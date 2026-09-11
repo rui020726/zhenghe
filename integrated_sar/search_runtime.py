@@ -128,12 +128,23 @@ class MockGridSearchEnv:
     """A numpy stand-in for ``piloc.src.Map.timemap.Environment``.
 
     It reproduces only the surface :class:`~integrated_sar.adapters.piloc.PilocSearchAdapter`
-    relies on, with two intentional deviations from PILOC:
+    relies on, so a machine with no checkpoints and no torch can still exercise the
+    whole integration: detection events, registry, coordination, allocation,
+    execution and the lifecycle log. A mock run is evidence about that pipeline and
+    never about search quality.
+
+    Intentional deviations from PILOC:
 
     * discovered targets are removed from the scene (same as PILOC), but undiscovered
       ones stay put -- PILOC random-walks its goals through the global ``random``
       module, which would make a mock episode irreproducible;
-    * rewards are informational only, because nothing trains here.
+    * rewards are informational only, because nothing trains here;
+    * timestamp aging, map fusion between agents and the communication failure,
+      partial-loss and delay models are absent, so a mock run cannot show how a real
+      search degrades under restricted communication.
+
+    ``two_channel_from_timestamp`` is the one piece verified cell-for-cell against
+    ``timemap.Environment.two_channel_map``; see ``MockFidelityTests``.
     """
 
     def __init__(

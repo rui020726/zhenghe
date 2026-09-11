@@ -1102,6 +1102,34 @@ class EpisodeStateTests(unittest.TestCase):
         self.assertIn("deadline_expired", reasons)
 
 
+@unittest.skipUnless(HAS_PILOC_ENV, "the PILOC environment needs gym and Pillow")
+class MockFidelityTests(unittest.TestCase):
+    """Whatever the mock claims to share with PILOC is checked against PILOC."""
+
+    def test_two_channel_map_matches_piloc_cell_for_cell(self) -> None:
+        import numpy as np
+
+        from integrated_sar.piloc_runtime import import_timemap_module
+        from integrated_sar.search_runtime import two_channel_from_timestamp
+
+        timemap = import_timemap_module()
+        # Every branch of the real implementation, including both ends of [0, 0.3].
+        values = np.array(
+            [1.0, 0.5, 0.0, 0.1, 0.25, 0.3, 0.31, 0.7, -4.5], dtype=np.float32
+        )
+        agent_obs = np.random.default_rng(3).choice(values, size=(60, 60)).astype(np.float32)
+
+        # two_channel_map never touches self, so __new__ avoids the constructor.
+        reference = timemap.Environment.__new__(timemap.Environment)
+        expected = timemap.Environment.two_channel_map(
+            reference, {"agent_0": agent_obs}, {}
+        )["agent_0"]
+        actual = two_channel_from_timestamp(agent_obs)
+
+        np.testing.assert_array_equal(actual["obstacle_map"], expected["obstacle_map"])
+        np.testing.assert_array_equal(actual["explore_map"], expected["explore_map"])
+
+
 class MissingDependencyTests(unittest.TestCase):
     """A missing dependency becomes an actionable message, never a bare ImportError."""
 
