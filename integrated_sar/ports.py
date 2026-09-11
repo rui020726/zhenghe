@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Protocol, Sequence
+from typing import Protocol, Sequence, runtime_checkable
 
 from .contracts import (
     AgentSnapshot,
@@ -57,3 +57,17 @@ class ReplanSource(Protocol):
     """
 
     def pending_replans(self) -> frozenset[str]: ...
+
+
+@runtime_checkable
+class Resettable(Protocol):
+    """
+    A collaborator holding per-episode state that must be cleared between episodes.
+
+    Adapters map external ids to internal ones, fingerprint progress to suppress
+    repeats and number their commands; none of that may survive into the next
+    episode, because TaskEnv restarts its own counters and a repeated event id
+    would be dropped as a duplicate.
+    """
+
+    def reset(self) -> None: ...

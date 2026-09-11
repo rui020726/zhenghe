@@ -20,6 +20,7 @@ from .ports import (
     Coordinator,
     Executor,
     ReplanSource,
+    Resettable,
     SearchModule,
     TaskSink,
 )
@@ -163,3 +164,19 @@ class JointSAROrchestrator:
         self.step_index = 0
         self.clock.reset()
         self._advice = CoordinationAdvice(0, 0.0, 0.0)
+        # Several ports are normally served by one object, so reset each distinct
+        # collaborator once rather than once per role it plays.
+        seen: set[int] = set()
+        for component in (
+            self.search,
+            self.task_sink,
+            self.agent_source,
+            self.allocator,
+            self.executor,
+            self.replan_source,
+        ):
+            if component is None or id(component) in seen:
+                continue
+            seen.add(id(component))
+            if isinstance(component, Resettable):
+                component.reset()

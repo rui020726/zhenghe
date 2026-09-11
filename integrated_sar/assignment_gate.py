@@ -88,6 +88,16 @@ class AssignmentGate:
         """Robots whose command was dropped; the coordinator drains them into its advice."""
         return frozenset(self.pending_replan)
 
+    def reset(self) -> None:
+        """Drop the previous episode's rejections and outstanding replan requests.
+
+        The wrapped executor is deliberately left alone: the orchestrator already
+        visits every collaborator it was given, so delegating would reset the same
+        adapter twice.
+        """
+        self._rejections.clear()
+        self.pending_replan.clear()
+
     @property
     def rejections(self) -> tuple[RejectedAssignment, ...]:
         return tuple(self._rejections)

@@ -53,9 +53,10 @@ class PilocSearchAdapter:
         self._episode = 0
         self._track_ids: list[str] = []
         self._untracked_counter = 0
-        self.reset_tracks()
+        self.reset()
 
-    def reset_tracks(self) -> None:
+    def reset(self) -> None:
+        """Start a new episode: track ids are namespaced by episode, so they never collide."""
         self._episode += 1
         self._track_ids = [
             f"piloc-e{self._episode}-target-{index}"

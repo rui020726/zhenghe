@@ -77,6 +77,7 @@ def make_detection(
     row: int = 20,
     col: int = 30,
     detected_at: float = 1.0,
+    deadline_offset: float = 500.0,
     stages: tuple[TaskStageSpec, ...] | None = None,
 ) -> DetectionEvent:
     position = GridPosition(row, col)
@@ -90,7 +91,7 @@ def make_detection(
         confidence=1.0,
         profile=TargetProfile(
             stages=stages or (TaskStageSpec((1, 0, 0, 0, 0), 3.0),),
-            deadline_offset=500.0,
+            deadline_offset=deadline_offset,
             severity=0.8,
         ),
     )
@@ -1050,6 +1051,55 @@ class LifecycleCorrelationTests(unittest.TestCase):
         for target_id, ids in sources.items():
             self.assertEqual(len(ids), 1, f"{target_id} was logged under source ids {ids}")
             self.assertIsNotNone(next(iter(ids)))
+
+
+class EpisodeStateTests(unittest.TestCase):
+    """Per-episode state must not leak, and failures must name a reason."""
+
+    @staticmethod
+    def _one_episode(adapter: Any) -> list[str]:
+        registry = TaskRegistry()
+        registry.handle_detection(make_detection())
+        adapter.sync_tasks(registry.active_snapshots())
+        ids: list[str] = []
+        for _ in range(2):
+            ids.extend(event.event_id for event in adapter.step(0.0, 1.0).progress_events)
+        return ids
+
+    def test_a_reused_adapter_does_not_repeat_progress_event_ids(self) -> None:
+        from integrated_sar.adapters.task03 import Task03Adapter
+        from integrated_sar.task03_runtime import build_task_env, load_task_env_module
+
+        env = build_task_env(load_task_env_module(), seed=7)
+        adapter = Task03Adapter(env=env, clear_initial_tasks=True)
+
+        first = self._one_episode(adapter)
+        adapter.reset()
+        # Rewind the environment counter so the second episode replays the same
+        # internal step numbers against the same external id.
+        env._inner_step_counter = 0
+        second = self._one_episode(adapter)
+
+        self.assertTrue(first and second)
+        self.assertEqual(
+            set(first) & set(second), set(), "a repeated event id would be dropped as a duplicate"
+        )
+
+    def test_an_expired_task_names_its_failure_reason(self) -> None:
+        from integrated_sar.adapters.task03 import Task03Adapter
+        from integrated_sar.task03_runtime import build_task_env, load_task_env_module
+
+        env = build_task_env(load_task_env_module(), seed=7)
+        adapter = Task03Adapter(env=env, clear_initial_tasks=True)
+        registry = TaskRegistry()
+        registry.handle_detection(make_detection(deadline_offset=0.5))
+        adapter.sync_tasks(registry.active_snapshots())
+
+        reasons: list[str | None] = []
+        for _ in range(3):
+            reasons.extend(event.failure_reason for event in adapter.step(0.0, 1.0).progress_events)
+
+        self.assertIn("deadline_expired", reasons)
 
 
 class MissingDependencyTests(unittest.TestCase):

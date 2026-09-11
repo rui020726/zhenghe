@@ -56,6 +56,7 @@ class Task03Adapter:
         self._task_revisions: dict[str, int] = {}
         self._progress_fingerprints: dict[str, tuple[Any, ...]] = {}
         self._command_counter = 0
+        self._episode = 0
 
         self.env.enable_tidal_tasks = False
         self.env.enable_discovered_tasks = False
@@ -71,6 +72,20 @@ class Task03Adapter:
         for agent in self.env.agent_dic.values():
             agent["need_decision"] = True
             agent["current_task"] = -1
+
+    def reset(self) -> None:
+        """Start a new episode on the same environment.
+
+        Mappings, fingerprints and command numbering restart, and the episode counter
+        keeps progress event ids from colliding with the previous episode's.
+        """
+        self._episode += 1
+        self.external_to_internal.clear()
+        self.internal_to_external.clear()
+        self._task_revisions.clear()
+        self._progress_fingerprints.clear()
+        self._command_counter = 0
+        self._clear_initial_tasks()
 
     def sync_tasks(self, tasks: Sequence[TaskSnapshot]) -> None:
         for task in tasks:
@@ -371,7 +386,7 @@ class Task03Adapter:
             events.append(
                 ProgressEvent(
                     event_id=(
-                        f"task03-progress:{external_id}:"
+                        f"task03-progress:e{self._episode}:{external_id}:"
                         f"{int(getattr(self.env, '_inner_step_counter', 0))}"
                     ),
                     task_id=external_id,
@@ -382,6 +397,7 @@ class Task03Adapter:
                     progress=progress,
                     members=members,
                     expired=bool(task.get("expired", False)),
+                    failure_reason=self._failure_reason(task),
                 )
             )
         return ExecutionStepResult(
@@ -427,6 +443,19 @@ class Task03Adapter:
         else:
             status = TaskStatus.DETECTED
         return status, stage_index, remaining, progress, members
+
+    def _failure_reason(self, task: dict[str, Any]) -> str | None:
+        """Why this task is not succeeding, or None while it is progressing normally."""
+        if bool(task.get("expired", False)):
+            return "deadline_expired"
+        if bool(task.get("finished", False)):
+            return None
+        internal_id = int(task["ID"])
+        for agent in self.env.agent_dic.values():
+            for record in agent.get("failed_tasks", []):
+                if int(record.get("task_id", -1)) == internal_id:
+                    return str(record.get("reason") or "assignment_failed")
+        return None
 
     @staticmethod
     def _np_array(values: Any, dtype: Any) -> Any:
