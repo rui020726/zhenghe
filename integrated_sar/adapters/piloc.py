@@ -1,0 +1,158 @@
+"""Non-invasive adapter around piloc.src.Map.timemap.Environment."""
+
+from __future__ import annotations
+
+from collections.abc import Callable, Mapping
+from typing import Any
+
+from ..contracts import (
+    CoordinateTransform,
+    DetectionEvent,
+    GridPosition,
+    SearchStepResult,
+)
+from ..profiles import TargetProfileProvider
+
+
+ActionProvider = Callable[[Any, Any, Any], Mapping[str, int]]
+
+
+class PilocSearchAdapter:
+    """
+    Wraps the current PILOC environment without importing it directly.
+
+    The adapter reconstructs which pre-move targets were observed, because the
+    current environment deletes observed goals inside ``Environment.step``.
+    A future native integration should emit DetectionEvent before that deletion.
+    """
+
+    def __init__(
+        self,
+        *,
+        env: Any,
+        action_provider: ActionProvider,
+        profile_provider: TargetProfileProvider,
+        obs: Any,
+        two_channelmap: Any,
+        rescue_actions: Mapping[str, Any] | None = None,
+        episode_horizon: int = 250,
+        detection_radius: int = 5,
+        confidence: float = 1.0,
+    ) -> None:
+        self.env = env
+        self.action_provider = action_provider
+        self.profile_provider = profile_provider
+        self.obs = obs
+        self.two_channelmap = two_channelmap
+        self.rescue_actions = dict(rescue_actions or {})
+        self.episode_horizon = int(episode_horizon)
+        self.detection_radius = int(detection_radius)
+        self.confidence = float(confidence)
+        rows, cols = tuple(int(value) for value in env.map_size)
+        self.transform = CoordinateTransform(rows=rows, cols=cols)
+        self._episode = 0
+        self._track_ids: list[str] = []
+        self.reset_tracks()
+
+    def reset_tracks(self) -> None:
+        self._episode += 1
+        self._track_ids = [
+            f"piloc-e{self._episode}-target-{index}"
+            for index in range(len(self.env.goals_pos))
+        ]
+
+    def step(self, current_time: float, dt: float) -> SearchStepResult:
+        before_goals = [
+            GridPosition(int(position[0]), int(position[1]))
+            for position in self.env.goals_pos
+        ]
+        before_tracks = list(self._track_ids)
+        actions = dict(self.action_provider(self.env, self.obs, self.two_channelmap))
+
+        (
+            self.obs,
+            rewards,
+            done,
+            repeat_mark,
+            self.two_channelmap,
+        ) = self.env.step(
+            actions,
+            self.obs,
+            self.rescue_actions,
+            self.two_channelmap,
+            self.episode_horizon,
+        )
+
+        detected: list[tuple[int, str]] = []
+        post_agents = list(self.env.agents_pos)
+        for goal_index, goal in enumerate(before_goals):
+            for agent_index, agent_position in enumerate(post_agents):
+                row, col = int(agent_position[0]), int(agent_position[1])
+                if (
+                    abs(row - goal.row) <= self.detection_radius
+                    and abs(col - goal.col) <= self.detection_radius
+                    and self._line_of_sight(row, col, goal.row, goal.col)
+                ):
+                    agent_id = (
+                        str(self.env.agents[agent_index])
+                        if agent_index < len(self.env.agents)
+                        else f"agent_{agent_index}"
+                    )
+                    detected.append((goal_index, agent_id))
+                    break
+
+        detected_indices = {index for index, _ in detected}
+        map_version = int(getattr(self.env, "steps", 0))
+        observed_at = current_time + dt
+        events: list[DetectionEvent] = []
+        for goal_index, agent_id in detected:
+            if goal_index >= len(before_tracks):
+                continue
+            target_id = before_tracks[goal_index]
+            grid_position = before_goals[goal_index]
+            events.append(
+                DetectionEvent(
+                    event_id=f"detection:{target_id}:{map_version}",
+                    target_id=target_id,
+                    grid_position=grid_position,
+                    world_position=self.transform.to_world(grid_position),
+                    detected_at=observed_at,
+                    discovered_by=agent_id,
+                    confidence=self.confidence,
+                    profile=self.profile_provider.profile_for(
+                        target_id, grid_position, observed_at
+                    ),
+                    map_version=map_version,
+                )
+            )
+
+        remaining_tracks = [
+            track_id
+            for index, track_id in enumerate(before_tracks)
+            if index not in detected_indices
+        ]
+        post_goal_count = len(self.env.goals_pos)
+        if post_goal_count > len(remaining_tracks):
+            remaining_tracks.extend(
+                f"piloc-e{self._episode}-late-target-{map_version}-{index}"
+                for index in range(post_goal_count - len(remaining_tracks))
+            )
+        self._track_ids = remaining_tracks[:post_goal_count]
+
+        return SearchStepResult(
+            detections=tuple(events),
+            metrics={
+                "search_rewards": dict(rewards),
+                "remaining_targets": post_goal_count,
+                "search_done": all(bool(value) for value in done.values()) if done else False,
+                "repeat_agents": tuple(repeat_mark),
+                "map_version": map_version,
+            },
+        )
+
+    def _line_of_sight(self, row: int, col: int, goal_row: int, goal_col: int) -> bool:
+        checker = getattr(self.env, "_is_line_of_sight_blocked", None)
+        if checker is None:
+            return True
+        # Despite its name, the existing method returns True when the path is clear.
+        return bool(checker(row, col, goal_row, goal_col, self.env.map))

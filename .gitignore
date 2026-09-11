@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Secrets and machine-local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Model artifacts and experiment outputs
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.tfevents.*
+checkpoints*/
+model/save*/
+logs/
+runs/
+train/
+animations/
+gifs/
+test_gifs/
+test_plots/
+test_results/
+test_results_ablation/
+test_visualizations/
+comparison_results/
+paper_results/
+scalability_results/
+
+# Large datasets and generated media/documents
+RALTestSet*/
+DungeonMaps/
+*.gif
+*.mp4
+*.avi
+*.pdf
+*.docx
+*.pptx
+*.xlsx
+
+# Runtime output
+replay_pid*.log
+training_output.log
+failure_analysis*.csv
+test_results*.csv
+single_episode_*
