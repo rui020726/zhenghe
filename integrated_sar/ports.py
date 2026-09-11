@@ -45,3 +45,15 @@ class Executor(Protocol):
     def apply_assignments(self, commands: Sequence[AssignmentCommand]) -> None: ...
 
     def step(self, current_time: float, dt: float) -> ExecutionStepResult: ...
+
+
+class ReplanSource(Protocol):
+    """
+    Reports robots whose last assignment was dropped and must decide again.
+
+    A rejection is only known after the executor has applied assignments, which is
+    later in the tick than coordination, so the scheduler has to ask before it can
+    decide whether the next tick needs fresh advice.
+    """
+
+    def pending_replans(self) -> frozenset[str]: ...

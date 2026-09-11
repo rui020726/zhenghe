@@ -355,6 +355,7 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         registry=registry,
         event_bus=bus,
         clock=clock,
+        replan_source=gate,
         dt=configuration.dt,
         coordination_interval=configuration.coordination_interval,
         allocation_interval=configuration.allocation_interval,

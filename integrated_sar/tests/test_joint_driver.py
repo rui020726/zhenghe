@@ -508,6 +508,52 @@ class AssignmentGateTests(unittest.TestCase):
         self.assertEqual(executor.steps, 1)
 
 
+class ReplanSchedulingTests(unittest.TestCase):
+    """A dropped command causes exactly one replan, on the next tick."""
+
+    def test_rejection_replans_once_on_the_next_tick(self) -> None:
+        executor = _RecordingExecutor()
+        clock = GlobalClock()
+        registry_revision = [1]
+        gate = AssignmentGate(
+            executor, clock=clock, revision_of=lambda _: registry_revision[0]
+        )
+        orchestrator = JointSAROrchestrator(
+            search=_IdleSearch(),
+            task_sink=_NullTaskSink(),
+            agent_source=_NullAgentSource(),
+            coordinator=ReplanCoordinator(HeuristicCoordinator(), gate.pending_replan),
+            allocator=_FixedAllocator(task_revision=2),
+            executor=gate,
+            clock=clock,
+            replan_source=gate,
+            coordination_interval=5,
+            allocation_interval=5,
+        )
+
+        counts: dict[int, int] = {}
+        for report in orchestrator.run(8):
+            counts[report.step] = len(report.assignments)
+            if report.step == 1:
+                # The registry catches up, so the next command matches and is accepted.
+                registry_revision[0] = 2
+
+        rejections = gate.drain_rejections()
+        self.assertEqual([item.reason for item in rejections], ["stale_task_revision"])
+        # assignment:1 was dropped by the gate; only the replan and the periodic
+        # interval ever reach the executor.
+        self.assertEqual(
+            [command.command_id for command in executor.applied],
+            ["assignment:2", "assignment:3"],
+        )
+
+        self.assertEqual(counts[1], 1, "first decision is issued, then dropped by the gate")
+        self.assertEqual(counts[2], 1, "the replan must not wait for the coordination interval")
+        self.assertEqual([counts[3], counts[4], counts[5]], [0, 0, 0])
+        self.assertEqual(counts[6], 1, "the periodic allocation interval still fires")
+        self.assertEqual([counts[7], counts[8]], [0, 0], "a consumed replan must not repeat")
+
+
 class OrchestratorWiringTests(unittest.TestCase):
     """Regression coverage for collaborator injection."""
 
@@ -670,6 +716,26 @@ class _NullAllocator:
     def allocate(self, tasks: Any, agents: Any, advice: Any, current_time: float) -> tuple[Any, ...]:
         del tasks, agents, advice, current_time
         return ()
+
+
+class _FixedAllocator:
+    """Always offers the same task at a fixed revision, numbering each command."""
+
+    def __init__(self, *, task_revision: int) -> None:
+        self.task_revision = task_revision
+        self.calls = 0
+
+    def allocate(self, tasks: Any, agents: Any, advice: Any, current_time: float) -> tuple[Any, ...]:
+        del tasks, agents, advice
+        self.calls += 1
+        return (
+            make_command(
+                issued_at=current_time,
+                valid_until=current_time + 10.0,
+                task_revision=self.task_revision,
+                command_id=f"assignment:{self.calls}",
+            ),
+        )
 
 
 @unittest.skipUnless(HAS_TORCH, "torch is not installed")

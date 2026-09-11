@@ -84,6 +84,10 @@ class AssignmentGate:
         self._rejections.clear()
         return rejections
 
+    def pending_replans(self) -> frozenset[str]:
+        """Robots whose command was dropped; the coordinator drains them into its advice."""
+        return frozenset(self.pending_replan)
+
     @property
     def rejections(self) -> tuple[RejectedAssignment, ...]:
         return tuple(self._rejections)
