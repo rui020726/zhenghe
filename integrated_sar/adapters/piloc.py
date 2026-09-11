@@ -52,6 +52,7 @@ class PilocSearchAdapter:
         self.transform = CoordinateTransform(rows=rows, cols=cols)
         self._episode = 0
         self._track_ids: list[str] = []
+        self._untracked_counter = 0
         self.reset_tracks()
 
     def reset_tracks(self) -> None:
@@ -133,10 +134,14 @@ class PilocSearchAdapter:
         ]
         post_goal_count = len(self.env.goals_pos)
         if post_goal_count > len(remaining_tracks):
-            remaining_tracks.extend(
-                f"piloc-e{self._episode}-late-target-{map_version}-{index}"
-                for index in range(post_goal_count - len(remaining_tracks))
-            )
+            # A goal the adapter never tracked (the environment can add or move goals).
+            # The id must not depend on map_version, or the same physical target would
+            # receive a fresh id every tick and be rescued several times over.
+            for _ in range(post_goal_count - len(remaining_tracks)):
+                self._untracked_counter += 1
+                remaining_tracks.append(
+                    f"piloc-e{self._episode}-untracked-{self._untracked_counter}"
+                )
         self._track_ids = remaining_tracks[:post_goal_count]
 
         return SearchStepResult(

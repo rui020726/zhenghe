@@ -21,6 +21,9 @@ from .errors import AssetMissingError, DependencyMissingError, ScenarioError
 
 # The PILOC convolutional policy and its timestamp maps are built for a fixed canvas.
 PILOC_GRID_SIZE = 60
+# timemap derives the timestamp-map window, the local pheromone window and the
+# last_actions tensor shape from obs_radius, so a checkpoint only matches this value.
+PILOC_OBS_RADIUS = 5
 
 IMAGE_SUFFIXES = frozenset({".png", ".bmp", ".jpg", ".jpeg", ".tif", ".tiff"})
 ARRAY_SUFFIXES = frozenset({".npy"})

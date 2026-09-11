@@ -44,6 +44,7 @@ from integrated_sar.joint_driver import (
 )
 from integrated_sar.lifecycle_log import LIFECYCLE_FIELDS
 from integrated_sar.orchestrator import JointSAROrchestrator
+from integrated_sar.scenarios import PILOC_OBS_RADIUS
 from integrated_sar.task_registry import TaskRegistry
 
 _REAL_FIND_SPEC = importlib.util.find_spec
@@ -301,6 +302,57 @@ class JointRunTests(unittest.TestCase):
             )
         self.assertEqual(exit_code, 2)
         self.assertIn("unsupported --device", stderr.getvalue())
+
+
+class DetectionRadiusTests(unittest.TestCase):
+    """One radius must decide observation, target removal and detection publication."""
+
+    def test_every_removed_target_yields_exactly_one_stable_id(self) -> None:
+        for radius in (1, 5, 10):
+            with self.subTest(detection_radius=radius):
+                with tempfile.TemporaryDirectory() as directory:
+                    configuration = make_configuration(
+                        directory, detection_radius=radius, steps=20
+                    )
+                    run = build_joint_run(configuration)
+                    try:
+                        run.run()
+                        placed = len(run.scenario.goal_positions)
+                        remaining = len(run.search_adapter.env.goals_pos)
+                        task_ids = [
+                            snapshot.task_id for snapshot in run.registry.snapshots()
+                        ]
+                        detections = run.counters.get("detections", 0)
+                    finally:
+                        run.logger.close()
+
+                removed = placed - remaining
+                self.assertLessEqual(removed, placed)
+                # A target the environment removed without an event is lost forever;
+                # more events than removed targets means one target is rescued twice.
+                self.assertEqual(detections, removed)
+                self.assertEqual(len(task_ids), removed)
+                self.assertEqual(len(set(task_ids)), len(task_ids))
+
+    def test_trained_search_rejects_a_radius_the_checkpoint_was_not_built_for(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            configuration = make_configuration(
+                directory,
+                mock=False,
+                piloc_checkpoint="shared_mappo_model_21_9232.pth",
+                detection_radius=PILOC_OBS_RADIUS + 2,
+            )
+            with self.assertRaises(ConfigurationError) as caught:
+                configuration.validate()
+            self.assertIn("--detection-radius", str(caught.exception))
+
+            matching = make_configuration(
+                directory,
+                mock=False,
+                piloc_checkpoint="shared_mappo_model_21_9232.pth",
+                detection_radius=PILOC_OBS_RADIUS,
+            )
+            matching.validate()
 
 
 class RegistryLifecycleTests(unittest.TestCase):

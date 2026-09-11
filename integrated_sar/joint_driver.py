@@ -33,7 +33,7 @@ from .event_bus import InMemoryEventBus
 from .lifecycle_log import LifecycleLogger
 from .orchestrator import JointSAROrchestrator
 from .profiles import DeterministicTargetProfileProvider
-from .scenarios import PILOC_GRID_SIZE, SearchScenario, build_scenario
+from .scenarios import PILOC_GRID_SIZE, PILOC_OBS_RADIUS, SearchScenario, build_scenario
 from .search_runtime import FrontierSearchPolicy, build_mock_search_side
 from .task_registry import TaskRegistry
 
@@ -100,6 +100,14 @@ class RunConfiguration:
                 f"the trained PILOC policy is a convolutional network built for "
                 f"{PILOC_GRID_SIZE}x{PILOC_GRID_SIZE} timestamp maps, so --grid-size "
                 f"{self.grid_size} cannot be used with --piloc-checkpoint"
+            )
+        if self.detection_radius != PILOC_OBS_RADIUS and self.piloc_checkpoint is not None:
+            raise ConfigurationError(
+                f"the trained PILOC policy derives its timestamp-map, pheromone and "
+                f"last-action windows from obs_radius={PILOC_OBS_RADIUS}, so "
+                f"--detection-radius {self.detection_radius} cannot be combined with "
+                f"--piloc-checkpoint: the environment would remove targets on one radius "
+                f"while the adapter detects them on another"
             )
         if not 0.0 <= self.residual_scale <= 1.0:
             raise ConfigurationError(
@@ -372,9 +380,14 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
 def _build_search_side(
     configuration: RunConfiguration, scenario: SearchScenario, device: str
 ) -> PilocSearchAdapter:
+    # One radius for the whole search side: it decides which cells an agent observes,
+    # which targets the environment removes and which detections the adapter publishes.
+    radius = configuration.detection_radius
     if configuration.piloc_checkpoint is None:
-        environment, observations, channels = build_mock_search_side(scenario)
-        action_provider: Any = FrontierSearchPolicy(view_radius=configuration.detection_radius)
+        environment, observations, channels = build_mock_search_side(
+            scenario, view_radius=radius
+        )
+        action_provider: Any = FrontierSearchPolicy(view_radius=radius)
     else:
         from .piloc_runtime import build_piloc_search_side
 
@@ -384,6 +397,7 @@ def _build_search_side(
             device=device,
             seed=configuration.seed,
             root=configuration.repository_root,
+            obs_radius=radius,
         )
 
     return PilocSearchAdapter(
@@ -393,7 +407,7 @@ def _build_search_side(
         obs=observations,
         two_channelmap=channels,
         episode_horizon=max(configuration.steps, 1),
-        detection_radius=configuration.detection_radius,
+        detection_radius=radius,
     )
 
 

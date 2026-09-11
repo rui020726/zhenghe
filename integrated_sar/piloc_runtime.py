@@ -19,7 +19,7 @@ from typing import Any
 import numpy as np
 
 from .errors import AssetMissingError, CheckpointIncompatibleError, DependencyMissingError
-from .scenarios import SearchScenario
+from .scenarios import PILOC_OBS_RADIUS, SearchScenario
 from .search_runtime import initialize_timestamp_observations, initialize_two_channel_map, local_pheromone_window
 
 PILOC_SUBDIR = "piloc"
@@ -285,6 +285,7 @@ def build_piloc_search_side(
     seed: int = 0,
     root: str | os.PathLike[str] | None = None,
     enable_comm_noise: bool = False,
+    obs_radius: int = PILOC_OBS_RADIUS,
 ) -> tuple[Any, Any, dict[str, np.ndarray], dict[str, dict[str, np.ndarray]]]:
     """Build the real PILOC environment, policy and initial observations."""
     # Resolved first: a missing checkpoint must be reported before any heavy import.
@@ -294,6 +295,7 @@ def build_piloc_search_side(
         root=root,
         seed=seed,
         enable_comm_noise=enable_comm_noise,
+        obs_radius=obs_radius,
     )
     policy = load_piloc_policy(
         resolved_checkpoint,
@@ -301,10 +303,10 @@ def build_piloc_search_side(
         num_agents=len(scenario.agent_positions),
         root=root,
     )
-    observations = initialize_timestamp_observations(environment)
+    observations = initialize_timestamp_observations(environment, view_radius=obs_radius)
     return (
         environment,
-        TrainedPilocPolicy(policy, device=device),
+        TrainedPilocPolicy(policy, device=device, view_radius=obs_radius),
         observations,
         initialize_two_channel_map(observations),
     )
