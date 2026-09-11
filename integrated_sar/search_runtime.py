@@ -144,6 +144,7 @@ class MockGridSearchEnv:
         goal_positions: Sequence[Sequence[int]],
         view_radius: int = 5,
         pheromone_decay: float = 0.95,
+        dt: float = 1.0,
     ) -> None:
         self.map = np.asarray(obstacles, dtype=np.int32)
         self.map_size = (int(self.map.shape[0]), int(self.map.shape[1]))
@@ -153,6 +154,9 @@ class MockGridSearchEnv:
         self.agents = [f"agent_{index}" for index in range(self.num_agents)]
         self.view_radius = int(view_radius)
         self.pheromone_decay = float(pheromone_decay)
+        if dt <= 0:
+            raise ValueError(f"dt must be positive, got {dt}")
+        self.dt = float(dt)
         self.steps = 0
         self.current_time = 0.0
         self.global_pheromone = np.zeros(self.map_size, dtype=np.float32)
@@ -229,7 +233,7 @@ class MockGridSearchEnv:
             )
 
         self.steps += 1
-        self.current_time += 1.0
+        self.current_time += self.dt
         updated_obs = self._refresh_observations(obs)
         updated_channels = initialize_two_channel_map(updated_obs)
         done = {agent_id: len(self.goals_pos) == 0 for agent_id in actions}
@@ -364,8 +368,9 @@ def build_mock_search_side(
     scenario: SearchScenario,
     *,
     view_radius: int = 5,
+    dt: float = 1.0,
 ) -> tuple[MockGridSearchEnv, dict[str, np.ndarray], dict[str, dict[str, np.ndarray]]]:
     """Create a mock environment plus its initial observations and channel maps."""
-    env = MockGridSearchEnv.from_scenario(scenario, view_radius=view_radius)
+    env = MockGridSearchEnv.from_scenario(scenario, view_radius=view_radius, dt=dt)
     obs = initialize_timestamp_observations(env, view_radius=view_radius)
     return env, obs, initialize_two_channel_map(obs)

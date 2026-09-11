@@ -109,6 +109,13 @@ class RunConfiguration:
                 f"--piloc-checkpoint: the environment would remove targets on one radius "
                 f"while the adapter detects them on another"
             )
+        if self.dt != 1.0 and self.piloc_checkpoint is not None:
+            raise ConfigurationError(
+                f"timemap.Environment advances its own clock by exactly 1 per step, so "
+                f"--dt {self.dt} would put the search environment on a different time "
+                f"base from the global clock and the rescue environment; use --dt 1.0 "
+                f"with --piloc-checkpoint"
+            )
         if not 0.0 <= self.residual_scale <= 1.0:
             raise ConfigurationError(
                 f"--residual-scale must stay in [0, 1] so the coordinator can only add a "
@@ -386,7 +393,7 @@ def _build_search_side(
     radius = configuration.detection_radius
     if configuration.piloc_checkpoint is None:
         environment, observations, channels = build_mock_search_side(
-            scenario, view_radius=radius
+            scenario, view_radius=radius, dt=configuration.dt
         )
         action_provider: Any = FrontierSearchPolicy(view_radius=radius)
     else:

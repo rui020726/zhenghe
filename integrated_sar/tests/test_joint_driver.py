@@ -648,6 +648,38 @@ class CoordinatorResidualTests(unittest.TestCase):
             self.assertNotIn(action_index, masked_indices)
 
 
+class UnifiedClockTests(unittest.TestCase):
+    """One time base for the orchestrator, the search side and the rescue side."""
+
+    def test_a_fractional_dt_keeps_every_clock_together(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            configuration = make_configuration(directory, dt=0.25, steps=8)
+            run = build_joint_run(configuration)
+            try:
+                run.run()
+                global_time = run.orchestrator.current_time
+                search_time = float(run.search_adapter.env.current_time)
+                task_time = float(run.task_adapter.env.current_time)
+            finally:
+                run.logger.close()
+
+        self.assertAlmostEqual(global_time, 2.0, places=9)
+        self.assertAlmostEqual(search_time, global_time, places=9)
+        self.assertAlmostEqual(task_time, global_time, places=9)
+
+    def test_trained_search_rejects_a_dt_the_environment_cannot_honour(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            configuration = make_configuration(
+                directory,
+                mock=False,
+                piloc_checkpoint="shared_mappo_model_21_9232.pth",
+                dt=0.25,
+            )
+            with self.assertRaises(ConfigurationError) as caught:
+                configuration.validate()
+        self.assertIn("--dt", str(caught.exception))
+
+
 class BeliefBoundaryTests(unittest.TestCase):
     """Invariant 9: nothing may decide on a target it has not heard about."""
 
