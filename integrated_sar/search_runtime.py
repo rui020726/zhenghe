@@ -270,11 +270,13 @@ class FrontierSearchPolicy:
     """Deterministic greedy frontier policy used when no search checkpoint is given.
 
     Each candidate action is scored by how many still-unknown cells it would bring
-    inside the agent's view, plus a separation bonus capped at the view radius --
-    every searcher keeps its own timestamp map, so without that bonus a second robot
-    just trails the first through cells it has not personally observed. Illegal moves
-    are only ever chosen when every move is illegal, and ties break on the action
-    index so a seed fully determines the episode.
+    inside the agent's view, minus a penalty for recent traffic in that same window.
+    The penalty reads the shared pheromone map rather than the other robots'
+    positions: pheromone is PILOC's own coordination medium and the trained policy
+    already observes it through a view-radius window, so this spreads the team
+    without any robot needing environment truth about its teammates (invariant 9).
+    Illegal moves are only ever chosen when every move is illegal, and ties break on
+    the action index so a seed fully determines the episode.
     """
 
     def __init__(
@@ -298,6 +300,7 @@ class FrontierSearchPolicy:
         rows, cols = (int(value) for value in env.map_size)
         obstacles = np.asarray(env.map)
         positions = np.asarray(env.agents_pos).reshape(-1, 2)
+        pheromone = np.asarray(getattr(env, "global_pheromone", np.zeros((rows, cols))))
         candidate_positions = self._candidate_positions(positions, obstacles, rows, cols)
         actions: dict[str, int] = {}
 
@@ -310,9 +313,7 @@ class FrontierSearchPolicy:
                     score = -self.illegal_penalty
                 else:
                     score = float(self._frontier_gain(unknown, row, col, rows, cols))
-                    score += self.separation_weight * self._separation(
-                        index, row, col, positions, self.view_radius
-                    )
+                    score -= self.separation_weight * self._trail_penalty(pheromone, row, col)
                 if score > best_score:
                     best_action, best_score = action_index, score
             actions[str(agent_id)] = best_action
@@ -349,16 +350,14 @@ class FrontierSearchPolicy:
         col_min, col_max = max(0, col - radius), min(cols, col + radius + 1)
         return int(np.count_nonzero(unknown[row_min:row_max, col_min:col_max]))
 
-    @staticmethod
-    def _separation(index: int, row: int, col: int, positions: np.ndarray, cap: int) -> float:
-        distances = [
-            max(abs(row - int(other[0])), abs(col - int(other[1])))
-            for other_index, other in enumerate(positions)
-            if other_index != index
-        ]
-        if not distances:
-            return 0.0
-        return float(min(min(distances), cap))
+    def _trail_penalty(self, pheromone: np.ndarray, row: int, col: int) -> float:
+        """Recent traffic inside the candidate's own view window.
+
+        Saturated at the view radius so a well-worn corridor cannot outweigh the
+        frontier gain, which keeps the two terms on the scale the weight was tuned for.
+        """
+        window = local_pheromone_window(pheromone, row, col, self.view_radius)
+        return float(min(float(window.sum()), float(self.view_radius)))
 
 
 def build_mock_search_side(

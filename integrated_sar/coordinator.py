@@ -79,7 +79,13 @@ class HeuristicCoordinator:
             if agent.current_task and agent.current_task not in task_by_id:
                 replan_agents.add(agent.agent_id)
 
+            # Invariant 9: only bias pairs this robot can actually have heard about.
+            # A robot that never received the detection cannot act on it, and scoring
+            # it anyway would leak registry truth into a decentralized decision.
+            known = agent.known_tasks
             for task in active_tasks:
+                if known is not None and task.task_id not in known:
+                    continue
                 required = task.remaining_requirements
                 denominator = max(1.0, float(sum(required)))
                 overlap = sum(

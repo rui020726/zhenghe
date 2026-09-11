@@ -181,6 +181,9 @@ class AgentSnapshot:
     status: str = "idle"
     current_task: str | None = None
     needs_decision: bool = True
+    # External ids of the tasks this robot has actually heard about, by sensing or by
+    # gossip. None means the agent source does not model belief, so nothing is filtered.
+    known_tasks: tuple[str, ...] | None = None
     metadata: Mapping[str, Any] = field(default_factory=dict)
 
 

@@ -30,6 +30,10 @@ class Task03Adapter:
     If ``network`` is omitted, an interpretable greedy allocator is used. When
     a CTDE network is supplied, coordinator advice is added as a bounded
     residual to its action logits.
+
+    Injected targets go into the environment's ground truth only. Which robot
+    knows about them is decided by ``TaskEnv`` itself, through ``comm_range``
+    sensing and one-hop gossip, so no decision here can outrun communication.
     """
 
     def __init__(
@@ -41,16 +45,12 @@ class Task03Adapter:
         residual_scale: float = 0.5,
         command_ttl: float = 10.0,
         clear_initial_tasks: bool = True,
-        notify_mode: str = "all",
     ) -> None:
-        if notify_mode not in {"all", "nearest"}:
-            raise ValueError("notify_mode must be 'all' or 'nearest'")
         self.env = env
         self.network = network
         self.deterministic = bool(deterministic)
         self.residual_scale = float(residual_scale)
         self.command_ttl = float(command_ttl)
-        self.notify_mode = notify_mode
         self.external_to_internal: dict[str, int] = {}
         self.internal_to_external: dict[int, str] = {}
         self._task_revisions: dict[str, int] = {}
@@ -145,41 +145,33 @@ class Task03Adapter:
             "external_task_id": task.task_id,
             "confidence": float(task.confidence),
         }
-        self.env.task_source[internal_id] = "piloc"
+        # "discovered" is the label TaskEnv whitelists for tasks that appear at
+        # runtime, and it drives the dynamic_tasks observation feature. Provenance
+        # stays on the task record itself, in external_task_id and discovered_by.
+        self.env.task_source[internal_id] = "discovered"
         self.env.tasks_num = len(self.env.task_dic)
         self.external_to_internal[task.task_id] = internal_id
         self.internal_to_external[internal_id] = task.task_id
         self._task_revisions[task.task_id] = task.revision
-        self._notify_agents(internal_id)
-
-    def _notify_agents(self, internal_id: int) -> None:
-        task = self.env.task_dic[internal_id]
-        agent_ids = list(self.env.agent_dic.keys())
-        if self.notify_mode == "nearest" and agent_ids:
-            agent_ids = [
-                min(
-                    agent_ids,
-                    key=lambda aid: float(
-                        self._norm(self.env.agent_dic[aid]["location"] - task["location"])
-                    ),
-                )
-            ]
-
-        for agent_id in agent_ids:
-            knowledge = self.env.agent_knowledge[agent_id]
-            knowledge["known_tasks"].add(internal_id)
-            knowledge["task_locations"][internal_id] = task["location"].copy()
-            knowledge["task_requirements"][internal_id] = task["requirements"].copy()
-            knowledge["task_deadlines"][internal_id] = task["deadline"]
-            knowledge["dynamic_tasks"].add(internal_id)
-            knowledge["task_current_status"][internal_id] = task["status"].copy()
-            knowledge["task_members"][internal_id] = []
-            knowledge["task_last_update_time"][internal_id] = self.env.current_time
+        # Deliberately no notification here: propagate_task_completion senses this
+        # task for robots inside comm_range and gossips it one hop per interval.
 
     def agent_snapshots(self) -> tuple[AgentSnapshot, ...]:
         snapshots: list[AgentSnapshot] = []
         for internal_id, agent in self.env.agent_dic.items():
             task_id = self.internal_to_external.get(int(agent.get("current_task", -1)))
+            knowledge = self.env.agent_knowledge.get(internal_id) or {}
+            # Sorted so advice does not depend on set iteration order.
+            known_tasks = tuple(
+                sorted(
+                    external
+                    for external in (
+                        self.internal_to_external.get(int(known))
+                        for known in knowledge.get("known_tasks", ())
+                    )
+                    if external is not None
+                )
+            )
             snapshots.append(
                 AgentSnapshot(
                     agent_id=str(internal_id),
@@ -190,6 +182,7 @@ class Task03Adapter:
                     status=str(agent.get("status", "idle")),
                     current_task=task_id,
                     needs_decision=bool(agent.get("need_decision", False)),
+                    known_tasks=known_tasks,
                     metadata={"species": int(agent.get("species", -1))},
                 )
             )
@@ -213,7 +206,7 @@ class Task03Adapter:
             _, _, _, mask, action_map = self.env.get_local_obs(internal_agent_id)
             if self.network is None:
                 action_index = self._heuristic_action(
-                    internal_agent_id, mask, action_map, task_by_id, advice
+                    internal_agent_id, mask, action_map, current_time, advice
                 )
                 reason = "heuristic+coordination"
             else:
@@ -252,10 +245,15 @@ class Task03Adapter:
         agent_id: int,
         mask: Any,
         action_map: Sequence[tuple[str, int | None]],
-        task_by_id: dict[str, TaskSnapshot],
+        current_time: float,
         advice: CoordinationAdvice,
     ) -> int:
+        """Score legal actions from this robot's belief, never from environment truth."""
         agent = self.env.agent_dic[agent_id]
+        knowledge = self.env.agent_knowledge.get(agent_id) or {}
+        believed_status = knowledge.get("task_current_status") or {}
+        believed_locations = knowledge.get("task_locations") or {}
+        believed_deadlines = knowledge.get("task_deadlines") or {}
         best_index, best_score = 0, -math.inf
         for index, (kind, internal_task_id) in enumerate(action_map):
             if index < len(mask) and bool(mask[index]):
@@ -263,19 +261,22 @@ class Task03Adapter:
             if kind == "depot" or internal_task_id is None:
                 score = -0.25
             else:
-                external_id = self.internal_to_external.get(int(internal_task_id))
-                task = task_by_id.get(external_id or "")
-                env_task = self.env.task_dic[int(internal_task_id)]
-                requirements = env_task["status"]
+                internal_task_id = int(internal_task_id)
+                requirements = believed_status.get(internal_task_id)
+                location = believed_locations.get(internal_task_id)
+                if requirements is None or location is None:
+                    continue  # not in this robot's belief, so it cannot act on it
+                external_id = self.internal_to_external.get(internal_task_id)
                 denominator = max(1.0, float(sum(requirements)))
                 compatibility = sum(
                     min(float(ability), float(need))
                     for ability, need in zip(agent["abilities"], requirements)
                 ) / denominator
-                distance = float(self._norm(agent["location"] - env_task["location"])) / math.sqrt(2.0)
+                distance = float(self._norm(agent["location"] - location)) / math.sqrt(2.0)
                 residual = advice.bias_for(str(agent_id), external_id or "")
                 score = compatibility - 0.35 * distance + self.residual_scale * residual
-                if task is not None and task.expired:
+                deadline = believed_deadlines.get(internal_task_id)
+                if deadline is not None and float(deadline) < current_time:
                     score -= 0.25
             if score > best_score:
                 best_index, best_score = index, score

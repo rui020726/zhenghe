@@ -12,6 +12,7 @@ import os
 import re
 import sys
 import types
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
@@ -108,6 +109,7 @@ def build_task_env(
     dt: float = 1.0,
     comm_range: float = 0.3,
     traits_dim: int = 5,
+    depot_positions: Sequence[Sequence[float]] | None = None,
 ) -> Any:
     """
     Create a rescue environment that starts empty and waits for PILOC detections.
@@ -115,8 +117,13 @@ def build_task_env(
     ``tasks_range=(0, 0)`` plus both burst generators disabled makes the registry the
     only source of tasks, and a fixed species count covering all five ability
     dimensions keeps injected tasks feasible for some robot.
+
+    ``depot_positions`` stages the rescue teams inside the shared scene. Without it
+    TaskEnv scatters depots uniformly over the unit square, which can leave them
+    permanently outside ``comm_range`` of every PILOC target: nothing is sensed,
+    gossip has nothing to spread, and the belief-gated pipeline never starts.
     """
-    return module.TaskEnv(
+    env = module.TaskEnv(
         tasks_range=(0, 0),
         species_range=(species, species),
         per_species_range=(per_species, per_species),
@@ -128,6 +135,24 @@ def build_task_env(
         dt=dt,
         seed=seed,
     )
+    if depot_positions is not None:
+        place_depots(env, depot_positions)
+    return env
+
+
+def place_depots(env: Any, depot_positions: Sequence[Sequence[float]]) -> None:
+    """Move each species depot, and the robots staged on it, to a normalized position."""
+    positions = [np.asarray(point, dtype=float) for point in depot_positions]
+    if not positions:
+        raise AssetMissingError("depot_positions must name at least one staging point")
+
+    for index, species_id in enumerate(sorted(env.depot_dic)):
+        point = positions[index % len(positions)]
+        env.depot_dic[species_id]["location"] = point.copy()
+        for member in env.depot_dic[species_id].get("members", ()):
+            agent = env.agent_dic[member]
+            agent["location"] = point.copy()
+            agent["depot"] = point.copy()
 
 
 def resolve_task_checkpoint(checkpoint: str | os.PathLike[str]) -> Path:

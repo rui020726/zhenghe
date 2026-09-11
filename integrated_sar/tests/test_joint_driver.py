@@ -210,7 +210,9 @@ class JointRunTests(unittest.TestCase):
         for target_id in discovered:
             internal_id = adapter.external_to_internal[target_id]
             self.assertIn(internal_id, adapter.env.task_dic)
-            self.assertEqual(adapter.env.task_source[internal_id], "piloc")
+            # "discovered" is what makes TaskEnv set the dynamic_tasks observation
+            # feature; provenance is carried by external_task_id instead.
+            self.assertEqual(adapter.env.task_source[internal_id], "discovered")
             self.assertEqual(
                 adapter.env.task_dic[internal_id]["external_task_id"], target_id
             )
@@ -596,10 +598,18 @@ class CoordinatorResidualTests(unittest.TestCase):
         module = load_task_env_module()
         env = build_task_env(module, seed=7)
         adapter = Task03Adapter(env=env, clear_initial_tasks=True, residual_scale=1.0)
+
+        # Drop the target on robot 0's own cell so it is inside comm_range: knowledge
+        # now arrives through the environment's sensing and gossip, not a broadcast.
+        origin = env.agent_dic[0]["location"]
         registry = TaskRegistry()
-        registry.handle_detection(make_detection())
+        registry.handle_detection(
+            make_detection(row=int(round(float(origin[1]) * 59)), col=int(round(float(origin[0]) * 59)))
+        )
         tasks = registry.active_snapshots()
         adapter.sync_tasks(tasks)
+        env.update_communication_graph()
+        env.propagate_task_completion()
         agents = adapter.agent_snapshots()
 
         agent_id = agents[0].agent_id
@@ -636,6 +646,77 @@ class CoordinatorResidualTests(unittest.TestCase):
             action_index = action_index_of.get(adapter.external_to_internal[command.task_id])
             self.assertIsNotNone(action_index, "an assigned task is absent from the action map")
             self.assertNotIn(action_index, masked_indices)
+
+
+class BeliefBoundaryTests(unittest.TestCase):
+    """Invariant 9: nothing may decide on a target it has not heard about."""
+
+    @staticmethod
+    def _wire(species: int, depot_positions: list[tuple[float, float]]) -> Any:
+        from integrated_sar.adapters.task03 import Task03Adapter
+        from integrated_sar.task03_runtime import build_task_env, load_task_env_module
+
+        env = build_task_env(
+            load_task_env_module(),
+            seed=7,
+            species=species,
+            per_species=2,
+            depot_positions=depot_positions,
+        )
+        return env, Task03Adapter(env=env, clear_initial_tasks=True)
+
+    def test_only_robots_in_comm_range_learn_a_target(self) -> None:
+        # Two staging points 1.13 apart, so they are out of comm_range of each other
+        # and gossip cannot bridge them; the target sits next to the second one only.
+        env, adapter = self._wire(3, [(0.1, 0.1), (0.9, 0.9)])
+        registry = TaskRegistry()
+        registry.handle_detection(make_detection(row=59, col=59))
+        tasks = registry.active_snapshots()
+        adapter.sync_tasks(tasks)
+        env.update_communication_graph()
+        env.propagate_task_completion()
+
+        snapshots = adapter.agent_snapshots()
+        knowing = sorted(item.agent_id for item in snapshots if item.known_tasks)
+        self.assertEqual(len(knowing), 2, "expected one species of two robots to be in range")
+        self.assertEqual(len(snapshots) - len(knowing), 4)
+        for snapshot in snapshots:
+            if snapshot.agent_id in knowing:
+                self.assertEqual(snapshot.known_tasks, ("target-a",))
+
+        advice = HeuristicCoordinator().advise(
+            CoordinatorInput(0.0, tasks, snapshots)
+        )
+        self.assertEqual(sorted(agent for agent, _ in advice.pair_bias), knowing)
+
+        commands = adapter.allocate(tasks, snapshots, advice, 0.0)
+        for command in commands:
+            if command.agent_id not in knowing:
+                self.assertIsNone(
+                    command.task_id,
+                    f"{command.agent_id} was assigned a target it never heard about",
+                )
+
+    def test_a_target_outside_every_comm_range_reaches_nobody(self) -> None:
+        env, adapter = self._wire(2, [(0.1, 0.1)])
+        registry = TaskRegistry()
+        registry.handle_detection(make_detection(row=59, col=59))
+        tasks = registry.active_snapshots()
+        adapter.sync_tasks(tasks)
+        env.update_communication_graph()
+        env.propagate_task_completion()
+
+        snapshots = adapter.agent_snapshots()
+        self.assertTrue(snapshots)
+        for snapshot in snapshots:
+            self.assertEqual(snapshot.known_tasks, ())
+
+        advice = HeuristicCoordinator().advise(
+            CoordinatorInput(0.0, tasks, snapshots)
+        )
+        self.assertEqual(advice.pair_bias, {})
+        # The target still exists in the registry; it is simply unheard of downstream.
+        self.assertIn("target-a", advice.task_bias)
 
 
 @unittest.skipUnless(HAS_TORCH, "torch is not installed")

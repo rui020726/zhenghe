@@ -331,7 +331,7 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
     )
 
     search_adapter = _build_search_side(configuration, scenario, device)
-    task_adapter = _build_task_side(configuration, device)
+    task_adapter = _build_task_side(configuration, scenario, device)
 
     registry = TaskRegistry()
     bus = InMemoryEventBus()
@@ -412,7 +412,27 @@ def _build_search_side(
     )
 
 
-def _build_task_side(configuration: RunConfiguration, device: str) -> Task03Adapter:
+def _rescue_depot_positions(
+    scenario: SearchScenario, species: int
+) -> list[tuple[float, float]]:
+    """Stage each rescue species where a search team started, in the shared scene.
+
+    Both teams respond to the same disaster, so their staging points have to be inside
+    it. TaskEnv would otherwise scatter depots uniformly over the unit square, which
+    can put every robot outside ``comm_range`` of every target forever.
+    """
+    cells = scenario.agent_positions
+    transform = scenario.transform
+    positions: list[tuple[float, float]] = []
+    for index in range(max(1, int(species))):
+        world = transform.to_world(cells[index % len(cells)])
+        positions.append((world.x, world.y))
+    return positions
+
+
+def _build_task_side(
+    configuration: RunConfiguration, scenario: SearchScenario, device: str
+) -> Task03Adapter:
     from .task03_runtime import (
         build_task_env,
         load_ctde_network,
@@ -437,6 +457,7 @@ def _build_task_side(configuration: RunConfiguration, device: str) -> Task03Adap
         species=configuration.rescue_species,
         per_species=configuration.rescue_per_species,
         dt=configuration.dt,
+        depot_positions=_rescue_depot_positions(scenario, configuration.rescue_species),
     )
     network = (
         load_ctde_network(
