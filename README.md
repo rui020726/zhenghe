@@ -71,7 +71,11 @@ checkpoint、地图或依赖缺失时打印一行 `[joint-driver] <ErrorType>: <
 当前测试覆盖：事件扇出、目标去重、坐标转换、协调偏置、PILOC 发现适配、
 外部任务注入 `old_task_env`、“发现—分配—执行—完成”端到端闭环、
 mock 联合推理的确定性与生命周期日志字段、分配命令 TTL 与 revision 校验、
-硬 mask 不可被残差绕过，以及 checkpoint/地图/依赖缺失时的清晰报错。
+硬 mask 不可被残差绕过、被拒命令在下一 tick 恰好重规划一次、
+检测半径在环境/策略/适配器三处只有一个真值、通信范围外的目标不被任何机器人或协调器使用、
+非整数 `dt` 下三个时钟仍然一致、场景载入 PILOC 后不残留随机初始状态、
+复用适配器开新 episode 不会重复事件 id、mock 的双通道地图与 PILOC 逐格一致，
+以及 checkpoint/地图/依赖缺失时的清晰报错。
 
 ## 联合推理入口
 
@@ -99,9 +103,21 @@ python -m integrated_sar.joint_driver \
 `--allocation-interval`、`--dt`、`--detection-radius`、`--no-coordinator`、`--quiet`。
 `--mock` 与任一 checkpoint 参数互斥。
 
+使用 `--piloc-checkpoint` 时还有两个约束，启动即校验，不会静默放行：
+`--detection-radius` 必须为 5（时间戳地图、信息素窗口和 `last_actions` 的形状都由
+`obs_radius` 推出，半径不一致会让环境按一个半径删除目标、适配器按另一个半径发事件）；
+`--dt` 必须为 1.0（`timemap.Environment` 每步固定把自己的时钟推进 1，无法配置）。
+
 两侧后端互相独立：省略 `--piloc-checkpoint` 时搜索侧使用前沿贪心策略，
 省略 `--task-checkpoint` 时分配侧使用启发式打分，摘要中的
 `search_backend`/`allocation_backend` 会标明实际使用的后端。
+
+目标如何传到救援队，决定了这一轮能完成多少：检测只写入环境真值（`task_dic`），
+哪台机器人知道它由 `old_task_env` 自己的 `comm_range` 视距感知加一跳 gossip 决定。
+分配器和协调器都不能对机器人尚未听说的目标做决策（架构不变量 9），因此通信范围和
+传播延迟会真实地体现在结果里。为此救援队的集结点被放在搜索队的出发格上，两队共享
+同一个灾区；`TaskEnv` 默认会把集结点随机撒在整个单位正方形，那样两队可能永远不在
+彼此通信范围内，闭环根本启动不了。
 
 `--output` 写出 JSONL 生命周期日志（`-` 表示标准输出），每条记录至少包含
 `target_id`、`source_event_id`、`event_type`、`timestamp`、`discovered_by`、

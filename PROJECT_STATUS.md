@@ -27,7 +27,33 @@
 - 无 checkpoint 的 mock 模式可在仅安装 NumPy 的机器上跑完整个 episode，且同一 seed 结果逐字节一致。
 - 修复 `JointSAROrchestrator` 的注入缺陷：`registry or TaskRegistry()` 与 `clock or GlobalClock()`
   因 `__len__`/`__float__` 返回假值而静默丢弃调用方实例，已改为显式 `is None` 判断并补回归测试。
-- 36 项集成测试通过。
+- 经一轮独立代码审查后修复的问题，每项都有对应回归测试：
+  - 检测半径原本有三个真值来源（mock 环境默认 5、策略与适配器用配置值、真实 PILOC 用
+    `obs_radius`），半径不等于 5 时既会漏任务也会给同一物理目标发多个 id；现在全链路共享一个值，
+    真实模式下非 5 直接拒绝启动（不变量 2、3）。
+  - 协调残差原本加在环境硬 mask 之后，只因内置 bias 恰好被 clamp 到 ±1 才没出事；
+    现在残差写完再 `masked_fill` 一次（不变量 6）。
+  - 被拒命令原本要等到协调周期才重规划，且消费后 `replan_agents` 留在缓存 advice 里导致每 tick
+    重复下发；现在下一 tick 恰好重规划一次（新增 `ReplanSource` 端口）。
+  - actor 与协调器原本直接读环境真值：新任务被广播进每台机器人的 knowledge，启发式分配读
+    `task_dic`，前沿策略读全体真实位置。现在检测只进真值，由 `comm_range` 感知加一跳 gossip 扩散，
+    启发式与协调器只用该机器人自己的 belief，分离项改读 PILOC 本就共享的信息素（不变量 9）。
+    代价是 20 步 mock 的 `progress_events` 由 22 降到 19、资源利用率由 0.82 降到 0.65，
+    这是通信受限的真实成本。
+  - 配套修复：`TaskEnv` 默认把救援队集结点随机撒在单位正方形，belief 收口后两队可能永远不在
+    通信范围内导致闭环死锁，现在集结点落在搜索队出发格上，两队共享同一灾区。
+  - 非整数 `dt` 时 mock 搜索环境仍按 1.0 推进，三个时钟分裂；现在统一按 `dt`，
+    真实 PILOC 无法配置故要求 `--dt 1.0`。
+  - 场景 `load()` 进 PILOC 后残留构造函数随机起点留下的信息素与位置历史，真实策略会绕着
+    没人去过的格子走；现在按构造函数同样的单遍顺序重建。
+  - 生命周期日志的 progress 记录原本写自己的 event_id，无法与 detection/assignment/final 串联；
+    且日志消费者不幂等，同一事件重发会写两行。两者均已修复。
+  - 复用适配器开新 episode 会重复 progress event id 并被注册表当重复丢弃；现在按 episode 命名空间隔离。
+  - `ProgressEvent.failure_reason` 从未填写，任务过期或超时在日志里也是空白；现在会给出原因。
+  - 注入任务的 `task_source` 由 `"piloc"` 改为 `"discovered"`：前者不在 `old_task_env` 的白名单里，
+    会静默把 `dynamic_tasks` 观测特征喂错给网络；溯源信息保留在 `external_task_id` 与 `discovered_by`。
+- mock 的双通道地图与 `timemap.Environment.two_channel_map` 逐格一致（含 `[0, 0.3]` 两端边界）。
+- 50 项集成测试通过。
 
 ## 尚未完成
 
@@ -46,6 +72,13 @@
 9. 用真实 checkpoint 复跑联合闭环。本仓库不含任何 `.pth`，当前真实权重路径只用
    架构匹配的合成 checkpoint 验证过（加载、strict 校验、探针、分配、执行、日志），
    真实训练权重的数值行为仍待在有权重的机器上确认。
+10. 提高 mock 搜索侧的保真度。目前只验证了双通道地图与 PILOC 逐格一致；时间戳老化、
+    智能体间地图融合、通信失败/部分丢失/延迟都没有实现，所以 mock 的完成率与策略表现
+    不能作为真实 PILOC 闭环有效性的证据，只能证明接口、日志与确定性。
+11. 加强加载期探针。当前只喂全零输入、固定 4 个任务，且发生在协调残差之前；
+    应补真实量级输入、不同任务数，以及“残差之后再校验 mask”的用例。
+12. 在 checkpoint 元数据里记录 `actor_kv_mode`。`summary` 与 `tokens` 的参数形状完全相同，
+    strict 加载发现不了模式选错，目前只能靠调用方传对参数。
 
 ## 推荐下一任务
 
