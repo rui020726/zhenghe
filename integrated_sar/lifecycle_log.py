@@ -93,6 +93,15 @@ class LifecycleLogger:
             self._stream = sink
         self._closed = False
         self.records_written = 0
+        # The registry already ignores a re-published event; a log consumer has to as
+        # well, or one duplicated publication inflates every downstream statistic.
+        self._seen_event_ids: set[str] = set()
+
+    def _first_time(self, event_id: str) -> bool:
+        if event_id in self._seen_event_ids:
+            return False
+        self._seen_event_ids.add(event_id)
+        return True
 
     def write(self, record: LifecycleRecord) -> LifecycleRecord:
         if self._closed:
@@ -115,7 +124,9 @@ class LifecycleLogger:
             )
         )
 
-    def handle_detection(self, event: DetectionEvent) -> LifecycleRecord:
+    def handle_detection(self, event: DetectionEvent) -> LifecycleRecord | None:
+        if not self._first_time(event.event_id):
+            return None
         snapshot = self._snapshot(event.target_id)
         return self.write(
             LifecycleRecord(
@@ -143,14 +154,18 @@ class LifecycleLogger:
             )
         )
 
-    def handle_progress(self, event: ProgressEvent) -> LifecycleRecord:
+    def handle_progress(self, event: ProgressEvent) -> LifecycleRecord | None:
+        if not self._first_time(event.event_id):
+            return None
         snapshot = self._snapshot(event.task_id)
         return self.write(
             LifecycleRecord(
                 target_id=event.task_id,
                 event_type="progress",
                 timestamp=event.observed_at,
-                source_event_id=event.event_id,
+                # The originating detection, so every record for one target joins on the
+                # same key; the progress event's own id stays available in detail.
+                source_event_id=snapshot.source_event_id if snapshot else None,
                 discovered_by=snapshot.metadata.get("discovered_by") if snapshot else None,
                 assigned_agents=event.members,
                 task_revision=snapshot.revision if snapshot else None,
@@ -159,7 +174,7 @@ class LifecycleLogger:
                 remaining_requirements=event.remaining_requirements,
                 status=event.status.value,
                 failure_reason=_failure_reason(event),
-                detail={"expired": event.expired},
+                detail={"expired": event.expired, "progress_event_id": event.event_id},
             )
         )
 

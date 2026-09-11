@@ -42,7 +42,7 @@ from integrated_sar.joint_driver import (
     main,
     run_from_configuration,
 )
-from integrated_sar.lifecycle_log import LIFECYCLE_FIELDS
+from integrated_sar.lifecycle_log import LIFECYCLE_FIELDS, RUN_TARGET_ID, LifecycleLogger
 from integrated_sar.orchestrator import JointSAROrchestrator
 from integrated_sar.scenarios import PILOC_OBS_RADIUS
 from integrated_sar.task_registry import TaskRegistry
@@ -1012,6 +1012,44 @@ class PilocScenarioLoadingTests(unittest.TestCase):
                         float(environment.local_pheromone[f"agent_{index}"]),
                         float(window.sum()),
                     )
+
+
+class LifecycleCorrelationTests(unittest.TestCase):
+    """The log must stay idempotent and let one target be traced by a single key."""
+
+    def test_a_republished_event_is_logged_once(self) -> None:
+        stream = io.StringIO()
+        registry = TaskRegistry()
+        bus = InMemoryEventBus()
+        bus.subscribe(DetectionEvent, registry.handle_detection)
+        logger = LifecycleLogger(stream, snapshot_of=registry.get)
+        bus.subscribe(DetectionEvent, logger.handle_detection)
+
+        event = make_detection()
+        for _ in range(3):
+            bus.publish(event)
+
+        records = [json.loads(line) for line in stream.getvalue().splitlines() if line.strip()]
+        self.assertEqual(registry.accepted_event_count, 1)
+        self.assertEqual(logger.records_written, 1)
+        self.assertEqual(len(records), 1, "the registry is idempotent, so the log must be too")
+
+    def test_every_record_for_a_target_shares_its_detection_id(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            configuration = make_configuration(directory)
+            run_from_configuration(configuration)
+            records = read_jsonl(configuration.output)
+
+        sources: dict[str, set[Any]] = {}
+        for record in records:
+            if record["target_id"] == RUN_TARGET_ID:
+                continue
+            sources.setdefault(record["target_id"], set()).add(record["source_event_id"])
+
+        self.assertTrue(sources)
+        for target_id, ids in sources.items():
+            self.assertEqual(len(ids), 1, f"{target_id} was logged under source ids {ids}")
+            self.assertIsNotNone(next(iter(ids)))
 
 
 class MissingDependencyTests(unittest.TestCase):
