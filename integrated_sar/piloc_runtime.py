@@ -130,7 +130,37 @@ def build_piloc_environment(
         np.asarray([[p.row, p.col] for p in scenario.agent_positions], dtype=np.int32),
         np.asarray([[p.row, p.col] for p in scenario.goal_positions], dtype=np.int32),
     )
+    _rebuild_position_state(environment)
     return environment
+
+
+def _rebuild_position_state(environment: Any) -> None:
+    """Re-derive everything ``timemap`` builds from agent positions.
+
+    ``Environment.load`` replaces the map, the positions, the goals and the action
+    cache, but ``__init__`` already marked its randomly drawn start cells in
+    ``global_pheromone``, computed a ``local_pheromone`` window around each of them
+    and seeded ``agent_positions_history`` with them. The trained policy reads that
+    pheromone window, so without this it would be steering around cells no robot in
+    the scenario ever occupied.
+    """
+    rows, cols = (int(value) for value in environment.map.shape)
+    num_agents = int(environment.num_agents)
+
+    environment.global_pheromone = np.zeros((rows, cols), dtype=np.float32)
+    environment.local_pheromone = {}
+    for index, position in enumerate(environment.agents_pos):
+        row, col = int(position[0]), int(position[1])
+        environment.global_pheromone[row, col] = 1
+        environment.local_pheromone[f"agent_{index}"] = environment.calculate_pheromone(row, col)
+
+    environment.agent_positions_history = {
+        f"agent_{index}": environment.agents_pos[index] for index in range(num_agents)
+    }
+    environment.global_timestamp_maps = np.full((rows, cols), 0.5, dtype=np.float32)
+    environment.check_repeat_pos = []
+    environment.comm_stats = {"success": 0, "failed": 0, "partial": 0, "delayed": 0, "total": 0}
+    environment.delayed_map_buffer = []
 
 
 def resolve_piloc_checkpoint(checkpoint: str | os.PathLike[str]) -> Path:

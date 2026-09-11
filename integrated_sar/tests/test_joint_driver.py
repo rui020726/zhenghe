@@ -49,6 +49,8 @@ from integrated_sar.task_registry import TaskRegistry
 
 _REAL_FIND_SPEC = importlib.util.find_spec
 HAS_TORCH = _REAL_FIND_SPEC("torch") is not None
+# timemap needs gym and Pillow; the search policy needs torch and tensorflow on top.
+HAS_PILOC_ENV = all(_REAL_FIND_SPEC(name) is not None for name in ("gym", "PIL"))
 
 
 def make_configuration(directory: str, **overrides: Any) -> RunConfiguration:
@@ -963,6 +965,53 @@ class CheckpointResolutionTests(unittest.TestCase):
             with self.assertRaises(AssetMissingError) as caught:
                 resolve_task_checkpoint(missing)
         self.assertIn(missing, str(caught.exception))
+
+
+@unittest.skipUnless(HAS_PILOC_ENV, "the PILOC environment needs gym and Pillow")
+class PilocScenarioLoadingTests(unittest.TestCase):
+    """``load`` must not leave state behind from the constructor's random starts."""
+
+    def test_no_pheromone_or_history_survives_from_a_random_start(self) -> None:
+        import numpy as np
+
+        from integrated_sar.piloc_runtime import build_piloc_environment
+        from integrated_sar.scenarios import build_scenario
+
+        for seed in (11, 23):
+            with self.subTest(seed=seed):
+                scenario = build_scenario(seed=seed, num_agents=2, num_goals=3)
+                environment = build_piloc_environment(scenario, seed=seed)
+
+                expected = {
+                    (int(position.row), int(position.col))
+                    for position in scenario.agent_positions
+                }
+                marked = {
+                    (int(row), int(col))
+                    for row, col in zip(*np.nonzero(environment.global_pheromone))
+                }
+                self.assertEqual(marked, expected)
+
+                for index, position in enumerate(scenario.agent_positions):
+                    row, col = int(position.row), int(position.col)
+                    agent_id = f"agent_{index}"
+                    history = environment.agent_positions_history[agent_id]
+                    self.assertEqual((int(history[0]), int(history[1])), (row, col))
+
+                # timemap marks each start cell and measures that agent's window in
+                # the same pass, so agent i only ever sees the marks of agents 0..i.
+                staged = np.zeros(environment.map.shape, dtype=np.float32)
+                for index, position in enumerate(scenario.agent_positions):
+                    row, col = int(position.row), int(position.col)
+                    staged[row, col] = 1.0
+                    window = staged[
+                        max(0, row - PILOC_OBS_RADIUS) : row + PILOC_OBS_RADIUS + 1,
+                        max(0, col - PILOC_OBS_RADIUS) : col + PILOC_OBS_RADIUS + 1,
+                    ]
+                    self.assertEqual(
+                        float(environment.local_pheromone[f"agent_{index}"]),
+                        float(window.sum()),
+                    )
 
 
 class MissingDependencyTests(unittest.TestCase):
