@@ -592,6 +592,62 @@ class CoordinatorResidualTests(unittest.TestCase):
             self.assertNotIn(action_index, masked_indices)
 
 
+@unittest.skipUnless(HAS_TORCH, "torch is not installed")
+class HardMaskOrderingTests(unittest.TestCase):
+    """Invariant 6 must hold for an unbounded residual, not just a small one."""
+
+    def test_an_unbounded_residual_cannot_select_a_masked_task(self) -> None:
+        import numpy as np
+        import torch
+        from types import SimpleNamespace
+
+        from integrated_sar.adapters.task03 import MASKED_LOGIT, Task03Adapter
+
+        action_map = [("depot", None), ("task", 7), ("task", 8)]
+        mask = np.array([False, True, False])
+
+        class _StubEnv:
+            def get_local_obs(self, agent_id: int, max_tasks: int | None = None) -> Any:
+                del agent_id, max_tasks
+                return (
+                    np.zeros(4, dtype=np.float32),
+                    np.zeros((2, 4), dtype=np.float32),
+                    np.zeros((len(action_map), 4), dtype=np.float32),
+                    mask,
+                    action_map,
+                )
+
+        class _MaskingNetwork:
+            """Mirrors old_network: the hard mask is applied inside get_action."""
+
+            def parameters(self) -> Any:
+                return iter([torch.zeros(1)])
+
+            def get_action(self, state: Any, neighbors: Any, tasks: Any, hard_mask: Any) -> Any:
+                del state, neighbors
+                logits = torch.zeros(tasks.shape[0], tasks.shape[1])
+                return SimpleNamespace(logits=logits.masked_fill(hard_mask.bool(), MASKED_LOGIT))
+
+        adapter = Task03Adapter(
+            env=_StubEnv(),
+            network=_MaskingNetwork(),
+            clear_initial_tasks=False,
+            residual_scale=1.0,
+        )
+        adapter.internal_to_external = {7: "target-masked", 8: "target-legal"}
+        advice = CoordinationAdvice(
+            revision=1,
+            generated_at=0.0,
+            valid_until=1.0,
+            task_bias={"target-masked": 1e12},
+            pair_bias={("0", "target-masked"): 1e12},
+        )
+
+        chosen = adapter._network_action(0, action_map, advice)
+        self.assertNotEqual(chosen, 1, "a masked task became selectable again")
+        self.assertFalse(bool(mask[chosen]))
+
+
 class _IdleSearch:
     def step(self, current_time: float, dt: float) -> Any:
         del current_time, dt

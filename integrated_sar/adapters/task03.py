@@ -17,6 +17,11 @@ from ..contracts import (
     WorldPosition,
 )
 
+# Same sentinel old_network.CTDE_Network.get_action uses for illegal actions, so
+# re-applying the mask after the coordinator residual cannot change which actions
+# are legal -- only restore the constraint the residual was allowed to weaken.
+MASKED_LOGIT = -1e9
+
 
 class Task03Adapter:
     """
@@ -290,12 +295,13 @@ class Task03Adapter:
         except StopIteration:
             device = torch.device("cpu")
 
+        mask_tensor = torch.as_tensor(mask, dtype=torch.bool, device=device).unsqueeze(0)
         with torch.no_grad():
             distribution = self.network.get_action(
                 torch.as_tensor(state, dtype=torch.float32, device=device).unsqueeze(0),
                 torch.as_tensor(neighbors, dtype=torch.float32, device=device).unsqueeze(0),
                 torch.as_tensor(tasks, dtype=torch.float32, device=device).unsqueeze(0),
-                torch.as_tensor(mask, dtype=torch.bool, device=device).unsqueeze(0),
+                mask_tensor,
             )
             logits = distribution.logits.clone()
             for index, (kind, internal_task_id) in enumerate(action_map):
@@ -306,6 +312,11 @@ class Task03Adapter:
                     logits[0, index] += self.residual_scale * advice.bias_for(
                         str(agent_id), external_id
                     )
+            # Invariant 6: the environment's hard mask is the last thing applied.
+            # get_action already masked these logits, but the residual lands afterwards
+            # and CoordinationAdvice bounds nothing, so without this a large enough bias
+            # would make an illegal action selectable again.
+            logits = logits.masked_fill(mask_tensor, MASKED_LOGIT)
             residual_distribution = torch.distributions.Categorical(logits=logits)
             if self.deterministic:
                 return int(torch.argmax(logits, dim=-1).item())
