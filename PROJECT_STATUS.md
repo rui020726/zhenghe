@@ -13,32 +13,51 @@
 - 实现 PILOC 兼容适配器，可将当前“发现即删除”行为重建为事件。
 - 实现 task-03 适配器，可注入外部多阶段任务、叠加协调 bias、执行并返回进度。
 - 端到端演示能够完成 `发现 → 分配 → 执行 → 完成`。
-- 7 项集成测试通过。
+- 统一场景生成器 `scenarios.py`：障碍图生成与加载（`.npy`/图片/文本）、最大连通域筛选、
+  稳定 `target_id`、`CoordinateTransform`（`x = col/(width-1)`、`y = row/(height-1)`）。
+- 仅推理联合入口 `joint_driver.py`：统一全局时钟、命令行参数、错误分类与 JSON 摘要。
+- 搜索侧运行时：`search_runtime.py` 提供仅依赖 NumPy 的 `MockGridSearchEnv` 与前沿贪心策略，
+  `piloc_runtime.py` 在有权重时按 strict 模式加载 PILOC 策略。
+- 任务侧运行时：`task03_runtime.py` 按 strict 模式加载 CTDE 权重，并在加载期探针中
+  拒绝产生 NaN logits 或违反环境硬 mask 的权重。
+- 分配闸门 `assignment_gate.py`：TTL 过期与 `task_revision` 不一致的命令不进入执行，
+  受影响 agent 转为重规划请求。
+- 生命周期日志 `lifecycle_log.py`：JSONL 输出 12 个必需字段，可按 `target_id`/`source_event_id`
+  追踪单个目标从发现到完成的完整轨迹。
+- 无 checkpoint 的 mock 模式可在仅安装 NumPy 的机器上跑完整个 episode，且同一 seed 结果逐字节一致。
+- 修复 `JointSAROrchestrator` 的注入缺陷：`registry or TaskRegistry()` 与 `clock or GlobalClock()`
+  因 `__len__`/`__float__` 返回假值而静默丢弃调用方实例，已改为显式 `is None` 判断并补回归测试。
+- 36 项集成测试通过。
 
 ## 尚未完成
 
 按推荐优先级排列：
 
 1. 在 PILOC 环境中原生发出 `DetectionEvent`，不再依赖适配器重建。
-2. 创建统一场景生成器和稳定目标 ID；目标发现后保留到真正救援完成。
-3. 编写 `joint_driver.py`，加载 PILOC 与 `old_network` checkpoint 并运行真实闭环。
-4. 用共享障碍图的路径代价替换 task-03 欧氏距离与直线移动。
-5. 修复 `old_network` 全 padding 邻居 attention 的 NaN 风险。
-6. 修复 `old_driver` critic padding mask 和 agent/时间步 GAE 对齐。
-7. 将规则协调器替换为有界学习型残差网络，并加入训练 buffer。
-8. 建立搜索、协调、任务分配联合奖励与延迟信用关联。
-9. 增加端到端基准和消融：无协调、规则协调、学习协调、无反馈。
+2. 让 PILOC 环境在发现后保留目标实体。当前 `timemap` 仍会删除已发现目标；
+   集成层已通过注册表把任务生命周期保留到真正完成，但搜索侧的原生行为尚未修改。
+3. 用共享障碍图的路径代价替换 task-03 欧氏距离与直线移动。
+4. 修复 `old_network` 全 padding 邻居 attention 的 NaN 风险。目前只在加载期探针中拦截，
+   `summary` 模式的权重会被拒绝加载，主线 `tokens` 模式不受影响，上游代码尚未修改。
+5. 修复 `old_driver` critic padding mask 和 agent/时间步 GAE 对齐。
+6. 将规则协调器替换为有界学习型残差网络，并加入训练 buffer。
+7. 建立搜索、协调、任务分配联合奖励与延迟信用关联。
+8. 增加端到端基准和消融：无协调、规则协调、学习协调、无反馈。
+9. 用真实 checkpoint 复跑联合闭环。本仓库不含任何 `.pth`，当前真实权重路径只用
+   架构匹配的合成 checkpoint 验证过（加载、strict 校验、探针、分配、执行、日志），
+   真实训练权重的数值行为仍待在有权重的机器上确认。
 
 ## 推荐下一任务
 
-实现一个仅推理的 `joint_driver.py`：
+在有权重的机器上跑一次真实闭环，并确认日志可追踪：
 
-- 使用固定小地图和固定 seed；
-- 分别加载已有搜索与任务分配 checkpoint；
-- 使用 `HeuristicCoordinator`；
-- 运行一个 episode；
-- 输出每个目标的发现时间、首次分配、阶段进度、完成时间和重规划次数；
-- 不在该阶段做联合训练。
+- 用团队共享存储中的 `shared_mappo_model_*.pth` 与 `ctde_final.pth`；
+- 固定 60×60 障碍图与 seed，`--steps` 取足以完成若干目标的长度；
+- 检查摘要中 `search_backend=piloc-trained`、`allocation_backend=ctde-network`、
+  `rejected_assignments` 是否非零；
+- 若 PILOC 权重与当前网络结构不匹配，驱动会以 `CheckpointIncompatibleError` 明确报错，
+  此时应核对 `dim_info` 与 `num_agent` 而不是放宽 strict 加载；
+- 之后再做第 1、2 项，让搜索侧原生发事件并保留目标。
 
 验收标准是可以从日志中用 `target_id/source_event_id` 追踪每个目标的完整生命周期。
 

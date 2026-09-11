@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Iterable
 
+from .clock import GlobalClock
 from .contracts import (
     CoordinationAdvice,
     CoordinatorInput,
@@ -28,6 +29,7 @@ class JointSAROrchestrator:
         executor: Executor,
         registry: TaskRegistry | None = None,
         event_bus: InMemoryEventBus | None = None,
+        clock: GlobalClock | None = None,
         dt: float = 1.0,
         coordination_interval: int = 5,
         allocation_interval: int = 5,
@@ -43,17 +45,24 @@ class JointSAROrchestrator:
         self.coordinator = coordinator
         self.allocator = allocator
         self.executor = executor
-        self.registry = registry or TaskRegistry()
-        self.event_bus = event_bus or InMemoryEventBus()
+        # Explicit None checks: an empty TaskRegistry is falsy via __len__ and a freshly
+        # started GlobalClock is falsy via __float__, so `x or Default()` would silently
+        # discard the instance the caller injected.
+        self.registry = registry if registry is not None else TaskRegistry()
+        self.event_bus = event_bus if event_bus is not None else InMemoryEventBus()
+        self.clock = clock if clock is not None else GlobalClock()
         self.dt = float(dt)
         self.coordination_interval = int(coordination_interval)
         self.allocation_interval = int(allocation_interval)
         self.step_index = 0
-        self.current_time = 0.0
         self._advice = CoordinationAdvice(0, 0.0, 0.0)
 
         self.event_bus.subscribe(DetectionEvent, self.registry.handle_detection)
         self.event_bus.subscribe(ProgressEvent, self.registry.handle_progress)
+
+    @property
+    def current_time(self) -> float:
+        return self.clock.now
 
     def step(self) -> StepReport:
         now = self.current_time
@@ -69,6 +78,10 @@ class JointSAROrchestrator:
         execution_result = self.executor.step(now, self.dt)
         for event in execution_result.progress_events:
             self.event_bus.publish(event)
+
+        # The physical step has happened: every later decision in this tick judges
+        # command validity against the same global time the simulators now hold.
+        self.clock.advance_to(decision_time)
 
         tasks = self.registry.active_snapshots()
         agents = tuple(self.agent_source.agent_snapshots())
@@ -102,7 +115,6 @@ class JointSAROrchestrator:
             )
             self.executor.apply_assignments(assignments)
 
-        self.current_time = decision_time
         self.step_index += 1
         return StepReport(
             step=self.step_index,
@@ -122,5 +134,5 @@ class JointSAROrchestrator:
         self.registry.clear()
         self.event_bus.clear_history()
         self.step_index = 0
-        self.current_time = 0.0
+        self.clock.reset()
         self._advice = CoordinationAdvice(0, 0.0, 0.0)
