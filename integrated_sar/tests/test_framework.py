@@ -4,6 +4,7 @@ import unittest
 
 from integrated_sar.contracts import (
     AgentSnapshot,
+    AgentTaskBelief,
     CoordinateTransform,
     CoordinatorInput,
     DetectionEvent,
@@ -88,6 +89,17 @@ class CoordinatorTests(unittest.TestCase):
         registry.handle_detection(detection())
         task = registry.get("target-1")
         assert task is not None
+        # The coordinator scores from each robot's own belief (invariant 9), so a
+        # robot is only biased towards tasks it has actually received.
+        belief = AgentTaskBelief(
+            task_id="target-1",
+            position=WorldPosition(0.7, 0.3),
+            remaining_requirements=(1, 0, 1, 0, 0),
+            deadline=task.deadline,
+            stage_index=0,
+            progress=0.0,
+            severity=0.7,
+        )
         coordinator = HeuristicCoordinator()
         advice = coordinator.advise(
             CoordinatorInput(
@@ -95,10 +107,12 @@ class CoordinatorTests(unittest.TestCase):
                 tasks=(task,),
                 agents=(
                     AgentSnapshot(
-                        "near", WorldPosition(0.7, 0.3), (1, 0, 1, 0, 0)
+                        "near", WorldPosition(0.7, 0.3), (1, 0, 1, 0, 0),
+                        known_tasks=("target-1",), task_beliefs=(belief,),
                     ),
                     AgentSnapshot(
-                        "far", WorldPosition(0.0, 1.0), (0, 1, 0, 0, 0)
+                        "far", WorldPosition(0.0, 1.0), (0, 1, 0, 0, 0),
+                        known_tasks=("target-1",), task_beliefs=(belief,),
                     ),
                 ),
             )
@@ -107,6 +121,23 @@ class CoordinatorTests(unittest.TestCase):
             advice.pair_bias[("near", "target-1")],
             advice.pair_bias[("far", "target-1")],
         )
+
+    def test_a_robot_without_a_belief_gets_no_bias_at_all(self) -> None:
+        registry = TaskRegistry()
+        registry.handle_detection(detection())
+        task = registry.get("target-1")
+        assert task is not None
+        advice = HeuristicCoordinator().advise(
+            CoordinatorInput(
+                current_time=5.0,
+                tasks=(task,),
+                agents=(
+                    AgentSnapshot("blind", WorldPosition(0.7, 0.3), (1, 0, 1, 0, 0)),
+                ),
+            )
+        )
+        self.assertEqual(advice.pair_bias, {})
+        self.assertEqual(advice.task_bias, {})
 
 
 class EndToEndTests(unittest.TestCase):

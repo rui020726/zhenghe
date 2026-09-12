@@ -146,6 +146,7 @@ class DetectionMessage:
     deadline: float
     severity: float
     confidence: float
+    progress: float = 0.0
     members: tuple[str, ...] = ()
     discovered_by: str | None = None
 
@@ -205,6 +206,29 @@ class TaskSnapshot:
 
 
 @dataclass(frozen=True, slots=True)
+class AgentTaskBelief:
+    """What one robot believes about one task, as delivered by communication.
+
+    This is the only task view a decentralized decision may use: the online
+    coordinator scores pairs from it (invariant 9), and the executor navigates
+    to ``position`` here rather than to registry truth.
+    """
+
+    task_id: str
+    position: WorldPosition
+    remaining_requirements: tuple[int, ...]
+    deadline: float
+    stage_index: int
+    progress: float
+    severity: float
+    future_requirements: tuple[int, ...] = ()
+    members: tuple[str, ...] = ()
+    updated_at: float = 0.0
+    finished: bool = False
+    dynamic: bool = False
+
+
+@dataclass(frozen=True, slots=True)
 class AgentSnapshot:
     agent_id: str
     position: WorldPosition
@@ -215,7 +239,16 @@ class AgentSnapshot:
     # External ids of the tasks this robot has actually heard about, by sensing or by
     # gossip. None means the agent source does not model belief, so nothing is filtered.
     known_tasks: tuple[str, ...] | None = None
+    # The beliefs behind those ids. Empty means the source models no belief at all,
+    # in which case consumers fall back to the id filter only.
+    task_beliefs: tuple[AgentTaskBelief, ...] = ()
     metadata: Mapping[str, Any] = field(default_factory=dict)
+
+    def belief_for(self, task_id: str) -> AgentTaskBelief | None:
+        for belief in self.task_beliefs:
+            if belief.task_id == task_id:
+                return belief
+        return None
 
 
 @dataclass(frozen=True, slots=True)

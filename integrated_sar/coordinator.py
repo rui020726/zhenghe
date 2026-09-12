@@ -62,55 +62,62 @@ class HeuristicCoordinator:
         self._revision = 0
 
     def advise(self, state: CoordinatorInput) -> CoordinationAdvice:
+        """Score every (robot, task) pair from that robot's own belief.
+
+        Invariant 9: the coordinator is an online module, so it may only use
+        information that reached a robot over the communication chain. Every
+        number here is derived from ``AgentSnapshot.task_beliefs`` -- never from
+        the registry's task snapshots -- so a robot with a stale belief, or no
+        belief at all, cannot be biased towards a target it has not heard about
+        and cannot receive a task update that never arrived.
+        """
         self._revision += 1
-        active_tasks = [task for task in state.tasks if task.active]
-        task_by_id = {task.task_id: task for task in active_tasks}
+        task_by_id = {task.task_id: task for task in state.tasks if task.active}
         task_bias: dict[str, float] = {}
         pair_bias: dict[tuple[str, str], float] = {}
         replan_agents: set[str] = set()
-
-        for task in active_tasks:
-            time_left = task.deadline - state.current_time
-            urgency = 1.0 - _clamp(time_left / self.urgency_horizon, 0.0, 1.0)
-            unfinished = 1.0 - task.progress
-            score = (
-                self.urgency_weight * urgency
-                + self.progress_weight * unfinished
-                + self.severity_weight * task.severity
-                + self.confidence_weight * task.confidence
-            )
-            if task.expired:
-                score -= 0.25
-            task_bias[task.task_id] = _clamp(score)
 
         for agent in state.agents:
             if agent.current_task and agent.current_task not in task_by_id:
                 replan_agents.add(agent.agent_id)
 
-            # Invariant 9: only bias pairs this robot can actually have heard about.
-            # A robot that never received the detection cannot act on it, and scoring
-            # it anyway would leak registry truth into a decentralized decision.
             known = agent.known_tasks
-            for task in active_tasks:
-                if known is not None and task.task_id not in known:
+            for belief in agent.task_beliefs:
+                task_id = belief.task_id
+                if task_id not in task_by_id:
+                    # Unheard-of or already closed in the registry: no bias at all.
                     continue
-                required = task.remaining_requirements
+                if known is not None and task_id not in known:
+                    continue
+
+                time_left = belief.deadline - state.current_time
+                urgency = 1.0 - _clamp(time_left / self.urgency_horizon, 0.0, 1.0)
+                unfinished = 1.0 - _clamp(belief.progress, 0.0, 1.0)
+                score = (
+                    self.urgency_weight * urgency
+                    + self.progress_weight * unfinished
+                    + self.severity_weight * belief.severity
+                    + self.confidence_weight * task_by_id[task_id].confidence
+                )
+                task_bias[task_id] = max(task_bias.get(task_id, -1.0), _clamp(score))
+
+                required = belief.remaining_requirements
                 denominator = max(1.0, float(sum(required)))
                 overlap = sum(
                     min(float(ability), float(need))
                     for ability, need in zip(agent.abilities, required)
                 ) / denominator
                 distance = math.hypot(
-                    agent.position.x - task.position.x,
-                    agent.position.y - task.position.y,
+                    agent.position.x - belief.position.x,
+                    agent.position.y - belief.position.y,
                 ) / math.sqrt(2.0)
                 busy = (
                     self.busy_penalty
                     if agent.status not in {"idle", "available"}
-                    and agent.current_task != task.task_id
+                    and agent.current_task != task_id
                     else 0.0
                 )
-                pair_bias[(agent.agent_id, task.task_id)] = _clamp(
+                pair_bias[(agent.agent_id, task_id)] = _clamp(
                     self.compatibility_weight * overlap
                     - self.distance_weight * distance
                     - busy
@@ -123,5 +130,5 @@ class HeuristicCoordinator:
             task_bias=task_bias,
             pair_bias=pair_bias,
             replan_agents=frozenset(replan_agents),
-            metadata={"policy": "heuristic-residual-v1"},
+            metadata={"policy": "heuristic-residual-v2-belief-only"},
         )

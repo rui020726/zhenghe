@@ -745,12 +745,35 @@ class BeliefBoundaryTests(unittest.TestCase):
         self.assertTrue(snapshots)
         for snapshot in snapshots:
             self.assertEqual(snapshot.known_tasks, ())
+            self.assertEqual(snapshot.task_beliefs, ())
 
         advice = HeuristicCoordinator().advise(
             CoordinatorInput(0.0, tasks, snapshots)
         )
+        # Nothing reached a robot, so the coordinator has nothing to bias: it
+        # reads beliefs, not the registry's task pool (invariant 9).
         self.assertEqual(advice.pair_bias, {})
+        self.assertEqual(advice.task_bias, {})
         # The target still exists in the registry; it is simply unheard of downstream.
+        self.assertEqual(len(tasks), 1)
+
+    def test_a_robot_that_holds_a_belief_does_get_bias(self) -> None:
+        env, adapter = self._wire(3, [(0.1, 0.1), (0.9, 0.9)])
+        registry = TaskRegistry()
+        registry.handle_detection(make_detection(row=59, col=59))
+        tasks = registry.active_snapshots()
+        adapter.sync_tasks(tasks)
+        env.update_communication_graph()
+        env.propagate_task_completion()
+
+        snapshots = adapter.agent_snapshots()
+        knowing = sorted(item.agent_id for item in snapshots if item.task_beliefs)
+        self.assertTrue(knowing, "no robot learned the target")
+
+        advice = HeuristicCoordinator().advise(
+            CoordinatorInput(0.0, tasks, snapshots)
+        )
+        self.assertEqual(sorted(agent for agent, _ in advice.pair_bias), knowing)
         self.assertIn("target-a", advice.task_bias)
 
 

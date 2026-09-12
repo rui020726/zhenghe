@@ -8,6 +8,7 @@ from typing import Any
 
 from ..contracts import (
     AgentSnapshot,
+    AgentTaskBelief,
     AssignmentCommand,
     CoordinationAdvice,
     ExecutionStepResult,
@@ -278,10 +279,50 @@ class Task03Adapter:
                     current_task=task_id,
                     needs_decision=bool(agent.get("need_decision", False)),
                     known_tasks=known_tasks,
+                    task_beliefs=self._task_beliefs(knowledge),
                     metadata={"species": int(agent.get("species", -1))},
                 )
             )
         return tuple(snapshots)
+
+    def _task_beliefs(self, knowledge: Mapping[str, Any]) -> tuple[AgentTaskBelief, ...]:
+        """The per-task beliefs behind one robot's ``known_tasks``, sorted by id."""
+        beliefs: list[AgentTaskBelief] = []
+        for internal_id in sorted(knowledge.get("known_tasks", ())):
+            external_id = self.internal_to_external.get(int(internal_id))
+            if external_id is None:
+                continue
+            location = knowledge.get("task_locations", {}).get(internal_id)
+            remaining = knowledge.get("task_current_status", {}).get(internal_id)
+            if location is None or remaining is None:
+                continue
+            beliefs.append(
+                AgentTaskBelief(
+                    task_id=external_id,
+                    position=WorldPosition(float(location[0]), float(location[1])),
+                    remaining_requirements=tuple(int(value) for value in remaining),
+                    deadline=float(knowledge["task_deadlines"].get(internal_id, 0.0)),
+                    stage_index=int(knowledge.get("task_stage_index", {}).get(internal_id, 0)),
+                    progress=float(knowledge.get("task_progress", {}).get(internal_id, 0.0)),
+                    severity=float(
+                        knowledge.get("task_scene_complexity", {}).get(internal_id, 0.5)
+                    ),
+                    future_requirements=tuple(
+                        int(value)
+                        for value in knowledge.get("task_future_requirements", {}).get(
+                            internal_id, ()
+                        )
+                    ),
+                    members=tuple(
+                        str(member)
+                        for member in knowledge.get("task_members", {}).get(internal_id, ())
+                    ),
+                    updated_at=float(knowledge["task_last_update_time"].get(internal_id, 0.0)),
+                    finished=internal_id in knowledge.get("known_finished", ()),
+                    dynamic=internal_id in knowledge.get("dynamic_tasks", ()),
+                )
+            )
+        return tuple(beliefs)
 
     def allocate(
         self,

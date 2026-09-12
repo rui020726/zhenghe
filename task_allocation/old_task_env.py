@@ -292,6 +292,7 @@ class TaskEnv:
                 "task_stage_index": {tid: int(task.get("current_stage_index", 0)) for tid, task in self.task_dic.items()},
                 "task_future_requirements": {tid: self._future_requirements(task) for tid, task in self.task_dic.items()},
                 "task_scene_complexity": {tid: float(task.get("scene_complexity", 0.5)) for tid, task in self.task_dic.items()},
+                "task_progress": {tid: 1.0 if task.get("finished", False) else 0.0 for tid, task in self.task_dic.items()},
             }
             for aid in self.agent_dic.keys()
         }
@@ -322,8 +323,24 @@ class TaskEnv:
             future_req = np.zeros(self.traits_dim, dtype=int)
         knowledge["task_future_requirements"][tid] = future_req.copy()
         knowledge["task_scene_complexity"][tid] = float(view.get("scene_complexity", 0.5))
+        knowledge["task_progress"][tid] = float(view.get("progress", 0.0))
         if view.get("dynamic"):
             knowledge["dynamic_tasks"].add(tid)
+
+    def task_progress_of(self, task):
+        """任务完成比例，与集成层 ProgressEvent 的定义 (已完成阶段 + 当前阶段比例)/总阶段 一致。"""
+        stages = task["stages"]
+        total = max(1, len(stages))
+        if task.get("finished", False):
+            return 1.0
+        stage_index = min(int(task.get("current_stage_index", 0)), total - 1)
+        stage = stages[stage_index]
+        remaining = np.asarray(task.get("status", stage["status"]))
+        fraction = 0.0
+        if all(value <= 0 for value in remaining):
+            duration = max(float(stage.get("time", 1.0)), 1e-6)
+            fraction = 1.0 - max(0.0, float(stage.get("time_left", 0.0))) / duration
+        return max(0.0, min(1.0, (stage_index + fraction) / total))
 
     def refresh_task_belief(self, agent_id, tid, update_time=None):
         """视距感知/到场核实：机器人用现场真值刷新自己对任务 tid 的 belief。"""
@@ -342,6 +359,7 @@ class TaskEnv:
                 "stage_index": stage_index,
                 "future_requirements": self._future_requirements(task),
                 "scene_complexity": float(task.get("scene_complexity", 0.5)),
+                "progress": self.task_progress_of(task),
                 "dynamic": self.task_source.get(tid) in ("discovered", "tidal"),
             },
         )
@@ -366,6 +384,7 @@ class TaskEnv:
                 tid: value.copy() for tid, value in knowledge["task_future_requirements"].items()
             },
             "task_scene_complexity": dict(knowledge["task_scene_complexity"]),
+            "task_progress": dict(knowledge["task_progress"]),
         }
 
     def _share_task_belief(self, sender, tid, receiver):
@@ -386,6 +405,9 @@ class TaskEnv:
         ).copy()
         receiver["task_scene_complexity"][tid] = float(
             sender["task_scene_complexity"].get(tid, task.get("scene_complexity", 0.5))
+        )
+        receiver["task_progress"][tid] = float(
+            sender["task_progress"].get(tid, self.task_progress_of(task))
         )
         if tid in sender["dynamic_tasks"]:
             receiver["dynamic_tasks"].add(tid)
@@ -946,10 +968,27 @@ class TaskEnv:
             agent.update({"need_decision": True, "status": "idle"})
             return -1.0, True, []
 
+        # 不变量 9：动作虽然由 belief 里的 action_map 选出，导航目标与预期状态也必须
+        # 来自该机器人的 belief。任务真值只在到场核实（verify_task_on_arrival）时才用，
+        # 否则丢包/延迟期间机器人会直奔一个自己从未收到的位置。
+        knowledge = self.agent_knowledge[agent_id]
+        believed_location = knowledge["task_locations"].get(task_id)
+        believed_status = knowledge["task_current_status"].get(task_id)
+        target_pos = (
+            np.asarray(believed_location, dtype=float).copy()
+            if believed_location is not None
+            else self.task_dic[task_id]["location"].copy()
+        )
+        expected_state = (
+            np.asarray(believed_status, dtype=int).copy()
+            if believed_status is not None
+            else self.task_dic[task_id]["status"].copy()
+        )
+
         agent.update(
-            {"target_type": "task", "target_id": task_id, "target_pos": self.task_dic[task_id]["location"].copy(),
+            {"target_type": "task", "target_id": task_id, "target_pos": target_pos,
              "status": "moving", "is_rushing": True, "current_task": task_id, "need_decision": False,
-             "target_task_expected_state": self.task_dic[task_id]["status"].copy(), "working_start_time": None,
+             "target_task_expected_state": expected_state, "working_start_time": None,
              "working_timeout_value": None, "consecutive_timeouts": 0})
         return self._compute_shaping_reward(agent_id, task_id), False, []
 
@@ -1090,13 +1129,18 @@ class TaskEnv:
         return f_task
 
     def check_agent_enroute_replan(self, agent_id):
+        # 不变量 9：在途重规划只看这台机器人自己的 belief。真值显示任务已完成、
+        # 但消息还没送达时，机器人应当继续前往；到场后由 verify_task_on_arrival 核实。
         agent = self.agent_dic[agent_id]
         if agent.get("target_type") != "task" or agent.get("target_id") is None: return False, "Not enroute"
         task_id = int(agent["target_id"])
         if task_id not in self.task_dic: return True, "Target no longer exists"
-        task = self.task_dic[task_id]
-        if task_id in self.agent_knowledge[agent_id]["known_finished"] or task["finished"]: return True, "Task finished"
-        if np.minimum(task["status"], agent["abilities"]).sum() <= 0: return True, "Cannot contribute"
+        knowledge = self.agent_knowledge[agent_id]
+        if task_id not in knowledge["known_tasks"]: return True, "Task unknown"
+        if task_id in knowledge["known_finished"]: return True, "Task finished"
+        believed_status = knowledge["task_current_status"].get(task_id)
+        if believed_status is not None and np.minimum(believed_status, agent["abilities"]).sum() <= 0:
+            return True, "Cannot contribute"
         return False, "OK"
 
 
