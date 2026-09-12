@@ -309,8 +309,12 @@ class FrontierSearchPolicy:
     positions: pheromone is PILOC's own coordination medium and the trained policy
     already observes it through a view-radius window, so this spreads the team
     without any robot needing environment truth about its teammates (invariant 9).
-    Illegal moves are only ever chosen when every move is illegal, and ties break on
-    the action index so a seed fully determines the episode.
+    Only the pheromone the agent can currently observe is read: the map is masked
+    to the view-radius window around the agent's own cell before scoring, so a
+    change outside the current view -- including the ring a candidate-centred
+    window would have exposed -- can never influence the action. Illegal moves are
+    only ever chosen when every move is illegal, and ties break on the action
+    index so a seed fully determines the episode.
     """
 
     def __init__(
@@ -341,18 +345,40 @@ class FrontierSearchPolicy:
         for index, agent_id in enumerate(env.agents):
             agent_obs = np.asarray(obs[agent_id], dtype=np.float32)
             unknown = agent_obs == UNKNOWN_VALUE
+            row, col = (int(value) for value in positions[index])
+            observable = self._observable_pheromone(pheromone, row, col, rows, cols)
             best_action, best_score = 0, -np.inf
-            for action_index, (row, col) in enumerate(candidate_positions[index]):
-                if row < 0:
+            for action_index, (candidate_row, candidate_col) in enumerate(
+                candidate_positions[index]
+            ):
+                if candidate_row < 0:
                     score = -self.illegal_penalty
                 else:
-                    score = float(self._frontier_gain(unknown, row, col, rows, cols))
-                    score -= self.separation_weight * self._trail_penalty(pheromone, row, col)
+                    score = float(self._frontier_gain(unknown, candidate_row, candidate_col, rows, cols))
+                    score -= self.separation_weight * self._trail_penalty(
+                        observable, candidate_row, candidate_col
+                    )
                 if score > best_score:
                     best_action, best_score = action_index, score
             actions[str(agent_id)] = best_action
 
         return actions
+
+    def _observable_pheromone(
+        self,
+        pheromone: np.ndarray,
+        row: int,
+        col: int,
+        rows: int,
+        cols: int,
+    ) -> np.ndarray:
+        """Pheromone zeroed everywhere outside the agent's current view window."""
+        radius = self.view_radius
+        masked = np.zeros_like(pheromone)
+        row_min, row_max = max(0, row - radius), min(rows, row + radius + 1)
+        col_min, col_max = max(0, col - radius), min(cols, col + radius + 1)
+        masked[row_min:row_max, col_min:col_max] = pheromone[row_min:row_max, col_min:col_max]
+        return masked
 
     def _candidate_positions(
         self,
