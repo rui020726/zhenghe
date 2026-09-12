@@ -1,17 +1,30 @@
+import argparse
+import json
+import os
+import random
+import re
+import subprocess
+import sys
 import time
+from pathlib import Path
+
 import numpy as np
 import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.utils.tensorboard import SummaryWriter
-from src.DDQN.Agent import MAPPO
-import src.Map.timemap
-import configs
-from src.Map.timemap import Environment
 from torch.distributions import Categorical
-from src.DDQN.rescue import RescueAlgorithm
-import random
-# from torch.utils.tensorboard import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
+
+# Agent.py does `from normalization import ...`, which only resolves with src/DDQN on
+# the path. Running `python train.py` from this directory puts only piloc/ there, so
+# add it explicitly instead of requiring the operator to set PYTHONPATH.
+_SRC_DDQN = str(Path(__file__).resolve().parent / "src" / "DDQN")
+if _SRC_DDQN not in sys.path:
+    sys.path.append(_SRC_DDQN)
+
+import configs
+from src.DDQN.Agent import MAPPO
+from src.Map.timemap import Environment
+
+SHARED_MODEL_PATTERN = re.compile(r"^shared_mappo_model_(\d+)_(\d+)\.pth$")
 
 def repeat_check(repeat_mark,env,obs,rescue_policy):
     all_paths = {}
@@ -158,12 +171,206 @@ def initialize_obs(env,num_agents = configs.num_agents, map_size=(60, 60)):
 
     return obs
 
-def main():
+def resolve_device(name: str = "auto") -> torch.device:
+    """Resolve --device without assuming a GPU exists.
+
+    ``auto`` picks cuda when it is really available. Asking for cuda on a machine
+    without it is an error rather than a silent fallback, because a run that quietly
+    trains on CPU is many times slower and the operator should know which happened.
+    """
+    if name == "auto":
+        return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if name.startswith("cuda") and not torch.cuda.is_available():
+        raise ValueError(f"--device {name} was requested but CUDA is not available")
+    if name not in {"cpu"} and not name.startswith("cuda"):
+        raise ValueError(f"--device must be auto, cpu or cuda[:N], got {name!r}")
+    return torch.device(name)
+
+
+def prepare_output_dir(root: str | os.PathLike[str]) -> dict[str, Path]:
+    """Create one experiment directory holding checkpoints, logs and metrics."""
+    base = Path(os.fspath(root))
+    directories = {
+        "root": base,
+        "checkpoints": base / "checkpoints",
+        "tb_logs": base / "tb_logs",
+    }
+    for path in directories.values():
+        path.mkdir(parents=True, exist_ok=True)
+    return directories
+
+
+def should_save_checkpoint(episode_num: int, every: int) -> bool:
+    """True only on a real episode boundary that is a multiple of ``every``.
+
+    The previous check was ``episode_num % 1000 == 0`` evaluated on every step of the
+    loop. Since ``episode_num`` starts at 0 and ``0 % 1000 == 0``, it wrote a
+    checkpoint on every single step of the first episode, and again throughout every
+    1000th episode.
+    """
+    if every < 1:
+        raise ValueError(f"the checkpoint interval must be at least 1, got {every}")
+    return episode_num > 0 and episode_num % every == 0
+
+
+def git_commit() -> str | None:
+    """The commit this run was trained from, or None outside a git checkout."""
+    repository = Path(__file__).resolve().parents[1]
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=repository,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return result.stdout.strip() if result.returncode == 0 else None
+
+
+def write_run_meta(
+    directory: str | os.PathLike[str],
+    *,
+    settings: dict,
+    seed: int,
+    device: torch.device,
+    dim_info: dict,
+) -> Path:
+    """Record everything needed to identify or reproduce a run.
+
+    Checkpoints alone cannot answer which commit, seed, device or observation
+    dimensions produced them, which is exactly what makes a training result
+    uninterpretable later.
+    """
+    meta = {
+        "git_commit": git_commit(),
+        "seed": int(seed),
+        "device": str(device),
+        "cuda_available": bool(torch.cuda.is_available()),
+        "torch_version": torch.__version__,
+        "dim_info": {key: list(value) for key, value in dim_info.items()},
+        "settings": settings,
+        "started_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
+    }
+    path = Path(os.fspath(directory)) / "run_meta.json"
+    path.write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
+    return path
+
+
+def episode_from_checkpoint_name(path: str | os.PathLike[str]) -> int:
+    """Read the episode number back out of a ``shared_mappo_model_*_*.pth`` name."""
+    match = SHARED_MODEL_PATTERN.match(Path(os.fspath(path)).name)
+    return int(match.group(2)) if match else 0
+
+
+def resume_policy(policy: MAPPO, checkpoint: str | os.PathLike[str], device: torch.device) -> int:
+    """Load weights strictly and return the episode the run resumes from.
+
+    ``MAPPO.load`` is deliberately not used: it hardcodes ``device='cuda'`` and the
+    filename ``shared_mappo_model_21_9232.pth``, so it cannot resume an arbitrary run.
+    A partial load is refused rather than accepted, because silently missing layers
+    produce a policy that runs and decides with the wrong weights.
+    """
+    path = Path(os.fspath(checkpoint))
+    if not path.is_file():
+        raise FileNotFoundError(f"resume checkpoint not found: {path}")
+    state = torch.load(path, map_location=device, weights_only=False)
+
+    agents = policy.agents
+    targets = {"full_model": agents.full_model, "actor": agents.actor, "critic": agents.critic}
+    missing = [name for name in targets if name not in state]
+    if missing:
+        raise KeyError(f"{path} does not contain {', '.join(missing)}; cannot resume strictly")
+
+    for name, module in targets.items():
+        module.load_state_dict(state[name], strict=True)
+        module.eval()
+    if "optimizer" in state:
+        agents.optimizer.load_state_dict(state["optimizer"])
+    return int(state.get("episode", episode_from_checkpoint_name(path)))
+
+
+class SearchEpisodeMetrics:
+    """The search-side indicators for one episode: what was found, how fast, how far.
+
+    Coverage is measured from the per-agent observation maps because
+    ``env.global_timestamp_maps`` is initialised once in the constructor and never
+    updated, so it stays uniformly unknown forever.
+    """
+
+    def __init__(self) -> None:
+        self.reset(0)
+
+    def reset(self, num_goals: int) -> None:
+        self.initial_goals = max(0, int(num_goals))
+        self.first_discovery_step: int | None = None
+        self.steps = 0
+        self.moves = 0
+        self.repeat_steps = 0
+        self._previous_positions: list[tuple[int, int]] | None = None
+
+    def observe(self, env, repeat_marks) -> None:
+        self.steps += 1
+        positions = [(int(p[0]), int(p[1])) for p in env.agents_pos]
+        if self._previous_positions is not None:
+            self.moves += sum(
+                1 for before, after in zip(self._previous_positions, positions) if before != after
+            )
+        self._previous_positions = positions
+        if repeat_marks:
+            self.repeat_steps += 1
+        if self.first_discovery_step is None and len(env.goals_pos) < self.initial_goals:
+            self.first_discovery_step = self.steps
+
+    def as_dict(self, env, obs) -> dict:
+        remaining = len(env.goals_pos)
+        discovered = max(0, self.initial_goals - remaining)
+        obstacles = np.asarray(env.map)
+        free = int(np.count_nonzero(obstacles != 1))
+        unseen = np.ones(obstacles.shape, dtype=bool)
+        for agent_obs in obs.values():
+            unseen &= np.asarray(agent_obs) == 0.5
+        return {
+            "targets_discovered": discovered,
+            "discovery_rate": discovered / self.initial_goals if self.initial_goals else 0.0,
+            "first_discovery_step": self.first_discovery_step,
+            "coverage": float(np.count_nonzero(~unseen & (obstacles != 1)) / free) if free else 0.0,
+            "travel": self.moves,
+            "repeat_ratio": self.repeat_steps / self.steps if self.steps else 0.0,
+            "episode_steps": self.steps,
+        }
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="piloc.train",
+        description="Train the PILOC multi-agent area-search policy.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument("--device", default="auto", help="auto, cpu, cuda or cuda:N")
+    parser.add_argument(
+        "--output-dir",
+        default=os.path.join("runs", "piloc_search"),
+        help="experiment directory for checkpoints, TensorBoard logs and metrics",
+    )
+    parser.add_argument("--seed", type=int, default=0, help="seed for the env, the RNGs and action sampling")
+    parser.add_argument("--num-agents", type=int, default=configs.num_agents)
+    parser.add_argument("--num-goals", type=int, default=configs.num_goals)
+    parser.add_argument("--episodes", type=int, default=configs.MAX_EPISODES,
+                        help="stop after this many episodes")
+    parser.add_argument("--save-every", type=int, default=1000, help="checkpoint interval in episodes")
+    parser.add_argument("--log-every", type=int, default=100, help="how often to record episode metrics")
+    parser.add_argument("--resume", default=None, help="a shared_mappo_model_*.pth to continue from")
+    parser.add_argument("--no-tensorboard", action="store_true", help="skip TensorBoard logging")
+    return parser
+
+
+def main(argv=None) -> int:
+    args = build_parser().parse_args(argv)
+
     # 使用configs中的超参数
-    env_name = configs.ENV_NAME
-    max_episodes = configs.MAX_EPISODES
     gamma = configs.GAMMA
-    tau = configs.TAU
     actor_lr = configs.ACTOR_LR
     critic_lr = configs.CRITIC_LR
     horizon = configs.HORIZON
@@ -172,23 +379,70 @@ def main():
     minibatch_size = configs.MINIBATCH_SIZE
     lmbda = configs.LMBDA
     huber_delta = configs.HUBER_DELTA
-    device = torch.device("cuda" )
-    trick = configs.TRICK
-    #writer = SummaryWriter('runs/experiment')
-    # 初始化环境，这里假设你使用自己的环境（替换成你自己的环境代码）
-    env = Environment()  # 请替换为您的自定义环境类
-    dim_info = {f'agent_{i}': [121, 4] for i in range(configs.num_agents)}  # 这里面包含了初始化几个智能体，现在修改为所有智能体使用相同的参数，但是经验存储是分开的
+    device = resolve_device(args.device)
+    trick = dict(configs.TRICK)
+
+    directories = prepare_output_dir(args.output_dir)
+    model_dir = str(directories["checkpoints"])
+    model_dir1 = model_dir
+
+    # One seed drives every random source the episode depends on, so a run is reproducible.
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+
+    start_time = time.time()
+    writer = None if args.no_tensorboard else SummaryWriter(log_dir=str(directories["tb_logs"]))
+
+    env = Environment(num_agents=args.num_agents, num_goals=args.num_goals)
+    # 121 是 obs_radius=5 的信息素窗口 (2*5+1)^2，4 是动作数；网络形状在 Actor/Critic 内部固定，
+    # dim_info 只决定 buffer 的观测宽度。
+    dim_info = {f'agent_{i}': [121, 4] for i in range(args.num_agents)}
 
     # 初始化算法
-    policy = MAPPO(dim_info, actor_lr=actor_lr, critic_lr=critic_lr,device=device,horizon=horizon,trick=trick)
+    policy = MAPPO(
+        dim_info,
+        actor_lr=actor_lr,
+        critic_lr=critic_lr,
+        device=device,
+        horizon=horizon,
+        trick=trick,
+        num_agent=args.num_agents,
+    )
 
-
-    # 训练配置
-    model_dir1= 'path_to_save_model_1'  # 保存模型的路径
-    model_dir = 'path_to_save_model'  # 保存模型的路径
-    #writer = SummaryWriter(log_dir='runs/experiment_1')
+    write_run_meta(
+        directories["root"],
+        settings={
+            "num_agents": args.num_agents,
+            "num_goals": args.num_goals,
+            "episodes": args.episodes,
+            "save_every": args.save_every,
+            "log_every": args.log_every,
+            "resume": args.resume,
+            "gamma": gamma,
+            "actor_lr": actor_lr,
+            "critic_lr": critic_lr,
+            "horizon": horizon,
+            "clip_param": clip_param,
+            "k_epochs": k_epochs,
+            "minibatch_size": minibatch_size,
+            "lmbda": lmbda,
+            "huber_delta": huber_delta,
+            "trick": trick,
+            "reward_fn": dict(configs.reward_fn),
+            "obs_radius": configs.obs_radius,
+            "pheromone_decay": configs.pheromone_decay,
+        },
+        seed=args.seed,
+        device=device,
+        dim_info=dim_info,
+    )
 
     episode_num = 0
+    if args.resume is not None:
+        episode_num = resume_policy(policy, args.resume, device)
+        print(f"resumed from {args.resume} at episode {episode_num}")
+
     step = 0 # 记录总步数
     step_t = 0 # 记录当前回合的步数
     env_agents = [agent_id for agent_id in env.agents]
@@ -197,15 +451,14 @@ def main():
     obs = initialize_obs(env)
     two_channelmap = {}
     two_channelmap = env.two_channel_map(obs,two_channelmap)
-    {agent: env.action_space(agent).seed(seed=100) for agent in env_agents}  # 给每个智能体的动作空间设置种子
+    for agent in env_agents:  # 给每个智能体的动作空间设置种子
+        env.action_space(agent).seed(seed=args.seed)
     rescue_actions = {}
     reward_max_M = -float('inf')  # 初始化为很小的负数，便于更新第一回合的奖励
     t = 10
     Curriculum_Training = 0 # 用于记录有多少个回合智能体的奖励函数没有超过R_max
     E = 10 # 用于随机生成环境步数,从40步开始训练
     step_reward_t = 0
-    # 初始化rescue算法用于训练
-    #rescue_policy = RescueAlgorithm(env.map_size, env.agents_pos, env,obs)
     episode_reward_agent = 0 # 回合奖励初始化为0
     obs1 = {}
     obs2 = {}
@@ -213,10 +466,13 @@ def main():
     next_obs2 = {}
     obs_pheromone = {}
     next_obs_pheromone = {}
-    num_agent = 2
+    num_agent = args.num_agents
+    metrics = SearchEpisodeMetrics()
+    metrics.reset(len(env.goals_pos))
+    metrics_path = directories["root"] / "episode_metrics.jsonl"
 
     # 训练循环
-    while E <= 250 :
+    while E <= 250 and episode_num < args.episodes:
         step += 1
         step_t +=1
         step_reward_t += 1
@@ -229,6 +485,7 @@ def main():
 
         # 环境更新
         next_obs, reward, terminated, repeat_Mark,next_two_channelmap= env.step(action,obs,rescue_actions,two_channelmap,E)
+        metrics.observe(env, repeat_Mark)
         for agentid,position in enumerate(env.agents_pos):
             x,y = position
             agent_id = f"agent_{agentid}"
@@ -255,19 +512,44 @@ def main():
         two_channelmap = next_two_channelmap
         # 完成目标 或者 达到最大环境步 ，这一个回合结束
         if any(done.values()) or step_t >= t:
-            # 显示信息
-            if (episode_num + 1) % 100 == 0:
-                print(f"Episode {episode_num + 1} | Reward: {episode_reward}")
+            # 先用回合结束时的环境与观测统计搜索指标，环境重建之后就拿不到了
+            episode_metrics = metrics.as_dict(env, obs)
+            episode_metrics.update(
+                {
+                    "episode": episode_num + 1,
+                    "env_steps": E,
+                    "curriculum_stall": Curriculum_Training,
+                }
+            )
+            episode_metrics.update(
+                {f"reward/{agent_id}": float(episode_reward[agent_id]) for agent_id in env_agents}
+            )
+
+            if (episode_num + 1) % args.log_every == 0:
+                print(
+                    f"Episode {episode_num + 1} | E={E} stall={Curriculum_Training} | "
+                    f"discovered={episode_metrics['targets_discovered']} "
+                    f"coverage={episode_metrics['coverage']:.3f} "
+                    f"first_find={episode_metrics['first_discovery_step']} | "
+                    f"Reward: {episode_reward}"
+                )
                 for agent_id in env_agents:
                     train_return[agent_id].append(episode_reward[agent_id])
-            #for agent_id, reward in episode_reward.items():
-                # 为每个智能体生成唯一的标签
-                #writer.add_scalar(f'train_episode_reward/{agent_id}', reward, episode_num)
-            print(E)
-            print(Curriculum_Training)
+                if writer is not None:
+                    for key, value in episode_metrics.items():
+                        if isinstance(value, (int, float)):
+                            writer.add_scalar(f"search/{key}", value, episode_num + 1)
+                with metrics_path.open("a", encoding="utf-8") as handle:
+                    handle.write(json.dumps(episode_metrics, ensure_ascii=False) + "\n")
+
             episode_num += 1
             env = Environment(num_agents=num_agent) # 重置环境
             obs = initialize_obs(env)  # 重置时间戳地图
+            metrics.reset(len(env.goals_pos))
+
+            # 保存模型：只在回合边界，且跳过 episode 0（0 % every == 0 会让第一回合每步都存盘）
+            if should_save_checkpoint(episode_num, args.save_every):
+                policy.save(model_dir, episode_num)
 
             # 用于计算该回合奖励
             for agent_reward in episode_reward.values() :
@@ -292,20 +574,18 @@ def main():
         if step % horizon == 0:
             policy.learn(minibatch_size, gamma, lmbda, clip_param, k_epochs, entropy_coefficient=0.01, huber_delta=huber_delta)
 
-        # 保存模型
-        if episode_num % 1000 == 0:
-            policy.save(model_dir,episode_num)
-
     print(f"Training completed in {time.time() - start_time} seconds")
     policy.save(model_dir1,episode_num)
 
-    # writer.close()
     # 保存训练结果
     train_return_ = np.array([train_return[agent_id] for agent_id in env.agents])
-    np.save(f"{model_dir}/train_return.npy", train_return_)
+    np.save(os.path.join(model_dir, "train_return.npy"), train_return_)
+    if writer is not None:
+        writer.close()
+    print(f"checkpoints, TensorBoard logs and metrics are in {directories['root']}")
+    return 0
 
 if __name__ == '__main__':
-    start_time = time.time()
-    main()
+    raise SystemExit(main())
 
 
