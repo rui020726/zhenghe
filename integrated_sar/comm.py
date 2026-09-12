@@ -30,6 +30,7 @@ import numpy as np
 from .contracts import DetectionEvent, DetectionMessage, TaskSnapshot
 
 SnapshotLookup = Callable[[str], TaskSnapshot | None]
+AcceptanceLookup = Callable[[str], bool]
 
 
 class CommRelay:
@@ -39,6 +40,11 @@ class CommRelay:
     before the simulated world advances. A message queued during tick ``N`` is due
     at ``N + 1 + delay_ticks``, so ``delay_ticks=0`` arrives within the same joint
     step and ``delay_ticks=1`` on the next one.
+
+    ``accepted_of`` is the registry's verdict lookup: an event the registry
+    rejected (unknown task, late timestamp, terminal task) is not news, so the
+    relay must not send it. Subscribing the relay after the registry guarantees
+    the verdict is already recorded when the relay is called.
     """
 
     def __init__(
@@ -47,6 +53,7 @@ class CommRelay:
         subscribers,
         writer,
         snapshot_of: SnapshotLookup | None = None,
+        accepted_of: AcceptanceLookup | None = None,
         delivery_probability: float = 1.0,
         delay_ticks: int = 0,
         seed: int | None = None,
@@ -60,6 +67,7 @@ class CommRelay:
         self._subscribers = tuple(str(agent_id) for agent_id in subscribers)
         self._writer = writer
         self._snapshot_of = snapshot_of
+        self._accepted_of = accepted_of
         self._delivery_probability = float(delivery_probability)
         self._delay_ticks = int(delay_ticks)
         self._seed = seed
@@ -74,6 +82,11 @@ class CommRelay:
         if event.event_id in self._seen_event_ids:
             return
         self._seen_event_ids.add(event.event_id)
+        if self._accepted_of is not None and not self._accepted_of(event.event_id):
+            # The registry refused this event: it is not a new lifecycle fact, so
+            # forwarding it would let a rejected detection re-send an old task
+            # view or reopen a terminal one in robot belief.
+            return
         message = self._build_message(event)
         due_tick = self._tick + 1 + self._delay_ticks
         for agent_id in self._subscribers:
@@ -130,6 +143,7 @@ class CommRelay:
                 deadline=event.detected_at + event.profile.deadline_offset,
                 severity=event.profile.severity,
                 confidence=event.confidence,
+                progress=0.0,
                 discovered_by=event.discovered_by,
             )
         return DetectionMessage(
@@ -143,6 +157,7 @@ class CommRelay:
             deadline=snapshot.deadline,
             severity=snapshot.severity,
             confidence=snapshot.confidence,
+            progress=snapshot.progress,
             members=snapshot.members,
             discovered_by=snapshot.metadata.get("discovered_by"),
         )

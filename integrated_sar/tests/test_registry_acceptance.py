@@ -14,6 +14,8 @@ import json
 import unittest
 from typing import Any
 
+import numpy as np
+
 from integrated_sar.contracts import (
     DetectionEvent,
     GridPosition,
@@ -26,6 +28,12 @@ from integrated_sar.contracts import (
 from integrated_sar.event_bus import InMemoryEventBus
 from integrated_sar.lifecycle_log import LifecycleLogger
 from integrated_sar.task_registry import TaskRegistry
+from integrated_sar.tests.test_joint_driver import (
+    _NullAgentSource,
+    _NullAllocator,
+    _NullTaskSink,
+    _RecordingExecutor,
+)
 
 
 def make_detection(
@@ -186,6 +194,177 @@ class TerminalTaskTests(RegistryClassificationHarness):
         self.assertEqual(
             [record["event_type"] for record in self.records()],
             ["detection", "progress"],
+        )
+
+
+class RelayAcceptanceTests(unittest.TestCase):
+    """A rejected detection must not be forwarded to any robot's belief.
+
+    Third review round, finding 4: CommRelay only deduplicated event ids
+    locally, so a registry-rejected late event was still queued and delivered
+    -- effectively re-sending an old task view, and letting a terminal task be
+    rewritten as pending in a robot's belief.
+    """
+
+    @staticmethod
+    def _wire():
+        from integrated_sar.adapters.task03 import Task03Adapter
+        from integrated_sar.comm import CommRelay
+        from integrated_sar.task03_runtime import build_task_env, load_task_env_module
+
+        env = build_task_env(
+            load_task_env_module(),
+            seed=7,
+            species=1,
+            per_species=1,
+            comm_range=0.3,
+            depot_positions=[(0.0, 0.0)],
+        )
+        adapter = Task03Adapter(env=env, clear_initial_tasks=True, seed=7)
+        registry = TaskRegistry()
+        relay = CommRelay(
+            subscribers=("0",),
+            writer=adapter,
+            snapshot_of=registry.get,
+            accepted_of=registry.was_accepted,
+            seed=7,
+        )
+        adapter.comm_relay = relay
+        return env, adapter, registry, relay
+
+    def test_a_late_event_is_not_queued_or_delivered(self) -> None:
+        env, adapter, registry, relay = self._wire()
+        first = make_detection(detected_at=1.0)
+        registry.handle_detection(first)
+        adapter.sync_tasks(registry.active_snapshots())
+        relay.handle_detection(first)
+        relay.tick()
+        internal_id = adapter.external_to_internal["target-a"]
+        belief_before = env.agent_knowledge[0]["task_locations"][internal_id].copy()
+
+        late = make_detection(event_id="detection:target-a:late", detected_at=0.5)
+        registry.handle_detection(late)
+        self.assertEqual(registry.rejection_reason("detection:target-a:late"), "late_event")
+
+        relay.handle_detection(late)
+        self.assertEqual(relay.queued, 0, "a rejected detection entered the uplink")
+        relay.tick()
+        np.testing.assert_array_equal(
+            env.agent_knowledge[0]["task_locations"][internal_id], belief_before
+        )
+
+    def test_a_terminal_task_is_not_reopened_in_belief(self) -> None:
+        env, adapter, registry, relay = self._wire()
+        first = make_detection()
+        registry.handle_detection(first)
+        adapter.sync_tasks(registry.active_snapshots())
+        relay.handle_detection(first)
+        relay.tick()
+        registry.handle_progress(
+            ProgressEvent(
+                event_id="progress:done",
+                task_id="target-a",
+                observed_at=2.0,
+                status=TaskStatus.COMPLETED,
+                stage_index=0,
+                remaining_requirements=(0, 0, 0, 0, 0),
+                progress=1.0,
+            )
+        )
+
+        again = make_detection(event_id="detection:target-a:again", detected_at=3.0)
+        registry.handle_detection(again)
+        self.assertEqual(registry.rejection_reason("detection:target-a:again"), "terminal_task")
+
+        internal_id = adapter.external_to_internal["target-a"]
+        knowledge = env.agent_knowledge[0]
+        status_before = knowledge["task_current_status"][internal_id].copy()
+        finished_before = set(knowledge["known_finished"])
+
+        relay.handle_detection(again)
+        relay.tick()
+        self.assertEqual(relay.queued, 0, "a terminal-task re-detection entered the uplink")
+        # The robot's belief is exactly as it was: not reopened as pending, and not
+        # told the task finished either (that news travels via sensing/gossip).
+        np.testing.assert_array_equal(
+            knowledge["task_current_status"][internal_id], status_before,
+            "a rejected re-detection rewrote the robot's belief",
+        )
+        self.assertEqual(set(knowledge["known_finished"]), finished_before)
+
+    def test_an_accepted_event_is_still_forwarded(self) -> None:
+        env, adapter, registry, relay = self._wire()
+        event = make_detection()
+        registry.handle_detection(event)
+        adapter.sync_tasks(registry.active_snapshots())
+        relay.handle_detection(event)
+        self.assertEqual(relay.queued, 1)
+        relay.tick()
+        self.assertIn(
+            adapter.external_to_internal["target-a"],
+            env.agent_knowledge[0]["known_tasks"],
+        )
+
+
+class SchedulerVerdictTests(unittest.TestCase):
+    """Coordination must not be triggered by an event the registry refused."""
+
+    def test_a_rejected_detection_does_not_change_the_scheduling_signal(self) -> None:
+        from integrated_sar.contracts import SearchStepResult
+        from integrated_sar.orchestrator import JointSAROrchestrator
+
+        registry = TaskRegistry()
+        bus = InMemoryEventBus()
+        bus.subscribe(DetectionEvent, registry.handle_detection)
+        # A task the registry already knows, updated at t=10.
+        registry.handle_detection(make_detection(event_id="detection:fresh", detected_at=10.0))
+
+        class _StaleSearch:
+            """Publishes a late re-detection, which the registry must refuse."""
+
+            def step(self, current_time: float, dt: float) -> SearchStepResult:
+                del current_time, dt
+                return SearchStepResult(
+                    (make_detection(event_id="detection:late", detected_at=1.0),)
+                )
+
+        class _CountingCoordinator:
+            def __init__(self) -> None:
+                self.calls = 0
+
+            def advise(self, state: Any) -> Any:
+                self.calls += 1
+                from integrated_sar.contracts import CoordinationAdvice
+
+                # Long validity, so the periodic/expiry triggers cannot mask the
+                # event trigger this test is about.
+                return CoordinationAdvice(
+                    self.calls, state.current_time, state.current_time + 100.0
+                )
+
+        coordinator = _CountingCoordinator()
+        orchestrator = JointSAROrchestrator(
+            search=_StaleSearch(),
+            task_sink=_NullTaskSink(),
+            agent_source=_NullAgentSource(),
+            coordinator=coordinator,
+            allocator=_NullAllocator(),
+            executor=_RecordingExecutor(),
+            registry=registry,
+            event_bus=bus,
+            coordination_interval=100,
+            allocation_interval=100,
+        )
+        # Tick 1 always coordinates: step_index 0 satisfies the periodic rule.
+        # From tick 2 on, only a real state change may trigger another call.
+        for _ in range(3):
+            orchestrator.step()
+        self.assertEqual(registry.rejection_reason("detection:late"), "late_event")
+        # Only the pre-seeded detection was accepted; the stale re-detections were not.
+        self.assertEqual(registry.accepted_event_count, 1)
+        self.assertEqual(
+            coordinator.calls, 1,
+            "a rejected detection triggered coordination on a non-periodic tick",
         )
 
 

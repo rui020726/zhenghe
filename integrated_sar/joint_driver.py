@@ -412,6 +412,7 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         subscribers=tuple(str(agent_id) for agent_id in task_adapter.env.agent_dic),
         writer=task_adapter,
         snapshot_of=registry.get,
+        accepted_of=registry.was_accepted,
         delivery_probability=configuration.comm_delivery_probability,
         delay_ticks=configuration.comm_delay_ticks,
         seed=configuration.seed,

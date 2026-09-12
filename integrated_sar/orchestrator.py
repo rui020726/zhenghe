@@ -80,6 +80,10 @@ class JointSAROrchestrator:
         now = self.current_time
         decision_time = now + self.dt
 
+        # The registry's verdict is what makes an event a fact: an event it
+        # refused (unknown task, late, terminal) must not drive coordination.
+        accepted_before = self.registry.accepted_event_count
+
         search_result = self.search.step(now, self.dt)
         for event in search_result.detections:
             self.event_bus.publish(event)
@@ -100,12 +104,9 @@ class JointSAROrchestrator:
         # A belief revision is a first-class scheduling signal: when a message
         # finally reaches a robot, coordination must happen now, not on the next
         # periodic interval. Knowledge propagation is never reported as a
-        # ProgressEvent.
-        state_changed = bool(
-            search_result.detections
-            or execution_result.progress_events
-            or execution_result.belief_changed_agents
-        )
+        # ProgressEvent, and an event the registry rejected does not count.
+        knowledge_grew = self.registry.accepted_event_count > accepted_before
+        state_changed = knowledge_grew or bool(execution_result.belief_changed_agents)
         # Rejections from the previous tick surface only now: the executor drops a
         # command while applying assignments, which is later than this tick's advice.
         replan_requested = bool(self._pending_replans())
