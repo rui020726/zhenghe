@@ -12,17 +12,39 @@ from __future__ import annotations
 
 import importlib.util
 import random
+import types
 import unittest
 
 import numpy as np
 
 from integrated_sar.contracts import GridPosition
+from integrated_sar.errors import CheckpointIncompatibleError
 from integrated_sar.piloc_runtime import reset_piloc_environment
-from integrated_sar.scenarios import PILOC_OBS_RADIUS, SearchScenario
+from integrated_sar.scenarios import PILOC_GRID_SIZE, PILOC_OBS_RADIUS, SearchScenario
 
-HAS_TIMEMAP = all(
-    importlib.util.find_spec(name) is not None for name in ("gym", "PIL")
-)
+# timemap imports gym, matplotlib and Pillow at module scope, so a machine without
+# any of them cannot even load the environment, and a machine with all three can
+# still fail if PILOC's own sources are missing. Both cases are the same skip: the
+# real environment cannot be constructed here.
+TIMEMAP_IMPORT_NAMES = ("gym", "PIL", "matplotlib")
+
+
+def _timemap_skip_reason() -> str | None:
+    missing = [
+        name for name in TIMEMAP_IMPORT_NAMES if importlib.util.find_spec(name) is None
+    ]
+    if missing:
+        return f"the PILOC environment needs {', '.join(missing)}"
+    try:
+        from integrated_sar.piloc_runtime import import_timemap_module
+
+        import_timemap_module()
+    except Exception as exc:  # noqa: BLE001 - reported verbatim as the skip reason
+        return f"the PILOC environment module is not importable: {exc}"
+    return None
+
+
+TIMEMAP_SKIP_REASON = _timemap_skip_reason()
 
 
 def _scenario(rows: int = 8, cols: int = 8) -> SearchScenario:
@@ -34,6 +56,82 @@ def _scenario(rows: int = 8, cols: int = 8) -> SearchScenario:
         seed=5,
         source="test",
     )
+
+
+class _StandInTimemapEnvironment:
+    """Stands in for ``timemap.Environment`` when it cannot be imported.
+
+    Only ``__init__``, ``load`` and ``calculate_pheromone`` decide what a reset has
+    to restore, and this class mirrors their real contracts (see
+    ``piloc/src/Map/timemap.py``): ``__init__`` builds the map, robots and goals and
+    marks the drawn start cells in the pheromone map; ``load`` replaces the map,
+    positions, goals, ``steps`` and the action cache and nothing else. Going through
+    it lets ``build_piloc_environment`` itself be exercised -- the 60x60 guard, the
+    two-step construction and the derived-state rebuild -- on a machine that has no
+    gym, matplotlib or Pillow.
+    """
+
+    def __init__(self, **kwargs: object) -> None:
+        length = int(kwargs.get("map_length", PILOC_GRID_SIZE))
+        self.obs_radius = int(kwargs.get("obs_radius", PILOC_OBS_RADIUS))
+        self.num_agents = int(kwargs.get("num_agents", 2))
+        self.num_goals = int(kwargs.get("num_goals", 1))
+        self.agents = [f"agent_{index}" for index in range(self.num_agents)]
+        self.map = np.zeros((length, length), dtype=np.int32)
+        self.map_size = (length, length)
+        self.agents_pos = np.stack(
+            [np.array([length // 4, length // 4], dtype=np.int32)] * self.num_agents
+        )
+        self.goals_pos = np.zeros((self.num_goals, 2), dtype=np.int32)
+        self.steps = 0
+        self.global_pheromone = np.zeros((length, length), dtype=np.float32)
+        for row, col in self.agents_pos:
+            self.global_pheromone[int(row), int(col)] = 1.0
+        self.local_pheromone = {
+            f"agent_{index}": self.calculate_pheromone(
+                int(self.agents_pos[index][0]), int(self.agents_pos[index][1])
+            )
+            for index in range(self.num_agents)
+        }
+        self.agent_positions_history = {
+            f"agent_{index}": self.agents_pos[index] for index in range(self.num_agents)
+        }
+        self.global_timestamp_maps = np.full((length, length), 0.5, dtype=np.float32)
+        self.check_repeat_pos: list[tuple[int, int]] = []
+        self.comm_stats = {"success": 0, "failed": 0, "partial": 0, "delayed": 0, "total": 0}
+        self.delayed_map_buffer: list[object] = []
+        self.last_actions = np.zeros(
+            (self.num_agents, 5, 2 * self.obs_radius + 1, 2 * self.obs_radius + 1),
+            dtype=bool,
+        )
+
+    def calculate_pheromone(self, row: int, col: int) -> float:
+        """Window sum, matching the real method's view-radius crop."""
+        from integrated_sar.search_runtime import local_pheromone_window
+
+        return float(
+            local_pheromone_window(
+                np.asarray(self.global_pheromone), row, col, self.obs_radius
+            ).sum()
+        )
+
+    def load(self, map, agents_pos, goals_pos) -> None:  # noqa: A002 - real signature
+        self.map = np.copy(map)
+        self.agents_pos = np.copy(agents_pos)
+        self.goals_pos = np.copy(goals_pos)
+        self.num_agents = agents_pos.shape[0]
+        self.map_size = (self.map.shape[0], self.map.shape[1])
+        self.steps = 0
+        self.last_actions = np.zeros(
+            (self.num_agents, 5, 2 * self.obs_radius + 1, 2 * self.obs_radius + 1),
+            dtype=bool,
+        )
+
+
+def _stand_in_timemap_module() -> types.ModuleType:
+    module = types.ModuleType("integrated_sar_stand_in_timemap")
+    module.Environment = _StandInTimemapEnvironment
+    return module
 
 
 class _StubTimemapEnvironment:
@@ -74,7 +172,7 @@ class _StubTimemapEnvironment:
             ).sum()
         )
 
-    def load(self, map, agents_pos, goals_pos) -> None:
+    def load(self, map, agents_pos, goals_pos) -> None:  # noqa: A002 - real signature
         self.map = np.copy(map)
         self.agents_pos = np.copy(agents_pos)
         self.goals_pos = np.copy(goals_pos)
@@ -135,14 +233,77 @@ class PilocResetTests(unittest.TestCase):
         self.assertEqual(draws, again)
 
 
-@unittest.skipUnless(HAS_TIMEMAP, "the PILOC environment needs gym and Pillow")
+class BuildPilocEnvironmentTests(unittest.TestCase):
+    """The production construction path, with ``timemap`` stood in for.
+
+    ``build_piloc_environment`` refuses any scenario that is not 60x60 because the
+    trained policy's timestamp maps are built for that canvas, and it constructs the
+    environment in two steps so the shared scenario map survives ``__init__``. Both
+    behaviours are checked here without gym, matplotlib or Pillow.
+    """
+
+    def setUp(self) -> None:
+        import integrated_sar.piloc_runtime as piloc_runtime
+
+        self.piloc_runtime = piloc_runtime
+        self._saved = piloc_runtime.import_timemap_module
+        piloc_runtime.import_timemap_module = lambda root=None: _stand_in_timemap_module()
+        self.addCleanup(
+            setattr, piloc_runtime, "import_timemap_module", self._saved
+        )
+
+    def test_a_legal_scenario_builds_and_resets_from_the_shared_map(self) -> None:
+        size = PILOC_GRID_SIZE
+        scenario = _scenario(size, size)
+        environment = self.piloc_runtime.build_piloc_environment(scenario, seed=7)
+
+        np.testing.assert_array_equal(environment.map, scenario.obstacles)
+        np.testing.assert_array_equal(
+            environment.agents_pos,
+            [[position.row, position.col] for position in scenario.agent_positions],
+        )
+        np.testing.assert_array_equal(
+            environment.goals_pos,
+            [[position.row, position.col] for position in scenario.goal_positions],
+        )
+        self.assertEqual(environment.steps, 0)
+
+        # A finished episode leaves trails, traffic counters and a delayed buffer.
+        environment.global_pheromone[:] = 5.0
+        environment.comm_stats.update({"success": 30, "total": 30})
+        environment.delayed_map_buffer.append(object())
+        environment.check_repeat_pos.append((0, 0))
+        environment.steps = 42
+
+        reset_piloc_environment(environment, scenario, seed=7)
+
+        expected = np.zeros((size, size), dtype=np.float32)
+        for position in scenario.agent_positions:
+            expected[position.row, position.col] = 1.0
+        np.testing.assert_array_equal(environment.global_pheromone, expected)
+        self.assertEqual(environment.comm_stats["total"], 0)
+        self.assertEqual(environment.delayed_map_buffer, [])
+        self.assertEqual(environment.check_repeat_pos, [])
+        self.assertEqual(environment.steps, 0)
+
+    def test_an_off_size_scenario_is_refused_not_resized(self) -> None:
+        with self.assertRaises(CheckpointIncompatibleError):
+            self.piloc_runtime.build_piloc_environment(_scenario(8, 8), seed=7)
+
+
+@unittest.skipIf(TIMEMAP_SKIP_REASON is not None, TIMEMAP_SKIP_REASON or "")
 class RealPilocResetTests(unittest.TestCase):
-    """The same checks against the real ``timemap.Environment``."""
+    """The same checks against the real ``timemap.Environment``.
+
+    The scenario must be 60x60: ``build_piloc_environment`` refuses anything else,
+    so a smaller map would fail here for a reason that has nothing to do with reset.
+    """
 
     def test_second_episode_starts_from_a_clean_world(self) -> None:
         from integrated_sar.piloc_runtime import build_piloc_environment
 
-        scenario = _scenario()
+        size = PILOC_GRID_SIZE
+        scenario = _scenario(size, size)
         environment = build_piloc_environment(scenario, seed=7)
         # Pollute it the way a finished episode would.
         environment.global_pheromone[:] = 5.0
