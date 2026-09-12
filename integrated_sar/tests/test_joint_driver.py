@@ -311,6 +311,18 @@ class JointRunTests(unittest.TestCase):
         self.assertEqual(exit_code, 2)
         self.assertIn("unsupported --device", stderr.getvalue())
 
+    def test_a_missing_output_directory_is_created(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            target = os.path.join(directory, "runs", "joint_eval", "lifecycle.jsonl")
+            self.assertFalse(os.path.isdir(os.path.dirname(target)))
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                exit_code = main(
+                    ["--mock", "--steps", "3", "--seed", "42", "--quiet", "--output", target]
+                )
+            self.assertEqual(exit_code, 0, stderr.getvalue())
+            self.assertTrue(os.path.isfile(target))
+
 
 class DetectionRadiusTests(unittest.TestCase):
     """One radius must decide observation, target removal and detection publication."""

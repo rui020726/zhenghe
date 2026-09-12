@@ -626,9 +626,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     output_is_file = configuration.output != "-"
     if output_is_file:
         directory = os.path.dirname(os.path.abspath(configuration.output))
-        if not os.path.isdir(directory):
+        try:
+            os.makedirs(directory, exist_ok=True)
+        except OSError as exc:
             print(
-                f"[joint-driver] ConfigurationError: --output directory does not exist: {directory}",
+                f"[joint-driver] ConfigurationError: cannot create --output directory "
+                f"{directory}: {exc}",
                 file=sys.stderr,
             )
             return 2
