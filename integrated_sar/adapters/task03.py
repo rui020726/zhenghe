@@ -65,9 +65,10 @@ class Task03Adapter:
         self._seed = seed
         # Captured for reset(): a TaskEnv.reset regenerates depots from its own
         # rng, so the staging points this episode was built with must be reapplied.
+        # Environments without a depot dictionary (stubs in tests) are tolerated.
         self._depot_positions = {
             species_id: depot["location"].copy()
-            for species_id, depot in self.env.depot_dic.items()
+            for species_id, depot in getattr(self.env, "depot_dic", {}).items()
         }
 
         self.env.enable_tidal_tasks = False
@@ -98,7 +99,9 @@ class Task03Adapter:
         the previous episode's.
         """
         self._episode += 1
-        self.env.reset(seed=self._seed)
+        env_reset = getattr(self.env, "reset", None)
+        if env_reset is not None:
+            env_reset(seed=self._seed)
         self._stage_rescue_teams()
         self._clear_initial_tasks()
         self.external_to_internal.clear()
@@ -112,7 +115,7 @@ class Task03Adapter:
     def _stage_rescue_teams(self) -> None:
         """Move each species depot -- and its robots -- back to its staging point."""
         for species_id, point in self._depot_positions.items():
-            depot = self.env.depot_dic.get(species_id)
+            depot = getattr(self.env, "depot_dic", {}).get(species_id)
             if depot is None:
                 continue
             depot["location"] = self._np_array(point, dtype=float)

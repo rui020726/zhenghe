@@ -6,6 +6,8 @@ import sys
 import types
 import unittest
 
+import numpy as np
+
 from integrated_sar.adapters.task03 import Task03Adapter
 from integrated_sar.contracts import (
     CoordinatorInput,
@@ -17,6 +19,35 @@ from integrated_sar.contracts import (
 )
 from integrated_sar.coordinator import HeuristicCoordinator
 from integrated_sar.task_registry import TaskRegistry
+
+
+class _BareEnv:
+    """Minimal stand-in: no depot_dic, no reset, no simulator state.
+
+    Guards the adapter against assuming the full TaskEnv surface -- the mask
+    ordering test builds one of these, and without coverage here the assumption
+    would only fail on a machine that has torch installed.
+    """
+
+    def get_local_obs(self, agent_id, max_tasks=None):
+        del agent_id, max_tasks
+        return (
+            np.zeros(4, dtype=np.float32),
+            np.zeros((1, 4), dtype=np.float32),
+            np.zeros((1, 4), dtype=np.float32),
+            np.array([False]),
+            [("depot", None)],
+        )
+
+
+class BareEnvironmentTests(unittest.TestCase):
+    def test_adapter_tolerates_an_environment_without_depots(self) -> None:
+        # The mask-ordering test builds this stub, and it is torch-gated, so
+        # without coverage here an adapter constructor that assumes env.depot_dic
+        # would only fail on a machine that has torch installed.
+        adapter = Task03Adapter(env=_BareEnv(), clear_initial_tasks=False)
+        self.assertEqual(adapter._depot_positions, {})
+        self.assertIsNone(adapter.comm_relay)
 
 
 REPOSITORY_ROOT = pathlib.Path(__file__).resolve().parents[2]
