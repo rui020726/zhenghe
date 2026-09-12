@@ -1,4 +1,6 @@
-"""The critic must value a state the same way however its batch happens to be padded.
+"""Correctness tests for the CTDE trainer in ``task_allocation/old_driver.py``.
+
+Three defects, each of which silently corrupts learning rather than crashing.
 
 ``CTDE_Network.get_value`` accepts agent and task padding masks and uses them both to
 exclude padded slots from attention and to mean-pool over valid slots only. The driver
@@ -7,6 +9,13 @@ averaged in. Because rollout pads to the round maximum while the update pads to 
 minibatch maximum, one identical stored state received two different values, and the
 critic was trained towards ``returns = advantages + rollout_values`` -- a target it
 cannot represent.
+
+Nothing called ``eval()``, so with dropout active the stored ``old_logprobs`` came from
+an unrecorded mask and the behaviour policy behind the importance ratio was not
+reproducible.
+
+GAE walked the flat buffer, which is stored round-major and agent-minor, so it treated
+the next robot in the same round as the next time step.
 """
 
 from __future__ import annotations
@@ -203,6 +212,98 @@ class TrainingModeTests(unittest.TestCase):
         )
         self.assertEqual(result, {})
         self.assertTrue(self.net.training, "the PPO epochs would run with dropout frozen off")
+
+
+@unittest.skipUnless(HAS_TORCH, "torch is not installed")
+class GaeAlignmentTests(unittest.TestCase):
+    """GAE runs along each robot's decisions, not along the flat buffer."""
+
+    def setUp(self) -> None:
+        self.driver = _load_old_driver()
+
+    @staticmethod
+    def _buffer(rewards, values, agent_ids, dones) -> dict:
+        count = len(rewards)
+        return {
+            "states": [None] * count,
+            "rewards": list(rewards),
+            "values": list(values),
+            "agent_ids": list(agent_ids),
+            "dones": list(dones),
+        }
+
+    def test_advantages_follow_each_robots_own_sequence(self) -> None:
+        gamma, lam = 0.9, 1.0
+        # Round-major, agent-minor: both robots in a round share that round's value,
+        # which is exactly what made V(s) - V(s) cancel in the flat walk.
+        v0, v1 = 2.0, 3.0
+        buffer = self._buffer(
+            rewards=[1.0, 5.0, 2.0, 7.0],
+            values=[v0, v0, v1, v1],
+            agent_ids=["A", "B", "A", "B"],
+            dones=[False, False, False, True],
+        )
+
+        advantages, returns = self.driver.compute_gae_segmented(buffer, gamma, lam)
+
+        # Robot A decides at index 0 then index 2; index 2 is its last decision of the
+        # episode, so it bootstraps from zero even though dones flags index 3 instead.
+        adv_a2 = 2.0 - v1
+        adv_a0 = (1.0 + gamma * v1 - v0) + gamma * lam * adv_a2
+        # Robot B decides at index 1 then index 3.
+        adv_b3 = 7.0 - v1
+        adv_b1 = (5.0 + gamma * v1 - v0) + gamma * lam * adv_b3
+
+        self.assertAlmostEqual(advantages[0], adv_a0, places=9)
+        self.assertAlmostEqual(advantages[1], adv_b1, places=9)
+        self.assertAlmostEqual(advantages[2], adv_a2, places=9)
+        self.assertAlmostEqual(advantages[3], adv_b3, places=9)
+        self.assertAlmostEqual(returns[2], 2.0, places=9)
+        self.assertAlmostEqual(returns[3], 7.0, places=9)
+
+    def test_one_robots_reward_never_enters_another_robots_advantage(self) -> None:
+        gamma, lam = 0.9, 0.95
+        shape = dict(
+            values=[2.0, 2.0, 3.0, 3.0],
+            agent_ids=["A", "B", "A", "B"],
+            dones=[False, False, False, True],
+        )
+        quiet = self.driver.compute_gae_segmented(
+            self._buffer(rewards=[1.0, 0.0, 2.0, 0.0], **shape), gamma, lam
+        )[0]
+        loud = self.driver.compute_gae_segmented(
+            self._buffer(rewards=[1.0, 500.0, 2.0, -400.0], **shape), gamma, lam
+        )[0]
+
+        self.assertAlmostEqual(quiet[0], loud[0], places=9)
+        self.assertAlmostEqual(quiet[2], loud[2], places=9)
+        self.assertNotAlmostEqual(quiet[1], loud[1], places=6)
+
+    def test_two_episodes_do_not_leak_into_each_other(self) -> None:
+        gamma, lam = 0.9, 0.95
+        alone = self.driver.compute_gae_segmented(
+            self._buffer(
+                rewards=[1.0, 2.0],
+                values=[0.5, 0.5],
+                agent_ids=["A", "B"],
+                dones=[False, True],
+            ),
+            gamma,
+            lam,
+        )[0]
+        both = self.driver.compute_gae_segmented(
+            self._buffer(
+                rewards=[1.0, 2.0, 9.0, 9.0],
+                values=[0.5, 0.5, 4.0, 4.0],
+                agent_ids=["A", "B", "A", "B"],
+                dones=[False, True, False, True],
+            ),
+            gamma,
+            lam,
+        )[0]
+
+        self.assertAlmostEqual(alone[0], both[0], places=9)
+        self.assertAlmostEqual(alone[1], both[1], places=9)
 
 
 if __name__ == "__main__":

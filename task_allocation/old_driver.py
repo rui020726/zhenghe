@@ -395,7 +395,22 @@ def inject_terminal_reward(buffer, terminal_reward, ep_start_idx, mode="spread")
         for i in range(ep_start_idx, n):
             buffer["rewards"][i] += per_step
 
-def compute_gae_segmented(buffer, gamma, gae_lambda, device, net):
+def compute_gae_segmented(buffer, gamma, gae_lambda):
+    """GAE along each robot's own decision sequence, segmented per episode.
+
+    Storage is round-major and agent-minor: one environment round appends one sample
+    per robot that had to decide, and every robot in that round shares the round's
+    global state, so they all carry the same stored value. Walking the flat buffer and
+    reading ``values[t + 1]`` therefore treated the next robot in the same round as the
+    next time step. ``V(s) - V(s)`` cancelled, delta collapsed to the bare reward with
+    no bootstrapping, and the chain then folded later robots' rewards into earlier
+    robots' advantages at an effective discount of ``gamma ** (robots deciding that
+    round)`` -- which the curriculum changes as training proceeds.
+
+    Grouping by robot gives each one its own chronological sequence, because the
+    round-major storage order already is that order, so ``values`` at the next position
+    within a group is that robot's next decision point.
+    """
     n = len(buffer["states"])
     if n == 0:
         return [], []
@@ -403,28 +418,44 @@ def compute_gae_segmented(buffer, gamma, gae_lambda, device, net):
     rewards = buffer["rewards"]
     dones = buffer["dones"]
     values = buffer["values"]
+    agent_ids = buffer.get("agent_ids")
 
     advantages = [0.0] * n
     returns = [0.0] * n
 
-    last_gae = 0.0
+    # dones marks the last sample of a finished episode, and only whole episodes are
+    # ever flushed into this buffer, so each segment between two marks is one episode.
+    segments = []
+    start = 0
+    for index in range(n):
+        if dones[index]:
+            segments.append((start, index + 1))
+            start = index + 1
+    if start < n:
+        segments.append((start, n))
 
-    for t in reversed(range(n)):
-        if t == n - 1:
-            next_value = 0.0
+    for segment_start, segment_end in segments:
+        groups: dict = {}
+        for index in range(segment_start, segment_end):
+            key = agent_ids[index] if agent_ids is not None else None
+            groups.setdefault(key, []).append(index)
+
+        for indices in groups.values():
             last_gae = 0.0
-        else:
-            if dones[t]:
-                next_value = 0.0
-                last_gae = 0.0
-            else:
-                next_value = values[t + 1]
+            for position in reversed(range(len(indices))):
+                current = indices[position]
+                if position == len(indices) - 1:
+                    # The episode ended, so this robot has no next decision to
+                    # bootstrap from -- not just the one sample dones flagged.
+                    next_value = 0.0
+                    last_gae = 0.0
+                else:
+                    next_value = values[indices[position + 1]]
 
-        delta = rewards[t] + gamma * next_value * (1.0 - float(dones[t])) - values[t]
-        last_gae = delta + gamma * gae_lambda * (1.0 - float(dones[t])) * last_gae
-
-        advantages[t] = last_gae
-        returns[t] = last_gae + values[t]
+                delta = rewards[current] + gamma * next_value - values[current]
+                last_gae = delta + gamma * gae_lambda * last_gae
+                advantages[current] = last_gae
+                returns[current] = last_gae + values[current]
 
     return advantages, returns
 
@@ -439,7 +470,7 @@ def update(net, optimizer, buffer, device, params: TrainParams, entropy_weight: 
         return {}
 
     advantages_list, returns_list = compute_gae_segmented(
-        buffer, params.GAMMA, params.GAE_LAMBDA, device, net
+        buffer, params.GAMMA, params.GAE_LAMBDA
     )
 
     buffer["advantages"] = advantages_list
@@ -632,7 +663,7 @@ def main():
     env_buffers = [{k: [] for k in _buf_keys} for _ in range(TrainParams.N_ENVS)]
     global_buffer = {k: [] for k in
                      ["states", "neighbors", "tasks", "masks", "actions", "logprobs",
-                      "values", "rewards", "dones", "g_agents", "g_tasks"]}
+                      "values", "rewards", "dones", "g_agents", "g_tasks", "agent_ids"]}
 
     rng = np.random.default_rng(seed=42)
 
@@ -775,10 +806,6 @@ def main():
                                        mode=TrainParams.TERMINAL_REWARD_MODE)
                 ep_reward = sum(env_buffers[env_idx]["rewards"])
                 for k in env_buffers[env_idx].keys():
-                    # ✅ agent_ids 不需要进 global_buffer（只是辅助字段），跳过
-                    if k == "agent_ids":
-                        env_buffers[env_idx][k] = []
-                        continue
                     global_buffer[k].extend(env_buffers[env_idx][k])
                     env_buffers[env_idx][k] = []
 
