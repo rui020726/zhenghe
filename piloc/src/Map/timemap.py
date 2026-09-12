@@ -130,6 +130,13 @@ class Environment:
             self.obstacle_density = fix_density
 
         # 原逻辑保持不变...
+        # self.map 必须在这里就有值：下面 map_partition(self.map) 无条件读取它，而 test 分支
+        # 只在 test=True 时赋值，默认 test=False 会直接 AttributeError。生成方式与 reset() 一致，
+        # test=True 时随后会被图片覆盖。
+        self.map = np.random.choice(
+            2, self.map_size, p=[1 - self.obstacle_density, self.obstacle_density]
+        ).astype(np.int32)
+
         if test:
             map_dir = 'DungeonMaps/test'
             if map_filename is not None:

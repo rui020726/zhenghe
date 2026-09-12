@@ -320,5 +320,40 @@ class RealPilocResetTests(unittest.TestCase):
         self.assertEqual(environment.steps, 0)
 
 
+@unittest.skipIf(TIMEMAP_SKIP_REASON is not None, TIMEMAP_SKIP_REASON or "")
+class TimemapDefaultConstructionTests(unittest.TestCase):
+    """``Environment()`` has to work with its own defaults.
+
+    ``self.map`` used to be assigned only inside the ``if test:`` branch, so the
+    default ``test=False`` reached ``map_partition(self.map)`` with no such attribute
+    and raised ``AttributeError``. That made ``piloc/train.py`` unable to start, and
+    forced every other caller to pre-assign ``map`` on a bare instance before running
+    ``__init__``.
+    """
+
+    def test_default_construction_produces_a_usable_map(self) -> None:
+        import random as random_module
+
+        from integrated_sar.piloc_runtime import import_timemap_module
+
+        timemap = import_timemap_module()
+        random_module.seed(11)
+        np.random.seed(11)
+
+        environment = timemap.Environment()
+
+        self.assertEqual(environment.map.shape, (PILOC_GRID_SIZE, PILOC_GRID_SIZE))
+        self.assertTrue(
+            np.isin(environment.map, (0, 1)).all(), "the obstacle map must be binary"
+        )
+        self.assertGreater(
+            int(np.count_nonzero(environment.map != 1)),
+            0,
+            "a map with no free cell cannot be searched",
+        )
+        self.assertEqual(len(environment.agents_pos), len(environment.agents))
+        self.assertGreater(len(environment.goals_pos), 0)
+
+
 if __name__ == "__main__":
     unittest.main()
