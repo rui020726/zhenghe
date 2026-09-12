@@ -164,6 +164,50 @@ python -m integrated_sar.joint_driver \
 可用 `target_id` 与 `source_event_id` 串起单个目标从发现到完成的完整轨迹。
 日志属于运行产物，不要提交。
 
+## 训练
+
+不要把三个模块一起端到端训练。按以下顺序推进，每一步稳定后再进下一步：
+
+```text
+PILOC 单独训练 → 任务分配单独训练 → 冻结两端跑通联合推理 → 训练协调器 → 按 episode 交替微调
+```
+
+搜索模块：
+
+```bash
+cd piloc
+python train.py --device auto --seed 0 --episodes 120000 \
+  --output-dir ../runs/piloc_search --save-every 1000 --log-every 100
+```
+
+产出 `<output-dir>/checkpoints/shared_mappo_model_21_<episode>.pth`、`run_meta.json`
+（git commit、seed、device、dim_info、全部超参）与 `episode_metrics.jsonl`
+（发现率、首次发现步、覆盖率、移动距离、重复搜索比例）。
+`--resume <checkpoint>` 以 strict 方式续训，不接受部分加载。
+
+任务分配模块：
+
+```bash
+cd task_allocation
+python old_driver.py --device auto --seed 0 --episodes 20000 --no-resume \
+  --checkpoint-dir ../runs/ctde --actor-kv-mode tokens
+```
+
+产出 `ctde_best.pth`、`ctde_final.pth`、`ctde_ep_<episode>.pth` 与 `run_meta.json`。
+每个 checkpoint 都记录 `actor_kv_mode`、网络维度、seed 与 commit；`summary` 与
+`tokens` 的参数形状完全相同，加载端会拒绝模式不匹配的权重。新训练请加
+`--no-resume`，否则会自动加载目录里最新的 checkpoint 并跳过 `global_episodes_done`，
+而熵权重、学习率衰减和课程调度都由它驱动。
+
+两端训好后冻结参数，用 `joint_driver` 验证完整数据链（见上一节）。
+
+两点运行注意：
+
+- 本机 `torch` 为 CPU 版，只适合冒烟验证；正式训练请放在有 GPU 的机器上。
+- `--checkpoint-dir` / `--output-dir` 请用绝对路径且不含非 ASCII 字符：
+  TensorFlow 的 gfile 在含中文的路径下使用相对目录会以
+  `FailedPreconditionError` 失败。
+
 ## 环境
 
 建议使用 Python 3.10 或 3.11：

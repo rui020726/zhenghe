@@ -163,7 +163,28 @@
     `AgentSnapshot + task belief → Coordinator`，并写明注册表只向分配器供数
     （闸门校验与执行注入）。
 - mock 的双通道地图与 `timemap.Environment.two_channel_map` 逐格一致（含 `[0, 0.3]` 两端边界）。
-- 119 项集成测试通过（本机无 torch/gym 时其中 8 项按依赖跳过）。
+- 训练入口工程化与训练正确性修复（步骤 0–2）：
+  - `timemap.Environment` 的 `self.map` 只在 `test=True` 分支赋值，而 `map_partition(self.map)`
+    无条件执行，默认参数下直接 `AttributeError` —— `piloc/train.py` 根本启动不了。
+    现按 `reset()` 的同款逻辑在构造函数里生成障碍图。
+  - `piloc/train.py`：device 可配置（原硬编码 `cuda`）、占位保存目录改为 `--output-dir`
+    并自动创建、修掉 `episode_num % 1000 == 0` 在 episode 0 每步都存盘的缺陷、
+    `--seed` 统一驱动 random/numpy/torch 与动作空间、`--episodes` 生效（原 `max_episodes`
+    读了不用）、`--resume` 走 strict 加载而不经过硬编码 device 与文件名的 `MAPPO.load`、
+    每回合搜索指标写入 TensorBoard 与 JSONL、每次运行写 `run_meta.json`。
+  - `task_allocation/old_driver.py`：`D:\tb_logs` 改为 `--log-dir`、`RESUME` 默认关闭、
+    补 `--seed`、网络维度收敛到 `NETWORK_DIMS` 并随运行记录、三处 checkpoint 写入统一走
+    `save_checkpoint` 并内嵌 `actor_kv_mode` 与 `run_meta`、`--episodes` 可界定训练长度；
+    集成层加载端会拒绝 `actor_kv_mode` 与请求不符的权重。
+  - CTDE 训练正确性三处：critic 从未收到 padding mask（rollout 与 update 的 pad 宽度不同，
+    同一状态得到两个 value，critic 目标不可表示）；全程没有 `eval()`，dropout 使
+    `old_logprobs` 来自未记录的掩码、行为策略不可复现；GAE 沿着 round-major/agent-minor
+    的扁平 buffer 走，把同一回合的下一台机器人当成下一时间步，`V(s)-V(s)` 相消导致
+    没有 bootstrap，并把别人的奖励折进自己的优势。
+  - 两个入口都在 CPU 上冒烟跑通：PILOC 3 回合产出的权重经 strict 加载驱动联合闭环到
+    `search_backend=piloc-trained` 并完成一个目标；CTDE 一轮 6 个 episode 产出
+    `ctde_final.pth`，记录 `actor_kv_mode=tokens`、seed、commit 与网络维度，并通过加载期探针。
+- 148 项集成测试通过（本机无 torch/gym 时其中若干项按依赖跳过）。
 
 ## 尚未完成
 
@@ -175,21 +196,25 @@
 3. 用共享障碍图的路径代价替换 task-03 欧氏距离与直线移动。
 4. 修复 `old_network` 全 padding 邻居 attention 的 NaN 风险。目前只在加载期探针中拦截，
    `summary` 模式的权重会被拒绝加载，主线 `tokens` 模式不受影响，上游代码尚未修改。
-5. 修复 `old_driver` critic padding mask 和 agent/时间步 GAE 对齐。
+5. 固定训练/验证/测试地图与 split。PILOC 每回合重新随机生成地图，仓库又不含
+   `DungeonMaps`，所以目前无法留出验证集，也就无法按“验证集最优”而不是“最后一个”
+   来选模型。
 6. 将规则协调器替换为有界学习型残差网络，并加入训练 buffer。
 7. 建立搜索、协调、任务分配联合奖励与延迟信用关联。
 8. 增加端到端基准和消融：无协调、规则协调、学习协调、无反馈。
-9. 用真实 checkpoint 复跑联合闭环。本仓库不含任何 `.pth`，当前真实权重路径只用
-   架构匹配的合成 checkpoint 验证过（加载、strict 校验、探针、分配、执行、日志），
-   真实训练权重的数值行为仍待在有权重的机器上确认。
+9. 跑一次真正收敛的训练。两个训练入口现在都能在 CPU 上端到端跑完并产出带元数据的
+   checkpoint，且都能被 `joint_driver` 以 strict 方式加载（PILOC 侧已实测跑到
+   `search_backend=piloc-trained` 并完成一个目标，CTDE 侧已实测通过加载期探针），
+   但本机 `torch` 是 CPU 版、没有 GPU，冒烟规模的结果不代表收敛后的策略质量。
 10. 提高 mock 搜索侧的保真度。目前只验证了双通道地图与 PILOC 逐格一致；时间戳老化、
     智能体间地图融合没有实现（搜索到救援的上行链路已由 CommRelay 提供延迟与丢包模型，
     但搜索队内部与真实无线电环境仍未建模），所以 mock 的完成率与策略表现
     不能作为真实 PILOC 闭环有效性的证据，只能证明接口、日志与确定性。
 11. 加强加载期探针。当前只喂全零输入、固定 4 个任务，且发生在协调残差之前；
     应补真实量级输入、不同任务数，以及“残差之后再校验 mask”的用例。
-12. 在 checkpoint 元数据里记录 `actor_kv_mode`。`summary` 与 `tokens` 的参数形状完全相同，
-    strict 加载发现不了模式选错，目前只能靠调用方传对参数。
+12. 可复现性的上限。`old_driver` 的 `--episodes` 粒度是 `N_ENVS`（请求 2 个会跑满一轮 6 个）；
+    TF32 与 bfloat16 AMP、以及动作采样本身，使固定 seed 也只能保证统计可复现，
+    不能保证逐位一致。
 
 ## 推荐下一任务
 
