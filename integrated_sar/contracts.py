@@ -226,17 +226,20 @@ class AgentTaskBelief:
     stage_index: int
     progress: float
     severity: float
-    # Detection confidence as it arrived with the message; a robot that learned the
-    # task by its own sensing simply keeps the default.
-    confidence: float = 0.5
-    # Registry revision of this belief, so a newer fact with an unchanged timestamp
-    # can still be ordered.
-    revision: int = 0
     future_requirements: tuple[int, ...] = ()
     members: tuple[str, ...] = ()
     updated_at: float = 0.0
     finished: bool = False
     dynamic: bool = False
+    # Keyword-only, and appended after every pre-existing field: a new positional
+    # parameter would re-bind the arguments the earlier call sites already pass by
+    # position (a requirements tuple landing in ``confidence``, for one).
+    # Detection confidence as it arrived with the message; a robot that learned the
+    # task by its own sensing simply keeps the default.
+    confidence: float = field(default=0.5, kw_only=True)
+    # Registry revision of this belief, so a newer fact with an unchanged timestamp
+    # can still be ordered.
+    revision: int = field(default=0, kw_only=True)
 
 
 @dataclass(frozen=True, slots=True)
@@ -284,20 +287,24 @@ class CoordinationAdvice:
     # derived from one robot's belief, which would broadcast that robot's knowledge to
     # robots it never reached (invariant 9).
     task_bias: Mapping[str, float] = field(default_factory=dict)
-    # Per-robot priority for one task: what this robot's own belief says about
-    # urgency, remaining work, severity and confidence. Separate from ``pair_bias``
-    # so a task-level term cannot leak across robots.
-    agent_task_bias: Mapping[tuple[str, str], float] = field(default_factory=dict)
     # Per-robot task compatibility: ability overlap, believed distance, busy penalty.
     pair_bias: Mapping[tuple[str, str], float] = field(default_factory=dict)
     replan_agents: frozenset[str] = frozenset()
     metadata: Mapping[str, Any] = field(default_factory=dict)
+    # Per-robot priority for one task: what this robot's own belief says about
+    # urgency, remaining work, severity and confidence. Separate from ``pair_bias``
+    # so a task-level term cannot leak across robots. Keyword-only and appended so
+    # the pre-existing positional call sites keep binding replan_agents to
+    # replan_agents.
+    agent_task_bias: Mapping[tuple[str, str], float] = field(
+        default_factory=dict, kw_only=True
+    )
 
     def bias_for(self, agent_id: str, task_id: str) -> float:
         return (
             float(self.task_bias.get(task_id, 0.0))
-            + float(self.agent_task_bias.get((agent_id, task_id), 0.0))
             + float(self.pair_bias.get((agent_id, task_id), 0.0))
+            + float(self.agent_task_bias.get((agent_id, task_id), 0.0))
         )
 
 

@@ -60,22 +60,71 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(result.metrics, {"assigned_agents": 2})
         self.assertEqual(result.belief_changed_agents, ())
 
-    def test_advice_bias_sums_the_pool_agent_and_pair_terms(self) -> None:
+    def test_new_contract_fields_do_not_rebind_legacy_positional_calls(self) -> None:
+        # Review finding 3: inserting ``confidence``/``revision`` ahead of
+        # ``future_requirements`` and ``agent_task_bias`` ahead of ``pair_bias``
+        # re-bound arguments that the earlier call sites pass by position.
+        self.assertEqual(
+            [field.name for field in fields(AgentTaskBelief)][:8],
+            [
+                "task_id",
+                "position",
+                "remaining_requirements",
+                "deadline",
+                "stage_index",
+                "progress",
+                "severity",
+                "future_requirements",
+            ],
+        )
+        self.assertEqual(
+            [field.name for field in fields(CoordinationAdvice)][:5],
+            ["revision", "generated_at", "valid_until", "task_bias", "pair_bias"],
+        )
+
+        belief = AgentTaskBelief(
+            "t", WorldPosition(0.5, 0.5), (1, 0, 0, 0, 0), 10.0, 0, 0.0, 0.5,
+            (2, 0, 0, 0, 0), ("a",), 1.0, False, True,
+        )
+        self.assertEqual(belief.future_requirements, (2, 0, 0, 0, 0))
+        self.assertEqual(belief.members, ("a",))
+        self.assertEqual(belief.updated_at, 1.0)
+        self.assertFalse(belief.finished)
+        self.assertTrue(belief.dynamic)
+        self.assertEqual(belief.confidence, 0.5)
+        self.assertEqual(belief.revision, 0)
+
+        advice = CoordinationAdvice(
+            1, 0.0, 2.0, {"t": 0.1}, {("a", "t"): 0.2}, frozenset({"b"}), {"policy": "x"},
+        )
+        self.assertEqual(advice.task_bias, {"t": 0.1})
+        self.assertEqual(advice.pair_bias, {("a", "t"): 0.2})
+        self.assertEqual(advice.replan_agents, frozenset({"b"}))
+        self.assertEqual(advice.metadata, {"policy": "x"})
+        self.assertEqual(advice.agent_task_bias, {})
+        self.assertAlmostEqual(advice.bias_for("a", "t"), 0.3)
+
+        # Both new fields are keyword-only, so a future argument cannot be mis-bound.
+        with self.assertRaises(TypeError):
+            AgentTaskBelief(
+                "t", WorldPosition(0.5, 0.5), (1,), 10.0, 0, 0.0, 0.5,
+                (), (), 0.0, False, False, 0.9,
+            )
+        with self.assertRaises(TypeError):
+            CoordinationAdvice(1, 0.0, 2.0, {}, {}, frozenset(), {}, {})
+
+    def test_advice_bias_sums_the_pool_pair_and_agent_terms(self) -> None:
         advice = CoordinationAdvice(
             revision=1,
             generated_at=0.0,
             valid_until=1.0,
             task_bias={"t": 0.1},
-            agent_task_bias={("a", "t"): 0.2},
-            pair_bias={("a", "t"): 0.3},
+            pair_bias={("a", "t"): 0.2},
+            agent_task_bias={("a", "t"): 0.3},
         )
         self.assertAlmostEqual(advice.bias_for("a", "t"), 0.6)
         # A pool-level term reaches every robot; the per-robot terms do not.
         self.assertAlmostEqual(advice.bias_for("b", "t"), 0.1)
-        self.assertEqual(
-            [field.name for field in fields(CoordinationAdvice)][:5],
-            ["revision", "generated_at", "valid_until", "task_bias", "agent_task_bias"],
-        )
 
 
 class RegistryTests(unittest.TestCase):
