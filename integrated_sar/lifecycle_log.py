@@ -76,13 +76,28 @@ class LifecycleRecord:
 
 
 SnapshotLookup = Callable[[str], TaskSnapshot | None]
+AcceptanceLookup = Callable[[str], bool]
 
 
 class LifecycleLogger:
-    """Writes lifecycle records to a file path or to an already-open text stream."""
+    """Writes lifecycle records to a file path or to an already-open text stream.
 
-    def __init__(self, sink: str | os.PathLike[str] | TextIO, *, snapshot_of: SnapshotLookup | None = None) -> None:
+    ``accepted_of`` is the registry's verdict lookup: a published event the
+    registry rejected (unknown task, late timestamp, terminal task) is never a
+    lifecycle record, so the logger drops it instead of writing history the
+    registry does not stand behind. Bus subscription order matters -- subscribe
+    the logger after the registry, exactly as ``build_joint_run`` does.
+    """
+
+    def __init__(
+        self,
+        sink: str | os.PathLike[str] | TextIO,
+        *,
+        snapshot_of: SnapshotLookup | None = None,
+        accepted_of: AcceptanceLookup | None = None,
+    ) -> None:
         self.snapshot_of = snapshot_of
+        self.accepted_of = accepted_of
         if isinstance(sink, (str, os.PathLike)):
             self._owns_stream = str(sink) != "-"
             self._stream: TextIO = (
@@ -102,6 +117,10 @@ class LifecycleLogger:
             return False
         self._seen_event_ids.add(event_id)
         return True
+
+    def _registry_accepted(self, event_id: str) -> bool:
+        """A rejected event is marked seen here so it can never be logged later."""
+        return self.accepted_of is None or self.accepted_of(event_id)
 
     def reset(self) -> None:
         """Clear the per-episode dedup state so a second episode logs afresh.
@@ -137,6 +156,8 @@ class LifecycleLogger:
     def handle_detection(self, event: DetectionEvent) -> LifecycleRecord | None:
         if not self._first_time(event.event_id):
             return None
+        if not self._registry_accepted(event.event_id):
+            return None
         snapshot = self._snapshot(event.target_id)
         return self.write(
             LifecycleRecord(
@@ -166,6 +187,8 @@ class LifecycleLogger:
 
     def handle_progress(self, event: ProgressEvent) -> LifecycleRecord | None:
         if not self._first_time(event.event_id):
+            return None
+        if not self._registry_accepted(event.event_id):
             return None
         snapshot = self._snapshot(event.task_id)
         return self.write(

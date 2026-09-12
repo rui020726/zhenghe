@@ -335,6 +335,7 @@ class JointRun:
             "assignment_commands": self.counters.get("assignments", 0),
             "rejected_assignments": self.counters.get("rejected_assignments", 0),
             "accepted_event_count": self.registry.accepted_event_count,
+            "rejected_event_count": self.registry.rejected_event_count,
             "search_backend": self.configuration.search_backend,
             "allocation_backend": self.configuration.allocation_backend,
             "remaining_search_targets": len(self.search_adapter.env.goals_pos),
@@ -412,7 +413,11 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
     bus.subscribe(DetectionEvent, comm_relay.handle_detection)
     task_adapter.comm_relay = comm_relay
 
-    logger = LifecycleLogger(configuration.output, snapshot_of=registry.get)
+    logger = LifecycleLogger(
+        configuration.output,
+        snapshot_of=registry.get,
+        accepted_of=registry.was_accepted,
+    )
     # Subscribed after the registry handlers so a logged record already sees the new revision.
     bus.subscribe(DetectionEvent, logger.handle_detection)
     bus.subscribe(ProgressEvent, logger.handle_progress)
