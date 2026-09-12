@@ -544,28 +544,54 @@ class Task03Adapter:
     def _belief_fingerprints(self) -> dict[int, tuple[Any, ...]]:
         """Content fingerprints of every robot's belief, for change detection.
 
-        Deliberately excludes raw timestamps: a robot standing next to an idle
-        task refreshes its timestamps every tick without learning anything new,
-        and that must not look like a belief revision.
+        Every field that reaches a decision input is part of the fingerprint --
+        remaining status, full requirements, stage index, future requirements,
+        location, deadline, scene complexity, members, progress and the
+        finished/assigned/dynamic flags -- not only the subset an earlier
+        version happened to compare. Missing one means a delivered update does
+        not trigger coordination until the periodic interval fires.
+
+        Raw timestamps are deliberately excluded: a robot standing next to an
+        idle task refreshes its timestamps every tick without learning anything
+        new, and that must not look like a belief revision.
         """
         import numpy as np
+
+        def as_tuple(values: Any) -> tuple[Any, ...] | None:
+            return None if values is None else tuple(np.asarray(values).ravel().tolist())
 
         fingerprints: dict[int, tuple[Any, ...]] = {}
         for agent_id, knowledge in self.env.agent_knowledge.items():
             status_of = knowledge.get("task_current_status", {})
-            members_of = knowledge.get("task_members", {})
+            requirements_of = knowledge.get("task_requirements", {})
             stage_of = knowledge.get("task_stage_index", {})
-            finished = knowledge.get("known_finished", set())
+            future_of = knowledge.get("task_future_requirements", {})
+            locations_of = knowledge.get("task_locations", {})
+            deadlines_of = knowledge.get("task_deadlines", {})
+            complexity_of = knowledge.get("task_scene_complexity", {})
+            members_of = knowledge.get("task_members", {})
+            progress_of = knowledge.get("task_progress", {})
+            finished = knowledge.get("known_finished", ())
+            assigned = knowledge.get("known_assigned", ())
+            dynamic = knowledge.get("dynamic_tasks", ())
+
             entries = []
             for tid in knowledge.get("known_tasks", ()):
-                status = status_of.get(tid)
                 entries.append(
                     (
                         int(tid),
-                        None if status is None else tuple(np.asarray(status).ravel().tolist()),
+                        as_tuple(status_of.get(tid)),
+                        as_tuple(requirements_of.get(tid)),
+                        int(stage_of.get(tid, -1)),
+                        as_tuple(future_of.get(tid)),
+                        as_tuple(locations_of.get(tid)),
+                        None if tid not in deadlines_of else float(deadlines_of[tid]),
+                        None if tid not in complexity_of else float(complexity_of[tid]),
                         tuple(members_of.get(tid, ())),
-                        stage_of.get(tid),
+                        float(progress_of.get(tid, 0.0)),
                         int(tid in finished),
+                        int(tid in assigned),
+                        int(tid in dynamic),
                     )
                 )
             fingerprints[agent_id] = tuple(sorted(entries))
