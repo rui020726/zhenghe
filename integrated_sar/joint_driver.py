@@ -307,6 +307,17 @@ class JointRun:
         )
         return summary
 
+    def reset(self) -> None:
+        """Start a fresh episode on the same wired collaborators.
+
+        Every clock, simulator, registry, adapter mapping, gate rejection, relay
+        outbox, logger dedup entry and run counter restarts; nothing of the
+        previous episode's state survives.
+        """
+        self.orchestrator.reset()
+        self.logger.reset()
+        self.counters.clear()
+
     def summarize(self, steps: int) -> dict[str, Any]:
         snapshots = self.registry.snapshots()
         by_status: dict[str, int] = {}
@@ -429,8 +440,10 @@ def _build_search_side(
             scenario, view_radius=radius, dt=configuration.dt
         )
         action_provider: Any = FrontierSearchPolicy(view_radius=radius)
+        # The mock environment restores the scenario itself.
+        reset_world: Any = environment.reset
     else:
-        from .piloc_runtime import build_piloc_search_side
+        from .piloc_runtime import build_piloc_search_side, reset_piloc_environment
 
         environment, action_provider, observations, channels = build_piloc_search_side(
             scenario,
@@ -441,6 +454,11 @@ def _build_search_side(
             obs_radius=radius,
         )
 
+        def reset_world() -> None:
+            # timemap.Environment.reset would generate a random map; a faithful
+            # reset re-loads the original scenario instead.
+            reset_piloc_environment(environment, scenario)
+
     return PilocSearchAdapter(
         env=environment,
         action_provider=action_provider,
@@ -449,6 +467,7 @@ def _build_search_side(
         two_channelmap=channels,
         episode_horizon=max(configuration.steps, 1),
         detection_radius=radius,
+        reset_world=reset_world,
     )
 
 
@@ -515,6 +534,7 @@ def _build_task_side(
         deterministic=True,
         residual_scale=configuration.residual_scale,
         command_ttl=configuration.command_ttl,
+        seed=configuration.seed,
     )
 
 

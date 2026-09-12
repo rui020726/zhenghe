@@ -161,6 +161,10 @@ class MockGridSearchEnv:
         self.map_size = (int(self.map.shape[0]), int(self.map.shape[1]))
         self.agents_pos = _as_position_array(agent_positions)
         self.goals_pos = _as_position_array(goal_positions)
+        # Episode-start state for reset(): the hidden targets include the ones a
+        # previous episode already discovered and removed from goals_pos.
+        self._initial_agents = self.agents_pos.copy()
+        self._initial_goals = self.goals_pos.copy()
         self.num_agents = int(self.agents_pos.shape[0])
         self.agents = [f"agent_{index}" for index in range(self.num_agents)]
         self.view_radius = int(view_radius)
@@ -182,6 +186,21 @@ class MockGridSearchEnv:
             goal_positions=scenario.goal_positions,
             **kwargs,
         )
+
+    def reset(self) -> None:
+        """Restore the episode-start world: robots, hidden targets and pheromone.
+
+        The obstacle map is static by construction; everything the previous
+        episode mutated -- positions, the discovered-target list, the pheromone
+        field, the step and time counters -- goes back to its initial value.
+        """
+        self.agents_pos = self._initial_agents.copy()
+        self.goals_pos = self._initial_goals.copy()
+        self.steps = 0
+        self.current_time = 0.0
+        self.global_pheromone = np.zeros(self.map_size, dtype=np.float32)
+        for row, col in self.agents_pos:
+            self.global_pheromone[int(row), int(col)] = 1.0
 
     def _is_line_of_sight_blocked(
         self, start_row: int, start_col: int, end_row: int, end_col: int, env_map: Any

@@ -12,6 +12,7 @@ from ..contracts import (
     SearchStepResult,
 )
 from ..profiles import TargetProfileProvider
+from ..search_runtime import initialize_timestamp_observations, initialize_two_channel_map
 
 
 ActionProvider = Callable[[Any, Any, Any], Mapping[str, int]]
@@ -24,6 +25,12 @@ class PilocSearchAdapter:
     The adapter reconstructs which pre-move targets were observed, because the
     current environment deletes observed goals inside ``Environment.step``.
     A future native integration should emit DetectionEvent before that deletion.
+
+    ``reset_world`` is an optional callback that restores the underlying search
+    environment to the episode-start scenario (the mock environment resets
+    itself; the real timemap environment re-loads the scenario map, positions
+    and pheromone). Without it, ``reset`` can only rebuild the adapter's own
+    tracking state.
     """
 
     def __init__(
@@ -38,6 +45,7 @@ class PilocSearchAdapter:
         episode_horizon: int = 250,
         detection_radius: int = 5,
         confidence: float = 1.0,
+        reset_world: Callable[[], None] | None = None,
     ) -> None:
         self.env = env
         self.action_provider = action_provider
@@ -48,6 +56,7 @@ class PilocSearchAdapter:
         self.episode_horizon = int(episode_horizon)
         self.detection_radius = int(detection_radius)
         self.confidence = float(confidence)
+        self._reset_world = reset_world
         rows, cols = tuple(int(value) for value in env.map_size)
         self.transform = CoordinateTransform(rows=rows, cols=cols)
         self._episode = 0
@@ -55,9 +64,28 @@ class PilocSearchAdapter:
         self._untracked_counter = 0
         self.reset()
 
+    def _view_radius(self) -> int:
+        for name in ("view_radius", "obs_radius"):
+            value = getattr(self.env, name, None)
+            if value is not None:
+                return int(value)
+        return self.detection_radius
+
     def reset(self) -> None:
-        """Start a new episode: track ids are namespaced by episode, so they never collide."""
+        """Start a new episode: track ids are namespaced by episode, so they never collide.
+
+        When a ``reset_world`` callback is wired, the search environment is also
+        restored to the original scenario -- initial robot positions, the full
+        set of hidden targets, zeroed pheromone and counters -- and the adapter's
+        timestamp observations and channel maps are rebuilt from it.
+        """
         self._episode += 1
+        if self._reset_world is not None:
+            self._reset_world()
+            self.obs = initialize_timestamp_observations(
+                self.env, view_radius=self._view_radius()
+            )
+            self.two_channelmap = initialize_two_channel_map(self.obs)
         self._track_ids = [
             f"piloc-e{self._episode}-target-{index}"
             for index in range(len(self.env.goals_pos))

@@ -103,6 +103,16 @@ class LifecycleLogger:
         self._seen_event_ids.add(event_id)
         return True
 
+    def reset(self) -> None:
+        """Clear the per-episode dedup state so a second episode logs afresh.
+
+        Records already written stay in the stream; the next episode's events are
+        namespaced by their adapters' episode counters, so nothing is confused
+        with this episode's records.
+        """
+        self._seen_event_ids.clear()
+        self.records_written = 0
+
     def write(self, record: LifecycleRecord) -> LifecycleRecord:
         if self._closed:
             raise RuntimeError("lifecycle log is already closed")

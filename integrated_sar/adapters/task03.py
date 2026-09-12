@@ -63,6 +63,12 @@ class Task03Adapter:
         self._command_counter = 0
         self._episode = 0
         self._seed = seed
+        # Captured for reset(): a TaskEnv.reset regenerates depots from its own
+        # rng, so the staging points this episode was built with must be reapplied.
+        self._depot_positions = {
+            species_id: depot["location"].copy()
+            for species_id, depot in self.env.depot_dic.items()
+        }
 
         self.env.enable_tidal_tasks = False
         self.env.enable_discovered_tasks = False
@@ -80,18 +86,42 @@ class Task03Adapter:
             agent["current_task"] = -1
 
     def reset(self) -> None:
-        """Start a new episode on the same environment.
+        """Start a new episode: restart the underlying simulator, then the mappings.
 
-        Mappings, fingerprints and command numbering restart, and the episode counter
-        keeps progress event ids from colliding with the previous episode's.
+        ``TaskEnv.reset`` regenerates robots, depots, tasks, knowledge, the
+        communication graph and every counter (including its clock and gossip
+        counters), so no stale target reference, cooldown or working state can
+        survive into the next episode. The rescue teams are then staged back on
+        the depot positions this episode was built with, initial tasks (none in
+        joint runs) are cleared again, and the attached comm relay drops its
+        outbox. The episode counter keeps progress event ids from colliding with
+        the previous episode's.
         """
         self._episode += 1
+        self.env.reset(seed=self._seed)
+        self._stage_rescue_teams()
+        self._clear_initial_tasks()
         self.external_to_internal.clear()
         self.internal_to_external.clear()
         self._task_revisions.clear()
         self._progress_fingerprints.clear()
         self._command_counter = 0
-        self._clear_initial_tasks()
+        if self.comm_relay is not None:
+            self.comm_relay.reset()
+
+    def _stage_rescue_teams(self) -> None:
+        """Move each species depot -- and its robots -- back to its staging point."""
+        for species_id, point in self._depot_positions.items():
+            depot = self.env.depot_dic.get(species_id)
+            if depot is None:
+                continue
+            depot["location"] = self._np_array(point, dtype=float)
+            for member in depot.get("members", ()):
+                agent = self.env.agent_dic.get(member)
+                if agent is None:
+                    continue
+                agent["location"] = depot["location"].copy()
+                agent["depot"] = depot["location"].copy()
 
     def sync_tasks(self, tasks: Sequence[TaskSnapshot]) -> None:
         for task in tasks:

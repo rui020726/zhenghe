@@ -125,13 +125,23 @@ def build_piloc_environment(
         test=False,
         enable_comm_noise=enable_comm_noise,
     )
+    reset_piloc_environment(environment, scenario)
+    _rebuild_position_state(environment)
+    return environment
+
+
+def reset_piloc_environment(environment: Any, scenario: SearchScenario) -> None:
+    """Reload one scenario into a constructed ``timemap.Environment``.
+
+    ``Environment.reset`` would generate a random map, so a faithful full-episode
+    reset re-runs ``load`` with the original scenario; the caller rebuilds the
+    derived position state afterwards.
+    """
     environment.load(
         np.asarray(scenario.obstacles, dtype=np.int32),
         np.asarray([[p.row, p.col] for p in scenario.agent_positions], dtype=np.int32),
         np.asarray([[p.row, p.col] for p in scenario.goal_positions], dtype=np.int32),
     )
-    _rebuild_position_state(environment)
-    return environment
 
 
 def _rebuild_position_state(environment: Any) -> None:

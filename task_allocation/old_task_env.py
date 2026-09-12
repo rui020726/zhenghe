@@ -314,9 +314,13 @@ class TaskEnv:
         knowledge["task_members"][tid] = list(view["members"])
         knowledge["task_last_update_time"][tid] = float(view["update_time"])
         knowledge["task_stage_index"][tid] = int(view.get("stage_index", 0))
-        knowledge["task_future_requirements"][tid] = np.asarray(
+        future_req = np.asarray(
             view.get("future_requirements", np.zeros(self.traits_dim, dtype=int)), dtype=int
-        ).copy()
+        )
+        if future_req.size == 0:
+            # 最后阶段（或消息未携带未来需求）： belief 里记为全零。
+            future_req = np.zeros(self.traits_dim, dtype=int)
+        knowledge["task_future_requirements"][tid] = future_req.copy()
         knowledge["task_scene_complexity"][tid] = float(view.get("scene_complexity", 0.5))
         if view.get("dynamic"):
             knowledge["dynamic_tasks"].add(tid)
