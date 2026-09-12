@@ -9,6 +9,7 @@ from .contracts import (
     AssignmentCommand,
     CoordinationAdvice,
     CoordinatorInput,
+    DetectionMessage,
     ExecutionStepResult,
     SearchStepResult,
     TaskSnapshot,
@@ -57,6 +58,17 @@ class ReplanSource(Protocol):
     """
 
     def pending_replans(self) -> frozenset[str]: ...
+
+
+class BeliefWriter(Protocol):
+    """
+    A sink that can merge one delivered communication message into one robot's belief.
+
+    Implementations own the belief schema; the relay only decides *whether* and
+    *when* a message arrives, never what a robot is allowed to know.
+    """
+
+    def deliver_detection(self, message: DetectionMessage, agent_id: str) -> bool: ...
 
 
 @runtime_checkable

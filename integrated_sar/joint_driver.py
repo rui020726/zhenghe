@@ -26,6 +26,7 @@ from .adapters.piloc import PilocSearchAdapter
 from .adapters.task03 import Task03Adapter
 from .assignment_gate import AssignmentGate, ReplanCoordinator
 from .clock import GlobalClock
+from .comm import CommRelay
 from .contracts import DetectionEvent, ProgressEvent, TaskSnapshot
 from .coordinator import HeuristicCoordinator, PassthroughCoordinator
 from .errors import ConfigurationError, IntegratedSARError
@@ -66,6 +67,8 @@ class RunConfiguration:
     allocation_interval: int = 5
     dt: float = 1.0
     detection_radius: int = 5
+    comm_delivery_probability: float = 1.0
+    comm_delay_ticks: int = 0
     quiet: bool = False
     repository_root: str | None = None
 
@@ -123,6 +126,15 @@ class RunConfiguration:
             )
         if self.command_ttl <= 0:
             raise ConfigurationError(f"--command-ttl must be positive, got {self.command_ttl}")
+        if not 0.0 <= self.comm_delivery_probability <= 1.0:
+            raise ConfigurationError(
+                f"--comm-delivery-probability must stay in [0, 1] so the search-to-rescue "
+                f"uplink stays a seedable packet-loss process, got {self.comm_delivery_probability}"
+            )
+        if self.comm_delay_ticks < 0:
+            raise ConfigurationError(
+                f"--comm-delay-ticks cannot be negative, got {self.comm_delay_ticks}"
+            )
         if self.coordination_interval < 1 or self.allocation_interval < 1:
             raise ConfigurationError("decision intervals must be at least 1")
         if self.mock and (self.piloc_checkpoint or self.task_checkpoint):
@@ -174,6 +186,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--allocation-interval", type=int, default=5, help="steps between allocation calls")
     parser.add_argument("--dt", type=float, default=1.0, help="global clock increment per joint step")
     parser.add_argument("--detection-radius", type=int, default=5, help="Chebyshev radius for target detection")
+    parser.add_argument("--comm-delivery-probability", type=float, default=1.0,
+                        help="per-packet success probability of the search-to-rescue uplink")
+    parser.add_argument("--comm-delay-ticks", type=int, default=0,
+                        help="joint steps a detection message spends on the uplink before delivery")
     parser.add_argument("--quiet", action="store_true", help="do not print per-step progress lines")
     parser.add_argument("--repository-root", default=None,
                         help="override the repository root used to locate piloc/ and task_allocation/")
@@ -204,6 +220,8 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         allocation_interval=int(args.allocation_interval),
         dt=float(args.dt),
         detection_radius=int(args.detection_radius),
+        comm_delivery_probability=float(args.comm_delivery_probability),
+        comm_delay_ticks=int(args.comm_delay_ticks),
         quiet=bool(args.quiet),
         repository_root=args.repository_root,
     )
@@ -367,6 +385,21 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         coordination_interval=configuration.coordination_interval,
         allocation_interval=configuration.allocation_interval,
     )
+
+    # The search-to-rescue communication bridge. Subscribed after the registry so a
+    # queued message snapshots exactly the task view the registry accepted. Delivery
+    # obeys an explicit topology (the subscribed rescue robots), a per-packet delay
+    # and a seeded loss process; positions play no role in it (invariant 10).
+    comm_relay = CommRelay(
+        subscribers=tuple(str(agent_id) for agent_id in task_adapter.env.agent_dic),
+        writer=task_adapter,
+        snapshot_of=registry.get,
+        delivery_probability=configuration.comm_delivery_probability,
+        delay_ticks=configuration.comm_delay_ticks,
+        seed=configuration.seed,
+    )
+    bus.subscribe(DetectionEvent, comm_relay.handle_detection)
+    task_adapter.comm_relay = comm_relay
 
     logger = LifecycleLogger(configuration.output, snapshot_of=registry.get)
     # Subscribed after the registry handlers so a logged record already sees the new revision.

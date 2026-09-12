@@ -126,6 +126,37 @@ class DetectionEvent:
 
 
 @dataclass(frozen=True, slots=True)
+class DetectionMessage:
+    """The payload a communication relay carries over the search-to-rescue link.
+
+    This is not a second discovery event: :class:`DetectionEvent` is the lifecycle
+    event published once on the bus, while a message is the letter itself -- a
+    snapshot of the task as the registry accepted it at send time, delivered later
+    (or never) to each subscribed robot's belief over an explicit topology with
+    delay and loss.
+    """
+
+    event_id: str
+    target_id: str
+    sent_at: float
+    position: WorldPosition
+    stages: tuple[TaskStageSpec, ...]
+    current_stage: int
+    remaining_requirements: tuple[int, ...]
+    deadline: float
+    severity: float
+    confidence: float
+    members: tuple[str, ...] = ()
+    discovered_by: str | None = None
+
+    def __post_init__(self) -> None:
+        if not self.event_id or not self.target_id:
+            raise ValueError("event_id and target_id are required")
+        if self.current_stage < 0 or self.current_stage >= len(self.stages):
+            raise ValueError("current_stage must index into stages")
+
+
+@dataclass(frozen=True, slots=True)
 class ProgressEvent:
     event_id: str
     task_id: str

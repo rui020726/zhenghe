@@ -31,9 +31,12 @@ class Task03Adapter:
     a CTDE network is supplied, coordinator advice is added as a bounded
     residual to its action logits.
 
-    Injected targets go into the environment's ground truth only. Which robot
-    knows about them is decided by ``TaskEnv`` itself, through ``comm_range``
-    sensing and one-hop gossip, so no decision here can outrun communication.
+    Injected targets go into the environment's ground truth only. How a robot
+    learns about one is decided by explicit communication: an attached
+    :class:`~integrated_sar.comm.CommRelay` routes published detections into
+    robot beliefs over a seeded, lossy, delayed uplink, and TaskEnv's own
+    ``comm_range`` sensing plus one-hop gossip remain the robot-to-robot
+    channels. No decision here can outrun communication.
     """
 
     def __init__(
@@ -45,18 +48,21 @@ class Task03Adapter:
         residual_scale: float = 0.5,
         command_ttl: float = 10.0,
         clear_initial_tasks: bool = True,
+        seed: int | None = None,
     ) -> None:
         self.env = env
         self.network = network
         self.deterministic = bool(deterministic)
         self.residual_scale = float(residual_scale)
         self.command_ttl = float(command_ttl)
+        self.comm_relay: Any | None = None
         self.external_to_internal: dict[str, int] = {}
         self.internal_to_external: dict[int, str] = {}
         self._task_revisions: dict[str, int] = {}
         self._progress_fingerprints: dict[str, tuple[Any, ...]] = {}
         self._command_counter = 0
         self._episode = 0
+        self._seed = seed
 
         self.env.enable_tidal_tasks = False
         self.env.enable_discovered_tasks = False
@@ -168,8 +174,45 @@ class Task03Adapter:
         self.external_to_internal[task.task_id] = internal_id
         self.internal_to_external[internal_id] = task.task_id
         self._task_revisions[task.task_id] = task.revision
-        # Deliberately no notification here: propagate_task_completion senses this
-        # task for robots inside comm_range and gossips it one hop per interval.
+        # Deliberately no notification here: detections reach robot beliefs only
+        # through the attached comm relay (topology, delay, loss, seed) and the
+        # environment's own sensing and gossip.
+
+    def deliver_detection(self, message: Any, agent_id: str) -> bool:
+        """Merge one relayed detection into one robot's belief.
+
+        Returns True when the belief actually changed. A message for a task the
+        registry has not injected yet is dropped, and a message older than what
+        the robot already believes never overwrites fresher knowledge.
+        """
+        agent_key = int(agent_id)
+        knowledge = self.env.agent_knowledge.get(agent_key)
+        if knowledge is None:
+            return False
+        internal_id = self.external_to_internal.get(message.target_id)
+        if internal_id is None or internal_id not in self.env.task_dic:
+            return False
+        if (
+            internal_id in knowledge["known_tasks"]
+            and float(message.sent_at) <= knowledge["task_last_update_time"].get(internal_id, 0.0)
+        ):
+            return False
+
+        stage_index = min(int(message.current_stage), len(message.stages) - 1)
+        view = {
+            "task_id": internal_id,
+            "location": (message.position.x, message.position.y),
+            "deadline": float(message.deadline),
+            "status": tuple(message.remaining_requirements),
+            "requirements": tuple(message.stages[stage_index].requirements),
+            "members": tuple(message.members),
+            "update_time": float(message.sent_at),
+            # Detections are dynamic tasks by provenance, matching what TaskEnv's
+            # own sensing would have recorded for this task_source.
+            "dynamic": True,
+        }
+        self.env.learn_task_view(agent_key, view)
+        return True
 
     def agent_snapshots(self) -> tuple[AgentSnapshot, ...]:
         snapshots: list[AgentSnapshot] = []
@@ -365,6 +408,10 @@ class Task03Adapter:
 
     def step(self, current_time: float, dt: float) -> ExecutionStepResult:
         del current_time
+        # The relay's delivery opportunity comes before the world advances, so a
+        # message that arrives this tick can be acted on in this tick's allocation.
+        if self.comm_relay is not None:
+            self.comm_relay.tick()
         self.env.step(dt)
         events: list[ProgressEvent] = []
         for external_id, internal_id in self.external_to_internal.items():

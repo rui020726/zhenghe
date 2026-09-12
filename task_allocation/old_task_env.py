@@ -284,6 +284,53 @@ class TaskEnv:
             for aid in self.agent_dic.keys()
         }
 
+    def learn_task_view(self, agent_id, view):
+        """把一条任务视图（通信消息或视距感知到的真值）写进一台机器人的 belief。
+
+        view 是集成层与本项目共享的 belief 字段：task_id、location、deadline、
+        status、requirements、members、update_time、dynamic。调用方决定这条消息
+        是否比机器人已知的更新；本方法只负责按统一模式落盘。
+        """
+        tid = int(view["task_id"])
+        knowledge = self.agent_knowledge[agent_id]
+        knowledge["known_tasks"].add(tid)
+        knowledge["task_locations"][tid] = np.asarray(view["location"], dtype=float).copy()
+        knowledge["task_deadlines"][tid] = float(view["deadline"])
+        knowledge["task_current_status"][tid] = np.asarray(view["status"], dtype=int).copy()
+        knowledge["task_requirements"][tid] = np.asarray(view["requirements"], dtype=int).copy()
+        knowledge["task_members"][tid] = list(view["members"])
+        knowledge["task_last_update_time"][tid] = float(view["update_time"])
+        if view.get("dynamic"):
+            knowledge["dynamic_tasks"].add(tid)
+
+    def _copy_knowledge(self, knowledge):
+        """tick 开始时刻的知识快照，gossip 只能基于它传播，避免一个 tick 多跳。"""
+        return {
+            "known_tasks": set(knowledge["known_tasks"]),
+            "task_locations": {tid: value.copy() for tid, value in knowledge["task_locations"].items()},
+            "task_requirements": {tid: value.copy() for tid, value in knowledge["task_requirements"].items()},
+            "task_deadlines": dict(knowledge["task_deadlines"]),
+            "dynamic_tasks": set(knowledge["dynamic_tasks"]),
+            "known_finished": set(knowledge["known_finished"]),
+            "known_assigned": set(knowledge["known_assigned"]),
+            "task_current_status": {tid: value.copy() for tid, value in knowledge["task_current_status"].items()},
+            "task_members": {tid: list(value) for tid, value in knowledge["task_members"].items()},
+            "task_last_update_time": dict(knowledge["task_last_update_time"]),
+        }
+
+    def _share_task_belief(self, sender, tid, receiver):
+        """把发送方 belief 中的任务 tid 合并进接收方（读快照，写真实 knowledge）。"""
+        task = self.task_dic[tid]
+        receiver["known_tasks"].add(tid)
+        receiver["task_locations"][tid] = sender["task_locations"].get(tid, task["location"]).copy()
+        receiver["task_deadlines"][tid] = sender["task_deadlines"].get(tid, task["deadline"])
+        receiver["task_current_status"][tid] = sender["task_current_status"].get(tid, task["status"]).copy()
+        receiver["task_requirements"][tid] = sender["task_requirements"].get(tid, task["requirements"]).copy()
+        receiver["task_members"][tid] = list(sender["task_members"].get(tid, task.get("members", [])))
+        receiver["task_last_update_time"][tid] = sender["task_last_update_time"].get(tid, 0.0)
+        if tid in sender["dynamic_tasks"]:
+            receiver["dynamic_tasks"].add(tid)
+
     def reset(self, seed=None):
         if seed is not None: self.rng = np.random.default_rng(seed)
         self.task_source = {}
@@ -348,73 +395,44 @@ class TaskEnv:
                     knowledge["task_members"][tid] = task["members"].copy()
                     knowledge["task_last_update_time"][tid] = self.current_time
 
-        # 第二部分：一跳通信传播
-        agent_ids = list(self.agent_dic.keys())
+        # 第二部分：一跳通信传播。本轮传播只读取 tick 开始时的知识快照，写入的才是
+        # 各机器人真实的 knowledge：一次 gossip 最多传播一跳，A 的新知识不能因为
+        # 原地修改集合而在同一个 tick 内经 B 直达 C。
+        snapshots = {aid: self._copy_knowledge(k) for aid, k in self.agent_knowledge.items()}
         for i, aid in enumerate(agent_ids):
-            knowledge = self.agent_knowledge[aid]
+            knowledge = snapshots[aid]
             for nid in self.comm_graph.get(aid, []):
                 if aid >= nid: continue
 
-                nk = self.agent_knowledge[nid]
+                nk = snapshots[nid]
 
                 # 1. 增量交换互相不知道的新任务
                 for tid in (knowledge["known_tasks"] - nk["known_tasks"]):
                     if tid in self.task_dic:
-                        nk["known_tasks"].add(tid)
-                        nk["task_locations"][tid], nk["task_deadlines"][tid] = knowledge["task_locations"].get(tid,
-                                                                                                                self.task_dic[
-                                                                                                                    tid][
-                                                                                                                    "location"]).copy(), \
-                        knowledge["task_deadlines"].get(tid, self.task_dic[tid]["deadline"])
-                        nk["task_current_status"][tid], nk["task_requirements"][tid] = knowledge[
-                            "task_current_status"].get(tid, self.task_dic[tid]["status"]).copy(), knowledge[
-                            "task_requirements"].get(tid, self.task_dic[tid]["requirements"]).copy()
-                        nk["task_members"][tid], nk["task_last_update_time"][tid] = knowledge["task_members"].get(tid,
-                                                                                                                  []).copy(), \
-                        knowledge["task_last_update_time"].get(tid, 0.0)
-                        if tid in knowledge["dynamic_tasks"]: nk["dynamic_tasks"].add(tid)
+                        self._share_task_belief(knowledge, tid, self.agent_knowledge[nid])
 
                 for tid in (nk["known_tasks"] - knowledge["known_tasks"]):
                     if tid in self.task_dic:
-                        knowledge["known_tasks"].add(tid)
-                        knowledge["task_locations"][tid], knowledge["task_deadlines"][tid] = nk["task_locations"].get(
-                            tid, self.task_dic[tid]["location"]).copy(), nk["task_deadlines"].get(tid,
-                                                                                                   self.task_dic[tid][
-                                                                                                       "deadline"])
-                        knowledge["task_current_status"][tid], knowledge["task_requirements"][tid] = nk[
-                            "task_current_status"].get(tid, self.task_dic[tid]["status"]).copy(), nk[
-                            "task_requirements"].get(tid, self.task_dic[tid]["requirements"]).copy()
-                        knowledge["task_members"][tid], knowledge["task_last_update_time"][tid] = nk[
-                            "task_members"].get(tid, []).copy(), nk["task_last_update_time"].get(tid, 0.0)
-                        if tid in nk["dynamic_tasks"]: knowledge["dynamic_tasks"].add(tid)
+                        self._share_task_belief(nk, tid, self.agent_knowledge[aid])
 
                 # 2. 传递已完成信息
                 for tid in (knowledge["known_finished"] - nk["known_finished"]):
                     if tid in nk["known_tasks"]:
-                        nk["known_finished"].add(tid);
-                        nk["task_last_update_time"][tid] = self.current_time
+                        self.agent_knowledge[nid]["known_finished"].add(tid)
+                        self.agent_knowledge[nid]["task_last_update_time"][tid] = self.current_time
 
                 for tid in (nk["known_finished"] - knowledge["known_finished"]):
                     if tid in knowledge["known_tasks"]:
-                        knowledge["known_finished"].add(tid);
-                        knowledge["task_last_update_time"][tid] = self.current_time
+                        self.agent_knowledge[aid]["known_finished"].add(tid)
+                        self.agent_knowledge[aid]["task_last_update_time"][tid] = self.current_time
 
                 # 3. 双方都知道的任务，看谁的时间戳更新，直接覆盖
                 for tid in (knowledge["known_tasks"] & nk["known_tasks"]):
-                    t_a, t_n = knowledge["task_last_update_time"].get(tid, 0.0), nk["task_last_update_time"].get(tid,
-                                                                                                                 0.0)
+                    t_a, t_n = knowledge["task_last_update_time"].get(tid, 0.0), nk["task_last_update_time"].get(tid, 0.0)
                     if t_a > t_n:
-                        nk["task_current_status"][tid], nk["task_requirements"][tid] = knowledge[
-                            "task_current_status"].get(tid, self.task_dic[tid]["status"]).copy(), knowledge[
-                            "task_requirements"].get(tid, self.task_dic[tid]["requirements"]).copy()
-                        nk["task_members"][tid], nk["task_last_update_time"][tid] = knowledge["task_members"].get(tid,
-                                                                                                                  []).copy(), t_a
+                        self._share_task_belief(knowledge, tid, self.agent_knowledge[nid])
                     elif t_n > t_a:
-                        knowledge["task_current_status"][tid], knowledge["task_requirements"][tid] = nk[
-                            "task_current_status"].get(tid, self.task_dic[tid]["status"]).copy(), nk[
-                            "task_requirements"].get(tid, self.task_dic[tid]["requirements"]).copy()
-                        knowledge["task_members"][tid], knowledge["task_last_update_time"][tid] = nk[
-                            "task_members"].get(tid, []).copy(), t_n
+                        self._share_task_belief(nk, tid, self.agent_knowledge[aid])
 
         # 第三部分在途重规划检查
         for aid, agent in self.agent_dic.items():
