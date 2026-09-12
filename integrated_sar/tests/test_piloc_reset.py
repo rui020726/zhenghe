@@ -23,9 +23,10 @@ from integrated_sar.piloc_runtime import reset_piloc_environment
 from integrated_sar.scenarios import PILOC_GRID_SIZE, PILOC_OBS_RADIUS, SearchScenario
 
 # timemap imports gym, matplotlib and Pillow at module scope, so a machine without
-# any of them cannot even load the environment, and a machine with all three can
-# still fail if PILOC's own sources are missing. Both cases are the same skip: the
-# real environment cannot be constructed here.
+# any of them cannot import the environment at all. Only that specific condition is
+# a skip: once the three libraries are present, a failing import is a real
+# regression in PILOC or in the loader and must fail the test rather than be
+# reported as a missing dependency.
 TIMEMAP_IMPORT_NAMES = ("gym", "PIL", "matplotlib")
 
 
@@ -35,12 +36,6 @@ def _timemap_skip_reason() -> str | None:
     ]
     if missing:
         return f"the PILOC environment needs {', '.join(missing)}"
-    try:
-        from integrated_sar.piloc_runtime import import_timemap_module
-
-        import_timemap_module()
-    except Exception as exc:  # noqa: BLE001 - reported verbatim as the skip reason
-        return f"the PILOC environment module is not importable: {exc}"
     return None
 
 
