@@ -77,6 +77,14 @@ mock 联合推理的确定性与生命周期日志字段、分配命令 TTL 与 
 复用适配器开新 episode 不会重复事件 id、mock 的双通道地图与 PILOC 逐格一致，
 以及 checkpoint/地图/依赖缺失时的清晰报错。
 
+第二轮审查后的补充覆盖：远距离检测经上行中转送达救援 belief 并完成闭环、
+未收到消息的机器人看不见也选不到该任务、消息首次到达当 tick 立即协调并恰好分配一次、
+gossip 每 tick 最多传播一跳、丢包时 belief 保持原值、通信随机过程按 seed 复现、
+断联期间真值推进不改变 observation/mask 而新消息到达后才更新、
+公开 reset 恢复三个时钟/两个模拟器/日志与计数器且同 seed 逐记录复现、
+日志只记录 Registry 接受的事件（迟到/未知/终态后事件三者一致被拒）、
+mock 前沿策略不读视野外的信息素，以及负的检测半径以退出码 2 拒绝。
+
 ## 联合推理入口
 
 `integrated_sar/joint_driver.py` 只做推理，不训练任何网络。
@@ -100,7 +108,8 @@ python -m integrated_sar.joint_driver \
 常用参数：`--search-agents`、`--num-goals`、`--grid-size`（使用 PILOC 权重时必须为 60）、
 `--obstacle-density`、`--rescue-species`、`--rescue-per-species`、`--actor-kv-mode`、
 `--residual-scale`（协调残差上界，0–1）、`--command-ttl`、`--coordination-interval`、
-`--allocation-interval`、`--dt`、`--detection-radius`、`--no-coordinator`、`--quiet`。
+`--allocation-interval`、`--dt`、`--detection-radius`（不允许为负，0 合法但退化）、
+`--comm-delivery-probability`、`--comm-delay-ticks`、`--no-coordinator`、`--quiet`。
 `--mock` 与任一 checkpoint 参数互斥。
 
 使用 `--piloc-checkpoint` 时还有两个约束，启动即校验，不会静默放行：
@@ -112,12 +121,16 @@ python -m integrated_sar.joint_driver \
 省略 `--task-checkpoint` 时分配侧使用启发式打分，摘要中的
 `search_backend`/`allocation_backend` 会标明实际使用的后端。
 
-目标如何传到救援队，决定了这一轮能完成多少：检测只写入环境真值（`task_dic`），
-哪台机器人知道它由 `old_task_env` 自己的 `comm_range` 视距感知加一跳 gossip 决定。
-分配器和协调器都不能对机器人尚未听说的目标做决策（架构不变量 9），因此通信范围和
-传播延迟会真实地体现在结果里。为此救援队的集结点被放在搜索队的出发格上，两队共享
-同一个灾区；`TaskEnv` 默认会把集结点随机撒在整个单位正方形，那样两队可能永远不在
-彼此通信范围内，闭环根本启动不了。
+目标如何传到救援队，决定了这一轮能完成多少。检测先只写入环境真值（`task_dic`），
+`integrated_sar/comm.py` 的 `CommRelay` 再把它作为显式通信投递进机器人 belief：
+上行链路覆盖订阅它的救援机器人，每包有可配置的延迟与丢包率，丢包不重发、belief
+保持原值，整个随机过程由 seed 控制；中转不读任何人的位置，因此救援队是否与搜索
+起点重合不是闭环启动的必要条件。机器人获知任务之后，状态更新仍由 `old_task_env`
+自己的视距感知和一跳 gossip（每 tick 最多一跳）传播；断联期间真值推进不会改变
+该机器人的 observation、mask 或合法动作。分配器和协调器都不能对机器人尚未听说
+的目标做决策（架构不变量 9），通信范围、传播延迟和丢包率会真实地体现在结果里。
+为此救援队的集结点默认仍放在搜索队的出发格上，两队共享同一个灾区；
+`TaskEnv` 默认会把集结点随机撒在整个单位正方形。
 
 `--output` 写出 JSONL 生命周期日志（`-` 表示标准输出），每条记录至少包含
 `target_id`、`source_event_id`、`event_type`、`timestamp`、`discovered_by`、

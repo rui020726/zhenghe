@@ -1,6 +1,6 @@
 # 项目状态
 
-更新时间：2026-09-11
+更新时间：2026-09-12
 
 ## 已完成
 
@@ -36,10 +36,10 @@
   - 被拒命令原本要等到协调周期才重规划，且消费后 `replan_agents` 留在缓存 advice 里导致每 tick
     重复下发；现在下一 tick 恰好重规划一次（新增 `ReplanSource` 端口）。
   - actor 与协调器原本直接读环境真值：新任务被广播进每台机器人的 knowledge，启发式分配读
-    `task_dic`，前沿策略读全体真实位置。现在检测只进真值，由 `comm_range` 感知加一跳 gossip 扩散，
-    启发式与协调器只用该机器人自己的 belief，分离项改读 PILOC 本就共享的信息素（不变量 9）。
-    代价是 20 步 mock 的 `progress_events` 由 22 降到 19、资源利用率由 0.82 降到 0.65，
-    这是通信受限的真实成本。
+    `task_dic`，前沿策略读全体真实位置。现在检测只进真值，启发式与协调器只用该机器人自己的
+    belief，分离项改读 PILOC 本就共享的信息素（不变量 9）。该轮曾把“谁听说过任务”完全交给
+    `comm_range` 视距感知加一跳 gossip，代价是远距离目标永远无法分配；第二轮已用显式通信桥
+    （CommRelay）补上搜索侧到救援侧的消息通路。
   - 配套修复：`TaskEnv` 默认把救援队集结点随机撒在单位正方形，belief 收口后两队可能永远不在
     通信范围内导致闭环死锁，现在集结点落在搜索队出发格上，两队共享同一灾区。
   - 非整数 `dt` 时 mock 搜索环境仍按 1.0 推进，三个时钟分裂；现在统一按 `dt`，
@@ -52,8 +52,38 @@
   - `ProgressEvent.failure_reason` 从未填写，任务过期或超时在日志里也是空白；现在会给出原因。
   - 注入任务的 `task_source` 由 `"piloc"` 改为 `"discovered"`：前者不在 `old_task_env` 的白名单里，
     会静默把 `dynamic_tasks` 观测特征喂错给网络；溯源信息保留在 `external_task_id` 与 `discovered_by`。
+- 经第二轮独立代码审查后修复的问题，每项都有对应回归测试：
+  - 新增 `integrated_sar/comm.py` 的 `CommRelay` 作为搜索发现到救援 belief 的显式通信桥：
+    检测只进真值曾导致远距离目标永远无法分配（救援机器人必须亲自走到目标附近才能“感知”
+    到一条 PILOC 已经发出的消息）。现在事件总线把检测扇出一次，中转按注册表已接受的快照
+    生成消息，经显式拓扑、每包延迟与丢包率（seed 驱动）投递；不读任何人的位置，无条件广播
+    不会回归。`old_task_env` 的 gossip 改为基于 tick 起点快照，一次最多传播一跳（此前原地
+    修改集合会让 A 的新知识在同一 tick 经 B 直达 C）。
+  - `get_local_obs`/`get_hard_mask` 曾继续读取 `task_dic` 真值（阶段索引、未来阶段需求、
+    复杂度和若干 status/location/deadline 回退）：机器人 belief 时间戳不变、只改真值就会
+    改变 actor 输入甚至翻转硬 mask。现在观测与 mask 全部来自该机器人自己的 belief 副本，
+    belief 新增阶段索引、未来需求与复杂度三个字段并由所有 belief 路径统一维护；观测维度
+    不变，checkpoint 仍按 strict 加载。
+  - 通信消息到达或 belief 变化成为显式调度信号：`ExecutionStepResult.belief_changed_agents`
+    由内容指纹（不含裸时间戳）计算，orchestrator 在同一 tick 立即重算 advice 并分配，
+    不再等 `allocation_interval`；知识传播绝不伪装成 `ProgressEvent`。
+  - 公开 reset 现在恢复完整 episode 状态：TaskEnv 按 seed 重置并重新落位集结点、
+    mock 搜索环境恢复初始位置/隐藏目标/信息素/步数（真实 PILOC 路径重载场景而不是
+    `Environment.reset` 的随机图）、中转清空 outbox、logger 清空去重状态、JointRun 计数器
+    清零。此前 reset 后机器人带着旧 `target_id` 走到已删除的任务上会 `KeyError`；
+    且 `DeterministicTargetProfileProvider` 曾按含 episode 号的 track id 哈希任务画像，
+    reset 后同 seed 复现会因任务难度不同而分叉，现改为按物理格点哈希。
+  - 注册表区分 seen/accepted/rejected：迟到、未知任务、终态后的非法事件不再计入
+    `accepted_event_count`，logger 只记录注册表已接受的规范事件（审查复现的
+    “Registry=assigned 但日志多一条 completed”不再发生），`source_event_id` 仍指向
+    最初的 DetectionEvent。
+  - mock 前沿策略的信息素惩罚裁剪窗以候选位置为中心，曾读到当前视野外一圈；现在先把
+    信息素遮蔽到机器人自身视野窗口再打分（与真实 PILOC 策略读局部窗口的方式一致），
+    视野外变化不再影响动作。
+  - `--detection-radius` 为负会在 `RunConfiguration.validate()` 阶段以退出码 2、
+    单行 `ConfigurationError` 拒绝（此前会带着 NumPy traceback 崩溃）；0 明确合法但退化。
 - mock 的双通道地图与 `timemap.Environment.two_channel_map` 逐格一致（含 `[0, 0.3]` 两端边界）。
-- 50 项集成测试通过。
+- 77 项集成测试通过（本机无 torch/gym 时其中 7 项按依赖跳过）。
 
 ## 尚未完成
 
@@ -73,7 +103,8 @@
    架构匹配的合成 checkpoint 验证过（加载、strict 校验、探针、分配、执行、日志），
    真实训练权重的数值行为仍待在有权重的机器上确认。
 10. 提高 mock 搜索侧的保真度。目前只验证了双通道地图与 PILOC 逐格一致；时间戳老化、
-    智能体间地图融合、通信失败/部分丢失/延迟都没有实现，所以 mock 的完成率与策略表现
+    智能体间地图融合没有实现（搜索到救援的上行链路已由 CommRelay 提供延迟与丢包模型，
+    但搜索队内部与真实无线电环境仍未建模），所以 mock 的完成率与策略表现
     不能作为真实 PILOC 闭环有效性的证据，只能证明接口、日志与确定性。
 11. 加强加载期探针。当前只喂全零输入、固定 4 个任务，且发生在协调残差之前；
     应补真实量级输入、不同任务数，以及“残差之后再校验 mask”的用例。

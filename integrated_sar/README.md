@@ -7,6 +7,8 @@
 flowchart LR
     S[PILOC 搜索] -->|DetectionEvent| B[(事件总线)]
     B --> R[任务注册表]
+    B --> M[通信中转 CommRelay]
+    M -->|DetectionMessage| K[救援机器人 belief]
     B --> C[协调优化器]
     R -->|TaskSnapshot| A[CTDE 分配器]
     C -->|残差修正| A
@@ -18,7 +20,8 @@ flowchart LR
 
 - `contracts.py`：模块之间唯一允许交换的数据结构。
 - `event_bus.py`：搜索结果和执行反馈一次发布、多方订阅。
-- `task_registry.py`：任务去重、版本管理和生命周期管理。
+- `task_registry.py`：任务去重、版本管理和生命周期管理（seen/accepted/rejected 分类）。
+- `comm.py`：搜索发现到救援 belief 的显式通信中转（拓扑、延迟、丢包、seed）。
 - `coordinator.py`：无协调基线和可解释的规则协调器。
 - `orchestrator.py`：统一时钟，以及实时事件通路和较慢优化通路。
 - `adapters/piloc.py`：适配 `piloc/src/Map/timemap.py`。
@@ -30,9 +33,13 @@ flowchart LR
 
 1. PILOC 只发布目标发现事件，不把“发现”当成“完成”。
 2. 任务注册表是任务状态的唯一可信来源。
-3. 协调器不直接替代分配器，只输出任务优先级和机器人—任务配对偏置。
-4. CTDE 环境的硬 mask 始终最后执行，协调器不能放开非法动作。
-5. 执行模块返回阶段、剩余能力需求和完成比例，而不只是成功/失败。
+3. 检测消息只有经 `comm.py` 写进机器人 belief 之后才可能被分配；不存在无条件广播，
+   中转不读任何人的位置。
+4. CTDE 的 observation、硬 mask 和协调器打分只读机器人自己的 belief 副本；
+   环境真值只供模拟器、训练 critic 和统计指标使用。
+5. 协调器不直接替代分配器，只输出任务优先级和机器人—任务配对偏置。
+6. CTDE 环境的硬 mask 始终最后执行，协调器不能放开非法动作。
+7. 执行模块返回阶段、剩余能力需求和完成比例，而不只是成功/失败。
 
 当接入 CTDE 网络时，最终任务 logits 为：
 

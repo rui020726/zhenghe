@@ -10,6 +10,7 @@ flowchart LR
     S[PILOC 搜索]
     B[(事件总线)]
     R[任务注册表]
+    M[通信中转 CommRelay]
     C[协调优化器]
     A[CTDE 分配器]
     X[导航与任务执行]
@@ -19,7 +20,8 @@ flowchart LR
     S -->|DetectionEvent| B
     X -->|ProgressEvent| B
     B --> R
-    B --> C
+    B --> M
+    M -->|投递 DetectionMessage| X
     R -->|TaskSnapshot| A
     R -->|全局任务态势| C
     C -->|task/pair bias + replan| A
@@ -28,6 +30,7 @@ flowchart LR
 ```
 
 快通路保证发现后立即进入任务池；慢通路计算优先级、匹配度和重规划建议，不能阻塞救援。
+发现消息只有经通信中转写进机器人 belief 之后才可能被分配。
 
 ## 2. 模块边界
 
@@ -46,6 +49,15 @@ HIDDEN → DETECTED → VERIFIED → ASSIGNED → EN_ROUTE
 ```
 
 异常分支包括 `REPLAN_REQUIRED`、`EXPIRED`、`LOST` 和 `FAILED`。
+
+### 通信中转
+
+`CommRelay` 是搜索发现与救援 belief 之间唯一的通道。事件总线把每个
+`DetectionEvent` 扇出一次，中转按注册表已接受的任务快照生成消息，按显式拓扑
+（订阅了上行链路的救援机器人）、每包延迟和丢包率（由 seed 驱动）投递；包丢了
+就丢了，belief 保持原值。中转不读任何人的位置，搜索队与救援队仍是两组独立
+实体，救援集结点是否与搜索起点重合不影响闭环能否启动。机器人获知任务后的
+后续更新仍走 TaskEnv 自身的视距感知与一跳 gossip。
 
 ### 协调优化器
 
@@ -80,6 +92,7 @@ HIDDEN → DETECTED → VERIFIED → ASSIGNED → EN_ROUTE
 | 契约 | 生产者 | 消费者 | 关键字段 |
 | --- | --- | --- | --- |
 | `DetectionEvent` | PILOC adapter | Registry/Coordinator | target ID、位置、时间、置信度、目标属性 |
+| `DetectionMessage` | CommRelay | 机器人 belief（经 Task03 adapter） | 发送时快照：位置、阶段、需求、截止时间 |
 | `TaskSnapshot` | Registry | Coordinator/Allocator/Executor | 阶段、剩余需求、截止时间、revision |
 | `CoordinationAdvice` | Coordinator | Allocator | task bias、pair bias、replan、有效期 |
 | `AssignmentCommand` | Allocator | Executor | agent/task、task revision、TTL |
@@ -94,9 +107,11 @@ HIDDEN → DETECTED → VERIFIED → ASSIGNED → EN_ROUTE
 1. 搜索环境推进并发布新发现。
 2. 注册表幂等接收发现并创建/更新任务。
 3. 将最新任务快照同步到 task-03 环境。
-4. 救援执行环境推进并发布进度。
-5. 注册表接收进度，协调器按周期或事件重新计算 advice。
-6. 分配器在新任务、进度变化、超时或周期触发时生成命令。
+4. 救援执行环境推进：先投递到期的通信消息（belief 变化被报告为调度信号），
+   再推进模拟器并发布进度。
+5. 注册表接收进度，协调器按周期或事件（新发现、进度、belief 变化、重规划请求）
+   重新计算 advice。
+6. 分配器在新任务、进度变化、belief 变化、超时或周期触发时生成命令。
 7. 执行器应用命令；机器人从下一物理步开始移动。
 
 ## 5. 世界与坐标
@@ -125,5 +140,7 @@ y = row / (height - 1)
 
 ## 7. 部署与信息约束
 
-环境维护 `truth state`，Actor/在线协调器维护 `belief state`。严格 CTDE 实验中，在线模块
-只能使用经过通信图、延迟和丢包后的信息；全局真值只允许训练 Critic 和计算指标使用。
+环境维护 `truth state`，Actor/在线协调器维护 `belief state`。严格 CTDE 实验中，
+在线模块只能使用经过通信链（上行中转、视距感知、gossip）到达的信息；观测特征、
+硬 mask、协调器打分全部读 belief 副本，断联期间真值推进不改变机器人的决策输入。
+全局真值只允许训练 Critic 和计算指标使用。
