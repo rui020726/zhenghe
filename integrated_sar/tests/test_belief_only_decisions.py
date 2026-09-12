@@ -301,5 +301,124 @@ class ExecutionBeliefTests(unittest.TestCase):
         self.assertIn(internal_id, env.agent_knowledge[0]["task_progress"])
 
 
+class StaleTerminalBeliefTests(unittest.TestCase):
+    """A robot that still believes in a closed task must not starve a live one.
+
+    Fifth review round, finding 1. The coordinator no longer reads the registry, so
+    it keeps biasing a task the registry has closed, and the live task competes with
+    it on belief alone. That command used to be stamped ``task_revision=None`` and
+    refused with ``missing_task_revision`` on every allocation round -- reproduced at
+    02d29e9, where the live task never ran at all. The stamp now comes from the
+    adapter's own cache, so the robot travels, verifies on scene, and its belief
+    catches up.
+    """
+
+    def _wire(self):
+        env = build_task_env(
+            load_task_env_module(),
+            seed=7,
+            species=1,
+            per_species=1,
+            comm_range=0.02,
+            depot_positions=[(0.05, 0.05)],
+        )
+        adapter = Task03Adapter(env=env, clear_initial_tasks=True, seed=7)
+        registry = TaskRegistry()
+        events = (
+            # The closed task sits next to the robot, so its belief-derived score wins
+            # over the live task on the far side of the map.
+            _event("closed", (0.12, 0.12), "d-closed"),
+            _event("live", (0.95, 0.95), "d-live"),
+        )
+        for event in events:
+            registry.handle_detection(event)
+        adapter.sync_tasks(registry.snapshots())
+        relay = CommRelay(
+            subscribers=("0",), writer=adapter, snapshot_of=registry.get, seed=7
+        )
+        adapter.comm_relay = relay
+        for event in events:
+            relay.handle_detection(event)
+        relay.tick()
+        return env, adapter, registry
+
+    def test_a_closed_task_is_settled_on_scene_and_the_live_task_runs(self) -> None:
+        from integrated_sar.assignment_gate import AssignmentGate
+        from integrated_sar.clock import GlobalClock
+        from integrated_sar.contracts import TaskStatus
+
+        env, adapter, registry = self._wire()
+        self.assertEqual(adapter.agent_snapshots()[0].known_tasks, ("closed", "live"))
+        closed_internal = adapter.external_to_internal["closed"]
+        live_internal = adapter.external_to_internal["live"]
+
+        # The registry closes one task; no message about it reaches the robot.
+        registry._tasks["closed"].status = TaskStatus.COMPLETED
+        registry._tasks["closed"].revision += 1
+        adapter.sync_tasks(registry.snapshots())
+        self.assertFalse(adapter.agent_snapshots()[0].belief_for("closed").finished)
+
+        clock = GlobalClock()
+        gate = AssignmentGate(
+            adapter,
+            clock=clock,
+            revision_of=lambda task_id: (
+                registry.get(task_id).revision if registry.get(task_id) else None
+            ),
+        )
+        coordinator = HeuristicCoordinator()
+
+        first_command = None
+        for tick in range(1, 30):
+            clock.advance_to(float(tick))
+            agents = adapter.agent_snapshots()
+            advice = coordinator.advise(
+                CoordinatorInput(float(tick), registry.active_snapshots(), agents)
+            )
+            commands = adapter.allocate(
+                registry.active_snapshots(), agents, advice, float(tick)
+            )
+            gate.apply_assignments(commands)
+            self.assertEqual(
+                gate.drain_rejections(),
+                (),
+                "the command was refused instead of letting the robot verify on scene",
+            )
+            if first_command is None and commands:
+                first_command = commands[0]
+            adapter.step(float(tick), 1.0)
+            if env.task_dic[live_internal].get("finished"):
+                break
+
+        # The closed task was proposed first, and it travelled with the revision the
+        # adapter cached for it rather than with None.
+        self.assertEqual(first_command.task_id, "closed")
+        self.assertIsNotNone(first_command.task_revision)
+
+        # On scene the robot learned the truth, and the live task then ran to
+        # completion instead of being starved.
+        self.assertIn(closed_internal, env.agent_knowledge[0]["known_finished"])
+        self.assertTrue(env.task_dic[live_internal].get("finished"))
+        self.assertTrue(
+            adapter.agent_snapshots()[0].belief_for("closed").finished,
+            "the robot's belief never caught up with the closed task",
+        )
+
+
+def _event(target_id: str, world: tuple[float, float], event_id: str) -> DetectionEvent:
+    return DetectionEvent(
+        event_id=event_id,
+        target_id=target_id,
+        grid_position=GridPosition(59, 59),
+        world_position=WorldPosition(*world),
+        detected_at=1.0,
+        discovered_by="a0",
+        confidence=1.0,
+        profile=TargetProfile(
+            stages=(TaskStageSpec((1, 0, 0, 0, 0), 3.0),), deadline_offset=500.0
+        ),
+    )
+
+
 if __name__ == "__main__":
     unittest.main()

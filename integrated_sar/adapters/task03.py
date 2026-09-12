@@ -385,11 +385,7 @@ class Task03Adapter:
                 if kind == "task" and internal_task_id is not None
                 else None
             )
-            revision = (
-                task_by_id[external_task_id].revision
-                if external_task_id in task_by_id
-                else None
-            )
+            revision = self._command_revision(external_task_id, task_by_id)
             self._command_counter += 1
             commands.append(
                 AssignmentCommand(
@@ -403,6 +399,35 @@ class Task03Adapter:
                 )
             )
         return tuple(commands)
+
+    def _command_revision(
+        self,
+        external_task_id: str | None,
+        active_by_id: Mapping[str, TaskSnapshot],
+    ) -> int | None:
+        """The registry revision to stamp on a command, or None for a depot action.
+
+        A task the registry has closed is absent from the active snapshots, but it is
+        not absent from this adapter's cache: ``sync_tasks`` records the revision of
+        every injected task on every tick, terminal ones included. Stamping the cached
+        revision is what lets such a command through the assignment gate instead of
+        being refused as ``missing_task_revision``.
+
+        That matters because a robot may hold a belief the registry has since
+        closed -- invariant 9 forbids telling it otherwise, and the coordinator is
+        not allowed to read the registry to compensate. Without the stamp the robot
+        would re-propose the same closed task on every allocation cycle and never
+        travel, so on-scene verification would never run and the task would stay in
+        its belief forever, outbidding tasks that are still alive. With it, the robot
+        goes, `verify_task_on_arrival` settles the question from the ground truth it
+        is standing on, and its belief catches up.
+        """
+        if external_task_id is None:
+            return None
+        active = active_by_id.get(external_task_id)
+        if active is not None:
+            return active.revision
+        return self._task_revisions.get(external_task_id)
 
     def _heuristic_action(
         self,
