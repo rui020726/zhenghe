@@ -368,6 +368,63 @@ class SchedulerVerdictTests(unittest.TestCase):
         )
 
 
+class ReDetectionLogTests(RegistryClassificationHarness):
+    """A legal re-detection must not be logged as a fresh 'detected' task.
+
+    Third review round, finding 6: the detection record hardcoded stage 0,
+    progress 0 and status 'detected', and stamped its own event id as
+    source_event_id, so a re-detection of an already-assigned task wrote a
+    lifecycle state the registry never held and broke the per-target
+    correlation key.
+    """
+
+    def test_re_detection_logs_the_registry_state_and_keeps_the_first_source(self) -> None:
+        self.publish(make_detection(detected_at=1.0))
+        self.publish(
+            make_progress(
+                event_id="progress:assigned", observed_at=2.0, status=TaskStatus.ASSIGNED
+            )
+        )
+        self.publish(
+            make_detection(event_id="detection:target-a:v2", detected_at=3.0)
+        )
+
+        snapshot = self.registry.get("target-a")
+        self.assertEqual(snapshot.status, TaskStatus.ASSIGNED)
+        self.assertEqual(snapshot.revision, 3)
+
+        records = self.records()
+        detections = [r for r in records if r["event_type"] == "detection"]
+        self.assertEqual(len(detections), 2)
+        first, second = detections
+        self.assertEqual(first["source_event_id"], "detection:target-a")
+        self.assertEqual(
+            second["source_event_id"],
+            "detection:target-a",
+            "a re-detection replaced the target's correlation key",
+        )
+        self.assertEqual(second["status"], "assigned")
+        self.assertEqual(second["progress"], 0.0)
+        self.assertEqual(second["task_revision"], 3)
+        self.assertEqual(
+            second["detail"]["detection_event_id"],
+            "detection:target-a:v2",
+            "the new observation's own id belongs in detail",
+        )
+        # Every record for this target still joins on one detection id.
+        sources = {r["source_event_id"] for r in records}
+        self.assertEqual(sources, {"detection:target-a"})
+
+    def test_a_first_detection_still_reads_as_detected(self) -> None:
+        self.publish(make_detection(detected_at=1.0))
+        record = self.records()[0]
+        self.assertEqual(record["status"], "detected")
+        self.assertEqual(record["stage_index"], 0)
+        self.assertEqual(record["progress"], 0.0)
+        self.assertEqual(record["remaining_requirements"], [1, 0, 0, 0, 0])
+        self.assertEqual(record["detail"]["detection_event_id"], "detection:target-a")
+
+
 class ConsistencyTests(RegistryClassificationHarness):
     def test_log_accepted_count_and_registry_status_agree(self) -> None:
         self.publish(make_detection())

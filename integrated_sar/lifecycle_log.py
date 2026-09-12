@@ -159,31 +159,65 @@ class LifecycleLogger:
         if not self._registry_accepted(event.event_id):
             return None
         snapshot = self._snapshot(event.target_id)
+        if snapshot is None:
+            # Accepted but somehow absent: fall back to the event's own profile so
+            # the record still carries the required fields.
+            stages = event.profile.stages
+            return self.write(
+                LifecycleRecord(
+                    target_id=event.target_id,
+                    event_type="detection",
+                    timestamp=event.detected_at,
+                    source_event_id=event.event_id,
+                    discovered_by=event.discovered_by,
+                    task_revision=1,
+                    stage_index=0,
+                    progress=0.0,
+                    remaining_requirements=tuple(
+                        stages[0].requirements if stages else ()
+                    ),
+                    status="detected",
+                    detail=self._detection_detail(event),
+                )
+            )
+        # Lifecycle fields come from what the registry actually holds. A legal
+        # re-detection of a task that is already assigned must not be logged as a
+        # fresh 'detected' task at progress 0: that would break the per-target
+        # correlation key and the offline delayed-credit statistics.
         return self.write(
             LifecycleRecord(
                 target_id=event.target_id,
                 event_type="detection",
                 timestamp=event.detected_at,
-                source_event_id=event.event_id,
-                discovered_by=event.discovered_by,
-                task_revision=snapshot.revision if snapshot else 1,
-                stage_index=0,
-                progress=0.0,
-                remaining_requirements=tuple(
-                    event.profile.stages[0].requirements if event.profile.stages else ()
+                source_event_id=snapshot.source_event_id,
+                discovered_by=snapshot.metadata.get("discovered_by"),
+                assigned_agents=snapshot.members,
+                task_revision=snapshot.revision,
+                stage_index=snapshot.current_stage,
+                progress=snapshot.progress,
+                remaining_requirements=snapshot.remaining_requirements,
+                status=snapshot.status.value,
+                failure_reason=(
+                    "deadline_expired" if snapshot.expired else None
                 ),
-                status="detected",
-                detail={
-                    "grid_position": [event.grid_position.row, event.grid_position.col],
-                    "world_position": [event.world_position.x, event.world_position.y],
-                    "confidence": event.confidence,
-                    "severity": event.profile.severity,
-                    "total_stages": len(event.profile.stages),
-                    "deadline_offset": event.profile.deadline_offset,
-                    "map_version": event.map_version,
-                },
+                detail=self._detection_detail(event),
             )
         )
+
+    @staticmethod
+    def _detection_detail(event: DetectionEvent) -> dict[str, Any]:
+        """Run-specific detection facts, including which observation this was."""
+        return {
+            "detection_event_id": event.event_id,
+            "grid_position": [event.grid_position.row, event.grid_position.col],
+            "world_position": [event.world_position.x, event.world_position.y],
+            "confidence": event.confidence,
+            "severity": event.profile.severity,
+            "total_stages": len(event.profile.stages),
+            "deadline_offset": event.profile.deadline_offset,
+            "map_version": event.map_version,
+            "observed_by": event.discovered_by,
+        }
 
     def handle_progress(self, event: ProgressEvent) -> LifecycleRecord | None:
         if not self._first_time(event.event_id):

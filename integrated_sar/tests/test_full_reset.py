@@ -45,9 +45,11 @@ def _normalize_ids(record: dict[str, Any]) -> dict[str, Any]:
         if isinstance(normalized.get(key), str):
             normalized[key] = re.sub(r"\d+", "N", normalized[key])
     detail = normalized.get("detail") or {}
-    for key in ("progress_event_id", "command_id"):
+    for key in ("progress_event_id", "command_id", "detection_event_id"):
         if isinstance(detail.get(key), str):
             detail[key] = re.sub(r"\d+", "N", detail[key])
+    if "detail" in normalized:
+        normalized["detail"] = detail
     return normalized
 
 
