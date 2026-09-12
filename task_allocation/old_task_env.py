@@ -293,6 +293,10 @@ class TaskEnv:
                 "task_future_requirements": {tid: self._future_requirements(task) for tid, task in self.task_dic.items()},
                 "task_scene_complexity": {tid: float(task.get("scene_complexity", 0.5)) for tid, task in self.task_dic.items()},
                 "task_progress": {tid: 1.0 if task.get("finished", False) else 0.0 for tid, task in self.task_dic.items()},
+                # 检测置信度与登记版本号只随消息到达写入 belief：它们不是本机可感知的
+                # 事实，所以视距感知刷新时保留原值（见 learn_task_view）。
+                "task_confidence": {tid: float(task.get("confidence", 0.5)) for tid, task in self.task_dic.items()},
+                "task_revision": {tid: int(task.get("revision", 0)) for tid, task in self.task_dic.items()},
             }
             for aid in self.agent_dic.keys()
         }
@@ -302,8 +306,10 @@ class TaskEnv:
 
         view 是集成层与本项目共享的 belief 字段：task_id、location、deadline、
         status、requirements、members、update_time、dynamic，以及阶段信息
-        stage_index、future_requirements、scene_complexity。调用方决定这条消息
-        是否比机器人已知的更新；本方法只负责按统一模式落盘。
+        stage_index、future_requirements、scene_complexity、confidence、revision、
+        progress。调用方决定这条消息是否比机器人已知的更新；本方法只负责按统一模式
+        落盘。confidence 与 revision 只有消息携带时才更新：视距感知刷新不改变它们，
+        否则现场真值会让机器人以为自己收到过一条从未到达的消息。
         """
         tid = int(view["task_id"])
         knowledge = self.agent_knowledge[agent_id]
@@ -324,6 +330,14 @@ class TaskEnv:
         knowledge["task_future_requirements"][tid] = future_req.copy()
         knowledge["task_scene_complexity"][tid] = float(view.get("scene_complexity", 0.5))
         knowledge["task_progress"][tid] = float(view.get("progress", 0.0))
+        if view.get("confidence") is not None:
+            knowledge["task_confidence"][tid] = float(view["confidence"])
+        elif tid not in knowledge["task_confidence"]:
+            knowledge["task_confidence"][tid] = 0.5
+        if view.get("revision") is not None:
+            knowledge["task_revision"][tid] = int(view["revision"])
+        elif tid not in knowledge["task_revision"]:
+            knowledge["task_revision"][tid] = 0
         if view.get("dynamic"):
             knowledge["dynamic_tasks"].add(tid)
 
@@ -385,6 +399,8 @@ class TaskEnv:
             },
             "task_scene_complexity": dict(knowledge["task_scene_complexity"]),
             "task_progress": dict(knowledge["task_progress"]),
+            "task_confidence": dict(knowledge["task_confidence"]),
+            "task_revision": dict(knowledge["task_revision"]),
         }
 
     def _share_task_belief(self, sender, tid, receiver):
@@ -408,6 +424,12 @@ class TaskEnv:
         )
         receiver["task_progress"][tid] = float(
             sender["task_progress"].get(tid, self.task_progress_of(task))
+        )
+        receiver["task_confidence"][tid] = float(
+            sender["task_confidence"].get(tid, task.get("confidence", 0.5))
+        )
+        receiver["task_revision"][tid] = int(
+            sender["task_revision"].get(tid, task.get("revision", 0))
         )
         if tid in sender["dynamic_tasks"]:
             receiver["dynamic_tasks"].add(tid)

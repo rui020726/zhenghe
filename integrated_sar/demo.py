@@ -6,6 +6,7 @@ from collections.abc import Sequence
 
 from .contracts import (
     AgentSnapshot,
+    AgentTaskBelief,
     AssignmentCommand,
     CoordinationAdvice,
     DetectionEvent,
@@ -76,6 +77,31 @@ class SimpleResponseTeam:
             self.progress.setdefault(task.task_id, task.progress)
 
     def agent_snapshots(self) -> tuple[AgentSnapshot, ...]:
+        """The team, with the task belief each robot holds.
+
+        This demo's response team is also the task sink, so every robot here has been
+        told about the pool; the beliefs below are that knowledge. In a real joint run
+        the rescue side learns detections through the relay in ``integrated_sar.comm``
+        instead, and the same belief fields gate its decisions.
+        """
+        known = tuple(sorted(self.tasks))
+        beliefs = tuple(
+            AgentTaskBelief(
+                task_id=task.task_id,
+                position=task.position,
+                remaining_requirements=task.remaining_requirements,
+                deadline=task.deadline,
+                stage_index=task.current_stage,
+                progress=self.progress.get(task.task_id, task.progress),
+                severity=task.severity,
+                confidence=task.confidence,
+                revision=task.revision,
+                members=task.members,
+                updated_at=task.updated_at,
+                finished=task.status.terminal,
+            )
+            for task in sorted(self.tasks.values(), key=lambda item: item.task_id)
+        )
         snapshots = []
         for agent_id, data in self._agents.items():
             current_task = self.assignments.get(agent_id)
@@ -87,6 +113,8 @@ class SimpleResponseTeam:
                     status="working" if current_task else "idle",
                     current_task=current_task,
                     needs_decision=current_task is None,
+                    known_tasks=known,
+                    task_beliefs=beliefs,
                 )
             )
         return tuple(snapshots)
@@ -161,7 +189,9 @@ class SimpleResponseTeam:
                 for agent_id in members:
                     self.assignments.pop(agent_id, None)
 
-        return ExecutionStepResult(tuple(events), {"assigned_agents": len(self.assignments)})
+        return ExecutionStepResult(
+            tuple(events), metrics={"assigned_agents": len(self.assignments)}
+        )
 
 
 def build_demo() -> JointSAROrchestrator:

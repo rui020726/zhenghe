@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 from ..contracts import (
@@ -142,6 +142,8 @@ class Task03Adapter:
                 continue
             env_task["deadline"] = float(task.deadline)
             env_task["location"] = self._np_array((task.position.x, task.position.y), dtype=float)
+            env_task["confidence"] = float(task.confidence)
+            env_task["revision"] = int(task.revision)
             if task.status.terminal:
                 env_task["finished"] = True
                 env_task["expired"] = task.status == TaskStatus.EXPIRED or task.expired
@@ -199,6 +201,7 @@ class Task03Adapter:
             "discovered_by": task.metadata.get("discovered_by"),
             "external_task_id": task.task_id,
             "confidence": float(task.confidence),
+            "revision": int(task.revision),
         }
         # "discovered" is the label TaskEnv whitelists for tasks that appear at
         # runtime, and it drives the dynamic_tasks observation feature. Provenance
@@ -216,8 +219,14 @@ class Task03Adapter:
         """Merge one relayed detection into one robot's belief.
 
         Returns True when the belief actually changed. A message for a task the
-        registry has not injected yet is dropped, and a message older than what
-        the robot already believes never overwrites fresher knowledge.
+        registry has not injected yet is dropped, and a message older than what the
+        robot already believes never overwrites fresher knowledge.
+
+        Freshness is decided on ``(sent_at, revision)`` together, because the
+        registry accepts an update that carries the same timestamp as its record
+        when the event id differs -- it only rejects a strictly older one. Ordering
+        by time alone would silently discard exactly those revisions the registry
+        just accepted.
         """
         agent_key = int(agent_id)
         knowledge = self.env.agent_knowledge.get(agent_key)
@@ -226,11 +235,15 @@ class Task03Adapter:
         internal_id = self.external_to_internal.get(message.target_id)
         if internal_id is None or internal_id not in self.env.task_dic:
             return False
-        if (
-            internal_id in knowledge["known_tasks"]
-            and float(message.sent_at) <= knowledge["task_last_update_time"].get(internal_id, 0.0)
-        ):
-            return False
+        if internal_id in knowledge["known_tasks"]:
+            known_time = float(knowledge["task_last_update_time"].get(internal_id, 0.0))
+            known_revision = int(self._knowledge_revisions(knowledge).get(internal_id, 0))
+            sent_at = float(message.sent_at)
+            revision = int(getattr(message, "revision", 0))
+            if sent_at < known_time:
+                return False
+            if sent_at == known_time and revision <= known_revision:
+                return False
 
         stage_index = min(int(message.current_stage), len(message.stages) - 1)
         next_stage = message.stages[stage_index + 1].requirements if stage_index + 1 < len(message.stages) else ()
@@ -245,6 +258,9 @@ class Task03Adapter:
             "stage_index": stage_index,
             "future_requirements": tuple(next_stage),
             "scene_complexity": float(message.severity),
+            "confidence": float(message.confidence),
+            "revision": int(getattr(message, "revision", 0)),
+            "progress": float(message.progress),
             # Detections are dynamic tasks by provenance, matching what TaskEnv's
             # own sensing would have recorded for this task_source.
             "dynamic": True,
@@ -285,6 +301,10 @@ class Task03Adapter:
             )
         return tuple(snapshots)
 
+    def _knowledge_revisions(self, knowledge: Mapping[str, Any]) -> Mapping[Any, Any]:
+        """The belief's registry revisions, tolerating environments that predate them."""
+        return knowledge.get("task_revision") or {}
+
     def _task_beliefs(self, knowledge: Mapping[str, Any]) -> tuple[AgentTaskBelief, ...]:
         """The per-task beliefs behind one robot's ``known_tasks``, sorted by id."""
         beliefs: list[AgentTaskBelief] = []
@@ -307,6 +327,10 @@ class Task03Adapter:
                     severity=float(
                         knowledge.get("task_scene_complexity", {}).get(internal_id, 0.5)
                     ),
+                    confidence=float(
+                        knowledge.get("task_confidence", {}).get(internal_id, 0.5)
+                    ),
+                    revision=int(self._knowledge_revisions(knowledge).get(internal_id, 0)),
                     future_requirements=tuple(
                         int(value)
                         for value in knowledge.get("task_future_requirements", {}).get(
@@ -331,6 +355,10 @@ class Task03Adapter:
         advice: CoordinationAdvice,
         current_time: float,
     ) -> tuple[AssignmentCommand, ...]:
+        # ``tasks`` is read for one thing only: stamping each command with the
+        # registry revision the assignment gate validates against, so a command
+        # issued before a revision change is rejected rather than executed. Which
+        # task a robot is sent to comes from that robot's own belief.
         task_by_id = {task.task_id: task for task in tasks}
         commands: list[AssignmentCommand] = []
         for agent in agents:
@@ -546,14 +574,15 @@ class Task03Adapter:
 
         Every field that reaches a decision input is part of the fingerprint --
         remaining status, full requirements, stage index, future requirements,
-        location, deadline, scene complexity, members, progress and the
-        finished/assigned/dynamic flags -- not only the subset an earlier
-        version happened to compare. Missing one means a delivered update does
-        not trigger coordination until the periodic interval fires.
+        location, deadline, scene complexity, confidence, members, progress and the
+        finished/assigned/dynamic flags -- not only the subset an earlier version
+        happened to compare. Missing one means a delivered update does not trigger
+        coordination until the periodic interval fires.
 
-        Raw timestamps are deliberately excluded: a robot standing next to an
-        idle task refreshes its timestamps every tick without learning anything
-        new, and that must not look like a belief revision.
+        Raw timestamps and the raw revision are deliberately excluded: a robot
+        standing next to an idle task refreshes its timestamps every tick without
+        learning anything new, and a revision bump with unchanged content is already
+        a registry-accepted event, which the orchestrator schedules on separately.
         """
         import numpy as np
 
@@ -569,6 +598,7 @@ class Task03Adapter:
             locations_of = knowledge.get("task_locations", {})
             deadlines_of = knowledge.get("task_deadlines", {})
             complexity_of = knowledge.get("task_scene_complexity", {})
+            confidence_of = knowledge.get("task_confidence", {})
             members_of = knowledge.get("task_members", {})
             progress_of = knowledge.get("task_progress", {})
             finished = knowledge.get("known_finished", ())
@@ -587,6 +617,7 @@ class Task03Adapter:
                         as_tuple(locations_of.get(tid)),
                         None if tid not in deadlines_of else float(deadlines_of[tid]),
                         None if tid not in complexity_of else float(complexity_of[tid]),
+                        None if tid not in confidence_of else float(confidence_of[tid]),
                         tuple(members_of.get(tid, ())),
                         float(progress_of.get(tid, 0.0)),
                         int(tid in finished),

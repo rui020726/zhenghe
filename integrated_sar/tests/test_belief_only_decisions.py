@@ -5,6 +5,14 @@ already belief-based, but the coordinator still scored pairs from the registry's
 task snapshots (position, remaining requirements), ``apply_action`` navigated to
 the truth position, and the en-route replan check used the truth status. A robot
 with a stale belief therefore received task updates it never heard.
+
+Fourth review round, findings 1 and 2: the coordinator still filtered beliefs
+against the registry's active pool, read the registry's ``confidence``, triggered
+a replan when the registry closed a task the robot still believed in, and
+aggregated every robot's task priority into the pool-level ``task_bias`` -- a map
+handed to every robot, which broadcast one robot's knowledge to robots the message
+never reached. The coordinator now scores from beliefs alone and emits the priority
+per robot.
 """
 
 from __future__ import annotations
@@ -66,25 +74,62 @@ def _wire():
 
 
 class CoordinatorBeliefTests(unittest.TestCase):
-    def test_pair_bias_ignores_registry_only_position_updates(self) -> None:
+    def test_registry_only_updates_do_not_move_the_advice(self) -> None:
         env, adapter, registry = _wire()
         agents = adapter.agent_snapshots()
         before = HeuristicCoordinator().advise(
             CoordinatorInput(2.0, registry.active_snapshots(), agents)
         )
 
-        # Move only the registry truth; the robot received nothing.
+        # Move the registry truth and its confidence; the robot received nothing.
         registry._tasks["t1"].position = WorldPosition(*TRUTH_ONLY_POSITION)
+        registry._tasks["t1"].confidence = 0.1
         after = HeuristicCoordinator().advise(
             CoordinatorInput(2.0, registry.active_snapshots(), agents)
         )
 
         self.assertAlmostEqual(before.pair_bias[("0", "t1")], after.pair_bias[("0", "t1")])
-        self.assertAlmostEqual(before.task_bias["t1"], after.task_bias["t1"])
+        self.assertAlmostEqual(
+            before.agent_task_bias[("0", "t1")], after.agent_task_bias[("0", "t1")]
+        )
+        # The pool-level map is handed to every robot, so it stays empty: a
+        # belief-derived priority placed there would be broadcast to robots the
+        # message never reached.
+        self.assertEqual(after.task_bias, {})
         self.assertAlmostEqual(
             float(env.agent_knowledge[0]["task_locations"][adapter.external_to_internal["t1"]][0]),
             BELIEVED_POSITION[0],
         )
+
+    def test_a_registry_terminal_task_does_not_force_a_replan(self) -> None:
+        from integrated_sar.contracts import TaskStatus
+
+        env, adapter, registry = _wire()
+        internal_id = adapter.external_to_internal["t1"]
+        env.agent_dic[0].update({"current_task": internal_id, "status": "working"})
+        agents = adapter.agent_snapshots()
+        self.assertFalse(agents[0].belief_for("t1").finished)
+        advice = HeuristicCoordinator().advise(
+            CoordinatorInput(2.0, registry.active_snapshots(), agents)
+        )
+        self.assertEqual(advice.replan_agents, frozenset())
+
+        # The registry closing the task is not a fact any robot has observed.
+        registry._tasks["t1"].status = TaskStatus.COMPLETED
+        advice = HeuristicCoordinator().advise(
+            CoordinatorInput(2.0, registry.active_snapshots(), agents)
+        )
+        self.assertEqual(advice.replan_agents, frozenset())
+
+        # Only the robot learning it replans, and the closed task is no longer scored.
+        env.agent_knowledge[0]["known_finished"].add(internal_id)
+        agents = adapter.agent_snapshots()
+        advice = HeuristicCoordinator().advise(
+            CoordinatorInput(2.0, registry.active_snapshots(), agents)
+        )
+        self.assertEqual(advice.replan_agents, frozenset({"0"}))
+        self.assertEqual(advice.agent_task_bias, {})
+        self.assertEqual(advice.pair_bias, {})
 
     def test_the_belief_position_is_what_moves_the_pair_bias(self) -> None:
         env, adapter, registry = _wire()
@@ -102,58 +147,107 @@ class CoordinatorBeliefTests(unittest.TestCase):
         )
         self.assertGreater(after.pair_bias[("0", "t1")], before.pair_bias[("0", "t1")])
 
-    def test_stale_belief_does_not_inherit_a_fresher_task_pool_priority(self) -> None:
-        # A second, better-informed robot learns the deadline changed; the stale
-        # robot must keep its own believed priority, not the other robot's.
-        task_pool = (
-            AgentSnapshot(
-                "informed",
-                WorldPosition(0.9, 0.9),
-                (1.0, 0, 0, 0, 0),
-                known_tasks=("t1",),
-                task_beliefs=(
-                    AgentTaskBelief("t1", WorldPosition(0.9, 0.9), (1, 0, 0, 0, 0), 1000.0, 0, 0.0, 0.5),
-                ),
-            ),
+    def test_belief_confidence_is_what_moves_the_priority(self) -> None:
+        # The registry's confidence is not a robot-visible number, so the belief
+        # carries its own copy and that copy is what the coordinator reads.
+        env, adapter, registry = _wire()
+        internal_id = adapter.external_to_internal["t1"]
+        before = HeuristicCoordinator().advise(
+            CoordinatorInput(2.0, registry.active_snapshots(), adapter.agent_snapshots())
         )
-        advice = HeuristicCoordinator().advise(
-            CoordinatorInput(
-                10.0,
-                (),
-                task_pool
-                + (
-                    AgentSnapshot("stale", WorldPosition(0.0, 0.0), (1.0, 0, 0, 0, 0),
-                                  known_tasks=("t1",), task_beliefs=()),
+
+        # The registry moves its confidence: nothing moves.
+        registry._tasks["t1"].confidence = 0.1
+        unchanged = HeuristicCoordinator().advise(
+            CoordinatorInput(2.0, registry.active_snapshots(), adapter.agent_snapshots())
+        )
+        self.assertAlmostEqual(before.bias_for("0", "t1"), unchanged.bias_for("0", "t1"))
+
+        # A delivered value does move it, in both directions.
+        env.agent_knowledge[0]["task_confidence"][internal_id] = 0.05
+        lowered = HeuristicCoordinator().advise(
+            CoordinatorInput(2.0, registry.active_snapshots(), adapter.agent_snapshots())
+        )
+        self.assertLess(lowered.bias_for("0", "t1"), before.bias_for("0", "t1"))
+
+        env.agent_knowledge[0]["task_confidence"][internal_id] = 1.0
+        raised = HeuristicCoordinator().advise(
+            CoordinatorInput(2.0, registry.active_snapshots(), adapter.agent_snapshots())
+        )
+        self.assertAlmostEqual(raised.bias_for("0", "t1"), before.bias_for("0", "t1"))
+
+    def test_a_belief_derived_priority_never_reaches_another_robot(self) -> None:
+        # One robot learns the deadline changed. The other robot's belief is
+        # untouched, so its bias must not move with it.
+        def pool(informed_deadline: float) -> tuple[AgentSnapshot, ...]:
+            return (
+                AgentSnapshot(
+                    "informed",
+                    WorldPosition(0.9, 0.9),
+                    (1.0, 0, 0, 0, 0),
+                    known_tasks=("t1",),
+                    task_beliefs=(
+                        AgentTaskBelief(
+                            "t1", WorldPosition(0.9, 0.9), (1, 0, 0, 0, 0),
+                            informed_deadline, 0, 0.0, 0.5,
+                        ),
+                    ),
+                ),
+                AgentSnapshot(
+                    "stale",
+                    WorldPosition(0.4, 0.5),
+                    (1.0, 0, 0, 0, 0),
+                    known_tasks=("t1",),
+                    task_beliefs=(
+                        AgentTaskBelief(
+                            "t1", WorldPosition(0.9, 0.9), (1, 0, 0, 0, 0),
+                            1000.0, 0, 0.0, 0.5,
+                        ),
+                    ),
                 ),
             )
-        )
-        # No active registry task -> no bias at all, even though a belief exists.
-        self.assertEqual(advice.task_bias, {})
-        self.assertEqual(advice.pair_bias, {})
 
-        # With the registry agreeing the task is active, only the believing robot
-        # is scored: the stale one has no belief to score from.
+        relaxed = HeuristicCoordinator().advise(CoordinatorInput(10.0, (), pool(1000.0)))
+        urgent = HeuristicCoordinator().advise(CoordinatorInput(10.0, (), pool(10.0)))
+
+        self.assertEqual(relaxed.task_bias, {})
+        self.assertEqual(urgent.task_bias, {})
+        self.assertAlmostEqual(
+            relaxed.bias_for("stale", "t1"), urgent.bias_for("stale", "t1")
+        )
+        self.assertGreater(
+            urgent.bias_for("informed", "t1"), relaxed.bias_for("informed", "t1")
+        )
+        self.assertEqual(
+            sorted(agent for agent, _ in urgent.agent_task_bias), ["informed", "stale"]
+        )
+
+    def test_the_registry_task_list_is_not_consulted_at_all(self) -> None:
         from integrated_sar.contracts import TaskSnapshot, TaskStatus
 
-        active = TaskSnapshot(
-            task_id="t1", source_event_id="d1", position=WorldPosition(0.9, 0.9),
+        env, adapter, registry = _wire()
+        agents = adapter.agent_snapshots()
+        active = registry.get("t1")
+        without_pool = HeuristicCoordinator().advise(CoordinatorInput(2.0, (), agents))
+        with_pool = HeuristicCoordinator().advise(
+            CoordinatorInput(2.0, (active,), agents)
+        )
+        self.assertEqual(without_pool.bias_for("0", "t1"), with_pool.bias_for("0", "t1"))
+
+        # And a registry record the robot never heard of earns it nothing.
+        unheard = TaskSnapshot(
+            task_id="t2", source_event_id="d2", position=WorldPosition(0.2, 0.2),
             stages=(TaskStageSpec((1, 0, 0, 0, 0), 3.0),), current_stage=0,
             remaining_requirements=(1, 0, 0, 0, 0), progress=0.0, status=TaskStatus.DETECTED,
-            deadline=1000.0, confidence=1.0, severity=0.5, discovered_at=1.0, updated_at=1.0,
+            deadline=500.0, confidence=1.0, severity=0.9, discovered_at=1.0, updated_at=1.0,
             revision=1,
         )
         advice = HeuristicCoordinator().advise(
-            CoordinatorInput(
-                10.0,
-                (active,),
-                task_pool
-                + (
-                    AgentSnapshot("stale", WorldPosition(0.0, 0.0), (1.0, 0, 0, 0, 0),
-                                  known_tasks=("t1",), task_beliefs=()),
-                ),
-            )
+            CoordinatorInput(2.0, (unheard,), agents)
         )
-        self.assertEqual(sorted(agent for agent, _ in advice.pair_bias), ["informed"])
+        self.assertEqual(advice.task_bias, {})
+        self.assertNotIn(("0", "t2"), advice.agent_task_bias)
+        self.assertNotIn(("0", "t2"), advice.pair_bias)
 
 
 class ExecutionBeliefTests(unittest.TestCase):

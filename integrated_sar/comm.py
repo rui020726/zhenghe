@@ -160,4 +160,5 @@ class CommRelay:
             progress=snapshot.progress,
             members=snapshot.members,
             discovered_by=snapshot.metadata.get("discovered_by"),
+            revision=snapshot.revision,
         )

@@ -49,8 +49,11 @@ from integrated_sar.task_registry import TaskRegistry
 
 _REAL_FIND_SPEC = importlib.util.find_spec
 HAS_TORCH = _REAL_FIND_SPEC("torch") is not None
-# timemap needs gym and Pillow; the search policy needs torch and tensorflow on top.
-HAS_PILOC_ENV = all(_REAL_FIND_SPEC(name) is not None for name in ("gym", "PIL"))
+# timemap imports gym, matplotlib and Pillow at module scope; the search policy
+# needs torch and tensorflow on top.
+HAS_PILOC_ENV = all(
+    _REAL_FIND_SPEC(name) is not None for name in ("gym", "PIL", "matplotlib")
+)
 
 
 def make_configuration(directory: str, **overrides: Any) -> RunConfiguration:
@@ -753,6 +756,7 @@ class BeliefBoundaryTests(unittest.TestCase):
         # Nothing reached a robot, so the coordinator has nothing to bias: it
         # reads beliefs, not the registry's task pool (invariant 9).
         self.assertEqual(advice.pair_bias, {})
+        self.assertEqual(advice.agent_task_bias, {})
         self.assertEqual(advice.task_bias, {})
         # The target still exists in the registry; it is simply unheard of downstream.
         self.assertEqual(len(tasks), 1)
@@ -774,7 +778,10 @@ class BeliefBoundaryTests(unittest.TestCase):
             CoordinatorInput(0.0, tasks, snapshots)
         )
         self.assertEqual(sorted(agent for agent, _ in advice.pair_bias), knowing)
-        self.assertIn("target-a", advice.task_bias)
+        # The priority is per robot: the pool-level map stays empty so one robot's
+        # belief cannot raise another robot's score (invariant 9).
+        self.assertEqual(sorted(agent for agent, _ in advice.agent_task_bias), knowing)
+        self.assertEqual(advice.task_bias, {})
 
 
 @unittest.skipUnless(HAS_TORCH, "torch is not installed")
@@ -991,7 +998,7 @@ class CheckpointResolutionTests(unittest.TestCase):
         self.assertIn(missing, str(caught.exception))
 
 
-@unittest.skipUnless(HAS_PILOC_ENV, "the PILOC environment needs gym and Pillow")
+@unittest.skipUnless(HAS_PILOC_ENV, "the PILOC environment needs gym, matplotlib and Pillow")
 class PilocScenarioLoadingTests(unittest.TestCase):
     """``load`` must not leave state behind from the constructor's random starts."""
 
@@ -1125,7 +1132,7 @@ class EpisodeStateTests(unittest.TestCase):
         self.assertIn("deadline_expired", reasons)
 
 
-@unittest.skipUnless(HAS_PILOC_ENV, "the PILOC environment needs gym and Pillow")
+@unittest.skipUnless(HAS_PILOC_ENV, "the PILOC environment needs gym, matplotlib and Pillow")
 class MockFidelityTests(unittest.TestCase):
     """Whatever the mock claims to share with PILOC is checked against PILOC."""
 

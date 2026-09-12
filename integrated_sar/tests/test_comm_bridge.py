@@ -410,5 +410,150 @@ class RelayResetTests(unittest.TestCase):
         self.assertIn(internal_id, env.agent_knowledge[0]["known_tasks"])
 
 
+class RelayedBeliefContentTests(unittest.TestCase):
+    """What a delivered message writes into belief (review findings 3 and 5).
+
+    A message is a snapshot of the registry record, so every field the robot needs
+    to score the task has to travel with it: progress, confidence and the revision
+    the record was at. Dropping one leaves the coordinator scoring a task the robot
+    is being told has already started as if it had not started at all.
+    """
+
+    def _wire(self, detected_at: float = 1.0):
+        env, adapter = wire_rescue_side(
+            species=1, per_species=1, depot_positions=[(0.0, 0.0)]
+        )
+        registry = TaskRegistry()
+        event = make_detection(world=(0.9, 0.9), detected_at=detected_at)
+        registry.handle_detection(event)
+        adapter.sync_tasks(registry.active_snapshots())
+        relay = CommRelay(
+            subscribers=("0",),
+            writer=adapter,
+            snapshot_of=registry.get,
+            accepted_of=registry.was_accepted,
+            seed=7,
+        )
+        adapter.comm_relay = relay
+        return env, adapter, registry, relay, event
+
+    def test_non_zero_progress_and_confidence_reach_the_belief(self) -> None:
+        from integrated_sar.contracts import ProgressEvent, TaskStatus
+
+        env, adapter, registry, relay, event = self._wire()
+        relay.handle_detection(event)
+        relay.tick()
+        internal_id = adapter.external_to_internal["remote-target"]
+        belief = adapter.agent_snapshots()[0].belief_for("remote-target")
+        self.assertEqual(belief.progress, 0.0)
+        priority_before = HeuristicCoordinator().advise(
+            CoordinatorInput(2.0, registry.active_snapshots(), adapter.agent_snapshots())
+        ).agent_task_bias[("0", "remote-target")]
+
+        # The rescue team works the task; the registry records 60% progress.
+        registry.handle_progress(
+            ProgressEvent(
+                event_id="progress:1",
+                task_id="remote-target",
+                observed_at=2.0,
+                status=TaskStatus.IN_PROGRESS,
+                stage_index=0,
+                remaining_requirements=(1, 0, 0, 0, 0),
+                progress=0.6,
+                members=("0",),
+            )
+        )
+        self.assertAlmostEqual(registry.get("remote-target").progress, 0.6)
+
+        # A later re-detection of the same target carries that snapshot.
+        again = make_detection(
+            world=(0.9, 0.9), detected_at=3.0, event_id="detection:remote-target#2"
+        )
+        registry.handle_detection(again)
+        self.assertTrue(registry.was_accepted(again.event_id))
+        relay.handle_detection(again)
+        relay.tick()
+
+        belief = adapter.agent_snapshots()[0].belief_for("remote-target")
+        self.assertAlmostEqual(belief.progress, 0.6)
+        self.assertAlmostEqual(belief.confidence, 1.0)
+        self.assertEqual(int(env.agent_knowledge[0]["task_progress"][internal_id] * 10), 6)
+        # And the coordinator scores the started task below the untouched one.
+        priority_after = HeuristicCoordinator().advise(
+            CoordinatorInput(2.0, registry.active_snapshots(), adapter.agent_snapshots())
+        ).agent_task_bias[("0", "remote-target")]
+        self.assertLess(priority_after, priority_before)
+
+    def test_an_accepted_same_timestamp_revision_reaches_the_belief(self) -> None:
+        env, adapter, registry, relay, event = self._wire()
+        relay.handle_detection(event)
+        relay.tick()
+        belief = adapter.agent_snapshots()[0].belief_for("remote-target")
+        self.assertEqual((belief.position.x, belief.position.y), (0.9, 0.9))
+        self.assertEqual(belief.revision, 1)
+
+        # The registry rejects only a strictly older timestamp, so it accepts this
+        # update; a robot that dropped it would keep believing an outdated position.
+        second = make_detection(
+            world=(0.2, 0.2), detected_at=1.0, event_id="detection:remote-target#2"
+        )
+        registry.handle_detection(second)
+        self.assertTrue(registry.was_accepted(second.event_id))
+        self.assertEqual(registry.get("remote-target").revision, 2)
+        self.assertEqual(registry.get("remote-target").updated_at, 1.0)
+
+        relay.handle_detection(second)
+        relay.tick()
+
+        belief = adapter.agent_snapshots()[0].belief_for("remote-target")
+        self.assertEqual((belief.position.x, belief.position.y), (0.2, 0.2))
+        self.assertEqual(belief.revision, 2)
+
+    def test_an_older_message_never_overwrites_a_fresher_belief(self) -> None:
+        from integrated_sar.contracts import DetectionMessage, TaskStageSpec, WorldPosition
+
+        env, adapter, registry, relay, event = self._wire()
+        relay.handle_detection(event)
+        relay.tick()
+        internal_id = adapter.external_to_internal["remote-target"]
+        knowledge = env.agent_knowledge[0]
+        knowledge["task_last_update_time"][internal_id] = 9.0
+
+        stale = DetectionMessage(
+            event_id="late",
+            target_id="remote-target",
+            sent_at=1.0,
+            position=WorldPosition(0.2, 0.2),
+            stages=(TaskStageSpec((1, 0, 0, 0, 0), 3.0),),
+            current_stage=0,
+            remaining_requirements=(1, 0, 0, 0, 0),
+            deadline=500.0,
+            severity=0.5,
+            confidence=1.0,
+            progress=0.9,
+            revision=99,
+        )
+        self.assertFalse(adapter.deliver_detection(stale, "0"))
+        self.assertEqual((knowledge["task_locations"][internal_id][0]), 0.9)
+
+        # The same message delivered twice is not two revisions either.
+        newer = DetectionMessage(
+            event_id="new",
+            target_id="remote-target",
+            sent_at=9.0,
+            position=WorldPosition(0.2, 0.2),
+            stages=(TaskStageSpec((1, 0, 0, 0, 0), 3.0),),
+            current_stage=0,
+            remaining_requirements=(1, 0, 0, 0, 0),
+            deadline=500.0,
+            severity=0.5,
+            confidence=1.0,
+            progress=0.9,
+            revision=99,
+        )
+        self.assertTrue(adapter.deliver_detection(newer, "0"))
+        self.assertFalse(adapter.deliver_detection(newer, "0"))
+
+
 if __name__ == "__main__":
     unittest.main()

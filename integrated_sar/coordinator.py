@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 
-from .contracts import CoordinationAdvice, CoordinatorInput, TaskStatus
+from .contracts import AgentSnapshot, CoordinationAdvice, CoordinatorInput
 
 
 def _clamp(value: float, lower: float = -1.0, upper: float = 1.0) -> float:
@@ -70,22 +70,32 @@ class HeuristicCoordinator:
         the registry's task snapshots -- so a robot with a stale belief, or no
         belief at all, cannot be biased towards a target it has not heard about
         and cannot receive a task update that never arrived.
+
+        A task's priority is emitted as the per-agent ``agent_task_bias``, not as
+        the pool-level ``task_bias``: the pool-level map is handed to every robot,
+        so a belief-derived number placed there would broadcast one robot's
+        knowledge to robots the message never reached.
         """
         self._revision += 1
-        task_by_id = {task.task_id: task for task in state.tasks if task.active}
-        task_bias: dict[str, float] = {}
+        agent_task_bias: dict[tuple[str, str], float] = {}
         pair_bias: dict[tuple[str, str], float] = {}
         replan_agents: set[str] = set()
 
         for agent in state.agents:
-            if agent.current_task and agent.current_task not in task_by_id:
-                replan_agents.add(agent.agent_id)
+            if agent.current_task and self._models_belief(agent):
+                # Replan only when this robot's own knowledge says its commitment
+                # ended, or when it holds no knowledge of the task it is committed
+                # to. The registry closing a task is not a robot-visible fact, so
+                # it must not pull a robot off a target it still believes in.
+                belief = agent.belief_for(agent.current_task)
+                if belief is None or belief.finished:
+                    replan_agents.add(agent.agent_id)
 
             known = agent.known_tasks
             for belief in agent.task_beliefs:
                 task_id = belief.task_id
-                if task_id not in task_by_id:
-                    # Unheard-of or already closed in the registry: no bias at all.
+                if belief.finished:
+                    # This robot itself has learned that the task is over.
                     continue
                 if known is not None and task_id not in known:
                     continue
@@ -93,13 +103,12 @@ class HeuristicCoordinator:
                 time_left = belief.deadline - state.current_time
                 urgency = 1.0 - _clamp(time_left / self.urgency_horizon, 0.0, 1.0)
                 unfinished = 1.0 - _clamp(belief.progress, 0.0, 1.0)
-                score = (
+                agent_task_bias[(agent.agent_id, task_id)] = _clamp(
                     self.urgency_weight * urgency
                     + self.progress_weight * unfinished
                     + self.severity_weight * belief.severity
-                    + self.confidence_weight * task_by_id[task_id].confidence
+                    + self.confidence_weight * belief.confidence
                 )
-                task_bias[task_id] = max(task_bias.get(task_id, -1.0), _clamp(score))
 
                 required = belief.remaining_requirements
                 denominator = max(1.0, float(sum(required)))
@@ -127,8 +136,13 @@ class HeuristicCoordinator:
             revision=self._revision,
             generated_at=state.current_time,
             valid_until=state.current_time + self.validity,
-            task_bias=task_bias,
+            agent_task_bias=agent_task_bias,
             pair_bias=pair_bias,
             replan_agents=frozenset(replan_agents),
-            metadata={"policy": "heuristic-residual-v2-belief-only"},
+            metadata={"policy": "heuristic-residual-v3-belief-only"},
         )
+
+    @staticmethod
+    def _models_belief(agent: AgentSnapshot) -> bool:
+        """True when the agent source reports task knowledge for this robot at all."""
+        return agent.known_tasks is not None or bool(agent.task_beliefs)

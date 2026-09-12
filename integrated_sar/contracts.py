@@ -149,6 +149,11 @@ class DetectionMessage:
     progress: float = 0.0
     members: tuple[str, ...] = ()
     discovered_by: str | None = None
+    # The registry revision this snapshot was taken from. ``sent_at`` alone cannot
+    # order two updates that carry the same timestamp, which the registry accepts
+    # (it only rejects strictly older ones), so delivery is decided on
+    # (sent_at, revision) together.
+    revision: int = 0
 
     def __post_init__(self) -> None:
         if not self.event_id or not self.target_id:
@@ -221,6 +226,12 @@ class AgentTaskBelief:
     stage_index: int
     progress: float
     severity: float
+    # Detection confidence as it arrived with the message; a robot that learned the
+    # task by its own sensing simply keeps the default.
+    confidence: float = 0.5
+    # Registry revision of this belief, so a newer fact with an unchanged timestamp
+    # can still be ordered.
+    revision: int = 0
     future_requirements: tuple[int, ...] = ()
     members: tuple[str, ...] = ()
     updated_at: float = 0.0
@@ -268,14 +279,25 @@ class CoordinationAdvice:
     revision: int
     generated_at: float
     valid_until: float
+    # Pool-level bias for one task. Every robot that scores the task sees this number,
+    # so a policy must only put facts that are common knowledge here -- never a value
+    # derived from one robot's belief, which would broadcast that robot's knowledge to
+    # robots it never reached (invariant 9).
     task_bias: Mapping[str, float] = field(default_factory=dict)
+    # Per-robot priority for one task: what this robot's own belief says about
+    # urgency, remaining work, severity and confidence. Separate from ``pair_bias``
+    # so a task-level term cannot leak across robots.
+    agent_task_bias: Mapping[tuple[str, str], float] = field(default_factory=dict)
+    # Per-robot task compatibility: ability overlap, believed distance, busy penalty.
     pair_bias: Mapping[tuple[str, str], float] = field(default_factory=dict)
     replan_agents: frozenset[str] = frozenset()
     metadata: Mapping[str, Any] = field(default_factory=dict)
 
     def bias_for(self, agent_id: str, task_id: str) -> float:
-        return float(self.task_bias.get(task_id, 0.0)) + float(
-            self.pair_bias.get((agent_id, task_id), 0.0)
+        return (
+            float(self.task_bias.get(task_id, 0.0))
+            + float(self.agent_task_bias.get((agent_id, task_id), 0.0))
+            + float(self.pair_bias.get((agent_id, task_id), 0.0))
         )
 
 
@@ -297,11 +319,13 @@ class SearchStepResult:
 @dataclass(frozen=True, slots=True)
 class ExecutionStepResult:
     progress_events: tuple[ProgressEvent, ...] = ()
+    metrics: Mapping[str, Any] = field(default_factory=dict)
     # Robots whose belief changed during this step (a message arrived, gossip or
     # sensing updated a task view). A belief revision is an explicit scheduling
     # signal: knowledge propagation must not be disguised as a ProgressEvent.
+    # Appended after ``metrics`` so the earlier positional call sites keep meaning
+    # what they meant.
     belief_changed_agents: tuple[str, ...] = ()
-    metrics: Mapping[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True, slots=True)
