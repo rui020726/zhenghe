@@ -264,6 +264,10 @@ class SearchStepResult:
 @dataclass(frozen=True, slots=True)
 class ExecutionStepResult:
     progress_events: tuple[ProgressEvent, ...] = ()
+    # Robots whose belief changed during this step (a message arrived, gossip or
+    # sensing updated a task view). A belief revision is an explicit scheduling
+    # signal: knowledge propagation must not be disguised as a ProgressEvent.
+    belief_changed_agents: tuple[str, ...] = ()
     metrics: Mapping[str, Any] = field(default_factory=dict)
 
 
@@ -276,6 +280,7 @@ class StepReport:
     assignments: tuple[AssignmentCommand, ...]
     advice: CoordinationAdvice
     active_tasks: tuple[TaskSnapshot, ...]
+    belief_changed_agents: tuple[str, ...] = ()
 
 
 DomainEvent = DetectionEvent | ProgressEvent

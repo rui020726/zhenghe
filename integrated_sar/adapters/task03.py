@@ -412,11 +412,18 @@ class Task03Adapter:
 
     def step(self, current_time: float, dt: float) -> ExecutionStepResult:
         del current_time
+        before = self._belief_fingerprints()
         # The relay's delivery opportunity comes before the world advances, so a
         # message that arrives this tick can be acted on in this tick's allocation.
         if self.comm_relay is not None:
             self.comm_relay.tick()
         self.env.step(dt)
+        after = self._belief_fingerprints()
+        changed = sorted(
+            agent_id
+            for agent_id in set(before) | set(after)
+            if before.get(agent_id) != after.get(agent_id)
+        )
         events: list[ProgressEvent] = []
         for external_id, internal_id in self.external_to_internal.items():
             task = self.env.task_dic.get(internal_id)
@@ -453,11 +460,42 @@ class Task03Adapter:
             )
         return ExecutionStepResult(
             progress_events=tuple(events),
+            belief_changed_agents=tuple(str(agent_id) for agent_id in changed),
             metrics={
                 "resource_utilization": float(self.env.get_resource_utilization()),
                 "environment_time": float(self.env.current_time),
             },
         )
+
+    def _belief_fingerprints(self) -> dict[int, tuple[Any, ...]]:
+        """Content fingerprints of every robot's belief, for change detection.
+
+        Deliberately excludes raw timestamps: a robot standing next to an idle
+        task refreshes its timestamps every tick without learning anything new,
+        and that must not look like a belief revision.
+        """
+        import numpy as np
+
+        fingerprints: dict[int, tuple[Any, ...]] = {}
+        for agent_id, knowledge in self.env.agent_knowledge.items():
+            status_of = knowledge.get("task_current_status", {})
+            members_of = knowledge.get("task_members", {})
+            stage_of = knowledge.get("task_stage_index", {})
+            finished = knowledge.get("known_finished", set())
+            entries = []
+            for tid in knowledge.get("known_tasks", ()):
+                status = status_of.get(tid)
+                entries.append(
+                    (
+                        int(tid),
+                        None if status is None else tuple(np.asarray(status).ravel().tolist()),
+                        tuple(members_of.get(tid, ())),
+                        stage_of.get(tid),
+                        int(tid in finished),
+                    )
+                )
+            fingerprints[agent_id] = tuple(sorted(entries))
+        return fingerprints
 
     def _read_progress(
         self, task: dict[str, Any]

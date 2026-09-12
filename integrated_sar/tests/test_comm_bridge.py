@@ -304,6 +304,88 @@ class DelayAndDeterminismTests(unittest.TestCase):
         self.assertLess(len(delivered[0]), 60, "nothing was ever dropped")
 
 
+class BeliefSchedulingTests(unittest.TestCase):
+    """A first message arrival is an explicit scheduling signal (review finding 3)."""
+
+    def test_first_message_arrival_coordinates_and_allocates_immediately(self) -> None:
+        from integrated_sar.adapters.task03 import Task03Adapter
+        from integrated_sar.clock import GlobalClock
+        from integrated_sar.coordinator import HeuristicCoordinator
+        from integrated_sar.contracts import SearchStepResult
+        from integrated_sar.event_bus import InMemoryEventBus
+        from integrated_sar.orchestrator import JointSAROrchestrator
+        from integrated_sar.task03_runtime import build_task_env, load_task_env_module
+
+        env = build_task_env(
+            load_task_env_module(),
+            seed=7,
+            species=1,
+            per_species=1,
+            comm_range=0.3,
+            depot_positions=[(0.0, 0.0)],
+        )
+        adapter = Task03Adapter(env=env, clear_initial_tasks=True, seed=7)
+        registry = TaskRegistry()
+        bus = InMemoryEventBus()
+        event = make_detection()
+        relay = CommRelay(
+            subscribers=("0",), writer=adapter, snapshot_of=registry.get,
+            delay_ticks=1, seed=7,
+        )
+
+        class _OneShotSearch:
+            def __init__(self) -> None:
+                self.emitted = False
+
+            def step(self, current_time: float, dt: float) -> SearchStepResult:
+                del current_time, dt
+                if self.emitted:
+                    return SearchStepResult()
+                self.emitted = True
+                return SearchStepResult((event,), {})
+
+        orchestrator = JointSAROrchestrator(
+            search=_OneShotSearch(),
+            task_sink=adapter,
+            agent_source=adapter,
+            coordinator=HeuristicCoordinator(),
+            allocator=adapter,
+            executor=adapter,
+            registry=registry,
+            event_bus=bus,
+            clock=GlobalClock(),
+            dt=1.0,
+            coordination_interval=5,
+            allocation_interval=5,
+        )
+        bus.subscribe(type(event), relay.handle_detection)
+        adapter.comm_relay = relay
+
+        reports = list(orchestrator.run(6))
+
+        # Tick 1: the task exists, but no robot has heard of it -> nobody may be
+        # assigned, and no belief moved yet.
+        self.assertEqual(reports[0].belief_changed_agents, ())
+        self.assertEqual(
+            [command.task_id for command in reports[0].assignments if command.task_id], []
+        )
+        # Tick 2: the delayed message arrives -> immediate coordination (fresh
+        # advice, not the cached one) and exactly one allocation of the task,
+        # without waiting for the five-step allocation interval.
+        self.assertEqual(reports[1].belief_changed_agents, ("0",))
+        self.assertEqual(reports[1].advice.generated_at, 2.0)
+        self.assertEqual(
+            [command.task_id for command in reports[1].assignments if command.task_id],
+            ["remote-target"],
+        )
+        self.assertEqual(len(reports[1].assignments), 1)
+        # Ticks 3-5: the same arrival must not re-trigger allocation every tick.
+        for report in reports[2:5]:
+            self.assertEqual(
+                [command.task_id for command in report.assignments if command.task_id], []
+            )
+
+
 class RelayResetTests(unittest.TestCase):
     def test_reset_clears_outbox_dedup_and_reseeds(self) -> None:
         env, adapter = wire_rescue_side(

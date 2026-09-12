@@ -97,7 +97,15 @@ class JointSAROrchestrator:
 
         tasks = self.registry.active_snapshots()
         agents = tuple(self.agent_source.agent_snapshots())
-        state_changed = bool(search_result.detections or execution_result.progress_events)
+        # A belief revision is a first-class scheduling signal: when a message
+        # finally reaches a robot, coordination must happen now, not on the next
+        # periodic interval. Knowledge propagation is never reported as a
+        # ProgressEvent.
+        state_changed = bool(
+            search_result.detections
+            or execution_result.progress_events
+            or execution_result.belief_changed_agents
+        )
         # Rejections from the previous tick surface only now: the executor drops a
         # command while applying assignments, which is later than this tick's advice.
         replan_requested = bool(self._pending_replans())
@@ -147,6 +155,7 @@ class JointSAROrchestrator:
             assignments=assignments,
             advice=advice_used,
             active_tasks=self.registry.active_snapshots(),
+            belief_changed_agents=execution_result.belief_changed_agents,
         )
 
     def _pending_replans(self) -> frozenset[str]:
