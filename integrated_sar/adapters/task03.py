@@ -199,6 +199,7 @@ class Task03Adapter:
             return False
 
         stage_index = min(int(message.current_stage), len(message.stages) - 1)
+        next_stage = message.stages[stage_index + 1].requirements if stage_index + 1 < len(message.stages) else ()
         view = {
             "task_id": internal_id,
             "location": (message.position.x, message.position.y),
@@ -207,6 +208,9 @@ class Task03Adapter:
             "requirements": tuple(message.stages[stage_index].requirements),
             "members": tuple(message.members),
             "update_time": float(message.sent_at),
+            "stage_index": stage_index,
+            "future_requirements": tuple(next_stage),
+            "scene_complexity": float(message.severity),
             # Detections are dynamic tasks by provenance, matching what TaskEnv's
             # own sensing would have recorded for this task_source.
             "dynamic": True,

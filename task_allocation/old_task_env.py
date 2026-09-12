@@ -269,6 +269,13 @@ class TaskEnv:
 
         return task_dic, agent_dic, depot_dic, species_dict
 
+    def _future_requirements(self, task):
+        """下一阶段的真实需求向量；已是最后阶段则为全零。"""
+        stage_index = min(int(task.get("current_stage_index", 0)), len(task["stages"]) - 1)
+        if stage_index + 1 < len(task["stages"]):
+            return task["stages"][stage_index + 1]["requirements"].copy()
+        return np.zeros(self.traits_dim, dtype=int)
+
     def init_agent_memory(self):
         self.agent_knowledge = {
             aid: {
@@ -280,6 +287,11 @@ class TaskEnv:
                 "task_current_status": {tid: task["status"].copy() for tid, task in self.task_dic.items()},
                 "task_members": {tid: [] for tid in self.task_dic.keys()},
                 "task_last_update_time": {tid: 0.0 for tid in self.task_dic.keys()},
+                # 决策输入（observation/mask）只读这些 belief 副本：断联期间真值推进
+                # 不会改变该机器人的观察，只有新消息到达才会更新。
+                "task_stage_index": {tid: int(task.get("current_stage_index", 0)) for tid, task in self.task_dic.items()},
+                "task_future_requirements": {tid: self._future_requirements(task) for tid, task in self.task_dic.items()},
+                "task_scene_complexity": {tid: float(task.get("scene_complexity", 0.5)) for tid, task in self.task_dic.items()},
             }
             for aid in self.agent_dic.keys()
         }
@@ -288,7 +300,8 @@ class TaskEnv:
         """把一条任务视图（通信消息或视距感知到的真值）写进一台机器人的 belief。
 
         view 是集成层与本项目共享的 belief 字段：task_id、location、deadline、
-        status、requirements、members、update_time、dynamic。调用方决定这条消息
+        status、requirements、members、update_time、dynamic，以及阶段信息
+        stage_index、future_requirements、scene_complexity。调用方决定这条消息
         是否比机器人已知的更新；本方法只负责按统一模式落盘。
         """
         tid = int(view["task_id"])
@@ -300,8 +313,36 @@ class TaskEnv:
         knowledge["task_requirements"][tid] = np.asarray(view["requirements"], dtype=int).copy()
         knowledge["task_members"][tid] = list(view["members"])
         knowledge["task_last_update_time"][tid] = float(view["update_time"])
+        knowledge["task_stage_index"][tid] = int(view.get("stage_index", 0))
+        knowledge["task_future_requirements"][tid] = np.asarray(
+            view.get("future_requirements", np.zeros(self.traits_dim, dtype=int)), dtype=int
+        ).copy()
+        knowledge["task_scene_complexity"][tid] = float(view.get("scene_complexity", 0.5))
         if view.get("dynamic"):
             knowledge["dynamic_tasks"].add(tid)
+
+    def refresh_task_belief(self, agent_id, tid, update_time=None):
+        """视距感知/到场核实：机器人用现场真值刷新自己对任务 tid 的 belief。"""
+        task = self.task_dic[tid]
+        stage_index = min(int(task.get("current_stage_index", 0)), len(task["stages"]) - 1)
+        self.learn_task_view(
+            agent_id,
+            {
+                "task_id": tid,
+                "location": task["location"],
+                "deadline": task["deadline"],
+                "status": task["status"],
+                "requirements": task["requirements"],
+                "members": task.get("members", []),
+                "update_time": self.current_time if update_time is None else update_time,
+                "stage_index": stage_index,
+                "future_requirements": self._future_requirements(task),
+                "scene_complexity": float(task.get("scene_complexity", 0.5)),
+                "dynamic": self.task_source.get(tid) in ("discovered", "tidal"),
+            },
+        )
+        if task.get("finished", False):
+            self.agent_knowledge[agent_id]["known_finished"].add(tid)
 
     def _copy_knowledge(self, knowledge):
         """tick 开始时刻的知识快照，gossip 只能基于它传播，避免一个 tick 多跳。"""
@@ -316,6 +357,11 @@ class TaskEnv:
             "task_current_status": {tid: value.copy() for tid, value in knowledge["task_current_status"].items()},
             "task_members": {tid: list(value) for tid, value in knowledge["task_members"].items()},
             "task_last_update_time": dict(knowledge["task_last_update_time"]),
+            "task_stage_index": dict(knowledge["task_stage_index"]),
+            "task_future_requirements": {
+                tid: value.copy() for tid, value in knowledge["task_future_requirements"].items()
+            },
+            "task_scene_complexity": dict(knowledge["task_scene_complexity"]),
         }
 
     def _share_task_belief(self, sender, tid, receiver):
@@ -328,6 +374,15 @@ class TaskEnv:
         receiver["task_requirements"][tid] = sender["task_requirements"].get(tid, task["requirements"]).copy()
         receiver["task_members"][tid] = list(sender["task_members"].get(tid, task.get("members", [])))
         receiver["task_last_update_time"][tid] = sender["task_last_update_time"].get(tid, 0.0)
+        receiver["task_stage_index"][tid] = int(
+            sender["task_stage_index"].get(tid, min(int(task.get("current_stage_index", 0)), len(task["stages"]) - 1))
+        )
+        receiver["task_future_requirements"][tid] = sender["task_future_requirements"].get(
+            tid, self._future_requirements(task)
+        ).copy()
+        receiver["task_scene_complexity"][tid] = float(
+            sender["task_scene_complexity"].get(tid, task.get("scene_complexity", 0.5))
+        )
         if tid in sender["dynamic_tasks"]:
             receiver["dynamic_tasks"].add(tid)
 
@@ -378,22 +433,11 @@ class TaskEnv:
             in_range = np.linalg.norm(diffs, axis=-1) <= self.comm_range
 
             for i, aid in enumerate(agent_ids):
-                knowledge = self.agent_knowledge[aid]
                 for j, tid in enumerate(task_ids):
                     if not in_range[i, j]:
                         continue
-                    task = self.task_dic[tid]
-                    if tid not in knowledge["known_tasks"]:
-                        knowledge["known_tasks"].add(tid)
-                        knowledge["task_locations"][tid] = task["location"].copy()
-                        knowledge["task_deadlines"][tid] = task["deadline"]
-                        if self.task_source.get(tid) in ["discovered", "tidal"]:
-                            knowledge["dynamic_tasks"].add(tid)
-                    if task["finished"]:
-                        knowledge["known_finished"].add(tid)
-                    knowledge["task_current_status"][tid] = task["status"].copy()
-                    knowledge["task_members"][tid] = task["members"].copy()
-                    knowledge["task_last_update_time"][tid] = self.current_time
+                    # 视距感知：机器人就在现场，用真值刷新自己的 belief。
+                    self.refresh_task_belief(aid, tid, update_time=self.current_time)
 
         # 第二部分：一跳通信传播。本轮传播只读取 tick 开始时的知识快照，写入的才是
         # 各机器人真实的 knowledge：一次 gossip 最多传播一跳，A 的新知识不能因为
@@ -488,16 +532,8 @@ class TaskEnv:
         notified_agents = self.rng.choice(agent_ids, size=num_notified, replace=False)
 
         for aid in notified_agents:
-            knowledge = self.agent_knowledge[aid]
             for tid in new_tids:
-                task = self.task_dic[tid]
-                knowledge["known_tasks"].add(tid)
-                knowledge["task_locations"][tid], knowledge["task_deadlines"][tid] = task["location"].copy(), task[
-                    "deadline"]
-                knowledge["dynamic_tasks"].add(tid)
-                knowledge["task_current_status"][tid], knowledge["task_requirements"][tid], knowledge["task_members"][
-                    tid] = task["status"].copy(), task["requirements"].copy(), task["members"].copy()
-                knowledge["task_last_update_time"][tid] = self.current_time
+                self.refresh_task_belief(aid, tid, update_time=self.current_time)
 
     def trigger_discovered_burst(self):
         """周期性 discovered 任务爆发：模拟巡逻 agent 在某区域发现任务簇。
@@ -529,17 +565,8 @@ class TaskEnv:
         notified_agents = self.rng.choice(agent_ids, size=num_notified, replace=False)
 
         for aid in notified_agents:
-            knowledge = self.agent_knowledge[aid]
             for tid in new_tids:
-                task = self.task_dic[tid]
-                knowledge["known_tasks"].add(tid)
-                knowledge["task_locations"][tid] = task["location"].copy()
-                knowledge["task_deadlines"][tid] = task["deadline"]
-                knowledge["dynamic_tasks"].add(tid)
-                knowledge["task_current_status"][tid] = task["status"].copy()
-                knowledge["task_requirements"][tid] = task["requirements"].copy()
-                knowledge["task_members"][tid] = task["members"].copy()
-                knowledge["task_last_update_time"][tid] = self.current_time
+                self.refresh_task_belief(aid, tid, update_time=self.current_time)
 
     def _count_enroute_and_working(self, task_id, exclude_agent_id=None):
         count = 0
@@ -761,18 +788,22 @@ class TaskEnv:
                 for tid in expired: del agent["cooldown_tasks"][tid]
 
     def get_hard_mask(self, agent_id):
+        # 不变量 9：mask 只能来自该机器人自己的 belief。阶段索引与未来阶段需求
+        # 读 belief 副本，断联期间真值推进不得改变这台机器人的合法动作集合。
         agent, knowledge, mask = self.agent_dic[agent_id], self.agent_knowledge[agent_id], [False]
         pending_tasks = knowledge["known_tasks"] - knowledge["known_finished"]
         for tid in sorted(pending_tasks):
             if tid not in self.task_dic: continue
-            task = self.task_dic[tid]
-            future_req = task["stages"][task["current_stage_index"] + 1]["requirements"] if task[
-                                                                                                "current_stage_index"] + 1 < \
-                                                                                            task[
-                                                                                                "total_stages"] else np.zeros(
-                self.traits_dim)
-            if np.minimum(knowledge["task_current_status"].get(tid, task["status"]),
-                          agent["abilities"]).sum() <= 0 and np.minimum(future_req, agent["abilities"]).sum() <= 0:
+            current_status = knowledge["task_current_status"].get(tid)
+            if current_status is None:
+                # belief 不完整（正常流程不会发生）：保守起见不可选。
+                mask.append(True)
+                continue
+            future_req = knowledge["task_future_requirements"].get(tid)
+            if future_req is None:
+                future_req = np.zeros(self.traits_dim)
+            if np.minimum(current_status, agent["abilities"]).sum() <= 0 and np.minimum(
+                    future_req, agent["abilities"]).sum() <= 0:
                 mask.append(True);
                 continue
             if tid in agent.get("cooldown_tasks", {}) and self.current_time < agent["cooldown_tasks"][tid]:
@@ -810,23 +841,25 @@ class TaskEnv:
         pending_tasks = knowledge["known_tasks"] - knowledge["known_finished"]
         for tid in sorted(pending_tasks):
             if tid not in self.task_dic: continue
-            task = self.task_dic[tid]
-            future_req = task["stages"][task["current_stage_index"] + 1]["requirements"].astype(np.float32) if task[
-                                                                                                                   "current_stage_index"] + 1 < \
-                                                                                                               task[
-                                                                                                                   "total_stages"] else np.zeros(
-                self.traits_dim, dtype=np.float32)
+            # 不变量 9：观察特征全部来自该机器人的 belief 副本，绝不回退读 task_dic
+            # 真值（阶段索引、未来需求、位置、截止时间、复杂度都是消息到达时的快照）。
+            status = knowledge["task_current_status"].get(tid)
+            location = knowledge["task_locations"].get(tid)
+            if status is None or location is None:
+                continue
+            status_feat = np.asarray(status, dtype=np.float32).flatten()
+            future_req = np.asarray(
+                knowledge["task_future_requirements"].get(tid, np.zeros(self.traits_dim, dtype=int)),
+                dtype=np.float32,
+            )
             num_members = float(len(knowledge["task_members"].get(tid, []))) / 10.0
 
-            deadline_val = float(knowledge["task_deadlines"].get(tid, task["deadline"]))
+            deadline_val = float(knowledge["task_deadlines"].get(tid, self.current_time))
             time_until_deadline = max(0.0, deadline_val - self.current_time)
             deadline_urgency = float(np.tanh(time_until_deadline / 50.0))
-            base_feat = np.hstack([knowledge["task_current_status"].get(tid, knowledge["task_requirements"].get(tid,
-                                                                                                                task[
-                                                                                                                    "requirements"])).astype(
-                np.float32).flatten(), future_req.flatten(), ((knowledge["task_locations"].get(tid, task["location"]) -
-                                                               agent["location"]) / LOC_NORM).flatten(), [deadline_urgency],
-                                   [float(task.get("scene_complexity", 0.5))], [num_members]])
+            base_feat = np.hstack([status_feat, future_req.flatten(),
+                                   ((location - agent["location"]) / LOC_NORM).flatten(), [deadline_urgency],
+                                   [float(knowledge["task_scene_complexity"].get(tid, 0.5))], [num_members]])
             info_feat = np.array([float(tid in knowledge["known_finished"]), float(tid in knowledge["known_assigned"]),
                                   float(tid in knowledge["dynamic_tasks"]), np.tanh(
                     float(self.current_time - float(knowledge["task_last_update_time"].get(tid, 0.0))) / 50.0),
@@ -874,9 +907,8 @@ class TaskEnv:
     def verify_task_on_arrival(self, agent_id, task_id):
         if task_id < 0: return True, "Depot", False
         task, agent, knowledge = self.task_dic[task_id], self.agent_dic[agent_id], self.agent_knowledge[agent_id]
-        knowledge["task_current_status"][task_id], knowledge["task_requirements"][task_id], knowledge["task_members"][
-            task_id], knowledge["task_last_update_time"][task_id] = task["status"].copy(), task["requirements"].copy(), \
-        task["members"].copy(), self.current_time
+        # 到场核实：机器人就在任务点，用现场真值刷新 belief（含阶段信息）。
+        self.refresh_task_belief(agent_id, task_id, update_time=self.current_time)
 
         if task["finished"]:
             knowledge["known_finished"].add(task_id)
