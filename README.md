@@ -99,6 +99,13 @@ belief，同时间戳但版本更高的合法更新不再被丢弃，更旧或�
 `ExecutionStepResult` 的字段顺序保证位置参数调用仍然是 metrics；真实 PILOC reset 用例
 改用 60×60 场景，并用 stand-in 环境覆盖生产构造路径（60×60 守卫与派生状态重建）。
 
+第五轮审查后的补充覆盖：机器人仍相信一个已被注册表关闭的任务时，命令带缓存的终态
+revision 通过闸门，机器人前往现场核实并学到“已完成”，同场的活跃任务不会被饿死；
+gossip 在时间戳相同时按 revision 取新，两台相邻机器人不会长期保留不同版本的同一任务；
+`AgentTaskBelief` 与 `CoordinationAdvice` 的新字段为 keyword-only 且追加在原字段之后，
+旧的位置参数调用不会被重新绑定；真实 PILOC 测试只在 gym/matplotlib/Pillow 确实缺失时跳过，
+依赖齐全后的导入失败会让测试失败而不是伪装成 skip。
+
 ## 联合推理入口
 
 `integrated_sar/joint_driver.py` 只做推理，不训练任何网络。

@@ -23,14 +23,16 @@ flowchart LR
     B --> M
     M -->|投递 DetectionMessage| X
     R -->|TaskSnapshot| A
-    R -->|全局任务态势| C
+    X -->|AgentSnapshot + task belief| C
     C -->|task/pair bias + replan| A
     A -->|AssignmentCommand| X
     C -.后续扩展：搜索热点.-> S
 ```
 
 快通路保证发现后立即进入任务池；慢通路计算优先级、匹配度和重规划建议，不能阻塞救援。
-发现消息只有经通信中转写进机器人 belief 之后才可能被分配。
+发现消息只有经通信中转写进机器人 belief 之后才可能被分配。协调优化器的输入是
+`AgentSnapshot` 里的 belief，不是注册表：注册表只把 `TaskSnapshot` 供给分配器（用于闸门
+校验与执行注入），不给协调器供数，避免在线决策绕过通信链读真值。
 
 ## 2. 模块边界
 

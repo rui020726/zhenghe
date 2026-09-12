@@ -134,21 +134,41 @@
     用例改用 60×60 场景，skip 条件覆盖 timemap 的全部导入依赖（gym、matplotlib、Pillow）
     及实际导入失败，另增一组 stand-in 测试覆盖生产构造路径（60×60 守卫、两步构造、
     派生状态重建）与越界场景被拒绝。
+- 经第五轮独立代码审查后修复的问题，每项都有对应回归测试：
+  - 上一轮把“机器人仍相信一个已被注册表关闭的任务”整体判断为既有缺陷，这个判断不完整：
+    单独只剩终态任务时的死循环确实早已存在，但协调器改为按 belief 打分后，会给这个陈旧的
+    终态 belief 较高偏置，从而新增“抢占并饿死仍活跃任务”的行为。复现（一个已关闭任务 +
+    一个仍活跃任务）：`02d29e9` 连续多轮都选关闭任务、`task_revision=None`、连续
+    `missing_task_revision`，活跃任务始终拿不到执行；`1a41471` 选活跃任务因而正常。
+    现在分配器用自己的缓存给命令盖上该任务的终态 revision（`sync_tasks` 每 tick 记录所有
+    已注入任务的 revision，含终态），命令因此通过闸门：机器人按自身 belief 前往现场，
+    由 `verify_task_on_arrival` 在地面了结，belief 随即跟上，活跃任务在同一个闭环里被选中
+    并完成（新回归测试：第 1 轮接受 → 现场核实 → 第 2 轮改选活跃任务 → 完成）。协调器仍然
+    不读注册表，闸门语义未变。
+  - belief 已存 `task_revision`，但“双方都知道同一任务”时的 gossip 仍只比较时间戳：同一
+    时刻、revision 2 的合法更新到不了 revision 1 的邻居（复现：两台相邻机器人时间戳相同，
+    位置分别为 (0.8,0.9) 与 (0.9,0.9)，gossip 后接收方仍是旧位置与 revision 1）。现在按
+    `(时间戳, revision)` 比较，只有严格更大才覆盖，双方一致时不搬迁。
+  - 上一轮修 `ExecutionStepResult` 位置参数兼容时，又在 `AgentTaskBelief`（`confidence`/
+    `revision` 插在 `future_requirements` 之前）与 `CoordinationAdvice`（`agent_task_bias`
+    插在 `pair_bias` 之前）上犯了同一错误：旧的位置参数调用会把需求元组绑成 `confidence`
+    （协调器随后对浮点数乘元组）、把 `replan_agents` 绑成 `pair_bias`（`bias_for` 对
+    frozenset 调 `get`）。现在两个新字段都是 keyword-only 且追加在原字段之后，并有测试
+    锁定旧的构造顺序、keyword-only 约束与三项 bias 求和。
+  - 真实 PILOC 测试把 `import_timemap_module` 抛出的任意异常都转成 skip：依赖齐全时，
+    语法错误、API 回归或初始化异常都会被报告成“缺依赖”。现在只在 gym / matplotlib / Pillow
+    确实缺失时跳过，其余导入失败直接让测试失败。
+  - `ARCHITECTURE.md` 架构图仍画着 `Registry → 全局任务态势 → Coordinator`，与正文“在线
+    协调器只读 belief”矛盾，后续 agent 可能照图把真值泄漏引回来；已改为
+    `AgentSnapshot + task belief → Coordinator`，并写明注册表只向分配器供数
+    （闸门校验与执行注入）。
 - mock 的双通道地图与 `timemap.Environment.two_channel_map` 逐格一致（含 `[0, 0.3]` 两端边界）。
-- 116 项集成测试通过（本机无 torch/gym 时其中 8 项按依赖跳过）。
+- 119 项集成测试通过（本机无 torch/gym 时其中 8 项按依赖跳过）。
 
 ## 尚未完成
 
 按推荐优先级排列：
 
-0. 已知缺陷（本轮的构造性探针复现，第三轮提交同样存在，非本轮引入）：机器人 belief 里
-   仍有一个注册表已关闭的任务时，分配器会一直选它，而 `AssignmentGate` 以
-   `missing_task_revision` 拒绝该命令（终态任务不在活动快照里），机器人因此永远无法
-   动身前往现场核实，belief 也永远学不到“已完成”，形成每个分配周期重复一次的循环。
-   建议修法：把“任务已关闭”做成一条发往 belief 的显式消息（与检测同一条通信链），
-   或让闸门放行终态任务的命令，由 `verify_task_on_arrival` 在现场了结（该路径不写任何
-   任务状态，安全）。当前 mock 流水线 200 步两种 seed 的 `rejected_assignments` 均为 0，
-   因为救援队集结点彼此在 `comm_range` 内、gossip 会及时传播 `known_finished`。
 1. 在 PILOC 环境中原生发出 `DetectionEvent`，不再依赖适配器重建。
 2. 让 PILOC 环境在发现后保留目标实体。当前 `timemap` 仍会删除已发现目标；
    集成层已通过注册表把任务生命周期保留到真正完成，但搜索侧的原生行为尚未修改。
