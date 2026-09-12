@@ -105,13 +105,50 @@
   - 合法 re-detection 的日志硬编码 stage 0/progress 0/status detected 并把 source_event_id
     换成当前检测 id，与注册表状态（如 assigned）矛盾且破坏同一目标的关联键；现在生命周期
     字段全部取自注册表快照，当前观测的事件 id 放进 `detail.detection_event_id`。
+- 经第四轮独立代码审查后修复的问题，每项都有对应回归测试：
+  - 协调器进入在线决策时仍读注册表：它用注册表的活动任务池决定哪些 belief 参与打分、
+    是否触发 replan，并直接读注册表的 `confidence`。复现：belief 完全不变、只改注册表
+    置信度，同一台机器人的偏置就从 0.785 变到 0.695；注册表把任务置为终态后，尚未收到
+    消息的机器人也被判定需要重规划。现在 `advise` 只读 `AgentSnapshot.task_beliefs`：
+    任务是否已结束由 `belief.finished` 决定，重规划只在“机器人自己的知识说承诺已结束、
+    或它对所承诺的任务一无所知”时触发。
+  - 任务优先级此前被 `max` 聚合进池级 `task_bias`，而这张表会发给所有机器人：复现中
+    只把机器人 A 的 belief 截止时间从 1000 改成 10，机器人 B 的 belief 与 pair_bias
+    都没变，总偏置却从 1.075 涨到 1.525。现在优先级按机器人分开发布
+    （`CoordinationAdvice.agent_task_bias`，`bias_for` 累加池级/按机器人/配对三项），
+    并新增 `AgentTaskBelief.confidence`，置信度只随消息到达写入 belief。
+  - `DetectionMessage.progress` 在构造 belief 视图时被丢掉，`learn_task_view` 回退默认 0.0：
+    注册表进度 0.833 的合法 re-detection 投递后机器人 belief 仍是 0.0，协调器继续按
+    “未开始的任务”打分。现在 progress、confidence、revision 随消息一起落盘。
+  - 同时间戳的注册表合法更新进不了 belief：注册表只拒绝严格更旧的事件，belief 却用 `<=`
+    丢弃同刻更新。复现：第二个事件已被接受、revision 变成 2、位置变为 (0.2,0.2)，
+    机器人仍保留 (0.9,0.9)。现在 `DetectionMessage` 与 belief 都携带 revision，
+    投递按 `(sent_at, revision)` 共同排序：更新则接受，同刻且版本更高则接受，
+    更旧或同刻同版本则丢弃。
+  - `ExecutionStepResult` 新增字段插在 `metrics` 之前，破坏了仓库自己的位置参数调用：
+    `demo.py` 把 metrics 字典当成了 `belief_changed_agents`，导致每个 tick 都被判定为
+    belief 变化、协调器 revision 变成 1/2/3 而无视配置周期。现在新字段追加在 `metrics`
+    之后，`demo.py` 改用关键字，并有契约测试锁定字段顺序。
+  - 真实 PILOC reset 测试用默认 8×8 场景构造环境，而生产构造器明确拒绝非 60×60 场景，
+    安装 gym/Pillow 后测试会在 reset 断言前抛 `CheckpointIncompatibleError`。现在真实
+    用例改用 60×60 场景，skip 条件覆盖 timemap 的全部导入依赖（gym、matplotlib、Pillow）
+    及实际导入失败，另增一组 stand-in 测试覆盖生产构造路径（60×60 守卫、两步构造、
+    派生状态重建）与越界场景被拒绝。
 - mock 的双通道地图与 `timemap.Environment.two_channel_map` 逐格一致（含 `[0, 0.3]` 两端边界）。
-- 105 项集成测试通过（本机无 torch/gym 时其中 8 项按依赖跳过）。
+- 116 项集成测试通过（本机无 torch/gym 时其中 8 项按依赖跳过）。
 
 ## 尚未完成
 
 按推荐优先级排列：
 
+0. 已知缺陷（本轮的构造性探针复现，第三轮提交同样存在，非本轮引入）：机器人 belief 里
+   仍有一个注册表已关闭的任务时，分配器会一直选它，而 `AssignmentGate` 以
+   `missing_task_revision` 拒绝该命令（终态任务不在活动快照里），机器人因此永远无法
+   动身前往现场核实，belief 也永远学不到“已完成”，形成每个分配周期重复一次的循环。
+   建议修法：把“任务已关闭”做成一条发往 belief 的显式消息（与检测同一条通信链），
+   或让闸门放行终态任务的命令，由 `verify_task_on_arrival` 在现场了结（该路径不写任何
+   任务状态，安全）。当前 mock 流水线 200 步两种 seed 的 `rejected_assignments` 均为 0，
+   因为救援队集结点彼此在 `comm_range` 内、gossip 会及时传播 `known_finished`。
 1. 在 PILOC 环境中原生发出 `DetectionEvent`，不再依赖适配器重建。
 2. 让 PILOC 环境在发现后保留目标实体。当前 `timemap` 仍会删除已发现目标；
    集成层已通过注册表把任务生命周期保留到真正完成，但搜索侧的原生行为尚未修改。

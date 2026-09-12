@@ -63,17 +63,23 @@ id 列表）、每包延迟和丢包率（由 seed 驱动）投递；包丢了�
 ### 协调与执行的 belief 边界
 
 在线协调器只按每台机器人自己的 belief 打分：`AgentSnapshot.task_beliefs` 携带该机器人
-收到的任务位置、剩余需求、截止时间、阶段、进度与复杂度，`HeuristicCoordinator` 的
-`task_bias` 与 `pair_bias` 全部由它推出，绝不回退读注册表快照。执行侧同理：
-`apply_action` 用 believed 位置作为导航目标、believed 状态作为预期状态，任务真值只在
-到场核实（`verify_task_on_arrival`）时使用；在途重规划也只看 belief，真值显示完成而
-消息未达时机器人继续前往。
+收到的任务位置、剩余需求、截止时间、阶段、进度、复杂度、置信度与登记版本号，
+`HeuristicCoordinator` 的输出全部由它推出，绝不读注册表快照——注册表只负责闸门与
+生命周期管理，它关闭一个任务并不是任何机器人观察到的事实。任务优先级按机器人分开
+发布（`agent_task_bias`）而不是放进 `task_bias`：后者是会被所有机器人共享的池级修正，
+任何由单台机器人 belief 推出的数值放进去，都等于把该机器人的知识广播给它从未收到过
+消息的机器人。执行侧同理：`apply_action` 用 believed 位置作为导航目标、believed 状态
+作为预期状态，任务真值只在到场核实（`verify_task_on_arrival`）时使用；在途重规划也只看
+belief，真值显示完成而消息未达时机器人继续前往。分配器只在给命令盖上注册表 revision
+时读快照，因为 `AssignmentGate` 需要用它拒绝过期命令，选哪个任务仍来自该机器人自己的
+belief。
 
 ### 协调优化器
 
 输入搜索覆盖/陈旧度、任务阶段/截止时间、机器人能力/位置/工作状态和执行失败；输出：
 
-- `task_bias[task]`：任务优先级修正；
+- `task_bias[task]`：池级任务优先级修正，所有机器人共享，因此只允许放共同知识；
+- `agent_task_bias[agent, task]`：按机器人分开的任务优先级修正，由该机器人的 belief 推出；
 - `pair_bias[agent, task]`：机器人—任务匹配修正；
 - `replan_agents`：需要重新决策的机器人；
 - 后续可选搜索热点。
@@ -102,10 +108,10 @@ id 列表）、每包延迟和丢包率（由 seed 驱动）投递；包丢了�
 | 契约 | 生产者 | 消费者 | 关键字段 |
 | --- | --- | --- | --- |
 | `DetectionEvent` | PILOC adapter | Registry/Coordinator | target ID、位置、时间、置信度、目标属性 |
-| `DetectionMessage` | CommRelay | 机器人 belief（经 Task03 adapter） | 发送时快照：位置、阶段、需求、进度、截止时间 |
+| `DetectionMessage` | CommRelay | 机器人 belief（经 Task03 adapter） | 发送时快照：位置、阶段、需求、进度、置信度、revision、截止时间 |
 | `TaskSnapshot` | Registry | Coordinator/Allocator/Executor | 阶段、剩余需求、截止时间、revision |
-| `AgentSnapshot` / `AgentTaskBelief` | Task03 adapter | Coordinator/Allocator | 该机器人收到的任务视图（位置/需求/阶段/进度） |
-| `CoordinationAdvice` | Coordinator | Allocator | task bias、pair bias、replan、有效期 |
+| `AgentSnapshot` / `AgentTaskBelief` | Task03 adapter | Coordinator/Allocator | 该机器人收到的任务视图（位置/需求/阶段/进度/置信度/revision） |
+| `CoordinationAdvice` | Coordinator | Allocator | 池级 task bias、按机器人的 agent task bias、pair bias、replan、有效期 |
 | `AssignmentCommand` | Allocator | Executor | agent/task、task revision、TTL |
 | `ProgressEvent` | Executor | Registry/Coordinator | 阶段、剩余需求、进度、失败原因 |
 
