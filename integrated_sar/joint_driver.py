@@ -69,6 +69,7 @@ class RunConfiguration:
     detection_radius: int = 5
     comm_delivery_probability: float = 1.0
     comm_delay_ticks: int = 0
+    comm_subscribers: str = "all"
     quiet: bool = False
     repository_root: str | None = None
 
@@ -141,6 +142,17 @@ class RunConfiguration:
             raise ConfigurationError(
                 f"--comm-delay-ticks cannot be negative, got {self.comm_delay_ticks}"
             )
+        # "all" broadcasts each detection to the whole rescue team; a count or an
+        # explicit id list narrows the uplink to a subset, which is what a
+        # restricted-topology experiment needs. Either way the link keeps its
+        # delay and loss model, and robots outside the subset may still learn a
+        # task later through sensing or gossip.
+        subscribers = parse_comm_subscribers(self.comm_subscribers)
+        if subscribers is not None and not subscribers:
+            raise ConfigurationError(
+                "--comm-subscribers must be 'all', 'first:N' with N >= 1, or a "
+                f"comma-separated list of rescue robot ids, got {self.comm_subscribers!r}"
+            )
         if self.coordination_interval < 1 or self.allocation_interval < 1:
             raise ConfigurationError("decision intervals must be at least 1")
         if self.mock and (self.piloc_checkpoint or self.task_checkpoint):
@@ -196,6 +208,9 @@ def build_parser() -> argparse.ArgumentParser:
                         help="per-packet success probability of the search-to-rescue uplink")
     parser.add_argument("--comm-delay-ticks", type=int, default=0,
                         help="joint steps a detection message spends on the uplink before delivery")
+    parser.add_argument("--comm-subscribers", default="all",
+                        help="uplink receivers: 'all' (default, whole rescue team), 'first:N' "
+                             "(robots 0..N-1), or a comma-separated id list")
     parser.add_argument("--quiet", action="store_true", help="do not print per-step progress lines")
     parser.add_argument("--repository-root", default=None,
                         help="override the repository root used to locate piloc/ and task_allocation/")
@@ -228,9 +243,32 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         detection_radius=int(args.detection_radius),
         comm_delivery_probability=float(args.comm_delivery_probability),
         comm_delay_ticks=int(args.comm_delay_ticks),
+        comm_subscribers=str(args.comm_subscribers),
         quiet=bool(args.quiet),
         repository_root=args.repository_root,
     )
+
+
+def parse_comm_subscribers(spec: str) -> tuple[str, ...] | None:
+    """Interpret ``--comm-subscribers``: ``all``, ``first:N``, or an id list.
+
+    ``None`` means "every rescue robot" (the default broadcast uplink). The count
+    form is spelled ``first:N`` rather than a bare ``N`` because rescue robot ids
+    are themselves numbers: ``--comm-subscribers 0`` unambiguously names robot 0,
+    while ``--comm-subscribers first:2`` names robots 0 and 1.
+    """
+    text = str(spec).strip().lower()
+    if text in ("", "all"):
+        return None
+    if text.startswith("first:"):
+        suffix = text[len("first:"):].strip()
+        if suffix.isdigit() and int(suffix) >= 1:
+            return tuple(str(index) for index in range(int(suffix)))
+        return ()
+    ids = [token.strip() for token in text.split(",") if token.strip()]
+    if not ids or any(not token.isdigit() for token in ids):
+        return ()
+    return tuple(dict.fromkeys(ids))
 
 
 def resolve_device(name: str, *, checkpoint_requested: bool) -> str:
@@ -405,11 +443,24 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
     )
 
     # The search-to-rescue communication bridge. Subscribed after the registry so a
-    # queued message snapshots exactly the task view the registry accepted. Delivery
-    # obeys an explicit topology (the subscribed rescue robots), a per-packet delay
-    # and a seeded loss process; positions play no role in it (invariant 10).
+    # queued message snapshots exactly the task view the registry accepted, and so
+    # an event the registry refuses is never sent. Delivery obeys an explicit
+    # topology (--comm-subscribers), a per-packet delay and a seeded loss process;
+    # positions play no role in it (invariant 10).
+    requested = parse_comm_subscribers(configuration.comm_subscribers)
+    available = tuple(str(agent_id) for agent_id in task_adapter.env.agent_dic)
+    if requested is None:
+        subscribers = available
+    else:
+        unknown = sorted(set(requested) - set(available))
+        if unknown:
+            raise ConfigurationError(
+                f"--comm-subscribers names rescue robots that do not exist: {', '.join(unknown)}; "
+                f"this run has {', '.join(available)}"
+            )
+        subscribers = requested
     comm_relay = CommRelay(
-        subscribers=tuple(str(agent_id) for agent_id in task_adapter.env.agent_dic),
+        subscribers=subscribers,
         writer=task_adapter,
         snapshot_of=registry.get,
         accepted_of=registry.was_accepted,
