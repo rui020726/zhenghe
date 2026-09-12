@@ -429,6 +429,11 @@ def compute_gae_segmented(buffer, gamma, gae_lambda, device, net):
     return advantages, returns
 
 def update(net, optimizer, buffer, device, params: TrainParams, entropy_weight: float):
+    # compute_gae_segmented reads the values stored during rollout and never calls the
+    # network, so the only mode that matters here is the one the PPO epochs run in.
+    # The rollout leaves the network in eval, so switch back before optimizing.
+    net.train()
+
     n = len(buffer["states"])
     if n < params.MINI_BATCH_SIZE:
         return {}
@@ -688,6 +693,12 @@ def main():
             tg_t = tg_t.to(device)
             tg_a_padding = padding_mask_from_lengths(tg_a_lengths, tg_a.shape[1], device)
             tg_t_padding = padding_mask_from_lengths(tg_t_lengths, tg_t.shape[1], device)
+
+            # Rollout data has to describe one well-defined behaviour policy. In train
+            # mode every forward draws a fresh dropout mask that is never recorded, so
+            # old_logprobs and old_values would not be reproducible and the importance
+            # ratio in update() would refer to a policy nobody can reconstruct.
+            net.eval()
 
             if TrainParams.USE_INFERENCE_MODE:
                 ctx = torch.inference_mode()

@@ -140,5 +140,70 @@ class CriticPaddingInvarianceTests(unittest.TestCase):
         )
 
 
+@unittest.skipUnless(HAS_TORCH, "torch is not installed")
+class TrainingModeTests(unittest.TestCase):
+    """Dropout must not be part of the recorded behaviour policy."""
+
+    def setUp(self) -> None:
+        import torch
+
+        _load_old_driver()
+        from old_network import CTDE_Network
+
+        self.torch = torch
+        self.driver = _load_old_driver()
+        torch.manual_seed(0)
+        self.net = CTDE_Network(
+            self_dim=10,
+            neighbor_dim=10,
+            task_dim=20,
+            global_agent_dim=13,
+            global_task_dim=23,
+            hidden=128,
+            dropout=0.15,
+            use_pos_encoding=True,
+        )
+
+    def _log_prob(self, action: Any) -> Any:
+        torch = self.torch
+        # Real values, not zeros: dropout scales zeros to zeros, so an all-zero batch
+        # would show no difference between the two modes and prove nothing.
+        generator = torch.Generator().manual_seed(3)
+        state = torch.randn(1, 10, generator=generator)
+        neighbors = torch.randn(1, 20, 10, generator=generator)
+        tasks = torch.randn(1, 3, 20, generator=generator)
+        mask = torch.zeros(1, 3, dtype=torch.bool)
+        with torch.no_grad():
+            return self.net.get_action(state, neighbors, tasks, mask).log_prob(action)
+
+    def test_train_mode_redraws_dropout_but_eval_mode_is_stable(self) -> None:
+        torch = self.torch
+        action = torch.zeros(1, dtype=torch.long)
+
+        self.net.train()
+        first = self._log_prob(action)
+        second = self._log_prob(action)
+        self.assertFalse(
+            torch.allclose(first, second),
+            "dropout was expected to make two train-mode passes over identical input differ",
+        )
+
+        self.net.eval()
+        third = self._log_prob(action)
+        fourth = self._log_prob(action)
+        torch.testing.assert_close(third, fourth)
+
+    def test_update_switches_the_network_back_to_train_mode(self) -> None:
+        self.net.eval()
+        # Undersized on purpose: the mode is established before the early return, so
+        # the contract is observable without building a 1024-sample buffer.
+        result = self.driver.update(
+            self.net, None, {"states": []}, self.torch.device("cpu"),
+            self.driver.TrainParams, 0.0,
+        )
+        self.assertEqual(result, {})
+        self.assertTrue(self.net.training, "the PPO epochs would run with dropout frozen off")
+
+
 if __name__ == "__main__":
     unittest.main()
