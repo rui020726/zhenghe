@@ -306,5 +306,90 @@ class GaeAlignmentTests(unittest.TestCase):
         self.assertAlmostEqual(alone[1], both[1], places=9)
 
 
+@unittest.skipUnless(HAS_TORCH, "torch is not installed")
+class TrainerConfigurationTests(unittest.TestCase):
+    """A run has to be configurable from the command line and identifiable afterwards."""
+
+    def setUp(self) -> None:
+        import torch
+
+        self.torch = torch
+        self.driver = _load_old_driver()
+        self.params = self.driver.TrainParams
+        self._saved = {
+            name: getattr(self.params, name)
+            for name in ("SEED", "DEVICE", "LOG_DIR", "CHECKPOINT_DIR", "ACTOR_KV_MODE",
+                         "RESUME", "RESUME_CKPT")
+        }
+
+    def tearDown(self) -> None:
+        # TrainParams is module state shared by every test in this process.
+        for name, value in self._saved.items():
+            setattr(self.params, name, value)
+
+    def test_cli_overrides_land_on_train_params(self) -> None:
+        args = self.driver.build_parser().parse_args(
+            ["--seed", "7", "--device", "cpu", "--checkpoint-dir", "runs/exp",
+             "--actor-kv-mode", "summary", "--resume"]
+        )
+        self.driver.apply_cli_overrides(args)
+
+        self.assertEqual(self.params.SEED, 7)
+        self.assertEqual(self.params.DEVICE, "cpu")
+        self.assertEqual(self.params.CHECKPOINT_DIR, "runs/exp")
+        self.assertEqual(self.params.ACTOR_KV_MODE, "summary")
+        self.assertTrue(self.params.RESUME)
+
+    def test_a_new_run_does_not_resume_by_default(self) -> None:
+        args = self.driver.build_parser().parse_args([])
+        self.assertIsNone(args.resume, "an unset flag must not override TrainParams")
+        self.driver.apply_cli_overrides(args)
+        self.assertFalse(
+            self.params.RESUME,
+            "resuming by default silently jumps global_episodes_done, which drives the "
+            "entropy weight, the LR schedule and the curriculum",
+        )
+        self.driver.apply_cli_overrides(self.driver.build_parser().parse_args(["--resume"]))
+        self.assertTrue(self.params.RESUME)
+
+    def test_the_parameter_snapshot_is_serializable_and_names_the_mode(self) -> None:
+        import json
+
+        snapshot = self.driver.params_snapshot()
+        restored = json.loads(json.dumps(snapshot))
+        self.assertEqual(restored["ACTOR_KV_MODE"], self.params.ACTOR_KV_MODE)
+        self.assertIn("GAMMA", restored)
+        self.assertIn("SEED", restored)
+
+    def test_device_resolution_refuses_what_the_machine_cannot_do(self) -> None:
+        self.assertEqual(self.driver.resolve_device("cpu").type, "cpu")
+        self.assertEqual(self.driver.resolve_device(None).type, "cpu" if not self.torch.cuda.is_available() else "cuda")
+        with self.assertRaises(ValueError):
+            self.driver.resolve_device("tpu")
+        if not self.torch.cuda.is_available():
+            with self.assertRaises(ValueError):
+                self.driver.resolve_device("cuda")
+
+    def test_a_saved_checkpoint_records_the_mode_that_produced_it(self) -> None:
+        import tempfile
+
+        from old_network import CTDE_Network
+
+        net = CTDE_Network(actor_kv_mode="tokens", **self.driver.NETWORK_DIMS)
+        optimizer = self.torch.optim.Adam(net.parameters(), lr=1e-4)
+        run_meta = {"actor_kv_mode": "tokens", "seed": 3, "git_commit": "abc123"}
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "ctde_ep_1.pth"
+            self.driver.save_checkpoint(path, net, optimizer, 1, run_meta=run_meta)
+            loaded = self.torch.load(path, map_location="cpu", weights_only=False)
+
+        self.assertEqual(loaded["actor_kv_mode"], "tokens")
+        self.assertEqual(loaded["run_meta"]["seed"], 3)
+        self.assertEqual(loaded["episode"], 1)
+        self.assertIn("model_state_dict", loaded)
+        self.assertIn("optimizer_state_dict", loaded)
+
+
 if __name__ == "__main__":
     unittest.main()

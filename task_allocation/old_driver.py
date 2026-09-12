@@ -15,6 +15,10 @@ CTDE 训练主程序（时间驱动 + 动态Padding版）
 import os
 import re
 import glob as _glob
+import argparse
+import json
+import random
+import subprocess
 import time
 import numpy as np
 import torch
@@ -166,8 +170,15 @@ class TrainParams:
     # Actor KV 消融开关: "summary"(单向量KV) / "tokens"(多agent KV)
     ACTOR_KV_MODE = "tokens"
 
-    # 断点续训：从 7/1 的 10000 episode checkpoint 继续训
-    RESUME = True
+    # 运行身份：都可由命令行覆盖，并写入 run_meta.json 与每个 checkpoint
+    SEED = 0
+    DEVICE = None       # None = auto，有 GPU 且 USE_GPU 时用 cuda，否则 cpu
+    LOG_DIR = None      # None = <CHECKPOINT_DIR>/tb_logs
+
+    # 断点续训：默认关闭。开启后会自动加载 CHECKPOINT_DIR 里最新的 ctde_ep_*.pth，
+    # 并把 global_episodes_done 跳到该 checkpoint 的 episode，而熵权重、学习率衰减和
+    # 课程调度都由它驱动 —— 想从零开始的训练会静默地从中间开始。
+    RESUME = False
     RESUME_CKPT = None  # None = 自动从 CHECKPOINT_DIR 找最新 checkpoint
 
 
@@ -569,7 +580,7 @@ def get_lr(ep: int, params: TrainParams) -> float:
     progress = (ep - params.LR_DECAY_START) / (params.LR_DECAY_END - params.LR_DECAY_START)
     return params.LR * (1.0 - progress) + params.LR_MIN * progress
 
-def save_checkpoint(path, net, optimizer, ep, best_metric=None, extra=None):
+def save_checkpoint(path, net, optimizer, ep, best_metric=None, extra=None, run_meta=None):
     ckpt = {
         "episode": ep,
         "model_state_dict": net.state_dict(),
@@ -579,10 +590,111 @@ def save_checkpoint(path, net, optimizer, ep, best_metric=None, extra=None):
         ckpt["best_metric"] = float(best_metric)
     if extra is not None:
         ckpt.update(extra)
+    if run_meta is not None:
+        # actor_kv_mode matters most: summary and tokens have identical parameter
+        # shapes, so a strict load succeeds across modes while silently changing what
+        # the network computes, and the shapes cannot reveal the mistake later.
+        ckpt["run_meta"] = dict(run_meta)
+        ckpt["actor_kv_mode"] = run_meta.get("actor_kv_mode")
     torch.save(ckpt, path)
 
 
-def main():
+NETWORK_DIMS = {
+    "self_dim": 10,
+    "neighbor_dim": 10,
+    "task_dim": 20,
+    "global_agent_dim": 13,
+    "global_task_dim": 23,
+    "hidden": 128,
+    "dropout": 0.15,
+    "use_pos_encoding": True,
+}
+
+
+def git_commit():
+    """The commit this run was trained from, or None outside a git checkout."""
+    repository = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=repository, capture_output=True, text=True, timeout=15,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return result.stdout.strip() if result.returncode == 0 else None
+
+
+def params_snapshot():
+    """Every serializable TrainParams field.
+
+    TrainParams is a bare class of class attributes, which reads well in code and cannot
+    be recorded as-is. Without a snapshot a checkpoint cannot say what produced it.
+    """
+    return {
+        name: getattr(TrainParams, name)
+        for name in sorted(vars(TrainParams))
+        if not name.startswith("_")
+        and isinstance(getattr(TrainParams, name), (str, int, float, bool, type(None)))
+    }
+
+
+def build_parser():
+    parser = argparse.ArgumentParser(
+        prog="task_allocation.old_driver",
+        description="Train the CTDE task-allocation network.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument("--seed", type=int, default=None, help="seed python, numpy and torch")
+    parser.add_argument("--device", default=None, help="auto, cpu, cuda or cuda:N")
+    parser.add_argument("--checkpoint-dir", default=None, help="where ctde_ep_*.pth is written")
+    parser.add_argument("--log-dir", default=None,
+                        help="TensorBoard directory; defaults to <checkpoint-dir>/tb_logs")
+    parser.add_argument("--actor-kv-mode", default=None, choices=["tokens", "summary"])
+    parser.add_argument("--episodes", type=int, default=None,
+                        help="stop after this many episodes (TrainParams.MAX_EPISODES)")
+    parser.add_argument("--resume", dest="resume", action="store_true", default=None,
+                        help="continue from the newest checkpoint in --checkpoint-dir")
+    parser.add_argument("--no-resume", dest="resume", action="store_false",
+                        help="start a new run even if checkpoints are present")
+    parser.add_argument("--resume-ckpt", default=None, help="resume from this exact file")
+    return parser
+
+
+def apply_cli_overrides(args):
+    """Write the CLI values onto TrainParams, which stays the single source of truth."""
+    if args.seed is not None:
+        TrainParams.SEED = int(args.seed)
+    if args.checkpoint_dir is not None:
+        TrainParams.CHECKPOINT_DIR = args.checkpoint_dir
+    if args.log_dir is not None:
+        TrainParams.LOG_DIR = args.log_dir
+    if args.actor_kv_mode is not None:
+        TrainParams.ACTOR_KV_MODE = args.actor_kv_mode
+    if args.episodes is not None:
+        TrainParams.MAX_EPISODES = int(args.episodes)
+    if args.resume is not None:
+        TrainParams.RESUME = bool(args.resume)
+    if args.resume_ckpt is not None:
+        TrainParams.RESUME_CKPT = args.resume_ckpt
+    if args.device is not None:
+        TrainParams.DEVICE = args.device
+
+
+def resolve_device(name):
+    """Resolve the device without assuming a GPU, and without failing silently."""
+    if name is None or name == "auto":
+        return torch.device("cuda" if torch.cuda.is_available() and TrainParams.USE_GPU else "cpu")
+    if name.startswith("cuda") and not torch.cuda.is_available():
+        raise ValueError(f"--device {name} was requested but CUDA is not available")
+    if name != "cpu" and not name.startswith("cuda"):
+        raise ValueError(f"--device must be auto, cpu or cuda[:N], got {name!r}")
+    return torch.device(name)
+
+
+def main(argv=None):
+    args = build_parser().parse_args(argv)
+    apply_cli_overrides(args)
+
     print("=" * 60)
     print(f"[START] CTDE High-Performance Training (N_ENVS={TrainParams.N_ENVS})")
     print("=" * 60)
@@ -597,14 +709,36 @@ def main():
         torch.backends.cudnn.allow_tf32 = True
     torch.set_float32_matmul_precision(TrainParams.MATMUL_PRECISION)
 
-    device = torch.device("cuda" if torch.cuda.is_available() and TrainParams.USE_GPU else "cpu")
+    device = resolve_device(getattr(TrainParams, "DEVICE", None))
 
-    log_dir = os.path.join(r"D:\tb_logs", time.strftime("ctde_dynamic_%Y%m%d_%H%M%S"))
-    writer = SummaryWriter(log_dir=log_dir)
+    seed = int(getattr(TrainParams, "SEED", 0))
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+
     os.makedirs(TrainParams.CHECKPOINT_DIR, exist_ok=True)
+    # Was a hardcoded absolute D:\tb_logs, which is another machine's disk layout.
+    log_dir = getattr(TrainParams, "LOG_DIR", None) or os.path.join(
+        TrainParams.CHECKPOINT_DIR, "tb_logs"
+    )
+    log_dir = os.path.join(log_dir, time.strftime("ctde_dynamic_%Y%m%d_%H%M%S"))
+    writer = SummaryWriter(log_dir=log_dir)
 
-    net = CTDE_Network(self_dim=10, neighbor_dim=10, task_dim=20, global_agent_dim=13, global_task_dim=23, hidden=128,
-                       dropout=0.15, use_pos_encoding=True, actor_kv_mode=TrainParams.ACTOR_KV_MODE).to(device)
+    run_meta = {
+        "git_commit": git_commit(),
+        "seed": seed,
+        "device": str(device),
+        "cuda_available": bool(torch.cuda.is_available()),
+        "torch_version": torch.__version__,
+        "actor_kv_mode": TrainParams.ACTOR_KV_MODE,
+        "network_dims": dict(NETWORK_DIMS),
+        "params": params_snapshot(),
+        "started_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
+    }
+    with open(os.path.join(TrainParams.CHECKPOINT_DIR, "run_meta.json"), "w", encoding="utf-8") as handle:
+        json.dump(run_meta, handle, indent=2, ensure_ascii=False)
+
+    net = CTDE_Network(actor_kv_mode=TrainParams.ACTOR_KV_MODE, **NETWORK_DIMS).to(device)
     optimizer = optim.Adam(net.parameters(), lr=TrainParams.LR)
 
     global_episodes_done = 0
@@ -833,15 +967,11 @@ def main():
                 if ep_reward > best_reward:
                     best_reward = ep_reward
                     save_checkpoint(os.path.join(TrainParams.CHECKPOINT_DIR, "ctde_best.pth"), net, optimizer,
-                                    global_episodes_done, best_metric=best_reward)
+                                    global_episodes_done, best_metric=best_reward, run_meta=run_meta)
 
                 if global_episodes_done % TrainParams.SAVE_EVERY_EP == 0:
                     save_path = os.path.join(TrainParams.CHECKPOINT_DIR, f"ctde_ep_{global_episodes_done}.pth")
-                    torch.save({
-                        "episode": global_episodes_done,
-                        "model_state_dict": net.state_dict(),
-                        "optimizer_state_dict": optimizer.state_dict()
-                    }, save_path)
+                    save_checkpoint(save_path, net, optimizer, global_episodes_done, run_meta=run_meta)
                     print(f"[SAVE] Checkpoint saved: {save_path}")
 
                 stage, comm, tasks_rng, dur_scale, disc_prob, deadline_tightness, species_range, per_species_range = sample_curriculum_settings(
@@ -908,11 +1038,8 @@ def main():
             update_count = 0
 
     writer.close()
-    torch.save({
-        "episode": global_episodes_done,
-        "model_state_dict": net.state_dict(),
-        "optimizer_state_dict": optimizer.state_dict()
-    }, os.path.join(TrainParams.CHECKPOINT_DIR, "ctde_final.pth"))
+    save_checkpoint(os.path.join(TrainParams.CHECKPOINT_DIR, "ctde_final.pth"), net, optimizer,
+                    global_episodes_done, run_meta=run_meta)
 
     print("\n[DONE] High-Performance Training completed! Final model saved.")
 

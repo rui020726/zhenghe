@@ -986,6 +986,30 @@ class CtdeCheckpointTests(unittest.TestCase):
             )
             self.assertIsNotNone(load_ctde_network(tokens_path))
 
+    def test_a_checkpoint_recorded_in_the_other_kv_mode_is_refused(self) -> None:
+        from integrated_sar.errors import CheckpointIncompatibleError
+        from integrated_sar.task03_runtime import load_ctde_network
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = os.path.join(directory, "ctde_recorded_summary.pth")
+            network = self.network_module.CTDE_Network(actor_kv_mode="summary")
+            self.torch.save(
+                {
+                    "episode": 4,
+                    "model_state_dict": network.state_dict(),
+                    "actor_kv_mode": "summary",
+                },
+                path,
+            )
+            # summary and tokens have identical parameter shapes, so strict loading
+            # cannot tell them apart; only the recorded field can.
+            with self.assertRaises(CheckpointIncompatibleError) as caught:
+                load_ctde_network(path, actor_kv_mode="tokens")
+
+        message = str(caught.exception)
+        self.assertIn("actor_kv_mode", message)
+        self.assertIn("summary", message)
+
 
 class CheckpointResolutionTests(unittest.TestCase):
     """Path resolution needs no torch, so it is checked on every machine."""

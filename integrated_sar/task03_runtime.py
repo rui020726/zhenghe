@@ -224,6 +224,15 @@ def load_ctde_network(
     except Exception as exc:  # noqa: BLE001
         raise AssetMissingError(f"cannot read task checkpoint {resolved}: {exc}") from exc
 
+    recorded_mode = state.get("actor_kv_mode") if isinstance(state, dict) else None
+    if recorded_mode is not None and recorded_mode != actor_kv_mode:
+        raise CheckpointIncompatibleError(
+            f"task checkpoint {resolved} was trained with actor_kv_mode={recorded_mode!r} "
+            f"but {actor_kv_mode!r} was requested. The two modes have identical parameter "
+            f"shapes, so a strict load would succeed while silently changing what the "
+            f"network computes."
+        )
+
     state_dict = state.get("model_state_dict", state) if isinstance(state, dict) else state
     try:
         network.load_state_dict(state_dict, strict=True)
