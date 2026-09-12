@@ -202,6 +202,24 @@ def pad_to_batch_max(batch_data_list, pad_value=0.0):
     return padded, torch.tensor(lengths)
 
 
+def padding_mask_from_lengths(lengths, max_len, device):
+    """Build the [B, max_len] padding mask (True = padding) that get_value expects.
+
+    ``pad_to_batch_max`` already returns the real lengths, but both call sites threw
+    them away. Without the mask, ``get_value`` attends over the zero rows and divides
+    its mean pooling by the padded count, so the value of one stored global state
+    depends on how many other samples happened to land in the same batch. Rollout
+    pads to the round maximum and update pads to a random 1024-sample minibatch
+    maximum, which made the two disagree for identical input -- and since the critic
+    target is ``returns = advantages + rollout_values``, it was trained towards a
+    value it cannot represent.
+    """
+    if lengths is None:
+        return None
+    positions = torch.arange(int(max_len), device=device)
+    return positions.unsqueeze(0) >= lengths.to(device).unsqueeze(1)
+
+
 def collate_batch_dynamic(buffer, indices, device):
         batch_states = []
         batch_neighbors = []
@@ -249,6 +267,8 @@ def collate_batch_dynamic(buffer, indices, device):
         g_tasks, task_lengths_global = pad_to_batch_max(batch_g_tasks, pad_value=0.0)
         g_agents = g_agents.to(device)
         g_tasks = g_tasks.to(device)
+        agent_padding_mask = padding_mask_from_lengths(agent_lengths, g_agents.shape[1], device)
+        task_padding_mask = padding_mask_from_lengths(task_lengths_global, g_tasks.shape[1], device)
 
         return {
             'states': states,
@@ -262,6 +282,8 @@ def collate_batch_dynamic(buffer, indices, device):
             'dones': dones,
             'g_agents': g_agents,
             'g_tasks': g_tasks,
+            'agent_padding_mask': agent_padding_mask,
+            'task_padding_mask': task_padding_mask,
             'task_lengths': task_lengths,
         }
 
@@ -464,7 +486,12 @@ def update(net, optimizer, buffer, device, params: TrainParams, entropy_weight: 
                 logprobs = dist.log_prob(batch['actions'])
                 entropy = dist.entropy().mean()
 
-                values = net.get_value(batch['g_agents'], batch['g_tasks']).squeeze(-1)
+                values = net.get_value(
+                    batch['g_agents'],
+                    batch['g_tasks'],
+                    batch['agent_padding_mask'],
+                    batch['task_padding_mask'],
+                ).squeeze(-1)
 
                 ratio = torch.exp(logprobs - batch['old_logprobs'])
                 surr1 = ratio * mb_advantages
@@ -655,10 +682,12 @@ def main():
 
             bg_a_list = [item[3] for item in meta_info]
             bg_t_list = [item[4] for item in meta_info]
-            tg_a, _ = pad_to_batch_max(bg_a_list, pad_value=0.0);
+            tg_a, tg_a_lengths = pad_to_batch_max(bg_a_list, pad_value=0.0);
             tg_a = tg_a.to(device)
-            tg_t, _ = pad_to_batch_max(bg_t_list, pad_value=0.0);
+            tg_t, tg_t_lengths = pad_to_batch_max(bg_t_list, pad_value=0.0);
             tg_t = tg_t.to(device)
+            tg_a_padding = padding_mask_from_lengths(tg_a_lengths, tg_a.shape[1], device)
+            tg_t_padding = padding_mask_from_lengths(tg_t_lengths, tg_t.shape[1], device)
 
             if TrainParams.USE_INFERENCE_MODE:
                 ctx = torch.inference_mode()
@@ -669,7 +698,7 @@ def main():
                 dist = net.get_action(ts, tn, tt, tm)
                 actions = dist.sample()
                 logprobs = dist.log_prob(actions)
-                values = net.get_value(tg_a, tg_t).squeeze(-1)
+                values = net.get_value(tg_a, tg_t, tg_a_padding, tg_t_padding).squeeze(-1)
 
             for j, (env_idx, aid, amap, g_a_cpu, g_t_cpu) in enumerate(meta_info):
                 act = int(actions[j].item())
