@@ -196,6 +196,60 @@ class GossipHopTests(unittest.TestCase):
         env.propagate_task_completion()
         self.assertIn(0, env.agent_knowledge[2]["known_tasks"], "C never heard B")
 
+    def test_gossip_prefers_the_higher_revision_at_the_same_timestamp(self) -> None:
+        # Fifth review round, finding 2: jointly-known tasks were ordered by
+        # timestamp alone, so a legal revision bump that kept the timestamp never
+        # reached the neighbour -- two adjacent robots ended up disagreeing about
+        # the same task's position forever.
+        from integrated_sar.task03_runtime import build_task_env, load_task_env_module
+
+        env = build_task_env(
+            load_task_env_module(), seed=7, species=1, per_species=2, comm_range=0.3
+        )
+        env.task_dic.clear()
+        env.task_source.clear()
+        env.next_dynamic_task_id = 0
+        env.init_agent_memory()
+        for agent_id, x in ((0, 0.0), (1, 0.2)):
+            env.agent_dic[agent_id]["location"] = np.array([x, 0.0])
+        # The task itself is far from both robots, so the sensing half of
+        # propagation cannot refresh either belief behind the gossip half's back.
+        env._spawn_new_task(0, location=np.array([0.9, 0.9]), source="tidal")
+        env.update_communication_graph()
+        self.assertEqual(env.comm_graph[0], [1])
+        self.assertEqual(env.comm_graph[1], [0])
+
+        def view(location: tuple[float, float], revision: int) -> dict:
+            return {
+                "task_id": 0,
+                "location": np.array(location, dtype=float),
+                "deadline": env.task_dic[0]["deadline"],
+                "status": env.task_dic[0]["status"],
+                "requirements": env.task_dic[0]["requirements"],
+                "members": [],
+                "update_time": 5.0,
+                "revision": revision,
+                "dynamic": True,
+            }
+
+        # Both robots know the task, at the same instant, at different revisions.
+        env.learn_task_view(0, view((0.8, 0.9), 2))
+        env.learn_task_view(1, view((0.9, 0.9), 1))
+        env.current_time = 5.0
+
+        env.propagate_task_completion()
+
+        self.assertEqual(int(env.agent_knowledge[1]["task_revision"][0]), 2)
+        np.testing.assert_allclose(
+            env.agent_knowledge[1]["task_locations"][0], np.array([0.8, 0.9])
+        )
+
+        # And the comparison stays strict: nothing moves when both agree.
+        before = env.agent_knowledge[0]["task_locations"][0].copy()
+        env.propagate_task_completion()
+        np.testing.assert_allclose(env.agent_knowledge[0]["task_locations"][0], before)
+        self.assertEqual(int(env.agent_knowledge[1]["task_revision"][0]), 2)
+
 
 class PacketLossTests(unittest.TestCase):
     """A dropped packet never changes anyone's belief."""

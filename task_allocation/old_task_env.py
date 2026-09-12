@@ -518,12 +518,21 @@ class TaskEnv:
                         self.agent_knowledge[aid]["known_finished"].add(tid)
                         self.agent_knowledge[aid]["task_last_update_time"][tid] = self.current_time
 
-                # 3. 双方都知道的任务，看谁的时间戳更新，直接覆盖
+                # 3. 双方都知道的任务，按 (时间戳, revision) 取新者覆盖。只比时间戳时，
+                #    同一 tick 内被登记表提升到更高 revision 的合法更新不会传播：
+                #    两台相邻机器人时间戳相同、revision 不同，接收方会一直保留旧值。
                 for tid in (knowledge["known_tasks"] & nk["known_tasks"]):
-                    t_a, t_n = knowledge["task_last_update_time"].get(tid, 0.0), nk["task_last_update_time"].get(tid, 0.0)
-                    if t_a > t_n:
+                    rank_a = (
+                        knowledge["task_last_update_time"].get(tid, 0.0),
+                        int(knowledge["task_revision"].get(tid, 0)),
+                    )
+                    rank_n = (
+                        nk["task_last_update_time"].get(tid, 0.0),
+                        int(nk["task_revision"].get(tid, 0)),
+                    )
+                    if rank_a > rank_n:
                         self._share_task_belief(knowledge, tid, self.agent_knowledge[nid])
-                    elif t_n > t_a:
+                    elif rank_n > rank_a:
                         self._share_task_belief(nk, tid, self.agent_knowledge[aid])
 
         # 第三部分在途重规划检查
