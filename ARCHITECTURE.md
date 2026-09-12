@@ -53,11 +53,21 @@ HIDDEN → DETECTED → VERIFIED → ASSIGNED → EN_ROUTE
 ### 通信中转
 
 `CommRelay` 是搜索发现与救援 belief 之间唯一的通道。事件总线把每个
-`DetectionEvent` 扇出一次，中转按注册表已接受的任务快照生成消息，按显式拓扑
-（订阅了上行链路的救援机器人）、每包延迟和丢包率（由 seed 驱动）投递；包丢了
-就丢了，belief 保持原值。中转不读任何人的位置，搜索队与救援队仍是两组独立
-实体，救援集结点是否与搜索起点重合不影响闭环能否启动。机器人获知任务后的
-后续更新仍走 TaskEnv 自身的视距感知与一跳 gossip。
+`DetectionEvent` 扇出一次，中转只转发注册表已接受的事件，按已接受的快照生成消息，
+再按显式拓扑（`--comm-subscribers`：默认全救援队，也可指定 `first:N` 或救援机器人
+id 列表）、每包延迟和丢包率（由 seed 驱动）投递；包丢了就丢了，belief 保持原值。
+中转不读任何人的位置，搜索队与救援队仍是两组独立实体，救援集结点是否与搜索起点
+重合不影响闭环能否启动。机器人获知任务后的后续更新仍走 TaskEnv 自身的视距感知与
+一跳 gossip，因此收紧拓扑只是限制投递范围，并不禁止知识通过其他信道到达。
+
+### 协调与执行的 belief 边界
+
+在线协调器只按每台机器人自己的 belief 打分：`AgentSnapshot.task_beliefs` 携带该机器人
+收到的任务位置、剩余需求、截止时间、阶段、进度与复杂度，`HeuristicCoordinator` 的
+`task_bias` 与 `pair_bias` 全部由它推出，绝不回退读注册表快照。执行侧同理：
+`apply_action` 用 believed 位置作为导航目标、believed 状态作为预期状态，任务真值只在
+到场核实（`verify_task_on_arrival`）时使用；在途重规划也只看 belief，真值显示完成而
+消息未达时机器人继续前往。
 
 ### 协调优化器
 
@@ -92,8 +102,9 @@ HIDDEN → DETECTED → VERIFIED → ASSIGNED → EN_ROUTE
 | 契约 | 生产者 | 消费者 | 关键字段 |
 | --- | --- | --- | --- |
 | `DetectionEvent` | PILOC adapter | Registry/Coordinator | target ID、位置、时间、置信度、目标属性 |
-| `DetectionMessage` | CommRelay | 机器人 belief（经 Task03 adapter） | 发送时快照：位置、阶段、需求、截止时间 |
+| `DetectionMessage` | CommRelay | 机器人 belief（经 Task03 adapter） | 发送时快照：位置、阶段、需求、进度、截止时间 |
 | `TaskSnapshot` | Registry | Coordinator/Allocator/Executor | 阶段、剩余需求、截止时间、revision |
+| `AgentSnapshot` / `AgentTaskBelief` | Task03 adapter | Coordinator/Allocator | 该机器人收到的任务视图（位置/需求/阶段/进度） |
 | `CoordinationAdvice` | Coordinator | Allocator | task bias、pair bias、replan、有效期 |
 | `AssignmentCommand` | Allocator | Executor | agent/task、task revision、TTL |
 | `ProgressEvent` | Executor | Registry/Coordinator | 阶段、剩余需求、进度、失败原因 |
@@ -141,6 +152,8 @@ y = row / (height - 1)
 ## 7. 部署与信息约束
 
 环境维护 `truth state`，Actor/在线协调器维护 `belief state`。严格 CTDE 实验中，
-在线模块只能使用经过通信链（上行中转、视距感知、gossip）到达的信息；观测特征、
-硬 mask、协调器打分全部读 belief 副本，断联期间真值推进不改变机器人的决策输入。
-全局真值只允许训练 Critic 和计算指标使用。
+在线模块只能使用经过通信链（上行中转、视距感知、gossip）到达的信息：
+观测特征、硬 mask、协调器打分、导航目标与在途重规划全部读 belief 副本，
+断联期间真值推进不改变机器人的决策输入与行动目标。机器人是否听说某任务决定它
+能否选择该任务；belief 中与决策相关的任一字段变化都会立即成为调度信号。
+全局真值只允许模拟器、训练 Critic 和统计指标使用。

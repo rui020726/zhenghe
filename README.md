@@ -85,6 +85,13 @@ gossip 每 tick 最多传播一跳、丢包时 belief 保持原值、通信随�
 日志只记录 Registry 接受的事件（迟到/未知/终态后事件三者一致被拒）、
 mock 前沿策略不读视野外的信息素，以及负的检测半径以退出码 2 拒绝。
 
+第三轮审查后的补充覆盖：真实 PILOC 的 reset 会 reseed 并重建信息素/位置历史/通信统计/
+延迟消息，适配器与协调器的每 episode 计数器一并复位；协调偏置与导航目标只来自
+该机器人的 belief（只改注册表真值不改变二者）；belief 的位置/截止时间/未来需求/
+复杂度/进度/成员/动态与已分配标志任一变化都被报告为调度信号，纯时间戳刷新不算；
+被注册表拒绝的检测不入通信队列也不触发协调；通信拓扑可通过配置收窄并在集成测试中生效；
+合法 re-detection 的日志按注册表快照写入并保留最初 detection 作为关联键。
+
 ## 联合推理入口
 
 `integrated_sar/joint_driver.py` 只做推理，不训练任何网络。
@@ -109,7 +116,9 @@ python -m integrated_sar.joint_driver \
 `--obstacle-density`、`--rescue-species`、`--rescue-per-species`、`--actor-kv-mode`、
 `--residual-scale`（协调残差上界，0–1）、`--command-ttl`、`--coordination-interval`、
 `--allocation-interval`、`--dt`、`--detection-radius`（不允许为负，0 合法但退化）、
-`--comm-delivery-probability`、`--comm-delay-ticks`、`--no-coordinator`、`--quiet`。
+`--comm-delivery-probability`、`--comm-delay-ticks`、
+`--comm-subscribers`（`all` 默认覆盖全救援队，或 `first:N`，或机器人 id 列表）、
+`--no-coordinator`、`--quiet`。
 `--mock` 与任一 checkpoint 参数互斥。
 
 使用 `--piloc-checkpoint` 时还有两个约束，启动即校验，不会静默放行：
@@ -123,12 +132,14 @@ python -m integrated_sar.joint_driver \
 
 目标如何传到救援队，决定了这一轮能完成多少。检测先只写入环境真值（`task_dic`），
 `integrated_sar/comm.py` 的 `CommRelay` 再把它作为显式通信投递进机器人 belief：
-上行链路覆盖订阅它的救援机器人，每包有可配置的延迟与丢包率，丢包不重发、belief
-保持原值，整个随机过程由 seed 控制；中转不读任何人的位置，因此救援队是否与搜索
-起点重合不是闭环启动的必要条件。机器人获知任务之后，状态更新仍由 `old_task_env`
-自己的视距感知和一跳 gossip（每 tick 最多一跳）传播；断联期间真值推进不会改变
-该机器人的 observation、mask 或合法动作。分配器和协调器都不能对机器人尚未听说
-的目标做决策（架构不变量 9），通信范围、传播延迟和丢包率会真实地体现在结果里。
+只有注册表已接受的检测才会被转发，上行链路默认覆盖订阅它的整支救援队，可用
+`--comm-subscribers` 收窄到 `first:N` 或指定 id；每包有可配置的延迟与丢包率，丢包
+不重发、belief 保持原值，整个随机过程由 seed 控制；中转不读任何人的位置，因此救援队
+是否与搜索起点重合不是闭环启动的必要条件。收窄拓扑只限制投递范围——机器人仍可能
+经视距感知或 gossip 获知任务，那两条信道由 `old_task_env` 自己建模（gossip 每 tick
+最多一跳）。分配器、协调器与执行模块都不能使用机器人尚未收到的信息：协调偏置只按
+该机器人自己的 belief 打分，导航目标取 believed 位置，在途重规划也只看 belief，
+断联期间真值推进不会改变 observation、mask 或行动目标（架构不变量 9）。
 为此救援队的集结点默认仍放在搜索队的出发格上，两队共享同一个灾区；
 `TaskEnv` 默认会把集结点随机撒在整个单位正方形。
 

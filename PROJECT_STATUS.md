@@ -82,8 +82,31 @@
     视野外变化不再影响动作。
   - `--detection-radius` 为负会在 `RunConfiguration.validate()` 阶段以退出码 2、
     单行 `ConfigurationError` 拒绝（此前会带着 NumPy traceback 崩溃）；0 明确合法但退化。
+- 经第三轮独立代码审查后修复的问题，每项都有对应回归测试：
+  - 真实 PILOC 的 reset 只调用了 `Environment.load`，第二轮遗留的信息素/位置历史/
+    时间戳地图/通信统计/延迟消息全部存活，且两个 RNG 都没有重新播种；现在
+    `reset_piloc_environment` 统一完成 reseed + load + 派生状态重建，构造与 reset 走同一路径。
+    适配器的 `_untracked_counter` 与协调器的 advice revision 也随 episode 复位。
+  - “只读 belief”此前只覆盖了 observation 与 mask：协调器仍按注册表真值给 pair_bias
+    打分（复现：belief 位置固定为 (0.9,0.9)、只改注册表到 (0.1,0.1)，pair_bias 从 0.335
+    变成 0.615），`apply_action` 用真值位置导航（复现：机器人直奔从未收到的 (0.25,0.25)），
+    在途重规划也用真值状态。现在 `AgentSnapshot.task_beliefs` 携带每台机器人收到的任务视图，
+    协调偏置、导航目标与在途重规划全部只读它；真值只在到场核实时使用。
+  - belief 变化指纹只比较状态/成员/阶段/完成标志，位置、截止时间、未来需求、复杂度、
+    进度、动态与已分配标志的变化都不触发调度；现在指纹覆盖所有进入决策的字段，
+    同时仍然排除裸时间戳（机器人站在闲置任务旁的刷新不算学到新东西）。
+  - `CommRelay` 没有读取注册表判定，被拒绝的 late/terminal 检测仍会入队并写入机器人 belief
+    （等于让被拒事件重发旧任务视图、把终态任务重新写成待处理）；现在中转只转发注册表
+    已接受的事件，orchestrator 的知识调度信号也改为比较 `accepted_event_count`，
+    被拒检测不再触发协调。
+  - 生产 wiring 此前把所有救援机器人无条件放进上行链路，拓扑只存在于手工单元测试里；
+    现在 `--comm-subscribers` 支持 `all`（默认全队）、`first:N` 与显式 id 列表，
+    未知 id 与非法规格都以退出码 2 拒绝，并有集成测试覆盖收窄后的实际投递。
+  - 合法 re-detection 的日志硬编码 stage 0/progress 0/status detected 并把 source_event_id
+    换成当前检测 id，与注册表状态（如 assigned）矛盾且破坏同一目标的关联键；现在生命周期
+    字段全部取自注册表快照，当前观测的事件 id 放进 `detail.detection_event_id`。
 - mock 的双通道地图与 `timemap.Environment.two_channel_map` 逐格一致（含 `[0, 0.3]` 两端边界）。
-- 77 项集成测试通过（本机无 torch/gym 时其中 7 项按依赖跳过）。
+- 105 项集成测试通过（本机无 torch/gym 时其中 8 项按依赖跳过）。
 
 ## 尚未完成
 
