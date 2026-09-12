@@ -180,6 +180,7 @@ class JointSAROrchestrator:
             self.search,
             self.task_sink,
             self.agent_source,
+            self.coordinator,
             self.allocator,
             self.executor,
             self.replan_source,

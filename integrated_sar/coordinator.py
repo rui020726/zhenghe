@@ -26,6 +26,10 @@ class PassthroughCoordinator:
             valid_until=state.current_time + self.validity,
         )
 
+    def reset(self) -> None:
+        """Start a new episode: advice numbering restarts, so revisions stay comparable."""
+        self._revision = 0
+
 
 class HeuristicCoordinator:
     """Interpretable first-stage coordinator; later replaceable by a learned policy."""
@@ -51,6 +55,10 @@ class HeuristicCoordinator:
         self.compatibility_weight = float(compatibility_weight)
         self.distance_weight = float(distance_weight)
         self.busy_penalty = float(busy_penalty)
+        self._revision = 0
+
+    def reset(self) -> None:
+        """Start a new episode: advice numbering restarts, so revisions stay comparable."""
         self._revision = 0
 
     def advise(self, state: CoordinatorInput) -> CoordinationAdvice:

@@ -125,23 +125,37 @@ def build_piloc_environment(
         test=False,
         enable_comm_noise=enable_comm_noise,
     )
-    reset_piloc_environment(environment, scenario)
-    _rebuild_position_state(environment)
+    reset_piloc_environment(environment, scenario, seed=seed)
     return environment
 
 
-def reset_piloc_environment(environment: Any, scenario: SearchScenario) -> None:
-    """Reload one scenario into a constructed ``timemap.Environment``.
+def reset_piloc_environment(
+    environment: Any,
+    scenario: SearchScenario,
+    *,
+    seed: int = 0,
+) -> None:
+    """Restore a constructed ``timemap.Environment`` to the scenario's start state.
 
     ``Environment.reset`` would generate a random map, so a faithful full-episode
-    reset re-runs ``load`` with the original scenario; the caller rebuilds the
-    derived position state afterwards.
+    reset reseeds both RNGs and re-runs ``load`` with the original scenario.
+
+    ``load`` alone is not enough: it replaces the map, positions, goals, action
+    cache and ``steps``, but leaves every other piece of derived state behind --
+    ``global_pheromone`` and ``local_pheromone``, ``agent_positions_history``,
+    ``global_timestamp_maps``, ``check_repeat_pos``, ``comm_stats`` and
+    ``delayed_map_buffer`` all still describe the previous episode. The trained
+    policy reads the pheromone window, so without the rebuild the second episode
+    steers around stale trails and counts last episode's traffic.
     """
+    random.seed(seed)
+    np.random.seed(seed)
     environment.load(
         np.asarray(scenario.obstacles, dtype=np.int32),
         np.asarray([[p.row, p.col] for p in scenario.agent_positions], dtype=np.int32),
         np.asarray([[p.row, p.col] for p in scenario.goal_positions], dtype=np.int32),
     )
+    _rebuild_position_state(environment)
 
 
 def _rebuild_position_state(environment: Any) -> None:

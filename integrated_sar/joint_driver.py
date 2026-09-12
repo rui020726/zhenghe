@@ -467,8 +467,9 @@ def _build_search_side(
 
         def reset_world() -> None:
             # timemap.Environment.reset would generate a random map; a faithful
-            # reset re-loads the original scenario instead.
-            reset_piloc_environment(environment, scenario)
+            # reset reseeds both RNGs, re-loads the original scenario and rebuilds
+            # the pheromone, position history, timestamp maps and comm counters.
+            reset_piloc_environment(environment, scenario, seed=configuration.seed)
 
     return PilocSearchAdapter(
         env=environment,

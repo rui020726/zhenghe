@@ -86,6 +86,8 @@ class PilocSearchAdapter:
                 self.env, view_radius=self._view_radius()
             )
             self.two_channelmap = initialize_two_channel_map(self.obs)
+        # Untracked-target numbering is per episode, like the track ids themselves.
+        self._untracked_counter = 0
         self._track_ids = [
             f"piloc-e{self._episode}-target-{index}"
             for index in range(len(self.env.goals_pos))

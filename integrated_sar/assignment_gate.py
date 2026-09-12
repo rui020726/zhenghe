@@ -140,3 +140,13 @@ class ReplanCoordinator:
         merged = frozenset(advice.replan_agents | self.pending_replan)
         self.pending_replan.clear()
         return replace(advice, replan_agents=merged)
+
+    def reset(self) -> None:
+        """Advice numbering restarts with the wrapped coordinator.
+
+        ``pending_replan`` is the gate's own set and is cleared by the gate's own
+        reset, so it is deliberately left alone here.
+        """
+        reset = getattr(self.inner, "reset", None)
+        if reset is not None:
+            reset()

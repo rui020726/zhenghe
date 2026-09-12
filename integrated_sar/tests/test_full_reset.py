@@ -51,6 +51,33 @@ def _normalize_ids(record: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
+class PerEpisodeCounterTests(unittest.TestCase):
+    """Counters that name things must also restart with the episode."""
+
+    def test_search_untracked_counter_and_coordinator_revision_restart(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            configuration = make_configuration(directory)
+            run = build_joint_run(configuration)
+            try:
+                first_advice_revision = None
+                for report in run.orchestrator.run(1):
+                    first_advice_revision = report.advice.revision
+                # Make the search adapter allocate some untracked ids.
+                run.search_adapter._untracked_counter = 4
+                run.reset()
+
+                self.assertEqual(run.search_adapter._untracked_counter, 0)
+                self.assertEqual(run.search_adapter._episode, 2)
+                for report in run.orchestrator.run(1):
+                    self.assertEqual(
+                        report.advice.revision,
+                        first_advice_revision,
+                        "advice numbering did not restart with the episode",
+                    )
+            finally:
+                run.logger.close()
+
+
 class FullResetTests(unittest.TestCase):
     def test_reset_restores_clocks_scene_and_rescue_state(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
