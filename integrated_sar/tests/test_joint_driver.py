@@ -1130,6 +1130,31 @@ class MockFidelityTests(unittest.TestCase):
         np.testing.assert_array_equal(actual["explore_map"], expected["explore_map"])
 
 
+class DetectionRadiusValidationTests(unittest.TestCase):
+    """A bad --detection-radius fails at configuration time, not inside numpy."""
+
+    def test_negative_radius_is_rejected_with_a_clean_error(self) -> None:
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+            exit_code = main(
+                ["--mock", "--steps", "1", "--detection-radius", "-1", "--output", "-"]
+            )
+        self.assertEqual(exit_code, 2)
+        self.assertEqual(stdout.getvalue(), "")
+        lines = [line for line in stderr.getvalue().splitlines() if line.strip()]
+        self.assertEqual(len(lines), 1)
+        self.assertTrue(lines[0].startswith("[joint-driver] ConfigurationError:"))
+        self.assertIn("--detection-radius", lines[0])
+
+    def test_zero_radius_is_a_legal_configuration(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            configuration = make_configuration(
+                directory, steps=1, detection_radius=0
+            )
+            summary = run_from_configuration(configuration)
+        self.assertEqual(summary["steps"], 1)
+
+
 class MissingDependencyTests(unittest.TestCase):
     """A missing dependency becomes an actionable message, never a bare ImportError."""
 

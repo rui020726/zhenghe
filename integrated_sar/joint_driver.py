@@ -98,6 +98,12 @@ class RunConfiguration:
             raise ConfigurationError(f"--search-agents must be at least 1, got {self.search_agents}")
         if self.num_goals < 0:
             raise ConfigurationError(f"--num-goals cannot be negative, got {self.num_goals}")
+        if self.detection_radius < 0:
+            raise ConfigurationError(
+                f"--detection-radius cannot be negative, got {self.detection_radius}; 0 is "
+                f"allowed (a robot then only observes its own cell), but a negative radius "
+                f"would build negative pheromone windows and crash deep inside numpy"
+            )
         if self.grid_size != PILOC_GRID_SIZE and self.piloc_checkpoint is not None:
             raise ConfigurationError(
                 f"the trained PILOC policy is a convolutional network built for "
