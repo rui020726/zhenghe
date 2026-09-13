@@ -49,11 +49,34 @@ TRICK = {
     'feature_norm': False
 }
 
-reward_fn = dict(move= -0.75 ,
-                stay_on_goal=0,
-                stay_off_goal=-0.075,
-                collision= -3 ,
+# 旧版（legacy）奖励中实际被读取的键。move / stay_on_goal / stay_off_goal
+# 从未被任何代码读取，属于历史遗留，已删除；需要旧值请查 git 历史。
+reward_fn = dict(collision= -3 ,
                 finish= 3 )
+
+# === 奖励模式（见 REWARD_AND_TRAINING.md）===
+# legacy: 旧公式对照；v2: 新的默认训练奖励；potential: 势函数覆盖塑形对照。
+reward_mode = "v2"
+
+# 回合长度上限：时间成本按 1/T_max 归一，使单步奖励幅度与课程阶段无关。
+T_MAX = 250
+
+# V2 权重。team_reward = target*N_t + coverage*(C_t+1 - C_t)
+#                      + finish*all_found - time_cost/T_MAX
+# agent_reward = team_reward - collision*collision_i
+REWARD_V2 = dict(
+    target=1.0,
+    coverage=2.0,
+    finish=3.0,
+    time_cost=0.5,
+    collision=0.2,        # 每 agent 单独计
+    repeat=0.0,           # 默认关闭：V2 不用短周期惩罚
+    pheromone=0.0,        # 默认关闭：实验项，带 epsilon 保护与裁剪
+)
+
+# potential 模式的势函数系数：F = beta * (gamma * Phi_next - Phi_current)，
+# Phi = 团队并集覆盖率。gamma 必须与 MAPPO 使用的折扣一致（训练时由 --gamma 传入）。
+POTENTIAL_BETA = 1.0
 # 视野
 obs_radius = 5
 

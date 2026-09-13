@@ -53,13 +53,17 @@ _ALWAYS_PRESENT = {
 _CONDITIONAL = {"collision", "repeat", "finish", "finish_dropped_prior"}
 
 
-def _environment(track: bool):
+def _environment(track: bool, reward_mode: str = "legacy"):
+    """Legacy mode by default: these tests pin the *old* decomposition, whose
+    hidden -1 baseline and finish-overwrite behaviour are exactly what the
+    reward rework is measured against. V2 terms are covered in
+    ``test_piloc_reward_v2.py``."""
     for entry in (_PILOC_DIR, _PILOC_DIR / "src" / "DDQN"):
         if str(entry) not in sys.path:
             sys.path.append(str(entry))
     from src.Map.timemap import Environment  # type: ignore[import-not-found]
 
-    return Environment(num_agents=2, num_goals=3, track_reward_terms=track)
+    return Environment(num_agents=2, num_goals=3, track_reward_terms=track, reward_mode=reward_mode)
 
 
 @unittest.skipIf(SKIP_REASON is not None, SKIP_REASON or "")
