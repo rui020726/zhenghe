@@ -1,6 +1,6 @@
 # 项目状态
 
-更新时间：2026-09-12
+更新时间：2026-09-13
 
 ## 已完成
 
@@ -132,7 +132,7 @@
   - 真实 PILOC reset 测试用默认 8×8 场景构造环境，而生产构造器明确拒绝非 60×60 场景，
     安装 gym/Pillow 后测试会在 reset 断言前抛 `CheckpointIncompatibleError`。现在真实
     用例改用 60×60 场景，skip 条件覆盖 timemap 的全部导入依赖（gym、matplotlib、Pillow）
-    及实际导入失败，另增一组 stand-in 测试覆盖生产构造路径（60×60 守卫、两步构造、
+    及实际导入失败，另增一组 stand-in 测试覆盖生产构造路径（60×60 守卫、构造、
     派生状态重建）与越界场景被拒绝。
 - 经第五轮独立代码审查后修复的问题，每项都有对应回归测试：
   - 上一轮把“机器人仍相信一个已被注册表关闭的任务”整体判断为既有缺陷，这个判断不完整：
@@ -166,11 +166,15 @@
 - 训练入口工程化与训练正确性修复（步骤 0–2）：
   - `timemap.Environment` 的 `self.map` 只在 `test=True` 分支赋值，而 `map_partition(self.map)`
     无条件执行，默认参数下直接 `AttributeError` —— `piloc/train.py` 根本启动不了。
-    现按 `reset()` 的同款逻辑在构造函数里生成障碍图。
+    现按 `reset()` 的同款逻辑在构造函数里生成障碍图；这同时让
+    `build_piloc_environment` 里为绕过它而写的 `__new__` + 预置场景地图两步构造变得多余
+    （构造函数本来就会覆盖那张图），现已改为直接构造。
   - `piloc/train.py`：device 可配置（原硬编码 `cuda`）、占位保存目录改为 `--output-dir`
     并自动创建、修掉 `episode_num % 1000 == 0` 在 episode 0 每步都存盘的缺陷、
     `--seed` 统一驱动 random/numpy/torch 与动作空间、`--episodes` 生效（原 `max_episodes`
     读了不用）、`--resume` 走 strict 加载而不经过硬编码 device 与文件名的 `MAPPO.load`、
+    每回合重建环境时经 `build_search_environment` 统一补齐 `--num-goals`（原先只传
+    `num_agents`，第二回合起静默退回 `configs.num_goals`，与 `run_meta.json` 记录的世界不一致）、
     每回合搜索指标写入 TensorBoard 与 JSONL、每次运行写 `run_meta.json`。
   - `task_allocation/old_driver.py`：`D:\tb_logs` 改为 `--log-dir`、`RESUME` 默认关闭、
     补 `--seed`、网络维度收敛到 `NETWORK_DIMS` 并随运行记录、三处 checkpoint 写入统一走
@@ -184,11 +188,70 @@
   - 两个入口都在 CPU 上冒烟跑通：PILOC 3 回合产出的权重经 strict 加载驱动联合闭环到
     `search_backend=piloc-trained` 并完成一个目标；CTDE 一轮 6 个 episode 产出
     `ctde_final.pth`，记录 `actor_kv_mode=tokens`、seed、commit 与网络维度，并通过加载期探针。
-- 148 项集成测试通过（本机无 torch/gym 时其中若干项按依赖跳过）。
+- `piloc/src/DDQN/Agent.py` 首行的 `import tensorflow as tf` 是死导入：整个 `src/DDQN`
+  只有这一处出现 `tf`，真正使用它的 `ModelStats.py` 与 `base/BaseDisplay.py` 都不在
+  `train.py` 的导入链上。它却让任何训练运行都必须装 tensorflow，也挡住了只有 CUDA torch
+  的环境；已删除，`piloc_runtime.import_agent_module` 的报错文案与测试的依赖探测同步去掉
+  tensorflow（`requirements.txt` 本就把 tensorflow 归在 legacy 组，无需改动）。
+- 集成测试共 156 项：在 torch / gym / gymnasium / Pillow / matplotlib 齐备的环境里通过，
+  仅 2 项“无 GPU 时回退 CPU”的用例因检测到 GPU 而按设计自我跳过。
+- `piloc/train.py` 已在 CPU 与 CUDA 上各以 3 回合冒烟跑通，回合边界的环境重建路径实际执行，
+  `run_meta.json` 记录了命令行传入的 num_agents / num_goals 与 device / cuda_available /
+  torch_version。
+- 奖励构成诊断（奖励重构第 1 步，行为不变）：`timemap.Environment` 新增 `track_reward_terms`
+  开关与 `last_reward_terms`（默认关闭），`train.py` 加 `--track-reward-terms`，把每步奖励拆成
+  9 个分量、按回合累加写进 `reward_term/{agent}/{term}`；新增 `test_piloc_reward_terms`，用
+  “各分量之和恒等于 `step` 返回的奖励”锁住这个不变量（另有 2 项断言该开关确实传到环境）。
+  实测（250 步回合、随机动作）：`reexploration_shaped` +231 与 `reexploration_baseline` −250
+  几乎完全相消，`exploration_new` 甚至可为负（−16.5），另有 collision −27/−48、
+  `teammate_proximity` −14、repeat −2.5/−4.1、pheromone ≈ −2；同一环境短回合（10 步）合计
+  +78、长回合 −7/−102 —— **累计奖励随回合变长的塌陷是直接量出来的，不是学习退化**。
+  另实证：前五个目标没有任何发现奖励——180 次 `update_timestamp_map` 调用中剩余目标出现在
+  视野内 0 次（检测并删除目标的判据严格覆盖更新时的判据），所以 `find_target` 分支恒不触发。
+- 奖励重构第 2–5 步（本轮完成，详见 `REWARD_AND_TRAINING.md`）：
+  - **目标发现流程修复**：`step()` 改为先基于本步目标快照计算被任意机器人观测到的
+    目标集合（同一目标两人同看只计一次），产生发现事件后再统一删除；中间发现立即计酬；
+    `finish` 累加不覆盖；`done` 只剩“全部目标完成”一个语义。`nx != x and ny != y`
+    修复为 `or`（只排除中心格），修复后的旧格统计只留在 legacy；
+    `reExploration_reward_find_target` 跨 agent 泄漏与恒不触发的死分支已删除。
+  - **Reward V2**（`piloc/src/Map/reward_modes.py`，`--reward-mode v2` 为默认）：
+    `team = 1.0*N_t + 2.0*ΔC_union + 3.0*all_found − 0.5/T_max`，
+    `agent = team − 0.2*collision_i`；删除隐式 −1、队友邻近 −v 惩罚与旧格正奖励；
+    repeat/pheromone 默认权重 0，信息素有 epsilon 与裁剪保护；
+    `potential` 模式 `F = β(γΦ'−Φ)`，真实终止 Φ_next 归零、截断保留 bootstrap。
+    `legacy` 模式逐位保留旧行为作对照（含 finish 覆盖与发现奖励恒 0 两个已知缺陷）。
+  - **课程门控**（`piloc/src/curriculum.py`）：删除“历史最高累计奖励 + 200 回合”规则；
+    每 `--eval-every` 回合在固定验证 seed 上跑确定性（argmax）评估，
+    连续 `--required-passes` 次任务指标达标才升级，永不因等待自动升级；
+    门控输入白名单拒绝任何 reward/return 键；`--curriculum off` 用固定回合上限；
+    最优 checkpoint 按验证任务指标存 `best/`。E 只控制回合步数上限，已在文档写明。
+  - **γ 与可复现性**：`--gamma/--lmbda` 暴露为 CLI（V2 推荐 0.99，legacy 对照 0.95）；
+    `seed_all` 统一 Python/NumPy/Torch CPU/CUDA/动作空间 seed；环境拥有独立 RNG
+    （视野噪声、目标移动、通信噪声不再消耗全局流），`reset_piloc_environment` 经
+    `reseed()` 重放；验证 seed 默认 `seed + 1_000_000_007`，与训练流隔离；
+    gamma/lambda/reward_mode/全部权重写入 `run_meta.json` 与 checkpoint 内嵌 `run_meta`；
+    CUDA cudnn.benchmark 非确定性已在元数据与文档记录。
+  - **失效逻辑清理**：`reward_fn` 的 `move/stay_on_goal/stay_off_goal` 死键删除；
+    `exp_xishu` 相同分支合并；`repeat_check` 从 train.py 移除并注明原因
+    （rescue 覆盖动作会使执行动作与保存的 log-prob 不一致，评估路径 test.py 保留）；
+    collision、短周期循环、重复覆盖分别统计（`last_step_stats` +
+    `collision_rate/repeat_ratio/recoverage_rate`）。
+  - 测试：新增 `test_piloc_reward_v2`（15 项：发现立即计酬、双机器人同看只计一次、
+    未完成不终止、finish 累加、并集覆盖计酬、重复看格不重复计、纯重复无正奖励、
+    分量之和恒等于 total、信息素无 NaN/Inf、发现奖励与 E 无关、potential 公式级、
+    legacy 可运行、step 接口兼容）、`test_curriculum_gate`（13 项：拒绝 reward 输入、
+    等待不升级、连续达标只升一次、窗口重置、关闭课程）、`test_piloc_seeding`
+    （5 项：同 seed 逐位复现、全局随机消耗不影响、验证 seed 存活、seed_all 覆盖三流）。
+    集成测试共 189 项通过；v2/legacy/potential 三模式与断点恢复各跑通 CPU smoke；
+    smoke 中 episode 3 实测 discovered=1、return=+1.8，中间发现奖励首次真正生效。
 
 ## 尚未完成
 
 按推荐优先级排列：
+
+0. 奖励构成重构（第 1–5 步全部完成，见上）。剩余：跑正式规模的
+   v2/legacy 配对 seed 对照（γ 0.99 vs 0.95），并记录 value loss /
+   explained variance / entropy / KL / clip fraction；V2 权重调参。
 
 1. 在 PILOC 环境中原生发出 `DetectionEvent`，不再依赖适配器重建。
 2. 让 PILOC 环境在发现后保留目标实体。当前 `timemap` 仍会删除已发现目标；
