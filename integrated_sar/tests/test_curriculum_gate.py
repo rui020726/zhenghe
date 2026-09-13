@@ -9,6 +9,9 @@ tests lock the replacement contract:
 * waiting long without meeting thresholds never advances the stage;
 * the stage advances exactly once after the required consecutive passes;
 * the window resets on stage change and on a failed validation;
+* coverage/discovery thresholds scale with each stage's budget share, so a
+  10-step stage is never asked for the final stage's coverage (the first v2
+  run sat 5000 episodes at stage 0 precisely because it was);
 * the curriculum can be switched off for a fixed episode limit.
 """
 
@@ -73,7 +76,8 @@ class GateRejectsRewardTests(unittest.TestCase):
 class AdvancementTests(unittest.TestCase):
     def test_no_advancement_without_passes_however_long_one_waits(self) -> None:
         gate = _gate()
-        failing = _passing(coverage=0.1)  # below the 0.5 threshold
+        # Half the stage-0 bound: clearly below whatever the scaling asks for.
+        failing = _passing(coverage=default_stages([10, 20, 30])[0].thresholds["coverage"] / 2)
         for _ in range(100):  # 20 evaluation windows of pure waiting
             gate.register_episode()
             if gate.should_evaluate():
@@ -168,11 +172,57 @@ class DisabledCurriculumTests(unittest.TestCase):
 class MetricSemanticsTests(unittest.TestCase):
     def test_higher_is_better_and_lower_is_better_are_not_swapped(self) -> None:
         # coverage/discovery: must be >= threshold. collision/repeat: must be <=.
+        # The bound is whatever stage 0 of this ladder actually asks for.
         gate = _gate(required_passes=1)
-        self.assertFalse(gate.metrics_pass(_passing(coverage=0.49)))
-        self.assertTrue(gate.metrics_pass(_passing(coverage=0.5)))
+        bound = default_stages([10, 20, 30])[0].thresholds["coverage"]
+        self.assertFalse(gate.metrics_pass(_passing(coverage=bound - 1e-9)))
+        self.assertTrue(gate.metrics_pass(_passing(coverage=bound)))
         self.assertFalse(gate.metrics_pass(_passing(collision_rate=0.06)))
         self.assertTrue(gate.metrics_pass(_passing(collision_rate=0.05)))
+
+
+class StageScaledThresholdsTests(unittest.TestCase):
+    """Regression for the stuck first v2 run: demanding the final stage's
+    coverage (0.5) from a 10-step stage is geometrically impossible -- the
+    validation plateaued at coverage ~0.06 / discovery 1/6 and the ladder
+    never left stage 0 in 5000 episodes."""
+
+    def test_coverage_and_discovery_scale_with_the_budget_share(self) -> None:
+        stages = default_stages([10, 20, 30])
+        self.assertAlmostEqual(stages[0].thresholds["coverage"], 0.5 * 10 / 30)
+        self.assertAlmostEqual(stages[1].thresholds["coverage"], 0.5 * 20 / 30)
+        self.assertAlmostEqual(stages[2].thresholds["coverage"], 0.5)
+        self.assertAlmostEqual(stages[0].thresholds["discovery_rate"], 4 / 6 * 10 / 30)
+        self.assertAlmostEqual(stages[1].thresholds["discovery_rate"], 4 / 6 * 20 / 30)
+        self.assertAlmostEqual(stages[2].thresholds["discovery_rate"], 4 / 6)
+
+    def test_per_step_rates_are_not_scaled(self) -> None:
+        for stage in default_stages([10, 20, 30]):
+            self.assertEqual(stage.thresholds["collision_rate"], 0.05)
+            self.assertEqual(stage.thresholds["repeat_rate"], 0.5)
+
+    def test_production_stage0_is_reachable_by_the_plateaued_policy(self) -> None:
+        # The stuck run's validation plateau: coverage ~0.06, discovery 1/6.
+        # Stage 0 of the production ladder must sit below both, otherwise the
+        # curriculum is blocked at E=10 again no matter how good the policy is.
+        stage0 = default_stages(list(range(10, 251, 10)))[0].thresholds
+        self.assertLess(stage0["coverage"], 0.06)
+        self.assertLess(stage0["discovery_rate"], 1 / 6)
+
+    def test_an_intermediate_policy_advances_only_to_where_it_qualifies(self) -> None:
+        gate = _gate(eval_every=1, required_passes=1)
+        # coverage 0.25 clears stage 0 (bound 0.5*10/30) but not stage 1
+        # (bound 0.5*20/30): the ladder advances once, then holds.
+        middle = _passing(coverage=0.25)
+        self.assertTrue(gate.submit_validation(middle))
+        self.assertEqual(gate.stage_index, 1)
+        self.assertFalse(gate.submit_validation(middle))
+        self.assertEqual(gate.stage_index, 1)
+        self.assertEqual(gate.episode_limit(), 20)
+
+    def test_empty_limits_are_refused(self) -> None:
+        with self.assertRaises(ValueError):
+            default_stages([])
 
 
 if __name__ == "__main__":

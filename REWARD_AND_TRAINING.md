@@ -94,8 +94,13 @@ F     = beta * (gamma * Phi_{t+1} - Phi_t)     （beta = configs.POTENTIAL_BETA 
   `--validation-episodes`（默认 3）个**确定性动作（argmax）**回合；
 - 门控输入**只允许**任务指标：`coverage, coverage_auc, discovery_rate,
   collision_rate, repeat_rate`。传入 reward/return 直接 `ValueError`；
-- 默认阈值：`coverage ≥ 0.5, discovery_rate ≥ 4/6, collision_rate ≤ 0.05,
-  repeat_rate ≤ 0.5`；
+- 默认阈值：`coverage ≥ 0.5, discovery_rate ≥ 4/6` 描述**最终阶段**（250 步）
+  的能力，并按各阶段预算占最终预算的比例线性缩放——阶段 k 的门槛是
+  `门槛 × E_k / 250`。stage 0（E=10）只要求 `coverage ≥ 0.02`、
+  `discovery_rate ≥ 4/150 ≈ 0.027`（验证时至少发现 1 个目标）；
+  `collision_rate ≤ 0.05, repeat_rate ≤ 0.5` 是每步比率，与回合长度无关，
+  不缩放。背景：首轮 v2 训练 5000 回合验证 coverage 平台仅 0.06、
+  discovery 1/6，旧的同阈值设置在 E=10 几何上不可达，课程永远卡在 stage 0；
 - 连续 `--required-passes`（默认 3）次全部达标才升一级；任何一次失败清零计数；
 - **长期不达标永不自动升级**；升级后窗口重置；
 - `--curriculum off` 关闭课程，使用 `--fixed-episode-limit`（默认 250）；
