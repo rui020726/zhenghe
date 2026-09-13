@@ -69,7 +69,7 @@ REWARD_V2 = dict(
     coverage=2.0,
     finish=3.0,
     time_cost=0.5,
-    collision=0.2,        # 每 agent 单独计
+    collision=1.0,        # 每 agent 单独计；0.2 过弱，早期策略撞墙/出界率 31% 不降
     repeat=0.0,           # 默认关闭：V2 不用短周期惩罚
     pheromone=0.0,        # 默认关闭：实验项，带 epsilon 保护与裁剪
 )

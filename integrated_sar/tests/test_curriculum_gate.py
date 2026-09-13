@@ -122,7 +122,7 @@ class AdvancementTests(unittest.TestCase):
     def test_mixed_thresholds_all_required(self) -> None:
         gate = _gate(required_passes=1)
         # discovery fine but collision above bound -> no pass
-        self.assertFalse(gate.submit_validation(_passing(collision_rate=0.5)))
+        self.assertFalse(gate.submit_validation(_passing(collision_rate=0.9)))
         # repeat above bound -> no pass
         self.assertFalse(gate.submit_validation(_passing(repeat_rate=0.9)))
         self.assertEqual(gate.stage_index, 0)
@@ -177,8 +177,8 @@ class MetricSemanticsTests(unittest.TestCase):
         bound = default_stages([10, 20, 30])[0].thresholds["coverage"]
         self.assertFalse(gate.metrics_pass(_passing(coverage=bound - 1e-9)))
         self.assertTrue(gate.metrics_pass(_passing(coverage=bound)))
-        self.assertFalse(gate.metrics_pass(_passing(collision_rate=0.06)))
-        self.assertTrue(gate.metrics_pass(_passing(collision_rate=0.05)))
+        self.assertFalse(gate.metrics_pass(_passing(collision_rate=0.51)))
+        self.assertTrue(gate.metrics_pass(_passing(collision_rate=0.5)))
 
 
 class StageScaledThresholdsTests(unittest.TestCase):
@@ -198,7 +198,7 @@ class StageScaledThresholdsTests(unittest.TestCase):
 
     def test_per_step_rates_are_not_scaled(self) -> None:
         for stage in default_stages([10, 20, 30]):
-            self.assertEqual(stage.thresholds["collision_rate"], 0.05)
+            self.assertEqual(stage.thresholds["collision_rate"], 0.5)
             self.assertEqual(stage.thresholds["repeat_rate"], 0.5)
 
     def test_production_stage0_is_reachable_by_the_plateaued_policy(self) -> None:

@@ -146,7 +146,7 @@ class TargetDiscoveryTests(unittest.TestCase):
         self.assertAlmostEqual(sum(terms.values()), reward["agent_0"], places=4)
 
         collision_terms = env.last_reward_terms["agent_1"]
-        self.assertAlmostEqual(collision_terms["collision"], -0.2)
+        self.assertAlmostEqual(collision_terms["collision"], -1.0)
         self.assertAlmostEqual(sum(collision_terms.values()), reward["agent_1"], places=4)
         self.assertLess(reward["agent_1"], reward["agent_0"])
 

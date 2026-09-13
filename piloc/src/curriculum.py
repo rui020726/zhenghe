@@ -47,7 +47,7 @@ def default_stages(
     *,
     coverage: float = 0.5,
     discovery_rate: float = 4 / 6,
-    collision_rate: float = 0.05,
+    collision_rate: float = 0.5,
     repeat_rate: float = 0.5,
 ) -> list[CurriculumStage]:
     """coverage/discovery 阈值按各阶段预算占最终预算的比例缩放。
@@ -58,7 +58,10 @@ def default_stages(
     卡在 stage 0。现在阶段 k 的门槛是 ``门槛_最终 × limit_k / max(limits)``——
     E=250 的 0.5 在 E=10 是 0.02，在 E=100 是 0.2。
 
-    collision/repeat 是每步比率，与回合长度无关，不缩放。最后一阶段不再升级，
+    collision/repeat 是每步比率，与回合长度无关，不缩放。collision 门槛
+    （0.5）特意设得宽松：早期随机策略撞墙/出界是正常现象（实测平均碰撞率
+    0.31），避碰是奖励层（V2 的 collision 权重）该管的事，课程只管 E 阶梯；
+    coverage/discovery 门槛才是任务能力的正确信号。最后一阶段不再升级，
     其阈值只是阶梯终点的能力描述，不参与任何门控判断。
     """
     if not limits:

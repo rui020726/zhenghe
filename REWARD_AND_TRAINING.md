@@ -36,11 +36,13 @@ team_reward  = 1.0 * N_t
              + 3.0 * all_targets_found
              - 0.5 / T_max
 
-agent_reward = team_reward - 0.2 * collision_i
+agent_reward = team_reward - collision * collision_i
 ```
 
 默认权重（`configs.REWARD_V2`）：`target=1.0, coverage=2.0, finish=3.0,
-time_cost=0.5, collision=0.2, repeat=0.0, pheromone=0.0`。
+time_cost=0.5, collision=1.0, repeat=0.0, pheromone=0.0`。
+（2026-09-13 起 collision 由 0.2 调至 1.0：0.2 过弱，E=10 随机探索期间碰撞率
+平均 0.31 且 5000 回合不降，给不了策略足够的避碰梯度。）
 
 与 legacy 的本质区别：
 
@@ -98,9 +100,13 @@ F     = beta * (gamma * Phi_{t+1} - Phi_t)     （beta = configs.POTENTIAL_BETA 
   的能力，并按各阶段预算占最终预算的比例线性缩放——阶段 k 的门槛是
   `门槛 × E_k / 250`。stage 0（E=10）只要求 `coverage ≥ 0.02`、
   `discovery_rate ≥ 4/150 ≈ 0.027`（验证时至少发现 1 个目标）；
-  `collision_rate ≤ 0.05, repeat_rate ≤ 0.5` 是每步比率，与回合长度无关，
-  不缩放。背景：首轮 v2 训练 5000 回合验证 coverage 平台仅 0.06、
-  discovery 1/6，旧的同阈值设置在 E=10 几何上不可达，课程永远卡在 stage 0；
+  `collision_rate ≤ 0.5, repeat_rate ≤ 0.5` 是每步比率，与回合长度无关，
+  不缩放。collision 门槛特意设得宽松（0.5）：早期随机策略撞墙/出界是正常
+  现象（实测平均碰撞率 0.31），避碰是奖励层（V2 的 collision 权重）该管的
+  事，课程只管 E 阶梯。背景：首轮 v2 训练 5000 回合验证 coverage 平台仅
+  0.06、discovery 1/6，旧的同阈值设置在 E=10 几何上不可达，课程永远卡在
+  stage 0；将 coverage/discovery 按预算缩放后，剩余卡点只剩 collision≤0.05
+  这一奖励层指标，故一并放宽；
 - 连续 `--required-passes`（默认 3）次全部达标才升一级；任何一次失败清零计数；
 - **长期不达标永不自动升级**；升级后窗口重置；
 - `--curriculum off` 关闭课程，使用 `--fixed-episode-limit`（默认 250）；

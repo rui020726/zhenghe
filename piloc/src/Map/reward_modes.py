@@ -41,7 +41,7 @@ class RewardWeights:
     coverage: float = 2.0
     finish: float = 3.0
     time_cost: float = 0.5
-    collision: float = 0.2
+    collision: float = 1.0
     repeat: float = 0.0
     pheromone: float = 0.0
     potential_beta: float = 1.0
@@ -64,7 +64,7 @@ class RewardWeights:
             coverage=float(weights.get("coverage", 2.0)),
             finish=float(weights.get("finish", 3.0)),
             time_cost=float(weights.get("time_cost", 0.5)),
-            collision=float(weights.get("collision", 0.2)),
+            collision=float(weights.get("collision", 1.0)),
             repeat=float(weights.get("repeat", 0.0)),
             pheromone=float(weights.get("pheromone", 0.0)),
             potential_beta=float(potential_beta),
