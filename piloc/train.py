@@ -363,7 +363,29 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--log-every", type=int, default=100, help="how often to record episode metrics")
     parser.add_argument("--resume", default=None, help="a shared_mappo_model_*.pth to continue from")
     parser.add_argument("--no-tensorboard", action="store_true", help="skip TensorBoard logging")
+    parser.add_argument(
+        "--track-reward-terms",
+        action="store_true",
+        help="record the per-step reward decomposition in the episode metrics",
+    )
     return parser
+
+
+def build_search_environment(args: argparse.Namespace) -> Environment:
+    """Build the search environment from the run's own command-line settings.
+
+    ``main`` builds it once before training and rebuilds it at every episode
+    boundary. The rebuild used to pass ``num_agents`` alone, so a non-default
+    ``--num-goals`` was silently replaced by ``configs.num_goals`` from the second
+    episode on: the curriculum then trained against a different world than the one
+    ``write_run_meta`` recorded. Both sites go through here so the two cannot drift
+    apart again.
+    """
+    return Environment(
+        num_agents=args.num_agents,
+        num_goals=args.num_goals,
+        track_reward_terms=args.track_reward_terms,
+    )
 
 
 def main(argv=None) -> int:
@@ -394,7 +416,7 @@ def main(argv=None) -> int:
     start_time = time.time()
     writer = None if args.no_tensorboard else SummaryWriter(log_dir=str(directories["tb_logs"]))
 
-    env = Environment(num_agents=args.num_agents, num_goals=args.num_goals)
+    env = build_search_environment(args)
     # 121 是 obs_radius=5 的信息素窗口 (2*5+1)^2，4 是动作数；网络形状在 Actor/Critic 内部固定，
     # dim_info 只决定 buffer 的观测宽度。
     dim_info = {f'agent_{i}': [121, 4] for i in range(args.num_agents)}
@@ -419,6 +441,7 @@ def main(argv=None) -> int:
             "save_every": args.save_every,
             "log_every": args.log_every,
             "resume": args.resume,
+            "track_reward_terms": args.track_reward_terms,
             "gamma": gamma,
             "actor_lr": actor_lr,
             "critic_lr": critic_lr,
@@ -448,6 +471,7 @@ def main(argv=None) -> int:
     env_agents = [agent_id for agent_id in env.agents]
     episode_reward = {agent_id: 0 for agent_id in env_agents}
     train_return = {agent_id: [] for agent_id in env_agents}
+    reward_term_sums = {agent_id: {} for agent_id in env_agents}
     obs = initialize_obs(env)
     two_channelmap = {}
     two_channelmap = env.two_channel_map(obs,two_channelmap)
@@ -466,7 +490,6 @@ def main(argv=None) -> int:
     next_obs2 = {}
     obs_pheromone = {}
     next_obs_pheromone = {}
-    num_agent = args.num_agents
     metrics = SearchEpisodeMetrics()
     metrics.reset(len(env.goals_pos))
     metrics_path = directories["root"] / "episode_metrics.jsonl"
@@ -486,6 +509,11 @@ def main(argv=None) -> int:
         # 环境更新
         next_obs, reward, terminated, repeat_Mark,next_two_channelmap= env.step(action,obs,rescue_actions,two_channelmap,E)
         metrics.observe(env, repeat_Mark)
+        if args.track_reward_terms:
+            for agent_id, terms in env.last_reward_terms.items():
+                bucket = reward_term_sums[agent_id]
+                for name, value in terms.items():
+                    bucket[name] = bucket.get(name, 0.0) + value
         for agentid,position in enumerate(env.agents_pos):
             x,y = position
             agent_id = f"agent_{agentid}"
@@ -524,6 +552,10 @@ def main(argv=None) -> int:
             episode_metrics.update(
                 {f"reward/{agent_id}": float(episode_reward[agent_id]) for agent_id in env_agents}
             )
+            if args.track_reward_terms:
+                for agent_id, terms in reward_term_sums.items():
+                    for name, value in terms.items():
+                        episode_metrics[f"reward_term/{agent_id}/{name}"] = float(value)
 
             if (episode_num + 1) % args.log_every == 0:
                 print(
@@ -543,7 +575,7 @@ def main(argv=None) -> int:
                     handle.write(json.dumps(episode_metrics, ensure_ascii=False) + "\n")
 
             episode_num += 1
-            env = Environment(num_agents=num_agent) # 重置环境
+            env = build_search_environment(args) # 重置环境
             obs = initialize_obs(env)  # 重置时间戳地图
             metrics.reset(len(env.goals_pos))
 
@@ -560,6 +592,7 @@ def main(argv=None) -> int:
                 Curriculum_Training = 0 # r_max更新时将其置0
 
             episode_reward = {agent_id: 0 for agent_id in env_agents}
+            reward_term_sums = {agent_id: {} for agent_id in env_agents}
             episode_reward_agent = 0
             step_t = 0
             t = random.randint(E-5, min(E+5, 250))

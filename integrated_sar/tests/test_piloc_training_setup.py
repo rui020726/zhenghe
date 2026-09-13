@@ -1,9 +1,10 @@
 """Tests for the PILOC training entry point's setup helpers.
 
-``piloc/train.py`` imports ``MAPPO`` at module scope, which pulls in tensorflow, so
-the whole module is gated on the training dependencies being present. The helpers
-themselves are pure configuration and bookkeeping: they are what make a run
-reproducible and its artefacts identifiable, which is why they are worth testing
+``piloc/train.py`` imports ``MAPPO`` at module scope, which pulls in torch, and
+``src.Map.timemap``, which pulls in gym, Pillow and matplotlib; some tests here build
+that real environment, so the whole module is gated on all of those being present.
+The helpers themselves are pure configuration and bookkeeping: they are what make a
+run reproducible and its artefacts identifiable, which is why they are worth testing
 separately from a training run that takes hours.
 """
 
@@ -24,7 +25,7 @@ _PILOC_DIR = _REPO_ROOT / "piloc"
 
 
 def _missing_dependency() -> str | None:
-    for name in ("torch", "tensorflow", "gym", "PIL"):
+    for name in ("torch", "gym", "PIL", "matplotlib"):
         if importlib.util.find_spec(name) is None:
             return f"{name} is not installed"
     return None
@@ -206,6 +207,56 @@ class CommandLineTests(unittest.TestCase):
         self.assertEqual(parsed.seed, 11)
         self.assertEqual(parsed.episodes, 5)
         self.assertEqual(parsed.save_every, 2)
+
+
+@unittest.skipIf(_SKIP_REASON is not None, _SKIP_REASON or "")
+class SearchEnvironmentSettingsTests(unittest.TestCase):
+    """The episode-boundary rebuild must keep the run's own settings.
+
+    ``main`` builds the environment once before training and rebuilds it at every
+    episode boundary. The rebuild used to pass ``num_agents`` alone, so a non-default
+    ``--num-goals`` was dropped and every episode after the first silently fell back
+    to ``configs.num_goals`` -- the run trained against a different world than the
+    one ``write_run_meta`` recorded.
+    """
+
+    def setUp(self) -> None:
+        self.train = _load_train_module()
+
+    def _args(self, argv: list[str]) -> Any:
+        import random
+
+        random.seed(11)
+        np.random.seed(11)
+        return self.train.build_parser().parse_args(argv)
+
+    def test_the_command_line_agents_and_goals_reach_the_environment(self) -> None:
+        environment = self.train.build_search_environment(
+            self._args(["--num-agents", "4", "--num-goals", "3"])
+        )
+
+        self.assertEqual(len(environment.agents_pos), 4)
+        self.assertEqual(len(environment.goals_pos), 3)
+
+    def test_the_defaults_are_the_configs_values(self) -> None:
+        configs = self.train.configs
+
+        environment = self.train.build_search_environment(self._args([]))
+
+        self.assertEqual(len(environment.agents_pos), configs.num_agents)
+        self.assertEqual(len(environment.goals_pos), configs.num_goals)
+
+    def test_the_reward_term_flag_reaches_the_environment(self) -> None:
+        environment = self.train.build_search_environment(
+            self._args(["--track-reward-terms"])
+        )
+
+        self.assertTrue(environment.track_reward_terms)
+
+    def test_reward_term_tracking_stays_off_unless_requested(self) -> None:
+        environment = self.train.build_search_environment(self._args([]))
+
+        self.assertFalse(environment.track_reward_terms)
 
 
 if __name__ == "__main__":

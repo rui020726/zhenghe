@@ -75,6 +75,19 @@ def map_partition(map):
     return partition_list
 
 
+def _add_reward_term(terms, agent_id, name, value):
+    """Record one reward term for diagnostics; no-op when tracking is off.
+
+    ``terms`` is None unless ``track_reward_terms`` is enabled, so the call sites in
+    ``step`` stay one line each. The recorded terms must add up to the reward that
+    step returns; ``test_piloc_reward_terms`` is what holds that invariant.
+    """
+    if terms is None:
+        return
+    bucket = terms[agent_id]
+    bucket[name] = bucket.get(name, 0.0) + float(value)
+
+
 class Environment:
     def __init__(self, num_agents: int = configs.num_agents, map_length: int = configs.init_env_settings[1],
                  obs_radius: int = configs.obs_radius, reward_fn: dict = configs.reward_fn, fix_density=None,
@@ -82,7 +95,7 @@ class Environment:
                  pheromone_decay=configs.pheromone_decay, test=False,
                  # === 新增：通信条件参数 ===
                  comm_failure_prob=0.05, comm_partial_loss_prob=0.10, comm_delay_prob=0.05, enable_comm_noise=True,
-                 map_filename=None):
+                 map_filename=None, track_reward_terms: bool = False):
         """
         新增参数:
         comm_failure_prob: 通信完全失败概率
@@ -96,6 +109,11 @@ class Environment:
         self.action_spaces = {agent: spaces.Discrete(4) for agent in self.agents}  # 每个智能体有4个离散动作
         self.curriculum = curriculum
         self.check_repeat_pos = []
+        # 逐项奖励分解日志：默认关闭。开启后 step() 把每步奖励拆成各项存进
+        # last_reward_terms，各分量之和恒等于返回给训练循环的奖励值。
+        self.track_reward_terms = track_reward_terms
+        self.last_reward_terms = {}
+        self._reexploration_parts = {}
 
         self.global_pheromone = np.full((60, 60), 0, dtype=np.float32)  # 初始化全局的信息素地图
         self.pheromone_decay = pheromone_decay  # 信息素挥发率
@@ -408,6 +426,10 @@ class Environment:
                             v = agent_map[nx, ny]
                             if 0 <= v <= 0.3:
                                 reExploration_reward += 1 + v / 0.3  # 获得再次探索的奖励
+            # 分解日志：把“已探索格子计数×0.01”与隐藏的无条件 -1 基线分开记录，
+            # 这是定位“累计奖励随回合变长而塌陷”的关键（每步每 agent 恒扣 1）。
+            if self.track_reward_terms:
+                self._reexploration_parts[agent_id] = (reExploration_reward * 0.01, -1.0)
             reExploration_reward = reExploration_reward * 0.01 - 1
             reExploration_reward_dict[agent_id] = reExploration_reward
             for goal_index, goal_pos in enumerate(self.goals_pos):
@@ -423,6 +445,8 @@ class Environment:
                     reExploration_reward_find_target += 1
             if reExploration_reward_find_target != 0:
                 reExploration_reward_dict[agent_id] = reExploration_reward_find_target * 0.1
+                if self.track_reward_terms:
+                    self._reexploration_parts[agent_id] = (reExploration_reward_find_target * 0.1, 0.0)
             # 更新当前智能体
             for dx in range(-vision_radius, vision_radius + 1):  # x轴方向从-1到1
                 for dy in range(-vision_radius, vision_radius + 1):  # y轴方向从-1到1
@@ -483,6 +507,9 @@ class Environment:
         new_goals_pos = []
 
         rewards = {agent_id: 0 for agent_id in actions.keys()}
+        terms = {agent_id: {} for agent_id in actions.keys()} if self.track_reward_terms else None
+        if self.track_reward_terms:
+            self._reexploration_parts = {}
         checking_list = [i for i in range(self.num_agents)]
 
         next_pos = np.copy(self.agents_pos)
@@ -497,10 +524,12 @@ class Environment:
             agent_key = f"agent_{agent_id}"  # 获取字典中的键，如 'agent_0', 'agent_1' 等
             if np.any(next_pos[agent_id] < 0) or np.any(next_pos[agent_id] >= self.map_size[0]):
                 rewards[agent_key] += self.reward_fn['collision']
+                _add_reward_term(terms, agent_key, 'collision', self.reward_fn['collision'])
                 next_pos[agent_id] = self.agents_pos[agent_id]
                 checking_list.remove(agent_id)
             elif self.map[tuple(next_pos[agent_id])] == 1:  # Check for obstacle
                 rewards[agent_key] += self.reward_fn['collision']
+                _add_reward_term(terms, agent_key, 'collision', self.reward_fn['collision'])
                 next_pos[agent_id] = self.agents_pos[agent_id]
                 checking_list.remove(agent_id)
 
@@ -514,6 +543,8 @@ class Environment:
             v = self.calculate_pheromone(x, y)
             v_ = self.local_pheromone[f"agent_{i}"]  # 获取上一时刻的信息素浓度
             rewards[f"agent_{i}"] += 0.1 * (v_ - v) / v_ + 0.1 * (v_ - v)  # 奖励设置选用相对变化和绝对变化
+            _add_reward_term(terms, f"agent_{i}", 'pheromone_rel', 0.1 * (v_ - v) / v_)
+            _add_reward_term(terms, f"agent_{i}", 'pheromone_abs', 0.1 * (v_ - v))
             self.local_pheromone[f"agent_{i}"] = v  # 更新信息素浓度
 
         self.steps += 1
@@ -529,6 +560,7 @@ class Environment:
             for agent_id in repeat_mark:  # 遍历 repeat_mark 中的每个智能体编号
                 if agent_id in rewards:  # 确保 rewards 中有这个智能体的编号
                     rewards[agent_id] -= 0.1  # 将对应智能体的奖励减去 0.1
+                    _add_reward_term(terms, agent_id, 'repeat', -0.1)
 
         # 检查是否有智能体找到目标
         done = {agent_id: False for agent_id in actions.keys()}
@@ -559,6 +591,12 @@ class Environment:
 
         # 检测所有目标是否均被观测到
         if len(self.goals_pos) == 0:
+            # 分解日志：finish 走的是 update()（覆盖），本步此前累计的碰撞/信息素/重复
+            # 项会被丢掉；把被丢弃的量单独记一项，各分量之和才仍等于最终奖励。
+            if terms is not None:
+                for agent_id in actions.keys():
+                    _add_reward_term(terms, agent_id, 'finish_dropped_prior', -rewards[agent_id])
+                    _add_reward_term(terms, agent_id, 'finish', self.reward_fn['finish'])
             rewards.update({agent_id: self.reward_fn['finish'] for agent_id in actions.keys()})
             done = {agent_id: True for agent_id in actions.keys()}
         else:
@@ -577,6 +615,13 @@ class Environment:
             reexploration_reward = reExploration_reward.get(agent_id, 0)
             rewards[
                 agent_id] += exploration_reward * exp_xishu + reexploration_reward  # Add 0.4 times the exploration reward
+            _add_reward_term(terms, agent_id, 'exploration_new', exploration_reward * exp_xishu)
+            if terms is not None:
+                shaped, baseline = self._reexploration_parts.get(
+                    agent_id, (float(reexploration_reward), 0.0)
+                )
+                _add_reward_term(terms, agent_id, 'reexploration_shaped', shaped)
+                _add_reward_term(terms, agent_id, 'reexploration_baseline', baseline)
 
         # Return updated observations, rewards, done flags, and info
         updated_obs = obs  # `obs` is now updated with the latest timestamp maps
@@ -616,6 +661,8 @@ class Environment:
         result = {}
         for key in rewards:
             result[key] = rewards[key] + reward_comm[key]
+            _add_reward_term(terms, key, 'teammate_proximity', reward_comm[key])
+        self.last_reward_terms = terms if terms is not None else {}
 
         return updated_obs, result, done, repeat_mark, next_two_channelmap
 
