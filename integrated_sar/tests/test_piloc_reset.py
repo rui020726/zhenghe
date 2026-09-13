@@ -122,6 +122,10 @@ class _StandInTimemapEnvironment:
             dtype=bool,
         )
 
+    def reseed(self, seed: int) -> None:
+        """Mirror the real environment's per-instance RNG replay."""
+        self._py_rng = random.Random(seed)
+
 
 def _stand_in_timemap_module() -> types.ModuleType:
     module = types.ModuleType("integrated_sar_stand_in_timemap")
@@ -175,6 +179,10 @@ class _StubTimemapEnvironment:
         self.steps = 0
         self.last_actions = np.zeros((self.num_agents, 5, 11, 11), dtype=bool)
 
+    def reseed(self, seed: int) -> None:
+        """Mirror the real environment's per-instance RNG replay."""
+        self._py_rng = random.Random(seed)
+
 
 class PilocResetTests(unittest.TestCase):
     def test_reset_clears_pheromone_history_and_comm_state(self) -> None:
@@ -216,16 +224,32 @@ class PilocResetTests(unittest.TestCase):
         )
         self.assertEqual(environment.delayed_map_buffer, [])
 
-    def test_reset_reseeds_both_random_generators(self) -> None:
+    def test_reset_replays_the_environment_rng_stream(self) -> None:
+        """A reset must replay the per-instance stream, not the global modules.
+
+        The environment owns its RNG now, so ``reset_piloc_environment`` calls
+        ``reseed`` instead of ``random.seed``/``np.random.seed``. Two resets on one
+        seed must leave the environment's own stream in the same state, and must
+        not touch the global streams the training loop consumes.
+        """
         environment = _StubTimemapEnvironment()
         scenario = _scenario()
 
+        random.seed(999)
+        np.random.seed(999)
+        global_before = (random.random(), float(np.random.random()))
+
         reset_piloc_environment(environment, scenario, seed=13)
-        draws = (random.random(), float(np.random.random()))
+        draws = (environment._py_rng.random(), environment._py_rng.random())
         reset_piloc_environment(environment, scenario, seed=13)
-        again = (random.random(), float(np.random.random()))
+        again = (environment._py_rng.random(), environment._py_rng.random())
 
         self.assertEqual(draws, again)
+        # The globals were not reseeded by the reset: replaying them continues the
+        # 999 stream exactly, proving the fixed validation seed can't be consumed.
+        random.seed(999)
+        np.random.seed(999)
+        self.assertEqual((random.random(), float(np.random.random())), global_before)
 
 
 class BuildPilocEnvironmentTests(unittest.TestCase):

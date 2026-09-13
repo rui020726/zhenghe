@@ -550,13 +550,18 @@ class MAPPO:
             for p in agent.critic_optimizer.param_groups:
                 p['lr'] = lr_c_now
 
-    def save(self, model_dir,episode_num):
+    def save(self, model_dir,episode_num, meta=None):
         # 保存共享的 full_model、actor、critic 的状态字典（仅需保存一次，无需区分智能体）
+        os.makedirs(model_dir, exist_ok=True)
         state = {
             'full_model': self.agents.full_model.state_dict(),  # 假设 self.agents 是共享的单个 Agent 实例
             'actor': self.agents.actor.state_dict(),
             'critic': self.agents.critic.state_dict(),
-            'optimizer': self.agents.optimizer.state_dict()  # 可选：如需保存优化器状态
+            'optimizer': self.agents.optimizer.state_dict(),  # 可选：如需保存优化器状态
+            'episode': episode_num,
+            # 训练配置随权重走：一个 checkpoint 必须自带它是哪套奖励/折扣训出来的，
+            # 否则事后无法解释，也无法安全地送去联合推理。
+            'run_meta': dict(meta) if meta else None,
         }
         torch.save(state, os.path.join(model_dir, f'shared_mappo_model_21_{episode_num}.pth'))
     # 21为修正通信丢失的模型

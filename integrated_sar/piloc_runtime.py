@@ -147,9 +147,12 @@ def reset_piloc_environment(
     ``delayed_map_buffer`` all still describe the previous episode. The trained
     policy reads the pheromone window, so without the rebuild the second episode
     steers around stale trails and counts last episode's traffic.
+
+    The environment now owns its own RNG streams, so a reset replays them via
+    ``reseed`` rather than reseeding the global ``random``/``numpy`` modules --
+    which would otherwise be consumed by (and interfere with) the training loop.
     """
-    random.seed(seed)
-    np.random.seed(seed)
+    environment.reseed(seed)
     environment.load(
         np.asarray(scenario.obstacles, dtype=np.int32),
         np.asarray([[p.row, p.col] for p in scenario.agent_positions], dtype=np.int32),

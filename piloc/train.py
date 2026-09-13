@@ -23,18 +23,14 @@ if _SRC_DDQN not in sys.path:
 import configs
 from src.DDQN.Agent import MAPPO
 from src.Map.timemap import Environment
+from src.curriculum import CurriculumGate, default_stages
 
 SHARED_MODEL_PATTERN = re.compile(r"^shared_mappo_model_(\d+)_(\d+)\.pth$")
 
-def repeat_check(repeat_mark,env,obs,rescue_policy):
-    all_paths = {}
-    if len(repeat_mark) != 0:
-        for agent_id in repeat_mark:
-            agent_index = int(agent_id.split('_')[1])  # 提取数字部分并转换为整数
-            path = rescue_policy.rescue_action(agent_index,env)
-            # 将路径保存到字典中，键是智能体的ID，值是智能体的路径
-            all_paths[agent_id] = path
-    return all_paths
+# repeat_check / rescue actions are deliberately NOT wired into training: a rescue
+# action would overwrite the PPO-sampled action while the buffer still stores the
+# policy's log-prob of the sampled one, making the recorded transition inconsistent
+# with the executed action. piloc/test.py keeps the rescue path for evaluation only.
 
 def get_local_ph(global_ph, x, y, view_radius=5):
     """ 根据智能体当前位置裁剪局部信息素视野 """
@@ -297,6 +293,10 @@ class SearchEpisodeMetrics:
     Coverage is measured from the per-agent observation maps because
     ``env.global_timestamp_maps`` is initialised once in the constructor and never
     updated, so it stays uniformly unknown forever.
+
+    Collision, short-cycle and pure-re-coverage are tracked separately (from
+    ``env.last_step_stats``) so a rising "repeat" signal can be attributed to the
+    right cause instead of all three being conflated.
     """
 
     def __init__(self) -> None:
@@ -308,6 +308,9 @@ class SearchEpisodeMetrics:
         self.steps = 0
         self.moves = 0
         self.repeat_steps = 0
+        self.collision_steps = 0
+        self.no_new_cell_steps = 0
+        self.coverage_sum = 0.0
         self._previous_positions: list[tuple[int, int]] | None = None
 
     def observe(self, env, repeat_marks) -> None:
@@ -322,6 +325,12 @@ class SearchEpisodeMetrics:
             self.repeat_steps += 1
         if self.first_discovery_step is None and len(env.goals_pos) < self.initial_goals:
             self.first_discovery_step = self.steps
+        stats = getattr(env, "last_step_stats", {}) or {}
+        if any(stats.get("collisions", {}).values()):
+            self.collision_steps += 1
+        if stats.get("new_cells", 1) == 0:
+            self.no_new_cell_steps += 1
+        self.coverage_sum += float(stats.get("coverage_after", 0.0))
 
     def as_dict(self, env, obs) -> dict:
         remaining = len(env.goals_pos)
@@ -331,15 +340,27 @@ class SearchEpisodeMetrics:
         unseen = np.ones(obstacles.shape, dtype=bool)
         for agent_obs in obs.values():
             unseen &= np.asarray(agent_obs) == 0.5
+        coverage = float(np.count_nonzero(~unseen & (obstacles != 1)) / free) if free else 0.0
         return {
             "targets_discovered": discovered,
             "discovery_rate": discovered / self.initial_goals if self.initial_goals else 0.0,
             "first_discovery_step": self.first_discovery_step,
-            "coverage": float(np.count_nonzero(~unseen & (obstacles != 1)) / free) if free else 0.0,
+            "coverage": coverage,
+            # coverage AUC: mean coverage over the episode, so a curve that rises
+            # early scores higher than one that only reaches the same end value late.
+            "coverage_auc": self.coverage_sum / self.steps if self.steps else 0.0,
             "travel": self.moves,
+            # three distinct signals, no longer one conflated "repeat":
             "repeat_ratio": self.repeat_steps / self.steps if self.steps else 0.0,
+            "collision_rate": self.collision_steps / self.steps if self.steps else 0.0,
+            "recoverage_rate": self.no_new_cell_steps / self.steps if self.steps else 0.0,
             "episode_steps": self.steps,
         }
+
+
+def default_curriculum_stages():
+    """Episode-limit ladder from 10 to 250 in steps of 10 (mirrors the old E schedule)."""
+    return list(range(10, 251, 10))
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -368,10 +389,40 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="record the per-step reward decomposition in the episode metrics",
     )
+    # --- 奖励与折扣 ---
+    parser.add_argument(
+        "--reward-mode",
+        choices=("legacy", "v2", "potential"),
+        default=configs.reward_mode,
+        help="reward function; legacy keeps the old formula for A/B control",
+    )
+    parser.add_argument("--gamma", type=float, default=configs.GAMMA,
+                        help="discount factor; V2 training recommends 0.99")
+    parser.add_argument("--lmbda", type=float, default=configs.LMBDA, help="GAE lambda")
+    parser.add_argument("--potential-beta", type=float, default=configs.POTENTIAL_BETA,
+                        help="potential-based shaping coefficient (potential mode)")
+    # --- 课程门控 ---
+    parser.add_argument(
+        "--curriculum",
+        choices=("gate", "off"),
+        default="gate",
+        help="gate: task-metric curriculum; off: fixed episode limit",
+    )
+    parser.add_argument("--fixed-episode-limit", type=int, default=configs.T_MAX,
+                        help="episode step limit when --curriculum off")
+    parser.add_argument("--eval-every", type=int, default=50,
+                        help="validate on the fixed map every N training episodes")
+    parser.add_argument("--required-passes", type=int, default=3,
+                        help="consecutive passing validations required to advance a stage")
+    parser.add_argument("--validation-episodes", type=int, default=3,
+                        help="episodes averaged into each validation score")
+    parser.add_argument("--validation-seed", type=int, default=None,
+                        help="fixed seed for the deterministic validation rollout "
+                             "(defaults to seed + 1_000_000_007, kept off the training RNG)")
     return parser
 
 
-def build_search_environment(args: argparse.Namespace) -> Environment:
+def build_search_environment(args: argparse.Namespace, seed: int = None) -> Environment:
     """Build the search environment from the run's own command-line settings.
 
     ``main`` builds it once before training and rebuilds it at every episode
@@ -380,26 +431,120 @@ def build_search_environment(args: argparse.Namespace) -> Environment:
     episode on: the curriculum then trained against a different world than the one
     ``write_run_meta`` recorded. Both sites go through here so the two cannot drift
     apart again.
+
+    ``seed`` pins the environment's own RNG stream; the validation rollout passes a
+    fixed seed so the training process can never consume it.
     """
     return Environment(
         num_agents=args.num_agents,
         num_goals=args.num_goals,
         track_reward_terms=args.track_reward_terms,
+        reward_mode=args.reward_mode,
+        gamma=args.gamma,
+        t_max=configs.T_MAX,
+        potential_beta=args.potential_beta,
+        seed=seed,
     )
+
+
+def seed_all(seed: int) -> None:
+    """Seed every random source a rollout touches.
+
+    Python's ``random``, NumPy, Torch CPU and Torch CUDA all draw during training
+    (env layout, vision noise, action sampling, weight init). Missing any one of
+    them is why two runs on the same seed diverged. CUDA kernels can still be
+    non-deterministic (cudnn.benchmark is on in the policy module), so this
+    guarantees reproducibility on CPU and only statistical reproducibility on GPU;
+    the run metadata records which device was used.
+    """
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+
+
+def select_action_deterministic(two_channelmap, policy, env, env_agents, device):
+    """Argmax over the policy probabilities -- one state, one action, no sampling."""
+    actions = {}
+    for agent_id in env_agents:
+        obstacle_map = two_channelmap[agent_id]["obstacle_map"]
+        explore_map = two_channelmap[agent_id]["explore_map"]
+        agent_intid = int(agent_id.split("_")[-1])
+        x, y = env.agents_pos[agent_intid]
+        pheromone_map = get_local_ph(env.global_pheromone, x, y)
+        pheromone_tensor = torch.tensor(pheromone_map, dtype=torch.float32).unsqueeze(0).to(device)
+        obs = np.stack([obstacle_map, explore_map], axis=0)
+        obs_tensor = torch.tensor(obs, dtype=torch.float32).unsqueeze(0).to(device)
+        with torch.no_grad():
+            # get_action returns (sampled_action, probs); take the probs row.
+            _sampled, probs = policy.agents.get_action(obs_tensor, pheromone_tensor, batch_size=1)
+        actions[agent_id] = int(torch.argmax(probs[0]).item())
+    return actions
+
+
+def validation_score(report: dict) -> float:
+    """A single task-metric score for choosing the best checkpoint.
+
+    Deliberately built only from coverage / discovery / collision / repeat -- never
+    the cumulative reward -- so the best model is the one that searches well, not
+    the one that happened to collect reward on a long episode.
+    """
+    return (
+        report["coverage_auc"]
+        + report["discovery_rate"]
+        - report["collision_rate"]
+        - 0.5 * report["recoverage_rate"]
+    )
+
+
+def run_validation(args, policy, device, episode_limit: int, seed: int) -> dict:
+    """Average deterministic task metrics over a few fixed-seed validation episodes.
+
+    The environment is rebuilt from a fixed seed every call, so the map, robot
+    starts and hidden targets are identical across validations and are never
+    consumed by the training RNG.
+    """
+    env_agents = [f"agent_{i}" for i in range(args.num_agents)]
+    totals: dict = {}
+    episodes = max(1, int(args.validation_episodes))
+    for episode in range(episodes):
+        env = build_search_environment(args, seed=seed + episode)
+        for agent in env_agents:
+            env.action_space(agent).seed(seed=seed + episode)
+        obs = initialize_obs(env)
+        two_channelmap = env.two_channel_map(obs, {})
+        metrics = SearchEpisodeMetrics()
+        metrics.reset(len(env.goals_pos))
+        step_t = 0
+        while step_t < episode_limit:
+            step_t += 1
+            action = select_action_deterministic(two_channelmap, policy, env, env_agents, device)
+            obs, _reward, terminated, repeat_mark, two_channelmap = env.step(
+                action, obs, {}, two_channelmap, episode_limit
+            )
+            metrics.observe(env, repeat_mark)
+            if any(terminated.values()):
+                break
+        report = metrics.as_dict(env, obs)
+        for key, value in report.items():
+            if isinstance(value, (int, float)):
+                totals[key] = totals.get(key, 0.0) + float(value)
+    return {key: value / episodes for key, value in totals.items()}
 
 
 def main(argv=None) -> int:
     args = build_parser().parse_args(argv)
 
-    # 使用configs中的超参数
-    gamma = configs.GAMMA
+    # 使用configs中的超参数；gamma / lmbda 可由命令行覆盖并写入元数据。
+    gamma = args.gamma
     actor_lr = configs.ACTOR_LR
     critic_lr = configs.CRITIC_LR
     horizon = configs.HORIZON
     clip_param = configs.CLIP_PARAM
     k_epochs = configs.K_EPOCHS
     minibatch_size = configs.MINIBATCH_SIZE
-    lmbda = configs.LMBDA
+    lmbda = args.lmbda
     huber_delta = configs.HUBER_DELTA
     device = resolve_device(args.device)
     trick = dict(configs.TRICK)
@@ -409,14 +554,16 @@ def main(argv=None) -> int:
     model_dir1 = model_dir
 
     # One seed drives every random source the episode depends on, so a run is reproducible.
-    random.seed(args.seed)
-    np.random.seed(args.seed)
-    torch.manual_seed(args.seed)
+    seed_all(args.seed)
+
+    validation_seed = (
+        args.validation_seed if args.validation_seed is not None else args.seed + 1_000_000_007
+    )
 
     start_time = time.time()
     writer = None if args.no_tensorboard else SummaryWriter(log_dir=str(directories["tb_logs"]))
 
-    env = build_search_environment(args)
+    env = build_search_environment(args, seed=args.seed)
     # 121 是 obs_radius=5 的信息素窗口 (2*5+1)^2，4 是动作数；网络形状在 Actor/Critic 内部固定，
     # dim_info 只决定 buffer 的观测宽度。
     dim_info = {f'agent_{i}': [121, 4] for i in range(args.num_agents)}
@@ -432,30 +579,67 @@ def main(argv=None) -> int:
         num_agent=args.num_agents,
     )
 
+    if args.curriculum == "gate":
+        stages = default_curriculum_stages()
+        gate = CurriculumGate(
+            stages=default_stages(stages),
+            eval_every=args.eval_every,
+            required_passes=args.required_passes,
+        )
+    else:
+        stages = None
+        gate = CurriculumGate(stages=None, fixed_limit=args.fixed_episode_limit)
+
+    run_settings = {
+        "num_agents": args.num_agents,
+        "num_goals": args.num_goals,
+        "episodes": args.episodes,
+        "save_every": args.save_every,
+        "log_every": args.log_every,
+        "resume": args.resume,
+        "track_reward_terms": args.track_reward_terms,
+        "gamma": gamma,
+        "actor_lr": actor_lr,
+        "critic_lr": critic_lr,
+        "horizon": horizon,
+        "clip_param": clip_param,
+        "k_epochs": k_epochs,
+        "minibatch_size": minibatch_size,
+        "lmbda": lmbda,
+        "huber_delta": huber_delta,
+        "trick": trick,
+        "reward_fn": dict(configs.reward_fn),
+        "obs_radius": configs.obs_radius,
+        "pheromone_decay": configs.pheromone_decay,
+        # 奖励与课程：模式、全部权重、门控配置必须随运行落盘，
+        # 否则事后无法判断一个 checkpoint 是哪套奖励训出来的。
+        "reward_mode": args.reward_mode,
+        "reward_v2_weights": dict(configs.REWARD_V2),
+        "potential_beta": args.potential_beta,
+        "t_max": configs.T_MAX,
+        "curriculum": args.curriculum,
+        "curriculum_stage_limits": stages if args.curriculum == "gate" else None,
+        "eval_every": args.eval_every,
+        "required_passes": args.required_passes,
+        "validation_seed": validation_seed,
+        "fixed_episode_limit": args.fixed_episode_limit,
+        "cuda_deterministic": False,  # cudnn.benchmark=True in the policy module
+    }
+    # checkpoint 内嵌的最小可解释元数据：gamma、lambda、奖励模式与全部权重。
+    checkpoint_meta = {
+        "gamma": gamma,
+        "lmbda": lmbda,
+        "reward_mode": args.reward_mode,
+        "reward_v2_weights": dict(configs.REWARD_V2),
+        "potential_beta": args.potential_beta,
+        "t_max": configs.T_MAX,
+        "seed": args.seed,
+        "device": str(device),
+    }
+
     write_run_meta(
         directories["root"],
-        settings={
-            "num_agents": args.num_agents,
-            "num_goals": args.num_goals,
-            "episodes": args.episodes,
-            "save_every": args.save_every,
-            "log_every": args.log_every,
-            "resume": args.resume,
-            "track_reward_terms": args.track_reward_terms,
-            "gamma": gamma,
-            "actor_lr": actor_lr,
-            "critic_lr": critic_lr,
-            "horizon": horizon,
-            "clip_param": clip_param,
-            "k_epochs": k_epochs,
-            "minibatch_size": minibatch_size,
-            "lmbda": lmbda,
-            "huber_delta": huber_delta,
-            "trick": trick,
-            "reward_fn": dict(configs.reward_fn),
-            "obs_radius": configs.obs_radius,
-            "pheromone_decay": configs.pheromone_decay,
-        },
+        settings=run_settings,
         seed=args.seed,
         device=device,
         dim_info=dim_info,
@@ -478,12 +662,11 @@ def main(argv=None) -> int:
     for agent in env_agents:  # 给每个智能体的动作空间设置种子
         env.action_space(agent).seed(seed=args.seed)
     rescue_actions = {}
-    reward_max_M = -float('inf')  # 初始化为很小的负数，便于更新第一回合的奖励
-    t = 10
-    Curriculum_Training = 0 # 用于记录有多少个回合智能体的奖励函数没有超过R_max
-    E = 10 # 用于随机生成环境步数,从40步开始训练
+    # E 现在只是当前课程阶段的回合步数上限，由 CurriculumGate 决定；
+    # 它不再代表“累计奖励刷新”，升级只看验证任务指标。
+    E = gate.episode_limit()
+    best_validation_score = -float("inf")
     step_reward_t = 0
-    episode_reward_agent = 0 # 回合奖励初始化为0
     obs1 = {}
     obs2 = {}
     next_obs1 = {}
@@ -495,7 +678,7 @@ def main(argv=None) -> int:
     metrics_path = directories["root"] / "episode_metrics.jsonl"
 
     # 训练循环
-    while E <= 250 and episode_num < args.episodes:
+    while episode_num < args.episodes:
         step += 1
         step_t +=1
         step_reward_t += 1
@@ -519,10 +702,10 @@ def main(argv=None) -> int:
             agent_id = f"agent_{agentid}"
             next_obs_pheromone[agent_id] = get_local_ph(env.global_pheromone,x,y)
 
-        #for agent_id in env_agents:
-            #writer.add_scalar(f'step_reward_{agent_id}', reward[agent_id],step_reward_t)
-        # 更新obs
-        done = {agent_id: (terminated[agent_id] or step_t >= t) for agent_id in env_agents}
+        # done 的两种语义分开：terminated 是真实终止（全部目标完成），
+        # step_t >= E 是时间上限截断。adv_dones 用截断后的 done（GAE 边界），
+        # done_bool（critic bootstrap）只用真实终止，避免把截断当成价值吸收态。
+        done = {agent_id: (terminated[agent_id] or step_t >= E) for agent_id in env_agents}
         done_bool = {agent_id: terminated[agent_id] for agent_id in env_agents}
 
         for agentid in two_channelmap.keys():
@@ -539,14 +722,20 @@ def main(argv=None) -> int:
         obs = next_obs
         two_channelmap = next_two_channelmap
         # 完成目标 或者 达到最大环境步 ，这一个回合结束
-        if any(done.values()) or step_t >= t:
+        if any(done.values()) or step_t >= E:
             # 先用回合结束时的环境与观测统计搜索指标，环境重建之后就拿不到了
             episode_metrics = metrics.as_dict(env, obs)
+            episode_reward_total = sum(episode_reward.values())
+            episode_length = episode_metrics["episode_steps"]
             episode_metrics.update(
                 {
                     "episode": episode_num + 1,
                     "env_steps": E,
-                    "curriculum_stall": Curriculum_Training,
+                    "curriculum_stage": gate.stage_index,
+                    "episode_return": float(episode_reward_total),
+                    "mean_reward_per_step": float(episode_reward_total / episode_length)
+                    if episode_length
+                    else 0.0,
                 }
             )
             episode_metrics.update(
@@ -559,10 +748,11 @@ def main(argv=None) -> int:
 
             if (episode_num + 1) % args.log_every == 0:
                 print(
-                    f"Episode {episode_num + 1} | E={E} stall={Curriculum_Training} | "
+                    f"Episode {episode_num + 1} | stage={gate.stage_index} E={E} | "
                     f"discovered={episode_metrics['targets_discovered']} "
                     f"coverage={episode_metrics['coverage']:.3f} "
-                    f"first_find={episode_metrics['first_discovery_step']} | "
+                    f"return={episode_metrics['episode_return']:.1f} "
+                    f"mean_r/step={episode_metrics['mean_reward_per_step']:.3f} | "
                     f"Reward: {episode_reward}"
                 )
                 for agent_id in env_agents:
@@ -575,40 +765,58 @@ def main(argv=None) -> int:
                     handle.write(json.dumps(episode_metrics, ensure_ascii=False) + "\n")
 
             episode_num += 1
-            env = build_search_environment(args) # 重置环境
+
+            # 课程门控：只喂验证任务指标，绝不喂累计奖励。达到评估边界时做一次
+            # 固定地图/固定 seed 的确定性验证，连续达标才升级。
+            gate.register_episode()
+            if gate.should_evaluate():
+                report = run_validation(args, policy, device, gate.episode_limit(), validation_seed)
+                # 只把任务指标喂给门控；repeat_ratio 对应门控的 repeat_rate 阈值。
+                gate_metrics = {
+                    "coverage": report["coverage"],
+                    "coverage_auc": report["coverage_auc"],
+                    "discovery_rate": report["discovery_rate"],
+                    "collision_rate": report["collision_rate"],
+                    "repeat_rate": report["repeat_ratio"],
+                }
+                advanced = gate.submit_validation(gate_metrics)
+                score = validation_score(report)
+                if writer is not None:
+                    for key, value in report.items():
+                        writer.add_scalar(f"validation/{key}", value, episode_num)
+                    writer.add_scalar("validation/stage", gate.stage_index, episode_num)
+                # 最优 checkpoint 按验证任务指标保存，不按训练累计回报。
+                if score > best_validation_score:
+                    best_validation_score = score
+                    policy.save(str(directories["root"] / "best"), episode_num, meta=checkpoint_meta)
+                print(
+                    f"[validation] episode {episode_num} stage={gate.stage_index} "
+                    f"score={score:.3f} coverage={report['coverage']:.3f} "
+                    f"discovery={report['discovery_rate']:.3f} advanced={advanced}"
+                )
+                # 阶段可能已变，重新读取当前回合步数上限。
+                E = gate.episode_limit()
+
+            env = build_search_environment(args, seed=args.seed + episode_num) # 重置环境
+            for agent in env_agents:
+                env.action_space(agent).seed(seed=args.seed + episode_num)
             obs = initialize_obs(env)  # 重置时间戳地图
             metrics.reset(len(env.goals_pos))
 
             # 保存模型：只在回合边界，且跳过 episode 0（0 % every == 0 会让第一回合每步都存盘）
             if should_save_checkpoint(episode_num, args.save_every):
-                policy.save(model_dir, episode_num)
-
-            # 用于计算该回合奖励
-            for agent_reward in episode_reward.values() :
-                episode_reward_agent += agent_reward
-            # 如果r_max更新，重新计算有多少轮没有更新
-            if episode_reward_agent > reward_max_M:
-                reward_max_M = episode_reward_agent
-                Curriculum_Training = 0 # r_max更新时将其置0
+                policy.save(model_dir, episode_num, meta=checkpoint_meta)
 
             episode_reward = {agent_id: 0 for agent_id in env_agents}
             reward_term_sums = {agent_id: {} for agent_id in env_agents}
-            episode_reward_agent = 0
             step_t = 0
-            t = random.randint(E-5, min(E+5, 250))
-            Curriculum_Training += 1 # 用于记录r_max有没有变化
-            # 如果200个回合没有r_max更新，则增加E，增加环境时间步
-            if Curriculum_Training >= 200:
-                E += 10
-                reward_max_M = -float('inf')
-                Curriculum_Training = 0 #
 
         # 每隔一定步数更新网络
         if step % horizon == 0:
             policy.learn(minibatch_size, gamma, lmbda, clip_param, k_epochs, entropy_coefficient=0.01, huber_delta=huber_delta)
 
     print(f"Training completed in {time.time() - start_time} seconds")
-    policy.save(model_dir1,episode_num)
+    policy.save(model_dir1, episode_num, meta=checkpoint_meta)
 
     # 保存训练结果
     train_return_ = np.array([train_return[agent_id] for agent_id in env.agents])
