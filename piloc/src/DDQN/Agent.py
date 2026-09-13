@@ -1,4 +1,3 @@
-import tensorflow as tf
 import configs
 import numpy as np
 import torch.optim as optim

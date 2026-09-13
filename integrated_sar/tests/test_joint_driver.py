@@ -50,7 +50,7 @@ from integrated_sar.task_registry import TaskRegistry
 _REAL_FIND_SPEC = importlib.util.find_spec
 HAS_TORCH = _REAL_FIND_SPEC("torch") is not None
 # timemap imports gym, matplotlib and Pillow at module scope; the search policy
-# needs torch and tensorflow on top.
+# needs torch on top.
 HAS_PILOC_ENV = all(
     _REAL_FIND_SPEC(name) is not None for name in ("gym", "PIL", "matplotlib")
 )

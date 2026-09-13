@@ -62,7 +62,7 @@ class _StandInTimemapEnvironment:
     marks the drawn start cells in the pheromone map; ``load`` replaces the map,
     positions, goals, ``steps`` and the action cache and nothing else. Going through
     it lets ``build_piloc_environment`` itself be exercised -- the 60x60 guard, the
-    two-step construction and the derived-state rebuild -- on a machine that has no
+    construction and the derived-state rebuild -- on a machine that has no
     gym, matplotlib or Pillow.
     """
 
@@ -232,9 +232,10 @@ class BuildPilocEnvironmentTests(unittest.TestCase):
     """The production construction path, with ``timemap`` stood in for.
 
     ``build_piloc_environment`` refuses any scenario that is not 60x60 because the
-    trained policy's timestamp maps are built for that canvas, and it constructs the
-    environment in two steps so the shared scenario map survives ``__init__``. Both
-    behaviours are checked here without gym, matplotlib or Pillow.
+    trained policy's timestamp maps are built for that canvas, and it installs the
+    scenario through ``reset_piloc_environment``, whose ``load`` replaces the map,
+    positions and goals the constructor randomly drew. Both behaviours are checked
+    here without gym, matplotlib or Pillow.
     """
 
     def setUp(self) -> None:

@@ -2,8 +2,8 @@
 
 Every PILOC import happens inside a function: importing ``piloc.src.Map.timemap``
 pulls in ``configs``, ``gym`` and Pillow, and ``piloc.src.DDQN.Agent`` pulls in
-tensorflow and torch. Keeping those imports lazy is what allows the mock driver and
-the unit tests to run on a machine that has none of them installed.
+torch. Keeping those imports lazy is what allows the mock driver and the unit tests
+to run on a machine that has none of them installed.
 """
 
 from __future__ import annotations
@@ -61,14 +61,14 @@ def import_timemap_module(root: str | os.PathLike[str] | None = None) -> Any:
 
 
 def import_agent_module(root: str | os.PathLike[str] | None = None) -> Any:
-    """Import the PILOC policy module, which pulls in torch and tensorflow."""
+    """Import the PILOC policy module, which pulls in torch."""
     ensure_piloc_on_path(root)
     try:
         from src.DDQN import Agent as agent_module  # type: ignore[import-not-found]
     except ModuleNotFoundError as exc:
         raise DependencyMissingError(
             f"importing piloc.src.DDQN.Agent failed ({exc}). "
-            "The search policy needs torch and tensorflow: pip install torch tensorflow"
+            "The search policy needs torch: pip install torch"
         ) from exc
     except Exception as exc:  # noqa: BLE001
         raise DependencyMissingError(f"importing piloc.src.DDQN.Agent failed: {exc}") from exc
@@ -88,11 +88,14 @@ def build_piloc_environment(
     """
     Construct ``timemap.Environment`` around the shared scenario.
 
-    ``Environment.__init__`` reads ``self.map`` before assigning it whenever
-    ``test=False`` (see the known-issues list in AGENTS.md), so the instance is
-    created in two steps and the scenario map is installed first. ``load`` then
-    replaces the positions the constructor randomly drew, which keeps one scene
-    shared with task-03 as architecture invariant 10 requires.
+    ``__init__`` draws its own random map, robots and goals; ``reset_piloc_environment``
+    then installs the world the caller asked for, calling ``load`` with the scenario's
+    map, positions and goals and rebuilding the derived state. That is what keeps one
+    scene shared with task-03 as architecture invariant 10 requires. The instance used
+    to be built with ``__new__`` and the scenario map assigned first, a workaround for
+    ``__init__`` reading ``self.map`` before assigning it; that is fixed in ``timemap``
+    (see ``TimemapDefaultConstructionTests``) and ``__init__`` overwrote the assigned
+    map anyway, so the workaround is gone.
     """
     timemap = import_timemap_module(root)
     agents = len(scenario.agent_positions) if num_agents is None else int(num_agents)
@@ -113,10 +116,7 @@ def build_piloc_environment(
     random.seed(seed)
     np.random.seed(seed)
 
-    environment = timemap.Environment.__new__(timemap.Environment)
-    environment.map = np.asarray(scenario.obstacles, dtype=np.int32)
-    timemap.Environment.__init__(
-        environment,
+    environment = timemap.Environment(
         num_agents=agents,
         map_length=rows,
         obs_radius=obs_radius,
