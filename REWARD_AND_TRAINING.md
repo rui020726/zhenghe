@@ -100,13 +100,15 @@ F     = beta * (gamma * Phi_{t+1} - Phi_t)     （beta = configs.POTENTIAL_BETA 
   的能力，并按各阶段预算占最终预算的比例线性缩放——阶段 k 的门槛是
   `门槛 × E_k / 250`。stage 0（E=10）只要求 `coverage ≥ 0.02`、
   `discovery_rate ≥ 4/150 ≈ 0.027`（验证时至少发现 1 个目标）；
-  `collision_rate ≤ 0.5, repeat_rate ≤ 0.5` 是每步比率，与回合长度无关，
+  `collision_rate ≤ 0.5, repeat_rate ≤ 0.9` 是每步比率，与回合长度无关，
   不缩放。collision 门槛特意设得宽松（0.5）：早期随机策略撞墙/出界是正常
   现象（实测平均碰撞率 0.31），避碰是奖励层（V2 的 collision 权重）该管的
-  事，课程只管 E 阶梯。背景：首轮 v2 训练 5000 回合验证 coverage 平台仅
-  0.06、discovery 1/6，旧的同阈值设置在 E=10 几何上不可达，课程永远卡在
-  stage 0；将 coverage/discovery 按预算缩放后，剩余卡点只剩 collision≤0.05
-  这一奖励层指标，故一并放宽；
+  事；repeat 门槛放宽到 0.9 同理——E=10 短回合下 argmax 验证 repeat 恒
+  0.7（起点附近无探索空间，策略打转，几何上降不到 0.5 以下），且 V2 的
+  repeat 权重本就是 0（不惩罚重复）。课程只管 E 阶梯。背景：首轮 v2 训练
+  5000 回合验证 coverage 平台仅 0.06、discovery 1/6，旧的同阈值设置在 E=10
+  几何上不可达，课程永远卡在 stage 0；将 coverage/discovery 按预算缩放后，
+  剩余卡点只剩 collision≤0.05 与 repeat≤0.5 这两个奖励层指标，故一并放宽；
 - 连续 `--required-passes`（默认 3）次全部达标才升一级；任何一次失败清零计数；
 - **长期不达标永不自动升级**；升级后窗口重置；
 - `--curriculum off` 关闭课程，使用 `--fixed-episode-limit`（默认 250）；

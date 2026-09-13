@@ -124,7 +124,7 @@ class AdvancementTests(unittest.TestCase):
         # discovery fine but collision above bound -> no pass
         self.assertFalse(gate.submit_validation(_passing(collision_rate=0.9)))
         # repeat above bound -> no pass
-        self.assertFalse(gate.submit_validation(_passing(repeat_rate=0.9)))
+        self.assertFalse(gate.submit_validation(_passing(repeat_rate=0.95)))
         self.assertEqual(gate.stage_index, 0)
 
 
@@ -199,7 +199,7 @@ class StageScaledThresholdsTests(unittest.TestCase):
     def test_per_step_rates_are_not_scaled(self) -> None:
         for stage in default_stages([10, 20, 30]):
             self.assertEqual(stage.thresholds["collision_rate"], 0.5)
-            self.assertEqual(stage.thresholds["repeat_rate"], 0.5)
+            self.assertEqual(stage.thresholds["repeat_rate"], 0.9)
 
     def test_production_stage0_is_reachable_by_the_plateaued_policy(self) -> None:
         # The stuck run's validation plateau: coverage ~0.06, discovery 1/6.
