@@ -36,7 +36,7 @@ HUBER_DELTA = 10.0
 DEVICE = 'cuda'  # 或者 'cpu'
 ENV_NAME = 'simple_spread_v3'  # 或者您自己定义的环境
 TRICK = {
-    'adv_norm': False,
+    'adv_norm': True,   # v2 baseline 开启 advantage 归一，避免训练对奖励绝对尺度过度敏感
     'ObsNorm': False,
     'reward_norm': False,
     'reward_scaling': False,
@@ -61,17 +61,21 @@ reward_mode = "v2"
 # 回合长度上限：时间成本按 1/T_max 归一，使单步奖励幅度与课程阶段无关。
 T_MAX = 250
 
-# V2 权重。team_reward = target*N_t + coverage*(C_t+1 - C_t)
-#                      + finish*all_found - time_cost/T_MAX
-# agent_reward = team_reward - collision*collision_i
+# V2 baseline 权重（整数格子计数；见 REWARD_AND_TRAINING.md 与 reward_modes.py）。
+# 旧版按比例归一的 coverage=10 在 60x60 上每步只有 ~0.013 的绝对信号，比 legacy
+# 小约两个数量级，且被信息素负偏置（~ -0.0128）抵消——改回整数计数。
+# 这是首轮标定起点，不是最终最优参数：pheromone/time_cost/repeat 全部归零，
+# 一次只验证核心覆盖闭环。
 REWARD_V2 = dict(
-    target=1.0,
-    coverage=10.0,        # 2.0 过弱：60x60 每步覆盖增量 0.01-0.02，信号淹没在 critic 噪声里，策略学会原地打转
-    finish=3.0,
-    time_cost=1.5,        # 0.5 太弱：不动每步仅 -0.002，打转近免费。1.5/250=-0.006/步，给“不动”征税
-    collision=0.4,        # 1.0 过强：撞墙 -1.0 使探索期望收益为负（密度 0.25 时 ~-0.25），策略干脆不动。0.4 让走出去期望转正
-    repeat=0.0,           # 默认关闭：V2 不用短周期惩罚
-    pheromone=0.3,        # 恢复 PILOC 探索引导：走低信息素新区域得正奖励，推动策略走出起点
+    target=5.0,           # 团队共享：发现一个目标
+    marginal_coverage=0.2,# 观察者分摊的整数边际新格（个体信用）
+    union_coverage=0.05,  # 团队并集整数新格（共享，不重复计数）
+    finish=20.0,          # 团队共享：全部目标完成
+    collision=1.0,        # 个体碰撞成本
+    no_new_cell=0.05,     # 本步团队零新增时的惩罚，推动离开已探索区
+    time_cost=0.0,        # 默认关闭：四个动作全合法时它不产生动作区分
+    repeat=0.0,           # 默认关闭
+    pheromone=0.0,        # 默认关闭：环境先衰减再 +1 的更新顺序使其系统性偏负
 )
 
 # potential 模式的势函数系数：F = beta * (gamma * Phi_next - Phi_current)，
@@ -88,13 +92,6 @@ num_comm_layers = 2
 num_comm_heads = 2
 max_comm_agents = 3
 hidden_dim = 256
-
-TRICK = {'adv_norm':False,'ObsNorm':False,'reward_norm':False,'reward_scaling':False,    # or
-         'orthogonal_init':False,'adam_eps':False,'lr_decay':False, # 原代码中设置为False
-          # 以上均在PPO_with_tricks.py中实现过
-          'ValueClip':False,'huber_loss':False,
-          'LayerNorm':False,'feature_norm':False,
-          }
 
 # 信息素衰减
 pheromone_decay = 0.95

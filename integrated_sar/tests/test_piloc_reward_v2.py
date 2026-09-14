@@ -87,14 +87,14 @@ class TargetDiscoveryTests(unittest.TestCase):
 
     def test_one_discovery_pays_new_target_immediately(self) -> None:
         env, obs = _controlled_env(self.timemap, goals=[(30, 31)], agents=[(30, 30), (5, 5)])
-        actions = {"agent_0": 0, "agent_1": 0}  # stay-ish; discovery is about position
+        actions = {"agent_0": 0, "agent_1": 0}  # move up 1; discovery is about position
 
         _obs, reward, done, _marks, _tc = env.step(actions, obs, {}, {}, 60)
 
         self.assertEqual(env.last_step_stats["new_targets"], 1)
-        self.assertAlmostEqual(env.last_reward_terms["agent_0"]["new_target"], 1.0)
+        self.assertAlmostEqual(env.last_reward_terms["agent_0"]["new_target"], 5.0)
         # The team reward is shared: the robot that did not see it still gets it once.
-        self.assertAlmostEqual(env.last_reward_terms["agent_1"]["new_target"], 1.0)
+        self.assertAlmostEqual(env.last_reward_terms["agent_1"]["new_target"], 5.0)
         self.assertTrue(all(np.isfinite(list(reward.values()))))
 
     def test_both_robots_seeing_one_target_counts_once(self) -> None:
@@ -107,7 +107,7 @@ class TargetDiscoveryTests(unittest.TestCase):
 
         # new_targets is a set over goal indices, so two viewers of one goal == 1.
         self.assertEqual(env.last_step_stats["new_targets"], 1)
-        self.assertAlmostEqual(env.last_reward_terms["agent_0"]["new_target"], 1.0)
+        self.assertAlmostEqual(env.last_reward_terms["agent_0"]["new_target"], 5.0)
 
     def test_discovery_does_not_end_episode_until_last_target(self) -> None:
         env, obs = _controlled_env(
@@ -131,7 +131,7 @@ class TargetDiscoveryTests(unittest.TestCase):
     def test_finish_is_added_not_overwritten(self) -> None:
         # agent_0 finds the only goal (finish + new_target); agent_1 is at the top
         # edge moving up, so it also collides on the same step. If finish overwrote
-        # the step reward (the old bug), agent_1 would get exactly 3.0 with its
+        # the step reward (the old bug), agent_1 would get exactly 20.0 with its
         # collision dropped; accumulation keeps the collision visible.
         env, obs = _controlled_env(self.timemap, goals=[(30, 31)], agents=[(30, 30), (0, 5)])
         actions = {"agent_0": 0, "agent_1": 0}  # agent_1 action 0 = move up -> out of bounds
@@ -139,14 +139,14 @@ class TargetDiscoveryTests(unittest.TestCase):
 
         terms = env.last_reward_terms["agent_0"]
         self.assertIn("finish", terms)
-        self.assertAlmostEqual(terms["finish"], 3.0)
-        self.assertAlmostEqual(terms["new_target"], 1.0)
-        # finish (3) + new_target (1) + time_cost (-0.006) => ~3.994, not 3.0.
-        self.assertGreater(reward["agent_0"], 3.0)
+        self.assertAlmostEqual(terms["finish"], 20.0)
+        self.assertAlmostEqual(terms["new_target"], 5.0)
+        # finish (20) + new_target (5) + marginal new cells => well above 25.0.
+        self.assertGreaterEqual(reward["agent_0"], 25.0)
         self.assertAlmostEqual(sum(terms.values()), reward["agent_0"], places=4)
 
         collision_terms = env.last_reward_terms["agent_1"]
-        self.assertAlmostEqual(collision_terms["collision"], -0.4)
+        self.assertAlmostEqual(collision_terms["collision"], -1.0)
         self.assertAlmostEqual(sum(collision_terms.values()), reward["agent_1"], places=4)
         self.assertLess(reward["agent_1"], reward["agent_0"])
 
@@ -228,7 +228,7 @@ class RewardInvariantsTests(unittest.TestCase):
                 self.timemap, goals=[(30, 31)], agents=[(30, 30), (5, 5)], seed=9
             )
             _obs, _r, _d, _m, _tc = env.step({"agent_0": 0, "agent_1": 0}, obs, {}, {}, limit)
-            self.assertAlmostEqual(env.last_reward_terms["agent_0"]["new_target"], 1.0,
+            self.assertAlmostEqual(env.last_reward_terms["agent_0"]["new_target"], 5.0,
                                    msg=f"discovery reward changed with E={limit}")
 
 
@@ -270,7 +270,7 @@ class PotentialModeTests(unittest.TestCase):
 
     def test_potential_shaping_matches_the_formula(self) -> None:
         rm = self.reward_modes
-        weights = rm.RewardWeights(potential_beta=1.0, gamma=0.99, coverage=2.0, time_cost=0.0)
+        weights = rm.RewardWeights(potential_beta=1.0, gamma=0.99, time_cost=0.0)
         events = rm.StepEvents(potential_current=0.20, potential_next=0.25, all_found=False)
         terms = rm.compute_potential_rewards(["agent_0"], events, weights)["agent_0"]
         expected = 1.0 * (0.99 * 0.25 - 0.20)

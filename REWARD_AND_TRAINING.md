@@ -24,55 +24,55 @@
 - 信息素 `0.1*(v_-v)/v_ + 0.1*(v_-v)`（无保护，可能爆炸）；
 - 中间目标发现奖励恒为 0（先删目标再算奖励——已知缺陷，为对照保真而保留）。
 
-### 1.2 `v2` —— 新的默认训练奖励
+### 1.2 `v2` —— 新的默认训练奖励（baseline 标定版）
 
 ```text
-C_t          = 团队并集覆盖率（见 §1.4）
+U_t          = 本步团队并集新覆盖的整数自由格数
+M_i          = 本步 agent i 的边际新格数（观察者分摊：同一新格被 n 个
+               机器人同时看到，每个获得 1/n，既不重复计数又保留个体信用）
 N_t          = 本步首次被任意机器人观测到的唯一目标数（两人同看一个目标只计一次）
-T_max        = 250
 
-team_reward  = 1.0 * N_t
-             + 10.0 * (C_{t+1} - C_t)
-             + 3.0 * all_targets_found
-             - 1.5 / T_max
-             + 0.3 * pheromone_term   # 走低信息素新区域为正，clip ±1；见下
+team_reward  = 5.0 * N_t
+             + 0.05 * U_t
+             + 20.0 * all_targets_found
+             - 0.05 * I(U_t == 0)          # 本步团队零新增：推动离开已探索区
 
-agent_reward = team_reward - 0.4 * collision_i
+agent_reward = team_reward
+             + 0.20 * M_i                   # 个体边际覆盖信用
+             - 1.0  * collision_i
 ```
 
-默认权重（`configs.REWARD_V2`）：`target=1.0, coverage=10.0, finish=3.0,
-time_cost=1.5, collision=0.4, repeat=0.0, pheromone=0.3`。
-（2026-09-13 起 collision 由 0.2 调至 1.0：0.2 过弱，E=10 随机探索期间碰撞率
-平均 0.31 且 5000 回合不降，给不了策略足够的避碰梯度。
-2026-09-14 起 coverage 由 2.0 调至 10.0 并开启 pheromone 0.3：60×60 地图每步
-覆盖增量仅 0.01-0.02，×2.0 后每步 0.02-0.04，信号淹没在 PPO critic 噪声里，
-策略在 E=30 学会原地打转（验证 travel=58/60 但 recoverage=0.96）；放大覆盖
-信号并恢复 PILOC 的**信息素探索引导**——`0.1*(v_-v)/max(v_,eps) + 0.1*(v_-v)`
-走低信息素新区域为正、重复踩旧区域为负，weight=0.3 时单步 ±0.3，量级足以
-驱动策略继续向外探索（信息素带 epsilon 保护与 clip，`pheromone_epsilon=1e-6`、
-`pheromone_clip=1.0`）。
-同轮再调：collision 1.0→0.4、time_cost 0.5→1.5。best checkpoint 实测轨迹
-（40 步只踩 5 个不同格、发现 0 目标）证明策略收敛到“出生点微振荡”：
-密度 0.15~0.3（三角分布，本例 0.248）下走出去的期望 `-1.0×P(撞墙)+探索收益`
-净负，而“不动”每步仅 -0.002 近免费，PPO 理性地选择不动。0.4 使探索期望转正，
-1.5/250=-0.006/步给“不动”征税。）
+默认权重（`configs.REWARD_V2`）：`target=5.0, marginal_coverage=0.2,
+union_coverage=0.05, finish=20.0, collision=1.0, no_new_cell=0.05,
+time_cost=0.0, repeat=0.0, pheromone=0.0`。
+
+（2026-09-14 诊断：旧 v2 把覆盖增量按比例归一（coverage=10 × ΔC），60×60
+地图上每步团队新增仅 ~4 格，ΔC≈0.0013，奖励 +0.013——比 legacy 的探索信号
+小约两个数量级，且被信息素负偏置（环境先衰减再 +1，实测均值 −0.0128）与
+碰撞期望（−0.054）抵消，随机 rollout 每 agent-step 总奖励 −0.04，策略学到
+"原地撞墙"比探索更优。故改回**整数格子计数**，并设 `pheromone=0,
+time_cost=0, repeat=0`——一次只验证核心覆盖闭环。`time_cost` 在固定长度
+回合里对四个动作完全相同，不产生动作区分；pheromone 的更新顺序使其系统
+性偏负，详见 git 历史。新权重下随机 rollout 每 agent-step 总奖励 +0.51
+（marginal 覆盖 +0.36、碰撞 −0.14），探索期望显著为正。）
 
 与 legacy 的本质区别：
 
 - **删除**每步隐式 `-1`：回合变长不再线性塌陷累计奖励；
 - **删除**队友邻近 `-v` 惩罚（靠近队友同时是地图融合条件，惩罚与机制自相矛盾）；
-- **不再**给"看到大量旧格子"正奖励——只有并集覆盖**增量**计酬，
-  两个机器人重复看同一格不会重复计团队奖励；
+- 覆盖只计**整数新格增量**：两个机器人重复看同一格不重复计团队奖励，
+  同时按观察者分摊给个体边际信用 `M_i`（解决团队共享奖励的信用分配问题）；
 - 中间目标发现**立即**获得 `target` 奖励（修复先删目标再算奖励的死路径），
   全部完成时 `finish` 是**累加**而不是覆盖；
 - `done` 只有一个语义：全部目标完成。单个机器人看到目标不再置 per-agent done；
-- 时间成本按 `1/T_max` 归一：单个发现事件的奖励幅度与当前课程阶段 E 无关；
-- `repeat` 默认权重 0（保留参数但默认关闭）；
-- `pheromone` 默认权重 0；启用时环境侧分母有 epsilon 保护（`1e-6`），
-  奖励侧做有限值检查并裁剪到 ±1。
+- `repeat` / `pheromone` / `time_cost` 默认权重 0（保留参数但默认关闭，
+  标定通过后再逐项开启）；
+- 启用 pheromone 时环境侧分母有 epsilon 保护（`1e-6`），
+  奖励侧做有限值检查并裁剪（注意：裁剪在乘权重**之后**进行，
+  实际最大幅度由 `pheromone_clip` 控制）。
 
-团队搜索收益（发现、覆盖、finish、时间成本）共享给所有 agent；
-碰撞成本按 agent 单独计算。
+团队搜索收益（发现、并集覆盖、finish、零新增惩罚）共享给所有 agent；
+边际覆盖与碰撞成本按 agent 单独计算。
 
 ### 1.3 `potential` —— 势函数覆盖塑形对照
 
@@ -94,43 +94,83 @@ F     = beta * (gamma * Phi_{t+1} - Phi_t)     （beta = configs.POTENTIAL_BETA 
 
 `team_union_coverage`（`timemap.Environment`）与 `train.SearchEpisodeMetrics`
 完全同口径：**任一**机器人时间戳观测 ≠ 0.5（未知）的自由格数 ÷ 全部自由格数
-（障碍 = `map == 1` 之外的格）。V2 的覆盖增量、potential 的 Phi、课程门控的
-`coverage` 全部使用这一个定义，不存在第二套覆盖率。
+（障碍 = `map == 1` 之外的格）。V2 的整数新格数 `U_t`、边际信用 `M_i`、
+potential 的 Phi、课程门控的 `coverage_gain` 全部从同一套布尔掩码算出，
+不存在第二套覆盖率。
 
-`coverage_auc` = 回合内每步覆盖率的平均值（越早覆盖得分越高）。
+- `U_t`：本步 `after_seen & ~before_seen` 的整数计数（一步只算一次掩码，
+  覆盖率、新格数、边际信用同口径）；
+- `M_i`：每个新格被 n 个机器人同时看到时，每个观察者获得 `1/n`；
+- `coverage_auc` = 回合内每步覆盖率的平均值（越早覆盖得分越高）；
+- `coverage_gain` = `C_T - C_0`（回合末覆盖率减回合初覆盖率）：
+  初始视野覆盖率实测 ~0.044，不计入"新增"，避免"出生位置好"被误认为会探索。
 
 ## 2. 课程门控（`src/curriculum.py`）
 
 旧规则"历史最高累计奖励 + 200 回合未刷新即升级"已删除。新规则：
 
-- 阶段阶梯：回合步数上限 E 从 10 到 250（每级 +10），`--curriculum gate`（默认）；
+- 阶段阶梯：回合步数上限 E 从 **50** 到 250（每级 +25），`--curriculum gate`（默认）。
+  起点 E=50：E=10 时回合太短，指标主要由初始视野决定（随机策略 coverage 已达
+  0.068），无法区分策略好坏；E=50 给随机策略的 coverage_gain 约 0.1，
+  给可学习策略留出明确上升空间；
 - 每 `--eval-every`（默认 50）个训练回合，在**固定验证 seed**
   （默认 `seed + 1_000_000_007`，与训练流隔离且永不被训练消耗）上跑
-  `--validation-episodes`（默认 3）个**确定性动作（argmax）**回合；
-- 门控输入**只允许**任务指标：`coverage, coverage_auc, discovery_rate,
-  collision_rate, repeat_rate`。传入 reward/return 直接 `ValueError`；
-- 默认阈值：`coverage ≥ 0.5, discovery_rate ≥ 4/6` 描述**最终阶段**（250 步）
-  的能力，并按各阶段预算占最终预算的比例线性缩放——阶段 k 的门槛是
-  `门槛 × E_k / 250`。stage 0（E=10）只要求 `coverage ≥ 0.02`、
-  `discovery_rate ≥ 4/150 ≈ 0.027`（验证时至少发现 1 个目标）；
+  `--validation-episodes`（默认 **20**）个**确定性动作（argmax）**回合，
+  取平均任务指标。20 个固定 seed 而非 3 张图：验证方差大时 3 个 seed 的
+  均值会把运气误当能力；
+- 门控输入**只允许**任务指标：`coverage, coverage_gain, coverage_auc,
+  discovery_rate, collision_rate, repeat_rate`。传入 reward/return 直接
+  `ValueError`（门控不读累计回报是接口约束，不是约定）；
+- 门控阈值：`coverage_gain` 按各阶段预算占最终预算的比例线性缩放——
+  阶段 k 的门槛是 `0.5 × E_k / 250`。E=50 只要求 coverage_gain ≥ 0.1；
   `collision_rate ≤ 0.5, repeat_rate ≤ 0.9` 是每步比率，与回合长度无关，
-  不缩放。collision 门槛特意设得宽松（0.5）：早期随机策略撞墙/出界是正常
-  现象（实测平均碰撞率 0.31），避碰是奖励层（V2 的 collision 权重）该管的
-  事；repeat 门槛放宽到 0.9 同理——E=10 短回合下 argmax 验证 repeat 恒
-  0.7（起点附近无探索空间，策略打转，几何上降不到 0.5 以下），且 V2 的
-  repeat 权重本就是 0（不惩罚重复）。课程只管 E 阶梯。背景：首轮 v2 训练
-  5000 回合验证 coverage 平台仅 0.06、discovery 1/6，旧的同阈值设置在 E=10
-  几何上不可达，课程永远卡在 stage 0；将 coverage/discovery 按预算缩放后，
-  剩余卡点只剩 collision≤0.05 与 repeat≤0.5 这两个奖励层指标，故一并放宽；
+  不缩放。**不门控 discovery_rate**：E 较短时它主要由目标出生位置运气决定，
+  且 discovery 已由验证分数与最优 checkpoint 选择覆盖。背景：首轮 v2 训练
+  5000 回合验证 coverage 平台仅 0.06，旧同阈值设置在 E=10 几何上不可达，
+  课程永远卡在 stage 0；E=10 的原始随机策略 coverage=0.068、collision=0.375
+  已优于旧门槛，门槛只是暴露了策略坍塌，而非主因；
 - 连续 `--required-passes`（默认 3）次全部达标才升一级；任何一次失败清零计数；
 - **长期不达标永不自动升级**；升级后窗口重置；
-- `--curriculum off` 关闭课程，使用 `--fixed-episode-limit`（默认 250）；
+- `--curriculum off` 关闭课程，使用 `--fixed-episode-limit`（默认 250）。
+  **课程关闭时评估节奏仍然有效**：仍按 `eval_every` 跑确定性验证与随机基线
+  早停，只是不升级——`--curriculum off` 的对照实验同样需要验证与早停；
 - 最优 checkpoint 按验证任务指标
   （`validation_score = coverage_auc + discovery_rate - collision_rate - 0.5*recoverage_rate`）
   保存到 `<output-dir>/best/`，不按训练累计回报。
 
-说明：旧代码中的 E 本来就只控制回合步数上限，与地图/目标数无关；
-新实现保持这一点并明确记录在 `run_meta.json`。
+### 2.1 合法动作 mask
+
+边界与相邻障碍始终处于局部视野内，掩码不引入真值泄漏。掩码（1=合法，
+0=越界/障碍；四向全不合法时返回全 1，由碰撞惩罚处理）**同时**用于：
+
+- 训练动作采样（`select_action`：概率过掩码归一后再 `Categorical.sample`）；
+- 确定性验证（`select_action_deterministic`：argmax 只在合法动作上取，
+  内部只调 `get_probs`，不触碰 torch 采样 RNG）；
+- PPO 更新重算 log-prob（buffer 逐条保存掩码，新旧策略分布一致，ratio 无偏）；
+- 随机基线 legal-random（只在合法动作上均匀采样）。
+
+### 2.2 随机基线与早停
+
+每个验证点在同批固定验证 seed 上跑两个均匀随机 rollout 基线（独立
+`np.random.RandomState`，绝不触碰训练 RNG）：
+
+- **raw-random**：4 个动作均匀采样（含碰撞，下界参照）；
+- **legal-random**：只在合法动作上均匀采样（无碰撞上界参照）。
+
+早停（默认开启，`--no-early-stop` 关闭）：episode ≥ `--early-stop-window`
+（默认 500）后，若确定性验证 coverage ≤ raw-random，或
+coverage < legal-random − `--early-stop-margin`（默认 0.05），判定策略已坍塌
+（比随机还差），立即停止并落盘 `trainer_state.pkl`（含
+`early_stop_triggered`），不再跑满 5000 回合浪费算力。
+
+### 2.3 断点恢复
+
+`trainer_state.pkl`（pickle）保存断点恢复所需的**全部**状态：episode、
+global step、最优验证分、早停标记、课程门控状态（stage_index、
+连续通过计数、评估节拍）、Python/NumPy/Torch CPU/Torch CUDA 的 RNG 状态。
+旧 checkpoint 只存网络权重与 episode 号，任何 resume 都事实上从 stage 0
+重来且采样序列偏移——已补齐。`--resume` 加载网络后若输出目录存在
+`trainer_state.pkl` 则一并恢复。
 
 ## 3. γ 与随机性
 
@@ -138,6 +178,11 @@ F     = beta * (gamma * Phi_{t+1} - Phi_t)     （beta = configs.POTENTIAL_BETA 
   回合上限 250 步、γ=0.95 时有效视野约 1/(1-γ)=20 步，远小于任务时间尺度；
   γ=0.99 的约 100 步仍偏短，但配合逐步的稀疏发现奖励已可传播。
   legacy 对照实验可继续用 0.95。
+- `TRICK['adv_norm'] = True`：v2 baseline 开启 advantage 归一，避免训练对
+  奖励绝对尺度过度敏感。
+- PPO 信用分配：一个 agent 的 ratio 只与它自己的 advantage 相乘（旧实现把
+  (mb,1) 的 ratio 与 (mb,num_agents) 的 adv 广播相乘，个体碰撞信号被队友
+  advantage 稀释，碰撞学不到）。
 - `seed_all()` 统一设置 Python `random`、NumPy、Torch CPU、Torch CUDA
   与每个 agent 的 `action_space(agent).seed(...)`。
 - 环境拥有**独立 RNG**（`_py_rng`/`_np_rng`），步内随机（视野噪声、目标移动、
@@ -153,12 +198,13 @@ F     = beta * (gamma * Phi_{t+1} - Phi_t)     （beta = configs.POTENTIAL_BETA 
 ```text
 <output-dir>/
 ├── run_meta.json          # 全部配置：gamma、lmbda、reward_mode、权重、门控、seed、设备
+├── trainer_state.pkl      # 断点恢复全量状态（课程/RNG/global step/最优分/早停标记）
 ├── episode_metrics.jsonl  # 每 log-every 回合：return、mean reward/step、length、
 │                          # coverage、coverage AUC、发现数、collision/repeat/recoverage 率、
 │                          # （--track-reward-terms 时）逐分量奖励分解
 ├── checkpoints/           # 周期性 checkpoint（--save-every）
 ├── best/                  # 验证任务指标最优 checkpoint
-└── tb_logs/               # TensorBoard：search/*、validation/*、reward_term/*
+└── tb_logs/               # TensorBoard：search/*、validation/*、reward_term/*、baseline/*
 ```
 
 每个 checkpoint 内嵌 `run_meta`（gamma、lmbda、reward_mode、全部权重、seed、device）
@@ -176,18 +222,30 @@ python train.py --device cpu --reward-mode v2 --gamma 0.99 --seed 0 \
     --episodes 3 --eval-every 2 --required-passes 1 --validation-episodes 1 \
     --log-every 1 --no-tensorboard --output-dir ../runs/smoke_v2
 
-# 正式训练（V2 推荐命令）
+# 正式训练（V2 推荐命令：课程 gate，E 从 50 起步）
 python train.py --device auto --reward-mode v2 --gamma 0.99 --seed 0 \
     --episodes 5000 --save-every 500 --log-every 50 --eval-every 50 \
-    --required-passes 3 --validation-episodes 3 \
+    --required-passes 3 --validation-episodes 20 \
     --track-reward-terms --output-dir runs/piloc_v2_s0
 
-# legacy 对照（配对 seed）
+# 第三步对照实验（绕开课程验证奖励本身；每组 ≥3 seed × 300 回合先跑）
+# 判定规则：legacy 能学、新 v2 不能学 → 查 PPO；两者都不能学 → 不能再归咎奖励
+python train.py --device auto --reward-mode legacy --gamma 0.95 --seed 0 \
+    --curriculum off --fixed-episode-limit 50 \
+    --episodes 300 --save-every 300 --log-every 50 --eval-every 50 \
+    --validation-episodes 20 --output-dir runs/abl_legacy_s0_e50
+python train.py --device auto --reward-mode v2 --gamma 0.99 --seed 0 \
+    --curriculum off --fixed-episode-limit 50 \
+    --episodes 300 --save-every 300 --log-every 50 --eval-every 50 \
+    --validation-episodes 20 --track-reward-terms \
+    --output-dir runs/abl_v2_s0_e50
+
+# legacy 课程对照（配对 seed）
 python train.py --device auto --reward-mode legacy --gamma 0.95 --seed 0 \
     --episodes 5000 --save-every 500 --log-every 50 --eval-every 50 \
-    --output-dir runs/piloc_legacy_s0
+    --validation-episodes 20 --output-dir runs/piloc_legacy_s0
 
-# 断点恢复
+# 断点恢复（网络 + trainer_state.pkl 全量状态）
 python train.py --device auto --reward-mode v2 --gamma 0.99 --seed 0 \
     --episodes 5000 --resume runs/piloc_v2_s0/checkpoints/shared_mappo_model_21_2000.pth \
     --output-dir runs/piloc_v2_s0
@@ -201,7 +259,8 @@ python -m integrated_sar.joint_driver --piloc-checkpoint runs/piloc_v2_s0/best \
 
 - 每回合训练地图仍随机生成（`DungeonMaps` 资产不在仓库内），
   验证集是"固定 seed 的固定地图"而不是独立留出的真实地图集；
-- V2 权重是初始默认值，未经大规模配对实验调参；
+- V2 baseline 权重是首轮标定起点，不是最终最优参数；pheromone/time_cost/
+  repeat 归零，标定通过后再逐项开启；
 - `repeat`/`pheromone` 保留为默认关闭的实验项；
 - rescue 启发式**不进入训练**（会破坏动作与 log-prob 的一致性），
   仅在 `piloc/test.py` 的评估路径保留。

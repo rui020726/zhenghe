@@ -35,6 +35,7 @@ from src.curriculum import CurriculumGate, CurriculumStage, default_stages  # no
 def _passing(**overrides):
     metrics = {
         "coverage": 0.6,
+        "coverage_gain": 0.6,
         "coverage_auc": 0.4,
         "discovery_rate": 0.8,
         "collision_rate": 0.01,
@@ -77,7 +78,7 @@ class AdvancementTests(unittest.TestCase):
     def test_no_advancement_without_passes_however_long_one_waits(self) -> None:
         gate = _gate()
         # Half the stage-0 bound: clearly below whatever the scaling asks for.
-        failing = _passing(coverage=default_stages([10, 20, 30])[0].thresholds["coverage"] / 2)
+        failing = _passing(coverage_gain=default_stages([10, 20, 30])[0].thresholds["coverage_gain"] / 2)
         for _ in range(100):  # 20 evaluation windows of pure waiting
             gate.register_episode()
             if gate.should_evaluate():
@@ -101,7 +102,7 @@ class AdvancementTests(unittest.TestCase):
         gate = _gate(required_passes=3, eval_every=1)
         gate.submit_validation(_passing())
         gate.submit_validation(_passing())
-        gate.submit_validation(_passing(coverage=0.0))  # fail resets
+        gate.submit_validation(_passing(coverage_gain=0.0))  # fail resets
         self.assertEqual(gate.stage_index, 0)
         self.assertFalse(gate.submit_validation(_passing()))  # needs 3 again
         gate.submit_validation(_passing())
@@ -155,14 +156,24 @@ class EvaluationCadenceTests(unittest.TestCase):
 
 
 class DisabledCurriculumTests(unittest.TestCase):
-    def test_off_uses_the_fixed_limit_and_never_evaluates(self) -> None:
+    def test_off_uses_the_fixed_limit_and_never_advances(self) -> None:
         gate = CurriculumGate(stages=None, fixed_limit=123)
         self.assertEqual(gate.episode_limit(), 123)
-        self.assertFalse(gate.should_evaluate())
         for _ in range(10):
             gate.register_episode()
-        self.assertFalse(gate.should_evaluate())
         self.assertFalse(gate.submit_validation(_passing()))
+        self.assertEqual(gate.stage_index, 0)
+
+    def test_off_keeps_the_evaluation_cadence_for_baseline_early_stop(self) -> None:
+        # --curriculum off 的对照实验仍按 eval_every 跑验证与随机基线早停，
+        # 只是不升级；评估节奏必须与 gate 模式一致。
+        gate = CurriculumGate(stages=None, fixed_limit=123, eval_every=5)
+        for _ in range(4):
+            gate.register_episode()
+        self.assertFalse(gate.should_evaluate())
+        gate.register_episode()
+        self.assertTrue(gate.should_evaluate())
+        self.assertFalse(gate.submit_validation(_passing()))  # never advances
 
     def test_thresholds_on_unknown_metrics_are_refused_at_construction(self) -> None:
         with self.assertRaises(ValueError):
@@ -171,12 +182,12 @@ class DisabledCurriculumTests(unittest.TestCase):
 
 class MetricSemanticsTests(unittest.TestCase):
     def test_higher_is_better_and_lower_is_better_are_not_swapped(self) -> None:
-        # coverage/discovery: must be >= threshold. collision/repeat: must be <=.
+        # coverage_gain: must be >= threshold. collision/repeat: must be <=.
         # The bound is whatever stage 0 of this ladder actually asks for.
         gate = _gate(required_passes=1)
-        bound = default_stages([10, 20, 30])[0].thresholds["coverage"]
-        self.assertFalse(gate.metrics_pass(_passing(coverage=bound - 1e-9)))
-        self.assertTrue(gate.metrics_pass(_passing(coverage=bound)))
+        bound = default_stages([10, 20, 30])[0].thresholds["coverage_gain"]
+        self.assertFalse(gate.metrics_pass(_passing(coverage_gain=bound - 1e-9)))
+        self.assertTrue(gate.metrics_pass(_passing(coverage_gain=bound)))
         self.assertFalse(gate.metrics_pass(_passing(collision_rate=0.51)))
         self.assertTrue(gate.metrics_pass(_passing(collision_rate=0.5)))
 
@@ -187,14 +198,16 @@ class StageScaledThresholdsTests(unittest.TestCase):
     validation plateaued at coverage ~0.06 / discovery 1/6 and the ladder
     never left stage 0 in 5000 episodes."""
 
-    def test_coverage_and_discovery_scale_with_the_budget_share(self) -> None:
+    def test_coverage_gain_scales_with_the_budget_share(self) -> None:
         stages = default_stages([10, 20, 30])
-        self.assertAlmostEqual(stages[0].thresholds["coverage"], 0.5 * 10 / 30)
-        self.assertAlmostEqual(stages[1].thresholds["coverage"], 0.5 * 20 / 30)
-        self.assertAlmostEqual(stages[2].thresholds["coverage"], 0.5)
-        self.assertAlmostEqual(stages[0].thresholds["discovery_rate"], 4 / 6 * 10 / 30)
-        self.assertAlmostEqual(stages[1].thresholds["discovery_rate"], 4 / 6 * 20 / 30)
-        self.assertAlmostEqual(stages[2].thresholds["discovery_rate"], 4 / 6)
+        self.assertAlmostEqual(stages[0].thresholds["coverage_gain"], 0.5 * 10 / 30)
+        self.assertAlmostEqual(stages[1].thresholds["coverage_gain"], 0.5 * 20 / 30)
+        self.assertAlmostEqual(stages[2].thresholds["coverage_gain"], 0.5)
+
+    def test_discovery_is_not_gated(self) -> None:
+        # E 较短时 discovery 主要由目标出生位置运气决定；门控只看覆盖增益。
+        for stage in default_stages([10, 20, 30]):
+            self.assertNotIn("discovery_rate", stage.thresholds)
 
     def test_per_step_rates_are_not_scaled(self) -> None:
         for stage in default_stages([10, 20, 30]):
@@ -206,14 +219,13 @@ class StageScaledThresholdsTests(unittest.TestCase):
         # Stage 0 of the production ladder must sit below both, otherwise the
         # curriculum is blocked at E=10 again no matter how good the policy is.
         stage0 = default_stages(list(range(10, 251, 10)))[0].thresholds
-        self.assertLess(stage0["coverage"], 0.06)
-        self.assertLess(stage0["discovery_rate"], 1 / 6)
+        self.assertLess(stage0["coverage_gain"], 0.06)
 
     def test_an_intermediate_policy_advances_only_to_where_it_qualifies(self) -> None:
         gate = _gate(eval_every=1, required_passes=1)
-        # coverage 0.25 clears stage 0 (bound 0.5*10/30) but not stage 1
+        # coverage_gain 0.25 clears stage 0 (bound 0.5*10/30) but not stage 1
         # (bound 0.5*20/30): the ladder advances once, then holds.
-        middle = _passing(coverage=0.25)
+        middle = _passing(coverage_gain=0.25)
         self.assertTrue(gate.submit_validation(middle))
         self.assertEqual(gate.stage_index, 1)
         self.assertFalse(gate.submit_validation(middle))

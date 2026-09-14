@@ -18,8 +18,11 @@ from typing import Mapping, Sequence
 
 # 门控允许读取的指标名。任何其他键（包括 reward/return）都会被拒绝，
 # 这样“门控不读累计回报”是一个可断言的接口约束，而不是约定。
+# coverage_gain = 回合内新增覆盖 C_T - C_0：初始视野覆盖率（实测 ~0.044）
+# 不计入，避免“出生位置好”被误认为策略会探索。
 ALLOWED_METRICS = (
     "coverage",
+    "coverage_gain",
     "coverage_auc",
     "discovery_rate",
     "collision_rate",
@@ -45,26 +48,19 @@ class CurriculumStage:
 def default_stages(
     limits: Sequence[int],
     *,
-    coverage: float = 0.5,
-    discovery_rate: float = 4 / 6,
+    coverage_gain: float = 0.5,
     collision_rate: float = 0.5,
     repeat_rate: float = 0.9,
 ) -> list[CurriculumStage]:
-    """coverage/discovery 阈值按各阶段预算占最终预算的比例缩放。
+    """门控阈值：coverage_gain 按各阶段预算占最终预算的比例缩放，不加 discovery。
 
-    上一版把最终阶段的门槛（coverage≥0.5、discovery≥4/6）原样套在每一级上。
-    stage 0 只有 10 步，两台机器人在 60×60 地图上几何上不可能覆盖一半格子：
-    v2 首轮 5000 回合的验证 coverage 停在 0.06、discovery 停在 1/6，课程永远
-    卡在 stage 0。现在阶段 k 的门槛是 ``门槛_最终 × limit_k / max(limits)``——
-    E=250 的 0.5 在 E=10 是 0.02，在 E=100 是 0.2。
+    上一版把最终阶段的门槛（coverage≥0.5、discovery≥4/6）原样套在每一级上，
+    短回合阶段几何上不可达，课程永远卡死。现在：
 
-    collision/repeat 是每步比率，与回合长度无关，不缩放。两个门槛都特意设得
-    宽松：早期随机策略撞墙/出界是正常现象（实测平均碰撞率 0.31），避碰是奖励
-    层（V2 的 collision 权重）该管的事；repeat（最后位置 10 步内出现 ≥3 次）
-    在 E=10 短回合下 argmax 验证恒 0.7——起点附近没有探索空间，策略只能打转，
-    几何上降不到 0.5 以下，且 V2 的 repeat 权重本就是 0（不惩罚重复）。课程
-    只管 E 阶梯，coverage/discovery 门槛才是任务能力的正确信号。最后阶段不再
-    升级，其阈值只是阶梯终点的能力描述，不参与任何门控判断。
+    - coverage_gain（C_T - C_0）按预算份额缩放：E=250 要 0.5，E=50 只要 0.1；
+    - 不门控 discovery_rate：E 较短时它主要由目标出生位置运气决定，
+      且 discovery 已由验证分数与最优 checkpoint 选择覆盖；
+    - collision/repeat 是每步比率，与回合长度无关，不缩放。
     """
     if not limits:
         raise ValueError("limits must be non-empty; pass None to disable the curriculum")
@@ -73,8 +69,7 @@ def default_stages(
         CurriculumStage(
             int(limit),
             {
-                "coverage": coverage * (int(limit) / final_limit),
-                "discovery_rate": discovery_rate * (int(limit) / final_limit),
+                "coverage_gain": coverage_gain * (int(limit) / final_limit),
                 "collision_rate": collision_rate,
                 "repeat_rate": repeat_rate,
             },
@@ -91,7 +86,9 @@ class CurriculumGate:
     - 未达标：连续通过计数清零，阶段保持不变；等待再久也不会自动升级。
     - 升级后：连续通过计数重置，重新积累 ``required_passes`` 次。
     - 已在最后阶段：永远不再升级。
-    - ``stages=None``：课程关闭，``episode_limit()`` 恒为 ``fixed_limit``。
+    - ``stages=None``：课程关闭，``episode_limit()`` 恒为 ``fixed_limit``；
+      ``submit_validation`` 恒 False（不升级），但 ``should_evaluate`` 的评估
+      节奏仍然有效——``--curriculum off`` 的对照实验同样需要验证与早停。
     """
 
     stages: Sequence[CurriculumStage] | None
@@ -125,8 +122,9 @@ class CurriculumGate:
 
     def should_evaluate(self) -> bool:
         """距上次评估已完成的回合数是否已达到评估边界（在回合结束、
-        ``register_episode`` 之后询问）。"""
-        return self.enabled and self._episodes_since_eval >= self.eval_every
+        ``register_episode`` 之后询问）。课程关闭时节奏依然有效，
+        调用方据此跑验证与早停，只是 ``submit_validation`` 不会升级。"""
+        return self._episodes_since_eval >= self.eval_every
 
     def metrics_pass(self, metrics: Mapping[str, float]) -> bool:
         if not self.enabled or self._stage_index >= len(self.stages) - 1:
@@ -151,9 +149,12 @@ class CurriculumGate:
         return True
 
     def register_episode(self) -> None:
-        """一个训练回合结束；返回后调用方检查 ``due_for_eval``。"""
-        if self.enabled:
-            self._episodes_since_eval += 1
+        """一个训练回合结束；返回后调用方检查 ``should_evaluate``。
+
+        课程关闭时也计数：``--curriculum off`` 的对照实验仍按
+        ``eval_every`` 跑确定性验证与随机基线早停。
+        """
+        self._episodes_since_eval += 1
 
     def submit_validation(self, metrics: Mapping[str, float]) -> bool:
         """提交一次验证指标，返回本次是否触发了升级。"""
@@ -171,3 +172,18 @@ class CurriculumGate:
         else:
             self._passes_in_a_row = 0
         return False
+
+    def state_dict(self) -> dict:
+        """导出断点恢复所需的全部门控状态（供 trainer_state 落盘）。"""
+        return {
+            "stage_index": int(self._stage_index),
+            "passes_in_a_row": int(self._passes_in_a_row),
+            "episodes_since_eval": int(self._episodes_since_eval),
+        }
+
+    def load_state_dict(self, state: Mapping[str, int]) -> None:
+        if not self.enabled:
+            return
+        self._stage_index = int(state["stage_index"])
+        self._passes_in_a_row = int(state["passes_in_a_row"])
+        self._episodes_since_eval = int(state["episodes_since_eval"])

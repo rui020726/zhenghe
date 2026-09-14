@@ -569,6 +569,25 @@ class Environment:
             seen |= (np.asarray(agent_obs) != 0.5) & free
         return seen
 
+    def _marginal_new_cells(self, obs_maps, new_seen, free_mask) -> dict:
+        """每 agent 的边际新格数：每个本步新覆盖格由它的观察者各分摊 1/n。
+
+        既不重复计数（团队并集只算一次），又保留个体信用（同时看到同一新格的
+        n 个机器人各得 1/n）。v2 的 ``marginal_new_cells`` 分量从这里来。
+        """
+        agent_ids = list(obs_maps.keys())
+        if not agent_ids:
+            return {}
+        seen_stack = np.stack(
+            [(np.asarray(obs_maps[a]) != 0.5) & free_mask for a in agent_ids]
+        )  # (n, H, W)
+        observers = seen_stack.sum(axis=0)  # (H, W) 每个新格被几个机器人看到
+        credit = np.where(new_seen, 1.0 / np.maximum(observers, 1), 0.0)
+        return {
+            agent_id: float((seen_stack[i] * credit).sum())
+            for i, agent_id in enumerate(agent_ids)
+        }
+
     def team_union_coverage(self, obs_maps) -> float:
         """团队并集覆盖率：任一机器人观测到（时间戳 != 0.5）的自由格 / 全部自由格。
 
@@ -592,7 +611,14 @@ class Environment:
         checking_list = [i for i in range(self.num_agents)]
 
         # 覆盖率口径：C_t 取本步观测更新前的团队并集，C_{t+1} 取更新后。
-        coverage_before = self.team_union_coverage(obs)
+        # 布尔掩码只算一次：覆盖率、整数新格数与边际信用都从同一口径出。
+        free_mask = np.asarray(self.map) != 1
+        free_count = int(np.count_nonzero(free_mask))
+        before_seen = self._union_seen_mask(obs)
+        coverage_before = float(np.count_nonzero(before_seen) / free_count) if free_count else 0.0
+        # 整数新格数与边际信用只在 v2/potential 路径填充；legacy 保持旧口径。
+        new_union_cells = 0
+        marginal_new_cells: dict = {}
 
         next_pos = np.copy(self.agents_pos)
         self.global_pheromone = self.global_pheromone * self.pheromone_decay  # 每一步信息素都在衰减
@@ -659,7 +685,11 @@ class Environment:
         # Step 6: Update timestamp map after all actions using the provided `obs`
         obs, Exploration_reward, reExploration_reward, two_channelmap, reward_comm = self.update_timestamp_map(obs,
                                                                                                                two_channelmap)  # Directly use `obs` to update the timestamp map
-        coverage_after = self.team_union_coverage(obs)
+        after_seen = self._union_seen_mask(obs)
+        coverage_after = float(np.count_nonzero(after_seen) / free_count) if free_count else 0.0
+        new_seen = after_seen & ~before_seen
+        new_union_cells = int(np.count_nonzero(new_seen))
+        marginal_new_cells = self._marginal_new_cells(obs, new_seen, free_mask)
 
         if legacy:
             # ---- legacy 对照路径：逐位保留旧行为，包括 finish 覆盖、per-agent done
@@ -721,6 +751,8 @@ class Environment:
             done = {agent_id: all_found for agent_id in actions.keys()}
 
             events = StepEvents(
+                new_union_cells=new_union_cells,
+                marginal_new_cells=marginal_new_cells,
                 coverage_delta=coverage_after - coverage_before,
                 new_targets=new_target_count,
                 all_found=all_found,
@@ -789,12 +821,15 @@ class Environment:
         # 分别统计碰撞、短周期循环与真正的重复覆盖，不再混为 repeat：
         # - collisions：每 agent 本步碰撞次数
         # - short_cycle：触发 10 步内位置重复 3 次的 agent（旧 repeat_mark）
-        # - new_cells：本步团队并集新增覆盖格数（0 表示这一步纯重复旧区域）
-        free_count = int(np.count_nonzero(np.asarray(self.map) != 1)) or 1
+        # - new_union_cells：本步团队并集新增覆盖格数（0 表示这一步纯重复旧区域）
+        # - marginal_new_cells：每 agent 观察者分摊的边际新格数
+        legacy_new_cells = int(round((coverage_after - coverage_before) * (free_count or 1)))
         self.last_step_stats = {
             "collisions": dict(collisions),
             "short_cycle": list(repeat_mark),
-            "new_cells": int(round((coverage_after - coverage_before) * free_count)),
+            "new_cells": new_union_cells if not legacy else legacy_new_cells,
+            "new_union_cells": new_union_cells if not legacy else legacy_new_cells,
+            "marginal_new_cells": dict(marginal_new_cells),
             "new_targets": new_target_count,
             "all_found": all_found,
             "coverage_before": coverage_before,

@@ -285,18 +285,22 @@ class Agent:
             {'params': self.actor.parameters(), 'lr': actor_lr},
             {'params': self.critic.parameters(), 'lr': critic_lr}
         ])
+    def get_probs(self, state, pheromone_map_tensor, batch_size):
+        """只算动作概率，不采样：不消耗 torch 采样 RNG。
+
+        确定性验证、PPO 更新重算 log-prob 都必须走这里；采样一律由调用方
+        在应用合法动作掩码后自行进行，保证训练/验证/更新三处动作分布一致。
+        """
+        state = state.to(self.device)
+        pheromone_map_tensor = pheromone_map_tensor.to(self.device)
+        feature = self.full_model(state, pheromone_map_tensor, batch_size)
+        return self.actor(feature.view(batch_size, -1))
+
     def get_action(self, state,pheromone_map_tensor,batch_size = 256):
         """
         通过FullModel提取特征，使用Actor网络生成动作.这里的输入应该为时间戳地图
         """
-        # state: 输入的状态数据（例如，地图）
-        state = state.to(self.device)
-        pheromone_map_tensor = pheromone_map_tensor.to(self.device)
-        # 获取FullModel输出的特征
-        feature = self.full_model(state, pheromone_map_tensor,batch_size)
-
-        # 使用Actor网络生成动作概率
-        action_probs = self.actor(feature.view(batch_size, -1))  # 调整为适合Actor网络输入的形状
+        action_probs = self.get_probs(state, pheromone_map_tensor, batch_size)
 
         # 根据策略选择动作 (通过采样等方式)
         action = torch.multinomial(action_probs, 1).squeeze(1)  # 选择一个动作
@@ -410,11 +414,11 @@ class MAPPO:
         return actions
 
     ## buffer 相关
-    def add(self, obs1,obs2, obs_pheromone,action, reward, next_obs1,next_obs2,next_obs_pheromone, done, action_log_pi, adv_dones):
+    def add(self, obs1,obs2, obs_pheromone,action, reward, next_obs1,next_obs2,next_obs_pheromone, done, action_log_pi, adv_dones, legal_masks):
         for agent_id, buffer in self.buffers.items():
             buffer.add(obs1[agent_id],obs2[agent_id],obs_pheromone[agent_id] ,action[agent_id],
                        reward[agent_id], next_obs1[agent_id], next_obs2[agent_id],next_obs_pheromone[agent_id],
-                       done[agent_id],action_log_pi[agent_id], adv_dones[agent_id])
+                       done[agent_id],action_log_pi[agent_id], adv_dones[agent_id], legal_masks[agent_id])
 
 
     def all(self):
@@ -429,15 +433,16 @@ class MAPPO:
         done = {}
         action_log_pi = {}
         adv_dones = {}
+        legal_masks = {}
         for agent_id, buffer in self.buffers.items():
             obs1[agent_id],obs2[agent_id],obs_pheromone[agent_id], action[agent_id], reward[agent_id], next_obs1[agent_id],next_obs2[agent_id],next_obs_pheromone[agent_id],done[agent_id], action_log_pi[
-                agent_id], adv_dones[agent_id] = buffer.all()
-        return obs1,obs2, obs_pheromone,action, reward, next_obs1,next_obs2,next_obs_pheromone, done, action_log_pi, adv_dones
+                agent_id], adv_dones[agent_id], legal_masks[agent_id] = buffer.all()
+        return obs1,obs2, obs_pheromone,action, reward, next_obs1,next_obs2,next_obs_pheromone, done, action_log_pi, adv_dones, legal_masks
 
     ## PPO算法相关
     def learn(self, minibatch_size, gamma, lmbda, clip_param, K_epochs, entropy_coefficient, huber_delta=None):
         # 多智能体特有-- 集中式训练critic:要用到所有智能体next状态和动作
-        obs1,obs2, obs_pheromone,action, reward, next_obs1,next_obs2,next_obs_pheromone, done, action_log_pi, adv_dones = self.all()
+        obs1,obs2, obs_pheromone,action, reward, next_obs1,next_obs2,next_obs_pheromone, done, action_log_pi, adv_dones, legal_masks = self.all()
         # 计算GAE
         with torch.no_grad():  # adv and v_target have no gradient
             adv = torch.zeros(self.horizon, self.num_agents)
@@ -476,7 +481,8 @@ class MAPPO:
             if self.trick['adv_norm']:
                 adv = ((adv - adv.mean()) / (adv.std() + 1e-8))
 
-        for agent_id in self.buffers.keys():
+        agent_id_list = list(self.buffers.keys())
+        for agent_idx, agent_id in enumerate(agent_id_list):
             # Optimize policy for K epochs:
             for _ in range(K_epochs):
                 # 随机打乱样本 并 生成小批量
@@ -497,16 +503,25 @@ class MAPPO:
                         OBS_pheromone = obs_pheromone[agent_id][index]
                         OBS = torch.stack((OBS1, OBS2), dim=1)
 
-                        _, probs = self.agents.get_action(OBS,OBS_pheromone)
-                        dist_now = Categorical(probs)
+                        # 重算 log-prob 必须用与采样时相同的合法动作掩码，
+                        # 否则新旧策略分布不一致，PPO ratio 有偏。
+                        probs = self.agents.get_probs(OBS, OBS_pheromone, batch_size=OBS.shape[0])
+                        mask = legal_masks[agent_id][index]
+                        masked_probs = probs * mask
+                        masked_probs = masked_probs / masked_probs.sum(dim=-1, keepdim=True).clamp(min=1e-8)
+                        dist_now = Categorical(masked_probs)
                         dist_entropy = dist_now.entropy().reshape(-1, 1)  # mini_batch_size  -> mini_batch_size x 1
                         action_log_pi_now = dist_now.log_prob(action[agent_id][index].reshape(-1)).reshape(-1,
                                                                                                            1)  # mini_batch_size  -> mini_batch_size x 1
                     ratios = torch.exp(
                         action_log_pi_now.sum(dim=1, keepdim=True) - action_log_pi[agent_id][index].sum(dim=1,
                                                                                                         keepdim=True))  # shape(mini_batch_size X 1)
-                    surr1 = ratios * adv[index]  # mini_batch_size x 1
-                    surr2 = torch.clamp(ratios, 1 - clip_param, 1 + clip_param) * adv[index]
+                    # 信用分配：一个 agent 的 ratio 只与它自己的 advantage 相乘。
+                    # 旧实现把 (mb,1) 的 ratio 与 (mb,num_agents) 的 adv 广播相乘，
+                    # 个体碰撞信号被队友的 advantage 稀释，碰撞学不到。
+                    adv_own = adv[index][:, agent_idx].reshape(-1, 1)  # mini_batch_size x 1
+                    surr1 = ratios * adv_own
+                    surr2 = torch.clamp(ratios, 1 - clip_param, 1 + clip_param) * adv_own
                     actor_loss = -torch.min(surr1, surr2).mean() - entropy_coefficient * dist_entropy.mean()
                     self.agents.update_actor(actor_loss)
 
