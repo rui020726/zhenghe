@@ -259,5 +259,44 @@ class SearchEnvironmentSettingsTests(unittest.TestCase):
         self.assertFalse(environment.track_reward_terms)
 
 
+@unittest.skipIf(_SKIP_REASON is not None, _SKIP_REASON or "")
+class RandomBaselineTests(unittest.TestCase):
+    """``run_random_baseline`` 是早停的参照系：必须能跑通、按 seed 可复现、
+    且绝不触碰训练用全局 NumPy RNG（内部使用独立 ``RandomState``）。"""
+
+    def setUp(self) -> None:
+        self.train = _load_train_module()
+
+    def _args(self, episodes: int = 3) -> Any:
+        return self.train.build_parser().parse_args(
+            ["--validation-episodes", str(episodes), "--num-agents", "2", "--num-goals", "3"]
+        )
+
+    def test_raw_random_runs_and_reports_task_metrics(self) -> None:
+        report = self.train.run_random_baseline(self._args(), 20, seed=5, legal_only=False)
+        for key in ("coverage", "collision_rate", "discovery_rate", "repeat_ratio"):
+            self.assertIn(key, report)
+
+    def test_legal_random_never_collides_but_raw_random_does(self) -> None:
+        legal = self.train.run_random_baseline(self._args(), 30, seed=5, legal_only=True)
+        raw = self.train.run_random_baseline(self._args(), 30, seed=5, legal_only=False)
+        self.assertEqual(legal["collision_rate"], 0.0)
+        self.assertGreater(raw["collision_rate"], 0.0)
+
+    def test_same_seed_gives_identical_results(self) -> None:
+        a = self.train.run_random_baseline(self._args(), 20, seed=7, legal_only=True)
+        b = self.train.run_random_baseline(self._args(), 20, seed=7, legal_only=True)
+        self.assertEqual(a, b)
+
+    def test_it_does_not_touch_the_training_numpy_rng(self) -> None:
+        np.random.seed(123)
+        before = np.random.get_state()
+        self.train.run_random_baseline(self._args(), 10, seed=9, legal_only=False)
+        after = np.random.get_state()
+        self.assertEqual(before[0], after[0])
+        np.testing.assert_array_equal(before[1], after[1])
+        self.assertEqual(before[2], after[2])
+
+
 if __name__ == "__main__":
     unittest.main()

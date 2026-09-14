@@ -605,7 +605,7 @@ def run_random_baseline(args, episode_limit: int, seed: int, legal_only: bool) -
                     legal = np.flatnonzero(mask > 0).tolist()
                     actions[agent_id] = int(rng.choice(legal)) if legal else 0
             else:
-                actions = {agent_id: int(rng.randrange(4)) for agent_id in env_agents}
+                actions = {agent_id: int(rng.randint(4)) for agent_id in env_agents}
             obs, _reward, terminated, marks, two_channelmap = env.step(
                 actions, obs, {}, two_channelmap, episode_limit
             )
@@ -724,7 +724,13 @@ def main(argv=None) -> int:
         )
     else:
         stages = None
-        gate = CurriculumGate(stages=None, fixed_limit=args.fixed_episode_limit)
+        # 评估节奏必须尊重 --eval-every：课程关闭时仍按该间隔跑确定性验证
+        # 与随机基线早停（见 CurriculumGate.should_evaluate 注释）。
+        gate = CurriculumGate(
+            stages=None,
+            fixed_limit=args.fixed_episode_limit,
+            eval_every=args.eval_every,
+        )
 
     run_settings = {
         "num_agents": args.num_agents,
