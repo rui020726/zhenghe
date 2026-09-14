@@ -141,12 +141,12 @@ class TargetDiscoveryTests(unittest.TestCase):
         self.assertIn("finish", terms)
         self.assertAlmostEqual(terms["finish"], 3.0)
         self.assertAlmostEqual(terms["new_target"], 1.0)
-        # finish (3) + new_target (1) + time_cost (-0.002) => ~3.998, not 3.0.
+        # finish (3) + new_target (1) + time_cost (-0.006) => ~3.994, not 3.0.
         self.assertGreater(reward["agent_0"], 3.0)
         self.assertAlmostEqual(sum(terms.values()), reward["agent_0"], places=4)
 
         collision_terms = env.last_reward_terms["agent_1"]
-        self.assertAlmostEqual(collision_terms["collision"], -1.0)
+        self.assertAlmostEqual(collision_terms["collision"], -0.4)
         self.assertAlmostEqual(sum(collision_terms.values()), reward["agent_1"], places=4)
         self.assertLess(reward["agent_1"], reward["agent_0"])
 
