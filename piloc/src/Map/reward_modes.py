@@ -38,12 +38,12 @@ class RewardWeights:
     """V2 / potential 模式的全部可调权重。"""
 
     target: float = 1.0
-    coverage: float = 2.0
+    coverage: float = 10.0
     finish: float = 3.0
     time_cost: float = 0.5
     collision: float = 1.0
     repeat: float = 0.0
-    pheromone: float = 0.0
+    pheromone: float = 0.3
     potential_beta: float = 1.0
     t_max: int = 250
     gamma: float = 0.99
@@ -61,12 +61,12 @@ class RewardWeights:
     ) -> "RewardWeights":
         return RewardWeights(
             target=float(weights.get("target", 1.0)),
-            coverage=float(weights.get("coverage", 2.0)),
+            coverage=float(weights.get("coverage", 10.0)),
             finish=float(weights.get("finish", 3.0)),
             time_cost=float(weights.get("time_cost", 0.5)),
             collision=float(weights.get("collision", 1.0)),
             repeat=float(weights.get("repeat", 0.0)),
-            pheromone=float(weights.get("pheromone", 0.0)),
+            pheromone=float(weights.get("pheromone", 0.3)),
             potential_beta=float(potential_beta),
             t_max=int(t_max),
             gamma=float(gamma),

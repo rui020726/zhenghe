@@ -32,17 +32,25 @@ N_t          = 本步首次被任意机器人观测到的唯一目标数（两�
 T_max        = 250
 
 team_reward  = 1.0 * N_t
-             + 2.0 * (C_{t+1} - C_t)
+             + 10.0 * (C_{t+1} - C_t)
              + 3.0 * all_targets_found
              - 0.5 / T_max
+             + 0.3 * pheromone_term   # 走低信息素新区域为正，clip ±1；见下
 
 agent_reward = team_reward - collision * collision_i
 ```
 
-默认权重（`configs.REWARD_V2`）：`target=1.0, coverage=2.0, finish=3.0,
-time_cost=0.5, collision=1.0, repeat=0.0, pheromone=0.0`。
+默认权重（`configs.REWARD_V2`）：`target=1.0, coverage=10.0, finish=3.0,
+time_cost=0.5, collision=1.0, repeat=0.0, pheromone=0.3`。
 （2026-09-13 起 collision 由 0.2 调至 1.0：0.2 过弱，E=10 随机探索期间碰撞率
-平均 0.31 且 5000 回合不降，给不了策略足够的避碰梯度。）
+平均 0.31 且 5000 回合不降，给不了策略足够的避碰梯度。
+2026-09-14 起 coverage 由 2.0 调至 10.0 并开启 pheromone 0.3：60×60 地图每步
+覆盖增量仅 0.01-0.02，×2.0 后每步 0.02-0.04，信号淹没在 PPO critic 噪声里，
+策略在 E=30 学会原地打转（验证 travel=58/60 但 recoverage=0.96）；放大覆盖
+信号并恢复 PILOC 的**信息素探索引导**——`0.1*(v_-v)/max(v_,eps) + 0.1*(v_-v)`
+走低信息素新区域为正、重复踩旧区域为负，weight=0.3 时单步 ±0.3，量级足以
+驱动策略继续向外探索（信息素带 epsilon 保护与 clip，`pheromone_epsilon=1e-6`、
+`pheromone_clip=1.0`）。）
 
 与 legacy 的本质区别：
 

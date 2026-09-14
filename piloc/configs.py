@@ -66,12 +66,12 @@ T_MAX = 250
 # agent_reward = team_reward - collision*collision_i
 REWARD_V2 = dict(
     target=1.0,
-    coverage=2.0,
+    coverage=10.0,        # 2.0 过弱：60x60 每步覆盖增量 0.01-0.02，信号淹没在 critic 噪声里，策略学会原地打转
     finish=3.0,
     time_cost=0.5,
     collision=1.0,        # 每 agent 单独计；0.2 过弱，早期策略撞墙/出界率 31% 不降
     repeat=0.0,           # 默认关闭：V2 不用短周期惩罚
-    pheromone=0.0,        # 默认关闭：实验项，带 epsilon 保护与裁剪
+    pheromone=0.3,        # 恢复 PILOC 探索引导：走低信息素新区域得正奖励，推动策略走出起点
 )
 
 # potential 模式的势函数系数：F = beta * (gamma * Phi_next - Phi_current)，
