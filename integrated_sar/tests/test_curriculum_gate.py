@@ -175,6 +175,31 @@ class DisabledCurriculumTests(unittest.TestCase):
         self.assertTrue(gate.should_evaluate())
         self.assertFalse(gate.submit_validation(_passing()))  # never advances
 
+    def test_off_resets_the_evaluation_cadence_after_each_validation(self) -> None:
+        # 计数器重置属于评估节奏，不属于课程升级：课程关闭时每次验证后
+        # 也必须归零。否则首次验证后 should_evaluate 每回合都为 True，
+        # 每个训练回合都白跑一遍确定性验证（实测把 300 回合拖成 3+ 小时）。
+        gate = CurriculumGate(stages=None, fixed_limit=123, eval_every=5)
+        for _ in range(5):
+            gate.register_episode()
+        self.assertTrue(gate.should_evaluate())
+        gate.submit_validation(_passing())
+        for _ in range(4):
+            gate.register_episode()
+        self.assertFalse(gate.should_evaluate())  # 节奏已重置，未满 5 回合
+        gate.register_episode()
+        self.assertTrue(gate.should_evaluate())  # 第 5 回合再次触发
+
+    def test_enabled_gate_also_resets_cadence_after_validation(self) -> None:
+        gate = CurriculumGate(
+            stages=default_stages([50, 250]), eval_every=5, required_passes=2
+        )
+        for _ in range(5):
+            gate.register_episode()
+        self.assertTrue(gate.should_evaluate())
+        gate.submit_validation(_passing())
+        self.assertFalse(gate.should_evaluate())
+
     def test_thresholds_on_unknown_metrics_are_refused_at_construction(self) -> None:
         with self.assertRaises(ValueError):
             CurriculumStage(10, {"episode_return": 5.0})

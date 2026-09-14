@@ -158,9 +158,13 @@ class CurriculumGate:
 
     def submit_validation(self, metrics: Mapping[str, float]) -> bool:
         """提交一次验证指标，返回本次是否触发了升级。"""
+        # 计数器重置属于“评估节奏”，不属于“课程升级”：任何一次验证
+        # （包括课程关闭时的对照实验验证）之后都要归零，否则
+        # --curriculum off 下 should_evaluate 从首次验证起每回合都 True，
+        # 每个训练回合都白跑一遍确定性验证。
+        self._episodes_since_eval = 0
         if not self.enabled:
             return False
-        self._episodes_since_eval = 0
         if self._stage_index >= len(self.stages) - 1:
             return False
         if self.metrics_pass(metrics):
