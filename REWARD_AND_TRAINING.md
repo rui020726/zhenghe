@@ -255,7 +255,41 @@ python -m integrated_sar.joint_driver --piloc-checkpoint runs/piloc_v2_s0/best \
     --steps 200 --seed 7
 ```
 
-## 6. 已知限制
+## 6. E=50 对照实验结果（2026-09-15）
+
+第三步消融：`--curriculum off`、固定 E=50、每 50 回合 20 个固定验证 seed
+确定性验证 + raw/legal-random 基线、300 回合 × 3 seed。运行目录
+`runs/abl_{legacy,v2}_s{0,1,2}_e50`，每组约 20 分钟（CPU 单线程）。
+
+**300 回合最终验证 coverage（验证 seed 均值）**：
+
+| 组别 | seed 0 | seed 1 | seed 2 | 均值 | raw-random | legal-random |
+|---|---:|---:|---:|---:|---:|---:|
+| legacy (γ=0.95) | 0.214 | 0.217 | 0.243 | **0.225** | 0.110 | 0.120 |
+| v2 (γ=0.99) | 0.174 | 0.201 | 0.207 | **0.194** | 0.110 | 0.119 |
+
+coverage_gain（C_T−C_0）均值：legacy 0.183，v2 0.153。discovery_rate 均值：
+legacy 0.20，v2 0.17（6 个目标）。无任何早停触发；全部 6 组全程在随机基线之上。
+
+判定：
+
+- **两组都能学**：300 回合内验证 coverage 单调爬升，最终高于 raw-random
+  约 75–120%、高于 legal-random 约 50–95%。旧 v2（归一化 coverage +
+  pheromone 负偏置）"学得比随机差"的坍塌模式没有复现——修复生效。
+- **legacy 当前略优于 v2**（0.225 vs 0.194）。注意两组 γ 不同（0.95 vs 0.99，
+  v2 按 §3 推荐），且 300 回合偏短，差距的归因需 γ 配对实验确认；
+  v2 seed 0 在 ep 150 后回退（0.200→0.174），稳定性弱于 legacy。
+- 旧 v2（当前 v2 对照组）未重跑：用户诊断已给出其坍塌证据
+  （训练 2250+ 回合后 coverage 0.055 < raw-random 0.0685、collision 0.867），
+  与本仓库随机 rollout 标定（每 agent-step 奖励 −0.0401，legacy +0.87）一致。
+- v2 奖励分解（`--track-reward-terms`）符合设计：边际信用按个体分化
+  （末回合 agent_0 23.8 vs agent_1 61.0），碰撞项全程为 0（合法 mask
+  生效），pheromone/time_cost/repeat 恒 0（标定期关闭）。
+
+后续：γ 配对（两组同 γ）+ E=100/500 回合复测消除混杂；之后进入第四步
+课程恢复（E 从 50 起步）。
+
+## 7. 已知限制
 
 - 每回合训练地图仍随机生成（`DungeonMaps` 资产不在仓库内），
   验证集是"固定 seed 的固定地图"而不是独立留出的真实地图集；
