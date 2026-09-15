@@ -44,7 +44,8 @@ agent_reward = team_reward
 
 默认权重（`configs.REWARD_V2`）：`target=5.0, marginal_coverage=0.2,
 union_coverage=0.05, finish=20.0, collision=1.0, no_new_cell=0.05,
-time_cost=0.0, repeat=0.0, pheromone=0.0`。
+time_cost=0.0, repeat=0.5, pheromone=0.0`（repeat 标定起点为 0，§6.2 按
+重复访问线索开到 0.5 并成为默认，§6.3 完整课程实验按此权重跑完）。
 
 （2026-09-14 诊断：旧 v2 把覆盖增量按比例归一（coverage=10 × ΔC），60×60
 地图上每步团队新增仅 ~4 格，ΔC≈0.0013，奖励 +0.013——比 legacy 的探索信号
@@ -381,16 +382,55 @@ coverage_gain：legacy 0.191，v2 0.162。discovery_rate 两组相同（0.111）
    回归测试，commit `314ebbb`）；
 2. ✅ γ 配对 E=50 复测（见 §6.1，γ 混杂排除，差距真实）；
 3. ✅ 单种子课程 smoke test（E 连续晋级 50→75→stage 2，509s）；
-4. ⬜ 3–5 种子完整课程实验（建议先给 v2 开小幅 repeat 惩罚再跑）；
+4. ✅ 3 种子完整课程实验（v2 + repeat=0.5，3 × 5000 回合，见 §6.3）；
 5. ⬜ centralized critic、potential reward 等结构性改进
    （potential 需先按 §1.3 校准 beta）。
+
+### 6.3 完整课程实验（3 seed × 5000 回合，2026-09-16）
+
+第 4 步正式训练：v2 + repeat=0.5、`--curriculum gate`（阶梯 50→250）、
+γ=0.99、3 seed × 5000 回合、每 50 回合在 20 个固定验证 seed 上确定性验证。
+运行目录 `runs/cur_v2rep05_s{0,1,2}`；进程 OMP 线程限 6（双链并行，桌面
+负载正常），s0 与 s1 并行、s2 接力，全部跑满 5000 回合，无早停触发。
+
+**末段窗口（最后 1000 回合，E=250）训练指标**：
+
+| 指标 | seed 0 | seed 1 | seed 2 | 均值±std |
+|---|---:|---:|---:|---:|
+| coverage | 0.668 | 0.640 | 0.668 | **0.659 ± 0.013** |
+| coverage_gain | 0.628 | 0.601 | 0.628 | 0.619 ± 0.013 |
+| coverage_auc | 0.426 | 0.426 | 0.411 | 0.421 ± 0.007 |
+| repeat 率 | 0.070 | 0.076 | 0.078 | 0.074 ± 0.003 |
+| collision 率 | 0 | 0 | 0 | 0 |
+| discovery 率 | 0.708 | 0.625 | 0.775 | 0.703 ± 0.061 |
+
+**确定性验证（20 固定 seed）**：最优验证 coverage 0.714（s0, ep 2900）、
+0.681（s1, ep 1900）、0.719（s2, ep 3100），存于各 `best/`；末次验证
+coverage 0.628 / 0.695 / 0.696，与峰值持平、无坍塌。末期验证点
+legal-random 基线 0.213–0.228（E=250 口径），策略约为其 3 倍。
+
+判定：
+
+- **课程全程按最快节奏晋级**：9 个阶段都在连续 3 次验证达标后立即升级
+  （每段恰好 150 回合），stage 8（E=250）分别于 ep 1250 / 1250 / 1350
+  到达，此后 3500+ 回合稳定在末段；无一次失败重试、无早停。
+- **repeat 惩罚长训有效**：末段 repeat 率 0.074，与 E=50 短跑（§6.2 的
+  0.07）持平；全阶段 collision 恒 0（合法动作 mask 生效）。
+- **覆盖数字不可跨 E 比较**：回合上限提高后 legal-random 基线也从 0.12
+  升到 0.22；§6.1/§6.2 的 legacy vs v2 结论是 E=50 口径，本节只回答
+  "完整课程能到多少"。
+- **无 train/val 落差**：末段训练 coverage 0.659 与验证 0.63–0.70 同档。
+- 奖励分解（agent_0，每回合均值）：marginal_new_cells +191、
+  union_coverage +96、new_target +21、finish +2~6、repeat −3.8、
+  no_new_cell −2.1——与设计一致（个体边际信用 + 团队共享 + 零碰撞）。
+- 产物齐全：`checkpoints/` 每 500 回合一个（内嵌 trainer_state，可直接
+  `--resume`）、`best/` 按验证任务指标保存、`trainer_state.pkl` 旁路副本。
 
 ## 7. 已知限制
 
 - 每回合训练地图仍随机生成（`DungeonMaps` 资产不在仓库内），
   验证集是"固定 seed 的固定地图"而不是独立留出的真实地图集；
-- V2 baseline 权重是首轮标定起点，不是最终最优参数；pheromone/time_cost/
-  repeat 归零，标定通过后再逐项开启；
-- `repeat`/`pheromone` 保留为默认关闭的实验项；
+- V2 baseline 权重是首轮标定起点，不是最终最优参数；`pheromone`/`time_cost`
+  保留为默认关闭的实验项（`repeat=0.5` 已是默认并跑完完整课程，见 §6.3）；
 - rescue 启发式**不进入训练**（会破坏动作与 log-prob 的一致性），
   仅在 `piloc/test.py` 的评估路径保留。
