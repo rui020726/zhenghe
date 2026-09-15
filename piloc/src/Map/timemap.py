@@ -24,6 +24,28 @@ from src.Map.reward_modes import (
 
 action_list = np.array([[-1, 0], [1, 0], [0, -1], [0, 1]], dtype=np.int32)
 
+
+def legal_action_mask(env, agent_index):
+    """每 agent 的合法动作掩码（1=合法，0=越界或目标格为障碍）。
+
+    训练采样、PPO log-prob 重算、argmax 验证、piloc/test.py 评估与集成 SAR
+    runtime 的部署推理共用这一份实现：四条路径的动作分布必须一致，否则
+    非法方向（训练时几乎无梯度）可能在部署时成为最大 logit 重新撞墙。
+    边界与相邻障碍始终处于局部视野内，掩码不引入真值泄漏。四向全不合法
+    （被障碍围住）时返回全 1：碰撞只会让 agent 停在原地，由碰撞惩罚处理，
+    比给 softmax 一个全 0 掩码安全。
+    """
+    x, y = (int(v) for v in env.agents_pos[agent_index])
+    mask = np.zeros(action_list.shape[0], dtype=np.float32)
+    for action in range(action_list.shape[0]):
+        dx, dy = (int(v) for v in action_list[action])
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < env.map_size[0] and 0 <= ny < env.map_size[1] and env.map[nx, ny] != 1:
+            mask[action] = 1.0
+    if mask.sum() == 0.0:
+        mask[:] = 1.0
+    return mask
+
 color_map = np.array([[255, 255, 255],  # white
                       [190, 190, 190],  # gray
                       [0, 191, 255],  # blue
@@ -141,6 +163,9 @@ class Environment:
         # 最近一步的结构化事件（碰撞、发现、覆盖前后值），供训练循环分别统计
         # collision / 短周期循环 / 重复覆盖，而不是全部混进 repeat。
         self.last_step_stats = {}
+        # 本步各 agent 自身视野更新后、通信合并前的观测快照：边际信用只归因
+        # 给真正观测到新格的机器人，而不是通过通信收到队友地图的机器人。
+        self._local_obs_snapshot: dict = {}
         self.num_goals = num_goals  # 目标个数
         self.timestamp_map = np.full((60, 60), 0.5, dtype=np.float32)  # 初始时间戳地图
         self.agents = [f'agent_{i}' for i in range(num_agents)]  # 智能体列表
@@ -514,6 +539,13 @@ class Environment:
 
             # 更新回字典中
             agent_timestamp_maps[agent_id] = agent_map  # 更新该智能体的时间戳地图
+        # 合并前快照：此刻每张地图只包含该 agent 自己观测过的格子。之后的
+        # 通信合并会把队友的观测并入（视野内交换 + 延迟缓冲），边际信用
+        # 若基于合并后的地图，会把奖励分给只是"收到地图"而并未观测该格的
+        # agent——这是 v2 个体信用的归因错误，必须用这份快照计算。
+        self._local_obs_snapshot = {
+            agent_id: agent_map.copy() for agent_id, agent_map in agent_timestamp_maps.items()
+        }
         agent_invision = self.find_agents_in_vision(agents_positions)  # 得到智能体视野内有哪些智能体
 
         for agentid, agent_in_vision in enumerate(agent_invision):
@@ -689,7 +721,9 @@ class Environment:
         coverage_after = float(np.count_nonzero(after_seen) / free_count) if free_count else 0.0
         new_seen = after_seen & ~before_seen
         new_union_cells = int(np.count_nonzero(new_seen))
-        marginal_new_cells = self._marginal_new_cells(obs, new_seen, free_mask)
+        # 边际信用用合并前的本地 FOV 快照归因：新格只可能被本步真正观测到它的
+        # 机器人看见（新格不在任何 agent 的旧地图里），收到队友合并地图不算观测。
+        marginal_new_cells = self._marginal_new_cells(self._local_obs_snapshot, new_seen, free_mask)
 
         if legacy:
             # ---- legacy 对照路径：逐位保留旧行为，包括 finish 覆盖、per-agent done

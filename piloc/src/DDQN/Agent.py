@@ -565,7 +565,7 @@ class MAPPO:
             for p in agent.critic_optimizer.param_groups:
                 p['lr'] = lr_c_now
 
-    def save(self, model_dir,episode_num, meta=None):
+    def save(self, model_dir,episode_num, meta=None, trainer_state=None):
         # 保存共享的 full_model、actor、critic 的状态字典（仅需保存一次，无需区分智能体）
         os.makedirs(model_dir, exist_ok=True)
         state = {
@@ -577,6 +577,10 @@ class MAPPO:
             # 训练配置随权重走：一个 checkpoint 必须自带它是哪套奖励/折扣训出来的，
             # 否则事后无法解释，也无法安全地送去联合推理。
             'run_meta': dict(meta) if meta else None,
+            # 训练状态随权重走（trainer_state.pkl 的内容合一进同一个文件）：
+            # 权重与课程/RNG/global step/ buffer 分开覆盖时，恢复旧 checkpoint
+            # 可能加载到更新一轮的其余状态，resume 不再与连续训练一致。
+            'trainer_state': trainer_state,
         }
         torch.save(state, os.path.join(model_dir, f'shared_mappo_model_21_{episode_num}.pth'))
     # 21为修正通信丢失的模型

@@ -66,6 +66,54 @@ class Buffer_for_PPO:
         self._index = 0
         self._size = 0
 
+    def state_dict(self):
+        """导出断点恢复所需的 buffer 状态（全量数组）。
+
+        PPO 的 learn 通过 ``all()`` 消费全部 capacity 行：连续训练中
+        "未填充" 行保留着上一窗口的残留数据，同样参与梯度更新（learn 后
+        的 clear 只重置索引，不清数组内容）。checkpoint 若只存前
+        ``_size`` 行，恢复后这些残留行会变成零，与连续训练不一致
+        （N+M ≠ N+resume M）。因此必须全量存取，size==0 且刚 learn 完
+        时残留数据同样不能丢。数组训练时按 float32 使用（``all()`` 里
+        ``dtype=torch.float32``），落盘也用 float32 不损失精度。
+        """
+        return {
+            "index": int(self._index),
+            "size": int(self._size),
+            "obs1": self.obs1.astype(np.float32),
+            "obs2": self.obs2.astype(np.float32),
+            "obs_pheromone": self.obs_pheromone.astype(np.float32),
+            "actions": self.actions.astype(np.float32),
+            "rewards": self.rewards.astype(np.float32),
+            "next_obs1": self.next_obs1.astype(np.float32),
+            "next_obs2": self.next_obs2.astype(np.float32),
+            "next_obs_pheromone": self.next_obs_pheromone.astype(np.float32),
+            "dones": self.dones.copy(),
+            "action_log_probs": self.action_log_probs.astype(np.float32),
+            "adv_dones": self.adv_dones.copy(),
+            "legal_masks": self.legal_masks.astype(np.float32),
+        }
+
+    def load_state_dict(self, state):
+        """恢复 ``state_dict`` 导出的 buffer 状态（None 表示全新空窗口）。"""
+        self.clear()
+        if state is None:
+            return
+        self.obs1[:] = state["obs1"]
+        self.obs2[:] = state["obs2"]
+        self.obs_pheromone[:] = state["obs_pheromone"]
+        self.actions[:] = state["actions"]
+        self.rewards[:] = state["rewards"]
+        self.next_obs1[:] = state["next_obs1"]
+        self.next_obs2[:] = state["next_obs2"]
+        self.next_obs_pheromone[:] = state["next_obs_pheromone"]
+        self.dones[:] = state["dones"]
+        self.action_log_probs[:] = state["action_log_probs"]
+        self.adv_dones[:] = state["adv_dones"]
+        self.legal_masks[:] = state["legal_masks"]
+        self._index = int(state["index"])
+        self._size = int(state["size"])
+
     def all(self):
         # 这里的obs和next_obs是 (batch_size, 60, 60)，可以使用flatten将它们展平为一维数组
         obs1 = torch.as_tensor(self.obs1, dtype=torch.float32).to(self.device)  # torch.Size([batch_size, 60, 60])

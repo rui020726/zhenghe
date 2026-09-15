@@ -291,13 +291,25 @@ class TrainedPilocPolicy:
     """Action provider that runs the trained PILOC network deterministically.
 
     It mirrors ``piloc/test.select_action`` but takes the argmax instead of sampling,
-    so one seed produces one episode.
+    so one seed produces one episode. The argmax is taken over the legal-action mask
+    (``timemap.legal_action_mask``, the same mask used by training, validation and
+    test evaluation): illegal directions receive almost no gradient during training,
+    so without the mask they can still own the largest logit at deployment and the
+    robots would start running into walls again.
     """
 
-    def __init__(self, policy: Any, *, device: str = "cpu", view_radius: int = 5) -> None:
+    def __init__(
+        self,
+        policy: Any,
+        *,
+        device: str = "cpu",
+        view_radius: int = 5,
+        legal_action_mask: Any = None,
+    ) -> None:
         self.policy = policy
         self.device = device
         self.view_radius = int(view_radius)
+        self._legal_action_mask = legal_action_mask
 
     def __call__(
         self,
@@ -306,6 +318,10 @@ class TrainedPilocPolicy:
         two_channelmap: Mapping[str, Any],
     ) -> dict[str, int]:
         import torch
+
+        mask_fn = self._legal_action_mask
+        if mask_fn is None:
+            from src.Map.timemap import legal_action_mask as mask_fn  # type: ignore[no-redef]
 
         del obs  # the trained policy consumes the two-channel map, not the raw timestamps
         actions: dict[str, int] = {}
@@ -320,7 +336,7 @@ class TrainedPilocPolicy:
                 np.asarray(env.global_pheromone), row, col, self.view_radius
             )
             with torch.no_grad():
-                _, probabilities = self.policy.agents.get_action(
+                probabilities = self.policy.agents.get_probs(
                     torch.as_tensor(observation, device=self.device).unsqueeze(0),
                     torch.as_tensor(pheromone.astype(np.float32), device=self.device).unsqueeze(0),
                     batch_size=1,
@@ -330,7 +346,10 @@ class TrainedPilocPolicy:
                 raise CheckpointIncompatibleError(
                     f"PILOC policy returned non-finite action probabilities for {agent_id}"
                 )
-            actions[str(agent_id)] = int(np.argmax(values))
+            # 非法动作概率清零后取 argmax；掩码在四向全不合法时退化为全 1，
+            # 所以乘出的最大值必然落在一个合法动作上。
+            mask = np.asarray(mask_fn(env, index), dtype=np.float64)
+            actions[str(agent_id)] = int(np.argmax(values * mask))
         return actions
 
 
@@ -363,7 +382,14 @@ def build_piloc_search_side(
     observations = initialize_timestamp_observations(environment, view_radius=obs_radius)
     return (
         environment,
-        TrainedPilocPolicy(policy, device=device, view_radius=obs_radius),
+        # 掩码与训练/验证/test.py 同源：部署推理不得选出训练时几乎无梯度的
+        # 非法动作（否则重新出现撞墙）。
+        TrainedPilocPolicy(
+            policy,
+            device=device,
+            view_radius=obs_radius,
+            legal_action_mask=import_timemap_module(root).legal_action_mask,
+        ),
         observations,
         initialize_two_channel_map(observations),
     )

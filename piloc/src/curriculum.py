@@ -49,7 +49,6 @@ def default_stages(
     limits: Sequence[int],
     *,
     coverage_gain: float = 0.5,
-    collision_rate: float = 0.5,
     repeat_rate: float = 0.9,
 ) -> list[CurriculumStage]:
     """门控阈值：coverage_gain 按各阶段预算占最终预算的比例缩放，不加 discovery。
@@ -60,7 +59,11 @@ def default_stages(
     - coverage_gain（C_T - C_0）按预算份额缩放：E=250 要 0.5，E=50 只要 0.1；
     - 不门控 discovery_rate：E 较短时它主要由目标出生位置运气决定，
       且 discovery 已由验证分数与最优 checkpoint 选择覆盖；
-    - collision/repeat 是每步比率，与回合长度无关，不缩放。
+    - repeat 是每步比率，与回合长度无关，不缩放；
+    - 不再门控 collision_rate：合法动作 mask 上线后碰撞率恒为 0，它已经
+      衡量不了"学会避障"，留着只会让门控永远通过（自欺）。避障质量改由
+      部署一致性（mask 之外的推理路径不得选非法动作）与验证分里的
+      collision 项体现。
     """
     if not limits:
         raise ValueError("limits must be non-empty; pass None to disable the curriculum")
@@ -70,7 +73,6 @@ def default_stages(
             int(limit),
             {
                 "coverage_gain": coverage_gain * (int(limit) / final_limit),
-                "collision_rate": collision_rate,
                 "repeat_rate": repeat_rate,
             },
         )
@@ -186,8 +188,10 @@ class CurriculumGate:
         }
 
     def load_state_dict(self, state: Mapping[str, int]) -> None:
-        if not self.enabled:
-            return
-        self._stage_index = int(state["stage_index"])
-        self._passes_in_a_row = int(state["passes_in_a_row"])
+        # 评估节奏（episodes_since_eval）在课程关闭时也必须恢复：--curriculum off
+        # 的对照实验靠它维持验证/早停节拍，丢了它恢复后的验证时刻就会偏移，
+        # 与连续训练不再逐位一致。阶段字段只对启用的课程有意义。
+        if self.enabled:
+            self._stage_index = int(state["stage_index"])
+            self._passes_in_a_row = int(state["passes_in_a_row"])
         self._episodes_since_eval = int(state["episodes_since_eval"])

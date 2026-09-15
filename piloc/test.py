@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from torch.distributions import Categorical
 from src.DDQN.Agent import MAPPO
-from src.Map.timemap import Environment
+from src.Map.timemap import Environment, legal_action_mask
 from src.DDQN.rescue import RescueAlgorithm
 import configs
 import random
@@ -153,6 +153,12 @@ def get_local_ph(global_ph, x, y, view_radius=5):
 
 
 def select_action(two_channelmap, policy, env, env_agents, device):
+    """评估采样：策略概率过合法动作掩码归一后再采样。
+
+    与训练采样（train.select_action）、确定性验证（train.select_action_deterministic）
+    和集成 SAR runtime 共用 timemap.legal_action_mask：非法方向在训练时几乎
+    无梯度，不加掩码时它们可能在评估中拿到最大概率，重新出现撞墙行为。
+    """
     actions = {}
     action_log_pis = {}
     for agent_id in env_agents:
@@ -164,9 +170,11 @@ def select_action(two_channelmap, policy, env, env_agents, device):
         pheromone_map_tensor = torch.tensor(pheromone_map, dtype=torch.float32).unsqueeze(0).to(device)
         obs = np.stack([obstacle_map, explore_map], axis=0)
         obs_tensor = torch.tensor(obs, dtype=torch.float32).unsqueeze(0).to(device)
-        action_probs = policy.agents.get_action(obs_tensor, pheromone_map_tensor, batch_size=1)
-        action_probs = action_probs[1]
-        dist = Categorical(probs=action_probs)
+        action_probs = policy.agents.get_probs(obs_tensor, pheromone_map_tensor, batch_size=1)
+        mask = torch.as_tensor(legal_action_mask(env, agent_intid), dtype=torch.float32, device=device)
+        masked_probs = action_probs * mask
+        masked_probs = masked_probs / masked_probs.sum(dim=-1, keepdim=True).clamp(min=1e-8)
+        dist = Categorical(probs=masked_probs)
         action = dist.sample()
         action_log_pi = dist.log_prob(action)
         actions[agent_id] = action.item()

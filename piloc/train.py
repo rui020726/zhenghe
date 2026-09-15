@@ -23,7 +23,7 @@ if _SRC_DDQN not in sys.path:
 
 import configs
 from src.DDQN.Agent import MAPPO
-from src.Map.timemap import Environment, action_list as ACTION_LIST
+from src.Map.timemap import Environment, action_list as ACTION_LIST, legal_action_mask
 from src.curriculum import CurriculumGate, default_stages
 
 SHARED_MODEL_PATTERN = re.compile(r"^shared_mappo_model_(\d+)_(\d+)\.pth$")
@@ -66,26 +66,6 @@ def get_local_ph(global_ph, x, y, view_radius=5):
 
     # 进行填充
     return np.pad(local_ph, ((pad_top, pad_bottom), (pad_left, pad_right)), mode='constant')
-
-def legal_action_mask(env, agent_index):
-    """每 agent 的合法动作掩码（1=合法，0=越界或目标格为障碍）。
-
-    边界与相邻障碍始终处于局部视野内，掩码不引入真值泄漏。掩码必须同时
-    用于训练采样、argmax 验证与 PPO 更新重算 log-prob（buffer 逐条保存）。
-    四向全不合法（被障碍围住）时返回全 1：碰撞只会让 agent 停在原地，
-    由碰撞惩罚处理，比给 softmax 一个全 0 掩码安全。
-    """
-    x, y = (int(v) for v in env.agents_pos[agent_index])
-    mask = np.zeros(ACTION_LIST.shape[0], dtype=np.float32)
-    for action in range(ACTION_LIST.shape[0]):
-        dx, dy = (int(v) for v in ACTION_LIST[action])
-        nx, ny = x + dx, y + dy
-        if 0 <= nx < env.map_size[0] and 0 <= ny < env.map_size[1] and env.map[nx, ny] != 1:
-            mask[action] = 1.0
-    if mask.sum() == 0.0:
-        mask[:] = 1.0
-    return mask
-
 
 def apply_action_mask(action_probs, mask, device):
     """掩码 + 归一化：非法动作概率清零后重新归一，供 Categorical 使用。"""
@@ -291,13 +271,17 @@ def episode_from_checkpoint_name(path: str | os.PathLike[str]) -> int:
     return int(match.group(2)) if match else 0
 
 
-def resume_policy(policy: MAPPO, checkpoint: str | os.PathLike[str], device: torch.device) -> int:
-    """Load weights strictly and return the episode the run resumes from.
+def resume_policy(policy: MAPPO, checkpoint: str | os.PathLike[str], device: torch.device):
+    """Load weights strictly and return ``(episode, trainer_state_bundle)``.
 
     ``MAPPO.load`` is deliberately not used: it hardcodes ``device='cuda'`` and the
     filename ``shared_mappo_model_21_9232.pth``, so it cannot resume an arbitrary run.
     A partial load is refused rather than accepted, because silently missing layers
     produce a policy that runs and decides with the wrong weights.
+
+    新版 checkpoint 把 trainer state（课程/RNG/global step/buffer/早停计数）与
+    权重嵌在同一个文件里并在这里一并取出；旧 checkpoint 没有 ``trainer_state``
+    键时返回 None，由调用方回退到旁路 ``trainer_state.pkl``。
     """
     path = Path(os.fspath(checkpoint))
     if not path.is_file():
@@ -312,30 +296,66 @@ def resume_policy(policy: MAPPO, checkpoint: str | os.PathLike[str], device: tor
 
     for name, module in targets.items():
         module.load_state_dict(state[name], strict=True)
-        module.eval()
+        # resume 后继续训练：保持 train 模式与连续训练一致（部署加载才用 eval）。
+        module.train()
     if "optimizer" in state:
         agents.optimizer.load_state_dict(state["optimizer"])
-    return int(state.get("episode", episode_from_checkpoint_name(path)))
+
+    episode = int(state.get("episode", episode_from_checkpoint_name(path)))
+    bundle = state.get("trainer_state")
+    if bundle is not None:
+        stored = int(bundle.get("episode_num", episode))
+        if stored != episode:
+            # episode 一致性校验：权重与训练状态必须来自同一轮，否则恢复出的
+            # 运行点面目全非（旧的旁路 pkl 就是这么错位的）。
+            raise ValueError(
+                f"checkpoint {path} holds mismatched trainer state: weights are from "
+                f"episode {episode} but the embedded trainer state says {stored}"
+            )
+    return episode, bundle
 
 
-def save_trainer_state(path, *, episode_num, global_step, best_validation_score, gate, early_stop_triggered=False):
-    """把断点恢复需要的全部训练状态落盘（pickle，含 RNG 状态）。
+def build_trainer_state(
+    *,
+    episode_num,
+    global_step,
+    best_validation_score,
+    gate,
+    early_stop_triggered=False,
+    early_stop_failures=0,
+    buffers: dict | None = None,
+) -> dict:
+    """断点恢复需要的全部训练状态（含 RNG 与 PPO buffer 窗口）。
 
     旧 checkpoint 只存网络权重与 episode 号：课程阶段、连续通过计数、
     全局步数、最优验证分、Python/NumPy/Torch 的 RNG 状态全部丢失，任何
-    resume 都事实上从 stage 0 重来且后续采样序列偏移。这里一次性补齐。
+    resume 都事实上从 stage 0 重来且后续采样序列偏移。这里一次性补齐，
+    并嵌入 PPO buffer 的未消费窗口——缺了它，在 horizon 窗口中途恢复时
+    前几步样本丢失，恢复后的梯度更新与连续训练不一致。
     """
-    state = {
+    return {
         "episode_num": int(episode_num),
         "global_step": int(global_step),
         "best_validation_score": float(best_validation_score),
         "early_stop_triggered": bool(early_stop_triggered),
+        "early_stop_failures": int(early_stop_failures),
         "gate": gate.state_dict(),
+        "buffers": {
+            agent_id: buffer.state_dict() for agent_id, buffer in (buffers or {}).items()
+        },
         "rng_python": random.getstate(),
         "rng_numpy": np.random.get_state(),
         "rng_torch": torch.get_rng_state(),
         "rng_torch_cuda": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
     }
+
+
+def save_trainer_state(path, state: dict):
+    """把 ``build_trainer_state`` 的结果落盘（pickle，兼容旧 resume 流程）。
+
+    权威副本已嵌入模型 checkpoint 本体（``MAPPO.save(trainer_state=...)``），
+    这份旁路文件保留用于旧 checkpoint 的 resume 回退与人工检查。
+    """
     with open(path, "wb") as handle:
         pickle.dump(state, handle)
 
@@ -346,13 +366,31 @@ def load_trainer_state(path):
 
 
 def restore_trainer_state(state, gate):
-    """把 ``load_trainer_state`` 读回的状态应用到训练循环与门控上。"""
+    """把 ``load_trainer_state``/checkpoint 内嵌的 trainer state 应用到运行上。"""
     gate.load_state_dict(state["gate"])
     random.setstate(state["rng_python"])
     np.random.set_state(state["rng_numpy"])
     torch.set_rng_state(state["rng_torch"])
     if state.get("rng_torch_cuda") is not None and torch.cuda.is_available():
         torch.cuda.set_rng_state_all(state["rng_torch_cuda"])
+
+
+def restore_buffers(policy: MAPPO, state: dict) -> None:
+    """恢复 checkpoint 内嵌的 PPO buffer 窗口（缺失视为空窗口）。"""
+    saved = state.get("buffers") or {}
+    for agent_id, buffer in policy.buffers.items():
+        buffer.load_state_dict(saved.get(agent_id))
+
+
+def register_early_stop_failure(below_legal: bool, failures: int, patience: int) -> tuple[int, bool]:
+    """早停计一次验证结果，返回 ``(failures, triggered)``。
+
+    早停只与 legal-random 比较（raw-random 含非法动作，不是公平基线），且
+    必须连续 ``patience`` 次验证失败才停——单次验证方差足以让还在线性改善
+    的策略被误杀。
+    """
+    failures = failures + 1 if below_legal else 0
+    return failures, failures >= max(1, int(patience))
 
 
 class SearchEpisodeMetrics:
@@ -500,16 +538,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--validation-seed", type=int, default=None,
                         help="fixed seed for the deterministic validation rollout "
                              "(defaults to seed + 1_000_000_007, kept off the training RNG)")
-    # --- 早停：确定性策略必须在窗口内超过 raw-random 并接近 legal-random ---
+    # --- 早停：确定性策略必须接近 legal-random（唯一公平参照），连续失败才停 ---
     parser.add_argument("--early-stop", dest="early_stop", action="store_true", default=True,
-                        help="stop early when the deterministic policy cannot beat the "
-                             "raw-random baseline within the window")
+                        help="stop early when the deterministic policy keeps underperforming "
+                             "the legal-random baseline within the window")
     parser.add_argument("--no-early-stop", dest="early_stop", action="store_false",
-                        help="disable the random-baseline early stop")
+                        help="disable the legal-random-baseline early stop")
     parser.add_argument("--early-stop-window", type=int, default=500,
-                        help="episode by which the policy must clear the random baselines")
+                        help="episode by which the policy must clear the legal-random baseline")
     parser.add_argument("--early-stop-margin", type=float, default=0.05,
-                        help="'close to legal-random' tolerance on validation coverage")
+                        help="tolerance below legal-random validation coverage")
+    parser.add_argument("--early-stop-patience", type=int, default=3,
+                        help="consecutive failing validations required to trigger the early stop")
     return parser
 
 
@@ -769,6 +809,7 @@ def main(argv=None) -> int:
         "early_stop": args.early_stop,
         "early_stop_window": args.early_stop_window,
         "early_stop_margin": args.early_stop_margin,
+        "early_stop_patience": args.early_stop_patience,
         "cuda_deterministic": False,  # cudnn.benchmark=True in the policy module
     }
     # checkpoint 内嵌的最小可解释元数据：gamma、lambda、奖励模式与全部权重。
@@ -795,24 +836,43 @@ def main(argv=None) -> int:
     global_step = 0
     best_validation_score = -float("inf")
     early_stop_triggered = False
+    early_stop_failures = 0
     trainer_state_path = directories["root"] / "trainer_state.pkl"
     if args.resume is not None:
-        episode_num = resume_policy(policy, args.resume, device)
+        episode_num, resumed_bundle = resume_policy(policy, args.resume, device)
         print(f"resumed from {args.resume} at episode {episode_num}")
-        # 恢复课程阶段、全局步数、最优验证分与三条 RNG 流——否则任何 resume
-        # 都事实上从 stage 0 重来，且后续训练动作序列整体偏移。
-        if trainer_state_path.is_file():
+        if resumed_bundle is not None:
+            # 权威状态来自 checkpoint 本体：课程、RNG、global step、最优分、
+            # 早停计数与 PPO buffer 窗口全部与权重同源，不存在错位配对。
+            global_step = int(resumed_bundle.get("global_step", 0))
+            best_validation_score = float(
+                resumed_bundle.get("best_validation_score", -float("inf"))
+            )
+            early_stop_triggered = bool(resumed_bundle.get("early_stop_triggered", False))
+            early_stop_failures = int(resumed_bundle.get("early_stop_failures", 0))
+            restore_trainer_state(resumed_bundle, gate)
+            restore_buffers(policy, resumed_bundle)
+            print(
+                f"restored embedded trainer state: global_step={global_step} "
+                f"stage={gate.stage_index} best={best_validation_score:.3f} "
+                f"early_stop_failures={early_stop_failures}"
+            )
+        elif trainer_state_path.is_file():
+            # 旧格式回退：checkpoint 没有内嵌 trainer state 时读旁路 pkl。
+            # 两者是分开覆盖的，无法校验同源性——可用，但不保证与权重同轮。
             state = load_trainer_state(trainer_state_path)
             global_step = int(state.get("global_step", 0))
             best_validation_score = float(state.get("best_validation_score", -float("inf")))
             early_stop_triggered = bool(state.get("early_stop_triggered", False))
+            early_stop_failures = int(state.get("early_stop_failures", 0))
             restore_trainer_state(state, gate)
             print(
-                f"restored trainer state: global_step={global_step} "
-                f"stage={gate.stage_index} best={best_validation_score:.3f}"
+                f"restored legacy trainer_state.pkl: global_step={global_step} "
+                f"stage={gate.stage_index} best={best_validation_score:.3f} "
+                f"(checkpoint has no embedded trainer state; PPO buffer window is lost)"
             )
         else:
-            print("no trainer_state.pkl found; curriculum/RNG state restarts from scratch")
+            print("no trainer state found; curriculum/RNG state restarts from scratch")
 
     step = global_step # 记录总步数（resume 时从 trainer_state 恢复）
     step_t = 0 # 记录当前回合的步数
@@ -841,6 +901,18 @@ def main(argv=None) -> int:
     metrics = SearchEpisodeMetrics()
     metrics.reset(len(env.goals_pos))
     metrics_path = directories["root"] / "episode_metrics.jsonl"
+
+    if args.resume is not None:
+        # 恢复后按 episode 边界规则重建环境：训练循环在每个回合边界用
+        # seed+episode_num 重建环境并重播动作空间种子，resume 的第一个回合
+        # 必须遵守同一规则——主循环开头构建的环境用的是 seed+0，地图/目标
+        # 与连续训练中将要恢复的那个回合不一致。
+        env = build_search_environment(args, seed=args.seed + episode_num)
+        for agent_index in range(args.num_agents):
+            env.action_space(f"agent_{agent_index}").seed(seed=args.seed + episode_num)
+        obs = initialize_obs(env)
+        two_channelmap = env.two_channel_map(obs, {})
+        metrics.reset(len(env.goals_pos))
 
     # 训练循环
     while episode_num < args.episodes:
@@ -936,11 +1008,11 @@ def main(argv=None) -> int:
             gate.register_episode()
             if gate.should_evaluate():
                 report = run_validation(args, policy, device, gate.episode_limit(), validation_seed)
-                # 只把任务指标喂给门控；门控 coverage 用 coverage_gain（C_T - C_0），
-                # 初始视野覆盖率（~0.044）不计入；repeat_ratio 对应 repeat_rate 阈值。
+                # 只喂任务指标；coverage 用 coverage_gain（C_T - C_0），初始视野
+                # 覆盖率（~0.044）不计入；repeat_ratio 对应 repeat_rate 阈值。
+                # collision_rate 不再门控：legal mask 下恒为 0，衡量不了避障。
                 gate_metrics = {
                     "coverage_gain": report["coverage_gain"],
-                    "collision_rate": report["collision_rate"],
                     "repeat_rate": report["repeat_ratio"],
                 }
                 advanced = gate.submit_validation(gate_metrics)
@@ -963,14 +1035,20 @@ def main(argv=None) -> int:
                 # 最优 checkpoint 按验证任务指标保存，不按训练累计回报。
                 if score > best_validation_score:
                     best_validation_score = score
-                    policy.save(str(directories["root"] / "best"), episode_num, meta=checkpoint_meta)
-                    save_trainer_state(
-                        trainer_state_path,
+                    state = build_trainer_state(
                         episode_num=episode_num,
                         global_step=step,
                         best_validation_score=best_validation_score,
                         gate=gate,
+                        early_stop_triggered=early_stop_triggered,
+                        early_stop_failures=early_stop_failures,
+                        buffers=policy.buffers,
                     )
+                    policy.save(
+                        str(directories["root"] / "best"), episode_num,
+                        meta=checkpoint_meta, trainer_state=state,
+                    )
+                    save_trainer_state(trainer_state_path, state)
                 print(
                     f"[validation] episode {episode_num} stage={gate.stage_index} "
                     f"score={score:.3f} coverage={report['coverage']:.3f} "
@@ -980,31 +1058,38 @@ def main(argv=None) -> int:
                     f"legal={legal_base['coverage']:.3f}"
                 )
 
-                # 早停：窗口内确定性策略必须超过 raw-random，并接近 legal-random，
-                # 否则策略已坍塌（比随机还差），不再跑满 5000 回合浪费算力。
+                # 早停：只与 legal-random 比较（raw-random 含非法动作，策略经
+                # mask 训练后不再产生，只作日志参照）；且连续 patience 次验证
+                # 失败才停——单次验证方差足以误杀仍在线性改善的策略。
                 if (
                     args.early_stop
                     and not early_stop_triggered
                     and episode_num >= args.early_stop_window
                 ):
-                    below_raw = report["coverage"] <= raw_base["coverage"]
                     below_legal = report["coverage"] < legal_base["coverage"] - args.early_stop_margin
-                    if below_raw or below_legal:
+                    early_stop_failures, stop_now = register_early_stop_failure(
+                        below_legal, early_stop_failures, args.early_stop_patience
+                    )
+                    if stop_now:
                         early_stop_triggered = True
                         print(
                             f"[early-stop] episode {episode_num}: validation coverage "
-                            f"{report['coverage']:.3f} raw-random {raw_base['coverage']:.3f} "
-                            f"legal-random {legal_base['coverage']:.3f} (margin "
-                            f"{args.early_stop_margin}) -> stopping; policy failed to "
-                            f"beat random within {args.early_stop_window} episodes"
+                            f"{report['coverage']:.3f} below legal-random "
+                            f"{legal_base['coverage']:.3f} - margin {args.early_stop_margin} "
+                            f"for {early_stop_failures} consecutive validations "
+                            f"(patience {args.early_stop_patience}) -> stopping"
                         )
                         save_trainer_state(
                             trainer_state_path,
-                            episode_num=episode_num,
-                            global_step=step,
-                            best_validation_score=best_validation_score,
-                            gate=gate,
-                            early_stop_triggered=True,
+                            build_trainer_state(
+                                episode_num=episode_num,
+                                global_step=step,
+                                best_validation_score=best_validation_score,
+                                gate=gate,
+                                early_stop_triggered=True,
+                                early_stop_failures=early_stop_failures,
+                                buffers=policy.buffers,
+                            ),
                         )
                 # 阶段可能已变，重新读取当前回合步数上限。
                 E = gate.episode_limit()
@@ -1017,15 +1102,17 @@ def main(argv=None) -> int:
 
             # 保存模型：只在回合边界，且跳过 episode 0（0 % every == 0 会让第一回合每步都存盘）
             if should_save_checkpoint(episode_num, args.save_every):
-                policy.save(model_dir, episode_num, meta=checkpoint_meta)
-                save_trainer_state(
-                    trainer_state_path,
+                state = build_trainer_state(
                     episode_num=episode_num,
                     global_step=step,
                     best_validation_score=best_validation_score,
                     gate=gate,
                     early_stop_triggered=early_stop_triggered,
+                    early_stop_failures=early_stop_failures,
+                    buffers=policy.buffers,
                 )
+                policy.save(model_dir, episode_num, meta=checkpoint_meta, trainer_state=state)
+                save_trainer_state(trainer_state_path, state)
 
             episode_reward = {agent_id: 0 for agent_id in env_agents}
             reward_term_sums = {agent_id: {} for agent_id in env_agents}
@@ -1039,7 +1126,20 @@ def main(argv=None) -> int:
             policy.learn(minibatch_size, gamma, lmbda, clip_param, k_epochs, entropy_coefficient=0.01, huber_delta=huber_delta)
 
     print(f"Training completed in {time.time() - start_time} seconds")
-    policy.save(model_dir1, episode_num, meta=checkpoint_meta)
+    # 最终模型与 trainer state 同步落盘：恢复/部署都从这个 checkpoint 拿到
+    # 与权重同源的训练状态，不再依赖旁路 pkl 的新旧配对。
+    policy.save(
+        model_dir1, episode_num, meta=checkpoint_meta,
+        trainer_state=build_trainer_state(
+            episode_num=episode_num,
+            global_step=step,
+            best_validation_score=best_validation_score,
+            gate=gate,
+            early_stop_triggered=early_stop_triggered,
+            early_stop_failures=early_stop_failures,
+            buffers=policy.buffers,
+        ),
+    )
 
     # 保存训练结果
     train_return_ = np.array([train_return[agent_id] for agent_id in env.agents])

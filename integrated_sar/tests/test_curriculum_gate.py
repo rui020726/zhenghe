@@ -122,8 +122,9 @@ class AdvancementTests(unittest.TestCase):
 
     def test_mixed_thresholds_all_required(self) -> None:
         gate = _gate(required_passes=1)
-        # discovery fine but collision above bound -> no pass
-        self.assertFalse(gate.submit_validation(_passing(collision_rate=0.9)))
+        # discovery fine but coverage below bound -> no pass
+        bound = default_stages([10, 20, 30])[0].thresholds["coverage_gain"]
+        self.assertFalse(gate.submit_validation(_passing(coverage_gain=bound - 1e-9)))
         # repeat above bound -> no pass
         self.assertFalse(gate.submit_validation(_passing(repeat_rate=0.95)))
         self.assertEqual(gate.stage_index, 0)
@@ -208,13 +209,21 @@ class DisabledCurriculumTests(unittest.TestCase):
 class MetricSemanticsTests(unittest.TestCase):
     def test_higher_is_better_and_lower_is_better_are_not_swapped(self) -> None:
         # coverage_gain: must be >= threshold. collision/repeat: must be <=.
-        # The bound is whatever stage 0 of this ladder actually asks for.
-        gate = _gate(required_passes=1)
+        # collision_rate 已从 default_stages 移除（合法动作 mask 上线后碰撞率
+        # 恒为 0，不再衡量避障），但下限优机制仍支持显式配置——用显式阶段锁语义。
         bound = default_stages([10, 20, 30])[0].thresholds["coverage_gain"]
+        thresholds = {"coverage_gain": bound, "collision_rate": 0.5, "repeat_rate": 0.9}
+        # 两级阶梯：单阶段即最后一级，metrics_pass 恒 False，语义无从检验。
+        gate = CurriculumGate(
+            stages=[CurriculumStage(10, thresholds), CurriculumStage(20, thresholds)],
+            required_passes=1,
+        )
         self.assertFalse(gate.metrics_pass(_passing(coverage_gain=bound - 1e-9)))
         self.assertTrue(gate.metrics_pass(_passing(coverage_gain=bound)))
         self.assertFalse(gate.metrics_pass(_passing(collision_rate=0.51)))
         self.assertTrue(gate.metrics_pass(_passing(collision_rate=0.5)))
+        self.assertFalse(gate.metrics_pass(_passing(repeat_rate=0.91)))
+        self.assertTrue(gate.metrics_pass(_passing(repeat_rate=0.9)))
 
 
 class StageScaledThresholdsTests(unittest.TestCase):
@@ -235,8 +244,10 @@ class StageScaledThresholdsTests(unittest.TestCase):
             self.assertNotIn("discovery_rate", stage.thresholds)
 
     def test_per_step_rates_are_not_scaled(self) -> None:
+        # collision_rate 不再由 default_stages 门控（mask 上线后恒为 0）；
+        # repeat_rate 仍是逐回合比例阈值，不随预算缩放。
         for stage in default_stages([10, 20, 30]):
-            self.assertEqual(stage.thresholds["collision_rate"], 0.5)
+            self.assertNotIn("collision_rate", stage.thresholds)
             self.assertEqual(stage.thresholds["repeat_rate"], 0.9)
 
     def test_production_stage0_is_reachable_by_the_plateaued_policy(self) -> None:

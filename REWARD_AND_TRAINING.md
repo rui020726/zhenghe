@@ -88,7 +88,10 @@ F     = beta * (gamma * Phi_{t+1} - Phi_t)     （beta = configs.POTENTIAL_BETA 
 - **时间上限截断**不是终止：critic bootstrap 保留（`done_bool` 只对真实终止为真），
   势函数不强制归零；
 - 公式级单元测试在 `test_piloc_reward_v2.PotentialModeTests`；
-- 注意：塑形使回报对回合长度的依赖**减弱**但不完全无关，不要按"与回合长度无关"解读。
+- 注意：塑形使回报对回合长度的依赖**减弱**但不完全无关，不要按"与回合长度无关"解读；
+- **暂缓消融**：count reward 是 O(1) 整数量级，potential 用覆盖比例通常只有
+  O(10⁻³–10⁻²)，`beta=1` 会让 potential 重新落入弱密集信号问题。比较前须先把
+  势函数换算成格子数单位（或校准 beta ≈ 10³），否则结果不可比。
 
 ### 1.4 coverage 的准确口径
 
@@ -100,7 +103,10 @@ potential 的 Phi、课程门控的 `coverage_gain` 全部从同一套布尔掩�
 
 - `U_t`：本步 `after_seen & ~before_seen` 的整数计数（一步只算一次掩码，
   覆盖率、新格数、边际信用同口径）；
-- `M_i`：每个新格被 n 个机器人同时看到时，每个观察者获得 `1/n`；
+- `M_i`：每个新格被 n 个机器人同时看到时，每个观察者获得 `1/n`。
+  归因基于**通信合并前**的本地 FOV 快照（`_local_obs_snapshot`）：只在
+  合并后的地图上看到某格（收到队友广播）而本机从未实际观测的 agent
+  不分摊信用；
 - `coverage_auc` = 回合内每步覆盖率的平均值（越早覆盖得分越高）；
 - `coverage_gain` = `C_T - C_0`（回合末覆盖率减回合初覆盖率）：
   初始视野覆盖率实测 ~0.044，不计入"新增"，避免"出生位置好"被误认为会探索。
@@ -123,12 +129,15 @@ potential 的 Phi、课程门控的 `coverage_gain` 全部从同一套布尔掩�
   `ValueError`（门控不读累计回报是接口约束，不是约定）；
 - 门控阈值：`coverage_gain` 按各阶段预算占最终预算的比例线性缩放——
   阶段 k 的门槛是 `0.5 × E_k / 250`。E=50 只要求 coverage_gain ≥ 0.1；
-  `collision_rate ≤ 0.5, repeat_rate ≤ 0.9` 是每步比率，与回合长度无关，
-  不缩放。**不门控 discovery_rate**：E 较短时它主要由目标出生位置运气决定，
-  且 discovery 已由验证分数与最优 checkpoint 选择覆盖。背景：首轮 v2 训练
-  5000 回合验证 coverage 平台仅 0.06，旧同阈值设置在 E=10 几何上不可达，
-  课程永远卡在 stage 0；E=10 的原始随机策略 coverage=0.068、collision=0.375
-  已优于旧门槛，门槛只是暴露了策略坍塌，而非主因；
+  `repeat_rate ≤ 0.9` 是每步比率，与回合长度无关，不缩放。
+  **不门控 collision_rate**：合法动作 mask 上线后碰撞率恒为 0，它已不再
+  衡量"学会避障"（`metrics_pass` 的下限优机制仍支持显式配置该指标，仅供
+  部署一致性检查使用）。**不门控 discovery_rate**：E 较短时它主要由目标
+  出生位置运气决定，且 discovery 已由验证分数与最优 checkpoint 选择覆盖。
+  背景：首轮 v2 训练 5000 回合验证 coverage 平台仅 0.06，旧同阈值设置在
+  E=10 几何上不可达，课程永远卡在 stage 0；E=10 的原始随机策略
+  coverage=0.068、collision=0.375 已优于旧门槛，门槛只是暴露了策略坍塌，
+  而非主因；
 - 连续 `--required-passes`（默认 3）次全部达标才升一级；任何一次失败清零计数；
 - **长期不达标永不自动升级**；升级后窗口重置；
 - `--curriculum off` 关闭课程，使用 `--fixed-episode-limit`（默认 250）。
@@ -138,16 +147,25 @@ potential 的 Phi、课程门控的 `coverage_gain` 全部从同一套布尔掩�
   （`validation_score = coverage_auc + discovery_rate - collision_rate - 0.5*recoverage_rate`）
   保存到 `<output-dir>/best/`，不按训练累计回报。
 
-### 2.1 合法动作 mask
+### 2.1 合法动作 mask（五条路径共用同一实现）
 
 边界与相邻障碍始终处于局部视野内，掩码不引入真值泄漏。掩码（1=合法，
-0=越界/障碍；四向全不合法时返回全 1，由碰撞惩罚处理）**同时**用于：
+0=越界/障碍；四向全不合法时返回全 1，由碰撞惩罚处理）是
+`timemap.legal_action_mask` 这**一个**函数，被五条路径共用——动作分布
+在任何路径上都必须一致，否则非法方向（训练时几乎无梯度）可能在部署时
+成为最大 logit 重新撞墙：
 
-- 训练动作采样（`select_action`：概率过掩码归一后再 `Categorical.sample`）；
-- 确定性验证（`select_action_deterministic`：argmax 只在合法动作上取，
+- 训练动作采样（`train.select_action`：概率过掩码归一后再 `Categorical.sample`）；
+- 确定性验证（`train.select_action_deterministic`：argmax 只在合法动作上取，
   内部只调 `get_probs`，不触碰 torch 采样 RNG）；
 - PPO 更新重算 log-prob（buffer 逐条保存掩码，新旧策略分布一致，ratio 无偏）；
-- 随机基线 legal-random（只在合法动作上均匀采样）。
+- 评估脚本 `piloc/test.py`（`select_action`：采样前过同一掩码）；
+- 集成 SAR runtime（`integrated_sar.piloc_runtime.TrainedPilocPolicy`：
+  确定性部署推理，`argmax` 只在掩码后的概率上取）。
+
+回归测试 `test_piloc_mask_and_resume.py` 锁住：即使非法方向持有最高原始
+概率，上述每条路径最终也必须选出合法动作（含负对照：掩码失效时 argmax
+确实会撞墙，证明测试有区分力）。
 
 ### 2.2 随机基线与早停
 
@@ -158,19 +176,38 @@ potential 的 Phi、课程门控的 `coverage_gain` 全部从同一套布尔掩�
 - **legal-random**：只在合法动作上均匀采样（无碰撞上界参照）。
 
 早停（默认开启，`--no-early-stop` 关闭）：episode ≥ `--early-stop-window`
-（默认 500）后，若确定性验证 coverage ≤ raw-random，或
-coverage < legal-random − `--early-stop-margin`（默认 0.05），判定策略已坍塌
-（比随机还差），立即停止并落盘 `trainer_state.pkl`（含
-`early_stop_triggered`），不再跑满 5000 回合浪费算力。
+（默认 500）后，若确定性验证 coverage < legal-random − `--early-stop-margin`
+（默认 0.05），计一次失败；**连续 `--early-stop-patience`（默认 3）次失败**
+才判定策略已坍塌并停止（单次验证的方差足以误杀仍在线性改善的策略）。
+只与 legal-random 比较：raw-random 含非法动作，与带掩码的策略不可比。
+触发后落盘 trainer state（含 `early_stop_failures`），不再跑满 5000 回合
+浪费算力。
 
-### 2.3 断点恢复
+### 2.3 断点恢复（checkpoint 合一）
 
-`trainer_state.pkl`（pickle）保存断点恢复所需的**全部**状态：episode、
-global step、最优验证分、早停标记、课程门控状态（stage_index、
-连续通过计数、评估节拍）、Python/NumPy/Torch CPU/Torch CUDA 的 RNG 状态。
-旧 checkpoint 只存网络权重与 episode 号，任何 resume 都事实上从 stage 0
-重来且采样序列偏移——已补齐。`--resume` 加载网络后若输出目录存在
-`trainer_state.pkl` 则一并恢复。
+**权威副本内嵌在模型 checkpoint 本体**：`MAPPO.save` 把
+`trainer_state`（episode、global step、最优验证分、早停标记与失败计数、
+课程门控状态、Python/NumPy/Torch CPU/Torch CUDA 的 RNG 状态、**PPO buffer
+全量数组**）与权重、optimizer、`run_meta` 写进同一个 `.pth`。
+`--resume` 走 `resume_policy`：严格加载权重与 optimizer，取出内嵌状态，
+并做 **episode 一致性校验**——权重轮次与内嵌 trainer state 的
+`episode_num` 不一致直接拒绝（旧的旁路 pkl 就是这么错位的）。
+
+细节约束：
+
+- **PPO buffer 必须全量存取**：`learn()` 通过 `all()` 消费全部 capacity 行，
+  连续训练中"未填充"行保留上一窗口的残留数据并参与梯度更新（learn 后的
+  `clear` 只重置索引，不清数组内容）。只存前 `_size` 行会把残留行清零，
+  恢复后的梯度更新与连续训练分岔（N+M ≠ N+resume M）。
+- **恢复后按回合边界规则重建环境**：训练循环在每个回合边界用
+  `seed + episode_num` 重建环境并重播动作空间种子，resume 的第一个回合
+  也必须遵守同一规则，否则恢复后的第一张地图与连续训练不一致。
+- 旧格式回退：checkpoint 没有内嵌 trainer state 时才读旁路
+  `trainer_state.pkl`（两者分开覆盖、无法校验同源——可用但不保证同轮）。
+- 回归测试 `test_piloc_mask_and_resume.ResumeEquivalenceTests` 锁住
+  **N+M ≡ N+resume M**：连续训练 N+M 轮与"训练 N 轮后恢复再训练 M 轮"，
+  learn 之后的网络参数逐位一致（同 HORIZON=256 约束，含 Adam 状态、
+  buffer 残留窗口与 RNG 同源）。
 
 ## 3. γ 与随机性
 
@@ -198,7 +235,7 @@ global step、最优验证分、早停标记、课程门控状态（stage_index�
 ```text
 <output-dir>/
 ├── run_meta.json          # 全部配置：gamma、lmbda、reward_mode、权重、门控、seed、设备
-├── trainer_state.pkl      # 断点恢复全量状态（课程/RNG/global step/最优分/早停标记）
+├── trainer_state.pkl      # 旁路副本（旧格式回退与人工检查用；权威副本在 checkpoint 内）
 ├── episode_metrics.jsonl  # 每 log-every 回合：return、mean reward/step、length、
 │                          # coverage、coverage AUC、发现数、collision/repeat/recoverage 率、
 │                          # （--track-reward-terms 时）逐分量奖励分解
@@ -207,8 +244,11 @@ global step、最优验证分、早停标记、课程门控状态（stage_index�
 └── tb_logs/               # TensorBoard：search/*、validation/*、reward_term/*、baseline/*
 ```
 
-每个 checkpoint 内嵌 `run_meta`（gamma、lmbda、reward_mode、全部权重、seed、device）
-与 `episode`，加载端 `resume_policy` 会读取 `episode`。
+每个 checkpoint 内嵌 `run_meta`（gamma、lmbda、reward_mode、全部权重、seed、
+device）、`episode` 与 `trainer_state`（课程/RNG/global step/最优分/早停计数/
+PPO buffer 全量数组）。buffer 全量数组约 15MB/agent——这是"恢复后梯度更新
+与连续训练逐位一致"的必要代价。加载端 `resume_policy` 读取 `episode` 并校验
+与内嵌 trainer state 的轮次一致。
 
 ## 5. 如何运行
 
@@ -286,8 +326,16 @@ legacy 0.20，v2 0.17（6 个目标）。无任何早停触发；全部 6 组全
   （末回合 agent_0 23.8 vs agent_1 61.0），碰撞项全程为 0（合法 mask
   生效），pheromone/time_cost/repeat 恒 0（标定期关闭）。
 
-后续：γ 配对（两组同 γ）+ E=100/500 回合复测消除混杂；之后进入第四步
-课程恢复（E 从 50 起步）。
+后续（外部评审建议的执行顺序，2026-09-15）：
+
+1. 训练/验证/恢复/部署四条路径一致性已落地（mask 五路共用 + checkpoint
+   合一 + N+M ≡ N+resume M 回归测试）；
+2. γ 配对 E=50 复测：legacy 与 v2 都用同一 γ、同 seed、同验证集，消除
+   0.225 vs 0.194 的归因混杂；
+3. 单种子完整课程 smoke test：确认 E 能连续晋级而不是卡在某一级；
+4. 通过后跑 3–5 个种子的完整课程实验；
+5. 最后再评估 centralized critic、potential reward 等结构性改进
+   （potential 需先按 §1.3 校准 beta）。
 
 ## 7. 已知限制
 
