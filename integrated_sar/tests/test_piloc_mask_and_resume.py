@@ -184,13 +184,21 @@ class DeploymentMaskRegressionTests(unittest.TestCase):
         self.assertNotEqual(actions["agent_0"], 1)
 
     def test_evaluation_sampling_never_picks_the_illegal_action(self) -> None:
+        # The final-eval CLI replaced the old ``select_action`` with
+        # ``policy_actions(two_channelmap, policy, env, agents, device, sampled)``;
+        # the masked-sampling path must stay legal, and so must the deterministic
+        # argmax it defaults to.
         evaluation = _load_eval_module()
         self.train.torch.manual_seed(0)
         for _ in range(100):
-            actions, _ = evaluation.select_action(
-                self.two_channelmap, self.policy, self.env, ["agent_0"], self.device
+            actions = evaluation.policy_actions(
+                self.two_channelmap, self.policy, self.env, ["agent_0"], self.device, True
             )
             self.assertNotEqual(actions["agent_0"], 1)
+        actions = evaluation.policy_actions(
+            self.two_channelmap, self.policy, self.env, ["agent_0"], self.device, False
+        )
+        self.assertNotEqual(actions["agent_0"], 1)
 
     def test_runtime_argmax_never_picks_the_illegal_action(self) -> None:
         from integrated_sar import piloc_runtime
