@@ -145,5 +145,53 @@ class RecordReplayTests(unittest.TestCase):
             load_detection_stream(path)
 
 
+class ReplayAuditTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self._folder = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._folder.name)
+
+    def tearDown(self) -> None:
+        self._folder.cleanup()
+
+    def _config(self, output: str, **overrides) -> RunConfiguration:
+        base = dict(seed=11, steps=40, mock=True, output=output, quiet=True, num_goals=4)
+        base.update(overrides)
+        return RunConfiguration(**base)
+
+    def test_audit_passes_for_arms_replaying_one_stream(self) -> None:
+        from integrated_sar.replay_audit import audit
+
+        bundle = self.tmp / "s11.json"
+        run_from_configuration(self._config(str(self.tmp / "rp_nocoord_s11.jsonl"), record_stream=str(bundle)))
+        run_from_configuration(
+            self._config(str(self.tmp / "rp_rs0.25_s11.jsonl"), replay_stream=str(bundle))
+        )
+        verified, arms, problems = audit(
+            sorted(str(p) for p in self.tmp.glob("rp_*_s*.jsonl")), [str(bundle)]
+        )
+        self.assertEqual(verified, 1)
+        self.assertEqual(arms, 2)
+        self.assertEqual(problems, [])
+
+    def test_audit_flags_a_tampered_log(self) -> None:
+        from integrated_sar.replay_audit import audit
+
+        bundle = self.tmp / "s11.json"
+        run_from_configuration(self._config(str(self.tmp / "rp_nocoord_s11.jsonl"), record_stream=str(bundle)))
+        replay = self.tmp / "rp_rs0.25_s11.jsonl"
+        run_from_configuration(self._config(str(replay), replay_stream=str(bundle)))
+        # Drop the last detection line: the replayed arm no longer matches the stream.
+        lines = replay.read_text(encoding="utf-8").splitlines()
+        last = max(
+            index for index, line in enumerate(lines) if '"event_type": "detection"' in line
+        )
+        del lines[last]
+        replay.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        _, _, problems = audit(
+            sorted(str(p) for p in self.tmp.glob("rp_*_s*.jsonl")), [str(bundle)]
+        )
+        self.assertTrue(any("detections differ" in p for p in problems))
+
+
 if __name__ == "__main__":
     unittest.main()
