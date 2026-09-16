@@ -55,9 +55,20 @@ def _detection(target: str, at: float, row: int = 3, col: int = 4, offset: float
 
 
 def _progress(
-    target: str, at: float, progress: float, *, stage: int = 0, members=("0",), status="in_progress"
+    target: str,
+    at: float,
+    progress: float,
+    *,
+    stage: int = 0,
+    members=("0",),
+    status="in_progress",
+    remaining=None,
 ) -> dict:
-    return {
+    """One progress row; ``remaining`` is the current stage's unmet requirement.
+
+    Omitted by default so the older-log case (the field is absent) stays testable.
+    """
+    record = {
         "target_id": target,
         "event_type": "progress",
         "timestamp": at,
@@ -67,6 +78,9 @@ def _progress(
         "status": status,
         "detail": {"expired": False},
     }
+    if remaining is not None:
+        record["remaining_requirements"] = list(remaining)
+    return record
 
 
 def _assignment(target: str, at: float, agent: str = "0") -> dict:
@@ -118,6 +132,75 @@ class TimelineTests(unittest.TestCase):
         timeline = build_timelines(records, arm="a", seed=1, plan_provider=_provider(_plan()))["t0"]
         self.assertEqual(timeline.progress_setbacks, 1)
         self.assertAlmostEqual(timeline.discarded_work_steps, 4.0)  # 0.4 * 10
+
+
+class ShortGroupStallTests(unittest.TestCase):
+    """A group that is on site but cannot work is idle, and must be measurable."""
+
+    def _timeline(self, records: list[dict]) -> TargetTimeline:
+        return build_timelines(records, arm="a", seed=1, plan_provider=_provider(_plan()))["t0"]
+
+    def test_the_stall_is_integrated_between_rows_not_counted_per_row(self) -> None:
+        records = [
+            _detection("t0", 0.0),
+            # Two members arrive and stay, but abilities 3 and 4 are still missing, so
+            # the stage clock never starts: the run writes no further row for 51 steps.
+            _progress("t0", 20.0, 0.0, members=("0", "1"), remaining=(0, 0, 0, 1, 1)),
+            _progress("t0", 71.0, 0.0, members=("0", "1", "5"), remaining=(0, 0, 0, 0, 0)),
+            _progress("t0", 80.0, 0.25, members=("0", "1", "5")),
+        ]
+        self.assertAlmostEqual(self._timeline(records).short_group_idle_steps, 51.0)
+
+    def test_queueing_without_members_or_with_the_requirement_met_is_not_a_stall(self) -> None:
+        records = [
+            _detection("t0", 0.0),
+            # Nobody on site yet: waiting for a robot is queueing, not a short group.
+            _progress("t0", 10.0, 0.0, members=(), remaining=(1, 0, 0, 0, 0)),
+            # On site with the requirement already met: this time is spent working.
+            _progress("t0", 30.0, 0.5, members=("0",), remaining=(0, 0, 0, 0, 0)),
+            _progress("t0", 40.0, 0.75, members=("0",), remaining=(0, 0, 0, 0, 0)),
+        ]
+        self.assertAlmostEqual(self._timeline(records).short_group_idle_steps, 0.0)
+
+    def test_a_row_without_the_remaining_field_is_not_assumed_blocked(self) -> None:
+        records = [
+            _detection("t0", 0.0),
+            _progress("t0", 10.0, 0.0, members=("0",)),  # no remaining_requirements
+            _progress("t0", 40.0, 0.5, members=("0",)),
+        ]
+        self.assertAlmostEqual(self._timeline(records).short_group_idle_steps, 0.0)
+
+    def test_stall_stats_keep_expired_and_completed_targets_apart(self) -> None:
+        blocked = self._timeline(
+            [
+                _detection("t0", 0.0),
+                _progress("t0", 10.0, 0.0, members=("0",), remaining=(0, 0, 0, 1, 1)),
+                _progress("t0", 70.0, 0.0, members=("0",), remaining=(0, 0, 0, 1, 1)),
+                _final("t0", 70.0, 0.0, "expired"),
+            ]
+        )
+        healthy = self._timeline(
+            [
+                _detection("t0", 0.0),
+                _progress("t0", 10.0, 0.0, members=("0",), remaining=(0, 0, 0, 0, 0)),
+                _progress("t0", 12.0, 0.5, members=("0",), remaining=(0, 0, 0, 0, 0)),
+                _final("t0", 20.0, 1.0, "completed"),
+            ]
+        )
+        attribution = Attribution(
+            arm="a",
+            window=200.0,
+            seeds=(1,),
+            expired=(blocked,),
+            completed=(healthy,),
+            counts={},
+        )
+        stats = attribution.stall_stats()
+        self.assertEqual(stats["expired"]["n"], 1.0)
+        self.assertAlmostEqual(stats["expired"]["median"], 60.0)
+        self.assertAlmostEqual(stats["expired"]["share_ge_30"], 1.0)
+        self.assertAlmostEqual(stats["completed"]["share_ge_10"], 0.0)
+        self.assertAlmostEqual(blocked.as_row()["short_group_idle_steps"], 60.0)
 
 
 class ClassificationTests(unittest.TestCase):

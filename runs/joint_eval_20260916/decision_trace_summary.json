@@ -1,0 +1,3420 @@
+{
+  "format": "allocation-decision-trace/1",
+  "files": 60,
+  "arms": {
+    "nocoord": {
+      "seeds": [
+        10000,
+        10001,
+        10002,
+        10003,
+        10004,
+        10005,
+        10006,
+        10007,
+        10008,
+        10009,
+        10010,
+        10011,
+        10012,
+        10013,
+        10014,
+        10015,
+        10016,
+        10017,
+        10018,
+        10019,
+        10020,
+        10021,
+        10022,
+        10023,
+        10024,
+        10025,
+        10026,
+        10027,
+        10028,
+        10029
+      ],
+      "files": 30,
+      "decisions": 36681,
+      "legal_decisions": 15690,
+      "no_task_on_menu": 16046,
+      "no_task_on_menu_share": 0.43744717973882935,
+      "all_tasks_masked": 4945,
+      "busy_decisions": 0,
+      "depot_with_legal": 14891,
+      "depot_with_legal_share": 0.9490758444869344,
+      "depot_with_legal_share_mean_over_seeds": 0.6753,
+      "depot_with_legal_share_ci95": 0.145,
+      "depot_with_legal_idle": 14891,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive_share": 0.050924155513065644,
+      "margin_median": -0.034,
+      "margin_mean": -0.0331,
+      "margin_p90": -0.005,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switched_before_arrival_share": null,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "duration_p90": null,
+      "targets_dispatched": 153,
+      "group_covered_share": 0.1437908496732026,
+      "group_covered_gap_median": 11.5,
+      "group_covered_gap_p90": 21.0,
+      "group_filled_share": 0.20261437908496732,
+      "group_filled_gap_median": 8.0,
+      "never_covered": 131,
+      "never_filled": 122
+    },
+    "rs0.25": {
+      "seeds": [
+        10000,
+        10001,
+        10002,
+        10003,
+        10004,
+        10005,
+        10006,
+        10007,
+        10008,
+        10009,
+        10010,
+        10011,
+        10012,
+        10013,
+        10014,
+        10015,
+        10016,
+        10017,
+        10018,
+        10019,
+        10020,
+        10021,
+        10022,
+        10023,
+        10024,
+        10025,
+        10026,
+        10027,
+        10028,
+        10029
+      ],
+      "files": 30,
+      "decisions": 35838,
+      "legal_decisions": 831,
+      "no_task_on_menu": 31913,
+      "no_task_on_menu_share": 0.8904793794296557,
+      "all_tasks_masked": 3094,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_share_mean_over_seeds": 0.0,
+      "depot_with_legal_share_ci95": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 136,
+      "margin_positive_share": 0.8363417569193743,
+      "margin_median": 0.179,
+      "margin_mean": 0.1808,
+      "margin_p90": 0.4,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switched_before_arrival_share": null,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "duration_p90": null,
+      "targets_dispatched": 171,
+      "group_covered_share": 0.0935672514619883,
+      "group_covered_gap_median": 12.0,
+      "group_covered_gap_p90": 73.0,
+      "group_filled_share": 0.13450292397660818,
+      "group_filled_gap_median": 13.0,
+      "never_covered": 155,
+      "never_filled": 148
+    }
+  },
+  "per_seed": [
+    {
+      "arm": "nocoord",
+      "seed": 10000,
+      "decisions": 1126,
+      "legal_decisions": 132,
+      "no_task_on_menu": 948,
+      "all_tasks_masked": 46,
+      "busy_decisions": 0,
+      "depot_with_legal": 96,
+      "depot_with_legal_share": 0.7272727272727273,
+      "depot_with_legal_idle": 96,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 36,
+      "margin_median": -0.02,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 92.78601040981022,
+          "first_considered": 31.0,
+          "first_dispatch": 31.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 291.85265932287194,
+          "first_considered": 255.0,
+          "first_dispatch": 255.0,
+          "filled_at": 256.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 315.39143072560177,
+          "first_considered": 200.0,
+          "first_dispatch": 200.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 386.09050148964286,
+          "first_considered": 236.0,
+          "first_dispatch": 236.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 161.06039379249415,
+          "first_considered": 3.0,
+          "first_dispatch": 3.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 73.08402256590787,
+          "first_considered": 44.0,
+          "first_dispatch": 44.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10001,
+      "decisions": 1284,
+      "legal_decisions": 576,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 708,
+      "busy_decisions": 0,
+      "depot_with_legal": 556,
+      "depot_with_legal_share": 0.9652777777777778,
+      "depot_with_legal_idle": 556,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 20,
+      "margin_median": -0.013,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 187.5023641399303,
+          "first_considered": 20.0,
+          "first_dispatch": 20.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 79.70285730975834,
+          "first_considered": 3.0,
+          "first_dispatch": 3.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 166.25451386752968,
+          "first_considered": 96.0,
+          "first_dispatch": 96.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 168.85441582930648,
+          "first_considered": 131.0,
+          "first_dispatch": 131.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 532.3004536995127,
+          "first_considered": 471.0,
+          "first_dispatch": 471.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10002,
+      "decisions": 1164,
+      "legal_decisions": 428,
+      "no_task_on_menu": 510,
+      "all_tasks_masked": 226,
+      "busy_decisions": 0,
+      "depot_with_legal": 400,
+      "depot_with_legal_share": 0.9345794392523364,
+      "depot_with_legal_idle": 400,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 28,
+      "margin_median": -0.013,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 97.07772270410476,
+          "first_considered": 42.0,
+          "first_dispatch": 42.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 114.6954749023624,
+          "first_considered": 9.0,
+          "first_dispatch": 9.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 163.4096548309638,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 138.8680149709649,
+          "first_considered": 58.0,
+          "first_dispatch": 58.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 169.82863128982223,
+          "first_considered": 116.0,
+          "first_dispatch": 116.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10003,
+      "decisions": 1166,
+      "legal_decisions": 44,
+      "no_task_on_menu": 1084,
+      "all_tasks_masked": 38,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 44,
+      "margin_median": 0.372,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 143.69316125951454,
+          "first_considered": 48.0,
+          "first_dispatch": 48.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 160.40573556551973,
+          "first_considered": 19.0,
+          "first_dispatch": 19.0,
+          "filled_at": 20.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 139.02969342001694,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 152.02969342001694,
+          "first_considered": 29.0,
+          "first_dispatch": 29.0,
+          "covered_at": 33.0,
+          "filled_at": 33.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 393.5376782402607,
+          "first_considered": 270.0,
+          "first_dispatch": 270.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 137.22199357417094,
+          "first_considered": 57.0,
+          "first_dispatch": 57.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10004,
+      "decisions": 1166,
+      "legal_decisions": 1166,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 0,
+      "busy_decisions": 0,
+      "depot_with_legal": 1144,
+      "depot_with_legal_share": 0.9811320754716981,
+      "depot_with_legal_idle": 1144,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 22,
+      "margin_median": -0.03,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 133.66540106472968,
+          "first_considered": 17.0,
+          "first_dispatch": 17.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 133.79739904698528,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0,
+          "covered_at": 84.0,
+          "filled_at": 84.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 148.47847658542443,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 135.7478900580099,
+          "first_considered": 77.0,
+          "first_dispatch": 77.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 205.658045482869,
+          "first_considered": 139.0,
+          "first_dispatch": 139.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10005,
+      "decisions": 1290,
+      "legal_decisions": 1212,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 78,
+      "busy_decisions": 0,
+      "depot_with_legal": 1190,
+      "depot_with_legal_share": 0.9818481848184818,
+      "depot_with_legal_idle": 1190,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 22,
+      "margin_median": -0.034,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-1": {
+          "deadline": 160.83813749040922,
+          "first_considered": 22.0,
+          "first_dispatch": 22.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 87.44187522471242,
+          "first_considered": 38.0,
+          "first_dispatch": 38.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 100.28693956751825,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 75.76851585981723,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 184.5295195548756,
+          "first_considered": 161.0,
+          "first_dispatch": 161.0,
+          "covered_at": 168.0,
+          "filled_at": 168.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10006,
+      "decisions": 1113,
+      "legal_decisions": 1111,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 2,
+      "busy_decisions": 0,
+      "depot_with_legal": 1083,
+      "depot_with_legal_share": 0.9747974797479748,
+      "depot_with_legal_idle": 1083,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 28,
+      "margin_median": -0.104,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 110.12755056453263,
+          "first_considered": 61.0,
+          "first_dispatch": 61.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 125.42478015406431,
+          "first_considered": 126.0,
+          "first_dispatch": 126.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 104.08929136442808,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 73.86067690476742,
+          "first_considered": 2.0,
+          "first_dispatch": 2.0,
+          "covered_at": 109.0,
+          "filled_at": 109.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 161.2899810610411,
+          "first_considered": 109.0,
+          "first_dispatch": 109.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10007,
+      "decisions": 1220,
+      "legal_decisions": 812,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 408,
+      "busy_decisions": 0,
+      "depot_with_legal": 788,
+      "depot_with_legal_share": 0.9704433497536946,
+      "depot_with_legal_idle": 788,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 24,
+      "margin_median": -0.096,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 277.74907582893866,
+          "first_considered": 181.0,
+          "first_dispatch": 181.0,
+          "covered_at": 185.0,
+          "filled_at": 185.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 294.3326329770639,
+          "first_considered": 188.0,
+          "first_dispatch": 188.0,
+          "covered_at": 195.0,
+          "filled_at": 195.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 164.11573571710585,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 82.33439148981438,
+          "first_considered": 4.0,
+          "first_dispatch": 4.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 315.4232036453453,
+          "first_considered": 180.0,
+          "first_dispatch": 180.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10008,
+      "decisions": 1222,
+      "legal_decisions": 18,
+      "no_task_on_menu": 1128,
+      "all_tasks_masked": 76,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 18,
+      "margin_median": 0.293,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 159.29253106036867,
+          "first_considered": 9.0,
+          "first_dispatch": 9.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 68.8295058549886,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 82.1312729012587,
+          "first_considered": 40.0,
+          "first_dispatch": 40.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 88.74547031993903,
+          "first_considered": 51.0,
+          "first_dispatch": 51.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10009,
+      "decisions": 1208,
+      "legal_decisions": 1208,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 0,
+      "busy_decisions": 0,
+      "depot_with_legal": 1190,
+      "depot_with_legal_share": 0.9850993377483444,
+      "depot_with_legal_idle": 1190,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 18,
+      "margin_median": -0.081,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-1": {
+          "deadline": 158.92243119214356,
+          "first_considered": 146.0,
+          "first_dispatch": 146.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 157.25458493718037,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 81.19149084534831,
+          "first_considered": 12.0,
+          "first_dispatch": 12.0,
+          "covered_at": 30.0,
+          "filled_at": 30.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10010,
+      "decisions": 1149,
+      "legal_decisions": 137,
+      "no_task_on_menu": 984,
+      "all_tasks_masked": 28,
+      "busy_decisions": 0,
+      "depot_with_legal": 108,
+      "depot_with_legal_share": 0.7883211678832117,
+      "depot_with_legal_idle": 108,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 29,
+      "margin_median": -0.014,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 94.41539379553832,
+          "first_considered": 64.0,
+          "first_dispatch": 64.0,
+          "covered_at": 81.0,
+          "filled_at": 81.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 170.00645999002984,
+          "first_considered": 171.0,
+          "first_dispatch": 171.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 150.80088809453585,
+          "first_considered": 5.0,
+          "first_dispatch": 5.0,
+          "filled_at": 73.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 145.93695181827513,
+          "first_considered": 83.0,
+          "first_dispatch": 83.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 78.60052571381527,
+          "first_considered": 2.0,
+          "first_dispatch": 2.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 74.17336288643533,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10011,
+      "decisions": 1179,
+      "legal_decisions": 42,
+      "no_task_on_menu": 924,
+      "all_tasks_masked": 213,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 42,
+      "margin_median": 0.378,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 79.58194404459533,
+          "first_considered": 19.0,
+          "first_dispatch": 19.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 170.57086327201205,
+          "first_considered": 32.0,
+          "first_dispatch": 32.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 169.21552908941663,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 348.9395260235126,
+          "first_considered": 285.0,
+          "first_dispatch": 285.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 300.8701293045824,
+          "first_considered": 191.0,
+          "first_dispatch": 191.0,
+          "filled_at": 192.0,
+          "covered_at": 195.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 283.26343606848525,
+          "first_considered": 174.0,
+          "first_dispatch": 174.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10012,
+      "decisions": 1258,
+      "legal_decisions": 170,
+      "no_task_on_menu": 1024,
+      "all_tasks_masked": 64,
+      "busy_decisions": 0,
+      "depot_with_legal": 146,
+      "depot_with_legal_share": 0.8588235294117647,
+      "depot_with_legal_idle": 146,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 24,
+      "margin_median": -0.033,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 163.38231507102824,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 157.50705715794152,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 109.10138594989172,
+          "first_considered": 110.0,
+          "first_dispatch": 110.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 814.5397615681545,
+          "first_considered": 742.0,
+          "first_dispatch": 742.0,
+          "covered_at": 745.0,
+          "filled_at": 745.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 108.28354340951127,
+          "first_considered": 17.0,
+          "first_dispatch": 17.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10013,
+      "decisions": 1260,
+      "legal_decisions": 102,
+      "no_task_on_menu": 1062,
+      "all_tasks_masked": 96,
+      "busy_decisions": 0,
+      "depot_with_legal": 80,
+      "depot_with_legal_share": 0.7843137254901961,
+      "depot_with_legal_idle": 80,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 22,
+      "margin_median": -0.026,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 114.32049813254278,
+          "first_considered": 52.0,
+          "first_dispatch": 52.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 133.32424369294,
+          "first_considered": 30.0,
+          "first_dispatch": 30.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 135.83166479171058,
+          "first_considered": 111.0,
+          "first_dispatch": 111.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 77.30292069809305,
+          "first_considered": 75.0,
+          "first_dispatch": 75.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 164.239672346597,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0,
+          "filled_at": 6.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 82.86367239063796,
+          "first_considered": 30.0,
+          "first_dispatch": 30.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10014,
+      "decisions": 1232,
+      "legal_decisions": 62,
+      "no_task_on_menu": 1040,
+      "all_tasks_masked": 130,
+      "busy_decisions": 0,
+      "depot_with_legal": 24,
+      "depot_with_legal_share": 0.3870967741935484,
+      "depot_with_legal_idle": 24,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 38,
+      "margin_median": 0.143,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 220.15720734659882,
+          "first_considered": 127.0,
+          "first_dispatch": 127.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 616.2138668841972,
+          "first_considered": 458.0,
+          "first_dispatch": 458.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 107.6795758410599,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 395.9842658009601,
+          "first_considered": 336.0,
+          "first_dispatch": 336.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 93.72323652424951,
+          "first_considered": 16.0,
+          "first_dispatch": 16.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 175.4059854044927,
+          "first_considered": 23.0,
+          "first_dispatch": 23.0,
+          "covered_at": 39.0,
+          "filled_at": 39.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10015,
+      "decisions": 1310,
+      "legal_decisions": 32,
+      "no_task_on_menu": 1032,
+      "all_tasks_masked": 246,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 32,
+      "margin_median": 0.203,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 106.91715136740152,
+          "first_considered": 13.0,
+          "first_dispatch": 13.0,
+          "covered_at": 34.0,
+          "filled_at": 34.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 106.91715136740152,
+          "first_considered": 50.0,
+          "first_dispatch": 50.0,
+          "filled_at": 62.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 113.37877007533349,
+          "first_considered": 79.0,
+          "first_dispatch": 79.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 99.96065805260316,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 387.3779123337389,
+          "first_considered": 215.0,
+          "first_dispatch": 215.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 337.74616403858613,
+          "first_considered": 253.0,
+          "first_dispatch": 253.0,
+          "covered_at": 266.0,
+          "filled_at": 266.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10016,
+      "decisions": 1308,
+      "legal_decisions": 492,
+      "no_task_on_menu": 816,
+      "all_tasks_masked": 0,
+      "busy_decisions": 0,
+      "depot_with_legal": 464,
+      "depot_with_legal_share": 0.943089430894309,
+      "depot_with_legal_idle": 464,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 28,
+      "margin_median": -0.029,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 135.5101859336978,
+          "first_considered": 46.0,
+          "first_dispatch": 46.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 163.4889963610209,
+          "first_considered": 217.0,
+          "first_dispatch": 217.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 122.77990323581217,
+          "first_considered": 56.0,
+          "first_dispatch": 56.0,
+          "covered_at": 68.0,
+          "filled_at": 68.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 134.89367964665402,
+          "first_considered": 2.0,
+          "first_dispatch": 2.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 346.3913080904082,
+          "first_considered": 216.0,
+          "first_dispatch": 216.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 318.5868921815111,
+          "first_considered": 311.0,
+          "first_dispatch": 311.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10017,
+      "decisions": 1244,
+      "legal_decisions": 1244,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 0,
+      "busy_decisions": 0,
+      "depot_with_legal": 1226,
+      "depot_with_legal_share": 0.9855305466237942,
+      "depot_with_legal_idle": 1226,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 18,
+      "margin_median": -0.044,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 75.72824399919921,
+          "first_considered": 15.0,
+          "first_dispatch": 15.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 129.79812472650158,
+          "first_considered": 9.0,
+          "first_dispatch": 9.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 74.11652414198562,
+          "first_considered": 10.0,
+          "first_dispatch": 10.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 109.67792714352181,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10018,
+      "decisions": 1126,
+      "legal_decisions": 34,
+      "no_task_on_menu": 1086,
+      "all_tasks_masked": 6,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 34,
+      "margin_median": 0.368,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 91.25637405396184,
+          "first_considered": 17.0,
+          "first_dispatch": 17.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 70.26696848836679,
+          "first_considered": 35.0,
+          "first_dispatch": 35.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 149.71466923098495,
+          "first_considered": 80.0,
+          "first_dispatch": 80.0,
+          "covered_at": 92.0,
+          "filled_at": 92.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 146.19577482295014,
+          "first_considered": 53.0,
+          "first_dispatch": 53.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 147.68882096860688,
+          "first_considered": 85.0,
+          "first_dispatch": 85.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 89.09400010647792,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10019,
+      "decisions": 1288,
+      "legal_decisions": 24,
+      "no_task_on_menu": 1096,
+      "all_tasks_masked": 168,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 24,
+      "margin_median": 0.288,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 123.89543726524491,
+          "first_considered": 25.0,
+          "first_dispatch": 25.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 389.41722182302976,
+          "first_considered": 231.0,
+          "first_dispatch": 231.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 69.28265322650547,
+          "first_considered": 3.0,
+          "first_dispatch": 3.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 71.28265322650547,
+          "first_considered": 14.0,
+          "first_dispatch": 14.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 203.4498038639996,
+          "first_considered": 140.0,
+          "first_dispatch": 140.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10020,
+      "decisions": 1250,
+      "legal_decisions": 468,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 782,
+      "busy_decisions": 0,
+      "depot_with_legal": 434,
+      "depot_with_legal_share": 0.9273504273504274,
+      "depot_with_legal_idle": 434,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 34,
+      "margin_median": -0.001,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 131.1106951570546,
+          "first_considered": 7.0,
+          "first_dispatch": 7.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 85.62852830928263,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 167.2348247876495,
+          "first_considered": 12.0,
+          "first_dispatch": 12.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 334.88421036827333,
+          "first_considered": 163.0,
+          "first_dispatch": 163.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 242.10069192007728,
+          "first_considered": 77.0,
+          "first_dispatch": 77.0,
+          "covered_at": 85.0,
+          "filled_at": 85.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 87.78575044296596,
+          "first_considered": 40.0,
+          "first_dispatch": 40.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10021,
+      "decisions": 1250,
+      "legal_decisions": 1250,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 0,
+      "busy_decisions": 0,
+      "depot_with_legal": 1236,
+      "depot_with_legal_share": 0.9888,
+      "depot_with_legal_idle": 1236,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 14,
+      "margin_median": -0.005,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-2": {
+          "deadline": 176.62348173372962,
+          "first_considered": 12.0,
+          "first_dispatch": 12.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 145.19244717149533,
+          "first_considered": 18.0,
+          "first_dispatch": 18.0,
+          "covered_at": 19.0,
+          "filled_at": 19.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 85.62852830928263,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10022,
+      "decisions": 1288,
+      "legal_decisions": 1004,
+      "no_task_on_menu": 234,
+      "all_tasks_masked": 50,
+      "busy_decisions": 0,
+      "depot_with_legal": 990,
+      "depot_with_legal_share": 0.9860557768924303,
+      "depot_with_legal_idle": 990,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 14,
+      "margin_median": -0.024,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 258.2253493837504,
+          "first_considered": 181.0,
+          "first_dispatch": 181.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 711.6660351000471,
+          "first_considered": 559.0,
+          "first_dispatch": 559.0,
+          "covered_at": 570.0,
+          "filled_at": 570.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 379.51941355402835,
+          "first_considered": 376.0,
+          "first_dispatch": 376.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10023,
+      "decisions": 1154,
+      "legal_decisions": 32,
+      "no_task_on_menu": 1104,
+      "all_tasks_masked": 18,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 32,
+      "margin_median": 0.251,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 458.94275336619035,
+          "first_considered": 383.0,
+          "first_dispatch": 383.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 102.42718920882047,
+          "first_considered": 34.0,
+          "first_dispatch": 34.0,
+          "covered_at": 39.0,
+          "filled_at": 39.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 64.00957856658218,
+          "first_considered": 2.0,
+          "first_dispatch": 2.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 77.64861774962216,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 178.7331898137055,
+          "first_considered": 25.0,
+          "first_dispatch": 25.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 379.9765324886825,
+          "first_considered": 279.0,
+          "first_dispatch": 279.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10024,
+      "decisions": 1278,
+      "legal_decisions": 854,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 424,
+      "busy_decisions": 0,
+      "depot_with_legal": 834,
+      "depot_with_legal_share": 0.9765807962529274,
+      "depot_with_legal_idle": 834,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 20,
+      "margin_median": -0.008,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-1": {
+          "deadline": 172.29253106036867,
+          "first_considered": 19.0,
+          "first_dispatch": 19.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 133.2142712051922,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 386.131531894955,
+          "first_considered": 320.0,
+          "first_dispatch": 320.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 472.06389735836285,
+          "first_considered": 358.0,
+          "first_dispatch": 358.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10025,
+      "decisions": 1236,
+      "legal_decisions": 86,
+      "no_task_on_menu": 918,
+      "all_tasks_masked": 232,
+      "busy_decisions": 0,
+      "depot_with_legal": 58,
+      "depot_with_legal_share": 0.6744186046511628,
+      "depot_with_legal_idle": 58,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 28,
+      "margin_median": -0.026,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 111.11234288446687,
+          "first_considered": 12.0,
+          "first_dispatch": 12.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 298.1888903629356,
+          "first_considered": 205.0,
+          "first_dispatch": 205.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 1064.3826679163803,
+          "first_considered": 896.0,
+          "first_dispatch": 896.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 381.6558599124949,
+          "first_considered": 376.0,
+          "first_dispatch": 376.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 404.46641142087816,
+          "first_considered": 251.0,
+          "first_dispatch": 251.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 601.7788730121009,
+          "first_considered": 454.0,
+          "first_dispatch": 454.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10026,
+      "decisions": 1146,
+      "legal_decisions": 66,
+      "no_task_on_menu": 1056,
+      "all_tasks_masked": 24,
+      "busy_decisions": 0,
+      "depot_with_legal": 34,
+      "depot_with_legal_share": 0.5151515151515151,
+      "depot_with_legal_idle": 34,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 32,
+      "margin_median": -0.007,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 269.1484527382228,
+          "first_considered": 97.0,
+          "first_dispatch": 97.0,
+          "filled_at": 104.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 93.40014307026163,
+          "first_considered": 4.0,
+          "first_dispatch": 4.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 168.44409199559908,
+          "first_considered": 116.0,
+          "first_dispatch": 116.0,
+          "covered_at": 119.0,
+          "filled_at": 119.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 107.38542759674905,
+          "first_considered": 70.0,
+          "first_dispatch": 70.0,
+          "covered_at": 87.0,
+          "filled_at": 87.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 94.23455174890145,
+          "first_considered": 6.0,
+          "first_dispatch": 6.0,
+          "covered_at": 70.0,
+          "filled_at": 70.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10027,
+      "decisions": 1268,
+      "legal_decisions": 806,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 462,
+      "busy_decisions": 0,
+      "depot_with_legal": 790,
+      "depot_with_legal_share": 0.9801488833746899,
+      "depot_with_legal_idle": 790,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 16,
+      "margin_median": -0.09,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 161.77997925276856,
+          "first_considered": 32.0,
+          "first_dispatch": 32.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 164.68522901570992,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 146.89316855687758,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 109.21780965309796,
+          "first_considered": 24.0,
+          "first_dispatch": 24.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 112.39189163371375,
+          "first_considered": 65.0,
+          "first_dispatch": 65.0,
+          "filled_at": 66.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10028,
+      "decisions": 1338,
+      "legal_decisions": 918,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 420,
+      "busy_decisions": 0,
+      "depot_with_legal": 890,
+      "depot_with_legal_share": 0.9694989106753813,
+      "depot_with_legal_idle": 890,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 28,
+      "margin_median": -0.029,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 311.4398709234131,
+          "first_considered": 249.0,
+          "first_dispatch": 249.0,
+          "filled_at": 258.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 125.10733041872095,
+          "first_considered": 6.0,
+          "first_dispatch": 6.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 165.59211578592783,
+          "first_considered": 116.0,
+          "first_dispatch": 116.0,
+          "filled_at": 124.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 151.06697840429604,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 183.84786791254493,
+          "first_considered": 21.0,
+          "first_dispatch": 21.0
+        }
+      }
+    },
+    {
+      "arm": "nocoord",
+      "seed": 10029,
+      "decisions": 1160,
+      "legal_decisions": 1160,
+      "no_task_on_menu": 0,
+      "all_tasks_masked": 0,
+      "busy_decisions": 0,
+      "depot_with_legal": 1130,
+      "depot_with_legal_share": 0.9741379310344828,
+      "depot_with_legal_idle": 1130,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 30,
+      "margin_median": -0.055,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 201.43249206724334,
+          "first_considered": 117.0,
+          "first_dispatch": 117.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 107.58895311671662,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 146.51506296584648,
+          "first_considered": 125.0,
+          "first_dispatch": 125.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 100.20188437797,
+          "first_considered": 18.0,
+          "first_dispatch": 18.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 114.09787166580571,
+          "first_considered": 8.0,
+          "first_dispatch": 8.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10000,
+      "decisions": 1097,
+      "legal_decisions": 33,
+      "no_task_on_menu": 996,
+      "all_tasks_masked": 68,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 6,
+      "margin_positive": 27,
+      "margin_median": 0.321,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 92.78601040981022,
+          "first_considered": 22.0,
+          "first_dispatch": 22.0,
+          "covered_at": 78.0,
+          "filled_at": 78.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 291.85265932287194,
+          "first_considered": 152.0,
+          "first_dispatch": 152.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 315.39143072560177,
+          "first_considered": 200.0,
+          "first_dispatch": 200.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 386.09050148964286,
+          "first_considered": 236.0,
+          "first_dispatch": 236.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 161.06039379249415,
+          "first_considered": 3.0,
+          "first_dispatch": 3.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 73.08402256590787,
+          "first_considered": 3.0,
+          "first_dispatch": 3.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10001,
+      "decisions": 1234,
+      "legal_decisions": 22,
+      "no_task_on_menu": 1136,
+      "all_tasks_masked": 76,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 14,
+      "margin_positive": 8,
+      "margin_median": -0.02,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 187.5023641399303,
+          "first_considered": 20.0,
+          "first_dispatch": 20.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 77.58956961754672,
+          "first_considered": 15.0,
+          "first_dispatch": 15.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 79.70285730975834,
+          "first_considered": 6.0,
+          "first_dispatch": 6.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 166.25451386752968,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 168.85441582930648,
+          "first_considered": 3.0,
+          "first_dispatch": 3.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 532.3004536995127,
+          "first_considered": 406.0,
+          "first_dispatch": 406.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10002,
+      "decisions": 1170,
+      "legal_decisions": 32,
+      "no_task_on_menu": 1076,
+      "all_tasks_masked": 62,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 8,
+      "margin_positive": 24,
+      "margin_median": 0.234,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 97.07772270410476,
+          "first_considered": 42.0,
+          "first_dispatch": 42.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 114.6954749023624,
+          "first_considered": 9.0,
+          "first_dispatch": 9.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 163.4096548309638,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 138.8680149709649,
+          "first_considered": 58.0,
+          "first_dispatch": 58.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 169.82863128982223,
+          "first_considered": 87.0,
+          "first_dispatch": 87.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 694.9211129001962,
+          "first_considered": 545.0,
+          "first_dispatch": 545.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10003,
+      "decisions": 1079,
+      "legal_decisions": 34,
+      "no_task_on_menu": 1004,
+      "all_tasks_masked": 41,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 1,
+      "margin_positive": 33,
+      "margin_median": 0.344,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 143.69316125951454,
+          "first_considered": 84.0,
+          "first_dispatch": 84.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 160.40573556551973,
+          "first_considered": 19.0,
+          "first_dispatch": 19.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 139.02969342001694,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 152.02969342001694,
+          "first_considered": 19.0,
+          "first_dispatch": 19.0,
+          "covered_at": 20.0,
+          "filled_at": 20.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 393.5376782402607,
+          "first_considered": 270.0,
+          "first_dispatch": 270.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 137.22199357417094,
+          "first_considered": 115.0,
+          "first_dispatch": 115.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10004,
+      "decisions": 1149,
+      "legal_decisions": 26,
+      "no_task_on_menu": 1068,
+      "all_tasks_masked": 55,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 2,
+      "margin_positive": 24,
+      "margin_median": 0.153,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 133.66540106472968,
+          "first_considered": 17.0,
+          "first_dispatch": 17.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 133.79739904698528,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 148.47847658542443,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 135.7478900580099,
+          "first_considered": 77.0,
+          "first_dispatch": 77.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 205.658045482869,
+          "first_considered": 139.0,
+          "first_dispatch": 139.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 69.27447164100899,
+          "first_considered": 72.0,
+          "first_dispatch": 72.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10005,
+      "decisions": 1286,
+      "legal_decisions": 26,
+      "no_task_on_menu": 1086,
+      "all_tasks_masked": 174,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 8,
+      "margin_positive": 18,
+      "margin_median": 0.209,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 174.31217672449432,
+          "first_considered": 107.0,
+          "first_dispatch": 107.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 160.83813749040922,
+          "first_considered": 16.0,
+          "first_dispatch": 16.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 87.44187522471242,
+          "first_considered": 38.0,
+          "first_dispatch": 38.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 100.28693956751825,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 75.76851585981723,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 184.5295195548756,
+          "first_considered": 49.0,
+          "first_dispatch": 49.0,
+          "covered_at": 66.0,
+          "filled_at": 66.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10006,
+      "decisions": 1094,
+      "legal_decisions": 28,
+      "no_task_on_menu": 1044,
+      "all_tasks_masked": 22,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 2,
+      "margin_positive": 26,
+      "margin_median": 0.081,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 110.12755056453263,
+          "first_considered": 61.0,
+          "first_dispatch": 61.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 125.42478015406431,
+          "first_considered": 113.0,
+          "first_dispatch": 113.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 104.08929136442808,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 97.14102004598413,
+          "first_considered": 104.0,
+          "first_dispatch": 104.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 73.86067690476742,
+          "first_considered": 2.0,
+          "first_dispatch": 2.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 161.2899810610411,
+          "first_considered": 109.0,
+          "first_dispatch": 109.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10007,
+      "decisions": 1152,
+      "legal_decisions": 30,
+      "no_task_on_menu": 1046,
+      "all_tasks_masked": 76,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 4,
+      "margin_positive": 26,
+      "margin_median": 0.172,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 277.74907582893866,
+          "first_considered": 181.0,
+          "first_dispatch": 181.0,
+          "covered_at": 265.0,
+          "filled_at": 265.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 294.3326329770639,
+          "first_considered": 181.0,
+          "first_dispatch": 181.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 164.11573571710585,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 82.33439148981438,
+          "first_considered": 4.0,
+          "first_dispatch": 4.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 315.4232036453453,
+          "first_considered": 180.0,
+          "first_dispatch": 180.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 87.68014721960841,
+          "first_considered": 27.0,
+          "first_dispatch": 27.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10008,
+      "decisions": 1222,
+      "legal_decisions": 18,
+      "no_task_on_menu": 1128,
+      "all_tasks_masked": 76,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 18,
+      "margin_median": 0.293,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 159.29253106036867,
+          "first_considered": 9.0,
+          "first_dispatch": 9.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 68.8295058549886,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 82.1312729012587,
+          "first_considered": 40.0,
+          "first_dispatch": 40.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 88.74547031993903,
+          "first_considered": 51.0,
+          "first_dispatch": 51.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10009,
+      "decisions": 1123,
+      "legal_decisions": 20,
+      "no_task_on_menu": 1062,
+      "all_tasks_masked": 41,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 8,
+      "margin_positive": 12,
+      "margin_median": 0.078,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 96.23803162417516,
+          "first_considered": 29.0,
+          "first_dispatch": 29.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 158.92243119214356,
+          "first_considered": 27.0,
+          "first_dispatch": 27.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 170.2818902405138,
+          "first_considered": 101.0,
+          "first_dispatch": 101.0,
+          "covered_at": 109.0,
+          "filled_at": 109.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 157.25458493718037,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 81.19149084534831,
+          "first_considered": 12.0,
+          "first_dispatch": 12.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10010,
+      "decisions": 1208,
+      "legal_decisions": 26,
+      "no_task_on_menu": 1104,
+      "all_tasks_masked": 78,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 8,
+      "margin_positive": 18,
+      "margin_median": 0.091,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 94.41539379553832,
+          "first_considered": 39.0,
+          "first_dispatch": 39.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 170.00645999002984,
+          "first_considered": 59.0,
+          "first_dispatch": 59.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 150.80088809453585,
+          "first_considered": 9.0,
+          "first_dispatch": 9.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 145.93695181827513,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 78.60052571381527,
+          "first_considered": 47.0,
+          "first_dispatch": 47.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 74.17336288643533,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10011,
+      "decisions": 1179,
+      "legal_decisions": 42,
+      "no_task_on_menu": 924,
+      "all_tasks_masked": 213,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 42,
+      "margin_median": 0.378,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 79.58194404459533,
+          "first_considered": 19.0,
+          "first_dispatch": 19.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 170.57086327201205,
+          "first_considered": 32.0,
+          "first_dispatch": 32.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 169.21552908941663,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 348.9395260235126,
+          "first_considered": 285.0,
+          "first_dispatch": 285.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 300.8701293045824,
+          "first_considered": 191.0,
+          "first_dispatch": 191.0,
+          "filled_at": 192.0,
+          "covered_at": 195.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 283.26343606848525,
+          "first_considered": 174.0,
+          "first_dispatch": 174.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10012,
+      "decisions": 1188,
+      "legal_decisions": 22,
+      "no_task_on_menu": 1108,
+      "all_tasks_masked": 58,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 4,
+      "margin_positive": 18,
+      "margin_median": 0.324,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 163.38231507102824,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 157.50705715794152,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 109.10138594989172,
+          "first_considered": 27.0,
+          "first_dispatch": 27.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 814.5397615681545,
+          "first_considered": 742.0,
+          "first_dispatch": 742.0,
+          "covered_at": 745.0,
+          "filled_at": 745.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 108.28354340951127,
+          "first_considered": 17.0,
+          "first_dispatch": 17.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10013,
+      "decisions": 1242,
+      "legal_decisions": 22,
+      "no_task_on_menu": 1062,
+      "all_tasks_masked": 158,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 2,
+      "margin_positive": 20,
+      "margin_median": 0.179,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 114.32049813254278,
+          "first_considered": 70.0,
+          "first_dispatch": 70.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 133.32424369294,
+          "first_considered": 30.0,
+          "first_dispatch": 30.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 135.83166479171058,
+          "first_considered": 70.0,
+          "first_dispatch": 70.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 77.30292069809305,
+          "first_considered": 93.0,
+          "first_dispatch": 93.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 164.239672346597,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0,
+          "filled_at": 6.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 82.86367239063796,
+          "first_considered": 30.0,
+          "first_dispatch": 30.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10014,
+      "decisions": 1226,
+      "legal_decisions": 38,
+      "no_task_on_menu": 1064,
+      "all_tasks_masked": 124,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 6,
+      "margin_positive": 32,
+      "margin_median": 0.292,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 220.15720734659882,
+          "first_considered": 127.0,
+          "first_dispatch": 127.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 616.2138668841972,
+          "first_considered": 458.0,
+          "first_dispatch": 458.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 107.6795758410599,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 395.9842658009601,
+          "first_considered": 319.0,
+          "first_dispatch": 319.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 93.72323652424951,
+          "first_considered": 16.0,
+          "first_dispatch": 16.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 175.4059854044927,
+          "first_considered": 23.0,
+          "first_dispatch": 23.0,
+          "covered_at": 39.0,
+          "filled_at": 39.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10015,
+      "decisions": 1310,
+      "legal_decisions": 32,
+      "no_task_on_menu": 1032,
+      "all_tasks_masked": 246,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 32,
+      "margin_median": 0.203,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 106.91715136740152,
+          "first_considered": 13.0,
+          "first_dispatch": 13.0,
+          "covered_at": 34.0,
+          "filled_at": 34.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 106.91715136740152,
+          "first_considered": 50.0,
+          "first_dispatch": 50.0,
+          "filled_at": 62.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 113.37877007533349,
+          "first_considered": 79.0,
+          "first_dispatch": 79.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 99.96065805260316,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 387.3779123337389,
+          "first_considered": 215.0,
+          "first_dispatch": 215.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 337.74616403858613,
+          "first_considered": 253.0,
+          "first_dispatch": 253.0,
+          "covered_at": 266.0,
+          "filled_at": 266.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10016,
+      "decisions": 1238,
+      "legal_decisions": 26,
+      "no_task_on_menu": 1050,
+      "all_tasks_masked": 162,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 13,
+      "margin_positive": 13,
+      "margin_median": 0.043,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 135.5101859336978,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 163.4889963610209,
+          "first_considered": 69.0,
+          "first_dispatch": 69.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 122.77990323581217,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 134.89367964665402,
+          "first_considered": 11.0,
+          "first_dispatch": 11.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 346.3913080904082,
+          "first_considered": 216.0,
+          "first_dispatch": 216.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 318.5868921815111,
+          "first_considered": 193.0,
+          "first_dispatch": 193.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10017,
+      "decisions": 1257,
+      "legal_decisions": 23,
+      "no_task_on_menu": 1017,
+      "all_tasks_masked": 217,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 10,
+      "margin_positive": 13,
+      "margin_median": 0.048,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 75.72824399919921,
+          "first_considered": 15.0,
+          "first_dispatch": 15.0,
+          "covered_at": 137.0,
+          "filled_at": 137.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 129.79812472650158,
+          "first_considered": 15.0,
+          "first_dispatch": 15.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 74.11652414198562,
+          "first_considered": 15.0,
+          "first_dispatch": 15.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 156.49877223842992,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 109.67792714352181,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 284.2232555928422,
+          "first_considered": 194.0,
+          "first_dispatch": 194.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10018,
+      "decisions": 1023,
+      "legal_decisions": 30,
+      "no_task_on_menu": 978,
+      "all_tasks_masked": 15,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 1,
+      "margin_positive": 29,
+      "margin_median": 0.372,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 91.25637405396184,
+          "first_considered": 17.0,
+          "first_dispatch": 17.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 70.26696848836679,
+          "first_considered": 29.0,
+          "first_dispatch": 29.0,
+          "filled_at": 158.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 149.71466923098495,
+          "first_considered": 90.0,
+          "first_dispatch": 90.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 146.19577482295014,
+          "first_considered": 89.0,
+          "first_dispatch": 89.0,
+          "covered_at": 162.0,
+          "filled_at": 162.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 147.68882096860688,
+          "first_considered": 169.0,
+          "first_dispatch": 169.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 89.09400010647792,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10019,
+      "decisions": 1288,
+      "legal_decisions": 24,
+      "no_task_on_menu": 1096,
+      "all_tasks_masked": 168,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 24,
+      "margin_median": 0.288,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 123.89543726524491,
+          "first_considered": 25.0,
+          "first_dispatch": 25.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 389.41722182302976,
+          "first_considered": 231.0,
+          "first_dispatch": 231.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 69.28265322650547,
+          "first_considered": 3.0,
+          "first_dispatch": 3.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 71.28265322650547,
+          "first_considered": 14.0,
+          "first_dispatch": 14.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 203.4498038639996,
+          "first_considered": 140.0,
+          "first_dispatch": 140.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10020,
+      "decisions": 1230,
+      "legal_decisions": 36,
+      "no_task_on_menu": 1096,
+      "all_tasks_masked": 98,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 2,
+      "margin_positive": 34,
+      "margin_median": 0.191,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 131.1106951570546,
+          "first_considered": 7.0,
+          "first_dispatch": 7.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 85.62852830928263,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 167.2348247876495,
+          "first_considered": 12.0,
+          "first_dispatch": 12.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 334.88421036827333,
+          "first_considered": 163.0,
+          "first_dispatch": 163.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 242.10069192007728,
+          "first_considered": 77.0,
+          "first_dispatch": 77.0,
+          "covered_at": 85.0,
+          "filled_at": 85.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 87.78575044296596,
+          "first_considered": 40.0,
+          "first_dispatch": 40.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10021,
+      "decisions": 1106,
+      "legal_decisions": 24,
+      "no_task_on_menu": 1050,
+      "all_tasks_masked": 32,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 5,
+      "margin_positive": 19,
+      "margin_median": 0.068,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 143.48955104242577,
+          "first_considered": 7.0,
+          "first_dispatch": 7.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 157.8263445079855,
+          "first_considered": 11.0,
+          "first_dispatch": 11.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 176.62348173372962,
+          "first_considered": 12.0,
+          "first_dispatch": 12.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 145.19244717149533,
+          "first_considered": 19.0,
+          "first_dispatch": 19.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 85.62852830928263,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 138.1496064941973,
+          "first_considered": 102.0,
+          "first_dispatch": 102.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10022,
+      "decisions": 1264,
+      "legal_decisions": 20,
+      "no_task_on_menu": 1146,
+      "all_tasks_masked": 98,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 12,
+      "margin_positive": 8,
+      "margin_median": -0.018,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 258.2253493837504,
+          "first_considered": 105.0,
+          "first_dispatch": 105.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 711.6660351000471,
+          "first_considered": 559.0,
+          "first_dispatch": 559.0,
+          "covered_at": 570.0,
+          "filled_at": 570.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 379.51941355402835,
+          "first_considered": 280.0,
+          "first_dispatch": 280.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 372.6577510811792,
+          "first_considered": 272.0,
+          "first_dispatch": 272.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10023,
+      "decisions": 1154,
+      "legal_decisions": 32,
+      "no_task_on_menu": 1104,
+      "all_tasks_masked": 18,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 0,
+      "margin_positive": 32,
+      "margin_median": 0.251,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 458.94275336619035,
+          "first_considered": 383.0,
+          "first_dispatch": 383.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 102.42718920882047,
+          "first_considered": 34.0,
+          "first_dispatch": 34.0,
+          "covered_at": 39.0,
+          "filled_at": 39.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 64.00957856658218,
+          "first_considered": 2.0,
+          "first_dispatch": 2.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 77.64861774962216,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 178.7331898137055,
+          "first_considered": 25.0,
+          "first_dispatch": 25.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 379.9765324886825,
+          "first_considered": 279.0,
+          "first_dispatch": 279.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10024,
+      "decisions": 1256,
+      "legal_decisions": 22,
+      "no_task_on_menu": 1104,
+      "all_tasks_masked": 130,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 2,
+      "margin_positive": 20,
+      "margin_median": 0.295,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 134.97137773688922,
+          "first_considered": 19.0,
+          "first_dispatch": 19.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 172.29253106036867,
+          "first_considered": 19.0,
+          "first_dispatch": 19.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 133.2142712051922,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 386.131531894955,
+          "first_considered": 320.0,
+          "first_dispatch": 320.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 472.06389735836285,
+          "first_considered": 358.0,
+          "first_dispatch": 358.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10025,
+      "decisions": 1228,
+      "legal_decisions": 28,
+      "no_task_on_menu": 1090,
+      "all_tasks_masked": 110,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 2,
+      "margin_positive": 26,
+      "margin_median": 0.211,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 111.11234288446687,
+          "first_considered": 12.0,
+          "first_dispatch": 12.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 298.1888903629356,
+          "first_considered": 205.0,
+          "first_dispatch": 205.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 1064.3826679163803,
+          "first_considered": 896.0,
+          "first_dispatch": 896.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 381.6558599124949,
+          "first_considered": 220.0,
+          "first_dispatch": 220.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 404.46641142087816,
+          "first_considered": 251.0,
+          "first_dispatch": 251.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 601.7788730121009,
+          "first_considered": 454.0,
+          "first_dispatch": 454.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10026,
+      "decisions": 1081,
+      "legal_decisions": 31,
+      "no_task_on_menu": 1050,
+      "all_tasks_masked": 0,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 2,
+      "margin_positive": 29,
+      "margin_median": 0.042,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 269.1484527382228,
+          "first_considered": 97.0,
+          "first_dispatch": 97.0,
+          "filled_at": 118.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 93.40014307026163,
+          "first_considered": 4.0,
+          "first_dispatch": 4.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 168.44409199559908,
+          "first_considered": 4.0,
+          "first_dispatch": 4.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 107.38542759674905,
+          "first_considered": 67.0,
+          "first_dispatch": 67.0,
+          "filled_at": 88.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 94.23455174890145,
+          "first_considered": 12.0,
+          "first_dispatch": 12.0,
+          "filled_at": 13.0,
+          "covered_at": 14.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10027,
+      "decisions": 1224,
+      "legal_decisions": 16,
+      "no_task_on_menu": 1038,
+      "all_tasks_masked": 170,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 4,
+      "margin_positive": 12,
+      "margin_median": 0.122,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 161.77997925276856,
+          "first_considered": 89.0,
+          "first_dispatch": 89.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 108.34640972429625,
+          "first_considered": 129.0,
+          "first_dispatch": 129.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 164.68522901570992,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 146.89316855687758,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 109.21780965309796,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 112.39189163371375,
+          "first_considered": 32.0,
+          "first_dispatch": 32.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10028,
+      "decisions": 1320,
+      "legal_decisions": 32,
+      "no_task_on_menu": 1080,
+      "all_tasks_masked": 208,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 2,
+      "margin_positive": 30,
+      "margin_median": 0.086,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 311.4398709234131,
+          "first_considered": 249.0,
+          "first_dispatch": 249.0,
+          "filled_at": 258.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 66.76659276374687,
+          "first_considered": 35.0,
+          "first_dispatch": 35.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 125.10733041872095,
+          "first_considered": 35.0,
+          "first_dispatch": 35.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 165.59211578592783,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0,
+          "filled_at": 20.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 151.06697840429604,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 183.84786791254493,
+          "first_considered": 52.0,
+          "first_dispatch": 52.0
+        }
+      }
+    },
+    {
+      "arm": "rs0.25",
+      "seed": 10029,
+      "decisions": 1210,
+      "legal_decisions": 36,
+      "no_task_on_menu": 1074,
+      "all_tasks_masked": 100,
+      "busy_decisions": 0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "depot_with_legal_idle": 0,
+      "depot_with_legal_committed": 0,
+      "depot_with_legal_replan": 0,
+      "depot_despite_margin": 0,
+      "task_despite_margin": 8,
+      "margin_positive": 28,
+      "margin_median": 0.104,
+      "task_commitments": 0,
+      "arrived_commitments": 0,
+      "switched_before_arrival": 0,
+      "switch_to_task": 0,
+      "switch_to_depot": 0,
+      "duration_median": null,
+      "targets": {
+        "piloc-e1-target-0": {
+          "deadline": 201.43249206724334,
+          "first_considered": 117.0,
+          "first_dispatch": 117.0
+        },
+        "piloc-e1-target-1": {
+          "deadline": 168.16500874648872,
+          "first_considered": 61.0,
+          "first_dispatch": 61.0
+        },
+        "piloc-e1-target-2": {
+          "deadline": 107.58895311671662,
+          "first_considered": 1.0,
+          "first_dispatch": 1.0
+        },
+        "piloc-e1-target-3": {
+          "deadline": 146.51506296584648,
+          "first_considered": 45.0,
+          "first_dispatch": 45.0
+        },
+        "piloc-e1-target-4": {
+          "deadline": 100.20188437797,
+          "first_considered": 18.0,
+          "first_dispatch": 18.0
+        },
+        "piloc-e1-target-5": {
+          "deadline": 114.09787166580571,
+          "first_considered": 8.0,
+          "first_dispatch": 8.0
+        }
+      }
+    }
+  ]
+}

@@ -79,6 +79,11 @@ class RunConfiguration:
     # allocator behaviour on an identical search history.
     record_stream: str | None = None
     replay_stream: str | None = None
+    # Write one line per allocation decision: the action space, the hard mask, the CTDE
+    # logits, the coordinator residual, the choice, and the ground truth the decision is
+    # later judged against. Off unless a path is given, and never read back by a
+    # decision -- see integrated_sar.allocation_trace.
+    decision_trace: str | None = None
 
     @property
     def search_backend(self) -> str:
@@ -240,6 +245,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--replay-stream", default=None,
                         help="replay a recorded detection stream instead of running PILOC, so "
                              "every coordinator arm sees byte-identical search events")
+    parser.add_argument("--decision-trace", default=None,
+                        help="write one line per allocation decision (action space, hard mask, "
+                             "CTDE logits, coordinator residual, choice, ground truth) to this "
+                             "path; a statistics-only artifact, never read back by a decision")
     return parser
 
 
@@ -274,6 +283,7 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         repository_root=args.repository_root,
         record_stream=args.record_stream,
         replay_stream=args.replay_stream,
+        decision_trace=args.decision_trace,
     )
 
 
@@ -346,6 +356,7 @@ class JointRun:
     search_adapter: PilocSearchAdapter
     task_adapter: Task03Adapter
     stream_recorder: Any = None
+    decision_trace: Any = None
     counters: dict[str, int] = field(default_factory=dict)
 
     def run(self, steps: int | None = None) -> dict[str, Any]:
@@ -377,6 +388,8 @@ class JointRun:
             written = self.stream_recorder.to_stream().write(self.configuration.record_stream)
             summary["recorded_stream"] = str(written)
             summary["recorded_detections"] = self.stream_recorder.detections_recorded
+        if self.decision_trace is not None:
+            self.decision_trace.finish(summary)
         self.logger.log_final(
             self.registry.snapshots(),
             step=total,
@@ -532,6 +545,15 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
     bus.subscribe(DetectionEvent, logger.handle_detection)
     bus.subscribe(ProgressEvent, logger.handle_progress)
 
+    trace_writer = None
+    if configuration.decision_trace is not None:
+        from .allocation_trace import DecisionTraceWriter, trace_meta
+
+        trace_writer = DecisionTraceWriter(
+            configuration.decision_trace, meta=trace_meta(configuration)
+        )
+        task_adapter.decision_trace = trace_writer
+
     return JointRun(
         configuration=configuration,
         scenario=scenario,
@@ -542,6 +564,7 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         search_adapter=search_adapter,
         task_adapter=task_adapter,
         stream_recorder=recorder,
+        decision_trace=trace_writer,
     )
 
 
@@ -669,6 +692,8 @@ def run_from_configuration(configuration: RunConfiguration) -> dict[str, Any]:
         return run.run()
     finally:
         run.logger.close()
+        if run.decision_trace is not None:
+            run.decision_trace.close()
 
 
 def main(argv: Sequence[str] | None = None) -> int:

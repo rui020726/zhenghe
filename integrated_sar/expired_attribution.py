@@ -120,6 +120,7 @@ class ProgressPoint:
     members: tuple[str, ...]
     status: str
     expired: bool
+    remaining: tuple[int, ...] = ()
 
 
 @dataclass(slots=True)
@@ -274,6 +275,23 @@ class TargetTimeline:
         return longest
 
     @property
+    def short_group_idle_steps(self) -> float:
+        """Steps with members on site while the stage requirement was still unmet.
+
+        ``old_task_env`` does not even start the stage clock while a stage's
+        requirements are unmet, so a group standing on a target with the wrong
+        ability set produces no work at all: it is not slow, it is idle. The
+        lifecycle log only writes a progress row when the reported state changes,
+        so the duration is integrated between consecutive rows -- counting rows
+        would collapse a long stall that writes no row into nothing.
+        """
+        idle = 0.0
+        for point, following in zip(self.progress, self.progress[1:]):
+            if point.members and any(value > 0 for value in point.remaining):
+                idle += max(0.0, following.timestamp - point.timestamp)
+        return idle
+
+    @property
     def latest_start(self) -> float:
         """Latest first-work time that still finishes inside the deadline."""
         return self.deadline - self.work_needed
@@ -322,6 +340,7 @@ class TargetTimeline:
             "max_progress": self.max_progress,
             "idle_steps_after_start": round(self.idle_steps_after_start, 1),
             "members_waiting_steps": round(self.members_waiting_steps, 1),
+            "short_group_idle_steps": round(self.short_group_idle_steps, 1),
             "assignments": len(self.assignments),
             "distinct_agents": len(self.assigned_agents),
             "final_progress": self.final_progress,
@@ -382,6 +401,7 @@ def build_timelines(
                     members=tuple(record.get("assigned_agents") or ()),
                     status=str(record.get("status") or ""),
                     expired=bool(detail.get("expired", False)),
+                    remaining=tuple(int(v) for v in (record.get("remaining_requirements") or ())),
                 )
             )
         elif event_type == "final":
@@ -498,6 +518,33 @@ class Attribution:
             }
         return out
 
+    def stall_stats(
+        self, thresholds: Sequence[float] = (10.0, 30.0)
+    ) -> dict[str, dict[str, float]]:
+        """Time spent on site unable to work, expired versus completed targets.
+
+        A group that is on the target with an unmet stage requirement is not making
+        slow progress -- it is making none, and the deadline keeps running.
+        """
+        out: dict[str, dict[str, float]] = {}
+        for label, group in (("expired", self.expired), ("completed", self.completed)):
+            if not group:
+                out[label] = {}
+                continue
+            values = sorted(t.short_group_idle_steps for t in group)
+            entry = {
+                "n": float(len(values)),
+                "median": statistics.median(values),
+                "p90": values[int(0.9 * (len(values) - 1))],
+                "max": values[-1],
+            }
+            for threshold in thresholds:
+                entry[f"share_ge_{threshold:g}"] = (
+                    sum(1 for value in values if value >= threshold) / len(values)
+                )
+            out[label] = entry
+        return out
+
 
 def attribute(
     paths: Iterable[str | Path],
@@ -610,6 +657,15 @@ def report(attributions: Mapping[str, Attribution], latencies: Sequence[float]) 
                     f"work thrown away by resets {entry['discarded_work_mean']:.1f} steps "
                     f"(n={int(entry['n'])})"
                 )
+        for label, entry in attribution.stall_stats().items():
+            if entry:
+                lines.append(
+                    f"  {label:<10} on site with the stage requirement unmet: "
+                    f"median {entry['median']:.1f} p90 {entry['p90']:.1f} "
+                    f"max {entry['max']:.1f} steps; "
+                    f">=10 steps in {entry['share_ge_10']:.2f} of targets, "
+                    f">=30 in {entry['share_ge_30']:.2f} (n={int(entry['n'])})"
+                )
         lines.append("")
     return "\n".join(lines)
 
@@ -657,6 +713,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                         for latency in args.latencies
                     },
                     "churn": attribution.churn_stats(),
+                    "stall": attribution.stall_stats(),
                     "latency": attribution.latency_stats(),
                 }
                 for arm, attribution in attributions.items()

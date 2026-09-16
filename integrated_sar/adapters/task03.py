@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import math
 from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
 from typing import Any
 
+from ..allocation_trace import EPS_ARRIVE, ROBOT_VELOCITY, DecisionFacts
 from ..contracts import (
     AgentSnapshot,
     AgentTaskBelief,
@@ -53,6 +55,22 @@ def _world_position(x: float, y: float, *, what: str) -> WorldPosition:
     )
 
 
+@dataclass(frozen=True, slots=True)
+class _Verdict:
+    """One allocator decision: the winning index plus the logits behind it.
+
+    ``ctde`` and ``bias`` are ``None`` for a backend without a network, in which case
+    ``final`` carries the scoring function's own values. Every vector is aligned with
+    the environment's ``action_map`` and carries ``None`` where an action is masked, so
+    a reader can tell "illegal" from "very unlikely" without knowing the -1e9 sentinel.
+    """
+
+    index: int
+    ctde: tuple[float | None, ...] | None = None
+    bias: tuple[float | None, ...] | None = None
+    final: tuple[float | None, ...] | None = None
+
+
 class Task03Adapter:
     """
     Makes ``old_task_env.TaskEnv`` serve as task sink, allocator and executor.
@@ -86,6 +104,11 @@ class Task03Adapter:
         self.residual_scale = float(residual_scale)
         self.command_ttl = float(command_ttl)
         self.comm_relay: Any | None = None
+        # A sink for per-decision facts, or None. Attached by the driver only when a run
+        # asks for a trace; it is written to after the decision is made and is never read
+        # back, so attaching it cannot change what the allocator does.
+        self.decision_trace: Any | None = None
+        self._commitments: dict[int, tuple[Any, str | None, float]] = {}
         self.external_to_internal: dict[str, int] = {}
         self.internal_to_external: dict[int, str] = {}
         self._task_revisions: dict[str, int] = {}
@@ -138,9 +161,12 @@ class Task03Adapter:
         self.internal_to_external.clear()
         self._task_revisions.clear()
         self._progress_fingerprints.clear()
+        self._commitments.clear()
         self._command_counter = 0
         if self.comm_relay is not None:
             self.comm_relay.reset()
+        if self.decision_trace is not None:
+            self.decision_trace.reset()
 
     def _stage_rescue_teams(self) -> None:
         """Move each species depot -- and its robots -- back to its staging point."""
@@ -400,15 +426,27 @@ class Task03Adapter:
                 continue
             _, _, _, mask, action_map = self.env.get_local_obs(internal_agent_id)
             if self.network is None:
-                action_index = self._heuristic_action(
+                verdict = self._heuristic_verdict(
                     internal_agent_id, mask, action_map, current_time, advice
                 )
                 reason = "heuristic+coordination"
             else:
-                action_index = self._network_action(
-                    internal_agent_id, action_map, advice
-                )
+                verdict = self._network_verdict(internal_agent_id, action_map, advice)
                 reason = "ctde+coordination"
+            action_index = verdict.index
+            if self.decision_trace is not None:
+                self.decision_trace.record(
+                    self._decision_facts(
+                        agent_id=str(agent.agent_id),
+                        response=verdict,
+                        action_map=action_map,
+                        mask=mask,
+                        current_time=current_time,
+                        needs_decision=bool(agent.needs_decision),
+                        replanned=agent.agent_id in advice.replan_agents,
+                        belief_task_count=len(agent.known_tasks or ()),
+                    )
+                )
 
             kind, internal_task_id = action_map[action_index]
             external_task_id = (
@@ -468,6 +506,16 @@ class Task03Adapter:
         current_time: float,
         advice: CoordinationAdvice,
     ) -> int:
+        return self._heuristic_verdict(agent_id, mask, action_map, current_time, advice).index
+
+    def _heuristic_verdict(
+        self,
+        agent_id: int,
+        mask: Any,
+        action_map: Sequence[tuple[str, int | None]],
+        current_time: float,
+        advice: CoordinationAdvice,
+    ) -> _Verdict:
         """Score legal actions from this robot's belief, never from environment truth."""
         agent = self.env.agent_dic[agent_id]
         knowledge = self.env.agent_knowledge.get(agent_id) or {}
@@ -475,6 +523,7 @@ class Task03Adapter:
         believed_locations = knowledge.get("task_locations") or {}
         believed_deadlines = knowledge.get("task_deadlines") or {}
         best_index, best_score = 0, -math.inf
+        scores: list[float | None] = [None] * len(action_map)
         for index, (kind, internal_task_id) in enumerate(action_map):
             if index < len(mask) and bool(mask[index]):
                 continue
@@ -498,9 +547,10 @@ class Task03Adapter:
                 deadline = believed_deadlines.get(internal_task_id)
                 if deadline is not None and float(deadline) < current_time:
                     score -= 0.25
+            scores[index] = score
             if score > best_score:
                 best_index, best_score = index, score
-        return best_index
+        return _Verdict(index=best_index, final=tuple(scores))
 
     def _network_action(
         self,
@@ -508,6 +558,14 @@ class Task03Adapter:
         action_map: Sequence[tuple[str, int | None]],
         advice: CoordinationAdvice,
     ) -> int:
+        return self._network_verdict(agent_id, action_map, advice).index
+
+    def _network_verdict(
+        self,
+        agent_id: int,
+        action_map: Sequence[tuple[str, int | None]],
+        advice: CoordinationAdvice,
+    ) -> _Verdict:
         import torch
 
         state, neighbors, tasks, mask, _ = self.env.get_local_obs(agent_id)
@@ -516,6 +574,7 @@ class Task03Adapter:
         except StopIteration:
             device = torch.device("cpu")
 
+        illegal = [bool(value) for value in mask][: len(action_map)]
         mask_tensor = torch.as_tensor(mask, dtype=torch.bool, device=device).unsqueeze(0)
         with torch.no_grad():
             distribution = self.network.get_action(
@@ -524,15 +583,19 @@ class Task03Adapter:
                 torch.as_tensor(tasks, dtype=torch.float32, device=device).unsqueeze(0),
                 mask_tensor,
             )
-            logits = distribution.logits.clone()
-            for index, (kind, internal_task_id) in enumerate(action_map):
+            ctde = distribution.logits.clone()
+            logits = ctde.clone()
+            # The residual is zero on the depot action by construction: advice is only
+            # ever produced for (robot, task) pairs, so "go home" cannot be biased.
+            bias = torch.zeros_like(logits)
+            for position, (kind, internal_task_id) in enumerate(action_map):
                 if kind != "task" or internal_task_id is None:
                     continue
                 external_id = self.internal_to_external.get(int(internal_task_id))
                 if external_id is not None:
-                    logits[0, index] += self.residual_scale * advice.bias_for(
-                        str(agent_id), external_id
-                    )
+                    value = self.residual_scale * advice.bias_for(str(agent_id), external_id)
+                    bias[0, position] = value
+                    logits[0, position] += value
             # Invariant 6: the environment's hard mask is the last thing applied.
             # get_action already masked these logits, but the residual lands afterwards
             # and CoordinationAdvice bounds nothing, so without this a large enough bias
@@ -540,8 +603,20 @@ class Task03Adapter:
             logits = logits.masked_fill(mask_tensor, MASKED_LOGIT)
             residual_distribution = torch.distributions.Categorical(logits=logits)
             if self.deterministic:
-                return int(torch.argmax(logits, dim=-1).item())
-            return int(residual_distribution.sample().item())
+                index = int(torch.argmax(logits, dim=-1).item())
+            else:
+                index = int(residual_distribution.sample().item())
+
+        def visible(values: Any) -> tuple[float | None, ...]:
+            return tuple(
+                None if position < len(illegal) and illegal[position]
+                else float(values[0, position])
+                for position in range(len(action_map))
+            )
+
+        return _Verdict(
+            index=index, ctde=visible(ctde), bias=visible(bias), final=visible(logits)
+        )
 
     def apply_assignments(self, commands: Sequence[AssignmentCommand]) -> None:
         for command in commands:
@@ -567,6 +642,147 @@ class Task03Adapter:
                 0,
             )
             self.env.apply_action(agent_id, action_index, action_map)
+            self._note_commitment(agent_id)
+
+    def _note_commitment(self, agent_id: int) -> None:
+        """Remember when a robot's navigation target last changed.
+
+        Only the trace needs this: a commitment's age is that of the target change, not
+        of the last decision, and a command applied here is the only place a target
+        changes before the robot arrives. The bookkeeping is skipped entirely while no
+        trace is attached.
+        """
+        if self.decision_trace is None:
+            return
+        agent = self.env.agent_dic.get(int(agent_id))
+        if agent is None:
+            return
+        internal = agent.get("target_id")
+        self._commitments[int(agent_id)] = (
+            agent.get("target_type"),
+            self.internal_to_external.get(int(internal)) if internal is not None else None,
+            float(self.env.current_time),
+        )
+
+    def _decision_facts(
+        self,
+        *,
+        agent_id: str,
+        response: _Verdict,
+        action_map: Sequence[tuple[str, int | None]],
+        mask: Any,
+        current_time: float,
+        needs_decision: bool,
+        replanned: bool,
+        belief_task_count: int,
+    ) -> DecisionFacts:
+        """Gather one already-made decision for the trace.
+
+        Nothing here can reach a decision: the action was chosen before this runs and the
+        trace is a sink. The ``truth`` block is the exception that proves the rule -- it
+        reads the environment's ground truth deliberately, because the questions this
+        trace exists to answer ("is a sufficient group already on site", "how much of the
+        deadline is left") are about the world, and a robot's belief lags the world by
+        exactly the delay those questions are about.
+        """
+        import numpy as np
+
+        raw = self.env.agent_dic[int(agent_id)]
+        kind = raw.get("target_type")
+        external_current = (
+            self.internal_to_external.get(int(raw.get("current_task", -1)))
+            if int(raw.get("current_task", -1)) >= 0
+            else None
+        )
+        location = np.asarray(raw["location"], dtype=float)
+        target_pos = raw.get("target_pos")
+        distance = None
+        if target_pos is not None:
+            distance = float(np.linalg.norm(np.asarray(target_pos, dtype=float) - location))
+
+        commitment = self._commitments.get(int(agent_id))
+        if commitment is None or commitment[0] != kind or commitment[1] != external_current:
+            # The target changed without a command (arrival, timeout, release), so the
+            # change is visible only now: age is measured from here and understates by at
+            # most one allocation interval.
+            commitment = (kind, external_current, float(current_time))
+            self._commitments[int(agent_id)] = commitment
+
+        action_task_ids = tuple(
+            self.internal_to_external.get(int(task_id)) if task_id is not None else None
+            for _, task_id in action_map
+        )
+        truth: dict[str, Any] = {"targets": {}}
+        for external_id in (action_task_ids[response.index], external_current):
+            if external_id and external_id not in truth["targets"]:
+                entry = self._target_truth(external_id)
+                if entry is not None:
+                    truth["targets"][external_id] = entry
+
+        return DecisionFacts(
+            step=int(getattr(self.env, "_inner_step_counter", 0)),
+            timestamp=float(current_time),
+            agent_id=str(agent_id),
+            status=str(raw.get("status", "idle")),
+            abilities=tuple(float(value) for value in raw["abilities"]),
+            position=(float(location[0]), float(location[1])),
+            travel_dist=float(raw.get("travel_dist", 0.0)),
+            needs_decision=bool(needs_decision),
+            replanned=bool(replanned),
+            belief_task_count=int(belief_task_count),
+            action_task_ids=action_task_ids,
+            mask=tuple(bool(value) for value in mask),
+            chosen_index=int(response.index),
+            ctde_logits=response.ctde,
+            bias=response.bias,
+            final_logits=response.final,
+            current_kind=str(kind) if kind is not None else None,
+            current_task=external_current,
+            current_task_age=max(0.0, float(current_time) - commitment[2]),
+            current_target_distance=distance,
+            current_target_eta=(
+                None if distance is None else distance / ROBOT_VELOCITY
+            ),
+            current_target_taken=None if distance is None else distance <= EPS_ARRIVE,
+            truth=truth,
+        )
+
+    def _target_truth(self, external_id: str) -> dict[str, Any] | None:
+        """Ground truth about one target, written to the trace and read by nobody else."""
+        import numpy as np
+
+        internal_id = self.external_to_internal.get(external_id)
+        task = self.env.task_dic.get(internal_id) if internal_id is not None else None
+        if task is None:
+            return None
+        stages = task["stages"]
+        stage = stages[min(int(task.get("current_stage_index", 0)), len(stages) - 1)]
+        on_site = [int(member) for member in task.get("members", ())]
+        internal_task_id = int(task["ID"])
+        en_route = [
+            int(other)
+            for other, agent in self.env.agent_dic.items()
+            if agent.get("target_type") == "task"
+            and int(agent.get("target_id", -1)) == internal_task_id
+        ]
+        requirements = np.asarray(stage["requirements"], dtype=float)
+        capacity = np.zeros_like(requirements)
+        for other in on_site + en_route:
+            capacity = capacity + np.asarray(self.env.agent_dic[other]["abilities"], dtype=float)
+        remaining = np.asarray(stage["status"], dtype=float)
+        return {
+            "on_site": [str(member) for member in on_site],
+            "en_route": [str(other) for other in en_route],
+            # The stage's own status is the environment's answer to "do the robots on
+            # site already cover the requirement": it holds requirements - member
+            # abilities, floored at zero, and is all-zero exactly when they cover it.
+            "remaining": [int(value) for value in remaining],
+            "covered": bool((remaining <= 0).all()),
+            "en_route_covers": bool((np.maximum(requirements - capacity, 0.0) <= 0).all()),
+            "deadline": float(task.get("deadline", 0.0)),
+            "stage_index": int(task.get("current_stage_index", 0)),
+            "expired": bool(task.get("expired", False)),
+        }
 
     def step(self, current_time: float, dt: float) -> ExecutionStepResult:
         del current_time
