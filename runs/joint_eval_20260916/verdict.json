@@ -1,0 +1,100 @@
+{
+  "stage": "joint-coordinator-ablation (replay, corrected metrics)",
+  "date": "2026-09-16",
+  "git_commit": "46393a7",
+  "frozen_checkpoints": {
+    "piloc": {
+      "path": "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth",
+      "sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+      "note": "cur_v2rep05_s2 best @ episode 3100 (best independent-test discovery)"
+    },
+    "ctde": {
+      "path": "runs/joint_eval_20260916/ctde_final_7_1.pth",
+      "sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+      "note": "task-03 checkpoints_old/7/1/ctde_final.pth @ episode 20002, actor_kv_mode=tokens"
+    }
+  },
+  "protocol": {
+    "seeds": [
+      10000,
+      10001,
+      10002,
+      10003,
+      10004,
+      10005,
+      10006,
+      10007,
+      10008,
+      10009,
+      10010,
+      10011,
+      10012,
+      10013,
+      10014,
+      10015,
+      10016,
+      10017,
+      10018,
+      10019,
+      10020,
+      10021,
+      10022,
+      10023,
+      10024,
+      10025,
+      10026,
+      10027,
+      10028,
+      10029
+    ],
+    "steps_recorded": 1000,
+    "windows": [
+      500,
+      750,
+      1000
+    ],
+    "arms": [
+      "nocoord",
+      "rs0.25",
+      "rs0.5"
+    ],
+    "search_backend": "nocoord arm records the live PILOC stream; rs0.25/rs0.5 replay it",
+    "consistency": "30 seeds x 3 arms, detections + map hash identical, 0 failures",
+    "causality": "1000-step prefix @500 == independent 500-step run (verified)"
+  },
+  "three_window_table": "== window 500 | paired seeds: 30 ==\narm         disc compl  exp  act unas      completion  deadline        mean_t     asg   rej\n-------------------------------------------------------------------------------------------\nnocoord      167   133   34    0    0     0.793±0.070     1.000    44.3±8.0     18653     0\nrs0.25       167   148   19    0    0     0.891±0.070     1.000    42.2±7.7     17804     0\nrs0.5        167   145   22    0    0     0.869±0.069     1.000    45.1±8.4     17756     0\ndelta vs nocoord                                 completion        mean_t       asg(sum)\nrs0.25                                    0.098±0.095    -2.1±8.5             -849\nrs0.5                                     0.076±0.095     0.8±8.4             -897\n\n== window 750 | paired seeds: 30 ==\narm         disc compl  exp  act unas      completion  deadline        mean_t     asg   rej\n-------------------------------------------------------------------------------------------\nnocoord      170   134   35    1    0     0.788±0.065     1.000    43.3±7.7     27689     0\nrs0.25       170   150   19    1    0     0.884±0.070     1.000    42.0±7.5     26846     0\nrs0.5        170   147   22    1    0     0.862±0.068     1.000    44.9±8.3     26798     0\ndelta vs nocoord                                 completion        mean_t       asg(sum)\nrs0.25                                    0.097±0.090    -1.3±7.5             -843\nrs0.5                                     0.074±0.091     1.6±7.4             -891\n\n== window 1000 | paired seeds: 30 ==\narm         disc compl  exp  act unas      completion  deadline        mean_t     asg   rej\n-------------------------------------------------------------------------------------------\nnocoord      171   136   35    0    0     0.796±0.064     1.000    43.4±7.6     36681     0\nrs0.25       171   152   19    0    0     0.891±0.070     1.000    42.1±7.5     35838     0\nrs0.5        171   149   22    0    0     0.869±0.069     1.000    44.9±8.2     35790     0\ndelta vs nocoord                                 completion        mean_t       asg(sum)\nrs0.25                                    0.096±0.090    -1.4±7.5             -843\nrs0.5                                     0.073±0.090     1.5±7.4             -891\n",
+  "expired_diagnosis_window1000": {
+    "nocoord": {
+      "completed": 136,
+      "barely_missed": 16,
+      "stalled": 19,
+      "never_started": 0,
+      "in_time_budget": 0
+    },
+    "rs0.25": {
+      "completed": 152,
+      "barely_missed": 19,
+      "stalled": 0,
+      "never_started": 0,
+      "in_time_budget": 0
+    },
+    "rs0.5": {
+      "completed": 149,
+      "barely_missed": 22,
+      "stalled": 0,
+      "never_started": 0,
+      "in_time_budget": 0
+    }
+  },
+  "expired_overlap": {
+    "nocoord_and_rs0.25": 8,
+    "only_nocoord": 27,
+    "only_rs0.25": 11
+  },
+  "commands": {
+    "record_nocoord": "python -m integrated_sar.joint_driver --piloc-checkpoint <piloc> --task-checkpoint <ctde> --actor-kv-mode tokens --steps 1000 --seed <s> --no-coordinator --quiet --record-stream streams/s<s>.json --output rp_nocoord_s<s>.jsonl",
+    "replay_arm": "python -m integrated_sar.joint_driver --task-checkpoint <ctde> --actor-kv-mode tokens --steps 1000 --seed <s> --replay-stream streams/s<s>.json --residual-scale <a> --quiet --output rp_rs<a>_s<s>.jsonl",
+    "audit": "python -m integrated_sar.replay_audit --logs rp_*_s*.jsonl --bundles streams/s*.json",
+    "metrics": "python -m integrated_sar.lifecycle_metrics rp_*_s*.jsonl --windows 500 750 1000"
+  }
+}

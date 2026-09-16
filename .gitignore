@@ -32,7 +32,15 @@ Thumbs.db
 checkpoints*/
 model/save*/
 logs/
-runs/
+# Experiment runs stay out of version control (checkpoints, JSONL lifecycles,
+# detection-stream bundles, stdout captures); only the small, reproducible
+# ablation drivers and verdicts live in the repo.
+runs/*
+!runs/joint_eval_20260916/
+runs/joint_eval_20260916/*
+!runs/joint_eval_20260916/*.cmd
+!runs/joint_eval_20260916/*.py
+!runs/joint_eval_20260916/*.json
 train/
 animations/
 gifs/
