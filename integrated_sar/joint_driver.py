@@ -72,9 +72,17 @@ class RunConfiguration:
     comm_subscribers: str = "all"
     quiet: bool = False
     repository_root: str | None = None
+    # Detection-stream recording/replay. Exactly one of the two may be set: the
+    # recording runs the frozen PILOC once and writes the ordered event stream;
+    # the replay feeds that stream to every arm, so coordinator ablations compare
+    # allocator behaviour on an identical search history.
+    record_stream: str | None = None
+    replay_stream: str | None = None
 
     @property
     def search_backend(self) -> str:
+        if self.replay_stream is not None:
+            return "replayed-detections"
         return "mock-frontier" if self.piloc_checkpoint is None else "piloc-trained"
 
     @property
@@ -164,6 +172,17 @@ class RunConfiguration:
             raise ConfigurationError(
                 f"--actor-kv-mode must be 'tokens' or 'summary', got {self.actor_kv_mode!r}"
             )
+        if self.record_stream is not None and self.replay_stream is not None:
+            raise ConfigurationError(
+                "--record-stream and --replay-stream are alternatives: a recording runs "
+                "the live search side and writes the stream, a replay consumes it"
+            )
+        if self.replay_stream is not None and self.piloc_checkpoint is not None:
+            raise ConfigurationError(
+                f"--replay-stream already carries the detections of a trained PILOC "
+                f"(recorded from {self.replay_stream}); combining it with "
+                f"--piloc-checkpoint would run two search policies at once"
+            )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -214,6 +233,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--quiet", action="store_true", help="do not print per-step progress lines")
     parser.add_argument("--repository-root", default=None,
                         help="override the repository root used to locate piloc/ and task_allocation/")
+    parser.add_argument("--record-stream", default=None,
+                        help="run the live search side for --steps and write the ordered "
+                             "detection stream (JSON) to this path; the task side still runs")
+    parser.add_argument("--replay-stream", default=None,
+                        help="replay a recorded detection stream instead of running PILOC, so "
+                             "every coordinator arm sees byte-identical search events")
     return parser
 
 
@@ -246,6 +271,8 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         comm_subscribers=str(args.comm_subscribers),
         quiet=bool(args.quiet),
         repository_root=args.repository_root,
+        record_stream=args.record_stream,
+        replay_stream=args.replay_stream,
     )
 
 
@@ -317,6 +344,7 @@ class JointRun:
     logger: LifecycleLogger
     search_adapter: PilocSearchAdapter
     task_adapter: Task03Adapter
+    stream_recorder: Any = None
     counters: dict[str, int] = field(default_factory=dict)
 
     def run(self, steps: int | None = None) -> dict[str, Any]:
@@ -343,6 +371,10 @@ class JointRun:
                 )
 
         summary = self.summarize(total)
+        if self.stream_recorder is not None:
+            written = self.stream_recorder.to_stream().write(self.configuration.record_stream)
+            summary["recorded_stream"] = str(written)
+            summary["recorded_detections"] = self.stream_recorder.detections_recorded
         self.logger.log_final(
             self.registry.snapshots(),
             step=total,
@@ -412,6 +444,24 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
     )
 
     search_adapter = _build_search_side(configuration, scenario, device)
+    recorder = None
+    if configuration.replay_stream is not None:
+        from .detection_replay import (
+            ReplaySearchModule,
+            assert_bundle_matches_configuration,
+            load_detection_stream,
+        )
+
+        stream = load_detection_stream(configuration.replay_stream)
+        assert_bundle_matches_configuration(stream, configuration, configuration.steps)
+        search_adapter = ReplaySearchModule(stream)
+    elif configuration.record_stream is not None:
+        from .detection_replay import RecordingSearchModule
+
+        recorder = RecordingSearchModule(
+            search_adapter, scenario=scenario, configuration=configuration
+        )
+        search_adapter = recorder
     task_adapter = _build_task_side(configuration, scenario, device)
 
     registry = TaskRegistry()
@@ -489,6 +539,7 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         logger=logger,
         search_adapter=search_adapter,
         task_adapter=task_adapter,
+        stream_recorder=recorder,
     )
 
 
