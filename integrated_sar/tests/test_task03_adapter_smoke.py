@@ -126,3 +126,41 @@ class Task03AdapterSmokeTests(unittest.TestCase):
         result = adapter.step(1.0, 1.0)
         self.assertTrue(result.progress_events)
         self.assertEqual(result.progress_events[0].task_id, "piloc-target-smoke")
+
+    def test_rounding_noise_at_the_scene_edge_is_clamped_not_fatal(self) -> None:
+        # TaskEnv integrates position by repeated float addition, so a robot that
+        # travels to the edge can land one ulp outside the closed unit square. The
+        # observed production failure was x = -3.469446951953614e-18 at step 81 of
+        # seed 10003, which raised "world coordinates must be normalized to [0, 1]"
+        # and truncated the whole joint episode.
+        env = self.TaskEnv(
+            tasks_range=(0, 0),
+            species_range=(1, 1),
+            per_species_range=(1, 1),
+            enable_tidal_tasks=False,
+            enable_discovered_tasks=False,
+            seed=3,
+        )
+        adapter = Task03Adapter(env=env, clear_initial_tasks=True)
+        agent_key = next(iter(env.agent_dic))
+        env.agent_dic[agent_key]["location"] = np.array(
+            [-3.469446951953614e-18, 1.0 + 2.220446049250313e-16], dtype=float
+        )
+        snapshot = next(a for a in adapter.agent_snapshots() if a.agent_id == str(agent_key))
+        self.assertEqual(snapshot.position.x, 0.0)
+        self.assertEqual(snapshot.position.y, 1.0)
+
+    def test_a_real_coordinate_violation_still_raises(self) -> None:
+        env = self.TaskEnv(
+            tasks_range=(0, 0),
+            species_range=(1, 1),
+            per_species_range=(1, 1),
+            enable_tidal_tasks=False,
+            enable_discovered_tasks=False,
+            seed=3,
+        )
+        adapter = Task03Adapter(env=env, clear_initial_tasks=True)
+        agent_key = next(iter(env.agent_dic))
+        env.agent_dic[agent_key]["location"] = np.array([-0.05, 0.5], dtype=float)
+        with self.assertRaises(ValueError):
+            adapter.agent_snapshots()

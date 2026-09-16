@@ -23,6 +23,35 @@ from ..contracts import (
 # are legal -- only restore the constraint the residual was allowed to weaken.
 MASKED_LOGIT = -1e9
 
+# TaskEnv moves its robots by repeated floating-point addition, so a robot that
+# reaches the edge of the scene can land one ulp outside the closed unit square
+# (observed at -3.469446951953614e-18 after 80 steps of travel). ``WorldPosition``
+# requires [0, 1], and the violation is pure rounding noise, not a lost robot.
+# Anything inside this tolerance is clamped onto the boundary; anything larger is
+# a real coordinate bug and must keep raising.
+POSITION_TOLERANCE = 1e-9
+
+
+def _unit_coordinate(value: float, *, what: str, axis: str) -> float:
+    """Clamp a TaskEnv coordinate onto [0, 1] within rounding tolerance."""
+    if -POSITION_TOLERANCE <= value < 0.0:
+        return 0.0
+    if 1.0 < value <= 1.0 + POSITION_TOLERANCE:
+        return 1.0
+    if not 0.0 <= value <= 1.0:
+        raise ValueError(
+            f"{what} {axis} coordinate {value!r} is outside [0, 1] by more than "
+            f"{POSITION_TOLERANCE:g}; this is not rounding noise, so it is not clamped"
+        )
+    return value
+
+
+def _world_position(x: float, y: float, *, what: str) -> WorldPosition:
+    return WorldPosition(
+        _unit_coordinate(x, what=what, axis="x"),
+        _unit_coordinate(y, what=what, axis="y"),
+    )
+
 
 class Task03Adapter:
     """
@@ -287,8 +316,10 @@ class Task03Adapter:
             snapshots.append(
                 AgentSnapshot(
                     agent_id=str(internal_id),
-                    position=WorldPosition(
-                        float(agent["location"][0]), float(agent["location"][1])
+                    position=_world_position(
+                        float(agent["location"][0]),
+                        float(agent["location"][1]),
+                        what=f"rescue robot {internal_id}",
                     ),
                     abilities=tuple(float(value) for value in agent["abilities"]),
                     status=str(agent.get("status", "idle")),
