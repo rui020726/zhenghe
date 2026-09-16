@@ -29,6 +29,7 @@ from .clock import GlobalClock
 from .comm import CommRelay
 from .contracts import DetectionEvent, ProgressEvent, TaskSnapshot
 from .coordinator import HeuristicCoordinator, PassthroughCoordinator
+from .detection_replay import scenario_map_sha256
 from .errors import ConfigurationError, IntegratedSARError
 from .event_bus import InMemoryEventBus
 from .lifecycle_log import LifecycleLogger
@@ -349,7 +350,8 @@ class JointRun:
 
     def run(self, steps: int | None = None) -> dict[str, Any]:
         total = self.configuration.steps if steps is None else int(steps)
-        self.logger.log_run_config(self.configuration.as_dict(), self.scenario.as_dict())
+        scenario_detail = {**self.scenario.as_dict(), "map_sha256": scenario_map_sha256(self.scenario)}
+        self.logger.log_run_config(self.configuration.as_dict(), scenario_detail)
 
         for report in self.orchestrator.run(total):
             for command in report.assignments:
