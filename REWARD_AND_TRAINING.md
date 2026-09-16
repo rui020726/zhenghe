@@ -426,6 +426,37 @@ legal-random 基线 0.213–0.228（E=250 口径），策略约为其 3 倍。
 - 产物齐全：`checkpoints/` 每 500 回合一个（内嵌 trainer_state，可直接
   `--resume`）、`best/` 按验证任务指标保存、`trainer_state.pkl` 旁路副本。
 
+### 6.4 独立测试集终评（2026-09-16，分支 eval/final-eval-20260916）
+
+§6.3 的 20 个验证 seed 反复参与课程门控与选模，不是独立测试集。本节按
+隔离协议重评：120 个全新测试 seed（base 2_000_000_000，与训练 seed
+[0, 5001]、验证 seed [1e9+7, 1e9+29] 完全不相交），所有臂复用同一
+`runs/final_eval_20260916/test_seeds.json`，因此看到完全相同的测试地图。
+评估工具 `piloc/test.py`（终评版）：seeded 地图生成（不用图片地图）、
+默认确定性掩码 argmax、eval() 模式（部署口径）、纯策略（RescueAlgorithm
+关闭）、E=250。checkpoint 归档（SHA256 / run_meta / 训练命令）在
+`runs/final_eval_20260916/checkpoint_archive.json`。
+
+**结果（120 回合 × E=250，均值 ± 95% CI）**：
+
+| 臂 | coverage | discovery | all_found | repeat | collision |
+|---|---:|---:|---:|---:|---:|
+| v2rep05_s0 (ep 2900) | **0.674±0.020** | 0.732±0.041 | 0.225 | 0.057 | 0 |
+| v2rep05_s1 (ep 1900) | **0.662±0.019** | 0.747±0.034 | 0.208 | 0.071 | 0 |
+| v2rep05_s2 (ep 3100) | **0.672±0.024** | 0.794±0.033 | 0.283 | 0.063 | 0 |
+| legacy_s0/s1/s2 (ep 300) | 0.255/0.342/0.256 | 0.27~0.40 | 0 | 0.41~0.67 | 0 |
+| legal-random | 0.212±0.009 | 0.268 | 0 | 0.335 | 0 |
+| raw-random | 0.205±0.010 | 0.301 | 0 | 0.462 | 0.294 |
+
+验收线（collision=0、repeat≤0.10、策略 coverage CI 下界高于 legal-random
+CI 上界）：**3 个 v2 checkpoint 全部通过**——CI 下界 0.643~0.654 vs
+legal-random 上界 0.221，余量约 2 倍。终评 coverage（0.662~0.674）与
+§6.3 训练末段（0.659）一致，无 train/test 落差。
+
+注意：legacy 对照只训练了 300 回合（E=50 消融协议），且 legacy 的 repeat
+率 0.41~0.67 说明其覆盖主要靠打转堆积；公平对照仍以 §6.1/§6.2 的 E=50
+配对消融为准。raw-random collision 0.294 印证合法动作 mask 的价值。
+
 ## 7. 已知限制
 
 - 每回合训练地图仍随机生成（`DungeonMaps` 资产不在仓库内），
