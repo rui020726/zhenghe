@@ -43,7 +43,14 @@ from integrated_sar.data_splits import (  # noqa: E402
 
 STEPS = 1000
 PLANNER_SCALE = 0.25
-ARMS = (("coalplan0.25", "coalition_planner"), ("daw0.25", "deadline_aware"))
+# (label, policy, binding). The third entry turns the commitment into something the
+# allocator honours; the first two stay advisory so the comparison is against the arm the
+# learnability gate measured.
+ARMS = (
+    ("coalplan0.25", "coalition_planner", False),
+    ("coalplan0.25sticky", "coalition_planner", True),
+    ("daw0.25", "deadline_aware", False),
+)
 # The gate the phase was set. The oracle may only reorder legal candidates, so the share
 # of the planner's remaining expiries it removes is the measure of learnability.
 EXPIRY_FIX_TARGET = 0.30
@@ -87,7 +94,7 @@ def manifest() -> dict[str, object]:
             }
             for name, split in SPLITS.items()
         },
-        "arms": {label: policy for label, policy in ARMS},
+        "arms": {label: policy for label, policy, _ in ARMS},
         "gate": {
             "same_information_expiry_fix_target": EXPIRY_FIX_TARGET,
             "metric": "share of the rule planner's remaining expired targets removed by "
@@ -96,7 +103,7 @@ def manifest() -> dict[str, object]:
     }
 
 
-def command(seed: int, label: str, policy: str, split_name: str) -> list[str]:
+def command(seed: int, label: str, policy: str, split_name: str, binding: bool = False) -> list[str]:
     """The joint_driver argv for one arm on one recorded stream."""
     return [
         sys.executable or "python",
@@ -122,6 +129,8 @@ def command(seed: int, label: str, policy: str, split_name: str) -> list[str]:
         "--decision-trace",
         str(run_dir(REPO, split_name) / f"tr_{label}_s{seed}.jsonl"),
     ]
+    if binding:
+        argv.append("--sticky-commitments")
 
 
 def record_command(seed: int, split_name: str) -> list[str]:
@@ -189,8 +198,8 @@ def do_run(args: argparse.Namespace) -> int:
         print(f"{len(missing)} streams missing; run the record pass first")
         return 1
     jobs = [
-        command(seed, label, policy, args.split)
-        for label, policy in ARMS
+        command(seed, label, policy, args.split, binding)
+        for label, policy, binding in ARMS
         for seed in split.seeds
         if not (run_dir(REPO, args.split) / f"rp_{label}_s{seed}.jsonl").exists()
         or args.force

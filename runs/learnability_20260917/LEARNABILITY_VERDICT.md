@@ -4,8 +4,14 @@
 planner's legal candidates is **bit-for-bit identical** to the rule planner -- 11 615
 compared decision rows, 0 differences, and 0 paired differences in expired or completed
 targets across 160 seeds on two independent blocks. It fixes **0 %** of the remaining
-expiries against a target of 30 %. No neural network is trained, and none should be: there
-is no ordering signal for it to learn.
+expiries against a target of 30 %. No neural network is trained on this evidence.
+
+Read the 0 % for exactly what it is: **this** oracle variant found no improvement. It is a
+*feasibility-filtered* planner -- it starts from the rule plan and returns commitments whose
+reserved group cannot arrive inside the believed budget -- and it is one candidate
+reordering, not an upper bound over every policy that sees the same information. A strictly
+better ordering may still exist. What this result rules out is that the first obvious one
+reaches it, and it moves the burden of proof to whoever proposes another.
 
 What the attribution says instead is where the remaining loss actually lives, and it is not
 in the coordinator:
@@ -29,7 +35,10 @@ work uninterrupted would have saved **100 %** of them. The binding constraints a
 **The oracle.** `DeadlineAwareCoalitionCoordinator` (`--coordinator deadline_aware`) sees
 exactly what the rule planner sees: the same free robots, the same believed tasks, the same
 unit slots, the same exclusivity, and never `CoordinatorInput.tasks`. It may only reorder
-the planner's own output, so whatever it fixes is fixed by ordering.
+the planner's own output, so whatever it fixes is fixed by ordering. It is a
+feasibility-filtered planner, not a strict upper bound over all same-information policies:
+it searches exactly one neighbourhood of the rule plan, so its 0 % is evidence about that
+neighbourhood and about nothing larger.
 
 Its first version was not that. It built coalitions from scratch and demanded a complete
 cover from the robots free *right now*, which is strictly more brittle than the planner's
