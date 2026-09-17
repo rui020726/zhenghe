@@ -1,0 +1,811 @@
+{
+  "format": "coordinator-baselines/verdict/1",
+  "generated": "2026-09-17",
+  "question": "Before training a learned residual coordinator: how far do two interpretable baselines get -- (A) a scalar CTDE task/depot calibration and (B) a belief-only coalition-aware coordinator in the existing bias interface?",
+  "data": {
+    "dev": {
+      "seeds": "10000-10029 (30)",
+      "streams": "runs/joint_eval_20260916/streams",
+      "note": "read repeatedly while designing the offset and the coalition term, so it selects arms and nothing else; every choice below is made here"
+    },
+    "heldout": {
+      "seeds": "20000-20099 (100)",
+      "streams": "runs/coordinator_baselines_20260917/heldout/streams",
+      "note": "recorded after the arms were frozen; one arm (nocoord+cal0.25) was added after the first five but before any held-out number was read",
+      "replay_audit": {
+        "checked": 600,
+        "mismatch_count": 0,
+        "detections_per_arm": {
+          "coal0.25": 588,
+          "coal0.25+cal0.1": 588,
+          "nocoord": 588,
+          "nocoord+cal0.1": 588,
+          "nocoord+cal0.25": 588,
+          "rs0.25": 588
+        }
+      }
+    }
+  },
+  "stage_a_development": {
+    "nocoord": {
+      "runs": 30,
+      "discovered": 171,
+      "completed": 136,
+      "expired": 35,
+      "completion_rate_mean": 0.7956,
+      "completion_rate_ci95": 0.0641,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 43.41,
+      "assignment_commands": 36681,
+      "resource_utilization_mean": 0.0749,
+      "resource_utilization_ci95": 0.0117,
+      "expired_never_assigned": 18,
+      "expired_finished_after_deadline": 16,
+      "expired_stopped_mid_work": 1,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 0.0,
+      "depot_with_legal": 14891,
+      "depot_with_legal_share": 0.9490758444869344,
+      "margin_median": -0.034,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.1437908496732026,
+      "group_covered_gap_median": 11.5,
+      "never_covered": 131,
+      "group_filled_share": 0.20261437908496732,
+      "group_filled_gap_median": 8.0,
+      "never_filled": 122,
+      "targets_dispatched": 153
+    },
+    "nocoord+cal0.05": {
+      "runs": 30,
+      "discovered": 171,
+      "completed": 155,
+      "expired": 16,
+      "completion_rate_mean": 0.9089,
+      "completion_rate_ci95": 0.0551,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 43.16,
+      "assignment_commands": 36304,
+      "resource_utilization_mean": 0.079,
+      "resource_utilization_ci95": 0.011,
+      "expired_never_assigned": 6,
+      "expired_finished_after_deadline": 10,
+      "expired_stopped_mid_work": 0,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 1.0,
+      "depot_with_legal": 6096,
+      "depot_with_legal_share": 0.8785127539991353,
+      "margin_median": -0.081,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.11515151515151516,
+      "group_covered_gap_median": 11.0,
+      "never_covered": 146,
+      "group_filled_share": 0.15151515151515152,
+      "group_filled_gap_median": 9.0,
+      "never_filled": 140,
+      "targets_dispatched": 165
+    },
+    "nocoord+cal0.1": {
+      "runs": 30,
+      "discovered": 171,
+      "completed": 156,
+      "expired": 15,
+      "completion_rate_mean": 0.9144,
+      "completion_rate_ci95": 0.0552,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 41.86,
+      "assignment_commands": 36007,
+      "resource_utilization_mean": 0.0837,
+      "resource_utilization_ci95": 0.0099,
+      "expired_never_assigned": 1,
+      "expired_finished_after_deadline": 14,
+      "expired_stopped_mid_work": 0,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 6.0,
+      "depot_with_legal": 1417,
+      "depot_with_legal_share": 0.624504186866461,
+      "margin_median": -0.104,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.1,
+      "group_covered_gap_median": 12.0,
+      "never_covered": 153,
+      "group_filled_share": 0.13529411764705881,
+      "group_filled_gap_median": 11.0,
+      "never_filled": 147,
+      "targets_dispatched": 170
+    },
+    "nocoord+cal0.25": {
+      "runs": 30,
+      "discovered": 171,
+      "completed": 157,
+      "expired": 14,
+      "completion_rate_mean": 0.92,
+      "completion_rate_ci95": 0.0552,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 40.75,
+      "assignment_commands": 35961,
+      "resource_utilization_mean": 0.0845,
+      "resource_utilization_ci95": 0.0104,
+      "expired_never_assigned": 0,
+      "expired_finished_after_deadline": 14,
+      "expired_stopped_mid_work": 0,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 25.0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "margin_median": 0.18,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.10526315789473684,
+      "group_covered_gap_median": 11.5,
+      "never_covered": 153,
+      "group_filled_share": 0.14035087719298245,
+      "group_filled_gap_median": 10.0,
+      "never_filled": 147,
+      "targets_dispatched": 171
+    },
+    "rs0.25": {
+      "runs": 30,
+      "discovered": 171,
+      "completed": 152,
+      "expired": 19,
+      "completion_rate_mean": 0.8911,
+      "completion_rate_ci95": 0.0704,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 42.05,
+      "assignment_commands": 35838,
+      "resource_utilization_mean": 0.0939,
+      "resource_utilization_ci95": 0.0125,
+      "expired_never_assigned": 0,
+      "expired_finished_after_deadline": 19,
+      "expired_stopped_mid_work": 0,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 67.0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "margin_median": 0.179,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.0935672514619883,
+      "group_covered_gap_median": 12.0,
+      "never_covered": 155,
+      "group_filled_share": 0.13450292397660818,
+      "group_filled_gap_median": 13.0,
+      "never_filled": 148,
+      "targets_dispatched": 171
+    },
+    "coal0.25": {
+      "runs": 30,
+      "discovered": 171,
+      "completed": 152,
+      "expired": 19,
+      "completion_rate_mean": 0.8911,
+      "completion_rate_ci95": 0.0704,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 42.05,
+      "assignment_commands": 35838,
+      "resource_utilization_mean": 0.0939,
+      "resource_utilization_ci95": 0.0125,
+      "expired_never_assigned": 0,
+      "expired_finished_after_deadline": 19,
+      "expired_stopped_mid_work": 0,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 67.0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "margin_median": 0.179,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.0935672514619883,
+      "group_covered_gap_median": 12.0,
+      "never_covered": 155,
+      "group_filled_share": 0.13450292397660818,
+      "group_filled_gap_median": 13.0,
+      "never_filled": 148,
+      "targets_dispatched": 171
+    },
+    "coal0.25+cal0.1": {
+      "runs": 30,
+      "discovered": 171,
+      "completed": 152,
+      "expired": 19,
+      "completion_rate_mean": 0.8911,
+      "completion_rate_ci95": 0.0704,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 42.05,
+      "assignment_commands": 35838,
+      "resource_utilization_mean": 0.0939,
+      "resource_utilization_ci95": 0.0125,
+      "expired_never_assigned": 0,
+      "expired_finished_after_deadline": 19,
+      "expired_stopped_mid_work": 0,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 67.0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "margin_median": 0.179,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.0935672514619883,
+      "group_covered_gap_median": 12.0,
+      "never_covered": 155,
+      "group_filled_share": 0.13450292397660818,
+      "group_filled_gap_median": 13.0,
+      "never_filled": 148,
+      "targets_dispatched": 171
+    },
+    "coal0.25+cal0.25": {
+      "runs": 30,
+      "discovered": 171,
+      "completed": 152,
+      "expired": 19,
+      "completion_rate_mean": 0.8911,
+      "completion_rate_ci95": 0.0704,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 42.05,
+      "assignment_commands": 35838,
+      "resource_utilization_mean": 0.0939,
+      "resource_utilization_ci95": 0.0125,
+      "expired_never_assigned": 0,
+      "expired_finished_after_deadline": 19,
+      "expired_stopped_mid_work": 0,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 67.0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "margin_median": 0.179,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.0935672514619883,
+      "group_covered_gap_median": 12.0,
+      "never_covered": 155,
+      "group_filled_share": 0.13450292397660818,
+      "group_filled_gap_median": 13.0,
+      "never_filled": 148,
+      "targets_dispatched": 171
+    }
+  },
+  "stage_a_heldout": {
+    "nocoord": {
+      "runs": 100,
+      "discovered": 588,
+      "completed": 469,
+      "expired": 119,
+      "completion_rate_mean": 0.7976,
+      "completion_rate_ci95": 0.041,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 41.12,
+      "assignment_commands": 121768,
+      "resource_utilization_mean": 0.0838,
+      "resource_utilization_ci95": 0.0081,
+      "expired_never_assigned": 50,
+      "expired_finished_after_deadline": 65,
+      "expired_stopped_mid_work": 1,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 0.0,
+      "depot_with_legal": 37741,
+      "depot_with_legal_share": 0.9295583852614467,
+      "margin_median": -0.043,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.08550185873605948,
+      "group_covered_gap_median": 13.0,
+      "never_covered": 492,
+      "group_filled_share": 0.21933085501858737,
+      "group_filled_gap_median": 10.0,
+      "never_filled": 420,
+      "targets_dispatched": 538
+    },
+    "nocoord+cal0.1": {
+      "runs": 100,
+      "discovered": 588,
+      "completed": 520,
+      "expired": 68,
+      "completion_rate_mean": 0.8838,
+      "completion_rate_ci95": 0.0385,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 37.52,
+      "assignment_commands": 120485,
+      "resource_utilization_mean": 0.0899,
+      "resource_utilization_ci95": 0.0087,
+      "expired_never_assigned": 5,
+      "expired_finished_after_deadline": 63,
+      "expired_stopped_mid_work": 0,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 61.5,
+      "depot_with_legal": 6266,
+      "depot_with_legal_share": 0.6760897712559344,
+      "margin_median": -0.107,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.07890222984562607,
+      "group_covered_gap_median": 15.0,
+      "never_covered": 537,
+      "group_filled_share": 0.2006861063464837,
+      "group_filled_gap_median": 10.0,
+      "never_filled": 466,
+      "targets_dispatched": 583
+    },
+    "nocoord+cal0.25": {
+      "runs": 100,
+      "discovered": 588,
+      "completed": 524,
+      "expired": 64,
+      "completion_rate_mean": 0.8923,
+      "completion_rate_ci95": 0.0388,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 36.82,
+      "assignment_commands": 119425,
+      "resource_utilization_mean": 0.0951,
+      "resource_utilization_ci95": 0.0091,
+      "expired_never_assigned": 0,
+      "expired_finished_after_deadline": 64,
+      "expired_stopped_mid_work": 0,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 74.0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "margin_median": 0.158,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.07993197278911565,
+      "group_covered_gap_median": 17.0,
+      "never_covered": 541,
+      "group_filled_share": 0.19727891156462585,
+      "group_filled_gap_median": 10.0,
+      "never_filled": 472,
+      "targets_dispatched": 588
+    },
+    "rs0.25": {
+      "runs": 100,
+      "discovered": 588,
+      "completed": 535,
+      "expired": 53,
+      "completion_rate_mean": 0.9108,
+      "completion_rate_ci95": 0.039,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 37.36,
+      "assignment_commands": 120126,
+      "resource_utilization_mean": 0.0884,
+      "resource_utilization_ci95": 0.0077,
+      "expired_never_assigned": 0,
+      "expired_finished_after_deadline": 53,
+      "expired_stopped_mid_work": 0,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 67.0,
+      "depot_with_legal": 272,
+      "depot_with_legal_share": 0.08436724565756824,
+      "margin_median": 0.137,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.08163265306122448,
+      "group_covered_gap_median": 12.0,
+      "never_covered": 540,
+      "group_filled_share": 0.19387755102040816,
+      "group_filled_gap_median": 9.5,
+      "never_filled": 474,
+      "targets_dispatched": 588
+    },
+    "coal0.25": {
+      "runs": 100,
+      "discovered": 588,
+      "completed": 538,
+      "expired": 50,
+      "completion_rate_mean": 0.9158,
+      "completion_rate_ci95": 0.037,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 37.07,
+      "assignment_commands": 120251,
+      "resource_utilization_mean": 0.0869,
+      "resource_utilization_ci95": 0.0074,
+      "expired_never_assigned": 0,
+      "expired_finished_after_deadline": 50,
+      "expired_stopped_mid_work": 0,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 65.0,
+      "depot_with_legal": 268,
+      "depot_with_legal_share": 0.08328154133001865,
+      "margin_median": 0.137,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.07993197278911565,
+      "group_covered_gap_median": 12.0,
+      "never_covered": 541,
+      "group_filled_share": 0.195578231292517,
+      "group_filled_gap_median": 9.0,
+      "never_filled": 473,
+      "targets_dispatched": 588
+    },
+    "coal0.25+cal0.1": {
+      "runs": 100,
+      "discovered": 588,
+      "completed": 538,
+      "expired": 50,
+      "completion_rate_mean": 0.9158,
+      "completion_rate_ci95": 0.037,
+      "deadline_rate_micro": 1.0,
+      "mean_completion_time": 36.91,
+      "assignment_commands": 120050,
+      "resource_utilization_mean": 0.0876,
+      "resource_utilization_ci95": 0.0073,
+      "expired_never_assigned": 0,
+      "expired_finished_after_deadline": 50,
+      "expired_stopped_mid_work": 0,
+      "expired_infeasible_at_discovery": 0,
+      "short_group_idle_steps_median": 65.0,
+      "depot_with_legal": 0,
+      "depot_with_legal_share": 0.0,
+      "margin_median": 0.157,
+      "switched_before_arrival": 0,
+      "group_covered_share": 0.07993197278911565,
+      "group_covered_gap_median": 12.0,
+      "never_covered": 541,
+      "group_filled_share": 0.195578231292517,
+      "group_filled_gap_median": 9.0,
+      "never_filled": 473,
+      "targets_dispatched": 588
+    }
+  },
+  "stage_a_heldout_paired": {
+    "nocoord+cal0.25 - rs0.25": {
+      "completion_rate": {
+        "seeds": 99,
+        "mean": -0.0185,
+        "ci95": 0.0273
+      },
+      "mean_completion_time": {
+        "seeds": 98,
+        "mean": -0.5355,
+        "ci95": 2.485
+      },
+      "expired": {
+        "seeds": 100,
+        "mean": 0.11,
+        "ci95": 0.1622
+      }
+    },
+    "coal0.25 - rs0.25": {
+      "completion_rate": {
+        "seeds": 99,
+        "mean": 0.0051,
+        "ci95": 0.0073
+      },
+      "mean_completion_time": {
+        "seeds": 98,
+        "mean": -0.2877,
+        "ci95": 0.8939
+      },
+      "expired": {
+        "seeds": 100,
+        "mean": -0.03,
+        "ci95": 0.0436
+      }
+    },
+    "coal0.25+cal0.1 - coal0.25": {
+      "completion_rate": {
+        "seeds": 99,
+        "mean": 0.0,
+        "ci95": 0.0
+      },
+      "mean_completion_time": {
+        "seeds": 98,
+        "mean": -0.1607,
+        "ci95": 0.7547
+      },
+      "expired": {
+        "seeds": 100,
+        "mean": 0,
+        "ci95": 0.0
+      }
+    },
+    "nocoord+cal0.25 - nocoord": {
+      "completion_rate": {
+        "seeds": 99,
+        "mean": 0.0946,
+        "ci95": 0.0322
+      },
+      "mean_completion_time": {
+        "seeds": 98,
+        "mean": -4.2937,
+        "ci95": 2.6503
+      },
+      "expired": {
+        "seeds": 100,
+        "mean": -0.55,
+        "ci95": 0.1877
+      }
+    },
+    "coal0.25 - nocoord": {
+      "completion_rate": {
+        "seeds": 99,
+        "mean": 0.1182,
+        "ci95": 0.0407
+      },
+      "mean_completion_time": {
+        "seeds": 98,
+        "mean": -4.046,
+        "ci95": 3.2878
+      },
+      "expired": {
+        "seeds": 100,
+        "mean": -0.69,
+        "ci95": 0.2392
+      }
+    },
+    "rs0.25 - nocoord": {
+      "completion_rate": {
+        "seeds": 99,
+        "mean": 0.1131,
+        "ci95": 0.0409
+      },
+      "mean_completion_time": {
+        "seeds": 98,
+        "mean": -3.7582,
+        "ci95": 3.4108
+      },
+      "expired": {
+        "seeds": 100,
+        "mean": -0.66,
+        "ci95": 0.24
+      }
+    }
+  },
+  "stage_a_development_paired": {
+    "nocoord+cal0.25 - rs0.25": {
+      "completion_rate": {
+        "seeds": 30,
+        "mean": 0.0289,
+        "ci95": 0.0632
+      },
+      "mean_completion_time": {
+        "seeds": 30,
+        "mean": -1.3056,
+        "ci95": 4.7356
+      },
+      "expired": {
+        "seeds": 30,
+        "mean": -0.1667,
+        "ci95": 0.3769
+      }
+    },
+    "coal0.25 - rs0.25": {
+      "completion_rate": {
+        "seeds": 30,
+        "mean": 0.0,
+        "ci95": 0.0
+      },
+      "mean_completion_time": {
+        "seeds": 30,
+        "mean": 0.0,
+        "ci95": 0.0
+      },
+      "expired": {
+        "seeds": 30,
+        "mean": 0,
+        "ci95": 0.0
+      }
+    },
+    "coal0.25+cal0.1 - coal0.25": {
+      "completion_rate": {
+        "seeds": 30,
+        "mean": 0.0,
+        "ci95": 0.0
+      },
+      "mean_completion_time": {
+        "seeds": 30,
+        "mean": 0.0,
+        "ci95": 0.0
+      },
+      "expired": {
+        "seeds": 30,
+        "mean": 0,
+        "ci95": 0.0
+      }
+    },
+    "nocoord+cal0.25 - nocoord": {
+      "completion_rate": {
+        "seeds": 30,
+        "mean": 0.1244,
+        "ci95": 0.0608
+      },
+      "mean_completion_time": {
+        "seeds": 30,
+        "mean": -2.66,
+        "ci95": 6.1368
+      },
+      "expired": {
+        "seeds": 30,
+        "mean": -0.7,
+        "ci95": 0.3408
+      }
+    },
+    "coal0.25 - nocoord": {
+      "completion_rate": {
+        "seeds": 30,
+        "mean": 0.0956,
+        "ci95": 0.0903
+      },
+      "mean_completion_time": {
+        "seeds": 30,
+        "mean": -1.3544,
+        "ci95": 7.5272
+      },
+      "expired": {
+        "seeds": 30,
+        "mean": -0.5333,
+        "ci95": 0.521
+      }
+    },
+    "rs0.25 - nocoord": {
+      "completion_rate": {
+        "seeds": 30,
+        "mean": 0.0956,
+        "ci95": 0.0903
+      },
+      "mean_completion_time": {
+        "seeds": 30,
+        "mean": -1.3544,
+        "ci95": 7.5272
+      },
+      "expired": {
+        "seeds": 30,
+        "mean": -0.5333,
+        "ci95": 0.521
+      }
+    }
+  },
+  "stage_b": {
+    "policy": "CoalitionAwareCoordinator: belief-only, bonus 0.65 * fill ratio + 0.35 * distance + 0.40 * busy, bounded to [-1,1] per pair, applied through CoordinationAdvice.pair_bias so residual_scale and the hard mask still bound the decision",
+    "development_trace_compare": {
+      "left": "rs0.25",
+      "right": "coal0.25",
+      "seeds": 30,
+      "totals": {
+        "paired": 35838,
+        "selection_diffs": 0,
+        "unmatched_left": 0,
+        "unmatched_right": 0,
+        "legal_left": 831,
+        "legal_right": 831,
+        "legal_selection_diffs": 0,
+        "bias_diff_rows": 20,
+        "bias_diff_rows_legal": 20,
+        "bias_diff_rows_legal_idle": 20,
+        "bias_diff_rows_legal_busy": 0,
+        "index_diffs_legal": 20,
+        "index_diffs_off_legal": 0
+      },
+      "flips": {
+        "0.0": {
+          "all": 181,
+          "legal": 181
+        },
+        "1.0": {
+          "all": 0,
+          "legal": 0
+        },
+        "2.0": {
+          "all": 33,
+          "legal": 33
+        },
+        "4.0": {
+          "all": 66,
+          "legal": 66
+        }
+      },
+      "delta_flips": {
+        "1.0": {
+          "all": 0,
+          "legal": 0
+        },
+        "2.0": {
+          "all": 3,
+          "legal": 3
+        },
+        "4.0": {
+          "all": 8,
+          "legal": 8
+        },
+        "8.0": {
+          "all": 10,
+          "legal": 10
+        },
+        "16.0": {
+          "all": 10,
+          "legal": 10
+        },
+        "32.0": {
+          "all": 10,
+          "legal": 10
+        },
+        "64.0": {
+          "all": 10,
+          "legal": 10
+        }
+      },
+      "first_delta_flip": 2.0,
+      "legal_bias_delta": {
+        "count": 20,
+        "median": 0.0812,
+        "max": 0.1625
+      }
+    },
+    "heldout_trace_compare": {
+      "left": "rs0.25",
+      "right": "coal0.25",
+      "seeds": 100,
+      "totals": {
+        "paired": 119903,
+        "selection_diffs": 18,
+        "unmatched_left": 223,
+        "unmatched_right": 348,
+        "legal_left": 3197,
+        "legal_right": 3191,
+        "legal_selection_diffs": 18,
+        "bias_diff_rows": 57,
+        "bias_diff_rows_legal": 50,
+        "bias_diff_rows_legal_idle": 50,
+        "bias_diff_rows_legal_busy": 0,
+        "index_diffs_legal": 49,
+        "index_diffs_off_legal": 9
+      },
+      "flips": {
+        "0.0": {
+          "all": 609,
+          "legal": 609
+        },
+        "1.0": {
+          "all": 0,
+          "legal": 0
+        },
+        "2.0": {
+          "all": 404,
+          "legal": 404
+        },
+        "4.0": {
+          "all": 516,
+          "legal": 516
+        }
+      },
+      "delta_flips": {
+        "1.0": {
+          "all": 0,
+          "legal": 0
+        },
+        "2.0": {
+          "all": 5,
+          "legal": 5
+        },
+        "4.0": {
+          "all": 10,
+          "legal": 10
+        },
+        "8.0": {
+          "all": 16,
+          "legal": 16
+        },
+        "16.0": {
+          "all": 17,
+          "legal": 17
+        },
+        "32.0": {
+          "all": 17,
+          "legal": 17
+        },
+        "64.0": {
+          "all": 17,
+          "legal": 17
+        }
+      },
+      "first_delta_flip": 2.0,
+      "legal_bias_delta": {
+        "count": 49,
+        "median": 0.0813,
+        "max": 0.2474
+      }
+    },
+    "reading": "the two policies choose the same action on every paired development decision and on all but 18 of 119903 held-out decisions; their residual vectors differ on 20 (dev) and 57 (held-out) rows, all on legal-task decisions of idle robots, and amplifying only that difference flips nothing at m=1, 5 decisions at m=2 and saturates at 17 (held-out). The interface can move a single robot's preference, but the missing-capability gap is almost never what decides that preference"
+  },
+  "decision_gate": {
+    "scalar_calibration_matches_heuristic_coordinator": "no: on held-out completion the two are within noise of each other (nocoord+cal0.25 - rs0.25 = -0.019 +- 0.027), but calibration alone does not reach rs0.25's point estimate, and it loses the depot-with-a-legal-task statistic entirely (0 of N vs 272 of 119903)",
+    "coalition_baseline_reduces_expiry": "no: dev is bit-for-bit rs0.25 (19 expired, 67-step median group stall); held-out differs by +0.005 +- 0.007 completion (3 targets of 588) and 2 steps of median stall, which is not the reduction the gate asks for",
+    "proceed_to_learned_residual_coordinator": "not on this interface alone: expiry remains avoidable (held-out 50 expired under coal0.25, none unassigned, none infeasible at discovery, 65-step median stall waiting for a capability), but the trace counterfactual shows the per-pair bias is not what decides those dispatches"
+  },
+  "verdict": "The depot preference is a calibration problem and is fixed by a constant (stage A): one scalar, default 0, turns 0.798 held-out completion into 0.892 with no retraining and leaves the old behaviour bit-for-bit when unset. The heuristic residual is still the best arm (0.911) and the coalition term adds nothing measurable (0.916, +3 targets of 588 over rs0.25, identical on 99.94% of development decisions), because a candidate robot's own belief almost never shows a capability gap it could fill -- the gap that kills the remaining 50 targets is only visible across robots, and the per-pair bias interface cannot convene a group.",
+  "open_risks": [
+    "the group-formation metrics (covered / filled) are sampled at decision instants, so never_covered is dominated by sampling and is only usable as a between-arm comparison, not as an absolute time-to-assemble",
+    "the coalition arm's held-out point estimate (538 completed) sits 3 targets above rs0.25 with a narrow CI because the two agree on most seeds; it is not evidence of a better policy",
+    "223/348 held-out decisions could not be paired between rs0.25 and coal0.25 (the arms diverge slightly), so the trace comparison covers 119903 of ~120250 decisions",
+    "stage B was measured with residual_scale=0.25 on both policies; the counterfactual sweep shows what larger scales would do to the *winner*, not to the search"
+  ]
+}
