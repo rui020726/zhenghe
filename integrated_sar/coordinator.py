@@ -526,6 +526,7 @@ class CoalitionPlannerCoordinator:
         distance_weight: float = 0.35,
         commitment_weight: float = 0.35,
         renew_commitments: bool = False,
+        assembly_scheduling: bool = False,
     ) -> None:
         if reservation_validity <= 0:
             raise ValueError("reservation_validity must be positive")
@@ -552,6 +553,18 @@ class CoalitionPlannerCoordinator:
         # turning renewal on unconditionally would move the advisory arm's trajectory.
         self.renew_commitments = bool(renew_commitments)
         self.renewed_commitments = 0
+        # Whether the plan also synchronises arrivals: among robots that fill the same
+        # live gap, prefer the one whose ETA is closest to the set's current latest, so
+        # the covering coalition completes on one tick instead of trickling in. Off by
+        # default, and when off no code path below reads a position or an ETA, so the
+        # trajectory is byte-identical to the plan without it.
+        self.assembly_scheduling = bool(assembly_scheduling)
+        self.synchronised_dispatches = 0
+        # How much a synchronised arrival adds, and over how many steps the credit decays.
+        # Kept small relative to the fill weight so the term breaks ties between robots
+        # for one task without overriding the covering decision itself.
+        self.assembly_weight = 0.15
+        self.sync_horizon = 50.0
         self._revision = 0
         self._reservations: dict[tuple[str, str], CoalitionReservation] = {}
         # Identity, not ordering: a fresh commitment takes the next number, a renewal keeps
@@ -625,6 +638,14 @@ class CoalitionPlannerCoordinator:
         pair_bias, redundant = self._pair_biases(
             agents, candidates, committed, planned
         )
+        # Assembly scheduling is additive and bounded: it only ever adds a small positive
+        # term to a pair that is already legal and already fills a live gap, so it can
+        # reorder two candidate robots for the same task but cannot make an illegal
+        # action legal (invariant 6) and cannot pull a robot towards a task it does not
+        # believe in (invariant 9). With the flag off, this block does not run at all.
+        if self.assembly_scheduling:
+            synchronised = self._synchronise(agents, pair_bias, beliefs_by_key, now)
+            pair_bias = synchronised
         counts = self._lifecycle(previous, reservations, beliefs_by_key, now)
         self._reservations = dict(reservations)
 
@@ -733,6 +754,55 @@ class CoalitionPlannerCoordinator:
             )
         self.renewed_commitments = len(renewed)
         return renewed
+
+    def _synchronise(
+        self,
+        agents: Mapping[str, AgentSnapshot],
+        pair_bias: Mapping[tuple[str, str], float],
+        beliefs_by_key: Mapping[tuple[str, str], AgentTaskBelief],
+        now: float,
+    ) -> dict[tuple[str, str], float]:
+        """Nudge a pair towards the task it can reach at the same time as its peers.
+
+        The measured failure this addresses: on the six remaining binding expiries every
+        robot already held the letter and none was busy, yet the covering set completed
+        0-157 steps after detection because the members arrived far apart, and a stage
+        clock cannot start until the last of them lands.
+
+        The term is deliberately small and additive: it rewards a pair whose believed ETA
+        is close to the earliest ETA among the robots that could serve the same task, and
+        never subtracts. It is bounded by ``assembly_weight``, well inside the band the
+        other policy terms respect, so it can break a tie between two robots for one task
+        but cannot overturn a large preference or make an illegal action legal.
+        """
+        synchronised = dict(pair_bias)
+        earliest: dict[str, float] = {}
+        for (agent_id, task_id), belief in beliefs_by_key.items():
+            agent = agents.get(agent_id)
+            if agent is None:
+                continue
+            eta = _travel_steps(agent.position, belief.position, ROBOT_VELOCITY)
+            if task_id not in earliest or eta < earliest[task_id]:
+                earliest[task_id] = eta
+        added = 0
+        for agent_id, task_id in synchronised:
+            belief = beliefs_by_key.get((agent_id, task_id))
+            agent = agents.get(agent_id)
+            if belief is None or agent is None:
+                continue
+            eta = _travel_steps(agent.position, belief.position, ROBOT_VELOCITY)
+            gap = eta - earliest.get(task_id, eta)
+            # 1.0 for a robot already at the earliest arrival, decaying to 0 by the time
+            # it is `sync_horizon` steps behind. Never negative: this only ever promotes.
+            credit = max(0.0, 1.0 - gap / self.sync_horizon)
+            if credit <= 0.0:
+                continue
+            synchronised[(agent_id, task_id)] = _clamp(
+                synchronised[(agent_id, task_id)] + self.assembly_weight * credit
+            )
+            added += 1
+        self.synchronised_dispatches = added
+        return synchronised
 
     def _plan(
         self,

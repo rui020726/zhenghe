@@ -212,11 +212,13 @@ class RunConfiguration:
             "heuristic",
             "coalition",
             "coalition_planner",
+            "coalition_assembly_scheduler",
             "deadline_aware",
         }:
             raise ConfigurationError(
-                f"--coordinator must be 'heuristic', 'coalition', 'coalition_planner' or "
-                f"'deadline_aware', got {self.coordinator_policy!r}"
+                f"--coordinator must be 'heuristic', 'coalition', 'coalition_planner', "
+                f"'coalition_assembly_scheduler' or 'deadline_aware', got "
+                f"{self.coordinator_policy!r}"
             )
         if self.sticky_commitments and not self.use_coordinator:
             raise ConfigurationError(
@@ -284,13 +286,16 @@ def build_parser() -> argparse.ArgumentParser:
                              "coordinator residual (depot and masked actions unchanged); "
                              "0.0 keeps the uncalibrated behaviour")
     parser.add_argument("--coordinator", dest="coordinator_policy",
-                        choices=("heuristic", "coalition", "coalition_planner", "deadline_aware"),
+                        choices=("heuristic", "coalition", "coalition_planner",
+                                 "coalition_assembly_scheduler", "deadline_aware"),
                         default="heuristic",
                         help="residual policy: 'heuristic' scores how much of a task's whole "
                              "remaining requirement a robot covers, 'coalition' scores the share "
                              "of the *uncovered* part it would add, 'coalition_planner' plans a "
                              "greedy set-cover of the free robots over each task's open "
-                             "capability slots and publishes a commitment per selected robot")
+                             "capability slots and publishes a commitment per selected robot, "
+                             "'coalition_assembly_scheduler' adds an arrival-synchronising term "
+                             "on top of that plan so the covering set completes together")
     parser.add_argument("--sticky-commitments", dest="sticky_commitments",
                         action="store_true",
                         help="bind a coalition commitment while it stays valid: the "
@@ -766,6 +771,14 @@ def _build_coordinator(configuration: RunConfiguration) -> Any:
     if configuration.coordinator_policy == "coalition_planner":
         return CoalitionPlannerCoordinator(
             renew_commitments=configuration.sticky_commitments
+        )
+    if configuration.coordinator_policy == "coalition_assembly_scheduler":
+        # The assembly-scheduler prototype: the same planner plus an arrival-synchronising
+        # term. Binding commitments stay on, so the arm differs from the binding baseline
+        # in exactly one mechanism and the comparison isolates that mechanism.
+        return CoalitionPlannerCoordinator(
+            renew_commitments=configuration.sticky_commitments,
+            assembly_scheduling=True,
         )
     if configuration.coordinator_policy == "deadline_aware":
         # The same-information oracle of the learnability gate: identical candidates and
