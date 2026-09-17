@@ -71,16 +71,21 @@ def arm_name(
     use_coordinator: bool,
     residual_scale: float,
     task_logit_offset: float = 0.0,
+    coordinator_policy: str = "heuristic",
 ) -> str:
     """The arm label shared with the ``rp_<arm>_s<seed>.jsonl`` lifecycle logs.
 
-    Scalar calibration is part of the arm's identity: a trace that cannot say
-    "this was the uncalibrated actor" cannot be pooled with others without
-    silently averaging two different policies. The default keeps the
-    pre-existing labels exactly as they were, so the frozen 20260916 traces keep
-    reading as ``nocoord``/``rs0.25``.
+    Scalar calibration and the residual policy are part of the arm's identity: a
+    trace that cannot say "this was the uncalibrated actor" or "this was the
+    coalition policy" cannot be pooled with others without silently averaging two
+    different policies. The defaults keep the pre-existing labels exactly as they
+    were, so the frozen 20260916 traces keep reading as ``nocoord``/``rs0.25``.
     """
-    label = f"rs{residual_scale:g}" if use_coordinator else "nocoord"
+    if use_coordinator:
+        prefix = "rs" if coordinator_policy == "heuristic" else "coal"
+        label = f"{prefix}{residual_scale:g}"
+    else:
+        label = "nocoord"
     if task_logit_offset:
         label = f"{label}+cal{task_logit_offset:g}"
     return label
@@ -95,6 +100,12 @@ def trace_meta(configuration: Any) -> dict[str, Any]:
             task_logit_offset=float(
                 getattr(configuration, "ctde_task_logit_offset", 0.0)
             ),
+            coordinator_policy=str(
+                getattr(configuration, "coordinator_policy", "heuristic")
+            ),
+        ),
+        "coordinator_policy": str(
+            getattr(configuration, "coordinator_policy", "heuristic")
         ),
         "seed": int(configuration.seed),
         "steps": int(configuration.steps),

@@ -29,7 +29,11 @@ from .assignment_gate import AssignmentGate, ReplanCoordinator
 from .clock import GlobalClock
 from .comm import CommRelay
 from .contracts import DetectionEvent, ProgressEvent, TaskSnapshot
-from .coordinator import HeuristicCoordinator, PassthroughCoordinator
+from .coordinator import (
+    CoalitionAwareCoordinator,
+    HeuristicCoordinator,
+    PassthroughCoordinator,
+)
 from .detection_replay import scenario_map_sha256
 from .errors import ConfigurationError, IntegratedSARError
 from .event_bus import InMemoryEventBus
@@ -69,6 +73,11 @@ class RunConfiguration:
     # never to a masked action. Zero keeps a run bit-for-bit identical to one from
     # before this parameter existed.
     ctde_task_logit_offset: float = 0.0
+    # Which residual policy produces the coordination advice. "heuristic" is the
+    # frozen v3 scoring function and the default; "coalition" scores each robot by
+    # the share of a task's *uncovered* requirement it would add, so the ablations
+    # can tell "a better bias" apart from "the same bias, better scaled".
+    coordinator_policy: str = "heuristic"
     command_ttl: float = 10.0
     coordination_interval: int = 5
     allocation_interval: int = 5
@@ -190,6 +199,17 @@ class RunConfiguration:
             raise ConfigurationError(
                 f"--actor-kv-mode must be 'tokens' or 'summary', got {self.actor_kv_mode!r}"
             )
+        if self.coordinator_policy not in {"heuristic", "coalition"}:
+            raise ConfigurationError(
+                f"--coordinator must be 'heuristic' or 'coalition', got "
+                f"{self.coordinator_policy!r}"
+            )
+        if not self.use_coordinator and self.coordinator_policy != "heuristic":
+            raise ConfigurationError(
+                f"--no-coordinator already removes the residual, so asking for "
+                f"--coordinator {self.coordinator_policy} would silently do nothing; "
+                f"drop one of the two"
+            )
         if self.record_stream is not None and self.replay_stream is not None:
             raise ConfigurationError(
                 "--record-stream and --replay-stream are alternatives: a recording runs "
@@ -239,6 +259,11 @@ def build_parser() -> argparse.ArgumentParser:
                         help="scalar calibration added to every legal task logit before the "
                              "coordinator residual (depot and masked actions unchanged); "
                              "0.0 keeps the uncalibrated behaviour")
+    parser.add_argument("--coordinator", dest="coordinator_policy",
+                        choices=("heuristic", "coalition"), default="heuristic",
+                        help="residual policy: 'heuristic' scores how much of a task's whole "
+                             "remaining requirement a robot covers, 'coalition' scores the share "
+                             "of the *uncovered* part it would add")
     parser.add_argument("--command-ttl", type=float, default=10.0,
                         help="how long an assignment command stays valid, in global-clock units")
     parser.add_argument("--coordination-interval", type=int, default=5, help="steps between coordinator calls")
@@ -288,6 +313,7 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         use_coordinator=not args.no_coordinator,
         residual_scale=float(args.residual_scale),
         ctde_task_logit_offset=float(args.ctde_task_logit_offset),
+        coordinator_policy=str(args.coordinator_policy),
         command_ttl=float(args.command_ttl),
         coordination_interval=int(args.coordination_interval),
         allocation_interval=int(args.allocation_interval),
@@ -449,6 +475,11 @@ class JointRun:
             "ctde_task_logit_offset": round(
                 float(self.configuration.ctde_task_logit_offset), 6
             ),
+            "coordinator_policy": (
+                self.configuration.coordinator_policy
+                if self.configuration.use_coordinator
+                else "none"
+            ),
             "remaining_search_targets": len(self.search_adapter.env.goals_pos),
             "rescue_robots": len(self.task_adapter.env.agent_dic),
             "resource_utilization": round(
@@ -508,7 +539,9 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         revision_of=lambda task_id: _revision_of(registry, task_id),
     )
     coordinator = (
-        HeuristicCoordinator() if configuration.use_coordinator else PassthroughCoordinator()
+        _build_coordinator(configuration)
+        if configuration.use_coordinator
+        else PassthroughCoordinator()
     )
 
     orchestrator = JointSAROrchestrator(
@@ -647,6 +680,13 @@ def _rescue_depot_positions(
         world = transform.to_world(cells[index % len(cells)])
         positions.append((world.x, world.y))
     return positions
+
+
+def _build_coordinator(configuration: RunConfiguration) -> Any:
+    """The residual policy named by ``--coordinator``; both are belief-only."""
+    if configuration.coordinator_policy == "coalition":
+        return CoalitionAwareCoordinator()
+    return HeuristicCoordinator()
 
 
 def _build_task_side(
