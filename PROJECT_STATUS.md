@@ -1,6 +1,6 @@
 # 项目状态
 
-更新时间：2026-09-17
+更新时间：2026-09-17（可学习性门禁）
 
 ## 已完成
 
@@ -277,6 +277,26 @@
     核对检测流 0 不一致；100 次运行 0 次非法命令；既有 arm 复现上一阶段数字
     （`coal0.25−rs0.25 = +0.0051±0.0073`、`cal0.25−rs0.25 = −0.0185±0.0273`），
     说明契约与指标改动零回归。集成测试共 369 项通过（2 项按设计跳过）。
+- 联盟协调器的可学习性门禁（`feat/learned-coalition-coordinator`，证据见
+  `runs/learnability_20260917/LEARNABILITY_VERDICT.md`）。**门禁未通过，未训练任何网络**：
+  - 同信息 oracle `DeadlineAwareCoalitionCoordinator`（`--coordinator deadline_aware`）与规则
+    规划器逐位一致——11 615 条决策记录 0 处不同，160 个 seed 上过期与完成的配对差全为 0，
+    可修复比例 0%（门槛 30%）。它的第一版从零构建联盟并要求"当下空闲机器人即时全覆盖"，
+    比规划器的渐进补位更脆（legacy block 上过期 16→30），已改为"从规则计划出发，只退还
+    预留组在 belief 预算内无法到达的任务，并把释放的机器人重规划到可救的任务"。
+  - 逐目标归因（六类，确定性顺序）：legacy 16 个过期目标中 12 个是"预约/执行中断"
+    （计划已承诺、分配器却另作决定 11 例，或已完成工作被丢弃 2 例）、2 个是"belief 缺失或
+    迟到"；candidate-ordering / task-contention / capacity-conflict 三类均为 0。
+    事后上界：`infeasible_with_travel = 0`，即每个过期目标在物理上都可避免——
+    若检测后 5–40 步内有机器人到场且工作不被打断，100% 可救。
+  - 结论：残余失败不在协调器的排序里，训练网络没有可学信号。给出三项建议（按损失大小）：
+    ① 让已成立的承诺对执行侧有约束力（持有有效预约的机器人不应在每个分配周期被重新决策）；
+    ② 把阶段工作时长写进 `AgentTaskBelief`（`DetectionMessage` 已携带、belief 现在丢弃），
+       否则"行程+工作 ≤ 截止"根本不可判定；③ 其余按机队构成/分批派遣处理，而非协调。
+  - 数据：20000–20099 降级为 `analysis_legacy`（上一阶段曾作为 held-out 报告，且本门禁设计时
+    已读它），新增 `analysis_fresh` 21000–21059（门禁指定后录制）；split 互斥、含 checkpoint
+    摘要与录制协议。异常已记录：两 block 过期率差一个数量级（16/588 对 1/355），不可合并。
+  - 集成测试共 385 项通过（2 项按设计跳过）。
 
 ## 尚未完成
 
@@ -295,13 +315,11 @@
 5. 固定训练/验证/测试地图与 split。PILOC 每回合重新随机生成地图，仓库又不含
    `DungeonMaps`，所以目前无法留出验证集，也就无法按“验证集最优”而不是“最后一个”
    来选模型。
-6. 将规则协调器替换为有界学习型协调器。接口已就绪并验证：`CoalitionReservation`
-   契约冻结，规则规划器 `CoalitionPlannerCoordinator` 在 held-out 上通过门槛，可作为
-   学习的下限与零残差初始化。下一步是 `LearnedCoalitionCoordinator`——学习
-   `(robot, task, slot)` 的排序而不是可行性（槽位存在性与占用权仍由规则决定），
-   以 honoured/broken、预约到期与 detection→首次推进的步数为奖励，并保留 NaN/缺失时的
-   规则回退；设计见 `runs/coordinator_baselines_20260917/RESERVATION_VERDICT.md`。
-   训练 buffer 与联合奖励仍待建立。
+6. 学习型协调器**暂缓**：可学习性门禁未通过——同信息 oracle 与规则规划器逐位一致
+   （可修复比例 0%，门槛 30%），残余失败是执行中断而非排序错误。先做
+   `runs/learnability_20260917/LEARNABILITY_VERDICT.md` 的三项建议
+   （承诺对执行侧的约束力、belief 携带阶段工作时长、机队构成），然后重新录制 fresh block
+   并用同一门禁复测；只有排序类失败出现时才训练 `LearnedCoalitionCoordinator`。
 7. 建立搜索、协调、任务分配联合奖励与延迟信用关联。
 8. 增加端到端基准和消融：无协调、规则协调、学习协调、无反馈。
 9. 跑一次真正收敛的训练。两个训练入口现在都能在 CPU 上端到端跑完并产出带元数据的

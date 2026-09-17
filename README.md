@@ -133,7 +133,8 @@ python -m integrated_sar.joint_driver \
 `--comm-delivery-probability`、`--comm-delay-ticks`、
 `--comm-subscribers`（`all` 默认覆盖全救援队，或 `first:N`，或机器人 id 列表）、
 `--coordinator`（`heuristic` 默认；`coalition` 按缺口而不是重叠打分；`coalition_planner`
-在空闲机器人与任务开放槽位之间规划团队预约）、
+在空闲机器人与任务开放槽位之间规划团队预约；`deadline_aware` 是可学习性门禁用的同信息
+oracle，只退还 belief 预算内到不了的任务）、
 `--no-coordinator`、`--quiet`。
 `--mock` 与任一 checkpoint 参数互斥。
 
