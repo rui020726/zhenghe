@@ -57,7 +57,11 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence, TextIO
 
-TRACE_FORMAT = "allocation-decision-trace/1"
+from .run_signature import TRACE_SCHEMA as TRACE_FORMAT
+
+# The schema version a trace declares and the one a run signature records are one constant,
+# because a reader that accepts one version and a writer that stamps another would silently
+# stop checking anything.
 DEPOT_INDEX = 0
 # ``old_task_env`` moves each robot by velocity * dt per step and snaps it onto its
 # target once within EPS_ARRIVE, so these two constants turn a distance into the ETA
@@ -112,9 +116,17 @@ def arm_name(
     return label
 
 
-def trace_meta(configuration: Any) -> dict[str, Any]:
-    """Everything a trace file needs to identify itself without the lifecycle log."""
-    return {
+def trace_meta(
+    configuration: Any, signature: Mapping[str, Any] | None = None
+) -> dict[str, Any]:
+    """Everything a trace file needs to identify itself without the lifecycle log.
+
+    ``signature`` is the run signature the lifecycle log also carries. It is what makes the
+    trace checkable rather than merely named: the arm in the file's name is a claim, and
+    the signature is the run's own statement of which arm it was, from which commit, over
+    which stream. A trace without one is a trace nothing may be aggregated from.
+    """
+    meta = {
         "arm": arm_name(
             use_coordinator=bool(configuration.use_coordinator),
             residual_scale=float(configuration.residual_scale),
@@ -152,6 +164,9 @@ def trace_meta(configuration: Any) -> dict[str, Any]:
         "comm_delivery_probability": float(configuration.comm_delivery_probability),
         "comm_delay_ticks": int(configuration.comm_delay_ticks),
     }
+    if signature is not None:
+        meta["run_signature"] = dict(signature)
+    return meta
 
 
 @dataclass(frozen=True, slots=True)
@@ -224,10 +239,30 @@ class DecisionFacts:
     commitment_mask_legal: bool | None = None
     commitment_overridden: bool = False
     commitment_suppressed_command: bool = False
-    # The index that was actually commanded. When a commitment binds, this differs from
-    # the allocator's own verdict, and ``unforced_index`` keeps what the residual would
-    # have chosen so the trace can show both instead of erasing one of them.
-    unforced_index: int | None = None
+    # The three choices one decision contains, all read at the instant it was made:
+    # ``raw_choice`` is the allocator's own preference, ``forced_choice`` is the action a
+    # standing commitment imposed instead, and ``chosen_index`` (written as
+    # ``post_mask_choice``) is what survived the hard mask and was executed. Recording all
+    # three is what makes "the model wanted elsewhere and the commitment held it" tellable
+    # from "the model's own choice was the committed task".
+    raw_choice: int | None = None
+    forced_choice: int | None = None
+    # The task the issued command named, and its id -- the values the lifecycle log also
+    # received, rather than a second derivation of them. ``actual_assignment`` is None for
+    # a depot action and for a decision that issued no command at all.
+    actual_assignment: str | None = None
+    command_id: str | None = None
+    # The identity of the commitment this robot held, stable across renewals, so a reader
+    # can follow one commitment through many advisories.
+    reservation_id: str | None = None
+    # The conditions a held commitment was tested against, in the order they were checked,
+    # up to and including the first that failed. The check stops at the first failure, so a
+    # condition absent here was never evaluated, not evaluated and false.
+    commitment_validity: Mapping[str, bool] = field(default_factory=dict)
+    # Whether the decision ends with the robot on the task it was committed to. A
+    # commitment can be held and not executed only when nothing binds the allocator, which
+    # is exactly the measurement the binding arm exists to make.
+    reservation_executed: bool | None = None
 
     @property
     def chosen_kind(self) -> str:
@@ -268,9 +303,15 @@ class DecisionFacts:
             "action_task_ids": list(self.action_task_ids),
             "mask": [bool(value) for value in self.mask],
             "chosen_index": int(self.chosen_index),
-            "unforced_index": (
-                None if self.unforced_index is None else int(self.unforced_index)
+            # The same number the continuity contract names ``post_mask_choice``: the value
+            # the analysis reads and the name the decision record promises are one fact.
+            "post_mask_choice": int(self.chosen_index),
+            "raw_choice": None if self.raw_choice is None else int(self.raw_choice),
+            "forced_choice": (
+                None if self.forced_choice is None else int(self.forced_choice)
             ),
+            "actual_assignment": self.actual_assignment,
+            "command_id": self.command_id,
             "chosen_kind": self.chosen_kind,
             "chosen_task": self.chosen_task,
             "current_kind": self.current_kind,
@@ -332,6 +373,13 @@ class DecisionFacts:
         )
         payload["commitment_overridden"] = bool(self.commitment_overridden)
         payload["commitment_suppressed_command"] = bool(self.commitment_suppressed_command)
+        payload["reservation_id"] = self.reservation_id
+        payload["commitment_validity"] = {
+            str(key): bool(value) for key, value in self.commitment_validity.items()
+        }
+        payload["reservation_executed"] = (
+            None if self.reservation_executed is None else bool(self.reservation_executed)
+        )
         return payload
 
 
@@ -487,12 +535,14 @@ class FileMetrics:
     durations: list[float] = field(default_factory=list)
     targets: dict[str, dict[str, float]] = field(default_factory=dict)
     # Coalition commitments. ``reserved_decisions`` counts decisions made by a robot
-    # holding a commitment for a task on its own menu; of those, ``honoured`` took the
-    # committed task and ``broken`` went elsewhere, which is the only direct evidence of
-    # whether the allocator followed the plan.
+    # holding a commitment for a task on its own menu. Of those, ``executed_reservations``
+    # ends on the committed task and ``raw_choice_taken_reservations`` is the subset where
+    # the allocator's own preference was already that task. The two differ exactly where a
+    # commitment forced a choice the residual did not want, so they are counted separately
+    # rather than pooled into one "followed the plan" number.
     reserved_decisions: int = 0
-    honoured_reservations: int = 0
-    broken_reservations: int = 0
+    executed_reservations: int = 0
+    raw_choice_taken_reservations: int = 0
     # The planner's own per-cycle counters, keyed by advice revision so a cycle that
     # appears on several decision rows is counted once.
     advice_plans: dict[int, dict[str, Any]] = field(default_factory=dict)
@@ -551,8 +601,8 @@ class FileMetrics:
             "switch_to_depot": self.switch_to_depot,
             "duration_median": _median(self.durations),
             "reserved_decisions": self.reserved_decisions,
-            "honoured_reservations": self.honoured_reservations,
-            "broken_reservations": self.broken_reservations,
+            "executed_reservations": self.executed_reservations,
+            "raw_choice_taken_reservations": self.raw_choice_taken_reservations,
             "dispatched_targets": self.dispatched_targets,
             "never_reserved": self.never_reserved,
             "never_reserved_share": _ratio(self.never_reserved, self.dispatched_targets),
@@ -622,10 +672,16 @@ def analyse(rows: Sequence[Mapping[str, Any]], *, arm: str, seed: int) -> FileMe
         commitment = decision.get("held_reservation")
         if isinstance(commitment, Mapping):
             metrics.reserved_decisions += 1
-            if commitment.get("honoured"):
-                metrics.honoured_reservations += 1
-            else:
-                metrics.broken_reservations += 1
+            # Schema /1 records carried a single ``honoured`` flag, meaning the raw choice
+            # took the committed task -- which under an advisory allocator is the same event
+            # as executing it. Falling back to it keeps the frozen artefacts analysable
+            # under the schema they were written with; /2 records carry both facts.
+            executed = commitment.get("executed", commitment.get("honoured"))
+            raw_taken = commitment.get("raw_choice_taken", commitment.get("honoured"))
+            if executed:
+                metrics.executed_reservations += 1
+            if raw_taken:
+                metrics.raw_choice_taken_reservations += 1
         revision = decision.get("advice_revision")
         plan = decision.get("advice_plan")
         if revision is not None and isinstance(plan, Mapping):
@@ -917,16 +973,20 @@ def summarise(rows: Sequence[FileMetrics]) -> dict[str, dict[str, Any]]:
             "group_filled_gap_median": _median(filled_gaps),
             "never_covered": never_covered,
             "never_filled": never_filled,
-            # Coalition commitments: what the plan promised, whether the allocator took
-            # it, and the ways a commitment ends (the plan dropped it, or the clock
-            # did). ``honoured_share`` is the fraction of decisions made under a
-            # commitment that took the committed task -- the allocator's fidelity to
-            # the plan.
+            # Coalition commitments: what the plan promised, whether the decision ended on
+            # the committed task, and the ways a commitment ends (the plan dropped it, or
+            # the clock did). ``executed_share`` is the fraction of decisions made under a
+            # commitment that ended on the committed task; ``raw_choice_share`` is the
+            # subset where the allocator's own preference was that task anyway, so the two
+            # together say how much of the fidelity a binding commitment had to impose.
             "reserved_decisions": total("reserved_decisions"),
-            "honoured_reservations": total("honoured_reservations"),
-            "broken_reservations": total("broken_reservations"),
-            "honoured_share": _ratio(
-                total("honoured_reservations"), total("reserved_decisions")
+            "executed_reservations": total("executed_reservations"),
+            "raw_choice_taken_reservations": total("raw_choice_taken_reservations"),
+            "executed_share": _ratio(
+                total("executed_reservations"), total("reserved_decisions")
+            ),
+            "raw_choice_share": _ratio(
+                total("raw_choice_taken_reservations"), total("reserved_decisions")
             ),
             "plan_totals": plan_totals,
             # How far ahead of the allocator the plan runs: detection to the first
@@ -1028,8 +1088,9 @@ def report(summary: Mapping[str, Mapping[str, Any]]) -> str:
         lines.append(
             f"  coalition commitments              planned {_fmt(plan['planned_reservations'])} "
             f"; decisions under one {_fmt(block['reserved_decisions'])} "
-            f"(took the committed task {_pct(block['honoured_share'])}, "
-            f"went elsewhere {_fmt(block['broken_reservations'])})"
+            f"(ended on the committed task {_pct(block['executed_share'])}; "
+            f"of those the raw choice already agreed "
+            f"{_pct(block['raw_choice_share'])})"
         )
         lines.append(
             f"    ended by plan                    superseded "

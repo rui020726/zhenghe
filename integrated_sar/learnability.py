@@ -23,7 +23,7 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 from .allocation_trace import analyse, read_trace
-from .data_splits import run_dir, split_of
+from .data_splits import arm_paths, split_of
 from .expired_attribution import attribute, build_timelines, load_records
 
 PLANNER_ARM = "coalplan0.25"
@@ -55,8 +55,8 @@ LATE_BELIEF_SHARE = 0.5
 LATE_DISPATCH_SHARE = 0.5
 
 
-def _trace_facts(repo: Path, split_name: str, seed: int) -> dict[str, dict[str, object]]:
-    """Per-target facts read from the planner's decision trace.
+def _trace_facts(repo: Path, split_name: str, seed: int, *, arm: str = PLANNER_ARM) -> dict[str, dict[str, object]]:
+    """Per-target facts read from one arm's decision trace.
 
     The reservation time, whether a commitment held for the target was taken, and how
     saturated the fleet was at the instant the target was first dispatched -- the number
@@ -64,11 +64,11 @@ def _trace_facts(repo: Path, split_name: str, seed: int) -> dict[str, dict[str, 
     Saturation is what separates "the ability was scarce" from "the planner chose
     elsewhere": the first is a capacity conflict, the second a choice.
     """
-    path = run_dir(repo, split_name) / f"tr_{PLANNER_ARM}_s{seed}.jsonl"
+    _, path = arm_paths(repo, split_name, arm, seed)
     if not path.exists():
         return {}
     _, decisions = read_trace(path)
-    metrics = analyse(decisions, arm=PLANNER_ARM, seed=seed)
+    metrics = analyse(decisions, arm=arm, seed=seed)
     robot_count = len({str(decision.get("agent_id")) for decision in decisions}) or 1
     facts: dict[str, dict[str, object]] = {}
     for target_id, row in metrics.targets.items():
@@ -78,8 +78,11 @@ def _trace_facts(repo: Path, split_name: str, seed: int) -> dict[str, dict[str, 
             "was_broken": False,
         }
     for decision in decisions:
+        # A commitment was broken when the robot held it and the decision did not end on
+        # it. The raw choice disagreeing is the *binding* arm's prevented override, not a
+        # break -- conflating the two would count the fix's successes as failures.
         held = decision.get("held_reservation")
-        if isinstance(held, Mapping) and not held.get("honoured"):
+        if isinstance(held, Mapping) and held.get("executed") is False:
             target = str(held.get("task_id"))
             if target in facts:
                 facts[target]["was_broken"] = True
@@ -101,18 +104,23 @@ def _trace_facts(repo: Path, split_name: str, seed: int) -> dict[str, dict[str, 
     return facts
 
 
-def expired_target_rows(repo: Path, split_name: str) -> list[dict[str, object]]:
-    """One row per expired target of the planner arm, with everything the classifier uses."""
+def expired_target_rows(
+    repo: Path, split_name: str, *, arm: str = PLANNER_ARM
+) -> list[dict[str, object]]:
+    """One row per expired target of one arm, with everything the classifier uses."""
     split = split_of(split_name)
-    directory = run_dir(repo, split_name)
     rows: list[dict[str, object]] = []
-    paths = sorted(directory.glob(f"rp_{PLANNER_ARM}_s*.jsonl"))
+    paths = [
+        path
+        for path in (arm_paths(repo, split_name, arm, seed)[0] for seed in split.seeds)
+        if path.exists()
+    ]
     attributions = attribute([str(path) for path in paths], window=float(split.frozen and 1000 or 1000))
     for path in paths:
         seed = int(path.stem.rsplit("_s", 1)[1])
-        facts = _trace_facts(repo, split_name, seed)
+        facts = _trace_facts(repo, split_name, seed, arm=arm)
         records = load_records(path)
-        timelines = build_timelines(records, arm=PLANNER_ARM, seed=seed)
+        timelines = build_timelines(records, arm=arm, seed=seed)
         # "Expired" is decided by the same rule the lifecycle metrics use -- discovered,
         # not completed, and the deadline inside the window -- rather than by the final
         # record's registry status. A target nobody was ever sent to keeps saying
@@ -280,9 +288,8 @@ def paired_comparison(repo: Path, split_name: str) -> dict[str, object]:
     from .lifecycle_metrics import collect, _ci95
 
     split = split_of(split_name)
-    directory = run_dir(repo, split_name)
     paths = [
-        str(directory / f"rp_{arm}_s{seed}.jsonl")
+        str(arm_paths(repo, split_name, arm, seed)[0])
         for arm in (PLANNER_ARM, ORACLE_ARM)
         for seed in split.seeds
     ]
@@ -328,8 +335,12 @@ def paired_comparison(repo: Path, split_name: str) -> dict[str, object]:
 def hindsight_ceiling(repo: Path, split_name: str) -> dict[str, object]:
     """The diagnostic-only upper bound: what no dispatcher, however informed, could save."""
     split = split_of(split_name)
-    paths = sorted(run_dir(repo, split_name).glob(f"rp_{PLANNER_ARM}_s*.jsonl"))
-    attributions = attribute([str(path) for path in paths], window=1000.0)
+    paths = [
+        str(path)
+        for path in (arm_paths(repo, split_name, PLANNER_ARM, seed)[0] for seed in split.seeds)
+        if path.exists()
+    ]
+    attributions = attribute(paths, window=1000.0)
     entry = attributions[PLANNER_ARM]
     curve = entry.oracle_budget_curve((5.0, 10.0, 20.0, 40.0))
     return {
@@ -402,20 +413,17 @@ def _gate(per_split: Mapping[str, Mapping[str, object]], pooled: Sequence[Mappin
     }
 
 
-def commitment_metrics(repo: Path, split_name: str, arm: str = STICKY_ARM) -> dict[str, object]:
-    """What the allocator did to the commitments it was holding, read off the trace.
+def override_counts(decisions: Sequence[Mapping[str, object]]) -> dict[str, object]:
+    """The two override questions, answered from one decision's recorded facts.
 
-    ``override_prevented`` counts decisions where the residual would have gone elsewhere
-    and the commitment stopped it -- that is the fix working. ``override_unjustified``
-    counts a command that left a *held* commitment for something else; the acceptance
-    criterion for the fix is that this is zero. ``release_reasons`` is the histogram of
-    why commitments did not survive, and ``longest_idle_hold`` is the longest run of
-    consecutive decisions in which a robot sat idle holding a commitment that kept not
-    being satisfied -- the shape a deadlock would take.
+    ``counterfactual_override_blocked`` is a decision where the raw choice differed from
+    the commitment, the commitment carried the decision, and the command went to the
+    committed task -- the fix working. ``executed_override_unjustified`` is a held
+    commitment whose every validity condition passed and which was nevertheless not
+    executed -- the fix failing, and the only one of the two with an acceptance target.
     """
     from collections import Counter
 
-    directory = run_dir(repo, split_name)
     prevented = 0
     unjustified = 0
     suppressed = 0
@@ -424,37 +432,38 @@ def commitment_metrics(repo: Path, split_name: str, arm: str = STICKY_ARM) -> di
     releases: Counter[str] = Counter()
     idle_run = 0
     longest_idle_hold = 0
-    for path in sorted(directory.glob(f"tr_{arm}_s*.jsonl")):
-        _, decisions = read_trace(path)
-        for decision in decisions:
-            if not decision.get("commitment_present"):
+    for decision in decisions:
+        if not decision.get("commitment_present"):
+            idle_run = 0
+            continue
+        present += 1
+        if decision.get("commitment_held"):
+            held += 1
+            if decision.get("commitment_suppressed_command"):
+                suppressed += 1
                 idle_run = 0
                 continue
-            present += 1
-            if decision.get("commitment_held"):
-                held += 1
-                if decision.get("commitment_suppressed_command"):
-                    suppressed += 1
-                    idle_run = 0
-                    continue
+            if decision.get("reservation_executed"):
                 if decision.get("commitment_overridden"):
+                    # The raw choice differed and the commitment carried the decision: an
+                    # override that was blocked, not one that happened.
                     prevented += 1
-                if decision.get("chosen_task") != decision.get("commitment_task"):
-                    unjustified += 1
-                if str(decision.get("status")) == "idle":
-                    idle_run += 1
-                    longest_idle_hold = max(longest_idle_hold, idle_run)
-                else:
-                    idle_run = 0
             else:
-                releases[str(decision.get("commitment_release_reason"))] += 1
+                unjustified += 1
+            if str(decision.get("status")) == "idle":
+                idle_run += 1
+                longest_idle_hold = max(longest_idle_hold, idle_run)
+            else:
                 idle_run = 0
+        else:
+            releases[str(decision.get("commitment_release_reason"))] += 1
+            idle_run = 0
     return {
         "decisions_with_a_commitment": present,
         "commitments_held": held,
         "commitment_honour_share": round(held / present, 4) if present else None,
-        "override_prevented": prevented,
-        "override_unjustified": unjustified,
+        "counterfactual_override_blocked": prevented,
+        "executed_override_unjustified": unjustified,
         "commands_suppressed": suppressed,
         "release_reasons": dict(releases),
         "longest_idle_hold": longest_idle_hold,
@@ -462,14 +471,42 @@ def commitment_metrics(repo: Path, split_name: str, arm: str = STICKY_ARM) -> di
     }
 
 
+def commitment_metrics(repo: Path, split_name: str, arm: str = STICKY_ARM) -> dict[str, object]:
+    """What the allocator did to the commitments it was holding, read off the trace.
+
+    One decision under a commitment answers two different questions, and the answer to the
+    first is not a defect at all:
+
+    * ``counterfactual_override_blocked`` -- the allocator's own choice was elsewhere, the
+      standing commitment overrode it, and the decision ended on the committed task. This
+      is the fix *working*, and it is expected to be large.
+    * ``executed_override_unjustified`` -- a commitment was held, every validity condition
+      it is tested against passed, and the decision still ended somewhere else. This is
+      the fix failing, and the acceptance criterion is that it is zero.
+
+    ``release_reasons`` is the histogram of why commitments did not survive, and
+    ``longest_idle_hold`` is the longest run of consecutive decisions in which a robot sat
+    idle holding a commitment that kept not being satisfied -- the shape a deadlock would
+    take. The counting itself is :func:`override_counts`, so the definitions are in one
+    place and testable without artefacts on disk.
+    """
+    decisions: list[Mapping[str, object]] = []
+    for seed in split_of(split_name).seeds:
+        _, path = arm_paths(repo, split_name, arm, seed)
+        if not path.exists():
+            continue
+        _, rows = read_trace(path)
+        decisions.extend(rows)
+    return override_counts(decisions)
+
+
 def compare_sticky(repo: Path, split_name: str) -> dict[str, object]:
     """Advisory planner versus the binding planner, paired per seed."""
     from .lifecycle_metrics import collect, _ci95
 
     split = split_of(split_name)
-    directory = run_dir(repo, split_name)
     paths = [
-        str(directory / f"rp_{arm}_s{seed}.jsonl")
+        str(arm_paths(repo, split_name, arm, seed)[0])
         for arm in (PLANNER_ARM, STICKY_ARM)
         for seed in split.seeds
     ]
@@ -488,18 +525,19 @@ def compare_sticky(repo: Path, split_name: str) -> dict[str, object]:
         expired.append(binding.expired - advisory.expired)
         if advisory.completion_rate is not None and binding.completion_rate is not None:
             completion.append(binding.completion_rate - advisory.completion_rate)
-    attribution = attribute(
-        [
-            str(directory / f"rp_{STICKY_ARM}_s{seed}.jsonl")
-            for seed in split.seeds
-            if (directory / f"rp_{STICKY_ARM}_s{seed}.jsonl").exists()
-        ],
-        window=1000.0,
-    ).get(STICKY_ARM)
-    discarded = latency = None
+    sticky_paths = [
+        str(arm_paths(repo, split_name, STICKY_ARM, seed)[0])
+        for seed in split.seeds
+        if arm_paths(repo, split_name, STICKY_ARM, seed)[0].exists()
+    ]
+    attribution = attribute(sticky_paths, window=1000.0).get(STICKY_ARM)
+    discarded = latency = discarded_expired = None
     if attribution is not None:
         churn = attribution.churn_stats()
-        discarded = churn.get("discarded_work_mean")
+        # Work thrown away on targets that nonetheless finished -- the churn a binding
+        # commitment should reduce -- with the expired group alongside it.
+        discarded = churn.get("completed", {}).get("discarded_work_mean")
+        discarded_expired = churn.get("expired", {}).get("discarded_work_mean")
         latency = attribution.latency_stats().get("completed", {}).get("median")
     mean, ci = _ci95([float(value) for value in expired])
     cmean, cci = _ci95(completion)
@@ -519,8 +557,142 @@ def compare_sticky(repo: Path, split_name: str) -> dict[str, object]:
         "paired_completion": {"mean": round(cmean, 4), "ci95": round(cci, 4)},
         "rejected_assignments": rejected,
         "discarded_work_mean": round(discarded, 4) if discarded is not None else None,
+        "discarded_work_expired_mean": (
+            round(discarded_expired, 4) if discarded_expired is not None else None
+        ),
         "first_work_latency_median": round(latency, 3) if latency is not None else None,
         "deadlock": False,
+        # The acceptance numbers, on the same artefacts the comparison was read from.
+        "commitments": commitment_metrics(repo, split_name, arm=STICKY_ARM),
+    }
+
+
+def fleet_diagnostics(repo: Path, split_name: str) -> dict[str, object]:
+    """What the fleet and the cycle looked like when each target was found.
+
+    The two blocks expire at very different rates under one arm, and the per-target rows
+    already say the expired ones differ in budget and latency. This adds the six facts
+    about the *context* a detection landed in, pooled over every detected target of the
+    planner arm, so a block difference can be traced to the fleet or the cycle rather than
+    assumed away:
+
+    * idle robots at the instant of detection;
+    * tasks already known and unfinished at that instant;
+    * detection to the first ``needs_decision`` the trace shows;
+    * the earliest moment any robot was free after detection;
+    * how far into an allocation cycle the detection fell, and the wait to the next one;
+    * the communication settings the block was recorded and replayed with.
+    """
+    import statistics
+
+    from .lifecycle_log import RUN_TARGET_ID
+
+    idle: list[float] = []
+    concurrent: list[float] = []
+    first_decision: list[float] = []
+    earliest_free: list[float] = []
+    cycle_offset: list[float] = []
+    cycle_wait: list[float] = []
+    comm: dict[str, object] = {}
+    for seed in split_of(split_name).seeds:
+        log_path, trace_path = arm_paths(repo, split_name, PLANNER_ARM, seed)
+        if not log_path.exists() or not trace_path.exists():
+            continue
+        meta, decisions = read_trace(trace_path)
+        if not comm:
+            comm = {
+                "comm_delay_ticks": meta.get("comm_delay_ticks"),
+                "comm_delivery_probability": meta.get("comm_delivery_probability"),
+                "allocation_interval": meta.get("allocation_interval"),
+            }
+        interval = max(1, int(meta.get("allocation_interval") or 1))
+        per_agent: dict[str, list[tuple[float, str, bool]]] = {}
+        for decision in decisions:
+            per_agent.setdefault(str(decision.get("agent_id")), []).append(
+                (
+                    float(decision.get("timestamp") or 0.0),
+                    str(decision.get("status")),
+                    bool(decision.get("needs_decision")),
+                )
+            )
+        for rows in per_agent.values():
+            rows.sort(key=lambda row: row[0])
+
+        detected: dict[str, float] = {}
+        finished_at: dict[str, float] = {}
+        for record in load_records(log_path):
+            target = record.get("target_id")
+            if not target or target == RUN_TARGET_ID:
+                continue
+            timestamp = float(record.get("timestamp") or 0.0)
+            if record.get("event_type") == "detection" and str(target) not in detected:
+                detected[str(target)] = timestamp
+            elif (
+                record.get("event_type") in ("progress", "final")
+                and record.get("status") == "completed"
+                and str(target) not in finished_at
+            ):
+                finished_at[str(target)] = timestamp
+
+        def status_at(agent_id: str, moment: float) -> str | None:
+            rows = per_agent.get(agent_id)
+            if not rows:
+                return None
+            chosen = rows[0]
+            for row in rows:
+                if row[0] > moment:
+                    break
+                chosen = row
+            return chosen[1]
+
+        for target_id, moment in sorted(detected.items(), key=lambda item: item[1]):
+            states = [
+                status_at(agent_id, moment) for agent_id in sorted(per_agent)
+            ]
+            idle.append(float(sum(1 for state in states if state == "idle")))
+            concurrent.append(
+                float(
+                    sum(
+                        1
+                        for other, seen_at in detected.items()
+                        if other != target_id
+                        and seen_at < moment
+                        and finished_at.get(other, float("inf")) > moment
+                    )
+                )
+            )
+            waits = [
+                row[0] - moment
+                for rows in per_agent.values()
+                for row in rows
+                if row[2] and row[0] > moment
+            ]
+            if waits:
+                first_decision.append(min(waits))
+            free = [
+                row[0] - moment
+                for rows in per_agent.values()
+                for row in rows
+                if row[1] == "idle" and row[0] >= moment
+            ]
+            if free:
+                earliest_free.append(min(free))
+            offset = moment % interval
+            cycle_offset.append(offset)
+            cycle_wait.append(0.0 if offset == 0.0 else interval - offset)
+
+    def median(values: list[float]) -> float | None:
+        return round(statistics.median(values), 2) if values else None
+
+    return {
+        "targets_observed": len(idle),
+        "comm": comm,
+        "idle_agents_at_detection_median": median(idle),
+        "active_tasks_at_detection_median": median(concurrent),
+        "detection_to_first_decision_median": median(first_decision),
+        "earliest_agent_availability_median": median(earliest_free),
+        "detection_cycle_offset_median": median(cycle_offset),
+        "detection_wait_to_next_cycle_median": median(cycle_wait),
     }
 
 
@@ -548,7 +720,6 @@ def split_diagnostics(repo: Path) -> dict[str, object]:
     blocks: dict[str, object] = {}
     for name in ("analysis_legacy", "analysis_fresh"):
         split = SPLITS[name]
-        directory = run_dir(repo, name)
         rows = expired_target_rows(repo, name)
         budgets = [
             float(row["delivery_budget"])
@@ -576,7 +747,7 @@ def split_diagnostics(repo: Path) -> dict[str, object]:
             "seeds_with_runs": sum(
                 1
                 for seed in split.seeds
-                if (directory / f"rp_{PLANNER_ARM}_s{seed}.jsonl").exists()
+                if arm_paths(repo, name, PLANNER_ARM, seed)[0].exists()
             ),
             "primary_classes": class_counts(rows),
             "secondary_classes": dict(
@@ -597,6 +768,7 @@ def split_diagnostics(repo: Path) -> dict[str, object]:
             "detected_at_median": (
                 round(statistics.median(detected), 2) if detected else None
             ),
+            "fleet": fleet_diagnostics(repo, name),
         }
     return {
         "format": "split-diagnostics/1",

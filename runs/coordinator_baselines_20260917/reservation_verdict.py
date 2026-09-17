@@ -170,9 +170,9 @@ def collect_traces() -> dict[str, dict[str, object]]:
     summary = summarise(rows) if rows else {}
     keep = (
         "reserved_decisions",
-        "honoured_reservations",
-        "broken_reservations",
-        "honoured_share",
+        "executed_reservations",
+        "raw_choice_taken_reservations",
+        "executed_share",
         "plan_totals",
         "dispatched_targets",
         "never_reserved",

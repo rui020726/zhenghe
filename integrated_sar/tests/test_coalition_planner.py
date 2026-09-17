@@ -23,6 +23,7 @@ import importlib.util
 import os
 import tempfile
 import unittest
+from dataclasses import replace
 from typing import Any
 
 from integrated_sar.contracts import (
@@ -453,6 +454,34 @@ class PlanDeterminismTests(unittest.TestCase):
         warm = CoalitionPlannerCoordinator()
         warm.advise(self._state())
         self.assertEqual(warm.advise(self._state()).reservations, CoalitionPlannerCoordinator().advise(self._state()).reservations)
+
+    def test_a_republished_commitment_keeps_its_identity(self) -> None:
+        """The same robot on the same slot of the same task is one commitment, not many."""
+        planner = CoalitionPlannerCoordinator()
+        first = planner.advise(self._state()).reservations
+        second = planner.advise(self._state()).reservations
+        self.assertEqual(set(first), set(second))
+        for key, held in first.items():
+            republished = second[key]
+            self.assertEqual(republished.commitment_id, held.commitment_id)
+            self.assertEqual(republished.created_at, held.created_at)
+            # The window moves with the cycle; the identity does not.
+            self.assertGreaterEqual(republished.valid_until, held.valid_until)
+
+    def test_a_changed_slot_mints_a_new_identity(self) -> None:
+        """Identity is carried for the same slot only: a different order is a new one."""
+        planner = CoalitionPlannerCoordinator()
+        held = planner.advise(self._state()).reservations
+        key = sorted(held)[0]
+        standing = held[key]
+        # A freshly planned commitment arrives without the old one's identity -- exactly
+        # what the planner mints -- so the derivation is what the carry-over must not touch.
+        different_slot = replace(
+            standing, ability_slot=standing.ability_slot + 1, commitment_id="", created_at=None
+        )
+        carried = planner._carry_identity({key: standing}, {key: different_slot})
+        self.assertNotEqual(carried[key].commitment_id, standing.commitment_id)
+        self.assertEqual(carried[key].created_at, different_slot.issued_at)
 
     def test_the_plan_covers_the_open_slots_and_no_more(self) -> None:
         advice = CoalitionPlannerCoordinator().advise(self._state())

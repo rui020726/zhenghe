@@ -120,3 +120,24 @@ def run_dir(repo: Path, split_name: str) -> Path:
 
 def stream_path(repo: Path, split_name: str, seed: int) -> Path:
     return split_of(split_name).stream_dir(repo) / f"s{seed}.json"
+
+
+# Where one arm's logs live inside a split's run directory. An arm is a policy plus the
+# flags it was invoked with, and two arms differ by construction -- the advisory planner and
+# the binding one differ by exactly one flag -- so each gets its own directory *and* its own
+# file names. A shared directory with a label in the name was enough for a batch script to
+# point the wrong flag at the wrong output and leave files whose names said one arm and
+# whose contents were another.
+ARMS_DIR = "arms"
+
+
+def arm_dir(repo: Path, split_name: str, arm: str) -> Path:
+    return run_dir(repo, split_name) / ARMS_DIR / arm
+
+
+def arm_paths(
+    repo: Path, split_name: str, arm: str, seed: int
+) -> tuple[Path, Path]:
+    """The lifecycle log and the decision trace of one arm on one seed."""
+    directory = arm_dir(repo, split_name, arm)
+    return directory / f"rp_{arm}_s{seed}.jsonl", directory / f"tr_{arm}_s{seed}.jsonl"

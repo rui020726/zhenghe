@@ -140,10 +140,19 @@ class LifecycleLogger:
         self.records_written += 1
         return record
 
-    def log_run_config(self, configuration: Mapping[str, Any], scenario: Mapping[str, Any] | None = None) -> LifecycleRecord:
+    def log_run_config(
+        self,
+        configuration: Mapping[str, Any],
+        scenario: Mapping[str, Any] | None = None,
+        signature: Mapping[str, Any] | None = None,
+    ) -> LifecycleRecord:
         detail: dict[str, Any] = {"configuration": dict(configuration)}
         if scenario is not None:
             detail["scenario"] = dict(scenario)
+        if signature is not None:
+            # Written next to the configuration so a reader can tell which arm this file is
+            # without trusting its name.
+            detail["run_signature"] = dict(signature)
         return self.write(
             LifecycleRecord(
                 target_id=RUN_TARGET_ID,

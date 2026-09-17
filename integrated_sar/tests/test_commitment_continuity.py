@@ -23,6 +23,7 @@ from integrated_sar.contracts import (
     CoordinationAdvice,
     WorldPosition,
 )
+from integrated_sar.learnability import override_counts
 from integrated_sar.tests.test_coalition_reservation_contract import (
     ACTION_MAP,
     _make_adapter,
@@ -162,6 +163,40 @@ class ContinuityTests(unittest.TestCase):
         self.assertTrue(row["commitment_overridden"])
         self.assertFalse(row["commitment_suppressed_command"])
         self.assertEqual(row["chosen_task"], TASK)
+        # The three choices of one decision, all recorded at the moment it was made: the
+        # allocator wanted the depot, the commitment imposed the task, and the task is
+        # what the command named.
+        self.assertEqual(row["raw_choice"], 0)
+        self.assertEqual(row["forced_choice"], 1)
+        self.assertEqual(row["post_mask_choice"], 1)
+        self.assertEqual(row["chosen_index"], 1)
+        self.assertEqual(row["actual_assignment"], TASK)
+        self.assertEqual(row["command_id"], commands[0].command_id)
+        self.assertTrue(row["commitment_validity"]["not_replanning"])
+        self.assertTrue(row["commitment_validity"]["task_active_in_belief"])
+        self.assertTrue(row["commitment_validity"]["not_expired"])
+        self.assertTrue(row["commitment_validity"]["slot_still_needed"])
+        self.assertTrue(row["commitment_validity"]["on_menu"])
+        self.assertTrue(row["commitment_validity"]["hard_mask_legal"])
+        self.assertTrue(row["commitment_validity"]["agent_can_continue"])
+        self.assertTrue(row["reservation_executed"])
+        self.assertEqual(row["reservation_id"], row["held_reservation"]["reservation_id"])
+        self.assertEqual(row["advice_revision"], 7)
+
+    def test_the_conditions_stop_at_the_first_failure(self) -> None:
+        """A condition after the release was never evaluated, and must not be reported."""
+        mask = self._mask()
+        adapter = binding_adapter(mask)
+        binding = adapter._evaluate_commitment(
+            robot(beliefs=(belief(),)),
+            reservation(),
+            action_index=1,
+            mask=mask,
+            current_time=3.0,
+            replanned=True,
+        )
+        self.assertEqual(binding.reason, "replan")
+        self.assertEqual(binding.conditions, {"not_replanning": False})
 
     def test_an_explicit_replan_releases_the_commitment(self) -> None:
         mask = self._mask()
@@ -328,6 +363,64 @@ class ContinuityTests(unittest.TestCase):
         adapter.apply_assignments((stale,))
         # The robot never moved onto it: the depot is where an expired command leaves it.
         self.assertEqual(adapter.env.agent_dic[0]["current_task"], -1)
+
+
+class OverrideAccountingTests(unittest.TestCase):
+    """A blocked override and an executed one are different events, counted apart."""
+
+    def _row(self, **fields: Any) -> dict[str, Any]:
+        row = {
+            "commitment_present": True,
+            "commitment_held": True,
+            "commitment_suppressed_command": False,
+            "commitment_overridden": False,
+            "reservation_executed": True,
+            "commitment_release_reason": None,
+            "status": "idle",
+        }
+        row.update(fields)
+        return row
+
+    def test_an_override_the_commitment_carried_is_blocked_not_executed(self) -> None:
+        rows = [
+            self._row(commitment_overridden=True, reservation_executed=True),
+            self._row(commitment_overridden=True, reservation_executed=True, status="working"),
+        ]
+        counts = override_counts(rows)
+        self.assertEqual(counts["counterfactual_override_blocked"], 2)
+        self.assertEqual(counts["executed_override_unjustified"], 0)
+        self.assertEqual(counts["commitment_honour_share"], 1.0)
+
+    def test_a_held_commitment_that_was_not_executed_is_the_unjustified_one(self) -> None:
+        counts = override_counts(
+            [self._row(reservation_executed=False), self._row(reservation_executed=False)]
+        )
+        self.assertEqual(counts["executed_override_unjustified"], 2)
+        self.assertEqual(counts["counterfactual_override_blocked"], 0)
+
+    def test_a_suppressed_command_is_neither(self) -> None:
+        counts = override_counts(
+            [self._row(commitment_suppressed_command=True)]
+        )
+        self.assertEqual(counts["commands_suppressed"], 1)
+        self.assertEqual(counts["counterfactual_override_blocked"], 0)
+        self.assertEqual(counts["executed_override_unjustified"], 0)
+
+    def test_a_release_is_not_an_override(self) -> None:
+        counts = override_counts(
+            [
+                self._row(commitment_held=False, commitment_release_reason="expired"),
+                self._row(commitment_held=False, commitment_release_reason="hard_mask"),
+            ]
+        )
+        self.assertEqual(counts["release_reasons"], {"expired": 1, "hard_mask": 1})
+        self.assertEqual(counts["executed_override_unjustified"], 0)
+
+    def test_an_idle_hold_run_is_the_deadlock_shape(self) -> None:
+        rows = [self._row(status="idle") for _ in range(25)]
+        counts = override_counts(rows)
+        self.assertEqual(counts["longest_idle_hold"], 25)
+        self.assertTrue(counts["deadlock"])
 
 
 class DefaultOffTests(unittest.TestCase):

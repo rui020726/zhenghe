@@ -297,6 +297,41 @@
     已读它），新增 `analysis_fresh` 21000–21059（门禁指定后录制）；split 互斥、含 checkpoint
     摘要与录制协议。异常已记录：两 block 过期率差一个数量级（16/588 对 1/355），不可合并。
   - 集成测试共 385 项通过（2 项按设计跳过）。
+- 承诺执行连续性与实验隔离（`fix/coalition-commitment-continuity`，证据见
+  `runs/learnability_20260917/COMMITMENT_CONTINUITY.md` 与
+  `commitment_continuity.json`；不训练模型，不实现 stage duration）：
+  - **决策 trace 完整化（schema `allocation-decision-trace/2`）**：每条决策同时记录
+    `raw_choice` / `forced_choice` / `post_mask_choice` / `actual_assignment` / `command_id`、
+    预约身份（`reservation_id`）、六项有效性条件（belief 活动、未过期、槽位仍需、
+    on-menu、mask 合法、可继续）与首个失败的释放原因；trace 与命令由同一组值生成，
+    禁止事后重推。指标拆分为 `counterfactual_override_blocked`（原始选择不同但承诺被
+    执行——修复在起作用）与 `executed_override_unjustified`（有效承诺却未被执行——
+    唯一有验收要求的指标）。schema /1 的冻结产物仍可按原语义分析。
+  - **承诺身份**：`CoalitionReservation` 增加 `commitment_id`/`created_at`；规划器每轮
+    重建计划，但对同一 (agent, task, slot) 的再次发布是**同一承诺的续订**——身份不变，
+    仅有效期/revision/分数推进；只有槽位改变才生成新 id。
+  - **实验隔离**：每个 arm 写入独立目录（`runs/<...>/arms/<arm>/`），arm label、目录与
+    文件名三者必须一致；`run_signature`（arm、sticky、code commit、checkpoint 摘要、
+    seed、流指纹、config hash、trace schema）写入 lifecycle log 与 trace config 两条
+    记录。resume 仅复用“签名逐字段一致且含完整 final record”的产物，否则先隔离到带
+    时间戳的 quarantine 目录再重跑；聚合前 preflight 逐文件校验签名/完整性/sticky
+    元数据/config 一致性/配对检测指纹，并要求仅差 sticky 标志的两个 arm config hash
+    不同——任一失败禁止生成 summary。本轮即靠它抓出并修复了驱动脚本的两个真实缺陷：
+    sticky 命令拼接位于 return 之后（死代码）导致的“贴牌 advisory 运行”，以及
+    分片在 resume 扫描之后二次应用导致的 1/4 运行量；混入的 /1 schema 产物与竞态窗口
+    产物全部隔离重跑，最终 legacy 100×3 arm、fresh 60×3 arm 全部通过 preflight。
+  - **结果（干净复跑后）**：legacy（analysis_legacy 100 seeds）advisory→binding
+    expired 16→9（配对 −0.0700±0.0750），completion 配对 +0.0118±0.0126；7 个
+    “幸存者”在 advisory 下全部是 `reservation_or_execution_break`，binding 下该类
+    降为 0（剩余 9 个：6 个排序、3 个 belief 迟到）。fresh（21000–21059）1→0。
+    binding arm：承诺 honour 99.9%/99.7%，`executed_override_unjustified` 两块均为
+    **0**（legacy 阻止了 151 次、fresh 98 次 counterfactual override），0 非法命令、
+    0 拒绝分配、最长空闲持约 13/9 个决策周期（死锁阈 20）。
+  - **split diagnostics**：两 block 通信配置相同（delay 0、delivery 1.0、interval 5）、
+    checkpoint 与 commit 相同；差异在检测时刻（中位 4.5 对 2.0）、assignment latency
+    （26 对 4）与 delivery budget（72.1 对 60.3）——fresh block 的目标被发现更早、
+    被服务更快，解释 16/588 对 1/355 的过期率差。
+  - 集成测试共 435 项通过（2 项按设计跳过）。
 
 ## 尚未完成
 
@@ -316,10 +351,10 @@
    `DungeonMaps`，所以目前无法留出验证集，也就无法按“验证集最优”而不是“最后一个”
    来选模型。
 6. 学习型协调器**暂缓**：可学习性门禁未通过——同信息 oracle 与规则规划器逐位一致
-   （可修复比例 0%，门槛 30%），残余失败是执行中断而非排序错误。先做
-   `runs/learnability_20260917/LEARNABILITY_VERDICT.md` 的三项建议
-   （承诺对执行侧的约束力、belief 携带阶段工作时长、机队构成），然后重新录制 fresh block
-   并用同一门禁复测；只有排序类失败出现时才训练 `LearnedCoalitionCoordinator`。
+   （可修复比例 0%，门槛 30%），残余失败是执行中断而非排序错误。三项建议中
+   “承诺对执行侧的约束力”已实现并验证（见上）；下一步是 belief 携带阶段工作时长
+   （`DetectionMessage` 已携带、belief 现在丢弃）的独立 ablation，然后重新录制 fresh
+   block 并用同一门禁复测；只有排序类失败出现时才训练 `LearnedCoalitionCoordinator`。
 7. 建立搜索、协调、任务分配联合奖励与延迟信用关联。
 8. 增加端到端基准和消融：无协调、规则协调、学习协调、无反馈。
 9. 跑一次真正收敛的训练。两个训练入口现在都能在 CPU 上端到端跑完并产出带元数据的

@@ -554,11 +554,19 @@ class CoalitionPlannerCoordinator:
         self.renewed_commitments = 0
         self._revision = 0
         self._reservations: dict[tuple[str, str], CoalitionReservation] = {}
+        # Identity, not ordering: a fresh commitment takes the next number, a renewal keeps
+        # the one it has. Reset with the episode so ids are reproducible from a seed.
+        self._commitment_counter = 0
 
     def reset(self) -> None:
         """Start a new episode: numbering restarts and no commitment survives it."""
         self._revision = 0
         self._reservations.clear()
+        self._commitment_counter = 0
+
+    def _new_commitment_id(self) -> str:
+        self._commitment_counter += 1
+        return f"rp{self._commitment_counter:04d}"
 
     def advise(self, state: CoordinatorInput) -> CoordinationAdvice:
         self._revision += 1
@@ -613,6 +621,7 @@ class CoalitionPlannerCoordinator:
             for key, value in self._renew(agents, committed, beliefs_by_key, now).items():
                 reservations[key] = value
                 planned[value.task_id][value.agent_id] = agents[value.agent_id].abilities
+        reservations = self._carry_identity(previous, reservations)
         pair_bias, redundant = self._pair_biases(
             agents, candidates, committed, planned
         )
@@ -642,6 +651,34 @@ class CoalitionPlannerCoordinator:
                 **counts,
             },
         )
+
+    def _carry_identity(
+        self,
+        previous: Mapping[tuple[str, str], CoalitionReservation],
+        reservations: Mapping[tuple[str, str], CoalitionReservation],
+    ) -> dict[tuple[str, str], CoalitionReservation]:
+        """A commitment re-published for the same slot is the same commitment.
+
+        The plan is rebuilt from scratch every cycle, so re-issuing the reservation the
+        planner chose again last cycle is the normal case, not an event. Minting a new id
+        there would turn one continuous commitment into a series of unrelated ones in the
+        trace and erase the churn the renewal exists to prevent. Only a changed slot -- a
+        genuinely different order for that robot -- is a new commitment, and only that gets
+        a new id. The plan's *content* is untouched: identity is carried, not chosen.
+        """
+        carried: dict[tuple[str, str], CoalitionReservation] = {}
+        for key, value in reservations.items():
+            standing = previous.get(key)
+            if standing is not None and standing.ability_slot == value.ability_slot:
+                carried[key] = standing.renewed(
+                    issued_at=value.issued_at,
+                    valid_until=value.valid_until,
+                    task_revision=value.task_revision,
+                    score=value.score,
+                )
+            else:
+                carried[key] = value
+        return carried
 
     def _renew(
         self,
@@ -679,6 +716,10 @@ class CoalitionPlannerCoordinator:
             if claim is None:
                 continue
             slot, dimension = claim
+            score = _clamp(
+                self.commitment_weight
+                * _gap_fill_ratio(requirement, open_units, abilities)
+            )
             renewed[(agent_id, task_id)] = CoalitionReservation(
                 agent_id=agent_id,
                 task_id=task_id,
@@ -687,10 +728,8 @@ class CoalitionPlannerCoordinator:
                 task_revision=int(belief.revision),
                 issued_at=now,
                 valid_until=now + self.reservation_validity,
-                score=_clamp(
-                    self.commitment_weight
-                    * _gap_fill_ratio(requirement, open_units, abilities)
-                ),
+                score=score,
+                commitment_id=self._new_commitment_id(),
             )
         self.renewed_commitments = len(renewed)
         return renewed
@@ -776,6 +815,7 @@ class CoalitionPlannerCoordinator:
                 issued_at=now,
                 valid_until=now + self.reservation_validity,
                 score=_clamp(self.commitment_weight * row.fill),
+                commitment_id=self._new_commitment_id(),
             )
         return chosen, planned
 

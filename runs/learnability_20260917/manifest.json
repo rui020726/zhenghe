@@ -1,6 +1,6 @@
 {
-  "format": "learnability-manifest/1",
-  "code_commit": "e6c23c3e4a6a403c0e380119dfdf2d2295f64fbf",
+  "format": "learnability-manifest/2",
+  "code_commit": "04cc187ac8a987e059a5eef7548b315d2375577b",
   "steps": 1000,
   "checkpoints": {
     "piloc": {
@@ -49,6 +49,7 @@
         10029
       ],
       "stream_dir": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\streams",
+      "arm_dir": "D:\\code\\整合\\zhenghe\\runs\\coordinator_baselines_20260917\\arms",
       "recorded_with": "one live PILOC pass per seed at --steps 1000 with --no-coordinator, writing the ordered DetectionEvent stream; every arm of the split then replays that stream"
     },
     "analysis_legacy": {
@@ -157,6 +158,7 @@
         20099
       ],
       "stream_dir": "D:\\code\\整合\\zhenghe\\runs\\coordinator_baselines_20260917\\heldout\\streams",
+      "arm_dir": "D:\\code\\整合\\zhenghe\\runs\\coordinator_baselines_20260917\\heldout\\arms",
       "recorded_with": "one live PILOC pass per seed at --steps 1000 with --no-coordinator, writing the ordered DetectionEvent stream; every arm of the split then replays that stream"
     },
     "analysis_fresh": {
@@ -225,15 +227,13 @@
         21059
       ],
       "stream_dir": "D:\\code\\整合\\zhenghe\\runs\\learnability_20260917\\analysis_fresh",
+      "arm_dir": "D:\\code\\整合\\zhenghe\\runs\\learnability_20260917\\analysis_fresh\\arms",
       "recorded_with": "one live PILOC pass per seed at --steps 1000 with --no-coordinator, writing the ordered DetectionEvent stream; every arm of the split then replays that stream"
     }
   },
   "arms": {
     "coalplan0.25": "coalition_planner",
+    "coalplan0.25sticky": "coalition_planner",
     "daw0.25": "deadline_aware"
-  },
-  "gate": {
-    "same_information_expiry_fix_target": 0.3,
-    "metric": "share of the rule planner's remaining expired targets removed by the same-information oracle, paired per seed"
   }
 }

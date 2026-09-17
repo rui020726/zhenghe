@@ -1,0 +1,998 @@
+{
+  "format": "commitment-continuity/2",
+  "learnability": {
+    "format": "learnability-verdict/1",
+    "planner_arm": "coalplan0.25",
+    "oracle_arm": "daw0.25",
+    "failure_classes": [
+      "candidate_ordering_error",
+      "task_contention_error",
+      "missing_or_late_belief",
+      "travel_or_deadline_impossible",
+      "reservation_or_execution_break",
+      "capacity_conflict"
+    ],
+    "splits": {
+      "analysis_legacy": {
+        "purpose": "analysis: previously reported as held-out, now demoted because the learnability gate was designed while reading it",
+        "failure_classes": {
+          "candidate_ordering_error": 0,
+          "task_contention_error": 0,
+          "missing_or_late_belief": 3,
+          "travel_or_deadline_impossible": 0,
+          "reservation_or_execution_break": 13,
+          "capacity_conflict": 0
+        },
+        "expired_attributed": 16,
+        "comparison_vs_planner": {
+          "seeds": 100,
+          "planner_expired": 16,
+          "oracle_expired": 16,
+          "expiry_fix_share": 0.0,
+          "paired_expired": {
+            "mean": 0.0,
+            "ci95": 0.0
+          },
+          "paired_completion": {
+            "mean": 0.0,
+            "ci95": 0.0
+          }
+        },
+        "hindsight_ceiling": {
+          "expired": 16,
+          "provably_infeasible_no_travel": 0,
+          "infeasible_with_travel": 0,
+          "oracle_completion_share_by_latency": {
+            "5": 1.0,
+            "10": 1.0,
+            "20": 1.0,
+            "40": 1.0
+          }
+        }
+      },
+      "analysis_fresh": {
+        "purpose": "analysis: fresh seeds recorded after the gate was specified, used to confirm the attribution and the oracle away from the legacy block",
+        "failure_classes": {
+          "candidate_ordering_error": 0,
+          "task_contention_error": 0,
+          "missing_or_late_belief": 0,
+          "travel_or_deadline_impossible": 0,
+          "reservation_or_execution_break": 1,
+          "capacity_conflict": 0
+        },
+        "expired_attributed": 1,
+        "comparison_vs_planner": {
+          "seeds": 60,
+          "planner_expired": 1,
+          "oracle_expired": 1,
+          "expiry_fix_share": 0.0,
+          "paired_expired": {
+            "mean": 0.0,
+            "ci95": 0.0
+          },
+          "paired_completion": {
+            "mean": 0.0,
+            "ci95": 0.0
+          }
+        },
+        "hindsight_ceiling": {
+          "expired": 1,
+          "provably_infeasible_no_travel": 0,
+          "infeasible_with_travel": 0,
+          "oracle_completion_share_by_latency": {
+            "5": 1.0,
+            "10": 1.0,
+            "20": 1.0,
+            "40": 1.0
+          }
+        }
+      }
+    },
+    "gate": {
+      "target": 0.3,
+      "same_information_expiry_fix_share": 0.0,
+      "per_split_fix_shares": {
+        "analysis_legacy": 0.0,
+        "analysis_fresh": 0.0
+      },
+      "completion_positive_on_every_split": false,
+      "decision": "fail",
+      "note": "the oracle could not reorder legal candidates into enough saves; the failure is information or physics, not ordering"
+    }
+  },
+  "sticky": {
+    "analysis_legacy": {
+      "comparison": {
+        "seeds": 100,
+        "advisory_expired": 16,
+        "binding_expired": 9,
+        "paired_expired": {
+          "mean": -0.07,
+          "ci95": 0.075
+        },
+        "paired_completion": {
+          "mean": 0.0118,
+          "ci95": 0.0126
+        },
+        "rejected_assignments": 0,
+        "discarded_work_mean": 0.0021,
+        "discarded_work_expired_mean": 0,
+        "first_work_latency_median": 2.0,
+        "deadlock": false,
+        "commitments": {
+          "decisions_with_a_commitment": 1024,
+          "commitments_held": 1023,
+          "commitment_honour_share": 0.999,
+          "counterfactual_override_blocked": 151,
+          "executed_override_unjustified": 0,
+          "commands_suppressed": 0,
+          "release_reasons": {
+            "hard_mask": 1
+          },
+          "longest_idle_hold": 13,
+          "deadlock": false
+        }
+      },
+      "commitments": {
+        "decisions_with_a_commitment": 1024,
+        "commitments_held": 1023,
+        "commitment_honour_share": 0.999,
+        "counterfactual_override_blocked": 151,
+        "executed_override_unjustified": 0,
+        "commands_suppressed": 0,
+        "release_reasons": {
+          "hard_mask": 1
+        },
+        "longest_idle_hold": 13,
+        "deadlock": false
+      },
+      "advisory_expired_rows": [
+        {
+          "seed": 20002,
+          "target": "piloc-e1-target-1",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 5.0,
+          "deadline_offset": 91.77,
+          "work_needed": 11.88,
+          "delivery_budget": 79.89,
+          "assignment_latency": 3.0,
+          "delivery_latency": 4.0,
+          "assignments": 5,
+          "distinct_agents": 5,
+          "short_group_idle_steps": 175.0,
+          "members_waiting_steps": 98.0,
+          "reserved_at": 8.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20002,
+          "target": "piloc-e1-target-5",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [
+            "missing_or_late_belief"
+          ],
+          "broke_commitment": false,
+          "discarded_work_steps": 3.48,
+          "detected_at": 9.0,
+          "deadline_offset": 116.96,
+          "work_needed": 19.56,
+          "delivery_budget": 97.4,
+          "assignment_latency": 3.0,
+          "delivery_latency": 104.0,
+          "assignments": 9,
+          "distinct_agents": 6,
+          "short_group_idle_steps": 113.0,
+          "members_waiting_steps": 86.0,
+          "reserved_at": 111.0,
+          "was_broken": false
+        },
+        {
+          "seed": 20003,
+          "target": "piloc-e1-target-4",
+          "class_reason": "missing_or_late_belief",
+          "secondary_reasons": [],
+          "broke_commitment": false,
+          "discarded_work_steps": 0,
+          "detected_at": 3.0,
+          "deadline_offset": 107.89,
+          "work_needed": 24.03,
+          "delivery_budget": 83.86,
+          "assignment_latency": 0.0,
+          "delivery_latency": 98.0,
+          "assignments": 8,
+          "distinct_agents": 5,
+          "short_group_idle_steps": 117.0,
+          "members_waiting_steps": 14.0,
+          "reserved_at": 100.0,
+          "was_broken": false
+        },
+        {
+          "seed": 20003,
+          "target": "piloc-e1-target-1",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [
+            "task_contention_error"
+          ],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 4.0,
+          "deadline_offset": 81.13,
+          "work_needed": 10.24,
+          "delivery_budget": 70.89,
+          "assignment_latency": 120.0,
+          "delivery_latency": 141.0,
+          "assignments": 4,
+          "distinct_agents": 4,
+          "short_group_idle_steps": 20.0,
+          "members_waiting_steps": 10.0,
+          "reserved_at": 17.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20003,
+          "target": "piloc-e1-target-0",
+          "class_reason": "missing_or_late_belief",
+          "secondary_reasons": [],
+          "broke_commitment": false,
+          "discarded_work_steps": 0,
+          "detected_at": 5.0,
+          "deadline_offset": 75.92,
+          "work_needed": 11.97,
+          "delivery_budget": 63.95,
+          "assignment_latency": null,
+          "delivery_latency": null,
+          "assignments": 0,
+          "distinct_agents": 0,
+          "short_group_idle_steps": 0.0,
+          "members_waiting_steps": 0.0,
+          "reserved_at": null,
+          "was_broken": false
+        },
+        {
+          "seed": 20003,
+          "target": "piloc-e1-target-2",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [
+            "missing_or_late_belief",
+            "task_contention_error"
+          ],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 9.0,
+          "deadline_offset": 104.58,
+          "work_needed": 22.65,
+          "delivery_budget": 81.92,
+          "assignment_latency": 97.0,
+          "delivery_latency": 105.0,
+          "assignments": 2,
+          "distinct_agents": 2,
+          "short_group_idle_steps": 8.0,
+          "members_waiting_steps": 0.0,
+          "reserved_at": 106.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20003,
+          "target": "piloc-e1-target-3",
+          "class_reason": "missing_or_late_belief",
+          "secondary_reasons": [
+            "task_contention_error"
+          ],
+          "broke_commitment": false,
+          "discarded_work_steps": 0,
+          "detected_at": 19.0,
+          "deadline_offset": 100.33,
+          "work_needed": 24.52,
+          "delivery_budget": 75.81,
+          "assignment_latency": 78.0,
+          "delivery_latency": 80.0,
+          "assignments": 5,
+          "distinct_agents": 5,
+          "short_group_idle_steps": 1.0,
+          "members_waiting_steps": 0.0,
+          "reserved_at": 97.0,
+          "was_broken": false
+        },
+        {
+          "seed": 20008,
+          "target": "piloc-e1-target-2",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 6.0,
+          "deadline_offset": 105.61,
+          "work_needed": 28.31,
+          "delivery_budget": 77.3,
+          "assignment_latency": 0.0,
+          "delivery_latency": 4.0,
+          "assignments": 11,
+          "distinct_agents": 6,
+          "short_group_idle_steps": 169.0,
+          "members_waiting_steps": 96.0,
+          "reserved_at": 6.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20019,
+          "target": "piloc-e1-target-0",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [
+            "task_contention_error"
+          ],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 3.0,
+          "deadline_offset": 74.62,
+          "work_needed": 29.49,
+          "delivery_budget": 45.13,
+          "assignment_latency": 24.0,
+          "delivery_latency": 94.0,
+          "assignments": 7,
+          "distinct_agents": 6,
+          "short_group_idle_steps": 72.0,
+          "members_waiting_steps": 67.0,
+          "reserved_at": 19.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20019,
+          "target": "piloc-e1-target-3",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [],
+          "broke_commitment": true,
+          "discarded_work_steps": 0.95,
+          "detected_at": 4.0,
+          "deadline_offset": 107.53,
+          "work_needed": 31.82,
+          "delivery_budget": 75.71,
+          "assignment_latency": 15.0,
+          "delivery_latency": 16.0,
+          "assignments": 6,
+          "distinct_agents": 5,
+          "short_group_idle_steps": 68.0,
+          "members_waiting_steps": 12.0,
+          "reserved_at": 19.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20019,
+          "target": "piloc-e1-target-5",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [
+            "task_contention_error"
+          ],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 10.0,
+          "deadline_offset": 74.87,
+          "work_needed": 17.92,
+          "delivery_budget": 56.95,
+          "assignment_latency": 31.0,
+          "delivery_latency": 90.0,
+          "assignments": 5,
+          "distinct_agents": 3,
+          "short_group_idle_steps": 76.0,
+          "members_waiting_steps": 43.0,
+          "reserved_at": 19.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20052,
+          "target": "piloc-e1-target-3",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [
+            "task_contention_error"
+          ],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 10.0,
+          "deadline_offset": 62.68,
+          "work_needed": 21.86,
+          "delivery_budget": 40.82,
+          "assignment_latency": 41.0,
+          "delivery_latency": 42.0,
+          "assignments": 4,
+          "distinct_agents": 4,
+          "short_group_idle_steps": 2.0,
+          "members_waiting_steps": 0.0,
+          "reserved_at": 17.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20070,
+          "target": "piloc-e1-target-4",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 1.0,
+          "deadline_offset": 97.41,
+          "work_needed": 25.23,
+          "delivery_budget": 72.18,
+          "assignment_latency": 0.0,
+          "delivery_latency": 1.0,
+          "assignments": 7,
+          "distinct_agents": 5,
+          "short_group_idle_steps": 80.0,
+          "members_waiting_steps": 75.0,
+          "reserved_at": 1.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20070,
+          "target": "piloc-e1-target-2",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [
+            "task_contention_error"
+          ],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 4.0,
+          "deadline_offset": 85.64,
+          "work_needed": 13.58,
+          "delivery_budget": 72.06,
+          "assignment_latency": 60.0,
+          "delivery_latency": 61.0,
+          "assignments": 4,
+          "distinct_agents": 3,
+          "short_group_idle_steps": 48.0,
+          "members_waiting_steps": 18.0,
+          "reserved_at": 12.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20074,
+          "target": "piloc-e1-target-2",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 1.0,
+          "deadline_offset": 63.73,
+          "work_needed": 3.54,
+          "delivery_budget": 60.19,
+          "assignment_latency": 26.0,
+          "delivery_latency": 90.0,
+          "assignments": 3,
+          "distinct_agents": 3,
+          "short_group_idle_steps": 63.0,
+          "members_waiting_steps": 52.0,
+          "reserved_at": 1.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20083,
+          "target": "piloc-e1-target-4",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [
+            "task_contention_error"
+          ],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 3.0,
+          "deadline_offset": 67.94,
+          "work_needed": 9.28,
+          "delivery_budget": 58.65,
+          "assignment_latency": 64.0,
+          "delivery_latency": 66.0,
+          "assignments": 2,
+          "distinct_agents": 2,
+          "short_group_idle_steps": 1.0,
+          "members_waiting_steps": 0.0,
+          "reserved_at": 13.0,
+          "was_broken": true
+        }
+      ],
+      "binding_expired_rows": [
+        {
+          "seed": 20003,
+          "target": "piloc-e1-target-4",
+          "class_reason": "missing_or_late_belief",
+          "secondary_reasons": [],
+          "broke_commitment": false,
+          "discarded_work_steps": 0,
+          "detected_at": 3.0,
+          "deadline_offset": 107.89,
+          "work_needed": 24.03,
+          "delivery_budget": 83.86,
+          "assignment_latency": 0.0,
+          "delivery_latency": 128.0,
+          "assignments": 9,
+          "distinct_agents": 5,
+          "short_group_idle_steps": 133.0,
+          "members_waiting_steps": 120.0,
+          "reserved_at": null,
+          "was_broken": false
+        },
+        {
+          "seed": 20003,
+          "target": "piloc-e1-target-1",
+          "class_reason": "candidate_ordering_error",
+          "secondary_reasons": [],
+          "broke_commitment": false,
+          "discarded_work_steps": 0,
+          "detected_at": 4.0,
+          "deadline_offset": 81.13,
+          "work_needed": 10.24,
+          "delivery_budget": 70.89,
+          "assignment_latency": 13.0,
+          "delivery_latency": 157.0,
+          "assignments": 6,
+          "distinct_agents": 5,
+          "short_group_idle_steps": 143.0,
+          "members_waiting_steps": 133.0,
+          "reserved_at": 17.0,
+          "was_broken": false
+        },
+        {
+          "seed": 20003,
+          "target": "piloc-e1-target-0",
+          "class_reason": "candidate_ordering_error",
+          "secondary_reasons": [],
+          "broke_commitment": false,
+          "discarded_work_steps": 0,
+          "detected_at": 5.0,
+          "deadline_offset": 75.92,
+          "work_needed": 11.97,
+          "delivery_budget": 63.95,
+          "assignment_latency": 12.0,
+          "delivery_latency": null,
+          "assignments": 1,
+          "distinct_agents": 1,
+          "short_group_idle_steps": 105.0,
+          "members_waiting_steps": 62.0,
+          "reserved_at": 17.0,
+          "was_broken": false
+        },
+        {
+          "seed": 20003,
+          "target": "piloc-e1-target-2",
+          "class_reason": "missing_or_late_belief",
+          "secondary_reasons": [
+            "task_contention_error"
+          ],
+          "broke_commitment": false,
+          "discarded_work_steps": 0,
+          "detected_at": 9.0,
+          "deadline_offset": 104.58,
+          "work_needed": 22.65,
+          "delivery_budget": 81.92,
+          "assignment_latency": 91.0,
+          "delivery_latency": 92.0,
+          "assignments": 3,
+          "distinct_agents": 3,
+          "short_group_idle_steps": 0.0,
+          "members_waiting_steps": 0.0,
+          "reserved_at": 100.0,
+          "was_broken": false
+        },
+        {
+          "seed": 20003,
+          "target": "piloc-e1-target-3",
+          "class_reason": "missing_or_late_belief",
+          "secondary_reasons": [
+            "task_contention_error"
+          ],
+          "broke_commitment": false,
+          "discarded_work_steps": 0,
+          "detected_at": 19.0,
+          "deadline_offset": 100.33,
+          "work_needed": 24.52,
+          "delivery_budget": 75.81,
+          "assignment_latency": 78.0,
+          "delivery_latency": 80.0,
+          "assignments": 4,
+          "distinct_agents": 4,
+          "short_group_idle_steps": 19.0,
+          "members_waiting_steps": 12.0,
+          "reserved_at": 97.0,
+          "was_broken": false
+        },
+        {
+          "seed": 20008,
+          "target": "piloc-e1-target-2",
+          "class_reason": "candidate_ordering_error",
+          "secondary_reasons": [],
+          "broke_commitment": false,
+          "discarded_work_steps": 0,
+          "detected_at": 6.0,
+          "deadline_offset": 105.61,
+          "work_needed": 28.31,
+          "delivery_budget": 77.3,
+          "assignment_latency": 0.0,
+          "delivery_latency": 4.0,
+          "assignments": 8,
+          "distinct_agents": 6,
+          "short_group_idle_steps": 89.0,
+          "members_waiting_steps": 79.0,
+          "reserved_at": 6.0,
+          "was_broken": false
+        },
+        {
+          "seed": 20052,
+          "target": "piloc-e1-target-3",
+          "class_reason": "candidate_ordering_error",
+          "secondary_reasons": [],
+          "broke_commitment": false,
+          "discarded_work_steps": 0,
+          "detected_at": 10.0,
+          "deadline_offset": 62.68,
+          "work_needed": 21.86,
+          "delivery_budget": 40.82,
+          "assignment_latency": 7.0,
+          "delivery_latency": 42.0,
+          "assignments": 2,
+          "distinct_agents": 2,
+          "short_group_idle_steps": 36.0,
+          "members_waiting_steps": 0.0,
+          "reserved_at": 17.0,
+          "was_broken": false
+        },
+        {
+          "seed": 20070,
+          "target": "piloc-e1-target-2",
+          "class_reason": "candidate_ordering_error",
+          "secondary_reasons": [],
+          "broke_commitment": false,
+          "discarded_work_steps": 0,
+          "detected_at": 4.0,
+          "deadline_offset": 85.64,
+          "work_needed": 13.58,
+          "delivery_budget": 72.06,
+          "assignment_latency": 8.0,
+          "delivery_latency": 9.0,
+          "assignments": 4,
+          "distinct_agents": 4,
+          "short_group_idle_steps": 12.0,
+          "members_waiting_steps": 0.0,
+          "reserved_at": 12.0,
+          "was_broken": false
+        },
+        {
+          "seed": 20083,
+          "target": "piloc-e1-target-4",
+          "class_reason": "candidate_ordering_error",
+          "secondary_reasons": [],
+          "broke_commitment": false,
+          "discarded_work_steps": 0,
+          "detected_at": 3.0,
+          "deadline_offset": 67.94,
+          "work_needed": 9.28,
+          "delivery_budget": 58.65,
+          "assignment_latency": 10.0,
+          "delivery_latency": 66.0,
+          "assignments": 3,
+          "distinct_agents": 3,
+          "short_group_idle_steps": 55.0,
+          "members_waiting_steps": 47.0,
+          "reserved_at": 13.0,
+          "was_broken": false
+        }
+      ],
+      "survivors": [
+        {
+          "seed": 20002,
+          "target": "piloc-e1-target-1",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 5.0,
+          "deadline_offset": 91.77,
+          "work_needed": 11.88,
+          "delivery_budget": 79.89,
+          "assignment_latency": 3.0,
+          "delivery_latency": 4.0,
+          "assignments": 5,
+          "distinct_agents": 5,
+          "short_group_idle_steps": 175.0,
+          "members_waiting_steps": 98.0,
+          "reserved_at": 8.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20002,
+          "target": "piloc-e1-target-5",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [
+            "missing_or_late_belief"
+          ],
+          "broke_commitment": false,
+          "discarded_work_steps": 3.48,
+          "detected_at": 9.0,
+          "deadline_offset": 116.96,
+          "work_needed": 19.56,
+          "delivery_budget": 97.4,
+          "assignment_latency": 3.0,
+          "delivery_latency": 104.0,
+          "assignments": 9,
+          "distinct_agents": 6,
+          "short_group_idle_steps": 113.0,
+          "members_waiting_steps": 86.0,
+          "reserved_at": 111.0,
+          "was_broken": false
+        },
+        {
+          "seed": 20019,
+          "target": "piloc-e1-target-0",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [
+            "task_contention_error"
+          ],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 3.0,
+          "deadline_offset": 74.62,
+          "work_needed": 29.49,
+          "delivery_budget": 45.13,
+          "assignment_latency": 24.0,
+          "delivery_latency": 94.0,
+          "assignments": 7,
+          "distinct_agents": 6,
+          "short_group_idle_steps": 72.0,
+          "members_waiting_steps": 67.0,
+          "reserved_at": 19.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20019,
+          "target": "piloc-e1-target-3",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [],
+          "broke_commitment": true,
+          "discarded_work_steps": 0.95,
+          "detected_at": 4.0,
+          "deadline_offset": 107.53,
+          "work_needed": 31.82,
+          "delivery_budget": 75.71,
+          "assignment_latency": 15.0,
+          "delivery_latency": 16.0,
+          "assignments": 6,
+          "distinct_agents": 5,
+          "short_group_idle_steps": 68.0,
+          "members_waiting_steps": 12.0,
+          "reserved_at": 19.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20019,
+          "target": "piloc-e1-target-5",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [
+            "task_contention_error"
+          ],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 10.0,
+          "deadline_offset": 74.87,
+          "work_needed": 17.92,
+          "delivery_budget": 56.95,
+          "assignment_latency": 31.0,
+          "delivery_latency": 90.0,
+          "assignments": 5,
+          "distinct_agents": 3,
+          "short_group_idle_steps": 76.0,
+          "members_waiting_steps": 43.0,
+          "reserved_at": 19.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20070,
+          "target": "piloc-e1-target-4",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 1.0,
+          "deadline_offset": 97.41,
+          "work_needed": 25.23,
+          "delivery_budget": 72.18,
+          "assignment_latency": 0.0,
+          "delivery_latency": 1.0,
+          "assignments": 7,
+          "distinct_agents": 5,
+          "short_group_idle_steps": 80.0,
+          "members_waiting_steps": 75.0,
+          "reserved_at": 1.0,
+          "was_broken": true
+        },
+        {
+          "seed": 20074,
+          "target": "piloc-e1-target-2",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 1.0,
+          "deadline_offset": 63.73,
+          "work_needed": 3.54,
+          "delivery_budget": 60.19,
+          "assignment_latency": 26.0,
+          "delivery_latency": 90.0,
+          "assignments": 3,
+          "distinct_agents": 3,
+          "short_group_idle_steps": 63.0,
+          "members_waiting_steps": 52.0,
+          "reserved_at": 1.0,
+          "was_broken": true
+        }
+      ]
+    },
+    "analysis_fresh": {
+      "comparison": {
+        "seeds": 60,
+        "advisory_expired": 1,
+        "binding_expired": 0,
+        "paired_expired": {
+          "mean": -0.0167,
+          "ci95": 0.0327
+        },
+        "paired_completion": {
+          "mean": 0.0028,
+          "ci95": 0.0054
+        },
+        "rejected_assignments": 0,
+        "discarded_work_mean": 0,
+        "discarded_work_expired_mean": null,
+        "first_work_latency_median": 2.0,
+        "deadlock": false,
+        "commitments": {
+          "decisions_with_a_commitment": 606,
+          "commitments_held": 604,
+          "commitment_honour_share": 0.9967,
+          "counterfactual_override_blocked": 98,
+          "executed_override_unjustified": 0,
+          "commands_suppressed": 0,
+          "release_reasons": {
+            "hard_mask": 2
+          },
+          "longest_idle_hold": 9,
+          "deadlock": false
+        }
+      },
+      "commitments": {
+        "decisions_with_a_commitment": 606,
+        "commitments_held": 604,
+        "commitment_honour_share": 0.9967,
+        "counterfactual_override_blocked": 98,
+        "executed_override_unjustified": 0,
+        "commands_suppressed": 0,
+        "release_reasons": {
+          "hard_mask": 2
+        },
+        "longest_idle_hold": 9,
+        "deadlock": false
+      },
+      "advisory_expired_rows": [
+        {
+          "seed": 21021,
+          "target": "piloc-e1-target-4",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 2.0,
+          "deadline_offset": 81.75,
+          "work_needed": 21.43,
+          "delivery_budget": 60.32,
+          "assignment_latency": 4.0,
+          "delivery_latency": 94.0,
+          "assignments": 5,
+          "distinct_agents": 4,
+          "short_group_idle_steps": 85.0,
+          "members_waiting_steps": 78.0,
+          "reserved_at": 6.0,
+          "was_broken": true
+        }
+      ],
+      "binding_expired_rows": [],
+      "survivors": [
+        {
+          "seed": 21021,
+          "target": "piloc-e1-target-4",
+          "class_reason": "reservation_or_execution_break",
+          "secondary_reasons": [],
+          "broke_commitment": true,
+          "discarded_work_steps": 0,
+          "detected_at": 2.0,
+          "deadline_offset": 81.75,
+          "work_needed": 21.43,
+          "delivery_budget": 60.32,
+          "assignment_latency": 4.0,
+          "delivery_latency": 94.0,
+          "assignments": 5,
+          "distinct_agents": 4,
+          "short_group_idle_steps": 85.0,
+          "members_waiting_steps": 78.0,
+          "reserved_at": 6.0,
+          "was_broken": true
+        }
+      ]
+    }
+  },
+  "split_diagnostics": {
+    "format": "split-diagnostics/1",
+    "note": "stage duration is not carried in the belief, so the work half of the budget cannot be compared here; the verdict proposes that ablation separately",
+    "blocks": {
+      "analysis_legacy": {
+        "purpose": "analysis: previously reported as held-out, now demoted because the learnability gate was designed while reading it",
+        "code_commit": "04cc187ac8a987e059a5eef7548b315d2375577b",
+        "checkpoints": {
+          "piloc_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+          "ctde_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+        },
+        "expired_attributed": 16,
+        "seeds_with_runs": 100,
+        "primary_classes": {
+          "candidate_ordering_error": 0,
+          "task_contention_error": 0,
+          "missing_or_late_belief": 3,
+          "travel_or_deadline_impossible": 0,
+          "reservation_or_execution_break": 13,
+          "capacity_conflict": 0
+        },
+        "secondary_classes": {
+          "missing_or_late_belief": 2,
+          "task_contention_error": 8
+        },
+        "delivery_budget_median": 72.12,
+        "assignment_latency_median": 26.0,
+        "detected_at_median": 4.5,
+        "fleet": {
+          "targets_observed": 588,
+          "comm": {
+            "comm_delay_ticks": 0,
+            "comm_delivery_probability": 1.0,
+            "allocation_interval": 5
+          },
+          "idle_agents_at_detection_median": 6.0,
+          "active_tasks_at_detection_median": 0.0,
+          "detection_to_first_decision_median": 6.0,
+          "earliest_agent_availability_median": 0.0,
+          "detection_cycle_offset_median": 1.0,
+          "detection_wait_to_next_cycle_median": 3.0
+        }
+      },
+      "analysis_fresh": {
+        "purpose": "analysis: fresh seeds recorded after the gate was specified, used to confirm the attribution and the oracle away from the legacy block",
+        "code_commit": "04cc187ac8a987e059a5eef7548b315d2375577b",
+        "checkpoints": {
+          "piloc_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+          "ctde_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+        },
+        "expired_attributed": 1,
+        "seeds_with_runs": 60,
+        "primary_classes": {
+          "candidate_ordering_error": 0,
+          "task_contention_error": 0,
+          "missing_or_late_belief": 0,
+          "travel_or_deadline_impossible": 0,
+          "reservation_or_execution_break": 1,
+          "capacity_conflict": 0
+        },
+        "secondary_classes": {},
+        "delivery_budget_median": 60.32,
+        "assignment_latency_median": 4.0,
+        "detected_at_median": 2.0,
+        "fleet": {
+          "targets_observed": 355,
+          "comm": {
+            "comm_delay_ticks": 0,
+            "comm_delivery_probability": 1.0,
+            "allocation_interval": 5
+          },
+          "idle_agents_at_detection_median": 6.0,
+          "active_tasks_at_detection_median": 0.0,
+          "detection_to_first_decision_median": 5.0,
+          "earliest_agent_availability_median": 0.0,
+          "detection_cycle_offset_median": 1.0,
+          "detection_wait_to_next_cycle_median": 3.0
+        }
+      }
+    }
+  }
+}

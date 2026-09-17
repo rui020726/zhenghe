@@ -98,7 +98,19 @@ belief。
 不产出预约，默认配置下 `reservations` 为空，残差与旧行为逐位一致。联盟规划协调器
 （`CoalitionPlannerCoordinator`，`--coordinator coalition_planner`）在空闲机器人与任务
 开放槽位之间做确定性的贪心 set-cover，考虑截止时间、行进代价、能力互补与冗余派遣，输出
-本轮团队预约。学习型协调器必须保持相同接口，并对输出进行有界限制。
+本轮团队预约。`CoalitionReservation` 带有身份（`commitment_id`、`created_at`）：规划器每轮
+重建计划，但对同一 (agent, task, slot) 的再次发布视为**同一承诺的续订**——身份保持不变，
+只有有效期、belief revision 与分数随本轮更新；只有槽位改变（真正的重规划）才产生新 id。
+学习型协调器必须保持相同接口，并对输出进行有界限制。
+
+### 承诺的执行侧约束（`--sticky-commitments`，默认关闭）
+
+`Task03Adapter` 在决策时刻对持约机器人做六项有效性检查（belief 中任务仍活动、未过期、
+槽位仍需、hard mask 合法、不在 `replan_agents`、可继续执行），全部通过则该承诺对分配器
+有约束力：机器人已在承诺任务上时不再重复派令；空闲时保持承诺任务；分配器自身的原始选择
+与承诺不同时，以承诺为准并在 trace 中记录 `raw_choice` / `forced_choice` /
+`post_mask_choice` / `actual_assignment`。任一条件失败则按首个失败原因释放并正常重规划。
+硬 mask 仍然最后应用（不变量 6），协调器依旧只提供建议（不变量 5）。
 
 ### CTDE 分配器
 

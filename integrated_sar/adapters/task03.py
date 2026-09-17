@@ -80,20 +80,43 @@ _RELEASE_REASONS = (
 )
 
 
+# The validity conditions, in the order they are checked. The first that fails is the
+# release reason; each one is named so the trace can record the state a release was made
+# from instead of leaving a reader to infer it from the reason alone.
+_CONDITIONS = (
+    ("replan", "not_replanning"),
+    ("terminal_belief", "task_active_in_belief"),
+    ("expired", "not_expired"),
+    ("slot_filled", "slot_still_needed"),
+    ("not_on_menu", "on_menu"),
+    ("hard_mask", "hard_mask_legal"),
+    ("not_executable", "agent_can_continue"),
+)
+
+
 class _Binding:
     """The outcome of testing one commitment against the conditions that keep it.
 
     ``held`` is the only thing the allocator acts on. ``reason`` is the first condition
     that failed, or None while the commitment stands; both go to the trace, so a released
-    commitment is never mistaken for an ignored one.
+    commitment is never mistaken for an ignored one. ``conditions`` is the prefix of the
+    check that actually ran: the test stops at the first failure, so a condition after it
+    was never evaluated and is absent rather than reported as false.
     """
 
-    __slots__ = ("held", "reason", "action_index")
+    __slots__ = ("held", "reason", "action_index", "conditions")
 
-    def __init__(self, held: bool, reason: str | None, action_index: int | None) -> None:
+    def __init__(
+        self,
+        held: bool,
+        reason: str | None,
+        action_index: int | None,
+        conditions: Mapping[str, bool] | None = None,
+    ) -> None:
         self.held = held
         self.reason = reason
         self.action_index = action_index
+        self.conditions: dict[str, bool] = dict(conditions or {})
 
 
 def _index_of_task(action_task_ids: Sequence[str | None], task_id: str) -> int | None:
@@ -541,7 +564,7 @@ class Task03Adapter:
                 verdict = self._network_verdict(internal_agent_id, action_map, advice)
                 reason = "ctde+coordination"
             action_index = verdict.index
-            overridden = False
+            forced_index = None
             if self.binding_commitments and binding.held and commitment is not None:
                 forced = _index_of_task(action_task_ids, commitment.task_id)
                 if forced is not None and forced != action_index:
@@ -549,12 +572,37 @@ class Task03Adapter:
                     # elsewhere is recorded rather than erased: that difference is the
                     # number the continuity fix exists to drive to zero.
                     action_index = forced
-                    overridden = True
+                    forced_index = forced
             suppressed = bool(
                 self.binding_commitments
                 and binding.held
                 and commitment is not None
                 and agent.current_task == commitment.task_id
+            )
+            # The command is built here, from the values the decision produced, and the
+            # trace is given those values -- not a second derivation of them. Recording
+            # first and commanding afterwards is what let a trace disagree with the log it
+            # was supposed to explain.
+            kind, internal_task_id = action_map[action_index]
+            external_task_id = (
+                self.internal_to_external.get(int(internal_task_id))
+                if kind == "task" and internal_task_id is not None
+                else None
+            )
+            revision = self._command_revision(external_task_id, task_by_id)
+            command_id = None
+            if not suppressed:
+                self._command_counter += 1
+                command_id = f"assignment:{self._command_counter}"
+            # The commitment was executed when the robot ends this decision on the task it
+            # is committed to: either because the commitment forced the choice, or because
+            # the allocator's own choice already was that task -- including the case where
+            # it is already under way there and no new command is needed.
+            reservation_executed = bool(
+                commitment is not None
+                and binding.held
+                and binding.action_index is not None
+                and action_index == binding.action_index
             )
             if self.decision_trace is not None:
                 self.decision_trace.record(
@@ -570,12 +618,16 @@ class Task03Adapter:
                         advice=advice,
                         reserved_commitment=commitment,
                         binding=binding,
-                        overridden=overridden,
+                        overridden=forced_index is not None,
                         belief_status=belief_status,
                         belief_revision=belief_revision,
                         mask_legal=mask_legal,
                         effective_index=action_index,
-                        unforced_index=verdict.index if overridden else None,
+                        raw_index=int(verdict.index),
+                        forced_index=forced_index,
+                        actual_assignment=external_task_id,
+                        command_id=command_id,
+                        reservation_executed=reservation_executed,
                         suppressed_command=suppressed,
                     )
                 )
@@ -585,17 +637,9 @@ class Task03Adapter:
                 # restart it, so this decision produces no command at all.
                 continue
 
-            kind, internal_task_id = action_map[action_index]
-            external_task_id = (
-                self.internal_to_external.get(int(internal_task_id))
-                if kind == "task" and internal_task_id is not None
-                else None
-            )
-            revision = self._command_revision(external_task_id, task_by_id)
-            self._command_counter += 1
             commands.append(
                 AssignmentCommand(
-                    command_id=f"assignment:{self._command_counter}",
+                    command_id=command_id,
                     agent_id=agent.agent_id,
                     task_id=external_task_id,
                     issued_at=current_time,
@@ -839,32 +883,45 @@ class Task03Adapter:
         reads the registry -- whether the task is still open is the robot's own belief
         (invariant 9), and the mask is the last word on legality (invariant 6).
         """
-        if replanned:
-            return _Binding(False, "replan", action_index)
+        conditions: dict[str, bool] = {}
+
+        def check(name: str, holds: bool) -> bool:
+            conditions[name] = bool(holds)
+            return bool(holds)
+
+        if not check("not_replanning", not replanned):
+            return _Binding(False, "replan", action_index, conditions)
         belief = agent.belief_for(commitment.task_id)
-        if belief is None or belief.finished:
-            return _Binding(False, "terminal_belief", action_index)
-        if not commitment.active_at(float(current_time)):
-            return _Binding(False, "expired", action_index)
+        if not check(
+            "task_active_in_belief", belief is not None and not belief.finished
+        ):
+            return _Binding(False, "terminal_belief", action_index, conditions)
+        if not check("not_expired", commitment.active_at(float(current_time))):
+            return _Binding(False, "expired", action_index, conditions)
         requirement = tuple(int(need) for need in belief.remaining_requirements)
         dimension = int(commitment.slot_dimension)
-        if (
+        needed = not (
             all(need <= 0 for need in requirement)
             or dimension >= len(requirement)
             or requirement[dimension] <= 0
-        ):
-            return _Binding(False, "slot_filled", action_index)
-        if action_index is None:
-            return _Binding(False, "not_on_menu", action_index)
-        if bool(mask[action_index]):
-            return _Binding(False, "hard_mask", action_index)
+        )
+        if not check("slot_still_needed", needed):
+            return _Binding(False, "slot_filled", action_index, conditions)
+        # On the menu is the precondition that makes the mask check meaningful: an action
+        # the robot is not offered has no mask entry and cannot be executed at all.
+        if not check("on_menu", action_index is not None):
+            return _Binding(False, "not_on_menu", action_index, conditions)
+        if not check("hard_mask_legal", not bool(mask[action_index])):
+            return _Binding(False, "hard_mask", action_index, conditions)
+        can_continue = True
         if agent.current_task and agent.current_task != commitment.task_id:
             current = agent.belief_for(agent.current_task)
-            if current is not None and not current.finished:
-                # Mid-commitment elsewhere: yanking it would discard the work it has
-                # already done. That other commitment has to be released first.
-                return _Binding(False, "not_executable", action_index)
-        return _Binding(True, None, action_index)
+            # Mid-commitment elsewhere: yanking it would discard the work it has already
+            # done. That other commitment has to be released first.
+            can_continue = not (current is not None and not current.finished)
+        if not check("agent_can_continue", can_continue):
+            return _Binding(False, "not_executable", action_index, conditions)
+        return _Binding(True, None, action_index, conditions)
 
     def _decision_facts(
         self,
@@ -885,7 +942,11 @@ class Task03Adapter:
         belief_revision: int | None = None,
         mask_legal: bool | None = None,
         effective_index: int | None = None,
-        unforced_index: int | None = None,
+        raw_index: int | None = None,
+        forced_index: int | None = None,
+        actual_assignment: str | None = None,
+        command_id: str | None = None,
+        reservation_executed: bool | None = None,
         suppressed_command: bool = False,
     ) -> DecisionFacts:
         """Gather one already-made decision for the trace.
@@ -925,7 +986,10 @@ class Task03Adapter:
             for _, task_id in action_map
         )
         truth: dict[str, Any] = {"targets": {}}
-        for external_id in (action_task_ids[response.index], external_current):
+        # The executed action, not the allocator's own preference: the per-target timings
+        # this block feeds are about where the robot was sent.
+        executed_index = int(response.index if effective_index is None else effective_index)
+        for external_id in (action_task_ids[executed_index], external_current):
             if external_id and external_id not in truth["targets"]:
                 entry = self._target_truth(external_id)
                 if entry is not None:
@@ -936,18 +1000,24 @@ class Task03Adapter:
             None
             if reserved is None
             else {
+                "reservation_id": reserved.commitment_id,
                 "task_id": reserved.task_id,
                 "ability_slot": int(reserved.ability_slot),
                 "slot_dimension": int(reserved.slot_dimension),
                 "task_revision": int(reserved.task_revision),
+                "created_at": float(reserved.created_at),
                 "issued_at": float(reserved.issued_at),
                 "valid_until": float(reserved.valid_until),
                 "score": float(reserved.score),
-                # Whether this decision actually took the committed task. A commitment
-                # the allocator ignored is the measurement that separates "the plan was
-                # wrong" from "the plan was right and the residual could not reach the
-                # choice", so it is recorded here rather than inferred later.
-                "honoured": reserved.task_id == action_task_ids[response.index],
+                # Two different questions about one commitment, both answered here so a
+                # reader never has to reconstruct either. ``executed`` says the decision
+                # ended on the committed task -- the plan was carried out.
+                # ``raw_choice_taken`` says the allocator's own preference was already
+                # that task, which is the part of the fidelity that cost nothing.
+                "executed": bool(reservation_executed),
+                "raw_choice_taken": bool(
+                    reserved.task_id == action_task_ids[response.index]
+                ),
             }
         )
 
@@ -967,7 +1037,15 @@ class Task03Adapter:
             chosen_index=int(
                 response.index if effective_index is None else effective_index
             ),
-            unforced_index=unforced_index,
+            raw_choice=int(response.index if raw_index is None else raw_index),
+            forced_choice=None if forced_index is None else int(forced_index),
+            actual_assignment=actual_assignment,
+            command_id=command_id,
+            reservation_id=None if reserved is None else reserved.commitment_id,
+            commitment_validity=dict(binding.conditions) if binding is not None else {},
+            reservation_executed=(
+                None if reservation_executed is None else bool(reservation_executed)
+            ),
             ctde_logits=response.ctde,
             bias=response.bias,
             final_logits=response.final,

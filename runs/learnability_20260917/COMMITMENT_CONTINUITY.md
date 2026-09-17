@@ -1,78 +1,73 @@
-# Commitment continuity: the fix works where it binds, one criterion is still open
+# Commitment continuity: advisory plan versus binding plan
 
-**Status.** The continuity fix is implemented, tested (402 tests, 0 skipped failures) and
-measured on both blocks. It clears the honour, legality and deadlock criteria and does not
-regress completion. It does **not** yet clear "zero unjustified overrides": the count is 82
-on the legacy block and an unexplained 134 on the probe block, and that has to be
-understood before the criterion is claimed.
+Arms share the same recorded detection stream per seed; the only difference is whether a standing coalition commitment binds the allocator. Every artefact carries a run signature, resume is fail-closed, and the preflight over the whole batch had to pass before this page was written.
 
-## What was built
+## analysis_legacy
 
-`--sticky-commitments` binds a coalition commitment on both sides, off by default:
+- seeds compared: 100
+- expired: advisory 16 -> binding 9; paired -0.0700 (95% CI 0.0750)
+- completion: paired 0.0118 (95% CI 0.0126)
+- rejected assignments 0, discarded work mean on completed targets 0.0021 (on expired 0), first-work latency median 2.0000, deadlock False
+- decisions under a commitment 1024, held 1023 (share 0.9990)
+- counterfactual overrides blocked 151; executed overrides without a release reason **0**
+- release reasons: `{'hard_mask': 1}`
+- longest idle hold 13 decision cycles (deadlock threshold 20)
 
-* **planner** (`renew_commitments`): the plan is rebuilt every cycle from free robots only,
-  so a robot used to stop being reserved the moment it was dispatched. Renewal re-issues the
-  commitment of a robot already executing the task it was sent to, adding nothing new -- no
-  new claim, no robot that is not already under orders, no commitment that robot's own belief
-  has not kept open.
-* **allocator** (`binding_commitments`): a commitment is tested against six conditions before
-  it acts -- explicit replan, the robot's own belief still active, not expired, the
-  capability slot still needed, on the menu and hard-mask legal, and not mid-commitment
-  elsewhere. One that fails is released with the named reason and the allocator re-decides.
-* the trace records presence, held, release reason, task, slot, believed status and revision,
-  mask legality, whether the residual would have gone elsewhere (`commitment_overridden`),
-  what it would have chosen instead (`unforced_index`), and whether a command was suppressed.
+### Expiry attribution
 
-The hard mask is still the last word: a masked committed task releases as `hard_mask`
-instead of being forced.
+- advisory arm expired 16: `{'candidate_ordering_error': 0, 'task_contention_error': 0, 'missing_or_late_belief': 3, 'travel_or_deadline_impossible': 0, 'reservation_or_execution_break': 13, 'capacity_conflict': 0}`
+- binding arm expired 9: `{'candidate_ordering_error': 6, 'task_contention_error': 0, 'missing_or_late_belief': 3, 'travel_or_deadline_impossible': 0, 'reservation_or_execution_break': 0, 'capacity_conflict': 0}`
+- survivors (7): expired under the advisory arm, no longer expired under the binding arm
+  - seed 20002 piloc-e1-target-1: primary `reservation_or_execution_break`
+  - seed 20002 piloc-e1-target-5: primary `reservation_or_execution_break`, secondary `['missing_or_late_belief']`
+  - seed 20019 piloc-e1-target-0: primary `reservation_or_execution_break`, secondary `['task_contention_error']`
+  - seed 20019 piloc-e1-target-3: primary `reservation_or_execution_break`
+  - seed 20019 piloc-e1-target-5: primary `reservation_or_execution_break`, secondary `['task_contention_error']`
+  - seed 20070 piloc-e1-target-4: primary `reservation_or_execution_break`
+  - seed 20074 piloc-e1-target-2: primary `reservation_or_execution_break`
 
-## Measured
+## analysis_fresh
 
-| | `analysis_legacy` (100 seeds) | probe (`analysis_fresh`, 60 seeds) |
-|---|---|---|
-| expired, advisory -> binding | **16 -> 11** | 1 -> 1 |
-| paired expired | −0.05 ± 0.0703 | 0.0 |
-| paired completion | **+0.0084 ± 0.0118** (not worse) | 0.0 |
-| decisions with a commitment | 1091 | 704 |
-| commitment honour | **99.45 %** | 99.72 % |
-| overrides prevented | **97** | 0 |
-| unjustified overrides | **82 — open** | **134 — unexplained** |
-| commands suppressed | 0 | 0 |
-| releases | `hard_mask` 6 | `hard_mask` 2 |
-| longest idle hold | 13 decisions | 15 |
-| deadlock | none | none |
-| rejected assignments | 0 | 0 |
+- seeds compared: 60
+- expired: advisory 1 -> binding 0; paired -0.0167 (95% CI 0.0327)
+- completion: paired 0.0028 (95% CI 0.0054)
+- rejected assignments 0, discarded work mean on completed targets 0 (on expired -), first-work latency median 2.0000, deadlock False
+- decisions under a commitment 606, held 604 (share 0.9967)
+- counterfactual overrides blocked 98; executed overrides without a release reason **0**
+- release reasons: `{'hard_mask': 2}`
+- longest idle hold 9 decision cycles (deadlock threshold 20)
 
-Legacy attribution now closes: 16 of 16 expired targets carry exactly one primary cause
-(13 execution break, 3 missing-or-late belief) and 10 secondary causes are listed
-separately (8 task contention, 2 belief), so no target is double counted and none is lost.
+### Expiry attribution
 
-## Two things this phase got wrong, and what they cost
+- advisory arm expired 1: `{'candidate_ordering_error': 0, 'task_contention_error': 0, 'missing_or_late_belief': 0, 'travel_or_deadline_impossible': 0, 'reservation_or_execution_break': 1, 'capacity_conflict': 0}`
+- binding arm expired 0: `{'candidate_ordering_error': 0, 'task_contention_error': 0, 'missing_or_late_belief': 0, 'travel_or_deadline_impossible': 0, 'reservation_or_execution_break': 0, 'capacity_conflict': 0}`
+- survivors (1): expired under the advisory arm, no longer expired under the binding arm
+  - seed 21021 piloc-e1-target-4: primary `reservation_or_execution_break`
 
-1. **The first oracle was mis-described.** `DeadlineAwareCoalitionCoordinator` is a
-   *feasibility-filtered* planner -- it starts from the rule plan and returns commitments
-   that cannot arrive in time -- and that is one candidate reordering, not an upper bound
-   over every policy seeing the same information. The verdict now says the 0 % means only
-   that this variant found nothing, and the burden of proof moves to the next proposal.
-2. **Two batches ran against stale code.** The first sticky batch and the first oracle
-   batch were launched while the working tree was still being edited, so they produced
-   advisory behaviour under a binding label. Both were re-run; the numbers above are from
-   the re-runs, and every metric in this file is recomputed from the final artefacts.
+## Split diagnostics
 
-## The open criterion
+### analysis_legacy
 
-`override_unjustified` counts a decision where a commitment is held and the commanded task
-differs from it. With the force in place it should be zero, and on spot-checked seeds it is.
-Aggregated it is not, and the probe block's commitment counts are identical to the advisory
-arm's, which suggests part of that block was still measured without the flag. Resolving it
-means re-running the probe block once more with the flag confirmed in each run's own trace
-meta (`sticky_commitments: true`) before aggregating, and then explaining any remainder row
-by row.
+- purpose: analysis: previously reported as held-out, now demoted because the learnability gate was designed while reading it
+- code commit: `04cc187ac8a987e059a5eef7548b315d2375577b`
+- piloc sha256: `d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33`
+- ctde sha256: `c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d`
+- expired attributed 16 over 100 seeds; classes `{'candidate_ordering_error': 0, 'task_contention_error': 0, 'missing_or_late_belief': 3, 'travel_or_deadline_impossible': 0, 'reservation_or_execution_break': 13, 'capacity_conflict': 0}`
+- secondary classes: `{'missing_or_late_belief': 2, 'task_contention_error': 8}`
+- delivery budget median 72.1200, assignment latency median 26.0000, detected-at median 4.5000
+- fleet: idle at detection median 6.0000, concurrent active tasks 0.0000, detection to first needs_decision 6.0000, earliest agent availability 0.0000, cycle offset 1.0000, wait to next cycle 3.0000
+- communication: `{'comm_delay_ticks': 0, 'comm_delivery_probability': 1.0, 'allocation_interval': 5}`
 
-## Next ablation (proposed, not implemented)
+### analysis_fresh
 
-Stage work duration is still missing from `AgentTaskBelief` -- `DetectionMessage` delivers
-it and the belief drops it -- so "travel + work <= deadline" remains uncheckable. A separate
-ablation should add the duration to the belief only, re-run this same comparison, and
-measure whether the `travel_or_deadline_impossible` and execution-break classes shrink.
-That is the last information gap the attribution points at.
+- purpose: analysis: fresh seeds recorded after the gate was specified, used to confirm the attribution and the oracle away from the legacy block
+- code commit: `04cc187ac8a987e059a5eef7548b315d2375577b`
+- piloc sha256: `d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33`
+- ctde sha256: `c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d`
+- expired attributed 1 over 60 seeds; classes `{'candidate_ordering_error': 0, 'task_contention_error': 0, 'missing_or_late_belief': 0, 'travel_or_deadline_impossible': 0, 'reservation_or_execution_break': 1, 'capacity_conflict': 0}`
+- secondary classes: `{}`
+- delivery budget median 60.3200, assignment latency median 4.0000, detected-at median 2.0000
+- fleet: idle at detection median 6.0000, concurrent active tasks 0.0000, detection to first needs_decision 5.0000, earliest agent availability 0.0000, cycle offset 1.0000, wait to next cycle 3.0000
+- communication: `{'comm_delay_ticks': 0, 'comm_delivery_probability': 1.0, 'allocation_interval': 5}`
+
+Stage duration is deliberately not implemented here: the belief carries no work half of the budget, so that ablation stays a separate, independently seeded step.

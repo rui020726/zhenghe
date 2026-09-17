@@ -106,6 +106,65 @@ class ReservationContractTests(unittest.TestCase):
         self.assertTrue(held.active_at(10.0))
         self.assertFalse(held.active_at(10.001))
 
+    def test_a_reservation_without_an_explicit_id_names_itself_by_slot(self) -> None:
+        held = reservation(agent_id="0", task_id="target-a", ability_slot=2)
+        self.assertEqual(held.commitment_id, "0|target-a|2")
+        self.assertEqual(held.created_at, held.issued_at)
+
+    def test_an_explicit_identity_is_kept_exactly(self) -> None:
+        held = CoalitionReservation(
+            agent_id="0",
+            task_id="target-a",
+            ability_slot=0,
+            slot_dimension=0,
+            task_revision=1,
+            issued_at=5.0,
+            valid_until=10.0,
+            score=0.5,
+            commitment_id="rp0007",
+            created_at=1.0,
+        )
+        self.assertEqual(held.commitment_id, "rp0007")
+        self.assertEqual(held.created_at, 1.0)
+
+    def test_a_reservation_cannot_be_created_after_it_was_issued(self) -> None:
+        with self.assertRaises(ValueError):
+            CoalitionReservation(
+                agent_id="0",
+                task_id="target-a",
+                ability_slot=0,
+                slot_dimension=0,
+                task_revision=1,
+                issued_at=5.0,
+                valid_until=10.0,
+                score=0.5,
+                created_at=6.0,
+            )
+
+    def test_a_renewal_keeps_the_identity_and_moves_only_the_facts(self) -> None:
+        first = CoalitionReservation(
+            agent_id="0",
+            task_id="target-a",
+            ability_slot=1,
+            slot_dimension=0,
+            task_revision=3,
+            issued_at=5.0,
+            valid_until=10.0,
+            score=0.4,
+            commitment_id="rp0002",
+            created_at=5.0,
+        )
+        second = first.renewed(
+            issued_at=15.0, valid_until=20.0, task_revision=4, score=0.6
+        )
+        self.assertEqual(second.commitment_id, first.commitment_id)
+        self.assertEqual(second.created_at, first.created_at)
+        self.assertEqual(second.ability_slot, first.ability_slot)
+        self.assertEqual(second.issued_at, 15.0)
+        self.assertEqual(second.valid_until, 20.0)
+        self.assertEqual(second.task_revision, 4)
+        self.assertEqual(second.score, 0.6)
+
 
 def _stub_env(mask: Any) -> Any:
     import numpy as np

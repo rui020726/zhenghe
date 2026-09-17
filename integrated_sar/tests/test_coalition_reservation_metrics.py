@@ -136,7 +136,10 @@ class CommitmentAccountingTests(unittest.TestCase):
     """A commitment the allocator took is not the same as one it ignored."""
 
     def _rows(self) -> list[dict[str, Any]]:
-        honoured = {
+        # ``executed`` and ``raw_choice_taken`` are separate facts: the first says the
+        # decision ended on the committed task, the second says the allocator's own
+        # preference was already that task.
+        executed = {
             "task_id": "target-a",
             "ability_slot": 0,
             "slot_dimension": 0,
@@ -144,15 +147,16 @@ class CommitmentAccountingTests(unittest.TestCase):
             "issued_at": 5.0,
             "valid_until": 10.0,
             "score": 0.35,
-            "honoured": True,
+            "executed": True,
+            "raw_choice_taken": False,
         }
-        broken = dict(honoured, honoured=False)
+        broken = dict(executed, executed=False, raw_choice_taken=False)
         plan = {"planned_reservations": 2, "redundant_candidates": 1}
         return [
-            decision(timestamp=5.0, reservations=("target-a",), held=honoured, plan=plan, revision=2),
+            decision(timestamp=5.0, reservations=("target-a",), held=executed, plan=plan, revision=2),
             # Same revision again: the counters describe the transition into revision 2
             # and must not be summed twice.
-            decision(timestamp=6.0, reservations=("target-a",), held=honoured, plan=plan, revision=2),
+            decision(timestamp=6.0, reservations=("target-a",), held=executed, plan=plan, revision=2),
             decision(timestamp=7.0, reservations=("target-a",), held=broken, plan=plan, revision=3),
             decision(timestamp=8.0),
         ]
@@ -160,8 +164,8 @@ class CommitmentAccountingTests(unittest.TestCase):
     def test_commitments_are_split_into_taken_and_ignored(self) -> None:
         metrics = analyse(self._rows(), arm="coalplan0.25", seed=1)
         self.assertEqual(metrics.reserved_decisions, 3)
-        self.assertEqual(metrics.honoured_reservations, 2)
-        self.assertEqual(metrics.broken_reservations, 1)
+        self.assertEqual(metrics.executed_reservations, 2)
+        self.assertEqual(metrics.raw_choice_taken_reservations, 0)
 
     def test_cycle_counters_are_summed_once_per_advice_revision(self) -> None:
         metrics = analyse(self._rows(), arm="coalplan0.25", seed=1)
@@ -178,7 +182,7 @@ class CommitmentAccountingTests(unittest.TestCase):
             seed=1,
         )
         self.assertEqual(metrics.reserved_decisions, 0)
-        self.assertIsNone(summarise([metrics])["rs0.25"]["honoured_share"])
+        self.assertIsNone(summarise([metrics])["rs0.25"]["executed_share"])
         self.assertEqual(
             summarise([metrics])["rs0.25"]["plan_totals"],
             {key: 0 for key in PLAN_COUNTERS},

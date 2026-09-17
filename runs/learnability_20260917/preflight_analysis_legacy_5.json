@@ -1,0 +1,69 @@
+{
+  "format": "run-preflight/1",
+  "commit": "04cc187ac8a987e059a5eef7548b315d2375577b",
+  "checkpoints": {
+    "ctde_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  },
+  "arms": [
+    {
+      "split": "analysis_legacy",
+      "arm": "coalplan0.25",
+      "sticky_commitments": false,
+      "policy": "coalition_planner",
+      "seeds_expected": 5,
+      "seeds_present": 5,
+      "seeds_complete": 5,
+      "config_hashes": [
+        "6a390e145831edf9",
+        "912838a0507651eb",
+        "afcbda8ef4de429e",
+        "cb66712fa728c2d5",
+        "ccfb9c6327103378"
+      ],
+      "problems": [
+        "unexpected files in coalplan0.25: ['rp_coalplan0.25_s20019.jsonl', 'tr_coalplan0.25_s20019.jsonl']"
+      ]
+    },
+    {
+      "split": "analysis_legacy",
+      "arm": "coalplan0.25sticky",
+      "sticky_commitments": true,
+      "policy": "coalition_planner",
+      "seeds_expected": 5,
+      "seeds_present": 5,
+      "seeds_complete": 5,
+      "config_hashes": [
+        "113bdcdc07c4e4d2",
+        "2816c825b1fc0b95",
+        "c66f6d94868be97c",
+        "f92950a0b4b4ef4c",
+        "fa52e322f268400b"
+      ],
+      "problems": [
+        "unexpected files in coalplan0.25sticky: ['rp_coalplan0.25sticky_s20019.jsonl', 'tr_coalplan0.25sticky_s20019.jsonl']"
+      ]
+    },
+    {
+      "split": "analysis_legacy",
+      "arm": "daw0.25",
+      "sticky_commitments": false,
+      "policy": "deadline_aware",
+      "seeds_expected": 5,
+      "seeds_present": 5,
+      "seeds_complete": 5,
+      "config_hashes": [
+        "0cfe814671c917a4",
+        "4d5c13a1ddae9b17",
+        "5a07fbbbff43023c",
+        "dbe0fad182523f37",
+        "f5fa3bd3e5584a58"
+      ],
+      "problems": []
+    }
+  ],
+  "problems": [
+    "unexpected files in coalplan0.25: ['rp_coalplan0.25_s20019.jsonl', 'tr_coalplan0.25_s20019.jsonl']",
+    "unexpected files in coalplan0.25sticky: ['rp_coalplan0.25sticky_s20019.jsonl', 'tr_coalplan0.25sticky_s20019.jsonl']"
+  ],
+  "ok": false
+}

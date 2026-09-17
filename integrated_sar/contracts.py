@@ -302,6 +302,14 @@ class CoalitionReservation:
     reserving planner must also bound its advice's ``valid_until`` by the earliest
     reservation expiry, because the advice is what the allocator reads and a cached
     advice is the only way an expired commitment could still be applied.
+
+    ``commitment_id`` and ``created_at`` are the commitment's identity, as distinct from
+    the instant it was last published (``issued_at``). A planner that keeps a robot on the
+    task it already sent it to publishes the *same* commitment again with a later
+    ``valid_until``; minting a new id there would make one continuous commitment look like
+    a series of unrelated ones in the trace, and would hide the very churn the renewal
+    exists to prevent. Only a fresh plan -- a robot that was not already committed to this
+    task, in this slot -- creates a new id.
     """
 
     agent_id: str
@@ -312,6 +320,10 @@ class CoalitionReservation:
     issued_at: float
     valid_until: float
     score: float
+    # Identity, preserved across renewals. Keyword-only and appended so every positional
+    # call site written before identity existed keeps binding what it meant.
+    commitment_id: str = field(default="", kw_only=True)
+    created_at: float | None = field(default=None, kw_only=True)
 
     def __post_init__(self) -> None:
         if not self.agent_id or not self.task_id:
@@ -324,10 +336,42 @@ class CoalitionReservation:
             raise ValueError("a reservation cannot expire before it was issued")
         if not -1.0 <= self.score <= 1.0:
             raise ValueError("reservation score must be bounded to [-1, 1]")
+        # Defaulted rather than required: a caller that names a commitment by its slot
+        # already has an identity, so it does not have to invent one to construct this.
+        object.__setattr__(
+            self,
+            "commitment_id",
+            self.commitment_id or f"{self.agent_id}|{self.task_id}|{self.ability_slot}",
+        )
+        if self.created_at is None:
+            object.__setattr__(self, "created_at", float(self.issued_at))
+        if float(self.created_at) > float(self.issued_at):
+            raise ValueError("a reservation cannot be created after it was issued")
 
     def active_at(self, now: float) -> bool:
         """True while the commitment still stands. Expiry is the issuer's to enforce."""
         return now <= self.valid_until
+
+    def renewed(self, *, issued_at: float, valid_until: float, task_revision: int, score: float) -> "CoalitionReservation":
+        """The same commitment, published again with a later window.
+
+        ``commitment_id``, ``created_at`` and the slot are carried over untouched: the
+        robot is still under the order it was given. What describes this instant -- the
+        publication instant, the window, the revision the robot now believes and the score
+        the planner now assigns -- advances, so the identity stays and the facts move.
+        """
+        return CoalitionReservation(
+            agent_id=self.agent_id,
+            task_id=self.task_id,
+            ability_slot=self.ability_slot,
+            slot_dimension=self.slot_dimension,
+            task_revision=int(task_revision),
+            issued_at=float(issued_at),
+            valid_until=float(valid_until),
+            score=float(score),
+            commitment_id=self.commitment_id,
+            created_at=float(self.created_at),
+        )
 
 
 @dataclass(frozen=True, slots=True)

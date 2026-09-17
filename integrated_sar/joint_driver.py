@@ -21,6 +21,7 @@ import os
 import sys
 from collections.abc import Sequence
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 from .adapters.piloc import PilocSearchAdapter
@@ -419,6 +420,29 @@ def resolve_device(name: str, *, checkpoint_requested: bool) -> str:
     return normalized
 
 
+def run_signature_of(configuration: RunConfiguration) -> dict[str, Any]:
+    """The identity of one run: see :mod:`integrated_sar.run_signature`.
+
+    Computed from the run's own configuration, which is the only thing that knows the arm,
+    the flags, the checkpoint and the stream it was built from. Callers that need it more
+    than once cache it; callers on the decision path never build it at all.
+    """
+    from .allocation_trace import arm_name
+    from .run_signature import build
+
+    return build(
+        configuration,
+        arm=arm_name(
+            use_coordinator=bool(configuration.use_coordinator),
+            residual_scale=float(configuration.residual_scale),
+            task_logit_offset=float(configuration.ctde_task_logit_offset),
+            coordinator_policy=str(configuration.coordinator_policy),
+            binding_commitments=bool(configuration.sticky_commitments),
+        ),
+        repo=Path(__file__).resolve().parent.parent,
+    )
+
+
 @dataclass(slots=True)
 class JointRun:
     """A fully wired episode, ready to step and to log."""
@@ -434,11 +458,25 @@ class JointRun:
     stream_recorder: Any = None
     decision_trace: Any = None
     counters: dict[str, int] = field(default_factory=dict)
+    _signature: dict[str, Any] | None = field(default=None, repr=False)
+
+    @property
+    def run_signature(self) -> dict[str, Any]:
+        """What this run is, written into every artefact it produces.
+
+        Cached because the trace writer wants it at construction and the lifecycle log wants
+        it at the first step, and both must carry the same truth.
+        """
+        if self._signature is None:
+            self._signature = run_signature_of(self.configuration)
+        return self._signature
 
     def run(self, steps: int | None = None) -> dict[str, Any]:
         total = self.configuration.steps if steps is None else int(steps)
         scenario_detail = {**self.scenario.as_dict(), "map_sha256": scenario_map_sha256(self.scenario)}
-        self.logger.log_run_config(self.configuration.as_dict(), scenario_detail)
+        self.logger.log_run_config(
+            self.configuration.as_dict(), scenario_detail, self.run_signature
+        )
 
         for report in self.orchestrator.run(total):
             for command in report.assignments:
@@ -631,12 +669,17 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
     bus.subscribe(DetectionEvent, logger.handle_detection)
     bus.subscribe(ProgressEvent, logger.handle_progress)
 
+    # Built once here, before either artefact exists: the trace's config record and the
+    # lifecycle log's run_config record must state the same identity, and the only way to
+    # guarantee that is to build it once and hand it to both.
+    signature = run_signature_of(configuration)
+
     trace_writer = None
     if configuration.decision_trace is not None:
         from .allocation_trace import DecisionTraceWriter, trace_meta
 
         trace_writer = DecisionTraceWriter(
-            configuration.decision_trace, meta=trace_meta(configuration)
+            configuration.decision_trace, meta=trace_meta(configuration, signature)
         )
         task_adapter.decision_trace = trace_writer
 
@@ -651,6 +694,7 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         task_adapter=task_adapter,
         stream_recorder=recorder,
         decision_trace=trace_writer,
+        _signature=signature,
     )
 
 
