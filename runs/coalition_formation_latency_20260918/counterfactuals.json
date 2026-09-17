@@ -1,0 +1,276 @@
+{
+ "arm": "coalplan0.25sticky",
+ "gate": "net rescued >= 3 of 6",
+ "failures": [
+  "20003/piloc-e1-target-1",
+  "20003/piloc-e1-target-0",
+  "20008/piloc-e1-target-2",
+  "20052/piloc-e1-target-3",
+  "20070/piloc-e1-target-2",
+  "20083/piloc-e1-target-4"
+ ],
+ "successes_available": 24,
+ "counterfactuals": {
+  "A_earliest_belief_dispatch": {
+   "rescued_failures": [
+    "20003/piloc-e1-target-1",
+    "20003/piloc-e1-target-0",
+    "20008/piloc-e1-target-2",
+    "20052/piloc-e1-target-3",
+    "20070/piloc-e1-target-2",
+    "20083/piloc-e1-target-4"
+   ],
+   "rescued_count": 6,
+   "newly_broken_successes": [],
+   "broken_count": 0,
+   "net_completed_delta": 6,
+   "coverage_reset_delta": 0,
+   "lost_work_delta": -0.0,
+   "waiting_travel_delta": null,
+   "uses_online_invisible_information": false,
+   "is_upper_bound": true,
+   "passes_gate": true
+  },
+  "B_synchronised_arrival": {
+   "rescued_failures": [
+    "20003/piloc-e1-target-1",
+    "20003/piloc-e1-target-0",
+    "20008/piloc-e1-target-2",
+    "20052/piloc-e1-target-3",
+    "20070/piloc-e1-target-2",
+    "20083/piloc-e1-target-4"
+   ],
+   "rescued_count": 6,
+   "newly_broken_successes": [],
+   "broken_count": 0,
+   "net_completed_delta": 6,
+   "coverage_reset_delta": 0,
+   "lost_work_delta": -0.0,
+   "waiting_travel_delta": null,
+   "uses_online_invisible_information": false,
+   "is_upper_bound": true,
+   "passes_gate": true
+  },
+  "C_stage_scoped_lease": {
+   "rescued_failures": [],
+   "rescued_count": 0,
+   "newly_broken_successes": [],
+   "broken_count": 0,
+   "net_completed_delta": 0,
+   "coverage_reset_delta": 0,
+   "lost_work_delta": -0.0,
+   "waiting_travel_delta": null,
+   "uses_online_invisible_information": false,
+   "is_upper_bound": false,
+   "passes_gate": false
+  },
+  "D_instant_communication": {
+   "rescued_failures": [
+    "20003/piloc-e1-target-1",
+    "20003/piloc-e1-target-0",
+    "20008/piloc-e1-target-2",
+    "20052/piloc-e1-target-3",
+    "20070/piloc-e1-target-2",
+    "20083/piloc-e1-target-4"
+   ],
+   "rescued_count": 6,
+   "newly_broken_successes": [],
+   "broken_count": 0,
+   "net_completed_delta": 6,
+   "coverage_reset_delta": 0,
+   "lost_work_delta": -0.0,
+   "waiting_travel_delta": null,
+   "uses_online_invisible_information": true,
+   "is_upper_bound": true,
+   "passes_gate": true
+  },
+  "E_deadline_final_tick_credit": {
+   "rescued_failures": [],
+   "rescued_count": 0,
+   "newly_broken_successes": [],
+   "broken_count": 0,
+   "net_completed_delta": 0,
+   "coverage_reset_delta": 0,
+   "lost_work_delta": -0.0,
+   "waiting_travel_delta": null,
+   "uses_online_invisible_information": false,
+   "is_upper_bound": false,
+   "passes_gate": false
+  }
+ },
+ "per_target": {
+  "A_earliest_belief_dispatch": {
+   "20003/piloc-e1-target-1": {
+    "rescued": true,
+    "new_cover_at": 11.07
+   },
+   "20003/piloc-e1-target-0": {
+    "rescued": true,
+    "new_cover_at": 12.07
+   },
+   "20008/piloc-e1-target-2": {
+    "rescued": true,
+    "new_cover_at": 13.07
+   },
+   "20052/piloc-e1-target-3": {
+    "rescued": true,
+    "new_cover_at": 17.07
+   },
+   "20070/piloc-e1-target-2": {
+    "rescued": true,
+    "new_cover_at": 11.07
+   },
+   "20083/piloc-e1-target-4": {
+    "rescued": true,
+    "new_cover_at": 10.07
+   }
+  },
+  "B_synchronised_arrival": {
+   "20003/piloc-e1-target-1": {
+    "rescued": true,
+    "new_cover_at": 11.07,
+    "note": "identical to A where no coverage break ever occurred"
+   },
+   "20003/piloc-e1-target-0": {
+    "rescued": true,
+    "new_cover_at": 12.07,
+    "note": "identical to A where no coverage break ever occurred"
+   },
+   "20008/piloc-e1-target-2": {
+    "rescued": true,
+    "new_cover_at": 13.07,
+    "note": "identical to A where no coverage break ever occurred"
+   },
+   "20052/piloc-e1-target-3": {
+    "rescued": true,
+    "new_cover_at": 17.07,
+    "note": "identical to A where no coverage break ever occurred"
+   },
+   "20070/piloc-e1-target-2": {
+    "rescued": true,
+    "new_cover_at": 11.07,
+    "note": "identical to A where no coverage break ever occurred"
+   },
+   "20083/piloc-e1-target-4": {
+    "rescued": true,
+    "new_cover_at": 10.07,
+    "note": "identical to A where no coverage break ever occurred"
+   }
+  },
+  "C_stage_scoped_lease": {
+   "20003/piloc-e1-target-1": {
+    "rescued": false,
+    "ceiling_reason": "lost 0.00 work-steps and broke coverage 0 times, so there was nothing to protect",
+    "had_something_to_protect": false,
+    "lost_work_steps": 0.0,
+    "coverage_gaps": 0
+   },
+   "20003/piloc-e1-target-0": {
+    "rescued": false,
+    "ceiling_reason": "lost 0.00 work-steps and broke coverage 0 times, so there was nothing to protect",
+    "had_something_to_protect": false,
+    "lost_work_steps": 0.0,
+    "coverage_gaps": 0
+   },
+   "20008/piloc-e1-target-2": {
+    "rescued": false,
+    "ceiling_reason": "lost 0.00 work-steps and broke coverage 0 times, so there was nothing to protect",
+    "had_something_to_protect": false,
+    "lost_work_steps": 0.0,
+    "coverage_gaps": 0
+   },
+   "20052/piloc-e1-target-3": {
+    "rescued": false,
+    "ceiling_reason": "lost 0.00 work-steps and broke coverage 0 times, so there was nothing to protect",
+    "had_something_to_protect": false,
+    "lost_work_steps": 0.0,
+    "coverage_gaps": 0
+   },
+   "20070/piloc-e1-target-2": {
+    "rescued": false,
+    "ceiling_reason": "lost 0.00 work-steps and broke coverage 0 times, so there was nothing to protect",
+    "had_something_to_protect": false,
+    "lost_work_steps": 0.0,
+    "coverage_gaps": 0
+   },
+   "20083/piloc-e1-target-4": {
+    "rescued": false,
+    "ceiling_reason": "lost 0.00 work-steps and broke coverage 0 times, so there was nothing to protect",
+    "had_something_to_protect": false,
+    "lost_work_steps": 0.0,
+    "coverage_gaps": 0
+   }
+  },
+  "D_instant_communication": {
+   "20003/piloc-e1-target-1": {
+    "rescued": true,
+    "new_cover_at": 11.07,
+    "uses_online_invisible_information": false,
+    "note": "no-op here: belief_spread is already 0.0; the letter was in hand at detection"
+   },
+   "20003/piloc-e1-target-0": {
+    "rescued": true,
+    "new_cover_at": 12.07,
+    "uses_online_invisible_information": false,
+    "note": "no-op here: belief_spread is already 0.0; the letter was in hand at detection"
+   },
+   "20008/piloc-e1-target-2": {
+    "rescued": true,
+    "new_cover_at": 13.07,
+    "uses_online_invisible_information": false,
+    "note": "no-op here: belief_spread is already 0.0; the letter was in hand at detection"
+   },
+   "20052/piloc-e1-target-3": {
+    "rescued": true,
+    "new_cover_at": 17.07,
+    "uses_online_invisible_information": false,
+    "note": "no-op here: belief_spread is already 0.0; the letter was in hand at detection"
+   },
+   "20070/piloc-e1-target-2": {
+    "rescued": true,
+    "new_cover_at": 11.07,
+    "uses_online_invisible_information": false,
+    "note": "no-op here: belief_spread is already 0.0; the letter was in hand at detection"
+   },
+   "20083/piloc-e1-target-4": {
+    "rescued": true,
+    "new_cover_at": 10.07,
+    "uses_online_invisible_information": false,
+    "note": "no-op here: belief_spread is already 0.0; the letter was in hand at detection"
+   }
+  },
+  "E_deadline_final_tick_credit": {
+   "20003/piloc-e1-target-1": {
+    "rescued": false,
+    "overrun_steps": 85.87,
+    "note": "only reorders the deadline test; does not change the clock"
+   },
+   "20003/piloc-e1-target-0": {
+    "rescued": false,
+    "overrun_steps": 43.08,
+    "note": "only reorders the deadline test; does not change the clock"
+   },
+   "20008/piloc-e1-target-2": {
+    "rescued": false,
+    "overrun_steps": 10.39,
+    "note": "only reorders the deadline test; does not change the clock"
+   },
+   "20052/piloc-e1-target-3": {
+    "rescued": false,
+    "overrun_steps": 1.32,
+    "note": "only reorders the deadline test; does not change the clock"
+   },
+   "20070/piloc-e1-target-2": {
+    "rescued": false,
+    "overrun_steps": 2.36,
+    "note": "only reorders the deadline test; does not change the clock"
+   },
+   "20083/piloc-e1-target-4": {
+    "rescued": false,
+    "overrun_steps": 7.06,
+    "note": "only reorders the deadline test; does not change the clock"
+   }
+  }
+ },
+ "any_passed": true
+}
