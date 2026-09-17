@@ -332,6 +332,30 @@
     （26 对 4）与 delivery budget（72.1 对 60.3）——fresh block 的目标被发现更早、
     被服务更快，解释 16/588 对 1/355 的过期率差。
   - 集成测试共 435 项通过（2 项按设计跳过）。
+- stage-duration 相关性门禁（基线 `fix/coalition-commitment-continuity@868d68a`，证据见
+  `runs/duration_relevance_20260917/DURATION_RELEVANCE.md` 与 `DURATION_GATE.json`；
+  **门禁未通过，Phase B 未开展**：`AgentTaskBelief` 未改动、未建
+  `feat/belief-stage-duration-slack` 分支、无 `coalition_binding_duration` arm、不训练模型）：
+  - **门槛**：binding 后 legacy 残余的 6 个 `candidate_ordering_error` 中至少 3 个可被
+    duration-aware 排序救回，且不依赖 truth。实测 **0/6**（prune 与 rank 两种模式均 0/6，
+    rank 反而让原本 completed 的 `20083/piloc-e1-target-3` 转为 expired，净 −1）。
+  - **信息合法性**：五个 seed 从各自 commit 的 `run_config` 复跑，5 645 条决策逐字段与已提交
+    trace 比对 **0 差异**（挂载录制钩子后仍然成立）；时长只取该机器人自己 accept 过的
+    `DetectionMessage`，并按 `first_received <= now` 门控；`CoordinatorInput.tasks`（注册表真值）
+    从未被读取，钩子只记录 `typed_input.agents`。`CommRelay._build_message` 原样复制
+    `snapshot.stages`、`_inject_task` 写入 `"time": float(spec.duration)`，因此消息里的时长与
+    环境倒数的是同一个数——无需任何估计，也未创建第二套时长语义。
+  - **为什么无信号（三条实测理由）**：① 六个目标在其 belief 预算内的最佳余量是 44–97 步，
+    可行性判据永不触发，784 次合法出现中 0 次被提前；② 784 次里只有 31 次（4%）发生在目标
+    仍处预算期内，此时 duration 项的唯一作用是“更早放弃”而非“优先做”，其中 14 次分配器本来就
+    选了它（`20008/target-2` 的 6 次全部选中）；③ 五个目标死在不足一个 tick 上（还欠
+    0.24–0.71 步覆盖工时，最后阶段完成度 91.9–97.7%），第六个从未获得覆盖。真正的分化变量是
+    **首个覆盖 tick 相对检测的延迟**（4、9、42、66、157 步，预算仅 62.7–105.6 步）。
+  - **结构性原因**：deadline 由场景生成器按 `travel + total_work + 30 + 0.3·total_work + U(0,50)`
+    再乘 tightness 生成（`task_allocation/old_task_env.py:210-216`），即“行程+工作 ≤ 截止”本就是
+    场景构造性质而非需要分配器发现的约束；这与 learnability 门禁中 `deadline_aware` oracle
+    修复 0/16 是同一堵墙。
+  - 集成测试仍为 435 项通过（2 项按设计跳过），本阶段无源码改动。
 
 ## 尚未完成
 
@@ -352,9 +376,12 @@
    来选模型。
 6. 学习型协调器**暂缓**：可学习性门禁未通过——同信息 oracle 与规则规划器逐位一致
    （可修复比例 0%，门槛 30%），残余失败是执行中断而非排序错误。三项建议中
-   “承诺对执行侧的约束力”已实现并验证（见上）；下一步是 belief 携带阶段工作时长
-   （`DetectionMessage` 已携带、belief 现在丢弃）的独立 ablation，然后重新录制 fresh
-   block 并用同一门禁复测；只有排序类失败出现时才训练 `LearnedCoalitionCoordinator`。
+   “承诺对执行侧的约束力”已实现并验证（见上）；“belief 携带阶段工作时长”已作为
+   stage-duration 相关性门禁单独测过并**被否**（0/6，见上），不再重复提议，除非出现新的
+   证据。剩下的开放杠杆是**联盟成型延迟**：检测后多久真正凑齐覆盖所需的能力组合
+   （六个残余目标该值为 4–157 步，而预算只有 62.7–105.6 步），它属于分批派遣与机队构成，
+   不属于协调器的排序；只有该方向出现可排序类失败时，才重新录制 fresh block、
+   用同一门禁复测，并训练 `LearnedCoalitionCoordinator`。
 7. 建立搜索、协调、任务分配联合奖励与延迟信用关联。
 8. 增加端到端基准和消融：无协调、规则协调、学习协调、无反馈。
 9. 跑一次真正收敛的训练。两个训练入口现在都能在 CPU 上端到端跑完并产出带元数据的
