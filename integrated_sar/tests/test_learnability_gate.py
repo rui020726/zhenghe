@@ -146,6 +146,8 @@ class FailureClassTests(unittest.TestCase):
         return SimpleNamespace(travel_floor=lambda: travel_floor)
 
     def _classify(self, *, work=1.0, offset=100.0, travel_floor=0.0, fact=None, budget=100.0, detected=0.0, reserved=1.0, first_dispatch=1.0) -> str:
+        # The primary cause only; the secondaries are asserted through the attribution
+        # closure in the learnability driver.
         return _classify(
             timeline=self._timeline(travel_floor),
             row={"work_needed": work, "deadline_offset": offset, "progress_setbacks": 0.0},
@@ -154,7 +156,7 @@ class FailureClassTests(unittest.TestCase):
             detected=detected,
             reserved=reserved,
             first_dispatch=first_dispatch,
-        )
+        )[0]
 
     def test_physics_beats_every_other_explanation(self) -> None:
         # Travel alone already exceeds the budget, so no ordering could have saved it.
