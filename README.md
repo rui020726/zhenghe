@@ -132,6 +132,8 @@ python -m integrated_sar.joint_driver \
 `--allocation-interval`、`--dt`、`--detection-radius`（不允许为负，0 合法但退化）、
 `--comm-delivery-probability`、`--comm-delay-ticks`、
 `--comm-subscribers`（`all` 默认覆盖全救援队，或 `first:N`，或机器人 id 列表）、
+`--coordinator`（`heuristic` 默认；`coalition` 按缺口而不是重叠打分；`coalition_planner`
+在空闲机器人与任务开放槽位之间规划团队预约）、
 `--no-coordinator`、`--quiet`。
 `--mock` 与任一 checkpoint 参数互斥。
 

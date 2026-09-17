@@ -1,6 +1,6 @@
 # 项目状态
 
-更新时间：2026-09-13
+更新时间：2026-09-17
 
 ## 已完成
 
@@ -242,8 +242,41 @@
     legacy 可运行、step 接口兼容）、`test_curriculum_gate`（13 项：拒绝 reward 输入、
     等待不升级、连续达标只升一次、窗口重置、关闭课程）、`test_piloc_seeding`
     （5 项：同 seed 逐位复现、全局随机消耗不影响、验证 seed 存活、seed_all 覆盖三流）。
-    集成测试共 189 项通过；v2/legacy/potential 三模式与断点恢复各跑通 CPU smoke；
+    该阶段集成测试 189 项通过；现为 369 项，见下文联盟预约阶段。
+    v2/legacy/potential 三模式与断点恢复各跑通 CPU smoke；
     smoke 中 episode 3 实测 discovered=1、return=+1.8，中间发现奖励首次真正生效。
+- 联盟预约接口与规则规划协调器（`feat/coalition-reservation-coordinator`，逐项证据见
+  `runs/coordinator_baselines_20260917/RESERVATION_VERDICT.md`，上一阶段的两个基线见同
+  目录 `VERDICT.md`）。本阶段不训练任何网络，PILOC、CTDE 与全部 checkpoint 冻结：
+  - **契约扩展**：`CoordinationAdvice` 新增 keyword-only 的
+    `reservations: Mapping[(agent, task), CoalitionReservation]`，默认空。`CoalitionReservation`
+    至少含 agent、task、capability slot（需求向量的扁平单元索引）、slot dimension、
+    该机器人 belief 的 task revision、issued_at/valid_until 与有界 score，构造时校验槽位
+    非负、有效期不早于签发、分数落在 [-1,1]。`Task03Adapter` 把持约折进与 `pair_bias`
+    相同的有界残差通道，仍在环境 hard mask 之前（不变量 6），因此 trace 的
+    `final = ctde + offset + bias` 恒等式不变；无预约时残差算术逐位不变，旧 checkpoint
+    与全部既有测试不受影响。
+  - **规则规划器**：`CoalitionPlannerCoordinator`（`--coordinator coalition_planner`）在
+    空闲机器人与任务开放槽位之间做确定性贪心 set-cover，每轮对全部候选针对**实时**缺口
+    重新打分，因此冗余派遣被排除而不是被惩罚；槽位占用由单元索引递增保证互斥。它只读每台
+    机器人自己的 belief 与团队自己的派单计划（`AgentSnapshot.current_task`），完全不读
+    `CoordinatorInput.tasks`；非空闲机器人整体退出 pair 通道（比 busy 惩罚更强）；belief
+    已判定过期的任务两个通道都不发。advice 的 `valid_until` 被压到最早预约到期之前，规划器
+    每轮报告预约的 expired / superseded / cancelled 与被拒的冗余候选。`HeuristicCoordinator`
+    未改动，默认策略仍是 heuristic。新增 37 项测试。
+  - **trace 与指标**：决策 trace 新增 advice revision、该 advice 的全部预约、本机器人持约
+    （含是否被采纳）与规划器每轮计数；`allocation_trace` 据此给出预约 planned/honoured/broken、
+    到期与作废、detection→预约/到场/首次推进三段时间、按能力维度的 missing-capability 向量
+    与超额派遣，规划器计数按 advice revision 去重。`arm_name` 增加 `coalplan` 前缀，
+    `dev_sweep.py`（`--planner`）与 `heldout.py` 接入新 arm，残差预算与两个 pair 策略相同。
+    新增 15 项测试。
+  - **结论**：100 个全新 held-out seed（20000–20099）上，相对 `rs0.25`，expired 53→16
+    （−70%）、completion 0.910→0.973（+6.3pp，配对 +0.0623±0.0310）、
+    `short_group_idle_steps` 合计 −47%、`members_waiting_steps` 合计 −64%（中位数 54→13）、
+    机队利用率最低（0.066 对 0.089）、完成时间 29.0 对 37.4 步。700 个 (run, seed) 逐事件
+    核对检测流 0 不一致；100 次运行 0 次非法命令；既有 arm 复现上一阶段数字
+    （`coal0.25−rs0.25 = +0.0051±0.0073`、`cal0.25−rs0.25 = −0.0185±0.0273`），
+    说明契约与指标改动零回归。集成测试共 369 项通过（2 项按设计跳过）。
 
 ## 尚未完成
 
@@ -262,7 +295,13 @@
 5. 固定训练/验证/测试地图与 split。PILOC 每回合重新随机生成地图，仓库又不含
    `DungeonMaps`，所以目前无法留出验证集，也就无法按“验证集最优”而不是“最后一个”
    来选模型。
-6. 将规则协调器替换为有界学习型残差网络，并加入训练 buffer。
+6. 将规则协调器替换为有界学习型协调器。接口已就绪并验证：`CoalitionReservation`
+   契约冻结，规则规划器 `CoalitionPlannerCoordinator` 在 held-out 上通过门槛，可作为
+   学习的下限与零残差初始化。下一步是 `LearnedCoalitionCoordinator`——学习
+   `(robot, task, slot)` 的排序而不是可行性（槽位存在性与占用权仍由规则决定），
+   以 honoured/broken、预约到期与 detection→首次推进的步数为奖励，并保留 NaN/缺失时的
+   规则回退；设计见 `runs/coordinator_baselines_20260917/RESERVATION_VERDICT.md`。
+   训练 buffer 与联合奖励仍待建立。
 7. 建立搜索、协调、任务分配联合奖励与延迟信用关联。
 8. 增加端到端基准和消融：无协调、规则协调、学习协调、无反馈。
 9. 跑一次真正收敛的训练。两个训练入口现在都能在 CPU 上端到端跑完并产出带元数据的

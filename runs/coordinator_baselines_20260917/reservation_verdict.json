@@ -1,0 +1,629 @@
+{
+  "arms": {
+    "coal0.25": {
+      "completed": 538,
+      "completion_rate": 0.915,
+      "discovered": 588,
+      "expired": 50,
+      "mean_completion_time": 37.07,
+      "never_assigned": 0,
+      "paired_vs_reference": {
+        "completion": {
+          "ci95": 0.0073,
+          "mean": 0.0051,
+          "targets": 0.5
+        },
+        "expired": {
+          "ci95": 0.0436,
+          "mean": -0.03,
+          "targets": -3
+        }
+      },
+      "runs": 100
+    },
+    "coalplan0.25": {
+      "completed": 572,
+      "completion_rate": 0.9728,
+      "discovered": 588,
+      "expired": 16,
+      "mean_completion_time": 29.01,
+      "never_assigned": 0,
+      "paired_vs_reference": {
+        "completion": {
+          "ci95": 0.031,
+          "mean": 0.0623,
+          "targets": 6.2
+        },
+        "expired": {
+          "ci95": 0.1841,
+          "mean": -0.37,
+          "targets": -37
+        }
+      },
+      "runs": 100
+    },
+    "nocoord": {
+      "completed": 469,
+      "completion_rate": 0.7976,
+      "discovered": 588,
+      "expired": 119,
+      "mean_completion_time": 41.12,
+      "never_assigned": 0,
+      "paired_vs_reference": {
+        "completion": {
+          "ci95": 0.0409,
+          "mean": -0.1131,
+          "targets": -11.2
+        },
+        "expired": {
+          "ci95": 0.24,
+          "mean": 0.66,
+          "targets": 66
+        }
+      },
+      "runs": 100
+    },
+    "nocoord+cal0.25": {
+      "completed": 524,
+      "completion_rate": 0.8912,
+      "discovered": 588,
+      "expired": 64,
+      "mean_completion_time": 36.82,
+      "never_assigned": 0,
+      "paired_vs_reference": {
+        "completion": {
+          "ci95": 0.0273,
+          "mean": -0.0185,
+          "targets": -1.8
+        },
+        "expired": {
+          "ci95": 0.1622,
+          "mean": 0.11,
+          "targets": 11
+        }
+      },
+      "runs": 100
+    },
+    "rs0.25": {
+      "completed": 535,
+      "completion_rate": 0.9099,
+      "discovered": 588,
+      "expired": 53,
+      "mean_completion_time": 37.36,
+      "never_assigned": 0,
+      "paired_vs_reference": {
+        "completion": {
+          "ci95": 0.0,
+          "mean": 0.0,
+          "targets": 0.0
+        },
+        "expired": {
+          "ci95": 0.0,
+          "mean": 0.0,
+          "targets": 0.0
+        }
+      },
+      "runs": 100
+    }
+  },
+  "attribution": {
+    "coal0.25": {
+      "classes": {
+        "finished_after_deadline": 50
+      },
+      "expired": 50,
+      "latency": {
+        "completed": {
+          "dispatch_to_work_median": 1.0,
+          "mean": 18.490706319702603,
+          "median": 6.0,
+          "n": 538.0,
+          "p90": 54.0
+        },
+        "expired": {
+          "dispatch_to_work_median": 21.5,
+          "mean": 81.54,
+          "median": 82.5,
+          "n": 50.0,
+          "p90": 127.0
+        }
+      },
+      "missing_capability_vector": {
+        "expired_targets": 50,
+        "share": [
+          0.24,
+          0.1,
+          0.22,
+          0.32,
+          0.18
+        ],
+        "targets": [
+          12,
+          5,
+          11,
+          16,
+          9
+        ],
+        "targets_with_a_report_before_the_deadline": 50
+      },
+      "stall": {
+        "completed": {
+          "max": 120.0,
+          "median": 2.0,
+          "n": 538.0,
+          "p90": 16.0,
+          "share_ge_10": 0.18401486988847585,
+          "share_ge_30": 0.06319702602230483
+        },
+        "expired": {
+          "max": 204.0,
+          "median": 65.0,
+          "n": 50.0,
+          "p90": 118.0,
+          "share_ge_10": 0.88,
+          "share_ge_30": 0.68
+        }
+      }
+    },
+    "coalplan0.25": {
+      "classes": {
+        "capability_blocked": 1,
+        "finished_after_deadline": 14,
+        "never_assigned": 1
+      },
+      "expired": 16,
+      "latency": {
+        "completed": {
+          "dispatch_to_work_median": 1.0,
+          "mean": 11.034965034965035,
+          "median": 2.0,
+          "n": 572.0,
+          "p90": 30.0
+        },
+        "expired": {
+          "dispatch_to_work_median": 4.0,
+          "mean": 66.4,
+          "median": 80.0,
+          "n": 15.0,
+          "p90": 104.0
+        }
+      },
+      "missing_capability_vector": {
+        "expired_targets": 14,
+        "share": [
+          0.1429,
+          0.0714,
+          0.3571,
+          0.2857,
+          0.1429
+        ],
+        "targets": [
+          2,
+          1,
+          5,
+          4,
+          2
+        ],
+        "targets_with_a_report_before_the_deadline": 14
+      },
+      "stall": {
+        "completed": {
+          "max": 113.0,
+          "median": 1.0,
+          "n": 572.0,
+          "p90": 13.0,
+          "share_ge_10": 0.14685314685314685,
+          "share_ge_30": 0.033216783216783216
+        },
+        "expired": {
+          "max": 175.0,
+          "median": 65.5,
+          "n": 16.0,
+          "p90": 117.0,
+          "share_ge_10": 0.6875,
+          "share_ge_30": 0.625
+        }
+      }
+    },
+    "nocoord": {
+      "classes": {
+        "capability_blocked": 3,
+        "finished_after_deadline": 65,
+        "never_assigned": 50,
+        "stopped_mid_work": 1
+      },
+      "expired": 119,
+      "latency": {
+        "completed": {
+          "dispatch_to_work_median": 1.0,
+          "mean": 22.501066098081022,
+          "median": 7.0,
+          "n": 469.0,
+          "p90": 66.0
+        },
+        "expired": {
+          "dispatch_to_work_median": 7.5,
+          "mean": 117.58823529411765,
+          "median": 100.0,
+          "n": 68.0,
+          "p90": 172.0
+        }
+      },
+      "missing_capability_vector": {
+        "expired_targets": 65,
+        "share": [
+          0.2923,
+          0.2154,
+          0.2462,
+          0.2769,
+          0.2154
+        ],
+        "targets": [
+          19,
+          14,
+          16,
+          18,
+          14
+        ],
+        "targets_with_a_report_before_the_deadline": 65
+      },
+      "stall": {
+        "completed": {
+          "max": 100.0,
+          "median": 1.0,
+          "n": 469.0,
+          "p90": 13.0,
+          "share_ge_10": 0.14285714285714285,
+          "share_ge_30": 0.0511727078891258
+        },
+        "expired": {
+          "max": 326.0,
+          "median": 0.0,
+          "n": 119.0,
+          "p90": 102.0,
+          "share_ge_10": 0.3697478991596639,
+          "share_ge_30": 0.3445378151260504
+        }
+      }
+    },
+    "nocoord+cal0.25": {
+      "classes": {
+        "finished_after_deadline": 64
+      },
+      "expired": 64,
+      "latency": {
+        "completed": {
+          "dispatch_to_work_median": 1.0,
+          "mean": 19.137404580152673,
+          "median": 5.5,
+          "n": 524.0,
+          "p90": 57.0
+        },
+        "expired": {
+          "dispatch_to_work_median": 52.0,
+          "mean": 88.640625,
+          "median": 88.0,
+          "n": 64.0,
+          "p90": 142.0
+        }
+      },
+      "missing_capability_vector": {
+        "expired_targets": 64,
+        "share": [
+          0.2969,
+          0.2031,
+          0.2188,
+          0.2969,
+          0.1562
+        ],
+        "targets": [
+          19,
+          13,
+          14,
+          19,
+          10
+        ],
+        "targets_with_a_report_before_the_deadline": 64
+      },
+      "stall": {
+        "completed": {
+          "max": 108.0,
+          "median": 1.0,
+          "n": 524.0,
+          "p90": 16.0,
+          "share_ge_10": 0.1736641221374046,
+          "share_ge_30": 0.06870229007633588
+        },
+        "expired": {
+          "max": 204.0,
+          "median": 74.0,
+          "n": 64.0,
+          "p90": 156.0,
+          "share_ge_10": 0.859375,
+          "share_ge_30": 0.78125
+        }
+      }
+    },
+    "rs0.25": {
+      "classes": {
+        "finished_after_deadline": 53
+      },
+      "expired": 53,
+      "latency": {
+        "completed": {
+          "dispatch_to_work_median": 1.0,
+          "mean": 18.500934579439253,
+          "median": 6.0,
+          "n": 535.0,
+          "p90": 55.0
+        },
+        "expired": {
+          "dispatch_to_work_median": 18.0,
+          "mean": 82.0377358490566,
+          "median": 85.0,
+          "n": 53.0,
+          "p90": 127.0
+        }
+      },
+      "missing_capability_vector": {
+        "expired_targets": 53,
+        "share": [
+          0.2264,
+          0.1132,
+          0.2075,
+          0.3396,
+          0.1698
+        ],
+        "targets": [
+          12,
+          6,
+          11,
+          18,
+          9
+        ],
+        "targets_with_a_report_before_the_deadline": 53
+      },
+      "stall": {
+        "completed": {
+          "max": 130.0,
+          "median": 2.0,
+          "n": 535.0,
+          "p90": 16.0,
+          "share_ge_10": 0.18878504672897195,
+          "share_ge_30": 0.06728971962616823
+        },
+        "expired": {
+          "max": 204.0,
+          "median": 67.0,
+          "n": 53.0,
+          "p90": 135.0,
+          "share_ge_10": 0.8490566037735849,
+          "share_ge_30": 0.660377358490566
+        }
+      }
+    }
+  },
+  "dataset": {
+    "count": 100,
+    "seeds": [
+      20000,
+      20099
+    ],
+    "source": "runs/coordinator_baselines_20260917/heldout (fresh seeds, recorded before this arm existed)"
+  },
+  "decision_trace": {
+    "coal0.25": {
+      "arrival_gap_median": 31.0,
+      "broken_reservations": 0,
+      "dispatched_targets": 588,
+      "excess_units_median": 3.0,
+      "group_arrival_gap_median": 31.0,
+      "honoured_reservations": 0,
+      "honoured_share": null,
+      "missing_capability_target_share": [
+        0.3639,
+        0.3231,
+        0.3214,
+        0.3571,
+        0.3197
+      ],
+      "never_reserved": 588,
+      "never_reserved_share": 1.0,
+      "oversupplied_share": 0.44727891156462585,
+      "plan_totals": {
+        "cancelled_reservations": 0,
+        "expired_reservations": 0,
+        "planned_reservations": 0,
+        "redundant_candidates": 0,
+        "superseded_reservations": 0
+      },
+      "progress_gap_median": 43.0,
+      "reservation_gap_median": null,
+      "reservation_gap_p90": null,
+      "reserved_decisions": 0,
+      "switched_before_arrival": 0,
+      "task_commitments": 0
+    },
+    "coal0.25+cal0.1": {
+      "arrival_gap_median": null,
+      "broken_reservations": 0,
+      "dispatched_targets": 588,
+      "excess_units_median": null,
+      "group_arrival_gap_median": null,
+      "honoured_reservations": 0,
+      "honoured_share": null,
+      "missing_capability_target_share": [],
+      "never_reserved": 588,
+      "never_reserved_share": 1.0,
+      "oversupplied_share": 0.0,
+      "plan_totals": {
+        "cancelled_reservations": 0,
+        "expired_reservations": 0,
+        "planned_reservations": 0,
+        "redundant_candidates": 0,
+        "superseded_reservations": 0
+      },
+      "progress_gap_median": null,
+      "reservation_gap_median": null,
+      "reservation_gap_p90": null,
+      "reserved_decisions": 0,
+      "switched_before_arrival": 0,
+      "task_commitments": 0
+    },
+    "coalplan0.25": {
+      "arrival_gap_median": 15.0,
+      "broken_reservations": 217,
+      "dispatched_targets": 587,
+      "excess_units_median": 3.0,
+      "group_arrival_gap_median": 15.0,
+      "honoured_reservations": 962,
+      "honoured_share": 0.8159457167090755,
+      "missing_capability_target_share": [
+        0.3646,
+        0.3118,
+        0.3186,
+        0.3646,
+        0.3186
+      ],
+      "never_reserved": 4,
+      "never_reserved_share": 0.0068143100511073255,
+      "oversupplied_share": 0.4190800681431005,
+      "plan_totals": {
+        "cancelled_reservations": 356,
+        "expired_reservations": 0,
+        "planned_reservations": 1179,
+        "redundant_candidates": 1500,
+        "superseded_reservations": 1
+      },
+      "progress_gap_median": 19.0,
+      "reservation_gap_median": 0.0,
+      "reservation_gap_p90": 14.0,
+      "reserved_decisions": 1179,
+      "switched_before_arrival": 0,
+      "task_commitments": 0
+    },
+    "nocoord": {
+      "arrival_gap_median": null,
+      "broken_reservations": 0,
+      "dispatched_targets": 538,
+      "excess_units_median": null,
+      "group_arrival_gap_median": null,
+      "honoured_reservations": 0,
+      "honoured_share": null,
+      "missing_capability_target_share": [],
+      "never_reserved": 538,
+      "never_reserved_share": 1.0,
+      "oversupplied_share": 0.0,
+      "plan_totals": {
+        "cancelled_reservations": 0,
+        "expired_reservations": 0,
+        "planned_reservations": 0,
+        "redundant_candidates": 0,
+        "superseded_reservations": 0
+      },
+      "progress_gap_median": null,
+      "reservation_gap_median": null,
+      "reservation_gap_p90": null,
+      "reserved_decisions": 0,
+      "switched_before_arrival": 0,
+      "task_commitments": 0
+    },
+    "nocoord+cal0.1": {
+      "arrival_gap_median": null,
+      "broken_reservations": 0,
+      "dispatched_targets": 583,
+      "excess_units_median": null,
+      "group_arrival_gap_median": null,
+      "honoured_reservations": 0,
+      "honoured_share": null,
+      "missing_capability_target_share": [],
+      "never_reserved": 583,
+      "never_reserved_share": 1.0,
+      "oversupplied_share": 0.0,
+      "plan_totals": {
+        "cancelled_reservations": 0,
+        "expired_reservations": 0,
+        "planned_reservations": 0,
+        "redundant_candidates": 0,
+        "superseded_reservations": 0
+      },
+      "progress_gap_median": null,
+      "reservation_gap_median": null,
+      "reservation_gap_p90": null,
+      "reserved_decisions": 0,
+      "switched_before_arrival": 0,
+      "task_commitments": 0
+    },
+    "nocoord+cal0.25": {
+      "arrival_gap_median": null,
+      "broken_reservations": 0,
+      "dispatched_targets": 588,
+      "excess_units_median": null,
+      "group_arrival_gap_median": null,
+      "honoured_reservations": 0,
+      "honoured_share": null,
+      "missing_capability_target_share": [],
+      "never_reserved": 588,
+      "never_reserved_share": 1.0,
+      "oversupplied_share": 0.0,
+      "plan_totals": {
+        "cancelled_reservations": 0,
+        "expired_reservations": 0,
+        "planned_reservations": 0,
+        "redundant_candidates": 0,
+        "superseded_reservations": 0
+      },
+      "progress_gap_median": null,
+      "reservation_gap_median": null,
+      "reservation_gap_p90": null,
+      "reserved_decisions": 0,
+      "switched_before_arrival": 0,
+      "task_commitments": 0
+    },
+    "rs0.25": {
+      "arrival_gap_median": 31.0,
+      "broken_reservations": 0,
+      "dispatched_targets": 588,
+      "excess_units_median": 3.0,
+      "group_arrival_gap_median": 31.0,
+      "honoured_reservations": 0,
+      "honoured_share": null,
+      "missing_capability_target_share": [
+        0.3639,
+        0.3197,
+        0.3197,
+        0.3571,
+        0.3197
+      ],
+      "never_reserved": 588,
+      "never_reserved_share": 1.0,
+      "oversupplied_share": 0.44727891156462585,
+      "plan_totals": {
+        "cancelled_reservations": 0,
+        "expired_reservations": 0,
+        "planned_reservations": 0,
+        "redundant_candidates": 0,
+        "superseded_reservations": 0
+      },
+      "progress_gap_median": 46.0,
+      "reservation_gap_median": null,
+      "reservation_gap_p90": null,
+      "reserved_decisions": 0,
+      "switched_before_arrival": 0,
+      "task_commitments": 0
+    }
+  },
+  "format": "coalition-reservation-verdict/1",
+  "gate": {
+    "completion_delta": {
+      "ci95": 0.031,
+      "mean": 0.0623,
+      "targets": 6.2
+    },
+    "completion_gate": "pass",
+    "expired_reduction": 0.6981,
+    "expired_reduction_target": 0.2,
+    "expiry_gate": "pass",
+    "reference": "rs0.25"
+  }
+}

@@ -83,11 +83,22 @@ belief。
 - `task_bias[task]`：池级任务优先级修正，所有机器人共享，因此只允许放共同知识；
 - `agent_task_bias[agent, task]`：按机器人分开的任务优先级修正，由该机器人的 belief 推出；
 - `pair_bias[agent, task]`：机器人—任务匹配修正；
+- `reservations[agent, task]`：短期团队预约（默认空），指明该机器人覆盖该任务的哪个
+  能力槽位、按该机器人 belief 的任务 revision、有效期与有界分数。pair bias 只能表达
+  “这台机器人与这个任务有多匹配”，同一槽位的两台机器人会得到相同分数；预约把槽位写进
+  契约，占用因此互斥，计划选中的机器人就是实际被派出的机器人。预约与 pair bias 走同一条
+  有界残差通道，因此不变量 5 的形式不变，硬 mask 仍在最后应用（不变量 6）。预约键是
+  (agent, task)，只对持约的机器人可见，不会像池级 `task_bias` 那样把一台机器人的知识
+  广播给没收到消息的机器人（不变量 9）；发约方必须把自己的 `valid_until` 压到最早预约
+  到期之前，过期预约才不可能通过缓存 advice 生效；
 - `replan_agents`：需要重新决策的机器人；
 - 后续可选搜索热点。
 
-第一版 `HeuristicCoordinator` 可解释且可作为无学习基线。学习型协调器必须保持相同接口，
-并对输出进行有界限制。
+规则协调器（`HeuristicCoordinator`）与联盟打分协调器（`CoalitionAwareCoordinator`）都
+不产出预约，默认配置下 `reservations` 为空，残差与旧行为逐位一致。联盟规划协调器
+（`CoalitionPlannerCoordinator`，`--coordinator coalition_planner`）在空闲机器人与任务
+开放槽位之间做确定性的贪心 set-cover，考虑截止时间、行进代价、能力互补与冗余派遣，输出
+本轮团队预约。学习型协调器必须保持相同接口，并对输出进行有界限制。
 
 ### CTDE 分配器
 
@@ -113,7 +124,7 @@ belief。
 | `DetectionMessage` | CommRelay | 机器人 belief（经 Task03 adapter） | 发送时快照：位置、阶段、需求、进度、置信度、revision、截止时间 |
 | `TaskSnapshot` | Registry | Coordinator/Allocator/Executor | 阶段、剩余需求、截止时间、revision |
 | `AgentSnapshot` / `AgentTaskBelief` | Task03 adapter | Coordinator/Allocator | 该机器人收到的任务视图（位置/需求/阶段/进度/置信度/revision） |
-| `CoordinationAdvice` | Coordinator | Allocator | 池级 task bias、按机器人的 agent task bias、pair bias、replan、有效期 |
+| `CoordinationAdvice` | Coordinator | Allocator | 池级 task bias、按机器人的 agent task bias、pair bias、团队预约 reservations、replan、有效期 |
 | `AssignmentCommand` | Allocator | Executor | agent/task、task revision、TTL |
 | `ProgressEvent` | Executor | Registry/Coordinator | 阶段、剩余需求、进度、失败原因 |
 
