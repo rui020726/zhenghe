@@ -1,0 +1,2058 @@
+{
+ "arm": "coalplan0.25sticky",
+ "seeds": [
+  20003,
+  20008,
+  20052,
+  20070,
+  20083
+ ],
+ "rule": {
+  "late_dispatch_share": 0.25,
+  "late_belief_share": 0.25,
+  "desync_steps": 10.0,
+  "tick_eps": 1.0,
+  "order": [
+   "communication_or_belief_late",
+   "capable_agent_unavailable",
+   "planner_dispatch_late",
+   "arrival_desynchronised",
+   "complete_coverage_interrupted",
+   "stage_transition_handoff",
+   "deadline_tick_boundary",
+   "fleet_capacity",
+   "unknown"
+  ]
+ },
+ "primary_cause_counts": {
+  "arrival_desynchronised": 3,
+  "planner_dispatch_late": 1,
+  "stage_transition_handoff": 2
+ },
+ "successes_available": 24,
+ "reports": [
+  {
+   "target": "20003/piloc-e1-target-1",
+   "primary_cause": "arrival_desynchronised",
+   "secondary_causes": [
+    "planner_dispatch_late"
+   ],
+   "metrics": {
+    "target": "20003/piloc-e1-target-1",
+    "completed_work": true,
+    "expired_at": 1000.0,
+    "deadline": 85.13,
+    "work_needed": 10.239,
+    "delivery_budget": 70.89,
+    "belief_spread": 0.0,
+    "reservation_spread": 13.0,
+    "assignment_spread": 156.0,
+    "arrival_spread": 157.0,
+    "detection_to_first_complete": 157.0,
+    "longest_contiguous_coverage": 10.0,
+    "total_coverage_time": 10.0,
+    "coverage_gap_count": 0,
+    "coverage_reset_count": 0,
+    "coverage_work_lost": 0.0,
+    "final_coverage_shortfall": 0.0,
+    "last_complete_coverage_start": 161.0,
+    "earliest_belief_feasible_dispatch": 4.0,
+    "earliest_feasible_completion": 21.30980890124203,
+    "capable_agents_total": 6,
+    "capable_agents_busy_at_detection": 0,
+    "concurrent_active_tasks_at_detection": 3,
+    "capability_waiting_steps": 143.0
+   },
+   "events": [
+    {
+     "at": 4.0,
+     "event": "detection",
+     "detail": "work 10.24 steps, budget 70.9, deadline 85.1"
+    },
+    {
+     "at": 4.0,
+     "event": "belief_arrival",
+     "detail": "agent 0"
+    },
+    {
+     "at": 4.0,
+     "event": "belief_arrival",
+     "detail": "agent 1"
+    },
+    {
+     "at": 4.0,
+     "event": "belief_arrival",
+     "detail": "agent 2"
+    },
+    {
+     "at": 4.0,
+     "event": "belief_arrival",
+     "detail": "agent 3"
+    },
+    {
+     "at": 4.0,
+     "event": "belief_arrival",
+     "detail": "agent 4"
+    },
+    {
+     "at": 4.0,
+     "event": "belief_arrival",
+     "detail": "agent 5"
+    },
+    {
+     "at": 4.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 0 members [] missing [0, 1, 0, 1, 1]"
+    },
+    {
+     "at": 17.0,
+     "event": "reservation",
+     "detail": "agent 4"
+    },
+    {
+     "at": 17.0,
+     "event": "reservation",
+     "detail": "agent 5"
+    },
+    {
+     "at": 17.0,
+     "event": "assignment",
+     "detail": "agent 5"
+    },
+    {
+     "at": 18.0,
+     "event": "arrival",
+     "detail": "agent 5"
+    },
+    {
+     "at": 130.0,
+     "event": "assignment",
+     "detail": "agent 2"
+    },
+    {
+     "at": 131.0,
+     "event": "arrival",
+     "detail": "agent 2"
+    },
+    {
+     "at": 150.0,
+     "event": "assignment",
+     "detail": "agent 0"
+    },
+    {
+     "at": 150.0,
+     "event": "assignment",
+     "detail": "agent 1"
+    },
+    {
+     "at": 151.0,
+     "event": "arrival",
+     "detail": "agent 0"
+    },
+    {
+     "at": 151.0,
+     "event": "arrival",
+     "detail": "agent 1"
+    },
+    {
+     "at": 160.0,
+     "event": "assignment",
+     "detail": "agent 4"
+    },
+    {
+     "at": 161.0,
+     "event": "arrival",
+     "detail": "agent 4"
+    },
+    {
+     "at": 161.0,
+     "event": "complete_coverage_begin",
+     "detail": "stage 0 members ['2', '0', '1', '4', '5'] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 161.0,
+     "event": "last_coverage_window",
+     "detail": "161.0 -> 171.0 (10.0 steps)"
+    },
+    {
+     "at": 171.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 0 members [] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 1000.0,
+     "event": "expiry",
+     "detail": "reported deadline_expired, final progress 1.000"
+    }
+   ],
+   "matched_controls": [
+    {
+     "target": "20008/piloc-e1-target-3",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 98.2,
+     "work_needed": 6.213,
+     "delivery_budget": 90.99,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 0.0,
+     "arrival_spread": 1.0,
+     "detection_to_first_complete": 1.0,
+     "longest_contiguous_coverage": 6.0,
+     "total_coverage_time": 6.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 2.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 14.283990204580615,
+     "capable_agents_total": 6,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 2,
+     "capability_waiting_steps": 0.0,
+     "match_distance": 0.5708
+    },
+    {
+     "target": "20083/piloc-e1-target-2",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 78.81,
+     "work_needed": 7.953,
+     "delivery_budget": 69.86,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 59.0,
+     "arrival_spread": 60.0,
+     "detection_to_first_complete": 60.0,
+     "longest_contiguous_coverage": 7.0,
+     "total_coverage_time": 7.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 61.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 16.024226216229305,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 3,
+     "capability_waiting_steps": 59.0,
+     "match_distance": 0.5751
+    },
+    {
+     "target": "20070/piloc-e1-target-5",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 132.24,
+     "work_needed": 10.64,
+     "delivery_budget": 119.6,
+     "belief_spread": 0.0,
+     "reservation_spread": 70.0,
+     "assignment_spread": 70.0,
+     "arrival_spread": 71.0,
+     "detection_to_first_complete": 71.0,
+     "longest_contiguous_coverage": 10.0,
+     "total_coverage_time": 10.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 73.0,
+     "earliest_belief_feasible_dispatch": 2.0,
+     "earliest_feasible_completion": 19.71121392100936,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 2,
+     "capability_waiting_steps": 70.0,
+     "match_distance": 0.8676
+    },
+    {
+     "target": "20052/piloc-e1-target-1",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 98.45,
+     "work_needed": 15.245,
+     "delivery_budget": 82.2,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 0.0,
+     "arrival_spread": 1.0,
+     "detection_to_first_complete": 1.0,
+     "longest_contiguous_coverage": 9.0,
+     "total_coverage_time": 14.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 8.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 23.316494531597435,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 1,
+     "capability_waiting_steps": 1.0,
+     "match_distance": 0.8815
+    },
+    {
+     "target": "20052/piloc-e1-target-5",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 83.1,
+     "work_needed": 14.14,
+     "delivery_budget": 55.96,
+     "belief_spread": 0.0,
+     "reservation_spread": 4.0,
+     "assignment_spread": 4.0,
+     "arrival_spread": 5.0,
+     "detection_to_first_complete": 5.0,
+     "longest_contiguous_coverage": 9.0,
+     "total_coverage_time": 13.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 28.0,
+     "earliest_belief_feasible_dispatch": 13.0,
+     "earliest_feasible_completion": 34.210894012636466,
+     "capable_agents_total": 6,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 5,
+     "capability_waiting_steps": 1.0,
+     "match_distance": 0.9138
+    }
+   ],
+   "failure_vs_controls": {
+    "belief_spread": {
+     "failure": 0.0,
+     "control_median": 0.0,
+     "n": 5
+    },
+    "arrival_spread": {
+     "failure": 157.0,
+     "control_median": 5.0,
+     "n": 5
+    },
+    "longest_contiguous_coverage": {
+     "failure": 10.0,
+     "control_median": 9.0,
+     "n": 5
+    },
+    "coverage_reset_count": {
+     "failure": 0,
+     "control_median": 0,
+     "n": 5
+    },
+    "coverage_work_lost": {
+     "failure": 0.0,
+     "control_median": 0.0,
+     "n": 5
+    },
+    "earliest_feasible_completion": {
+     "failure": 21.30980890124203,
+     "control_median": 19.711,
+     "n": 5
+    },
+    "delivery_budget": {
+     "failure": 70.89,
+     "control_median": 82.2,
+     "n": 5
+    },
+    "capability_waiting_steps": {
+     "failure": 143.0,
+     "control_median": 1.0,
+     "n": 5
+    }
+   }
+  },
+  {
+   "target": "20003/piloc-e1-target-0",
+   "primary_cause": "planner_dispatch_late",
+   "secondary_causes": [
+    "arrival_desynchronised"
+   ],
+   "metrics": {
+    "target": "20003/piloc-e1-target-0",
+    "completed_work": false,
+    "expired_at": 1000.0,
+    "deadline": 80.92,
+    "work_needed": 11.969,
+    "delivery_budget": 63.95,
+    "belief_spread": 0.0,
+    "reservation_spread": 12.0,
+    "assignment_spread": 12.0,
+    "arrival_spread": 14.0,
+    "detection_to_first_complete": null,
+    "longest_contiguous_coverage": 0.0,
+    "total_coverage_time": 0.0,
+    "coverage_gap_count": 0,
+    "coverage_reset_count": 0,
+    "coverage_work_lost": 0.0,
+    "final_coverage_shortfall": 11.969,
+    "last_complete_coverage_start": null,
+    "earliest_belief_feasible_dispatch": 5.0,
+    "earliest_feasible_completion": 24.040487432613933,
+    "capable_agents_total": 4,
+    "capable_agents_busy_at_detection": 0,
+    "concurrent_active_tasks_at_detection": 4,
+    "capability_waiting_steps": 105.0
+   },
+   "events": [
+    {
+     "at": 5.0,
+     "event": "detection",
+     "detail": "work 11.97 steps, budget 64.0, deadline 80.9"
+    },
+    {
+     "at": 5.0,
+     "event": "belief_arrival",
+     "detail": "agent 0"
+    },
+    {
+     "at": 5.0,
+     "event": "belief_arrival",
+     "detail": "agent 1"
+    },
+    {
+     "at": 5.0,
+     "event": "belief_arrival",
+     "detail": "agent 2"
+    },
+    {
+     "at": 5.0,
+     "event": "belief_arrival",
+     "detail": "agent 3"
+    },
+    {
+     "at": 5.0,
+     "event": "belief_arrival",
+     "detail": "agent 4"
+    },
+    {
+     "at": 5.0,
+     "event": "belief_arrival",
+     "detail": "agent 5"
+    },
+    {
+     "at": 5.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 0 members [] missing [1, 0, 1, 0, 1]"
+    },
+    {
+     "at": 17.0,
+     "event": "reservation",
+     "detail": "agent 4"
+    },
+    {
+     "at": 17.0,
+     "event": "reservation",
+     "detail": "agent 5"
+    },
+    {
+     "at": 17.0,
+     "event": "assignment",
+     "detail": "agent 4"
+    },
+    {
+     "at": 19.0,
+     "event": "arrival",
+     "detail": "agent 4"
+    },
+    {
+     "at": 1000.0,
+     "event": "expiry",
+     "detail": "reported deadline_expired, final progress 0.000"
+    }
+   ],
+   "matched_controls": [
+    {
+     "target": "20083/piloc-e1-target-2",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 78.81,
+     "work_needed": 7.953,
+     "delivery_budget": 69.86,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 59.0,
+     "arrival_spread": 60.0,
+     "detection_to_first_complete": 60.0,
+     "longest_contiguous_coverage": 7.0,
+     "total_coverage_time": 7.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 61.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 16.024226216229305,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 3,
+     "capability_waiting_steps": 59.0,
+     "match_distance": 0.5404
+    },
+    {
+     "target": "20003/piloc-e1-target-2",
+     "completed_work": true,
+     "expired_at": 1000.0,
+     "deadline": 113.58,
+     "work_needed": 22.654,
+     "delivery_budget": 81.92,
+     "belief_spread": 0.0,
+     "reservation_spread": 91.0,
+     "assignment_spread": 162.0,
+     "arrival_spread": 163.0,
+     "detection_to_first_complete": 92.0,
+     "longest_contiguous_coverage": 11.0,
+     "total_coverage_time": 21.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 172.0,
+     "earliest_belief_feasible_dispatch": 9.0,
+     "earliest_feasible_completion": 38.725021500930495,
+     "capable_agents_total": 2,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 5,
+     "capability_waiting_steps": 0.0,
+     "match_distance": 0.7583
+    },
+    {
+     "target": "20070/piloc-e1-target-5",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 132.24,
+     "work_needed": 10.64,
+     "delivery_budget": 119.6,
+     "belief_spread": 0.0,
+     "reservation_spread": 70.0,
+     "assignment_spread": 70.0,
+     "arrival_spread": 71.0,
+     "detection_to_first_complete": 71.0,
+     "longest_contiguous_coverage": 10.0,
+     "total_coverage_time": 10.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 73.0,
+     "earliest_belief_feasible_dispatch": 2.0,
+     "earliest_feasible_completion": 19.71121392100936,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 2,
+     "capability_waiting_steps": 70.0,
+     "match_distance": 0.8436
+    },
+    {
+     "target": "20052/piloc-e1-target-1",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 98.45,
+     "work_needed": 15.245,
+     "delivery_budget": 82.2,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 0.0,
+     "arrival_spread": 1.0,
+     "detection_to_first_complete": 1.0,
+     "longest_contiguous_coverage": 9.0,
+     "total_coverage_time": 14.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 8.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 23.316494531597435,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 1,
+     "capability_waiting_steps": 1.0,
+     "match_distance": 0.9649
+    },
+    {
+     "target": "20008/piloc-e1-target-3",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 98.2,
+     "work_needed": 6.213,
+     "delivery_budget": 90.99,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 0.0,
+     "arrival_spread": 1.0,
+     "detection_to_first_complete": 1.0,
+     "longest_contiguous_coverage": 6.0,
+     "total_coverage_time": 6.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 2.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 14.283990204580615,
+     "capable_agents_total": 6,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 2,
+     "capability_waiting_steps": 0.0,
+     "match_distance": 0.993
+    }
+   ],
+   "failure_vs_controls": {
+    "belief_spread": {
+     "failure": 0.0,
+     "control_median": 0.0,
+     "n": 5
+    },
+    "arrival_spread": {
+     "failure": 14.0,
+     "control_median": 60.0,
+     "n": 5
+    },
+    "longest_contiguous_coverage": {
+     "failure": 0.0,
+     "control_median": 9.0,
+     "n": 5
+    },
+    "coverage_reset_count": {
+     "failure": 0,
+     "control_median": 0,
+     "n": 5
+    },
+    "coverage_work_lost": {
+     "failure": 0.0,
+     "control_median": 0.0,
+     "n": 5
+    },
+    "earliest_feasible_completion": {
+     "failure": 24.040487432613933,
+     "control_median": 19.711,
+     "n": 5
+    },
+    "delivery_budget": {
+     "failure": 63.95,
+     "control_median": 82.2,
+     "n": 5
+    },
+    "capability_waiting_steps": {
+     "failure": 105.0,
+     "control_median": 1.0,
+     "n": 5
+    }
+   }
+  },
+  {
+   "target": "20008/piloc-e1-target-2",
+   "primary_cause": "stage_transition_handoff",
+   "secondary_causes": [],
+   "metrics": {
+    "target": "20008/piloc-e1-target-2",
+    "completed_work": true,
+    "expired_at": 1000.0,
+    "deadline": 111.61,
+    "work_needed": 28.306,
+    "delivery_budget": 77.3,
+    "belief_spread": 0.0,
+    "reservation_spread": 2.0,
+    "assignment_spread": 2.0,
+    "arrival_spread": 4.0,
+    "detection_to_first_complete": 4.0,
+    "longest_contiguous_coverage": 11.0,
+    "total_coverage_time": 26.0,
+    "coverage_gap_count": 0,
+    "coverage_reset_count": 0,
+    "coverage_work_lost": 0.0,
+    "final_coverage_shortfall": 0.0,
+    "last_complete_coverage_start": 111.0,
+    "earliest_belief_feasible_dispatch": 6.0,
+    "earliest_feasible_completion": 41.37679608746776,
+    "capable_agents_total": 6,
+    "capable_agents_busy_at_detection": 0,
+    "concurrent_active_tasks_at_detection": 3,
+    "capability_waiting_steps": 89.0
+   },
+   "events": [
+    {
+     "at": 6.0,
+     "event": "detection",
+     "detail": "work 28.31 steps, budget 77.3, deadline 111.6"
+    },
+    {
+     "at": 6.0,
+     "event": "belief_arrival",
+     "detail": "agent 0"
+    },
+    {
+     "at": 6.0,
+     "event": "belief_arrival",
+     "detail": "agent 1"
+    },
+    {
+     "at": 6.0,
+     "event": "belief_arrival",
+     "detail": "agent 2"
+    },
+    {
+     "at": 6.0,
+     "event": "belief_arrival",
+     "detail": "agent 3"
+    },
+    {
+     "at": 6.0,
+     "event": "belief_arrival",
+     "detail": "agent 4"
+    },
+    {
+     "at": 6.0,
+     "event": "belief_arrival",
+     "detail": "agent 5"
+    },
+    {
+     "at": 6.0,
+     "event": "reservation",
+     "detail": "agent 2"
+    },
+    {
+     "at": 6.0,
+     "event": "reservation",
+     "detail": "agent 3"
+    },
+    {
+     "at": 6.0,
+     "event": "assignment",
+     "detail": "agent 2"
+    },
+    {
+     "at": 6.0,
+     "event": "assignment",
+     "detail": "agent 3"
+    },
+    {
+     "at": 6.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 0 members [] missing [0, 1, 0, 1, 1]"
+    },
+    {
+     "at": 7.0,
+     "event": "arrival",
+     "detail": "agent 2"
+    },
+    {
+     "at": 7.0,
+     "event": "arrival",
+     "detail": "agent 3"
+    },
+    {
+     "at": 8.0,
+     "event": "reservation",
+     "detail": "agent 0"
+    },
+    {
+     "at": 8.0,
+     "event": "reservation",
+     "detail": "agent 1"
+    },
+    {
+     "at": 8.0,
+     "event": "reservation",
+     "detail": "agent 4"
+    },
+    {
+     "at": 8.0,
+     "event": "reservation",
+     "detail": "agent 5"
+    },
+    {
+     "at": 8.0,
+     "event": "assignment",
+     "detail": "agent 0"
+    },
+    {
+     "at": 8.0,
+     "event": "assignment",
+     "detail": "agent 1"
+    },
+    {
+     "at": 8.0,
+     "event": "assignment",
+     "detail": "agent 4"
+    },
+    {
+     "at": 8.0,
+     "event": "assignment",
+     "detail": "agent 5"
+    },
+    {
+     "at": 10.0,
+     "event": "arrival",
+     "detail": "agent 0"
+    },
+    {
+     "at": 10.0,
+     "event": "arrival",
+     "detail": "agent 1"
+    },
+    {
+     "at": 10.0,
+     "event": "arrival",
+     "detail": "agent 4"
+    },
+    {
+     "at": 10.0,
+     "event": "arrival",
+     "detail": "agent 5"
+    },
+    {
+     "at": 10.0,
+     "event": "complete_coverage_begin",
+     "detail": "stage 0 members ['2', '3', '0', '1', '4', '5'] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 17.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 1 members ['0', '1'] missing [0, 0, 0, 0, 1]"
+    },
+    {
+     "at": 18.0,
+     "event": "complete_coverage_begin",
+     "detail": "stage 1 members ['0', '1'] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 26.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 2 members ['0', '1'] missing [1, 0, 0, 1, 1]"
+    },
+    {
+     "at": 111.0,
+     "event": "complete_coverage_begin",
+     "detail": "stage 2 members ['0', '1', '3', '5'] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 111.0,
+     "event": "last_coverage_window",
+     "detail": "111.0 -> 122.0 (11.0 steps)"
+    },
+    {
+     "at": 122.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 2 members [] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 1000.0,
+     "event": "expiry",
+     "detail": "reported deadline_expired, final progress 1.000"
+    }
+   ],
+   "matched_controls": [
+    {
+     "target": "20083/piloc-e1-target-3",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 69.47,
+     "work_needed": 16.653,
+     "delivery_budget": 51.81,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 52.0,
+     "arrival_spread": 53.0,
+     "detection_to_first_complete": 1.0,
+     "longest_contiguous_coverage": 7.0,
+     "total_coverage_time": 16.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 54.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 24.72389773892011,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 3,
+     "capability_waiting_steps": 42.0,
+     "match_distance": 0.7351
+    },
+    {
+     "target": "20003/piloc-e1-target-4",
+     "completed_work": true,
+     "expired_at": 1000.0,
+     "deadline": 110.89,
+     "work_needed": 24.028,
+     "delivery_budget": 83.86,
+     "belief_spread": 0.0,
+     "reservation_spread": null,
+     "assignment_spread": 133.0,
+     "arrival_spread": 134.0,
+     "detection_to_first_complete": 128.0,
+     "longest_contiguous_coverage": 9.0,
+     "total_coverage_time": 22.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 151.0,
+     "earliest_belief_feasible_dispatch": 3.0,
+     "earliest_feasible_completion": 34.09874297237848,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 2,
+     "capability_waiting_steps": 133.0,
+     "match_distance": 0.7584
+    },
+    {
+     "target": "20008/piloc-e1-target-0",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 184.55,
+     "work_needed": 19.662,
+     "delivery_budget": 151.89,
+     "belief_spread": 0.0,
+     "reservation_spread": 109.0,
+     "assignment_spread": 109.0,
+     "arrival_spread": 111.0,
+     "detection_to_first_complete": 111.0,
+     "longest_contiguous_coverage": 10.0,
+     "total_coverage_time": 20.0,
+     "coverage_gap_count": 1,
+     "coverage_reset_count": 5,
+     "coverage_work_lost": 1.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 160.0,
+     "earliest_belief_feasible_dispatch": 13.0,
+     "earliest_feasible_completion": 39.73272027182981,
+     "capable_agents_total": 6,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 4,
+     "capability_waiting_steps": 109.0,
+     "match_distance": 0.813
+    },
+    {
+     "target": "20052/piloc-e1-target-2",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 159.66,
+     "work_needed": 21.876,
+     "delivery_budget": 135.78,
+     "belief_spread": 0.0,
+     "reservation_spread": 15.0,
+     "assignment_spread": 68.0,
+     "arrival_spread": 69.0,
+     "detection_to_first_complete": 16.0,
+     "longest_contiguous_coverage": 8.0,
+     "total_coverage_time": 20.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 77.0,
+     "earliest_belief_feasible_dispatch": 2.0,
+     "earliest_feasible_completion": 30.947406418293603,
+     "capable_agents_total": 6,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 2,
+     "capability_waiting_steps": 46.0,
+     "match_distance": 0.8148
+    },
+    {
+     "target": "20070/piloc-e1-target-4",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 98.41,
+     "work_needed": 25.232,
+     "delivery_budget": 72.18,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 66.0,
+     "arrival_spread": 67.0,
+     "detection_to_first_complete": 1.0,
+     "longest_contiguous_coverage": 10.0,
+     "total_coverage_time": 24.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 68.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 33.302974986548655,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 1,
+     "capability_waiting_steps": 46.0,
+     "match_distance": 0.8238
+    }
+   ],
+   "failure_vs_controls": {
+    "belief_spread": {
+     "failure": 0.0,
+     "control_median": 0.0,
+     "n": 5
+    },
+    "arrival_spread": {
+     "failure": 4.0,
+     "control_median": 69.0,
+     "n": 5
+    },
+    "longest_contiguous_coverage": {
+     "failure": 11.0,
+     "control_median": 9.0,
+     "n": 5
+    },
+    "coverage_reset_count": {
+     "failure": 0,
+     "control_median": 0,
+     "n": 5
+    },
+    "coverage_work_lost": {
+     "failure": 0.0,
+     "control_median": 0.0,
+     "n": 5
+    },
+    "earliest_feasible_completion": {
+     "failure": 41.37679608746776,
+     "control_median": 33.303,
+     "n": 5
+    },
+    "delivery_budget": {
+     "failure": 77.3,
+     "control_median": 83.86,
+     "n": 5
+    },
+    "capability_waiting_steps": {
+     "failure": 89.0,
+     "control_median": 46.0,
+     "n": 5
+    }
+   }
+  },
+  {
+   "target": "20052/piloc-e1-target-3",
+   "primary_cause": "arrival_desynchronised",
+   "secondary_causes": [
+    "planner_dispatch_late"
+   ],
+   "metrics": {
+    "target": "20052/piloc-e1-target-3",
+    "completed_work": true,
+    "expired_at": 1000.0,
+    "deadline": 72.68,
+    "work_needed": 21.858,
+    "delivery_budget": 40.82,
+    "belief_spread": 0.0,
+    "reservation_spread": 7.0,
+    "assignment_spread": 41.0,
+    "arrival_spread": 42.0,
+    "detection_to_first_complete": 42.0,
+    "longest_contiguous_coverage": 10.0,
+    "total_coverage_time": 20.0,
+    "coverage_gap_count": 0,
+    "coverage_reset_count": 0,
+    "coverage_work_lost": 0.0,
+    "final_coverage_shortfall": 0.0,
+    "last_complete_coverage_start": 71.0,
+    "earliest_belief_feasible_dispatch": 10.0,
+    "earliest_feasible_completion": 38.9289699433826,
+    "capable_agents_total": 4,
+    "capable_agents_busy_at_detection": 0,
+    "concurrent_active_tasks_at_detection": 4,
+    "capability_waiting_steps": 36.0
+   },
+   "events": [
+    {
+     "at": 10.0,
+     "event": "detection",
+     "detail": "work 21.86 steps, budget 40.8, deadline 72.7"
+    },
+    {
+     "at": 10.0,
+     "event": "belief_arrival",
+     "detail": "agent 0"
+    },
+    {
+     "at": 10.0,
+     "event": "belief_arrival",
+     "detail": "agent 1"
+    },
+    {
+     "at": 10.0,
+     "event": "belief_arrival",
+     "detail": "agent 2"
+    },
+    {
+     "at": 10.0,
+     "event": "belief_arrival",
+     "detail": "agent 3"
+    },
+    {
+     "at": 10.0,
+     "event": "belief_arrival",
+     "detail": "agent 4"
+    },
+    {
+     "at": 10.0,
+     "event": "belief_arrival",
+     "detail": "agent 5"
+    },
+    {
+     "at": 10.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 0 members [] missing [1, 1, 1, 0, 0]"
+    },
+    {
+     "at": 17.0,
+     "event": "reservation",
+     "detail": "agent 0"
+    },
+    {
+     "at": 17.0,
+     "event": "reservation",
+     "detail": "agent 1"
+    },
+    {
+     "at": 17.0,
+     "event": "reservation",
+     "detail": "agent 2"
+    },
+    {
+     "at": 17.0,
+     "event": "reservation",
+     "detail": "agent 3"
+    },
+    {
+     "at": 17.0,
+     "event": "reservation",
+     "detail": "agent 4"
+    },
+    {
+     "at": 17.0,
+     "event": "reservation",
+     "detail": "agent 5"
+    },
+    {
+     "at": 17.0,
+     "event": "assignment",
+     "detail": "agent 3"
+    },
+    {
+     "at": 18.0,
+     "event": "arrival",
+     "detail": "agent 3"
+    },
+    {
+     "at": 51.0,
+     "event": "assignment",
+     "detail": "agent 4"
+    },
+    {
+     "at": 52.0,
+     "event": "arrival",
+     "detail": "agent 4"
+    },
+    {
+     "at": 52.0,
+     "event": "complete_coverage_begin",
+     "detail": "stage 0 members ['3', '4'] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 62.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 1 members ['3', '4'] missing [0, 0, 1, 0, 1]"
+    },
+    {
+     "at": 63.0,
+     "event": "complete_coverage_begin",
+     "detail": "stage 1 members ['3', '4'] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 70.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 2 members ['4'] missing [1, 1, 0, 0, 0]"
+    },
+    {
+     "at": 71.0,
+     "event": "complete_coverage_begin",
+     "detail": "stage 2 members ['4'] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 71.0,
+     "event": "last_coverage_window",
+     "detail": "71.0 -> 74.0 (3.0 steps)"
+    },
+    {
+     "at": 74.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 2 members [] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 1000.0,
+     "event": "expiry",
+     "detail": "reported deadline_expired, final progress 1.000"
+    }
+   ],
+   "matched_controls": [
+    {
+     "target": "20083/piloc-e1-target-3",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 69.47,
+     "work_needed": 16.653,
+     "delivery_budget": 51.81,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 52.0,
+     "arrival_spread": 53.0,
+     "detection_to_first_complete": 1.0,
+     "longest_contiguous_coverage": 7.0,
+     "total_coverage_time": 16.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 54.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 24.72389773892011,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 3,
+     "capability_waiting_steps": 42.0,
+     "match_distance": 0.3122
+    },
+    {
+     "target": "20003/piloc-e1-target-4",
+     "completed_work": true,
+     "expired_at": 1000.0,
+     "deadline": 110.89,
+     "work_needed": 24.028,
+     "delivery_budget": 83.86,
+     "belief_spread": 0.0,
+     "reservation_spread": null,
+     "assignment_spread": 133.0,
+     "arrival_spread": 134.0,
+     "detection_to_first_complete": 128.0,
+     "longest_contiguous_coverage": 9.0,
+     "total_coverage_time": 22.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 151.0,
+     "earliest_belief_feasible_dispatch": 3.0,
+     "earliest_feasible_completion": 34.09874297237848,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 2,
+     "capability_waiting_steps": 133.0,
+     "match_distance": 0.7631
+    },
+    {
+     "target": "20070/piloc-e1-target-4",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 98.41,
+     "work_needed": 25.232,
+     "delivery_budget": 72.18,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 66.0,
+     "arrival_spread": 67.0,
+     "detection_to_first_complete": 1.0,
+     "longest_contiguous_coverage": 10.0,
+     "total_coverage_time": 24.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 68.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 33.302974986548655,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 1,
+     "capability_waiting_steps": 46.0,
+     "match_distance": 0.8467
+    },
+    {
+     "target": "20052/piloc-e1-target-1",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 98.45,
+     "work_needed": 15.245,
+     "delivery_budget": 82.2,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 0.0,
+     "arrival_spread": 1.0,
+     "detection_to_first_complete": 1.0,
+     "longest_contiguous_coverage": 9.0,
+     "total_coverage_time": 14.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 8.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 23.316494531597435,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 1,
+     "capability_waiting_steps": 1.0,
+     "match_distance": 0.8739
+    },
+    {
+     "target": "20052/piloc-e1-target-5",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 83.1,
+     "work_needed": 14.14,
+     "delivery_budget": 55.96,
+     "belief_spread": 0.0,
+     "reservation_spread": 4.0,
+     "assignment_spread": 4.0,
+     "arrival_spread": 5.0,
+     "detection_to_first_complete": 5.0,
+     "longest_contiguous_coverage": 9.0,
+     "total_coverage_time": 13.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 28.0,
+     "earliest_belief_feasible_dispatch": 13.0,
+     "earliest_feasible_completion": 34.210894012636466,
+     "capable_agents_total": 6,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 5,
+     "capability_waiting_steps": 1.0,
+     "match_distance": 0.9006
+    }
+   ],
+   "failure_vs_controls": {
+    "belief_spread": {
+     "failure": 0.0,
+     "control_median": 0.0,
+     "n": 5
+    },
+    "arrival_spread": {
+     "failure": 42.0,
+     "control_median": 53.0,
+     "n": 5
+    },
+    "longest_contiguous_coverage": {
+     "failure": 10.0,
+     "control_median": 9.0,
+     "n": 5
+    },
+    "coverage_reset_count": {
+     "failure": 0,
+     "control_median": 0,
+     "n": 5
+    },
+    "coverage_work_lost": {
+     "failure": 0.0,
+     "control_median": 0.0,
+     "n": 5
+    },
+    "earliest_feasible_completion": {
+     "failure": 38.9289699433826,
+     "control_median": 33.303,
+     "n": 5
+    },
+    "delivery_budget": {
+     "failure": 40.82,
+     "control_median": 72.18,
+     "n": 5
+    },
+    "capability_waiting_steps": {
+     "failure": 36.0,
+     "control_median": 42.0,
+     "n": 5
+    }
+   }
+  },
+  {
+   "target": "20070/piloc-e1-target-2",
+   "primary_cause": "stage_transition_handoff",
+   "secondary_causes": [
+    "arrival_desynchronised",
+    "planner_dispatch_late"
+   ],
+   "metrics": {
+    "target": "20070/piloc-e1-target-2",
+    "completed_work": true,
+    "expired_at": 1000.0,
+    "deadline": 89.64,
+    "work_needed": 13.578,
+    "delivery_budget": 72.06,
+    "belief_spread": 0.0,
+    "reservation_spread": 79.0,
+    "assignment_spread": 80.0,
+    "arrival_spread": 81.0,
+    "detection_to_first_complete": 9.0,
+    "longest_contiguous_coverage": 7.0,
+    "total_coverage_time": 13.0,
+    "coverage_gap_count": 0,
+    "coverage_reset_count": 0,
+    "coverage_work_lost": 0.0,
+    "final_coverage_shortfall": 0.0,
+    "last_complete_coverage_start": 85.0,
+    "earliest_belief_feasible_dispatch": 4.0,
+    "earliest_feasible_completion": 24.649058517492733,
+    "capable_agents_total": 4,
+    "capable_agents_busy_at_detection": 0,
+    "concurrent_active_tasks_at_detection": 4,
+    "capability_waiting_steps": 12.0
+   },
+   "events": [
+    {
+     "at": 4.0,
+     "event": "detection",
+     "detail": "work 13.58 steps, budget 72.1, deadline 89.6"
+    },
+    {
+     "at": 4.0,
+     "event": "belief_arrival",
+     "detail": "agent 0"
+    },
+    {
+     "at": 4.0,
+     "event": "belief_arrival",
+     "detail": "agent 1"
+    },
+    {
+     "at": 4.0,
+     "event": "belief_arrival",
+     "detail": "agent 2"
+    },
+    {
+     "at": 4.0,
+     "event": "belief_arrival",
+     "detail": "agent 3"
+    },
+    {
+     "at": 4.0,
+     "event": "belief_arrival",
+     "detail": "agent 4"
+    },
+    {
+     "at": 4.0,
+     "event": "belief_arrival",
+     "detail": "agent 5"
+    },
+    {
+     "at": 4.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 0 members [] missing [1, 0, 0, 0, 0]"
+    },
+    {
+     "at": 12.0,
+     "event": "reservation",
+     "detail": "agent 4"
+    },
+    {
+     "at": 12.0,
+     "event": "reservation",
+     "detail": "agent 5"
+    },
+    {
+     "at": 12.0,
+     "event": "assignment",
+     "detail": "agent 4"
+    },
+    {
+     "at": 13.0,
+     "event": "arrival",
+     "detail": "agent 4"
+    },
+    {
+     "at": 13.0,
+     "event": "complete_coverage_begin",
+     "detail": "stage 0 members ['4'] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 19.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 1 members [] missing [0, 0, 1, 1, 1]"
+    },
+    {
+     "at": 72.0,
+     "event": "reservation",
+     "detail": "agent 0"
+    },
+    {
+     "at": 72.0,
+     "event": "reservation",
+     "detail": "agent 2"
+    },
+    {
+     "at": 72.0,
+     "event": "reservation",
+     "detail": "agent 3"
+    },
+    {
+     "at": 72.0,
+     "event": "assignment",
+     "detail": "agent 0"
+    },
+    {
+     "at": 73.0,
+     "event": "arrival",
+     "detail": "agent 0"
+    },
+    {
+     "at": 83.0,
+     "event": "reservation",
+     "detail": "agent 1"
+    },
+    {
+     "at": 83.0,
+     "event": "assignment",
+     "detail": "agent 2"
+    },
+    {
+     "at": 84.0,
+     "event": "assignment",
+     "detail": "agent 3"
+    },
+    {
+     "at": 85.0,
+     "event": "arrival",
+     "detail": "agent 2"
+    },
+    {
+     "at": 85.0,
+     "event": "arrival",
+     "detail": "agent 3"
+    },
+    {
+     "at": 85.0,
+     "event": "complete_coverage_begin",
+     "detail": "stage 1 members ['0', '2', '3'] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 85.0,
+     "event": "last_coverage_window",
+     "detail": "85.0 -> 92.0 (7.0 steps)"
+    },
+    {
+     "at": 92.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 1 members [] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 1000.0,
+     "event": "expiry",
+     "detail": "reported deadline_expired, final progress 1.000"
+    }
+   ],
+   "matched_controls": [
+    {
+     "target": "20052/piloc-e1-target-0",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 140.58,
+     "work_needed": 15.408,
+     "delivery_budget": 121.18,
+     "belief_spread": 0.0,
+     "reservation_spread": 13.0,
+     "assignment_spread": 70.0,
+     "arrival_spread": 71.0,
+     "detection_to_first_complete": 14.0,
+     "longest_contiguous_coverage": 8.0,
+     "total_coverage_time": 15.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 75.0,
+     "earliest_belief_feasible_dispatch": 4.0,
+     "earliest_feasible_completion": 26.478611741613875,
+     "capable_agents_total": 2,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 3,
+     "capability_waiting_steps": 48.0,
+     "match_distance": 0.7187
+    },
+    {
+     "target": "20052/piloc-e1-target-4",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 85.13,
+     "work_needed": 18.399,
+     "delivery_budget": 47.73,
+     "belief_spread": 0.0,
+     "reservation_spread": 13.0,
+     "assignment_spread": 13.0,
+     "arrival_spread": 14.0,
+     "detection_to_first_complete": 14.0,
+     "longest_contiguous_coverage": 10.0,
+     "total_coverage_time": 17.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 41.0,
+     "earliest_belief_feasible_dispatch": 19.0,
+     "earliest_feasible_completion": 44.46981532863847,
+     "capable_agents_total": 2,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 6,
+     "capability_waiting_steps": 1.0,
+     "match_distance": 0.7436
+    },
+    {
+     "target": "20052/piloc-e1-target-5",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 83.1,
+     "work_needed": 14.14,
+     "delivery_budget": 55.96,
+     "belief_spread": 0.0,
+     "reservation_spread": 4.0,
+     "assignment_spread": 4.0,
+     "arrival_spread": 5.0,
+     "detection_to_first_complete": 5.0,
+     "longest_contiguous_coverage": 9.0,
+     "total_coverage_time": 13.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 28.0,
+     "earliest_belief_feasible_dispatch": 13.0,
+     "earliest_feasible_completion": 34.210894012636466,
+     "capable_agents_total": 6,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 5,
+     "capability_waiting_steps": 1.0,
+     "match_distance": 0.7513
+    },
+    {
+     "target": "20003/piloc-e1-target-3",
+     "completed_work": true,
+     "expired_at": 1000.0,
+     "deadline": 119.33,
+     "work_needed": 24.519,
+     "delivery_budget": 75.81,
+     "belief_spread": 0.0,
+     "reservation_spread": 78.0,
+     "assignment_spread": 105.0,
+     "arrival_spread": 106.0,
+     "detection_to_first_complete": 80.0,
+     "longest_contiguous_coverage": 10.0,
+     "total_coverage_time": 23.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 131.0,
+     "earliest_belief_feasible_dispatch": 19.0,
+     "earliest_feasible_completion": 50.589861613979394,
+     "capable_agents_total": 2,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 6,
+     "capability_waiting_steps": 19.0,
+     "match_distance": 0.8317
+    },
+    {
+     "target": "20003/piloc-e1-target-4",
+     "completed_work": true,
+     "expired_at": 1000.0,
+     "deadline": 110.89,
+     "work_needed": 24.028,
+     "delivery_budget": 83.86,
+     "belief_spread": 0.0,
+     "reservation_spread": null,
+     "assignment_spread": 133.0,
+     "arrival_spread": 134.0,
+     "detection_to_first_complete": 128.0,
+     "longest_contiguous_coverage": 9.0,
+     "total_coverage_time": 22.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 151.0,
+     "earliest_belief_feasible_dispatch": 3.0,
+     "earliest_feasible_completion": 34.09874297237848,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 2,
+     "capability_waiting_steps": 133.0,
+     "match_distance": 0.8338
+    }
+   ],
+   "failure_vs_controls": {
+    "belief_spread": {
+     "failure": 0.0,
+     "control_median": 0.0,
+     "n": 5
+    },
+    "arrival_spread": {
+     "failure": 81.0,
+     "control_median": 71.0,
+     "n": 5
+    },
+    "longest_contiguous_coverage": {
+     "failure": 7.0,
+     "control_median": 9.0,
+     "n": 5
+    },
+    "coverage_reset_count": {
+     "failure": 0,
+     "control_median": 0,
+     "n": 5
+    },
+    "coverage_work_lost": {
+     "failure": 0.0,
+     "control_median": 0.0,
+     "n": 5
+    },
+    "earliest_feasible_completion": {
+     "failure": 24.649058517492733,
+     "control_median": 34.211,
+     "n": 5
+    },
+    "delivery_budget": {
+     "failure": 72.06,
+     "control_median": 75.81,
+     "n": 5
+    },
+    "capability_waiting_steps": {
+     "failure": 12.0,
+     "control_median": 19.0,
+     "n": 5
+    }
+   }
+  },
+  {
+   "target": "20083/piloc-e1-target-4",
+   "primary_cause": "arrival_desynchronised",
+   "secondary_causes": [
+    "planner_dispatch_late"
+   ],
+   "metrics": {
+    "target": "20083/piloc-e1-target-4",
+    "completed_work": true,
+    "expired_at": 1000.0,
+    "deadline": 70.94,
+    "work_needed": 9.285,
+    "delivery_budget": 58.65,
+    "belief_spread": 0.0,
+    "reservation_spread": 65.0,
+    "assignment_spread": 65.0,
+    "arrival_spread": 66.0,
+    "detection_to_first_complete": 66.0,
+    "longest_contiguous_coverage": 9.0,
+    "total_coverage_time": 9.0,
+    "coverage_gap_count": 0,
+    "coverage_reset_count": 0,
+    "coverage_work_lost": 0.0,
+    "final_coverage_shortfall": 0.0,
+    "last_complete_coverage_start": 69.0,
+    "earliest_belief_feasible_dispatch": 3.0,
+    "earliest_feasible_completion": 19.356061715838777,
+    "capable_agents_total": 6,
+    "capable_agents_busy_at_detection": 0,
+    "concurrent_active_tasks_at_detection": 5,
+    "capability_waiting_steps": 55.0
+   },
+   "events": [
+    {
+     "at": 3.0,
+     "event": "detection",
+     "detail": "work 9.28 steps, budget 58.7, deadline 70.9"
+    },
+    {
+     "at": 3.0,
+     "event": "belief_arrival",
+     "detail": "agent 0"
+    },
+    {
+     "at": 3.0,
+     "event": "belief_arrival",
+     "detail": "agent 1"
+    },
+    {
+     "at": 3.0,
+     "event": "belief_arrival",
+     "detail": "agent 2"
+    },
+    {
+     "at": 3.0,
+     "event": "belief_arrival",
+     "detail": "agent 3"
+    },
+    {
+     "at": 3.0,
+     "event": "belief_arrival",
+     "detail": "agent 4"
+    },
+    {
+     "at": 3.0,
+     "event": "belief_arrival",
+     "detail": "agent 5"
+    },
+    {
+     "at": 3.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 0 members [] missing [1, 1, 0, 1, 0]"
+    },
+    {
+     "at": 13.0,
+     "event": "reservation",
+     "detail": "agent 2"
+    },
+    {
+     "at": 13.0,
+     "event": "reservation",
+     "detail": "agent 3"
+    },
+    {
+     "at": 13.0,
+     "event": "assignment",
+     "detail": "agent 3"
+    },
+    {
+     "at": 14.0,
+     "event": "arrival",
+     "detail": "agent 3"
+    },
+    {
+     "at": 60.0,
+     "event": "reservation",
+     "detail": "agent 1"
+    },
+    {
+     "at": 60.0,
+     "event": "reservation",
+     "detail": "agent 4"
+    },
+    {
+     "at": 60.0,
+     "event": "assignment",
+     "detail": "agent 1"
+    },
+    {
+     "at": 61.0,
+     "event": "arrival",
+     "detail": "agent 1"
+    },
+    {
+     "at": 68.0,
+     "event": "reservation",
+     "detail": "agent 0"
+    },
+    {
+     "at": 68.0,
+     "event": "assignment",
+     "detail": "agent 4"
+    },
+    {
+     "at": 69.0,
+     "event": "arrival",
+     "detail": "agent 4"
+    },
+    {
+     "at": 69.0,
+     "event": "complete_coverage_begin",
+     "detail": "stage 0 members ['3', '1', '4'] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 69.0,
+     "event": "last_coverage_window",
+     "detail": "69.0 -> 78.0 (9.0 steps)"
+    },
+    {
+     "at": 78.0,
+     "event": "complete_coverage_end",
+     "detail": "stage 0 members [] missing [0, 0, 0, 0, 0]"
+    },
+    {
+     "at": 1000.0,
+     "event": "expiry",
+     "detail": "reported deadline_expired, final progress 1.000"
+    }
+   ],
+   "matched_controls": [
+    {
+     "target": "20083/piloc-e1-target-2",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 78.81,
+     "work_needed": 7.953,
+     "delivery_budget": 69.86,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 59.0,
+     "arrival_spread": 60.0,
+     "detection_to_first_complete": 60.0,
+     "longest_contiguous_coverage": 7.0,
+     "total_coverage_time": 7.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 61.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 16.024226216229305,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 3,
+     "capability_waiting_steps": 59.0,
+     "match_distance": 0.6697
+    },
+    {
+     "target": "20052/piloc-e1-target-5",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 83.1,
+     "work_needed": 14.14,
+     "delivery_budget": 55.96,
+     "belief_spread": 0.0,
+     "reservation_spread": 4.0,
+     "assignment_spread": 4.0,
+     "arrival_spread": 5.0,
+     "detection_to_first_complete": 5.0,
+     "longest_contiguous_coverage": 9.0,
+     "total_coverage_time": 13.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 28.0,
+     "earliest_belief_feasible_dispatch": 13.0,
+     "earliest_feasible_completion": 34.210894012636466,
+     "capable_agents_total": 6,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 5,
+     "capability_waiting_steps": 1.0,
+     "match_distance": 0.7594
+    },
+    {
+     "target": "20008/piloc-e1-target-3",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 98.2,
+     "work_needed": 6.213,
+     "delivery_budget": 90.99,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 0.0,
+     "arrival_spread": 1.0,
+     "detection_to_first_complete": 1.0,
+     "longest_contiguous_coverage": 6.0,
+     "total_coverage_time": 6.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 2.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 14.283990204580615,
+     "capable_agents_total": 6,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 2,
+     "capability_waiting_steps": 0.0,
+     "match_distance": 0.7735
+    },
+    {
+     "target": "20070/piloc-e1-target-5",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 132.24,
+     "work_needed": 10.64,
+     "delivery_budget": 119.6,
+     "belief_spread": 0.0,
+     "reservation_spread": 70.0,
+     "assignment_spread": 70.0,
+     "arrival_spread": 71.0,
+     "detection_to_first_complete": 71.0,
+     "longest_contiguous_coverage": 10.0,
+     "total_coverage_time": 10.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 73.0,
+     "earliest_belief_feasible_dispatch": 2.0,
+     "earliest_feasible_completion": 19.71121392100936,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 2,
+     "capability_waiting_steps": 70.0,
+     "match_distance": 1.1033
+    },
+    {
+     "target": "20052/piloc-e1-target-1",
+     "completed_work": true,
+     "expired_at": null,
+     "deadline": 98.45,
+     "work_needed": 15.245,
+     "delivery_budget": 82.2,
+     "belief_spread": 0.0,
+     "reservation_spread": 0.0,
+     "assignment_spread": 0.0,
+     "arrival_spread": 1.0,
+     "detection_to_first_complete": 1.0,
+     "longest_contiguous_coverage": 9.0,
+     "total_coverage_time": 14.0,
+     "coverage_gap_count": 0,
+     "coverage_reset_count": 0,
+     "coverage_work_lost": 0.0,
+     "final_coverage_shortfall": 0.0,
+     "last_complete_coverage_start": 8.0,
+     "earliest_belief_feasible_dispatch": 1.0,
+     "earliest_feasible_completion": 23.316494531597435,
+     "capable_agents_total": 4,
+     "capable_agents_busy_at_detection": 0,
+     "concurrent_active_tasks_at_detection": 1,
+     "capability_waiting_steps": 1.0,
+     "match_distance": 1.1099
+    }
+   ],
+   "failure_vs_controls": {
+    "belief_spread": {
+     "failure": 0.0,
+     "control_median": 0.0,
+     "n": 5
+    },
+    "arrival_spread": {
+     "failure": 66.0,
+     "control_median": 5.0,
+     "n": 5
+    },
+    "longest_contiguous_coverage": {
+     "failure": 9.0,
+     "control_median": 9.0,
+     "n": 5
+    },
+    "coverage_reset_count": {
+     "failure": 0,
+     "control_median": 0,
+     "n": 5
+    },
+    "coverage_work_lost": {
+     "failure": 0.0,
+     "control_median": 0.0,
+     "n": 5
+    },
+    "earliest_feasible_completion": {
+     "failure": 19.356061715838777,
+     "control_median": 19.711,
+     "n": 5
+    },
+    "delivery_budget": {
+     "failure": 58.65,
+     "control_median": 82.2,
+     "n": 5
+    },
+    "capability_waiting_steps": {
+     "failure": 55.0,
+     "control_median": 1.0,
+     "n": 5
+    }
+   }
+  }
+ ]
+}

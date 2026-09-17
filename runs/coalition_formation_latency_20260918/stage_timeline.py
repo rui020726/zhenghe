@@ -198,20 +198,18 @@ class TargetTimeline:
 
     @property
     def coverage_gap_count(self) -> int:
-        """Coverage breaks *within* a stage, after that stage had been covered.
+        """Real coverage interruptions, excluding stage transitions and completion.
 
-        A stage transition also drops ``complete`` to False (the next stage's
-        requirement is unmet by definition), so counting every False would report one
-        gap per stage boundary. Only a same-stage break is an interruption.
+        A stage transition drops ``complete`` to False (the next stage's requirement is
+        unmet by definition) and task completion drops it too (the members are released),
+        so neither is an interruption. Only a same-stage break that is not the task
+        finishing counts.
         """
-        seen: dict[int, bool] = {}
         gaps = 0
-        for change in self.coverage:
-            if change.complete:
-                seen[change.stage_index] = True
-            elif seen.get(change.stage_index):
-                seen[change.stage_index] = False
-                gaps += 1
+        for change, following in zip(self.coverage, self.coverage[1:]):
+            if change.complete and not following.complete:
+                if following.stage_index == change.stage_index and following.progress < 1.0 - EPS:
+                    gaps += 1
         return gaps
 
     @property
@@ -241,6 +239,45 @@ class TargetTimeline:
             elapsed = change.progress * len(self.durations) - change.stage_index
             lost += max(0.0, min(1.0, elapsed)) * self.durations[index]
         return lost
+
+    @property
+    def coalition_dispatch_lag(self) -> float | None:
+        """Detection to the *last* contributing member being dispatched.
+
+        The minimum over assignments would say the planner acted at once; what decides
+        whether the coalition can form is when its final member was sent, so this takes
+        the maximum over the agents that actually reached the target.
+        """
+        contributing = [at for agent, at in self.assignment_sent_at.items() if agent in self.arrived_at]
+        if not contributing:
+            return None
+        return max(contributing) - self.detected_at
+
+    @property
+    def stage_handoff_gaps(self) -> list[tuple[int, float]]:
+        """(stage index, steps) from a stage completing to the next stage being covered.
+
+        At a stage boundary the requirement changes and ``task_update`` releases the
+        members whose abilities no longer contribute, so the next stage starts from an
+        uncovered task. A long gap here is a handoff failure, not a coverage break: the
+        previous stage's work was banked and ``time_left`` was never reset.
+        """
+        gaps: list[tuple[int, float]] = []
+        for index in sorted(self.stages):
+            window = self.stages[index]
+            following = self.stages.get(index + 1)
+            if window.completed_at is None or following is None:
+                continue
+            if following.first_complete_at is None:
+                continue
+            gap = following.first_complete_at - window.completed_at
+            if gap > 0:
+                gaps.append((index, gap))
+        return gaps
+
+    @property
+    def worst_stage_handoff_gap(self) -> float:
+        return max((gap for _, gap in self.stage_handoff_gaps), default=0.0)
 
     @property
     def completed_work(self) -> bool:
@@ -318,6 +355,9 @@ class TargetTimeline:
             "concurrent_active_tasks_at_detection": self.concurrent_active_at_detection,
             "detection_to_first_needs_decision": self.detection_to_first_needs_decision,
             "capability_waiting_steps": round(self.capability_waiting_steps, 3),
+            "coalition_dispatch_lag": self.coalition_dispatch_lag,
+            "stage_handoff_gaps": self.stage_handoff_gaps,
+            "worst_stage_handoff_gap": round(self.worst_stage_handoff_gap, 3),
             "stage_windows": {
                 str(index): {
                     "duration": window.duration,

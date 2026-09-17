@@ -18,6 +18,381 @@
  "targets": [
   {
    "seed": 20003,
+   "target": "piloc-e1-target-2",
+   "detected_at": 9.0,
+   "deadline": 113.57856185197006,
+   "stage_count": 2,
+   "durations": [
+    10.751884621293847,
+    11.902069067771174
+   ],
+   "requirements": [
+    [
+     1,
+     0,
+     1,
+     1,
+     0
+    ],
+    [
+     0,
+     1,
+     0,
+     0,
+     0
+    ]
+   ],
+   "work_needed": 22.654,
+   "delivery_budget": 81.925,
+   "expired_at": 1000.0,
+   "final_progress": 1.0,
+   "final_stage": 1,
+   "final_status": "expired",
+   "completed_work": true,
+   "finished_after_deadline": true,
+   "first_belief_at": {
+    "0": 9.0,
+    "1": 9.0,
+    "2": 9.0,
+    "3": 9.0,
+    "4": 9.0,
+    "5": 9.0
+   },
+   "belief_revisions": {
+    "0": [
+     [
+      9.0,
+      1
+     ]
+    ],
+    "1": [
+     [
+      9.0,
+      1
+     ]
+    ],
+    "2": [
+     [
+      9.0,
+      1
+     ]
+    ],
+    "3": [
+     [
+      9.0,
+      1
+     ]
+    ],
+    "4": [
+     [
+      9.0,
+      1
+     ]
+    ],
+    "5": [
+     [
+      9.0,
+      1
+     ]
+    ]
+   },
+   "belief_spread": 0.0,
+   "first_reservation_at": {
+    "3": 100.0
+   },
+   "reservation_spread": 91.0,
+   "reservation_ids": {
+    "3": [
+     "rp0009"
+    ]
+   },
+   "assignment_sent_at": {
+    "3": 100.0,
+    "0": 171.0,
+    "1": 171.0
+   },
+   "assignment_spread": 162.0,
+   "departed_at": {},
+   "arrived_at": {
+    "3": 101.0,
+    "0": 172.0,
+    "1": 172.0
+   },
+   "arrival_spread": 163.0,
+   "left_at": {
+    "3": 111.0,
+    "1": 183.0,
+    "0": 183.0
+   },
+   "on_site": {
+    "3": [
+     [
+      101.0,
+      111.0
+     ]
+    ],
+    "0": [
+     [
+      172.0,
+      183.0
+     ]
+    ],
+    "1": [
+     [
+      172.0,
+      183.0
+     ]
+    ]
+   },
+   "first_complete_at": 101.0,
+   "detection_to_first_complete": 92.0,
+   "coverage_intervals": [
+    [
+     101.0,
+     111.0
+    ],
+    [
+     172.0,
+     183.0
+    ]
+   ],
+   "longest_contiguous_coverage": 11.0,
+   "total_coverage_time": 21.0,
+   "coverage_gap_count": 0,
+   "coverage_reset_count": 0,
+   "coverage_work_lost": 0.0,
+   "final_coverage_shortfall": 0.0,
+   "last_complete_coverage_start": 172.0,
+   "earliest_belief_feasible_dispatch": 9.0,
+   "earliest_feasible_completion": 38.725021500930495,
+   "capable_agents_total": 2,
+   "capable_agents_busy_at_detection": 0,
+   "concurrent_active_tasks_at_detection": 5,
+   "detection_to_first_needs_decision": 8.0,
+   "capability_waiting_steps": 0.0,
+   "stage_windows": {
+    "0": {
+     "duration": 10.751884621293847,
+     "requirements": [
+      1,
+      0,
+      1,
+      1,
+      0
+     ],
+     "first_complete_at": 101.0,
+     "last_complete_at": 110.0,
+     "completed_at": 111.0,
+     "resets": []
+    },
+    "1": {
+     "duration": 11.902069067771174,
+     "requirements": [
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "first_complete_at": 172.0,
+     "last_complete_at": 182.0,
+     "completed_at": null,
+     "resets": []
+    }
+   },
+   "coverage_changes": [
+    {
+     "at": 9.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      1,
+      0,
+      1,
+      1,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 0.0,
+     "committed": [],
+     "reservation_ids": [
+      "rp0009"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 101.0,
+     "complete": true,
+     "members": [
+      "3"
+     ],
+     "covered": [
+      1,
+      0,
+      1,
+      1,
+      0
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 0.046503,
+     "committed": [],
+     "reservation_ids": [
+      "rp0009"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 111.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 1,
+     "progress": 0.5,
+     "committed": [
+      "3"
+     ],
+     "reservation_ids": [
+      "rp0009"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 172.0,
+     "complete": true,
+     "members": [
+      "0",
+      "1"
+     ],
+     "covered": [
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 1,
+     "progress": 0.54201,
+     "committed": [
+      "3"
+     ],
+     "reservation_ids": [
+      "rp0009"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 183.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 1,
+     "progress": 1.0,
+     "committed": [
+      "0",
+      "1",
+      "3"
+     ],
+     "reservation_ids": [
+      "rp0009"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    }
+   ]
+  },
+  {
+   "seed": 20003,
    "target": "piloc-e1-target-3",
    "detected_at": 19.0,
    "deadline": 119.32583455266823,
@@ -56,6 +431,8 @@
    "final_progress": 1.0,
    "final_stage": 2,
    "final_status": "expired",
+   "completed_work": true,
+   "finished_after_deadline": true,
    "first_belief_at": {
     "0": 19.0,
     "1": 19.0,
@@ -130,8 +507,8 @@
    "left_at": {
     "2": 130.0,
     "4": 130.0,
-    "0": 141.0,
-    "1": 141.0
+    "1": 141.0,
+    "0": 141.0
    },
    "on_site": {
     "2": [
@@ -177,9 +554,9 @@
    ],
    "longest_contiguous_coverage": 10.0,
    "total_coverage_time": 23.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 131.0,
    "earliest_belief_feasible_dispatch": 19.0,
@@ -531,6 +908,8 @@
    "final_progress": 1.0,
    "final_stage": 0,
    "final_status": "expired",
+   "completed_work": true,
+   "finished_after_deadline": true,
    "first_belief_at": {
     "0": 4.0,
     "1": 4.0,
@@ -607,9 +986,9 @@
    "arrival_spread": 157.0,
    "left_at": {
     "5": 133.0,
+    "2": 171.0,
     "0": 171.0,
     "1": 171.0,
-    "2": 171.0,
     "4": 171.0
    },
    "on_site": {
@@ -654,9 +1033,9 @@
    ],
    "longest_contiguous_coverage": 10.0,
    "total_coverage_time": 10.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 161.0,
    "earliest_belief_feasible_dispatch": 4.0,
@@ -804,379 +1183,6 @@
   },
   {
    "seed": 20003,
-   "target": "piloc-e1-target-2",
-   "detected_at": 9.0,
-   "deadline": 113.57856185197006,
-   "stage_count": 2,
-   "durations": [
-    10.751884621293847,
-    11.902069067771174
-   ],
-   "requirements": [
-    [
-     1,
-     0,
-     1,
-     1,
-     0
-    ],
-    [
-     0,
-     1,
-     0,
-     0,
-     0
-    ]
-   ],
-   "work_needed": 22.654,
-   "delivery_budget": 81.925,
-   "expired_at": 1000.0,
-   "final_progress": 1.0,
-   "final_stage": 1,
-   "final_status": "expired",
-   "first_belief_at": {
-    "0": 9.0,
-    "1": 9.0,
-    "2": 9.0,
-    "3": 9.0,
-    "4": 9.0,
-    "5": 9.0
-   },
-   "belief_revisions": {
-    "0": [
-     [
-      9.0,
-      1
-     ]
-    ],
-    "1": [
-     [
-      9.0,
-      1
-     ]
-    ],
-    "2": [
-     [
-      9.0,
-      1
-     ]
-    ],
-    "3": [
-     [
-      9.0,
-      1
-     ]
-    ],
-    "4": [
-     [
-      9.0,
-      1
-     ]
-    ],
-    "5": [
-     [
-      9.0,
-      1
-     ]
-    ]
-   },
-   "belief_spread": 0.0,
-   "first_reservation_at": {
-    "3": 100.0
-   },
-   "reservation_spread": 91.0,
-   "reservation_ids": {
-    "3": [
-     "rp0009"
-    ]
-   },
-   "assignment_sent_at": {
-    "3": 100.0,
-    "0": 171.0,
-    "1": 171.0
-   },
-   "assignment_spread": 162.0,
-   "departed_at": {},
-   "arrived_at": {
-    "3": 101.0,
-    "0": 172.0,
-    "1": 172.0
-   },
-   "arrival_spread": 163.0,
-   "left_at": {
-    "3": 111.0,
-    "0": 183.0,
-    "1": 183.0
-   },
-   "on_site": {
-    "3": [
-     [
-      101.0,
-      111.0
-     ]
-    ],
-    "0": [
-     [
-      172.0,
-      183.0
-     ]
-    ],
-    "1": [
-     [
-      172.0,
-      183.0
-     ]
-    ]
-   },
-   "first_complete_at": 101.0,
-   "detection_to_first_complete": 92.0,
-   "coverage_intervals": [
-    [
-     101.0,
-     111.0
-    ],
-    [
-     172.0,
-     183.0
-    ]
-   ],
-   "longest_contiguous_coverage": 11.0,
-   "total_coverage_time": 21.0,
-   "coverage_gap_count": 1,
-   "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
-   "final_coverage_shortfall": 0.0,
-   "last_complete_coverage_start": 172.0,
-   "earliest_belief_feasible_dispatch": 9.0,
-   "earliest_feasible_completion": 38.725021500930495,
-   "capable_agents_total": 2,
-   "capable_agents_busy_at_detection": 0,
-   "concurrent_active_tasks_at_detection": 5,
-   "detection_to_first_needs_decision": 8.0,
-   "capability_waiting_steps": 0.0,
-   "stage_windows": {
-    "0": {
-     "duration": 10.751884621293847,
-     "requirements": [
-      1,
-      0,
-      1,
-      1,
-      0
-     ],
-     "first_complete_at": 101.0,
-     "last_complete_at": 110.0,
-     "completed_at": 111.0,
-     "resets": []
-    },
-    "1": {
-     "duration": 11.902069067771174,
-     "requirements": [
-      0,
-      1,
-      0,
-      0,
-      0
-     ],
-     "first_complete_at": 172.0,
-     "last_complete_at": 182.0,
-     "completed_at": null,
-     "resets": []
-    }
-   },
-   "coverage_changes": [
-    {
-     "at": 9.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      1,
-      0,
-      1,
-      1,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 0.0,
-     "committed": [],
-     "reservation_ids": [
-      "rp0009"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 101.0,
-     "complete": true,
-     "members": [
-      "3"
-     ],
-     "covered": [
-      1,
-      0,
-      1,
-      1,
-      0
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 0.046503,
-     "committed": [],
-     "reservation_ids": [
-      "rp0009"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 111.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      0,
-      1,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 1,
-     "progress": 0.5,
-     "committed": [
-      "3"
-     ],
-     "reservation_ids": [
-      "rp0009"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 172.0,
-     "complete": true,
-     "members": [
-      "0",
-      "1"
-     ],
-     "covered": [
-      0,
-      1,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 1,
-     "progress": 0.54201,
-     "committed": [
-      "3"
-     ],
-     "reservation_ids": [
-      "rp0009"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 183.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      0,
-      1,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 1,
-     "progress": 1.0,
-     "committed": [
-      "0",
-      "1",
-      "3"
-     ],
-     "reservation_ids": [
-      "rp0009"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    }
-   ]
-  },
-  {
-   "seed": 20003,
    "target": "piloc-e1-target-4",
    "detected_at": 3.0,
    "deadline": 110.8898414861488,
@@ -1215,6 +1221,8 @@
    "final_progress": 1.0,
    "final_stage": 2,
    "final_status": "expired",
+   "completed_work": true,
+   "finished_after_deadline": true,
    "first_belief_at": {
     "0": 3.0,
     "1": 3.0,
@@ -1285,8 +1293,8 @@
    "left_at": {
     "1": 106.0,
     "0": 124.0,
-    "3": 136.0,
     "4": 136.0,
+    "3": 136.0,
     "5": 160.0
    },
    "on_site": {
@@ -1339,9 +1347,9 @@
    ],
    "longest_contiguous_coverage": 9.0,
    "total_coverage_time": 22.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 151.0,
    "earliest_belief_feasible_dispatch": 3.0,
@@ -1696,6 +1704,8 @@
    "final_progress": 1.0,
    "final_stage": 2,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 1.0,
     "1": 1.0,
@@ -1837,9 +1847,9 @@
    ],
    "longest_contiguous_coverage": 11.0,
    "total_coverage_time": 20.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 112.0,
    "earliest_belief_feasible_dispatch": 1.0,
@@ -2218,6 +2228,8 @@
    "final_progress": 0.0,
    "final_stage": 0,
    "final_status": "detected",
+   "completed_work": false,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 5.0,
     "1": 5.0,
@@ -2365,562 +2377,6 @@
   },
   {
    "seed": 20008,
-   "target": "piloc-e1-target-3",
-   "detected_at": 1.0,
-   "deadline": 98.20160961777316,
-   "stage_count": 1,
-   "durations": [
-    6.21292239271514
-   ],
-   "requirements": [
-    [
-     1,
-     0,
-     0,
-     1,
-     1
-    ]
-   ],
-   "work_needed": 6.213,
-   "delivery_budget": 90.989,
-   "expired_at": null,
-   "final_progress": 1.0,
-   "final_stage": 0,
-   "final_status": "completed",
-   "first_belief_at": {
-    "0": 1.0,
-    "1": 1.0,
-    "2": 1.0,
-    "3": 1.0,
-    "4": 1.0,
-    "5": 1.0
-   },
-   "belief_revisions": {
-    "0": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "1": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "2": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "3": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "4": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "5": [
-     [
-      1.0,
-      1
-     ]
-    ]
-   },
-   "belief_spread": 0.0,
-   "first_reservation_at": {
-    "0": 1.0,
-    "1": 1.0,
-    "2": 1.0,
-    "3": 1.0,
-    "4": 1.0,
-    "5": 1.0
-   },
-   "reservation_spread": 0.0,
-   "reservation_ids": {
-    "0": [
-     "rp0003"
-    ],
-    "4": [
-     "rp0002"
-    ]
-   },
-   "assignment_sent_at": {
-    "0": 1.0,
-    "1": 1.0,
-    "4": 1.0,
-    "5": 1.0
-   },
-   "assignment_spread": 0.0,
-   "departed_at": {},
-   "arrived_at": {
-    "0": 2.0,
-    "1": 2.0,
-    "4": 2.0,
-    "5": 2.0
-   },
-   "arrival_spread": 1.0,
-   "left_at": {
-    "5": 8.0,
-    "0": 8.0,
-    "4": 8.0,
-    "1": 8.0
-   },
-   "on_site": {
-    "0": [
-     [
-      2.0,
-      8.0
-     ]
-    ],
-    "1": [
-     [
-      2.0,
-      8.0
-     ]
-    ],
-    "4": [
-     [
-      2.0,
-      8.0
-     ]
-    ],
-    "5": [
-     [
-      2.0,
-      8.0
-     ]
-    ]
-   },
-   "first_complete_at": 2.0,
-   "detection_to_first_complete": 1.0,
-   "coverage_intervals": [
-    [
-     2.0,
-     8.0
-    ]
-   ],
-   "longest_contiguous_coverage": 6.0,
-   "total_coverage_time": 6.0,
-   "coverage_gap_count": 1,
-   "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
-   "final_coverage_shortfall": 0.0,
-   "last_complete_coverage_start": 2.0,
-   "earliest_belief_feasible_dispatch": 1.0,
-   "earliest_feasible_completion": 14.283990204580615,
-   "capable_agents_total": 6,
-   "capable_agents_busy_at_detection": 0,
-   "concurrent_active_tasks_at_detection": 2,
-   "detection_to_first_needs_decision": 0.0,
-   "capability_waiting_steps": 0.0,
-   "stage_windows": {
-    "0": {
-     "duration": 6.21292239271514,
-     "requirements": [
-      1,
-      0,
-      0,
-      1,
-      1
-     ],
-     "first_complete_at": 2.0,
-     "last_complete_at": 7.0,
-     "completed_at": null,
-     "resets": []
-    }
-   },
-   "coverage_changes": [
-    {
-     "at": 1.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      1,
-      0,
-      0,
-      1,
-      1
-     ],
-     "stage_index": 0,
-     "progress": 0.0,
-     "committed": [
-      "0",
-      "1",
-      "4",
-      "5"
-     ],
-     "reservation_ids": [
-      "rp0003",
-      "rp0002"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "2",
-      "3"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 2.0,
-     "complete": true,
-     "members": [
-      "0",
-      "1",
-      "4",
-      "5"
-     ],
-     "covered": [
-      1,
-      0,
-      0,
-      1,
-      1
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 0.160955,
-     "committed": [],
-     "reservation_ids": [
-      "rp0003",
-      "rp0002"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "2",
-      "3"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 8.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      1,
-      0,
-      0,
-      1,
-      1
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 1.0,
-     "committed": [
-      "0",
-      "1",
-      "4",
-      "5"
-     ],
-     "reservation_ids": [
-      "rp0003",
-      "rp0002"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "2",
-      "3"
-     ],
-     "belief_stale": []
-    }
-   ]
-  },
-  {
-   "seed": 20008,
-   "target": "piloc-e1-target-1",
-   "detected_at": 1.0,
-   "deadline": 62.178520965510245,
-   "stage_count": 1,
-   "durations": [
-    3.517097636362031
-   ],
-   "requirements": [
-    [
-     0,
-     0,
-     1,
-     0,
-     0
-    ]
-   ],
-   "work_needed": 3.517,
-   "delivery_budget": 57.661,
-   "expired_at": null,
-   "final_progress": 1.0,
-   "final_stage": 0,
-   "final_status": "completed",
-   "first_belief_at": {
-    "0": 1.0,
-    "1": 1.0,
-    "2": 1.0,
-    "3": 1.0,
-    "4": 1.0,
-    "5": 1.0
-   },
-   "belief_revisions": {
-    "0": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "1": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "2": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "3": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "4": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "5": [
-     [
-      1.0,
-      1
-     ]
-    ]
-   },
-   "belief_spread": 0.0,
-   "first_reservation_at": {
-    "0": 1.0,
-    "1": 1.0,
-    "2": 1.0,
-    "3": 1.0,
-    "4": 1.0,
-    "5": 1.0
-   },
-   "reservation_spread": 0.0,
-   "reservation_ids": {
-    "2": [
-     "rp0001"
-    ]
-   },
-   "assignment_sent_at": {
-    "2": 1.0,
-    "3": 1.0
-   },
-   "assignment_spread": 0.0,
-   "departed_at": {},
-   "arrived_at": {
-    "2": 2.0,
-    "3": 2.0
-   },
-   "arrival_spread": 1.0,
-   "left_at": {
-    "3": 5.0,
-    "2": 5.0
-   },
-   "on_site": {
-    "2": [
-     [
-      2.0,
-      5.0
-     ]
-    ],
-    "3": [
-     [
-      2.0,
-      5.0
-     ]
-    ]
-   },
-   "first_complete_at": 2.0,
-   "detection_to_first_complete": 1.0,
-   "coverage_intervals": [
-    [
-     2.0,
-     5.0
-    ]
-   ],
-   "longest_contiguous_coverage": 3.0,
-   "total_coverage_time": 3.0,
-   "coverage_gap_count": 1,
-   "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
-   "final_coverage_shortfall": 0.0,
-   "last_complete_coverage_start": 2.0,
-   "earliest_belief_feasible_dispatch": 1.0,
-   "earliest_feasible_completion": 11.588165448227507,
-   "capable_agents_total": 2,
-   "capable_agents_busy_at_detection": 0,
-   "concurrent_active_tasks_at_detection": 2,
-   "detection_to_first_needs_decision": 0.0,
-   "capability_waiting_steps": 0.0,
-   "stage_windows": {
-    "0": {
-     "duration": 3.517097636362031,
-     "requirements": [
-      0,
-      0,
-      1,
-      0,
-      0
-     ],
-     "first_complete_at": 2.0,
-     "last_complete_at": 4.0,
-     "completed_at": null,
-     "resets": []
-    }
-   },
-   "coverage_changes": [
-    {
-     "at": 1.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      0,
-      0,
-      1,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 0.0,
-     "committed": [
-      "2",
-      "3"
-     ],
-     "reservation_ids": [
-      "rp0001"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 2.0,
-     "complete": true,
-     "members": [
-      "2",
-      "3"
-     ],
-     "covered": [
-      0,
-      0,
-      1,
-      0,
-      0
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 0.284325,
-     "committed": [],
-     "reservation_ids": [
-      "rp0001"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 5.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      0,
-      0,
-      1,
-      0,
-      0
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 1.0,
-     "committed": [
-      "2",
-      "3"
-     ],
-     "reservation_ids": [
-      "rp0001"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    }
-   ]
-  },
-  {
-   "seed": 20008,
    "target": "piloc-e1-target-2",
    "detected_at": 6.0,
    "deadline": 111.6081220097841,
@@ -2959,6 +2415,8 @@
    "final_progress": 1.0,
    "final_stage": 2,
    "final_status": "expired",
+   "completed_work": true,
+   "finished_after_deadline": true,
    "first_belief_at": {
     "0": 6.0,
     "1": 6.0,
@@ -3052,9 +2510,9 @@
    },
    "arrival_spread": 4.0,
    "left_at": {
-    "3": 17.0,
-    "2": 17.0,
     "5": 17.0,
+    "2": 17.0,
+    "3": 17.0,
     "4": 17.0,
     "0": 122.0,
     "1": 122.0
@@ -3115,9 +2573,9 @@
    ],
    "longest_contiguous_coverage": 11.0,
    "total_coverage_time": 26.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 111.0,
    "earliest_belief_feasible_dispatch": 6.0,
@@ -3484,6 +2942,566 @@
   },
   {
    "seed": 20008,
+   "target": "piloc-e1-target-3",
+   "detected_at": 1.0,
+   "deadline": 98.20160961777316,
+   "stage_count": 1,
+   "durations": [
+    6.21292239271514
+   ],
+   "requirements": [
+    [
+     1,
+     0,
+     0,
+     1,
+     1
+    ]
+   ],
+   "work_needed": 6.213,
+   "delivery_budget": 90.989,
+   "expired_at": null,
+   "final_progress": 1.0,
+   "final_stage": 0,
+   "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
+   "first_belief_at": {
+    "0": 1.0,
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0,
+    "4": 1.0,
+    "5": 1.0
+   },
+   "belief_revisions": {
+    "0": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "1": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "2": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "3": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "4": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "5": [
+     [
+      1.0,
+      1
+     ]
+    ]
+   },
+   "belief_spread": 0.0,
+   "first_reservation_at": {
+    "0": 1.0,
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0,
+    "4": 1.0,
+    "5": 1.0
+   },
+   "reservation_spread": 0.0,
+   "reservation_ids": {
+    "0": [
+     "rp0003"
+    ],
+    "4": [
+     "rp0002"
+    ]
+   },
+   "assignment_sent_at": {
+    "0": 1.0,
+    "1": 1.0,
+    "4": 1.0,
+    "5": 1.0
+   },
+   "assignment_spread": 0.0,
+   "departed_at": {},
+   "arrived_at": {
+    "0": 2.0,
+    "1": 2.0,
+    "4": 2.0,
+    "5": 2.0
+   },
+   "arrival_spread": 1.0,
+   "left_at": {
+    "1": 8.0,
+    "5": 8.0,
+    "4": 8.0,
+    "0": 8.0
+   },
+   "on_site": {
+    "0": [
+     [
+      2.0,
+      8.0
+     ]
+    ],
+    "1": [
+     [
+      2.0,
+      8.0
+     ]
+    ],
+    "4": [
+     [
+      2.0,
+      8.0
+     ]
+    ],
+    "5": [
+     [
+      2.0,
+      8.0
+     ]
+    ]
+   },
+   "first_complete_at": 2.0,
+   "detection_to_first_complete": 1.0,
+   "coverage_intervals": [
+    [
+     2.0,
+     8.0
+    ]
+   ],
+   "longest_contiguous_coverage": 6.0,
+   "total_coverage_time": 6.0,
+   "coverage_gap_count": 0,
+   "coverage_reset_count": 0,
+   "coverage_work_lost": 0.0,
+   "final_coverage_shortfall": 0.0,
+   "last_complete_coverage_start": 2.0,
+   "earliest_belief_feasible_dispatch": 1.0,
+   "earliest_feasible_completion": 14.283990204580615,
+   "capable_agents_total": 6,
+   "capable_agents_busy_at_detection": 0,
+   "concurrent_active_tasks_at_detection": 2,
+   "detection_to_first_needs_decision": 0.0,
+   "capability_waiting_steps": 0.0,
+   "stage_windows": {
+    "0": {
+     "duration": 6.21292239271514,
+     "requirements": [
+      1,
+      0,
+      0,
+      1,
+      1
+     ],
+     "first_complete_at": 2.0,
+     "last_complete_at": 7.0,
+     "completed_at": null,
+     "resets": []
+    }
+   },
+   "coverage_changes": [
+    {
+     "at": 1.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      1,
+      0,
+      0,
+      1,
+      1
+     ],
+     "stage_index": 0,
+     "progress": 0.0,
+     "committed": [
+      "0",
+      "1",
+      "4",
+      "5"
+     ],
+     "reservation_ids": [
+      "rp0003",
+      "rp0002"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "2",
+      "3"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 2.0,
+     "complete": true,
+     "members": [
+      "0",
+      "1",
+      "4",
+      "5"
+     ],
+     "covered": [
+      1,
+      0,
+      0,
+      1,
+      1
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 0.160955,
+     "committed": [],
+     "reservation_ids": [
+      "rp0003",
+      "rp0002"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "2",
+      "3"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 8.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      1,
+      0,
+      0,
+      1,
+      1
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 1.0,
+     "committed": [
+      "0",
+      "1",
+      "4",
+      "5"
+     ],
+     "reservation_ids": [
+      "rp0003",
+      "rp0002"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "2",
+      "3"
+     ],
+     "belief_stale": []
+    }
+   ]
+  },
+  {
+   "seed": 20008,
+   "target": "piloc-e1-target-1",
+   "detected_at": 1.0,
+   "deadline": 62.178520965510245,
+   "stage_count": 1,
+   "durations": [
+    3.517097636362031
+   ],
+   "requirements": [
+    [
+     0,
+     0,
+     1,
+     0,
+     0
+    ]
+   ],
+   "work_needed": 3.517,
+   "delivery_budget": 57.661,
+   "expired_at": null,
+   "final_progress": 1.0,
+   "final_stage": 0,
+   "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
+   "first_belief_at": {
+    "0": 1.0,
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0,
+    "4": 1.0,
+    "5": 1.0
+   },
+   "belief_revisions": {
+    "0": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "1": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "2": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "3": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "4": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "5": [
+     [
+      1.0,
+      1
+     ]
+    ]
+   },
+   "belief_spread": 0.0,
+   "first_reservation_at": {
+    "0": 1.0,
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0,
+    "4": 1.0,
+    "5": 1.0
+   },
+   "reservation_spread": 0.0,
+   "reservation_ids": {
+    "2": [
+     "rp0001"
+    ]
+   },
+   "assignment_sent_at": {
+    "2": 1.0,
+    "3": 1.0
+   },
+   "assignment_spread": 0.0,
+   "departed_at": {},
+   "arrived_at": {
+    "2": 2.0,
+    "3": 2.0
+   },
+   "arrival_spread": 1.0,
+   "left_at": {
+    "2": 5.0,
+    "3": 5.0
+   },
+   "on_site": {
+    "2": [
+     [
+      2.0,
+      5.0
+     ]
+    ],
+    "3": [
+     [
+      2.0,
+      5.0
+     ]
+    ]
+   },
+   "first_complete_at": 2.0,
+   "detection_to_first_complete": 1.0,
+   "coverage_intervals": [
+    [
+     2.0,
+     5.0
+    ]
+   ],
+   "longest_contiguous_coverage": 3.0,
+   "total_coverage_time": 3.0,
+   "coverage_gap_count": 0,
+   "coverage_reset_count": 0,
+   "coverage_work_lost": 0.0,
+   "final_coverage_shortfall": 0.0,
+   "last_complete_coverage_start": 2.0,
+   "earliest_belief_feasible_dispatch": 1.0,
+   "earliest_feasible_completion": 11.588165448227507,
+   "capable_agents_total": 2,
+   "capable_agents_busy_at_detection": 0,
+   "concurrent_active_tasks_at_detection": 2,
+   "detection_to_first_needs_decision": 0.0,
+   "capability_waiting_steps": 0.0,
+   "stage_windows": {
+    "0": {
+     "duration": 3.517097636362031,
+     "requirements": [
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "first_complete_at": 2.0,
+     "last_complete_at": 4.0,
+     "completed_at": null,
+     "resets": []
+    }
+   },
+   "coverage_changes": [
+    {
+     "at": 1.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 0.0,
+     "committed": [
+      "2",
+      "3"
+     ],
+     "reservation_ids": [
+      "rp0001"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 2.0,
+     "complete": true,
+     "members": [
+      "2",
+      "3"
+     ],
+     "covered": [
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 0.284325,
+     "committed": [],
+     "reservation_ids": [
+      "rp0001"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 5.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 1.0,
+     "committed": [
+      "2",
+      "3"
+     ],
+     "reservation_ids": [
+      "rp0001"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    }
+   ]
+  },
+  {
+   "seed": 20008,
    "target": "piloc-e1-target-4",
    "detected_at": 56.0,
    "deadline": 208.3909071576526,
@@ -3514,6 +3532,8 @@
    "final_progress": 1.0,
    "final_stage": 1,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 56.0,
     "1": 56.0,
@@ -3620,9 +3640,9 @@
    ],
    "longest_contiguous_coverage": 11.0,
    "total_coverage_time": 14.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 136.0,
    "earliest_belief_feasible_dispatch": 56.0,
@@ -3895,6 +3915,8 @@
    "final_progress": 1.0,
    "final_stage": 2,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 61.0,
     "1": 61.0,
@@ -3976,8 +3998,8 @@
    "left_at": {
     "3": 147.0,
     "4": 147.0,
-    "0": 155.0,
-    "1": 155.0
+    "1": 155.0,
+    "0": 155.0
    },
    "on_site": {
     "3": [
@@ -4023,9 +4045,9 @@
    ],
    "longest_contiguous_coverage": 7.0,
    "total_coverage_time": 19.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 148.0,
    "earliest_belief_feasible_dispatch": 61.0,
@@ -4406,6 +4428,8 @@
    "final_progress": 1.0,
    "final_stage": 2,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 13.0,
     "1": 13.0,
@@ -4495,8 +4519,8 @@
    "left_at": {
     "3": 104.0,
     "5": 109.0,
-    "0": 129.0,
     "1": 129.0,
+    "0": 129.0,
     "4": 132.0,
     "2": 134.0
    },
@@ -4560,9 +4584,9 @@
    ],
    "longest_contiguous_coverage": 10.0,
    "total_coverage_time": 20.0,
-   "coverage_gap_count": 2,
+   "coverage_gap_count": 1,
    "coverage_reset_count": 5,
-   "coverage_work_lost": 2.0,
+   "coverage_work_lost": 1.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 160.0,
    "earliest_belief_feasible_dispatch": 13.0,
@@ -5023,6 +5047,484 @@
   },
   {
    "seed": 20052,
+   "target": "piloc-e1-target-2",
+   "detected_at": 2.0,
+   "deadline": 159.6610693195158,
+   "stage_count": 3,
+   "durations": [
+    8.766958789732312,
+    5.275597308494445,
+    7.833782508201371
+   ],
+   "requirements": [
+    [
+     0,
+     0,
+     1,
+     0,
+     1
+    ],
+    [
+     0,
+     0,
+     0,
+     1,
+     1
+    ],
+    [
+     1,
+     1,
+     0,
+     0,
+     1
+    ]
+   ],
+   "work_needed": 21.876,
+   "delivery_budget": 135.785,
+   "expired_at": null,
+   "final_progress": 1.0,
+   "final_stage": 2,
+   "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
+   "first_belief_at": {
+    "0": 2.0,
+    "1": 2.0,
+    "2": 2.0,
+    "3": 2.0,
+    "4": 2.0,
+    "5": 2.0
+   },
+   "belief_revisions": {
+    "0": [
+     [
+      2.0,
+      1
+     ]
+    ],
+    "1": [
+     [
+      2.0,
+      1
+     ]
+    ],
+    "2": [
+     [
+      2.0,
+      1
+     ]
+    ],
+    "3": [
+     [
+      2.0,
+      1
+     ]
+    ],
+    "4": [
+     [
+      2.0,
+      1
+     ]
+    ],
+    "5": [
+     [
+      2.0,
+      1
+     ]
+    ]
+   },
+   "belief_spread": 0.0,
+   "first_reservation_at": {
+    "0": 17.0,
+    "1": 17.0,
+    "2": 17.0,
+    "3": 17.0,
+    "4": 17.0,
+    "5": 17.0
+   },
+   "reservation_spread": 15.0,
+   "reservation_ids": {
+    "2": [
+     "rp0005"
+    ],
+    "5": [
+     "rp0019"
+    ]
+   },
+   "assignment_sent_at": {
+    "2": 17.0,
+    "0": 27.0,
+    "1": 27.0,
+    "5": 70.0
+   },
+   "assignment_spread": 68.0,
+   "departed_at": {},
+   "arrived_at": {
+    "2": 18.0,
+    "0": 28.0,
+    "1": 28.0,
+    "5": 71.0
+   },
+   "arrival_spread": 69.0,
+   "left_at": {
+    "1": 84.0,
+    "5": 84.0,
+    "2": 84.0,
+    "0": 84.0
+   },
+   "on_site": {
+    "2": [
+     [
+      18.0,
+      84.0
+     ]
+    ],
+    "0": [
+     [
+      28.0,
+      84.0
+     ]
+    ],
+    "1": [
+     [
+      28.0,
+      84.0
+     ]
+    ],
+    "5": [
+     [
+      71.0,
+      84.0
+     ]
+    ]
+   },
+   "first_complete_at": 18.0,
+   "detection_to_first_complete": 16.0,
+   "coverage_intervals": [
+    [
+     18.0,
+     26.0
+    ],
+    [
+     71.0,
+     76.0
+    ],
+    [
+     77.0,
+     84.0
+    ]
+   ],
+   "longest_contiguous_coverage": 8.0,
+   "total_coverage_time": 20.0,
+   "coverage_gap_count": 0,
+   "coverage_reset_count": 0,
+   "coverage_work_lost": 0.0,
+   "final_coverage_shortfall": 0.0,
+   "last_complete_coverage_start": 77.0,
+   "earliest_belief_feasible_dispatch": 2.0,
+   "earliest_feasible_completion": 30.947406418293603,
+   "capable_agents_total": 6,
+   "capable_agents_busy_at_detection": 0,
+   "concurrent_active_tasks_at_detection": 2,
+   "detection_to_first_needs_decision": 15.0,
+   "capability_waiting_steps": 46.0,
+   "stage_windows": {
+    "0": {
+     "duration": 8.766958789732312,
+     "requirements": [
+      0,
+      0,
+      1,
+      0,
+      1
+     ],
+     "first_complete_at": 18.0,
+     "last_complete_at": 25.0,
+     "completed_at": 26.0,
+     "resets": []
+    },
+    "1": {
+     "duration": 5.275597308494445,
+     "requirements": [
+      0,
+      0,
+      0,
+      1,
+      1
+     ],
+     "first_complete_at": 71.0,
+     "last_complete_at": 75.0,
+     "completed_at": 76.0,
+     "resets": []
+    },
+    "2": {
+     "duration": 7.833782508201371,
+     "requirements": [
+      1,
+      1,
+      0,
+      0,
+      1
+     ],
+     "first_complete_at": 77.0,
+     "last_complete_at": 83.0,
+     "completed_at": null,
+     "resets": []
+    }
+   },
+   "coverage_changes": [
+    {
+     "at": 2.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      0,
+      0,
+      1,
+      0,
+      1
+     ],
+     "stage_index": 0,
+     "progress": 0.0,
+     "committed": [],
+     "reservation_ids": [
+      "rp0005",
+      "rp0019"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "3",
+      "4"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 18.0,
+     "complete": true,
+     "members": [
+      "2"
+     ],
+     "covered": [
+      0,
+      0,
+      1,
+      0,
+      1
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 0.038022,
+     "committed": [],
+     "reservation_ids": [
+      "rp0005",
+      "rp0019"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "3",
+      "4"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 26.0,
+     "complete": false,
+     "members": [
+      "2"
+     ],
+     "covered": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      1,
+      1
+     ],
+     "stage_index": 1,
+     "progress": 0.333333,
+     "committed": [],
+     "reservation_ids": [
+      "rp0005",
+      "rp0019"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "3",
+      "4"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 71.0,
+     "complete": true,
+     "members": [
+      "2",
+      "0",
+      "1",
+      "5"
+     ],
+     "covered": [
+      0,
+      0,
+      0,
+      1,
+      1
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 1,
+     "progress": 0.396517,
+     "committed": [],
+     "reservation_ids": [
+      "rp0005",
+      "rp0019"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "3",
+      "4"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 76.0,
+     "complete": false,
+     "members": [
+      "2",
+      "0",
+      "1",
+      "5"
+     ],
+     "covered": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      1,
+      1,
+      0,
+      0,
+      1
+     ],
+     "stage_index": 2,
+     "progress": 0.666667,
+     "committed": [],
+     "reservation_ids": [
+      "rp0005",
+      "rp0019"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "3",
+      "4"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 77.0,
+     "complete": true,
+     "members": [
+      "2",
+      "0",
+      "1",
+      "5"
+     ],
+     "covered": [
+      1,
+      1,
+      0,
+      0,
+      1
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 2,
+     "progress": 0.709217,
+     "committed": [],
+     "reservation_ids": [
+      "rp0005",
+      "rp0019"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "3",
+      "4"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 84.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      1,
+      1,
+      0,
+      0,
+      1
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 2,
+     "progress": 1.0,
+     "committed": [
+      "0",
+      "1",
+      "2",
+      "5"
+     ],
+     "reservation_ids": [
+      "rp0005",
+      "rp0019"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "3",
+      "4"
+     ],
+     "belief_stale": []
+    }
+   ]
+  },
+  {
+   "seed": 20052,
    "target": "piloc-e1-target-3",
    "detected_at": 10.0,
    "deadline": 72.67708638436105,
@@ -5061,6 +5563,8 @@
    "final_progress": 1.0,
    "final_stage": 2,
    "final_status": "expired",
+   "completed_work": true,
+   "finished_after_deadline": true,
    "first_belief_at": {
     "0": 10.0,
     "1": 10.0,
@@ -5172,9 +5676,9 @@
    ],
    "longest_contiguous_coverage": 10.0,
    "total_coverage_time": 20.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 71.0,
    "earliest_belief_feasible_dispatch": 10.0,
@@ -5500,6 +6004,8 @@
    "final_progress": 1.0,
    "final_stage": 1,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 1.0,
     "1": 1.0,
@@ -5584,11 +6090,11 @@
    },
    "arrival_spread": 1.0,
    "left_at": {
-    "5": 17.0,
+    "2": 17.0,
+    "3": 17.0,
     "0": 17.0,
     "1": 17.0,
-    "3": 17.0,
-    "2": 17.0,
+    "5": 17.0,
     "4": 17.0
    },
    "on_site": {
@@ -5643,9 +6149,9 @@
    ],
    "longest_contiguous_coverage": 9.0,
    "total_coverage_time": 14.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 8.0,
    "earliest_belief_feasible_dispatch": 1.0,
@@ -5905,482 +6411,6 @@
   },
   {
    "seed": 20052,
-   "target": "piloc-e1-target-2",
-   "detected_at": 2.0,
-   "deadline": 159.6610693195158,
-   "stage_count": 3,
-   "durations": [
-    8.766958789732312,
-    5.275597308494445,
-    7.833782508201371
-   ],
-   "requirements": [
-    [
-     0,
-     0,
-     1,
-     0,
-     1
-    ],
-    [
-     0,
-     0,
-     0,
-     1,
-     1
-    ],
-    [
-     1,
-     1,
-     0,
-     0,
-     1
-    ]
-   ],
-   "work_needed": 21.876,
-   "delivery_budget": 135.785,
-   "expired_at": null,
-   "final_progress": 1.0,
-   "final_stage": 2,
-   "final_status": "completed",
-   "first_belief_at": {
-    "0": 2.0,
-    "1": 2.0,
-    "2": 2.0,
-    "3": 2.0,
-    "4": 2.0,
-    "5": 2.0
-   },
-   "belief_revisions": {
-    "0": [
-     [
-      2.0,
-      1
-     ]
-    ],
-    "1": [
-     [
-      2.0,
-      1
-     ]
-    ],
-    "2": [
-     [
-      2.0,
-      1
-     ]
-    ],
-    "3": [
-     [
-      2.0,
-      1
-     ]
-    ],
-    "4": [
-     [
-      2.0,
-      1
-     ]
-    ],
-    "5": [
-     [
-      2.0,
-      1
-     ]
-    ]
-   },
-   "belief_spread": 0.0,
-   "first_reservation_at": {
-    "0": 17.0,
-    "1": 17.0,
-    "2": 17.0,
-    "3": 17.0,
-    "4": 17.0,
-    "5": 17.0
-   },
-   "reservation_spread": 15.0,
-   "reservation_ids": {
-    "2": [
-     "rp0005"
-    ],
-    "5": [
-     "rp0019"
-    ]
-   },
-   "assignment_sent_at": {
-    "2": 17.0,
-    "0": 27.0,
-    "1": 27.0,
-    "5": 70.0
-   },
-   "assignment_spread": 68.0,
-   "departed_at": {},
-   "arrived_at": {
-    "2": 18.0,
-    "0": 28.0,
-    "1": 28.0,
-    "5": 71.0
-   },
-   "arrival_spread": 69.0,
-   "left_at": {
-    "5": 84.0,
-    "2": 84.0,
-    "1": 84.0,
-    "0": 84.0
-   },
-   "on_site": {
-    "2": [
-     [
-      18.0,
-      84.0
-     ]
-    ],
-    "0": [
-     [
-      28.0,
-      84.0
-     ]
-    ],
-    "1": [
-     [
-      28.0,
-      84.0
-     ]
-    ],
-    "5": [
-     [
-      71.0,
-      84.0
-     ]
-    ]
-   },
-   "first_complete_at": 18.0,
-   "detection_to_first_complete": 16.0,
-   "coverage_intervals": [
-    [
-     18.0,
-     26.0
-    ],
-    [
-     71.0,
-     76.0
-    ],
-    [
-     77.0,
-     84.0
-    ]
-   ],
-   "longest_contiguous_coverage": 8.0,
-   "total_coverage_time": 20.0,
-   "coverage_gap_count": 1,
-   "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
-   "final_coverage_shortfall": 0.0,
-   "last_complete_coverage_start": 77.0,
-   "earliest_belief_feasible_dispatch": 2.0,
-   "earliest_feasible_completion": 30.947406418293603,
-   "capable_agents_total": 6,
-   "capable_agents_busy_at_detection": 0,
-   "concurrent_active_tasks_at_detection": 2,
-   "detection_to_first_needs_decision": 15.0,
-   "capability_waiting_steps": 46.0,
-   "stage_windows": {
-    "0": {
-     "duration": 8.766958789732312,
-     "requirements": [
-      0,
-      0,
-      1,
-      0,
-      1
-     ],
-     "first_complete_at": 18.0,
-     "last_complete_at": 25.0,
-     "completed_at": 26.0,
-     "resets": []
-    },
-    "1": {
-     "duration": 5.275597308494445,
-     "requirements": [
-      0,
-      0,
-      0,
-      1,
-      1
-     ],
-     "first_complete_at": 71.0,
-     "last_complete_at": 75.0,
-     "completed_at": 76.0,
-     "resets": []
-    },
-    "2": {
-     "duration": 7.833782508201371,
-     "requirements": [
-      1,
-      1,
-      0,
-      0,
-      1
-     ],
-     "first_complete_at": 77.0,
-     "last_complete_at": 83.0,
-     "completed_at": null,
-     "resets": []
-    }
-   },
-   "coverage_changes": [
-    {
-     "at": 2.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      0,
-      0,
-      1,
-      0,
-      1
-     ],
-     "stage_index": 0,
-     "progress": 0.0,
-     "committed": [],
-     "reservation_ids": [
-      "rp0005",
-      "rp0019"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "3",
-      "4"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 18.0,
-     "complete": true,
-     "members": [
-      "2"
-     ],
-     "covered": [
-      0,
-      0,
-      1,
-      0,
-      1
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 0.038022,
-     "committed": [],
-     "reservation_ids": [
-      "rp0005",
-      "rp0019"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "3",
-      "4"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 26.0,
-     "complete": false,
-     "members": [
-      "2"
-     ],
-     "covered": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      1,
-      1
-     ],
-     "stage_index": 1,
-     "progress": 0.333333,
-     "committed": [],
-     "reservation_ids": [
-      "rp0005",
-      "rp0019"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "3",
-      "4"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 71.0,
-     "complete": true,
-     "members": [
-      "2",
-      "0",
-      "1",
-      "5"
-     ],
-     "covered": [
-      0,
-      0,
-      0,
-      1,
-      1
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 1,
-     "progress": 0.396517,
-     "committed": [],
-     "reservation_ids": [
-      "rp0005",
-      "rp0019"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "3",
-      "4"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 76.0,
-     "complete": false,
-     "members": [
-      "2",
-      "0",
-      "1",
-      "5"
-     ],
-     "covered": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      1,
-      1,
-      0,
-      0,
-      1
-     ],
-     "stage_index": 2,
-     "progress": 0.666667,
-     "committed": [],
-     "reservation_ids": [
-      "rp0005",
-      "rp0019"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "3",
-      "4"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 77.0,
-     "complete": true,
-     "members": [
-      "2",
-      "0",
-      "1",
-      "5"
-     ],
-     "covered": [
-      1,
-      1,
-      0,
-      0,
-      1
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 2,
-     "progress": 0.709217,
-     "committed": [],
-     "reservation_ids": [
-      "rp0005",
-      "rp0019"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "3",
-      "4"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 84.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      1,
-      1,
-      0,
-      0,
-      1
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 2,
-     "progress": 1.0,
-     "committed": [
-      "0",
-      "1",
-      "2",
-      "5"
-     ],
-     "reservation_ids": [
-      "rp0005",
-      "rp0019"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "3",
-      "4"
-     ],
-     "belief_stale": []
-    }
-   ]
-  },
-  {
-   "seed": 20052,
    "target": "piloc-e1-target-4",
    "detected_at": 19.0,
    "deadline": 85.131531894955,
@@ -6411,6 +6441,8 @@
    "final_progress": 1.0,
    "final_stage": 1,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 19.0,
     "1": 19.0,
@@ -6501,9 +6533,9 @@
    ],
    "longest_contiguous_coverage": 10.0,
    "total_coverage_time": 17.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 41.0,
    "earliest_belief_feasible_dispatch": 19.0,
@@ -6736,6 +6768,8 @@
    "final_progress": 1.0,
    "final_stage": 1,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 13.0,
     "1": 13.0,
@@ -6811,8 +6845,8 @@
    },
    "arrival_spread": 5.0,
    "left_at": {
-    "0": 27.0,
     "1": 27.0,
+    "0": 27.0,
     "4": 32.0
    },
    "on_site": {
@@ -6849,9 +6883,9 @@
    ],
    "longest_contiguous_coverage": 9.0,
    "total_coverage_time": 13.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 28.0,
    "earliest_belief_feasible_dispatch": 13.0,
@@ -7099,6 +7133,8 @@
    "final_progress": 1.0,
    "final_stage": 1,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 4.0,
     "1": 4.0,
@@ -7218,9 +7254,9 @@
    ],
    "longest_contiguous_coverage": 8.0,
    "total_coverage_time": 15.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 75.0,
    "earliest_belief_feasible_dispatch": 4.0,
@@ -7453,621 +7489,6 @@
   },
   {
    "seed": 20070,
-   "target": "piloc-e1-target-3",
-   "detected_at": 4.0,
-   "deadline": 154.58178519581224,
-   "stage_count": 1,
-   "durations": [
-    11.567769631159802
-   ],
-   "requirements": [
-    [
-     0,
-     1,
-     0,
-     0,
-     0
-    ]
-   ],
-   "work_needed": 11.568,
-   "delivery_budget": 139.014,
-   "expired_at": null,
-   "final_progress": 1.0,
-   "final_stage": 0,
-   "final_status": "completed",
-   "first_belief_at": {
-    "0": 4.0,
-    "1": 4.0,
-    "2": 4.0,
-    "3": 4.0,
-    "4": 4.0,
-    "5": 4.0
-   },
-   "belief_revisions": {
-    "0": [
-     [
-      4.0,
-      1
-     ]
-    ],
-    "1": [
-     [
-      4.0,
-      1
-     ]
-    ],
-    "2": [
-     [
-      4.0,
-      1
-     ]
-    ],
-    "3": [
-     [
-      4.0,
-      1
-     ]
-    ],
-    "4": [
-     [
-      4.0,
-      1
-     ]
-    ],
-    "5": [
-     [
-      4.0,
-      1
-     ]
-    ]
-   },
-   "belief_spread": 0.0,
-   "first_reservation_at": {
-    "0": 72.0,
-    "2": 72.0,
-    "3": 72.0,
-    "4": 72.0,
-    "5": 72.0
-   },
-   "reservation_spread": 68.0,
-   "reservation_ids": {
-    "3": [
-     "rp0007"
-    ]
-   },
-   "assignment_sent_at": {
-    "3": 72.0
-   },
-   "assignment_spread": 68.0,
-   "departed_at": {},
-   "arrived_at": {
-    "3": 73.0
-   },
-   "arrival_spread": 69.0,
-   "left_at": {
-    "3": 84.0
-   },
-   "on_site": {
-    "3": [
-     [
-      73.0,
-      84.0
-     ]
-    ]
-   },
-   "first_complete_at": 73.0,
-   "detection_to_first_complete": 69.0,
-   "coverage_intervals": [
-    [
-     73.0,
-     84.0
-    ]
-   ],
-   "longest_contiguous_coverage": 11.0,
-   "total_coverage_time": 11.0,
-   "coverage_gap_count": 1,
-   "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
-   "final_coverage_shortfall": 0.0,
-   "last_complete_coverage_start": 73.0,
-   "earliest_belief_feasible_dispatch": 4.0,
-   "earliest_feasible_completion": 22.638837443025277,
-   "capable_agents_total": 2,
-   "capable_agents_busy_at_detection": 0,
-   "concurrent_active_tasks_at_detection": 4,
-   "detection_to_first_needs_decision": 8.0,
-   "capability_waiting_steps": 0.0,
-   "stage_windows": {
-    "0": {
-     "duration": 11.567769631159802,
-     "requirements": [
-      0,
-      1,
-      0,
-      0,
-      0
-     ],
-     "first_complete_at": 73.0,
-     "last_complete_at": 83.0,
-     "completed_at": null,
-     "resets": []
-    }
-   },
-   "coverage_changes": [
-    {
-     "at": 4.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      0,
-      1,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 0.0,
-     "committed": [],
-     "reservation_ids": [
-      "rp0007"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "0",
-      "1",
-      "2",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 73.0,
-     "complete": true,
-     "members": [
-      "3"
-     ],
-     "covered": [
-      0,
-      1,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 0.086447,
-     "committed": [],
-     "reservation_ids": [
-      "rp0007"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "0",
-      "1",
-      "2",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 84.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      0,
-      1,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 1.0,
-     "committed": [
-      "3"
-     ],
-     "reservation_ids": [
-      "rp0007"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "0",
-      "1",
-      "2",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    }
-   ]
-  },
-  {
-   "seed": 20070,
-   "target": "piloc-e1-target-1",
-   "detected_at": 505.0,
-   "deadline": 598.3129306472134,
-   "stage_count": 2,
-   "durations": [
-    11.92885613024894,
-    7.491682315278461
-   ],
-   "requirements": [
-    [
-     1,
-     0,
-     0,
-     0,
-     1
-    ],
-    [
-     1,
-     0,
-     0,
-     1,
-     1
-    ]
-   ],
-   "work_needed": 19.421,
-   "delivery_budget": 73.892,
-   "expired_at": null,
-   "final_progress": 1.0,
-   "final_stage": 1,
-   "final_status": "completed",
-   "first_belief_at": {
-    "0": 505.0,
-    "1": 505.0,
-    "2": 505.0,
-    "3": 505.0,
-    "4": 505.0,
-    "5": 505.0
-   },
-   "belief_revisions": {
-    "0": [
-     [
-      505.0,
-      1
-     ]
-    ],
-    "1": [
-     [
-      505.0,
-      1
-     ]
-    ],
-    "2": [
-     [
-      505.0,
-      1
-     ]
-    ],
-    "3": [
-     [
-      505.0,
-      1
-     ]
-    ],
-    "4": [
-     [
-      505.0,
-      1
-     ]
-    ],
-    "5": [
-     [
-      505.0,
-      1
-     ]
-    ]
-   },
-   "belief_spread": 0.0,
-   "first_reservation_at": {
-    "0": 505.0,
-    "1": 505.0,
-    "2": 505.0,
-    "3": 505.0,
-    "4": 505.0,
-    "5": 505.0
-   },
-   "reservation_spread": 0.0,
-   "reservation_ids": {
-    "0": [
-     "rp0015"
-    ],
-    "2": [
-     "rp0014"
-    ]
-   },
-   "assignment_sent_at": {
-    "0": 505.0,
-    "2": 505.0
-   },
-   "assignment_spread": 0.0,
-   "departed_at": {},
-   "arrived_at": {
-    "0": 507.0,
-    "2": 507.0
-   },
-   "arrival_spread": 2.0,
-   "left_at": {
-    "0": 526.0,
-    "2": 526.0
-   },
-   "on_site": {
-    "0": [
-     [
-      507.0,
-      526.0
-     ]
-    ],
-    "2": [
-     [
-      507.0,
-      526.0
-     ]
-    ]
-   },
-   "first_complete_at": 507.0,
-   "detection_to_first_complete": 2.0,
-   "coverage_intervals": [
-    [
-     507.0,
-     518.0
-    ],
-    [
-     519.0,
-     526.0
-    ]
-   ],
-   "longest_contiguous_coverage": 11.0,
-   "total_coverage_time": 18.0,
-   "coverage_gap_count": 1,
-   "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
-   "final_coverage_shortfall": 0.0,
-   "last_complete_coverage_start": 519.0,
-   "earliest_belief_feasible_dispatch": 505.0,
-   "earliest_feasible_completion": 531.491606257393,
-   "capable_agents_total": 6,
-   "capable_agents_busy_at_detection": 0,
-   "concurrent_active_tasks_at_detection": 6,
-   "detection_to_first_needs_decision": 0.0,
-   "capability_waiting_steps": 1.0,
-   "stage_windows": {
-    "0": {
-     "duration": 11.92885613024894,
-     "requirements": [
-      1,
-      0,
-      0,
-      0,
-      1
-     ],
-     "first_complete_at": 507.0,
-     "last_complete_at": 517.0,
-     "completed_at": 518.0,
-     "resets": []
-    },
-    "1": {
-     "duration": 7.491682315278461,
-     "requirements": [
-      1,
-      0,
-      0,
-      1,
-      1
-     ],
-     "first_complete_at": 519.0,
-     "last_complete_at": 525.0,
-     "completed_at": null,
-     "resets": []
-    }
-   },
-   "coverage_changes": [
-    {
-     "at": 505.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      1,
-      0,
-      0,
-      0,
-      1
-     ],
-     "stage_index": 0,
-     "progress": 0.0,
-     "committed": [
-      "0",
-      "2"
-     ],
-     "reservation_ids": [
-      "rp0015",
-      "rp0014"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "1",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 507.0,
-     "complete": true,
-     "members": [
-      "0",
-      "2"
-     ],
-     "covered": [
-      1,
-      0,
-      0,
-      0,
-      1
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 0.041915,
-     "committed": [],
-     "reservation_ids": [
-      "rp0015",
-      "rp0014"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "1",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 518.0,
-     "complete": false,
-     "members": [
-      "0",
-      "2"
-     ],
-     "covered": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      1,
-      0,
-      0,
-      1,
-      1
-     ],
-     "stage_index": 1,
-     "progress": 0.5,
-     "committed": [],
-     "reservation_ids": [
-      "rp0015",
-      "rp0014"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "1",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 519.0,
-     "complete": true,
-     "members": [
-      "0",
-      "2"
-     ],
-     "covered": [
-      1,
-      0,
-      0,
-      1,
-      1
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 1,
-     "progress": 0.566741,
-     "committed": [],
-     "reservation_ids": [
-      "rp0015",
-      "rp0014"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "1",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 526.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      1,
-      0,
-      0,
-      1,
-      1
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 1,
-     "progress": 1.0,
-     "committed": [
-      "0",
-      "2"
-     ],
-     "reservation_ids": [
-      "rp0015",
-      "rp0014"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "1",
-      "4",
-      "5"
-     ],
-     "belief_stale": []
-    }
-   ]
-  },
-  {
-   "seed": 20070,
    "target": "piloc-e1-target-2",
    "detected_at": 4.0,
    "deadline": 89.64284656005731,
@@ -8098,6 +7519,8 @@
    "final_progress": 1.0,
    "final_stage": 1,
    "final_status": "expired",
+   "completed_work": true,
+   "finished_after_deadline": true,
    "first_belief_at": {
     "0": 4.0,
     "1": 4.0,
@@ -8182,9 +7605,9 @@
    "arrival_spread": 81.0,
    "left_at": {
     "4": 19.0,
-    "3": 92.0,
+    "2": 92.0,
     "0": 92.0,
-    "2": 92.0
+    "3": 92.0
    },
    "on_site": {
     "4": [
@@ -8226,9 +7649,9 @@
    ],
    "longest_contiguous_coverage": 7.0,
    "total_coverage_time": 13.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 85.0,
    "earliest_belief_feasible_dispatch": 4.0,
@@ -8458,6 +7881,625 @@
   },
   {
    "seed": 20070,
+   "target": "piloc-e1-target-3",
+   "detected_at": 4.0,
+   "deadline": 154.58178519581224,
+   "stage_count": 1,
+   "durations": [
+    11.567769631159802
+   ],
+   "requirements": [
+    [
+     0,
+     1,
+     0,
+     0,
+     0
+    ]
+   ],
+   "work_needed": 11.568,
+   "delivery_budget": 139.014,
+   "expired_at": null,
+   "final_progress": 1.0,
+   "final_stage": 0,
+   "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
+   "first_belief_at": {
+    "0": 4.0,
+    "1": 4.0,
+    "2": 4.0,
+    "3": 4.0,
+    "4": 4.0,
+    "5": 4.0
+   },
+   "belief_revisions": {
+    "0": [
+     [
+      4.0,
+      1
+     ]
+    ],
+    "1": [
+     [
+      4.0,
+      1
+     ]
+    ],
+    "2": [
+     [
+      4.0,
+      1
+     ]
+    ],
+    "3": [
+     [
+      4.0,
+      1
+     ]
+    ],
+    "4": [
+     [
+      4.0,
+      1
+     ]
+    ],
+    "5": [
+     [
+      4.0,
+      1
+     ]
+    ]
+   },
+   "belief_spread": 0.0,
+   "first_reservation_at": {
+    "0": 72.0,
+    "2": 72.0,
+    "3": 72.0,
+    "4": 72.0,
+    "5": 72.0
+   },
+   "reservation_spread": 68.0,
+   "reservation_ids": {
+    "3": [
+     "rp0007"
+    ]
+   },
+   "assignment_sent_at": {
+    "3": 72.0
+   },
+   "assignment_spread": 68.0,
+   "departed_at": {},
+   "arrived_at": {
+    "3": 73.0
+   },
+   "arrival_spread": 69.0,
+   "left_at": {
+    "3": 84.0
+   },
+   "on_site": {
+    "3": [
+     [
+      73.0,
+      84.0
+     ]
+    ]
+   },
+   "first_complete_at": 73.0,
+   "detection_to_first_complete": 69.0,
+   "coverage_intervals": [
+    [
+     73.0,
+     84.0
+    ]
+   ],
+   "longest_contiguous_coverage": 11.0,
+   "total_coverage_time": 11.0,
+   "coverage_gap_count": 0,
+   "coverage_reset_count": 0,
+   "coverage_work_lost": 0.0,
+   "final_coverage_shortfall": 0.0,
+   "last_complete_coverage_start": 73.0,
+   "earliest_belief_feasible_dispatch": 4.0,
+   "earliest_feasible_completion": 22.638837443025277,
+   "capable_agents_total": 2,
+   "capable_agents_busy_at_detection": 0,
+   "concurrent_active_tasks_at_detection": 4,
+   "detection_to_first_needs_decision": 8.0,
+   "capability_waiting_steps": 0.0,
+   "stage_windows": {
+    "0": {
+     "duration": 11.567769631159802,
+     "requirements": [
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "first_complete_at": 73.0,
+     "last_complete_at": 83.0,
+     "completed_at": null,
+     "resets": []
+    }
+   },
+   "coverage_changes": [
+    {
+     "at": 4.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 0.0,
+     "committed": [],
+     "reservation_ids": [
+      "rp0007"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "0",
+      "1",
+      "2",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 73.0,
+     "complete": true,
+     "members": [
+      "3"
+     ],
+     "covered": [
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 0.086447,
+     "committed": [],
+     "reservation_ids": [
+      "rp0007"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "0",
+      "1",
+      "2",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 84.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 1.0,
+     "committed": [
+      "3"
+     ],
+     "reservation_ids": [
+      "rp0007"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "0",
+      "1",
+      "2",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    }
+   ]
+  },
+  {
+   "seed": 20070,
+   "target": "piloc-e1-target-1",
+   "detected_at": 505.0,
+   "deadline": 598.3129306472134,
+   "stage_count": 2,
+   "durations": [
+    11.92885613024894,
+    7.491682315278461
+   ],
+   "requirements": [
+    [
+     1,
+     0,
+     0,
+     0,
+     1
+    ],
+    [
+     1,
+     0,
+     0,
+     1,
+     1
+    ]
+   ],
+   "work_needed": 19.421,
+   "delivery_budget": 73.892,
+   "expired_at": null,
+   "final_progress": 1.0,
+   "final_stage": 1,
+   "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
+   "first_belief_at": {
+    "0": 505.0,
+    "1": 505.0,
+    "2": 505.0,
+    "3": 505.0,
+    "4": 505.0,
+    "5": 505.0
+   },
+   "belief_revisions": {
+    "0": [
+     [
+      505.0,
+      1
+     ]
+    ],
+    "1": [
+     [
+      505.0,
+      1
+     ]
+    ],
+    "2": [
+     [
+      505.0,
+      1
+     ]
+    ],
+    "3": [
+     [
+      505.0,
+      1
+     ]
+    ],
+    "4": [
+     [
+      505.0,
+      1
+     ]
+    ],
+    "5": [
+     [
+      505.0,
+      1
+     ]
+    ]
+   },
+   "belief_spread": 0.0,
+   "first_reservation_at": {
+    "0": 505.0,
+    "1": 505.0,
+    "2": 505.0,
+    "3": 505.0,
+    "4": 505.0,
+    "5": 505.0
+   },
+   "reservation_spread": 0.0,
+   "reservation_ids": {
+    "0": [
+     "rp0015"
+    ],
+    "2": [
+     "rp0014"
+    ]
+   },
+   "assignment_sent_at": {
+    "0": 505.0,
+    "2": 505.0
+   },
+   "assignment_spread": 0.0,
+   "departed_at": {},
+   "arrived_at": {
+    "0": 507.0,
+    "2": 507.0
+   },
+   "arrival_spread": 2.0,
+   "left_at": {
+    "2": 526.0,
+    "0": 526.0
+   },
+   "on_site": {
+    "0": [
+     [
+      507.0,
+      526.0
+     ]
+    ],
+    "2": [
+     [
+      507.0,
+      526.0
+     ]
+    ]
+   },
+   "first_complete_at": 507.0,
+   "detection_to_first_complete": 2.0,
+   "coverage_intervals": [
+    [
+     507.0,
+     518.0
+    ],
+    [
+     519.0,
+     526.0
+    ]
+   ],
+   "longest_contiguous_coverage": 11.0,
+   "total_coverage_time": 18.0,
+   "coverage_gap_count": 0,
+   "coverage_reset_count": 0,
+   "coverage_work_lost": 0.0,
+   "final_coverage_shortfall": 0.0,
+   "last_complete_coverage_start": 519.0,
+   "earliest_belief_feasible_dispatch": 505.0,
+   "earliest_feasible_completion": 531.491606257393,
+   "capable_agents_total": 6,
+   "capable_agents_busy_at_detection": 0,
+   "concurrent_active_tasks_at_detection": 6,
+   "detection_to_first_needs_decision": 0.0,
+   "capability_waiting_steps": 1.0,
+   "stage_windows": {
+    "0": {
+     "duration": 11.92885613024894,
+     "requirements": [
+      1,
+      0,
+      0,
+      0,
+      1
+     ],
+     "first_complete_at": 507.0,
+     "last_complete_at": 517.0,
+     "completed_at": 518.0,
+     "resets": []
+    },
+    "1": {
+     "duration": 7.491682315278461,
+     "requirements": [
+      1,
+      0,
+      0,
+      1,
+      1
+     ],
+     "first_complete_at": 519.0,
+     "last_complete_at": 525.0,
+     "completed_at": null,
+     "resets": []
+    }
+   },
+   "coverage_changes": [
+    {
+     "at": 505.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      1,
+      0,
+      0,
+      0,
+      1
+     ],
+     "stage_index": 0,
+     "progress": 0.0,
+     "committed": [
+      "0",
+      "2"
+     ],
+     "reservation_ids": [
+      "rp0015",
+      "rp0014"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "1",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 507.0,
+     "complete": true,
+     "members": [
+      "0",
+      "2"
+     ],
+     "covered": [
+      1,
+      0,
+      0,
+      0,
+      1
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 0.041915,
+     "committed": [],
+     "reservation_ids": [
+      "rp0015",
+      "rp0014"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "1",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 518.0,
+     "complete": false,
+     "members": [
+      "0",
+      "2"
+     ],
+     "covered": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      1,
+      0,
+      0,
+      1,
+      1
+     ],
+     "stage_index": 1,
+     "progress": 0.5,
+     "committed": [],
+     "reservation_ids": [
+      "rp0015",
+      "rp0014"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "1",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 519.0,
+     "complete": true,
+     "members": [
+      "0",
+      "2"
+     ],
+     "covered": [
+      1,
+      0,
+      0,
+      1,
+      1
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 1,
+     "progress": 0.566741,
+     "committed": [],
+     "reservation_ids": [
+      "rp0015",
+      "rp0014"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "1",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 526.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      1,
+      0,
+      0,
+      1,
+      1
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 1,
+     "progress": 1.0,
+     "committed": [
+      "0",
+      "2"
+     ],
+     "reservation_ids": [
+      "rp0015",
+      "rp0014"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "1",
+      "4",
+      "5"
+     ],
+     "belief_stale": []
+    }
+   ]
+  },
+  {
+   "seed": 20070,
    "target": "piloc-e1-target-4",
    "detected_at": 1.0,
    "deadline": 98.41137345373289,
@@ -8496,6 +8538,8 @@
    "final_progress": 1.0,
    "final_stage": 2,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 1.0,
     "1": 1.0,
@@ -8580,9 +8624,9 @@
    "left_at": {
     "5": 12.0,
     "4": 12.0,
-    "0": 72.0,
+    "2": 72.0,
     "3": 72.0,
-    "2": 72.0
+    "0": 72.0
    },
    "on_site": {
     "2": [
@@ -8634,9 +8678,9 @@
    ],
    "longest_contiguous_coverage": 10.0,
    "total_coverage_time": 24.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 68.0,
    "earliest_belief_feasible_dispatch": 1.0,
@@ -8980,6 +9024,8 @@
    "final_progress": 1.0,
    "final_stage": 0,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 2.0,
     "1": 2.0,
@@ -9092,9 +9138,9 @@
    ],
    "longest_contiguous_coverage": 10.0,
    "total_coverage_time": 10.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 73.0,
    "earliest_belief_feasible_dispatch": 2.0,
@@ -9280,6 +9326,8 @@
    "final_progress": 1.0,
    "final_stage": 2,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 505.0,
     "1": 505.0,
@@ -9360,8 +9408,8 @@
    },
    "arrival_spread": 2.0,
    "left_at": {
-    "5": 524.0,
     "1": 524.0,
+    "5": 524.0,
     "4": 524.0,
     "3": 530.0
    },
@@ -9409,9 +9457,9 @@
    ],
    "longest_contiguous_coverage": 8.0,
    "total_coverage_time": 21.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 525.0,
    "earliest_belief_feasible_dispatch": 505.0,
@@ -9752,6 +9800,286 @@
   },
   {
    "seed": 20083,
+   "target": "piloc-e1-target-2",
+   "detected_at": 1.0,
+   "deadline": 78.81283957400717,
+   "stage_count": 1,
+   "durations": [
+    7.95315840436383
+   ],
+   "requirements": [
+    [
+     0,
+     1,
+     1,
+     1,
+     0
+    ]
+   ],
+   "work_needed": 7.953,
+   "delivery_budget": 69.86,
+   "expired_at": null,
+   "final_progress": 1.0,
+   "final_stage": 0,
+   "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
+   "first_belief_at": {
+    "0": 1.0,
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0,
+    "4": 1.0,
+    "5": 1.0
+   },
+   "belief_revisions": {
+    "0": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "1": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "2": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "3": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "4": [
+     [
+      1.0,
+      1
+     ]
+    ],
+    "5": [
+     [
+      1.0,
+      1
+     ]
+    ]
+   },
+   "belief_spread": 0.0,
+   "first_reservation_at": {
+    "0": 1.0,
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0,
+    "4": 1.0,
+    "5": 1.0
+   },
+   "reservation_spread": 0.0,
+   "reservation_ids": {
+    "0": [
+     "rp0003"
+    ],
+    "4": [
+     "rp0009"
+    ]
+   },
+   "assignment_sent_at": {
+    "0": 1.0,
+    "1": 1.0,
+    "4": 60.0
+   },
+   "assignment_spread": 59.0,
+   "departed_at": {},
+   "arrived_at": {
+    "0": 2.0,
+    "1": 2.0,
+    "4": 61.0
+   },
+   "arrival_spread": 60.0,
+   "left_at": {
+    "1": 53.0,
+    "0": 68.0,
+    "4": 68.0
+   },
+   "on_site": {
+    "0": [
+     [
+      2.0,
+      68.0
+     ]
+    ],
+    "1": [
+     [
+      2.0,
+      53.0
+     ]
+    ],
+    "4": [
+     [
+      61.0,
+      68.0
+     ]
+    ]
+   },
+   "first_complete_at": 61.0,
+   "detection_to_first_complete": 60.0,
+   "coverage_intervals": [
+    [
+     61.0,
+     68.0
+    ]
+   ],
+   "longest_contiguous_coverage": 7.0,
+   "total_coverage_time": 7.0,
+   "coverage_gap_count": 0,
+   "coverage_reset_count": 0,
+   "coverage_work_lost": 0.0,
+   "final_coverage_shortfall": 0.0,
+   "last_complete_coverage_start": 61.0,
+   "earliest_belief_feasible_dispatch": 1.0,
+   "earliest_feasible_completion": 16.024226216229305,
+   "capable_agents_total": 4,
+   "capable_agents_busy_at_detection": 0,
+   "concurrent_active_tasks_at_detection": 3,
+   "detection_to_first_needs_decision": 0.0,
+   "capability_waiting_steps": 59.0,
+   "stage_windows": {
+    "0": {
+     "duration": 7.95315840436383,
+     "requirements": [
+      0,
+      1,
+      1,
+      1,
+      0
+     ],
+     "first_complete_at": 61.0,
+     "last_complete_at": 67.0,
+     "completed_at": null,
+     "resets": []
+    }
+   },
+   "coverage_changes": [
+    {
+     "at": 1.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "missing": [
+      0,
+      1,
+      1,
+      1,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 0.0,
+     "committed": [
+      "0",
+      "1"
+     ],
+     "reservation_ids": [
+      "rp0003",
+      "rp0009"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "1",
+      "2",
+      "3"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 61.0,
+     "complete": true,
+     "members": [
+      "0",
+      "4"
+     ],
+     "covered": [
+      0,
+      1,
+      1,
+      1,
+      0
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 0.125736,
+     "committed": [
+      "1"
+     ],
+     "reservation_ids": [
+      "rp0003",
+      "rp0009"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "1",
+      "2",
+      "3"
+     ],
+     "belief_stale": []
+    },
+    {
+     "at": 68.0,
+     "complete": false,
+     "members": [],
+     "covered": [
+      0,
+      1,
+      1,
+      1,
+      0
+     ],
+     "missing": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "stage_index": 0,
+     "progress": 1.0,
+     "committed": [
+      "0",
+      "1",
+      "4"
+     ],
+     "reservation_ids": [
+      "rp0003",
+      "rp0009"
+     ],
+     "release_reason": null,
+     "hard_masked": [
+      "1",
+      "2",
+      "3"
+     ],
+     "belief_stale": []
+    }
+   ]
+  },
+  {
+   "seed": 20083,
    "target": "piloc-e1-target-3",
    "detected_at": 1.0,
    "deadline": 69.46578825924773,
@@ -9790,6 +10118,8 @@
    "final_progress": 1.0,
    "final_stage": 2,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 1.0,
     "1": 1.0,
@@ -9870,8 +10200,8 @@
    },
    "arrival_spread": 53.0,
    "left_at": {
-    "3": 13.0,
     "2": 13.0,
+    "3": 13.0,
     "1": 60.0,
     "4": 60.0
    },
@@ -9919,9 +10249,9 @@
    ],
    "longest_contiguous_coverage": 7.0,
    "total_coverage_time": 16.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 54.0,
    "earliest_belief_feasible_dispatch": 1.0,
@@ -10272,6 +10602,8 @@
    "final_progress": 1.0,
    "final_stage": 0,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 6.0,
     "1": 6.0,
@@ -10360,9 +10692,9 @@
    ],
    "longest_contiguous_coverage": 6.0,
    "total_coverage_time": 6.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 69.0,
    "earliest_belief_feasible_dispatch": 6.0,
@@ -10496,284 +10828,6 @@
   },
   {
    "seed": 20083,
-   "target": "piloc-e1-target-2",
-   "detected_at": 1.0,
-   "deadline": 78.81283957400717,
-   "stage_count": 1,
-   "durations": [
-    7.95315840436383
-   ],
-   "requirements": [
-    [
-     0,
-     1,
-     1,
-     1,
-     0
-    ]
-   ],
-   "work_needed": 7.953,
-   "delivery_budget": 69.86,
-   "expired_at": null,
-   "final_progress": 1.0,
-   "final_stage": 0,
-   "final_status": "completed",
-   "first_belief_at": {
-    "0": 1.0,
-    "1": 1.0,
-    "2": 1.0,
-    "3": 1.0,
-    "4": 1.0,
-    "5": 1.0
-   },
-   "belief_revisions": {
-    "0": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "1": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "2": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "3": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "4": [
-     [
-      1.0,
-      1
-     ]
-    ],
-    "5": [
-     [
-      1.0,
-      1
-     ]
-    ]
-   },
-   "belief_spread": 0.0,
-   "first_reservation_at": {
-    "0": 1.0,
-    "1": 1.0,
-    "2": 1.0,
-    "3": 1.0,
-    "4": 1.0,
-    "5": 1.0
-   },
-   "reservation_spread": 0.0,
-   "reservation_ids": {
-    "0": [
-     "rp0003"
-    ],
-    "4": [
-     "rp0009"
-    ]
-   },
-   "assignment_sent_at": {
-    "0": 1.0,
-    "1": 1.0,
-    "4": 60.0
-   },
-   "assignment_spread": 59.0,
-   "departed_at": {},
-   "arrived_at": {
-    "0": 2.0,
-    "1": 2.0,
-    "4": 61.0
-   },
-   "arrival_spread": 60.0,
-   "left_at": {
-    "1": 53.0,
-    "0": 68.0,
-    "4": 68.0
-   },
-   "on_site": {
-    "0": [
-     [
-      2.0,
-      68.0
-     ]
-    ],
-    "1": [
-     [
-      2.0,
-      53.0
-     ]
-    ],
-    "4": [
-     [
-      61.0,
-      68.0
-     ]
-    ]
-   },
-   "first_complete_at": 61.0,
-   "detection_to_first_complete": 60.0,
-   "coverage_intervals": [
-    [
-     61.0,
-     68.0
-    ]
-   ],
-   "longest_contiguous_coverage": 7.0,
-   "total_coverage_time": 7.0,
-   "coverage_gap_count": 1,
-   "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
-   "final_coverage_shortfall": 0.0,
-   "last_complete_coverage_start": 61.0,
-   "earliest_belief_feasible_dispatch": 1.0,
-   "earliest_feasible_completion": 16.024226216229305,
-   "capable_agents_total": 4,
-   "capable_agents_busy_at_detection": 0,
-   "concurrent_active_tasks_at_detection": 3,
-   "detection_to_first_needs_decision": 0.0,
-   "capability_waiting_steps": 59.0,
-   "stage_windows": {
-    "0": {
-     "duration": 7.95315840436383,
-     "requirements": [
-      0,
-      1,
-      1,
-      1,
-      0
-     ],
-     "first_complete_at": 61.0,
-     "last_complete_at": 67.0,
-     "completed_at": null,
-     "resets": []
-    }
-   },
-   "coverage_changes": [
-    {
-     "at": 1.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "missing": [
-      0,
-      1,
-      1,
-      1,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 0.0,
-     "committed": [
-      "0",
-      "1"
-     ],
-     "reservation_ids": [
-      "rp0003",
-      "rp0009"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "1",
-      "2",
-      "3"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 61.0,
-     "complete": true,
-     "members": [
-      "0",
-      "4"
-     ],
-     "covered": [
-      0,
-      1,
-      1,
-      1,
-      0
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 0.125736,
-     "committed": [
-      "1"
-     ],
-     "reservation_ids": [
-      "rp0003",
-      "rp0009"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "1",
-      "2",
-      "3"
-     ],
-     "belief_stale": []
-    },
-    {
-     "at": 68.0,
-     "complete": false,
-     "members": [],
-     "covered": [
-      0,
-      1,
-      1,
-      1,
-      0
-     ],
-     "missing": [
-      0,
-      0,
-      0,
-      0,
-      0
-     ],
-     "stage_index": 0,
-     "progress": 1.0,
-     "committed": [
-      "0",
-      "1",
-      "4"
-     ],
-     "reservation_ids": [
-      "rp0003",
-      "rp0009"
-     ],
-     "release_reason": null,
-     "hard_masked": [
-      "1",
-      "2",
-      "3"
-     ],
-     "belief_stale": []
-    }
-   ]
-  },
-  {
-   "seed": 20083,
    "target": "piloc-e1-target-4",
    "detected_at": 3.0,
    "deadline": 70.93963703229436,
@@ -10796,6 +10850,8 @@
    "final_progress": 1.0,
    "final_stage": 0,
    "final_status": "expired",
+   "completed_work": true,
+   "finished_after_deadline": true,
    "first_belief_at": {
     "0": 3.0,
     "1": 3.0,
@@ -10876,8 +10932,8 @@
    },
    "arrival_spread": 66.0,
    "left_at": {
-    "3": 78.0,
     "1": 78.0,
+    "3": 78.0,
     "4": 78.0
    },
    "on_site": {
@@ -10910,9 +10966,9 @@
    ],
    "longest_contiguous_coverage": 9.0,
    "total_coverage_time": 9.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 69.0,
    "earliest_belief_feasible_dispatch": 3.0,
@@ -11088,6 +11144,8 @@
    "final_progress": 1.0,
    "final_stage": 2,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 1.0,
     "1": 1.0,
@@ -11199,9 +11257,9 @@
    ],
    "longest_contiguous_coverage": 8.0,
    "total_coverage_time": 18.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 76.0,
    "earliest_belief_feasible_dispatch": 1.0,
@@ -11558,6 +11616,8 @@
    "final_progress": 1.0,
    "final_stage": 1,
    "final_status": "completed",
+   "completed_work": true,
+   "finished_after_deadline": false,
    "first_belief_at": {
     "0": 2.0,
     "1": 2.0,
@@ -11663,9 +11723,9 @@
    ],
    "longest_contiguous_coverage": 11.0,
    "total_coverage_time": 20.0,
-   "coverage_gap_count": 1,
+   "coverage_gap_count": 0,
    "coverage_reset_count": 0,
-   "coverage_work_lost": 1.0,
+   "coverage_work_lost": 0.0,
    "final_coverage_shortfall": 0.0,
    "last_complete_coverage_start": 79.0,
    "earliest_belief_feasible_dispatch": 2.0,
