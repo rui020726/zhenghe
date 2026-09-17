@@ -55,6 +55,19 @@ def _world_position(x: float, y: float, *, what: str) -> WorldPosition:
     )
 
 
+def _reservation_score(advice: CoordinationAdvice, agent_id: str, task_id: str) -> float:
+    """The coalition commitment this robot holds for this task, or 0.0 if none.
+
+    Reading the commitment here is what lets the same bounded residual channel carry
+    both the per-pair bias and the team plan. Staleness is bounded by the advice
+    window, not re-checked per pair: the planner that issues reservations also bounds
+    its advice's ``valid_until`` by the earliest reservation expiry, and both the
+    heuristic and the network path must treat a commitment the same way.
+    """
+    commitment = advice.reservations.get((agent_id, task_id))
+    return 0.0 if commitment is None else float(commitment.score)
+
+
 @dataclass(frozen=True, slots=True)
 class _Verdict:
     """One allocator decision: the winning index plus the logits behind it.
@@ -549,6 +562,7 @@ class Task03Adapter:
                 ) / denominator
                 distance = float(self._norm(agent["location"] - location)) / math.sqrt(2.0)
                 residual = advice.bias_for(str(agent_id), external_id or "")
+                residual += _reservation_score(advice, str(agent_id), external_id or "")
                 score = compatibility - 0.35 * distance + self.residual_scale * residual
                 deadline = believed_deadlines.get(internal_task_id)
                 if deadline is not None and float(deadline) < current_time:
@@ -607,13 +621,18 @@ class Task03Adapter:
                     logits[0, position] += self.ctde_task_logit_offset
             # The residual is zero on the depot action by construction: advice is only
             # ever produced for (robot, task) pairs, so "go home" cannot be biased.
+            # A coalition commitment rides the same channel and the same bound, so the
+            # recorded ``bias`` vector still satisfies final = ctde + offset + bias.
             bias = torch.zeros_like(logits)
             for position, (kind, internal_task_id) in enumerate(action_map):
                 if kind != "task" or internal_task_id is None:
                     continue
                 external_id = self.internal_to_external.get(int(internal_task_id))
                 if external_id is not None:
-                    value = self.residual_scale * advice.bias_for(str(agent_id), external_id)
+                    agent_key = str(agent_id)
+                    residual = advice.bias_for(agent_key, external_id)
+                    residual += _reservation_score(advice, agent_key, external_id)
+                    value = self.residual_scale * residual
                     bias[0, position] = value
                     logits[0, position] += value
             # Invariant 6: the environment's hard mask is the last thing applied.

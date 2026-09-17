@@ -278,6 +278,59 @@ class AssignmentCommand:
 
 
 @dataclass(frozen=True, slots=True)
+class CoalitionReservation:
+    """One robot's short-horizon commitment to one capability slot of one task.
+
+    A per-pair bias scores a robot against a task in isolation, so two robots that
+    would fill the *same* slot are scored identically and nothing stops the allocator
+    from sending both. A reservation names the slot, so occupancy is exclusive and
+    the group that assembles is the one the plan actually asked for -- the
+    composition lever the pair interface cannot reach.
+
+    ``ability_slot`` reads the task's remaining requirement as a flat list of unit
+    slots: a requirement of ``(3, 0, 0, 0, 0)`` has three slots, in dimension 0, and
+    a robot with one unit of that ability covers exactly one of them.
+    ``slot_dimension`` names which ability dimension the slot belongs to, so a
+    consumer never has to re-derive it from the requirement vector. Within one task
+    two reservations may not share a slot index.
+
+    ``task_revision`` is the revision of the task *as this robot believes it*, so the
+    commitment is dropped as soon as that robot's own view moves on. It is never a
+    registry revision: the coordinator does not read the registry (invariant 9).
+
+    The commitment is deliberately short-horizon: ``valid_until`` bounds it, and a
+    reserving planner must also bound its advice's ``valid_until`` by the earliest
+    reservation expiry, because the advice is what the allocator reads and a cached
+    advice is the only way an expired commitment could still be applied.
+    """
+
+    agent_id: str
+    task_id: str
+    ability_slot: int
+    slot_dimension: int
+    task_revision: int
+    issued_at: float
+    valid_until: float
+    score: float
+
+    def __post_init__(self) -> None:
+        if not self.agent_id or not self.task_id:
+            raise ValueError("agent_id and task_id are required")
+        if self.ability_slot < 0 or self.slot_dimension < 0:
+            raise ValueError("slot indices cannot be negative")
+        if self.task_revision < 0:
+            raise ValueError("task_revision cannot be negative")
+        if self.valid_until < self.issued_at:
+            raise ValueError("a reservation cannot expire before it was issued")
+        if not -1.0 <= self.score <= 1.0:
+            raise ValueError("reservation score must be bounded to [-1, 1]")
+
+    def active_at(self, now: float) -> bool:
+        """True while the commitment still stands. Expiry is the issuer's to enforce."""
+        return now <= self.valid_until
+
+
+@dataclass(frozen=True, slots=True)
 class CoordinationAdvice:
     revision: int
     generated_at: float
@@ -297,6 +350,16 @@ class CoordinationAdvice:
     # the pre-existing positional call sites keep binding replan_agents to
     # replan_agents.
     agent_task_bias: Mapping[tuple[str, str], float] = field(
+        default_factory=dict, kw_only=True
+    )
+    # Short-horizon coalition commitments keyed by (agent, task): which robot covers
+    # which capability slot of which task, until when. Empty by default, which is what
+    # keeps a run without a reserving planner identical to one from before this field
+    # existed. The key names a single robot, so unlike ``task_bias`` a reservation
+    # cannot carry one robot's knowledge to robots it never reached (invariant 9).
+    # Keyword-only and appended, so the earlier positional call sites keep binding
+    # their arguments to the fields they already meant.
+    reservations: Mapping[tuple[str, str], CoalitionReservation] = field(
         default_factory=dict, kw_only=True
     )
 
