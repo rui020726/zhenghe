@@ -676,9 +676,16 @@ def _observe_target(metrics: FileMetrics, decision: Mapping[str, Any]) -> None:
                 )
         requirements = entry.get("requirements")
         remaining = entry.get("remaining")
-        if requirements is not None and remaining is not None:
+        stage_index = entry.get("stage_index")
+        if requirements is not None:
             row.setdefault("requirements", list(requirements))
-            row["remaining_last"] = list(remaining)
+            row.setdefault("dispatch_stage", stage_index)
+        if requirements is not None and remaining is not None:
+            if stage_index == row.get("dispatch_stage"):
+                # Only the stage this target was dispatched in is tracked. A target that
+                # advanced reports the *next* stage's requirement, which is open work by
+                # definition and would otherwise read as a capability that never arrived.
+                row["remaining_last"] = list(remaining)
             if list(remaining) != list(requirements):
                 row["worked_at"] = min(row.get("worked_at", timestamp), timestamp)
         capacity = entry.get("capacity")
