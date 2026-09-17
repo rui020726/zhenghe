@@ -356,6 +356,30 @@
     场景构造性质而非需要分配器发现的约束；这与 learnability 门禁中 `deadline_aware` oracle
     修复 0/16 是同一堵墙。
   - 集成测试仍为 435 项通过（2 项按设计跳过），本阶段无源码改动。
+- 联盟成型与连续覆盖分析（基线 `fix/coalition-commitment-continuity@868d68a`，分支
+  `analysis/coalition-formation-latency`，证据见
+  `runs/coalition_formation_latency_20260918/COALITION_FORMATION_VERDICT.md`）：
+  - **六个"ordering failure"的标签是错的**。五个目标实际交付了**全部**工时（whole-task
+    progress 1.0），只是因为最后一 tick 落在截止线后 1.3–10.4 步而被记为 expired；第六个
+    （`20003/target-0`）从未获得完整覆盖。六个目标全部 `belief_spread = 0`（检测当 tick
+    每个机器人都已收到消息）、0 个可用机器人被占用、0 次覆盖重置、0 工时被丢弃。
+  - **primary cause**：`arrival_desynchronised` ×3、`stage_transition_handoff` ×2、
+    `planner_dispatch_late` ×1。两个是阶段交接失败（`20008/target-2` 阶段 1 完成后等 85 步、
+    `20070/target-2` 等 66 步）。
+  - **反事实门槛**：A earliest-belief dispatch 与 B synchronised arrival 各 6/6（均为解析上界，
+    非实测策略），C stage-scoped lease 0/6（无覆盖可保护），E final-tick credit 0/6（超时
+    1.3–85.9 步），D instant communication 6/6（诊断上界，禁止进在线 actor）。按序门槛选中
+    10B assembly scheduler。
+  - **原型 `coalition_assembly_scheduler`（默认关闭）小门禁未通过**：5 个 seed 上 baseline 与
+    candidate 完全一致（completed 21、expired 8、reset 1、lost work 1.2，0 override、0 拒绝、
+    0 死锁）。同步项**确实生效**（seed 20003 的 1085 条决策中 13 条 bias 被抬高恰好 0.0375），
+    但**未翻转任何选择**——分配器自身 logits 的间距远大于该有界项。因此按 Phase 12 第 7 步
+    停止，未跑批量评估。
+  - **deadline tick 语义**已用 18 项测试钉死（`test_deadline_tick_semantics.py`）：覆盖中断时
+    `time_left` 重置为**完整** stage 时长、只有已到场成员计入覆盖、多余成员不提速、stage 时长
+    固定、deadline 用严格 `>`。发现一处真实 off-by-one（`task_update` 先判过期后结算工时，
+    导致"恰在跨线 tick 完成"的任务被报成 expired），**仅记录未修复**。
+  - 集成测试 476 项通过（2 项按设计跳过）。
 
 ## 尚未完成
 

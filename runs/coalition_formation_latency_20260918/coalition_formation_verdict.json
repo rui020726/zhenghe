@@ -1,0 +1,77 @@
+{
+ "arm": "coalplan0.25sticky",
+ "question": "why do the six remaining binding-planner expiries happen, and which mechanism could fix them?",
+ "branch": "analysis/coalition-formation-latency",
+ "base_commit": "868d68a",
+ "tests": {"count": 476, "skipped": 2, "result": "OK"},
+ "deadline_tick_semantics": {
+  "coverage_incomplete_resets_time_left": "yes, to the full stage duration (old_task_env.py:1152-1154)",
+  "assigned_but_not_arrived_counts_as_coverage": "no (members appended only on arrival, :1064)",
+  "extra_agents_change_work_speed": "no (flat time_left -= self.dt, :1121)",
+  "stage_duration_fixed": "yes, equal across a task's stages (:172)",
+  "deadline_comparison": "strict > (:1102)",
+  "dt_vs_self_dt": "equal in every recorded run; step() uses the argument, task_update uses self.dt",
+  "off_by_one_found": {
+   "where": "task_update runs the expiry loop (:1099-1108) before the work loop (:1110-1154); Task03Adapter._read_progress reads expired first (task03.py:1258)",
+   "effect": "a task that completes on the tick its deadline is crossed is reported expired",
+   "impact": "bounded; cannot explain the six (none of them finished), can only misreport a genuine completion",
+   "status": "reported in DEADLINE_TICK_TESTS.md, deliberately not fixed"
+  }
+ },
+ "six_failures": {
+  "20003/piloc-e1-target-1": {"primary": "arrival_desynchronised", "secondary": ["planner_dispatch_late"], "completed_work": true, "belief_spread": 0.0, "arrival_spread": 157.0, "detection_to_first_complete": 157.0, "coverage_resets": 0, "lost_work": 0.0, "capable_busy_at_detection": "0/6"},
+  "20003/piloc-e1-target-0": {"primary": "planner_dispatch_late", "secondary": ["arrival_desynchronised"], "completed_work": false, "belief_spread": 0.0, "arrival_spread": 14.0, "detection_to_first_complete": null, "coverage_resets": 0, "lost_work": 0.0, "capable_busy_at_detection": "0/4"},
+  "20008/piloc-e1-target-2": {"primary": "stage_transition_handoff", "secondary": [], "completed_work": true, "belief_spread": 0.0, "arrival_spread": 4.0, "detection_to_first_complete": 4.0, "coverage_resets": 0, "lost_work": 0.0, "capable_busy_at_detection": "0/6"},
+  "20052/piloc-e1-target-3": {"primary": "arrival_desynchronised", "secondary": ["planner_dispatch_late"], "completed_work": true, "belief_spread": 0.0, "arrival_spread": 42.0, "detection_to_first_complete": 42.0, "coverage_resets": 0, "lost_work": 0.0, "capable_busy_at_detection": "0/4"},
+  "20070/piloc-e1-target-2": {"primary": "stage_transition_handoff", "secondary": ["arrival_desynchronised", "planner_dispatch_late"], "completed_work": true, "belief_spread": 0.0, "arrival_spread": 81.0, "detection_to_first_complete": 9.0, "coverage_resets": 0, "lost_work": 0.0, "capable_busy_at_detection": "0/4"},
+  "20083/piloc-e1-target-4": {"primary": "arrival_desynchronised", "secondary": ["planner_dispatch_late"], "completed_work": true, "belief_spread": 0.0, "arrival_spread": 66.0, "detection_to_first_complete": 66.0, "coverage_resets": 0, "lost_work": 0.0, "capable_busy_at_detection": "0/6"}
+ },
+ "primary_cause_counts": {"arrival_desynchronised": 3, "stage_transition_handoff": 2, "planner_dispatch_late": 1},
+ "counterfactual_gate": {
+  "gate": "net rescued >= 3 of 6",
+  "A_earliest_belief_dispatch": {"rescued": 6, "broken": 0, "net": 6, "passes": true, "kind": "analytic ceiling", "online_invisible": false},
+  "B_synchronised_arrival": {"rescued": 6, "broken": 0, "net": 6, "passes": true, "kind": "analytic ceiling", "online_invisible": false},
+  "C_stage_scoped_lease": {"rescued": 0, "broken": 0, "net": 0, "passes": false, "reason": "zero resets and zero lost work: nothing to protect"},
+  "D_instant_communication": {"rescued": 6, "broken": 0, "net": 6, "passes": true, "kind": "diagnostic ceiling", "online_invisible": true},
+  "E_deadline_final_tick_credit": {"rescued": 0, "broken": 0, "net": 0, "passes": false, "reason": "overruns are 1.3-85.9 steps, not one tick"}
+ },
+ "decision_gate": {
+  "A_final_tick_credit": "fails (0/6)",
+  "B_stage_lease": "fails (0/6)",
+  "C_earliest_dispatch_or_sync_arrival": "passes (6/6 each)",
+  "selected_direction": "10B assembly scheduler",
+  "note": "the higher-preference stage lease failed its own gate, so dispatch/arrival is the smallest-blast option that passed"
+ },
+ "prototype": {
+  "implemented": true,
+  "module": "integrated_sar/assembly.py",
+  "policy": "coalition_assembly_scheduler",
+  "flag": "assembly_scheduling (default False)",
+  "tests": 27,
+  "small_scale_gate": "FAIL",
+  "small_scale_gate_detail": {
+   "seeds": [20003, 20008, 20052, 20070, 20083],
+   "baseline_completed": 21, "candidate_completed": 21,
+   "baseline_expired": 8, "candidate_expired": 8,
+   "baseline_coverage_resets": 1, "candidate_coverage_resets": 1,
+   "baseline_lost_work": 1.2, "candidate_lost_work": 1.2,
+   "executed_override_unjustified": {"baseline": 0, "candidate": 0},
+   "rejected_assignments": {"baseline": 0, "candidate": 0},
+   "max_longest_idle_streak": 0.0,
+   "term_active": "13 of 1085 decision rows in seed 20003 carry a bias raised by exactly 0.0375",
+   "choices_flipped": 0,
+   "attribution": "the allocator's own logits separate candidates by far more than 0.0375, so a bounded tie-break term cannot reorder them"
+  }
+ },
+ "evaluation": {
+  "legacy_100": "not run (small-scale gate failed)",
+  "fresh_60": "not run (small-scale gate failed)",
+  "final_preregistered": "not run"
+ },
+ "uncommitted_large_artefacts": [
+  "runs/coordinator_baselines_20260917/dev_summary.json (protected, never staged)",
+  "runs/coalition_formation_latency_20260918/gate/ (per-run lifecycle and decision traces)",
+  "runs/duration_relevance_20260917/deliveries_s*.json (31 MB total)"
+ ],
+ "learned_coordinator": "not reconsidered: no ordering-class failure was found, so there is no learnable residual; the failures are dispatch and assembly latency, which the learnability gate already flagged"
+}

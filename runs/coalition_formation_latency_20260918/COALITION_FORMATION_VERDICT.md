@@ -148,9 +148,22 @@ option that passed.
 ## 6. Prototype
 
 Phase 10B is implemented as `integrated_sar/assembly.py` plus a default-off option on the
-coalition planner, `coalition_assembly_scheduler`. See
-`ASSEMBLY_SCHEDULER_DESIGN.md` for the contract, the default-off identity argument and the
-test matrix; the small-scale gate result is in `ASSEMBLY_GATE.md`.
+coalition planner, `coalition_assembly_scheduler`. See `ASSEMBLY_SCHEDULER_DESIGN.md` for
+the contract, the default-off identity argument and the test matrix.
+
+**Its small-scale gate fails, and the result is in `ASSEMBLY_GATE.md`.** On the five
+failure seeds the baseline and the prototype are identical: completed 21 both arms,
+expired 8 both arms, one coverage reset and 1.2 lost work-steps in each, zero unjustified
+overrides, zero rejected commands, zero deadlocks. The synchronisation term *is* active --
+13 of 1085 decision rows in seed 20003 carry a bias raised by exactly `0.15 * 0.25 =
+0.0375` -- but it flips **no** choice, because the allocator's own logits separate the
+candidates by far more than that. Per the brief's Phase 12 step 7 the batch evaluation is
+therefore not started.
+
+So the gate selects the *direction* on the strength of the counterfactual ceilings, and
+the prototype built for that direction does not clear its own gate. That is recorded as
+the outcome rather than as a partial success: the prototype is safe, inert by default and
+its planner is a usable component, but it does not rescue any of the six.
 
 ## 7. What this does not establish
 
