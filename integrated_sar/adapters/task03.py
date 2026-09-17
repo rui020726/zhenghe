@@ -97,12 +97,18 @@ class Task03Adapter:
         command_ttl: float = 10.0,
         clear_initial_tasks: bool = True,
         seed: int | None = None,
+        ctde_task_logit_offset: float = 0.0,
     ) -> None:
         self.env = env
         self.network = network
         self.deterministic = bool(deterministic)
         self.residual_scale = float(residual_scale)
         self.command_ttl = float(command_ttl)
+        # Scalar calibration of the CTDE task/depot preference: a constant added to
+        # every *legal task* logit before the coordinator residual, never to the
+        # depot and never to a masked action. Zero by default, so a run that does
+        # not ask for calibration is bit-for-bit what it was before this existed.
+        self.ctde_task_logit_offset = float(ctde_task_logit_offset)
         self.comm_relay: Any | None = None
         # A sink for per-decision facts, or None. Attached by the driver only when a run
         # asks for a trace; it is written to after the decision is made and is never read
@@ -585,6 +591,20 @@ class Task03Adapter:
             )
             ctde = distribution.logits.clone()
             logits = ctde.clone()
+            # Scalar calibration comes first: a constant added to legal task logits
+            # only. The depot action keeps its logit, and a masked task is skipped,
+            # so no offset -- however large -- can make an illegal action selectable
+            # (invariant 6 is enforced again at the end regardless). The offset is
+            # deliberately not folded into ``bias``: the trace reports calibration
+            # and coordinator residual separately, so the recorded final logit can
+            # be re-derived from all three numbers.
+            if self.ctde_task_logit_offset:
+                for position, (kind, internal_task_id) in enumerate(action_map):
+                    if kind != "task" or internal_task_id is None:
+                        continue
+                    if position < len(illegal) and illegal[position]:
+                        continue
+                    logits[0, position] += self.ctde_task_logit_offset
             # The residual is zero on the depot action by construction: advice is only
             # ever produced for (robot, task) pairs, so "go home" cannot be biased.
             bias = torch.zeros_like(logits)
@@ -736,6 +756,9 @@ class Task03Adapter:
             ctde_logits=response.ctde,
             bias=response.bias,
             final_logits=response.final,
+            task_logit_offset=(
+                self.ctde_task_logit_offset if self.network is not None else None
+            ),
             current_kind=str(kind) if kind is not None else None,
             current_task=external_current,
             current_task_age=max(0.0, float(current_time) - commitment[2]),

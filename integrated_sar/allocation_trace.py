@@ -66,9 +66,24 @@ ROBOT_VELOCITY = 0.2
 EPS_ARRIVE = 1e-6
 
 
-def arm_name(*, use_coordinator: bool, residual_scale: float) -> str:
-    """The arm label shared with the ``rp_<arm>_s<seed>.jsonl`` lifecycle logs."""
-    return f"rs{residual_scale:g}" if use_coordinator else "nocoord"
+def arm_name(
+    *,
+    use_coordinator: bool,
+    residual_scale: float,
+    task_logit_offset: float = 0.0,
+) -> str:
+    """The arm label shared with the ``rp_<arm>_s<seed>.jsonl`` lifecycle logs.
+
+    Scalar calibration is part of the arm's identity: a trace that cannot say
+    "this was the uncalibrated actor" cannot be pooled with others without
+    silently averaging two different policies. The default keeps the
+    pre-existing labels exactly as they were, so the frozen 20260916 traces keep
+    reading as ``nocoord``/``rs0.25``.
+    """
+    label = f"rs{residual_scale:g}" if use_coordinator else "nocoord"
+    if task_logit_offset:
+        label = f"{label}+cal{task_logit_offset:g}"
+    return label
 
 
 def trace_meta(configuration: Any) -> dict[str, Any]:
@@ -77,6 +92,9 @@ def trace_meta(configuration: Any) -> dict[str, Any]:
         "arm": arm_name(
             use_coordinator=bool(configuration.use_coordinator),
             residual_scale=float(configuration.residual_scale),
+            task_logit_offset=float(
+                getattr(configuration, "ctde_task_logit_offset", 0.0)
+            ),
         ),
         "seed": int(configuration.seed),
         "steps": int(configuration.steps),
@@ -84,6 +102,9 @@ def trace_meta(configuration: Any) -> dict[str, Any]:
         "search_backend": configuration.search_backend,
         "use_coordinator": bool(configuration.use_coordinator),
         "residual_scale": float(configuration.residual_scale),
+        "ctde_task_logit_offset": float(
+            getattr(configuration, "ctde_task_logit_offset", 0.0)
+        ),
         "command_ttl": float(configuration.command_ttl),
         "allocation_interval": int(configuration.allocation_interval),
         "coordination_interval": int(configuration.coordination_interval),
@@ -121,6 +142,10 @@ class DecisionFacts:
     ctde_logits: tuple[float | None, ...] | None = None
     bias: tuple[float | None, ...] | None = None
     final_logits: tuple[float | None, ...] | None = None
+    # The scalar calibration applied to legal task logits in this decision, if any.
+    # Recorded next to the raw CTDE logits so ``final`` can be re-derived:
+    # final[task] == ctde[task] + task_logit_offset + bias[task] for a legal task.
+    task_logit_offset: float | None = None
     current_kind: str | None = None
     current_task: str | None = None
     current_task_age: float | None = None
@@ -190,6 +215,9 @@ class DecisionFacts:
             ("current_target_eta", self.current_target_eta),
         ):
             payload[key] = None if value is None else _round(value)
+        payload["task_logit_offset"] = (
+            None if self.task_logit_offset is None else _round(self.task_logit_offset)
+        )
         payload["current_target_taken"] = (
             None if self.current_target_taken is None else bool(self.current_target_taken)
         )

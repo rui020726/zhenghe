@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import sys
 from collections.abc import Sequence
@@ -63,6 +64,11 @@ class RunConfiguration:
     actor_kv_mode: str = "tokens"
     use_coordinator: bool = True
     residual_scale: float = 0.5
+    # Scalar calibration of the CTDE task/depot preference, in logit units: added to
+    # every legal task action before the coordinator residual, never to the depot and
+    # never to a masked action. Zero keeps a run bit-for-bit identical to one from
+    # before this parameter existed.
+    ctde_task_logit_offset: float = 0.0
     command_ttl: float = 10.0
     coordination_interval: int = 5
     allocation_interval: int = 5
@@ -145,6 +151,12 @@ class RunConfiguration:
                 f"--residual-scale must stay in [0, 1] so the coordinator can only add a "
                 f"bounded residual to the allocator logits, got {self.residual_scale}"
             )
+        if not math.isfinite(self.ctde_task_logit_offset) or self.ctde_task_logit_offset < 0.0:
+            raise ConfigurationError(
+                f"--ctde-task-logit-offset must be a finite, non-negative number of "
+                f"logit units (it is only ever added to legal task actions, never "
+                f"subtracted from the depot), got {self.ctde_task_logit_offset}"
+            )
         if self.command_ttl <= 0:
             raise ConfigurationError(f"--command-ttl must be positive, got {self.command_ttl}")
         if not 0.0 <= self.comm_delivery_probability <= 1.0:
@@ -223,6 +235,10 @@ def build_parser() -> argparse.ArgumentParser:
                         help="disable the coordinator residual (ablation baseline)")
     parser.add_argument("--residual-scale", type=float, default=0.5,
                         help="alpha in final_logits = ctde_logits + alpha * coordinator_bias")
+    parser.add_argument("--ctde-task-logit-offset", type=float, default=0.0,
+                        help="scalar calibration added to every legal task logit before the "
+                             "coordinator residual (depot and masked actions unchanged); "
+                             "0.0 keeps the uncalibrated behaviour")
     parser.add_argument("--command-ttl", type=float, default=10.0,
                         help="how long an assignment command stays valid, in global-clock units")
     parser.add_argument("--coordination-interval", type=int, default=5, help="steps between coordinator calls")
@@ -271,6 +287,7 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         actor_kv_mode=str(args.actor_kv_mode),
         use_coordinator=not args.no_coordinator,
         residual_scale=float(args.residual_scale),
+        ctde_task_logit_offset=float(args.ctde_task_logit_offset),
         command_ttl=float(args.command_ttl),
         coordination_interval=int(args.coordination_interval),
         allocation_interval=int(args.allocation_interval),
@@ -429,6 +446,9 @@ class JointRun:
             "rejected_event_count": self.registry.rejected_event_count,
             "search_backend": self.configuration.search_backend,
             "allocation_backend": self.configuration.allocation_backend,
+            "ctde_task_logit_offset": round(
+                float(self.configuration.ctde_task_logit_offset), 6
+            ),
             "remaining_search_targets": len(self.search_adapter.env.goals_pos),
             "rescue_robots": len(self.task_adapter.env.agent_dic),
             "resource_utilization": round(
@@ -675,6 +695,7 @@ def _build_task_side(
         residual_scale=configuration.residual_scale,
         command_ttl=configuration.command_ttl,
         seed=configuration.seed,
+        ctde_task_logit_offset=configuration.ctde_task_logit_offset,
     )
 
 
