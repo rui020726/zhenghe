@@ -32,6 +32,7 @@ from .contracts import DetectionEvent, ProgressEvent, TaskSnapshot
 from .coordinator import (
     CoalitionAwareCoordinator,
     CoalitionPlannerCoordinator,
+    DeadlineAwareCoalitionCoordinator,
     HeuristicCoordinator,
     PassthroughCoordinator,
 )
@@ -200,10 +201,15 @@ class RunConfiguration:
             raise ConfigurationError(
                 f"--actor-kv-mode must be 'tokens' or 'summary', got {self.actor_kv_mode!r}"
             )
-        if self.coordinator_policy not in {"heuristic", "coalition", "coalition_planner"}:
+        if self.coordinator_policy not in {
+            "heuristic",
+            "coalition",
+            "coalition_planner",
+            "deadline_aware",
+        }:
             raise ConfigurationError(
-                f"--coordinator must be 'heuristic', 'coalition' or 'coalition_planner', got "
-                f"{self.coordinator_policy!r}"
+                f"--coordinator must be 'heuristic', 'coalition', 'coalition_planner' or "
+                f"'deadline_aware', got {self.coordinator_policy!r}"
             )
         if not self.use_coordinator and self.coordinator_policy != "heuristic":
             raise ConfigurationError(
@@ -261,7 +267,7 @@ def build_parser() -> argparse.ArgumentParser:
                              "coordinator residual (depot and masked actions unchanged); "
                              "0.0 keeps the uncalibrated behaviour")
     parser.add_argument("--coordinator", dest="coordinator_policy",
-                        choices=("heuristic", "coalition", "coalition_planner"),
+                        choices=("heuristic", "coalition", "coalition_planner", "deadline_aware"),
                         default="heuristic",
                         help="residual policy: 'heuristic' scores how much of a task's whole "
                              "remaining requirement a robot covers, 'coalition' scores the share "
@@ -692,6 +698,10 @@ def _build_coordinator(configuration: RunConfiguration) -> Any:
         return CoalitionAwareCoordinator()
     if configuration.coordinator_policy == "coalition_planner":
         return CoalitionPlannerCoordinator()
+    if configuration.coordinator_policy == "deadline_aware":
+        # The same-information oracle of the learnability gate: identical candidates and
+        # slots, a different selection. Diagnostic, but a legal coordinator all the same.
+        return DeadlineAwareCoalitionCoordinator()
     return HeuristicCoordinator()
 
 

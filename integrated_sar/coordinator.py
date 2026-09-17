@@ -6,13 +6,16 @@ import math
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from typing import Any
 
+from .allocation_trace import ROBOT_VELOCITY
 from .contracts import (
     AgentSnapshot,
     AgentTaskBelief,
     CoalitionReservation,
     CoordinationAdvice,
     CoordinatorInput,
+    WorldPosition,
 )
 
 # The statuses a robot has when it has no task and can take one. In task-03 these are
@@ -844,3 +847,183 @@ class CoalitionPlannerCoordinator:
     def _models_belief(agent: AgentSnapshot) -> bool:
         """True when the agent source reports task knowledge for this robot at all."""
         return agent.known_tasks is not None or bool(agent.task_beliefs)
+
+
+def _travel_steps(
+    position: WorldPosition, believed: WorldPosition, velocity: float
+) -> float:
+    """Steps a robot needs to reach a believed task position at the allocator's speed.
+
+    The same speed ``old_task_env`` moves robots by, so this is the ETA the allocator is
+    effectively choosing between, not a new model of travel.
+    """
+    return math.hypot(position.x - believed.x, position.y - believed.y) / max(
+        float(velocity), 1e-9
+    )
+
+
+class DeadlineAwareCoalitionCoordinator(CoalitionPlannerCoordinator):
+    """Same candidates, same slots, a different question: can this group arrive in time?
+
+    A diagnostic policy, built to answer one question before any network is trained: is
+    the rule planner's *ordering* the binding constraint, or is the information it sees
+    not enough to order better? It generates exactly the candidates the rule planner
+    does -- the same free robots, the same believed tasks, the same unit slots, the same
+    exclusivity -- and changes only how it chooses among them. A difference between the
+    two is therefore a difference in ordering and nothing else, which is what makes it a
+    usable oracle: whatever it fixes, a reordering of legal candidates fixed.
+
+    Three changes, all computable from what an online coordinator already sees:
+
+    1. **Cover, not fill.** The rule planner takes the highest-scoring (robot, task)
+       pair each round and assembles a group member by member without ever asking
+       whether the group can work. This policy enumerates the coalitions that cover the
+       believed requirement outright and keeps the one whose *last needed member*
+       arrives soonest -- the moment the group can actually start.
+    2. **Believed budget.** A task whose fastest covering group still arrives after that
+       robot's own believed deadline is skipped and its robots stay free for tasks that
+       can still be saved. The post-mortem says the rule planner never does this: it
+       spends robots on work that cannot be finished and calls the spend a plan.
+    3. **One-step lookahead.** A robot that is the only remaining way an
+       earlier-deadline task can be covered is not spent on a later one while an
+       alternative coalition exists. One step, over the team's own plan, not over the
+       simulator.
+
+    Two things it deliberately cannot do, because the belief does not carry them. It
+    cannot subtract the stage's work duration from the budget -- ``AgentTaskBelief``
+    keeps the requirement and the deadline but drops the duration the
+    ``DetectionMessage`` carried -- so its budget check is optimistic by the work time.
+    And it cannot see a detection that has not reached a robot yet. Both limits are the
+    point: if this policy still leaves the failure, the failure is not an ordering
+    failure, and no network trained on these features can fix it.
+
+    Invariant 9 holds exactly as in the parent: every number comes from that robot's own
+    belief or from the team's own assignment plan, ``CoordinatorInput.tasks`` is never
+    read, and the advice never outlives the shortest commitment in it.
+    """
+
+    def __init__(self, robot_velocity: float = ROBOT_VELOCITY, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
+        self.robot_velocity = float(robot_velocity)
+        self.last_plan_notes: dict[str, int] = {}
+
+    def _plan(
+        self,
+        agents: Mapping[str, AgentSnapshot],
+        candidates: Sequence[
+            tuple[int, str, tuple[float, ...], tuple[AgentTaskBelief, ...]]
+        ],
+        committed: Mapping[str, Mapping[str, tuple[float, ...]]],
+        now: float,
+    ) -> tuple[
+        dict[tuple[str, str], CoalitionReservation],
+        dict[str, dict[str, tuple[float, ...]]],
+    ]:
+        """The rule plan, minus the tasks it cannot finish inside the believed budget.
+
+        The first attempt at this oracle built coalitions from scratch and demanded a
+        complete cover from the robots free *right now*, which is strictly more brittle
+        than the rule planner's incremental filling: a task that needed three robots and
+        had two free got no reservation at all instead of two, and the fleet waited. On
+        the legacy analysis block that made expiry *worse* (16 to 30), so the design was
+        corrected to the one below, which cannot be more brittle than the rule planner
+        because it starts from it.
+
+        What remains of the oracle is the part that is a pure reordering of the rule
+        planner's own output: a task whose reserved group still cannot arrive inside the
+        budget its own members believe in has its commitments returned, and the robots
+        are re-planned onto the tasks that can still be saved. Nothing is added, nothing
+        is invented, and no robot is held back from work the rule planner would have
+        sent it to.
+        """
+        chosen, planned = super()._plan(agents, candidates, committed, now)
+        beliefs = {
+            (agent_id, belief.task_id): belief
+            for _, agent_id, _, agent_beliefs in candidates
+            for belief in agent_beliefs
+        }
+        hopeless = self._hopeless_tasks(chosen, beliefs, agents, now)
+        if not hopeless:
+            self.last_plan_notes = {"tasks_returned_on_believed_budget": 0, "robots_replanned": 0}
+            return chosen, planned
+
+        freed = {agent_id for agent_id, task_id in chosen if task_id in hopeless}
+        kept = {key: value for key, value in chosen.items() if key[1] not in hopeless}
+        kept_planned = {
+            task_id: dict(members)
+            for task_id, members in planned.items()
+            if task_id not in hopeless
+        }
+        # The robots the returned commitments release are planned again, over the tasks
+        # that are still worth serving, against a cover that already includes what the
+        # plan kept.
+        busy = {agent_id for agent_id, _ in kept}
+        carriers = [
+            (
+                order,
+                agent_id,
+                abilities,
+                tuple(b for b in beliefs if b.task_id not in hopeless),
+            )
+            for order, agent_id, abilities, beliefs in candidates
+            if agent_id in freed and agent_id not in busy
+        ]
+        carriers = [
+            (order, agent_id, abilities, beliefs) for order, agent_id, abilities, beliefs in carriers if beliefs
+        ]
+        covering: dict[str, dict[str, tuple[float, ...]]] = defaultdict(dict)
+        for task_id, holders in committed.items():
+            covering[task_id] = dict(holders)
+        for task_id, members in kept_planned.items():
+            covering[task_id].update(members)
+        extra, extra_planned = super()._plan(agents, carriers, covering, now)
+
+        merged = dict(kept)
+        for key, value in extra.items():
+            merged[key] = value
+        merged_planned: dict[str, dict[str, tuple[float, ...]]] = defaultdict(dict)
+        for task_id, members in kept_planned.items():
+            merged_planned[task_id].update(members)
+        for task_id, members in extra_planned.items():
+            merged_planned[task_id].update(members)
+        self.last_plan_notes = {
+            "tasks_returned_on_believed_budget": len(hopeless),
+            "robots_replanned": len(carriers),
+        }
+        return merged, merged_planned
+
+    def _hopeless_tasks(
+        self,
+        chosen: Mapping[tuple[str, str], CoalitionReservation],
+        beliefs: Mapping[tuple[str, str], AgentTaskBelief],
+        agents: Mapping[str, AgentSnapshot],
+        now: float,
+    ) -> frozenset[str]:
+        """Tasks whose reserved group cannot arrive inside what its members believe.
+
+        The budget check is deliberately optimistic: the belief carries no stage work
+        duration, so only travel is subtracted. A task returned here was hopeless even
+        before work time is taken into account, which is what makes returning it safe.
+        """
+        by_task: dict[str, list[str]] = defaultdict(list)
+        for agent_id, task_id in chosen:
+            by_task[task_id].append(agent_id)
+        hopeless: set[str] = set()
+        for task_id, members in by_task.items():
+            arrivals = []
+            deadlines = []
+            for agent_id in members:
+                belief = beliefs.get((agent_id, task_id))
+                if belief is None:
+                    continue
+                arrivals.append(
+                    _travel_steps(
+                        agents[agent_id].position, belief.position, self.robot_velocity
+                    )
+                )
+                deadlines.append(belief.deadline)
+            if not arrivals:
+                continue
+            if max(arrivals) > min(deadlines) - now:
+                hopeless.add(task_id)
+        return frozenset(hopeless)

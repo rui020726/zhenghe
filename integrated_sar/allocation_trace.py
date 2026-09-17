@@ -96,9 +96,11 @@ def arm_name(
         # share a label, or their traces would pool silently. Names that are not listed
         # keep the historical "coal" prefix, so the frozen 20260916 traces still read
         # as ``rs0.25``/``coal0.25``.
-        prefix = {"heuristic": "rs", "coalition_planner": "coalplan"}.get(
-            coordinator_policy, "coal"
-        )
+        prefix = {
+            "heuristic": "rs",
+            "coalition_planner": "coalplan",
+            "deadline_aware": "daw",
+        }.get(coordinator_policy, "coal")
         label = f"{prefix}{residual_scale:g}"
     else:
         label = "nocoord"
