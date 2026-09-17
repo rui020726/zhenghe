@@ -12,6 +12,7 @@ from ..contracts import (
     AgentSnapshot,
     AgentTaskBelief,
     AssignmentCommand,
+    CoalitionReservation,
     CoordinationAdvice,
     ExecutionStepResult,
     ProgressEvent,
@@ -66,6 +67,24 @@ def _reservation_score(advice: CoordinationAdvice, agent_id: str, task_id: str) 
     """
     commitment = advice.reservations.get((agent_id, task_id))
     return 0.0 if commitment is None else float(commitment.score)
+
+
+def held_commitment(
+    advice: CoordinationAdvice, agent_id: str, action_task_ids: Sequence[str | None]
+) -> CoalitionReservation | None:
+    """The commitment this robot holds for a task on its own menu, if any.
+
+    Only tasks the robot could actually choose count. A commitment for a task that is
+    absent from the menu, or masked, cannot be honoured or broken by this decision, so
+    treating it as either would invent evidence about whether the plan was followed.
+    """
+    for external_id in action_task_ids:
+        if external_id is None:
+            continue
+        commitment = advice.reservations.get((agent_id, external_id))
+        if commitment is not None:
+            return commitment
+    return None
 
 
 @dataclass(frozen=True, slots=True)
@@ -464,6 +483,7 @@ class Task03Adapter:
                         needs_decision=bool(agent.needs_decision),
                         replanned=agent.agent_id in advice.replan_agents,
                         belief_task_count=len(agent.known_tasks or ()),
+                        advice=advice,
                     )
                 )
 
@@ -714,6 +734,7 @@ class Task03Adapter:
         needs_decision: bool,
         replanned: bool,
         belief_task_count: int,
+        advice: CoordinationAdvice,
     ) -> DecisionFacts:
         """Gather one already-made decision for the trace.
 
@@ -758,6 +779,26 @@ class Task03Adapter:
                 if entry is not None:
                     truth["targets"][external_id] = entry
 
+        reserved = held_commitment(advice, str(agent_id), action_task_ids)
+        reservation = (
+            None
+            if reserved is None
+            else {
+                "task_id": reserved.task_id,
+                "ability_slot": int(reserved.ability_slot),
+                "slot_dimension": int(reserved.slot_dimension),
+                "task_revision": int(reserved.task_revision),
+                "issued_at": float(reserved.issued_at),
+                "valid_until": float(reserved.valid_until),
+                "score": float(reserved.score),
+                # Whether this decision actually took the committed task. A commitment
+                # the allocator ignored is the measurement that separates "the plan was
+                # wrong" from "the plan was right and the residual could not reach the
+                # choice", so it is recorded here rather than inferred later.
+                "honoured": reserved.task_id == action_task_ids[response.index],
+            }
+        )
+
         return DecisionFacts(
             step=int(getattr(self.env, "_inner_step_counter", 0)),
             timestamp=float(current_time),
@@ -787,6 +828,12 @@ class Task03Adapter:
             ),
             current_target_taken=None if distance is None else distance <= EPS_ARRIVE,
             truth=truth,
+            advice_revision=int(getattr(advice, "revision", 0)),
+            advice_reservations=tuple(
+                sorted(task_id for _, task_id in advice.reservations)
+            ),
+            held_reservation=reservation,
+            advice_plan=dict(advice.metadata),
         )
 
     def _target_truth(self, external_id: str) -> dict[str, Any] | None:
@@ -821,6 +868,12 @@ class Task03Adapter:
             "remaining": [int(value) for value in remaining],
             "covered": bool((remaining <= 0).all()),
             "en_route_covers": bool((np.maximum(requirements - capacity, 0.0) <= 0).all()),
+            # The stage requirement and the abilities on the way, so a reader can tell
+            # "still missing" from "never asked for" and measure over-supply without a
+            # second source. Both are ground truth: they are written, never read back.
+            "requirements": [int(value) for value in requirements],
+            "capacity": [float(value) for value in capacity],
+            "detected_at": float(task.get("discovered_at", 0.0)),
             "deadline": float(task.get("deadline", 0.0)),
             "stage_index": int(task.get("current_stage_index", 0)),
             "expired": bool(task.get("expired", False)),

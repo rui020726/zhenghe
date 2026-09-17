@@ -54,6 +54,7 @@ COARSE_SEEDS = DEV_SEEDS[:5]
 COARSE_OFFSETS = (0.0, 0.02, 0.03, 0.05, 0.10, 0.15, 0.25)
 HEURISTIC_SCALE = 0.25
 COALITION_SCALE = 0.25
+PLANNER_SCALE = 0.25
 
 
 def arm_label(
@@ -81,6 +82,12 @@ def specs(args: argparse.Namespace) -> list[tuple[float, float | None, str]]:
         # Same residual budget as the heuristic arm, so the two differ only in *what*
         # the bias rewards; calibration is stacked on top of the coalition term too.
         arms += [(offset, COALITION_SCALE, "coalition") for offset in [0.0, *args.cal]]
+    if getattr(args, "planner", False):
+        # The planner rides the same residual budget as the other two policies, so the
+        # three arms differ in the plan they publish, not in how loud it is.
+        arms += [
+            (offset, PLANNER_SCALE, "coalition_planner") for offset in [0.0, *args.cal]
+        ]
     return arms
 
 
@@ -574,6 +581,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="task-logit offsets for --mode full")
     runner.add_argument("--coalition", action="store_true",
                         help="also run the CoalitionAwareCoordinator arms")
+    runner.add_argument("--planner", action="store_true",
+                        help="also run the CoalitionPlannerCoordinator (reservation) arms")
     runner.add_argument("--shard", default=None, help="i/n, e.g. 0/2")
     runner.set_defaults(func=run)
 

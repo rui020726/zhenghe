@@ -65,6 +65,16 @@ DEPOT_INDEX = 0
 ROBOT_VELOCITY = 0.2
 EPS_ARRIVE = 1e-6
 
+# The per-cycle counters a reserving coordinator publishes in ``advice.metadata``. Named
+# here so the planner and the reader of its traces cannot drift apart silently.
+PLAN_COUNTERS = (
+    "planned_reservations",
+    "redundant_candidates",
+    "expired_reservations",
+    "superseded_reservations",
+    "cancelled_reservations",
+)
+
 
 def arm_name(
     *,
@@ -82,7 +92,13 @@ def arm_name(
     were, so the frozen 20260916 traces keep reading as ``nocoord``/``rs0.25``.
     """
     if use_coordinator:
-        prefix = "rs" if coordinator_policy == "heuristic" else "coal"
+        # The policy is part of the arm's identity: two residual policies must never
+        # share a label, or their traces would pool silently. Names that are not listed
+        # keep the historical "coal" prefix, so the frozen 20260916 traces still read
+        # as ``rs0.25``/``coal0.25``.
+        prefix = {"heuristic": "rs", "coalition_planner": "coalplan"}.get(
+            coordinator_policy, "coal"
+        )
         label = f"{prefix}{residual_scale:g}"
     else:
         label = "nocoord"
@@ -164,6 +180,21 @@ class DecisionFacts:
     current_target_eta: float | None = None
     current_target_taken: bool | None = None
     truth: Mapping[str, Any] = field(default_factory=dict)
+    # The advice this decision was made under. A reservation is a stated intention --
+    # this robot covers a named slot of a named task until a stated time -- which is a
+    # different object from the bounded per-pair bias every policy publishes, so the two
+    # are recorded separately and can be compared rather than pooled.
+    advice_revision: int | None = None
+    # Task ids the advice held a commitment for, team-wide. This is what makes "how long
+    # from detection to a full reservation" measurable at all: a plan can be complete for
+    # a target without the robot that decides next being one of the reserved ones.
+    advice_reservations: tuple[str, ...] = ()
+    # The commitment this robot itself held for a task on its own menu, if any.
+    held_reservation: Mapping[str, Any] | None = None
+    # The issuing planner's own cycle counters (planned/redundant/expired/superseded/
+    # cancelled). Counted once per advice revision, since they describe the transition
+    # into that revision rather than a property of one decision.
+    advice_plan: Mapping[str, Any] = field(default_factory=dict)
 
     @property
     def chosen_kind(self) -> str:
@@ -232,6 +263,16 @@ class DecisionFacts:
         payload["current_target_taken"] = (
             None if self.current_target_taken is None else bool(self.current_target_taken)
         )
+        payload["advice_revision"] = (
+            None if self.advice_revision is None else int(self.advice_revision)
+        )
+        payload["advice_reservations"] = list(self.advice_reservations)
+        payload["held_reservation"] = (
+            None
+            if self.held_reservation is None
+            else _jsonable(self.held_reservation)
+        )
+        payload["advice_plan"] = _jsonable(self.advice_plan)
         return payload
 
 
@@ -386,6 +427,45 @@ class FileMetrics:
     switch_to_depot: int = 0
     durations: list[float] = field(default_factory=list)
     targets: dict[str, dict[str, float]] = field(default_factory=dict)
+    # Coalition commitments. ``reserved_decisions`` counts decisions made by a robot
+    # holding a commitment for a task on its own menu; of those, ``honoured`` took the
+    # committed task and ``broken`` went elsewhere, which is the only direct evidence of
+    # whether the allocator followed the plan.
+    reserved_decisions: int = 0
+    honoured_reservations: int = 0
+    broken_reservations: int = 0
+    # The planner's own per-cycle counters, keyed by advice revision so a cycle that
+    # appears on several decision rows is counted once.
+    advice_plans: dict[int, dict[str, Any]] = field(default_factory=dict)
+    # First timestamp at which an advice held a commitment for each target. Kept apart
+    # from ``targets`` so a target that was reserved but never dispatched cannot leak
+    # into the per-target tables the other metrics are pooled from.
+    reservation_times: dict[str, float] = field(default_factory=dict)
+    # Timings measured from detection, and the capability gap left at the last look.
+    dispatched_targets: int = 0
+    never_reserved: int = 0
+    reservation_gaps: list[float] = field(default_factory=list)
+    arrival_gaps: list[float] = field(default_factory=list)
+    group_arrival_gaps: list[float] = field(default_factory=list)
+    progress_gaps: list[float] = field(default_factory=list)
+    open_dimensions: list[int] = field(default_factory=list)
+    oversupplied_targets: int = 0
+    excess_units: list[float] = field(default_factory=list)
+
+    def plan_totals(self) -> dict[str, int]:
+        """Sum the planner's cycle counters, counting each advice revision once.
+
+        The counters describe the transition into a revision -- what expired, what was
+        superseded, what the new plan cancelled -- so a revision seen on twenty decision
+        rows is still one transition. Summing per row would multiply it by twenty.
+        """
+        totals = {key: 0 for key in PLAN_COUNTERS}
+        for plan in self.advice_plans.values():
+            for key in PLAN_COUNTERS:
+                value = plan.get(key)
+                if isinstance(value, int) and not isinstance(value, bool):
+                    totals[key] += value
+        return totals
 
     def as_row(self) -> dict[str, Any]:
         return {
@@ -411,6 +491,20 @@ class FileMetrics:
             "switch_to_task": self.switch_to_task,
             "switch_to_depot": self.switch_to_depot,
             "duration_median": _median(self.durations),
+            "reserved_decisions": self.reserved_decisions,
+            "honoured_reservations": self.honoured_reservations,
+            "broken_reservations": self.broken_reservations,
+            "dispatched_targets": self.dispatched_targets,
+            "never_reserved": self.never_reserved,
+            "never_reserved_share": _ratio(self.never_reserved, self.dispatched_targets),
+            "reservation_gap_median": _median(self.reservation_gaps),
+            "arrival_gap_median": _median(self.arrival_gaps),
+            "group_arrival_gap_median": _median(self.group_arrival_gaps),
+            "progress_gap_median": _median(self.progress_gaps),
+            "open_dimensions": list(self.open_dimensions),
+            "oversupplied_targets": self.oversupplied_targets,
+            "excess_units_median": _median(self.excess_units),
+            "plan_totals": self.plan_totals(),
             "targets": {
                 target: dict(row) for target, row in sorted(self.targets.items())
             },
@@ -466,12 +560,63 @@ def analyse(rows: Sequence[Mapping[str, Any]], *, arm: str, seed: int) -> FileMe
                     metrics.task_despite_margin += 1
         if decision.get("replanned") and _chosen_is_depot(decision) and legal:
             metrics.depot_with_legal_replan += 1
+        commitment = decision.get("held_reservation")
+        if isinstance(commitment, Mapping):
+            metrics.reserved_decisions += 1
+            if commitment.get("honoured"):
+                metrics.honoured_reservations += 1
+            else:
+                metrics.broken_reservations += 1
+        revision = decision.get("advice_revision")
+        plan = decision.get("advice_plan")
+        if revision is not None and isinstance(plan, Mapping):
+            if any(key in plan for key in PLAN_COUNTERS):
+                metrics.advice_plans[int(revision)] = dict(plan)
         per_agent[str(decision.get("agent_id"))].append(decision)
         _observe_target(metrics, decision)
 
     for agent_rows in per_agent.values():
         _walk_commitments(metrics, agent_rows)
+    _measure_targets(metrics)
     return metrics
+
+
+def _measure_targets(metrics: FileMetrics) -> None:
+    """Per-file timings from detection, and the capability gap left at the last look.
+
+    Measured here rather than in :func:`summarise` because the pooled view keeps the
+    element-wise minimum of every float and would therefore read a vector by comparing
+    it lexicographically: "the requirement still open at the last look" has to be read
+    per file, before pooling, or it means nothing.
+    """
+    dimensions = len(metrics.open_dimensions)
+    for row in metrics.targets.values():
+        if row.get("first_dispatch") is None:
+            continue
+        metrics.dispatched_targets += 1
+        detected = row.get("detected_at")
+        if detected is not None:
+            for key, bucket in (
+                ("reserved_at", metrics.reservation_gaps),
+                ("arrived_at", metrics.arrival_gaps),
+                ("group_arrived_at", metrics.group_arrival_gaps),
+                ("worked_at", metrics.progress_gaps),
+            ):
+                if key in row:
+                    bucket.append(max(0.0, float(row[key]) - float(detected)))
+        if "reserved_at" not in row:
+            metrics.never_reserved += 1
+        remaining = list(row.get("remaining_last") or ())
+        if remaining:
+            if not dimensions:
+                metrics.open_dimensions = [0] * len(remaining)
+                dimensions = len(remaining)
+            for index in range(min(dimensions, len(remaining))):
+                metrics.open_dimensions[index] += int(remaining[index] > 0)
+        excess = float(row.get("capacity_excess") or 0.0)
+        if excess > 0.0:
+            metrics.oversupplied_targets += 1
+            metrics.excess_units.append(excess)
 
 
 def _chosen_is_depot(decision: Mapping[str, Any]) -> bool:
@@ -479,22 +624,70 @@ def _chosen_is_depot(decision: Mapping[str, Any]) -> bool:
 
 
 def _observe_target(metrics: FileMetrics, decision: Mapping[str, Any]) -> None:
-    """Record, per target, when it was first dispatched to and when its group formed."""
+    """Record, per target, when it was first dispatched to and when its group formed.
+
+    Also records the three timings the coalition experiment is judged on -- detection to
+    a reservation, to the group being on site, and to the first step of work -- plus the
+    requirement still open at the last look, which is that target's missing-capability
+    vector. All of them are read off the ground-truth block of a decision, so they exist
+    for every arm; an arm with no reserving policy simply never fills ``reserved_at``.
+    """
     targets = (decision.get("truth") or {}).get("targets") or {}
     chosen = decision.get("chosen_task")
     timestamp = float(decision.get("timestamp") or 0.0)
+    # Commitments are scanned first and kept in their own table. A plan can hold a
+    # commitment for a target long before any decision names it -- that is the whole
+    # point of planning ahead -- and the ground-truth block only ever describes the
+    # target a decision is about, so a reservation read from that block would appear to
+    # arrive at the same instant as the dispatch and the lead time would vanish.
+    for target_id in decision.get("advice_reservations") or ():
+        if not target_id:
+            continue
+        held = metrics.reservation_times.get(target_id)
+        if held is None or timestamp < held:
+            metrics.reservation_times[target_id] = timestamp
     for target_id, entry in targets.items():
         if not target_id:
             continue
         row = metrics.targets.setdefault(target_id, {})
         row.setdefault("deadline", float(entry.get("deadline") or 0.0))
+        if entry.get("detected_at") is not None:
+            # A detection stamped at t=0 is a real timestamp, so "absent" and "zero" must
+            # stay distinguishable: the timings below are skipped when the key is missing
+            # rather than when its value is falsy.
+            row.setdefault("detected_at", float(entry["detected_at"]))
         row.setdefault("first_considered", timestamp)
         if target_id == chosen:
             row["first_dispatch"] = min(row.get("first_dispatch", timestamp), timestamp)
+        reserved_at = metrics.reservation_times.get(target_id)
+        if reserved_at is not None:
+            row["reserved_at"] = reserved_at
         if entry.get("covered"):
             row["covered_at"] = min(row.get("covered_at", timestamp), timestamp)
         if entry.get("en_route_covers"):
             row["filled_at"] = min(row.get("filled_at", timestamp), timestamp)
+        on_site = list(entry.get("on_site") or ())
+        en_route = list(entry.get("en_route") or ())
+        if on_site:
+            row["arrived_at"] = min(row.get("arrived_at", timestamp), timestamp)
+            if not en_route:
+                row["group_arrived_at"] = min(
+                    row.get("group_arrived_at", timestamp), timestamp
+                )
+        requirements = entry.get("requirements")
+        remaining = entry.get("remaining")
+        if requirements is not None and remaining is not None:
+            row.setdefault("requirements", list(requirements))
+            row["remaining_last"] = list(remaining)
+            if list(remaining) != list(requirements):
+                row["worked_at"] = min(row.get("worked_at", timestamp), timestamp)
+        capacity = entry.get("capacity")
+        if capacity is not None and requirements is not None:
+            excess = sum(
+                max(0.0, float(got) - float(need))
+                for got, need in zip(capacity, requirements)
+            )
+            row["capacity_excess"] = max(row.get("capacity_excess", 0.0), excess)
 
 
 def _walk_commitments(metrics: FileMetrics, rows: Sequence[Mapping[str, Any]]) -> None:
@@ -581,6 +774,27 @@ def summarise(rows: Sequence[FileMetrics]) -> dict[str, dict[str, Any]]:
         dispatch_gaps: list[float] = []
         covered_gaps: list[float] = []
         filled_gaps: list[float] = []
+        reservation_gaps = [value for item in files for value in item.reservation_gaps]
+        arrival_gaps = [value for item in files for value in item.arrival_gaps]
+        group_arrival_gaps = [value for item in files for value in item.group_arrival_gaps]
+        progress_gaps = [value for item in files for value in item.progress_gaps]
+        excess_units = [value for item in files for value in item.excess_units]
+        plan_totals = {
+            key: sum(item.plan_totals()[key] for item in files) for key in PLAN_COUNTERS
+        }
+        dispatched = total("dispatched_targets")
+        open_dimensions = [0] * max(
+            (len(item.open_dimensions) for item in files), default=0
+        )
+        for item in files:
+            for index, value in enumerate(item.open_dimensions):
+                open_dimensions[index] += value
+        never_reserved_shares = [
+            share
+            for share in (item.as_row()["never_reserved_share"] for item in files)
+            if share is not None
+        ]
+        reserved_mean, reserved_ci = _ci95(never_reserved_shares)
         never_covered = 0
         never_filled = 0
         for row in targets.values():
@@ -637,6 +851,50 @@ def summarise(rows: Sequence[FileMetrics]) -> dict[str, dict[str, Any]]:
             "group_filled_gap_median": _median(filled_gaps),
             "never_covered": never_covered,
             "never_filled": never_filled,
+            # Coalition commitments: what the plan promised, whether the allocator took
+            # it, and the ways a commitment ends (the plan dropped it, or the clock
+            # did). ``honoured_share`` is the fraction of decisions made under a
+            # commitment that took the committed task -- the allocator's fidelity to
+            # the plan.
+            "reserved_decisions": total("reserved_decisions"),
+            "honoured_reservations": total("honoured_reservations"),
+            "broken_reservations": total("broken_reservations"),
+            "honoured_share": _ratio(
+                total("honoured_reservations"), total("reserved_decisions")
+            ),
+            "plan_totals": plan_totals,
+            # How far ahead of the allocator the plan runs: detection to the first
+            # advice that holds a commitment for the target, to the group standing on
+            # site, and to the first step of work. An arm with no reserving policy fills
+            # only the last two, and its ``never_reserved`` is every dispatched target.
+            "dispatched_targets": dispatched,
+            "never_reserved": total("never_reserved"),
+            "never_reserved_share": _ratio(total("never_reserved"), dispatched),
+            "never_reserved_share_mean_over_seeds": round(reserved_mean, 4)
+            if never_reserved_shares
+            else None,
+            "never_reserved_share_ci95": round(reserved_ci, 4)
+            if never_reserved_shares
+            else None,
+            "reservation_gap_median": _median(reservation_gaps),
+            "reservation_gap_p90": _percentile(reservation_gaps, 0.9),
+            "arrival_gap_median": _median(arrival_gaps),
+            "group_arrival_gap_median": _median(group_arrival_gaps),
+            "progress_gap_median": _median(progress_gaps),
+            # Which ability dimensions were still open the last time each dispatched
+            # target was looked at, as a share of dispatched targets. This is the
+            # missing-capability vector: it says *what* never arrived, not just how many
+            # targets were missed.
+            "missing_capability_target_share": [
+                round(value / dispatched, 4) if dispatched else None
+                for value in open_dimensions
+            ],
+            "missing_capability_targets": open_dimensions,
+            # Over-dispatch, measured at the target rather than at the plan: the first
+            # time the abilities on site plus en route exceeded the stage requirement.
+            "oversupplied_targets": total("oversupplied_targets"),
+            "oversupplied_share": _ratio(total("oversupplied_targets"), dispatched),
+            "excess_units_median": _median(excess_units),
         }
     return summary
 
@@ -699,6 +957,44 @@ def report(summary: Mapping[str, Mapping[str, Any]]) -> str:
             f"  with en-route robots added         "
             f"{_pct(block['group_filled_share'])} of targets, gap median "
             f"{_num(block['group_filled_gap_median'])} (never {block['never_filled']})"
+        )
+        plan = block["plan_totals"]
+        lines.append(
+            f"  coalition commitments              planned {_fmt(plan['planned_reservations'])} "
+            f"; decisions under one {_fmt(block['reserved_decisions'])} "
+            f"(took the committed task {_pct(block['honoured_share'])}, "
+            f"went elsewhere {_fmt(block['broken_reservations'])})"
+        )
+        lines.append(
+            f"    ended by plan                    superseded "
+            f"{_fmt(plan['superseded_reservations'])} cancelled "
+            f"{_fmt(plan['cancelled_reservations'])} ; ended by clock expired "
+            f"{_fmt(plan['expired_reservations'])} ; redundant candidates declined "
+            f"{_fmt(plan['redundant_candidates'])}"
+        )
+        lines.append(
+            f"  detection -> reservation           median "
+            f"{_num(block['reservation_gap_median'])} steps (p90 "
+            f"{_num(block['reservation_gap_p90'])}); never "
+            f"{_fmt(block['never_reserved'])} of {_fmt(block['dispatched_targets'])} = "
+            f"{_pct(block['never_reserved_share'])}"
+        )
+        lines.append(
+            f"  detection -> group on site / work  median "
+            f"{_num(block['arrival_gap_median'])} / {_num(block['progress_gap_median'])} "
+            f"steps (all on site {_num(block['group_arrival_gap_median'])})"
+        )
+        vector = block["missing_capability_target_share"]
+        lines.append(
+            "  missing capability vector          "
+            + (" ".join(_pct(value) for value in vector) if vector else "?")
+            + f"  (share of {_fmt(block['dispatched_targets'])} dispatched targets still open"
+            " at the last look, by ability dimension)"
+        )
+        lines.append(
+            f"  over-dispatch                      {_pct(block['oversupplied_share'])} of "
+            f"targets ever had more ability on site+en route than the stage needed "
+            f"(median excess {_num(block['excess_units_median'])} units)"
         )
         lines.append("")
     return "\n".join(lines)

@@ -60,8 +60,9 @@ HELD_SEEDS = list(range(20000, 20100))
 BEST_CAL = 0.10
 HEURISTIC_SCALE = dev_sweep.HEURISTIC_SCALE
 COALITION_SCALE = dev_sweep.COALITION_SCALE
+PLANNER_SCALE = dev_sweep.PLANNER_SCALE
 
-# The five arms the task fixes. ``(task_logit_offset, residual_scale, policy)``;
+# The arms this dataset is read with. ``(task_logit_offset, residual_scale, policy)``;
 # a scale of None means no coordinator at all.
 ARMS: tuple[tuple[float, float | None, str], ...] = (
     (0.0, None, "heuristic"),
@@ -69,9 +70,16 @@ ARMS: tuple[tuple[float, float | None, str], ...] = (
     (BEST_CAL, None, "heuristic"),
     (0.0, COALITION_SCALE, "coalition"),
     (BEST_CAL, COALITION_SCALE, "coalition"),
+    # The reserving planner rides the same residual budget as the two per-pair
+    # policies. It is a *later* arm: the dev set selected it (164 / 171 completed and
+    # 7 expiries against rs0.25's 152 / 19), so the held-out number this arm produces
+    # is a confirmation of a dev decision, not an independent selection. Treat it
+    # exactly as the earlier phases treated their own post-hoc arms: the test set can
+    # reject the dev choice, and cannot be used to pick a different one.
+    (0.0, PLANNER_SCALE, "coalition_planner"),
 )
-# A sixth point, added after those five were frozen and before any held-out number
-# was read: on the dev set the calibration curve is still improving at 0.25 (157
+# A further point, added after those were frozen and before any held-out number was
+# read: on the dev set the calibration curve is still improving at 0.25 (157
 # completed / 14 expired against 156/15 at 0.10, with 0.625 of the remaining
 # legal-task decisions still choosing the depot), so the test set has to measure
 # the calibration *family* -- 0.00, 0.10, 0.25 -- rather than only the single point
