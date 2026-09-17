@@ -82,6 +82,7 @@ def arm_name(
     residual_scale: float,
     task_logit_offset: float = 0.0,
     coordinator_policy: str = "heuristic",
+    binding_commitments: bool = False,
 ) -> str:
     """The arm label shared with the ``rp_<arm>_s<seed>.jsonl`` lifecycle logs.
 
@@ -106,6 +107,8 @@ def arm_name(
         label = "nocoord"
     if task_logit_offset:
         label = f"{label}+cal{task_logit_offset:g}"
+    if binding_commitments:
+        label = f"{label}sticky"
     return label
 
 
@@ -121,6 +124,9 @@ def trace_meta(configuration: Any) -> dict[str, Any]:
             coordinator_policy=str(
                 getattr(configuration, "coordinator_policy", "heuristic")
             ),
+            binding_commitments=bool(
+                getattr(configuration, "sticky_commitments", False)
+            ),
         ),
         "coordinator_policy": str(
             getattr(configuration, "coordinator_policy", "heuristic")
@@ -130,6 +136,9 @@ def trace_meta(configuration: Any) -> dict[str, Any]:
         "allocation_backend": configuration.allocation_backend,
         "search_backend": configuration.search_backend,
         "use_coordinator": bool(configuration.use_coordinator),
+        "sticky_commitments": bool(
+            getattr(configuration, "sticky_commitments", False)
+        ),
         "residual_scale": float(configuration.residual_scale),
         "ctde_task_logit_offset": float(
             getattr(configuration, "ctde_task_logit_offset", 0.0)
@@ -197,6 +206,28 @@ class DecisionFacts:
     # cancelled). Counted once per advice revision, since they describe the transition
     # into that revision rather than a property of one decision.
     advice_plan: Mapping[str, Any] = field(default_factory=dict)
+    # Commitment continuity. ``commitment_present`` says the advice held a commitment for
+    # a task on this robot's menu; ``commitment_held`` says it survived the validity
+    # conditions; ``commitment_release_reason`` is the first condition that failed, so a
+    # released commitment is never mistaken for an ignored one. ``commitment_overridden``
+    # is the allocator's own verdict differing from a commitment that still stands -- the
+    # number the continuity fix exists to drive to zero, recorded whether or not the
+    # commitment was binding.
+    commitment_present: bool = False
+    commitment_held: bool = False
+    commitment_release_reason: str | None = None
+    commitment_task: str | None = None
+    commitment_slot: int | None = None
+    commitment_slot_dimension: int | None = None
+    commitment_belief_status: str | None = None
+    commitment_belief_revision: int | None = None
+    commitment_mask_legal: bool | None = None
+    commitment_overridden: bool = False
+    commitment_suppressed_command: bool = False
+    # The index that was actually commanded. When a commitment binds, this differs from
+    # the allocator's own verdict, and ``unforced_index`` keeps what the residual would
+    # have chosen so the trace can show both instead of erasing one of them.
+    unforced_index: int | None = None
 
     @property
     def chosen_kind(self) -> str:
@@ -237,6 +268,9 @@ class DecisionFacts:
             "action_task_ids": list(self.action_task_ids),
             "mask": [bool(value) for value in self.mask],
             "chosen_index": int(self.chosen_index),
+            "unforced_index": (
+                None if self.unforced_index is None else int(self.unforced_index)
+            ),
             "chosen_kind": self.chosen_kind,
             "chosen_task": self.chosen_task,
             "current_kind": self.current_kind,
@@ -275,6 +309,29 @@ class DecisionFacts:
             else _jsonable(self.held_reservation)
         )
         payload["advice_plan"] = _jsonable(self.advice_plan)
+        payload["commitment_present"] = bool(self.commitment_present)
+        payload["commitment_held"] = bool(self.commitment_held)
+        payload["commitment_release_reason"] = self.commitment_release_reason
+        payload["commitment_task"] = self.commitment_task
+        payload["commitment_slot"] = (
+            None if self.commitment_slot is None else int(self.commitment_slot)
+        )
+        payload["commitment_slot_dimension"] = (
+            None
+            if self.commitment_slot_dimension is None
+            else int(self.commitment_slot_dimension)
+        )
+        payload["commitment_belief_status"] = self.commitment_belief_status
+        payload["commitment_belief_revision"] = (
+            None
+            if self.commitment_belief_revision is None
+            else int(self.commitment_belief_revision)
+        )
+        payload["commitment_mask_legal"] = (
+            None if self.commitment_mask_legal is None else bool(self.commitment_mask_legal)
+        )
+        payload["commitment_overridden"] = bool(self.commitment_overridden)
+        payload["commitment_suppressed_command"] = bool(self.commitment_suppressed_command)
         return payload
 
 

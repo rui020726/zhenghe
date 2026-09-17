@@ -183,7 +183,12 @@ def _fixed_network(logits: Any) -> Any:
 
 
 def _make_adapter(
-    *, mask: Any, logits: Any, residual_scale: float = 0.0, network: bool = True
+    *,
+    mask: Any,
+    logits: Any,
+    residual_scale: float = 0.0,
+    network: bool = True,
+    **kwargs: Any,
 ) -> Any:
     from integrated_sar.adapters.task03 import Task03Adapter
 
@@ -194,6 +199,7 @@ def _make_adapter(
         clear_initial_tasks=False,
         residual_scale=residual_scale,
         ctde_task_logit_offset=0.0,
+        **kwargs,
     )
     adapter.internal_to_external = {7: "target-a", 8: "target-b"}
     return adapter

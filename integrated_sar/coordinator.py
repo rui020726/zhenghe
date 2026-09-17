@@ -525,6 +525,7 @@ class CoalitionPlannerCoordinator:
         fill_weight: float = 0.65,
         distance_weight: float = 0.35,
         commitment_weight: float = 0.35,
+        renew_commitments: bool = False,
     ) -> None:
         if reservation_validity <= 0:
             raise ValueError("reservation_validity must be positive")
@@ -546,6 +547,11 @@ class CoalitionPlannerCoordinator:
         # weight so a reserved pair stays inside the [-1, 1] band the other policies
         # respect: the reservation breaks ties between plans, it is not a second vote.
         self.commitment_weight = float(commitment_weight)
+        # Whether a robot already executing the task it was sent to keeps its commitment
+        # across cycles. Off by default: the advisory plan reserves only free robots, and
+        # turning renewal on unconditionally would move the advisory arm's trajectory.
+        self.renew_commitments = bool(renew_commitments)
+        self.renewed_commitments = 0
         self._revision = 0
         self._reservations: dict[tuple[str, str], CoalitionReservation] = {}
 
@@ -603,6 +609,10 @@ class CoalitionPlannerCoordinator:
                 candidates.append((order, agent.agent_id, abilities, tuple(usable)))
 
         reservations, planned = self._plan(agents, candidates, committed, now)
+        if self.renew_commitments:
+            for key, value in self._renew(agents, committed, beliefs_by_key, now).items():
+                reservations[key] = value
+                planned[value.task_id][value.agent_id] = agents[value.agent_id].abilities
         pair_bias, redundant = self._pair_biases(
             agents, candidates, committed, planned
         )
@@ -632,6 +642,58 @@ class CoalitionPlannerCoordinator:
                 **counts,
             },
         )
+
+    def _renew(
+        self,
+        agents: Mapping[str, AgentSnapshot],
+        committed: Mapping[str, Mapping[str, tuple[float, ...]]],
+        beliefs_by_key: Mapping[tuple[str, str], AgentTaskBelief],
+        now: float,
+    ) -> dict[tuple[str, str], CoalitionReservation]:
+        """Keep a robot commitment alive while it executes the task it was sent to.
+
+        The plan is rebuilt from scratch each cycle and only *free* robots are candidates,
+        so a robot stops being reserved the moment it is dispatched -- which is exactly the
+        gap the execution-break class lives in: the allocator re-decides it, the residual
+        flips it elsewhere, and the work it had already done is thrown away. Renewal adds
+        nothing new: no new claim, no robot that is not already under orders, and no
+        commitment that robot own belief has not kept open. A belief that says the task is
+        finished releases it as ``terminal_belief``, an open requirement it can no longer
+        fill releases it as ``slot_filled``, and both leave the allocator free to
+        re-decide.
+        """
+        renewed: dict[tuple[str, str], CoalitionReservation] = {}
+        for agent_id, agent in agents.items():
+            task_id = agent.current_task
+            if not task_id:
+                continue
+            belief = beliefs_by_key.get((agent_id, task_id))
+            if belief is None or belief.finished:
+                continue
+            if belief.deadline < now:
+                continue
+            abilities = tuple(float(value) for value in agent.abilities)
+            requirement = tuple(float(need) for need in belief.remaining_requirements)
+            open_units = _others(committed.get(task_id, {}), agent_id)
+            claim = _claim_slot(requirement, open_units, abilities)
+            if claim is None:
+                continue
+            slot, dimension = claim
+            renewed[(agent_id, task_id)] = CoalitionReservation(
+                agent_id=agent_id,
+                task_id=task_id,
+                ability_slot=slot,
+                slot_dimension=dimension,
+                task_revision=int(belief.revision),
+                issued_at=now,
+                valid_until=now + self.reservation_validity,
+                score=_clamp(
+                    self.commitment_weight
+                    * _gap_fill_ratio(requirement, open_units, abilities)
+                ),
+            )
+        self.renewed_commitments = len(renewed)
+        return renewed
 
     def _plan(
         self,

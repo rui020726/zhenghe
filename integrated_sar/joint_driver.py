@@ -80,6 +80,12 @@ class RunConfiguration:
     # the share of a task's *uncovered* requirement it would add, so the ablations
     # can tell "a better bias" apart from "the same bias, better scaled".
     coordinator_policy: str = "heuristic"
+    # Whether a commitment the advice still holds binds the allocator: a robot already
+    # executing its committed task is not re-commanded, an idle one is pointed at the
+    # committed task rather than whatever the residual would have picked, and the planner
+    # keeps the commitment alive while the robot's own belief says the task is open. Off
+    # by default, so the advisory arm stays what every earlier number was measured on.
+    sticky_commitments: bool = False
     command_ttl: float = 10.0
     coordination_interval: int = 5
     allocation_interval: int = 5
@@ -211,6 +217,16 @@ class RunConfiguration:
                 f"--coordinator must be 'heuristic', 'coalition', 'coalition_planner' or "
                 f"'deadline_aware', got {self.coordinator_policy!r}"
             )
+        if self.sticky_commitments and not self.use_coordinator:
+            raise ConfigurationError(
+                "--sticky-commitments needs a coordinator to hold the commitment; "
+                "--no-coordinator removes the residual and with it anything to bind"
+            )
+        if self.sticky_commitments and self.coordinator_policy == "heuristic":
+            raise ConfigurationError(
+                "--sticky-commitments binds coalition reservations, but --coordinator "
+                "heuristic never issues one; ask for --coordinator coalition_planner"
+            )
         if not self.use_coordinator and self.coordinator_policy != "heuristic":
             raise ConfigurationError(
                 f"--no-coordinator already removes the residual, so asking for "
@@ -274,6 +290,12 @@ def build_parser() -> argparse.ArgumentParser:
                              "of the *uncovered* part it would add, 'coalition_planner' plans a "
                              "greedy set-cover of the free robots over each task's open "
                              "capability slots and publishes a commitment per selected robot")
+    parser.add_argument("--sticky-commitments", dest="sticky_commitments",
+                        action="store_true",
+                        help="bind a coalition commitment while it stays valid: the "
+                             "planner renews the commitment of a robot already on its "
+                             "task, and the allocator does not silently send that robot "
+                             "elsewhere or to the depot")
     parser.add_argument("--command-ttl", type=float, default=10.0,
                         help="how long an assignment command stays valid, in global-clock units")
     parser.add_argument("--coordination-interval", type=int, default=5, help="steps between coordinator calls")
@@ -324,6 +346,7 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         residual_scale=float(args.residual_scale),
         ctde_task_logit_offset=float(args.ctde_task_logit_offset),
         coordinator_policy=str(args.coordinator_policy),
+        sticky_commitments=bool(getattr(args, "sticky_commitments", False)),
         command_ttl=float(args.command_ttl),
         coordination_interval=int(args.coordination_interval),
         allocation_interval=int(args.allocation_interval),
@@ -697,7 +720,9 @@ def _build_coordinator(configuration: RunConfiguration) -> Any:
     if configuration.coordinator_policy == "coalition":
         return CoalitionAwareCoordinator()
     if configuration.coordinator_policy == "coalition_planner":
-        return CoalitionPlannerCoordinator()
+        return CoalitionPlannerCoordinator(
+            renew_commitments=configuration.sticky_commitments
+        )
     if configuration.coordinator_policy == "deadline_aware":
         # The same-information oracle of the learnability gate: identical candidates and
         # slots, a different selection. Diagnostic, but a legal coordinator all the same.
@@ -752,6 +777,7 @@ def _build_task_side(
         command_ttl=configuration.command_ttl,
         seed=configuration.seed,
         ctde_task_logit_offset=configuration.ctde_task_logit_offset,
+        binding_commitments=configuration.sticky_commitments,
     )
 
 

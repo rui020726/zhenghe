@@ -69,6 +69,41 @@ def _reservation_score(advice: CoordinationAdvice, agent_id: str, task_id: str) 
     return 0.0 if commitment is None else float(commitment.score)
 
 
+_RELEASE_REASONS = (
+    "replan",
+    "terminal_belief",
+    "expired",
+    "slot_filled",
+    "not_on_menu",
+    "hard_mask",
+    "not_executable",
+)
+
+
+class _Binding:
+    """The outcome of testing one commitment against the conditions that keep it.
+
+    ``held`` is the only thing the allocator acts on. ``reason`` is the first condition
+    that failed, or None while the commitment stands; both go to the trace, so a released
+    commitment is never mistaken for an ignored one.
+    """
+
+    __slots__ = ("held", "reason", "action_index")
+
+    def __init__(self, held: bool, reason: str | None, action_index: int | None) -> None:
+        self.held = held
+        self.reason = reason
+        self.action_index = action_index
+
+
+def _index_of_task(action_task_ids: Sequence[str | None], task_id: str) -> int | None:
+    """The menu position of one task, or None when the robot is not offered it."""
+    for index, external in enumerate(action_task_ids):
+        if external == task_id:
+            return index
+    return None
+
+
 def held_commitment(
     advice: CoordinationAdvice, agent_id: str, action_task_ids: Sequence[str | None]
 ) -> CoalitionReservation | None:
@@ -130,12 +165,17 @@ class Task03Adapter:
         clear_initial_tasks: bool = True,
         seed: int | None = None,
         ctde_task_logit_offset: float = 0.0,
+        binding_commitments: bool = False,
     ) -> None:
         self.env = env
         self.network = network
         self.deterministic = bool(deterministic)
         self.residual_scale = float(residual_scale)
         self.command_ttl = float(command_ttl)
+        # Whether a commitment the advice still holds binds the allocator. Off by default:
+        # the advisory arm is what every earlier number was measured on, and binding a
+        # commitment changes what the allocator commands.
+        self.binding_commitments = bool(binding_commitments)
         # Scalar calibration of the CTDE task/depot preference: a constant added to
         # every *legal task* logit before the coordinator residual, never to the
         # depot and never to a masked action. Zero by default, so a run that does
@@ -463,6 +503,35 @@ class Task03Adapter:
             if internal_agent_id not in self.env.agent_dic:
                 continue
             _, _, _, mask, action_map = self.env.get_local_obs(internal_agent_id)
+            action_task_ids = tuple(
+                self.internal_to_external.get(int(task_id)) if task_id is not None else None
+                for _, task_id in action_map
+            )
+            commitment = held_commitment(advice, str(agent.agent_id), action_task_ids)
+            binding = _Binding(False, None, None)
+            if commitment is not None:
+                binding = self._evaluate_commitment(
+                    agent,
+                    commitment,
+                    action_index=_index_of_task(action_task_ids, commitment.task_id),
+                    mask=mask,
+                    current_time=current_time,
+                    replanned=agent.agent_id in advice.replan_agents,
+                )
+            belief_status = belief_revision = None
+            mask_legal = None
+            if commitment is not None:
+                believed = agent.belief_for(commitment.task_id)
+                belief_status = (
+                    "unknown"
+                    if believed is None
+                    else "finished" if believed.finished else "active"
+                )
+                belief_revision = None if believed is None else int(believed.revision)
+                if binding.action_index is None:
+                    mask_legal = False
+                else:
+                    mask_legal = not bool(mask[binding.action_index])
             if self.network is None:
                 verdict = self._heuristic_verdict(
                     internal_agent_id, mask, action_map, current_time, advice
@@ -472,6 +541,21 @@ class Task03Adapter:
                 verdict = self._network_verdict(internal_agent_id, action_map, advice)
                 reason = "ctde+coordination"
             action_index = verdict.index
+            overridden = False
+            if self.binding_commitments and binding.held and commitment is not None:
+                forced = _index_of_task(action_task_ids, commitment.task_id)
+                if forced is not None and forced != action_index:
+                    # The commitment wins, and the fact that the allocator would have gone
+                    # elsewhere is recorded rather than erased: that difference is the
+                    # number the continuity fix exists to drive to zero.
+                    action_index = forced
+                    overridden = True
+            suppressed = bool(
+                self.binding_commitments
+                and binding.held
+                and commitment is not None
+                and agent.current_task == commitment.task_id
+            )
             if self.decision_trace is not None:
                 self.decision_trace.record(
                     self._decision_facts(
@@ -484,8 +568,22 @@ class Task03Adapter:
                         replanned=agent.agent_id in advice.replan_agents,
                         belief_task_count=len(agent.known_tasks or ()),
                         advice=advice,
+                        reserved_commitment=commitment,
+                        binding=binding,
+                        overridden=overridden,
+                        belief_status=belief_status,
+                        belief_revision=belief_revision,
+                        mask_legal=mask_legal,
+                        effective_index=action_index,
+                        unforced_index=verdict.index if overridden else None,
+                        suppressed_command=suppressed,
                     )
                 )
+
+            if suppressed:
+                # Already executing the committed task: re-issuing the command would
+                # restart it, so this decision produces no command at all.
+                continue
 
             kind, internal_task_id = action_map[action_index]
             external_task_id = (
@@ -723,6 +821,51 @@ class Task03Adapter:
             float(self.env.current_time),
         )
 
+    def _evaluate_commitment(
+        self,
+        agent: AgentSnapshot,
+        commitment: Any,
+        *,
+        action_index: int | None,
+        mask: Any,
+        current_time: float,
+        replanned: bool,
+    ) -> _Binding:
+        """The conditions a held commitment must satisfy to keep this robot.
+
+        Ordered so ``reason`` is the first condition that failed, and every one of them is
+        checkable from what this adapter already holds: the robot's own belief, the advice
+        it arrived in, and the hard mask it is about to be judged against. Nothing here
+        reads the registry -- whether the task is still open is the robot's own belief
+        (invariant 9), and the mask is the last word on legality (invariant 6).
+        """
+        if replanned:
+            return _Binding(False, "replan", action_index)
+        belief = agent.belief_for(commitment.task_id)
+        if belief is None or belief.finished:
+            return _Binding(False, "terminal_belief", action_index)
+        if not commitment.active_at(float(current_time)):
+            return _Binding(False, "expired", action_index)
+        requirement = tuple(int(need) for need in belief.remaining_requirements)
+        dimension = int(commitment.slot_dimension)
+        if (
+            all(need <= 0 for need in requirement)
+            or dimension >= len(requirement)
+            or requirement[dimension] <= 0
+        ):
+            return _Binding(False, "slot_filled", action_index)
+        if action_index is None:
+            return _Binding(False, "not_on_menu", action_index)
+        if bool(mask[action_index]):
+            return _Binding(False, "hard_mask", action_index)
+        if agent.current_task and agent.current_task != commitment.task_id:
+            current = agent.belief_for(agent.current_task)
+            if current is not None and not current.finished:
+                # Mid-commitment elsewhere: yanking it would discard the work it has
+                # already done. That other commitment has to be released first.
+                return _Binding(False, "not_executable", action_index)
+        return _Binding(True, None, action_index)
+
     def _decision_facts(
         self,
         *,
@@ -735,6 +878,15 @@ class Task03Adapter:
         replanned: bool,
         belief_task_count: int,
         advice: CoordinationAdvice,
+        reserved_commitment: Any = None,
+        binding: Any = None,
+        overridden: bool = False,
+        belief_status: str | None = None,
+        belief_revision: int | None = None,
+        mask_legal: bool | None = None,
+        effective_index: int | None = None,
+        unforced_index: int | None = None,
+        suppressed_command: bool = False,
     ) -> DecisionFacts:
         """Gather one already-made decision for the trace.
 
@@ -812,7 +964,10 @@ class Task03Adapter:
             belief_task_count=int(belief_task_count),
             action_task_ids=action_task_ids,
             mask=tuple(bool(value) for value in mask),
-            chosen_index=int(response.index),
+            chosen_index=int(
+                response.index if effective_index is None else effective_index
+            ),
+            unforced_index=unforced_index,
             ctde_logits=response.ctde,
             bias=response.bias,
             final_logits=response.final,
@@ -834,6 +989,23 @@ class Task03Adapter:
             ),
             held_reservation=reservation,
             advice_plan=dict(advice.metadata),
+            commitment_present=reserved_commitment is not None,
+            commitment_held=bool(binding is not None and binding.held),
+            commitment_release_reason=None if binding is None else binding.reason,
+            commitment_task=None if reserved_commitment is None else reserved_commitment.task_id,
+            commitment_slot=(
+                None if reserved_commitment is None else int(reserved_commitment.ability_slot)
+            ),
+            commitment_slot_dimension=(
+                None
+                if reserved_commitment is None
+                else int(reserved_commitment.slot_dimension)
+            ),
+            commitment_belief_status=belief_status,
+            commitment_belief_revision=belief_revision,
+            commitment_mask_legal=mask_legal,
+            commitment_overridden=bool(overridden),
+            commitment_suppressed_command=bool(suppressed_command),
         )
 
     def _target_truth(self, external_id: str) -> dict[str, Any] | None:
