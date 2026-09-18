@@ -51,7 +51,7 @@ from integrated_sar.lifecycle_metrics import load_records  # noqa: E402
 
 import mechanism_ablation as ablation  # noqa: E402  (metric definitions are shared)
 
-FROZEN_COMMIT = "REPLACE_AFTER_FREEZE"
+FROZEN_COMMIT = "fd0dd76"  # full: fd0dd76af7d6216b3d0d1929bef4a5f8a992b90f
 STEPS = 1000
 WORKERS = 8
 BOOTSTRAP_RESAMPLES = 10_000
