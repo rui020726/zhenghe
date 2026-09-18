@@ -32,6 +32,9 @@ from integrated_sar.data_splits import SPLITS  # noqa: E402
 
 COUNT = 400
 BASE = 500000
+# The conditional online-system block: fixed here, before either block has produced a number.
+SYSTEM_COUNT = 60
+SYSTEM_BASE = 500400
 
 
 def sha256_text(value: str) -> str:
@@ -54,7 +57,13 @@ def collect() -> tuple[set[int], dict[str, int]]:
     from_manifests: set[int] = set()
     scanned = 0
     for root, directories, files in os.walk(REPO / "runs"):
-        directories[:] = [d for d in directories if d != "__pycache__"]
+        # This block's own products are not history: its streams and per-seed records would
+        # otherwise count as spent seeds and move the block every time it is re-run.
+        directories[:] = [
+            name for name in directories if name != "__pycache__" and (Path(root) / name) != HERE
+        ]
+        if Path(root) == HERE:
+            files = [name for name in files if not re.match(r"(record_)?s\d+\.", name)]
         for name in files:
             path = Path(root) / name
             lowered = name.lower()
@@ -103,7 +112,24 @@ def draw() -> dict:
         if candidate not in used:
             seeds.append(candidate)
         candidate += 1
+    system: list[int] = []
+    candidate = SYSTEM_BASE
+    while len(system) < SYSTEM_COUNT:
+        if candidate not in used and candidate not in seeds:
+            system.append(candidate)
+        candidate += 1
+    committed = json.loads(HERE.joinpath("HELDOUT_SEEDS_V2.json").read_text(encoding="utf-8"))["seeds"] if (HERE / "HELDOUT_SEEDS_V2.json").exists() else []
+    assert not committed or committed == seeds, (
+        "the registered block of 400 may not shift once it exists: "
+        f"{len(set(committed) ^ set(seeds))} seeds differ"
+    )
     return {
+        "system_seeds": system,
+        "system_rule": (
+            f"the same ascending-kept rule from {SYSTEM_BASE}, {SYSTEM_COUNT} seeds, also "
+            "disjoint from the block above and from every historical source"
+        ),
+        "system_overlap_with_used": sorted(set(system) & used),
         "algorithm": (
             f"ascending integers from {BASE}, kept unless present in any historical manifest "
             "or artefact name under runs/ (plus the registered data splits); the first "
@@ -132,6 +158,8 @@ def draw() -> dict:
 def main() -> int:
     payload = draw()
     assert not payload["overlap_with_used"], "the drawn block collides with a used seed"
+    assert not payload["system_overlap_with_used"], "a system seed collides with a used seed"
+    assert not set(payload["system_seeds"]) & set(payload["seeds"]), "a seed is in both blocks"
     destination = HERE / "HELDOUT_SEEDS_V2.json"
     part = destination.with_suffix(".json.part")
     part.write_text(json.dumps(payload, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
