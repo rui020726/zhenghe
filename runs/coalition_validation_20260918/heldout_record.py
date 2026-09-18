@@ -13,9 +13,22 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
+
+# Worker processes must not each open a 20-thread torch pool: eight of them
+# oversubscribed a 20-core box by an order of magnitude. Single-threaded inference is
+# both faster in aggregate and identical per process.
+for _variable in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS"):
+    os.environ.setdefault(_variable, "1")
+try:  # applied before any checkpoint load
+    import torch
+
+    torch.set_num_threads(1)
+except Exception:  # torch absent only in dependency-free environments, where it is moot
+    pass
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent

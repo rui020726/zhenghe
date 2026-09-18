@@ -18,11 +18,24 @@ run_signature (commit, arm, seed) and the stream digest against the recorded ind
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 import numpy as np
+
+# Same reasoning as heldout_record: sharded workers each defaulting to a 20-thread
+# torch pool oversubscribe the box badly; single-threaded inference is faster in
+# aggregate and identical within a process.
+for _variable in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS"):
+    os.environ.setdefault(_variable, "1")
+try:
+    import torch
+
+    torch.set_num_threads(1)
+except Exception:  # torch is optional in dependency-free environments
+    pass
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
@@ -38,7 +51,7 @@ from integrated_sar.lifecycle_metrics import load_records  # noqa: E402
 import mechanism_ablation as ablation  # noqa: E402  (metric definitions are shared)
 import heldout_record  # noqa: E402
 
-FROZEN_COMMIT = "6cb3609"  # full: 6cb3609a75c458e47d8518696bdbc7b1553a43d0
+FROZEN_COMMIT = "1bd4a57"  # full: 1bd4a573ce7dd1150ef0ef9a5898ec1f86ed11f4
 BASELINE = {"policy": "coalition_planner", "release": False, "suppress": False}
 CANDIDATE = {"policy": "coalition_planner", "release": True, "suppress": True}
 ARMS = {"baseline": BASELINE, "candidate": CANDIDATE}
