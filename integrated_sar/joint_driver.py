@@ -68,6 +68,12 @@ class RunConfiguration:
     num_goals: int = 6
     rescue_species: int = 3
     rescue_per_species: int = 2
+    # The band TaskEnv draws each task's deadline multiplier from, as (low, high)
+    # multiples of the estimated travel-and-work time. The default is TaskEnv's own, so
+    # leaving it unset reproduces every scenario recorded before this field existed;
+    # lowering the upper bound is how a run asks for less slack, not how the sampler
+    # itself changes.
+    deadline_tightness: tuple[float, float] = (0.5, 2.0)
     actor_kv_mode: str = "tokens"
     use_coordinator: bool = True
     residual_scale: float = 0.5
@@ -146,6 +152,12 @@ class RunConfiguration:
             raise ConfigurationError(f"--search-agents must be at least 1, got {self.search_agents}")
         if self.num_goals < 0:
             raise ConfigurationError(f"--num-goals cannot be negative, got {self.num_goals}")
+        low, high = (float(value) for value in self.deadline_tightness)
+        if low <= 0 or high <= 0 or low > high:
+            raise ConfigurationError(
+                f"--deadline-tightness must be two positive numbers with low <= high, "
+                f"got {self.deadline_tightness}"
+            )
         if self.detection_radius < 0:
             raise ConfigurationError(
                 f"--detection-radius cannot be negative, got {self.detection_radius}; 0 is "
@@ -301,6 +313,10 @@ def build_parser() -> argparse.ArgumentParser:
                         help="obstacle ratio used when no --map is given")
     parser.add_argument("--rescue-species", type=int, default=3, help="rescue robot species (ability profiles)")
     parser.add_argument("--rescue-per-species", type=int, default=2, help="rescue robots per species")
+    parser.add_argument("--deadline-tightness", type=float, nargs=2, metavar=("LOW", "HIGH"),
+                        default=[0.5, 2.0],
+                        help="multiplier band TaskEnv draws each deadline from; the default "
+                             "is its own (0.5 2.0), lowering HIGH asks for less slack")
     parser.add_argument("--actor-kv-mode", default="tokens", choices=("tokens", "summary"),
                         help="CTDE actor key/value mode the checkpoint was trained with")
     parser.add_argument("--no-coordinator", action="store_true",
@@ -385,6 +401,7 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         num_goals=int(args.num_goals),
         rescue_species=int(args.rescue_species),
         rescue_per_species=int(args.rescue_per_species),
+        deadline_tightness=(float(args.deadline_tightness[0]), float(args.deadline_tightness[1])),
         actor_kv_mode=str(args.actor_kv_mode),
         use_coordinator=not args.no_coordinator,
         residual_scale=float(args.residual_scale),
@@ -873,6 +890,7 @@ def _build_task_side(
         seed=configuration.seed,
         species=configuration.rescue_species,
         per_species=configuration.rescue_per_species,
+        deadline_tightness=tuple(float(value) for value in configuration.deadline_tightness),
         dt=configuration.dt,
         depot_positions=_rescue_depot_positions(scenario, configuration.rescue_species),
     )

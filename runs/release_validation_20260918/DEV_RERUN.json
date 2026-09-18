@@ -1,0 +1,220 @@
+{
+ "code_note": "coverage-preserving redundancy verdict",
+ "gate": {
+  "seeds": [
+   20003,
+   20008,
+   20052,
+   20070,
+   20083
+  ],
+  "arms": {
+   "baseline": {
+    "completed": 21.0,
+    "expired": 8.0,
+    "coverage_resets": 1.0,
+    "lost_work": 1.2,
+    "recommands": 0.0,
+    "rejected_assignments": 0.0,
+    "executed_override_unjustified": 0.0
+   },
+   "candidate": {
+    "completed": 30.0,
+    "expired": 0.0,
+    "coverage_resets": 0.0,
+    "lost_work": 0.0,
+    "recommands": 0.0,
+    "rejected_assignments": 0.0,
+    "executed_override_unjustified": 0.0
+   }
+  },
+  "rescued_targets": [
+   "20003/piloc-e1-target-0",
+   "20003/piloc-e1-target-1",
+   "20003/piloc-e1-target-2",
+   "20003/piloc-e1-target-3",
+   "20003/piloc-e1-target-4",
+   "20008/piloc-e1-target-2",
+   "20052/piloc-e1-target-3",
+   "20070/piloc-e1-target-2",
+   "20083/piloc-e1-target-4"
+  ],
+  "regressed_targets": [],
+  "previous_verdict_for_reference": {
+   "arms": {
+    "completed": {
+     "baseline": 21.0,
+     "candidate": 30.0
+    },
+    "expired": {
+     "baseline": 8.0,
+     "candidate": 0.0
+    },
+    "coverage_resets": {
+     "baseline": 1.0,
+     "candidate": 0.0
+    },
+    "lost_work": {
+     "baseline": 1.2,
+     "candidate": 0.0
+    },
+    "executed_override_unjustified": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "rejected_assignments": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "recommands": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    }
+   },
+   "rescued": [
+    "20003/piloc-e1-target-1",
+    "20003/piloc-e1-target-0",
+    "20008/piloc-e1-target-2",
+    "20052/piloc-e1-target-3",
+    "20070/piloc-e1-target-2",
+    "20083/piloc-e1-target-4"
+   ],
+   "new_failures": []
+  }
+ },
+ "ablation": {
+  "seeds": [
+   20003,
+   20008,
+   20052,
+   20070,
+   20083,
+   20000,
+   20010,
+   20020,
+   20030,
+   20040,
+   20050,
+   20060,
+   20080,
+   20090,
+   20001
+  ],
+  "arms": {
+   "A_baseline": {
+    "completed": 81.0,
+    "expired": 8.0,
+    "coverage_resets": 1.0,
+    "lost_work": 1.2,
+    "releases_planned": 0.0,
+    "redundant_working_ticks": 5233.0,
+    "recommands": 0.0,
+    "accepted_reassignments": 0.0,
+    "replan_declined": 0.0,
+    "same_task_noop": 0.0,
+    "rejected_assignments": 0.0,
+    "executed_override_unjustified": 0.0
+   },
+   "B_suppress": {
+    "completed": 81.0,
+    "expired": 8.0,
+    "coverage_resets": 1.0,
+    "lost_work": 1.2,
+    "releases_planned": 0.0,
+    "redundant_working_ticks": 5233.0,
+    "recommands": 0.0,
+    "accepted_reassignments": 0.0,
+    "replan_declined": 0.0,
+    "same_task_noop": 0.0,
+    "rejected_assignments": 0.0,
+    "executed_override_unjustified": 0.0
+   },
+   "C_release": {
+    "completed": 90.0,
+    "expired": 0.0,
+    "coverage_resets": 0.0,
+    "lost_work": 0.0,
+    "releases_planned": 125.0,
+    "redundant_working_ticks": 3463.0,
+    "recommands": 75.0,
+    "accepted_reassignments": 51.0,
+    "replan_declined": 0.0,
+    "same_task_noop": 0.0,
+    "rejected_assignments": 1.0,
+    "executed_override_unjustified": 0.0
+   },
+   "D_both": {
+    "completed": 90.0,
+    "expired": 0.0,
+    "coverage_resets": 0.0,
+    "lost_work": 0.0,
+    "releases_planned": 125.0,
+    "redundant_working_ticks": 3556.0,
+    "recommands": 0.0,
+    "accepted_reassignments": 51.0,
+    "replan_declined": 75.0,
+    "same_task_noop": 75.0,
+    "rejected_assignments": 1.0,
+    "executed_override_unjustified": 0.0
+   }
+  },
+  "previous_verdict_for_reference": {
+   "A_baseline": {
+    "completed": 81.0,
+    "expired": 8.0,
+    "coverage_resets": 1.0,
+    "lost_work": 1.2,
+    "executed_override_unjustified": 0.0,
+    "rejected_assignments": 0.0,
+    "recommands": 0.0,
+    "releases_planned": 0.0,
+    "redundant_working_ticks": 5233.0,
+    "accepted_reassignments": 0.0,
+    "replan_declined": 0.0,
+    "same_task_noop": 0.0
+   },
+   "B_suppress": {
+    "completed": 81.0,
+    "expired": 8.0,
+    "coverage_resets": 1.0,
+    "lost_work": 1.2,
+    "executed_override_unjustified": 0.0,
+    "rejected_assignments": 0.0,
+    "recommands": 0.0,
+    "releases_planned": 0.0,
+    "redundant_working_ticks": 5233.0,
+    "accepted_reassignments": 0.0,
+    "replan_declined": 0.0,
+    "same_task_noop": 0.0
+   },
+   "C_release": {
+    "completed": 90.0,
+    "expired": 0.0,
+    "coverage_resets": 0.0,
+    "lost_work": 0.0,
+    "executed_override_unjustified": 0.0,
+    "rejected_assignments": 1.0,
+    "recommands": 120.0,
+    "releases_planned": 205.0,
+    "redundant_working_ticks": 3213.0,
+    "accepted_reassignments": 86.0,
+    "replan_declined": 0.0,
+    "same_task_noop": 0.0
+   },
+   "D_both": {
+    "completed": 90.0,
+    "expired": 0.0,
+    "coverage_resets": 0.0,
+    "lost_work": 0.0,
+    "executed_override_unjustified": 0.0,
+    "rejected_assignments": 1.0,
+    "recommands": 0.0,
+    "releases_planned": 205.0,
+    "redundant_working_ticks": 3362.0,
+    "accepted_reassignments": 86.0,
+    "replan_declined": 120.0,
+    "same_task_noop": 120.0
+   }
+  }
+ }
+}

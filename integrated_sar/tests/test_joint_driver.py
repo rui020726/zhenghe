@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import contextlib
 import importlib.util
+import inspect
 import io
 import json
 import os
@@ -1219,6 +1220,57 @@ class DetectionRadiusValidationTests(unittest.TestCase):
             )
             summary = run_from_configuration(configuration)
         self.assertEqual(summary["steps"], 1)
+
+
+class DeadlineBandTests(unittest.TestCase):
+    """The scenario's deadline band is selectable, and unset means unchanged."""
+
+    def test_the_default_band_is_the_builders_own(self) -> None:
+        # A run that says nothing must replay the scenarios recorded before this field
+        # existed, so the two defaults are load-bearing and have to agree.
+        from integrated_sar.task03_runtime import build_task_env
+
+        builder_default = tuple(
+            inspect.signature(build_task_env).parameters["deadline_tightness"].default
+        )
+        self.assertEqual(RunConfiguration().deadline_tightness, builder_default)
+        self.assertEqual(builder_default, (0.5, 2.0))
+
+    def test_an_inverted_or_empty_band_is_refused(self) -> None:
+        with self.assertRaises(ConfigurationError):
+            make_configuration("/tmp", deadline_tightness=(2.0, 0.5)).validate()
+        with self.assertRaises(ConfigurationError):
+            make_configuration("/tmp", deadline_tightness=(0.0, 1.0)).validate()
+
+    def test_the_band_reaches_the_environment(self) -> None:
+        from integrated_sar.task03_runtime import build_task_env
+
+        recorded: dict = {}
+
+        class _StubEnv:
+            def __init__(self, **kwargs):
+                recorded.update(kwargs)
+
+        class _StubModule:
+            TaskEnv = _StubEnv
+
+        build_task_env(
+            _StubModule(),
+            seed=7,
+            species=3,
+            per_species=2,
+            deadline_tightness=(0.4, 1.2),
+            depot_positions=None,
+        )
+        self.assertEqual(recorded["deadline_tightness"], (0.4, 1.2))
+
+    def test_the_command_line_takes_two_numbers(self) -> None:
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+            exit_code = main(
+                ["--mock", "--steps", "1", "--deadline-tightness", "0.4", "1.2", "--output", "-"]
+            )
+        self.assertEqual(exit_code, 0)
 
 
 class MissingDependencyTests(unittest.TestCase):

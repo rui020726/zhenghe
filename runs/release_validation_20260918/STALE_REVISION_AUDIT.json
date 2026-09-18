@@ -1,0 +1,1061 @@
+{
+ "source": "runs/coalition_validation_20260918/heldout",
+ "arms": {
+  "baseline": {
+   "summary": {
+    "rejections_by_reason": {
+     "stale_task_revision": 11
+    },
+    "total_rejections": 11,
+    "repeated_stale_command_attempts": 0,
+    "rejections_within_one_allocation_interval_of_a_previous_one": 0,
+    "recovery_latencies": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "events_without_a_later_accepted_assignment": 0,
+    "invalid_commands_executed": {
+     "assignments_executed": 489444,
+     "executed_with_stale_revision": 0,
+     "commands_rejected_before_execution": 11,
+     "violations": []
+    }
+   },
+   "events": [
+    {
+     "arm": "baseline",
+     "seed": 30095,
+     "target": "piloc-e1-target-5",
+     "agent_id": "3",
+     "reason": "stale_task_revision",
+     "rejected_at": 580.0,
+     "command_id": "assignment:752",
+     "command_issued_at": 580.0,
+     "command_valid_until": 590.0,
+     "command_task_revision": 11,
+     "registry_revision_at_rejection": 12,
+     "registry_revisions_same_tick": [
+      11,
+      12
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 579.0
+     },
+     "next_accepted_assignment": {
+      "at": 581.0,
+      "target": "piloc-e1-target-5",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "baseline",
+     "seed": 30095,
+     "target": "piloc-e1-target-5",
+     "agent_id": "5",
+     "reason": "stale_task_revision",
+     "rejected_at": 580.0,
+     "command_id": "assignment:754",
+     "command_issued_at": 580.0,
+     "command_valid_until": 590.0,
+     "command_task_revision": 11,
+     "registry_revision_at_rejection": 12,
+     "registry_revisions_same_tick": [
+      11,
+      12
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 579.0
+     },
+     "next_accepted_assignment": {
+      "at": 581.0,
+      "target": "piloc-e1-target-5",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "baseline",
+     "seed": 30105,
+     "target": "piloc-e1-target-5",
+     "agent_id": "3",
+     "reason": "stale_task_revision",
+     "rejected_at": 485.0,
+     "command_id": "assignment:642",
+     "command_issued_at": 485.0,
+     "command_valid_until": 495.0,
+     "command_task_revision": 11,
+     "registry_revision_at_rejection": 12,
+     "registry_revisions_same_tick": [
+      11,
+      12
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 484.0
+     },
+     "next_accepted_assignment": {
+      "at": 486.0,
+      "target": "__run__",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "baseline",
+     "seed": 30105,
+     "target": "piloc-e1-target-5",
+     "agent_id": "5",
+     "reason": "stale_task_revision",
+     "rejected_at": 485.0,
+     "command_id": "assignment:644",
+     "command_issued_at": 485.0,
+     "command_valid_until": 495.0,
+     "command_task_revision": 11,
+     "registry_revision_at_rejection": 12,
+     "registry_revisions_same_tick": [
+      11,
+      12
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 484.0
+     },
+     "next_accepted_assignment": {
+      "at": 486.0,
+      "target": "__run__",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "baseline",
+     "seed": 30106,
+     "target": "piloc-e1-target-1",
+     "agent_id": "1",
+     "reason": "stale_task_revision",
+     "rejected_at": 145.0,
+     "command_id": "assignment:216",
+     "command_issued_at": 145.0,
+     "command_valid_until": 155.0,
+     "command_task_revision": 11,
+     "registry_revision_at_rejection": 12,
+     "registry_revisions_same_tick": [
+      11,
+      12
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 144.0
+     },
+     "next_accepted_assignment": {
+      "at": 146.0,
+      "target": "__run__",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "baseline",
+     "seed": 30106,
+     "target": "piloc-e1-target-1",
+     "agent_id": "5",
+     "reason": "stale_task_revision",
+     "rejected_at": 145.0,
+     "command_id": "assignment:220",
+     "command_issued_at": 145.0,
+     "command_valid_until": 155.0,
+     "command_task_revision": 11,
+     "registry_revision_at_rejection": 12,
+     "registry_revisions_same_tick": [
+      11,
+      12
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 144.0
+     },
+     "next_accepted_assignment": {
+      "at": 146.0,
+      "target": "__run__",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "baseline",
+     "seed": 30126,
+     "target": "piloc-e1-target-3",
+     "agent_id": "1",
+     "reason": "stale_task_revision",
+     "rejected_at": 564.0,
+     "command_id": "assignment:724",
+     "command_issued_at": 564.0,
+     "command_valid_until": 574.0,
+     "command_task_revision": 8,
+     "registry_revision_at_rejection": 9,
+     "registry_revisions_same_tick": [
+      8,
+      9
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 563.0
+     },
+     "next_accepted_assignment": {
+      "at": 565.0,
+      "target": "piloc-e1-target-3",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "baseline",
+     "seed": 30126,
+     "target": "piloc-e1-target-3",
+     "agent_id": "3",
+     "reason": "stale_task_revision",
+     "rejected_at": 564.0,
+     "command_id": "assignment:726",
+     "command_issued_at": 564.0,
+     "command_valid_until": 574.0,
+     "command_task_revision": 8,
+     "registry_revision_at_rejection": 9,
+     "registry_revisions_same_tick": [
+      8,
+      9
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 563.0
+     },
+     "next_accepted_assignment": {
+      "at": 565.0,
+      "target": "piloc-e1-target-3",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "baseline",
+     "seed": 30245,
+     "target": "piloc-e1-target-0",
+     "agent_id": "3",
+     "reason": "stale_task_revision",
+     "rejected_at": 261.0,
+     "command_id": "assignment:363",
+     "command_issued_at": 261.0,
+     "command_valid_until": 271.0,
+     "command_task_revision": 6,
+     "registry_revision_at_rejection": 7,
+     "registry_revisions_same_tick": [
+      6,
+      7
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 260.0
+     },
+     "next_accepted_assignment": {
+      "at": 262.0,
+      "target": "__run__",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "baseline",
+     "seed": 30346,
+     "target": "piloc-e1-target-5",
+     "agent_id": "1",
+     "reason": "stale_task_revision",
+     "rejected_at": 258.0,
+     "command_id": "assignment:348",
+     "command_issued_at": 258.0,
+     "command_valid_until": 268.0,
+     "command_task_revision": 14,
+     "registry_revision_at_rejection": 15,
+     "registry_revisions_same_tick": [
+      14,
+      15
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 257.0
+     },
+     "next_accepted_assignment": {
+      "at": 259.0,
+      "target": "piloc-e1-target-5",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "baseline",
+     "seed": 30346,
+     "target": "piloc-e1-target-5",
+     "agent_id": "5",
+     "reason": "stale_task_revision",
+     "rejected_at": 258.0,
+     "command_id": "assignment:352",
+     "command_issued_at": 258.0,
+     "command_valid_until": 268.0,
+     "command_task_revision": 14,
+     "registry_revision_at_rejection": 15,
+     "registry_revisions_same_tick": [
+      14,
+      15
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 257.0
+     },
+     "next_accepted_assignment": {
+      "at": 259.0,
+      "target": "piloc-e1-target-5",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    }
+   ]
+  },
+  "candidate": {
+   "summary": {
+    "rejections_by_reason": {
+     "stale_task_revision": 13
+    },
+    "total_rejections": 13,
+    "repeated_stale_command_attempts": 0,
+    "rejections_within_one_allocation_interval_of_a_previous_one": 0,
+    "recovery_latencies": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "events_without_a_later_accepted_assignment": 0,
+    "invalid_commands_executed": {
+     "assignments_executed": 499875,
+     "executed_with_stale_revision": 0,
+     "commands_rejected_before_execution": 13,
+     "violations": []
+    }
+   },
+   "events": [
+    {
+     "arm": "candidate",
+     "seed": 30095,
+     "target": "piloc-e1-target-5",
+     "agent_id": "3",
+     "reason": "stale_task_revision",
+     "rejected_at": 580.0,
+     "command_id": "assignment:763",
+     "command_issued_at": 580.0,
+     "command_valid_until": 590.0,
+     "command_task_revision": 11,
+     "registry_revision_at_rejection": 12,
+     "registry_revisions_same_tick": [
+      11,
+      12
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 579.0
+     },
+     "next_accepted_assignment": {
+      "at": 581.0,
+      "target": "piloc-e1-target-5",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "candidate",
+     "seed": 30095,
+     "target": "piloc-e1-target-5",
+     "agent_id": "5",
+     "reason": "stale_task_revision",
+     "rejected_at": 580.0,
+     "command_id": "assignment:765",
+     "command_issued_at": 580.0,
+     "command_valid_until": 590.0,
+     "command_task_revision": 11,
+     "registry_revision_at_rejection": 12,
+     "registry_revisions_same_tick": [
+      11,
+      12
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 579.0
+     },
+     "next_accepted_assignment": {
+      "at": 581.0,
+      "target": "piloc-e1-target-5",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "candidate",
+     "seed": 30105,
+     "target": "piloc-e1-target-5",
+     "agent_id": "3",
+     "reason": "stale_task_revision",
+     "rejected_at": 485.0,
+     "command_id": "assignment:638",
+     "command_issued_at": 485.0,
+     "command_valid_until": 495.0,
+     "command_task_revision": 11,
+     "registry_revision_at_rejection": 12,
+     "registry_revisions_same_tick": [
+      11,
+      12
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 484.0
+     },
+     "next_accepted_assignment": {
+      "at": 486.0,
+      "target": "__run__",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "candidate",
+     "seed": 30105,
+     "target": "piloc-e1-target-5",
+     "agent_id": "5",
+     "reason": "stale_task_revision",
+     "rejected_at": 485.0,
+     "command_id": "assignment:640",
+     "command_issued_at": 485.0,
+     "command_valid_until": 495.0,
+     "command_task_revision": 11,
+     "registry_revision_at_rejection": 12,
+     "registry_revisions_same_tick": [
+      11,
+      12
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 484.0
+     },
+     "next_accepted_assignment": {
+      "at": 486.0,
+      "target": "__run__",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "candidate",
+     "seed": 30106,
+     "target": "piloc-e1-target-1",
+     "agent_id": "1",
+     "reason": "stale_task_revision",
+     "rejected_at": 145.0,
+     "command_id": "assignment:220",
+     "command_issued_at": 145.0,
+     "command_valid_until": 155.0,
+     "command_task_revision": 11,
+     "registry_revision_at_rejection": 12,
+     "registry_revisions_same_tick": [
+      11,
+      12
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 144.0
+     },
+     "next_accepted_assignment": {
+      "at": 146.0,
+      "target": "__run__",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "candidate",
+     "seed": 30106,
+     "target": "piloc-e1-target-1",
+     "agent_id": "5",
+     "reason": "stale_task_revision",
+     "rejected_at": 145.0,
+     "command_id": "assignment:224",
+     "command_issued_at": 145.0,
+     "command_valid_until": 155.0,
+     "command_task_revision": 11,
+     "registry_revision_at_rejection": 12,
+     "registry_revisions_same_tick": [
+      11,
+      12
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 144.0
+     },
+     "next_accepted_assignment": {
+      "at": 146.0,
+      "target": "__run__",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "candidate",
+     "seed": 30126,
+     "target": "piloc-e1-target-3",
+     "agent_id": "1",
+     "reason": "stale_task_revision",
+     "rejected_at": 564.0,
+     "command_id": "assignment:721",
+     "command_issued_at": 564.0,
+     "command_valid_until": 574.0,
+     "command_task_revision": 8,
+     "registry_revision_at_rejection": 9,
+     "registry_revisions_same_tick": [
+      8,
+      9
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 563.0
+     },
+     "next_accepted_assignment": {
+      "at": 565.0,
+      "target": "piloc-e1-target-3",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "candidate",
+     "seed": 30126,
+     "target": "piloc-e1-target-3",
+     "agent_id": "3",
+     "reason": "stale_task_revision",
+     "rejected_at": 564.0,
+     "command_id": "assignment:723",
+     "command_issued_at": 564.0,
+     "command_valid_until": 574.0,
+     "command_task_revision": 8,
+     "registry_revision_at_rejection": 9,
+     "registry_revisions_same_tick": [
+      8,
+      9
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 563.0
+     },
+     "next_accepted_assignment": {
+      "at": 565.0,
+      "target": "piloc-e1-target-3",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "candidate",
+     "seed": 30215,
+     "target": "piloc-e1-target-2",
+     "agent_id": "4",
+     "reason": "stale_task_revision",
+     "rejected_at": 572.0,
+     "command_id": "assignment:757",
+     "command_issued_at": 572.0,
+     "command_valid_until": 582.0,
+     "command_task_revision": 24,
+     "registry_revision_at_rejection": 25,
+     "registry_revisions_same_tick": [
+      24,
+      25
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 1,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "piloc-e1-target-5",
+      "at": 553.0
+     },
+     "next_accepted_assignment": {
+      "at": 573.0,
+      "target": "piloc-e1-target-2",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "candidate",
+     "seed": 30245,
+     "target": "piloc-e1-target-0",
+     "agent_id": "3",
+     "reason": "stale_task_revision",
+     "rejected_at": 261.0,
+     "command_id": "assignment:410",
+     "command_issued_at": 261.0,
+     "command_valid_until": 271.0,
+     "command_task_revision": 6,
+     "registry_revision_at_rejection": 7,
+     "registry_revisions_same_tick": [
+      6,
+      7
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 260.0
+     },
+     "next_accepted_assignment": {
+      "at": 262.0,
+      "target": "__run__",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "candidate",
+     "seed": 30346,
+     "target": "piloc-e1-target-5",
+     "agent_id": "1",
+     "reason": "stale_task_revision",
+     "rejected_at": 258.0,
+     "command_id": "assignment:394",
+     "command_issued_at": 258.0,
+     "command_valid_until": 268.0,
+     "command_task_revision": 14,
+     "registry_revision_at_rejection": 15,
+     "registry_revisions_same_tick": [
+      14,
+      15
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 257.0
+     },
+     "next_accepted_assignment": {
+      "at": 259.0,
+      "target": "piloc-e1-target-5",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "candidate",
+     "seed": 30346,
+     "target": "piloc-e1-target-5",
+     "agent_id": "5",
+     "reason": "stale_task_revision",
+     "rejected_at": 258.0,
+     "command_id": "assignment:398",
+     "command_issued_at": 258.0,
+     "command_valid_until": 268.0,
+     "command_task_revision": 14,
+     "registry_revision_at_rejection": 15,
+     "registry_revisions_same_tick": [
+      14,
+      15
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "__run__",
+      "at": 257.0
+     },
+     "next_accepted_assignment": {
+      "at": 259.0,
+      "target": "piloc-e1-target-5",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    },
+    {
+     "arm": "candidate",
+     "seed": 30388,
+     "target": "piloc-e1-target-0",
+     "agent_id": "4",
+     "reason": "stale_task_revision",
+     "rejected_at": 23.0,
+     "command_id": "assignment:18",
+     "command_issued_at": 23.0,
+     "command_valid_until": 33.0,
+     "command_task_revision": 7,
+     "registry_revision_at_rejection": 8,
+     "registry_revisions_same_tick": [
+      7,
+      8
+     ],
+     "task_status_at_rejection": "completed",
+     "task_stage_at_rejection": 0,
+     "task_progress_at_rejection": 1.0,
+     "task_remaining_at_rejection": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "previous_assignment_for_agent": {
+      "target": "piloc-e1-target-1",
+      "at": 14.0
+     },
+     "next_accepted_assignment": {
+      "at": 24.0,
+      "target": "piloc-e1-target-5",
+      "latency": 1.0
+     },
+     "repeat_of_previous_stale_command": false,
+     "retry_within_one_allocation_interval": false
+    }
+   ]
+  }
+ },
+ "candidate_only": [
+  {
+   "arm": "candidate",
+   "seed": 30215,
+   "target": "piloc-e1-target-2",
+   "agent_id": "4",
+   "reason": "stale_task_revision",
+   "rejected_at": 572.0,
+   "command_id": "assignment:757",
+   "command_issued_at": 572.0,
+   "command_valid_until": 582.0,
+   "command_task_revision": 24,
+   "registry_revision_at_rejection": 25,
+   "registry_revisions_same_tick": [
+    24,
+    25
+   ],
+   "task_status_at_rejection": "completed",
+   "task_stage_at_rejection": 1,
+   "task_progress_at_rejection": 1.0,
+   "task_remaining_at_rejection": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "previous_assignment_for_agent": {
+    "target": "piloc-e1-target-5",
+    "at": 553.0
+   },
+   "next_accepted_assignment": {
+    "at": 573.0,
+    "target": "piloc-e1-target-2",
+    "latency": 1.0
+   },
+   "repeat_of_previous_stale_command": false,
+   "retry_within_one_allocation_interval": false
+  },
+  {
+   "arm": "candidate",
+   "seed": 30388,
+   "target": "piloc-e1-target-0",
+   "agent_id": "4",
+   "reason": "stale_task_revision",
+   "rejected_at": 23.0,
+   "command_id": "assignment:18",
+   "command_issued_at": 23.0,
+   "command_valid_until": 33.0,
+   "command_task_revision": 7,
+   "registry_revision_at_rejection": 8,
+   "registry_revisions_same_tick": [
+    7,
+    8
+   ],
+   "task_status_at_rejection": "completed",
+   "task_stage_at_rejection": 0,
+   "task_progress_at_rejection": 1.0,
+   "task_remaining_at_rejection": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "previous_assignment_for_agent": {
+    "target": "piloc-e1-target-1",
+    "at": 14.0
+   },
+   "next_accepted_assignment": {
+    "at": 24.0,
+    "target": "piloc-e1-target-5",
+    "latency": 1.0
+   },
+   "repeat_of_previous_stale_command": false,
+   "retry_within_one_allocation_interval": false
+  }
+ ]
+}

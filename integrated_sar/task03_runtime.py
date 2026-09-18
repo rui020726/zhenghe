@@ -109,6 +109,7 @@ def build_task_env(
     dt: float = 1.0,
     comm_range: float = 0.3,
     traits_dim: int = 5,
+    deadline_tightness: tuple[float, float] = (0.5, 2.0),
     depot_positions: Sequence[Sequence[float]] | None = None,
 ) -> Any:
     """
@@ -117,6 +118,10 @@ def build_task_env(
     ``tasks_range=(0, 0)`` plus both burst generators disabled makes the registry the
     only source of tasks, and a fixed species count covering all five ability
     dimensions keeps injected tasks feasible for some robot.
+
+    ``deadline_tightness`` picks the multiplier band TaskEnv already samples every
+    deadline from. The default is TaskEnv's own, so a caller that says nothing gets the
+    scenarios recorded before this argument existed; the sampler itself is untouched.
 
     ``depot_positions`` stages the rescue teams inside the shared scene. Without it
     TaskEnv scatters depots uniformly over the unit square, which can leave them
@@ -128,6 +133,7 @@ def build_task_env(
         species_range=(species, species),
         per_species_range=(per_species, per_species),
         traits_dim=traits_dim,
+        deadline_tightness=deadline_tightness,
         enable_tidal_tasks=False,
         enable_discovered_tasks=False,
         dynamic_task_discovery=False,
