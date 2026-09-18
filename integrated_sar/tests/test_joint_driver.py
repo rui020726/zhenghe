@@ -1222,6 +1222,43 @@ class DetectionRadiusValidationTests(unittest.TestCase):
         self.assertEqual(summary["steps"], 1)
 
 
+class ReleasePairingGuardTests(unittest.TestCase):
+    """The release cannot be turned on without the work-clock protection by accident."""
+
+    def test_an_unpaired_release_is_refused(self) -> None:
+        with self.assertRaises(ConfigurationError) as refused:
+            make_configuration(
+                "/tmp",
+                coordinator_policy="coalition_planner",
+                sticky_commitments=True,
+                release_redundant_members=True,
+            ).validate()
+        message = str(refused.exception)
+        self.assertIn("coalition_redundant_release", message)
+        self.assertIn("work clock", message)
+
+    def test_the_declared_research_exception_is_accepted(self) -> None:
+        make_configuration(
+            "/tmp",
+            coordinator_policy="coalition_planner",
+            sticky_commitments=True,
+            release_redundant_members=True,
+            allow_release_without_suppression=True,
+        ).validate()
+
+    def test_the_shorthand_needs_no_exception(self) -> None:
+        make_configuration(
+            "/tmp", coordinator_policy="coalition_redundant_release", sticky_commitments=True
+        ).validate()
+        make_configuration(
+            "/tmp",
+            coordinator_policy="coalition_planner",
+            sticky_commitments=True,
+            release_redundant_members=True,
+            suppress_recommand_own_task=True,
+        ).validate()
+
+
 class DeadlineBandTests(unittest.TestCase):
     """The scenario's deadline band is selectable, and unset means unchanged."""
 

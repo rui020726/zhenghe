@@ -63,6 +63,9 @@ def run_arm(seed: int, arm: str) -> dict:
         use_coordinator=True,
         release_redundant_members=spec["release"],
         suppress_recommand_own_task=spec["suppress"],
+        # Arm C is the release on its own, churn included: measuring that churn is the
+        # point of the arm, so it declares the exception rather than tripping the guard.
+        allow_release_without_suppression=spec["release"] and not spec["suppress"],
         residual_scale=0.25,
         allocation_interval=5,
         coordination_interval=5,

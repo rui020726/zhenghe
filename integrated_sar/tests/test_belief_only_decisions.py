@@ -404,6 +404,72 @@ class StaleTerminalBeliefTests(unittest.TestCase):
             "the robot's belief never caught up with the closed task",
         )
 
+    def test_a_task_completing_mid_tick_is_refused_once_and_then_travelled(self) -> None:
+        """The one stale-revision shape the 400-seed block produced, reproduced.
+
+        ``sync_tasks`` caches a closed task's revision at the top of the tick, the
+        completion event then moves the registry on, and the command built later in the
+        same tick carries the cached, one-behind stamp. The refusal must run nothing,
+        must not repeat, and must not strand the robot.
+        """
+        from integrated_sar.assignment_gate import AssignmentGate
+        from integrated_sar.clock import GlobalClock
+        from integrated_sar.contracts import TaskStatus
+
+        env, adapter, registry = self._wire()
+        closed_internal = adapter.external_to_internal["closed"]
+        clock = GlobalClock()
+        gate = AssignmentGate(
+            adapter,
+            clock=clock,
+            revision_of=lambda task_id: (
+                registry.get(task_id).revision if registry.get(task_id) else None
+            ),
+        )
+        coordinator = HeuristicCoordinator()
+        rejections: list = []
+        ticks_at_the_closed_task: list[int] = []
+
+        for tick in range(1, 12):
+            clock.advance_to(float(tick))
+            adapter.sync_tasks(registry.snapshots())
+            if tick == 1:
+                # The task finishes after the cache was written and before the gate reads.
+                registry._tasks["closed"].status = TaskStatus.COMPLETED
+                registry._tasks["closed"].revision += 1
+            agents = adapter.agent_snapshots()
+            advice = coordinator.advise(
+                CoordinatorInput(float(tick), registry.active_snapshots(), agents)
+            )
+            commands = adapter.allocate(
+                registry.active_snapshots(), agents, advice, float(tick)
+            )
+            proposed = [command for command in commands if command.task_id == "closed"]
+            if proposed:
+                ticks_at_the_closed_task.append(tick)
+            # The robot's own state is what a refused command must leave alone.
+            untouched = (env.agent_dic[0]["status"], env.agent_dic[0]["current_task"])
+            gate.apply_assignments(commands)
+            round_rejections = gate.drain_rejections()
+            rejections.extend(round_rejections)
+            if round_rejections:
+                self.assertEqual(
+                    (env.agent_dic[0]["status"], env.agent_dic[0]["current_task"]),
+                    untouched,
+                    "a refused command changed the robot's execution state",
+                )
+            adapter.step(float(tick), 1.0)
+            if closed_internal in env.agent_knowledge[0]["known_finished"]:
+                break
+
+        self.assertEqual([rejection.reason for rejection in rejections], ["stale_task_revision"])
+        self.assertEqual(len(rejections), 1, "the same stale command must not be attempted twice")
+        self.assertEqual((rejections[0].agent_id, rejections[0].task_id), ("0", "closed"))
+        self.assertEqual(rejections[0].task_revision + 1, rejections[0].current_revision)
+        # It proposed the closed task, was refused, and travelled to it one tick later.
+        self.assertEqual(ticks_at_the_closed_task[:2], [1, 2])
+        self.assertIn(closed_internal, env.agent_knowledge[0]["known_finished"])
+
 
 def _event(target_id: str, world: tuple[float, float], event_id: str) -> DetectionEvent:
     return DetectionEvent(

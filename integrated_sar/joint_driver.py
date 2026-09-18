@@ -93,15 +93,19 @@ class RunConfiguration:
     # keeps the commitment alive while the robot's own belief says the task is open. Off
     # by default, so the advisory arm stays what every earlier number was measured on.
     sticky_commitments: bool = False
-    # Whether the planner may re-decide a working robot whose own belief says its
-    # presence fills no slot on the stage it is on. Off by default; the flag only ever
-    # names a provably redundant robot, and only when the plan has somewhere else for it.
+    # Whether the planner may re-decide a working robot when taking it off its stage
+    # would leave the believed stage requirement covered no worse. Off by default; the flag
+    # only ever names a robot the plan also has somewhere else for.
     release_redundant_members: bool = False
     # Whether the allocator stays silent when a replan-woke robot re-picks the task it is
     # already executing. The release needs it (a re-issued command would restart the work
     # clock), but the two switches are independent so an ablation can tell the planner
     # mechanism apart from the suppression.
     suppress_recommand_own_task: bool = False
+    # The deliberate exception: running the release without the suppression churns the
+    # work clock by design, which is a measurement worth making but never a configuration
+    # someone should reach for by accident.
+    allow_release_without_suppression: bool = False
     command_ttl: float = 10.0
     coordination_interval: int = 5
     allocation_interval: int = 5
@@ -268,6 +272,17 @@ class RunConfiguration:
                 "--suppress-recommand-own-task only ever applies to a decision a "
                 "coordinator replan woke; --no-coordinator removes that trigger"
             )
+        if self.release_redundant_members and not self.suppress_recommand_own_task \
+                and self.coordinator_policy != "coalition_redundant_release" \
+                and not self.allow_release_without_suppression:
+            raise ConfigurationError(
+                "--release-redundant-members without --suppress-recommand-own-task "
+                "re-issues a command for a task the robot is already executing, which "
+                "restarts its work clock and disarms the environment's working timeout. "
+                "Use --coordinator coalition_redundant_release for the paired arm, or "
+                "--allow-release-without-suppression when measuring that churn is the "
+                "experiment"
+            )
         if not self.use_coordinator and self.coordinator_policy != "heuristic":
             raise ConfigurationError(
                 f"--no-coordinator already removes the residual, so asking for "
@@ -356,6 +371,10 @@ def build_parser() -> argparse.ArgumentParser:
                         action="store_true",
                         help="issue no command when a replan-woke robot re-picks the task it "
                              "is already executing (re-issuing one restarts its work clock)")
+    parser.add_argument("--allow-release-without-suppression", dest="allow_release_without_suppression",
+                        action="store_true",
+                        help="research escape: run the redundant-member release on its own so "
+                             "the command churn it causes is measurable rather than prevented")
     parser.add_argument("--command-ttl", type=float, default=10.0,
                         help="how long an assignment command stays valid, in global-clock units")
     parser.add_argument("--coordination-interval", type=int, default=5, help="steps between coordinator calls")
@@ -410,6 +429,9 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         sticky_commitments=bool(getattr(args, "sticky_commitments", False)),
         release_redundant_members=bool(getattr(args, "release_redundant_members", False)),
         suppress_recommand_own_task=bool(getattr(args, "suppress_recommand_own_task", False)),
+        allow_release_without_suppression=bool(
+            getattr(args, "allow_release_without_suppression", False)
+        ),
         command_ttl=float(args.command_ttl),
         coordination_interval=int(args.coordination_interval),
         allocation_interval=int(args.allocation_interval),
