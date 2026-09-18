@@ -513,7 +513,7 @@ def replay_one(arm_label: str, seed: int) -> dict:
 # ---------------------------------------------------------------- preflight
 def preflight(seeds_subset: list[int]) -> int:
     head = arms.assert_frozen_tree()
-    print(f"freeze {arms.FROZEN['code_commit']} clean, HEAD {head[:12]}")
+    print(f"freeze {head} clean, HEAD {arms.current_head()[:12]}")
     for label, arm in arms.ARMS.items():
         seed = seeds_subset[0]
         run = arm.build(seed, stream_path(seed), HERE / "preflight")

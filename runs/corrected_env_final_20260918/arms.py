@@ -38,10 +38,19 @@ BOOTSTRAP_RESAMPLES = 10_000
 BOOTSTRAP_SEED = 20260918
 STREAMS = HERE / "streams"
 OUT = HERE / "block"
+FREEZE_FILE = HERE / "FREEZE.json"
+
+
+def freeze_commit() -> str:
+    """The commit the block is frozen at, read from FREEZE.json -- never typed by hand."""
+    if not FREEZE_FILE.exists():
+        raise AssertionError(
+            "no FREEZE.json: run freeze.py to register the commit before building an arm"
+        )
+    return json.loads(FREEZE_FILE.read_text(encoding="utf-8"))["code_commit"]
 
 # The frozen facts. Any change to one of these ends the acceptance run of this version.
 FROZEN = {
-    "code_commit": "d96b9deb9448f41859e3826e7e05d80b6aaa10e6",
     "branch": "fix/task-membership-consistency",
     "piloc_checkpoint": str(PIL_CHECKPOINT.relative_to(REPO)),
     "ctde_checkpoint": str(CTDE_CHECKPOINT.relative_to(REPO)),
@@ -293,20 +302,21 @@ def assert_frozen_tree() -> str:
             "the production tree has uncommitted changes, so the block may not be run: "
             + dirty.replace("\n", "; ")
         )
-    drift = git("diff", FROZEN["code_commit"], "--", "integrated_sar", "task_allocation")
+    commit = freeze_commit()
+    drift = git("diff", commit, "--", "integrated_sar", "task_allocation")
     if drift:
         raise AssertionError(
-            "the production files differ from the freeze commit "
-            f"{FROZEN['code_commit']}: {len(drift.splitlines())} diff lines"
+            f"the production files differ from the freeze commit {commit}: "
+            f"{len(drift.splitlines())} diff lines"
         )
-    return git("rev-parse", "HEAD")
+    return commit
 
 
 def truth_table() -> dict[str, Any]:
     """The two arms side by side, field by field, for the protocol document."""
     keys = sorted(set(ARMS["C"].configuration) | set(ARMS["D"].configuration))
     return {
-        "frozen": FROZEN,
+        "frozen": {**FROZEN, "code_commit": freeze_commit()},
         "checkpoint_sha256": {
             "piloc": sha256(PIL_CHECKPOINT),
             "ctde": sha256(CTDE_CHECKPOINT),

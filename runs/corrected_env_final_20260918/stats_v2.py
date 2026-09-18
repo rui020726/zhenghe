@@ -89,7 +89,7 @@ def failures(by_arm: dict[str, dict[int, dict]], scheduled: list[int]) -> tuple[
                     f"(steps={row.get('run_steps')}, time={row.get('run_time')})"
                 )
                 bad.add(seed)
-            if row.get("code_commit") != arms.FROZEN["code_commit"]:
+            if row.get("code_commit") != arms.freeze_commit():
                 reasons.append(f"{label} s{seed}: commit {row.get('code_commit')}")
                 bad.add(seed)
             if row.get("detections", 0) == 0:
