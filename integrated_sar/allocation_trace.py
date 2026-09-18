@@ -87,6 +87,8 @@ def arm_name(
     task_logit_offset: float = 0.0,
     coordinator_policy: str = "heuristic",
     binding_commitments: bool = False,
+    release_redundant_members: bool = False,
+    suppress_recommand_own_task: bool = False,
 ) -> str:
     """The arm label shared with the ``rp_<arm>_s<seed>.jsonl`` lifecycle logs.
 
@@ -115,6 +117,13 @@ def arm_name(
         label = f"{label}+cal{task_logit_offset:g}"
     if binding_commitments:
         label = f"{label}sticky"
+    if release_redundant_members:
+        # An arm label is the only place two policies are told apart in a pooled file:
+        # a run that re-decides redundant members must never share a label with one
+        # that does not, exactly like the binding suffix above.
+        label = f"{label}+redrel"
+    if suppress_recommand_own_task:
+        label = f"{label}+noself"
     return label
 
 
@@ -141,6 +150,14 @@ def trace_meta(
             binding_commitments=bool(
                 getattr(configuration, "sticky_commitments", False)
             ),
+            release_redundant_members=bool(
+                getattr(configuration, "release_redundant_members", False)
+                or getattr(configuration, "coordinator_policy", "") == "coalition_redundant_release"
+            ),
+            suppress_recommand_own_task=bool(
+                getattr(configuration, "suppress_recommand_own_task", False)
+                or getattr(configuration, "coordinator_policy", "") == "coalition_redundant_release"
+            ),
         ),
         "coordinator_policy": str(
             getattr(configuration, "coordinator_policy", "heuristic")
@@ -152,6 +169,12 @@ def trace_meta(
         "use_coordinator": bool(configuration.use_coordinator),
         "sticky_commitments": bool(
             getattr(configuration, "sticky_commitments", False)
+        ),
+        "release_redundant_members": bool(
+            getattr(configuration, "release_redundant_members", False)
+        ),
+        "suppress_recommand_own_task": bool(
+            getattr(configuration, "suppress_recommand_own_task", False)
         ),
         "residual_scale": float(configuration.residual_scale),
         "ctde_task_logit_offset": float(

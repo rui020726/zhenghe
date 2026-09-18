@@ -483,6 +483,14 @@ def run_signature_of(configuration: RunConfiguration) -> dict[str, Any]:
             task_logit_offset=float(configuration.ctde_task_logit_offset),
             coordinator_policy=str(configuration.coordinator_policy),
             binding_commitments=bool(configuration.sticky_commitments),
+            release_redundant_members=bool(
+                configuration.release_redundant_members
+                or configuration.coordinator_policy == "coalition_redundant_release"
+            ),
+            suppress_recommand_own_task=bool(
+                configuration.suppress_recommand_own_task
+                or configuration.coordinator_policy == "coalition_redundant_release"
+            ),
         ),
         repo=Path(__file__).resolve().parent.parent,
     )
@@ -809,8 +817,12 @@ def _build_coordinator(configuration: RunConfiguration) -> Any:
     if configuration.coordinator_policy == "coalition":
         return CoalitionAwareCoordinator()
     if configuration.coordinator_policy == "coalition_planner":
+        # ``release_redundant_members`` switches the same planner's release mechanism on
+        # directly, so an ablation can pair it with or without the allocator suppression;
+        # the policy shorthand below turns both halves on at once.
         return CoalitionPlannerCoordinator(
-            renew_commitments=configuration.sticky_commitments
+            renew_commitments=configuration.sticky_commitments,
+            release_redundant_members=configuration.release_redundant_members,
         )
     if configuration.coordinator_policy == "coalition_assembly_scheduler":
         # The assembly-scheduler prototype: the same planner plus an arrival-synchronising
@@ -824,13 +836,6 @@ def _build_coordinator(configuration: RunConfiguration) -> Any:
         # The redundant-member release: the same planner, allowed to re-decide a working
         # robot whose own belief says it fills no slot on its stage. Binding commitments
         # stay on so the arm differs from the binding baseline in exactly one mechanism.
-        return CoalitionPlannerCoordinator(
-            renew_commitments=configuration.sticky_commitments,
-            release_redundant_members=True,
-        )
-    if configuration.coordinator_policy == "coalition_planner" and configuration.release_redundant_members:
-        # The planner mechanism switched on directly, for an ablation that pairs it with
-        # or without the allocator's own-task suppression.
         return CoalitionPlannerCoordinator(
             renew_commitments=configuration.sticky_commitments,
             release_redundant_members=True,
