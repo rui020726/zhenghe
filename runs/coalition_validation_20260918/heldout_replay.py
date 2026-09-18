@@ -22,6 +22,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import numpy as np
+
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
 if str(REPO) not in sys.path:
@@ -36,7 +38,7 @@ from integrated_sar.lifecycle_metrics import load_records  # noqa: E402
 import mechanism_ablation as ablation  # noqa: E402  (metric definitions are shared)
 import heldout_record  # noqa: E402
 
-FROZEN_COMMIT = "e15050a"  # full: e15050a62d33a8261b1a6ecda25edaa60312df7b
+FROZEN_COMMIT = "6cb3609"  # full: 6cb3609a75c458e47d8518696bdbc7b1553a43d0
 BASELINE = {"policy": "coalition_planner", "release": False, "suppress": False}
 CANDIDATE = {"policy": "coalition_planner", "release": True, "suppress": True}
 ARMS = {"baseline": BASELINE, "candidate": CANDIDATE}
@@ -109,20 +111,20 @@ def _instrument(run, counters: dict) -> None:
 
     def step():
         report = original_step()
-        abilities = {str(aid): __import__("numpy").array(agent["abilities"], dtype=float) for aid, agent in env.agent_dic.items()}
+        abilities = {str(aid): np.array(agent["abilities"], dtype=float) for aid, agent in env.agent_dic.items()}
         for task in env.task_dic.values():
             members = [str(m) for m in task["members"]]
             index = min(int(task["current_stage_index"]), len(task["stages"]) - 1)
-            requirement = __import__("numpy").array(task["stages"][index]["requirements"], dtype=float)
+            requirement = np.array(task["stages"][index]["requirements"], dtype=float)
             for member in members:
                 agent = env.agent_dic.get(int(member)) if member.isdigit() else None
                 if agent is None or agent.get("status") != "working" or member not in abilities:
                     continue
                 others = [abilities[m] for m in members if m != member and m in abilities]
-                covered = __import__("numpy").sum(others, axis=0) if others else __import__("numpy").zeros(requirement.shape)
-                gap_without = __import__("numpy").maximum(requirement - covered, 0.0)
+                covered = np.sum(others, axis=0) if others else np.zeros(requirement.shape)
+                gap_without = np.maximum(requirement - covered, 0.0)
                 counters["working_ticks"] += 1
-                if float(__import__("numpy").minimum(gap_without, abilities[member]).sum()) <= 1e-9:
+                if float(np.minimum(gap_without, abilities[member]).sum()) <= 1e-9:
                     counters["redundant_working_ticks"] += 1
         counters["releases_planned"] += int((report.advice.metadata or {}).get("redundant_releases", 0) or 0)
         return report
@@ -133,35 +135,37 @@ def _instrument(run, counters: dict) -> None:
 def identity_check() -> int:
     """The all-off configuration must reproduce the committed binding arm, field by field."""
     import dataclasses
-    import tempfile
 
+    # A fixed scratch directory rather than a temp dir: Windows refuses to unlink an
+    # output while a writer still holds it, and the teardown error hides the verdict.
+    scratch = HERE / "identity_scratch"
+    scratch.mkdir(parents=True, exist_ok=True)
     ok = True
     for seed in DEV_SEEDS:
-        with tempfile.TemporaryDirectory() as scratch:
-            configuration = dataclasses.replace(
-                configuration_for(
-                    seed,
-                    "baseline",
-                    REPO / "runs" / "coordinator_baselines_20260917" / "heldout" / "streams" / f"s{seed}.json",
-                ),
-                output=str(Path(scratch) / "rp.jsonl"),
-                decision_trace=str(Path(scratch) / "tr.jsonl"),
-            )
-            run = build_joint_run(configuration)
-            run.run()
-            produced = [
-                tuple(row.get(name) for name in FIELDS)
-                for line in Path(scratch).joinpath("tr.jsonl").read_text(encoding="utf-8").splitlines()
-                if line.strip() and (row := json.loads(line)).get("event_type") == "decision"
-            ]
-            committed = [
-                tuple(row.get(name) for name in FIELDS)
-                for line in (COMMITTED_TR / f"tr_coalplan0.25sticky_s{seed}.jsonl").read_text(encoding="utf-8").splitlines()
-                if line.strip() and (row := json.loads(line)).get("event_type") == "decision"
-            ]
-            same = produced == committed
-            ok = ok and same
-            print(f"identity seed {seed}: {len(produced)} rows vs {len(committed)} committed -> {'IDENTICAL' if same else 'DIVERGED'}")
+        configuration = dataclasses.replace(
+            configuration_for(
+                seed,
+                "baseline",
+                REPO / "runs" / "coordinator_baselines_20260917" / "heldout" / "streams" / f"s{seed}.json",
+            ),
+            output=str(scratch / f"rp_s{seed}.jsonl"),
+            decision_trace=str(scratch / f"tr_s{seed}.jsonl"),
+        )
+        run = build_joint_run(configuration)
+        run.run()
+        produced = [
+            tuple(row.get(name) for name in FIELDS)
+            for line in (scratch / f"tr_s{seed}.jsonl").read_text(encoding="utf-8").splitlines()
+            if line.strip() and (row := json.loads(line)).get("event_type") == "decision"
+        ]
+        committed = [
+            tuple(row.get(name) for name in FIELDS)
+            for line in (COMMITTED_TR / f"tr_coalplan0.25sticky_s{seed}.jsonl").read_text(encoding="utf-8").splitlines()
+            if line.strip() and (row := json.loads(line)).get("event_type") == "decision"
+        ]
+        same = produced == committed
+        ok = ok and same
+        print(f"identity seed {seed}: {len(produced)} rows vs {len(committed)} committed -> {'IDENTICAL' if same else 'DIVERGED'}", flush=True)
     print(f"all-off reproduces the 868d68a-era trajectory: {ok}")
     return 0 if ok else 1
 
