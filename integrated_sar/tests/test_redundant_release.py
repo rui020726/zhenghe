@@ -22,6 +22,7 @@ Pinned here:
 from __future__ import annotations
 
 import unittest
+from dataclasses import replace
 
 from integrated_sar.coordinator import CoalitionPlannerCoordinator
 from integrated_sar.contracts import (
@@ -45,12 +46,14 @@ def belief(
     task_id: str,
     *,
     requirement=(1, 0, 0, 0, 0),
+    gross=None,
     deadline: float = 100.0,
     stage: int = 0,
     progress: float = 0.0,
     position=(0.0, 0.0),
     finished: bool = False,
     revision: int = 1,
+    members=(),
 ) -> AgentTaskBelief:
     return AgentTaskBelief(
         task_id=task_id,
@@ -61,12 +64,15 @@ def belief(
         progress=float(progress),
         severity=0.5,
         future_requirements=(),
-        members=(),
+        members=tuple(str(member) for member in members),
         updated_at=0.0,
         finished=finished,
         dynamic=False,
         confidence=1.0,
         revision=revision,
+        # What the stage asks for in total. A delivered belief never carries the residual
+        # alone: the residual is computed with the reading robot counted among the members.
+        stage_requirements=tuple(int(v) for v in (requirement if gross is None else gross)),
     )
 
 
@@ -77,8 +83,18 @@ def robot(
     current_task: str | None = None,
     beliefs=(),
     status: str | None = None,
+    roster: bool = True,
 ) -> AgentSnapshot:
     working = current_task is not None
+    if roster and working:
+        # A robot standing on a task is on that task's roster; only the deliberately
+        # inconsistent cases run without it.
+        beliefs = tuple(
+            replace(belief, members=(*belief.members, agent_id))
+            if belief.task_id == current_task
+            else belief
+            for belief in beliefs
+        )
     return AgentSnapshot(
         agent_id=agent_id,
         position=WorldPosition(*position_of(agent_id)),
@@ -376,6 +392,86 @@ class JointReleaseTests(unittest.TestCase):
         destinations = [task for agent, task in advice.reservations if agent == "a"]
         self.assertEqual(len(destinations), 1)
         self.assertIn("a", advice.replan_agents)
+
+
+class CoveragePreservingVerdictTests(unittest.TestCase):
+    """The release test compares coverage with me against coverage without me."""
+
+    def test_a_sole_provider_is_not_released_even_though_its_residual_reads_zero(self) -> None:
+        # The measured case: b arrived first and covered the stage alone, so the residual
+        # it now reads is zero -- which is exactly the reading an earlier version of this
+        # test called redundant. The gross figure still says the stage needs its unit.
+        world = (
+            robot("b", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=(0, 0, 0, 0, 0), gross=OLD_REQ),
+                           belief(NEW, requirement=NEW_REQ, position=(0.9, 0.9)))),
+        )
+        coordinator = planner(release=True)
+        advice = coordinator.advise(state(world))
+        self.assertNotIn("b", advice.replan_agents)
+        self.assertEqual(coordinator.redundant_releases, 0)
+        # It was examined and found needed, which is a different answer from refused.
+        self.assertEqual(dict(coordinator.release_refusals), {})
+
+    def test_the_second_of_two_over_provisioned_members_is_still_released(self) -> None:
+        # The same belief shape, with a teammate who also covers the unit: one of the two
+        # may go, which is the whole point of the mechanism.
+        world = (
+            robot("a", dims=(0, 4), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=(0, 0, 0, 0, 0), gross=OLD_REQ),
+                           belief(NEW, requirement=NEW_REQ, position=(0.9, 0.9)))),
+            robot("b", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=(0, 0, 0, 0, 0), gross=OLD_REQ),)),
+        )
+        coordinator = planner(release=True)
+        advice = coordinator.advise(state(world))
+        self.assertIn(("a", NEW), advice.reservations)
+        self.assertIn("a", advice.replan_agents)
+        self.assertNotIn("b", advice.replan_agents)
+        self.assertEqual(coordinator.redundant_releases, 1)
+
+    def test_a_belief_without_a_gross_requirement_is_refused_and_counted(self) -> None:
+        world = (
+            robot("a", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=(0, 0, 0, 0, 0), gross=()),
+                           belief(NEW, requirement=NEW_REQ, position=(0.9, 0.9)))),
+            robot("b", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=(0, 0, 0, 0, 0), gross=OLD_REQ),)),
+        )
+        coordinator = planner(release=True)
+        advice = coordinator.advise(state(world))
+        self.assertEqual(coordinator.release_refusals["no_stage_requirement"], 1)
+        self.assertNotIn("a", advice.replan_agents)
+
+    def test_a_robot_missing_from_the_roster_it_read_is_refused_and_counted(self) -> None:
+        # The requirement and the on-site pool came from different moments.
+        world = (
+            robot("a", dims=(4,), current_task=OLD, roster=False,
+                  beliefs=(belief(OLD, requirement=(0, 0, 0, 0, 0), gross=OLD_REQ),
+                           belief(NEW, requirement=NEW_REQ, position=(0.9, 0.9)))),
+            robot("b", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=(0, 0, 0, 0, 0), gross=OLD_REQ),)),
+        )
+        coordinator = planner(release=True)
+        advice = coordinator.advise(state(world))
+        self.assertEqual(coordinator.release_refusals["absent_from_believed_roster"], 1)
+        self.assertNotIn("a", advice.replan_agents)
+        # "b" is left alone for the real reason: removing it would uncover the stage.
+        self.assertNotIn("b", advice.replan_agents)
+        self.assertEqual(coordinator.redundant_releases, 0)
+
+    def test_refusals_are_counted_per_decision(self) -> None:
+        world = (
+            robot("a", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=(0, 0, 0, 0, 0), gross=()),)),
+        )
+        coordinator = planner(release=True)
+        coordinator.advise(state(world))
+        self.assertEqual(coordinator.release_refusals["no_stage_requirement"], 1)
+        coordinator.advise(state(world))
+        self.assertEqual(coordinator.release_refusals["no_stage_requirement"], 1)
+        coordinator.reset()
+        self.assertEqual(dict(coordinator.release_refusals), {})
 
 
 class RecommandSuppressionTests(unittest.TestCase):

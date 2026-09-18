@@ -240,6 +240,13 @@ class AgentTaskBelief:
     # Registry revision of this belief, so a newer fact with an unchanged timestamp
     # can still be ordered.
     revision: int = field(default=0, kw_only=True)
+    # What the believed stage asks for in total, as delivered with the same message as
+    # ``remaining_requirements``. The two are not interchangeable: ``remaining`` is what
+    # the task still lacked *including this robot* among its members, so a robot that is
+    # the sole provider of a requirement sees that requirement as zero. Only the gross
+    # figure can say whether removing one member would uncover a unit.
+    # Empty means the belief carries no stage requirement at all.
+    stage_requirements: tuple[int, ...] = field(default=(), kw_only=True)
 
 
 @dataclass(frozen=True, slots=True)

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
@@ -571,16 +571,19 @@ class CoalitionPlannerCoordinator:
         # for one task without overriding the covering decision itself.
         self.assembly_weight = 0.15
         self.sync_horizon = 50.0
-        # Whether a working robot whose own belief says its presence adds nothing to the
-        # stage it is on may be planned onto another task and re-decided this tick. The
-        # measured wall behind the six assembly failures: working robots carry
+        # Whether a working robot may be planned onto another task and re-decided this
+        # tick. The measured wall behind the six assembly failures: working robots carry
         # need_decision=False, so neither the planner (free robots only) nor the allocator
         # (eligible robots only) could ever touch them, and the only release was the
-        # environment's random 50-120-step working timeout. Off by default: the flag only
-        # ever names a robot that is provably redundant *in its own belief*, never a robot
-        # another member still needs.
+        # environment's random 50-120-step working timeout. Off by default, and the test is
+        # coverage-preserving: a robot is named only when the believed stage requirement is
+        # covered exactly as well without it as with it, judged from the gross requirement
+        # the robot was told rather than the residual that already counts it in.
         self.release_redundant_members = bool(release_redundant_members)
         self.redundant_releases = 0
+        # Why a robot standing on a task was left alone. Separated by reason because "the
+        # belief could not decide" and "the belief says it is needed" are different answers.
+        self.release_refusals: Counter[str] = Counter()
         self._revision = 0
         self._reservations: dict[tuple[str, str], CoalitionReservation] = {}
         # Identity, not ordering: a fresh commitment takes the next number, a renewal keeps
@@ -593,6 +596,7 @@ class CoalitionPlannerCoordinator:
         self._reservations.clear()
         self._commitment_counter = 0
         self.redundant_releases = 0
+        self.release_refusals.clear()
 
     def _new_commitment_id(self) -> str:
         self._commitment_counter += 1
@@ -603,6 +607,7 @@ class CoalitionPlannerCoordinator:
         now = float(state.current_time)
         previous = dict(self._reservations)
         agents = {agent.agent_id: agent for agent in state.agents}
+        self.release_refusals.clear()
 
         agent_task_bias: dict[tuple[str, str], float] = {}
         replan_agents: set[str] = set()
@@ -647,7 +652,17 @@ class CoalitionPlannerCoordinator:
                         # not already fill. The verdict is not taken here: two members can
                         # each look redundant only because of the other, so the joint
                         # accounting in ``_joint_redundant`` decides once the team is in.
-                        release_checks[agent.agent_id] = belief
+                        if not belief.stage_requirements:
+                            # No gross figure: the belief cannot say what removing this
+                            # robot would uncover, so it stays where it is.
+                            self.release_refusals["no_stage_requirement"] += 1
+                        elif agent.agent_id not in belief.members:
+                            # The roster that came with this requirement does not include
+                            # the robot asking. The requirement and the on-site pool then
+                            # describe different moments, which is the case to refuse.
+                            self.release_refusals["absent_from_believed_roster"] += 1
+                        else:
+                            release_checks[agent.agent_id] = belief
 
             known = agent.known_tasks
             usable: list[AgentTaskBelief] = []
@@ -730,6 +745,7 @@ class CoalitionPlannerCoordinator:
                 "planned_reservations": len(reservations),
                 "redundant_candidates": redundant,
                 "redundant_releases": self.redundant_releases,
+                "release_refusals": dict(sorted(self.release_refusals.items())),
                 "held_slot_indices": sorted(
                     held.ability_slot for held in reservations.values()
                 ),
@@ -1085,14 +1101,16 @@ class CoalitionPlannerCoordinator:
         committed: Mapping[str, Mapping[str, tuple[float, ...]]],
         checks: Mapping[str, AgentTaskBelief],
     ) -> set[str]:
-        """Which working robots may be released without opening a believed gap.
+        """Which working robots may be released without lowering believed coverage.
 
         Judged together, never per robot: two members can each look redundant only
         because of the other, and releasing both would strip the task. Candidates are
         processed in a deterministic order and every accepted release leaves the pool
         before the next robot is judged, so what remains on the task after the whole
-        release set is applied still covers its believed requirement -- if the stage was
-        fully covered before, it is fully covered after.
+        release set is applied covers the believed stage requirement exactly as well as
+        the full team did. A stage believed fully covered stays fully covered, because
+        both sides of the comparison use the same gross requirement; a stage covered only
+        by this robot cannot pass, whichever way its residual reads.
 
         Only robots the snapshots place *on site* count as coverage: one still
         travelling has not arrived for the environment and cannot be the reason another
@@ -1114,18 +1132,14 @@ class CoalitionPlannerCoordinator:
             pool = on_site.get(task_id or "", {})
             if agent_id not in pool:
                 continue
-            pool = {key: value for key, value in pool.items() if key != agent_id}
-            restored = on_site.setdefault(task_id or "", {})
-            if (
-                _claim_slot(
-                    tuple(float(value) for value in checks[agent_id].remaining_requirements),
-                    list(pool.values()),
-                    tuple(float(value) for value in agents[agent_id].abilities),
-                )
-                is None
-            ):
+            requirement = tuple(checks[agent_id].stage_requirements)
+            covered_with = _covered_units(requirement, list(pool.values()))
+            covered_without = _covered_units(
+                requirement, [value for key, value in pool.items() if key != agent_id]
+            )
+            if covered_with == covered_without:
                 released.add(agent_id)
-                restored.pop(agent_id, None)  # banked: the next verdict sees one fewer filler
+                pool.pop(agent_id, None)  # banked: the next verdict sees one fewer filler
         return released
 
     @staticmethod

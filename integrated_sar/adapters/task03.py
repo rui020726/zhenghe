@@ -506,6 +506,10 @@ class Task03Adapter:
                         str(member)
                         for member in knowledge.get("task_members", {}).get(internal_id, ())
                     ),
+                    stage_requirements=tuple(
+                        int(value)
+                        for value in knowledge.get("task_requirements", {}).get(internal_id, ())
+                    ),
                     updated_at=float(knowledge["task_last_update_time"].get(internal_id, 0.0)),
                     finished=internal_id in knowledge.get("known_finished", ()),
                     dynamic=internal_id in knowledge.get("dynamic_tasks", ()),

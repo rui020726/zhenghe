@@ -176,6 +176,10 @@ def trace_meta(
         "suppress_recommand_own_task": bool(
             getattr(configuration, "suppress_recommand_own_task", False)
         ),
+        # The rule, not just the switch: the flag has carried two different redundancy
+        # tests, and an artefact that cannot say which one ran cannot be compared with
+        # one that was produced before the rule changed.
+        "release_verdict": "coverage-preserving-stage-requirement",
         "residual_scale": float(configuration.residual_scale),
         "ctde_task_logit_offset": float(
             getattr(configuration, "ctde_task_logit_offset", 0.0)
