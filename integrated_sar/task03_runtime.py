@@ -110,6 +110,7 @@ def build_task_env(
     comm_range: float = 0.3,
     traits_dim: int = 5,
     deadline_tightness: tuple[float, float] = (0.5, 2.0),
+    membership_consistency: bool = False,
     depot_positions: Sequence[Sequence[float]] | None = None,
 ) -> Any:
     """
@@ -123,6 +124,11 @@ def build_task_env(
     deadline from. The default is TaskEnv's own, so a caller that says nothing gets the
     scenarios recorded before this argument existed; the sampler itself is untouched.
 
+    ``membership_consistency`` makes the member roster mean what it says: an accepted
+    reassignment detaches the robot from the task it is leaving, and re-selecting the task
+    a working robot is already on becomes a true no-op. Off by default, because every
+    existing number was produced under the old bookkeeping.
+
     ``depot_positions`` stages the rescue teams inside the shared scene. Without it
     TaskEnv scatters depots uniformly over the unit square, which can leave them
     permanently outside ``comm_range`` of every PILOC target: nothing is sensed,
@@ -134,6 +140,7 @@ def build_task_env(
         per_species_range=(per_species, per_species),
         traits_dim=traits_dim,
         deadline_tightness=deadline_tightness,
+        membership_consistency=membership_consistency,
         enable_tidal_tasks=False,
         enable_discovered_tasks=False,
         dynamic_task_discovery=False,

@@ -56,8 +56,12 @@ class TaskEnv:
             discovered_notify_ratio=0.1,
             discovered_cluster_radius=0.15,
             hard_expire=False,
+            membership_consistency=False,
             **kwargs,
     ):
+        # 成员一致性：被接受的改派是否应当把机器人从旧任务的成员名单上摘掉。
+        # 默认关闭，保持既有全部数字的产生条件不变。
+        self.membership_consistency = bool(membership_consistency)
         # 向后兼容旧版 prio_range 参数
         if "prio_range" in kwargs:
             deadline_tightness = kwargs.pop("prio_range")
@@ -981,12 +985,32 @@ class TaskEnv:
             return False, "Cannot contribute", True
         return True, "Valid", False
 
+    def _detach_from_rosters(self, agent_id):
+        """成员一致性：机器人离开时从所有仍列出它的名册上摘掉，并重算这些 stage 的缺口。
+
+        默认关闭时本方法不会被调用，行为与历史一致。
+        """
+        left = []
+        for tid in sorted(self.task_dic.keys()):
+            task = self.task_dic[tid]
+            if agent_id not in task["members"]:
+                continue
+            task["members"].remove(agent_id)
+            if not task.get("finished"):
+                stage = task["stages"][min(int(task.get("current_stage_index", 0)), len(task["stages"]) - 1)]
+                stage["status"] = np.maximum(stage["requirements"] - self.get_abilities(task["members"]), 0)
+                task["status"] = stage["status"].copy()
+            left.append(tid)
+        return left
+
     def apply_action(self, agent_id, action_index, action_map):
         agent = self.agent_dic[agent_id]
         kind, tid = action_map[action_index] if 0 <= action_index < len(action_map) else ("depot", None)
         agent["immediate_replan"] = False
 
         if kind == "depot":
+            if self.membership_consistency:
+                self._detach_from_rosters(agent_id)
             agent.update({"target_type": "depot", "target_id": None,
                           "target_pos": self.depot_dic[agent["species"]]["location"].copy(), "status": "moving",
                           "is_rushing": False, "current_task": -1, "need_decision": False,
@@ -998,6 +1022,14 @@ class TaskEnv:
         if task_id not in self.task_dic:
             agent.update({"need_decision": True, "status": "idle"})
             return -1.0, True, []
+
+        if self.membership_consistency and agent.get("status") == "working" and \
+                int(agent.get("current_task", -1)) == task_id:
+            # 重选自己正在执行的任务：真正的 no-op。不重置工时、不动名册、不改导航目标。
+            return 0.0, False, []
+
+        if self.membership_consistency:
+            self._detach_from_rosters(agent_id)
 
         # 不变量 9：动作虽然由 belief 里的 action_map 选出，导航目标与预期状态也必须
         # 来自该机器人的 belief。任务真值只在到场核实（verify_task_on_arrival）时才用，

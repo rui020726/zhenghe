@@ -74,6 +74,11 @@ class RunConfiguration:
     # lowering the upper bound is how a run asks for less slack, not how the sampler
     # itself changes.
     deadline_tightness: tuple[float, float] = (0.5, 2.0)
+    # Whether the rescue environment keeps its member roster honest: an accepted
+    # reassignment detaches a robot from the task it is leaving, and re-selecting the task
+    # it is already working on is a true no-op. Off by default -- every completion, reset
+    # and lost-work number in this repository was produced under the old bookkeeping.
+    task_membership_consistency: bool = False
     actor_kv_mode: str = "tokens"
     use_coordinator: bool = True
     residual_scale: float = 0.5
@@ -332,6 +337,12 @@ def build_parser() -> argparse.ArgumentParser:
                         default=[0.5, 2.0],
                         help="multiplier band TaskEnv draws each deadline from; the default "
                              "is its own (0.5 2.0), lowering HIGH asks for less slack")
+    parser.add_argument("--task-membership-consistency", dest="task_membership_consistency",
+                        action="store_true",
+                        help="make the rescue environment's member roster mean what it says: "
+                             "an accepted reassignment detaches the robot from the task it "
+                             "leaves, and re-picking the current task is a no-op (off by "
+                             "default; every existing number assumes the old bookkeeping)")
     parser.add_argument("--actor-kv-mode", default="tokens", choices=("tokens", "summary"),
                         help="CTDE actor key/value mode the checkpoint was trained with")
     parser.add_argument("--no-coordinator", action="store_true",
@@ -421,6 +432,7 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         rescue_species=int(args.rescue_species),
         rescue_per_species=int(args.rescue_per_species),
         deadline_tightness=(float(args.deadline_tightness[0]), float(args.deadline_tightness[1])),
+        task_membership_consistency=bool(getattr(args, "task_membership_consistency", False)),
         actor_kv_mode=str(args.actor_kv_mode),
         use_coordinator=not args.no_coordinator,
         residual_scale=float(args.residual_scale),
@@ -913,6 +925,7 @@ def _build_task_side(
         species=configuration.rescue_species,
         per_species=configuration.rescue_per_species,
         deadline_tightness=tuple(float(value) for value in configuration.deadline_tightness),
+        membership_consistency=bool(configuration.task_membership_consistency),
         dt=configuration.dt,
         depot_positions=_rescue_depot_positions(scenario, configuration.rescue_species),
     )
