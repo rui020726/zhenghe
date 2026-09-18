@@ -114,11 +114,17 @@ class SourceStageGateTests(unittest.TestCase):
         self.assertEqual(rejections[0].release_from_task, "t-old")
         self.assertEqual(gate.pending_replan, {"0"}, "the robot must be asked to decide again")
 
-    def test_a_source_revision_move_is_named_apart_from_a_stage_move(self) -> None:
+    def test_a_revision_move_alone_is_not_a_refusal(self) -> None:
+        # The registry advances a task's revision on every accepted event, so a belief is
+        # nearly always older than the live value. Refusing on that would refuse 979 of
+        # the releases on the development block and keep none of the safety: only the
+        # stage a release was judged against can actually invalidate the judgement.
         executor = _RecordingExecutor()
         gate = gate_for(executor, lambda task_id: (0, 9))
-        gate.apply_assignments([command(release_from="t-old", release_stage=0, release_revision=3)])
-        self.assertEqual([row.reason for row in gate.drain_rejections()], ["stale_release_revision"])
+        issued = command(release_from="t-old", release_stage=0, release_revision=3)
+        gate.apply_assignments([issued])
+        self.assertEqual(executor.applied, [issued])
+        self.assertEqual(gate.drain_rejections(), ())
 
     def test_an_unchanged_source_is_executed(self) -> None:
         executor = _RecordingExecutor()

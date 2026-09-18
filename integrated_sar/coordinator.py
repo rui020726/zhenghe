@@ -1125,6 +1125,10 @@ class CoalitionPlannerCoordinator:
         both sides of the comparison use the same gross requirement; a stage covered only
         by this robot cannot pass, whichever way its residual reads.
 
+        Spareness is judged against the next stage too. Finishing the stage a robot stands
+        on is the normal reason a task moves on, and a robot that the following stage needs
+        has only looked redundant until that moment.
+
         Only robots the snapshots place *on site* count as coverage: one still
         travelling has not arrived for the environment and cannot be the reason another
         robot is redundant. A candidate that is not itself credibly on site is never
@@ -1146,13 +1150,22 @@ class CoalitionPlannerCoordinator:
             if agent_id not in pool:
                 continue
             requirement = tuple(checks[agent_id].stage_requirements)
-            covered_with = _covered_units(requirement, list(pool.values()))
-            covered_without = _covered_units(
-                requirement, [value for key, value in pool.items() if key != agent_id]
-            )
-            if covered_with == covered_without:
-                released.add(agent_id)
-                pool.pop(agent_id, None)  # banked: the next verdict sees one fewer filler
+            others = [value for key, value in pool.items() if key != agent_id]
+            if _covered_units(requirement, list(pool.values())) != _covered_units(requirement, others):
+                continue
+            # The stage that follows, as this same belief was told it. The measured
+            # failure mode was a release that was right about the stage the robot stood in
+            # and wrong about the next one: the moment the team finished the current
+            # stage, the ability that had just walked away was what the new stage needed.
+            # A robot the next stage still needs is not spare, and an all-zero next
+            # requirement means the belief says this is the last stage.
+            following = tuple(checks[agent_id].future_requirements)
+            if following and _covered_units(following, list(pool.values())) != _covered_units(
+                following, others
+            ):
+                continue
+            released.add(agent_id)
+            pool.pop(agent_id, None)  # banked: the next verdict sees one fewer filler
         return released
 
     @staticmethod

@@ -139,12 +139,12 @@ class AssignmentGate:
             if state is not None:
                 stage_now, revision_now = state
                 # The planner judged the release against a stage of the source task. If
-                # that stage has advanced, the coverage the judgement relied on is gone,
-                # and a newer revision means the same thing about any other move on it.
+                # that stage has advanced, the coverage the judgement relied on is gone.
+                # Revision is not compared here: the registry bumps it on every accepted
+                # event, so a belief is nearly always older than the live value and
+                # refusing on it rejects the mechanism rather than the unsafe release.
                 if int(metadata.get("release_stage_index", stage_now)) != int(stage_now):
                     return "stale_release_stage", revision_now, str(source)
-                if int(metadata.get("release_revision", revision_now)) != int(revision_now):
-                    return "stale_release_revision", revision_now, str(source)
         return None, current_revision, None
 
 

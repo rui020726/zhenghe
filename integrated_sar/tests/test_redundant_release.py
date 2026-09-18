@@ -47,6 +47,7 @@ def belief(
     *,
     requirement=(1, 0, 0, 0, 0),
     gross=None,
+    future=(),
     deadline: float = 100.0,
     stage: int = 0,
     progress: float = 0.0,
@@ -63,7 +64,9 @@ def belief(
         stage_index=stage,
         progress=float(progress),
         severity=0.5,
-        future_requirements=(),
+        # The stage the belief says comes next. An empty tuple is what a delivered belief
+        # carries for the last stage of a task.
+        future_requirements=tuple(float(v) for v in future),
         members=tuple(str(member) for member in members),
         updated_at=0.0,
         finished=finished,
@@ -428,6 +431,41 @@ class CoveragePreservingVerdictTests(unittest.TestCase):
         self.assertIn(("a", NEW), advice.reservations)
         self.assertIn("a", advice.replan_agents)
         self.assertNotIn("b", advice.replan_agents)
+        self.assertEqual(coordinator.redundant_releases, 1)
+
+    def test_a_robot_the_next_stage_needs_is_not_spare(self) -> None:
+        # The current stage is covered twice over, so the standing stage says both are
+        # spare. The next stage needs two of the same unit, so only one of them may go --
+        # and going is what the measured failures did: the release was right about the
+        # stage it stood in and wrong about the one that followed.
+        world = (
+            robot("a", dims=(0, 4), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=(0, 0, 0, 0, 0), gross=OLD_REQ,
+                                  future=(0, 0, 0, 0, 2)),
+                           belief(NEW, requirement=NEW_REQ, position=(0.9, 0.9)))),
+            robot("b", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=(0, 0, 0, 0, 0), gross=OLD_REQ,
+                                  future=(0, 0, 0, 0, 2)),)),
+        )
+        coordinator = planner(release=True)
+        advice = coordinator.advise(state(world))
+        self.assertNotIn("a", advice.replan_agents)
+        self.assertNotIn("b", advice.replan_agents)
+        self.assertEqual(coordinator.redundant_releases, 0)
+
+    def test_a_belief_with_no_next_stage_still_allows_the_release(self) -> None:
+        # An empty next requirement is what a belief carries for the last stage of a task;
+        # treating it as "unknown" would switch the mechanism off everywhere.
+        world = (
+            robot("a", dims=(0, 4), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=(0, 0, 0, 0, 0), gross=OLD_REQ, future=()),
+                           belief(NEW, requirement=NEW_REQ, position=(0.9, 0.9)))),
+            robot("b", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=(0, 0, 0, 0, 0), gross=OLD_REQ, future=()),)),
+        )
+        coordinator = planner(release=True)
+        advice = coordinator.advise(state(world))
+        self.assertIn("a", advice.replan_agents)
         self.assertEqual(coordinator.redundant_releases, 1)
 
     def test_a_belief_without_a_gross_requirement_is_refused_and_counted(self) -> None:
