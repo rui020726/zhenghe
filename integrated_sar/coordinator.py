@@ -23,6 +23,11 @@ from .contracts import (
 # with ``need_decision = False`` the moment it is dispatched, and "working" once it is
 # on site, so "free" and "will be asked to decide" coincide.
 IDLE_STATUSES = frozenset({"idle", "available"})
+# A robot counts as coverage of the task it is under orders on only once it is on site:
+# "working" is the environment's arrived-and-contributing state, while "moving" has not
+# joined the task's members yet. The release accounting never treats a traveller as a
+# filler, and never releases a traveller either.
+ONSITE_STATUSES = frozenset({"working"})
 
 
 def _clamp(value: float, lower: float = -1.0, upper: float = 1.0) -> float:
@@ -604,6 +609,9 @@ class CoalitionPlannerCoordinator:
         # Working robots whose own belief says they fill no slot on their current task.
         # Consumed before ``_pair_biases`` rebinds its own duplicate count to the name.
         redundant_now: set[str] = set()
+        # agent -> the belief for the task it is under orders on, kept until the whole
+        # team is visible so the release verdict can be computed jointly.
+        release_checks: dict[str, AgentTaskBelief] = {}
         # The team's own plan: which robot is under orders for which task, and what
         # abilities that already puts on each task. Not a belief, and not a registry
         # fact -- see the class docstring. Built in one pass before the per-robot
@@ -617,6 +625,9 @@ class CoalitionPlannerCoordinator:
                 )
         candidates: list[tuple[int, str, tuple[float, ...], tuple[AgentTaskBelief, ...]]] = []
         beliefs_by_key: dict[tuple[str, str], AgentTaskBelief] = {}
+        with_usable: list[
+            tuple[int, str, tuple[float, ...], tuple[AgentTaskBelief, ...]]
+        ] = []
 
         for order, agent in enumerate(state.agents):
             abilities = tuple(float(value) for value in agent.abilities)
@@ -630,11 +641,13 @@ class CoalitionPlannerCoordinator:
                     elif (
                         self.release_redundant_members
                         and belief.deadline >= now
-                        and self._is_redundant(agent, belief, committed[agent.current_task])
+                        and agent.status in ONSITE_STATUSES
                     ):
-                        # Working, but by its own belief adding nothing the others
-                        # don't already add. Plannable again -- see the flag comment.
-                        redundant_now.add(agent.agent_id)
+                        # On site and believed to fill nothing the teammates on site do
+                        # not already fill. The verdict is not taken here: two members can
+                        # each look redundant only because of the other, so the joint
+                        # accounting in ``_joint_redundant`` decides once the team is in.
+                        release_checks[agent.agent_id] = belief
 
             known = agent.known_tasks
             usable: list[AgentTaskBelief] = []
@@ -655,8 +668,13 @@ class CoalitionPlannerCoordinator:
                 agent_task_bias[(agent.agent_id, task_id)] = self._priority(belief, now)
                 usable.append(belief)
 
-            if usable and (self._is_free(agent) or agent.agent_id in redundant_now):
-                candidates.append((order, agent.agent_id, abilities, tuple(usable)))
+            if usable:
+                with_usable.append((order, agent.agent_id, abilities, tuple(usable)))
+
+        redundant_now = self._joint_redundant(agents, committed, release_checks)
+        for order, agent_id, abilities, usable in with_usable:
+            if self._is_free(agents[agent_id]) or agent_id in redundant_now:
+                candidates.append((order, agent_id, abilities, usable))
 
         reservations, planned = self._plan(agents, candidates, committed, now)
         self.redundant_releases = 0
@@ -1062,29 +1080,53 @@ class CoalitionPlannerCoordinator:
         return agent.status in IDLE_STATUSES and not agent.current_task
 
     @staticmethod
-    def _is_redundant(
-        agent: AgentSnapshot,
-        belief: AgentTaskBelief,
-        committed_for_task: Mapping[str, tuple[float, ...]],
-    ) -> bool:
-        """True when the robot's own belief says its presence fills no slot.
+    def _joint_redundant(
+        agents: Mapping[str, AgentSnapshot],
+        committed: Mapping[str, Mapping[str, tuple[float, ...]]],
+        checks: Mapping[str, AgentTaskBelief],
+    ) -> set[str]:
+        """Which working robots may be released without opening a believed gap.
 
-        The believed remaining requirement minus what the *other* robots already
-        under orders for the task supply leaves no unit this robot can cover -- and
-        because the environment's stage clock drains at a flat rate regardless of
-        headcount, a robot that fills no unit cannot make the stage finish sooner
-        by staying. Both inputs are online-legal: the requirement comes from the
-        robot's own belief, the teammates' abilities from the coordinator's
-        snapshots of their own state -- never from the task registry.
+        Judged together, never per robot: two members can each look redundant only
+        because of the other, and releasing both would strip the task. Candidates are
+        processed in a deterministic order and every accepted release leaves the pool
+        before the next robot is judged, so what remains on the task after the whole
+        release set is applied still covers its believed requirement -- if the stage was
+        fully covered before, it is fully covered after.
+
+        Only robots the snapshots place *on site* count as coverage: one still
+        travelling has not arrived for the environment and cannot be the reason another
+        robot is redundant. A candidate that is not itself credibly on site is never
+        released, which is the conservative answer when the information cannot decide.
         """
-        return (
-            _claim_slot(
-                tuple(float(value) for value in belief.remaining_requirements),
-                _others(committed_for_task, agent.agent_id),
-                tuple(float(value) for value in agent.abilities),
-            )
-            is None
-        )
+        if not checks:
+            return set()
+        on_site: dict[str, dict[str, tuple[float, ...]]] = {}
+        for task_id, holders in committed.items():
+            on_site[task_id] = {
+                agent_id: abilities
+                for agent_id, abilities in holders.items()
+                if agent_id in agents and agents[agent_id].status in ONSITE_STATUSES
+            }
+        released: set[str] = set()
+        for agent_id in sorted(checks):
+            task_id = agents[agent_id].current_task
+            pool = on_site.get(task_id or "", {})
+            if agent_id not in pool:
+                continue
+            pool = {key: value for key, value in pool.items() if key != agent_id}
+            restored = on_site.setdefault(task_id or "", {})
+            if (
+                _claim_slot(
+                    tuple(float(value) for value in checks[agent_id].remaining_requirements),
+                    list(pool.values()),
+                    tuple(float(value) for value in agents[agent_id].abilities),
+                )
+                is None
+            ):
+                released.add(agent_id)
+                restored.pop(agent_id, None)  # banked: the next verdict sees one fewer filler
+        return released
 
     @staticmethod
     def _models_belief(agent: AgentSnapshot) -> bool:

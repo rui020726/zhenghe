@@ -91,6 +91,11 @@ class RunConfiguration:
     # presence fills no slot on the stage it is on. Off by default; the flag only ever
     # names a provably redundant robot, and only when the plan has somewhere else for it.
     release_redundant_members: bool = False
+    # Whether the allocator stays silent when a replan-woke robot re-picks the task it is
+    # already executing. The release needs it (a re-issued command would restart the work
+    # clock), but the two switches are independent so an ablation can tell the planner
+    # mechanism apart from the suppression.
+    suppress_recommand_own_task: bool = False
     command_ttl: float = 10.0
     coordination_interval: int = 5
     allocation_interval: int = 5
@@ -246,6 +251,11 @@ class RunConfiguration:
                 f"{self.coordinator_policy} never issues one; ask for "
                 "--coordinator coalition_redundant_release"
             )
+        if self.suppress_recommand_own_task and not self.use_coordinator:
+            raise ConfigurationError(
+                "--suppress-recommand-own-task only ever applies to a decision a "
+                "coordinator replan woke; --no-coordinator removes that trigger"
+            )
         if not self.use_coordinator and self.coordinator_policy != "heuristic":
             raise ConfigurationError(
                 f"--no-coordinator already removes the residual, so asking for "
@@ -326,6 +336,10 @@ def build_parser() -> argparse.ArgumentParser:
                         help="let the coalition planner re-decide a working robot whose own "
                              "belief says it fills no slot on its current stage, and only "
                              "when the plan has a different task for it")
+    parser.add_argument("--suppress-recommand-own-task", dest="suppress_recommand_own_task",
+                        action="store_true",
+                        help="issue no command when a replan-woke robot re-picks the task it "
+                             "is already executing (re-issuing one restarts its work clock)")
     parser.add_argument("--command-ttl", type=float, default=10.0,
                         help="how long an assignment command stays valid, in global-clock units")
     parser.add_argument("--coordination-interval", type=int, default=5, help="steps between coordinator calls")
@@ -378,6 +392,7 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         coordinator_policy=str(args.coordinator_policy),
         sticky_commitments=bool(getattr(args, "sticky_commitments", False)),
         release_redundant_members=bool(getattr(args, "release_redundant_members", False)),
+        suppress_recommand_own_task=bool(getattr(args, "suppress_recommand_own_task", False)),
         command_ttl=float(args.command_ttl),
         coordination_interval=int(args.coordination_interval),
         allocation_interval=int(args.allocation_interval),
@@ -813,6 +828,13 @@ def _build_coordinator(configuration: RunConfiguration) -> Any:
             renew_commitments=configuration.sticky_commitments,
             release_redundant_members=True,
         )
+    if configuration.coordinator_policy == "coalition_planner" and configuration.release_redundant_members:
+        # The planner mechanism switched on directly, for an ablation that pairs it with
+        # or without the allocator's own-task suppression.
+        return CoalitionPlannerCoordinator(
+            renew_commitments=configuration.sticky_commitments,
+            release_redundant_members=True,
+        )
     if configuration.coordinator_policy == "deadline_aware":
         # The same-information oracle of the learnability gate: identical candidates and
         # slots, a different selection. Diagnostic, but a legal coordinator all the same.
@@ -869,7 +891,7 @@ def _build_task_side(
         ctde_task_logit_offset=configuration.ctde_task_logit_offset,
         binding_commitments=configuration.sticky_commitments,
         suppress_recommand_own_task=bool(
-            configuration.release_redundant_members
+            configuration.suppress_recommand_own_task
             or configuration.coordinator_policy == "coalition_redundant_release"
         ),
     )

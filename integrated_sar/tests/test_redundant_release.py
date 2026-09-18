@@ -311,6 +311,73 @@ class InvariantsTests(unittest.TestCase):
         self.assertIn(("a", NEW), bare.reservations)
 
 
+class JointReleaseTests(unittest.TestCase):
+    """Releases are accounted together; what a robot covers is coverage by who is there."""
+
+    def test_two_mutually_redundant_members_do_not_both_leave(self) -> None:
+        # The stage needs one dim-4 unit; a and b each carry one. Both alternatives are
+        # open, so an independent verdict would call both redundant and strip the task.
+        world = (
+            robot("a", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=OLD_REQ),
+                           belief("t-u", requirement=OLD_REQ, position=(0.9, 0.9)))),
+            robot("b", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=OLD_REQ),
+                           belief("t-v", requirement=OLD_REQ, position=(0.8, 0.8)))),
+        )
+        coordinator = planner(release=True)
+        advice = coordinator.advise(state(world))
+        released = sorted(set(advice.replan_agents) & {"a", "b"})
+        self.assertEqual(len(released), 1)
+        self.assertEqual(coordinator.redundant_releases, 1)
+        stayed = ({"a", "b"} - set(released)).pop()
+        self.assertNotIn(stayed, advice.replan_agents)
+
+    def test_a_travelling_teammate_is_not_coverage(self) -> None:
+        # b is en route: it has not joined the task, so it cannot be the reason a robot
+        # already on site is judged redundant.
+        world = (
+            robot("a", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=OLD_REQ),
+                           belief(NEW, requirement=NEW_REQ, position=(0.9, 0.9)))),
+            robot("b", dims=(4,), current_task=OLD, status="moving",
+                  beliefs=(belief(OLD, requirement=OLD_REQ),)),
+        )
+        coordinator = planner(release=True)
+        advice = coordinator.advise(state(world))
+        self.assertNotIn("a", advice.replan_agents)
+        self.assertEqual(coordinator.redundant_releases, 0)
+
+    def test_a_travelling_candidate_is_never_released(self) -> None:
+        world = (
+            robot("a", dims=(4,), current_task=OLD, status="moving",
+                  beliefs=(belief(OLD, requirement=OLD_REQ),
+                           belief(NEW, requirement=NEW_REQ, position=(0.9, 0.9)))),
+            robot("b", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=OLD_REQ),)),
+        )
+        coordinator = planner(release=True)
+        advice = coordinator.advise(state(world))
+        self.assertNotIn("a", advice.replan_agents)
+        self.assertEqual(coordinator.redundant_releases, 0)
+
+    def test_one_robot_ends_up_at_exactly_one_task(self) -> None:
+        # Two open tasks both need what the redundant member has; whichever wins, the
+        # plan must never promise the same robot to both.
+        world = (
+            robot("a", dims=(0, 4), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=OLD_REQ),
+                           belief("t-u", requirement=NEW_REQ, position=(0.9, 0.9)),
+                           belief("t-v", requirement=(0, 1, 0, 0, 0), position=(0.5, 0.5)))),
+            robot("b", dims=(4,), current_task=OLD,
+                  beliefs=(belief(OLD, requirement=OLD_REQ),)),
+        )
+        advice = planner(release=True).advise(state(world))
+        destinations = [task for agent, task in advice.reservations if agent == "a"]
+        self.assertEqual(len(destinations), 1)
+        self.assertIn("a", advice.replan_agents)
+
+
 class RecommandSuppressionTests(unittest.TestCase):
     """A replan-woke robot that re-picks its own task must not be re-commanded.
 
@@ -362,6 +429,69 @@ class RecommandSuppressionTests(unittest.TestCase):
     def test_with_suppression_the_robot_keeps_working_without_a_command(self) -> None:
         commands = self._scenario(suppress=True)
         self.assertEqual(commands, ())
+
+    def test_a_declined_reassignment_reports_no_success(self) -> None:
+        """The trace must not call a suppressed own-task re-pick an executed reservation."""
+        import io
+        import json
+
+        import numpy as np
+        import torch
+
+        from integrated_sar.adapters.task03 import Task03Adapter
+        from integrated_sar.allocation_trace import DecisionTraceWriter
+        from integrated_sar.contracts import CoalitionReservation, CoordinationAdvice
+        from integrated_sar.tests.test_coalition_reservation_contract import (
+            _fixed_network,
+            _stub_env,
+        )
+
+        mask = np.array([False, False, False], dtype=bool)
+        adapter = Task03Adapter(
+            env=_stub_env(mask),
+            network=_fixed_network(torch.tensor([[0.1, 0.9, 0.2]])),
+            deterministic=True,
+            clear_initial_tasks=False,
+            residual_scale=0.25,
+            binding_commitments=True,
+            suppress_recommand_own_task=True,
+        )
+        adapter.internal_to_external = {7: OLD, 8: NEW}
+        sink = io.StringIO()
+        adapter.decision_trace = DecisionTraceWriter(sink, meta={"arm": "ablation", "seed": 1})
+        working = robot("0", dims=(0, 4), current_task=OLD,
+                        beliefs=(belief(OLD, requirement=OLD_REQ),))
+        plan_for_new = CoalitionReservation(
+            agent_id="0",
+            task_id=NEW,
+            ability_slot=0,
+            slot_dimension=0,
+            task_revision=1,
+            issued_at=3.0,
+            valid_until=8.0,
+            score=0.3,
+            commitment_id="rp0009",
+        )
+        advice = CoordinationAdvice(
+            revision=2,
+            generated_at=3.0,
+            valid_until=8.0,
+            replan_agents=frozenset({"0"}),
+            reservations={("0", NEW): plan_for_new},
+        )
+        # NEW is off the stub menu, so the robot re-picks the task it is already doing.
+        adapter.allocate((), (working,), advice, 3.0)
+        adapter.decision_trace.close()
+        row = next(
+            json.loads(line)
+            for line in sink.getvalue().splitlines()
+            if json.loads(line).get("event_type") == "decision"
+        )
+        self.assertIsNone(row["command_id"])
+        self.assertFalse(row["reservation_executed"])
+        self.assertFalse(row["commitment_overridden"])
+        self.assertIsNone(row["forced_choice"])
+        self.assertEqual(row["chosen_task"], OLD)
 
 
 if __name__ == "__main__":
