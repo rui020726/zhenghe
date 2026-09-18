@@ -264,6 +264,11 @@ class DecisionFacts:
     commitment_mask_legal: bool | None = None
     commitment_overridden: bool = False
     commitment_suppressed_command: bool = False
+    # Whether the allocator withheld the command because the decision re-picked the task
+    # the robot is already executing. Distinct from ``commitment_suppressed_command``,
+    # which names the commitment as the reason: two different rules, and a reader must be
+    # able to tell which one held a command back.
+    own_task_suppressed: bool = False
     # The three choices one decision contains, all read at the instant it was made:
     # ``raw_choice`` is the allocator's own preference, ``forced_choice`` is the action a
     # standing commitment imposed instead, and ``chosen_index`` (written as
@@ -398,6 +403,7 @@ class DecisionFacts:
         )
         payload["commitment_overridden"] = bool(self.commitment_overridden)
         payload["commitment_suppressed_command"] = bool(self.commitment_suppressed_command)
+        payload["own_task_suppressed"] = bool(self.own_task_suppressed)
         payload["reservation_id"] = self.reservation_id
         payload["commitment_validity"] = {
             str(key): bool(value) for key, value in self.commitment_validity.items()

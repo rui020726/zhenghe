@@ -580,7 +580,7 @@ class Task03Adapter:
                     # number the continuity fix exists to drive to zero.
                     action_index = forced
                     forced_index = forced
-            suppressed = bool(
+            commitment_suppressed = bool(
                 self.binding_commitments
                 and binding.held
                 and commitment is not None
@@ -596,17 +596,17 @@ class Task03Adapter:
                 if kind == "task" and internal_task_id is not None
                 else None
             )
-            if (
-                not suppressed
+            own_task_suppressed = bool(
+                not commitment_suppressed
                 and self.suppress_recommand_own_task
                 and external_task_id is not None
                 and external_task_id == agent.current_task
-            ):
-                # The decision re-picked the task this robot is already executing.
-                # Re-issuing the command would restart its work clock for no change,
-                # which is the same harm the commitment path's suppression prevents;
-                # the robot simply keeps working.
-                suppressed = True
+            )
+            # The decision re-picked the task this robot is already executing. Re-issuing
+            # the command would restart its work clock for no change -- the same harm the
+            # commitment path's suppression prevents -- so the robot simply keeps working,
+            # and the trace names which of the two reasons held the command back.
+            suppressed = commitment_suppressed or own_task_suppressed
             revision = self._command_revision(external_task_id, task_by_id)
             command_id = None
             if not suppressed:
@@ -646,7 +646,8 @@ class Task03Adapter:
                         actual_assignment=external_task_id,
                         command_id=command_id,
                         reservation_executed=reservation_executed,
-                        suppressed_command=suppressed,
+                        suppressed_command=commitment_suppressed,
+                        own_task_suppressed=own_task_suppressed,
                     )
                 )
 
@@ -966,6 +967,7 @@ class Task03Adapter:
         command_id: str | None = None,
         reservation_executed: bool | None = None,
         suppressed_command: bool = False,
+        own_task_suppressed: bool = False,
     ) -> DecisionFacts:
         """Gather one already-made decision for the trace.
 
@@ -1102,6 +1104,7 @@ class Task03Adapter:
             commitment_mask_legal=mask_legal,
             commitment_overridden=bool(overridden),
             commitment_suppressed_command=bool(suppressed_command),
+            own_task_suppressed=bool(own_task_suppressed),
         )
 
     def _target_truth(self, external_id: str) -> dict[str, Any] | None:

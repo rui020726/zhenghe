@@ -24,7 +24,11 @@ from typing import Any, Mapping, Sequence
 # Schema /2 adds the raw/forced/post-mask choice, the command identity, the reservation
 # identity and the validity conditions to the decision record, and replaces the single
 # ``honoured`` flag on ``held_reservation`` with the executed / raw-choice split.
-TRACE_SCHEMA = "allocation-decision-trace/2"
+# Schema /3 adds ``own_task_suppressed``, which names the allocator's own-task
+# suppression as the reason a command was withheld, so it can never be conflated with
+# ``commitment_suppressed_command`` -- the two rules hold a command back for different
+# reasons and the ablation counts them apart.
+TRACE_SCHEMA = "allocation-decision-trace/3"
 SIGNATURE_FORMAT = "run-signature/1"
 
 FIELDS = (

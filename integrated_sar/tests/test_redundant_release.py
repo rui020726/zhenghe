@@ -492,6 +492,11 @@ class RecommandSuppressionTests(unittest.TestCase):
         self.assertFalse(row["commitment_overridden"])
         self.assertIsNone(row["forced_choice"])
         self.assertEqual(row["chosen_task"], OLD)
+        # The two suppression rules stay tellable apart: this command was held back by
+        # the own-task rule, not by a commitment (whose binding the replan released).
+        self.assertTrue(row["own_task_suppressed"])
+        self.assertFalse(row["commitment_suppressed_command"])
+        self.assertEqual(row["commitment_release_reason"], "replan")
 
 
 if __name__ == "__main__":
