@@ -9,10 +9,12 @@ Candidate: `--coalition_planner + sticky + release + own-command suppression`, w
 coverage-preserving verdict. Baseline: the same planner, both switches off.
 
 **Bottom line.** Under 50 % more tasks the candidate is significantly better even after
-multiplicity adjustment, with no correctness breach. Under the tightened deadline band the
-scenarios turn out to be near-ceiling for both arms, so that block cannot judge the effect
-either way. One target in one seed is a new candidate-only failure; the trace shows no
-release woke it.
+multiplicity adjustment. **It is not correct to say there is no correctness breach**: 19 of
+1 498 acted-on releases removed a capability the stage really needed, and that stands as an
+open coverage-protection failure. The reset and lost-work metrics that appear to exonerate it
+are confounded, because the environment leaves a re-tasked robot on the old task's roster.
+Under the tightened deadline band both arms are near ceiling, so that block judges nothing
+either way. One target in one seed is a new candidate-only failure.
 
 ## 1. Run integrity
 
@@ -75,11 +77,16 @@ unchanged:
 | …where removing it would have lowered real stage coverage | 5 | 8 | 6 | **19** |
 
 19 of 1 498 acted-on releases (1.3 %) were belief-lag cases: the robot's believed gross
-stage requirement was older than the stage the environment had moved to. None of the 18
-affected seeds is a seed where the candidate shows a coverage reset or discarded work —
-the two sets do not intersect in any condition. For comparison, the same measurement on the
-15 development seeds under the old verdict put that residue at 33 of 205 (16 %), and it
-was systematic rather than residual: the old test called every sole provider redundant.
+stage requirement was older than the stage the environment had moved to. **These are counted
+as failures of the coverage protection, not as an accepted residue.** The observation that
+none of the 18 affected seeds shows a coverage reset or discarded work is *not* an
+exoneration: if the environment keeps crediting a robot that has been re-tasked away, then a
+release that removes needed capability produces no reset to measure, so the same non-
+intersection is what a confounded metric would look like either way. Settling it requires the
+member-semantics audit (`MEMBERSHIP_CONSISTENCY_AUDIT.md`), not another read of these plots.
+For comparison, the same measurement on the 15 development seeds under the old verdict put
+the rate at 33 of 205 (16 %), and that one was systematic: the old test called every sole
+provider redundant.
 
 ### The one new failure: seed 33011, target-7, condition B
 

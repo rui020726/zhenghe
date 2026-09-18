@@ -25,26 +25,33 @@ is what every candidate number here was produced with.
 
 ## 2. Release criteria, one by one
 
+**发布阻塞：阶段信息陈旧导致错误释放，且环境旧任务成员残留可能掩盖覆盖损失。**
+
 | Criterion | Status | Evidence |
 |---|---|---|
 | Information sources fit the existing architecture | **met, after a fix** | every field was already a legal `CoordinatorInput` input; no new permission taken. The verdict itself was reading the wrong denominator and now reads the gross stage requirement (`INFORMATION_PROVENANCE_AUDIT.md`) |
-| Joint release does not wrongly remove a needed capability | **met for the rule; 1.3 % belief-lag residue in action** | sole provider never released (unit test); on 180 stress episodes 19 of 1 498 acted-on releases touched a stage the registry really needed, and none of those seeds shows a coverage reset or discarded work |
+| Joint release does not wrongly remove a needed capability | **NOT MET — open failure** | on 180 stress episodes, **19 of 1 498 acted-on releases removed a capability the stage really needed**. This is counted as a coverage-protection failure, not as accepted residue. The existing metrics cannot clear it: the environment leaves a re-tasked robot on the old task's roster, so the setbacks these releases should cause may not appear as coverage resets at all (§2 of `MEMBERSHIP_CONSISTENCY_AUDIT.md`) |
 | Stale-command refusal leaves state consistent and recoverable | **met** | 24 refusals across 800 held-out logs, all the same-tick completion race; 0 executed, 0 repeats, recovery in 1 tick in 24/24 (`STALE_REVISION_RECOVERY_AUDIT.md`) |
 | No illegal action executed | **met** | 0 of 989 319 executed assignments across both arms of the independent block; `executed_override_unjustified` 0 everywhere |
-| No unresolved livelock or coverage break | **met** | longest continuous no-progress streak 0 in every stress condition; coverage resets never higher than baseline (equal in A and B, 0 vs 1 in C) |
-| Stress shows no clear unexplained regression | **met with one named exception** | condition B: +0.0243 paired, Bonferroni CI [+0.0019, +0.0579]; one new failure (33011/target-7) explained, and no release woke it |
+| No unresolved livelock or coverage break | **NOT MET** | the release gate covers only the *destination* task's revision, never the precondition "it is safe to leave the source task" (`SOURCE_STAGE_RELEASE_AUDIT.md`). Measured resets are not evidence of absence while the stale-roster question is open |
+| Stress shows no clear unexplained regression | **held** | condition B: +0.0243 paired, Bonferroni CI [+0.0019, +0.0579]; one new failure (33011/target-7). Whether the gain is attributable to the controller cannot be settled until the environment's member semantics are separated out |
 | Mileage cost reported honestly | **met** | travel +2.3 % in the condition with a significant gain, flat elsewhere; decision p99 0.73 → 1.09 ms; 3.8–6.6 release judgements per seed that the plan declined to act on |
 
 ## 3. Recommendation
 
-**Recommend for the default configuration, with two conditions attached to the wording.**
-The claim that survives its own tests is: on deadline-relevant failures under load, the
-candidate converts late and never-finished targets into on-time ones, on unseen seeds,
-without coverage loss, without command churn, and at a small travel and latency cost. The
-claim that does **not** survive is a general improvement at the ceiling: in the two
-conditions where both arms were already near 99 %, the interval cannot separate the arms.
+**No default-on recommendation is made.** The candidate is blocked on two open items: the
+19 stale-source-stage releases, and the unresolved status of the environment's stale roster
+entries. Both have to be settled — and the controller re-measured against an environment
+whose member semantics are known — before any statement about making this a default.
 
-The default decision is the user's, as instructed. Nothing in this branch changes a default.
+What is established, and stays established: the planner-side release does clear late and
+never-finished targets under load on unseen seeds, the refusals of stale commands are
+correct and recoverable, and no illegal action executes. What is **not** established is
+that it does so without removing capability a stage was using, because the measurement that
+would show it is confounded by the environment's own bookkeeping.
+
+Nothing in this branch changes a default, and this round must not be merged as a default
+version.
 
 ## 4. Explicit enable command
 
@@ -122,7 +129,7 @@ argument plumbed through, default equal to TaskEnv's own), the allocation trace 
 | Closed-loop gate | 5 | development | v1 `6915d63`, v2 `fb1c85b` |
 | Mechanism ablation A/B/C/D | 15 (5 nested in the gate, all inside the legacy 100) | development | v1 `1f4a598`, v2 `fb1c85b` |
 | Paired expansion | 100 + 60, both previously read blocks | development | `6915d63` |
-| Independent replay | 400 unseen | **independent — the only block that licenses a significance claim for the v1 verdict** | `1f4a598` |
+| Independent replay | 400 unseen | **old-candidate evidence** — it measured the residual-based verdict, and its standing under the member-consistency question is not yet assessed | `1f4a598` |
 | Live-system loop | 60 unseen, real PILOC search | live-system | `1f4a598` |
 | Stress | 180 unseen (3 × 60, disjoint) | robustness for the **v2** verdict | `3fcef63` |
 | Provenance and safety scans | reuse of the 15 development and 180 stress seeds, instrumented, verified trajectory-identical | analysis | `fb1c85b`, `3fcef63` |
@@ -140,10 +147,12 @@ regenerates this from the manifests.
   so search coverage is not a claim here.
 * Cost: ~2 % more rescue travel where it pays; p99 decision latency roughly 1.5×, still
   ~1 ms; a few release judgements per seed that the plan declines to act on.
-* Limits: the 1.3 % belief-lag residue; one explained new failure under load; the ceiling
-  that makes two of the three stress conditions inconclusive; and the fact that the
-  coverage-preserving verdict's own independent evidence is 180 stress seeds measured under
-  conditions this round chose — the 400-seed block belongs to the verdict it replaced.
+* Limits: the 19 stale-source-stage releases are an open coverage-protection failure, not a
+  tolerated residue; the environment's stale roster entries confound every "no coverage
+  loss" reading of the candidate, including the 400-seed block's; one new failure stands
+  under load; and the two ceiling-bound stress conditions are inconclusive. The
+  coverage-preserving verdict's own evidence is 180 stress seeds measured under conditions
+  this round chose, and the 400-seed block belongs to the verdict it replaced.
 
 ## 10. Changes to merge, and what is not merged
 
