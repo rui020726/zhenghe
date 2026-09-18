@@ -1,0 +1,328 @@
+{
+ "seeds": 400,
+ "seeds_in_primary": 400,
+ "zero_detection_seeds_excluded_by_rule": 0,
+ "zero_detection_seed_list": [],
+ "identical_denominators": true,
+ "denominator_mismatch_seeds": [],
+ "primary": {
+  "metric": "paired per-seed on-time completion rate (candidate - baseline)",
+  "mean_difference": 0.008333,
+  "bootstrap_ci95": [
+   0.004167,
+   0.01375
+  ],
+  "bootstrap_resamples": 10000,
+  "bootstrap_rng_seed": 20260918,
+  "t_interval_reference": [
+   0.003496,
+   0.013171
+  ],
+  "significant_improvement": true,
+  "claim": "significant improvement (bootstrap CI lower bound above zero)"
+ },
+ "secondary_expired_count": {
+  "baseline": 20,
+  "candidate": 0,
+  "paired_mean_difference": -0.05,
+  "bootstrap_ci95": [
+   -0.0825,
+   -0.025
+  ]
+ },
+ "completion_latency_detected_to_finish": {
+  "baseline": {
+   "n": 2335,
+   "mean": 24.848,
+   "median": 22.0
+  },
+  "candidate": {
+   "n": 2355,
+   "mean": 17.609,
+   "median": 17.0
+  }
+ },
+ "ceiling_effect": true,
+ "closure": {
+  "baseline": {
+   "detections": 2355,
+   "on_time": 2335,
+   "expired": 20,
+   "active": 0
+  },
+  "candidate": {
+   "detections": 2355,
+   "on_time": 2355,
+   "expired": 0,
+   "active": 0
+  },
+  "pooled_on_time_rate": {
+   "baseline": 0.991507,
+   "candidate": 1.0
+  },
+  "runs_per_arm": {
+   "baseline": 400,
+   "candidate": 400
+  }
+ },
+ "secondary": {
+  "baseline": {
+   "redundant_working_ticks": 105055,
+   "working_ticks": 135501,
+   "coverage_resets": 2,
+   "lost_work": 6.499,
+   "rejected_assignments": 11,
+   "executed_override_unjustified": 0,
+   "recommands": 0,
+   "releases_planned": 0,
+   "replan_attempts": 11,
+   "accepted_reassignments": 6,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "max_idle_streak": 0.0
+  },
+  "candidate": {
+   "redundant_working_ticks": 89553,
+   "working_ticks": 108209,
+   "coverage_resets": 1,
+   "lost_work": 0.928,
+   "rejected_assignments": 13,
+   "executed_override_unjustified": 0,
+   "recommands": 0,
+   "releases_planned": 5106,
+   "replan_attempts": 5119,
+   "accepted_reassignments": 2056,
+   "replan_declined": 3058,
+   "same_task_noop": 3058,
+   "max_idle_streak": 0.0
+  }
+ },
+ "rescued_count": 20,
+ "rescued_targets_sample": [
+  {
+   "seed": 30042,
+   "target": "piloc-e1-target-3",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30045,
+   "target": "piloc-e1-target-3",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30077,
+   "target": "piloc-e1-target-0",
+   "baseline": {
+    "progress": 0.6667,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30077,
+   "target": "piloc-e1-target-5",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30094,
+   "target": "piloc-e1-target-1",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30103,
+   "target": "piloc-e1-target-4",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30103,
+   "target": "piloc-e1-target-3",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30132,
+   "target": "piloc-e1-target-0",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30153,
+   "target": "piloc-e1-target-4",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30158,
+   "target": "piloc-e1-target-1",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30168,
+   "target": "piloc-e1-target-0",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30168,
+   "target": "piloc-e1-target-4",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30180,
+   "target": "piloc-e1-target-0",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30180,
+   "target": "piloc-e1-target-1",
+   "baseline": {
+    "progress": 0.6667,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30192,
+   "target": "piloc-e1-target-4",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30192,
+   "target": "piloc-e1-target-5",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30192,
+   "target": "piloc-e1-target-3",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30299,
+   "target": "piloc-e1-target-1",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30366,
+   "target": "piloc-e1-target-1",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  },
+  {
+   "seed": 30366,
+   "target": "piloc-e1-target-4",
+   "baseline": {
+    "progress": 1.0,
+    "reason": "deadline_expired",
+    "on_time": false
+   }
+  }
+ ],
+ "candidate_new_failure_count": 0,
+ "candidate_new_failures": [],
+ "rejections": {
+  "baseline_seeds": [
+   "30095",
+   "30105",
+   "30106",
+   "30126",
+   "30245",
+   "30346"
+  ],
+  "candidate_seeds": [
+   "30095",
+   "30105",
+   "30106",
+   "30126",
+   "30215",
+   "30245",
+   "30346",
+   "30388"
+  ],
+  "candidate_only": {
+   "30215": [
+    {
+     "target": "piloc-e1-target-2",
+     "reason": "stale_task_revision",
+     "at": 572.0
+    }
+   ],
+   "30388": [
+    {
+     "target": "piloc-e1-target-0",
+     "reason": "stale_task_revision",
+     "at": 23.0
+    }
+   ]
+  }
+ },
+ "correctness": {
+  "no_joint_release_coverage_loss": true,
+  "no_candidate_only_rejections": false,
+  "no_duplicate_own_task_commands": true,
+  "no_unjustified_overrides": true,
+  "no_excess_deadlock_streak": true
+ }
+}

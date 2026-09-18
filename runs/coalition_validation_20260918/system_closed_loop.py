@@ -178,7 +178,7 @@ def main(argv: list[str]) -> int:
         )
         for i in range(WORKERS)
     ]
-    codes = [p.wait() for p in processes]
+    codes = [p.wait() for p in processes] if "--aggregate" not in argv else []
     if any(codes):
         print(f"worker failures: {codes}")
         return 1
@@ -216,10 +216,7 @@ def main(argv: list[str]) -> int:
             "wall_seconds": round(total("wall_seconds"), 1),
         }
     paired = []
-    by_seed = {
-        arm: {row["seed"]: row for arm in ARMS for row in rows[arm] if row["arm"] == arm}
-        for arm in ARMS
-    }
+    by_seed = {arm: {row["seed"]: row for row in rows[arm]} for arm in ARMS}
     for seed in all_seeds:
         base = by_seed["baseline"].get(seed)
         cand = by_seed["candidate"].get(seed)
@@ -236,7 +233,38 @@ def main(argv: list[str]) -> int:
                 "rate_candidate": cand["completion_rate_of_discovered"],
             }
         )
-    payload = {"seeds": all_seeds, "arms": summary, "paired": paired}
+    # The same estimator the held-out protocol fixed: seed-level percentile bootstrap.
+    usable = [
+        row for row in paired
+        if row["discovered_baseline"] and row["discovered_candidate"]
+        and row["rate_baseline"] is not None and row["rate_candidate"] is not None
+    ]
+    differences = np.array([row["rate_candidate"] - row["rate_baseline"] for row in usable], dtype=float)
+    if differences.size:
+        rng = np.random.default_rng(20260918)
+        draws = rng.integers(0, differences.size, size=(10_000, differences.size))
+        means = differences[draws].mean(axis=1)
+        interval = [round(float(np.percentile(means, 2.5)), 6), round(float(np.percentile(means, 97.5)), 6)]
+        mean_difference = round(float(differences.mean()), 6)
+    else:
+        interval, mean_difference = [0.0, 0.0], 0.0
+    payload = {
+        "seeds": all_seeds,
+        "arms": summary,
+        "paired": paired,
+        "paired_completion_rate_of_discovered": {
+            "episodes_in_test": int(differences.size),
+            "mean_difference": mean_difference,
+            "bootstrap_ci95": interval,
+            "bootstrap_resamples": 10_000,
+            "bootstrap_rng_seed": 20260918,
+            "episodes_where_discovery_differed": sum(
+                1 for row in paired if row["discovered_baseline"] != row["discovered_candidate"]
+            ),
+            "episodes_candidate_better": sum(1 for row in paired if row["on_time_candidate"] > row["on_time_baseline"]),
+            "episodes_candidate_worse": sum(1 for row in paired if row["on_time_candidate"] < row["on_time_baseline"]),
+        },
+    }
     (HERE / "SYSTEM_LOOP.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=1) + "\n", encoding="utf-8"
     )

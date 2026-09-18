@@ -418,6 +418,44 @@
     579/9 → candidate **588/0**（9 个过期目标全部按时完成，含 20003 上 5 个），
     reset 1→0、lost 1.2→0；fresh 60 seed 上两臂同为 355/0（无病无扰）。
     **两块 0 回归、0 新增失败**。两块均为开发已读集合，不作为 held-out 报告。
+- 冗余释放的安全审查、机制拆分与独立测试（分支 `validation/coalition-redundant-release`，
+  证据见 `runs/coalition_validation_20260918/`）：
+  - **安全审查发现并修复 5 个真实缺陷**（`REDUNDANT_RELEASE_SAFETY_REVIEW.md`）：① 冗余判定
+    各自独立后合并，两名互为冗余的成员可同时被释放而掏空任务覆盖 → 改为单趟确定性**联合核算**
+    （每次释放先从能力池扣除）；② 填充池把 `moving`（未到场）机器人算作覆盖 → 池与候选均限
+    `ONSITE_STATUSES={"working"}`（环境到场态），并明确不用 belief.members 作覆盖来源（其新鲜度
+    受消息延迟限制）；③ `_build_coordinator` 中 planner 分支提前 return，使
+    `release_redundant_members` 字段路径不可达（四臂结果完全相同即是症状）；④ arm 标签不编码两个
+    新开关，四种臂共用 `coalplan0.25sticky` → 加 `+redrel`/`+noself`；⑤ 自有任务抑制复用了
+    `commitment_suppressed_command` 使两种原因混淆 → 新增 `own_task_suppressed`，schema 升至
+    `allocation-decision-trace/3`。另确认：一机器人一去处由 `_plan` 的 picked 集合保证（补断言）、
+    被需要成员永不释放、被拒改派不虚报成功、不读注册表真值、不绕 hard mask。
+  - **机制拆分消融（预注册 15 个开发 seed × 4 臂 = 60 局闭环，`MECHANISM_ABLATION.md`）**：收益
+    100% 来自 planner 的冗余释放（81/8 → 90/0，9 个目标获救、0 回归，零贡献工作 tick
+    5233 → 3213）；抑制开关单独存在时与 baseline **逐指标完全相同**（默认关恒等的端到端证据），
+    其作用是把 C 臂 120 条"重选自己任务"的命令（会重置工作时钟、解除超时武装）变为 120 次静默
+    decline；改派接受延迟均值 5.43 tick。
+  - **独立测试（400 个全新 seed 30000-30399，协议与统计在看到任何结果前冻结，
+    `HELDOUT_PROTOCOL.md` / `HELDOUT_VERDICT.md`）**：身份前置——两开关全关时在 5 个开发 seed 上
+    逐字段复现 868d68a 时代轨迹（5645 条决策行）；800 次运行 preflight 全绿。主指标（逐 seed 按
+    时完成率配对差 + seed 级 bootstrap 95% CI，B=10000、RNG 20260918）= **+0.008333，
+    CI [+0.004167, +0.013750] → 显著提升**；计数闭合 2355 检出：baseline 2335 按时/20 过期 →
+    candidate **2355 按时/0 过期**，两臂 active 0，**逐目标回归 0**；完成延迟均值 24.85 → 17.61；
+    零检测 seed 为 0（预声明剔除规则未被使用）。**天花板效应如实报告**：baseline 已 99.15%，
+    总余量仅 20 个目标，未补选 seed。正确性四项通过；candidate-only 拒绝 2 起（均
+    `stale_task_revision`，gate 正常拒绝过期 revision 命令；baseline 同类事件本身有 11 起），未丢目标。
+  - **完整系统闭环（60 个新 seed 31000-31059，真实 PILOC 在线搜索，不共用 stream，
+    `SYSTEM_CLOSED_LOOP_VERDICT.md`）**：两臂搜索覆盖率完全相同（356/360），candidate 把 6 个过期
+    清零、已发现目标完成率 98.31% → 100%；配对差 +0.0167、CI [0.0, 0.0389]（下界触 0 → 按预登记
+    规则记为**改善趋势**，3 局更好 0 局更差）；0 拒绝、0 重置、0 重复命令、0 死锁；救援里程 +2.9%
+    是机制的真实代价。60 局**发现序列逐局相同**——不变量 10 下搜索队不读救援态，分配无法反馈到
+    发现；若未来合并两队或让搜索读任务状态，此阶段必须重跑。
+  - **默认值与版本状态**：两个开关仍默认 False（`coalition_redundant_release` 仅为显式快捷策略）；
+    稳定基线仍是 `fix/coalition-commitment-continuity@868d68a`，通过独立测试的候选是
+    `validation/coalition-redundant-release@1f4a598`（其 `integrated_sar` 与 `304fc60`、`e96f34c`
+    逐字节相同，`git diff` 为空）。**建议**：证据支持默认启用（独立块显著提升、四项正确性通过、
+    620 个配对局 0 回归）；若要更严标准，因天花板效应应再跑一个未触碰的紧 deadline/高饱和块。
+    默认启用与合并由用户决定。
 
 ## 尚未完成
 

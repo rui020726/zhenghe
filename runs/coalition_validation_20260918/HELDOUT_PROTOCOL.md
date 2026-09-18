@@ -9,7 +9,7 @@ development block and cannot be re-labelled as independent for that version.
 | item | value |
 |---|---|
 | branch | `validation/coalition-redundant-release` |
-| candidate commit | the freeze commit of this file (recorded in `HELDOUT_SEEDS.json`'s companion commit note and in every run signature) |
+| candidate commit | `1f4a5988cc05becab717eecba551c3ea2d196727` — stamped into every run signature by the preflight; the `integrated_sar` tree is byte-identical to the two earlier freezes `304fc60` and `e96f34c` (`git diff` empty), so the identity precondition and the held-out runs share one source |
 | stable baseline | `fix/coalition-commitment-continuity@868d68a` (untouched) |
 | switches, baseline arm | `coordinator_policy=coalition_planner`, `sticky_commitments=True`, `release_redundant_members=False`, `suppress_recommand_own_task=False` |
 | switches, candidate arm | same planner + `release_redundant_members=True` + `suppress_recommand_own_task=True` |

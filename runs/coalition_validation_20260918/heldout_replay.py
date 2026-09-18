@@ -51,7 +51,7 @@ from integrated_sar.lifecycle_metrics import load_records  # noqa: E402
 import mechanism_ablation as ablation  # noqa: E402  (metric definitions are shared)
 import heldout_record  # noqa: E402
 
-FROZEN_COMMIT = "304fc60"  # full: 304fc6044218f8032d708cbef0f19cf640dc4add
+FROZEN_COMMIT = "1f4a598"  # full: 1f4a5988cc05becab717eecba551c3ea2d196727
 BASELINE = {"policy": "coalition_planner", "release": False, "suppress": False}
 CANDIDATE = {"policy": "coalition_planner", "release": True, "suppress": True}
 ARMS = {"baseline": BASELINE, "candidate": CANDIDATE}
