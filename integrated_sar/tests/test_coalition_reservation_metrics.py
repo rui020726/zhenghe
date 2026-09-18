@@ -131,6 +131,27 @@ class ArmLabelTests(unittest.TestCase):
             "coal0.5",
         )
 
+    def test_the_two_environments_cannot_share_a_label(self) -> None:
+        # Which roster the work is credited to is an environment fact, and two environments
+        # pooled under one label would average away the thing being measured.
+        self.assertEqual(
+            arm_name(use_coordinator=False, residual_scale=0.25, task_membership_consistency=True),
+            "nocoord+memfix",
+        )
+        self.assertEqual(
+            arm_name(
+                use_coordinator=True,
+                residual_scale=0.25,
+                coordinator_policy="coalition_redundant_release",
+                binding_commitments=True,
+                release_redundant_members=True,
+                suppress_recommand_own_task=True,
+                check_release_source_stage=True,
+                task_membership_consistency=True,
+            ),
+            "coalredrel0.25sticky+redrel+noself+srccheck+memfix",
+        )
+
 
 class CommitmentAccountingTests(unittest.TestCase):
     """A commitment the allocator took is not the same as one it ignored."""

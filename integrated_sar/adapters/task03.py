@@ -670,6 +670,7 @@ class Task03Adapter:
                     "release_from_task": release.task_id,
                     "release_stage_index": int(release.stage_index),
                     "release_revision": int(release.revision),
+                    "release_support_members": tuple(release.supporting_members),
                 }
             commands.append(
                 AssignmentCommand(

@@ -1,0 +1,195 @@
+{
+ "frozen": {
+  "code_commit": "d96b9deb9448f41859e3826e7e05d80b6aaa10e6",
+  "branch": "fix/task-membership-consistency",
+  "piloc_checkpoint": "runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+  "ctde_checkpoint": "runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+  "steps": 1000,
+  "dt": 1.0,
+  "grid_size": 60,
+  "obstacle_density": 0.15,
+  "detection_radius": 5,
+  "search_agents": 2,
+  "num_goals": 6,
+  "deadline_tightness": [
+   0.5,
+   2.0
+  ],
+  "residual_scale": 0.25,
+  "allocation_interval": 5,
+  "coordination_interval": 5,
+  "command_ttl": 10.0,
+  "communication": {
+   "comm_delivery_probability": 1.0,
+   "comm_delay_ticks": 0,
+   "comm_subscribers": "all"
+  },
+  "device": "cpu",
+  "thread_environment": {
+   "OMP_NUM_THREADS": "1",
+   "MKL_NUM_THREADS": "1",
+   "OPENBLAS_NUM_THREADS": "1"
+  },
+  "trace_schema": "allocation-decision-trace/3",
+  "recording_policy": "live PILOC search, coordinator off, membership-consistent environment"
+ },
+ "checkpoint_sha256": {
+  "piloc": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+  "ctde": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+ },
+ "fields": {
+  "actor_kv_mode": {
+   "C": "tokens",
+   "D": "tokens"
+  },
+  "allocation_interval": {
+   "C": 5,
+   "D": 5
+  },
+  "check_release_source_stage": {
+   "C": false,
+   "D": true
+  },
+  "comm_delay_ticks": {
+   "C": 0,
+   "D": 0
+  },
+  "comm_delivery_probability": {
+   "C": 1.0,
+   "D": 1.0
+  },
+  "comm_subscribers": {
+   "C": "all",
+   "D": "all"
+  },
+  "command_ttl": {
+   "C": 10.0,
+   "D": 10.0
+  },
+  "coordination_interval": {
+   "C": 5,
+   "D": 5
+  },
+  "coordinator_policy": {
+   "C": "coalition_planner",
+   "D": "coalition_planner"
+  },
+  "deadline_tightness": {
+   "C": [
+    0.5,
+    2.0
+   ],
+   "D": [
+    0.5,
+    2.0
+   ]
+  },
+  "detection_radius": {
+   "C": 5,
+   "D": 5
+  },
+  "device": {
+   "C": "cpu",
+   "D": "cpu"
+  },
+  "dt": {
+   "C": 1.0,
+   "D": 1.0
+  },
+  "grid_size": {
+   "C": 60,
+   "D": 60
+  },
+  "mock": {
+   "C": false,
+   "D": false
+  },
+  "num_goals": {
+   "C": 6,
+   "D": 6
+  },
+  "obstacle_density": {
+   "C": 0.15,
+   "D": 0.15
+  },
+  "quiet": {
+   "C": true,
+   "D": true
+  },
+  "release_redundant_members": {
+   "C": false,
+   "D": true
+  },
+  "rescue_per_species": {
+   "C": 2,
+   "D": 2
+  },
+  "rescue_species": {
+   "C": 3,
+   "D": 3
+  },
+  "residual_scale": {
+   "C": 0.25,
+   "D": 0.25
+  },
+  "search_agents": {
+   "C": 2,
+   "D": 2
+  },
+  "steps": {
+   "C": 1000,
+   "D": 1000
+  },
+  "sticky_commitments": {
+   "C": true,
+   "D": true
+  },
+  "suppress_recommand_own_task": {
+   "C": false,
+   "D": true
+  },
+  "task_checkpoint": {
+   "C": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+   "D": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth"
+  },
+  "task_membership_consistency": {
+   "C": true,
+   "D": true
+  },
+  "use_coordinator": {
+   "C": true,
+   "D": true
+  }
+ },
+ "construction_expectations": {
+  "C": {
+   "task_membership_consistency": true,
+   "release_redundant_members": false,
+   "suppress_recommand_own_task": false,
+   "renew_commitments": true,
+   "gate_release_callbacks": false,
+   "arm_suffixes": [
+    "+memfix"
+   ],
+   "arm_absent_suffixes": [
+    "+redrel",
+    "+noself",
+    "+srccheck"
+   ]
+  },
+  "D": {
+   "task_membership_consistency": true,
+   "release_redundant_members": true,
+   "suppress_recommand_own_task": true,
+   "renew_commitments": true,
+   "gate_release_callbacks": true,
+   "arm_suffixes": [
+    "+redrel",
+    "+noself",
+    "+srccheck",
+    "+memfix"
+   ],
+   "arm_absent_suffixes": []
+  }
+ }
+}

@@ -399,6 +399,10 @@ class ReleaseProvenance:
     task_id: str
     stage_index: int
     revision: int
+    # The teammates whose abilities the verdict counted on when it called this robot spare:
+    # the believed on-site team of the source task, minus this robot. A release is only as
+    # safe as that set, so the boundary needs to know who it was.
+    supporting_members: tuple[str, ...] = field(default=(), kw_only=True)
 
     def __post_init__(self) -> None:
         if not self.task_id:

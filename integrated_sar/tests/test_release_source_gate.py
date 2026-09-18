@@ -256,6 +256,10 @@ class PublishedProvenanceTests(unittest.TestCase):
             (provenance.stage_index, provenance.revision), (2, 7),
             "the provenance must be the believed source state, not anything newer",
         )
+        self.assertEqual(
+            provenance.supporting_members, ("b",),
+            "the verdict called a spare because b covers what a supplies; the boundary needs to know",
+        )
 
     def test_no_release_means_no_provenance(self) -> None:
         kept = CoalitionPlannerCoordinator(renew_commitments=True, release_redundant_members=False)

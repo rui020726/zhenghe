@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable, Sequence
+from collections import defaultdict
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, replace
 
 from .clock import GlobalClock
@@ -41,10 +42,18 @@ class AssignmentGate:
     instead of executing it.
 
     A release has a second end to check. The advice that moved a robot off the task it was
-    working decided that was safe against a *stage*; if that task has moved on in the
-    meantime, the judgement describes a state that no longer exists, so the command is
-    dropped rather than quietly upgraded to the newer revision. The robot keeps the work it
-    had, which is the conservative outcome the planner itself cannot see.
+    working decided that was safe against a *stage* and against the *team* standing on that
+    stage; if either has moved in the meantime, the judgement describes a state that no
+    longer exists, so the command is dropped rather than quietly upgraded to the newer
+    revision. The robot keeps the work it had, which is the conservative outcome the
+    planner itself cannot see.
+
+    ``release_state_of`` supplies the source task's live stage, ``release_roster_of`` its
+    live member list. Both are execution-side truth that no actor, planner or observation
+    reads: the gate only ever uses them to refuse, and a refusal feeds back as a
+    ``replan_agents`` entry, which is the same channel every other rejection already uses.
+    A batch is screened in order against the state each earlier acceptance produces, so two
+    commands that are individually legal cannot jointly strip the source.
     """
 
     def __init__(
@@ -54,6 +63,7 @@ class AssignmentGate:
         clock: GlobalClock,
         revision_of: Callable[[str], int | None],
         release_state_of: Callable[[str], tuple[int, int] | None] | None = None,
+        release_roster_of: Callable[[str], Sequence[str] | None] | None = None,
     ) -> None:
         self.executor = executor
         self.clock = clock
@@ -61,16 +71,25 @@ class AssignmentGate:
         # Supplied only when the wiring can report a task's live stage and revision; the
         # gate stays exactly as strict without it.
         self.release_state_of = release_state_of
+        # Same condition: without a readable roster the support check simply does not run.
+        self.release_roster_of = release_roster_of
         self.pending_replan: set[str] = set()
         self._rejections: list[RejectedAssignment] = []
 
     def apply_assignments(self, commands: Sequence[AssignmentCommand]) -> None:
         now = self.clock.now
         accepted: list[AssignmentCommand] = []
+        # source task -> the robots this batch has already been allowed to take off it
+        leaving: dict[str, set[str]] = defaultdict(set)
         for command in commands:
             reason, current_revision, release_from = self._inspect(command, now)
             if reason is None:
+                reason, release_from = self._inspect_release(command, leaving)
+            if reason is None:
                 accepted.append(command)
+                source = (command.metadata or {}).get("release_from_task")
+                if source:
+                    leaving[str(source)].add(command.agent_id)
                 continue
             self._rejections.append(
                 RejectedAssignment(
@@ -146,6 +165,33 @@ class AssignmentGate:
                 if int(metadata.get("release_stage_index", stage_now)) != int(stage_now):
                     return "stale_release_stage", revision_now, str(source)
         return None, current_revision, None
+
+    def _inspect_release(
+        self, command: AssignmentCommand, leaving: Mapping[str, set[str]]
+    ) -> tuple[str | None, str | None]:
+        """Does the team this release was judged against still stand on the source task?
+
+        The verdict said "these teammates cover what this robot supplies". A supporter that
+        has since left -- on its own timeout, on an earlier command, or on a companion
+        release inside this very batch -- takes that reasoning with it, and the stage
+        comparison alone would not notice.
+        """
+        metadata = command.metadata or {}
+        source = metadata.get("release_from_task")
+        if not source or self.release_roster_of is None:
+            return None, None
+        listed = self.release_roster_of(str(source))
+        if listed is None:
+            # Nothing to compare against. Parking a robot because a bookkeeping field cannot
+            # be read would be a new failure mode, so this stays the stage check it was.
+            return None, None
+        roster = {str(member) for member in listed}
+        if command.agent_id not in roster:
+            return "stale_release_agent_moved", str(source)
+        support = {str(member) for member in metadata.get("release_support_members", ())}
+        if not support <= roster - leaving.get(str(source), set()):
+            return "stale_release_support", str(source)
+        return None, None
 
 
 class ReplanCoordinator:

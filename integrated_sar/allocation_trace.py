@@ -90,6 +90,7 @@ def arm_name(
     release_redundant_members: bool = False,
     suppress_recommand_own_task: bool = False,
     check_release_source_stage: bool = False,
+    task_membership_consistency: bool = False,
 ) -> str:
     """The arm label shared with the ``rp_<arm>_s<seed>.jsonl`` lifecycle logs.
 
@@ -129,6 +130,10 @@ def arm_name(
         # The same reasoning as the suffixes above: refusing a release whose source stage
         # has moved changes which commands execute, so it cannot share an arm label.
         label = f"{label}+srccheck"
+    if task_membership_consistency:
+        # An environment that takes a reassigned robot off the roster it left changes which
+        # work the controller is credited for. Two environments cannot share a label.
+        label = f"{label}+memfix"
     return label
 
 
@@ -165,6 +170,9 @@ def trace_meta(
             ),
             check_release_source_stage=bool(
                 getattr(configuration, "check_release_source_stage", False)
+            ),
+            task_membership_consistency=bool(
+                getattr(configuration, "task_membership_consistency", False)
             ),
         ),
         "coordinator_policy": str(

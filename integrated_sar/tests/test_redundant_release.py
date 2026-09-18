@@ -21,11 +21,13 @@ Pinned here:
 
 from __future__ import annotations
 
+import dataclasses
 import unittest
 from dataclasses import replace
 
 from integrated_sar.coordinator import CoalitionPlannerCoordinator
 from integrated_sar.contracts import (
+    CoordinationAdvice,
     AgentSnapshot,
     AgentTaskBelief,
     CoordinatorInput,
@@ -148,7 +150,24 @@ class DefaultOffIdentityTests(unittest.TestCase):
         )
         off = planner(release=False).advise(state(world))
         on = planner(release=True).advise(state(world))
-        self.assertEqual(off, on)
+        decided = [
+            field.name
+            for field in dataclasses.fields(CoordinationAdvice)
+            if field.name != "metadata"
+        ]
+        self.assertEqual(
+            {name: getattr(off, name) for name in decided},
+            {name: getattr(on, name) for name in decided},
+            "the flag may not change a decision when nothing is redundant",
+        )
+        self.assertEqual(
+            {key: value for key, value in on.metadata.items() if "release" not in key},
+            {key: value for key, value in off.metadata.items() if "release" not in key},
+        )
+        # What does differ is the report: with the flag on the verdict ran and can say why it
+        # held the robot, which is a naming change, not a choosing one.
+        self.assertEqual(off.metadata["release_refusals"], {})
+        self.assertEqual(on.metadata["release_refusals"], {"stage_needs_this_robot": 1})
 
     def test_off_and_reset_report_zero_releases(self) -> None:
         coordinator = planner(release=False)
@@ -413,8 +432,9 @@ class CoveragePreservingVerdictTests(unittest.TestCase):
         advice = coordinator.advise(state(world))
         self.assertNotIn("b", advice.replan_agents)
         self.assertEqual(coordinator.redundant_releases, 0)
-        # It was examined and found needed, which is a different answer from refused.
-        self.assertEqual(dict(coordinator.release_refusals), {})
+        # It was examined and found needed, which is a different answer from "the belief could
+        # not decide": the verdict names the reason instead of staying silent.
+        self.assertEqual(dict(coordinator.release_refusals), {"stage_needs_this_robot": 1})
 
     def test_the_second_of_two_over_provisioned_members_is_still_released(self) -> None:
         # The same belief shape, with a teammate who also covers the unit: one of the two
@@ -452,6 +472,8 @@ class CoveragePreservingVerdictTests(unittest.TestCase):
         self.assertNotIn("a", advice.replan_agents)
         self.assertNotIn("b", advice.replan_agents)
         self.assertEqual(coordinator.redundant_releases, 0)
+        self.assertEqual(coordinator.release_refusals["next_stage_needs_this_robot"], 2)
+        self.assertEqual(coordinator.release_refusals["stage_needs_this_robot"], 0)
 
     def test_a_belief_with_no_next_stage_still_allows_the_release(self) -> None:
         # An empty next requirement is what a belief carries for the last stage of a task;

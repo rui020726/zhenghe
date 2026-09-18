@@ -1,0 +1,223 @@
+{
+ "purpose": "the one ghost tick either baseline cell reports, read at three moments",
+ "seed": 20008,
+ "unit": "task-tick (one task's stage clock over one environment tick)",
+ "cells": {
+  "A": {
+   "environment_ticks": 1000,
+   "legacy_ghost_ticks_read_after_the_step": 1,
+   "real_ghost_ticks_read_at_the_work_update": 0,
+   "located_event": {
+    "tick": 132,
+    "time": 132.0,
+    "task_id": 3,
+    "stage_index": 1,
+    "requirement_used_by_the_work_update": [
+     1,
+     0,
+     0,
+     1,
+     0
+    ],
+    "clock_before": 8.924,
+    "clock_after": 7.924,
+    "work_this_tick": 1.0,
+    "roster_at_the_work_update": [
+     2,
+     4
+    ],
+    "on_site_at_the_work_update": [
+     2,
+     4
+    ],
+    "counted_while_absent_at_the_work_update": [],
+    "on_site_supply_at_the_work_update": [
+     1,
+     1,
+     1,
+     2,
+     0
+    ],
+    "gap_at_the_work_update_counting_only_on_site": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "roster_at_end_of_step": [
+     2
+    ],
+    "on_site_supply_at_end_of_step": [
+     0,
+     0,
+     1,
+     1,
+     0
+    ],
+    "gap_at_end_of_step": [
+     1,
+     0,
+     0,
+     0,
+     0
+    ],
+    "members_at_the_work_update": [
+     {
+      "member": 2,
+      "status": "working",
+      "current_task": 3,
+      "distance_to_task": 0.0,
+      "abilities": [
+       0,
+       0,
+       1,
+       1,
+       0
+      ],
+      "on_site": true
+     },
+     {
+      "member": 4,
+      "status": "working",
+      "current_task": 3,
+      "distance_to_task": 0.0,
+      "abilities": [
+       1,
+       1,
+       0,
+       1,
+       0
+      ],
+      "on_site": true
+     }
+    ],
+    "members_at_end_of_step": [
+     {
+      "member": 2,
+      "status": "working",
+      "current_task": 3,
+      "distance_to_task": 0.0,
+      "abilities": [
+       0,
+       0,
+       1,
+       1,
+       0
+      ],
+      "on_site": true
+     }
+    ]
+   }
+  },
+  "C": {
+   "environment_ticks": 1000,
+   "legacy_ghost_ticks_read_after_the_step": 1,
+   "real_ghost_ticks_read_at_the_work_update": 0,
+   "located_event": {
+    "tick": 132,
+    "time": 132.0,
+    "task_id": 3,
+    "stage_index": 1,
+    "requirement_used_by_the_work_update": [
+     1,
+     0,
+     0,
+     1,
+     0
+    ],
+    "clock_before": 8.924,
+    "clock_after": 7.924,
+    "work_this_tick": 1.0,
+    "roster_at_the_work_update": [
+     2,
+     4
+    ],
+    "on_site_at_the_work_update": [
+     2,
+     4
+    ],
+    "counted_while_absent_at_the_work_update": [],
+    "on_site_supply_at_the_work_update": [
+     1,
+     1,
+     1,
+     2,
+     0
+    ],
+    "gap_at_the_work_update_counting_only_on_site": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "roster_at_end_of_step": [
+     2
+    ],
+    "on_site_supply_at_end_of_step": [
+     0,
+     0,
+     1,
+     1,
+     0
+    ],
+    "gap_at_end_of_step": [
+     1,
+     0,
+     0,
+     0,
+     0
+    ],
+    "members_at_the_work_update": [
+     {
+      "member": 2,
+      "status": "working",
+      "current_task": 3,
+      "distance_to_task": 0.0,
+      "abilities": [
+       0,
+       0,
+       1,
+       1,
+       0
+      ],
+      "on_site": true
+     },
+     {
+      "member": 4,
+      "status": "working",
+      "current_task": 3,
+      "distance_to_task": 0.0,
+      "abilities": [
+       1,
+       1,
+       0,
+       1,
+       0
+      ],
+      "on_site": true
+     }
+    ],
+    "members_at_end_of_step": [
+     {
+      "member": 2,
+      "status": "working",
+      "current_task": 3,
+      "distance_to_task": 0.0,
+      "abilities": [
+       0,
+       0,
+       1,
+       1,
+       0
+      ],
+      "on_site": true
+     }
+    ]
+   }
+  }
+ },
+ "classification": "C -- measurement window, not a ghost contribution. Presence was read after the whole step, and _check_working_timeouts runs after task_update inside the same step: the robot that legitimately worked this tick had already been released for its own timeout by the time the detector looked. At the work update both credited robots were on site (status working, current_task equal to the task, distance 0.0), so no absent or wrongly assigned robot supplied capability to the work clock.",
+ "same_reading_in_both_cells": true
+}

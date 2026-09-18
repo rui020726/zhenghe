@@ -585,6 +585,9 @@ class CoalitionPlannerCoordinator:
         # Why a robot standing on a task was left alone. Separated by reason because "the
         # belief could not decide" and "the belief says it is needed" are different answers.
         self.release_refusals: Counter[str] = Counter()
+        # Releases that went through with nothing said about the following stage: the belief
+        # carried no vector at all. A last stage reports all-zero, which is information.
+        self.releases_without_future_information = 0
         self._revision = 0
         self._reservations: dict[tuple[str, str], CoalitionReservation] = {}
         # Identity, not ordering: a fresh commitment takes the next number, a renewal keeps
@@ -598,6 +601,7 @@ class CoalitionPlannerCoordinator:
         self._commitment_counter = 0
         self.redundant_releases = 0
         self.release_refusals.clear()
+        self.releases_without_future_information = 0
 
     def _new_commitment_id(self) -> str:
         self._commitment_counter += 1
@@ -687,13 +691,17 @@ class CoalitionPlannerCoordinator:
             if usable:
                 with_usable.append((order, agent.agent_id, abilities, tuple(usable)))
 
-        redundant_now = self._joint_redundant(agents, committed, release_checks)
+        release_supports: dict[str, tuple[str, ...]] = {}
+        redundant_now = self._joint_redundant(
+            agents, committed, release_checks, release_supports, self.release_refusals
+        )
         for order, agent_id, abilities, usable in with_usable:
             if self._is_free(agents[agent_id]) or agent_id in redundant_now:
                 candidates.append((order, agent_id, abilities, usable))
 
         reservations, planned = self._plan(agents, candidates, committed, now)
         self.redundant_releases = 0
+        self.releases_without_future_information = 0
         releases: dict[str, ReleaseProvenance] = {}
         if redundant_now:
             # A redundant member is re-decided only when the plan actually found it
@@ -711,6 +719,8 @@ class CoalitionPlannerCoordinator:
                     replan_agents.add(agent_id)
                     self.redundant_releases += 1
                     believed = release_checks[agent_id]
+                    if not tuple(believed.future_requirements):
+                        self.releases_without_future_information += 1
                     # What this robot believed about the task it is leaving, at the moment
                     # of deciding. The gate compares it against the task as it is when the
                     # command arrives; a stage that moved in between invalidates the
@@ -719,6 +729,7 @@ class CoalitionPlannerCoordinator:
                         task_id=str(current),
                         stage_index=int(believed.stage_index),
                         revision=int(believed.revision),
+                        supporting_members=release_supports.get(agent_id, ()),
                     )
         if self.renew_commitments:
             for key, value in self._renew(agents, committed, beliefs_by_key, now).items():
@@ -759,6 +770,7 @@ class CoalitionPlannerCoordinator:
                 "redundant_candidates": redundant,
                 "redundant_releases": self.redundant_releases,
                 "release_refusals": dict(sorted(self.release_refusals.items())),
+                "releases_without_future_information": self.releases_without_future_information,
                 "held_slot_indices": sorted(
                     held.ability_slot for held in reservations.values()
                 ),
@@ -1113,6 +1125,8 @@ class CoalitionPlannerCoordinator:
         agents: Mapping[str, AgentSnapshot],
         committed: Mapping[str, Mapping[str, tuple[float, ...]]],
         checks: Mapping[str, AgentTaskBelief],
+        supports: dict[str, tuple[str, ...]] | None = None,
+        refusals: "Counter[str] | None" = None,
     ) -> set[str]:
         """Which working robots may be released without lowering believed coverage.
 
@@ -1124,6 +1138,11 @@ class CoalitionPlannerCoordinator:
         the full team did. A stage believed fully covered stays fully covered, because
         both sides of the comparison use the same gross requirement; a stage covered only
         by this robot cannot pass, whichever way its residual reads.
+
+        ``supports``, when given, receives the on-site team each verdict relied on. The
+        release is only as safe as that set, and the set is only knowable here, at the
+        moment of the verdict: it is the pool with this robot still in it, minus the
+        robots this advice has already released.
 
         Spareness is judged against the next stage too. Finishing the stage a robot stands
         on is the normal reason a task moves on, and a robot that the following stage needs
@@ -1148,10 +1167,14 @@ class CoalitionPlannerCoordinator:
             task_id = agents[agent_id].current_task
             pool = on_site.get(task_id or "", {})
             if agent_id not in pool:
+                if refusals is not None:
+                    refusals["not_credibly_on_site"] += 1
                 continue
             requirement = tuple(checks[agent_id].stage_requirements)
             others = [value for key, value in pool.items() if key != agent_id]
             if _covered_units(requirement, list(pool.values())) != _covered_units(requirement, others):
+                if refusals is not None:
+                    refusals["stage_needs_this_robot"] += 1
                 continue
             # The stage that follows, as this same belief was told it. The measured
             # failure mode was a release that was right about the stage the robot stood in
@@ -1163,8 +1186,12 @@ class CoalitionPlannerCoordinator:
             if following and _covered_units(following, list(pool.values())) != _covered_units(
                 following, others
             ):
+                if refusals is not None:
+                    refusals["next_stage_needs_this_robot"] += 1
                 continue
             released.add(agent_id)
+            if supports is not None:
+                supports[agent_id] = tuple(sorted(key for key in pool if key != agent_id))
             pool.pop(agent_id, None)  # banked: the next verdict sees one fewer filler
         return released
 

@@ -561,6 +561,8 @@ def run_signature_of(configuration: RunConfiguration) -> dict[str, Any]:
                 configuration.suppress_recommand_own_task
                 or configuration.coordinator_policy == "coalition_redundant_release"
             ),
+            check_release_source_stage=bool(configuration.check_release_source_stage),
+            task_membership_consistency=bool(configuration.task_membership_consistency),
         ),
         repo=Path(__file__).resolve().parent.parent,
     )
@@ -733,6 +735,11 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         revision_of=lambda task_id: _revision_of(registry, task_id),
         release_state_of=(
             (lambda task_id: _stage_and_revision_of(registry, task_id))
+            if configuration.check_release_source_stage
+            else None
+        ),
+        release_roster_of=(
+            (lambda task_id: _members_of(registry, task_id))
             if configuration.check_release_source_stage
             else None
         ),
@@ -996,6 +1003,18 @@ def _stage_and_revision_of(
     if snapshot is None:
         return None
     return int(snapshot.current_stage), int(snapshot.revision)
+
+
+def _members_of(registry: TaskRegistry, task_id: str | None) -> tuple[str, ...] | None:
+    """Who the execution boundary currently lists on a task a release is leaving behind.
+
+    Read by the gate alone. It is the roster as the last accepted progress event reported it,
+    never a planning feature: no actor, coordinator or observation sees this value.
+    """
+    if task_id is None:
+        return None
+    snapshot = registry.get(task_id)
+    return None if snapshot is None else tuple(str(member) for member in snapshot.members)
 
 
 def run_from_configuration(configuration: RunConfiguration) -> dict[str, Any]:

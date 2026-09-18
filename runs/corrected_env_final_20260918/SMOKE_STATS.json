@@ -1,0 +1,191 @@
+{
+ "protocol": {
+  "primary_metric": "per-seed paired difference in on_time_rate (D minus C)",
+  "bootstrap_resamples": 10000,
+  "bootstrap_rng_seed": 20260918,
+  "interval": "percentile 95 %, one primary metric, no multiplicity adjustment",
+  "zero_detection_rule": "excluded from the paired set when neither arm detected a target",
+  "technical_failure_rule": "excluded and listed: unfinished, commit or stream mismatch, or missing artefact",
+  "ceiling_rule": "both arms completing every detected target is a difference of zero, kept",
+  "correctness_gate": "any non-zero correctness count fails the block regardless of performance"
+ },
+ "scheduled_seeds": 400,
+ "episodes": {
+  "C": 3,
+  "D": 3
+ },
+ "paired_seeds": 3,
+ "excluded_seeds": 0,
+ "exclusion_reasons": [],
+ "totals": {
+  "C": {
+   "detections": 18,
+   "on_time": 18,
+   "expired_targets": 0,
+   "unresolved_targets": 0
+  },
+  "D": {
+   "detections": 18,
+   "on_time": 18,
+   "expired_targets": 0,
+   "unresolved_targets": 0
+  }
+ },
+ "primary": {
+  "mean_difference": 0.0,
+  "ci95": [
+   0.0,
+   0.0
+  ],
+  "seeds_d_better": 0,
+  "seeds_d_worse": 0,
+  "seeds_discordant": 0,
+  "seeds_both_at_ceiling": 3,
+  "share_of_paired_seeds": 0.0
+ },
+ "correctness": {
+  "C": {
+   "false_credit_task_ticks": 0,
+   "legacy_ghost_task_ticks": 0,
+   "dual_roster_robot_ticks": 0,
+   "closing_released_robot_assigned_elsewhere": 0,
+   "executed_releases_that_uncovered_the_stage": 0,
+   "duplicate_command_reset": 0,
+   "illegal_executed_assignment": 0,
+   "releases_without_future_information": 0
+  },
+  "D": {
+   "false_credit_task_ticks": 0,
+   "legacy_ghost_task_ticks": 0,
+   "dual_roster_robot_ticks": 0,
+   "closing_released_robot_assigned_elsewhere": 0,
+   "executed_releases_that_uncovered_the_stage": 0,
+   "duplicate_command_reset": 0,
+   "illegal_executed_assignment": 0,
+   "releases_without_future_information": 0
+  }
+ },
+ "correctness_gate_pass": true,
+ "candidate_new_failures": [],
+ "secondary_descriptive": {
+  "on_time": {
+   "C": 6.0,
+   "D": 6.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "detections": {
+   "C": 6.0,
+   "D": 6.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "expired": {
+   "C": 0.0,
+   "D": 0.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "deadline_expired_targets": {
+   "C": 0.0,
+   "D": 0.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "unresolved": {
+   "C": 0.0,
+   "D": 0.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "completed_env_tasks": {
+   "C": 6.0,
+   "D": 6.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "mean_completion_time": {
+   "C": 39.3333,
+   "D": 38.8333,
+   "mean_paired_difference": -0.5,
+   "seeds_where_D_is_worse": 2,
+   "seeds_where_D_is_better": 0
+  },
+  "travel_dist_total": {
+   "C": 3.0403,
+   "D": 3.401,
+   "mean_paired_difference": 0.3607,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 2
+  },
+  "lost_work": {
+   "C": 0.0,
+   "D": 0.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "coverage_resets": {
+   "C": 0.0,
+   "D": 0.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "idle_robot_ticks": {
+   "C": 4560.0,
+   "D": 4550.0,
+   "mean_paired_difference": -10.0,
+   "seeds_where_D_is_worse": 1,
+   "seeds_where_D_is_better": 0
+  },
+  "longest_idle_streak": {
+   "C": 0.0,
+   "D": 0.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "replan_decisions": {
+   "C": 0.0,
+   "D": 10.3333,
+   "mean_paired_difference": 10.3333,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 2
+  },
+  "releases_published": {
+   "C": 0.0,
+   "D": 10.3333,
+   "mean_paired_difference": 10.3333,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 2
+  },
+  "releases_executed": {
+   "C": 0.0,
+   "D": 3.3333,
+   "mean_paired_difference": 3.3333,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 2
+  },
+  "release_refusal_recovered": {
+   "C": 0.0,
+   "D": 0.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "release_refusal_unrecovered": {
+   "C": 0.0,
+   "D": 0.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  }
+ }
+}

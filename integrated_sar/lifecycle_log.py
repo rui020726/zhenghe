@@ -256,6 +256,18 @@ class LifecycleLogger:
 
     def log_assignment(self, command: AssignmentCommand, *, step: int) -> LifecycleRecord:
         snapshot = self._snapshot(command.task_id) if command.task_id else None
+        detail = {
+            "command_id": command.command_id,
+            "reason": command.reason,
+            "valid_until": command.valid_until,
+            "step": step,
+        }
+        metadata = command.metadata or {}
+        if metadata.get("release_from_task"):
+            # Without this the log says a command was issued, and only the absence of a
+            # rejection says it ran. A release has to be countable from the record itself.
+            detail["release_from_task"] = str(metadata["release_from_task"])
+            detail["release_stage_index"] = int(metadata.get("release_stage_index", -1))
         return self.write(
             LifecycleRecord(
                 target_id=command.task_id or RUN_TARGET_ID,
@@ -271,12 +283,7 @@ class LifecycleLogger:
                     snapshot.remaining_requirements if snapshot else None
                 ),
                 status=snapshot.status.value if snapshot else None,
-                detail={
-                    "command_id": command.command_id,
-                    "reason": command.reason,
-                    "valid_until": command.valid_until,
-                    "step": step,
-                },
+                detail=detail,
             )
         )
 
