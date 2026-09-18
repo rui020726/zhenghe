@@ -22,7 +22,10 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
 TARGET = HERE / "FREEZE.json"
 BRANCH = "fix/task-membership-consistency"
-PRODUCTION = ("integrated_sar", "task_allocation")
+# The code that executes. The test directory is excluded: a test file cannot change what a run
+# does, and freezing on it would block honest documentation commits for no safety at all.
+PRODUCTION = ("integrated_sar", "task_allocation", ":(exclude)integrated_sar/tests")
+STATUS_PATHS = ("integrated_sar", "task_allocation", ":(exclude)integrated_sar/tests")
 
 
 def git(*arguments: str) -> str:
@@ -37,7 +40,7 @@ def git(*arguments: str) -> str:
 
 def tree_is_clean() -> tuple[bool, str]:
     """What must hold before any commit may be named as the freeze."""
-    dirty = git("status", "--porcelain", *PRODUCTION)
+    dirty = git("status", "--porcelain", *STATUS_PATHS)
     if dirty:
         return False, "uncommitted production changes: " + dirty.replace("\n", "; ")
     branch = git("rev-parse", "--abbrev-ref", "HEAD")

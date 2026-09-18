@@ -56,6 +56,7 @@ SCRIPTS = (
     "system_v2.py",
 )
 PRODUCTION = ("integrated_sar", "task_allocation")
+EXECUTION_ONLY = ("integrated_sar", "task_allocation", ":(exclude)integrated_sar/tests")
 
 
 def sha256(path: Path) -> str:
@@ -111,7 +112,7 @@ def main() -> int:
         "manifest_written_at_head": git("rev-parse", "HEAD"),
         "frozen_code_commit": arms.freeze_commit(),
         "production_tree_matches_freeze": not git(
-            "diff", arms.freeze_commit(), "--", *PRODUCTION
+            "diff", arms.freeze_commit(), "--", *EXECUTION_ONLY
         ),
         "production_python_digest": production_digest,
         "environment_variant": {

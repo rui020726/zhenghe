@@ -98,6 +98,21 @@ class DefaultOffUnchangedTests(unittest.TestCase):
         self.assertEqual(int(np.asarray(env.task_dic[A]["status"], dtype=int).sum()), 0)
         self.assertLess(float(stage(env.task_dic[A])["time_left"]), covered)
 
+    def test_the_old_bookkeeping_let_a_closing_task_reach_back_for_the_robot(self) -> None:
+        # What the fix removes, kept on the record: A keeps spending its clock on the stale
+        # entry, closes with nobody standing on it, and closing releases every member --
+        # including the robot that has since started working at B.
+        env = scenario(membership_consistency=False)
+        self.assertTrue(arrive(env, 0, A))
+        stage(env.task_dic[A])["time"] = 8.0
+        stage(env.task_dic[A])["time_left"] = 8.0
+        env.apply_action(0, INDEX_OF[B], ACTION_MAP)
+        self.assertTrue(arrive(env, 0, B))
+        for _ in range(40):
+            env.step()
+        self.assertTrue(env.task_dic[A]["finished"], "A closed on the absent robot's credit")
+        self.assertNotEqual(int(env.agent_dic[0]["current_task"]), B, "A's closing pulled it off B")
+
 
 class RosterConsistencyTests(unittest.TestCase):
     def test_an_accepted_reassignment_stops_the_old_task_being_covered(self) -> None:
@@ -132,6 +147,26 @@ class RosterConsistencyTests(unittest.TestCase):
         for _ in range(80):
             env.step()
         self.assertFalse(env.task_dic[A]["finished"], "A closed on ghost capability")
+
+    def test_a_closing_task_does_not_release_a_robot_working_on_another(self) -> None:
+        # Robot 0 is the only provider A has. Once it is re-tasked, A can only keep running on
+        # the residue -- and a task that finishes walks its roster and releases everyone on it,
+        # which is how a robot already working elsewhere used to get pulled back off the job.
+        env = scenario(membership_consistency=True)
+        arrive(env, 0, A)
+        # Eight steps is enough for A to close on the credit of an absent robot, and short
+        # enough that neither B's own work clock nor the random working timeout can reach
+        # forty ticks -- otherwise the assertion would be about the clock, not the roster.
+        stage(env.task_dic[A])["time"] = 8.0
+        stage(env.task_dic[A])["time_left"] = 8.0
+        env.apply_action(0, INDEX_OF[B], ACTION_MAP)
+        self.assertTrue(arrive(env, 0, B), "robot 0 must be working at B")
+        for _ in range(40):
+            env.step()
+        self.assertFalse(env.task_dic[A]["finished"], "A closed on ghost capability")
+        self.assertEqual(int(env.agent_dic[0]["current_task"]), B)
+        self.assertEqual(env.agent_dic[0]["status"], "working")
+        self.assertNotIn(0, env.task_dic[A]["members"])
 
     def test_one_robot_never_supplies_two_tasks_at_once(self) -> None:
         env = scenario(membership_consistency=True)

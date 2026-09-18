@@ -296,14 +296,20 @@ def assert_frozen_tree() -> str:
             cwd=str(REPO), capture_output=True, text=True, encoding="utf-8", errors="replace",
         ).stdout.strip()
 
-    dirty = git("status", "--porcelain", "integrated_sar", "task_allocation")
+    dirty = git(
+        "status", "--porcelain", "integrated_sar", "task_allocation",
+        ":(exclude)integrated_sar/tests",
+    )
     if dirty:
         raise AssertionError(
             "the production tree has uncommitted changes, so the block may not be run: "
             + dirty.replace("\n", "; ")
         )
     commit = freeze_commit()
-    drift = git("diff", commit, "--", "integrated_sar", "task_allocation")
+    drift = git(
+        "diff", commit, "--", "integrated_sar", "task_allocation",
+        ":(exclude)integrated_sar/tests",
+    )
     if drift:
         raise AssertionError(
             f"the production files differ from the freeze commit {commit}: "
