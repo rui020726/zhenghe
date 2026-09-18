@@ -1,6 +1,6 @@
 # 项目状态
 
-更新时间：2026-09-17（可学习性门禁）
+更新时间：2026-09-18（候选发布验收：信息来源修正、陈旧命令审计与三条件压力测试）
 
 ## 已完成
 
@@ -453,9 +453,67 @@
   - **默认值与版本状态**：两个开关仍默认 False（`coalition_redundant_release` 仅为显式快捷策略）；
     稳定基线仍是 `fix/coalition-commitment-continuity@868d68a`，通过独立测试的候选是
     `validation/coalition-redundant-release@1f4a598`（其 `integrated_sar` 与 `304fc60`、`e96f34c`
-    逐字节相同，`git diff` 为空）。**建议**：证据支持默认启用（独立块显著提升、四项正确性通过、
-    620 个配对局 0 回归）；若要更严标准，因天花板效应应再跑一个未触碰的紧 deadline/高饱和块。
+    逐字节相同，`git diff` 为空）。**建议**：证据支持默认启用（独立块显著提升、四项正确性通过）；
+    "620" 是该轮所有实验块去重后的 **seed 数**而非配对局数，且开发块彼此嵌套（gate 的 5 ⊂
+    消融的 15 ⊂ legacy 的 100），只有 400-seed 独立块支持显著性表述——该计数已由
+    `runs/release_validation_20260918/evidence_accounting.py` 从 manifest 重算并纠正。
+    另：该轮结论所测的"冗余判定"在下一轮被查明读错了分母，其泛化声明只适用于那个旧判定。
     默认启用与合并由用户决定。
+- 候选发布验收：信息来源、陈旧命令恢复与固定方案压力测试（分支
+  `release/coalition-controller-validation`，起点 `validation/coalition-redundant-release@7e5ba3a`，
+  证据见 `runs/release_validation_20260918/`）：
+  - **版本与证据核对**：本地与远端 `7e5ba3a` 一致；测试执行点 `1f4a598` → 交付头 `7e5ba3a` 的
+    差异 **不含任何 `integrated_sar` 生产文件**（20 个文件全为 .gitignore/PROJECT_STATUS/分析脚本与
+    小汇总）。既有 400-seed 独立结果的协议、标签与统计口径未改。累计数字重算：全部块共
+    **800 个去重 seed / 835 个配对场景 / 1700 次回放**，其中独立证据 460 个新 seed
+    （400 回放 + 60 在线），开发块去重后仅 160 个 seed 且相互嵌套。
+  - **信息来源审查发现一个真实缺陷并修复（`fb1c85b`）**：冗余判定用的是 belief 里的
+    `remaining_requirements`，而该残差是环境**把这台机器人算进 members 之后**得到的——于是"独自
+    撑住某需求"的机器人必然看到需求为 0，被判冗余。15 个开发 seed 实测：3556 次候选判定中
+    3111 次残差全零；205 次真正执行的释放里有 **33 次会移走现场确实需要的能力**。旧结果之所以
+    未出现覆盖回归，只因为环境对被改派的 working 机器人**仍保留在 members 名单里**（幽灵在场），
+    这是环境侧既有行为，不能作为安全依据。改为按同一消息已送达的 **stage 总需求**比较"有它/没它"
+    的覆盖，并加两条保守拒判（belief 无总需求、belief 名单不含本机），按原因计数进 metadata。
+    全程未新增任何信息权限：所需字段本就随消息送达，只是从未被 surface 到 `AgentTaskBelief`。
+  - **修复后的开发复测**：五 seed 闭环 baseline 21/8（1 重置、1.2 丢失工时）→ candidate
+    30/0（0/0），9 个目标获救、0 回归；15 seed 消融仍为 81/8 → 90/0，但释放次数
+    205 → 125、接受改派 86 → 51，即更少动作换到同样的收益。开关全关时仍逐字段复现 868d68a
+    轨迹（5 seed 共 5645 条决策行 IDENTICAL）。
+  - **陈旧命令拒绝审计（`STALE_REVISION_RECOVERY_AUDIT.md`）**：读完 800 份 held-out 日志，
+    baseline 11 起 / candidate 13 起，**全部是同一形态**——任务在"写缓存 revision"与"闸门读
+    registry"之间的同一 tick 内完成，命令带的 revision 恰好落后 1。四项指标分列：按原因
+    拒绝（仅 `stale_task_revision`）、实际执行的非法命令 **0**、恢复延迟 **1 tick（24/24）**、
+    重复陈旧命令尝试 **0**；拒绝不改机器人执行态、不丢既有工作、下一次合法更新即恢复，
+    gate 与 hard mask 强度不变。结论为"行为正确，仅补证据与测试"，新增
+    `test_a_task_completing_mid_tick_is_refused_once_and_then_travelled`。
+  - **三条件压力测试（预注册后运行；`STRESS_PROTOCOL.md` / `STRESS_VERDICT.md`）**：A 更紧
+    deadline（band 0.4-1.2）、B 更高负载（9 goals）、C 两者，各 60 个全新 seed（32000/33000/
+    34000 段，排除全部历史 seed，块间互不重叠），共 360 次回放、preflight 0 问题。
+    主指标为逐 seed 按完成率配对差，bootstrap B=10000，三条件同时给出 95% 与
+    Bonferroni 校正 98.33% 区间：**B +0.0243，校正后 CI [+0.0019, +0.0579] → 显著**
+    （12 迟到 + 1 未完成被救，expired 12→0，7 局更好 1 局更差）；A +0.0056
+    CI [0, 0.0222]、C +0.0037 CI [0, 0.0148] **均触 0**，且两臂已 98.7-99.4%——按预登记
+    规则记为"证据不足"，并如实报告 deadline 下限（0.95×估计）使该压力未能真正收紧，
+    未补选 seed。正确性：0 非法执行、0 重复命令、0 无进展死锁，覆盖重置不高于 baseline
+    （A/B 持平、C 1→0）。唯一新增失败 33011/target-7 经 trace 定位为两次**环境随机工作超时**
+    掏空 dim-4 覆盖，该 episode 中"因释放而被唤醒且离开该目标"的决策为 0 条。
+  - **释放安全性实测（180 局带记录器的复跑，复现存储结果 180/180）**：23311 次判定、
+    1498 次实际执行，其中 **19 次（1.3%）** 仍会移走现场需要的能力——均为 belief 落后于
+    stage 切换的残余（在线规则原理上不可消除），且这 18 个 seed 与出现覆盖重置/工时丢失的
+    seed **完全不相交**。旧判定同口径为 33/205（16%）且属系统性。
+  - **成本**：里程 5.83→5.80 / 7.17→7.33 / 7.01→7.10（+2.3% 仅出现在取得显著提升的 B）；
+    协调决策 p99 0.38→0.60 / 0.73→1.09 / 1.11→1.42 ms。
+  - **配置防护**：`--release-redundant-members` 未配 `--suppress-recommand-own-task` 现在直接
+    ConfigurationError，并给出 `--coordinator coalition_redundant_release`（成对快捷）或
+    `--allow-release-without-suppression`（显式消融，保留 C 臂用途）两条出路，附测试。
+    `deadline_tightness` 只是把 TaskEnv 既有参数接通过来（默认与其自身默认一致，有测试钉住），
+    未改任何环境生成逻辑。
+  - **默认值与版本状态**：两个开关**仍默认 False**；稳定基线 `868d68a`；
+    当前可合并候选 `release/coalition-controller-validation`
+    （`fb1c85b` 判定修复 + `fd0dd76` 审计与压力预注册 + `3fcef63` 冻结）。
+    `RELEASE_CANDIDATE.md` 给出启用命令、回退命令、支持配置与研究用路径清单、以及
+    `RELEASE_MANIFEST.json`（代码/模型/seed manifest/原始产物 fold hash）。
+    全套 **513 通过（2 跳过）**，smoke `final_status=completed`。
 
 ## 尚未完成
 
@@ -500,17 +558,22 @@
 
 ## 推荐下一任务
 
-在有权重的机器上跑一次真实闭环，并确认日志可追踪：
+按依赖顺序：
 
-- 用团队共享存储中的 `shared_mappo_model_*.pth` 与 `ctde_final.pth`；
-- 固定 60×60 障碍图与 seed，`--steps` 取足以完成若干目标的长度；
-- 检查摘要中 `search_backend=piloc-trained`、`allocation_backend=ctde-network`、
-  `rejected_assignments` 是否非零；
-- 若 PILOC 权重与当前网络结构不匹配，驱动会以 `CheckpointIncompatibleError` 明确报错，
-  此时应核对 `dim_info` 与 `num_agent` 而不是放宽 strict 加载；
-- 之后再做第 1、2 项，让搜索侧原生发事件并保留目标。
-
-验收标准是可以从日志中用 `target_id/source_event_id` 追踪每个目标的完整生命周期。
+1. **默认启用与合并的决定**（属于用户）。证据边界写在
+   `runs/release_validation_20260918/RELEASE_CANDIDATE.md`：取得显著提升的是"更高负载"这一
+   条件（校正后 CI 下界 +0.0019），两个接近天花板的条件区间触 0，既不能宣称改善也不能判失败。
+   启用命令与回退命令都在该文档里，合并不会改动任何默认值。
+2. **给覆盖保持判定补一份独立证据**。本轮 180 个压力 seed 虽然全新，但条件是本研究的产物。
+   若要把"默认启用"抬到与上一轮 400-seed 同等级的确认，需要一次预先登记、未参与任何决策的
+   新块；400-seed 那份结果属于旧判定，不能代替。
+3. **换一个咬得动的压力源**。`deadline_tightness` 再低也没用：环境把每个 deadline 下限锁在
+   0.95×自身估计，所以 A/C 两条件天然接近满完成。可选项是已有支持参数里的
+   `rescue_per_species`/`rescue_species` 反向变化（减少机队）或提高任务饱和度——都属于场景
+   侧，不需要动策略。
+4. **belief 滞后残余**：1.3% 的实际释放仍会移走现场需要的能力，源于在线规则看不到尚未送达
+   的 stage 切换。要继续压低它，需要的是更新鲜的阶段信息（新的通信语义），不是新的判定技巧。
+   本轮未触碰通信规则，也不建议用加权或阈值掩盖。
 
 ## 资产说明
 

@@ -51,7 +51,10 @@ from integrated_sar.lifecycle_metrics import load_records  # noqa: E402
 
 import mechanism_ablation as ablation  # noqa: E402  (metric definitions are shared)
 
-FROZEN_COMMIT = "fd0dd76"  # full: fd0dd76af7d6216b3d0d1929bef4a5f8a992b90f
+# The runs record the HEAD they executed under, which is the freeze commit itself (it
+# differs from ``fd0dd76`` only by this line: ``git diff fd0dd76 3fcef63 -- integrated_sar``
+# is empty, so the production tree is the frozen one).
+FROZEN_COMMIT = "3fcef63"  # full: 3fcef636d6dfc1dca599877238bca4e4006fe81f
 STEPS = 1000
 WORKERS = 8
 BOOTSTRAP_RESAMPLES = 10_000

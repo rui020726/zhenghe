@@ -53,6 +53,7 @@ def main() -> int:
     ablation = load(VALIDATION / "ablation_seeds.json")
     heldout = load(VALIDATION / "HELDOUT_SEEDS.json")
     system_seeds = load(VALIDATION / "SYSTEM_SEEDS.json")
+    stress = load(HERE / "STRESS_SEEDS.json")
     expansion = load(DISPATCH / "paired" / "expansion.json")
 
     gate = load(DISPATCH / "CLOSED_LOOP_GATE.json")
@@ -65,6 +66,43 @@ def main() -> int:
     }
 
     blocks = [
+        block(
+            "stress_A_tighter_deadline",
+            "stress",
+            stress["conditions"]["A_tighter_deadline"],
+            len(stress["conditions"]["A_tighter_deadline"]),
+            2,
+            "runs/release_validation_20260918/STRESS_SEEDS.json",
+            "60 new seeds, deadline band (0.4, 1.2)",
+        ),
+        block(
+            "stress_B_higher_load",
+            "stress",
+            stress["conditions"]["B_higher_load"],
+            len(stress["conditions"]["B_higher_load"]),
+            2,
+            "runs/release_validation_20260918/STRESS_SEEDS.json",
+            "60 new seeds, nine goals",
+        ),
+        block(
+            "stress_C_tight_and_heavy",
+            "stress",
+            stress["conditions"]["C_tight_and_heavy"],
+            len(stress["conditions"]["C_tight_and_heavy"]),
+            2,
+            "runs/release_validation_20260918/STRESS_SEEDS.json",
+            "60 new seeds, both stressors",
+        ),
+        block(
+            "coverage_verdict_development_rerun",
+            "development",
+            list(ablation["seeds"]),
+            len(ablation["seeds"]),
+            2,
+            "runs/release_validation_20260918/DEV_RERUN.json",
+            "reuses the gate's 5 and the ablation's 15 seeds; re-measures them under the "
+            "coverage-preserving verdict, so it adds no new seed evidence",
+        ),
         block(
             "closed_loop_gate",
             "development",
@@ -135,6 +173,7 @@ def main() -> int:
     independent = [b for b in blocks if b["role"] == "independent"]
     live = [b for b in blocks if b["role"] == "live-system"]
     development = [b for b in blocks if b["role"] == "development"]
+    stress_blocks = [b for b in blocks if b["role"] == "stress"]
     union_independent_live = set().union(*(set(b["seeds"]) for b in independent + live))
     union_all = set().union(*(set(b["seeds"]) for b in blocks))
 
@@ -160,6 +199,8 @@ def main() -> int:
             "unique_seeds_independent_or_live": len(union_independent_live),
             "development_paired_scenarios": sum(b["paired_scenarios"] for b in development),
             "development_unique_seeds": len(set().union(*(set(b["seeds"]) for b in development))),
+            "stress_paired_scenarios": sum(b["paired_scenarios"] for b in stress_blocks),
+            "stress_unique_seeds": len(set().union(*(set(b["seeds"]) for b in stress_blocks))),
         },
         "already_spent_blocks_excluded_by_the_held_out_draw": {
             name: len(seeds) for name, seeds in spent_elsewhere.items()

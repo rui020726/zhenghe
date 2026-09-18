@@ -1,0 +1,333 @@
+{
+ "frozen_commit": "3fcef63",
+ "paired_scenarios": 180,
+ "unpaired": [],
+ "bootstrap_resamples": 10000,
+ "bootstrap_rng_seed": 20260918,
+ "bonferroni_level": 0.983333,
+ "conditions": {
+  "A_tighter_deadline": {
+   "scenario": {
+    "deadline_tightness": [
+     0.4,
+     1.2
+    ],
+    "num_goals": 6
+   },
+   "seeds": 60,
+   "excluded_zero_detection": [],
+   "paired_seeds_analysed": 60,
+   "closure_ok": true,
+   "totals": {
+    "baseline": {
+     "detections": 343,
+     "on_time": 341,
+     "expired": 2
+    },
+    "candidate": {
+     "detections": 343,
+     "on_time": 343,
+     "expired": 0
+    }
+   },
+   "mean_paired_difference": 0.005556,
+   "ci95": [
+    0.0,
+    0.016667
+   ],
+   "ci_bonferroni": [
+    0.0,
+    0.022222
+   ],
+   "seeds_candidate_better": 1,
+   "seeds_candidate_worse": 0,
+   "ceiling_effect": true,
+   "secondary": {
+    "coverage_resets": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "lost_work": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "redundant_working_ticks": {
+     "baseline": 262.7833,
+     "candidate": 215.6167
+    },
+    "releases_planned": {
+     "baseline": 0.0,
+     "candidate": 6.4833
+    },
+    "replan_attempts": {
+     "baseline": 0.0333,
+     "candidate": 6.5167
+    },
+    "accepted_reassignments": {
+     "baseline": 0.0,
+     "candidate": 2.7167
+    },
+    "replan_declined": {
+     "baseline": 0.0,
+     "candidate": 3.7667
+    },
+    "same_task_noop": {
+     "baseline": 0.0,
+     "candidate": 3.7667
+    },
+    "recommands": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "rejected_assignments": {
+     "baseline": 0.0333,
+     "candidate": 0.0667
+    },
+    "executed_override_unjustified": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "longest_idle_streak": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "rescue_travel": {
+     "baseline": 5.8288,
+     "candidate": 5.7983
+    }
+   },
+   "decision_milliseconds": {
+    "baseline": {
+     "mean": 0.083,
+     "p50": 0.047,
+     "p95": 0.23,
+     "p99": 0.376
+    },
+    "candidate": {
+     "mean": 0.113,
+     "p50": 0.046,
+     "p95": 0.408,
+     "p99": 0.604
+    }
+   },
+   "candidate_new_failures": [],
+   "candidate_rescued_targets": 2
+  },
+  "B_higher_load": {
+   "scenario": {
+    "deadline_tightness": [
+     0.5,
+     2.0
+    ],
+    "num_goals": 9
+   },
+   "seeds": 60,
+   "excluded_zero_detection": [],
+   "paired_seeds_analysed": 60,
+   "closure_ok": true,
+   "totals": {
+    "baseline": {
+     "detections": 526,
+     "on_time": 513,
+     "expired": 12
+    },
+    "candidate": {
+     "detections": 526,
+     "on_time": 525,
+     "expired": 0
+    }
+   },
+   "mean_paired_difference": 0.024306,
+   "ci95": [
+    0.003935,
+    0.050231
+   ],
+   "ci_bonferroni": [
+    0.001852,
+    0.05787
+   ],
+   "seeds_candidate_better": 7,
+   "seeds_candidate_worse": 1,
+   "ceiling_effect": false,
+   "secondary": {
+    "coverage_resets": {
+     "baseline": 0.0167,
+     "candidate": 0.0167
+    },
+    "lost_work": {
+     "baseline": 0.0387,
+     "candidate": 0.0422
+    },
+    "redundant_working_ticks": {
+     "baseline": 271.2167,
+     "candidate": 250.0667
+    },
+    "releases_planned": {
+     "baseline": 0.0,
+     "candidate": 9.1333
+    },
+    "replan_attempts": {
+     "baseline": 0.0333,
+     "candidate": 9.2
+    },
+    "accepted_reassignments": {
+     "baseline": 0.0333,
+     "candidate": 3.1
+    },
+    "replan_declined": {
+     "baseline": 0.0,
+     "candidate": 6.1
+    },
+    "same_task_noop": {
+     "baseline": 0.0,
+     "candidate": 6.1
+    },
+    "recommands": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "rejected_assignments": {
+     "baseline": 0.0333,
+     "candidate": 0.0667
+    },
+    "executed_override_unjustified": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "longest_idle_streak": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "rescue_travel": {
+     "baseline": 7.1657,
+     "candidate": 7.3286
+    }
+   },
+   "decision_milliseconds": {
+    "baseline": {
+     "mean": 0.12,
+     "p50": 0.049,
+     "p95": 0.33,
+     "p99": 0.73
+    },
+    "candidate": {
+     "mean": 0.165,
+     "p50": 0.049,
+     "p95": 0.567,
+     "p99": 1.089
+    }
+   },
+   "candidate_new_failures": [
+    "33011/piloc-e1-target-7"
+   ],
+   "candidate_rescued_targets": 13
+  },
+  "C_tight_and_heavy": {
+   "scenario": {
+    "deadline_tightness": [
+     0.4,
+     1.2
+    ],
+    "num_goals": 9
+   },
+   "seeds": 60,
+   "excluded_zero_detection": [],
+   "paired_seeds_analysed": 60,
+   "closure_ok": true,
+   "totals": {
+    "baseline": {
+     "detections": 526,
+     "on_time": 519,
+     "expired": 5
+    },
+    "candidate": {
+     "detections": 526,
+     "on_time": 521,
+     "expired": 3
+    }
+   },
+   "mean_paired_difference": 0.003704,
+   "ci95": [
+    0.0,
+    0.011111
+   ],
+   "ci_bonferroni": [
+    0.0,
+    0.014815
+   ],
+   "seeds_candidate_better": 1,
+   "seeds_candidate_worse": 0,
+   "ceiling_effect": true,
+   "secondary": {
+    "coverage_resets": {
+     "baseline": 0.0167,
+     "candidate": 0.0
+    },
+    "lost_work": {
+     "baseline": 0.1362,
+     "candidate": 0.0
+    },
+    "redundant_working_ticks": {
+     "baseline": 262.9167,
+     "candidate": 255.8667
+    },
+    "releases_planned": {
+     "baseline": 0.0,
+     "candidate": 9.35
+    },
+    "replan_attempts": {
+     "baseline": 0.0,
+     "candidate": 9.3833
+    },
+    "accepted_reassignments": {
+     "baseline": 0.0,
+     "candidate": 2.8167
+    },
+    "replan_declined": {
+     "baseline": 0.0,
+     "candidate": 6.5667
+    },
+    "same_task_noop": {
+     "baseline": 0.0,
+     "candidate": 6.5667
+    },
+    "recommands": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "rejected_assignments": {
+     "baseline": 0.0,
+     "candidate": 0.0333
+    },
+    "executed_override_unjustified": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "longest_idle_streak": {
+     "baseline": 0.0,
+     "candidate": 0.0
+    },
+    "rescue_travel": {
+     "baseline": 7.012,
+     "candidate": 7.1002
+    }
+   },
+   "decision_milliseconds": {
+    "baseline": {
+     "mean": 0.134,
+     "p50": 0.045,
+     "p95": 0.382,
+     "p99": 1.112
+    },
+    "candidate": {
+     "mean": 0.186,
+     "p50": 0.044,
+     "p95": 0.65,
+     "p99": 1.424
+    }
+   },
+   "candidate_new_failures": [],
+   "candidate_rescued_targets": 2
+  }
+ }
+}

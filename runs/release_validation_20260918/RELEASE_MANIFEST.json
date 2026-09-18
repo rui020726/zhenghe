@@ -1,0 +1,236 @@
+{
+ "candidate_branch": "release/coalition-controller-validation",
+ "delivery_head": "3fcef636d6dfc1dca599877238bca4e4006fe81f",
+ "production_code_identical_to_test_execution_point": "1f4a598",
+ "key_commits": {
+  "stable_baseline": "868d68a",
+  "event_driven_dispatch": "df2255a",
+  "development_experiment_source": "6915d63",
+  "v1_delivery": "7e5ba3a",
+  "coverage_preserving_verdict": "fb1c85b",
+  "stress_freeze": "fd0dd76"
+ },
+ "models": {
+  "piloc_checkpoint": {
+   "path": "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth",
+   "sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33"
+  },
+  "ctde_checkpoint": {
+   "path": "runs/joint_eval_20260916/ctde_final_7_1.pth",
+   "sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  }
+ },
+ "arms": {
+  "baseline": {
+   "coordinator_policy": "coalition_planner",
+   "sticky_commitments": true,
+   "release_redundant_members": false,
+   "suppress_recommand_own_task": false
+  },
+  "candidate": {
+   "coordinator_policy": "coalition_planner",
+   "sticky_commitments": true,
+   "release_redundant_members": true,
+   "suppress_recommand_own_task": true
+  }
+ },
+ "shared_configuration": {
+  "steps": 1000,
+  "dt": 1.0,
+  "rescue_species": 3,
+  "rescue_per_species": 2,
+  "search_agents": 2,
+  "grid_size": 60,
+  "obstacle_density": 0.15,
+  "detection_radius": 5,
+  "residual_scale": 0.25,
+  "coordination_interval": 5,
+  "allocation_interval": 5,
+  "command_ttl": 10.0,
+  "comm_delivery_probability": 1.0,
+  "comm_delay_ticks": 0,
+  "comm_subscribers": "all",
+  "actor_kv_mode": "tokens",
+  "device": "cpu"
+ },
+ "trace_schema": "allocation-decision-trace/3",
+ "release_verdict_rule": "coverage-preserving-stage-requirement",
+ "seed_manifests": {
+  "runs/coalition_validation_20260918/ablation_seeds.json": {
+   "sha256": "9d9ed25a682ac7039dca72881af8420a144f6029ce43fe3ab89941a7df9daa50"
+  },
+  "runs/coalition_validation_20260918/HELDOUT_SEEDS.json": {
+   "sha256": "3926aaf0268379f72b1f02b89533a1d2dc1b4900e3a7200129875b7f512c222e"
+  },
+  "runs/coalition_validation_20260918/SYSTEM_SEEDS.json": {
+   "sha256": "496e7baf0529d075d4063da76935f8747f20c66e76dc7b245cbd387e8b8dbbc8"
+  },
+  "runs/release_validation_20260918/STRESS_SEEDS.json": {
+   "sha256": "fae160023b6bc7606a0e1a8ce6e17395144c0328aaaf9e76393caa803daec8a9"
+  }
+ },
+ "blocks": {
+  "development_failure_seeds": {
+   "role": "development",
+   "code": "6915d63",
+   "seed_manifest": {
+    "runs/dispatch_trigger_audit_20260918/CLOSED_LOOP_GATE.json": "2b68044cb4a1797f97da2e2a17ac90ac955f69cdde9c1e37d12e24ff9004b984"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/dispatch_trigger_audit_20260918/closedloop",
+     "present": true,
+     "files": 20,
+     "bytes": 24657146,
+     "fold_sha256": "c27a2804b7e7cd82bfe59ae21f9125cac50b0f4c65b24af3b2e02b6bb322c3ff"
+    }
+   ]
+  },
+  "development_ablation": {
+   "role": "development",
+   "code": "1f4a598",
+   "seed_manifest": {
+    "runs/coalition_validation_20260918/ablation_seeds.json": "9d9ed25a682ac7039dca72881af8420a144f6029ce43fe3ab89941a7df9daa50"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/coalition_validation_20260918/ablation",
+     "present": true,
+     "files": 180,
+     "bytes": 155527886,
+     "fold_sha256": "fa070705c8f59e8018309a3afeaea3fe48e297eb0bb4058c54a24062293c00ba"
+    }
+   ]
+  },
+  "paired_expansion": {
+   "role": "development",
+   "code": "6915d63",
+   "seed_manifest": {
+    "runs/dispatch_trigger_audit_20260918/paired/expansion.json": "bbaddaaa3fe05d854966d6f2c81cdcd899ceceac3b06cf4560fb9c60c12c011b"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/dispatch_trigger_audit_20260918/paired",
+     "present": true,
+     "files": 641,
+     "bytes": 816685545,
+     "fold_sha256": "45bdd8b03d033c73f55007b21ba37708437056a90d3bc44f4096d41e732a6444"
+    }
+   ]
+  },
+  "independent_replay_400": {
+   "role": "independent",
+   "code": "1f4a598",
+   "seed_manifest": {
+    "runs/coalition_validation_20260918/HELDOUT_SEEDS.json": "3926aaf0268379f72b1f02b89533a1d2dc1b4900e3a7200129875b7f512c222e"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/coalition_validation_20260918/heldout",
+     "present": true,
+     "files": 2400,
+     "bytes": 2077168902,
+     "fold_sha256": "2d538ee775ea820b793d708d46f0b94db4a048f740fd3c17e72f34c30c0cfae5"
+    },
+    {
+     "path": "runs/coalition_validation_20260918/streams",
+     "present": true,
+     "files": 400,
+     "bytes": 107325332,
+     "fold_sha256": "ac6a3495c6df726124f10dd7ea2e1f968d69851f3f424dd0bc379cf0fa84fdad"
+    }
+   ]
+  },
+  "live_system_loop_60": {
+   "role": "live-system",
+   "code": "1f4a598",
+   "seed_manifest": {
+    "runs/coalition_validation_20260918/SYSTEM_SEEDS.json": "496e7baf0529d075d4063da76935f8747f20c66e76dc7b245cbd387e8b8dbbc8"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/coalition_validation_20260918/systemloop",
+     "present": true,
+     "files": 360,
+     "bytes": 312779999,
+     "fold_sha256": "841bc9e8f74049ade97c606d03d6a732905b22a8466e94fc05e89d77e5f1b53b"
+    }
+   ]
+  },
+  "coverage_verdict_development_rerun": {
+   "role": "development",
+   "code": "fb1c85b",
+   "seed_manifest": {
+    "runs/coalition_validation_20260918/ablation_seeds.json": "9d9ed25a682ac7039dca72881af8420a144f6029ce43fe3ab89941a7df9daa50"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/release_validation_20260918/dev",
+     "present": true,
+     "files": 210,
+     "bytes": 181096194,
+     "fold_sha256": "0b77e961511b2671f09ec024a943251571f92bfa4abf196a267ca028f15d03b9"
+    }
+   ]
+  },
+  "provenance_scan": {
+   "role": "analysis",
+   "code": "7e5ba3a",
+   "seed_manifest": {
+    "runs/coalition_validation_20260918/ablation_seeds.json": "9d9ed25a682ac7039dca72881af8420a144f6029ce43fe3ab89941a7df9daa50"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/release_validation_20260918/provenance",
+     "present": true,
+     "files": 45,
+     "bytes": 43521532,
+     "fold_sha256": "dbb0f6ff503003a37e29dbf44aade347e31c6a32300d03ede956f53949bb9652"
+    }
+   ]
+  },
+  "stress_180": {
+   "role": "stress",
+   "code": "fd0dd76",
+   "seed_manifest": {
+    "runs/release_validation_20260918/STRESS_SEEDS.json": "fae160023b6bc7606a0e1a8ce6e17395144c0328aaaf9e76393caa803daec8a9"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/release_validation_20260918/stress",
+     "present": true,
+     "files": 1080,
+     "bytes": 941326670,
+     "fold_sha256": "dfda56914c93bd705cd7476eec5ddc2b082cc8d085372577c65a569e226834f7"
+    },
+    {
+     "path": "runs/release_validation_20260918/stress_streams",
+     "present": true,
+     "files": 207,
+     "bytes": 48813257,
+     "fold_sha256": "6441b7c2f4a58b1c26d1e95c2b51a5756826a1ed36e703b79fb16aac0e800fc5"
+    }
+   ]
+  },
+  "stress_release_safety_scan": {
+   "role": "analysis",
+   "code": "3fcef63",
+   "seed_manifest": {
+    "runs/release_validation_20260918/STRESS_SEEDS.json": "fae160023b6bc7606a0e1a8ce6e17395144c0328aaaf9e76393caa803daec8a9"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/release_validation_20260918/stress_safety",
+     "present": true,
+     "files": 540,
+     "bytes": 481714484,
+     "fold_sha256": "7a26dc87f48a1a06c4ae1f1f97c2780fedc0f4a26ffe3afcabed3c2890febcef"
+    }
+   ]
+  }
+ },
+ "raw_artefacts_in_git": false,
+ "retained_untracked_by_policy": [
+  "runs/coordinator_baselines_20260917/dev_summary.json"
+ ]
+}
