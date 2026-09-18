@@ -36,7 +36,7 @@ from integrated_sar.lifecycle_metrics import load_records  # noqa: E402
 import mechanism_ablation as ablation  # noqa: E402  (metric definitions are shared)
 import heldout_record  # noqa: E402
 
-FROZEN_COMMIT = "a167b3d"  # short; the preflight compares against the run's own full hash
+FROZEN_COMMIT = "e15050a"  # full: e15050a62d33a8261b1a6ecda25edaa60312df7b
 BASELINE = {"policy": "coalition_planner", "release": False, "suppress": False}
 CANDIDATE = {"policy": "coalition_planner", "release": True, "suppress": True}
 ARMS = {"baseline": BASELINE, "candidate": CANDIDATE}
@@ -132,14 +132,21 @@ def _instrument(run, counters: dict) -> None:
 
 def identity_check() -> int:
     """The all-off configuration must reproduce the committed binding arm, field by field."""
+    import dataclasses
     import tempfile
 
     ok = True
     for seed in DEV_SEEDS:
         with tempfile.TemporaryDirectory() as scratch:
-            configuration = configuration_for(seed, "baseline", REPO / "runs" / "coordinator_baselines_20260917" / "heldout" / "streams" / f"s{seed}.json")
-            configuration.output = str(Path(scratch) / "rp.jsonl")
-            configuration.decision_trace = str(Path(scratch) / "tr.jsonl")
+            configuration = dataclasses.replace(
+                configuration_for(
+                    seed,
+                    "baseline",
+                    REPO / "runs" / "coordinator_baselines_20260917" / "heldout" / "streams" / f"s{seed}.json",
+                ),
+                output=str(Path(scratch) / "rp.jsonl"),
+                decision_trace=str(Path(scratch) / "tr.jsonl"),
+            )
             run = build_joint_run(configuration)
             run.run()
             produced = [
