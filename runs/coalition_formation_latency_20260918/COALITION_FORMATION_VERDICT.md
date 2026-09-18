@@ -3,17 +3,21 @@
 **Verdict.** The binding planner's six remaining `candidate_ordering_error` expiries are
 **not** ordering failures, and the label was wrong. Five of the six delivered **all** of
 their work — whole-task progress 1.0 — and are reported expired only because the last
-tick of it landed 1.3-10.4 steps past the deadline. The sixth was never covered at all.
-Every one of the six had the detection letter in **every** robot's hands on the detection
+tick of it landed past the deadline (by 1.3, 2.4, 7.1, 10.4 and 85.9 steps; four are
+near-misses, one — 20003/target-1 — assembled 157 steps after detection and was never
+close). The sixth was never covered at all. Every one of the six had the detection letter
+in **every** robot's hands on the detection
 tick (`belief_spread = 0`), zero capable robots busy, zero coverage resets, and zero work
 thrown away. What separates them from the successes is **when the covering coalition
 finished assembling** — and, for two of them, how long the *next stage* waited after the
 previous one completed.
 
-Decision gate: counterfactuals A (earliest-belief dispatch) and B (synchronised arrival)
-each rescue 6/6; C (stage lease) and E (final-tick credit) rescue 0/6. The ordered gate
-therefore selects **Phase 10B, the assembly scheduler**. A and B are *analytic ceilings*,
-not measured policies — that caveat is load-bearing and is carried into the design below.
+Decision gate: the feasibility estimates A (earliest-belief dispatch) and B
+(synchronised arrival) are 6/6 potentially feasible; C (stage lease) and E (final-tick
+credit) are 0/6. The ordered gate therefore selects **Phase 10B, the assembly scheduler**.
+A and B are *analytical feasibility estimates*, not measured policies -- they bound what
+the information allowed, leave the effect on other targets unmeasured, and that caveat is
+load-bearing and is carried into the design below.
 
 ## 1. The environment's stage clock, pinned
 
@@ -100,33 +104,50 @@ failures. The failures differ in exactly one place: **arrival spread**. Controls
 in 1-71 steps; four of the six failures take 42-157. The failures are not worse at
 holding a coalition; they are worse at *forming* one.
 
-## 4. The five counterfactuals
+## 4. The five counterfactuals (analytical feasibility estimates)
 
 `counterfactuals.json`. Every one is computed from the recorded timelines plus the
 straight-line travel bound the offline attribution already uses; no simulator re-run.
+A, B and D never re-run the episode, so their effect on the other targets is
+**unmeasured** — the table reports feasibility only, and reports nothing as "net".
 
-| counterfactual | rescued | broken | net | gate | online-invisible | kind |
-|---|---|---|---|---|---|---|
-| A earliest-belief dispatch | 6/6 | 0 | +6 | **pass** | no | analytic ceiling |
-| B synchronised arrival | 6/6 | 0 | +6 | **pass** | no | analytic ceiling |
-| C stage-scoped lease | 0/6 | 0 | 0 | fail | no | — |
-| D instant communication | 6/6 | 0 | +6 | pass | **yes** | diagnostic only |
-| E deadline final-tick credit | 0/6 | 0 | 0 | fail | no | — |
+| counterfactual | potentially feasible | global effect | gate | online-invisible | kind |
+|---|---|---|---|---|---|
+| A earliest-belief dispatch | 6/6 | unmeasured | **pass** | no | analytical feasibility estimate |
+| B synchronised arrival | 6/6 | unmeasured | **pass** | no | analytical feasibility estimate |
+| C stage-scoped lease | 0/6 | — | fail | no | measured (no coverage to protect) |
+| D instant communication | 6/6 | unmeasured | pass | **yes** | diagnostic, delta-vs-A |
+| E deadline final-tick credit | 0/6 | — | fail | no | measured (ordering only) |
 
-* **A and B are ceilings, not measurements.** Both assume a perfect dispatcher sends the
-  minimal covering set at the earliest legal moment and that travel is the shortest
-  straight line. They bound what the *information* allowed. A measured policy must still
-  clear the small-scale gate on its own, and the fact that the ceiling is 6/6 does not mean
-  an implementable scheduler reaches 6/6.
+The outcome split the feasibility numbers have to be read against:
+
+| terminal state | targets |
+|---|---|
+| completed on time | none |
+| finished after deadline | 20003/target-1 (+85.9), 20008/target-2 (+10.4), 20052/target-3 (+1.3), 20070/target-2 (+2.4), 20083/target-4 (+7.1) |
+| never finished | 20003/target-0 (progress 0.0, shortfall 12.0 steps) |
+
+* **A and B are feasibility estimates, not measurements.** Both assume a perfect
+  dispatcher sends the minimal covering set at the earliest legal moment and that travel
+  is the shortest straight line. They bound what the *information* allowed. A measured
+  policy must still clear the closed-loop gate on its own, and the fact that feasibility
+  is 6/6 does not mean an implementable scheduler reaches 6/6 — the prototype's own gate
+  (section 6) is the demonstration of exactly that gap.
 * **B collapses into A here**, because the six never broke coverage: synchronising arrival
   can only help by preventing a break, and there was none.
 * **C is vacuous by measurement, not by assumption**: zero resets and zero lost work means
   a lease has nothing to protect. This is the strongest single result against the
   stage-lease hypothesis.
-* **D is a no-op**: the letters already arrived at detection, so instant communication
-  changes nothing. It is retained as a labelled diagnostic and must never enter an actor.
-* **E rescues nothing**: the overruns are 1.3, 2.4, 7.1, 10.4, 43.1 and 85.9 steps — only
-  one is even within a single tick, and that one (`20052/target-3`, 1.32) still exceeds it.
+* **D ≡ A here, and its communication-only delta is exactly 0.0 on all six.** A
+  dispatches the tick the last needed robot has the letter; with `belief_spread = 0` that
+  tick is already the detection tick, so "instant communication" changes nothing that
+  "earliest-belief dispatch" did not already assume. D's 6/6 is **inherited from A's
+  dispatch-timing assumption and must not be read as a communication gain**
+  (`communication_only_delta_steps: 0.0` per target in `counterfactuals.json`). It is
+  retained as a labelled diagnostic and must never enter an online actor.
+* **E rescues nothing**: the overruns are 1.3, 2.4, 7.1, 10.4 and 85.9 steps for the five
+  that finished late — none inside the one-tick boundary window — and the sixth never
+  finished, so reordering the deadline test cannot help it either.
 
 ## 5. Decision gate
 
@@ -160,15 +181,17 @@ overrides, zero rejected commands, zero deadlocks. The synchronisation term *is*
 candidates by far more than that. Per the brief's Phase 12 step 7 the batch evaluation is
 therefore not started.
 
-So the gate selects the *direction* on the strength of the counterfactual ceilings, and
-the prototype built for that direction does not clear its own gate. That is recorded as
-the outcome rather than as a partial success: the prototype is safe, inert by default and
-its planner is a usable component, but it does not rescue any of the six.
+So the gate selects the *direction* on the strength of the analytical feasibility
+estimates, and the prototype built for that direction does not clear its own gate. That is
+recorded as the outcome rather than as a partial success: the prototype is safe, inert by
+default and its planner is a usable component, but it does not rescue any of the six.
 
 ## 7. What this does not establish
 
-* **A and B are ceilings.** The gate is satisfied by bounds, not by a measured policy. The
-  prototype's own small-scale gate is the real test, and it is reported separately.
+* **A and B are analytical feasibility estimates.** The gate is satisfied by a bound on
+  what the information allowed, not by a measured policy, and the effect on the other
+  targets in the episode is unmeasured. The prototype's own small-scale gate is the real
+  test, and it is reported separately.
 * **The six are a residual class.** `candidate_ordering_error` fires when nothing else did;
   this analysis replaces that label with measured causes, but the *class totals* over the
   whole split are unchanged.

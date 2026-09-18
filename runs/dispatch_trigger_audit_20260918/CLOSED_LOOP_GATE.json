@@ -1,0 +1,545 @@
+{
+ "seeds": [
+  20003,
+  20008,
+  20052,
+  20070,
+  20083
+ ],
+ "baseline_policy": "coalition_planner",
+ "candidate_policy": "coalition_redundant_release",
+ "rescued": [
+  "20003/piloc-e1-target-1",
+  "20003/piloc-e1-target-0",
+  "20008/piloc-e1-target-2",
+  "20052/piloc-e1-target-3",
+  "20070/piloc-e1-target-2",
+  "20083/piloc-e1-target-4"
+ ],
+ "rescued_from_finished_after_deadline": [
+  "20003/piloc-e1-target-1",
+  "20008/piloc-e1-target-2",
+  "20052/piloc-e1-target-3",
+  "20070/piloc-e1-target-2",
+  "20083/piloc-e1-target-4"
+ ],
+ "new_failures": [],
+ "comparison": {
+  "completed": {
+   "baseline": 21.0,
+   "candidate": 30.0
+  },
+  "expired": {
+   "baseline": 8.0,
+   "candidate": 0.0
+  },
+  "coverage_resets": {
+   "baseline": 1.0,
+   "candidate": 0.0
+  },
+  "lost_work": {
+   "baseline": 1.2,
+   "candidate": 0.0
+  },
+  "executed_override_unjustified": {
+   "baseline": 0.0,
+   "candidate": 0.0
+  },
+  "rejected_assignments": {
+   "baseline": 0.0,
+   "candidate": 0.0
+  },
+  "recommands": {
+   "baseline": 0.0,
+   "candidate": 0.0
+  }
+ },
+ "max_longest_idle_streak": 0.0,
+ "gates": {
+  "no_new_execution_break": true,
+  "zero_invalid_commands": true,
+  "zero_deadlocks": true,
+  "no_new_failure": true,
+  "no_command_churn": true,
+  "rescued_at_least_3": true
+ },
+ "passed": true,
+ "rows": [
+  {
+   "seed": 20003,
+   "policy": "coalition_planner",
+   "completed": 1,
+   "expired": 4,
+   "status_counts": {
+    "detected": 1,
+    "expired": 4,
+    "completed": 1
+   },
+   "coverage_resets": 0,
+   "lost_work": 0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "recommands": 0,
+   "targets": {
+    "piloc-e1-target-5": {
+     "final_progress": 1.0,
+     "failure_reason": "Timeout",
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-4": {
+     "final_progress": 1.0,
+     "failure_reason": "deadline_expired",
+     "finished_after_deadline": true
+    },
+    "piloc-e1-target-1": {
+     "final_progress": 1.0,
+     "failure_reason": "deadline_expired",
+     "finished_after_deadline": true
+    },
+    "piloc-e1-target-0": {
+     "final_progress": 0.0,
+     "failure_reason": "deadline_expired",
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-2": {
+     "final_progress": 1.0,
+     "failure_reason": "deadline_expired",
+     "finished_after_deadline": true
+    },
+    "piloc-e1-target-3": {
+     "final_progress": 1.0,
+     "failure_reason": "deadline_expired",
+     "finished_after_deadline": true
+    }
+   }
+  },
+  {
+   "seed": 20003,
+   "policy": "coalition_redundant_release",
+   "completed": 6,
+   "expired": 0,
+   "status_counts": {
+    "completed": 6
+   },
+   "coverage_resets": 0,
+   "lost_work": 0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "recommands": 0,
+   "targets": {
+    "piloc-e1-target-5": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-4": {
+     "final_progress": 1.0,
+     "failure_reason": "Cannot contribute",
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-1": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-0": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-2": {
+     "final_progress": 1.0,
+     "failure_reason": "Cannot contribute",
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-3": {
+     "final_progress": 1.0,
+     "failure_reason": "Cannot contribute",
+     "finished_after_deadline": false
+    }
+   }
+  },
+  {
+   "seed": 20008,
+   "policy": "coalition_planner",
+   "completed": 5,
+   "expired": 1,
+   "status_counts": {
+    "completed": 5,
+    "expired": 1
+   },
+   "coverage_resets": 1,
+   "lost_work": 1.2,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "recommands": 0,
+   "targets": {
+    "piloc-e1-target-1": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-3": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-2": {
+     "final_progress": 1.0,
+     "failure_reason": "deadline_expired",
+     "finished_after_deadline": true
+    },
+    "piloc-e1-target-0": {
+     "final_progress": 1.0,
+     "failure_reason": "Timeout",
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-4": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-5": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    }
+   }
+  },
+  {
+   "seed": 20008,
+   "policy": "coalition_redundant_release",
+   "completed": 6,
+   "expired": 0,
+   "status_counts": {
+    "completed": 6
+   },
+   "coverage_resets": 0,
+   "lost_work": 0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "recommands": 0,
+   "targets": {
+    "piloc-e1-target-1": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-3": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-2": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-0": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-4": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-5": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    }
+   }
+  },
+  {
+   "seed": 20052,
+   "policy": "coalition_planner",
+   "completed": 5,
+   "expired": 1,
+   "status_counts": {
+    "completed": 5,
+    "expired": 1
+   },
+   "coverage_resets": 0,
+   "lost_work": 0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "recommands": 0,
+   "targets": {
+    "piloc-e1-target-1": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-2": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-0": {
+     "final_progress": 1.0,
+     "failure_reason": "Timeout",
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-3": {
+     "final_progress": 1.0,
+     "failure_reason": "deadline_expired",
+     "finished_after_deadline": true
+    },
+    "piloc-e1-target-5": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-4": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    }
+   }
+  },
+  {
+   "seed": 20052,
+   "policy": "coalition_redundant_release",
+   "completed": 6,
+   "expired": 0,
+   "status_counts": {
+    "completed": 6
+   },
+   "coverage_resets": 0,
+   "lost_work": 0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "recommands": 0,
+   "targets": {
+    "piloc-e1-target-1": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-2": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-0": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-3": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-5": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-4": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    }
+   }
+  },
+  {
+   "seed": 20070,
+   "policy": "coalition_planner",
+   "completed": 5,
+   "expired": 1,
+   "status_counts": {
+    "completed": 5,
+    "expired": 1
+   },
+   "coverage_resets": 0,
+   "lost_work": 0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "recommands": 0,
+   "targets": {
+    "piloc-e1-target-4": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-5": {
+     "final_progress": 1.0,
+     "failure_reason": "Timeout",
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-2": {
+     "final_progress": 1.0,
+     "failure_reason": "deadline_expired",
+     "finished_after_deadline": true
+    },
+    "piloc-e1-target-3": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-0": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-1": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    }
+   }
+  },
+  {
+   "seed": 20070,
+   "policy": "coalition_redundant_release",
+   "completed": 6,
+   "expired": 0,
+   "status_counts": {
+    "completed": 6
+   },
+   "coverage_resets": 0,
+   "lost_work": 0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "recommands": 0,
+   "targets": {
+    "piloc-e1-target-4": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-5": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-2": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-3": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-0": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-1": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    }
+   }
+  },
+  {
+   "seed": 20083,
+   "policy": "coalition_planner",
+   "completed": 5,
+   "expired": 1,
+   "status_counts": {
+    "completed": 5,
+    "expired": 1
+   },
+   "coverage_resets": 0,
+   "lost_work": 0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "recommands": 0,
+   "targets": {
+    "piloc-e1-target-2": {
+     "final_progress": 1.0,
+     "failure_reason": "Timeout",
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-3": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-5": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-0": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-4": {
+     "final_progress": 1.0,
+     "failure_reason": "deadline_expired",
+     "finished_after_deadline": true
+    },
+    "piloc-e1-target-1": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    }
+   }
+  },
+  {
+   "seed": 20083,
+   "policy": "coalition_redundant_release",
+   "completed": 6,
+   "expired": 0,
+   "status_counts": {
+    "completed": 6
+   },
+   "coverage_resets": 0,
+   "lost_work": 0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "recommands": 0,
+   "targets": {
+    "piloc-e1-target-2": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-3": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-5": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-0": {
+     "final_progress": 1.0,
+     "failure_reason": "Cannot contribute",
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-4": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    },
+    "piloc-e1-target-1": {
+     "final_progress": 1.0,
+     "failure_reason": null,
+     "finished_after_deadline": false
+    }
+   }
+  }
+ ]
+}

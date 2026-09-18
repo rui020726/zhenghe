@@ -6,8 +6,9 @@ brief's Phase 12 step 7 ("未通过则停止并归因"), the batch evaluation is
 result is recorded here instead.
 
 This is a negative result about a *specific bounded mechanism*, not about the diagnosis.
-The counterfactual ceilings in `COALITION_FORMATION_VERDICT.md` are unaffected: they say a
-perfect dispatcher could have saved 6/6, and this prototype is not a perfect dispatcher.
+The analytical feasibility estimates in `COALITION_FORMATION_VERDICT.md` are unaffected:
+they say completion in time was still possible in every one of the six, and this prototype
+is not the dispatcher that would realise that.
 
 ## The gate
 
@@ -31,7 +32,7 @@ Baseline `coalition_planner` (binding, sticky commitments) vs candidate
 
 | gate | result |
 |---|---|
-| rescued at least 3 | **FAIL** — net 0 |
+| rescued at least 3 (closed-loop, measured) | **FAIL** — net 0 |
 | no new execution break | pass — `executed_override_unjustified` 0 both arms |
 | zero invalid commands | pass — 0 rejected assignments |
 | zero deadlocks | pass — longest idle streak 0.0 (threshold 20) |

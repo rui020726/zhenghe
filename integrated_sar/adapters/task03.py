@@ -189,6 +189,7 @@ class Task03Adapter:
         seed: int | None = None,
         ctde_task_logit_offset: float = 0.0,
         binding_commitments: bool = False,
+        suppress_recommand_own_task: bool = False,
     ) -> None:
         self.env = env
         self.network = network
@@ -199,6 +200,12 @@ class Task03Adapter:
         # the advisory arm is what every earlier number was measured on, and binding a
         # commitment changes what the allocator commands.
         self.binding_commitments = bool(binding_commitments)
+        # Whether a replan-woke robot that re-picks the task it is already executing gets
+        # a command at all. Re-issuing one would restart its work clock for no change --
+        # the exact harm the commitment path's suppression exists to prevent -- so the
+        # redundant-member release turns this on to keep the working timeout armed as the
+        # natural next escape. Off by default: the baseline never reaches this branch.
+        self.suppress_recommand_own_task = bool(suppress_recommand_own_task)
         # Scalar calibration of the CTDE task/depot preference: a constant added to
         # every *legal task* logit before the coordinator residual, never to the
         # depot and never to a masked action. Zero by default, so a run that does
@@ -589,6 +596,17 @@ class Task03Adapter:
                 if kind == "task" and internal_task_id is not None
                 else None
             )
+            if (
+                not suppressed
+                and self.suppress_recommand_own_task
+                and external_task_id is not None
+                and external_task_id == agent.current_task
+            ):
+                # The decision re-picked the task this robot is already executing.
+                # Re-issuing the command would restart its work clock for no change,
+                # which is the same harm the commitment path's suppression prevents;
+                # the robot simply keeps working.
+                suppressed = True
             revision = self._command_revision(external_task_id, task_by_id)
             command_id = None
             if not suppressed:

@@ -87,6 +87,10 @@ class RunConfiguration:
     # keeps the commitment alive while the robot's own belief says the task is open. Off
     # by default, so the advisory arm stays what every earlier number was measured on.
     sticky_commitments: bool = False
+    # Whether the planner may re-decide a working robot whose own belief says its
+    # presence fills no slot on the stage it is on. Off by default; the flag only ever
+    # names a provably redundant robot, and only when the plan has somewhere else for it.
+    release_redundant_members: bool = False
     command_ttl: float = 10.0
     coordination_interval: int = 5
     allocation_interval: int = 5
@@ -213,12 +217,13 @@ class RunConfiguration:
             "coalition",
             "coalition_planner",
             "coalition_assembly_scheduler",
+            "coalition_redundant_release",
             "deadline_aware",
         }:
             raise ConfigurationError(
                 f"--coordinator must be 'heuristic', 'coalition', 'coalition_planner', "
-                f"'coalition_assembly_scheduler' or 'deadline_aware', got "
-                f"{self.coordinator_policy!r}"
+                f"'coalition_assembly_scheduler', 'coalition_redundant_release' or "
+                f"'deadline_aware', got {self.coordinator_policy!r}"
             )
         if self.sticky_commitments and not self.use_coordinator:
             raise ConfigurationError(
@@ -229,6 +234,17 @@ class RunConfiguration:
             raise ConfigurationError(
                 "--sticky-commitments binds coalition reservations, but --coordinator "
                 "heuristic never issues one; ask for --coordinator coalition_planner"
+            )
+        if self.release_redundant_members and self.coordinator_policy not in {
+            "coalition_planner",
+            "coalition_assembly_scheduler",
+            "coalition_redundant_release",
+        }:
+            raise ConfigurationError(
+                "--release-redundant-members re-decides working robots from the "
+                "coalition planner's reservations, but --coordinator "
+                f"{self.coordinator_policy} never issues one; ask for "
+                "--coordinator coalition_redundant_release"
             )
         if not self.use_coordinator and self.coordinator_policy != "heuristic":
             raise ConfigurationError(
@@ -287,7 +303,8 @@ def build_parser() -> argparse.ArgumentParser:
                              "0.0 keeps the uncalibrated behaviour")
     parser.add_argument("--coordinator", dest="coordinator_policy",
                         choices=("heuristic", "coalition", "coalition_planner",
-                                 "coalition_assembly_scheduler", "deadline_aware"),
+                                 "coalition_assembly_scheduler",
+                                 "coalition_redundant_release", "deadline_aware"),
                         default="heuristic",
                         help="residual policy: 'heuristic' scores how much of a task's whole "
                              "remaining requirement a robot covers, 'coalition' scores the share "
@@ -295,13 +312,20 @@ def build_parser() -> argparse.ArgumentParser:
                              "greedy set-cover of the free robots over each task's open "
                              "capability slots and publishes a commitment per selected robot, "
                              "'coalition_assembly_scheduler' adds an arrival-synchronising term "
-                             "on top of that plan so the covering set completes together")
+                             "on top of that plan so the covering set completes together, "
+                             "'coalition_redundant_release' may also re-decide a working robot "
+                             "whose own belief says it fills no slot on its stage")
     parser.add_argument("--sticky-commitments", dest="sticky_commitments",
                         action="store_true",
                         help="bind a coalition commitment while it stays valid: the "
                              "planner renews the commitment of a robot already on its "
                              "task, and the allocator does not silently send that robot "
                              "elsewhere or to the depot")
+    parser.add_argument("--release-redundant-members", dest="release_redundant_members",
+                        action="store_true",
+                        help="let the coalition planner re-decide a working robot whose own "
+                             "belief says it fills no slot on its current stage, and only "
+                             "when the plan has a different task for it")
     parser.add_argument("--command-ttl", type=float, default=10.0,
                         help="how long an assignment command stays valid, in global-clock units")
     parser.add_argument("--coordination-interval", type=int, default=5, help="steps between coordinator calls")
@@ -353,6 +377,7 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         ctde_task_logit_offset=float(args.ctde_task_logit_offset),
         coordinator_policy=str(args.coordinator_policy),
         sticky_commitments=bool(getattr(args, "sticky_commitments", False)),
+        release_redundant_members=bool(getattr(args, "release_redundant_members", False)),
         command_ttl=float(args.command_ttl),
         coordination_interval=int(args.coordination_interval),
         allocation_interval=int(args.allocation_interval),
@@ -780,6 +805,14 @@ def _build_coordinator(configuration: RunConfiguration) -> Any:
             renew_commitments=configuration.sticky_commitments,
             assembly_scheduling=True,
         )
+    if configuration.coordinator_policy == "coalition_redundant_release":
+        # The redundant-member release: the same planner, allowed to re-decide a working
+        # robot whose own belief says it fills no slot on its stage. Binding commitments
+        # stay on so the arm differs from the binding baseline in exactly one mechanism.
+        return CoalitionPlannerCoordinator(
+            renew_commitments=configuration.sticky_commitments,
+            release_redundant_members=True,
+        )
     if configuration.coordinator_policy == "deadline_aware":
         # The same-information oracle of the learnability gate: identical candidates and
         # slots, a different selection. Diagnostic, but a legal coordinator all the same.
@@ -835,6 +868,10 @@ def _build_task_side(
         seed=configuration.seed,
         ctde_task_logit_offset=configuration.ctde_task_logit_offset,
         binding_commitments=configuration.sticky_commitments,
+        suppress_recommand_own_task=bool(
+            configuration.release_redundant_members
+            or configuration.coordinator_policy == "coalition_redundant_release"
+        ),
     )
 
 

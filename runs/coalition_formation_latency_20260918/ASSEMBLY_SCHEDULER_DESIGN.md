@@ -76,8 +76,9 @@ serialisation, and the default-off identity.
 
 ## What this design does not claim
 
-* A and B are **analytic ceilings**, not measurements of this prototype. The prototype
-  must clear the small-scale gate on its own; `ASSEMBLY_GATE.md` records that result.
+* A and B are **analytical feasibility estimates**, not measurements of this prototype.
+  The prototype must clear the small-scale gate on its own; `ASSEMBLY_GATE.md` records
+  that result.
 * The two handoff failures are addressed only **indirectly**: the scheduler plans the first
   cover, and at a stage boundary the requirement changes and `task_update` releases the
   members whose abilities no longer contribute, so the next stage is re-planned from

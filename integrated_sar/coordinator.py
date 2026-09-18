@@ -527,6 +527,7 @@ class CoalitionPlannerCoordinator:
         commitment_weight: float = 0.35,
         renew_commitments: bool = False,
         assembly_scheduling: bool = False,
+        release_redundant_members: bool = False,
     ) -> None:
         if reservation_validity <= 0:
             raise ValueError("reservation_validity must be positive")
@@ -565,6 +566,16 @@ class CoalitionPlannerCoordinator:
         # for one task without overriding the covering decision itself.
         self.assembly_weight = 0.15
         self.sync_horizon = 50.0
+        # Whether a working robot whose own belief says its presence adds nothing to the
+        # stage it is on may be planned onto another task and re-decided this tick. The
+        # measured wall behind the six assembly failures: working robots carry
+        # need_decision=False, so neither the planner (free robots only) nor the allocator
+        # (eligible robots only) could ever touch them, and the only release was the
+        # environment's random 50-120-step working timeout. Off by default: the flag only
+        # ever names a robot that is provably redundant *in its own belief*, never a robot
+        # another member still needs.
+        self.release_redundant_members = bool(release_redundant_members)
+        self.redundant_releases = 0
         self._revision = 0
         self._reservations: dict[tuple[str, str], CoalitionReservation] = {}
         # Identity, not ordering: a fresh commitment takes the next number, a renewal keeps
@@ -576,6 +587,7 @@ class CoalitionPlannerCoordinator:
         self._revision = 0
         self._reservations.clear()
         self._commitment_counter = 0
+        self.redundant_releases = 0
 
     def _new_commitment_id(self) -> str:
         self._commitment_counter += 1
@@ -589,23 +601,40 @@ class CoalitionPlannerCoordinator:
 
         agent_task_bias: dict[tuple[str, str], float] = {}
         replan_agents: set[str] = set()
+        # Working robots whose own belief says they fill no slot on their current task.
+        # Consumed before ``_pair_biases`` rebinds its own duplicate count to the name.
+        redundant_now: set[str] = set()
         # The team's own plan: which robot is under orders for which task, and what
         # abilities that already puts on each task. Not a belief, and not a registry
-        # fact -- see the class docstring.
+        # fact -- see the class docstring. Built in one pass before the per-robot
+        # loop so a redundancy verdict sees the whole team, not the part of it that
+        # happened to be enumerated first.
         committed: dict[str, dict[str, tuple[float, ...]]] = defaultdict(dict)
+        for agent in state.agents:
+            if agent.current_task:
+                committed[agent.current_task][agent.agent_id] = tuple(
+                    float(value) for value in agent.abilities
+                )
         candidates: list[tuple[int, str, tuple[float, ...], tuple[AgentTaskBelief, ...]]] = []
         beliefs_by_key: dict[tuple[str, str], AgentTaskBelief] = {}
 
         for order, agent in enumerate(state.agents):
             abilities = tuple(float(value) for value in agent.abilities)
             if agent.current_task:
-                committed[agent.current_task][agent.agent_id] = abilities
                 if self._models_belief(agent):
                     # Only this robot's own belief can tell it its commitment ended;
                     # the registry closing a task is not a robot-visible fact.
                     belief = agent.belief_for(agent.current_task)
                     if belief is None or belief.finished:
                         replan_agents.add(agent.agent_id)
+                    elif (
+                        self.release_redundant_members
+                        and belief.deadline >= now
+                        and self._is_redundant(agent, belief, committed[agent.current_task])
+                    ):
+                        # Working, but by its own belief adding nothing the others
+                        # don't already add. Plannable again -- see the flag comment.
+                        redundant_now.add(agent.agent_id)
 
             known = agent.known_tasks
             usable: list[AgentTaskBelief] = []
@@ -626,10 +655,26 @@ class CoalitionPlannerCoordinator:
                 agent_task_bias[(agent.agent_id, task_id)] = self._priority(belief, now)
                 usable.append(belief)
 
-            if usable and self._is_free(agent):
+            if usable and (self._is_free(agent) or agent.agent_id in redundant_now):
                 candidates.append((order, agent.agent_id, abilities, tuple(usable)))
 
         reservations, planned = self._plan(agents, candidates, committed, now)
+        self.redundant_releases = 0
+        if redundant_now:
+            # A redundant member is re-decided only when the plan actually found it
+            # somewhere else to be: replanning it into the identical task would just
+            # re-issue the command it is already executing. Renewal already leaves it
+            # without a commitment (it claims no slot), so a planned task here is a
+            # different task by construction.
+            for agent_id in sorted(redundant_now):
+                current = agents[agent_id].current_task
+                if current and any(
+                    task_id != current
+                    for held_agent, task_id in reservations
+                    if held_agent == agent_id
+                ):
+                    replan_agents.add(agent_id)
+                    self.redundant_releases += 1
         if self.renew_commitments:
             for key, value in self._renew(agents, committed, beliefs_by_key, now).items():
                 reservations[key] = value
@@ -666,6 +711,7 @@ class CoalitionPlannerCoordinator:
                 "policy": "coalition-planner-v1-belief-only",
                 "planned_reservations": len(reservations),
                 "redundant_candidates": redundant,
+                "redundant_releases": self.redundant_releases,
                 "held_slot_indices": sorted(
                     held.ability_slot for held in reservations.values()
                 ),
@@ -1014,6 +1060,31 @@ class CoalitionPlannerCoordinator:
     @staticmethod
     def _is_free(agent: AgentSnapshot) -> bool:
         return agent.status in IDLE_STATUSES and not agent.current_task
+
+    @staticmethod
+    def _is_redundant(
+        agent: AgentSnapshot,
+        belief: AgentTaskBelief,
+        committed_for_task: Mapping[str, tuple[float, ...]],
+    ) -> bool:
+        """True when the robot's own belief says its presence fills no slot.
+
+        The believed remaining requirement minus what the *other* robots already
+        under orders for the task supply leaves no unit this robot can cover -- and
+        because the environment's stage clock drains at a flat rate regardless of
+        headcount, a robot that fills no unit cannot make the stage finish sooner
+        by staying. Both inputs are online-legal: the requirement comes from the
+        robot's own belief, the teammates' abilities from the coordinator's
+        snapshots of their own state -- never from the task registry.
+        """
+        return (
+            _claim_slot(
+                tuple(float(value) for value in belief.remaining_requirements),
+                _others(committed_for_task, agent.agent_id),
+                tuple(float(value) for value in agent.abilities),
+            )
+            is None
+        )
 
     @staticmethod
     def _models_belief(agent: AgentSnapshot) -> bool:

@@ -104,6 +104,8 @@ def arm_name(
         prefix = {
             "heuristic": "rs",
             "coalition_planner": "coalplan",
+            "coalition_assembly_scheduler": "coalasm",
+            "coalition_redundant_release": "coalredrel",
             "deadline_aware": "daw",
         }.get(coordinator_policy, "coal")
         label = f"{prefix}{residual_scale:g}"

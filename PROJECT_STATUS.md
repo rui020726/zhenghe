@@ -360,26 +360,59 @@
   `analysis/coalition-formation-latency`，证据见
   `runs/coalition_formation_latency_20260918/COALITION_FORMATION_VERDICT.md`）：
   - **六个"ordering failure"的标签是错的**。五个目标实际交付了**全部**工时（whole-task
-    progress 1.0），只是因为最后一 tick 落在截止线后 1.3–10.4 步而被记为 expired；第六个
-    （`20003/target-0`）从未获得完整覆盖。六个目标全部 `belief_spread = 0`（检测当 tick
-    每个机器人都已收到消息）、0 个可用机器人被占用、0 次覆盖重置、0 工时被丢弃。
+    progress 1.0），只是因为最后一 tick 落在截止线后被记为 expired——超时分别为 1.3、2.4、
+    7.1、10.4 与 85.9 步（四个是险些错过，`20003/target-1` 因 157 步才凑齐覆盖而从未接近）；
+    第六个（`20003/target-0`）从未获得完整覆盖。六个目标全部 `belief_spread = 0`（检测当
+    tick 每个机器人都已收到消息）、0 个可用机器人被占用、0 次覆盖重置、0 工时被丢弃。
   - **primary cause**：`arrival_desynchronised` ×3、`stage_transition_handoff` ×2、
     `planner_dispatch_late` ×1。两个是阶段交接失败（`20008/target-2` 阶段 1 完成后等 85 步、
     `20070/target-2` 等 66 步）。
-  - **反事实门槛**：A earliest-belief dispatch 与 B synchronised arrival 各 6/6（均为解析上界，
-    非实测策略），C stage-scoped lease 0/6（无覆盖可保护），E final-tick credit 0/6（超时
-    1.3–85.9 步），D instant communication 6/6（诊断上界，禁止进在线 actor）。按序门槛选中
-    10B assembly scheduler。
+  - **反事实门槛（A/B/D 为解析可行性估计，非实测策略；不重放模拟器，对其他目标的全局
+    影响未测量）**：A earliest-belief dispatch 与 B synchronised arrival 各 6/6
+    potentially feasible，C stage-scoped lease 0/6（无覆盖可保护），E final-tick credit
+    0/6（五个迟到者超时 1.3–85.9 步，无一落在单 tick 边界窗口内，从未完成者不适用）；
+    D instant communication 与 A 同公式同派发假设，在 `belief_spread = 0` 下通信-only
+    增量逐目标实测为 **0.0**，其 6/6 继承自 A 的派发时机假设，**不得记为通信收益**，
+    且禁止进在线 actor。按序门槛选中 10B assembly scheduler。
   - **原型 `coalition_assembly_scheduler`（默认关闭）小门禁未通过**：5 个 seed 上 baseline 与
     candidate 完全一致（completed 21、expired 8、reset 1、lost work 1.2，0 override、0 拒绝、
     0 死锁）。同步项**确实生效**（seed 20003 的 1085 条决策中 13 条 bias 被抬高恰好 0.0375），
-    但**未翻转任何选择**——分配器自身 logits 的间距远大于该有界项。因此按 Phase 12 第 7 步
-    停止，未跑批量评估。
+    但**未翻转任何选择**——分配器自身 logits 的间距远大于该有界项。这仅说明该原型未作用到
+    控制路径，训练是否可行暂缺充分依据；按 Phase 12 第 7 步停止，未跑批量评估。
   - **deadline tick 语义**已用 18 项测试钉死（`test_deadline_tick_semantics.py`）：覆盖中断时
     `time_left` 重置为**完整** stage 时长、只有已到场成员计入覆盖、多余成员不提速、stage 时长
     固定、deadline 用严格 `>`。发现一处真实 off-by-one（`task_update` 先判过期后结算工时，
     导致"恰在跨线 tick 完成"的任务被报成 expired），**仅记录未修复**。
   - 集成测试 476 项通过（2 项按设计跳过）。
+- 事件触发派发审计与冗余成员释放（基线同上，分支
+  `fix/event-driven-coalition-dispatch`，证据见
+  `runs/dispatch_trigger_audit_20260918/DISPATCH_TRIGGER_AUDIT.md`）：
+  - **首个阻塞点（逐 tick 实测，instrumentation-only 探针复跑并与已提交 trace 逐位核对：
+    5 seed 决策行与 final 全同）**：六个失败目标在缺口打开期间，能补齐且有 belief 的机器人
+    全部处于 working 态 `need_decision=False`——planner 只规划空闲机器人
+    （`coordinator.py` `_is_free`），allocator 跳过非 eligible（`task03.py:523`），唯一出口是
+    U(50,120) 随机工作超时。六个目标的 pre-deadline 缺口 tick 中 408/412 由
+    `capable_all_locked` 解释；belief/通信/能力/覆盖/承诺均被同一测量排除。
+    14 个匹配对照呈同样的锁死画像（757 tick），失败只是 deadline 更紧。
+  - **两个 stage handoff 案例（20008/t-2、20070/t-2）完整钉死**：阶段边界 keep 规则只要求
+    "任一能力重叠"，把对下一阶段零贡献的成员留在 working 态；20008 出现跨任务互锁
+    （target-2 需 dims 0/3 被 target-0 上的机器人占着，target-0 需 dim 4 被 target-2 上
+    两台冗余 dim-4 机器人占着），靠随机超时 85 步后才解锁。五个 seed 共测得
+    **2150 个零边际贡献工作 tick**（belief-only 可判定）。
+  - **证据文档修正**：A/B/D 反事实改为 analytical feasibility estimates（potentially
+    feasible / global_effect_unmeasured），D 与 A 同公式同派发假设、通信-only 增量逐目标
+    实测为 0.0；按 completed on time / finished after deadline / never finished / 边界语义
+    分列（旧文"超时 1.3–10.4 步"有误，实为 1.3–85.9）。
+  - **修复（默认关闭，单一开关）**：`--coordinator coalition_redundant_release`——自身 belief
+    判定对当前 stage 无可填单元的 working 成员可被重新规划，且仅当计划为其找到**不同**任务时
+    才进 replan；allocator 侧默认关闭地抑制"重选自己正在执行任务"的重复命令（否则会重置工作
+    时钟并解除超时武装，首跑实测 98 条 churn，抑制后为 0）。不触环境/通信/机队/checkpoint，
+    不绕 mask，不扩可见信息。15 项新测试（默认关恒等、仅冗余且有去处才释放、被需要成员永不
+    释放、重定向后承诺身份延续、确定性、mask/band 不变等），全套 **495 通过（2 跳过）**。
+  - **闭环小门禁全部通过**（5 失败 seed × 2 臂，同录制流，`CLOSED_LOOP_GATE.json`）：
+    completed 21→**30**（全部目标完成）、expired 8→**0**、reset 1→0、lost work 1.2→0、
+    0 override、0 拒绝、0 churn、0 死锁；**6/6 获救**（5 个从"迟到完成"变按时，
+    20003/target-0 从"从未覆盖"变按时完成），0 新增失败；baseline 逐目标复现 868d68a。
 
 ## 尚未完成
 
