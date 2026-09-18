@@ -187,7 +187,7 @@ def aggregate() -> int:
         for seed, row in values.items():
             if int(row["run_steps"]) != arms.STEPS:
                 problems.append(f"{label} s{seed}: steps={row['run_steps']}")
-            if row["code_commit"] != arms.freeze_commit():
+            if not arms.same_production(str(row["code_commit"])):
                 problems.append(f"{label} s{seed}: commit {row['code_commit']}")
     summary = {
         "seeds_scheduled": len(SEEDS),

@@ -62,11 +62,17 @@ TTL → 目的任务是否登记 → 目的 revision 是否相等 → **源任�
 
 （dev 精确值见 `GHOST_RECHECK_dev.json`；stress 见 `GHOST_RECHECK_stress.json`。）
 
+单位说明：**发布** = 协调器判定该机器人冗余并要求重决策（advice 带 provenance）；
+**执行** = 该命令通过边界、真的把它派去了另一个任务。一次发布不一定产生改派命令
+（重决策后仍选原任务时被 `suppress_recommand_own_task` 压掉）。上一轮
+`SOURCE_STAGE_RELEASE_AUDIT.md` 写的"0 of 118 executed"用的是较宽的"执行"（=本文的发布）；
+本轮把两数分开：stress 是 **118 发布 / 44 执行**。旧文档不改动，只在这里标明口径变化。
+
 是否长期占用：**没有观察到**。理由是三条一起看——(a) D 在两块的按时率与 C 完全相同
 （dev 90/90 vs 81/90、stress 131/131 vs 131/131），(b) 释放机制仍然在跑（stress 44 次执行），
-(c) `idle_robot_ticks` / `longest_idle_streak` 与 C 同级，被"下一阶段需要"留下的机器人是**继续在
-原任务工作**，不是空等。但要说清楚这只覆盖 32 个 episode 与 `num_goals=6/9` 的负载；
-独立块会把 `idle_robot_ticks`、恢复时间和拒绝数按 seed 配对再测一次。
+(c) 被"下一阶段需要"留下的机器人**继续在原来的任务上工作**，工时照常推进——拒绝释放的含义就是
+"哪儿也别去"，不是把它挂起。空等本身（`idle_robot_ticks`、`longest_idle_streak`、恢复 tick 数）
+在这 32 个 episode 上没有测，独立块按 seed 配对再测，届时若 D 的空等更长，这条结论就要改。
 
 `releases_without_future_information` 在两块的 32 个 episode 里都是 0：环境的
 `_future_requirements` 总会投递一个完整维向量（最后一阶段是全零），所以真实运行里

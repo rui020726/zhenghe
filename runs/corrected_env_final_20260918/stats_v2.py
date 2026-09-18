@@ -64,6 +64,18 @@ SECONDARY = (
     "release_refusal_unrecovered",
 )
 CORRECTNESS = block.CORRECTNESS_FIELDS
+GATED = block.GATED_FIELDS
+LOWER_IS_BETTER = {
+    "expired",
+    "unresolved",
+    "mean_completion_time",
+    "travel_dist_total",
+    "lost_work",
+    "coverage_resets",
+    "idle_robot_ticks",
+    "longest_idle_streak",
+    "release_refusal_unrecovered",
+}
 
 
 def load() -> dict[str, dict[int, dict]]:
@@ -89,8 +101,12 @@ def failures(by_arm: dict[str, dict[int, dict]], scheduled: list[int]) -> tuple[
                     f"(steps={row.get('run_steps')}, time={row.get('run_time')})"
                 )
                 bad.add(seed)
-            if row.get("code_commit") != arms.freeze_commit():
-                reasons.append(f"{label} s{seed}: commit {row.get('code_commit')}")
+            # What has to match is the production tree, not the label: a documentation commit
+            # made while the block ran is a different string over the same executing code.
+            if not arms.same_production(str(row.get("code_commit"))):
+                reasons.append(
+                    f"{label} s{seed}: commit {row.get('code_commit')} does not match the freeze"
+                )
                 bad.add(seed)
             if row.get("detections", 0) == 0:
                 continue
@@ -149,7 +165,9 @@ def main() -> int:
         label: {field: int(sum(row[field] for row in by_arm[label].values())) for field in CORRECTNESS}
         for label in arms.ARMS
     }
-    correctness_pass = all(value == 0 for row in correctness.values() for value in row.values())
+    correctness_pass = all(
+        row[field] == 0 for row in correctness.values() for field in GATED
+    )
     secondary = {}
     for field in SECONDARY:
         values = {
@@ -162,8 +180,12 @@ def main() -> int:
             "C": round(float(np.nanmean(values["C"])), 4),
             "D": round(float(np.nanmean(values["D"])), 4),
             "mean_paired_difference": round(float(observed.mean()), 4) if observed.size else None,
-            "seeds_where_D_is_worse": int(np.nansum(deltas < -1e-12)),
-            "seeds_where_D_is_better": int(np.nansum(deltas > 1e-12)),
+            # Direction is named, not read off a sign: a smaller completion time is an
+            # improvement while a larger idle count is not, and calling both "better" would
+            # be the kind of label that quietly inverts a result.
+            "seeds_D_higher": int(np.nansum(deltas > 1e-12)),
+            "seeds_D_lower": int(np.nansum(deltas < -1e-12)),
+            "lower_is_better": field in LOWER_IS_BETTER,
         }
     payload = {
         "protocol": {

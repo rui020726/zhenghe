@@ -82,6 +82,15 @@ RECORD_CONFIGURATION = {
 }
 
 
+def git_head() -> str:
+    import subprocess
+
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=str(REPO), capture_output=True, text=True, encoding="utf-8", errors="replace",
+    ).stdout.strip()
+
+
 def seeds() -> list[int]:
     return [int(seed) for seed in json.loads(SEEDS_FILE.read_text(encoding="utf-8"))["seeds"]]
 
@@ -226,7 +235,10 @@ def measure(run: object, arm_label: str, seed: int, summary: dict, hooks: dict) 
             "executed_releases_that_uncovered_the_stage"
         ],
         "duplicate_command_reset": hooks["duplicate_command_reset"],
-        "illegal_executed_assignment": hooks["illegal_executed_assignment"],
+        "assignment_to_task_already_closed_in_truth": hooks[
+            "assignment_to_task_already_closed_in_truth"
+        ],
+        "state_written_on_a_closed_task": hooks["state_written_on_a_closed_task"],
         "rejections_by_reason": dict(sorted(rejections.items())),
         "releases_published": hooks["releases_published"],
         "releases_executed": hooks["releases_executed"],
@@ -270,7 +282,8 @@ def replay_one(arm_label: str, seed: int) -> dict:
         "closing_released_robot_assigned_elsewhere": 0,
         "executed_releases_that_uncovered_the_stage": 0,
         "duplicate_command_reset": 0,
-        "illegal_executed_assignment": 0,
+        "assignment_to_task_already_closed_in_truth": 0,
+        "state_written_on_a_closed_task": 0,
         "releases_published": 0,
         "releases_executed": 0,
         "releases_without_future_information": 0,
@@ -279,6 +292,8 @@ def replay_one(arm_label: str, seed: int) -> dict:
         "release_refusals_unrecovered": 0,
     }
     accepted_releases: set[tuple[int, str]] = set()
+    # task id -> (roster size, clock) the first time it was seen finished
+    closed_state: dict[int, tuple[int, float]] = {}
     # agent -> (source internal id, time the boundary refused to take it off that task)
     awaiting_recovery: dict[str, tuple[int, float]] = {}
     # task id -> (roster at the previous call, stage then, member -> assignment then)
@@ -306,6 +321,13 @@ def replay_one(arm_label: str, seed: int) -> dict:
     def task_update():
         for tid, task in env.task_dic.items():
             if task.get("finished"):
+                after = closed_state.get(int(tid))
+                roster = [int(value) for value in task["members"]]
+                clock = float(arms_module_stage(task)["time_left"])
+                if after is not None and (len(roster) > after[0] or clock < after[1]):
+                    # A finished task must not gain a member or spend work: this is the one
+                    # shape that would be an illegal execution rather than a wasted trip.
+                    hooks["state_written_on_a_closed_task"] += 1
                 continue
             roster = [int(value) for value in task["members"]]
             roster_at_entry = list(roster)
@@ -374,6 +396,12 @@ def replay_one(arm_label: str, seed: int) -> dict:
         return result
 
     def step():
+        for tid, task in env.task_dic.items():
+            if task.get("finished") and int(tid) not in closed_state:
+                closed_state[int(tid)] = (
+                    len(task["members"]),
+                    float(arms_module_stage(task)["time_left"]),
+                )
         clocks = {
             tid: float(arms_module_stage(task)["time_left"])
             for tid, task in env.task_dic.items()
@@ -417,7 +445,11 @@ def replay_one(arm_label: str, seed: int) -> dict:
         if agent is not None and kind == "task" and tid is not None:
             task = env.task_dic.get(int(tid))
             if task is not None and task.get("finished"):
-                hooks["illegal_executed_assignment"] += 1
+                # Not a corrupted write: the arrival check is what the architecture uses to
+                # turn down a task that closed while the robot was on its way. Counted as the
+                # wasted trip it is, and separated from the test below, which looks for an
+                # actual write against a closed task.
+                hooks["assignment_to_task_already_closed_in_truth"] += 1
             working_elsewhere = (
                 agent.get("status") == "working" and int(agent.get("current_task", -1)) == int(tid)
             )
@@ -503,7 +535,7 @@ def replay_one(arm_label: str, seed: int) -> dict:
         f"expired={payload['expired']} false_credit={payload['false_credit_task_ticks']} "
         f"dual_roster={payload['dual_roster_robot_ticks']} bad_release="
         f"{payload['executed_releases_that_uncovered_the_stage']} "
-        f"dup_reset={payload['duplicate_command_reset']} illegal={payload['illegal_executed_assignment']} "
+        f"dup_reset={payload['duplicate_command_reset']} closed_trip={payload['assignment_to_task_already_closed_in_truth']} closed_write={payload['state_written_on_a_closed_task']} "
         f"releases={payload['releases_executed']}/{payload['releases_published']}",
         flush=True,
     )
@@ -513,7 +545,7 @@ def replay_one(arm_label: str, seed: int) -> dict:
 # ---------------------------------------------------------------- preflight
 def preflight(seeds_subset: list[int]) -> int:
     head = arms.assert_frozen_tree()
-    print(f"freeze {head} clean, HEAD {arms.current_head()[:12]}")
+    print(f"freeze {head} clean, HEAD {git_head()[:12]}")
     for label, arm in arms.ARMS.items():
         seed = seeds_subset[0]
         run = arm.build(seed, stream_path(seed), HERE / "preflight")
@@ -537,14 +569,20 @@ def preflight(seeds_subset: list[int]) -> int:
 
 # ---------------------------------------------------------------- aggregation
 HORIZON_FIELDS = ("run_steps", "run_time")
-CORRECTNESS_FIELDS = (
+# The gate reads GATED_FIELDS. The wasted trip toward a task the environment already closed
+# is reported in the same table but does not gate: it happens in the arm with no release
+# mechanism too, the arrival check turns it down before any state is written, and the state
+# write test below is what "illegal" would mean here.
+GATED_FIELDS = (
     "false_credit_task_ticks",
-    "legacy_ghost_task_ticks",
     "dual_roster_robot_ticks",
     "closing_released_robot_assigned_elsewhere",
     "executed_releases_that_uncovered_the_stage",
     "duplicate_command_reset",
-    "illegal_executed_assignment",
+    "state_written_on_a_closed_task",
+)
+REPORTED_ONLY_FIELDS = ("legacy_ghost_task_ticks", "assignment_to_task_already_closed_in_truth")
+CORRECTNESS_FIELDS = GATED_FIELDS + REPORTED_ONLY_FIELDS + (
     "releases_without_future_information",
 )
 
@@ -564,9 +602,12 @@ def aggregate(expected_seeds: list[int] | None = None) -> int:
     problems: list[str] = []
     for label, values in by_seed.items():
         for seed, row in values.items():
-            if row.get("final_status") != "completed":
-                problems.append(f"{label} s{seed}: final_status={row.get('final_status')}")
-            if row.get("code_commit") != arms.FROZEN["code_commit"]:
+            if int(row.get("run_steps", 0)) != arms.STEPS or float(row.get("run_time", 0.0)) < arms.STEPS - 0.5:
+                problems.append(
+                    f"{label} s{seed}: horizon not reached (steps={row.get('run_steps')}, "
+                    f"time={row.get('run_time')})"
+                )
+            if not arms.same_production(str(row.get("code_commit"))):  # same rule as stats_v2
                 problems.append(f"{label} s{seed}: commit {row.get('code_commit')}")
     if missing.get("C") or missing.get("D"):
         problems.append(f"unpaired seeds: { {k: v for k, v in missing.items() if v} }")

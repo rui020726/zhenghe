@@ -184,20 +184,28 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-_HEAD: str | None = None
+_SAME_PRODUCTION: dict[str, bool] = {}
 
 
-def current_head() -> str:
-    """The commit the artefacts must name. The freeze check is about the files, not this."""
-    global _HEAD
-    if _HEAD is None:
-        import subprocess
+def same_production(commit: str) -> bool:
+    """Does a commit's production tree match the freeze? That is the only identity that matters.
 
-        _HEAD = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
+    Compared by content rather than by a HEAD string: a documentation or test commit landing
+    while a block runs changes HEAD, and an artefact built either side of it would otherwise
+    disagree with the harness about which commit it came from.
+    """
+    import subprocess
+
+    if commit not in _SAME_PRODUCTION:
+        result = subprocess.run(
+            [
+                "git", "diff", "--quiet", commit, freeze_commit(), "--",
+                "integrated_sar", "task_allocation", ":(exclude)integrated_sar/tests",
+            ],
             cwd=str(REPO), capture_output=True, text=True, encoding="utf-8", errors="replace",
-        ).stdout.strip()
-    return _HEAD
+        )
+        _SAME_PRODUCTION[commit] = result.returncode == 0
+    return _SAME_PRODUCTION[commit]
 
 
 def unwrapped_coordinator(run: Any) -> CoalitionPlannerCoordinator:
@@ -265,10 +273,10 @@ def assert_built(run: Any, arm: Arm) -> None:
             f"arm {arm.label}: the source check needs both the stage and the roster callback"
         )
     signature = run.run_signature
-    if signature.get("code_commit") != current_head():
+    if not same_production(str(signature.get("code_commit"))):
         raise AssertionError(
-            f"arm {arm.label}: the artefact names {signature.get('code_commit')!r} but the "
-            f"tree it was built from is {current_head()!r}"
+            f"arm {arm.label}: the artefact names {signature.get('code_commit')!r}, whose "
+            f"production tree is not the frozen {freeze_commit()!r}"
         )
     for suffix in expects["arm_suffixes"]:
         if suffix not in signature["arm"]:

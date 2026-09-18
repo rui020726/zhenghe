@@ -1,0 +1,200 @@
+{
+ "protocol": {
+  "primary_metric": "per-seed paired difference in on_time_rate (D minus C)",
+  "bootstrap_resamples": 10000,
+  "bootstrap_rng_seed": 20260918,
+  "interval": "percentile 95 %, one primary metric, no multiplicity adjustment",
+  "zero_detection_rule": "excluded from the paired set when neither arm detected a target",
+  "technical_failure_rule": "excluded and listed: unfinished, commit or stream mismatch, or missing artefact",
+  "ceiling_rule": "both arms completing every detected target is a difference of zero, kept",
+  "correctness_gate": "any non-zero correctness count fails the block regardless of performance"
+ },
+ "scheduled_seeds": 400,
+ "episodes": {
+  "C": 400,
+  "D": 400
+ },
+ "paired_seeds": 400,
+ "excluded_seeds": 0,
+ "exclusion_reasons": [],
+ "totals": {
+  "C": {
+   "detections": 2346,
+   "on_time": 2303,
+   "expired_targets": 43,
+   "unresolved_targets": 0
+  },
+  "D": {
+   "detections": 2346,
+   "on_time": 2341,
+   "expired_targets": 5,
+   "unresolved_targets": 0
+  }
+ },
+ "primary": {
+  "mean_difference": 0.016125,
+  "ci95": [
+   0.00925,
+   0.023959
+  ],
+  "seeds_d_better": 25,
+  "seeds_d_worse": 1,
+  "seeds_discordant": 26,
+  "seeds_both_at_ceiling": 373,
+  "share_of_paired_seeds": 0.065
+ },
+ "correctness": {
+  "C": {
+   "false_credit_task_ticks": 0,
+   "legacy_ghost_task_ticks": 15,
+   "dual_roster_robot_ticks": 0,
+   "closing_released_robot_assigned_elsewhere": 0,
+   "executed_releases_that_uncovered_the_stage": 0,
+   "duplicate_command_reset": 0,
+   "illegal_executed_assignment": 4,
+   "releases_without_future_information": 0
+  },
+  "D": {
+   "false_credit_task_ticks": 0,
+   "legacy_ghost_task_ticks": 2,
+   "dual_roster_robot_ticks": 0,
+   "closing_released_robot_assigned_elsewhere": 0,
+   "executed_releases_that_uncovered_the_stage": 0,
+   "duplicate_command_reset": 0,
+   "illegal_executed_assignment": 6,
+   "releases_without_future_information": 0
+  }
+ },
+ "correctness_gate_pass": false,
+ "candidate_new_failures": [
+  {
+   "seed": 500168,
+   "C": 1.0,
+   "D": 0.833333,
+   "D_expired": 1,
+   "D_unresolved": 0,
+   "D_releases_executed": 4
+  }
+ ],
+ "secondary_descriptive": {
+  "on_time": {
+   "C": 5.7575,
+   "D": 5.8525,
+   "mean_paired_difference": 0.095,
+   "seeds_where_D_is_worse": 1,
+   "seeds_where_D_is_better": 25
+  },
+  "detections": {
+   "C": 5.865,
+   "D": 5.865,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "expired": {
+   "C": 0.0975,
+   "D": 0.0125,
+   "mean_paired_difference": -0.085,
+   "seeds_where_D_is_worse": 24,
+   "seeds_where_D_is_better": 1
+  },
+  "deadline_expired_targets": {
+   "C": 0.1075,
+   "D": 0.0125,
+   "mean_paired_difference": -0.095,
+   "seeds_where_D_is_worse": 25,
+   "seeds_where_D_is_better": 1
+  },
+  "unresolved": {
+   "C": 0.0,
+   "D": 0.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "completed_env_tasks": {
+   "C": 5.7575,
+   "D": 5.8525,
+   "mean_paired_difference": 0.095,
+   "seeds_where_D_is_worse": 1,
+   "seeds_where_D_is_better": 25
+  },
+  "mean_completion_time": {
+   "C": 104.4725,
+   "D": 98.3875,
+   "mean_paired_difference": -6.0849,
+   "seeds_where_D_is_worse": 312,
+   "seeds_where_D_is_better": 19
+  },
+  "travel_dist_total": {
+   "C": 5.5867,
+   "D": 5.5172,
+   "mean_paired_difference": -0.0695,
+   "seeds_where_D_is_worse": 182,
+   "seeds_where_D_is_better": 137
+  },
+  "lost_work": {
+   "C": 0.176,
+   "D": 0.0193,
+   "mean_paired_difference": -0.1567,
+   "seeds_where_D_is_worse": 12,
+   "seeds_where_D_is_better": 0
+  },
+  "coverage_resets": {
+   "C": 0.0375,
+   "D": 0.005,
+   "mean_paired_difference": -0.0325,
+   "seeds_where_D_is_worse": 12,
+   "seeds_where_D_is_better": 0
+  },
+  "idle_robot_ticks": {
+   "C": 4419.245,
+   "D": 4479.0975,
+   "mean_paired_difference": 59.8525,
+   "seeds_where_D_is_worse": 15,
+   "seeds_where_D_is_better": 283
+  },
+  "longest_idle_streak": {
+   "C": 0.0,
+   "D": 0.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  },
+  "replan_decisions": {
+   "C": 0.0125,
+   "D": 6.945,
+   "mean_paired_difference": 6.9325,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 353
+  },
+  "releases_published": {
+   "C": 0.0,
+   "D": 6.9225,
+   "mean_paired_difference": 6.9225,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 353
+  },
+  "releases_executed": {
+   "C": 0.0,
+   "D": 2.585,
+   "mean_paired_difference": 2.585,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 351
+  },
+  "release_refusal_recovered": {
+   "C": 0.0,
+   "D": 0.0325,
+   "mean_paired_difference": 0.0325,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 12
+  },
+  "release_refusal_unrecovered": {
+   "C": 0.0,
+   "D": 0.0,
+   "mean_paired_difference": 0.0,
+   "seeds_where_D_is_worse": 0,
+   "seeds_where_D_is_better": 0
+  }
+ }
+}

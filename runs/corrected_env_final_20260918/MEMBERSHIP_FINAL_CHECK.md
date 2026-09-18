@@ -69,14 +69,16 @@ A 类（瞬时名单不一致但未用于工时）在这个 episode 里也不成
 任务工作的机器人）在 C 与 D 上全部满足，计数为 0；旧环境 B 上三条都不满足。
 A 与 C 逐列相同，说明环境修复没有改动 baseline 的任何结局。
 
-## 三、checkpoint 结论（本轮唯一措辞）
+## 三、checkpoint 结论
 
-> **现有 PILOC / CTDE checkpoint 在修正环境下的开发回放已验证；独立泛化表现待测。**
+> **修正环境下的开发回放已验证；独立泛化表现随后在同一修正环境、400 个未使用 seed 上完成测量
+> （见 `CORRECTED_ENV_HELDOUT_VERDICT.md`）；在线搜索链路上的 60 seed 块对该难度没有可分辨信号
+> （见 `CORRECTED_ENV_SYSTEM_VERDICT.md`）。**
 
-本轮没有训练、没有改权重、没有动 checkpoint 文件；`runs/*/checkpoint` 与
-`shared_mappo_model_21_3100.pth`、`ctde_final_7_1.pth` 的 SHA 见 `RELEASE_MANIFEST_V2.json`。
-开发回放覆盖 15 + 17 个 episode（含 5 个旧失败 seed 与 19 事件所在 seed）；这是定位与
-门槛验证，不是泛化声明。独立块见 `CORRECTED_ENV_HELDOUT_PROTOCOL.md`。
+本轮没有训练、没有改权重、没有动 checkpoint 文件；`shared_mappo_model_21_3100.pth` 与
+`ctde_final_7_1.pth` 的 SHA256 记在 `ARMS_CONFIG_TRUTH.json` 与 `RELEASE_MANIFEST_V2.json`。
+开发块覆盖 15 + 17 个 episode（含 5 个旧失败 seed 与 19 事件所在 seed）——那是定位与门槛验证，
+不是泛化声明；泛化声明只属于那 400 个未使用 seed 的配对块。
 
 ## 四、本轮生产变更（全部默认关闭）
 
@@ -90,5 +92,19 @@ A 与 C 逐列相同，说明环境修复没有改动 baseline 的任何结局�
 
 测试：`integrated_sar/tests/test_release_execution_boundary.py`（13 项，六场景各一，含
 "没有 roster 回调时行为与旧 gate 完全一致"），`test_redundant_release.py`、
-`test_release_source_gate.py`、`test_coalition_reservation_metrics.py` 相应补钉。
-全量测试与 smoke 见本文末"验证"。
+`test_release_source_gate.py`、`test_coalition_reservation_metrics.py` 相应补钉；
+环境侧新增两条方向相反的钉：修正环境下"已结束的任务不会把手指到别的任务上的机器人拽回来"
+（`test_a_closing_task_does_not_release_a_robot_working_on_another`），以及旧记法下这个伤害
+确实发生（`test_the_old_bookkeeping_let_a_closing_task_reach_back_for_the_robot`）。两条都
+把等待长度控制在随机工作超时与新任务自身工时都够不着的范围内，免得断言变成对时钟的断言。
+全量测试与 smoke 见"验证"一节末尾。
+
+## 五、验证
+
+* 全量测试 **551 通过（2 跳过）**（`python -m unittest discover -s integrated_sar/tests`）。
+* smoke `python -m integrated_sar` → `final_status=completed`。
+* 独立块与在线块的技术完整性：800 + 120 个 episode，0 技术失败，配对 stream 摘要逐 seed 一致，
+  构造断言在每一次构建时执行（`--preflight` 输出记在 `PREFLIGHT_smoke.txt`）。
+* 默认开关不变：`coordinator_policy`、`sticky_commitments`、`release_redundant_members`、
+  `suppress_recommand_own_task`、`check_release_source_stage`、`task_membership_consistency`
+  仍全部默认关闭；未合并、未重训、未删除任何旧产物。
