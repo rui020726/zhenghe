@@ -19,6 +19,7 @@ a rerun skips what is already there.
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -119,7 +120,7 @@ def run_arm(seed: int, arm: str) -> dict:
     metrics = measure(seed, arm, rp, trace, summary, counters)
     part = summary_path.with_suffix(".json.part")
     part.write_text(json.dumps(metrics, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    part.rename(summary_path)
+    os.replace(part, summary_path)
     return metrics
 
 

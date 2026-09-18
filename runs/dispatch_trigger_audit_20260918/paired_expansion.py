@@ -19,6 +19,7 @@ completion; nothing of an earlier signature is mixed in.
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -104,8 +105,7 @@ def worker(shard: int, total: int) -> int:
         if rp.exists():
             continue
         part = rp.with_suffix(".jsonl.part")
-        done = run_one(split_name, seed, policy, tag)
-        done.rename(rp)
+        run_one(split_name, seed, policy, tag)
         print(f"[worker {shard}] {index + 1}/{len(mine)} {split_name} {tag} s{seed}", flush=True)
     return 0
 
@@ -242,7 +242,7 @@ def main(argv: list[str]) -> int:
     OUT.parent.mkdir(parents=True, exist_ok=True)
     part = OUT.with_suffix(".json.part")
     part.write_text(json.dumps(payload, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    part.rename(OUT)
+    os.replace(part, OUT)
     for split_name, block in payload["splits"].items():
         print(
             f"{split_name}: baseline {block['totals']['baseline']['completed']}completed/"

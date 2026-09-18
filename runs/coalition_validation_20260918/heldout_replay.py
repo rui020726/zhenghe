@@ -51,7 +51,7 @@ from integrated_sar.lifecycle_metrics import load_records  # noqa: E402
 import mechanism_ablation as ablation  # noqa: E402  (metric definitions are shared)
 import heldout_record  # noqa: E402
 
-FROZEN_COMMIT = "1bd4a57"  # full: 1bd4a573ce7dd1150ef0ef9a5898ec1f86ed11f4
+FROZEN_COMMIT = "304fc60"  # full: 304fc6044218f8032d708cbef0f19cf640dc4add
 BASELINE = {"policy": "coalition_planner", "release": False, "suppress": False}
 CANDIDATE = {"policy": "coalition_planner", "release": True, "suppress": True}
 ARMS = {"baseline": BASELINE, "candidate": CANDIDATE}
@@ -114,7 +114,7 @@ def run_pair(seed: int, arm: str, stream: Path) -> dict:
     metrics["stream_sha256"] = heldout_record.sha256(stream)
     part = (OUT / f"{arm}_s{seed}.json").with_suffix(".json.part")
     part.write_text(json.dumps(metrics, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    part.rename(OUT / f"{arm}_s{seed}.json")
+    os.replace(part, OUT / f"{arm}_s{seed}.json")
     return metrics
 
 

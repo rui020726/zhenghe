@@ -105,7 +105,7 @@ def main(argv: list[str]) -> int:
             # the aggregate step merges them.
             part = own_path.with_suffix(".json.part")
             part.write_text(json.dumps(own, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-            part.rename(own_path)
+            os.replace(part, own_path)
             print(f"[worker {index}] s{seed}: {own[str(seed)]['detections']} detections", flush=True)
         return 0
 
