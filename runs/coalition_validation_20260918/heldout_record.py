@@ -44,6 +44,7 @@ def sha256(path: Path) -> str:
 
 def record_one(seed: int) -> dict:
     STREAMS.mkdir(parents=True, exist_ok=True)
+    (HERE / "record_logs").mkdir(parents=True, exist_ok=True)
     stream = STREAMS / f"s{seed}.json"
     configuration = RunConfiguration(
         seed=seed,
