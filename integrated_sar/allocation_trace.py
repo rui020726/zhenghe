@@ -89,6 +89,7 @@ def arm_name(
     binding_commitments: bool = False,
     release_redundant_members: bool = False,
     suppress_recommand_own_task: bool = False,
+    check_release_source_stage: bool = False,
 ) -> str:
     """The arm label shared with the ``rp_<arm>_s<seed>.jsonl`` lifecycle logs.
 
@@ -124,6 +125,10 @@ def arm_name(
         label = f"{label}+redrel"
     if suppress_recommand_own_task:
         label = f"{label}+noself"
+    if check_release_source_stage:
+        # The same reasoning as the suffixes above: refusing a release whose source stage
+        # has moved changes which commands execute, so it cannot share an arm label.
+        label = f"{label}+srccheck"
     return label
 
 
@@ -158,6 +163,9 @@ def trace_meta(
                 getattr(configuration, "suppress_recommand_own_task", False)
                 or getattr(configuration, "coordinator_policy", "") == "coalition_redundant_release"
             ),
+            check_release_source_stage=bool(
+                getattr(configuration, "check_release_source_stage", False)
+            ),
         ),
         "coordinator_policy": str(
             getattr(configuration, "coordinator_policy", "heuristic")
@@ -175,6 +183,12 @@ def trace_meta(
         ),
         "suppress_recommand_own_task": bool(
             getattr(configuration, "suppress_recommand_own_task", False)
+        ),
+        "check_release_source_stage": bool(
+            getattr(configuration, "check_release_source_stage", False)
+        ),
+        "task_membership_consistency": bool(
+            getattr(configuration, "task_membership_consistency", False)
         ),
         # The rule, not just the switch: the flag has carried two different redundancy
         # tests, and an artefact that cannot say which one ran cannot be compared with

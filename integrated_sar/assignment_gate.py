@@ -26,16 +26,25 @@ class RejectedAssignment:
     current_revision: int | None
     reason: str
     rejected_at: float
+    # Which task the refused command was leaving, when the refusal was about the release
+    # rather than the destination. None for every pre-existing reason.
+    release_from_task: str | None = None
 
 
 class AssignmentGate:
     """
-    Executor decorator that enforces command TTL and task-revision consistency.
+    Executor decorator that enforces command TTL, destination freshness and release safety.
 
     ``TaskRegistry`` is the only source of truth, so a command stamped with an older
     revision describes a task that has since changed. Applying it would let a stale
     decision overwrite newer state, so the gate drops it and asks for a replan
     instead of executing it.
+
+    A release has a second end to check. The advice that moved a robot off the task it was
+    working decided that was safe against a *stage*; if that task has moved on in the
+    meantime, the judgement describes a state that no longer exists, so the command is
+    dropped rather than quietly upgraded to the newer revision. The robot keeps the work it
+    had, which is the conservative outcome the planner itself cannot see.
     """
 
     def __init__(
@@ -44,10 +53,14 @@ class AssignmentGate:
         *,
         clock: GlobalClock,
         revision_of: Callable[[str], int | None],
+        release_state_of: Callable[[str], tuple[int, int] | None] | None = None,
     ) -> None:
         self.executor = executor
         self.clock = clock
         self.revision_of = revision_of
+        # Supplied only when the wiring can report a task's live stage and revision; the
+        # gate stays exactly as strict without it.
+        self.release_state_of = release_state_of
         self.pending_replan: set[str] = set()
         self._rejections: list[RejectedAssignment] = []
 
@@ -55,7 +68,7 @@ class AssignmentGate:
         now = self.clock.now
         accepted: list[AssignmentCommand] = []
         for command in commands:
-            reason, current_revision = self._inspect(command, now)
+            reason, current_revision, release_from = self._inspect(command, now)
             if reason is None:
                 accepted.append(command)
                 continue
@@ -70,6 +83,7 @@ class AssignmentGate:
                     current_revision=current_revision,
                     reason=reason,
                     rejected_at=now,
+                    release_from_task=release_from,
                 )
             )
             self.pending_replan.add(command.agent_id)
@@ -104,20 +118,34 @@ class AssignmentGate:
 
     def _inspect(
         self, command: AssignmentCommand, now: float
-    ) -> tuple[str | None, int | None]:
+    ) -> tuple[str | None, int | None, str | None]:
         if command.valid_until < now:
-            return "expired_command", None
+            return "expired_command", None, None
         if command.task_id is None:
-            return None, None
+            return None, None, None
 
         current_revision = self.revision_of(command.task_id)
         if current_revision is None:
-            return "unknown_task", None
+            return "unknown_task", None, None
         if command.task_revision is None:
-            return "missing_task_revision", current_revision
+            return "missing_task_revision", current_revision, None
         if command.task_revision != current_revision:
-            return "stale_task_revision", current_revision
-        return None, current_revision
+            return "stale_task_revision", current_revision, None
+
+        metadata = command.metadata or {}
+        source = metadata.get("release_from_task")
+        if source and self.release_state_of is not None:
+            state = self.release_state_of(str(source))
+            if state is not None:
+                stage_now, revision_now = state
+                # The planner judged the release against a stage of the source task. If
+                # that stage has advanced, the coverage the judgement relied on is gone,
+                # and a newer revision means the same thing about any other move on it.
+                if int(metadata.get("release_stage_index", stage_now)) != int(stage_now):
+                    return "stale_release_stage", revision_now, str(source)
+                if int(metadata.get("release_revision", revision_now)) != int(revision_now):
+                    return "stale_release_revision", revision_now, str(source)
+        return None, current_revision, None
 
 
 class ReplanCoordinator:

@@ -15,6 +15,7 @@ from .contracts import (
     CoalitionReservation,
     CoordinationAdvice,
     CoordinatorInput,
+    ReleaseProvenance,
     WorldPosition,
 )
 
@@ -693,6 +694,7 @@ class CoalitionPlannerCoordinator:
 
         reservations, planned = self._plan(agents, candidates, committed, now)
         self.redundant_releases = 0
+        releases: dict[str, ReleaseProvenance] = {}
         if redundant_now:
             # A redundant member is re-decided only when the plan actually found it
             # somewhere else to be: replanning it into the identical task would just
@@ -708,6 +710,16 @@ class CoalitionPlannerCoordinator:
                 ):
                     replan_agents.add(agent_id)
                     self.redundant_releases += 1
+                    believed = release_checks[agent_id]
+                    # What this robot believed about the task it is leaving, at the moment
+                    # of deciding. The gate compares it against the task as it is when the
+                    # command arrives; a stage that moved in between invalidates the
+                    # release rather than being quietly followed.
+                    releases[agent_id] = ReleaseProvenance(
+                        task_id=str(current),
+                        stage_index=int(believed.stage_index),
+                        revision=int(believed.revision),
+                    )
         if self.renew_commitments:
             for key, value in self._renew(agents, committed, beliefs_by_key, now).items():
                 reservations[key] = value
@@ -740,6 +752,7 @@ class CoalitionPlannerCoordinator:
             pair_bias=pair_bias,
             replan_agents=frozenset(replan_agents),
             reservations=dict(reservations),
+            releases=dict(releases),
             metadata={
                 "policy": "coalition-planner-v1-belief-only",
                 "planned_reservations": len(reservations),

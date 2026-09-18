@@ -57,11 +57,13 @@ FAILURE_SEEDS = [20003, 20008, 20052, 20070, 20083]
 CONTROL_SEEDS = [20000, 20010, 20020, 20030, 20040, 20050, 20060, 20080, 20090, 20001]
 DEV_STREAMS = REPO / "runs" / "coordinator_baselines_20260917" / "heldout" / "streams"
 # Cells: which environment bookkeeping, which controller.
+# D is the candidate with its release gated on the source stage as well, so a release
+# judged against a stage that has already moved on is refused instead of executed.
 CELLS = {
-    "A": {"arm": "baseline", "membership_fix": False},
-    "B": {"arm": "candidate", "membership_fix": False},
-    "C": {"arm": "baseline", "membership_fix": True},
-    "D": {"arm": "candidate", "membership_fix": True},
+    "A": {"arm": "baseline", "membership_fix": False, "source_check": False},
+    "B": {"arm": "candidate", "membership_fix": False, "source_check": False},
+    "C": {"arm": "baseline", "membership_fix": True, "source_check": False},
+    "D": {"arm": "candidate", "membership_fix": True, "source_check": True},
 }
 
 
@@ -105,6 +107,8 @@ def configuration_for(cell: str, seed: int, stream: Path, scenario: str, directo
     configuration = replace(configuration, **overrides)
     if spec["membership_fix"]:
         configuration = replace(configuration, task_membership_consistency=True)
+    if spec["source_check"]:
+        configuration = replace(configuration, check_release_source_stage=True)
     return configuration, arm
 
 
@@ -163,15 +167,28 @@ def run_one(cell: str, scenario: str, seed: int, stream: Path) -> dict:
     if run.decision_trace is not None:
         run.decision_trace.close()
     counts = summary.get("status_counts", {}) or {}
-    timelines = build_timelines(
-        load_records(directory / f"{cell}_rp_s{seed}.jsonl"), arm=cell, seed=seed
+    records = load_records(directory / f"{cell}_rp_s{seed}.jsonl")
+    rejections = [row for row in records if row.get("event_type") == "assignment_rejected"]
+    by_reason: dict[str, int] = {}
+    for row in rejections:
+        reason = str(row.get("failure_reason"))
+        by_reason[reason] = by_reason.get(reason, 0) + 1
+    release_refusals = sum(
+        1
+        for row in rejections
+        if (row.get("detail") or {}).get("release_from_task")
+        or str(row.get("failure_reason", "")).startswith("stale_release_")
     )
+    timelines = build_timelines(records, arm=cell, seed=seed)
     payload = {
         "cell": cell,
         "scenario": scenario,
         "seed": seed,
         "arm": arm,
         "membership_fix": CELLS[cell]["membership_fix"],
+        "source_check": CELLS[cell]["source_check"],
+        "rejections_by_reason": by_reason,
+        "release_refusals": release_refusals,
         "completed": int(counts.get("completed", 0)),
         "expired": int(counts.get("expired", 0)),
         "on_time": sum(1 for t in timelines.values() if t.final_progress >= 1.0

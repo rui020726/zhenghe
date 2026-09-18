@@ -382,6 +382,32 @@ class CoalitionReservation:
 
 
 @dataclass(frozen=True, slots=True)
+class ReleaseProvenance:
+    """The source side of a release: what the robot was taken off, as it was believed.
+
+    A release is a two-ended decision. The destination is already checked against the
+    registry when the command arrives, but nothing checked the task being left, so a
+    command planned from a belief that a stage had not yet moved on could execute after
+    it had. This records what the coordinator believed about the source at the moment it
+    decided, which is what an execution-side check has to compare against.
+
+    Every value is this robot's own delivered belief about the source task. None of it is
+    registry truth, and none of it is fed back into planning: it travels on the robot's own
+    command and is read only by the gate.
+    """
+
+    task_id: str
+    stage_index: int
+    revision: int
+
+    def __post_init__(self) -> None:
+        if not self.task_id:
+            raise ValueError("a release provenance needs the task it released from")
+        if self.stage_index < 0 or self.revision < 0:
+            raise ValueError("stage index and revision cannot be negative")
+
+
+@dataclass(frozen=True, slots=True)
 class CoordinationAdvice:
     revision: int
     generated_at: float
@@ -413,6 +439,13 @@ class CoordinationAdvice:
     reservations: Mapping[tuple[str, str], CoalitionReservation] = field(
         default_factory=dict, kw_only=True
     )
+    # What each released robot was released *from*, and what this coordinator believed
+    # about that task when it decided. A reservation says where a robot is going; nothing
+    # in the advice said where it was being taken away from, so the execution boundary
+    # could check the destination and not the release it was leaving behind. Keyed by
+    # agent, so one robot's belief travels to that robot's own command and nowhere else
+    # (invariant 9). Keyword-only and appended.
+    releases: Mapping[str, ReleaseProvenance] = field(default_factory=dict, kw_only=True)
 
     def bias_for(self, agent_id: str, task_id: str) -> float:
         return (

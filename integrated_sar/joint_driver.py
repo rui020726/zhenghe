@@ -107,6 +107,12 @@ class RunConfiguration:
     # clock), but the two switches are independent so an ablation can tell the planner
     # mechanism apart from the suppression.
     suppress_recommand_own_task: bool = False
+    # Whether the execution gate also checks the *source* of a release: the task the robot
+    # is being taken off must still be at the stage and revision the planner believed when
+    # it judged the release safe. Off by default so the candidate measured earlier stays
+    # exactly reproducible; with it on, a release judged against a stage that has since
+    # moved on is refused without side effects instead of executed.
+    check_release_source_stage: bool = False
     # The deliberate exception: running the release without the suppression churns the
     # work clock by design, which is a measurement worth making but never a configuration
     # someone should reach for by accident.
@@ -277,6 +283,13 @@ class RunConfiguration:
                 "--suppress-recommand-own-task only ever applies to a decision a "
                 "coordinator replan woke; --no-coordinator removes that trigger"
             )
+        if self.check_release_source_stage and not self.release_redundant_members \
+                and self.coordinator_policy != "coalition_redundant_release":
+            raise ConfigurationError(
+                "--check-release-source-stage guards a release, and --coordinator "
+                f"{self.coordinator_policy} never releases anyone; ask for "
+                "--coordinator coalition_redundant_release or drop the check"
+            )
         if self.release_redundant_members and not self.suppress_recommand_own_task \
                 and self.coordinator_policy != "coalition_redundant_release" \
                 and not self.allow_release_without_suppression:
@@ -382,6 +395,11 @@ def build_parser() -> argparse.ArgumentParser:
                         action="store_true",
                         help="issue no command when a replan-woke robot re-picks the task it "
                              "is already executing (re-issuing one restarts its work clock)")
+    parser.add_argument("--check-release-source-stage", dest="check_release_source_stage",
+                        action="store_true",
+                        help="refuse a release whose source task has moved to a different "
+                             "stage or revision since the planner judged it safe; the robot "
+                             "keeps its current work instead of being quietly upgraded")
     parser.add_argument("--allow-release-without-suppression", dest="allow_release_without_suppression",
                         action="store_true",
                         help="research escape: run the redundant-member release on its own so "
@@ -441,6 +459,7 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         sticky_commitments=bool(getattr(args, "sticky_commitments", False)),
         release_redundant_members=bool(getattr(args, "release_redundant_members", False)),
         suppress_recommand_own_task=bool(getattr(args, "suppress_recommand_own_task", False)),
+        check_release_source_stage=bool(getattr(args, "check_release_source_stage", False)),
         allow_release_without_suppression=bool(
             getattr(args, "allow_release_without_suppression", False)
         ),
@@ -712,6 +731,11 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         task_adapter,
         clock=clock,
         revision_of=lambda task_id: _revision_of(registry, task_id),
+        release_state_of=(
+            (lambda task_id: _stage_and_revision_of(registry, task_id))
+            if configuration.check_release_source_stage
+            else None
+        ),
     )
     coordinator = (
         _build_coordinator(configuration)
@@ -960,6 +984,18 @@ def _revision_of(registry: TaskRegistry, task_id: str | None) -> int | None:
         return None
     snapshot = registry.get(task_id)
     return snapshot.revision if snapshot is not None else None
+
+
+def _stage_and_revision_of(
+    registry: TaskRegistry, task_id: str | None
+) -> tuple[int, int] | None:
+    """What the execution boundary knows about a task a release is leaving behind."""
+    if task_id is None:
+        return None
+    snapshot = registry.get(task_id)
+    if snapshot is None:
+        return None
+    return int(snapshot.current_stage), int(snapshot.revision)
 
 
 def run_from_configuration(configuration: RunConfiguration) -> dict[str, Any]:

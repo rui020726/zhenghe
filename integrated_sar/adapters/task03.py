@@ -660,6 +660,17 @@ class Task03Adapter:
                 # restart it, so this decision produces no command at all.
                 continue
 
+            release = advice.releases.get(agent.agent_id)
+            command_metadata: dict[str, Any] = {}
+            if release is not None and release.task_id != external_task_id:
+                # The robot is being taken off the task it was working. Carry what the
+                # coordinator believed about that task when it decided, so the gate can
+                # check the release itself and not only where the command is going.
+                command_metadata = {
+                    "release_from_task": release.task_id,
+                    "release_stage_index": int(release.stage_index),
+                    "release_revision": int(release.revision),
+                }
             commands.append(
                 AssignmentCommand(
                     command_id=command_id,
@@ -669,6 +680,7 @@ class Task03Adapter:
                     valid_until=current_time + self.command_ttl,
                     task_revision=revision,
                     reason=reason,
+                    metadata=command_metadata,
                 )
             )
         return tuple(commands)
