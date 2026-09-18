@@ -413,6 +413,11 @@
     completed 21→**30**（全部目标完成）、expired 8→**0**、reset 1→0、lost work 1.2→0、
     0 override、0 拒绝、0 churn、0 死锁；**6/6 获救**（5 个从"迟到完成"变按时，
     20003/target-0 从"从未覆盖"变按时完成），0 新增失败；baseline 逐目标复现 868d68a。
+  - **配对扩展（§八条件满足后执行，冻结 commit `6915d63`，320 次运行、8 worker 分片、
+    preflight 校验签名，`PAIRED_EXPANSION.md`）**：legacy 100 seed 上 baseline
+    579/9 → candidate **588/0**（9 个过期目标全部按时完成，含 20003 上 5 个），
+    reset 1→0、lost 1.2→0；fresh 60 seed 上两臂同为 355/0（无病无扰）。
+    **两块 0 回归、0 新增失败**。两块均为开发已读集合，不作为 held-out 报告。
 
 ## 尚未完成
 
