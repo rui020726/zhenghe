@@ -86,6 +86,30 @@ BLOCKS = {
         "role": "analysis",
         "code": "3fcef63",
     },
+    "member_semantics_ghost_scan": {
+        "seeds": "runs/release_validation_20260918/STRESS_SEEDS.json",
+        "raw": ["runs/membership_consistency_20260918/ghost_scan"],
+        "role": "analysis",
+        "code": "98a34b3",
+    },
+    "four_cell_measurement": {
+        "seeds": "runs/coalition_validation_20260918/ablation_seeds.json",
+        "raw": ["runs/membership_consistency_20260918/cells"],
+        "role": "development",
+        "code": "d194c31",
+    },
+    "single_seed_33011_cells": {
+        "seeds": "runs/release_validation_20260918/STRESS_SEEDS.json",
+        "raw": ["runs/membership_consistency_20260918/single_33011"],
+        "role": "development",
+        "code": "d194c31",
+    },
+    "release_harm_before_after": {
+        "seeds": "runs/release_validation_20260918/STRESS_SEEDS.json",
+        "raw": ["runs/membership_consistency_20260918/harm_scan"],
+        "role": "analysis",
+        "code": "d194c31",
+    },
 }
 PILOC = "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth"
 CTDE = "runs/joint_eval_20260916/ctde_final_7_1.pth"
@@ -95,12 +119,23 @@ ARMS = {
         "sticky_commitments": True,
         "release_redundant_members": False,
         "suppress_recommand_own_task": False,
+        "check_release_source_stage": False,
     },
     "candidate": {
         "coordinator_policy": "coalition_planner",
         "sticky_commitments": True,
         "release_redundant_members": True,
         "suppress_recommand_own_task": True,
+        "check_release_source_stage": False,
+    },
+    # Cells measured this round; the environment bookkeeping is a variable of its own.
+    "cell_A": {"arm": "baseline", "task_membership_consistency": False},
+    "cell_B": {"arm": "candidate", "task_membership_consistency": False},
+    "cell_C": {"arm": "baseline", "task_membership_consistency": True},
+    "cell_D": {
+        "arm": "candidate",
+        "task_membership_consistency": True,
+        "check_release_source_stage": True,
     },
 }
 SHARED_CONFIGURATION = {
@@ -156,8 +191,9 @@ def git(*args: str) -> str:
 
 def main() -> int:
     payload = {
-        "candidate_branch": "release/coalition-controller-validation",
+        "candidate_branch": git("rev-parse", "--abbrev-ref", "HEAD"),
         "delivery_head": git("rev-parse", "HEAD"),
+        "release_status": "blocked; earlier default-on recommendation withdrawn at 305cd0a",
         "production_code_identical_to_test_execution_point": "1f4a598",
         "key_commits": {
             "stable_baseline": "868d68a",
@@ -166,6 +202,11 @@ def main() -> int:
             "v1_delivery": "7e5ba3a",
             "coverage_preserving_verdict": "fb1c85b",
             "stress_freeze": "fd0dd76",
+            "release_delivered_then_blocked": "bed60f9",
+            "recommendation_withdrawn": "305cd0a",
+            "membership_consistency_fix": "98a34b3",
+            "release_source_gate": "7bbc3ac",
+            "next_stage_guard": "d194c31",
         },
         "models": {
             "piloc_checkpoint": {"path": PILOC, "sha256": sha256(REPO / PILOC)},

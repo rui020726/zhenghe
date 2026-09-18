@@ -1,6 +1,7 @@
 {
- "candidate_branch": "release/coalition-controller-validation",
- "delivery_head": "3fcef636d6dfc1dca599877238bca4e4006fe81f",
+ "candidate_branch": "fix/task-membership-consistency",
+ "delivery_head": "d194c312adb66372e58c73d0af51a41fd0a808af",
+ "release_status": "blocked; earlier default-on recommendation withdrawn at 305cd0a",
  "production_code_identical_to_test_execution_point": "1f4a598",
  "key_commits": {
   "stable_baseline": "868d68a",
@@ -8,7 +9,12 @@
   "development_experiment_source": "6915d63",
   "v1_delivery": "7e5ba3a",
   "coverage_preserving_verdict": "fb1c85b",
-  "stress_freeze": "fd0dd76"
+  "stress_freeze": "fd0dd76",
+  "release_delivered_then_blocked": "bed60f9",
+  "recommendation_withdrawn": "305cd0a",
+  "membership_consistency_fix": "98a34b3",
+  "release_source_gate": "7bbc3ac",
+  "next_stage_guard": "d194c31"
  },
  "models": {
   "piloc_checkpoint": {
@@ -25,13 +31,32 @@
    "coordinator_policy": "coalition_planner",
    "sticky_commitments": true,
    "release_redundant_members": false,
-   "suppress_recommand_own_task": false
+   "suppress_recommand_own_task": false,
+   "check_release_source_stage": false
   },
   "candidate": {
    "coordinator_policy": "coalition_planner",
    "sticky_commitments": true,
    "release_redundant_members": true,
-   "suppress_recommand_own_task": true
+   "suppress_recommand_own_task": true,
+   "check_release_source_stage": false
+  },
+  "cell_A": {
+   "arm": "baseline",
+   "task_membership_consistency": false
+  },
+  "cell_B": {
+   "arm": "candidate",
+   "task_membership_consistency": false
+  },
+  "cell_C": {
+   "arm": "baseline",
+   "task_membership_consistency": true
+  },
+  "cell_D": {
+   "arm": "candidate",
+   "task_membership_consistency": true,
+   "check_release_source_stage": true
   }
  },
  "shared_configuration": {
@@ -225,6 +250,70 @@
      "files": 540,
      "bytes": 481714484,
      "fold_sha256": "7a26dc87f48a1a06c4ae1f1f97c2780fedc0f4a26ffe3afcabed3c2890febcef"
+    }
+   ]
+  },
+  "member_semantics_ghost_scan": {
+   "role": "analysis",
+   "code": "98a34b3",
+   "seed_manifest": {
+    "runs/release_validation_20260918/STRESS_SEEDS.json": "fae160023b6bc7606a0e1a8ce6e17395144c0328aaaf9e76393caa803daec8a9"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/membership_consistency_20260918/ghost_scan",
+     "present": true,
+     "files": 102,
+     "bytes": 90543215,
+     "fold_sha256": "c92c00662a3c5f9dfacfae874403632096f44cf081ca50ac87df61532b92b520"
+    }
+   ]
+  },
+  "four_cell_measurement": {
+   "role": "development",
+   "code": "d194c31",
+   "seed_manifest": {
+    "runs/coalition_validation_20260918/ablation_seeds.json": "9d9ed25a682ac7039dca72881af8420a144f6029ce43fe3ab89941a7df9daa50"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/membership_consistency_20260918/cells",
+     "present": true,
+     "files": 384,
+     "bytes": 335821379,
+     "fold_sha256": "cc73c6387931c17497bbf2d2445f0b0359709a9f820d0f9afea0ad2c901a9063"
+    }
+   ]
+  },
+  "single_seed_33011_cells": {
+   "role": "development",
+   "code": "d194c31",
+   "seed_manifest": {
+    "runs/release_validation_20260918/STRESS_SEEDS.json": "fae160023b6bc7606a0e1a8ce6e17395144c0328aaaf9e76393caa803daec8a9"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/membership_consistency_20260918/single_33011",
+     "present": true,
+     "files": 12,
+     "bytes": 10218489,
+     "fold_sha256": "7c41fa7cfb39bb2ebb58ccff74e3c59bb0e60705bf8bedfeafc4e64ed1460d24"
+    }
+   ]
+  },
+  "release_harm_before_after": {
+   "role": "analysis",
+   "code": "d194c31",
+   "seed_manifest": {
+    "runs/release_validation_20260918/STRESS_SEEDS.json": "fae160023b6bc7606a0e1a8ce6e17395144c0328aaaf9e76393caa803daec8a9"
+   },
+   "raw_artefacts": [
+    {
+     "path": "runs/membership_consistency_20260918/harm_scan",
+     "present": true,
+     "files": 102,
+     "bytes": 91204352,
+     "fold_sha256": "9c517f10a8041d74fae08d23a6dc71fb5339c1aa4b83ebea97d528dd66b56f72"
     }
    ]
   }
