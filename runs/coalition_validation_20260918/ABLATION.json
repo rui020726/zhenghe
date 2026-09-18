@@ -1,0 +1,3313 @@
+{
+ "seeds": [
+  20003,
+  20008,
+  20052,
+  20070,
+  20083,
+  20000,
+  20010,
+  20020,
+  20030,
+  20040,
+  20050,
+  20060,
+  20080,
+  20090,
+  20001
+ ],
+ "arms": {
+  "A_baseline": {
+   "completed": 81.0,
+   "expired": 8.0,
+   "active": 1.0,
+   "coverage_resets": 1.0,
+   "lost_work": 1.2,
+   "executed_override_unjustified": 0.0,
+   "rejected_assignments": 0.0,
+   "recommands": 0.0,
+   "releases_planned": 0.0,
+   "redundant_working_ticks": 5233.0,
+   "replan_attempts": 0.0,
+   "accepted_reassignments": 0.0,
+   "replan_declined": 0.0,
+   "same_task_noop": 0.0,
+   "replan_to_accept_latency_mean": null,
+   "max_idle": 0.0
+  },
+  "B_suppress": {
+   "completed": 81.0,
+   "expired": 8.0,
+   "active": 1.0,
+   "coverage_resets": 1.0,
+   "lost_work": 1.2,
+   "executed_override_unjustified": 0.0,
+   "rejected_assignments": 0.0,
+   "recommands": 0.0,
+   "releases_planned": 0.0,
+   "redundant_working_ticks": 5233.0,
+   "replan_attempts": 0.0,
+   "accepted_reassignments": 0.0,
+   "replan_declined": 0.0,
+   "same_task_noop": 0.0,
+   "replan_to_accept_latency_mean": null,
+   "max_idle": 0.0
+  },
+  "C_release": {
+   "completed": 90.0,
+   "expired": 0.0,
+   "active": 0.0,
+   "coverage_resets": 0.0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0.0,
+   "rejected_assignments": 1.0,
+   "recommands": 120.0,
+   "releases_planned": 205.0,
+   "redundant_working_ticks": 3213.0,
+   "replan_attempts": 206.0,
+   "accepted_reassignments": 86.0,
+   "replan_declined": 0.0,
+   "same_task_noop": 0.0,
+   "replan_to_accept_latency_mean": 5.43,
+   "max_idle": 0.0
+  },
+  "D_both": {
+   "completed": 90.0,
+   "expired": 0.0,
+   "active": 0.0,
+   "coverage_resets": 0.0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0.0,
+   "rejected_assignments": 1.0,
+   "recommands": 0.0,
+   "releases_planned": 205.0,
+   "redundant_working_ticks": 3362.0,
+   "replan_attempts": 206.0,
+   "accepted_reassignments": 86.0,
+   "replan_declined": 120.0,
+   "same_task_noop": 120.0,
+   "replan_to_accept_latency_mean": 5.43,
+   "max_idle": 0.0
+  }
+ },
+ "outcomes_vs_A": {
+  "A_baseline": {
+   "rescued": [],
+   "regressed": []
+  },
+  "B_suppress": {
+   "rescued": [],
+   "regressed": []
+  },
+  "C_release": {
+   "rescued": [
+    "20003/piloc-e1-target-0",
+    "20003/piloc-e1-target-1",
+    "20003/piloc-e1-target-2",
+    "20003/piloc-e1-target-3",
+    "20003/piloc-e1-target-4",
+    "20008/piloc-e1-target-2",
+    "20052/piloc-e1-target-3",
+    "20070/piloc-e1-target-2",
+    "20083/piloc-e1-target-4"
+   ],
+   "regressed": []
+  },
+  "D_both": {
+   "rescued": [
+    "20003/piloc-e1-target-0",
+    "20003/piloc-e1-target-1",
+    "20003/piloc-e1-target-2",
+    "20003/piloc-e1-target-3",
+    "20003/piloc-e1-target-4",
+    "20008/piloc-e1-target-2",
+    "20052/piloc-e1-target-3",
+    "20070/piloc-e1-target-2",
+    "20083/piloc-e1-target-4"
+   ],
+   "regressed": []
+  }
+ },
+ "rows": [
+  {
+   "seed": 20000,
+   "arm": "A_baseline",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 442,
+   "redundant_working_ticks": 413,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20001,
+   "arm": "A_baseline",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 290,
+   "redundant_working_ticks": 290,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20003,
+   "arm": "A_baseline",
+   "completed": 1,
+   "expired": 4,
+   "active": 1,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 994,
+   "redundant_working_ticks": 636,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": "Timeout",
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-0": {
+     "progress": 0.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    }
+   }
+  },
+  {
+   "seed": 20008,
+   "arm": "A_baseline",
+   "completed": 5,
+   "expired": 1,
+   "active": 0,
+   "coverage_resets": 1,
+   "lost_work": 1.2,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 881,
+   "redundant_working_ticks": 769,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": "Timeout",
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20010,
+   "arm": "A_baseline",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 374,
+   "redundant_working_ticks": 295,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20020,
+   "arm": "A_baseline",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 315,
+   "redundant_working_ticks": 256,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20030,
+   "arm": "A_baseline",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 523,
+   "redundant_working_ticks": 484,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20040,
+   "arm": "A_baseline",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 372,
+   "redundant_working_ticks": 372,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20050,
+   "arm": "A_baseline",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 384,
+   "redundant_working_ticks": 384,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20052,
+   "arm": "A_baseline",
+   "completed": 5,
+   "expired": 1,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 475,
+   "redundant_working_ticks": 284,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": "Timeout",
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20060,
+   "arm": "A_baseline",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 184,
+   "redundant_working_ticks": 131,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20070,
+   "arm": "A_baseline",
+   "completed": 5,
+   "expired": 1,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 591,
+   "redundant_working_ticks": 455,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": "Timeout",
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20080,
+   "arm": "A_baseline",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 239,
+   "redundant_working_ticks": 215,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20083,
+   "arm": "A_baseline",
+   "completed": 5,
+   "expired": 1,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 414,
+   "redundant_working_ticks": 137,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "Timeout",
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20090,
+   "arm": "A_baseline",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 243,
+   "redundant_working_ticks": 112,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20000,
+   "arm": "B_suppress",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 442,
+   "redundant_working_ticks": 413,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20001,
+   "arm": "B_suppress",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 290,
+   "redundant_working_ticks": 290,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20003,
+   "arm": "B_suppress",
+   "completed": 1,
+   "expired": 4,
+   "active": 1,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 994,
+   "redundant_working_ticks": 636,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": "Timeout",
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-0": {
+     "progress": 0.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    }
+   }
+  },
+  {
+   "seed": 20008,
+   "arm": "B_suppress",
+   "completed": 5,
+   "expired": 1,
+   "active": 0,
+   "coverage_resets": 1,
+   "lost_work": 1.2,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 881,
+   "redundant_working_ticks": 769,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": "Timeout",
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20010,
+   "arm": "B_suppress",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 374,
+   "redundant_working_ticks": 295,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20020,
+   "arm": "B_suppress",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 315,
+   "redundant_working_ticks": 256,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20030,
+   "arm": "B_suppress",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 523,
+   "redundant_working_ticks": 484,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20040,
+   "arm": "B_suppress",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 372,
+   "redundant_working_ticks": 372,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20050,
+   "arm": "B_suppress",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 384,
+   "redundant_working_ticks": 384,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20052,
+   "arm": "B_suppress",
+   "completed": 5,
+   "expired": 1,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 475,
+   "redundant_working_ticks": 284,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": "Timeout",
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20060,
+   "arm": "B_suppress",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 184,
+   "redundant_working_ticks": 131,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20070,
+   "arm": "B_suppress",
+   "completed": 5,
+   "expired": 1,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 591,
+   "redundant_working_ticks": 455,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": "Timeout",
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20080,
+   "arm": "B_suppress",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 239,
+   "redundant_working_ticks": 215,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20083,
+   "arm": "B_suppress",
+   "completed": 5,
+   "expired": 1,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 414,
+   "redundant_working_ticks": 137,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "Timeout",
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": "deadline_expired",
+     "on_time": false
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20090,
+   "arm": "B_suppress",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 0,
+   "working_ticks": 243,
+   "redundant_working_ticks": 112,
+   "replan_attempts": 0,
+   "accepted_reassignments": 0,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20000,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 13,
+   "working_ticks": 322,
+   "redundant_working_ticks": 303,
+   "replan_attempts": 13,
+   "accepted_reassignments": 5,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 8,
+   "replan_to_accept_latency_mean": 5.25,
+   "targets": {
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20001,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 2,
+   "working_ticks": 215,
+   "redundant_working_ticks": 206,
+   "replan_attempts": 2,
+   "accepted_reassignments": 2,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20003,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 37,
+   "working_ticks": 238,
+   "redundant_working_ticks": 157,
+   "replan_attempts": 37,
+   "accepted_reassignments": 12,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 25,
+   "replan_to_accept_latency_mean": 5.45,
+   "targets": {
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20008,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 14,
+   "working_ticks": 307,
+   "redundant_working_ticks": 279,
+   "replan_attempts": 14,
+   "accepted_reassignments": 6,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 8,
+   "replan_to_accept_latency_mean": 5.67,
+   "targets": {
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20010,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 6,
+   "working_ticks": 319,
+   "redundant_working_ticks": 256,
+   "replan_attempts": 6,
+   "accepted_reassignments": 6,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 3.75,
+   "targets": {
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20020,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 3,
+   "working_ticks": 275,
+   "redundant_working_ticks": 194,
+   "replan_attempts": 3,
+   "accepted_reassignments": 3,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 6.5,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20030,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 1,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 4,
+   "working_ticks": 375,
+   "redundant_working_ticks": 336,
+   "replan_attempts": 5,
+   "accepted_reassignments": 5,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 6.5,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20040,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 4,
+   "working_ticks": 324,
+   "redundant_working_ticks": 311,
+   "replan_attempts": 4,
+   "accepted_reassignments": 4,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 4.33,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20050,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 8,
+   "working_ticks": 300,
+   "redundant_working_ticks": 279,
+   "replan_attempts": 8,
+   "accepted_reassignments": 6,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 2,
+   "replan_to_accept_latency_mean": 1.5,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20052,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 21,
+   "working_ticks": 263,
+   "redundant_working_ticks": 219,
+   "replan_attempts": 21,
+   "accepted_reassignments": 11,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 10,
+   "replan_to_accept_latency_mean": 4.38,
+   "targets": {
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20060,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 10,
+   "working_ticks": 160,
+   "redundant_working_ticks": 131,
+   "replan_attempts": 10,
+   "accepted_reassignments": 4,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 6,
+   "replan_to_accept_latency_mean": 3.33,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20070,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 54,
+   "working_ticks": 235,
+   "redundant_working_ticks": 147,
+   "replan_attempts": 54,
+   "accepted_reassignments": 6,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 48,
+   "replan_to_accept_latency_mean": 13.25,
+   "targets": {
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20080,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 4,
+   "working_ticks": 209,
+   "redundant_working_ticks": 186,
+   "replan_attempts": 4,
+   "accepted_reassignments": 4,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 4.5,
+   "targets": {
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20083,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 10,
+   "working_ticks": 150,
+   "redundant_working_ticks": 86,
+   "replan_attempts": 10,
+   "accepted_reassignments": 6,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 4,
+   "replan_to_accept_latency_mean": 5.2,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20090,
+   "arm": "C_release",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 15,
+   "working_ticks": 197,
+   "redundant_working_ticks": 123,
+   "replan_attempts": 15,
+   "accepted_reassignments": 6,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 9,
+   "replan_to_accept_latency_mean": 6.4,
+   "targets": {
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20000,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 13,
+   "working_ticks": 343,
+   "redundant_working_ticks": 318,
+   "replan_attempts": 13,
+   "accepted_reassignments": 5,
+   "replan_declined": 8,
+   "same_task_noop": 8,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 5.25,
+   "targets": {
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20001,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 2,
+   "working_ticks": 215,
+   "redundant_working_ticks": 206,
+   "replan_attempts": 2,
+   "accepted_reassignments": 2,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": null,
+   "targets": {
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20003,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 37,
+   "working_ticks": 278,
+   "redundant_working_ticks": 182,
+   "replan_attempts": 37,
+   "accepted_reassignments": 12,
+   "replan_declined": 25,
+   "same_task_noop": 25,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 5.45,
+   "targets": {
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20008,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 14,
+   "working_ticks": 315,
+   "redundant_working_ticks": 287,
+   "replan_attempts": 14,
+   "accepted_reassignments": 6,
+   "replan_declined": 8,
+   "same_task_noop": 8,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 5.67,
+   "targets": {
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20010,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 6,
+   "working_ticks": 319,
+   "redundant_working_ticks": 256,
+   "replan_attempts": 6,
+   "accepted_reassignments": 6,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 3.75,
+   "targets": {
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20020,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 3,
+   "working_ticks": 275,
+   "redundant_working_ticks": 194,
+   "replan_attempts": 3,
+   "accepted_reassignments": 3,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 6.5,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20030,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 1,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 4,
+   "working_ticks": 375,
+   "redundant_working_ticks": 336,
+   "replan_attempts": 5,
+   "accepted_reassignments": 5,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 6.5,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20040,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 4,
+   "working_ticks": 324,
+   "redundant_working_ticks": 311,
+   "replan_attempts": 4,
+   "accepted_reassignments": 4,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 4.33,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20050,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 8,
+   "working_ticks": 302,
+   "redundant_working_ticks": 281,
+   "replan_attempts": 8,
+   "accepted_reassignments": 6,
+   "replan_declined": 2,
+   "same_task_noop": 2,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 1.5,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20052,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 21,
+   "working_ticks": 292,
+   "redundant_working_ticks": 239,
+   "replan_attempts": 21,
+   "accepted_reassignments": 11,
+   "replan_declined": 10,
+   "same_task_noop": 10,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 4.38,
+   "targets": {
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20060,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 10,
+   "working_ticks": 166,
+   "redundant_working_ticks": 136,
+   "replan_attempts": 10,
+   "accepted_reassignments": 4,
+   "replan_declined": 6,
+   "same_task_noop": 6,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 3.33,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20070,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 54,
+   "working_ticks": 309,
+   "redundant_working_ticks": 205,
+   "replan_attempts": 54,
+   "accepted_reassignments": 6,
+   "replan_declined": 48,
+   "same_task_noop": 48,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 13.25,
+   "targets": {
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20080,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 4,
+   "working_ticks": 209,
+   "redundant_working_ticks": 186,
+   "replan_attempts": 4,
+   "accepted_reassignments": 4,
+   "replan_declined": 0,
+   "same_task_noop": 0,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 4.5,
+   "targets": {
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20083,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 10,
+   "working_ticks": 160,
+   "redundant_working_ticks": 93,
+   "replan_attempts": 10,
+   "accepted_reassignments": 6,
+   "replan_declined": 4,
+   "same_task_noop": 4,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 5.2,
+   "targets": {
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "seed": 20090,
+   "arm": "D_both",
+   "completed": 6,
+   "expired": 0,
+   "active": 0,
+   "coverage_resets": 0,
+   "lost_work": 0.0,
+   "executed_override_unjustified": 0,
+   "rejected_assignments": 0,
+   "longest_idle_streak": 0.0,
+   "releases_planned": 15,
+   "working_ticks": 216,
+   "redundant_working_ticks": 132,
+   "replan_attempts": 15,
+   "accepted_reassignments": 6,
+   "replan_declined": 9,
+   "same_task_noop": 9,
+   "recommands": 0,
+   "replan_to_accept_latency_mean": 6.4,
+   "targets": {
+    "piloc-e1-target-0": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-2": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-4": {
+     "progress": 1.0,
+     "reason": "Cannot contribute",
+     "on_time": true
+    },
+    "piloc-e1-target-1": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    },
+    "piloc-e1-target-3": {
+     "progress": 1.0,
+     "reason": null,
+     "on_time": true
+    }
+   }
+  }
+ ]
+}
