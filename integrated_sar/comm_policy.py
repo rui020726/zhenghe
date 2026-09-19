@@ -283,6 +283,62 @@ class PriorityEventPolicy(EventPolicy):
         return tuple(item.target_id for item in triggered)
 
 
+class HoldToBoundPolicy(CommSendPolicy):
+    """Ask for nothing, ever, and let the shared silence bound do all the talking.
+
+    This is the floor of the design space, and it is a *rule*, not an ablation switch: the
+    bound lives in the transport, so an empty decision here is not radio silence, it is "only
+    the protocol's own deadline sends". A learned controller that merely learned to hold has
+    become this arm, and the only way to see that is to run it.
+    """
+
+    name = "hold_to_bound"
+
+    def decide(self, observation: SendObservation) -> tuple[str, ...]:
+        return ()
+
+
+class RandomSendPolicy(CommSendPolicy):
+    """Flip a coin per candidate, on a seed of its own.
+
+    A trained sender has to beat more than "not the always-sender": an untrained network emits
+    a sparse, structured-looking pattern by accident. This arm is the unstructured sparse
+    control, and it is reproducible because the coin is seeded and per-episode -- the same
+    property the transport's loss rolls have.
+    """
+
+    name = "random_send"
+
+    def __init__(self, *, send_probability: float = 0.5, seed: int = 0) -> None:
+        if not 0.0 <= float(send_probability) <= 1.0:
+            raise ValueError(
+                f"send_probability must stay in [0, 1], got {send_probability}"
+            )
+        self.send_probability = float(send_probability)
+        self.seed = int(seed)
+        self._rng: Random | None = None
+        self._last_step = -1
+
+    def parameters(self) -> dict[str, Any]:
+        return {"send_probability": self.send_probability, "seed": self.seed}
+
+    def decide(self, observation: SendObservation) -> tuple[str, ...]:
+        from random import Random
+
+        step = int(observation.step)
+        if self._rng is None or step <= self._last_step:
+            # A relay is reused across episodes and calls reset(), which the policy does not
+            # see. Re-seeding when the step counter goes back is how this arm restarts its
+            # stream, so episode N always draws the same coins as episode N did before.
+            self._rng = Random(self.seed)
+        self._last_step = step
+        return tuple(
+            item.target_id
+            for item in observation.items
+            if self._rng.random() < self.send_probability
+        )
+
+
 POLICIES: dict[str, type[CommSendPolicy]] = {
     policy.name: policy
     for policy in (
@@ -291,6 +347,8 @@ POLICIES: dict[str, type[CommSendPolicy]] = {
         EventPolicy,
         EventMaxWaitPolicy,
         PriorityEventPolicy,
+        HoldToBoundPolicy,
+        RandomSendPolicy,
     )
 }
 

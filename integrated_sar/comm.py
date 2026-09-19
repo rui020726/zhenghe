@@ -250,9 +250,17 @@ class CommRelay:
                 "delivery_refused",
                 # what the transport rules refused to say
                 "emissions_suppressed_terminal",
-                "forced_emissions",
                 "capacity_refused_sends",
                 "budget_refused_sends",
+                # Who each send was really for. The three reasons are mutually exclusive and
+                # cover every attempt, so an arm that only ever speaks because the bound ran
+                # out cannot be read as an arm that learned when to talk. ``policy`` counts a
+                # send the sender asked for even when the change was also overdue: it asked.
+                *[
+                    f"{metric}_{reason}"
+                    for metric in ("emissions", "attempts", "bytes", "refused")
+                    for reason in ("policy", "forced_maxwait", "other")
+                ],
                 # cost: primary is airtime over attempts; applied bytes is an efficiency read
                 "airtime_bytes",
                 "applied_bytes",
@@ -401,6 +409,7 @@ class CommRelay:
                 (item for item in observation.items if item.target_id in wanted),
                 key=lambda item: (item.remaining_time, -item.age_steps, item.target_id),
             )
+        forced: set[str] = set()
         if self._max_wait_steps is not None:
             overdue = {
                 item.target_id
@@ -408,12 +417,13 @@ class CommRelay:
                 if item.age_steps >= self._wait_limit(item)
             }
             present = {item.target_id for item in chosen}
-            self.counters["forced_emissions"] += len(overdue - present)
+            forced = overdue - present
             chosen = list(chosen) + [
-                item for item in observation.items if item.target_id in overdue - present
+                item for item in observation.items if item.target_id in forced
             ]
         for item in chosen:
-            self._emit(item, first=item.first_emission)
+            reason = "forced_maxwait" if item.target_id in forced else "policy"
+            self._emit(item, first=item.first_emission, reason=reason)
 
     def _wait_limit(self, item: SendItem) -> int:
         if self._urgent_wait_steps is not None and 0.0 <= item.remaining_time <= self._urgency_time:
@@ -509,7 +519,9 @@ class CommRelay:
             subscribers=len(self._subscribers),
         )
 
-    def _emit(self, item: SendItem, *, first: bool) -> None:
+    def _emit(self, item: SendItem, *, first: bool, reason: str = "policy") -> None:
+        if reason not in ("policy", "forced_maxwait", "other"):
+            raise ValueError(f"unknown send reason {reason!r}")
         ledger = self._ledger[item.target_id]
         snapshot = self._snapshot_of(item.target_id) if self._snapshot_of else None
         message = self._message(item.target_id, ledger, snapshot)
@@ -519,20 +531,22 @@ class CommRelay:
         # receiver; a per-emission cost would let an arm look cheap by widening the team.
         cost_bytes = payload_bytes * len(self._subscribers)
         if not self._budget.can_send(cost_bytes):
-            reason = self._budget.why_blocked(cost_bytes)
-            self._budget.note_refusal(reason, cost_bytes)
+            blocked = self._budget.why_blocked(cost_bytes)
+            self._budget.note_refusal(blocked, cost_bytes)
             key = (
                 "capacity_refused_sends"
-                if reason == "capacity_step"
+                if blocked == "capacity_step"
                 else "budget_refused_sends"
             )
             self.counters[key] += 1
+            self.counters[f"refused_{reason}"] += 1
             if self.transcript is not None:
                 self.transcript.add(
                     "refused",
                     step=int(self._tick),
                     target=item.target_id,
-                    reason=reason,
+                    reason=blocked,
+                    send_reason=reason,
                     cost_bytes=int(cost_bytes),
                     remaining_bytes=(
                         None if self._budget.bytes_per_episode is None else self._budget.remaining_bytes
@@ -568,6 +582,9 @@ class CommRelay:
         ledger.ready_step = None
         attempts = sent + lost
         self.counters["emissions"] += 1
+        self.counters[f"emissions_{reason}"] += 1
+        self.counters[f"attempts_{reason}"] += attempts
+        self.counters[f"bytes_{reason}"] += int(cost_bytes)
         self.counters["first_emissions"] += 1 if first else 0
         self.counters["refresh_emissions"] += 0 if first else 1
         self.counters["transmission_attempts"] += attempts
@@ -579,6 +596,7 @@ class CommRelay:
                 "send",
                 step=int(self._tick),
                 target=item.target_id,
+                send_reason=reason,
                 revision=int(message.revision),
                 payload_bytes=int(payload_bytes),
                 attempts=int(attempts),

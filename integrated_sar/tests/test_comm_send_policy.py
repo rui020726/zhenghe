@@ -613,7 +613,8 @@ class SilenceBoundTests(unittest.TestCase):
         self.assertEqual(bounded.counters["emissions"], 0, "two steps is the limit, not yet past it")
         bounded.tick()
         self.assertEqual(bounded.counters["emissions"], 1, "the transport emits it anyway")
-        self.assertEqual(bounded.counters["forced_emissions"], 1)
+        self.assertEqual(bounded.counters["emissions_forced_maxwait"], 1)
+        self.assertEqual(bounded.counters["emissions_policy"], 0)
         self.assertEqual(
             bounded.transport_parameters()["max_wait_steps"],
             2,
@@ -757,6 +758,225 @@ class DeliveryRefusalTests(unittest.TestCase):
         self.assertEqual(relay._deliver(fresh, "1"), (True, "accepted"))
         self.assertEqual(
             relay._deliver(fresh, "1"), (False, "delivery_duplicate"), "the same packet twice"
+        )
+
+
+class AttributionArmTests(unittest.TestCase):
+    """The controls a learned sender has to beat, and who paid for each send."""
+
+    def bounded(self, policy, *, budget=None, seed=3):
+        registry = TaskRegistry()
+        writer = RecordingWriter()
+        event = detection()
+        registry.handle_detection(event)
+        relay = CommRelay(
+            subscribers=("0",),
+            writer=writer,
+            snapshot_of=registry.get,
+            accepted_of=registry.was_accepted,
+            policy=policy,
+            seed=seed,
+            budget=budget,
+            max_wait_steps=2,
+            urgent_wait_steps=1,
+            urgency_time=25.0,
+        )
+        relay.handle_detection(event)
+        return registry, writer, relay
+
+    def test_holding_to_the_bound_is_a_real_arm_not_silence(self) -> None:
+        from integrated_sar.comm_policy import HoldToBoundPolicy
+
+        registry = TaskRegistry()
+        writer = RecordingWriter()
+        event = detection()
+        registry.handle_detection(event)
+        unbounded = CommRelay(
+            subscribers=("0",),
+            writer=writer,
+            snapshot_of=registry.get,
+            accepted_of=registry.was_accepted,
+            policy=HoldToBoundPolicy(),
+            seed=3,
+        )
+        unbounded.handle_detection(event)
+        for _ in range(5):
+            unbounded.tick()
+        self.assertEqual(unbounded.counters["emissions"], 0, "no bound, nothing to say")
+
+        _, _, bounded = self.bounded(HoldToBoundPolicy())
+        for _ in range(5):
+            bounded.tick()
+        self.assertGreater(bounded.counters["emissions"], 0, "the bound speaks for it")
+        self.assertEqual(
+            bounded.counters["emissions_policy"],
+            0,
+            "and none of it was the arm's own doing",
+        )
+        self.assertEqual(
+            bounded.counters["attempts_forced_maxwait"],
+            bounded.counters["transmission_attempts"],
+        )
+        self.assertEqual(
+            bounded.counters["bytes_forced_maxwait"], bounded.counters["airtime_bytes"]
+        )
+
+    def test_a_policy_that_asks_for_an_overdue_change_is_credited_for_it(self) -> None:
+        from integrated_sar.comm_policy import ImmediatePolicy
+
+        registry = TaskRegistry()
+        writer = RecordingWriter()
+        event = detection()
+        registry.handle_detection(event)
+        relay = CommRelay(
+            subscribers=("0",),
+            writer=writer,
+            snapshot_of=registry.get,
+            accepted_of=registry.was_accepted,
+            policy=ImmediatePolicy(),
+            seed=3,
+            max_wait_steps=1,
+            urgent_wait_steps=1,
+            urgency_time=25.0,
+        )
+        relay.handle_detection(event)
+        relay.tick()
+        self.assertEqual(relay.counters["emissions_policy"], 1)
+        self.assertEqual(
+            relay.counters["emissions_forced_maxwait"],
+            0,
+            "the reason is who asked, not how late it was",
+        )
+
+    def test_the_reason_split_closes_against_the_totals(self) -> None:
+        """A mixed episode: one target the arm speaks for, one only the bound speaks for."""
+        from integrated_sar.comm_policy import CommSendPolicy
+
+        class SpeaksForA(CommSendPolicy):
+            name = "speaks_for_a"
+
+            def decide(self, observation):
+                return tuple(
+                    item.target_id for item in observation.items if item.target_id == "a"
+                )
+
+        registry = TaskRegistry()
+        writer = RecordingWriter()
+        for index, target in enumerate(("a", "b")):
+            registry.handle_detection(detection(target, event_id=f"d{index}", detected_at=float(1 + index)))
+        relay = CommRelay(
+            subscribers=("0",),
+            writer=writer,
+            snapshot_of=registry.get,
+            accepted_of=registry.was_accepted,
+            policy=SpeaksForA(),
+            seed=3,
+            max_wait_steps=2,
+            urgent_wait_steps=1,
+            urgency_time=25.0,
+        )
+        for index, target in enumerate(("a", "b")):
+            relay.handle_detection(detection(target, event_id=f"d{index}", detected_at=float(1 + index)))
+        # Keep both views moving: without a change after the first packet nothing can age out,
+        # and then there would be no forced send to attribute.
+        for step in range(2, 10):
+            for target in ("a", "b"):
+                registry.handle_progress(
+                    progress(target, observed_at=float(step), value=0.1 * step)
+                )
+            relay.tick()
+        counters = relay.counters
+        self.assertEqual(
+            counters["emissions_policy"] + counters["emissions_forced_maxwait"] + counters["emissions_other"],
+            counters["emissions"],
+        )
+        self.assertEqual(
+            counters["attempts_policy"] + counters["attempts_forced_maxwait"] + counters["attempts_other"],
+            counters["transmission_attempts"],
+        )
+        self.assertEqual(
+            counters["bytes_policy"] + counters["bytes_forced_maxwait"] + counters["bytes_other"],
+            counters["airtime_bytes"],
+        )
+        self.assertGreater(counters["emissions_policy"], 0)
+        self.assertGreater(counters["emissions_forced_maxwait"], 0)
+
+    def test_a_refused_forced_send_is_attributed_to_the_bound(self) -> None:
+        from integrated_sar.comm_budget import CommBudget
+        from integrated_sar.comm_policy import HoldToBoundPolicy
+
+        _, _, relay = self.bounded(HoldToBoundPolicy(), budget=CommBudget(bytes_per_episode=1))
+        for _ in range(5):
+            relay.tick()
+        self.assertEqual(relay.counters["emissions"], 0)
+        self.assertEqual(relay.counters["refused_forced_maxwait"], relay.counters["budget_refused_sends"])
+        self.assertEqual(relay.counters["refused_policy"], 0)
+
+    def test_random_send_is_the_same_coins_twice_and_different_seeds_differ(self) -> None:
+        from integrated_sar.comm_policy import RandomSendPolicy, build_comm_policy
+
+        def schedule(seed: int) -> list:
+            registry = TaskRegistry()
+            writer = RecordingWriter()
+            transcript = CommTranscript()
+            event = detection()
+            registry.handle_detection(event)
+            relay = CommRelay(
+                subscribers=("0",),
+                writer=writer,
+                snapshot_of=registry.get,
+                accepted_of=registry.was_accepted,
+                policy=RandomSendPolicy(send_probability=0.5, seed=seed),
+                seed=11,
+                transcript=transcript,
+            )
+            relay.handle_detection(event)
+            for _ in range(6):
+                relay.tick()
+            return [
+                (int(record["step"]), str(record["target"]), int(record["revision"]))
+                for record in transcript.records
+                if record["kind"] == "send"
+            ]
+
+        self.assertTrue(schedule(4), "the coin does send something")
+        self.assertEqual(schedule(4), schedule(4))
+        build_comm_policy("random_send", "send_probability=0.5,seed=4")
+        self.assertEqual(
+            build_comm_policy("random_send", {"send_probability": 0.25, "seed": 9}).parameters(),
+            {"send_probability": 0.25, "seed": 9},
+        )
+        with self.assertRaises(ValueError):
+            build_comm_policy("random_send", "send_probability=two")
+
+    def test_the_transcript_carries_the_reason_so_delivery_follows_it(self) -> None:
+        from integrated_sar.comm_policy import HoldToBoundPolicy
+
+        transcript = CommTranscript()
+        registry = TaskRegistry()
+        writer = RecordingWriter()
+        event = detection()
+        registry.handle_detection(event)
+        relay = CommRelay(
+            subscribers=("0",),
+            writer=writer,
+            snapshot_of=registry.get,
+            accepted_of=registry.was_accepted,
+            policy=HoldToBoundPolicy(),
+            seed=3,
+            max_wait_steps=2,
+            urgent_wait_steps=1,
+            urgency_time=25.0,
+            transcript=transcript,
+        )
+        relay.handle_detection(event)
+        for _ in range(4):
+            relay.tick()
+        sends = [record for record in transcript.records if record["kind"] == "send"]
+        self.assertTrue(sends)
+        self.assertEqual(
+            {record["send_reason"] for record in sends},
+            {"forced_maxwait"},
         )
 
 

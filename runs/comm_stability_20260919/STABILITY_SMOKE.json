@@ -1,0 +1,174 @@
+{
+ "budget_bytes": 87900,
+ "constants": {
+  "budget_tier": "75pct",
+  "checkpoint_milestone_note": "saved at the first update boundary at or after the milestone",
+  "collector": "transport_bounded",
+  "episodes_per_update": 4,
+  "milestones": [
+   150000,
+   200000,
+   300000,
+   400000
+  ]
+ },
+ "data_split": {
+  "previous_block_executed": 400,
+  "reserved_block": [
+   800000,
+   800400
+  ],
+  "reserved_clean": true
+ },
+ "executed_configuration": {
+  "allocation_arm_is_C": true,
+  "artefact_paths_excluded": [
+   "comm_transcript",
+   "decision_trace",
+   "output",
+   "reservation_log"
+  ],
+  "expected": {
+   "actor_kv_mode": "tokens",
+   "allocation_interval": 5,
+   "check_release_source_stage": false,
+   "comm_budget_bytes": null,
+   "comm_delay_ticks": 0,
+   "comm_delivery_probability": 1.0,
+   "comm_policy": "immediate",
+   "comm_policy_params": "",
+   "comm_range": 0.3,
+   "comm_sends_per_tick": null,
+   "comm_subscribers": "all",
+   "comm_transcript": null,
+   "command_ttl": 10.0,
+   "coordination_interval": 5,
+   "coordinator_policy": "coalition_planner",
+   "deadline_tightness": [
+    0.5,
+    2.0
+   ],
+   "detection_radius": 5,
+   "dt": 1.0,
+   "gossip_interval": 2,
+   "grid_size": 60,
+   "num_goals": 6,
+   "obstacle_density": 0.15,
+   "release_redundant_members": false,
+   "rescue_per_species": 2,
+   "rescue_species": 3,
+   "residual_scale": 0.25,
+   "search_agents": 2,
+   "steps": 1000,
+   "sticky_commitments": true,
+   "suppress_recommand_own_task": false,
+   "task_membership_consistency": true
+  },
+  "membership_consistency_enabled": true,
+  "mismatches": {},
+  "source": "built RunConfiguration for one training seed, arm C",
+  "values": {
+   "actor_kv_mode": "tokens",
+   "allocation_interval": 5,
+   "check_release_source_stage": false,
+   "comm_budget_bytes": null,
+   "comm_delay_ticks": 0,
+   "comm_delivery_probability": 1.0,
+   "comm_policy": "immediate",
+   "comm_policy_params": "",
+   "comm_range": 0.3,
+   "comm_sends_per_tick": null,
+   "comm_subscribers": "all",
+   "comm_transcript": "D:\\code\\整合\\zhenghe\\runs\\comm_stability_20260919\\preflight\\ct_manifest_preflight_s700000.jsonl",
+   "command_ttl": 10.0,
+   "coordination_interval": 5,
+   "coordinator_policy": "coalition_planner",
+   "deadline_tightness": [
+    0.5,
+    2.0
+   ],
+   "detection_radius": 5,
+   "dt": 1.0,
+   "gossip_interval": 2,
+   "grid_size": 60,
+   "num_goals": 6,
+   "obstacle_density": 0.15,
+   "release_redundant_members": false,
+   "rescue_per_species": 2,
+   "rescue_species": 3,
+   "residual_scale": 0.25,
+   "search_agents": 2,
+   "steps": 1000,
+   "sticky_commitments": true,
+   "suppress_recommand_own_task": false,
+   "task_membership_consistency": true
+  }
+ },
+ "failures": [],
+ "hold_to_bound": {
+  "bytes": 36822,
+  "emissions": 14,
+  "forced_emissions": 14,
+  "on_time": 6,
+  "policy_emissions": 0,
+  "redundant": 0,
+  "unspoken_or_uncounted_at_end": 6
+ },
+ "immediate": {
+  "bytes": 36804,
+  "emissions": 14,
+  "forced_emissions": 8,
+  "on_time": 6,
+  "policy_emissions": 6,
+  "redundant": 0,
+  "unspoken_or_uncounted_at_end": 6
+ },
+ "leakage_audit": {
+  "allow_list_entries_that_no_longer_exist": {},
+  "clean": true,
+  "fields_not_on_the_allow_list": {}
+ },
+ "learned_seed3": {
+  "autonomous_share_of_bytes": 0.0,
+  "bytes": 36822,
+  "forced_emissions": 14,
+  "policy_emissions": 0
+ },
+ "resume": {
+  "draw": [
+   0.23604809,
+   0.96702984,
+   0.55963862
+  ],
+  "pilot_checkpoint_has_no_rng": true,
+  "pilot_stored_keys": [
+   "budget_bytes",
+   "cursor",
+   "environment_steps",
+   "episodes",
+   "evaluations",
+   "seed",
+   "updates"
+  ],
+  "rng_round_trip": true
+ },
+ "seed": 700048,
+ "send_once_no_bound": {
+  "bytes": 15054,
+  "emissions": 6
+ },
+ "update": {
+  "approx_kl": -0.00032,
+  "clip_fraction": 0.0007,
+  "entropy": 0.07781,
+  "epochs": 4,
+  "gradient_norm_mean": 0.2483,
+  "minibatches": 16,
+  "optimizer_steps": 16,
+  "policy_surrogate": 0.45718,
+  "samples": 1000,
+  "value_explained_variance": 0.0998,
+  "value_loss": 0.02212,
+  "weight_delta": 0.00455
+ }
+}
