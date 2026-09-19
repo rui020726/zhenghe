@@ -1,0 +1,145 @@
+{
+ "all_forced_step": {
+  "actor_moved": false,
+  "asked": [],
+  "logged_probability": 0.0
+ },
+ "bound": {
+  "emissions": 16,
+  "forced": 16,
+  "policy": 0,
+  "reason_split_closes": true
+ },
+ "budget_bytes": 87900,
+ "budget_hold_to_bound": {
+  "credit": 87900,
+  "ledger_airtime": 41916,
+  "refusals": 0,
+  "spent": 41916
+ },
+ "budget_immediate": {
+  "credit": 87900,
+  "ledger_airtime": 39270,
+  "refusals": 0,
+  "spent": 39270
+ },
+ "constants": {
+  "clip": 0.2,
+  "collector": "onpolicy",
+  "entropy_bonus": 0.01,
+  "episodes_per_update": 4,
+  "epochs_per_batch": 4,
+  "exploration_epsilon_used": null,
+  "feature_layout": "comm-send-state/1",
+  "max_wait_steps": 10,
+  "minibatch_steps": 256,
+  "urgency_steps": 25.0,
+  "urgent_wait_steps": 3
+ },
+ "data_split": {
+  "previous_block_executed": 400,
+  "reserved_block": [
+   800000,
+   800400
+  ],
+  "reserved_clean": true
+ },
+ "executed_configuration": {
+  "allocation_arm_is_C": true,
+  "membership_consistency_enabled": true,
+  "mismatches": {},
+  "steps": 1000
+ },
+ "failures": [],
+ "guard_refused_tape": "the rollout's logged probability does not describe the action that was drawn: {'max_abs_gap': 0.531442, 'tapes': 1000}",
+ "leakage_audit": {
+  "allow_list_entries_that_no_longer_exist": {},
+  "clean": true,
+  "fields_not_on_the_allow_list": {}
+ },
+ "milestones": {
+  "exact": [
+   100000,
+   200000,
+   300000,
+   400000
+  ],
+  "rounded_up": [],
+  "steps_per_update": 4000
+ },
+ "resume": {
+  "identical": true,
+  "resumed": {
+   "cursor": 8,
+   "final_fingerprint": "7061fba7cd1ed496",
+   "last_report": {
+    "approx_kl": -3.1e-05,
+    "at_steps": 8000,
+    "batch_bytes": 349302,
+    "batch_on_time": 15,
+    "clip_fraction": 0.0047,
+    "drawn_send_rate": 0.5457,
+    "optimizer_steps": 56,
+    "samples": 3379
+   },
+   "updates": 2
+  },
+  "uninterrupted": {
+   "cursor": 8,
+   "final_fingerprint": "7061fba7cd1ed496",
+   "last_report": {
+    "approx_kl": -3.1e-05,
+    "at_steps": 8000,
+    "batch_bytes": 349302,
+    "batch_on_time": 15,
+    "clip_fraction": 0.0047,
+    "drawn_send_rate": 0.5457,
+    "optimizer_steps": 56,
+    "samples": 3379
+   },
+   "updates": 2
+  }
+ },
+ "sampler": {
+  "alignment": {
+   "max_abs_gap": 0.0,
+   "mean_gap": 0.0,
+   "records": 1000
+  },
+  "timing": {
+   "candidates_seen": 2567,
+   "decide_milliseconds_per_call": 0.1747,
+   "decisions": 1000,
+   "forced_sends": 2384,
+   "free_candidates": 183,
+   "voluntary_send_rate": 0.4809
+  }
+ },
+ "seed": 700000,
+ "tiers": {
+  "25pct": {
+   "bytes": 29300,
+   "locked": 29300
+  },
+  "75pct": {
+   "bytes": 87900,
+   "locked": 87900
+  }
+ },
+ "update": {
+  "actor_delta": 0.001898,
+  "approx_kl": -0.000182,
+  "clip_fraction": 0.0005,
+  "critic_delta": 0.004636,
+  "entropy": 0.09158,
+  "epochs": 4,
+  "free_candidate_samples": 115,
+  "gradient_norm_mean": 0.3079,
+  "minibatches": 16,
+  "optimizer_steps": 16,
+  "policy_surrogate": 0.28425,
+  "samples": 869,
+  "value_explained_variance": -0.2058,
+  "value_loss": 0.07599
+ }
+}
