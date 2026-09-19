@@ -55,11 +55,17 @@ def main(argv: list[str]) -> int:
         "date": "2026-09-19",
         "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
         "head": git("rev-parse", "HEAD"),
+        # The commit the run's *production* code came from. The manifest file itself is
+        # committed after it is written, so `head` alone would point one commit early.
+        "production_head": git("log", "-1", "--format=%H", "--", "integrated_sar", "task_allocation"),
         "inherited_from": {
             "branch": "fix/task-membership-consistency",
             "head": "fd06d45abab83e595c907e3a5d6b0d3d28554117",
             "frozen_production_commit": common.FROZEN["code_commit"],
             "production_paths_dirty_here": bool(production),
+            "production_paths_dirty_exactly": [
+                line[3:] for line in production.splitlines() if line
+            ],
             "note": (
                 "the allocation side is the frozen block's C arm; this branch adds a send-policy "
                 "seam to the relay, so the previous block's freeze check reports drift by design -- "

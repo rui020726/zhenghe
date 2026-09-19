@@ -559,13 +559,14 @@
   "IDENTITY_CHECK.json": "c66f27972ed453bceebbc40fc188efdfacb112124e71d4fd8e9639ccd76bb5a6",
   "TRAFFIC_PROBE.json": "8b0b4fa7676e4281183ff2054519c8884e456547e174e1352cae46e846008234"
  },
- "head": "fd06d45abab83e595c907e3a5d6b0d3d28554117",
+ "head": "2c2f6e3886adb3339e43b8b6d8379d5cbfbe60f6",
  "inherited_from": {
   "branch": "fix/task-membership-consistency",
   "frozen_production_commit": "a26e5b54990e2d3b2ead8c542057d6cfa2b23922",
   "head": "fd06d45abab83e595c907e3a5d6b0d3d28554117",
   "note": "the allocation side is the frozen block's C arm; this branch adds a send-policy seam to the relay, so the previous block's freeze check reports drift by design -- the equivalence of the default path is the identity check below, not the freeze file",
-  "production_paths_dirty_here": true
+  "production_paths_dirty_exactly": [],
+  "production_paths_dirty_here": false
  },
  "policy_menu": [
   {
@@ -599,6 +600,7 @@
    }
   }
  ],
+ "production_head": "14c29aedad8e03c36256cdf1fcb90dd3b45bcf5d",
  "round": "communication_control_baselines_20260919",
  "scenario": {
   "allocation_interval": 5,
