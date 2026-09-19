@@ -114,6 +114,11 @@ class _TargetLedger:
     pending_message: DetectionMessage | None = None
     last_sent: DetectionMessage | None = None
     last_sent_view: "_View | None" = None
+    #: The newest view the sender has already booked an item against -- ``last_sent_view`` says
+    #: what went out, this says what it came to know. Without it a change that arrives while an
+    #: older one is still unsent is invisible to both ``generated_items`` and
+    #: ``coalesced_changes``, because neither counter can tell it from the one already waiting.
+    ready_view: "_View | None" = None
     last_sent_step: int | None = None
     sent_count: int = 0
     pending_event: bool = False
@@ -238,6 +243,12 @@ class CommRelay:
                 "coalesced_changes",
                 "emissions",
                 "first_emissions",
+                # Three different things that all sound like "the same thing twice", counted
+                # separately on purpose: ``coalesced_changes`` is production-side (two pieces of
+                # news, one letter), ``redundant_emissions`` is send-side (a letter whose content
+                # was already said unchanged), and ``delivery_duplicate`` is one receiver
+                # refusing a packet it already believed.
+                "redundant_emissions",
                 "refresh_emissions",
                 # what went on the air, and what came out the other end
                 "transmission_attempts",
@@ -298,6 +309,10 @@ class CommRelay:
             self.counters["coalesced_changes"] += 1
         ledger.pending_event = True
         ledger.closed = False
+        # The event has now been booked as one item (and as one merge, if something was already
+        # waiting). What it actually says is only known when the registry is read, so clear the
+        # content marker: the next poll records that content without counting it a second time.
+        ledger.ready_view = None
         if ledger.ready_step is None:
             ledger.ready_step = ready_step
         self.counters["events_accepted"] += 1
@@ -453,6 +468,7 @@ class CommRelay:
                     self.counters["emissions_suppressed_terminal"] += 1
                     ledger.pending_event = False
                     ledger.ready_step = None
+                    ledger.ready_view = None
                     ledger.pending_message = None
                 continue
             reference = ledger.last_sent or ledger.pending_message
@@ -470,7 +486,20 @@ class CommRelay:
                 # policy intends to send it: a held change is what a "queue wait" number has
                 # to count, and the historical policy holds every one of them by design.
                 ledger.ready_step = self._tick
+                ledger.ready_view = view
                 self.counters["generated_items"] += 1
+            elif changed_view and ledger.ready_view is None:
+                # Something is already waiting and this is its content for the first time: an
+                # event booked it on the way in, so record what it says and count nothing again.
+                ledger.ready_view = view
+            elif changed_view and ledger.ready_view != view:
+                # The registry moved again while the first change sat unsent. This is the same
+                # situation the event path calls a coalesce -- two pieces of news, one letter --
+                # and it has to be counted the same way, or the merge the relay really performed
+                # disappears from the ledger.
+                ledger.ready_view = view
+                self.counters["generated_items"] += 1
+                self.counters["coalesced_changes"] += 1
             sent = ledger.last_sent
             ready_step = ledger.ready_step if ledger.ready_step is not None else self._tick
             items.append(
@@ -580,8 +609,10 @@ class CommRelay:
         ledger.pending_event = False
         ledger.pending_message = None
         ledger.ready_step = None
+        ledger.ready_view = None
         attempts = sent + lost
         self.counters["emissions"] += 1
+        self.counters["redundant_emissions"] += 0 if item.changed_view else 1
         self.counters[f"emissions_{reason}"] += 1
         self.counters[f"attempts_{reason}"] += attempts
         self.counters[f"bytes_{reason}"] += int(cost_bytes)

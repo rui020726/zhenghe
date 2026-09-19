@@ -79,6 +79,18 @@ belief 或投递结果（上行无 ACK），所以搜索队与救援队仍是两
 新增的两个地板臂）。`--comm-budget-bytes` 是同一执行器给的每 episode 字节额度，规则臂与学习臂
 共用，见 `integrated_sar/comm_budget.py`。
 
+三种"同一件事做两次"的口径必须分开，否则账本会被读反：`coalesced_changes` 是**生产侧**的合并
+（两条新闻装进一封信），`redundant_emissions` 是**发送侧**的重复（一封信的内容与上一封逐字段相同，
+即 `SendItem.changed_view` 为假），`delivery_duplicate` 则是**接收侧**某个机器人拒收它已经相信的包。
+一条被轮询发现的变化若撞上一件仍在排队的旧变化，现在同时计入 `generated_items` 与
+`coalesced_changes`——它确实既是一条新闻、又是一次合并——并且与事件路径共用 `ready_view`，
+所以同一条新闻被事件和轮询各看一次时只计一遍。恒等式因此是
+`generated_items = (emissions - redundant_emissions) + coalesced_changes + 终态抑制 + 终局未说`，
+四项各归其位、不重复计数。回归见 `integrated_sar/tests/test_comm_send_policy.py` 的
+`GenerationAccountingTests`，机制实测见 `runs/comm_tight_budget_20260919/` 的
+`ledger_gap_reproduction.py` 与 `ledger_fix_invariance.py`（后者核对固定 checkpoint 在记账修正前后
+的发射、扣费与任务结局逐值不变）。
+
 收窄拓扑或压低发送频率都只限制**这条消息通道**——机器人仍可能经视距感知或一跳 gossip
 获知同一信息（那两条信道由 `old_task_env` 自己建模，实测份额见
 `runs/comm_control_20260919/INFORMATION_BOUNDARY.md`：默认传感半径下 95.6% 的"首次知晓"

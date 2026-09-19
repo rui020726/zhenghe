@@ -1,0 +1,91 @@
+{
+ "candidates": [
+  {
+   "balance_reading_redundant_by_content": 0,
+   "balance_reading_redundant_by_revision": 0,
+   "balance_using_the_live_counter": 0,
+   "case": "A poll-side coalescing: 3 changes, 1 packet",
+   "coalesced_changes": 2,
+   "emissions": 1,
+   "generated_items": 3,
+   "note": "the middle change is invisible to both counters; the packet that carries all three is one emission, so the identity loses the same unit on both sides",
+   "redundant_by_content_offline": 0,
+   "redundant_by_revision": 0,
+   "redundant_counted_live": 0,
+   "suppressed_terminal": 0
+  },
+  {
+   "balance_reading_redundant_by_content": 0,
+   "balance_reading_redundant_by_revision": -1,
+   "balance_using_the_live_counter": 0,
+   "case": "B revision without a view change: 2 packets, 1 change",
+   "coalesced_changes": 0,
+   "emissions": 2,
+   "emissions_before_second_case": 1,
+   "generated_items": 1,
+   "note": "the second update repeats the first packet's stage, progress, requirements and members, so no view moved and no item was generated; only the registry revision advanced",
+   "redundant_by_content_offline": 1,
+   "redundant_by_revision": 0,
+   "redundant_counted_live": 1,
+   "suppressed_terminal": 0
+  }
+ ],
+ "real_episodes": [
+  {
+   "balance_reading_redundant_by_content": 5,
+   "balance_reading_redundant_by_revision": 5,
+   "balance_using_the_live_counter": 5,
+   "case": "C real episode s700000 policy=event",
+   "coalesced_changes": 78,
+   "emissions": 33,
+   "generated_items": 116,
+   "redundant_by_content_offline": 0,
+   "redundant_by_revision": 0,
+   "redundant_counted_live": 0,
+   "spent_bytes": 87330,
+   "suppressed_terminal": 0
+  },
+  {
+   "balance_reading_redundant_by_content": 6,
+   "balance_reading_redundant_by_revision": 6,
+   "balance_using_the_live_counter": 6,
+   "case": "C real episode s700001 policy=event",
+   "coalesced_changes": 74,
+   "emissions": 33,
+   "generated_items": 113,
+   "redundant_by_content_offline": 0,
+   "redundant_by_revision": 0,
+   "redundant_counted_live": 0,
+   "spent_bytes": 86586,
+   "suppressed_terminal": 0
+  },
+  {
+   "balance_reading_redundant_by_content": 4,
+   "balance_reading_redundant_by_revision": 4,
+   "balance_using_the_live_counter": 4,
+   "case": "C real episode s700002 policy=event",
+   "coalesced_changes": 51,
+   "emissions": 34,
+   "generated_items": 89,
+   "redundant_by_content_offline": 0,
+   "redundant_by_revision": 0,
+   "redundant_counted_live": 0,
+   "spent_bytes": 86634,
+   "suppressed_terminal": 0
+  },
+  {
+   "balance_reading_redundant_by_content": 6,
+   "balance_reading_redundant_by_revision": 6,
+   "balance_using_the_live_counter": 6,
+   "case": "C real episode s700003 policy=event",
+   "coalesced_changes": 95,
+   "emissions": 32,
+   "generated_items": 133,
+   "redundant_by_content_offline": 0,
+   "redundant_by_revision": 0,
+   "redundant_counted_live": 0,
+   "spent_bytes": 86268,
+   "suppressed_terminal": 0
+  }
+ ]
+}

@@ -980,5 +980,143 @@ class AttributionArmTests(unittest.TestCase):
         )
 
 
+class GenerationAccountingTests(unittest.TestCase):
+    """What the sender came to know, what it merged, and what it said twice.
+
+    Round 3 found the generation identity short by 40 units and blamed poll-side coalescing.
+    Measured here, that mechanism is invisible but self-cancelling -- it loses the same unit on
+    both sides -- and the negative sign comes from comparing two different counting objects: the
+    relay counts transitions of what a robot could act on, while the transcript reader was
+    comparing registry revisions. These tests pin all three quantities separately so the next
+    reader does not have to re-derive which is which.
+    """
+
+    @staticmethod
+    def _run(policy_name: str = "periodic", **parameters: Any):
+        registry = TaskRegistry()
+        writer = RecordingWriter()
+        transcript = CommTranscript()
+        relay = CommRelay(
+            subscribers=("0", "1"),
+            writer=writer,
+            snapshot_of=registry.get,
+            accepted_of=registry.was_accepted,
+            policy=build_comm_policy(policy_name, parameters or {"interval": 20}),
+            seed=7,
+            transcript=transcript,
+        )
+        return registry, relay, transcript
+
+    @staticmethod
+    def _identity(counters: dict[str, int]) -> dict[str, int]:
+        """Every item the sender came to know ends up as one of four things, never two.
+
+        ``generated_items`` is the left side; a merge is not a second letter and a repeat is not
+        an answer to news at all, so neither may be counted on both sides.
+        """
+        return {
+            "generated": counters["generated_items"],
+            "said_once": counters["emissions"] - counters["redundant_emissions"],
+            "merged": counters["coalesced_changes"],
+            "silenced": counters["emissions_suppressed_terminal"],
+        }
+
+    def test_three_changes_carried_by_one_packet_are_counted_as_three(self) -> None:
+        registry, relay, transcript = self._run()
+        event = detection()
+        registry.handle_detection(event)
+        relay.handle_detection(event)
+        relay.tick()
+        relay.tick()
+        registry.handle_progress(progress("target-1", observed_at=3.0, value=0.3, members=("0",)))
+        relay.tick()
+        relay.tick()
+        registry.handle_progress(
+            progress("target-1", observed_at=5.0, value=0.6, members=("0", "1"))
+        )
+        for _ in range(16):
+            relay.tick()
+        counters = relay.counters
+        self.assertEqual(counters["emissions"], 1, "one slot, one letter, whatever it absorbed")
+        self.assertEqual(counters["generated_items"], 3, "the detection and both later changes")
+        self.assertEqual(counters["coalesced_changes"], 2, "both later changes joined a waiting item")
+        self.assertEqual(counters["redundant_emissions"], 0)
+        identity = self._identity(counters)
+        self.assertEqual(
+            identity["generated"],
+            identity["said_once"] + identity["merged"] + identity["silenced"],
+            "everything the sender knew is either said, merged, or silenced -- none left over",
+        )
+
+    def test_a_change_seen_by_an_event_and_by_the_poller_is_counted_once(self) -> None:
+        registry, relay, _transcript = self._run()
+        event = detection()
+        registry.handle_detection(event)
+        relay.handle_detection(event)
+        for _ in range(3):
+            relay.tick()
+        self.assertEqual(
+            relay.counters["generated_items"],
+            1,
+            "the poller read the news the event had already booked; that is one item, not two",
+        )
+        self.assertEqual(relay.counters["coalesced_changes"], 0)
+
+    def test_a_revision_move_that_changes_nothing_actionable_is_a_repeat_not_news(self) -> None:
+        registry, relay, transcript = self._run()
+        event = detection()
+        registry.handle_detection(event)
+        relay.handle_detection(event)
+        for _ in range(20):
+            relay.tick()
+        self.assertEqual(relay.counters["emissions"], 1)
+        revision_after_first = registry.get("target-1").revision
+        registry.handle_progress(
+            progress(
+                "target-1", observed_at=30.0, value=0.0, remaining=(1, 0, 0, 0, 0), members=()
+            )
+        )
+        moved = registry.get("target-1")
+        for _ in range(20):
+            relay.tick()
+        counters = relay.counters
+        if moved.revision == revision_after_first:
+            self.skipTest("this registry leaves the revision alone for an identical update")
+        self.assertEqual(counters["generated_items"], 1, "nothing a robot reads has moved")
+        self.assertEqual(counters["emissions"], 2)
+        self.assertEqual(
+            counters["redundant_emissions"], 1, "the second letter repeats the first, by content"
+        )
+        identity = self._identity(counters)
+        self.assertEqual(identity["generated"], identity["said_once"] + identity["merged"] + identity["silenced"])
+        self.assertEqual(identity["said_once"], 1, "only the first letter answered news")
+
+    def test_a_send_the_budget_refused_does_not_recount_the_change(self) -> None:
+        from integrated_sar.comm_budget import CommBudget
+        from integrated_sar.comm_policy import ImmediatePolicy
+
+        registry = TaskRegistry()
+        writer = RecordingWriter()
+        relay = CommRelay(
+            subscribers=("0",),
+            writer=writer,
+            snapshot_of=registry.get,
+            accepted_of=registry.was_accepted,
+            policy=ImmediatePolicy(),
+            seed=5,
+            budget=CommBudget(bytes_per_episode=1),
+        )
+        event = detection()
+        registry.handle_detection(event)
+        relay.handle_detection(event)
+        for _ in range(4):
+            relay.tick()
+        counters = relay.counters
+        self.assertEqual(counters["emissions"], 0)
+        self.assertEqual(counters["generated_items"], 1, "re-asking for the same news is not news")
+        self.assertEqual(counters["coalesced_changes"], 0)
+        self.assertGreater(counters["budget_refused_sends"], 0)
+
+
 if __name__ == "__main__":
     unittest.main()
