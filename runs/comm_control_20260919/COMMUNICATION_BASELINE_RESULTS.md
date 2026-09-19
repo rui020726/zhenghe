@@ -149,6 +149,10 @@
   `all_identical: true`）。因此"默认 = 现状"是被验证的，不是被声明的。
 * **构造断言**：每个 episode 在运行前核对中继实际携带的策略名、参数字典、发射预算，
   以及运行标识里含 `+memfix`（修正环境），不符即失败并记为技术失败行。
+* **产物归属**：`COMM_ROUND_MANIFEST.json` 同时记录 `production_head`（最后一次触碰
+  `integrated_sar`/`task_allocation` 的提交）与生成时生产路径是否干净；本轮 204 个 episode、
+  48 个探针 episode 与 16 个等价性 episode 都产自该提交的生产代码。清单自身所在的提交
+  必然晚于它记录的 `head`，因此归属判断看 `production_head` 而不是 `head`。
 * **签名隔离**：非默认策略会改变臂标签（`+commperiodic[interval5]` 形式）与 `config_hash`；
   转录文件路径不入 hash。
 * **指标口径修订**：信息年龄不再对"登记处已终态"的任务累计（否则 12 seed 全部退化为同一年龄，
