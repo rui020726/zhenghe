@@ -750,6 +750,9 @@
     （`mismatches: {}`，不再拿 dataclass 默认值冒充实验配置）；默认配置不变；
     12 项 smoke **`failures: []`**；全套 **598 通过（2 跳过）**；`python -m integrated_sar`
     `final_status=completed`；`.pt` checkpoint、录制流、逐 episode 日志与 transcript 均不入库。
+    交付头 `545e526fd140887a39ea924f501b76054f885615`（episode 跑在该树内容上；
+    `COMM_STABILITY_ROUND_MANIFEST.json` 于提交后重生成，故其 `dirty_modules` 为空、
+    被执行模块哈希与 HEAD 一致）。
 
 ## 尚未完成
 

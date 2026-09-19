@@ -141,7 +141,7 @@ CTDE + 规则协调／预约 + 执行校验
 | 通信学习 pilot 分支 | `feat/learned-communication-budget-pilot` | 最新已报告的通信学习工作 |
 | 通信学习 pilot 交付头 | `ab5728beb124d7d0edd710457b2f84cdd6a5d244` | 三训练 seeds；源码与产物仍由执行 Agent 核对 |
 | 归因与稳定性分支 | `feat/communication-training-stability` | 起点即上面的 `ab5728be…`；只引入总纲与执行指令两个文档，未回退旧生产代码 |
-| 归因与稳定性交付头 | 见 `runs/comm_stability_20260919/COMM_STABILITY_ROUND_MANIFEST.json` 的 `branch.head` | 交付头不能写进它自己所在的那个提交；该 manifest 同时记录被执行模块的内容哈希与是否等于 HEAD |
+| 归因与稳定性交付头 | `545e526fd140887a39ea924f501b76054f885615` | 该轮 episode 跑在这棵树上；manifest 在提交后重生成，故其 `executed_code.modules[*].matches_head` 为 true 且 `dirty_modules` 为空 |
 
 ### 5.2 通信先导结果应如何解读
 
