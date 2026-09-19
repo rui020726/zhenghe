@@ -816,6 +816,10 @@
     `800000..800399` 仍封存、盘上无 artefact；两档额度均等于锁定标定值；
     checkpoint / 流 / transcript / 逐集日志不入库，`COMM_TIGHT_BUDGET_MANIFEST.json` 以
     **git blob 身份**（而非裸字节，避开 checkout 的 CRLF 假不匹配）核对被执行模块与 HEAD 一致。
+    逐问题提交：文档引入 `e9dc21b`、概率修复 `f6827c7`、记账修复 `237126d`、
+    紧预算闸门 `0464f3b`、判据冻结 `a4cfb4f`、结果与交付 `157898e`；
+    manifest 在 `157898e` 之后重生成（`executed_code.head` 即该值、`dirty_modules: []`、
+    全部被执行模块 matches_head），随后以一次 chore 提交登记交付 SHA。
     旧的二、三轮预注册判定与产物原样保留，未重跑、未改写。
 
 ## 尚未完成

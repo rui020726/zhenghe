@@ -154,7 +154,7 @@ CTDE + 规则协调／预约 + 执行校验
 | 归因与稳定性分支 | `feat/communication-training-stability` | 起点即上面的 `ab5728be…`；只引入总纲与执行指令两个文档，未回退旧生产代码 |
 | 归因与稳定性交付头 | `545e526fd140887a39ea924f501b76054f885615` | 该轮 episode 跑在这棵树上；manifest 在提交后重生成，故其 `executed_code.modules[*].matches_head` 为 true 且 `dirty_modules` 为空 |
 | 正确性与紧预算分支 | `fix/comm-ppo-probability-budget` | 起点即上面的 `7834034…`（第三轮交付头）；只引入文档提交 `4bd44da`，未回退旧生产代码 |
-| 正确性与紧预算交付头 | 见 `PROJECT_STATUS.md` 第四轮条目与 `runs/comm_tight_budget_20260919/COMM_TIGHT_BUDGET_MANIFEST.json` 的 `executed_code.head` | manifest 以 **git blob 身份**比较（`hash-object` vs `rev-parse HEAD:path`），不再用裸字节，以免 checkout 的 CRLF 被误报为不一致 |
+| 正确性与紧预算交付头 | `157898e7e8c6c3e224c6187b35a6673972d14567` | manifest 于该提交之后重生成，故 `executed_code.head` 即此值、`dirty_modules` 为空、被执行模块的 blob 身份全部与 HEAD 一致 |
 
 ### 5.2 通信先导结果应如何解读
 
