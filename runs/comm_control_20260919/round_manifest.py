@@ -67,7 +67,10 @@ def main(argv: list[str]) -> int:
             ),
         },
         "checkpoints": {
-            name: {"path": path, "sha256": digest}
+            name: {
+                "path": str(Path(path).relative_to(common.ROOT)).replace(chr(92), "/"),
+                "sha256": digest,
+            }
             for (name, path), digest in zip(common.CHECKPOINTS.items(), common.CHECKPOINT_SHA256.values())
         },
         "scenario": {
@@ -105,7 +108,7 @@ def main(argv: list[str]) -> int:
         "conditions": [condition.as_dict() for condition in conditions.CONDITIONS],
         "seeds": {
             "development_used_for_baselines": list(common.DEV_SEEDS[:12]),
-            "development_stream_dir": str(common.DEV_STREAM_DIR),
+            "development_stream_dir": str(common.DEV_STREAM_DIR.relative_to(common.ROOT)).replace(chr(92), "/"),
             "untouched_registered_independent_test": "500000..500399 (previous round)",
             "live_system_seeds_not_used": "600000..600059",
         },
