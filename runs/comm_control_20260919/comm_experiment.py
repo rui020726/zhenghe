@@ -219,7 +219,7 @@ def run_one(condition: conditions.Condition, seed: int, *, directory: Path) -> d
             f"{condition.name}: built parameters {relay.policy.parameters()}, "
             f"asked for {condition.params}"
         )
-    if relay.transport_parameters()["sends_per_tick"] != condition.sends_per_tick:
+    if relay.transport_parameters()["budget"]["sends_per_step"] != condition.sends_per_tick:
         raise RuntimeError(f"{condition.name}: the emission budget did not reach the relay")
     if "+memfix" not in run.run_signature["arm"]:
         raise RuntimeError(f"{condition.name}: the run is not on the corrected environment")
@@ -356,8 +356,8 @@ def main(argv: list[str]) -> int:
             transport = row.get("transport", {})
             print(
                 f"[{name} s{seed}] on_time={performance.get('on_time')}/{performance.get('targets')} "
-                f"emissions={transport.get('emissions')} packets={transport.get('packets_sent')} "
-                f"bytes={transport.get('payload_bytes_total')} "
+                f"emissions={transport.get('emissions')} attempts={transport.get('transmission_attempts')} "
+                f"bytes={transport.get('airtime_bytes')} "
                 f"age={row.get('belief_all_channels', {}).get('belief_age_steps_mean')} "
                 f"{row.get('seconds')}s"
                 + (f" FAILED: {row.get('technical_failure')}" if "technical_failure" in row else ""),

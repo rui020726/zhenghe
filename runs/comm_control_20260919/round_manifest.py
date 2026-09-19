@@ -143,11 +143,11 @@ def main(argv: list[str]) -> int:
                     "on_time_total": values["metrics"]
                     .get("performance.on_time", {})
                     .get("total"),
-                    "packets_total": values["metrics"]
-                    .get("transport.packets_sent", {})
+                    "attempts_total": values["metrics"]
+                    .get("transport.transmission_attempts", {})
                     .get("total"),
-                    "payload_bytes_total": values["metrics"]
-                    .get("transport.payload_bytes_total", {})
+                    "airtime_bytes_total": values["metrics"]
+                    .get("transport.airtime_bytes", {})
                     .get("total"),
                 }
                 for name, values in sorted((stats.get("per_condition") or {}).items())

@@ -1,0 +1,59 @@
+{
+ "always_send": {
+  "attempts": 198,
+  "on_time": 4,
+  "spent": 85710
+ },
+ "budget_bytes": 87900,
+ "constants": {
+  "feature_layout": "comm-send-state/1",
+  "feature_names": [
+   "age_steps",
+   "since_last_emission_time",
+   "sent_count",
+   "pending_event",
+   "changed_view",
+   "first_emission",
+   "stage_changed",
+   "requirements_changed",
+   "members_changed",
+   "progress_delta_abs",
+   "revision_delta",
+   "remaining_time_over_horizon",
+   "urgency_now",
+   "has_future_requirements",
+   "queue_backlog_targets",
+   "budget_remaining_fraction",
+   "capacity_remaining_fraction",
+   "subscribers",
+   "step_over_horizon"
+  ],
+  "max_wait_steps": 10,
+  "urgency_steps": 25.0,
+  "urgent_wait_steps": 3
+ },
+ "failures": [],
+ "hold_to_bound": {
+  "forced_sends": 16,
+  "on_time": 6,
+  "spent": 41916
+ },
+ "hold_unmasked": {
+  "attempts": 0,
+  "on_time": 0,
+  "targets_known": 0
+ },
+ "leakage_audit": {
+  "allow_list_entries_that_no_longer_exist": {},
+  "clean": true,
+  "fields_not_on_the_allow_list": {}
+ },
+ "update": {
+  "approx_kl": -0.001893,
+  "entropy": 0.0962,
+  "minibatches": 16,
+  "policy_surrogate": 0.21946,
+  "value_loss": 0.07115,
+  "weight_delta": 0.004836
+ }
+}

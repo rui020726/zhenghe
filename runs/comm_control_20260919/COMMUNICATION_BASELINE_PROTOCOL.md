@@ -53,7 +53,7 @@
   禁止复用已定交付时间的消息序列——消息序列由策略产生，转录取自 `CommRelay` 自身。
 * **主指标**：per-seed 按时完成目标数（`performance.on_time`，定义沿用上一轮：
   `final_progress ≥ 1 且 failure_reason ≠ deadline_expired`）与按时完成率。
-* **通信指标**：`emissions`（批次）、`packets_sent`（=批次×订阅者−丢包）、`payload_bytes_total`
+* **通信指标**：`emissions`（批次）、`transmission_attempts`（=批次×订阅者，**丢包同样计入**）、`airtime_bytes`
   （规范化 JSON 载荷字节×包数，明确不含无线头部/帧开销）、批大小、队列等待与飞行步数、
   重复/过期/陈旧投递计数、刷新批次占比。
 * **接收端指标**：信息年龄（`now − believed 载荷状态时刻`，仅对**仍活动**的任务计，

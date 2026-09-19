@@ -62,15 +62,33 @@ class SendItem:
 
 @dataclass(frozen=True)
 class SendObservation:
+    """Everything the sending node can act on at one decision point.
+
+    The budget fields are what the executor still allows, not a forecast of what will fit:
+    a policy that asks for more than the remaining credit is refused and stays queued, so a
+    learned controller sees its own constraint rather than a privileged view of the future.
+    """
+
     step: int
     current_time: float
     items: tuple[SendItem, ...]
+    remaining_budget_bytes: float = float("inf")
+    budget_bytes_per_episode: int | None = None
+    capacity_remaining: int | None = None
+    backlog_targets: int = 0
+    subscribers: int = 1
 
 
 class CommSendPolicy:
-    """Base class: a policy names itself and reports its parameters verbatim."""
+    """Base class: a policy names itself and reports its parameters verbatim.
+
+    ``orders_selection`` says whether the executor should keep the order this policy returns.
+    Rules that do not claim an ordering are trimmed by the transport in one fixed order, so
+    they are compared on what they ask to say rather than on queue-pushing skill.
+    """
 
     name = "abstract"
+    orders_selection = False
 
     def parameters(self) -> dict[str, Any]:
         return {}
@@ -230,6 +248,41 @@ class EventMaxWaitPolicy(EventPolicy):
         return tuple(selected)
 
 
+class PriorityEventPolicy(EventPolicy):
+    """The event triggers, and when the airtime will not cover them all, say the most
+    actionable first: a score of urgency, how long the change has been held, and how much the
+    packet would actually say.
+
+    With unbounded airtime this emits exactly what ``event`` emits -- the ordering only matters
+    once something has to be refused. That is the point: it is the strongest simple rule a
+    learned controller has to beat under a budget, and it is a rule, not a ceiling, because
+    every term in the score is visible state.
+    """
+
+    name = "event_priority"
+    orders_selection = True
+
+    #: Three pre-registered quantities, each normalised to roughly [0, 1], summed with equal
+    #: weight. Nothing here was tuned against a result: urgency is 1/(1+slack), staleness is
+    #: held-steps over 50 (a command lifetime), and information content counts a fresh
+    #: discovery, a stage or requirement change, or a full progress jump as one unit each.
+    @staticmethod
+    def score(item: SendItem) -> float:
+        urgency = 1.0 / (1.0 + max(0.0, item.remaining_time) / 50.0)
+        staleness = min(1.0, item.age_steps / 50.0)
+        information = (
+            1.0 if item.pending_event else 0.0
+        ) + (
+            1.0 if (item.stage_changed or item.requirements_changed or item.members_changed) else 0.0
+        ) + min(1.0, abs(item.progress_delta) / 0.5)
+        return urgency + staleness + information
+
+    def decide(self, observation: SendObservation) -> tuple[str, ...]:
+        triggered = [item for item in observation.items if self.triggered(item)]
+        triggered.sort(key=lambda item: (-self.score(item), item.target_id))
+        return tuple(item.target_id for item in triggered)
+
+
 POLICIES: dict[str, type[CommSendPolicy]] = {
     policy.name: policy
     for policy in (
@@ -237,6 +290,7 @@ POLICIES: dict[str, type[CommSendPolicy]] = {
         PeriodicPolicy,
         EventPolicy,
         EventMaxWaitPolicy,
+        PriorityEventPolicy,
     )
 }
 
@@ -275,6 +329,14 @@ def parse_parameters(spec: str | None) -> dict[str, Any]:
 def build_comm_policy(name: str, parameters: dict[str, Any] | str | None = None) -> CommSendPolicy:
     """Instantiate a named policy; unknown names and unknown keys are hard errors."""
     normalized = str(name or "").strip().lower()
+    if normalized == "learned":
+        # The learned controller is not a rule and its weights are not a string parameter: it
+        # is injected onto the relay (CommRelay.attach_policy) after construction. Building the
+        # placeholder here is what makes "learned" a legal, label-visible arm; running it
+        # without injecting a decision function fails loudly instead of silently sending all.
+        from .comm_learning import LearnedSendPolicy
+
+        return LearnedSendPolicy(None)
     if normalized not in POLICIES:
         raise ValueError(
             f"unknown communication policy {name!r}; available: {', '.join(sorted(POLICIES))}"
@@ -309,7 +371,11 @@ def _accepted_keywords(policy: CommSendPolicy) -> dict[str, str]:
 
 
 def policy_descriptors() -> Sequence[dict[str, Any]]:
-    """The policy menu, for a protocol document that must be reviewable before any run."""
+    """The rule menu, for a protocol document that must be reviewable before any run.
+
+    "learned" is deliberately absent: it has no parameters of its own to publish, only a
+    network and a checkpoint that the pilot records separately.
+    """
     return [
         {
             "name": policy.name,

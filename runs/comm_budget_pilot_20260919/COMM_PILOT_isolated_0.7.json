@@ -1,0 +1,1262 @@
+{
+ "episodes": 168,
+ "paired_bytes_vs_event": {
+  "arms": {
+   "event_priority": {
+    "ci95": [
+     -38.25,
+     163.25625
+    ],
+    "mean_difference": 57.75,
+    "pairs": 24,
+    "seeds_better": 6,
+    "seeds_equal": 16,
+    "seeds_worse": 2
+   },
+   "free_event_reference": {
+    "ci95": [
+     27849.825,
+     43904.26875
+    ],
+    "mean_difference": 35941.5,
+    "pairs": 24,
+    "seeds_better": 23,
+    "seeds_equal": 1,
+    "seeds_worse": 0
+   },
+   "learned_seed1": {
+    "ci95": [
+     -518.5,
+     354.5375
+    ],
+    "mean_difference": -73.5,
+    "pairs": 24,
+    "seeds_better": 15,
+    "seeds_equal": 0,
+    "seeds_worse": 9
+   },
+   "learned_seed2": {
+    "ci95": [
+     -697.775,
+     108.0125
+    ],
+    "mean_difference": -309.75,
+    "pairs": 24,
+    "seeds_better": 7,
+    "seeds_equal": 0,
+    "seeds_worse": 17
+   },
+   "learned_seed3": {
+    "ci95": [
+     -49843.925,
+     -35795.45625
+    ],
+    "mean_difference": -43232.75,
+    "pairs": 24,
+    "seeds_better": 1,
+    "seeds_equal": 0,
+    "seeds_worse": 23
+   },
+   "periodic_5": {
+    "ci95": [
+     -15484.78125,
+     -5357.475
+    ],
+    "mean_difference": -10199.0,
+    "pairs": 24,
+    "seeds_better": 6,
+    "seeds_equal": 0,
+    "seeds_worse": 18
+   }
+  },
+  "baseline": "event",
+  "shared_seeds": 24
+ },
+ "paired_vs_event": {
+  "arms": {
+   "event_priority": {
+    "ci95": [
+     0.0,
+     0.125
+    ],
+    "mean_difference": 0.04167,
+    "pairs": 24,
+    "seeds_better": 1,
+    "seeds_equal": 23,
+    "seeds_worse": 0
+   },
+   "free_event_reference": {
+    "ci95": [
+     0.79167,
+     1.29167
+    ],
+    "mean_difference": 1.04167,
+    "pairs": 24,
+    "seeds_better": 19,
+    "seeds_equal": 5,
+    "seeds_worse": 0
+   },
+   "learned_seed1": {
+    "ci95": [
+     0.125,
+     0.75
+    ],
+    "mean_difference": 0.45833,
+    "pairs": 24,
+    "seeds_better": 12,
+    "seeds_equal": 11,
+    "seeds_worse": 1
+   },
+   "learned_seed2": {
+    "ci95": [
+     -1.08333,
+     -0.41667
+    ],
+    "mean_difference": -0.75,
+    "pairs": 24,
+    "seeds_better": 2,
+    "seeds_equal": 6,
+    "seeds_worse": 16
+   },
+   "learned_seed3": {
+    "ci95": [
+     0.45833,
+     1.29167
+    ],
+    "mean_difference": 0.875,
+    "pairs": 24,
+    "seeds_better": 16,
+    "seeds_equal": 7,
+    "seeds_worse": 1
+   },
+   "periodic_5": {
+    "ci95": [
+     0.16667,
+     0.91667
+    ],
+    "mean_difference": 0.54167,
+    "pairs": 24,
+    "seeds_better": 14,
+    "seeds_equal": 7,
+    "seeds_worse": 3
+   }
+  },
+  "baseline": "event",
+  "shared_seeds": 24
+ },
+ "per_arm": {
+  "event": {
+   "credit_used_fraction": 0.988,
+   "decide_milliseconds_per_call": 0.0,
+   "episodes": 24,
+   "mean_airtime_bytes": 86845.0,
+   "mean_applied": 140.1,
+   "mean_attempts": 197.8,
+   "mean_belief_age_steps": 90.84,
+   "mean_budget_refusals": 749.0,
+   "mean_expired": 1.1667,
+   "mean_lost": 57.4,
+   "mean_on_time": 4.8333,
+   "mean_unknown_to_everyone": 546.0
+  },
+  "event_priority": {
+   "credit_used_fraction": 0.9887,
+   "decide_milliseconds_per_call": 0.0,
+   "episodes": 24,
+   "mean_airtime_bytes": 86902.8,
+   "mean_applied": 140.0,
+   "mean_attempts": 197.8,
+   "mean_belief_age_steps": 62.7,
+   "mean_budget_refusals": 670.8,
+   "mean_expired": 1.125,
+   "mean_lost": 57.4,
+   "mean_on_time": 4.875,
+   "mean_unknown_to_everyone": 546.0
+  },
+  "free_event_reference": {
+   "credit_used_fraction": 0.0,
+   "decide_milliseconds_per_call": 0.0,
+   "episodes": 24,
+   "mean_airtime_bytes": 122786.5,
+   "mean_applied": 195.7,
+   "mean_attempts": 276.8,
+   "mean_belief_age_steps": 6.93,
+   "mean_budget_refusals": 0.0,
+   "mean_expired": 0.125,
+   "mean_lost": 80.8,
+   "mean_on_time": 5.875,
+   "mean_unknown_to_everyone": 0.0
+  },
+  "learned_seed1": {
+   "credit_used_fraction": 0.9872,
+   "decide_milliseconds_per_call": 0.2116,
+   "episodes": 24,
+   "mean_airtime_bytes": 86771.5,
+   "mean_applied": 135.6,
+   "mean_attempts": 200.5,
+   "mean_belief_age_steps": 39.7,
+   "mean_budget_refusals": 423.4,
+   "mean_expired": 0.7083,
+   "mean_lost": 58.4,
+   "mean_on_time": 5.2917,
+   "mean_unknown_to_everyone": 332.8
+  },
+  "learned_seed2": {
+   "credit_used_fraction": 0.9845,
+   "decide_milliseconds_per_call": 0.1905,
+   "episodes": 24,
+   "mean_airtime_bytes": 86535.2,
+   "mean_applied": 110.2,
+   "mean_attempts": 202.0,
+   "mean_belief_age_steps": 67.49,
+   "mean_budget_refusals": 1419.5,
+   "mean_expired": 1.9167,
+   "mean_lost": 58.8,
+   "mean_on_time": 4.0833,
+   "mean_unknown_to_everyone": 1255.7
+  },
+  "learned_seed3": {
+   "credit_used_fraction": 0.4962,
+   "decide_milliseconds_per_call": 0.2498,
+   "episodes": 24,
+   "mean_airtime_bytes": 43612.2,
+   "mean_applied": 62.8,
+   "mean_attempts": 100.2,
+   "mean_belief_age_steps": 23.74,
+   "mean_budget_refusals": 137.1,
+   "mean_expired": 0.2917,
+   "mean_lost": 29.0,
+   "mean_on_time": 5.7083,
+   "mean_unknown_to_everyone": 121.2
+  },
+  "periodic_5": {
+   "credit_used_fraction": 0.872,
+   "decide_milliseconds_per_call": 0.0,
+   "episodes": 24,
+   "mean_airtime_bytes": 76646.0,
+   "mean_applied": 98.4,
+   "mean_attempts": 175.8,
+   "mean_belief_age_steps": 36.79,
+   "mean_budget_refusals": 327.0,
+   "mean_expired": 0.625,
+   "mean_lost": 51.2,
+   "mean_on_time": 5.375,
+   "mean_unknown_to_everyone": 250.6
+  }
+ },
+ "per_seed": [
+  {
+   "arm": "event",
+   "bytes": 86268,
+   "on_time": 4,
+   "seed": 700048
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87108,
+   "on_time": 4,
+   "seed": 700048
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 147234,
+   "on_time": 5,
+   "seed": 700048
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 86928,
+   "on_time": 4,
+   "seed": 700048
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 86070,
+   "on_time": 3,
+   "seed": 700048
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 87060,
+   "on_time": 5,
+   "seed": 700048
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 86856,
+   "on_time": 5,
+   "seed": 700048
+  },
+  {
+   "arm": "event",
+   "bytes": 85734,
+   "on_time": 4,
+   "seed": 700049
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 85920,
+   "on_time": 4,
+   "seed": 700049
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 141900,
+   "on_time": 6,
+   "seed": 700049
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 87768,
+   "on_time": 5,
+   "seed": 700049
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 87462,
+   "on_time": 3,
+   "seed": 700049
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 45012,
+   "on_time": 6,
+   "seed": 700049
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 87810,
+   "on_time": 4,
+   "seed": 700049
+  },
+  {
+   "arm": "event",
+   "bytes": 86196,
+   "on_time": 4,
+   "seed": 700050
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 86196,
+   "on_time": 4,
+   "seed": 700050
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 130356,
+   "on_time": 6,
+   "seed": 700050
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 85698,
+   "on_time": 5,
+   "seed": 700050
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 86910,
+   "on_time": 4,
+   "seed": 700050
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 44088,
+   "on_time": 6,
+   "seed": 700050
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 87726,
+   "on_time": 5,
+   "seed": 700050
+  },
+  {
+   "arm": "event",
+   "bytes": 86556,
+   "on_time": 4,
+   "seed": 700051
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 86556,
+   "on_time": 4,
+   "seed": 700051
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 155112,
+   "on_time": 6,
+   "seed": 700051
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 87600,
+   "on_time": 2,
+   "seed": 700051
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 85794,
+   "on_time": 3,
+   "seed": 700051
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 86484,
+   "on_time": 2,
+   "seed": 700051
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 87696,
+   "on_time": 2,
+   "seed": 700051
+  },
+  {
+   "arm": "event",
+   "bytes": 87678,
+   "on_time": 4,
+   "seed": 700052
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87774,
+   "on_time": 4,
+   "seed": 700052
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 122400,
+   "on_time": 6,
+   "seed": 700052
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 87810,
+   "on_time": 5,
+   "seed": 700052
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 86208,
+   "on_time": 4,
+   "seed": 700052
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 42864,
+   "on_time": 6,
+   "seed": 700052
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 63912,
+   "on_time": 6,
+   "seed": 700052
+  },
+  {
+   "arm": "event",
+   "bytes": 86190,
+   "on_time": 6,
+   "seed": 700053
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 86064,
+   "on_time": 6,
+   "seed": 700053
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 91170,
+   "on_time": 6,
+   "seed": 700053
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 84444,
+   "on_time": 6,
+   "seed": 700053
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 86448,
+   "on_time": 4,
+   "seed": 700053
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 19536,
+   "on_time": 6,
+   "seed": 700053
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 45306,
+   "on_time": 6,
+   "seed": 700053
+  },
+  {
+   "arm": "event",
+   "bytes": 86328,
+   "on_time": 5,
+   "seed": 700054
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 86328,
+   "on_time": 5,
+   "seed": 700054
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 98430,
+   "on_time": 6,
+   "seed": 700054
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 86490,
+   "on_time": 6,
+   "seed": 700054
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 86010,
+   "on_time": 3,
+   "seed": 700054
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 21834,
+   "on_time": 6,
+   "seed": 700054
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 61386,
+   "on_time": 6,
+   "seed": 700054
+  },
+  {
+   "arm": "event",
+   "bytes": 87798,
+   "on_time": 6,
+   "seed": 700055
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87798,
+   "on_time": 6,
+   "seed": 700055
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 113664,
+   "on_time": 6,
+   "seed": 700055
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 87084,
+   "on_time": 6,
+   "seed": 700055
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 86970,
+   "on_time": 4,
+   "seed": 700055
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 39090,
+   "on_time": 6,
+   "seed": 700055
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 85716,
+   "on_time": 6,
+   "seed": 700055
+  },
+  {
+   "arm": "event",
+   "bytes": 87642,
+   "on_time": 5,
+   "seed": 700056
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87642,
+   "on_time": 5,
+   "seed": 700056
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 99774,
+   "on_time": 6,
+   "seed": 700056
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 85740,
+   "on_time": 6,
+   "seed": 700056
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 85878,
+   "on_time": 4,
+   "seed": 700056
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 35334,
+   "on_time": 6,
+   "seed": 700056
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 74076,
+   "on_time": 6,
+   "seed": 700056
+  },
+  {
+   "arm": "event",
+   "bytes": 87666,
+   "on_time": 5,
+   "seed": 700057
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87666,
+   "on_time": 5,
+   "seed": 700057
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 116232,
+   "on_time": 6,
+   "seed": 700057
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 86418,
+   "on_time": 5,
+   "seed": 700057
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 87582,
+   "on_time": 5,
+   "seed": 700057
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 39324,
+   "on_time": 6,
+   "seed": 700057
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 69606,
+   "on_time": 6,
+   "seed": 700057
+  },
+  {
+   "arm": "event",
+   "bytes": 87096,
+   "on_time": 6,
+   "seed": 700058
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87096,
+   "on_time": 6,
+   "seed": 700058
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 104304,
+   "on_time": 6,
+   "seed": 700058
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 87258,
+   "on_time": 6,
+   "seed": 700058
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 86358,
+   "on_time": 6,
+   "seed": 700058
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 28122,
+   "on_time": 6,
+   "seed": 700058
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 64038,
+   "on_time": 6,
+   "seed": 700058
+  },
+  {
+   "arm": "event",
+   "bytes": 86172,
+   "on_time": 5,
+   "seed": 700059
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 86172,
+   "on_time": 5,
+   "seed": 700059
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 115020,
+   "on_time": 6,
+   "seed": 700059
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 86184,
+   "on_time": 6,
+   "seed": 700059
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 85716,
+   "on_time": 4,
+   "seed": 700059
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 35856,
+   "on_time": 6,
+   "seed": 700059
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 67986,
+   "on_time": 6,
+   "seed": 700059
+  },
+  {
+   "arm": "event",
+   "bytes": 85458,
+   "on_time": 5,
+   "seed": 700060
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 85458,
+   "on_time": 5,
+   "seed": 700060
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 124428,
+   "on_time": 6,
+   "seed": 700060
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 86544,
+   "on_time": 5,
+   "seed": 700060
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 87834,
+   "on_time": 5,
+   "seed": 700060
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 42192,
+   "on_time": 6,
+   "seed": 700060
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 87246,
+   "on_time": 6,
+   "seed": 700060
+  },
+  {
+   "arm": "event",
+   "bytes": 87738,
+   "on_time": 5,
+   "seed": 700061
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87738,
+   "on_time": 5,
+   "seed": 700061
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 127020,
+   "on_time": 6,
+   "seed": 700061
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 85422,
+   "on_time": 5,
+   "seed": 700061
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 86052,
+   "on_time": 4,
+   "seed": 700061
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 52308,
+   "on_time": 5,
+   "seed": 700061
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 86010,
+   "on_time": 4,
+   "seed": 700061
+  },
+  {
+   "arm": "event",
+   "bytes": 87198,
+   "on_time": 6,
+   "seed": 700062
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87198,
+   "on_time": 6,
+   "seed": 700062
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 96750,
+   "on_time": 6,
+   "seed": 700062
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 87888,
+   "on_time": 6,
+   "seed": 700062
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 85914,
+   "on_time": 5,
+   "seed": 700062
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 28596,
+   "on_time": 6,
+   "seed": 700062
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 86064,
+   "on_time": 6,
+   "seed": 700062
+  },
+  {
+   "arm": "event",
+   "bytes": 87300,
+   "on_time": 4,
+   "seed": 700063
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87300,
+   "on_time": 4,
+   "seed": 700063
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 145164,
+   "on_time": 6,
+   "seed": 700063
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 87588,
+   "on_time": 5,
+   "seed": 700063
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 86544,
+   "on_time": 3,
+   "seed": 700063
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 37476,
+   "on_time": 6,
+   "seed": 700063
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 86982,
+   "on_time": 6,
+   "seed": 700063
+  },
+  {
+   "arm": "event",
+   "bytes": 86916,
+   "on_time": 5,
+   "seed": 700064
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87540,
+   "on_time": 5,
+   "seed": 700064
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 118134,
+   "on_time": 6,
+   "seed": 700064
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 86460,
+   "on_time": 5,
+   "seed": 700064
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 87528,
+   "on_time": 4,
+   "seed": 700064
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 39552,
+   "on_time": 6,
+   "seed": 700064
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 68538,
+   "on_time": 6,
+   "seed": 700064
+  },
+  {
+   "arm": "event",
+   "bytes": 86838,
+   "on_time": 5,
+   "seed": 700065
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 86838,
+   "on_time": 6,
+   "seed": 700065
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 149406,
+   "on_time": 6,
+   "seed": 700065
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 87828,
+   "on_time": 6,
+   "seed": 700065
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 85860,
+   "on_time": 6,
+   "seed": 700065
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 78048,
+   "on_time": 5,
+   "seed": 700065
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 87708,
+   "on_time": 5,
+   "seed": 700065
+  },
+  {
+   "arm": "event",
+   "bytes": 87606,
+   "on_time": 5,
+   "seed": 700066
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87606,
+   "on_time": 5,
+   "seed": 700066
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 117792,
+   "on_time": 6,
+   "seed": 700066
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 86412,
+   "on_time": 5,
+   "seed": 700066
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 85902,
+   "on_time": 5,
+   "seed": 700066
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 31932,
+   "on_time": 6,
+   "seed": 700066
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 85614,
+   "on_time": 6,
+   "seed": 700066
+  },
+  {
+   "arm": "event",
+   "bytes": 87120,
+   "on_time": 6,
+   "seed": 700067
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87402,
+   "on_time": 6,
+   "seed": 700067
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 87120,
+   "on_time": 6,
+   "seed": 700067
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 87744,
+   "on_time": 6,
+   "seed": 700067
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 87234,
+   "on_time": 4,
+   "seed": 700067
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 26874,
+   "on_time": 6,
+   "seed": 700067
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 52452,
+   "on_time": 6,
+   "seed": 700067
+  },
+  {
+   "arm": "event",
+   "bytes": 86688,
+   "on_time": 5,
+   "seed": 700068
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 86112,
+   "on_time": 5,
+   "seed": 700068
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 125778,
+   "on_time": 6,
+   "seed": 700068
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 87702,
+   "on_time": 6,
+   "seed": 700068
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 86502,
+   "on_time": 4,
+   "seed": 700068
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 49866,
+   "on_time": 6,
+   "seed": 700068
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 77832,
+   "on_time": 6,
+   "seed": 700068
+  },
+  {
+   "arm": "event",
+   "bytes": 86502,
+   "on_time": 3,
+   "seed": 700069
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 86562,
+   "on_time": 3,
+   "seed": 700069
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 157188,
+   "on_time": 4,
+   "seed": 700069
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 86826,
+   "on_time": 5,
+   "seed": 700069
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 85902,
+   "on_time": 4,
+   "seed": 700069
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 41502,
+   "on_time": 6,
+   "seed": 700069
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 86094,
+   "on_time": 2,
+   "seed": 700069
+  },
+  {
+   "arm": "event",
+   "bytes": 87378,
+   "on_time": 4,
+   "seed": 700070
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 87378,
+   "on_time": 4,
+   "seed": 700070
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 134934,
+   "on_time": 6,
+   "seed": 700070
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 85938,
+   "on_time": 5,
+   "seed": 700070
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 87300,
+   "on_time": 3,
+   "seed": 700070
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 37674,
+   "on_time": 6,
+   "seed": 700070
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 87120,
+   "on_time": 6,
+   "seed": 700070
+  },
+  {
+   "arm": "event",
+   "bytes": 86214,
+   "on_time": 5,
+   "seed": 700071
+  },
+  {
+   "arm": "event_priority",
+   "bytes": 86214,
+   "on_time": 5,
+   "seed": 700071
+  },
+  {
+   "arm": "free_event_reference",
+   "bytes": 127566,
+   "on_time": 6,
+   "seed": 700071
+  },
+  {
+   "arm": "learned_seed1",
+   "bytes": 86742,
+   "on_time": 6,
+   "seed": 700071
+  },
+  {
+   "arm": "learned_seed2",
+   "bytes": 86868,
+   "on_time": 4,
+   "seed": 700071
+  },
+  {
+   "arm": "learned_seed3",
+   "bytes": 56070,
+   "on_time": 6,
+   "seed": 700071
+  },
+  {
+   "arm": "periodic_5",
+   "bytes": 65730,
+   "on_time": 6,
+   "seed": 700071
+  }
+ ],
+ "setting": {
+  "delivery_probability": 0.7,
+  "information": "isolated"
+ },
+ "tier": "75pct"
+}

@@ -20,12 +20,15 @@
   "performance.on_time": "on-time targets completed before their deadline",
   "performance.on_time_rate": "share of discovered targets completed on time",
   "performance.unresolved": "targets neither completed nor expired by the horizon",
+  "transport.airtime_bytes": "the billed cost: payload bytes x addressed robots, per attempt",
+  "transport.applied_bytes": "of that airtime, bytes that actually changed a belief",
+  "transport.deliveries_applied": "deliveries that changed a belief",
   "transport.deliveries_duplicate": "delivered but already believed (same time+revision)",
   "transport.deliveries_superseded": "delivered but older than what the robot believes",
   "transport.emissions": "task views put on the air",
-  "transport.packets_sent": "one emission to one subscribed robot",
-  "transport.payload_bytes_total": "canonical-JSON payload bytes across all packets",
-  "transport.refresh_emissions": "emissions after the first for that target"
+  "transport.packets_lost": "attempted packets the channel dropped",
+  "transport.refresh_emissions": "emissions after the first for that target",
+  "transport.transmission_attempts": "one emission addressed to one subscribed robot, survived the channel or not"
  },
  "diagnostic_conditions": [
   "range_0p03_event",
@@ -38,35 +41,34 @@
  "headroom": [
   {
    "mean_gain_over_reference": 0.25,
-   "mean_packets_of_the_winning_rule": 35.6,
+   "mean_packets_of_the_winning_rule": 38.5,
    "metric": "performance.on_time",
    "pool": [
-    "stress_budget_1",
     "stress_delay_5",
-    "isolated_immediate",
     "isolated_periodic_2",
-    "stress_loss_0p7_periodic_5",
-    "isolated_event",
+    "stress_budget_1",
     "stress_loss_0p7",
-    "isolated_periodic_5",
     "isolated_event_maxwait",
-    "stress_budget_1_periodic_5",
+    "isolated_periodic_20",
+    "isolated_periodic_5",
+    "stress_loss_0p7_periodic_5",
+    "isolated_immediate",
     "isolated_periodic_100",
-    "isolated_periodic_20"
+    "isolated_event",
+    "stress_budget_1_periodic_5"
    ],
    "reference": "isolated_immediate",
    "seeds": 12,
    "seeds_where_a_rule_ties_at_the_top": 12,
    "seeds_where_any_rule_is_worse_than_reference": 12,
    "winners_by_condition": {
-    "isolated_immediate": 6,
-    "isolated_periodic_20": 2,
-    "stress_loss_0p7": 4
+    "isolated_immediate": 10,
+    "isolated_periodic_20": 2
    }
   },
   {
    "mean_gain_over_reference": 0.25,
-   "mean_packets_of_the_winning_rule": 31.1,
+   "mean_packets_of_the_winning_rule": 34.0,
    "metric": "performance.on_time",
    "pool": [
     "deployed_immediate",
@@ -88,41 +90,39 @@
    "seeds_where_a_rule_ties_at_the_top": 12,
    "seeds_where_any_rule_is_worse_than_reference": 12,
    "winners_by_condition": {
-    "deployed_immediate": 8,
-    "stress_loss_0p7": 4
+    "deployed_immediate": 12
    }
   },
   {
    "mean_gain_over_reference": 0.04167,
-   "mean_packets_of_the_winning_rule": 35.6,
+   "mean_packets_of_the_winning_rule": 38.5,
    "metric": "performance.on_time_rate",
    "pool": [
-    "stress_budget_1",
     "stress_delay_5",
-    "isolated_immediate",
     "isolated_periodic_2",
-    "stress_loss_0p7_periodic_5",
-    "isolated_event",
+    "stress_budget_1",
     "stress_loss_0p7",
-    "isolated_periodic_5",
     "isolated_event_maxwait",
-    "stress_budget_1_periodic_5",
+    "isolated_periodic_20",
+    "isolated_periodic_5",
+    "stress_loss_0p7_periodic_5",
+    "isolated_immediate",
     "isolated_periodic_100",
-    "isolated_periodic_20"
+    "isolated_event",
+    "stress_budget_1_periodic_5"
    ],
    "reference": "isolated_immediate",
    "seeds": 12,
    "seeds_where_a_rule_ties_at_the_top": 12,
    "seeds_where_any_rule_is_worse_than_reference": 12,
    "winners_by_condition": {
-    "isolated_immediate": 6,
-    "isolated_periodic_20": 2,
-    "stress_loss_0p7": 4
+    "isolated_immediate": 10,
+    "isolated_periodic_20": 2
    }
   },
   {
    "mean_gain_over_reference": 0.04167,
-   "mean_packets_of_the_winning_rule": 31.1,
+   "mean_packets_of_the_winning_rule": 34.0,
    "metric": "performance.on_time_rate",
    "pool": [
     "deployed_immediate",
@@ -144,8 +144,7 @@
    "seeds_where_a_rule_ties_at_the_top": 12,
    "seeds_where_any_rule_is_worse_than_reference": 12,
    "winners_by_condition": {
-    "deployed_immediate": 8,
-    "stress_loss_0p7": 4
+    "deployed_immediate": 12
    }
   }
  ],
@@ -250,7 +249,7 @@
       "seeds_lower": 0
      }
     },
-    "metric": "transport.packets_sent",
+    "metric": "transport.transmission_attempts",
     "shared_seeds": 12
    }
   ],
@@ -509,28 +508,28 @@
      },
      "stress_loss_0p7": {
       "ci95": [
-       -11.75,
-       -8.25
+       0.0,
+       0.0
       ],
-      "mean_difference": -10.0,
+      "mean_difference": 0.0,
       "pairs": 12,
-      "seeds_equal": 0,
+      "seeds_equal": 12,
       "seeds_higher": 0,
-      "seeds_lower": 12
+      "seeds_lower": 0
      },
      "stress_loss_0p7_periodic_5": {
       "ci95": [
-       70.16667,
-       137.5
+       116.5,
+       211.0
       ],
-      "mean_difference": 99.91667,
+      "mean_difference": 158.5,
       "pairs": 12,
       "seeds_equal": 0,
       "seeds_higher": 12,
       "seeds_lower": 0
      }
     },
-    "metric": "transport.packets_sent",
+    "metric": "transport.transmission_attempts",
     "shared_seeds": 12
    }
   ],
@@ -1067,28 +1066,28 @@
      },
      "stress_loss_0p7": {
       "ci95": [
-       -11.75,
-       -8.25
+       0.0,
+       0.0
       ],
-      "mean_difference": -10.0,
+      "mean_difference": 0.0,
       "pairs": 12,
-      "seeds_equal": 0,
+      "seeds_equal": 12,
       "seeds_higher": 0,
-      "seeds_lower": 12
+      "seeds_lower": 0
      },
      "stress_loss_0p7_periodic_5": {
       "ci95": [
-       70.16667,
-       137.5
+       116.5,
+       211.0
       ],
-      "mean_difference": 99.91667,
+      "mean_difference": 158.5,
       "pairs": 12,
       "seeds_equal": 0,
       "seeds_higher": 12,
       "seeds_lower": 0
      }
     },
-    "metric": "transport.packets_sent",
+    "metric": "transport.transmission_attempts",
     "shared_seeds": 12
    },
    {
@@ -1206,28 +1205,28 @@
      },
      "stress_loss_0p7": {
       "ci95": [
-       -4867.71667,
-       -3407.99167
+       0.0,
+       0.0
       ],
-      "mean_difference": -4136.91667,
+      "mean_difference": 0.0,
       "pairs": 12,
-      "seeds_equal": 0,
+      "seeds_equal": 12,
       "seeds_higher": 0,
-      "seeds_lower": 12
+      "seeds_lower": 0
      },
      "stress_loss_0p7_periodic_5": {
       "ci95": [
-       31447.44583,
-       59679.74375
+       51766.0125,
+       91487.5125
       ],
-      "mean_difference": 44057.58333,
+      "mean_difference": 69567.0,
       "pairs": 12,
       "seeds_equal": 0,
       "seeds_higher": 12,
       "seeds_lower": 0
      }
     },
-    "metric": "transport.payload_bytes_total",
+    "metric": "transport.airtime_bytes",
     "shared_seeds": 12
    },
    {
@@ -2069,10 +2068,10 @@
     "conditions": {
      "deployed_immediate": {
       "ci95": [
-       -0.29318,
-       -0.17577
+       -0.23154,
+       -0.12014
       ],
-      "mean_difference": -0.23292,
+      "mean_difference": -0.17588,
       "pairs": 12,
       "seeds_equal": 0,
       "seeds_higher": 0,
@@ -2080,10 +2079,10 @@
      },
      "isolated_event": {
       "ci95": [
-       0.07587,
-       0.19348
+       0.07446,
+       0.17966
       ],
-      "mean_difference": 0.12928,
+      "mean_difference": 0.12698,
       "pairs": 12,
       "seeds_equal": 0,
       "seeds_higher": 11,
@@ -2091,10 +2090,10 @@
      },
      "isolated_event_maxwait": {
       "ci95": [
-       0.09882,
-       0.21518
+       0.06757,
+       0.15562
       ],
-      "mean_difference": 0.15248,
+      "mean_difference": 0.11132,
       "pairs": 12,
       "seeds_equal": 0,
       "seeds_higher": 12,
@@ -2102,21 +2101,21 @@
      },
      "isolated_periodic_100": {
       "ci95": [
-       -0.10718,
-       -0.03805
+       -0.083,
+       -0.00546
       ],
-      "mean_difference": -0.07233,
+      "mean_difference": -0.04629,
       "pairs": 12,
       "seeds_equal": 0,
-      "seeds_higher": 1,
-      "seeds_lower": 11
+      "seeds_higher": 2,
+      "seeds_lower": 10
      },
      "isolated_periodic_2": {
       "ci95": [
-       0.21337,
-       0.37196
+       0.21882,
+       0.35478
       ],
-      "mean_difference": 0.29067,
+      "mean_difference": 0.28348,
       "pairs": 12,
       "seeds_equal": 0,
       "seeds_higher": 12,
@@ -2124,21 +2123,21 @@
      },
      "isolated_periodic_20": {
       "ci95": [
-       -0.00903,
-       0.07617
+       0.09812,
+       0.20294
       ],
-      "mean_difference": 0.03047,
+      "mean_difference": 0.14679,
       "pairs": 12,
       "seeds_equal": 0,
-      "seeds_higher": 7,
-      "seeds_lower": 5
+      "seeds_higher": 12,
+      "seeds_lower": 0
      },
      "isolated_periodic_5": {
       "ci95": [
-       0.13983,
-       0.23054
+       0.28661,
+       0.39901
       ],
-      "mean_difference": 0.18489,
+      "mean_difference": 0.3408,
       "pairs": 12,
       "seeds_equal": 0,
       "seeds_higher": 12,
@@ -2146,21 +2145,21 @@
      },
      "stress_budget_1": {
       "ci95": [
-       0.08416,
-       0.15055
+       -0.06553,
+       0.00254
       ],
-      "mean_difference": 0.11827,
+      "mean_difference": -0.03284,
       "pairs": 12,
       "seeds_equal": 0,
-      "seeds_higher": 12,
-      "seeds_lower": 0
+      "seeds_higher": 3,
+      "seeds_lower": 9
      },
      "stress_budget_1_periodic_5": {
       "ci95": [
-       0.31092,
-       0.40592
+       0.20585,
+       0.3124
       ],
-      "mean_difference": 0.35623,
+      "mean_difference": 0.25374,
       "pairs": 12,
       "seeds_equal": 0,
       "seeds_higher": 12,
@@ -2168,32 +2167,32 @@
      },
      "stress_delay_5": {
       "ci95": [
-       0.11072,
-       0.20517
+       0.00339,
+       0.10118
       ],
-      "mean_difference": 0.15695,
+      "mean_difference": 0.0522,
       "pairs": 12,
       "seeds_equal": 0,
-      "seeds_higher": 12,
-      "seeds_lower": 0
+      "seeds_higher": 9,
+      "seeds_lower": 3
      },
      "stress_loss_0p7": {
       "ci95": [
-       -0.2692,
-       -0.00958
+       -0.36511,
+       -0.08616
       ],
-      "mean_difference": -0.13274,
+      "mean_difference": -0.22198,
       "pairs": 12,
       "seeds_equal": 0,
-      "seeds_higher": 5,
-      "seeds_lower": 7
+      "seeds_higher": 2,
+      "seeds_lower": 10
      },
      "stress_loss_0p7_periodic_5": {
       "ci95": [
-       0.19242,
-       0.30456
+       0.15647,
+       0.27717
       ],
-      "mean_difference": 0.24719,
+      "mean_difference": 0.21513,
       "pairs": 12,
       "seeds_equal": 0,
       "seeds_higher": 12,
@@ -2247,24 +2246,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 6.7409,
-     "mean_per_episode": 6.1602,
-     "median": 6.1982,
-     "total": 73.9227
+     "max": 7.5792,
+     "mean_per_episode": 6.8543,
+     "median": 6.9591,
+     "total": 82.2511
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 1.6764,
-     "mean_per_episode": 1.6056,
-     "median": 1.6006,
-     "total": 19.2673
+     "max": 1.8967,
+     "mean_per_episode": 1.787,
+     "median": 1.7696,
+     "total": 21.4446
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.0777,
-     "mean_per_episode": 0.0217,
-     "median": 0.0168,
-     "total": 0.2606
+     "max": 0.0775,
+     "mean_per_episode": 0.023,
+     "median": 0.0182,
+     "total": 0.2759
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -2308,6 +2307,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 0.0,
@@ -2329,19 +2349,12 @@
      "median": 6.0,
      "total": 68.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 36.0,
-     "mean_per_episode": 34.0,
-     "median": 36.0,
-     "total": 408.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 15444.0,
-     "mean_per_episode": 14041.5,
-     "median": 14817.0,
-     "total": 168498.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -2349,6 +2362,13 @@
      "mean_per_episode": 0.0,
      "median": 0.0,
      "total": 0.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
     }
    },
    "policy": "immediate",
@@ -2400,24 +2420,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 8.8222,
-     "mean_per_episode": 7.5913,
-     "median": 7.6547,
-     "total": 91.0961
+     "max": 9.1002,
+     "mean_per_episode": 8.067,
+     "median": 8.2424,
+     "total": 96.8035
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.2408,
-     "mean_per_episode": 1.9678,
-     "median": 1.952,
-     "total": 23.6137
+     "max": 2.3114,
+     "mean_per_episode": 2.0899,
+     "median": 2.1103,
+     "total": 25.0789
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
      "max": 0.0297,
-     "mean_per_episode": 0.0243,
-     "median": 0.0249,
-     "total": 0.291
+     "mean_per_episode": 0.0249,
+     "median": 0.0253,
+     "total": 0.2991
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -2461,6 +2481,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 141222.0,
+     "mean_per_episode": 108654.5,
+     "median": 114789.0,
+     "total": 1303854.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 141222.0,
+     "mean_per_episode": 108250.5,
+     "median": 112365.0,
+     "total": 1299006.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 306.0,
+     "mean_per_episode": 244.0,
+     "median": 255.0,
+     "total": 2928.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 12.0,
@@ -2482,19 +2523,12 @@
      "median": 43.5,
      "total": 490.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 306.0,
-     "mean_per_episode": 245.0,
-     "median": 261.0,
-     "total": 2940.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 141222.0,
-     "mean_per_episode": 108654.5,
-     "median": 114789.0,
-     "total": 1303854.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -2502,6 +2536,13 @@
      "mean_per_episode": 35.1667,
      "median": 37.5,
      "total": 422.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 306.0,
+     "mean_per_episode": 245.0,
+     "median": 261.0,
+     "total": 2940.0
     }
    },
    "policy": "event",
@@ -2556,24 +2597,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 8.9226,
-     "mean_per_episode": 7.683,
-     "median": 7.634,
-     "total": 92.1964
+     "max": 8.883,
+     "mean_per_episode": 8.0083,
+     "median": 8.2017,
+     "total": 96.0995
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.2663,
-     "mean_per_episode": 1.991,
-     "median": 2.006,
-     "total": 23.8921
+     "max": 2.2563,
+     "mean_per_episode": 2.0742,
+     "median": 2.0773,
+     "total": 24.8909
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.0728,
-     "mean_per_episode": 0.0282,
-     "median": 0.0246,
-     "total": 0.3378
+     "max": 0.0734,
+     "mean_per_episode": 0.029,
+     "median": 0.0261,
+     "total": 0.348
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -2617,6 +2658,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 144078.0,
+     "mean_per_episode": 108892.5,
+     "median": 114789.0,
+     "total": 1306710.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 144078.0,
+     "mean_per_episode": 108488.5,
+     "median": 112365.0,
+     "total": 1301862.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 312.0,
+     "mean_per_episode": 244.5,
+     "median": 255.0,
+     "total": 2934.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 12.0,
@@ -2638,19 +2700,12 @@
      "median": 43.5,
      "total": 491.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 312.0,
-     "mean_per_episode": 245.5,
-     "median": 261.0,
-     "total": 2946.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 144078.0,
-     "mean_per_episode": 108892.5,
-     "median": 114789.0,
-     "total": 1306710.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -2658,6 +2713,13 @@
      "mean_per_episode": 35.25,
      "median": 37.5,
      "total": 423.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 312.0,
+     "mean_per_episode": 245.5,
+     "median": 261.0,
+     "total": 2946.0
     }
    },
    "policy": "event_maxwait",
@@ -2714,24 +2776,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 7.8604,
-     "mean_per_episode": 6.8921,
-     "median": 7.0052,
-     "total": 82.7049
+     "max": 8.2538,
+     "mean_per_episode": 7.3602,
+     "median": 7.515,
+     "total": 88.3221
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.083,
-     "mean_per_episode": 1.8385,
-     "median": 1.8247,
-     "total": 22.0623
+     "max": 2.1873,
+     "mean_per_episode": 1.9629,
+     "median": 1.9372,
+     "total": 23.5551
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.0354,
-     "mean_per_episode": 0.026,
-     "median": 0.0265,
-     "total": 0.312
+     "max": 0.0362,
+     "mean_per_episode": 0.0273,
+     "median": 0.0271,
+     "total": 0.3281
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -2775,6 +2837,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 0.0,
@@ -2796,19 +2879,12 @@
      "median": 6.0,
      "total": 68.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 36.0,
-     "mean_per_episode": 34.0,
-     "median": 36.0,
-     "total": 408.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 15444.0,
-     "mean_per_episode": 14041.5,
-     "median": 14817.0,
-     "total": 168498.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -2816,6 +2892,13 @@
      "mean_per_episode": 0.0,
      "median": 0.0,
      "total": 0.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
     }
    },
    "policy": "immediate",
@@ -2867,24 +2950,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 7.3396,
-     "mean_per_episode": 6.6609,
-     "median": 6.6918,
-     "total": 79.9307
+     "max": 8.0135,
+     "mean_per_episode": 7.2302,
+     "median": 7.2611,
+     "total": 86.7629
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 1.9083,
-     "mean_per_episode": 1.7662,
-     "median": 1.7746,
-     "total": 21.1944
+     "max": 2.0835,
+     "mean_per_episode": 1.9166,
+     "median": 1.9027,
+     "total": 22.9996
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.0211,
-     "mean_per_episode": 0.0166,
-     "median": 0.016,
-     "total": 0.1993
+     "max": 0.0219,
+     "mean_per_episode": 0.0174,
+     "median": 0.017,
+     "total": 0.209
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -2928,6 +3011,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 35766.0,
+     "mean_per_episode": 17003.0,
+     "median": 15066.0,
+     "total": 204036.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 21114.0,
+     "mean_per_episode": 15270.0,
+     "median": 14970.0,
+     "total": 183240.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 48.0,
+     "mean_per_episode": 36.5,
+     "median": 36.0,
+     "total": 438.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 54.0,
@@ -2949,19 +3053,12 @@
      "median": 6.0,
      "total": 82.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 90.0,
-     "mean_per_episode": 41.0,
-     "median": 36.0,
-     "total": 492.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 35766.0,
-     "mean_per_episode": 17003.0,
-     "median": 15066.0,
-     "total": 204036.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -2969,6 +3066,13 @@
      "mean_per_episode": 1.1667,
      "median": 0.0,
      "total": 14.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 90.0,
+     "mean_per_episode": 41.0,
+     "median": 36.0,
+     "total": 492.0
     }
    },
    "policy": "periodic",
@@ -3022,24 +3126,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 9.3124,
-     "mean_per_episode": 8.2632,
-     "median": 8.3581,
-     "total": 99.1583
+     "max": 9.6695,
+     "mean_per_episode": 8.7201,
+     "median": 8.6554,
+     "total": 104.6417
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.3768,
-     "mean_per_episode": 2.1292,
-     "median": 2.1871,
-     "total": 25.5503
+     "max": 2.4511,
+     "mean_per_episode": 2.2464,
+     "median": 2.2789,
+     "total": 26.9569
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.034,
-     "mean_per_episode": 0.0261,
-     "median": 0.0265,
-     "total": 0.3132
+     "max": 0.0327,
+     "mean_per_episode": 0.027,
+     "median": 0.0274,
+     "total": 0.3245
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -3083,6 +3187,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 413250.0,
+     "mean_per_episode": 200859.0,
+     "median": 196041.0,
+     "total": 2410308.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 187884.0,
+     "mean_per_episode": 139193.5,
+     "median": 134016.0,
+     "total": 1670322.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 414.0,
+     "mean_per_episode": 311.5,
+     "median": 300.0,
+     "total": 3738.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 660.0,
@@ -3104,19 +3229,12 @@
      "median": 71.0,
      "total": 911.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 948.0,
-     "mean_per_episode": 455.5,
-     "median": 426.0,
-     "total": 5466.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 413250.0,
-     "mean_per_episode": 200859.0,
-     "median": 196041.0,
-     "total": 2410308.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -3124,6 +3242,13 @@
      "mean_per_episode": 70.25,
      "median": 65.0,
      "total": 843.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 948.0,
+     "mean_per_episode": 455.5,
+     "median": 426.0,
+     "total": 5466.0
     }
    },
    "policy": "periodic",
@@ -3177,24 +3302,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 7.8106,
-     "mean_per_episode": 7.2045,
-     "median": 7.3293,
-     "total": 86.4544
+     "max": 8.9653,
+     "mean_per_episode": 8.1336,
+     "median": 8.207,
+     "total": 97.6027
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.0436,
-     "mean_per_episode": 1.869,
-     "median": 1.8618,
-     "total": 22.428
+     "max": 2.2778,
+     "mean_per_episode": 2.1097,
+     "median": 2.0995,
+     "total": 25.3166
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.03,
-     "mean_per_episode": 0.0228,
-     "median": 0.0232,
-     "total": 0.2731
+     "max": 0.0322,
+     "mean_per_episode": 0.0256,
+     "median": 0.026,
+     "total": 0.3071
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -3238,6 +3363,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 60942.0,
+     "mean_per_episode": 26262.5,
+     "median": 25851.0,
+     "total": 315150.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 35574.0,
+     "mean_per_episode": 23852.0,
+     "median": 25506.0,
+     "total": 286224.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 84.0,
+     "mean_per_episode": 55.5,
+     "median": 60.0,
+     "total": 666.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 60.0,
@@ -3259,19 +3405,12 @@
      "median": 10.0,
      "total": 122.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 138.0,
-     "mean_per_episode": 61.0,
-     "median": 60.0,
-     "total": 732.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 60942.0,
-     "mean_per_episode": 26262.5,
-     "median": 25851.0,
-     "total": 315150.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -3279,6 +3418,13 @@
      "mean_per_episode": 4.5,
      "median": 4.0,
      "total": 54.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 138.0,
+     "mean_per_episode": 61.0,
+     "median": 60.0,
+     "total": 732.0
     }
    },
    "policy": "periodic",
@@ -3332,24 +3478,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 8.6818,
-     "mean_per_episode": 7.916,
-     "median": 8.0029,
-     "total": 94.9922
+     "max": 9.7798,
+     "mean_per_episode": 9.0085,
+     "median": 9.1285,
+     "total": 108.1016
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.167,
-     "mean_per_episode": 2.0234,
-     "median": 2.0205,
-     "total": 24.281
+     "max": 2.4528,
+     "mean_per_episode": 2.3037,
+     "median": 2.3423,
+     "total": 27.6447
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.0321,
-     "mean_per_episode": 0.0251,
-     "median": 0.0253,
-     "total": 0.3014
+     "max": 0.0343,
+     "mean_per_episode": 0.0278,
+     "median": 0.0285,
+     "total": 0.333
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -3393,6 +3539,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 267786.0,
+     "mean_per_episode": 85835.0,
+     "median": 75015.0,
+     "total": 1030020.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 99564.0,
+     "mean_per_episode": 64752.8333,
+     "median": 63477.0,
+     "total": 777034.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 222.0,
+     "mean_per_episode": 146.4167,
+     "median": 144.0,
+     "total": 1757.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 384.0,
@@ -3414,19 +3581,12 @@
      "median": 28.0,
      "total": 390.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 606.0,
-     "mean_per_episode": 195.0,
-     "median": 168.0,
-     "total": 2340.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 267786.0,
-     "mean_per_episode": 85835.0,
-     "median": 75015.0,
-     "total": 1030020.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -3434,6 +3594,13 @@
      "mean_per_episode": 26.8333,
      "median": 22.0,
      "total": 322.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 606.0,
+     "mean_per_episode": 195.0,
+     "median": 168.0,
+     "total": 2340.0
     }
    },
    "policy": "periodic",
@@ -3487,24 +3654,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 8.4412,
-     "mean_per_episode": 7.5813,
-     "median": 7.6991,
-     "total": 90.9759
+     "max": 8.447,
+     "mean_per_episode": 7.5638,
+     "median": 7.7009,
+     "total": 90.7661
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.085,
-     "mean_per_episode": 1.9709,
-     "median": 1.9851,
-     "total": 23.6503
+     "max": 2.1428,
+     "mean_per_episode": 1.9676,
+     "median": 1.9662,
+     "total": 23.6107
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.0299,
-     "mean_per_episode": 0.0215,
-     "median": 0.0221,
-     "total": 0.2583
+     "max": 0.0294,
+     "mean_per_episode": 0.0214,
+     "median": 0.0224,
+     "total": 0.2564
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -3548,6 +3715,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 138390.0,
+     "mean_per_episode": 108855.5,
+     "median": 115287.0,
+     "total": 1306266.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 138390.0,
+     "mean_per_episode": 108451.5,
+     "median": 112863.0,
+     "total": 1301418.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 300.0,
+     "mean_per_episode": 244.5,
+     "median": 258.0,
+     "total": 2934.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 8.0,
@@ -3569,19 +3757,12 @@
      "median": 44.0,
      "total": 491.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 300.0,
-     "mean_per_episode": 245.5,
-     "median": 264.0,
-     "total": 2946.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 138390.0,
-     "mean_per_episode": 108855.5,
-     "median": 115287.0,
-     "total": 1306266.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -3589,6 +3770,13 @@
      "mean_per_episode": 35.25,
      "median": 38.0,
      "total": 423.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 300.0,
+     "mean_per_episode": 245.5,
+     "median": 264.0,
+     "total": 2946.0
     }
    },
    "policy": "event",
@@ -3643,24 +3831,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 8.6465,
-     "mean_per_episode": 7.7272,
-     "median": 7.755,
-     "total": 92.7267
+     "max": 8.5747,
+     "mean_per_episode": 7.6481,
+     "median": 7.6773,
+     "total": 91.777
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.2276,
-     "mean_per_episode": 2.0247,
-     "median": 1.9748,
-     "total": 24.2969
+     "max": 2.2123,
+     "mean_per_episode": 2.0047,
+     "median": 1.9901,
+     "total": 24.056
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.0302,
-     "mean_per_episode": 0.0224,
+     "max": 0.0325,
+     "mean_per_episode": 0.0226,
      "median": 0.0223,
-     "total": 0.2683
+     "total": 0.2715
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -3704,6 +3892,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 0.0,
@@ -3725,19 +3934,12 @@
      "median": 6.0,
      "total": 68.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 36.0,
-     "mean_per_episode": 34.0,
-     "median": 36.0,
-     "total": 408.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 15444.0,
-     "mean_per_episode": 14041.5,
-     "median": 14817.0,
-     "total": 168498.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -3745,6 +3947,13 @@
      "mean_per_episode": 0.0,
      "median": 0.0,
      "total": 0.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
     }
    },
    "policy": "immediate",
@@ -3796,24 +4005,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 8.4048,
-     "mean_per_episode": 7.3833,
-     "median": 7.3763,
-     "total": 88.5995
+     "max": 8.4943,
+     "mean_per_episode": 7.3647,
+     "median": 7.347,
+     "total": 88.3758
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.16,
-     "mean_per_episode": 1.9217,
-     "median": 1.9167,
-     "total": 23.0601
+     "max": 2.1264,
+     "mean_per_episode": 1.9176,
+     "median": 1.9129,
+     "total": 23.0109
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.0256,
-     "mean_per_episode": 0.0205,
+     "max": 0.0265,
+     "mean_per_episode": 0.0208,
      "median": 0.0202,
-     "total": 0.2465
+     "total": 0.25
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -3857,6 +4066,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 138390.0,
+     "mean_per_episode": 108858.0,
+     "median": 115287.0,
+     "total": 1306296.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 138390.0,
+     "mean_per_episode": 108454.0,
+     "median": 112863.0,
+     "total": 1301448.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 300.0,
+     "mean_per_episode": 244.5,
+     "median": 258.0,
+     "total": 2934.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 8.0,
@@ -3878,19 +4108,12 @@
      "median": 44.0,
      "total": 491.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 300.0,
-     "mean_per_episode": 245.5,
-     "median": 264.0,
-     "total": 2946.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 138390.0,
-     "mean_per_episode": 108858.0,
-     "median": 115287.0,
-     "total": 1306296.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -3898,6 +4121,13 @@
      "mean_per_episode": 35.25,
      "median": 38.0,
      "total": 423.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 300.0,
+     "mean_per_episode": 245.5,
+     "median": 264.0,
+     "total": 2946.0
     }
    },
    "policy": "event",
@@ -3952,24 +4182,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 8.4819,
-     "mean_per_episode": 7.3248,
-     "median": 7.4085,
-     "total": 87.8976
+     "max": 8.5741,
+     "mean_per_episode": 7.3711,
+     "median": 7.4344,
+     "total": 88.4538
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.1883,
-     "mean_per_episode": 1.9292,
-     "median": 1.9419,
-     "total": 23.1508
+     "max": 2.2121,
+     "mean_per_episode": 1.9421,
+     "median": 1.943,
+     "total": 23.3056
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
      "max": 0.0255,
-     "mean_per_episode": 0.0208,
-     "median": 0.0222,
-     "total": 0.2494
+     "mean_per_episode": 0.0207,
+     "median": 0.0212,
+     "total": 0.2488
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -4013,6 +4243,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 0.0,
@@ -4034,19 +4285,12 @@
      "median": 6.0,
      "total": 68.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 36.0,
-     "mean_per_episode": 34.0,
-     "median": 36.0,
-     "total": 408.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 15444.0,
-     "mean_per_episode": 14041.5,
-     "median": 14817.0,
-     "total": 168498.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -4054,6 +4298,13 @@
      "mean_per_episode": 0.0,
      "median": 0.0,
      "total": 0.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
     }
    },
    "policy": "immediate",
@@ -4105,24 +4356,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 8.5398,
-     "mean_per_episode": 7.2416,
-     "median": 7.2224,
-     "total": 86.8997
+     "max": 8.4367,
+     "mean_per_episode": 7.1412,
+     "median": 7.113,
+     "total": 85.694
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.263,
-     "mean_per_episode": 1.9568,
-     "median": 1.9287,
-     "total": 23.4815
+     "max": 2.2357,
+     "mean_per_episode": 1.9301,
+     "median": 1.9003,
+     "total": 23.161
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.0356,
-     "mean_per_episode": 0.0268,
-     "median": 0.0275,
-     "total": 0.3215
+     "max": 0.0359,
+     "mean_per_episode": 0.0266,
+     "median": 0.0264,
+     "total": 0.3189
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -4166,6 +4417,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 0.0,
@@ -4187,19 +4459,12 @@
      "median": 6.0,
      "total": 68.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 36.0,
-     "mean_per_episode": 34.0,
-     "median": 36.0,
-     "total": 408.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 15444.0,
-     "mean_per_episode": 14041.5,
-     "median": 14817.0,
-     "total": 168498.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -4207,6 +4472,13 @@
      "mean_per_episode": 0.0,
      "median": 0.0,
      "total": 0.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
     }
    },
    "policy": "immediate",
@@ -4258,24 +4530,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 9.1482,
-     "mean_per_episode": 7.9199,
-     "median": 7.873,
-     "total": 95.0387
+     "max": 9.1445,
+     "mean_per_episode": 7.9991,
+     "median": 8.0454,
+     "total": 95.9896
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.4334,
-     "mean_per_episode": 2.1948,
-     "median": 2.2177,
-     "total": 26.3371
+     "max": 2.4324,
+     "mean_per_episode": 2.2167,
+     "median": 2.2097,
+     "total": 26.6
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.0314,
-     "mean_per_episode": 0.0267,
+     "max": 0.0331,
+     "mean_per_episode": 0.0273,
      "median": 0.0275,
-     "total": 0.3199
+     "total": 0.3279
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -4319,6 +4591,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 76842.0,
+     "mean_per_episode": 57124.5,
+     "median": 54426.0,
+     "total": 685494.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 76842.0,
+     "mean_per_episode": 56294.5,
+     "median": 54426.0,
+     "total": 675534.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 168.0,
+     "mean_per_episode": 126.0,
+     "median": 123.0,
+     "total": 1512.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 24.0,
@@ -4340,19 +4633,12 @@
      "median": 20.5,
      "total": 256.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 168.0,
-     "mean_per_episode": 128.0,
-     "median": 123.0,
-     "total": 1536.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 76842.0,
-     "mean_per_episode": 57124.5,
-     "median": 54426.0,
-     "total": 685494.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -4360,6 +4646,13 @@
      "mean_per_episode": 15.6667,
      "median": 14.5,
      "total": 188.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 168.0,
+     "mean_per_episode": 128.0,
+     "median": 123.0,
+     "total": 1536.0
     }
    },
    "policy": "periodic",
@@ -4413,24 +4706,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 8.5952,
-     "mean_per_episode": 7.4167,
-     "median": 7.6224,
-     "total": 88.9998
+     "max": 8.9467,
+     "mean_per_episode": 7.4791,
+     "median": 7.4821,
+     "total": 89.7496
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.3293,
-     "mean_per_episode": 1.9955,
-     "median": 1.9581,
-     "total": 23.9457
+     "max": 2.4246,
+     "mean_per_episode": 2.0151,
+     "median": 2.0147,
+     "total": 24.1815
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.0389,
-     "mean_per_episode": 0.0268,
-     "median": 0.0268,
-     "total": 0.3219
+     "max": 0.0408,
+     "mean_per_episode": 0.0278,
+     "median": 0.0278,
+     "total": 0.3332
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -4474,6 +4767,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 0.0,
@@ -4495,19 +4809,12 @@
      "median": 6.0,
      "total": 68.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 36.0,
-     "mean_per_episode": 34.0,
-     "median": 36.0,
-     "total": 408.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 15444.0,
-     "mean_per_episode": 14041.5,
-     "median": 14817.0,
-     "total": 168498.0
+     "max": 0.0,
+     "mean_per_episode": 0.0,
+     "median": 0.0,
+     "total": 0.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -4515,6 +4822,13 @@
      "mean_per_episode": 0.0,
      "median": 0.0,
      "total": 0.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
     }
    },
    "policy": "immediate",
@@ -4566,24 +4880,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 7.7395,
-     "mean_per_episode": 6.1023,
-     "median": 6.5729,
-     "total": 73.2275
+     "max": 7.6495,
+     "mean_per_episode": 6.2261,
+     "median": 6.9148,
+     "total": 74.7136
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.0897,
-     "mean_per_episode": 1.7058,
-     "median": 1.7927,
-     "total": 20.4694
+     "max": 2.0654,
+     "mean_per_episode": 1.7409,
+     "median": 1.8562,
+     "total": 20.8913
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.032,
-     "mean_per_episode": 0.0238,
-     "median": 0.0242,
-     "total": 0.2855
+     "max": 0.0301,
+     "mean_per_episode": 0.0237,
+     "median": 0.0244,
+     "total": 0.2844
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -4627,6 +4941,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 15444.0,
+     "mean_per_episode": 14041.5,
+     "median": 14817.0,
+     "total": 168498.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 12797.0,
+     "mean_per_episode": 9904.5833,
+     "median": 10046.5,
+     "total": 118855.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 31.0,
+     "mean_per_episode": 24.0,
+     "median": 24.0,
+     "total": 288.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 0.0,
@@ -4648,19 +4983,12 @@
      "median": 6.0,
      "total": 68.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 31.0,
-     "mean_per_episode": 24.0,
-     "median": 24.0,
-     "total": 288.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 12797.0,
-     "mean_per_episode": 9904.5833,
-     "median": 10046.5,
-     "total": 118855.0
+     "max": 16.0,
+     "mean_per_episode": 10.0,
+     "median": 10.0,
+     "total": 120.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -4668,6 +4996,13 @@
      "mean_per_episode": 0.0,
      "median": 0.0,
      "total": 0.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 36.0,
+     "mean_per_episode": 34.0,
+     "median": 36.0,
+     "total": 408.0
     }
    },
    "policy": "immediate",
@@ -4719,24 +5054,24 @@
     },
     "decisions.allocation_milliseconds_per_call": {
      "episodes_reporting": 12,
-     "max": 9.2841,
-     "mean_per_episode": 8.0456,
-     "median": 8.0298,
-     "total": 96.5476
+     "max": 9.6865,
+     "mean_per_episode": 8.3969,
+     "median": 8.4164,
+     "total": 100.7625
     },
     "decisions.allocation_seconds": {
      "episodes_reporting": 12,
-     "max": 2.3102,
-     "mean_per_episode": 2.0857,
-     "median": 2.0926,
-     "total": 25.0286
+     "max": 2.4798,
+     "mean_per_episode": 2.1781,
+     "median": 2.1661,
+     "total": 26.1366
     },
     "decisions.coordinator_seconds": {
      "episodes_reporting": 12,
-     "max": 0.0291,
-     "mean_per_episode": 0.0253,
-     "median": 0.0263,
-     "total": 0.3031
+     "max": 0.0309,
+     "mean_per_episode": 0.0263,
+     "median": 0.0275,
+     "total": 0.3158
     },
     "decisions.idle_robot_steps": {
      "episodes_reporting": 12,
@@ -4780,6 +5115,27 @@
      "median": 0.0,
      "total": 0.0
     },
+    "transport.airtime_bytes": {
+     "episodes_reporting": 12,
+     "max": 180288.0,
+     "mean_per_episode": 83608.5,
+     "median": 79071.0,
+     "total": 1003302.0
+    },
+    "transport.applied_bytes": {
+     "episodes_reporting": 12,
+     "max": 68735.0,
+     "mean_per_episode": 46852.1667,
+     "median": 43892.5,
+     "total": 562226.0
+    },
+    "transport.deliveries_applied": {
+     "episodes_reporting": 12,
+     "max": 153.0,
+     "mean_per_episode": 106.6667,
+     "median": 100.5,
+     "total": 1280.0
+    },
     "transport.deliveries_duplicate": {
      "episodes_reporting": 12,
      "max": 166.0,
@@ -4801,19 +5157,12 @@
      "median": 30.0,
      "total": 385.0
     },
-    "transport.packets_sent": {
+    "transport.packets_lost": {
      "episodes_reporting": 12,
-     "max": 299.0,
-     "mean_per_episode": 133.9167,
-     "median": 122.0,
-     "total": 1607.0
-    },
-    "transport.payload_bytes_total": {
-     "episodes_reporting": 12,
-     "max": 126633.0,
-     "mean_per_episode": 58099.0833,
-     "median": 53352.5,
-     "total": 697189.0
+     "max": 127.0,
+     "mean_per_episode": 58.5833,
+     "median": 56.5,
+     "total": 703.0
     },
     "transport.refresh_emissions": {
      "episodes_reporting": 12,
@@ -4821,6 +5170,13 @@
      "mean_per_episode": 26.4167,
      "median": 24.0,
      "total": 317.0
+    },
+    "transport.transmission_attempts": {
+     "episodes_reporting": 12,
+     "max": 426.0,
+     "mean_per_episode": 192.5,
+     "median": 180.0,
+     "total": 2310.0
     }
    },
    "policy": "periodic",
@@ -4874,10 +5230,10 @@
    "seeds_where_rules_disagree": 12
   },
   {
-   "max_spread": 925.0,
+   "max_spread": 918.0,
    "mean_rules_achieving_the_best": 1.0,
-   "mean_spread": 433.0,
-   "metric": "transport.packets_sent",
+   "mean_spread": 423.0,
+   "metric": "transport.transmission_attempts",
    "seeds": 12,
    "seeds_every_rule_agrees": 0,
    "seeds_where_rules_disagree": 12
@@ -4899,12 +5255,15 @@
   "performance.on_time": "targets",
   "performance.on_time_rate": "ratio",
   "performance.unresolved": "targets",
+  "transport.airtime_bytes": "bytes",
+  "transport.applied_bytes": "bytes",
+  "transport.deliveries_applied": "packets",
   "transport.deliveries_duplicate": "packets",
   "transport.deliveries_superseded": "packets",
   "transport.emissions": "batches",
-  "transport.packets_sent": "packets",
-  "transport.payload_bytes_total": "bytes",
-  "transport.refresh_emissions": "batches"
+  "transport.packets_lost": "packets",
+  "transport.refresh_emissions": "batches",
+  "transport.transmission_attempts": "packets"
  },
  "zero_detection_seeds": []
 }

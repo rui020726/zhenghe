@@ -89,39 +89,54 @@ def _tr_at(entries: Sequence[TruthEntry], moment: float) -> tuple[int, tuple[int
 
 
 def transport_accounting(records: Sequence[dict[str, Any]]) -> dict[str, Any]:
-    """Batch and volume numbers, from the relay's own records."""
+    """Batch and volume numbers, from the relay's own records.
+
+    Attempts are what the sender paid for; deliveries and applications are what the team got.
+    The three are never conflated here, because under a lossy channel they move apart and only
+    the first one is a cost.
+    """
     sends = [record for record in records if record["kind"] == "send"]
     deliveries = [record for record in records if record["kind"] == "deliver"]
+    refusals = [record for record in records if record["kind"] == "refused"]
     per_step: dict[int, int] = defaultdict(int)
     for send in sends:
         per_step[int(send["step"])] += 1
-    ages = [int(send["step"]) - int(send["ready_step"]) for send in sends]
+    waits = [int(send["step"]) - int(send["ready_step"]) for send in sends]
     flights = [int(delivery["step"]) - int(delivery["sent_step"]) for delivery in deliveries]
+    attempts = sum(int(send["attempts"]) for send in sends)
+    lost = sum(int(send["packets_lost"]) for send in sends)
+    airtime = sum(int(send["cost_bytes"]) for send in sends)
+    applied = [delivery for delivery in deliveries if delivery["accepted"]]
+    applied_bytes = sum(int(delivery["payload_bytes"]) for delivery in applied)
     return {
         "emissions": len(sends),
         "first_emissions": sum(1 for send in sends if send["first"]),
         "refresh_emissions": sum(1 for send in sends if not send["first"]),
-        "packets_sent": sum(int(send["packets"]) for send in sends),
-        "packets_lost": sum(int(send["packets_lost"]) for send in sends),
+        "transmission_attempts": attempts,
+        "packets_lost": lost,
         "packets_delivered": len(deliveries),
-        "deliveries_accepted": sum(1 for delivery in deliveries if delivery["accepted"]),
+        "deliveries_applied": len(applied),
         "deliveries_duplicate": sum(
             1 for delivery in deliveries if delivery.get("reason") == "delivery_duplicate"
         ),
         "deliveries_superseded": sum(
             1 for delivery in deliveries if delivery.get("reason") == "delivery_superseded"
         ),
-        "payload_bytes_total": sum(int(send["bytes_total"]) for send in sends),
+        "refusals_for_credit": sum(1 for record in refusals if record["reason"] == "budget_exhausted"),
+        "refusals_for_step_capacity": sum(
+            1 for record in refusals if record["reason"] == "capacity_step"
+        ),
+        "airtime_bytes": airtime,
+        "applied_bytes": applied_bytes,
+        "applied_share_of_airtime": round(applied_bytes / airtime, 5) if airtime else None,
         "payload_bytes_mean": (
-            round(sum(int(send["payload_bytes"]) for send in sends) / len(sends), 1)
-            if sends
-            else None
+            round(sum(int(send["payload_bytes"]) for send in sends) / len(sends), 1) if sends else None
         ),
         "batch_size_mean": round(len(sends) / len(per_step), 3) if sends else 0.0,
         "batch_size_max": max(per_step.values(), default=0),
         "busy_steps": len(per_step),
-        "emission_wait_steps_mean": round(sum(ages) / len(ages), 3) if ages else 0.0,
-        "emission_wait_steps_max": max(ages, default=0),
+        "emission_wait_steps_mean": round(sum(waits) / len(waits), 3) if waits else 0.0,
+        "emission_wait_steps_max": max(waits, default=0),
         "flight_steps_mean": round(sum(flights) / len(flights), 3) if flights else 0.0,
         "targets_emitted": len({send["target"] for send in sends}),
     }
@@ -142,6 +157,7 @@ def belief_age_accounting(
     "step" age would be a half-truth.
     """
     closed_skipped = 0
+    unknown_steps = 0
     sends = {(int(record["step"]), str(record["target"])): record for record in records if record["kind"] == "send"}
     accepted: dict[int, list[dict[str, Any]]] = defaultdict(list)
     for delivery in (record for record in records if record["kind"] == "deliver"):
@@ -155,6 +171,10 @@ def belief_age_accounting(
     stage_errors = 0
     requirement_errors = 0
     first_knowledge: dict[tuple[str, str], float] = {}
+    known_from = {
+        target: entries[0][0] for target, entries in (truth or {}).items() if entries
+    }
+    informed_from: dict[str, float] = {}
     for sample in range(1, int(horizon) + 1):
         moment = float(sample - 1)
         for delivery in sorted(accepted.get(sample, ()), key=lambda item: str(item["agent"])):
@@ -168,6 +188,8 @@ def belief_age_accounting(
                 tuple(int(value) for value in emission["remaining"]),
             )
             first_knowledge.setdefault(key, moment)
+            held = str(delivery["target"])
+            informed_from[held] = min(informed_from.get(held, moment), moment)
         for (robot, target), (state_time, stage, remaining) in believed.items():
             if active_until is not None and moment > active_until.get(target, float("inf")):
                 closed_skipped += 1
@@ -181,6 +203,14 @@ def belief_age_accounting(
             scored_steps += 1
             stage_errors += int(actual[0] != stage)
             requirement_errors += int(actual[1] != remaining and bool(actual[1]))
+    # "Active but nobody knows": task-steps in which the registry held a live task that no
+    # robot had been told about yet. It is the direct cost of holding a first notification,
+    # and it is invisible in a completion count until a deadline actually passes.
+    if truth is not None:
+        for target, started in known_from.items():
+            ends = active_until.get(target, float("inf")) if active_until else float("inf")
+            reached = informed_from.get(target, float("inf"))
+            unknown_steps += max(0.0, min(ends, reached, float(horizon)) - max(started, 0.0))
     arrivals = sorted(first_knowledge.values())
     return {
         "known_robot_target_pairs": len(first_knowledge),
@@ -191,6 +221,10 @@ def belief_age_accounting(
         "belief_age_steps_mean": round(sum(ages) / len(ages), 3) if ages else None,
         "belief_age_steps_max": round(max(ages), 3) if ages else None,
         "scored_robot_target_steps": scored_steps,
+        # Belief-steps about tasks the registry has already closed are excluded from the age
+        # rather than counted as stale: a robot that knows a finished task is not misinformed.
+        "closed_belief_steps_skipped": closed_skipped,
+        "unknown_to_everyone_steps": round(unknown_steps, 3),
         "stage_error_steps": stage_errors,
         "requirement_error_steps": requirement_errors,
     }

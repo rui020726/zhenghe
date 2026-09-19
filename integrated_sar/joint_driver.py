@@ -29,6 +29,7 @@ from .adapters.task03 import Task03Adapter
 from .assignment_gate import AssignmentGate, ReplanCoordinator
 from .clock import GlobalClock
 from .comm import CommRelay, CommTranscript
+from .comm_budget import CommBudget
 from .comm_policy import build_comm_policy
 from .contracts import DetectionEvent, ProgressEvent, TaskSnapshot
 from .coordinator import (
@@ -134,6 +135,15 @@ class RunConfiguration:
     # An emission budget per joint step, i.e. how many task views may go out at once.
     # None means the uplink is unconstrained apart from its topology, delay and loss.
     comm_sends_per_tick: int | None = None
+    # A hard byte credit for the whole episode, priced as payload bytes x addressed robots per
+    # transmission attempt, with lost packets billed the same as delivered ones. None leaves the
+    # airtime unbounded, which is every configuration recorded before this field existed.
+    comm_budget_bytes: int | None = None
+    # One silence bound applied by the transport to every arm, learned or rule: a change may
+    # not be held longer than this, and no longer than the urgent bound while a task is inside
+    # its urgency window. Unset leaves the relay's own behaviour untouched.
+    comm_max_wait_steps: int | None = None
+    comm_urgent_wait_steps: int | None = None
     # Where to write the transport transcript (one JSON object per send/delivery/event).
     # Off unless a path is given, and never read back by any decision.
     comm_transcript: str | None = None
@@ -241,11 +251,20 @@ class RunConfiguration:
             raise ConfigurationError(
                 f"--comm-delay-ticks cannot be negative, got {self.comm_delay_ticks}"
             )
+        if self.comm_budget_bytes is not None and self.comm_budget_bytes < 1:
+            raise ConfigurationError(
+                "--comm-budget-bytes must be a positive byte credit or unset, got "
+                f"{self.comm_budget_bytes}"
+            )
         if self.comm_sends_per_tick is not None and self.comm_sends_per_tick < 1:
             raise ConfigurationError(
                 "--comm-sends-per-tick must be a positive emission budget or unset, got "
                 f"{self.comm_sends_per_tick}"
             )
+        for name in ("comm_max_wait_steps", "comm_urgent_wait_steps"):
+            value = getattr(self, name)
+            if value is not None and int(value) < 1:
+                raise ConfigurationError(f"--{name.replace('_', '-')} must be >= 1 or unset, got {value}")
         if self.comm_range < 0:
             raise ConfigurationError(
                 f"--comm-range cannot be negative, got {self.comm_range}"
@@ -466,6 +485,16 @@ def build_parser() -> argparse.ArgumentParser:
                         help="emission budget: how many task views may go on the air in one "
                              "joint step (unset means the uplink is unconstrained apart from "
                              "its topology, delay and loss)")
+    parser.add_argument("--comm-budget-bytes", type=int, default=None,
+                        help="hard byte credit for the episode, charged per transmission attempt "
+                             "(payload bytes x addressed robots, lost packets included); unset "
+                             "leaves the airtime unbounded, which is every recorded run so far")
+    parser.add_argument("--comm-max-wait-steps", type=int, default=None,
+                        help="transport-level silence bound every arm must obey: a change is "
+                             "emitted at the latest after this many steps (unset = no bound)")
+    parser.add_argument("--comm-urgent-wait-steps", type=int, default=None,
+                        help="the tighter bound while a task is inside its urgency window "
+                             "(requires --comm-max-wait-steps)")
     parser.add_argument("--comm-transcript", default=None,
                         help="write the transport transcript (one JSON object per accepted "
                              "event, emission and delivery attempt) to this path; a "
@@ -535,6 +564,9 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         comm_policy=str(args.comm_policy),
         comm_policy_params=str(args.comm_policy_params),
         comm_sends_per_tick=getattr(args, "comm_sends_per_tick", None),
+        comm_budget_bytes=getattr(args, "comm_budget_bytes", None),
+        comm_max_wait_steps=getattr(args, "comm_max_wait_steps", None),
+        comm_urgent_wait_steps=getattr(args, "comm_urgent_wait_steps", None),
         comm_transcript=args.comm_transcript,
         comm_range=float(args.comm_range),
         gossip_interval=int(args.gossip_interval),
@@ -632,6 +664,9 @@ def run_signature_of(configuration: RunConfiguration) -> dict[str, Any]:
             task_membership_consistency=bool(configuration.task_membership_consistency),
             comm_policy=str(configuration.comm_policy),
             comm_policy_params=str(configuration.comm_policy_params),
+            comm_budget_bytes=configuration.comm_budget_bytes,
+            comm_max_wait_steps=configuration.comm_max_wait_steps,
+            comm_urgent_wait_steps=configuration.comm_urgent_wait_steps,
         ),
         repo=Path(__file__).resolve().parent.parent,
     )
@@ -875,7 +910,12 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         delay_ticks=configuration.comm_delay_ticks,
         seed=configuration.seed,
         policy=build_comm_policy(configuration.comm_policy, configuration.comm_policy_params),
-        sends_per_tick=configuration.comm_sends_per_tick,
+        budget=CommBudget(
+            bytes_per_episode=configuration.comm_budget_bytes,
+            sends_per_step=configuration.comm_sends_per_tick,
+        ),
+        max_wait_steps=configuration.comm_max_wait_steps,
+        urgent_wait_steps=configuration.comm_urgent_wait_steps,
         freshness_of=task_adapter.belief_freshness if comm_transcript is not None else None,
         now_of=lambda: clock.now,
         transcript=comm_transcript,

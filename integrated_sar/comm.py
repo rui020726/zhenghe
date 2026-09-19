@@ -35,6 +35,7 @@ from typing import Any, Callable
 import numpy as np
 
 from .contracts import DetectionEvent, DetectionMessage, TaskSnapshot
+from .comm_budget import CommBudget
 from .comm_policy import CommSendPolicy, ImmediatePolicy, SendItem, SendObservation
 
 SnapshotLookup = Callable[[str], TaskSnapshot | None]
@@ -170,6 +171,10 @@ class CommRelay:
         seed: int | None = None,
         policy: CommSendPolicy | None = None,
         sends_per_tick: int | None = None,
+        budget: CommBudget | None = None,
+        max_wait_steps: int | None = None,
+        urgent_wait_steps: int | None = None,
+        urgency_time: float = 25.0,
         freshness_of: FreshnessLookup | None = None,
         now_of: NowLookup | None = None,
         transcript: CommTranscript | None = None,
@@ -182,6 +187,13 @@ class CommRelay:
             raise ValueError(f"delay_ticks cannot be negative, got {delay_ticks}")
         if sends_per_tick is not None and int(sends_per_tick) < 1:
             raise ValueError(f"sends_per_tick must be >= 1 or None, got {sends_per_tick}")
+        if budget is not None and sends_per_tick is not None and budget.sends_per_step != int(
+            sends_per_tick
+        ):
+            raise ValueError(
+                "pass the emission capacity either as sends_per_tick or inside budget, not as "
+                f"two different values ({sends_per_tick} vs {budget.sends_per_step})"
+            )
         self._subscribers = tuple(str(agent_id) for agent_id in subscribers)
         self._writer = writer
         self._snapshot_of = snapshot_of
@@ -191,32 +203,59 @@ class CommRelay:
         self._seed = seed
         self._rng = np.random.default_rng(seed)
         self._policy = policy if policy is not None else ImmediatePolicy()
-        self._sends_per_tick = None if sends_per_tick is None else int(sends_per_tick)
+        self._budget = budget if budget is not None else CommBudget(sends_per_step=sends_per_tick)
+        # One silence bound for every arm, transport-side rather than policy-side: a change may
+        # not be held past max_wait_steps, or past urgent_wait_steps while a task is inside
+        # urgency_time. Unset leaves the relay exactly as it was. It is a floor on what goes
+        # out, still billed and still refused when the credit cannot pay for it.
+        if max_wait_steps is not None and int(max_wait_steps) < 1:
+            raise ValueError(f"max_wait_steps must be >= 1 or None, got {max_wait_steps}")
+        self._max_wait_steps = None if max_wait_steps is None else int(max_wait_steps)
+        self._urgent_wait_steps = (
+            None if urgent_wait_steps is None else max(0, int(urgent_wait_steps))
+        )
+        self._urgency_time = float(urgency_time)
         self._freshness_of = freshness_of
         self._now_of = now_of
         self.transcript = transcript
-        self._pending: list[tuple[int, int, str, DetectionMessage, int]] = []
+        self._pending: list[tuple[int, int, str, DetectionMessage, int, int]] = []
         self._ledger: dict[str, _TargetLedger] = {}
         self._seen_event_ids: set[str] = set()
         self._tick = 0
         self._sequence = 0
-        # Aggregated transport facts, reported once per episode by the run harness.
+        # The transport ledger, reported once per episode by the run harness. The naming is
+        # deliberate because these quantities are routinely confused: an *attempt* is radio
+        # time spent and is what a budget is charged against, a *delivery* is a packet that
+        # reached a receiver, and an *application* is a delivery that changed a belief.
+        # Losing packets reduces deliveries, never attempts, so a lossy channel cannot be
+        # reported as savings.
         self.counters: dict[str, int] = {
             key: 0
             for key in (
+                # what the sender came to know, and what it said
+                "generated_items",
                 "events_accepted",
+                "coalesced_changes",
                 "emissions",
                 "first_emissions",
                 "refresh_emissions",
-                "packets_sent",
+                # what went on the air, and what came out the other end
+                "transmission_attempts",
                 "packets_lost",
                 "packets_delivered",
+                "deliveries_applied",
                 "delivery_duplicate",
                 "delivery_superseded",
                 "delivery_unknown_task",
+                "delivery_refused",
+                # what the transport rules refused to say
                 "emissions_suppressed_terminal",
-                "emissions_suppressed_budget",
-                "payload_bytes",
+                "forced_emissions",
+                "capacity_refused_sends",
+                "budget_refused_sends",
+                # cost: primary is airtime over attempts; applied bytes is an efficiency read
+                "airtime_bytes",
+                "applied_bytes",
                 # Two different waits. backlog_steps is how long the packets that *did* go
                 # out sat first; unsent_change_steps is the integral of everything the sender
                 # knew and had not said, which a policy that never refreshes keeps growing.
@@ -245,11 +284,16 @@ class CommRelay:
             return
         ready_step = self._tick + 1
         ledger = self._ledger.setdefault(str(event.target_id), _TargetLedger())
+        if ledger.ready_step is not None:
+            # Something about this target was already waiting to be said. This event joins it
+            # instead of queueing a second letter: the emission will carry one newer view.
+            self.counters["coalesced_changes"] += 1
         ledger.pending_event = True
         ledger.closed = False
         if ledger.ready_step is None:
             ledger.ready_step = ready_step
         self.counters["events_accepted"] += 1
+        self.counters["generated_items"] += 1
         if self._snapshot_of is None:
             # No registry lookup wired: the event itself -- the same profile the registry
             # would have stored -- defines the payload, as it always did.
@@ -274,12 +318,14 @@ class CommRelay:
         changed: list[str] = []
         if due:
             due.sort(key=lambda item: item[1])
-            for due_tick, _, agent_id, message, sent_step in due:
+            for due_tick, _, agent_id, message, sent_step, payload_bytes in due:
                 self.counters["packets_delivered"] += 1
                 self.counters["flight_steps"] += int(self._tick - due_tick)
                 accepted, reason = self._deliver(message, agent_id)
                 if accepted:
                     changed.append(agent_id)
+                    self.counters["deliveries_applied"] += 1
+                    self.counters["applied_bytes"] += int(payload_bytes)
                 elif reason in self.counters:
                     self.counters[reason] += 1
                 if self.transcript is not None:
@@ -292,6 +338,7 @@ class CommRelay:
                         sent_at=float(message.sent_at),
                         sent_step=int(sent_step),
                         now=float(self._now_value()),
+                        payload_bytes=int(payload_bytes),
                         accepted=bool(accepted),
                         reason="accepted" if accepted else str(reason),
                     )
@@ -334,21 +381,45 @@ class CommRelay:
 
     # ------------------------------------------------------------------ scheduling
     def _emit_selected(self) -> None:
+        self._budget.begin_step()
         observation = self._observation()
         if not observation.items:
             return
-        selected = set(self._policy.decide(observation))
-        ordered = sorted(
-            (item for item in observation.items if item.target_id in selected),
-            key=lambda item: (item.remaining_time, -item.age_steps, item.target_id),
-        )
-        if self._sends_per_tick is not None and len(ordered) > self._sends_per_tick:
-            # One trim order for every policy: under a budget a rule is judged by what it
-            # asks for, not by an ordering advantage the transport happened to give it.
-            self.counters["emissions_suppressed_budget"] += len(ordered) - self._sends_per_tick
-            ordered = ordered[: self._sends_per_tick]
-        for item in ordered:
+        chosen_targets = self._policy.decide(observation)
+        by_target = {item.target_id: item for item in observation.items}
+        if getattr(self._policy, "orders_selection", False):
+            # The policy named its own priority: keep it, first mention first, and ignore any
+            # target it was not actually offered.
+            requested = dict.fromkeys(str(target) for target in chosen_targets)
+            chosen = [by_target[target] for target in requested if target in by_target]
+        else:
+            # A rule that does not claim an ordering is trimmed by the transport, identically
+            # for every such rule: it is judged by what it asks to say, not by a queueing
+            # advantage the executor happened to give it.
+            wanted = set(chosen_targets)
+            chosen = sorted(
+                (item for item in observation.items if item.target_id in wanted),
+                key=lambda item: (item.remaining_time, -item.age_steps, item.target_id),
+            )
+        if self._max_wait_steps is not None:
+            overdue = {
+                item.target_id
+                for item in observation.items
+                if item.age_steps >= self._wait_limit(item)
+            }
+            present = {item.target_id for item in chosen}
+            self.counters["forced_emissions"] += len(overdue - present)
+            chosen = list(chosen) + [
+                item for item in observation.items if item.target_id in overdue - present
+            ]
+        for item in chosen:
             self._emit(item, first=item.first_emission)
+
+    def _wait_limit(self, item: SendItem) -> int:
+        if self._urgent_wait_steps is not None and 0.0 <= item.remaining_time <= self._urgency_time:
+            return self._urgent_wait_steps
+        assert self._max_wait_steps is not None
+        return self._max_wait_steps
 
     def _now_value(self) -> float:
         """The sending node's own reading of the clock; the step counter if none is wired."""
@@ -389,6 +460,7 @@ class CommRelay:
                 # policy intends to send it: a held change is what a "queue wait" number has
                 # to count, and the historical policy holds every one of them by design.
                 ledger.ready_step = self._tick
+                self.counters["generated_items"] += 1
             sent = ledger.last_sent
             ready_step = ledger.ready_step if ledger.ready_step is not None else self._tick
             items.append(
@@ -422,26 +494,69 @@ class CommRelay:
                     has_future_requirements=bool(len(state.stages) > int(state.current_stage) + 1),
                 )
             )
-        return SendObservation(step=self._tick, current_time=now, items=tuple(items))
+        return SendObservation(
+            step=self._tick,
+            current_time=now,
+            items=tuple(items),
+            remaining_budget_bytes=self._budget.remaining_bytes,
+            budget_bytes_per_episode=self._budget.bytes_per_episode,
+            capacity_remaining=(
+                None
+                if self._budget.sends_per_step is None
+                else max(0, self._budget.sends_per_step - self._budget.sends_this_step)
+            ),
+            backlog_targets=self.backlog,
+            subscribers=len(self._subscribers),
+        )
 
     def _emit(self, item: SendItem, *, first: bool) -> None:
         ledger = self._ledger[item.target_id]
         snapshot = self._snapshot_of(item.target_id) if self._snapshot_of else None
         message = self._message(item.target_id, ledger, snapshot)
         payload_bytes = estimate_message_bytes(message)
+        # One emission addresses the whole subscribed set, so its price is the payload times
+        # that fan-out. A broadcast is paid for per receiver because the airtime is per
+        # receiver; a per-emission cost would let an arm look cheap by widening the team.
+        cost_bytes = payload_bytes * len(self._subscribers)
+        if not self._budget.can_send(cost_bytes):
+            reason = self._budget.why_blocked(cost_bytes)
+            self._budget.note_refusal(reason, cost_bytes)
+            key = (
+                "capacity_refused_sends"
+                if reason == "capacity_step"
+                else "budget_refused_sends"
+            )
+            self.counters[key] += 1
+            if self.transcript is not None:
+                self.transcript.add(
+                    "refused",
+                    step=int(self._tick),
+                    target=item.target_id,
+                    reason=reason,
+                    cost_bytes=int(cost_bytes),
+                    remaining_bytes=(
+                        None if self._budget.bytes_per_episode is None else self._budget.remaining_bytes
+                    ),
+                )
+            # The change stays queued and keeps ageing: an unaffordable send is not a send,
+            # and nothing here marks the ledger as informed.
+            return
         due_tick = self._tick + self._delay_ticks
         sent = 0
         lost = 0
         for agent_id in self._subscribers:
             # The uplink drops packets independently per robot; a dropped packet is never
             # retransmitted by the relay itself, so that robot's belief stays as it was and
-            # only a policy that emits again can recover it.
+            # only a policy that emits again can recover it. The drop is billed all the same.
             if self._rng.random() > self._delivery_probability:
                 lost += 1
                 continue
             self._sequence += 1
             sent += 1
-            self._pending.append((due_tick, self._sequence, agent_id, message, self._tick))
+            self._pending.append(
+                (due_tick, self._sequence, agent_id, message, self._tick, payload_bytes)
+            )
+        self._budget.charge(cost_bytes)
         ready_step = ledger.ready_step if ledger.ready_step is not None else self._tick
         ledger.last_sent = message
         ledger.last_sent_view = _View.of(message)
@@ -451,12 +566,13 @@ class CommRelay:
         ledger.pending_event = False
         ledger.pending_message = None
         ledger.ready_step = None
+        attempts = sent + lost
         self.counters["emissions"] += 1
         self.counters["first_emissions"] += 1 if first else 0
         self.counters["refresh_emissions"] += 0 if first else 1
-        self.counters["packets_sent"] += sent
+        self.counters["transmission_attempts"] += attempts
         self.counters["packets_lost"] += lost
-        self.counters["payload_bytes"] += payload_bytes * sent
+        self.counters["airtime_bytes"] += cost_bytes
         self.counters["backlog_steps"] += max(0, self._tick - int(ready_step))
         if self.transcript is not None:
             self.transcript.add(
@@ -465,9 +581,12 @@ class CommRelay:
                 target=item.target_id,
                 revision=int(message.revision),
                 payload_bytes=int(payload_bytes),
+                attempts=int(attempts),
                 packets=int(sent),
                 packets_lost=int(lost),
                 subscribers=len(self._subscribers),
+                cost_bytes=int(cost_bytes),
+                spent_after_bytes=int(self._budget.spent_bytes),
                 due_step=int(due_tick),
                 ready_step=int(ready_step),
                 now=float(self._now_value()),
@@ -477,7 +596,7 @@ class CommRelay:
                 stage_index=int(message.current_stage),
                 remaining=[int(value) for value in message.remaining_requirements],
                 members=[str(member) for member in message.members],
-                bytes_total=int(payload_bytes * sent),
+                bytes_total=int(cost_bytes),
                 deadline=float(message.deadline),
             )
 
@@ -489,6 +608,7 @@ class CommRelay:
         self._tick = 0
         self._sequence = 0
         self._rng = np.random.default_rng(self._seed)
+        self._budget.reset()
         for key in self.counters:
             self.counters[key] = 0
 
@@ -504,6 +624,23 @@ class CommRelay:
     @property
     def policy(self) -> CommSendPolicy:
         return self._policy
+    @property
+    def budget(self) -> CommBudget:
+        """The executor this relay spends from. A harness asserts on it, never writes it."""
+        return self._budget
+
+    def attach_policy(self, policy: CommSendPolicy) -> None:
+        """Install the decision-maker before the episode starts.
+
+        Refusing after the first step is the point: swapping a controller mid-episode would
+        make the recorded transcript a mixture of two policies and the run label a lie.
+        """
+        if self._tick or self._pending or self._ledger:
+            raise RuntimeError(
+                f"the relay has already run {self._tick} steps; a policy can only be attached "
+                "before the episode starts"
+            )
+        self._policy = policy
 
     def transport_parameters(self) -> dict[str, Any]:
         """The knobs the relay itself owns, for a configuration truth table."""
@@ -511,9 +648,12 @@ class CommRelay:
             "subscribers": list(self._subscribers),
             "delivery_probability": self._delivery_probability,
             "delay_ticks": self._delay_ticks,
-            "sends_per_tick": self._sends_per_tick,
+            "budget": self._budget.usage(),
             "policy": self._policy.name,
             "policy_parameters": dict(self._policy.parameters()),
+            "max_wait_steps": self._max_wait_steps,
+            "urgent_wait_steps": self._urgent_wait_steps,
+            "urgency_time": self._urgency_time if self._max_wait_steps is not None else None,
         }
 
     # ------------------------------------------------------------------ payloads

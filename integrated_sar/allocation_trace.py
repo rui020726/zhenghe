@@ -93,6 +93,9 @@ def arm_name(
     task_membership_consistency: bool = False,
     comm_policy: str = "immediate",
     comm_policy_params: str = "",
+    comm_budget_bytes: int | None = None,
+    comm_max_wait_steps: int | None = None,
+    comm_urgent_wait_steps: int | None = None,
 ) -> str:
     """The arm label shared with the ``rp_<arm>_s<seed>.jsonl`` lifecycle logs.
 
@@ -146,6 +149,16 @@ def arm_name(
             if character.isalnum() or character in "._"
         )
         label = f"{label}+comm{comm_policy}{parameters}"
+    if comm_budget_bytes:
+        # A hard airtime credit changes which sends happen at all, so two arms that differ only
+        # in their budget cannot share a label or their rows would pool.
+        label = f"{label}+bud{int(comm_budget_bytes)}"
+    if comm_max_wait_steps:
+        # A shared silence bound changes what leaves the sender even when the policy is
+        # unchanged, so it cannot be invisible in the label.
+        label = f"{label}+mw{int(comm_max_wait_steps)}"
+        if comm_urgent_wait_steps is not None:
+            label = f"{label}u{int(comm_urgent_wait_steps)}"
     return label
 
 
@@ -188,6 +201,9 @@ def trace_meta(
             ),
             comm_policy=str(getattr(configuration, "comm_policy", "immediate")),
             comm_policy_params=str(getattr(configuration, "comm_policy_params", "")),
+            comm_budget_bytes=getattr(configuration, "comm_budget_bytes", None),
+            comm_max_wait_steps=getattr(configuration, "comm_max_wait_steps", None),
+            comm_urgent_wait_steps=getattr(configuration, "comm_urgent_wait_steps", None),
         ),
         "coordinator_policy": str(
             getattr(configuration, "coordinator_policy", "heuristic")

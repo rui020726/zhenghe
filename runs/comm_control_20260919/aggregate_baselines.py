@@ -36,8 +36,14 @@ METRICS = {
     "performance.expired": ("targets", "targets that expired"),
     "performance.unresolved": ("targets", "targets neither completed nor expired by the horizon"),
     "transport.emissions": ("batches", "task views put on the air"),
-    "transport.packets_sent": ("packets", "one emission to one subscribed robot"),
-    "transport.payload_bytes_total": ("bytes", "canonical-JSON payload bytes across all packets"),
+    "transport.transmission_attempts": (
+        "packets",
+        "one emission addressed to one subscribed robot, survived the channel or not",
+    ),
+    "transport.packets_lost": ("packets", "attempted packets the channel dropped"),
+    "transport.deliveries_applied": ("packets", "deliveries that changed a belief"),
+    "transport.airtime_bytes": ("bytes", "the billed cost: payload bytes x addressed robots, per attempt"),
+    "transport.applied_bytes": ("bytes", "of that airtime, bytes that actually changed a belief"),
     "transport.refresh_emissions": ("batches", "emissions after the first for that target"),
     "transport.deliveries_duplicate": ("packets", "delivered but already believed (same time+revision)"),
     "transport.deliveries_superseded": ("packets", "delivered but older than what the robot believes"),
@@ -198,7 +204,7 @@ def headroom(
         if isinstance(value, (int, float)):
             by_seed[int(row["seed"])][row["condition"]] = float(value)
             cost[(row["condition"], int(row["seed"]))] = float(
-                dig(row, "transport.packets_sent") or 0.0
+                dig(row, "transport.transmission_attempts") or 0.0
             )
     winners: dict[str, int] = defaultdict(int)
     gains: list[float] = []
@@ -286,8 +292,8 @@ def main(argv: list[str]) -> int:
         "performance.on_time",
         "performance.expired",
         "performance.unresolved",
-        "transport.packets_sent",
-        "transport.payload_bytes_total",
+        "transport.transmission_attempts",
+        "transport.airtime_bytes",
         "transport.refresh_emissions",
         "transport.deliveries_duplicate",
         "belief_all_channels.belief_age_steps_mean",
@@ -330,18 +336,18 @@ def main(argv: list[str]) -> int:
             ],
             "primary_vs_deployed_immediate": [
                 paired_contrast(rows, baseline="deployed_immediate", metric=metric, pool=primary)
-                for metric in ("performance.on_time", "transport.packets_sent")
+                for metric in ("performance.on_time", "transport.transmission_attempts")
             ],
             "diagnostic_vs_deployed_immediate": [
                 paired_contrast(rows, baseline="deployed_immediate", metric=metric, pool=diagnostics)
-                for metric in ("performance.on_time", "transport.packets_sent")
+                for metric in ("performance.on_time", "transport.transmission_attempts")
             ]
             if diagnostics
             else [],
         },
         "spread": [
             spread(rows, metric=metric, pool=primary)
-            for metric in ("performance.on_time", "transport.packets_sent")
+            for metric in ("performance.on_time", "transport.transmission_attempts")
         ],
         "headroom": [
             headroom(rows, metric=metric, pool=pool)
@@ -361,8 +367,8 @@ def main(argv: list[str]) -> int:
             f"on_time={metrics.get('performance.on_time', {}).get('total')} "
             f"expired={metrics.get('performance.expired', {}).get('total')} "
             f"emissions={metrics.get('transport.emissions', {}).get('total'):>7} "
-            f"packets={metrics.get('transport.packets_sent', {}).get('total'):>7} "
-            f"bytes={metrics.get('transport.payload_bytes_total', {}).get('total'):>12.0f} "
+            f"attempts={metrics.get('transport.transmission_attempts', {}).get('total'):>6} "
+            f"bytes={metrics.get('transport.airtime_bytes', {}).get('total'):>12.0f} "
             f"age={metrics.get('belief_all_channels.belief_age_steps_mean', {}).get('mean_per_episode')}"
         )
     return 0

@@ -1,0 +1,179 @@
+{
+ "configuration": {
+  "actor_kv_mode": "tokens",
+  "allocation_interval": 5,
+  "check_release_source_stage": false,
+  "comm_budget_bytes": null,
+  "comm_delay_ticks": 0,
+  "comm_delivery_probability": 1.0,
+  "comm_policy": "immediate",
+  "comm_policy_params": "",
+  "comm_range": 0.3,
+  "comm_sends_per_tick": null,
+  "comm_subscribers": "all",
+  "comm_transcript": "D:\\code\\整合\\zhenghe\\runs\\comm_budget_pilot_20260919\\preflight\\ct_preflight_s700000.jsonl",
+  "command_ttl": 10.0,
+  "coordination_interval": 5,
+  "coordinator_policy": "coalition_planner",
+  "deadline_tightness": [
+   0.5,
+   2.0
+  ],
+  "detection_radius": 5,
+  "dt": 1.0,
+  "gossip_interval": 2,
+  "grid_size": 60,
+  "num_goals": 6,
+  "obstacle_density": 0.15,
+  "release_redundant_members": false,
+  "rescue_per_species": 2,
+  "rescue_species": 3,
+  "residual_scale": 0.25,
+  "search_agents": 2,
+  "steps": 1000,
+  "sticky_commitments": true,
+  "suppress_recommand_own_task": false,
+  "task_membership_consistency": true
+ },
+ "expected_allocation": {
+  "actor_kv_mode": "tokens",
+  "allocation_interval": 5,
+  "check_release_source_stage": false,
+  "command_ttl": 10.0,
+  "coordination_interval": 5,
+  "coordinator_policy": "coalition_planner",
+  "deadline_tightness": [
+   0.5,
+   2.0
+  ],
+  "detection_radius": 5,
+  "dt": 1.0,
+  "grid_size": 60,
+  "num_goals": 6,
+  "obstacle_density": 0.15,
+  "release_redundant_members": false,
+  "rescue_per_species": 2,
+  "rescue_species": 3,
+  "residual_scale": 0.25,
+  "search_agents": 2,
+  "steps": 1000,
+  "sticky_commitments": true,
+  "suppress_recommand_own_task": false,
+  "task_membership_consistency": true
+ },
+ "expected_communication_defaults": {
+  "comm_budget_bytes": null,
+  "comm_delay_ticks": 0,
+  "comm_delivery_probability": 1.0,
+  "comm_policy": "immediate",
+  "comm_policy_params": "",
+  "comm_range": 0.3,
+  "comm_sends_per_tick": null,
+  "comm_subscribers": "all",
+  "comm_transcript": null,
+  "gossip_interval": 2
+ },
+ "gates": [
+  {
+   "gate": "场景可分辨",
+   "requirement": "under the pre-registered budget, the published rules separate on on-time completions with a paired CI that excludes zero",
+   "status_at_preflight": "open -- last round's unbudgeted dev set separated nothing (best-minus-reference 0.25 targets/episode, CI lower bound 0); the budget tiers are what makes this checkable"
+  },
+  {
+   "gate": "信息确有后果",
+   "requirement": "withholding or delaying a message changes receiver belief and task outcomes, with the environment's own sensing accounted for",
+   "status_at_preflight": "met in the isolated setting (belief age 70.0 vs 4.2 steps, requirement error 14776 vs 0 robot-target-steps, silence informs nobody); only partially met in the deployed setting, where line-of-sight sensing supplies 95.6% of first knowledge anyway"
+  },
+  {
+   "gate": "旁路已说明并受控",
+   "requirement": "no claim of communication value is made in a setting where the delayed information can still reach the receiver by another path",
+   "status_at_preflight": "met -- training and mechanism checks run in the isolated setting, the deployed setting is reported separately, and arrival verification is named as the one channel no send policy can replace"
+  }
+ ],
+ "mismatches": [],
+ "runtime": {
+  "arm_label": "coalplan0.25sticky+memfix",
+  "binding_commitments": true,
+  "code_commit": "0794de9d2adb9438b753397cea8304616ddd0102",
+  "config_hash": "f93d72826f7f2dc7",
+  "coordinator": "ReplanCoordinator",
+  "coordinator_is_planner": true,
+  "deadline_tightness_runtime": [
+   0.5,
+   2.0
+  ],
+  "environment_membership_consistency": true,
+  "environment_module": "integrated_sar_task_env",
+  "relay": {
+   "budget": {
+    "budget_refused_bytes": 0,
+    "budget_refused_sends": 0,
+    "bytes_per_episode": null,
+    "capacity_refused_sends": 0,
+    "remaining_bytes": null,
+    "sends_per_step": null,
+    "spent_bytes": 0,
+    "used_fraction": null
+   },
+   "delay_ticks": 0,
+   "delivery_probability": 1.0,
+   "policy": "immediate",
+   "policy_parameters": {},
+   "subscribers": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5"
+   ]
+  },
+  "release_flags": [
+   false,
+   false
+  ],
+  "robot_abilities": [
+   [
+    0,
+    0,
+    1,
+    0,
+    0
+   ],
+   [
+    0,
+    1,
+    0,
+    0,
+    0
+   ],
+   [
+    1,
+    1,
+    0,
+    1,
+    1
+   ]
+  ],
+  "robots": 6,
+  "species": [
+   0,
+   1,
+   2
+  ],
+  "stream_sha256": "ddbe6bb84f15a464c4926971e1708573e442b426927c33a6fb5337d233706463"
+ },
+ "seed": 700000,
+ "what_the_pilot_controls": {
+  "bypasses": [
+   "TaskEnv line-of-sight refresh (deployed setting only; switched off for the pilot)",
+   "one-hop gossip (same switch)",
+   "verify_task_on_arrival, which is physical presence rather than a message",
+   "assignment-gate refusals feeding replan_agents, which carry no task state"
+  ],
+  "channel": "A: search-side registry to rescue belief, CommRelay uplink",
+  "decided": "whether the message currently held for a target goes on the air this step -- covering both a first detection and a later task-state view, because both travel as the same DetectionMessage contract",
+  "not_decided": "payload fields, recipients, merge rule, allocator, coordinator, fleet, deadline, sensing",
+  "sender_side_truth_is_legitimate_because": "ARCHITECTURE.md names CommRelay the only channel from the registry side into rescue belief, and the registry is the ground station's own state; the receiver still learns nothing it was not sent"
+ }
+}

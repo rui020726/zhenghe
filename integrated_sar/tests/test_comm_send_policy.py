@@ -11,11 +11,13 @@ from __future__ import annotations
 import unittest
 
 from integrated_sar.comm import CommRelay, CommTranscript, estimate_message_bytes
+from integrated_sar.comm_budget import CommBudget
 from integrated_sar.comm_policy import (
     EventMaxWaitPolicy,
     EventPolicy,
     ImmediatePolicy,
     PeriodicPolicy,
+    PriorityEventPolicy,
     build_comm_policy,
     parse_parameters,
     policy_descriptors,
@@ -30,16 +32,27 @@ from integrated_sar.contracts import (
     WorldPosition,
 )
 from integrated_sar.task_registry import TaskRegistry
+from typing import Any
 
 
 class RecordingWriter:
-    """The receiver side: remember what arrived, accept everything."""
+    """The receiver side: remember what arrived, and apply the real freshness rule.
+
+    A packet no newer than what this robot already believes changes nothing, which is what
+    lets the relay's duplicate and superseded accounting be tested where it is produced.
+    """
 
     def __init__(self) -> None:
         self.received: list[tuple[str, str, int, float]] = []
         self.messages: list[object] = []
+        self.believed: dict[tuple[str, str], tuple[float, int]] = {}
 
     def deliver_detection(self, message, agent_id: str) -> bool:
+        key = (str(agent_id), str(message.target_id))
+        known = self.believed.get(key)
+        if known is not None and (float(message.sent_at), int(message.revision)) <= known:
+            return False
+        self.believed[key] = (float(message.sent_at), int(message.revision))
         self.received.append(
             (
                 str(agent_id),
@@ -50,6 +63,9 @@ class RecordingWriter:
         )
         self.messages.append(message)
         return True
+
+    def belief_freshness(self, agent_id: str, target_id: str):
+        return self.believed.get((str(agent_id), str(target_id)))
 
 
 def detection(
@@ -106,6 +122,7 @@ class Harness:
         delay_ticks: int = 0,
         delivery_probability: float = 1.0,
         sends_per_tick: int | None = None,
+        budget=None,
         seed: int = 7,
     ) -> None:
         self.registry = TaskRegistry()
@@ -121,6 +138,8 @@ class Harness:
             seed=seed,
             policy=policy,
             sends_per_tick=sends_per_tick,
+            budget=budget,
+            freshness_of=self.writer.belief_freshness,
             now_of=lambda: self.now,
         )
 
@@ -213,19 +232,19 @@ class TransportPromiseTests(unittest.TestCase):
             run.step()
             self.assertEqual(run.emissions, 1, policy.name)
             self.assertEqual([item[1] for item in run.delivered], ["near", "near"], policy.name)
-            self.assertEqual(run.relay.counters["emissions_suppressed_budget"], 1, policy.name)
+            self.assertEqual(run.relay.counters["capacity_refused_sends"], 1, policy.name)
 
     def test_reset_replays_the_same_packet_outcome(self) -> None:
         run = Harness(delivery_probability=0.5)
         run.publish(detection())
         run.step(3)
-        first, first_sent = list(run.delivered), run.relay.counters["packets_sent"]
+        first, first_sent = list(run.delivered), run.relay.counters["transmission_attempts"]
         run.relay.reset()
         run.writer.received.clear()
         run.publish(detection())
         run.step(3)
         self.assertEqual(run.delivered, first)
-        self.assertEqual(run.relay.counters["packets_sent"], first_sent)
+        self.assertEqual(run.relay.counters["transmission_attempts"], first_sent)
 
 
 class PeriodicPolicyTests(unittest.TestCase):
@@ -248,16 +267,19 @@ class PeriodicPolicyTests(unittest.TestCase):
         self.assertEqual(run.delivered[0][3], 0.5)
         self.assertEqual(run.delivered[0][2], 2, "the registry revision after the progress event")
 
-    def test_a_periodic_policy_keeps_offering_so_a_loss_is_recoverable(self) -> None:
+    def test_a_lost_packet_is_billed_and_a_periodic_policy_can_offer_again(self) -> None:
         run = Harness(policy=PeriodicPolicy(interval=2), delivery_probability=0.5)
         run.publish(detection())
         run.step(20)
         self.assertEqual(run.emissions, 10)
         self.assertEqual(
-            run.relay.counters["packets_sent"] + run.relay.counters["packets_lost"],
-            run.emissions * 2,
-            "every emission is one packet per subscriber, lost or not",
+            run.relay.counters["packets_delivered"] + run.relay.counters["packets_lost"],
+            run.relay.counters["transmission_attempts"],
+            "every attempt either arrives or is counted as lost",
         )
+        self.assertGreater(run.relay.counters["packets_lost"], 0, "the seeded channel did drop some")
+        # Attempts are the billed quantity: they do not fall just because packets died.
+        self.assertEqual(run.relay.counters["transmission_attempts"], run.emissions * 2)
         self.assertGreater(len(run.delivered), 0)
 
 
@@ -352,13 +374,13 @@ class MeasurementTests(unittest.TestCase):
         self.assertEqual(single.emissions, many.emissions, "one batch each")
         self.assertEqual(len(single.writer.messages[0].stages), 1)
         self.assertGreater(
-            many.relay.counters["payload_bytes"],
-            single.relay.counters["payload_bytes"],
+            many.relay.counters["airtime_bytes"],
+            single.relay.counters["airtime_bytes"],
             "more task structure in the letter is more information, and it has to show up",
         )
         per_packet = estimate_message_bytes(single.writer.messages[0])
-        self.assertEqual(single.relay.counters["payload_bytes"], per_packet * 2)
-        self.assertEqual(single.relay.counters["packets_sent"], 2, "two robots, two packets")
+        self.assertEqual(single.relay.counters["airtime_bytes"], per_packet * 2)
+        self.assertEqual(single.relay.counters["transmission_attempts"], 2, "two robots, two packets")
 
     def test_the_transcript_names_every_stage_of_a_packet_life(self) -> None:
         run = Harness(policy=PeriodicPolicy(interval=3), delay_ticks=1)
@@ -404,6 +426,223 @@ class MeasurementTests(unittest.TestCase):
         self.assertEqual(run.relay.counters["max_backlog_age"], 3)
         self.assertGreaterEqual(run.relay.counters["unsent_change_steps"], 4)
         self.assertEqual(run.relay.counters["backlog_steps"], 0, "what went out went at once")
+
+
+class BudgetLedgerTests(unittest.TestCase):
+    """What the airtime ledger bills, and what a hard budget refuses."""
+
+    def priced_emission(self) -> int:
+        run = Harness()
+        run.publish(detection())
+        run.step()
+        return int(run.relay.counters["airtime_bytes"])
+
+    def test_a_packet_the_channel_ate_is_still_paid_for(self) -> None:
+        run = Harness(policy=PeriodicPolicy(interval=2), delivery_probability=0.0)
+        run.publish(detection())
+        run.step(10)
+        self.assertEqual(run.emissions, 5)
+        self.assertEqual(run.relay.counters["packets_delivered"], 0)
+        self.assertEqual(run.relay.counters["transmission_attempts"], 10)
+        self.assertEqual(run.relay.counters["packets_lost"], 10)
+        self.assertGreater(run.relay.counters["airtime_bytes"], 0, "a dead channel is not free")
+        self.assertEqual(run.relay.counters["applied_bytes"], 0)
+        self.assertEqual(run.delivered, [], "nothing reached anyone, so nothing was applied")
+
+    def test_attempts_split_into_delivered_and_lost_and_nothing_else(self) -> None:
+        run = Harness(policy=PeriodicPolicy(interval=3), delivery_probability=0.5)
+        run.publish(detection())
+        run.step(30)
+        self.assertEqual(
+            run.relay.counters["transmission_attempts"],
+            run.relay.counters["packets_delivered"] + run.relay.counters["packets_lost"],
+        )
+        self.assertLessEqual(
+            run.relay.counters["applied_bytes"], run.relay.counters["airtime_bytes"]
+        )
+
+    def test_an_unaffordable_send_does_not_happen_and_keeps_ageing(self) -> None:
+        cost = self.priced_emission()
+        run = Harness(
+            policy=PeriodicPolicy(interval=1), budget=CommBudget(bytes_per_episode=cost)
+        )
+        run.publish(detection())
+        run.step()
+        self.assertEqual(run.emissions, 1, "the credit buys exactly one emission")
+        # A change worth reporting arrives after the credit is gone.
+        run.report(progress("target-1", observed_at=5.0, value=0.5, members=("3",)))
+        run.step(3)
+        self.assertEqual(run.emissions, 1, "nothing more can be paid for")
+        self.assertGreaterEqual(run.relay.counters["budget_refused_sends"], 3)
+        self.assertEqual(run.relay.counters["airtime_bytes"], cost, "a refused send bills nothing")
+        self.assertEqual(run.relay.backlog, 1, "the unsaid change stays queued")
+        self.assertGreaterEqual(run.relay.counters["max_backlog_age"], 2, "and it keeps ageing")
+        self.assertEqual(run.relay._budget.remaining_bytes, 0.0, "credit never goes negative")
+
+    def test_the_credit_refuses_what_does_not_fit(self) -> None:
+        budget = CommBudget(bytes_per_episode=100)
+        budget.charge(60)
+        self.assertFalse(budget.can_send(60))
+        self.assertTrue(budget.can_send(40))
+        with self.assertRaises(RuntimeError):
+            budget.charge(60)
+        self.assertEqual(budget.remaining_bytes, 40.0)
+
+    def test_a_duplicate_costs_airtime_but_informs_nobody(self) -> None:
+        run = Harness(policy=PeriodicPolicy(interval=1), subscribers=("0",))
+        run.publish(detection())
+        run.step(3)
+        self.assertEqual(run.emissions, 3, "a periodic rule keeps offering an unchanged view")
+        self.assertEqual(run.relay.counters["deliveries_applied"], 1)
+        self.assertGreaterEqual(run.relay.counters["delivery_duplicate"], 2)
+        self.assertEqual(run.relay.counters["applied_bytes"], run.relay.counters["airtime_bytes"] / 3)
+
+    def test_the_priority_rule_matches_the_event_rule_while_airtime_is_free(self) -> None:
+        plain, priority = Harness(policy=EventPolicy()), Harness(policy=PriorityEventPolicy())
+        for run in (plain, priority):
+            run.publish(detection("far", deadline_offset=900.0))
+            run.publish(detection("near", deadline_offset=30.0))
+            run.step()
+            run.report(
+                progress(
+                    "far",
+                    observed_at=2.0,
+                    value=0.9,
+                    remaining=(0, 1, 0, 0, 0),
+                    members=("4",),
+                    event_id="p-far",
+                )
+            )
+            run.step()
+        self.assertEqual(priority.delivered, plain.delivered, "same set, so same emission")
+        self.assertEqual(priority.emissions, plain.emissions)
+
+    def test_priority_decides_who_gets_the_last_slot(self) -> None:
+        def staged(policy):
+            run = Harness(policy=policy, sends_per_tick=1)
+            run.publish(detection("far", deadline_offset=900.0))
+            run.publish(detection("near", deadline_offset=30.0))
+            return run
+
+        plain, priority = staged(EventPolicy()), staged(PriorityEventPolicy())
+        plain.step()
+        priority.step()
+        self.assertEqual(plain.delivered[0][1], "near", "a fresh discovery is a fresh discovery")
+        self.assertEqual(priority.delivered[0][1], "near", "the score agrees when the news is equal")
+
+        # Far moved a lot; near only got looked at again. One slot remains for the two claims.
+        for run in (plain, priority):
+            run.report(
+                progress(
+                    "far", observed_at=2.0, value=0.9, remaining=(0, 1, 0, 0, 0), event_id="p-far"
+                )
+            )
+            again = detection("near", event_id="detection:near:again", detected_at=2.0)
+            run.registry.handle_detection(again)
+            run.relay.handle_detection(again)
+        plain.step()
+        priority.step()
+        trimmed = [item[1] for item in plain.delivered if item[0] == "0"][-1]
+        scored = [item[1] for item in priority.delivered if item[0] == "0"][-1]
+        self.assertEqual(trimmed, "near", "the transport trim is deadline-first, always")
+        self.assertEqual(scored, "far", "the score follows what the packet would actually say")
+
+    def test_a_budget_that_never_binds_leaves_the_rule_untouched(self) -> None:
+        free = Harness(policy=EventPolicy())
+        broke = Harness(policy=EventPolicy(), budget=CommBudget(bytes_per_episode=self.priced_emission() * 3))
+        for run in (free, broke):
+            run.publish(detection())
+        free.step()
+        broke.step()
+        self.assertEqual(broke.delivered, free.delivered)
+
+
+class SilenceBoundTests(unittest.TestCase):
+    """The transport's own ceiling on how long anything may go unsaid."""
+
+    class Hold:
+        name = "hold"
+        orders_selection = False
+
+        def parameters(self) -> dict[str, Any]:
+            return {}
+
+        def decide(self, observation):
+            return ()
+
+    def relay(self, **kwargs):
+        values = dict(subscribers=("0",), writer=None)
+        values.update(kwargs)
+        return values
+
+    def test_a_silent_policy_is_still_made_to_speak_by_the_bound(self) -> None:
+        writer = RecordingWriter()
+        registry = TaskRegistry()
+        event = detection()
+        registry.handle_detection(event)
+        silent = CommRelay(
+            subscribers=("0",),
+            writer=writer,
+            snapshot_of=registry.get,
+            accepted_of=registry.was_accepted,
+            policy=self.Hold(),
+            seed=3,
+        )
+        silent.handle_detection(event)
+        silent.tick()
+        silent.tick()
+        self.assertEqual(silent.counters["emissions"], 0, "no bound, no send: silence is free")
+
+        bounded = CommRelay(
+            subscribers=("0",),
+            writer=writer,
+            snapshot_of=registry.get,
+            accepted_of=registry.was_accepted,
+            policy=self.Hold(),
+            seed=3,
+            max_wait_steps=2,
+            urgent_wait_steps=1,
+            urgency_time=25.0,
+        )
+        bounded.handle_detection(event)
+        # The change becomes sendable on step 1, so a bound of two steps means it must be on
+        # the air by step 3 and cannot be held past it.
+        bounded.tick()
+        self.assertEqual(bounded.counters["emissions"], 0, "one step of holding is allowed")
+        bounded.tick()
+        self.assertEqual(bounded.counters["emissions"], 0, "two steps is the limit, not yet past it")
+        bounded.tick()
+        self.assertEqual(bounded.counters["emissions"], 1, "the transport emits it anyway")
+        self.assertEqual(bounded.counters["forced_emissions"], 1)
+        self.assertEqual(
+            bounded.transport_parameters()["max_wait_steps"],
+            2,
+            "and the bound the arm ran under is stated in the parameters",
+        )
+
+    def test_a_forced_send_still_has_to_be_paid_for(self) -> None:
+        from integrated_sar.comm_budget import CommBudget
+
+        writer = RecordingWriter()
+        registry = TaskRegistry()
+        event = detection()
+        registry.handle_detection(event)
+        run = CommRelay(
+            subscribers=("0",),
+            writer=writer,
+            snapshot_of=registry.get,
+            accepted_of=registry.was_accepted,
+            policy=self.Hold(),
+            seed=3,
+            max_wait_steps=1,
+            budget=CommBudget(bytes_per_episode=1),
+        )
+        run.handle_detection(event)
+        run.tick()
+        run.tick()
+        self.assertEqual(run.counters["emissions"], 0, "even a forced send costs airtime")
+        self.assertGreaterEqual(run.counters["budget_refused_sends"], 1)
+        self.assertEqual(run.counters["airtime_bytes"], 0, "and nothing is billed that did not go out")
 
 
 class ConstructionTests(unittest.TestCase):
