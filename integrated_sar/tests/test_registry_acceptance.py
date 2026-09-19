@@ -298,8 +298,12 @@ class RelayAcceptanceTests(unittest.TestCase):
         registry.handle_detection(event)
         adapter.sync_tasks(registry.active_snapshots())
         relay.handle_detection(event)
-        self.assertEqual(relay.queued, 1)
+        # Recording news and putting it on the air are separate now: the relay holds the
+        # change until the step's tick, where the send policy decides whether it goes out.
+        self.assertEqual(relay.backlog, 1)
+        self.assertEqual(relay.queued, 0)
         relay.tick()
+        self.assertEqual(relay.counters["emissions"], 1)
         self.assertIn(
             adapter.external_to_internal["target-a"],
             env.agent_knowledge[0]["known_tasks"],

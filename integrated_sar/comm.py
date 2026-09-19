@@ -1,50 +1,161 @@
 """The communication bridge between search detections and rescue robots' beliefs.
 
-Architecture invariant 9: actors and the online coordinator may only use beliefs
-that actually arrived over a communication link. This module is that link. The
-event bus fans a published :class:`~integrated_sar.contracts.DetectionEvent` out
-once, the relay snapshots what the registry accepted and queues one transmission
-attempt per subscribed rescue robot, and delivery obeys an explicit topology, a
-configurable per-packet delay and a seeded packet-loss process.
+Architecture invariant 9: actors and the online coordinator may only use beliefs that
+actually arrived over a communication link. This module is that link. The event bus fans a
+published :class:`~integrated_sar.contracts.DetectionEvent` out once, the relay records what
+the registry accepted, and a :mod:`send policy <integrated_sar.comm_policy>` decides which
+task views go on the air. Delivery then obeys an explicit topology, a per-packet delay and a
+seeded packet-loss process.
 
-The uplink is a radio channel, not omniscience:
+What the relay guarantees, independently of the policy attached to it:
 
-* only subscribed robots receive it, and every packet is delivered or lost
-  independently;
-* a lost packet is gone -- the robot's belief stays exactly as it was;
-* the relay never reads anyone's position, so the search and rescue robots remain
-  two independent entity sets (invariant 10) and co-location with the search start
-  is never a precondition for the loop to start;
-* the stochastic process (which packets survive) is driven entirely by the seed.
+* at most one emission per (target, step), and its payload is the newest registry snapshot at
+  the step of emission -- a change that is held is *superseded* by the next emission, never
+  sent stale, so a policy that sends less sends later and fresher rather than thinner;
+* only subscribed robots receive it, every packet is delivered or lost independently, and the
+  relay never retransmits on its own -- only a policy that emits again can recover a loss;
+* the relay never reads a robot's position, so search and rescue robots remain two
+  independent entity sets (invariant 10) and co-location with the search start is never a
+  precondition for the loop to start;
+* the stochastic process (which packets survive) is driven entirely by the seed;
+* a task the registry has already closed is not announced: "there is a task here" would be
+  false information at the moment of sending, and the suppressed emission is counted.
 
-Once a robot knows a task, further updates still travel through TaskEnv's own
-sensing and one-hop gossip; this relay only carries what the search side found.
+Once a robot knows a task, TaskEnv's own line-of-sight refresh and one-hop gossip can still
+reach it without a packet from here. That bypass belongs to the environment; it is measured
+(``runs/comm_control_20260919/INFORMATION_BOUNDARY.md``), not hidden.
 """
 
 from __future__ import annotations
 
-from typing import Callable
+import json
+from dataclasses import dataclass
+from typing import Any, Callable
 
 import numpy as np
 
 from .contracts import DetectionEvent, DetectionMessage, TaskSnapshot
+from .comm_policy import CommSendPolicy, ImmediatePolicy, SendItem, SendObservation
 
 SnapshotLookup = Callable[[str], TaskSnapshot | None]
 AcceptanceLookup = Callable[[str], bool]
+NowLookup = Callable[[], float]
+# Read-only "what does this robot already believe" lookup, used only to classify a refused
+# delivery as duplicate or superseded. Never consulted before deciding what to send.
+FreshnessLookup = Callable[[str, str], "tuple[float, int] | None"]
+
+
+def estimate_message_bytes(message: DetectionMessage) -> int:
+    """Payload size in bytes: the UTF-8 length of the message's canonical JSON encoding.
+
+    An estimate, and an explicitly narrow one. It counts the fields a receiver has to apply
+    and nothing else: no radio header, no framing, no link-layer overhead, no ack. Those are
+    constant per packet, so a comparison that holds here holds after adding them, but the
+    absolute number is payload only. One emission to ``n`` subscribers costs ``n`` packets of
+    this size, which is why batch size (emissions per step) and information volume (bytes)
+    are reported separately.
+    """
+    payload = {
+        "event_id": message.event_id,
+        "target_id": message.target_id,
+        "sent_at": message.sent_at,
+        "position": [message.position.x, message.position.y],
+        "stages": [[list(stage.requirements), stage.duration] for stage in message.stages],
+        "current_stage": message.current_stage,
+        "remaining_requirements": list(message.remaining_requirements),
+        "deadline": message.deadline,
+        "severity": message.severity,
+        "confidence": message.confidence,
+        "progress": message.progress,
+        "members": list(message.members),
+        "discovered_by": message.discovered_by,
+        "revision": message.revision,
+    }
+    return len(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8"))
+
+
+@dataclass(frozen=True)
+class _View:
+    """The part of a task view a receiver would actually apply, for "have I said this?".
+
+    Two snapshots that differ only in fields no robot reads are not worth a packet, and two
+    that differ here are. ``revision`` is deliberately excluded: it says the registry moved,
+    not that anything a robot would act on moved.
+    """
+
+    stage_index: int
+    progress: float
+    remaining: tuple[int, ...]
+    members: tuple[str, ...]
+    deadline: float
+    position: tuple[float, float]
+    confidence: float
+
+    @classmethod
+    def of(cls, state: Any) -> "_View":
+        """From either side of the link: a registry snapshot and a sent message agree here."""
+        return cls(
+            stage_index=int(state.current_stage),
+            progress=round(float(state.progress), 6),
+            remaining=tuple(int(value) for value in state.remaining_requirements),
+            members=tuple(str(member) for member in state.members),
+            deadline=round(float(state.deadline), 6),
+            position=(round(float(state.position.x), 6), round(float(state.position.y), 6)),
+            confidence=round(float(state.confidence), 6),
+        )
+
+
+@dataclass
+class _TargetLedger:
+    """The sending node's own record for one target: what it said, and what moved since."""
+
+    ready_step: int | None = None
+    pending_message: DetectionMessage | None = None
+    last_sent: DetectionMessage | None = None
+    last_sent_view: "_View | None" = None
+    last_sent_step: int | None = None
+    sent_count: int = 0
+    pending_event: bool = False
+    closed: bool = False
+    last_sent_now: float | None = None
+
+
+class CommTranscript:
+    """Append-only record of what the relay was asked to do, for offline measurement.
+
+    Written after a step and never read back, so attaching one cannot change what a policy or
+    a robot does. Deliberately per-event, not per-tick: queue depths are aggregated in
+    :attr:`CommRelay.counters` so a 1000-step episode stays a few hundred lines.
+    """
+
+    def __init__(self) -> None:
+        self.records: list[dict[str, Any]] = []
+
+    def add(self, kind: str, **fields: Any) -> None:
+        self.records.append({"kind": kind, **fields})
+
+    def write(self, path: Any) -> Any:
+        """Write one JSON object per line; returns the path so a caller can record it."""
+        target = str(path)
+        with open(target, "w", encoding="utf-8", newline="\n") as handle:
+            for record in self.records:
+                handle.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+        return target
 
 
 class CommRelay:
-    """Queues published detections and delivers them to subscribed robots.
+    """Holds the task views the registry accepted and emits the ones its policy selects.
 
-    Delivery happens in :meth:`tick`, which the executor calls once per joint step
-    before the simulated world advances. A message queued during tick ``N`` is due
-    at ``N + 1 + delay_ticks``, so ``delay_ticks=0`` arrives within the same joint
-    step and ``delay_ticks=1`` on the next one.
+    Both happen in :meth:`tick`, which the executor calls once per joint step before the
+    simulated world advances: the policy picks, then packets whose due step has come are
+    delivered. A packet emitted on step ``N`` is due at ``N + delay_ticks``, so
+    ``delay_ticks=0`` arrives within the same joint step and ``delay_ticks=1`` on the next
+    one -- which is what the relay did before a policy was involved.
 
-    ``accepted_of`` is the registry's verdict lookup: an event the registry
-    rejected (unknown task, late timestamp, terminal task) is not news, so the
-    relay must not send it. Subscribing the relay after the registry guarantees
-    the verdict is already recorded when the relay is called.
+    ``accepted_of`` is the registry's verdict lookup: an event the registry rejected (unknown
+    task, late timestamp, terminal task) is not news, so the relay must not treat it as a
+    change worth sending. Subscribing the relay after the registry guarantees the verdict is
+    already recorded when the relay is called.
     """
 
     def __init__(
@@ -57,6 +168,11 @@ class CommRelay:
         delivery_probability: float = 1.0,
         delay_ticks: int = 0,
         seed: int | None = None,
+        policy: CommSendPolicy | None = None,
+        sends_per_tick: int | None = None,
+        freshness_of: FreshnessLookup | None = None,
+        now_of: NowLookup | None = None,
+        transcript: CommTranscript | None = None,
     ) -> None:
         if not 0.0 <= float(delivery_probability) <= 1.0:
             raise ValueError(
@@ -64,6 +180,8 @@ class CommRelay:
             )
         if int(delay_ticks) < 0:
             raise ValueError(f"delay_ticks cannot be negative, got {delay_ticks}")
+        if sends_per_tick is not None and int(sends_per_tick) < 1:
+            raise ValueError(f"sends_per_tick must be >= 1 or None, got {sends_per_tick}")
         self._subscribers = tuple(str(agent_id) for agent_id in subscribers)
         self._writer = writer
         self._snapshot_of = snapshot_of
@@ -72,13 +190,51 @@ class CommRelay:
         self._delay_ticks = int(delay_ticks)
         self._seed = seed
         self._rng = np.random.default_rng(seed)
-        self._pending: list[tuple[int, int, str, DetectionMessage]] = []
+        self._policy = policy if policy is not None else ImmediatePolicy()
+        self._sends_per_tick = None if sends_per_tick is None else int(sends_per_tick)
+        self._freshness_of = freshness_of
+        self._now_of = now_of
+        self.transcript = transcript
+        self._pending: list[tuple[int, int, str, DetectionMessage, int]] = []
+        self._ledger: dict[str, _TargetLedger] = {}
         self._seen_event_ids: set[str] = set()
         self._tick = 0
         self._sequence = 0
+        # Aggregated transport facts, reported once per episode by the run harness.
+        self.counters: dict[str, int] = {
+            key: 0
+            for key in (
+                "events_accepted",
+                "emissions",
+                "first_emissions",
+                "refresh_emissions",
+                "packets_sent",
+                "packets_lost",
+                "packets_delivered",
+                "delivery_duplicate",
+                "delivery_superseded",
+                "delivery_unknown_task",
+                "emissions_suppressed_terminal",
+                "emissions_suppressed_budget",
+                "payload_bytes",
+                # Two different waits. backlog_steps is how long the packets that *did* go
+                # out sat first; unsent_change_steps is the integral of everything the sender
+                # knew and had not said, which a policy that never refreshes keeps growing.
+                "backlog_steps",
+                "unsent_change_steps",
+                "flight_steps",
+                "max_in_flight",
+                "max_backlog_age",
+            )
+        }
 
+    # ------------------------------------------------------------------ production side
     def handle_detection(self, event: DetectionEvent) -> None:
-        """Bus handler: queue one transmission attempt per subscriber."""
+        """Bus handler: record that the registry accepted news about one target.
+
+        Nothing is sent here. Whether anything goes on the air, and when, is the policy's
+        decision, taken once per step inside :meth:`tick`.
+        """
         if event.event_id in self._seen_event_ids:
             return
         self._seen_event_ids.add(event.event_id)
@@ -87,68 +243,326 @@ class CommRelay:
             # forwarding it would let a rejected detection re-send an old task
             # view or reopen a terminal one in robot belief.
             return
-        message = self._build_message(event)
-        due_tick = self._tick + 1 + self._delay_ticks
+        ready_step = self._tick + 1
+        ledger = self._ledger.setdefault(str(event.target_id), _TargetLedger())
+        ledger.pending_event = True
+        ledger.closed = False
+        if ledger.ready_step is None:
+            ledger.ready_step = ready_step
+        self.counters["events_accepted"] += 1
+        if self._snapshot_of is None:
+            # No registry lookup wired: the event itself -- the same profile the registry
+            # would have stored -- defines the payload, as it always did.
+            ledger.pending_message = self._message_from_event(event)
+        if self.transcript is not None:
+            snapshot = self._snapshot_of(event.target_id) if self._snapshot_of else None
+            self.transcript.add(
+                "event",
+                step=ready_step,
+                target=str(event.target_id),
+                event_id=str(event.event_id),
+                revision=int(getattr(snapshot, "revision", 0) or 0),
+            )
+
+    # ------------------------------------------------------------------ transport step
+    def tick(self) -> tuple[str, ...]:
+        """One send opportunity and one delivery opportunity; returns belief changes."""
+        self._tick += 1
+        self._emit_selected()
+        due = [item for item in self._pending if item[0] <= self._tick]
+        self._pending = [item for item in self._pending if item[0] > self._tick]
+        changed: list[str] = []
+        if due:
+            due.sort(key=lambda item: item[1])
+            for due_tick, _, agent_id, message, sent_step in due:
+                self.counters["packets_delivered"] += 1
+                self.counters["flight_steps"] += int(self._tick - due_tick)
+                accepted, reason = self._deliver(message, agent_id)
+                if accepted:
+                    changed.append(agent_id)
+                elif reason in self.counters:
+                    self.counters[reason] += 1
+                if self.transcript is not None:
+                    self.transcript.add(
+                        "deliver",
+                        step=int(self._tick),
+                        target=message.target_id,
+                        agent=agent_id,
+                        revision=int(message.revision),
+                        sent_at=float(message.sent_at),
+                        sent_step=int(sent_step),
+                        now=float(self._now_value()),
+                        accepted=bool(accepted),
+                        reason="accepted" if accepted else str(reason),
+                    )
+        self._note_queue_depth()
+        return tuple(changed)
+
+    def _deliver(self, message: DetectionMessage, agent_id: str) -> tuple[bool, str]:
+        """Hand one packet to the receiver, naming the reason when the receiver refuses it.
+
+        Without a freshness lookup the relay does not interpret a refusal -- it records that
+        the writer returned False, which is all it ever knew.
+        """
+        accepted = bool(self._writer.deliver_detection(message, agent_id))
+        if accepted:
+            return True, "accepted"
+        if self._freshness_of is None:
+            return False, "delivery_refused"
+        known = self._freshness_of(agent_id, message.target_id)
+        if known is None:
+            return False, "delivery_unknown_task"
+        update_time, revision = known
+        if update_time > float(message.sent_at):
+            return False, "delivery_superseded"
+        if update_time == float(message.sent_at) and revision >= int(message.revision):
+            return False, "delivery_duplicate"
+        return False, "delivery_superseded"
+
+    def _note_queue_depth(self) -> None:
+        self.counters["max_in_flight"] = max(self.counters["max_in_flight"], len(self._pending))
+        waiting = [
+            ledger.ready_step
+            for ledger in self._ledger.values()
+            if ledger.ready_step is not None and ledger.ready_step <= self._tick
+        ]
+        self.counters["unsent_change_steps"] += len(waiting)
+        if waiting:
+            self.counters["max_backlog_age"] = max(
+                self.counters["max_backlog_age"], int(self._tick - min(waiting))
+            )
+
+    # ------------------------------------------------------------------ scheduling
+    def _emit_selected(self) -> None:
+        observation = self._observation()
+        if not observation.items:
+            return
+        selected = set(self._policy.decide(observation))
+        ordered = sorted(
+            (item for item in observation.items if item.target_id in selected),
+            key=lambda item: (item.remaining_time, -item.age_steps, item.target_id),
+        )
+        if self._sends_per_tick is not None and len(ordered) > self._sends_per_tick:
+            # One trim order for every policy: under a budget a rule is judged by what it
+            # asks for, not by an ordering advantage the transport happened to give it.
+            self.counters["emissions_suppressed_budget"] += len(ordered) - self._sends_per_tick
+            ordered = ordered[: self._sends_per_tick]
+        for item in ordered:
+            self._emit(item, first=item.first_emission)
+
+    def _now_value(self) -> float:
+        """The sending node's own reading of the clock; the step counter if none is wired."""
+        return float(self._now_of()) if self._now_of is not None else float(self._tick)
+
+    def _observation(self) -> SendObservation:
+        now = self._now_value()
+        items: list[SendItem] = []
+        for target_id in sorted(self._ledger):
+            ledger = self._ledger[target_id]
+            if ledger.ready_step is None and ledger.last_sent is None:
+                continue
+            if ledger.closed and ledger.ready_step is None:
+                continue
+            snapshot = self._snapshot_of(target_id) if self._snapshot_of else None
+            if snapshot is not None and snapshot.status.terminal:
+                # The task closed before the news went out. Say nothing, and record that a
+                # policy asked: a rule that keeps trying to announce a dead task is visible.
+                ledger.closed = True
+                if ledger.pending_event:
+                    self.counters["emissions_suppressed_terminal"] += 1
+                    ledger.pending_event = False
+                    ledger.ready_step = None
+                    ledger.pending_message = None
+                continue
+            reference = ledger.last_sent or ledger.pending_message
+            # A registry snapshot is what the sending node would say now; without one (no
+            # lookup wired, or a test stub) the event it was told about is the state.
+            state = snapshot if snapshot is not None else reference
+            if state is None:
+                # Neither the registry nor a previous packet describes this target: there is
+                # nothing to say about it, and the ledger stays as it is.
+                continue
+            view = _View.of(state)
+            changed_view = ledger.last_sent_view != view
+            if changed_view and ledger.ready_step is None:
+                # The clock on an unsaid change starts here, whether or not the attached
+                # policy intends to send it: a held change is what a "queue wait" number has
+                # to count, and the historical policy holds every one of them by design.
+                ledger.ready_step = self._tick
+            sent = ledger.last_sent
+            ready_step = ledger.ready_step if ledger.ready_step is not None else self._tick
+            items.append(
+                SendItem(
+                    target_id=target_id,
+                    ready_step=int(ready_step),
+                    age_steps=max(0, self._tick - int(ready_step)),
+                    pending_event=ledger.pending_event,
+                    changed_view=changed_view,
+                    first_emission=sent is None,
+                    revision=int(state.revision),
+                    revision_delta=int(state.revision) - int(sent.revision if sent else 0),
+                    stage_index=int(state.current_stage),
+                    stage_changed=bool(sent is not None and sent.current_stage != state.current_stage),
+                    progress=float(state.progress),
+                    progress_delta=float(state.progress) - float(sent.progress if sent else 0.0),
+                    requirements_changed=bool(
+                        sent is not None
+                        and tuple(sent.remaining_requirements) != tuple(state.remaining_requirements)
+                    ),
+                    members_changed=bool(
+                        sent is not None and tuple(sent.members) != tuple(state.members)
+                    ),
+                    deadline=float(state.deadline),
+                    remaining_time=float(state.deadline) - now,
+                    sent_count=ledger.sent_count,
+                    last_sent_step=ledger.last_sent_step,
+                    since_last_emission_time=(
+                        None if ledger.last_sent_now is None else now - float(ledger.last_sent_now)
+                    ),
+                    has_future_requirements=bool(len(state.stages) > int(state.current_stage) + 1),
+                )
+            )
+        return SendObservation(step=self._tick, current_time=now, items=tuple(items))
+
+    def _emit(self, item: SendItem, *, first: bool) -> None:
+        ledger = self._ledger[item.target_id]
+        snapshot = self._snapshot_of(item.target_id) if self._snapshot_of else None
+        message = self._message(item.target_id, ledger, snapshot)
+        payload_bytes = estimate_message_bytes(message)
+        due_tick = self._tick + self._delay_ticks
+        sent = 0
+        lost = 0
         for agent_id in self._subscribers:
-            # The uplink drops packets independently per robot; a dropped packet is
-            # never retransmitted, so that robot's belief stays as it was.
+            # The uplink drops packets independently per robot; a dropped packet is never
+            # retransmitted by the relay itself, so that robot's belief stays as it was and
+            # only a policy that emits again can recover it.
             if self._rng.random() > self._delivery_probability:
+                lost += 1
                 continue
             self._sequence += 1
-            self._pending.append((due_tick, self._sequence, agent_id, message))
+            sent += 1
+            self._pending.append((due_tick, self._sequence, agent_id, message, self._tick))
+        ready_step = ledger.ready_step if ledger.ready_step is not None else self._tick
+        ledger.last_sent = message
+        ledger.last_sent_view = _View.of(message)
+        ledger.last_sent_step = self._tick
+        ledger.last_sent_now = self._now_value()
+        ledger.sent_count += 1
+        ledger.pending_event = False
+        ledger.pending_message = None
+        ledger.ready_step = None
+        self.counters["emissions"] += 1
+        self.counters["first_emissions"] += 1 if first else 0
+        self.counters["refresh_emissions"] += 0 if first else 1
+        self.counters["packets_sent"] += sent
+        self.counters["packets_lost"] += lost
+        self.counters["payload_bytes"] += payload_bytes * sent
+        self.counters["backlog_steps"] += max(0, self._tick - int(ready_step))
+        if self.transcript is not None:
+            self.transcript.add(
+                "send",
+                step=int(self._tick),
+                target=item.target_id,
+                revision=int(message.revision),
+                payload_bytes=int(payload_bytes),
+                packets=int(sent),
+                packets_lost=int(lost),
+                subscribers=len(self._subscribers),
+                due_step=int(due_tick),
+                ready_step=int(ready_step),
+                now=float(self._now_value()),
+                backlog_steps=max(0, self._tick - int(ready_step)),
+                first=bool(first),
+                progress=float(message.progress),
+                stage_index=int(message.current_stage),
+                remaining=[int(value) for value in message.remaining_requirements],
+                members=[str(member) for member in message.members],
+                bytes_total=int(payload_bytes * sent),
+                deadline=float(message.deadline),
+            )
 
-    def tick(self) -> tuple[str, ...]:
-        """One delivery opportunity; returns the agents whose belief changed."""
-        self._tick += 1
-        due = [item for item in self._pending if item[0] <= self._tick]
-        if not due:
-            return ()
-        self._pending = [item for item in self._pending if item[0] > self._tick]
-        due.sort(key=lambda item: item[1])
-        changed: list[str] = []
-        for _, _, agent_id, message in due:
-            if self._writer.deliver_detection(message, agent_id):
-                changed.append(agent_id)
-        return tuple(changed)
+    def reset(self) -> None:
+        """Start a new episode: drop backlog, outbox, ledgers, dedup state and rng draws."""
+        self._pending.clear()
+        self._ledger.clear()
+        self._seen_event_ids.clear()
+        self._tick = 0
+        self._sequence = 0
+        self._rng = np.random.default_rng(self._seed)
+        for key in self.counters:
+            self.counters[key] = 0
 
     @property
     def queued(self) -> int:
         return len(self._pending)
 
-    def reset(self) -> None:
-        """Start a new episode: drop outbox, dedup state and the seeded rng draws."""
-        self._pending.clear()
-        self._seen_event_ids.clear()
-        self._tick = 0
-        self._sequence = 0
-        self._rng = np.random.default_rng(self._seed)
+    @property
+    def backlog(self) -> int:
+        """Targets with a change the policy has not emitted yet."""
+        return sum(1 for ledger in self._ledger.values() if ledger.ready_step is not None)
 
-    def _build_message(self, event: DetectionEvent) -> DetectionMessage:
-        snapshot = self._snapshot_of(event.target_id) if self._snapshot_of else None
+    @property
+    def policy(self) -> CommSendPolicy:
+        return self._policy
+
+    def transport_parameters(self) -> dict[str, Any]:
+        """The knobs the relay itself owns, for a configuration truth table."""
+        return {
+            "subscribers": list(self._subscribers),
+            "delivery_probability": self._delivery_probability,
+            "delay_ticks": self._delay_ticks,
+            "sends_per_tick": self._sends_per_tick,
+            "policy": self._policy.name,
+            "policy_parameters": dict(self._policy.parameters()),
+        }
+
+    # ------------------------------------------------------------------ payloads
+    def _message(
+        self, target_id: str, ledger: _TargetLedger, snapshot: TaskSnapshot | None
+    ) -> DetectionMessage:
+        """The packet for one emission: the newest registry view, or the recorded event.
+
+        A first emission keeps the detection's own event id, so a discovery message stays
+        traceable to the search event behind it. A refresh has no new event to name, so it is
+        labelled by what it repeats.
+        """
         if snapshot is None:
-            # The registry has not been consulted (or does not know the target), so
-            # the event itself -- the same profile the registry would have stored --
-            # defines the payload.
-            stages = event.profile.stages
-            return DetectionMessage(
-                event_id=event.event_id,
-                target_id=event.target_id,
-                sent_at=event.detected_at,
-                position=event.world_position,
-                stages=stages,
-                current_stage=0,
-                remaining_requirements=(
-                    stages[0].requirements if stages else ()
-                ),
-                deadline=event.detected_at + event.profile.deadline_offset,
-                severity=event.profile.severity,
-                confidence=event.confidence,
-                progress=0.0,
-                discovered_by=event.discovered_by,
-            )
+            pending = ledger.pending_message
+            if pending is None:
+                raise RuntimeError(
+                    f"relay has no registry lookup and no stored event for {target_id}"
+                )
+            return pending
+        event_id = (
+            ledger.pending_message.event_id
+            if ledger.pending_message is not None
+            else f"refresh-{target_id}-{self._tick}"
+        )
+        return self._message_from_snapshot(target_id, event_id, snapshot)
+
+    def _message_from_event(self, event: DetectionEvent) -> DetectionMessage:
+        stages = event.profile.stages
         return DetectionMessage(
             event_id=event.event_id,
             target_id=event.target_id,
+            sent_at=event.detected_at,
+            position=event.world_position,
+            stages=stages,
+            current_stage=0,
+            remaining_requirements=stages[0].requirements if stages else (),
+            deadline=event.detected_at + event.profile.deadline_offset,
+            severity=event.profile.severity,
+            confidence=event.confidence,
+            progress=0.0,
+            discovered_by=event.discovered_by,
+        )
+
+    def _message_from_snapshot(
+        self, target_id: str, event_id: str, snapshot: TaskSnapshot
+    ) -> DetectionMessage:
+        return DetectionMessage(
+            event_id=event_id,
+            target_id=target_id,
             sent_at=snapshot.updated_at,
             position=snapshot.position,
             stages=snapshot.stages,

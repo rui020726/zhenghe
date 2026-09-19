@@ -28,7 +28,8 @@ from .adapters.piloc import PilocSearchAdapter
 from .adapters.task03 import Task03Adapter
 from .assignment_gate import AssignmentGate, ReplanCoordinator
 from .clock import GlobalClock
-from .comm import CommRelay
+from .comm import CommRelay, CommTranscript
+from .comm_policy import build_comm_policy
 from .contracts import DetectionEvent, ProgressEvent, TaskSnapshot
 from .coordinator import (
     CoalitionAwareCoordinator,
@@ -125,6 +126,24 @@ class RunConfiguration:
     comm_delivery_probability: float = 1.0
     comm_delay_ticks: int = 0
     comm_subscribers: str = "all"
+    # Which task views the search-to-rescue relay puts on the air, and when. "immediate" is
+    # the relay's historical behaviour: one emission per accepted detection, at that step,
+    # and no refresh traffic. See integrated_sar/comm_policy.py for the alternatives.
+    comm_policy: str = "immediate"
+    comm_policy_params: str = ""
+    # An emission budget per joint step, i.e. how many task views may go out at once.
+    # None means the uplink is unconstrained apart from its topology, delay and loss.
+    comm_sends_per_tick: int | None = None
+    # Where to write the transport transcript (one JSON object per send/delivery/event).
+    # Off unless a path is given, and never read back by any decision.
+    comm_transcript: str | None = None
+    # TaskEnv's own knowledge channels, exposed so an experiment can state them instead of
+    # leaving them implicit: the radius inside which a robot refreshes a belief directly from
+    # local truth, and how often that refresh plus one-hop gossip runs. The defaults are
+    # TaskEnv's own, so an untouched configuration is the environment everything else was
+    # measured on.
+    comm_range: float = 0.3
+    gossip_interval: int = 2
     quiet: bool = False
     repository_root: str | None = None
     # Detection-stream recording/replay. Exactly one of the two may be set: the
@@ -222,6 +241,23 @@ class RunConfiguration:
             raise ConfigurationError(
                 f"--comm-delay-ticks cannot be negative, got {self.comm_delay_ticks}"
             )
+        if self.comm_sends_per_tick is not None and self.comm_sends_per_tick < 1:
+            raise ConfigurationError(
+                "--comm-sends-per-tick must be a positive emission budget or unset, got "
+                f"{self.comm_sends_per_tick}"
+            )
+        if self.comm_range < 0:
+            raise ConfigurationError(
+                f"--comm-range cannot be negative, got {self.comm_range}"
+            )
+        if self.gossip_interval < 1:
+            raise ConfigurationError(
+                f"--gossip-interval must be at least 1, got {self.gossip_interval}"
+            )
+        try:
+            build_comm_policy(self.comm_policy, self.comm_policy_params)
+        except ValueError as error:
+            raise ConfigurationError(f"--comm-policy: {error}") from None
         # "all" broadcasts each detection to the whole rescue team; a count or an
         # explicit id list narrows the uplink to a subset, which is what a
         # restricted-topology experiment needs. Either way the link keeps its
@@ -417,6 +453,31 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--comm-subscribers", default="all",
                         help="uplink receivers: 'all' (default, whole rescue team), 'first:N' "
                              "(robots 0..N-1), or a comma-separated id list")
+    parser.add_argument("--comm-policy", default="immediate",
+                        help="which task views the search-to-rescue relay emits, and when: "
+                             "'immediate' (default, one emission per accepted detection at "
+                             "that step, which is what every earlier number was measured on), "
+                             "'periodic', 'event' or 'event_maxwait'")
+    parser.add_argument("--comm-policy-params", default="",
+                        help="key=value parameters for --comm-policy, e.g. 'interval=5' or "
+                             "'progress_threshold=0.2,urgency_time=25'; an unknown name or key "
+                             "is an error, never a silent default")
+    parser.add_argument("--comm-sends-per-tick", type=int, default=None,
+                        help="emission budget: how many task views may go on the air in one "
+                             "joint step (unset means the uplink is unconstrained apart from "
+                             "its topology, delay and loss)")
+    parser.add_argument("--comm-transcript", default=None,
+                        help="write the transport transcript (one JSON object per accepted "
+                             "event, emission and delivery attempt) to this path; a "
+                             "measurement artefact, never read back by a decision")
+    parser.add_argument("--comm-range", type=float, default=0.3,
+                        help="rescue-environment sensing radius: inside it a robot refreshes "
+                             "its belief from local truth without any message (0.3 is "
+                             "TaskEnv's own default)")
+    parser.add_argument("--gossip-interval", dest="gossip_interval", type=int, default=2,
+                        help="how often the rescue environment runs its belief refresh plus "
+                             "one-hop gossip (2 is TaskEnv's own default; a value above the "
+                             "step count isolates the uplink as the only message path)")
     parser.add_argument("--quiet", action="store_true", help="do not print per-step progress lines")
     parser.add_argument("--repository-root", default=None,
                         help="override the repository root used to locate piloc/ and task_allocation/")
@@ -471,6 +532,12 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         comm_delivery_probability=float(args.comm_delivery_probability),
         comm_delay_ticks=int(args.comm_delay_ticks),
         comm_subscribers=str(args.comm_subscribers),
+        comm_policy=str(args.comm_policy),
+        comm_policy_params=str(args.comm_policy_params),
+        comm_sends_per_tick=getattr(args, "comm_sends_per_tick", None),
+        comm_transcript=args.comm_transcript,
+        comm_range=float(args.comm_range),
+        gossip_interval=int(args.gossip_interval),
         quiet=bool(args.quiet),
         repository_root=args.repository_root,
         record_stream=args.record_stream,
@@ -563,6 +630,8 @@ def run_signature_of(configuration: RunConfiguration) -> dict[str, Any]:
             ),
             check_release_source_stage=bool(configuration.check_release_source_stage),
             task_membership_consistency=bool(configuration.task_membership_consistency),
+            comm_policy=str(configuration.comm_policy),
+            comm_policy_params=str(configuration.comm_policy_params),
         ),
         repo=Path(__file__).resolve().parent.parent,
     )
@@ -582,6 +651,7 @@ class JointRun:
     task_adapter: Task03Adapter
     stream_recorder: Any = None
     decision_trace: Any = None
+    comm_transcript: Any = None
     counters: dict[str, int] = field(default_factory=dict)
     _signature: dict[str, Any] | None = field(default=None, repr=False)
 
@@ -627,6 +697,16 @@ class JointRun:
             written = self.stream_recorder.to_stream().write(self.configuration.record_stream)
             summary["recorded_stream"] = str(written)
             summary["recorded_detections"] = self.stream_recorder.detections_recorded
+        relay = getattr(self.task_adapter, "comm_relay", None)
+        if relay is not None:
+            summary["communication"] = {
+                **relay.transport_parameters(),
+                **{key: int(value) for key, value in relay.counters.items()},
+            }
+        if self.comm_transcript is not None and self.configuration.comm_transcript:
+            summary["comm_transcript"] = str(
+                self.comm_transcript.write(self.configuration.comm_transcript)
+            )
         if self.decision_trace is not None:
             self.decision_trace.finish(summary)
         self.logger.log_final(
@@ -766,11 +846,13 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         allocation_interval=configuration.allocation_interval,
     )
 
-    # The search-to-rescue communication bridge. Subscribed after the registry so a
-    # queued message snapshots exactly the task view the registry accepted, and so
-    # an event the registry refuses is never sent. Delivery obeys an explicit
-    # topology (--comm-subscribers), a per-packet delay and a seeded loss process;
-    # positions play no role in it (invariant 10).
+    # The search-to-rescue communication bridge. Subscribed after the registry so a queued
+    # message snapshots exactly the task view the registry accepted, and so an event the
+    # registry refuses is never sent. *Which* views go on the air and when is the send
+    # policy's decision (default: one emission per accepted detection, the historical
+    # behaviour); delivery then obeys an explicit topology (--comm-subscribers), a per-packet
+    # delay, a per-step emission budget and a seeded loss process. Positions play no role in
+    # it (invariant 10), and nothing a robot believes is observable from this side.
     requested = parse_comm_subscribers(configuration.comm_subscribers)
     available = tuple(str(agent_id) for agent_id in task_adapter.env.agent_dic)
     if requested is None:
@@ -783,6 +865,7 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
                 f"this run has {', '.join(available)}"
             )
         subscribers = requested
+    comm_transcript = CommTranscript() if configuration.comm_transcript else None
     comm_relay = CommRelay(
         subscribers=subscribers,
         writer=task_adapter,
@@ -791,6 +874,11 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         delivery_probability=configuration.comm_delivery_probability,
         delay_ticks=configuration.comm_delay_ticks,
         seed=configuration.seed,
+        policy=build_comm_policy(configuration.comm_policy, configuration.comm_policy_params),
+        sends_per_tick=configuration.comm_sends_per_tick,
+        freshness_of=task_adapter.belief_freshness if comm_transcript is not None else None,
+        now_of=lambda: clock.now,
+        transcript=comm_transcript,
     )
     bus.subscribe(DetectionEvent, comm_relay.handle_detection)
     task_adapter.comm_relay = comm_relay
@@ -829,6 +917,7 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         task_adapter=task_adapter,
         stream_recorder=recorder,
         decision_trace=trace_writer,
+        comm_transcript=comm_transcript,
         _signature=signature,
     )
 
@@ -957,6 +1046,8 @@ def _build_task_side(
         per_species=configuration.rescue_per_species,
         deadline_tightness=tuple(float(value) for value in configuration.deadline_tightness),
         membership_consistency=bool(configuration.task_membership_consistency),
+        comm_range=float(configuration.comm_range),
+        gossip_interval=int(configuration.gossip_interval),
         dt=configuration.dt,
         depot_positions=_rescue_depot_positions(scenario, configuration.rescue_species),
     )

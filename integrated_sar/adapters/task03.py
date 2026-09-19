@@ -431,6 +431,23 @@ class Task03Adapter:
         self.env.learn_task_view(agent_key, view)
         return True
 
+    def belief_freshness(self, agent_id: str, target_id: str) -> tuple[float, int] | None:
+        """What one robot currently believes about a task: ``(update_time, revision)``.
+
+        Measurement only. The comm relay calls it after a delivery was refused, to say
+        whether the packet was a duplicate or already superseded; no decision reads it.
+        """
+        knowledge = self.env.agent_knowledge.get(int(agent_id))
+        internal_id = self.external_to_internal.get(str(target_id))
+        if knowledge is None or internal_id is None:
+            return None
+        if internal_id not in knowledge.get("known_tasks", ()):
+            return None
+        return (
+            float(knowledge["task_last_update_time"].get(internal_id, 0.0)),
+            int(self._knowledge_revisions(knowledge).get(internal_id, 0)),
+        )
+
     def agent_snapshots(self) -> tuple[AgentSnapshot, ...]:
         snapshots: list[AgentSnapshot] = []
         for internal_id, agent in self.env.agent_dic.items():

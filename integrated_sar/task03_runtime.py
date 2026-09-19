@@ -108,6 +108,7 @@ def build_task_env(
     per_species: int = 2,
     dt: float = 1.0,
     comm_range: float = 0.3,
+    gossip_interval: int = 2,
     traits_dim: int = 5,
     deadline_tightness: tuple[float, float] = (0.5, 2.0),
     membership_consistency: bool = False,
@@ -123,6 +124,15 @@ def build_task_env(
     ``deadline_tightness`` picks the multiplier band TaskEnv already samples every
     deadline from. The default is TaskEnv's own, so a caller that says nothing gets the
     scenarios recorded before this argument existed; the sampler itself is untouched.
+
+    ``comm_range`` and ``gossip_interval`` are the environment's own information channels:
+    inside ``comm_range`` a robot refreshes its belief from local truth, and every
+    ``gossip_interval`` steps that refresh and the one-hop exchange between neighbours run
+    together -- one switch gates both, because both live in
+    ``TaskEnv.propagate_task_completion``. Both defaults are TaskEnv's own, so a caller
+    that says nothing gets the environment every earlier number was measured on; raising
+    the interval above the step count is how an experiment isolates the uplink as the only
+    message path.
 
     ``membership_consistency`` makes the member roster mean what it says: an accepted
     reassignment detaches the robot from the task it is leaving, and re-selecting the task
@@ -145,6 +155,7 @@ def build_task_env(
         enable_discovered_tasks=False,
         dynamic_task_discovery=False,
         comm_range=comm_range,
+        gossip_interval=gossip_interval,
         dt=dt,
         seed=seed,
     )

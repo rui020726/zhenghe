@@ -91,6 +91,8 @@ def arm_name(
     suppress_recommand_own_task: bool = False,
     check_release_source_stage: bool = False,
     task_membership_consistency: bool = False,
+    comm_policy: str = "immediate",
+    comm_policy_params: str = "",
 ) -> str:
     """The arm label shared with the ``rp_<arm>_s<seed>.jsonl`` lifecycle logs.
 
@@ -134,6 +136,16 @@ def arm_name(
         # An environment that takes a reassigned robot off the roster it left changes which
         # work the controller is credited for. Two environments cannot share a label.
         label = f"{label}+memfix"
+    if str(comm_policy or "immediate").strip().lower() != "immediate":
+        # When task information goes on the air decides what a robot believes and therefore
+        # what the allocator can act on. Two uplink schedules cannot share a label, and the
+        # parameters belong in it: a period of 2 and a period of 20 are different arms.
+        parameters = "".join(
+            character
+            for character in str(comm_policy_params or "").strip().lower()
+            if character.isalnum() or character in "._"
+        )
+        label = f"{label}+comm{comm_policy}{parameters}"
     return label
 
 
@@ -174,6 +186,8 @@ def trace_meta(
             task_membership_consistency=bool(
                 getattr(configuration, "task_membership_consistency", False)
             ),
+            comm_policy=str(getattr(configuration, "comm_policy", "immediate")),
+            comm_policy_params=str(getattr(configuration, "comm_policy_params", "")),
         ),
         "coordinator_policy": str(
             getattr(configuration, "coordinator_policy", "heuristic")

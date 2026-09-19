@@ -132,6 +132,12 @@ python -m integrated_sar.joint_driver \
 `--allocation-interval`、`--dt`、`--detection-radius`（不允许为负，0 合法但退化）、
 `--comm-delivery-probability`、`--comm-delay-ticks`、
 `--comm-subscribers`（`all` 默认覆盖全救援队，或 `first:N`，或机器人 id 列表）、
+`--comm-policy`（上行发送策略：默认 `immediate` = 每条被接受的检测发一次且不刷新，即历史行为；
+另有 `periodic`、`event`、`event_maxwait`）、`--comm-policy-params`（如 `interval=5`，
+未知策略名或参数键直接报错而非退回默认）、`--comm-sends-per-tick`（每步发射预算，默认不限）、
+`--comm-transcript`（把接受/发射/投递逐条写盘，仅测量、不被任何决策回读）、
+`--comm-range` 与 `--gossip-interval`（救援环境自带的视距刷新半径与"刷新+一跳 gossip"周期，
+默认 0.3 与 2 就是 `TaskEnv` 自己的取值；把间隔调到大于步数即可把这两条旁路关掉），
 `--coordinator`（`heuristic` 默认；`coalition` 按缺口而不是重叠打分；`coalition_planner`
 在空闲机器人与任务开放槽位之间规划团队预约；`deadline_aware` 是可学习性门禁用的同信息
 oracle，只退还 belief 预算内到不了的任务）、
@@ -149,14 +155,21 @@ oracle，只退还 belief 预算内到不了的任务）、
 
 目标如何传到救援队，决定了这一轮能完成多少。检测先只写入环境真值（`task_dic`），
 `integrated_sar/comm.py` 的 `CommRelay` 再把它作为显式通信投递进机器人 belief：
-只有注册表已接受的检测才会被转发，上行链路默认覆盖订阅它的整支救援队，可用
+只有注册表已接受的检测才会被记为"有待播报的新闻"，**是否当步上空气由发送策略决定**
+（默认 `immediate`：每条被接受的检测发一次且不刷新，即历史行为）。载荷按**发射时刻**的
+注册表快照构造，所以被推迟的变化是被取代、不是被迟到地重发；每目标每步至多一次发射，
+终态任务不再播报，超出 `--comm-sends-per-tick` 的请求按统一顺序裁剪——这三条传输规则对
+所有策略相同，不只约束学习策略。上行链路默认覆盖订阅它的整支救援队，可用
 `--comm-subscribers` 收窄到 `first:N` 或指定 id；每包有可配置的延迟与丢包率，丢包
-不重发、belief 保持原值，整个随机过程由 seed 控制；中转不读任何人的位置，因此救援队
-是否与搜索起点重合不是闭环启动的必要条件。收窄拓扑只限制投递范围——机器人仍可能
-经视距感知或 gossip 获知任务，那两条信道由 `old_task_env` 自己建模（gossip 每 tick
-最多一跳）。分配器、协调器与执行模块都不能使用机器人尚未收到的信息：协调偏置只按
-该机器人自己的 belief 打分，导航目标取 believed 位置，在途重规划也只看 belief，
-断联期间真值推进不会改变 observation、mask 或行动目标（架构不变量 9）。
+不重发（只有策略再发一次才可能补救）、belief 保持原值，整个随机过程由 seed 控制；
+中转不读任何人的位置，也不读接收端状态（无 ACK），因此救援队是否与搜索起点重合不是
+闭环启动的必要条件。压低频率或收窄拓扑都只限制这条消息通道——机器人仍可能
+经视距感知或 gossip 获知同一信息，那两条信道由 `old_task_env` 自己建模（gossip 每 tick
+最多一跳；默认传感半径 0.3 下，实测 95.6% 的"首次知晓"在没有上行时依然成立），
+所以比较发送策略必须用 `--gossip-interval` 大于步数的隔离配置。分配器、协调器与执行模块
+都不能使用机器人尚未收到的信息：协调偏置只按该机器人自己的 belief 打分，导航目标取
+believed 位置，在途重规划也只看 belief，断联期间真值推进不会改变 observation、mask
+或行动目标（架构不变量 9）。
 为此救援队的集结点默认仍放在搜索队的出发格上，两队共享同一个灾区；
 `TaskEnv` 默认会把集结点随机撒在整个单位正方形。
 
