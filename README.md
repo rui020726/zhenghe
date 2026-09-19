@@ -132,6 +132,11 @@ python -m integrated_sar.joint_driver \
 `--allocation-interval`、`--dt`、`--detection-radius`（不允许为负，0 合法但退化）、
 `--comm-delivery-probability`、`--comm-delay-ticks`、
 `--comm-subscribers`（`all` 默认覆盖全救援队，或 `first:N`，或机器人 id 列表）、
+`--comm-budget-bytes`（每 episode 的字节额度，对所有策略同一执行器；按**发送尝试**计费，
+丢包照计，上界替它发的也算，付不起就不发并记一次拒绝）、
+`--comm-max-wait-steps` 与 `--comm-urgent-wait-steps`、`--comm-urgency-time`
+（共享静默上界：一条变化最长能沉默多少步、任务临近 deadline 时收紧到多少步、以及多近算临近；
+它是任何臂都逃不掉的下界，默认两者为空即不启用）、
 `--comm-policy`（上行发送策略：默认 `immediate` = 每条被接受的检测发一次且不刷新，即历史行为；
 另有 `periodic`、`event`、`event_maxwait`）、`--comm-policy-params`（如 `interval=5`，
 未知策略名或参数键直接报错而非退回默认）、`--comm-sends-per-tick`（每步发射预算，默认不限）、
@@ -165,6 +170,11 @@ oracle，只退还 belief 预算内到不了的任务）、
 每条发射都带一个互斥主原因（`policy`：发送端自己要发；`forced_maxwait`：共享静默上界到点，
 传输层替它发；`other`：预留给未来的强制协议事件），发射/尝试/字节/被拒四分列并按原因闭合，
 被额度拒掉的强制发送单独计数，因此"只学会闭嘴、由规则说话"的策略不可能被当成省通信的学习成果。
+三种"同一件事做两次"分别计数、不可混用：`coalesced_changes` 是生产侧合并（两条新闻装进一封信），
+`redundant_emissions` 是发送侧重复（这封信的内容与上一封逐字段相同），`delivery_duplicate` 是某个
+接收端拒收它已经相信的包。生成量恒等式因此写成
+`generated_items = (emissions − redundant_emissions) + coalesced_changes + 终态抑制 + 终局未说`，
+两侧同用"机器人会据以行动的量"这一个口径（`_View`，刻意排除 registry `revision`）。
 规则菜单除 `immediate`/`periodic`/`event`/`event_maxwait`/`event_priority` 外还有
 `hold_to_bound`（永不主动请求，只有上界发声）与 `random_send`（逐候选的可复现硬币），
 二者与所有规则共用同一套合并、裁剪与上界。中转不读任何人的位置，也不读接收端状态（无 ACK），

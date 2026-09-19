@@ -1,0 +1,5962 @@
+{
+ "protocol": {
+  "comparators_always_reported": [
+   "immediate",
+   "hold_to_bound"
+  ],
+  "diagnostics_excluded_from_thresholds": [
+   "send_once_no_bound",
+   "event_unbudgeted"
+  ],
+  "final_test_block": "800000..800399 reserved, not generated, not read",
+  "non_inferiority_targets_per_episode": -0.05,
+  "primary_setting": [
+   "isolated",
+   1.0
+  ],
+  "secondary_settings": [
+   [
+    "isolated",
+    0.7
+   ],
+   [
+    "deployed",
+    1.0
+   ]
+  ],
+  "selection_rule": "max mean_on_time, then min mean_airtime_bytes, then earliest step",
+  "statistic": "seed-level paired percentile bootstrap, B=10 000, RNG 20260919"
+ },
+ "tiers": {
+  "25pct": {
+   "between_training_seeds": {
+    "airtime_bytes": {
+     "mean": 27889.5,
+     "per_training_seed": {
+      "seed1": 28370.25,
+      "seed2": 28301.5,
+      "seed3": 26996.75
+     },
+     "range": [
+      26996.75,
+      28370.25
+     ],
+     "standard_deviation": 773.908
+    },
+    "autonomous_share_of_bytes": {
+     "mean": 0.8402,
+     "per_training_seed": {
+      "seed1": 1.0,
+      "seed2": 1.0,
+      "seed3": 0.5207
+     },
+     "range": [
+      0.5207,
+      1.0
+     ],
+     "standard_deviation": 0.2767
+    },
+    "on_time_targets_per_episode": {
+     "mean": 4.3195,
+     "per_training_seed": {
+      "seed1": 4.1667,
+      "seed2": 3.5,
+      "seed3": 5.2917
+     },
+     "range": [
+      3.5,
+      5.2917
+     ],
+     "standard_deviation": 0.9056
+    }
+   },
+   "learning_curves": {
+    "1": {
+     "points": {
+      "0": {
+       "airtime_bytes_mean": 28330.25,
+       "applied_mean": 63.0,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 84.493,
+       "budget_refusals_mean": 2484.7083,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 679926,
+       "credit_used_fraction_mean": 0.9669,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.125,
+       "emissions_policy_total": 267,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 3.0417,
+       "inference_ms_mean": 0.1569,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.4931,
+       "on_time_targets_per_episode_mean": 2.9583,
+       "optional_emissions_share_mean": 1.0,
+       "path": null,
+       "pooled_on_time_over_detected_targets": 0.49306,
+       "redundant_emissions_mean": 3.375,
+       "seconds_mean": 2.5162,
+       "unknown_to_everyone_mean": 2262.25
+      },
+      "100000": {
+       "airtime_bytes_mean": 28350.25,
+       "applied_mean": 65.5,
+       "autonomous_share_of_bytes_mean": 0.9568,
+       "belief_age_mean": 66.3003,
+       "budget_refusals_mean": 1513.5833,
+       "bytes_forced_total": 29484,
+       "bytes_policy_total": 650922,
+       "credit_used_fraction_mean": 0.9676,
+       "emissions_forced_total": 11,
+       "emissions_mean": 10.9167,
+       "emissions_policy_total": 251,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.0417,
+       "inference_ms_mean": 0.1602,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6597,
+       "on_time_targets_per_episode_mean": 3.9583,
+       "optional_emissions_share_mean": 0.9575,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed1\\tight_25pct_seed1_at100000.pt",
+       "pooled_on_time_over_detected_targets": 0.65972,
+       "redundant_emissions_mean": 0.0417,
+       "seconds_mean": 2.5575,
+       "unknown_to_everyone_mean": 1358.9167
+      },
+      "200000": {
+       "airtime_bytes_mean": 28272.5,
+       "applied_mean": 65.25,
+       "autonomous_share_of_bytes_mean": 0.9879,
+       "belief_age_mean": 85.7332,
+       "budget_refusals_mean": 1696.1667,
+       "bytes_forced_total": 8418,
+       "bytes_policy_total": 670122,
+       "credit_used_fraction_mean": 0.9649,
+       "emissions_forced_total": 3,
+       "emissions_mean": 11.0,
+       "emissions_policy_total": 261,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.2083,
+       "inference_ms_mean": 0.1542,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6319,
+       "on_time_targets_per_episode_mean": 3.7917,
+       "optional_emissions_share_mean": 0.9886,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed1\\tight_25pct_seed1_at200000.pt",
+       "pooled_on_time_over_detected_targets": 0.63194,
+       "redundant_emissions_mean": 0.9167,
+       "seconds_mean": 2.4996,
+       "unknown_to_everyone_mean": 1476.2083
+      },
+      "300000": {
+       "airtime_bytes_mean": 28432.0,
+       "applied_mean": 64.5,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 88.0216,
+       "budget_refusals_mean": 1540.5,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 682368,
+       "credit_used_fraction_mean": 0.9704,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0,
+       "emissions_policy_total": 264,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.125,
+       "inference_ms_mean": 0.1639,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6458,
+       "on_time_targets_per_episode_mean": 3.875,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed1\\tight_25pct_seed1_at300000.pt",
+       "pooled_on_time_over_detected_targets": 0.64583,
+       "redundant_emissions_mean": 0.375,
+       "seconds_mean": 2.5421,
+       "unknown_to_everyone_mean": 1304.5
+      },
+      "400000": {
+       "airtime_bytes_mean": 28370.25,
+       "applied_mean": 64.2083,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 99.0053,
+       "budget_refusals_mean": 1325.5,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 680886,
+       "credit_used_fraction_mean": 0.9683,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0,
+       "emissions_policy_total": 264,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.8333,
+       "inference_ms_mean": 0.1641,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6944,
+       "on_time_targets_per_episode_mean": 4.1667,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed1\\tight_25pct_seed1.pt",
+       "pooled_on_time_over_detected_targets": 0.69444,
+       "redundant_emissions_mean": 0.4583,
+       "seconds_mean": 2.5671,
+       "unknown_to_everyone_mean": 1072.8333
+      }
+     },
+     "selected_by_rule": {
+      "airtime_bytes_mean": 28370.25,
+      "applied_mean": 64.2083,
+      "at_steps": "400000",
+      "autonomous_share_of_bytes_mean": 1.0,
+      "belief_age_mean": 99.0053,
+      "budget_refusals_mean": 1325.5,
+      "bytes_forced_total": 0,
+      "bytes_policy_total": 680886,
+      "credit_used_fraction_mean": 0.9683,
+      "emissions_forced_total": 0,
+      "emissions_mean": 11.0,
+      "emissions_policy_total": 264,
+      "episodes": 24,
+      "episodes_over_budget": 0,
+      "expired_per_episode_mean": 1.8333,
+      "inference_ms_mean": 0.1641,
+      "ledger_residual_rows": 0,
+      "on_time_rate_per_episode_mean": 0.6944,
+      "on_time_targets_per_episode_mean": 4.1667,
+      "optional_emissions_share_mean": 1.0,
+      "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed1\\tight_25pct_seed1.pt",
+      "pooled_on_time_over_detected_targets": 0.69444,
+      "redundant_emissions_mean": 0.4583,
+      "rule": "max mean_on_time, then min mean_airtime_bytes, then earliest step",
+      "seconds_mean": 2.5671,
+      "unknown_to_everyone_mean": 1072.8333
+     }
+    },
+    "2": {
+     "points": {
+      "0": {
+       "airtime_bytes_mean": 28330.25,
+       "applied_mean": 63.0,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 84.493,
+       "budget_refusals_mean": 2500.5833,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 679926,
+       "credit_used_fraction_mean": 0.9669,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.125,
+       "emissions_policy_total": 267,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 3.0417,
+       "inference_ms_mean": 0.1548,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.4931,
+       "on_time_targets_per_episode_mean": 2.9583,
+       "optional_emissions_share_mean": 1.0,
+       "path": null,
+       "pooled_on_time_over_detected_targets": 0.49306,
+       "redundant_emissions_mean": 3.375,
+       "seconds_mean": 2.4663,
+       "unknown_to_everyone_mean": 2262.25
+      },
+      "100000": {
+       "airtime_bytes_mean": 28304.0,
+       "applied_mean": 63.0,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 84.5282,
+       "budget_refusals_mean": 2487.875,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 679296,
+       "credit_used_fraction_mean": 0.966,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.125,
+       "emissions_policy_total": 267,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 3.0417,
+       "inference_ms_mean": 0.1563,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.4931,
+       "on_time_targets_per_episode_mean": 2.9583,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed2\\tight_25pct_seed2_at100000.pt",
+       "pooled_on_time_over_detected_targets": 0.49306,
+       "redundant_emissions_mean": 3.4167,
+       "seconds_mean": 2.485,
+       "unknown_to_everyone_mean": 2262.25
+      },
+      "200000": {
+       "airtime_bytes_mean": 28328.5,
+       "applied_mean": 63.25,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 84.7501,
+       "budget_refusals_mean": 2432.625,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 679884,
+       "credit_used_fraction_mean": 0.9668,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.125,
+       "emissions_policy_total": 267,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.9583,
+       "inference_ms_mean": 0.1603,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.5069,
+       "on_time_targets_per_episode_mean": 3.0417,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed2\\tight_25pct_seed2_at200000.pt",
+       "pooled_on_time_over_detected_targets": 0.50694,
+       "redundant_emissions_mean": 3.375,
+       "seconds_mean": 2.5325,
+       "unknown_to_everyone_mean": 2195.875
+      },
+      "300000": {
+       "airtime_bytes_mean": 28301.5,
+       "applied_mean": 62.0,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 49.4753,
+       "budget_refusals_mean": 2016.0417,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 679236,
+       "credit_used_fraction_mean": 0.9659,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0417,
+       "emissions_policy_total": 265,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.5,
+       "inference_ms_mean": 0.1577,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.5833,
+       "on_time_targets_per_episode_mean": 3.5,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed2\\tight_25pct_seed2_at300000.pt",
+       "pooled_on_time_over_detected_targets": 0.58333,
+       "redundant_emissions_mean": 2.8333,
+       "seconds_mean": 2.44,
+       "unknown_to_everyone_mean": 1864.4583
+      },
+      "400000": {
+       "airtime_bytes_mean": 28207.75,
+       "applied_mean": 66.0,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 47.6591,
+       "budget_refusals_mean": 2003.25,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 676986,
+       "credit_used_fraction_mean": 0.9627,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0417,
+       "emissions_policy_total": 265,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.5833,
+       "inference_ms_mean": 0.1595,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.5694,
+       "on_time_targets_per_episode_mean": 3.4167,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed2\\tight_25pct_seed2.pt",
+       "pooled_on_time_over_detected_targets": 0.56944,
+       "redundant_emissions_mean": 3.0417,
+       "seconds_mean": 2.4971,
+       "unknown_to_everyone_mean": 1848.0833
+      }
+     },
+     "selected_by_rule": {
+      "airtime_bytes_mean": 28301.5,
+      "applied_mean": 62.0,
+      "at_steps": "300000",
+      "autonomous_share_of_bytes_mean": 1.0,
+      "belief_age_mean": 49.4753,
+      "budget_refusals_mean": 2016.0417,
+      "bytes_forced_total": 0,
+      "bytes_policy_total": 679236,
+      "credit_used_fraction_mean": 0.9659,
+      "emissions_forced_total": 0,
+      "emissions_mean": 11.0417,
+      "emissions_policy_total": 265,
+      "episodes": 24,
+      "episodes_over_budget": 0,
+      "expired_per_episode_mean": 2.5,
+      "inference_ms_mean": 0.1577,
+      "ledger_residual_rows": 0,
+      "on_time_rate_per_episode_mean": 0.5833,
+      "on_time_targets_per_episode_mean": 3.5,
+      "optional_emissions_share_mean": 1.0,
+      "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed2\\tight_25pct_seed2_at300000.pt",
+      "pooled_on_time_over_detected_targets": 0.58333,
+      "redundant_emissions_mean": 2.8333,
+      "rule": "max mean_on_time, then min mean_airtime_bytes, then earliest step",
+      "seconds_mean": 2.44,
+      "unknown_to_everyone_mean": 1864.4583
+     }
+    },
+    "3": {
+     "points": {
+      "0": {
+       "airtime_bytes_mean": 28330.0,
+       "applied_mean": 63.0,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 84.4607,
+       "budget_refusals_mean": 2482.2917,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 679920,
+       "credit_used_fraction_mean": 0.9669,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.125,
+       "emissions_policy_total": 267,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 3.0417,
+       "inference_ms_mean": 0.1577,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.4931,
+       "on_time_targets_per_episode_mean": 2.9583,
+       "optional_emissions_share_mean": 1.0,
+       "path": null,
+       "pooled_on_time_over_detected_targets": 0.49306,
+       "redundant_emissions_mean": 3.375,
+       "seconds_mean": 2.5079,
+       "unknown_to_everyone_mean": 2262.25
+      },
+      "100000": {
+       "airtime_bytes_mean": 28149.25,
+       "applied_mean": 49.5,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 30.5661,
+       "budget_refusals_mean": 1950.25,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 675582,
+       "credit_used_fraction_mean": 0.9607,
+       "emissions_forced_total": 0,
+       "emissions_mean": 10.9167,
+       "emissions_policy_total": 262,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.4583,
+       "inference_ms_mean": 0.1586,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.5903,
+       "on_time_targets_per_episode_mean": 3.5417,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed3\\tight_25pct_seed3_at100000.pt",
+       "pooled_on_time_over_detected_targets": 0.59028,
+       "redundant_emissions_mean": 3.7917,
+       "seconds_mean": 2.4542,
+       "unknown_to_everyone_mean": 1848.2083
+      },
+      "200000": {
+       "airtime_bytes_mean": 28253.75,
+       "applied_mean": 65.5,
+       "autonomous_share_of_bytes_mean": 0.9837,
+       "belief_age_mean": 77.3519,
+       "budget_refusals_mean": 1220.375,
+       "bytes_forced_total": 11004,
+       "bytes_policy_total": 667086,
+       "credit_used_fraction_mean": 0.9643,
+       "emissions_forced_total": 4,
+       "emissions_mean": 10.9167,
+       "emissions_policy_total": 258,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.7083,
+       "inference_ms_mean": 0.1609,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.7153,
+       "on_time_targets_per_episode_mean": 4.2917,
+       "optional_emissions_share_mean": 0.9841,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed3\\tight_25pct_seed3_at200000.pt",
+       "pooled_on_time_over_detected_targets": 0.71528,
+       "redundant_emissions_mean": 0.5,
+       "seconds_mean": 2.5379,
+       "unknown_to_everyone_mean": 1024.3333
+      },
+      "300000": {
+       "airtime_bytes_mean": 26996.75,
+       "applied_mean": 61.7917,
+       "autonomous_share_of_bytes_mean": 0.5207,
+       "belief_age_mean": 18.5692,
+       "budget_refusals_mean": 488.9167,
+       "bytes_forced_total": 314742,
+       "bytes_policy_total": 333180,
+       "credit_used_fraction_mean": 0.9214,
+       "emissions_forced_total": 115,
+       "emissions_mean": 10.375,
+       "emissions_policy_total": 134,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.7083,
+       "inference_ms_mean": 0.1827,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8819,
+       "on_time_targets_per_episode_mean": 5.2917,
+       "optional_emissions_share_mean": 0.5422,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed3\\tight_25pct_seed3_at300000.pt",
+       "pooled_on_time_over_detected_targets": 0.88194,
+       "redundant_emissions_mean": 0.2083,
+       "seconds_mean": 2.5579,
+       "unknown_to_everyone_mean": 455.9167
+      },
+      "400000": {
+       "airtime_bytes_mean": 27685.75,
+       "applied_mean": 62.875,
+       "autonomous_share_of_bytes_mean": 0.7457,
+       "belief_age_mean": 60.4852,
+       "budget_refusals_mean": 738.0,
+       "bytes_forced_total": 169350,
+       "bytes_policy_total": 495108,
+       "credit_used_fraction_mean": 0.9449,
+       "emissions_forced_total": 61,
+       "emissions_mean": 10.75,
+       "emissions_policy_total": 197,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.0,
+       "inference_ms_mean": 0.1673,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8333,
+       "on_time_targets_per_episode_mean": 5.0,
+       "optional_emissions_share_mean": 0.7621,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed3\\tight_25pct_seed3.pt",
+       "pooled_on_time_over_detected_targets": 0.83333,
+       "redundant_emissions_mean": 1.1667,
+       "seconds_mean": 2.5033,
+       "unknown_to_everyone_mean": 582.5
+      }
+     },
+     "selected_by_rule": {
+      "airtime_bytes_mean": 26996.75,
+      "applied_mean": 61.7917,
+      "at_steps": "300000",
+      "autonomous_share_of_bytes_mean": 0.5207,
+      "belief_age_mean": 18.5692,
+      "budget_refusals_mean": 488.9167,
+      "bytes_forced_total": 314742,
+      "bytes_policy_total": 333180,
+      "credit_used_fraction_mean": 0.9214,
+      "emissions_forced_total": 115,
+      "emissions_mean": 10.375,
+      "emissions_policy_total": 134,
+      "episodes": 24,
+      "episodes_over_budget": 0,
+      "expired_per_episode_mean": 0.7083,
+      "inference_ms_mean": 0.1827,
+      "ledger_residual_rows": 0,
+      "on_time_rate_per_episode_mean": 0.8819,
+      "on_time_targets_per_episode_mean": 5.2917,
+      "optional_emissions_share_mean": 0.5422,
+      "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\25pct_seed3\\tight_25pct_seed3_at300000.pt",
+      "pooled_on_time_over_detected_targets": 0.88194,
+      "redundant_emissions_mean": 0.2083,
+      "rule": "max mean_on_time, then min mean_airtime_bytes, then earliest step",
+      "seconds_mean": 2.5579,
+      "unknown_to_everyone_mean": 455.9167
+     }
+    }
+   },
+   "selected_checkpoint_per_seed": {
+    "1": "400000",
+    "2": "300000",
+    "3": "300000"
+   },
+   "settings": {
+    "deployed_1.0": {
+     "judgement": {
+      "budget_bytes": 29300,
+      "checkpoint_used_per_seed": {
+       "1": "400000",
+       "2": "300000",
+       "3": "300000"
+      },
+      "comparator": "immediate",
+      "cost_saving_arms": [],
+      "non_inferiority_targets_per_episode": -0.05,
+      "seeds": {
+       "1": {
+        "arm": "learned1_at400000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -0.125,
+        "hygiene_clean": true,
+        "no_regression_below_margin": false,
+        "numbers": {
+         "autonomous_bytes": 681666,
+         "autonomous_share_of_bytes": 1.0,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           3094.7375,
+           7900.725
+          ],
+          "mean_difference": 5389.5,
+          "pairs": 24,
+          "seeds_better": 19,
+          "seeds_equal": 0,
+          "seeds_worse": 5
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           418.7375,
+           2481.2875
+          ],
+          "mean_difference": 1374.75,
+          "pairs": 24,
+          "seeds_better": 15,
+          "seeds_equal": 0,
+          "seeds_worse": 9
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -0.33333,
+           0.0
+          ],
+          "mean_difference": -0.125,
+          "pairs": 24,
+          "seeds_better": 0,
+          "seeds_equal": 22,
+          "seeds_worse": 2
+         },
+         "optional_emissions_share": 1.0,
+         "redundant_emissions_mean": 0.2917
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       },
+       "2": {
+        "arm": "learned2_at300000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -0.20833,
+        "hygiene_clean": true,
+        "no_regression_below_margin": false,
+        "numbers": {
+         "autonomous_bytes": 679236,
+         "autonomous_share_of_bytes": 1.0,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           3052.45625,
+           7716.51875
+          ],
+          "mean_difference": 5288.25,
+          "pairs": 24,
+          "seeds_better": 18,
+          "seeds_equal": 0,
+          "seeds_worse": 6
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           361.24375,
+           2336.29375
+          ],
+          "mean_difference": 1273.5,
+          "pairs": 24,
+          "seeds_better": 16,
+          "seeds_equal": 1,
+          "seeds_worse": 7
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -0.41667,
+           -0.04167
+          ],
+          "mean_difference": -0.20833,
+          "pairs": 24,
+          "seeds_better": 0,
+          "seeds_equal": 20,
+          "seeds_worse": 4
+         },
+         "optional_emissions_share": 1.0,
+         "redundant_emissions_mean": 2.8333
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       },
+       "3": {
+        "arm": "learned3_at300000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": 0.0,
+        "hygiene_clean": true,
+        "no_regression_below_margin": true,
+        "numbers": {
+         "autonomous_bytes": 330654,
+         "autonomous_share_of_bytes": 0.5129,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           2386.24375,
+           5967.00625
+          ],
+          "mean_difference": 4113.5,
+          "pairs": 24,
+          "seeds_better": 16,
+          "seeds_equal": 0,
+          "seeds_worse": 8
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           -12.75,
+           309.0
+          ],
+          "mean_difference": 98.75,
+          "pairs": 24,
+          "seeds_better": 2,
+          "seeds_equal": 21,
+          "seeds_worse": 1
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           0.0,
+           0.0
+          ],
+          "mean_difference": 0.0,
+          "pairs": 24,
+          "seeds_better": 0,
+          "seeds_equal": 24,
+          "seeds_worse": 0
+         },
+         "optional_emissions_share": 0.5349,
+         "redundant_emissions_mean": 0.2083
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       }
+      },
+      "statistic": "seed-level paired percentile bootstrap, B=10 000, RNG 20260919",
+      "tier": "25pct",
+      "training_seeds_reaching_cost_saving_bar": 0,
+      "training_seeds_reaching_upgrade_bar": 0,
+      "upgrade_gate_met": false
+     },
+     "paired_vs_hold_to_bound": {
+      "airtime_bytes": {
+       "event": {
+        "ci95": [
+         2859.41875,
+         7690.5625
+        ],
+        "mean_difference": 5218.75,
+        "pairs": 24,
+        "seeds_better": 18,
+        "seeds_equal": 0,
+        "seeds_worse": 6
+       },
+       "event_priority": {
+        "ci95": [
+         2913.18125,
+         7707.7875
+        ],
+        "mean_difference": 5209.5,
+        "pairs": 24,
+        "seeds_better": 18,
+        "seeds_equal": 0,
+        "seeds_worse": 6
+       },
+       "immediate": {
+        "ci95": [
+         2290.74375,
+         5886.34375
+        ],
+        "mean_difference": 4014.75,
+        "pairs": 24,
+        "seeds_better": 16,
+        "seeds_equal": 0,
+        "seeds_worse": 8
+       },
+       "learned1_at400000": {
+        "ci95": [
+         3094.7375,
+         7900.725
+        ],
+        "mean_difference": 5389.5,
+        "pairs": 24,
+        "seeds_better": 19,
+        "seeds_equal": 0,
+        "seeds_worse": 5
+       },
+       "learned2_at300000": {
+        "ci95": [
+         3052.45625,
+         7716.51875
+        ],
+        "mean_difference": 5288.25,
+        "pairs": 24,
+        "seeds_better": 18,
+        "seeds_equal": 0,
+        "seeds_worse": 6
+       },
+       "learned2_at400000": {
+        "ci95": [
+         2816.94375,
+         7777.54375
+        ],
+        "mean_difference": 5194.5,
+        "pairs": 24,
+        "seeds_better": 16,
+        "seeds_equal": 0,
+        "seeds_worse": 8
+       },
+       "learned3_at300000": {
+        "ci95": [
+         2386.24375,
+         5967.00625
+        ],
+        "mean_difference": 4113.5,
+        "pairs": 24,
+        "seeds_better": 16,
+        "seeds_equal": 0,
+        "seeds_worse": 8
+       },
+       "learned3_at400000": {
+        "ci95": [
+         2771.20625,
+         6759.60625
+        ],
+        "mean_difference": 4709.25,
+        "pairs": 24,
+        "seeds_better": 18,
+        "seeds_equal": 0,
+        "seeds_worse": 6
+       },
+       "periodic_5": {
+        "ci95": [
+         2880.24375,
+         7609.51875
+        ],
+        "mean_difference": 5140.25,
+        "pairs": 24,
+        "seeds_better": 19,
+        "seeds_equal": 0,
+        "seeds_worse": 5
+       }
+      },
+      "on_time_targets_per_episode": {
+       "event": {
+        "ci95": [
+         -0.58333,
+         -0.125
+        ],
+        "mean_difference": -0.33333,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 18,
+        "seeds_worse": 6
+       },
+       "event_priority": {
+        "ci95": [
+         -0.58333,
+         -0.125
+        ],
+        "mean_difference": -0.33333,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 18,
+        "seeds_worse": 6
+       },
+       "immediate": {
+        "ci95": [
+         -0.25,
+         0.0
+        ],
+        "mean_difference": -0.125,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 21,
+        "seeds_worse": 3
+       },
+       "learned1_at400000": {
+        "ci95": [
+         -0.45833,
+         -0.08333
+        ],
+        "mean_difference": -0.25,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 19,
+        "seeds_worse": 5
+       },
+       "learned2_at300000": {
+        "ci95": [
+         -0.58333,
+         -0.125
+        ],
+        "mean_difference": -0.33333,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 18,
+        "seeds_worse": 6
+       },
+       "learned2_at400000": {
+        "ci95": [
+         -0.58333,
+         -0.125
+        ],
+        "mean_difference": -0.33333,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 18,
+        "seeds_worse": 6
+       },
+       "learned3_at300000": {
+        "ci95": [
+         -0.29167,
+         0.0
+        ],
+        "mean_difference": -0.125,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 21,
+        "seeds_worse": 3
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -0.25,
+         0.0
+        ],
+        "mean_difference": -0.125,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 21,
+        "seeds_worse": 3
+       },
+       "periodic_5": {
+        "ci95": [
+         -0.54167,
+         -0.08333
+        ],
+        "mean_difference": -0.29167,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 19,
+        "seeds_worse": 5
+       }
+      }
+     },
+     "paired_vs_immediate": {
+      "airtime_bytes": {
+       "event": {
+        "ci95": [
+         271.75,
+         2274.50625
+        ],
+        "mean_difference": 1204.0,
+        "pairs": 24,
+        "seeds_better": 17,
+        "seeds_equal": 0,
+        "seeds_worse": 7
+       },
+       "event_priority": {
+        "ci95": [
+         267.99375,
+         2251.56875
+        ],
+        "mean_difference": 1194.75,
+        "pairs": 24,
+        "seeds_better": 17,
+        "seeds_equal": 0,
+        "seeds_worse": 7
+       },
+       "hold_to_bound": {
+        "ci95": [
+         -5886.34375,
+         -2290.74375
+        ],
+        "mean_difference": -4014.75,
+        "pairs": 24,
+        "seeds_better": 8,
+        "seeds_equal": 0,
+        "seeds_worse": 16
+       },
+       "learned1_at400000": {
+        "ci95": [
+         418.7375,
+         2481.2875
+        ],
+        "mean_difference": 1374.75,
+        "pairs": 24,
+        "seeds_better": 15,
+        "seeds_equal": 0,
+        "seeds_worse": 9
+       },
+       "learned2_at300000": {
+        "ci95": [
+         361.24375,
+         2336.29375
+        ],
+        "mean_difference": 1273.5,
+        "pairs": 24,
+        "seeds_better": 16,
+        "seeds_equal": 1,
+        "seeds_worse": 7
+       },
+       "learned2_at400000": {
+        "ci95": [
+         204.95625,
+         2300.3125
+        ],
+        "mean_difference": 1179.75,
+        "pairs": 24,
+        "seeds_better": 13,
+        "seeds_equal": 1,
+        "seeds_worse": 10
+       },
+       "learned3_at300000": {
+        "ci95": [
+         -12.75,
+         309.0
+        ],
+        "mean_difference": 98.75,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 21,
+        "seeds_worse": 1
+       },
+       "learned3_at400000": {
+        "ci95": [
+         145.75,
+         1325.76875
+        ],
+        "mean_difference": 694.5,
+        "pairs": 24,
+        "seeds_better": 11,
+        "seeds_equal": 1,
+        "seeds_worse": 12
+       },
+       "periodic_5": {
+        "ci95": [
+         221.0,
+         2257.7625
+        ],
+        "mean_difference": 1125.5,
+        "pairs": 24,
+        "seeds_better": 14,
+        "seeds_equal": 0,
+        "seeds_worse": 10
+       }
+      },
+      "on_time_targets_per_episode": {
+       "event": {
+        "ci95": [
+         -0.41667,
+         -0.04167
+        ],
+        "mean_difference": -0.20833,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 20,
+        "seeds_worse": 4
+       },
+       "event_priority": {
+        "ci95": [
+         -0.41667,
+         -0.04167
+        ],
+        "mean_difference": -0.20833,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 20,
+        "seeds_worse": 4
+       },
+       "hold_to_bound": {
+        "ci95": [
+         0.0,
+         0.25
+        ],
+        "mean_difference": 0.125,
+        "pairs": 24,
+        "seeds_better": 3,
+        "seeds_equal": 21,
+        "seeds_worse": 0
+       },
+       "learned1_at400000": {
+        "ci95": [
+         -0.33333,
+         0.0
+        ],
+        "mean_difference": -0.125,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 22,
+        "seeds_worse": 2
+       },
+       "learned2_at300000": {
+        "ci95": [
+         -0.41667,
+         -0.04167
+        ],
+        "mean_difference": -0.20833,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 20,
+        "seeds_worse": 4
+       },
+       "learned2_at400000": {
+        "ci95": [
+         -0.41667,
+         -0.04167
+        ],
+        "mean_difference": -0.20833,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 20,
+        "seeds_worse": 4
+       },
+       "learned3_at300000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned3_at400000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "periodic_5": {
+        "ci95": [
+         -0.375,
+         0.0
+        ],
+        "mean_difference": -0.16667,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 21,
+        "seeds_worse": 3
+       }
+      }
+     },
+     "per_arm": {
+      "event": {
+       "airtime_bytes_mean": 28232.0,
+       "applied_mean": 65.5,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 12.7815,
+       "budget_refusals_mean": 342.625,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 677568,
+       "credit_used_fraction_mean": 0.9636,
+       "emissions_forced_total": 0,
+       "emissions_mean": 10.9167,
+       "emissions_policy_total": 262,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.4167,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 92,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9306,
+       "on_time_targets_per_episode_mean": 5.5833,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.93056,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.5325,
+       "unknown_to_everyone_mean": 279.5417
+      },
+      "event_priority": {
+       "airtime_bytes_mean": 28222.75,
+       "applied_mean": 65.5,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 12.5065,
+       "budget_refusals_mean": 342.7917,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 677346,
+       "credit_used_fraction_mean": 0.9632,
+       "emissions_forced_total": 0,
+       "emissions_mean": 10.9167,
+       "emissions_policy_total": 262,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.4167,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 91,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9306,
+       "on_time_targets_per_episode_mean": 5.5833,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.93056,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.6554,
+       "unknown_to_everyone_mean": 281.25
+      },
+      "hold_to_bound": {
+       "airtime_bytes_mean": 23013.25,
+       "applied_mean": 38.25,
+       "autonomous_share_of_bytes_mean": 0.0,
+       "belief_age_mean": 7.6465,
+       "budget_refusals_mean": 25.3333,
+       "bytes_forced_total": 552318,
+       "bytes_policy_total": 0,
+       "credit_used_fraction_mean": 0.7854,
+       "emissions_forced_total": 206,
+       "emissions_mean": 8.5833,
+       "emissions_policy_total": 0,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0833,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 114,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9861,
+       "on_time_targets_per_episode_mean": 5.9167,
+       "optional_emissions_share_mean": 0.0,
+       "pooled_on_time_over_detected_targets": 0.98611,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.68,
+       "unknown_to_everyone_mean": 107.625
+      },
+      "immediate": {
+       "airtime_bytes_mean": 27028.0,
+       "applied_mean": 57.5,
+       "autonomous_share_of_bytes_mean": 0.4953,
+       "belief_age_mean": 10.56,
+       "budget_refusals_mean": 109.7917,
+       "bytes_forced_total": 331470,
+       "bytes_policy_total": 317202,
+       "credit_used_fraction_mean": 0.9225,
+       "emissions_forced_total": 121,
+       "emissions_mean": 10.375,
+       "emissions_policy_total": 128,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.2083,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 125,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9653,
+       "on_time_targets_per_episode_mean": 5.7917,
+       "optional_emissions_share_mean": 0.5183,
+       "pooled_on_time_over_detected_targets": 0.96528,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.6229,
+       "unknown_to_everyone_mean": 99.5
+      },
+      "learned1_at400000": {
+       "airtime_bytes_mean": 28402.75,
+       "applied_mean": 59.5,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 11.2837,
+       "budget_refusals_mean": 254.2083,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 681666,
+       "credit_used_fraction_mean": 0.9694,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0,
+       "emissions_policy_total": 264,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.3333,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 107,
+       "inference_ms_mean": 0.2118,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9444,
+       "on_time_targets_per_episode_mean": 5.6667,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.94444,
+       "redundant_emissions_mean": 0.2917,
+       "seconds_mean": 2.6154,
+       "unknown_to_everyone_mean": 200.125
+      },
+      "learned2_at300000": {
+       "airtime_bytes_mean": 28301.5,
+       "applied_mean": 59.75,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 14.4525,
+       "budget_refusals_mean": 364.1667,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 679236,
+       "credit_used_fraction_mean": 0.9659,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0417,
+       "emissions_policy_total": 265,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.4167,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 90,
+       "inference_ms_mean": 0.2094,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9306,
+       "on_time_targets_per_episode_mean": 5.5833,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.93056,
+       "redundant_emissions_mean": 2.8333,
+       "seconds_mean": 2.7196,
+       "unknown_to_everyone_mean": 286.4583
+      },
+      "learned2_at400000": {
+       "airtime_bytes_mean": 28207.75,
+       "applied_mean": 64.0,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 13.5744,
+       "budget_refusals_mean": 356.1667,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 676986,
+       "credit_used_fraction_mean": 0.9627,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0417,
+       "emissions_policy_total": 265,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.4167,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 91,
+       "inference_ms_mean": 0.2111,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9306,
+       "on_time_targets_per_episode_mean": 5.5833,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.93056,
+       "redundant_emissions_mean": 3.0417,
+       "seconds_mean": 2.7325,
+       "unknown_to_everyone_mean": 285.0
+      },
+      "learned3_at300000": {
+       "airtime_bytes_mean": 27126.75,
+       "applied_mean": 57.75,
+       "autonomous_share_of_bytes_mean": 0.5129,
+       "belief_age_mean": 10.6621,
+       "budget_refusals_mean": 111.625,
+       "bytes_forced_total": 320388,
+       "bytes_policy_total": 330654,
+       "credit_used_fraction_mean": 0.9258,
+       "emissions_forced_total": 117,
+       "emissions_mean": 10.4167,
+       "emissions_policy_total": 133,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.2083,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 125,
+       "inference_ms_mean": 0.2166,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9653,
+       "on_time_targets_per_episode_mean": 5.7917,
+       "optional_emissions_share_mean": 0.5349,
+       "pooled_on_time_over_detected_targets": 0.96528,
+       "redundant_emissions_mean": 0.2083,
+       "seconds_mean": 2.5892,
+       "unknown_to_everyone_mean": 99.5
+      },
+      "learned3_at400000": {
+       "airtime_bytes_mean": 27722.5,
+       "applied_mean": 52.5,
+       "autonomous_share_of_bytes_mean": 0.7415,
+       "belief_age_mean": 11.1423,
+       "budget_refusals_mean": 140.9167,
+       "bytes_forced_total": 172152,
+       "bytes_policy_total": 493188,
+       "credit_used_fraction_mean": 0.9462,
+       "emissions_forced_total": 62,
+       "emissions_mean": 10.75,
+       "emissions_policy_total": 196,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.2083,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 124,
+       "inference_ms_mean": 0.2118,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9653,
+       "on_time_targets_per_episode_mean": 5.7917,
+       "optional_emissions_share_mean": 0.7583,
+       "pooled_on_time_over_detected_targets": 0.96528,
+       "redundant_emissions_mean": 1.0,
+       "seconds_mean": 2.4546,
+       "unknown_to_everyone_mean": 104.8333
+      },
+      "periodic_5": {
+       "airtime_bytes_mean": 28153.5,
+       "applied_mean": 47.25,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 10.1538,
+       "budget_refusals_mean": 265.4167,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 675684,
+       "credit_used_fraction_mean": 0.9609,
+       "emissions_forced_total": 0,
+       "emissions_mean": 10.75,
+       "emissions_policy_total": 258,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.375,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 100,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9375,
+       "on_time_targets_per_episode_mean": 5.625,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.9375,
+       "redundant_emissions_mean": 1.625,
+       "seconds_mean": 2.5542,
+       "unknown_to_everyone_mean": 269.4167
+      }
+     }
+    },
+    "isolated_0.7": {
+     "judgement": {
+      "budget_bytes": 29300,
+      "checkpoint_used_per_seed": {
+       "1": "400000",
+       "2": "300000",
+       "3": "300000"
+      },
+      "comparator": "immediate",
+      "cost_saving_arms": [],
+      "non_inferiority_targets_per_episode": -0.05,
+      "seeds": {
+       "1": {
+        "arm": "learned1_at400000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -0.66667,
+        "hygiene_clean": true,
+        "no_regression_below_margin": false,
+        "numbers": {
+         "autonomous_bytes": 676698,
+         "autonomous_share_of_bytes": 1.0,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           50.25,
+           2175.3375
+          ],
+          "mean_difference": 1036.75,
+          "pairs": 24,
+          "seeds_better": 11,
+          "seeds_equal": 0,
+          "seeds_worse": 13
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           14.16875,
+           1925.25625
+          ],
+          "mean_difference": 899.0,
+          "pairs": 24,
+          "seeds_better": 12,
+          "seeds_equal": 1,
+          "seeds_worse": 11
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -1.125,
+           -0.20833
+          ],
+          "mean_difference": -0.66667,
+          "pairs": 24,
+          "seeds_better": 4,
+          "seeds_equal": 7,
+          "seeds_worse": 13
+         },
+         "optional_emissions_share": 1.0,
+         "redundant_emissions_mean": 0.875
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       },
+       "2": {
+        "arm": "learned2_at300000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -1.5,
+        "hygiene_clean": true,
+        "no_regression_below_margin": false,
+        "numbers": {
+         "autonomous_bytes": 680118,
+         "autonomous_share_of_bytes": 1.0,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           239.4875,
+           2291.0125
+          ],
+          "mean_difference": 1179.25,
+          "pairs": 24,
+          "seeds_better": 12,
+          "seeds_equal": 1,
+          "seeds_worse": 11
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           198.70625,
+           2062.50625
+          ],
+          "mean_difference": 1041.5,
+          "pairs": 24,
+          "seeds_better": 13,
+          "seeds_equal": 0,
+          "seeds_worse": 11
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -1.95833,
+           -1.04167
+          ],
+          "mean_difference": -1.5,
+          "pairs": 24,
+          "seeds_better": 1,
+          "seeds_equal": 4,
+          "seeds_worse": 19
+         },
+         "optional_emissions_share": 1.0,
+         "redundant_emissions_mean": 2.7083
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       },
+       "3": {
+        "arm": "learned3_at300000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": 0.0,
+        "hygiene_clean": true,
+        "no_regression_below_margin": true,
+        "numbers": {
+         "autonomous_bytes": 312942,
+         "autonomous_share_of_bytes": 0.4882,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           -64.75,
+           1.75
+          ],
+          "mean_difference": -28.0,
+          "pairs": 24,
+          "seeds_better": 2,
+          "seeds_equal": 0,
+          "seeds_worse": 22
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           -696.00625,
+           266.0
+          ],
+          "mean_difference": -165.75,
+          "pairs": 24,
+          "seeds_better": 6,
+          "seeds_equal": 14,
+          "seeds_worse": 4
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -0.16667,
+           0.16667
+          ],
+          "mean_difference": 0.0,
+          "pairs": 24,
+          "seeds_better": 2,
+          "seeds_equal": 20,
+          "seeds_worse": 2
+         },
+         "optional_emissions_share": 0.5073,
+         "redundant_emissions_mean": 0.125
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       }
+      },
+      "statistic": "seed-level paired percentile bootstrap, B=10 000, RNG 20260919",
+      "tier": "25pct",
+      "training_seeds_reaching_cost_saving_bar": 0,
+      "training_seeds_reaching_upgrade_bar": 0,
+      "upgrade_gate_met": false
+     },
+     "paired_vs_hold_to_bound": {
+      "airtime_bytes": {
+       "event": {
+        "ci95": [
+         34.2125,
+         2131.79375
+        ],
+        "mean_difference": 1020.25,
+        "pairs": 24,
+        "seeds_better": 12,
+        "seeds_equal": 0,
+        "seeds_worse": 12
+       },
+       "event_priority": {
+        "ci95": [
+         52.2375,
+         2142.525
+        ],
+        "mean_difference": 1027.0,
+        "pairs": 24,
+        "seeds_better": 12,
+        "seeds_equal": 0,
+        "seeds_worse": 12
+       },
+       "immediate": {
+        "ci95": [
+         -326.75625,
+         686.00625
+        ],
+        "mean_difference": 137.75,
+        "pairs": 24,
+        "seeds_better": 5,
+        "seeds_equal": 0,
+        "seeds_worse": 19
+       },
+       "learned1_at400000": {
+        "ci95": [
+         50.25,
+         2175.3375
+        ],
+        "mean_difference": 1036.75,
+        "pairs": 24,
+        "seeds_better": 11,
+        "seeds_equal": 0,
+        "seeds_worse": 13
+       },
+       "learned2_at300000": {
+        "ci95": [
+         239.4875,
+         2291.0125
+        ],
+        "mean_difference": 1179.25,
+        "pairs": 24,
+        "seeds_better": 12,
+        "seeds_equal": 1,
+        "seeds_worse": 11
+       },
+       "learned2_at400000": {
+        "ci95": [
+         -100.2625,
+         2080.01875
+        ],
+        "mean_difference": 921.0,
+        "pairs": 24,
+        "seeds_better": 12,
+        "seeds_equal": 0,
+        "seeds_worse": 12
+       },
+       "learned3_at300000": {
+        "ci95": [
+         -64.75,
+         1.75
+        ],
+        "mean_difference": -28.0,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 0,
+        "seeds_worse": 22
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -135.775,
+         1368.25
+        ],
+        "mean_difference": 549.25,
+        "pairs": 24,
+        "seeds_better": 10,
+        "seeds_equal": 0,
+        "seeds_worse": 14
+       },
+       "periodic_5": {
+        "ci95": [
+         -40.78125,
+         2100.25625
+        ],
+        "mean_difference": 927.5,
+        "pairs": 24,
+        "seeds_better": 10,
+        "seeds_equal": 0,
+        "seeds_worse": 14
+       }
+      },
+      "on_time_targets_per_episode": {
+       "event": {
+        "ci95": [
+         -1.875,
+         -0.625
+        ],
+        "mean_difference": -1.25,
+        "pairs": 24,
+        "seeds_better": 3,
+        "seeds_equal": 6,
+        "seeds_worse": 15
+       },
+       "event_priority": {
+        "ci95": [
+         -1.95833,
+         -0.70833
+        ],
+        "mean_difference": -1.33333,
+        "pairs": 24,
+        "seeds_better": 3,
+        "seeds_equal": 5,
+        "seeds_worse": 16
+       },
+       "immediate": {
+        "ci95": [
+         -0.08333,
+         0.33333
+        ],
+        "mean_difference": 0.125,
+        "pairs": 24,
+        "seeds_better": 5,
+        "seeds_equal": 17,
+        "seeds_worse": 2
+       },
+       "learned1_at400000": {
+        "ci95": [
+         -1.0,
+         -0.08333
+        ],
+        "mean_difference": -0.54167,
+        "pairs": 24,
+        "seeds_better": 3,
+        "seeds_equal": 10,
+        "seeds_worse": 11
+       },
+       "learned2_at300000": {
+        "ci95": [
+         -1.875,
+         -0.875
+        ],
+        "mean_difference": -1.375,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 4,
+        "seeds_worse": 19
+       },
+       "learned2_at400000": {
+        "ci95": [
+         -1.75,
+         -0.79167
+        ],
+        "mean_difference": -1.29167,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 2,
+        "seeds_worse": 20
+       },
+       "learned3_at300000": {
+        "ci95": [
+         0.0,
+         0.25
+        ],
+        "mean_difference": 0.125,
+        "pairs": 24,
+        "seeds_better": 3,
+        "seeds_equal": 21,
+        "seeds_worse": 0
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -0.45833,
+         0.20833
+        ],
+        "mean_difference": -0.125,
+        "pairs": 24,
+        "seeds_better": 5,
+        "seeds_equal": 13,
+        "seeds_worse": 6
+       },
+       "periodic_5": {
+        "ci95": [
+         -1.70833,
+         -0.54167
+        ],
+        "mean_difference": -1.125,
+        "pairs": 24,
+        "seeds_better": 3,
+        "seeds_equal": 6,
+        "seeds_worse": 15
+       }
+      }
+     },
+     "paired_vs_immediate": {
+      "airtime_bytes": {
+       "event": {
+        "ci95": [
+         27.7375,
+         1904.50625
+        ],
+        "mean_difference": 882.5,
+        "pairs": 24,
+        "seeds_better": 14,
+        "seeds_equal": 0,
+        "seeds_worse": 10
+       },
+       "event_priority": {
+        "ci95": [
+         32.95,
+         1888.26875
+        ],
+        "mean_difference": 889.25,
+        "pairs": 24,
+        "seeds_better": 14,
+        "seeds_equal": 0,
+        "seeds_worse": 10
+       },
+       "hold_to_bound": {
+        "ci95": [
+         -686.00625,
+         326.75625
+        ],
+        "mean_difference": -137.75,
+        "pairs": 24,
+        "seeds_better": 19,
+        "seeds_equal": 0,
+        "seeds_worse": 5
+       },
+       "learned1_at400000": {
+        "ci95": [
+         14.16875,
+         1925.25625
+        ],
+        "mean_difference": 899.0,
+        "pairs": 24,
+        "seeds_better": 12,
+        "seeds_equal": 1,
+        "seeds_worse": 11
+       },
+       "learned2_at300000": {
+        "ci95": [
+         198.70625,
+         2062.50625
+        ],
+        "mean_difference": 1041.5,
+        "pairs": 24,
+        "seeds_better": 13,
+        "seeds_equal": 0,
+        "seeds_worse": 11
+       },
+       "learned2_at400000": {
+        "ci95": [
+         -133.00625,
+         1848.54375
+        ],
+        "mean_difference": 783.25,
+        "pairs": 24,
+        "seeds_better": 12,
+        "seeds_equal": 0,
+        "seeds_worse": 12
+       },
+       "learned3_at300000": {
+        "ci95": [
+         -696.00625,
+         266.0
+        ],
+        "mean_difference": -165.75,
+        "pairs": 24,
+        "seeds_better": 6,
+        "seeds_equal": 14,
+        "seeds_worse": 4
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -397.0375,
+         1306.2625
+        ],
+        "mean_difference": 411.5,
+        "pairs": 24,
+        "seeds_better": 11,
+        "seeds_equal": 0,
+        "seeds_worse": 13
+       },
+       "periodic_5": {
+        "ci95": [
+         -77.28125,
+         1837.025
+        ],
+        "mean_difference": 789.75,
+        "pairs": 24,
+        "seeds_better": 12,
+        "seeds_equal": 0,
+        "seeds_worse": 12
+       }
+      },
+      "on_time_targets_per_episode": {
+       "event": {
+        "ci95": [
+         -1.95833,
+         -0.79167
+        ],
+        "mean_difference": -1.375,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 8,
+        "seeds_worse": 15
+       },
+       "event_priority": {
+        "ci95": [
+         -2.04167,
+         -0.875
+        ],
+        "mean_difference": -1.45833,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 7,
+        "seeds_worse": 16
+       },
+       "hold_to_bound": {
+        "ci95": [
+         -0.33333,
+         0.08333
+        ],
+        "mean_difference": -0.125,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 17,
+        "seeds_worse": 5
+       },
+       "learned1_at400000": {
+        "ci95": [
+         -1.125,
+         -0.20833
+        ],
+        "mean_difference": -0.66667,
+        "pairs": 24,
+        "seeds_better": 4,
+        "seeds_equal": 7,
+        "seeds_worse": 13
+       },
+       "learned2_at300000": {
+        "ci95": [
+         -1.95833,
+         -1.04167
+        ],
+        "mean_difference": -1.5,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 4,
+        "seeds_worse": 19
+       },
+       "learned2_at400000": {
+        "ci95": [
+         -1.83333,
+         -0.95833
+        ],
+        "mean_difference": -1.41667,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 4,
+        "seeds_worse": 19
+       },
+       "learned3_at300000": {
+        "ci95": [
+         -0.16667,
+         0.16667
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 20,
+        "seeds_worse": 2
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -0.58333,
+         0.08333
+        ],
+        "mean_difference": -0.25,
+        "pairs": 24,
+        "seeds_better": 5,
+        "seeds_equal": 10,
+        "seeds_worse": 9
+       },
+       "periodic_5": {
+        "ci95": [
+         -1.79167,
+         -0.75
+        ],
+        "mean_difference": -1.25,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 5,
+        "seeds_worse": 17
+       }
+      }
+     },
+     "per_arm": {
+      "event": {
+       "airtime_bytes_mean": 28179.25,
+       "applied_mean": 47.2083,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 106.133,
+       "budget_refusals_mean": 1871.7917,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 676302,
+       "credit_used_fraction_mean": 0.9617,
+       "emissions_forced_total": 0,
+       "emissions_mean": 10.9167,
+       "emissions_policy_total": 262,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.5417,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 137,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.5764,
+       "on_time_targets_per_episode_mean": 3.4583,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.57639,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.5954,
+       "unknown_to_everyone_mean": 1642.7917
+      },
+      "event_priority": {
+       "airtime_bytes_mean": 28186.0,
+       "applied_mean": 47.2083,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 133.1508,
+       "budget_refusals_mean": 1949.125,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 676464,
+       "credit_used_fraction_mean": 0.962,
+       "emissions_forced_total": 0,
+       "emissions_mean": 10.9167,
+       "emissions_policy_total": 262,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.625,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 137,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.5625,
+       "on_time_targets_per_episode_mean": 3.375,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.5625,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.6642,
+       "unknown_to_everyone_mean": 1642.7917
+      },
+      "hold_to_bound": {
+       "airtime_bytes_mean": 27159.0,
+       "applied_mean": 45.0833,
+       "autonomous_share_of_bytes_mean": 0.0,
+       "belief_age_mean": 75.6655,
+       "budget_refusals_mean": 672.75,
+       "bytes_forced_total": 651816,
+       "bytes_policy_total": 0,
+       "credit_used_fraction_mean": 0.9269,
+       "emissions_forced_total": 251,
+       "emissions_mean": 10.4583,
+       "emissions_policy_total": 0,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.2917,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 136,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.7847,
+       "on_time_targets_per_episode_mean": 4.7083,
+       "optional_emissions_share_mean": 0.0,
+       "pooled_on_time_over_detected_targets": 0.78472,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.8238,
+       "unknown_to_everyone_mean": 631.6667
+      },
+      "immediate": {
+       "airtime_bytes_mean": 27296.75,
+       "applied_mean": 45.5833,
+       "autonomous_share_of_bytes_mean": 0.4717,
+       "belief_age_mean": 74.3536,
+       "budget_refusals_mean": 678.0417,
+       "bytes_forced_total": 350430,
+       "bytes_policy_total": 304692,
+       "credit_used_fraction_mean": 0.9316,
+       "emissions_forced_total": 130,
+       "emissions_mean": 10.5417,
+       "emissions_policy_total": 123,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.1667,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 136,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8056,
+       "on_time_targets_per_episode_mean": 4.8333,
+       "optional_emissions_share_mean": 0.4908,
+       "pooled_on_time_over_detected_targets": 0.80556,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.6967,
+       "unknown_to_everyone_mean": 587.0
+      },
+      "learned1_at400000": {
+       "airtime_bytes_mean": 28195.75,
+       "applied_mean": 45.5833,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 65.1217,
+       "budget_refusals_mean": 1319.5417,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 676698,
+       "credit_used_fraction_mean": 0.9623,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0,
+       "emissions_policy_total": 264,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.8333,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 135,
+       "inference_ms_mean": 0.1903,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6944,
+       "on_time_targets_per_episode_mean": 4.1667,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.69444,
+       "redundant_emissions_mean": 0.875,
+       "seconds_mean": 2.9346,
+       "unknown_to_everyone_mean": 1135.2917
+      },
+      "learned2_at300000": {
+       "airtime_bytes_mean": 28338.25,
+       "applied_mean": 45.75,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 85.3025,
+       "budget_refusals_mean": 2101.9583,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 680118,
+       "credit_used_fraction_mean": 0.9672,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0417,
+       "emissions_policy_total": 265,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.6667,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 140,
+       "inference_ms_mean": 0.1857,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.5556,
+       "on_time_targets_per_episode_mean": 3.3333,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.55556,
+       "redundant_emissions_mean": 2.7083,
+       "seconds_mean": 2.9229,
+       "unknown_to_everyone_mean": 1848.0833
+      },
+      "learned2_at400000": {
+       "airtime_bytes_mean": 28080.0,
+       "applied_mean": 47.3333,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 66.3292,
+       "budget_refusals_mean": 2046.125,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 673920,
+       "credit_used_fraction_mean": 0.9584,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0,
+       "emissions_policy_total": 264,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.5833,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 142,
+       "inference_ms_mean": 0.1848,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.5694,
+       "on_time_targets_per_episode_mean": 3.4167,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.56944,
+       "redundant_emissions_mean": 2.875,
+       "seconds_mean": 2.9113,
+       "unknown_to_everyone_mean": 1848.2083
+      },
+      "learned3_at300000": {
+       "airtime_bytes_mean": 27131.0,
+       "applied_mean": 45.0833,
+       "autonomous_share_of_bytes_mean": 0.4882,
+       "belief_age_mean": 74.0869,
+       "budget_refusals_mean": 673.5417,
+       "bytes_forced_total": 338202,
+       "bytes_policy_total": 312942,
+       "credit_used_fraction_mean": 0.926,
+       "emissions_forced_total": 125,
+       "emissions_mean": 10.4583,
+       "emissions_policy_total": 126,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.1667,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 136,
+       "inference_ms_mean": 0.1926,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8056,
+       "on_time_targets_per_episode_mean": 4.8333,
+       "optional_emissions_share_mean": 0.5073,
+       "pooled_on_time_over_detected_targets": 0.80556,
+       "redundant_emissions_mean": 0.125,
+       "seconds_mean": 2.6721,
+       "unknown_to_everyone_mean": 585.5417
+      },
+      "learned3_at400000": {
+       "airtime_bytes_mean": 27708.25,
+       "applied_mean": 44.1667,
+       "autonomous_share_of_bytes_mean": 0.7869,
+       "belief_age_mean": 70.751,
+       "budget_refusals_mean": 964.4583,
+       "bytes_forced_total": 141210,
+       "bytes_policy_total": 523788,
+       "credit_used_fraction_mean": 0.9457,
+       "emissions_forced_total": 51,
+       "emissions_mean": 10.8333,
+       "emissions_policy_total": 209,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.4167,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 140,
+       "inference_ms_mean": 0.1842,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.7639,
+       "on_time_targets_per_episode_mean": 4.5833,
+       "optional_emissions_share_mean": 0.8021,
+       "pooled_on_time_over_detected_targets": 0.76389,
+       "redundant_emissions_mean": 1.9167,
+       "seconds_mean": 2.6042,
+       "unknown_to_everyone_mean": 786.4167
+      },
+      "periodic_5": {
+       "airtime_bytes_mean": 28086.5,
+       "applied_mean": 42.4167,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 89.4668,
+       "budget_refusals_mean": 1618.4167,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 674076,
+       "credit_used_fraction_mean": 0.9586,
+       "emissions_forced_total": 0,
+       "emissions_mean": 10.9583,
+       "emissions_policy_total": 263,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.4167,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 136,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.5972,
+       "on_time_targets_per_episode_mean": 3.5833,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.59722,
+       "redundant_emissions_mean": 1.5,
+       "seconds_mean": 2.6325,
+       "unknown_to_everyone_mean": 1421.5
+      }
+     }
+    },
+    "isolated_1.0": {
+     "judgement": {
+      "budget_bytes": 29300,
+      "checkpoint_used_per_seed": {
+       "1": "400000",
+       "2": "300000",
+       "3": "300000"
+      },
+      "comparator": "immediate",
+      "cost_saving_arms": [],
+      "non_inferiority_targets_per_episode": -0.05,
+      "seeds": {
+       "1": {
+        "arm": "learned1_at400000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -1.125,
+        "hygiene_clean": true,
+        "no_regression_below_margin": false,
+        "numbers": {
+         "autonomous_bytes": 680886,
+         "autonomous_share_of_bytes": 1.0,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           281.25,
+           2556.76875
+          ],
+          "mean_difference": 1331.25,
+          "pairs": 24,
+          "seeds_better": 12,
+          "seeds_equal": 0,
+          "seeds_worse": 12
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           440.0,
+           2672.275
+          ],
+          "mean_difference": 1473.0,
+          "pairs": 24,
+          "seeds_better": 13,
+          "seeds_equal": 2,
+          "seeds_worse": 9
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -1.54167,
+           -0.70833
+          ],
+          "mean_difference": -1.125,
+          "pairs": 24,
+          "seeds_better": 1,
+          "seeds_equal": 7,
+          "seeds_worse": 16
+         },
+         "optional_emissions_share": 1.0,
+         "redundant_emissions_mean": 0.4583
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       },
+       "2": {
+        "arm": "learned2_at300000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -1.79167,
+        "hygiene_clean": true,
+        "no_regression_below_margin": false,
+        "numbers": {
+         "autonomous_bytes": 679236,
+         "autonomous_share_of_bytes": 1.0,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           295.74375,
+           2416.30625
+          ],
+          "mean_difference": 1262.5,
+          "pairs": 24,
+          "seeds_better": 15,
+          "seeds_equal": 0,
+          "seeds_worse": 9
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           423.725,
+           2550.525
+          ],
+          "mean_difference": 1404.25,
+          "pairs": 24,
+          "seeds_better": 16,
+          "seeds_equal": 0,
+          "seeds_worse": 8
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -2.33333,
+           -1.29167
+          ],
+          "mean_difference": -1.79167,
+          "pairs": 24,
+          "seeds_better": 0,
+          "seeds_equal": 5,
+          "seeds_worse": 19
+         },
+         "optional_emissions_share": 1.0,
+         "redundant_emissions_mean": 2.8333
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       },
+       "3": {
+        "arm": "learned3_at300000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": 0.0,
+        "hygiene_clean": true,
+        "no_regression_below_margin": true,
+        "numbers": {
+         "autonomous_bytes": 333180,
+         "autonomous_share_of_bytes": 0.5207,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           -76.5,
+           -18.75
+          ],
+          "mean_difference": -42.25,
+          "pairs": 24,
+          "seeds_better": 1,
+          "seeds_equal": 0,
+          "seeds_worse": 23
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           -12.0,
+           309.0
+          ],
+          "mean_difference": 99.5,
+          "pairs": 24,
+          "seeds_better": 3,
+          "seeds_equal": 20,
+          "seeds_worse": 1
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           0.0,
+           0.0
+          ],
+          "mean_difference": 0.0,
+          "pairs": 24,
+          "seeds_better": 0,
+          "seeds_equal": 24,
+          "seeds_worse": 0
+         },
+         "optional_emissions_share": 0.5422,
+         "redundant_emissions_mean": 0.2083
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       }
+      },
+      "statistic": "seed-level paired percentile bootstrap, B=10 000, RNG 20260919",
+      "tier": "25pct",
+      "training_seeds_reaching_cost_saving_bar": 0,
+      "training_seeds_reaching_upgrade_bar": 0,
+      "upgrade_gate_met": false
+     },
+     "paired_vs_hold_to_bound": {
+      "airtime_bytes": {
+       "event": {
+        "ci95": [
+         189.75,
+         2362.2875
+        ],
+        "mean_difference": 1196.0,
+        "pairs": 24,
+        "seeds_better": 16,
+        "seeds_equal": 1,
+        "seeds_worse": 7
+       },
+       "event_priority": {
+        "ci95": [
+         184.5,
+         2353.0375
+        ],
+        "mean_difference": 1186.75,
+        "pairs": 24,
+        "seeds_better": 16,
+        "seeds_equal": 1,
+        "seeds_worse": 7
+       },
+       "immediate": {
+        "ci95": [
+         -377.0,
+         -21.5
+        ],
+        "mean_difference": -141.75,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 0,
+        "seeds_worse": 24
+       },
+       "learned1_at400000": {
+        "ci95": [
+         281.25,
+         2556.76875
+        ],
+        "mean_difference": 1331.25,
+        "pairs": 24,
+        "seeds_better": 12,
+        "seeds_equal": 0,
+        "seeds_worse": 12
+       },
+       "learned2_at300000": {
+        "ci95": [
+         295.74375,
+         2416.30625
+        ],
+        "mean_difference": 1262.5,
+        "pairs": 24,
+        "seeds_better": 15,
+        "seeds_equal": 0,
+        "seeds_worse": 9
+       },
+       "learned2_at400000": {
+        "ci95": [
+         120.75,
+         2384.28125
+        ],
+        "mean_difference": 1168.75,
+        "pairs": 24,
+        "seeds_better": 13,
+        "seeds_equal": 0,
+        "seeds_worse": 11
+       },
+       "learned3_at300000": {
+        "ci95": [
+         -76.5,
+         -18.75
+        ],
+        "mean_difference": -42.25,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 0,
+        "seeds_worse": 23
+       },
+       "learned3_at400000": {
+        "ci95": [
+         55.9875,
+         1309.75625
+        ],
+        "mean_difference": 646.75,
+        "pairs": 24,
+        "seeds_better": 10,
+        "seeds_equal": 0,
+        "seeds_worse": 14
+       },
+       "periodic_5": {
+        "ci95": [
+         195.225,
+         2561.8125
+        ],
+        "mean_difference": 1244.0,
+        "pairs": 24,
+        "seeds_better": 13,
+        "seeds_equal": 0,
+        "seeds_worse": 11
+       }
+      },
+      "on_time_targets_per_episode": {
+       "event": {
+        "ci95": [
+         -2.08333,
+         -0.95833
+        ],
+        "mean_difference": -1.54167,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 5,
+        "seeds_worse": 18
+       },
+       "event_priority": {
+        "ci95": [
+         -2.16667,
+         -1.0
+        ],
+        "mean_difference": -1.58333,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 5,
+        "seeds_worse": 18
+       },
+       "immediate": {
+        "ci95": [
+         0.0,
+         0.125
+        ],
+        "mean_difference": 0.04167,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 23,
+        "seeds_worse": 0
+       },
+       "learned1_at400000": {
+        "ci95": [
+         -1.5,
+         -0.625
+        ],
+        "mean_difference": -1.08333,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 6,
+        "seeds_worse": 16
+       },
+       "learned2_at300000": {
+        "ci95": [
+         -2.29167,
+         -1.20833
+        ],
+        "mean_difference": -1.75,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 4,
+        "seeds_worse": 19
+       },
+       "learned2_at400000": {
+        "ci95": [
+         -2.375,
+         -1.29167
+        ],
+        "mean_difference": -1.83333,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 3,
+        "seeds_worse": 20
+       },
+       "learned3_at300000": {
+        "ci95": [
+         0.0,
+         0.125
+        ],
+        "mean_difference": 0.04167,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 23,
+        "seeds_worse": 0
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -0.54167,
+         0.0
+        ],
+        "mean_difference": -0.25,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 15,
+        "seeds_worse": 7
+       },
+       "periodic_5": {
+        "ci95": [
+         -1.70833,
+         -0.70833
+        ],
+        "mean_difference": -1.20833,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 5,
+        "seeds_worse": 17
+       }
+      }
+     },
+     "paired_vs_immediate": {
+      "airtime_bytes": {
+       "event": {
+        "ci95": [
+         324.70625,
+         2512.575
+        ],
+        "mean_difference": 1337.75,
+        "pairs": 24,
+        "seeds_better": 17,
+        "seeds_equal": 0,
+        "seeds_worse": 7
+       },
+       "event_priority": {
+        "ci95": [
+         314.74375,
+         2490.75
+        ],
+        "mean_difference": 1328.5,
+        "pairs": 24,
+        "seeds_better": 17,
+        "seeds_equal": 0,
+        "seeds_worse": 7
+       },
+       "hold_to_bound": {
+        "ci95": [
+         21.5,
+         377.0
+        ],
+        "mean_difference": 141.75,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "learned1_at400000": {
+        "ci95": [
+         440.0,
+         2672.275
+        ],
+        "mean_difference": 1473.0,
+        "pairs": 24,
+        "seeds_better": 13,
+        "seeds_equal": 2,
+        "seeds_worse": 9
+       },
+       "learned2_at300000": {
+        "ci95": [
+         423.725,
+         2550.525
+        ],
+        "mean_difference": 1404.25,
+        "pairs": 24,
+        "seeds_better": 16,
+        "seeds_equal": 0,
+        "seeds_worse": 8
+       },
+       "learned2_at400000": {
+        "ci95": [
+         262.6875,
+         2528.2875
+        ],
+        "mean_difference": 1310.5,
+        "pairs": 24,
+        "seeds_better": 14,
+        "seeds_equal": 0,
+        "seeds_worse": 10
+       },
+       "learned3_at300000": {
+        "ci95": [
+         -12.0,
+         309.0
+        ],
+        "mean_difference": 99.5,
+        "pairs": 24,
+        "seeds_better": 3,
+        "seeds_equal": 20,
+        "seeds_worse": 1
+       },
+       "learned3_at400000": {
+        "ci95": [
+         221.45625,
+         1420.5
+        ],
+        "mean_difference": 788.5,
+        "pairs": 24,
+        "seeds_better": 11,
+        "seeds_equal": 1,
+        "seeds_worse": 12
+       },
+       "periodic_5": {
+        "ci95": [
+         351.4875,
+         2685.78125
+        ],
+        "mean_difference": 1385.75,
+        "pairs": 24,
+        "seeds_better": 14,
+        "seeds_equal": 0,
+        "seeds_worse": 10
+       }
+      },
+      "on_time_targets_per_episode": {
+       "event": {
+        "ci95": [
+         -2.125,
+         -1.04167
+        ],
+        "mean_difference": -1.58333,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 6,
+        "seeds_worse": 18
+       },
+       "event_priority": {
+        "ci95": [
+         -2.16667,
+         -1.08333
+        ],
+        "mean_difference": -1.625,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 6,
+        "seeds_worse": 18
+       },
+       "hold_to_bound": {
+        "ci95": [
+         -0.125,
+         0.0
+        ],
+        "mean_difference": -0.04167,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 23,
+        "seeds_worse": 1
+       },
+       "learned1_at400000": {
+        "ci95": [
+         -1.54167,
+         -0.70833
+        ],
+        "mean_difference": -1.125,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 7,
+        "seeds_worse": 16
+       },
+       "learned2_at300000": {
+        "ci95": [
+         -2.33333,
+         -1.29167
+        ],
+        "mean_difference": -1.79167,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 5,
+        "seeds_worse": 19
+       },
+       "learned2_at400000": {
+        "ci95": [
+         -2.375,
+         -1.375
+        ],
+        "mean_difference": -1.875,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 4,
+        "seeds_worse": 20
+       },
+       "learned3_at300000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -0.54167,
+         -0.04167
+        ],
+        "mean_difference": -0.29167,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 16,
+        "seeds_worse": 7
+       },
+       "periodic_5": {
+        "ci95": [
+         -1.70833,
+         -0.79167
+        ],
+        "mean_difference": -1.25,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 6,
+        "seeds_worse": 17
+       }
+      }
+     },
+     "per_arm": {
+      "event": {
+       "airtime_bytes_mean": 28235.0,
+       "applied_mean": 65.5,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 30.9733,
+       "budget_refusals_mean": 1743.625,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 677640,
+       "credit_used_fraction_mean": 0.9637,
+       "emissions_forced_total": 0,
+       "emissions_mean": 10.9167,
+       "emissions_policy_total": 262,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.2917,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 137,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6181,
+       "on_time_targets_per_episode_mean": 3.7083,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.61806,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.3175,
+       "unknown_to_everyone_mean": 1641.9167
+      },
+      "event_priority": {
+       "airtime_bytes_mean": 28225.75,
+       "applied_mean": 65.5,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 30.6744,
+       "budget_refusals_mean": 1783.1667,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 677418,
+       "credit_used_fraction_mean": 0.9633,
+       "emissions_forced_total": 0,
+       "emissions_mean": 10.9167,
+       "emissions_policy_total": 262,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.3333,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 137,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6111,
+       "on_time_targets_per_episode_mean": 3.6667,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.61111,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.45,
+       "unknown_to_everyone_mean": 1683.0833
+      },
+      "hold_to_bound": {
+       "airtime_bytes_mean": 27039.0,
+       "applied_mean": 62.0833,
+       "autonomous_share_of_bytes_mean": 0.0,
+       "belief_age_mean": 18.1258,
+       "budget_refusals_mean": 480.7917,
+       "bytes_forced_total": 648936,
+       "bytes_policy_total": 0,
+       "credit_used_fraction_mean": 0.9228,
+       "emissions_forced_total": 249,
+       "emissions_mean": 10.375,
+       "emissions_policy_total": 0,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.75,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 140,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.875,
+       "on_time_targets_per_episode_mean": 5.25,
+       "optional_emissions_share_mean": 0.0,
+       "pooled_on_time_over_detected_targets": 0.875,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.4496,
+       "unknown_to_everyone_mean": 503.9167
+      },
+      "immediate": {
+       "airtime_bytes_mean": 26897.25,
+       "applied_mean": 61.8333,
+       "autonomous_share_of_bytes_mean": 0.4993,
+       "belief_age_mean": 18.3245,
+       "budget_refusals_mean": 487.0833,
+       "bytes_forced_total": 328332,
+       "bytes_policy_total": 317202,
+       "credit_used_fraction_mean": 0.918,
+       "emissions_forced_total": 120,
+       "emissions_mean": 10.3333,
+       "emissions_policy_total": 128,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.7083,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 140,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8819,
+       "on_time_targets_per_episode_mean": 5.2917,
+       "optional_emissions_share_mean": 0.5217,
+       "pooled_on_time_over_detected_targets": 0.88194,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.4608,
+       "unknown_to_everyone_mean": 455.9167
+      },
+      "learned1_at400000": {
+       "airtime_bytes_mean": 28370.25,
+       "applied_mean": 64.2083,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 99.0053,
+       "budget_refusals_mean": 1325.5,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 680886,
+       "credit_used_fraction_mean": 0.9683,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0,
+       "emissions_policy_total": 264,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.8333,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 137,
+       "inference_ms_mean": 0.1731,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6944,
+       "on_time_targets_per_episode_mean": 4.1667,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.69444,
+       "redundant_emissions_mean": 0.4583,
+       "seconds_mean": 2.6371,
+       "unknown_to_everyone_mean": 1072.8333
+      },
+      "learned2_at300000": {
+       "airtime_bytes_mean": 28301.5,
+       "applied_mean": 62.0,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 49.4753,
+       "budget_refusals_mean": 2016.0417,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 679236,
+       "credit_used_fraction_mean": 0.9659,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0417,
+       "emissions_policy_total": 265,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.5,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 139,
+       "inference_ms_mean": 0.1715,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.5833,
+       "on_time_targets_per_episode_mean": 3.5,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.58333,
+       "redundant_emissions_mean": 2.8333,
+       "seconds_mean": 2.5933,
+       "unknown_to_everyone_mean": 1864.4583
+      },
+      "learned2_at400000": {
+       "airtime_bytes_mean": 28207.75,
+       "applied_mean": 66.0,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 47.6591,
+       "budget_refusals_mean": 2003.25,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 676986,
+       "credit_used_fraction_mean": 0.9627,
+       "emissions_forced_total": 0,
+       "emissions_mean": 11.0417,
+       "emissions_policy_total": 265,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.5833,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 140,
+       "inference_ms_mean": 0.166,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.5694,
+       "on_time_targets_per_episode_mean": 3.4167,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.56944,
+       "redundant_emissions_mean": 3.0417,
+       "seconds_mean": 2.6046,
+       "unknown_to_everyone_mean": 1848.0833
+      },
+      "learned3_at300000": {
+       "airtime_bytes_mean": 26996.75,
+       "applied_mean": 61.7917,
+       "autonomous_share_of_bytes_mean": 0.5207,
+       "belief_age_mean": 18.5692,
+       "budget_refusals_mean": 488.9167,
+       "bytes_forced_total": 314742,
+       "bytes_policy_total": 333180,
+       "credit_used_fraction_mean": 0.9214,
+       "emissions_forced_total": 115,
+       "emissions_mean": 10.375,
+       "emissions_policy_total": 134,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.7083,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 140,
+       "inference_ms_mean": 0.1916,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8819,
+       "on_time_targets_per_episode_mean": 5.2917,
+       "optional_emissions_share_mean": 0.5422,
+       "pooled_on_time_over_detected_targets": 0.88194,
+       "redundant_emissions_mean": 0.2083,
+       "seconds_mean": 2.6133,
+       "unknown_to_everyone_mean": 455.9167
+      },
+      "learned3_at400000": {
+       "airtime_bytes_mean": 27685.75,
+       "applied_mean": 62.875,
+       "autonomous_share_of_bytes_mean": 0.7457,
+       "belief_age_mean": 60.4852,
+       "budget_refusals_mean": 738.0,
+       "bytes_forced_total": 169350,
+       "bytes_policy_total": 495108,
+       "credit_used_fraction_mean": 0.9449,
+       "emissions_forced_total": 61,
+       "emissions_mean": 10.75,
+       "emissions_policy_total": 197,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.0,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 141,
+       "inference_ms_mean": 0.1761,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8333,
+       "on_time_targets_per_episode_mean": 5.0,
+       "optional_emissions_share_mean": 0.7621,
+       "pooled_on_time_over_detected_targets": 0.83333,
+       "redundant_emissions_mean": 1.1667,
+       "seconds_mean": 2.6229,
+       "unknown_to_everyone_mean": 582.5
+      },
+      "periodic_5": {
+       "airtime_bytes_mean": 28283.0,
+       "applied_mean": 61.0,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 102.358,
+       "budget_refusals_mean": 1480.375,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 678792,
+       "credit_used_fraction_mean": 0.9653,
+       "emissions_forced_total": 0,
+       "emissions_mean": 10.9583,
+       "emissions_policy_total": 263,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.9583,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 136,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6736,
+       "on_time_targets_per_episode_mean": 4.0417,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.67361,
+       "redundant_emissions_mean": 0.8333,
+       "seconds_mean": 2.3717,
+       "unknown_to_everyone_mean": 1265.75
+      }
+     }
+    }
+   }
+  },
+  "75pct": {
+   "between_training_seeds": {
+    "airtime_bytes": {
+     "mean": 52958.5,
+     "per_training_seed": {
+      "seed1": 86818.5,
+      "seed2": 35935.0,
+      "seed3": 36122.0
+     },
+     "range": [
+      35935.0,
+      86818.5
+     ],
+     "standard_deviation": 29323.7692
+    },
+    "autonomous_share_of_bytes": {
+     "mean": 0.5172,
+     "per_training_seed": {
+      "seed1": 1.0,
+      "seed2": 0.1012,
+      "seed3": 0.4503
+     },
+     "range": [
+      0.1012,
+      1.0
+     ],
+     "standard_deviation": 0.4531
+    },
+    "on_time_targets_per_episode": {
+     "mean": 5.625,
+     "per_training_seed": {
+      "seed1": 5.0,
+      "seed2": 5.9583,
+      "seed3": 5.9167
+     },
+     "range": [
+      5.0,
+      5.9583
+     ],
+     "standard_deviation": 0.5417
+    }
+   },
+   "learning_curves": {
+    "1": {
+     "points": {
+      "0": {
+       "airtime_bytes_mean": 86737.5,
+       "applied_mean": 150.75,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 30.3652,
+       "budget_refusals_mean": 1666.4167,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2081700,
+       "credit_used_fraction_mean": 0.9868,
+       "emissions_forced_total": 0,
+       "emissions_mean": 33.5833,
+       "emissions_policy_total": 806,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.2083,
+       "inference_ms_mean": 0.1592,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6319,
+       "on_time_targets_per_episode_mean": 3.7917,
+       "optional_emissions_share_mean": 1.0,
+       "path": null,
+       "pooled_on_time_over_detected_targets": 0.63194,
+       "redundant_emissions_mean": 12.2083,
+       "seconds_mean": 2.5375,
+       "unknown_to_everyone_mean": 1573.0833
+      },
+      "100000": {
+       "airtime_bytes_mean": 86690.25,
+       "applied_mean": 148.5,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 61.73,
+       "budget_refusals_mean": 1251.625,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2080566,
+       "credit_used_fraction_mean": 0.9862,
+       "emissions_forced_total": 0,
+       "emissions_mean": 33.6667,
+       "emissions_policy_total": 808,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.6667,
+       "inference_ms_mean": 0.1601,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.7222,
+       "on_time_targets_per_episode_mean": 4.3333,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed1\\tight_75pct_seed1_at100000.pt",
+       "pooled_on_time_over_detected_targets": 0.72222,
+       "redundant_emissions_mean": 13.625,
+       "seconds_mean": 2.5746,
+       "unknown_to_everyone_mean": 1077.8333
+      },
+      "200000": {
+       "airtime_bytes_mean": 86737.5,
+       "applied_mean": 150.75,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 30.3652,
+       "budget_refusals_mean": 1685.9583,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2081700,
+       "credit_used_fraction_mean": 0.9868,
+       "emissions_forced_total": 0,
+       "emissions_mean": 33.5833,
+       "emissions_policy_total": 806,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.2083,
+       "inference_ms_mean": 0.1576,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6319,
+       "on_time_targets_per_episode_mean": 3.7917,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed1\\tight_75pct_seed1_at200000.pt",
+       "pooled_on_time_over_detected_targets": 0.63194,
+       "redundant_emissions_mean": 12.2083,
+       "seconds_mean": 2.48,
+       "unknown_to_everyone_mean": 1573.0833
+      },
+      "300000": {
+       "airtime_bytes_mean": 86808.75,
+       "applied_mean": 152.0,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 82.2136,
+       "budget_refusals_mean": 1514.625,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2083410,
+       "credit_used_fraction_mean": 0.9876,
+       "emissions_forced_total": 0,
+       "emissions_mean": 33.6667,
+       "emissions_policy_total": 808,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.9583,
+       "inference_ms_mean": 0.1615,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6736,
+       "on_time_targets_per_episode_mean": 4.0417,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed1\\tight_75pct_seed1_at300000.pt",
+       "pooled_on_time_over_detected_targets": 0.67361,
+       "redundant_emissions_mean": 12.75,
+       "seconds_mean": 2.5533,
+       "unknown_to_everyone_mean": 1288.7083
+      },
+      "400000": {
+       "airtime_bytes_mean": 86818.5,
+       "applied_mean": 177.5,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 48.4185,
+       "budget_refusals_mean": 715.0833,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2083644,
+       "credit_used_fraction_mean": 0.9877,
+       "emissions_forced_total": 0,
+       "emissions_mean": 33.375,
+       "emissions_policy_total": 801,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.0,
+       "inference_ms_mean": 0.1755,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8333,
+       "on_time_targets_per_episode_mean": 5.0,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed1\\tight_75pct_seed1.pt",
+       "pooled_on_time_over_detected_targets": 0.83333,
+       "redundant_emissions_mean": 7.875,
+       "seconds_mean": 2.6283,
+       "unknown_to_everyone_mean": 585.0833
+      }
+     },
+     "selected_by_rule": {
+      "airtime_bytes_mean": 86818.5,
+      "applied_mean": 177.5,
+      "at_steps": "400000",
+      "autonomous_share_of_bytes_mean": 1.0,
+      "belief_age_mean": 48.4185,
+      "budget_refusals_mean": 715.0833,
+      "bytes_forced_total": 0,
+      "bytes_policy_total": 2083644,
+      "credit_used_fraction_mean": 0.9877,
+      "emissions_forced_total": 0,
+      "emissions_mean": 33.375,
+      "emissions_policy_total": 801,
+      "episodes": 24,
+      "episodes_over_budget": 0,
+      "expired_per_episode_mean": 1.0,
+      "inference_ms_mean": 0.1755,
+      "ledger_residual_rows": 0,
+      "on_time_rate_per_episode_mean": 0.8333,
+      "on_time_targets_per_episode_mean": 5.0,
+      "optional_emissions_share_mean": 1.0,
+      "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed1\\tight_75pct_seed1.pt",
+      "pooled_on_time_over_detected_targets": 0.83333,
+      "redundant_emissions_mean": 7.875,
+      "rule": "max mean_on_time, then min mean_airtime_bytes, then earliest step",
+      "seconds_mean": 2.6283,
+      "unknown_to_everyone_mean": 585.0833
+     }
+    },
+    "2": {
+     "points": {
+      "0": {
+       "airtime_bytes_mean": 86737.5,
+       "applied_mean": 150.75,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 30.3652,
+       "budget_refusals_mean": 1685.9583,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2081700,
+       "credit_used_fraction_mean": 0.9868,
+       "emissions_forced_total": 0,
+       "emissions_mean": 33.5833,
+       "emissions_policy_total": 806,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.2083,
+       "inference_ms_mean": 0.158,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6319,
+       "on_time_targets_per_episode_mean": 3.7917,
+       "optional_emissions_share_mean": 1.0,
+       "path": null,
+       "pooled_on_time_over_detected_targets": 0.63194,
+       "redundant_emissions_mean": 12.2083,
+       "seconds_mean": 2.4796,
+       "unknown_to_everyone_mean": 1573.0833
+      },
+      "100000": {
+       "airtime_bytes_mean": 83922.5,
+       "applied_mean": 128.5,
+       "autonomous_share_of_bytes_mean": 0.991,
+       "belief_age_mean": 32.2941,
+       "budget_refusals_mean": 790.0833,
+       "bytes_forced_total": 18372,
+       "bytes_policy_total": 1995768,
+       "credit_used_fraction_mean": 0.9548,
+       "emissions_forced_total": 7,
+       "emissions_mean": 32.1667,
+       "emissions_policy_total": 765,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.0417,
+       "inference_ms_mean": 0.181,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8264,
+       "on_time_targets_per_episode_mean": 4.9583,
+       "optional_emissions_share_mean": 0.9912,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed2\\tight_75pct_seed2_at100000.pt",
+       "pooled_on_time_over_detected_targets": 0.82639,
+       "redundant_emissions_mean": 12.1667,
+       "seconds_mean": 2.5521,
+       "unknown_to_everyone_mean": 697.125
+      },
+      "200000": {
+       "airtime_bytes_mean": 54606.5,
+       "applied_mean": 119.9583,
+       "autonomous_share_of_bytes_mean": 0.9059,
+       "belief_age_mean": 5.7928,
+       "budget_refusals_mean": 0.625,
+       "bytes_forced_total": 139086,
+       "bytes_policy_total": 1171470,
+       "credit_used_fraction_mean": 0.6212,
+       "emissions_forced_total": 52,
+       "emissions_mean": 20.5417,
+       "emissions_policy_total": 441,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0417,
+       "inference_ms_mean": 0.2084,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9931,
+       "on_time_targets_per_episode_mean": 5.9583,
+       "optional_emissions_share_mean": 0.9061,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed2\\tight_75pct_seed2_at200000.pt",
+       "pooled_on_time_over_detected_targets": 0.99306,
+       "redundant_emissions_mean": 0.7083,
+       "seconds_mean": 2.6308,
+       "unknown_to_everyone_mean": 0.5417
+      },
+      "300000": {
+       "airtime_bytes_mean": 35935.0,
+       "applied_mean": 81.5833,
+       "autonomous_share_of_bytes_mean": 0.1012,
+       "belief_age_mean": 7.8138,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 778758,
+       "bytes_policy_total": 83682,
+       "credit_used_fraction_mean": 0.4088,
+       "emissions_forced_total": 294,
+       "emissions_mean": 13.625,
+       "emissions_policy_total": 33,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0417,
+       "inference_ms_mean": 0.1989,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9931,
+       "on_time_targets_per_episode_mean": 5.9583,
+       "optional_emissions_share_mean": 0.1056,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed2\\tight_75pct_seed2_at300000.pt",
+       "pooled_on_time_over_detected_targets": 0.99306,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.5071,
+       "unknown_to_everyone_mean": 42.125
+      },
+      "400000": {
+       "airtime_bytes_mean": 36161.5,
+       "applied_mean": 82.0833,
+       "autonomous_share_of_bytes_mean": 0.0,
+       "belief_age_mean": 7.7685,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 867876,
+       "bytes_policy_total": 0,
+       "credit_used_fraction_mean": 0.4114,
+       "emissions_forced_total": 329,
+       "emissions_mean": 13.7083,
+       "emissions_policy_total": 0,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0417,
+       "inference_ms_mean": 0.2001,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9931,
+       "on_time_targets_per_episode_mean": 5.9583,
+       "optional_emissions_share_mean": 0.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed2\\tight_75pct_seed2.pt",
+       "pooled_on_time_over_detected_targets": 0.99306,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.5587,
+       "unknown_to_everyone_mean": 54.0
+      }
+     },
+     "selected_by_rule": {
+      "airtime_bytes_mean": 35935.0,
+      "applied_mean": 81.5833,
+      "at_steps": "300000",
+      "autonomous_share_of_bytes_mean": 0.1012,
+      "belief_age_mean": 7.8138,
+      "budget_refusals_mean": 0.0,
+      "bytes_forced_total": 778758,
+      "bytes_policy_total": 83682,
+      "credit_used_fraction_mean": 0.4088,
+      "emissions_forced_total": 294,
+      "emissions_mean": 13.625,
+      "emissions_policy_total": 33,
+      "episodes": 24,
+      "episodes_over_budget": 0,
+      "expired_per_episode_mean": 0.0417,
+      "inference_ms_mean": 0.1989,
+      "ledger_residual_rows": 0,
+      "on_time_rate_per_episode_mean": 0.9931,
+      "on_time_targets_per_episode_mean": 5.9583,
+      "optional_emissions_share_mean": 0.1056,
+      "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed2\\tight_75pct_seed2_at300000.pt",
+      "pooled_on_time_over_detected_targets": 0.99306,
+      "redundant_emissions_mean": 0.0,
+      "rule": "max mean_on_time, then min mean_airtime_bytes, then earliest step",
+      "seconds_mean": 2.5071,
+      "unknown_to_everyone_mean": 42.125
+     }
+    },
+    "3": {
+     "points": {
+      "0": {
+       "airtime_bytes_mean": 86610.5,
+       "applied_mean": 147.75,
+       "autonomous_share_of_bytes_mean": 0.9974,
+       "belief_age_mean": 47.5138,
+       "budget_refusals_mean": 1506.9583,
+       "bytes_forced_total": 5472,
+       "bytes_policy_total": 2073180,
+       "credit_used_fraction_mean": 0.9853,
+       "emissions_forced_total": 2,
+       "emissions_mean": 33.625,
+       "emissions_policy_total": 805,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.0,
+       "inference_ms_mean": 0.1597,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6667,
+       "on_time_targets_per_episode_mean": 4.0,
+       "optional_emissions_share_mean": 0.9975,
+       "path": null,
+       "pooled_on_time_over_detected_targets": 0.66667,
+       "redundant_emissions_mean": 13.2083,
+       "seconds_mean": 2.5488,
+       "unknown_to_everyone_mean": 1371.5417
+      },
+      "100000": {
+       "airtime_bytes_mean": 86737.5,
+       "applied_mean": 150.75,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 30.3652,
+       "budget_refusals_mean": 1685.9583,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2081700,
+       "credit_used_fraction_mean": 0.9868,
+       "emissions_forced_total": 0,
+       "emissions_mean": 33.5833,
+       "emissions_policy_total": 806,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 2.2083,
+       "inference_ms_mean": 0.1609,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.6319,
+       "on_time_targets_per_episode_mean": 3.7917,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed3\\tight_75pct_seed3_at100000.pt",
+       "pooled_on_time_over_detected_targets": 0.63194,
+       "redundant_emissions_mean": 12.2083,
+       "seconds_mean": 2.5121,
+       "unknown_to_everyone_mean": 1573.0833
+      },
+      "200000": {
+       "airtime_bytes_mean": 83195.75,
+       "applied_mean": 174.375,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 20.8996,
+       "budget_refusals_mean": 783.875,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 1996698,
+       "credit_used_fraction_mean": 0.9465,
+       "emissions_forced_total": 0,
+       "emissions_mean": 30.9583,
+       "emissions_policy_total": 743,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.0833,
+       "inference_ms_mean": 0.1729,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8194,
+       "on_time_targets_per_episode_mean": 4.9167,
+       "optional_emissions_share_mean": 1.0,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed3\\tight_75pct_seed3_at200000.pt",
+       "pooled_on_time_over_detected_targets": 0.81944,
+       "redundant_emissions_mean": 1.875,
+       "seconds_mean": 2.5908,
+       "unknown_to_everyone_mean": 718.125
+      },
+      "300000": {
+       "airtime_bytes_mean": 50417.5,
+       "applied_mean": 113.4167,
+       "autonomous_share_of_bytes_mean": 0.9877,
+       "belief_age_mean": 5.6245,
+       "budget_refusals_mean": 1.4167,
+       "bytes_forced_total": 22302,
+       "bytes_policy_total": 1187718,
+       "credit_used_fraction_mean": 0.5736,
+       "emissions_forced_total": 8,
+       "emissions_mean": 18.9583,
+       "emissions_policy_total": 447,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0833,
+       "inference_ms_mean": 0.2036,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9861,
+       "on_time_targets_per_episode_mean": 5.9167,
+       "optional_emissions_share_mean": 0.9882,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed3\\tight_75pct_seed3_at300000.pt",
+       "pooled_on_time_over_detected_targets": 0.98611,
+       "redundant_emissions_mean": 0.125,
+       "seconds_mean": 2.5675,
+       "unknown_to_everyone_mean": 20.2917
+      },
+      "400000": {
+       "airtime_bytes_mean": 36122.0,
+       "applied_mean": 82.0417,
+       "autonomous_share_of_bytes_mean": 0.4503,
+       "belief_age_mean": 8.7677,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 508866,
+       "bytes_policy_total": 358062,
+       "credit_used_fraction_mean": 0.4109,
+       "emissions_forced_total": 185,
+       "emissions_mean": 13.7083,
+       "emissions_policy_total": 144,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0833,
+       "inference_ms_mean": 0.2014,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9861,
+       "on_time_targets_per_episode_mean": 5.9167,
+       "optional_emissions_share_mean": 0.4733,
+       "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed3\\tight_75pct_seed3.pt",
+       "pooled_on_time_over_detected_targets": 0.98611,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.5096,
+       "unknown_to_everyone_mean": 16.2917
+      }
+     },
+     "selected_by_rule": {
+      "airtime_bytes_mean": 36122.0,
+      "applied_mean": 82.0417,
+      "at_steps": "400000",
+      "autonomous_share_of_bytes_mean": 0.4503,
+      "belief_age_mean": 8.7677,
+      "budget_refusals_mean": 0.0,
+      "bytes_forced_total": 508866,
+      "bytes_policy_total": 358062,
+      "credit_used_fraction_mean": 0.4109,
+      "emissions_forced_total": 185,
+      "emissions_mean": 13.7083,
+      "emissions_policy_total": 144,
+      "episodes": 24,
+      "episodes_over_budget": 0,
+      "expired_per_episode_mean": 0.0833,
+      "inference_ms_mean": 0.2014,
+      "ledger_residual_rows": 0,
+      "on_time_rate_per_episode_mean": 0.9861,
+      "on_time_targets_per_episode_mean": 5.9167,
+      "optional_emissions_share_mean": 0.4733,
+      "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\train\\75pct_seed3\\tight_75pct_seed3.pt",
+      "pooled_on_time_over_detected_targets": 0.98611,
+      "redundant_emissions_mean": 0.0,
+      "rule": "max mean_on_time, then min mean_airtime_bytes, then earliest step",
+      "seconds_mean": 2.5096,
+      "unknown_to_everyone_mean": 16.2917
+     }
+    }
+   },
+   "selected_checkpoint_per_seed": {
+    "1": "400000",
+    "2": "300000",
+    "3": "400000"
+   },
+   "settings": {
+    "deployed_1.0": {
+     "judgement": {
+      "budget_bytes": 87900,
+      "checkpoint_used_per_seed": {
+       "1": "400000",
+       "2": "300000",
+       "3": "400000"
+      },
+      "comparator": "immediate",
+      "cost_saving_arms": [
+       "learned2_at300000",
+       "learned3_at400000"
+      ],
+      "non_inferiority_targets_per_episode": -0.05,
+      "seeds": {
+       "1": {
+        "arm": "learned1_at400000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -0.16667,
+        "hygiene_clean": true,
+        "no_regression_below_margin": false,
+        "numbers": {
+         "autonomous_bytes": 2083698,
+         "autonomous_share_of_bytes": 1.0,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           55793.24375,
+           64145.08125
+          ],
+          "mean_difference": 60087.25,
+          "pairs": 24,
+          "seeds_better": 24,
+          "seeds_equal": 0,
+          "seeds_worse": 0
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           47717.60625,
+           55540.1
+          ],
+          "mean_difference": 51806.0,
+          "pairs": 24,
+          "seeds_better": 24,
+          "seeds_equal": 0,
+          "seeds_worse": 0
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -0.375,
+           0.0
+          ],
+          "mean_difference": -0.16667,
+          "pairs": 24,
+          "seeds_better": 0,
+          "seeds_equal": 21,
+          "seeds_worse": 3
+         },
+         "optional_emissions_share": 1.0,
+         "redundant_emissions_mean": 7.7917
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       },
+       "2": {
+        "arm": "learned2_at300000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": 0.0,
+        "hygiene_clean": true,
+        "no_regression_below_margin": true,
+        "numbers": {
+         "autonomous_bytes": 305328,
+         "autonomous_share_of_bytes": 0.4188,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           4655.49375,
+           7658.0125
+          ],
+          "mean_difference": 6207.25,
+          "pairs": 24,
+          "seeds_better": 21,
+          "seeds_equal": 0,
+          "seeds_worse": 3
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           -3361.3375,
+           -758.6875
+          ],
+          "mean_difference": -2074.0,
+          "pairs": 24,
+          "seeds_better": 8,
+          "seeds_equal": 0,
+          "seeds_worse": 16
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           0.0,
+           0.0
+          ],
+          "mean_difference": 0.0,
+          "pairs": 24,
+          "seeds_better": 0,
+          "seeds_equal": 24,
+          "seeds_worse": 0
+         },
+         "optional_emissions_share": 0.4295,
+         "redundant_emissions_mean": 0.0
+        },
+        "present": true,
+        "same_effect_cheaper": true
+       },
+       "3": {
+        "arm": "learned3_at400000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": 0.0,
+        "hygiene_clean": true,
+        "no_regression_below_margin": true,
+        "numbers": {
+         "autonomous_bytes": 364578,
+         "autonomous_share_of_bytes": 0.5114,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           4179.475,
+           6864.0625
+          ],
+          "mean_difference": 5562.5,
+          "pairs": 24,
+          "seeds_better": 20,
+          "seeds_equal": 0,
+          "seeds_worse": 4
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           -3970.5375,
+           -1450.74375
+          ],
+          "mean_difference": -2718.75,
+          "pairs": 24,
+          "seeds_better": 8,
+          "seeds_equal": 0,
+          "seeds_worse": 16
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           0.0,
+           0.0
+          ],
+          "mean_difference": 0.0,
+          "pairs": 24,
+          "seeds_better": 0,
+          "seeds_equal": 24,
+          "seeds_worse": 0
+         },
+         "optional_emissions_share": 0.5283,
+         "redundant_emissions_mean": 0.0
+        },
+        "present": true,
+        "same_effect_cheaper": true
+       }
+      },
+      "statistic": "seed-level paired percentile bootstrap, B=10 000, RNG 20260919",
+      "tier": "75pct",
+      "training_seeds_reaching_cost_saving_bar": 2,
+      "training_seeds_reaching_upgrade_bar": 0,
+      "upgrade_gate_met": false
+     },
+     "paired_vs_hold_to_bound": {
+      "airtime_bytes": {
+       "event": {
+        "ci95": [
+         55344.675,
+         63889.36875
+        ],
+        "mean_difference": 59699.5,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "event_priority": {
+        "ci95": [
+         55301.75,
+         63930.78125
+        ],
+        "mean_difference": 59715.75,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "immediate": {
+        "ci95": [
+         6602.7375,
+         9840.78125
+        ],
+        "mean_difference": 8281.25,
+        "pairs": 24,
+        "seeds_better": 22,
+        "seeds_equal": 0,
+        "seeds_worse": 2
+       },
+       "learned1_at400000": {
+        "ci95": [
+         55793.24375,
+         64145.08125
+        ],
+        "mean_difference": 60087.25,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "learned2_at300000": {
+        "ci95": [
+         4655.49375,
+         7658.0125
+        ],
+        "mean_difference": 6207.25,
+        "pairs": 24,
+        "seeds_better": 21,
+        "seeds_equal": 0,
+        "seeds_worse": 3
+       },
+       "learned2_at400000": {
+        "ci95": [
+         1612.74375,
+         3558.775
+        ],
+        "mean_difference": 2571.5,
+        "pairs": 24,
+        "seeds_better": 18,
+        "seeds_equal": 0,
+        "seeds_worse": 6
+       },
+       "learned3_at400000": {
+        "ci95": [
+         4179.475,
+         6864.0625
+        ],
+        "mean_difference": 5562.5,
+        "pairs": 24,
+        "seeds_better": 20,
+        "seeds_equal": 0,
+        "seeds_worse": 4
+       },
+       "periodic_5": {
+        "ci95": [
+         40238.875,
+         47244.25
+        ],
+        "mean_difference": 43808.25,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       }
+      },
+      "on_time_targets_per_episode": {
+       "event": {
+        "ci95": [
+         -0.375,
+         0.0
+        ],
+        "mean_difference": -0.16667,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 21,
+        "seeds_worse": 3
+       },
+       "event_priority": {
+        "ci95": [
+         -0.375,
+         0.0
+        ],
+        "mean_difference": -0.16667,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 21,
+        "seeds_worse": 3
+       },
+       "immediate": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned1_at400000": {
+        "ci95": [
+         -0.375,
+         0.0
+        ],
+        "mean_difference": -0.16667,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 21,
+        "seeds_worse": 3
+       },
+       "learned2_at300000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned2_at400000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned3_at400000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "periodic_5": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       }
+      }
+     },
+     "paired_vs_immediate": {
+      "airtime_bytes": {
+       "event": {
+        "ci95": [
+         47341.11875,
+         55257.26875
+        ],
+        "mean_difference": 51418.25,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "event_priority": {
+        "ci95": [
+         47255.19375,
+         55252.51875
+        ],
+        "mean_difference": 51434.5,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "hold_to_bound": {
+        "ci95": [
+         -9840.78125,
+         -6602.7375
+        ],
+        "mean_difference": -8281.25,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 0,
+        "seeds_worse": 22
+       },
+       "learned1_at400000": {
+        "ci95": [
+         47717.60625,
+         55540.1
+        ],
+        "mean_difference": 51806.0,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "learned2_at300000": {
+        "ci95": [
+         -3361.3375,
+         -758.6875
+        ],
+        "mean_difference": -2074.0,
+        "pairs": 24,
+        "seeds_better": 8,
+        "seeds_equal": 0,
+        "seeds_worse": 16
+       },
+       "learned2_at400000": {
+        "ci95": [
+         -6947.25625,
+         -4414.9875
+        ],
+        "mean_difference": -5709.75,
+        "pairs": 24,
+        "seeds_better": 3,
+        "seeds_equal": 0,
+        "seeds_worse": 21
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -3970.5375,
+         -1450.74375
+        ],
+        "mean_difference": -2718.75,
+        "pairs": 24,
+        "seeds_better": 8,
+        "seeds_equal": 0,
+        "seeds_worse": 16
+       },
+       "periodic_5": {
+        "ci95": [
+         31631.9,
+         39246.84375
+        ],
+        "mean_difference": 35527.0,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       }
+      },
+      "on_time_targets_per_episode": {
+       "event": {
+        "ci95": [
+         -0.375,
+         0.0
+        ],
+        "mean_difference": -0.16667,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 21,
+        "seeds_worse": 3
+       },
+       "event_priority": {
+        "ci95": [
+         -0.375,
+         0.0
+        ],
+        "mean_difference": -0.16667,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 21,
+        "seeds_worse": 3
+       },
+       "hold_to_bound": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned1_at400000": {
+        "ci95": [
+         -0.375,
+         0.0
+        ],
+        "mean_difference": -0.16667,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 21,
+        "seeds_worse": 3
+       },
+       "learned2_at300000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned2_at400000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned3_at400000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "periodic_5": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       }
+      }
+     },
+     "per_arm": {
+      "event": {
+       "airtime_bytes_mean": 86433.0,
+       "applied_mean": 196.25,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 4.921,
+       "budget_refusals_mean": 117.4167,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2074392,
+       "credit_used_fraction_mean": 0.9833,
+       "emissions_forced_total": 0,
+       "emissions_mean": 32.75,
+       "emissions_policy_total": 786,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.2083,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 78,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9653,
+       "on_time_targets_per_episode_mean": 5.7917,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.96528,
+       "redundant_emissions_mean": 0.0417,
+       "seconds_mean": 2.5725,
+       "unknown_to_everyone_mean": 101.6667
+      },
+      "event_priority": {
+       "airtime_bytes_mean": 86449.25,
+       "applied_mean": 196.25,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 4.9097,
+       "budget_refusals_mean": 117.3333,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2074782,
+       "credit_used_fraction_mean": 0.9835,
+       "emissions_forced_total": 0,
+       "emissions_mean": 32.75,
+       "emissions_policy_total": 786,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.2083,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 78,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9653,
+       "on_time_targets_per_episode_mean": 5.7917,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.96528,
+       "redundant_emissions_mean": 0.0417,
+       "seconds_mean": 2.6946,
+       "unknown_to_everyone_mean": 101.6667
+      },
+      "hold_to_bound": {
+       "airtime_bytes_mean": 26733.5,
+       "applied_mean": 46.0,
+       "autonomous_share_of_bytes_mean": 0.0,
+       "belief_age_mean": 6.5755,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 641604,
+       "bytes_policy_total": 0,
+       "credit_used_fraction_mean": 0.3041,
+       "emissions_forced_total": 238,
+       "emissions_mean": 9.9167,
+       "emissions_policy_total": 0,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0417,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 113,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9931,
+       "on_time_targets_per_episode_mean": 5.9583,
+       "optional_emissions_share_mean": 0.0,
+       "pooled_on_time_over_detected_targets": 0.99306,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.66,
+       "unknown_to_everyone_mean": 85.625
+      },
+      "immediate": {
+       "airtime_bytes_mean": 35014.75,
+       "applied_mean": 74.5,
+       "autonomous_share_of_bytes_mean": 0.4575,
+       "belief_age_mean": 8.8447,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 482370,
+       "bytes_policy_total": 357984,
+       "credit_used_fraction_mean": 0.3983,
+       "emissions_forced_total": 175,
+       "emissions_mean": 13.2917,
+       "emissions_policy_total": 144,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0417,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 132,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9931,
+       "on_time_targets_per_episode_mean": 5.9583,
+       "optional_emissions_share_mean": 0.4811,
+       "pooled_on_time_over_detected_targets": 0.99306,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.6162,
+       "unknown_to_everyone_mean": 0.0
+      },
+      "learned1_at400000": {
+       "airtime_bytes_mean": 86820.75,
+       "applied_mean": 173.125,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 6.8327,
+       "budget_refusals_mean": 134.4583,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2083698,
+       "credit_used_fraction_mean": 0.9877,
+       "emissions_forced_total": 0,
+       "emissions_mean": 33.375,
+       "emissions_policy_total": 801,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.2083,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 107,
+       "inference_ms_mean": 0.2122,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9653,
+       "on_time_targets_per_episode_mean": 5.7917,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.96528,
+       "redundant_emissions_mean": 7.7917,
+       "seconds_mean": 2.5783,
+       "unknown_to_everyone_mean": 103.125
+      },
+      "learned2_at300000": {
+       "airtime_bytes_mean": 32940.75,
+       "applied_mean": 64.75,
+       "autonomous_share_of_bytes_mean": 0.4188,
+       "belief_age_mean": 7.0358,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 485250,
+       "bytes_policy_total": 305328,
+       "credit_used_fraction_mean": 0.3748,
+       "emissions_forced_total": 178,
+       "emissions_mean": 12.3333,
+       "emissions_policy_total": 118,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0417,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 129,
+       "inference_ms_mean": 0.2307,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9931,
+       "on_time_targets_per_episode_mean": 5.9583,
+       "optional_emissions_share_mean": 0.4295,
+       "pooled_on_time_over_detected_targets": 0.99306,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.6404,
+       "unknown_to_everyone_mean": 44.25
+      },
+      "learned2_at400000": {
+       "airtime_bytes_mean": 29305.0,
+       "applied_mean": 52.25,
+       "autonomous_share_of_bytes_mean": 0.2714,
+       "belief_age_mean": 6.5127,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 526764,
+       "bytes_policy_total": 176556,
+       "credit_used_fraction_mean": 0.3334,
+       "emissions_forced_total": 195,
+       "emissions_mean": 10.875,
+       "emissions_policy_total": 66,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0417,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 123,
+       "inference_ms_mean": 0.2402,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9931,
+       "on_time_targets_per_episode_mean": 5.9583,
+       "optional_emissions_share_mean": 0.2727,
+       "pooled_on_time_over_detected_targets": 0.99306,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.705,
+       "unknown_to_everyone_mean": 76.5417
+      },
+      "learned3_at400000": {
+       "airtime_bytes_mean": 32296.0,
+       "applied_mean": 54.25,
+       "autonomous_share_of_bytes_mean": 0.5114,
+       "belief_age_mean": 6.8223,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 410526,
+       "bytes_policy_total": 364578,
+       "credit_used_fraction_mean": 0.3674,
+       "emissions_forced_total": 148,
+       "emissions_mean": 12.0833,
+       "emissions_policy_total": 142,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0417,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 129,
+       "inference_ms_mean": 0.2326,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9931,
+       "on_time_targets_per_episode_mean": 5.9583,
+       "optional_emissions_share_mean": 0.5283,
+       "pooled_on_time_over_detected_targets": 0.99306,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.5592,
+       "unknown_to_everyone_mean": 67.1667
+      },
+      "periodic_5": {
+       "airtime_bytes_mean": 70541.75,
+       "applied_mean": 117.2083,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 5.6024,
+       "budget_refusals_mean": 11.0417,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 1693002,
+       "credit_used_fraction_mean": 0.8025,
+       "emissions_forced_total": 0,
+       "emissions_mean": 26.5,
+       "emissions_policy_total": 636,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0417,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 119,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9931,
+       "on_time_targets_per_episode_mean": 5.9583,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.99306,
+       "redundant_emissions_mean": 4.75,
+       "seconds_mean": 2.5725,
+       "unknown_to_everyone_mean": 30.0
+      }
+     }
+    },
+    "isolated_0.7": {
+     "judgement": {
+      "budget_bytes": 87900,
+      "checkpoint_used_per_seed": {
+       "1": "400000",
+       "2": "300000",
+       "3": "400000"
+      },
+      "comparator": "immediate",
+      "cost_saving_arms": [],
+      "non_inferiority_targets_per_episode": -0.05,
+      "seeds": {
+       "1": {
+        "arm": "learned1_at400000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -0.91667,
+        "hygiene_clean": true,
+        "no_regression_below_margin": false,
+        "numbers": {
+         "autonomous_bytes": 2080308,
+         "autonomous_share_of_bytes": 1.0,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           42260.9625,
+           52970.5125
+          ],
+          "mean_difference": 47873.75,
+          "pairs": 24,
+          "seeds_better": 24,
+          "seeds_equal": 0,
+          "seeds_worse": 0
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           40540.24375,
+           52251.59375
+          ],
+          "mean_difference": 46707.25,
+          "pairs": 24,
+          "seeds_better": 24,
+          "seeds_equal": 0,
+          "seeds_worse": 0
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -1.33333,
+           -0.45833
+          ],
+          "mean_difference": -0.91667,
+          "pairs": 24,
+          "seeds_better": 2,
+          "seeds_equal": 8,
+          "seeds_worse": 14
+         },
+         "optional_emissions_share": 1.0,
+         "redundant_emissions_mean": 8.4583
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       },
+       "2": {
+        "arm": "learned2_at300000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -0.08333,
+        "hygiene_clean": true,
+        "no_regression_below_margin": false,
+        "numbers": {
+         "autonomous_bytes": 90972,
+         "autonomous_share_of_bytes": 0.098,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           -574.75,
+           632.25
+          ],
+          "mean_difference": 89.25,
+          "pairs": 24,
+          "seeds_better": 3,
+          "seeds_equal": 20,
+          "seeds_worse": 1
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           -5647.01875,
+           2675.03125
+          ],
+          "mean_difference": -1077.25,
+          "pairs": 24,
+          "seeds_better": 17,
+          "seeds_equal": 0,
+          "seeds_worse": 7
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -0.25,
+           0.08333
+          ],
+          "mean_difference": -0.08333,
+          "pairs": 24,
+          "seeds_better": 1,
+          "seeds_equal": 20,
+          "seeds_worse": 3
+         },
+         "optional_emissions_share": 0.1023,
+         "redundant_emissions_mean": 0.0
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       },
+       "3": {
+        "arm": "learned3_at400000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -0.04167,
+        "hygiene_clean": true,
+        "no_regression_below_margin": true,
+        "numbers": {
+         "autonomous_bytes": 369192,
+         "autonomous_share_of_bytes": 0.4399,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           -2461.26875,
+           1087.01875
+          ],
+          "mean_difference": -616.5,
+          "pairs": 24,
+          "seeds_better": 3,
+          "seeds_equal": 0,
+          "seeds_worse": 21
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           -6203.34375,
+           1804.00625
+          ],
+          "mean_difference": -1783.0,
+          "pairs": 24,
+          "seeds_better": 11,
+          "seeds_equal": 7,
+          "seeds_worse": 6
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -0.16667,
+           0.08333
+          ],
+          "mean_difference": -0.04167,
+          "pairs": 24,
+          "seeds_better": 1,
+          "seeds_equal": 21,
+          "seeds_worse": 2
+         },
+         "optional_emissions_share": 0.4598,
+         "redundant_emissions_mean": 0.0
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       }
+      },
+      "statistic": "seed-level paired percentile bootstrap, B=10 000, RNG 20260919",
+      "tier": "75pct",
+      "training_seeds_reaching_cost_saving_bar": 0,
+      "training_seeds_reaching_upgrade_bar": 0,
+      "upgrade_gate_met": false
+     },
+     "paired_vs_hold_to_bound": {
+      "airtime_bytes": {
+       "event": {
+        "ci95": [
+         42333.25,
+         53347.58125
+        ],
+        "mean_difference": 48039.25,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "event_priority": {
+        "ci95": [
+         42404.3375,
+         53319.86875
+        ],
+        "mean_difference": 48097.0,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "immediate": {
+        "ci95": [
+         -2671.7875,
+         5712.325
+        ],
+        "mean_difference": 1166.5,
+        "pairs": 24,
+        "seeds_better": 7,
+        "seeds_equal": 0,
+        "seeds_worse": 17
+       },
+       "learned1_at400000": {
+        "ci95": [
+         42260.9625,
+         52970.5125
+        ],
+        "mean_difference": 47873.75,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "learned2_at300000": {
+        "ci95": [
+         -574.75,
+         632.25
+        ],
+        "mean_difference": 89.25,
+        "pairs": 24,
+        "seeds_better": 3,
+        "seeds_equal": 20,
+        "seeds_worse": 1
+       },
+       "learned2_at400000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -2461.26875,
+         1087.01875
+        ],
+        "mean_difference": -616.5,
+        "pairs": 24,
+        "seeds_better": 3,
+        "seeds_equal": 0,
+        "seeds_worse": 21
+       },
+       "periodic_5": {
+        "ci95": [
+         33027.1,
+         42705.725
+        ],
+        "mean_difference": 37840.25,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       }
+      },
+      "on_time_targets_per_episode": {
+       "event": {
+        "ci95": [
+         -1.25,
+         -0.45833
+        ],
+        "mean_difference": -0.83333,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 7,
+        "seeds_worse": 15
+       },
+       "event_priority": {
+        "ci95": [
+         -1.20833,
+         -0.33333
+        ],
+        "mean_difference": -0.79167,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 7,
+        "seeds_worse": 15
+       },
+       "immediate": {
+        "ci95": [
+         -0.08333,
+         0.25
+        ],
+        "mean_difference": 0.08333,
+        "pairs": 24,
+        "seeds_better": 3,
+        "seeds_equal": 20,
+        "seeds_worse": 1
+       },
+       "learned1_at400000": {
+        "ci95": [
+         -1.25,
+         -0.375
+        ],
+        "mean_difference": -0.83333,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 7,
+        "seeds_worse": 15
+       },
+       "learned2_at300000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned2_at400000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned3_at400000": {
+        "ci95": [
+         0.0,
+         0.125
+        ],
+        "mean_difference": 0.04167,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 23,
+        "seeds_worse": 0
+       },
+       "periodic_5": {
+        "ci95": [
+         -0.75,
+         0.08333
+        ],
+        "mean_difference": -0.29167,
+        "pairs": 24,
+        "seeds_better": 3,
+        "seeds_equal": 16,
+        "seeds_worse": 5
+       }
+      }
+     },
+     "paired_vs_immediate": {
+      "airtime_bytes": {
+       "event": {
+        "ci95": [
+         40519.7375,
+         52795.08125
+        ],
+        "mean_difference": 46872.75,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "event_priority": {
+        "ci95": [
+         40533.75,
+         52655.03125
+        ],
+        "mean_difference": 46930.5,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "hold_to_bound": {
+        "ci95": [
+         -5712.325,
+         2671.7875
+        ],
+        "mean_difference": -1166.5,
+        "pairs": 24,
+        "seeds_better": 17,
+        "seeds_equal": 0,
+        "seeds_worse": 7
+       },
+       "learned1_at400000": {
+        "ci95": [
+         40540.24375,
+         52251.59375
+        ],
+        "mean_difference": 46707.25,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "learned2_at300000": {
+        "ci95": [
+         -5647.01875,
+         2675.03125
+        ],
+        "mean_difference": -1077.25,
+        "pairs": 24,
+        "seeds_better": 17,
+        "seeds_equal": 0,
+        "seeds_worse": 7
+       },
+       "learned2_at400000": {
+        "ci95": [
+         -5800.6375,
+         2765.81875
+        ],
+        "mean_difference": -1166.5,
+        "pairs": 24,
+        "seeds_better": 17,
+        "seeds_equal": 0,
+        "seeds_worse": 7
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -6203.34375,
+         1804.00625
+        ],
+        "mean_difference": -1783.0,
+        "pairs": 24,
+        "seeds_better": 11,
+        "seeds_equal": 7,
+        "seeds_worse": 6
+       },
+       "periodic_5": {
+        "ci95": [
+         31537.61875,
+         41729.6375
+        ],
+        "mean_difference": 36673.75,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       }
+      },
+      "on_time_targets_per_episode": {
+       "event": {
+        "ci95": [
+         -1.25,
+         -0.58333
+        ],
+        "mean_difference": -0.91667,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 7,
+        "seeds_worse": 16
+       },
+       "event_priority": {
+        "ci95": [
+         -1.25,
+         -0.5
+        ],
+        "mean_difference": -0.875,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 6,
+        "seeds_worse": 16
+       },
+       "hold_to_bound": {
+        "ci95": [
+         -0.25,
+         0.08333
+        ],
+        "mean_difference": -0.08333,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 20,
+        "seeds_worse": 3
+       },
+       "learned1_at400000": {
+        "ci95": [
+         -1.33333,
+         -0.45833
+        ],
+        "mean_difference": -0.91667,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 8,
+        "seeds_worse": 14
+       },
+       "learned2_at300000": {
+        "ci95": [
+         -0.25,
+         0.08333
+        ],
+        "mean_difference": -0.08333,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 20,
+        "seeds_worse": 3
+       },
+       "learned2_at400000": {
+        "ci95": [
+         -0.25,
+         0.08333
+        ],
+        "mean_difference": -0.08333,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 20,
+        "seeds_worse": 3
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -0.16667,
+         0.08333
+        ],
+        "mean_difference": -0.04167,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 21,
+        "seeds_worse": 2
+       },
+       "periodic_5": {
+        "ci95": [
+         -0.79167,
+         -0.04167
+        ],
+        "mean_difference": -0.375,
+        "pairs": 24,
+        "seeds_better": 2,
+        "seeds_equal": 16,
+        "seeds_worse": 6
+       }
+      }
+     },
+     "per_arm": {
+      "event": {
+       "airtime_bytes_mean": 86845.0,
+       "applied_mean": 140.125,
+       "autonomous_share_of_bytes_mean": 0.9973,
+       "belief_age_mean": 90.8393,
+       "budget_refusals_mean": 748.9583,
+       "bytes_forced_total": 5688,
+       "bytes_policy_total": 2078592,
+       "credit_used_fraction_mean": 0.988,
+       "emissions_forced_total": 2,
+       "emissions_mean": 32.9583,
+       "emissions_policy_total": 789,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.1667,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 96,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8056,
+       "on_time_targets_per_episode_mean": 4.8333,
+       "optional_emissions_share_mean": 0.9975,
+       "pooled_on_time_over_detected_targets": 0.80556,
+       "redundant_emissions_mean": 0.1667,
+       "seconds_mean": 2.9533,
+       "unknown_to_everyone_mean": 546.0
+      },
+      "event_priority": {
+       "airtime_bytes_mean": 86902.75,
+       "applied_mean": 140.0417,
+       "autonomous_share_of_bytes_mean": 0.9986,
+       "belief_age_mean": 62.6965,
+       "budget_refusals_mean": 670.8333,
+       "bytes_forced_total": 2844,
+       "bytes_policy_total": 2082822,
+       "credit_used_fraction_mean": 0.9887,
+       "emissions_forced_total": 1,
+       "emissions_mean": 32.9583,
+       "emissions_policy_total": 790,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.125,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 97,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8125,
+       "on_time_targets_per_episode_mean": 4.875,
+       "optional_emissions_share_mean": 0.9987,
+       "pooled_on_time_over_detected_targets": 0.8125,
+       "redundant_emissions_mean": 0.2083,
+       "seconds_mean": 2.9375,
+       "unknown_to_everyone_mean": 546.0
+      },
+      "hold_to_bound": {
+       "airtime_bytes_mean": 38805.75,
+       "applied_mean": 62.8333,
+       "autonomous_share_of_bytes_mean": 0.0,
+       "belief_age_mean": 42.2053,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 931338,
+       "bytes_policy_total": 0,
+       "credit_used_fraction_mean": 0.4415,
+       "emissions_forced_total": 354,
+       "emissions_mean": 14.75,
+       "emissions_policy_total": 0,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.3333,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 131,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9444,
+       "on_time_targets_per_episode_mean": 5.6667,
+       "optional_emissions_share_mean": 0.0,
+       "pooled_on_time_over_detected_targets": 0.94444,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.9108,
+       "unknown_to_everyone_mean": 54.0
+      },
+      "immediate": {
+       "airtime_bytes_mean": 39972.25,
+       "applied_mean": 64.4583,
+       "autonomous_share_of_bytes_mean": 0.4204,
+       "belief_age_mean": 43.5869,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 601350,
+       "bytes_policy_total": 357984,
+       "credit_used_fraction_mean": 0.4547,
+       "emissions_forced_total": 221,
+       "emissions_mean": 15.2083,
+       "emissions_policy_total": 144,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.25,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 130,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9583,
+       "on_time_targets_per_episode_mean": 5.75,
+       "optional_emissions_share_mean": 0.44,
+       "pooled_on_time_over_detected_targets": 0.95833,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.8358,
+       "unknown_to_everyone_mean": 0.0
+      },
+      "learned1_at400000": {
+       "airtime_bytes_mean": 86679.5,
+       "applied_mean": 126.625,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 79.2271,
+       "budget_refusals_mean": 810.625,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2080308,
+       "credit_used_fraction_mean": 0.9861,
+       "emissions_forced_total": 0,
+       "emissions_mean": 33.4167,
+       "emissions_policy_total": 802,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.1667,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 122,
+       "inference_ms_mean": 0.1978,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8056,
+       "on_time_targets_per_episode_mean": 4.8333,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.80556,
+       "redundant_emissions_mean": 8.4583,
+       "seconds_mean": 3.0404,
+       "unknown_to_everyone_mean": 597.0833
+      },
+      "learned2_at300000": {
+       "airtime_bytes_mean": 38895.0,
+       "applied_mean": 63.125,
+       "autonomous_share_of_bytes_mean": 0.098,
+       "belief_age_mean": 38.9642,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 842508,
+       "bytes_policy_total": 90972,
+       "credit_used_fraction_mean": 0.4425,
+       "emissions_forced_total": 319,
+       "emissions_mean": 14.7917,
+       "emissions_policy_total": 36,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.3333,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 129,
+       "inference_ms_mean": 0.2329,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9444,
+       "on_time_targets_per_episode_mean": 5.6667,
+       "optional_emissions_share_mean": 0.1023,
+       "pooled_on_time_over_detected_targets": 0.94444,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 3.0008,
+       "unknown_to_everyone_mean": 41.125
+      },
+      "learned2_at400000": {
+       "airtime_bytes_mean": 38805.75,
+       "applied_mean": 62.8333,
+       "autonomous_share_of_bytes_mean": 0.0,
+       "belief_age_mean": 42.2053,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 931338,
+       "bytes_policy_total": 0,
+       "credit_used_fraction_mean": 0.4415,
+       "emissions_forced_total": 354,
+       "emissions_mean": 14.75,
+       "emissions_policy_total": 0,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.3333,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 131,
+       "inference_ms_mean": 0.2265,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9444,
+       "on_time_targets_per_episode_mean": 5.6667,
+       "optional_emissions_share_mean": 0.0,
+       "pooled_on_time_over_detected_targets": 0.94444,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.8421,
+       "unknown_to_everyone_mean": 54.0
+      },
+      "learned3_at400000": {
+       "airtime_bytes_mean": 38189.25,
+       "applied_mean": 61.875,
+       "autonomous_share_of_bytes_mean": 0.4399,
+       "belief_age_mean": 42.5106,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 547350,
+       "bytes_policy_total": 369192,
+       "credit_used_fraction_mean": 0.4345,
+       "emissions_forced_total": 201,
+       "emissions_mean": 14.5417,
+       "emissions_policy_total": 148,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.2917,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 130,
+       "inference_ms_mean": 0.216,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9514,
+       "on_time_targets_per_episode_mean": 5.7083,
+       "optional_emissions_share_mean": 0.4598,
+       "pooled_on_time_over_detected_targets": 0.95139,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.6837,
+       "unknown_to_everyone_mean": 16.2917
+      },
+      "periodic_5": {
+       "airtime_bytes_mean": 76646.0,
+       "applied_mean": 98.375,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 36.7882,
+       "budget_refusals_mean": 327.0417,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 1839504,
+       "credit_used_fraction_mean": 0.872,
+       "emissions_forced_total": 0,
+       "emissions_mean": 29.2917,
+       "emissions_policy_total": 703,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.625,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 116,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8958,
+       "on_time_targets_per_episode_mean": 5.375,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.89583,
+       "redundant_emissions_mean": 7.2083,
+       "seconds_mean": 2.8467,
+       "unknown_to_everyone_mean": 250.5833
+      }
+     }
+    },
+    "isolated_1.0": {
+     "judgement": {
+      "budget_bytes": 87900,
+      "checkpoint_used_per_seed": {
+       "1": "400000",
+       "2": "300000",
+       "3": "400000"
+      },
+      "comparator": "immediate",
+      "cost_saving_arms": [],
+      "non_inferiority_targets_per_episode": -0.05,
+      "seeds": {
+       "1": {
+        "arm": "learned1_at400000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -1.0,
+        "hygiene_clean": true,
+        "no_regression_below_margin": false,
+        "numbers": {
+         "autonomous_bytes": 2083644,
+         "autonomous_share_of_bytes": 1.0,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           46089.28125,
+           54784.04375
+          ],
+          "mean_difference": 50657.0,
+          "pairs": 24,
+          "seeds_better": 24,
+          "seeds_equal": 0,
+          "seeds_worse": 0
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           48020.14375,
+           55363.3
+          ],
+          "mean_difference": 51734.5,
+          "pairs": 24,
+          "seeds_better": 24,
+          "seeds_equal": 0,
+          "seeds_worse": 0
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -1.375,
+           -0.625
+          ],
+          "mean_difference": -1.0,
+          "pairs": 24,
+          "seeds_better": 0,
+          "seeds_equal": 9,
+          "seeds_worse": 15
+         },
+         "optional_emissions_share": 1.0,
+         "redundant_emissions_mean": 7.875
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       },
+       "2": {
+        "arm": "learned2_at300000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -0.04167,
+        "hygiene_clean": true,
+        "no_regression_below_margin": true,
+        "numbers": {
+         "autonomous_bytes": 83682,
+         "autonomous_share_of_bytes": 0.1012,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           -679.25,
+           0.0
+          ],
+          "mean_difference": -226.5,
+          "pairs": 24,
+          "seeds_better": 0,
+          "seeds_equal": 22,
+          "seeds_worse": 2
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           22.49375,
+           2027.25
+          ],
+          "mean_difference": 851.0,
+          "pairs": 24,
+          "seeds_better": 24,
+          "seeds_equal": 0,
+          "seeds_worse": 0
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -0.125,
+           0.0
+          ],
+          "mean_difference": -0.04167,
+          "pairs": 24,
+          "seeds_better": 0,
+          "seeds_equal": 23,
+          "seeds_worse": 1
+         },
+         "optional_emissions_share": 0.1056,
+         "redundant_emissions_mean": 0.0
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       },
+       "3": {
+        "arm": "learned3_at400000",
+        "completion_gain_ci_lower_above_zero": false,
+        "completion_point_estimate": -0.08333,
+        "hygiene_clean": true,
+        "no_regression_below_margin": false,
+        "numbers": {
+         "autonomous_bytes": 358062,
+         "autonomous_share_of_bytes": 0.4503,
+         "bytes_vs_hold_to_bound": {
+          "ci95": [
+           -1425.7625,
+           1781.25
+          ],
+          "mean_difference": -39.5,
+          "pairs": 24,
+          "seeds_better": 1,
+          "seeds_equal": 0,
+          "seeds_worse": 23
+         },
+         "bytes_vs_immediate": {
+          "ci95": [
+           120.25,
+           2520.5
+          ],
+          "mean_difference": 1038.0,
+          "pairs": 24,
+          "seeds_better": 11,
+          "seeds_equal": 13,
+          "seeds_worse": 0
+         },
+         "on_time_vs_immediate": {
+          "ci95": [
+           -0.25,
+           0.0
+          ],
+          "mean_difference": -0.08333,
+          "pairs": 24,
+          "seeds_better": 0,
+          "seeds_equal": 23,
+          "seeds_worse": 1
+         },
+         "optional_emissions_share": 0.4733,
+         "redundant_emissions_mean": 0.0
+        },
+        "present": true,
+        "same_effect_cheaper": false
+       }
+      },
+      "statistic": "seed-level paired percentile bootstrap, B=10 000, RNG 20260919",
+      "tier": "75pct",
+      "training_seeds_reaching_cost_saving_bar": 0,
+      "training_seeds_reaching_upgrade_bar": 0,
+      "upgrade_gate_met": false
+     },
+     "paired_vs_hold_to_bound": {
+      "airtime_bytes": {
+       "event": {
+        "ci95": [
+         45716.16875,
+         54808.0625
+        ],
+        "mean_difference": 50489.5,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "event_priority": {
+        "ci95": [
+         45748.51875,
+         54746.41875
+        ],
+        "mean_difference": 50505.75,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "immediate": {
+        "ci95": [
+         -2257.50625,
+         -144.5
+        ],
+        "mean_difference": -1077.5,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 0,
+        "seeds_worse": 24
+       },
+       "learned1_at400000": {
+        "ci95": [
+         46089.28125,
+         54784.04375
+        ],
+        "mean_difference": 50657.0,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "learned2_at300000": {
+        "ci95": [
+         -679.25,
+         0.0
+        ],
+        "mean_difference": -226.5,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 22,
+        "seeds_worse": 2
+       },
+       "learned2_at400000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -1425.7625,
+         1781.25
+        ],
+        "mean_difference": -39.5,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 0,
+        "seeds_worse": 23
+       },
+       "periodic_5": {
+        "ci95": [
+         33547.4375,
+         42458.7625
+        ],
+        "mean_difference": 37967.0,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       }
+      },
+      "on_time_targets_per_episode": {
+       "event": {
+        "ci95": [
+         -1.20833,
+         -0.54167
+        ],
+        "mean_difference": -0.875,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 7,
+        "seeds_worse": 16
+       },
+       "event_priority": {
+        "ci95": [
+         -1.25,
+         -0.54167
+        ],
+        "mean_difference": -0.875,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 7,
+        "seeds_worse": 16
+       },
+       "immediate": {
+        "ci95": [
+         0.0,
+         0.125
+        ],
+        "mean_difference": 0.04167,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 23,
+        "seeds_worse": 0
+       },
+       "learned1_at400000": {
+        "ci95": [
+         -1.33333,
+         -0.58333
+        ],
+        "mean_difference": -0.95833,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 8,
+        "seeds_worse": 15
+       },
+       "learned2_at300000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned2_at400000": {
+        "ci95": [
+         0.0,
+         0.0
+        ],
+        "mean_difference": 0.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 24,
+        "seeds_worse": 0
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -0.25,
+         0.125
+        ],
+        "mean_difference": -0.04167,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 22,
+        "seeds_worse": 1
+       },
+       "periodic_5": {
+        "ci95": [
+         -0.25,
+         0.08333
+        ],
+        "mean_difference": -0.08333,
+        "pairs": 24,
+        "seeds_better": 1,
+        "seeds_equal": 20,
+        "seeds_worse": 3
+       }
+      }
+     },
+     "paired_vs_immediate": {
+      "airtime_bytes": {
+       "event": {
+        "ci95": [
+         47630.95625,
+         55343.31875
+        ],
+        "mean_difference": 51567.0,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "event_priority": {
+        "ci95": [
+         47658.98125,
+         55280.14375
+        ],
+        "mean_difference": 51583.25,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "hold_to_bound": {
+        "ci95": [
+         144.5,
+         2257.50625
+        ],
+        "mean_difference": 1077.5,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "learned1_at400000": {
+        "ci95": [
+         48020.14375,
+         55363.3
+        ],
+        "mean_difference": 51734.5,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "learned2_at300000": {
+        "ci95": [
+         22.49375,
+         2027.25
+        ],
+        "mean_difference": 851.0,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "learned2_at400000": {
+        "ci95": [
+         245.25,
+         2256.25
+        ],
+        "mean_difference": 1077.5,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       },
+       "learned3_at400000": {
+        "ci95": [
+         120.25,
+         2520.5
+        ],
+        "mean_difference": 1038.0,
+        "pairs": 24,
+        "seeds_better": 11,
+        "seeds_equal": 13,
+        "seeds_worse": 0
+       },
+       "periodic_5": {
+        "ci95": [
+         34946.24375,
+         43146.5125
+        ],
+        "mean_difference": 39044.5,
+        "pairs": 24,
+        "seeds_better": 24,
+        "seeds_equal": 0,
+        "seeds_worse": 0
+       }
+      },
+      "on_time_targets_per_episode": {
+       "event": {
+        "ci95": [
+         -1.25,
+         -0.58333
+        ],
+        "mean_difference": -0.91667,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 8,
+        "seeds_worse": 16
+       },
+       "event_priority": {
+        "ci95": [
+         -1.25,
+         -0.58333
+        ],
+        "mean_difference": -0.91667,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 8,
+        "seeds_worse": 16
+       },
+       "hold_to_bound": {
+        "ci95": [
+         -0.125,
+         0.0
+        ],
+        "mean_difference": -0.04167,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 23,
+        "seeds_worse": 1
+       },
+       "learned1_at400000": {
+        "ci95": [
+         -1.375,
+         -0.625
+        ],
+        "mean_difference": -1.0,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 9,
+        "seeds_worse": 15
+       },
+       "learned2_at300000": {
+        "ci95": [
+         -0.125,
+         0.0
+        ],
+        "mean_difference": -0.04167,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 23,
+        "seeds_worse": 1
+       },
+       "learned2_at400000": {
+        "ci95": [
+         -0.125,
+         0.0
+        ],
+        "mean_difference": -0.04167,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 23,
+        "seeds_worse": 1
+       },
+       "learned3_at400000": {
+        "ci95": [
+         -0.25,
+         0.0
+        ],
+        "mean_difference": -0.08333,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 23,
+        "seeds_worse": 1
+       },
+       "periodic_5": {
+        "ci95": [
+         -0.25,
+         0.0
+        ],
+        "mean_difference": -0.125,
+        "pairs": 24,
+        "seeds_better": 0,
+        "seeds_equal": 21,
+        "seeds_worse": 3
+       }
+      }
+     },
+     "per_arm": {
+      "event": {
+       "airtime_bytes_mean": 86651.0,
+       "applied_mean": 196.75,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 39.6554,
+       "budget_refusals_mean": 632.875,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2079624,
+       "credit_used_fraction_mean": 0.9858,
+       "emissions_forced_total": 0,
+       "emissions_mean": 32.8333,
+       "emissions_policy_total": 788,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.9167,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 93,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8472,
+       "on_time_targets_per_episode_mean": 5.0833,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.84722,
+       "redundant_emissions_mean": 0.0417,
+       "seconds_mean": 2.6117,
+       "unknown_to_everyone_mean": 499.6667
+      },
+      "event_priority": {
+       "airtime_bytes_mean": 86667.25,
+       "applied_mean": 196.75,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 39.6441,
+       "budget_refusals_mean": 632.7917,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2080014,
+       "credit_used_fraction_mean": 0.986,
+       "emissions_forced_total": 0,
+       "emissions_mean": 32.8333,
+       "emissions_policy_total": 788,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.9167,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 93,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8472,
+       "on_time_targets_per_episode_mean": 5.0833,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.84722,
+       "redundant_emissions_mean": 0.0417,
+       "seconds_mean": 2.5846,
+       "unknown_to_everyone_mean": 499.6667
+      },
+      "hold_to_bound": {
+       "airtime_bytes_mean": 36161.5,
+       "applied_mean": 82.0833,
+       "autonomous_share_of_bytes_mean": 0.0,
+       "belief_age_mean": 7.7685,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 867876,
+       "bytes_policy_total": 0,
+       "credit_used_fraction_mean": 0.4114,
+       "emissions_forced_total": 329,
+       "emissions_mean": 13.7083,
+       "emissions_policy_total": 0,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0417,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 136,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9931,
+       "on_time_targets_per_episode_mean": 5.9583,
+       "optional_emissions_share_mean": 0.0,
+       "pooled_on_time_over_detected_targets": 0.99306,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.5833,
+       "unknown_to_everyone_mean": 54.0
+      },
+      "immediate": {
+       "airtime_bytes_mean": 35084.0,
+       "applied_mean": 79.8333,
+       "autonomous_share_of_bytes_mean": 0.4563,
+       "belief_age_mean": 7.8731,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 484032,
+       "bytes_policy_total": 357984,
+       "credit_used_fraction_mean": 0.3991,
+       "emissions_forced_total": 176,
+       "emissions_mean": 13.3333,
+       "emissions_policy_total": 144,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 136,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 1.0,
+       "on_time_targets_per_episode_mean": 6.0,
+       "optional_emissions_share_mean": 0.4795,
+       "pooled_on_time_over_detected_targets": 1.0,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.6308,
+       "unknown_to_everyone_mean": 0.0
+      },
+      "learned1_at400000": {
+       "airtime_bytes_mean": 86818.5,
+       "applied_mean": 177.5,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 48.4185,
+       "budget_refusals_mean": 715.0833,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 2083644,
+       "credit_used_fraction_mean": 0.9877,
+       "emissions_forced_total": 0,
+       "emissions_mean": 33.375,
+       "emissions_policy_total": 801,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 1.0,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 124,
+       "inference_ms_mean": 0.1804,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.8333,
+       "on_time_targets_per_episode_mean": 5.0,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.83333,
+       "redundant_emissions_mean": 7.875,
+       "seconds_mean": 2.6796,
+       "unknown_to_everyone_mean": 585.0833
+      },
+      "learned2_at300000": {
+       "airtime_bytes_mean": 35935.0,
+       "applied_mean": 81.5833,
+       "autonomous_share_of_bytes_mean": 0.1012,
+       "belief_age_mean": 7.8138,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 778758,
+       "bytes_policy_total": 83682,
+       "credit_used_fraction_mean": 0.4088,
+       "emissions_forced_total": 294,
+       "emissions_mean": 13.625,
+       "emissions_policy_total": 33,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0417,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 136,
+       "inference_ms_mean": 0.2019,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9931,
+       "on_time_targets_per_episode_mean": 5.9583,
+       "optional_emissions_share_mean": 0.1056,
+       "pooled_on_time_over_detected_targets": 0.99306,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.5008,
+       "unknown_to_everyone_mean": 42.125
+      },
+      "learned2_at400000": {
+       "airtime_bytes_mean": 36161.5,
+       "applied_mean": 82.0833,
+       "autonomous_share_of_bytes_mean": 0.0,
+       "belief_age_mean": 7.7685,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 867876,
+       "bytes_policy_total": 0,
+       "credit_used_fraction_mean": 0.4114,
+       "emissions_forced_total": 329,
+       "emissions_mean": 13.7083,
+       "emissions_policy_total": 0,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0417,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 136,
+       "inference_ms_mean": 0.2009,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9931,
+       "on_time_targets_per_episode_mean": 5.9583,
+       "optional_emissions_share_mean": 0.0,
+       "pooled_on_time_over_detected_targets": 0.99306,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.5146,
+       "unknown_to_everyone_mean": 54.0
+      },
+      "learned3_at400000": {
+       "airtime_bytes_mean": 36122.0,
+       "applied_mean": 82.0417,
+       "autonomous_share_of_bytes_mean": 0.4503,
+       "belief_age_mean": 8.7677,
+       "budget_refusals_mean": 0.0,
+       "bytes_forced_total": 508866,
+       "bytes_policy_total": 358062,
+       "credit_used_fraction_mean": 0.4109,
+       "emissions_forced_total": 185,
+       "emissions_mean": 13.7083,
+       "emissions_policy_total": 144,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.0833,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 135,
+       "inference_ms_mean": 0.2023,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9861,
+       "on_time_targets_per_episode_mean": 5.9167,
+       "optional_emissions_share_mean": 0.4733,
+       "pooled_on_time_over_detected_targets": 0.98611,
+       "redundant_emissions_mean": 0.0,
+       "seconds_mean": 2.4921,
+       "unknown_to_everyone_mean": 16.2917
+      },
+      "periodic_5": {
+       "airtime_bytes_mean": 74128.5,
+       "applied_mean": 144.75,
+       "autonomous_share_of_bytes_mean": 1.0,
+       "belief_age_mean": 16.6373,
+       "budget_refusals_mean": 89.2917,
+       "bytes_forced_total": 0,
+       "bytes_policy_total": 1779084,
+       "credit_used_fraction_mean": 0.8433,
+       "emissions_forced_total": 0,
+       "emissions_mean": 28.0833,
+       "emissions_policy_total": 674,
+       "episodes": 24,
+       "episodes_over_budget": 0,
+       "expired_per_episode_mean": 0.125,
+       "generation_identity_negative_episodes": 0,
+       "generation_identity_unspoken_total": 114,
+       "inference_ms_mean": 0.0,
+       "ledger_residual_rows": 0,
+       "on_time_rate_per_episode_mean": 0.9792,
+       "on_time_targets_per_episode_mean": 5.875,
+       "optional_emissions_share_mean": 1.0,
+       "pooled_on_time_over_detected_targets": 0.97917,
+       "redundant_emissions_mean": 4.0,
+       "seconds_mean": 2.6829,
+       "unknown_to_everyone_mean": 64.5
+      }
+     }
+    }
+   }
+  }
+ }
+}

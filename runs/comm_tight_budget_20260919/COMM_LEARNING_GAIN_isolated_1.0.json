@@ -1,0 +1,584 @@
+{
+ "initialisation_note": "reconstructed from Controller(seed); round 2 saved no pre-training checkpoint, so this is reproducible by rule and not a bit-for-bit replay of an archived file",
+ "runs": [
+  {
+   "budget_bytes": 87900,
+   "seeds": {
+    "seed1": {
+     "arms": {
+      "seed1_final": {
+       "airtime_bytes": 86818.5,
+       "autonomous_share_of_bytes": 1.0,
+       "on_time_per_episode": 5.0,
+       "optional_emissions_share": 1.0,
+       "provenance": {
+        "collector": "onpolicy",
+        "environment_steps": 400000,
+        "file": "tight_75pct_seed1.pt",
+        "kind": "checkpoint",
+        "optimizer_steps": 4896,
+        "sha256": "1f87089f63318944316e84f9aca38bfa777a0ca73f76ce8d278b2d8aa077fdbd",
+        "weight_fingerprint": "d82dc3806ad89403"
+       }
+      },
+      "seed1_init": {
+       "airtime_bytes": 86737.5,
+       "autonomous_share_of_bytes": 1.0,
+       "on_time_per_episode": 3.7917,
+       "optional_emissions_share": 1.0,
+       "provenance": {
+        "archived_checkpoint": false,
+        "kind": "reconstructed-initialisation",
+        "weight_fingerprint": "7d7f7152f3104470"
+       }
+      },
+      "seed1_selected": {
+       "airtime_bytes": 86818.5,
+       "autonomous_share_of_bytes": 1.0,
+       "on_time_per_episode": 5.0,
+       "optional_emissions_share": 1.0,
+       "provenance": {
+        "collector": "onpolicy",
+        "environment_steps": 400000,
+        "file": "tight_75pct_seed1.pt",
+        "kind": "checkpoint",
+        "optimizer_steps": 4896,
+        "sha256": "1f87089f63318944316e84f9aca38bfa777a0ca73f76ce8d278b2d8aa077fdbd",
+        "weight_fingerprint": "d82dc3806ad89403"
+       }
+      }
+     },
+     "final_vs_init": {
+      "airtime_bytes": {
+       "ci95": [
+        -301.7625,
+        463.00625
+       ],
+       "mean_difference": 81.0,
+       "pairs": 24,
+       "seeds_better": 13,
+       "seeds_equal": 0,
+       "seeds_worse": 11
+      },
+      "on_time": {
+       "ci95": [
+        0.70833,
+        1.70833
+       ],
+       "mean_difference": 1.20833,
+       "pairs": 24,
+       "seeds_better": 15,
+       "seeds_equal": 8,
+       "seeds_worse": 1
+      }
+     },
+     "selected_vs_init": {
+      "airtime_bytes": {
+       "ci95": [
+        -306.00625,
+        459.25
+       ],
+       "mean_difference": 81.0,
+       "pairs": 24,
+       "seeds_better": 13,
+       "seeds_equal": 0,
+       "seeds_worse": 11
+      },
+      "on_time": {
+       "ci95": [
+        0.75,
+        1.66667
+       ],
+       "mean_difference": 1.20833,
+       "pairs": 24,
+       "seeds_better": 15,
+       "seeds_equal": 8,
+       "seeds_worse": 1
+      }
+     }
+    },
+    "seed2": {
+     "arms": {
+      "seed2_final": {
+       "airtime_bytes": 36161.5,
+       "autonomous_share_of_bytes": 0.0,
+       "on_time_per_episode": 5.9583,
+       "optional_emissions_share": 0.0,
+       "provenance": {
+        "collector": "onpolicy",
+        "environment_steps": 400000,
+        "file": "tight_75pct_seed2.pt",
+        "kind": "checkpoint",
+        "optimizer_steps": 3164,
+        "sha256": "dee17f53373d92de1bc7bdca93c31c045acf1775772cc618f390d0c93219f7f9",
+        "weight_fingerprint": "aea6fa7a68699d56"
+       }
+      },
+      "seed2_init": {
+       "airtime_bytes": 86737.5,
+       "autonomous_share_of_bytes": 1.0,
+       "on_time_per_episode": 3.7917,
+       "optional_emissions_share": 1.0,
+       "provenance": {
+        "archived_checkpoint": false,
+        "kind": "reconstructed-initialisation",
+        "weight_fingerprint": "e7338f6040e6a0f3"
+       }
+      },
+      "seed2_selected": {
+       "airtime_bytes": 35935.0,
+       "autonomous_share_of_bytes": 0.1012,
+       "on_time_per_episode": 5.9583,
+       "optional_emissions_share": 0.1056,
+       "provenance": {
+        "collector": "onpolicy",
+        "environment_steps": 300000,
+        "file": "tight_75pct_seed2_at300000.pt",
+        "kind": "checkpoint",
+        "optimizer_steps": 2848,
+        "sha256": "2a908ce2fc4bd0d2a43af4b4942d1d706c2354e0e909060b36ae7fbc73a3f772",
+        "weight_fingerprint": "803872344171509b"
+       }
+      }
+     },
+     "final_vs_init": {
+      "airtime_bytes": {
+       "ci95": [
+        -54907.825,
+        -45781.975
+       ],
+       "mean_difference": -50576.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      },
+      "on_time": {
+       "ci95": [
+        1.66667,
+        2.66667
+       ],
+       "mean_difference": 2.16667,
+       "pairs": 24,
+       "seeds_better": 22,
+       "seeds_equal": 1,
+       "seeds_worse": 1
+      }
+     },
+     "selected_vs_init": {
+      "airtime_bytes": {
+       "ci95": [
+        -55039.58125,
+        -46219.20625
+       ],
+       "mean_difference": -50802.5,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      },
+      "on_time": {
+       "ci95": [
+        1.66667,
+        2.625
+       ],
+       "mean_difference": 2.16667,
+       "pairs": 24,
+       "seeds_better": 22,
+       "seeds_equal": 1,
+       "seeds_worse": 1
+      }
+     }
+    },
+    "seed3": {
+     "arms": {
+      "seed3_final": {
+       "airtime_bytes": 36122.0,
+       "autonomous_share_of_bytes": 0.4503,
+       "on_time_per_episode": 5.9167,
+       "optional_emissions_share": 0.4733,
+       "provenance": {
+        "collector": "onpolicy",
+        "environment_steps": 400000,
+        "file": "tight_75pct_seed3.pt",
+        "kind": "checkpoint",
+        "optimizer_steps": 3968,
+        "sha256": "72e268aae6e5fe2c9559c9812055bbe2969a0d2d0e2924a4c2839732554be348",
+        "weight_fingerprint": "07448648174a8c62"
+       }
+      },
+      "seed3_init": {
+       "airtime_bytes": 86610.5,
+       "autonomous_share_of_bytes": 0.9974,
+       "on_time_per_episode": 4.0,
+       "optional_emissions_share": 0.9975,
+       "provenance": {
+        "archived_checkpoint": false,
+        "kind": "reconstructed-initialisation",
+        "weight_fingerprint": "69ad8aafa51544d1"
+       }
+      },
+      "seed3_selected": {
+       "airtime_bytes": 36122.0,
+       "autonomous_share_of_bytes": 0.4503,
+       "on_time_per_episode": 5.9167,
+       "optional_emissions_share": 0.4733,
+       "provenance": {
+        "collector": "onpolicy",
+        "environment_steps": 400000,
+        "file": "tight_75pct_seed3.pt",
+        "kind": "checkpoint",
+        "optimizer_steps": 3968,
+        "sha256": "72e268aae6e5fe2c9559c9812055bbe2969a0d2d0e2924a4c2839732554be348",
+        "weight_fingerprint": "07448648174a8c62"
+       }
+      }
+     },
+     "final_vs_init": {
+      "airtime_bytes": {
+       "ci95": [
+        -54895.29375,
+        -45683.975
+       ],
+       "mean_difference": -50488.5,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      },
+      "on_time": {
+       "ci95": [
+        1.54167,
+        2.29167
+       ],
+       "mean_difference": 1.91667,
+       "pairs": 24,
+       "seeds_better": 22,
+       "seeds_equal": 2,
+       "seeds_worse": 0
+      }
+     },
+     "selected_vs_init": {
+      "airtime_bytes": {
+       "ci95": [
+        -54977.50625,
+        -45706.2375
+       ],
+       "mean_difference": -50488.5,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      },
+      "on_time": {
+       "ci95": [
+        1.54167,
+        2.29167
+       ],
+       "mean_difference": 1.91667,
+       "pairs": 24,
+       "seeds_better": 22,
+       "seeds_equal": 2,
+       "seeds_worse": 0
+      }
+     }
+    }
+   },
+   "setting": [
+    "isolated",
+    1.0
+   ],
+   "tier": "75pct"
+  },
+  {
+   "budget_bytes": 29300,
+   "seeds": {
+    "seed1": {
+     "arms": {
+      "seed1_final": {
+       "airtime_bytes": 28370.25,
+       "autonomous_share_of_bytes": 1.0,
+       "on_time_per_episode": 4.1667,
+       "optional_emissions_share": 1.0,
+       "provenance": {
+        "collector": "onpolicy",
+        "environment_steps": 400000,
+        "file": "tight_25pct_seed1.pt",
+        "kind": "checkpoint",
+        "optimizer_steps": 5704,
+        "sha256": "c2f6b9ecf699fc467f9c914402eb9f2843c6f388c1cdeeb33c575e330c2af3f6",
+        "weight_fingerprint": "bf14075ccf101743"
+       }
+      },
+      "seed1_init": {
+       "airtime_bytes": 28330.25,
+       "autonomous_share_of_bytes": 1.0,
+       "on_time_per_episode": 2.9583,
+       "optional_emissions_share": 1.0,
+       "provenance": {
+        "archived_checkpoint": false,
+        "kind": "reconstructed-initialisation",
+        "weight_fingerprint": "7d7f7152f3104470"
+       }
+      },
+      "seed1_selected": {
+       "airtime_bytes": 28370.25,
+       "autonomous_share_of_bytes": 1.0,
+       "on_time_per_episode": 4.1667,
+       "optional_emissions_share": 1.0,
+       "provenance": {
+        "collector": "onpolicy",
+        "environment_steps": 400000,
+        "file": "tight_25pct_seed1.pt",
+        "kind": "checkpoint",
+        "optimizer_steps": 5704,
+        "sha256": "c2f6b9ecf699fc467f9c914402eb9f2843c6f388c1cdeeb33c575e330c2af3f6",
+        "weight_fingerprint": "bf14075ccf101743"
+       }
+      }
+     },
+     "final_vs_init": {
+      "airtime_bytes": {
+       "ci95": [
+        -377.75625,
+        460.7625
+       ],
+       "mean_difference": 40.0,
+       "pairs": 24,
+       "seeds_better": 10,
+       "seeds_equal": 0,
+       "seeds_worse": 14
+      },
+      "on_time": {
+       "ci95": [
+        0.875,
+        1.54167
+       ],
+       "mean_difference": 1.20833,
+       "pairs": 24,
+       "seeds_better": 19,
+       "seeds_equal": 5,
+       "seeds_worse": 0
+      }
+     },
+     "selected_vs_init": {
+      "airtime_bytes": {
+       "ci95": [
+        -377.25625,
+        462.5125
+       ],
+       "mean_difference": 40.0,
+       "pairs": 24,
+       "seeds_better": 10,
+       "seeds_equal": 0,
+       "seeds_worse": 14
+      },
+      "on_time": {
+       "ci95": [
+        0.875,
+        1.54167
+       ],
+       "mean_difference": 1.20833,
+       "pairs": 24,
+       "seeds_better": 19,
+       "seeds_equal": 5,
+       "seeds_worse": 0
+      }
+     }
+    },
+    "seed2": {
+     "arms": {
+      "seed2_final": {
+       "airtime_bytes": 28207.75,
+       "autonomous_share_of_bytes": 1.0,
+       "on_time_per_episode": 3.4167,
+       "optional_emissions_share": 1.0,
+       "provenance": {
+        "collector": "onpolicy",
+        "environment_steps": 400000,
+        "file": "tight_25pct_seed2.pt",
+        "kind": "checkpoint",
+        "optimizer_steps": 6068,
+        "sha256": "2187db46af26beece25c6aaffe00e937d67cd1f8bf230a6fbb7504af8f2c4266",
+        "weight_fingerprint": "c3556bfa4a8db9eb"
+       }
+      },
+      "seed2_init": {
+       "airtime_bytes": 28330.25,
+       "autonomous_share_of_bytes": 1.0,
+       "on_time_per_episode": 2.9583,
+       "optional_emissions_share": 1.0,
+       "provenance": {
+        "archived_checkpoint": false,
+        "kind": "reconstructed-initialisation",
+        "weight_fingerprint": "e7338f6040e6a0f3"
+       }
+      },
+      "seed2_selected": {
+       "airtime_bytes": 28301.5,
+       "autonomous_share_of_bytes": 1.0,
+       "on_time_per_episode": 3.5,
+       "optional_emissions_share": 1.0,
+       "provenance": {
+        "collector": "onpolicy",
+        "environment_steps": 300000,
+        "file": "tight_25pct_seed2_at300000.pt",
+        "kind": "checkpoint",
+        "optimizer_steps": 4556,
+        "sha256": "a81d7988750e6c0d64a745feffe4bed4ae9a1a58204e3bdbcc28e7f0007c9ef9",
+        "weight_fingerprint": "092337f907c9d37e"
+       }
+      }
+     },
+     "final_vs_init": {
+      "airtime_bytes": {
+       "ci95": [
+        -384.01875,
+        92.5
+       ],
+       "mean_difference": -122.5,
+       "pairs": 24,
+       "seeds_better": 11,
+       "seeds_equal": 1,
+       "seeds_worse": 12
+      },
+      "on_time": {
+       "ci95": [
+        0.20833,
+        0.75
+       ],
+       "mean_difference": 0.45833,
+       "pairs": 24,
+       "seeds_better": 9,
+       "seeds_equal": 15,
+       "seeds_worse": 0
+      }
+     },
+     "selected_vs_init": {
+      "airtime_bytes": {
+       "ci95": [
+        -237.5125,
+        144.25
+       ],
+       "mean_difference": -28.75,
+       "pairs": 24,
+       "seeds_better": 12,
+       "seeds_equal": 1,
+       "seeds_worse": 11
+      },
+      "on_time": {
+       "ci95": [
+        0.25,
+        0.875
+       ],
+       "mean_difference": 0.54167,
+       "pairs": 24,
+       "seeds_better": 9,
+       "seeds_equal": 15,
+       "seeds_worse": 0
+      }
+     }
+    },
+    "seed3": {
+     "arms": {
+      "seed3_final": {
+       "airtime_bytes": 27685.75,
+       "autonomous_share_of_bytes": 0.7457,
+       "on_time_per_episode": 5.0,
+       "optional_emissions_share": 0.7621,
+       "provenance": {
+        "collector": "onpolicy",
+        "environment_steps": 400000,
+        "file": "tight_25pct_seed3.pt",
+        "kind": "checkpoint",
+        "optimizer_steps": 5708,
+        "sha256": "3de78ce21b26063bed965be317e2121f69de5f4a252464d887596ab60f6c07f4",
+        "weight_fingerprint": "ffa9bbed7b71760f"
+       }
+      },
+      "seed3_init": {
+       "airtime_bytes": 28330.0,
+       "autonomous_share_of_bytes": 1.0,
+       "on_time_per_episode": 2.9583,
+       "optional_emissions_share": 1.0,
+       "provenance": {
+        "archived_checkpoint": false,
+        "kind": "reconstructed-initialisation",
+        "weight_fingerprint": "69ad8aafa51544d1"
+       }
+      },
+      "seed3_selected": {
+       "airtime_bytes": 26996.75,
+       "autonomous_share_of_bytes": 0.5207,
+       "on_time_per_episode": 5.2917,
+       "optional_emissions_share": 0.5422,
+       "provenance": {
+        "collector": "onpolicy",
+        "environment_steps": 300000,
+        "file": "tight_25pct_seed3_at300000.pt",
+        "kind": "checkpoint",
+        "optimizer_steps": 4432,
+        "sha256": "157dc72e571f2af587f812f7379988962b1c713181da615370374044e3ca24f4",
+        "weight_fingerprint": "5d72cb87dfad5454"
+       }
+      }
+     },
+     "final_vs_init": {
+      "airtime_bytes": {
+       "ci95": [
+        -1426.3,
+        -20.99375
+       ],
+       "mean_difference": -644.25,
+       "pairs": 24,
+       "seeds_better": 7,
+       "seeds_equal": 0,
+       "seeds_worse": 17
+      },
+      "on_time": {
+       "ci95": [
+        1.58333,
+        2.5
+       ],
+       "mean_difference": 2.04167,
+       "pairs": 24,
+       "seeds_better": 22,
+       "seeds_equal": 2,
+       "seeds_worse": 0
+      }
+     },
+     "selected_vs_init": {
+      "airtime_bytes": {
+       "ci95": [
+        -2485.29375,
+        -364.725
+       ],
+       "mean_difference": -1333.25,
+       "pairs": 24,
+       "seeds_better": 6,
+       "seeds_equal": 0,
+       "seeds_worse": 18
+      },
+      "on_time": {
+       "ci95": [
+        1.875,
+        2.79167
+       ],
+       "mean_difference": 2.33333,
+       "pairs": 24,
+       "seeds_better": 22,
+       "seeds_equal": 2,
+       "seeds_worse": 0
+      }
+     }
+    }
+   },
+   "setting": [
+    "isolated",
+    1.0
+   ],
+   "tier": "25pct"
+  }
+ ],
+ "statistic": "seed-level paired percentile bootstrap, B=10 000, RNG 20260919"
+}

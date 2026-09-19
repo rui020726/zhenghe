@@ -312,7 +312,7 @@ def evaluate_controller(
         "mean_belief_age": mean("belief_age"),
         "generation_balance_total": int(sum(int(row["generation_balance"]) for row in rows)),
         "inference_milliseconds_per_decision": round(
-            1000.0 * sum(item["decide_milliseconds_per_call"] * item["decisions"] for item in timings)
+            sum(item["decide_milliseconds_per_call"] * item["decisions"] for item in timings)
             / max(1, sum(item["decisions"] for item in timings)),
             4,
         ),
