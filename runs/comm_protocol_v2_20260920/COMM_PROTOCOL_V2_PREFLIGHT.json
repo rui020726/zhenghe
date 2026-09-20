@@ -1,0 +1,227 @@
+{
+ "all_pass": true,
+ "budget_and_billing_close": {
+  "episodes": 32,
+  "over_budget": [],
+  "pass": true,
+  "residual_keys_nonzero": {},
+  "seconds": 77.7
+ },
+ "checkpoint_refusal": {
+  "all_three_wrong_checkpoints_refused": true,
+  "continuous_fingerprint": "ca11b822f45ea2f4",
+  "differing_fields": [],
+  "initial_checkpoint_is_a_milestone": true,
+  "pass": true,
+  "refusal_failures": [],
+  "resume_matches_continuous": true,
+  "resumed_fingerprint": "ca11b822f45ea2f4",
+  "seconds": 71.4
+ },
+ "defaults_untouched": {
+  "checked": 10,
+  "drift": {},
+  "pass": true,
+  "seconds": 0.0
+ },
+ "dual_choice_exists": {
+  "cells": 1487,
+  "choosable_share": 0.07868,
+  "free_cells": 96,
+  "free_share": 0.06456,
+  "note": "free/choosable counts come from the round's mask census run in policy_owned mode, where an overdue change is labelled but not blocking; declined-though-affordable is read off the archived sample cells, so it is a lower bound on a 40-cell sample",
+  "pass": true,
+  "protocol": "policy_owned_timing",
+  "sampled_declined_though_affordable": 36,
+  "seconds": 5.2
+ },
+ "equivalence_pairs": {
+  "pairs": {
+   "bound_only_3_10 vs hold_to_bound @ 25pct": {
+    "all_equal": true,
+    "episodes": 8,
+    "fields": [],
+    "mismatched_seeds": []
+   },
+   "bound_only_3_10 vs hold_to_bound @ 75pct": {
+    "all_equal": true,
+    "episodes": 8,
+    "fields": [],
+    "mismatched_seeds": []
+   },
+   "first_send_plus_bound_3_10 vs immediate @ 25pct": {
+    "all_equal": true,
+    "episodes": 8,
+    "fields": [],
+    "mismatched_seeds": []
+   },
+   "first_send_plus_bound_3_10 vs immediate @ 75pct": {
+    "all_equal": true,
+    "episodes": 8,
+    "fields": [],
+    "mismatched_seeds": []
+   },
+   "send_once vs send_once_no_bound @ 25pct": {
+    "all_equal": true,
+    "episodes": 8,
+    "fields": [],
+    "mismatched_seeds": []
+   },
+   "send_once vs send_once_no_bound @ 75pct": {
+    "all_equal": true,
+    "episodes": 8,
+    "fields": [],
+    "mismatched_seeds": []
+   }
+  },
+  "pass": true,
+  "seconds": 0.0,
+  "unit_level": "integrated_sar/tests/test_comm_policy_owned_timing.py::RuleEquivalenceTests",
+  "verdict": true
+ },
+ "failures": [],
+ "final_test_sealed": {
+  "artefacts_found": [],
+  "block": "800000..800399",
+  "count": 0,
+  "pass": true,
+  "seconds": 3.4
+ },
+ "fixed_action_intervention": {
+  "arrivals_changed_by_the_action": true,
+  "belief_changed_by_the_action": true,
+  "more_sends_change_more": true,
+  "one_send_at_step_100": {
+   "airtime_bytes": 2292,
+   "applied": 6,
+   "belief": [
+    [
+     "piloc-e1-target-0",
+     3
+    ]
+   ],
+   "emissions": 1,
+   "first_delivery": 100,
+   "on_time": 0,
+   "targets": 6
+  },
+  "pass": true,
+  "seconds": 5.9,
+  "send_every_step": {
+   "airtime_bytes": 27234,
+   "applied": 66,
+   "belief": [
+    [
+     "piloc-e1-target-0",
+     1
+    ],
+    [
+     "piloc-e1-target-0",
+     2
+    ],
+    [
+     "piloc-e1-target-0",
+     3
+    ],
+    [
+     "piloc-e1-target-0",
+     4
+    ],
+    [
+     "piloc-e1-target-0",
+     5
+    ],
+    [
+     "piloc-e1-target-0",
+     6
+    ],
+    [
+     "piloc-e1-target-0",
+     7
+    ],
+    [
+     "piloc-e1-target-0",
+     8
+    ],
+    [
+     "piloc-e1-target-0",
+     9
+    ],
+    [
+     "piloc-e1-target-0",
+     10
+    ],
+    [
+     "piloc-e1-target-0",
+     11
+    ]
+   ],
+   "emissions": 11,
+   "first_delivery": 12,
+   "on_time": 1,
+   "targets": 6
+  },
+  "silence": {
+   "airtime_bytes": 0,
+   "applied": 0,
+   "belief": [],
+   "emissions": 0,
+   "first_delivery": null,
+   "on_time": 0,
+   "targets": 6
+  }
+ },
+ "gate_streams": [
+  700000,
+  700001,
+  700002,
+  700003,
+  700004,
+  700005,
+  700006,
+  700007
+ ],
+ "hold_is_not_masked": {
+  "held_emissions": 0,
+  "held_generated_items_but_silent": 6,
+  "held_unsent_at_end_is_now_visible": true,
+  "held_unsent_change_steps": 5364,
+  "held_unspoken_at_end": 6,
+  "legacy_and_rule_emit_the_same": true,
+  "legacy_reference_emissions": 11,
+  "legacy_unsent_change_steps": 4376,
+  "pass": true,
+  "rule_requested_emissions": 11,
+  "seconds": 7.1
+ },
+ "information_boundary": {
+  "feature_count": 19,
+  "note": "the transcript is written after the step and read back only by this round's analysis scripts; no production decision path opens it, and the 19 features name no receiver",
+  "pass": true,
+  "receiver_state_features": [],
+  "seconds": 0.0
+ },
+ "legacy_mode_invariants": {
+  "forced_emissions_still_happen": 7,
+  "pass": true,
+  "policy_emissions": 4,
+  "runner_agrees_with_pilot_env": true,
+  "runner_mismatches": {},
+  "seconds": 13.3
+ },
+ "no_implicit_send": {
+  "airtime_bytes": 0,
+  "deliveries_applied": 0,
+  "emissions": 0,
+  "episodes": 16,
+  "forced_maxwait_emissions": 0,
+  "pass": true,
+  "seconds": 30.3
+ },
+ "primary_budget_bytes": 29300,
+ "protocol": {
+  "legacy": "legacy_shared_bound",
+  "research": "policy_owned_timing"
+ },
+ "sensitivity_budget_bytes": 87900
+}
