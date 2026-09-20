@@ -1,0 +1,288 @@
+{
+ "artefacts_not_in_git": {
+  "25pct_p70": {
+   "counterfactual": {
+    "bytes": 609860356,
+    "files": 567,
+    "sha256_fold": "7afcab8eba13ae033dee9677a30b5c32a3e7655507086040d3262cf5f26869b3"
+   },
+   "matrix": {
+    "bytes": 6444217401,
+    "files": 6336,
+    "sha256_fold": "155adb9730e4ba146e9dfca79e04808b1666bf4039cc8a37b901069e46920d5b"
+   },
+   "shard_json": {
+    "bytes": 27829885,
+    "files": 12,
+    "sha256_fold": "6e3b355d1669e47df7e17162ba383ff5e7cab6ae6f5d462dd7c81b7409b17e82"
+   }
+  },
+  "preflight": {
+   "bytes": 34131892,
+   "files": 33,
+   "sha256_fold": "338b4673a2d97ca46d078a8fe0bcbbb8c2bafae1053923f0418a6ee3ed47fad4"
+  },
+  "smoke": {}
+ },
+ "branch_start": {
+  "code_base": "feat/comm-policy-owned-timing@23feba8f2c8edd44792827844e0f9482b708a535",
+  "document_commit": "d4c73af04ccf144fd968bdf2c795144206c05caf"
+ },
+ "brief": "COMM_ACK_VALUE_NEXT_ROUND.md",
+ "charter_version": "v1.7",
+ "defaults_unchanged": {
+  "comm_ack": false,
+  "comm_budget_bytes": null,
+  "comm_max_wait_steps": null,
+  "comm_policy": "immediate",
+  "comm_range": 0.3,
+  "comm_timing_mode": "legacy_shared_bound",
+  "gossip_interval": 2
+ },
+ "documents": {
+  "COMM_ACK_CONTRACT.md": {
+   "sha256": "18634686acce4aff1d9f72fc6038378ef7839825aece0192dbb73e23ce0eca54"
+  },
+  "COMM_ACK_PREFLIGHT.json": {
+   "sha256": "d76f758f78c30a0305d9dfc1b8e9a0e0ff9ab794a0f7925664a4295fc0e662aa"
+  },
+  "COMM_ACK_VALUE_COUNTERFACTUAL_25pct.json": {
+   "sha256": "2202fea2f81d19e6658d89b1bd965b740a4aee064328800707b6455d6fb3bde5"
+  },
+  "COMM_ACK_VALUE_GATE.md": {
+   "sha256": "4ce084106d99489543b8da1f6d297169ac07bdefa59968f673d3df907da24921"
+  },
+  "COMM_ACK_VALUE_GATE_25pct.json": {
+   "sha256": "f34d1904f49370defe6b29a895830fc1e600d7c7ae457d0240518ee76bbcaf64"
+  },
+  "COMM_ACK_VALUE_RULE_MATRIX_25pct.json": {
+   "sha256": "1cb67ae211b9d12b83ccbede072b5f0a5cbc910aa897e9f4be8a06dea8792d12"
+  }
+ },
+ "executed_code": {
+  "all_modules_match_head": true,
+  "branch": "feat/comm-ack-feedback-gate",
+  "comparison": "git blob identity (line-ending filters applied)",
+  "dirty_modules": [],
+  "head": "f11c0f1069d8c8150e9fd67c8db5de09160c92e2",
+  "inherited_scripts": {
+   "runs/comm_budget_pilot_20260919/evaluate_pilot.py": {
+    "blob": "689602785d03170aba90186e7cda858a82ff3a08",
+    "sha256": "42df29cf2ae2bc03f309031b066a6a3e80732c68fe57752f1efc1c33c2b233b6"
+   },
+   "runs/comm_budget_pilot_20260919/pilot_common.py": {
+    "blob": "53b4a9ef76f6031d86f12089368017dc0e2fed40",
+    "sha256": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8"
+   },
+   "runs/comm_budget_pilot_20260919/pilot_env.py": {
+    "blob": "a21d54d3fa7750283ccf3ba49038d29cba97e1c1",
+    "sha256": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b"
+   },
+   "runs/comm_budget_pilot_20260919/train_pilot.py": {
+    "blob": "0e5f00fbc29c11e8dfdf8ce75cd5c98a48c214ae",
+    "sha256": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81"
+   },
+   "runs/comm_protocol_v2_20260920/protocol_common.py": {
+    "blob": "d741368aa0156ff4d6ba347743366aa8cd2e952d",
+    "sha256": "b19faaf12b9fb81b206b5bd336e389564f772297619dafee8b37e1749d29809d"
+   },
+   "runs/comm_protocol_v2_20260920/protocol_env.py": {
+    "blob": "4b2d7c84920534c00f9591a504f98dab2a5f0a13",
+    "sha256": "457521b2b16c78f8ef002c3c0c28f1541bda7b110c54ac4f2b60d9ddb59f14ff"
+   },
+   "runs/comm_stability_20260919/attribution_metrics.py": {
+    "blob": "44ecc18af6caa47731e4ae63d59af6280f12b367",
+    "sha256": "a4059c507ded0663d656b759797ad7999673093b7577420165f3930a2d654fea"
+   },
+   "runs/comm_stability_20260919/data_split_audit.py": {
+    "blob": "6becfa8b80baa9b755b99c853d5e155555e251d6",
+    "sha256": "d359e536f85287e492d2eb693f894c0e367e9a71ec7eea893df09edec4366ebd"
+   },
+   "runs/comm_tight_budget_20260919/onpolicy.py": {
+    "blob": "426ae608b1bf64be2daf67a4b63f03ee04fc30cb",
+    "sha256": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3"
+   },
+   "runs/comm_tight_budget_20260919/tight_common.py": {
+    "blob": "c0df37f7c5f06a898b642bf7cbfddb178d09b8bb",
+    "sha256": "ce9a3080aad5d2580a63b02cad7fdda89762eceb773ea26aacb5a70b9baadd9a"
+   },
+   "runs/comm_tight_budget_20260919/train_onpolicy.py": {
+    "blob": "ed165a9a69c8e3b343bf31e70d65c32c224db9e9",
+    "sha256": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f"
+   }
+  },
+  "modules": {
+   "integrated_sar/adapters/task03.py": {
+    "blob": "8ba631ca1892bacc46dc24832d20f56c73173022",
+    "blob_at_head": "8ba631ca1892bacc46dc24832d20f56c73173022",
+    "matches_head": true,
+    "sha256": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1"
+   },
+   "integrated_sar/allocation_trace.py": {
+    "blob": "4dcd6df6bb6ed0fda20a0e3fbcbfe7dd75a20d27",
+    "blob_at_head": "4dcd6df6bb6ed0fda20a0e3fbcbfe7dd75a20d27",
+    "matches_head": true,
+    "sha256": "1cc48d0d564a3ee1bdb32d198ce465cbab8dcd89837473af05c47e44b7484801"
+   },
+   "integrated_sar/comm.py": {
+    "blob": "ebb67dd3b0b6fce38a4c5c6a326cd898c88e95a6",
+    "blob_at_head": "ebb67dd3b0b6fce38a4c5c6a326cd898c88e95a6",
+    "matches_head": true,
+    "sha256": "4ce419a4fc223c9fb38742c2bd6c3157cd92dbed5d3ac5138753ee698a82e92c"
+   },
+   "integrated_sar/comm_ack.py": {
+    "blob": "dbc4e4c9d39a77a0bd1352901485ba002028f8bf",
+    "blob_at_head": "dbc4e4c9d39a77a0bd1352901485ba002028f8bf",
+    "matches_head": true,
+    "sha256": "fb2f91c93156354a37aa36d312d1acb59bf3d94bb2f8f2fbd0aa4013da46deb5"
+   },
+   "integrated_sar/comm_budget.py": {
+    "blob": "64fe9cd5a2776a9bd29ee7dbec258b4b2dc7fe84",
+    "blob_at_head": "64fe9cd5a2776a9bd29ee7dbec258b4b2dc7fe84",
+    "matches_head": true,
+    "sha256": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929"
+   },
+   "integrated_sar/comm_learning.py": {
+    "blob": "6dec7e8688e6ee7c8c5a58c221c04c6785d0bc07",
+    "blob_at_head": "6dec7e8688e6ee7c8c5a58c221c04c6785d0bc07",
+    "matches_head": true,
+    "sha256": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed"
+   },
+   "integrated_sar/comm_policy.py": {
+    "blob": "f852b1b19ec72a2bf94b0a4eb5c0fd9cb2ebb7d8",
+    "blob_at_head": "f852b1b19ec72a2bf94b0a4eb5c0fd9cb2ebb7d8",
+    "matches_head": true,
+    "sha256": "6c1a836fb1df3f1aedd00e7b1081c4199e63f57d9123129c4711c51e9e9ef2de"
+   },
+   "integrated_sar/contracts.py": {
+    "blob": "156bbaf470e8480e918c06e94cee4ba70c6741f1",
+    "blob_at_head": "156bbaf470e8480e918c06e94cee4ba70c6741f1",
+    "matches_head": true,
+    "sha256": "7052a4d6bca870060a12890fe2117fe0a0a1097db11934d74c6136655dce09b7"
+   },
+   "integrated_sar/joint_driver.py": {
+    "blob": "4f803803777a405ee293b32519e721704a95472c",
+    "blob_at_head": "4f803803777a405ee293b32519e721704a95472c",
+    "matches_head": true,
+    "sha256": "eac7a63cb770501e7abc80f4dc980a3adad82c917c2fe212d9d85727a069fcf7"
+   },
+   "integrated_sar/orchestrator.py": {
+    "blob": "013419cc77906c96aac472e74afc1840bb994758",
+    "blob_at_head": "013419cc77906c96aac472e74afc1840bb994758",
+    "matches_head": true,
+    "sha256": "ad1380d4695d8fb90ea646d2b4ebd0d6d736879885feff79bef8067a1a956b74"
+   },
+   "integrated_sar/task_registry.py": {
+    "blob": "bf3eba2bc10bf69292eef0fe03f9e60984a3a48a",
+    "blob_at_head": "bf3eba2bc10bf69292eef0fe03f9e60984a3a48a",
+    "matches_head": true,
+    "sha256": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+   },
+   "integrated_sar/tests/test_comm_ack_feedback.py": {
+    "blob": "9b43388fe94330c0b98c24b1062c90d7036910e9",
+    "blob_at_head": "9b43388fe94330c0b98c24b1062c90d7036910e9",
+    "matches_head": true,
+    "sha256": "81991ad1399dac36fe1bbd2bd27931453fa50381a0428bb88164468b3c156a95"
+   }
+  },
+  "round_scripts": {
+   "ack_common.py": {
+    "blob": "045c6bdafc928eaede052556cade7793a207a850",
+    "sha256": "90506064a68f685bea014dc572e8c29dd75ba9e56f26f3ba4ebd4382b910f997"
+   },
+   "ack_counterfactual.py": {
+    "blob": "436b29637ab521384a4997ca931cef046eaa50da",
+    "sha256": "1813aa4facd96bc9f58045298c226528aad1aa5494f5bc4eda9a5ede9c2a51ed"
+   },
+   "ack_gate.py": {
+    "blob": "2d8d584b4d5ebbd47a2f6cfea771ddd880336023",
+    "sha256": "83c853d210a42d3c57ca81517e9fb6f54f205f47fdac141835e8c911fb90b62b"
+   },
+   "ack_manifest.py": {
+    "blob": "a4e1c2b48ec888a86fe05992e33090117b1819d3",
+    "sha256": "3905ca8b9e327fc089326f9c038fed926909092807772bc3d2e1eab7dfac1a2e"
+   },
+   "ack_matrix.py": {
+    "blob": "a155d6c17058c13922a2e5bf08c680e657f6d8d1",
+    "sha256": "fb3561022ffc97f79862bf8f8e43a5af5b06b3d8126b043b192625c5305b7844"
+   },
+   "ack_preflight.py": {
+    "blob": "a0fe6cd849de7f321da2e399a9be9cf0794e12b3",
+    "sha256": "47139625afafc659df8a77cea1a91b16dd87d0ab1d1f7db0395bbc37d29d4f05"
+   }
+  }
+ },
+ "gate": {
+  "all_passed": false,
+  "decision": "stop and deliver the ACK gate negative result",
+  "gates": {
+   "1_information_exists": {
+    "passed": true,
+    "streams_qualifying": 48
+   },
+   "2_information_pays": {
+    "completion_ci95": [
+     0.5625,
+     1.1875
+    ],
+    "completion_mean_difference": 0.875,
+    "passed": true,
+    "selected_ack_rule": "retry_until_acked_2",
+    "total_bytes_mean_difference": 19562.0625
+   },
+   "3_real_choice": {
+    "passed": false
+   },
+   "4_no_rule_dominates": {
+    "dominators": [],
+    "passed": true
+   }
+  },
+  "present": true
+ },
+ "rerun": [
+  "cd runs/comm_ack_value_20260920",
+  "python ack_preflight.py --threads 1",
+  "python ack_matrix.py --mode matrix --shards 6 --shard 0 --threads 1",
+  "python ack_matrix.py --mode report",
+  "python ack_counterfactual.py --mode run --shards 6 --shard 0 --threads 1",
+  "python ack_counterfactual.py --mode report",
+  "python ack_gate.py --tier 25pct",
+  "python ack_manifest.py --threads 1"
+ ],
+ "round": "comm-ack-value-gate",
+ "rule_matrix": {
+  "budget_bytes": 29300,
+  "channels": {
+   "lossless": {
+    "arms": 22,
+    "episodes_per_arm": 48,
+    "selection": "backoff_16"
+   },
+   "lossy": {
+    "arms": 22,
+    "episodes_per_arm": 48,
+    "selection": "retry_until_acked_2"
+   }
+  },
+  "present": true,
+  "streams": 48,
+  "tier": "25pct"
+ },
+ "sealed_final_test_block": {
+  "artefact_leaks": [],
+  "block": [
+   800000,
+   800399
+  ],
+  "clean": true,
+  "generated": false,
+  "read": false
+ },
+ "training": {
+  "environment_steps": 0,
+  "permitted": false,
+  "reason": "information-value gate item 3 did not pass, so the brief's condition for training was not met",
+  "runs": 0
+ }
+}
