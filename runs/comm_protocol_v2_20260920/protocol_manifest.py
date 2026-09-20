@@ -94,7 +94,7 @@ _UPDATE_LINE = re.compile(
     r"use=(?P<use>[-\d.]+) free=(?P<free>\d+)/(?P<candidates>\d+) "
     r"send_rate=(?P<send_rate>[-\d.]+) samples=(?P<samples>\d+) "
     r"opt=(?P<optimizer_steps>\d+) kl=(?P<kl>[-\d.e+]+) clip=(?P<clip>[-\d.e+]+) "
-    r"ent=(?P<entropy>[-\d.e+]+).*?\((?P<elapsed>\d+)s\)"
+    r"ent=(?P<entropy>[-\d.e+]+) ent_free=(?P<ent_free>[-\d.e+]+).*?\((?P<elapsed>\d+)s\)"
 )
 
 
@@ -255,7 +255,7 @@ def training_log_facts() -> dict[str, Any]:
                 "updates_logged": len(updates),
                 "environment_steps": int(updates[-1]["steps"]),
                 "decision_samples": sum(int(item["samples"]) for item in updates),
-                "free_decision_terms": int(updates[-1]["free"]) * len(updates),
+                "free_decision_terms": sum(int(item["free"]) for item in updates),
                 "candidates_seen": sum(int(item["candidates"]) for item in updates),
                 "free_candidates_per_decision": round(
                     sum(int(item["free"]) for item in updates)
@@ -271,7 +271,11 @@ def training_log_facts() -> dict[str, Any]:
                 ),
                 "kl_last": float(updates[-1]["kl"]),
                 "clip_last": float(updates[-1]["clip"]),
-                "entropy_last": float(updates[-1]["entropy"]),
+                # Two entropy readings, named for what they are: the per-step number is a sum over
+                # free candidates and grows when the choice surface grows, which round 4 learned to
+                # distrust; the per-candidate one is the comparable quantity.
+                "entropy_last_per_step_sum": float(updates[-1]["entropy"]),
+                "entropy_last_per_free_candidate": float(updates[-1]["ent_free"]),
                 "drawn_send_rate_last": float(updates[-1]["send_rate"]),
                 "batch_on_time_last": int(updates[-1]["on_time"]),
                 "batch_bytes_last": int(updates[-1]["bytes"]),
