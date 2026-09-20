@@ -1,0 +1,4018 @@
+{
+ "comparators_locked_on_training_streams": {
+  "25pct": "send_once",
+  "75pct": "first_send_plus_bound_3_10"
+ },
+ "non_inferiority_margin": -0.05,
+ "primary_metric": "on_time_targets_per_episode (targets/episode)",
+ "primary_setting": {
+  "delivery_probability": 1.0,
+  "information": "isolated"
+ },
+ "protocol": "COMM_PROTOCOL_V2_PROTOCOL.md",
+ "question": "With the 3/10 silence bound no longer spoken for by the transport, can a learned policy beat a strong rule that owns the same choice, under the same hard credit?",
+ "tiers": {
+  "25pct": {
+   "arms": {
+    "always_hold": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 0.0,
+      "stdev": 0.0,
+      "total": 0.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 0.0,
+     "belief_age_steps_mean": 0.0,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 0.0,
+     "episodes": 24,
+     "expired_total": 144,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 999,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 0.0,
+      "stdev": 0.0,
+      "total": 0.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "bound_only_3_10": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 27039.0,
+      "stdev": 2747.7347,
+      "total": 648936.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 18.126,
+     "budget_refusals_mean": 480.792,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 10.375,
+     "episodes": 24,
+     "expired_total": 18,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 987,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.25,
+      "stdev": 0.92421,
+      "total": 126.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "event": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28235.0,
+      "stdev": 740.21348,
+      "total": 677640.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 30.973,
+     "budget_refusals_mean": 1743.625,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 10.917,
+     "episodes": 24,
+     "expired_total": 55,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 994,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 3.70833,
+      "stdev": 1.24094,
+      "total": 89.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "event_priority": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28225.75,
+      "stdev": 750.53077,
+      "total": 677418.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 30.674,
+     "budget_refusals_mean": 1783.167,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 10.917,
+     "episodes": 24,
+     "expired_total": 56,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 994,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 3.66667,
+      "stdev": 1.24722,
+      "total": 88.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "first_send_plus_bound_3_10": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 26897.25,
+      "stdev": 2718.58124,
+      "total": 645534.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 18.325,
+     "budget_refusals_mean": 487.083,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 10.333,
+     "episodes": 24,
+     "expired_total": 17,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.29167,
+      "stdev": 0.93449,
+      "total": 127.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "hold_to_bound": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 27039.0,
+      "stdev": 2747.7347,
+      "total": 648936.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 0.0,
+     "belief_age_steps_mean": 18.126,
+     "budget_refusals_mean": 480.792,
+     "detected_total": 144,
+     "emissions_forced_mean": 10.375,
+     "emissions_mean": 10.375,
+     "episodes": 24,
+     "expired_total": 18,
+     "forced_share_of_emissions_mean": 1.0,
+     "kind": "rule",
+     "max_backlog_age_max": 987,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.25,
+      "stdev": 0.92421,
+      "total": 126.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "immediate": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 26897.25,
+      "stdev": 2718.58124,
+      "total": 645534.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 0.4993,
+     "belief_age_steps_mean": 18.325,
+     "budget_refusals_mean": 487.083,
+     "detected_total": 144,
+     "emissions_forced_mean": 5.0,
+     "emissions_mean": 10.333,
+     "episodes": 24,
+     "expired_total": 17,
+     "forced_share_of_emissions_mean": 0.4783,
+     "kind": "rule",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.29167,
+      "stdev": 0.93449,
+      "total": 127.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "init_25pct_seed1": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28330.25,
+      "stdev": 685.21707,
+      "total": 679926.0
+     },
+     "at_steps": 0,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 84.493,
+     "budget_refusals_mean": 2302.042,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 11.125,
+     "episodes": 24,
+     "expired_total": 73,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "learned",
+     "max_backlog_age_max": 996,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 2.95833,
+      "stdev": 0.93449,
+      "total": 71.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "init_25pct_seed2": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28330.25,
+      "stdev": 685.21707,
+      "total": 679926.0
+     },
+     "at_steps": 0,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 84.493,
+     "budget_refusals_mean": 2500.583,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 11.125,
+     "episodes": 24,
+     "expired_total": 73,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "learned",
+     "max_backlog_age_max": 996,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 2.95833,
+      "stdev": 0.93449,
+      "total": 71.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "init_25pct_seed3": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 5790.25,
+      "stdev": 9749.04603,
+      "total": 138966.0
+     },
+     "at_steps": 0,
+     "autonomous_share_of_bytes_mean": 0.2917,
+     "belief_age_steps_mean": 0.254,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 2.208,
+     "episodes": 24,
+     "expired_total": 137,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "learned",
+     "max_backlog_age_max": 999,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 0.29167,
+      "stdev": 0.45453,
+      "total": 7.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "learned_25pct_seed1_at400000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 18112.25,
+      "stdev": 3412.48406,
+      "total": 434694.0
+     },
+     "at_steps": 400000,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 14.677,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 7.208,
+     "episodes": 24,
+     "expired_total": 2,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "learned",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.91667,
+      "stdev": 0.39965,
+      "total": 142.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "learned_25pct_seed2_at400000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 14916.0,
+      "stdev": 436.73791,
+      "total": 357984.0
+     },
+     "at_steps": 400000,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 59.511,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 6.0,
+     "episodes": 24,
+     "expired_total": 5,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "learned",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.79167,
+      "stdev": 0.57584,
+      "total": 139.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "learned_25pct_seed3_at400000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28312.75,
+      "stdev": 764.51549,
+      "total": 679506.0
+     },
+     "at_steps": 400000,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 110.965,
+     "budget_refusals_mean": 447.833,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 10.917,
+     "episodes": 24,
+     "expired_total": 36,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "learned",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.5,
+      "stdev": 0.95743,
+      "total": 108.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "periodic_10": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 27752.25,
+      "stdev": 1903.38499,
+      "total": 666054.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 21.917,
+     "budget_refusals_mean": 77.375,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 10.708,
+     "episodes": 24,
+     "expired_total": 29,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 988,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.79167,
+      "stdev": 0.95652,
+      "total": 115.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "periodic_2": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28196.0,
+      "stdev": 631.85837,
+      "total": 676704.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 67.06,
+     "budget_refusals_mean": 1040.958,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 10.958,
+     "episodes": 24,
+     "expired_total": 62,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 995,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 3.41667,
+      "stdev": 1.0769,
+      "total": 82.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "periodic_20": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 24701.25,
+      "stdev": 4123.76538,
+      "total": 592830.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 12.533,
+     "budget_refusals_mean": 8.375,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 9.583,
+     "episodes": 24,
+     "expired_total": 8,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 978,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.66667,
+      "stdev": 0.74536,
+      "total": 136.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "periodic_5": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28283.0,
+      "stdev": 709.85491,
+      "total": 678792.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 102.358,
+     "budget_refusals_mean": 304.542,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 10.958,
+     "episodes": 24,
+     "expired_total": 47,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 993,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.04167,
+      "stdev": 1.01977,
+      "total": 97.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "random_send": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28147.25,
+      "stdev": 768.49589,
+      "total": 675534.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 102.684,
+     "budget_refusals_mean": 1203.708,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 11.0,
+     "episodes": 24,
+     "expired_total": 69,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 995,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 3.125,
+      "stdev": 1.12962,
+      "total": 75.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "send_once": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 14916.0,
+      "stdev": 436.73791,
+      "total": 357984.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 59.511,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 6.0,
+     "episodes": 24,
+     "expired_total": 5,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.79167,
+      "stdev": 0.57584,
+      "total": 139.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "send_once_no_bound": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 14916.0,
+      "stdev": 436.73791,
+      "total": 357984.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 59.511,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 6.0,
+     "episodes": 24,
+     "expired_total": 5,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.79167,
+      "stdev": 0.57584,
+      "total": 139.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    }
+   },
+   "comparator": "send_once",
+   "diagnostics": {
+    "('isolated', 0.3)": 144,
+    "('normal', 1.0)": 144
+   },
+   "episodes": 480,
+   "gate_verdict": {
+    "primary_gate_met": false,
+    "seeds_not_passing": [
+     "learned_25pct_seed1_at400000",
+     "learned_25pct_seed2_at400000",
+     "learned_25pct_seed3_at400000"
+    ],
+    "seeds_passing": [],
+    "third_seed_point_estimate": {
+     "learned_25pct_seed1_at400000": 0.125,
+     "learned_25pct_seed2_at400000": 0.0,
+     "learned_25pct_seed3_at400000": -1.29167
+    },
+    "third_seed_within_margin": false
+   },
+   "learning_curves": {
+    "learned_25pct_seed1_at0": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28330.25,
+      "stdev": 685.21707,
+      "total": 679926.0
+     },
+     "at_steps": 0,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 2.95833,
+      "stdev": 0.93449,
+      "total": 71.0
+     }
+    },
+    "learned_25pct_seed1_at100000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28330.25,
+      "stdev": 685.21707,
+      "total": 679926.0
+     },
+     "at_steps": 100000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 2.95833,
+      "stdev": 0.93449,
+      "total": 71.0
+     }
+    },
+    "learned_25pct_seed1_at200000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28301.75,
+      "stdev": 669.4135,
+      "total": 679242.0
+     },
+     "at_steps": 200000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 2.95833,
+      "stdev": 0.93449,
+      "total": 71.0
+     }
+    },
+    "learned_25pct_seed1_at300000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 16576.0,
+      "stdev": 3332.00105,
+      "total": 397824.0
+     },
+     "at_steps": 300000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.79167,
+      "stdev": 0.49826,
+      "total": 139.0
+     }
+    },
+    "learned_25pct_seed1_at400000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 18112.25,
+      "stdev": 3412.48406,
+      "total": 434694.0
+     },
+     "at_steps": 400000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.91667,
+      "stdev": 0.39965,
+      "total": 142.0
+     }
+    },
+    "learned_25pct_seed2_at0": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28330.25,
+      "stdev": 685.21707,
+      "total": 679926.0
+     },
+     "at_steps": 0,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 2.95833,
+      "stdev": 0.93449,
+      "total": 71.0
+     }
+    },
+    "learned_25pct_seed2_at100000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 20649.75,
+      "stdev": 5326.45102,
+      "total": 495594.0
+     },
+     "at_steps": 100000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.41667,
+      "stdev": 0.99652,
+      "total": 106.0
+     }
+    },
+    "learned_25pct_seed2_at200000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28187.5,
+      "stdev": 684.25635,
+      "total": 676500.0
+     },
+     "at_steps": 200000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 3.58333,
+      "stdev": 1.11492,
+      "total": 86.0
+     }
+    },
+    "learned_25pct_seed2_at300000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 19473.0,
+      "stdev": 4173.85146,
+      "total": 467352.0
+     },
+     "at_steps": 300000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.79167,
+      "stdev": 0.57584,
+      "total": 139.0
+     }
+    },
+    "learned_25pct_seed2_at400000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 14916.0,
+      "stdev": 436.73791,
+      "total": 357984.0
+     },
+     "at_steps": 400000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.79167,
+      "stdev": 0.57584,
+      "total": 139.0
+     }
+    },
+    "learned_25pct_seed3_at0": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 5790.25,
+      "stdev": 9749.04603,
+      "total": 138966.0
+     },
+     "at_steps": 0,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 0.29167,
+      "stdev": 0.45453,
+      "total": 7.0
+     }
+    },
+    "learned_25pct_seed3_at100000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28379.75,
+      "stdev": 655.73504,
+      "total": 681114.0
+     },
+     "at_steps": 100000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 3.79167,
+      "stdev": 1.25762,
+      "total": 91.0
+     }
+    },
+    "learned_25pct_seed3_at200000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28454.25,
+      "stdev": 716.2,
+      "total": 682902.0
+     },
+     "at_steps": 200000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.375,
+      "stdev": 0.99216,
+      "total": 105.0
+     }
+    },
+    "learned_25pct_seed3_at300000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28287.0,
+      "stdev": 842.19535,
+      "total": 678888.0
+     },
+     "at_steps": 300000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.45833,
+      "stdev": 0.99913,
+      "total": 107.0
+     }
+    },
+    "learned_25pct_seed3_at400000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 28312.75,
+      "stdev": 764.51549,
+      "total": 679506.0
+     },
+     "at_steps": 400000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.5,
+      "stdev": 0.95743,
+      "total": 108.0
+     }
+    }
+   },
+   "learning_gate_per_seed": {
+    "learned_25pct_seed1_at400000": {
+     "byte_difference": {
+      "ci95": [
+       1946.99375,
+       4519.5125
+      ],
+      "mean_difference": 3196.25,
+      "pairs": 24,
+      "seeds_better": 15,
+      "seeds_equal": 9,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       0.0,
+       0.33333
+      ],
+      "mean_difference": 0.125,
+      "pairs": 24,
+      "seeds_better": 2,
+      "seeds_equal": 22,
+      "seeds_worse": 0
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "learned_25pct_seed2_at400000": {
+     "byte_difference": {
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "mean_difference": 0.0,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 24,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "mean_difference": 0.0,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 24,
+      "seeds_worse": 0
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "learned_25pct_seed3_at400000": {
+     "byte_difference": {
+      "ci95": [
+       13000.475,
+       13750.5
+      ],
+      "mean_difference": 13396.75,
+      "pairs": 24,
+      "seeds_better": 24,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -1.58333,
+       -1.0
+      ],
+      "mean_difference": -1.29167,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 3,
+      "seeds_worse": 21
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    }
+   },
+   "learning_versus_own_initialisation": {
+    "learned_25pct_seed1_at400000": {
+     "episodes": 24,
+     "mean": 2.95833,
+     "stdev": 0.84059,
+     "total": 71.0
+    },
+    "learned_25pct_seed2_at400000": {
+     "episodes": 24,
+     "mean": 2.83333,
+     "stdev": 0.84984,
+     "total": 68.0
+    },
+    "learned_25pct_seed3_at400000": {
+     "episodes": 24,
+     "mean": 4.20833,
+     "stdev": 1.07932,
+     "total": 101.0
+    }
+   },
+   "per_training_seed": {
+    "init_25pct_seed1": {
+     "byte_difference": {
+      "ci95": [
+       13068.99375,
+       13736.75625
+      ],
+      "mean_difference": 13414.25,
+      "pairs": 24,
+      "seeds_better": 24,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -3.16667,
+       -2.5
+      ],
+      "mean_difference": -2.83333,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 0,
+      "seeds_worse": 24
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "init_25pct_seed2": {
+     "byte_difference": {
+      "ci95": [
+       13068.99375,
+       13736.75625
+      ],
+      "mean_difference": 13414.25,
+      "pairs": 24,
+      "seeds_better": 24,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -3.16667,
+       -2.5
+      ],
+      "mean_difference": -2.83333,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 0,
+      "seeds_worse": 24
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "init_25pct_seed3": {
+     "byte_difference": {
+      "ci95": [
+       -12740.58125,
+       -4976.725
+      ],
+      "mean_difference": -9125.75,
+      "pairs": 24,
+      "seeds_better": 5,
+      "seeds_equal": 0,
+      "seeds_worse": 19
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -5.79167,
+       -5.16667
+      ],
+      "mean_difference": -5.5,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 0,
+      "seeds_worse": 24
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "learned_25pct_seed1_at400000": {
+     "byte_difference": {
+      "ci95": [
+       1946.99375,
+       4519.5125
+      ],
+      "mean_difference": 3196.25,
+      "pairs": 24,
+      "seeds_better": 15,
+      "seeds_equal": 9,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       0.0,
+       0.33333
+      ],
+      "mean_difference": 0.125,
+      "pairs": 24,
+      "seeds_better": 2,
+      "seeds_equal": 22,
+      "seeds_worse": 0
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "learned_25pct_seed2_at400000": {
+     "byte_difference": {
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "mean_difference": 0.0,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 24,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "mean_difference": 0.0,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 24,
+      "seeds_worse": 0
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "learned_25pct_seed3_at400000": {
+     "byte_difference": {
+      "ci95": [
+       13000.475,
+       13750.5
+      ],
+      "mean_difference": 13396.75,
+      "pairs": 24,
+      "seeds_better": 24,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -1.58333,
+       -1.0
+      ],
+      "mean_difference": -1.29167,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 3,
+      "seeds_worse": 21
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    }
+   },
+   "pooled_for_reference_only": {
+    "airtime_bytes": {
+     "arms": {
+      "always_hold": {
+       "ci95": [
+        -15091.0,
+        -14742.4875
+       ],
+       "mean_difference": -14916.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      },
+      "bound_only_3_10": {
+       "ci95": [
+        10980.9875,
+        13019.25625
+       ],
+       "mean_difference": 12123.0,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "event": {
+       "ci95": [
+        12972.7375,
+        13665.0
+       ],
+       "mean_difference": 13319.0,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "event_priority": {
+       "ci95": [
+        12947.99375,
+        13654.5
+       ],
+       "mean_difference": 13309.75,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "first_send_plus_bound_3_10": {
+       "ci95": [
+        10913.21875,
+        12893.775
+       ],
+       "mean_difference": 11981.25,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "hold_to_bound": {
+       "ci95": [
+        11044.475,
+        13041.75
+       ],
+       "mean_difference": 12123.0,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "immediate": {
+       "ci95": [
+        10890.48125,
+        12873.75625
+       ],
+       "mean_difference": 11981.25,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "init_25pct_seed1": {
+       "ci95": [
+        13079.74375,
+        13745.75625
+       ],
+       "mean_difference": 13414.25,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "init_25pct_seed2": {
+       "ci95": [
+        13066.2375,
+        13743.7625
+       ],
+       "mean_difference": 13414.25,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "init_25pct_seed3": {
+       "ci95": [
+        -12759.25625,
+        -4947.54375
+       ],
+       "mean_difference": -9125.75,
+       "pairs": 24,
+       "seeds_better": 5,
+       "seeds_equal": 0,
+       "seeds_worse": 19
+      },
+      "learned_25pct_seed1_at400000": {
+       "ci95": [
+        1951.4875,
+        4552.0125
+       ],
+       "mean_difference": 3196.25,
+       "pairs": 24,
+       "seeds_better": 15,
+       "seeds_equal": 9,
+       "seeds_worse": 0
+      },
+      "learned_25pct_seed2_at400000": {
+       "ci95": [
+        0.0,
+        0.0
+       ],
+       "mean_difference": 0.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 24,
+       "seeds_worse": 0
+      },
+      "learned_25pct_seed3_at400000": {
+       "ci95": [
+        13006.98125,
+        13754.0
+       ],
+       "mean_difference": 13396.75,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "periodic_10": {
+       "ci95": [
+        11991.7125,
+        13452.75625
+       ],
+       "mean_difference": 12836.25,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "periodic_2": {
+       "ci95": [
+        12937.25,
+        13619.7625
+       ],
+       "mean_difference": 13280.0,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "periodic_20": {
+       "ci95": [
+        8189.48125,
+        11319.2625
+       ],
+       "mean_difference": 9785.25,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "periodic_5": {
+       "ci95": [
+        12982.23125,
+        13742.5
+       ],
+       "mean_difference": 13367.0,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "random_send": {
+       "ci95": [
+        12852.98125,
+        13605.00625
+       ],
+       "mean_difference": 13231.25,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "send_once_no_bound": {
+       "ci95": [
+        0.0,
+        0.0
+       ],
+       "mean_difference": 0.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 24,
+       "seeds_worse": 0
+      }
+     },
+     "baseline": "send_once",
+     "shared_seeds": 24
+    },
+    "on_time_targets_per_episode": {
+     "arms": {
+      "always_hold": {
+       "ci95": [
+        -6.0,
+        -5.54167
+       ],
+       "mean_difference": -5.79167,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      },
+      "bound_only_3_10": {
+       "ci95": [
+        -0.83333,
+        -0.29167
+       ],
+       "mean_difference": -0.54167,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 14,
+       "seeds_worse": 10
+      },
+      "event": {
+       "ci95": [
+        -2.58333,
+        -1.58333
+       ],
+       "mean_difference": -2.08333,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 2,
+       "seeds_worse": 22
+      },
+      "event_priority": {
+       "ci95": [
+        -2.625,
+        -1.625
+       ],
+       "mean_difference": -2.125,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 2,
+       "seeds_worse": 22
+      },
+      "first_send_plus_bound_3_10": {
+       "ci95": [
+        -0.79167,
+        -0.25
+       ],
+       "mean_difference": -0.5,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 15,
+       "seeds_worse": 9
+      },
+      "hold_to_bound": {
+       "ci95": [
+        -0.83333,
+        -0.29167
+       ],
+       "mean_difference": -0.54167,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 14,
+       "seeds_worse": 10
+      },
+      "immediate": {
+       "ci95": [
+        -0.79167,
+        -0.25
+       ],
+       "mean_difference": -0.5,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 15,
+       "seeds_worse": 9
+      },
+      "init_25pct_seed1": {
+       "ci95": [
+        -3.16667,
+        -2.5
+       ],
+       "mean_difference": -2.83333,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      },
+      "init_25pct_seed2": {
+       "ci95": [
+        -3.16667,
+        -2.5
+       ],
+       "mean_difference": -2.83333,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      },
+      "init_25pct_seed3": {
+       "ci95": [
+        -5.75,
+        -5.16667
+       ],
+       "mean_difference": -5.5,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      },
+      "learned_25pct_seed1_at400000": {
+       "ci95": [
+        0.0,
+        0.33333
+       ],
+       "mean_difference": 0.125,
+       "pairs": 24,
+       "seeds_better": 2,
+       "seeds_equal": 22,
+       "seeds_worse": 0
+      },
+      "learned_25pct_seed2_at400000": {
+       "ci95": [
+        0.0,
+        0.0
+       ],
+       "mean_difference": 0.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 24,
+       "seeds_worse": 0
+      },
+      "learned_25pct_seed3_at400000": {
+       "ci95": [
+        -1.58333,
+        -1.0
+       ],
+       "mean_difference": -1.29167,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 3,
+       "seeds_worse": 21
+      },
+      "periodic_10": {
+       "ci95": [
+        -1.29167,
+        -0.70833
+       ],
+       "mean_difference": -1.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 6,
+       "seeds_worse": 18
+      },
+      "periodic_2": {
+       "ci95": [
+        -2.83333,
+        -1.91667
+       ],
+       "mean_difference": -2.375,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 1,
+       "seeds_worse": 23
+      },
+      "periodic_20": {
+       "ci95": [
+        -0.5,
+        0.20833
+       ],
+       "mean_difference": -0.125,
+       "pairs": 24,
+       "seeds_better": 3,
+       "seeds_equal": 17,
+       "seeds_worse": 4
+      },
+      "periodic_5": {
+       "ci95": [
+        -2.16667,
+        -1.375
+       ],
+       "mean_difference": -1.75,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 2,
+       "seeds_worse": 22
+      },
+      "random_send": {
+       "ci95": [
+        -3.04167,
+        -2.25
+       ],
+       "mean_difference": -2.66667,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 1,
+       "seeds_worse": 23
+      },
+      "send_once_no_bound": {
+       "ci95": [
+        0.0,
+        0.0
+       ],
+       "mean_difference": 0.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 24,
+       "seeds_worse": 0
+      }
+     },
+     "baseline": "send_once",
+     "shared_seeds": 24
+    },
+    "warning": "pooled across training seeds, so its CI is optimistic: the frozen judgement reads per_seed below"
+   }
+  },
+  "75pct": {
+   "arms": {
+    "always_hold": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 0.0,
+      "stdev": 0.0,
+      "total": 0.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 0.0,
+     "belief_age_steps_mean": 0.0,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 0.0,
+     "episodes": 24,
+     "expired_total": 144,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 999,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 0.0,
+      "stdev": 0.0,
+      "total": 0.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "bound_only_3_10": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 36161.5,
+      "stdev": 11173.00102,
+      "total": 867876.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 7.768,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 13.708,
+     "episodes": 24,
+     "expired_total": 1,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 987,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.95833,
+      "stdev": 0.19983,
+      "total": 143.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "event": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86651.0,
+      "stdev": 811.6551,
+      "total": 2079624.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 39.655,
+     "budget_refusals_mean": 632.875,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 32.833,
+     "episodes": 24,
+     "expired_total": 22,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 990,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.08333,
+      "stdev": 0.81223,
+      "total": 122.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "event_priority": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86667.25,
+      "stdev": 812.27455,
+      "total": 2080014.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 39.644,
+     "budget_refusals_mean": 632.792,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 32.833,
+     "episodes": 24,
+     "expired_total": 22,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 990,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.08333,
+      "stdev": 0.81223,
+      "total": 122.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "first_send_plus_bound_3_10": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 35084.0,
+      "stdev": 9521.30332,
+      "total": 842016.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 7.873,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 13.333,
+     "episodes": 24,
+     "expired_total": 0,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 6.0,
+      "stdev": 0.0,
+      "total": 144.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "hold_to_bound": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 36161.5,
+      "stdev": 11173.00102,
+      "total": 867876.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 0.0,
+     "belief_age_steps_mean": 7.768,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 13.708,
+     "emissions_mean": 13.708,
+     "episodes": 24,
+     "expired_total": 1,
+     "forced_share_of_emissions_mean": 1.0,
+     "kind": "rule",
+     "max_backlog_age_max": 987,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.95833,
+      "stdev": 0.19983,
+      "total": 143.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "immediate": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 35084.0,
+      "stdev": 9521.30332,
+      "total": 842016.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 0.4563,
+     "belief_age_steps_mean": 7.873,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 7.333,
+     "emissions_mean": 13.333,
+     "episodes": 24,
+     "expired_total": 0,
+     "forced_share_of_emissions_mean": 0.5205,
+     "kind": "rule",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 6.0,
+      "stdev": 0.0,
+      "total": 144.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "init_75pct_seed1": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86599.5,
+      "stdev": 701.74621,
+      "total": 2078388.0
+     },
+     "at_steps": 0,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 47.492,
+     "budget_refusals_mean": 1554.708,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 33.583,
+     "episodes": 24,
+     "expired_total": 52,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "learned",
+     "max_backlog_age_max": 992,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 3.83333,
+      "stdev": 1.06719,
+      "total": 92.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "init_75pct_seed2": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86737.5,
+      "stdev": 697.02995,
+      "total": 2081700.0
+     },
+     "at_steps": 0,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 30.365,
+     "budget_refusals_mean": 1685.958,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 33.583,
+     "episodes": 24,
+     "expired_total": 53,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "learned",
+     "max_backlog_age_max": 992,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 3.79167,
+      "stdev": 1.11726,
+      "total": 91.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "init_75pct_seed3": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86701.25,
+      "stdev": 700.05495,
+      "total": 2080830.0
+     },
+     "at_steps": 0,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 101.524,
+     "budget_refusals_mean": 223.667,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 34.167,
+     "episodes": 24,
+     "expired_total": 41,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "learned",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.29167,
+      "stdev": 1.2069,
+      "total": 103.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "learned_75pct_seed1_at400000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 81406.5,
+      "stdev": 8778.00739,
+      "total": 1953756.0
+     },
+     "at_steps": 400000,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 32.924,
+     "budget_refusals_mean": 174.458,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 31.042,
+     "episodes": 24,
+     "expired_total": 6,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "learned",
+     "max_backlog_age_max": 994,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.75,
+      "stdev": 0.59512,
+      "total": 138.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "learned_75pct_seed2_at400000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86792.25,
+      "stdev": 667.24166,
+      "total": 2083014.0
+     },
+     "at_steps": 400000,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 74.825,
+     "budget_refusals_mean": 53.917,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 33.625,
+     "episodes": 24,
+     "expired_total": 28,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "learned",
+     "max_backlog_age_max": 995,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.83333,
+      "stdev": 0.74536,
+      "total": 116.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "learned_75pct_seed3_at400000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 30555.25,
+      "stdev": 6544.64353,
+      "total": 733326.0
+     },
+     "at_steps": 400000,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 22.277,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 11.667,
+     "episodes": 24,
+     "expired_total": 1,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "learned",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.95833,
+      "stdev": 0.19983,
+      "total": 143.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "periodic_10": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 46083.75,
+      "stdev": 16495.28867,
+      "total": 1106010.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 7.658,
+     "budget_refusals_mean": 1.833,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 17.542,
+     "episodes": 24,
+     "expired_total": 5,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 988,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.79167,
+      "stdev": 0.81543,
+      "total": 139.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "periodic_2": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86788.75,
+      "stdev": 579.02326,
+      "total": 2082930.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 96.809,
+     "budget_refusals_mean": 698.208,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 33.125,
+     "episodes": 24,
+     "expired_total": 44,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 993,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.16667,
+      "stdev": 1.06719,
+      "total": 100.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "periodic_20": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 29185.75,
+      "stdev": 14890.26314,
+      "total": 700458.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 10.166,
+     "budget_refusals_mean": 0.667,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 11.25,
+     "episodes": 24,
+     "expired_total": 4,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 978,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.83333,
+      "stdev": 0.62361,
+      "total": 140.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "periodic_5": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 74128.5,
+      "stdev": 14811.7936,
+      "total": 1779084.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 16.637,
+     "budget_refusals_mean": 19.292,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 28.083,
+     "episodes": 24,
+     "expired_total": 3,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 993,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.875,
+      "stdev": 0.33072,
+      "total": 141.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "random_send": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 87019.5,
+      "stdev": 599.6055,
+      "total": 2088468.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 80.491,
+     "budget_refusals_mean": 727.375,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 33.375,
+     "episodes": 24,
+     "expired_total": 44,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 995,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.16667,
+      "stdev": 1.10554,
+      "total": 100.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "send_once": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 14916.0,
+      "stdev": 436.73791,
+      "total": 357984.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 59.511,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 6.0,
+     "episodes": 24,
+     "expired_total": 5,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.79167,
+      "stdev": 0.57584,
+      "total": 139.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    },
+    "send_once_no_bound": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 14916.0,
+      "stdev": 436.73791,
+      "total": 357984.0
+     },
+     "at_steps": null,
+     "autonomous_share_of_bytes_mean": 1.0,
+     "belief_age_steps_mean": 59.511,
+     "budget_refusals_mean": 0.0,
+     "detected_total": 144,
+     "emissions_forced_mean": 0.0,
+     "emissions_mean": 6.0,
+     "episodes": 24,
+     "expired_total": 5,
+     "forced_share_of_emissions_mean": 0.0,
+     "kind": "rule",
+     "max_backlog_age_max": 997,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.79167,
+      "stdev": 0.57584,
+      "total": 139.0
+     },
+     "seeds": [
+      700048,
+      700049,
+      700050,
+      700051,
+      700052,
+      700053,
+      700054,
+      700055,
+      700056,
+      700057,
+      700058,
+      700059,
+      700060,
+      700061,
+      700062,
+      700063,
+      700064,
+      700065,
+      700066,
+      700067,
+      700068,
+      700069,
+      700070,
+      700071
+     ]
+    }
+   },
+   "comparator": "first_send_plus_bound_3_10",
+   "diagnostics": {
+    "('isolated', 0.3)": 0,
+    "('normal', 1.0)": 0
+   },
+   "episodes": 480,
+   "gate_verdict": {
+    "primary_gate_met": false,
+    "seeds_not_passing": [
+     "learned_75pct_seed1_at400000",
+     "learned_75pct_seed2_at400000",
+     "learned_75pct_seed3_at400000"
+    ],
+    "seeds_passing": [],
+    "third_seed_point_estimate": {
+     "learned_75pct_seed1_at400000": -0.25,
+     "learned_75pct_seed2_at400000": -1.16667,
+     "learned_75pct_seed3_at400000": -0.04167
+    },
+    "third_seed_within_margin": false
+   },
+   "learning_curves": {
+    "learned_75pct_seed1_at0": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86599.5,
+      "stdev": 701.74621,
+      "total": 2078388.0
+     },
+     "at_steps": 0,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 3.83333,
+      "stdev": 1.06719,
+      "total": 92.0
+     }
+    },
+    "learned_75pct_seed1_at100000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 81319.0,
+      "stdev": 10548.43723,
+      "total": 1951656.0
+     },
+     "at_steps": 100000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.45833,
+      "stdev": 0.95652,
+      "total": 131.0
+     }
+    },
+    "learned_75pct_seed1_at200000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86455.5,
+      "stdev": 796.16,
+      "total": 2074932.0
+     },
+     "at_steps": 200000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.79167,
+      "stdev": 0.76263,
+      "total": 115.0
+     }
+    },
+    "learned_75pct_seed1_at300000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 77611.0,
+      "stdev": 11621.89567,
+      "total": 1862664.0
+     },
+     "at_steps": 300000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.54167,
+      "stdev": 0.95652,
+      "total": 133.0
+     }
+    },
+    "learned_75pct_seed1_at400000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 81406.5,
+      "stdev": 8778.00739,
+      "total": 1953756.0
+     },
+     "at_steps": 400000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.75,
+      "stdev": 0.59512,
+      "total": 138.0
+     }
+    },
+    "learned_75pct_seed2_at0": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86737.5,
+      "stdev": 697.02995,
+      "total": 2081700.0
+     },
+     "at_steps": 0,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 3.79167,
+      "stdev": 1.11726,
+      "total": 91.0
+     }
+    },
+    "learned_75pct_seed2_at100000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86737.5,
+      "stdev": 697.02995,
+      "total": 2081700.0
+     },
+     "at_steps": 100000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 3.79167,
+      "stdev": 1.11726,
+      "total": 91.0
+     }
+    },
+    "learned_75pct_seed2_at200000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86739.75,
+      "stdev": 751.55601,
+      "total": 2081754.0
+     },
+     "at_steps": 200000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 3.79167,
+      "stdev": 1.11726,
+      "total": 91.0
+     }
+    },
+    "learned_75pct_seed2_at300000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86944.25,
+      "stdev": 472.8038,
+      "total": 2086662.0
+     },
+     "at_steps": 300000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.20833,
+      "stdev": 0.81543,
+      "total": 101.0
+     }
+    },
+    "learned_75pct_seed2_at400000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86792.25,
+      "stdev": 667.24166,
+      "total": 2083014.0
+     },
+     "at_steps": 400000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.83333,
+      "stdev": 0.74536,
+      "total": 116.0
+     }
+    },
+    "learned_75pct_seed3_at0": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 86701.25,
+      "stdev": 700.05495,
+      "total": 2080830.0
+     },
+     "at_steps": 0,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 4.29167,
+      "stdev": 1.2069,
+      "total": 103.0
+     }
+    },
+    "learned_75pct_seed3_at100000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 33539.5,
+      "stdev": 5769.61877,
+      "total": 804948.0
+     },
+     "at_steps": 100000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.79167,
+      "stdev": 0.49826,
+      "total": 139.0
+     }
+    },
+    "learned_75pct_seed3_at200000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 14927.25,
+      "stdev": 436.79736,
+      "total": 358254.0
+     },
+     "at_steps": 200000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.70833,
+      "stdev": 0.67572,
+      "total": 137.0
+     }
+    },
+    "learned_75pct_seed3_at300000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 38694.5,
+      "stdev": 5812.11216,
+      "total": 928668.0
+     },
+     "at_steps": 300000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.66667,
+      "stdev": 0.62361,
+      "total": 136.0
+     }
+    },
+    "learned_75pct_seed3_at400000": {
+     "airtime_bytes": {
+      "episodes": 24,
+      "mean": 30555.25,
+      "stdev": 6544.64353,
+      "total": 733326.0
+     },
+     "at_steps": 400000,
+     "episodes": 24,
+     "on_time_per_episode": {
+      "episodes": 24,
+      "mean": 5.95833,
+      "stdev": 0.19983,
+      "total": 143.0
+     }
+    }
+   },
+   "learning_gate_per_seed": {
+    "learned_75pct_seed1_at400000": {
+     "byte_difference": {
+      "ci95": [
+       43280.125,
+       49154.54375
+      ],
+      "mean_difference": 46322.5,
+      "pairs": 24,
+      "seeds_better": 24,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -0.5,
+       -0.04167
+      ],
+      "mean_difference": -0.25,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 20,
+      "seeds_worse": 4
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "learned_75pct_seed2_at400000": {
+     "byte_difference": {
+      "ci95": [
+       47753.49375,
+       55575.03125
+      ],
+      "mean_difference": 51708.25,
+      "pairs": 24,
+      "seeds_better": 24,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -1.45833,
+       -0.83333
+      ],
+      "mean_difference": -1.16667,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 5,
+      "seeds_worse": 19
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "learned_75pct_seed3_at400000": {
+     "byte_difference": {
+      "ci95": [
+       -7657.575,
+       -1741.9875
+      ],
+      "mean_difference": -4528.75,
+      "pairs": 24,
+      "seeds_better": 6,
+      "seeds_equal": 0,
+      "seeds_worse": 18
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -0.125,
+       0.0
+      ],
+      "mean_difference": -0.04167,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 23,
+      "seeds_worse": 1
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    }
+   },
+   "learning_versus_own_initialisation": {
+    "learned_75pct_seed1_at400000": {
+     "episodes": 24,
+     "mean": 1.91667,
+     "stdev": 0.99652,
+     "total": 46.0
+    },
+    "learned_75pct_seed2_at400000": {
+     "episodes": 24,
+     "mean": 1.04167,
+     "stdev": 1.13575,
+     "total": 25.0
+    },
+    "learned_75pct_seed3_at400000": {
+     "episodes": 24,
+     "mean": 1.66667,
+     "stdev": 1.17851,
+     "total": 40.0
+    }
+   },
+   "per_training_seed": {
+    "init_75pct_seed1": {
+     "byte_difference": {
+      "ci95": [
+       47632.25,
+       55311.8875
+      ],
+      "mean_difference": 51515.5,
+      "pairs": 24,
+      "seeds_better": 24,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -2.58333,
+       -1.75
+      ],
+      "mean_difference": -2.16667,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 2,
+      "seeds_worse": 22
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "init_75pct_seed2": {
+     "byte_difference": {
+      "ci95": [
+       47725.925,
+       55518.7625
+      ],
+      "mean_difference": 51653.5,
+      "pairs": 24,
+      "seeds_better": 24,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -2.66667,
+       -1.75
+      ],
+      "mean_difference": -2.20833,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 2,
+      "seeds_worse": 22
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "init_75pct_seed3": {
+     "byte_difference": {
+      "ci95": [
+       47754.19375,
+       55370.0375
+      ],
+      "mean_difference": 51617.25,
+      "pairs": 24,
+      "seeds_better": 24,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -2.20833,
+       -1.25
+      ],
+      "mean_difference": -1.70833,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 3,
+      "seeds_worse": 21
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "learned_75pct_seed1_at400000": {
+     "byte_difference": {
+      "ci95": [
+       43280.125,
+       49154.54375
+      ],
+      "mean_difference": 46322.5,
+      "pairs": 24,
+      "seeds_better": 24,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -0.5,
+       -0.04167
+      ],
+      "mean_difference": -0.25,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 20,
+      "seeds_worse": 4
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "learned_75pct_seed2_at400000": {
+     "byte_difference": {
+      "ci95": [
+       47753.49375,
+       55575.03125
+      ],
+      "mean_difference": 51708.25,
+      "pairs": 24,
+      "seeds_better": 24,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -1.45833,
+       -0.83333
+      ],
+      "mean_difference": -1.16667,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 5,
+      "seeds_worse": 19
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    },
+    "learned_75pct_seed3_at400000": {
+     "byte_difference": {
+      "ci95": [
+       -7657.575,
+       -1741.9875
+      ],
+      "mean_difference": -4528.75,
+      "pairs": 24,
+      "seeds_better": 6,
+      "seeds_equal": 0,
+      "seeds_worse": 18
+     },
+     "completion_difference_per_episode": {
+      "ci95": [
+       -0.125,
+       0.0
+      ],
+      "mean_difference": -0.04167,
+      "pairs": 24,
+      "seeds_better": 0,
+      "seeds_equal": 23,
+      "seeds_worse": 1
+     },
+     "primary_gate_seed_passes": false,
+     "saving_gate_seed_passes": false
+    }
+   },
+   "pooled_for_reference_only": {
+    "airtime_bytes": {
+     "arms": {
+      "always_hold": {
+       "ci95": [
+        -38970.80625,
+        -31339.24375
+       ],
+       "mean_difference": -35084.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      },
+      "bound_only_3_10": {
+       "ci95": [
+        144.5,
+        2257.50625
+       ],
+       "mean_difference": 1077.5,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "event": {
+       "ci95": [
+        47627.96875,
+        55297.65
+       ],
+       "mean_difference": 51567.0,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "event_priority": {
+       "ci95": [
+        47660.49375,
+        55380.8375
+       ],
+       "mean_difference": 51583.25,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "hold_to_bound": {
+       "ci95": [
+        145.5,
+        2266.2625
+       ],
+       "mean_difference": 1077.5,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "immediate": {
+       "ci95": [
+        0.0,
+        0.0
+       ],
+       "mean_difference": 0.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 24,
+       "seeds_worse": 0
+      },
+      "init_75pct_seed1": {
+       "ci95": [
+        47551.475,
+        55321.78125
+       ],
+       "mean_difference": 51515.5,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "init_75pct_seed2": {
+       "ci95": [
+        47649.70625,
+        55388.775
+       ],
+       "mean_difference": 51653.5,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "init_75pct_seed3": {
+       "ci95": [
+        47821.74375,
+        55418.575
+       ],
+       "mean_difference": 51617.25,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "learned_75pct_seed1_at400000": {
+       "ci95": [
+        43260.6875,
+        49213.525
+       ],
+       "mean_difference": 46322.5,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "learned_75pct_seed2_at400000": {
+       "ci95": [
+        47790.93125,
+        55501.51875
+       ],
+       "mean_difference": 51708.25,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "learned_75pct_seed3_at400000": {
+       "ci95": [
+        -7630.2625,
+        -1777.2375
+       ],
+       "mean_difference": -4528.75,
+       "pairs": 24,
+       "seeds_better": 6,
+       "seeds_equal": 0,
+       "seeds_worse": 18
+      },
+      "periodic_10": {
+       "ci95": [
+        6423.0875,
+        16221.3375
+       ],
+       "mean_difference": 10999.75,
+       "pairs": 24,
+       "seeds_better": 21,
+       "seeds_equal": 0,
+       "seeds_worse": 3
+      },
+      "periodic_2": {
+       "ci95": [
+        47745.7,
+        55492.38125
+       ],
+       "mean_difference": 51704.75,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "periodic_20": {
+       "ci95": [
+        -10219.525,
+        -748.74375
+       ],
+       "mean_difference": -5898.25,
+       "pairs": 24,
+       "seeds_better": 3,
+       "seeds_equal": 0,
+       "seeds_worse": 21
+      },
+      "periodic_5": {
+       "ci95": [
+        34833.9875,
+        43095.58125
+       ],
+       "mean_difference": 39044.5,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "random_send": {
+       "ci95": [
+        48164.69375,
+        55577.26875
+       ],
+       "mean_difference": 51935.5,
+       "pairs": 24,
+       "seeds_better": 24,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      },
+      "send_once": {
+       "ci95": [
+        -23927.26875,
+        -16557.7
+       ],
+       "mean_difference": -20168.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      },
+      "send_once_no_bound": {
+       "ci95": [
+        -23971.50625,
+        -16539.75
+       ],
+       "mean_difference": -20168.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      }
+     },
+     "baseline": "first_send_plus_bound_3_10",
+     "shared_seeds": 24
+    },
+    "on_time_targets_per_episode": {
+     "arms": {
+      "always_hold": {
+       "ci95": [
+        -6.0,
+        -6.0
+       ],
+       "mean_difference": -6.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 0,
+       "seeds_worse": 24
+      },
+      "bound_only_3_10": {
+       "ci95": [
+        -0.125,
+        0.0
+       ],
+       "mean_difference": -0.04167,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 23,
+       "seeds_worse": 1
+      },
+      "event": {
+       "ci95": [
+        -1.25,
+        -0.62396
+       ],
+       "mean_difference": -0.91667,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 8,
+       "seeds_worse": 16
+      },
+      "event_priority": {
+       "ci95": [
+        -1.25,
+        -0.58333
+       ],
+       "mean_difference": -0.91667,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 8,
+       "seeds_worse": 16
+      },
+      "hold_to_bound": {
+       "ci95": [
+        -0.125,
+        0.0
+       ],
+       "mean_difference": -0.04167,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 23,
+       "seeds_worse": 1
+      },
+      "immediate": {
+       "ci95": [
+        0.0,
+        0.0
+       ],
+       "mean_difference": 0.0,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 24,
+       "seeds_worse": 0
+      },
+      "init_75pct_seed1": {
+       "ci95": [
+        -2.58333,
+        -1.75
+       ],
+       "mean_difference": -2.16667,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 2,
+       "seeds_worse": 22
+      },
+      "init_75pct_seed2": {
+       "ci95": [
+        -2.62604,
+        -1.75
+       ],
+       "mean_difference": -2.20833,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 2,
+       "seeds_worse": 22
+      },
+      "init_75pct_seed3": {
+       "ci95": [
+        -2.20833,
+        -1.25
+       ],
+       "mean_difference": -1.70833,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 3,
+       "seeds_worse": 21
+      },
+      "learned_75pct_seed1_at400000": {
+       "ci95": [
+        -0.5,
+        -0.04167
+       ],
+       "mean_difference": -0.25,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 20,
+       "seeds_worse": 4
+      },
+      "learned_75pct_seed2_at400000": {
+       "ci95": [
+        -1.45833,
+        -0.875
+       ],
+       "mean_difference": -1.16667,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 5,
+       "seeds_worse": 19
+      },
+      "learned_75pct_seed3_at400000": {
+       "ci95": [
+        -0.125,
+        0.0
+       ],
+       "mean_difference": -0.04167,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 23,
+       "seeds_worse": 1
+      },
+      "periodic_10": {
+       "ci95": [
+        -0.58333,
+        0.0
+       ],
+       "mean_difference": -0.20833,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 22,
+       "seeds_worse": 2
+      },
+      "periodic_2": {
+       "ci95": [
+        -2.25,
+        -1.41667
+       ],
+       "mean_difference": -1.83333,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 3,
+       "seeds_worse": 21
+      },
+      "periodic_20": {
+       "ci95": [
+        -0.45833,
+        0.0
+       ],
+       "mean_difference": -0.16667,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 22,
+       "seeds_worse": 2
+      },
+      "periodic_5": {
+       "ci95": [
+        -0.29167,
+        0.0
+       ],
+       "mean_difference": -0.125,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 21,
+       "seeds_worse": 3
+      },
+      "random_send": {
+       "ci95": [
+        -2.29167,
+        -1.41667
+       ],
+       "mean_difference": -1.83333,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 3,
+       "seeds_worse": 21
+      },
+      "send_once": {
+       "ci95": [
+        -0.45833,
+        0.0
+       ],
+       "mean_difference": -0.20833,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 21,
+       "seeds_worse": 3
+      },
+      "send_once_no_bound": {
+       "ci95": [
+        -0.45833,
+        0.0
+       ],
+       "mean_difference": -0.20833,
+       "pairs": 24,
+       "seeds_better": 0,
+       "seeds_equal": 21,
+       "seeds_worse": 3
+      }
+     },
+     "baseline": "first_send_plus_bound_3_10",
+     "shared_seeds": 24
+    },
+    "warning": "pooled across training seeds, so its CI is optimistic: the frozen judgement reads per_seed below"
+   }
+  }
+ },
+ "verdict": {
+  "primary_gate_met": false,
+  "primary_gate_passed": [],
+  "saving_gate_met": false,
+  "saving_gate_passed": []
+ }
+}

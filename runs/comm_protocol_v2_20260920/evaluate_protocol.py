@@ -138,6 +138,7 @@ def score_learned(
             1000.0 * collector.decide_seconds / max(1, collector.decisions), 4
         ),
         "config_hash": row["config_hash"],
+        "transcript": row["artefacts"]["transcript"],
         "seconds": float(row["seconds"]),
     }
 
@@ -203,10 +204,20 @@ def score_rule(
     }
 
 
-def rows_path(tier: str, setting: tuple[str, float], directory: Path, suffix: str = "") -> Path:
+def rows_path(
+    tier: str,
+    setting: tuple[str, float],
+    directory: Path,
+    suffix: str = "",
+    shard: int | None = None,
+) -> Path:
     information, probability = setting
-    name = f"rows_{tier}_{information}_{probability}{suffix}.jsonl"
-    return directory / name
+    name = f"rows_{tier}_{information}_{probability}{suffix}"
+    if shard is not None:
+        # One file per shard: two processes appending to one JSONL can interleave a half-written
+        # line, and a reader that trips over it should not have to guess which half it got.
+        name = f"{name}_s{shard}"
+    return directory / f"{name}.jsonl"
 
 
 def write_row(path: Path, row: dict[str, Any]) -> None:
@@ -215,11 +226,39 @@ def write_row(path: Path, row: dict[str, Any]) -> None:
         handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
 
 
-def load_rows(tier: str, setting: tuple[str, float], directory: Path, suffix: str = "") -> list[dict[str, Any]]:
-    path = rows_path(tier, setting, directory, suffix)
-    if not path.exists():
-        return []
-    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+def load_rows(
+    tier: str, setting: tuple[str, float], directory: Path, suffix: str = ""
+) -> list[dict[str, Any]]:
+    """Every row for one tier, setting and suffix, from the sharded files as well as the shared one.
+
+    The unsuffixed read is an exact filename rather than a glob: a glob would also pick up the
+    curve and diagnostic files, which are different readings and must never be pooled with it.
+    """
+    information, probability = setting
+    if not suffix:
+        paths = [directory / f"rows_{tier}_{information}_{probability}.jsonl"]
+    else:
+        paths = sorted(directory.glob(f"rows_{tier}_{information}_{probability}{suffix}*.jsonl"))
+    rows: list[dict[str, Any]] = []
+    for path in paths:
+        if not path.exists():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            try:
+                rows.append(json.loads(line))
+            except json.JSONDecodeError:
+                # A trailing line cut by a concurrent writer is not a row. Anything else is a real
+                # defect, and it will surface as a coverage gap in the report rather than silently.
+                continue
+    # A cell is one (arm, stream) pair. An interrupted shard can redo a cell it had already
+    # written, and a duplicated row would silently double that scenario's weight in every mean, so
+    # the last write for a cell wins.
+    unique: dict[tuple[str, int], dict[str, Any]] = {}
+    for row in rows:
+        unique[(str(row["arm"]), int(row["seed"]))] = row
+    return list(unique.values())
 
 
 def done_keys(rows: list[dict[str, Any]]) -> set[tuple[str, int]]:
@@ -249,13 +288,15 @@ def curve_mode(args: argparse.Namespace) -> int:
             controller,
             seed=stream,
             tier=args.tier,
-            directory=directory / "runs",
+            directory=directory / f"runs_s{args.shard}",
             arm=arm,
             setting=PRIMARY_SETTING,
         )
         row["at_steps"] = at_steps
         row["greedy"] = True
-        write_row(rows_path(args.tier, PRIMARY_SETTING, directory, "_curve"), row)
+        write_row(
+            rows_path(args.tier, PRIMARY_SETTING, directory, "_curve", shard=args.shard), row
+        )
         written += 1
         print(
             f"[curve {args.tier}] run{seed}@{at_steps} s{stream}: "
@@ -291,7 +332,7 @@ def arms_mode(args: argparse.Namespace) -> int:
                 arm,
                 tier=args.tier,
                 seed=stream,
-                directory=directory / "runs",
+                directory=directory / f"runs_s{args.shard}",
                 setting=PRIMARY_SETTING,
                 table="legacy" if kind == "legacy" else "v2",
             )
@@ -300,14 +341,16 @@ def arms_mode(args: argparse.Namespace) -> int:
             controller, _ = load_controller(args.tier, int(seed), at_steps)
             row = score_learned(
                 controller,
-                seed=int(seed),
+                seed=stream,
                 tier=args.tier,
-                directory=directory / "runs",
+                directory=directory / f"runs_s{args.shard}",
                 arm=arm,
                 setting=PRIMARY_SETTING,
             )
             row["at_steps"] = at_steps
-        write_row(rows_path(args.tier, PRIMARY_SETTING, directory), row)
+        write_row(
+            rows_path(args.tier, PRIMARY_SETTING, directory, shard=args.shard), row
+        )
         written += 1
         print(
             f"[arms {args.tier}] {arm} s{row['seed']}: onT={row['on_time_targets_per_episode']} "
@@ -341,10 +384,12 @@ def diagnostics_mode(args: argparse.Namespace) -> int:
                     arm,
                     tier=args.tier,
                     seed=seed,
-                    directory=directory / "runs",
+                    directory=directory / f"runs_s{args.shard}",
                     setting=setting,
                 )
-                write_row(rows_path(args.tier, setting, directory, suffix), row)
+                write_row(
+                    rows_path(args.tier, setting, directory, suffix, shard=args.shard), row
+                )
                 written += 1
                 print(
                     f"[diag {args.tier} {setting}] {arm} s{seed}: onT={row['on_time_targets_per_episode']} "
@@ -361,12 +406,14 @@ def diagnostics_mode(args: argparse.Namespace) -> int:
                     controller,
                     seed=stream,
                     tier=args.tier,
-                    directory=directory / "runs",
+                    directory=directory / f"runs_s{args.shard}",
                     arm=arm,
                     setting=setting,
                 )
                 row["at_steps"] = 400_000
-                write_row(rows_path(args.tier, setting, directory, suffix), row)
+                write_row(
+                    rows_path(args.tier, setting, directory, suffix, shard=args.shard), row
+                )
                 written += 1
                 print(
                     f"[diag {args.tier} {setting}] {arm} s{stream}: onT={row['on_time_targets_per_episode']} "
@@ -414,20 +461,22 @@ def sequence_mode(args: argparse.Namespace) -> int:
         for stream in args.seeds:
             row = (
                 score_rule(
-                    arm, tier=args.tier, seed=stream, directory=directory / "seq", setting=PRIMARY_SETTING
+                    arm, tier=args.tier, seed=stream, directory=directory / f"seq_s{args.shard}", setting=PRIMARY_SETTING
                 )
                 if controller is None
                 else score_learned(
                     controller,
                     seed=stream,
                     tier=args.tier,
-                    directory=directory / "seq",
+                    directory=directory / f"seq_s{args.shard}",
                     arm=arm,
                     setting=PRIMARY_SETTING,
                 )
             )
             row["at_steps"] = 400_000 if controller is not None else None
-            write_row(rows_path(args.tier, PRIMARY_SETTING, directory, "_sequence"), row)
+            write_row(
+                rows_path(args.tier, PRIMARY_SETTING, directory, "_sequence", shard=args.shard), row
+            )
             rows.append(row)
             records = common.metrics.load_transcript(row["transcript"])
             sequences[arm][stream] = _send_sequence(records)
@@ -599,11 +648,9 @@ def report_mode(args: argparse.Namespace) -> int:
                 "airtime_bytes": _summary(values, "airtime_bytes"),
             }
         completion = common.paired_bootstrap(
-            rows, baseline=comparator, extract=lambda row: float(row["on_time_targets_per_episode"])
+            rows, baseline=comparator, key="on_time_targets_per_episode"
         )
-        bytes_paired = common.paired_bootstrap(
-            rows, baseline=comparator, extract=lambda row: float(row["airtime_bytes"])
-        )
+        bytes_paired = common.paired_bootstrap(rows, baseline=comparator, key="airtime_bytes")
         # One arm is one *training seed*. The frozen gate counts training seeds, so each arm's CI
         # is computed against the comparator over that arm's own 24 scenario pairs -- pooling all
         # three would treat 3 x 24 as 72 independent scenarios, which the protocol forbids.
@@ -613,12 +660,10 @@ def report_mode(args: argparse.Namespace) -> int:
         ):
             subset = [row for row in rows if row["arm"] in {arm, comparator}]
             own_completion = common.paired_bootstrap(
-                subset,
-                baseline=comparator,
-                extract=lambda row: float(row["on_time_targets_per_episode"]),
+                subset, baseline=comparator, key="on_time_targets_per_episode"
             )["arms"].get(arm, {})
             own_bytes = common.paired_bootstrap(
-                subset, baseline=comparator, extract=lambda row: float(row["airtime_bytes"])
+                subset, baseline=comparator, key="airtime_bytes"
             )["arms"].get(arm, {})
             per_seed[arm] = {
                 "completion_difference_per_episode": own_completion,
@@ -766,8 +811,9 @@ def main(argv: list[str]) -> int:
         if not args.tier:
             raise SystemExit("--mode sequence needs --tier")
         return sequence_mode(args)
-    if not args.tier:
-        raise SystemExit("--mode report needs --tier, or a single-tier run: the report reads one tier")
+    # With or without --tier, one payload holds every tier that was asked for: writing the file
+    # once per tier would leave the last tier's results standing in for both, which is exactly the
+    # substitution the frozen protocol forbids.
     return report_mode(args)
 
 

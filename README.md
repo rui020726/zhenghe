@@ -259,6 +259,23 @@ pip install -r requirements.txt
 模型权重、DungeonMaps 和大规模测试集没有提交到 Git。需要运行完整训练或论文评估时，
 请从团队共享存储取得这些资产，并放到代码期望的本地目录中。
 
+## 通信控制研究轮次（每轮一个 run 目录，入口文档可点击）
+
+研究问题、判据与结果按轮分开归档；每轮目录内的 `.md` 是协议/结果，`.json` 是机读摘要，
+checkpoint、录制流、逐 episode 日志与转录**不入 Git**，只在 manifest 里记路径与 sha256。
+
+| 轮次 | run 目录 | 关键文档 |
+|---|---|---|
+| 通信基线与规则 | `runs/comm_control_20260919/` | `INFORMATION_BOUNDARY.md`（旁路份额实测） |
+| 预算标定与 pilot | `runs/comm_budget_pilot_20260919/` | `COMM_BUDGET_LOCKED.json`（三档锁定额度） |
+| 归因与稳定性 | `runs/comm_stability_20260919/` | `COMM_TRAINING_STABILITY_PROTOCOL.md`、`COMM_TRAINING_STABILITY_RESULTS.md` |
+| 概率正确性与紧预算 | `runs/comm_tight_budget_20260919/` | `COMM_PPO_PROBABILITY_AUDIT.md`、`COMM_TIGHT_BUDGET_PROTOCOL.md`、`COMM_TIGHT_BUDGET_RESULTS.md` |
+| **发送时机协议消融（最新）** | `runs/comm_protocol_v2_20260920/` | `COMM_MASK_CAUSE_AUDIT.md`（掩码归因与勘误）、`COMM_PROTOCOL_V2_PROTOCOL.md`（判据先于结果）、`COMM_PROTOCOL_V2_RESULTS.md`（协议收益与学习收益分开）、`COMM_PROTOCOL_V2_MANIFEST.json` |
+
+传输层的两个协议由 `--comm-timing-mode` 选择：`legacy_shared_bound`（默认，全部历史实验，
+上界到点由传输层代发、计费、可拒付）与 `policy_owned_timing`（研究模式，只有策略自己请求的
+发送才上空气）。协议差异的逐包证据与训练判据见上表最后一行的文档。
+
 ## 协作方式
 
 不要直接在 `main` 开发。每项工作建立独立分支，例如：
