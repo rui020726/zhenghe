@@ -198,6 +198,7 @@ def score_rule(
         "belief_age_steps": float(row["belief"].get("belief_age_steps_mean") or 0.0),
         "max_backlog_age": int(ledger["max_backlog_age"]),
         "config_hash": row["config_hash"],
+        "transcript": row["artefacts"]["transcript"],
         "seconds": float(row["seconds"]),
     }
 
@@ -374,6 +375,146 @@ def diagnostics_mode(args: argparse.Namespace) -> int:
                 )
     print(json.dumps({"rows_written": written}, ensure_ascii=False))
     return 0
+
+
+def sequence_mode(args: argparse.Namespace) -> int:
+    """Section 6's "look at the action and message sequences, not just the completions".
+
+    The locked comparator, the two 3/10 equivalents and every final learned arm, on the same
+    validation streams, with each episode's transport transcript kept: what went on the air and
+    when, how long a change waited, how long a discovery waited for its first report, and whether
+    two arms that finish the same tasks did it with the same packets. Equal completions are not
+    equal behaviour -- and "this policy converged onto that rule" is a claim about sequences, so it
+    has to be able to say which of the two it is.
+    """
+    torch.set_num_threads(max(1, int(args.threads)))
+    directory = common.evaluation_root(args.tier)
+    directory.mkdir(parents=True, exist_ok=True)
+    locked = json.loads(common.json_path("COMM_PROTOCOL_V2_RULE_SELECTION.json").read_text(encoding="utf-8"))
+    comparator = locked["tiers"][args.tier]["selected_primary"]
+    arms: list[tuple[str, Any]] = [(comparator, None)]
+    for arm in ("first_send_plus_bound_3_10", "bound_only_3_10"):
+        arms.append((arm, None))
+    for seed in (1, 2, 3):
+        controller, _ = load_controller(args.tier, seed, 400_000)
+        arms.append((arm_label("learned", args.tier, seed, at_steps=400_000), controller))
+    report: dict[str, Any] = {
+        "tier": args.tier,
+        "comparator": comparator,
+        "budget_bytes": common.tier_bytes(args.tier),
+        "setting": {"information": PRIMARY_SETTING[0], "delivery_probability": PRIMARY_SETTING[1]},
+        "streams": len(args.seeds),
+        "arms": {},
+    }
+    sequences: dict[str, dict[int, list[list[int]]]] = {}
+    for arm, controller in arms:
+        rows: list[dict[str, Any]] = []
+        sequences[arm] = {}
+        waits: list[int] = []
+        for stream in args.seeds:
+            row = (
+                score_rule(
+                    arm, tier=args.tier, seed=stream, directory=directory / "seq", setting=PRIMARY_SETTING
+                )
+                if controller is None
+                else score_learned(
+                    controller,
+                    seed=stream,
+                    tier=args.tier,
+                    directory=directory / "seq",
+                    arm=arm,
+                    setting=PRIMARY_SETTING,
+                )
+            )
+            row["at_steps"] = 400_000 if controller is not None else None
+            write_row(rows_path(args.tier, PRIMARY_SETTING, directory, "_sequence"), row)
+            rows.append(row)
+            records = common.metrics.load_transcript(row["transcript"])
+            sequences[arm][stream] = _send_sequence(records)
+            waits.extend(
+                int(record["step"]) - int(record["ready_step"])
+                for record in records
+                if record["kind"] == "send"
+            )
+        report["arms"][arm] = {
+            "episodes": len(rows),
+            "on_time_per_episode": _summary(rows, "on_time_targets_per_episode"),
+            "airtime_bytes": _summary(rows, "airtime_bytes"),
+            "emissions_mean": round(float(np.mean([int(r["emissions"]) for r in rows])), 3),
+            "forced_share_of_emissions_mean": round(
+                float(np.mean([r["forced_share_of_emissions"] or 0.0 for r in rows])), 4
+            ),
+            "autonomous_share_of_bytes_mean": round(
+                float(np.mean([r["autonomous_share_of_bytes"] or 0.0 for r in rows])), 4
+            ),
+            "longest_silence_max": max(int(r["max_backlog_age"]) for r in rows),
+            "belief_age_steps_mean": round(float(np.mean([float(r["belief_age_steps"]) for r in rows])), 3),
+            "mean_wait_of_a_change_steps": round(float(np.mean(waits)), 3) if waits else None,
+            "max_wait_of_a_change_steps": max(waits) if waits else None,
+        }
+        print(
+            f"[sequence {args.tier}] {arm}: onT={report['arms'][arm]['on_time_per_episode']['mean']} "
+            f"bytes={report['arms'][arm]['airtime_bytes']['mean']} "
+            f"em={report['arms'][arm]['emissions_mean']} "
+            f"longest_silence={report['arms'][arm]['longest_silence_max']}",
+            flush=True,
+        )
+    report["sequence_comparison"] = _sequence_comparison(sequences, comparator)
+    common.write_json(common.json_path("COMM_PROTOCOL_V2_SEQUENCES.json"), report)
+    print(json.dumps({"arms": len(report["arms"])}, ensure_ascii=False))
+    return 0
+
+
+def _send_sequence(records: list[dict[str, Any]]) -> list[list[Any]]:
+    """Every emission as (step, target, position within the step), in the order taken."""
+    positions: dict[int, int] = defaultdict(int)
+    sequence: list[list[Any]] = []
+    for record in records:
+        if record["kind"] != "send":
+            continue
+        step = int(record["step"])
+        sequence.append([step, str(record["target"]), positions[step]])
+        positions[step] += 1
+    return sequence
+
+
+def _sequence_comparison(
+    sequences: dict[str, dict[int, list[list[Any]]]], comparator: str
+) -> dict[str, Any]:
+    """Per arm, how often it emitted the same packets at the same steps as the comparator.
+
+    Three ways to differ, kept apart because they mean different things: a packet the arm sent and
+    the comparator did not, a packet the comparator sent and the arm did not, and the same packets
+    in a different order or at different steps. "Same completions" and "same behaviour" are only
+    the same sentence when all three counts are zero.
+    """
+    report: dict[str, Any] = {}
+    for arm, per_stream in sorted(sequences.items()):
+        if arm == comparator:
+            continue
+        identical = 0
+        extra = 0
+        missing = 0
+        retimed = 0
+        for stream, sequence in per_stream.items():
+            other = sequences[comparator].get(stream, [])
+            if sequence == other:
+                identical += 1
+                continue
+            left = {(step, target) for step, target, _ in sequence}
+            right = {(step, target) for step, target, _ in other}
+            extra += len(left - right)
+            missing += len(right - left)
+            if left == right:
+                retimed += 1
+        report[arm] = {
+            "streams_identical": identical,
+            "streams_compared": len(per_stream),
+            "packets_extra": extra,
+            "packets_missing": missing,
+            "streams_same_packets_different_timing": retimed,
+        }
+    return report
 
 
 def _summary(rows: list[dict[str, Any]], key: str) -> dict[str, Any]:
@@ -599,7 +740,9 @@ def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("--mode", choices=("curve", "arms", "diagnostics", "report"), required=True)
+    parser.add_argument(
+        "--mode", choices=("curve", "arms", "diagnostics", "sequence", "report"), required=True
+    )
     parser.add_argument(
         "--tiers", nargs="+", default=list(common.BUDGET_TIERS), choices=list(common.BUDGET_TIERS)
     )
@@ -619,6 +762,10 @@ def main(argv: list[str]) -> int:
         return arms_mode(args)
     if args.mode == "diagnostics":
         return diagnostics_mode(args)
+    if args.mode == "sequence":
+        if not args.tier:
+            raise SystemExit("--mode sequence needs --tier")
+        return sequence_mode(args)
     if not args.tier:
         raise SystemExit("--mode report needs --tier, or a single-tier run: the report reads one tier")
     return report_mode(args)
