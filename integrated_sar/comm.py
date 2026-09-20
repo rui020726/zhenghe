@@ -30,12 +30,24 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any, Callable, Iterable
 
 import numpy as np
 
 from .contracts import DetectionEvent, DetectionMessage, TaskSnapshot
 from .comm_budget import CommBudget
+from .comm_ack import (
+    ACK_AGE_SCALE_STEPS,
+    ACK_SCHEMA,
+    UNACKED_SCALE,
+    VIEW_GAP_SCALE,
+    AckFeedback,
+    AckLedger,
+    AckMessage,
+    content_fingerprint,
+    estimate_ack_bytes,
+    reverse_rng_key,
+)
 from .comm_policy import (
     CommSendPolicy,
     ImmediatePolicy,
@@ -47,6 +59,20 @@ from .comm_policy import (
 SnapshotLookup = Callable[[str], TaskSnapshot | None]
 AcceptanceLookup = Callable[[str], bool]
 NowLookup = Callable[[], float]
+
+
+def _stable_hash(text: str) -> int:
+    """A stable 32-bit digest of a name, for counter-based seeding.
+
+    ``hash()`` is salted per process in CPython, so it cannot seed a stream two runs must
+    agree on; this one is a plain FNV-1a over the UTF-8 bytes, which is stable everywhere.
+    """
+    digest = 2166136261
+    for byte in str(text).encode("utf-8"):
+        digest = ((digest ^ byte) * 16777619) & 0xFFFFFFFF
+    return digest
+
+
 # Read-only "what does this robot already believe" lookup, used only to classify a refused
 # delivery as duplicate or superseded. Never consulted before deciding what to send.
 FreshnessLookup = Callable[[str, str], "tuple[float, int] | None"]
@@ -206,6 +232,10 @@ class CommRelay:
         freshness_of: FreshnessLookup | None = None,
         now_of: NowLookup | None = None,
         transcript: CommTranscript | None = None,
+        ack_enabled: bool = False,
+        ack_delay_ticks: int | None = None,
+        ack_delivery_probability: float | None = None,
+        ack_seed: int | None = None,
     ) -> None:
         if not 0.0 <= float(delivery_probability) <= 1.0:
             raise ValueError(
@@ -256,6 +286,37 @@ class CommRelay:
         self._freshness_of = freshness_of
         self._now_of = now_of
         self.transcript = transcript
+        # The reverse channel. Off by default and constructed only when asked for: with ACK off
+        # there is no state table, no reverse rng, no extra transcript kind and no extra rng
+        # consumption, which is what keeps the historical path byte-identical. The declared
+        # delay and loss are the *same frozen numbers* the uplink runs with unless a caller
+        # passes its own, so the reverse channel is not a second, friendlier uplink.
+        self._ack_enabled = bool(ack_enabled)
+        self._ack_delay_ticks = (
+            self._delay_ticks if ack_delay_ticks is None else int(ack_delay_ticks)
+        )
+        self._ack_delivery_probability = (
+            float(delivery_probability)
+            if ack_delivery_probability is None
+            else float(ack_delivery_probability)
+        )
+        if self._ack_enabled:
+            if not 0.0 <= self._ack_delivery_probability <= 1.0:
+                raise ValueError(
+                    f"ack_delivery_probability must stay in [0, 1], got {ack_delivery_probability}"
+                )
+            if self._ack_delay_ticks < 0:
+                raise ValueError(
+                    f"ack delay_ticks cannot be negative, got {ack_delay_ticks}"
+                )
+            self._ack_seed = self._seed if ack_seed is None else int(ack_seed)
+            self.ack = AckFeedback(ledger=AckLedger())
+            self._ack_pending: list[tuple[int, int, str, str, AckMessage, int]] = []
+            self._ack_ordinal = 0
+        else:
+            self.ack = AckFeedback(ledger=AckLedger())
+            self._ack_pending = []
+            self._ack_ordinal = 0
         self._pending: list[tuple[int, int, str, DetectionMessage, int, int]] = []
         self._ledger: dict[str, _TargetLedger] = {}
         self._seen_event_ids: set[str] = set()
@@ -316,6 +377,20 @@ class CommRelay:
                 "flight_steps",
                 "max_in_flight",
                 "max_backlog_age",
+                # The reverse channel, all zero unless ACK is on. ``ack_emitted`` counts
+                # frames the receivers actually asked to send (one per applied packet, merged
+                # per receiver/task/tick); ``ack_attempts``/``ack_attempt_bytes`` are the
+                # billed attempts on the reverse channel, losses included; ``ack_delivered``
+                # and ``ack_lost`` split them; ``ack_frames_advanced``/``ack_frames_reaffirmed``
+                # say whether an arrived frame moved the highest confirmed view or re-confirmed
+                # the same one.
+                "ack_emitted",
+                "ack_attempts",
+                "ack_attempt_bytes",
+                "ack_delivered",
+                "ack_lost",
+                "ack_frames_advanced",
+                "ack_frames_reaffirmed",
             )
         }
 
@@ -382,6 +457,10 @@ class CommRelay:
                     changed.append(agent_id)
                     self.counters["deliveries_applied"] += 1
                     self.counters["applied_bytes"] += int(payload_bytes)
+                    # The one and only ACK trigger: the receiver applied this packet. A lost
+                    # packet never reaches here, and a refused one returns False, so neither
+                    # can produce an acknowledgement.
+                    self._ack_applied(agent_id, message)
                 elif reason in self.counters:
                     self.counters[reason] += 1
                 if self.transcript is not None:
@@ -398,6 +477,9 @@ class CommRelay:
                         accepted=bool(accepted),
                         reason="accepted" if accepted else str(reason),
                     )
+        # The reverse channel runs after this step's deliveries and before the next send
+        # decision, so an ACK generated here is visible no earlier than the next step.
+        self._deliver_acks()
         self._note_queue_depth()
         return tuple(changed)
 
@@ -421,6 +503,178 @@ class CommRelay:
         if update_time == float(message.sent_at) and revision >= int(message.revision):
             return False, "delivery_duplicate"
         return False, "delivery_superseded"
+
+    # ------------------------------------------------------------------ reverse channel
+    def _ack_applied(self, agent_id: str, message: DetectionMessage) -> None:
+        """A receiver applied one uplink packet: queue its cumulative acknowledgement.
+
+        At most one ACK per (receiver, task, tick), merged with the existing queue rules -- a
+        receiver that applies two packets for the same task in one step confirms the newer view
+        once, not twice. The ACK itself is billed on the reverse ledger whether or not it
+        survives the reverse channel.
+        """
+        if not self._ack_enabled:
+            return
+        for index, (_, _, subscriber, target, _ack, _cost) in enumerate(self._ack_pending):
+            if subscriber == str(agent_id) and target == str(message.target_id):
+                # Same receiver, same task, same step: the newer application supersedes the
+                # older frame, exactly as two pieces of news share one letter on the uplink.
+                self._ack_pending[index] = (
+                    self._tick + self._ack_delay_ticks,
+                    self._ack_ordinal,
+                    str(agent_id),
+                    str(message.target_id),
+                    AckMessage(
+                        subscriber=str(agent_id),
+                        target_id=str(message.target_id),
+                        sent_at=float(message.sent_at),
+                        revision=int(message.revision),
+                        content_fingerprint=content_fingerprint(message),
+                        confirmed_at=float(self._now_value()),
+                    ),
+                    0,
+                )
+                return
+        self._ack_ordinal += 1
+        ack = AckMessage(
+            subscriber=str(agent_id),
+            target_id=str(message.target_id),
+            sent_at=float(message.sent_at),
+            revision=int(message.revision),
+            content_fingerprint=content_fingerprint(message),
+            confirmed_at=float(self._now_value()),
+        )
+        cost = estimate_ack_bytes(ack)
+        self._ack_pending.append(
+            (
+                self._tick + self._ack_delay_ticks,
+                self._ack_ordinal,
+                str(agent_id),
+                str(message.target_id),
+                ack,
+                int(cost),
+            )
+        )
+        self.counters["ack_emitted"] += 1
+
+    def _deliver_acks(self) -> None:
+        """Deliver the ACK frames whose reverse-channel delay has come; bill every attempt.
+
+        The draw is counter-based on ``(episode seed, direction, subscriber, target, ordinal)``,
+        so two strategies facing the same key lose the same frame -- common random numbers, not
+        merely a common distribution. A lost frame is billed in full and changes nothing else.
+        """
+        if not self._ack_enabled:
+            return
+        due = [item for item in self._ack_pending if item[0] <= self._tick]
+        self._ack_pending = [item for item in self._ack_pending if item[0] > self._tick]
+        if not due:
+            return
+        due.sort(key=lambda item: item[1])
+        for _due_tick, ordinal, subscriber, target, ack, cost in due:
+            key = reverse_rng_key(
+                episode_seed=int(self._ack_seed),
+                direction="uplink_ack",
+                subscriber=subscriber,
+                target_id=target,
+                ordinal=ordinal,
+            )
+            # Counter-based seeding needs integers, so the name components are hashed into
+            # the seed sequence rather than passed through: the same key still assembles the
+            # same stream, and two strategies naming the same key still draw the same number.
+            stream = np.random.default_rng(
+                [
+                    key[0],
+                    _stable_hash(key[1]),
+                    _stable_hash(key[2]),
+                    _stable_hash(key[3]),
+                    key[4],
+                    int(self._tick),
+                ]
+            )
+            delivered = bool(stream.random() < self._ack_delivery_probability)
+            self.counters["ack_attempts"] += 1
+            self.counters["ack_attempt_bytes"] += int(cost)
+            self.ack.ledger.note_attempt(int(cost), delivered=delivered)
+            if delivered:
+                self.counters["ack_delivered"] += 1
+                state = self.ack.state(subscriber, target)
+                advanced = state.offer(ack, self._tick)
+                self.ack.ledger.note_offer(advanced=advanced)
+                if advanced:
+                    self.counters["ack_frames_advanced"] += 1
+                else:
+                    self.counters["ack_frames_reaffirmed"] += 1
+                self._settle_unacked(target)
+            else:
+                self.counters["ack_lost"] += 1
+            if self.transcript is not None:
+                self.transcript.add(
+                    "ack",
+                    step=int(self._tick),
+                    subscriber=subscriber,
+                    target=target,
+                    revision=int(ack.revision),
+                    sent_at=float(ack.sent_at),
+                    confirmed_at=float(ack.confirmed_at),
+                    attempt_bytes=int(cost),
+                    delivered=bool(delivered),
+                    ordinal=int(ordinal),
+                )
+
+    def _settle_unacked(self, target_id: str) -> None:
+        """Clear the unacknowledged-broadcast count once every receiver has caught up.
+
+        The count is the sender's own "I have said this and not everyone has confirmed it"
+        counter, so it is zeroed by confirmations, not by further sends.
+        """
+        if self.ack.broadcast_attempts.get(target_id, 0) <= 0:
+            return
+        if all(
+            self.ack.state(name, target_id).highest is not None for name in self._subscribers
+        ):
+            self.ack.broadcast_attempts[target_id] = 0
+
+    def ack_features(
+        self, item: SendItem, subscribers: Iterable[str] | None = None
+    ) -> tuple[float, ...]:
+        """The four ``/2`` features for one candidate, from arrived ACKs and own history only.
+
+        The view gap compares what the sender *last put on the air* (its own record) with what
+        each receiver has confirmed, so both sides of the subtraction are the sender's own
+        history. Every term is ``UNKNOWN`` when ACK is off, so a ``/1``-trained controller
+        reading this block sees a constant rather than a plausible-looking zero.
+        """
+        if not self._ack_enabled:
+            return (-1.0, -1.0, -1.0, -1.0)
+        names = [
+            str(name)
+            for name in (subscribers if subscribers is not None else self._subscribers)
+        ]
+        ledger = self._ledger.get(item.target_id)
+        last_sent = ledger.last_sent if ledger is not None else None
+        if last_sent is None:
+            # Nothing has gone out yet, so there is no confirmed view to be behind: the gap
+            # term is unknown rather than zero.
+            return (self.ack.confirmed_fraction(item.target_id, names), -1.0, -1.0,
+                    min(1.0, self.ack.unacked_broadcasts(item.target_id) / UNACKED_SCALE))
+        gaps: list[float] = []
+        for name in names:
+            highest = self.ack.state(name, item.target_id).highest
+            if highest is None:
+                continue
+            revision_gap = max(0, int(item.revision) - int(highest[1]))
+            content_gap = 0.0 if highest[2] == content_fingerprint(last_sent) else 1.0
+            gaps.append(float(revision_gap) + content_gap)
+        gap = max(gaps) if gaps else -1.0
+        confirmed = self.ack.confirmed_fraction(item.target_id, names)
+        age = self.ack.max_ack_age(item.target_id, names, self._tick)
+        return (
+            float(confirmed),
+            -1.0 if age < 0 else min(1.0, age / ACK_AGE_SCALE_STEPS),
+            -1.0 if gap < 0 else min(1.0, gap / VIEW_GAP_SCALE),
+            min(1.0, self.ack.unacked_broadcasts(item.target_id) / UNACKED_SCALE),
+        )
 
     def _note_queue_depth(self) -> None:
         self.counters["max_in_flight"] = max(self.counters["max_in_flight"], len(self._pending))
@@ -654,6 +908,14 @@ class CommRelay:
         self.counters["packets_lost"] += lost
         self.counters["airtime_bytes"] += cost_bytes
         self.counters["backlog_steps"] += max(0, self._tick - int(ready_step))
+        # The sender's own count of emissions for this target since its view last changed:
+        # what the ``unacked_broadcasts`` feature reads, and what an ACK resets to zero.
+        if self._ack_enabled and item.changed_view:
+            self.ack.broadcast_attempts[item.target_id] = 1
+        elif self._ack_enabled:
+            self.ack.broadcast_attempts[item.target_id] = (
+                self.ack.broadcast_attempts.get(item.target_id, 0) + 1
+            )
         if self.transcript is not None:
             self.transcript.add(
                 "send",
@@ -689,6 +951,11 @@ class CommRelay:
         self._tick = 0
         self._sequence = 0
         self._rng = np.random.default_rng(self._seed)
+        # The reverse channel starts empty too: no queued frames, no confirmation state, no
+        # billed bytes, and the counter-based draws begin again from ordinal zero.
+        self._ack_pending.clear()
+        self._ack_ordinal = 0
+        self.ack.reset()
         self._budget.reset()
         for key in self.counters:
             self.counters[key] = 0
@@ -722,6 +989,20 @@ class CommRelay:
                 "before the episode starts"
             )
         self._policy = policy
+        self._attach_ack_source(policy)
+
+    def _attach_ack_source(self, policy: Any) -> None:
+        """Give a learned sender the relay's own reverse-channel reader, if ACK is on.
+
+        The reader is a closure over this relay, so the four extra dims can only ever come
+        from ACKs that arrived here. With ACK off nothing is attached and the policy keeps the
+        19-dim layout it was trained on.
+        """
+        source = getattr(policy, "_ack_source", None)
+        if self._ack_enabled and hasattr(policy, "last_features"):
+            policy._ack_source = self.ack_features
+        elif source is not None and not self._ack_enabled:
+            policy._ack_source = None
 
     def transport_parameters(self) -> dict[str, Any]:
         """The knobs the relay itself owns, for a configuration truth table."""
@@ -742,6 +1023,25 @@ class CommRelay:
             "timing_mode": self._timing_mode,
             "bound_enforced_by_transport": self._max_wait_steps is not None
             and self._timing_mode == LEGACY_SHARED_BOUND,
+            # The reverse channel's declared parameters. ``ack_enabled`` False means none of
+            # the rest was ever constructed, so a zero ACK byte count on a no-ACK run is a
+            # statement about the protocol, not about the channel.
+            "ack_enabled": self._ack_enabled,
+            "ack_schema": ACK_SCHEMA if self._ack_enabled else None,
+            "ack_delay_ticks": self._ack_delay_ticks if self._ack_enabled else None,
+            "ack_delivery_probability": (
+                self._ack_delivery_probability if self._ack_enabled else None
+            ),
+            "ack_seed": self._ack_seed if self._ack_enabled else None,
+            "ack_rng_scheme": (
+                "counter-based:(episode_seed,direction,subscriber,target,ordinal)"
+                if self._ack_enabled
+                else None
+            ),
+            "ack_billing": "attempt_bytes_on_separate_reverse_ledger"
+            if self._ack_enabled
+            else None,
+            "ack_usage": self.ack.ledger.usage() if self._ack_enabled else None,
         }
 
     # ------------------------------------------------------------------ payloads

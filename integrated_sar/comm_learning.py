@@ -8,17 +8,27 @@ sender's own ledger and airtime.
 
 Nothing in this module imports torch. The pilot's network lives with the pilot; what is
 production-relevant is the boundary -- these fields, in this order, are what a sender may read.
+
+Two layouts exist. ``comm-send-state/1`` is the 19-dim block every round through the
+protocol-v2 ablation was trained on. ``comm-send-state/2`` is the same 19 dims followed by four
+ACK-derived dims, and it exists because a sender that has never been told what a receiver
+confirmed cannot be asked whether it would have used that: the four new fields are computed only
+from the sender's own send history and ACKs that actually arrived over the reverse channel, and
+they are the explicit ``UNKNOWN`` encoding when no ACK has ever arrived. A ``/1`` checkpoint
+must be refused on a ``/2`` network rather than silently padded.
 """
 
 from __future__ import annotations
 
 from typing import Any, Callable, Mapping
 
+from .comm_ack import OBSERVATION_SCHEMA
 from .comm_policy import SendItem, SendObservation
 
 # Order matters: this is the observation layout a checkpoint was trained against. Adding a
 # field means a new layout name, not a silent reshape of an old one.
 FEATURE_LAYOUT = "comm-send-state/1"
+ACK_FEATURE_LAYOUT = OBSERVATION_SCHEMA
 
 FEATURE_NAMES: tuple[str, ...] = (
     "age_steps",
@@ -42,6 +52,18 @@ FEATURE_NAMES: tuple[str, ...] = (
     "step_over_horizon",
 )
 
+#: The four ACK-derived dims appended to ``FEATURE_NAMES`` for layout ``/2``. Each is either a
+#: normalised quantity or ``UNKNOWN`` (-1.0); none of them can be produced from registry truth,
+#: a receiver's belief, an in-flight packet or a future event.
+ACK_FEATURE_NAMES: tuple[str, ...] = (
+    "confirmed_fraction",
+    "max_ack_age_scaled",
+    "max_view_gap_scaled",
+    "unacked_broadcasts_scaled",
+)
+
+FEATURE_NAMES_V2: tuple[str, ...] = FEATURE_NAMES + ACK_FEATURE_NAMES
+
 #: What "near the deadline" means for the feature scale, and the episode length used to
 #: normalise the position in the episode. Both are declared constants of the *state
 #: representation*, not tuned per run: changing either invalidates a checkpoint.
@@ -54,12 +76,15 @@ def features(
     item: SendItem,
     *,
     horizon: float = EPISODE_HORIZON_STEPS,
+    ack_features: tuple[float, ...] | None = None,
 ) -> tuple[float, ...]:
     """The named feature vector for one candidate at one decision point.
 
     ``since_last_emission_time`` and ``age_steps`` are the sender's own silence clocks. The
     change flags compare the view it would send with the view it last sent. The budget and
     capacity terms are what the executor will allow now, never a forecast of future arrivals.
+    ``ack_features`` is the relay's own four-dim reverse-channel summary; passing it is what
+    makes this the ``/2`` layout, and leaving it out keeps the 19-dim ``/1`` layout byte-for-byte.
     """
     remaining = float(item.remaining_time)
     budget_fraction = 1.0
@@ -93,7 +118,7 @@ def features(
         capacity_fraction,
         float(observation.subscribers),
         min(1.0, float(observation.step) / max(1.0, float(horizon))),
-    )
+    ) + (tuple(ack_features) if ack_features is not None else ())
 
 
 class LearnedSendPolicy:
@@ -114,14 +139,22 @@ class LearnedSendPolicy:
         decide_fn: Callable[[SendObservation], list[str]] | None,
         *,
         horizon: float = EPISODE_HORIZON_STEPS,
+        ack_source: Callable[[SendItem], tuple[float, ...]] | None = None,
     ) -> None:
         self._decide_fn = decide_fn
         self.horizon = float(horizon)
+        #: The relay's reverse-channel reader, attached only when ACK is on. Without it the
+        #: policy stays on the 19-dim layout and its recorded features are byte-identical to
+        #: what every previous round trained on.
+        self._ack_source = ack_source
         self.last_features: dict[str, tuple[float, ...]] = {}
         self.decisions = 0
 
     def parameters(self) -> dict[str, Any]:
-        return {"horizon": self.horizon, "feature_layout": FEATURE_LAYOUT}
+        return {
+            "horizon": self.horizon,
+            "feature_layout": ACK_FEATURE_LAYOUT if self._ack_source is not None else FEATURE_LAYOUT,
+        }
 
     def decide(self, observation: SendObservation) -> tuple[str, ...]:
         if self._decide_fn is None:
@@ -130,7 +163,14 @@ class LearnedSendPolicy:
                 "the policy with a controller and pass it to CommRelay.attach_policy()"
             )
         self.last_features = {
-            item.target_id: features(observation, item, horizon=self.horizon)
+            item.target_id: features(
+                observation,
+                item,
+                horizon=self.horizon,
+                ack_features=(
+                    self._ack_source(item) if self._ack_source is not None else None
+                ),
+            )
             for item in observation.items
         }
         self.decisions += 1

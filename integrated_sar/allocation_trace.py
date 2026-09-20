@@ -57,6 +57,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence, TextIO
 
+from .comm_ack import OBSERVATION_SCHEMA
+from .comm_learning import FEATURE_LAYOUT
 from .run_signature import TRACE_SCHEMA as TRACE_FORMAT
 
 # The schema version a trace declares and the one a run signature records are one constant,
@@ -97,6 +99,9 @@ def arm_name(
     comm_max_wait_steps: int | None = None,
     comm_urgent_wait_steps: int | None = None,
     comm_timing_mode: str = "legacy_shared_bound",
+    comm_ack: bool = False,
+    comm_ack_delay_ticks: int | None = None,
+    comm_ack_delivery_probability: float | None = None,
 ) -> str:
     """The arm label shared with the ``rp_<arm>_s<seed>.jsonl`` lifecycle logs.
 
@@ -164,6 +169,17 @@ def arm_name(
         # The same policy name under two timing protocols is two different arms: one of them has
         # a mechanism speaking on its behalf and the other does not. Their rows must never pool.
         label = f"{label}+{str(comm_timing_mode).strip().lower()}"
+    if comm_ack:
+        # A reverse channel changes what the sender knows, so an ACK-on arm and its no-ACK
+        # twin are two arms even when every uplink byte is identical. The reverse parameters
+        # belong in the label for the same reason the budget does: two reverse channels with
+        # different loss are two protocols.
+        details = ""
+        if comm_ack_delay_ticks is not None:
+            details += f"d{int(comm_ack_delay_ticks)}"
+        if comm_ack_delivery_probability is not None:
+            details += f"p{float(comm_ack_delivery_probability):g}"
+        label = f"{label}+ack{details}"
     return label
 
 
@@ -210,6 +226,11 @@ def trace_meta(
             comm_max_wait_steps=getattr(configuration, "comm_max_wait_steps", None),
             comm_urgent_wait_steps=getattr(configuration, "comm_urgent_wait_steps", None),
             comm_timing_mode=str(getattr(configuration, "comm_timing_mode", "legacy_shared_bound")),
+            comm_ack=bool(getattr(configuration, "comm_ack", False)),
+            comm_ack_delay_ticks=getattr(configuration, "comm_ack_delay_ticks", None),
+            comm_ack_delivery_probability=getattr(
+                configuration, "comm_ack_delivery_probability", None
+            ),
         ),
         "coordinator_policy": str(
             getattr(configuration, "coordinator_policy", "heuristic")
@@ -250,6 +271,17 @@ def trace_meta(
         "record_stream": configuration.record_stream,
         "comm_delivery_probability": float(configuration.comm_delivery_probability),
         "comm_delay_ticks": int(configuration.comm_delay_ticks),
+        # The reverse channel's declared parameters, and the schema the sender's state ran
+        # on. A trace that cannot say whether its sender ever saw an acknowledgement cannot
+        # be pooled with one that did.
+        "comm_ack": bool(getattr(configuration, "comm_ack", False)),
+        "comm_ack_delay_ticks": getattr(configuration, "comm_ack_delay_ticks", None),
+        "comm_ack_delivery_probability": getattr(
+            configuration, "comm_ack_delivery_probability", None
+        ),
+        "observation_schema": (
+            OBSERVATION_SCHEMA if getattr(configuration, "comm_ack", False) else FEATURE_LAYOUT
+        ),
     }
     if signature is not None:
         meta["run_signature"] = dict(signature)

@@ -154,6 +154,13 @@ class RunConfiguration:
     # Where to write the transport transcript (one JSON object per send/delivery/event).
     # Off unless a path is given, and never read back by any decision.
     comm_transcript: str | None = None
+    # The reverse channel. Off by default: with it off no ACK state, reverse rng or extra
+    # transcript kind is constructed, and the run is byte-identical to every recorded one.
+    # With it on, receivers acknowledge applied views over a delayed, lossy, separately billed
+    # channel, and the sender's observation gains four ACK-derived dims (comm-send-state/2).
+    comm_ack: bool = False
+    comm_ack_delay_ticks: int | None = None
+    comm_ack_delivery_probability: float | None = None
     # TaskEnv's own knowledge channels, exposed so an experiment can state them instead of
     # leaving them implicit: the radius inside which a robot refreshes a belief directly from
     # local truth, and how often that refresh plus one-hop gossip runs. The defaults are
@@ -279,6 +286,17 @@ class RunConfiguration:
             raise ConfigurationError(
                 f"--comm-timing-mode must be one of {', '.join(TIMING_MODES)}, got "
                 f"{self.comm_timing_mode!r}"
+            )
+        if self.comm_ack_delay_ticks is not None and int(self.comm_ack_delay_ticks) < 0:
+            raise ConfigurationError(
+                f"--comm-ack-delay-ticks cannot be negative, got {self.comm_ack_delay_ticks}"
+            )
+        if self.comm_ack_delivery_probability is not None and not (
+            0.0 <= float(self.comm_ack_delivery_probability) <= 1.0
+        ):
+            raise ConfigurationError(
+                f"--comm-ack-delivery-probability must stay in [0, 1], got "
+                f"{self.comm_ack_delivery_probability}"
             )
         if self.comm_range < 0:
             raise ConfigurationError(
@@ -521,6 +539,18 @@ def build_parser() -> argparse.ArgumentParser:
                         help="write the transport transcript (one JSON object per accepted "
                              "event, emission and delivery attempt) to this path; a "
                              "measurement artefact, never read back by a decision")
+    parser.add_argument("--comm-ack", action="store_true",
+                        help="turn on the reverse channel: receivers acknowledge the views they "
+                             "actually applied, over a delayed, lossy, separately billed channel, "
+                             "and the sender's state gains four ACK-derived features "
+                             "(comm-send-state/2). Off by default: with it off, no feedback "
+                             "state is constructed and the historical path is unchanged")
+    parser.add_argument("--comm-ack-delay-ticks", type=int, default=None,
+                        help="reverse-channel delay in ticks (default: the uplink's own "
+                             "--comm-delay-ticks, so the two channels share frozen parameters)")
+    parser.add_argument("--comm-ack-delivery-probability", type=float, default=None,
+                        help="reverse-channel delivery probability (default: the uplink's own "
+                             "--comm-delivery-probability)")
     parser.add_argument("--comm-range", type=float, default=0.3,
                         help="rescue-environment sensing radius: inside it a robot refreshes "
                              "its belief from local truth without any message (0.3 is "
@@ -591,6 +621,9 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         comm_urgent_wait_steps=getattr(args, "comm_urgent_wait_steps", None),
         comm_timing_mode=getattr(args, "comm_timing_mode", "legacy_shared_bound"),
         comm_transcript=args.comm_transcript,
+        comm_ack=bool(getattr(args, "comm_ack", False)),
+        comm_ack_delay_ticks=getattr(args, "comm_ack_delay_ticks", None),
+        comm_ack_delivery_probability=getattr(args, "comm_ack_delivery_probability", None),
         comm_range=float(args.comm_range),
         gossip_interval=int(args.gossip_interval),
         quiet=bool(args.quiet),
@@ -691,6 +724,9 @@ def run_signature_of(configuration: RunConfiguration) -> dict[str, Any]:
             comm_max_wait_steps=configuration.comm_max_wait_steps,
             comm_urgent_wait_steps=configuration.comm_urgent_wait_steps,
             comm_timing_mode=configuration.comm_timing_mode,
+            comm_ack=bool(configuration.comm_ack),
+            comm_ack_delay_ticks=configuration.comm_ack_delay_ticks,
+            comm_ack_delivery_probability=configuration.comm_ack_delivery_probability,
         ),
         repo=Path(__file__).resolve().parent.parent,
     )
@@ -944,6 +980,12 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         freshness_of=task_adapter.belief_freshness if comm_transcript is not None else None,
         now_of=lambda: clock.now,
         transcript=comm_transcript,
+        # The reverse channel. Off unless asked for; the declared delay and loss default to
+        # the uplink's own so the two channels share frozen parameters, and the ACK ledger is
+        # separate from the task credit.
+        ack_enabled=bool(configuration.comm_ack),
+        ack_delay_ticks=configuration.comm_ack_delay_ticks,
+        ack_delivery_probability=configuration.comm_ack_delivery_probability,
     )
     bus.subscribe(DetectionEvent, comm_relay.handle_detection)
     task_adapter.comm_relay = comm_relay
