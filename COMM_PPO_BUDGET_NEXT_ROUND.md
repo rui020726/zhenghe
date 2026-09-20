@@ -2,6 +2,10 @@
 
 日期：2026-09-19。对应总纲 v1.3，S3。本文为执行方案，未启动训练。
 
+> 历史状态更新（2026-09-20）：本指令已执行完成，交付头 `edba1e3`。上句“未启动训练”是制定时状态。
+> 结果见 `runs/comm_tight_budget_20260919/COMM_TIGHT_BUDGET_RESULTS.md`；下一轮以
+> [COMM_PROTOCOL_V2_NEXT_ROUND.md](COMM_PROTOCOL_V2_NEXT_ROUND.md) 为准，不重复本轮训练。
+
 ## 1. 工作基础与主问题
 
 从 `feat/communication-training-stability@7834034b58fcb71dda2643f8216cbc8639189a69` 创建 `fix/comm-ppo-probability-budget`，仅引入本次文档提交。先读 AGENTS、架构、状态、总纲及上一轮完整协议和结果。不要切回早期生产分支。
