@@ -241,13 +241,19 @@ def legal_decision_points(seed: int, *, directory: Path, tier: str) -> list[dict
             return self._inner.parameters()
 
         def decide(self, observation: Any) -> tuple[str, ...]:
-            chosen = set(self._inner.decide(observation))
+            # The inner rule's order is returned untouched. Turning it into a set first
+            # would reorder an ``orders_selection`` rule, and under a short credit the order
+            # decides who is paid for -- so the probe episode would stop being the same
+            # episode the branches are measured against. The consistency check below is what
+            # catches that, and it did.
+            chosen = self._inner.decide(observation)
+            selected = set(chosen)
             for item in observation.items:
                 offered.append(
                     {
                         "step": int(observation.step),
                         "target": str(item.target_id),
-                        "rule_sent": str(item.target_id) in chosen,
+                        "rule_sent": str(item.target_id) in selected,
                         "confirmed_fraction": float(item.ack_confirmed_fraction),
                         "unacked": int(item.ack_unacked_broadcasts),
                         "age_steps": int(item.age_steps),
@@ -283,10 +289,13 @@ def legal_decision_points(seed: int, *, directory: Path, tier: str) -> list[dict
     return offered
 
 
-#: How many decision points per stream the diagnostic measures. Two, at deterministic
-#: positions among the partial-confirmation points, so the sample is not the first step of
-#: every episode (which is always a first emission and therefore not a trade-off at all).
-POINTS_PER_STREAM = 2
+#: How many decision points per stream the diagnostic measures. Ten, at deterministic
+#: positions among the partial-confirmation points. This is a *sample size*, not a threshold:
+#: the brief fixes the thresholds (>= 20 per branch, >= 8 streams) and this number only
+#: decides how much evidence is collected before they are applied. Measuring two points per
+#: stream cannot distinguish "there is no trade-off" from "there was not enough measurement",
+#: so the sample is wide enough for the gate to be able to fail for the right reason.
+POINTS_PER_STREAM = 10
 
 
 def select_points(points: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -422,6 +431,28 @@ def load_rows(tier: str) -> list[dict[str, Any]]:
     return rows
 
 
+def _folded_probe_points(tier: str) -> list[dict[str, Any]]:
+    """The per-stream probe records from every shard, de-duplicated by stream.
+
+    The shards each carry the probe for their own streams, so folding them is a concatenation
+    with a per-stream guard: two shards must never claim the same stream, or a stream's
+    decision points would be counted twice and gate 1's evidence would be inflated.
+    """
+    root = common.evaluation_root(tier)
+    folded: dict[int, list[dict[str, Any]]] = {}
+    for path in sorted(root.glob("counterfactual_shard*.json")):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        for entry in payload.get("probe_points", []):
+            seed = int(entry["seed"])
+            if seed in folded:
+                raise RuntimeError(
+                    f"{path}: stream {seed} already recorded by another shard; a duplicated "
+                    "probe would inflate gate 1's evidence"
+                )
+            folded[seed] = entry["points"]
+    return [{"seed": seed, "points": folded[seed]} for seed in sorted(folded)]
+
+
 def report(args: argparse.Namespace) -> int:
     rows = [row for row in load_rows(args.tier) if row.get("status") == "measured"]
     if not rows:
@@ -459,11 +490,11 @@ def report(args: argparse.Namespace) -> int:
         },
         "send_better_on_time": {
             "count": len(send_better),
-            "streams": sorted(row["seed"] for row in send_better),
+            "streams": sorted({row["seed"] for row in send_better}),
         },
         "hold_better_on_time": {
             "count": len(hold_better),
-            "streams": sorted(row["seed"] for row in hold_better),
+            "streams": sorted({row["seed"] for row in hold_better}),
         },
         "tied_on_time": {"count": len(ties)},
         "send_cheaper_total_bytes": {"count": len(send_cheaper)},
@@ -477,6 +508,11 @@ def report(args: argparse.Namespace) -> int:
             and len({row["seed"] for row in hold_better}) >= MIN_STREAMS_PER_BRANCH,
         },
         "per_stream": rows,
+        # Every legal decision point the probe recorded, per stream, folded in from the
+        # shards. Gate 1 reads these: it needs to know whether an unconfirmed attempt was
+        # ever followed by a change in the sender's confirmation state, which is the same
+        # evidence the branches were chosen from rather than a second measurement.
+        "probe_points": _folded_probe_points(args.tier),
     }
     common.write_json(common.json_path(f"COMM_ACK_VALUE_COUNTERFACTUAL_{args.tier}.json"), payload)
     print(json.dumps({k: v for k, v in payload.items() if k != "per_stream"}, ensure_ascii=False, indent=1))

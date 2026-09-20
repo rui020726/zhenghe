@@ -59,16 +59,12 @@ def _pairs(rows: list[dict[str, Any]], channel: str, arm: str, key: str) -> dict
 def _paired_difference(
     rows: list[dict[str, Any]], channel: str, arm: str, baseline: str, key: str
 ) -> dict[str, Any] | None:
-    left = _pairs(rows, channel, arm, key)
-    right = _pairs(rows, channel, baseline, key)
-    shared = sorted(set(left) & set(right))
-    if len(shared) < 8:
+    """Round 2's seed-level paired bootstrap, reused so the CI is the same quantity."""
+    import ack_matrix
+
+    result = ack_matrix._paired(rows, channel, arm, baseline, key)
+    if not result.get("streams"):
         return None
-    pairs = [(left[seed], right[seed]) for seed in shared]
-    result = common.paired_bootstrap(
-        pairs, baseline=0.0, key=lambda pair: pair[0] - pair[1]
-    )
-    result.update({"streams": len(shared)})
     return result
 
 
@@ -129,13 +125,13 @@ def gate_2_information_pays(
         _paired_difference(rows, channel, best, baseline, "total_bytes") if best else None
     )
     better_completion = bool(
-        completion and float(completion["ci_lower"]) > 0.0
+        completion and float(completion["ci95_lower"]) > 0.0
     )
     non_inferior_and_cheaper = bool(
         completion
         and total_bytes
-        and float(completion["ci_lower"]) >= NON_INFERIORITY_MARGIN
-        and float(total_bytes["ci_upper"]) < 0.0
+        and float(completion["ci95_lower"]) >= NON_INFERIORITY_MARGIN
+        and float(total_bytes["ci95_upper"]) < 0.0
     )
     return {
         "channel": channel,

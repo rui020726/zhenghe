@@ -209,26 +209,37 @@ def aggregate(rows: list[dict[str, Any]], channel: str) -> dict[str, dict[str, A
 def _paired(
     rows: list[dict[str, Any]], channel: str, arm: str, baseline: str, key: str
 ) -> dict[str, Any]:
-    """Per-stream paired difference and its percentile bootstrap, the frozen implementation."""
-    left = {
-        int(row["seed"]): float(row[key])
+    """Per-stream paired difference and its percentile bootstrap, the frozen implementation.
+
+    ``paired_bootstrap`` is round 2's: it takes the row list of one channel, pairs every arm
+    against the named baseline by seed, and returns ``{"arms": {arm: {...}}}`` with
+    ``ci95``. It is reused rather than re-derived so this round's CIs are the same quantity
+    the archived rounds quote.
+    """
+    scoped = [
+        row
         for row in rows
-        if row["channel"] == channel and row["arm"] == arm
-    }
-    right = {
-        int(row["seed"]): float(row[key])
-        for row in rows
-        if row["channel"] == channel and row["arm"] == baseline
-    }
-    shared = sorted(set(left) & set(right))
-    if not shared:
+        if row["channel"] == channel and row["arm"] in (arm, baseline)
+    ]
+    if not scoped:
         return {"arm": arm, "baseline": baseline, "key": key, "streams": 0}
-    pairs = [(left[seed], right[seed]) for seed in shared]
-    result = common.paired_bootstrap(
-        pairs, baseline=0.0, key=lambda pair: pair[0] - pair[1]
-    )
-    result.update({"arm": arm, "baseline": baseline, "key": key, "streams": len(shared)})
-    return result
+    result = common.paired_bootstrap(scoped, baseline=baseline, key=key)
+    entry = dict(result.get("arms", {}).get(arm, {}))
+    if not entry:
+        return {"arm": arm, "baseline": baseline, "key": key, "streams": 0}
+    ci = entry.get("ci95") or [None, None]
+    return {
+        "arm": arm,
+        "baseline": baseline,
+        "key": key,
+        "streams": int(entry.get("pairs", 0)),
+        "mean_difference": entry.get("mean_difference"),
+        "ci95_lower": ci[0],
+        "ci95_upper": ci[1],
+        "seeds_better": entry.get("seeds_better"),
+        "seeds_worse": entry.get("seeds_worse"),
+        "seeds_equal": entry.get("seeds_equal"),
+    }
 
 
 def report(args: argparse.Namespace) -> int:
