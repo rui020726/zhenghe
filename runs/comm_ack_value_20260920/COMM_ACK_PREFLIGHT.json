@@ -1,0 +1,213 @@
+{
+ "all_passed": true,
+ "checks": {
+  "ack_arrival_is_delayed": {
+   "acks": 22,
+   "passed": true,
+   "sends": 11,
+   "violations": []
+  },
+  "ack_ledger_is_separate_and_billed": {
+   "passed": true,
+   "problems": [],
+   "rows": [
+    {
+     "ack": 10899,
+     "attempts": 37,
+     "delivered": 28,
+     "emitted": 37,
+     "lost": 9,
+     "seed": 700000,
+     "uplink": 27750
+    },
+    {
+     "ack": 15307,
+     "attempts": 52,
+     "delivered": 39,
+     "emitted": 52,
+     "lost": 13,
+     "seed": 700001,
+     "uplink": 29250
+    }
+   ]
+  },
+  "ack_off_path_is_byte_identical": {
+   "config_hash_pairs": {
+    "700000": [
+     "be7d7b4dd6fdefd9",
+     "711c8b68367f2626"
+    ],
+    "700001": [
+     "64c44c509ccc0c35",
+     "d2ee97c88a631b2f"
+    ]
+   },
+   "config_hashes_differ": true,
+   "mismatches": {},
+   "passed": true,
+   "seeds": [
+    700000,
+    700001
+   ]
+  },
+  "budget_is_never_breached": {
+   "breaches": [],
+   "budget_bytes": 29300,
+   "passed": true
+  },
+  "counter_based_channel_is_reproducible": {
+   "passed": true,
+   "shared_prefix_identical": true
+  },
+  "default_configuration_unchanged": {
+   "expected": {
+    "comm_ack": false,
+    "comm_ack_delay_ticks": null,
+    "comm_ack_delivery_probability": null,
+    "comm_budget_bytes": null,
+    "comm_max_wait_steps": null,
+    "comm_policy": "immediate",
+    "comm_range": 0.3,
+    "comm_timing_mode": "legacy_shared_bound",
+    "comm_urgent_wait_steps": null,
+    "gossip_interval": 2
+   },
+   "mismatches": {},
+   "observed": {
+    "comm_ack": false,
+    "comm_ack_delay_ticks": null,
+    "comm_ack_delivery_probability": null,
+    "comm_budget_bytes": null,
+    "comm_max_wait_steps": null,
+    "comm_policy": "immediate",
+    "comm_range": 0.3,
+    "comm_timing_mode": "legacy_shared_bound",
+    "comm_urgent_wait_steps": null,
+    "gossip_interval": 2
+   },
+   "passed": true
+  },
+  "final_test_block_is_sealed": {
+   "leaks": [],
+   "passed": true,
+   "roots": [
+    "D:\\code\\整合\\zhenghe\\runs\\comm_ack_value_20260920\\evaluation",
+    "D:\\code\\整合\\zhenghe\\runs\\comm_ack_value_20260920\\preflight"
+   ]
+  },
+  "lost_uplink_makes_no_ack": {
+   "ack_attempt_bytes": 0,
+   "ack_emitted": 0,
+   "deliveries_applied": 0,
+   "passed": true
+  },
+  "observation_schema_is_declared": {
+   "ack_names": [
+    "confirmed_fraction",
+    "max_ack_age_scaled",
+    "max_view_gap_scaled",
+    "unacked_broadcasts_scaled"
+   ],
+   "passed": true,
+   "schema": "comm-send-state/2",
+   "v1_names": 19,
+   "v2_names": 23
+  },
+  "reset_clears_the_feedback_state": {
+   "ack_attempts_first_episode": 37,
+   "passed": true
+  },
+  "rule_catalogue_is_complete": {
+   "arms": 22,
+   "built": {
+    "always_hold": {},
+    "backoff_1": {
+     "base_interval": 1,
+     "max_interval": 32
+    },
+    "backoff_16": {
+     "base_interval": 16,
+     "max_interval": 32
+    },
+    "backoff_2": {
+     "base_interval": 2,
+     "max_interval": 32
+    },
+    "backoff_4": {
+     "base_interval": 4,
+     "max_interval": 32
+    },
+    "backoff_8": {
+     "base_interval": 8,
+     "max_interval": 32
+    },
+    "deadline_tightening_retry": {
+     "base_interval": 8,
+     "max_attempts": 10,
+     "urgency_time": 25.0
+    },
+    "event": {
+     "progress_threshold": 0.2,
+     "urgency_time": 25.0
+    },
+    "event_priority": {
+     "progress_threshold": 0.2,
+     "urgency_time": 25.0
+    },
+    "event_retry_until_acked_10": {
+     "max_attempts": 10,
+     "progress_threshold": 0.2,
+     "urgency_time": 25.0
+    },
+    "event_retry_until_acked_2": {
+     "max_attempts": 2,
+     "progress_threshold": 0.2,
+     "urgency_time": 25.0
+    },
+    "event_retry_until_acked_20": {
+     "max_attempts": 20,
+     "progress_threshold": 0.2,
+     "urgency_time": 25.0
+    },
+    "event_retry_until_acked_5": {
+     "max_attempts": 5,
+     "progress_threshold": 0.2,
+     "urgency_time": 25.0
+    },
+    "periodic_10": {
+     "interval": 10
+    },
+    "periodic_2": {
+     "interval": 2
+    },
+    "periodic_20": {
+     "interval": 20
+    },
+    "periodic_5": {
+     "interval": 5
+    },
+    "retry_until_acked_10": {
+     "max_attempts": 10
+    },
+    "retry_until_acked_2": {
+     "max_attempts": 2
+    },
+    "retry_until_acked_20": {
+     "max_attempts": 20
+    },
+    "retry_until_acked_5": {
+     "max_attempts": 5
+    },
+    "send_once": {}
+   },
+   "missing": [],
+   "passed": true
+  },
+  "torch_is_available_for_training": {
+   "passed": true,
+   "torch": "2.9.0+cu128"
+  }
+ },
+ "failures": [],
+ "threads": 1
+}

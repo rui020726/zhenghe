@@ -57,6 +57,9 @@ def run_episode(
     max_wait_steps: int | None = common.pilot_env.MAX_WAIT_STEPS,
     urgent_wait_steps: int | None = common.pilot_env.MAX_WAIT_WHEN_URGENT_STEPS,
     timing_mode: str = LEGACY,
+    ack: bool = False,
+    ack_delay_ticks: int | None = None,
+    ack_delivery_probability: float | None = None,
     controller: Any | None = None,
     policy_hook: Callable[[Any], None] | None = None,
     on_step: Callable[[int, float], None] | None = None,
@@ -67,6 +70,10 @@ def run_episode(
     ``max_wait_steps=None`` builds a relay with no bound declared at all. Under
     ``policy_owned_timing`` the declared numbers stay on the relay as constants and produce no
     emission by themselves; passing them is what lets the truth table say "declared, not enforced".
+
+    ``ack`` turns the reverse channel on. Its delay and loss default to the uplink's own, which
+    is the contract's rule; the ACK ledger is separate from the task credit and is reported
+    beside it, never merged into it.
     """
     parameters = dict(policy_params or {})
     values = common.pilot.configuration_for(
@@ -83,6 +90,9 @@ def run_episode(
         comm_max_wait_steps=max_wait_steps,
         comm_urgent_wait_steps=urgent_wait_steps,
         comm_timing_mode=timing_mode,
+        comm_ack=bool(ack),
+        comm_ack_delay_ticks=ack_delay_ticks,
+        comm_ack_delivery_probability=ack_delivery_probability,
         gossip_interval=(common.ISOLATED_GOSSIP_INTERVAL if information == "isolated" else 2),
         quiet=True,
     )
@@ -108,6 +118,11 @@ def run_episode(
         raise RuntimeError(
             f"{label} s{seed}: the relay reports timing mode {declared['timing_mode']!r}, not "
             f"{timing_mode!r}; a protocol that cannot state which one it ran cannot be reported"
+        )
+    if bool(declared["ack_enabled"]) != bool(ack):
+        raise RuntimeError(
+            f"{label} s{seed}: the relay reports ack_enabled={declared['ack_enabled']!r}, not "
+            f"{ack!r}; a run that cannot state whether it had a reverse channel cannot be reported"
         )
 
     environment = run.task_adapter.env
@@ -164,6 +179,16 @@ def run_episode(
         "information": information,
         "timing_mode": timing_mode,
         "bound_enforced_by_transport": declared["bound_enforced_by_transport"],
+        "ack_enabled": bool(declared["ack_enabled"]),
+        "ack_parameters": {
+            key: declared[key]
+            for key in (
+                "ack_delay_ticks",
+                "ack_delivery_probability",
+                "ack_rng_scheme",
+                "ack_billing",
+            )
+        },
         "budget_bytes": budget_bytes,
         "sends_per_step": sends_per_step,
         "delivery_probability": delivery_probability,
@@ -227,6 +252,9 @@ def rollout_episode(
     timing_mode: str = POLICY_OWNED,
     information: str = "isolated",
     delivery_probability: float = 1.0,
+    ack: bool = False,
+    ack_delay_ticks: int | None = None,
+    ack_delivery_probability: float | None = None,
 ) -> dict[str, Any]:
     """One training rollout: the collector is the only sender, and the tape sums to the score.
 
@@ -255,6 +283,9 @@ def rollout_episode(
         urgent_wait_steps=(
             common.pilot_env.MAX_WAIT_WHEN_URGENT_STEPS if timing_mode == LEGACY else None
         ),
+        ack=bool(ack),
+        ack_delay_ticks=ack_delay_ticks,
+        ack_delivery_probability=ack_delivery_probability,
     )
     by_step = {int(record["step"]): record for record in collector.records}
     decisions = sorted(by_step)

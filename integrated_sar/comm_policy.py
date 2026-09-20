@@ -36,6 +36,14 @@ class SendItem:
     node's current view differs from the last packet it emitted for this target, for any
     reason. The narrower flags say *which* part moved, so a policy can decide that a roster
     edit is worth a packet and a confidence tweak is not.
+
+    ``ack_confirmed_fraction`` and ``ack_unacked_broadcasts`` are the reverse channel's
+    contribution, and both are the sender's own arithmetic over ACKs that actually arrived:
+    the first is how many configured receivers have confirmed the view it last put on the
+    air, the second how many emissions it has made for this target since the view last
+    changed without everyone confirming. Both are ``-1`` when no ACK has ever arrived, which
+    is the explicit unknown encoding -- a sender that has never been told anything must not
+    read as a sender that has been told "nobody confirmed".
     """
 
     target_id: str
@@ -58,6 +66,8 @@ class SendItem:
     last_sent_step: int | None
     since_last_emission_time: float | None
     has_future_requirements: bool
+    ack_confirmed_fraction: float = -1.0
+    ack_unacked_broadcasts: int = -1
 
 
 @dataclass(frozen=True)
@@ -488,6 +498,238 @@ class RandomSendPolicy(CommSendPolicy):
         )
 
 
+class _AckAwarePolicy(CommSendPolicy):
+    """Plumbing for rules that read the reverse channel.
+
+    The two facts an ACK rule may use are on every :class:`SendItem` already, so a rule stays
+    a pure function of its observation. ``unknown`` is what a sender that has never received
+    an ACK sees, and it is deliberately *not* zero: "nobody has confirmed" and "I have not
+    been told anything" are different states, and a rule that confuses them would retry a
+    view that was confirmed long ago.
+    """
+
+    #: The value ``ack_confirmed_fraction`` carries when no ACK has arrived.
+    UNKNOWN = -1.0
+
+    @staticmethod
+    def confirmed(item: SendItem) -> float | None:
+        value = float(item.ack_confirmed_fraction)
+        return None if value < 0.0 else value
+
+    @staticmethod
+    def unacked(item: SendItem) -> int | None:
+        value = int(item.ack_unacked_broadcasts)
+        return None if value < 0 else value
+
+
+class RetryUntilAckedPolicy(_AckAwarePolicy):
+    """Say each view again until every configured receiver has confirmed it, up to k attempts.
+
+    The simplest rule that can only exist with a reverse channel: without an ACK there is no
+    "everyone has it" to wait for, and without the cap there is no bound on what a lost
+    acknowledgement costs. The first emission of a view always goes out; the retries are
+    driven by the sender's own unacknowledged-broadcast count, never by a receiver's state.
+    """
+
+    name = "retry_until_acked"
+
+    def __init__(self, *, max_attempts: int = 5) -> None:
+        max_attempts = int(max_attempts)
+        if max_attempts < 1:
+            raise ValueError(f"max_attempts must be >= 1, got {max_attempts}")
+        self.max_attempts = max_attempts
+
+    def parameters(self) -> dict[str, Any]:
+        return {"max_attempts": self.max_attempts}
+
+    def decide(self, observation: SendObservation) -> tuple[str, ...]:
+        chosen: list[str] = []
+        for item in observation.items:
+            if item.first_emission or item.pending_event:
+                chosen.append(item.target_id)
+                continue
+            confirmed = self.confirmed(item)
+            unacked = self.unacked(item)
+            if confirmed is None:
+                # No ACK has ever arrived for this view: the rule cannot tell "unconfirmed"
+                # from "unknown", so it falls back to its attempt budget rather than
+                # pretending it knows.
+                if unacked is None or unacked < self.max_attempts:
+                    chosen.append(item.target_id)
+                continue
+            if confirmed >= 1.0:
+                continue
+            if unacked is None or unacked < self.max_attempts:
+                chosen.append(item.target_id)
+        return tuple(chosen)
+
+
+class EventRetryUntilAckedPolicy(_AckAwarePolicy):
+    """The event triggers, plus a bounded retry for the views they have not confirmed.
+
+    This is the arm the brief names as the realistic ACK rule: it does not resend everything,
+    it resends what a receiver has not confirmed yet, and it stops when the event set is
+    exhausted and the confirmations are in. It shares the event trigger with ``event`` so the
+    only difference between the two arms is the retry band.
+    """
+
+    name = "event_retry_until_acked"
+    orders_selection = True
+
+    def __init__(
+        self,
+        *,
+        max_attempts: int = 5,
+        progress_threshold: float = 0.2,
+        urgency_time: float = 25.0,
+    ) -> None:
+        max_attempts = int(max_attempts)
+        if max_attempts < 1:
+            raise ValueError(f"max_attempts must be >= 1, got {max_attempts}")
+        self.max_attempts = max_attempts
+        self._event = EventPolicy(
+            progress_threshold=progress_threshold, urgency_time=urgency_time
+        )
+
+    def parameters(self) -> dict[str, Any]:
+        values = self._event.parameters()
+        values.update({"max_attempts": self.max_attempts})
+        return values
+
+    def triggered(self, item: SendItem) -> bool:
+        return self._event.triggered(item)
+
+    def decide(self, observation: SendObservation) -> tuple[str, ...]:
+        triggered = [item for item in observation.items if self.triggered(item)]
+        retries = []
+        for item in observation.items:
+            if item in triggered:
+                continue
+            confirmed = self.confirmed(item)
+            if confirmed is not None and confirmed >= 1.0:
+                continue
+            unacked = self.unacked(item)
+            if unacked is not None and unacked >= self.max_attempts:
+                continue
+            retries.append(item)
+        ordered = transport_order(triggered) + transport_order(retries)
+        return tuple(item.target_id for item in ordered)
+
+
+class ExponentialBackoffPolicy(_AckAwarePolicy):
+    """Retry on a doubling clock, capped, until the view is confirmed.
+
+    The backoff interval is measured in emissions for this target, so the clock is the
+    sender's own history rather than the global step counter: a target that changed rarely
+    does not inherit a schedule from a neighbour that changed often.
+    """
+
+    name = "exponential_backoff"
+
+    def __init__(self, *, base_interval: int = 2, max_interval: int = 32) -> None:
+        base_interval = int(base_interval)
+        max_interval = int(max_interval)
+        if base_interval < 1:
+            raise ValueError(f"base_interval must be >= 1, got {base_interval}")
+        if max_interval < base_interval:
+            raise ValueError(
+                f"max_interval must be >= base_interval, got {max_interval} < {base_interval}"
+            )
+        self.base_interval = base_interval
+        self.max_interval = max_interval
+
+    def parameters(self) -> dict[str, Any]:
+        return {"base_interval": self.base_interval, "max_interval": self.max_interval}
+
+    def _interval(self, attempts: int) -> int:
+        """The gap after the ``attempts``-th emission, doubling up to the cap."""
+        if attempts <= 0:
+            return self.base_interval
+        return min(self.max_interval, self.base_interval * (2 ** max(0, attempts - 1)))
+
+    def decide(self, observation: SendObservation) -> tuple[str, ...]:
+        chosen: list[str] = []
+        for item in observation.items:
+            if item.first_emission or item.pending_event:
+                chosen.append(item.target_id)
+                continue
+            confirmed = self.confirmed(item)
+            if confirmed is not None and confirmed >= 1.0:
+                continue
+            unacked = self.unacked(item)
+            attempts = 0 if unacked is None else unacked
+            since = item.since_last_emission_time
+            if since is None:
+                chosen.append(item.target_id)
+                continue
+            if float(since) >= float(self._interval(attempts)):
+                chosen.append(item.target_id)
+        return tuple(chosen)
+
+
+class DeadlineTighteningRetryPolicy(_AckAwarePolicy):
+    """Retry spacing shrinks as the deadline approaches, capped by an attempt budget.
+
+    The explicit version of "matter more, say it more often": the gap between retries is the
+    base interval scaled by how much slack is left, so a task inside its urgency window is
+    retried every step and one with months of slack keeps its spacing. Every term is visible
+    state -- remaining time and the sender's own attempt count -- so the rule stays a rule.
+    """
+
+    name = "deadline_tightening_retry"
+
+    def __init__(
+        self,
+        *,
+        max_attempts: int = 10,
+        urgency_time: float = 25.0,
+        base_interval: int = 8,
+    ) -> None:
+        max_attempts = int(max_attempts)
+        if max_attempts < 1:
+            raise ValueError(f"max_attempts must be >= 1, got {max_attempts}")
+        if float(urgency_time) < 0.0:
+            raise ValueError(f"urgency_time cannot be negative, got {urgency_time}")
+        if int(base_interval) < 1:
+            raise ValueError(f"base_interval must be >= 1, got {base_interval}")
+        self.max_attempts = max_attempts
+        self.urgency_time = float(urgency_time)
+        self.base_interval = int(base_interval)
+
+    def parameters(self) -> dict[str, Any]:
+        return {
+            "max_attempts": self.max_attempts,
+            "urgency_time": self.urgency_time,
+            "base_interval": self.base_interval,
+        }
+
+    def _gap(self, item: SendItem) -> int:
+        """Steps to wait before the next retry: 1 when urgent, growing with slack."""
+        slack = float(item.remaining_time)
+        if 0.0 <= slack <= self.urgency_time:
+            return 1
+        # One extra step of waiting per full urgency window of slack, capped at the base.
+        windows = max(0.0, slack) / max(1.0, self.urgency_time)
+        return max(1, min(self.base_interval, int(windows) + 1))
+
+    def decide(self, observation: SendObservation) -> tuple[str, ...]:
+        chosen: list[str] = []
+        for item in observation.items:
+            if item.first_emission or item.pending_event:
+                chosen.append(item.target_id)
+                continue
+            confirmed = self.confirmed(item)
+            if confirmed is not None and confirmed >= 1.0:
+                continue
+            unacked = self.unacked(item)
+            if unacked is not None and unacked >= self.max_attempts:
+                continue
+            since = item.since_last_emission_time
+            if since is None or float(since) >= float(self._gap(item)):
+                chosen.append(item.target_id)
+        return tuple(chosen)
+
+
 _RULE_CLASSES: tuple[type[CommSendPolicy], ...] = (
     ImmediatePolicy,
     PeriodicPolicy,
@@ -500,6 +742,13 @@ _RULE_CLASSES: tuple[type[CommSendPolicy], ...] = (
     SendOncePolicy,
     AlwaysHoldPolicy,
     RandomSendPolicy,
+    # The ACK-aware rules. They read the same two reverse-channel facts the ``/2`` features
+    # read, so a rule and a learned sender compete on the same information rather than one of
+    # them holding a private channel.
+    RetryUntilAckedPolicy,
+    EventRetryUntilAckedPolicy,
+    ExponentialBackoffPolicy,
+    DeadlineTighteningRetryPolicy,
 )
 
 POLICIES: dict[str, type[CommSendPolicy]] = {

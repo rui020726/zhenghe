@@ -640,10 +640,12 @@ class CommRelay:
     ) -> tuple[float, ...]:
         """The four ``/2`` features for one candidate, from arrived ACKs and own history only.
 
-        The view gap compares what the sender *last put on the air* (its own record) with what
-        each receiver has confirmed, so both sides of the subtraction are the sender's own
-        history. Every term is ``UNKNOWN`` when ACK is off, so a ``/1``-trained controller
-        reading this block sees a constant rather than a plausible-looking zero.
+        The first two dims are the item's own reverse-channel facts, so a rule and a network
+        reading them read the same numbers. The view gap compares what the sender *last put
+        on the air* (its own record) with what each receiver has confirmed, so both sides of
+        the subtraction are the sender's own history. Every term is ``UNKNOWN`` when ACK is
+        off, so a ``/1``-trained controller reading this block sees a constant rather than a
+        plausible-looking zero.
         """
         if not self._ack_enabled:
             return (-1.0, -1.0, -1.0, -1.0)
@@ -651,29 +653,30 @@ class CommRelay:
             str(name)
             for name in (subscribers if subscribers is not None else self._subscribers)
         ]
+        confirmed = float(item.ack_confirmed_fraction)
+        age = self.ack.max_ack_age(item.target_id, names, self._tick)
         ledger = self._ledger.get(item.target_id)
         last_sent = ledger.last_sent if ledger is not None else None
         if last_sent is None:
             # Nothing has gone out yet, so there is no confirmed view to be behind: the gap
             # term is unknown rather than zero.
-            return (self.ack.confirmed_fraction(item.target_id, names), -1.0, -1.0,
-                    min(1.0, self.ack.unacked_broadcasts(item.target_id) / UNACKED_SCALE))
-        gaps: list[float] = []
-        for name in names:
-            highest = self.ack.state(name, item.target_id).highest
-            if highest is None:
-                continue
-            revision_gap = max(0, int(item.revision) - int(highest[1]))
-            content_gap = 0.0 if highest[2] == content_fingerprint(last_sent) else 1.0
-            gaps.append(float(revision_gap) + content_gap)
-        gap = max(gaps) if gaps else -1.0
-        confirmed = self.ack.confirmed_fraction(item.target_id, names)
-        age = self.ack.max_ack_age(item.target_id, names, self._tick)
+            gap = -1.0
+        else:
+            gaps: list[float] = []
+            for name in names:
+                highest = self.ack.state(name, item.target_id).highest
+                if highest is None:
+                    continue
+                revision_gap = max(0, int(item.revision) - int(highest[1]))
+                content_gap = 0.0 if highest[2] == content_fingerprint(last_sent) else 1.0
+                gaps.append(float(revision_gap) + content_gap)
+            gap = max(gaps) if gaps else -1.0
+        unacked = int(item.ack_unacked_broadcasts)
         return (
-            float(confirmed),
+            confirmed,
             -1.0 if age < 0 else min(1.0, age / ACK_AGE_SCALE_STEPS),
             -1.0 if gap < 0 else min(1.0, gap / VIEW_GAP_SCALE),
-            min(1.0, self.ack.unacked_broadcasts(item.target_id) / UNACKED_SCALE),
+            -1.0 if unacked < 0 else min(1.0, unacked / UNACKED_SCALE),
         )
 
     def _note_queue_depth(self) -> None:
@@ -817,6 +820,17 @@ class CommRelay:
                         None if ledger.last_sent_now is None else now - float(ledger.last_sent_now)
                     ),
                     has_future_requirements=bool(len(state.stages) > int(state.current_stage) + 1),
+                    # The reverse channel's two facts, computed by the sender from ACKs that
+                    # actually arrived and its own emission count. ``-1`` when ACK is off or
+                    # nothing has arrived yet: the explicit unknown, never a plausible zero.
+                    ack_confirmed_fraction=(
+                        self.ack.confirmed_fraction(target_id, self._subscribers)
+                        if self._ack_enabled
+                        else -1.0
+                    ),
+                    ack_unacked_broadcasts=(
+                        self.ack.unacked_broadcasts(target_id) if self._ack_enabled else -1
+                    ),
                 )
             )
         return SendObservation(
