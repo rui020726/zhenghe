@@ -159,7 +159,8 @@ CTDE + 规则协调／预约 + 执行校验
 | 正确性与紧预算最终归档头 | `edba1e396010b80c12bbe12b73b504c317191518` | 下一轮代码起点；与上行实际运行源码身份分别记录 |
 | 发送时机协议消融计划 | `docs/communication-protocol-v2-plan` | 仅文档，未启动实验；不得当作已验证方法 |
 | 发送时机协议消融分支 | `feat/comm-policy-owned-timing` | 起点 `fix/comm-ppo-probability-budget@edba1e3`；只引入文档提交 `185c2a2`，未回退旧生产代码 |
-| 发送时机协议消融交付头 | 见 `runs/comm_protocol_v2_20260920/COMM_PROTOCOL_V2_MANIFEST.json` 的 `executed_code.head` | manifest 于交付提交之后重生成，故其 `executed_code.head` 即交付 SHA、`dirty_modules` 为空、被执行模块 blob 身份与 HEAD 一致 |
+| 发送时机协议消融交付头 | `85ca3b4c43e83ebc8c31814239ead523e777e437` | 训练与评价所用的代码即此树；`COMM_PROTOCOL_V2_MANIFEST.json` 于该提交之后重生成，故其 `executed_code.head` 即此值、`dirty_modules` 为空、被执行模块 blob 身份全部与 HEAD 一致 |
+| 发送时机协议消融最终归档头 | `1d8798c75b2192e878cbe46757b2654541d37337` | 分支 tip，manifest 自身的登记提交；与上行分别记录 |
 
 ### 5.2 通信先导结果应如何解读
 
