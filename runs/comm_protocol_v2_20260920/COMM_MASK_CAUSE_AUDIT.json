@@ -1,0 +1,1639 @@
+{
+ "archive_crosscheck": {
+  "archive": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\probe_after",
+  "available": true,
+  "cells_agreeing": 40,
+  "cells_compared": 40,
+  "cells_not_usable": 40,
+  "disagreements": {},
+  "note": "round 4's probe transcripts are named after the arm and the stream only, so the two tiers overwrote each other there; its published gate aggregates are tier-qualified and are checked against this round's 48-stream rule matrix instead",
+  "why_not_usable": [
+   "75pct/event/s700000: the file at ct_event_s700000.jsonl carries a peak spend of 28704 B, which is 25pct's credit, not 75pct's",
+   "75pct/event/s700001: the file at ct_event_s700001.jsonl carries a peak spend of 27246 B, which is 25pct's credit, not 75pct's",
+   "75pct/event/s700002: the file at ct_event_s700002.jsonl carries a peak spend of 27210 B, which is 25pct's credit, not 75pct's",
+   "75pct/event/s700003: the file at ct_event_s700003.jsonl carries a peak spend of 28518 B, which is 25pct's credit, not 75pct's"
+  ]
+ },
+ "arms": {
+  "event@25pct": {
+   "airtime_bytes": 224022,
+   "asked_by_cause": {
+    "bound_send": 15908,
+    "credit_unaffordable": 361,
+    "free": 93
+   },
+   "autonomous_share_of_bytes_mean": 1.0,
+   "bytes_by_reason": {
+    "forced_maxwait": 0,
+    "other": 0,
+    "policy": 224022
+   },
+   "bytes_forced": 0,
+   "candidate_cells": 16798,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 15908,
+    "content_redundant": 340,
+    "credit_unaffordable": 16532
+   },
+   "cells_by_cause": {
+    "bound_send": 15908,
+    "content_redundant": 95,
+    "credit_unaffordable": 624,
+    "free": 171
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 90,
+    "credit_unaffordable": 89,
+    "free": 159
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 15908,
+    "capacity_full": 0,
+    "content_redundant": 5,
+    "credit_unaffordable": 535,
+    "free": 12
+   },
+   "choosable_share_of_cells": 0.01584,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 87,
+   "decision_steps": 7131,
+   "emissions": 87,
+   "emissions_forced": 0,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.0,
+   "free_candidate_share_of_cells": 0.01018,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 3.375,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 28704,
+     "emissions": 11
+    },
+    "700001": {
+     "airtime_bytes": 27246,
+     "emissions": 11
+    },
+    "700002": {
+     "airtime_bytes": 27210,
+     "emissions": 11
+    },
+    "700003": {
+     "airtime_bytes": 28518,
+     "emissions": 11
+    },
+    "700004": {
+     "airtime_bytes": 28308,
+     "emissions": 11
+    },
+    "700005": {
+     "airtime_bytes": 27618,
+     "emissions": 10
+    },
+    "700006": {
+     "airtime_bytes": 28506,
+     "emissions": 11
+    },
+    "700007": {
+     "airtime_bytes": 27912,
+     "emissions": 11
+    }
+   },
+   "refused_by_policy": 16275,
+   "refused_forced": 0,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 869
+  },
+  "event@75pct": {
+   "airtime_bytes": 693384,
+   "asked_by_cause": {
+    "bound_send": 2082,
+    "credit_unaffordable": 153,
+    "free": 261
+   },
+   "autonomous_share_of_bytes_mean": 1.0,
+   "bytes_by_reason": {
+    "forced_maxwait": 0,
+    "other": 0,
+    "policy": 693384
+   },
+   "bytes_forced": 0,
+   "candidate_cells": 3362,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 2082,
+    "content_redundant": 495,
+    "credit_unaffordable": 2308
+   },
+   "cells_by_cause": {
+    "bound_send": 2082,
+    "content_redundant": 441,
+    "credit_unaffordable": 226,
+    "free": 613
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 441,
+    "credit_unaffordable": 27,
+    "free": 613
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 2082,
+    "capacity_full": 0,
+    "content_redundant": 0,
+    "credit_unaffordable": 199,
+    "free": 0
+   },
+   "choosable_share_of_cells": 0.3135,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 261,
+   "decision_steps": 2617,
+   "emissions": 261,
+   "emissions_forced": 0,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.0,
+   "free_candidate_share_of_cells": 0.18233,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 5.375,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 87330,
+     "emissions": 33
+    },
+    "700001": {
+     "airtime_bytes": 86586,
+     "emissions": 33
+    },
+    "700002": {
+     "airtime_bytes": 86634,
+     "emissions": 34
+    },
+    "700003": {
+     "airtime_bytes": 86268,
+     "emissions": 32
+    },
+    "700004": {
+     "airtime_bytes": 87120,
+     "emissions": 32
+    },
+    "700005": {
+     "airtime_bytes": 86538,
+     "emissions": 32
+    },
+    "700006": {
+     "airtime_bytes": 85584,
+     "emissions": 32
+    },
+    "700007": {
+     "airtime_bytes": 87324,
+     "emissions": 33
+    }
+   },
+   "refused_by_policy": 2235,
+   "refused_forced": 0,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 5383
+  },
+  "event_priority@25pct": {
+   "airtime_bytes": 224460,
+   "asked_by_cause": {
+    "bound_send": 13985,
+    "credit_unaffordable": 356,
+    "free": 93
+   },
+   "autonomous_share_of_bytes_mean": 1.0,
+   "bytes_by_reason": {
+    "forced_maxwait": 0,
+    "other": 0,
+    "policy": 224460
+   },
+   "bytes_forced": 0,
+   "candidate_cells": 14814,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 13985,
+    "content_redundant": 284,
+    "credit_unaffordable": 14548
+   },
+   "cells_by_cause": {
+    "bound_send": 13985,
+    "content_redundant": 95,
+    "credit_unaffordable": 563,
+    "free": 171
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 90,
+    "credit_unaffordable": 89,
+    "free": 159
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 13985,
+    "capacity_full": 0,
+    "content_redundant": 5,
+    "credit_unaffordable": 474,
+    "free": 12
+   },
+   "choosable_share_of_cells": 0.01796,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 87,
+   "decision_steps": 7131,
+   "emissions": 87,
+   "emissions_forced": 0,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.0,
+   "free_candidate_share_of_cells": 0.01154,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 3.625,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 28776,
+     "emissions": 11
+    },
+    "700001": {
+     "airtime_bytes": 27720,
+     "emissions": 11
+    },
+    "700002": {
+     "airtime_bytes": 27210,
+     "emissions": 11
+    },
+    "700003": {
+     "airtime_bytes": 28518,
+     "emissions": 11
+    },
+    "700004": {
+     "airtime_bytes": 28308,
+     "emissions": 11
+    },
+    "700005": {
+     "airtime_bytes": 27618,
+     "emissions": 10
+    },
+    "700006": {
+     "airtime_bytes": 28506,
+     "emissions": 11
+    },
+    "700007": {
+     "airtime_bytes": 27804,
+     "emissions": 11
+    }
+   },
+   "refused_by_policy": 14347,
+   "refused_forced": 0,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 869
+  },
+  "event_priority@75pct": {
+   "airtime_bytes": 693384,
+   "asked_by_cause": {
+    "bound_send": 2082,
+    "credit_unaffordable": 153,
+    "free": 261
+   },
+   "autonomous_share_of_bytes_mean": 1.0,
+   "bytes_by_reason": {
+    "forced_maxwait": 0,
+    "other": 0,
+    "policy": 693384
+   },
+   "bytes_forced": 0,
+   "candidate_cells": 3362,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 2082,
+    "content_redundant": 495,
+    "credit_unaffordable": 2308
+   },
+   "cells_by_cause": {
+    "bound_send": 2082,
+    "content_redundant": 441,
+    "credit_unaffordable": 226,
+    "free": 613
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 441,
+    "credit_unaffordable": 27,
+    "free": 613
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 2082,
+    "capacity_full": 0,
+    "content_redundant": 0,
+    "credit_unaffordable": 199,
+    "free": 0
+   },
+   "choosable_share_of_cells": 0.3135,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 261,
+   "decision_steps": 2617,
+   "emissions": 261,
+   "emissions_forced": 0,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.0,
+   "free_candidate_share_of_cells": 0.18233,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 5.375,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 87330,
+     "emissions": 33
+    },
+    "700001": {
+     "airtime_bytes": 86586,
+     "emissions": 33
+    },
+    "700002": {
+     "airtime_bytes": 86634,
+     "emissions": 34
+    },
+    "700003": {
+     "airtime_bytes": 86268,
+     "emissions": 32
+    },
+    "700004": {
+     "airtime_bytes": 87120,
+     "emissions": 32
+    },
+    "700005": {
+     "airtime_bytes": 86538,
+     "emissions": 32
+    },
+    "700006": {
+     "airtime_bytes": 85584,
+     "emissions": 32
+    },
+    "700007": {
+     "airtime_bytes": 87324,
+     "emissions": 33
+    }
+   },
+   "refused_by_policy": 2235,
+   "refused_forced": 0,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 5383
+  },
+  "hold_to_bound@25pct": {
+   "airtime_bytes": 230436,
+   "asked_by_cause": {},
+   "autonomous_share_of_bytes_mean": 0.0,
+   "bytes_by_reason": {
+    "forced_maxwait": 230436,
+    "other": 0,
+    "policy": 0
+   },
+   "bytes_forced": 230436,
+   "candidate_cells": 4820,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 3200,
+    "content_redundant": 434,
+    "credit_unaffordable": 3353
+   },
+   "cells_by_cause": {
+    "bound_send": 3200,
+    "content_redundant": 373,
+    "credit_unaffordable": 241,
+    "free": 1006
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 87,
+    "capacity_full": 0,
+    "content_redundant": 371,
+    "credit_unaffordable": 116,
+    "free": 1003
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 3113,
+    "capacity_full": 0,
+    "content_redundant": 2,
+    "credit_unaffordable": 125,
+    "free": 3
+   },
+   "choosable_share_of_cells": 0.2861,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 0,
+   "decision_steps": 3179,
+   "emissions": 88,
+   "emissions_forced": 88,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 1.0,
+   "free_candidate_share_of_cells": 0.20871,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 5.25,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 28800,
+     "emissions": 11
+    },
+    "700001": {
+     "airtime_bytes": 28320,
+     "emissions": 11
+    },
+    "700002": {
+     "airtime_bytes": 27522,
+     "emissions": 11
+    },
+    "700003": {
+     "airtime_bytes": 29262,
+     "emissions": 11
+    },
+    "700004": {
+     "airtime_bytes": 29022,
+     "emissions": 11
+    },
+    "700005": {
+     "airtime_bytes": 29070,
+     "emissions": 11
+    },
+    "700006": {
+     "airtime_bytes": 29190,
+     "emissions": 11
+    },
+    "700007": {
+     "airtime_bytes": 29250,
+     "emissions": 11
+    }
+   },
+   "refused_by_policy": 0,
+   "refused_forced": 3112,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 4821
+  },
+  "hold_to_bound@75pct": {
+   "airtime_bytes": 309600,
+   "asked_by_cause": {},
+   "autonomous_share_of_bytes_mean": 0.0,
+   "bytes_by_reason": {
+    "forced_maxwait": 309600,
+    "other": 0,
+    "policy": 0
+   },
+   "bytes_forced": 309600,
+   "candidate_cells": 1939,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 117,
+    "content_redundant": 460
+   },
+   "cells_by_cause": {
+    "bound_send": 117,
+    "content_redundant": 460,
+    "free": 1362
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 117,
+    "capacity_full": 0,
+    "content_redundant": 460,
+    "credit_unaffordable": 0,
+    "free": 1362
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 0,
+    "credit_unaffordable": 0,
+    "free": 0
+   },
+   "choosable_share_of_cells": 0.93966,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 0,
+   "decision_steps": 849,
+   "emissions": 117,
+   "emissions_forced": 117,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 1.0,
+   "free_candidate_share_of_cells": 0.70242,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 5.875,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 41916,
+     "emissions": 16
+    },
+    "700001": {
+     "airtime_bytes": 36174,
+     "emissions": 14
+    },
+    "700002": {
+     "airtime_bytes": 30204,
+     "emissions": 12
+    },
+    "700003": {
+     "airtime_bytes": 43290,
+     "emissions": 16
+    },
+    "700004": {
+     "airtime_bytes": 31536,
+     "emissions": 12
+    },
+    "700005": {
+     "airtime_bytes": 42888,
+     "emissions": 16
+    },
+    "700006": {
+     "airtime_bytes": 32100,
+     "emissions": 12
+    },
+    "700007": {
+     "airtime_bytes": 51492,
+     "emissions": 19
+    }
+   },
+   "refused_by_policy": 0,
+   "refused_forced": 0,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 7151
+  },
+  "immediate@25pct": {
+   "airtime_bytes": 230232,
+   "asked_by_cause": {
+    "bound_send": 2982,
+    "credit_unaffordable": 50,
+    "free": 42
+   },
+   "autonomous_share_of_bytes_mean": 0.45504,
+   "bytes_by_reason": {
+    "forced_maxwait": 125610,
+    "other": 0,
+    "policy": 104622
+   },
+   "bytes_forced": 125610,
+   "candidate_cells": 4398,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 3143,
+    "content_redundant": 432,
+    "credit_unaffordable": 3354
+   },
+   "cells_by_cause": {
+    "bound_send": 3143,
+    "content_redundant": 373,
+    "credit_unaffordable": 257,
+    "free": 625
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 45,
+    "capacity_full": 0,
+    "content_redundant": 371,
+    "credit_unaffordable": 115,
+    "free": 622
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 3098,
+    "capacity_full": 0,
+    "content_redundant": 2,
+    "credit_unaffordable": 142,
+    "free": 3
+   },
+   "choosable_share_of_cells": 0.22692,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 42,
+   "decision_steps": 3057,
+   "emissions": 88,
+   "emissions_forced": 46,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.52273,
+   "free_candidate_share_of_cells": 0.14211,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 5.25,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 28764,
+     "emissions": 11
+    },
+    "700001": {
+     "airtime_bytes": 28296,
+     "emissions": 11
+    },
+    "700002": {
+     "airtime_bytes": 27492,
+     "emissions": 11
+    },
+    "700003": {
+     "airtime_bytes": 29238,
+     "emissions": 11
+    },
+    "700004": {
+     "airtime_bytes": 29010,
+     "emissions": 11
+    },
+    "700005": {
+     "airtime_bytes": 29052,
+     "emissions": 11
+    },
+    "700006": {
+     "airtime_bytes": 29160,
+     "emissions": 11
+    },
+    "700007": {
+     "airtime_bytes": 29220,
+     "emissions": 11
+    }
+   },
+   "refused_by_policy": 3032,
+   "refused_forced": 115,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 4943
+  },
+  "immediate@75pct": {
+   "airtime_bytes": 298614,
+   "asked_by_cause": {
+    "free": 47
+   },
+   "autonomous_share_of_bytes_mean": 0.40385,
+   "bytes_by_reason": {
+    "forced_maxwait": 180990,
+    "other": 0,
+    "policy": 117624
+   },
+   "bytes_forced": 180990,
+   "candidate_cells": 1467,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 66,
+    "content_redundant": 458
+   },
+   "cells_by_cause": {
+    "bound_send": 66,
+    "content_redundant": 458,
+    "free": 943
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 66,
+    "capacity_full": 0,
+    "content_redundant": 458,
+    "credit_unaffordable": 0,
+    "free": 943
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 0,
+    "credit_unaffordable": 0,
+    "free": 0
+   },
+   "choosable_share_of_cells": 0.95501,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 47,
+   "decision_steps": 677,
+   "emissions": 113,
+   "emissions_forced": 66,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.58407,
+   "free_candidate_share_of_cells": 0.64281,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 5.875,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 39270,
+     "emissions": 15
+    },
+    "700001": {
+     "airtime_bytes": 33726,
+     "emissions": 13
+    },
+    "700002": {
+     "airtime_bytes": 30174,
+     "emissions": 12
+    },
+    "700003": {
+     "airtime_bytes": 43266,
+     "emissions": 16
+    },
+    "700004": {
+     "airtime_bytes": 31524,
+     "emissions": 12
+    },
+    "700005": {
+     "airtime_bytes": 42858,
+     "emissions": 16
+    },
+    "700006": {
+     "airtime_bytes": 32070,
+     "emissions": 12
+    },
+    "700007": {
+     "airtime_bytes": 45726,
+     "emissions": 17
+    }
+   },
+   "refused_by_policy": 0,
+   "refused_forced": 0,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 7323
+  },
+  "learned1_at400000@25pct": {
+   "airtime_bytes": 227256,
+   "asked_by_cause": {
+    "content_redundant": 6,
+    "credit_unaffordable": 366,
+    "free": 83
+   },
+   "autonomous_share_of_bytes_mean": 1.0,
+   "bytes_by_reason": {
+    "forced_maxwait": 0,
+    "other": 0,
+    "policy": 227256
+   },
+   "bytes_forced": 0,
+   "candidate_cells": 9620,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 8655,
+    "content_redundant": 341,
+    "credit_unaffordable": 9162
+   },
+   "cells_by_cause": {
+    "bound_send": 8655,
+    "content_redundant": 175,
+    "credit_unaffordable": 507,
+    "free": 283
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 174,
+    "credit_unaffordable": 28,
+    "free": 280
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 8655,
+    "capacity_full": 0,
+    "content_redundant": 1,
+    "credit_unaffordable": 479,
+    "free": 3
+   },
+   "choosable_share_of_cells": 0.04761,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 88,
+   "decision_steps": 6161,
+   "emissions": 88,
+   "emissions_forced": 0,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.0,
+   "free_candidate_share_of_cells": 0.02942,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 4.375,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 28674,
+     "emissions": 11
+    },
+    "700001": {
+     "airtime_bytes": 27576,
+     "emissions": 11
+    },
+    "700002": {
+     "airtime_bytes": 27372,
+     "emissions": 11
+    },
+    "700003": {
+     "airtime_bytes": 28920,
+     "emissions": 11
+    },
+    "700004": {
+     "airtime_bytes": 29148,
+     "emissions": 11
+    },
+    "700005": {
+     "airtime_bytes": 29154,
+     "emissions": 11
+    },
+    "700006": {
+     "airtime_bytes": 28302,
+     "emissions": 11
+    },
+    "700007": {
+     "airtime_bytes": 28110,
+     "emissions": 11
+    }
+   },
+   "refused_by_policy": 367,
+   "refused_forced": 8655,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 1839
+  },
+  "learned1_at400000@75pct": {
+   "airtime_bytes": 690048,
+   "asked_by_cause": {
+    "content_redundant": 67,
+    "credit_unaffordable": 240,
+    "free": 199
+   },
+   "autonomous_share_of_bytes_mean": 1.0,
+   "bytes_by_reason": {
+    "forced_maxwait": 0,
+    "other": 0,
+    "policy": 690048
+   },
+   "bytes_forced": 0,
+   "candidate_cells": 5973,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 4822,
+    "content_redundant": 408,
+    "credit_unaffordable": 5113
+   },
+   "cells_by_cause": {
+    "bound_send": 4822,
+    "content_redundant": 359,
+    "credit_unaffordable": 291,
+    "free": 501
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 359,
+    "credit_unaffordable": 21,
+    "free": 498
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 4822,
+    "capacity_full": 0,
+    "content_redundant": 0,
+    "credit_unaffordable": 270,
+    "free": 3
+   },
+   "choosable_share_of_cells": 0.14398,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 265,
+   "decision_steps": 4120,
+   "emissions": 265,
+   "emissions_forced": 0,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.0,
+   "free_candidate_share_of_cells": 0.08388,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 4.875,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 86730,
+     "emissions": 33
+    },
+    "700001": {
+     "airtime_bytes": 86460,
+     "emissions": 34
+    },
+    "700002": {
+     "airtime_bytes": 85824,
+     "emissions": 34
+    },
+    "700003": {
+     "airtime_bytes": 86568,
+     "emissions": 33
+    },
+    "700004": {
+     "airtime_bytes": 85734,
+     "emissions": 32
+    },
+    "700005": {
+     "airtime_bytes": 86430,
+     "emissions": 33
+    },
+    "700006": {
+     "airtime_bytes": 85968,
+     "emissions": 33
+    },
+    "700007": {
+     "airtime_bytes": 86334,
+     "emissions": 33
+    }
+   },
+   "refused_by_policy": 241,
+   "refused_forced": 4822,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 3880
+  },
+  "learned2_at400000@25pct": {
+   "airtime_bytes": 226200,
+   "asked_by_cause": {
+    "content_redundant": 25,
+    "credit_unaffordable": 417,
+    "free": 66
+   },
+   "autonomous_share_of_bytes_mean": 1.0,
+   "bytes_by_reason": {
+    "forced_maxwait": 0,
+    "other": 0,
+    "policy": 226200
+   },
+   "bytes_forced": 0,
+   "candidate_cells": 17846,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 17165,
+    "content_redundant": 167,
+    "credit_unaffordable": 17664
+   },
+   "cells_by_cause": {
+    "bound_send": 17165,
+    "content_redundant": 61,
+    "credit_unaffordable": 499,
+    "free": 121
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 54,
+    "credit_unaffordable": 4,
+    "free": 114
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 17165,
+    "capacity_full": 0,
+    "content_redundant": 7,
+    "credit_unaffordable": 495,
+    "free": 7
+   },
+   "choosable_share_of_cells": 0.0102,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 89,
+   "decision_steps": 7637,
+   "emissions": 89,
+   "emissions_forced": 0,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.0,
+   "free_candidate_share_of_cells": 0.00678,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 3.25,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 28398,
+     "emissions": 11
+    },
+    "700001": {
+     "airtime_bytes": 27114,
+     "emissions": 11
+    },
+    "700002": {
+     "airtime_bytes": 29208,
+     "emissions": 12
+    },
+    "700003": {
+     "airtime_bytes": 28608,
+     "emissions": 11
+    },
+    "700004": {
+     "airtime_bytes": 27912,
+     "emissions": 11
+    },
+    "700005": {
+     "airtime_bytes": 29100,
+     "emissions": 11
+    },
+    "700006": {
+     "airtime_bytes": 28308,
+     "emissions": 11
+    },
+    "700007": {
+     "airtime_bytes": 27552,
+     "emissions": 11
+    }
+   },
+   "refused_by_policy": 419,
+   "refused_forced": 17165,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 363
+  },
+  "learned2_at400000@75pct": {
+   "airtime_bytes": 309600,
+   "asked_by_cause": {},
+   "autonomous_share_of_bytes_mean": 0.0,
+   "bytes_by_reason": {
+    "forced_maxwait": 309600,
+    "other": 0,
+    "policy": 0
+   },
+   "bytes_forced": 309600,
+   "candidate_cells": 1939,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 117,
+    "content_redundant": 460
+   },
+   "cells_by_cause": {
+    "bound_send": 117,
+    "content_redundant": 460,
+    "free": 1362
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 117,
+    "capacity_full": 0,
+    "content_redundant": 460,
+    "credit_unaffordable": 0,
+    "free": 1362
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 0,
+    "credit_unaffordable": 0,
+    "free": 0
+   },
+   "choosable_share_of_cells": 0.93966,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 0,
+   "decision_steps": 849,
+   "emissions": 117,
+   "emissions_forced": 117,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 1.0,
+   "free_candidate_share_of_cells": 0.70242,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 5.875,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 41916,
+     "emissions": 16
+    },
+    "700001": {
+     "airtime_bytes": 36174,
+     "emissions": 14
+    },
+    "700002": {
+     "airtime_bytes": 30204,
+     "emissions": 12
+    },
+    "700003": {
+     "airtime_bytes": 43290,
+     "emissions": 16
+    },
+    "700004": {
+     "airtime_bytes": 31536,
+     "emissions": 12
+    },
+    "700005": {
+     "airtime_bytes": 42888,
+     "emissions": 16
+    },
+    "700006": {
+     "airtime_bytes": 32100,
+     "emissions": 12
+    },
+    "700007": {
+     "airtime_bytes": 51492,
+     "emissions": 19
+    }
+   },
+   "refused_by_policy": 0,
+   "refused_forced": 0,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 7151
+  },
+  "learned3_at400000@25pct": {
+   "airtime_bytes": 225798,
+   "asked_by_cause": {
+    "content_redundant": 14,
+    "credit_unaffordable": 226,
+    "free": 51
+   },
+   "autonomous_share_of_bytes_mean": 0.71808,
+   "bytes_by_reason": {
+    "forced_maxwait": 63486,
+    "other": 0,
+    "policy": 162312
+   },
+   "bytes_forced": 63486,
+   "candidate_cells": 9387,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 8335,
+    "content_redundant": 388,
+    "credit_unaffordable": 8646
+   },
+   "cells_by_cause": {
+    "bound_send": 8335,
+    "content_redundant": 291,
+    "credit_unaffordable": 335,
+    "free": 426
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 23,
+    "capacity_full": 0,
+    "content_redundant": 285,
+    "credit_unaffordable": 47,
+    "free": 424
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 8312,
+    "capacity_full": 0,
+    "content_redundant": 6,
+    "credit_unaffordable": 288,
+    "free": 2
+   },
+   "choosable_share_of_cells": 0.07638,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 64,
+   "decision_steps": 5798,
+   "emissions": 87,
+   "emissions_forced": 23,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.26437,
+   "free_candidate_share_of_cells": 0.04538,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 4.375,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 28476,
+     "emissions": 11
+    },
+    "700001": {
+     "airtime_bytes": 27780,
+     "emissions": 11
+    },
+    "700002": {
+     "airtime_bytes": 27480,
+     "emissions": 11
+    },
+    "700003": {
+     "airtime_bytes": 28386,
+     "emissions": 11
+    },
+    "700004": {
+     "airtime_bytes": 27024,
+     "emissions": 10
+    },
+    "700005": {
+     "airtime_bytes": 28992,
+     "emissions": 11
+    },
+    "700006": {
+     "airtime_bytes": 28968,
+     "emissions": 11
+    },
+    "700007": {
+     "airtime_bytes": 28692,
+     "emissions": 11
+    }
+   },
+   "refused_by_policy": 227,
+   "refused_forced": 8312,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 2202
+  },
+  "learned3_at400000@75pct": {
+   "airtime_bytes": 293268,
+   "asked_by_cause": {
+    "free": 47
+   },
+   "autonomous_share_of_bytes_mean": 0.40942,
+   "bytes_by_reason": {
+    "forced_maxwait": 175614,
+    "other": 0,
+    "policy": 117654
+   },
+   "bytes_forced": 175614,
+   "candidate_cells": 1585,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 64,
+    "content_redundant": 422
+   },
+   "cells_by_cause": {
+    "bound_send": 64,
+    "content_redundant": 422,
+    "free": 1099
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 64,
+    "capacity_full": 0,
+    "content_redundant": 422,
+    "credit_unaffordable": 0,
+    "free": 1099
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 0,
+    "credit_unaffordable": 0,
+    "free": 0
+   },
+   "choosable_share_of_cells": 0.95962,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 47,
+   "decision_steps": 715,
+   "emissions": 111,
+   "emissions_forced": 64,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.57658,
+   "free_candidate_share_of_cells": 0.69338,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 5.875,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 39270,
+     "emissions": 15
+    },
+    "700001": {
+     "airtime_bytes": 33732,
+     "emissions": 13
+    },
+    "700002": {
+     "airtime_bytes": 30174,
+     "emissions": 12
+    },
+    "700003": {
+     "airtime_bytes": 43272,
+     "emissions": 16
+    },
+    "700004": {
+     "airtime_bytes": 31524,
+     "emissions": 12
+    },
+    "700005": {
+     "airtime_bytes": 42858,
+     "emissions": 16
+    },
+    "700006": {
+     "airtime_bytes": 32076,
+     "emissions": 12
+    },
+    "700007": {
+     "airtime_bytes": 40362,
+     "emissions": 15
+    }
+   },
+   "refused_by_policy": 0,
+   "refused_forced": 0,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 7285
+  },
+  "periodic_5@25pct": {
+   "airtime_bytes": 224604,
+   "asked_by_cause": {
+    "bound_send": 1902,
+    "content_redundant": 7,
+    "credit_unaffordable": 79,
+    "free": 89
+   },
+   "autonomous_share_of_bytes_mean": 1.0,
+   "bytes_by_reason": {
+    "forced_maxwait": 0,
+    "other": 0,
+    "policy": 224604
+   },
+   "bytes_forced": 0,
+   "candidate_cells": 10378,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 9496,
+    "content_redundant": 154,
+    "credit_unaffordable": 9926
+   },
+   "cells_by_cause": {
+    "bound_send": 9496,
+    "content_redundant": 76,
+    "credit_unaffordable": 430,
+    "free": 376
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 70,
+    "credit_unaffordable": 22,
+    "free": 358
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 9496,
+    "capacity_full": 0,
+    "content_redundant": 6,
+    "credit_unaffordable": 408,
+    "free": 18
+   },
+   "choosable_share_of_cells": 0.04355,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 87,
+   "decision_steps": 6656,
+   "emissions": 87,
+   "emissions_forced": 0,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.0,
+   "free_candidate_share_of_cells": 0.03623,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 4.25,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 28542,
+     "emissions": 11
+    },
+    "700001": {
+     "airtime_bytes": 27762,
+     "emissions": 11
+    },
+    "700002": {
+     "airtime_bytes": 27102,
+     "emissions": 11
+    },
+    "700003": {
+     "airtime_bytes": 28452,
+     "emissions": 11
+    },
+    "700004": {
+     "airtime_bytes": 29094,
+     "emissions": 11
+    },
+    "700005": {
+     "airtime_bytes": 26958,
+     "emissions": 10
+    },
+    "700006": {
+     "airtime_bytes": 28218,
+     "emissions": 11
+    },
+    "700007": {
+     "airtime_bytes": 28476,
+     "emissions": 11
+    }
+   },
+   "refused_by_policy": 1990,
+   "refused_forced": 7594,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 1344
+  },
+  "periodic_5@75pct": {
+   "airtime_bytes": 660186,
+   "asked_by_cause": {
+    "bound_send": 254,
+    "content_redundant": 45,
+    "credit_unaffordable": 13,
+    "free": 206
+   },
+   "autonomous_share_of_bytes_mean": 1.0,
+   "bytes_by_reason": {
+    "forced_maxwait": 0,
+    "other": 0,
+    "policy": 660186
+   },
+   "bytes_forced": 0,
+   "candidate_cells": 2609,
+   "capacity_refused_sends": 0,
+   "cell_flags": {
+    "bound_send": 1268,
+    "content_redundant": 330,
+    "credit_unaffordable": 1342
+   },
+   "cells_by_cause": {
+    "bound_send": 1268,
+    "content_redundant": 329,
+    "credit_unaffordable": 74,
+    "free": 938
+   },
+   "cells_by_cause_before_first_refusal": {
+    "bound_send": 0,
+    "capacity_full": 0,
+    "content_redundant": 323,
+    "credit_unaffordable": 11,
+    "free": 935
+   },
+   "cells_by_cause_from_first_refusal": {
+    "bound_send": 1268,
+    "capacity_full": 0,
+    "content_redundant": 6,
+    "credit_unaffordable": 63,
+    "free": 3
+   },
+   "choosable_share_of_cells": 0.48563,
+   "cost_prediction_mismatches": 0,
+   "cost_predictions_checked": 249,
+   "decision_steps": 1879,
+   "emissions": 249,
+   "emissions_forced": 0,
+   "episodes": 8,
+   "forced_emissions_the_census_missed": 0,
+   "forced_share_of_emissions": 0.0,
+   "free_candidate_share_of_cells": 0.35952,
+   "non_perturbation_clean": true,
+   "on_time_targets_per_episode": 5.625,
+   "per_seed": {
+    "700000": {
+     "airtime_bytes": 87168,
+     "emissions": 33
+    },
+    "700001": {
+     "airtime_bytes": 87858,
+     "emissions": 34
+    },
+    "700002": {
+     "airtime_bytes": 85932,
+     "emissions": 34
+    },
+    "700003": {
+     "airtime_bytes": 85122,
+     "emissions": 32
+    },
+    "700004": {
+     "airtime_bytes": 77070,
+     "emissions": 29
+    },
+    "700005": {
+     "airtime_bytes": 65844,
+     "emissions": 24
+    },
+    "700006": {
+     "airtime_bytes": 84426,
+     "emissions": 31
+    },
+    "700007": {
+     "airtime_bytes": 86766,
+     "emissions": 32
+    }
+   },
+   "refused_by_policy": 269,
+   "refused_forced": 1014,
+   "seeds": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007
+   ],
+   "ticks_without_candidates": 6121
+  }
+ },
+ "blocking_causes": [
+  "bound_send",
+  "capacity_full",
+  "credit_unaffordable"
+ ],
+ "cause_priority": [
+  "bound_send",
+  "capacity_full",
+  "credit_unaffordable",
+  "content_redundant",
+  "free"
+ ],
+ "cells": "D:\\code\\整合\\zhenghe\\runs\\comm_protocol_v2_20260920\\mask_audit",
+ "denominators": {
+  "byte": "one transmission attempt billed at payload bytes x subscribers, lost packets included",
+  "candidate_cell": "one offered target at one decision step: the arm's decision surface",
+  "emission": "one packet the transport put on the air, whichever reason produced it",
+  "warning": "free_candidate_share_of_cells and forced_share_of_emissions are not complements: the first divides by candidates offered, the second by emissions produced, and a masked candidate never becomes a packet"
+ },
+ "episodes": 128,
+ "protocol": "legacy_shared_bound, isolated, lossless, 8 training streams, two locked tiers",
+ "question": "Which candidates could the arm still choose between, and how many bytes did the silence bound really speak?",
+ "tier_bytes": {
+  "25pct": 29300,
+  "75pct": 87900
+ }
+}
