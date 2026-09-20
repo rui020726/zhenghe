@@ -1,6 +1,10 @@
 # 下一轮执行指令：把发送时机交还给策略
 
-日期：2026-09-20。对应总纲 v1.5，S3 协议消融。状态：执行方案，尚未实现、尚未训练。
+日期：2026-09-20。对应总纲 v1.5，S3 协议消融。
+
+> 历史状态更新：本指令已执行完毕，最终归档头为 `23feba8f2c8edd44792827844e0f9482b708a535`。
+> 结果见 `runs/comm_protocol_v2_20260920/COMM_PROTOCOL_V2_RESULTS.md`；下一轮以
+> [COMM_ACK_VALUE_NEXT_ROUND.md](COMM_ACK_VALUE_NEXT_ROUND.md) 为准，不重复本轮训练。
 
 ## 1. 起点、目标与边界
 
