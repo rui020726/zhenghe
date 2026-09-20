@@ -53,7 +53,11 @@ import torch
 import protocol_common as common
 import protocol_env
 
-from integrated_sar.comm import LEGACY_SHARED_BOUND, estimate_message_bytes
+from integrated_sar.comm import (
+    LEGACY_SHARED_BOUND,
+    POLICY_OWNED_TIMING,
+    estimate_message_bytes,
+)
 from integrated_sar.comm_policy import SendObservation, parse_parameters
 
 #: The declared priority, fixed before any count so a cause cannot be promoted afterwards. The
