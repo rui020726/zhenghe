@@ -83,6 +83,39 @@ belief 或投递结果（上行无 ACK），所以搜索队与救援队仍是两
 实测（含旧模式逐格复现归档转录、以及新模式下代发数为 0）见
 `runs/comm_protocol_v2_20260920/`。
 
+### 反向信道（ACK，`--comm-ack`，默认关闭）
+
+上行一直没有回执，所以发送端无法知道某个视图是否已被应用，"重发还是等待"因此没有反馈可用。
+`--comm-ack` 打开一条独立的**反向信道**，语义由 `COMM_ACK_CONTRACT.md` 固定、
+`integrated_sar/comm_ack.py` 实现、`integrated_sar/tests/test_comm_ack_feedback.py` 回归：
+
+- **ACK 只有一个来源**：接收端把一条上行包真正应用进 belief（`deliver_detection` 返回 True）。
+  包丢失则接收端从未看到，不产生 ACK；送达但被判重复/被取代的，belief 未变，也不产生 ACK。
+- **ACK 证明"新视图已应用"而不是"包到达"**：载荷携带接收端已应用的最高
+  `(sent_at, revision, content_fingerprint)`。重复包可再次确认同一个最高视图，乱序 ACK
+  按三元组字典序取最大，`highest` 永不回退。
+- **ACK 经反向信道传输，延迟与丢包和上行同参数**（`--comm-ack-delay-ticks` /
+  `--comm-ack-delivery-probability` 默认取上行自己的值，不搞第二套更友好的参数）。
+  每步顺序固定为"上行投递 → 反向 ACK 投递 → 发送决策"，所以本步刚产生的 ACK 当步不可见，
+  "包是否在途"永远不会成为策略输入。
+- **每个 ACK 发送尝试都按序列化字节全额计费，丢失也计费**，走独立的反向账本
+  （`AckLedger`：只计数、不设上限、不可为负），**不消耗任务上行额度**。主成本与任何
+  "省通信"结论必须用 `上行尝试字节 + ACK 尝试字节`，两项同时分列。把反向额度与上行额度
+  混成一个动作约束，"省上行"就可以靠"随便确认"伪造。
+- **随机数是 counter-based 的**：key 至少含 `(episode seed, direction, subscriber, target,
+  attempt ordinal)`，两个策略面对同一个 key 抽到同一个数（共同随机数配对）；与 no-ACK
+  历史臂比较时只能称同分布比较，不得称同一串事件。
+- **发送端可见的只有四维**（`comm-send-state/2` 在 19 维之上追加）：已确认比例、最大 ACK age、
+  与最高已确认视图的最大 revision/content gap、未全体确认的广播次数。全部由发送端自己的
+  发送历史与已到达 ACK 推出；**没有任何 ACK 到达时是显式的 unknown 编码（-1），不把未知
+  编码成"接收端肯定没有"**。接收端 belief、在途包、未来到达、真实丢包结果、注册表状态
+  都不得进入特征。旧 `/1` checkpoint 在 `/2` 网络上 fail closed。
+- **ACK 关闭时不构造任何反馈状态**：无状态表、无反向 RNG、无 ACK transcript 记录，
+  `/1` 特征与候选顺序、RNG 消耗逐位相同，历史路径逐字节不变。生产默认继续无 ACK。
+- 与 ACK 一同新增的还有四条**只有反向信道存在才可能存在的规则**：`retry_until_acked`、
+  `event_retry_until_acked`、`exponential_backoff`、`deadline_tightening_retry`。它们读的是
+  `/2` 特征同源的两个事实，所以规则与学习发送端竞争的是同一份信息，不是某一方持有私有通道。
+
 每条发射都带一个互斥主原因：`policy`（发送端自己请求）、`forced_maxwait`（上界到点，传输层
 代发）、`other`（预留给未来的强制协议事件）。发射数、尝试数、字节数与被拒次数都按原因分列并
 要求闭合。这不是记账洁癖，而是这条研究线能否被证伪的关键：一个只学会"闭嘴"的策略，其全部

@@ -146,6 +146,16 @@ python -m integrated_sar.joint_driver \
 `send_once`、`always_hold`）、`--comm-policy-params`（如 `interval=5`，
 未知策略名或参数键直接报错而非退回默认）、`--comm-sends-per-tick`（每步发射预算，默认不限）、
 `--comm-transcript`（把接受/发射/投递逐条写盘，仅测量、不被任何决策回读）、
+`--comm-ack`（打开反向 ACK 信道：接收端把上行包真正应用进 belief 后才发累计确认，
+经独立的有延迟/丢包的反向信道回传，每次发送尝试按序列化字节全额计费、丢失也计费，
+走独立的反向账本而不消耗任务上行额度；发送端观测随之增加四维 `comm-send-state/2`
+——已确认比例、最大 ACK age、与最高已确认视图的最大 gap、未全体确认的广播次数，
+无任何 ACK 到达时是显式的 unknown 编码；默认关闭，关闭时不构造任何反馈状态、
+不改变候选顺序与 RNG 消耗，历史路径逐字节不变）、
+`--comm-ack-delay-ticks` 与 `--comm-ack-delivery-probability`（反向信道的延迟与丢包，
+默认取上行自己的 `--comm-delay-ticks` / `--comm-delivery-probability`，不搞第二套更友好的参数）；
+与 ACK 一同可用的四条规则：`retry_until_acked`、`event_retry_until_acked`、
+`exponential_backoff`、`deadline_tightening_retry`（都只读发送端自己的发送历史与已到达 ACK）、
 `--comm-range` 与 `--gossip-interval`（救援环境自带的视距刷新半径与"刷新+一跳 gossip"周期，
 默认 0.3 与 2 就是 `TaskEnv` 自己的取值；把间隔调到大于步数即可把这两条旁路关掉），
 `--coordinator`（`heuristic` 默认；`coalition` 按缺口而不是重叠打分；`coalition_planner`
@@ -270,11 +280,17 @@ checkpoint、录制流、逐 episode 日志与转录**不入 Git**，只在 mani
 | 预算标定与 pilot | `runs/comm_budget_pilot_20260919/` | `COMM_BUDGET_LOCKED.json`（三档锁定额度） |
 | 归因与稳定性 | `runs/comm_stability_20260919/` | `COMM_TRAINING_STABILITY_PROTOCOL.md`、`COMM_TRAINING_STABILITY_RESULTS.md` |
 | 概率正确性与紧预算 | `runs/comm_tight_budget_20260919/` | `COMM_PPO_PROBABILITY_AUDIT.md`、`COMM_TIGHT_BUDGET_PROTOCOL.md`、`COMM_TIGHT_BUDGET_RESULTS.md` |
-| **发送时机协议消融（最新）** | `runs/comm_protocol_v2_20260920/` | `COMM_MASK_CAUSE_AUDIT.md`（掩码归因与勘误）、`COMM_PROTOCOL_V2_PROTOCOL.md`（判据先于结果）、`COMM_PROTOCOL_V2_RESULTS.md`（协议收益与学习收益分开）、`COMM_PROTOCOL_V2_MANIFEST.json` |
+| **发送时机协议消融** | `runs/comm_protocol_v2_20260920/` | `COMM_MASK_CAUSE_AUDIT.md`（掩码归因与勘误）、`COMM_PROTOCOL_V2_PROTOCOL.md`（判据先于结果）、`COMM_PROTOCOL_V2_RESULTS.md`（协议收益与学习收益分开）、`COMM_PROTOCOL_V2_MANIFEST.json` |
+| **ACK 信息价值门禁（最新）** | `runs/comm_ack_value_20260920/` | `COMM_ACK_CONTRACT.md`（反向信道合同）、`COMM_ACK_VALUE_GATE.md`/`.json`（四项门禁）、`COMM_ACK_MANIFEST.json` |
 
 传输层的两个协议由 `--comm-timing-mode` 选择：`legacy_shared_bound`（默认，全部历史实验，
 上界到点由传输层代发、计费、可拒付）与 `policy_owned_timing`（研究模式，只有策略自己请求的
-发送才上空气）。协议差异的逐包证据与训练判据见上表最后一行的文档。
+发送才上空气）。协议差异的逐包证据与训练判据见上表的协议消融行。
+
+反向 ACK 信道由 `--comm-ack` 打开（默认关闭），合同见 `COMM_ACK_CONTRACT.md`：
+ACK 只来自接收端真实应用的上行包，经有延迟/丢包的反向信道回传，每次尝试按序列化字节
+全额计费并计入与上行并列的总成本。四项信息价值门禁全部通过才允许训练；
+未通过即交付负结果并停止，不提高丢包、不收紧 deadline、不改场景制造信号。
 
 ## 协作方式
 
