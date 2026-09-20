@@ -36,7 +36,13 @@ import numpy as np
 
 from .contracts import DetectionEvent, DetectionMessage, TaskSnapshot
 from .comm_budget import CommBudget
-from .comm_policy import CommSendPolicy, ImmediatePolicy, SendItem, SendObservation
+from .comm_policy import (
+    CommSendPolicy,
+    ImmediatePolicy,
+    SendItem,
+    SendObservation,
+    transport_order,
+)
 
 SnapshotLookup = Callable[[str], TaskSnapshot | None]
 AcceptanceLookup = Callable[[str], bool]
@@ -44,6 +50,22 @@ NowLookup = Callable[[], float]
 # Read-only "what does this robot already believe" lookup, used only to classify a refused
 # delivery as duplicate or superseded. Never consulted before deciding what to send.
 FreshnessLookup = Callable[[str, str], "tuple[float, int] | None"]
+
+#: Who decides that a change which has sat unsaid for ``max_wait_steps`` goes on the air.
+#:
+#: ``legacy_shared_bound`` is every experiment recorded since the bound existed: the transport
+#: appends the overdue changes to whatever the arm asked for, bills them, and refuses them when
+#: the credit cannot pay. ``policy_owned_timing`` hands that decision to the arm -- nothing is
+#: emitted because a clock ran out, and a request is never rewritten into a send.
+#:
+#: Only that one mechanism differs. Candidate generation, registry polling, the per-step call,
+#: message merging, the byte credit, the per-step capacity, the terminal-suppression rule and the
+#: payload's "newest snapshot at the moment of sending" are identical in both modes, and so is the
+#: loss process. A default-constructed relay is the legacy one, so an untouched configuration
+#: cannot drift into the new protocol by omission.
+LEGACY_SHARED_BOUND = "legacy_shared_bound"
+POLICY_OWNED_TIMING = "policy_owned_timing"
+TIMING_MODES: tuple[str, ...] = (LEGACY_SHARED_BOUND, POLICY_OWNED_TIMING)
 
 
 def estimate_message_bytes(message: DetectionMessage) -> int:
@@ -180,6 +202,7 @@ class CommRelay:
         max_wait_steps: int | None = None,
         urgent_wait_steps: int | None = None,
         urgency_time: float = 25.0,
+        timing_mode: str = LEGACY_SHARED_BOUND,
         freshness_of: FreshnessLookup | None = None,
         now_of: NowLookup | None = None,
         transcript: CommTranscript | None = None,
@@ -215,6 +238,16 @@ class CommRelay:
         # out, still billed and still refused when the credit cannot pay for it.
         if max_wait_steps is not None and int(max_wait_steps) < 1:
             raise ValueError(f"max_wait_steps must be >= 1 or None, got {max_wait_steps}")
+        mode = str(timing_mode or "").strip().lower()
+        if mode not in TIMING_MODES:
+            raise ValueError(
+                f"unknown timing mode {timing_mode!r}; available: {', '.join(TIMING_MODES)}"
+            )
+        # The bound constants are *declared* under either mode. What the mode decides is whether
+        # the transport acts on them: under policy_owned_timing they stay here as the numbers a
+        # rule may quote (and as a record of what the legacy floor was), and no emission follows
+        # from them by itself.
+        self._timing_mode = mode
         self._max_wait_steps = None if max_wait_steps is None else int(max_wait_steps)
         self._urgent_wait_steps = (
             None if urgent_wait_steps is None else max(0, int(urgent_wait_steps))
@@ -420,12 +453,11 @@ class CommRelay:
             # for every such rule: it is judged by what it asks to say, not by a queueing
             # advantage the executor happened to give it.
             wanted = set(chosen_targets)
-            chosen = sorted(
-                (item for item in observation.items if item.target_id in wanted),
-                key=lambda item: (item.remaining_time, -item.age_steps, item.target_id),
+            chosen = transport_order(
+                item for item in observation.items if item.target_id in wanted
             )
         forced: set[str] = set()
-        if self._max_wait_steps is not None:
+        if self._max_wait_steps is not None and self._timing_mode == LEGACY_SHARED_BOUND:
             overdue = {
                 item.target_id
                 for item in observation.items
@@ -703,6 +735,13 @@ class CommRelay:
             "max_wait_steps": self._max_wait_steps,
             "urgent_wait_steps": self._urgent_wait_steps,
             "urgency_time": self._urgency_time if self._max_wait_steps is not None else None,
+            # Which of the two protocols this relay runs, and whether the declared bound is
+            # something the transport acts on. A truth table has to be able to say that the
+            # bound is declared *and not enforced* before it reads a zero forced-send count as
+            # evidence of anything.
+            "timing_mode": self._timing_mode,
+            "bound_enforced_by_transport": self._max_wait_steps is not None
+            and self._timing_mode == LEGACY_SHARED_BOUND,
         }
 
     # ------------------------------------------------------------------ payloads

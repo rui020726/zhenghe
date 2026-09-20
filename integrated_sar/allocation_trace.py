@@ -96,6 +96,7 @@ def arm_name(
     comm_budget_bytes: int | None = None,
     comm_max_wait_steps: int | None = None,
     comm_urgent_wait_steps: int | None = None,
+    comm_timing_mode: str = "legacy_shared_bound",
 ) -> str:
     """The arm label shared with the ``rp_<arm>_s<seed>.jsonl`` lifecycle logs.
 
@@ -159,6 +160,10 @@ def arm_name(
         label = f"{label}+mw{int(comm_max_wait_steps)}"
         if comm_urgent_wait_steps is not None:
             label = f"{label}u{int(comm_urgent_wait_steps)}"
+    if str(comm_timing_mode or "legacy_shared_bound").strip().lower() != "legacy_shared_bound":
+        # The same policy name under two timing protocols is two different arms: one of them has
+        # a mechanism speaking on its behalf and the other does not. Their rows must never pool.
+        label = f"{label}+{str(comm_timing_mode).strip().lower()}"
     return label
 
 
@@ -204,6 +209,7 @@ def trace_meta(
             comm_budget_bytes=getattr(configuration, "comm_budget_bytes", None),
             comm_max_wait_steps=getattr(configuration, "comm_max_wait_steps", None),
             comm_urgent_wait_steps=getattr(configuration, "comm_urgent_wait_steps", None),
+            comm_timing_mode=str(getattr(configuration, "comm_timing_mode", "legacy_shared_bound")),
         ),
         "coordinator_policy": str(
             getattr(configuration, "coordinator_policy", "heuristic")

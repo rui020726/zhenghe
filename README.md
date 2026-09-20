@@ -137,8 +137,13 @@ python -m integrated_sar.joint_driver \
 `--comm-max-wait-steps` 与 `--comm-urgent-wait-steps`、`--comm-urgency-time`
 （共享静默上界：一条变化最长能沉默多少步、任务临近 deadline 时收紧到多少步、以及多近算临近；
 它是任何臂都逃不掉的下界，默认两者为空即不启用）、
+`--comm-timing-mode`（谁按这条上界行事：默认 `legacy_shared_bound` = 到点由传输层代发、照计费照拒付，
+即全部历史实验；`policy_owned_timing` 是研究模式，传输层不再替任何臂开口，3/10 只能作为显式规则
+被请求，硬额度/每步容量/内容合法性/执行安全一概保留；未识别的模式启动即报错，不静默退回默认）、
 `--comm-policy`（上行发送策略：默认 `immediate` = 每条被接受的检测发一次且不刷新，即历史行为；
-另有 `periodic`、`event`、`event_maxwait`）、`--comm-policy-params`（如 `interval=5`，
+另有 `periodic`、`event`、`event_maxwait`、`event_priority`、`hold_to_bound`、`random_send`，
+以及 `policy_owned_timing` 模式下表达同一时机的 `first_send_plus_bound_3_10`、`bound_only_3_10`、
+`send_once`、`always_hold`）、`--comm-policy-params`（如 `interval=5`，
 未知策略名或参数键直接报错而非退回默认）、`--comm-sends-per-tick`（每步发射预算，默认不限）、
 `--comm-transcript`（把接受/发射/投递逐条写盘，仅测量、不被任何决策回读）、
 `--comm-range` 与 `--gossip-interval`（救援环境自带的视距刷新半径与"刷新+一跳 gossip"周期，

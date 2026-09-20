@@ -28,7 +28,7 @@ from .adapters.piloc import PilocSearchAdapter
 from .adapters.task03 import Task03Adapter
 from .assignment_gate import AssignmentGate, ReplanCoordinator
 from .clock import GlobalClock
-from .comm import CommRelay, CommTranscript
+from .comm import CommRelay, CommTranscript, TIMING_MODES
 from .comm_budget import CommBudget
 from .comm_policy import build_comm_policy
 from .contracts import DetectionEvent, ProgressEvent, TaskSnapshot
@@ -144,6 +144,13 @@ class RunConfiguration:
     # its urgency window. Unset leaves the relay's own behaviour untouched.
     comm_max_wait_steps: int | None = None
     comm_urgent_wait_steps: int | None = None
+    # Who acts on the silence bound. "legacy_shared_bound" is every run recorded before this field
+    # existed: the transport appends whatever has run out its bound, bills it and refuses it like
+    # any other send. "policy_owned_timing" is a research protocol in which that decision belongs
+    # to the arm -- nothing goes on the air because a clock ran out. Byte credit, per-step capacity,
+    # candidate generation, message merging and the payload rule are identical either way, and the
+    # default leaves production alone.
+    comm_timing_mode: str = "legacy_shared_bound"
     # Where to write the transport transcript (one JSON object per send/delivery/event).
     # Off unless a path is given, and never read back by any decision.
     comm_transcript: str | None = None
@@ -265,6 +272,14 @@ class RunConfiguration:
             value = getattr(self, name)
             if value is not None and int(value) < 1:
                 raise ConfigurationError(f"--{name.replace('_', '-')} must be >= 1 or unset, got {value}")
+        if str(self.comm_timing_mode or "").strip().lower() not in TIMING_MODES:
+            # Falling back to the legacy protocol would run a "policy owns its timing" experiment
+            # on the mechanism it was designed to remove, and every count in it would still look
+            # like a real one.
+            raise ConfigurationError(
+                f"--comm-timing-mode must be one of {', '.join(TIMING_MODES)}, got "
+                f"{self.comm_timing_mode!r}"
+            )
         if self.comm_range < 0:
             raise ConfigurationError(
                 f"--comm-range cannot be negative, got {self.comm_range}"
@@ -495,6 +510,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--comm-urgent-wait-steps", type=int, default=None,
                         help="the tighter bound while a task is inside its urgency window "
                              "(requires --comm-max-wait-steps)")
+    parser.add_argument("--comm-timing-mode", default="legacy_shared_bound",
+                        choices=sorted(TIMING_MODES),
+                        help="who acts on the silence bound: 'legacy_shared_bound' (default, the "
+                             "transport emits whatever has run out its bound, which is every "
+                             "recorded experiment) or 'policy_owned_timing' (research protocol: "
+                             "only what the arm itself asks for goes on the air; the byte credit, "
+                             "per-step capacity, content rules and safety checks are unchanged)")
     parser.add_argument("--comm-transcript", default=None,
                         help="write the transport transcript (one JSON object per accepted "
                              "event, emission and delivery attempt) to this path; a "
@@ -567,6 +589,7 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         comm_budget_bytes=getattr(args, "comm_budget_bytes", None),
         comm_max_wait_steps=getattr(args, "comm_max_wait_steps", None),
         comm_urgent_wait_steps=getattr(args, "comm_urgent_wait_steps", None),
+        comm_timing_mode=getattr(args, "comm_timing_mode", "legacy_shared_bound"),
         comm_transcript=args.comm_transcript,
         comm_range=float(args.comm_range),
         gossip_interval=int(args.gossip_interval),
@@ -667,6 +690,7 @@ def run_signature_of(configuration: RunConfiguration) -> dict[str, Any]:
             comm_budget_bytes=configuration.comm_budget_bytes,
             comm_max_wait_steps=configuration.comm_max_wait_steps,
             comm_urgent_wait_steps=configuration.comm_urgent_wait_steps,
+            comm_timing_mode=configuration.comm_timing_mode,
         ),
         repo=Path(__file__).resolve().parent.parent,
     )
@@ -916,6 +940,7 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         ),
         max_wait_steps=configuration.comm_max_wait_steps,
         urgent_wait_steps=configuration.comm_urgent_wait_steps,
+        timing_mode=configuration.comm_timing_mode,
         freshness_of=task_adapter.belief_freshness if comm_transcript is not None else None,
         now_of=lambda: clock.now,
         transcript=comm_transcript,

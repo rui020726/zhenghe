@@ -24,7 +24,7 @@ accepted detection, at the step that detection was accepted, no refresh traffic.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Sequence
+from typing import Any, Iterable, Sequence
 
 
 @dataclass(frozen=True)
@@ -77,6 +77,21 @@ class SendObservation:
     capacity_remaining: int | None = None
     backlog_targets: int = 0
     subscribers: int = 1
+
+
+def transport_trim_key(item: SendItem) -> tuple[float, int, str]:
+    """The one order the transport trims an unranked selection by: slack, staleness, id.
+
+    Published because a rule that has to reproduce the transport's own emission sequence must not
+    copy this key into its own body: two definitions of one order drift apart, and the drift
+    shows up as a protocol change nobody made.
+    """
+    return (item.remaining_time, -item.age_steps, item.target_id)
+
+
+def transport_order(items: Iterable[SendItem]) -> list[SendItem]:
+    """The candidates in the order the transport would take them."""
+    return sorted(items, key=transport_trim_key)
 
 
 class CommSendPolicy:
@@ -298,6 +313,140 @@ class HoldToBoundPolicy(CommSendPolicy):
         return ()
 
 
+#: The declared silence bound, as numbers an arm can be held to. ``hold_to_bound`` and
+#: ``immediate`` never see them: the transport enforces them on every arm. The arms below ask
+#: for the same timings themselves, which is what a transport that does not speak for everyone
+#: needs in order to keep the comparison honest.
+BOUND_MAX_WAIT_STEPS = 10
+BOUND_URGENT_WAIT_STEPS = 3
+BOUND_URGENCY_TIME = 25.0
+
+FIRST_SEND_PLUS_BOUND = f"first_send_plus_bound_{BOUND_URGENT_WAIT_STEPS}_{BOUND_MAX_WAIT_STEPS}"
+BOUND_ONLY = f"bound_only_{BOUND_URGENT_WAIT_STEPS}_{BOUND_MAX_WAIT_STEPS}"
+
+
+class SilenceBoundPolicy(CommSendPolicy):
+    """Plumbing for arms that *request* the declared bound instead of being spoken for by it.
+
+    The three numbers are the same 3/10/25 the transport has always enforced, and the arm's
+    registered name quotes two of them, so the constructor refuses a parameter set the name does
+    not describe. An arm whose label says 3/10 and whose body says 4/20 would otherwise be a
+    protocol change nobody made.
+    """
+
+    orders_selection = True
+
+    def __init__(
+        self,
+        *,
+        max_wait_steps: int = BOUND_MAX_WAIT_STEPS,
+        urgent_wait_steps: int = BOUND_URGENT_WAIT_STEPS,
+        urgency_time: float = BOUND_URGENCY_TIME,
+    ) -> None:
+        max_wait_steps = int(max_wait_steps)
+        urgent_wait_steps = int(urgent_wait_steps)
+        if max_wait_steps < 1 or urgent_wait_steps < 0:
+            raise ValueError(
+                f"a silence bound needs max_wait_steps >= 1 and urgent_wait_steps >= 0, got "
+                f"{max_wait_steps} and {urgent_wait_steps}"
+            )
+        if float(urgency_time) < 0.0:
+            raise ValueError(f"urgency_time cannot be negative, got {urgency_time}")
+        quoted = f"{urgent_wait_steps}_{max_wait_steps}"
+        if not self.name.endswith(quoted):
+            raise ValueError(
+                f"{type(self).__name__} is registered as {self.name!r}, which quotes a different "
+                f"bound than the one it was given ({quoted!r}); an arm may not be named for a "
+                "timing it does not obey"
+            )
+        self.max_wait_steps = max_wait_steps
+        self.urgent_wait_steps = urgent_wait_steps
+        self.urgency_time = float(urgency_time)
+
+    def parameters(self) -> dict[str, Any]:
+        return {
+            "max_wait_steps": self.max_wait_steps,
+            "urgent_wait_steps": self.urgent_wait_steps,
+            "urgency_time": self.urgency_time,
+        }
+
+    def urgent_now(self, item: SendItem) -> bool:
+        return 0.0 <= item.remaining_time <= self.urgency_time
+
+    def wait_limit(self, item: SendItem) -> int:
+        return self.urgent_wait_steps if self.urgent_now(item) else self.max_wait_steps
+
+    def overdue(self, item: SendItem) -> bool:
+        """Whether this held change has run out the bound. Same predicate the transport uses."""
+        return int(item.age_steps) >= self.wait_limit(item)
+
+
+class BoundOnlyPolicy(SilenceBoundPolicy):
+    """Say nothing except what the declared bound has run out on, and say it as a request.
+
+    Under a transport that enforces the bound, this is what an empty decision does by default.
+    Under a transport that does not, it has to ask -- and asking is the point: the same timings
+    are then available to a learned controller without a hidden mechanism handing them out, and
+    the arm that asks for exactly these is the floor the controller has to beat.
+    """
+
+    name = BOUND_ONLY
+
+    def decide(self, observation: SendObservation) -> tuple[str, ...]:
+        return tuple(item.target_id for item in observation.items if self.overdue(item))
+
+
+class FirstSendPlusBoundPolicy(SilenceBoundPolicy):
+    """Report news as it arrives, and refresh anything the declared bound has run out on.
+
+    The two bands are requested in the order the transport used to assemble them -- its own
+    trim order for the news it asked for, then the overdue changes behind it -- because when the
+    credit cannot pay for everything, position in that list decides who speaks. An arm that is
+    meant to be the same *behaviour* under a different protocol has to reproduce that order, not
+    merely the same set.
+    """
+
+    name = FIRST_SEND_PLUS_BOUND
+
+    def decide(self, observation: SendObservation) -> tuple[str, ...]:
+        asked = [item for item in observation.items if item.pending_event]
+        ranked = transport_order(asked)
+        following = [
+            item.target_id
+            for item in observation.items
+            if self.overdue(item) and item.target_id not in {ranked_target.target_id for ranked_target in ranked}
+        ]
+        return tuple(item.target_id for item in ranked) + tuple(following)
+
+
+class SendOncePolicy(CommSendPolicy):
+    """One report per accepted detection, and no refresh traffic at all.
+
+    This is what the relay did before any bound existed, and the cheapest arm that still tells
+    the truth about a discovery: the receiver learns a task exists and never learns how it has
+    moved. Refreshing is not this arm's job, so nothing speaks for it when a stage changes.
+    """
+
+    name = "send_once"
+
+    def decide(self, observation: SendObservation) -> tuple[str, ...]:
+        return tuple(item.target_id for item in observation.items if item.pending_event)
+
+
+class AlwaysHoldPolicy(CommSendPolicy):
+    """Radio silence, chosen rather than imposed.
+
+    Under the shared bound this arm was impossible: the transport spoke for it every 10 steps.
+    Here it can actually do what it says, which is why it is the control that tells a reader
+    what the uplink was worth -- and why a task left unknown is allowed to fail.
+    """
+
+    name = "always_hold"
+
+    def decide(self, observation: SendObservation) -> tuple[str, ...]:
+        return ()
+
+
 class RandomSendPolicy(CommSendPolicy):
     """Flip a coin per candidate, on a seed of its own.
 
@@ -339,18 +488,30 @@ class RandomSendPolicy(CommSendPolicy):
         )
 
 
+_RULE_CLASSES: tuple[type[CommSendPolicy], ...] = (
+    ImmediatePolicy,
+    PeriodicPolicy,
+    EventPolicy,
+    EventMaxWaitPolicy,
+    PriorityEventPolicy,
+    HoldToBoundPolicy,
+    BoundOnlyPolicy,
+    FirstSendPlusBoundPolicy,
+    SendOncePolicy,
+    AlwaysHoldPolicy,
+    RandomSendPolicy,
+)
+
 POLICIES: dict[str, type[CommSendPolicy]] = {
-    policy.name: policy
-    for policy in (
-        ImmediatePolicy,
-        PeriodicPolicy,
-        EventPolicy,
-        EventMaxWaitPolicy,
-        PriorityEventPolicy,
-        HoldToBoundPolicy,
-        RandomSendPolicy,
-    )
+    policy.name: policy for policy in _RULE_CLASSES
 }
+
+_RULE_NAMES = [policy.name for policy in _RULE_CLASSES]
+if len(set(_RULE_NAMES)) != len(_RULE_NAMES):
+    # A colliding name would drop an arm out of the catalogue silently, and a dropped arm is a
+    # comparison that quietly stops including the thing it was supposed to include.
+    repeated = sorted(name for name in set(_RULE_NAMES) if _RULE_NAMES.count(name) > 1)
+    raise ImportError(f"two communication rules claim the same name: {repeated}")
 
 
 def parse_parameters(spec: str | None) -> dict[str, Any]:
