@@ -230,16 +230,23 @@ def curve_mode(args: argparse.Namespace) -> int:
     directory = common.evaluation_root(args.tier)
     directory.mkdir(parents=True, exist_ok=True)
     written = 0
-    tasks = [(seed, at_steps) for seed in (1, 2, 3) for at_steps in CHECKPOINT_STEPS]
-    for seed, at_steps in tasks[args.shard :: args.shards]:
+    # One job per (run, checkpoint, validation stream): the training seed names the weights and the
+    # stream names the scenario, which are different things and must not share a variable.
+    tasks = [
+        (seed, at_steps, stream)
+        for seed in (1, 2, 3)
+        for at_steps in CHECKPOINT_STEPS
+        for stream in args.seeds
+    ]
+    for seed, at_steps, stream in tasks[args.shard :: args.shards]:
         arm = arm_label("learned", args.tier, seed, at_steps=at_steps)
         rows = load_rows(args.tier, PRIMARY_SETTING, directory, suffix="_curve")
-        if arm in {row["arm"] for row in rows} and not args.overwrite:
+        if (arm, stream) in done_keys(rows) and not args.overwrite:
             continue
         controller, _ = load_controller(args.tier, seed, at_steps)
         row = score_learned(
             controller,
-            seed=seed,
+            seed=stream,
             tier=args.tier,
             directory=directory / "runs",
             arm=arm,
@@ -250,8 +257,8 @@ def curve_mode(args: argparse.Namespace) -> int:
         write_row(rows_path(args.tier, PRIMARY_SETTING, directory, "_curve"), row)
         written += 1
         print(
-            f"[curve {args.tier}] seed{seed}@{at_steps}: onT={row['on_time_targets_per_episode']} "
-            f"bytes={row['airtime_bytes']} ({row['seconds']}s)",
+            f"[curve {args.tier}] run{seed}@{at_steps} s{stream}: "
+            f"onT={row['on_time_targets_per_episode']} bytes={row['airtime_bytes']} ({row['seconds']}s)",
             flush=True,
         )
     print(json.dumps({"rows_written": written}, ensure_ascii=False))
@@ -440,63 +447,116 @@ def report_mode(args: argparse.Namespace) -> int:
         learned_arms = [
             arm for arm in table if table[arm]["kind"] == "learned" and table[arm].get("at_steps") == 400_000
         ]
+        curve = load_rows(tier, PRIMARY_SETTING, common.evaluation_root(tier), "_curve")
+        curve_table: dict[str, Any] = {}
+        for arm in sorted({str(row["arm"]) for row in curve}):
+            values = [row for row in curve if row["arm"] == arm]
+            curve_table[arm] = {
+                "episodes": len(values),
+                "at_steps": values[0].get("at_steps"),
+                "on_time_per_episode": _summary(values, "on_time_targets_per_episode"),
+                "airtime_bytes": _summary(values, "airtime_bytes"),
+            }
         completion = common.paired_bootstrap(
             rows, baseline=comparator, extract=lambda row: float(row["on_time_targets_per_episode"])
         )
         bytes_paired = common.paired_bootstrap(
             rows, baseline=comparator, extract=lambda row: float(row["airtime_bytes"])
         )
-        gate: dict[str, Any] = {}
-        for arm in sorted(learned_arms):
-            stats = completion["arms"].get(arm, {})
-            cost = bytes_paired["arms"].get(arm, {})
-            gate[arm] = {
-                "completion_difference_per_episode": stats,
-                "byte_difference": cost,
-                "primary_gate": bool(
-                    stats
-                    and stats["ci95"][0] > 0
-                    and stats["pairs"] >= 3
-                ),
-                "saving_gate": bool(
-                    cost
-                    and stats
-                    and cost["ci95"][1] < 0
-                    and stats["ci95"][0] >= -0.05
+        # One arm is one *training seed*. The frozen gate counts training seeds, so each arm's CI
+        # is computed against the comparator over that arm's own 24 scenario pairs -- pooling all
+        # three would treat 3 x 24 as 72 independent scenarios, which the protocol forbids.
+        per_seed: dict[str, Any] = {}
+        for arm in sorted(
+            arm for arm in by_arm if arm in learned_arms or arm.startswith("init_")
+        ):
+            subset = [row for row in rows if row["arm"] in {arm, comparator}]
+            own_completion = common.paired_bootstrap(
+                subset,
+                baseline=comparator,
+                extract=lambda row: float(row["on_time_targets_per_episode"]),
+            )["arms"].get(arm, {})
+            own_bytes = common.paired_bootstrap(
+                subset, baseline=comparator, extract=lambda row: float(row["airtime_bytes"])
+            )["arms"].get(arm, {})
+            per_seed[arm] = {
+                "completion_difference_per_episode": own_completion,
+                "byte_difference": own_bytes,
+                "primary_gate_seed_passes": bool(own_completion and own_completion["ci95"][0] > 0),
+                "saving_gate_seed_passes": bool(
+                    own_completion
+                    and own_bytes
+                    and own_bytes["ci95"][1] < 0
+                    and own_completion["ci95"][0] >= -0.05
                 ),
             }
-        # §7 comparison 3: each final model against its own untrained weights.
+        learned_seed_arms = [arm for arm in sorted(learned_arms)]
+        # §7 comparison 3: each final model against its own untrained weights, per stream.
         initialisation: dict[str, Any] = {}
-        for seed in (1, 2, 3):
-            final = f"learned_{tier}_seed{seed}_at400000"
-            initial = f"init_{tier}_seed{seed}"
-            if final in by_arm and initial in by_arm:
-                difference = _summary(
-                    [
-                        {
-                            "value": float(row["on_time_targets_per_episode"])
-                            - float(
-                                next(
-                                    other["on_time_targets_per_episode"]
-                                    for other in by_arm[initial]
-                                    if int(other["seed"]) == int(row["seed"])
-                                )
-                            )
-                        }
-                        for row in by_arm[final]
-                    ],
-                    "value",
-                )
-                initialisation[f"seed{seed}"] = difference
+        for arm in learned_seed_arms:
+            initial = f"init_{tier}_seed{arm.rsplit('_seed', 1)[1].split('_at', 1)[0]}"
+            if initial not in by_arm:
+                continue
+            baseline_by_stream = {
+                int(row["seed"]): float(row["on_time_targets_per_episode"])
+                for row in by_arm[initial]
+            }
+            initialisation[arm] = _summary(
+                [
+                    {
+                        "value": float(row["on_time_targets_per_episode"])
+                        - baseline_by_stream[int(row["seed"])]
+                    }
+                    for row in by_arm[arm]
+                    if int(row["seed"]) in baseline_by_stream
+                ],
+                "value",
+            )
+        passing = [arm for arm in learned_seed_arms if per_seed[arm]["primary_gate_seed_passes"]]
+        remaining = [arm for arm in learned_seed_arms if arm not in passing]
         report["tiers"][tier] = {
             "comparator": comparator,
             "episodes": len(rows),
             "arms": table,
-            "paired_against_comparator": {
+            # The curve is reported beside the frozen judgement, never instead of it.
+            "learning_curves": curve_table,
+            "pooled_for_reference_only": {
                 "on_time_targets_per_episode": completion,
                 "airtime_bytes": bytes_paired,
+                "warning": (
+                    "pooled across training seeds, so its CI is optimistic: the frozen judgement "
+                    "reads per_seed below"
+                ),
             },
-            "learning_gate_per_seed": gate,
+            "per_training_seed": per_seed,
+            "learning_gate_per_seed": {
+                arm: {
+                    "primary_gate_seed_passes": per_seed[arm]["primary_gate_seed_passes"],
+                    "saving_gate_seed_passes": per_seed[arm]["saving_gate_seed_passes"],
+                    "completion_difference_per_episode": per_seed[arm]["completion_difference_per_episode"],
+                    "byte_difference": per_seed[arm]["byte_difference"],
+                }
+                for arm in learned_seed_arms
+            },
+            "gate_verdict": {
+                "seeds_passing": passing,
+                "seeds_not_passing": remaining,
+                "third_seed_point_estimate": {
+                    arm: per_seed[arm]["completion_difference_per_episode"].get("mean_difference")
+                    for arm in remaining
+                },
+                "third_seed_within_margin": all(
+                    (per_seed[arm]["completion_difference_per_episode"].get("mean_difference") or 0.0)
+                    >= -0.05
+                    for arm in remaining
+                ),
+                "primary_gate_met": len(passing) >= 2
+                and all(
+                    (per_seed[arm]["completion_difference_per_episode"].get("mean_difference") or 0.0)
+                    >= -0.05
+                    for arm in remaining
+                ),
+            },
             "learning_versus_own_initialisation": initialisation,
             "diagnostics": {
                 str(setting): len(load_rows(tier, setting, common.evaluation_root(tier), "_diag"))
@@ -511,30 +571,27 @@ def report_mode(args: argparse.Namespace) -> int:
 
 
 def _verdict(report: dict[str, Any]) -> dict[str, Any]:
-    """The frozen gate, applied per tier and per seed exactly as §6 wrote it."""
+    """The frozen gate, applied per tier and per training seed exactly as §6 wrote it.
+
+    A tier's primary gate is met when at least two of the three training seeds show a positive 95 %
+    CI lower bound against the locked comparator and the remaining seed's point estimate is no
+    worse than -0.05 targets/episode. Nothing here pools seeds, and nothing here relaxes the
+    margin because a result was close.
+    """
     passed: list[str] = []
     saved: list[str] = []
     for tier, block in report["tiers"].items():
-        positive = [
-            arm
-            for arm, value in block["learning_gate_per_seed"].items()
-            if value["primary_gate"]
-        ]
-        for arm in positive:
-            passed.append(f"{arm}@{tier}")
+        verdict = block["gate_verdict"]
+        if verdict["primary_gate_met"]:
+            passed.append(f"{tier}: {','.join(verdict['seeds_passing'])}")
         for arm, value in block["learning_gate_per_seed"].items():
-            if value["saving_gate"]:
+            if value["saving_gate_seed_passes"]:
                 saved.append(f"{arm}@{tier}")
     return {
-        "primary_gate_passed": sorted(passed),
+        "primary_gate_passed": passed,
         "saving_gate_passed": sorted(saved),
         "primary_gate_met": bool(passed),
         "saving_gate_met": bool(saved),
-        "note": (
-            "§6 also requires the third seed's point estimate to be no worse than -0.05 "
-            "targets/episode when 2/3 seeds pass; that is read from the paired table beside this "
-            "verdict, not folded into a boolean"
-        ),
     }
 
 
