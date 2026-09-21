@@ -1,5 +1,13 @@
 # 项目状态
 
+## 2026-09-22：多步诊断第一阶段启动计划（尚未运行）
+
+当前入口 [COMM_MULTISTEP_STAGE1_NEXT_ROUND.md](COMM_MULTISTEP_STAGE1_NEXT_ROUND.md)，总纲 v2.3。
+基于 `analysis/comm-evidence-review@d8bd680`：最多 32 干预分支 + 8 自由基线，不训练、不扩样。
+先修正候选来源/后续策略不一致、通信合法性字段、旧转录不可复现与选点/状态摘要的登记顺序。
+本阶段沿用旧反事实的 event_retry_until_acked_5，不混入 retry_2。
+现有生产代码和默认值不变。多步信号即使成立，也不直接证明 PPO 信用分配根因或学习收益。
+
 ## 2026-09-21：证据复核与训练诊断已交付（第八轮，未跑任何 episode）
 
 执行入口 [COMM_RESEARCH_REVIEW_NEXT_ROUND.md](COMM_RESEARCH_REVIEW_NEXT_ROUND.md) **已执行完毕**。
