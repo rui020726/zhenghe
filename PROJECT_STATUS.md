@@ -1,5 +1,14 @@
 # 项目状态
 
+## 下一轮计划（2026-09-21，S3 收尾与规则独立确认尚未运行）
+
+当前执行入口为 [COMMUNICATION_S3_CLOSURE_NEXT_ROUND.md](COMMUNICATION_S3_CLOSURE_NEXT_ROUND.md)，
+总纲 v1.9。ACK 门禁 3 未过后，不再训练或改变场景追逐正结果。下一轮先冻结通信学习的范围准确负结论，
+再用预登记且与历史零重叠的 `900000..900199` 工程块，独立确认 `send_once`、
+`retry_until_acked_2` 等五条锁定规则在 isolated-lossless、isolated-lossy、normal-lossy 三个设置上的
+任务效果与 total bytes。规则参数不在新数据上重选，`800000..800399` 学习最终测试继续封存。
+本轮结束后由使用者根据正常路径的独立成本—效果曲线决定是否保留 ACK 高可靠模式；以下第六轮和历史记录保持原含义。
+
 ## 下一轮计划（2026-09-20，ACK 信息价值门禁已执行，停在未通过分支）
 
 当前执行入口 [COMM_ACK_VALUE_NEXT_ROUND.md](COMM_ACK_VALUE_NEXT_ROUND.md) 的 §5 门禁**已跑完**：
