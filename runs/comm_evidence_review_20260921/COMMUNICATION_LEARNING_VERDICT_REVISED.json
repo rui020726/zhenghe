@@ -1,0 +1,261 @@
+{
+ "branch": "analysis/comm-evidence-review",
+ "brief": "COMM_RESEARCH_REVIEW_NEXT_ROUND.md",
+ "charter_version": "v2.1",
+ "conclusions": {
+  "ack_task_gain_and_total_cost": {
+   "causal_scope": "retry 胜过只发一次同时改变三件事（反向信道、是否消费确认、是否有第二次尝试），因此该差值不单独证明 ACK 信息本身的净价值。要分离反馈价值，需要'相近重试机会与调参资源的无反馈重试'对照，本轮未新增任何运行。",
+   "claim": "ACK 信息真实、可获得、有后果（一条简单规则就能拿到完成数增益），但不是免费的，且增益不能单独归因给反馈本身。",
+   "cost_comparisons_are_different": [
+    {
+     "comparison": "ack_retry_2 − noack_send_once（基线无 ACK 信道）",
+     "difference": "+26 354.1 B/ep",
+     "what_it_measures": "协议整体：开信道 + 消费反馈 + 允许二次尝试"
+    },
+    {
+     "comparison": "ack_retry_2 − ack_send_once（基线有 ACK 信道、不消费）",
+     "difference": "+19 100.7 B/ep",
+     "what_it_measures": "重发规则本身的成本增量"
+    },
+    {
+     "comparison": "第六轮 retry_until_acked_2 − send_once（48 条训练流，基线同为不消费）",
+     "difference": "+19 562 B/ep",
+     "what_it_measures": "与上一行同类的量，但数据与轮次不同；不是同一基线的变化"
+    }
+   ],
+   "gate_3_scope": {
+    "observed": {
+     "consistency": {
+      "checked": 425,
+      "consistent": 425
+     },
+     "hold_ok": false,
+     "passed": false,
+     "send_ok": false,
+     "threshold_per_branch": 20,
+     "threshold_streams": 8
+    },
+    "sampling_history": "初次每流 2 点（93 点）→ 一致性检查抓到 Recorder 把 orders_selection 的有序选择转成 set 再转回 tuple、破坏优先级顺序的真实缺陷 → 修复后扩到每流 10 点（425 点）。样本上限是在看到第一遍的一致性失败后提高的，打平率从 87 % 变为 96.5 %；该顺序如实披露，不外推为总体比例。",
+    "thresholds": {
+     "nature": "资源门槛（这轮愿意采多少点），不是强化学习可行性的必要条件",
+     "per_branch": 20,
+     "streams": 8
+    },
+    "what_it_does_not_say": "不写'96.5 % 的所有决策没有学习空间'；只说这 425 个单步点上未采到取舍"
+   },
+   "lossless_control": {
+    "completion": 0.0,
+    "total_bytes": 10364.34
+   },
+   "negative_control_reading": "无损负控上完成数逐字相等而 total 更贵 ⇒ 只支持'该重试收益与所测丢包条件有关'。它不支持'不是多花字节买分'这种机制结论，因为在有损信道上增益也可能全部来自额外的第二次尝试而非确认状态。",
+   "round6_training_streams": {
+    "baseline": "send_once",
+    "baseline_ack_switch": "开（本轮 22 臂全部 ack=True）",
+    "baseline_consumes_feedback": "否：send_once 每视图一次上报，没有重发决策",
+    "baseline_on_time": 4.4167,
+    "baseline_total_bytes": 22110.3,
+    "completion": {
+     "arm": "retry_until_acked_2",
+     "baseline": "send_once",
+     "ci95_lower": 0.5625,
+     "ci95_upper": 1.1875,
+     "key": "on_time",
+     "mean_difference": 0.875,
+     "seeds_better": 26,
+     "seeds_equal": 20,
+     "seeds_worse": 2,
+     "streams": 48
+    },
+    "passed": true,
+    "selected_on_time": 5.2917,
+    "selected_rule": "retry_until_acked_2",
+    "selected_total_bytes": 41672.4,
+    "total_bytes": {
+     "arm": "retry_until_acked_2",
+     "baseline": "send_once",
+     "ci95_lower": 19103.67656,
+     "ci95_upper": 20044.28594,
+     "key": "total_bytes",
+     "mean_difference": 19562.0625,
+     "seeds_better": 48,
+     "seeds_equal": 0,
+     "seeds_worse": 0,
+     "streams": 48
+    }
+   },
+   "round7_fresh_streams": {
+    "bytes_per_additional_on_time_target": 31561.7,
+    "bytes_per_additional_unit": "B / 新增一个按时任务（不是 B/episode）",
+    "completion_ci95": [
+     0.685,
+     0.995
+    ],
+    "completion_gain_targets_per_episode": 0.835,
+    "new_per_target_failures": 23,
+    "per_stream": [
+     118,
+     72,
+     10
+    ],
+    "per_target_interval": [
+     26502.7,
+     38459.3
+    ],
+    "ratio_interval_kind": "unconditional",
+    "ratio_robustly_interpretable": true,
+    "recovered": 190,
+    "setting": "isolated-lossy（成功率 0.7 ⇒ 丢包率 0.3）",
+    "total_bytes_ci95": [
+     26002.26562,
+     26687.79025
+    ],
+    "total_bytes_increase_B_per_episode": 26354.06
+   },
+   "units": "个任务/episode（完成数差）、B/episode（每局字节差）、B/新增按时任务（比值）、完成率（[0,1] 比例，不是百分点）。四者不可互换：+0.835 是个/ep，+26 354 是 B/ep，31 562 是 B/新增任务，不是 B/ep。"
+  },
+  "learning_negative": {
+   "claim": "在已经测试的任务分布、两类发送协议、no-ACK/ACK 反馈、观测、动作、奖励和有界训练资源下，学习型发送控制器没有建立相对强规则的附加价值；简单规则形成了当前可复现的成本—效果前沿。",
+   "final_test_block": {
+    "block": "800000..800399",
+    "generated": false,
+    "opened": false,
+    "read": false
+   },
+   "not_claimed": [
+    "强化学习永远无效",
+    "规则全局最优",
+    "没有任何可学习空间",
+    "ACK 模型训练失败",
+    "扩训已排除欠训练",
+    "96.5 % 的所有决策没有学习空间",
+    "无损打平证明不是多花字节买分"
+   ],
+   "s3_state": "范围准确的负结果；研究先导按预注册停止条件关闭",
+   "three_facts_stated_separately": [
+    {
+     "evidence": "S3-1…S3-4：预注册门槛 0/3；但每个运行的六个训练都显著优于各自未训练初值",
+     "fact": "no-ACK 学习模型未建立稳定优势",
+     "scope": "修正采样器之后、两种 timing 协议、两档预算、每条件 3 seed × 400k 环境步"
+    },
+    {
+     "evidence": "runs/comm_ack_value_20260920/COMM_ACK_VALUE_GATE_25pct.json（decision = stop）",
+     "fact": "ACK 只做过规则与信息门禁，未训练任何 ACK 模型",
+     "scope": "S3-5：48 流 × 22 臂规则矩阵 + 425 点受控反事实；门禁 3 未过 ⇒ 按指令未训练"
+    },
+    {
+     "evidence": "本文修订报告的 inputs.rows = 3 000，arms 全部是规则",
+     "fact": "本轮 3 000 episode 里没有学习臂",
+     "scope": "S3-6：五条已锁定规则 × 3 设置 × 200 新流，训练 0 次"
+    }
+   ],
+   "training_sufficiency": "扩训（100k→400k 环境步）改善了种子间稳定性并让六个运行显著优于各自初值，但这只排除'完全学不动'，不排除仍然欠训练、时序信用分配过稀或表征不足。'优于初值'≠充分收敛，'达到资源上限'≠最优。停止决定保留，绝对表述删除。",
+   "why_not_claimed": {
+    "96.5 % 的所有决策没有学习空间": "打平率是特定采样分布、单次干预与固定后续策略下的观测，且各 ≥20 点/≥8 流只是资源门槛",
+    "ACK 模型训练失败": "ACK 从未训练过模型，只做过规则与信息门禁；三条事实不能打包",
+    "强化学习永远无效": "负结论的范围是已测分布/观测/动作/奖励/训练资源，不是方法本身",
+    "扩训已排除欠训练": "100k→400k 的改善与种子间差异缩小不足以排除仍欠训练、稀疏信用分配或表征问题",
+    "无损打平证明不是多花字节买分": "无损负控只支持'该重试收益与所测丢包条件有关'，不分离反馈价值与额外重试机会",
+    "没有任何可学习空间": "门禁 3 只否定被采样的那 425 个单步决策点；本轮 3 000 集没有学习臂",
+    "规则全局最优": "规则只是在已测集合与已测数据上形成可复现前沿"
+   }
+  },
+  "normal_path_engineering_suitability": {
+   "break_even": "设新增按时任务价值 V（效用/任务）、字节成本 c（效用/B）：此样本均值下净效用改善需 V × 0.835 > c × 26354.1。未指定 V、c 时不宣布值得部署；total 只含任务上行与 ACK，不含未计入的 gossip/系统通信。",
+   "claim": "在保留项目原有视距感知与 gossip 的正常信息路径上，这两个固定规则在已测 200 流的完成数逐局相同，而 ACK 重试每局多花同样多的字节 ⇒ 该设置上被支配，不提部署。",
+   "completion_ci95": [
+    0.0,
+    0.0
+   ],
+   "completion_difference": 0.0,
+   "default_changed": false,
+   "does_not_mean": "不代表所有 ACK 策略、所有正常场景或学习策略都无价值；这些固定规则不构成学习成果，也不构成对整个反馈类的否证。",
+   "proposed_as_optional_high_reliability_mode": false,
+   "same_outcome_but_dearer": true,
+   "total_bytes_difference": 26354.06
+  },
+  "protocol_and_rule_gains": {
+   "claim": "把 3/10 静默上界从传输层代发改为显式规则后，规则集合本身改善：send_once 成为同协议合法对照并在主预算上支配 immediate 同行为。这是协议/规则收益，与学习收益必须分开引用。",
+   "evidence": "S3-4（runs/comm_protocol_v2_20260920/）",
+   "nature": "不是某条规则变好，而是规则集合的合法性变了"
+  }
+ },
+ "date": "2026-09-21",
+ "differences_against_archived": [
+  {
+   "archived": [
+    0.685,
+    0.99
+   ],
+   "item": "隔离有损完成数 CI",
+   "kind": "数值（分位边界）",
+   "reason": "归档引用两臂抽样的判读段值；修订统一为比较表那一套抽样",
+   "revised": [
+    0.685,
+    0.995
+   ]
+  },
+  {
+   "archived": [
+    26017.64838,
+    26687.40263
+   ],
+   "item": "隔离有损 total-byte CI",
+   "kind": "数值（分位边界）",
+   "reason": "同上；均值未变",
+   "revised": [
+    26002.26562,
+    26687.79025
+   ]
+  },
+  {
+   "archived": 31561.7,
+   "item": "每新增按时任务的字节成本",
+   "kind": "数值（未变）",
+   "reason": "比值不依赖判读段抽样；单位写明是 B/新增任务而不是 B/ep",
+   "revised": 31561.7
+  },
+  {
+   "archived": "理由段落中的绝对表述",
+   "item": "'欠训练（已用扩训排除）'",
+   "kind": "只改解释",
+   "reason": "§3.9：改善与种子差异缩小不足以证明充分收敛",
+   "revised": "扩训排除的是'完全学不动'，不排除仍欠训练/信用分配/表征"
+  },
+  {
+   "archived": "把该基线称作 no-ACK 规则",
+   "item": "'第六轮最强 no-ACK 规则 send_once'",
+   "kind": "只改解释",
+   "reason": "§3.6：否则 +19 562 B 与 +26 354 B 会被读成同一基线的变化",
+   "revised": "第六轮 22 臂全部 ack=True：该基线信道开、但不消费反馈"
+  }
+ ],
+ "document": "COMMUNICATION_LEARNING_VERDICT_REVISED",
+ "learning_facts": [
+  {
+   "evidence": "S3-1…S3-4：预注册门槛 0/3；但每个运行的六个训练都显著优于各自未训练初值",
+   "fact": "no-ACK 学习模型未建立稳定优势",
+   "scope": "修正采样器之后、两种 timing 协议、两档预算、每条件 3 seed × 400k 环境步"
+  },
+  {
+   "evidence": "runs/comm_ack_value_20260920/COMM_ACK_VALUE_GATE_25pct.json（decision = stop）",
+   "fact": "ACK 只做过规则与信息门禁，未训练任何 ACK 模型",
+   "scope": "S3-5：48 流 × 22 臂规则矩阵 + 425 点受控反事实；门禁 3 未过 ⇒ 按指令未训练"
+  },
+  {
+   "evidence": "本文修订报告的 inputs.rows = 3 000，arms 全部是规则",
+   "fact": "本轮 3 000 episode 里没有学习臂",
+   "scope": "S3-6：五条已锁定规则 × 3 设置 × 200 新流，训练 0 次"
+  }
+ ],
+ "numbers_from": "COMM_RULE_CONFIRMATION_RESULTS_REVISED.json / 第六轮 gate JSON",
+ "preserved": {
+  "gate_criteria_redefined": false,
+  "new_episodes": 0,
+  "new_streams": 0,
+  "new_training": 0,
+  "original_stop_decisions": "未改：门禁未过与门槛 0/3 的判定原样保留",
+  "production_defaults_changed": false,
+  "round6_negative_result": "原样保留，ACK 是新协议不覆盖旧结论"
+ },
+ "revises": "COMMUNICATION_LEARNING_VERDICT.json"
+}
