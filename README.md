@@ -281,7 +281,8 @@ checkpoint、录制流、逐 episode 日志与转录**不入 Git**，只在 mani
 | 归因与稳定性 | `runs/comm_stability_20260919/` | `COMM_TRAINING_STABILITY_PROTOCOL.md`、`COMM_TRAINING_STABILITY_RESULTS.md` |
 | 概率正确性与紧预算 | `runs/comm_tight_budget_20260919/` | `COMM_PPO_PROBABILITY_AUDIT.md`、`COMM_TIGHT_BUDGET_PROTOCOL.md`、`COMM_TIGHT_BUDGET_RESULTS.md` |
 | **发送时机协议消融** | `runs/comm_protocol_v2_20260920/` | `COMM_MASK_CAUSE_AUDIT.md`（掩码归因与勘误）、`COMM_PROTOCOL_V2_PROTOCOL.md`（判据先于结果）、`COMM_PROTOCOL_V2_RESULTS.md`（协议收益与学习收益分开）、`COMM_PROTOCOL_V2_MANIFEST.json` |
-| **ACK 信息价值门禁（最新）** | `runs/comm_ack_value_20260920/` | `COMM_ACK_CONTRACT.md`（反向信道合同）、`COMM_ACK_VALUE_GATE.md`/`.json`（四项门禁）、`COMM_ACK_MANIFEST.json` |
+| **ACK 信息价值门禁** | `runs/comm_ack_value_20260920/` | `COMM_ACK_CONTRACT.md`（反向信道合同）、`COMM_ACK_VALUE_GATE.md`/`.json`（四项门禁：1/2/4 过、3 未过 ⇒ 未训练）、`COMM_ACK_MANIFEST.json` |
+| **S3 收尾与规则独立确认（最新）** | `runs/comm_rule_confirm_20260921/` | `COMM_RULE_CONFIRMATION_PROTOCOL.md`（判据先于数据）、`COMM_RULE_BLOCK_AUDIT.json`（`900000..900199` 与全项目四源零重叠）、`COMM_RULE_CONFIRMATION_RESULTS.md`（3 000 episode：隔离有损 +0.835 个/ep 而 total +26 354 B、正常路径被支配）、`COMMUNICATION_LEARNING_VERDICT.md`（S3 学习结论冻结为范围准确的负结果，研究先导关闭）、`COMM_RULE_CONFIRMATION_MANIFEST.json` |
 
 传输层的两个协议由 `--comm-timing-mode` 选择：`legacy_shared_bound`（默认，全部历史实验，
 上界到点由传输层代发、计费、可拒付）与 `policy_owned_timing`（研究模式，只有策略自己请求的

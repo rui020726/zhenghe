@@ -1,0 +1,6300 @@
+{
+ "block": [
+  900000,
+  900199
+ ],
+ "budget_bytes": 29300,
+ "comparisons": {
+  "isolated-lossless": {
+   "ack_backoff_16 - ack_retry_2": {
+    "axes": {
+     "ack_bytes": {
+      "arm": "ack_backoff_16",
+      "baseline": "ack_retry_2",
+      "ci95_lower": 0.0,
+      "ci95_upper": 0.0,
+      "key": "ack_bytes",
+      "mean_difference": 0.0,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 200,
+      "seeds_worse": 0
+     },
+     "on_time": {
+      "arm": "ack_backoff_16",
+      "baseline": "ack_retry_2",
+      "ci95_lower": 0.0,
+      "ci95_upper": 0.0,
+      "key": "on_time",
+      "mean_difference": 0.0,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 200,
+      "seeds_worse": 0
+     },
+     "total_bytes": {
+      "arm": "ack_backoff_16",
+      "baseline": "ack_retry_2",
+      "ci95_lower": 0.0,
+      "ci95_upper": 0.0,
+      "key": "total_bytes",
+      "mean_difference": 0.0,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 200,
+      "seeds_worse": 0
+     },
+     "uplink_bytes": {
+      "arm": "ack_backoff_16",
+      "baseline": "ack_retry_2",
+      "ci95_lower": 0.0,
+      "ci95_upper": 0.0,
+      "key": "uplink_bytes",
+      "mean_difference": 0.0,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 200,
+      "seeds_worse": 0
+     }
+    },
+    "note": "frontier stability: backoff against the locked rule",
+    "pairs": 200
+   },
+   "ack_periodic_20 - ack_retry_2": {
+    "axes": {
+     "ack_bytes": {
+      "arm": "ack_periodic_20",
+      "baseline": "ack_retry_2",
+      "ci95_lower": 5707.3985,
+      "ci95_upper": 6340.03575,
+      "key": "ack_bytes",
+      "mean_difference": 6023.425,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "on_time": {
+      "arm": "ack_periodic_20",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -0.1,
+      "ci95_upper": 0.125,
+      "key": "on_time",
+      "mean_difference": 0.015,
+      "pairs": 200,
+      "seeds_better": 34,
+      "seeds_equal": 140,
+      "seeds_worse": 26
+     },
+     "total_bytes": {
+      "arm": "ack_periodic_20",
+      "baseline": "ack_retry_2",
+      "ci95_lower": 14797.79425,
+      "ci95_upper": 16422.04637,
+      "key": "total_bytes",
+      "mean_difference": 15616.825,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "uplink_bytes": {
+      "arm": "ack_periodic_20",
+      "baseline": "ack_retry_2",
+      "ci95_lower": 9075.70425,
+      "ci95_upper": 10108.4475,
+      "key": "uplink_bytes",
+      "mean_difference": 9593.4,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     }
+    },
+    "note": "frontier stability: periodic against the locked rule",
+    "pairs": 200
+   },
+   "ack_retry_2 - ack_send_once": {
+    "axes": {
+     "ack_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "ack_send_once",
+      "ci95_lower": 0.0,
+      "ci95_upper": 0.0,
+      "key": "ack_bytes",
+      "mean_difference": 0.0,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 200,
+      "seeds_worse": 0
+     },
+     "on_time": {
+      "arm": "ack_retry_2",
+      "baseline": "ack_send_once",
+      "ci95_lower": 0.0,
+      "ci95_upper": 0.0,
+      "key": "on_time",
+      "mean_difference": 0.0,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 200,
+      "seeds_worse": 0
+     },
+     "total_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "ack_send_once",
+      "ci95_lower": 0.0,
+      "ci95_upper": 0.0,
+      "key": "total_bytes",
+      "mean_difference": 0.0,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 200,
+      "seeds_worse": 0
+     },
+     "uplink_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "ack_send_once",
+      "ci95_lower": 0.0,
+      "ci95_upper": 0.0,
+      "key": "uplink_bytes",
+      "mean_difference": 0.0,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 200,
+      "seeds_worse": 0
+     }
+    },
+    "note": "what the retry rule adds on top of the ACK information",
+    "pairs": 200
+   },
+   "ack_retry_2 - noack_send_once": {
+    "axes": {
+     "ack_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "noack_send_once",
+      "ci95_lower": 10240.10775,
+      "ci95_upper": 10470.63075,
+      "key": "ack_bytes",
+      "mean_difference": 10364.34,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "on_time": {
+      "arm": "ack_retry_2",
+      "baseline": "noack_send_once",
+      "ci95_lower": 0.0,
+      "ci95_upper": 0.0,
+      "key": "on_time",
+      "mean_difference": 0.0,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 200,
+      "seeds_worse": 0
+     },
+     "total_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "noack_send_once",
+      "ci95_lower": 10240.10775,
+      "ci95_upper": 10470.63075,
+      "key": "total_bytes",
+      "mean_difference": 10364.34,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "uplink_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "noack_send_once",
+      "ci95_lower": 0.0,
+      "ci95_upper": 0.0,
+      "key": "uplink_bytes",
+      "mean_difference": 0.0,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 200,
+      "seeds_worse": 0
+     }
+    },
+    "note": "the protocol's cost-effect difference as a whole",
+    "pairs": 200
+   }
+  },
+  "isolated-lossy": {
+   "ack_backoff_16 - ack_retry_2": {
+    "axes": {
+     "ack_bytes": {
+      "arm": "ack_backoff_16",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -1078.46625,
+      "ci95_upper": -640.683,
+      "key": "ack_bytes",
+      "mean_difference": -856.74,
+      "pairs": 200,
+      "seeds_better": 88,
+      "seeds_equal": 0,
+      "seeds_worse": 112
+     },
+     "on_time": {
+      "arm": "ack_backoff_16",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -0.35,
+      "ci95_upper": -0.03,
+      "key": "on_time",
+      "mean_difference": -0.185,
+      "pairs": 200,
+      "seeds_better": 42,
+      "seeds_equal": 107,
+      "seeds_worse": 51
+     },
+     "total_bytes": {
+      "arm": "ack_backoff_16",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -2460.593,
+      "ci95_upper": -1202.15525,
+      "key": "total_bytes",
+      "mean_difference": -1823.43,
+      "pairs": 200,
+      "seeds_better": 109,
+      "seeds_equal": 0,
+      "seeds_worse": 91
+     },
+     "uplink_bytes": {
+      "arm": "ack_backoff_16",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -1392.81,
+      "ci95_upper": -551.05275,
+      "key": "uplink_bytes",
+      "mean_difference": -966.69,
+      "pairs": 200,
+      "seeds_better": 126,
+      "seeds_equal": 0,
+      "seeds_worse": 74
+     }
+    },
+    "note": "frontier stability: backoff against the locked rule",
+    "pairs": 200
+   },
+   "ack_periodic_20 - ack_retry_2": {
+    "axes": {
+     "ack_bytes": {
+      "arm": "ack_periodic_20",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -1852.92538,
+      "ci95_upper": -1365.69225,
+      "key": "ack_bytes",
+      "mean_difference": -1608.75,
+      "pairs": 200,
+      "seeds_better": 37,
+      "seeds_equal": 0,
+      "seeds_worse": 163
+     },
+     "on_time": {
+      "arm": "ack_periodic_20",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -0.17,
+      "ci95_upper": 0.16,
+      "key": "on_time",
+      "mean_difference": -0.005,
+      "pairs": 200,
+      "seeds_better": 52,
+      "seeds_equal": 110,
+      "seeds_worse": 38
+     },
+     "total_bytes": {
+      "arm": "ack_periodic_20",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -4278.45388,
+      "ci95_upper": -2875.402,
+      "key": "total_bytes",
+      "mean_difference": -3568.98,
+      "pairs": 200,
+      "seeds_better": 63,
+      "seeds_equal": 0,
+      "seeds_worse": 137
+     },
+     "uplink_bytes": {
+      "arm": "ack_periodic_20",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -2452.0815,
+      "ci95_upper": -1482.111,
+      "key": "uplink_bytes",
+      "mean_difference": -1960.23,
+      "pairs": 200,
+      "seeds_better": 95,
+      "seeds_equal": 0,
+      "seeds_worse": 105
+     }
+    },
+    "note": "frontier stability: periodic against the locked rule",
+    "pairs": 200
+   },
+   "ack_retry_2 - ack_send_once": {
+    "axes": {
+     "ack_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "ack_send_once",
+      "ci95_lower": 6261.16725,
+      "ci95_upper": 6523.29037,
+      "key": "ack_bytes",
+      "mean_difference": 6393.355,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "on_time": {
+      "arm": "ack_retry_2",
+      "baseline": "ack_send_once",
+      "ci95_lower": 0.685,
+      "ci95_upper": 0.995,
+      "key": "on_time",
+      "mean_difference": 0.835,
+      "pairs": 200,
+      "seeds_better": 118,
+      "seeds_equal": 72,
+      "seeds_worse": 10
+     },
+     "total_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "ack_send_once",
+      "ci95_lower": 18840.99013,
+      "ci95_upper": 19353.7995,
+      "key": "total_bytes",
+      "mean_difference": 19100.725,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "uplink_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "ack_send_once",
+      "ci95_lower": 12550.28925,
+      "ci95_upper": 12854.253,
+      "key": "uplink_bytes",
+      "mean_difference": 12707.37,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     }
+    },
+    "note": "what the retry rule adds on top of the ACK information",
+    "pairs": 200
+   },
+   "ack_retry_2 - noack_send_once": {
+    "axes": {
+     "ack_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "noack_send_once",
+      "ci95_lower": 13426.09112,
+      "ci95_upper": 13859.01125,
+      "key": "ack_bytes",
+      "mean_difference": 13646.69,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "on_time": {
+      "arm": "ack_retry_2",
+      "baseline": "noack_send_once",
+      "ci95_lower": 0.685,
+      "ci95_upper": 0.995,
+      "key": "on_time",
+      "mean_difference": 0.835,
+      "pairs": 200,
+      "seeds_better": 118,
+      "seeds_equal": 72,
+      "seeds_worse": 10
+     },
+     "total_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "noack_send_once",
+      "ci95_lower": 26002.26562,
+      "ci95_upper": 26687.79025,
+      "key": "total_bytes",
+      "mean_difference": 26354.06,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "uplink_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "noack_send_once",
+      "ci95_lower": 12550.28925,
+      "ci95_upper": 12854.253,
+      "key": "uplink_bytes",
+      "mean_difference": 12707.37,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     }
+    },
+    "note": "the protocol's cost-effect difference as a whole",
+    "pairs": 200
+   }
+  },
+  "normal-lossy": {
+   "ack_backoff_16 - ack_retry_2": {
+    "axes": {
+     "ack_bytes": {
+      "arm": "ack_backoff_16",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -2878.45087,
+      "ci95_upper": -2343.7245,
+      "key": "ack_bytes",
+      "mean_difference": -2610.105,
+      "pairs": 200,
+      "seeds_better": 16,
+      "seeds_equal": 0,
+      "seeds_worse": 184
+     },
+     "on_time": {
+      "arm": "ack_backoff_16",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -0.1,
+      "ci95_upper": -0.035,
+      "key": "on_time",
+      "mean_difference": -0.065,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 187,
+      "seeds_worse": 13
+     },
+     "total_bytes": {
+      "arm": "ack_backoff_16",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -4549.27163,
+      "ci95_upper": -3302.908,
+      "key": "total_bytes",
+      "mean_difference": -3913.605,
+      "pairs": 200,
+      "seeds_better": 31,
+      "seeds_equal": 0,
+      "seeds_worse": 169
+     },
+     "uplink_bytes": {
+      "arm": "ack_backoff_16",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -1763.61975,
+      "ci95_upper": -871.9185,
+      "key": "uplink_bytes",
+      "mean_difference": -1303.5,
+      "pairs": 200,
+      "seeds_better": 109,
+      "seeds_equal": 0,
+      "seeds_worse": 91
+     }
+    },
+    "note": "frontier stability: backoff against the locked rule",
+    "pairs": 200
+   },
+   "ack_periodic_20 - ack_retry_2": {
+    "axes": {
+     "ack_bytes": {
+      "arm": "ack_periodic_20",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -7948.816,
+      "ci95_upper": -7288.80125,
+      "key": "ack_bytes",
+      "mean_difference": -7609.485,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 0,
+      "seeds_worse": 200
+     },
+     "on_time": {
+      "arm": "ack_periodic_20",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -0.015,
+      "ci95_upper": 0.08,
+      "key": "on_time",
+      "mean_difference": 0.03,
+      "pairs": 200,
+      "seeds_better": 5,
+      "seeds_equal": 193,
+      "seeds_worse": 2
+     },
+     "total_bytes": {
+      "arm": "ack_periodic_20",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -19206.1515,
+      "ci95_upper": -17146.0915,
+      "key": "total_bytes",
+      "mean_difference": -18148.365,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 0,
+      "seeds_worse": 200
+     },
+     "uplink_bytes": {
+      "arm": "ack_periodic_20",
+      "baseline": "ack_retry_2",
+      "ci95_lower": -11366.91225,
+      "ci95_upper": -9722.60925,
+      "key": "uplink_bytes",
+      "mean_difference": -10538.88,
+      "pairs": 200,
+      "seeds_better": 12,
+      "seeds_equal": 0,
+      "seeds_worse": 188
+     }
+    },
+    "note": "frontier stability: periodic against the locked rule",
+    "pairs": 200
+   },
+   "ack_retry_2 - ack_send_once": {
+    "axes": {
+     "ack_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "ack_send_once",
+      "ci95_lower": 6261.16725,
+      "ci95_upper": 6523.29037,
+      "key": "ack_bytes",
+      "mean_difference": 6393.355,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "on_time": {
+      "arm": "ack_retry_2",
+      "baseline": "ack_send_once",
+      "ci95_lower": 0.0,
+      "ci95_upper": 0.0,
+      "key": "on_time",
+      "mean_difference": 0.0,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 200,
+      "seeds_worse": 0
+     },
+     "total_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "ack_send_once",
+      "ci95_lower": 18840.99013,
+      "ci95_upper": 19353.7995,
+      "key": "total_bytes",
+      "mean_difference": 19100.725,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "uplink_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "ack_send_once",
+      "ci95_lower": 12550.28925,
+      "ci95_upper": 12854.253,
+      "key": "uplink_bytes",
+      "mean_difference": 12707.37,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     }
+    },
+    "note": "what the retry rule adds on top of the ACK information",
+    "pairs": 200
+   },
+   "ack_retry_2 - noack_send_once": {
+    "axes": {
+     "ack_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "noack_send_once",
+      "ci95_lower": 13426.09112,
+      "ci95_upper": 13859.01125,
+      "key": "ack_bytes",
+      "mean_difference": 13646.69,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "on_time": {
+      "arm": "ack_retry_2",
+      "baseline": "noack_send_once",
+      "ci95_lower": 0.0,
+      "ci95_upper": 0.0,
+      "key": "on_time",
+      "mean_difference": 0.0,
+      "pairs": 200,
+      "seeds_better": 0,
+      "seeds_equal": 200,
+      "seeds_worse": 0
+     },
+     "total_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "noack_send_once",
+      "ci95_lower": 26002.26562,
+      "ci95_upper": 26687.79025,
+      "key": "total_bytes",
+      "mean_difference": 26354.06,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     },
+     "uplink_bytes": {
+      "arm": "ack_retry_2",
+      "baseline": "noack_send_once",
+      "ci95_lower": 12550.28925,
+      "ci95_upper": 12854.253,
+      "key": "uplink_bytes",
+      "mean_difference": 12707.37,
+      "pairs": 200,
+      "seeds_better": 200,
+      "seeds_equal": 0,
+      "seeds_worse": 0
+     }
+    },
+    "note": "the protocol's cost-effect difference as a whole",
+    "pairs": 200
+   }
+  }
+ },
+ "episodes": 3000,
+ "episodes_expected": 3000,
+ "incomplete_cells": {
+  "isolated-lossless": {},
+  "isolated-lossy": {},
+  "normal-lossy": {}
+ },
+ "judgement": {
+  "isolated-lossless": {
+   "frontier": {
+    "action": "the locked rule stays the strongest completion rule of the set on this data",
+    "checks": {
+     "ack_backoff_16": {
+      "beats_the_locked_rule": false,
+      "completion": {
+       "arm": "ack_backoff_16",
+       "baseline": "ack_retry_2",
+       "ci95_lower": 0.0,
+       "ci95_upper": 0.0,
+       "key": "on_time",
+       "mean_difference": 0.0,
+       "pairs": 200,
+       "seeds_better": 0,
+       "seeds_equal": 200,
+       "seeds_worse": 0
+      }
+     },
+     "ack_periodic_20": {
+      "beats_the_locked_rule": false,
+      "completion": {
+       "arm": "ack_periodic_20",
+       "baseline": "ack_retry_2",
+       "ci95_lower": -0.1,
+       "ci95_upper": 0.13,
+       "key": "on_time",
+       "mean_difference": 0.015,
+       "pairs": 200,
+       "seeds_better": 34,
+       "seeds_equal": 140,
+       "seeds_worse": 26
+      }
+     }
+    },
+    "unstable": []
+   },
+   "negative_control": {
+    "action": "proceed: the negative control behaved as the protocol expects",
+    "arms": {
+     "ack_backoff_16": {
+      "completion": {
+       "arm": "ack_backoff_16",
+       "baseline": "noack_send_once",
+       "ci95_lower": 0.0,
+       "ci95_upper": 0.0,
+       "key": "on_time",
+       "mean_difference": 0.0,
+       "pairs": 200,
+       "seeds_better": 0,
+       "seeds_equal": 200,
+       "seeds_worse": 0
+      },
+      "improves": false,
+      "total_bytes": {
+       "arm": "ack_backoff_16",
+       "baseline": "noack_send_once",
+       "ci95_lower": 10244.514,
+       "ci95_upper": 10472.22225,
+       "key": "total_bytes",
+       "mean_difference": 10364.34,
+       "pairs": 200,
+       "seeds_better": 200,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      }
+     },
+     "ack_periodic_20": {
+      "completion": {
+       "arm": "ack_periodic_20",
+       "baseline": "noack_send_once",
+       "ci95_lower": -0.1,
+       "ci95_upper": 0.13,
+       "key": "on_time",
+       "mean_difference": 0.015,
+       "pairs": 200,
+       "seeds_better": 34,
+       "seeds_equal": 140,
+       "seeds_worse": 26
+      },
+      "improves": false,
+      "total_bytes": {
+       "arm": "ack_periodic_20",
+       "baseline": "noack_send_once",
+       "ci95_lower": 25137.03225,
+       "ci95_upper": 26801.2925,
+       "key": "total_bytes",
+       "mean_difference": 25981.165,
+       "pairs": 200,
+       "seeds_better": 200,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      }
+     },
+     "ack_retry_2": {
+      "completion": {
+       "arm": "ack_retry_2",
+       "baseline": "noack_send_once",
+       "ci95_lower": 0.0,
+       "ci95_upper": 0.0,
+       "key": "on_time",
+       "mean_difference": 0.0,
+       "pairs": 200,
+       "seeds_better": 0,
+       "seeds_equal": 200,
+       "seeds_worse": 0
+      },
+      "improves": false,
+      "total_bytes": {
+       "arm": "ack_retry_2",
+       "baseline": "noack_send_once",
+       "ci95_lower": 10244.514,
+       "ci95_upper": 10472.22225,
+       "key": "total_bytes",
+       "mean_difference": 10364.34,
+       "pairs": 200,
+       "seeds_better": 200,
+       "seeds_equal": 0,
+       "seeds_worse": 0
+      }
+     }
+    },
+    "expectation": "no ACK rule should gain completions where nothing is ever lost",
+    "note": "the ACK arms' higher total bytes on this setting are the protocol's cost, not a pass and not a failure",
+    "passed": true,
+    "violations": []
+   },
+   "pareto": {
+    "arms_compared": [
+     "ack_backoff_16",
+     "ack_periodic_20",
+     "ack_retry_2",
+     "ack_send_once",
+     "noack_send_once"
+    ],
+    "definition": "an arm is dominated when another arm is per-stream no worse on on-time completions and no costlier in total bytes, and strictly better on at least one stream",
+    "dominated": {
+     "ack_backoff_16": [
+      "noack_send_once"
+     ],
+     "ack_retry_2": [
+      "noack_send_once"
+     ],
+     "ack_send_once": [
+      "noack_send_once"
+     ]
+    },
+    "frontier": [
+     "ack_periodic_20",
+     "noack_send_once"
+    ],
+    "streams": 200
+   },
+   "setting": "isolated-lossless"
+  },
+  "isolated-lossy": {
+   "frontier": {
+    "action": "the locked rule stays the strongest completion rule of the set on this data",
+    "checks": {
+     "ack_backoff_16": {
+      "beats_the_locked_rule": false,
+      "completion": {
+       "arm": "ack_backoff_16",
+       "baseline": "ack_retry_2",
+       "ci95_lower": -0.35,
+       "ci95_upper": -0.03,
+       "key": "on_time",
+       "mean_difference": -0.185,
+       "pairs": 200,
+       "seeds_better": 42,
+       "seeds_equal": 107,
+       "seeds_worse": 51
+      }
+     },
+     "ack_periodic_20": {
+      "beats_the_locked_rule": false,
+      "completion": {
+       "arm": "ack_periodic_20",
+       "baseline": "ack_retry_2",
+       "ci95_lower": -0.175,
+       "ci95_upper": 0.155,
+       "key": "on_time",
+       "mean_difference": -0.005,
+       "pairs": 200,
+       "seeds_better": 52,
+       "seeds_equal": 110,
+       "seeds_worse": 38
+      }
+     }
+    },
+    "unstable": []
+   },
+   "lossy_confirmation": {
+    "action": "round 6's cost-effect effect gains independent support on fresh streams; report the byte increase beside the task gain",
+    "completion": {
+     "arm": "ack_retry_2",
+     "baseline": "noack_send_once",
+     "ci95_lower": 0.685,
+     "ci95_upper": 0.99,
+     "key": "on_time",
+     "mean_difference": 0.835,
+     "pairs": 200,
+     "seeds_better": 118,
+     "seeds_equal": 72,
+     "seeds_worse": 10
+    },
+    "reproduced": true,
+    "total_bytes": {
+     "arm": "ack_retry_2",
+     "baseline": "noack_send_once",
+     "ci95_lower": 26017.64838,
+     "ci95_upper": 26687.40263,
+     "key": "total_bytes",
+     "mean_difference": 26354.06,
+     "pairs": 200,
+     "seeds_better": 200,
+     "seeds_equal": 0,
+     "seeds_worse": 0
+    }
+   },
+   "pareto": {
+    "arms_compared": [
+     "ack_backoff_16",
+     "ack_periodic_20",
+     "ack_retry_2",
+     "ack_send_once",
+     "noack_send_once"
+    ],
+    "definition": "an arm is dominated when another arm is per-stream no worse on on-time completions and no costlier in total bytes, and strictly better on at least one stream",
+    "dominated": {
+     "ack_send_once": [
+      "noack_send_once"
+     ]
+    },
+    "frontier": [
+     "ack_backoff_16",
+     "ack_periodic_20",
+     "ack_retry_2",
+     "noack_send_once"
+    ],
+    "streams": 200
+   },
+   "setting": "isolated-lossy"
+  },
+  "normal-lossy": {
+   "frontier": {
+    "action": "the locked rule stays the strongest completion rule of the set on this data",
+    "checks": {
+     "ack_backoff_16": {
+      "beats_the_locked_rule": false,
+      "completion": {
+       "arm": "ack_backoff_16",
+       "baseline": "ack_retry_2",
+       "ci95_lower": -0.1,
+       "ci95_upper": -0.035,
+       "key": "on_time",
+       "mean_difference": -0.065,
+       "pairs": 200,
+       "seeds_better": 0,
+       "seeds_equal": 187,
+       "seeds_worse": 13
+      }
+     },
+     "ack_periodic_20": {
+      "beats_the_locked_rule": false,
+      "completion": {
+       "arm": "ack_periodic_20",
+       "baseline": "ack_retry_2",
+       "ci95_lower": -0.015,
+       "ci95_upper": 0.08,
+       "key": "on_time",
+       "mean_difference": 0.03,
+       "pairs": 200,
+       "seeds_better": 5,
+       "seeds_equal": 193,
+       "seeds_worse": 2
+      }
+     }
+    },
+    "unstable": []
+   },
+   "normal_path": {
+    "action": "do not propose deployment: the real information path gives no completion gain to justify the bytes",
+    "completion": {
+     "arm": "ack_retry_2",
+     "baseline": "noack_send_once",
+     "ci95_lower": 0.0,
+     "ci95_upper": 0.0,
+     "key": "on_time",
+     "mean_difference": 0.0,
+     "pairs": 200,
+     "seeds_better": 0,
+     "seeds_equal": 200,
+     "seeds_worse": 0
+    },
+    "new_failure_cases": [],
+    "new_failures": 0,
+    "proposed_as_optional_mode": false,
+    "recovered": 0,
+    "same_outcome_but_dearer": true,
+    "total_bytes": {
+     "arm": "ack_retry_2",
+     "baseline": "noack_send_once",
+     "ci95_lower": 26017.64838,
+     "ci95_upper": 26687.40263,
+     "key": "total_bytes",
+     "mean_difference": 26354.06,
+     "pairs": 200,
+     "seeds_better": 200,
+     "seeds_equal": 0,
+     "seeds_worse": 0
+    }
+   },
+   "pareto": {
+    "arms_compared": [
+     "ack_backoff_16",
+     "ack_periodic_20",
+     "ack_retry_2",
+     "ack_send_once",
+     "noack_send_once"
+    ],
+    "definition": "an arm is dominated when another arm is per-stream no worse on on-time completions and no costlier in total bytes, and strictly better on at least one stream",
+    "dominated": {
+     "ack_backoff_16": [
+      "ack_send_once",
+      "noack_send_once"
+     ],
+     "ack_retry_2": [
+      "ack_send_once",
+      "noack_send_once"
+     ],
+     "ack_send_once": [
+      "noack_send_once"
+     ]
+    },
+    "frontier": [
+     "ack_periodic_20",
+     "noack_send_once"
+    ],
+    "streams": 200
+   },
+   "setting": "normal-lossy"
+  }
+ },
+ "new_failures": {
+  "isolated-lossless": {
+   "ack_backoff_16 - ack_retry_2": {
+    "arm": "ack_backoff_16",
+    "baseline": "ack_retry_2",
+    "new_failure_cases": [],
+    "new_failures": 0,
+    "recovered": 0,
+    "recovered_cases": []
+   },
+   "ack_periodic_20 - ack_retry_2": {
+    "arm": "ack_periodic_20",
+    "baseline": "ack_retry_2",
+    "new_failure_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900011,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900012,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900012,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900012,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900015,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900015,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900018,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900031,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900035,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900046,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900051,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900054,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900054,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900074,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900075,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900093,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900097,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900112,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900115,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900116,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900117,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900117,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900117,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900121,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900129,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900134,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900150,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900158,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900163,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900163,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900164,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900164,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900164,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900165,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900166,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900166,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900166,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900173,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900173,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900186,
+      "target_id": "piloc-e1-target-2"
+     }
+    ],
+    "new_failures": 49,
+    "recovered": 52,
+    "recovered_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900017,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900017,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900018,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900019,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900028,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900031,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900035,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900042,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900045,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900046,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900046,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900054,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900056,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900058,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900058,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900060,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900064,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900065,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900065,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900073,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900073,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900080,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900083,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900083,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900088,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900088,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900100,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900101,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900102,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900103,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900103,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900104,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900115,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900115,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900124,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900131,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900132,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900140,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900141,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900148,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900155,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900158,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900173,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900174,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900182,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900187,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900192,
+      "target_id": "piloc-e1-target-4"
+     }
+    ]
+   },
+   "ack_retry_2 - ack_send_once": {
+    "arm": "ack_retry_2",
+    "baseline": "ack_send_once",
+    "new_failure_cases": [],
+    "new_failures": 0,
+    "recovered": 0,
+    "recovered_cases": []
+   },
+   "ack_retry_2 - noack_send_once": {
+    "arm": "ack_retry_2",
+    "baseline": "noack_send_once",
+    "new_failure_cases": [],
+    "new_failures": 0,
+    "recovered": 0,
+    "recovered_cases": []
+   }
+  },
+  "isolated-lossy": {
+   "ack_backoff_16 - ack_retry_2": {
+    "arm": "ack_backoff_16",
+    "baseline": "ack_retry_2",
+    "new_failure_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900002,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900003,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900004,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900005,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900006,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900008,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900011,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900014,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900017,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900018,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900023,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900025,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900025,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900025,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900029,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900046,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900046,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900049,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900051,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900053,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900054,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900054,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900056,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900057,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900061,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900065,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900065,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "unresolved",
+      "seed": 900070,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900072,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900077,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900086,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900088,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900093,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900094,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900097,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900097,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900098,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900111,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900112,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900115,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900116,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900118,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900119,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900119,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900121,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900128,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900128,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900128,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900130,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900147,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900147,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900158,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900163,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900164,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900165,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900166,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900173,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900174,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900175,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900175,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900176,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900177,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900189,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900189,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900189,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900193,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900193,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900193,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900197,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900198,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900198,
+      "target_id": "piloc-e1-target-3"
+     }
+    ],
+    "new_failures": 99,
+    "recovered": 62,
+    "recovered_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900000,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900007,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900009,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900015,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900017,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900017,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900019,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900021,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900028,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900031,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900032,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900041,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900045,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900046,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900051,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900056,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900058,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900060,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900064,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900069,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900072,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900072,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900072,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900073,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900073,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900074,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900080,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900083,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900088,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900093,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900098,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900098,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900101,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900101,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900103,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900103,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900112,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900116,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900124,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900131,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900132,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900136,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900141,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900155,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900156,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900161,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900166,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900166,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900168,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900173,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900178,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900182,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900182,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900186,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900186,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900187,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900190,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900192,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900192,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900195,
+      "target_id": "piloc-e1-target-2"
+     }
+    ]
+   },
+   "ack_periodic_20 - ack_retry_2": {
+    "arm": "ack_periodic_20",
+    "baseline": "ack_retry_2",
+    "new_failure_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900004,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900005,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900008,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900008,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900011,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900015,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900018,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900018,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900025,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900025,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900025,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900035,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900039,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900040,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900040,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900040,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900040,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900051,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900054,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900054,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900064,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900065,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900065,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900072,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900073,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900074,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900081,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900081,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900088,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900093,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900094,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900094,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900094,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900097,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900098,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900108,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900122,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900129,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900129,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900131,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900131,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900134,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "unresolved",
+      "seed": 900135,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900140,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900151,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900158,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900158,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900163,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900164,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900164,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900164,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900165,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900166,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900173,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900173,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900173,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900177,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900189,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900193,
+      "target_id": "piloc-e1-target-5"
+     }
+    ],
+    "new_failures": 81,
+    "recovered": 80,
+    "recovered_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900000,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900007,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900009,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900017,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900017,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900018,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900019,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900021,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900028,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900029,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900031,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900032,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900035,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900041,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900042,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900045,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900045,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900046,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900046,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900046,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900051,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900051,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900051,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900054,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900056,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900057,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900058,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900058,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900060,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900061,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900061,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900064,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900069,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900072,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900072,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900073,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900073,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900080,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900083,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900083,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900086,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900088,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900090,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900093,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900098,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900100,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900103,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900103,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900112,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900116,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900118,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900124,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900136,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900141,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900148,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900155,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900156,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900161,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900166,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900168,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900174,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900174,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900178,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900178,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900182,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900182,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900186,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900186,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900186,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900187,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900190,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900192,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900192,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900195,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900197,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900198,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900199,
+      "target_id": "piloc-e1-target-4"
+     }
+    ]
+   },
+   "ack_retry_2 - ack_send_once": {
+    "arm": "ack_retry_2",
+    "baseline": "ack_send_once",
+    "new_failure_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900000,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900007,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900029,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900057,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900064,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900072,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900086,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900088,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900098,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900098,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900136,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900161,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900168,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900174,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900178,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900178,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900182,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900192,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900195,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900197,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900199,
+      "target_id": "piloc-e1-target-4"
+     }
+    ],
+    "new_failures": 23,
+    "recovered": 190,
+    "recovered_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900002,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900004,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900004,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900004,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900005,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900006,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900008,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900008,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900008,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900010,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900011,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900012,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900012,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900013,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900014,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900015,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900015,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900017,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900020,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900021,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900023,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900025,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900027,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900033,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900035,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900037,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900042,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900043,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900045,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900049,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900050,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900053,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900055,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900057,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900057,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900057,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900059,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900059,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900060,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900061,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900061,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900063,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900064,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900065,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900066,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900069,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900069,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900070,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900071,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900072,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900075,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900076,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900078,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900080,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900080,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900082,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900082,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900083,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900083,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900083,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900084,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900085,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900085,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900086,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900086,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900088,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900088,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900089,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900091,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900092,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900094,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900095,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900098,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900101,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900102,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900104,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900105,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900107,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900108,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900108,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900108,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900109,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900112,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900113,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900115,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900116,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900116,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900117,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900119,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900119,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900120,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900120,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900121,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900125,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900128,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900129,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900130,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900132,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "unresolved",
+      "seed": 900133,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900134,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900134,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900137,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900137,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900140,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900140,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900142,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900143,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900146,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900146,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900147,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900147,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900149,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900151,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900151,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900152,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900152,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900156,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900156,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900158,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900159,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900160,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900160,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900161,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900162,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900162,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900164,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900164,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900165,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900166,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900168,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900169,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900170,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900170,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900170,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900170,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900171,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900173,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900174,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900175,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900175,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900176,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900177,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900179,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900179,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900180,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900181,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900181,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900183,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900186,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900189,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900191,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900194,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900194,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900196,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900197,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900197,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900198,
+      "target_id": "piloc-e1-target-1"
+     }
+    ]
+   },
+   "ack_retry_2 - noack_send_once": {
+    "arm": "ack_retry_2",
+    "baseline": "noack_send_once",
+    "new_failure_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900000,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900007,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900029,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900057,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900064,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900072,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900086,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900088,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900098,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900098,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900136,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900161,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900168,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900174,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900178,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900178,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900182,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900192,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900195,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900197,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900199,
+      "target_id": "piloc-e1-target-4"
+     }
+    ],
+    "new_failures": 23,
+    "recovered": 190,
+    "recovered_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900001,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900002,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900004,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900004,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900004,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900005,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900006,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900008,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900008,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900008,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900010,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900011,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900012,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900012,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900013,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900014,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900015,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900015,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900017,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900020,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900021,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900023,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900025,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900027,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900033,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900035,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900037,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900042,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900043,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900045,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900049,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900050,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900053,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900055,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900057,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900057,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900057,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900059,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900059,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900060,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900061,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900061,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900063,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900064,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900065,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900066,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900069,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900069,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900070,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900071,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900072,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900075,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900076,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900078,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900079,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900080,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900080,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900082,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900082,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900083,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900083,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900083,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900084,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900085,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900085,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900086,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900086,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900088,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900088,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900089,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900091,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900092,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900094,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900095,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900098,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900099,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900101,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900102,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900104,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900105,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900107,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900108,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900108,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900108,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900109,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900110,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900112,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900113,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900114,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900115,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900116,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900116,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900117,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900119,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900119,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900120,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900120,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900121,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900125,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900128,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900129,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900130,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900132,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "unresolved",
+      "seed": 900133,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900134,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900134,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900137,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900137,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900138,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900140,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900140,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900142,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900143,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900146,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900146,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900147,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900147,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900149,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900151,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900151,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900152,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900152,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900156,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900156,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900158,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900159,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900160,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900160,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900161,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900162,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900162,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900164,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900164,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900165,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900166,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900168,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900169,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900170,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900170,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900170,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900170,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900171,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900173,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900174,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900175,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900175,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900176,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900177,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900179,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900179,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900180,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900181,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900181,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900183,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900186,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900188,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900189,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900191,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900194,
+      "target_id": "piloc-e1-target-0"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900194,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900196,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900197,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900197,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900198,
+      "target_id": "piloc-e1-target-1"
+     }
+    ]
+   }
+  },
+  "normal-lossy": {
+   "ack_backoff_16 - ack_retry_2": {
+    "arm": "ack_backoff_16",
+    "baseline": "ack_retry_2",
+    "new_failure_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900002,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900011,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900045,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900049,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900051,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900067,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900089,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900090,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900121,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900123,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900167,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900182,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900190,
+      "target_id": "piloc-e1-target-1"
+     }
+    ],
+    "new_failures": 13,
+    "recovered": 0,
+    "recovered_cases": []
+   },
+   "ack_periodic_20 - ack_retry_2": {
+    "arm": "ack_periodic_20",
+    "baseline": "ack_retry_2",
+    "new_failure_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900012,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900167,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900167,
+      "target_id": "piloc-e1-target-5"
+     }
+    ],
+    "new_failures": 3,
+    "recovered": 9,
+    "recovered_cases": [
+     {
+      "outcome": "expired",
+      "seed": 900024,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900039,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900039,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900061,
+      "target_id": "piloc-e1-target-4"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900061,
+      "target_id": "piloc-e1-target-5"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900089,
+      "target_id": "piloc-e1-target-3"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900186,
+      "target_id": "piloc-e1-target-1"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900186,
+      "target_id": "piloc-e1-target-2"
+     },
+     {
+      "outcome": "expired",
+      "seed": 900186,
+      "target_id": "piloc-e1-target-5"
+     }
+    ]
+   },
+   "ack_retry_2 - ack_send_once": {
+    "arm": "ack_retry_2",
+    "baseline": "ack_send_once",
+    "new_failure_cases": [],
+    "new_failures": 0,
+    "recovered": 0,
+    "recovered_cases": []
+   },
+   "ack_retry_2 - noack_send_once": {
+    "arm": "ack_retry_2",
+    "baseline": "noack_send_once",
+    "new_failure_cases": [],
+    "new_failures": 0,
+    "recovered": 0,
+    "recovered_cases": []
+   }
+  }
+ },
+ "randomness": {
+  "forward": "per-episode np.random.default_rng(scenario_seed) stream, one draw per (subscriber, emission): same mechanism and seed for every arm, so a same-distribution comparison, not the same events",
+  "reverse": "counter-based (episode_seed, 'uplink_ack', subscriber, target, ordinal) plus the delivery tick: common random numbers between ACK-on arms"
+ },
+ "ratios": {
+  "isolated-lossless": {
+   "ack_backoff_16 - ack_retry_2": {
+    "ack_bytes_numerator_mean": 0.0,
+    "defined": false,
+    "denominator_mean_on_time": 0.0,
+    "note": "the arm does not complete more on-time targets than its baseline on average, so 'bytes per additional on-time target' has no positive denominator: undefined, and the byte difference stands on its own",
+    "total_bytes_numerator_mean": 0.0,
+    "uplink_bytes_numerator_mean": 0.0
+   },
+   "ack_periodic_20 - ack_retry_2": {
+    "ack_bytes_numerator_mean": 6023.43,
+    "ack_bytes_ratio": 401561.7,
+    "ack_bytes_ratio_ci95": [
+     43192.2,
+     1217926.4
+    ],
+    "defined": true,
+    "denominator_mean_on_time": 0.015,
+    "total_bytes_numerator_mean": 15616.83,
+    "total_bytes_ratio": 1041121.7,
+    "total_bytes_ratio_ci95": [
+     111363.2,
+     3157053.8
+    ],
+    "undefined_replicates": 4116,
+    "uplink_bytes_numerator_mean": 9593.4,
+    "uplink_bytes_ratio": 639560.0,
+    "uplink_bytes_ratio_ci95": [
+     68108.8,
+     1941609.5
+    ]
+   },
+   "ack_retry_2 - ack_send_once": {
+    "ack_bytes_numerator_mean": 0.0,
+    "defined": false,
+    "denominator_mean_on_time": 0.0,
+    "note": "the arm does not complete more on-time targets than its baseline on average, so 'bytes per additional on-time target' has no positive denominator: undefined, and the byte difference stands on its own",
+    "total_bytes_numerator_mean": 0.0,
+    "uplink_bytes_numerator_mean": 0.0
+   },
+   "ack_retry_2 - noack_send_once": {
+    "ack_bytes_numerator_mean": 10364.34,
+    "defined": false,
+    "denominator_mean_on_time": 0.0,
+    "note": "the arm does not complete more on-time targets than its baseline on average, so 'bytes per additional on-time target' has no positive denominator: undefined, and the byte difference stands on its own",
+    "total_bytes_numerator_mean": 10364.34,
+    "uplink_bytes_numerator_mean": 0.0
+   }
+  },
+  "isolated-lossy": {
+   "ack_backoff_16 - ack_retry_2": {
+    "ack_bytes_numerator_mean": -856.74,
+    "defined": false,
+    "denominator_mean_on_time": -0.185,
+    "note": "the arm does not complete more on-time targets than its baseline on average, so 'bytes per additional on-time target' has no positive denominator: undefined, and the byte difference stands on its own",
+    "total_bytes_numerator_mean": -1823.43,
+    "uplink_bytes_numerator_mean": -966.69
+   },
+   "ack_periodic_20 - ack_retry_2": {
+    "ack_bytes_numerator_mean": -1608.75,
+    "defined": false,
+    "denominator_mean_on_time": -0.005,
+    "note": "the arm does not complete more on-time targets than its baseline on average, so 'bytes per additional on-time target' has no positive denominator: undefined, and the byte difference stands on its own",
+    "total_bytes_numerator_mean": -3568.98,
+    "uplink_bytes_numerator_mean": -1960.23
+   },
+   "ack_retry_2 - ack_send_once": {
+    "ack_bytes_numerator_mean": 6393.35,
+    "ack_bytes_ratio": 7656.7,
+    "ack_bytes_ratio_ci95": [
+     6421.6,
+     9323.0
+    ],
+    "defined": true,
+    "denominator_mean_on_time": 0.835,
+    "total_bytes_numerator_mean": 19100.72,
+    "total_bytes_ratio": 22875.1,
+    "total_bytes_ratio_ci95": [
+     19229.5,
+     27826.8
+    ],
+    "undefined_replicates": 0,
+    "uplink_bytes_numerator_mean": 12707.37,
+    "uplink_bytes_ratio": 15218.4,
+    "uplink_bytes_ratio_ci95": [
+     12796.0,
+     18517.1
+    ]
+   },
+   "ack_retry_2 - noack_send_once": {
+    "ack_bytes_numerator_mean": 13646.69,
+    "ack_bytes_ratio": 16343.3,
+    "ack_bytes_ratio_ci95": [
+     13716.5,
+     19945.3
+    ],
+    "defined": true,
+    "denominator_mean_on_time": 0.835,
+    "total_bytes_numerator_mean": 26354.06,
+    "total_bytes_ratio": 31561.7,
+    "total_bytes_ratio_ci95": [
+     26502.7,
+     38459.3
+    ],
+    "undefined_replicates": 0,
+    "uplink_bytes_numerator_mean": 12707.37,
+    "uplink_bytes_ratio": 15218.4,
+    "uplink_bytes_ratio_ci95": [
+     12796.0,
+     18517.1
+    ]
+   }
+  },
+  "normal-lossy": {
+   "ack_backoff_16 - ack_retry_2": {
+    "ack_bytes_numerator_mean": -2610.11,
+    "defined": false,
+    "denominator_mean_on_time": -0.065,
+    "note": "the arm does not complete more on-time targets than its baseline on average, so 'bytes per additional on-time target' has no positive denominator: undefined, and the byte difference stands on its own",
+    "total_bytes_numerator_mean": -3913.61,
+    "uplink_bytes_numerator_mean": -1303.5
+   },
+   "ack_periodic_20 - ack_retry_2": {
+    "ack_bytes_numerator_mean": -7609.48,
+    "ack_bytes_ratio": -253649.5,
+    "ack_bytes_ratio_ci95": [
+     -1533906.2,
+     -90820.1
+    ],
+    "defined": true,
+    "denominator_mean_on_time": 0.03,
+    "total_bytes_numerator_mean": -18148.37,
+    "total_bytes_ratio": -604945.5,
+    "total_bytes_ratio_ci95": [
+     -3663304.9,
+     -216960.1
+    ],
+    "undefined_replicates": 1222,
+    "uplink_bytes_numerator_mean": -10538.88,
+    "uplink_bytes_ratio": -351296.0,
+    "uplink_bytes_ratio_ci95": [
+     -2134069.5,
+     -125755.8
+    ]
+   },
+   "ack_retry_2 - ack_send_once": {
+    "ack_bytes_numerator_mean": 6393.35,
+    "defined": false,
+    "denominator_mean_on_time": 0.0,
+    "note": "the arm does not complete more on-time targets than its baseline on average, so 'bytes per additional on-time target' has no positive denominator: undefined, and the byte difference stands on its own",
+    "total_bytes_numerator_mean": 19100.72,
+    "uplink_bytes_numerator_mean": 12707.37
+   },
+   "ack_retry_2 - noack_send_once": {
+    "ack_bytes_numerator_mean": 13646.69,
+    "defined": false,
+    "denominator_mean_on_time": 0.0,
+    "note": "the arm does not complete more on-time targets than its baseline on average, so 'bytes per additional on-time target' has no positive denominator: undefined, and the byte difference stands on its own",
+    "total_bytes_numerator_mean": 26354.06,
+    "uplink_bytes_numerator_mean": 12707.37
+   }
+  }
+ },
+ "revalidated_rejections": {},
+ "settings": {
+  "isolated-lossless": {
+   "ack_backoff_16": {
+    "ack_attempt_bytes": 10364.34,
+    "ack_attempts": 35.16,
+    "ack_bytes": 10364.34,
+    "ack_delivered": 35.16,
+    "ack_emitted": 35.16,
+    "ack_frames_advanced": 35.16,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 0.0,
+    "ack_share_of_total": 0.4152,
+    "belief_age_steps": 95.5484,
+    "budget_refused_sends": 0.0,
+    "budget_used_fraction": 0.4985,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 87.39,
+    "completion_rate_all_goals": 0.9192,
+    "completion_rate_conditional": 0.9421,
+    "deliveries_applied": 35.16,
+    "delivery_duplicate": 0.0,
+    "delivery_superseded": 0.0,
+    "detection_to_assignment": 4.0625,
+    "detection_to_completion": 26.6313,
+    "detection_to_work": 9.0762,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 5.0137,
+    "emissions": 5.86,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 0.34,
+    "first_emissions": 5.86,
+    "generated_items": 99.11,
+    "on_time_per_episode": 5.515,
+    "packets_delivered": 35.16,
+    "packets_lost": 0.0,
+    "redundant_emissions": 0.0,
+    "refresh_emissions": 0.0,
+    "total_bytes": 24969.12,
+    "transmission_attempts": 35.16,
+    "unresolved_per_episode": 0.005,
+    "uplink_bytes": 14604.78
+   },
+   "ack_periodic_20": {
+    "ack_attempt_bytes": 16387.765,
+    "ack_attempts": 54.35,
+    "ack_bytes": 16387.765,
+    "ack_delivered": 54.35,
+    "ack_emitted": 54.35,
+    "ack_frames_advanced": 54.35,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 0.0,
+    "ack_share_of_total": 0.405,
+    "belief_age_steps": 39.7017,
+    "budget_refused_sends": 11.785,
+    "budget_used_fraction": 0.8259,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 81.57,
+    "completion_rate_all_goals": 0.9217,
+    "completion_rate_conditional": 0.9445,
+    "deliveries_applied": 54.35,
+    "delivery_duplicate": 1.575,
+    "delivery_superseded": 0.505,
+    "detection_to_assignment": 15.4831,
+    "detection_to_completion": 41.3303,
+    "detection_to_work": 21.182,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 5.7102,
+    "emissions": 9.405,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 0.325,
+    "first_emissions": 5.68,
+    "generated_items": 96.355,
+    "on_time_per_episode": 5.53,
+    "packets_delivered": 56.43,
+    "packets_lost": 0.0,
+    "redundant_emissions": 0.28,
+    "refresh_emissions": 3.725,
+    "total_bytes": 40585.945,
+    "transmission_attempts": 56.43,
+    "unresolved_per_episode": 0.005,
+    "uplink_bytes": 24198.18
+   },
+   "ack_retry_2": {
+    "ack_attempt_bytes": 10364.34,
+    "ack_attempts": 35.16,
+    "ack_bytes": 10364.34,
+    "ack_delivered": 35.16,
+    "ack_emitted": 35.16,
+    "ack_frames_advanced": 35.16,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 0.0,
+    "ack_share_of_total": 0.4152,
+    "belief_age_steps": 95.5484,
+    "budget_refused_sends": 0.0,
+    "budget_used_fraction": 0.4985,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 87.39,
+    "completion_rate_all_goals": 0.9192,
+    "completion_rate_conditional": 0.9421,
+    "deliveries_applied": 35.16,
+    "delivery_duplicate": 0.0,
+    "delivery_superseded": 0.0,
+    "detection_to_assignment": 4.0625,
+    "detection_to_completion": 26.6313,
+    "detection_to_work": 9.0762,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 5.0137,
+    "emissions": 5.86,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 0.34,
+    "first_emissions": 5.86,
+    "generated_items": 99.11,
+    "on_time_per_episode": 5.515,
+    "packets_delivered": 35.16,
+    "packets_lost": 0.0,
+    "redundant_emissions": 0.0,
+    "refresh_emissions": 0.0,
+    "total_bytes": 24969.12,
+    "transmission_attempts": 35.16,
+    "unresolved_per_episode": 0.005,
+    "uplink_bytes": 14604.78
+   },
+   "ack_send_once": {
+    "ack_attempt_bytes": 10364.34,
+    "ack_attempts": 35.16,
+    "ack_bytes": 10364.34,
+    "ack_delivered": 35.16,
+    "ack_emitted": 35.16,
+    "ack_frames_advanced": 35.16,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 0.0,
+    "ack_share_of_total": 0.4152,
+    "belief_age_steps": 95.5484,
+    "budget_refused_sends": 0.0,
+    "budget_used_fraction": 0.4985,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 87.39,
+    "completion_rate_all_goals": 0.9192,
+    "completion_rate_conditional": 0.9421,
+    "deliveries_applied": 35.16,
+    "delivery_duplicate": 0.0,
+    "delivery_superseded": 0.0,
+    "detection_to_assignment": 4.0625,
+    "detection_to_completion": 26.6313,
+    "detection_to_work": 9.0762,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 5.0137,
+    "emissions": 5.86,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 0.34,
+    "first_emissions": 5.86,
+    "generated_items": 99.11,
+    "on_time_per_episode": 5.515,
+    "packets_delivered": 35.16,
+    "packets_lost": 0.0,
+    "redundant_emissions": 0.0,
+    "refresh_emissions": 0.0,
+    "total_bytes": 24969.12,
+    "transmission_attempts": 35.16,
+    "unresolved_per_episode": 0.005,
+    "uplink_bytes": 14604.78
+   },
+   "noack_send_once": {
+    "ack_attempt_bytes": 0.0,
+    "ack_attempts": 0.0,
+    "ack_bytes": 0.0,
+    "ack_delivered": 0.0,
+    "ack_emitted": 0.0,
+    "ack_frames_advanced": 0.0,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 0.0,
+    "ack_share_of_total": 0.0,
+    "belief_age_steps": 95.5484,
+    "budget_refused_sends": 0.0,
+    "budget_used_fraction": 0.4985,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 87.39,
+    "completion_rate_all_goals": 0.9192,
+    "completion_rate_conditional": 0.9421,
+    "deliveries_applied": 35.16,
+    "delivery_duplicate": 0.0,
+    "delivery_superseded": 0.0,
+    "detection_to_assignment": 4.0625,
+    "detection_to_completion": 26.6313,
+    "detection_to_work": 9.0762,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 5.0137,
+    "emissions": 5.86,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 0.34,
+    "first_emissions": 5.86,
+    "generated_items": 99.11,
+    "on_time_per_episode": 5.515,
+    "packets_delivered": 35.16,
+    "packets_lost": 0.0,
+    "redundant_emissions": 0.0,
+    "refresh_emissions": 0.0,
+    "total_bytes": 14604.78,
+    "transmission_attempts": 35.16,
+    "unresolved_per_episode": 0.005,
+    "uplink_bytes": 14604.78
+   }
+  },
+  "isolated-lossy": {
+   "ack_backoff_16": {
+    "ack_attempt_bytes": 12789.95,
+    "ack_attempts": 42.465,
+    "ack_bytes": 12789.95,
+    "ack_delivered": 29.69,
+    "ack_emitted": 42.465,
+    "ack_frames_advanced": 29.69,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 12.775,
+    "ack_share_of_total": 0.3269,
+    "belief_age_steps": 88.6419,
+    "budget_refused_sends": 409.385,
+    "budget_used_fraction": 0.8992,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 79.945,
+    "completion_rate_all_goals": 0.855,
+    "completion_rate_conditional": 0.8765,
+    "deliveries_applied": 42.465,
+    "delivery_duplicate": 0.81,
+    "delivery_superseded": 0.14,
+    "detection_to_assignment": 4.9464,
+    "detection_to_completion": 32.1399,
+    "detection_to_work": 14.6511,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 9.7362,
+    "emissions": 10.275,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 0.72,
+    "first_emissions": 5.555,
+    "generated_items": 95.05,
+    "on_time_per_episode": 5.13,
+    "packets_delivered": 43.415,
+    "packets_lost": 18.235,
+    "redundant_emissions": 0.805,
+    "refresh_emissions": 4.72,
+    "total_bytes": 39135.41,
+    "transmission_attempts": 61.65,
+    "unresolved_per_episode": 0.01,
+    "uplink_bytes": 26345.46
+   },
+   "ack_periodic_20": {
+    "ack_attempt_bytes": 12037.94,
+    "ack_attempts": 39.98,
+    "ack_bytes": 12037.94,
+    "ack_delivered": 27.965,
+    "ack_emitted": 39.98,
+    "ack_frames_advanced": 27.965,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 12.015,
+    "ack_share_of_total": 0.3227,
+    "belief_age_steps": 50.3505,
+    "budget_refused_sends": 15.39,
+    "budget_used_fraction": 0.8653,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 80.375,
+    "completion_rate_all_goals": 0.885,
+    "completion_rate_conditional": 0.9075,
+    "deliveries_applied": 39.98,
+    "delivery_duplicate": 1.42,
+    "delivery_superseded": 0.325,
+    "detection_to_assignment": 16.7288,
+    "detection_to_completion": 44.8905,
+    "detection_to_work": 25.4,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 8.648,
+    "emissions": 9.88,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 0.54,
+    "first_emissions": 5.64,
+    "generated_items": 95.355,
+    "on_time_per_episode": 5.31,
+    "packets_delivered": 41.725,
+    "packets_lost": 17.555,
+    "redundant_emissions": 0.575,
+    "refresh_emissions": 4.24,
+    "total_bytes": 37389.86,
+    "transmission_attempts": 59.28,
+    "unresolved_per_episode": 0.01,
+    "uplink_bytes": 25351.92
+   },
+   "ack_retry_2": {
+    "ack_attempt_bytes": 13646.69,
+    "ack_attempts": 46.315,
+    "ack_bytes": 13646.69,
+    "ack_delivered": 32.19,
+    "ack_emitted": 46.315,
+    "ack_frames_advanced": 32.19,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 14.125,
+    "ack_share_of_total": 0.3326,
+    "belief_age_steps": 128.7383,
+    "budget_refused_sends": 112.145,
+    "budget_used_fraction": 0.9322,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 89.45,
+    "completion_rate_all_goals": 0.8858,
+    "completion_rate_conditional": 0.9077,
+    "deliveries_applied": 46.315,
+    "delivery_duplicate": 0.0,
+    "delivery_superseded": 0.0,
+    "detection_to_assignment": 3.8603,
+    "detection_to_completion": 26.8457,
+    "detection_to_work": 10.1323,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 6.284,
+    "emissions": 10.97,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 0.54,
+    "first_emissions": 5.86,
+    "generated_items": 101.155,
+    "on_time_per_episode": 5.315,
+    "packets_delivered": 46.315,
+    "packets_lost": 19.505,
+    "redundant_emissions": 5.11,
+    "refresh_emissions": 5.11,
+    "total_bytes": 40958.84,
+    "transmission_attempts": 65.82,
+    "unresolved_per_episode": 0.005,
+    "uplink_bytes": 27312.15
+   },
+   "ack_send_once": {
+    "ack_attempt_bytes": 7253.335,
+    "ack_attempts": 24.605,
+    "ack_bytes": 7253.335,
+    "ack_delivered": 17.13,
+    "ack_emitted": 24.605,
+    "ack_frames_advanced": 17.13,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 7.475,
+    "ack_share_of_total": 0.331,
+    "belief_age_steps": 285.3733,
+    "budget_refused_sends": 0.0,
+    "budget_used_fraction": 0.4985,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 90.89,
+    "completion_rate_all_goals": 0.7467,
+    "completion_rate_conditional": 0.7645,
+    "deliveries_applied": 24.605,
+    "delivery_duplicate": 0.0,
+    "delivery_superseded": 0.0,
+    "detection_to_assignment": 4.8472,
+    "detection_to_completion": 30.1867,
+    "detection_to_work": 14.8527,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 10.3998,
+    "emissions": 5.86,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 1.37,
+    "first_emissions": 5.86,
+    "generated_items": 102.47,
+    "on_time_per_episode": 4.48,
+    "packets_delivered": 24.605,
+    "packets_lost": 10.555,
+    "redundant_emissions": 0.0,
+    "refresh_emissions": 0.0,
+    "total_bytes": 21858.115,
+    "transmission_attempts": 35.16,
+    "unresolved_per_episode": 0.01,
+    "uplink_bytes": 14604.78
+   },
+   "noack_send_once": {
+    "ack_attempt_bytes": 0.0,
+    "ack_attempts": 0.0,
+    "ack_bytes": 0.0,
+    "ack_delivered": 0.0,
+    "ack_emitted": 0.0,
+    "ack_frames_advanced": 0.0,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 0.0,
+    "ack_share_of_total": 0.0,
+    "belief_age_steps": 285.3733,
+    "budget_refused_sends": 0.0,
+    "budget_used_fraction": 0.4985,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 90.89,
+    "completion_rate_all_goals": 0.7467,
+    "completion_rate_conditional": 0.7645,
+    "deliveries_applied": 24.605,
+    "delivery_duplicate": 0.0,
+    "delivery_superseded": 0.0,
+    "detection_to_assignment": 4.8472,
+    "detection_to_completion": 30.1867,
+    "detection_to_work": 14.8527,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 10.3998,
+    "emissions": 5.86,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 1.37,
+    "first_emissions": 5.86,
+    "generated_items": 102.47,
+    "on_time_per_episode": 4.48,
+    "packets_delivered": 24.605,
+    "packets_lost": 10.555,
+    "redundant_emissions": 0.0,
+    "refresh_emissions": 0.0,
+    "total_bytes": 14604.78,
+    "transmission_attempts": 35.16,
+    "unresolved_per_episode": 0.01,
+    "uplink_bytes": 14604.78
+   }
+  },
+  "normal-lossy": {
+   "ack_backoff_16": {
+    "ack_attempt_bytes": 11036.585,
+    "ack_attempts": 36.41,
+    "ack_bytes": 11036.585,
+    "ack_delivered": 25.395,
+    "ack_emitted": 36.41,
+    "ack_frames_advanced": 25.395,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 11.015,
+    "ack_share_of_total": 0.2981,
+    "belief_age_steps": 12.7627,
+    "budget_refused_sends": 62.33,
+    "budget_used_fraction": 0.8877,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 81.53,
+    "completion_rate_all_goals": 0.9575,
+    "completion_rate_conditional": 0.9807,
+    "deliveries_applied": 36.41,
+    "delivery_duplicate": 0.0,
+    "delivery_superseded": 6.14,
+    "detection_to_assignment": 3.7839,
+    "detection_to_completion": 25.5191,
+    "detection_to_work": 8.2546,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 4.4707,
+    "emissions": 10.09,
+    "emissions_suppressed_terminal": 0.18,
+    "episodes": 200,
+    "expired_per_episode": 0.11,
+    "first_emissions": 5.61,
+    "generated_items": 96.67,
+    "on_time_per_episode": 5.745,
+    "packets_delivered": 42.55,
+    "packets_lost": 17.99,
+    "redundant_emissions": 0.59,
+    "refresh_emissions": 4.48,
+    "total_bytes": 37045.235,
+    "transmission_attempts": 60.54,
+    "unresolved_per_episode": 0.005,
+    "uplink_bytes": 26008.65
+   },
+   "ack_periodic_20": {
+    "ack_attempt_bytes": 6037.205,
+    "ack_attempts": 19.11,
+    "ack_bytes": 6037.205,
+    "ack_delivered": 13.35,
+    "ack_emitted": 19.11,
+    "ack_frames_advanced": 13.35,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 5.76,
+    "ack_share_of_total": 0.2721,
+    "belief_age_steps": 7.8181,
+    "budget_refused_sends": 0.67,
+    "budget_used_fraction": 0.5725,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 85.75,
+    "completion_rate_all_goals": 0.9733,
+    "completion_rate_conditional": 0.9967,
+    "deliveries_applied": 19.11,
+    "delivery_duplicate": 0.0,
+    "delivery_superseded": 7.365,
+    "detection_to_assignment": 4.298,
+    "detection_to_completion": 25.7801,
+    "detection_to_work": 8.3773,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 4.0838,
+    "emissions": 6.295,
+    "emissions_suppressed_terminal": 1.395,
+    "episodes": 200,
+    "expired_per_episode": 0.015,
+    "first_emissions": 4.455,
+    "generated_items": 97.36,
+    "on_time_per_episode": 5.84,
+    "packets_delivered": 26.475,
+    "packets_lost": 11.295,
+    "redundant_emissions": 0.265,
+    "refresh_emissions": 1.84,
+    "total_bytes": 22810.475,
+    "transmission_attempts": 37.77,
+    "unresolved_per_episode": 0.005,
+    "uplink_bytes": 16773.27
+   },
+   "ack_retry_2": {
+    "ack_attempt_bytes": 13646.69,
+    "ack_attempts": 46.315,
+    "ack_bytes": 13646.69,
+    "ack_delivered": 32.19,
+    "ack_emitted": 46.315,
+    "ack_frames_advanced": 32.19,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 14.125,
+    "ack_share_of_total": 0.3326,
+    "belief_age_steps": 15.3204,
+    "budget_refused_sends": 16.04,
+    "budget_used_fraction": 0.9322,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 86.19,
+    "completion_rate_all_goals": 0.9683,
+    "completion_rate_conditional": 0.9915,
+    "deliveries_applied": 46.315,
+    "delivery_duplicate": 0.0,
+    "delivery_superseded": 0.0,
+    "detection_to_assignment": 3.7082,
+    "detection_to_completion": 25.4913,
+    "detection_to_work": 8.2019,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 4.4937,
+    "emissions": 10.97,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 0.045,
+    "first_emissions": 5.86,
+    "generated_items": 97.91,
+    "on_time_per_episode": 5.81,
+    "packets_delivered": 46.315,
+    "packets_lost": 19.505,
+    "redundant_emissions": 5.11,
+    "refresh_emissions": 5.11,
+    "total_bytes": 40958.84,
+    "transmission_attempts": 65.82,
+    "unresolved_per_episode": 0.005,
+    "uplink_bytes": 27312.15
+   },
+   "ack_send_once": {
+    "ack_attempt_bytes": 7253.335,
+    "ack_attempts": 24.605,
+    "ack_bytes": 7253.335,
+    "ack_delivered": 17.13,
+    "ack_emitted": 24.605,
+    "ack_frames_advanced": 17.13,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 7.475,
+    "ack_share_of_total": 0.331,
+    "belief_age_steps": 15.7795,
+    "budget_refused_sends": 0.0,
+    "budget_used_fraction": 0.4985,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 86.21,
+    "completion_rate_all_goals": 0.9683,
+    "completion_rate_conditional": 0.9915,
+    "deliveries_applied": 24.605,
+    "delivery_duplicate": 0.0,
+    "delivery_superseded": 0.0,
+    "detection_to_assignment": 3.7209,
+    "detection_to_completion": 25.5106,
+    "detection_to_work": 8.2213,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 4.5003,
+    "emissions": 5.86,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 0.045,
+    "first_emissions": 5.86,
+    "generated_items": 97.93,
+    "on_time_per_episode": 5.81,
+    "packets_delivered": 24.605,
+    "packets_lost": 10.555,
+    "redundant_emissions": 0.0,
+    "refresh_emissions": 0.0,
+    "total_bytes": 21858.115,
+    "transmission_attempts": 35.16,
+    "unresolved_per_episode": 0.005,
+    "uplink_bytes": 14604.78
+   },
+   "noack_send_once": {
+    "ack_attempt_bytes": 0.0,
+    "ack_attempts": 0.0,
+    "ack_bytes": 0.0,
+    "ack_delivered": 0.0,
+    "ack_emitted": 0.0,
+    "ack_frames_advanced": 0.0,
+    "ack_frames_reaffirmed": 0.0,
+    "ack_lost": 0.0,
+    "ack_share_of_total": 0.0,
+    "belief_age_steps": 15.7795,
+    "budget_refused_sends": 0.0,
+    "budget_used_fraction": 0.4985,
+    "capacity_refused_sends": 0.0,
+    "coalesced_changes": 86.21,
+    "completion_rate_all_goals": 0.9683,
+    "completion_rate_conditional": 0.9915,
+    "deliveries_applied": 24.605,
+    "delivery_duplicate": 0.0,
+    "delivery_superseded": 0.0,
+    "detection_to_assignment": 3.7209,
+    "detection_to_completion": 25.5106,
+    "detection_to_work": 8.2213,
+    "discovered_per_episode": 5.86,
+    "dispatch_to_work": 4.5003,
+    "emissions": 5.86,
+    "emissions_suppressed_terminal": 0.0,
+    "episodes": 200,
+    "expired_per_episode": 0.045,
+    "first_emissions": 5.86,
+    "generated_items": 97.93,
+    "on_time_per_episode": 5.81,
+    "packets_delivered": 24.605,
+    "packets_lost": 10.555,
+    "redundant_emissions": 0.0,
+    "refresh_emissions": 0.0,
+    "total_bytes": 14604.78,
+    "transmission_attempts": 35.16,
+    "unresolved_per_episode": 0.005,
+    "uplink_bytes": 14604.78
+   }
+  }
+ },
+ "statistics": {
+  "method": "seed-level paired percentile bootstrap (evaluate_pilot.paired)",
+  "replications": 10000,
+  "rng_seed": 20260919,
+  "settings_pooled": false
+ }
+}

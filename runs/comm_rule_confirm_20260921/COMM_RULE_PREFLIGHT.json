@@ -1,0 +1,225 @@
+{
+ "all_passed": true,
+ "arms": [
+  "noack_send_once",
+  "ack_send_once",
+  "ack_retry_2",
+  "ack_periodic_20",
+  "ack_backoff_16"
+ ],
+ "block": [
+  900000,
+  900199
+ ],
+ "brief": "COMMUNICATION_S3_CLOSURE_NEXT_ROUND.md",
+ "budget_bytes": 29300,
+ "checks": {
+  "ack_only_follows_application": {
+   "ack_attempts": 48,
+   "ack_delivered": 32,
+   "ack_emitted": 48,
+   "ack_lost": 16,
+   "deliveries_applied": 48,
+   "passed": true
+  },
+  "block_audit_is_clean": {
+   "clean": true,
+   "overlap": {
+    "declared_by_other_rounds": 0,
+    "executed_artefacts": 0,
+    "manifest_seed_mentions": 0,
+    "recorded_streams": 0,
+    "stream_content_collisions": 0
+   },
+   "passed": true,
+   "sealed_clean": true,
+   "verdict": "zero overlap: the block may be registered and its 200 streams recorded"
+  },
+  "forward_path_is_ack_agnostic": {
+   "ack_bytes_added": {
+    "900000": 8570,
+    "900001": 7895,
+    "900002": 7368,
+    "900003": 8501
+   },
+   "disagreements": {},
+   "fields_compared": [
+    "on_time",
+    "targets",
+    "expired",
+    "unresolved",
+    "uplink_bytes",
+    "emissions",
+    "transmission_attempts",
+    "packets_lost",
+    "deliveries_applied",
+    "budget_refused_sends"
+   ],
+   "note": "the ACK-on arm's reverse bytes are the protocol's price; the forward path being identical is what makes the price measurable on its own",
+   "passed": true,
+   "seeds": [
+    900000,
+    900001,
+    900002,
+    900003
+   ]
+  },
+  "frozen_allocation_side_unchanged": {
+   "budget_bytes": 29300,
+   "checkpoint_mismatch": {},
+   "field_mismatches": {},
+   "locked_budget": 29300,
+   "passed": true
+  },
+  "hard_mask_is_never_violated": {
+   "commands_checked": 243,
+   "episodes_sampled": 10,
+   "mask_violations": [],
+   "passed": true
+  },
+  "lossless_reverse_is_lossless": {
+   "ack_attempt_bytes": 10638,
+   "ack_attempts": 36,
+   "ack_delivered": 36,
+   "ack_lost": 0,
+   "passed": true
+  },
+  "production_defaults_unchanged": {
+   "expected": {
+    "comm_ack": false,
+    "comm_ack_delay_ticks": null,
+    "comm_ack_delivery_probability": null,
+    "comm_budget_bytes": null,
+    "comm_max_wait_steps": null,
+    "comm_policy": "immediate",
+    "comm_range": 0.3,
+    "comm_timing_mode": "legacy_shared_bound",
+    "comm_urgent_wait_steps": null,
+    "gossip_interval": 2
+   },
+   "mismatches": {},
+   "observed": {
+    "comm_ack": false,
+    "comm_ack_delay_ticks": null,
+    "comm_ack_delivery_probability": null,
+    "comm_budget_bytes": null,
+    "comm_max_wait_steps": null,
+    "comm_policy": "immediate",
+    "comm_range": 0.3,
+    "comm_timing_mode": "legacy_shared_bound",
+    "comm_urgent_wait_steps": null,
+    "gossip_interval": 2
+   },
+   "passed": true
+  },
+  "registration_matches_disk": {
+   "mismatched": [],
+   "passed": true,
+   "seeds_outside_the_block": [],
+   "streams": 200
+  },
+  "reverse_channel_is_reproducible": {
+   "different": {},
+   "keys_compared": [
+    "on_time",
+    "targets",
+    "expired",
+    "unresolved",
+    "uplink_bytes",
+    "ack_bytes",
+    "total_bytes",
+    "ack_attempts",
+    "ack_delivered",
+    "ack_lost",
+    "ack_frames_advanced",
+    "ack_frames_reaffirmed",
+    "packets_lost",
+    "deliveries_applied",
+    "belief_age_steps"
+   ],
+   "passed": true
+  },
+  "runner_is_not_a_drift": {
+   "agree": true,
+   "budget_bytes": 29300,
+   "mismatches": {},
+   "passed": true,
+   "policy": "event",
+   "seeds": [
+    700000,
+    700001
+   ]
+  },
+  "sealed_block_is_untouched": {
+   "artefact_leaks": [],
+   "block": [
+    800000,
+    800399
+   ],
+   "clean": true,
+   "generated": false,
+   "passed": true,
+   "read": false
+  },
+  "two_channel_cost_closes": {
+   "arms": [
+    "noack_send_once",
+    "ack_send_once",
+    "ack_retry_2",
+    "ack_periodic_20",
+    "ack_backoff_16"
+   ],
+   "passed": true,
+   "problems": [],
+   "rows": [
+    {
+     "ack_bytes": 0,
+     "arm": "noack_send_once",
+     "budget_used_fraction": 0.53631,
+     "spent_bytes": 15714,
+     "total_bytes": 15714,
+     "uplink_bytes": 15714
+    },
+    {
+     "ack_bytes": 8570,
+     "arm": "ack_send_once",
+     "budget_used_fraction": 0.53631,
+     "spent_bytes": 15714,
+     "total_bytes": 24284,
+     "uplink_bytes": 15714
+    },
+    {
+     "ack_bytes": 14167,
+     "arm": "ack_retry_2",
+     "budget_used_fraction": 0.98068,
+     "spent_bytes": 28734,
+     "total_bytes": 42901,
+     "uplink_bytes": 28734
+    },
+    {
+     "ack_bytes": 13644,
+     "arm": "ack_periodic_20",
+     "budget_used_fraction": 0.90799,
+     "spent_bytes": 26604,
+     "total_bytes": 40248,
+     "uplink_bytes": 26604
+    },
+    {
+     "ack_bytes": 13679,
+     "arm": "ack_backoff_16",
+     "budget_used_fraction": 0.9215,
+     "spent_bytes": 27000,
+     "total_bytes": 40679,
+     "uplink_bytes": 27000
+    }
+   ]
+  }
+ },
+ "decision": "proceed with the 3,000-episode matrix",
+ "round": "comm-rule-confirmation",
+ "settings": [
+  "isolated-lossless",
+  "isolated-lossy",
+  "normal-lossy"
+ ]
+}

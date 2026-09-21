@@ -190,10 +190,13 @@ def validate_row(
         problems.append("the information path differs from the setting")
     if float(row["delivery_probability"]) != float(channel["delivery_probability"]):
         problems.append("the uplink delivery probability differs from the setting")
-    if row["ack_enabled"] and float(row["ack_delivery_probability"]) != float(
-        channel["delivery_probability"]
-    ):
-        problems.append("the reverse-channel probability differs from the setting")
+    if row["ack_enabled"]:
+        if row["ack_delivery_probability"] is None:
+            problems.append("an ACK-on run does not state its reverse-channel probability")
+        elif float(row["ack_delivery_probability"]) != float(
+            channel["delivery_probability"]
+        ):
+            problems.append("the reverse-channel probability differs from the setting")
     if int(row["budget_bytes"]) != int(common.BUDGET_BYTES):
         problems.append("the byte credit is not the locked 29,300 B")
     if int(row["spent_bytes"]) > int(common.BUDGET_BYTES):
@@ -390,11 +393,23 @@ def _difference(
 
 
 def aggregate(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """Per-arm means, grouped by the row's own setting.
+
+    The grouping is taken from each row rather than from the caller's pre-filtering, so a
+    caller that forgets to scope its rows cannot silently pool two settings -- the protocol
+    forbids pooling, and the aggregate is where that would happen.
+    """
     by_arm: dict[str, list[dict[str, Any]]] = {}
     for row in rows:
         by_arm.setdefault(row["arm"], []).append(row)
     summary: dict[str, dict[str, Any]] = {}
     for arm, items in by_arm.items():
+        settings = sorted({str(item["setting"]) for item in items})
+        if len(settings) != 1:
+            raise ValueError(
+                f"arm {arm!r} aggregates rows from {settings}; the three settings are never "
+                "pooled"
+            )
         summary[arm] = {
             "episodes": len(items),
             "on_time_per_episode": _mean([float(r["on_time"]) for r in items]),
@@ -484,12 +499,16 @@ def ratio_bootstrap(deltas: dict[str, np.ndarray]) -> dict[str, Any]:
     out["defined"] = True
     rng = np.random.default_rng(BOOTSTRAP_SEED)
     indices = rng.integers(0, completion.size, size=(BOOTSTRAP_REPLICATIONS, completion.size))
-    denominators = completion[indices].mean(axis=1)
-    defined = denominators > 0.0
-    out["undefined_replicates"] = int(denominators.size - defined.sum())
+    # Mean per replicate first, then the undefined mask, so a replicate whose resampled
+    # denominator is not positive is dropped as a whole instead of being averaged over the
+    # seeds it happens to contain.
+    replicate_completion = completion[indices].mean(axis=1)
+    defined = replicate_completion > 0.0
+    out["undefined_replicates"] = int(replicate_completion.size - defined.sum())
     for key in ("total_bytes", "uplink_bytes", "ack_bytes"):
         numerator = deltas[key]
-        ratios = numerator[indices][defined] / denominators[defined]
+        replicate_numerator = numerator[indices].mean(axis=1)
+        ratios = replicate_numerator[defined] / replicate_completion[defined]
         out[f"{key}_ratio"] = round(float(numerator.mean() / completion.mean()), 1)
         out[f"{key}_ratio_ci95"] = (
             [
