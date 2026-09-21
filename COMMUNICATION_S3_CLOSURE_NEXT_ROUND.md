@@ -1,9 +1,11 @@
 # 下一轮执行指令：通信学习结论冻结与强规则独立工程确认
 
-> 历史指令：已执行，交付为 `b5fb34e`。当前入口是 `COMM_RESEARCH_REVIEW_NEXT_ROUND.md`。
+> 历史指令：已执行，交付为 `b5fb34e`。其后的复核轮（`COMM_RESEARCH_REVIEW_NEXT_ROUND.md`）也已执行完毕，
+> 交付在 `runs/comm_evidence_review_20260921/`；当前入口是总纲 v2.2 §1。
 > 本文中的 no-ACK/ACK 学习范围、成本比较对象与单步门禁解释，须按总纲 v2.1 复核更正；勿再次执行本矩阵。
 
 日期：2026-09-21。对应总纲 v1.9，S3 收尾与工程确认。状态：执行方案，尚未运行。
+> **状态：已执行完毕（历史指令）。** 其结论的引用口径已由 `COMM_RESEARCH_REVIEW_NEXT_ROUND.md` 那一轮复核并统一，见 `runs/comm_evidence_review_20260921/COMM_EVIDENCE_CORRECTIONS.md`；本文与本轮产物均保留原样。
 
 ## 1. 起点与本轮定位
 

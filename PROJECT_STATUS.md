@@ -1,5 +1,52 @@
 # 项目状态
 
+## 2026-09-21：证据复核与训练诊断已交付（第八轮，未跑任何 episode）
+
+执行入口 [COMM_RESEARCH_REVIEW_NEXT_ROUND.md](COMM_RESEARCH_REVIEW_NEXT_ROUND.md) **已执行完毕**。
+分支 `analysis/comm-evidence-review`（起点文档提交 `6fcac4f`），产物在 `runs/comm_evidence_review_20260921/`。
+总纲已更新到 v2.2。**本轮 0 新 episode、0 新流、0 训练、生产默认值未改**（`comm_ack=False`、
+`comm_timing_mode=legacy_shared_bound`）；归档报告、归档 verdict 与其停止判定原样保留、可追溯。
+
+**唯一的数值改动是"统一到已有的一套"**：归档 `confirm_matrix.judge()` 用两臂行集重算配对差，
+`report()` 用五臂行集，而 `evaluate_pilot.paired` 每次重新播种但按臂序逐块消耗抽样 ⇒ 九处 CI 边界出现两套值。
+修订版每 (设置, 轴, 基线) 只抽一次样、判读段与 verdict 只切片：
+
+| 设置 | `ack_retry_2 − noack_send_once` | 统一后 CI | total bytes | 统一后 CI |
+|---|---:|---|---:|---|
+| isolated-lossless（负控） | 0.000 个/ep | [0.000, 0.000] | +10 364 B | [+10 240, +10 471] |
+| isolated-lossy | **+0.835 个/ep** | **[+0.685, +0.995]** | **+26 354.1 B/ep** | **[+26 002, +26 688]** |
+| normal-lossy | 0.000 个/ep | [0.000, 0.000] | +26 354.1 B/ep | [+26 002, +26 688] |
+
+均值与 3 000 行输入摘要逐项核对**完全相同**（585 个字段）；旧 verdict 的 [+0.685,+0.990] 与
+[26 018, 26 687] 作废并登记在 `old_output_diff`。
+
+**十项更正**（`COMM_EVIDENCE_CORRECTIONS.md/.json`，每项含原表述/证据字段/更正/是否改数值）：
+`delivery_probability` 是**成功率**（1.0/0.7 ⇒ 丢包率 0.0/0.3）；字节差只写"更高/相等/更低"；
+CI 含 0 只写"未检出差异"（isolated-lossy 的 periodic −0.005 [−0.170,+0.160] **未通过** −0.05 非劣界）；
+"前沿"拆成样本均值 Pareto／逐流支配／有统计支持的支配三个定义；丢掉非正分母的区间标 **conditional**
+（4 116/10 000、1 222/10 000），主比值用独立种子复核 [26 503,38 459] vs [26 522,38 508] ⇒ 稳健；
+第六轮基线 `send_once` 的 **ACK 是开的、策略不消费**（total 含 7 374 B ACK 字节）⇒
++19 562 / +19 100.7 / +26 354 是三个不同比较；重试差不单独证明反馈净价值；
+学习结论拆三条事实（no-ACK 未建立优势 / ACK 从未训练 / 本轮无学习臂）；删除"扩训已排除欠训练"；
+门禁 3 的 93→425 扩样顺序如实披露，不写"96.5 % 的所有决策没有学习空间"。
+
+**训练诊断**（`COMM_LEARNING_DIAGNOSTIC.md/.json`，只用已存记录）：第五轮 6 个运行的曲线、
+四个计数分开（环境步 400k / episode 400 / 决策样本 16.5–35.1 万 / optimizer.step 2 792–5 676）、
+KL·clip·熵·EV 只作诊断、逐消息序列一致率（learned2 15/24 全同 + 9/24 同时刻不同）、
+观测合法性表（紧急度/预算/反馈不确定性如何合法推得）与四种解释表（欠训练、观测不足、
+时序信用分配、强规则接近可达效果，允许并存）。**缺失项如实登记**：value loss 与贪心评估熵未持久化；
+"一次 HOLD 多久被补发"无法从旧 trace 归因（每 seed 只留 1 份 transcript、转录不标强制步）⇒ 列为待测。
+
+**下一轮设计（未执行）**：`COMM_MULTISTEP_DIAGNOSTIC_PROTOCOL.md` —— 单步 SEND/HOLD 之外做
+H=1/5/20 的消息级干预，≤16 点 × 3 个 H × 2 分支 = 96 条闭环分支上限 + ≤16 次复现检查，
+开发集探索性诊断、无伪理论门槛；**启动需使用者另行下令**。`800000..800399` 继续封存。
+
+**卫生**：生产代码 `git diff` 对 `integrated_sar/`、`piloc/`、`task_allocation/`、AGENTS、ARCHITECTURE 为空；
+676 集成测试通过（2 跳过）+ 本轮新增 24 项合成回归；`python -m integrated_sar` `final_status=completed`；
+checkpoint/原始流/逐集日志不入 Git；非本轮创建的 `architecture/` 与 `dev_summary.json` 未修改、未删除、未提交。
+
+## 2026-09-21：（历史，计划已被上一节执行）下一步曾为证据复核与模型诊断
+
 ## 2026-09-21：下一步为证据复核与模型诊断（计划，尚未执行）
 
 当前执行入口：[COMM_RESEARCH_REVIEW_NEXT_ROUND.md](COMM_RESEARCH_REVIEW_NEXT_ROUND.md)，总纲 v2.1。

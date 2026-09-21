@@ -1,6 +1,8 @@
 # 下一轮指令：纠正证据边界，返回学习型发送时机研究
 
-日期：2026-09-21。状态：待执行计划，不是新实验结果。对应总纲 v2.1。
+日期：2026-09-21。状态：**已执行完毕（历史指令，勿重复执行）**。对应总纲 v2.1 → v2.2。
+
+> 交付在 `runs/comm_evidence_review_20260921/`：`COMM_EVIDENCE_CORRECTIONS.md/.json`（§3 十项核对）、`COMM_RULE_CONFIRMATION_RESULTS_REVISED.md/.json` 与 `COMMUNICATION_LEARNING_VERDICT_REVISED.md/.json`（§2 归档件保留、§3 修订）、`COMM_LEARNING_DIAGNOSTIC.md/.json`（§4 训练诊断）、`COMM_MULTISTEP_DIAGNOSTIC_PROTOCOL.md`（§5 设计，**未执行**）。§6 的测试与卫生检查已跑：本轮 24 项合成回归 + 676 集成测试通过（2 跳过）、`python -m integrated_sar` `final_status=completed`、生产 `git diff` 为空、`800000..800399` 未触碰。§5 的执行需使用者另行启动指令。
 
 ## 1. 起点、目标与授权边界
 
