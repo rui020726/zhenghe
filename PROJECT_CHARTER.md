@@ -236,7 +236,7 @@ CTDE + 规则协调／预约 + 执行校验
 | S3 收尾与规则确认交付头 | `fbeb0b8`（脚本与流登记）；协议冻结提交 `5ddd7f5` | 3 000 episode 跑在该树内容上；`COMM_RULE_CONFIRMATION_MANIFEST.json` 于其之后重生成，故 `executed_code.head` 即此值、`dirty_modules` 为空、被执行模块 blob 身份全部与 HEAD 一致 |
 | 证据复核与训练诊断计划 | `docs/communication-research-review-plan@6fcac4fe59bf8c031c8677a63318c5f4cac22add` | 仅文档；划出"只复核、不跑新数据"的边界 |
 | 证据复核分支 | `analysis/comm-evidence-review` | 起点即上行文档提交，未回退任何生产代码 |
-| 证据复核交付头 | 本轮提交（见 §5.13 的 `git log`） | 0 episode / 0 新流 / 0 训练；生产 `git diff` 为空 |
+| 证据复核分析交付头 | `c09e795`（修订报告 / verdict / 勘误 / 诊断 / 协议 / 24 项合成回归） | 0 episode、0 新流、0 训练；生产代码 `git diff` 为空 |
 
 ### 5.2 通信先导结果应如何解读
 
