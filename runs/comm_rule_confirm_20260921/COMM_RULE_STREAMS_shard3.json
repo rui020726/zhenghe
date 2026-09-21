@@ -1,0 +1,581 @@
+{
+ "block": [
+  900000,
+  900199
+ ],
+ "block_audit": {
+  "clean": true,
+  "sha256": "9ead3b9e79dc38537f3c634e8d49d151cd795a465628522ea6e302e675ef5fa9",
+  "verdict": "zero overlap: the block may be registered and its 200 streams recorded"
+ },
+ "executed_code": {
+  "all_modules_match_head": true,
+  "branch": "analysis/comm-rule-independent-confirmation",
+  "comparison": "git blob identity (line-ending filters applied)",
+  "head": "5ddd7f566e0a6322e31cfb46d7291957245dd07f",
+  "modules": {
+   "integrated_sar/adapters/piloc.py": {
+    "blob": "db4d8539e2855e5d621df37afb9408dd8cbcf190",
+    "blob_at_head": "db4d8539e2855e5d621df37afb9408dd8cbcf190",
+    "matches_head": true,
+    "sha256": "2ac3d1a5420c518c6f5319dfc5e791efbc8cb0a87a31b9815aeae6c82b0107b5"
+   },
+   "integrated_sar/adapters/task03.py": {
+    "blob": "8ba631ca1892bacc46dc24832d20f56c73173022",
+    "blob_at_head": "8ba631ca1892bacc46dc24832d20f56c73173022",
+    "matches_head": true,
+    "sha256": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1"
+   },
+   "integrated_sar/comm.py": {
+    "blob": "ebb67dd3b0b6fce38a4c5c6a326cd898c88e95a6",
+    "blob_at_head": "ebb67dd3b0b6fce38a4c5c6a326cd898c88e95a6",
+    "matches_head": true,
+    "sha256": "4ce419a4fc223c9fb38742c2bd6c3157cd92dbed5d3ac5138753ee698a82e92c"
+   },
+   "integrated_sar/contracts.py": {
+    "blob": "156bbaf470e8480e918c06e94cee4ba70c6741f1",
+    "blob_at_head": "156bbaf470e8480e918c06e94cee4ba70c6741f1",
+    "matches_head": true,
+    "sha256": "7052a4d6bca870060a12890fe2117fe0a0a1097db11934d74c6136655dce09b7"
+   },
+   "integrated_sar/joint_driver.py": {
+    "blob": "4f803803777a405ee293b32519e721704a95472c",
+    "blob_at_head": "4f803803777a405ee293b32519e721704a95472c",
+    "matches_head": true,
+    "sha256": "eac7a63cb770501e7abc80f4dc980a3adad82c917c2fe212d9d85727a069fcf7"
+   },
+   "integrated_sar/lifecycle_log.py": {
+    "blob": "8585ae13711460af26aaad5626eef49347453364",
+    "blob_at_head": "8585ae13711460af26aaad5626eef49347453364",
+    "matches_head": true,
+    "sha256": "f55931a08705f4ebef9c1f9b8e06a69f4cfef467041bc1feb71dc34a3d4533ec"
+   },
+   "integrated_sar/orchestrator.py": {
+    "blob": "013419cc77906c96aac472e74afc1840bb994758",
+    "blob_at_head": "013419cc77906c96aac472e74afc1840bb994758",
+    "matches_head": true,
+    "sha256": "ad1380d4695d8fb90ea646d2b4ebd0d6d736879885feff79bef8067a1a956b74"
+   },
+   "integrated_sar/piloc_runtime.py": {
+    "blob": "1445292230315d59439e8f4bb18c22b6f18f68a1",
+    "blob_at_head": "1445292230315d59439e8f4bb18c22b6f18f68a1",
+    "matches_head": true,
+    "sha256": "d8cd2df3bc49d202747a06284c7d4b6fdba1540a269d9c1f09c8d08876ce1c84"
+   },
+   "integrated_sar/scenarios.py": {
+    "blob": "fff051a7f6f78cc228ef5869ebed082956efc008",
+    "blob_at_head": "fff051a7f6f78cc228ef5869ebed082956efc008",
+    "matches_head": true,
+    "sha256": "2e9a2fa0791d1b8917b80f397b1f8f54f6618e56f3ddccebd8a7416e72df98c8"
+   },
+   "integrated_sar/search_runtime.py": {
+    "blob": "0a0799032149d43e563f7341041e2330694ee00d",
+    "blob_at_head": "0a0799032149d43e563f7341041e2330694ee00d",
+    "matches_head": true,
+    "sha256": "89e772bec630f32a37f843b2efda8551f8bf9bd0c693a21556ad8ac7491103b1"
+   },
+   "integrated_sar/task_registry.py": {
+    "blob": "bf3eba2bc10bf69292eef0fe03f9e60984a3a48a",
+    "blob_at_head": "bf3eba2bc10bf69292eef0fe03f9e60984a3a48a",
+    "matches_head": true,
+    "sha256": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+   }
+  }
+ },
+ "fold": {
+  "bytes": 13413783,
+  "sha256_fold": "287dfd2545b991091c1d30564a4654148ca4626c8dd2c36d152bbef398e0128b",
+  "streams": 50
+ },
+ "purpose": "engineering confirmation of locked communication rules only; it may never be called an unseen test set for a learned model",
+ "recording_configuration": {
+  "actor_kv_mode": "tokens",
+  "comm_delay_ticks": 0,
+  "comm_delivery_probability": 1.0,
+  "comm_subscribers": "all",
+  "deadline_tightness": [
+   0.5,
+   2.0
+  ],
+  "detection_radius": 5,
+  "device": "cpu",
+  "dt": 1.0,
+  "grid_size": 60,
+  "mock": false,
+  "num_goals": 6,
+  "obstacle_density": 0.15,
+  "piloc_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+  "quiet": true,
+  "rescue_per_species": 2,
+  "rescue_species": 3,
+  "search_agents": 2,
+  "steps": 1000,
+  "task_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+  "task_membership_consistency": true,
+  "use_coordinator": false
+ },
+ "rerun_policy": {
+  "allowed_reasons": [
+   "process_killed",
+   "disk_full",
+   "checkpoint_load_failure"
+  ],
+  "rule": "same seed only, for a pre-registered reason; no seed is dropped for being hard and no replacement sample is drawn"
+ },
+ "seconds": 0.5,
+ "shard": 3,
+ "shards": 4,
+ "size": 200,
+ "streams": [
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900003,
+   "sha256": "2e1291cc54d8821d968f302d0634a7b222c6b051e9f381c1a7868c99557a33a5",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900007,
+   "sha256": "d5db68e32354237f4d4b7ff9f8626e1c60ad5b76c12f5526ce0546a2258df845",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900011,
+   "sha256": "5d11dfe7694071349e96fc4887ec2e0b32e9382d67c5e44d61e6a01e2e3b7fd3",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900015,
+   "sha256": "754f7e3254371d7741aa452674e1c506103d8ec6b56afab349ca981bbe199249",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900019,
+   "sha256": "6ad9d2834d6b0757c50d2e1a8f706cf4af42155594ebbad36db7b80a99797996",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900023,
+   "sha256": "7d0c4db2a4d654ea94926bc8a772a832302b7af43ef2112ece65a5c4717f02f0",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900027,
+   "sha256": "e50693c4b82cf68f9de0ebfd1204eeb2a12df50da0d84310e302314d38fc028d",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900031,
+   "sha256": "4fae2a8d619a52376d15bb4f85d916e7932c935ef3a6c2160e5f42366376c307",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900035,
+   "sha256": "901e32fdfdd1c122fd87699299e145dabad2659e26f58add8089b4b9436c3110",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900039,
+   "sha256": "d5a072bf0ec61b247b4dbd7d9daa24f0f57b2f7d56ed767da14d465f2d683a03",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900043,
+   "sha256": "0ecf159050294c5dc871afd3a4d996e70b0ce31356596f06de85e6744c08e086",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900047,
+   "sha256": "9b3fe776b14de97eb774f1eef41b99deb028ca0583c23b8359479a1d771e70ea",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900051,
+   "sha256": "83dae907805a053882487fe2a20fe650622491c3e3dfe4861d23e3d1755e8d67",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900055,
+   "sha256": "9b0aa4767143e972822a1e52e80b9a1937bf7d66710b4f4b23c3fbb9b57a3cf5",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900059,
+   "sha256": "f743ee9e14afa262cb9825c45b35dd1842bac2c44b635d7602fc56ed3cc31cfc",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 3,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900063,
+   "sha256": "ce84ad1e5ae060463efa3e629d3747dc2f8084938ecc0354d7942144ce766e21",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900067,
+   "sha256": "6fe258ddd643c5a163952d4fe25c5cc01271ddb065077456e7d48e31c95e62cb",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900071,
+   "sha256": "d378fcd265898899a02c8ab15ab05803f766751aaaa31b2dab5b0ddba54af07b",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900075,
+   "sha256": "3893a1344866a51097681755e9add68ff725937f28775498812f0aa4b9c467fb",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900079,
+   "sha256": "4f96f14eccc7fb88473fac00980cef54f4fa5242cbc152e1c29e8c459475966d",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900083,
+   "sha256": "e2687f76ebb130fd95dba8d715930949bb728e84a103c91f91bbfcf6411c575c",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900087,
+   "sha256": "c79bf677a82905256f82a9cd75a31fc4df1a5e0409765aa0801749cc8271c10f",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900091,
+   "sha256": "034813be30b50147ca9e20ef8eb3d9c8cb26f90159a09ce29650830f1dd7ddd3",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900095,
+   "sha256": "c5c0c3bcee346ddc0e6a727b2f0182b99fd94f4c312d5ee8423fca83edf99f21",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900099,
+   "sha256": "f0958ed7fee76baafcc9011a360244b70ec9aafb46c9bc0214f62d00a9af9dc3",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900103,
+   "sha256": "48b94159dcf44fedd43f3b7c07255eea293d274a79fdc6a64d1624eb02dca554",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900107,
+   "sha256": "3a0f3ea65d0ceb0848ea11cd63523a674019d83872278ea253eac7fa16887efd",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900111,
+   "sha256": "0d775752085a0fcb6dd68fa47acc69422a5ca6bd52d712b2fada17586540b533",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900115,
+   "sha256": "960493845bb0f430f3b613361207f2615eb9de4243c0c57572bc4f139860d826",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900119,
+   "sha256": "f70d8fef3121f6c5521592f61dee59b0544542214d9998bc4e123a0153aefda5",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900123,
+   "sha256": "e4d78ac06179976a6e6e92fb031d0ef7f8271d2f80784294e37c6f1b209bf21a",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900127,
+   "sha256": "bcf88ac7e37614d96a2058dde0510bbd20af4d52c0bac6a32c7e8b2bd7621fa0",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900131,
+   "sha256": "b743e06e88672eddbd42caae9736666e4ace4dff3a36f147b4bd587fdf62fbcf",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900135,
+   "sha256": "3781f55a763c5b5b08e199f19bfe43a81db5bac818635f41b214c93a1476ce0d",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900139,
+   "sha256": "56c6620a2f6378d726d75283fabb2a32a4452539ca5953b145b2f21436a5d530",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900143,
+   "sha256": "7d57d65eede9509e600200c3afa32b024c89462a0b6459c257737544f9fa1927",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900147,
+   "sha256": "3f23315c80f9f682aa141dcf3abdec68e5becf0c852b0eed8eced94ac389b0cd",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900151,
+   "sha256": "e2e653d9ad06a532fe9332a51e5308b36872f44ab197b00ff1cfdb4a90da1ab6",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900155,
+   "sha256": "b967a4f4975b47308e1586dc94ff28a5b787782a0af98c2c14e1bbac0fb30879",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900159,
+   "sha256": "b2fce3c86c90c2de0a060c5b28da1a769fe9d9f119479c1804666c6d3d643505",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900163,
+   "sha256": "aa9e553e9cfc53990c0a03a5ee001db07edba9efd1f8e9e06e81d49a11496455",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900167,
+   "sha256": "27c142e9a777f8f09ec2a2dd492be9a493bf6b3e0291a2eeac4b51be6252a0f5",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900171,
+   "sha256": "34fd6641910660f3098042a4318f3245cb8422e6bcbf53a2d37a22118cc091ad",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900175,
+   "sha256": "094ea0d6c34b1503630f52fd35eafdc5ef3e5e70b06f0e8e1aecbac42e557289",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900179,
+   "sha256": "147732413ab24b9868b28af570d7e0d62241e440f6581b4f5fdd798bd5bf8831",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900183,
+   "sha256": "e6f535754983922ca34dbcb68e9163387920e294474a2c0790312c1999c669b7",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900187,
+   "sha256": "f8e8eb60dc380f0ed6ffe6f77a5660b7549babbbab62abafe6d7987be93279e3",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900191,
+   "sha256": "13e615fd76453dd00f026e1d6fa73b95dce37213c28bd1dac938f3b3d2100ae7",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900195,
+   "sha256": "10b82e897c9b94a98c2b8799aafb0799d9565001770500c4a7aa1478ac014828",
+   "skipped": true,
+   "steps_recorded": 1000
+  },
+  {
+   "detections": 6,
+   "frames": 1000,
+   "note": "already recorded; the recorder never rewrites a stream",
+   "seed": 900199,
+   "sha256": "ee1de707f11f3ab31e120907443e1f5959b8dc1ebb25650494a0e86ffd6f9606",
+   "skipped": true,
+   "steps_recorded": 1000
+  }
+ ]
+}

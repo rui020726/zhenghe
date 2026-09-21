@@ -1,0 +1,41 @@
+{
+ "arms": [
+  "noack_send_once",
+  "ack_send_once",
+  "ack_retry_2",
+  "ack_periodic_20",
+  "ack_backoff_16"
+ ],
+ "bytes_per_episode": 2793934,
+ "episodes": 75,
+ "per_arm_total_bytes": {
+  "ack_backoff_16": 35244.9,
+  "ack_periodic_20": 35025.3,
+  "ack_retry_2": 36539.7,
+  "ack_send_once": 23786.7,
+  "noack_send_once": 14925.6
+ },
+ "per_setting_seconds": {
+  "isolated-lossless": 2.705,
+  "isolated-lossy": 2.445,
+  "normal-lossy": 2.447
+ },
+ "probe_seeds": [
+  700000,
+  700001,
+  700002,
+  700003,
+  700004
+ ],
+ "projected_disk_gb_3000_episodes": 8.38,
+ "projected_serial_hours_3000_episodes": 2.11,
+ "rows_with_issues": [],
+ "seconds_per_episode_max": 3.26,
+ "seconds_per_episode_mean": 2.532,
+ "serial_seconds": 190.0,
+ "settings": [
+  "isolated-lossless",
+  "isolated-lossy",
+  "normal-lossy"
+ ]
+}
