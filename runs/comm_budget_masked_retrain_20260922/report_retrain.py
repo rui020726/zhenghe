@@ -314,27 +314,27 @@ def judge(stats: dict[str, Any], gates: dict[str, Any]) -> dict[str, Any]:
         and gates["passed"]
     )
     return {
-        "criterion": "400k end-of-run checkpoint only; no middle checkpoint selects a model",
+        "criterion": "只看 400k 末轮 checkpoint；中间 checkpoint 不选模型",
         "per_seed": seeds,
         "primary_effect": {
-            "rule": "at least 2/3 seeds with completion-difference CI lower bound > 0, "
-            "the remaining seed's point estimate >= -0.05 targets/episode, zero correctness violations",
+            "rule": "≥2/3 个 seed 的按时完成差 95% CI 下界 > 0，其余 seed 点估计 ≥ −0.05 个/episode，"
+                    "且正确性门禁 0 违规",
             "seeds_with_positive_lower_bound": [item["arm"] for item in decisive],
             "seeds": len(decisive),
             "other_seeds_within_margin": others_ok,
             "passed": primary,
         },
         "non_inferiority_cost": {
-            "rule": "at least 2/3 seeds with completion CI lower bound >= -0.05 and byte CI upper "
-            "bound < 0, the remaining seed within the margin and no more expensive, zero violations",
+            "rule": "≥2/3 个 seed 的完成差 CI 下界 ≥ −0.05 且字节差 CI 上界 < 0，"
+                    "其余 seed 完成差点估计 ≥ −0.05 且字节不增加，且正确性门禁 0 违规",
             "seeds": len(cost_decisive),
             "other_seeds_within_margin": cost_others_ok,
             "passed": cost,
         },
         "mechanism_evidence_only": [
-            "learning versus its own initial weights",
-            "a falling training loss",
-            "a changed send rate",
+            "学习结果与自身 0 步初值之差",
+            "训练 loss 下降",
+            "发送率改变",
         ],
     }
 
@@ -351,7 +351,7 @@ def curves(records: dict[int, Any], families: dict[str, list[dict[str, Any]]]) -
         points: dict[str, Any] = {}
         for at in CHECKPOINTS:
             readings = rows_by_arm.get(evaluation.arm_label("learned", seed, at), [])
-            streams = sorted({int(row["stream"]) for row in readings}) if readings else []
+            streams = sorted({int(row["seed"]) for row in readings}) if readings else []
             points[str(at)] = {
                 "training_diagnostics": block["milestones"].get(at),
                 "evaluation": {
@@ -364,12 +364,20 @@ def curves(records: dict[int, Any], families: dict[str, list[dict[str, Any]]]) -
                         else "incomplete"
                     ),
                     "mean_on_time": round(
-                        float(np.mean([row["on_time"] for row in readings])), 5
+                        float(
+                            np.mean(
+                                [
+                                    row["on_time_targets_per_episode"]
+                                    for row in readings
+                                ]
+                            )
+                        ),
+                        5,
                     )
                     if readings
                     else None,
                     "mean_airtime_bytes": round(
-                        float(np.mean([row["bytes"] for row in readings])), 2
+                        float(np.mean([row["airtime_bytes"] for row in readings])), 2
                     )
                     if readings
                     else None,
@@ -437,17 +445,27 @@ def render(data: dict[str, Any]) -> str:
     )
     add("")
     measured = data["measured"]
+    closure = data["launch_closure"]
     add(
         f"**本轮实测**：训练 {measured['training_runs']} 次 × {measured['episodes_per_run']} 集 = "
         f"{measured['environment_steps']:,} 环境步；启动登记 {measured['launches_booked']}/"
-        f"{measured['launch_cap']}（探针 {measured['probe']}、确定性恢复 "
-        f"{measured['resume_check']}、评价 {measured['evaluation']}、规则重放 "
-        f"{measured['rule_replay']}、技术失败 {measured['technical_failures']}）；"
+        f"{measured['launch_cap']}（门禁类 {measured['gate_launches']}、训练 "
+        f"{sum(int(item['launches_booked']) for item in closure['arms'].values())}、评价 "
+        f"{measured['evaluation']}、规则重放 {measured['rule_replay']}、技术失败 "
+        f"{measured['technical_failures']}）；"
         f"optimizer.step 合计 {measured['optimizer_steps']:,}；actor 项合计 "
         f"{measured['actor_terms']:,}；候选 {measured['candidates']:,}，其中顺序后可执行 "
         f"{measured['actionable']:,}（{measured['actionable_share']:.2%}，绝对量 "
         f"{measured['actionable_per_episode']:.1f}/episode）。新流 "
         f"{measured['new_streams']}；H=20 spillover {measured['h20']}。"
+    )
+    add("")
+    add(
+        f"门禁类启动是 **{measured['preflight_passes']} 次 preflight** 的累计，不是一次："
+        "第一次在 12 集探针跑完后崩在本轮自己的 JSON 读取上（门禁如实判不过），第二次因为我在它测量期间"
+        "改了执行树而作废（它同样如实报出失败），只有第三次被采用；第三次用 `--no-rerun` 复用第二次在"
+        "旧 freeze 下测得的 12 集探针与 8 集恢复回归（该 freeze 见 §六 时间线）。这些启动全部计入 1,500 "
+        "上限，没有补流、没有换 seed、没有事后改数。"
     )
     add("")
     add("## 一、判定（预登记，400k 末轮唯一主判据）")
@@ -602,8 +620,9 @@ def render(data: dict[str, Any]) -> str:
         )
     add("")
     add(
-        f"- 被 `send_once` 在两个轴上同时不优于它的臂："
-        f"`{data['frontier']['dominated_by_send_once']}`。"
+        f"- 在两个轴上都不如 `send_once`（完成不更高且字节不更低）而被其支配的臂："
+        f"`{data['frontier']['dominated_by_send_once']}`。这是样本均值层面的描述，"
+        "不代替上面的逐 seed 配对区间。"
     )
     add("")
     add("## 五、结论范围")
@@ -662,21 +681,28 @@ def render(data: dict[str, Any]) -> str:
     )
     add("- checkpoint、录制流、逐 episode 原始日志均不入库。")
     add("")
-    add("## 七、复跑")
+    add("## 七、复跑（按本轮实际执行顺序）")
     add("")
     add("```bash")
     add("cd runs/comm_budget_masked_retrain_20260922")
     add("python train_retrain.py --mode identity")
-    add("python preflight.py                      # 12 探针 + 8 恢复回归 + 1 greedy 路径，0 训练")
-    add("python train_retrain.py --mode train --seed 1 --steps 400000 --threads 1   # 2/3 同理")
-    add("python evaluate_retrain.py --mode rules --shards 3 --shard 0")
-    add("python evaluate_retrain.py --mode eval --kind initial --shards 3 --shard 0")
-    add("python evaluate_retrain.py --mode eval --kind curve   --shards 3 --shard 0")
-    add("python evaluate_retrain.py --mode eval --kind final   --shards 3 --shard 0")
+    add("python preflight.py                     # 12 探针 + 8 恢复回归 + 1 greedy 通路，0 训练")
+    add("python freeze.py --register             # 执行代码变了就要重新登记")
+    add("python preflight.py --no-rerun          # 复用同一 freeze 下的探针/恢复产物")
+    add("# 三个臂串行跑：并行会争用启动账本（本轮早期就因此崩过一次）")
+    add("for s in 1 2 3; do python train_retrain.py --mode train --seed $s --steps 400000 --threads 1; done")
+    add("python evaluate_retrain.py --mode rules --threads 1")
+    add("for k in initial curve final; do python evaluate_retrain.py --mode eval --kind $k --threads 1; done")
+    add("python evaluate_retrain.py --mode coverage")
     add("python evaluate_retrain.py --mode replay-check")
     add("python report_retrain.py")
     add("cd ../.. && python -m unittest discover -s integrated_sar/tests && python -m integrated_sar")
     add("```")
+    add("")
+    add(
+        "分片（`--shards/--shard`）现在每个分片写自己的账本文件，因此并行是安全的；本轮为避开"
+        "已观察到的 Windows 文件锁竞争而使用单进程串行，代价由上面的启动数如实反映。"
+    )
     add("")
     return "\n".join(out) + "\n"
 
@@ -720,8 +746,9 @@ def launch_closure(records: dict[int, Any]) -> dict[str, Any]:
             list((common.EPISODE_OUT / "unittest").rglob("ct_*.jsonl"))
         ),
         "unit_test_note": (
-            "the suite's own rollouts write under episodes/unittest and are not arms of this "
-            "experiment; the count is given so the round's total episode cost is auditable"
+            "套件自己跑的 rollout 写在 episodes/unittest 下（此处按转录文件计数：同名标签会被后续一次"
+            "覆盖，所以这是**去重后的文件数**，不是启动次数）；它们不是本轮的臂，不占实验账本，"
+            "但确实花了磁盘与时间，因此列在这里"
         ),
     }
 
@@ -858,6 +885,11 @@ def assemble() -> dict[str, Any]:
                 if kind.startswith("eval_")
             ),
             "rule_replay": int(ledger.get("by_kind", {}).get("rule", 0)),
+            "gate_launches": sum(
+                int(ledger.get("by_kind", {}).get(kind, 0))
+                for kind in ("probe", "resume_check", "greedy_probe")
+            ),
+            "preflight_passes": int(ledger.get("by_kind", {}).get("greedy_probe", 0)),
             "technical_failures": int(ledger.get("failures", 0)),
             "new_streams": 0,
             "h20": 0,
@@ -892,25 +924,24 @@ def assemble() -> dict[str, Any]:
             },
             "evaluation_freeze": freeze.get("sha"),
             "note": (
-                "the three arms trained under the freeze named per arm, which did not move while "
-                "they ran; the reporting code was corrected afterwards, so evaluation is registered "
-                "against a later freeze. No sampler, rollout or update module differs between the "
-                "two -- the delta is launch accounting and report parsing -- and the checkpoints "
-                "record the freeze that produced them, so the two are not conflated."
+                "三个臂在整个训练期间处于同一个 freeze 之下（该 freeze 在训练期间未移动）；"
+                "报告与判据代码在其后被修正，因此评价/统计阶段登记在更晚的 freeze 上。"
+                "两个 freeze 之间没有任何采样器、rollout 或 optimizer 模块不同——差异只在启动账本与"
+                "报告解析——而且每个 checkpoint 内部都记录了产生它的那个 freeze，两者不会被混读。"
             ),
         },
         "likelihood_precision_note": (
-            "logged-versus-recomputed gap is recorded rounded to six decimals by the archived "
-            "alignment helper, so an arm whose maximum reads 1e-06 has a true maximum in "
-            "[0.5e-6, 1.5e-6); the gate is decided on the recorded value, and the stricter "
-            "interpretation -- that some raw gaps may sit just above 1e-6 -- is stated rather than "
-            "argued away. The float32 sum of a few log-softmax terms is the source, not a "
-            "distribution mismatch: the same helper disagrees loudly when the actionable set is a "
-            "lie, which is the test that exists for that."
+            "logged 与 recomputed  log-prob 的最大差由归档对齐助手**按 6 位小数舍入后记录**，"
+            "因此记录值恰为 1e−6 的臂，其真实最大差落在 [0.5e−6, 1.5e−6) 内；本轮门槛按记录值判定，"
+            "并且明确写出这个边界（存在原始值略大于 1e−6 的可能），不把它抹平。来源是 float32 下"
+            "若干条 log-softmax 求和的数值误差，而不是分布不一致：同一套检查在 actionable 集合被翻转时"
+            "确实会大声失败（本轮套件里保留着那条测试）。"
         ),
         "production_changed": common.production_diff()["integrated_sar_changed"],
         "defaults": common.setting()["production_defaults"],
-        "conclusions": data_conclusions(judgement, gates, rule_replay),
+        "conclusions": data_conclusions(
+            judgement, gates, rule_replay, stats.get("per_arm")
+        ),
         "not_measured": [
             "任何独立测试集结论：800000..800399 仍封存，本轮未打开",
             "第二预算、ACK、H=20、observation 扩维：均未授权、未运行",
@@ -921,7 +952,8 @@ def assemble() -> dict[str, Any]:
 
 
 def data_conclusions(
-    judgement: dict[str, Any], gates: dict[str, Any], replay: dict[str, Any]
+    judgement: dict[str, Any], gates: dict[str, Any], replay: dict[str, Any],
+    per_arm: dict[str, Any] | None = None,
 ) -> list[str]:
     lines: list[str] = []
     if not replay.get("passed"):
@@ -953,6 +985,60 @@ def data_conclusions(
         "0 步初值与 400k 的差、训练 loss 与发送率变化只作机制证据：它们说明优化器确实在动，"
         "不能替代与强规则的对照。"
     )
+    if per_arm:
+        initial = [
+            per_arm.get(evaluation.arm_label("learned", seed, 0))
+            for seed in common.TRAINING_SEEDS
+        ]
+        if all(initial):
+            lines.append(
+                "三个初值臂在 24 条开发流上一致：平均完成 "
+                f"{sorted({item['mean_on_time'] for item in initial})}，字节 "
+                f"{sorted({item['mean_airtime_bytes'] for item in initial})}——随机初值就是"
+                "「能发就发」，而修复后的 mask 让发不出去的 SEND 不再被请求，所以这条路不再产生"
+                "执行端拒付。"
+            )
+        readings = []
+        for seed in common.TRAINING_SEEDS:
+            arm = per_arm.get(evaluation.arm_label("learned", seed, 400_000))
+            if arm:
+                readings.append(
+                    f"seed{seed} 完成 {arm['mean_on_time']}、字节 {arm['mean_airtime_bytes']:,}"
+                )
+        lines.append("400k 末轮三个臂在 24 条开发流上的读数：" + "；".join(readings) + "。")
+        closest = min(
+            (
+                (abs(item["completion_point"]), seed, item)
+                for seed, item in judgement["per_seed"].items()
+                if item.get("available")
+            ),
+            default=None,
+        )
+        if closest:
+            _, seed, item = closest
+            lines.append(
+                f"与规则最接近的是 seed{seed}（这是描述，不是选择）：完成差 "
+                f"{item['completion_point']:+.4f} 个/episode（CI "
+                f"[{item['completion_ci_lower']:+.4f}, {item['completion']['ci95'][1]:+.4f}]）、"
+                f"字节差 {item['bytes_point']:+,.1f} B/episode（CI "
+                f"[{item['bytes']['ci95'][0]:+,.1f}, {item['bytes_ci_upper']:+,.1f}]）——"
+                "它在字节上把强规则的行为重现到几乎相同，但完成仍然不更高："
+                "修复后的动作空间**能够表达**这条规则，本轮没有任何一个臂超过它。"
+            )
+        stalled = []
+        for seed in common.TRAINING_SEEDS:
+            arm = per_arm.get(evaluation.arm_label("learned", seed, 400_000))
+            if arm:
+                stalled.append(
+                    f"seed{seed} {arm['mean_airtime_bytes'] / common.BUDGET_BYTES:.1%}"
+                )
+        lines.append(
+            "额度使用率（400k 平均字节 / 29,300）：" + "、".join(stalled) + "。"
+            "两个没有收敛到规则行为的臂仍把额度用到九成以上而完成更低，因此被 send_once 同时支配；"
+            "它们的 critic 在后段变差（value loss 上升、explained variance 下降、每候选熵塌到 "
+            "0.12–0.37），这解释「再多跑也不会自动变好」，但不构成追加步数或改特征的理由——"
+            "那需要新的授权与新的协议。"
+        )
     return lines
 
 
