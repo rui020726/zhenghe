@@ -1,6 +1,37 @@
 # 项目状态
 
-## 2026-09-22：预算动作 mask 正确性修复已规划，尚未执行
+## 2026-09-22：预算动作 mask 修复已交付，M0–M3 全通过（0 训练、8 集 smoke、optimizer.step=0）
+
+执行入口 [COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md](COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md) **已执行完毕**；
+分支 `fix/comm-budget-action-mask`（起点文档提交 `31da5f7`），产物在 `runs/comm_budget_action_mask_fix_20260922/`。
+总纲 v2.9 → **v3.0**。协议 `COMM_BUDGET_ACTION_MASK_PROTOCOL.md` 先于任何 episode 提交。
+
+**修的是训练正确性**：policy-owned timing 下预算不足的 SEND 过去可被采样、写进 joint log-prob、进 PPO surrogate，
+直到 `CommRelay._emit` 才被拒。现在改为**采样前、按 relay 实际执行顺序的 sequential hard mask**：
+候选携带与 `_emit` 同源计算的 `attempt_charge_bytes`；collector 的 shadow credit 从**观测里的剩余额度**起算
+（不是每步重新满额——这个错误被本轮测试抓到并修掉）；付不起的候选唯一合法动作是 HOLD 且
+likelihood/entropy 权重 0；采到 SEND 立即扣 shadow；全 mask step 仍保留 critic 样本；relay 硬门保留。
+**没有**采用"拒绝后事后删样本"：那会按已实现动作选择性改变联合概率。
+
+| 事实 | 数值 |
+|---|---|
+| 生产改动 | 仅 `integrated_sar/comm.py`、`comm_policy.py` 与新增测试；其余生产路径 diff 为空 |
+| 8 流 smoke | 20 655 候选 / 动作前可付 197 / **顺序后真双动作 181**（顺序自身再消 16）/ masked 20 474 |
+| 动作—执行闭合 | 请求 86 = 实际发射 86，执行端 budget+capacity 拒付 **0**（同接缝修复前留 133 次拒付） |
+| PPO 概率一致 | logged vs recomputed 最大差 **0.0** ≤ 1e−6；翻转 actionable 时检查确实失败 |
+| 训练量 | 训练 0 次、optimizer.step **0**、新流 0、H=20 spillover 0；启动配额 8/8 用满（技术失败计入） |
+| 隔离 | `budget_mask=False` 委托回旧 collector（含 tape schema）；/1=19、/2=23 维不变；默认值未动 |
+| 身份 | trainer tag `onpolicy-v3-budget-mask` + mask/tape schema 为 resume 前置；旧 checkpoint 只可前向读 |
+
+**测试**：本轮新增 30 项（生产侧契约 14 + collector/接缝/PPO 16）；`integrated_sar` 全量 **690 通过（2 跳过）**；
+`python -m integrated_sar` 冒烟 `final_status=completed`。本轮实测 = 8 episode（8 000 环境步），其余为引用历史。
+
+**含义与下一步**：可学习样本极少（actionable 占比 0.88 %）这一事实在修复前被"候选数"掩盖；旧的非 mask 训练结果
+仍属已知缺陷产物，不能当修复后基线。若要谈学习效果，只能另立"从初值重开"的协议，并先重新定义真实双动作样本数、
+训练上限与强规则对照 —— **本轮不启动**，等使用者决定。`800000..800399` 仍封存（盘上 artefact 0）；
+`900000..900199` 只作既有证据。非本轮创建的 `architecture/`、`dev_summary.json` 与另两轮未跟踪文件未改、未删、未提交。
+
+## 2026-09-22：（历史，计划已被下一节执行）预算动作 mask 正确性修复曾待执行
 
 当前入口 [COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md](COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md)，
 总纲 v2.9，起点 `analysis/comm-h20-terminal-attribution@b2061ae`。

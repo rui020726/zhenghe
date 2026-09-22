@@ -1,6 +1,6 @@
 # 项目总纲：面向协同搜救的学习型任务信息传递控制
 
-版本：v2.9
+版本：v3.0
 
 更新日期：2026-09-22
 用途：跨聊天、跨 Agent 的研究方向与实验约定。  
@@ -13,7 +13,40 @@
 
 ## 1. 本文如何使用
 
-### v2.9 当前计划：预算可执行动作的采样前顺序 mask 修复（尚未执行）
+### v3.0 当前状态：该修复已执行并通过 M0–M3（本轮 0 训练、8 episode smoke、optimizer.step=0）
+
+分支 `fix/comm-budget-action-mask`（起点文档提交 `31da5f7`），产物
+`runs/comm_budget_action_mask_fix_20260922/`：协议 `COMM_BUDGET_ACTION_MASK_PROTOCOL.md`
+（先于任何 episode 提交）、结果 `COMM_BUDGET_ACTION_MASK_RESULTS.md/.json`、
+`COMM_BUDGET_ACTION_MASK_SMOKE.json`、`LAUNCH_LEDGER.json`、`COMM_BUDGET_ACTION_MASK_MANIFEST.json`、
+`budget_masked.py` / `train_budget_masked.py` 与 30 项回归测试。
+
+已成立的修复事实（引用时按此口径）：
+
+- 候选契约：`SendItem.attempt_charge_bytes / send_executable / send_block_reason`，由与 `_emit`
+  **同一条**代码路径（同一 `_message`、`estimate_message_bytes`、subscriber fan-out、
+  `CommBudget.can_send/why_blocked`）算出；无法定价的候选报 `charge_unavailable`，不猜数字。
+- 采样前顺序 hard mask：shadow credit 从**观测里的剩余额度**起算（不是每步重新满额），
+  按 relay 实际发射顺序推进；付不起的候选唯一合法动作是 HOLD，likelihood/entropy 权重 0；
+  采到 SEND 立刻扣 shadow；全 mask step 保留 critic 样本；relay 硬门保留。**未**采用事后删样本。
+- tape 记 `actionable` 且与 `free` 同义，因此第五轮 PPO 循环原样复用（不复制第二套 optimizer）；
+  logged 与 recomputed log-prob 最大差 **0.0 ≤ 1e−6**；翻转 actionable 时该检查确实会失败。
+- 8 条既有流、固定初值、29 300 B、`policy_owned_timing`：20 655 候选中"作为下一次发送可付"
+  197 个，走过本步顺序后**真双动作 181 个**（顺序自身再消掉 16 个），请求 86 次、执行 86 次、
+  执行端 budget/capacity 拒付 **0**；同接缝的 60 步对照实验修复前会留下 133 次拒付。
+  actionable 占比 0.88 %：可学习样本极少这一事实，修复前被"候选数"掩盖。
+- 隔离性：`budget_mask=False` 委托回原 collector（连 tape schema 都不增键）；
+  feature /1=19、/2=23 维不变；默认值仍是 `comm_ack=False`、`legacy_shared_bound`、`immediate`；
+  生产改动只有 `integrated_sar/comm.py`、`comm_policy.py` 与该测试文件。
+- 身份与边界：新 trainer tag `onpolicy-v3-budget-mask` + mask/tape schema 是 resume 前置条件；
+  旧 400k checkpoint 只能前向读，**不得恢复 optimizer 续训**。本轮 0 训练、0 新流、
+  H=20 spillover 仍冻结（8 次启动配额已用满，技术失败计入）。
+
+因此"未启用预算 mask 的旧训练结果"仍是**已知的正确性缺陷产物**，不能被当作修复后基线；
+下一步若要谈学习效果，必须是从初值重开的新协议，且须先重新定义真实双动作样本数、训练上限与强规则对照。
+是否提出该协议由使用者决定，本轮不自动启动。
+
+### v2.9 历史计划（已由 v3.0 执行）
 
 当前入口 `COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md`，起点
 `analysis/comm-h20-terminal-attribution@b2061ae`。已确认预算不足 SEND 可被采样并进入 PPO loss，
@@ -328,6 +361,10 @@ CTDE + 规则协调／预约 + 执行校验
 | 证据复核与训练诊断计划 | `docs/communication-research-review-plan@6fcac4fe59bf8c031c8677a63318c5f4cac22add` | 仅文档；划出"只复核、不跑新数据"的边界 |
 | 证据复核分支 | `analysis/comm-evidence-review` | 起点即上行文档提交，未回退任何生产代码 |
 | 证据复核分析交付头 | `c09e795`（修订报告 / verdict / 勘误 / 诊断 / 协议 / 24 项合成回归） | 0 episode、0 新流、0 训练；生产代码 `git diff` 为空 |
+
+| 预算动作 mask 修复计划 | `docs/communication-budget-mask-fix-plan@31da5f7c36ed95b95d6752624bcbebd9f16221e6` | 仅文档 |
+| 预算动作 mask 修复分支 | `fix/comm-budget-action-mask` | 起点即上行文档提交，未回退生产代码 |
+| 预算动作 mask 修复交付头 | 见 `COMM_BUDGET_ACTION_MASK_RESULTS.json` 的 `head` | M0–M3 全过；生产改动仅 comm.py / comm_policy.py 与新测试；690 集成测试通过 |
 
 ### 5.2 通信先导结果应如何解读
 
@@ -787,6 +824,31 @@ CI [+0.685, +0.995]），在正常信息路径上完成数差 0.000 而 total by
 ### 当前可直接粘贴到新聊天的说明
 
 ```text
+先读 PROJECT_CHARTER.md v3.0 §1 与 runs/comm_budget_action_mask_fix_20260922/ 的
+COMM_BUDGET_ACTION_MASK_RESULTS.md（M0–M3 全过），并核对实际分支 fix/comm-budget-action-mask。
+
+本轮已完成的是训练正确性修复：预算不足的 SEND 不再被采样、不再进 actor likelihood/entropy；
+约束以"采样前 + 按 relay 实际执行顺序 + 从观测剩余额度起算的 shadow credit"实现，
+全 mask step 仍保留 critic 样本，relay 硬门保留，未采用事后删样本。
+SendItem 的 attempt_charge_bytes / send_executable / send_block_reason 由 _emit 同一条代码路径算出，
+只进契约与 tape，feature /1=19、/2=23 维不变，生产默认值不变。
+
+引用口径：8 条既有流、固定初值、29 300 B、policy_owned_timing、0 optimizer.step：
+20 655 候选中"作为下一次发送可付"197 个，走完本步顺序后真双动作 181 个（顺序自身再消 16 个），
+请求 86 次 = 实际发射 86 次，执行端 budget/capacity 拒付 0；logged vs recomputed log-prob 差 0.0（≤1e−6）。
+actionable 占比 0.88 % —— 可学习样本极少这一点，修复前被"候选数"掩盖。
+
+边界：本轮 0 训练、0 新流、0 optimizer.step、H=20 spillover 仍冻结、8 次启动配额已用满。
+旧 400k checkpoint 只可前向读，不得恢复 optimizer 续训；非 mask 的旧训练结果仍是已知缺陷产物，
+不能当修复后基线。下一步若谈学习效果，必须是"从初值重开"的新协议，且先重新定义真实双动作样本数、
+训练上限与强规则对照 —— 需使用者另行下令，不自动启动。
+800000..800399 继续封存；900000..900199 只作既有证据。非本轮创建的 architecture/、
+dev_summary.json 与另几轮的未跟踪文件不改、不删、不提交。
+```
+
+### v2.9 历史交接说明（已被上方取代，勿直接用于执行）
+
+```text
 先读 PROJECT_CHARTER.md v2.9 与 COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md，
 核对起点 analysis/comm-h20-terminal-attribution@b2061ae，并从该起点建立
 fix/comm-budget-action-mask。不要直接在分析分支上修改。
@@ -803,8 +865,6 @@ fix/comm-budget-action-mask。不要直接在分析分支上修改。
 
 上一轮 H=20 归因及 target-scoped 结果保持原样，勿重写实验提交。
 用户后续明确决定优先于总纲；有范围变化时同步更新总纲和变更记录。
-```
-
 ### v2.8 历史交接说明（已被上方说明取代）
 
 v2.8 的 H=20 终态归因与预算动作路径结论保留在 Git 历史及
@@ -928,6 +988,7 @@ learnability calibration；本轮不是"继续改场景直到模型获胜"的授
 
 | 日期 | 版本 | 变更 |
 |---|---|---|
+| 2026-09-22 | v3.0 | 预算可执行动作的采样前顺序 hard mask **已执行**（`fix/comm-budget-action-mask`，`runs/comm_budget_action_mask_fix_20260922/`）：契约三字段与 `_emit` 同源定价；shadow credit 从观测剩余额度起算并按真实发射顺序推进，付不起的候选固定 HOLD 且 likelihood/entropy=0，全 mask step 保留 critic 样本，禁止事后删样本；tape 的 actionable 与 free 同义故第五轮 PPO 循环原样复用；8 流 20 655 候选 → 真双动作 181（顺序再消 16）、请求 86 = 执行 86、policy 拒付 0、log-prob 差 0.0 ≤ 1e−6；`budget_mask=False` 委托回旧 collector、feature 19/23 维与默认值不变；新 trainer tag 与 resume schema 隔离旧 checkpoint（只可前向读）。**0 训练、0 新流、0 optimizer.step、H=20 仍冻结**；M0–M3 全过 |
 | 2026-09-22 | v2.9 | 基于 `b2061ae` 规划预算动作采样正确性修复：增加同源精确费用契约；采样前按实际执行顺序维护 shadow budget/capacity；不可执行 SEND 固定 HOLD 且 actor 权重为 0，critic 样本保留；禁止 relay 拒绝后删样本；不改 feature 维度，旧 checkpoint 不续训；本轮仅实现、测试与最多 8 条既有流 smoke（0 optimizer step），H=20 spillover 继续冻结 |
 | 2026-09-22 | v2.8 | H=20 终态归因 + 预算动作路径审计**已交付**（0 新 episode/0 训练/0 新流/0 参数修改）：3 seed 成功 EARLY 后结局分歧（可讨论 spillover）；预算不进 action mask、非可执行 SEND 进训练、双动作自由训练侧 missing ⇒ **先修训练路径，不继续通信效果实验**；原始 target-scoped 结果不变 |
 | 2026-09-22 | v2.7 | target-scoped 边界可行性**已交付**：24/28 启动；T0/T1 过；T2 H=1 2/4、H=5 0/4、**H=20 3/4 过**（多为 `terminal_before_boundary`）⇒ 可建议 H=20 完整 episode（不自动执行）；短 H 因 `refused_credit` 未过，禁止免费 flush/提高预算 |

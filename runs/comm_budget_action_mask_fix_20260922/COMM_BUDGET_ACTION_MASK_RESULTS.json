@@ -1,0 +1,326 @@
+{
+ "all_gates_passed": true,
+ "branch": "fix/comm-budget-action-mask",
+ "brief": "COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md",
+ "charter_version": "v2.9",
+ "date": "2026-09-22",
+ "document": "COMM_BUDGET_ACTION_MASK_RESULTS",
+ "gates": {
+  "M0_production_and_history_isolation": {
+   "evidence": {
+    "changed_production_files": [
+     "integrated_sar/comm.py",
+     "integrated_sar/comm_policy.py",
+     "integrated_sar/tests/test_comm_budget_action_mask.py"
+    ],
+    "defaults": {
+     "comm_ack": false,
+     "comm_budget_bytes": null,
+     "comm_delivery_probability": 1.0,
+     "comm_max_wait_steps": null,
+     "comm_policy": "immediate",
+     "comm_timing_mode": "legacy_shared_bound",
+     "comm_urgent_wait_steps": null,
+     "task_membership_consistency": false
+    },
+    "feature_layout": "19 (/1) and 23 (/2) unchanged, asserted in both suites",
+    "full_suite": {
+     "directory": "integrated_sar\\tests",
+     "failures_or_errors": false,
+     "passed": true,
+     "pattern": "test_*.py",
+     "ran": 690,
+     "skipped": 2,
+     "tail": "actor_type:discrete"
+    },
+    "mask_off_isolation": "budget_mask=False delegates to the archived collector, tape schema included (test_budget_action_mask.LegacyIsolationTests)",
+    "other_production_paths_changed": []
+   },
+   "passed": true
+  },
+  "M1_action_execution_agreement": {
+   "evidence": {
+    "collector_suite": {
+     "directory": "runs\\comm_budget_action_mask_fix_20260922",
+     "failures_or_errors": false,
+     "passed": true,
+     "pattern": "test_*.py",
+     "ran": 16,
+     "skipped": 0,
+     "tail": "OK"
+    },
+    "executed_policy_emissions": 86,
+    "policy_refusals": 0,
+    "requested_by_policy": 86,
+    "sequential_effect": {
+     "actionable_after_walking_the_order": 181,
+     "candidates_executable_before_the_step": 197,
+     "removed_by_order_dependent_credit": 16
+    },
+    "smoke_closure": {
+     "all_policy_refusals_zero": true,
+     "all_requested_equal_executed": true,
+     "all_tape_invariants_pass": true,
+     "max_log_prob_gap": 0.0,
+     "optimizer_steps_total": 0
+    }
+   },
+   "passed": true
+  },
+  "M2_ppo_probability_agreement": {
+   "evidence": {
+    "critic_samples_kept": "flatten keeps the row; asserted in ProbabilityTests",
+    "flipped_actionable_set_detected": "test_the_check_fails_when_the_actionable_set_is_a_lie",
+    "masked_terms": "actor log-prob and entropy are 0 on a fully masked step, tested",
+    "max_abs_log_prob_gap": 0.0,
+    "post_hoc_sample_filtering": "not used; the mask is applied before the draw",
+    "tolerance": 1e-06
+   },
+   "passed": true
+  },
+  "M3_smoke_closure": {
+   "evidence": {
+    "episodes_run": 8,
+    "launch_cap": 8,
+    "launches": 8,
+    "mixed_run_signatures": {
+     "action_mask_schema": "budget-sequential-mask/1",
+     "budget_bytes": 29300,
+     "episodes_per_stream": 1,
+     "initial_weight_seed": 20260922,
+     "launch_cap": 8,
+     "optimizer_steps": 0,
+     "streams": [
+      700010,
+      700018,
+      700020,
+      700022,
+      700031,
+      700033,
+      700042,
+      700046
+     ],
+     "tape_schema": "onpolicy-tape/2",
+     "timing_mode": "policy_owned_timing",
+     "trainer_tag": "onpolicy-v3-budget-mask"
+    },
+    "optimizer_steps_total": 0,
+    "sealed_block": {
+     "artefacts_found": [],
+     "block": "800000..800399",
+     "clean": true,
+     "count": 0
+    },
+    "tape_invariants": "all rows pass the actionable + forced + masked = candidates identity",
+    "technical_failures": [],
+    "weights": {
+     "distinct_initial_fingerprints": 8,
+     "trained_weights_loaded": 0
+    }
+   },
+   "passed": true
+  }
+ },
+ "head": "019ee67dde834c38b712ae9ed98c5b616b55e54e",
+ "not_authorised_by_this_round": [
+  "training of any kind",
+  "resuming the H=20 spillover experiment",
+  "adding attempt_charge_fraction to the network input"
+ ],
+ "per_stream": [
+  {
+   "actionable_candidates": 14,
+   "candidates": 2132,
+   "credit_spent_bytes": 26928,
+   "executed_policy_emissions": 10,
+   "initial_executable_candidates": 17,
+   "masked_by_capacity": 0,
+   "masked_by_credit": 2118,
+   "policy_budget_refusals": 0,
+   "policy_capacity_refusals": 0,
+   "requested_by_policy": 10,
+   "sampled_send": 10,
+   "seed": 700010,
+   "tapes": 1000,
+   "weight_fingerprint": "4c95c751c8b453d5"
+  },
+  {
+   "actionable_candidates": 18,
+   "candidates": 1136,
+   "credit_spent_bytes": 27114,
+   "executed_policy_emissions": 11,
+   "initial_executable_candidates": 19,
+   "masked_by_capacity": 0,
+   "masked_by_credit": 1118,
+   "policy_budget_refusals": 0,
+   "policy_capacity_refusals": 0,
+   "requested_by_policy": 11,
+   "sampled_send": 11,
+   "seed": 700018,
+   "tapes": 1000,
+   "weight_fingerprint": "ebccd9e0183b632b"
+  },
+  {
+   "actionable_candidates": 25,
+   "candidates": 3052,
+   "credit_spent_bytes": 27780,
+   "executed_policy_emissions": 11,
+   "initial_executable_candidates": 29,
+   "masked_by_capacity": 0,
+   "masked_by_credit": 3027,
+   "policy_budget_refusals": 0,
+   "policy_capacity_refusals": 0,
+   "requested_by_policy": 11,
+   "sampled_send": 11,
+   "seed": 700020,
+   "tapes": 1000,
+   "weight_fingerprint": "e1d6f24871b154eb"
+  },
+  {
+   "actionable_candidates": 23,
+   "candidates": 2674,
+   "credit_spent_bytes": 28080,
+   "executed_policy_emissions": 11,
+   "initial_executable_candidates": 26,
+   "masked_by_capacity": 0,
+   "masked_by_credit": 2651,
+   "policy_budget_refusals": 0,
+   "policy_capacity_refusals": 0,
+   "requested_by_policy": 11,
+   "sampled_send": 11,
+   "seed": 700022,
+   "tapes": 1000,
+   "weight_fingerprint": "7fa52b6bde020d73"
+  },
+  {
+   "actionable_candidates": 20,
+   "candidates": 2166,
+   "credit_spent_bytes": 28608,
+   "executed_policy_emissions": 11,
+   "initial_executable_candidates": 22,
+   "masked_by_capacity": 0,
+   "masked_by_credit": 2146,
+   "policy_budget_refusals": 0,
+   "policy_capacity_refusals": 0,
+   "requested_by_policy": 11,
+   "sampled_send": 11,
+   "seed": 700031,
+   "tapes": 1000,
+   "weight_fingerprint": "1d3817cf2df8cc3a"
+  },
+  {
+   "actionable_candidates": 32,
+   "candidates": 3686,
+   "credit_spent_bytes": 27192,
+   "executed_policy_emissions": 10,
+   "initial_executable_candidates": 33,
+   "masked_by_capacity": 0,
+   "masked_by_credit": 3654,
+   "policy_budget_refusals": 0,
+   "policy_capacity_refusals": 0,
+   "requested_by_policy": 10,
+   "sampled_send": 10,
+   "seed": 700033,
+   "tapes": 1000,
+   "weight_fingerprint": "73307ebdcc12ba17"
+  },
+  {
+   "actionable_candidates": 17,
+   "candidates": 3726,
+   "credit_spent_bytes": 29280,
+   "executed_policy_emissions": 11,
+   "initial_executable_candidates": 17,
+   "masked_by_capacity": 0,
+   "masked_by_credit": 3709,
+   "policy_budget_refusals": 0,
+   "policy_capacity_refusals": 0,
+   "requested_by_policy": 11,
+   "sampled_send": 11,
+   "seed": 700042,
+   "tapes": 1000,
+   "weight_fingerprint": "ec2ee7458cdbbd1f"
+  },
+  {
+   "actionable_candidates": 32,
+   "candidates": 2083,
+   "credit_spent_bytes": 29220,
+   "executed_policy_emissions": 11,
+   "initial_executable_candidates": 34,
+   "masked_by_capacity": 0,
+   "masked_by_credit": 2051,
+   "policy_budget_refusals": 0,
+   "policy_capacity_refusals": 0,
+   "requested_by_policy": 11,
+   "sampled_send": 11,
+   "seed": 700046,
+   "tapes": 1000,
+   "weight_fingerprint": "cab18bab0007ddd8"
+  }
+ ],
+ "protocol": "COMM_BUDGET_ACTION_MASK_PROTOCOL.md",
+ "reading_limits": [
+  "smoke runs fixed initial weights for one episode per stream: it measures the action set, not task performance, and does not rank policies",
+  "the actionable counts are not comparable to the send-actionability audit's 101 both-actions-free points: that audit replayed a rule policy and counted every offered row, while this smoke runs a fixed initial controller that requests nearly every affordable send, so the credit empties sooner",
+  "no trained checkpoint was resumed, and none was created",
+  "fixing the action space does not by itself say learning will beat the rules; the next question is a fresh run from initial weights, which needs its own authorisation"
+ ],
+ "suites": [
+  {
+   "directory": "integrated_sar\\tests",
+   "failures_or_errors": false,
+   "passed": true,
+   "pattern": "test_comm_budget_action_mask.py",
+   "ran": 14,
+   "skipped": 0,
+   "tail": "OK"
+  },
+  {
+   "directory": "integrated_sar\\tests",
+   "failures_or_errors": false,
+   "passed": true,
+   "pattern": "test_*.py",
+   "ran": 690,
+   "skipped": 2,
+   "tail": "actor_type:discrete"
+  },
+  {
+   "directory": "runs\\comm_budget_action_mask_fix_20260922",
+   "failures_or_errors": false,
+   "passed": true,
+   "pattern": "test_*.py",
+   "ran": 16,
+   "skipped": 0,
+   "tail": "OK"
+  }
+ ],
+ "this_round_measured": {
+  "environment_steps_of_smoke": 8000,
+  "episodes": 8,
+  "h20_spillover_episodes": 0,
+  "new_streams_recorded": 0,
+  "optimizer_steps": 0,
+  "training_runs": 0
+ },
+ "totals": {
+  "actionable_candidates": 181,
+  "candidates": 20655,
+  "executed_emissions": 86,
+  "executed_policy_emissions": 86,
+  "forced_emissions": 0,
+  "initial_executable_candidates": 197,
+  "masked_by_capacity": 0,
+  "masked_by_credit": 20474,
+  "policy_budget_refusals": 0,
+  "policy_capacity_refusals": 0,
+  "requested_by_policy": 86,
+  "terminal_suppressed": 0
+ },
+ "trainer_identity": {
+  "action_mask_schema": "budget-sequential-mask/1",
+  "candidate_order": "relay._observation order (sorted target ids), which is also the order the transport emits the policy's selection in",
+  "collector": "budget-masked-onpolicy",
+  "feature_layout_unchanged": true,
+  "tape_schema": "onpolicy-tape/2",
+  "trainer_tag": "onpolicy-v3-budget-mask"
+ }
+}

@@ -1,0 +1,179 @@
+{
+ "branch": "fix/comm-budget-action-mask",
+ "date": "2026-09-22",
+ "document": "COMM_BUDGET_ACTION_MASK_MANIFEST",
+ "executed_code": {
+  "dirty_modules": [
+   "integrated_sar/comm_transcript.py"
+  ],
+  "head": "019ee67dde834c38b712ae9ed98c5b616b55e54e",
+  "modules": {
+   "integrated_sar/comm.py": {
+    "head_blob": "c60471b29f4aea8f",
+    "matches_head": true,
+    "working_blob": "c60471b29f4aea8f"
+   },
+   "integrated_sar/comm_ack.py": {
+    "head_blob": "dbc4e4c9d39a77a0",
+    "matches_head": true,
+    "working_blob": "dbc4e4c9d39a77a0"
+   },
+   "integrated_sar/comm_budget.py": {
+    "head_blob": "64fe9cd5a2776a9b",
+    "matches_head": true,
+    "working_blob": "64fe9cd5a2776a9b"
+   },
+   "integrated_sar/comm_learning.py": {
+    "head_blob": "6dec7e8688e6ee7c",
+    "matches_head": true,
+    "working_blob": "6dec7e8688e6ee7c"
+   },
+   "integrated_sar/comm_policy.py": {
+    "head_blob": "b47f89702d5159c6",
+    "matches_head": true,
+    "working_blob": "b47f89702d5159c6"
+   },
+   "integrated_sar/comm_transcript.py": {
+    "head_blob": "HEAD:integrated_",
+    "matches_head": false,
+    "working_blob": null
+   }
+  },
+  "round_scripts": {
+   "runs/comm_budget_action_mask_fix_20260922/COMM_BUDGET_ACTION_MASK_PROTOCOL.md": {
+    "head_blob": "2d5248bb51a29702",
+    "matches_head": true,
+    "working_blob": "2d5248bb51a29702"
+   },
+   "runs/comm_budget_action_mask_fix_20260922/COMM_BUDGET_ACTION_MASK_SMOKE.json": {
+    "head_blob": "HEAD:runs/comm_b",
+    "matches_head": false,
+    "working_blob": "d9d60a493e474d7b"
+   },
+   "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": {
+    "head_blob": "9b8cc189c67da404",
+    "matches_head": true,
+    "working_blob": "9b8cc189c67da404"
+   },
+   "runs/comm_budget_action_mask_fix_20260922/mask_manifest.py": {
+    "head_blob": "HEAD:runs/comm_b",
+    "matches_head": false,
+    "working_blob": "346b461f7847a2e4"
+   },
+   "runs/comm_budget_action_mask_fix_20260922/report_mask.py": {
+    "head_blob": "HEAD:runs/comm_b",
+    "matches_head": false,
+    "working_blob": "7fb549dab02a84c4"
+   },
+   "runs/comm_budget_action_mask_fix_20260922/smoke_budget_mask.py": {
+    "head_blob": "HEAD:runs/comm_b",
+    "matches_head": false,
+    "working_blob": "f2552733a5ac5502"
+   },
+   "runs/comm_budget_action_mask_fix_20260922/test_budget_action_mask.py": {
+    "head_blob": "171732d52c1d2e47",
+    "matches_head": true,
+    "working_blob": "171732d52c1d2e47"
+   },
+   "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": {
+    "head_blob": "4b7146ff82eafc8f",
+    "matches_head": true,
+    "working_blob": "4b7146ff82eafc8f"
+   }
+  }
+ },
+ "head": "019ee67dde834c38b712ae9ed98c5b616b55e54e",
+ "not_committed": [
+  "checkpoints (.pt)",
+  "recorded streams",
+  "per-episode lifecycle/decision/transcript logs",
+  "other sessions' untracked files"
+ ],
+ "production_defaults": {
+  "comm_ack": false,
+  "comm_budget_bytes": null,
+  "comm_delivery_probability": 1.0,
+  "comm_max_wait_steps": null,
+  "comm_policy": "immediate",
+  "comm_timing_mode": "legacy_shared_bound",
+  "comm_urgent_wait_steps": null,
+  "task_membership_consistency": false
+ },
+ "production_diff": {
+  "changed_production_files": [
+   "integrated_sar/comm.py",
+   "integrated_sar/comm_policy.py",
+   "integrated_sar/tests/test_comm_budget_action_mask.py"
+  ],
+  "empty_outside_the_contract": true,
+  "other_production_paths_changed": [],
+  "start_commit": "31da5f7c36ed95b95d6752624bcbebd9f16221e6"
+ },
+ "round_files": [
+  {
+   "bytes": 11798,
+   "file": "COMM_BUDGET_ACTION_MASK_PROTOCOL.md"
+  },
+  {
+   "bytes": 17361,
+   "file": "COMM_BUDGET_ACTION_MASK_SMOKE.json"
+  },
+  {
+   "bytes": 17085,
+   "file": "budget_masked.py"
+  },
+  {
+   "bytes": 7688,
+   "file": "mask_manifest.py"
+  },
+  {
+   "bytes": 19994,
+   "file": "report_mask.py"
+  },
+  {
+   "bytes": 9644,
+   "file": "smoke_budget_mask.py"
+  },
+  {
+   "bytes": 20946,
+   "file": "test_budget_action_mask.py"
+  },
+  {
+   "bytes": 10946,
+   "file": "train_budget_masked.py"
+  }
+ ],
+ "sealed_block": {
+  "artefacts_found": [],
+  "block": "800000..800399",
+  "clean": true,
+  "count": 0
+ },
+ "streams": {
+  "consumed_block_not_reused_as_test": "900000..900199",
+  "episode_artefact_bytes_on_disk": 22032869,
+  "episode_artefacts_in_git": false,
+  "launch_cap": 8,
+  "launch_starts": 8,
+  "new_streams_recorded": 0,
+  "streams_used": [
+   700010,
+   700018,
+   700020,
+   700022,
+   700031,
+   700033,
+   700042,
+   700046
+  ],
+  "technical_failures": []
+ },
+ "trainer_identity": {
+  "action_mask_schema": "budget-sequential-mask/1",
+  "candidate_order": "relay._observation order (sorted target ids), which is also the order the transport emits the policy's selection in",
+  "collector": "budget-masked-onpolicy",
+  "feature_layout_unchanged": true,
+  "tape_schema": "onpolicy-tape/2",
+  "trainer_tag": "onpolicy-v3-budget-mask"
+ }
+}
