@@ -1,8 +1,10 @@
 # Zhenghe：搜索—协调—分配一体化搜救系统
 
-当前研究入口：[预算 mask 修复后的从初值重训计划](COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md)
-与 [项目总纲 v3.1](PROJECT_CHARTER.md)。采样前顺序 mask 已通过 M0–M3；下一轮先闭合执行代码 provenance，
-再在 29,300 B 主设置训练 3 seed × 400k。旧 checkpoint 禁止续训；最终封存块与 H=20 继续冻结。
+当前研究入口：[预算 mask 修复后的从初值重训](COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md)（**已执行完毕**）
+与 [项目总纲 v3.2](PROJECT_CHARTER.md)。在修复后的动作空间下，seed 1/2/3 各从随机初值训练 400k 环境步
+（总 1.2M）：正确性 0 违规、可学习样本 20.1–96.0 个/episode，但 400k 对 `send_once` 的三条区间都在劣侧，
+**主效果 0/3、非劣降本 0/3**——证据见 `runs/comm_budget_masked_retrain_20260922/`。
+旧 checkpoint 仍禁止续训；最终封存块与 H=20、第二预算、ACK、扩维继续冻结。
 
 本仓库整合两个已有研究模块：
 
@@ -288,7 +290,8 @@ checkpoint、录制流、逐 episode 日志与转录**不入 Git**，只在 mani
 | **ACK 信息价值门禁** | `runs/comm_ack_value_20260920/` | `COMM_ACK_CONTRACT.md`（反向信道合同）、`COMM_ACK_VALUE_GATE.md`/`.json`（四项门禁：1/2/4 过、3 未过 ⇒ 未训练）、`COMM_ACK_MANIFEST.json` |
 | **S3 收尾与规则独立确认** | `runs/comm_rule_confirm_20260921/` | `COMM_RULE_CONFIRMATION_PROTOCOL.md`（判据先于数据）、`COMM_RULE_BLOCK_AUDIT.json`（`900000..900199` 与全项目四源零重叠）、`COMM_RULE_CONFIRMATION_RESULTS.md`（3 000 episode：隔离有损 +0.835 个/ep 而 total +26 354 B、正常路径被支配）、`COMMUNICATION_LEARNING_VERDICT.md`（S3 学习结论冻结为范围准确的负结果，研究先导关闭）、`COMM_RULE_CONFIRMATION_MANIFEST.json` |
 | **H=20 终态归因 + 动作路径审计** | `runs/comm_h20_terminal_attribution_20260922/` | `COMM_H20_TERMINAL_ATTRIBUTION.md/.json`（3 seed 成功 EARLY 后结局分歧；1 对 `boundary_refused`）、`COMM_POLICY_ACTION_MASK_AUDIT.md/.json`（预算不进 mask；非可执行 SEND 进训练；双动作自由训练侧 **missing**）、`analyze_h20_terminal.py`；**0 新 episode / 0 训练** |
-| **预算动作 mask 修复（最新）** | `runs/comm_budget_action_mask_fix_20260922/` | `COMM_BUDGET_ACTION_MASK_PROTOCOL.md`（先于 episode 冻结）、`COMM_BUDGET_ACTION_MASK_RESULTS.md/.json`（M0–M3 全过：8 流 20 655 候选→真双动作 181、请求 86=执行 86、policy 拒付 0、log-prob 差 0.0）、`budget_masked.py`/`train_budget_masked.py`（采样前顺序 hard mask，tape actionable=free 故复用旧 PPO 循环）、`test_budget_action_mask.py`（16 项真实接缝）、`LAUNCH_LEDGER.json`（8/8 启动配额） |
+| **修复后从初值重训（最新）** | `runs/comm_budget_masked_retrain_20260922/` | `COMM_BUDGET_MASK_PROVENANCE_CORRECTION.md/.json`（幽灵模块 `comm_transcript.py` 的成因与两个头的分离）、`COMM_BUDGET_MASKED_RETRAIN_PROTOCOL.md`（判据先于第一个训练 episode 冻结）、`CODE_FREEZE.json`（54 模块执行图，逐次启动重校验）、`PREFLIGHT.json`/`THROUGHPUT.json`/`RESUME_CHECK.json`（12 探针 + 8 集确定性恢复 + greedy 通路，0 optimizer.step）、`COMM_BUDGET_MASKED_RETRAIN_RESULTS.md/.json`（3 seed × 400k：正确性 0 违规、actionable 20,110/8,020/38,404，主效果 0/3 与非劣降本 0/3）、`RULE_REPLAY_AGREEMENT.json`（`send_once` 与归档逐包 0 差异）、`LAUNCH_LEDGER*.json`（1,489/1,500，逐进程账本）；checkpoint 与逐集日志不入库 |
+| 预算动作 mask 修复 | `runs/comm_budget_action_mask_fix_20260922/` | `COMM_BUDGET_ACTION_MASK_PROTOCOL.md`（先于 episode 冻结）、`COMM_BUDGET_ACTION_MASK_RESULTS.md/.json`（M0–M3 全过：8 流 20 655 候选→真双动作 181、请求 86=执行 86、policy 拒付 0、log-prob 差 0.0）、`budget_masked.py`/`train_budget_masked.py`（采样前顺序 hard mask，tape actionable=free 故复用旧 PPO 循环）、`test_budget_action_mask.py`（16 项真实接缝）、`LAUNCH_LEDGER.json`（8/8 启动配额）；**其 manifest 的模块清单误列不存在的 `comm_transcript.py`，由下一轮更正件说明** |
 | target-scoped 边界可行性 | `runs/comm_target_scoped_feasibility_20260922/` | `COMM_TARGET_SCOPED_PROTOCOL.md`、`TARGET_POINTS_INITIAL.json`、`COMM_TARGET_SCOPED_BOUNDARY_RESULTS.md/.json`、`COMM_TARGET_SCOPED_INTERFACE_CHECK.json`、`COMM_TARGET_SCOPED_MANIFEST.json`；24/28 启动；T0/T1 过；T2 仅 H=20 3/4 过 |
 | 动作可行性审计 | `runs/comm_send_actionability_20260922/` | `COMM_SEND_ACTIONABILITY_PROTOCOL.md`、`COMM_SEND_ACTIONABILITY_ROWS.json`、`COMM_SEND_ACTIONABILITY_RESULTS.md/.json`、`COMM_SEND_ACTIONABILITY_POINTS.json`、`COMM_SEND_ACTIONABILITY_MANIFEST.json`；23 612 候选，both_actions_free 101/8 流，主阻塞预算；**A/B 过、C 不过** |
 | 多步诊断 Stage1 | `runs/comm_multistep_stage1_20260922/` | `COMM_MULTISTEP_PROTOCOL.md`（修订协议）、`FROZEN_CONFIG.json`（`event_retry_until_acked_5`）、`POINTS_INITIAL.json`/`POINTS.json`、`COMM_MULTISTEP_RESULTS.md/.json`、`COMM_MULTISTEP_VERDICT.md`、`DIAGNOSTIC_TEXT_FIXES.md`、`COMM_MULTISTEP_MANIFEST.json`；40/40 启动（8 free + 28 成功分支 + 4 失败保留），7/8 点完整；所有 S 强发均因 insufficient_credit 被拒 ⇒ 无有效 S−H 对照 |

@@ -1,6 +1,38 @@
 # 项目状态
 
-## 2026-09-22：预算 mask 修复后从初值重训已规划，尚未执行
+## 2026-09-22：修复动作空间后的从初值重训已执行，两条预登记门槛均未通过（3 seed × 400k）
+
+执行入口 [COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md](COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md) **已执行完毕**；
+分支 `exp/comm-budget-masked-retrain`（起点文档提交 `23160f3`），产物在
+`runs/comm_budget_masked_retrain_20260922/`（provenance 更正件、协议、PREFLIGHT/THROUGHPUT/RESUME_CHECK、
+CODE_FREEZE、逐臂账本、结果与 manifest）。
+
+做对的部分：**先闭合身份再花 checkpoint**——上轮 manifest 把从不存在的 `integrated_sar/comm_transcript.py`
+列为执行模块并显示"脏"，成因是 `git rev-parse HEAD:<缺失路径>` 回显参数而非报错；builder 改为由 import
+派生、缺失先用 `git cat-file -e` 判定，证据头 `7f9929c` 与只追加只读测试的交付头 `e692607` 分开表述。
+执行代码冻结为 54 模块的 SHA，每次启动重新派生图并检查 HEAD/工作区/未跟踪/新增模块四件事；
+报告自己发现"延迟 import 的统计模块不在冻结图里"时如实报 clean=False，修的是图不是规则。
+
+训练事实：seed 1/2/3 各从 `Controller(seed)` 随机初值起 400k 环境步（总 1.2M），4 episode/update，
+0/100k/200k/300k/400k checkpoint，400k 末轮是唯一主判据，旧 checkpoint 零加载。正确性 0 违规：
+请求发射 = 实际执行（4,434 / 4,448 / 4,222）、policy 端拒付 0、代发 0、NaN/Inf 0、
+logged/recomputed log-prob 记录差 ≤1e−6、每集 1,000 步、deterministic save/resume 逐项完全相等、
+生产代码自 `e692607` 起零改动。可学习样本按绝对量报：actionable/actor 项 20,110 / 8,020 / 38,404，
+即 20.1–96.0 个/episode、零可执行 episode 为 0——"0.88 % 太少所以学不动"这一读法被实测否证。
+
+结果：24 条开发流上 400k 对 `send_once` 的完成差 −0.7083 [−0.9583, −0.4583]、−2.0000
+[−2.5000, −1.5000]、−0.1250 [−0.3750, +0.0000] 个/episode，字节差 +13,318 / +13,368 / +3.8 B/episode；
+**主效果 0/3、非劣降本 0/3**。三臂都显著优于自身 0 步初值（+2.125 / +0.833 / +2.708），只作机制证据。
+`send_once` 重放与归档在任务结果、字节、发射数与**发射序列**上逐流 0 差异（`config_hash` 的 24 处差异
+已按机制解释：该哈希仍计入 `comm_transcript` 路径，换目录必然不同）。
+
+本轮不追加：加训练量、改特征/观测、换预算、加 ACK、恢复 H=20 均未授权也未执行；
+`800000..800399` 盘上 artefact 仍为 0，`900000..900199` 未进入本轮。启动 1,489/1,500，
+其中门禁类 43 次是三遍 preflight 的累计（第一遍崩在本轮自己的 JSON 读取上、第二遍因改树而作废，
+两遍都如实判不过），并行训练曾发生逐进程账本的 Windows 文件锁竞争并据此改为串行。
+下一步只能是新假设（非平稳信道或任务压力 + 无模型 learnability calibration），由使用者决定。
+
+## 2026-09-22：预算 mask 修复后从初值重训已规划（**已执行，见上一条**）
 
 当前入口 [COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md](COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md)，
 总纲 v3.1，起点 `fix/comm-budget-action-mask@e692607`。
