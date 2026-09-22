@@ -760,6 +760,23 @@ CI [+0.685, +0.995]），在正常信息路径上完成数差 0.000 而 total by
 ### 当前可直接粘贴到新聊天的说明
 
 ```text
+先读 PROJECT_CHARTER.md v2.7 与 runs/comm_target_scoped_feasibility_20260922/ 的
+COMM_TARGET_SCOPED_BOUNDARY_RESULTS.md、COMM_TARGET_SCOPED_INTERFACE_CHECK.json、
+COMM_TARGET_SCOPED_MANIFEST.json，并核对实际分支 analysis/comm-target-scoped-feasibility。
+
+target-scoped 边界可行性已交付：24/28 启动；T0/T1 过；T2 仅 H=20 通过（3/4 pair）。
+H=20 可解析性主要来自 terminal_before_boundary（吸收），不等于边界 flush 普遍可支付；
+H=1/5 因 refused_credit 未过，禁止免费 flush、提高预算或改成窗口末不发送。
+可建议以后对 H=20 跑完整 target-scoped episode，本轮不执行。
+
+COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md 已标为历史，勿再次执行该矩阵。
+下一步（H=20 完整 episode 或 credit reservation）须使用者下令。
+用户后续明确决定优先于总纲；有范围变化时同步更新总纲和变更记录。
+```
+
+### v2.6 历史交接说明（已被上方说明取代，勿直接用于执行）
+
+```text
 先读 PROJECT_CHARTER.md v2.6 与 COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md，
 核对起点 analysis/comm-send-actionability-audit@c6698f9。
 
