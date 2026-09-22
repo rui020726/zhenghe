@@ -1,0 +1,1600 @@
+{
+  "T0": {
+    "passed": true,
+    "synthetic_tests": "runs/comm_target_scoped_feasibility_20260922/test_target_window.py"
+  },
+  "T1": {
+    "criterion": "all four EARLY t* sends actually succeeded",
+    "passed": true,
+    "rows": [
+      {
+        "detail": "ok",
+        "seed": 700010,
+        "start_send_ok": true
+      },
+      {
+        "detail": "ok",
+        "seed": 700018,
+        "start_send_ok": true
+      },
+      {
+        "detail": "ok",
+        "seed": 700020,
+        "start_send_ok": true
+      },
+      {
+        "detail": "ok",
+        "seed": 700022,
+        "start_send_ok": true
+      }
+    ]
+  },
+  "T2_by_horizon": {
+    "1": {
+      "no_implementation_error": true,
+      "passed": false,
+      "resolved_pairs": 2,
+      "threshold": "3/4",
+      "total_pairs": 4
+    },
+    "20": {
+      "no_implementation_error": true,
+      "passed": true,
+      "resolved_pairs": 3,
+      "threshold": "3/4",
+      "total_pairs": 4
+    },
+    "5": {
+      "no_implementation_error": true,
+      "passed": false,
+      "resolved_pairs": 0,
+      "threshold": "3/4",
+      "total_pairs": 4
+    }
+  },
+  "launches": {
+    "cap": 28,
+    "entries": [
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "flushed_latest",
+        "horizon": 1,
+        "index": 1,
+        "kind": "smoke",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "flushed_latest",
+        "horizon": 1,
+        "index": 2,
+        "kind": "smoke",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 1,
+        "index": 3,
+        "kind": "smoke",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 1,
+        "index": 4,
+        "kind": "smoke",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 5,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 6,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "terminal_before_boundary",
+        "horizon": 20,
+        "index": 7,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "terminal_before_boundary",
+        "horizon": 20,
+        "index": 8,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 9,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 10,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "terminal_before_boundary",
+        "horizon": 20,
+        "index": 11,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "terminal_before_boundary",
+        "horizon": 20,
+        "index": 12,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 1,
+        "index": 13,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "flushed_latest",
+        "horizon": 1,
+        "index": 14,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 15,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 16,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 20,
+        "index": 17,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 20,
+        "index": 18,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "flushed_latest",
+        "horizon": 1,
+        "index": 19,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700022
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "flushed_latest",
+        "horizon": 1,
+        "index": 20,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700022
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 21,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700022
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 22,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700022
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "terminal_before_boundary",
+        "horizon": 20,
+        "index": 23,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700022
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "terminal_before_boundary",
+        "horizon": 20,
+        "index": 24,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700022
+      }
+    ],
+    "starts": 24
+  },
+  "pairs": {
+    "s700010_t3_H1": {
+      "branches": {
+        "DEFER_FLUSH": {
+          "boundary_status": "flushed_latest",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 2610,
+            "boundary_budget_after": 13460.0,
+            "boundary_budget_before": 16070.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[\"5\"],\"position\":[0.016949,0.016949],\"progress\":0.159381,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 435,
+            "boundary_revision": 4,
+            "boundary_status": "flushed_latest",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 48,
+            "forward_draws_at_fork": 24,
+            "horizon": 1,
+            "mode": "DEFER_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 4,
+            "policy_requests_blocked": 1,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 6153,
+              "ack_pending": 0,
+              "budget_remaining": 18932.0,
+              "budget_spent": 10368,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 24
+            },
+            "revisions_seen": [
+              1,
+              2,
+              4
+            ],
+            "start_fingerprint": null,
+            "start_revision": null,
+            "start_send_bytes": 0,
+            "start_send_ok": false,
+            "start_send_refused_reason": null,
+            "start_send_requested": false,
+            "steps_executed": 4,
+            "target": "piloc-e1-target-0",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        },
+        "EARLY_FLUSH": {
+          "boundary_status": "flushed_latest",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 2610,
+            "boundary_budget_after": 10844.0,
+            "boundary_budget_before": 13454.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[\"5\"],\"position\":[0.016949,0.016949],\"progress\":0.159381,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 435,
+            "boundary_revision": 4,
+            "boundary_status": "flushed_latest",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 48,
+            "forward_draws_at_fork": 24,
+            "horizon": 1,
+            "mode": "EARLY_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 4,
+            "policy_requests_blocked": 0,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 6153,
+              "ack_pending": 0,
+              "budget_remaining": 18932.0,
+              "budget_spent": 10368,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 24
+            },
+            "revisions_seen": [
+              1,
+              2,
+              3
+            ],
+            "start_fingerprint": "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[\"5\"],\"position\":[0.016949,0.016949],\"progress\":0.079691,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "start_revision": 3,
+            "start_send_bytes": 2616,
+            "start_send_ok": true,
+            "start_send_refused_reason": null,
+            "start_send_requested": true,
+            "steps_executed": 4,
+            "target": "piloc-e1-target-0",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        }
+      },
+      "horizon": 1,
+      "pair_resolved": true,
+      "seed": 700010,
+      "step": 3,
+      "target": "piloc-e1-target-0"
+    },
+    "s700010_t3_H20": {
+      "branches": {
+        "DEFER_FLUSH": {
+          "boundary_status": "terminal_before_boundary",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": null,
+            "boundary_attempt_bytes": null,
+            "boundary_budget_after": null,
+            "boundary_budget_before": null,
+            "boundary_fingerprint": null,
+            "boundary_payload_bytes": null,
+            "boundary_revision": null,
+            "boundary_status": "terminal_before_boundary",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 66,
+            "forward_draws_at_fork": 24,
+            "horizon": 20,
+            "mode": "DEFER_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 90,
+            "policy_requests_blocked": 17,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 6153,
+              "ack_pending": 0,
+              "budget_remaining": 18932.0,
+              "budget_spent": 10368,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 24
+            },
+            "revisions_seen": [
+              1,
+              2
+            ],
+            "start_fingerprint": null,
+            "start_revision": null,
+            "start_send_bytes": 0,
+            "start_send_ok": false,
+            "start_send_refused_reason": null,
+            "start_send_requested": false,
+            "steps_executed": 23,
+            "target": "piloc-e1-target-0",
+            "terminal_at": 23,
+            "terminal_before_boundary": true
+          }
+        },
+        "EARLY_FLUSH": {
+          "boundary_status": "terminal_before_boundary",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": null,
+            "boundary_attempt_bytes": null,
+            "boundary_budget_after": null,
+            "boundary_budget_before": null,
+            "boundary_fingerprint": null,
+            "boundary_payload_bytes": null,
+            "boundary_revision": null,
+            "boundary_status": "terminal_before_boundary",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 66,
+            "forward_draws_at_fork": 24,
+            "horizon": 20,
+            "mode": "EARLY_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 90,
+            "policy_requests_blocked": 14,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 6153,
+              "ack_pending": 0,
+              "budget_remaining": 18932.0,
+              "budget_spent": 10368,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 24
+            },
+            "revisions_seen": [
+              1,
+              2,
+              3
+            ],
+            "start_fingerprint": "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[\"5\"],\"position\":[0.016949,0.016949],\"progress\":0.079691,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "start_revision": 3,
+            "start_send_bytes": 2616,
+            "start_send_ok": true,
+            "start_send_refused_reason": null,
+            "start_send_requested": true,
+            "steps_executed": 23,
+            "target": "piloc-e1-target-0",
+            "terminal_at": 23,
+            "terminal_before_boundary": true
+          }
+        }
+      },
+      "horizon": 20,
+      "pair_resolved": true,
+      "seed": 700010,
+      "step": 3,
+      "target": "piloc-e1-target-0"
+    },
+    "s700010_t3_H5": {
+      "branches": {
+        "DEFER_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 2.0,
+            "boundary_budget_before": 2.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[\"5\"],\"position\":[0.016949,0.016949],\"progress\":0.478144,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 436,
+            "boundary_revision": 8,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 66,
+            "forward_draws_at_fork": 24,
+            "horizon": 5,
+            "mode": "DEFER_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 17,
+            "policy_requests_blocked": 5,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 6153,
+              "ack_pending": 0,
+              "budget_remaining": 18932.0,
+              "budget_spent": 10368,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 24
+            },
+            "revisions_seen": [
+              1,
+              2,
+              8
+            ],
+            "start_fingerprint": null,
+            "start_revision": null,
+            "start_send_bytes": 0,
+            "start_send_ok": false,
+            "start_send_refused_reason": null,
+            "start_send_requested": false,
+            "steps_executed": 8,
+            "target": "piloc-e1-target-0",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        },
+        "EARLY_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 62.0,
+            "boundary_budget_before": 62.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[\"5\"],\"position\":[0.016949,0.016949],\"progress\":0.478144,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 436,
+            "boundary_revision": 8,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 66,
+            "forward_draws_at_fork": 24,
+            "horizon": 5,
+            "mode": "EARLY_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 17,
+            "policy_requests_blocked": 2,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 6153,
+              "ack_pending": 0,
+              "budget_remaining": 18932.0,
+              "budget_spent": 10368,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 24
+            },
+            "revisions_seen": [
+              1,
+              2,
+              3,
+              8
+            ],
+            "start_fingerprint": "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[\"5\"],\"position\":[0.016949,0.016949],\"progress\":0.079691,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "start_revision": 3,
+            "start_send_bytes": 2616,
+            "start_send_ok": true,
+            "start_send_refused_reason": null,
+            "start_send_requested": true,
+            "steps_executed": 8,
+            "target": "piloc-e1-target-0",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        }
+      },
+      "horizon": 5,
+      "pair_resolved": false,
+      "seed": 700010,
+      "step": 3,
+      "target": "piloc-e1-target-0"
+    },
+    "s700018_t3_H1": {
+      "branches": {
+        "DEFER_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 2294.0,
+            "boundary_budget_before": 2294.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":64.590411,\"members\":[\"2\"],\"position\":[0.118644,0.067797],\"progress\":0.214685,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 400,
+            "boundary_revision": 4,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 66,
+            "forward_draws_at_fork": 54,
+            "horizon": 1,
+            "mode": "DEFER_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 14,
+            "policy_requests_blocked": 1,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 10821,
+              "ack_pending": 0,
+              "budget_remaining": 7532.0,
+              "budget_spent": 21768,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 54
+            },
+            "revisions_seen": [
+              1,
+              2,
+              4
+            ],
+            "start_fingerprint": null,
+            "start_revision": null,
+            "start_send_bytes": 0,
+            "start_send_ok": false,
+            "start_send_refused_reason": null,
+            "start_send_requested": false,
+            "steps_executed": 4,
+            "target": "piloc-e1-target-2",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        },
+        "EARLY_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 296.0,
+            "boundary_budget_before": 296.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":64.590411,\"members\":[\"2\"],\"position\":[0.118644,0.067797],\"progress\":0.214685,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 400,
+            "boundary_revision": 4,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 72,
+            "forward_draws_at_fork": 54,
+            "horizon": 1,
+            "mode": "EARLY_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 15,
+            "policy_requests_blocked": 0,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 10821,
+              "ack_pending": 0,
+              "budget_remaining": 7532.0,
+              "budget_spent": 21768,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 54
+            },
+            "revisions_seen": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "start_fingerprint": "{\"confidence\":1.0,\"deadline\":64.590411,\"members\":[\"2\"],\"position\":[0.118644,0.067797],\"progress\":0.107343,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "start_revision": 3,
+            "start_send_bytes": 2400,
+            "start_send_ok": true,
+            "start_send_refused_reason": null,
+            "start_send_requested": true,
+            "steps_executed": 4,
+            "target": "piloc-e1-target-2",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        }
+      },
+      "horizon": 1,
+      "pair_resolved": false,
+      "seed": 700018,
+      "step": 3,
+      "target": "piloc-e1-target-2"
+    },
+    "s700018_t3_H20": {
+      "branches": {
+        "DEFER_FLUSH": {
+          "boundary_status": "terminal_before_boundary",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": null,
+            "boundary_attempt_bytes": null,
+            "boundary_budget_after": null,
+            "boundary_budget_before": null,
+            "boundary_fingerprint": null,
+            "boundary_payload_bytes": null,
+            "boundary_revision": null,
+            "boundary_status": "terminal_before_boundary",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 72,
+            "forward_draws_at_fork": 54,
+            "horizon": 20,
+            "mode": "DEFER_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 93,
+            "policy_requests_blocked": 9,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 10821,
+              "ack_pending": 0,
+              "budget_remaining": 7532.0,
+              "budget_spent": 21768,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 54
+            },
+            "revisions_seen": [
+              1,
+              2
+            ],
+            "start_fingerprint": null,
+            "start_revision": null,
+            "start_send_bytes": 0,
+            "start_send_ok": false,
+            "start_send_refused_reason": null,
+            "start_send_requested": false,
+            "steps_executed": 23,
+            "target": "piloc-e1-target-2",
+            "terminal_at": 23,
+            "terminal_before_boundary": true
+          }
+        },
+        "EARLY_FLUSH": {
+          "boundary_status": "terminal_before_boundary",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": null,
+            "boundary_attempt_bytes": null,
+            "boundary_budget_after": null,
+            "boundary_budget_before": null,
+            "boundary_fingerprint": null,
+            "boundary_payload_bytes": null,
+            "boundary_revision": null,
+            "boundary_status": "terminal_before_boundary",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 72,
+            "forward_draws_at_fork": 54,
+            "horizon": 20,
+            "mode": "EARLY_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 94,
+            "policy_requests_blocked": 8,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 10821,
+              "ack_pending": 0,
+              "budget_remaining": 7532.0,
+              "budget_spent": 21768,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 54
+            },
+            "revisions_seen": [
+              1,
+              2,
+              3
+            ],
+            "start_fingerprint": "{\"confidence\":1.0,\"deadline\":64.590411,\"members\":[\"2\"],\"position\":[0.118644,0.067797],\"progress\":0.107343,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "start_revision": 3,
+            "start_send_bytes": 2400,
+            "start_send_ok": true,
+            "start_send_refused_reason": null,
+            "start_send_requested": true,
+            "steps_executed": 23,
+            "target": "piloc-e1-target-2",
+            "terminal_at": 23,
+            "terminal_before_boundary": true
+          }
+        }
+      },
+      "horizon": 20,
+      "pair_resolved": true,
+      "seed": 700018,
+      "step": 3,
+      "target": "piloc-e1-target-2"
+    },
+    "s700018_t3_H5": {
+      "branches": {
+        "DEFER_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 8.0,
+            "boundary_budget_before": 8.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":64.590411,\"members\":[\"2\"],\"position\":[0.118644,0.067797],\"progress\":0.644055,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 399,
+            "boundary_revision": 8,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 72,
+            "forward_draws_at_fork": 54,
+            "horizon": 5,
+            "mode": "DEFER_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 32,
+            "policy_requests_blocked": 5,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 10821,
+              "ack_pending": 0,
+              "budget_remaining": 7532.0,
+              "budget_spent": 21768,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 54
+            },
+            "revisions_seen": [
+              1,
+              2,
+              8
+            ],
+            "start_fingerprint": null,
+            "start_revision": null,
+            "start_send_bytes": 0,
+            "start_send_ok": false,
+            "start_send_refused_reason": null,
+            "start_send_requested": false,
+            "steps_executed": 8,
+            "target": "piloc-e1-target-2",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        },
+        "EARLY_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 296.0,
+            "boundary_budget_before": 296.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":64.590411,\"members\":[\"2\"],\"position\":[0.118644,0.067797],\"progress\":0.644055,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 399,
+            "boundary_revision": 8,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 72,
+            "forward_draws_at_fork": 54,
+            "horizon": 5,
+            "mode": "EARLY_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 33,
+            "policy_requests_blocked": 4,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 10821,
+              "ack_pending": 0,
+              "budget_remaining": 7532.0,
+              "budget_spent": 21768,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 54
+            },
+            "revisions_seen": [
+              1,
+              2,
+              3,
+              8
+            ],
+            "start_fingerprint": "{\"confidence\":1.0,\"deadline\":64.590411,\"members\":[\"2\"],\"position\":[0.118644,0.067797],\"progress\":0.107343,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "start_revision": 3,
+            "start_send_bytes": 2400,
+            "start_send_ok": true,
+            "start_send_refused_reason": null,
+            "start_send_requested": true,
+            "steps_executed": 8,
+            "target": "piloc-e1-target-2",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        }
+      },
+      "horizon": 5,
+      "pair_resolved": false,
+      "seed": 700018,
+      "step": 3,
+      "target": "piloc-e1-target-2"
+    },
+    "s700020_t3_H1": {
+      "branches": {
+        "DEFER_FLUSH": {
+          "boundary_status": "flushed_latest",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 2820,
+            "boundary_budget_after": 2288.0,
+            "boundary_budget_before": 5108.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"2\",\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.103272,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 470,
+            "boundary_revision": 4,
+            "boundary_status": "flushed_latest",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 72,
+            "forward_draws_at_fork": 42,
+            "horizon": 1,
+            "mode": "DEFER_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 10,
+            "policy_requests_blocked": 1,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 9868,
+              "ack_pending": 0,
+              "budget_remaining": 12266.0,
+              "budget_spent": 17034,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 42
+            },
+            "revisions_seen": [
+              1,
+              2
+            ],
+            "start_fingerprint": null,
+            "start_revision": null,
+            "start_send_bytes": 0,
+            "start_send_ok": false,
+            "start_send_refused_reason": null,
+            "start_send_requested": false,
+            "steps_executed": 4,
+            "target": "piloc-e1-target-0",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        },
+        "EARLY_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 2288.0,
+            "boundary_budget_before": 2288.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"2\",\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.103272,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 470,
+            "boundary_revision": 4,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 72,
+            "forward_draws_at_fork": 42,
+            "horizon": 1,
+            "mode": "EARLY_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 10,
+            "policy_requests_blocked": 0,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 9868,
+              "ack_pending": 0,
+              "budget_remaining": 12266.0,
+              "budget_spent": 17034,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 42
+            },
+            "revisions_seen": [
+              1,
+              2,
+              3
+            ],
+            "start_fingerprint": "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"2\",\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.051636,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "start_revision": 3,
+            "start_send_bytes": 2820,
+            "start_send_ok": true,
+            "start_send_refused_reason": null,
+            "start_send_requested": true,
+            "steps_executed": 4,
+            "target": "piloc-e1-target-0",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        }
+      },
+      "horizon": 1,
+      "pair_resolved": false,
+      "seed": 700020,
+      "step": 3,
+      "target": "piloc-e1-target-0"
+    },
+    "s700020_t3_H20": {
+      "branches": {
+        "DEFER_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 410.0,
+            "boundary_budget_before": 410.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"4\",\"2\"],\"position\":[0.118644,0.610169],\"progress\":0.333333,\"remaining\":[0,0,1,0,0],\"stage_index\":1}",
+            "boundary_payload_bytes": 471,
+            "boundary_revision": 10,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 72,
+            "forward_draws_at_fork": 42,
+            "horizon": 20,
+            "mode": "DEFER_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 75,
+            "policy_requests_blocked": 20,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 9868,
+              "ack_pending": 0,
+              "budget_remaining": 12266.0,
+              "budget_spent": 17034,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 42
+            },
+            "revisions_seen": [
+              1,
+              2,
+              10
+            ],
+            "start_fingerprint": null,
+            "start_revision": null,
+            "start_send_bytes": 0,
+            "start_send_ok": false,
+            "start_send_refused_reason": null,
+            "start_send_requested": false,
+            "steps_executed": 23,
+            "target": "piloc-e1-target-0",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        },
+        "EARLY_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 68.0,
+            "boundary_budget_before": 68.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.333333,\"remaining\":[0,0,1,0,0],\"stage_index\":1}",
+            "boundary_payload_bytes": 467,
+            "boundary_revision": 10,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 72,
+            "forward_draws_at_fork": 42,
+            "horizon": 20,
+            "mode": "EARLY_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 75,
+            "policy_requests_blocked": 16,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 9868,
+              "ack_pending": 0,
+              "budget_remaining": 12266.0,
+              "budget_spent": 17034,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 42
+            },
+            "revisions_seen": [
+              1,
+              2,
+              3,
+              10
+            ],
+            "start_fingerprint": "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"2\",\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.051636,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "start_revision": 3,
+            "start_send_bytes": 2820,
+            "start_send_ok": true,
+            "start_send_refused_reason": null,
+            "start_send_requested": true,
+            "steps_executed": 23,
+            "target": "piloc-e1-target-0",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        }
+      },
+      "horizon": 20,
+      "pair_resolved": false,
+      "seed": 700020,
+      "step": 3,
+      "target": "piloc-e1-target-0"
+    },
+    "s700020_t3_H5": {
+      "branches": {
+        "DEFER_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 410.0,
+            "boundary_budget_before": 410.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"2\",\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.309815,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 469,
+            "boundary_revision": 8,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 72,
+            "forward_draws_at_fork": 42,
+            "horizon": 5,
+            "mode": "DEFER_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 21,
+            "policy_requests_blocked": 5,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 9868,
+              "ack_pending": 0,
+              "budget_remaining": 12266.0,
+              "budget_spent": 17034,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 42
+            },
+            "revisions_seen": [
+              1,
+              2,
+              8
+            ],
+            "start_fingerprint": null,
+            "start_revision": null,
+            "start_send_bytes": 0,
+            "start_send_ok": false,
+            "start_send_refused_reason": null,
+            "start_send_requested": false,
+            "steps_executed": 8,
+            "target": "piloc-e1-target-0",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        },
+        "EARLY_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 68.0,
+            "boundary_budget_before": 68.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"2\",\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.309815,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 469,
+            "boundary_revision": 8,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 72,
+            "forward_draws_at_fork": 42,
+            "horizon": 5,
+            "mode": "EARLY_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 21,
+            "policy_requests_blocked": 1,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 9868,
+              "ack_pending": 0,
+              "budget_remaining": 12266.0,
+              "budget_spent": 17034,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 42
+            },
+            "revisions_seen": [
+              1,
+              2,
+              3,
+              8
+            ],
+            "start_fingerprint": "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"2\",\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.051636,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "start_revision": 3,
+            "start_send_bytes": 2820,
+            "start_send_ok": true,
+            "start_send_refused_reason": null,
+            "start_send_requested": true,
+            "steps_executed": 8,
+            "target": "piloc-e1-target-0",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        }
+      },
+      "horizon": 5,
+      "pair_resolved": false,
+      "seed": 700020,
+      "step": 3,
+      "target": "piloc-e1-target-0"
+    },
+    "s700022_t3_H1": {
+      "branches": {
+        "DEFER_FLUSH": {
+          "boundary_status": "flushed_latest",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 2610,
+            "boundary_budget_after": 4454.0,
+            "boundary_budget_before": 7064.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[\"2\",\"5\"],\"position\":[0.40678,0.474576],\"progress\":0.187737,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 435,
+            "boundary_revision": 4,
+            "boundary_status": "flushed_latest",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 66,
+            "forward_draws_at_fork": 36,
+            "horizon": 1,
+            "mode": "DEFER_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 10,
+            "policy_requests_blocked": 1,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 7316,
+              "ack_pending": 0,
+              "budget_remaining": 14462.0,
+              "budget_spent": 14838,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 36
+            },
+            "revisions_seen": [
+              1,
+              2,
+              4
+            ],
+            "start_fingerprint": null,
+            "start_revision": null,
+            "start_send_bytes": 0,
+            "start_send_ok": false,
+            "start_send_refused_reason": null,
+            "start_send_requested": false,
+            "steps_executed": 4,
+            "target": "piloc-e1-target-2",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        },
+        "EARLY_FLUSH": {
+          "boundary_status": "flushed_latest",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 2610,
+            "boundary_budget_after": 1844.0,
+            "boundary_budget_before": 4454.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[\"2\",\"5\"],\"position\":[0.40678,0.474576],\"progress\":0.187737,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "boundary_payload_bytes": 435,
+            "boundary_revision": 4,
+            "boundary_status": "flushed_latest",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 66,
+            "forward_draws_at_fork": 36,
+            "horizon": 1,
+            "mode": "EARLY_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 10,
+            "policy_requests_blocked": 0,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 7316,
+              "ack_pending": 0,
+              "budget_remaining": 14462.0,
+              "budget_spent": 14838,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 36
+            },
+            "revisions_seen": [
+              1,
+              2,
+              3
+            ],
+            "start_fingerprint": "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[\"2\",\"5\"],\"position\":[0.40678,0.474576],\"progress\":0.093869,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "start_revision": 3,
+            "start_send_bytes": 2610,
+            "start_send_ok": true,
+            "start_send_refused_reason": null,
+            "start_send_requested": true,
+            "steps_executed": 4,
+            "target": "piloc-e1-target-2",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        }
+      },
+      "horizon": 1,
+      "pair_resolved": true,
+      "seed": 700022,
+      "step": 3,
+      "target": "piloc-e1-target-2"
+    },
+    "s700022_t3_H20": {
+      "branches": {
+        "DEFER_FLUSH": {
+          "boundary_status": "terminal_before_boundary",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": null,
+            "boundary_attempt_bytes": null,
+            "boundary_budget_after": null,
+            "boundary_budget_before": null,
+            "boundary_fingerprint": null,
+            "boundary_payload_bytes": null,
+            "boundary_revision": null,
+            "boundary_status": "terminal_before_boundary",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 66,
+            "forward_draws_at_fork": 36,
+            "horizon": 20,
+            "mode": "DEFER_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 67,
+            "policy_requests_blocked": 10,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 7316,
+              "ack_pending": 0,
+              "budget_remaining": 14462.0,
+              "budget_spent": 14838,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 36
+            },
+            "revisions_seen": [
+              1,
+              2
+            ],
+            "start_fingerprint": null,
+            "start_revision": null,
+            "start_send_bytes": 0,
+            "start_send_ok": false,
+            "start_send_refused_reason": null,
+            "start_send_requested": false,
+            "steps_executed": 23,
+            "target": "piloc-e1-target-2",
+            "terminal_at": 23,
+            "terminal_before_boundary": true
+          }
+        },
+        "EARLY_FLUSH": {
+          "boundary_status": "terminal_before_boundary",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": null,
+            "boundary_attempt_bytes": null,
+            "boundary_budget_after": null,
+            "boundary_budget_before": null,
+            "boundary_fingerprint": null,
+            "boundary_payload_bytes": null,
+            "boundary_revision": null,
+            "boundary_status": "terminal_before_boundary",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 66,
+            "forward_draws_at_fork": 36,
+            "horizon": 20,
+            "mode": "EARLY_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 58,
+            "policy_requests_blocked": 7,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 7316,
+              "ack_pending": 0,
+              "budget_remaining": 14462.0,
+              "budget_spent": 14838,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 36
+            },
+            "revisions_seen": [
+              1,
+              2,
+              3
+            ],
+            "start_fingerprint": "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[\"2\",\"5\"],\"position\":[0.40678,0.474576],\"progress\":0.093869,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "start_revision": 3,
+            "start_send_bytes": 2610,
+            "start_send_ok": true,
+            "start_send_refused_reason": null,
+            "start_send_requested": true,
+            "steps_executed": 23,
+            "target": "piloc-e1-target-2",
+            "terminal_at": 23,
+            "terminal_before_boundary": true
+          }
+        }
+      },
+      "horizon": 20,
+      "pair_resolved": true,
+      "seed": 700022,
+      "step": 3,
+      "target": "piloc-e1-target-2"
+    },
+    "s700022_t3_H5": {
+      "branches": {
+        "DEFER_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 1940.0,
+            "boundary_budget_before": 1940.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[\"5\"],\"position\":[0.40678,0.474576],\"progress\":0.5,\"remaining\":[0,0,0,1,0],\"stage_index\":1}",
+            "boundary_payload_bytes": 415,
+            "boundary_revision": 8,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 66,
+            "forward_draws_at_fork": 36,
+            "horizon": 5,
+            "mode": "DEFER_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 22,
+            "policy_requests_blocked": 5,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 7316,
+              "ack_pending": 0,
+              "budget_remaining": 14462.0,
+              "budget_spent": 14838,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 36
+            },
+            "revisions_seen": [
+              1,
+              2,
+              8
+            ],
+            "start_fingerprint": null,
+            "start_revision": null,
+            "start_send_bytes": 0,
+            "start_send_ok": false,
+            "start_send_refused_reason": null,
+            "start_send_requested": false,
+            "steps_executed": 8,
+            "target": "piloc-e1-target-2",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        },
+        "EARLY_FLUSH": {
+          "boundary_status": "refused_credit",
+          "status": "boundary_record",
+          "window": {
+            "at_step": 3,
+            "boundary_ack_bytes": 0,
+            "boundary_attempt_bytes": 0,
+            "boundary_budget_after": 2150.0,
+            "boundary_budget_before": 2150.0,
+            "boundary_fingerprint": "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[\"5\"],\"position\":[0.40678,0.474576],\"progress\":0.5,\"remaining\":[0,0,0,1,0],\"stage_index\":1}",
+            "boundary_payload_bytes": 415,
+            "boundary_revision": 8,
+            "boundary_status": "refused_credit",
+            "coalesced_ready_updates": 0,
+            "emit_entry_blocked": 0,
+            "forward_draws_after": 66,
+            "forward_draws_at_fork": 36,
+            "horizon": 5,
+            "mode": "EARLY_FLUSH",
+            "other_target_bytes": 0,
+            "other_target_emissions": 18,
+            "policy_requests_blocked": 2,
+            "pre_action_digest": {
+              "ack_attempt_bytes": 7316,
+              "ack_pending": 0,
+              "budget_remaining": 14462.0,
+              "budget_spent": 14838,
+              "pending_packets": 0,
+              "tick": 3,
+              "transmission_attempts": 36
+            },
+            "revisions_seen": [
+              1,
+              2,
+              3,
+              8
+            ],
+            "start_fingerprint": "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[\"2\",\"5\"],\"position\":[0.40678,0.474576],\"progress\":0.093869,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+            "start_revision": 3,
+            "start_send_bytes": 2610,
+            "start_send_ok": true,
+            "start_send_refused_reason": null,
+            "start_send_requested": true,
+            "steps_executed": 8,
+            "target": "piloc-e1-target-2",
+            "terminal_at": null,
+            "terminal_before_boundary": false
+          }
+        }
+      },
+      "horizon": 5,
+      "pair_resolved": false,
+      "seed": 700022,
+      "step": 3,
+      "target": "piloc-e1-target-2"
+    }
+  },
+  "points": [
+    {
+      "attempt_charge_bytes": 2616,
+      "budget_remaining_at_audit": 18932.0,
+      "changed_view": true,
+      "first_emission": false,
+      "message_class": "update",
+      "primary_class": "both_actions_free",
+      "reason": "earliest post-first both_actions_free update",
+      "seed": 700010,
+      "semantic_revision": 3,
+      "step": 3,
+      "target": "piloc-e1-target-0",
+      "terminal": false
+    },
+    {
+      "attempt_charge_bytes": 2400,
+      "budget_remaining_at_audit": 5048.0,
+      "changed_view": true,
+      "first_emission": false,
+      "message_class": "update",
+      "primary_class": "both_actions_free",
+      "reason": "earliest post-first both_actions_free update",
+      "seed": 700018,
+      "semantic_revision": 3,
+      "step": 3,
+      "target": "piloc-e1-target-2",
+      "terminal": false
+    },
+    {
+      "attempt_charge_bytes": 2820,
+      "budget_remaining_at_audit": 12266.0,
+      "changed_view": true,
+      "first_emission": false,
+      "message_class": "update",
+      "primary_class": "both_actions_free",
+      "reason": "earliest post-first both_actions_free update",
+      "seed": 700020,
+      "semantic_revision": 3,
+      "step": 3,
+      "target": "piloc-e1-target-0",
+      "terminal": false
+    },
+    {
+      "attempt_charge_bytes": 2610,
+      "budget_remaining_at_audit": 12170.0,
+      "changed_view": true,
+      "first_emission": false,
+      "message_class": "update",
+      "primary_class": "both_actions_free",
+      "reason": "earliest post-first both_actions_free update",
+      "seed": 700022,
+      "semantic_revision": 3,
+      "step": 3,
+      "target": "piloc-e1-target-2",
+      "terminal": false
+    }
+  ],
+  "schema": "comm-target-scoped-boundary-results/1"
+}

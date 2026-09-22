@@ -1,5 +1,10 @@
 # 下一轮：target-scoped 合并发送的边界可行性门禁
 
+> **状态：已执行完毕（历史指令）。** 分支 `analysis/comm-target-scoped-feasibility`，
+> 产物 `runs/comm_target_scoped_feasibility_20260922/`。24/28 启动；T0/T1 通过。
+> T2：H=1 2/4 未过，H=5 0/4 未过，**H=20 3/4 通过**（可解析 pair 多为 `terminal_before_boundary`）。
+> 按门禁可建议以后对 **H=20** 跑完整 target-scoped episode（本轮不执行）。**请勿再次执行本矩阵。**
+
 日期：2026-09-22。对应总纲 v2.6。状态：待执行计划，尚未运行。
 
 ## 1. 起点与研究问题

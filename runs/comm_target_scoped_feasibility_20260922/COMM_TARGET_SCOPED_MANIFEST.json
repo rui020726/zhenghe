@@ -1,0 +1,258 @@
+{
+  "base": "dfe120a171e0a9f620b0f9e26175b90138deb374",
+  "branch": "analysis/comm-target-scoped-feasibility",
+  "gates": {
+    "T0": true,
+    "T1": true,
+    "T2": {
+      "1": {
+        "no_implementation_error": true,
+        "passed": false,
+        "resolved_pairs": 2,
+        "threshold": "3/4",
+        "total_pairs": 4
+      },
+      "20": {
+        "no_implementation_error": true,
+        "passed": true,
+        "resolved_pairs": 3,
+        "threshold": "3/4",
+        "total_pairs": 4
+      },
+      "5": {
+        "no_implementation_error": true,
+        "passed": false,
+        "resolved_pairs": 0,
+        "threshold": "3/4",
+        "total_pairs": 4
+      }
+    }
+  },
+  "launches": {
+    "cap": 28,
+    "entries": [
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "flushed_latest",
+        "horizon": 1,
+        "index": 1,
+        "kind": "smoke",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "flushed_latest",
+        "horizon": 1,
+        "index": 2,
+        "kind": "smoke",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 1,
+        "index": 3,
+        "kind": "smoke",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 1,
+        "index": 4,
+        "kind": "smoke",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 5,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 6,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "terminal_before_boundary",
+        "horizon": 20,
+        "index": 7,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "terminal_before_boundary",
+        "horizon": 20,
+        "index": 8,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 9,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 10,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "terminal_before_boundary",
+        "horizon": 20,
+        "index": 11,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "terminal_before_boundary",
+        "horizon": 20,
+        "index": 12,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 1,
+        "index": 13,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "flushed_latest",
+        "horizon": 1,
+        "index": 14,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 15,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 16,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 20,
+        "index": 17,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 20,
+        "index": 18,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "flushed_latest",
+        "horizon": 1,
+        "index": 19,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700022
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "flushed_latest",
+        "horizon": 1,
+        "index": 20,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700022
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 21,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700022
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "refused_credit",
+        "horizon": 5,
+        "index": 22,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700022
+      },
+      {
+        "branch": "EARLY_FLUSH",
+        "detail": "terminal_before_boundary",
+        "horizon": 20,
+        "index": 23,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700022
+      },
+      {
+        "branch": "DEFER_FLUSH",
+        "detail": "terminal_before_boundary",
+        "horizon": 20,
+        "index": 24,
+        "kind": "matrix",
+        "ok": true,
+        "seed": 700022
+      }
+    ],
+    "starts": 24
+  },
+  "max_starts": 28,
+  "new_streams": 0,
+  "production_diff": "none (wrapper only)",
+  "schema": "comm-target-scoped-manifest/1",
+  "training": 0
+}

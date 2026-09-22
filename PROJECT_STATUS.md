@@ -1,15 +1,29 @@
 # 项目状态
 
-## 2026-09-22：target-scoped 边界可行性门禁已规划，尚未运行
+## 2026-09-22：target-scoped 边界可行性已交付（T0/T1 过；T2 仅 H=20 过）
 
-当前入口 [COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md](COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md)，
-总纲 v2.6，起点 `analysis/comm-send-actionability-audit@c6698f9`。
+执行入口 [COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md](COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md) **已执行**（指令已标历史）。
+分支 `analysis/comm-target-scoped-feasibility`（起点 `dfe120a`），产物
+`runs/comm_target_scoped_feasibility_20260922/`。**未训练、未生成新流、未改预算/信道/默认值**；
+启动 **24/28**；每条只跑到窗口边界，不跑 episode 终局。
 
-下一轮只验证 target 级合并窗口能否在硬预算下完成“起点 EARLY 真实发送 + 窗口末两臂同步最新合法视图”。
-固定前四条审计流、H={1,5,20}，最多 24 条边界分支 / 28 次总启动；只跑到边界，不跑 episode 结局。
-不训练、不生成新流、不改预算/协议/默认值。边界字节不预留、不免费；H=20 不可执行时停止并报告。
+**固定点**：700010 / 700018 / 700020 / 700022，各取最早 post-first `both_actions_free` **update**（均为 t*=3）。
+分支 EARLY_FLUSH / DEFER_FLUSH，H∈{1,5,20}。边界最新视图走真实 `_message`/`_emit` 与真实计费，不预留字节。
 
-该实验是新估计对象，不覆盖 Stage1。通过只表示接口/预算可执行，不表示发送时机有任务收益或模型能胜规则。
+**门禁**：
+- **T0 实现可信：通过**（7 项合成测试 + 两点 H=1 冒烟）
+- **T1 起点可执行：通过**（4/4 点 EARLY t* 真实发射并扣费）
+- **T2 边界可解析（按 H，阈值 3/4）**：
+  - H=1：**2/4 未过**（700010、700022 双分支 `flushed_latest`；700018 双分支 `refused_credit`；700020 EARLY 拒付）
+  - H=5：**0/4 未过**（四对均 `refused_credit`）
+  - **H=20：3/4 通过**（700010/700018/700022 双分支 `terminal_before_boundary`；700020 `refused_credit`）
+
+**判读**：仅 **H=20** 达到资源门槛，**可建议**以后跑完整 target-scoped 结局实验（**本轮不执行**）。
+H=20 可解析性主要来自 target **提前终态（吸收）**，不等于边界同步在预算上可支付；H=1/5 失败原因是
+`refused_credit`，**不得**免费 flush、提高预算或改成窗口末不发送。T2 通过**不**证明任务收益、
+观测可预测优劣或学习优于规则。
+
+**下一步（未执行、未授权）**：使用者决定是否立项 H=20 完整 episode；或单独讨论 credit reservation。
 
 ## 2026-09-22：SEND/HOLD 动作可行性审计已交付（A/B 过、C 不过）
 

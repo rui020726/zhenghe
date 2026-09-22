@@ -1,0 +1,38 @@
+{
+  "schema": "comm-target-scoped-interface-check/1",
+  "t0_synthetic_tests": {
+    "path": "runs/comm_target_scoped_feasibility_20260922/test_target_window.py",
+    "cases": [
+      "early_send_once_then_block",
+      "defer_blocks_at_tstar",
+      "terminal_before_boundary",
+      "boundary_refused_credit",
+      "exactly_affordable_flush",
+      "uninstall_restores",
+      "blocked_requests_not_billed"
+    ],
+    "passed": true
+  },
+  "smoke": {
+    "plan": "points 700010/700018 x H=1 x EARLY/DEFER",
+    "results": {
+      "700010_H1_EARLY": "flushed_latest",
+      "700010_H1_DEFER": "flushed_latest",
+      "700018_H1_EARLY": "refused_credit",
+      "700018_H1_DEFER": "refused_credit"
+    },
+    "implementation_errors": 0,
+    "accounting_closed": true
+  },
+  "checks": {
+    "start_send_real_billing": true,
+    "target_all_revision_block": true,
+    "latest_view_coalescing_via_message": true,
+    "terminal_suppression": true,
+    "boundary_real_billing": true,
+    "exactly_affordable": true,
+    "unique_artifacts": true,
+    "uninstall_restore": true
+  },
+  "passed": true
+}

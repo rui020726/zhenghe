@@ -1,6 +1,6 @@
 # 项目总纲：面向协同搜救的学习型任务信息传递控制
 
-版本：v2.6
+版本：v2.7
 
 更新日期：2026-09-22
 用途：跨聊天、跨 Agent 的研究方向与实验约定。  
@@ -13,7 +13,17 @@
 
 ## 1. 本文如何使用
 
-### v2.6 当前计划：target-scoped 边界可行性门禁（尚未运行）
+### v2.7 当前状态：target-scoped 边界可行性已交付（T0/T1 过；T2 仅 H=20 过）
+
+`COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md` **已执行**。分支
+`analysis/comm-target-scoped-feasibility`，产物 `runs/comm_target_scoped_feasibility_20260922/`。
+24/28 启动，只跑到 H 边界；未训练、未改默认值。
+
+T0/T1 通过；T2：H=1 2/4、H=5 0/4、**H=20 3/4 通过**。可建议以后对 **H=20** 跑完整
+target-scoped episode（**本轮不执行**）。H=20 可解析性多来自 `terminal_before_boundary`，
+不等于边界同步在预算上可支付；短 H 失败原因是 `refused_credit`，不得免费 flush 或提高预算。
+
+### v2.6 历史状态：target-scoped 边界可行性门禁（尚未运行）
 
 当前入口 `COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md`，基于
 `analysis/comm-send-actionability-audit@c6698f9`。动作审计说明 post-first 双动作点存在，但 view-scoped
@@ -865,6 +875,7 @@ learnability calibration；本轮不是"继续改场景直到模型获胜"的授
 
 | 日期 | 版本 | 变更 |
 |---|---|---|
+| 2026-09-22 | v2.7 | target-scoped 边界可行性**已交付**：24/28 启动；T0/T1 过；T2 H=1 2/4、H=5 0/4、**H=20 3/4 过**（多为 `terminal_before_boundary`）⇒ 可建议 H=20 完整 episode（不自动执行）；短 H 因 `refused_credit` 未过，禁止免费 flush/提高预算 |
 | 2026-09-22 | v2.6 | 基于 c6698f9 立项 target-scoped 边界可行性门禁：EARLY+FLUSH vs DEFER+FLUSH，固定 4 条审计流、H={1,5,20}、最多 24 前缀分支/28 次启动；窗口末最新视图走真实预算与终态规则，不预留/不赠送字节；只跑到边界，以每个 H ≥3/4 pair 可解析作为后续完整实验的资源门禁，尚未执行、无训练授权 |
 | 2026-09-22 | v2.5 | 动作可行性审计交付（`analysis/comm-send-actionability-audit`）：8 free 重放、共享 SEND 谓词、八类闭合；23 612 候选，both_actions_free 101/8 流，主阻塞预算；**A/B 过、C 不过**（view-scoped 窗口被 revision 截断）⇒ 建议讨论 target-scoped 新估计对象，本轮不执行 |
 | 2026-09-22 | v2.4 | Stage1 **归档**：状态文档同步（PROJECT_STATUS 顶条目按 40/40、8 free、28 成功分支、4 失败保留、7/8 点、S 全拒 insufficient_credit、无有效 S−H、H=20 截断、任务相同≠时机无影响、未训练/未改默认值）；`COMM_MULTISTEP_STAGE1_NEXT_ROUND.md` 标为历史；总纲升到 v2.4；交接说明更新。**不改既有实验提交** |
