@@ -1,0 +1,121 @@
+{
+  "base_sha": "5b1062620a348d2425201b2c9594df674b411e78",
+  "branch": "analysis/comm-send-actionability-audit",
+  "cherry_pick": "fc34545c14d311fcd90463bd3ac2e539fbbdf0e7",
+  "gates": {
+    "A_audit_trustworthy": {
+      "identity_closed": true,
+      "no_outcome_fields": true,
+      "passed": true,
+      "streams_complete": true
+    },
+    "B_dual_actionable": {
+      "passed": true,
+      "streams": [
+        700010,
+        700018,
+        700020,
+        700022,
+        700031,
+        700033,
+        700042,
+        700046
+      ],
+      "threshold_streams": 4
+    },
+    "C_view_scoped_window": {
+      "passed": false,
+      "streams": [],
+      "threshold_streams": 4
+    }
+  },
+  "max_launches": 8,
+  "new_launches": {
+    "cap": 8,
+    "entries": [
+      {
+        "detail": "rows=1193",
+        "index": 1,
+        "kind": "free_replay",
+        "label": "abl_free_s700010",
+        "ok": true,
+        "seed": 700010
+      },
+      {
+        "detail": "rows=1158",
+        "index": 2,
+        "kind": "free_replay",
+        "label": "abl_free_s700018",
+        "ok": true,
+        "seed": 700018
+      },
+      {
+        "detail": "rows=4148",
+        "index": 3,
+        "kind": "free_replay",
+        "label": "abl_free_s700020",
+        "ok": true,
+        "seed": 700020
+      },
+      {
+        "detail": "rows=1713",
+        "index": 4,
+        "kind": "free_replay",
+        "label": "abl_free_s700022",
+        "ok": true,
+        "seed": 700022
+      },
+      {
+        "detail": "rows=3036",
+        "index": 5,
+        "kind": "free_replay",
+        "label": "abl_free_s700031",
+        "ok": true,
+        "seed": 700031
+      },
+      {
+        "detail": "rows=3686",
+        "index": 6,
+        "kind": "free_replay",
+        "label": "abl_free_s700033",
+        "ok": true,
+        "seed": 700033
+      },
+      {
+        "detail": "rows=3722",
+        "index": 7,
+        "kind": "free_replay",
+        "label": "abl_free_s700042",
+        "ok": true,
+        "seed": 700042
+      },
+      {
+        "detail": "rows=4956",
+        "index": 8,
+        "kind": "free_replay",
+        "label": "abl_free_s700046",
+        "ok": true,
+        "seed": 700046
+      }
+    ],
+    "starts": 8
+  },
+  "new_streams": 0,
+  "production_diff": "none expected",
+  "schema": "comm-send-actionability-manifest/1",
+  "stage1_artefacts": {
+    "free_streams": [
+      700010,
+      700018,
+      700020,
+      700022,
+      700031,
+      700033,
+      700042,
+      700046
+    ],
+    "points": "runs/comm_multistep_stage1_20260922/POINTS.json"
+  },
+  "tests": "runs/comm_send_actionability_20260922/test_send_actionability.py",
+  "training": 0
+}

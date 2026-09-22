@@ -313,25 +313,33 @@ def run_replay(args: argparse.Namespace) -> int:
                 policy_hook=hook,
                 read_timelines=True,
             )
-            relay = holder.get("relay")
-            if relay is not None:
-                enrich_rows_from_relay(recorder.rows, relay)
-                # Fill payload/fp from stash when enrich could not rebuild message yet.
-                payload_map = holder.get("payload") or {}
-                fp_map = holder.get("fp") or {}
-                for row in recorder.rows:
-                    key = (row.step, row.target_id, row.semantic_revision)
-                    if key in payload_map:
-                        row.payload_bytes = int(payload_map[key])
-                        row.attempt_charge_bytes = row.payload_bytes * row.subscriber_count
-                        budget = relay.budget
-                        reason = SA.send_block_from_budget(budget, row.attempt_charge_bytes)
+            # Payload/fp from the pre-decision stash only. Never overwrite decision-time
+            # budget/terminal with end-of-episode relay state (that was a repair bug).
+            payload_map = holder.get("payload") or {}
+            fp_map = holder.get("fp") or {}
+            budget = recorder._budget
+            for row in recorder.rows:
+                key = (row.step, row.target_id, row.semantic_revision)
+                if key in payload_map:
+                    row.payload_bytes = int(payload_map[key])
+                    row.attempt_charge_bytes = row.payload_bytes * row.subscriber_count
+                    if budget is not None:
+                        # Evaluate at the same decision step: use recorded remaining.
+                        reason = (
+                            "budget_exhausted"
+                            if row.attempt_charge_bytes > row.budget_remaining + 1e-9
+                            else (
+                                "capacity_step"
+                                if row.capacity_remaining is not None
+                                and row.capacity_remaining <= 0
+                                else None
+                            )
+                        )
                         row.send_executable = reason is None
                         row.send_block_reason = reason
-                        row.budget_spent = int(budget.spent_bytes)
-                        row.budget_remaining = float(budget.remaining_bytes)
-                    if key in fp_map:
-                        row.content_fingerprint = str(fp_map[key])
+                if key in fp_map:
+                    row.content_fingerprint = str(fp_map[key])
+                row.terminal = False
             # Drop exact duplicates by dedup key.
             seen = set()
             unique = []

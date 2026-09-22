@@ -1,5 +1,27 @@
 # 项目状态
 
+## 2026-09-22：SEND/HOLD 动作可行性审计已交付（A/B 过、C 不过）
+
+执行入口 [COMM_SEND_ACTIONABILITY_AUDIT_NEXT_ROUND.md](COMM_SEND_ACTIONABILITY_AUDIT_NEXT_ROUND.md) **已执行**（指令已标历史）。
+分支 `analysis/comm-send-actionability-audit`（基 `5b10626` + cherry-pick `fc34545`），产物
+`runs/comm_send_actionability_20260922/`。**训练 0、新流 0、无新 S/H 结局分支、生产默认值未改**；
+启动 **8/8**（8 条 Stage1 free 重放；短探针 0）。`800000..800399`、`900000..900199` 未触碰。
+
+**六个问题**：① 候选合计 **23 612**（逐流 1 158–4 956）；② **both_actions_free 101 点 / 8 流**；
+③ SEND 阻塞几乎全是**预算** 23 511（容量/终态/重试/协议强制均为 0）；④ 自由点：首发 30、更新 37、
+同视图重试 34；⑤ post-first 双动作可行 **71 点 / 8 流**（≥4，**B 过**）；⑥ 20 步内同视图重试且不被
+revision 提前截断：**0 流**（**C 不过**）——15 点有 20 步内重试请求，但几乎全部 `steps_to_new_revision=1`。
+
+**门禁**：A 通过（恒等式闭合、无 outcome 字段、8 流完整）；B 通过；C 未过 ⇒ 按指令应讨论
+**target-scoped**“延迟更新、窗口末发最新视图”这一**新估计对象**，**不**暗改 Stage1 view-scoped 协议。
+本轮不设计、不执行该新对象。
+
+**方法说明**：首遍重放曾把终局预算/终态写回决策前状态；已用 Stage1 free 转录重建预算时间线并离线
+重分类（**0 新启动**），见 `repair_budget_timeline.py`。
+
+**下一项（未执行、未授权）**：由使用者决定是否立项 target-scoped 干预；在此之前不跑 S/H、不训练、
+不改预算/协议。
+
 ## 2026-09-22：多步诊断第一阶段已有限交付（未训练、未改默认值）
 
 执行入口 [COMM_MULTISTEP_STAGE1_NEXT_ROUND.md](COMM_MULTISTEP_STAGE1_NEXT_ROUND.md) **已执行**（该指令已标为历史）。

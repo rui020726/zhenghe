@@ -1,6 +1,6 @@
 # 项目总纲：面向协同搜救的学习型任务信息传递控制
 
-版本：v2.4
+版本：v2.5
 
 更新日期：2026-09-22
 用途：跨聊天、跨 Agent 的研究方向与实验约定。  
@@ -13,7 +13,20 @@
 
 ## 1. 本文如何使用
 
-### v2.4 当前状态：多步诊断第一阶段已有限交付，停止等待下一步
+### v2.5 当前状态：动作可行性审计已交付（A/B 过、C 不过），停止等待下一步
+
+`COMM_SEND_ACTIONABILITY_AUDIT_NEXT_ROUND.md` **已执行**（指令标历史）。分支
+`analysis/comm-send-actionability-audit`，产物 `runs/comm_send_actionability_20260922/`。
+8/8 free 重放、0 短探针；**未训练、未生成新流、未跑新 S/H 结局、未改默认值**。
+
+六问摘要：23 612 候选；both_actions_free 101 点/8 流；主阻塞=预算 23 511；
+post-first 双动作可行 71 点/8 流（**B 过**）；20 步内同视图重试且不被 revision 提前截断 **0 流**（**C 不过**，
+因视图几乎每步被新 revision 取代）。
+
+⇒ 下一轮若继续，应讨论 **target-scoped**“延迟所有更新并在窗口末发送最新视图”这一**新估计对象**，
+不得暗改 Stage1 view-scoped 协议后声称同一实验。**本轮不设计、不执行。**
+
+### v2.4 历史状态：多步诊断第一阶段已有限交付，停止等待下一步
 
 `COMM_MULTISTEP_STAGE1_NEXT_ROUND.md` **已执行**（指令标为历史）。分支
 `analysis/comm-multistep-stage1@e42057d`，产物 `runs/comm_multistep_stage1_20260922/`。
@@ -821,6 +834,7 @@ learnability calibration；本轮不是"继续改场景直到模型获胜"的授
 
 | 日期 | 版本 | 变更 |
 |---|---|---|
+| 2026-09-22 | v2.5 | 动作可行性审计交付（`analysis/comm-send-actionability-audit`）：8 free 重放、共享 SEND 谓词、八类闭合；23 612 候选，both_actions_free 101/8 流，主阻塞预算；**A/B 过、C 不过**（view-scoped 窗口被 revision 截断）⇒ 建议讨论 target-scoped 新估计对象，本轮不执行 |
 | 2026-09-22 | v2.4 | Stage1 **归档**：状态文档同步（PROJECT_STATUS 顶条目按 40/40、8 free、28 成功分支、4 失败保留、7/8 点、S 全拒 insufficient_credit、无有效 S−H、H=20 截断、任务相同≠时机无影响、未训练/未改默认值）；`COMM_MULTISTEP_STAGE1_NEXT_ROUND.md` 标为历史；总纲升到 v2.4；交接说明更新。**不改既有实验提交** |
 | 2026-09-22 | v2.3 | 多步诊断第一阶段**有限交付**（`analysis/comm-multistep-stage1`）：修订协议（`event_retry_until_acked_5`、通信合法性、free 基线前缀、可执行登记顺序）；8 点 free + 28 干预分支 = 40/40 启动；接口修复后通过；S 强发全被预算拒绝、窗口多被 revision 截断 ⇒ 无有效 S−H 对照，结论不确定；附带训练诊断文案更正；不训练、不改默认值、不扩 96 分支 |
 | 2026-09-21 | v2.2 | 证据复核与训练诊断执行完毕（`analysis/comm-evidence-review`，`runs/comm_evidence_review_20260921/`）：**0 新 episode、0 新流、0 训练、默认值未改**。定位并修掉"同一统计量抽两次样"（判读段两臂行集 vs 比较表五臂行集），九处 CI 边界统一到比较表那一套（+0.835 [**+0.685,+0.995**]、total **+26 002,+26 688**），585 个均值字段核对与归档完全相同；十项措辞与口径更正（成功率 vs 丢包率、字节方向、CI 含 0 ≠ 等效、条件区间、ACK 基线开关、重试差的因果范围、学习三事实、删除"扩训已排除欠训练"、门禁 3 的样本性与扩样顺序披露）；训练诊断给出四种解释并列出缺失项（value loss / 贪心熵未持久化、补发间隔无法从旧 trace 归因）；多步发送干预协议设计完成但**未执行**。新增 §5.13、§1 v2.2 入口与 §9 当前行动，676 集成测试通过（2 跳过）+ 本轮 24 项合成回归，`python -m integrated_sar` `final_status=completed` |

@@ -1,5 +1,9 @@
 # 下一轮：通信 SEND/HOLD 动作可行性审计
 
+> **状态：已执行完毕（历史指令）。** 分支 `analysis/comm-send-actionability-audit`，
+> 产物 `runs/comm_send_actionability_20260922/`。8/8 free 重放、0 短探针；A/B 过、C 不过。
+> 引用口径见 `COMM_SEND_ACTIONABILITY_RESULTS.md`。**请勿再次执行本审计矩阵。**
+
 日期：2026-09-22。状态：待执行计划。本文只定义审计，不报告新结果。
 
 ## 1. 前置条件与定位
