@@ -106,7 +106,9 @@ def run_free(args: argparse.Namespace) -> int:
         ledger.record(kind="free", seed=seed, label=label, ok=False, detail="running")
         started = time.time()
         try:
-            digest, candidate, summary = run_free_with_capture(seed, row, label=label)
+            digest, candidate, summary, observation = run_free_with_capture(
+                seed, row, label=label
+            )
             payload = {
                 "seed": seed,
                 "point": common.strip_outcome_fields(row),
@@ -130,6 +132,7 @@ def run_free(args: argparse.Namespace) -> int:
                     if key in summary
                 },
                 "pre_action_digest": digest,
+                "observation_at_tstar": observation,
                 "candidate_at_tstar": candidate,
                 "old_transcript_status": "not_used_as_byte_baseline",
             }
@@ -161,7 +164,7 @@ def run_free(args: argparse.Namespace) -> int:
 
 def run_free_with_capture(
     seed: int, row: dict[str, Any], *, label: str
-) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     """One free episode that also captures the pre-action digest at t* (single launch)."""
     from integrated_sar.comm_policy import build_comm_policy
 
@@ -221,13 +224,12 @@ def run_free_with_capture(
         policy_hook=hook,
         read_timelines=True,
     )
-    digest = holder.get("relay_digest") or holder.get("observation_digest") or {}
-    if "observation_digest" in holder and "relay_digest" in holder:
-        digest = {
-            "relay": holder["relay_digest"],
-            "observation": holder["observation_digest"],
-        }
-    return digest, holder.get("candidate") or {}, summary
+    # Canonical pre-action digest matches WindowIntervention's snapshot_relay_state schema.
+    digest = holder.get("relay_digest") or {}
+    if not digest and holder.get("observation_digest"):
+        digest = {"observation": holder["observation_digest"]}
+    observation = holder.get("observation_digest")
+    return digest, holder.get("candidate") or {}, summary, observation
 
 
 def snapshot_relay_state_from_observation(observation: Any) -> dict[str, Any]:
@@ -481,13 +483,18 @@ def interface_check(first_row: dict[str, Any], ledger: LaunchLedger) -> dict[str
     free_path = point_dir(first_row) / "free.json"
     if free_path.exists():
         free = common.read_json(free_path)
+        left = free.get("pre_action_digest") or {}
+        # Older free products nested the relay digest; accept both shapes.
+        if "relay" in left and isinstance(left.get("relay"), dict):
+            left = left["relay"]
         for key, product in branches.items():
-            left = free.get("pre_action_digest") or {}
             right = (product.get("window") or {}).get("pre_action_digest") or {}
             if left and right:
                 ok, diffs = digests_equal(left, right)
                 if not ok:
-                    problems.append(f"{key} pre_action_digest mismatch: {diffs[:3]}")
+                    problems.append(f"{key} pre_action_digest mismatch: {diffs[:5]}")
+            elif left or right:
+                problems.append(f"{key} missing one side of pre_action_digest")
     return {
         "interface_ok": not problems,
         "problems": problems,

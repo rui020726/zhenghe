@@ -215,7 +215,7 @@ class WindowMechanismTests(unittest.TestCase):
                 chosen = relay.policy.decide(observation)
                 by_target = {item.target_id: item for item in observation.items}
                 for name in chosen:
-                    relay._emit(by_target[name], reason="policy")
+                    relay._emit(by_target[name], first=False, reason="policy")
             self.assertEqual(window.stats.forced_sends, 1)
             self.assertTrue(window.stats.force_applied)
             emitted = [row for row in relay._emitted if row[1] == "t0"]
@@ -239,8 +239,26 @@ class WindowMechanismTests(unittest.TestCase):
             )
             self.assertEqual(window.stats.effective_window_steps, 3)
             # After truncation the new revision may send.
-            relay._emit(make_item(revision=2), reason="policy")
+            relay._emit(make_item(revision=2), first=True, reason="policy")
             self.assertEqual(relay.counters["emissions"], 1)
+        finally:
+            window.uninstall()
+
+    def test_does_not_lock_revision_before_tstar(self):
+        relay = FakeRelay(InnerPolicy({"t0"}))
+        window = WindowIntervention(mode="H", at_step=33, target="t0", horizon=5)
+        try:
+            window.wrap_relay(relay)
+            # Earlier revisions of the same target must not become the locked view.
+            for step, revision in ((1, 1), (10, 4), (32, 7)):
+                relay._tick = step
+                relay.policy.decide(relay._observation([make_item(revision=revision)]))
+            self.assertIsNone(window.stats.locked_revision)
+            self.assertFalse(window.stats.window_truncated)
+            relay._tick = 33
+            relay.policy.decide(relay._observation([make_item(revision=8)]))
+            self.assertEqual(window.stats.locked_revision, 8)
+            self.assertFalse(window.stats.window_truncated)
         finally:
             window.uninstall()
 
@@ -289,7 +307,7 @@ class WindowMechanismTests(unittest.TestCase):
             # directly to hit the hard path with a present view outside suppression timing.
             window.stats.locked_revision = 99  # different revision => not same view
             window.stats.window_truncated = False
-            relay._emit(make_item(revision=1), reason="policy")
+            relay._emit(make_item(revision=1), first=False, reason="policy")
             self.assertEqual(relay.counters["budget_refused_sends"], 1)
             self.assertEqual(window.stats.window_blocked_requests, 0)
         finally:

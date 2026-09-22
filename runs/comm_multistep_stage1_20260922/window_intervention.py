@@ -100,13 +100,16 @@ class WindowIntervention:
         return (str(item.target_id), int(item.revision))
 
     def _lock_from_item(self, item: SendItem) -> None:
+        """Lock the intervened view only at t*, never from an earlier revision."""
         if self.stats.locked_revision is None:
             self.stats.locked_revision = int(item.revision)
 
     def _maybe_truncate(self, item: SendItem, step: int) -> None:
-        if self.stats.window_truncated:
+        if self.stats.window_truncated or self.stats.locked_revision is None:
             return
-        if self._view_key(item) != (self.target, self.stats.locked_revision):
+        if int(step) < self.at_step:
+            return
+        if self._view_key(item) != (self.target, int(self.stats.locked_revision)):
             self.stats.window_truncated = True
             self.stats.window_truncated_at = int(step)
             self.stats.window_truncated_reason = "window_truncated_by_revision"
@@ -121,6 +124,8 @@ class WindowIntervention:
 
     def in_window(self, step: int) -> bool:
         if self.stats.window_truncated:
+            return False
+        if self.stats.locked_revision is None:
             return False
         return self.at_step <= int(step) < self.at_step + self.horizon
 
@@ -148,26 +153,22 @@ class WindowIntervention:
                 step = int(observation.step)
                 items = {str(item.target_id): item for item in observation.items}
                 target_item = items.get(outer.target)
-                if target_item is not None:
+                if target_item is not None and step >= outer.at_step:
                     outer._lock_from_item(target_item)
-                    if step >= outer.at_step:
-                        outer._maybe_truncate(target_item, step)
+                    outer._maybe_truncate(target_item, step)
                 chosen = list(inner.decide(observation))
-                if target_item is None or outer.stats.window_truncated:
+                if target_item is None:
                     return tuple(chosen)
-                if step == outer.at_step and outer.mode == "S":
-                    # Request one send of the locked view. The emit gate still applies budget,
-                    # capacity and terminal legality; a refused force is not a successful force.
-                    outer.stats.force_requested = True
-                    if outer.target not in chosen:
-                        chosen.append(outer.target)
-                    return tuple(dict.fromkeys(chosen))
-                if step == outer.at_step and outer.mode == "H":
+                if step == outer.at_step and not outer.stats.window_truncated:
                     outer._lock_from_item(target_item)
+                    if outer.mode == "S":
+                        # Request one send of the locked view. The emit gate still applies
+                        # budget, capacity and terminal legality.
+                        outer.stats.force_requested = True
+                        if outer.target not in chosen:
+                            chosen.append(outer.target)
+                        return tuple(dict.fromkeys(chosen))
                 if outer.in_window(step) and outer._same_locked_view(target_item):
-                    # Suppress this view's request path. Counted only when the inner rule
-                    # actually asked: the emit gate counts the hard backstop separately via
-                    # the same counter only if a call still reaches _emit.
                     before = len(chosen)
                     chosen = [name for name in chosen if name != outer.target]
                     if before != len(chosen):
@@ -193,14 +194,19 @@ class WindowIntervention:
         ) -> None:
             step = int(relay._tick)
             if str(item.target_id) == outer.target:
-                outer._lock_from_item(item)
                 if step >= outer.at_step:
+                    outer._lock_from_item(item)
                     outer._maybe_truncate(item, step)
-                if outer.mode == "S" and step == outer.at_step and outer.stats.forced_sends == 0:
+                if (
+                    outer.mode == "S"
+                    and step == outer.at_step
+                    and outer.stats.forced_sends == 0
+                    and not outer.stats.window_truncated
+                ):
                     # The one forced emission of the locked view. Still goes through the
                     # original emit so budget/capacity/billing stay identical.
                     result = original_emit(item, first=first, reason="other")
-                    if outer.stats.forced_sends == 0 and outer._did_emit(item):
+                    if outer._did_emit(item):
                         outer.stats.forced_sends += 1
                         outer.stats.force_applied = True
                         if outer.stats.locked_fingerprint is None:
