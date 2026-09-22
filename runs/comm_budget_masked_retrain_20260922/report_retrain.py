@@ -644,8 +644,9 @@ def render(data: dict[str, Any]) -> str:
     add(
         f"- 启动账本闭合：登记 {closure['total_starts']}/{closure['cap']}，剩余 "
         f"{closure['remaining']}，记录到的技术失败 {closure['failures_recorded']}；"
-        f"套件内自测另跑 {closure['episodes_run_inside_unit_tests']} 集（写在 "
-        "`episodes/unittest`，不是本轮的臂，但计入真实磁盘成本）。"
+        f"套件自测的转录去重后 {closure['episodes_run_inside_unit_tests']} 个文件（每遍约 "
+        "2–3 集、同名互相覆盖，所以这是**落盘文件数**而不是启动次数；它们不是本轮的臂，"
+        "不占实验账本，但确实花了时间）。"
     )
     add("")
     add("| 训练 seed | 账本登记启动 | 落盘 episode | 差（被杀/未完成） | 步数 | 训练期 freeze |")
