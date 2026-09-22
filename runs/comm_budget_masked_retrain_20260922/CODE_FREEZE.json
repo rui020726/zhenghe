@@ -1,6 +1,6 @@
 {
  "branch": "exp/comm-budget-masked-retrain",
- "committed_at": "2026-09-22 18:01:02 +0800",
+ "committed_at": "2026-09-22 18:10:31 +0800",
  "configuration_hash": "b5d1b46afa3b2604",
  "derivation": "sys.modules after importing train_retrain and the archived sampler/trainer entries, unioned with this directory's own scripts",
  "document": "CODE_FREEZE",
@@ -217,11 +217,11 @@
    "working_blob": "4b7146ff82eafc8f"
   },
   "runs/comm_budget_masked_retrain_20260922/evaluate_retrain.py": {
-   "head_blob": "ce2a071e24db4204",
+   "head_blob": "d03ff095511d2835",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "ce2a071e24db4204"
+   "working_blob": "d03ff095511d2835"
   },
   "runs/comm_budget_masked_retrain_20260922/freeze.py": {
    "head_blob": "bc2950f4f89d4366",
@@ -231,11 +231,11 @@
    "working_blob": "bc2950f4f89d4366"
   },
   "runs/comm_budget_masked_retrain_20260922/preflight.py": {
-   "head_blob": "f4ab7ef40c003575",
+   "head_blob": "d475bbd644416f2e",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "f4ab7ef40c003575"
+   "working_blob": "d475bbd644416f2e"
   },
   "runs/comm_budget_masked_retrain_20260922/provenance_correction.py": {
    "head_blob": "ffe0ec3571bc2829",
@@ -245,32 +245,32 @@
    "working_blob": "ffe0ec3571bc2829"
   },
   "runs/comm_budget_masked_retrain_20260922/report_retrain.py": {
-   "head_blob": "7b7acc3ad2441e8e",
+   "head_blob": "a5128d869f094957",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "7b7acc3ad2441e8e"
+   "working_blob": "a5128d869f094957"
   },
   "runs/comm_budget_masked_retrain_20260922/retrain_common.py": {
-   "head_blob": "814b3f704718479f",
+   "head_blob": "5db26be2d6eafa02",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "814b3f704718479f"
+   "working_blob": "5db26be2d6eafa02"
   },
   "runs/comm_budget_masked_retrain_20260922/test_retrain.py": {
-   "head_blob": "eafa7aabc44a411e",
+   "head_blob": "bd8de0e233c6742d",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "eafa7aabc44a411e"
+   "working_blob": "bd8de0e233c6742d"
   },
   "runs/comm_budget_masked_retrain_20260922/train_retrain.py": {
-   "head_blob": "60cf9a52038d06b1",
+   "head_blob": "fb4b7e526ef554c4",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "60cf9a52038d06b1"
+   "working_blob": "fb4b7e526ef554c4"
   },
   "runs/comm_budget_pilot_20260919/pilot_common.py": {
    "head_blob": "53b4a9ef76f6031d",
@@ -385,12 +385,12 @@
   "runtime_modules_changed": []
  },
  "registered": true,
- "registered_at": "1790071262",
+ "registered_at": "1790071831",
  "rule": "every launch re-derives the graph and requires: no committed or working-tree difference against this SHA for any member, no untracked member, and no module in the graph that this freeze did not record",
  "schema": "retrain_common/1",
- "sha": "f256ed4d11b38a0d3525fbbe9ce1eea535e7678e",
- "short": "f256ed4d1",
- "subject": "fix(comm): read the round's own artefacts with one parser, not two",
+ "sha": "44416484f904479d0d7f933babcc9e7ee36f9703",
+ "short": "44416484f",
+ "subject": "fix(comm): give every launching process its own ledger and add them up for the ceiling",
  "trainer_identity": {
   "ack": false,
   "action_mask_schema": "budget-sequential-mask/1",
