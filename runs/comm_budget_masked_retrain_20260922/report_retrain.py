@@ -632,7 +632,7 @@ def render(data: dict[str, Any]) -> str:
 def assemble() -> dict[str, Any]:
     records = training_records()
     families = evaluation_rows()
-    pre = json.loads(common.read_json("PREFLIGHT.json")) if common.PREFLIGHT_FILE.exists() else {}
+    pre = common.read_json("PREFLIGHT.json") if common.PREFLIGHT_FILE.exists() else {}
     coverage = evaluation.coverage()
     stats = comparisons(families)
     gates = correctness(pre, coverage, records)
@@ -641,10 +641,16 @@ def assemble() -> dict[str, Any]:
     movement = per_stream_movement(families)
     curve_data = curves(records, families)
     freeze = common.freeze()
-    throughput = json.loads(common.read_json("THROUGHPUT.json")) if common.json_path(
-        "THROUGHPUT.json").exists() else {}
-    resume = json.loads(common.read_json("RESUME_CHECK.json")) if common.json_path(
-        "RESUME_CHECK.json").exists() else {}
+    throughput = (
+        common.read_json("THROUGHPUT.json")
+        if common.json_path("THROUGHPUT.json").exists()
+        else {}
+    )
+    resume = (
+        common.read_json("RESUME_CHECK.json")
+        if common.json_path("RESUME_CHECK.json").exists()
+        else {}
+    )
     ledger = json.loads(common.LAUNCH_LEDGER.read_text(encoding="utf-8"))
 
     training_table = {}

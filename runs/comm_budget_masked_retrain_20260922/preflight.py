@@ -244,8 +244,8 @@ def main(argv: list[str]) -> int:
         print(json.dumps(report, ensure_ascii=False, indent=1, default=str))
         return 1
     if args.no_rerun and common.json_path("THROUGHPUT.json").exists():
-        probe = json.loads(common.read_json("THROUGHPUT.json"))
-        resume = json.loads(common.read_json("RESUME_CHECK.json"))
+        probe = common.read_json("THROUGHPUT.json")
+        resume = common.read_json("RESUME_CHECK.json")
         reused_artefacts = True
     else:
         probe_args = argparse.Namespace(
@@ -256,13 +256,13 @@ def main(argv: list[str]) -> int:
         )
         if entry.probe(probe_args):
             raise SystemExit("a probe episode failed; see THROUGHPUT.json")
-        probe = json.loads(common.read_json("THROUGHPUT.json"))
+        probe = common.read_json("THROUGHPUT.json")
         resume_args = argparse.Namespace(
             seed=1, threads=args.threads, mode="resume-check", episodes=4, steps=common.STEPS_PER_RUN
         )
         if entry.resume_check(resume_args):
             raise SystemExit("deterministic resume failed; see RESUME_CHECK.json")
-        resume = json.loads(common.read_json("RESUME_CHECK.json"))
+        resume = common.read_json("RESUME_CHECK.json")
         reused_artefacts = False
     suites = suite_report()
     gates = mask_gates(probe, suites)
