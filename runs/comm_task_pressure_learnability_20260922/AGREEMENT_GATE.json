@@ -1,0 +1,73 @@
+{
+ "archived_rows": "runs\\comm_protocol_v2_20260920\\evaluation\\25pct\\rows_25pct_isolated_1.0.jsonl",
+ "checks": [
+  {
+   "arm": "send_once",
+   "seed": 700048,
+   "match": true,
+   "differences": {},
+   "reference_config_hash": "d7f35c4a933506c3",
+   "this_config_hash": "eab67b9e583f6e55",
+   "reference_transcript": "D:\\code\\整合\\zhenghe\\runs\\comm_protocol_v2_20260920\\evaluation\\25pct\\runs\\ct_send_once_s700048.jsonl",
+   "reference_transcript_present": true,
+   "emission_sequence_equal": true,
+   "emission_sequence_length": [
+    6,
+    6
+   ],
+   "explained_differences": {}
+  },
+  {
+   "arm": "event_priority",
+   "seed": 700048,
+   "match": true,
+   "differences": {},
+   "reference_config_hash": "ef4c2cc0b0ec1da1",
+   "this_config_hash": "e09fdf4b25ead2ee",
+   "reference_transcript": "D:\\code\\整合\\zhenghe\\runs\\comm_protocol_v2_20260920\\evaluation\\25pct\\runs\\ct_event_priority_s700048.jsonl",
+   "reference_transcript_present": true,
+   "emission_sequence_equal": true,
+   "emission_sequence_length": [
+    11,
+    11
+   ],
+   "explained_differences": {}
+  },
+  {
+   "arm": "first_send_plus_bound_3_10",
+   "seed": 700048,
+   "match": true,
+   "differences": {},
+   "reference_config_hash": "12a0bc60bc5811df",
+   "this_config_hash": "09dcc48cef6601f0",
+   "reference_transcript": "D:\\code\\整合\\zhenghe\\runs\\comm_protocol_v2_20260920\\evaluation\\25pct\\runs\\ct_first_send_plus_bound_3_10_s700048.jsonl",
+   "reference_transcript_present": true,
+   "emission_sequence_equal": false,
+   "emission_sequence_length": [
+    11,
+    11
+   ],
+   "explained_differences": {}
+  },
+  {
+   "arm": "always_hold",
+   "seed": 700048,
+   "match": true,
+   "differences": {},
+   "reference_config_hash": "da1744383f56a215",
+   "this_config_hash": "002373f5a9296a55",
+   "reference_transcript": "D:\\code\\整合\\zhenghe\\runs\\comm_protocol_v2_20260920\\evaluation\\25pct\\runs\\ct_always_hold_s700048.jsonl",
+   "reference_transcript_present": true,
+   "emission_sequence_equal": true,
+   "emission_sequence_length": [
+    0,
+    0
+   ],
+   "explained_differences": {
+    "belief_age": "the rule emitted nothing, so no robot-target pair was ever informed: this round keeps that as an explicit absence while round 5's renderer wrote `... or 0.0`. Same episode, two renderings of the same empty set."
+   }
+  }
+ ],
+ "agree": true,
+ "note": "config_hash is not part of the agreement: it folds the transcript path into the hash, so a different directory must change it (round 10 established this). The compared quantities are task outcome, money, emissions, refusals, deliveries and belief age."
+}

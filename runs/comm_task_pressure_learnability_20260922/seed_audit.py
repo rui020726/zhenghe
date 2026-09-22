@@ -204,6 +204,18 @@ def artefact_names() -> tuple[dict[str, list[str]], dict[int, list[Path]], dict[
     return by_round, dict(streams), coverage
 
 
+def _display(path: Path) -> str:
+    """Repo-relative where it is inside the repository, absolute otherwise.
+
+    The collision check is also exercised on temporary files by the test suite; a collision report
+    that crashed on a path outside the repo would hide the case it exists to catch.
+    """
+    try:
+        return str(Path(path).relative_to(RUNS))
+    except ValueError:
+        return str(path)
+
+
 def stream_content_collisions(seeds: set[int], streams: dict[int, list[Path]]) -> dict[str, Any]:
     """Same stream number, different bytes: a naming collision, not a leak, and still a stop."""
     import hashlib
@@ -215,9 +227,7 @@ def stream_content_collisions(seeds: set[int], streams: dict[int, list[Path]]) -
             continue
         by_digest: dict[str, list[str]] = defaultdict(list)
         for path in paths:
-            by_digest[hashlib.sha256(path.read_bytes()).hexdigest()[:16]].append(
-                str(path.relative_to(ROOT))
-            )
+            by_digest[hashlib.sha256(path.read_bytes()).hexdigest()[:16]].append(_display(path))
         if len(by_digest) > 1:
             collisions[str(seed)] = dict(sorted(by_digest.items()))
     return collisions

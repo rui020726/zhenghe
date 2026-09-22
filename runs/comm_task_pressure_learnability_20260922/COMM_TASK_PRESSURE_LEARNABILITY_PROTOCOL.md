@@ -211,7 +211,7 @@ lambda_break_even(b→c) = Δ on_time 个/episode / ( Δ bytes / 29 300 )
 | `seed_audit.py` → `SEED_COLLISION_AUDIT.json` | 四源冲突审计 |
 | `pressure_env.py` | 本轮 episode runner + 候选探针 + 与归档 runner 的一致性证明 |
 | `record_layer.py` | 逐层录制 + `STREAM_MANIFEST.json`（sha256、placed、detections） |
-| `rule_matrix.py` | 9 臂 × 16 流执行器（分片、幂等、逐片账本） |
+| `pressure_matrix.py` | 9 臂 × 16 流执行器（分片、幂等、逐片账本；原名 `rule_matrix.py`，因与第五轮同名模块冲突而改名，见 §11） |
 | `pressure_metrics.py` | §5 全部量的聚合与逐流表 |
 | `judge_layers.py` | L0–L4 机械判定 + bootstrap + Pareto/envelope/λ |
 | `freeze_pressure.py` | code-freeze 登记与校验（执行图来自 `sys.modules`） |
@@ -222,4 +222,73 @@ lambda_break_even(b→c) = Δ on_time 个/episode / ( Δ bytes / 29 300 )
 - **不提交** stream、逐 episode 原始日志、checkpoint、临时产物，也不触碰其他会话的未跟踪文件。
 - 执行中若必须改 harness：停止、隔离旧产物（移入 `quarantine_<reason>/`，不删除）、登记新 code-freeze，重跑该层并在结果里写明旧产物为何作废；不得把两个 code-freeze 的产物混进同一个聚合。
 - 交付前必须通过：`python -m unittest discover -s integrated_sar/tests`、`python -m integrated_sar`、本轮 `test_pressure_harness.py`。
-- 推送后核对远端 SHA，然后停止等待使用者。
+## 11. 开跑前的协议修订（在任何一条新 stream 之前提交，逐条列明改了什么与为什么）
+
+§0 声明本文冻结后不再修改，指的是 **判据、阈值、seed 块、规则库、口径**；下列五项是 harness 与测量仪器的修正，
+其中没有任何一项放宽判据或改变任何一条阈值。
+
+1. **`rule_matrix.py` 改名 `pressure_matrix.py`。** `pressure_common` 在导入各轮 fixtures 时，那些 fixture 会把自己
+   的目录重新插到 `sys.path` 最前，于是 `import rule_matrix` 会静默解析到 **第五轮同名模块**——两套 harness 混进
+   同一个聚合，而且不报错。这条由单元测试当场抓到（`AttributeError: module 'rule_matrix' has no attribute 'cells'`）。
+   修正有两层：`pressure_common` 在所有继承导入之后把本轮目录重新插回首位，并把模块改名彻底消除同名。
+2. **`budget_competition_points` 增加"原因分列"子计数。** 主口径与 §5.3 完全一致（`visible ≥ 2` 且 `1 ≤ payable < visible`），
+   另外记录 `competition_points_credit_cause` / `competition_points_capacity_only`。理由：`send_executable` 由
+   `CommBudget.why_blocked` 决定，它对"额度不够"和"本步容量已满"给同一个 False。本轮冻结的 C 臂配置
+   **没有**逐 step 容量（`comm_sends_per_tick` 未设），因此两者在本轮恒等——但要证明恒等，不能靠假设。
+   判据仍只读主口径；子计数不参与任何门槛。
+3. **探针透明性改为"一次运行同时证两件事"。** 原写"包探针 vs 不包探针"；实际做法是：带探针的本轮 runner 必须
+   逐字段复现第五轮**无探针**归档行。两条主张（runner 非漂移、探针无副作用）由同一批 episode 承担，
+   因此不必再单独跑一遍"不包探针"的对照。核验启动实到 **10 / 12**（明细见 §12 末条），矩阵启动 0。
+4. **启动账本的口径写明。** 640 = 4 × (16 录制 + 16 × 9 臂)，是执行指令对 **矩阵** 的算术；harness 自身的核验
+   启动另记 `gate` 类并自设上限 12，全部登记、在结果里报出实到数。把核验成本藏进矩阵数、或干脆不记，都是错的。
+5. **审计重跑一次，判读不变。** 单元测试把冲突检查喂到仓库外的临时路径上，暴露出渲染相对路径的
+   `relative_to(ROOT)` 会抛 `ValueError`——一个"因为崩溃而没报出冲突"的检查等于没有检查。修好后重跑
+   `seed_audit.py`：四源命中仍为 `git=0, manifests=0, artefacts=0, documentation=0`，`clean=true`，
+   封存块仍空。候选块、白名单与阈值一字未改。
+
+**§12 harness 核验结果（先于任何新 stream，写在下面，含一处对归档件的反向发现）**
+
+`AGREEMENT_GATE.json`：本轮 runner（探针开启）在归档流 `s700048`（`num_goals=6`、isolated-lossless、29 300 B）上
+对四臂逐字段复现第五轮归档行——`send_once` 6 个/15 054 B/6 发、`event_priority` 2 个/28 824 B/11 发/2 932 次预算拒付、
+`first_send_plus_bound_3_10` 5 个/28 704 B/11 发/826 次拒付、`always_hold` 0 个/0 B/0 发。
+
+- **皮对皮**：`send_once`、`event_priority`、`always_hold` 三支归档转录与本轮转录逐包
+  （step, target, revision, cost_bytes, subscribers, first）完全相等，且覆盖到 `orders_selection=True` 的规则
+  ——第六轮教训 6 的那一类缺陷正是被这条抓住的；探针因此被证明无副作用。`first_send_plus_bound_3_10`
+  只在**行级**一致，其归档转录不可作为证据引用，原因见下条。
+- `always_hold` 的 `belief_age`：本轮记 `None`（没有任何 robot-target 对被更新过），第五轮的渲染器写
+  `... or 0.0`。同一空集，两种渲染；该情形被显式分类为 `explained_differences`，且要求两侧发射数都为 0，
+  所以"说过话却没有 belief"仍然是不通过。
+- **反向发现（不改本轮任何数字，只更正可引用性）**：`first_send_plus_bound_3_10` 的归档 *转录文件* 与归档 *行* 自不相洽——
+  转录发送字节合计 **28 632 B**，行记 **28 704 B**；而 28 632/11 发/5 个恰好等于同目录另一趟
+  **normal 信息路径** 诊断行（`rows_25pct_normal_1.0_diag_s*.jsonl`）的值。也就是说第五轮把不同并行维度
+  （isolated / normal）写进了同一个 scratch 目录，转录按 `arm + seed` 命名 ⇒ 被后跑的那趟覆写。
+  这正是第八轮教训 5 的复发，本轮按 §5.3/§10 用 `g<goals>` 分目录、行/转录/账本逐层隔离来避免。
+  本轮的对照结论只依据**行级**一致性（四臂全等）与三支自洽转录的皮对皮一致性；该 bound 臂的归档转录不作为证据引用。
+- gate 启动实到 **10 / 12**（`LAUNCH_LEDGER_agreement.json`）：四个核验格跑了多遍，因为本轮自己的比较器先
+  抛 `KeyError`（转录拒付键名）、后又遇到 `belief` 渲染口径未定——每次中止时 episode 都已跑完，所以账本记
+  `starts=10, failures=0`：没有一次以环境异常结束，但确有 6 次是同一格的重复成本（`send_once` ×4、
+  `event_priority` ×2、`first_send_plus_bound_3_10` ×2、`always_hold` ×2）。如实计入，不当作"没花"。
+  矩阵启动 **0**；封存块 `800000..800399` 盘上 artefact 仍为 **0**。
+
+## 13. 复跑
+
+cd runs/comm_task_pressure_learnability_20260922
+python pressure_common.py                      # fixtures 自检：冻结项仍然冻结
+python seed_audit.py                           # 四源冲突审计（clean 才允许录制）
+python pressure_env.py                         # 归档一致性 + 探针透明（gate 启动）
+python pressure_env.py explain                 # 发射序列差异的字段级解释（不花启动数）
+python freeze_pressure.py --register
+python -m unittest test_pressure_harness       # 50 项合成测试，0 episode
+python record_layer.py --goals 6 --shards 4 --shard 0   # 2/3 同理
+python record_layer.py --goals 6 --mode merge
+python pressure_matrix.py --goals 6 --shards 4 --shard 0
+python pressure_matrix.py --goals 6 --mode coverage
+python pressure_metrics.py --goals 6
+python judge_layers.py --goals 6
+python report_pressure.py
+cd ../.. && python -m unittest discover -s integrated_sar/tests && python -m integrated_sar
+```
+
+`python -m unittest test_pressure_harness`（50 项合成测试，0 episode）、归档一致性核验与套件实跑结果写在
+`COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.md`，不在本文预先填写。推送后核对远端 SHA，然后停止等待使用者。
