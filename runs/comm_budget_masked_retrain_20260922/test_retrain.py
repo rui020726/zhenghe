@@ -479,22 +479,36 @@ class PreflightHelpersTests(unittest.TestCase):
         self.assertFalse(entry_ids["on_disk"])
         self.assertIsNone(entry_ids["head_blob"])
 
-    def test_launch_ledger_caps_and_counts_failures(self) -> None:
-        original = common.LAUNCH_LEDGER
-        temporary = SCRATCH / "ledger.json"
-        if temporary.exists():
-            temporary.unlink()
-        common.LAUNCH_LEDGER = temporary
+    def test_a_failure_spends_the_ceiling_and_each_process_owns_a_ledger(self) -> None:
+        """Three trainers write ledgers concurrently, so a shared counter would lose launches.
+
+        The ceiling stays global -- ``reserve`` adds every ledger file in the round directory up --
+        and a technical failure still spends it, because the bound caps the round's cost rather
+        than its successes. The files are written where the real ones live, since a totals function
+        that ignores a directory would test nothing about the aggregation.
+        """
+        names = ("LAUNCH_LEDGER unittest_a.json", "LAUNCH_LEDGER unittest_b.json")
+        for name in names:
+            (common.HERE / name).unlink(missing_ok=True)
+        before = common.ledger_totals()["starts"]
         try:
-            ledger = common.LaunchLedger()
-            self.assertEqual(common.LAUNCH_CAP, ledger.remaining())
-            ledger.reserve("probe", 700000)
-            ledger.record("probe", 700000, False, "simulated technical failure")
-            stored = json.loads(temporary.read_text(encoding="utf-8"))
-            self.assertEqual(1, stored["starts"])
-            self.assertEqual(1, stored["failures"], "a failure must still spend the ceiling")
+            first = common.LaunchLedger(names[0])
+            second = common.LaunchLedger(names[1])
+            first.reserve("probe", 700000)
+            first.record("probe", 700000, False, "simulated technical failure")
+            second.reserve("probe", 700001)
+            second.record("probe", 700001, True, "ok")
+            self.assertEqual(1, first.starts, "one process overwrote another's count")
+            self.assertEqual(1, second.starts)
+            self.assertEqual(1, first.payload["failures"], "a failure must still spend the ceiling")
+            merged = common.ledger_totals()
+            self.assertEqual(before + 2, merged["starts"], "the ceiling must see every ledger file")
+            self.assertGreaterEqual(merged["by_kind"].get("probe", 0), 2)
+            self.assertTrue(merged["within_cap"])
         finally:
-            common.LAUNCH_LEDGER = original
+            for name in names:
+                (common.HERE / name).unlink(missing_ok=True)
+        self.assertEqual(before, common.ledger_totals()["starts"])
 
     def test_shipped_code_has_not_moved_since_the_mask_fix(self) -> None:
         report = common.production_diff()

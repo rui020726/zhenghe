@@ -651,7 +651,7 @@ def assemble() -> dict[str, Any]:
         if common.json_path("RESUME_CHECK.json").exists()
         else {}
     )
-    ledger = json.loads(common.LAUNCH_LEDGER.read_text(encoding="utf-8"))
+    ledger = common.ledger_totals()
 
     training_table = {}
     milestone_table = []
@@ -858,7 +858,7 @@ def main(argv: list[str]) -> int:
         "streams": common.verify_streams(),
         "sealed_block": common.sealed_block_scan(),
         "production_diff": common.production_diff(),
-        "launches": json.loads(common.LAUNCH_LEDGER.read_text(encoding="utf-8")),
+        "launches": common.ledger_totals(),
         "evaluation_coverage": evaluation.coverage(),
         "rule_replay_agreement": data["rule_replay"],
         "preflight": {

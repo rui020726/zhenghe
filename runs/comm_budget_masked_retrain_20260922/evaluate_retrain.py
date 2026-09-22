@@ -309,7 +309,7 @@ def jobs(kind: str) -> list[tuple[int, int, int]]:
 
 
 def plan() -> dict[str, Any]:
-    booked = common.LaunchLedger().starts
+    booked = common.ledger_totals()["starts"]
     return {
         "cells": {
             name: {
@@ -340,7 +340,9 @@ def run_rules(args: argparse.Namespace) -> int:
     torch.set_num_threads(max(1, int(args.threads)))
     directory = EVAL_DIR / f"runs_rules_s{args.shard}"
     directory.mkdir(parents=True, exist_ok=True)
-    ledger = common.LaunchLedger()
+    # One ledger per shard for the same reason the trainers have one per seed: shards are processes,
+    # and a shared read-modify-write counter would lose launches to whichever shard wrote last.
+    ledger = common.LaunchLedger(f"LAUNCH_LEDGER_rules_s{args.shard}.json")
     done = {(str(row["arm"]), int(row["seed"])) for row in load_rows("rules")}
     rows: list[dict[str, Any]] = []
     failures: list[dict[str, Any]] = []
@@ -382,7 +384,7 @@ def run_eval(args: argparse.Namespace) -> int:
     torch.set_num_threads(max(1, int(args.threads)))
     directory = EVAL_DIR / f"runs_{kind}_s{args.shard}"
     directory.mkdir(parents=True, exist_ok=True)
-    ledger = common.LaunchLedger()
+    ledger = common.LaunchLedger(f"LAUNCH_LEDGER_eval_{kind}_s{args.shard}.json")
     done = {(str(row["arm"]), int(row["seed"])) for row in load_rows(f"learned_{kind}")}
     written = 0
     failures: list[dict[str, Any]] = []
@@ -482,9 +484,7 @@ def coverage() -> dict[str, Any]:
             row["steps_run"] == common.STEPS_PER_EPISODE for row in _all_rows()
         ),
     }
-    report["launches"] = json.loads(
-        common.LAUNCH_LEDGER.read_text(encoding="utf-8")
-    ) if common.LAUNCH_LEDGER.exists() else {}
+    report["launches"] = common.ledger_totals()
     return report
 
 

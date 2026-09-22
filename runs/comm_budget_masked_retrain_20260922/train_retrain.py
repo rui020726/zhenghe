@@ -775,15 +775,18 @@ def train(args: argparse.Namespace) -> int:
         )
     rows_path = directory / f"episodes_seed{training_seed}.jsonl"
     updates_path = directory / f"updates_seed{training_seed}.jsonl"
-    if not path.exists():
-        # A fresh start that finds episode rows from an earlier attempt would otherwise append to
+    if not path.exists():        # A fresh start that finds episode rows from an earlier attempt would otherwise append to
         # them, and a reader could not tell which rows belonged to which run. Quarantine, never
         # delete: the old rows are evidence about a failed attempt, not garbage.
         stamp = time.strftime("%Y%m%dT%H%M%S")
         for stale in (rows_path, updates_path):
             if stale.exists():
                 stale.rename(stale.with_name(f"{stale.stem}.quarantined_{stamp}{stale.suffix}"))
-    ledger = common.LaunchLedger()
+    # Each arm owns a ledger file: the three training processes run in parallel and the ledger is a
+    # read-modify-write document, so a shared one would have them overwrite each other's counts.
+    # The 1,500 ceiling is still global because ``reserve`` adds up every ledger file before it
+    # lets an episode start.
+    ledger = common.LaunchLedger(f"LAUNCH_LEDGER_train_seed{training_seed}.json")
     started = time.time()
     while state["environment_steps"] < args.steps:
         batch_seeds = [
@@ -961,7 +964,7 @@ def probe(args: argparse.Namespace) -> int:
         raise RuntimeError(f"the execution path is not clean against the freeze: {cleanliness}")
     directory = common.EPISODE_OUT / "probe"
     directory.mkdir(parents=True, exist_ok=True)
-    ledger = common.LaunchLedger()
+    ledger = common.LaunchLedger("LAUNCH_LEDGER_probe.json")
     rows: list[dict[str, Any]] = []
     failures: list[dict[str, Any]] = []
     per_seed = int(args.episodes)
@@ -1071,9 +1074,7 @@ def probe(args: argparse.Namespace) -> int:
                 row["steps_run"] == STEPS_PER_EPISODE for row in rows
             ),
         },
-        "launches": json.loads(common.LAUNCH_LEDGER.read_text(encoding="utf-8"))["starts"]
-        if common.LAUNCH_LEDGER.exists()
-        else 0,
+        "launches": common.ledger_totals()["starts"],
         "code_freeze_sha": freeze,
         "cleanliness": cleanliness,
     }
@@ -1143,7 +1144,7 @@ def resume_check(args: argparse.Namespace) -> int:
     directory = common.EPISODE_OUT / "resume_check"
     directory.mkdir(parents=True, exist_ok=True)
     freeze = common.freeze_sha()
-    ledger = common.LaunchLedger()
+    ledger = common.LaunchLedger("LAUNCH_LEDGER_resume_check.json")
     training_seed = int(args.seed)
 
     def fresh() -> tuple[Any, Any, dict[str, Any]]:

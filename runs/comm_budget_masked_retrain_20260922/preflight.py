@@ -191,7 +191,7 @@ def greedy_path_probe() -> dict[str, Any]:
     """
     directory = common.EPISODE_OUT / "greedy_probe"
     directory.mkdir(parents=True, exist_ok=True)
-    ledger = common.LaunchLedger()
+    ledger = common.LaunchLedger("LAUNCH_LEDGER_greedy_probe.json")
     controller = entry.initial_controller(1)
     stream = common.TRAIN_SEEDS[0]
     ledger.reserve("greedy_probe", stream, arm="greedy_probe")
@@ -279,7 +279,7 @@ def main(argv: list[str]) -> int:
         "optimizer_steps_total": resume.get("optimizer_steps_total"),
     }
     greedy = greedy_path_probe()
-    ledger = json.loads(common.LAUNCH_LEDGER.read_text(encoding="utf-8"))
+    ledger = common.ledger_totals()
     checks = {
         "provenance": provenance,
         "streams": streams,

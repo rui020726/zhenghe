@@ -456,14 +456,21 @@ class LaunchLedger:
 
     Training, probing and evaluation all draw from the same 1,500, and a launch that raised is
     still recorded: the ceiling exists to bound the round's cost, not to bound its successes.
+
+    Each process owns one file. The three training arms run in parallel and the payload is a
+    read-modify-write JSON document, so a single shared ledger would have each process overwrite
+    the others' counts -- an accounting defect in the one artefact whose job is accounting. The cap
+    is still global because ``reserve`` reads every ledger file, not just its own.
     """
 
-    def __init__(self) -> None:
-        self.path = LAUNCH_LEDGER
+    PATTERN = "LAUNCH_LEDGER*.json"
+
+    def __init__(self, name: str = "LAUNCH_LEDGER.json") -> None:
+        self.path = HERE / name
         self.payload = (
             json.loads(self.path.read_text(encoding="utf-8"))
             if self.path.exists()
-            else {"cap": LAUNCH_CAP, "starts": 0, "by_kind": {}, "entries": []}
+            else {"cap": LAUNCH_CAP, "starts": 0, "by_kind": {}, "entries": [], "failures": 0}
         )
         if int(self.payload["cap"]) != LAUNCH_CAP:
             raise RuntimeError(
@@ -475,17 +482,22 @@ class LaunchLedger:
     def starts(self) -> int:
         return int(self.payload["starts"])
 
+    def total_starts(self) -> int:
+        return ledger_totals()["starts"]
+
     def remaining(self) -> int:
-        return LAUNCH_CAP - self.starts
+        return LAUNCH_CAP - self.total_starts()
 
     def reserve(self, kind: str, seed: int, *, arm: str = "") -> None:
-        if self.starts >= LAUNCH_CAP:
+        total = self.total_starts()
+        if total >= LAUNCH_CAP:
             raise RuntimeError(
-                f"the {LAUNCH_CAP}-episode launch ceiling is spent ({self.payload['by_kind']}); "
-                f"refusing to start {kind} s{seed} rather than extending the round"
+                f"the {LAUNCH_CAP}-episode launch ceiling is spent ({total} started across "
+                f"{self.PATTERN}); refusing to start {kind} s{seed} rather than extending the round"
             )
         self.payload["starts"] = self.starts + 1
         self.payload["by_kind"][kind] = int(self.payload["by_kind"].get(kind, 0)) + 1
+        self._write()
 
     def record(self, kind: str, seed: int, ok: bool, detail: str, *, arm: str = "") -> None:
         self.payload["entries"].append(
@@ -501,7 +513,36 @@ class LaunchLedger:
         self.payload["failures"] = sum(
             1 for entry in self.payload["entries"] if not entry["ok"]
         )
+        self._write()
+
+    def _write(self) -> None:
         write_json(self.path, self.payload)
+
+
+def ledger_totals() -> dict[str, Any]:
+    """Every ledger file added up: the round's real cost, across processes and reruns."""
+    files = sorted(HERE.glob(LaunchLedger.PATTERN))
+    totals: dict[str, Any] = {
+        "cap": LAUNCH_CAP,
+        "starts": 0,
+        "failures": 0,
+        "by_kind": {},
+        "files": [],
+        "entries": [],
+    }
+    for path in files:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        totals["starts"] += int(payload.get("starts", 0))
+        totals["failures"] += int(payload.get("failures", 0))
+        for kind, count in (payload.get("by_kind") or {}).items():
+            totals["by_kind"][kind] = int(totals["by_kind"].get(kind, 0)) + int(count)
+        totals["files"].append(
+            {"file": path.name, "starts": int(payload.get("starts", 0))}
+        )
+        totals["entries"].extend(payload.get("entries") or [])
+    totals["remaining"] = LAUNCH_CAP - totals["starts"]
+    totals["within_cap"] = totals["starts"] <= LAUNCH_CAP
+    return totals
 
 
 # ------------------------------------------------------------------ statistics
@@ -653,9 +694,7 @@ def main(argv: list[str]) -> int:
         "cleanliness": freeze_cleanliness() if freeze().get("registered") else {"registered": False},
         "sealed_block": sealed_block_scan(),
         "production_diff": production_diff(),
-        "launches": json.loads(LAUNCH_LEDGER.read_text(encoding="utf-8"))["starts"]
-        if LAUNCH_LEDGER.exists()
-        else 0,
+        "launches": ledger_totals(),
     }
     print(json.dumps(payload, ensure_ascii=False, indent=1, default=str))
     return 0
