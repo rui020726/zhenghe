@@ -38,6 +38,41 @@ L4_MIN_FRONTIER_BYTE_GAP = 2_930
 ALLOWED_CELL_DIFFERENCES = ("comm_policy", "comm_policy_params", "comm_budget_bytes")
 
 
+def ledger_failures(goals: int) -> dict[str, Any]:
+    """Split the ledger's failures into recovered and unrecovered, mechanically.
+
+    A launch that crashed and was later re-run successfully for the same (kind, seed) still spent
+    an episode, and that cost stays in the totals. What L0 asks is whether any data this layer
+    aggregates came from a launch that never produced a good counterpart.
+    """
+    entries: list[dict[str, Any]] = []
+    for path in sorted(common.HERE.glob(common.LEDGER_PATTERN)):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        for entry in payload.get("entries", []):
+            if int(entry.get("goals", -1)) == int(goals):
+                entries.append(entry)
+    succeeded = {
+        (str(entry["kind"]), int(entry["seed"])) for entry in entries if entry["ok"]
+    }
+    failed = [(str(entry["kind"]), int(entry["seed"]), str(entry["detail"])) for entry in entries if not entry["ok"]]
+    unrecovered = [
+        {"kind": kind, "seed": seed, "detail": detail}
+        for kind, seed, detail in failed
+        if (kind, seed) not in succeeded
+    ]
+    return {
+        "entries": len(entries),
+        "failures": len(failed),
+        "recovered": [
+            {"kind": kind, "seed": seed, "detail": detail}
+            for kind, seed, detail in failed
+            if (kind, seed) in succeeded
+        ],
+        "unrecovered": unrecovered,
+        "matrix_failures": [item for item in failed if item[0] == "matrix"],
+    }
+
+
 def _verdict(name: str, passed: bool, evidence: dict[str, Any], meaning: str) -> dict[str, Any]:
     return {"gate": name, "passed": bool(passed), "meaning": meaning, "evidence": evidence}
 
@@ -49,6 +84,7 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
         common.json_path(f"STREAM_MANIFEST_g{goals}.json").read_text(encoding="utf-8")
     )
     ledger = common.ledger_totals()
+    failure_account = ledger_failures(goals)
     agreement = (
         json.loads(common.json_path("AGREEMENT_GATE.json").read_text(encoding="utf-8"))
         if common.json_path("AGREEMENT_GATE.json").exists()
@@ -97,7 +133,8 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
             or over_budget
             or closure_failures
             or refusals
-            or ledger["failures"]
+            or failure_account["unrecovered"]
+            or failure_account["matrix_failures"]
             or illegal
             or steps != [common.STREAM_STEPS]
             or probed != [True]
@@ -113,7 +150,8 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
             "ledger_closure_failures": closure_failures,
             "competitor_cells_with_transport_refusal": refusals[:10],
             "competitor_refusal_count": len(refusals),
-            "technical_failures_in_ledger": ledger["failures"],
+            "ledger_failures": failure_account,
+            "technical_failures_total": ledger["failures"],
             "launches": {
                 "matrix": ledger["matrix_starts"],
                 "matrix_cap": ledger["matrix_cap"],

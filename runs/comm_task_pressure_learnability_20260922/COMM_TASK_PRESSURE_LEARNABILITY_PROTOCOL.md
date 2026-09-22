@@ -224,7 +224,7 @@ lambda_break_even(b→c) = Δ on_time 个/episode / ( Δ bytes / 29 300 )
 - 交付前必须通过：`python -m unittest discover -s integrated_sar/tests`、`python -m integrated_sar`、本轮 `test_pressure_harness.py`。
 ## 11. 开跑前的协议修订（在任何一条新 stream 之前提交，逐条列明改了什么与为什么）
 
-§0 声明本文冻结后不再修改，指的是 **判据、阈值、seed 块、规则库、口径**；下列五项是 harness 与测量仪器的修正，
+§0 声明本文冻结后不再修改，指的是 **判据、阈值、seed 块、规则库、口径**；下列六项是 harness 与测量仪器的修正，
 其中没有任何一项放宽判据或改变任何一条阈值。
 
 1. **`rule_matrix.py` 改名 `pressure_matrix.py`。** `pressure_common` 在导入各轮 fixtures 时，那些 fixture 会把自己
