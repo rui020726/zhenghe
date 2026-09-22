@@ -1,10 +1,10 @@
 {
  "branch": "exp/comm-budget-masked-retrain",
- "committed_at": "2026-09-22 20:28:18 +0800",
+ "committed_at": "2026-09-22 20:32:39 +0800",
  "configuration_hash": "b5d1b46afa3b2604",
  "derivation": "sys.modules after importing train_retrain and the archived sampler/trainer entries, unioned with this directory's own scripts",
  "document": "CODE_FREEZE",
- "module_count": 53,
+ "module_count": 54,
  "modules": {
   "integrated_sar/__init__.py": {
    "head_blob": "c20e013e6a21d5b0",
@@ -245,18 +245,18 @@
    "working_blob": "ffe0ec3571bc2829"
   },
   "runs/comm_budget_masked_retrain_20260922/report_retrain.py": {
-   "head_blob": "977bb737eadc7c24",
+   "head_blob": "c21a290ed13dd8e8",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "977bb737eadc7c24"
+   "working_blob": "c21a290ed13dd8e8"
   },
   "runs/comm_budget_masked_retrain_20260922/retrain_common.py": {
-   "head_blob": "a1fe8554bcb4cc44",
+   "head_blob": "67d4f7701d0ad947",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "a1fe8554bcb4cc44"
+   "working_blob": "67d4f7701d0ad947"
   },
   "runs/comm_budget_masked_retrain_20260922/test_retrain.py": {
    "head_blob": "bd8de0e233c6742d",
@@ -271,6 +271,13 @@
    "matches_head": true,
    "on_disk": true,
    "working_blob": "fb4b7e526ef554c4"
+  },
+  "runs/comm_budget_pilot_20260919/evaluate_pilot.py": {
+   "head_blob": "689602785d03170a",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "689602785d03170a"
   },
   "runs/comm_budget_pilot_20260919/pilot_common.py": {
    "head_blob": "53b4a9ef76f6031d",
@@ -385,12 +392,12 @@
   "runtime_modules_changed": []
  },
  "registered": true,
- "registered_at": "1790080098",
+ "registered_at": "1790080359",
  "rule": "every launch re-derives the graph and requires: no committed or working-tree difference against this SHA for any member, no untracked member, and no module in the graph that this freeze did not record",
  "schema": "retrain_common/1",
- "sha": "ad3db56df8fd84e0c3f872bb0439bf77e5f1b63c",
- "short": "ad3db56df",
- "subject": "fix(comm): state the round in its own language, and let the numbers carry the mechanism",
+ "sha": "955a00e9b7dd0148532416effbbe4b7c98605fe5",
+ "short": "955a00e9b",
+ "subject": "fix(comm): put the lazily-imported statistics module inside the freeze",
  "trainer_identity": {
   "ack": false,
   "action_mask_schema": "budget-sequential-mask/1",
