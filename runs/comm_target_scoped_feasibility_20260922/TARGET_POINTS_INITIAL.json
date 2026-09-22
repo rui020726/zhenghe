@@ -1,0 +1,71 @@
+{
+  "schema": "comm-target-points-initial/1",
+  "date": "2026-09-22",
+  "source": "runs/comm_send_actionability_20260922/COMM_SEND_ACTIONABILITY_ROWS.json",
+  "selection_rule": "seed ascending first four streams; earliest post-first both_actions_free update by (step,target,revision); no outcome fields",
+  "seeds": [700010, 700018, 700020, 700022],
+  "horizons": [1, 5, 20],
+  "branches": ["EARLY_FLUSH", "DEFER_FLUSH"],
+  "max_boundary_branches": 24,
+  "max_simulation_starts": 28,
+  "points": [
+    {
+      "seed": 700010,
+      "step": 3,
+      "target": "piloc-e1-target-0",
+      "semantic_revision": 3,
+      "message_class": "update",
+      "primary_class": "both_actions_free",
+      "attempt_charge_bytes": 2616,
+      "budget_remaining_at_audit": 18932.0,
+      "reason": "earliest post-first both_actions_free update",
+      "changed_view": true,
+      "first_emission": false,
+      "terminal": false
+    },
+    {
+      "seed": 700018,
+      "step": 3,
+      "target": "piloc-e1-target-2",
+      "semantic_revision": 3,
+      "message_class": "update",
+      "primary_class": "both_actions_free",
+      "attempt_charge_bytes": 2400,
+      "budget_remaining_at_audit": 5048.0,
+      "reason": "earliest post-first both_actions_free update",
+      "changed_view": true,
+      "first_emission": false,
+      "terminal": false
+    },
+    {
+      "seed": 700020,
+      "step": 3,
+      "target": "piloc-e1-target-0",
+      "semantic_revision": 3,
+      "message_class": "update",
+      "primary_class": "both_actions_free",
+      "attempt_charge_bytes": 2820,
+      "budget_remaining_at_audit": 12266.0,
+      "reason": "earliest post-first both_actions_free update",
+      "changed_view": true,
+      "first_emission": false,
+      "terminal": false
+    },
+    {
+      "seed": 700022,
+      "step": 3,
+      "target": "piloc-e1-target-2",
+      "semantic_revision": 3,
+      "message_class": "update",
+      "primary_class": "both_actions_free",
+      "attempt_charge_bytes": 2610,
+      "budget_remaining_at_audit": 12170.0,
+      "reason": "earliest post-first both_actions_free update",
+      "changed_view": true,
+      "first_emission": false,
+      "terminal": false
+    }
+  ],
+  "shortfalls": [],
+  "outcome_fields_present": false
+}
