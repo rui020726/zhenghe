@@ -44,6 +44,26 @@ class SendItem:
     changed without everyone confirming. Both are ``-1`` when no ACK has ever arrived, which
     is the explicit unknown encoding -- a sender that has never been told anything must not
     read as a sender that has been told "nobody confirmed".
+
+    The last three fields state what this candidate would *cost* and whether it could be
+    *executed*, as the transport sees it. They are metadata for the executor and for the
+    training tape, never neural-network inputs: the feature layout is unchanged by them.
+
+    * ``attempt_charge_bytes`` -- the price of emitting this item now, i.e. the payload
+      estimate of the message ``CommRelay._emit`` would build for it multiplied by the
+      subscriber fan-out. It is produced by that same code path, not by a copy of the
+      formula, because an approximation would let a controller believe a send was affordable.
+    * ``send_executable`` -- whether this candidate would pass the real budget and capacity
+      gates **as the next send of the step, before any policy send of this step has run**.
+      Sequential feasibility inside the step is the caller's job, so a candidate that is
+      executable here may still turn out unaffordable once earlier sends have spent the credit.
+    * ``send_block_reason`` -- ``allowed``, ``budget_exhausted``, ``capacity_step``, or
+      ``charge_unavailable`` (the relay cannot price this candidate at all, which is the same
+      condition under which ``_emit`` would itself fail).
+
+    ``None`` means "not computed", which is what a hand-built item from an older test carries.
+    A consumer that needs executability must fail closed on ``None`` rather than read it as
+    zero bytes or as affordable.
     """
 
     target_id: str
@@ -68,6 +88,9 @@ class SendItem:
     has_future_requirements: bool
     ack_confirmed_fraction: float = -1.0
     ack_unacked_broadcasts: int = -1
+    attempt_charge_bytes: int | None = None
+    send_executable: bool | None = None
+    send_block_reason: str | None = None
 
 
 @dataclass(frozen=True)

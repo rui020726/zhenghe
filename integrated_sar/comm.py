@@ -791,6 +791,7 @@ class CommRelay:
                 self.counters["coalesced_changes"] += 1
             sent = ledger.last_sent
             ready_step = ledger.ready_step if ledger.ready_step is not None else self._tick
+            charge, block_reason = self._attempt_cost(target_id, ledger, snapshot)
             items.append(
                 SendItem(
                     target_id=target_id,
@@ -831,6 +832,16 @@ class CommRelay:
                     ack_unacked_broadcasts=(
                         self.ack.unacked_broadcasts(target_id) if self._ack_enabled else -1
                     ),
+                    # What emitting this item would cost and whether it could be emitted at all,
+                    # read off the executor's own arithmetic. The order the items come back in is
+                    # the order the transport will spend them in, so a controller that has to
+                    # know which sends are affordable can walk this list with a shadow credit
+                    # instead of discovering the refusal after the fact.
+                    attempt_charge_bytes=charge,
+                    send_executable=(
+                        None if charge is None else bool(self._budget.can_send(charge))
+                    ),
+                    send_block_reason=block_reason,
                 )
             )
         return SendObservation(
@@ -847,6 +858,29 @@ class CommRelay:
             backlog_targets=self.backlog,
             subscribers=len(self._subscribers),
         )
+
+    def _attempt_cost(
+        self, target_id: str, ledger: _TargetLedger, snapshot: TaskSnapshot | None
+    ) -> tuple[int | None, str]:
+        """Price one candidate exactly as :meth:`_emit` would spend it, and say if it fits now.
+
+        One code path on purpose. The relay is the only thing that knows what a packet costs --
+        the message the transport would build, its serialized payload estimate, the subscriber
+        fan-out it addresses, and the budget gate it checks before charging -- so an
+        "affordability" figure assembled anywhere else is a second definition of the same
+        number, and the two drift. A controller therefore gets the price and the gate verdict of
+        *this* candidate, as the next send of the step, while the order-dependent part (what
+        earlier sends of the step have already spent) stays the caller's shadow to walk.
+
+        ``charge_unavailable`` is returned exactly where ``_emit`` would itself fail: no registry
+        lookup wired and no stored event for the target. It is reported, never guessed at.
+        """
+        try:
+            message = self._message(target_id, ledger, snapshot)
+        except RuntimeError:
+            return None, "charge_unavailable"
+        charge = int(estimate_message_bytes(message) * len(self._subscribers))
+        return charge, self._budget.why_blocked(charge)
 
     def _emit(self, item: SendItem, *, first: bool, reason: str = "policy") -> None:
         if reason not in ("policy", "forced_maxwait", "other"):
