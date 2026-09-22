@@ -29,6 +29,27 @@ import record_layer
 ARTEFACT_KEY = "artefacts"
 
 
+def registered_freeze() -> dict[str, Any]:
+    """The freeze this process executes under, stamped into every row it writes.
+
+    Round 10 and this round both hit the same question: a layer whose rows were produced by two
+    different code states cannot say which code produced which number. The stamp makes that
+    checkable from the rows themselves instead of from a narrative in the report.
+    """
+    path = common.json_path("CODE_FREEZE.json")
+    if not path.exists():
+        raise SystemExit(
+            "CODE_FREEZE.json is missing: register the freeze before starting any cell, or the "
+            "round cannot say what code ran"
+        )
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    return {
+        "head": str(payload["head_at_registration"]),
+        "modules": int(payload["module_count"]),
+        "execution_blob": common.sha256(path)[:16],
+    }
+
+
 def rows_path(goals: int, shard: int) -> Path:
     return common.layer_rows(goals) / f"rows_g{goals}_shard{shard}.jsonl"
 
@@ -58,6 +79,7 @@ def cells(goals: int) -> list[tuple[str, int]]:
 
 
 def run(goals: int, shard: int, shards: int) -> dict[str, Any]:
+    freeze = registered_freeze()
     record_layer.require_clean_audit()
     manifest = common.json_path(f"STREAM_MANIFEST_g{goals}.json")
     if not manifest.exists():
@@ -92,6 +114,7 @@ def run(goals: int, shard: int, shards: int) -> dict[str, Any]:
                 failures.append(f"{arm} s{seed}: {type(error).__name__}: {str(error)[:200]}")
                 print(f"[FAIL g{goals} {arm} s{seed}] {error}", file=sys.stderr, flush=True)
                 continue
+            row["code_freeze"] = freeze
             row["stream_detected"] = int(by_seed[seed]["detected"])
             row["stream_placed"] = int(by_seed[seed]["placed"])
             row["stream_last_detection_step"] = by_seed[seed]["last_detection_step"]
@@ -140,13 +163,68 @@ def coverage(goals: int) -> dict[str, Any]:
     }
 
 
+#: Fields that legitimately differ between two passes over the same cell.
+VOLATILE_ROW_FIELDS = ("seconds", "artefacts", "code_freeze")
+
+
+def compare_rows(old: list[dict[str, Any]], new: list[dict[str, Any]]) -> dict[str, Any]:
+    """Did a re-run under a new freeze reproduce the same episodes?
+
+    This is the check that turns "we re-ran it" into evidence: everything but timing, the artefact
+    paths and the freeze stamp must be identical, cell by cell. A difference here is not noise to
+    be averaged, it is the round's determinism claim failing.
+    """
+    def key(row: dict[str, Any]) -> tuple[str, int]:
+        return (str(row["arm"]), int(row["seed"]))
+
+    def strip(row: dict[str, Any]) -> dict[str, Any]:
+        return {k: v for k, v in row.items() if k not in VOLATILE_ROW_FIELDS}
+
+    left = {key(row): strip(row) for row in old}
+    right = {key(row): strip(row) for row in new}
+    only_old = sorted(set(left) - set(right))
+    only_new = sorted(set(right) - set(left))
+    differing: dict[str, list[str]] = {}
+    for cell in sorted(set(left) & set(right)):
+        fields = sorted(
+            field
+            for field in set(left[cell]) | set(right[cell])
+            if left[cell].get(field) != right[cell].get(field)
+        )
+        if fields:
+            differing[f"{cell[0]} s{cell[1]}"] = fields
+    return {
+        "compared_cells": len(set(left) & set(right)),
+        "only_in_old": [f"{arm} s{seed}" for arm, seed in only_old][:10],
+        "only_in_new": [f"{arm} s{seed}" for arm, seed in only_new][:10],
+        "differing_fields": differing,
+        "identical": not differing and not only_old and not only_new and bool(left),
+    }
+
+
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--goals", type=int, required=True, choices=sorted(common.LAYERS))
-    parser.add_argument("--mode", choices=("run", "coverage"), default="run")
+    parser.add_argument("--mode", choices=("run", "coverage", "compare"), default="run")
+    parser.add_argument("--old-dir", default=None, help="quarantined rows to compare against")
+    parser.add_argument("--goals-a", type=int, default=None)
     parser.add_argument("--shards", type=int, default=1)
     parser.add_argument("--shard", type=int, default=0)
     args = parser.parse_args()
+    if args.mode == "compare":
+        if not args.old_dir:
+            parser.error("--mode compare needs --old-dir")
+        old_rows: list[dict[str, Any]] = []
+        for path in sorted(Path(args.old_dir).glob("rows_g*_shard*.jsonl")):
+            with path.open(encoding="utf-8") as handle:
+                old_rows.extend(json.loads(line) for line in handle if line.strip())
+        new_rows = list(load_rows(args.goals).values())
+        report = compare_rows(old_rows, new_rows)
+        common.write_json(
+            common.HERE / f"RERUN_DETERMINISM_g{args.goals}.json", report
+        )
+        print(json.dumps(report, ensure_ascii=False, indent=1))
+        return 0 if report["identical"] else 1
     if args.mode == "coverage":
         report = coverage(args.goals)
         print(json.dumps(report, ensure_ascii=False, indent=1))

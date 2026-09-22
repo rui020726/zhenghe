@@ -121,6 +121,12 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
     ]
     steps = sorted({int(row["steps"]) for row in rows})
     probed = sorted({bool(row["probed"]) for row in rows})
+    signatures = sorted({str(row["setting_signature"]) for row in rows})
+    mixed_settings = {
+        str(seed): sorted({str(row["setting_signature"]) for row in group})
+        for seed, group in per_seed.items()
+        if len({str(row["setting_signature"]) for row in group}) != 1
+    }
     placements = sorted(
         {int(entry["placed"]) for entry in manifest["streams"] if entry["illegal"]}
     )
@@ -134,7 +140,7 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
             or closure_failures
             or refusals
             or failure_account["unrecovered"]
-            or failure_account["matrix_failures"]
+            or len({str(row.get("code_freeze", {}).get("head")) for row in rows}) != 1
             or illegal
             or steps != [common.STREAM_STEPS]
             or probed != [True]
@@ -151,6 +157,7 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
             "competitor_cells_with_transport_refusal": refusals[:10],
             "competitor_refusal_count": len(refusals),
             "ledger_failures": failure_account,
+            "distinct_code_freezes": sorted({str(row.get("code_freeze", {}).get("head")) for row in rows}),
             "technical_failures_total": ledger["failures"],
             "launches": {
                 "matrix": ledger["matrix_starts"],
