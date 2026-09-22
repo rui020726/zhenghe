@@ -1,0 +1,352 @@
+{
+ "budget_bytes": 29300,
+ "gates": {
+  "L0": {
+   "evidence": {
+    "all_cells_probed": [
+     true
+    ],
+    "allowed_configuration_differences": [
+     "comm_policy",
+     "comm_policy_params",
+     "comm_budget_bytes"
+    ],
+    "budget_violations": [],
+    "cells_expected": 144,
+    "cells_present": 144,
+    "cells_where_the_credit_bit": 87,
+    "distinct_layer_wide_settings": [
+     [
+      "policy_owned_timing",
+      "1.0",
+      "False",
+      "1000",
+      "False",
+      "8",
+      "True"
+     ]
+    ],
+    "episode_code_states": [
+     "c922ca100665609c"
+    ],
+    "harness_agreement_with_archived_rows": true,
+    "illegal_streams": {},
+    "launches": {
+     "gate": 10,
+     "gate_cap": 12,
+     "matrix": 496,
+     "matrix_cap": 640
+    },
+    "ledger_closure_failures": [],
+    "ledger_failures": {
+     "entries": 160,
+     "failures": 0,
+     "matrix_failures": [],
+     "recovered": [],
+     "unrecovered": []
+    },
+    "missing_cells": [],
+    "note_on_refusals": "a fixed rule being refused is the credit binding, which is what L3 asks for; L0 only requires that the transcript and the relay agree about how often it happened",
+    "refusal_ledger_mismatches": [],
+    "single_episode_code_state": true,
+    "stamped_rows": {
+     "6e67fbdb9": 144
+    },
+    "steps_per_episode": [
+     1000
+    ],
+    "streams_with_mixed_settings": {},
+    "streams_with_wrong_arm_count": 0,
+    "technical_failures_total": 20,
+    "un_stamped_rows": 0
+   },
+   "gate": "L0",
+   "meaning": "the layer's data, ledger and interface are trustworthy enough to be judged at all",
+   "passed": true
+  },
+  "L1": {
+   "evidence": {
+    "illegal_streams": [],
+    "mean_detected_over_placed": 0.96094,
+    "per_stream": {
+     "1000100": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000101": {
+      "detected": 5,
+      "placed": 8,
+      "ratio": 0.625,
+      "registered": 5
+     },
+     "1000102": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000103": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000104": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000105": {
+      "detected": 6,
+      "placed": 8,
+      "ratio": 0.75,
+      "registered": 6
+     },
+     "1000106": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000107": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000108": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000109": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000110": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000111": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000112": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000113": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000114": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     },
+     "1000115": {
+      "detected": 8,
+      "placed": 8,
+      "ratio": 1.0,
+      "registered": 8
+     }
+    },
+    "threshold": 0.75,
+    "worst_stream": "1000101",
+    "worst_stream_ratio": 0.625
+   },
+   "gate": "L1",
+   "meaning": "the layer's targets are actually being found, so a communication gate is not measuring a search hole",
+   "passed": true
+  },
+  "L2": {
+   "evidence": {
+    "band": [
+     0.4,
+     0.9
+    ],
+    "band_holds": false,
+    "best_fixed_rule": "send_once",
+    "best_minus_always_hold_on_time": 7.1875,
+    "best_on_time_rate_of_detected": 0.9375,
+    "ci95": [
+     6.5,
+     7.75
+    ],
+    "ci_lower_above_zero": true,
+    "pairs": 16,
+    "reading_if_above_band": "effect ceiling: communication already buys nearly everything",
+    "reading_if_below_band": "capacity/search floor: sending cannot recover the tasks"
+   },
+   "gate": "L2",
+   "meaning": "the uplink still buys tasks, and the best rule is neither at the floor nor at the ceiling, so a cost/effect trade-off can exist at all",
+   "passed": false
+  },
+  "L3": {
+   "evidence": {
+    "all_arms_competition_streams": {
+     "always_hold": 0,
+     "bound_only_3_10": 1,
+     "event": 2,
+     "event_priority": 2,
+     "event_unbudgeted": 0,
+     "first_send_plus_bound_3_10": 1,
+     "periodic_20": 1,
+     "periodic_5": 3,
+     "send_once": 0
+    },
+    "best_fixed_rule": "send_once",
+    "definition_of_a_point": "visible candidates >= 2 and 1 <= payable < visible at the step's opening credit",
+    "per_stream_points": {
+     "1000100": 0,
+     "1000101": 0,
+     "1000102": 0,
+     "1000103": 0,
+     "1000104": 0,
+     "1000105": 0,
+     "1000106": 0,
+     "1000107": 0,
+     "1000108": 0,
+     "1000109": 0,
+     "1000110": 0,
+     "1000111": 0,
+     "1000112": 0,
+     "1000113": 0,
+     "1000114": 0,
+     "1000115": 0
+    },
+    "required_streams": 8,
+    "required_streams_90_percent": 4,
+    "secondary_readings_not_used_for_the_gate": {
+     "credit_exhausted_with_candidates_streams": 0,
+     "joint_only_points_total": 115,
+     "mean_payable_at_competition": 0.0,
+     "mean_visible_at_competition": 0.0,
+     "payable_candidate_points_total": 5793
+    },
+    "streams_at_or_above_90_percent_credit": 0,
+    "streams_with_competition_points": 0
+   },
+   "gate": "L3",
+   "meaning": "the budget is binding in a way that forces selection among candidates the sender can see",
+   "passed": false
+  },
+  "L4": {
+   "evidence": {
+    "conditions": {
+     "1_envelope_gain": {
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "holds": false,
+      "threshold": 0.25,
+      "value": 0.0
+     },
+     "2_two_rules_win_three_streams_each": {
+      "holds": false,
+      "rules": [
+       "send_once"
+      ],
+      "threshold": 2,
+      "unique_winner_counts": {
+       "send_once": 16
+      }
+     },
+     "3_bidirectional_pair": {
+      "holds": false,
+      "pairs": [],
+      "threshold_per_side": 3
+     },
+     "4_frontier": {
+      "adjacent_pairs": [],
+      "holds": false,
+      "points": [
+       [
+        "send_once",
+        7.1875,
+        19047.0
+       ]
+      ],
+      "qualifying_pairs": [],
+      "required_byte_gap": 2930,
+      "required_effect_gap": 0.25,
+      "required_points": 2
+     }
+    },
+    "envelope_definition": "per-stream maximum of the seven budgeted competitors on on-time targets, ties broken towards fewer bytes; an experience bound, not a deployable strategy",
+    "note": "L4 is a necessary-condition signal only: it says fixed rules cannot cover the measured situations uniformly. It does not show a network could learn the envelope."
+   },
+   "gate": "L4",
+   "meaning": "there is situation-dependent value that no single fixed rule in the library captures",
+   "passed": false
+  }
+ },
+ "goals": 8,
+ "launch_ledger": {
+  "by_kind": {
+   "gate": 10,
+   "matrix": 448,
+   "record": 48
+  },
+  "failures": 20,
+  "files": [
+   "LAUNCH_LEDGER_agreement.json",
+   "LAUNCH_LEDGER_g10_p34112.json",
+   "LAUNCH_LEDGER_g10_p35424.json",
+   "LAUNCH_LEDGER_g10_p4220.json",
+   "LAUNCH_LEDGER_g10_p47628.json",
+   "LAUNCH_LEDGER_g6_p12304.json",
+   "LAUNCH_LEDGER_g6_p18604.json",
+   "LAUNCH_LEDGER_g6_p31224.json",
+   "LAUNCH_LEDGER_g6_p31492.json",
+   "LAUNCH_LEDGER_g6_p38932.json",
+   "LAUNCH_LEDGER_g6_p39808.json",
+   "LAUNCH_LEDGER_g6_p42156.json",
+   "LAUNCH_LEDGER_g6_p57412.json",
+   "LAUNCH_LEDGER_g8_p36900.json",
+   "LAUNCH_LEDGER_g8_p39068.json",
+   "LAUNCH_LEDGER_g8_p42892.json",
+   "LAUNCH_LEDGER_g8_p44868.json",
+   "LAUNCH_LEDGER_record_g10_p3932.json",
+   "LAUNCH_LEDGER_record_g10_p52424.json",
+   "LAUNCH_LEDGER_record_g10_p55664.json",
+   "LAUNCH_LEDGER_record_g10_p56292.json",
+   "LAUNCH_LEDGER_record_g6_p10000.json",
+   "LAUNCH_LEDGER_record_g6_p18480.json",
+   "LAUNCH_LEDGER_record_g6_p23104.json",
+   "LAUNCH_LEDGER_record_g6_p2652.json",
+   "LAUNCH_LEDGER_record_g6_p43920.json",
+   "LAUNCH_LEDGER_record_g6_p55956.json",
+   "LAUNCH_LEDGER_record_g6_p8976.json",
+   "LAUNCH_LEDGER_record_g6_p9276.json",
+   "LAUNCH_LEDGER_record_g8_p21808.json",
+   "LAUNCH_LEDGER_record_g8_p39672.json",
+   "LAUNCH_LEDGER_record_g8_p40524.json",
+   "LAUNCH_LEDGER_record_g8_p43300.json"
+  ],
+  "gate_cap": 12,
+  "gate_starts": 10,
+  "matrix_cap": 640,
+  "matrix_starts": 496,
+  "starts": 506
+ },
+ "passed": false,
+ "stop_reason": "L2/L3/L4 not all passed and the data is sound: proceed to the next layer",
+ "stopped_here": false
+}

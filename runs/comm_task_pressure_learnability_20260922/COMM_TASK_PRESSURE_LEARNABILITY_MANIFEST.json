@@ -1,0 +1,589 @@
+{
+ "artefacts_committed": [
+  "COMM_TASK_PRESSURE_LEARNABILITY_PROTOCOL.md",
+  "SEED_COLLISION_AUDIT.json",
+  "AGREEMENT_GATE.json",
+  "GATE_SEQUENCE_EXPLANATION.json",
+  "CODE_FREEZE.json",
+  "STREAM_MANIFEST_g*.json",
+  "ROW_PROVENANCE_g*.json",
+  "RULE_MATRIX.json",
+  "RULE_MATRIX_g*.json",
+  "PRESSURE_METRICS.json",
+  "PRESSURE_METRICS_g*.json",
+  "GATES_g*.json",
+  "COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.md/.json",
+  "LAUNCH_LEDGER*.json"
+ ],
+ "branch": "analysis/comm-task-pressure-learnability",
+ "conclusion_scope": [
+  "结论口径：**仅提高目标数量（6→8→10，其余全部冻结）没有建立“固定规则无法统一覆盖、而额度迫使逐 step 选择”的场景**；L3 的“可支付严格子集”在三层中最佳规则上都是 0/16 流。",
+  "不得据此写“不存在更优发送策略”“学习无效”或“规则全局最优”——本轮只测试了一条轴（目标数），而且没有跑到 12 目标。",
+  "也不得把 L2 在 10 目标过带说成收益空间已打开：L2 通过只说明通信仍有价值且未触顶，它不与 L3/L4 相互替代。",
+  "L4 的完成差在三层分别是 6 目标 +0.312 个/episode（CI [0.0, 0.875]）、8 目标 +0.000 个/episode（CI [0.0, 0.0]）、10 目标 +0.250 个/episode（CI [0.0, 0.6875]）：envelope 相对最佳固定规则的增益从未同时满足 ≥0.25 与 CI 下界 > 0。",
+  "按 §9/执行指令 §五：无层通过 ⇒ 停止该学习路线的现有场景扩展；不训练、不改 reward、不再增加目标数、不打开 `800000..800399`。",
+  "**上限诚实性**：第四层没跑，不是因为不重要，而是本轮自己的两处缺陷吃掉了 20 次启动，使 12 目标层缺 16 次。要继续必须由使用者明确追加授权，并先把这一层当作同一协议的延续来登记。"
+ ],
+ "date": "2026-09-22（执行日；报告与推送完成于 2026-09-23）",
+ "episode_code_identity": "c922ca100665609c",
+ "executed": {
+  "checkpoints_written": 0,
+  "difference_explained": "the ledger is the truth and the arithmetic is the plan; the gap is the launches this round spent on its own defects and re-attempts, itemised in post_run_harness_fixes",
+  "episode_launches_according_to_ledger": 506,
+  "expected_by_arithmetic": 480,
+  "launch_ledger": {
+   "cause": "16 次矩阵启动花在“探针在写行之前崩溃”的格上，4 次录制启动花在登记步骤的 `GridPosition` 缺陷上；按执行指令，失败照样计入上限，所以第四层比它需要的 160 次少 16 次",
+   "gate_ceiling": 12,
+   "gate_starts_spent": 10,
+   "matrix_ceiling": 640,
+   "matrix_starts_spent": 496,
+   "next_layer_would_need": 160,
+   "recordings_included": true,
+   "remaining_for_the_next_layer": 144,
+   "rule_applied": "不换 seed、不删臂、不把任何一次启动从账上抹掉",
+   "short_by": 16,
+   "technical_failures_recorded": 20
+  },
+  "layers_executed": [
+   6,
+   8,
+   10
+  ],
+  "layers_not_executed": [
+   12
+  ],
+  "new_streams": 48,
+  "optimizer_steps": 0,
+  "training_steps": 0
+ },
+ "freeze_timeline": {
+  "6e67fbdb9": {
+   "commit": "6e67fbdb955fd7ab4f2b2c6733eb6ce04fa48766",
+   "episode_code_identity": "c922ca100665609c",
+   "modules": 54,
+   "production_modules": 37,
+   "registered_by_commit": "8748c72ac",
+   "run_episode_sha256": "bdaf5cf95aac7c95"
+  },
+  "778de913c": {
+   "commit": "778de913c4a0d5cb03f5a3cff2c013b0670c787b",
+   "episode_code_identity": "c922ca100665609c",
+   "modules": 54,
+   "production_modules": 37,
+   "registered_by_commit": "324972d89",
+   "run_episode_sha256": "bdaf5cf95aac7c95"
+  },
+  "911d47aa8": {
+   "commit": "911d47aa880bd90326c6b49d2f5d9687775ed678",
+   "episode_code_identity": "c922ca100665609c",
+   "modules": 54,
+   "production_modules": 37,
+   "registered_by_commit": "bf49b445d",
+   "run_episode_sha256": "bdaf5cf95aac7c95"
+  },
+  "f72be790e": {
+   "commit": "f72be790e5d8af434bec57640d6d68053e2e8dec",
+   "episode_code_identity": "c922ca100665609c",
+   "modules": 54,
+   "production_modules": 37,
+   "registered_by_commit": "e1989a9ce",
+   "run_episode_sha256": "bdaf5cf95aac7c95"
+  },
+  "fcea32fda": {
+   "commit": "fcea32fda2d3c2c53a4000f13ef30a1f0b01d2d1",
+   "episode_code_identity": "c922ca100665609c",
+   "modules": 54,
+   "production_modules": 37,
+   "registered_by_commit": "a6de94928",
+   "run_episode_sha256": "bdaf5cf95aac7c95"
+  }
+ },
+ "head_at_report": "6a1af13afcf49301f1aa805000da942176bff5cf",
+ "headline": "**没有任何压力层通过 L0–L4**（本轮执行 6 目标、8 目标、10 目标 三层）。L0 与 L1 在三层全部通过，L2 在 10 目标首次进入 [0.40, 0.90] 带内，但 L3（额度的严格子集选择）与 L4（规则间情境差 / 两个折中点）在三层都未过，而第四层 12 目标已无法在 640 次上限内完整运行",
+ "hygiene": {
+  "agreement": {
+   "agree": true,
+   "archived_rows": "runs\\comm_protocol_v2_20260920\\evaluation\\25pct\\rows_25pct_isolated_1.0.jsonl",
+   "checks": [
+    {
+     "arm": "send_once",
+     "differences": {},
+     "emission_sequence_equal": true,
+     "emission_sequence_length": [
+      6,
+      6
+     ],
+     "explained_differences": {},
+     "match": true,
+     "reference_config_hash": "d7f35c4a933506c3",
+     "reference_transcript": "D:\\code\\整合\\zhenghe\\runs\\comm_protocol_v2_20260920\\evaluation\\25pct\\runs\\ct_send_once_s700048.jsonl",
+     "reference_transcript_present": true,
+     "seed": 700048,
+     "this_config_hash": "eab67b9e583f6e55"
+    },
+    {
+     "arm": "event_priority",
+     "differences": {},
+     "emission_sequence_equal": true,
+     "emission_sequence_length": [
+      11,
+      11
+     ],
+     "explained_differences": {},
+     "match": true,
+     "reference_config_hash": "ef4c2cc0b0ec1da1",
+     "reference_transcript": "D:\\code\\整合\\zhenghe\\runs\\comm_protocol_v2_20260920\\evaluation\\25pct\\runs\\ct_event_priority_s700048.jsonl",
+     "reference_transcript_present": true,
+     "seed": 700048,
+     "this_config_hash": "e09fdf4b25ead2ee"
+    },
+    {
+     "arm": "first_send_plus_bound_3_10",
+     "differences": {},
+     "emission_sequence_equal": false,
+     "emission_sequence_length": [
+      11,
+      11
+     ],
+     "explained_differences": {},
+     "match": true,
+     "reference_config_hash": "12a0bc60bc5811df",
+     "reference_transcript": "D:\\code\\整合\\zhenghe\\runs\\comm_protocol_v2_20260920\\evaluation\\25pct\\runs\\ct_first_send_plus_bound_3_10_s700048.jsonl",
+     "reference_transcript_present": true,
+     "seed": 700048,
+     "this_config_hash": "09dcc48cef6601f0"
+    },
+    {
+     "arm": "always_hold",
+     "differences": {},
+     "emission_sequence_equal": true,
+     "emission_sequence_length": [
+      0,
+      0
+     ],
+     "explained_differences": {
+      "belief_age": "the rule emitted nothing, so no robot-target pair was ever informed: this round keeps that as an explicit absence while round 5's renderer wrote `... or 0.0`. Same episode, two renderings of the same empty set."
+     },
+     "match": true,
+     "reference_config_hash": "da1744383f56a215",
+     "reference_transcript": "D:\\code\\整合\\zhenghe\\runs\\comm_protocol_v2_20260920\\evaluation\\25pct\\runs\\ct_always_hold_s700048.jsonl",
+     "reference_transcript_present": true,
+     "seed": 700048,
+     "this_config_hash": "002373f5a9296a55"
+    }
+   ],
+   "note": "config_hash is not part of the agreement: it folds the transcript path into the hash, so a different directory must change it (round 10 established this). The compared quantities are task outcome, money, emissions, refusals, deliveries and belief age."
+  },
+  "audit": {
+   "blocks_audited": {
+    "10": {
+     "count": 16,
+     "seeds": [
+      1000200,
+      1000215
+     ]
+    },
+    "12": {
+     "count": 16,
+     "seeds": [
+      1000300,
+      1000315
+     ]
+    },
+    "6": {
+     "count": 16,
+     "seeds": [
+      1000000,
+      1000015
+     ]
+    },
+    "8": {
+     "count": 16,
+     "seeds": [
+      1000100,
+      1000115
+     ]
+    }
+   },
+   "blocks_the_project_already_owns": {
+    "communication training/dev block": [
+     700000,
+     700071
+    ],
+    "engineering confirmation block (round 7, consumed)": [
+     900000,
+     900199
+    ],
+    "independent test (round 1)": [
+     500000,
+     500399
+    ],
+    "live-system block": [
+     600000,
+     600059
+    ],
+    "pilot fitting": [
+     3000,
+     3011
+    ],
+    "sealed learning test (never generated)": [
+     800000,
+     800399
+    ]
+   },
+   "classified_as_this_rounds_own_pre_registration": {
+    "documentation": [
+     "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md"
+    ],
+    "git": [
+     "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md"
+    ],
+    "manifests": []
+   },
+   "clean": true,
+   "hit_counts": {
+    "artefacts": 0,
+    "documentation": 0,
+    "git": 0,
+    "manifests": 0
+   },
+   "own_round": {
+    "declared_blocks": {
+     "10": [
+      1000200,
+      1000215
+     ],
+     "12": [
+      1000300,
+      1000315
+     ],
+     "6": [
+      1000000,
+      1000015
+     ],
+     "8": [
+      1000100,
+      1000115
+     ]
+    },
+    "note": "this script and the protocol it ships with name the blocks by design",
+    "round": "comm_task_pressure_learnability_20260922"
+   },
+   "pre_registration_files_allowed": [
+    "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md"
+   ],
+   "rule": "an executed artefact cannot be un-seen, a registered seed cannot be un-claimed, and a declared range is a promise the project has already made. Any hit stops the round; the block is never moved to make the audit pass.",
+   "sealed_learning_block": {
+    "artefacts_on_disk": [],
+    "block": [
+     800000,
+     800399
+    ],
+    "clean": true,
+    "generated": false,
+    "read_by_this_round": false,
+    "streams_on_disk": []
+   },
+   "sources": {
+    "artefacts": {
+     "coverage": {
+      "files_seen": 68243,
+      "note": "file names carry the seed; 47 GB of per-episode JSONL is never opened"
+     },
+     "executed_episode_artefacts": {},
+     "recorded_streams": {},
+     "stream_content_collisions": {}
+    },
+    "documentation": {
+     "markdown_mentions_or_declares_a_candidate_seed": [
+      {
+       "classification": "own_pre_registration",
+       "count": 64,
+       "file": "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md",
+       "seeds": [
+        1000000,
+        1000001,
+        1000002,
+        1000003,
+        1000004,
+        1000005,
+        1000006,
+        1000007,
+        1000008,
+        1000009,
+        1000010,
+        1000011,
+        1000012,
+        1000013,
+        1000014,
+        1000015,
+        1000100,
+        1000101,
+        1000102,
+        1000103
+       ]
+      }
+     ],
+     "overlap_with_blocks_the_project_already_owns": []
+    },
+    "git": {
+     "commit_message_mentions": [],
+     "tracked_content_mentions": [
+      {
+       "classification": "own_pre_registration",
+       "excerpt": "| 6 | `1000000..1000015` | 16 |",
+       "file": "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md",
+       "line": 54,
+       "seeds": [
+        1000000,
+        1000015
+       ]
+      },
+      {
+       "classification": "own_pre_registration",
+       "excerpt": "| 8 | `1000100..1000115` | 16 |",
+       "file": "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md",
+       "line": 55,
+       "seeds": [
+        1000100,
+        1000115
+       ]
+      },
+      {
+       "classification": "own_pre_registration",
+       "excerpt": "| 10 | `1000200..1000215` | 16 |",
+       "file": "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md",
+       "line": 56,
+       "seeds": [
+        1000200,
+        1000215
+       ]
+      },
+      {
+       "classification": "own_pre_registration",
+       "excerpt": "| 12 | `1000300..1000315` | 16 |",
+       "file": "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md",
+       "line": 57,
+       "seeds": [
+        1000300,
+        1000315
+       ]
+      }
+     ],
+     "tracked_paths_with_seed": []
+    },
+    "manifests": {
+     "coverage": {
+      "scanned": 6590,
+      "skipped_too_large": 2
+     },
+     "json_registrations_mentioning_a_seed": []
+    }
+   },
+   "verdict": "zero overlap across all four sources: the blocks may be registered and recorded"
+  },
+  "defaults": {
+   "comm_ack": false,
+   "comm_budget_bytes": null,
+   "comm_policy": "immediate",
+   "comm_timing_mode": "legacy_shared_bound",
+   "num_goals": 6,
+   "ok": true
+  },
+  "sealed": {
+   "artefacts": [],
+   "block": [
+    800000,
+    800399
+   ],
+   "count": 0
+  },
+  "tests": {
+   "project": "通过：OK (skipped=2)",
+   "round": "通过：OK",
+   "smoke": "通过：final_status=completed"
+  }
+ },
+ "mechanism": {
+  "packet_cost_profile": {
+   "10": {
+    "max_bytes": 2940,
+    "median_as_fraction_of_credit": 0.09051,
+    "median_bytes": 2652,
+    "min_bytes": 2190,
+    "p25_bytes": 2466,
+    "p75_bytes": 2784,
+    "packets": 2425,
+    "packets_the_credit_could_pay_in_total": 11.05,
+    "spread_as_fraction_of_credit": 0.0256,
+    "spread_bytes": 750
+   },
+   "6": {
+    "max_bytes": 2952,
+    "median_as_fraction_of_credit": 0.09092,
+    "median_bytes": 2664,
+    "min_bytes": 2196,
+    "p25_bytes": 2460,
+    "p75_bytes": 2790,
+    "packets": 1792,
+    "packets_the_credit_could_pay_in_total": 11.0,
+    "spread_as_fraction_of_credit": 0.0258,
+    "spread_bytes": 756
+   },
+   "8": {
+    "max_bytes": 2940,
+    "median_as_fraction_of_credit": 0.08887,
+    "median_bytes": 2604,
+    "min_bytes": 2268,
+    "p25_bytes": 2430,
+    "p75_bytes": 2742,
+    "packets": 2070,
+    "packets_the_credit_could_pay_in_total": 11.25,
+    "spread_as_fraction_of_credit": 0.02294,
+    "spread_bytes": 672
+   }
+  },
+  "per_layer": [
+   {
+    "arms_with_any_competition": [
+     "event",
+     "event_priority",
+     "periodic_5"
+    ],
+    "best_competition_streams": 0,
+    "best_credit_used_ge_90_streams": 9,
+    "best_fixed_rule": "periodic_20",
+    "goals": 6,
+    "max_competition_streams_over_arms": 3,
+    "mean_packet_bytes_at_refusal": 2579.5,
+    "streams_where_something_was_still_visible_but_unpayable": 82
+   },
+   {
+    "arms_with_any_competition": [
+     "bound_only_3_10",
+     "event",
+     "event_priority",
+     "first_send_plus_bound_3_10",
+     "periodic_20",
+     "periodic_5"
+    ],
+    "best_competition_streams": 0,
+    "best_credit_used_ge_90_streams": 0,
+    "best_fixed_rule": "send_once",
+    "goals": 8,
+    "max_competition_streams_over_arms": 3,
+    "mean_packet_bytes_at_refusal": 2545.6,
+    "streams_where_something_was_still_visible_but_unpayable": 92
+   },
+   {
+    "arms_with_any_competition": [
+     "bound_only_3_10",
+     "event",
+     "event_priority",
+     "first_send_plus_bound_3_10",
+     "periodic_5"
+    ],
+    "best_competition_streams": 0,
+    "best_credit_used_ge_90_streams": 0,
+    "best_fixed_rule": "send_once",
+    "goals": 10,
+    "max_competition_streams_over_arms": 3,
+    "mean_packet_bytes_at_refusal": 2554.7,
+    "streams_where_something_was_still_visible_but_unpayable": 96
+   }
+  ],
+  "reading": "机制：额度只够约 11 个包，而同一步里各候选的价格极差只占额度的 2.3 %–2.6 %。于是一个流从『还付得起最贵的那个』滑到『一个都付不起』只需要跨过约 2.6 % 的额度区间，而终点态（看得见候选但 payable = 0）自己就占掉最后约 9 % ——所以三层里所有臂合计的争用点最多 3/16 流，而拒付成片出现（每层 82–96 个臂×流）。额度确实生效，但它生效的方式是**整体断供**，不是在同一 step 上给出可选子集；L3 要的是后者。",
+  "what_this_does_not_license": "这条机制陈述不让 L3 变成通过，也不允许把争用点重定义为“任何一次拒付”——那正是 §7 明令排除的读法；它只解释为什么三层都没有出现 L3 要求的那种 step 内子集选择"
+ },
+ "never_committed": [
+  "streams",
+  "per-episode logs",
+  "checkpoints",
+  "runs/"
+ ],
+ "next_round_requires_an_order": "12 目标层需要 160 次启动而剩余额度为 144 次；继续须由使用者明确追加授权",
+ "post_run_harness_fixes": [
+  {
+   "episodes_invalidated": false,
+   "evidence": "one episode_code_identity across every registered freeze",
+   "launches_lost": 16,
+   "touched": "CandidateProbe._observe only",
+   "what": "probe turned an unbounded credit into an integer (int(inf))"
+  },
+  {
+   "episodes_invalidated": false,
+   "evidence": "streams were written and re-verified; same-seed re-registration succeeded and reported placed/detected",
+   "launches_lost": 4,
+   "touched": "record_layer.scenario_facts registration step",
+   "what": "recorder expanded a GridPosition as a sequence"
+  },
+  {
+   "episodes_invalidated": false,
+   "evidence": "the seed is inside the signature, and a fixed rule's refusals are the credit binding that L3 asks for; L0 now checks per-stream signature equality, layer-wide transport invariants, and transcript/relay agreement",
+   "touched": "judge_layers.l0 conditions",
+   "what": "L0 read a layer-wide setting signature and forbade any refusal"
+  }
+ ],
+ "question": "does raising only the number of targets create a scene where fixed rules cannot cover the situations uniformly and the byte credit forces a per-step choice",
+ "round": "comm_task_pressure_learnability_20260922",
+ "setting": {
+  "ack": false,
+  "arms": [
+   "send_once",
+   "event",
+   "event_priority",
+   "periodic_5",
+   "periodic_20",
+   "first_send_plus_bound_3_10",
+   "bound_only_3_10",
+   "always_hold",
+   "event_unbudgeted"
+  ],
+  "budget_bytes": 29300,
+  "delivery_probability": 1.0,
+  "information": "isolated",
+  "layers_configured": [
+   6,
+   8,
+   10,
+   12
+  ],
+  "steps": 1000,
+  "timing_mode": "policy_owned_timing"
+ },
+ "starting_shas": {
+  "docs/communication-learnability-calibration": "ddee56db2d7ff0de991520fae3bc7100319d10f8",
+  "exp/comm-budget-masked-retrain": "7e0a4233127a19fa9bf49672bbcf37218b587fff"
+ },
+ "tests": {
+  "project": "通过：OK (skipped=2)",
+  "round": "通过：OK",
+  "smoke": "通过：final_status=completed"
+ },
+ "verdicts": {
+  "10": {
+   "L0": true,
+   "L1": true,
+   "L2": true,
+   "L3": false,
+   "L4": false,
+   "layer_passed": false
+  },
+  "6": {
+   "L0": true,
+   "L1": true,
+   "L2": false,
+   "L3": false,
+   "L4": false,
+   "layer_passed": false
+  },
+  "8": {
+   "L0": true,
+   "L1": true,
+   "L2": false,
+   "L3": false,
+   "L4": false,
+   "layer_passed": false
+  }
+ }
+}
