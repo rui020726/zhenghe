@@ -116,7 +116,12 @@ def read_json(name: str) -> Any:
 
 def git(*arguments: str) -> subprocess.CompletedProcess:
     return subprocess.run(
-        ("git", *arguments), cwd=ROOT, capture_output=True, text=True, encoding="utf-8"
+        ("git", *arguments),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
     )
 
 
@@ -628,6 +633,33 @@ def production_diff(reference: str = FIX_HEAD) -> dict[str, Any]:
     }
 
 
+def child_environment() -> dict[str, str]:
+    """Force UTF-8 on a child: the repository path itself is not representable in the ANSI codepage.
+
+    The first version of this runner asked for ``encoding="utf-8"`` and nothing else. A suite that
+    printed one ResourceWarning containing ``D:\\code\\整合\\...`` wrote it in cp936, the parent's
+    UTF-8 reader thread died on the ``整`` byte, and the subprocess returned ``stdout=None`` -- which
+    read back as "Ran 0 tests, not passed". A gate that fails because it could not hear the answer
+    has to say so out loud rather than report a zero, so the child is told to write UTF-8 and an
+    unreadable child raises instead of returning an empty report.
+    """
+    environment = dict(os.environ)
+    environment["PYTHONIOENCODING"] = "utf-8"
+    environment["PYTHONUTF8"] = "1"
+    return environment
+
+
+def read_child(result: subprocess.CompletedProcess) -> str:
+    """The child's combined output, or a failure. Never a silent empty string."""
+    if result.stdout is None and result.stderr is None:
+        raise RuntimeError(
+            f"a child process returned no decodable output at all (returncode "
+            f"{result.returncode}); an unreadable test report is not a passing one and not a zero "
+            "either"
+        )
+    return (result.stderr or "") + (result.stdout or "")
+
+
 def integration_smoke() -> dict[str, Any]:
     """``python -m integrated_sar``, AGENTS' minimum verification, judged on what it printed."""
     result = subprocess.run(
@@ -636,8 +668,10 @@ def integration_smoke() -> dict[str, Any]:
         capture_output=True,
         text=True,
         encoding="utf-8",
+        errors="replace",
+        env=child_environment(),
     )
-    output = (result.stdout or "") + (result.stderr or "")
+    output = read_child(result)
     lines = [line for line in output.splitlines() if line.strip()]
     return {
         "directory": ".",
@@ -659,19 +693,29 @@ def run_tests(directory: Path, pattern: str) -> dict[str, Any]:
         capture_output=True,
         text=True,
         encoding="utf-8",
+        errors="replace",
+        env=child_environment(),
     )
-    output = (result.stderr or "") + (result.stdout or "")
+    output = read_child(result)
     ran = _first(output, r"^Ran (\d+) tests")
     skipped = _first(output, r"^OK \(skipped=(\d+)")
-    return {
+    report = {
         "directory": Path(directory).relative_to(ROOT).as_posix(),
         "pattern": pattern,
         "ran": int(ran) if ran else 0,
         "passed": bool(_first(output, r"^OK\b")),
         "skipped": int(skipped) if skipped else 0,
         "failures_or_errors": bool(_first(output, r"^(FAILED|ERROR)")),
+        "returncode": result.returncode,
         "tail": output.strip().splitlines()[-1] if output.strip() else "",
     }
+    if report["ran"] == 0:
+        raise RuntimeError(
+            f"discovery in {report['directory']} for {pattern} collected nothing: "
+            f"{report['tail'][:400]!r} -- an empty suite is not a pass and must not be reported as "
+            "a gate result"
+        )
+    return report
 
 
 def _first(text: str, pattern: str) -> str | None:
