@@ -62,6 +62,12 @@ def executed_modules() -> dict[str, dict[str, Any]]:
         path = getattr(module, "__file__", None)
         if not path:
             continue
+        # ``torch.ops`` and ``torch.classes`` are synthesised on attribute access with a bare
+        # relative ``__file__`` ("_ops.py"), which resolves against whatever directory the round
+        # happens to run from -- so a lazy loader can invent a file inside this round's own
+        # directory. Only absolute origins describe code that exists.
+        if not os.path.isabs(path):
+            continue
         absolute = os.path.abspath(path)
         if "__pycache__" in absolute:
             continue
