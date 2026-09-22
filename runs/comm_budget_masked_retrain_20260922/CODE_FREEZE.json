@@ -1,6 +1,6 @@
 {
  "branch": "exp/comm-budget-masked-retrain",
- "committed_at": "2026-09-22 20:32:39 +0800",
+ "committed_at": "2026-09-22 20:35:39 +0800",
  "configuration_hash": "b5d1b46afa3b2604",
  "derivation": "sys.modules after importing train_retrain and the archived sampler/trainer entries, unioned with this directory's own scripts",
  "document": "CODE_FREEZE",
@@ -245,11 +245,11 @@
    "working_blob": "ffe0ec3571bc2829"
   },
   "runs/comm_budget_masked_retrain_20260922/report_retrain.py": {
-   "head_blob": "c21a290ed13dd8e8",
+   "head_blob": "9e05fb2051d7760c",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "c21a290ed13dd8e8"
+   "working_blob": "9e05fb2051d7760c"
   },
   "runs/comm_budget_masked_retrain_20260922/retrain_common.py": {
    "head_blob": "67d4f7701d0ad947",
@@ -392,12 +392,12 @@
   "runtime_modules_changed": []
  },
  "registered": true,
- "registered_at": "1790080359",
+ "registered_at": "1790080539",
  "rule": "every launch re-derives the graph and requires: no committed or working-tree difference against this SHA for any member, no untracked member, and no module in the graph that this freeze did not record",
  "schema": "retrain_common/1",
- "sha": "955a00e9b7dd0148532416effbbe4b7c98605fe5",
- "short": "955a00e9b",
- "subject": "fix(comm): put the lazily-imported statistics module inside the freeze",
+ "sha": "fddd9e6901366cc85ebea577021e8d7a0e4a135f",
+ "short": "fddd9e690",
+ "subject": "docs(comm): count the suite's own transcripts as files, not as experiment launches",
  "trainer_identity": {
   "ack": false,
   "action_mask_schema": "budget-sequential-mask/1",
