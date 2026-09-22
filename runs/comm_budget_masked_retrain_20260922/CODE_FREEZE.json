@@ -1,6 +1,6 @@
 {
  "branch": "exp/comm-budget-masked-retrain",
- "committed_at": "2026-09-22 18:10:31 +0800",
+ "committed_at": "2026-09-22 18:22:40 +0800",
  "configuration_hash": "b5d1b46afa3b2604",
  "derivation": "sys.modules after importing train_retrain and the archived sampler/trainer entries, unioned with this directory's own scripts",
  "document": "CODE_FREEZE",
@@ -252,11 +252,11 @@
    "working_blob": "a5128d869f094957"
   },
   "runs/comm_budget_masked_retrain_20260922/retrain_common.py": {
-   "head_blob": "5db26be2d6eafa02",
+   "head_blob": "e59ecf648f709b0f",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "5db26be2d6eafa02"
+   "working_blob": "e59ecf648f709b0f"
   },
   "runs/comm_budget_masked_retrain_20260922/test_retrain.py": {
    "head_blob": "bd8de0e233c6742d",
@@ -385,12 +385,12 @@
   "runtime_modules_changed": []
  },
  "registered": true,
- "registered_at": "1790071831",
+ "registered_at": "1790072560",
  "rule": "every launch re-derives the graph and requires: no committed or working-tree difference against this SHA for any member, no untracked member, and no module in the graph that this freeze did not record",
  "schema": "retrain_common/1",
- "sha": "44416484f904479d0d7f933babcc9e7ee36f9703",
- "short": "44416484f",
- "subject": "fix(comm): give every launching process its own ledger and add them up for the ceiling",
+ "sha": "e2bc99308ef4d26e3b394e1dc327c2bc714ee0c7",
+ "short": "e2bc99308",
+ "subject": "fix(comm): refuse to read an undecodable test child as a zero-test suite",
  "trainer_identity": {
   "ack": false,
   "action_mask_schema": "budget-sequential-mask/1",
