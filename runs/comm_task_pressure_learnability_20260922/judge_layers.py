@@ -85,6 +85,7 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
     )
     ledger = common.ledger_totals()
     failure_account = ledger_failures(goals)
+    provenance = pressure_matrix.row_provenance(goals)
     agreement = (
         json.loads(common.json_path("AGREEMENT_GATE.json").read_text(encoding="utf-8"))
         if common.json_path("AGREEMENT_GATE.json").exists()
@@ -110,23 +111,42 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
         != int(row["emissions"])
         or int(row["ledger"]["emissions"]) != int(row["emissions"])
     ]
-    refusals = [
+    refusal_mismatches = [
         f"{row['arm']} s{row['seed']}"
         for row in rows
-        if row["role"] == "competitor"
-        and (
-            int(row["refusals"]["budget_exhausted"]) > 0
-            or int(row["refusals"]["capacity_step"]) > 0
-        )
+        if int(row["refusals"]["budget_exhausted"])
+        + int(row["refusals"]["capacity_step"])
+        != int(row["refusals"]["total"])
+        or int(row["refusals"]["budget_exhausted"])
+        != int(row["ledger"]["budget_refused_sends"])
+        or int(row["refusals"]["capacity_step"])
+        != int(row["ledger"]["capacity_refused_sends"])
     ]
     steps = sorted({int(row["steps"]) for row in rows})
     probed = sorted({bool(row["probed"]) for row in rows})
-    signatures = sorted({str(row["setting_signature"]) for row in rows})
     mixed_settings = {
         str(seed): sorted({str(row["setting_signature"]) for row in group})
         for seed, group in per_seed.items()
         if len({str(row["setting_signature"]) for row in group}) != 1
     }
+    # The transport facts every arm of every stream must agree on. The raw setting signature cannot
+    # be compared layer-wide, because it contains the seed and so differs per stream by design:
+    # asking for one signature across 144 cells fails for a reason that has nothing to do with
+    # whether the arms share a configuration.
+    invariants = sorted(
+        {
+            (
+                str(row["timing_mode"]),
+                str(row["delivery_probability"]),
+                str(row["ack_enabled"]),
+                str(row["steps"]),
+                str(row["bound_enforced_by_transport"]),
+                str(row["goals"]),
+                str(row["probed"]),
+            )
+            for row in rows
+        }
+    )
     placements = sorted(
         {int(entry["placed"]) for entry in manifest["streams"] if entry["illegal"]}
     )
@@ -138,13 +158,14 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
             or wrong_arm_count
             or over_budget
             or closure_failures
-            or refusals
+            or refusal_mismatches
             or failure_account["unrecovered"]
-            or len({str(row.get("code_freeze", {}).get("head")) for row in rows}) != 1
+            or not provenance["single_episode_code_state"]
             or illegal
             or steps != [common.STREAM_STEPS]
             or probed != [True]
-            or len(signatures) != 1
+            or len(invariants) != 1
+            or mixed_settings
             or not agreement.get("agree", False)
         ),
         {
@@ -154,10 +175,19 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
             "streams_with_wrong_arm_count": wrong_arm_count,
             "budget_violations": over_budget,
             "ledger_closure_failures": closure_failures,
-            "competitor_cells_with_transport_refusal": refusals[:10],
-            "competitor_refusal_count": len(refusals),
+            "refusal_ledger_mismatches": refusal_mismatches[:10],
+            "cells_where_the_credit_bit": sum(
+                1 for row in rows if int(row["refusals"]["budget_exhausted"]) > 0
+            ),
+            "note_on_refusals": (
+                "a fixed rule being refused is the credit binding, which is what L3 asks for; L0 "
+                "only requires that the transcript and the relay agree about how often it happened"
+            ),
             "ledger_failures": failure_account,
-            "distinct_code_freezes": sorted({str(row.get("code_freeze", {}).get("head")) for row in rows}),
+            "episode_code_states": provenance["distinct_episode_code_states"],
+            "stamped_rows": provenance["stamped"],
+            "un_stamped_rows": provenance["un_stamped"],
+            "single_episode_code_state": provenance["single_episode_code_state"],
             "technical_failures_total": ledger["failures"],
             "launches": {
                 "matrix": ledger["matrix_starts"],
@@ -168,7 +198,8 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
             "illegal_streams": illegal,
             "steps_per_episode": steps,
             "all_cells_probed": probed,
-            "distinct_setting_signatures": signatures,
+            "distinct_layer_wide_settings": invariants,
+            "streams_with_mixed_settings": mixed_settings,
             "harness_agreement_with_archived_rows": agreement.get("agree", False),
             "allowed_configuration_differences": list(ALLOWED_CELL_DIFFERENCES),
         },

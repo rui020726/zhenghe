@@ -537,8 +537,13 @@ def main(argv: list[str]) -> int:
     parser.add_argument("--goals", type=int, required=True, choices=sorted(common.LAYERS))
     args = parser.parse_args()
     report = layer_report(args.goals)
-    common.write_json(common.json_path("RULE_MATRIX.json"), report)
-    common.write_json(common.json_path("PRESSURE_METRICS.json"), search_pressure(args.goals))
+    # Per-layer files: the combined RULE_MATRIX.json / PRESSURE_METRICS.json are written by
+    # report_pressure.py over every layer that ran, so re-aggregating one layer cannot quietly
+    # replace the whole round's matrix with one layer's.
+    common.write_json(common.json_path(f"RULE_MATRIX_g{args.goals}.json"), report)
+    common.write_json(
+        common.json_path(f"PRESSURE_METRICS_g{args.goals}.json"), search_pressure(args.goals)
+    )
     print(
         json.dumps(
             {

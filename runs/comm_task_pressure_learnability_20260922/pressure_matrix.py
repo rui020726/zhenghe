@@ -14,6 +14,7 @@ reporting a complete matrix.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -43,10 +44,13 @@ def registered_freeze() -> dict[str, Any]:
             "round cannot say what code ran"
         )
     payload = json.loads(path.read_text(encoding="utf-8"))
+    identity = episode_code_identity()
     return {
         "head": str(payload["head_at_registration"]),
         "modules": int(payload["module_count"]),
-        "execution_blob": common.sha256(path)[:16],
+        "freeze_file_sha256": common.sha256(path)[:16],
+        "episode_code_identity": identity["episode_code_identity"],
+        "run_episode_sha256": identity["run_episode_sha256"],
     }
 
 
@@ -202,12 +206,126 @@ def compare_rows(old: list[dict[str, Any]], new: list[dict[str, Any]]) -> dict[s
     }
 
 
+def episode_code_identity(at_commit: str | None = None) -> dict[str, Any]:
+    """A hash of the code that can change an episode, as distinct from the code that reads it.
+
+    ``integrated_sar/**`` is the simulation and ``run_episode`` is the harness around it; the probe
+    that measures a candidate list sits beside that function and cannot reach the world. Those two
+    facts are what let a layer whose cells started on either side of a probe-only fix still be one
+    episode-generating code state -- and the claim is a hash of source text, not a sentence in a
+    report. A freeze that moved the world changes this identity and forces a re-run.
+    """
+    import inspect
+
+    import pressure_env
+
+    production = sorted(
+        str(path.relative_to(common.ROOT)).replace("\\", "/")
+        for path in (common.ROOT / "integrated_sar").rglob("*.py")
+        if "tests" not in path.parts and "__pycache__" not in path.parts
+    )
+    if at_commit:
+        blobs = {
+            relative: common.git("rev-parse", f"{at_commit}:{relative}")
+            for relative in production
+        }
+        source = common.git(
+            "show", f"{at_commit}:runs/{common.HERE.name}/pressure_env.py"
+        )
+        start = source.index("def run_episode(")
+        source = source[start : source.index("\ndef ", start + 1)]
+    else:
+        blobs = {relative: common.blob_identity(relative)["blob"] for relative in production}
+        source = inspect.getsource(pressure_env.run_episode)
+    digest = hashlib.sha256()
+    for relative, blob in sorted(blobs.items()):
+        digest.update(f"{relative}:{blob}\n".encode("utf-8"))
+    digest.update(b"run_episode\n")
+    digest.update(source.encode("utf-8"))
+    return {
+        "episode_code_identity": digest.hexdigest()[:16],
+        "production_modules": len(blobs),
+        "run_episode_sha256": hashlib.sha256(source.encode("utf-8")).hexdigest()[:16],
+        "commit": at_commit or "working tree",
+    }
+
+
+def freeze_history() -> dict[str, Any]:
+    """Every CODE_FREEZE.json version in Git, with the episode identity each one names."""
+    commits = [
+        line.strip()
+        for line in common.git(
+            "log", "--format=%H", "--", f"runs/{common.HERE.name}/CODE_FREEZE.json"
+        ).splitlines()
+        if line.strip()
+    ]
+    history: dict[str, Any] = {}
+    heads: dict[str, str] = {}
+    for commit in commits:
+        payload = json.loads(
+            common.git("show", f"{commit}:runs/{common.HERE.name}/CODE_FREEZE.json")
+        )
+        registered = str(payload["head_at_registration"])
+        identity = episode_code_identity(registered)
+        heads[registered] = registered[:9]
+        history[registered[:9]] = {
+            "registered_by_commit": commit[:9],
+            "modules": int(payload["module_count"]),
+            **identity,
+        }
+    history["_heads"] = heads
+    return history
+
+
+def row_provenance(goals: int) -> dict[str, Any]:
+    """Say which code state produced which cells of a layer, and whether more than one exists.
+
+    Rows written before the freeze stamp existed are reported as un stamped rather than attributed
+    by guesswork. What can still be decided is whether *any* code state that could have produced
+    them differs: every freeze this round registered names an episode identity, so if those all
+    agree, an un stamped row cannot have come from different episode code either.
+    """
+    rows = load_rows(goals)
+    history = freeze_history()
+    known = {
+        head[:9]: entry["episode_code_identity"]
+        for head, entry in history.items()
+        if isinstance(entry, dict) and "episode_code_identity" in entry
+    }
+    identities = sorted(set(known.values()))
+    stamped: dict[str, int] = {}
+    stamped_identities: set[str] = set()
+    unstamped = 0
+    for row in rows.values():
+        head = str((row.get("code_freeze") or {}).get("head", ""))[:9]
+        if head:
+            stamped[head] = stamped.get(head, 0) + 1
+            if head in known:
+                stamped_identities.add(known[head])
+        else:
+            unstamped += 1
+    return {
+        "cells": len(rows),
+        "stamped": stamped,
+        "un_stamped": unstamped,
+        "freezes_registered_this_round": history,
+        "distinct_episode_code_states": identities,
+        "identities_named_by_stamped_rows": sorted(stamped_identities),
+        "single_episode_code_state": len(identities) == 1
+        and (not stamped_identities or stamped_identities == set(identities)),
+        "caveat": (
+            f"{unstamped} of {len(rows)} cells carry no stamp because the stamp was added after they "
+            "ran; their attribution comes from the freeze timeline above, not from the row"
+        ),
+    }
+
+
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--goals", type=int, required=True, choices=sorted(common.LAYERS))
-    parser.add_argument("--mode", choices=("run", "coverage", "compare"), default="run")
-    parser.add_argument("--old-dir", default=None, help="quarantined rows to compare against")
-    parser.add_argument("--goals-a", type=int, default=None)
+    parser.add_argument(
+        "--mode", choices=("run", "coverage", "compare", "provenance"), default="run"
+    )
     parser.add_argument("--shards", type=int, default=1)
     parser.add_argument("--shard", type=int, default=0)
     args = parser.parse_args()
@@ -225,6 +343,11 @@ def main(argv: list[str]) -> int:
         )
         print(json.dumps(report, ensure_ascii=False, indent=1))
         return 0 if report["identical"] else 1
+    if args.mode == "provenance":
+        report = row_provenance(args.goals)
+        common.write_json(common.HERE / f"ROW_PROVENANCE_g{args.goals}.json", report)
+        print(json.dumps(report, ensure_ascii=False, indent=1))
+        return 0 if report["single_episode_code_state"] else 1
     if args.mode == "coverage":
         report = coverage(args.goals)
         print(json.dumps(report, ensure_ascii=False, indent=1))
