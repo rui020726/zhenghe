@@ -1,0 +1,3455 @@
+{
+  "baseline_rule": "event_retry_until_acked_5",
+  "horizons": [
+    1,
+    20
+  ],
+  "max_simulation_starts": 40,
+  "point_selection_seed": 2026092101,
+  "problems": [],
+  "rows": [
+    {
+      "age_steps": 12,
+      "candidate_at_tstar": {
+        "age_steps": 12,
+        "changed_view": true,
+        "confirmed_fraction": 0.5,
+        "revision": 8,
+        "rule_sent": true,
+        "step": 33,
+        "target": "piloc-e1-target-2",
+        "unacked": 1
+      },
+      "changed_view": true,
+      "choice_index": 19,
+      "confirmed_fraction": 0.5,
+      "eligible_count": 88,
+      "pre_action_digest": {
+        "observation": {
+          "backlog_targets": 6,
+          "capacity_remaining": null,
+          "current_time": 32.0,
+          "items": [
+            {
+              "age_steps": 12,
+              "changed_view": true,
+              "confirmed_fraction": 0.5,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 8,
+              "sent_count": 1,
+              "target": "piloc-e1-target-2",
+              "unacked": 1
+            },
+            {
+              "age_steps": 3,
+              "changed_view": true,
+              "confirmed_fraction": 0.5,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 6,
+              "sent_count": 1,
+              "target": "piloc-e1-target-3",
+              "unacked": 1
+            },
+            {
+              "age_steps": 3,
+              "changed_view": true,
+              "confirmed_fraction": 0.6666666666666666,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 6,
+              "sent_count": 1,
+              "target": "piloc-e1-target-4",
+              "unacked": 1
+            },
+            {
+              "age_steps": 27,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 2,
+              "sent_count": 0,
+              "target": "piloc-e1-target-5",
+              "unacked": 0
+            }
+          ],
+          "observation_step": 33,
+          "remaining_budget_bytes": 128.0,
+          "subscribers": 6
+        },
+        "relay": {
+          "ack_ordinal": 51,
+          "ack_pending": 0,
+          "ack_states": {
+            "('0', 'piloc-e1-target-0')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[],\"position\":[0.016949,0.016949],\"progress\":0.0,\"remaining\":[0,0,1,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-1')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":92.580086,\"members\":[\"0\",\"2\",\"3\",\"4\",\"1\"],\"position\":[0.050847,0.033898],\"progress\":0.066371,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-0')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[],\"position\":[0.016949,0.016949],\"progress\":0.0,\"remaining\":[0,0,1,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-1')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":92.580086,\"members\":[\"0\",\"2\",\"3\",\"4\",\"1\"],\"position\":[0.050847,0.033898],\"progress\":0.066371,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-3')": {
+              "highest": [
+                7.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":143.504839,\"members\":[],\"position\":[0.20339,0.067797],\"progress\":0.0,\"remaining\":[1,0,0,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 7,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-0')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[],\"position\":[0.016949,0.016949],\"progress\":0.0,\"remaining\":[0,0,1,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-1')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":92.580086,\"members\":[\"0\",\"2\",\"3\",\"4\",\"1\"],\"position\":[0.050847,0.033898],\"progress\":0.066371,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-2')": {
+              "highest": [
+                5.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":140.22448,\"members\":[],\"position\":[0.169492,0.050847],\"progress\":0.0,\"remaining\":[0,1,1,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-3')": {
+              "highest": [
+                7.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":143.504839,\"members\":[],\"position\":[0.20339,0.067797],\"progress\":0.0,\"remaining\":[1,0,0,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 7,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-4')": {
+              "highest": [
+                5.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":111.79446,\"members\":[],\"position\":[0.050847,0.152542],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[\"5\"],\"position\":[0.016949,0.016949],\"progress\":0.079691,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-1')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":92.580086,\"members\":[\"0\",\"2\",\"3\",\"4\",\"1\"],\"position\":[0.050847,0.033898],\"progress\":0.066371,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-3')": {
+              "highest": [
+                7.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":143.504839,\"members\":[],\"position\":[0.20339,0.067797],\"progress\":0.0,\"remaining\":[1,0,0,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 7,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-4')": {
+              "highest": [
+                5.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":111.79446,\"members\":[],\"position\":[0.050847,0.152542],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-0')": {
+              "highest": [
+                5.0,
+                6,
+                "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[\"5\"],\"position\":[0.016949,0.016949],\"progress\":0.318763,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 6,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-1')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":92.580086,\"members\":[\"0\",\"2\",\"3\",\"4\",\"1\"],\"position\":[0.050847,0.033898],\"progress\":0.066371,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-2')": {
+              "highest": [
+                5.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":140.22448,\"members\":[],\"position\":[0.169492,0.050847],\"progress\":0.0,\"remaining\":[0,1,1,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-4')": {
+              "highest": [
+                5.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":111.79446,\"members\":[],\"position\":[0.050847,0.152542],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-0')": {
+              "highest": [
+                5.0,
+                6,
+                "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[\"5\"],\"position\":[0.016949,0.016949],\"progress\":0.318763,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 6,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-1')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":92.580086,\"members\":[\"0\",\"2\",\"3\",\"4\",\"1\"],\"position\":[0.050847,0.033898],\"progress\":0.066371,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-2')": {
+              "highest": [
+                5.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":140.22448,\"members\":[],\"position\":[0.169492,0.050847],\"progress\":0.0,\"remaining\":[0,1,1,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-4')": {
+              "highest": [
+                5.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":111.79446,\"members\":[],\"position\":[0.050847,0.152542],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            }
+          },
+          "budget_remaining": 128,
+          "budget_sends_this_step": 0,
+          "budget_spent": 29172,
+          "counters": {
+            "ack_attempt_bytes": 15357,
+            "ack_attempts": 51,
+            "ack_delivered": 41,
+            "ack_emitted": 51,
+            "ack_frames_advanced": 41,
+            "ack_frames_reaffirmed": 0,
+            "ack_lost": 10,
+            "airtime_bytes": 29172,
+            "applied_bytes": 22660,
+            "attempts_forced_maxwait": 0,
+            "attempts_other": 0,
+            "attempts_policy": 66,
+            "backlog_steps": 2,
+            "budget_refused_sends": 135,
+            "bytes_forced_maxwait": 0,
+            "bytes_other": 0,
+            "bytes_policy": 29172,
+            "capacity_refused_sends": 0,
+            "coalesced_changes": 46,
+            "deliveries_applied": 51,
+            "delivery_duplicate": 0,
+            "delivery_refused": 0,
+            "delivery_superseded": 0,
+            "delivery_unknown_task": 0,
+            "emissions": 11,
+            "emissions_forced_maxwait": 0,
+            "emissions_other": 0,
+            "emissions_policy": 11,
+            "emissions_suppressed_terminal": 0,
+            "events_accepted": 6,
+            "first_emissions": 5,
+            "flight_steps": 0,
+            "generated_items": 61,
+            "max_backlog_age": 27,
+            "max_in_flight": 0,
+            "packets_delivered": 51,
+            "packets_lost": 15,
+            "redundant_emissions": 2,
+            "refresh_emissions": 6,
+            "refused_forced_maxwait": 0,
+            "refused_other": 0,
+            "refused_policy": 135,
+            "transmission_attempts": 66,
+            "unsent_change_steps": 101
+          },
+          "forward_rng_draws": 66,
+          "ledger": [
+            {
+              "closed": true,
+              "last_revision": 6,
+              "last_sent_step": 6,
+              "last_view": "{\"confidence\":1.0,\"deadline\":149.42405,\"members\":[\"5\"],\"position\":[0.016949,0.016949],\"progress\":0.318763,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 7,
+              "sent_count": 4,
+              "target": "piloc-e1-target-0"
+            },
+            {
+              "closed": true,
+              "last_revision": 4,
+              "last_sent_step": 4,
+              "last_view": "{\"confidence\":1.0,\"deadline\":92.580086,\"members\":[\"0\",\"2\",\"3\",\"4\",\"1\"],\"position\":[0.050847,0.033898],\"progress\":0.066371,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 5,
+              "sent_count": 4,
+              "target": "piloc-e1-target-1"
+            },
+            {
+              "closed": false,
+              "last_revision": 1,
+              "last_sent_step": 5,
+              "last_view": "{\"confidence\":1.0,\"deadline\":140.22448,\"members\":[],\"position\":[0.169492,0.050847],\"progress\":0.0,\"remaining\":[0,1,1,1,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 21,
+              "sent_count": 1,
+              "target": "piloc-e1-target-2"
+            },
+            {
+              "closed": false,
+              "last_revision": 1,
+              "last_sent_step": 7,
+              "last_view": "{\"confidence\":1.0,\"deadline\":143.504839,\"members\":[],\"position\":[0.20339,0.067797],\"progress\":0.0,\"remaining\":[1,0,0,0,1],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 30,
+              "sent_count": 1,
+              "target": "piloc-e1-target-3"
+            },
+            {
+              "closed": false,
+              "last_revision": 1,
+              "last_sent_step": 5,
+              "last_view": "{\"confidence\":1.0,\"deadline\":111.79446,\"members\":[],\"position\":[0.050847,0.152542],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 30,
+              "sent_count": 1,
+              "target": "piloc-e1-target-4"
+            },
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 6,
+              "sent_count": 0,
+              "target": "piloc-e1-target-5"
+            }
+          ],
+          "pending_packets": 0,
+          "sequence": 51,
+          "tick": 33
+        }
+      },
+      "rule_sent": true,
+      "seed": 700010,
+      "status": "validated",
+      "step": 33,
+      "target": "piloc-e1-target-2",
+      "unacked": 1,
+      "validation_reasons": []
+    },
+    {
+      "age_steps": 610,
+      "candidate_at_tstar": {
+        "age_steps": 610,
+        "changed_view": true,
+        "confirmed_fraction": 0.8333333333333334,
+        "revision": 36,
+        "rule_sent": true,
+        "step": 620,
+        "target": "piloc-e1-target-2",
+        "unacked": 2
+      },
+      "changed_view": true,
+      "choice_index": 647,
+      "confirmed_fraction": 0.8333333333333334,
+      "eligible_count": 1028,
+      "pre_action_digest": {
+        "observation": {
+          "backlog_targets": 6,
+          "capacity_remaining": null,
+          "current_time": 619.0,
+          "items": [
+            {
+              "age_steps": 616,
+              "changed_view": true,
+              "confirmed_fraction": 1.0,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 23,
+              "sent_count": 3,
+              "target": "piloc-e1-target-0",
+              "unacked": 0
+            },
+            {
+              "age_steps": 610,
+              "changed_view": true,
+              "confirmed_fraction": 0.8333333333333334,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 36,
+              "sent_count": 4,
+              "target": "piloc-e1-target-2",
+              "unacked": 2
+            },
+            {
+              "age_steps": 614,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 3,
+              "sent_count": 0,
+              "target": "piloc-e1-target-3",
+              "unacked": 0
+            },
+            {
+              "age_steps": 605,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 3,
+              "sent_count": 0,
+              "target": "piloc-e1-target-5",
+              "unacked": 0
+            }
+          ],
+          "observation_step": 620,
+          "remaining_budget_bytes": 68.0,
+          "subscribers": 6
+        },
+        "relay": {
+          "ack_ordinal": 51,
+          "ack_pending": 0,
+          "ack_states": {
+            "('0', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"2\",\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.051636,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-1')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":135.701352,\"members\":[\"0\",\"1\",\"3\"],\"position\":[0.0,0.677966],\"progress\":0.0,\"remaining\":[0,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-2')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":148.699356,\"members\":[],\"position\":[0.0,0.694915],\"progress\":0.0,\"remaining\":[0,0,1,1,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-4')": {
+              "highest": [
+                2.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":93.305346,\"members\":[],\"position\":[0.169492,0.762712],\"progress\":0.0,\"remaining\":[0,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-0')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[],\"position\":[0.118644,0.610169],\"progress\":0.0,\"remaining\":[1,1,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-1')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":135.701352,\"members\":[],\"position\":[0.0,0.677966],\"progress\":0.0,\"remaining\":[0,1,1,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-2')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":148.699356,\"members\":[],\"position\":[0.0,0.694915],\"progress\":0.0,\"remaining\":[0,0,1,1,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"2\",\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.051636,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-1')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":135.701352,\"members\":[],\"position\":[0.0,0.677966],\"progress\":0.0,\"remaining\":[0,1,1,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":148.699356,\"members\":[\"5\"],\"position\":[0.0,0.694915],\"progress\":0.0,\"remaining\":[0,0,1,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-4')": {
+              "highest": [
+                2.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":93.305346,\"members\":[],\"position\":[0.169492,0.762712],\"progress\":0.0,\"remaining\":[0,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"2\",\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.051636,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-1')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":135.701352,\"members\":[],\"position\":[0.0,0.677966],\"progress\":0.0,\"remaining\":[0,1,1,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":148.699356,\"members\":[\"5\"],\"position\":[0.0,0.694915],\"progress\":0.0,\"remaining\":[0,0,1,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-4')": {
+              "highest": [
+                2.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":93.305346,\"members\":[],\"position\":[0.169492,0.762712],\"progress\":0.0,\"remaining\":[0,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-0')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[],\"position\":[0.118644,0.610169],\"progress\":0.0,\"remaining\":[1,1,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-1')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":135.701352,\"members\":[],\"position\":[0.0,0.677966],\"progress\":0.0,\"remaining\":[0,1,1,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-4')": {
+              "highest": [
+                2.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":93.305346,\"members\":[],\"position\":[0.169492,0.762712],\"progress\":0.0,\"remaining\":[0,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"2\",\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.051636,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-1')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":135.701352,\"members\":[\"0\",\"1\",\"3\"],\"position\":[0.0,0.677966],\"progress\":0.0,\"remaining\":[0,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":148.699356,\"members\":[\"5\"],\"position\":[0.0,0.694915],\"progress\":0.0,\"remaining\":[0,0,1,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-4')": {
+              "highest": [
+                2.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":93.305346,\"members\":[],\"position\":[0.169492,0.762712],\"progress\":0.0,\"remaining\":[0,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            }
+          },
+          "budget_remaining": 68,
+          "budget_sends_this_step": 0,
+          "budget_spent": 29232,
+          "counters": {
+            "ack_attempt_bytes": 14964,
+            "ack_attempts": 51,
+            "ack_delivered": 38,
+            "ack_emitted": 51,
+            "ack_frames_advanced": 38,
+            "ack_frames_reaffirmed": 0,
+            "ack_lost": 13,
+            "airtime_bytes": 29232,
+            "applied_bytes": 20915,
+            "attempts_forced_maxwait": 0,
+            "attempts_other": 0,
+            "attempts_policy": 72,
+            "backlog_steps": 0,
+            "budget_refused_sends": 2558,
+            "bytes_forced_maxwait": 0,
+            "bytes_other": 0,
+            "bytes_policy": 29232,
+            "capacity_refused_sends": 0,
+            "coalesced_changes": 81,
+            "deliveries_applied": 51,
+            "delivery_duplicate": 1,
+            "delivery_refused": 0,
+            "delivery_superseded": 0,
+            "delivery_unknown_task": 0,
+            "emissions": 12,
+            "emissions_forced_maxwait": 0,
+            "emissions_other": 0,
+            "emissions_policy": 12,
+            "emissions_suppressed_terminal": 0,
+            "events_accepted": 6,
+            "first_emissions": 4,
+            "flight_steps": 0,
+            "generated_items": 94,
+            "max_backlog_age": 615,
+            "max_in_flight": 0,
+            "packets_delivered": 52,
+            "packets_lost": 20,
+            "redundant_emissions": 5,
+            "refresh_emissions": 8,
+            "refused_forced_maxwait": 0,
+            "refused_other": 0,
+            "refused_policy": 2558,
+            "transmission_attempts": 72,
+            "unsent_change_steps": 3574
+          },
+          "forward_rng_draws": 72,
+          "ledger": [
+            {
+              "closed": false,
+              "last_revision": 3,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":123.488,\"members\":[\"2\",\"4\"],\"position\":[0.118644,0.610169],\"progress\":0.051636,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 4,
+              "sent_count": 3,
+              "target": "piloc-e1-target-0"
+            },
+            {
+              "closed": true,
+              "last_revision": 3,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":135.701352,\"members\":[\"0\",\"1\",\"3\"],\"position\":[0.0,0.677966],\"progress\":0.0,\"remaining\":[0,0,0,1,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 55,
+              "sent_count": 3,
+              "target": "piloc-e1-target-1"
+            },
+            {
+              "closed": false,
+              "last_revision": 3,
+              "last_sent_step": 4,
+              "last_view": "{\"confidence\":1.0,\"deadline\":148.699356,\"members\":[\"5\"],\"position\":[0.0,0.694915],\"progress\":0.0,\"remaining\":[0,0,1,0,1],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 10,
+              "sent_count": 4,
+              "target": "piloc-e1-target-2"
+            },
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 6,
+              "sent_count": 0,
+              "target": "piloc-e1-target-3"
+            },
+            {
+              "closed": true,
+              "last_revision": 2,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":93.305346,\"members\":[],\"position\":[0.169492,0.762712],\"progress\":0.0,\"remaining\":[0,0,0,1,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 56,
+              "sent_count": 2,
+              "target": "piloc-e1-target-4"
+            },
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 15,
+              "sent_count": 0,
+              "target": "piloc-e1-target-5"
+            }
+          ],
+          "pending_packets": 0,
+          "sequence": 52,
+          "tick": 620
+        }
+      },
+      "rule_sent": true,
+      "seed": 700020,
+      "status": "validated",
+      "step": 620,
+      "target": "piloc-e1-target-2",
+      "unacked": 2,
+      "validation_reasons": []
+    },
+    {
+      "age_steps": 20,
+      "candidate_at_tstar": {
+        "age_steps": 20,
+        "changed_view": true,
+        "confirmed_fraction": 0.16666666666666666,
+        "revision": 10,
+        "rule_sent": true,
+        "step": 29,
+        "target": "piloc-e1-target-1",
+        "unacked": 2
+      },
+      "changed_view": true,
+      "choice_index": 45,
+      "confirmed_fraction": 0.16666666666666666,
+      "eligible_count": 50,
+      "pre_action_digest": {
+        "observation": {
+          "backlog_targets": 4,
+          "capacity_remaining": null,
+          "current_time": 28.0,
+          "items": [
+            {
+              "age_steps": 20,
+              "changed_view": true,
+              "confirmed_fraction": 0.16666666666666666,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 10,
+              "sent_count": 2,
+              "target": "piloc-e1-target-1",
+              "unacked": 2
+            }
+          ],
+          "observation_step": 29,
+          "remaining_budget_bytes": 2150.0,
+          "subscribers": 6
+        },
+        "relay": {
+          "ack_ordinal": 42,
+          "ack_pending": 0,
+          "ack_states": {
+            "('0', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[\"2\",\"5\"],\"position\":[0.40678,0.474576],\"progress\":0.093869,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-3')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":96.85968,\"members\":[\"1\",\"3\",\"4\"],\"position\":[0.372881,0.508475],\"progress\":0.032669,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-4')": {
+              "highest": [
+                2.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":159.843762,\"members\":[],\"position\":[0.474576,0.508475],\"progress\":0.0,\"remaining\":[1,1,1,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-2')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[],\"position\":[0.40678,0.474576],\"progress\":0.0,\"remaining\":[0,0,0,1,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-4')": {
+              "highest": [
+                3.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":159.843762,\"members\":[\"0\"],\"position\":[0.474576,0.508475],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[\"2\",\"5\"],\"position\":[0.40678,0.474576],\"progress\":0.093869,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-3')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":96.85968,\"members\":[],\"position\":[0.372881,0.508475],\"progress\":0.0,\"remaining\":[1,0,1,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-4')": {
+              "highest": [
+                3.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":159.843762,\"members\":[\"0\"],\"position\":[0.474576,0.508475],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-2')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[],\"position\":[0.40678,0.474576],\"progress\":0.0,\"remaining\":[0,0,0,1,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-3')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":96.85968,\"members\":[\"1\",\"3\",\"4\"],\"position\":[0.372881,0.508475],\"progress\":0.032669,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-4')": {
+              "highest": [
+                2.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":159.843762,\"members\":[],\"position\":[0.474576,0.508475],\"progress\":0.0,\"remaining\":[1,1,1,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-1')": {
+              "highest": [
+                2.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":104.722172,\"members\":[],\"position\":[0.474576,0.389831],\"progress\":0.0,\"remaining\":[1,0,1,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[\"2\",\"5\"],\"position\":[0.40678,0.474576],\"progress\":0.093869,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-3')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":96.85968,\"members\":[\"1\",\"3\",\"4\"],\"position\":[0.372881,0.508475],\"progress\":0.032669,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-4')": {
+              "highest": [
+                3.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":159.843762,\"members\":[\"0\"],\"position\":[0.474576,0.508475],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[\"2\",\"5\"],\"position\":[0.40678,0.474576],\"progress\":0.093869,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-4')": {
+              "highest": [
+                3.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":159.843762,\"members\":[\"0\"],\"position\":[0.474576,0.508475],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            }
+          },
+          "budget_remaining": 2150,
+          "budget_sends_this_step": 0,
+          "budget_spent": 27150,
+          "counters": {
+            "ack_attempt_bytes": 12470,
+            "ack_attempts": 42,
+            "ack_delivered": 26,
+            "ack_emitted": 42,
+            "ack_frames_advanced": 26,
+            "ack_frames_reaffirmed": 0,
+            "ack_lost": 16,
+            "airtime_bytes": 27150,
+            "applied_bytes": 17368,
+            "attempts_forced_maxwait": 0,
+            "attempts_other": 0,
+            "attempts_policy": 66,
+            "backlog_steps": 0,
+            "budget_refused_sends": 65,
+            "bytes_forced_maxwait": 0,
+            "bytes_other": 0,
+            "bytes_policy": 27150,
+            "capacity_refused_sends": 0,
+            "coalesced_changes": 45,
+            "deliveries_applied": 42,
+            "delivery_duplicate": 0,
+            "delivery_refused": 0,
+            "delivery_superseded": 0,
+            "delivery_unknown_task": 0,
+            "emissions": 11,
+            "emissions_forced_maxwait": 0,
+            "emissions_other": 0,
+            "emissions_policy": 11,
+            "emissions_suppressed_terminal": 0,
+            "events_accepted": 4,
+            "first_emissions": 4,
+            "flight_steps": 0,
+            "generated_items": 56,
+            "max_backlog_age": 24,
+            "max_in_flight": 0,
+            "packets_delivered": 42,
+            "packets_lost": 24,
+            "redundant_emissions": 4,
+            "refresh_emissions": 7,
+            "refused_forced_maxwait": 0,
+            "refused_other": 0,
+            "refused_policy": 65,
+            "transmission_attempts": 66,
+            "unsent_change_steps": 85
+          },
+          "forward_rng_draws": 66,
+          "ledger": [
+            {
+              "closed": false,
+              "last_revision": 2,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":104.722172,\"members\":[],\"position\":[0.474576,0.389831],\"progress\":0.0,\"remaining\":[1,0,1,0,1],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 9,
+              "sent_count": 2,
+              "target": "piloc-e1-target-1"
+            },
+            {
+              "closed": true,
+              "last_revision": 3,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":91.860086,\"members\":[\"2\",\"5\"],\"position\":[0.40678,0.474576],\"progress\":0.093869,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 4,
+              "sent_count": 3,
+              "target": "piloc-e1-target-2"
+            },
+            {
+              "closed": true,
+              "last_revision": 3,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":96.85968,\"members\":[\"1\",\"3\",\"4\"],\"position\":[0.372881,0.508475],\"progress\":0.032669,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 4,
+              "sent_count": 3,
+              "target": "piloc-e1-target-3"
+            },
+            {
+              "closed": true,
+              "last_revision": 3,
+              "last_sent_step": 4,
+              "last_view": "{\"confidence\":1.0,\"deadline\":159.843762,\"members\":[\"0\"],\"position\":[0.474576,0.508475],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 14,
+              "sent_count": 3,
+              "target": "piloc-e1-target-4"
+            }
+          ],
+          "pending_packets": 0,
+          "sequence": 42,
+          "tick": 29
+        }
+      },
+      "rule_sent": true,
+      "seed": 700022,
+      "status": "validated",
+      "step": 29,
+      "target": "piloc-e1-target-1",
+      "unacked": 2,
+      "validation_reasons": []
+    },
+    {
+      "age_steps": 35,
+      "candidate_at_tstar": {
+        "age_steps": 35,
+        "changed_view": true,
+        "confirmed_fraction": 0.8333333333333334,
+        "revision": 4,
+        "rule_sent": true,
+        "step": 46,
+        "target": "piloc-e1-target-5",
+        "unacked": 4
+      },
+      "changed_view": true,
+      "choice_index": 37,
+      "confirmed_fraction": 0.8333333333333334,
+      "eligible_count": 80,
+      "pre_action_digest": {
+        "observation": {
+          "backlog_targets": 5,
+          "capacity_remaining": null,
+          "current_time": 45.0,
+          "items": [
+            {
+              "age_steps": 37,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 2,
+              "sent_count": 0,
+              "target": "piloc-e1-target-0",
+              "unacked": 0
+            },
+            {
+              "age_steps": 39,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 2,
+              "sent_count": 0,
+              "target": "piloc-e1-target-1",
+              "unacked": 0
+            },
+            {
+              "age_steps": 40,
+              "changed_view": true,
+              "confirmed_fraction": 1.0,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 11,
+              "sent_count": 4,
+              "target": "piloc-e1-target-2",
+              "unacked": 0
+            },
+            {
+              "age_steps": 42,
+              "changed_view": true,
+              "confirmed_fraction": 1.0,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 15,
+              "sent_count": 3,
+              "target": "piloc-e1-target-4",
+              "unacked": 0
+            },
+            {
+              "age_steps": 35,
+              "changed_view": true,
+              "confirmed_fraction": 0.8333333333333334,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 4,
+              "sent_count": 4,
+              "target": "piloc-e1-target-5",
+              "unacked": 4
+            }
+          ],
+          "observation_step": 46,
+          "remaining_budget_bytes": 1016.0,
+          "subscribers": 6
+        },
+        "relay": {
+          "ack_ordinal": 41,
+          "ack_pending": 0,
+          "ack_states": {
+            "('0', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-2')": {
+              "highest": [
+                4.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":137.153437,\"members\":[\"3\"],\"position\":[0.915254,0.525424],\"progress\":0.077871,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-4')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":113.244576,\"members\":[],\"position\":[0.847458,0.559322],\"progress\":0.0,\"remaining\":[1,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":137.153437,\"members\":[],\"position\":[0.915254,0.525424],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-4')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":113.244576,\"members\":[],\"position\":[0.847458,0.559322],\"progress\":0.0,\"remaining\":[1,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-5')": {
+              "highest": [
+                3.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":119.136113,\"members\":[],\"position\":[0.728814,0.677966],\"progress\":0.0,\"remaining\":[1,0,1,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-2')": {
+              "highest": [
+                4.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":137.153437,\"members\":[\"3\"],\"position\":[0.915254,0.525424],\"progress\":0.077871,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-4')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":113.244576,\"members\":[],\"position\":[0.847458,0.559322],\"progress\":0.0,\"remaining\":[1,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-5')": {
+              "highest": [
+                3.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":119.136113,\"members\":[],\"position\":[0.728814,0.677966],\"progress\":0.0,\"remaining\":[1,0,1,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-2')": {
+              "highest": [
+                4.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":137.153437,\"members\":[\"3\"],\"position\":[0.915254,0.525424],\"progress\":0.077871,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-4')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":113.244576,\"members\":[\"0\",\"1\",\"2\",\"4\",\"5\"],\"position\":[0.847458,0.559322],\"progress\":0.042528,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-5')": {
+              "highest": [
+                3.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":119.136113,\"members\":[],\"position\":[0.728814,0.677966],\"progress\":0.0,\"remaining\":[1,0,1,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-2')": {
+              "highest": [
+                4.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":137.153437,\"members\":[\"3\"],\"position\":[0.915254,0.525424],\"progress\":0.077871,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-4')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":113.244576,\"members\":[\"0\",\"1\",\"2\",\"4\",\"5\"],\"position\":[0.847458,0.559322],\"progress\":0.042528,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-5')": {
+              "highest": [
+                3.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":119.136113,\"members\":[],\"position\":[0.728814,0.677966],\"progress\":0.0,\"remaining\":[1,0,1,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-2')": {
+              "highest": [
+                4.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":137.153437,\"members\":[\"3\"],\"position\":[0.915254,0.525424],\"progress\":0.077871,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-4')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":113.244576,\"members\":[\"0\",\"1\",\"2\",\"4\",\"5\"],\"position\":[0.847458,0.559322],\"progress\":0.042528,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-5')": {
+              "highest": [
+                3.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":119.136113,\"members\":[],\"position\":[0.728814,0.677966],\"progress\":0.0,\"remaining\":[1,0,1,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            }
+          },
+          "budget_remaining": 1016,
+          "budget_sends_this_step": 0,
+          "budget_spent": 28284,
+          "counters": {
+            "ack_attempt_bytes": 12280,
+            "ack_attempts": 41,
+            "ack_delivered": 32,
+            "ack_emitted": 41,
+            "ack_frames_advanced": 32,
+            "ack_frames_reaffirmed": 0,
+            "ack_lost": 9,
+            "airtime_bytes": 28284,
+            "applied_bytes": 17912,
+            "attempts_forced_maxwait": 0,
+            "attempts_other": 0,
+            "attempts_policy": 66,
+            "backlog_steps": 0,
+            "budget_refused_sends": 188,
+            "bytes_forced_maxwait": 0,
+            "bytes_other": 0,
+            "bytes_policy": 28284,
+            "capacity_refused_sends": 0,
+            "coalesced_changes": 18,
+            "deliveries_applied": 41,
+            "delivery_duplicate": 6,
+            "delivery_refused": 0,
+            "delivery_superseded": 0,
+            "delivery_unknown_task": 0,
+            "emissions": 11,
+            "emissions_forced_maxwait": 0,
+            "emissions_other": 0,
+            "emissions_policy": 11,
+            "emissions_suppressed_terminal": 0,
+            "events_accepted": 5,
+            "first_emissions": 3,
+            "flight_steps": 0,
+            "generated_items": 29,
+            "max_backlog_age": 41,
+            "max_in_flight": 0,
+            "packets_delivered": 47,
+            "packets_lost": 19,
+            "redundant_emissions": 5,
+            "refresh_emissions": 8,
+            "refused_forced_maxwait": 0,
+            "refused_other": 0,
+            "refused_policy": 188,
+            "transmission_attempts": 66,
+            "unsent_change_steps": 193
+          },
+          "forward_rng_draws": 66,
+          "ledger": [
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 9,
+              "sent_count": 0,
+              "target": "piloc-e1-target-0"
+            },
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 7,
+              "sent_count": 0,
+              "target": "piloc-e1-target-1"
+            },
+            {
+              "closed": false,
+              "last_revision": 4,
+              "last_sent_step": 5,
+              "last_view": "{\"confidence\":1.0,\"deadline\":137.153437,\"members\":[\"3\"],\"position\":[0.915254,0.525424],\"progress\":0.077871,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 6,
+              "sent_count": 4,
+              "target": "piloc-e1-target-2"
+            },
+            {
+              "closed": false,
+              "last_revision": 3,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":113.244576,\"members\":[\"0\",\"1\",\"2\",\"4\",\"5\"],\"position\":[0.847458,0.559322],\"progress\":0.042528,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 4,
+              "sent_count": 3,
+              "target": "piloc-e1-target-4"
+            },
+            {
+              "closed": false,
+              "last_revision": 2,
+              "last_sent_step": 6,
+              "last_view": "{\"confidence\":1.0,\"deadline\":119.136113,\"members\":[],\"position\":[0.728814,0.677966],\"progress\":0.0,\"remaining\":[1,0,1,0,1],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 11,
+              "sent_count": 4,
+              "target": "piloc-e1-target-5"
+            }
+          ],
+          "pending_packets": 0,
+          "sequence": 47,
+          "tick": 46
+        }
+      },
+      "rule_sent": true,
+      "seed": 700042,
+      "status": "validated",
+      "step": 46,
+      "target": "piloc-e1-target-5",
+      "unacked": 4,
+      "validation_reasons": []
+    },
+    {
+      "age_steps": 418,
+      "candidate_at_tstar": {
+        "age_steps": 418,
+        "changed_view": true,
+        "confirmed_fraction": 0.8333333333333334,
+        "revision": 26,
+        "rule_sent": true,
+        "step": 423,
+        "target": "piloc-e1-target-1",
+        "unacked": 1
+      },
+      "changed_view": true,
+      "choice_index": 421,
+      "confirmed_fraction": 0.8333333333333334,
+      "eligible_count": 999,
+      "pre_action_digest": {
+        "observation": {
+          "backlog_targets": 6,
+          "capacity_remaining": null,
+          "current_time": 422.0,
+          "items": [
+            {
+              "age_steps": 418,
+              "changed_view": true,
+              "confirmed_fraction": 0.8333333333333334,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 26,
+              "sent_count": 4,
+              "target": "piloc-e1-target-1",
+              "unacked": 1
+            },
+            {
+              "age_steps": 415,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 3,
+              "sent_count": 0,
+              "target": "piloc-e1-target-2",
+              "unacked": 0
+            },
+            {
+              "age_steps": 419,
+              "changed_view": true,
+              "confirmed_fraction": 1.0,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 23,
+              "sent_count": 3,
+              "target": "piloc-e1-target-3",
+              "unacked": 0
+            },
+            {
+              "age_steps": 401,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 3,
+              "sent_count": 0,
+              "target": "piloc-e1-target-4",
+              "unacked": 0
+            },
+            {
+              "age_steps": 397,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 3,
+              "sent_count": 0,
+              "target": "piloc-e1-target-5",
+              "unacked": 0
+            }
+          ],
+          "observation_step": 423,
+          "remaining_budget_bytes": 746.0,
+          "subscribers": 6
+        },
+        "relay": {
+          "ack_ordinal": 42,
+          "ack_pending": 0,
+          "ack_states": {
+            "('0', 'piloc-e1-target-0')": {
+              "highest": [
+                4.0,
+                5,
+                "{\"confidence\":1.0,\"deadline\":149.116508,\"members\":[\"1\",\"5\"],\"position\":[0.067797,0.254237],\"progress\":0.386079,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-3')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":173.299017,\"members\":[],\"position\":[0.033898,0.338983],\"progress\":0.0,\"remaining\":[1,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-0')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":149.116508,\"members\":[],\"position\":[0.067797,0.254237],\"progress\":0.0,\"remaining\":[0,1,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-1')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":159.572003,\"members\":[],\"position\":[0.067797,0.271186],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-3')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":173.299017,\"members\":[],\"position\":[0.033898,0.338983],\"progress\":0.0,\"remaining\":[1,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-0')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":149.116508,\"members\":[],\"position\":[0.067797,0.254237],\"progress\":0.0,\"remaining\":[0,1,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-1')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":159.572003,\"members\":[\"3\",\"4\"],\"position\":[0.067797,0.271186],\"progress\":0.140016,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-3')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":173.299017,\"members\":[],\"position\":[0.033898,0.338983],\"progress\":0.0,\"remaining\":[1,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-0')": {
+              "highest": [
+                4.0,
+                5,
+                "{\"confidence\":1.0,\"deadline\":149.116508,\"members\":[\"1\",\"5\"],\"position\":[0.067797,0.254237],\"progress\":0.386079,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-1')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":159.572003,\"members\":[\"3\",\"4\"],\"position\":[0.067797,0.271186],\"progress\":0.140016,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-3')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":173.299017,\"members\":[\"0\",\"2\"],\"position\":[0.033898,0.338983],\"progress\":0.049362,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-0')": {
+              "highest": [
+                4.0,
+                5,
+                "{\"confidence\":1.0,\"deadline\":149.116508,\"members\":[\"1\",\"5\"],\"position\":[0.067797,0.254237],\"progress\":0.386079,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-1')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":159.572003,\"members\":[\"3\",\"4\"],\"position\":[0.067797,0.271186],\"progress\":0.070008,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-3')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":173.299017,\"members\":[],\"position\":[0.033898,0.338983],\"progress\":0.0,\"remaining\":[1,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-0')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":149.116508,\"members\":[],\"position\":[0.067797,0.254237],\"progress\":0.0,\"remaining\":[0,1,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-1')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":159.572003,\"members\":[\"3\",\"4\"],\"position\":[0.067797,0.271186],\"progress\":0.140016,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-3')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":173.299017,\"members\":[],\"position\":[0.033898,0.338983],\"progress\":0.0,\"remaining\":[1,0,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            }
+          },
+          "budget_remaining": 746,
+          "budget_sends_this_step": 0,
+          "budget_spent": 28554,
+          "counters": {
+            "ack_attempt_bytes": 12636,
+            "ack_attempts": 42,
+            "ack_delivered": 31,
+            "ack_emitted": 42,
+            "ack_frames_advanced": 31,
+            "ack_frames_reaffirmed": 0,
+            "ack_lost": 11,
+            "airtime_bytes": 28554,
+            "applied_bytes": 18224,
+            "attempts_forced_maxwait": 0,
+            "attempts_other": 0,
+            "attempts_policy": 66,
+            "backlog_steps": 1,
+            "budget_refused_sends": 2049,
+            "bytes_forced_maxwait": 0,
+            "bytes_other": 0,
+            "bytes_policy": 28554,
+            "capacity_refused_sends": 0,
+            "coalesced_changes": 42,
+            "deliveries_applied": 42,
+            "delivery_duplicate": 0,
+            "delivery_refused": 0,
+            "delivery_superseded": 0,
+            "delivery_unknown_task": 0,
+            "emissions": 11,
+            "emissions_forced_maxwait": 0,
+            "emissions_other": 0,
+            "emissions_policy": 11,
+            "emissions_suppressed_terminal": 0,
+            "events_accepted": 6,
+            "first_emissions": 3,
+            "flight_steps": 0,
+            "generated_items": 56,
+            "max_backlog_age": 418,
+            "max_in_flight": 0,
+            "packets_delivered": 42,
+            "packets_lost": 24,
+            "redundant_emissions": 3,
+            "refresh_emissions": 8,
+            "refused_forced_maxwait": 0,
+            "refused_other": 0,
+            "refused_policy": 2049,
+            "transmission_attempts": 66,
+            "unsent_change_steps": 2468
+          },
+          "forward_rng_draws": 66,
+          "ledger": [
+            {
+              "closed": true,
+              "last_revision": 5,
+              "last_sent_step": 5,
+              "last_view": "{\"confidence\":1.0,\"deadline\":149.116508,\"members\":[\"1\",\"5\"],\"position\":[0.067797,0.254237],\"progress\":0.386079,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 6,
+              "sent_count": 4,
+              "target": "piloc-e1-target-0"
+            },
+            {
+              "closed": false,
+              "last_revision": 4,
+              "last_sent_step": 4,
+              "last_view": "{\"confidence\":1.0,\"deadline\":159.572003,\"members\":[\"3\",\"4\"],\"position\":[0.067797,0.271186],\"progress\":0.140016,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 5,
+              "sent_count": 4,
+              "target": "piloc-e1-target-1"
+            },
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 8,
+              "sent_count": 0,
+              "target": "piloc-e1-target-2"
+            },
+            {
+              "closed": false,
+              "last_revision": 3,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":173.299017,\"members\":[\"0\",\"2\"],\"position\":[0.033898,0.338983],\"progress\":0.049362,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 4,
+              "sent_count": 3,
+              "target": "piloc-e1-target-3"
+            },
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 22,
+              "sent_count": 0,
+              "target": "piloc-e1-target-4"
+            },
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 26,
+              "sent_count": 0,
+              "target": "piloc-e1-target-5"
+            }
+          ],
+          "pending_packets": 0,
+          "sequence": 42,
+          "tick": 423
+        }
+      },
+      "rule_sent": true,
+      "seed": 700046,
+      "status": "validated",
+      "step": 423,
+      "target": "piloc-e1-target-1",
+      "unacked": 1,
+      "validation_reasons": []
+    },
+    {
+      "age_steps": 8,
+      "candidate_at_tstar": {
+        "age_steps": 8,
+        "changed_view": true,
+        "confirmed_fraction": 0.8333333333333334,
+        "revision": 12,
+        "rule_sent": true,
+        "step": 22,
+        "target": "piloc-e1-target-3",
+        "unacked": 1
+      },
+      "changed_view": true,
+      "choice_index": 56,
+      "confirmed_fraction": 0.8333333333333334,
+      "eligible_count": 137,
+      "pre_action_digest": {
+        "observation": {
+          "backlog_targets": 6,
+          "capacity_remaining": null,
+          "current_time": 21.0,
+          "items": [
+            {
+              "age_steps": 11,
+              "changed_view": true,
+              "confirmed_fraction": 0.8333333333333334,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 3,
+              "sent_count": 1,
+              "target": "piloc-e1-target-0",
+              "unacked": 1
+            },
+            {
+              "age_steps": 15,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 2,
+              "sent_count": 0,
+              "target": "piloc-e1-target-1",
+              "unacked": 0
+            },
+            {
+              "age_steps": 8,
+              "changed_view": true,
+              "confirmed_fraction": 0.8333333333333334,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 12,
+              "sent_count": 3,
+              "target": "piloc-e1-target-3",
+              "unacked": 1
+            },
+            {
+              "age_steps": 19,
+              "changed_view": true,
+              "confirmed_fraction": 0.6666666666666666,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 9,
+              "sent_count": 2,
+              "target": "piloc-e1-target-4",
+              "unacked": 2
+            }
+          ],
+          "observation_step": 22,
+          "remaining_budget_bytes": 296.0,
+          "subscribers": 6
+        },
+        "relay": {
+          "ack_ordinal": 50,
+          "ack_pending": 0,
+          "ack_states": {
+            "('0', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":72.658608,\"members\":[],\"position\":[0.016949,0.033898],\"progress\":0.0,\"remaining\":[0,0,1,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":64.590411,\"members\":[\"2\"],\"position\":[0.118644,0.067797],\"progress\":0.107343,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-3')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":108.543015,\"members\":[\"5\"],\"position\":[0.0,0.152542],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":72.658608,\"members\":[],\"position\":[0.016949,0.033898],\"progress\":0.0,\"remaining\":[0,0,1,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":64.590411,\"members\":[\"2\"],\"position\":[0.118644,0.067797],\"progress\":0.107343,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-3')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":108.543015,\"members\":[\"5\"],\"position\":[0.0,0.152542],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-4')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":107.79446,\"members\":[],\"position\":[0.050847,0.152542],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":72.658608,\"members\":[],\"position\":[0.016949,0.033898],\"progress\":0.0,\"remaining\":[0,0,1,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-3')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":108.543015,\"members\":[\"5\"],\"position\":[0.0,0.152542],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-4')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":107.79446,\"members\":[],\"position\":[0.050847,0.152542],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-5')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":67.041785,\"members\":[],\"position\":[0.152542,0.169492],\"progress\":0.0,\"remaining\":[0,1,0,1,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":72.658608,\"members\":[],\"position\":[0.016949,0.033898],\"progress\":0.0,\"remaining\":[0,0,1,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-2')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":64.590411,\"members\":[],\"position\":[0.118644,0.067797],\"progress\":0.0,\"remaining\":[0,0,0,0,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-4')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":107.79446,\"members\":[],\"position\":[0.050847,0.152542],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-5')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":67.041785,\"members\":[],\"position\":[0.152542,0.169492],\"progress\":0.0,\"remaining\":[0,1,0,1,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-3')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":108.543015,\"members\":[\"5\"],\"position\":[0.0,0.152542],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-4')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":107.79446,\"members\":[],\"position\":[0.050847,0.152542],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-5')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":67.041785,\"members\":[],\"position\":[0.152542,0.169492],\"progress\":0.0,\"remaining\":[0,1,0,1,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":72.658608,\"members\":[],\"position\":[0.016949,0.033898],\"progress\":0.0,\"remaining\":[0,0,1,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":64.590411,\"members\":[\"2\"],\"position\":[0.118644,0.067797],\"progress\":0.107343,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-3')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":108.543015,\"members\":[\"5\"],\"position\":[0.0,0.152542],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-5')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":67.041785,\"members\":[\"1\",\"3\"],\"position\":[0.152542,0.169492],\"progress\":0.13756,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            }
+          },
+          "budget_remaining": 296,
+          "budget_sends_this_step": 0,
+          "budget_spent": 29004,
+          "counters": {
+            "ack_attempt_bytes": 14740,
+            "ack_attempts": 50,
+            "ack_delivered": 32,
+            "ack_emitted": 50,
+            "ack_frames_advanced": 32,
+            "ack_frames_reaffirmed": 0,
+            "ack_lost": 18,
+            "airtime_bytes": 29004,
+            "applied_bytes": 20200,
+            "attempts_forced_maxwait": 0,
+            "attempts_other": 0,
+            "attempts_policy": 72,
+            "backlog_steps": 0,
+            "budget_refused_sends": 85,
+            "bytes_forced_maxwait": 0,
+            "bytes_other": 0,
+            "bytes_policy": 29004,
+            "capacity_refused_sends": 0,
+            "coalesced_changes": 25,
+            "deliveries_applied": 50,
+            "delivery_duplicate": 0,
+            "delivery_refused": 0,
+            "delivery_superseded": 0,
+            "delivery_unknown_task": 0,
+            "emissions": 12,
+            "emissions_forced_maxwait": 0,
+            "emissions_other": 0,
+            "emissions_policy": 12,
+            "emissions_suppressed_terminal": 0,
+            "events_accepted": 6,
+            "first_emissions": 5,
+            "flight_steps": 0,
+            "generated_items": 39,
+            "max_backlog_age": 18,
+            "max_in_flight": 0,
+            "packets_delivered": 50,
+            "packets_lost": 22,
+            "redundant_emissions": 4,
+            "refresh_emissions": 7,
+            "refused_forced_maxwait": 0,
+            "refused_other": 0,
+            "refused_policy": 85,
+            "transmission_attempts": 72,
+            "unsent_change_steps": 89
+          },
+          "forward_rng_draws": 72,
+          "ledger": [
+            {
+              "closed": false,
+              "last_revision": 1,
+              "last_sent_step": 2,
+              "last_view": "{\"confidence\":1.0,\"deadline\":72.658608,\"members\":[],\"position\":[0.016949,0.033898],\"progress\":0.0,\"remaining\":[0,0,1,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 11,
+              "sent_count": 1,
+              "target": "piloc-e1-target-0"
+            },
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 7,
+              "sent_count": 0,
+              "target": "piloc-e1-target-1"
+            },
+            {
+              "closed": true,
+              "last_revision": 3,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":64.590411,\"members\":[\"2\"],\"position\":[0.118644,0.067797],\"progress\":0.107343,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 4,
+              "sent_count": 3,
+              "target": "piloc-e1-target-2"
+            },
+            {
+              "closed": false,
+              "last_revision": 3,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":108.543015,\"members\":[\"5\"],\"position\":[0.0,0.152542],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 14,
+              "sent_count": 3,
+              "target": "piloc-e1-target-3"
+            },
+            {
+              "closed": false,
+              "last_revision": 2,
+              "last_sent_step": 2,
+              "last_view": "{\"confidence\":1.0,\"deadline\":107.79446,\"members\":[],\"position\":[0.050847,0.152542],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 3,
+              "sent_count": 2,
+              "target": "piloc-e1-target-4"
+            },
+            {
+              "closed": true,
+              "last_revision": 3,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":67.041785,\"members\":[\"1\",\"3\"],\"position\":[0.152542,0.169492],\"progress\":0.13756,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 4,
+              "sent_count": 3,
+              "target": "piloc-e1-target-5"
+            }
+          ],
+          "pending_packets": 0,
+          "sequence": 50,
+          "tick": 22
+        }
+      },
+      "rule_sent": true,
+      "seed": 700018,
+      "status": "validated",
+      "step": 22,
+      "target": "piloc-e1-target-3",
+      "unacked": 1,
+      "validation_reasons": []
+    },
+    {
+      "age_steps": 6,
+      "candidate_at_tstar": {
+        "age_steps": 6,
+        "changed_view": true,
+        "confirmed_fraction": 0.8333333333333334,
+        "revision": 10,
+        "rule_sent": true,
+        "step": 19,
+        "target": "piloc-e1-target-2",
+        "unacked": 2
+      },
+      "changed_view": true,
+      "choice_index": 22,
+      "confirmed_fraction": 0.8333333333333334,
+      "eligible_count": 45,
+      "pre_action_digest": {
+        "observation": {
+          "backlog_targets": 6,
+          "capacity_remaining": null,
+          "current_time": 18.0,
+          "items": [
+            {
+              "age_steps": 12,
+              "changed_view": true,
+              "confirmed_fraction": 0.8333333333333334,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 12,
+              "sent_count": 4,
+              "target": "piloc-e1-target-1",
+              "unacked": 1
+            },
+            {
+              "age_steps": 6,
+              "changed_view": true,
+              "confirmed_fraction": 0.8333333333333334,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 10,
+              "sent_count": 4,
+              "target": "piloc-e1-target-2",
+              "unacked": 2
+            },
+            {
+              "age_steps": 13,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 2,
+              "sent_count": 0,
+              "target": "piloc-e1-target-3",
+              "unacked": 0
+            },
+            {
+              "age_steps": 4,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 2,
+              "sent_count": 0,
+              "target": "piloc-e1-target-4",
+              "unacked": 0
+            },
+            {
+              "age_steps": 3,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 2,
+              "sent_count": 0,
+              "target": "piloc-e1-target-5",
+              "unacked": 0
+            }
+          ],
+          "observation_step": 19,
+          "remaining_budget_bytes": 1010.0,
+          "subscribers": 6
+        },
+        "relay": {
+          "ack_ordinal": 44,
+          "ack_pending": 0,
+          "ack_states": {
+            "('0', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":131.637248,\"members\":[\"3\",\"4\",\"5\"],\"position\":[0.186441,0.40678],\"progress\":0.160355,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-1')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":135.750345,\"members\":[\"2\"],\"position\":[0.355932,0.491525],\"progress\":0.0,\"remaining\":[1,0,1,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":131.637248,\"members\":[\"3\",\"4\",\"5\"],\"position\":[0.186441,0.40678],\"progress\":0.160355,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-1')": {
+              "highest": [
+                4.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":110.379138,\"members\":[\"1\",\"0\"],\"position\":[0.372881,0.440678],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":135.750345,\"members\":[\"2\"],\"position\":[0.355932,0.491525],\"progress\":0.0,\"remaining\":[1,0,1,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-0')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":131.637248,\"members\":[],\"position\":[0.186441,0.40678],\"progress\":0.0,\"remaining\":[1,0,0,1,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-1')": {
+              "highest": [
+                4.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":110.379138,\"members\":[\"1\",\"0\"],\"position\":[0.372881,0.440678],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 5,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-2')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":135.750345,\"members\":[],\"position\":[0.355932,0.491525],\"progress\":0.0,\"remaining\":[1,0,1,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":131.637248,\"members\":[\"3\",\"4\",\"5\"],\"position\":[0.186441,0.40678],\"progress\":0.160355,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-1')": {
+              "highest": [
+                3.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":110.379138,\"members\":[\"1\"],\"position\":[0.372881,0.440678],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":135.750345,\"members\":[\"2\"],\"position\":[0.355932,0.491525],\"progress\":0.0,\"remaining\":[1,0,1,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-0')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":131.637248,\"members\":[],\"position\":[0.186441,0.40678],\"progress\":0.0,\"remaining\":[1,0,0,1,1],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-1')": {
+              "highest": [
+                3.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":110.379138,\"members\":[\"1\"],\"position\":[0.372881,0.440678],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":135.750345,\"members\":[\"2\"],\"position\":[0.355932,0.491525],\"progress\":0.0,\"remaining\":[1,0,1,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-0')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":131.637248,\"members\":[\"3\",\"4\",\"5\"],\"position\":[0.186441,0.40678],\"progress\":0.160355,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-1')": {
+              "highest": [
+                3.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":110.379138,\"members\":[\"1\"],\"position\":[0.372881,0.440678],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-4')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-5')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            }
+          },
+          "budget_remaining": 1010,
+          "budget_sends_this_step": 0,
+          "budget_spent": 28290,
+          "counters": {
+            "ack_attempt_bytes": 13115,
+            "ack_attempts": 44,
+            "ack_delivered": 32,
+            "ack_emitted": 44,
+            "ack_frames_advanced": 32,
+            "ack_frames_reaffirmed": 0,
+            "ack_lost": 12,
+            "airtime_bytes": 28290,
+            "applied_bytes": 18745,
+            "attempts_forced_maxwait": 0,
+            "attempts_other": 0,
+            "attempts_policy": 66,
+            "backlog_steps": 0,
+            "budget_refused_sends": 54,
+            "bytes_forced_maxwait": 0,
+            "bytes_other": 0,
+            "bytes_policy": 28290,
+            "capacity_refused_sends": 0,
+            "coalesced_changes": 18,
+            "deliveries_applied": 44,
+            "delivery_duplicate": 2,
+            "delivery_refused": 0,
+            "delivery_superseded": 0,
+            "delivery_unknown_task": 0,
+            "emissions": 11,
+            "emissions_forced_maxwait": 0,
+            "emissions_other": 0,
+            "emissions_policy": 11,
+            "emissions_suppressed_terminal": 0,
+            "events_accepted": 6,
+            "first_emissions": 3,
+            "flight_steps": 0,
+            "generated_items": 31,
+            "max_backlog_age": 14,
+            "max_in_flight": 0,
+            "packets_delivered": 46,
+            "packets_lost": 20,
+            "redundant_emissions": 4,
+            "refresh_emissions": 8,
+            "refused_forced_maxwait": 0,
+            "refused_other": 0,
+            "refused_policy": 54,
+            "transmission_attempts": 66,
+            "unsent_change_steps": 53
+          },
+          "forward_rng_draws": 66,
+          "ledger": [
+            {
+              "closed": true,
+              "last_revision": 3,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":131.637248,\"members\":[\"3\",\"4\",\"5\"],\"position\":[0.186441,0.40678],\"progress\":0.160355,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 4,
+              "sent_count": 3,
+              "target": "piloc-e1-target-0"
+            },
+            {
+              "closed": false,
+              "last_revision": 4,
+              "last_sent_step": 5,
+              "last_view": "{\"confidence\":1.0,\"deadline\":110.379138,\"members\":[\"1\",\"0\"],\"position\":[0.372881,0.440678],\"progress\":0.0,\"remaining\":[1,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 7,
+              "sent_count": 4,
+              "target": "piloc-e1-target-1"
+            },
+            {
+              "closed": false,
+              "last_revision": 3,
+              "last_sent_step": 4,
+              "last_view": "{\"confidence\":1.0,\"deadline\":135.750345,\"members\":[\"2\"],\"position\":[0.355932,0.491525],\"progress\":0.0,\"remaining\":[1,0,1,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 13,
+              "sent_count": 4,
+              "target": "piloc-e1-target-2"
+            },
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 6,
+              "sent_count": 0,
+              "target": "piloc-e1-target-3"
+            },
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 15,
+              "sent_count": 0,
+              "target": "piloc-e1-target-4"
+            },
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 16,
+              "sent_count": 0,
+              "target": "piloc-e1-target-5"
+            }
+          ],
+          "pending_packets": 0,
+          "sequence": 46,
+          "tick": 19
+        }
+      },
+      "rule_sent": true,
+      "seed": 700031,
+      "status": "validated",
+      "step": 19,
+      "target": "piloc-e1-target-2",
+      "unacked": 2,
+      "validation_reasons": []
+    },
+    {
+      "age_steps": 8,
+      "candidate_at_tstar": {
+        "age_steps": 8,
+        "changed_view": true,
+        "confirmed_fraction": 0.8333333333333334,
+        "revision": 12,
+        "rule_sent": true,
+        "step": 12,
+        "target": "piloc-e1-target-3",
+        "unacked": 1
+      },
+      "changed_view": true,
+      "choice_index": 11,
+      "confirmed_fraction": 0.8333333333333334,
+      "eligible_count": 57,
+      "pre_action_digest": {
+        "observation": {
+          "backlog_targets": 3,
+          "capacity_remaining": null,
+          "current_time": 11.0,
+          "items": [
+            {
+              "age_steps": 5,
+              "changed_view": true,
+              "confirmed_fraction": 0.0,
+              "first_emission": true,
+              "pending_event": true,
+              "revision": 2,
+              "sent_count": 0,
+              "target": "piloc-e1-target-0",
+              "unacked": 0
+            },
+            {
+              "age_steps": 0,
+              "changed_view": false,
+              "confirmed_fraction": 0.6666666666666666,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 2,
+              "sent_count": 4,
+              "target": "piloc-e1-target-2",
+              "unacked": 4
+            },
+            {
+              "age_steps": 8,
+              "changed_view": true,
+              "confirmed_fraction": 0.8333333333333334,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 12,
+              "sent_count": 3,
+              "target": "piloc-e1-target-3",
+              "unacked": 1
+            },
+            {
+              "age_steps": 7,
+              "changed_view": true,
+              "confirmed_fraction": 1.0,
+              "first_emission": false,
+              "pending_event": false,
+              "revision": 12,
+              "sent_count": 4,
+              "target": "piloc-e1-target-5",
+              "unacked": 0
+            }
+          ],
+          "observation_step": 12,
+          "remaining_budget_bytes": 302.0,
+          "subscribers": 6
+        },
+        "relay": {
+          "ack_ordinal": 40,
+          "ack_pending": 0,
+          "ack_states": {
+            "('0', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-3')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":160.229802,\"members\":[\"0\",\"1\",\"3\",\"4\"],\"position\":[0.423729,0.169492],\"progress\":0.033464,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('0', 'piloc-e1-target-5')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":128.907972,\"members\":[\"2\",\"5\"],\"position\":[0.440678,0.20339],\"progress\":0.070556,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":129.654932,\"members\":[],\"position\":[0.305085,0.101695],\"progress\":0.0,\"remaining\":[1,1,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-3')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('1', 'piloc-e1-target-5')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":128.907972,\"members\":[\"2\",\"5\"],\"position\":[0.440678,0.20339],\"progress\":0.070556,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":129.654932,\"members\":[],\"position\":[0.305085,0.101695],\"progress\":0.0,\"remaining\":[1,1,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-3')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":160.229802,\"members\":[],\"position\":[0.423729,0.169492],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('2', 'piloc-e1-target-5')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":128.907972,\"members\":[\"2\",\"5\"],\"position\":[0.440678,0.20339],\"progress\":0.070556,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":129.654932,\"members\":[],\"position\":[0.305085,0.101695],\"progress\":0.0,\"remaining\":[1,1,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-3')": {
+              "highest": [
+                1.0,
+                1,
+                "{\"confidence\":1.0,\"deadline\":160.229802,\"members\":[],\"position\":[0.423729,0.169492],\"progress\":0.0,\"remaining\":[0,1,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 1,
+              "reaffirmations": 0
+            },
+            "('3', 'piloc-e1-target-5')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":128.907972,\"members\":[\"2\",\"5\"],\"position\":[0.440678,0.20339],\"progress\":0.070556,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-2')": {
+              "highest": [
+                2.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":129.654932,\"members\":[],\"position\":[0.305085,0.101695],\"progress\":0.0,\"remaining\":[1,1,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-3')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":160.229802,\"members\":[\"0\",\"1\",\"3\",\"4\"],\"position\":[0.423729,0.169492],\"progress\":0.033464,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('4', 'piloc-e1-target-5')": {
+              "highest": [
+                1.0,
+                2,
+                "{\"confidence\":1.0,\"deadline\":128.907972,\"members\":[],\"position\":[0.440678,0.20339],\"progress\":0.0,\"remaining\":[0,1,0,1,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 2,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-0')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-2')": {
+              "highest": null,
+              "last_arrival_step": null,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-3')": {
+              "highest": [
+                2.0,
+                3,
+                "{\"confidence\":1.0,\"deadline\":160.229802,\"members\":[\"0\",\"1\",\"3\",\"4\"],\"position\":[0.423729,0.169492],\"progress\":0.033464,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 3,
+              "reaffirmations": 0
+            },
+            "('5', 'piloc-e1-target-5')": {
+              "highest": [
+                3.0,
+                4,
+                "{\"confidence\":1.0,\"deadline\":128.907972,\"members\":[\"2\",\"5\"],\"position\":[0.440678,0.20339],\"progress\":0.070556,\"remaining\":[0,0,0,0,0],\"stage_index\":0}"
+              ],
+              "last_arrival_step": 4,
+              "reaffirmations": 0
+            }
+          },
+          "budget_remaining": 302,
+          "budget_sends_this_step": 0,
+          "budget_spent": 28998,
+          "counters": {
+            "ack_attempt_bytes": 12040,
+            "ack_attempts": 40,
+            "ack_delivered": 26,
+            "ack_emitted": 40,
+            "ack_frames_advanced": 26,
+            "ack_frames_reaffirmed": 0,
+            "ack_lost": 14,
+            "airtime_bytes": 28998,
+            "applied_bytes": 17835,
+            "attempts_forced_maxwait": 0,
+            "attempts_other": 0,
+            "attempts_policy": 66,
+            "backlog_steps": 0,
+            "budget_refused_sends": 21,
+            "bytes_forced_maxwait": 0,
+            "bytes_other": 0,
+            "bytes_policy": 28998,
+            "capacity_refused_sends": 0,
+            "coalesced_changes": 13,
+            "deliveries_applied": 40,
+            "delivery_duplicate": 6,
+            "delivery_refused": 0,
+            "delivery_superseded": 0,
+            "delivery_unknown_task": 0,
+            "emissions": 11,
+            "emissions_forced_maxwait": 0,
+            "emissions_other": 0,
+            "emissions_policy": 11,
+            "emissions_suppressed_terminal": 0,
+            "events_accepted": 4,
+            "first_emissions": 3,
+            "flight_steps": 0,
+            "generated_items": 22,
+            "max_backlog_age": 7,
+            "max_in_flight": 0,
+            "packets_delivered": 46,
+            "packets_lost": 20,
+            "redundant_emissions": 5,
+            "refresh_emissions": 8,
+            "refused_forced_maxwait": 0,
+            "refused_other": 0,
+            "refused_policy": 21,
+            "transmission_attempts": 66,
+            "unsent_change_steps": 20
+          },
+          "forward_rng_draws": 66,
+          "ledger": [
+            {
+              "closed": false,
+              "last_revision": null,
+              "last_sent_step": null,
+              "last_view": null,
+              "pending_event": true,
+              "ready_step": 7,
+              "sent_count": 0,
+              "target": "piloc-e1-target-0"
+            },
+            {
+              "closed": false,
+              "last_revision": 2,
+              "last_sent_step": 5,
+              "last_view": "{\"confidence\":1.0,\"deadline\":129.654932,\"members\":[],\"position\":[0.305085,0.101695],\"progress\":0.0,\"remaining\":[1,1,0,1,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": null,
+              "sent_count": 4,
+              "target": "piloc-e1-target-2"
+            },
+            {
+              "closed": false,
+              "last_revision": 3,
+              "last_sent_step": 3,
+              "last_view": "{\"confidence\":1.0,\"deadline\":160.229802,\"members\":[\"0\",\"1\",\"3\",\"4\"],\"position\":[0.423729,0.169492],\"progress\":0.033464,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 4,
+              "sent_count": 3,
+              "target": "piloc-e1-target-3"
+            },
+            {
+              "closed": false,
+              "last_revision": 4,
+              "last_sent_step": 4,
+              "last_view": "{\"confidence\":1.0,\"deadline\":128.907972,\"members\":[\"2\",\"5\"],\"position\":[0.440678,0.20339],\"progress\":0.070556,\"remaining\":[0,0,0,0,0],\"stage_index\":0}",
+              "pending_event": false,
+              "ready_step": 5,
+              "sent_count": 4,
+              "target": "piloc-e1-target-5"
+            }
+          ],
+          "pending_packets": 0,
+          "sequence": 46,
+          "tick": 12
+        }
+      },
+      "rule_sent": true,
+      "seed": 700033,
+      "status": "validated",
+      "step": 12,
+      "target": "piloc-e1-target-3",
+      "unacked": 1,
+      "validation_reasons": []
+    }
+  ],
+  "schema": "comm-multistep-points/1",
+  "stream_sample_seed": 20260921,
+  "validated_count": 8
+}
