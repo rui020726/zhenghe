@@ -1,5 +1,17 @@
 # 项目状态
 
+## 2026-09-22：预算动作 mask 正确性修复已规划，尚未执行
+
+当前入口 [COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md](COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md)，
+总纲 v2.9，起点 `analysis/comm-h20-terminal-attribution@b2061ae`。
+
+下一轮在 relay observation 中提供精确 attempt charge/动作前可执行性，并在 learned collector 采样前按实际
+顺序维护 shadow budget/capacity。不可执行 SEND 固定为 HOLD，不进 actor likelihood/entropy；critic step 保留。
+禁止 relay 拒绝后事后删样本。feature 维度与默认规则行为不变。
+
+本轮只实现、测试和最多 8 条既有流 smoke，optimizer.step=0；不训练、不跑 H=20 spillover。全部 M0–M3
+通过后再单独决定是否从初值重新训练，旧 checkpoint 不作修复后续训起点。
+
 ## 2026-09-22：H=20 终态归因 + 预算动作路径审计已交付（0 新 episode）
 
 分支 `analysis/comm-h20-terminal-attribution`（基 `analysis/comm-target-scoped-feasibility@9001a85`），

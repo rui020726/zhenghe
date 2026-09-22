@@ -1,6 +1,6 @@
 # 项目总纲：面向协同搜救的学习型任务信息传递控制
 
-版本：v2.8
+版本：v2.9
 
 更新日期：2026-09-22
 用途：跨聊天、跨 Agent 的研究方向与实验约定。  
@@ -13,7 +13,21 @@
 
 ## 1. 本文如何使用
 
-### v2.8 当前状态：H=20 终态归因 + 预算动作路径审计已交付（0 新 episode）
+### v2.9 当前计划：预算可执行动作的采样前顺序 mask 修复（尚未执行）
+
+当前入口 `COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md`，起点
+`analysis/comm-h20-terminal-attribution@b2061ae`。已确认预算不足 SEND 可被采样并进入 PPO loss，
+因此先修训练正确性，H=20 spillover 继续冻结。
+
+修复采用采样前顺序 hard mask，而不是 relay 拒绝后事后删样本：候选携带真实 attempt charge；collector 按
+实际执行顺序维护 shadow budget/capacity；付不起的候选固定 HOLD 且 likelihood/entropy 权重为 0；采样 SEND
+实时消耗 shadow credit。全 mask step 保留 critic 样本。relay 最终硬门不删除。
+
+本轮只实现/测试并跑同 8 流 smoke，最多 8 episode、optimizer.step=0。feature /1、/2 维度不变，费用字段先
+进入契约和 tape，不加入网络特征；新 trainer tag 与旧 checkpoint 训练身份隔离。M0–M3 全过后才可另行规划
+从初值重新训练，不自动续训旧 400k checkpoint、不运行 H=20 完整结局。
+
+### v2.8 历史状态：H=20 终态归因 + 预算动作路径审计已交付（0 新 episode）
 
 分支 `analysis/comm-h20-terminal-attribution`（基 `9001a85`），产物
 `runs/comm_h20_terminal_attribution_20260922/`。**0 新 episode、0 训练、0 新流、0 参数修改**。
@@ -773,24 +787,28 @@ CI [+0.685, +0.995]），在正常信息路径上完成数差 0.000 而 total by
 ### 当前可直接粘贴到新聊天的说明
 
 ```text
-先读 PROJECT_CHARTER.md v2.8 与 runs/comm_h20_terminal_attribution_20260922/ 的
-COMM_H20_TERMINAL_ATTRIBUTION.md/.json、COMM_POLICY_ACTION_MASK_AUDIT.md/.json，
-并核对实际分支 analysis/comm-h20-terminal-attribution。
+先读 PROJECT_CHARTER.md v2.9 与 COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md，
+核对起点 analysis/comm-h20-terminal-attribution@b2061ae，并从该起点建立
+fix/comm-budget-action-mask。不要直接在分析分支上修改。
 
-本轮 0 新 episode、0 训练、0 新流、0 参数修改、0 训练器补丁。
+已确认预算不足 SEND 可被采样并进入 PPO loss。下一轮只修训练正确性：候选携带与 relay
+同源的 attempt_charge_bytes；collector 在采样前按真实执行顺序维护 shadow budget/capacity；
+不可执行 SEND 固定 HOLD 且不进 actor likelihood/entropy；采样 SEND 立即扣 shadow credit。
+禁止在 relay 拒绝后事后删样本。全 mask step 仍保留 critic 样本，relay 硬门继续保留。
 
-H=20 终态归因：3 个 seed（700010/700018/700022）成功 EARLY 投递后出现同刻终态但
-assignment/revision/progress 分歧；700020 为 boundary_refused。both_terminal_identical=0。
-terminal_before_boundary 不自动解释为有效 flush。⇒ 可再讨论小型完整 H=20 spillover（未跑）。
+本轮不得扩网络输入维度；send_executable/attempt_charge_bytes 只进入契约与 tape。
+新训练身份必须与旧 trainer/checkpoint 隔离，旧 400k checkpoint 不得作为修复后续训起点。
+只实现、测试并最多使用 8 条既有流做 smoke；optimizer.step=0，不训练、不生成新流、
+不改预算/协议/信道/默认值，不运行 H=20 spillover。M0–M3 全过后停止并报告。
 
-预算动作路径：预算不是 action mask；不足 SEND 可采样且进 PPO loss；双动作自由样本数
-训练侧 missing（离线 101 点/8 流）。定性为训练正确性风险 ⇒ 先单独修复训练路径
-（mask/样本过滤 + 补 send_executable/attempt_charge_bytes 等），不继续通信效果实验。
-本轮未改训练器。H=20 spillover 须待修复后或用户明确覆盖顺序。
-
-上一轮 target-scoped 边界可行性结果保持原样，勿重写实验提交。
+上一轮 H=20 归因及 target-scoped 结果保持原样，勿重写实验提交。
 用户后续明确决定优先于总纲；有范围变化时同步更新总纲和变更记录。
 ```
+
+### v2.8 历史交接说明（已被上方说明取代）
+
+v2.8 的 H=20 终态归因与预算动作路径结论保留在 Git 历史及
+`runs/comm_h20_terminal_attribution_20260922/`，但不再作为下一轮直接执行入口。
 
 ### v2.6 历史交接说明（已被上方说明取代，勿直接用于执行）
 
@@ -910,6 +928,7 @@ learnability calibration；本轮不是"继续改场景直到模型获胜"的授
 
 | 日期 | 版本 | 变更 |
 |---|---|---|
+| 2026-09-22 | v2.9 | 基于 `b2061ae` 规划预算动作采样正确性修复：增加同源精确费用契约；采样前按实际执行顺序维护 shadow budget/capacity；不可执行 SEND 固定 HOLD 且 actor 权重为 0，critic 样本保留；禁止 relay 拒绝后删样本；不改 feature 维度，旧 checkpoint 不续训；本轮仅实现、测试与最多 8 条既有流 smoke（0 optimizer step），H=20 spillover 继续冻结 |
 | 2026-09-22 | v2.8 | H=20 终态归因 + 预算动作路径审计**已交付**（0 新 episode/0 训练/0 新流/0 参数修改）：3 seed 成功 EARLY 后结局分歧（可讨论 spillover）；预算不进 action mask、非可执行 SEND 进训练、双动作自由训练侧 missing ⇒ **先修训练路径，不继续通信效果实验**；原始 target-scoped 结果不变 |
 | 2026-09-22 | v2.7 | target-scoped 边界可行性**已交付**：24/28 启动；T0/T1 过；T2 H=1 2/4、H=5 0/4、**H=20 3/4 过**（多为 `terminal_before_boundary`）⇒ 可建议 H=20 完整 episode（不自动执行）；短 H 因 `refused_credit` 未过，禁止免费 flush/提高预算 |
 | 2026-09-22 | v2.6 | 基于 c6698f9 立项 target-scoped 边界可行性门禁：EARLY+FLUSH vs DEFER+FLUSH，固定 4 条审计流、H={1,5,20}、最多 24 前缀分支/28 次启动；窗口末最新视图走真实预算与终态规则，不预留/不赠送字节；只跑到边界，以每个 H ≥3/4 pair 可解析作为后续完整实验的资源门禁，尚未执行、无训练授权 |

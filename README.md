@@ -1,9 +1,8 @@
 # Zhenghe：搜索—协调—分配一体化搜救系统
 
-当前研究入口：[H=20 终态归因 + 预算动作路径审计（最新，已交付）](runs/comm_h20_terminal_attribution_20260922/)
-与 [项目总纲 v2.8](PROJECT_CHARTER.md)。3 个 seed 成功 EARLY 后出现结局分歧（可讨论 H=20 spillover）；
-同时发现预算不进 action mask、非可执行 SEND 进训练的正确性风险 ⇒ **先修训练路径，不继续通信效果实验**。
-上一轮 [target-scoped 边界可行性](COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md) 已标历史。
+当前研究入口：[预算动作 mask 正确性修复](COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md)
+与 [项目总纲 v2.9](PROJECT_CHARTER.md)。下一轮在采样前按真实执行顺序 mask 不可支付 SEND，
+补精确费用/tape 审计字段，只实现、测试和最多 8 流 smoke（0 optimizer.step）。尚未执行；H=20 暂停。
 
 本仓库整合两个已有研究模块：
 
