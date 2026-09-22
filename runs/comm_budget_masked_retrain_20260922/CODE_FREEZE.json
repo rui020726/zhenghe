@@ -1,6 +1,6 @@
 {
  "branch": "exp/comm-budget-masked-retrain",
- "committed_at": "2026-09-22 17:52:12 +0800",
+ "committed_at": "2026-09-22 18:01:02 +0800",
  "configuration_hash": "b5d1b46afa3b2604",
  "derivation": "sys.modules after importing train_retrain and the archived sampler/trainer entries, unioned with this directory's own scripts",
  "document": "CODE_FREEZE",
@@ -231,11 +231,11 @@
    "working_blob": "bc2950f4f89d4366"
   },
   "runs/comm_budget_masked_retrain_20260922/preflight.py": {
-   "head_blob": "d1c1735c6370b9c7",
+   "head_blob": "f4ab7ef40c003575",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "d1c1735c6370b9c7"
+   "working_blob": "f4ab7ef40c003575"
   },
   "runs/comm_budget_masked_retrain_20260922/provenance_correction.py": {
    "head_blob": "ffe0ec3571bc2829",
@@ -245,11 +245,11 @@
    "working_blob": "ffe0ec3571bc2829"
   },
   "runs/comm_budget_masked_retrain_20260922/report_retrain.py": {
-   "head_blob": "6d8cf2c4663fc517",
+   "head_blob": "7b7acc3ad2441e8e",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "6d8cf2c4663fc517"
+   "working_blob": "7b7acc3ad2441e8e"
   },
   "runs/comm_budget_masked_retrain_20260922/retrain_common.py": {
    "head_blob": "814b3f704718479f",
@@ -385,12 +385,12 @@
   "runtime_modules_changed": []
  },
  "registered": true,
- "registered_at": "1790070732",
+ "registered_at": "1790071262",
  "rule": "every launch re-derives the graph and requires: no committed or working-tree difference against this SHA for any member, no untracked member, and no module in the graph that this freeze did not record",
  "schema": "retrain_common/1",
- "sha": "2f8a44709fdf82bc393c6aeab14a8d0360cc639b",
- "short": "2f8a44709",
- "subject": "fix(comm): let the freeze be recognised by the code that has to honour it",
+ "sha": "f256ed4d11b38a0d3525fbbe9ce1eea535e7678e",
+ "short": "f256ed4d1",
+ "subject": "fix(comm): read the round's own artefacts with one parser, not two",
  "trainer_identity": {
   "ack": false,
   "action_mask_schema": "budget-sequential-mask/1",
