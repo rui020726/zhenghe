@@ -1,6 +1,6 @@
 # 预算可执行动作的采样前硬 mask：修复结果（M0–M3）
 
-日期：2026-09-22。分支 `fix/comm-budget-action-mask`，交付头 `019ee67dd`，总纲 v2.9，执行指令 `COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md`，协议 `COMM_BUDGET_ACTION_MASK_PROTOCOL.md`（先于任何 episode 提交）。
+日期：2026-09-22。分支 `fix/comm-budget-action-mask`，交付头 `7f9929c83`，总纲 v2.9，执行指令 `COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md`，协议 `COMM_BUDGET_ACTION_MASK_PROTOCOL.md`（先于任何 episode 提交）。
 
 **本轮实测**：episode 8（8 条既有流各 1 集，8,000 环境步）、新流 0、训练 0 次、optimizer.step **0**、H=20 spillover 0。trainer = `onpolicy-v3-budget-mask`，mask schema = `budget-sequential-mask/1`，tape schema = `onpolicy-tape/2`。
 
@@ -31,7 +31,7 @@ policy-owned timing 的 collector 把所有非静默上界候选当作二元自�
 | 门禁 | 判定 | 关键证据 |
 |---|---|---|
 | M0_production_and_history_isolation | 通过 | 生产改动仅 ['integrated_sar/comm.py', 'integrated_sar/comm_policy.py', 'integrated_sar/tests/test_comm_budget_action_mask.py']；默认值 comm_ack=False、timing=legacy_shared_bound；完整集成套件 690 项通过 |
-| M1_action_execution_agreement | 通过 | collector 套件 16 项通过；requested=executed=86；policy 拒付 0 |
+| M1_action_execution_agreement | 通过 | collector 套件 17 项通过；requested=executed=86；policy 拒付 0 |
 | M2_ppo_probability_agreement | 通过 | logged/recomputed 最大差 0.0 ≤ 1e-06；masked 项 likelihood/entropy=0；critic 样本保留；未做事后过滤 |
 | M3_smoke_closure | 通过 | episodes 8/8 启动、技术失败 0、optimizer.step 0、封存块 clean=True |
 
@@ -43,7 +43,7 @@ policy-owned timing 的 collector 把所有非静默上界候选当作二元自�
 |---|---:|---|
 | integrated_sar：charge 契约与 gate 同源（本轮新增） | 14 | 通过 |
 | integrated_sar 全量（AGENTS 要求的最低验证） | 690 | 通过（跳过 2） |
-| 本轮 collector/接缝/PPO 套件 | 16 | 通过 |
+| 本轮 collector/接缝/PPO 套件 | 17 | 通过 |
 
 ## 五、身份与卫生
 

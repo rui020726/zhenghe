@@ -457,6 +457,44 @@ class RelaySeamTests(unittest.TestCase):
         self.assertEqual(int(self.relay.counters["budget_refused_sends"]), 0)
 
 
+LEGACY_CHECKPOINT = (
+    ROOT / "runs" / "comm_protocol_v2_20260920" / "train" / "25pct_seed1"
+    / "v2_25pct_seed1_at400000.pt"
+)
+
+
+class LegacyCheckpointTests(unittest.TestCase):
+    """An old checkpoint is a forward-pass artefact, not a place to continue optimising from."""
+
+    @unittest.skipUnless(LEGACY_CHECKPOINT.exists(), "the round-5 400k checkpoint is not here")
+    def test_old_checkpoint_loads_forward_and_is_refused_for_resume(self) -> None:
+        import torch
+
+        info = entry.load_forward_only(LEGACY_CHECKPOINT, training_seed=1)
+        self.assertTrue(info["loaded"])
+        self.assertFalse(info["optimizer_resumable"])
+        self.assertGreater(info["parameters"], 0)
+        self.assertIn("unaffordable", info["reason"])
+        payload = torch.load(LEGACY_CHECKPOINT, map_location="cpu", weights_only=False)
+        problems = entry.resume_identity(payload)
+        # The pre-fix run says nothing about this round's mask, so resuming it would carry the
+        # defect forward under a label that claims otherwise.
+        self.assertIn("trainer_tag", problems)
+        self.assertIn("action_mask_schema", problems)
+        self.assertIn("tape_schema", problems)
+        def elements(state: Any) -> int:
+            if torch.is_tensor(state):
+                return int(state.numel())
+            if isinstance(state, dict):
+                return sum(elements(value) for value in state.values())
+            return 0
+
+        # The saved tensor count is the same shape the forward-only loader rebuilt, and the
+        # 5 635-parameter network is unchanged by this round: no new input, no new head.
+        self.assertEqual(elements(payload["controller"]), info["parameters"])
+        self.assertEqual(info["parameters"], 5635)
+
+
 class TrainerIdentityTests(unittest.TestCase):
     def test_resume_requires_the_same_mask_story(self) -> None:
         good = {
