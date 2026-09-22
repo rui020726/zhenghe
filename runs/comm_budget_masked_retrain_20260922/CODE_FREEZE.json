@@ -1,0 +1,536 @@
+{
+ "branch": "exp/comm-budget-masked-retrain",
+ "committed_at": "2026-09-22 17:52:12 +0800",
+ "configuration_hash": "b5d1b46afa3b2604",
+ "derivation": "sys.modules after importing train_retrain and the archived sampler/trainer entries, unioned with this directory's own scripts",
+ "document": "CODE_FREEZE",
+ "module_count": 53,
+ "modules": {
+  "integrated_sar/__init__.py": {
+   "head_blob": "c20e013e6a21d5b0",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "c20e013e6a21d5b0"
+  },
+  "integrated_sar/adapters/__init__.py": {
+   "head_blob": "03ca5af2e5b0ab6e",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "03ca5af2e5b0ab6e"
+  },
+  "integrated_sar/adapters/piloc.py": {
+   "head_blob": "db4d8539e2855e5d",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "db4d8539e2855e5d"
+  },
+  "integrated_sar/adapters/task03.py": {
+   "head_blob": "8ba631ca1892bacc",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "8ba631ca1892bacc"
+  },
+  "integrated_sar/allocation_trace.py": {
+   "head_blob": "4dcd6df6bb6ed0fd",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "4dcd6df6bb6ed0fd"
+  },
+  "integrated_sar/assignment_gate.py": {
+   "head_blob": "bc17633e96b58882",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "bc17633e96b58882"
+  },
+  "integrated_sar/clock.py": {
+   "head_blob": "53207ffc13e23507",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "53207ffc13e23507"
+  },
+  "integrated_sar/comm.py": {
+   "head_blob": "c60471b29f4aea8f",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "c60471b29f4aea8f"
+  },
+  "integrated_sar/comm_ack.py": {
+   "head_blob": "dbc4e4c9d39a77a0",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "dbc4e4c9d39a77a0"
+  },
+  "integrated_sar/comm_budget.py": {
+   "head_blob": "64fe9cd5a2776a9b",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "64fe9cd5a2776a9b"
+  },
+  "integrated_sar/comm_learning.py": {
+   "head_blob": "6dec7e8688e6ee7c",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "6dec7e8688e6ee7c"
+  },
+  "integrated_sar/comm_policy.py": {
+   "head_blob": "b47f89702d5159c6",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "b47f89702d5159c6"
+  },
+  "integrated_sar/contracts.py": {
+   "head_blob": "156bbaf470e8480e",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "156bbaf470e8480e"
+  },
+  "integrated_sar/coordinator.py": {
+   "head_blob": "122664e9ca3f18e1",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "122664e9ca3f18e1"
+  },
+  "integrated_sar/detection_replay.py": {
+   "head_blob": "36e6479ed8fd2e8e",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "36e6479ed8fd2e8e"
+  },
+  "integrated_sar/errors.py": {
+   "head_blob": "bfbd70820e43ad7f",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "bfbd70820e43ad7f"
+  },
+  "integrated_sar/event_bus.py": {
+   "head_blob": "d5aa18b33d82683c",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "d5aa18b33d82683c"
+  },
+  "integrated_sar/expired_attribution.py": {
+   "head_blob": "b8598eaa6ce84065",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "b8598eaa6ce84065"
+  },
+  "integrated_sar/joint_driver.py": {
+   "head_blob": "4f803803777a405e",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "4f803803777a405e"
+  },
+  "integrated_sar/lifecycle_log.py": {
+   "head_blob": "8585ae13711460af",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "8585ae13711460af"
+  },
+  "integrated_sar/lifecycle_metrics.py": {
+   "head_blob": "2fc5e0cedad5af3b",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "2fc5e0cedad5af3b"
+  },
+  "integrated_sar/orchestrator.py": {
+   "head_blob": "013419cc77906c96",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "013419cc77906c96"
+  },
+  "integrated_sar/ports.py": {
+   "head_blob": "80de7e430349c464",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "80de7e430349c464"
+  },
+  "integrated_sar/profiles.py": {
+   "head_blob": "515dcec3a46a3b8b",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "515dcec3a46a3b8b"
+  },
+  "integrated_sar/run_signature.py": {
+   "head_blob": "4bad2dcc2e860453",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "4bad2dcc2e860453"
+  },
+  "integrated_sar/scenarios.py": {
+   "head_blob": "fff051a7f6f78cc2",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "fff051a7f6f78cc2"
+  },
+  "integrated_sar/search_runtime.py": {
+   "head_blob": "0a0799032149d43e",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "0a0799032149d43e"
+  },
+  "integrated_sar/task_registry.py": {
+   "head_blob": "bf3eba2bc10bf692",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "bf3eba2bc10bf692"
+  },
+  "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": {
+   "head_blob": "9b8cc189c67da404",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "9b8cc189c67da404"
+  },
+  "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": {
+   "head_blob": "4b7146ff82eafc8f",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "4b7146ff82eafc8f"
+  },
+  "runs/comm_budget_masked_retrain_20260922/evaluate_retrain.py": {
+   "head_blob": "ce2a071e24db4204",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "ce2a071e24db4204"
+  },
+  "runs/comm_budget_masked_retrain_20260922/freeze.py": {
+   "head_blob": "bc2950f4f89d4366",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "bc2950f4f89d4366"
+  },
+  "runs/comm_budget_masked_retrain_20260922/preflight.py": {
+   "head_blob": "d1c1735c6370b9c7",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "d1c1735c6370b9c7"
+  },
+  "runs/comm_budget_masked_retrain_20260922/provenance_correction.py": {
+   "head_blob": "ffe0ec3571bc2829",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "ffe0ec3571bc2829"
+  },
+  "runs/comm_budget_masked_retrain_20260922/report_retrain.py": {
+   "head_blob": "6d8cf2c4663fc517",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "6d8cf2c4663fc517"
+  },
+  "runs/comm_budget_masked_retrain_20260922/retrain_common.py": {
+   "head_blob": "814b3f704718479f",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "814b3f704718479f"
+  },
+  "runs/comm_budget_masked_retrain_20260922/test_retrain.py": {
+   "head_blob": "eafa7aabc44a411e",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "eafa7aabc44a411e"
+  },
+  "runs/comm_budget_masked_retrain_20260922/train_retrain.py": {
+   "head_blob": "60cf9a52038d06b1",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "60cf9a52038d06b1"
+  },
+  "runs/comm_budget_pilot_20260919/pilot_common.py": {
+   "head_blob": "53b4a9ef76f6031d",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "53b4a9ef76f6031d"
+  },
+  "runs/comm_budget_pilot_20260919/pilot_env.py": {
+   "head_blob": "a21d54d3fa775028",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "a21d54d3fa775028"
+  },
+  "runs/comm_budget_pilot_20260919/train_pilot.py": {
+   "head_blob": "0e5f00fbc29c11e8",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "0e5f00fbc29c11e8"
+  },
+  "runs/comm_control_20260919/comm_metrics.py": {
+   "head_blob": "66079e6e3bf64159",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "66079e6e3bf64159"
+  },
+  "runs/comm_control_20260919/common.py": {
+   "head_blob": "9036b8ebc9556dc6",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "9036b8ebc9556dc6"
+  },
+  "runs/comm_protocol_v2_20260920/protocol_common.py": {
+   "head_blob": "d741368aa0156ff4",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "d741368aa0156ff4"
+  },
+  "runs/comm_protocol_v2_20260920/protocol_env.py": {
+   "head_blob": "4b2d7c84920534c0",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "4b2d7c84920534c0"
+  },
+  "runs/comm_protocol_v2_20260920/train_protocol.py": {
+   "head_blob": "462758cd6bd801ee",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "462758cd6bd801ee"
+  },
+  "runs/comm_stability_20260919/attribution_metrics.py": {
+   "head_blob": "44ecc18af6caa477",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "44ecc18af6caa477"
+  },
+  "runs/comm_stability_20260919/stability_common.py": {
+   "head_blob": "48d3552929ea7dab",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "48d3552929ea7dab"
+  },
+  "runs/comm_tight_budget_20260919/onpolicy.py": {
+   "head_blob": "426ae608b1bf64be",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "426ae608b1bf64be"
+  },
+  "runs/comm_tight_budget_20260919/tight_common.py": {
+   "head_blob": "c0df37f7c5f06a89",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "c0df37f7c5f06a89"
+  },
+  "runs/comm_tight_budget_20260919/train_onpolicy.py": {
+   "head_blob": "ed165a9a69c8e3b3",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "ed165a9a69c8e3b3"
+  },
+  "runs/corrected_env_final_20260918/arms.py": {
+   "head_blob": "5fe6b5eb42bff28c",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "5fe6b5eb42bff28c"
+  },
+  "runs/corrected_env_final_20260918/corrected_block.py": {
+   "head_blob": "f0ec0c377f4d55a4",
+   "in_head": true,
+   "matches_head": true,
+   "on_disk": true,
+   "working_blob": "f0ec0c377f4d55a4"
+  }
+ },
+ "production_diff_since_fix_head": {
+  "empty": true,
+  "integrated_sar_changed": [],
+  "reference": "e692607212fcc67fc82d045a8a53d44c79bde4d7",
+  "runtime_modules_changed": []
+ },
+ "registered": true,
+ "registered_at": "1790070732",
+ "rule": "every launch re-derives the graph and requires: no committed or working-tree difference against this SHA for any member, no untracked member, and no module in the graph that this freeze did not record",
+ "schema": "retrain_common/1",
+ "sha": "2f8a44709fdf82bc393c6aeab14a8d0360cc639b",
+ "short": "2f8a44709",
+ "subject": "fix(comm): let the freeze be recognised by the code that has to honour it",
+ "trainer_identity": {
+  "ack": false,
+  "action_mask_schema": "budget-sequential-mask/1",
+  "bootstrap": {
+   "replications": 10000,
+   "rng": 20260922
+  },
+  "budget_bytes": 29300,
+  "budget_tier": "25pct",
+  "checkpoints": [
+   0,
+   100000,
+   200000,
+   300000,
+   400000
+  ],
+  "curve_streams": [
+   700048,
+   700049,
+   700050,
+   700051,
+   700052,
+   700053,
+   700054,
+   700055
+  ],
+  "delivery_probability": 1.0,
+  "dev_streams": [
+   700048,
+   700049,
+   700050,
+   700051,
+   700052,
+   700053,
+   700054,
+   700055,
+   700056,
+   700057,
+   700058,
+   700059,
+   700060,
+   700061,
+   700062,
+   700063,
+   700064,
+   700065,
+   700066,
+   700067,
+   700068,
+   700069,
+   700070,
+   700071
+  ],
+  "episodes_per_update": 4,
+  "feature_dimension": 19,
+  "feature_layout": "comm-send-state/1",
+  "information": "isolated",
+  "launch_cap": 1500,
+  "main_rule": "send_once",
+  "network": {
+   "clip": 0.2,
+   "entropy_bonus": 0.01,
+   "epochs_per_batch": 4,
+   "gae_lambda": 0.95,
+   "gamma": 0.99,
+   "hidden": 64,
+   "learning_rate": 0.0003,
+   "max_grad_norm": 0.5,
+   "minibatch_steps": 256,
+   "value_coefficient": 0.5
+  },
+  "non_inferiority_margin_targets_per_episode": -0.05,
+  "probe_episodes": 12,
+  "production_defaults": {
+   "comm_ack": false,
+   "comm_budget_bytes": null,
+   "comm_delivery_probability": 1.0,
+   "comm_policy": "immediate",
+   "comm_timing_mode": "legacy_shared_bound"
+  },
+  "steps_per_episode": 1000,
+  "steps_per_run": 400000,
+  "tape_schema": "onpolicy-tape/2",
+  "timing_mode": "policy_owned_timing",
+  "total_step_cap": 1200000,
+  "train_streams": [
+   700000,
+   700001,
+   700002,
+   700003,
+   700004,
+   700005,
+   700006,
+   700007,
+   700008,
+   700009,
+   700010,
+   700011,
+   700012,
+   700013,
+   700014,
+   700015,
+   700016,
+   700017,
+   700018,
+   700019,
+   700020,
+   700021,
+   700022,
+   700023,
+   700024,
+   700025,
+   700026,
+   700027,
+   700028,
+   700029,
+   700030,
+   700031,
+   700032,
+   700033,
+   700034,
+   700035,
+   700036,
+   700037,
+   700038,
+   700039,
+   700040,
+   700041,
+   700042,
+   700043,
+   700044,
+   700045,
+   700046,
+   700047
+  ],
+  "trainer_tag": "onpolicy-v3-budget-mask",
+  "training_seeds": [
+   1,
+   2,
+   3
+  ]
+ }
+}
