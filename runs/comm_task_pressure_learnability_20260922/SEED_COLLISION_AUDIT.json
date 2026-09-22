@@ -1,0 +1,208 @@
+{
+ "blocks_audited": {
+  "10": {
+   "count": 16,
+   "seeds": [
+    1000200,
+    1000215
+   ]
+  },
+  "12": {
+   "count": 16,
+   "seeds": [
+    1000300,
+    1000315
+   ]
+  },
+  "6": {
+   "count": 16,
+   "seeds": [
+    1000000,
+    1000015
+   ]
+  },
+  "8": {
+   "count": 16,
+   "seeds": [
+    1000100,
+    1000115
+   ]
+  }
+ },
+ "blocks_the_project_already_owns": {
+  "communication training/dev block": [
+   700000,
+   700071
+  ],
+  "engineering confirmation block (round 7, consumed)": [
+   900000,
+   900199
+  ],
+  "independent test (round 1)": [
+   500000,
+   500399
+  ],
+  "live-system block": [
+   600000,
+   600059
+  ],
+  "pilot fitting": [
+   3000,
+   3011
+  ],
+  "sealed learning test (never generated)": [
+   800000,
+   800399
+  ]
+ },
+ "classified_as_this_rounds_own_pre_registration": {
+  "documentation": [
+   "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md"
+  ],
+  "git": [
+   "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md"
+  ],
+  "manifests": []
+ },
+ "clean": true,
+ "hit_counts": {
+  "artefacts": 0,
+  "documentation": 0,
+  "git": 0,
+  "manifests": 0
+ },
+ "own_round": {
+  "declared_blocks": {
+   "10": [
+    1000200,
+    1000215
+   ],
+   "12": [
+    1000300,
+    1000315
+   ],
+   "6": [
+    1000000,
+    1000015
+   ],
+   "8": [
+    1000100,
+    1000115
+   ]
+  },
+  "note": "this script and the protocol it ships with name the blocks by design",
+  "round": "comm_task_pressure_learnability_20260922"
+ },
+ "pre_registration_files_allowed": [
+  "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md"
+ ],
+ "rule": "an executed artefact cannot be un-seen, a registered seed cannot be un-claimed, and a declared range is a promise the project has already made. Any hit stops the round; the block is never moved to make the audit pass.",
+ "sealed_learning_block": {
+  "artefacts_on_disk": [],
+  "block": [
+   800000,
+   800399
+  ],
+  "clean": true,
+  "generated": false,
+  "read_by_this_round": false,
+  "streams_on_disk": []
+ },
+ "sources": {
+  "artefacts": {
+   "coverage": {
+    "files_seen": 68213,
+    "note": "file names carry the seed; 47 GB of per-episode JSONL is never opened"
+   },
+   "executed_episode_artefacts": {},
+   "recorded_streams": {},
+   "stream_content_collisions": {}
+  },
+  "documentation": {
+   "markdown_mentions_or_declares_a_candidate_seed": [
+    {
+     "classification": "own_pre_registration",
+     "count": 64,
+     "file": "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md",
+     "seeds": [
+      1000000,
+      1000001,
+      1000002,
+      1000003,
+      1000004,
+      1000005,
+      1000006,
+      1000007,
+      1000008,
+      1000009,
+      1000010,
+      1000011,
+      1000012,
+      1000013,
+      1000014,
+      1000015,
+      1000100,
+      1000101,
+      1000102,
+      1000103
+     ]
+    }
+   ],
+   "overlap_with_blocks_the_project_already_owns": []
+  },
+  "git": {
+   "commit_message_mentions": [],
+   "tracked_content_mentions": [
+    {
+     "classification": "own_pre_registration",
+     "excerpt": "| 6 | `1000000..1000015` | 16 |",
+     "file": "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md",
+     "line": 54,
+     "seeds": [
+      1000000,
+      1000015
+     ]
+    },
+    {
+     "classification": "own_pre_registration",
+     "excerpt": "| 8 | `1000100..1000115` | 16 |",
+     "file": "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md",
+     "line": 55,
+     "seeds": [
+      1000100,
+      1000115
+     ]
+    },
+    {
+     "classification": "own_pre_registration",
+     "excerpt": "| 10 | `1000200..1000215` | 16 |",
+     "file": "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md",
+     "line": 56,
+     "seeds": [
+      1000200,
+      1000215
+     ]
+    },
+    {
+     "classification": "own_pre_registration",
+     "excerpt": "| 12 | `1000300..1000315` | 16 |",
+     "file": "COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md",
+     "line": 57,
+     "seeds": [
+      1000300,
+      1000315
+     ]
+    }
+   ],
+   "tracked_paths_with_seed": []
+  },
+  "manifests": {
+   "coverage": {
+    "scanned": 6590,
+    "skipped_too_large": 2
+   },
+   "json_registrations_mentioning_a_seed": []
+  }
+ },
+ "verdict": "zero overlap across all four sources: the blocks may be registered and recorded"
+}
