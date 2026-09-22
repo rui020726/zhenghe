@@ -1,0 +1,339 @@
+{
+ "archived_files_untouched": {
+  "runs/comm_budget_action_mask_fix_20260922/COMM_BUDGET_ACTION_MASK_MANIFEST.json": "30d0a79fee00599c",
+  "runs/comm_budget_action_mask_fix_20260922/COMM_BUDGET_ACTION_MASK_PROTOCOL.md": "b35626688f36cb85",
+  "runs/comm_budget_action_mask_fix_20260922/COMM_BUDGET_ACTION_MASK_RESULTS.json": "7e9ee79184d5e59a",
+  "runs/comm_budget_action_mask_fix_20260922/COMM_BUDGET_ACTION_MASK_RESULTS.md": "1e5d19dc37be7508",
+  "runs/comm_budget_action_mask_fix_20260922/COMM_BUDGET_ACTION_MASK_SMOKE.json": "2e7d449099540e87"
+ },
+ "branch": "exp/comm-budget-masked-retrain",
+ "brief": "COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md",
+ "date": "2026-09-22",
+ "document": "COMM_BUDGET_MASK_PROVENANCE_CORRECTION",
+ "episodes_started_by_this_correction": 0,
+ "heads": {
+  "executed_graph_at_both_heads": {
+   "clean": true,
+   "committed_difference": [],
+   "reference": "7f9929c83cd80185830ca1ece4ec6899629605cf",
+   "working_tree_difference": []
+  },
+  "final_head": {
+   "adds_executed_modules": [],
+   "commit": "e692607212fcc67fc82d045a8a53d44c79bde4d7|2026-09-22 16:11:06 +0800|test(comm): prove an old checkpoint is forward-only and keep the gates re-runnable",
+   "files_changed_relative_to_results_head": [
+    "runs/comm_budget_action_mask_fix_20260922/COMM_BUDGET_ACTION_MASK_MANIFEST.json",
+    "runs/comm_budget_action_mask_fix_20260922/COMM_BUDGET_ACTION_MASK_RESULTS.json",
+    "runs/comm_budget_action_mask_fix_20260922/COMM_BUDGET_ACTION_MASK_RESULTS.md",
+    "runs/comm_budget_action_mask_fix_20260922/test_budget_action_mask.py"
+   ],
+   "sha": "e692607212fcc67fc82d045a8a53d44c79bde4d7"
+  },
+  "results_head": {
+   "commit": "7f9929c83cd80185830ca1ece4ec6899629605cf|2026-09-22 16:04:19 +0800|docs(comm): record the budget-action mask fix, its gates and the corrected next-step boundary",
+   "recorded_as_manifest_executed_head": "7f9929c83cd80185830ca1ece4ec6899629605cf",
+   "recorded_as_results_head": "7f9929c83cd80185830ca1ece4ec6899629605cf",
+   "sha": "7f9929c83cd80185830ca1ece4ec6899629605cf"
+  },
+  "statement": "M0-M3 were measured with the executed graph of 7f9929c; e692607 changed only a test file and the regenerated result documents, and the derived graph is identical at both heads (clean=True)",
+  "why_it_matters": "a reader who re-runs the gates at e692607 gets the same code under test, but a reader who cites 'delivered at e692607' as the SHA of the measurement would be quoting a commit that only documents it"
+ },
+ "manifest_builder_fix": {
+  "archived_numbers_left_untouched": {
+   "smoke_closure": {
+    "all_policy_refusals_zero": true,
+    "all_requested_equal_executed": true,
+    "all_tape_invariants_pass": true,
+    "max_log_prob_gap": 0.0,
+    "optimizer_steps_total": 0
+   },
+   "totals": {
+    "actionable_candidates": 181,
+    "all_gates_passed": true,
+    "candidates": 20655,
+    "executed_policy_emissions": 86,
+    "initial_executable_candidates": 197,
+    "max_abs_log_prob_gap": 0.0,
+    "policy_refusals": 0,
+    "requested_by_policy": 86
+   }
+  },
+  "declared_contract_modules": [
+   "integrated_sar/comm.py",
+   "integrated_sar/comm_policy.py",
+   "integrated_sar/comm_budget.py",
+   "integrated_sar/comm_learning.py",
+   "integrated_sar/comm_ack.py"
+  ],
+  "derived_graph": [
+   "integrated_sar/__init__.py",
+   "integrated_sar/adapters/__init__.py",
+   "integrated_sar/adapters/piloc.py",
+   "integrated_sar/adapters/task03.py",
+   "integrated_sar/allocation_trace.py",
+   "integrated_sar/assignment_gate.py",
+   "integrated_sar/clock.py",
+   "integrated_sar/comm.py",
+   "integrated_sar/comm_ack.py",
+   "integrated_sar/comm_budget.py",
+   "integrated_sar/comm_learning.py",
+   "integrated_sar/comm_policy.py",
+   "integrated_sar/contracts.py",
+   "integrated_sar/coordinator.py",
+   "integrated_sar/detection_replay.py",
+   "integrated_sar/errors.py",
+   "integrated_sar/event_bus.py",
+   "integrated_sar/expired_attribution.py",
+   "integrated_sar/joint_driver.py",
+   "integrated_sar/lifecycle_log.py",
+   "integrated_sar/lifecycle_metrics.py",
+   "integrated_sar/orchestrator.py",
+   "integrated_sar/ports.py",
+   "integrated_sar/profiles.py",
+   "integrated_sar/run_signature.py",
+   "integrated_sar/scenarios.py",
+   "integrated_sar/search_runtime.py",
+   "integrated_sar/task_registry.py",
+   "runs/comm_budget_action_mask_fix_20260922/budget_masked.py",
+   "runs/comm_budget_action_mask_fix_20260922/mask_manifest.py",
+   "runs/comm_budget_action_mask_fix_20260922/smoke_budget_mask.py",
+   "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py",
+   "runs/comm_budget_masked_retrain_20260922/provenance_correction.py",
+   "runs/comm_budget_masked_retrain_20260922/retrain_common.py",
+   "runs/comm_budget_pilot_20260919/pilot_common.py",
+   "runs/comm_budget_pilot_20260919/pilot_env.py",
+   "runs/comm_budget_pilot_20260919/train_pilot.py",
+   "runs/comm_control_20260919/comm_metrics.py",
+   "runs/comm_control_20260919/common.py",
+   "runs/comm_protocol_v2_20260920/protocol_common.py",
+   "runs/comm_protocol_v2_20260920/protocol_env.py",
+   "runs/comm_protocol_v2_20260920/train_protocol.py",
+   "runs/comm_stability_20260919/attribution_metrics.py",
+   "runs/comm_stability_20260919/stability_common.py",
+   "runs/comm_tight_budget_20260919/onpolicy.py",
+   "runs/comm_tight_budget_20260919/tight_common.py",
+   "runs/comm_tight_budget_20260919/train_onpolicy.py",
+   "runs/corrected_env_final_20260918/arms.py",
+   "runs/corrected_env_final_20260918/corrected_block.py"
+  ],
+  "derived_graph_size": 49,
+  "derives_from_import_graph": true,
+  "file": "runs/comm_budget_action_mask_fix_20260922/mask_manifest.py",
+  "old_manifest_blob": {
+   "runs/comm_budget_action_mask_fix_20260922/COMM_BUDGET_ACTION_MASK_MANIFEST.json": {
+    "head_blob": "6647c24b0e73d83c",
+    "in_head": true,
+    "matches_head": true,
+    "on_disk": true,
+    "working_blob": "6647c24b0e73d83c"
+   }
+  },
+  "phantom_in_builder_derived_graph": false,
+  "phantom_in_declared_contract": false,
+  "phantom_reported_by_fixed_builder": {
+   "head_blob": null,
+   "in_head": false,
+   "matches_head": false,
+   "on_disk": false,
+   "working_blob": null
+  },
+  "resolves_absence_before_hashing": true
+ },
+ "phantom_module": {
+  "class_actually_lives_in": "integrated_sar.comm.py",
+  "class_defined_at": "integrated_sar/comm.py",
+  "conclusion": "the only entry in dirty_modules was a path that does not exist and was never executed; no executed module was dirty, so M0-M3's measurements stand, but the manifest's identity column did not",
+  "dirty_modules_recorded_then": [
+   "integrated_sar/comm_transcript.py"
+  ],
+  "ever_added_in_git_history": false,
+  "exists_on_disk": false,
+  "git_log_added_commits": "(no commit ever added this path)",
+  "in_derived_import_graph": false,
+  "manifest_entry": {
+   "head_blob": "HEAD:integrated_",
+   "matches_head": false,
+   "working_blob": null
+  },
+  "mechanism": {
+   "git_cat_file_returncode": 128,
+   "git_rev_parse_returncode": 128,
+   "git_rev_parse_stdout": "HEAD:integrated_sar/comm_transcript.py",
+   "note": "rev-parse echoes an unresolvable argument to stdout instead of failing, so the old builder's head_blob became a truncated copy of the path and matches_head flipped to false; absence was reported as a dirty module"
+  },
+  "path_named_in_manifest": "integrated_sar/comm_transcript.py",
+  "real_modules_in_that_list": [
+   "integrated_sar/comm.py",
+   "integrated_sar/comm_ack.py",
+   "integrated_sar/comm_budget.py",
+   "integrated_sar/comm_learning.py",
+   "integrated_sar/comm_policy.py"
+  ]
+ },
+ "round": "comm_budget_masked_retrain_20260922",
+ "section": "2 (close last round's provenance before training)",
+ "what_does_not_change": {
+  "M0_to_M3": "all four gates were decided by re-run suites and a re-computed closure; neither defect touched a measured quantity",
+  "smoke_numbers": {
+   "actionable_candidates": 181,
+   "all_gates_passed": true,
+   "candidates": 20655,
+   "executed_policy_emissions": 86,
+   "initial_executable_candidates": 197,
+   "max_abs_log_prob_gap": 0.0,
+   "policy_refusals": 0,
+   "requested_by_policy": 86
+  },
+  "trainer_identity": {
+   "ack": false,
+   "action_mask_schema": "budget-sequential-mask/1",
+   "bootstrap": {
+    "replications": 10000,
+    "rng": 20260922
+   },
+   "budget_bytes": 29300,
+   "budget_tier": "25pct",
+   "checkpoints": [
+    0,
+    100000,
+    200000,
+    300000,
+    400000
+   ],
+   "curve_streams": [
+    700048,
+    700049,
+    700050,
+    700051,
+    700052,
+    700053,
+    700054,
+    700055
+   ],
+   "delivery_probability": 1.0,
+   "dev_streams": [
+    700048,
+    700049,
+    700050,
+    700051,
+    700052,
+    700053,
+    700054,
+    700055,
+    700056,
+    700057,
+    700058,
+    700059,
+    700060,
+    700061,
+    700062,
+    700063,
+    700064,
+    700065,
+    700066,
+    700067,
+    700068,
+    700069,
+    700070,
+    700071
+   ],
+   "episodes_per_update": 4,
+   "feature_dimension": 19,
+   "feature_layout": "comm-send-state/1",
+   "information": "isolated",
+   "launch_cap": 1500,
+   "main_rule": "send_once",
+   "network": {
+    "clip": 0.2,
+    "entropy_bonus": 0.01,
+    "epochs_per_batch": 4,
+    "gae_lambda": 0.95,
+    "gamma": 0.99,
+    "hidden": 64,
+    "learning_rate": 0.0003,
+    "max_grad_norm": 0.5,
+    "minibatch_steps": 256,
+    "value_coefficient": 0.5
+   },
+   "non_inferiority_margin_targets_per_episode": -0.05,
+   "probe_episodes": 12,
+   "production_defaults": {
+    "comm_ack": false,
+    "comm_budget_bytes": null,
+    "comm_delivery_probability": 1.0,
+    "comm_policy": "immediate",
+    "comm_timing_mode": "legacy_shared_bound"
+   },
+   "steps_per_episode": 1000,
+   "steps_per_run": 400000,
+   "tape_schema": "onpolicy-tape/2",
+   "timing_mode": "policy_owned_timing",
+   "total_step_cap": 1200000,
+   "train_streams": [
+    700000,
+    700001,
+    700002,
+    700003,
+    700004,
+    700005,
+    700006,
+    700007,
+    700008,
+    700009,
+    700010,
+    700011,
+    700012,
+    700013,
+    700014,
+    700015,
+    700016,
+    700017,
+    700018,
+    700019,
+    700020,
+    700021,
+    700022,
+    700023,
+    700024,
+    700025,
+    700026,
+    700027,
+    700028,
+    700029,
+    700030,
+    700031,
+    700032,
+    700033,
+    700034,
+    700035,
+    700036,
+    700037,
+    700038,
+    700039,
+    700040,
+    700041,
+    700042,
+    700043,
+    700044,
+    700045,
+    700046,
+    700047
+   ],
+   "trainer_tag": "onpolicy-v3-budget-mask",
+   "training_seeds": [
+    1,
+    2,
+    3
+   ]
+  }
+ },
+ "what_this_round_freezes": {
+  "fails_closed_when": [
+   "no freeze is registered",
+   "a graph member differs from the freeze in HEAD or in the working tree",
+   "a graph member or a script in this directory is untracked",
+   "a module appears in the graph that the freeze never recorded"
+  ],
+  "rule": "the executed graph is derived by importing the training entry, every member's blob is recorded against a registered code-freeze SHA, and any launch checks that the working tree and HEAD still match it"
+ }
+}

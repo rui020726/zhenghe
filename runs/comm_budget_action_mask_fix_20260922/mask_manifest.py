@@ -1,4 +1,14 @@
-"""Source and run identity for the budget-action mask fix."""
+"""Source and run identity for the budget-action mask fix.
+
+The executed-module list used to be typed by hand and named ``integrated_sar/comm_transcript.py``,
+a path that has never existed in the repository and that nothing imports -- the class it was named
+for lives in ``integrated_sar/comm.py``. It then read as a *dirty* module rather than an absent one
+because ``git rev-parse HEAD:<missing path>`` echoes its argument instead of failing. Both halves
+are corrected here, by the next round's provenance pass
+(``runs/comm_budget_masked_retrain_20260922/COMM_BUDGET_MASK_PROVENANCE_CORRECTION.md``), which
+changed no measurement of this round: the list is now derived by importing the round's own entry
+points, and absence is resolved with ``git cat-file -e`` before anything is hashed.
+"""
 
 from __future__ import annotations
 
@@ -24,8 +34,42 @@ EXECUTED_MODULES = (
     "integrated_sar/comm_budget.py",
     "integrated_sar/comm_learning.py",
     "integrated_sar/comm_ack.py",
-    "integrated_sar/comm_transcript.py",
 )
+
+#: The entry points whose import graph is this round's real execution surface. Derived, so a
+#: phantom path cannot re-enter the manifest.
+EXECUTED_ENTRIES = (
+    "smoke_budget_mask",
+    "train_budget_masked",
+    "budget_masked",
+    "train_protocol",
+    "train_onpolicy",
+    "onpolicy",
+    "protocol_env",
+    "pilot_env",
+    "train_pilot",
+)
+
+
+def executed_modules(entries: tuple[str, ...] = EXECUTED_ENTRIES) -> list[str]:
+    """Every repo-local module the round actually imported, walked out of ``sys.modules``."""
+    found: list[str] = []
+    for module in list(sys.modules.values()):
+        file = getattr(module, "__file__", None)
+        if not file:
+            continue
+        path = Path(file)
+        if not path.is_absolute() or not path.exists() or "__pycache__" in str(path):
+            continue
+        try:
+            relative = path.resolve().relative_to(ROOT)
+        except ValueError:
+            continue
+        if relative.parts[0] not in {"integrated_sar", "runs", "piloc", "task_allocation"}:
+            continue
+        if relative.suffix == ".py" and "/tests/" not in relative.as_posix():
+            found.append(relative.as_posix())
+    return sorted(set(found) | set(EXECUTED_MODULES))
 ROUND_SCRIPTS = (
     "COMM_BUDGET_ACTION_MASK_PROTOCOL.md",
     "COMM_BUDGET_ACTION_MASK_RESULTS.md",
@@ -50,17 +94,28 @@ def git(*arguments: str) -> str:
     ).stdout.strip()
 
 
-def blob_identity(paths: tuple[str, ...]) -> dict[str, dict[str, Any]]:
+def blob_identity(paths: tuple[str, ...] | list[str]) -> dict[str, dict[str, Any]]:
     """Git blob ids for HEAD and for the working tree, so "committed" is a checked fact.
 
     Blob identity rather than file hashes: a checkout can differ from the object database only in
-    line endings, and a false mismatch there has already wasted a round's attention.
+    line endings, and a false mismatch there has already wasted a round's attention. Absence is
+    settled first, and separately: ``git rev-parse HEAD:<missing path>`` prints its argument back on
+    stdout rather than failing, so a path that was never committed used to arrive as a truncated
+    fake blob id and be reported as a dirty module.
     """
     report: dict[str, dict[str, Any]] = {}
     for path in paths:
-        head = git("rev-parse", f"HEAD:{path}")
-        working = git("hash-object", path)
+        in_head = subprocess.run(
+            ("git", "cat-file", "-e", f"HEAD:{path}"),
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+        ).returncode == 0
+        head = git("rev-parse", f"HEAD:{path}") if in_head else ""
+        working = git("hash-object", path) if (ROOT / path).exists() else ""
         report[path] = {
+            "in_head": in_head,
+            "on_disk": (ROOT / path).exists(),
             "head_blob": head[:16] or None,
             "working_blob": working[:16] or None,
             "matches_head": bool(head) and head == working,
@@ -141,6 +196,7 @@ def streams_check() -> dict[str, Any]:
 
 
 def main(argv: list[str]) -> int:
+    modules = executed_modules()
     payload = {
         "document": "COMM_BUDGET_ACTION_MASK_MANIFEST",
         "date": "2026-09-22",
@@ -148,10 +204,16 @@ def main(argv: list[str]) -> int:
         "head": git("rev-parse", "HEAD"),
         "executed_code": {
             "head": git("rev-parse", "HEAD"),
-            "modules": blob_identity(EXECUTED_MODULES),
+            "derivation": "modules walked out of sys.modules after importing this round's entries",
+            "declared_contract_modules": list(EXECUTED_MODULES),
+            "modules": blob_identity(modules),
             "dirty_modules": sorted(
-                path for path, ids in blob_identity(EXECUTED_MODULES).items()
-                if not ids["matches_head"]
+                path for path, ids in blob_identity(modules).items()
+                if not ids["matches_head"] and ids["in_head"] and ids["on_disk"]
+            ),
+            "absent_modules": sorted(
+                path for path, ids in blob_identity(modules).items()
+                if not ids["in_head"] or not ids["on_disk"]
             ),
             "round_scripts": blob_identity(tuple(
                 f"runs/comm_budget_action_mask_fix_20260922/{name}"
