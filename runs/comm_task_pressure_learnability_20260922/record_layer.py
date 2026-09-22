@@ -94,7 +94,7 @@ def scenario_facts(goals: int, seed: int, payload: dict[str, Any]) -> dict[str, 
     )
     recorded = payload.get("scenario", {})
     goals_cells = [list(cell) for cell in recorded.get("goal_positions", [])]
-    agent_cells = [list(cell) for cell in scenario.agent_positions]
+    agent_cells = [[int(cell.row), int(cell.col)] for cell in scenario.agent_positions]
     distinct = len({tuple(cell) for cell in goals_cells}) == len(goals_cells)
     collisions = sorted({tuple(cell) for cell in goals_cells} & {tuple(cell) for cell in agent_cells})
     detections = {
@@ -329,7 +329,11 @@ def main(argv: list[str]) -> int:
     ledger = common.LaunchLedger(f"LAUNCH_LEDGER_record_g{args.goals}_p{os.getpid()}.json")
     rows: list[dict[str, Any]] = []
     for seed in seeds:
-        ledger.reserve("record", args.goals, seed, arm="record")
+        # A reservation is a promise that an episode is about to run. Re-registering a stream that
+        # is already on disk runs nothing, so it spends nothing -- but it is still recorded, so a
+        # reader can tell "re-checked" from "never looked at".
+        if not common.stream_path(args.goals, seed).exists() or args.rerun_seed == seed:
+            ledger.reserve("record", args.goals, seed, arm="record")
         try:
             row = record(
                 args.goals,
@@ -344,7 +348,8 @@ def main(argv: list[str]) -> int:
             args.goals,
             seed,
             not row["illegal"],
-            f"placed={row['placed']} detected={row['detected']} illegal={row['illegal']}",
+            ("re-registered without an episode: " if row.get("skipped") else "")
+            + f"placed={row['placed']} detected={row['detected']} illegal={row['illegal']}",
         )
         rows.append(row)
         print(
