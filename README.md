@@ -1,8 +1,8 @@
 # Zhenghe：搜索—协调—分配一体化搜救系统
 
-当前研究入口：[预算动作 mask 正确性修复](COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md)
-与 [项目总纲 v2.9](PROJECT_CHARTER.md)。下一轮在采样前按真实执行顺序 mask 不可支付 SEND，
-补精确费用/tape 审计字段，只实现、测试和最多 8 流 smoke（0 optimizer.step）。尚未执行；H=20 暂停。
+当前研究入口：[预算 mask 修复后的从初值重训计划](COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md)
+与 [项目总纲 v3.1](PROJECT_CHARTER.md)。采样前顺序 mask 已通过 M0–M3；下一轮先闭合执行代码 provenance，
+再在 29,300 B 主设置训练 3 seed × 400k。旧 checkpoint 禁止续训；最终封存块与 H=20 继续冻结。
 
 本仓库整合两个已有研究模块：
 

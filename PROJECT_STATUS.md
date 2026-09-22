@@ -1,5 +1,19 @@
 # 项目状态
 
+## 2026-09-22：预算 mask 修复后从初值重训已规划，尚未执行
+
+当前入口 [COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md](COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md)，
+总纲 v3.1，起点 `fix/comm-budget-action-mask@e692607`。
+
+下一轮先更正上轮 manifest 对不存在/未导入 `comm_transcript.py` 的误列并冻结真实执行代码 SHA；随后在唯一主设置
+29,300 B、`policy_owned_timing`、isolated-lossless、无 ACK、19 维旧观测下，从随机初值训练 seed 1/2/3，
+各 400k 步，总上限 1.2M。旧 checkpoint 不加载、不 warm start、不恢复 optimizer；主对照固定 `send_once`，
+400k 末轮是唯一主判据。
+
+0.88% 只作候选占比，必须同时报告绝对 actionable、每局/时间/消息类型分布和 actor/critic 优化诊断。
+最多 12 episode 训练前探针（0 optimizer.step），全轮启动上限 1,500。`800000..800399`、H=20、第二预算、
+ACK、observation 扩维继续冻结；即使开发门槛通过也不自动开放最终测试。
+
 ## 2026-09-22：预算动作 mask 修复已交付，M0–M3 全通过（0 训练、8 集 smoke、optimizer.step=0）
 
 执行入口 [COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md](COMM_BUDGET_ACTION_MASK_FIX_NEXT_ROUND.md) **已执行完毕**；
