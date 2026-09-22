@@ -1,10 +1,9 @@
 # Zhenghe：搜索—协调—分配一体化搜救系统
 
-当前研究入口：[预算 mask 修复后的从初值重训](COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md)（**已执行完毕**）
-与 [项目总纲 v3.2](PROJECT_CHARTER.md)。在修复后的动作空间下，seed 1/2/3 各从随机初值训练 400k 环境步
-（总 1.2M）：正确性 0 违规、可学习样本 20.1–96.0 个/episode，但 400k 对 `send_once` 的三条区间都在劣侧，
-**主效果 0/3、非劣降本 0/3**——证据见 `runs/comm_budget_masked_retrain_20260922/`。
-旧 checkpoint 仍禁止续训；最终封存块与 H=20、第二预算、ACK、扩维继续冻结。
+当前研究入口：[任务压力下的无模型 learnability calibration](COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md)
+与 [项目总纲 v3.3](PROJECT_CHARTER.md)。修复后重训已确认模型能学但仍不胜 `send_once`；下一轮0训练，
+只提高目标数并用冻结规则矩阵检验是否存在非天花板、预算竞争和可利用的情境差。通过后才讨论成本感知目标；
+最终封存块、H=20、ACK、丢包和观测扩维继续冻结。
 
 本仓库整合两个已有研究模块：
 

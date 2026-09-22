@@ -1,6 +1,6 @@
 # 项目总纲：面向协同搜救的学习型任务信息传递控制
 
-版本：v3.2
+版本：v3.3
 
 更新日期：2026-09-22
 用途：跨聊天、跨 Agent 的研究方向与实验约定。  
@@ -13,7 +13,21 @@
 
 ## 1. 本文如何使用
 
-### v3.2 当前状态：修复动作空间后的从初值重训**已执行**，两条门槛均未过（3 seed × 400k = 1.2M 步，0 新流）
+### v3.3 当前计划：任务压力下的无模型 learnability calibration（尚未执行，不训练）
+
+当前入口 `COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md`，起点
+`exp/comm-budget-masked-retrain@7e0a423`。修复后重训已证明模型能学、动作空间正确且 actor 样本充足，
+但 3 seed 对 `send_once` 两条门槛仍为 0/3；六目标设置中规则完成 5.7917/6，收益空间接近天花板。
+
+下一轮只提高 `num_goals={6,8,10,12}`，保持 29,300 B、无 ACK、isolated-lossless、全部 checkpoint、
+任务/信道/奖励/规则参数不变。新开发块每层16流，冻结九臂规则矩阵，总启动上限640，0训练。
+按最低压力优先的 L0–L4 门禁寻找：搜索仍有效、通信有价值且不在天花板、预算产生严格子集竞争、
+固定规则之间存在情境差，并形成至少两个成本—效果 Pareto 点。
+
+当前 reward 只奖励按时完成，字节是硬约束与事后指标；本轮只从规则前沿计算经验交换率，不暗加字节惩罚。
+若无压力层通过则停止；若通过也只允许设计成本感知目标/训练协议，不自动训练或开放最终封存块。
+
+### v3.2 历史状态：修复动作空间后的从初值重训**已执行**，两条门槛均未过（3 seed × 400k = 1.2M 步，0 新流）
 
 分支 `exp/comm-budget-masked-retrain`，产物 `runs/comm_budget_masked_retrain_20260922/`：
 provenance 更正件、协议（先于第一个训练 episode 提交）、`PREFLIGHT.json`、`THROUGHPUT.json`、
@@ -836,7 +850,14 @@ v1.5 协议消融中，所有新协议臂共同取消执行器的最大等待强
 | S5 系统适用性 | 正常信息路径及必要鲁棒性测试 | 工程侧已测：normal-lossy 上 ACK 重试无可分辨增益且更贵，不提部署；学习侧无候选可测 |
 | S6 研究交付 | 可复现代码、模型、实验和方法文档 | 研究侧以范围准确的否定结论交付（`COMMUNICATION_LEARNING_VERDICT.md/.json`）；工程侧以 Pareto 前沿与 break-even 交付 |
 
-**v3.2 当前行动（修复后重训已交付，等待使用者的下一步决定）。** 动作空间修好之后，"学得动"这一点第三次被确认
+**v3.3 当前行动（先做任务压力 learnability calibration，0 训练）。** v3.2 已把继续追加同设置训练排除：
+动作空间正确、绝对 actor 样本充足、三臂从初值改善，但六目标下 `send_once` 已完成 5.7917/6 且两门槛 0/3。
+下一轮只增加 `num_goals={6,8,10,12}`，以冻结规则库、硬预算竞争和逐流 hindsight rule envelope 检验
+“固定规则无法覆盖的可观测情境差”是否存在；同时从规则 Pareto 估计成本—效果交换率。0训练、不改 reward、
+不加 ACK/丢包、不运行 H=20，`800000..800399` 继续封存。只有某层通过 L0–L4，才允许另写成本感知目标与
+训练协议；通过不等于模型收益成立。
+
+**v3.2 历史行动（修复后重训已交付）。** 动作空间修好之后，"学得动"这一点第三次被确认
 （三臂各 +0.833～+2.708 个/episode 优于自身初值），"越过强规则"第三次没有发生：可学习样本不是瓶颈
 （每集 20.1–96.0 个真双动作，零可执行 episode 为 0），预算接缝、概率一致性与确定性恢复全部 0 违规，
 而 400k 末轮的三条区间都在 0 的劣侧。因此**继续在学习型发送控制上要预算/特征/步数，都不再是有意义的下一步**——
@@ -911,31 +932,34 @@ CI [+0.685, +0.995]），在正常信息路径上完成数差 0.000 而 total by
 ### 当前可直接粘贴到新聊天的说明
 
 ```text
-先读 PROJECT_CHARTER.md v3.2 §1 与 runs/comm_budget_masked_retrain_20260922/
-COMM_BUDGET_MASKED_RETRAIN_RESULTS.md/.json（两条门槛 0/3、正确性 0 违规），
-核对远端 exp/comm-budget-masked-retrain 的实际 SHA。
+先读 PROJECT_CHARTER.md v3.3、COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md，
+以及 runs/comm_budget_masked_retrain_20260922/COMM_BUDGET_MASKED_RETRAIN_RESULTS.md/.json。
+核对远端 exp/comm-budget-masked-retrain = 7e0a4233127a19fa9bf49672bbcf37218b587fff，
+从其后继文档分支创建 analysis/comm-task-pressure-learnability。
 
-本轮已执行的是修复动作空间后的从初值重训：唯一设置 29,300 B、policy_owned_timing、isolated-lossless、
-无 ACK、19 维 comm-send-state/1，trainer onpolicy-v3-budget-mask / mask budget-sequential-mask/1 /
-tape onpolicy-tape/2；seed 1/2/3 各从 Controller(seed) 起 400k 环境步（1.2M 总步），
-4 episode/update，主对照 send_once，400k 末轮是唯一主判据，旧 checkpoint 全程未加载。
+前轮事实不得重解释：修复后3 seed×400k正确性0违规、actionable 20.1–96.0/episode，
+但对 send_once 主效果0/3、非劣降本0/3；继续加步不再授权。当前 reward 只奖励按时完成，
+字节不是 reward 项，所以省通信不能被假定会自然学出。
 
-可引用口径：三臂 actionable（=actor 项）20,110 / 8,020 / 38,404，即 20.1–96.0 个/episode，
-零可执行 episode 0；请求 4,434 / 4,448 / 4,222 = 实际执行，policy 拒付 0、代发 0、NaN 0，
-logged/recomputed log-prob 记录差 ≤1e−6（该值按 6 位小数舍入，边界已在结果件写明）；
-deterministic save/resume 逐项完全相等；生产代码自 e692607 起零改动、默认值未变。
+本轮0训练，只做任务压力标定。唯一自变量 num_goals={6,8,10,12}；每层16条新的开发流，
+固定 seed 块见执行文档，生成前四源冲突审计。所有其他设置保持：29,300 B、policy_owned_timing、
+isolated-lossless、no-ACK、原 checkpoint/任务/奖励/规则参数。九臂规则库在任何新流前冻结，
+总启动上限640，技术失败计入、不补 seed。
 
-结果：完成差 −0.7083 [−0.9583,−0.4583]、−2.0000 [−2.5000,−1.5000]、−0.1250 [−0.3750,+0.0000] 个/episode，
-字节差 +13,318 / +13,368 / +3.8 B/episode；主效果 0/3、非劣降本 0/3。三臂均优于自身 0 步初值
-（+2.125 / +0.833 / +2.708），但那只作机制证据。send_once 重放与归档逐包 0 差异。
+按6→8→10→12选第一个通过 L0–L4 的压力层：数据可信；detected/placed≥0.75；通信有价值且完成比例
+在[0.40,0.90]；≥8/16流存在只能支付严格子集的预算竞争；逐流 rule envelope 比最佳固定规则
+至少+0.25个/ep且CI下界>0，并有至少两规则分别成为唯一赢家、双向胜负和至少两个Pareto点。
 
-结论限定为"在修复动作空间、原 19 维观测/奖励与总 1.2M 训练步下，学习附加价值仍未建立"。
-不得自动加训练量、改特征/观测、换预算、加 ACK 或恢复 H=20；800000..800399 继续封存（盘上 0 artefact），
-900000..900199 只作既有证据。若还要学习贡献，先立新假设并做无模型 learnability calibration。
-本轮启动 1,489/1,500，技术失败计入未补。checkpoint、流与逐集日志不入库；
-非本轮创建的 architecture/、dev_summary.json 与其他轮次的未跟踪文件不改、不删、不提交。
+无层通过则停止，不训练、不再扩目标数。通过也只报告规则前沿与经验lambda交换率并设计下一轮协议；
+不得自动训练、改reward、加入ACK/丢包、运行H=20或打开800000..800399。
+checkpoint、stream和逐集日志不入Git；用户未跟踪文件不改、不删、不提交。
 用户后续明确决定优先于总纲；有范围变化时同步更新总纲和变更记录。
 ```
+
+### v3.2 历史交接说明（已被上方说明取代）
+
+v3.2 的修复后重训结论与全部正确性证据保留在
+`runs/comm_budget_masked_retrain_20260922/`；旧 checkpoint 不进入新标定。
 
 ### v3.1 历史交接说明（已被上方说明取代，勿直接用于执行）
 
@@ -1112,6 +1136,7 @@ learnability calibration；本轮不是"继续改场景直到模型获胜"的授
 
 | 日期 | 版本 | 变更 |
 |---|---|---|
+| 2026-09-22 | v3.3 | 基于 `7e0a423` 规划任务压力下的无模型 learnability calibration：确认六目标 `send_once` 5.7917/6 接近天花板，且现 reward 只有完成奖励、字节仅为约束/事后指标；唯一改变 `num_goals={6,8,10,12}`，每层16条新开发流，冻结九臂规则库，0训练、总启动≤640；按最低压力优先的 L0–L4 检验搜索有效、通信价值、非天花板、严格预算竞争、rule-envelope 情境差与多点 Pareto，并仅由前沿报告经验 λ 交换率；通过只允许设计成本感知目标，封存块/H=20/ACK/丢包/扩维继续冻结 |
 | 2026-09-22 | v3.2 | 预算 mask 修复后的从初值重训**已执行**（`exp/comm-budget-masked-retrain`，`runs/comm_budget_masked_retrain_20260922/`）：先闭合上轮 provenance（幽灵模块 `comm_transcript.py` 的成因是 `git rev-parse` 对缺失路径回显参数，builder 改为 import 派生 + `cat-file` 判缺失；证据头 `7f9929c` 与交付头 `e692607` 分开），再冻结 54 模块执行图并在每次启动重新校验；协议与判据先于第一个训练 episode 提交。唯一设置 29,300 B / policy-owned / isolated-lossless / no-ACK / 19 维，seed 1/2/3 各 400k 步、4 episode/update、0/100k/200k/300k/400k checkpoint、400k 唯一主判据，旧 checkpoint 零加载。**正确性 0 违规**：请求=执行、policy 拒付 0、代发 0、NaN 0、log-prob 记录差 ≤1e−6、deterministic resume 逐项相等、生产代码自 `e692607` 零改动。**两条门槛 0/3**：完成差 −0.7083/−2.0000/−0.1250 个/ep，字节差 +13 318/+13 368/+3.8 B/ep；可学习样本 20.1–96.0 个/episode（否证"0.88 % 太少"是瓶颈）。三臂均优于自身初值（+2.125/+0.833/+2.708，仅机制证据）。结论限定为"修复动作空间后学习附加价值仍未建立"；`800000..800399` 仍封存、H=20/第二预算/ACK/扩维仍未授权；启动 1,489/1,500（含三遍 preflight 与一次并行账本竞争的作废尝试，均如实计入） |
 | 2026-09-22 | v3.1 | 基于 `e692607` 规划预算 mask 修复后的从初值重训：先更正上轮 manifest 的 provenance 清单并冻结执行代码 SHA；单一主设置 29,300 B / policy-owned / isolated-lossless / no-ACK，3 seed × 400k = 1.2M 步，旧 checkpoint 禁止加载；`send_once` 为固定强规则，400k 末轮为唯一主判据；按绝对 actionable/actor 样本和优化诊断报告，0.88% 不作停止线；最多 1,500 episode 启动；封存块、H=20、第二预算、ACK 与扩维继续冻结 |
 | 2026-09-22 | v3.0 | 预算可执行动作的采样前顺序 hard mask **已执行**（`fix/comm-budget-action-mask`，`runs/comm_budget_action_mask_fix_20260922/`）：契约三字段与 `_emit` 同源定价；shadow credit 从观测剩余额度起算并按真实发射顺序推进，付不起的候选固定 HOLD 且 likelihood/entropy=0，全 mask step 保留 critic 样本，禁止事后删样本；tape 的 actionable 与 free 同义故第五轮 PPO 循环原样复用；8 流 20 655 候选 → 真双动作 181（顺序再消 16）、请求 86 = 执行 86、policy 拒付 0、log-prob 差 0.0 ≤ 1e−6；`budget_mask=False` 委托回旧 collector、feature 19/23 维与默认值不变；新 trainer tag 与 resume schema 隔离旧 checkpoint（只可前向读）。**0 训练、0 新流、0 optimizer.step、H=20 仍冻结**；M0–M3 全过 |

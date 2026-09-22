@@ -1,5 +1,18 @@
 # 项目状态
 
+## 2026-09-22：任务压力 learnability calibration 已规划，尚未执行（0训练）
+
+当前入口 [COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md](COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md)，
+总纲 v3.3，起点 `exp/comm-budget-masked-retrain@7e0a423`。
+
+六目标下 `send_once` 已完成5.7917/6，修复后学习三臂仍两门槛0/3；继续追加同设置训练不再授权。
+下一轮只改变 `num_goals={6,8,10,12}`，每层16条新开发流，冻结九臂规则矩阵、29,300 B和其余系统，
+0训练、最多640次启动。用 L0–L4 寻找首个同时具备搜索有效、非天花板、预算严格竞争、固定规则情境差和
+多点成本—效果 Pareto 的压力层。
+
+当前 reward 只有按时完成奖励，字节只是硬约束和事后指标。本轮不改 reward，只计算规则前沿的经验交换率。
+通过只允许另写成本感知目标/训练协议；不通过则停止该场景扩展。最终封存块、H=20、ACK和丢包继续冻结。
+
 ## 2026-09-22：修复动作空间后的从初值重训已执行，两条预登记门槛均未通过（3 seed × 400k）
 
 执行入口 [COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md](COMM_BUDGET_MASKED_RETRAIN_NEXT_ROUND.md) **已执行完毕**；
