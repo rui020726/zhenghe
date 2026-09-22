@@ -1,6 +1,6 @@
 {
  "branch": "exp/comm-budget-masked-retrain",
- "committed_at": "2026-09-22 19:54:33 +0800",
+ "committed_at": "2026-09-22 20:20:48 +0800",
  "configuration_hash": "b5d1b46afa3b2604",
  "derivation": "sys.modules after importing train_retrain and the archived sampler/trainer entries, unioned with this directory's own scripts",
  "document": "CODE_FREEZE",
@@ -217,11 +217,11 @@
    "working_blob": "4b7146ff82eafc8f"
   },
   "runs/comm_budget_masked_retrain_20260922/evaluate_retrain.py": {
-   "head_blob": "d03ff095511d2835",
+   "head_blob": "99bc1af439e5936c",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "d03ff095511d2835"
+   "working_blob": "99bc1af439e5936c"
   },
   "runs/comm_budget_masked_retrain_20260922/freeze.py": {
    "head_blob": "bc2950f4f89d4366",
@@ -245,18 +245,18 @@
    "working_blob": "ffe0ec3571bc2829"
   },
   "runs/comm_budget_masked_retrain_20260922/report_retrain.py": {
-   "head_blob": "6daaec9f4847f4bb",
+   "head_blob": "a36d989c6556e56a",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "6daaec9f4847f4bb"
+   "working_blob": "a36d989c6556e56a"
   },
   "runs/comm_budget_masked_retrain_20260922/retrain_common.py": {
-   "head_blob": "e59ecf648f709b0f",
+   "head_blob": "a1fe8554bcb4cc44",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "e59ecf648f709b0f"
+   "working_blob": "a1fe8554bcb4cc44"
   },
   "runs/comm_budget_masked_retrain_20260922/test_retrain.py": {
    "head_blob": "bd8de0e233c6742d",
@@ -385,12 +385,12 @@
   "runtime_modules_changed": []
  },
  "registered": true,
- "registered_at": "1790078073",
+ "registered_at": "1790079648",
  "rule": "every launch re-derives the graph and requires: no committed or working-tree difference against this SHA for any member, no untracked member, and no module in the graph that this freeze did not record",
  "schema": "retrain_common/1",
- "sha": "ad4270a4aa2b43213556839f5ffac5b915e25c10",
- "short": "ad4270a4a",
- "subject": "feat(comm): close the launch ledger against the episode rows and state the gap's precision",
+ "sha": "abc0294fe628aefdca6aa52bda9469e618e9e083",
+ "short": "abc0294fe",
+ "subject": "fix(comm): split the replay check into behaviour, sequence and layout identity",
  "trainer_identity": {
   "ack": false,
   "action_mask_schema": "budget-sequential-mask/1",
