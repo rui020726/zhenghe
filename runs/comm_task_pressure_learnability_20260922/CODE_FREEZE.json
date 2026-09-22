@@ -1,0 +1,473 @@
+{
+ "branch": "analysis/comm-task-pressure-learnability",
+ "clean": true,
+ "dirty_relative_to_head": [],
+ "head_at_registration": "fcea32fda2d3c2c53a4000f13ef30a1f0b01d2d1",
+ "module_count": 54,
+ "modules": {
+  "integrated_sar/__init__.py": {
+   "blob": "c20e013e6a21d5b0af1568389f0406ae342185e2",
+   "blob_at_head": "c20e013e6a21d5b0af1568389f0406ae342185e2",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "50ba19c8b5522eacc34f8787797d005b0e7b4875f6d78e81144f26e9d114fdd2"
+  },
+  "integrated_sar/adapters/__init__.py": {
+   "blob": "03ca5af2e5b0ab6ed847585b7d197dba84a70106",
+   "blob_at_head": "03ca5af2e5b0ab6ed847585b7d197dba84a70106",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "ab948edd5d97dbe7f9c2c4e49aa4f0a788bdbaae7098cb54049b9f3ca2388c8b"
+  },
+  "integrated_sar/adapters/piloc.py": {
+   "blob": "db4d8539e2855e5d621df37afb9408dd8cbcf190",
+   "blob_at_head": "db4d8539e2855e5d621df37afb9408dd8cbcf190",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "2ac3d1a5420c518c6f5319dfc5e791efbc8cb0a87a31b9815aeae6c82b0107b5"
+  },
+  "integrated_sar/adapters/task03.py": {
+   "blob": "8ba631ca1892bacc46dc24832d20f56c73173022",
+   "blob_at_head": "8ba631ca1892bacc46dc24832d20f56c73173022",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1"
+  },
+  "integrated_sar/allocation_trace.py": {
+   "blob": "4dcd6df6bb6ed0fda20a0e3fbcbfe7dd75a20d27",
+   "blob_at_head": "4dcd6df6bb6ed0fda20a0e3fbcbfe7dd75a20d27",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "1cc48d0d564a3ee1bdb32d198ce465cbab8dcd89837473af05c47e44b7484801"
+  },
+  "integrated_sar/assignment_gate.py": {
+   "blob": "bc17633e96b588825bef59bb6d7c8aae775278cc",
+   "blob_at_head": "bc17633e96b588825bef59bb6d7c8aae775278cc",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "d9d7527c01c5c8d488c6b46745885bc51ef47fae76cbc0129630fadbcba4d473"
+  },
+  "integrated_sar/clock.py": {
+   "blob": "53207ffc13e23507514dd73c1770c9867bc96e15",
+   "blob_at_head": "53207ffc13e23507514dd73c1770c9867bc96e15",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "3eca664b849dde84fcfb7558e01049eb631e615b1ddaa390686d8ca68083a1cd"
+  },
+  "integrated_sar/comm.py": {
+   "blob": "c60471b29f4aea8fa4815481cb34b114a0421989",
+   "blob_at_head": "c60471b29f4aea8fa4815481cb34b114a0421989",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "d6e68275b220bbd5a4926aad9d03c567b1da9888e1cb605d7312d05bbdd64e43"
+  },
+  "integrated_sar/comm_ack.py": {
+   "blob": "dbc4e4c9d39a77a0bd1352901485ba002028f8bf",
+   "blob_at_head": "dbc4e4c9d39a77a0bd1352901485ba002028f8bf",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "fb2f91c93156354a37aa36d312d1acb59bf3d94bb2f8f2fbd0aa4013da46deb5"
+  },
+  "integrated_sar/comm_budget.py": {
+   "blob": "64fe9cd5a2776a9bd29ee7dbec258b4b2dc7fe84",
+   "blob_at_head": "64fe9cd5a2776a9bd29ee7dbec258b4b2dc7fe84",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929"
+  },
+  "integrated_sar/comm_learning.py": {
+   "blob": "6dec7e8688e6ee7c8c5a58c221c04c6785d0bc07",
+   "blob_at_head": "6dec7e8688e6ee7c8c5a58c221c04c6785d0bc07",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed"
+  },
+  "integrated_sar/comm_policy.py": {
+   "blob": "b47f89702d5159c6f37d959e1d242be775018a3f",
+   "blob_at_head": "b47f89702d5159c6f37d959e1d242be775018a3f",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d"
+  },
+  "integrated_sar/contracts.py": {
+   "blob": "156bbaf470e8480e918c06e94cee4ba70c6741f1",
+   "blob_at_head": "156bbaf470e8480e918c06e94cee4ba70c6741f1",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "7052a4d6bca870060a12890fe2117fe0a0a1097db11934d74c6136655dce09b7"
+  },
+  "integrated_sar/coordinator.py": {
+   "blob": "122664e9ca3f18e1d65e4585d2646aeee0d2943c",
+   "blob_at_head": "122664e9ca3f18e1d65e4585d2646aeee0d2943c",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "89d8867229b2675fb34134cd5c21371f836a83befb4a907f26156bd570f849af"
+  },
+  "integrated_sar/detection_replay.py": {
+   "blob": "36e6479ed8fd2e8e62425a8deb00c41b6ce871da",
+   "blob_at_head": "36e6479ed8fd2e8e62425a8deb00c41b6ce871da",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "349f57fc9bc804c1334ef09c1ba2ff2db948a9fb56b803c29092ea137babab58"
+  },
+  "integrated_sar/errors.py": {
+   "blob": "bfbd70820e43ad7ffaf8de0144f56f32c11f1e52",
+   "blob_at_head": "bfbd70820e43ad7ffaf8de0144f56f32c11f1e52",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "c47535f7f7a39c8f91b256720cf406dd4e5ec0e5554552e1954c6e32160fdb16"
+  },
+  "integrated_sar/event_bus.py": {
+   "blob": "d5aa18b33d82683c01c33b8c739af394587f5ff2",
+   "blob_at_head": "d5aa18b33d82683c01c33b8c739af394587f5ff2",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "60700446e97a296099edcd9d4d8869f4fef55c00b7a625909f0d25ca10ca2fe4"
+  },
+  "integrated_sar/expired_attribution.py": {
+   "blob": "b8598eaa6ce840652fc7ee91e100675a46da3e5c",
+   "blob_at_head": "b8598eaa6ce840652fc7ee91e100675a46da3e5c",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "b95be5e01a31063f694f0fff9d93134068396fc46e1a9a6166bdba77cbdd6ab2"
+  },
+  "integrated_sar/joint_driver.py": {
+   "blob": "4f803803777a405ee293b32519e721704a95472c",
+   "blob_at_head": "4f803803777a405ee293b32519e721704a95472c",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "eac7a63cb770501e7abc80f4dc980a3adad82c917c2fe212d9d85727a069fcf7"
+  },
+  "integrated_sar/lifecycle_log.py": {
+   "blob": "8585ae13711460af26aaad5626eef49347453364",
+   "blob_at_head": "8585ae13711460af26aaad5626eef49347453364",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "f55931a08705f4ebef9c1f9b8e06a69f4cfef467041bc1feb71dc34a3d4533ec"
+  },
+  "integrated_sar/lifecycle_metrics.py": {
+   "blob": "2fc5e0cedad5af3bd377cb4d3875170df75b43de",
+   "blob_at_head": "2fc5e0cedad5af3bd377cb4d3875170df75b43de",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db"
+  },
+  "integrated_sar/orchestrator.py": {
+   "blob": "013419cc77906c96aac472e74afc1840bb994758",
+   "blob_at_head": "013419cc77906c96aac472e74afc1840bb994758",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "ad1380d4695d8fb90ea646d2b4ebd0d6d736879885feff79bef8067a1a956b74"
+  },
+  "integrated_sar/ports.py": {
+   "blob": "80de7e430349c464b50c4ffb9f8108996e6c38f1",
+   "blob_at_head": "80de7e430349c464b50c4ffb9f8108996e6c38f1",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "7bb7babdaa467a6c7f154b8643e2c598553d438fff77b49caba48ad0609cbc33"
+  },
+  "integrated_sar/profiles.py": {
+   "blob": "515dcec3a46a3b8b9b47d3ecaea8334dd91cb7e1",
+   "blob_at_head": "515dcec3a46a3b8b9b47d3ecaea8334dd91cb7e1",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "6256edba1f2548b78e95bd47d00508b55664bd4f16b46e5856486cff022ad63a"
+  },
+  "integrated_sar/run_signature.py": {
+   "blob": "4bad2dcc2e860453fb2b6517a391fb93d3cae4bc",
+   "blob_at_head": "4bad2dcc2e860453fb2b6517a391fb93d3cae4bc",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "fbe4f0af4e1d7fa1a8a14fbed102bfee1b78aed55413e8a80f5c5620ddcbaeb1"
+  },
+  "integrated_sar/scenarios.py": {
+   "blob": "fff051a7f6f78cc228ef5869ebed082956efc008",
+   "blob_at_head": "fff051a7f6f78cc228ef5869ebed082956efc008",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "2e9a2fa0791d1b8917b80f397b1f8f54f6618e56f3ddccebd8a7416e72df98c8"
+  },
+  "integrated_sar/search_runtime.py": {
+   "blob": "0a0799032149d43e563f7341041e2330694ee00d",
+   "blob_at_head": "0a0799032149d43e563f7341041e2330694ee00d",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "89e772bec630f32a37f843b2efda8551f8bf9bd0c693a21556ad8ac7491103b1"
+  },
+  "integrated_sar/task_registry.py": {
+   "blob": "bf3eba2bc10bf69292eef0fe03f9e60984a3a48a",
+   "blob_at_head": "bf3eba2bc10bf69292eef0fe03f9e60984a3a48a",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+  },
+  "runs/comm_ack_value_20260920/ack_common.py": {
+   "blob": "045c6bdafc928eaede052556cade7793a207a850",
+   "blob_at_head": "045c6bdafc928eaede052556cade7793a207a850",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "90506064a68f685bea014dc572e8c29dd75ba9e56f26f3ba4ebd4382b910f997"
+  },
+  "runs/comm_budget_pilot_20260919/evaluate_pilot.py": {
+   "blob": "689602785d03170aba90186e7cda858a82ff3a08",
+   "blob_at_head": "689602785d03170aba90186e7cda858a82ff3a08",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "42df29cf2ae2bc03f309031b066a6a3e80732c68fe57752f1efc1c33c2b233b6"
+  },
+  "runs/comm_budget_pilot_20260919/pilot_common.py": {
+   "blob": "53b4a9ef76f6031d86f12089368017dc0e2fed40",
+   "blob_at_head": "53b4a9ef76f6031d86f12089368017dc0e2fed40",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8"
+  },
+  "runs/comm_budget_pilot_20260919/pilot_env.py": {
+   "blob": "a21d54d3fa7750283ccf3ba49038d29cba97e1c1",
+   "blob_at_head": "a21d54d3fa7750283ccf3ba49038d29cba97e1c1",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b"
+  },
+  "runs/comm_budget_pilot_20260919/train_pilot.py": {
+   "blob": "0e5f00fbc29c11e8dfdf8ce75cd5c98a48c214ae",
+   "blob_at_head": "0e5f00fbc29c11e8dfdf8ce75cd5c98a48c214ae",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81"
+  },
+  "runs/comm_control_20260919/comm_metrics.py": {
+   "blob": "66079e6e3bf641596b886e76b78754f13bbcdb82",
+   "blob_at_head": "66079e6e3bf641596b886e76b78754f13bbcdb82",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "919fee9059bbe8cf4d211c6338630ebd2eab9592b1b658ec02b3cae4bac4edbf"
+  },
+  "runs/comm_control_20260919/common.py": {
+   "blob": "9036b8ebc9556dc6e2e0ceaaaae65db522ae90e4",
+   "blob_at_head": "9036b8ebc9556dc6e2e0ceaaaae65db522ae90e4",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "e55ffa2787fd1105b2eaca3c294d8e6ecfc3e52fca36bf57009c60b15b730ff1"
+  },
+  "runs/comm_protocol_v2_20260920/protocol_common.py": {
+   "blob": "d741368aa0156ff4d6ba347743366aa8cd2e952d",
+   "blob_at_head": "d741368aa0156ff4d6ba347743366aa8cd2e952d",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "b19faaf12b9fb81b206b5bd336e389564f772297619dafee8b37e1749d29809d"
+  },
+  "runs/comm_protocol_v2_20260920/protocol_env.py": {
+   "blob": "4b2d7c84920534c00f9591a504f98dab2a5f0a13",
+   "blob_at_head": "4b2d7c84920534c00f9591a504f98dab2a5f0a13",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "457521b2b16c78f8ef002c3c0c28f1541bda7b110c54ac4f2b60d9ddb59f14ff"
+  },
+  "runs/comm_rule_confirm_20260921/confirm_common.py": {
+   "blob": "ba674f3dadc49f4f947ed66e0be5d34b7df86f12",
+   "blob_at_head": "ba674f3dadc49f4f947ed66e0be5d34b7df86f12",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "fe942c1c30e9e6a2bdd4637b0e3a68e50935800af0f69953a290a652bff94672"
+  },
+  "runs/comm_rule_confirm_20260921/confirm_env.py": {
+   "blob": "c35b1dd303ecd22bc1f9d988db3cb50ef3abb154",
+   "blob_at_head": "c35b1dd303ecd22bc1f9d988db3cb50ef3abb154",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "3a9af238c4f2da2d2ad7c0825fa2b8ef5edee246d03714e91091d66594ab7878"
+  },
+  "runs/comm_stability_20260919/attribution_metrics.py": {
+   "blob": "44ecc18af6caa47731e4ae63d59af6280f12b367",
+   "blob_at_head": "44ecc18af6caa47731e4ae63d59af6280f12b367",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "a4059c507ded0663d656b759797ad7999673093b7577420165f3930a2d654fea"
+  },
+  "runs/comm_stability_20260919/stability_common.py": {
+   "blob": "48d3552929ea7dab90c1a933d793fbe55b2292d2",
+   "blob_at_head": "48d3552929ea7dab90c1a933d793fbe55b2292d2",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "b63e864162f34260b1c21f74ba96265ffbfd9e95210032ada1d00fbb3fd9f6b1"
+  },
+  "runs/comm_task_pressure_learnability_20260922/freeze_pressure.py": {
+   "blob": "f2a92b1e213df512490738b9837f2cff3ba9e9bd",
+   "blob_at_head": "f2a92b1e213df512490738b9837f2cff3ba9e9bd",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "be1bc6af5efa3a7f73fc5865aa12acc2bafe8aeae0ead1d28d6750d340c2665f"
+  },
+  "runs/comm_task_pressure_learnability_20260922/judge_layers.py": {
+   "blob": "5035cd792488dada99e167e62a34fbeb286ef927",
+   "blob_at_head": "5035cd792488dada99e167e62a34fbeb286ef927",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "9f81fe9ec1d0c367d598fd9339fc855bda325102aebbeaad4446e22bf908f51b"
+  },
+  "runs/comm_task_pressure_learnability_20260922/pressure_common.py": {
+   "blob": "37112287d54cb4ee64a449e6bcdde68b0fc55e1d",
+   "blob_at_head": "37112287d54cb4ee64a449e6bcdde68b0fc55e1d",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "538b49ea0a27eb49be5e3462c42ab2dd79e590621eebe1429dc63a51b77bb0bc"
+  },
+  "runs/comm_task_pressure_learnability_20260922/pressure_env.py": {
+   "blob": "195ae5e2d5844c3bb9db784bf83ba1495fb1ad5b",
+   "blob_at_head": "195ae5e2d5844c3bb9db784bf83ba1495fb1ad5b",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "e653e17a27a9e18867060a214768e7a02ff1f2bd1b968315ddb0cf010228ca0d"
+  },
+  "runs/comm_task_pressure_learnability_20260922/pressure_matrix.py": {
+   "blob": "fa04ea8381c4c094c4ebbbf4ebe23d352cd8f942",
+   "blob_at_head": "fa04ea8381c4c094c4ebbbf4ebe23d352cd8f942",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "64b25b5c8ab450966b8a36f6cf2f8dd6e4dd8a56a5d515344864d9fa9a6594d3"
+  },
+  "runs/comm_task_pressure_learnability_20260922/pressure_metrics.py": {
+   "blob": "bd65bbd12b237f18fff53e9441b3d01546637734",
+   "blob_at_head": "bd65bbd12b237f18fff53e9441b3d01546637734",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "e768e276e8c5affe17c323d1875258e8a8d0ad6902b5c255f5252cd17b4dc617"
+  },
+  "runs/comm_task_pressure_learnability_20260922/record_layer.py": {
+   "blob": "828e5f3c7f511c30e8cdbc9d59fb3616d016ef86",
+   "blob_at_head": "828e5f3c7f511c30e8cdbc9d59fb3616d016ef86",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "4bb1dd8a4dee97279a31049e6c83420b41ec03b21ef9bf5f188e350db65925dd"
+  },
+  "runs/comm_task_pressure_learnability_20260922/seed_audit.py": {
+   "blob": "b62a521c086b3feac75446a5c085487fa3bd744a",
+   "blob_at_head": "b62a521c086b3feac75446a5c085487fa3bd744a",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "9c0ef4cb45cc6a8dab84fc23c93ec917269d6e320ddf1e18c496b31a4d0474d3"
+  },
+  "runs/comm_task_pressure_learnability_20260922/test_pressure_harness.py": {
+   "blob": "1452288777a35d1611148e5a6bebe9b5e7d2b6e4",
+   "blob_at_head": "1452288777a35d1611148e5a6bebe9b5e7d2b6e4",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "32630d288b7c6a2789d27ae42e9578d517cc1d72ebfa4e138313226a5be4cbba"
+  },
+  "runs/comm_tight_budget_20260919/onpolicy.py": {
+   "blob": "426ae608b1bf64be2daf67a4b63f03ee04fc30cb",
+   "blob_at_head": "426ae608b1bf64be2daf67a4b63f03ee04fc30cb",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3"
+  },
+  "runs/comm_tight_budget_20260919/tight_common.py": {
+   "blob": "c0df37f7c5f06a898b642bf7cbfddb178d09b8bb",
+   "blob_at_head": "c0df37f7c5f06a898b642bf7cbfddb178d09b8bb",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "ce9a3080aad5d2580a63b02cad7fdda89762eceb773ea26aacb5a70b9baadd9a"
+  },
+  "runs/corrected_env_final_20260918/arms.py": {
+   "blob": "5fe6b5eb42bff28c87b143386e2b7675f3661f6a",
+   "blob_at_head": "5fe6b5eb42bff28c87b143386e2b7675f3661f6a",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "03d2d5dda16f0b6c6a721fef0cade0af7605e2d9c418b80c0b9eb6426f3699a0"
+  },
+  "runs/corrected_env_final_20260918/corrected_block.py": {
+   "blob": "f0ec0c377f4d55a4b758da2953b47c5d56e0de9e",
+   "blob_at_head": "f0ec0c377f4d55a4b758da2953b47c5d56e0de9e",
+   "exists": true,
+   "in_head": true,
+   "matches_head": true,
+   "sha256": "49cac9fbd26f8bb052adbbd53c4d13e185a9933740631b3b323b71e0c0d96a7e"
+  }
+ },
+ "not_in_head": [],
+ "production_modules": [
+  "integrated_sar/__init__.py",
+  "integrated_sar/adapters/__init__.py",
+  "integrated_sar/adapters/piloc.py",
+  "integrated_sar/adapters/task03.py",
+  "integrated_sar/allocation_trace.py",
+  "integrated_sar/assignment_gate.py",
+  "integrated_sar/clock.py",
+  "integrated_sar/comm.py",
+  "integrated_sar/comm_ack.py",
+  "integrated_sar/comm_budget.py",
+  "integrated_sar/comm_learning.py",
+  "integrated_sar/comm_policy.py",
+  "integrated_sar/contracts.py",
+  "integrated_sar/coordinator.py",
+  "integrated_sar/detection_replay.py",
+  "integrated_sar/errors.py",
+  "integrated_sar/event_bus.py",
+  "integrated_sar/expired_attribution.py",
+  "integrated_sar/joint_driver.py",
+  "integrated_sar/lifecycle_log.py",
+  "integrated_sar/lifecycle_metrics.py",
+  "integrated_sar/orchestrator.py",
+  "integrated_sar/ports.py",
+  "integrated_sar/profiles.py",
+  "integrated_sar/run_signature.py",
+  "integrated_sar/scenarios.py",
+  "integrated_sar/search_runtime.py",
+  "integrated_sar/task_registry.py"
+ ],
+ "registered": true
+}
