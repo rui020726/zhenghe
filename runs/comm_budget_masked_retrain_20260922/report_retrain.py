@@ -603,6 +603,31 @@ def render(data: dict[str, Any]) -> str:
         f"生产默认值 comm_ack=`{data['defaults']['comm_ack']}`、"
         f"timing=`{data['defaults']['comm_timing_mode']}`。"
     )
+    closure = data["launch_closure"]
+    add(
+        f"- 启动账本闭合：登记 {closure['total_starts']}/{closure['cap']}，剩余 "
+        f"{closure['remaining']}，记录到的技术失败 {closure['failures_recorded']}；"
+        f"套件内自测另跑 {closure['episodes_run_inside_unit_tests']} 集（写在 "
+        "`episodes/unittest`，不是本轮的臂，但计入真实磁盘成本）。"
+    )
+    add("")
+    add("| 训练 seed | 账本登记启动 | 落盘 episode | 差（被杀/未完成） | 步数 | 训练期 freeze |")
+    add("|---|---:|---:|---:|---:|---|")
+    for seed, item in closure["arms"].items():
+        add(
+            f"| {seed} | {item['launches_booked']} | {item['episode_rows_written']} | "
+            f"{item['booked_minus_rows']} | {item['environment_steps']:,} | "
+            f"`{str(item['training_code_freeze_sha'])[:9]}` |"
+        )
+    add("")
+    timeline = data["provenance_timeline"]
+    add(
+        f"- 时间线：三个臂的训练期 freeze = "
+        f"`{sorted({str(value)[:9] for value in timeline['training_freeze_per_arm'].values()})}`，"
+        f"评价/统计期 freeze = `{str(timeline['evaluation_freeze'])[:9]}`。"
+        f"{timeline['note']}"
+    )
+    add(f"- 精度口径：{data['likelihood_precision_note']}")
     add(
         f"- 封存块 `800000..800399` 盘上 artefact "
         f"`{gates['violations']['sealed_block_artefacts']}`；`900000..900199` 未进入本轮。"
@@ -629,6 +654,50 @@ def render(data: dict[str, Any]) -> str:
 
 
 # ------------------------------------------------------------------ assembly
+def launch_closure(records: dict[int, Any]) -> dict[str, Any]:
+    """Ledger against episode rows: a launch that started and never finished must be visible.
+
+    ``reserve`` books the ceiling before the rollout runs, so a process killed mid-episode leaves a
+    start with no row behind it. The three arms did exactly that when their ledgers raced, and the
+    difference is reported rather than smoothed over -- an arm that shows 400 rows and 402 starts
+    spent two launches it did not finish, and that is part of the round's cost.
+    """
+    totals = common.ledger_totals()
+    arms: dict[str, Any] = {}
+    for seed, block in records.items():
+        summary = block["summary"]
+        name = f"LAUNCH_LEDGER_train_seed{seed}.json"
+        path = common.HERE / name
+        booked = json.loads(path.read_text(encoding="utf-8")).get("starts", 0) if path.exists() else 0
+        rows = len(block["episodes"])
+        arms[str(seed)] = {
+            "ledger_file": name,
+            "launches_booked": int(booked),
+            "episode_rows_written": int(rows),
+            "episodes_in_summary": int(summary.get("episodes", 0)),
+            "booked_minus_rows": int(booked) - int(rows),
+            "rows_equal_summary": int(rows) == int(summary.get("episodes", 0)),
+            "environment_steps": int(summary.get("environment_steps", 0)),
+            "training_code_freeze_sha": summary.get("code_freeze_sha"),
+        }
+    return {
+        "ledger_files": totals["files"],
+        "total_starts": totals["starts"],
+        "cap": totals["cap"],
+        "remaining": totals["remaining"],
+        "within_cap": totals["within_cap"],
+        "failures_recorded": totals["failures"],
+        "arms": arms,
+        "episodes_run_inside_unit_tests": len(
+            list((common.EPISODE_OUT / "unittest").rglob("ct_*.jsonl"))
+        ),
+        "unit_test_note": (
+            "the suite's own rollouts write under episodes/unittest and are not arms of this "
+            "experiment; the count is given so the round's total episode cost is auditable"
+        ),
+    }
+
+
 def assemble() -> dict[str, Any]:
     records = training_records()
     families = evaluation_rows()
@@ -786,6 +855,30 @@ def assemble() -> dict[str, Any]:
         "cleanliness": common.freeze_cleanliness(common.executed_modules())["clean"],
         "graph_members": freeze.get("module_count"),
         "untracked_code": common.untracked_code(common.executed_modules()),
+        "launch_closure": launch_closure(records),
+        "provenance_timeline": {
+            "training_freeze_per_arm": {
+                str(seed): block["summary"].get("code_freeze_sha")
+                for seed, block in records.items()
+            },
+            "evaluation_freeze": freeze.get("sha"),
+            "note": (
+                "the three arms trained under the freeze named per arm, which did not move while "
+                "they ran; the reporting code was corrected afterwards, so evaluation is registered "
+                "against a later freeze. No sampler, rollout or update module differs between the "
+                "two -- the delta is launch accounting and report parsing -- and the checkpoints "
+                "record the freeze that produced them, so the two are not conflated."
+            ),
+        },
+        "likelihood_precision_note": (
+            "logged-versus-recomputed gap is recorded rounded to six decimals by the archived "
+            "alignment helper, so an arm whose maximum reads 1e-06 has a true maximum in "
+            "[0.5e-6, 1.5e-6); the gate is decided on the recorded value, and the stricter "
+            "interpretation -- that some raw gaps may sit just above 1e-6 -- is stated rather than "
+            "argued away. The float32 sum of a few log-softmax terms is the source, not a "
+            "distribution mismatch: the same helper disagrees loudly when the actionable set is a "
+            "lie, which is the test that exists for that."
+        ),
         "production_changed": common.production_diff()["integrated_sar_changed"],
         "defaults": common.setting()["production_defaults"],
         "conclusions": data_conclusions(judgement, gates, rule_replay),
