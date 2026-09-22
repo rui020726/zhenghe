@@ -82,6 +82,7 @@ class CandidateProbe:
             "backlog_at_competition": 0.0,
         }
         self.sums_n = 0
+        self.remaining_sums_n = 0
         self.competition_sample: list[dict[str, Any]] = []
         self.slack_observations: list[float] = []
         self.backlog_by_step: list[int] = []
@@ -112,6 +113,10 @@ class CandidateProbe:
         if not items:
             return
         remaining = observation.remaining_budget_bytes
+        # An out-of-credit reference arm reports an infinite remainder. It stays infinite here --
+        # silently turning it into a missing number would put a zero into an average -- and is
+        # excluded from the one mean that would otherwise read as inf.
+        finite_remaining = remaining is not None and -1e30 < float(remaining) < 1e30
         charges = [
             None if item.attempt_charge_bytes is None else int(item.attempt_charge_bytes)
             for item in items
@@ -136,12 +141,15 @@ class CandidateProbe:
         # Primary definition, fixed in the protocol: at least two candidates in view and a
         # non-empty strict subset of them payable under the credit left at this step.
         competition = visible >= 2 and 1 <= payable < visible
+        # The credit of an out-of-credit reference arm is infinite, so the comparison stays in
+        # float space: int(inf) raises, and a reference arm would otherwise kill the cell that
+        # exists to measure it.
         joint_only = (
             visible >= 2
             and payable == visible
             and total_charge is not None
             and remaining is not None
-            and total_charge > int(remaining)
+            and float(total_charge) > float(remaining)
         )
         credit_blocked = sum(
             1 for item_ in items if str(item_.send_block_reason) == "budget_exhausted"
@@ -153,7 +161,9 @@ class CandidateProbe:
             else:
                 counts["competition_points_capacity_only"] += 1
             self.sums_n += 1
-            self.sums["remaining_at_competition"] += float(remaining or 0)
+            if finite_remaining:
+                self.sums["remaining_at_competition"] += float(remaining)
+                self.remaining_sums_n += 1
             self.sums["visible_at_competition"] += visible
             self.sums["payable_at_competition"] += payable
             self.sums["mean_slack_at_competition"] += sum(slack) / len(slack)
@@ -203,8 +213,11 @@ class CandidateProbe:
             "first_credit_exhaustion_step": self.first_credit_block_step,
             "block_reasons": dict(sorted(self.block_reasons.items())),
             "mean_remaining_bytes_at_competition": (
-                round(self.sums["remaining_at_competition"] / n, 1) if n else None
+                round(self.sums["remaining_at_competition"] / self.remaining_sums_n, 1)
+                if self.remaining_sums_n
+                else None
             ),
+            "competition_steps_with_unbounded_credit": (n - self.remaining_sums_n) if n else 0,
             "mean_visible_at_competition": round(self.sums["visible_at_competition"] / n, 3) if n else None,
             "mean_payable_at_competition": round(self.sums["payable_at_competition"] / n, 3) if n else None,
             "mean_slack_at_competition": round(self.sums["mean_slack_at_competition"] / n, 3) if n else None,
