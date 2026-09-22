@@ -498,13 +498,31 @@ def render(data: dict[str, Any]) -> str:
         f"{stats['baseline']['mean_airtime_bytes']:,} B/episode。"
     )
     agreement = data["rule_replay"]
+    identity = agreement.get("identity_field_differences", {})
     add(
-        f"- 归档一致性：逐流任务结果/字节/发送序列差异 "
-        f"{len(agreement.get('field_differences', {}))} 处、序列差异 "
-        f"{len(agreement.get('emission_sequence_differences', {}))} 处，"
-        f"passed=`{agreement.get('passed')}`（对照 "
-        f"`{agreement.get('archived_rows')}`）。"
+        f"- 归档一致性：逐流**行为**差异 {len(agreement.get('behaviour_field_differences', {}))} 处、"
+        f"**发射序列**差异 {len(agreement.get('emission_sequence_differences', {}))} 处、"
+        f"身份字段（config_hash）差异 {identity.get('count', 0)} 处 → "
+        f"passed=`{agreement.get('passed')}`（对照 `{agreement.get('archived_rows')}`）。"
     )
+    add("")
+    add("### 为什么 `config_hash` 必然不同（本轮初判为不一致，随后按机制拆解）")
+    add("")
+    explanation = identity.get("explanation") or {}
+    if explanation:
+        add(
+            f"- `run_signature.config_hash` 排除 `output`/`decision_trace`/`reservation_log`，但**仍把 "
+            f"`comm_transcript` 路径计入哈希**；该路径带本轮目录与臂名，所以同一规则换目录重放必然得到不同的 "
+            f"config_hash（`transcript_path_alone_changes_config_hash="
+            f"{explanation.get('transcript_path_alone_changes_config_hash')}`，"
+            f"`output_path_alone_leaves_config_hash_equal="
+            f"{explanation.get('output_path_alone_leaves_config_hash_equal')}`）。"
+        )
+        add(
+            f"- 判据先按「任何字段不同即不过」把本轮标成失败；查明原因后才拆成"
+            f"行为/序列/身份三类——**行为与发射序列 0 差异**才是本轮要的一致性，"
+            f"而这一拆解本身由上面两个可复核的演示支撑；若演示结论相反，判据仍为不过。"
+        )
     add("")
     add("### 学习 vs 自身 0 步初值（机制证据，不是门槛）")
     add("")
@@ -628,6 +646,16 @@ def render(data: dict[str, Any]) -> str:
         f"{timeline['note']}"
     )
     add(f"- 精度口径：{data['likelihood_precision_note']}")
+    add("")
+    add("### freeze 时间线（从 Git 里的 CODE_FREEZE.json 各版本读回）")
+    add("")
+    add("| 登记提交 | 执行代码 SHA | 提交时间 | 模块数 | 主题 |")
+    add("|---|---|---|---:|---|")
+    for item in data.get("freeze_timeline", []):
+        add(
+            f"| `{item['registered_in']}` | `{str(item['code_sha'])[:9]}` | "
+            f"{item['committed_at']} | {item['modules']} | {item['subject']} |"
+        )
     add(
         f"- 封存块 `800000..800399` 盘上 artefact "
         f"`{gates['violations']['sealed_block_artefacts']}`；`900000..900199` 未进入本轮。"
@@ -853,6 +881,7 @@ def assemble() -> dict[str, Any]:
         "initial_reads": initial_reads,
         "final_reads": final_reads,
         "cleanliness": common.freeze_cleanliness(common.executed_modules())["clean"],
+        "freeze_timeline": common.freeze_timeline(),
         "graph_members": freeze.get("module_count"),
         "untracked_code": common.untracked_code(common.executed_modules()),
         "launch_closure": launch_closure(records),
@@ -940,6 +969,7 @@ def main(argv: list[str]) -> int:
         "branch": data["branch"],
         "head": data["head"],
         "code_freeze": common.freeze(),
+        "freeze_timeline": common.freeze_timeline(),
         "cleanliness_now": common.freeze_cleanliness(common.executed_modules()),
         "configuration_hash": data["configuration_hash"],
         "trainer": {

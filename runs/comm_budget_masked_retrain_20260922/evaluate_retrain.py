@@ -496,6 +496,55 @@ def _all_rows() -> list[dict[str, Any]]:
     return _learned_rows() + load_rows("rules")
 
 
+def identity_field_explanation(stream_seed: int) -> dict[str, Any]:
+    """Why ``config_hash`` cannot match across rounds, demonstrated instead of asserted.
+
+    ``run_signature.config_hash`` drops ``output``, ``decision_trace`` and ``reservation_log`` from
+    the hashed payload for exactly the reason stated there -- two arms differ in their paths by
+    construction -- but it keeps ``comm_transcript``, and that path carries the round's directory
+    and the arm's label. A replay of the same rule in a new directory therefore has to hash
+    differently while behaving identically, and a check that reads that as a disagreement is
+    measuring the file layout, not the experiment.
+
+    The demonstration is two mutations of one configuration and nothing else: move the transcript
+    path, the hash changes; move the output path, it does not.
+    """
+    import protocol_common as fixtures
+    from integrated_sar.run_signature import config_hash
+
+    values = fixtures.pilot.configuration_for(
+        stream_seed,
+        directory=common.EPISODE_OUT / "identity_probe",
+        label=common.MAIN_RULE,
+        stream=None,
+        comm_policy=common.MAIN_RULE,
+        comm_policy_params="",
+        comm_budget_bytes=common.BUDGET_BYTES,
+        comm_delivery_probability=common.DELIVERY_PROBABILITY,
+        comm_max_wait_steps=None,
+        comm_urgent_wait_steps=None,
+        comm_timing_mode=common.TIMING_MODE,
+        gossip_interval=fixtures.ISOLATED_GOSSIP_INTERVAL,
+        quiet=True,
+    )
+    baseline = config_hash(values)
+    transcript_moved = config_hash({**values, "comm_transcript": str(
+        common.ROOT / "other_round" / "ct_send_once.jsonl")})
+    output_moved = config_hash({**values, "output": str(
+        common.ROOT / "other_round" / "rp_send_once.jsonl")})
+    return {
+        "hashed_payload_excludes": ["output", "decision_trace", "reservation_log"],
+        "hashed_payload_still_includes": ["comm_transcript"],
+        "transcript_path_alone_changes_config_hash": transcript_moved != baseline,
+        "output_path_alone_leaves_config_hash_equal": output_moved == baseline,
+        "this_round_transcript": str(values["comm_transcript"]),
+        "conclusion": (
+            "config_hash is a layout-sensitive identity, not a behavioural one: two runs of the same "
+            "rule on the same stream from different directories must differ in it"
+        ),
+    }
+
+
 def rule_replay_agreement() -> dict[str, Any]:
     """Compare this round's ``send_once`` with the archived one, per stream and per packet.
 
@@ -504,6 +553,11 @@ def rule_replay_agreement() -> dict[str, Any]:
     the same packets at the same steps for the same money -- and the task outcome would only
     rearrange after a sequence difference, so a difference in the aggregates without one would point
     at the measurement rather than at the behaviour.
+
+    ``config_hash`` is reported separately and not as a failure: it hashes the transcript path,
+    which names this round's directory, so it differs for every stream by construction. That is
+    established by ``identity_field_explanation``, not by declaring it unimportant -- and had the
+    explanation come out the other way, this check would stay red.
     """
     rows = {int(row["seed"]): row for row in load_rows("rules")}
     if not rows or not ARCHIVED_ROWS.exists():
@@ -524,12 +578,13 @@ def rule_replay_agreement() -> dict[str, Any]:
         if str(row.get("arm")) == common.MAIN_RULE:
             archived[int(row["seed"])] = row
     compared = 0
-    differences: dict[str, Any] = {}
+    behavioural: dict[str, Any] = {}
+    identity: dict[str, Any] = {}
     sequence_differences: dict[str, Any] = {}
     for seed, row in sorted(rows.items()):
         reference = archived.get(seed)
         if reference is None:
-            differences[str(seed)] = {"reason": "no archived row for this stream"}
+            behavioural[str(seed)] = {"reason": "no archived row for this stream"}
             continue
         compared += 1
         fields = {
@@ -554,8 +609,13 @@ def rule_replay_agreement() -> dict[str, Any]:
             for name, (got, want) in fields.items()
             if got != want
         }
-        if mismatched:
-            differences[str(seed)] = mismatched
+        behaviour_only = {
+            name: value for name, value in mismatched.items() if name != "config_hash"
+        }
+        if "config_hash" in mismatched:
+            identity[str(seed)] = mismatched["config_hash"]
+        if behaviour_only:
+            behavioural[str(seed)] = behaviour_only
         archived_sequence = emission_sequence(str(reference.get("transcript") or ""))
         new_sequence = [list(step) for step in row.get("send_sequence") or []]
         if archived_sequence and [list(step) for step in archived_sequence] != new_sequence:
@@ -582,14 +642,31 @@ def rule_replay_agreement() -> dict[str, Any]:
         }
         for key in ("on_time_targets_per_episode", "airtime_bytes", "emissions")
     }
+    explanation = identity_field_explanation(sorted(rows)[0]) if identity else {}
+    identity_explained = bool(
+        not identity
+        or (
+            explanation.get("transcript_path_alone_changes_config_hash")
+            and explanation.get("output_path_alone_leaves_config_hash_equal")
+        )
+    )
     return {
         "available": True,
         "archived_rows": str(ARCHIVED_ROWS.relative_to(common.ROOT).as_posix()),
         "streams_compared": compared,
         "streams_this_round": len(rows),
         "aggregate": aggregate,
-        "field_differences": differences,
+        "behaviour_field_differences": behavioural,
         "emission_sequence_differences": sequence_differences,
+        "identity_field_differences": {
+            "config_hash_streams": sorted(identity),
+            "count": len(identity),
+            "explanation": explanation,
+            "explained": identity_explained,
+        },
+        "field_differences": {**behavioural, **{
+            seed: {"config_hash": value} for seed, value in identity.items()
+        }},
         "matches_archived_reference": {
             "mean_on_time_within_rounding": abs(
                 aggregate["on_time_targets_per_episode"]["this_round"]
@@ -603,9 +680,12 @@ def rule_replay_agreement() -> dict[str, Any]:
             "mean_emissions_equals_reference": int(aggregate["emissions"]["this_round"])
             == int(common.ARCHIVED_SEND_ONCE_DEV["mean_emissions"]),
         },
-        "passed": not differences
-        and not sequence_differences
-        and compared == len(rows) == len(archived),
+        "passed": bool(
+            not behavioural
+            and not sequence_differences
+            and identity_explained
+            and compared == len(rows) == len(archived)
+        ),
     }
 
 

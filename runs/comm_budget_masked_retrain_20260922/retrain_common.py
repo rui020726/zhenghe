@@ -421,6 +421,42 @@ def freeze_sha() -> str:
     return str(payload["sha"])
 
 
+def freeze_timeline() -> list[dict[str, Any]]:
+    """Every freeze this round has registered, in commit order, read back out of Git.
+
+    The round moved its freeze three times -- the harness head, then a fix to the suite reader, then
+    a fix to the reporting code -- and an arm that trained under one and a judgement computed under
+    another is only meaningful if the sequence is written down. Reconstructing it from the committed
+    ``CODE_FREEZE.json`` versions means the timeline is checked by the same object database as the
+    code, not by a note in the report.
+    """
+    relative = FREEZE_FILE.relative_to(ROOT).as_posix()
+    commits = [
+        line for line in git_out("log", "--reverse", "--format=%H", "--", relative).splitlines()
+        if line.strip()
+    ]
+    timeline: list[dict[str, Any]] = []
+    for commit in commits:
+        text = git_out("show", f"{commit}:{relative}")
+        if not text.strip():
+            continue
+        try:
+            payload = json.loads(text)
+        except json.JSONDecodeError:
+            continue
+        timeline.append(
+            {
+                "registered_in": commit[:9],
+                "code_sha": payload.get("sha"),
+                "committed_at": git_out("log", "-1", "--format=%ad", "--date=iso", commit),
+                "subject": git_out("log", "-1", "--format=%s", commit),
+                "modules": payload.get("module_count"),
+                "configuration_hash": payload.get("configuration_hash"),
+            }
+        )
+    return timeline
+
+
 def freeze_cleanliness(paths: list[str] | None = None) -> dict[str, Any]:
     """The rule that gates every launch: what runs must be what was frozen.
 
