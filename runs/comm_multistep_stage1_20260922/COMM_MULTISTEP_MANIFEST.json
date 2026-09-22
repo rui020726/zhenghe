@@ -1,0 +1,75 @@
+{
+  "schema": "comm-multistep-stage1-manifest/1",
+  "date": "2026-09-22",
+  "branch": "analysis/comm-multistep-stage1",
+  "base": "docs/communication-multistep-start-plan@3cca880ba2dacd31f6b8a1d95bde55f808d8f3bb",
+  "baseline_rule": "event_retry_until_acked_5",
+  "policy_params": {
+    "max_attempts": 5,
+    "progress_threshold": 0.2,
+    "urgency_time": 25.0
+  },
+  "channel": {
+    "information": "isolated",
+    "delivery_probability": 0.7,
+    "ack": true,
+    "ack_delay_ticks": 0,
+    "ack_delivery_probability": 0.7
+  },
+  "budget_bytes": 29300,
+  "timing_mode": "policy_owned_timing",
+  "production_defaults_changed": false,
+  "training_runs": 0,
+  "new_streams": 0,
+  "sealed_blocks_touched": false,
+  "sealed_blocks": ["800000..800399 unread", "900000..900199 not used for selection"],
+  "source_candidates": {
+    "path": "runs/comm_ack_value_20260920/COMM_ACK_VALUE_COUNTERFACTUAL_25pct.json",
+    "streams": 48,
+    "eligible_points": 12097,
+    "selection_uses_outcome_fields": false
+  },
+  "selection": {
+    "stream_sample_seed": 20260921,
+    "stream_sample_drawn": 16,
+    "stream_sample_used": 8,
+    "point_selection_seed": 2026092101,
+    "points_selected": 8,
+    "points_validated": 8
+  },
+  "scale": {
+    "horizons": [1, 20],
+    "branches": ["S", "H"],
+    "max_simulation_starts": 40,
+    "simulation_starts_used": 40,
+    "free_baselines": 8,
+    "intervention_branches_measured": 28,
+    "intervention_branches_missing": 4,
+    "failed_attempt1_retained": 4,
+    "points_complete": 7,
+    "points_shortfall": 1,
+    "shortfall_reason": "launch cap after retaining 4 failed first-attempt branches"
+  },
+  "interface_check": {
+    "passed_after_fix": true,
+    "first_fix": "lock intervened view only at t-star",
+    "synthetic_tests": "12 passed (runs/comm_multistep_stage1_20260922/test_window_mechanism.py)"
+  },
+  "commits": {
+    "protocol_and_points_initial": "d893fe1",
+    "points_validated": "38c99cb",
+    "lock_timing_fix": "39ca7be",
+    "results_and_diagnostic_text": "fb07c79"
+  },
+  "dirty_modules_at_run": [],
+  "production_code_diff": "none (window intervention wraps CommRelay from outside; integrated_sar/piloc/task_allocation untouched)",
+  "artefacts_not_in_git": [
+    "episodes/",
+    "points/*/free.json pre-action digests retained in points/ as JSON (episode JSONL not in git)",
+    "failed_attempt1/ quarantined products"
+  ],
+  "tests_this_round": [
+    "runs/comm_multistep_stage1_20260922/test_window_mechanism.py (12 passed)"
+  ],
+  "python_used_for_episodes": "D:/env/python.exe (torch 2.9.1+cpu)"
+}
