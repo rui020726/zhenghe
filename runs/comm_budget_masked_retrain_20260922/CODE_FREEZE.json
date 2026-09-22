@@ -1,6 +1,6 @@
 {
  "branch": "exp/comm-budget-masked-retrain",
- "committed_at": "2026-09-22 20:20:48 +0800",
+ "committed_at": "2026-09-22 20:28:18 +0800",
  "configuration_hash": "b5d1b46afa3b2604",
  "derivation": "sys.modules after importing train_retrain and the archived sampler/trainer entries, unioned with this directory's own scripts",
  "document": "CODE_FREEZE",
@@ -245,11 +245,11 @@
    "working_blob": "ffe0ec3571bc2829"
   },
   "runs/comm_budget_masked_retrain_20260922/report_retrain.py": {
-   "head_blob": "a36d989c6556e56a",
+   "head_blob": "977bb737eadc7c24",
    "in_head": true,
    "matches_head": true,
    "on_disk": true,
-   "working_blob": "a36d989c6556e56a"
+   "working_blob": "977bb737eadc7c24"
   },
   "runs/comm_budget_masked_retrain_20260922/retrain_common.py": {
    "head_blob": "a1fe8554bcb4cc44",
@@ -385,12 +385,12 @@
   "runtime_modules_changed": []
  },
  "registered": true,
- "registered_at": "1790079648",
+ "registered_at": "1790080098",
  "rule": "every launch re-derives the graph and requires: no committed or working-tree difference against this SHA for any member, no untracked member, and no module in the graph that this freeze did not record",
  "schema": "retrain_common/1",
- "sha": "abc0294fe628aefdca6aa52bda9469e618e9e083",
- "short": "abc0294fe",
- "subject": "fix(comm): split the replay check into behaviour, sequence and layout identity",
+ "sha": "ad3db56df8fd84e0c3f872bb0439bf77e5f1b63c",
+ "short": "ad3db56df",
+ "subject": "fix(comm): state the round in its own language, and let the numbers carry the mechanism",
  "trainer_identity": {
   "ack": false,
   "action_mask_schema": "budget-sequential-mask/1",
