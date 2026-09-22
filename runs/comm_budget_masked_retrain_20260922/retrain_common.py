@@ -392,9 +392,18 @@ def untracked_code(paths: list[str]) -> list[str]:
 
 
 def freeze() -> dict[str, Any]:
+    """The registered freeze, or an unregistered stub.
+
+    ``registered`` is derived from the presence of a SHA rather than trusted from the file: a
+    freeze that names a commit *is* registered whatever its own flag says, and a flag without a
+    SHA is nothing to check against. Reading the two independently is how a first registration
+    that recorded a SHA but omitted the flag reported itself as unregistered.
+    """
     if not FREEZE_FILE.exists():
         return {"registered": False, "sha": None}
-    return json.loads(FREEZE_FILE.read_text(encoding="utf-8"))
+    payload = json.loads(FREEZE_FILE.read_text(encoding="utf-8"))
+    payload["registered"] = bool(payload.get("sha"))
+    return payload
 
 
 def freeze_sha() -> str:

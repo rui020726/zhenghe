@@ -42,6 +42,7 @@ def register(argv: list[str]) -> int:
     payload: dict[str, Any] = {
         "document": "CODE_FREEZE",
         "schema": common.__name__ + "/1",
+        "registered": True,
         "branch": branch,
         "sha": sha,
         "short": sha[:9],
@@ -69,13 +70,23 @@ def register(argv: list[str]) -> int:
     if missing:
         raise SystemExit(f"refusing to freeze: graph members missing from HEAD: {missing}")
     common.write_json(common.FREEZE_FILE, payload)
+    # Re-read rather than re-print what was just built: a freeze that cannot be recognised by the
+    # same function every launch uses is not registered, whatever this process has in memory.
+    reread = common.freeze()
+    verified = common.freeze_cleanliness(paths)
+    if not reread.get("registered") or not verified["clean"]:
+        raise SystemExit(
+            f"registration did not take: registered={reread.get('registered')} "
+            f"cleanliness={verified}"
+        )
     print(
         json.dumps(
             {
                 "sha": payload["sha"],
                 "modules": payload["module_count"],
+                "registered_on_reread": reread["registered"],
                 "production_empty": payload["production_diff_since_fix_head"]["empty"],
-                "clean_after_registration": common.freeze_cleanliness()["clean"],
+                "clean_after_registration": verified["clean"],
             },
             ensure_ascii=False,
         )
