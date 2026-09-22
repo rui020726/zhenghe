@@ -1,5 +1,16 @@
 # 项目状态
 
+## 2026-09-22：target-scoped 边界可行性门禁已规划，尚未运行
+
+当前入口 [COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md](COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md)，
+总纲 v2.6，起点 `analysis/comm-send-actionability-audit@c6698f9`。
+
+下一轮只验证 target 级合并窗口能否在硬预算下完成“起点 EARLY 真实发送 + 窗口末两臂同步最新合法视图”。
+固定前四条审计流、H={1,5,20}，最多 24 条边界分支 / 28 次总启动；只跑到边界，不跑 episode 结局。
+不训练、不生成新流、不改预算/协议/默认值。边界字节不预留、不免费；H=20 不可执行时停止并报告。
+
+该实验是新估计对象，不覆盖 Stage1。通过只表示接口/预算可执行，不表示发送时机有任务收益或模型能胜规则。
+
 ## 2026-09-22：SEND/HOLD 动作可行性审计已交付（A/B 过、C 不过）
 
 执行入口 [COMM_SEND_ACTIONABILITY_AUDIT_NEXT_ROUND.md](COMM_SEND_ACTIONABILITY_AUDIT_NEXT_ROUND.md) **已执行**（指令已标历史）。

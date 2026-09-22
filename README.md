@@ -1,9 +1,8 @@
 # Zhenghe：搜索—协调—分配一体化搜救系统
 
-当前研究状态：[动作可行性审计（历史，已交付）](COMM_SEND_ACTIONABILITY_AUDIT_NEXT_ROUND.md)
-与 [项目总纲 v2.5](PROJECT_CHARTER.md)。审计 A/B 过、C 不过：双动作可行点存在，但 view-scoped
-窗口几乎立刻被新 revision 截断。主阻塞是预算。未训练、未改生产默认值。下一步 target-scoped
-新估计对象待使用者下令。
+当前研究入口：[target-scoped 边界可行性门禁](COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md)
+与 [项目总纲 v2.6](PROJECT_CHARTER.md)。动作审计 A/B 过、C 不过；下一轮只跑到 H={1,5,20}
+窗口边界，检查最新视图的真实同步能否在硬预算下执行。尚未运行，不训练、不改生产默认值。
 
 本仓库整合两个已有研究模块：
 

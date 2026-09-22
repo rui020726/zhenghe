@@ -1,6 +1,6 @@
 # 项目总纲：面向协同搜救的学习型任务信息传递控制
 
-版本：v2.5
+版本：v2.6
 
 更新日期：2026-09-22
 用途：跨聊天、跨 Agent 的研究方向与实验约定。  
@@ -13,7 +13,21 @@
 
 ## 1. 本文如何使用
 
-### v2.5 当前状态：动作可行性审计已交付（A/B 过、C 不过），停止等待下一步
+### v2.6 当前计划：target-scoped 边界可行性门禁（尚未运行）
+
+当前入口 `COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md`，基于
+`analysis/comm-send-actionability-audit@c6698f9`。动作审计说明 post-first 双动作点存在，但 view-scoped
+窗口会被逐步新 revision 立即截断，因此立项新的 target-scoped 合并窗口。
+
+新估计对象比较：EARLY 在起点真实发送一次、两臂都压住该 target 的后续所有 revision，并在窗口边界尝试
+真实发送各自最新 sender-visible view；DEFER 起点不发。两臂不预留、不赠送边界字节，所有发送走原预算/
+计费/终态规则。本轮只运行到 H={1,5,20} 的边界，最多 4 点、24 分支、28 次总启动，不跑最终任务结局。
+
+目标是确认窗口末同步在当前全局硬预算下能否执行。只有某个 H 至少 3/4 pair 的边界可解析，才可建议以后
+跑完整 episode；即便通过也不证明学习收益。H=20 失败不能偷偷提高预算或免费 flush，credit reservation
+必须另立协议。仍无训练授权，生产默认值不变，封存数据不打开。
+
+### v2.5 历史状态：动作可行性审计已交付（A/B 过、C 不过）
 
 `COMM_SEND_ACTIONABILITY_AUDIT_NEXT_ROUND.md` **已执行**（指令标历史）。分支
 `analysis/comm-send-actionability-audit`，产物 `runs/comm_send_actionability_20260922/`。
@@ -736,6 +750,23 @@ CI [+0.685, +0.995]），在正常信息路径上完成数差 0.000 而 total by
 ### 当前可直接粘贴到新聊天的说明
 
 ```text
+先读 PROJECT_CHARTER.md v2.6 与 COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md，
+核对起点 analysis/comm-send-actionability-audit@c6698f9。
+
+动作审计已交付：8 条流有 71 个 post-first 双动作可行点，但 view-scoped H=20 在 0/8 流有效，
+因为新 revision 几乎每步替换旧视图。当前立项新的 target-scoped 估计对象。
+
+本轮只做边界可行性：固定前四条审计流，每流最早合法 update，H={1,5,20}；
+EARLY 起点真实发送一次，两臂都拦该 target 后续所有 revision，窗口末真实发送各自最新合法视图。
+不预留、不赠送字节；最多 24 条边界分支、28 次总启动，只跑到边界，不跑 episode 结局。
+
+只有某个 H 至少 3/4 pair 可解析，才可建议以后跑完整结局；本轮不自动继续。
+不训练、不生成新流、不改预算/协议/信道/deadline/生产默认值，不打开封存数据。
+```
+
+### v2.4 历史交接说明（已被上方说明取代）
+
+```text
 先读 PROJECT_CHARTER.md v2.4 §1 与 runs/comm_multistep_stage1_20260922/ 的
 COMM_MULTISTEP_VERDICT.md、COMM_MULTISTEP_RESULTS.md、COMM_MULTISTEP_MANIFEST.json，
 并核对实际分支 analysis/comm-multistep-stage1。
@@ -834,6 +865,7 @@ learnability calibration；本轮不是"继续改场景直到模型获胜"的授
 
 | 日期 | 版本 | 变更 |
 |---|---|---|
+| 2026-09-22 | v2.6 | 基于 c6698f9 立项 target-scoped 边界可行性门禁：EARLY+FLUSH vs DEFER+FLUSH，固定 4 条审计流、H={1,5,20}、最多 24 前缀分支/28 次启动；窗口末最新视图走真实预算与终态规则，不预留/不赠送字节；只跑到边界，以每个 H ≥3/4 pair 可解析作为后续完整实验的资源门禁，尚未执行、无训练授权 |
 | 2026-09-22 | v2.5 | 动作可行性审计交付（`analysis/comm-send-actionability-audit`）：8 free 重放、共享 SEND 谓词、八类闭合；23 612 候选，both_actions_free 101/8 流，主阻塞预算；**A/B 过、C 不过**（view-scoped 窗口被 revision 截断）⇒ 建议讨论 target-scoped 新估计对象，本轮不执行 |
 | 2026-09-22 | v2.4 | Stage1 **归档**：状态文档同步（PROJECT_STATUS 顶条目按 40/40、8 free、28 成功分支、4 失败保留、7/8 点、S 全拒 insufficient_credit、无有效 S−H、H=20 截断、任务相同≠时机无影响、未训练/未改默认值）；`COMM_MULTISTEP_STAGE1_NEXT_ROUND.md` 标为历史；总纲升到 v2.4；交接说明更新。**不改既有实验提交** |
 | 2026-09-22 | v2.3 | 多步诊断第一阶段**有限交付**（`analysis/comm-multistep-stage1`）：修订协议（`event_retry_until_acked_5`、通信合法性、free 基线前缀、可执行登记顺序）；8 点 free + 28 干预分支 = 40/40 启动；接口修复后通过；S 强发全被预算拒绝、窗口多被 revision 截断 ⇒ 无有效 S−H 对照，结论不确定；附带训练诊断文案更正；不训练、不改默认值、不扩 96 分支 |
