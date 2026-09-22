@@ -1,0 +1,63 @@
+{
+  "schema": "comm-multistep-stage1-frozen/1",
+  "date": "2026-09-22",
+  "baseline_rule": "event_retry_until_acked_5",
+  "source": {
+    "counterfactual": "runs/comm_ack_value_20260920/COMM_ACK_VALUE_COUNTERFACTUAL_25pct.json",
+    "arm_table": "runs/comm_ack_value_20260920/ack_common.py:ack_arm_specs",
+    "policy_impl": "integrated_sar/comm_policy.py:EventRetryUntilAckedPolicy",
+    "note": "Name suffix 5 means max_attempts=5. Event trigger uses EventPolicy defaults progress_threshold=0.2 and urgency_time=25.0 because the archived arm params string is exactly max_attempts=5."
+  },
+  "policy": {
+    "name": "event_retry_until_acked",
+    "params": {
+      "max_attempts": 5,
+      "progress_threshold": 0.2,
+      "urgency_time": 25.0
+    },
+    "mode": "policy_owned_timing",
+    "orders_selection": true
+  },
+  "channel": {
+    "information": "isolated",
+    "delivery_probability": 0.7,
+    "delay_ticks": 0,
+    "ack": true,
+    "ack_delay_ticks": 0,
+    "ack_delivery_probability": 0.7,
+    "ack_rng_scheme": "counter-based (episode seed, direction, subscriber, target, ordinal) + tick"
+  },
+  "budget": {
+    "tier": "25pct",
+    "bytes": 29300,
+    "note": "Task uplink credit only. ACK reverse bytes are billed on AckLedger and counted in total bytes = uplink + ACK."
+  },
+  "timing": {
+    "comm_timing_mode": "policy_owned_timing",
+    "max_wait_steps": null,
+    "urgent_wait_steps": null
+  },
+  "scope": {
+    "streams": "48 training streams only (700000..700047), from archived probe_points",
+    "stream_sample_seed": 20260921,
+    "stream_sample_size_drawn": 16,
+    "stream_sample_size_used": 8,
+    "point_selection_seed": 2026092101,
+    "horizons": [1, 20],
+    "branches_per_horizon": ["S", "H"],
+    "max_points": 8,
+    "max_free_baselines": 8,
+    "max_intervention_branches": 32,
+    "max_simulation_starts": 40,
+    "sealed_blocks": {
+      "800000..800399": "not read, not generated",
+      "900000..900199": "not used for point selection"
+    }
+  },
+  "eligibility": {
+    "confirmed_fraction_open_interval": "(0, 1)",
+    "changed_view": true,
+    "source_fields_only": ["step", "target", "confirmed_fraction", "unacked", "age_steps", "changed_view", "rule_sent"],
+    "forbidden_fields": ["send", "hold", "free", "on_time", "total_bytes", "status outcomes used as labels"]
+  }
+}
