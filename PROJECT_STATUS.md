@@ -1,6 +1,43 @@
 # 项目状态
 
-## 2026-09-22：任务压力 learnability calibration 已规划，尚未执行（0训练）
+## 2026-09-22（报告完成于 09-23）：任务压力 calibration 已执行三层，没有任何层通过 L0–L4（0 训练，第四层未跑）
+
+执行入口 [COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md](COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md) **已执行完毕**；
+产物 [runs/comm_task_pressure_learnability_20260922/](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.md)，
+分支 `analysis/comm-task-pressure-learnability`（起点 `docs/communication-learnability-calibration@ddee56db`，
+其父为已核对的 `exp/comm-budget-masked-retrain@7e0a423`），总纲 v3.4。
+
+**0 训练、0 `optimizer.step`、0 checkpoint、0 模型加载。** 唯一自变量 `num_goals`；29 300 B、`policy_owned_timing`、
+isolated-lossless、ACK 关闭、checkpoint/任务/奖励/消息/规则参数、19 维观测与生产默认值全部冻结。
+四源 seed 冲突审计 clean（唯一命中是执行指令自己的预登记），48 条全新流（`1000000..1000015`、
+`1000100..1000115`、`1000200..1000215`），九臂规则库在第一条新流之前冻结，432 个矩阵格全部完整。
+
+| 压力层 | L0 | L1 | L2 | L3 | L4 | 下一步（协议规定） |
+|---:|---|---|---|---|---|---|
+| 6 目标 | 过 | 过（0.96875） | **不过**（最佳 `periodic_20` 完成比 0.9271 > 0.90） | **不过**（0/16 流争用） | **不过**（envelope +0.3125，CI [0, 0.875]） | 进入下一层 |
+| 8 目标 | 过 | 过（0.96094） | **不过**（`send_once` 0.9375 > 0.90） | **不过**（0/16） | **不过**（+0.000；均值 Pareto 只剩 1 点） | 进入下一层 |
+| 10 目标 | 过 | 过（0.97500） | **过**（0.900 在带内；+8.750 CI [+7.8125, +9.500]） | **不过**（0/16） | **不过**（+0.250，CI [0, 0.6875]） | 需要第 12 目标层，但额度不足 |
+
+- **机制**：每包 2 190–2 952 B、极差只占额度的 2.3 %–2.6 %，中位包价占 9 %，额度总共只够约 11 个包 ⇒
+  额度生效的形式是**同一时刻全部付不起**（每层 82–96 个臂×流出现"看得见却没额度"），而不是"只付得起严格子集"。
+  这是 L3 在三层都停着的直接原因，也是**没有跑到 12 目标前不能改判据**的原因。
+- **不作为结论的三件事**：不得写"学习无效/规则全局最优/不存在更优策略"（只测了一条轴，且没跑到 12）；
+  L2 在 10 目标过带不等于收益空间已打开；本轮**未计算 λ、未改 reward**（用未通过门槛的层定成本系数正是禁止的暗加惩罚）。
+- **上限诚实性**：数据启动 496/640、核验启动 10/12、账本技术失败 20 次全部计入。第 12 目标层需要 160 次而只剩
+  144 次可用——差额正是本轮自己两处缺陷（探针把无限额度转整数、录制登记展开 `GridPosition`）吃掉的 16+4 次。
+  继续须由使用者明确追加授权；本轮不自动越线，也不删臂/不换 seed。
+- **可核对的身份**：5 次 code-freeze 的 **episode 代码身份全是 `c922ca100665609c`**（37 个生产模块 blob +
+  `run_episode` 源码哈希），所以修探针/修登记没换过世界；`ROW_PROVENANCE_g*.json` 与协议 §11 写明这一点。
+- **反向发现**：第五轮 `ct_first_send_plus_bound_3_10_s700048.jsonl` 与它自己的行不自洽（28 632 vs 28 704 B，
+  且 28 632 恰等于同目录 normal 诊断趟）⇒ 不同并行维度共用 scratch 目录被覆写；本轮按层/设置分目录，
+  该臂归档转录不作为证据引用。
+- 卫生：封存块 `800000..800399` 盘上 artefact **0**；生产默认值未改；本轮合成测试 50 项 + `integrated_sar` 套件
+  + `python -m integrated_sar` 全绿；stream、逐 episode 日志、checkpoint 一律不入库。
+
+**下一件事由使用者决定**：(a) 追加授权跑完 12 目标层；(b) 接受"仅提高目标数未建立逐 step 额度选择"的负结果并按 §9 停止；
+(c) 换轴（非平稳信道 / 多订阅者与真实拓扑 / 把成本显式写进目标，最后一项要先解决 reward 结构）。
+
+## 2026-09-22（历史，计划已由上一节执行）：任务压力 learnability calibration 当时的规划口径
 
 当前入口 [COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md](COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md)，
 总纲 v3.3，起点 `exp/comm-budget-masked-retrain@7e0a423`。
