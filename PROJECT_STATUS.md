@@ -2,25 +2,32 @@
 
 ## 2026-09-22：多步诊断第一阶段已有限交付（未训练、未改默认值）
 
-执行入口 [COMM_MULTISTEP_STAGE1_NEXT_ROUND.md](COMM_MULTISTEP_STAGE1_NEXT_ROUND.md) **已执行**。
+执行入口 [COMM_MULTISTEP_STAGE1_NEXT_ROUND.md](COMM_MULTISTEP_STAGE1_NEXT_ROUND.md) **已执行**（该指令已标为历史）。
 分支 `analysis/comm-multistep-stage1`（起点 `docs/communication-multistep-start-plan@3cca880`），
-产物 `runs/comm_multistep_stage1_20260922/`。**训练 0、新流 0、生产默认值未改**；`800000..800399`
-未读；`900000..900199` 未用于选点。
+交付头 `e42057d`，产物 `runs/comm_multistep_stage1_20260922/`。
 
-**协议修订先于数据**：前缀/后续 = 归档 `event_retry_until_acked_5`（`max_attempts=5`）；只查通信
-合法性；free 基线核对动作前状态；选流 20260921 / 选点 2026092101，先冻结 `POINTS_INITIAL` 再跑。
+**边界（强制）**：未训练、未生成新流、未改生产默认值；`800000..800399` 未读；`900000..900199` 未用于选点。
 
-**规模与接口**：8 free + 28 分支 = **40/40 启动**（含 4 次失败 attempt1 保留）；7/8 点四分支齐全。
-首轮因过早锁定旧 revision 失败，修复后首点过门禁再继续。本轮实测：**12 项合成机制测试通过**。
+**规模（含失败计入启动上限）**：
 
-**结果（逐点）**：S 强发全部 `refused_insufficient_credit`（预算）⇒ **无有效 S−H 对照**；H=20 有
-限拦截；同视图补发多为 never，替代来自新 revision；窗口常被 revision 截断；已跑点 on_time 与 free
-相同，**不**作“时机无跨步影响”解释。详见 `COMM_MULTISTEP_VERDICT.md`。
+- 总仿真启动 **40 / 40**
+- **8** 条 free 基线
+- **28** 条成功干预分支
+- **4** 条失败分支保留（`points/*/H*/failed_attempt1/`，视图锁定缺陷，修复后重跑并仍计上限）
+- **7 / 8** 点四分支完整（s700033 因启动上限缺额，不补抽、不换 seed）
 
-**附带文案更正**见 `DIAGNOSTIC_TEXT_FIXES.md`（计数口径、强制步字段 vs 点级归属、96.5% 措辞、
-优于初值≠排除欠训练）。
+**结果（逐点描述，不作方法主张）**：
 
-**下一项最小验证（未执行）**：在预算有余量的更早点确保 S 成功强发，或先做强制发射可行性门禁。
+- 所有 **S 强发**均因 **`insufficient_credit`（预算拒绝）** 未成功 ⇒ **没有形成有效 S−H 对照**
+- **H=20** 同视图窗口被 **新 revision 大量截断**，有效检验时间很短
+- 已跑点上 S/H/free 的任务结果（on_time）相同 ⇒ **不能解释为发送时机无跨步影响**
+- 同视图补发多为 never；替代发射来自新 revision
+
+协议修订、接口门禁、12 项合成机制测试与文案更正见
+`runs/comm_multistep_stage1_20260922/COMM_MULTISTEP_VERDICT.md`、`COMM_MULTISTEP_PROTOCOL.md`、
+`DIAGNOSTIC_TEXT_FIXES.md`。
+
+**下一项最小验证（未执行、未授权）**：在预算有余量的更早决策点确保 S 成功强发一次，或先做“强制发射可行性”门禁。
 
 ## 2026-09-21：证据复核与训练诊断已交付（第八轮，未跑任何 episode）
 
