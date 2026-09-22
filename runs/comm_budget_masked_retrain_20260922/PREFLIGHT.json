@@ -1,0 +1,414 @@
+{
+ "all_mask_gates_passed": true,
+ "branch": "exp/comm-budget-masked-retrain",
+ "code_freeze_sha": "e2bc99308ef4d26e3b394e1dc327c2bc714ee0c7",
+ "configuration_hash": "b5d1b46afa3b2604",
+ "deterministic_resume": {
+  "differences": {},
+  "episodes_used": 8,
+  "next_batch_seeds_continuous": [
+   700008,
+   700009,
+   700010,
+   700011
+  ],
+  "next_batch_seeds_resumed": [
+   700008,
+   700009,
+   700010,
+   700011
+  ],
+  "optimizer_identical": true,
+  "optimizer_steps_total": 192,
+  "passed": true,
+  "weights_identical": true
+ },
+ "document": "PREFLIGHT",
+ "greedy_evaluation_path": {
+  "passed": true,
+  "ran": true,
+  "row": {
+   "actionable_candidates": 11,
+   "airtime_bytes": 28230,
+   "arm": "masked_s1_at0",
+   "at_steps": 0,
+   "belief_age_steps": 458.811,
+   "budget_bytes": 29300,
+   "budget_refusals": 0,
+   "candidates": 2449,
+   "capacity_refusals": 0,
+   "config_hash": "b278a4e3c7ef5584",
+   "credit_used_fraction": 0.96348,
+   "decisions": 1000,
+   "deliveries_applied": 66,
+   "detected_targets_this_episode": 6,
+   "emissions": 11,
+   "emissions_by_policy": 11,
+   "emissions_forced": 0,
+   "expired_targets_per_episode": 3,
+   "forced_sends_by_collector": 0,
+   "generated_items": 99,
+   "greedy": true,
+   "greedy_send": 11,
+   "greedy_send_rate": 1.0,
+   "kind": "learned",
+   "masked_by_capacity": 0,
+   "masked_by_credit": 2438,
+   "max_backlog_age": 996,
+   "max_log_prob_gap": 0.0,
+   "message_first": 4,
+   "message_retry_same_view": 4,
+   "message_update": 3,
+   "on_time_targets_per_episode": 3,
+   "redundant_emissions": 4,
+   "requested": 11,
+   "seconds": 3.44,
+   "seed": 700000,
+   "steps_run": 1000,
+   "tape_invariants_passed": true,
+   "tape_violation_count": 0,
+   "timing_mode": "policy_owned_timing",
+   "training_seed": 1,
+   "transcript": "D:\\code\\整合\\zhenghe\\runs\\comm_budget_masked_retrain_20260922\\episodes\\greedy_probe\\ct_masked_s1_at0_s700000.jsonl",
+   "weight_fingerprint": "7d7f7152f3104470"
+  },
+  "seconds": 3.56,
+  "stream_role": "training stream: the development block is not spent on a plumbing check"
+ },
+ "head": "b4f4a5e8d2c2a0fc35b9ce389f2e57b7756821ac",
+ "initial_weights": {
+  "all_distinct": true,
+  "distinct": 3,
+  "fingerprints": {
+   "1": "7d7f7152f3104470",
+   "2": "e7338f6040e6a0f3",
+   "3": "69ad8aafa51544d1"
+  },
+  "loaded_from_checkpoint": [
+   null,
+   null,
+   null
+  ],
+  "passed": true
+ },
+ "launches": {
+  "by_kind": {
+   "greedy_probe": 3,
+   "probe": 24,
+   "resume_check": 16
+  },
+  "cap": 1500,
+  "failures": 0,
+  "starts": 43,
+  "within_cap": true
+ },
+ "mask_gates": {
+  "M0_production_and_history_isolation": {
+   "evidence": {
+    "defaults": {
+     "comm_ack": false,
+     "comm_budget_bytes": null,
+     "comm_delivery_probability": 1.0,
+     "comm_policy": "immediate",
+     "comm_timing_mode": "legacy_shared_bound"
+    },
+    "feature_layout": "19-dim comm-send-state/1",
+    "full_suite": {
+     "directory": "integrated_sar/tests",
+     "failures_or_errors": false,
+     "passed": true,
+     "pattern": "test_*.py",
+     "ran": 690,
+     "returncode": 0,
+     "skipped": 2,
+     "tail": "actor_type:discrete"
+    },
+    "integration_smoke": {
+     "directory": ".",
+     "failures_or_errors": false,
+     "passed": true,
+     "pattern": "python -m integrated_sar",
+     "ran": 1,
+     "returncode": 0,
+     "skipped": 0,
+     "tail": "final_status=completed"
+    },
+    "mask_off_isolation": "budget_mask=False still delegates to the archived collector (mask-fix round's LegacyIsolationTests, re-run here)",
+    "runtime_modules_changed": [],
+    "shipped_code_changed_since_fix_head": [],
+    "source": "fresh: git diff against e692607, RunConfiguration, both suites"
+   },
+   "passed": true
+  },
+  "M1_action_execution_agreement": {
+   "evidence": {
+    "archived_smoke_closure": {
+     "all_policy_refusals_zero": true,
+     "all_requested_equal_executed": true,
+     "all_tape_invariants_pass": true,
+     "max_log_prob_gap": 0.0,
+     "optimizer_steps_total": 0
+    },
+    "mask_round_suite": {
+     "directory": "runs/comm_budget_action_mask_fix_20260922",
+     "failures_or_errors": false,
+     "passed": true,
+     "pattern": "test_*.py",
+     "ran": 17,
+     "returncode": 0,
+     "skipped": 0,
+     "tail": "OK"
+    },
+    "probe_closure": {
+     "distinct_initial_fingerprints": 3,
+     "episode_length_all_1000": true,
+     "forced_emissions_zero": true,
+     "max_log_prob_gap": 0.0,
+     "optimizer_steps_total": 0,
+     "policy_refusals_zero": true,
+     "requested_equals_executed": true,
+     "tape_invariants_passed": true
+    },
+    "probe_totals": {
+     "actionable_candidates": 244,
+     "candidates": 27200,
+     "executed_policy_emissions": 136,
+     "forced_emissions": 0,
+     "initial_executable_candidates": 257,
+     "masked_by_capacity": 0,
+     "masked_by_credit": 26956,
+     "policy_budget_refusals": 0,
+     "policy_capacity_refusals": 0,
+     "requested": 136
+    },
+    "source": "fresh: 12 probe episodes on this tree; archived 8-stream smoke quoted"
+   },
+   "passed": true
+  },
+  "M2_ppo_probability_agreement": {
+   "evidence": {
+    "archived_smoke_gap": 0.0,
+    "max_abs_log_prob_gap": 0.0,
+    "source": "fresh: logged vs recomputed over every probe tape",
+    "this_round_suite": {
+     "directory": "runs/comm_budget_masked_retrain_20260922",
+     "failures_or_errors": false,
+     "passed": true,
+     "pattern": "test_*.py",
+     "ran": 41,
+     "returncode": 0,
+     "skipped": 4,
+     "tail": "OK (skipped=4)"
+    },
+    "tolerance": 1e-06
+   },
+   "passed": true
+  },
+  "M3_probe_closure_zero_optimizer_steps": {
+   "evidence": {
+    "distinct_initial_fingerprints": 3,
+    "episodes": 12,
+    "optimizer_steps_total": 0,
+    "probe_cap": 12,
+    "sealed_block": {
+     "artefacts_found": [],
+     "block": "800000..800399",
+     "clean": true,
+     "count": 0
+    },
+    "source": "fresh: 12 probe episodes (4 per training seed), fixed initial weights",
+    "technical_failures": [],
+    "training_runs_started": 0
+   },
+   "passed": true
+  }
+ },
+ "passed": true,
+ "probe_and_resume_reused_from_disk": true,
+ "provenance": {
+  "cleanliness": {
+   "clean": true,
+   "committed_difference": [],
+   "modules_in_graph": 53,
+   "modules_not_in_frozen_graph": [],
+   "modules_whose_blob_moved": [],
+   "registered": true,
+   "sha": "e2bc99308ef4d26e3b394e1dc327c2bc714ee0c7",
+   "untracked_code": [],
+   "working_tree_difference": []
+  },
+  "correction_document_present": true,
+  "correction_records_phantom_absent": true,
+  "correction_started_no_episode": true,
+  "freeze_registered": true,
+  "freeze_sha": "e2bc99308ef4d26e3b394e1dc327c2bc714ee0c7",
+  "freeze_subject": "fix(comm): refuse to read an undecodable test child as a zero-test suite",
+  "graph_members": 53,
+  "passed": true,
+  "production_diff_since_fix_head": {
+   "empty": true,
+   "integrated_sar_changed": [],
+   "reference": "e692607212fcc67fc82d045a8a53d44c79bde4d7",
+   "runtime_modules_changed": []
+  }
+ },
+ "sealed_block": {
+  "artefacts_found": [],
+  "block": "800000..800399",
+  "clean": true,
+  "count": 0
+ },
+ "streams": {
+  "absent": [],
+  "development_block": [
+   700048,
+   700049,
+   700050,
+   700051,
+   700052,
+   700053,
+   700054,
+   700055,
+   700056,
+   700057,
+   700058,
+   700059,
+   700060,
+   700061,
+   700062,
+   700063,
+   700064,
+   700065,
+   700066,
+   700067,
+   700068,
+   700069,
+   700070,
+   700071
+  ],
+  "expected": 72,
+  "mismatches": {},
+  "passed": true,
+  "registry": "runs/comm_budget_pilot_20260919/COMM_ROUND_MANIFEST.json seeds.stream_sha256",
+  "sealed_block_untouched": "800000..800399",
+  "streams_checked": 72,
+  "training_block": [
+   700000,
+   700001,
+   700002,
+   700003,
+   700004,
+   700005,
+   700006,
+   700007,
+   700008,
+   700009,
+   700010,
+   700011,
+   700012,
+   700013,
+   700014,
+   700015,
+   700016,
+   700017,
+   700018,
+   700019,
+   700020,
+   700021,
+   700022,
+   700023,
+   700024,
+   700025,
+   700026,
+   700027,
+   700028,
+   700029,
+   700030,
+   700031,
+   700032,
+   700033,
+   700034,
+   700035,
+   700036,
+   700037,
+   700038,
+   700039,
+   700040,
+   700041,
+   700042,
+   700043,
+   700044,
+   700045,
+   700046,
+   700047
+  ]
+ },
+ "suites": [
+  {
+   "directory": "integrated_sar/tests",
+   "failures_or_errors": false,
+   "passed": true,
+   "pattern": "test_comm_budget_action_mask.py",
+   "ran": 14,
+   "returncode": 0,
+   "skipped": 0,
+   "tail": "OK"
+  },
+  {
+   "directory": "integrated_sar/tests",
+   "failures_or_errors": false,
+   "passed": true,
+   "pattern": "test_*.py",
+   "ran": 690,
+   "returncode": 0,
+   "skipped": 2,
+   "tail": "actor_type:discrete"
+  },
+  {
+   "directory": "runs/comm_budget_action_mask_fix_20260922",
+   "failures_or_errors": false,
+   "passed": true,
+   "pattern": "test_*.py",
+   "ran": 17,
+   "returncode": 0,
+   "skipped": 0,
+   "tail": "OK"
+  },
+  {
+   "directory": "runs/comm_budget_masked_retrain_20260922",
+   "failures_or_errors": false,
+   "passed": true,
+   "pattern": "test_*.py",
+   "ran": 41,
+   "returncode": 0,
+   "skipped": 4,
+   "tail": "OK (skipped=4)"
+  },
+  {
+   "directory": ".",
+   "failures_or_errors": false,
+   "passed": true,
+   "pattern": "python -m integrated_sar",
+   "ran": 1,
+   "returncode": 0,
+   "skipped": 0,
+   "tail": "final_status=completed"
+  }
+ ],
+ "throughput": {
+  "environment_steps": 12000,
+  "episodes": 12,
+  "max_seconds_per_episode": 3.28,
+  "mean_seconds_per_episode": 2.93,
+  "note": "measured with the budget mask active on initial weights; a trained arm that talks less spends fewer credit-constrained candidates, so this is an upper bound on the rollout cost, not a promise",
+  "projection_one_run_hours": 0.33,
+  "projection_three_runs_serial_hours": 0.98,
+  "seconds_per_update_4_episodes": 11.7
+ },
+ "trainer": {
+  "action_mask_schema": "budget-sequential-mask/1",
+  "tape_schema": "onpolicy-tape/2",
+  "trainer_tag": "onpolicy-v3-budget-mask"
+ },
+ "training_runs_started": 0
+}
