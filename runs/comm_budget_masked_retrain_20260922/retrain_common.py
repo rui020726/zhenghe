@@ -266,6 +266,11 @@ ENTRY_MODULES = (
     "tight_common",
     "stability_common",
     "pilot_common",
+    # Reached only from inside ``paired``, so an import-graph taken from the training entry alone
+    # misses it -- and the freeze would then refuse the very script that computes the intervals.
+    # A lazily-imported module is still executed code; listing it here is what makes the graph a
+    # fact about the round rather than a fact about one entry point.
+    "evaluate_pilot",
 )
 
 #: The same graph as it stood at the previous round's delivery head, used by the provenance

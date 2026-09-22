@@ -993,10 +993,15 @@ def data_conclusions(
         if all(initial):
             lines.append(
                 "三个初值臂在 24 条开发流上一致：平均完成 "
-                f"{sorted({item['mean_on_time'] for item in initial})}，字节 "
-                f"{sorted({item['mean_airtime_bytes'] for item in initial})}——随机初值就是"
-                "「能发就发」，而修复后的 mask 让发不出去的 SEND 不再被请求，所以这条路不再产生"
-                "执行端拒付。"
+                + "、".join(
+                    sorted({f"{item['mean_on_time']} 个/episode" for item in initial})
+                )
+                + "，字节 "
+                + "、".join(
+                    sorted({f"{item['mean_airtime_bytes']:,} B/episode" for item in initial})
+                )
+                + "——随机初值就是「能发就发」，而修复后的 mask 让发不出去的 SEND 不再被请求，"
+                "所以这条路不再产生执行端拒付。"
             )
         readings = []
         for seed in common.TRAINING_SEEDS:
