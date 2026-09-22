@@ -1,0 +1,130 @@
+{
+  "round": "comm_h20_terminal_attribution_20260922",
+  "branch": "analysis/comm-h20-terminal-attribution",
+  "baseline": "analysis/comm-target-scoped-feasibility@9001a85cc643f6eccf6da5dc98078e3b95a6b49a",
+  "constraints": {
+    "new_episodes": 0,
+    "training": 0,
+    "new_streams": 0,
+    "param_changes": 0,
+    "trainer_patches": 0
+  },
+  "scope": "budget feasibility path observation -> action mask -> sampling -> log_prob -> rollout -> optimizer -> relay execution",
+  "path": [
+    {
+      "stage": "observation",
+      "file": "integrated_sar/comm_policy.py",
+      "lines": "85-86",
+      "fact": "remaining_budget_bytes and budget_bytes_per_episode are observation fields only"
+    },
+    {
+      "stage": "observation_inject",
+      "file": "integrated_sar/comm.py",
+      "lines": "840-848",
+      "fact": "relay builds SendObservation with budget/capacity remaining"
+    },
+    {
+      "stage": "features",
+      "file": "integrated_sar/comm_learning.py",
+      "lines": "90-95,117-118",
+      "fact": "budget_fraction and capacity_fraction are soft features; no attempt_charge_bytes"
+    },
+    {
+      "stage": "action_mask",
+      "file": "runs/comm_budget_pilot_20260919/train_pilot.py",
+      "lines": "95-99",
+      "fact": "forced(item) is silence-bound only (age_steps >= MAX_WAIT); no budget term"
+    },
+    {
+      "stage": "sampling",
+      "file": "runs/comm_tight_budget_20260919/onpolicy.py",
+      "lines": "145-175",
+      "fact": "must=forced -> SEND without likelihood; free candidates multinomial SEND/HOLD even if unaffordable"
+    },
+    {
+      "stage": "log_prob",
+      "file": "runs/comm_tight_budget_20260919/onpolicy.py",
+      "lines": "46-56,177,186-196",
+      "fact": "joint_log_prob weights only free (non-forced); budget-illegal SEND still gets log_prob and entropy"
+    },
+    {
+      "stage": "rollout",
+      "file": "runs/comm_tight_budget_20260919/train_onpolicy.py",
+      "lines": "113-141",
+      "fact": "flatten packs features/actions/free/log_prob/advantage with no budget filter"
+    },
+    {
+      "stage": "optimizer",
+      "file": "runs/comm_tight_budget_20260919/train_onpolicy.py",
+      "lines": "145-216",
+      "fact": "usable is free-set only; PPO loss includes non-executable SEND; refused_by_policy is aggregate-only"
+    },
+    {
+      "stage": "relay_execution",
+      "file": "integrated_sar/comm.py",
+      "lines": "851-886",
+      "fact": "budget can_send/why_blocked refuses at emit; transcript refused; sample-level training is not informed"
+    },
+    {
+      "stage": "budget_hard_gate",
+      "file": "integrated_sar/comm_budget.py",
+      "lines": "68-81",
+      "fact": "can_send checks sends_per_step and bytes_per_episode; why_blocked returns capacity_step or budget_exhausted"
+    }
+  ],
+  "questions": {
+    "budget_insufficient_send_sampleable": true,
+    "budget_insufficient_send_enters_training": true,
+    "budget_in_action_mask": false,
+    "log_prob_only_legal_actions": "only non-forced (silence bound); not budget-legal",
+    "rollout_to_optimizer_budget_filter": false,
+    "relay_refusal_sample_level_training_signal": false,
+    "sampler_logprob_consistency": "correct (fixed in COMM_PPO_PROBABILITY_AUDIT); not this defect"
+  },
+  "dual_action_free": {
+    "definition": "send_executable and hold_executable at the same decision point",
+    "training_buffer_recoverable": false,
+    "training_dual_action_free_samples": "missing",
+    "missing_fields": [
+      "send_executable",
+      "send_block_reason",
+      "attempt_charge_bytes",
+      "payload_bytes",
+      "subscriber_count",
+      "budget_remaining_raw_at_decision",
+      "step_link_to_transcript_refused"
+    ],
+    "what_training_does_record": {
+      "free": "non-forced (silence-bound) candidates, NOT budget-feasible",
+      "forced_sends": "silence-bound forced only",
+      "refused_by_policy": "episode aggregate counters only"
+    },
+    "offline_audit_recoverable": true,
+    "offline_source": "runs/comm_send_actionability_20260922/COMM_SEND_ACTIONABILITY_RESULTS.json",
+    "offline_both_actions_free_points": 101,
+    "offline_both_actions_free_streams": 8,
+    "offline_post_first_both_actions_free_points": 71,
+    "offline_send_blocked_credit": 23511,
+    "offline_candidates_total": 23612
+  },
+  "defect_classification": {
+    "sampler_logprob_mismatch": false,
+    "forced_mask_correct": true,
+    "budget_action_mask_gap": true,
+    "nonexecutable_send_in_actor_loss": true,
+    "dual_action_free_observability_gap": true,
+    "relay_sample_level_feedback_gap": true,
+    "summary": "Not a PPO probability bug. Structural gap: budget feasibility is outside the action mask and outside rollout filtering, so unaffordable SEND still occupies actor likelihood; training records cannot recover true dual-action-free counts.",
+    "treat_as_training_correctness_risk": true,
+    "next_if_defect_branch": "fix training path first (mask or sample filter + instrumentation fields); do not continue communication-effect experiments until fixed",
+    "this_round_patched_trainer": false
+  },
+  "judgment": {
+    "h20_early_success_with_divergence_seeds": [700010, 700018, 700022],
+    "h20_spillover_discussable": true,
+    "h20_spillover_auto_run": false,
+    "training_defect_found": true,
+    "recommended_next": "fix budget action-mask/rollout path first; H=20 spillover only after that fix or by explicit user override",
+    "stop_target_scoped_route": false
+  }
+}

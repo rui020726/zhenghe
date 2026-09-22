@@ -1,8 +1,9 @@
 # Zhenghe：搜索—协调—分配一体化搜救系统
 
-当前研究入口：[target-scoped 边界可行性（历史，已交付）](COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md)
-与 [项目总纲 v2.7](PROJECT_CHARTER.md)。T0/T1 过；T2 仅 H=20 通过（3/4 pair，多为终态吸收）。
-H=1/5 因边界 `refused_credit` 未过。可建议 H=20 完整 episode，本轮不执行。
+当前研究入口：[H=20 终态归因 + 预算动作路径审计（最新，已交付）](runs/comm_h20_terminal_attribution_20260922/)
+与 [项目总纲 v2.8](PROJECT_CHARTER.md)。3 个 seed 成功 EARLY 后出现结局分歧（可讨论 H=20 spillover）；
+同时发现预算不进 action mask、非可执行 SEND 进训练的正确性风险 ⇒ **先修训练路径，不继续通信效果实验**。
+上一轮 [target-scoped 边界可行性](COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md) 已标历史。
 
 本仓库整合两个已有研究模块：
 
@@ -287,7 +288,8 @@ checkpoint、录制流、逐 episode 日志与转录**不入 Git**，只在 mani
 | **发送时机协议消融** | `runs/comm_protocol_v2_20260920/` | `COMM_MASK_CAUSE_AUDIT.md`（掩码归因与勘误）、`COMM_PROTOCOL_V2_PROTOCOL.md`（判据先于结果）、`COMM_PROTOCOL_V2_RESULTS.md`（协议收益与学习收益分开）、`COMM_PROTOCOL_V2_MANIFEST.json` |
 | **ACK 信息价值门禁** | `runs/comm_ack_value_20260920/` | `COMM_ACK_CONTRACT.md`（反向信道合同）、`COMM_ACK_VALUE_GATE.md`/`.json`（四项门禁：1/2/4 过、3 未过 ⇒ 未训练）、`COMM_ACK_MANIFEST.json` |
 | **S3 收尾与规则独立确认** | `runs/comm_rule_confirm_20260921/` | `COMM_RULE_CONFIRMATION_PROTOCOL.md`（判据先于数据）、`COMM_RULE_BLOCK_AUDIT.json`（`900000..900199` 与全项目四源零重叠）、`COMM_RULE_CONFIRMATION_RESULTS.md`（3 000 episode：隔离有损 +0.835 个/ep 而 total +26 354 B、正常路径被支配）、`COMMUNICATION_LEARNING_VERDICT.md`（S3 学习结论冻结为范围准确的负结果，研究先导关闭）、`COMM_RULE_CONFIRMATION_MANIFEST.json` |
-| **target-scoped 边界可行性（最新）** | `runs/comm_target_scoped_feasibility_20260922/` | `COMM_TARGET_SCOPED_PROTOCOL.md`、`TARGET_POINTS_INITIAL.json`、`COMM_TARGET_SCOPED_BOUNDARY_RESULTS.md/.json`、`COMM_TARGET_SCOPED_INTERFACE_CHECK.json`、`COMM_TARGET_SCOPED_MANIFEST.json`；24/28 启动；T0/T1 过；T2 仅 H=20 3/4 过 |
+| **H=20 终态归因 + 动作路径审计（最新）** | `runs/comm_h20_terminal_attribution_20260922/` | `COMM_H20_TERMINAL_ATTRIBUTION.md/.json`（3 seed 成功 EARLY 后结局分歧；1 对 `boundary_refused`）、`COMM_POLICY_ACTION_MASK_AUDIT.md/.json`（预算不进 mask；非可执行 SEND 进训练；双动作自由训练侧 **missing**）、`analyze_h20_terminal.py`；**0 新 episode / 0 训练** |
+| target-scoped 边界可行性 | `runs/comm_target_scoped_feasibility_20260922/` | `COMM_TARGET_SCOPED_PROTOCOL.md`、`TARGET_POINTS_INITIAL.json`、`COMM_TARGET_SCOPED_BOUNDARY_RESULTS.md/.json`、`COMM_TARGET_SCOPED_INTERFACE_CHECK.json`、`COMM_TARGET_SCOPED_MANIFEST.json`；24/28 启动；T0/T1 过；T2 仅 H=20 3/4 过 |
 | 动作可行性审计 | `runs/comm_send_actionability_20260922/` | `COMM_SEND_ACTIONABILITY_PROTOCOL.md`、`COMM_SEND_ACTIONABILITY_ROWS.json`、`COMM_SEND_ACTIONABILITY_RESULTS.md/.json`、`COMM_SEND_ACTIONABILITY_POINTS.json`、`COMM_SEND_ACTIONABILITY_MANIFEST.json`；23 612 候选，both_actions_free 101/8 流，主阻塞预算；**A/B 过、C 不过** |
 | 多步诊断 Stage1 | `runs/comm_multistep_stage1_20260922/` | `COMM_MULTISTEP_PROTOCOL.md`（修订协议）、`FROZEN_CONFIG.json`（`event_retry_until_acked_5`）、`POINTS_INITIAL.json`/`POINTS.json`、`COMM_MULTISTEP_RESULTS.md/.json`、`COMM_MULTISTEP_VERDICT.md`、`DIAGNOSTIC_TEXT_FIXES.md`、`COMM_MULTISTEP_MANIFEST.json`；40/40 启动（8 free + 28 成功分支 + 4 失败保留），7/8 点完整；所有 S 强发均因 insufficient_credit 被拒 ⇒ 无有效 S−H 对照 |
 | 证据复核与训练诊断 | `runs/comm_evidence_review_20260921/` | `COMM_EVIDENCE_CORRECTIONS.md`/`.json`（十项核对：单位、成功率 vs 丢包率、字节方向、CI 含 0 ≠ 等效、条件区间、ACK 基线开关、因果范围、学习三事实、训练充分性、门禁样本性）、`COMM_RULE_CONFIRMATION_RESULTS_REVISED.md`/`.json`（同一统计量只抽一次样，主结果统一到 +0.835 个/ep [+0.685,+0.995] 与 +26 354.1 B/ep [+26 002,+26 688]；585 个均值字段核对未变）、`COMMUNICATION_LEARNING_VERDICT_REVISED.md`（结论范围重述，停止判定保留）、`COMM_LEARNING_DIAGNOSTIC.md`（四种解释与缺失项）、`COMM_MULTISTEP_DIAGNOSTIC_PROTOCOL.md`（≤96 分支的小实验设计，**尚未执行**） |

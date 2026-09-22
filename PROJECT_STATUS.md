@@ -1,5 +1,45 @@
 # 项目状态
 
+## 2026-09-22：H=20 终态归因 + 预算动作路径审计已交付（0 新 episode）
+
+分支 `analysis/comm-h20-terminal-attribution`（基 `analysis/comm-target-scoped-feasibility@9001a85`），
+产物 `runs/comm_h20_terminal_attribution_20260922/`。**0 新 episode、0 训练、0 新流、0 参数修改、0 训练器补丁**。
+只使用既有 target-scoped 24 条边界分支、actionability free 基线、训练源码与已有训练记录。
+
+### H=20 终态归因（`COMM_H20_TERMINAL_ATTRIBUTION.md/.json`）
+
+| seed | 分类 | EARLY/DEFER 终态时刻 | 成功 EARLY 投递/应用 |
+|---:|---|---|---|
+| 700010 | `both_terminal_same_time_outcome_diff` | 23 / 23 | ok / rev3 |
+| 700018 | `both_terminal_same_time_outcome_diff` | 23 / 23 | ok / rev3 |
+| 700020 | `boundary_refused` | — / — | ok / rev3（边界 flush 拒付） |
+| 700022 | `both_terminal_same_time_outcome_diff` | 23 / 23 | ok / rev3 |
+
+- `both_terminal_identical` **0**；`terminal_time_diff` **0**；`one_terminal_only` **0**。
+- 成功 EARLY 投递伴随 assignment / task_revision / progress / remaining 分歧的 seed：
+  **700010、700018、700022（3 个）**。DEFER 侧常见 `stale_task_revision` 残留指派。
+- **不把 `terminal_before_boundary` 解释成有效 flush**；700020 是预算拒付，不计入终态信号。
+- 与 free 对照均有差异（窗口截断 + 干预），不作因果外推。
+
+⇒ 满足“≥2 个不同 seed 成功 EARLY + 分歧”⇒ **可再讨论**小型完整 H=20 spillover（**未运行**）。
+
+### 预算动作路径审计（`COMM_POLICY_ACTION_MASK_AUDIT.md/.json`）
+
+- 预算**不是** action mask；唯一 mask 是静默上界 `forced()`（age/MAX_WAIT）。
+- 预算不足 SEND **能被采样且进入** tape → flatten → PPO loss（非 forced 项）。
+- rollout→optimizer **无**预算过滤；relay `refused_credit` **无**样本级训练信号。
+- 训练记录**不能**恢复真正双动作自由样本数 → **`training_dual_action_free_samples: missing`**。
+- 离线审计可恢复：`both_actions_free=101` 点 / 8 流（主阻塞预算 23 511）。
+- **不是**已修的 PPO 概率不一致；是动作空间/rollout 过滤/可观测性缺口。
+  **定性为训练正确性风险**（信用分配到不可执行动作）。
+
+### 判定与下一步（未执行、未授权）
+
+- H=20 分歧信号：**有**（3 seed）→ 可讨论 spillover。
+- 训练正确性风险：**有** → 按预注册应 **先单独修复训练路径**（mask/样本过滤 + 补
+  `send_executable`/`attempt_charge_bytes` 等字段），**不继续通信效果实验**。
+- 本轮**不修**训练器。H=20 spillover 须待修复完成后或用户明确覆盖该顺序。
+
 ## 2026-09-22：target-scoped 边界可行性已交付（T0/T1 过；T2 仅 H=20 过）
 
 执行入口 [COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md](COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md) **已执行**（指令已标历史）。

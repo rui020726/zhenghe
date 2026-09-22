@@ -1,6 +1,6 @@
 # 项目总纲：面向协同搜救的学习型任务信息传递控制
 
-版本：v2.7
+版本：v2.8
 
 更新日期：2026-09-22
 用途：跨聊天、跨 Agent 的研究方向与实验约定。  
@@ -13,7 +13,20 @@
 
 ## 1. 本文如何使用
 
-### v2.7 当前状态：target-scoped 边界可行性已交付（T0/T1 过；T2 仅 H=20 过）
+### v2.8 当前状态：H=20 终态归因 + 预算动作路径审计已交付（0 新 episode）
+
+分支 `analysis/comm-h20-terminal-attribution`（基 `9001a85`），产物
+`runs/comm_h20_terminal_attribution_20260922/`。**0 新 episode、0 训练、0 新流、0 参数修改**。
+
+**H=20 终态归因**：3 seed（700010/700018/700022）在成功 EARLY 投递后出现同刻终态但
+assignment/revision/progress 结局分歧；700020 为 `boundary_refused`。`both_terminal_identical=0`。
+**不把 `terminal_before_boundary` 解释成有效 flush。** ⇒ 可再讨论小型完整 H=20 spillover（未运行）。
+
+**预算动作路径**：预算**不是** action mask；预算不足 SEND 可采样且进 PPO loss；relay 拒绝无样本级
+训练信号；训练记录**不能**恢复双动作自由样本数（`missing`）；离线审计 101 点 / 8 流。
+**定性为训练正确性风险**（非已修的 PPO 概率问题）⇒ **下一步先单独修复训练路径，不继续通信效果实验。**
+
+### v2.7 历史状态：target-scoped 边界可行性已交付（T0/T1 过；T2 仅 H=20 过）
 
 `COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md` **已执行**。分支
 `analysis/comm-target-scoped-feasibility`，产物 `runs/comm_target_scoped_feasibility_20260922/`。
@@ -760,17 +773,22 @@ CI [+0.685, +0.995]），在正常信息路径上完成数差 0.000 而 total by
 ### 当前可直接粘贴到新聊天的说明
 
 ```text
-先读 PROJECT_CHARTER.md v2.7 与 runs/comm_target_scoped_feasibility_20260922/ 的
-COMM_TARGET_SCOPED_BOUNDARY_RESULTS.md、COMM_TARGET_SCOPED_INTERFACE_CHECK.json、
-COMM_TARGET_SCOPED_MANIFEST.json，并核对实际分支 analysis/comm-target-scoped-feasibility。
+先读 PROJECT_CHARTER.md v2.8 与 runs/comm_h20_terminal_attribution_20260922/ 的
+COMM_H20_TERMINAL_ATTRIBUTION.md/.json、COMM_POLICY_ACTION_MASK_AUDIT.md/.json，
+并核对实际分支 analysis/comm-h20-terminal-attribution。
 
-target-scoped 边界可行性已交付：24/28 启动；T0/T1 过；T2 仅 H=20 通过（3/4 pair）。
-H=20 可解析性主要来自 terminal_before_boundary（吸收），不等于边界 flush 普遍可支付；
-H=1/5 因 refused_credit 未过，禁止免费 flush、提高预算或改成窗口末不发送。
-可建议以后对 H=20 跑完整 target-scoped episode，本轮不执行。
+本轮 0 新 episode、0 训练、0 新流、0 参数修改、0 训练器补丁。
 
-COMM_TARGET_SCOPED_FEASIBILITY_NEXT_ROUND.md 已标为历史，勿再次执行该矩阵。
-下一步（H=20 完整 episode 或 credit reservation）须使用者下令。
+H=20 终态归因：3 个 seed（700010/700018/700022）成功 EARLY 投递后出现同刻终态但
+assignment/revision/progress 分歧；700020 为 boundary_refused。both_terminal_identical=0。
+terminal_before_boundary 不自动解释为有效 flush。⇒ 可再讨论小型完整 H=20 spillover（未跑）。
+
+预算动作路径：预算不是 action mask；不足 SEND 可采样且进 PPO loss；双动作自由样本数
+训练侧 missing（离线 101 点/8 流）。定性为训练正确性风险 ⇒ 先单独修复训练路径
+（mask/样本过滤 + 补 send_executable/attempt_charge_bytes 等），不继续通信效果实验。
+本轮未改训练器。H=20 spillover 须待修复后或用户明确覆盖顺序。
+
+上一轮 target-scoped 边界可行性结果保持原样，勿重写实验提交。
 用户后续明确决定优先于总纲；有范围变化时同步更新总纲和变更记录。
 ```
 
@@ -892,6 +910,7 @@ learnability calibration；本轮不是"继续改场景直到模型获胜"的授
 
 | 日期 | 版本 | 变更 |
 |---|---|---|
+| 2026-09-22 | v2.8 | H=20 终态归因 + 预算动作路径审计**已交付**（0 新 episode/0 训练/0 新流/0 参数修改）：3 seed 成功 EARLY 后结局分歧（可讨论 spillover）；预算不进 action mask、非可执行 SEND 进训练、双动作自由训练侧 missing ⇒ **先修训练路径，不继续通信效果实验**；原始 target-scoped 结果不变 |
 | 2026-09-22 | v2.7 | target-scoped 边界可行性**已交付**：24/28 启动；T0/T1 过；T2 H=1 2/4、H=5 0/4、**H=20 3/4 过**（多为 `terminal_before_boundary`）⇒ 可建议 H=20 完整 episode（不自动执行）；短 H 因 `refused_credit` 未过，禁止免费 flush/提高预算 |
 | 2026-09-22 | v2.6 | 基于 c6698f9 立项 target-scoped 边界可行性门禁：EARLY+FLUSH vs DEFER+FLUSH，固定 4 条审计流、H={1,5,20}、最多 24 前缀分支/28 次启动；窗口末最新视图走真实预算与终态规则，不预留/不赠送字节；只跑到边界，以每个 H ≥3/4 pair 可解析作为后续完整实验的资源门禁，尚未执行、无训练授权 |
 | 2026-09-22 | v2.5 | 动作可行性审计交付（`analysis/comm-send-actionability-audit`）：8 free 重放、共享 SEND 谓词、八类闭合；23 612 候选，both_actions_free 101/8 流，主阻塞预算；**A/B 过、C 不过**（view-scoped 窗口被 revision 截断）⇒ 建议讨论 target-scoped 新估计对象，本轮不执行 |
