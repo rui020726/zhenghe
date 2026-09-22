@@ -1,0 +1,218 @@
+{
+ "aggregate": {
+  "airtime_bytes": {
+   "archived": 14916.0,
+   "this_round": 14916.0
+  },
+  "emissions": {
+   "archived": 6.0,
+   "this_round": 6.0
+  },
+  "on_time_targets_per_episode": {
+   "archived": 5.79167,
+   "this_round": 5.79167
+  }
+ },
+ "archived_rows": "runs/comm_protocol_v2_20260920/evaluation/25pct/rows_25pct_isolated_1.0.jsonl",
+ "available": true,
+ "behaviour_field_differences": {},
+ "emission_sequence_differences": {},
+ "field_differences": {
+  "700048": {
+   "config_hash": {
+    "archived": "d7f35c4a933506c3",
+    "this_round": "5184d820556cfcd7"
+   }
+  },
+  "700049": {
+   "config_hash": {
+    "archived": "f86a561477007c84",
+    "this_round": "16301fadadbc5d80"
+   }
+  },
+  "700050": {
+   "config_hash": {
+    "archived": "30c14e9cf962fb98",
+    "this_round": "d33651adb40bb388"
+   }
+  },
+  "700051": {
+   "config_hash": {
+    "archived": "c3de0e091c636d9a",
+    "this_round": "44c7d7618e714ba1"
+   }
+  },
+  "700052": {
+   "config_hash": {
+    "archived": "616ff2387e8d1539",
+    "this_round": "fdba835244db3c33"
+   }
+  },
+  "700053": {
+   "config_hash": {
+    "archived": "e1b1b24bdcf74fcd",
+    "this_round": "ac189f7c0a13d737"
+   }
+  },
+  "700054": {
+   "config_hash": {
+    "archived": "60f676ae3d582535",
+    "this_round": "5d445be065067c52"
+   }
+  },
+  "700055": {
+   "config_hash": {
+    "archived": "eb027e68fb4d78b3",
+    "this_round": "9050fffa2bd946ec"
+   }
+  },
+  "700056": {
+   "config_hash": {
+    "archived": "3ee2c4d8e17959fa",
+    "this_round": "fa78c6e498b6480f"
+   }
+  },
+  "700057": {
+   "config_hash": {
+    "archived": "2c4052cd3b7ad008",
+    "this_round": "88fb7089bd7e14f4"
+   }
+  },
+  "700058": {
+   "config_hash": {
+    "archived": "f89db4894c4bf0b8",
+    "this_round": "7d200f40e4069f9e"
+   }
+  },
+  "700059": {
+   "config_hash": {
+    "archived": "8f4655f47d5f423c",
+    "this_round": "4b3455dec1f4f541"
+   }
+  },
+  "700060": {
+   "config_hash": {
+    "archived": "8f5f5a94f44c9c46",
+    "this_round": "c6794fd3b618c19a"
+   }
+  },
+  "700061": {
+   "config_hash": {
+    "archived": "8c2666debc044cad",
+    "this_round": "13a0efa2522a28a2"
+   }
+  },
+  "700062": {
+   "config_hash": {
+    "archived": "dffa827752807eee",
+    "this_round": "c15697db68a39a42"
+   }
+  },
+  "700063": {
+   "config_hash": {
+    "archived": "926d5e6e04ee0731",
+    "this_round": "12edd5e0dd7df057"
+   }
+  },
+  "700064": {
+   "config_hash": {
+    "archived": "5dee562f6e418d1b",
+    "this_round": "967205f93433e401"
+   }
+  },
+  "700065": {
+   "config_hash": {
+    "archived": "6dae167302ea964b",
+    "this_round": "85c84e1b756a0aa5"
+   }
+  },
+  "700066": {
+   "config_hash": {
+    "archived": "c76153be4233ada4",
+    "this_round": "6eba8f717f8bdec2"
+   }
+  },
+  "700067": {
+   "config_hash": {
+    "archived": "99208662d138320e",
+    "this_round": "e7d17bf324a744d0"
+   }
+  },
+  "700068": {
+   "config_hash": {
+    "archived": "260837e9484fa571",
+    "this_round": "b7fcc4ccdfb2406e"
+   }
+  },
+  "700069": {
+   "config_hash": {
+    "archived": "0c29b4fe90e5cde2",
+    "this_round": "b52bc9a9a1606a45"
+   }
+  },
+  "700070": {
+   "config_hash": {
+    "archived": "f740168092111230",
+    "this_round": "529e3a1fad47acb8"
+   }
+  },
+  "700071": {
+   "config_hash": {
+    "archived": "c0cfed7c1698278e",
+    "this_round": "32e241e9a3f04be7"
+   }
+  }
+ },
+ "identity_field_differences": {
+  "config_hash_streams": [
+   "700048",
+   "700049",
+   "700050",
+   "700051",
+   "700052",
+   "700053",
+   "700054",
+   "700055",
+   "700056",
+   "700057",
+   "700058",
+   "700059",
+   "700060",
+   "700061",
+   "700062",
+   "700063",
+   "700064",
+   "700065",
+   "700066",
+   "700067",
+   "700068",
+   "700069",
+   "700070",
+   "700071"
+  ],
+  "count": 24,
+  "explained": true,
+  "explanation": {
+   "conclusion": "config_hash is a layout-sensitive identity, not a behavioural one: two runs of the same rule on the same stream from different directories must differ in it",
+   "hashed_payload_excludes": [
+    "output",
+    "decision_trace",
+    "reservation_log"
+   ],
+   "hashed_payload_still_includes": [
+    "comm_transcript"
+   ],
+   "output_path_alone_leaves_config_hash_equal": true,
+   "this_round_transcript": "D:\\code\\整合\\zhenghe\\runs\\comm_budget_masked_retrain_20260922\\episodes\\identity_probe\\ct_send_once_s700048.jsonl",
+   "transcript_path_alone_changes_config_hash": true
+  }
+ },
+ "matches_archived_reference": {
+  "mean_airtime_equals_reference": true,
+  "mean_emissions_equals_reference": true,
+  "mean_on_time_within_rounding": true
+ },
+ "passed": true,
+ "streams_compared": 24,
+ "streams_this_round": 24
+}

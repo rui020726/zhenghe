@@ -1,0 +1,1949 @@
+{
+ "1": {
+  "arm_family": "masked_s1",
+  "checkpoints": {
+   "0": {
+    "evaluation": {
+     "mean_airtime_bytes": 28330.25,
+     "mean_on_time": 2.95833,
+     "stream_block": "development (24)",
+     "streams": 24
+    },
+    "training_diagnostics": null
+   },
+   "100000": {
+    "evaluation": {
+     "mean_airtime_bytes": 28272.0,
+     "mean_on_time": 3.5,
+     "stream_block": "curve subset (8)",
+     "streams": 8
+    },
+    "training_diagnostics": {
+     "actionable_per_episode": {
+      "max": 51.0,
+      "mean": 23.92,
+      "median": 22.0,
+      "min": 12.0,
+      "n": 100,
+      "p25": 19.0,
+      "p75": 28.0,
+      "total": 2392.0
+     },
+     "actionable_total": 2392,
+     "actor_terms_total": 2392,
+     "candidates_per_episode": {
+      "max": 4050.0,
+      "mean": 2132.65,
+      "median": 2073.5,
+      "min": 768.0,
+      "n": 100,
+      "p25": 1531.25,
+      "p75": 2702.75,
+      "total": 213265.0
+     },
+     "checkpoint": "maskretrain_seed1_at100000.pt",
+     "credit_bytes_spent_total": 2837652,
+     "credit_used_fraction_mean": 0.9685,
+     "environment_steps": 100000,
+     "episodes": 100,
+     "episodes_without_actionable": 0,
+     "episodes_without_decisions": 0,
+     "executed_policy_total": 1122,
+     "greedy_entropy_per_candidate_last": 0.58306,
+     "greedy_send_rate_last": 0.1284,
+     "initial_executable_total": 2513,
+     "landed_at_steps": 100000,
+     "masked_by_capacity_total": 0,
+     "masked_by_credit_total": 210873,
+     "max_log_prob_gap": 0.0,
+     "message_types": {
+      "first": 372,
+      "retry_same_view": 331,
+      "update": 419
+     },
+     "milestone_requested": 100000,
+     "nonfinite_values_total": 0,
+     "optimiser": {
+      "approx_kl": {
+       "max": 0.0005,
+       "mean": 0.0001,
+       "median": 0.0001,
+       "min": -0.0004,
+       "n": 25,
+       "p25": -0.0,
+       "p75": 0.0002,
+       "total": 0.0019
+      },
+      "clip_fraction": {
+       "max": 0.0024,
+       "mean": 0.0008,
+       "median": 0.0006,
+       "min": 0.0,
+       "n": 25,
+       "p25": 0.0003,
+       "p75": 0.001,
+       "total": 0.0189
+      },
+      "entropy": {
+       "max": 0.0306,
+       "mean": 0.017,
+       "median": 0.0165,
+       "min": 0.0099,
+       "n": 25,
+       "p25": 0.0139,
+       "p75": 0.0186,
+       "total": 0.424
+      },
+      "gradient_norm_mean": {
+       "max": 0.218,
+       "mean": 0.1437,
+       "median": 0.1397,
+       "min": 0.0892,
+       "n": 25,
+       "p25": 0.1266,
+       "p75": 0.1651,
+       "total": 3.5926
+      },
+      "optimizer_steps": {
+       "max": 64.0,
+       "mean": 59.52,
+       "median": 60.0,
+       "min": 48.0,
+       "n": 25,
+       "p25": 56.0,
+       "p75": 64.0,
+       "total": 1488.0
+      },
+      "policy_surrogate": {
+       "max": 0.0592,
+       "mean": -0.1133,
+       "median": -0.1319,
+       "min": -0.2788,
+       "n": 25,
+       "p25": -0.1765,
+       "p75": -0.0422,
+       "total": -2.8317
+      },
+      "samples": {
+       "max": 4000.0,
+       "mean": 3688.36,
+       "median": 3762.0,
+       "min": 3004.0,
+       "n": 25,
+       "p25": 3577.0,
+       "p75": 3873.0,
+       "total": 92209.0
+      },
+      "value_loss": {
+       "max": 0.0328,
+       "mean": 0.019,
+       "median": 0.0175,
+       "min": 0.0108,
+       "n": 25,
+       "p25": 0.0159,
+       "p75": 0.0227,
+       "total": 0.4758
+      }
+     },
+     "policy_refusals_total": 0,
+     "requested_total": 1122,
+     "send_step_percentiles": {
+      "25": 3,
+      "5": 1,
+      "50": 5,
+      "75": 8,
+      "95": 15
+     },
+     "steps_with_candidates": 92209,
+     "steps_with_zero_actionable": 91249,
+     "stochastic_entropy_per_candidate_last": 0.58446,
+     "stochastic_send_rate_last": 0.3194,
+     "updates": 25,
+     "value_explained_variance_last": 0.911,
+     "wall_seconds": 286.6,
+     "weights_fingerprint": "f5f134d991d0dda3",
+     "window": "everything up to this checkpoint, from initial weights"
+    }
+   },
+   "200000": {
+    "evaluation": {
+     "mean_airtime_bytes": 28607.25,
+     "mean_on_time": 3.75,
+     "stream_block": "curve subset (8)",
+     "streams": 8
+    },
+    "training_diagnostics": {
+     "actionable_per_episode": {
+      "max": 129.0,
+      "mean": 30.49,
+      "median": 27.0,
+      "min": 12.0,
+      "n": 200,
+      "p25": 21.0,
+      "p75": 34.0,
+      "total": 6098.0
+     },
+     "actionable_total": 6098,
+     "actor_terms_total": 6098,
+     "candidates_per_episode": {
+      "max": 4107.0,
+      "mean": 1991.615,
+      "median": 1993.5,
+      "min": 140.0,
+      "n": 200,
+      "p25": 1223.75,
+      "p75": 2649.0,
+      "total": 398323.0
+     },
+     "checkpoint": "maskretrain_seed1_at200000.pt",
+     "credit_bytes_spent_total": 5664156,
+     "credit_used_fraction_mean": 0.9666,
+     "environment_steps": 200000,
+     "episodes": 200,
+     "episodes_without_actionable": 0,
+     "episodes_without_decisions": 0,
+     "executed_policy_total": 2231,
+     "greedy_entropy_per_candidate_last": 0.35755,
+     "greedy_send_rate_last": 0.1218,
+     "initial_executable_total": 6363,
+     "landed_at_steps": 200000,
+     "masked_by_capacity_total": 0,
+     "masked_by_credit_total": 392225,
+     "max_log_prob_gap": 0.0,
+     "message_types": {
+      "first": 777,
+      "retry_same_view": 542,
+      "update": 912
+     },
+     "milestone_requested": 200000,
+     "nonfinite_values_total": 0,
+     "optimiser": {
+      "approx_kl": {
+       "max": 0.0023,
+       "mean": 0.0001,
+       "median": 0.0001,
+       "min": -0.0004,
+       "n": 50,
+       "p25": -0.0,
+       "p75": 0.0002,
+       "total": 0.0073
+      },
+      "clip_fraction": {
+       "max": 0.0076,
+       "mean": 0.0012,
+       "median": 0.001,
+       "min": 0.0,
+       "n": 50,
+       "p25": 0.0004,
+       "p75": 0.0014,
+       "total": 0.0612
+      },
+      "entropy": {
+       "max": 0.0388,
+       "mean": 0.0199,
+       "median": 0.0182,
+       "min": 0.0099,
+       "n": 50,
+       "p25": 0.0159,
+       "p75": 0.0219,
+       "total": 0.9945
+      },
+      "gradient_norm_mean": {
+       "max": 1.3411,
+       "mean": 0.1988,
+       "median": 0.1653,
+       "min": 0.0892,
+       "n": 50,
+       "p25": 0.1382,
+       "p75": 0.1933,
+       "total": 9.9408
+      },
+      "optimizer_steps": {
+       "max": 64.0,
+       "mean": 57.52,
+       "median": 60.0,
+       "min": 36.0,
+       "n": 50,
+       "p25": 56.0,
+       "p75": 64.0,
+       "total": 2876.0
+      },
+      "policy_surrogate": {
+       "max": 0.0645,
+       "mean": -0.1357,
+       "median": -0.131,
+       "min": -0.8121,
+       "n": 50,
+       "p25": -0.1971,
+       "p75": -0.0326,
+       "total": -6.7852
+      },
+      "samples": {
+       "max": 4000.0,
+       "mean": 3556.78,
+       "median": 3633.5,
+       "min": 2205.0,
+       "n": 50,
+       "p25": 3436.0,
+       "p75": 3872.25,
+       "total": 177839.0
+      },
+      "value_loss": {
+       "max": 0.0489,
+       "mean": 0.0203,
+       "median": 0.0176,
+       "min": 0.0101,
+       "n": 50,
+       "p25": 0.0147,
+       "p75": 0.0232,
+       "total": 1.0126
+      }
+     },
+     "policy_refusals_total": 0,
+     "requested_total": 2231,
+     "send_step_percentiles": {
+      "25": 3,
+      "5": 1,
+      "50": 6,
+      "75": 9,
+      "95": 22
+     },
+     "steps_with_candidates": 177839,
+     "steps_with_zero_actionable": 175427,
+     "stochastic_entropy_per_candidate_last": 0.35849,
+     "stochastic_send_rate_last": 0.188,
+     "updates": 50,
+     "value_explained_variance_last": 0.8863,
+     "wall_seconds": 567.5,
+     "weights_fingerprint": "e5f32caf4ac9c5fc",
+     "window": "everything up to this checkpoint, from initial weights"
+    }
+   },
+   "300000": {
+    "evaluation": {
+     "mean_airtime_bytes": 27963.0,
+     "mean_on_time": 5.125,
+     "stream_block": "curve subset (8)",
+     "streams": 8
+    },
+    "training_diagnostics": {
+     "actionable_per_episode": {
+      "max": 264.0,
+      "mean": 39.3133,
+      "median": 33.0,
+      "min": 12.0,
+      "n": 300,
+      "p25": 24.0,
+      "p75": 45.0,
+      "total": 11794.0
+     },
+     "actionable_total": 11794,
+     "actor_terms_total": 11794,
+     "candidates_per_episode": {
+      "max": 4107.0,
+      "mean": 1845.9633,
+      "median": 1726.0,
+      "min": 77.0,
+      "n": 300,
+      "p25": 1116.0,
+      "p75": 2403.0,
+      "total": 553789.0
+     },
+     "checkpoint": "maskretrain_seed1_at300000.pt",
+     "credit_bytes_spent_total": 8497986,
+     "credit_used_fraction_mean": 0.9668,
+     "environment_steps": 300000,
+     "episodes": 300,
+     "episodes_without_actionable": 0,
+     "episodes_without_decisions": 0,
+     "executed_policy_total": 3336,
+     "greedy_entropy_per_candidate_last": 0.21888,
+     "greedy_send_rate_last": 0.1164,
+     "initial_executable_total": 12187,
+     "landed_at_steps": 300000,
+     "masked_by_capacity_total": 0,
+     "masked_by_credit_total": 541995,
+     "max_log_prob_gap": 0.0,
+     "message_types": {
+      "first": 1218,
+      "retry_same_view": 618,
+      "update": 1500
+     },
+     "milestone_requested": 300000,
+     "nonfinite_values_total": 0,
+     "optimiser": {
+      "approx_kl": {
+       "max": 0.0023,
+       "mean": 0.0001,
+       "median": 0.0001,
+       "min": -0.0005,
+       "n": 75,
+       "p25": -0.0,
+       "p75": 0.0002,
+       "total": 0.0077
+      },
+      "clip_fraction": {
+       "max": 0.0125,
+       "mean": 0.0015,
+       "median": 0.0011,
+       "min": 0.0,
+       "n": 75,
+       "p25": 0.0005,
+       "p75": 0.0017,
+       "total": 0.1144
+      },
+      "entropy": {
+       "max": 0.0393,
+       "mean": 0.0208,
+       "median": 0.0192,
+       "min": 0.0099,
+       "n": 75,
+       "p25": 0.0167,
+       "p75": 0.0241,
+       "total": 1.5634
+      },
+      "gradient_norm_mean": {
+       "max": 1.3411,
+       "mean": 0.2288,
+       "median": 0.192,
+       "min": 0.0892,
+       "n": 75,
+       "p25": 0.1502,
+       "p75": 0.2646,
+       "total": 17.1593
+      },
+      "optimizer_steps": {
+       "max": 64.0,
+       "mean": 55.52,
+       "median": 60.0,
+       "min": 28.0,
+       "n": 75,
+       "p25": 52.0,
+       "p75": 60.0,
+       "total": 4164.0
+      },
+      "policy_surrogate": {
+       "max": 0.0971,
+       "mean": -0.1375,
+       "median": -0.1206,
+       "min": -0.8121,
+       "n": 75,
+       "p25": -0.1999,
+       "p75": -0.024,
+       "total": -10.3128
+      },
+      "samples": {
+       "max": 4000.0,
+       "mean": 3425.4,
+       "median": 3603.0,
+       "min": 1670.0,
+       "n": 75,
+       "p25": 3148.0,
+       "p75": 3775.0,
+       "total": 256905.0
+      },
+      "value_loss": {
+       "max": 0.073,
+       "mean": 0.0218,
+       "median": 0.0198,
+       "min": 0.0071,
+       "n": 75,
+       "p25": 0.0153,
+       "p75": 0.0263,
+       "total": 1.6317
+      }
+     },
+     "policy_refusals_total": 0,
+     "requested_total": 3336,
+     "send_step_percentiles": {
+      "25": 4,
+      "5": 1,
+      "50": 7,
+      "75": 11,
+      "95": 36
+     },
+     "steps_with_candidates": 256905,
+     "steps_with_zero_actionable": 252368,
+     "stochastic_entropy_per_candidate_last": 0.21985,
+     "stochastic_send_rate_last": 0.1549,
+     "updates": 75,
+     "value_explained_variance_last": 0.9055,
+     "wall_seconds": 851.3,
+     "weights_fingerprint": "6221129648a430dd",
+     "window": "everything up to this checkpoint, from initial weights"
+    }
+   },
+   "400000": {
+    "evaluation": {
+     "mean_airtime_bytes": 28234.25,
+     "mean_on_time": 5.08333,
+     "stream_block": "development (24)",
+     "streams": 24
+    },
+    "training_diagnostics": {
+     "actionable_per_episode": {
+      "max": 288.0,
+      "mean": 50.275,
+      "median": 40.0,
+      "min": 12.0,
+      "n": 400,
+      "p25": 27.0,
+      "p75": 60.0,
+      "total": 20110.0
+     },
+     "actionable_total": 20110,
+     "actor_terms_total": 20110,
+     "candidates_per_episode": {
+      "max": 4107.0,
+      "mean": 1678.62,
+      "median": 1643.5,
+      "min": 76.0,
+      "n": 400,
+      "p25": 924.0,
+      "p75": 2242.0,
+      "total": 671448.0
+     },
+     "checkpoint": "maskretrain_seed1_at400000.pt",
+     "credit_bytes_spent_total": 11327610,
+     "credit_used_fraction_mean": 0.9665,
+     "environment_steps": 400000,
+     "episodes": 400,
+     "episodes_without_actionable": 0,
+     "episodes_without_decisions": 0,
+     "executed_policy_total": 4434,
+     "greedy_entropy_per_candidate_last": 0.24945,
+     "greedy_send_rate_last": 0.0885,
+     "initial_executable_total": 20573,
+     "landed_at_steps": 400000,
+     "masked_by_capacity_total": 0,
+     "masked_by_credit_total": 651338,
+     "max_log_prob_gap": 1e-06,
+     "message_types": {
+      "first": 1692,
+      "retry_same_view": 639,
+      "update": 2103
+     },
+     "milestone_requested": 400000,
+     "nonfinite_values_total": 0,
+     "optimiser": {
+      "approx_kl": {
+       "max": 0.0023,
+       "mean": 0.0001,
+       "median": 0.0001,
+       "min": -0.0008,
+       "n": 100,
+       "p25": -0.0,
+       "p75": 0.0003,
+       "total": 0.0132
+      },
+      "clip_fraction": {
+       "max": 0.0191,
+       "mean": 0.0024,
+       "median": 0.0014,
+       "min": 0.0,
+       "n": 100,
+       "p25": 0.0008,
+       "p75": 0.0032,
+       "total": 0.2357
+      },
+      "entropy": {
+       "max": 0.0622,
+       "mean": 0.0223,
+       "median": 0.0206,
+       "min": 0.0099,
+       "n": 100,
+       "p25": 0.0174,
+       "p75": 0.0264,
+       "total": 2.2325
+      },
+      "gradient_norm_mean": {
+       "max": 1.3411,
+       "mean": 0.2722,
+       "median": 0.2406,
+       "min": 0.0892,
+       "n": 100,
+       "p25": 0.1654,
+       "p75": 0.3163,
+       "total": 27.2201
+      },
+      "optimizer_steps": {
+       "max": 64.0,
+       "mean": 52.68,
+       "median": 56.0,
+       "min": 20.0,
+       "n": 100,
+       "p25": 44.0,
+       "p75": 60.0,
+       "total": 5268.0
+      },
+      "policy_surrogate": {
+       "max": 0.0971,
+       "mean": -0.1401,
+       "median": -0.1238,
+       "min": -0.8121,
+       "n": 100,
+       "p25": -0.2073,
+       "p75": -0.0214,
+       "total": -14.0076
+      },
+      "samples": {
+       "max": 4000.0,
+       "mean": 3239.86,
+       "median": 3511.5,
+       "min": 1072.0,
+       "n": 100,
+       "p25": 2782.5,
+       "p75": 3725.5,
+       "total": 323986.0
+      },
+      "value_loss": {
+       "max": 0.102,
+       "mean": 0.0242,
+       "median": 0.0219,
+       "min": 0.0071,
+       "n": 100,
+       "p25": 0.0158,
+       "p75": 0.0291,
+       "total": 2.4169
+      }
+     },
+     "policy_refusals_total": 0,
+     "requested_total": 4434,
+     "send_step_percentiles": {
+      "25": 4,
+      "5": 1,
+      "50": 7,
+      "75": 13,
+      "95": 183
+     },
+     "steps_with_candidates": 323986,
+     "steps_with_zero_actionable": 316209,
+     "stochastic_entropy_per_candidate_last": 0.24945,
+     "stochastic_send_rate_last": 0.1654,
+     "updates": 100,
+     "value_explained_variance_last": 0.9368,
+     "wall_seconds": 1134.5,
+     "weights_fingerprint": "872bb918ba306244",
+     "window": "everything up to this checkpoint, from initial weights"
+    }
+   }
+  },
+  "summary": {
+   "actionable_total": 20110,
+   "actor_terms_total": 20110,
+   "candidates_total": 671448,
+   "environment_steps": 400000,
+   "episodes": 400,
+   "episodes_without_actionable_total": 0,
+   "executed_total": 4434,
+   "final_weights_fingerprint": "872bb918ba306244",
+   "initial_weights_fingerprint": "7d7f7152f3104470",
+   "likelihood_max_abs_gap": 1e-06,
+   "masked_by_credit_total": 651338,
+   "optimizer_steps_cumulative": 5268,
+   "policy_refusals_total": 0,
+   "requested_total": 4434,
+   "resumed": true,
+   "updates": 100,
+   "wall_seconds": 1266.2
+  }
+ },
+ "2": {
+  "arm_family": "masked_s2",
+  "checkpoints": {
+   "0": {
+    "evaluation": {
+     "mean_airtime_bytes": 28330.25,
+     "mean_on_time": 2.95833,
+     "stream_block": "development (24)",
+     "streams": 24
+    },
+    "training_diagnostics": null
+   },
+   "100000": {
+    "evaluation": {
+     "mean_airtime_bytes": 27983.25,
+     "mean_on_time": 2.875,
+     "stream_block": "curve subset (8)",
+     "streams": 8
+    },
+    "training_diagnostics": {
+     "actionable_per_episode": {
+      "max": 26.0,
+      "mean": 16.72,
+      "median": 16.0,
+      "min": 11.0,
+      "n": 100,
+      "p25": 14.0,
+      "p75": 18.0,
+      "total": 1672.0
+     },
+     "actionable_total": 1672,
+     "actor_terms_total": 1672,
+     "candidates_per_episode": {
+      "max": 5051.0,
+      "mean": 2497.13,
+      "median": 2452.5,
+      "min": 786.0,
+      "n": 100,
+      "p25": 2048.25,
+      "p75": 3081.0,
+      "total": 249713.0
+     },
+     "checkpoint": "maskretrain_seed2_at100000.pt",
+     "credit_bytes_spent_total": 2823126,
+     "credit_used_fraction_mean": 0.9635,
+     "environment_steps": 100000,
+     "episodes": 100,
+     "episodes_without_actionable": 0,
+     "episodes_without_decisions": 0,
+     "executed_policy_total": 1115,
+     "greedy_entropy_per_candidate_last": 0.65185,
+     "greedy_send_rate_last": 0.973,
+     "initial_executable_total": 1793,
+     "landed_at_steps": 100000,
+     "masked_by_capacity_total": 0,
+     "masked_by_credit_total": 248041,
+     "max_log_prob_gap": 0.0,
+     "message_types": {
+      "first": 336,
+      "retry_same_view": 337,
+      "update": 442
+     },
+     "milestone_requested": 100000,
+     "nonfinite_values_total": 0,
+     "optimiser": {
+      "approx_kl": {
+       "max": 0.0003,
+       "mean": 0.0,
+       "median": 0.0,
+       "min": -0.0004,
+       "n": 25,
+       "p25": -0.0,
+       "p75": 0.0001,
+       "total": 0.0006
+      },
+      "clip_fraction": {
+       "max": 0.0023,
+       "mean": 0.0007,
+       "median": 0.0005,
+       "min": 0.0,
+       "n": 25,
+       "p25": 0.0001,
+       "p75": 0.001,
+       "total": 0.0181
+      },
+      "entropy": {
+       "max": 0.0136,
+       "mean": 0.0108,
+       "median": 0.0111,
+       "min": 0.008,
+       "n": 25,
+       "p25": 0.0097,
+       "p75": 0.012,
+       "total": 0.2698
+      },
+      "gradient_norm_mean": {
+       "max": 0.3868,
+       "mean": 0.1767,
+       "median": 0.1514,
+       "min": 0.0772,
+       "n": 25,
+       "p25": 0.1266,
+       "p75": 0.193,
+       "total": 4.4168
+      },
+      "optimizer_steps": {
+       "max": 64.0,
+       "mean": 61.76,
+       "median": 64.0,
+       "min": 56.0,
+       "n": 25,
+       "p25": 60.0,
+       "p75": 64.0,
+       "total": 1544.0
+      },
+      "policy_surrogate": {
+       "max": 0.0771,
+       "mean": -0.1469,
+       "median": -0.1536,
+       "min": -0.4093,
+       "n": 25,
+       "p25": -0.2146,
+       "p75": -0.0443,
+       "total": -3.6725
+      },
+      "samples": {
+       "max": 4000.0,
+       "mean": 3835.88,
+       "median": 3870.0,
+       "min": 3425.0,
+       "n": 25,
+       "p25": 3769.0,
+       "p75": 3993.0,
+       "total": 95897.0
+      },
+      "value_loss": {
+       "max": 0.0252,
+       "mean": 0.0149,
+       "median": 0.0145,
+       "min": 0.0081,
+       "n": 25,
+       "p25": 0.0115,
+       "p75": 0.0173,
+       "total": 0.3726
+      }
+     },
+     "policy_refusals_total": 0,
+     "requested_total": 1115,
+     "send_step_percentiles": {
+      "25": 3,
+      "5": 1,
+      "50": 4,
+      "75": 6,
+      "95": 9
+     },
+     "steps_with_candidates": 95897,
+     "steps_with_zero_actionable": 95215,
+     "stochastic_entropy_per_candidate_last": 0.65355,
+     "stochastic_send_rate_last": 0.5696,
+     "updates": 25,
+     "value_explained_variance_last": 0.8904,
+     "wall_seconds": 280.9,
+     "weights_fingerprint": "1d76be1b60eaa4c4",
+     "window": "everything up to this checkpoint, from initial weights"
+    }
+   },
+   "200000": {
+    "evaluation": {
+     "mean_airtime_bytes": 28502.25,
+     "mean_on_time": 3.375,
+     "stream_block": "curve subset (8)",
+     "streams": 8
+    },
+    "training_diagnostics": {
+     "actionable_per_episode": {
+      "max": 32.0,
+      "mean": 18.9,
+      "median": 18.0,
+      "min": 11.0,
+      "n": 200,
+      "p25": 15.0,
+      "p75": 22.0,
+      "total": 3780.0
+     },
+     "actionable_total": 3780,
+     "actor_terms_total": 3780,
+     "candidates_per_episode": {
+      "max": 5051.0,
+      "mean": 2391.27,
+      "median": 2287.5,
+      "min": 768.0,
+      "n": 200,
+      "p25": 1873.0,
+      "p75": 3022.25,
+      "total": 478254.0
+     },
+     "checkpoint": "maskretrain_seed2_at200000.pt",
+     "credit_bytes_spent_total": 5659704,
+     "credit_used_fraction_mean": 0.9658,
+     "environment_steps": 200000,
+     "episodes": 200,
+     "episodes_without_actionable": 0,
+     "episodes_without_decisions": 0,
+     "executed_policy_total": 2233,
+     "greedy_entropy_per_candidate_last": 0.65477,
+     "greedy_send_rate_last": 0.3218,
+     "initial_executable_total": 4031,
+     "landed_at_steps": 200000,
+     "masked_by_capacity_total": 0,
+     "masked_by_credit_total": 474474,
+     "max_log_prob_gap": 0.0,
+     "message_types": {
+      "first": 693,
+      "retry_same_view": 649,
+      "update": 891
+     },
+     "milestone_requested": 200000,
+     "nonfinite_values_total": 0,
+     "optimiser": {
+      "approx_kl": {
+       "max": 0.0005,
+       "mean": 0.0001,
+       "median": 0.0,
+       "min": -0.0004,
+       "n": 50,
+       "p25": -0.0,
+       "p75": 0.0001,
+       "total": 0.0027
+      },
+      "clip_fraction": {
+       "max": 0.0033,
+       "mean": 0.0008,
+       "median": 0.0007,
+       "min": 0.0,
+       "n": 50,
+       "p25": 0.0002,
+       "p75": 0.0013,
+       "total": 0.0413
+      },
+      "entropy": {
+       "max": 0.0193,
+       "mean": 0.0128,
+       "median": 0.0125,
+       "min": 0.008,
+       "n": 50,
+       "p25": 0.0108,
+       "p75": 0.0149,
+       "total": 0.6386
+      },
+      "gradient_norm_mean": {
+       "max": 0.3868,
+       "mean": 0.1617,
+       "median": 0.1436,
+       "min": 0.0772,
+       "n": 50,
+       "p25": 0.1267,
+       "p75": 0.1674,
+       "total": 8.0837
+      },
+      "optimizer_steps": {
+       "max": 64.0,
+       "mean": 61.2,
+       "median": 64.0,
+       "min": 56.0,
+       "n": 50,
+       "p25": 60.0,
+       "p75": 64.0,
+       "total": 3060.0
+      },
+      "policy_surrogate": {
+       "max": 0.0941,
+       "mean": -0.1066,
+       "median": -0.0814,
+       "min": -0.4093,
+       "n": 50,
+       "p25": -0.1857,
+       "p75": -0.033,
+       "total": -5.3296
+      },
+      "samples": {
+       "max": 4000.0,
+       "mean": 3804.3,
+       "median": 3866.5,
+       "min": 3425.0,
+       "n": 50,
+       "p25": 3677.5,
+       "p75": 3948.5,
+       "total": 190215.0
+      },
+      "value_loss": {
+       "max": 0.0276,
+       "mean": 0.014,
+       "median": 0.0132,
+       "min": 0.0081,
+       "n": 50,
+       "p25": 0.0107,
+       "p75": 0.017,
+       "total": 0.7019
+      }
+     },
+     "policy_refusals_total": 0,
+     "requested_total": 2233,
+     "send_step_percentiles": {
+      "25": 3,
+      "5": 1,
+      "50": 5,
+      "75": 7,
+      "95": 10
+     },
+     "steps_with_candidates": 190215,
+     "steps_with_zero_actionable": 188689,
+     "stochastic_entropy_per_candidate_last": 0.65566,
+     "stochastic_send_rate_last": 0.5244,
+     "updates": 50,
+     "value_explained_variance_last": 0.9147,
+     "wall_seconds": 560.1,
+     "weights_fingerprint": "ca7bc241f3155d69",
+     "window": "everything up to this checkpoint, from initial weights"
+    }
+   },
+   "300000": {
+    "evaluation": {
+     "mean_airtime_bytes": 28262.25,
+     "mean_on_time": 3.0,
+     "stream_block": "curve subset (8)",
+     "streams": 8
+    },
+    "training_diagnostics": {
+     "actionable_per_episode": {
+      "max": 37.0,
+      "mean": 19.0167,
+      "median": 18.0,
+      "min": 11.0,
+      "n": 300,
+      "p25": 16.0,
+      "p75": 21.25,
+      "total": 5705.0
+     },
+     "actionable_total": 5705,
+     "actor_terms_total": 5705,
+     "candidates_per_episode": {
+      "max": 5051.0,
+      "mean": 2363.0967,
+      "median": 2274.5,
+      "min": 481.0,
+      "n": 300,
+      "p25": 1815.0,
+      "p75": 3024.5,
+      "total": 708929.0
+     },
+     "checkpoint": "maskretrain_seed2_at300000.pt",
+     "credit_bytes_spent_total": 8484654,
+     "credit_used_fraction_mean": 0.9653,
+     "environment_steps": 300000,
+     "episodes": 300,
+     "episodes_without_actionable": 0,
+     "episodes_without_decisions": 0,
+     "executed_policy_total": 3343,
+     "greedy_entropy_per_candidate_last": 0.50604,
+     "greedy_send_rate_last": 0.619,
+     "initial_executable_total": 6092,
+     "landed_at_steps": 300000,
+     "masked_by_capacity_total": 0,
+     "masked_by_credit_total": 703224,
+     "max_log_prob_gap": 0.0,
+     "message_types": {
+      "first": 1051,
+      "retry_same_view": 876,
+      "update": 1416
+     },
+     "milestone_requested": 300000,
+     "nonfinite_values_total": 0,
+     "optimiser": {
+      "approx_kl": {
+       "max": 0.0006,
+       "mean": 0.0001,
+       "median": 0.0,
+       "min": -0.0005,
+       "n": 75,
+       "p25": -0.0,
+       "p75": 0.0001,
+       "total": 0.0042
+      },
+      "clip_fraction": {
+       "max": 0.0049,
+       "mean": 0.001,
+       "median": 0.0008,
+       "min": 0.0,
+       "n": 75,
+       "p25": 0.0003,
+       "p75": 0.0013,
+       "total": 0.0718
+      },
+      "entropy": {
+       "max": 0.0235,
+       "mean": 0.0126,
+       "median": 0.0123,
+       "min": 0.0076,
+       "n": 75,
+       "p25": 0.0106,
+       "p75": 0.0143,
+       "total": 0.9434
+      },
+      "gradient_norm_mean": {
+       "max": 0.3868,
+       "mean": 0.17,
+       "median": 0.1514,
+       "min": 0.0772,
+       "n": 75,
+       "p25": 0.131,
+       "p75": 0.1911,
+       "total": 12.7498
+      },
+      "optimizer_steps": {
+       "max": 64.0,
+       "mean": 60.8,
+       "median": 64.0,
+       "min": 44.0,
+       "n": 75,
+       "p25": 58.0,
+       "p75": 64.0,
+       "total": 4560.0
+      },
+      "policy_surrogate": {
+       "max": 0.0941,
+       "mean": -0.0979,
+       "median": -0.0778,
+       "min": -0.4093,
+       "n": 75,
+       "p25": -0.1688,
+       "p75": -0.0209,
+       "total": -7.3421
+      },
+      "samples": {
+       "max": 4000.0,
+       "mean": 3776.2533,
+       "median": 3855.0,
+       "min": 2708.0,
+       "n": 75,
+       "p25": 3584.0,
+       "p75": 3941.5,
+       "total": 283219.0
+      },
+      "value_loss": {
+       "max": 0.0276,
+       "mean": 0.0132,
+       "median": 0.0116,
+       "min": 0.0063,
+       "n": 75,
+       "p25": 0.0101,
+       "p75": 0.0165,
+       "total": 0.9926
+      }
+     },
+     "policy_refusals_total": 0,
+     "requested_total": 3343,
+     "send_step_percentiles": {
+      "25": 3,
+      "5": 1,
+      "50": 5,
+      "75": 7,
+      "95": 11
+     },
+     "steps_with_candidates": 283219,
+     "steps_with_zero_actionable": 280884,
+     "stochastic_entropy_per_candidate_last": 0.5031,
+     "stochastic_send_rate_last": 0.7097,
+     "updates": 75,
+     "value_explained_variance_last": 0.9154,
+     "wall_seconds": 841.4,
+     "weights_fingerprint": "e76f16cf4705e77a",
+     "window": "everything up to this checkpoint, from initial weights"
+    }
+   },
+   "400000": {
+    "evaluation": {
+     "mean_airtime_bytes": 28284.25,
+     "mean_on_time": 3.79167,
+     "stream_block": "development (24)",
+     "streams": 24
+    },
+    "training_diagnostics": {
+     "actionable_per_episode": {
+      "max": 127.0,
+      "mean": 20.05,
+      "median": 19.0,
+      "min": 11.0,
+      "n": 400,
+      "p25": 16.0,
+      "p75": 22.0,
+      "total": 8020.0
+     },
+     "actionable_total": 8020,
+     "actor_terms_total": 8020,
+     "candidates_per_episode": {
+      "max": 5051.0,
+      "mean": 2323.905,
+      "median": 2232.0,
+      "min": 172.0,
+      "n": 400,
+      "p25": 1752.75,
+      "p75": 3009.75,
+      "total": 929562.0
+     },
+     "checkpoint": "maskretrain_seed2_at400000.pt",
+     "credit_bytes_spent_total": 11301732,
+     "credit_used_fraction_mean": 0.9643,
+     "environment_steps": 400000,
+     "episodes": 400,
+     "episodes_without_actionable": 0,
+     "episodes_without_decisions": 0,
+     "executed_policy_total": 4448,
+     "greedy_entropy_per_candidate_last": 0.36637,
+     "greedy_send_rate_last": 0.2214,
+     "initial_executable_total": 8532,
+     "landed_at_steps": 400000,
+     "masked_by_capacity_total": 0,
+     "masked_by_credit_total": 921542,
+     "max_log_prob_gap": 0.0,
+     "message_types": {
+      "first": 1415,
+      "retry_same_view": 1069,
+      "update": 1964
+     },
+     "milestone_requested": 400000,
+     "nonfinite_values_total": 0,
+     "optimiser": {
+      "approx_kl": {
+       "max": 0.0008,
+       "mean": 0.0001,
+       "median": 0.0,
+       "min": -0.0005,
+       "n": 100,
+       "p25": -0.0001,
+       "p75": 0.0002,
+       "total": 0.0074
+      },
+      "clip_fraction": {
+       "max": 0.0049,
+       "mean": 0.0011,
+       "median": 0.001,
+       "min": 0.0,
+       "n": 100,
+       "p25": 0.0004,
+       "p75": 0.0014,
+       "total": 0.1102
+      },
+      "entropy": {
+       "max": 0.0235,
+       "mean": 0.0122,
+       "median": 0.012,
+       "min": 0.007,
+       "n": 100,
+       "p25": 0.0099,
+       "p75": 0.014,
+       "total": 1.2226
+      },
+      "gradient_norm_mean": {
+       "max": 0.42,
+       "mean": 0.1844,
+       "median": 0.1627,
+       "min": 0.0772,
+       "n": 100,
+       "p25": 0.1381,
+       "p75": 0.2177,
+       "total": 18.4388
+      },
+      "optimizer_steps": {
+       "max": 64.0,
+       "mean": 60.44,
+       "median": 60.0,
+       "min": 44.0,
+       "n": 100,
+       "p25": 56.0,
+       "p75": 64.0,
+       "total": 6044.0
+      },
+      "policy_surrogate": {
+       "max": 0.0941,
+       "mean": -0.1057,
+       "median": -0.0866,
+       "min": -0.4093,
+       "n": 100,
+       "p25": -0.1824,
+       "p75": -0.0282,
+       "total": -10.5738
+      },
+      "samples": {
+       "max": 4000.0,
+       "mean": 3751.52,
+       "median": 3838.5,
+       "min": 2693.0,
+       "n": 100,
+       "p25": 3576.0,
+       "p75": 3941.0,
+       "total": 375152.0
+      },
+      "value_loss": {
+       "max": 0.0278,
+       "mean": 0.0132,
+       "median": 0.0116,
+       "min": 0.004,
+       "n": 100,
+       "p25": 0.0097,
+       "p75": 0.0168,
+       "total": 1.3152
+      }
+     },
+     "policy_refusals_total": 0,
+     "requested_total": 4448,
+     "send_step_percentiles": {
+      "25": 3,
+      "5": 1,
+      "50": 5,
+      "75": 7,
+      "95": 11
+     },
+     "steps_with_candidates": 375152,
+     "steps_with_zero_actionable": 371817,
+     "stochastic_entropy_per_candidate_last": 0.37041,
+     "stochastic_send_rate_last": 0.3188,
+     "updates": 100,
+     "value_explained_variance_last": 0.9068,
+     "wall_seconds": 1124.0,
+     "weights_fingerprint": "4df80593a32f624d",
+     "window": "everything up to this checkpoint, from initial weights"
+    }
+   }
+  },
+  "summary": {
+   "actionable_total": 8020,
+   "actor_terms_total": 8020,
+   "candidates_total": 929562,
+   "environment_steps": 400000,
+   "episodes": 400,
+   "episodes_without_actionable_total": 0,
+   "executed_total": 4448,
+   "final_weights_fingerprint": "4df80593a32f624d",
+   "initial_weights_fingerprint": "e7338f6040e6a0f3",
+   "likelihood_max_abs_gap": 0.0,
+   "masked_by_credit_total": 921542,
+   "optimizer_steps_cumulative": 6044,
+   "policy_refusals_total": 0,
+   "requested_total": 4448,
+   "resumed": true,
+   "updates": 100,
+   "wall_seconds": 1461.5
+  }
+ },
+ "3": {
+  "arm_family": "masked_s3",
+  "checkpoints": {
+   "0": {
+    "evaluation": {
+     "mean_airtime_bytes": 28330.0,
+     "mean_on_time": 2.95833,
+     "stream_block": "development (24)",
+     "streams": 24
+    },
+    "training_diagnostics": null
+   },
+   "100000": {
+    "evaluation": {
+     "mean_airtime_bytes": 22826.25,
+     "mean_on_time": 5.75,
+     "stream_block": "curve subset (8)",
+     "streams": 8
+    },
+    "training_diagnostics": {
+     "actionable_per_episode": {
+      "max": 42.0,
+      "mean": 19.58,
+      "median": 18.0,
+      "min": 11.0,
+      "n": 100,
+      "p25": 15.0,
+      "p75": 23.0,
+      "total": 1958.0
+     },
+     "actionable_total": 1958,
+     "actor_terms_total": 1958,
+     "candidates_per_episode": {
+      "max": 4956.0,
+      "mean": 2306.21,
+      "median": 2228.5,
+      "min": 179.0,
+      "n": 100,
+      "p25": 1719.0,
+      "p75": 2945.25,
+      "total": 230621.0
+     },
+     "checkpoint": "maskretrain_seed3_at100000.pt",
+     "credit_bytes_spent_total": 2831496,
+     "credit_used_fraction_mean": 0.9664,
+     "environment_steps": 100000,
+     "episodes": 100,
+     "episodes_without_actionable": 0,
+     "episodes_without_decisions": 0,
+     "executed_policy_total": 1119,
+     "greedy_entropy_per_candidate_last": 0.55962,
+     "greedy_send_rate_last": 0.1591,
+     "initial_executable_total": 2054,
+     "landed_at_steps": 100000,
+     "masked_by_capacity_total": 0,
+     "masked_by_credit_total": 228663,
+     "max_log_prob_gap": 0.0,
+     "message_types": {
+      "first": 359,
+      "retry_same_view": 304,
+      "update": 456
+     },
+     "milestone_requested": 100000,
+     "nonfinite_values_total": 0,
+     "optimiser": {
+      "approx_kl": {
+       "max": 0.0005,
+       "mean": 0.0,
+       "median": 0.0,
+       "min": -0.0004,
+       "n": 25,
+       "p25": -0.0002,
+       "p75": 0.0001,
+       "total": 0.0007
+      },
+      "clip_fraction": {
+       "max": 0.0034,
+       "mean": 0.0012,
+       "median": 0.001,
+       "min": 0.0001,
+       "n": 25,
+       "p25": 0.0005,
+       "p75": 0.0014,
+       "total": 0.029
+      },
+      "entropy": {
+       "max": 0.0232,
+       "mean": 0.0127,
+       "median": 0.0113,
+       "min": 0.0079,
+       "n": 25,
+       "p25": 0.0089,
+       "p75": 0.0154,
+       "total": 0.3175
+      },
+      "gradient_norm_mean": {
+       "max": 0.2618,
+       "mean": 0.1406,
+       "median": 0.1339,
+       "min": 0.0846,
+       "n": 25,
+       "p25": 0.1082,
+       "p75": 0.1714,
+       "total": 3.5142
+      },
+      "optimizer_steps": {
+       "max": 64.0,
+       "mean": 59.84,
+       "median": 60.0,
+       "min": 48.0,
+       "n": 25,
+       "p25": 56.0,
+       "p75": 64.0,
+       "total": 1496.0
+      },
+      "policy_surrogate": {
+       "max": 0.3959,
+       "mean": 0.0135,
+       "median": -0.0229,
+       "min": -0.2735,
+       "n": 25,
+       "p25": -0.0751,
+       "p75": 0.0586,
+       "total": 0.3381
+      },
+      "samples": {
+       "max": 4000.0,
+       "mean": 3712.28,
+       "median": 3775.0,
+       "min": 2819.0,
+       "n": 25,
+       "p25": 3570.0,
+       "p75": 3896.0,
+       "total": 92807.0
+      },
+      "value_loss": {
+       "max": 0.0324,
+       "mean": 0.0169,
+       "median": 0.0161,
+       "min": 0.0071,
+       "n": 25,
+       "p25": 0.013,
+       "p75": 0.0188,
+       "total": 0.4223
+      }
+     },
+     "policy_refusals_total": 0,
+     "requested_total": 1119,
+     "send_step_percentiles": {
+      "25": 3,
+      "5": 1,
+      "50": 4,
+      "75": 7,
+      "95": 12
+     },
+     "steps_with_candidates": 92807,
+     "steps_with_zero_actionable": 92022,
+     "stochastic_entropy_per_candidate_last": 0.55914,
+     "stochastic_send_rate_last": 0.3571,
+     "updates": 25,
+     "value_explained_variance_last": 0.8862,
+     "wall_seconds": 286.7,
+     "weights_fingerprint": "2d779ce6a5069914",
+     "window": "everything up to this checkpoint, from initial weights"
+    }
+   },
+   "200000": {
+    "evaluation": {
+     "mean_airtime_bytes": 14909.25,
+     "mean_on_time": 5.75,
+     "stream_block": "curve subset (8)",
+     "streams": 8
+    },
+    "training_diagnostics": {
+     "actionable_per_episode": {
+      "max": 279.0,
+      "mean": 43.09,
+      "median": 26.5,
+      "min": 11.0,
+      "n": 200,
+      "p25": 18.0,
+      "p75": 51.25,
+      "total": 8618.0
+     },
+     "actionable_total": 8618,
+     "actor_terms_total": 8618,
+     "candidates_per_episode": {
+      "max": 4956.0,
+      "mean": 1839.3,
+      "median": 1774.0,
+      "min": 81.0,
+      "n": 200,
+      "p25": 1089.0,
+      "p75": 2458.0,
+      "total": 367860.0
+     },
+     "checkpoint": "maskretrain_seed3_at200000.pt",
+     "credit_bytes_spent_total": 5662422,
+     "credit_used_fraction_mean": 0.9663,
+     "environment_steps": 200000,
+     "episodes": 200,
+     "episodes_without_actionable": 0,
+     "episodes_without_decisions": 0,
+     "executed_policy_total": 2231,
+     "greedy_entropy_per_candidate_last": 0.1708,
+     "greedy_send_rate_last": 0.0409,
+     "initial_executable_total": 8831,
+     "landed_at_steps": 200000,
+     "masked_by_capacity_total": 0,
+     "masked_by_credit_total": 359242,
+     "max_log_prob_gap": 0.0,
+     "message_types": {
+      "first": 815,
+      "retry_same_view": 520,
+      "update": 896
+     },
+     "milestone_requested": 200000,
+     "nonfinite_values_total": 0,
+     "optimiser": {
+      "approx_kl": {
+       "max": 0.0011,
+       "mean": 0.0001,
+       "median": 0.0001,
+       "min": -0.0004,
+       "n": 50,
+       "p25": -0.0001,
+       "p75": 0.0003,
+       "total": 0.0059
+      },
+      "clip_fraction": {
+       "max": 0.0089,
+       "mean": 0.002,
+       "median": 0.0013,
+       "min": 0.0,
+       "n": 50,
+       "p25": 0.0009,
+       "p75": 0.0024,
+       "total": 0.0983
+      },
+      "entropy": {
+       "max": 0.0789,
+       "mean": 0.0226,
+       "median": 0.0175,
+       "min": 0.0079,
+       "n": 50,
+       "p25": 0.0114,
+       "p75": 0.0261,
+       "total": 1.1283
+      },
+      "gradient_norm_mean": {
+       "max": 0.46,
+       "mean": 0.1947,
+       "median": 0.1754,
+       "min": 0.0846,
+       "n": 50,
+       "p25": 0.1328,
+       "p75": 0.253,
+       "total": 9.7371
+      },
+      "optimizer_steps": {
+       "max": 64.0,
+       "mean": 53.36,
+       "median": 56.0,
+       "min": 24.0,
+       "n": 50,
+       "p25": 48.0,
+       "p75": 60.0,
+       "total": 2668.0
+      },
+      "policy_surrogate": {
+       "max": 0.3959,
+       "mean": -0.0452,
+       "median": -0.0245,
+       "min": -0.653,
+       "n": 50,
+       "p25": -0.1156,
+       "p75": 0.036,
+       "total": -2.2618
+      },
+      "samples": {
+       "max": 4000.0,
+       "mean": 3302.56,
+       "median": 3565.0,
+       "min": 1492.0,
+       "n": 50,
+       "p25": 2990.75,
+       "p75": 3836.75,
+       "total": 165128.0
+      },
+      "value_loss": {
+       "max": 0.1051,
+       "mean": 0.0262,
+       "median": 0.0217,
+       "min": 0.0071,
+       "n": 50,
+       "p25": 0.015,
+       "p75": 0.0321,
+       "total": 1.3101
+      }
+     },
+     "policy_refusals_total": 0,
+     "requested_total": 2231,
+     "send_step_percentiles": {
+      "25": 3,
+      "5": 1,
+      "50": 6,
+      "75": 11,
+      "95": 186
+     },
+     "steps_with_candidates": 165128,
+     "steps_with_zero_actionable": 161600,
+     "stochastic_entropy_per_candidate_last": 0.1708,
+     "stochastic_send_rate_last": 0.0629,
+     "updates": 50,
+     "value_explained_variance_last": 0.9137,
+     "wall_seconds": 569.3,
+     "weights_fingerprint": "773347c80478e737",
+     "window": "everything up to this checkpoint, from initial weights"
+    }
+   },
+   "300000": {
+    "evaluation": {
+     "mean_airtime_bytes": 14574.75,
+     "mean_on_time": 5.875,
+     "stream_block": "curve subset (8)",
+     "streams": 8
+    },
+    "training_diagnostics": {
+     "actionable_per_episode": {
+      "max": 491.0,
+      "mean": 75.28,
+      "median": 49.0,
+      "min": 11.0,
+      "n": 300,
+      "p25": 22.0,
+      "p75": 122.0,
+      "total": 22584.0
+     },
+     "actionable_total": 22584,
+     "actor_terms_total": 22584,
+     "candidates_per_episode": {
+      "max": 4956.0,
+      "mean": 1412.9333,
+      "median": 1200.0,
+      "min": 76.0,
+      "n": 300,
+      "p25": 312.5,
+      "p75": 2217.25,
+      "total": 423880.0
+     },
+     "checkpoint": "maskretrain_seed3_at300000.pt",
+     "credit_bytes_spent_total": 8330784,
+     "credit_used_fraction_mean": 0.9478,
+     "environment_steps": 300000,
+     "episodes": 300,
+     "episodes_without_actionable": 0,
+     "episodes_without_decisions": 0,
+     "executed_policy_total": 3279,
+     "greedy_entropy_per_candidate_last": 0.15786,
+     "greedy_send_rate_last": 0.0522,
+     "initial_executable_total": 22855,
+     "landed_at_steps": 300000,
+     "masked_by_capacity_total": 0,
+     "masked_by_credit_total": 401296,
+     "max_log_prob_gap": 1e-06,
+     "message_types": {
+      "first": 1377,
+      "retry_same_view": 674,
+      "update": 1228
+     },
+     "milestone_requested": 300000,
+     "nonfinite_values_total": 0,
+     "optimiser": {
+      "approx_kl": {
+       "max": 0.0013,
+       "mean": 0.0002,
+       "median": 0.0001,
+       "min": -0.0004,
+       "n": 75,
+       "p25": -0.0001,
+       "p75": 0.0004,
+       "total": 0.0154
+      },
+      "clip_fraction": {
+       "max": 0.0122,
+       "mean": 0.0023,
+       "median": 0.0013,
+       "min": 0.0,
+       "n": 75,
+       "p25": 0.0005,
+       "p75": 0.0029,
+       "total": 0.1756
+      },
+      "entropy": {
+       "max": 0.372,
+       "mean": 0.0529,
+       "median": 0.0263,
+       "min": 0.0079,
+       "n": 75,
+       "p25": 0.0154,
+       "p75": 0.0601,
+       "total": 3.966
+      },
+      "gradient_norm_mean": {
+       "max": 2.236,
+       "mean": 0.393,
+       "median": 0.2535,
+       "min": 0.0846,
+       "n": 75,
+       "p25": 0.1597,
+       "p75": 0.4277,
+       "total": 29.4729
+      },
+      "optimizer_steps": {
+       "max": 64.0,
+       "mean": 42.72,
+       "median": 48.0,
+       "min": 4.0,
+       "n": 75,
+       "p25": 28.0,
+       "p75": 60.0,
+       "total": 3204.0
+      },
+      "policy_surrogate": {
+       "max": 0.3959,
+       "mean": -0.1098,
+       "median": -0.0714,
+       "min": -0.7203,
+       "n": 75,
+       "p25": -0.2509,
+       "p75": 0.0359,
+       "total": -8.234
+      },
+      "samples": {
+       "max": 4000.0,
+       "mean": 2613.64,
+       "median": 2985.0,
+       "min": 252.0,
+       "n": 75,
+       "p25": 1602.0,
+       "p75": 3653.5,
+       "total": 196023.0
+      },
+      "value_loss": {
+       "max": 0.6971,
+       "mean": 0.0655,
+       "median": 0.0324,
+       "min": 0.0071,
+       "n": 75,
+       "p25": 0.017,
+       "p75": 0.0591,
+       "total": 4.9143
+      }
+     },
+     "policy_refusals_total": 0,
+     "requested_total": 3279,
+     "send_step_percentiles": {
+      "25": 4,
+      "5": 1,
+      "50": 7,
+      "75": 22,
+      "95": 267
+     },
+     "steps_with_candidates": 196023,
+     "steps_with_zero_actionable": 186138,
+     "stochastic_entropy_per_candidate_last": 0.1582,
+     "stochastic_send_rate_last": 0.0659,
+     "updates": 75,
+     "value_explained_variance_last": 0.7231,
+     "wall_seconds": 848.4,
+     "weights_fingerprint": "31bdbeee951181f8",
+     "window": "everything up to this checkpoint, from initial weights"
+    }
+   },
+   "400000": {
+    "evaluation": {
+     "mean_airtime_bytes": 14919.75,
+     "mean_on_time": 5.66667,
+     "stream_block": "development (24)",
+     "streams": 24
+    },
+    "training_diagnostics": {
+     "actionable_per_episode": {
+      "max": 491.0,
+      "mean": 96.01,
+      "median": 89.0,
+      "min": 11.0,
+      "n": 400,
+      "p25": 26.75,
+      "p75": 148.25,
+      "total": 38404.0
+     },
+     "actionable_total": 38404,
+     "actor_terms_total": 38404,
+     "candidates_per_episode": {
+      "max": 4956.0,
+      "mean": 1180.5875,
+      "median": 886.0,
+      "min": 76.0,
+      "n": 400,
+      "p25": 166.0,
+      "p75": 2073.0,
+      "total": 472235.0
+     },
+     "checkpoint": "maskretrain_seed3_at400000.pt",
+     "credit_bytes_spent_total": 10726524,
+     "credit_used_fraction_mean": 0.9152,
+     "environment_steps": 400000,
+     "episodes": 400,
+     "episodes_without_actionable": 0,
+     "episodes_without_decisions": 0,
+     "executed_policy_total": 4222,
+     "greedy_entropy_per_candidate_last": 0.12466,
+     "greedy_send_rate_last": 0.0375,
+     "initial_executable_total": 38703,
+     "landed_at_steps": 400000,
+     "masked_by_capacity_total": 0,
+     "masked_by_credit_total": 433831,
+     "max_log_prob_gap": 1e-06,
+     "message_types": {
+      "first": 1944,
+      "retry_same_view": 789,
+      "update": 1489
+     },
+     "milestone_requested": 400000,
+     "nonfinite_values_total": 0,
+     "optimiser": {
+      "approx_kl": {
+       "max": 0.0041,
+       "mean": 0.0003,
+       "median": 0.0001,
+       "min": -0.0009,
+       "n": 100,
+       "p25": -0.0001,
+       "p75": 0.0004,
+       "total": 0.0255
+      },
+      "clip_fraction": {
+       "max": 0.0122,
+       "mean": 0.0025,
+       "median": 0.0014,
+       "min": 0.0,
+       "n": 100,
+       "p25": 0.0002,
+       "p75": 0.0036,
+       "total": 0.2495
+      },
+      "entropy": {
+       "max": 0.372,
+       "mean": 0.073,
+       "median": 0.0477,
+       "min": 0.0079,
+       "n": 100,
+       "p25": 0.0176,
+       "p75": 0.0931,
+       "total": 7.2969
+      },
+      "gradient_norm_mean": {
+       "max": 20.1162,
+       "mean": 0.7615,
+       "median": 0.3429,
+       "min": 0.0846,
+       "n": 100,
+       "p25": 0.1759,
+       "p75": 0.6307,
+       "total": 76.1476
+      },
+      "optimizer_steps": {
+       "max": 64.0,
+       "mean": 36.08,
+       "median": 32.0,
+       "min": 4.0,
+       "n": 100,
+       "p25": 20.0,
+       "p75": 56.0,
+       "total": 3608.0
+      },
+      "policy_surrogate": {
+       "max": 0.3959,
+       "mean": -0.1374,
+       "median": -0.0633,
+       "min": -1.5477,
+       "n": 100,
+       "p25": -0.2774,
+       "p75": 0.0401,
+       "total": -13.7418
+      },
+      "samples": {
+       "max": 4000.0,
+       "mean": 2187.43,
+       "median": 1940.0,
+       "min": 251.0,
+       "n": 100,
+       "p25": 1211.5,
+       "p75": 3562.5,
+       "total": 218743.0
+      },
+      "value_loss": {
+       "max": 0.6971,
+       "mean": 0.0902,
+       "median": 0.0502,
+       "min": 0.0071,
+       "n": 100,
+       "p25": 0.0218,
+       "p75": 0.0899,
+       "total": 9.0193
+      }
+     },
+     "policy_refusals_total": 0,
+     "requested_total": 4222,
+     "send_step_percentiles": {
+      "25": 4,
+      "5": 1,
+      "50": 9,
+      "75": 32,
+      "95": 305
+     },
+     "steps_with_candidates": 218743,
+     "steps_with_zero_actionable": 201654,
+     "stochastic_entropy_per_candidate_last": 0.12466,
+     "stochastic_send_rate_last": 0.0625,
+     "updates": 100,
+     "value_explained_variance_last": 0.7128,
+     "wall_seconds": 1125.3,
+     "weights_fingerprint": "036f85d57b911d91",
+     "window": "everything up to this checkpoint, from initial weights"
+    }
+   }
+  },
+  "summary": {
+   "actionable_total": 38404,
+   "actor_terms_total": 38404,
+   "candidates_total": 472235,
+   "environment_steps": 400000,
+   "episodes": 400,
+   "episodes_without_actionable_total": 0,
+   "executed_total": 4222,
+   "final_weights_fingerprint": "036f85d57b911d91",
+   "initial_weights_fingerprint": "69ad8aafa51544d1",
+   "likelihood_max_abs_gap": 1e-06,
+   "masked_by_credit_total": 433831,
+   "optimizer_steps_cumulative": 3608,
+   "policy_refusals_total": 0,
+   "requested_total": 4222,
+   "resumed": true,
+   "updates": 100,
+   "wall_seconds": 1148.5
+  }
+ }
+}
