@@ -42,6 +42,7 @@ from .coordinator import (
 from .detection_replay import scenario_map_sha256
 from .errors import ConfigurationError, IntegratedSARError
 from .event_bus import InMemoryEventBus
+from .info_probe import InfoProbe
 from .lifecycle_log import LifecycleLogger
 from .orchestrator import JointSAROrchestrator
 from .profiles import DeterministicTargetProfileProvider
@@ -181,6 +182,10 @@ class RunConfiguration:
     # later judged against. Off unless a path is given, and never read back by a
     # decision -- see integrated_sar.allocation_trace.
     decision_trace: str | None = None
+    # B0 of the D1 revision: a side file with placement, per-recipient delivery, first
+    # knowledge and arrival. Read-only, consumes no random number, and is not an input to
+    # any observation, so a run with it on must produce an identical lifecycle log.
+    info_probe: str | None = None
 
     @property
     def search_backend(self) -> str:
@@ -539,6 +544,12 @@ def build_parser() -> argparse.ArgumentParser:
                         help="write the transport transcript (one JSON object per accepted "
                              "event, emission and delivery attempt) to this path; a "
                              "measurement artefact, never read back by a decision")
+    parser.add_argument("--info-probe", dest="info_probe", default=None,
+                        help="write the passive information-path probe (goal placement, "
+                             "per-recipient delivery outcome, first knowledge with its "
+                             "channel, arrival) to this path. It reads beliefs and rosters "
+                             "only: it consumes no random number, feeds no observation, and "
+                             "gates no decision, so the lifecycle log stays byte-identical")
     parser.add_argument("--comm-ack", action="store_true",
                         help="turn on the reverse channel: receivers acknowledge the views they "
                              "actually applied, over a delayed, lossy, separately billed channel, "
@@ -629,6 +640,7 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         quiet=bool(args.quiet),
         repository_root=args.repository_root,
         record_stream=args.record_stream,
+        info_probe=getattr(args, "info_probe", None),
         replay_stream=args.replay_stream,
         decision_trace=args.decision_trace,
     )
@@ -747,6 +759,7 @@ class JointRun:
     stream_recorder: Any = None
     decision_trace: Any = None
     comm_transcript: Any = None
+    info_probe: Any = None
     counters: dict[str, int] = field(default_factory=dict)
     _signature: dict[str, Any] | None = field(default=None, repr=False)
 
@@ -774,6 +787,16 @@ class JointRun:
             for rejection in self.gate.drain_rejections():
                 self.logger.log_rejection(rejection, step=report.step)
                 self._count("rejected_assignments")
+            if self.info_probe is not None:
+                # Placement is read once, from the snapshot the search adapter took at reset,
+                # because timemap deletes a goal as soon as it is found.
+                self.info_probe.note_placed(self.search_adapter.placed_goals())
+                self.info_probe.sample(
+                    step=report.step,
+                    now=self.orchestrator.current_time,
+                    env=self.task_adapter.env,
+                    external_to_internal=self.task_adapter.external_to_internal,
+                )
             self._count("detections", len(report.detections))
             self._count("progress_events", len(report.progress_events))
             self._count("assignments", len(report.assignments))
@@ -802,6 +825,8 @@ class JointRun:
             summary["comm_transcript"] = str(
                 self.comm_transcript.write(self.configuration.comm_transcript)
             )
+        if self.info_probe is not None and self.configuration.info_probe:
+            summary["info_probe"] = str(self.info_probe.write())
         if self.decision_trace is not None:
             self.decision_trace.finish(summary)
         self.logger.log_final(
@@ -961,6 +986,7 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
             )
         subscribers = requested
     comm_transcript = CommTranscript() if configuration.comm_transcript else None
+    info_probe = InfoProbe(configuration.info_probe) if configuration.info_probe else None
     comm_relay = CommRelay(
         subscribers=subscribers,
         writer=task_adapter,
@@ -986,6 +1012,7 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         ack_enabled=bool(configuration.comm_ack),
         ack_delay_ticks=configuration.comm_ack_delay_ticks,
         ack_delivery_probability=configuration.comm_ack_delivery_probability,
+        info_probe=info_probe,
     )
     bus.subscribe(DetectionEvent, comm_relay.handle_detection)
     task_adapter.comm_relay = comm_relay
@@ -1025,6 +1052,7 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         stream_recorder=recorder,
         decision_trace=trace_writer,
         comm_transcript=comm_transcript,
+        info_probe=info_probe,
         _signature=signature,
     )
 

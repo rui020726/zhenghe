@@ -1,0 +1,116 @@
+{
+ "b0_replay": {
+  "all_identical": true,
+  "deterministic": true,
+  "pairs": [
+   {
+    "arm": "A1",
+    "behaviour_records_identical": true,
+    "charge_equal": true,
+    "complete": true,
+    "counter_differences": [],
+    "counters_identical": true,
+    "detection_sequence_equal": true,
+    "emission_sequence_equal": true,
+    "outcome_equal": true,
+    "probe_anomalies": 0,
+    "probe_records_present": true,
+    "repeat_off_deterministic": true,
+    "repeat_on_deterministic": true,
+    "seed": 1100000
+   },
+   {
+    "arm": "A3",
+    "behaviour_records_identical": true,
+    "charge_equal": true,
+    "complete": true,
+    "counter_differences": [],
+    "counters_identical": true,
+    "detection_sequence_equal": true,
+    "emission_sequence_equal": true,
+    "outcome_equal": true,
+    "probe_anomalies": 0,
+    "probe_records_present": true,
+    "repeat_off_deterministic": true,
+    "repeat_on_deterministic": true,
+    "seed": 1100000
+   },
+   {
+    "arm": "A1",
+    "behaviour_records_identical": true,
+    "charge_equal": true,
+    "complete": true,
+    "counter_differences": [],
+    "counters_identical": true,
+    "detection_sequence_equal": true,
+    "emission_sequence_equal": true,
+    "outcome_equal": true,
+    "probe_anomalies": 0,
+    "probe_records_present": true,
+    "repeat_off_deterministic": true,
+    "repeat_on_deterministic": true,
+    "seed": 1100001
+   },
+   {
+    "arm": "A3",
+    "behaviour_records_identical": true,
+    "charge_equal": true,
+    "complete": true,
+    "counter_differences": [],
+    "counters_identical": true,
+    "detection_sequence_equal": true,
+    "emission_sequence_equal": true,
+    "outcome_equal": true,
+    "probe_anomalies": 0,
+    "probe_records_present": true,
+    "repeat_off_deterministic": true,
+    "repeat_on_deterministic": true,
+    "seed": 1100001
+   }
+  ]
+ },
+ "i6_timing_mode_inert": {
+  "inert": true,
+  "pairs": [
+   {
+    "airtime_bytes": 15132,
+    "behaviour_records_identical": true,
+    "charge_equal": true,
+    "complete": true,
+    "counter_differences": [],
+    "counters_identical": true,
+    "differing_record_count": 0,
+    "emission_sequence_equal": true,
+    "outcome_equal": true,
+    "record_count": 1363,
+    "seed": 1100000
+   },
+   {
+    "airtime_bytes": 14766,
+    "behaviour_records_identical": true,
+    "charge_equal": true,
+    "complete": true,
+    "counter_differences": [],
+    "counters_identical": true,
+    "differing_record_count": 0,
+    "emission_sequence_equal": true,
+    "outcome_equal": true,
+    "record_count": 1434,
+    "seed": 1100001
+   }
+  ]
+ },
+ "launches_booked_so_far": {
+  "by_kind": {
+   "b0": 16,
+   "mode": 4
+  },
+  "cap": 296,
+  "used": 20
+ },
+ "passed": true,
+ "round": "comm_info_path_validation_20260923",
+ "stage": "b0_paired_replay_and_timing_mode",
+ "stop_rule": "if passed is false, the data arms must not be run",
+ "what_this_proves": "turning B0 on leaves the detection records, the task outcomes, the emission sequence and the charged bytes identical, and repeating a cell reproduces it — so the probe cannot be the reason for anything the data stage measures. The timing-mode pair additionally shows the transport does not speak for any arm when no max-wait is configured, which is what lets A1 and A2 differ in exactly one field."
+}

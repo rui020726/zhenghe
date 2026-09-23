@@ -92,6 +92,17 @@ class PilocSearchAdapter:
             f"piloc-e{self._episode}-target-{index}"
             for index in range(len(self.env.goals_pos))
         ]
+        # The placed set has to be captured here and not later: timemap removes a goal once
+        # it is found, so reading goals_pos after step one would under-count placement and
+        # silently lose the denominator for "never discovered".
+        self._placed_at_reset = [
+            (track_id, tuple(position))
+            for track_id, position in zip(self._track_ids, self.env.goals_pos)
+        ]
+
+    def placed_goals(self) -> list[tuple[str, tuple[Any, ...]]]:
+        """Every goal the scenario contains at reset, with the id it will be found under."""
+        return list(getattr(self, "_placed_at_reset", ()))
 
     def step(self, current_time: float, dt: float) -> SearchStepResult:
         before_goals = [

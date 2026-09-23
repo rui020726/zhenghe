@@ -236,6 +236,7 @@ class CommRelay:
         ack_delay_ticks: int | None = None,
         ack_delivery_probability: float | None = None,
         ack_seed: int | None = None,
+        info_probe: Any = None,
     ) -> None:
         if not 0.0 <= float(delivery_probability) <= 1.0:
             raise ValueError(
@@ -286,6 +287,8 @@ class CommRelay:
         self._freshness_of = freshness_of
         self._now_of = now_of
         self.transcript = transcript
+        # B0's read-only side channel: it observes the packet draw, it never makes one.
+        self._info_probe = info_probe
         # The reverse channel. Off by default and constructed only when asked for: with ACK off
         # there is no state table, no reverse rng, no extra transcript kind and no extra rng
         # consumption, which is what keeps the historical path byte-identical. The declared
@@ -921,11 +924,25 @@ class CommRelay:
         due_tick = self._tick + self._delay_ticks
         sent = 0
         lost = 0
-        for agent_id in self._subscribers:
+        for packet_index, agent_id in enumerate(self._subscribers, start=1):
             # The uplink drops packets independently per robot; a dropped packet is never
             # retransmitted by the relay itself, so that robot's belief stays as it was and
             # only a policy that emits again can recover it. The drop is billed all the same.
-            if self._rng.random() > self._delivery_probability:
+            dropped = bool(self._rng.random() > self._delivery_probability)
+            if self._info_probe is not None:
+                # One record per (packet, named recipient): the fact that ``packets_lost``
+                # could not carry. Read-only, and it does not touch the draw above.
+                self._info_probe.note_delivery(
+                    step=int(self._tick),
+                    target_id=str(item.target_id),
+                    robot_id=str(agent_id),
+                    arrived=not dropped,
+                    revision=int(message.revision),
+                    payload_bytes=int(payload_bytes),
+                    ordinal=ledger.sent_count + 1,
+                    packet_index=packet_index,
+                )
+            if dropped:
                 lost += 1
                 continue
             self._sequence += 1
