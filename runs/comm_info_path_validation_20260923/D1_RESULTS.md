@@ -1,6 +1,8 @@
 # D1 实测结果：部署路径的信息通道值多少按时任务
 
-分支 `exp/comm-info-path-validation`，起点 `analysis/comm-research-closure@b73876013e76…`（远端完整 SHA 已核对）。
+分支 `exp/comm-info-path-validation`，起点为上一轮已推送的提交头
+`analysis/comm-research-closure@b73876013e76a82bbaab2f886eedeb34df7fc039`
+（建分支前用 `git ls-remote` 取回远端完整 SHA，与本地该分支头逐字符一致）。
 判据来自 [`D1_PROTOCOL_REVISION.md`](D1_PROTOCOL_REVISION.md)（在任何新 episode 之前冻结并单独提交），
 机读结果 [`D1_RESULTS.json`](D1_RESULTS.json)，边界核验 [`D1_VERIFICATION.json`](D1_VERIFICATION.json)（`passed=true`）。
 
@@ -52,8 +54,9 @@ A4 隔离（`gossip_interval=100000`，同一个门同时关掉视距刷新与�
    与 C3 是同一条事实的两面。且两臂计费字节相同：按尝试计费，丢掉的钱照付。
 3. **C1 不是零**：把上行完全关掉要付 0.31667 个/ep（CI 下界 > 0，17 个 seed 有损、43 平、0 更好），
    买它的价格是 14 573.3 B/ep ⇒ **约 46 021 B/个额外按时任务**。
-   与机制记录自洽：A2 的"整集无人知晓"目标数比 A1 多 **0.4500 − 0.1333 = 0.31667 个/ep**，
-   与按时完成差**逐位相等**——这条一致性不是设计出来的，是两条独立口径撞到了一起。
+   与机制记录自洽：A2 比 A1 多出的"整集无人知晓"目标是 27 − 8 = **19 个/360**，
+   按时完成差也是 352 − 333 = **19 个/360**（同一个 19/60 个/ep）——
+   这条一致性不是设计出来的，是两条独立口径撞到了一起。
 
 ## 三、逐目标机制记录（描述，不是归因）
 
@@ -131,4 +134,5 @@ test_d1_harness.py             14 项，0 episode
 
 复跑：`d1_seeds.py` → `d1_run.py --plan b0` → `d1_gate.py` → `--plan smoke` → `d1_identity.py --tag smoke`
 → `--plan data`（4 并行约 15 分钟）→ `d1_identity.py --tag data --seeds …` → `d1_analyse.py` → `d1_verify.py`。
-逐集日志、转录与探针文件不入 Git（体积 3 项合计约 1.2 GB），只登记在账本与结果件里。
+逐集日志、转录与探针文件不入 Git（`logs/` 下 792 个文件实测约 148 MB：逐集生命周期 142.3 MB、
+探针 5.0 MB、通信转录 1.9 MB），只登记在账本与结果件里。

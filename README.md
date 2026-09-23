@@ -1,17 +1,45 @@
 # Zhenghe：搜索—协调—分配一体化搜救系统
 
-当前研究入口：[项目总纲 v3.8](PROJECT_CHARTER.md) 与
-[通信研究收束：可引用的阶段结论](runs/comm_research_closure_20260923/COMMUNICATION_RESEARCH_CLOSURE.md)
-＋[完整系统瓶颈盘点](runs/comm_research_closure_20260923/JOINT_SYSTEM_BOTTLENECK_AUDIT.md)
-（机读件 `JOINT_SYSTEM_BOTTLENECK_AUDIT.json`、逐目标链 `CHAIN_RECONSTRUCTION.json`、
-八阶段可归因性 `STAGE_CAPABILITY.json`、未执行的
-[最小配对验证协议 D1](runs/comm_research_closure_20260923/MINIMAL_PAIRED_VALIDATION_PROTOCOL.md)）。
-本轮 **0 新 episode、0 新流、0 训练、0 启动、未修改任何 production code / reward / 预算 / 拓扑 / 权重**
-（41 个只读输入 SHA256 不变、8 个日志族文件数与字节数不变、生产目录与起点 `git diff` 为空、
-本轮改动只落在四份治理文档上、
-账本 `starts` 恒 666、封存块盘上 artefact 0、五个环境入口 tripwire 日志为空，`passed=true`）。
+当前研究入口：[项目总纲 v3.9](PROJECT_CHARTER.md) 与
+[D1 实测结果：部署路径的信息路径值多少按时任务](runs/comm_info_path_validation_20260923/D1_RESULTS.md)
+（判据 [D1_PROTOCOL_REVISION.md](runs/comm_info_path_validation_20260923/D1_PROTOCOL_REVISION.md)
+在任何新 episode 之前冻结并单独提交、上一轮的 `MINIMAL_PAIRED_VALIDATION_PROTOCOL.md` 原件一字未动；
+机读 `D1_RESULTS.json`、门禁件 `B0_PAIRED_REPLAY.json` 与 `IDENTITY_AUDIT_data.json`、
+边界核验 `D1_VERIFICATION.json`，均 `passed=true`）。
+本轮 **0 训练、0 参数改动**；生产侧唯一改动是 B0 的**被动日志**
+（`integrated_sar/info_probe.py` + `comm.py`/`adapters/piloc.py`/`joint_driver.py` 挂钩，默认关闭），
+它写侧文件、不加 lifecycle 事件类型、不进 actor 观测、不消耗随机数。
+机械核实：16 格成对回放在开/关探针之间**全部生命周期记录、检测序列、发射序列、扣费字节、任务结局相同**；
+身份门禁 I1–I5 在 60 个 seed 上全过、I6 时机模式惰性 4 格通过；四源 seed 冲突审计 clean；
+四臂 × 60 = **240/240 格完整、0 技术失败**、启动 264/296（技术失败计入上限）；
+两个 checkpoint 的 SHA256 与修改时间未被触碰、封存块盘上 artefact 仍 0、生产默认值逐条未变
+（`comm_policy=immediate`、`comm_delivery_probability=1.0`、`gossip_interval=2`、无额度、`comm_ack=False`）。
 
-**收束件**把十四条轮次的结果分成四条**必须分开引用**的结论：
+三个同 seed 配对比较（唯一的因果陈述；配对百分位 bootstrap B=10 000）：
+
+| 代号 | 干预 | 按时完成差（个/ep） | 95 % CI | 胜/平/负 |
+|---|---|---:|---|---|
+| C1 | 上行说话 vs 完全静默 | **+0.31667** | [+0.18333, +0.45] | 17/43/0 |
+| C2 | 投递 1.0 → 0.7 | **0.00000** | [0.0, 0.0] | 0/60/0 |
+| C3 | 自带感知开 vs 关（**同一批丢包**） | **+1.28333** | [+1.01667, +1.55] | 45/15/0 |
+
+* **C3 的"同一批丢包"是核过的**：A3 与 A4 的发射序列与逐包送达结局逐条相同、计费字节相同 ⇒
+  同样每集 10.25 个丢失的包，部署路径上 0 个任务损失、关掉自带感知后 1.283 33 个/ep。
+  **部署路径对丢包的免疫来自环境传感旁路，不来自通信策略**（C2 的精确零是同一条事实的另一面）。
+  允许措辞逐对比机读登记：C2 只能说"同一批包、阈值不同的嵌套"，C1 不得使用"同一批丢包"。
+* **C1 不为零**：完全静默付 0.31667 个/ep、代价 14 573.3 B/ep ⇒ 约 **46 021 B/个**被上行救回的按时任务。
+* **冻结主判据机械适用的结果是 `undecidable`**：主口径臂（部署·0.7）在预登记难度下
+  按时失败数为 **0** ⇒ `information_bucket_share` 分母为空 ⇒ 守卫生效 ⇒
+  **既不判"信息侧不是瓶颈"，也不判它是瓶颈**。要出数只能另写一次预登记实验换难度，本轮明确未做。
+* **逐目标机制记录**（描述，不是归因）：隔离臂 77 个失败目标里"从未送达""整集无人知晓"
+  "知晓已在 deadline 之后"**各为 0**，68 个只带"决策时刻 belief 与真值不符"、9 个纯执行侧；
+  而该旗标在**按时完成的目标上 100 % 命中**（轮询式 belief 天然落后真值），故校准值与份额并排发表，
+  `S_all=0.883` **不得**读成"88 % 的失败由信息造成"。
+* 这 240 格**不是**学习模型的独立测试集（没有学习策略跑在其上）；`800000..800399` 继续封存。
+
+上一轮的**收束件**
+（[通信研究收束：可引用的阶段结论](runs/comm_research_closure_20260923/COMMUNICATION_RESEARCH_CLOSURE.md)）
+把十四条轮次的结果分成四条**必须分开引用**的结论：
 ① 规则与协议层收益**成立**（`send_once` 以 14 916 B 拿 5.7917 个/ep 支配 `immediate` 的
 26 897 B / 5.2917，其中 49.9 % 字节是上界替它发的刷新；ACK 规则在隔离有损 +0.835 个/ep
 但 total +26 354.1 B/ep，正常路径差 0.000 ⇒ 被支配、不提部署）；
@@ -23,36 +51,17 @@
 `subscribers=all`、`comm_range=0.3`、`gossip_interval=2`）：强规则基线来自**隔离**实验，
 而隔离与部署的差别是环境自带传感旁路，不是策略变好——所以不因它改默认值。
 
-**瓶颈盘点**第一次把同一个 `target_id` 串过八个阶段（放置→发现→交付→获知→分配→到场→开工→按时/过期），
-四条归档路径分开报告，**40 项与已发布结果的核对全部一致**（含四层 `GATES` 的
-`best_on_time_rate_of_detected` 逐位、`never_assigned=18` 与七类计数逐类、
-`send_once` 从未报出 8 个、+0.835 与 +26 354.1）。三条结论：
+**瓶颈盘点**（[JOINT_SYSTEM_BOTTLENECK_AUDIT.md](runs/comm_research_closure_20260923/JOINT_SYSTEM_BOTTLENECK_AUDIT.md)）第一次把同一个 `target_id` 串过八个阶段（放置→发现→交付→获知→分配→到场→开工→按时/过期），
+四条归档路径分开报告，**40 项与已发布结果的核对全部一致**。两条结论被本轮（D1）实测接管：
+部署路径上"信息未到达"当时写的是 `not attributable`（不是 0，因为归档的四条部署路径全是无损信道
+且没有 per-recipient 记录），而"同一批丢包在两种架构下价格差约 30 倍"当时只能给跨路径比。
 
-1. **部署路径**（60 seed 真实 PILOC + 30 seed 回放）：可归因损失是"搜索未发现"1.1 %–5 %
-   与"分配/执行"（无协调器 35/171 → 有协调器 19/171），而**"信息未到达"这一桶不可归因**——
-   报告里写的是 `not attributable`，不是 0（这两条部署路径运行都是无损信道、无 per-recipient 记录）。
-   最强臂上唯一可归因损失就是搜索的 4/360，独立复现了"瓶颈是搜索覆盖率"那句归档结论。
-2. **隔离路径**（29 300 B、576 格）：信息侧才是主损失（`always_hold` 555/555、`event` 216、
-   `periodic_20` 95、`send_once` 8 从未送达），但 `send_once` 另外的 68 个损失是
-   **"只被告知一次然后没做完"**（这些目标收到的刷新数恰好为 0）——不是"没人说"。
-   且 576 格里"检测→首次发射"与"首次发射→首次被知晓"**全是 0 步**：信道本身不给时机留任何余地。
-3. **同一批丢包的价格差 30 倍**：三条臂在 `normal-lossy` 与 `isolated-lossy` 之间
-   **前向信道账本逐字段相同**（尝试 35.16、到达 24.605、丢失 10.555），
-   于是差只可能来自自带传感：on-time **5.810 0 vs 4.480 0** 个/ep（过期 0.045 vs 1.370）。
-   与本轮从 48 行原始数据重算的信息源归属一致：静默上行时 **390/408 = 95.6 %** 首次知晓仍发生，
-   隔离静默时 **0** 次。
-
-**因此本轮对"要不要重开通信学习"给出的顺序是**：先补上四类缺失记录（B0：per-recipient 送达结局、
-per-(目标,机器人) 知晓时刻与 belief age、真实到场步、放置记录），再跑 D1 那 296 次启动上限的配对验证；
-**在那之前既不为它设计训练判据，也不因"当前量不出来"宣布它无价值**。D1 协议已写、**未执行**。
-最终封存块、H=20、ACK、丢包和观测扩维继续冻结。
-
-上一轮入口：[接收者与真实拓扑可行性审计](runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_RESULTS.md)
+再上一轮入口（第十四轮）：[接收者与真实拓扑可行性审计](runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_RESULTS.md)
 （判定 [DECISION](runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_DECISION.md)、
 [源码调用链](runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_SOURCE_MAP.md)）：
 `subscriber_count` 逐 episode 恒为 6（8 904 条发射 distinct = {6}），且它的任意全局缩放与调预算档
 在 1 875 次分类比较中 0 不一致 ⇒ 拓扑轴关闭 `global_fanout_is_only_a_scalar`。
-再上一轮：[动作几何审计](runs/comm_action_geometry_audit_20260923/COMM_ACTION_GEOMETRY_AUDIT.md)
+更早：[动作几何审计](runs/comm_action_geometry_audit_20260923/COMM_ACTION_GEOMETRY_AUDIT.md)
 （`no_temporal_allocation_signal`）与
 [任务压力第四层补跑实测](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_G12_EXTENSION_RESULTS.md)。
 
@@ -218,6 +227,10 @@ python -m integrated_sar.joint_driver \
 在空闲机器人与任务开放槽位之间规划团队预约；`deadline_aware` 是可学习性门禁用的同信息
 oracle，只退还 belief 预算内到不了的任务）、
 `--no-coordinator`、`--quiet`。
+`--info-probe <路径>` 打开 B0 的四类**被动**日志（逐行 JSON 写到给定路径）：放置目标、
+逐接收者送达结局、逐 (目标, 机器人) 的知晓来源与时刻、真实到场步。它默认关闭，只读不写状态、
+不进 actor 观测、不消耗随机数，成对回放已证明开启前后全部生命周期记录与扣费字节逐字段相同
+（`runs/comm_info_path_validation_20260923/B0_PAIRED_REPLAY.json`）。
 `--mock` 与任一 checkpoint 参数互斥。
 
 使用 `--piloc-checkpoint` 时还有两个约束，启动即校验，不会静默放行：
@@ -349,7 +362,8 @@ checkpoint、录制流、逐 episode 日志与转录**不入 Git**，只在 mani
 | 证据复核与训练诊断 | `runs/comm_evidence_review_20260921/` | `COMM_EVIDENCE_CORRECTIONS.md`/`.json`（十项核对：单位、成功率 vs 丢包率、字节方向、CI 含 0 ≠ 等效、条件区间、ACK 基线开关、因果范围、学习三事实、训练充分性、门禁样本性）、`COMM_RULE_CONFIRMATION_RESULTS_REVISED.md`/`.json`（同一统计量只抽一次样，主结果统一到 +0.835 个/ep [+0.685,+0.995] 与 +26 354.1 B/ep [+26 002,+26 688]；585 个均值字段核对未变）、`COMMUNICATION_LEARNING_VERDICT_REVISED.md`（结论范围重述，停止判定保留）、`COMM_LEARNING_DIAGNOSTIC.md`（四种解释与缺失项）、`COMM_MULTISTEP_DIAGNOSTIC_PROTOCOL.md`（≤96 分支的小实验设计，**尚未执行**） |
 | 动作几何与时序价值审计 | `runs/comm_action_geometry_audit_20260923/` | `COMM_ACTION_GEOMETRY_AUDIT.md`/`.json`（A-D 四问、七套分母各算各的）、`RECOMPUTE_L0_L4.json`（四层独立重跑，L0-L4 布尔逐层一致）、`COMM_ACTION_GEOMETRY_AUDIT_VERDICT.json`（判定名 **no_temporal_allocation_signal** + 六条范围）、`AUDIT_VERIFICATION.json`；**0 episode / 0 训练** |
 | 接收者与真实拓扑可行性 | `runs/comm_recipient_topology_feasibility_20260923/` | `COMM_RECIPIENT_TOPOLOGY_AUDIT_PROTOCOL.md`（R1 的失败名字先于数据写死）、`..._SOURCE_MAP.md`（九问调用链）、`..._RESULTS.md`/`.json`、`..._SCALAR_PROOF.json`（1 875 次分类比较 0 不一致）、`..._DECISION.md`（判定名 **global_fanout_is_only_a_scalar**）；**0 episode / 0 训练** |
-| **通信研究收束与完整系统瓶颈盘点（最新，0 训练）** | `runs/comm_research_closure_20260923/` | `COMMUNICATION_RESEARCH_CLOSURE.md`（四条结论分开引用 + 强规则基线与适用条件 + 重开条件 N1-N6）、`JOINT_SYSTEM_BOTTLENECK_AUDIT.md`/`.json`（八阶段链、四条路径分桶、**40 项核对全一致**）、`CHAIN_RECONSTRUCTION.json`（P1 120 + P2 90 + P3 576 格逐目标链）、`STAGE_CAPABILITY.json`（哪几阶段可归因、哪几处只有代理量）、`MINIMAL_PAIRED_VALIDATION_PROTOCOL.md`（D1，**未执行**）、`CLOSURE_INPUT_MANIFEST.json`、`CLOSURE_VERIFICATION.json`、`test_closure_harness.py`（21 项）；逐集日志与转录不入库 |
+| 通信研究收束与完整系统瓶颈盘点（0 训练） | `runs/comm_research_closure_20260923/` | `COMMUNICATION_RESEARCH_CLOSURE.md`（四条结论分开引用 + 强规则基线与适用条件 + 重开条件 N1-N6）、`JOINT_SYSTEM_BOTTLENECK_AUDIT.md`/`.json`（八阶段链、四条路径分桶、**40 项核对全一致**）、`CHAIN_RECONSTRUCTION.json`（P1 120 + P2 90 + P3 576 格逐目标链）、`STAGE_CAPABILITY.json`（哪几阶段可归因、哪几处只有代理量）、`MINIMAL_PAIRED_VALIDATION_PROTOCOL.md`（D1，**由下一轮修订后执行**）、`CLOSURE_INPUT_MANIFEST.json`、`CLOSURE_VERIFICATION.json`、`test_closure_harness.py`（21 项）；逐集日志与转录不入库 |
+| **完整系统信息路径验证（最新：B0 日志 + D1 四臂 × 60 配对 seed）** | `runs/comm_info_path_validation_20260923/` | `D1_PROTOCOL_REVISION.md`（**判据在任何 episode 之前冻结并单独提交**：三个配对比较、三态机制谓词与显式分母、身份门禁 I1–I6、`information_bucket_share` 的分母定义与守卫、两条停止条件、296 次启动上限）、`B0_PAIRED_REPLAY.json`（16 格成对回放 + 4 格时机模式惰性，`passed=true` ⇒ 开日志前后检测/结局/发射/扣费全同）、`SEED_COLLISION_AUDIT.json`（`1100000..1100059` 四源命中 0）、`IDENTITY_AUDIT_smoke.json`/`IDENTITY_AUDIT_data.json`（I1–I5 逐 seed，`phrasing_licensed` 规定哪一句"同一批丢包"可说）、`D1_RESULTS.md`/`.json`（C1 +0.31667 [+0.18333,+0.45]、C2 0.00000 [0,0]、C3 +1.28333 [+1.01667,+1.55]；机制记录三条零；`declared=undecidable`）、`D1_VERIFICATION.json`（生产改动仅限 5 个 B0 文件、checkpoint 未动、封存块 artefact 0，`passed=true`）、`test_d1_harness.py`（14 项 0 episode）＋ 生产侧 `integrated_sar/info_probe.py` 与 `tests/test_info_probe.py`（12 项）；逐集日志、转录与探针文件不入库 |
 
 传输层的两个协议由 `--comm-timing-mode` 选择：`legacy_shared_bound`（默认，全部历史实验，
 上界到点由传输层代发、计费、可拒付）与 `policy_owned_timing`（研究模式，只有策略自己请求的
