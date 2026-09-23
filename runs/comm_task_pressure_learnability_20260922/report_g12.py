@@ -36,6 +36,35 @@ OWN_NAMES = (
 DELIVERED_LAYERS = (6, 8, 10)
 
 
+def _remote_sha(branch: str, attempts: int = 3) -> str:
+    """Ask the remote itself. If it stays unreachable, say so instead of quoting a local ref as remote.
+
+    Retried because this round's own network history is intermittent: a single failed lookup is not
+    evidence about the remote, and a single success is not either -- the caller sees which one it got.
+    """
+    import subprocess
+    import time
+
+    last = ""
+    for attempt in range(attempts):
+        try:
+            result = subprocess.run(
+                ["git", "ls-remote", "origin", f"refs/heads/{branch}"],
+                cwd=str(common.ROOT),
+                capture_output=True,
+                text=True,
+                timeout=180,
+                check=True,
+            )
+        except Exception as error:  # noqa: BLE001 - an unreachable remote is reported, never glossed
+            last = f"{type(error).__name__}: {str(error)[:120]}"
+            time.sleep(5)
+            continue
+        fields = result.stdout.split()
+        return fields[0] if fields else "<远端没有该分支>"
+    return f"<未能在线核对（{attempts} 次尝试）：{last}>"
+
+
 def require_writable(name: str) -> None:
     if not (name in OWN_NAMES or name.startswith("G12_") or name.endswith("_g12.json")):
         raise SystemExit(
@@ -249,6 +278,10 @@ def build() -> dict[str, Any]:
         ],
         "packet_cost_profile": report_pressure.packet_cost_profile(goals),
         "decision": decision,
+        #: Where the round started, as the remote itself reported it at delivery time. The protocol
+        #: disclosed an offline start because github.com was unreachable then; this is the repair of
+        #: that gap rather than a restatement of it.
+        "starting_branch_remote_sha": _remote_sha("analysis/comm-task-pressure-learnability"),
         "tests": report_pressure.data_tests(),
         "hygiene": {
             "sealed": common.sealed_block_artefacts(),
@@ -518,6 +551,31 @@ def render(data: dict[str, Any]) -> str:
     add(
         f"- 测试：本轮合成套件 {data['tests']['round']}；项目套件 {data['tests']['project']}；"
         f"集成 smoke {data['tests']['smoke']}"
+    )
+    expected_start = "6b4452f5de88f7cfd0c17ce475de269eb13dd6b7"
+    remote_start = data["starting_branch_remote_sha"]
+    if remote_start == expected_start:
+        verification = (
+            f"在线核对通过：`git ls-remote` 报起点分支 "
+            f"`analysis/comm-task-pressure-learnability` 的远端 HEAD = `{remote_start}`，"
+            "与执行指令要求的 SHA 一致"
+        )
+    elif remote_start.startswith("<"):
+        verification = (
+            f"`git ls-remote` 此刻仍不可用（`{remote_start[1:-1]}`），所以起点分支的远端 HEAD "
+            f"**没有在交付时在线核到** `{expected_start}`；已核对的只有本地远程跟踪 ref。"
+            "这一条保持未闭合，不写成已核对。"
+        )
+    else:
+        verification = (
+            f"**不一致**：远端报 `{remote_start}`，要求的却是 `{expected_start}` ⇒ 起点不对，"
+            "本轮所有结论都不成立，必须停止并报告"
+        )
+    add(
+        "- 起点核对的补记：协议 §1.1 如实写过\"开跑时 github.com:443 不可达，只核对了本地远程跟踪 ref\"；"
+        f"交付时再核一次：{verification}。"
+        "本分支自身的远端 HEAD 无法写进本报告（报告所在的提交就是被核对的对象），"
+        "它随最后一次推送单独报出。"
     )
     add("")
     add("## 八、本轮欠读者的披露（不是判据，逐条写明动了什么）")

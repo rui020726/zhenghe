@@ -100,6 +100,7 @@
 - 封存块 `800000..800399` 盘上 artefact **0**；生产默认值 `comm_ack=False`、`comm_timing_mode=legacy_shared_bound`、`num_goals=6`
 - 归档一致性（继承自原轮）：`agree = True`；本轮探针扩展的透明性由 `test_pressure_harness` 的零 episode 测试证明
 - 测试：本轮合成套件 通过：OK；项目套件 通过：OK (skipped=2)；集成 smoke 通过：final_status=completed
+- 起点核对的补记：协议 §1.1 如实写过"开跑时 github.com:443 不可达，只核对了本地远程跟踪 ref"；交付时再核一次：在线核对通过：`git ls-remote` 报起点分支 `analysis/comm-task-pressure-learnability` 的远端 HEAD = `6b4452f5de88f7cfd0c17ce475de269eb13dd6b7`，与执行指令要求的 SHA 一致。本分支自身的远端 HEAD 无法写进本报告（报告所在的提交就是被核对的对象），它随最后一次推送单独报出。
 
 ## 八、本轮欠读者的披露（不是判据，逐条写明动了什么）
 
