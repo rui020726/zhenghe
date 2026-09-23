@@ -1,0 +1,137 @@
+{
+ "all_passed": true,
+ "as_executed_note": "the frozen revision's I3 sentence reads as equality of per-packet outcomes. For the pair whose intervention is the delivery probability, equality is unsatisfiable by construction, so the operative requirement there is the nesting relation the same revision states as I4: same packet keys, one arm losing nothing. This tightens what is checked; no judgement threshold moved.",
+ "gates_passed": {
+  "C1": true,
+  "C2": true,
+  "C3": true
+ },
+ "judgements": [
+  {
+   "cells": [
+    {
+     "arms": [
+      "A1",
+      "A2"
+     ],
+     "charged_bytes_per_arm": [
+      15132,
+      0
+     ],
+     "configuration_fields_allowed": [
+      "comm_policy"
+     ],
+     "configuration_fields_moved": [
+      "comm_policy"
+     ],
+     "contrast": "C1",
+     "detections_per_arm": [
+      6,
+      6
+     ],
+     "emissions_per_arm": [
+      6,
+      0
+     ],
+     "i1_detection_stream_identical": true,
+     "i2_emission_sequence_identical": false,
+     "i3_applicable": true,
+     "i3_packet_outcomes_identical": false,
+     "i5_only_the_declared_field_differs": true,
+     "may_say_same_lost_packets": false,
+     "packet_identity": "differs",
+     "seed": 1100000,
+     "tag": "smoke"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "arms": [
+      "A1",
+      "A3"
+     ],
+     "charged_bytes_per_arm": [
+      15132,
+      15132
+     ],
+     "configuration_fields_allowed": [
+      "comm_delivery_probability"
+     ],
+     "configuration_fields_moved": [
+      "comm_delivery_probability"
+     ],
+     "contrast": "C2",
+     "detections_per_arm": [
+      6,
+      6
+     ],
+     "emissions_per_arm": [
+      6,
+      6
+     ],
+     "i1_detection_stream_identical": true,
+     "i2_emission_sequence_identical": true,
+     "i3_applicable": false,
+     "i4_loss_is_a_subset_of_the_same_packet_set": true,
+     "i4_packet_keys_shared": 36,
+     "i4_reference_arm_loses_nothing": true,
+     "i5_only_the_declared_field_differs": true,
+     "may_say_same_lost_packets": false,
+     "packet_identity": "nested_threshold",
+     "seed": 1100000,
+     "tag": "smoke"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "arms": [
+      "A3",
+      "A4"
+     ],
+     "charged_bytes_per_arm": [
+      15132,
+      15132
+     ],
+     "configuration_fields_allowed": [
+      "gossip_interval"
+     ],
+     "configuration_fields_moved": [
+      "gossip_interval"
+     ],
+     "contrast": "C3",
+     "detections_per_arm": [
+      6,
+      6
+     ],
+     "emissions_per_arm": [
+      6,
+      6
+     ],
+     "i1_detection_stream_identical": true,
+     "i2_emission_sequence_identical": true,
+     "i3_applicable": true,
+     "i3_packet_outcomes_identical": true,
+     "i5_only_the_declared_field_differs": true,
+     "may_say_same_lost_packets": true,
+     "packet_identity": "identical",
+     "seed": 1100000,
+     "tag": "smoke"
+    }
+   ]
+  }
+ ],
+ "phrasing_licensed": {
+  "C1": "不得称同一批丢包",
+  "C2": "同一批包、阈值不同（嵌套）",
+  "C3": "同一批丢包"
+ },
+ "round": "comm_info_path_validation_20260923",
+ "seeds": [
+  1100000
+ ],
+ "tag": "smoke"
+}
