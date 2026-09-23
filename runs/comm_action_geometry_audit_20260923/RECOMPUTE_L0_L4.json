@@ -1,0 +1,458 @@
+{
+ "all_layers_reproduced": true,
+ "differences_per_layer": {
+  "g10": 15,
+  "g12": 0,
+  "g6": 15,
+  "g8": 15
+ },
+ "environment_tripwire_calls": [],
+ "exemptions_declared_before_comparing": {
+  "keys_added_by_the_later_g12_round": [
+   "$.gates.L0.evidence.harness_agreement_provenance",
+   "$.gates.L0.evidence.technical_failures_this_layer",
+   "$.gates.L2.evidence.band_edge_readings",
+   "$.gates.L3.evidence.step_geometry_of_the_best_rule",
+   "$.step_geometry"
+  ],
+  "live_ledger_readings": [
+   "$.launch_ledger",
+   "$.gates.L0.evidence.launches",
+   "$.gates.L0.evidence.technical_failures_total"
+  ]
+ },
+ "g12_reproduces_with_zero_differences": true,
+ "launch_ledger": {
+  "ceiling": {
+   "brief_cap": 640,
+   "data_launches_before_g12": 496,
+   "effective_cap": 656,
+   "g12_needed": 160,
+   "grant": 16,
+   "headroom_before_g12": 144,
+   "shortfall_before_grant": 16
+  },
+  "data_launches": 656,
+  "entries_total": 670,
+  "failed_data_launches": 20,
+  "files_where_entries_exceed_starts": [
+   {
+    "entries": 4,
+    "failures": 0,
+    "file": "LAUNCH_LEDGER_record_g6_p2652.json",
+    "non_launch_entries": 1,
+    "starts": 3
+   },
+   {
+    "entries": 4,
+    "failures": 0,
+    "file": "LAUNCH_LEDGER_record_g6_p55956.json",
+    "non_launch_entries": 1,
+    "starts": 3
+   },
+   {
+    "entries": 4,
+    "failures": 0,
+    "file": "LAUNCH_LEDGER_record_g6_p8976.json",
+    "non_launch_entries": 1,
+    "starts": 3
+   },
+   {
+    "entries": 4,
+    "failures": 0,
+    "file": "LAUNCH_LEDGER_record_g6_p9276.json",
+    "non_launch_entries": 1,
+    "starts": 3
+   }
+  ],
+  "gate_launches": 10,
+  "launches_total": 666,
+  "non_launch_entries": 4,
+  "per_layer": {
+   "g10": {
+    "by_kind": {
+     "matrix": {
+      "failed": 0,
+      "failure_details": [],
+      "launches": 144,
+      "ok": 144
+     },
+     "record": {
+      "failed": 0,
+      "failure_details": [],
+      "launches": 16,
+      "ok": 16
+     }
+    },
+    "data_launches": 160,
+    "entries": 160,
+    "failed": 0,
+    "gate_launches": 0,
+    "launches": 160,
+    "non_launch_entries": 0,
+    "ok": 160
+   },
+   "g12": {
+    "by_kind": {
+     "matrix": {
+      "failed": 0,
+      "failure_details": [],
+      "launches": 144,
+      "ok": 144
+     },
+     "record": {
+      "failed": 0,
+      "failure_details": [],
+      "launches": 16,
+      "ok": 16
+     }
+    },
+    "data_launches": 160,
+    "entries": 160,
+    "failed": 0,
+    "gate_launches": 0,
+    "launches": 160,
+    "non_launch_entries": 0,
+    "ok": 160
+   },
+   "g6": {
+    "by_kind": {
+     "gate": {
+      "failed": 0,
+      "failure_details": [],
+      "launches": 10,
+      "ok": 10
+     },
+     "matrix": {
+      "failed": 16,
+      "failure_details": [
+       "seed 1000002: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000006: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000010: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000014: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000003: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000007: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000011: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000015: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000000: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000004: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000008: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000012: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000001: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000005: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000009: event_unbudgeted: OverflowError: cannot convert float infinity to integer",
+       "seed 1000013: event_unbudgeted: OverflowError: cannot convert float infinity to integer"
+      ],
+      "launches": 160,
+      "ok": 144
+     },
+     "record": {
+      "failed": 4,
+      "failure_details": [
+       "seed 1000001: TypeError: 'GridPosition' object is not iterable",
+       "seed 1000000: TypeError: 'GridPosition' object is not iterable",
+       "seed 1000003: TypeError: 'GridPosition' object is not iterable",
+       "seed 1000002: TypeError: 'GridPosition' object is not iterable"
+      ],
+      "launches": 16,
+      "ok": 12
+     }
+    },
+    "data_launches": 176,
+    "entries": 190,
+    "failed": 20,
+    "gate_launches": 10,
+    "launches": 186,
+    "non_launch_entries": 4,
+    "ok": 166
+   },
+   "g8": {
+    "by_kind": {
+     "matrix": {
+      "failed": 0,
+      "failure_details": [],
+      "launches": 144,
+      "ok": 144
+     },
+     "record": {
+      "failed": 0,
+      "failure_details": [],
+      "launches": 16,
+      "ok": 16
+     }
+    },
+    "data_launches": 160,
+    "entries": 160,
+    "failed": 0,
+    "gate_launches": 0,
+    "launches": 160,
+    "non_launch_entries": 0,
+    "ok": 160
+   }
+  }
+ },
+ "layers": {
+  "g10": {
+   "allowed_time_varying_differences": {
+    "GATES": {
+     "added_by_later_round": [
+      "$.gates.L0.evidence.harness_agreement_provenance: only-in-recomputed \"this round's own AGREEMENT_GATE.json\"",
+      "$.gates.L0.evidence.technical_failures_this_layer: only-in-recomputed 0",
+      "$.gates.L2.evidence.band_edge_readings: only-in-recomputed {\"exact_rational_mean\": \"9/10\", \"exact_sum_float_mean\": \"0.9\", \"naive_float_mean",
+      "$.gates.L3.evidence.step_geometry_of_the_best_rule: only-in-recomputed {\"candidate_histogram\": {\"one\": 0, \"two_or_more\": 0, \"zero\": 10617}, \"episodes\":"
+     ],
+     "time_varying_ledger": [
+      "$.gates.L0.evidence.launches.extension_grant_for_this_layer: only-in-recomputed 0",
+      "$.gates.L0.evidence.launches.matrix: recomputed 656 != published 496",
+      "$.gates.L0.evidence.launches.matrix_cap_in_force_for_this_layer: only-in-recomputed 640",
+      "$.launch_ledger.by_kind.matrix: recomputed 592 != published 448",
+      "$.launch_ledger.by_kind.record: recomputed 64 != published 48",
+      "$.launch_ledger.extension_grant: only-in-recomputed 16",
+      "$.launch_ledger.files: length 41 (recomputed) != 33 (published)",
+      "$.launch_ledger.matrix_cap_with_grant: only-in-recomputed 656",
+      "$.launch_ledger.matrix_starts: recomputed 656 != published 496",
+      "$.launch_ledger.starts: recomputed 666 != published 506"
+     ]
+    },
+    "PRESSURE_METRICS": {
+     "added_by_later_round": [],
+     "time_varying_ledger": []
+    },
+    "RULE_MATRIX": {
+     "added_by_later_round": [
+      "$.step_geometry: only-in-recomputed {\"always_hold\": {\"candidate_histogram\": {\"one\": 0, \"two_or_more\": 0, \"zero\": 5},"
+     ],
+     "time_varying_ledger": []
+    }
+   },
+   "best_fixed_rule_published": "send_once",
+   "best_fixed_rule_recomputed": "send_once",
+   "goals": 10,
+   "layer": "g10",
+   "published_gate_booleans": {
+    "L0": true,
+    "L1": true,
+    "L2": true,
+    "L3": false,
+    "L4": false
+   },
+   "recomputed_gate_booleans": {
+    "L0": true,
+    "L1": true,
+    "L2": true,
+    "L3": false,
+    "L4": false
+   },
+   "reproduced": true,
+   "reproduction_failures": {
+    "GATES": [],
+    "PRESSURE_METRICS": [],
+    "RULE_MATRIX": []
+   },
+   "verdicts": {
+    "GATES_keys_added_by_later_round": 4,
+    "GATES_layer_passed_matches": true,
+    "GATES_leaves_compared": 241,
+    "GATES_time_varying_ledger_readings": 10,
+    "PRESSURE_METRICS_keys_added_by_later_round": 0,
+    "PRESSURE_METRICS_leaves_compared": 262,
+    "PRESSURE_METRICS_time_varying_ledger_readings": 0,
+    "RULE_MATRIX_keys_added_by_later_round": 1,
+    "RULE_MATRIX_leaves_compared": 1710,
+    "RULE_MATRIX_time_varying_ledger_readings": 0
+   }
+  },
+  "g12": {
+   "allowed_time_varying_differences": {
+    "GATES": {
+     "added_by_later_round": [],
+     "time_varying_ledger": []
+    },
+    "PRESSURE_METRICS": {
+     "added_by_later_round": [],
+     "time_varying_ledger": []
+    },
+    "RULE_MATRIX": {
+     "added_by_later_round": [],
+     "time_varying_ledger": []
+    }
+   },
+   "best_fixed_rule_published": "send_once",
+   "best_fixed_rule_recomputed": "send_once",
+   "goals": 12,
+   "layer": "g12",
+   "published_gate_booleans": {
+    "L0": true,
+    "L1": true,
+    "L2": true,
+    "L3": false,
+    "L4": false
+   },
+   "recomputed_gate_booleans": {
+    "L0": true,
+    "L1": true,
+    "L2": true,
+    "L3": false,
+    "L4": false
+   },
+   "reproduced": true,
+   "reproduction_failures": {
+    "GATES": [],
+    "PRESSURE_METRICS": [],
+    "RULE_MATRIX": []
+   },
+   "verdicts": {
+    "GATES_keys_added_by_later_round": 0,
+    "GATES_layer_passed_matches": true,
+    "GATES_leaves_compared": 437,
+    "GATES_time_varying_ledger_readings": 0,
+    "PRESSURE_METRICS_keys_added_by_later_round": 0,
+    "PRESSURE_METRICS_leaves_compared": 262,
+    "PRESSURE_METRICS_time_varying_ledger_readings": 0,
+    "RULE_MATRIX_keys_added_by_later_round": 0,
+    "RULE_MATRIX_leaves_compared": 3390,
+    "RULE_MATRIX_time_varying_ledger_readings": 0
+   }
+  },
+  "g6": {
+   "allowed_time_varying_differences": {
+    "GATES": {
+     "added_by_later_round": [
+      "$.gates.L0.evidence.harness_agreement_provenance: only-in-recomputed \"this round's own AGREEMENT_GATE.json\"",
+      "$.gates.L0.evidence.technical_failures_this_layer: only-in-recomputed 20",
+      "$.gates.L2.evidence.band_edge_readings: only-in-recomputed null",
+      "$.gates.L3.evidence.step_geometry_of_the_best_rule: only-in-recomputed {\"candidate_histogram\": {\"one\": 0, \"two_or_more\": 0, \"zero\": 11964}, \"episodes\":"
+     ],
+     "time_varying_ledger": [
+      "$.gates.L0.evidence.launches.extension_grant_for_this_layer: only-in-recomputed 0",
+      "$.gates.L0.evidence.launches.matrix: recomputed 656 != published 496",
+      "$.gates.L0.evidence.launches.matrix_cap_in_force_for_this_layer: only-in-recomputed 640",
+      "$.launch_ledger.by_kind.matrix: recomputed 592 != published 448",
+      "$.launch_ledger.by_kind.record: recomputed 64 != published 48",
+      "$.launch_ledger.extension_grant: only-in-recomputed 16",
+      "$.launch_ledger.files: length 41 (recomputed) != 33 (published)",
+      "$.launch_ledger.matrix_cap_with_grant: only-in-recomputed 656",
+      "$.launch_ledger.matrix_starts: recomputed 656 != published 496",
+      "$.launch_ledger.starts: recomputed 666 != published 506"
+     ]
+    },
+    "PRESSURE_METRICS": {
+     "added_by_later_round": [],
+     "time_varying_ledger": []
+    },
+    "RULE_MATRIX": {
+     "added_by_later_round": [
+      "$.step_geometry: only-in-recomputed {\"always_hold\": {\"candidate_histogram\": {\"one\": 0, \"two_or_more\": 0, \"zero\": 4},"
+     ],
+     "time_varying_ledger": []
+    }
+   },
+   "best_fixed_rule_published": "periodic_20",
+   "best_fixed_rule_recomputed": "periodic_20",
+   "goals": 6,
+   "layer": "g6",
+   "published_gate_booleans": {
+    "L0": true,
+    "L1": true,
+    "L2": false,
+    "L3": false,
+    "L4": false
+   },
+   "recomputed_gate_booleans": {
+    "L0": true,
+    "L1": true,
+    "L2": false,
+    "L3": false,
+    "L4": false
+   },
+   "reproduced": true,
+   "reproduction_failures": {
+    "GATES": [],
+    "PRESSURE_METRICS": [],
+    "RULE_MATRIX": []
+   },
+   "verdicts": {
+    "GATES_keys_added_by_later_round": 4,
+    "GATES_layer_passed_matches": true,
+    "GATES_leaves_compared": 359,
+    "GATES_time_varying_ledger_readings": 10,
+    "PRESSURE_METRICS_keys_added_by_later_round": 0,
+    "PRESSURE_METRICS_leaves_compared": 262,
+    "PRESSURE_METRICS_time_varying_ledger_readings": 0,
+    "RULE_MATRIX_keys_added_by_later_round": 1,
+    "RULE_MATRIX_leaves_compared": 1725,
+    "RULE_MATRIX_time_varying_ledger_readings": 0
+   }
+  },
+  "g8": {
+   "allowed_time_varying_differences": {
+    "GATES": {
+     "added_by_later_round": [
+      "$.gates.L0.evidence.harness_agreement_provenance: only-in-recomputed \"this round's own AGREEMENT_GATE.json\"",
+      "$.gates.L0.evidence.technical_failures_this_layer: only-in-recomputed 0",
+      "$.gates.L2.evidence.band_edge_readings: only-in-recomputed null",
+      "$.gates.L3.evidence.step_geometry_of_the_best_rule: only-in-recomputed {\"candidate_histogram\": {\"one\": 0, \"two_or_more\": 0, \"zero\": 12737}, \"episodes\":"
+     ],
+     "time_varying_ledger": [
+      "$.gates.L0.evidence.launches.extension_grant_for_this_layer: only-in-recomputed 0",
+      "$.gates.L0.evidence.launches.matrix: recomputed 656 != published 496",
+      "$.gates.L0.evidence.launches.matrix_cap_in_force_for_this_layer: only-in-recomputed 640",
+      "$.launch_ledger.by_kind.matrix: recomputed 592 != published 448",
+      "$.launch_ledger.by_kind.record: recomputed 64 != published 48",
+      "$.launch_ledger.extension_grant: only-in-recomputed 16",
+      "$.launch_ledger.files: length 41 (recomputed) != 33 (published)",
+      "$.launch_ledger.matrix_cap_with_grant: only-in-recomputed 656",
+      "$.launch_ledger.matrix_starts: recomputed 656 != published 496",
+      "$.launch_ledger.starts: recomputed 666 != published 506"
+     ]
+    },
+    "PRESSURE_METRICS": {
+     "added_by_later_round": [],
+     "time_varying_ledger": []
+    },
+    "RULE_MATRIX": {
+     "added_by_later_round": [
+      "$.step_geometry: only-in-recomputed {\"always_hold\": {\"candidate_histogram\": {\"one\": 0, \"two_or_more\": 0, \"zero\": 3},"
+     ],
+     "time_varying_ledger": []
+    }
+   },
+   "best_fixed_rule_published": "send_once",
+   "best_fixed_rule_recomputed": "send_once",
+   "goals": 8,
+   "layer": "g8",
+   "published_gate_booleans": {
+    "L0": true,
+    "L1": true,
+    "L2": false,
+    "L3": false,
+    "L4": false
+   },
+   "recomputed_gate_booleans": {
+    "L0": true,
+    "L1": true,
+    "L2": false,
+    "L3": false,
+    "L4": false
+   },
+   "reproduced": true,
+   "reproduction_failures": {
+    "GATES": [],
+    "PRESSURE_METRICS": [],
+    "RULE_MATRIX": []
+   },
+   "verdicts": {
+    "GATES_keys_added_by_later_round": 4,
+    "GATES_layer_passed_matches": true,
+    "GATES_leaves_compared": 240,
+    "GATES_time_varying_ledger_readings": 10,
+    "PRESSURE_METRICS_keys_added_by_later_round": 0,
+    "PRESSURE_METRICS_leaves_compared": 262,
+    "PRESSURE_METRICS_time_varying_ledger_readings": 0,
+    "RULE_MATRIX_keys_added_by_later_round": 1,
+    "RULE_MATRIX_leaves_compared": 1699,
+    "RULE_MATRIX_time_varying_ledger_readings": 0
+   }
+  }
+ }
+}
