@@ -1,0 +1,100 @@
+{
+ "freeze_file": "G12_FREEZE.json",
+ "launch_ceiling": {
+  "brief_ceiling": 640,
+  "effective_ceiling": 656,
+  "extension_grant": 16,
+  "goals": 12,
+  "granted_by": "the user's explicit order of 2026-09-23, recorded in COMM_TASK_PRESSURE_G12_EXTENSION_PROTOCOL.md §2"
+ },
+ "launches_this_layer_would_need": 160,
+ "layer": 12,
+ "ledger_before": {
+  "by_kind": {
+   "gate": 10,
+   "matrix": 448,
+   "record": 48
+  },
+  "extension_grant": 16,
+  "failures": 20,
+  "files": [
+   "LAUNCH_LEDGER_agreement.json",
+   "LAUNCH_LEDGER_g10_p34112.json",
+   "LAUNCH_LEDGER_g10_p35424.json",
+   "LAUNCH_LEDGER_g10_p4220.json",
+   "LAUNCH_LEDGER_g10_p47628.json",
+   "LAUNCH_LEDGER_g6_p12304.json",
+   "LAUNCH_LEDGER_g6_p18604.json",
+   "LAUNCH_LEDGER_g6_p31224.json",
+   "LAUNCH_LEDGER_g6_p31492.json",
+   "LAUNCH_LEDGER_g6_p38932.json",
+   "LAUNCH_LEDGER_g6_p39808.json",
+   "LAUNCH_LEDGER_g6_p42156.json",
+   "LAUNCH_LEDGER_g6_p57412.json",
+   "LAUNCH_LEDGER_g8_p36900.json",
+   "LAUNCH_LEDGER_g8_p39068.json",
+   "LAUNCH_LEDGER_g8_p42892.json",
+   "LAUNCH_LEDGER_g8_p44868.json",
+   "LAUNCH_LEDGER_record_g10_p3932.json",
+   "LAUNCH_LEDGER_record_g10_p52424.json",
+   "LAUNCH_LEDGER_record_g10_p55664.json",
+   "LAUNCH_LEDGER_record_g10_p56292.json",
+   "LAUNCH_LEDGER_record_g6_p10000.json",
+   "LAUNCH_LEDGER_record_g6_p18480.json",
+   "LAUNCH_LEDGER_record_g6_p23104.json",
+   "LAUNCH_LEDGER_record_g6_p2652.json",
+   "LAUNCH_LEDGER_record_g6_p43920.json",
+   "LAUNCH_LEDGER_record_g6_p55956.json",
+   "LAUNCH_LEDGER_record_g6_p8976.json",
+   "LAUNCH_LEDGER_record_g6_p9276.json",
+   "LAUNCH_LEDGER_record_g8_p21808.json",
+   "LAUNCH_LEDGER_record_g8_p39672.json",
+   "LAUNCH_LEDGER_record_g8_p40524.json",
+   "LAUNCH_LEDGER_record_g8_p43300.json"
+  ],
+  "gate_cap": 12,
+  "gate_starts": 10,
+  "matrix_cap": 640,
+  "matrix_cap_with_grant": 656,
+  "matrix_starts": 496,
+  "starts": 506
+ },
+ "no_new_verification_episodes": true,
+ "production_defaults": {
+  "comm_ack": false,
+  "comm_budget_bytes": null,
+  "comm_policy": "immediate",
+  "comm_timing_mode": "legacy_shared_bound",
+  "num_goals": 6,
+  "ok": true
+ },
+ "rule": "failures spend the ceiling; no seed replacement, no extra arms, no re-runs",
+ "sealed_block": {
+  "artefacts": [],
+  "block": [
+   800000,
+   800399
+  ],
+  "count": 0
+ },
+ "seed_audit": {
+  "clean": true,
+  "file": "G12_SEED_COLLISION_AUDIT.json",
+  "hit_counts": {
+   "artefacts": 0,
+   "documentation": 0,
+   "git": 0,
+   "manifests": 0
+  },
+  "scope": {
+   "goals_audited": [
+    12
+   ],
+   "note": "narrowed to the blocks this run may still create; a seed this project has already recorded is not a claim on a seed it has not, and narrowing is not a whitelist -- every hit inside the audited block still stops the round"
+  }
+ },
+ "seeds": [
+  1000300,
+  1000315
+ ]
+}
