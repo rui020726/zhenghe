@@ -1,0 +1,1403 @@
+{
+ "cross_layer": {
+  "g10": {
+   "band_steps_total": 0,
+   "streams_terminal_credit_inside_envelope": 0,
+   "streams_with_band": 0
+  },
+  "g12": {
+   "band_steps_total": 198,
+   "streams_terminal_credit_inside_envelope": 6,
+   "streams_with_band": 3
+  },
+  "g6": {
+   "band_steps_total": 0,
+   "streams_terminal_credit_inside_envelope": 0,
+   "streams_with_band": 0
+  },
+  "g8": {
+   "band_steps_total": 0,
+   "streams_terminal_credit_inside_envelope": 0,
+   "streams_with_band": 0
+  }
+ },
+ "explanation_tested": "the credit is spent in packet-sized jumps while the band of credit values that permits a strict subset is a few hundred bytes wide, so landing in the band is decided by the residue of the charges paid, not by the goal count",
+ "layers": {
+  "g10": {
+   "band_width_as_fraction_of_one_packet": null,
+   "best_fixed_rule": "send_once",
+   "first_starvation_candidate_classes": {
+    "all_refresh": 0,
+    "some_first_report": 0,
+    "streams_with_this_record": 0
+   },
+   "first_starvation_step_below_its_own_band_by_construction": 0,
+   "median_band_width_bytes_at_starvation_step": null,
+   "median_packet_charge_bytes": 2493.0,
+   "per_stream": [
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2385.0,
+     "credit_left_bytes": 5084,
+     "emissions": 10,
+     "joint_over_credit_steps": 38,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000200,
+     "spent_bytes": 24216,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2484.0,
+     "credit_left_bytes": 4502,
+     "emissions": 10,
+     "joint_over_credit_steps": 55,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000201,
+     "spent_bytes": 24798,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2493.0,
+     "credit_left_bytes": 4268,
+     "emissions": 10,
+     "joint_over_credit_steps": 553,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000202,
+     "spent_bytes": 25032,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2496.0,
+     "credit_left_bytes": 4442,
+     "emissions": 10,
+     "joint_over_credit_steps": 4,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000203,
+     "spent_bytes": 24858,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2664.0,
+     "credit_left_bytes": 3902,
+     "emissions": 10,
+     "joint_over_credit_steps": 127,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000204,
+     "spent_bytes": 25398,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2295.0,
+     "credit_left_bytes": 5432,
+     "emissions": 10,
+     "joint_over_credit_steps": 9,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000205,
+     "spent_bytes": 23868,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2496.0,
+     "credit_left_bytes": 6332,
+     "emissions": 9,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000206,
+     "spent_bytes": 22968,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2490.0,
+     "credit_left_bytes": 4442,
+     "emissions": 10,
+     "joint_over_credit_steps": 79,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000207,
+     "spent_bytes": 24858,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2682.0,
+     "credit_left_bytes": 3410,
+     "emissions": 10,
+     "joint_over_credit_steps": 20,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000208,
+     "spent_bytes": 25890,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2490.0,
+     "credit_left_bytes": 6734,
+     "emissions": 9,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000209,
+     "spent_bytes": 22566,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2472.0,
+     "credit_left_bytes": 5048,
+     "emissions": 10,
+     "joint_over_credit_steps": 29,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000210,
+     "spent_bytes": 24252,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2580.0,
+     "credit_left_bytes": 3578,
+     "emissions": 10,
+     "joint_over_credit_steps": 241,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000211,
+     "spent_bytes": 25722,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2391.0,
+     "credit_left_bytes": 4880,
+     "emissions": 10,
+     "joint_over_credit_steps": 84,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000212,
+     "spent_bytes": 24420,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2664.0,
+     "credit_left_bytes": 3788,
+     "emissions": 10,
+     "joint_over_credit_steps": 111,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000213,
+     "spent_bytes": 25512,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2493.0,
+     "credit_left_bytes": 9428,
+     "emissions": 8,
+     "joint_over_credit_steps": 3,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000214,
+     "spent_bytes": 19872,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2511.0,
+     "credit_left_bytes": 4028,
+     "emissions": 10,
+     "joint_over_credit_steps": 346,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000215,
+     "spent_bytes": 25272,
+     "strict_subset_steps": 0
+    }
+   ],
+   "streams": 16,
+   "streams_with_price_envelope": 0,
+   "streams_with_starvation_step_candidates": 0,
+   "streams_with_strict_subset_steps": 0,
+   "strict_subset_step_total": 0,
+   "terminal_credit_lands_above_envelope": 0,
+   "terminal_credit_lands_below_envelope": 0,
+   "terminal_credit_lands_inside_own_envelope": 0,
+   "where_the_credit_came_from_one_packet_earlier": {}
+  },
+  "g12": {
+   "band_width_as_fraction_of_one_packet": 0.05811,
+   "best_fixed_rule": "send_once",
+   "first_starvation_candidate_classes": {
+    "all_refresh": 15,
+    "some_first_report": 0,
+    "streams_with_this_record": 15
+   },
+   "first_starvation_step_below_its_own_band_by_construction": 15,
+   "median_band_width_bytes_at_starvation_step": 144.0,
+   "median_packet_charge_bytes": 2478.0,
+   "per_stream": [
+    {
+     "all_payable_steps": 10,
+     "at_first_starvation_step": {
+      "band_width_bytes": 522,
+      "credit_left_bytes": 1076.0,
+      "credit_one_packet_earlier": 3746.0,
+      "first_report_candidates": 0,
+      "max_charge": 2850,
+      "min_charge": 2328,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 9,
+      "step": 165,
+      "visible": 9
+     },
+     "charge_bytes_median_emitted": 2670.0,
+     "credit_left_bytes": 1076,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.02109,
+      "band_width_bytes": 618,
+      "distance_from_credit_to_cheapest_charge": -1234,
+      "max_charge": 2928,
+      "min_charge": 2310,
+      "position_of_terminal_credit": "below_band_nothing_payable"
+     },
+     "joint_over_credit_steps": 153,
+     "multi_candidate_steps": 287,
+     "none_payable_steps": 124,
+     "seed": 1000300,
+     "spent_bytes": 28224,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": 1,
+     "at_first_starvation_step": {
+      "band_width_bytes": 0,
+      "credit_left_bytes": 2534.0,
+      "credit_one_packet_earlier": 5012.0,
+      "first_report_candidates": 0,
+      "max_charge": 2634,
+      "min_charge": 2634,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 1,
+      "step": 166,
+      "visible": 1
+     },
+     "charge_bytes_median_emitted": 2478.0,
+     "credit_left_bytes": 2534,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.02212,
+      "band_width_bytes": 648,
+      "distance_from_credit_to_cheapest_charge": 332,
+      "max_charge": 2850,
+      "min_charge": 2202,
+      "position_of_terminal_credit": "inside_band_strict_subset_possible"
+     },
+     "joint_over_credit_steps": 15,
+     "multi_candidate_steps": 163,
+     "none_payable_steps": 0,
+     "seed": 1000301,
+     "spent_bytes": 26766,
+     "strict_subset_steps": 147
+    },
+    {
+     "all_payable_steps": 6,
+     "at_first_starvation_step": {
+      "band_width_bytes": 0,
+      "credit_left_bytes": 2336.0,
+      "credit_one_packet_earlier": 4814.0,
+      "first_report_candidates": 0,
+      "max_charge": 2700,
+      "min_charge": 2700,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 1,
+      "step": 154,
+      "visible": 1
+     },
+     "charge_bytes_median_emitted": 2478.0,
+     "credit_left_bytes": 2336,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.02048,
+      "band_width_bytes": 600,
+      "distance_from_credit_to_cheapest_charge": 62,
+      "max_charge": 2874,
+      "min_charge": 2274,
+      "position_of_terminal_credit": "inside_band_strict_subset_possible"
+     },
+     "joint_over_credit_steps": 101,
+     "multi_candidate_steps": 107,
+     "none_payable_steps": 0,
+     "seed": 1000302,
+     "spent_bytes": 26964,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": 30,
+     "at_first_starvation_step": {
+      "band_width_bytes": 0,
+      "credit_left_bytes": 2192.0,
+      "credit_one_packet_earlier": 4592.0,
+      "first_report_candidates": 0,
+      "max_charge": 2310,
+      "min_charge": 2310,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 1,
+      "step": 231,
+      "visible": 1
+     },
+     "charge_bytes_median_emitted": 2400.0,
+     "credit_left_bytes": 2192,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.02027,
+      "band_width_bytes": 594,
+      "distance_from_credit_to_cheapest_charge": -94,
+      "max_charge": 2880,
+      "min_charge": 2286,
+      "position_of_terminal_credit": "below_band_nothing_payable"
+     },
+     "joint_over_credit_steps": 61,
+     "multi_candidate_steps": 91,
+     "none_payable_steps": 0,
+     "seed": 1000303,
+     "spent_bytes": 27108,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": 24,
+     "at_first_starvation_step": {
+      "band_width_bytes": 312,
+      "credit_left_bytes": 1574.0,
+      "credit_one_packet_earlier": 4082.0,
+      "first_report_candidates": 0,
+      "max_charge": 2808,
+      "min_charge": 2496,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 8,
+      "step": 43,
+      "visible": 8
+     },
+     "charge_bytes_median_emitted": 2508.0,
+     "credit_left_bytes": 1574,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.02437,
+      "band_width_bytes": 714,
+      "distance_from_credit_to_cheapest_charge": -616,
+      "max_charge": 2904,
+      "min_charge": 2190,
+      "position_of_terminal_credit": "below_band_nothing_payable"
+     },
+     "joint_over_credit_steps": 18,
+     "multi_candidate_steps": 112,
+     "none_payable_steps": 70,
+     "seed": 1000304,
+     "spent_bytes": 27726,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": 11,
+     "charge_bytes_median_emitted": 2484.0,
+     "credit_left_bytes": 6758,
+     "emissions": 9,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.01884,
+      "band_width_bytes": 552,
+      "distance_from_credit_to_cheapest_charge": 4484,
+      "max_charge": 2826,
+      "min_charge": 2274,
+      "position_of_terminal_credit": "above_band_everything_payable"
+     },
+     "joint_over_credit_steps": 77,
+     "multi_candidate_steps": 88,
+     "none_payable_steps": 0,
+     "seed": 1000305,
+     "spent_bytes": 22542,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": 170,
+     "at_first_starvation_step": {
+      "band_width_bytes": 144,
+      "credit_left_bytes": 2282.0,
+      "credit_one_packet_earlier": 4586.0,
+      "first_report_candidates": 0,
+      "max_charge": 2826,
+      "min_charge": 2682,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 2,
+      "step": 766,
+      "visible": 2
+     },
+     "charge_bytes_median_emitted": 2304.0,
+     "credit_left_bytes": 2282,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.02212,
+      "band_width_bytes": 648,
+      "distance_from_credit_to_cheapest_charge": 8,
+      "max_charge": 2922,
+      "min_charge": 2274,
+      "position_of_terminal_credit": "inside_band_strict_subset_possible"
+     },
+     "joint_over_credit_steps": 81,
+     "multi_candidate_steps": 272,
+     "none_payable_steps": 21,
+     "seed": 1000306,
+     "spent_bytes": 27018,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": 4,
+     "at_first_starvation_step": {
+      "band_width_bytes": 186,
+      "credit_left_bytes": 1292.0,
+      "credit_one_packet_earlier": 3968.0,
+      "first_report_candidates": 0,
+      "max_charge": 2868,
+      "min_charge": 2682,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 5,
+      "step": 57,
+      "visible": 5
+     },
+     "charge_bytes_median_emitted": 2676.0,
+     "credit_left_bytes": 1292,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.02396,
+      "band_width_bytes": 702,
+      "distance_from_credit_to_cheapest_charge": -904,
+      "max_charge": 2898,
+      "min_charge": 2196,
+      "position_of_terminal_credit": "below_band_nothing_payable"
+     },
+     "joint_over_credit_steps": 52,
+     "multi_candidate_steps": 116,
+     "none_payable_steps": 60,
+     "seed": 1000307,
+     "spent_bytes": 28008,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": 2,
+     "at_first_starvation_step": {
+      "band_width_bytes": 318,
+      "credit_left_bytes": 2030.0,
+      "credit_one_packet_earlier": 4508.0,
+      "first_report_candidates": 0,
+      "max_charge": 2808,
+      "min_charge": 2490,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 2,
+      "step": 479,
+      "visible": 2
+     },
+     "charge_bytes_median_emitted": 2478.0,
+     "credit_left_bytes": 2030,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.01925,
+      "band_width_bytes": 564,
+      "distance_from_credit_to_cheapest_charge": -256,
+      "max_charge": 2850,
+      "min_charge": 2286,
+      "position_of_terminal_credit": "below_band_nothing_payable"
+     },
+     "joint_over_credit_steps": 81,
+     "multi_candidate_steps": 361,
+     "none_payable_steps": 278,
+     "seed": 1000308,
+     "spent_bytes": 27270,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": 3,
+     "at_first_starvation_step": {
+      "band_width_bytes": 324,
+      "credit_left_bytes": 1028.0,
+      "credit_one_packet_earlier": 3698.0,
+      "first_report_candidates": 0,
+      "max_charge": 2820,
+      "min_charge": 2496,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 8,
+      "step": 40,
+      "visible": 8
+     },
+     "charge_bytes_median_emitted": 2670.0,
+     "credit_left_bytes": 1028,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.0213,
+      "band_width_bytes": 624,
+      "distance_from_credit_to_cheapest_charge": -1252,
+      "max_charge": 2904,
+      "min_charge": 2280,
+      "position_of_terminal_credit": "below_band_nothing_payable"
+     },
+     "joint_over_credit_steps": 36,
+     "multi_candidate_steps": 1000,
+     "none_payable_steps": 961,
+     "seed": 1000309,
+     "spent_bytes": 28272,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": 15,
+     "at_first_starvation_step": {
+      "band_width_bytes": 0,
+      "credit_left_bytes": 2384.0,
+      "credit_one_packet_earlier": 4862.0,
+      "first_report_candidates": 0,
+      "max_charge": 2472,
+      "min_charge": 2472,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 1,
+      "step": 977,
+      "visible": 1
+     },
+     "charge_bytes_median_emitted": 2478.0,
+     "credit_left_bytes": 2384,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.0215,
+      "band_width_bytes": 630,
+      "distance_from_credit_to_cheapest_charge": 182,
+      "max_charge": 2832,
+      "min_charge": 2202,
+      "position_of_terminal_credit": "inside_band_strict_subset_possible"
+     },
+     "joint_over_credit_steps": 67,
+     "multi_candidate_steps": 82,
+     "none_payable_steps": 0,
+     "seed": 1000310,
+     "spent_bytes": 26916,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": 3,
+     "at_first_starvation_step": {
+      "band_width_bytes": 90,
+      "credit_left_bytes": 2606.0,
+      "credit_one_packet_earlier": 4892.0,
+      "first_report_candidates": 0,
+      "max_charge": 2712,
+      "min_charge": 2622,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 4,
+      "step": 41,
+      "visible": 4
+     },
+     "charge_bytes_median_emitted": 2286.0,
+     "credit_left_bytes": 2606,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.02109,
+      "band_width_bytes": 618,
+      "distance_from_credit_to_cheapest_charge": 332,
+      "max_charge": 2892,
+      "min_charge": 2274,
+      "position_of_terminal_credit": "inside_band_strict_subset_possible"
+     },
+     "joint_over_credit_steps": 6,
+     "multi_candidate_steps": 63,
+     "none_payable_steps": 15,
+     "seed": 1000311,
+     "spent_bytes": 26694,
+     "strict_subset_steps": 39
+    },
+    {
+     "all_payable_steps": 69,
+     "at_first_starvation_step": {
+      "band_width_bytes": 108,
+      "credit_left_bytes": 2510.0,
+      "credit_one_packet_earlier": 4820.0,
+      "first_report_candidates": 0,
+      "max_charge": 2898,
+      "min_charge": 2790,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 2,
+      "step": 270,
+      "visible": 2
+     },
+     "charge_bytes_median_emitted": 2310.0,
+     "credit_left_bytes": 2510,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.02253,
+      "band_width_bytes": 660,
+      "distance_from_credit_to_cheapest_charge": 230,
+      "max_charge": 2940,
+      "min_charge": 2280,
+      "position_of_terminal_credit": "inside_band_strict_subset_possible"
+     },
+     "joint_over_credit_steps": 43,
+     "multi_candidate_steps": 855,
+     "none_payable_steps": 731,
+     "seed": 1000312,
+     "spent_bytes": 26790,
+     "strict_subset_steps": 12
+    },
+    {
+     "all_payable_steps": 14,
+     "at_first_starvation_step": {
+      "band_width_bytes": 546,
+      "credit_left_bytes": 1196.0,
+      "credit_one_packet_earlier": 3500.0,
+      "first_report_candidates": 0,
+      "max_charge": 2868,
+      "min_charge": 2322,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 2,
+      "step": 228,
+      "visible": 2
+     },
+     "charge_bytes_median_emitted": 2304.0,
+     "credit_left_bytes": 1196,
+     "emissions": 12,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.02355,
+      "band_width_bytes": 690,
+      "distance_from_credit_to_cheapest_charge": -982,
+      "max_charge": 2868,
+      "min_charge": 2178,
+      "position_of_terminal_credit": "below_band_nothing_payable"
+     },
+     "joint_over_credit_steps": 31,
+     "multi_candidate_steps": 112,
+     "none_payable_steps": 67,
+     "seed": 1000313,
+     "spent_bytes": 28104,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": 224,
+     "at_first_starvation_step": {
+      "band_width_bytes": 540,
+      "credit_left_bytes": 1664.0,
+      "credit_one_packet_earlier": 4166.0,
+      "first_report_candidates": 0,
+      "max_charge": 2856,
+      "min_charge": 2316,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 7,
+      "step": 289,
+      "visible": 7
+     },
+     "charge_bytes_median_emitted": 2502.0,
+     "credit_left_bytes": 1664,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.01986,
+      "band_width_bytes": 582,
+      "distance_from_credit_to_cheapest_charge": -628,
+      "max_charge": 2874,
+      "min_charge": 2292,
+      "position_of_terminal_credit": "below_band_nothing_payable"
+     },
+     "joint_over_credit_steps": 64,
+     "multi_candidate_steps": 1000,
+     "none_payable_steps": 712,
+     "seed": 1000314,
+     "spent_bytes": 27636,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": 26,
+     "at_first_starvation_step": {
+      "band_width_bytes": 12,
+      "credit_left_bytes": 1184.0,
+      "credit_one_packet_earlier": 3680.0,
+      "first_report_candidates": 0,
+      "max_charge": 2694,
+      "min_charge": 2682,
+      "one_packet_earlier_position": "above_band_everything_payable",
+      "position": "below_band_nothing_payable",
+      "refresh_candidates": 2,
+      "step": 163,
+      "visible": 2
+     },
+     "charge_bytes_median_emitted": 2496.0,
+     "credit_left_bytes": 1184,
+     "emissions": 11,
+     "envelope": {
+      "band_width_as_fraction_of_credit": 0.02212,
+      "band_width_bytes": 648,
+      "distance_from_credit_to_cheapest_charge": -1102,
+      "max_charge": 2934,
+      "min_charge": 2286,
+      "position_of_terminal_credit": "below_band_nothing_payable"
+     },
+     "joint_over_credit_steps": 95,
+     "multi_candidate_steps": 143,
+     "none_payable_steps": 22,
+     "seed": 1000315,
+     "spent_bytes": 28116,
+     "strict_subset_steps": 0
+    }
+   ],
+   "streams": 16,
+   "streams_with_price_envelope": 16,
+   "streams_with_starvation_step_candidates": 15,
+   "streams_with_strict_subset_steps": 3,
+   "strict_subset_step_total": 198,
+   "terminal_credit_lands_above_envelope": 1,
+   "terminal_credit_lands_below_envelope": 9,
+   "terminal_credit_lands_inside_own_envelope": 6,
+   "where_the_credit_came_from_one_packet_earlier": {
+    "above_band_everything_payable": 15
+   }
+  },
+  "g6": {
+   "band_width_as_fraction_of_one_packet": null,
+   "best_fixed_rule": "periodic_20",
+   "first_starvation_candidate_classes": {
+    "all_refresh": 0,
+    "some_first_report": 0,
+    "streams_with_this_record": 0
+   },
+   "first_starvation_step_below_its_own_band_by_construction": 0,
+   "median_band_width_bytes_at_starvation_step": null,
+   "median_packet_charge_bytes": 2640.0,
+   "per_stream": [
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2682.0,
+     "credit_left_bytes": 290,
+     "emissions": 11,
+     "joint_over_credit_steps": 9,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000000,
+     "spent_bytes": 29010,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2688.0,
+     "credit_left_bytes": 2888,
+     "emissions": 10,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000001,
+     "spent_bytes": 26412,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2502.0,
+     "credit_left_bytes": 1268,
+     "emissions": 11,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000002,
+     "spent_bytes": 28032,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2490.0,
+     "credit_left_bytes": 9656,
+     "emissions": 8,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000003,
+     "spent_bytes": 19644,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2346.0,
+     "credit_left_bytes": 6998,
+     "emissions": 9,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000004,
+     "spent_bytes": 22302,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2766.0,
+     "credit_left_bytes": 13064,
+     "emissions": 6,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000005,
+     "spent_bytes": 16236,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2604.0,
+     "credit_left_bytes": 1118,
+     "emissions": 11,
+     "joint_over_credit_steps": 20,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000006,
+     "spent_bytes": 28182,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2664.0,
+     "credit_left_bytes": 1142,
+     "emissions": 11,
+     "joint_over_credit_steps": 20,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000007,
+     "spent_bytes": 28158,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2325.0,
+     "credit_left_bytes": 26,
+     "emissions": 12,
+     "joint_over_credit_steps": 20,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000008,
+     "spent_bytes": 29274,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2403.0,
+     "credit_left_bytes": 9644,
+     "emissions": 8,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000009,
+     "spent_bytes": 19656,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2685.0,
+     "credit_left_bytes": 3056,
+     "emissions": 10,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000010,
+     "spent_bytes": 26244,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2676.0,
+     "credit_left_bytes": 2960,
+     "emissions": 10,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000011,
+     "spent_bytes": 26340,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2616.0,
+     "credit_left_bytes": 470,
+     "emissions": 11,
+     "joint_over_credit_steps": 3,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000012,
+     "spent_bytes": 28830,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2502.0,
+     "credit_left_bytes": 998,
+     "emissions": 11,
+     "joint_over_credit_steps": 5,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000013,
+     "spent_bytes": 28302,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2694.0,
+     "credit_left_bytes": 5882,
+     "emissions": 9,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000014,
+     "spent_bytes": 23418,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2682.0,
+     "credit_left_bytes": 2684,
+     "emissions": 10,
+     "joint_over_credit_steps": 17,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000015,
+     "spent_bytes": 26616,
+     "strict_subset_steps": 0
+    }
+   ],
+   "streams": 16,
+   "streams_with_price_envelope": 0,
+   "streams_with_starvation_step_candidates": 0,
+   "streams_with_strict_subset_steps": 0,
+   "strict_subset_step_total": 0,
+   "terminal_credit_lands_above_envelope": 0,
+   "terminal_credit_lands_below_envelope": 0,
+   "terminal_credit_lands_inside_own_envelope": 0,
+   "where_the_credit_came_from_one_packet_earlier": {}
+  },
+  "g8": {
+   "band_width_as_fraction_of_one_packet": null,
+   "best_fixed_rule": "send_once",
+   "first_starvation_candidate_classes": {
+    "all_refresh": 0,
+    "some_first_report": 0,
+    "streams_with_this_record": 0
+   },
+   "first_starvation_step_below_its_own_band_by_construction": 0,
+   "median_band_width_bytes_at_starvation_step": null,
+   "median_packet_charge_bytes": 2478.0,
+   "per_stream": [
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2493.0,
+     "credit_left_bytes": 9596,
+     "emissions": 8,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000100,
+     "spent_bytes": 19704,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2304.0,
+     "credit_left_bytes": 17294,
+     "emissions": 5,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000101,
+     "spent_bytes": 12006,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2304.0,
+     "credit_left_bytes": 10004,
+     "emissions": 8,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000102,
+     "spent_bytes": 19296,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2475.0,
+     "credit_left_bytes": 9494,
+     "emissions": 8,
+     "joint_over_credit_steps": 60,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000103,
+     "spent_bytes": 19806,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2484.0,
+     "credit_left_bytes": 9212,
+     "emissions": 8,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000104,
+     "spent_bytes": 20088,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2574.0,
+     "credit_left_bytes": 14180,
+     "emissions": 6,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000105,
+     "spent_bytes": 15120,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2355.0,
+     "credit_left_bytes": 9884,
+     "emissions": 8,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000106,
+     "spent_bytes": 19416,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2400.0,
+     "credit_left_bytes": 9602,
+     "emissions": 8,
+     "joint_over_credit_steps": 1,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000107,
+     "spent_bytes": 19698,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2487.0,
+     "credit_left_bytes": 9404,
+     "emissions": 8,
+     "joint_over_credit_steps": 1,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000108,
+     "spent_bytes": 19896,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2667.0,
+     "credit_left_bytes": 8786,
+     "emissions": 8,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000109,
+     "spent_bytes": 20514,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2481.0,
+     "credit_left_bytes": 9428,
+     "emissions": 8,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000110,
+     "spent_bytes": 19872,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2292.0,
+     "credit_left_bytes": 10382,
+     "emissions": 8,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000111,
+     "spent_bytes": 18918,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2688.0,
+     "credit_left_bytes": 8012,
+     "emissions": 8,
+     "joint_over_credit_steps": 53,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000112,
+     "spent_bytes": 21288,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2301.0,
+     "credit_left_bytes": 10406,
+     "emissions": 8,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000113,
+     "spent_bytes": 18894,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2472.0,
+     "credit_left_bytes": 9524,
+     "emissions": 8,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000114,
+     "spent_bytes": 19776,
+     "strict_subset_steps": 0
+    },
+    {
+     "all_payable_steps": null,
+     "charge_bytes_median_emitted": 2664.0,
+     "credit_left_bytes": 8840,
+     "emissions": 8,
+     "joint_over_credit_steps": 0,
+     "multi_candidate_steps": null,
+     "none_payable_steps": null,
+     "seed": 1000115,
+     "spent_bytes": 20460,
+     "strict_subset_steps": 0
+    }
+   ],
+   "streams": 16,
+   "streams_with_price_envelope": 0,
+   "streams_with_starvation_step_candidates": 0,
+   "streams_with_strict_subset_steps": 0,
+   "strict_subset_step_total": 0,
+   "terminal_credit_lands_above_envelope": 0,
+   "terminal_credit_lands_below_envelope": 0,
+   "terminal_credit_lands_inside_own_envelope": 0,
+   "where_the_credit_came_from_one_packet_earlier": {}
+  }
+ },
+ "per_arm_all_layers": {
+  "g10": {
+   "always_hold": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   },
+   "bound_only_3_10": {
+    "band_steps_total": 20,
+    "streams_with_band": 3,
+    "terminal_credit_inside_envelope": 0
+   },
+   "event": {
+    "band_steps_total": 19,
+    "streams_with_band": 2,
+    "terminal_credit_inside_envelope": 0
+   },
+   "event_priority": {
+    "band_steps_total": 19,
+    "streams_with_band": 2,
+    "terminal_credit_inside_envelope": 0
+   },
+   "event_unbudgeted": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   },
+   "first_send_plus_bound_3_10": {
+    "band_steps_total": 16,
+    "streams_with_band": 2,
+    "terminal_credit_inside_envelope": 0
+   },
+   "periodic_20": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   },
+   "periodic_5": {
+    "band_steps_total": 5,
+    "streams_with_band": 1,
+    "terminal_credit_inside_envelope": 0
+   },
+   "send_once": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   }
+  },
+  "g12": {
+   "always_hold": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   },
+   "bound_only_3_10": {
+    "band_steps_total": 20,
+    "streams_with_band": 4,
+    "terminal_credit_inside_envelope": 1
+   },
+   "event": {
+    "band_steps_total": 29,
+    "streams_with_band": 5,
+    "terminal_credit_inside_envelope": 0
+   },
+   "event_priority": {
+    "band_steps_total": 29,
+    "streams_with_band": 5,
+    "terminal_credit_inside_envelope": 0
+   },
+   "event_unbudgeted": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   },
+   "first_send_plus_bound_3_10": {
+    "band_steps_total": 21,
+    "streams_with_band": 4,
+    "terminal_credit_inside_envelope": 0
+   },
+   "periodic_20": {
+    "band_steps_total": 40,
+    "streams_with_band": 2,
+    "terminal_credit_inside_envelope": 0
+   },
+   "periodic_5": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 1
+   },
+   "send_once": {
+    "band_steps_total": 198,
+    "streams_with_band": 3,
+    "terminal_credit_inside_envelope": 6
+   }
+  },
+  "g6": {
+   "always_hold": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   },
+   "bound_only_3_10": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   },
+   "event": {
+    "band_steps_total": 35,
+    "streams_with_band": 3,
+    "terminal_credit_inside_envelope": 0
+   },
+   "event_priority": {
+    "band_steps_total": 28,
+    "streams_with_band": 2,
+    "terminal_credit_inside_envelope": 0
+   },
+   "event_unbudgeted": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   },
+   "first_send_plus_bound_3_10": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   },
+   "periodic_20": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   },
+   "periodic_5": {
+    "band_steps_total": 2,
+    "streams_with_band": 1,
+    "terminal_credit_inside_envelope": 0
+   },
+   "send_once": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   }
+  },
+  "g8": {
+   "always_hold": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   },
+   "bound_only_3_10": {
+    "band_steps_total": 11,
+    "streams_with_band": 1,
+    "terminal_credit_inside_envelope": 0
+   },
+   "event": {
+    "band_steps_total": 4,
+    "streams_with_band": 2,
+    "terminal_credit_inside_envelope": 0
+   },
+   "event_priority": {
+    "band_steps_total": 4,
+    "streams_with_band": 2,
+    "terminal_credit_inside_envelope": 0
+   },
+   "event_unbudgeted": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   },
+   "first_send_plus_bound_3_10": {
+    "band_steps_total": 1,
+    "streams_with_band": 1,
+    "terminal_credit_inside_envelope": 0
+   },
+   "periodic_20": {
+    "band_steps_total": 14,
+    "streams_with_band": 1,
+    "terminal_credit_inside_envelope": 0
+   },
+   "periodic_5": {
+    "band_steps_total": 6,
+    "streams_with_band": 3,
+    "terminal_credit_inside_envelope": 0
+   },
+   "send_once": {
+    "band_steps_total": 0,
+    "streams_with_band": 0,
+    "terminal_credit_inside_envelope": 0
+   }
+  }
+ },
+ "question": "why does the strict-subset band appear in so few streams"
+}

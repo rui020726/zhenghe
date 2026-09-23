@@ -36,6 +36,19 @@ ARMS = (
 )
 BUDGET_BYTES = 29_300
 
+#: The seven competitors in the source protocol's row order (learnability protocol section 3).
+#: `best_fixed` is chosen among these, and the row order is the protocol's own tie-break, so the
+#: order is part of the definition rather than a listing convenience.
+COMPETITION_ORDER = (
+    "send_once",
+    "event",
+    "event_priority",
+    "periodic_5",
+    "periodic_20",
+    "first_send_plus_bound_3_10",
+    "bound_only_3_10",
+)
+
 #: Anything that could put an episode on the clock. Every name here is a real entry point in the
 #: frozen round (``pressure_env.run_episode`` / ``run_arm`` / ``agreement_with_archived_rows``,
 #: ``record_layer.record``, ``pressure_matrix.run``); the tripwire refuses to install if one is

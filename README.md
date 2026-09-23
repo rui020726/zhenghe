@@ -1,18 +1,26 @@
 # Zhenghe：搜索—协调—分配一体化搜救系统
 
-当前研究入口：[项目总纲 v3.5](PROJECT_CHARTER.md) 与
-[任务压力第四层（12 目标）的补跑实测](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_G12_EXTENSION_RESULTS.md)
-（前三层见 [同一目录的已交付报告](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.md)）。
-这条轴 0 训练、只改 `num_goals`：6→8→10→12 目标把 L2 从效果天花板推进到带内（0.900 → 0.78172），
-12 目标还第一次让"同一步只付得起严格候选子集"出现（3/16 流、198 步）并把额度用满 ≥90 % 的流数从 0/16 推到 15/16；
-但 L3 门槛是 8/16、L4 的 envelope 增益只有 +0.0625（CI 下界 0）⇒ **四层全部未通过**，
-未计算 λ、未改 reward、未训练。机制已量清：多候选步里 63.1 % 直接全拒付、只有 4.1 % 是严格子集，
-包价极差仅占额度 2.6 %，首次断供都落在"已发消息的刷新"上——额度失效的形式仍是成片断供而非逐步选择。
-下一步由使用者在三条里选：接受该负结果并停止、做只读 action-geometry audit、或换轴
-（非平稳信道 / 多订阅者与真实拓扑 / 把成本显式写进目标）。最终封存块、H=20、ACK、丢包和观测扩维继续冻结。
+当前研究入口：[项目总纲 v3.6](PROJECT_CHARTER.md) 与
+[通信动作几何与时序价值审计](runs/comm_action_geometry_audit_20260923/COMM_ACTION_GEOMETRY_AUDIT.md)
+（被审计的数据：[任务压力第四层补跑实测](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_G12_EXTENSION_RESULTS.md)、
+[前三层已交付报告](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.md)）。
+这一轮是**回顾性机制审计**（0 新 episode、0 启动、无判据无门禁），回答"v3.5 那 198 个严格子集步到底是什么"：
+`send_once` 在前 ~20 步发完全部首报后额度就**冻在一个残值**上，而残值要落进一条**中位只有 144 B
+（一个包 2 478 B 的 5.8 %）**的包价带才会产生逐步选择——15 条断供流把额度往回倒一个包，
+**15/15 都在带之上，一步跨带**；最终 3/16 条流命中，且那 52 个采样步上
+**候选 100 % 是续报、0 个是新目标首报**。⇒ L3 缺口是几何问题，不是"再多一层就会出现"。
+同时算清三笔账：**576 格没有任何一格把预算用到 100 %**（最高 0.999 93）；
+"首次断供候选全为刷新"只对 `send_once` 与 `first_send_plus_bound_3_10` 成立（其余五臂 9–13/16，引用须带臂名）；
+交接里"g12 缺 16 次启动"是过期陈述，实测 656/656、144/144 格、0 失败。
+单包节省反事实在 `send_once` 上**没有对象**（它零续报），在 `event` 上机会普遍但其内容恰是
+"`send_once` 已经在做的事" ⇒ 全部标注 `ledger_only_opportunity`，不声称效果改善。
+四层 L0–L4 独立复算逐层一致，原判据文件字节不变。
+下一步由使用者定：接受该轴关闭、或先构造"新目标之间"的报价分布再谈逐步选择（需新设计与新授权）、
+或换轴（非平稳信道 / 多订阅者与真实拓扑 / 把成本显式写进目标）。
+最终封存块、H=20、ACK、丢包和观测扩维继续冻结。
 
-上一轮入口：[任务压力标定指令（已执行完毕）](COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md)
-与 [修复后重训结果](runs/comm_budget_masked_retrain_20260922/COMM_BUDGET_MASKED_RETRAIN_RESULTS.md)。
+上一轮入口：[任务压力第四层协议](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_G12_EXTENSION_PROTOCOL.md)
+与 [任务压力标定指令（已执行完毕）](COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md)。
 
 本仓库整合两个已有研究模块：
 

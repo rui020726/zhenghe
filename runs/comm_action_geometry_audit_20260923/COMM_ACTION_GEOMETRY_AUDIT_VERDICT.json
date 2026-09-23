@@ -1,0 +1,402 @@
+{
+ "authorisation_honoured": {
+  "episode_entry_point_calls": [],
+  "files_added_since_freeze": [],
+  "input_files_changed": [],
+  "input_files_missing": [],
+  "launches_added": 0,
+  "new_episodes": 0,
+  "sealed_block_artefacts_on_disk": 0,
+  "verification_passed": true
+ },
+ "branch": "analysis/comm-action-geometry-audit",
+ "corrections_to_published_wording": [
+  {
+   "checked_reading": "对 `send_once`(15/15) 与 `first_send_plus_bound_3_10`(16/16) 成立；对 `bound_only_3_10` 13/16、`periodic_20` 12/16、`periodic_5` 10/16、`event_priority` 10/16、`event` 9/16 成立，其余流在那一步仍有一个从未报出的新目标。没有任何臂出现『全是新目标』。",
+   "required_qualifier": "引用时必须带臂名；它是最佳规则的性质，不是跨规则的性质。",
+   "statement": "首次额度耗尽的 15 条流，那一步上的候选全部是刷新",
+   "where_it_was_made": "COMM_TASK_PRESSURE_G12_EXTENSION_RESULTS.md §四"
+  },
+  {
+   "checked_reading": "已闭合：追加授权 16 次使上限 640→656，g12 实到 160 次、0 失败、144/144 格；总数据启动 656 = 上限 656。",
+   "required_qualifier": "账本 `entries`(670) 比 `starts`(666) 多 4 行是『重登记而未跑 episode』的审计痕迹，不是漏计。",
+   "statement": "g12 需要 160 次启动而账本只剩 144，缺口未闭合",
+   "where_it_was_made": "本轮交接文档 §未解决问题"
+  }
+ ],
+ "date": "2026-09-23",
+ "does_not_change": [
+  "四层任何一条已发布判据（`GATES_g*.json` 等字节不变，已由 SHA256 核对）",
+  "g12 的『容量扩展 / 探索性闭环』地位",
+  "总纲 §9 关于学习型发送控制器的既有结论口径"
+ ],
+ "findings": {
+  "A_concurrency": {
+   "attempt_share_of_visible_g12": {
+    "always_hold": 0.0,
+    "event": 0.978185,
+    "periodic_5": 0.200182,
+    "send_once": 0.23783
+   },
+   "g12_best_rule_g12_only_partition": {
+    "all_payable": {
+     "basis_note": "exact in g12 only; missing in g6/g8/g10",
+     "per_episode": {
+      "max": 224.0,
+      "mean": 38.25,
+      "median": 12.5,
+      "min": 1.0,
+      "n": 16,
+      "p25": 3.75,
+      "p75": 27.0,
+      "p95": 183.5
+     },
+     "streams_from_declared_fallback": 0,
+     "streams_measured_exactly": 16,
+     "streams_missing": 0,
+     "streams_with_at_least_one": 16,
+     "total_steps": 612.0
+    },
+    "all_steps": {
+     "basis_note": "exact in every layer",
+     "per_episode": {
+      "max": 1000.0,
+      "mean": 1000.0,
+      "median": 1000.0,
+      "min": 1000.0,
+      "n": 16,
+      "p25": 1000.0,
+      "p75": 1000.0,
+      "p95": 1000.0
+     },
+     "streams_from_declared_fallback": 0,
+     "streams_measured_exactly": 16,
+     "streams_missing": 0,
+     "streams_with_at_least_one": 16,
+     "total_steps": 16000.0
+    },
+    "at_least_one_candidate": {
+     "basis_note": "exact in every layer (the probe is not called on an empty candidate list)",
+     "per_episode": {
+      "max": 1000.0,
+      "mean": 699.25,
+      "median": 966.5,
+      "min": 80.0,
+      "n": 16,
+      "p25": 161.75,
+      "p75": 1000.0,
+      "p95": 1000.0
+     },
+     "streams_from_declared_fallback": 0,
+     "streams_measured_exactly": 16,
+     "streams_missing": 0,
+     "streams_with_at_least_one": 16,
+     "total_steps": 11188.0
+    },
+    "at_least_two_candidates": {
+     "basis_note": "exact in g12; bracketed in g6/g8/g10, which stored no per-step histogram",
+     "per_episode": {
+      "max": 1000.0,
+      "mean": 303.25,
+      "median": 129.5,
+      "min": 63.0,
+      "n": 16,
+      "p25": 103.0,
+      "p75": 305.5,
+      "p95": 1000.0
+     },
+     "streams_from_declared_fallback": 0,
+     "streams_measured_exactly": 16,
+     "streams_missing": 0,
+     "streams_with_at_least_one": 16,
+     "total_steps": 4852.0
+    },
+    "none_payable": {
+     "basis_note": "visible>=2 in g12; g6/g8/g10 only recorded visible>=1, a different base",
+     "per_episode": {
+      "max": 961.0,
+      "mean": 191.3125,
+      "median": 41.0,
+      "min": 0.0,
+      "n": 16,
+      "p25": 0.0,
+      "p75": 162.5,
+      "p95": 788.5
+     },
+     "streams_from_declared_fallback": 0,
+     "streams_measured_exactly": 16,
+     "streams_missing": 0,
+     "streams_with_at_least_one": 11,
+     "total_steps": 3061.0
+    },
+    "send_and_hold_both_executable": {
+     "basis_note": "exact in every layer",
+     "per_episode": {
+      "max": 765.0,
+      "mean": 188.5,
+      "median": 132.0,
+      "min": 39.0,
+      "n": 16,
+      "p25": 60.5,
+      "p75": 191.0,
+      "p95": 549.75
+     },
+     "streams_from_declared_fallback": 0,
+     "streams_measured_exactly": 16,
+     "streams_missing": 0,
+     "streams_with_at_least_one": 16,
+     "total_steps": 3016.0
+    },
+    "strict_subset_payable": {
+     "basis_note": "exact in every layer: this is the L3 reading",
+     "per_episode": {
+      "max": 147.0,
+      "mean": 12.375,
+      "median": 0.0,
+      "min": 0.0,
+      "n": 16,
+      "p25": 0.0,
+      "p75": 0.0,
+      "p95": 66.0
+     },
+     "streams_from_declared_fallback": 0,
+     "streams_measured_exactly": 16,
+     "streams_missing": 0,
+     "streams_with_at_least_one": 3,
+     "total_steps": 198.0
+    }
+   },
+   "strict_subset_steps_by_layer_best_rule": {
+    "g10": 0.0,
+    "g12": 198.0,
+    "g6": 0.0,
+    "g8": 0.0
+   },
+   "strict_subset_streams_by_layer_best_rule": {
+    "g10": 0,
+    "g12": 3,
+    "g6": 0,
+    "g8": 0
+   }
+  },
+  "B_quotes": {
+   "band_as_fraction_of_one_packet": 0.05811,
+   "credit_test_explains_payable_all_layers_all_arms": 375,
+   "first_report_candidates_at_g12_best_strict_steps": {
+    "max": 0.0,
+    "mean": 0.0,
+    "median": 0.0,
+    "min": 0.0,
+    "n": 52,
+    "p25": 0.0,
+    "p75": 0.0,
+    "p95": 0.0
+   },
+   "median_packet_charge_bytes": 2478.0,
+   "median_within_step_band_bytes_at_starvation": 144.0,
+   "one_packet_earlier_position": {
+    "above_band_everything_payable": 15
+   },
+   "sampled_steps_total": 375,
+   "strict_steps_sampled_vs_total_g12_best": {
+    "sampled": 52,
+    "total": 198
+   },
+   "terminal_credit_position_counts": {
+    "above": 1,
+    "below": 9,
+    "inside": 6
+   },
+   "visible_equals_refresh_at_those_steps": {
+    "refresh_median": 6.0,
+    "visible_median": 6.0
+   }
+  },
+  "C_timing": {
+   "cells_reaching_100_percent_credit": 0,
+   "first_report_targets_never_emitted_g12": {
+    "bound_only_3_10": 48,
+    "event": 73,
+    "periodic_20": 43,
+    "periodic_5": 66,
+    "send_once": 8
+   },
+   "max_budget_used_fraction_any_cell": 0.99993,
+   "per_arm_first_starvation_candidate_classes": {
+    "bound_only_3_10": {
+     "all_candidates_were_first_reports": 0,
+     "all_candidates_were_refreshes": 13,
+     "at_least_one_never_reported_target": 3,
+     "streams_with_record": 16
+    },
+    "event": {
+     "all_candidates_were_first_reports": 0,
+     "all_candidates_were_refreshes": 9,
+     "at_least_one_never_reported_target": 7,
+     "streams_with_record": 16
+    },
+    "event_priority": {
+     "all_candidates_were_first_reports": 0,
+     "all_candidates_were_refreshes": 10,
+     "at_least_one_never_reported_target": 6,
+     "streams_with_record": 16
+    },
+    "first_send_plus_bound_3_10": {
+     "all_candidates_were_first_reports": 0,
+     "all_candidates_were_refreshes": 16,
+     "at_least_one_never_reported_target": 0,
+     "streams_with_record": 16
+    },
+    "periodic_20": {
+     "all_candidates_were_first_reports": 0,
+     "all_candidates_were_refreshes": 12,
+     "at_least_one_never_reported_target": 4,
+     "streams_with_record": 16
+    },
+    "periodic_5": {
+     "all_candidates_were_first_reports": 0,
+     "all_candidates_were_refreshes": 10,
+     "at_least_one_never_reported_target": 6,
+     "streams_with_record": 16
+    },
+    "send_once": {
+     "all_candidates_were_first_reports": 0,
+     "all_candidates_were_refreshes": 15,
+     "at_least_one_never_reported_target": 0,
+     "streams_with_record": 15
+    }
+   }
+  },
+  "D_ledger_only": {
+   "environment_causal": false,
+   "event_arm_opportunity": {
+    "g10": {
+     "median_first_reports_unlocked_per_packet": 4.0,
+     "streams_unlocking_a_first_report": 16,
+     "streams_with_any_opportunity": 16
+    },
+    "g12": {
+     "median_first_reports_unlocked_per_packet": 5.0,
+     "streams_unlocking_a_first_report": 16,
+     "streams_with_any_opportunity": 16
+    },
+    "g6": {
+     "median_first_reports_unlocked_per_packet": 2.0,
+     "streams_unlocking_a_first_report": 12,
+     "streams_with_any_opportunity": 16
+    },
+    "g8": {
+     "median_first_reports_unlocked_per_packet": 3.0,
+     "streams_unlocking_a_first_report": 16,
+     "streams_with_any_opportunity": 16
+    }
+   },
+   "label": "ledger_only_opportunity",
+   "send_once_refreshes_by_layer": {
+    "g10": 0,
+    "g12": 0,
+    "g6": 0,
+    "g8": 0
+   }
+  }
+ },
+ "launch_ledger_closed": {
+  "brief_cap": 640,
+  "data_launches_before_g12": 496,
+  "effective_cap": 656,
+  "g12_needed": 160,
+  "grant": 16,
+  "headroom_before_g12": 144,
+  "shortfall_before_grant": 16
+ },
+ "next_step_belongs_to_the_user": true,
+ "not_claimed": [
+  "本轮不声称任何策略的任务效果会改善",
+  "本轮不声称学习控制器有或没有附加价值",
+  "本轮不声称 L3 应被改判",
+  "D 节全部数字是 ledger-only opportunity，不是环境因果效应"
+ ],
+ "recomputation": {
+  "all_layers_reproduced": true,
+  "best_fixed_rule_matches_published": {
+   "g10": true,
+   "g12": true,
+   "g6": true,
+   "g8": true
+  },
+  "g12_zero_differences": true,
+  "published_vs_recomputed": {
+   "g10": {
+    "hard_failures": 0,
+    "published": {
+     "L0": true,
+     "L1": true,
+     "L2": true,
+     "L3": false,
+     "L4": false
+    },
+    "recomputed": {
+     "L0": true,
+     "L1": true,
+     "L2": true,
+     "L3": false,
+     "L4": false
+    }
+   },
+   "g12": {
+    "hard_failures": 0,
+    "published": {
+     "L0": true,
+     "L1": true,
+     "L2": true,
+     "L3": false,
+     "L4": false
+    },
+    "recomputed": {
+     "L0": true,
+     "L1": true,
+     "L2": true,
+     "L3": false,
+     "L4": false
+    }
+   },
+   "g6": {
+    "hard_failures": 0,
+    "published": {
+     "L0": true,
+     "L1": true,
+     "L2": false,
+     "L3": false,
+     "L4": false
+    },
+    "recomputed": {
+     "L0": true,
+     "L1": true,
+     "L2": false,
+     "L3": false,
+     "L4": false
+    }
+   },
+   "g8": {
+    "hard_failures": 0,
+    "published": {
+     "L0": true,
+     "L1": true,
+     "L2": false,
+     "L3": false,
+     "L4": false
+    },
+    "recomputed": {
+     "L0": true,
+     "L1": true,
+     "L2": false,
+     "L3": false,
+     "L4": false
+    }
+   }
+  }
+ },
+ "round": "comm_action_geometry_audit",
+ "start_sha": "8e35a24e60a1542a13c38ed8f0c7f269c03d5374",
+ "status": "retrospective mechanism audit; not a pre-registered performance experiment"
+}
