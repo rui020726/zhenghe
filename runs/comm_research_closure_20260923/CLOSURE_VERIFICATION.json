@@ -1,0 +1,104 @@
+{
+ "env_tripwire": {
+  "blocked_call_count": 0,
+  "blocked_calls": [],
+  "entry_points_wrapped": [
+   "INSTALLED pressure_env.run_episode",
+   "INSTALLED pressure_env.run_arm",
+   "INSTALLED pressure_env.agreement_with_archived_rows",
+   "INSTALLED record_layer.record",
+   "INSTALLED pressure_matrix.run"
+  ]
+ },
+ "episodes_generated_by_this_round": 0,
+ "governing_change_scope": {
+  "docs": {
+   ".gitignore": {
+    "changed": true,
+    "sha256_at_start_sha": "592e243c5f8b7763ab9b726376a96e7d867603f39ca52f609e725a0ea0e8c00d",
+    "sha256_now": "cadab78d4f0273a36ee12709bb2cf66207497344860612ec5c9731bedcaa70b2"
+   },
+   "PROJECT_CHARTER.md": {
+    "changed": true,
+    "sha256_at_start_sha": "a3fb8fb68679460c102e54837c695f16bb1d9713034d427aa9910a60d7e9b0b6",
+    "sha256_now": "081e513c5a242e37716c6fd80e6ec79c3b290f3a20605033f7a6108827cd3288"
+   },
+   "PROJECT_STATUS.md": {
+    "changed": true,
+    "sha256_at_start_sha": "4aac96788194666cc7be2492d4411b3e30674e1c08e0872e1ded44de4113652b",
+    "sha256_now": "0d2d611e4b79898c74a643f7a19eee7d1e2cbdca356eb32b7c63a574c1f2d09b"
+   },
+   "README.md": {
+    "changed": true,
+    "sha256_at_start_sha": "7519e08c206eff2ad0612d5ca43fb07bbad053c6e7b502dd623d601d63a2fe40",
+    "sha256_now": "fd01683ace35d9161b06caa443ce9960795e9f0c7fd91e6b9e98546f3e9c0cf0"
+   }
+  },
+  "modified_outside_the_allowed_set": [],
+  "tracked_files_modified": [
+   ".gitignore",
+   "PROJECT_CHARTER.md",
+   "PROJECT_STATUS.md",
+   "README.md"
+  ]
+ },
+ "inputs_unchanged": {
+  "changed": [],
+  "hashed": 41,
+  "missing": []
+ },
+ "launch_ledger_starts_at_freeze": 666,
+ "launch_ledger_starts_now": 666,
+ "log_families_unchanged": {
+  "drifted": [],
+  "families": 8
+ },
+ "passed": true,
+ "production_drift": {
+  "diff_against_start_sha": [],
+  "working_tree_entries": []
+ },
+ "sealed_block_artefacts_now": 0,
+ "start_sha_verified": {
+  "head_descends_from_start": true,
+  "remote_line": "9db4cdf073d21d2730c426dfd8767b92c7a2f117\trefs/heads/analysis/comm-recipient-topology-feasibility",
+  "remote_matches_start": true,
+  "start_sha": "9db4cdf073d21d2730c426dfd8767b92c7a2f117"
+ },
+ "writes_confined": {
+  "pre_existing_untracked_files_not_touched": [
+   "architecture/flow-evidence.md",
+   "architecture/flow-risks-and-gaps.md",
+   "architecture/integrated-sar.architecture-understanding.md",
+   "architecture/integrated-sar.evidence.md",
+   "architecture/integrated-sar.structurizr.dsl",
+   "architecture/legacy-svg/mission-loop.svg",
+   "architecture/legacy-svg/task-lifecycle.svg",
+   "architecture/legacy-svg/tick-order.svg",
+   "architecture/mission-loop.dot",
+   "architecture/mission-loop.png",
+   "architecture/mission-loop.svg",
+   "architecture/system-overview.dot",
+   "architecture/system-overview.svg",
+   "architecture/task-lifecycle.dot",
+   "architecture/task-lifecycle.png",
+   "architecture/task-lifecycle.svg",
+   "architecture/tick-order.dot",
+   "architecture/tick-order.png",
+   "architecture/tick-order.puml",
+   "architecture/tick-order.svg",
+   "runs/comm_multistep_stage1_20260922/_DOC_PATCH_NOTES.md",
+   "runs/comm_multistep_stage1_20260922/_fix_diag_json.py",
+   "runs/comm_send_actionability_20260922/rows_s700010.json",
+   "runs/comm_send_actionability_20260922/rows_s700018.json",
+   "runs/comm_send_actionability_20260922/rows_s700020.json",
+   "runs/comm_send_actionability_20260922/rows_s700022.json",
+   "runs/comm_send_actionability_20260922/rows_s700031.json",
+   "runs/comm_send_actionability_20260922/rows_s700033.json",
+   "runs/comm_send_actionability_20260922/rows_s700042.json",
+   "runs/comm_send_actionability_20260922/rows_s700046.json",
+   "runs/coordinator_baselines_20260917/dev_summary.json"
+  ],
+  "untracked_files_in_round_directory": 14
+ }
+}

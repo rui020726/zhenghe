@@ -1,0 +1,299 @@
+{
+ "env_tripwire": {
+  "blocked_call_count": 0,
+  "blocked_calls": [],
+  "entry_points_wrapped": [
+   "INSTALLED pressure_env.run_episode",
+   "INSTALLED pressure_env.run_arm",
+   "INSTALLED pressure_env.agreement_with_archived_rows",
+   "INSTALLED record_layer.record",
+   "INSTALLED pressure_matrix.run"
+  ]
+ },
+ "episodes_generated_by_this_round": 0,
+ "explicit_inputs": {
+  "AGENTS.md": {
+   "bytes": 4713,
+   "sha256": "64cdb51c93216aea1f62f81e97b81436bd995a525c6eae58e98b5e6721f9a6b1"
+  },
+  "integrated_sar/adapters/task03.py": {
+   "bytes": 66194,
+   "sha256": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1"
+  },
+  "integrated_sar/allocation_trace.py": {
+   "bytes": 64267,
+   "sha256": "1cc48d0d564a3ee1bdb32d198ce465cbab8dcd89837473af05c47e44b7484801"
+  },
+  "integrated_sar/comm.py": {
+   "bytes": 58169,
+   "sha256": "d6e68275b220bbd5a4926aad9d03c567b1da9888e1cb605d7312d05bbdd64e43"
+  },
+  "integrated_sar/comm_policy.py": {
+   "bytes": 37769,
+   "sha256": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d"
+  },
+  "integrated_sar/joint_driver.py": {
+   "bytes": 65903,
+   "sha256": "eac7a63cb770501e7abc80f4dc980a3adad82c917c2fe212d9d85727a069fcf7"
+  },
+  "integrated_sar/lifecycle_log.py": {
+   "bytes": 17198,
+   "sha256": "f55931a08705f4ebef9c1f9b8e06a69f4cfef467041bc1feb71dc34a3d4533ec"
+  },
+  "integrated_sar/lifecycle_metrics.py": {
+   "bytes": 10711,
+   "sha256": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db"
+  },
+  "integrated_sar/task_registry.py": {
+   "bytes": 7388,
+   "sha256": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+  },
+  "runs/coalition_formation_latency_20260918/COALITION_FORMATION_VERDICT.md": {
+   "bytes": 13170,
+   "sha256": "b78c692efa3c5067849cbe600dd6bfd354cf73e442c7704cf5457445f7ee6dab"
+  },
+  "runs/coalition_validation_20260918/SYSTEM_CLOSED_LOOP_VERDICT.md": {
+   "bytes": 3339,
+   "sha256": "772a7e36ceb9cc9e5123bb56a1a7e8a4940c3cc6c133644924088c8cd63d8219"
+  },
+  "runs/coalition_validation_20260918/SYSTEM_LOOP.json": {
+   "bytes": 14006,
+   "sha256": "f26eef3fecdfbbd4589a1aaadb43927eed923f24ad5c343afa04e0164fc531ce"
+  },
+  "runs/comm_action_geometry_audit_20260923/COMM_ACTION_GEOMETRY_AUDIT.json": {
+   "bytes": 2396118,
+   "sha256": "5b2be6010759cd45fbb0fa3deb2eb947e18d3c5213f7124391e2d3a12c5c4e09"
+  },
+  "runs/comm_action_geometry_audit_20260923/COMM_ACTION_GEOMETRY_AUDIT.md": {
+   "bytes": 30849,
+   "sha256": "8e4cd24bfbba4bb36f25c7fda6a55f3841dabd6040d88c67444739d29038a219"
+  },
+  "runs/comm_action_geometry_audit_20260923/COMM_ACTION_GEOMETRY_AUDIT_VERDICT.json": {
+   "bytes": 14032,
+   "sha256": "b196de39d7d979a13962d5f4b89173a163645bbaeb4003a59cbaa0ac9628af31"
+  },
+  "runs/comm_action_geometry_audit_20260923/RECOMPUTE_L0_L4.json": {
+   "bytes": 15149,
+   "sha256": "c8e4929b7d90d4bd7413e7e6c45fcf9c58a6ed2a3f8b098242d272a5dc605184"
+  },
+  "runs/comm_budget_masked_retrain_20260922/COMM_BUDGET_MASKED_RETRAIN_RESULTS.json": {
+   "bytes": 725416,
+   "sha256": "92c4747f19da7931ae92acab55be78c6ae040cb1f7f32334b6c3b8a2188f8a45"
+  },
+  "runs/comm_budget_masked_retrain_20260922/COMM_BUDGET_MASKED_RETRAIN_RESULTS.md": {
+   "bytes": 15888,
+   "sha256": "a221488474a44893cd7f9873b520a6c513fb831ceb80abf8654696d4c696baca"
+  },
+  "runs/comm_control_20260919/INFORMATION_BOUNDARY.md": {
+   "bytes": 7830,
+   "sha256": "8764bdccffb00d3c656dbbcf862fe62c70c756bd55f928f255d0a3a82cbbdab6"
+  },
+  "runs/comm_control_20260919/TRAFFIC_PROBE.json": {
+   "bytes": 31756,
+   "sha256": "8b0b4fa7676e4281183ff2054519c8884e456547e174e1352cae46e846008234"
+  },
+  "runs/comm_evidence_review_20260921/COMM_RULE_CONFIRMATION_RESULTS_REVISED.md": {
+   "bytes": 26627,
+   "sha256": "49e8b6402caf1af685962c77a138db2fbcc295775dfb81793ee462c92ade47c4"
+  },
+  "runs/comm_protocol_v2_20260920/COMM_PROTOCOL_V2_RESULTS.md": {
+   "bytes": 13976,
+   "sha256": "3e1107d0618997f82946ec98f925145cb5531a5f8d170042ea04ecd64f338da3"
+  },
+  "runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_DECISION.md": {
+   "bytes": 6456,
+   "sha256": "fd41a00caebf14067784eb5c84f9b4b8899c372732ae67c3db6e360dc71dc68b"
+  },
+  "runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_RESULTS.json": {
+   "bytes": 7756,
+   "sha256": "69e0a70c2c9a5d424c774e1946e194934698ae75d88b5cdc2764a14cd1a5b503"
+  },
+  "runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_RESULTS.md": {
+   "bytes": 14943,
+   "sha256": "d420eece59df84191188d76671685df6509317ac0fd723bd703fbe60defa61c2"
+  },
+  "runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_SOURCE_MAP.md": {
+   "bytes": 10907,
+   "sha256": "ffc0263c366a0dd3a124315ccf75d409813710d51d7f396281281decb10aa2d6"
+  },
+  "runs/comm_rule_confirm_20260921/COMMUNICATION_LEARNING_VERDICT.md": {
+   "bytes": 10115,
+   "sha256": "fb174bf23fc72f8fa15182d3f8815b9200f6166331d27d69e9a4504c41d2b941"
+  },
+  "runs/comm_rule_confirm_20260921/COMM_RULE_CONFIRMATION_RESULTS.json": {
+   "bytes": 151501,
+   "sha256": "14b33f67330864a9bd2f3a9de28f4dd2ae58860e3e60f31e3e41f16990696e76"
+  },
+  "runs/comm_stability_20260919/COMM_POLICY_ATTRIBUTION.md": {
+   "bytes": 11189,
+   "sha256": "4e7a2d486e011c2ca51dd15399ddbd2a3be1bb097e6df2a5ba4bff5028465b7b"
+  },
+  "runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_G12_EXTENSION_RESULTS.md": {
+   "bytes": 15657,
+   "sha256": "432e3f6dbf33bfff5b97c82950fcf310046121454ce9778b1f48a4e1bd53f88c"
+  },
+  "runs/comm_task_pressure_learnability_20260922/GATES_g10.json": {
+   "bytes": 9201,
+   "sha256": "e05623560771ddf93a3fe76a34df8b8f1e99bdf349493a3e226195a8cea38cc1"
+  },
+  "runs/comm_task_pressure_learnability_20260922/GATES_g12.json": {
+   "bytes": 15936,
+   "sha256": "0966031b8a6c19022d50efd18b4d7f61a5190c22e1e830881a68fa244957b8d5"
+  },
+  "runs/comm_task_pressure_learnability_20260922/GATES_g6.json": {
+   "bytes": 15027,
+   "sha256": "ffa99f820c90a7d660e12df2ed28efc1e55b8cbb8ab5a2c54cc8567b94afc659"
+  },
+  "runs/comm_task_pressure_learnability_20260922/GATES_g8.json": {
+   "bytes": 9089,
+   "sha256": "32217925ceb30d1a801c9fd11e8e919c336c6756d861f43177d4f19f9da38207"
+  },
+  "runs/coordinator_baselines_20260917/RESERVATION_VERDICT.md": {
+   "bytes": 18101,
+   "sha256": "701c359fa08031fbb05c1ac152055c472dadacbb1360fba2d3411ae221394f39"
+  },
+  "runs/corrected_env_final_20260918/CORRECTED_ENV_SYSTEM_VERDICT.md": {
+   "bytes": 3269,
+   "sha256": "21918030dd994995f48c6069092a1238f6e868631d5221cc325351b6c198c298"
+  },
+  "runs/dispatch_trigger_audit_20260918/DISPATCH_TRIGGER_AUDIT.md": {
+   "bytes": 10085,
+   "sha256": "326d35b063e7ad41e2876b119ee28353a84e211dacbf26abcb54c8b1a10623b5"
+  },
+  "runs/duration_relevance_20260917/DURATION_RELEVANCE.md": {
+   "bytes": 10113,
+   "sha256": "24d63e239d4ddeb3c746f2535a8d5364295be07325db5b8095f2e1f1faebf635"
+  },
+  "runs/joint_eval_20260916/expired_attribution.json": {
+   "bytes": 73415,
+   "sha256": "5b94b8eab4f1852d60ea74afc288c9033231c43b69824cfd3a12a69543728223"
+  },
+  "runs/learnability_20260917/LEARNABILITY_VERDICT.md": {
+   "bytes": 9306,
+   "sha256": "c363bc509895cdebb1edf43f6492bcd81eed4a0e91853a98d320a9d6c4af0768"
+  },
+  "task_allocation/old_task_env.py": {
+   "bytes": 62806,
+   "sha256": "988c68423d17706f0ba35fdf3e8d286d3b668cba3002d92b82bc9b055bd33809"
+  }
+ },
+ "governing_docs_to_update_this_round": {
+  ".gitignore": {
+   "changed": true,
+   "sha256_at_start_sha": "592e243c5f8b7763ab9b726376a96e7d867603f39ca52f609e725a0ea0e8c00d",
+   "sha256_now": "cadab78d4f0273a36ee12709bb2cf66207497344860612ec5c9731bedcaa70b2"
+  },
+  "PROJECT_CHARTER.md": {
+   "changed": true,
+   "sha256_at_start_sha": "a3fb8fb68679460c102e54837c695f16bb1d9713034d427aa9910a60d7e9b0b6",
+   "sha256_now": "78807ced89dd345b28192c0449e9d302f9431a138f7a3df598b3fdf70d3e7961"
+  },
+  "PROJECT_STATUS.md": {
+   "changed": true,
+   "sha256_at_start_sha": "4aac96788194666cc7be2492d4411b3e30674e1c08e0872e1ded44de4113652b",
+   "sha256_now": "ef0aad16c89eeaf689ac4d6498602e1be35eb861e349d06d32fb8849b4f4984f"
+  },
+  "README.md": {
+   "changed": true,
+   "sha256_at_start_sha": "7519e08c206eff2ad0612d5ca43fb07bbad053c6e7b502dd623d601d63a2fe40",
+   "sha256_now": "302588c3788365d3d02b23462618f9987c578f738826d8bbde7bd9e6a0922b3d"
+  }
+ },
+ "log_families": [
+  {
+   "bytes": 65102812,
+   "dir": "runs/coalition_validation_20260918/systemloop",
+   "directory_exists": true,
+   "files": 120,
+   "name": "deployed live-search lifecycle",
+   "note": "60 seeds x 2 arms; the only archived run with live PILOC search on the deployed information path",
+   "pattern": "*_rp_s*.jsonl",
+   "scanned": true
+  },
+  {
+   "bytes": 47571417,
+   "cells_aggregated": 90,
+   "dir": "runs/joint_eval_20260916",
+   "directory_exists": true,
+   "files": 90,
+   "name": "deployed replayed-search lifecycle",
+   "note": "3 arms x 30 seeds have lifecycle logs; the round's two further arms are logged only as ab_*.jsonl (allocation-behaviour traces) and are not read here",
+   "pattern": "rp_*.jsonl",
+   "scanned": true
+  },
+  {
+   "bytes": 318021681,
+   "dir": "runs/comm_task_pressure_learnability_20260922/runs",
+   "directory_exists": true,
+   "files": 576,
+   "name": "isolated budgeted comm lifecycle",
+   "note": "576 cells (4 layers x 9 arms x 16)",
+   "pattern": "rp_*_g*_s*.jsonl",
+   "scanned": true
+  },
+  {
+   "bytes": 126512852,
+   "dir": "runs/comm_task_pressure_learnability_20260922/runs",
+   "directory_exists": true,
+   "files": 576,
+   "name": "isolated budgeted comm transcript",
+   "note": "same 576 cells",
+   "pattern": "ct_*_g*_s*.jsonl",
+   "scanned": true
+  },
+  {
+   "bytes": 73660447,
+   "dir": "runs/comm_rule_confirm_20260921/evaluation",
+   "directory_exists": true,
+   "files": 3075,
+   "name": "lossy confirmation transcript",
+   "note": "3 000 cells exist; only 60 are opened here, the rest of the quantities come from the round's published aggregate",
+   "pattern": "ct_*_s*.jsonl",
+   "scanned": "spot-check (4 seeds x 5 arms x 3 settings)"
+  },
+  {
+   "bytes": 1689242945,
+   "dir": "runs/comm_rule_confirm_20260921/evaluation",
+   "directory_exists": true,
+   "files": 3075,
+   "name": "lossy confirmation lifecycle",
+   "note": "1 650 MB of per-episode logs deliberately not re-derived; the published aggregate already carries the same outcome counts and detection-to-stage latencies",
+   "pattern": "rp_*_s*.jsonl",
+   "scanned": false
+  },
+  {
+   "bytes": 42405643793,
+   "dir": "runs",
+   "directory_exists": true,
+   "files": 19316,
+   "name": "decision traces",
+   "note": "where true arrival times (on_site / group_arrived_at) live; ~4.9 GB across rounds, not opened this round, so arrival is treated as a proxy everywhere below",
+   "pattern": "tr_*.jsonl",
+   "scanned": false
+  },
+  {
+   "bytes": 656201431,
+   "dir": "runs",
+   "directory_exists": true,
+   "files": 1235,
+   "name": "recorded detection streams",
+   "note": "the search-side input of the replayed runs; establishes that those runs inherit, rather than measure, the discovery stage",
+   "pattern": "rec_s*.jsonl",
+   "scanned": false
+  }
+ ],
+ "pressure_launch_ledger": {
+  "by_kind": {
+   "gate": 10,
+   "matrix": 592,
+   "record": 64
+  },
+  "entries": 670,
+  "ledger_files": 41,
+  "recorded_failures": 20,
+  "starts": 666
+ },
+ "round": "comm_research_closure_20260923",
+ "sealed_block_800000_800399_artefacts_on_disk": 0,
+ "start_sha": "9db4cdf073d21d2730c426dfd8767b92c7a2f117"
+}

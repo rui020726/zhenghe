@@ -1,0 +1,7465 @@
+{
+ "absent_record_checks": {
+  "no_arrival_or_work_start_lifecycle_event": {
+   "claim_holds": true,
+   "found": {},
+   "scanned_files": 81
+  },
+  "no_delivery_or_belief_lifecycle_event": {
+   "claim_holds": true,
+   "found": {},
+   "scanned_files": 81
+  },
+  "no_placed_goal_record": {
+   "claim_holds": true,
+   "found": {},
+   "scanned_files": 81
+  }
+ },
+ "belief_source_recomputation": {
+  "deployed+silent_uplink": {
+   "belief_writes": 178784,
+   "episodes": 12,
+   "first_knowing_gossip": 2,
+   "first_knowing_los_refresh": 388,
+   "first_knowing_total": 390,
+   "share_bypassing_uplink": 1.0,
+   "share_via_uplink": 0.0,
+   "targets_known": 65
+  },
+  "deployed+uplink_on": {
+   "belief_writes": 178558,
+   "episodes": 12,
+   "first_knowing_total": 408,
+   "first_knowing_uplink": 408,
+   "share_bypassing_uplink": 0.0,
+   "share_via_uplink": 1.0,
+   "targets_known": 68
+  },
+  "isolated+silent_uplink": {
+   "belief_writes": 0,
+   "episodes": 12,
+   "first_knowing_total": 0,
+   "share_bypassing_uplink": null,
+   "share_via_uplink": null,
+   "targets_known": 0
+  },
+  "isolated+uplink_on": {
+   "belief_writes": 1004,
+   "episodes": 12,
+   "first_knowing_total": 408,
+   "first_knowing_uplink": 408,
+   "share_bypassing_uplink": 0.0,
+   "share_via_uplink": 1.0,
+   "targets_known": 68
+  }
+ },
+ "eight_stages": [
+  "1_placed",
+  "2_search_discovered",
+  "3_message_delivered",
+  "4_robot_knew",
+  "5_allocated",
+  "6_arrived",
+  "7_started_work",
+  "8_outcome"
+ ],
+ "env_tripwire": {
+  "blocked_call_count": 0,
+  "blocked_calls": [],
+  "entry_points_wrapped": [
+   "INSTALLED pressure_env.run_episode",
+   "INSTALLED pressure_env.run_arm",
+   "INSTALLED pressure_env.agreement_with_archived_rows",
+   "INSTALLED record_layer.record",
+   "INSTALLED pressure_matrix.run"
+  ]
+ },
+ "lifecycle_event_type_set": [
+  "assignment",
+  "assignment_rejected",
+  "detection",
+  "final",
+  "progress",
+  "run_config"
+ ],
+ "loss_ranking": [
+  {
+   "arm": "baseline",
+   "buckets": {
+    "allocation_or_execution": 6,
+    "information": null,
+    "search_miss": 4
+   },
+   "group": "systemloop",
+   "information_bucket_attributable": false,
+   "largest_attributable_loss": "allocation_or_execution",
+   "path": "P1_deployed_live_search",
+   "path_label": "deployed path, live PILOC search (coalition_validation systemloop)"
+  },
+  {
+   "arm": "candidate",
+   "buckets": {
+    "allocation_or_execution": 0,
+    "information": null,
+    "search_miss": 4
+   },
+   "group": "systemloop",
+   "information_bucket_attributable": false,
+   "largest_attributable_loss": "search_miss",
+   "path": "P1_deployed_live_search",
+   "path_label": "deployed path, live PILOC search (coalition_validation systemloop)"
+  },
+  {
+   "arm": "nocoord",
+   "buckets": {
+    "allocation_or_execution": 35,
+    "information": null,
+    "search_miss": 9
+   },
+   "group": "joint_eval",
+   "information_bucket_attributable": false,
+   "largest_attributable_loss": "allocation_or_execution",
+   "path": "P2_deployed_replayed_search",
+   "path_label": "deployed path, replayed detections (joint_eval pilot)"
+  },
+  {
+   "arm": "rs0.25",
+   "buckets": {
+    "allocation_or_execution": 19,
+    "information": null,
+    "search_miss": 9
+   },
+   "group": "joint_eval",
+   "information_bucket_attributable": false,
+   "largest_attributable_loss": "allocation_or_execution",
+   "path": "P2_deployed_replayed_search",
+   "path_label": "deployed path, replayed detections (joint_eval pilot)"
+  },
+  {
+   "arm": "rs0.5",
+   "buckets": {
+    "allocation_or_execution": 22,
+    "information": null,
+    "search_miss": 9
+   },
+   "group": "joint_eval",
+   "information_bucket_attributable": false,
+   "largest_attributable_loss": "allocation_or_execution",
+   "path": "P2_deployed_replayed_search",
+   "path_label": "deployed path, replayed detections (joint_eval pilot)"
+  },
+  {
+   "arm": "always_hold",
+   "buckets": {
+    "allocation_or_execution": 0,
+    "information": 156,
+    "search_miss": 4
+   },
+   "group": "g10",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "bound_only_3_10",
+   "buckets": {
+    "allocation_or_execution": 15,
+    "information": 38,
+    "search_miss": 4
+   },
+   "group": "g10",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "event",
+   "buckets": {
+    "allocation_or_execution": 8,
+    "information": 61,
+    "search_miss": 4
+   },
+   "group": "g10",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "event_priority",
+   "buckets": {
+    "allocation_or_execution": 8,
+    "information": 60,
+    "search_miss": 4
+   },
+   "group": "g10",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "event_unbudgeted",
+   "buckets": {
+    "allocation_or_execution": 4,
+    "information": 0,
+    "search_miss": 4
+   },
+   "group": "g10",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "search_miss",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "first_send_plus_bound_3_10",
+   "buckets": {
+    "allocation_or_execution": 13,
+    "information": 37,
+    "search_miss": 4
+   },
+   "group": "g10",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "periodic_20",
+   "buckets": {
+    "allocation_or_execution": 18,
+    "information": 36,
+    "search_miss": 4
+   },
+   "group": "g10",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "periodic_5",
+   "buckets": {
+    "allocation_or_execution": 13,
+    "information": 56,
+    "search_miss": 4
+   },
+   "group": "g10",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "send_once",
+   "buckets": {
+    "allocation_or_execution": 16,
+    "information": 0,
+    "search_miss": 4
+   },
+   "group": "g10",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "allocation_or_execution",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "always_hold",
+   "buckets": {
+    "allocation_or_execution": 0,
+    "information": 183,
+    "search_miss": 9
+   },
+   "group": "g12",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "bound_only_3_10",
+   "buckets": {
+    "allocation_or_execution": 22,
+    "information": 48,
+    "search_miss": 9
+   },
+   "group": "g12",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "event",
+   "buckets": {
+    "allocation_or_execution": 13,
+    "information": 73,
+    "search_miss": 9
+   },
+   "group": "g12",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "event_priority",
+   "buckets": {
+    "allocation_or_execution": 15,
+    "information": 72,
+    "search_miss": 9
+   },
+   "group": "g12",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "event_unbudgeted",
+   "buckets": {
+    "allocation_or_execution": 1,
+    "information": 0,
+    "search_miss": 9
+   },
+   "group": "g12",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "search_miss",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "first_send_plus_bound_3_10",
+   "buckets": {
+    "allocation_or_execution": 25,
+    "information": 47,
+    "search_miss": 9
+   },
+   "group": "g12",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "periodic_20",
+   "buckets": {
+    "allocation_or_execution": 28,
+    "information": 43,
+    "search_miss": 9
+   },
+   "group": "g12",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "periodic_5",
+   "buckets": {
+    "allocation_or_execution": 22,
+    "information": 66,
+    "search_miss": 9
+   },
+   "group": "g12",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "send_once",
+   "buckets": {
+    "allocation_or_execution": 33,
+    "information": 8,
+    "search_miss": 9
+   },
+   "group": "g12",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "allocation_or_execution",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "always_hold",
+   "buckets": {
+    "allocation_or_execution": 0,
+    "information": 93,
+    "search_miss": 3
+   },
+   "group": "g6",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "bound_only_3_10",
+   "buckets": {
+    "allocation_or_execution": 3,
+    "information": 6,
+    "search_miss": 3
+   },
+   "group": "g6",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "event",
+   "buckets": {
+    "allocation_or_execution": 5,
+    "information": 30,
+    "search_miss": 3
+   },
+   "group": "g6",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "event_priority",
+   "buckets": {
+    "allocation_or_execution": 5,
+    "information": 30,
+    "search_miss": 3
+   },
+   "group": "g6",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "event_unbudgeted",
+   "buckets": {
+    "allocation_or_execution": 0,
+    "information": 0,
+    "search_miss": 3
+   },
+   "group": "g6",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "search_miss",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "first_send_plus_bound_3_10",
+   "buckets": {
+    "allocation_or_execution": 3,
+    "information": 6,
+    "search_miss": 3
+   },
+   "group": "g6",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "periodic_20",
+   "buckets": {
+    "allocation_or_execution": 5,
+    "information": 2,
+    "search_miss": 3
+   },
+   "group": "g6",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "allocation_or_execution",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "periodic_5",
+   "buckets": {
+    "allocation_or_execution": 11,
+    "information": 20,
+    "search_miss": 3
+   },
+   "group": "g6",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "send_once",
+   "buckets": {
+    "allocation_or_execution": 12,
+    "information": 0,
+    "search_miss": 3
+   },
+   "group": "g6",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "allocation_or_execution",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "always_hold",
+   "buckets": {
+    "allocation_or_execution": 0,
+    "information": 123,
+    "search_miss": 5
+   },
+   "group": "g8",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "bound_only_3_10",
+   "buckets": {
+    "allocation_or_execution": 5,
+    "information": 24,
+    "search_miss": 5
+   },
+   "group": "g8",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "event",
+   "buckets": {
+    "allocation_or_execution": 2,
+    "information": 52,
+    "search_miss": 5
+   },
+   "group": "g8",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "event_priority",
+   "buckets": {
+    "allocation_or_execution": 2,
+    "information": 50,
+    "search_miss": 5
+   },
+   "group": "g8",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "event_unbudgeted",
+   "buckets": {
+    "allocation_or_execution": 1,
+    "information": 0,
+    "search_miss": 5
+   },
+   "group": "g8",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "search_miss",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "first_send_plus_bound_3_10",
+   "buckets": {
+    "allocation_or_execution": 5,
+    "information": 24,
+    "search_miss": 5
+   },
+   "group": "g8",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "periodic_20",
+   "buckets": {
+    "allocation_or_execution": 6,
+    "information": 14,
+    "search_miss": 5
+   },
+   "group": "g8",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "periodic_5",
+   "buckets": {
+    "allocation_or_execution": 7,
+    "information": 44,
+    "search_miss": 5
+   },
+   "group": "g8",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "information",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  },
+  {
+   "arm": "send_once",
+   "buckets": {
+    "allocation_or_execution": 8,
+    "information": 0,
+    "search_miss": 5
+   },
+   "group": "g8",
+   "information_bucket_attributable": true,
+   "largest_attributable_loss": "allocation_or_execution",
+   "path": "P3_isolated_budgeted_comm",
+   "path_label": "isolated path, hard 29 300 B budget (task-pressure layers)"
+  }
+ ],
+ "missing_attribution": [
+  "stage 1 (placed): no record of a goal that nothing ever detected, so 'never discovered' is counted against the configured num_goals, not against a log",
+  "stage 3 (delivered): no per-recipient loss record; attempts = arrived + lost closes per send, but which robot was left uninformed is unrecoverable",
+  "stage 4 (robot knew): belief writes are not an event type; the only per-(goal, robot) record is a transcript deliver row, and three non-message channels also write belief",
+  "stage 6 (arrived) and 7 (started work): no event type; both are proxies from fingerprint-changed progress rows, so they can postdate or predate each other (one hop mean in this file is negative for exactly that reason)",
+  "no archived run has live search, a non-trivial channel and per-goal execution attribution at once: the deployed runs are lossless, the lossy runs replay detections, and the isolated runs switch the environment's own sensing off"
+ ],
+ "not_claimed": [
+  "no bucket in this file is an intervention's causal gain: the deployed-path information bucket is reported as not attributable rather than as zero",
+  "arm-to-arm differences within a path are designed contrasts on shared scenarios; cross-path differences (a P1 rate against a P3 rate, for example) are not",
+  "the setting contrast compares identical transmission ledgers with the sensing bypass toggled, which measures the value of the environment's own sensing, not the value of any communication policy",
+  "nothing here reopens the learning question or proposes a change to a production default"
+ ],
+ "paths": {
+  "P1_deployed_live_search": {
+   "channel": {
+    "delay_ticks": 0,
+    "delivery_probability": 1.0,
+    "gossip": true,
+    "line_of_sight_refresh": true,
+    "transcript": false
+   },
+   "groups": {
+    "systemloop": {
+     "baseline": {
+      "1_search_miss": 4,
+      "2_information_loss": null,
+      "2_information_loss_note": "this path has no per-recipient knowledge record and its uplink was configured lossless with zero delay, so 'information did not arrive' is not a measurable quantity here; the loss is reported where it can be seen, not assumed to be zero",
+      "3_allocation_or_execution_loss": 6,
+      "goals_placed": 360,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.016667,
+       "information": null,
+       "search_miss": 0.011111
+      },
+      "on_time": 350,
+      "per_goal_class_comm_facts": {
+       "c3_worked_but_incomplete": {
+        "goals": 6,
+        "goals_with_incomplete_coverage": 2,
+        "slack_at_completion_steps": null
+       },
+       "c4_complete_on_time": {
+        "goals": 350,
+        "slack_at_completion_steps": {
+         "max": 168.03620234557746,
+         "mean": 92.814,
+         "median": 92.83942574495288,
+         "min": 0.35327874903754264,
+         "n": 350,
+         "p25": 61.76092151418328,
+         "p75": 123.60977040288648,
+         "p90": 141.2853125270807
+        }
+       }
+      }
+     },
+     "candidate": {
+      "1_search_miss": 4,
+      "2_information_loss": null,
+      "2_information_loss_note": "this path has no per-recipient knowledge record and its uplink was configured lossless with zero delay, so 'information did not arrive' is not a measurable quantity here; the loss is reported where it can be seen, not assumed to be zero",
+      "3_allocation_or_execution_loss": 0,
+      "goals_placed": 360,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.0,
+       "information": null,
+       "search_miss": 0.011111
+      },
+      "on_time": 356,
+      "per_goal_class_comm_facts": {
+       "c4_complete_on_time": {
+        "goals": 356,
+        "slack_at_completion_steps": {
+         "max": 168.03620234557746,
+         "mean": 99.1485,
+         "median": 97.2947128016092,
+         "min": 31.41081111837495,
+         "n": 356,
+         "p25": 68.99765197768555,
+         "p75": 128.77374750111227,
+         "p90": 146.88744969984134
+        }
+       }
+      }
+     }
+    }
+   },
+   "label": "deployed path, live PILOC search (coalition_validation systemloop)",
+   "paired_contrasts": [
+    {
+     "group": "systemloop",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 0.1,
+       "median": 0.0,
+       "min": 0.0,
+       "n": 60,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 57,
+      "streams_where_second_better": 3,
+      "streams_where_second_worse": 0,
+      "sum": 6
+     },
+     "pair": [
+      "baseline",
+      "candidate"
+     ],
+     "streams_paired": 60
+    }
+   ],
+   "pairing": "same seed and same scenario for both arms; the channel is lossless with zero delay, so it contributes no randomness to the pair",
+   "search_backend": "live PILOC weights, 60 seeds, 2 arms"
+  },
+  "P2_deployed_replayed_search": {
+   "channel": {
+    "delay_ticks": 0,
+    "delivery_probability": 1.0,
+    "gossip": true,
+    "line_of_sight_refresh": true,
+    "transcript": false
+   },
+   "groups": {
+    "joint_eval": {
+     "nocoord": {
+      "1_search_miss": 9,
+      "2_information_loss": null,
+      "2_information_loss_note": "this path has no per-recipient knowledge record and its uplink was configured lossless with zero delay, so 'information did not arrive' is not a measurable quantity here; the loss is reported where it can be seen, not assumed to be zero",
+      "3_allocation_or_execution_loss": 35,
+      "goals_placed": 180,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.194444,
+       "information": null,
+       "search_miss": 0.05
+      },
+      "on_time": 136,
+      "per_goal_class_comm_facts": {
+       "c3_known_never_dispatched": {
+        "goals": 18,
+        "goals_with_incomplete_coverage": 18,
+        "slack_at_completion_steps": null
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 17,
+        "goals_with_incomplete_coverage": 1,
+        "slack_at_completion_steps": null
+       },
+       "c4_complete_on_time": {
+        "goals": 136,
+        "slack_at_completion_steps": {
+         "max": 157.62348173372962,
+         "mean": 77.4773,
+         "median": 68.28354340951127,
+         "min": 2.1275505645326263,
+         "n": 136,
+         "p25": 47.11652414198562,
+         "p75": 114.79812472650158,
+         "p90": 137.46641142087816
+        }
+       }
+      }
+     },
+     "rs0.25": {
+      "1_search_miss": 9,
+      "2_information_loss": null,
+      "2_information_loss_note": "this path has no per-recipient knowledge record and its uplink was configured lossless with zero delay, so 'information did not arrive' is not a measurable quantity here; the loss is reported where it can be seen, not assumed to be zero",
+      "3_allocation_or_execution_loss": 19,
+      "goals_placed": 180,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.105556,
+       "information": null,
+       "search_miss": 0.05
+      },
+      "on_time": 152,
+      "per_goal_class_comm_facts": {
+       "c3_worked_but_incomplete": {
+        "goals": 19,
+        "slack_at_completion_steps": null
+       },
+       "c4_complete_on_time": {
+        "goals": 152,
+        "slack_at_completion_steps": {
+         "max": 160.25451386752968,
+         "mean": 80.0248,
+         "median": 78.18889036293558,
+         "min": 1.1275505645326263,
+         "n": 152,
+         "p25": 47.58194404459533,
+         "p75": 121.93695181827513,
+         "p90": 141.49877223842992
+        }
+       }
+      }
+     },
+     "rs0.5": {
+      "1_search_miss": 9,
+      "2_information_loss": null,
+      "2_information_loss_note": "this path has no per-recipient knowledge record and its uplink was configured lossless with zero delay, so 'information did not arrive' is not a measurable quantity here; the loss is reported where it can be seen, not assumed to be zero",
+      "3_allocation_or_execution_loss": 22,
+      "goals_placed": 180,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.122222,
+       "information": null,
+       "search_miss": 0.05
+      },
+      "on_time": 149,
+      "per_goal_class_comm_facts": {
+       "c3_worked_but_incomplete": {
+        "goals": 22,
+        "slack_at_completion_steps": null
+       },
+       "c4_complete_on_time": {
+        "goals": 149,
+        "slack_at_completion_steps": {
+         "max": 157.62348173372962,
+         "mean": 80.5612,
+         "median": 78.18889036293558,
+         "min": 0.6931612595145396,
+         "n": 149,
+         "p25": 49.658045482869,
+         "p75": 123.57086327201205,
+         "p90": 142.25451386752968
+        }
+       }
+      }
+     }
+    }
+   },
+   "label": "deployed path, replayed detections (joint_eval pilot)",
+   "paired_contrasts": [
+    {
+     "group": "joint_eval",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 0.5333,
+       "median": 0.0,
+       "min": -5.0,
+       "n": 30,
+       "p25": 0.0,
+       "p75": 1.0,
+       "p90": 2.0
+      },
+      "streams_equal": 12,
+      "streams_where_second_better": 15,
+      "streams_where_second_worse": 3,
+      "sum": 16
+     },
+     "pair": [
+      "nocoord",
+      "rs0.25"
+     ],
+     "streams_paired": 30
+    },
+    {
+     "group": "joint_eval",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 0.4333,
+       "median": 0.0,
+       "min": -3.0,
+       "n": 30,
+       "p25": 0.0,
+       "p75": 1.0,
+       "p90": 2.0
+      },
+      "streams_equal": 11,
+      "streams_where_second_better": 14,
+      "streams_where_second_worse": 5,
+      "sum": 13
+     },
+     "pair": [
+      "nocoord",
+      "rs0.5"
+     ],
+     "streams_paired": 30
+    },
+    {
+     "group": "joint_eval",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -0.1,
+       "median": 0.0,
+       "min": -2.0,
+       "n": 30,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 26,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 3,
+      "sum": -3
+     },
+     "pair": [
+      "rs0.25",
+      "rs0.5"
+     ],
+     "streams_paired": 30
+    }
+   ],
+   "pairing": "arms share the seed and the frozen detection stream; channel adds nothing",
+   "search_backend": "detections replayed from a frozen stream: the search stage is inherited from the recording run, not measured here"
+  },
+  "P3_isolated_budgeted_comm": {
+   "channel": {
+    "delay_ticks": 0,
+    "delivery_probability": 1.0,
+    "gossip": false,
+    "line_of_sight_refresh": false,
+    "transcript": true
+   },
+   "groups": {
+    "g10": {
+     "always_hold": {
+      "1_search_miss": 4,
+      "2_information_loss": 156,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 0,
+      "goals_placed": 160,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.0,
+       "information": 0.975,
+       "search_miss": 0.025
+      },
+      "on_time": 0,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 156,
+        "goals_with_incomplete_coverage": 156,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       }
+      }
+     },
+     "bound_only_3_10": {
+      "1_search_miss": 4,
+      "2_information_loss": 38,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 15,
+      "goals_placed": 160,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.09375,
+       "information": 0.2375,
+       "search_miss": 0.025
+      },
+      "on_time": 103,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 38,
+        "goals_with_incomplete_coverage": 38,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 29365,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 15,
+        "goals_with_incomplete_coverage": 5,
+        "informed_rows": 120,
+        "packets_lost": 0,
+        "refreshes": 5,
+        "refusals": 6520,
+        "sends": 20,
+        "slack_at_completion_steps": null,
+        "with_first_report": 15
+       },
+       "c4_complete_on_time": {
+        "goals": 103,
+        "informed_rows": 942,
+        "packets_lost": 0,
+        "refreshes": 54,
+        "refusals": 918,
+        "sends": 157,
+        "slack_at_completion_steps": {
+         "max": 157.9098344913353,
+         "mean": 78.2139,
+         "median": 81.56728229187087,
+         "min": 0.05273016742036418,
+         "n": 103,
+         "p25": 51.62354286536252,
+         "p75": 102.87077327919022,
+         "p90": 129.21022388494765
+        },
+        "with_first_report": 103
+       }
+      }
+     },
+     "event": {
+      "1_search_miss": 4,
+      "2_information_loss": 61,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 8,
+      "goals_placed": 160,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.05,
+       "information": 0.38125,
+       "search_miss": 0.025
+      },
+      "on_time": 87,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 61,
+        "goals_with_incomplete_coverage": 61,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 52225,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 8,
+        "goals_with_incomplete_coverage": 6,
+        "informed_rows": 72,
+        "packets_lost": 0,
+        "refreshes": 4,
+        "refusals": 6075,
+        "sends": 12,
+        "slack_at_completion_steps": null,
+        "with_first_report": 8
+       },
+       "c4_complete_on_time": {
+        "goals": 87,
+        "informed_rows": 996,
+        "packets_lost": 0,
+        "refreshes": 79,
+        "refusals": 1886,
+        "sends": 166,
+        "slack_at_completion_steps": {
+         "max": 167.9098344913353,
+         "mean": 88.9236,
+         "median": 93.00097061913829,
+         "min": 8.052730167420364,
+         "n": 87,
+         "p25": 54.794148408284244,
+         "p75": 114.77429189054465,
+         "p90": 139.21022388494765
+        },
+        "with_first_report": 87
+       }
+      }
+     },
+     "event_priority": {
+      "1_search_miss": 4,
+      "2_information_loss": 60,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 8,
+      "goals_placed": 160,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.05,
+       "information": 0.375,
+       "search_miss": 0.025
+      },
+      "on_time": 88,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 60,
+        "goals_with_incomplete_coverage": 60,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 51237,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 8,
+        "goals_with_incomplete_coverage": 6,
+        "informed_rows": 72,
+        "packets_lost": 0,
+        "refreshes": 4,
+        "refusals": 6075,
+        "sends": 12,
+        "slack_at_completion_steps": null,
+        "with_first_report": 8
+       },
+       "c4_complete_on_time": {
+        "goals": 88,
+        "informed_rows": 996,
+        "packets_lost": 0,
+        "refreshes": 78,
+        "refusals": 1929,
+        "sends": 166,
+        "slack_at_completion_steps": {
+         "max": 167.9098344913353,
+         "mean": 89.0848,
+         "median": 93.88845531247654,
+         "min": 8.052730167420364,
+         "n": 88,
+         "p25": 54.794148408284244,
+         "p75": 114.77429189054465,
+         "p90": 139.21022388494765
+        },
+        "with_first_report": 88
+       }
+      }
+     },
+     "event_unbudgeted": {
+      "1_search_miss": 4,
+      "2_information_loss": 0,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 4,
+      "goals_placed": 160,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.025,
+       "information": 0.0,
+       "search_miss": 0.025
+      },
+      "on_time": 152,
+      "per_goal_class_comm_facts": {
+       "c3_worked_but_incomplete": {
+        "goals": 4,
+        "informed_rows": 282,
+        "packets_lost": 0,
+        "refreshes": 47,
+        "refusals": 0,
+        "sends": 51,
+        "slack_at_completion_steps": null,
+        "with_first_report": 4
+       },
+       "c4_complete_on_time": {
+        "goals": 152,
+        "informed_rows": 6906,
+        "packets_lost": 0,
+        "refreshes": 999,
+        "refusals": 0,
+        "sends": 1151,
+        "slack_at_completion_steps": {
+         "max": 167.9098344913353,
+         "mean": 89.6894,
+         "median": 93.00097061913829,
+         "min": 6.947862640626937,
+         "n": 152,
+         "p25": 59.54936153767633,
+         "p75": 120.38985736419602,
+         "p90": 140.54854557878355
+        },
+        "with_first_report": 152
+       }
+      }
+     },
+     "first_send_plus_bound_3_10": {
+      "1_search_miss": 4,
+      "2_information_loss": 37,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 13,
+      "goals_placed": 160,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.08125,
+       "information": 0.23125,
+       "search_miss": 0.025
+      },
+      "on_time": 106,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 37,
+        "goals_with_incomplete_coverage": 37,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 28757,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 13,
+        "goals_with_incomplete_coverage": 5,
+        "informed_rows": 108,
+        "packets_lost": 0,
+        "refreshes": 5,
+        "refusals": 5628,
+        "sends": 18,
+        "slack_at_completion_steps": null,
+        "with_first_report": 13
+       },
+       "c4_complete_on_time": {
+        "goals": 106,
+        "informed_rows": 954,
+        "packets_lost": 0,
+        "refreshes": 53,
+        "refusals": 1192,
+        "sends": 159,
+        "slack_at_completion_steps": {
+         "max": 167.9098344913353,
+         "mean": 87.1809,
+         "median": 85.64129276586698,
+         "min": 8.052730167420364,
+         "n": 106,
+         "p25": 59.41137345373289,
+         "p75": 112.87077327919022,
+         "p90": 139.21022388494765
+        },
+        "with_first_report": 106
+       }
+      }
+     },
+     "periodic_20": {
+      "1_search_miss": 4,
+      "2_information_loss": 36,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 18,
+      "goals_placed": 160,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.1125,
+       "information": 0.225,
+       "search_miss": 0.025
+      },
+      "on_time": 102,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 36,
+        "goals_with_incomplete_coverage": 36,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 1410,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 18,
+        "goals_with_incomplete_coverage": 6,
+        "informed_rows": 150,
+        "packets_lost": 0,
+        "refreshes": 7,
+        "refusals": 369,
+        "sends": 25,
+        "slack_at_completion_steps": null,
+        "with_first_report": 18
+       },
+       "c4_complete_on_time": {
+        "goals": 102,
+        "informed_rows": 846,
+        "packets_lost": 0,
+        "refreshes": 51,
+        "refusals": 114,
+        "sends": 153,
+        "slack_at_completion_steps": {
+         "max": 150.67161292227667,
+         "mean": 67.712,
+         "median": 67.56728229187087,
+         "min": 3.3561641295477784,
+         "n": 102,
+         "p25": 36.64129276586698,
+         "p75": 89.77429189054465,
+         "p90": 117.94500172040142
+        },
+        "with_first_report": 102
+       }
+      }
+     },
+     "periodic_5": {
+      "1_search_miss": 4,
+      "2_information_loss": 56,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 13,
+      "goals_placed": 160,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.08125,
+       "information": 0.35,
+       "search_miss": 0.025
+      },
+      "on_time": 87,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 56,
+        "goals_with_incomplete_coverage": 56,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 9471,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_dispatched_never_worked": {
+        "goals": 1,
+        "goals_with_incomplete_coverage": 1,
+        "informed_rows": 12,
+        "packets_lost": 0,
+        "refreshes": 1,
+        "refusals": 198,
+        "sends": 2,
+        "slack_at_completion_steps": null,
+        "with_first_report": 1
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 12,
+        "goals_with_incomplete_coverage": 5,
+        "informed_rows": 114,
+        "packets_lost": 0,
+        "refreshes": 7,
+        "refusals": 1367,
+        "sends": 19,
+        "slack_at_completion_steps": null,
+        "with_first_report": 12
+       },
+       "c4_complete_on_time": {
+        "goals": 87,
+        "informed_rows": 888,
+        "packets_lost": 0,
+        "refreshes": 71,
+        "refusals": 454,
+        "sends": 158,
+        "slack_at_completion_steps": {
+         "max": 159.9098344913353,
+         "mean": 84.6302,
+         "median": 88.29289527250447,
+         "min": 4.966436247958569,
+         "n": 87,
+         "p25": 58.706429807225106,
+         "p75": 109.88845531247654,
+         "p90": 128.71394140660027
+        },
+        "with_first_report": 87
+       }
+      }
+     },
+     "send_once": {
+      "1_search_miss": 4,
+      "2_information_loss": 0,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 16,
+      "goals_placed": 160,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.1,
+       "information": 0.0,
+       "search_miss": 0.025
+      },
+      "on_time": 140,
+      "per_goal_class_comm_facts": {
+       "c3_worked_but_incomplete": {
+        "goals": 16,
+        "goals_with_incomplete_coverage": 6,
+        "informed_rows": 96,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 16,
+        "slack_at_completion_steps": null,
+        "with_first_report": 16
+       },
+       "c4_complete_on_time": {
+        "goals": 140,
+        "informed_rows": 840,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 140,
+        "slack_at_completion_steps": {
+         "max": 167.9098344913353,
+         "mean": 88.3171,
+         "median": 87.339530547588,
+         "min": 2.0938400353498707,
+         "n": 140,
+         "p25": 58.93695181827513,
+         "p75": 116.64930070020895,
+         "p90": 139.40337760269873
+        },
+        "with_first_report": 140
+       }
+      }
+     }
+    },
+    "g12": {
+     "always_hold": {
+      "1_search_miss": 9,
+      "2_information_loss": 183,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 0,
+      "goals_placed": 192,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.0,
+       "information": 0.953125,
+       "search_miss": 0.046875
+      },
+      "on_time": 0,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 183,
+        "goals_with_incomplete_coverage": 183,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       }
+      }
+     },
+     "bound_only_3_10": {
+      "1_search_miss": 9,
+      "2_information_loss": 48,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 22,
+      "goals_placed": 192,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.114583,
+       "information": 0.25,
+       "search_miss": 0.046875
+      },
+      "on_time": 113,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 48,
+        "goals_with_incomplete_coverage": 48,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 37144,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 22,
+        "goals_with_incomplete_coverage": 4,
+        "informed_rows": 156,
+        "packets_lost": 0,
+        "refreshes": 4,
+        "refusals": 5436,
+        "sends": 26,
+        "slack_at_completion_steps": null,
+        "with_first_report": 22
+       },
+       "c4_complete_on_time": {
+        "goals": 113,
+        "informed_rows": 923,
+        "packets_lost": 0,
+        "refreshes": 41,
+        "refusals": 1445,
+        "sends": 154,
+        "slack_at_completion_steps": {
+         "max": 164.70165411087598,
+         "mean": 73.049,
+         "median": 66.82656330321464,
+         "min": 4.980726001189595,
+         "n": 113,
+         "p25": 44.16109471954957,
+         "p75": 103.65501323765045,
+         "p90": 122.38267147007434
+        },
+        "with_first_report": 113
+       }
+      }
+     },
+     "event": {
+      "1_search_miss": 9,
+      "2_information_loss": 73,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 13,
+      "goals_placed": 192,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.067708,
+       "information": 0.380208,
+       "search_miss": 0.046875
+      },
+      "on_time": 97,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 73,
+        "goals_with_incomplete_coverage": 73,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 62353,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 13,
+        "goals_with_incomplete_coverage": 5,
+        "informed_rows": 114,
+        "packets_lost": 0,
+        "refreshes": 6,
+        "refusals": 5880,
+        "sends": 19,
+        "slack_at_completion_steps": null,
+        "with_first_report": 13
+       },
+       "c4_complete_on_time": {
+        "goals": 97,
+        "informed_rows": 966,
+        "packets_lost": 0,
+        "refreshes": 64,
+        "refusals": 2478,
+        "sends": 161,
+        "slack_at_completion_steps": {
+         "max": 174.70165411087598,
+         "mean": 87.3704,
+         "median": 90.58562154445994,
+         "min": 3.67158351570788,
+         "n": 97,
+         "p25": 58.44085861868942,
+         "p75": 117.75261968926696,
+         "p90": 134.38126115576614
+        },
+        "with_first_report": 97
+       }
+      }
+     },
+     "event_priority": {
+      "1_search_miss": 9,
+      "2_information_loss": 72,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 15,
+      "goals_placed": 192,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.078125,
+       "information": 0.375,
+       "search_miss": 0.046875
+      },
+      "on_time": 96,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 72,
+        "goals_with_incomplete_coverage": 72,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 61357,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 15,
+        "goals_with_incomplete_coverage": 5,
+        "informed_rows": 120,
+        "packets_lost": 0,
+        "refreshes": 5,
+        "refusals": 6194,
+        "sends": 20,
+        "slack_at_completion_steps": null,
+        "with_first_report": 15
+       },
+       "c4_complete_on_time": {
+        "goals": 96,
+        "informed_rows": 960,
+        "packets_lost": 0,
+        "refreshes": 64,
+        "refusals": 2364,
+        "sends": 160,
+        "slack_at_completion_steps": {
+         "max": 174.70165411087598,
+         "mean": 87.4097,
+         "median": 90.58562154445994,
+         "min": 3.67158351570788,
+         "n": 96,
+         "p25": 59.02414775545631,
+         "p75": 117.75261968926696,
+         "p90": 137.3196278736835
+        },
+        "with_first_report": 96
+       }
+      }
+     },
+     "event_unbudgeted": {
+      "1_search_miss": 9,
+      "2_information_loss": 0,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 1,
+      "goals_placed": 192,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.005208,
+       "information": 0.0,
+       "search_miss": 0.046875
+      },
+      "on_time": 182,
+      "per_goal_class_comm_facts": {
+       "c3_worked_but_incomplete": {
+        "goals": 1,
+        "informed_rows": 54,
+        "packets_lost": 0,
+        "refreshes": 9,
+        "refusals": 0,
+        "sends": 10,
+        "slack_at_completion_steps": null,
+        "with_first_report": 1
+       },
+       "c4_complete_on_time": {
+        "goals": 182,
+        "informed_rows": 8094,
+        "packets_lost": 0,
+        "refreshes": 1167,
+        "refusals": 0,
+        "sends": 1349,
+        "slack_at_completion_steps": {
+         "max": 174.70165411087598,
+         "mean": 84.1132,
+         "median": 79.2829064036456,
+         "min": 15.708882772865508,
+         "n": 182,
+         "p25": 53.063366950512886,
+         "p75": 115.2108565671524,
+         "p90": 136.50245566785225
+        },
+        "with_first_report": 182
+       }
+      }
+     },
+     "first_send_plus_bound_3_10": {
+      "1_search_miss": 9,
+      "2_information_loss": 47,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 25,
+      "goals_placed": 192,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.130208,
+       "information": 0.244792,
+       "search_miss": 0.046875
+      },
+      "on_time": 111,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 47,
+        "goals_with_incomplete_coverage": 47,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 36639,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_dispatched_never_worked": {
+        "goals": 1,
+        "goals_with_incomplete_coverage": 1,
+        "informed_rows": 6,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 876,
+        "sends": 1,
+        "slack_at_completion_steps": null,
+        "with_first_report": 1
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 24,
+        "goals_with_incomplete_coverage": 4,
+        "informed_rows": 180,
+        "packets_lost": 0,
+        "refreshes": 6,
+        "refusals": 5754,
+        "sends": 30,
+        "slack_at_completion_steps": null,
+        "with_first_report": 24
+       },
+       "c4_complete_on_time": {
+        "goals": 111,
+        "informed_rows": 899,
+        "packets_lost": 0,
+        "refreshes": 39,
+        "refusals": 1417,
+        "sends": 150,
+        "slack_at_completion_steps": {
+         "max": 174.70165411087598,
+         "mean": 83.3977,
+         "median": 79.02699786757992,
+         "min": 10.916696495507452,
+         "n": 111,
+         "p25": 54.44187522471242,
+         "p75": 113.65501323765045,
+         "p90": 137.02309241702037
+        },
+        "with_first_report": 111
+       }
+      }
+     },
+     "periodic_20": {
+      "1_search_miss": 9,
+      "2_information_loss": 43,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 28,
+      "goals_placed": 192,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.145833,
+       "information": 0.223958,
+       "search_miss": 0.046875
+      },
+      "on_time": 112,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 43,
+        "goals_with_incomplete_coverage": 43,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 1675,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 28,
+        "goals_with_incomplete_coverage": 1,
+        "informed_rows": 186,
+        "packets_lost": 0,
+        "refreshes": 6,
+        "refusals": 265,
+        "sends": 34,
+        "slack_at_completion_steps": null,
+        "with_first_report": 28
+       },
+       "c4_complete_on_time": {
+        "goals": 112,
+        "informed_rows": 830,
+        "packets_lost": 0,
+        "refreshes": 35,
+        "refusals": 154,
+        "sends": 147,
+        "slack_at_completion_steps": {
+         "max": 146.14644164469163,
+         "mean": 65.6884,
+         "median": 62.64698602530879,
+         "min": 3.34577123962859,
+         "n": 112,
+         "p25": 39.41723398352562,
+         "p75": 87.09290727158182,
+         "p90": 108.538106896411
+        },
+        "with_first_report": 112
+       }
+      }
+     },
+     "periodic_5": {
+      "1_search_miss": 9,
+      "2_information_loss": 66,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 22,
+      "goals_placed": 192,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.114583,
+       "information": 0.34375,
+       "search_miss": 0.046875
+      },
+      "on_time": 95,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 66,
+        "goals_with_incomplete_coverage": 66,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 11103,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_dispatched_never_worked": {
+        "goals": 1,
+        "goals_with_incomplete_coverage": 1,
+        "informed_rows": 12,
+        "packets_lost": 0,
+        "refreshes": 1,
+        "refusals": 198,
+        "sends": 2,
+        "slack_at_completion_steps": null,
+        "with_first_report": 1
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 21,
+        "goals_with_incomplete_coverage": 6,
+        "informed_rows": 174,
+        "packets_lost": 0,
+        "refreshes": 9,
+        "refusals": 1681,
+        "sends": 30,
+        "slack_at_completion_steps": null,
+        "with_first_report": 21
+       },
+       "c4_complete_on_time": {
+        "goals": 95,
+        "informed_rows": 822,
+        "packets_lost": 0,
+        "refreshes": 54,
+        "refusals": 698,
+        "sends": 149,
+        "slack_at_completion_steps": {
+         "max": 170.70165411087598,
+         "mean": 78.0012,
+         "median": 74.59615677364744,
+         "min": 0.67158351570788,
+         "n": 95,
+         "p25": 50.40492085041748,
+         "p75": 100.41110075663391,
+         "p90": 132.64129276586698
+        },
+        "with_first_report": 95
+       }
+      }
+     },
+     "send_once": {
+      "1_search_miss": 9,
+      "2_information_loss": 8,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 33,
+      "goals_placed": 192,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.171875,
+       "information": 0.041667,
+       "search_miss": 0.046875
+      },
+      "on_time": 142,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 8,
+        "goals_with_incomplete_coverage": 8,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 5683,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 33,
+        "goals_with_incomplete_coverage": 9,
+        "informed_rows": 198,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 33,
+        "slack_at_completion_steps": null,
+        "with_first_report": 33
+       },
+       "c4_complete_on_time": {
+        "goals": 142,
+        "informed_rows": 852,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 142,
+        "slack_at_completion_steps": {
+         "max": 174.70165411087598,
+         "mean": 79.1702,
+         "median": 76.06336695051289,
+         "min": 4.427410970002313,
+         "n": 142,
+         "p25": 49.02414775545631,
+         "p75": 111.64219846874056,
+         "p90": 131.80948579586737
+        },
+        "with_first_report": 142
+       }
+      }
+     }
+    },
+    "g6": {
+     "always_hold": {
+      "1_search_miss": 3,
+      "2_information_loss": 93,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 0,
+      "goals_placed": 96,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.0,
+       "information": 0.96875,
+       "search_miss": 0.03125
+      },
+      "on_time": 0,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 93,
+        "goals_with_incomplete_coverage": 93,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       }
+      }
+     },
+     "bound_only_3_10": {
+      "1_search_miss": 3,
+      "2_information_loss": 6,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 3,
+      "goals_placed": 96,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.03125,
+       "information": 0.0625,
+       "search_miss": 0.03125
+      },
+      "on_time": 84,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 6,
+        "goals_with_incomplete_coverage": 6,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 4386,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 3,
+        "goals_with_incomplete_coverage": 1,
+        "informed_rows": 24,
+        "packets_lost": 0,
+        "refreshes": 1,
+        "refusals": 1149,
+        "sends": 4,
+        "slack_at_completion_steps": null,
+        "with_first_report": 3
+       },
+       "c4_complete_on_time": {
+        "goals": 84,
+        "informed_rows": 990,
+        "packets_lost": 0,
+        "refreshes": 81,
+        "refusals": 112,
+        "sends": 165,
+        "slack_at_completion_steps": {
+         "max": 164.90452252158516,
+         "mean": 80.9072,
+         "median": 79.75936767442744,
+         "min": 20.999517062169673,
+         "n": 84,
+         "p25": 52.67047998945034,
+         "p75": 110.93695181827513,
+         "p90": 126.09412346534748
+        },
+        "with_first_report": 84
+       }
+      }
+     },
+     "event": {
+      "1_search_miss": 3,
+      "2_information_loss": 30,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 5,
+      "goals_placed": 96,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.052083,
+       "information": 0.3125,
+       "search_miss": 0.03125
+      },
+      "on_time": 58,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 30,
+        "goals_with_incomplete_coverage": 30,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 24652,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 5,
+        "goals_with_incomplete_coverage": 4,
+        "informed_rows": 54,
+        "packets_lost": 0,
+        "refreshes": 4,
+        "refusals": 4015,
+        "sends": 9,
+        "slack_at_completion_steps": null,
+        "with_first_report": 5
+       },
+       "c4_complete_on_time": {
+        "goals": 58,
+        "informed_rows": 1002,
+        "packets_lost": 0,
+        "refreshes": 109,
+        "refusals": 624,
+        "sends": 167,
+        "slack_at_completion_steps": {
+         "max": 174.90452252158516,
+         "mean": 91.8732,
+         "median": 89.09170080220565,
+         "min": 35.04265568878114,
+         "n": 58,
+         "p25": 62.9046411214851,
+         "p75": 120.85182279687487,
+         "p90": 137.49913728362625
+        },
+        "with_first_report": 58
+       }
+      }
+     },
+     "event_priority": {
+      "1_search_miss": 3,
+      "2_information_loss": 30,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 5,
+      "goals_placed": 96,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.052083,
+       "information": 0.3125,
+       "search_miss": 0.03125
+      },
+      "on_time": 58,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 30,
+        "goals_with_incomplete_coverage": 30,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 24652,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 5,
+        "goals_with_incomplete_coverage": 4,
+        "informed_rows": 54,
+        "packets_lost": 0,
+        "refreshes": 4,
+        "refusals": 4015,
+        "sends": 9,
+        "slack_at_completion_steps": null,
+        "with_first_report": 5
+       },
+       "c4_complete_on_time": {
+        "goals": 58,
+        "informed_rows": 996,
+        "packets_lost": 0,
+        "refreshes": 108,
+        "refusals": 634,
+        "sends": 166,
+        "slack_at_completion_steps": {
+         "max": 174.90452252158516,
+         "mean": 91.8732,
+         "median": 89.09170080220565,
+         "min": 35.04265568878114,
+         "n": 58,
+         "p25": 62.9046411214851,
+         "p75": 120.85182279687487,
+         "p90": 137.49913728362625
+        },
+        "with_first_report": 58
+       }
+      }
+     },
+     "event_unbudgeted": {
+      "1_search_miss": 3,
+      "2_information_loss": 0,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 0,
+      "goals_placed": 96,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.0,
+       "information": 0.0,
+       "search_miss": 0.03125
+      },
+      "on_time": 93,
+      "per_goal_class_comm_facts": {
+       "c4_complete_on_time": {
+        "goals": 93,
+        "informed_rows": 4050,
+        "packets_lost": 0,
+        "refreshes": 583,
+        "refusals": 0,
+        "sends": 676,
+        "slack_at_completion_steps": {
+         "max": 174.90452252158516,
+         "mean": 91.3963,
+         "median": 89.09170080220565,
+         "min": 6.549424226558443,
+         "n": 93,
+         "p25": 60.60125347876158,
+         "p75": 123.24795438988389,
+         "p90": 137.49913728362625
+        },
+        "with_first_report": 93
+       }
+      }
+     },
+     "first_send_plus_bound_3_10": {
+      "1_search_miss": 3,
+      "2_information_loss": 6,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 3,
+      "goals_placed": 96,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.03125,
+       "information": 0.0625,
+       "search_miss": 0.03125
+      },
+      "on_time": 84,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 6,
+        "goals_with_incomplete_coverage": 6,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 4446,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 3,
+        "goals_with_incomplete_coverage": 1,
+        "informed_rows": 24,
+        "packets_lost": 0,
+        "refreshes": 1,
+        "refusals": 1159,
+        "sends": 4,
+        "slack_at_completion_steps": null,
+        "with_first_report": 3
+       },
+       "c4_complete_on_time": {
+        "goals": 84,
+        "informed_rows": 990,
+        "packets_lost": 0,
+        "refreshes": 81,
+        "refusals": 119,
+        "sends": 165,
+        "slack_at_completion_steps": {
+         "max": 174.90452252158516,
+         "mean": 90.9548,
+         "median": 89.75936767442744,
+         "min": 30.999517062169673,
+         "n": 84,
+         "p25": 62.67047998945034,
+         "p75": 120.93695181827513,
+         "p90": 136.09412346534748
+        },
+        "with_first_report": 84
+       }
+      }
+     },
+     "periodic_20": {
+      "1_search_miss": 3,
+      "2_information_loss": 2,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 5,
+      "goals_placed": 96,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.052083,
+       "information": 0.020833,
+       "search_miss": 0.03125
+      },
+      "on_time": 86,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 2,
+        "goals_with_incomplete_coverage": 2,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 76,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 5,
+        "goals_with_incomplete_coverage": 1,
+        "informed_rows": 54,
+        "packets_lost": 0,
+        "refreshes": 4,
+        "refusals": 64,
+        "sends": 9,
+        "slack_at_completion_steps": null,
+        "with_first_report": 5
+       },
+       "c4_complete_on_time": {
+        "goals": 86,
+        "informed_rows": 866,
+        "packets_lost": 0,
+        "refreshes": 63,
+        "refusals": 28,
+        "sends": 149,
+        "slack_at_completion_steps": {
+         "max": 153.53628226963957,
+         "mean": 74.5093,
+         "median": 74.20160961777316,
+         "min": 6.115941340474919,
+         "n": 86,
+         "p25": 43.34270619046208,
+         "p75": 101.79277834485296,
+         "p90": 122.84202608692374
+        },
+        "with_first_report": 86
+       }
+      }
+     },
+     "periodic_5": {
+      "1_search_miss": 3,
+      "2_information_loss": 20,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 11,
+      "goals_placed": 96,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.114583,
+       "information": 0.208333,
+       "search_miss": 0.03125
+      },
+      "on_time": 62,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 20,
+        "goals_with_incomplete_coverage": 20,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 3163,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 11,
+        "goals_with_incomplete_coverage": 8,
+        "informed_rows": 108,
+        "packets_lost": 0,
+        "refreshes": 9,
+        "refusals": 1624,
+        "sends": 20,
+        "slack_at_completion_steps": null,
+        "with_first_report": 11
+       },
+       "c4_complete_on_time": {
+        "goals": 62,
+        "informed_rows": 876,
+        "packets_lost": 0,
+        "refreshes": 94,
+        "refusals": 163,
+        "sends": 156,
+        "slack_at_completion_steps": {
+         "max": 170.90452252158516,
+         "mean": 93.0556,
+         "median": 97.65179608479849,
+         "min": 6.277378078295172,
+         "n": 62,
+         "p25": 62.2128952552512,
+         "p75": 119.60977040288648,
+         "p90": 135.21022388494765
+        },
+        "with_first_report": 62
+       }
+      }
+     },
+     "send_once": {
+      "1_search_miss": 3,
+      "2_information_loss": 0,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 12,
+      "goals_placed": 96,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.125,
+       "information": 0.0,
+       "search_miss": 0.03125
+      },
+      "on_time": 81,
+      "per_goal_class_comm_facts": {
+       "c3_dispatched_never_worked": {
+        "goals": 1,
+        "goals_with_incomplete_coverage": 1,
+        "informed_rows": 6,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 1,
+        "slack_at_completion_steps": null,
+        "with_first_report": 1
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 11,
+        "goals_with_incomplete_coverage": 7,
+        "informed_rows": 66,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 11,
+        "slack_at_completion_steps": null,
+        "with_first_report": 11
+       },
+       "c4_complete_on_time": {
+        "goals": 81,
+        "informed_rows": 486,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 81,
+        "slack_at_completion_steps": {
+         "max": 174.90452252158516,
+         "mean": 92.6035,
+         "median": 91.29856234666764,
+         "min": 22.9046411214851,
+         "n": 81,
+         "p25": 66.16725787815321,
+         "p75": 121.35657809934196,
+         "p90": 138.1041869382064
+        },
+        "with_first_report": 81
+       }
+      }
+     }
+    },
+    "g8": {
+     "always_hold": {
+      "1_search_miss": 5,
+      "2_information_loss": 123,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 0,
+      "goals_placed": 128,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.0,
+       "information": 0.960938,
+       "search_miss": 0.039062
+      },
+      "on_time": 0,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 123,
+        "goals_with_incomplete_coverage": 123,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       }
+      }
+     },
+     "bound_only_3_10": {
+      "1_search_miss": 5,
+      "2_information_loss": 24,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 5,
+      "goals_placed": 128,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.039062,
+       "information": 0.1875,
+       "search_miss": 0.039062
+      },
+      "on_time": 94,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 24,
+        "goals_with_incomplete_coverage": 24,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 18150,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 5,
+        "goals_with_incomplete_coverage": 3,
+        "informed_rows": 60,
+        "packets_lost": 0,
+        "refreshes": 5,
+        "refusals": 2868,
+        "sends": 10,
+        "slack_at_completion_steps": null,
+        "with_first_report": 5
+       },
+       "c4_complete_on_time": {
+        "goals": 94,
+        "informed_rows": 977,
+        "packets_lost": 0,
+        "refreshes": 69,
+        "refusals": 441,
+        "sends": 163,
+        "slack_at_completion_steps": {
+         "max": 147.6323880759698,
+         "mean": 86.6428,
+         "median": 84.25727181539986,
+         "min": 5.14121259625793,
+         "n": 94,
+         "p25": 62.07487300941557,
+         "p75": 117.12334703474664,
+         "p90": 126.83813749040922
+        },
+        "with_first_report": 94
+       }
+      }
+     },
+     "event": {
+      "1_search_miss": 5,
+      "2_information_loss": 52,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 2,
+      "goals_placed": 128,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.015625,
+       "information": 0.40625,
+       "search_miss": 0.039062
+      },
+      "on_time": 69,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 52,
+        "goals_with_incomplete_coverage": 52,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 42309,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 2,
+        "goals_with_incomplete_coverage": 2,
+        "informed_rows": 30,
+        "packets_lost": 0,
+        "refreshes": 3,
+        "refusals": 1975,
+        "sends": 5,
+        "slack_at_completion_steps": null,
+        "with_first_report": 2
+       },
+       "c4_complete_on_time": {
+        "goals": 69,
+        "informed_rows": 1050,
+        "packets_lost": 0,
+        "refreshes": 106,
+        "refusals": 973,
+        "sends": 175,
+        "slack_at_completion_steps": {
+         "max": 157.6323880759698,
+         "mean": 93.437,
+         "median": 91.71376069560426,
+         "min": 38.48709613896766,
+         "n": 69,
+         "p25": 72.42264607000581,
+         "p75": 111.33418995992045,
+         "p90": 132.41158003367
+        },
+        "with_first_report": 69
+       }
+      }
+     },
+     "event_priority": {
+      "1_search_miss": 5,
+      "2_information_loss": 50,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 2,
+      "goals_placed": 128,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.015625,
+       "information": 0.390625,
+       "search_miss": 0.039062
+      },
+      "on_time": 71,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 50,
+        "goals_with_incomplete_coverage": 50,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 40327,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 2,
+        "goals_with_incomplete_coverage": 2,
+        "informed_rows": 30,
+        "packets_lost": 0,
+        "refreshes": 3,
+        "refusals": 1975,
+        "sends": 5,
+        "slack_at_completion_steps": null,
+        "with_first_report": 2
+       },
+       "c4_complete_on_time": {
+        "goals": 71,
+        "informed_rows": 1050,
+        "packets_lost": 0,
+        "refreshes": 104,
+        "refusals": 1007,
+        "sends": 175,
+        "slack_at_completion_steps": {
+         "max": 157.6323880759698,
+         "mean": 94.1941,
+         "median": 93.40991405256077,
+         "min": 38.48709613896766,
+         "n": 71,
+         "p25": 73.44854386163672,
+         "p75": 111.33418995992045,
+         "p90": 132.72565683551886
+        },
+        "with_first_report": 71
+       }
+      }
+     },
+     "event_unbudgeted": {
+      "1_search_miss": 5,
+      "2_information_loss": 0,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 1,
+      "goals_placed": 128,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.007812,
+       "information": 0.0,
+       "search_miss": 0.039062
+      },
+      "on_time": 122,
+      "per_goal_class_comm_facts": {
+       "c3_worked_but_incomplete": {
+        "goals": 1,
+        "informed_rows": 66,
+        "packets_lost": 0,
+        "refreshes": 11,
+        "refusals": 0,
+        "sends": 12,
+        "slack_at_completion_steps": null,
+        "with_first_report": 1
+       },
+       "c4_complete_on_time": {
+        "goals": 122,
+        "informed_rows": 5268,
+        "packets_lost": 0,
+        "refreshes": 757,
+        "refusals": 0,
+        "sends": 879,
+        "slack_at_completion_steps": {
+         "max": 159.5088653576267,
+         "mean": 93.4415,
+         "median": 91.71376069560426,
+         "min": 0.4226460700058112,
+         "n": 122,
+         "p25": 67.90423533548906,
+         "p75": 122.75586872396102,
+         "p90": 136.91676969057755
+        },
+        "with_first_report": 122
+       }
+      }
+     },
+     "first_send_plus_bound_3_10": {
+      "1_search_miss": 5,
+      "2_information_loss": 24,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 5,
+      "goals_placed": 128,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.039062,
+       "information": 0.1875,
+       "search_miss": 0.039062
+      },
+      "on_time": 94,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 24,
+        "goals_with_incomplete_coverage": 24,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 18390,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 5,
+        "goals_with_incomplete_coverage": 3,
+        "informed_rows": 60,
+        "packets_lost": 0,
+        "refreshes": 5,
+        "refusals": 2834,
+        "sends": 10,
+        "slack_at_completion_steps": null,
+        "with_first_report": 5
+       },
+       "c4_complete_on_time": {
+        "goals": 94,
+        "informed_rows": 977,
+        "packets_lost": 0,
+        "refreshes": 69,
+        "refusals": 452,
+        "sends": 163,
+        "slack_at_completion_steps": {
+         "max": 157.6323880759698,
+         "mean": 95.9406,
+         "median": 94.25727181539986,
+         "min": 15.14121259625793,
+         "n": 94,
+         "p25": 69.25384607079158,
+         "p75": 127.12334703474664,
+         "p90": 136.83813749040922
+        },
+        "with_first_report": 94
+       }
+      }
+     },
+     "periodic_20": {
+      "1_search_miss": 5,
+      "2_information_loss": 14,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 6,
+      "goals_placed": 128,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.046875,
+       "information": 0.109375,
+       "search_miss": 0.039062
+      },
+      "on_time": 103,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 14,
+        "goals_with_incomplete_coverage": 14,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 518,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_dispatched_never_worked": {
+        "goals": 2,
+        "goals_with_incomplete_coverage": 2,
+        "informed_rows": 23,
+        "packets_lost": 0,
+        "refreshes": 2,
+        "refusals": 96,
+        "sends": 4,
+        "slack_at_completion_steps": null,
+        "with_first_report": 2
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 4,
+        "goals_with_incomplete_coverage": 2,
+        "informed_rows": 47,
+        "packets_lost": 0,
+        "refreshes": 5,
+        "refusals": 102,
+        "sends": 9,
+        "slack_at_completion_steps": null,
+        "with_first_report": 4
+       },
+       "c4_complete_on_time": {
+        "goals": 103,
+        "informed_rows": 922,
+        "packets_lost": 0,
+        "refreshes": 57,
+        "refusals": 47,
+        "sends": 160,
+        "slack_at_completion_steps": {
+         "max": 150.23171403054596,
+         "mean": 76.6545,
+         "median": 73.90749502949798,
+         "min": 2.4226460700058112,
+         "n": 103,
+         "p25": 48.62063801626908,
+         "p75": 109.38158346047783,
+         "p90": 124.8052637513905
+        },
+        "with_first_report": 103
+       }
+      }
+     },
+     "periodic_5": {
+      "1_search_miss": 5,
+      "2_information_loss": 44,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 7,
+      "goals_placed": 128,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.054688,
+       "information": 0.34375,
+       "search_miss": 0.039062
+      },
+      "on_time": 72,
+      "per_goal_class_comm_facts": {
+       "c2_info_never_arrived": {
+        "goals": 44,
+        "goals_with_incomplete_coverage": 44,
+        "informed_rows": 0,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 6931,
+        "sends": 0,
+        "slack_at_completion_steps": null,
+        "with_first_report": 0
+       },
+       "c3_dispatched_never_worked": {
+        "goals": 1,
+        "goals_with_incomplete_coverage": 1,
+        "informed_rows": 12,
+        "packets_lost": 0,
+        "refreshes": 1,
+        "refusals": 198,
+        "sends": 2,
+        "slack_at_completion_steps": null,
+        "with_first_report": 1
+       },
+       "c3_worked_but_incomplete": {
+        "goals": 6,
+        "goals_with_incomplete_coverage": 3,
+        "informed_rows": 66,
+        "packets_lost": 0,
+        "refreshes": 6,
+        "refusals": 666,
+        "sends": 12,
+        "slack_at_completion_steps": null,
+        "with_first_report": 6
+       },
+       "c4_complete_on_time": {
+        "goals": 72,
+        "informed_rows": 930,
+        "packets_lost": 0,
+        "refreshes": 91,
+        "refusals": 280,
+        "sends": 163,
+        "slack_at_completion_steps": {
+         "max": 156.44409199559908,
+         "mean": 88.3944,
+         "median": 85.48254723156246,
+         "min": 10.123340518567744,
+         "n": 72,
+         "p25": 65.14094875863157,
+         "p75": 114.03407448873244,
+         "p90": 132.83813749040922
+        },
+        "with_first_report": 72
+       }
+      }
+     },
+     "send_once": {
+      "1_search_miss": 5,
+      "2_information_loss": 0,
+      "2_information_loss_note": null,
+      "3_allocation_or_execution_loss": 8,
+      "goals_placed": 128,
+      "loss_share_of_placed": {
+       "allocation_or_execution": 0.0625,
+       "information": 0.0,
+       "search_miss": 0.039062
+      },
+      "on_time": 115,
+      "per_goal_class_comm_facts": {
+       "c3_worked_but_incomplete": {
+        "goals": 8,
+        "goals_with_incomplete_coverage": 2,
+        "informed_rows": 48,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 8,
+        "slack_at_completion_steps": null,
+        "with_first_report": 8
+       },
+       "c4_complete_on_time": {
+        "goals": 115,
+        "informed_rows": 690,
+        "packets_lost": 0,
+        "refreshes": 0,
+        "refusals": 0,
+        "sends": 115,
+        "slack_at_completion_steps": {
+         "max": 157.6323880759698,
+         "mean": 92.5274,
+         "median": 91.71376069560426,
+         "min": 15.14121259625793,
+         "n": 115,
+         "p25": 67.4139346676516,
+         "p75": 122.75586872396102,
+         "p90": 136.83813749040922
+        },
+        "with_first_report": 115
+       }
+      }
+     }
+    }
+   },
+   "label": "isolated path, hard 29 300 B budget (task-pressure layers)",
+   "paired_contrasts": [
+    {
+     "bytes_per_extra_on_time_goal": 4406.912621,
+     "comm_bytes_difference_total": 453912,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 9.0,
+       "mean": 6.4375,
+       "median": 6.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 8.0,
+       "p90": 9.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 103
+     },
+     "pair": [
+      "always_hold",
+      "bound_only_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 5197.793103,
+     "comm_bytes_difference_total": 452208,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 8.0,
+       "mean": 5.4375,
+       "median": 6.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 6.0,
+       "p90": 7.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 87
+     },
+     "pair": [
+      "always_hold",
+      "event"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 5134.909091,
+     "comm_bytes_difference_total": 451872,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 8.0,
+       "mean": 5.5,
+       "median": 6.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 6.0,
+       "p90": 7.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 88
+     },
+     "pair": [
+      "always_hold",
+      "event_priority"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 21067.223684,
+     "comm_bytes_difference_total": 3202218,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 10.0,
+       "mean": 9.5,
+       "median": 10.0,
+       "min": 8.0,
+       "n": 16,
+       "p25": 9.0,
+       "p75": 10.0,
+       "p90": 10.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 152
+     },
+     "pair": [
+      "always_hold",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 4277.660377,
+     "comm_bytes_difference_total": 453432,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 9.0,
+       "mean": 6.625,
+       "median": 6.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 6.0,
+       "p75": 8.0,
+       "p90": 9.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 106
+     },
+     "pair": [
+      "always_hold",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 4430.529412,
+     "comm_bytes_difference_total": 451914,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 10.0,
+       "mean": 6.375,
+       "median": 6.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 8.0,
+       "p90": 9.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 102
+     },
+     "pair": [
+      "always_hold",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 5210.275862,
+     "comm_bytes_difference_total": 453294,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 9.0,
+       "mean": 5.4375,
+       "median": 5.0,
+       "min": 1.0,
+       "n": 16,
+       "p25": 4.0,
+       "p75": 6.0,
+       "p90": 8.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 87
+     },
+     "pair": [
+      "always_hold",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 2782.157143,
+     "comm_bytes_difference_total": 389502,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 10.0,
+       "mean": 8.75,
+       "median": 9.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 8.0,
+       "p75": 10.0,
+       "p90": 10.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 140
+     },
+     "pair": [
+      "always_hold",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 106.5,
+     "comm_bytes_difference_total": -1704,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": -1.0,
+       "median": -1.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": 0.0,
+       "p90": 2.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 2,
+      "streams_where_second_worse": 11,
+      "sum": -16
+     },
+     "pair": [
+      "bound_only_3_10",
+      "event"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 136.0,
+     "comm_bytes_difference_total": -2040,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": -0.9375,
+       "median": -1.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": 0.0,
+       "p90": 2.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 2,
+      "streams_where_second_worse": 11,
+      "sum": -15
+     },
+     "pair": [
+      "bound_only_3_10",
+      "event_priority"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 56087.877551,
+     "comm_bytes_difference_total": 2748306,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 7.0,
+       "mean": 3.0625,
+       "median": 3.0,
+       "min": 1.0,
+       "n": 16,
+       "p25": 2.0,
+       "p75": 4.0,
+       "p90": 5.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 49
+     },
+     "pair": [
+      "bound_only_3_10",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 160.0,
+     "comm_bytes_difference_total": -480,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 0.1875,
+       "median": 0.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 15,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 0,
+      "sum": 3
+     },
+     "pair": [
+      "bound_only_3_10",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 1998.0,
+     "comm_bytes_difference_total": -1998,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": -0.0625,
+       "median": 0.0,
+       "min": -2.0,
+       "n": 16,
+       "p25": -1.0,
+       "p75": 0.0,
+       "p90": 2.0
+      },
+      "streams_equal": 7,
+      "streams_where_second_better": 3,
+      "streams_where_second_worse": 6,
+      "sum": -1
+     },
+     "pair": [
+      "bound_only_3_10",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 38.625,
+     "comm_bytes_difference_total": -618,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -1.0,
+       "median": 0.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 7,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 8,
+      "sum": -16
+     },
+     "pair": [
+      "bound_only_3_10",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 1740.810811,
+     "comm_bytes_difference_total": -64410,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 5.0,
+       "mean": 2.3125,
+       "median": 2.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 3.0,
+       "p90": 5.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 14,
+      "streams_where_second_worse": 0,
+      "sum": 37
+     },
+     "pair": [
+      "bound_only_3_10",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 336.0,
+     "comm_bytes_difference_total": -336,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": 0.0625,
+       "median": 0.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 15,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 0,
+      "sum": 1
+     },
+     "pair": [
+      "event",
+      "event_priority"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 42307.846154,
+     "comm_bytes_difference_total": 2750010,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 7.0,
+       "mean": 4.0625,
+       "median": 4.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 3.0,
+       "p75": 5.0,
+       "p90": 6.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 65
+     },
+     "pair": [
+      "event",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 64.421053,
+     "comm_bytes_difference_total": 1224,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 1.1875,
+       "median": 1.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 2.0,
+       "p90": 3.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 12,
+      "streams_where_second_worse": 1,
+      "sum": 19
+     },
+     "pair": [
+      "event",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 19.6,
+     "comm_bytes_difference_total": -294,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 0.9375,
+       "median": 1.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 2.0,
+       "p90": 3.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 11,
+      "streams_where_second_worse": 2,
+      "sum": 15
+     },
+     "pair": [
+      "event",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": null,
+     "comm_bytes_difference_total": 1086,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": 0.0,
+       "median": 0.0,
+       "min": -5.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 1.0,
+       "p90": 1.0
+      },
+      "streams_equal": 7,
+      "streams_where_second_better": 6,
+      "streams_where_second_worse": 3,
+      "sum": 0
+     },
+     "pair": [
+      "event",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 1183.132075,
+     "comm_bytes_difference_total": -62706,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 7.0,
+       "mean": 3.3125,
+       "median": 3.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 3.0,
+       "p75": 4.0,
+       "p90": 5.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 15,
+      "streams_where_second_worse": 1,
+      "sum": 53
+     },
+     "pair": [
+      "event",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 42974.15625,
+     "comm_bytes_difference_total": 2750346,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 4.0,
+       "median": 4.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 3.0,
+       "p75": 5.0,
+       "p90": 6.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 64
+     },
+     "pair": [
+      "event_priority",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 86.666667,
+     "comm_bytes_difference_total": 1560,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 1.125,
+       "median": 1.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 2.0,
+       "p90": 3.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 12,
+      "streams_where_second_worse": 1,
+      "sum": 18
+     },
+     "pair": [
+      "event_priority",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 3.0,
+     "comm_bytes_difference_total": 42,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 0.875,
+       "median": 1.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 2.0,
+       "p90": 3.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 11,
+      "streams_where_second_worse": 2,
+      "sum": 14
+     },
+     "pair": [
+      "event_priority",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 1422.0,
+     "comm_bytes_difference_total": 1422,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -0.0625,
+       "median": 0.0,
+       "min": -5.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 1.0,
+       "p90": 1.0
+      },
+      "streams_equal": 8,
+      "streams_where_second_better": 5,
+      "streams_where_second_worse": 3,
+      "sum": -1
+     },
+     "pair": [
+      "event_priority",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 1199.423077,
+     "comm_bytes_difference_total": -62370,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 3.25,
+       "median": 3.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 3.0,
+       "p75": 4.0,
+       "p90": 5.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 15,
+      "streams_where_second_worse": 1,
+      "sum": 52
+     },
+     "pair": [
+      "event_priority",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 59756.217391,
+     "comm_bytes_difference_total": -2748786,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": -1.0,
+       "mean": -2.875,
+       "median": -3.0,
+       "min": -5.0,
+       "n": 16,
+       "p25": -4.0,
+       "p75": -2.0,
+       "p90": -1.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 16,
+      "sum": -46
+     },
+     "pair": [
+      "event_unbudgeted",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 55006.08,
+     "comm_bytes_difference_total": -2750304,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -3.125,
+       "median": -3.0,
+       "min": -6.0,
+       "n": 16,
+       "p25": -4.0,
+       "p75": -2.0,
+       "p90": -1.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 15,
+      "sum": -50
+     },
+     "pair": [
+      "event_unbudgeted",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 42291.138462,
+     "comm_bytes_difference_total": -2748924,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": -1.0,
+       "mean": -4.0625,
+       "median": -4.0,
+       "min": -7.0,
+       "n": 16,
+       "p25": -5.0,
+       "p75": -3.0,
+       "p90": -2.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 16,
+      "sum": -65
+     },
+     "pair": [
+      "event_unbudgeted",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 234393.0,
+     "comm_bytes_difference_total": -2812716,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": -0.75,
+       "median": 0.0,
+       "min": -5.0,
+       "n": 16,
+       "p25": -1.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 9,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 6,
+      "sum": -12
+     },
+     "pair": [
+      "event_unbudgeted",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 379.5,
+     "comm_bytes_difference_total": -1518,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -0.25,
+       "median": 0.0,
+       "min": -2.0,
+       "n": 16,
+       "p25": -1.0,
+       "p75": 0.0,
+       "p90": 1.0
+      },
+      "streams_equal": 8,
+      "streams_where_second_better": 2,
+      "streams_where_second_worse": 6,
+      "sum": -4
+     },
+     "pair": [
+      "first_send_plus_bound_3_10",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 7.263158,
+     "comm_bytes_difference_total": -138,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -1.1875,
+       "median": -1.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 7,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 9,
+      "sum": -19
+     },
+     "pair": [
+      "first_send_plus_bound_3_10",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 1880.294118,
+     "comm_bytes_difference_total": -63930,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 5.0,
+       "mean": 2.125,
+       "median": 2.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 3.0,
+       "p90": 4.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 14,
+      "streams_where_second_worse": 0,
+      "sum": 34
+     },
+     "pair": [
+      "first_send_plus_bound_3_10",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 92.0,
+     "comm_bytes_difference_total": 1380,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": -0.9375,
+       "median": 0.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 7,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 8,
+      "sum": -15
+     },
+     "pair": [
+      "periodic_20",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 1642.421053,
+     "comm_bytes_difference_total": -62412,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 5.0,
+       "mean": 2.375,
+       "median": 2.0,
+       "min": -1.0,
+       "n": 16,
+       "p25": 2.0,
+       "p75": 3.0,
+       "p90": 4.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 15,
+      "streams_where_second_worse": 1,
+      "sum": 38
+     },
+     "pair": [
+      "periodic_20",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 1203.622642,
+     "comm_bytes_difference_total": -63792,
+     "group": "g10",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 3.3125,
+       "median": 3.0,
+       "min": 1.0,
+       "n": 16,
+       "p25": 2.0,
+       "p75": 4.0,
+       "p90": 6.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 53
+     },
+     "pair": [
+      "periodic_5",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 4014.477876,
+     "comm_bytes_difference_total": 453636,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 11.0,
+       "mean": 7.0625,
+       "median": 8.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 8.0,
+       "p90": 10.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 113
+     },
+     "pair": [
+      "always_hold",
+      "bound_only_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 4679.134021,
+     "comm_bytes_difference_total": 453876,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 9.0,
+       "mean": 6.0625,
+       "median": 6.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 7.0,
+       "p90": 9.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 97
+     },
+     "pair": [
+      "always_hold",
+      "event"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 4719.375,
+     "comm_bytes_difference_total": 453060,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 9.0,
+       "mean": 6.0,
+       "median": 6.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 7.0,
+       "p90": 9.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 96
+     },
+     "pair": [
+      "always_hold",
+      "event_priority"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 19749.593407,
+     "comm_bytes_difference_total": 3594426,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 12.0,
+       "mean": 11.375,
+       "median": 12.0,
+       "min": 9.0,
+       "n": 16,
+       "p25": 11.0,
+       "p75": 12.0,
+       "p90": 12.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 182
+     },
+     "pair": [
+      "always_hold",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 4098.0,
+     "comm_bytes_difference_total": 454878,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 11.0,
+       "mean": 6.9375,
+       "median": 8.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 9.0,
+       "p90": 10.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 111
+     },
+     "pair": [
+      "always_hold",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 4034.946429,
+     "comm_bytes_difference_total": 451914,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 11.0,
+       "mean": 7.0,
+       "median": 7.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 7.0,
+       "p75": 9.0,
+       "p90": 10.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 112
+     },
+     "pair": [
+      "always_hold",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 4732.863158,
+     "comm_bytes_difference_total": 449622,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 10.0,
+       "mean": 5.9375,
+       "median": 7.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 3.0,
+       "p75": 7.0,
+       "p90": 9.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 95
+     },
+     "pair": [
+      "always_hold",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 3057.422535,
+     "comm_bytes_difference_total": 434154,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 11.0,
+       "mean": 8.875,
+       "median": 10.0,
+       "min": 4.0,
+       "n": 16,
+       "p25": 8.0,
+       "p75": 11.0,
+       "p90": 11.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 142
+     },
+     "pair": [
+      "always_hold",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 15.0,
+     "comm_bytes_difference_total": 240,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -1.0,
+       "median": -1.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": 0.0,
+       "p90": 1.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 2,
+      "streams_where_second_worse": 11,
+      "sum": -16
+     },
+     "pair": [
+      "bound_only_3_10",
+      "event"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 33.882353,
+     "comm_bytes_difference_total": -576,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -1.0625,
+       "median": -1.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 4,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 11,
+      "sum": -17
+     },
+     "pair": [
+      "bound_only_3_10",
+      "event_priority"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 45518.695652,
+     "comm_bytes_difference_total": 3140790,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 9.0,
+       "mean": 4.3125,
+       "median": 4.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 3.0,
+       "p75": 6.0,
+       "p90": 8.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 15,
+      "streams_where_second_worse": 0,
+      "sum": 69
+     },
+     "pair": [
+      "bound_only_3_10",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 621.0,
+     "comm_bytes_difference_total": 1242,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": -0.125,
+       "median": 0.0,
+       "min": -1.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 12,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 3,
+      "sum": -2
+     },
+     "pair": [
+      "bound_only_3_10",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 1722.0,
+     "comm_bytes_difference_total": -1722,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -0.0625,
+       "median": 0.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -1.0,
+       "p75": 1.0,
+       "p90": 1.0
+      },
+      "streams_equal": 4,
+      "streams_where_second_better": 7,
+      "streams_where_second_worse": 5,
+      "sum": -1
+     },
+     "pair": [
+      "bound_only_3_10",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 223.0,
+     "comm_bytes_difference_total": -4014,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": -1.125,
+       "median": -1.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": -1.0,
+       "p90": 0.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 12,
+      "sum": -18
+     },
+     "pair": [
+      "bound_only_3_10",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 671.793103,
+     "comm_bytes_difference_total": -19482,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 1.8125,
+       "median": 2.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 3.0,
+       "p90": 4.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 14,
+      "streams_where_second_worse": 0,
+      "sum": 29
+     },
+     "pair": [
+      "bound_only_3_10",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 816.0,
+     "comm_bytes_difference_total": -816,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": -0.0625,
+       "median": 0.0,
+       "min": -2.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 14,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 1,
+      "sum": -1
+     },
+     "pair": [
+      "event",
+      "event_priority"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 36947.647059,
+     "comm_bytes_difference_total": 3140550,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 8.0,
+       "mean": 5.3125,
+       "median": 6.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 6.0,
+       "p90": 8.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 85
+     },
+     "pair": [
+      "event",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 71.571429,
+     "comm_bytes_difference_total": 1002,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 0.875,
+       "median": 1.0,
+       "min": -2.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 2.0,
+       "p90": 2.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 10,
+      "streams_where_second_worse": 3,
+      "sum": 14
+     },
+     "pair": [
+      "event",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 130.8,
+     "comm_bytes_difference_total": -1962,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 0.9375,
+       "median": 2.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 2.0,
+       "p90": 3.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 11,
+      "streams_where_second_worse": 4,
+      "sum": 15
+     },
+     "pair": [
+      "event",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 2127.0,
+     "comm_bytes_difference_total": -4254,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -0.125,
+       "median": 0.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -1.0,
+       "p75": 1.0,
+       "p90": 2.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 7,
+      "streams_where_second_worse": 7,
+      "sum": -2
+     },
+     "pair": [
+      "event",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 438.266667,
+     "comm_bytes_difference_total": -19722,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 7.0,
+       "mean": 2.8125,
+       "median": 3.0,
+       "min": -1.0,
+       "n": 16,
+       "p25": 2.0,
+       "p75": 4.0,
+       "p90": 5.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 13,
+      "streams_where_second_worse": 1,
+      "sum": 45
+     },
+     "pair": [
+      "event",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 36527.511628,
+     "comm_bytes_difference_total": 3141366,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 8.0,
+       "mean": 5.375,
+       "median": 6.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 4.0,
+       "p75": 7.0,
+       "p90": 8.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 86
+     },
+     "pair": [
+      "event_priority",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 121.2,
+     "comm_bytes_difference_total": 1818,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 0.9375,
+       "median": 1.0,
+       "min": -2.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 2.0,
+       "p90": 2.0
+      },
+      "streams_equal": 4,
+      "streams_where_second_better": 10,
+      "streams_where_second_worse": 2,
+      "sum": 15
+     },
+     "pair": [
+      "event_priority",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 71.625,
+     "comm_bytes_difference_total": -1146,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 1.0,
+       "median": 2.0,
+       "min": -2.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 2.0,
+       "p90": 3.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 11,
+      "streams_where_second_worse": 4,
+      "sum": 16
+     },
+     "pair": [
+      "event_priority",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 3438.0,
+     "comm_bytes_difference_total": -3438,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -0.0625,
+       "median": 0.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -1.0,
+       "p75": 1.0,
+       "p90": 2.0
+      },
+      "streams_equal": 4,
+      "streams_where_second_better": 6,
+      "streams_where_second_worse": 6,
+      "sum": -1
+     },
+     "pair": [
+      "event_priority",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 411.0,
+     "comm_bytes_difference_total": -18906,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 7.0,
+       "mean": 2.875,
+       "median": 3.0,
+       "min": -1.0,
+       "n": 16,
+       "p25": 2.0,
+       "p75": 4.0,
+       "p90": 5.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 14,
+      "streams_where_second_worse": 1,
+      "sum": 46
+     },
+     "pair": [
+      "event_priority",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 44218.985915,
+     "comm_bytes_difference_total": -3139548,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -4.4375,
+       "median": -4.0,
+       "min": -9.0,
+       "n": 16,
+       "p25": -6.0,
+       "p75": -3.0,
+       "p90": -1.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 15,
+      "sum": -71
+     },
+     "pair": [
+      "event_unbudgeted",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 44893.028571,
+     "comm_bytes_difference_total": -3142512,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -4.375,
+       "median": -3.0,
+       "min": -9.0,
+       "n": 16,
+       "p25": -5.0,
+       "p75": -3.0,
+       "p90": -2.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 15,
+      "sum": -70
+     },
+     "pair": [
+      "event_unbudgeted",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 36147.172414,
+     "comm_bytes_difference_total": -3144804,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": -1.0,
+       "mean": -5.4375,
+       "median": -5.0,
+       "min": -10.0,
+       "n": 16,
+       "p25": -8.0,
+       "p75": -4.0,
+       "p90": -2.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 16,
+      "sum": -87
+     },
+     "pair": [
+      "event_unbudgeted",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 79006.8,
+     "comm_bytes_difference_total": -3160272,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -2.5,
+       "median": -1.0,
+       "min": -8.0,
+       "n": 16,
+       "p25": -3.0,
+       "p75": -1.0,
+       "p90": 0.0
+      },
+      "streams_equal": 4,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 12,
+      "sum": -40
+     },
+     "pair": [
+      "event_unbudgeted",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 2964.0,
+     "comm_bytes_difference_total": -2964,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": 0.0625,
+       "median": 0.0,
+       "min": -2.0,
+       "n": 16,
+       "p25": -1.0,
+       "p75": 1.0,
+       "p90": 2.0
+      },
+      "streams_equal": 4,
+      "streams_where_second_better": 7,
+      "streams_where_second_worse": 5,
+      "sum": 1
+     },
+     "pair": [
+      "first_send_plus_bound_3_10",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 328.5,
+     "comm_bytes_difference_total": -5256,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": -1.0,
+       "median": -1.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -1.0,
+       "p75": -1.0,
+       "p90": 1.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 2,
+      "streams_where_second_worse": 13,
+      "sum": -16
+     },
+     "pair": [
+      "first_send_plus_bound_3_10",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 668.516129,
+     "comm_bytes_difference_total": -20724,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 1.9375,
+       "median": 2.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 3.0,
+       "p90": 4.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 15,
+      "streams_where_second_worse": 0,
+      "sum": 31
+     },
+     "pair": [
+      "first_send_plus_bound_3_10",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 134.823529,
+     "comm_bytes_difference_total": -2292,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": -1.0625,
+       "median": -1.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": 0.0,
+       "p90": 1.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 3,
+      "streams_where_second_worse": 10,
+      "sum": -17
+     },
+     "pair": [
+      "periodic_20",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 592.0,
+     "comm_bytes_difference_total": -17760,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 1.875,
+       "median": 2.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 3.0,
+       "p90": 4.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 15,
+      "streams_where_second_worse": 0,
+      "sum": 30
+     },
+     "pair": [
+      "periodic_20",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 329.106383,
+     "comm_bytes_difference_total": -15468,
+     "group": "g12",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 7.0,
+       "mean": 2.9375,
+       "median": 3.0,
+       "min": 1.0,
+       "n": 16,
+       "p25": 2.0,
+       "p75": 4.0,
+       "p90": 4.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 47
+     },
+     "pair": [
+      "periodic_5",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 5242.642857,
+     "comm_bytes_difference_total": 440382,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 5.25,
+       "median": 6.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 6.0,
+       "p90": 6.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 84
+     },
+     "pair": [
+      "always_hold",
+      "bound_only_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 7784.172414,
+     "comm_bytes_difference_total": 451482,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 3.625,
+       "median": 4.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 3.0,
+       "p75": 4.0,
+       "p90": 5.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 58
+     },
+     "pair": [
+      "always_hold",
+      "event"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 7748.689655,
+     "comm_bytes_difference_total": 449424,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 3.625,
+       "median": 4.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 3.0,
+       "p75": 4.0,
+       "p90": 5.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 58
+     },
+     "pair": [
+      "always_hold",
+      "event_priority"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 19416.516129,
+     "comm_bytes_difference_total": 1805736,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 5.8125,
+       "median": 6.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 6.0,
+       "p75": 6.0,
+       "p90": 6.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 93
+     },
+     "pair": [
+      "always_hold",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 5237.0,
+     "comm_bytes_difference_total": 439908,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 5.25,
+       "median": 6.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 6.0,
+       "p90": 6.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 84
+     },
+     "pair": [
+      "always_hold",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 4728.55814,
+     "comm_bytes_difference_total": 406656,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 5.375,
+       "median": 6.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 6.0,
+       "p90": 6.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 86
+     },
+     "pair": [
+      "always_hold",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 7262.806452,
+     "comm_bytes_difference_total": 450294,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 3.875,
+       "median": 4.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 4.0,
+       "p75": 4.0,
+       "p90": 6.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 62
+     },
+     "pair": [
+      "always_hold",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 2858.962963,
+     "comm_bytes_difference_total": 231576,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 5.0625,
+       "median": 6.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 6.0,
+       "p90": 6.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 81
+     },
+     "pair": [
+      "always_hold",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 426.923077,
+     "comm_bytes_difference_total": 11100,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -1.625,
+       "median": -2.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": -1.0,
+       "p90": 0.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 13,
+      "sum": -26
+     },
+     "pair": [
+      "bound_only_3_10",
+      "event"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 347.769231,
+     "comm_bytes_difference_total": 9042,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -1.625,
+       "median": -2.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": -1.0,
+       "p90": 0.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 13,
+      "sum": -26
+     },
+     "pair": [
+      "bound_only_3_10",
+      "event_priority"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 151706.0,
+     "comm_bytes_difference_total": 1365354,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 0.5625,
+       "median": 0.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 1.0,
+       "p90": 2.0
+      },
+      "streams_equal": 10,
+      "streams_where_second_better": 6,
+      "streams_where_second_worse": 0,
+      "sum": 9
+     },
+     "pair": [
+      "bound_only_3_10",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": null,
+     "comm_bytes_difference_total": -474,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": 0.0,
+       "median": 0.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 16,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 0,
+      "sum": 0
+     },
+     "pair": [
+      "bound_only_3_10",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 16863.0,
+     "comm_bytes_difference_total": -33726,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": 0.125,
+       "median": 0.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 2.0
+      },
+      "streams_equal": 11,
+      "streams_where_second_better": 4,
+      "streams_where_second_worse": 1,
+      "sum": 2
+     },
+     "pair": [
+      "bound_only_3_10",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 450.545455,
+     "comm_bytes_difference_total": 9912,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -1.375,
+       "median": -1.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": -1.0,
+       "p90": 0.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 13,
+      "sum": -22
+     },
+     "pair": [
+      "bound_only_3_10",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 69602.0,
+     "comm_bytes_difference_total": -208806,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": -0.1875,
+       "median": 0.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 1.0
+      },
+      "streams_equal": 9,
+      "streams_where_second_better": 3,
+      "streams_where_second_worse": 4,
+      "sum": -3
+     },
+     "pair": [
+      "bound_only_3_10",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": null,
+     "comm_bytes_difference_total": -2058,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": 0.0,
+       "median": 0.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 16,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 0,
+      "sum": 0
+     },
+     "pair": [
+      "event",
+      "event_priority"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 38692.971429,
+     "comm_bytes_difference_total": 1354254,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 2.1875,
+       "median": 2.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 2.0,
+       "p75": 3.0,
+       "p90": 4.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 14,
+      "streams_where_second_worse": 0,
+      "sum": 35
+     },
+     "pair": [
+      "event",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 445.153846,
+     "comm_bytes_difference_total": -11574,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 1.625,
+       "median": 2.0,
+       "min": -2.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 2.0,
+       "p90": 3.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 13,
+      "streams_where_second_worse": 1,
+      "sum": 26
+     },
+     "pair": [
+      "event",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 1600.928571,
+     "comm_bytes_difference_total": -44826,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 1.75,
+       "median": 2.0,
+       "min": -1.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 3.0,
+       "p90": 4.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 12,
+      "streams_where_second_worse": 1,
+      "sum": 28
+     },
+     "pair": [
+      "event",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 297.0,
+     "comm_bytes_difference_total": -1188,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": 0.25,
+       "median": 0.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 1.0,
+       "p90": 1.0
+      },
+      "streams_equal": 9,
+      "streams_where_second_better": 6,
+      "streams_where_second_worse": 1,
+      "sum": 4
+     },
+     "pair": [
+      "event",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 9561.130435,
+     "comm_bytes_difference_total": -219906,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 1.4375,
+       "median": 2.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 2.0,
+       "p90": 3.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 12,
+      "streams_where_second_worse": 2,
+      "sum": 23
+     },
+     "pair": [
+      "event",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 38751.771429,
+     "comm_bytes_difference_total": 1356312,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 2.1875,
+       "median": 2.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 2.0,
+       "p75": 3.0,
+       "p90": 4.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 14,
+      "streams_where_second_worse": 0,
+      "sum": 35
+     },
+     "pair": [
+      "event_priority",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 366.0,
+     "comm_bytes_difference_total": -9516,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 1.625,
+       "median": 2.0,
+       "min": -2.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 2.0,
+       "p90": 3.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 13,
+      "streams_where_second_worse": 1,
+      "sum": 26
+     },
+     "pair": [
+      "event_priority",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 1527.428571,
+     "comm_bytes_difference_total": -42768,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 1.75,
+       "median": 2.0,
+       "min": -1.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 3.0,
+       "p90": 4.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 12,
+      "streams_where_second_worse": 1,
+      "sum": 28
+     },
+     "pair": [
+      "event_priority",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 217.5,
+     "comm_bytes_difference_total": 870,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": 0.25,
+       "median": 0.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 1.0,
+       "p90": 1.0
+      },
+      "streams_equal": 9,
+      "streams_where_second_better": 6,
+      "streams_where_second_worse": 1,
+      "sum": 4
+     },
+     "pair": [
+      "event_priority",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 9471.652174,
+     "comm_bytes_difference_total": -217848,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 1.4375,
+       "median": 2.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 2.0,
+       "p90": 3.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 12,
+      "streams_where_second_worse": 2,
+      "sum": 23
+     },
+     "pair": [
+      "event_priority",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 151758.666667,
+     "comm_bytes_difference_total": -1365828,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -0.5625,
+       "median": 0.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -1.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 10,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 6,
+      "sum": -9
+     },
+     "pair": [
+      "event_unbudgeted",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 199868.571429,
+     "comm_bytes_difference_total": -1399080,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -0.4375,
+       "median": 0.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 12,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 4,
+      "sum": -7
+     },
+     "pair": [
+      "event_unbudgeted",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 43723.935484,
+     "comm_bytes_difference_total": -1355442,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -1.9375,
+       "median": -2.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": -2.0,
+       "p90": 0.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 13,
+      "sum": -31
+     },
+     "pair": [
+      "event_unbudgeted",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 131180.0,
+     "comm_bytes_difference_total": -1574160,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -0.75,
+       "median": 0.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -1.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 9,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 7,
+      "sum": -12
+     },
+     "pair": [
+      "event_unbudgeted",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 16626.0,
+     "comm_bytes_difference_total": -33252,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": 0.125,
+       "median": 0.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 2.0
+      },
+      "streams_equal": 11,
+      "streams_where_second_better": 4,
+      "streams_where_second_worse": 1,
+      "sum": 2
+     },
+     "pair": [
+      "first_send_plus_bound_3_10",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 472.090909,
+     "comm_bytes_difference_total": 10386,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -1.375,
+       "median": -1.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": -1.0,
+       "p90": 0.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 13,
+      "sum": -22
+     },
+     "pair": [
+      "first_send_plus_bound_3_10",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 69444.0,
+     "comm_bytes_difference_total": -208332,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": -0.1875,
+       "median": 0.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 1.0
+      },
+      "streams_equal": 9,
+      "streams_where_second_better": 3,
+      "streams_where_second_worse": 4,
+      "sum": -3
+     },
+     "pair": [
+      "first_send_plus_bound_3_10",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 1818.25,
+     "comm_bytes_difference_total": 43638,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -1.5,
+       "median": -2.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": -1.0,
+       "p90": 0.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 12,
+      "sum": -24
+     },
+     "pair": [
+      "periodic_20",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 35016.0,
+     "comm_bytes_difference_total": -175080,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": -0.3125,
+       "median": 0.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": -1.0,
+       "p75": 0.0,
+       "p90": 1.0
+      },
+      "streams_equal": 9,
+      "streams_where_second_better": 2,
+      "streams_where_second_worse": 5,
+      "sum": -5
+     },
+     "pair": [
+      "periodic_20",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 11511.473684,
+     "comm_bytes_difference_total": -218718,
+     "group": "g6",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 1.1875,
+       "median": 2.0,
+       "min": -1.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 2.0,
+       "p90": 2.0
+      },
+      "streams_equal": 4,
+      "streams_where_second_better": 11,
+      "streams_where_second_worse": 1,
+      "sum": 19
+     },
+     "pair": [
+      "periodic_5",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 4706.361702,
+     "comm_bytes_difference_total": 442398,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 8.0,
+       "mean": 5.875,
+       "median": 6.0,
+       "min": 1.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 7.0,
+       "p90": 8.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 94
+     },
+     "pair": [
+      "always_hold",
+      "bound_only_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 6592.782609,
+     "comm_bytes_difference_total": 454902,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 4.3125,
+       "median": 5.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 3.0,
+       "p75": 5.0,
+       "p90": 6.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 69
+     },
+     "pair": [
+      "always_hold",
+      "event"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 6400.985915,
+     "comm_bytes_difference_total": 454470,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 4.4375,
+       "median": 5.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 4.0,
+       "p75": 5.0,
+       "p90": 6.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 71
+     },
+     "pair": [
+      "always_hold",
+      "event_priority"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 19339.57377,
+     "comm_bytes_difference_total": 2359428,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 8.0,
+       "mean": 7.625,
+       "median": 8.0,
+       "min": 5.0,
+       "n": 16,
+       "p25": 8.0,
+       "p75": 8.0,
+       "p90": 8.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 122
+     },
+     "pair": [
+      "always_hold",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 4703.106383,
+     "comm_bytes_difference_total": 442092,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 8.0,
+       "mean": 5.875,
+       "median": 6.0,
+       "min": 1.0,
+       "n": 16,
+       "p25": 5.0,
+       "p75": 7.0,
+       "p90": 8.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 94
+     },
+     "pair": [
+      "always_hold",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 4265.300971,
+     "comm_bytes_difference_total": 439326,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 8.0,
+       "mean": 6.4375,
+       "median": 7.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 6.0,
+       "p75": 8.0,
+       "p90": 8.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 103
+     },
+     "pair": [
+      "always_hold",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 6230.666667,
+     "comm_bytes_difference_total": 448608,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 7.0,
+       "mean": 4.5,
+       "median": 5.0,
+       "min": 3.0,
+       "n": 16,
+       "p25": 4.0,
+       "p75": 5.0,
+       "p90": 6.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 72
+     },
+     "pair": [
+      "always_hold",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 2650.017391,
+     "comm_bytes_difference_total": 304752,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 8.0,
+       "mean": 7.1875,
+       "median": 8.0,
+       "min": 4.0,
+       "n": 16,
+       "p25": 7.0,
+       "p75": 8.0,
+       "p90": 8.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 115
+     },
+     "pair": [
+      "always_hold",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 500.16,
+     "comm_bytes_difference_total": 12504,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": -1.5625,
+       "median": -2.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -3.0,
+       "p75": -1.0,
+       "p90": 1.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 2,
+      "streams_where_second_worse": 12,
+      "sum": -25
+     },
+     "pair": [
+      "bound_only_3_10",
+      "event"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 524.869565,
+     "comm_bytes_difference_total": 12072,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": -1.4375,
+       "median": -2.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -3.0,
+       "p75": -1.0,
+       "p90": 1.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 2,
+      "streams_where_second_worse": 12,
+      "sum": -23
+     },
+     "pair": [
+      "bound_only_3_10",
+      "event_priority"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 68465.357143,
+     "comm_bytes_difference_total": 1917030,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 6.0,
+       "mean": 1.75,
+       "median": 2.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 3.0,
+       "p90": 4.0
+      },
+      "streams_equal": 5,
+      "streams_where_second_better": 11,
+      "streams_where_second_worse": 0,
+      "sum": 28
+     },
+     "pair": [
+      "bound_only_3_10",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": null,
+     "comm_bytes_difference_total": -306,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": 0.0,
+       "median": 0.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 16,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 0,
+      "sum": 0
+     },
+     "pair": [
+      "bound_only_3_10",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 341.333333,
+     "comm_bytes_difference_total": -3072,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": 0.5625,
+       "median": 1.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 2.0,
+       "p90": 2.0
+      },
+      "streams_equal": 6,
+      "streams_where_second_better": 8,
+      "streams_where_second_worse": 2,
+      "sum": 9
+     },
+     "pair": [
+      "bound_only_3_10",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 282.272727,
+     "comm_bytes_difference_total": 6210,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -1.375,
+       "median": -1.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 4,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 11,
+      "sum": -22
+     },
+     "pair": [
+      "bound_only_3_10",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 6554.571429,
+     "comm_bytes_difference_total": -137646,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 1.3125,
+       "median": 1.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 2.0,
+       "p90": 3.0
+      },
+      "streams_equal": 6,
+      "streams_where_second_better": 10,
+      "streams_where_second_worse": 0,
+      "sum": 21
+     },
+     "pair": [
+      "bound_only_3_10",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 216.0,
+     "comm_bytes_difference_total": -432,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": 0.125,
+       "median": 0.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 1.0
+      },
+      "streams_equal": 14,
+      "streams_where_second_better": 2,
+      "streams_where_second_worse": 0,
+      "sum": 2
+     },
+     "pair": [
+      "event",
+      "event_priority"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 35934.45283,
+     "comm_bytes_difference_total": 1904526,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 5.0,
+       "mean": 3.3125,
+       "median": 3.0,
+       "min": 2.0,
+       "n": 16,
+       "p25": 3.0,
+       "p75": 4.0,
+       "p90": 5.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 53
+     },
+     "pair": [
+      "event",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 512.4,
+     "comm_bytes_difference_total": -12810,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 1.5625,
+       "median": 2.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 3.0,
+       "p90": 3.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 12,
+      "streams_where_second_worse": 2,
+      "sum": 25
+     },
+     "pair": [
+      "event",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 458.117647,
+     "comm_bytes_difference_total": -15576,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 5.0,
+       "mean": 2.125,
+       "median": 3.0,
+       "min": -2.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 3.0,
+       "p90": 5.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 13,
+      "streams_where_second_worse": 2,
+      "sum": 34
+     },
+     "pair": [
+      "event",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 2098.0,
+     "comm_bytes_difference_total": -6294,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": 0.1875,
+       "median": 0.0,
+       "min": -1.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 1.0,
+       "p90": 1.0
+      },
+      "streams_equal": 6,
+      "streams_where_second_better": 6,
+      "streams_where_second_worse": 4,
+      "sum": 3
+     },
+     "pair": [
+      "event",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 3264.130435,
+     "comm_bytes_difference_total": -150150,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 5.0,
+       "mean": 2.875,
+       "median": 3.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 2.0,
+       "p75": 4.0,
+       "p90": 5.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 15,
+      "streams_where_second_worse": 0,
+      "sum": 46
+     },
+     "pair": [
+      "event",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 37352.117647,
+     "comm_bytes_difference_total": 1904958,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 5.0,
+       "mean": 3.1875,
+       "median": 3.0,
+       "min": 1.0,
+       "n": 16,
+       "p25": 3.0,
+       "p75": 4.0,
+       "p90": 5.0
+      },
+      "streams_equal": 0,
+      "streams_where_second_better": 16,
+      "streams_where_second_worse": 0,
+      "sum": 51
+     },
+     "pair": [
+      "event_priority",
+      "event_unbudgeted"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 538.173913,
+     "comm_bytes_difference_total": -12378,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 4.0,
+       "mean": 1.4375,
+       "median": 2.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 3.0,
+       "p90": 3.0
+      },
+      "streams_equal": 2,
+      "streams_where_second_better": 12,
+      "streams_where_second_worse": 2,
+      "sum": 23
+     },
+     "pair": [
+      "event_priority",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 473.25,
+     "comm_bytes_difference_total": -15144,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 5.0,
+       "mean": 2.0,
+       "median": 2.0,
+       "min": -2.0,
+       "n": 16,
+       "p25": 1.0,
+       "p75": 3.0,
+       "p90": 5.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 13,
+      "streams_where_second_worse": 2,
+      "sum": 32
+     },
+     "pair": [
+      "event_priority",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 5862.0,
+     "comm_bytes_difference_total": -5862,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": 0.0625,
+       "median": 0.0,
+       "min": -1.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 1.0,
+       "p90": 1.0
+      },
+      "streams_equal": 7,
+      "streams_where_second_better": 5,
+      "streams_where_second_worse": 4,
+      "sum": 1
+     },
+     "pair": [
+      "event_priority",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 3402.681818,
+     "comm_bytes_difference_total": -149718,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 5.0,
+       "mean": 2.75,
+       "median": 3.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 2.0,
+       "p75": 4.0,
+       "p90": 5.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 15,
+      "streams_where_second_worse": 0,
+      "sum": 44
+     },
+     "pair": [
+      "event_priority",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 68476.285714,
+     "comm_bytes_difference_total": -1917336,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -1.75,
+       "median": -1.0,
+       "min": -6.0,
+       "n": 16,
+       "p25": -3.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 5,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 11,
+      "sum": -28
+     },
+     "pair": [
+      "event_unbudgeted",
+      "first_send_plus_bound_3_10"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 101058.0,
+     "comm_bytes_difference_total": -1920102,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -1.1875,
+       "median": 0.0,
+       "min": -5.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 8,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 8,
+      "sum": -19
+     },
+     "pair": [
+      "event_unbudgeted",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 38216.4,
+     "comm_bytes_difference_total": -1910820,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -3.125,
+       "median": -3.0,
+       "min": -5.0,
+       "n": 16,
+       "p25": -4.0,
+       "p75": -3.0,
+       "p90": -1.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 15,
+      "sum": -50
+     },
+     "pair": [
+      "event_unbudgeted",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 293525.142857,
+     "comm_bytes_difference_total": -2054676,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 0.0,
+       "mean": -0.4375,
+       "median": 0.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 12,
+      "streams_where_second_better": 0,
+      "streams_where_second_worse": 4,
+      "sum": -7
+     },
+     "pair": [
+      "event_unbudgeted",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 307.333333,
+     "comm_bytes_difference_total": -2766,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": 0.5625,
+       "median": 1.0,
+       "min": -3.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 2.0,
+       "p90": 2.0
+      },
+      "streams_equal": 6,
+      "streams_where_second_better": 8,
+      "streams_where_second_worse": 2,
+      "sum": 9
+     },
+     "pair": [
+      "first_send_plus_bound_3_10",
+      "periodic_20"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 296.181818,
+     "comm_bytes_difference_total": 6516,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 2.0,
+       "mean": -1.375,
+       "median": -1.0,
+       "min": -4.0,
+       "n": 16,
+       "p25": -2.0,
+       "p75": 0.0,
+       "p90": 0.0
+      },
+      "streams_equal": 4,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 11,
+      "sum": -22
+     },
+     "pair": [
+      "first_send_plus_bound_3_10",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 6540.0,
+     "comm_bytes_difference_total": -137340,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 1.3125,
+       "median": 1.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 2.0,
+       "p90": 3.0
+      },
+      "streams_equal": 6,
+      "streams_where_second_better": 10,
+      "streams_where_second_worse": 0,
+      "sum": 21
+     },
+     "pair": [
+      "first_send_plus_bound_3_10",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 299.419355,
+     "comm_bytes_difference_total": 9282,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 1.0,
+       "mean": -1.9375,
+       "median": -2.0,
+       "min": -5.0,
+       "n": 16,
+       "p25": -3.0,
+       "p75": -1.0,
+       "p90": 0.0
+      },
+      "streams_equal": 3,
+      "streams_where_second_better": 1,
+      "streams_where_second_worse": 12,
+      "sum": -31
+     },
+     "pair": [
+      "periodic_20",
+      "periodic_5"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 11214.5,
+     "comm_bytes_difference_total": -134574,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 3.0,
+       "mean": 0.75,
+       "median": 0.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 0.0,
+       "p75": 1.0,
+       "p90": 3.0
+      },
+      "streams_equal": 9,
+      "streams_where_second_better": 7,
+      "streams_where_second_worse": 0,
+      "sum": 12
+     },
+     "pair": [
+      "periodic_20",
+      "send_once"
+     ],
+     "streams_paired": 16
+    },
+    {
+     "bytes_per_extra_on_time_goal": 3345.488372,
+     "comm_bytes_difference_total": -143856,
+     "group": "g8",
+     "on_time_difference_second_minus_first": {
+      "per_stream": {
+       "max": 5.0,
+       "mean": 2.6875,
+       "median": 3.0,
+       "min": 0.0,
+       "n": 16,
+       "p25": 2.0,
+       "p75": 3.0,
+       "p90": 4.0
+      },
+      "streams_equal": 1,
+      "streams_where_second_better": 15,
+      "streams_where_second_worse": 0,
+      "sum": 43
+     },
+     "pair": [
+      "periodic_5",
+      "send_once"
+     ],
+     "streams_paired": 16
+    }
+   ],
+   "pairing": "arms share the seed; the channel is deterministic, so a per-stream pair is an exact match on everything except the send decisions",
+   "search_backend": "replayed detections, isolated (gossip_interval 100000), 29 300 B budget, policy_owned_timing"
+  },
+  "P4_lossy_confirmation": {
+   "channel": {
+    "delay_ticks": 0,
+    "delivery_probability": 0.7,
+    "gossip": null,
+    "line_of_sight_refresh": null,
+    "transcript": true
+   },
+   "label": "deployed and isolated lossy channels (S3 rule confirmation)",
+   "note": "the round's own aggregate already carries per-arm discovered / on-time / expired / unresolved counts and the detection-to-assignment, -work and -completion latencies over 1 000 episodes each; re-deriving 1.65 GB of lifecycle logs would add cost and a second definition of the same quantity, so this round reads the aggregate and spot-checks the transcripts instead",
+   "pairing": "the forward-loss stream is consumed per episode, so two arms that send different things draw different channel outcomes: same scenario, not common random numbers",
+   "published_aggregate": {
+    "_episodes_expected": 3000,
+    "_incomplete_cells": {
+     "isolated-lossless": {},
+     "isolated-lossy": {},
+     "normal-lossy": {}
+    },
+    "_source_block": [
+     900000,
+     900199
+    ],
+    "isolated-lossless": {
+     "ack_backoff_16": {
+      "ack_bytes": 10364.34,
+      "belief_age_steps": 95.5484,
+      "budget_refused_sends": 0.0,
+      "budget_used_fraction": 0.4985,
+      "completion_rate_all_goals": 0.9192,
+      "detection_to_assignment": 4.0625,
+      "detection_to_completion": 26.6313,
+      "detection_to_work": 9.0762,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 5.0137,
+      "emissions": 5.86,
+      "episodes": 200,
+      "expired_per_episode": 0.34,
+      "first_emissions": 5.86,
+      "on_time_per_episode": 5.515,
+      "packets_delivered": 35.16,
+      "packets_lost": 0.0,
+      "refresh_emissions": 0.0,
+      "total_bytes": 24969.12,
+      "transmission_attempts": 35.16,
+      "unresolved_per_episode": 0.005,
+      "uplink_bytes": 14604.78
+     },
+     "ack_periodic_20": {
+      "ack_bytes": 16387.765,
+      "belief_age_steps": 39.7017,
+      "budget_refused_sends": 11.785,
+      "budget_used_fraction": 0.8259,
+      "completion_rate_all_goals": 0.9217,
+      "detection_to_assignment": 15.4831,
+      "detection_to_completion": 41.3303,
+      "detection_to_work": 21.182,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 5.7102,
+      "emissions": 9.405,
+      "episodes": 200,
+      "expired_per_episode": 0.325,
+      "first_emissions": 5.68,
+      "on_time_per_episode": 5.53,
+      "packets_delivered": 56.43,
+      "packets_lost": 0.0,
+      "refresh_emissions": 3.725,
+      "total_bytes": 40585.945,
+      "transmission_attempts": 56.43,
+      "unresolved_per_episode": 0.005,
+      "uplink_bytes": 24198.18
+     },
+     "ack_retry_2": {
+      "ack_bytes": 10364.34,
+      "belief_age_steps": 95.5484,
+      "budget_refused_sends": 0.0,
+      "budget_used_fraction": 0.4985,
+      "completion_rate_all_goals": 0.9192,
+      "detection_to_assignment": 4.0625,
+      "detection_to_completion": 26.6313,
+      "detection_to_work": 9.0762,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 5.0137,
+      "emissions": 5.86,
+      "episodes": 200,
+      "expired_per_episode": 0.34,
+      "first_emissions": 5.86,
+      "on_time_per_episode": 5.515,
+      "packets_delivered": 35.16,
+      "packets_lost": 0.0,
+      "refresh_emissions": 0.0,
+      "total_bytes": 24969.12,
+      "transmission_attempts": 35.16,
+      "unresolved_per_episode": 0.005,
+      "uplink_bytes": 14604.78
+     },
+     "ack_send_once": {
+      "ack_bytes": 10364.34,
+      "belief_age_steps": 95.5484,
+      "budget_refused_sends": 0.0,
+      "budget_used_fraction": 0.4985,
+      "completion_rate_all_goals": 0.9192,
+      "detection_to_assignment": 4.0625,
+      "detection_to_completion": 26.6313,
+      "detection_to_work": 9.0762,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 5.0137,
+      "emissions": 5.86,
+      "episodes": 200,
+      "expired_per_episode": 0.34,
+      "first_emissions": 5.86,
+      "on_time_per_episode": 5.515,
+      "packets_delivered": 35.16,
+      "packets_lost": 0.0,
+      "refresh_emissions": 0.0,
+      "total_bytes": 24969.12,
+      "transmission_attempts": 35.16,
+      "unresolved_per_episode": 0.005,
+      "uplink_bytes": 14604.78
+     },
+     "noack_send_once": {
+      "ack_bytes": 0.0,
+      "belief_age_steps": 95.5484,
+      "budget_refused_sends": 0.0,
+      "budget_used_fraction": 0.4985,
+      "completion_rate_all_goals": 0.9192,
+      "detection_to_assignment": 4.0625,
+      "detection_to_completion": 26.6313,
+      "detection_to_work": 9.0762,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 5.0137,
+      "emissions": 5.86,
+      "episodes": 200,
+      "expired_per_episode": 0.34,
+      "first_emissions": 5.86,
+      "on_time_per_episode": 5.515,
+      "packets_delivered": 35.16,
+      "packets_lost": 0.0,
+      "refresh_emissions": 0.0,
+      "total_bytes": 14604.78,
+      "transmission_attempts": 35.16,
+      "unresolved_per_episode": 0.005,
+      "uplink_bytes": 14604.78
+     }
+    },
+    "isolated-lossy": {
+     "ack_backoff_16": {
+      "ack_bytes": 12789.95,
+      "belief_age_steps": 88.6419,
+      "budget_refused_sends": 409.385,
+      "budget_used_fraction": 0.8992,
+      "completion_rate_all_goals": 0.855,
+      "detection_to_assignment": 4.9464,
+      "detection_to_completion": 32.1399,
+      "detection_to_work": 14.6511,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 9.7362,
+      "emissions": 10.275,
+      "episodes": 200,
+      "expired_per_episode": 0.72,
+      "first_emissions": 5.555,
+      "on_time_per_episode": 5.13,
+      "packets_delivered": 43.415,
+      "packets_lost": 18.235,
+      "refresh_emissions": 4.72,
+      "total_bytes": 39135.41,
+      "transmission_attempts": 61.65,
+      "unresolved_per_episode": 0.01,
+      "uplink_bytes": 26345.46
+     },
+     "ack_periodic_20": {
+      "ack_bytes": 12037.94,
+      "belief_age_steps": 50.3505,
+      "budget_refused_sends": 15.39,
+      "budget_used_fraction": 0.8653,
+      "completion_rate_all_goals": 0.885,
+      "detection_to_assignment": 16.7288,
+      "detection_to_completion": 44.8905,
+      "detection_to_work": 25.4,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 8.648,
+      "emissions": 9.88,
+      "episodes": 200,
+      "expired_per_episode": 0.54,
+      "first_emissions": 5.64,
+      "on_time_per_episode": 5.31,
+      "packets_delivered": 41.725,
+      "packets_lost": 17.555,
+      "refresh_emissions": 4.24,
+      "total_bytes": 37389.86,
+      "transmission_attempts": 59.28,
+      "unresolved_per_episode": 0.01,
+      "uplink_bytes": 25351.92
+     },
+     "ack_retry_2": {
+      "ack_bytes": 13646.69,
+      "belief_age_steps": 128.7383,
+      "budget_refused_sends": 112.145,
+      "budget_used_fraction": 0.9322,
+      "completion_rate_all_goals": 0.8858,
+      "detection_to_assignment": 3.8603,
+      "detection_to_completion": 26.8457,
+      "detection_to_work": 10.1323,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 6.284,
+      "emissions": 10.97,
+      "episodes": 200,
+      "expired_per_episode": 0.54,
+      "first_emissions": 5.86,
+      "on_time_per_episode": 5.315,
+      "packets_delivered": 46.315,
+      "packets_lost": 19.505,
+      "refresh_emissions": 5.11,
+      "total_bytes": 40958.84,
+      "transmission_attempts": 65.82,
+      "unresolved_per_episode": 0.005,
+      "uplink_bytes": 27312.15
+     },
+     "ack_send_once": {
+      "ack_bytes": 7253.335,
+      "belief_age_steps": 285.3733,
+      "budget_refused_sends": 0.0,
+      "budget_used_fraction": 0.4985,
+      "completion_rate_all_goals": 0.7467,
+      "detection_to_assignment": 4.8472,
+      "detection_to_completion": 30.1867,
+      "detection_to_work": 14.8527,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 10.3998,
+      "emissions": 5.86,
+      "episodes": 200,
+      "expired_per_episode": 1.37,
+      "first_emissions": 5.86,
+      "on_time_per_episode": 4.48,
+      "packets_delivered": 24.605,
+      "packets_lost": 10.555,
+      "refresh_emissions": 0.0,
+      "total_bytes": 21858.115,
+      "transmission_attempts": 35.16,
+      "unresolved_per_episode": 0.01,
+      "uplink_bytes": 14604.78
+     },
+     "noack_send_once": {
+      "ack_bytes": 0.0,
+      "belief_age_steps": 285.3733,
+      "budget_refused_sends": 0.0,
+      "budget_used_fraction": 0.4985,
+      "completion_rate_all_goals": 0.7467,
+      "detection_to_assignment": 4.8472,
+      "detection_to_completion": 30.1867,
+      "detection_to_work": 14.8527,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 10.3998,
+      "emissions": 5.86,
+      "episodes": 200,
+      "expired_per_episode": 1.37,
+      "first_emissions": 5.86,
+      "on_time_per_episode": 4.48,
+      "packets_delivered": 24.605,
+      "packets_lost": 10.555,
+      "refresh_emissions": 0.0,
+      "total_bytes": 14604.78,
+      "transmission_attempts": 35.16,
+      "unresolved_per_episode": 0.01,
+      "uplink_bytes": 14604.78
+     }
+    },
+    "normal-lossy": {
+     "ack_backoff_16": {
+      "ack_bytes": 11036.585,
+      "belief_age_steps": 12.7627,
+      "budget_refused_sends": 62.33,
+      "budget_used_fraction": 0.8877,
+      "completion_rate_all_goals": 0.9575,
+      "detection_to_assignment": 3.7839,
+      "detection_to_completion": 25.5191,
+      "detection_to_work": 8.2546,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 4.4707,
+      "emissions": 10.09,
+      "episodes": 200,
+      "expired_per_episode": 0.11,
+      "first_emissions": 5.61,
+      "on_time_per_episode": 5.745,
+      "packets_delivered": 42.55,
+      "packets_lost": 17.99,
+      "refresh_emissions": 4.48,
+      "total_bytes": 37045.235,
+      "transmission_attempts": 60.54,
+      "unresolved_per_episode": 0.005,
+      "uplink_bytes": 26008.65
+     },
+     "ack_periodic_20": {
+      "ack_bytes": 6037.205,
+      "belief_age_steps": 7.8181,
+      "budget_refused_sends": 0.67,
+      "budget_used_fraction": 0.5725,
+      "completion_rate_all_goals": 0.9733,
+      "detection_to_assignment": 4.298,
+      "detection_to_completion": 25.7801,
+      "detection_to_work": 8.3773,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 4.0838,
+      "emissions": 6.295,
+      "episodes": 200,
+      "expired_per_episode": 0.015,
+      "first_emissions": 4.455,
+      "on_time_per_episode": 5.84,
+      "packets_delivered": 26.475,
+      "packets_lost": 11.295,
+      "refresh_emissions": 1.84,
+      "total_bytes": 22810.475,
+      "transmission_attempts": 37.77,
+      "unresolved_per_episode": 0.005,
+      "uplink_bytes": 16773.27
+     },
+     "ack_retry_2": {
+      "ack_bytes": 13646.69,
+      "belief_age_steps": 15.3204,
+      "budget_refused_sends": 16.04,
+      "budget_used_fraction": 0.9322,
+      "completion_rate_all_goals": 0.9683,
+      "detection_to_assignment": 3.7082,
+      "detection_to_completion": 25.4913,
+      "detection_to_work": 8.2019,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 4.4937,
+      "emissions": 10.97,
+      "episodes": 200,
+      "expired_per_episode": 0.045,
+      "first_emissions": 5.86,
+      "on_time_per_episode": 5.81,
+      "packets_delivered": 46.315,
+      "packets_lost": 19.505,
+      "refresh_emissions": 5.11,
+      "total_bytes": 40958.84,
+      "transmission_attempts": 65.82,
+      "unresolved_per_episode": 0.005,
+      "uplink_bytes": 27312.15
+     },
+     "ack_send_once": {
+      "ack_bytes": 7253.335,
+      "belief_age_steps": 15.7795,
+      "budget_refused_sends": 0.0,
+      "budget_used_fraction": 0.4985,
+      "completion_rate_all_goals": 0.9683,
+      "detection_to_assignment": 3.7209,
+      "detection_to_completion": 25.5106,
+      "detection_to_work": 8.2213,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 4.5003,
+      "emissions": 5.86,
+      "episodes": 200,
+      "expired_per_episode": 0.045,
+      "first_emissions": 5.86,
+      "on_time_per_episode": 5.81,
+      "packets_delivered": 24.605,
+      "packets_lost": 10.555,
+      "refresh_emissions": 0.0,
+      "total_bytes": 21858.115,
+      "transmission_attempts": 35.16,
+      "unresolved_per_episode": 0.005,
+      "uplink_bytes": 14604.78
+     },
+     "noack_send_once": {
+      "ack_bytes": 0.0,
+      "belief_age_steps": 15.7795,
+      "budget_refused_sends": 0.0,
+      "budget_used_fraction": 0.4985,
+      "completion_rate_all_goals": 0.9683,
+      "detection_to_assignment": 3.7209,
+      "detection_to_completion": 25.5106,
+      "detection_to_work": 8.2213,
+      "discovered_per_episode": 5.86,
+      "dispatch_to_work": 4.5003,
+      "emissions": 5.86,
+      "episodes": 200,
+      "expired_per_episode": 0.045,
+      "first_emissions": 5.86,
+      "on_time_per_episode": 5.81,
+      "packets_delivered": 24.605,
+      "packets_lost": 10.555,
+      "refresh_emissions": 0.0,
+      "total_bytes": 14604.78,
+      "transmission_attempts": 35.16,
+      "unresolved_per_episode": 0.005,
+      "uplink_bytes": 14604.78
+     }
+    }
+   },
+   "search_backend": "replayed detections on 200 fresh streams; only normal-lossy keeps line-of-sight refresh and gossip on",
+   "transcript_spot_checks": {
+    "isolated-lossless": {
+     "attempts": 828,
+     "cells_checked": 20,
+     "cells_consistent": 20,
+     "lost_share_of_attempts": 0.0,
+     "packets_arrived": 828,
+     "packets_lost": 0
+    },
+    "isolated-lossy": {
+     "attempts": 1068,
+     "cells_checked": 20,
+     "cells_consistent": 20,
+     "lost_share_of_attempts": 0.257491,
+     "packets_arrived": 793,
+     "packets_lost": 275
+    },
+    "normal-lossy": {
+     "attempts": 978,
+     "cells_checked": 20,
+     "cells_consistent": 20,
+     "lost_share_of_attempts": 0.251534,
+     "packets_arrived": 732,
+     "packets_lost": 246
+    }
+   }
+  }
+ },
+ "reconciliation_summary": {
+  "agreeing": 40,
+  "checks": 40,
+  "disagreeing": 0,
+  "disagreements": []
+ },
+ "reconciliation_with_published": [
+  {
+   "agrees": true,
+   "published": 360,
+   "quantity": "P1 baseline goals_placed",
+   "recomputed": 360
+  },
+  {
+   "agrees": true,
+   "published": 356,
+   "quantity": "P1 baseline discovered",
+   "recomputed": 356
+  },
+  {
+   "agrees": true,
+   "published": 350,
+   "quantity": "P1 baseline on_time_completed",
+   "recomputed": 350
+  },
+  {
+   "agrees": true,
+   "published": 6,
+   "quantity": "P1 baseline expired",
+   "recomputed": 6
+  },
+  {
+   "agrees": true,
+   "published": 360,
+   "quantity": "P1 candidate goals_placed",
+   "recomputed": 360
+  },
+  {
+   "agrees": true,
+   "published": 356,
+   "quantity": "P1 candidate discovered",
+   "recomputed": 356
+  },
+  {
+   "agrees": true,
+   "published": 356,
+   "quantity": "P1 candidate on_time_completed",
+   "recomputed": 356
+  },
+  {
+   "agrees": true,
+   "published": 0,
+   "quantity": "P1 candidate expired",
+   "recomputed": 0
+  },
+  {
+   "agrees": true,
+   "published": 136.0,
+   "quantity": "P2 nocoord completed",
+   "recomputed": 136
+  },
+  {
+   "agrees": true,
+   "published": 35,
+   "quantity": "P2 nocoord expired",
+   "recomputed": 35
+  },
+  {
+   "agrees": true,
+   "published": 18,
+   "quantity": "P2 nocoord never_assigned",
+   "recomputed": 18
+  },
+  {
+   "agrees": true,
+   "published": 152.0,
+   "quantity": "P2 rs0.25 completed",
+   "recomputed": 152
+  },
+  {
+   "agrees": true,
+   "published": 19,
+   "quantity": "P2 rs0.25 expired",
+   "recomputed": 19
+  },
+  {
+   "agrees": true,
+   "published": 0,
+   "quantity": "P2 rs0.25 never_assigned",
+   "recomputed": 0
+  },
+  {
+   "agrees": true,
+   "published": 149.0,
+   "quantity": "P2 rs0.5 completed",
+   "recomputed": 149
+  },
+  {
+   "agrees": true,
+   "published": 22,
+   "quantity": "P2 rs0.5 expired",
+   "recomputed": 22
+  },
+  {
+   "agrees": true,
+   "published": 0,
+   "quantity": "P2 rs0.5 never_assigned",
+   "recomputed": 0
+  },
+  {
+   "agrees": true,
+   "published": "0 disagreements",
+   "quantity": "P3 all 36 layer/arm cells (placed, detected, on_time) vs the geometry audit",
+   "recomputed": "0 disagreements"
+  },
+  {
+   "agrees": true,
+   "published": 0.92708,
+   "quantity": "g6 best-rule on-time/detected (mean of per-stream rates)",
+   "recomputed": 0.92708
+  },
+  {
+   "agrees": true,
+   "published": 86,
+   "quantity": "g6 best-rule on-time total vs the geometry audit cells",
+   "recomputed": 86
+  },
+  {
+   "agrees": true,
+   "published": 0.9375,
+   "quantity": "g8 best-rule on-time/detected (mean of per-stream rates)",
+   "recomputed": 0.9375
+  },
+  {
+   "agrees": true,
+   "published": 115,
+   "quantity": "g8 best-rule on-time total vs the geometry audit cells",
+   "recomputed": 115
+  },
+  {
+   "agrees": true,
+   "published": 0.9,
+   "quantity": "g10 best-rule on-time/detected (mean of per-stream rates)",
+   "recomputed": 0.9
+  },
+  {
+   "agrees": true,
+   "published": 140,
+   "quantity": "g10 best-rule on-time total vs the geometry audit cells",
+   "recomputed": 140
+  },
+  {
+   "agrees": true,
+   "published": 0.78172,
+   "quantity": "g12 best-rule on-time/detected (mean of per-stream rates)",
+   "recomputed": 0.78172
+  },
+  {
+   "agrees": true,
+   "published": 142,
+   "quantity": "g12 best-rule on-time total vs the geometry audit cells",
+   "recomputed": 142
+  },
+  {
+   "agrees": true,
+   "published": 8,
+   "quantity": "g12 send_once goals detected but never reported",
+   "recomputed": 8
+  },
+  {
+   "agrees": true,
+   "published": 43,
+   "quantity": "g12 periodic_20 goals detected but never reported",
+   "recomputed": 43
+  },
+  {
+   "agrees": true,
+   "published": 48,
+   "quantity": "g12 bound_only_3_10 goals detected but never reported",
+   "recomputed": 48
+  },
+  {
+   "agrees": true,
+   "published": 66,
+   "quantity": "g12 periodic_5 goals detected but never reported",
+   "recomputed": 66
+  },
+  {
+   "agrees": true,
+   "published": 73,
+   "quantity": "g12 event goals detected but never reported",
+   "recomputed": 73
+  },
+  {
+   "agrees": true,
+   "published": 390,
+   "quantity": "deployed first-knowing bypassing the uplink (390 of 408)",
+   "recomputed": 390
+  },
+  {
+   "agrees": true,
+   "published": 388,
+   "quantity": "of those, via line-of-sight refresh",
+   "recomputed": 388
+  },
+  {
+   "agrees": true,
+   "published": 2,
+   "quantity": "of those, via one-hop gossip",
+   "recomputed": 2
+  },
+  {
+   "agrees": true,
+   "published": 0,
+   "quantity": "isolated path first-knowing with the uplink silenced",
+   "recomputed": 0
+  },
+  {
+   "agrees": true,
+   "published": 666,
+   "quantity": "pressure-round episode launches recorded in the ledgers",
+   "recomputed": 666
+  },
+  {
+   "agrees": true,
+   "published": 0,
+   "quantity": "sealed block 800000..800399 artefacts on disk",
+   "recomputed": 0
+  },
+  {
+   "agrees": true,
+   "published": 0.835,
+   "quantity": "isolated-lossy ack_retry_2 minus noack_send_once, on-time per episode",
+   "recomputed": 0.835
+  },
+  {
+   "agrees": true,
+   "published": 26354.1,
+   "quantity": "isolated-lossy total bytes difference of the same pair (the eighth round's canonical +26 354.1 B/ep)",
+   "recomputed": 26354.1
+  },
+  {
+   "agrees": true,
+   "published": 0.0,
+   "quantity": "normal-lossy: the same pair is indistinguishable on task effect",
+   "recomputed": 0.0
+  }
+ ],
+ "round": "comm_research_closure_20260923",
+ "setting_contrast_same_arm": {
+  "isolated_lossy_vs_lossless": {
+   "ack_backoff_16": {
+    "cost_of_channel_loss": 0.385,
+    "on_time_lossless": 5.515,
+    "on_time_lossy": 5.13
+   },
+   "ack_periodic_20": {
+    "cost_of_channel_loss": 0.22,
+    "on_time_lossless": 5.53,
+    "on_time_lossy": 5.31
+   },
+   "ack_retry_2": {
+    "cost_of_channel_loss": 0.2,
+    "on_time_lossless": 5.515,
+    "on_time_lossy": 5.315
+   },
+   "ack_send_once": {
+    "cost_of_channel_loss": 1.035,
+    "on_time_lossless": 5.515,
+    "on_time_lossy": 4.48
+   },
+   "noack_send_once": {
+    "cost_of_channel_loss": 1.035,
+    "on_time_lossless": 5.515,
+    "on_time_lossy": 4.48
+   }
+  },
+  "normal_lossy_vs_isolated_lossy": {
+   "ack_backoff_16": {
+    "channel": {
+     "emissions": 10.09,
+     "first_emissions": 5.61,
+     "packets_delivered": 42.55,
+     "packets_lost": 17.99,
+     "transmission_attempts": 60.54
+    },
+    "channel_ledger_identical": false,
+    "difference_normal_minus_isolated": {
+     "discovered_per_episode": 0.0,
+     "expired_per_episode": -0.61,
+     "on_time_per_episode": 0.615,
+     "unresolved_per_episode": -0.005
+    },
+    "isolated": {
+     "belief_age_steps": 88.6419,
+     "detection_to_assignment": 4.9464,
+     "detection_to_work": 14.6511,
+     "discovered_per_episode": 5.86,
+     "expired_per_episode": 0.72,
+     "on_time_per_episode": 5.13,
+     "total_bytes": 39135.41,
+     "unresolved_per_episode": 0.01
+    },
+    "normal": {
+     "belief_age_steps": 12.7627,
+     "detection_to_assignment": 3.7839,
+     "detection_to_work": 8.2546,
+     "discovered_per_episode": 5.86,
+     "expired_per_episode": 0.11,
+     "on_time_per_episode": 5.745,
+     "total_bytes": 37045.235,
+     "unresolved_per_episode": 0.005
+    }
+   },
+   "ack_periodic_20": {
+    "channel": {
+     "emissions": 6.295,
+     "first_emissions": 4.455,
+     "packets_delivered": 26.475,
+     "packets_lost": 11.295,
+     "transmission_attempts": 37.77
+    },
+    "channel_ledger_identical": false,
+    "difference_normal_minus_isolated": {
+     "discovered_per_episode": 0.0,
+     "expired_per_episode": -0.525,
+     "on_time_per_episode": 0.53,
+     "unresolved_per_episode": -0.005
+    },
+    "isolated": {
+     "belief_age_steps": 50.3505,
+     "detection_to_assignment": 16.7288,
+     "detection_to_work": 25.4,
+     "discovered_per_episode": 5.86,
+     "expired_per_episode": 0.54,
+     "on_time_per_episode": 5.31,
+     "total_bytes": 37389.86,
+     "unresolved_per_episode": 0.01
+    },
+    "normal": {
+     "belief_age_steps": 7.8181,
+     "detection_to_assignment": 4.298,
+     "detection_to_work": 8.3773,
+     "discovered_per_episode": 5.86,
+     "expired_per_episode": 0.015,
+     "on_time_per_episode": 5.84,
+     "total_bytes": 22810.475,
+     "unresolved_per_episode": 0.005
+    }
+   },
+   "ack_retry_2": {
+    "channel": {
+     "emissions": 10.97,
+     "first_emissions": 5.86,
+     "packets_delivered": 46.315,
+     "packets_lost": 19.505,
+     "transmission_attempts": 65.82
+    },
+    "channel_ledger_identical": true,
+    "difference_normal_minus_isolated": {
+     "discovered_per_episode": 0.0,
+     "expired_per_episode": -0.495,
+     "on_time_per_episode": 0.495,
+     "unresolved_per_episode": 0.0
+    },
+    "isolated": {
+     "belief_age_steps": 128.7383,
+     "detection_to_assignment": 3.8603,
+     "detection_to_work": 10.1323,
+     "discovered_per_episode": 5.86,
+     "expired_per_episode": 0.54,
+     "on_time_per_episode": 5.315,
+     "total_bytes": 40958.84,
+     "unresolved_per_episode": 0.005
+    },
+    "normal": {
+     "belief_age_steps": 15.3204,
+     "detection_to_assignment": 3.7082,
+     "detection_to_work": 8.2019,
+     "discovered_per_episode": 5.86,
+     "expired_per_episode": 0.045,
+     "on_time_per_episode": 5.81,
+     "total_bytes": 40958.84,
+     "unresolved_per_episode": 0.005
+    }
+   },
+   "ack_send_once": {
+    "channel": {
+     "emissions": 5.86,
+     "first_emissions": 5.86,
+     "packets_delivered": 24.605,
+     "packets_lost": 10.555,
+     "transmission_attempts": 35.16
+    },
+    "channel_ledger_identical": true,
+    "difference_normal_minus_isolated": {
+     "discovered_per_episode": 0.0,
+     "expired_per_episode": -1.325,
+     "on_time_per_episode": 1.33,
+     "unresolved_per_episode": -0.005
+    },
+    "isolated": {
+     "belief_age_steps": 285.3733,
+     "detection_to_assignment": 4.8472,
+     "detection_to_work": 14.8527,
+     "discovered_per_episode": 5.86,
+     "expired_per_episode": 1.37,
+     "on_time_per_episode": 4.48,
+     "total_bytes": 21858.115,
+     "unresolved_per_episode": 0.01
+    },
+    "normal": {
+     "belief_age_steps": 15.7795,
+     "detection_to_assignment": 3.7209,
+     "detection_to_work": 8.2213,
+     "discovered_per_episode": 5.86,
+     "expired_per_episode": 0.045,
+     "on_time_per_episode": 5.81,
+     "total_bytes": 21858.115,
+     "unresolved_per_episode": 0.005
+    }
+   },
+   "noack_send_once": {
+    "channel": {
+     "emissions": 5.86,
+     "first_emissions": 5.86,
+     "packets_delivered": 24.605,
+     "packets_lost": 10.555,
+     "transmission_attempts": 35.16
+    },
+    "channel_ledger_identical": true,
+    "difference_normal_minus_isolated": {
+     "discovered_per_episode": 0.0,
+     "expired_per_episode": -1.325,
+     "on_time_per_episode": 1.33,
+     "unresolved_per_episode": -0.005
+    },
+    "isolated": {
+     "belief_age_steps": 285.3733,
+     "detection_to_assignment": 4.8472,
+     "detection_to_work": 14.8527,
+     "discovered_per_episode": 5.86,
+     "expired_per_episode": 1.37,
+     "on_time_per_episode": 4.48,
+     "total_bytes": 14604.78,
+     "unresolved_per_episode": 0.01
+    },
+    "normal": {
+     "belief_age_steps": 15.7795,
+     "detection_to_assignment": 3.7209,
+     "detection_to_work": 8.2213,
+     "discovered_per_episode": 5.86,
+     "expired_per_episode": 0.045,
+     "on_time_per_episode": 5.81,
+     "total_bytes": 14604.78,
+     "unresolved_per_episode": 0.005
+    }
+   }
+  }
+ },
+ "stage_capability_headline": {
+  "note": "stage 3 is direct *only* in runs that turned on --comm-transcript, and even there the losing recipient of a dropped packet is not recorded; stage 1 has no record anywhere, so 'never discovered' is measured against a configured count",
+  "stages_directly_attributable_in_a_lifecycle_log": [
+   2,
+   5,
+   8
+  ],
+  "stages_only_inferrable": [
+   4,
+   6,
+   7
+  ],
+  "stages_with_no_record_at_all": [
+   1,
+   3
+  ]
+ },
+ "status": "read-only inventory of archived runs; 0 episodes, 0 new streams, 0 optimizer.step, 0 checkpoint loads, no production parameter changed"
+}

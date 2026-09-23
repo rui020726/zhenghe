@@ -1,0 +1,632 @@
+{
+ "absent_record_checks": {
+  "no_arrival_or_work_start_lifecycle_event": {
+   "claim_holds": true,
+   "found": {},
+   "scanned_files": 81
+  },
+  "no_delivery_or_belief_lifecycle_event": {
+   "claim_holds": true,
+   "found": {},
+   "scanned_files": 81
+  },
+  "no_placed_goal_record": {
+   "claim_holds": true,
+   "found": {},
+   "scanned_files": 81
+  }
+ },
+ "env_tripwire": {
+  "blocked_call_count": 0,
+  "blocked_calls": [],
+  "entry_points_wrapped": [
+   "INSTALLED pressure_env.run_episode",
+   "INSTALLED pressure_env.run_arm",
+   "INSTALLED pressure_env.agreement_with_archived_rows",
+   "INSTALLED record_layer.record",
+   "INSTALLED pressure_matrix.run"
+  ]
+ },
+ "headline": {
+  "note": "stage 3 is direct *only* in runs that turned on --comm-transcript, and even there the losing recipient of a dropped packet is not recorded; stage 1 has no record anywhere, so 'never discovered' is measured against a configured count",
+  "stages_directly_attributable_in_a_lifecycle_log": [
+   2,
+   5,
+   8
+  ],
+  "stages_only_inferrable": [
+   4,
+   6,
+   7
+  ],
+  "stages_with_no_record_at_all": [
+   1,
+   3
+  ]
+ },
+ "lifecycle_event_type_set": [
+  "assignment",
+  "assignment_rejected",
+  "detection",
+  "final",
+  "progress",
+  "run_config"
+ ],
+ "probes": {
+  "deployed_live_search": {
+   "configuration": "deployed (gossip_interval default 2), live PILOC search, 60 seeds x 2 arms",
+   "files": "runs\\coalition_validation_20260918\\systemloop",
+   "probes": {
+    "baseline_rp_s31000.jsonl": {
+     "assignment_target_linkage": {
+      "goal_level": 21,
+      "run_level": 1175
+     },
+     "distinct_target_ids": 7,
+     "event_types": {
+      "assignment": 1196,
+      "detection": 6,
+      "final": 7,
+      "progress": 89,
+      "run_config": 1
+     },
+     "final_deadline_fields": {
+      "deadline": 6,
+      "discovered_at": 6,
+      "updated_at": 6
+     },
+     "final_statuses": {
+      "completed": 6
+     },
+     "progress_statuses": {
+      "assigned": 3,
+      "completed": 6,
+      "detected": 6,
+      "en_route": 3,
+      "in_progress": 71
+     },
+     "records": 1299
+    },
+    "candidate_rp_s31000.jsonl": {
+     "assignment_target_linkage": {
+      "goal_level": 26,
+      "run_level": 1188
+     },
+     "distinct_target_ids": 7,
+     "event_types": {
+      "assignment": 1214,
+      "detection": 6,
+      "final": 7,
+      "progress": 90,
+      "run_config": 1
+     },
+     "final_deadline_fields": {
+      "deadline": 6,
+      "discovered_at": 6,
+      "updated_at": 6
+     },
+     "final_statuses": {
+      "completed": 6
+     },
+     "progress_statuses": {
+      "assigned": 4,
+      "completed": 6,
+      "detected": 6,
+      "en_route": 3,
+      "in_progress": 71
+     },
+     "records": 1318
+    }
+   }
+  },
+  "deployed_lossy_comm": {
+   "configuration": "deployed line-of-sight + gossip, delivery probability 0.7, 200 fresh seeds",
+   "files": "runs\\comm_rule_confirm_20260921\\evaluation\\normal-lossy",
+   "probes": {
+    "ct_normal-lossy_ack_retry_2_s900000.jsonl": {
+     "deliver_accepted": {
+      "True": 48
+     },
+     "deliver_reasons": {
+      "accepted": 48
+     },
+     "kinds": {
+      "ack": 48,
+      "deliver": 48,
+      "event": 6,
+      "refused": 20,
+      "send": 11
+     },
+     "packet_loss": {
+      "attempts_billed": 66,
+      "packets_arrived": 48,
+      "packets_lost": 18,
+      "sends_where_attempts_ne_arrived_plus_lost": 0,
+      "sends_with_lost_packets": 9
+     },
+     "per_recipient_loss_field_present": 0,
+     "records": 133,
+     "refusal_reasons": {
+      "budget_exhausted": 20
+     },
+     "send_first_flag": {
+      "False": 5,
+      "True": 6
+     }
+    },
+    "ct_normal-lossy_noack_send_once_s900000.jsonl": {
+     "deliver_accepted": {
+      "True": 29
+     },
+     "deliver_reasons": {
+      "accepted": 29
+     },
+     "kinds": {
+      "deliver": 29,
+      "event": 6,
+      "send": 6
+     },
+     "packet_loss": {
+      "attempts_billed": 36,
+      "packets_arrived": 29,
+      "packets_lost": 7,
+      "sends_where_attempts_ne_arrived_plus_lost": 0,
+      "sends_with_lost_packets": 4
+     },
+     "per_recipient_loss_field_present": 0,
+     "records": 41,
+     "refusal_reasons": {},
+     "send_first_flag": {
+      "True": 6
+     }
+    },
+    "rp_normal-lossy_noack_send_once_s900000.jsonl": {
+     "assignment_target_linkage": {
+      "goal_level": 28,
+      "run_level": 1175
+     },
+     "distinct_target_ids": 7,
+     "event_types": {
+      "assignment": 1203,
+      "detection": 6,
+      "final": 7,
+      "progress": 113,
+      "run_config": 1
+     },
+     "final_deadline_fields": {
+      "deadline": 6,
+      "discovered_at": 6,
+      "updated_at": 6
+     },
+     "final_statuses": {
+      "completed": 6
+     },
+     "progress_statuses": {
+      "assigned": 10,
+      "completed": 6,
+      "detected": 6,
+      "en_route": 1,
+      "in_progress": 90
+     },
+     "records": 1330
+    }
+   }
+  },
+  "deployed_replayed_search": {
+   "configuration": "deployed, detections replayed from a frozen stream, delivery 1.0 / delay 0",
+   "files": "runs\\joint_eval_20260916",
+   "probes": {
+    "rp_nocoord_s10000.jsonl": {
+     "assignment_target_linkage": {
+      "goal_level": 36,
+      "run_level": 1090
+     },
+     "distinct_target_ids": 7,
+     "event_types": {
+      "assignment": 1126,
+      "detection": 6,
+      "final": 7,
+      "progress": 152,
+      "run_config": 1
+     },
+     "final_deadline_fields": {
+      "deadline": 6,
+      "discovered_at": 6,
+      "updated_at": 6
+     },
+     "final_statuses": {
+      "completed": 5,
+      "expired": 1
+     },
+     "progress_statuses": {
+      "assigned": 9,
+      "completed": 5,
+      "detected": 6,
+      "en_route": 3,
+      "expired": 1,
+      "in_progress": 128
+     },
+     "records": 1292
+    },
+    "rp_rs0.25_s10000.jsonl": {
+     "assignment_target_linkage": {
+      "goal_level": 33,
+      "run_level": 1064
+     },
+     "distinct_target_ids": 7,
+     "event_types": {
+      "assignment": 1097,
+      "detection": 6,
+      "final": 7,
+      "progress": 157,
+      "run_config": 1
+     },
+     "final_deadline_fields": {
+      "deadline": 6,
+      "discovered_at": 6,
+      "updated_at": 6
+     },
+     "final_statuses": {
+      "completed": 5,
+      "expired": 1
+     },
+     "progress_statuses": {
+      "assigned": 15,
+      "completed": 5,
+      "detected": 6,
+      "en_route": 2,
+      "expired": 1,
+      "in_progress": 128
+     },
+     "records": 1268
+    }
+   }
+  },
+  "isolated_budgeted_comm": {
+   "configuration": "isolated (gossip_interval 100000), 29300 B budget, delivery 1.0 / delay 0",
+   "files": "runs\\comm_task_pressure_learnability_20260922\\runs\\g12",
+   "probes": {
+    "ct_send_once_g12_s1000300.jsonl": {
+     "deliver_accepted": {
+      "True": 66
+     },
+     "deliver_reasons": {
+      "accepted": 66
+     },
+     "kinds": {
+      "deliver": 66,
+      "event": 12,
+      "refused": 643,
+      "send": 11
+     },
+     "packet_loss": {
+      "attempts_billed": 66,
+      "packets_arrived": 66,
+      "packets_lost": 0,
+      "sends_where_attempts_ne_arrived_plus_lost": 0,
+      "sends_with_lost_packets": 0
+     },
+     "per_recipient_loss_field_present": 0,
+     "records": 732,
+     "refusal_reasons": {
+      "budget_exhausted": 643
+     },
+     "send_first_flag": {
+      "True": 11
+     }
+    },
+    "rp_send_once_g12_s1000300.jsonl": {
+     "assignment_target_linkage": {
+      "goal_level": 134,
+      "run_level": 842
+     },
+     "distinct_target_ids": 13,
+     "event_types": {
+      "assignment": 976,
+      "assignment_rejected": 21,
+      "detection": 12,
+      "final": 13,
+      "progress": 267,
+      "run_config": 1
+     },
+     "final_deadline_fields": {
+      "deadline": 12,
+      "discovered_at": 12,
+      "updated_at": 12
+     },
+     "final_statuses": {
+      "completed": 4,
+      "detected": 1,
+      "expired": 7
+     },
+     "progress_statuses": {
+      "assigned": 44,
+      "completed": 4,
+      "detected": 21,
+      "en_route": 8,
+      "expired": 7,
+      "in_progress": 183
+     },
+     "records": 1290
+    },
+    "tr_send_once_g12_s1000300.jsonl": {
+     "decision_rows": 976,
+     "kinds": {
+      "decision": 976,
+      "trace_config": 1,
+      "trace_final": 1
+     },
+     "records": 978,
+     "rows_with_someone_on_site": 32
+    }
+   }
+  }
+ },
+ "producer_anchors": {
+  "allocated": [
+   {
+    "all_hits": [
+     257
+    ],
+    "file": "integrated_sar/lifecycle_log.py",
+    "label": "assignment_record",
+    "line": 257
+   },
+   {
+    "all_hits": [
+     1334
+    ],
+    "file": "integrated_sar/adapters/task03.py",
+    "label": "en_route_status",
+    "line": 1334
+   }
+  ],
+  "arrived": [
+   {
+    "all_hits": [
+     1328
+    ],
+    "file": "integrated_sar/adapters/task03.py",
+    "label": "assigned_status",
+    "line": 1328
+   },
+   {
+    "all_hits": [
+     842,
+     914,
+     915
+    ],
+    "file": "integrated_sar/allocation_trace.py",
+    "label": "on_site_in_trace",
+    "line": 842
+   }
+  ],
+  "message_delivered": [
+   {
+    "all_hits": [
+     696,
+     885
+    ],
+    "file": "integrated_sar/comm.py",
+    "label": "send_record",
+    "line": 696
+   },
+   {
+    "all_hits": [
+     486
+    ],
+    "file": "integrated_sar/comm.py",
+    "label": "deliver_record",
+    "line": 486
+   },
+   {
+    "all_hits": [
+     840
+    ],
+    "file": "integrated_sar/comm.py",
+    "label": "charge_is_attempt_based",
+    "line": 840
+   }
+  ],
+  "outcome": [
+   {
+    "all_hits": [
+     1134
+    ],
+    "file": "task_allocation/old_task_env.py",
+    "label": "deadline_test",
+    "line": 1134
+   },
+   {
+    "all_hits": [
+     58
+    ],
+    "file": "task_allocation/old_task_env.py",
+    "label": "expiry_is_a_flag_not_a_stop",
+    "line": 58
+   },
+   {
+    "all_hits": [
+     1313
+    ],
+    "file": "integrated_sar/adapters/task03.py",
+    "label": "status_mapping",
+    "line": 1313
+   },
+   {
+    "all_hits": [
+     134
+    ],
+    "file": "integrated_sar/lifecycle_metrics.py",
+    "label": "on_time_computed_offline",
+    "line": 134
+   },
+   {
+    "all_hits": [
+     318
+    ],
+    "file": "integrated_sar/lifecycle_log.py",
+    "label": "final_record",
+    "line": 318
+   }
+  ],
+  "placed": [
+   {
+    "all_hits": [
+     70
+    ],
+    "file": "integrated_sar/joint_driver.py",
+    "label": "scenario_goal_count",
+    "line": 70
+   }
+  ],
+  "robot_knew": [
+   {
+    "all_hits": [
+     381
+    ],
+    "file": "integrated_sar/adapters/task03.py",
+    "label": "belief_write_gate",
+    "line": 381
+   },
+   {
+    "all_hits": [
+     320
+    ],
+    "file": "task_allocation/old_task_env.py",
+    "label": "known_tasks_update",
+    "line": 320
+   }
+  ],
+  "search_discovered": [
+   {
+    "all_hits": [
+     165
+    ],
+    "file": "integrated_sar/lifecycle_log.py",
+    "label": "detection_record",
+    "line": 165
+   },
+   {
+    "all_hits": [
+     81
+    ],
+    "file": "integrated_sar/task_registry.py",
+    "label": "registry_accepts_detection",
+    "line": 81
+   }
+  ],
+  "started_work": [
+   {
+    "all_hits": [
+     1326
+    ],
+    "file": "integrated_sar/adapters/task03.py",
+    "label": "in_progress_status",
+    "line": 1326
+   },
+   {
+    "all_hits": [
+     186,
+     360,
+     565,
+     1153,
+     1155,
+     1186
+    ],
+    "file": "task_allocation/old_task_env.py",
+    "label": "stage_advance",
+    "line": 186
+   }
+  ]
+ },
+ "round": "comm_research_closure_20260923",
+ "stages": [
+  {
+   "evidence_kind": "derived_from_config",
+   "fields": [
+    "run_config detail.configuration.num_goals (per episode)"
+   ],
+   "key": "placed",
+   "stage": 1,
+   "what": "a goal exists in the scenario, whether or not anything ever finds it",
+   "why_not_direct": "no record is emitted for a goal that nothing detects, so the denominator of 'never discovered' is only the configured count, and duplicate/merged detections would make placed != distinct target ids without any log saying so"
+  },
+  {
+   "evidence_kind": "direct",
+   "fields": [
+    "detection: timestamp, discovered_by, source_event_id, detail.grid_position",
+    "detail.confidence, detail.total_stages, detail.deadline_offset"
+   ],
+   "key": "search_discovered",
+   "stage": 2,
+   "what": "a search robot detected the goal and the registry accepted it",
+   "why_not_direct": null
+  },
+  {
+   "evidence_kind": "direct_only_where_transcript_enabled",
+   "fields": [
+    "send: step, target, first, cost_bytes, attempts (billed), packets (arrived), packets_lost, subscribers (a COUNT)",
+    "deliver: step, target, agent, revision, accepted, reason",
+    "refused: step, target, reason, cost_bytes, remaining_bytes"
+   ],
+   "key": "message_delivered",
+   "stage": 3,
+   "what": "a message carrying the goal was transmitted and reached a receiver",
+   "why_not_direct": "per send the ledger closes as attempts == packets + packets_lost (checked in the probe), but neither side names *which* subscriber lost the packet, so 'this robot never received it' cannot be read back; and the deployed-path runs before comm_rule_confirm carry no transcript at all"
+  },
+  {
+   "evidence_kind": "inferred",
+   "fields": [
+    "deliver accepted=true is the only per-(goal, robot) knowledge record"
+   ],
+   "key": "robot_knew",
+   "stage": 4,
+   "what": "this specific rescue robot's belief now contains the goal",
+   "why_not_direct": "belief updates are never logged as their own event, and they also happen through three non-message channels (line-of-sight refresh, one-hop gossip, on-arrival verify), so 'knew' cannot be separated from 'was told' without the probe counts"
+  },
+  {
+   "evidence_kind": "direct_with_caveat",
+   "fields": [
+    "assignment: timestamp, assigned_agents, detail.command_id/reason/valid_until",
+    "progress status 'en_route'"
+   ],
+   "key": "allocated",
+   "stage": 5,
+   "what": "an assignment command naming this goal was issued and accepted",
+   "why_not_direct": "assignment records are written with target_id '__run__' whenever the command carries no target id, so goal linkage is per-run, not guaranteed; the practical chain key is the first 'en_route' progress record"
+  },
+  {
+   "evidence_kind": "proxy",
+   "fields": [
+    "progress status 'assigned' (members non-empty, work not yet feasible)",
+    "decision trace truth.targets[*].on_site"
+   ],
+   "key": "arrived",
+   "stage": 6,
+   "what": "an assigned robot is physically at the goal",
+   "why_not_direct": "progress records are emitted only on a fingerprint change, so a robot that arrives and starts working between two polls produces no 'assigned' row at all; arrival time is therefore an upper bound, not a measurement"
+  },
+  {
+   "evidence_kind": "proxy",
+   "fields": [
+    "progress status 'in_progress', stage_index, progress, remaining_requirements"
+   ],
+   "key": "started_work",
+   "stage": 7,
+   "what": "the stage requirement is covered and the clock is running",
+   "why_not_direct": "the same fingerprint rule applies; additionally a coverage break resets time_left to the full stage duration, so 'working' is not a monotone quantity and elapsed work cannot be read off the progress fraction"
+  },
+  {
+   "evidence_kind": "direct",
+   "fields": [
+    "final: status, detail.deadline, detail.discovered_at, detail.updated_at",
+    "progress status 'completed' / 'expired'"
+   ],
+   "key": "outcome",
+   "stage": 8,
+   "what": "completed on time, completed late, expired, or unresolved",
+   "why_not_direct": null
+  }
+ ]
+}
