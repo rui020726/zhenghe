@@ -1,6 +1,92 @@
 # 项目状态
 
-## 2026-09-23：接收者与真实拓扑可行性审计完成——fan-out 是标量，该轴关闭（0 训练、0 新 episode）
+## 2026-09-23：通信研究收束 + 完整系统瓶颈盘点已交付（第十五轮，0 训练、0 新 episode）
+
+产物 [runs/comm_research_closure_20260923/COMMUNICATION_RESEARCH_CLOSURE.md](runs/comm_research_closure_20260923/COMMUNICATION_RESEARCH_CLOSURE.md)、
+[JOINT_SYSTEM_BOTTLENECK_AUDIT.md](runs/comm_research_closure_20260923/JOINT_SYSTEM_BOTTLENECK_AUDIT.md) /
+`.json`、未执行的 [MINIMAL_PAIRED_VALIDATION_PROTOCOL.md](runs/comm_research_closure_20260923/MINIMAL_PAIRED_VALIDATION_PROTOCOL.md)。
+分支 `analysis/comm-research-closure`（起点 `analysis/comm-recipient-topology-feasibility@9db4cdf073d2…`，
+建分支前用 `git ls-remote` 取回远端完整 SHA 与本地 HEAD 逐字符核对），总纲 v3.8。
+
+**0 新 episode、0 新流、0 `optimizer.step`、0 checkpoint 加载、0 启动；未修改任何 production code、
+reward、通信拓扑或模型权重。** 机械核实（`CLOSURE_VERIFICATION.json`，`passed=true`）：
+41 个只读输入 SHA256 不变、8 个日志族文件数与总字节数不变、生产目录与起点 `git diff` 为空、
+本轮改动只落在四份治理文档上（`git diff --name-only` 机械核对）、
+账本 `starts` 恒 666、封存块 `800000..800399` 盘上 artefact 仍为 0、五个环境入口 tripwire 日志为空。
+测试：本轮 `test_closure_harness` **21 项 0 episode OK**、项目套件 **690 项 OK (skipped=2)**、
+`python -m integrated_sar` **final_status=completed**、上一轮 `test_topology_harness` 13 项仍绿。
+
+### 一、收束件：四条结论必须分开引用
+
+| # | 结论 | 状态 | 决定性数字与出处 |
+|---|---|---|---|
+| 1 | 规则与协议层收益 | **成立** | `send_once` 14 916 B / 5.7917 个/ep 支配 `immediate` 26 897 B / 5.2917（后者 49.9 % 字节是上界代发）；`hold_to_bound` 单独 −37 967 B；`ack_retry_2` 隔离有损 +0.835 [+0.685,+0.995] 但 total +26 354.1 B、正常路径 0.000 ⇒ 不提部署 |
+| 2 | 学习型发送控制器 | **附加价值未建立**（四批独立训练、门槛全 0/3） | 第三/四/五/十轮；每批**全部**运行显著优于自身初值（+0.542～+2.333、+1.04～+4.21、+2.125/+0.833/+2.708）；两条臂与规则**逐字相同**且自主字节 0 ⇒ 不是 ε-greedy 假象；第十轮 actionable 20.1–96.0 个/ep 否证"样本太少" |
+| 3 | 时机轴 `no_temporal_allocation_signal` | **机制层面关闭** | 4 852 个多候选步里 63.1 % 全拒付、仅 4.1 % 严格子集；窗口 144 B = 单包 5.8 %、15/15 一步跨过；采样严格子集步上首报候选 min/median/max 全为 0；576 格无一用到 100 % |
+| 4 | 拓扑轴 `global_fanout_is_only_a_scalar` | **契约层面关闭** | 8 904 条发射 subscriber distinct = {6}；缩放与预算档等价（1 875 次比较 0 不一致）；coalition 规则下 1 107/1 107 首报收件人为空；`SendObservation.subscribers` 只有一个全局标量 |
+
+* 四条都**只**限定在当前任务分布 / 当前广播协议 / 当前硬预算 / 当前观测·动作·奖励之下，
+  **都不构成**"强化学习普遍无效"、"不存在更优策略"或"规则全局最优"。
+* 强规则基线按四层重算并与归档**逐位一致**（g6 `periodic_20` 5.375 @25 416.0 B、
+  g8/g10/g12 `send_once` 7.1875 / 8.750 / 8.875 个/ep；`best_on_time_rate_of_detected`
+  0.927 08 / 0.937 5 / 0.9 / 0.781 72 = **逐流比率的均值**，不是总和之比）。
+* **生产默认值一条都不改**（`comm_policy=immediate`、`comm_budget_bytes=None`、
+  `legacy_shared_bound`、`comm_ack=False`、`subscribers=all`、`comm_range=0.3`、`gossip_interval=2`，
+  `joint_driver.py:126-170`）：基线全部来自隔离实验，而隔离与部署的差是**环境自带传感旁路**，
+  不是策略变好；把 `send_once` 设默认会在部署路径上引入"不再刷新"这一行为改变，
+  而该改变在部署配置下的后果**从未被测量过**。
+* 重开条件写成 N1–N6 六条（每条带"当前状态"与"最低验收"），并明确列出**已被实测排除**的
+  七种"重开理由"（加步数、再减预算、扩动作空间、ε-greedy 掩盖、样本稀缺、欠训练、把 3/10 还给策略）。
+
+### 二、瓶颈盘点：八阶段第一次被同一个 target_id 串起来
+
+四条归档路径**分开报告、绝不合并**：P1 部署+真实 PILOC 搜索（120 集）、P2 部署+回放检测（90 集）、
+P3 隔离+硬额度（576 格）、P4 有损确认块（3 设置 × 5 臂 × 200 流，读归档聚合 + 60 格转录抽查）。
+**40 项与已发布结果的核对全部一致**（`reconciliation_summary`）；核对过程中抓到并修掉的是
+**本轮自己的两处错**（把 16 条流的比率之和当成比率、把归档的 +26 354.1 抄成 26 354.0），
+而不是去改期望值。
+
+1. **八阶段里只有 3 个是日志直接可归因的**（发现、分配、结局）；获知/到场/开工是代理量；
+   **放置与"逐接收者送达"根本没有记录**（生命周期 `event_type` 全集恰为 6 种，
+   脚本用"字面量不存在"反过来证明这条断言）。代理量的代价看得见：
+   g12 `send_once` 的 `dispatched→working` 均值是 **−18.0 步**（n=46），
+   因为"指纹不变就不写行"，`en_route` 可能晚于 `in_progress` 被观测到。
+2. **部署路径**：可归因损失 = 搜索未发现（P1 4/360 = 1.1 %、P2 9/180 = 5 %）+ 分配/执行
+   （P2 无协调器 35/171，其中"从未派出"18 与归档 `never_assigned=18` **逐类相等**；
+   有协调器降到 19/171）。**信息侧那一桶写成 `not attributable`，不是 0。**
+   P1 candidate 臂（356/356 按时）唯一的损失就是搜索的 4 个 ⇒ 独立复现"瓶颈是搜索覆盖率"。
+3. **隔离路径**：信息侧才是主损失（`always_hold` 555/555 从未送达、`event` 216、`periodic_20` 95、
+   `send_once` 8，与第十三轮独立登记的数字一致）；但 `send_once` 另有 **68 个目标是
+   "只被告知一次然后没做完"**（这些目标刷新数恰好为 0）⇒ 额度的伤害主要通过**信息陈旧**而非沉默起作用；
+   而在同一额度里改买刷新（`periodic_20`、`event`）实测**更差**（403、311 < 478）。
+   天花板配对差（精确配对）：`event_unbudgeted − send_once` = −12/−7/−12/−40，
+   g12 合 **197 517 B/ep 换 2.5 个/ep = 79 007 B/个**，是第七轮 ACK 路线 break-even 的 2.5 倍；
+   **混淆项已标明**（天花板臂同时改了额度与刷新策略）。
+4. **同一批丢包的价格差 30 倍**（本轮新量，此前无人发表这个配对）：三条臂在 `normal-lossy` 与
+   `isolated-lossy` 之间**前向信道账本逐字段相同**（尝试 35.16 / 到达 24.605 / 丢失 10.555 /
+   发射与首报数全等）⇒ 差只可能来自自带传感：on-time **5.810 0 vs 4.480 0** 个/ep、
+   过期 **0.045 vs 1.370**。与从 48 行 `TRAFFIC_PROBE.json` 重算的归属一致：
+   部署静默时 **390/408 = 95.6 %** 首次知晓仍发生（视距 388 + gossip 2），隔离静默时 **0 次**、
+   belief 写 0 次。配对分级逐条写明：**跨路径的比一律不算配对**。
+5. **576 格里"检测→首次发射"与"首次发射→首次被知晓"全是 0 步**（无损、零延迟）：
+   隔离设置下"何时说"的全部自由度就是"说不说"——这是 `no_temporal_allocation_signal` 的机制面重述。
+
+### 三、因此本轮交付的判定
+
+* 通信研究线**当前不需要新的训练实验**，需要的是一次**日志能力变更**（B0：per-recipient 送达结局、
+  per-(目标,机器人) 知晓时刻与 belief age、真实到场步、放置记录）+ 一次
+  **D1 最小配对验证**（296 次启动上限，四臂 × 60 seed；停 1 < 5 % ⇒ 关闭该路线、
+  停 2 ≥ 20 % 且 ≥ 15/60 流 ⇒ 才允许一次无模型 calibration、区间内不选边）。
+  协议已写、**本轮不执行**，且 B0 属生产改动、需单独授权。
+* **不做的六件事**：未训练、未改 reward/预算/ACK/丢包/拓扑/生产默认值/观测维度、
+  未运行任何 episode 或新流、未触碰 `800000..800399`（盘上 artefact 仍 0）、
+  未修改任何一轮的原判据与结果文件（写盘沙箱 + 一条测试证明越界即拒）、
+  未把"当前量不出来"写成"信息侧没有损失"。
+* **下一步由使用者定（本轮跑完即停）**：(a) 批准 B0 + D1；(b) 按瓶颈盘点转系统集成/任务分配
+  （本轮给出该方向可直接使用的三条损失归因）；(c) 论文负结果整理
+  （两条命名结论 + "同一丢包在两种架构下价格差 30 倍"的配对，都是可引用件）。
+
+## 2026-09-23（状态已由上一节接替）：接收者与真实拓扑可行性审计完成——fan-out 是标量，该轴关闭（0 训练、0 新 episode）
 
 产物 [runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_RESULTS.md](runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_RESULTS.md)、
 判定 [COMM_RECIPIENT_TOPOLOGY_DECISION.md](runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_DECISION.md)、
