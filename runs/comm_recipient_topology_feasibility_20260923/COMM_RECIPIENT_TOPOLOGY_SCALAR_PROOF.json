@@ -1,0 +1,115 @@
+{
+ "claim_1_scale_invariance_of_the_window": {
+  "per_scale": {
+   "x0.166667": {
+    "mean_packet_bytes": 426.4335,
+    "mean_within_step_window_bytes": 81.2987,
+    "payability_classes": {
+     "all_payable_within_credit": 193,
+     "joint_over_credit": 182
+    },
+    "window_as_fraction_of_one_packet": 0.190648
+   },
+   "x0.333333": {
+    "mean_packet_bytes": 852.867,
+    "mean_within_step_window_bytes": 162.5973,
+    "payability_classes": {
+     "all_payable_within_credit": 40,
+     "joint_over_credit": 335
+    },
+    "window_as_fraction_of_one_packet": 0.190648
+   },
+   "x1": {
+    "mean_packet_bytes": 2558.6011,
+    "mean_within_step_window_bytes": 487.792,
+    "payability_classes": {
+     "strict_subset_payable": 375
+    },
+    "window_as_fraction_of_one_packet": 0.190648
+   },
+   "x2": {
+    "mean_packet_bytes": 5117.2021,
+    "mean_within_step_window_bytes": 975.584,
+    "payability_classes": {
+     "none_payable": 375
+    },
+    "window_as_fraction_of_one_packet": 0.190648
+   },
+   "x3": {
+    "mean_packet_bytes": 7675.8032,
+    "mean_within_step_window_bytes": 1463.376,
+    "payability_classes": {
+     "none_payable": 375
+    },
+    "window_as_fraction_of_one_packet": 0.190648
+   },
+   "x6": {
+    "mean_packet_bytes": 15351.6063,
+    "mean_within_step_window_bytes": 2926.752,
+    "payability_classes": {
+     "none_payable": 375
+    },
+    "window_as_fraction_of_one_packet": 0.190648
+   }
+  },
+  "ratio_at_every_scale": {
+   "x0.166667": 0.190648,
+   "x0.333333": 0.190648,
+   "x1": 0.190648,
+   "x2": 0.190648,
+   "x3": 0.190648,
+   "x6": 0.190648
+  },
+  "ratio_is_constant_across_scales": true,
+  "statement": "window/packet ratio carries no fan-out term, so no global fan-out can widen the window relative to the jump that has to land in it"
+ },
+ "claim_2_raising_fanout_equals_lowering_the_budget": {
+  "classification_mismatches": 0,
+  "holds": true,
+  "mismatch_sample": [],
+  "scales_checked": [
+   0.16666666666666666,
+   0.3333333333333333,
+   2.0,
+   3.0,
+   6.0
+  ],
+  "statement": "fan-out s*k at budget B and fan-out k at budget B/s ask the same inequality at every step, so 'add subscribers' is the budget-tier sweep this project already ran, not a new axis",
+  "steps_checked": 375
+ },
+ "environment_tripwire_calls": [],
+ "mean_packet_bytes_unscaled": {
+  "max": 2712.0,
+  "mean": 2558.601051,
+  "median": 2565.0,
+  "min": 2380.8,
+  "n": 375,
+  "p25": 2485.2,
+  "p75": 2627.142857,
+  "p95": 2692.65
+ },
+ "observed_fanout_values_in_stored_data": [
+  6
+ ],
+ "per_step_payload_window_bytes": {
+  "max": 118.0,
+  "mean": 81.298667,
+  "median": 85.0,
+  "min": 34.0,
+  "n": 375,
+  "p25": 66.0,
+  "p75": 94.0,
+  "p95": 106.0
+ },
+ "per_step_window_bytes_unscaled": {
+  "max": 708.0,
+  "mean": 487.792,
+  "median": 510.0,
+  "min": 204.0,
+  "n": 375,
+  "p25": 396.0,
+  "p75": 564.0,
+  "p95": 636.0
+ },
+ "samples": 375
+}

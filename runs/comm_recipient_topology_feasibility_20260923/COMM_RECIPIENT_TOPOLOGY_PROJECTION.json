@@ -1,0 +1,354 @@
+{
+ "environment_tripwire_calls": [],
+ "first_report_choice_g12": {
+  "broadcast": {
+   "median_price_spread_between_two_first_reports": 6.0,
+   "rule": "broadcast",
+   "steps_where_a_first_report_would_be_priced_to_zero": 0,
+   "streams_where_two_first_reports_ever_cost_different_amounts": 16,
+   "streams_with_any_pair_of_first_reports": 16,
+   "total_pairs_of_first_reports_in_one_step": 174
+  },
+  "coalition": {
+   "median_price_spread_between_two_first_reports": 0.0,
+   "rule": "coalition",
+   "steps_where_a_first_report_would_be_priced_to_zero": 174,
+   "streams_where_two_first_reports_ever_cost_different_amounts": 0,
+   "streams_with_any_pair_of_first_reports": 16,
+   "total_pairs_of_first_reports_in_one_step": 174
+  }
+ },
+ "input": {
+  "g12_send_records": 2617,
+  "member_ids_outside_the_subscriber_space": 0,
+  "message_classes": {
+   "first_report": 3493,
+   "refresh": 5411
+  },
+  "send_records": 8904
+ },
+ "label": "offline_recipient_cost_projection",
+ "not_a_replay": "no episode was run; no trace was modified; no outcome is claimed",
+ "projection_all_layers": {
+  "broadcast": {
+   "bytes_that_would_never_be_sent_under_this_rule": 0,
+   "fanout": {
+    "max": 6.0,
+    "mean": 6.0,
+    "median": 6.0,
+    "min": 6.0,
+    "n": 8904,
+    "p25": 6.0,
+    "p75": 6.0,
+    "p95": 6.0
+   },
+   "fanout_by_message_class": {
+    "first_report": {
+     "distinct": [
+      6
+     ],
+     "max": 6.0,
+     "median": 6.0,
+     "min": 6.0,
+     "records": 3493
+    },
+    "refresh": {
+     "distinct": [
+      6
+     ],
+     "max": 6.0,
+     "median": 6.0,
+     "min": 6.0,
+     "records": 5411
+    }
+   },
+   "fanout_distinct_values": [
+    6
+   ],
+   "projected_charge_bytes": {
+    "max": 2952,
+    "mean": 2591.571429,
+    "median": 2622.0,
+    "min": 2178,
+    "n": 8904,
+    "p25": 2436.0,
+    "p75": 2778.0,
+    "p95": 2874.0
+   },
+   "share_of_messages_with_empty_recipient_set": 0.0
+  },
+  "broadcast_within_step": {
+   "absolute_spread_bytes": {
+    "max": 684.0,
+    "mean": 205.329185,
+    "median": 186.0,
+    "min": 0.0,
+    "n": 1607,
+    "p25": 18.0,
+    "p75": 372.0,
+    "p95": 522.0
+   },
+   "relative_spread_of_prices_within_a_step": {
+    "max": 0.2803565939133108,
+    "mean": 0.079741,
+    "median": 0.06993,
+    "min": 0.0,
+    "n": 1607,
+    "p25": 0.006789,
+    "p75": 0.144699,
+    "p95": 0.204078
+   },
+   "steps_with_two_or_more_candidates": 1607
+  },
+  "coalition": {
+   "bytes_that_would_never_be_sent_under_this_rule": 1513398,
+   "fanout": {
+    "max": 6.0,
+    "mean": 1.488881,
+    "median": 1.0,
+    "min": 0.0,
+    "n": 8904,
+    "p25": 0.0,
+    "p75": 2.0,
+    "p95": 6.0
+   },
+   "fanout_by_message_class": {
+    "first_report": {
+     "distinct": [
+      0
+     ],
+     "max": 0.0,
+     "median": 0.0,
+     "min": 0.0,
+     "records": 3493
+    },
+    "refresh": {
+     "distinct": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "max": 6.0,
+     "median": 2.0,
+     "min": 0.0,
+     "records": 5411
+    }
+   },
+   "fanout_distinct_values": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "projected_charge_bytes": {
+    "max": 2952,
+    "mean": 672.896788,
+    "median": 432.0,
+    "min": 0,
+    "n": 8904,
+    "p25": 0.0,
+    "p75": 942.0,
+    "p95": 2645.1
+   },
+   "share_of_messages_with_empty_recipient_set": 0.410377
+  },
+  "coalition_within_step": {
+   "absolute_spread_bytes": {
+    "max": 2940.0,
+    "mean": 633.235843,
+    "median": 444.0,
+    "min": 0.0,
+    "n": 1607,
+    "p25": 0.0,
+    "p75": 953.0,
+    "p95": 1956.5
+   },
+   "relative_spread_of_prices_within_a_step": {
+    "max": 12.0,
+    "mean": 1.173193,
+    "median": 0.70287,
+    "min": 0.0,
+    "n": 1607,
+    "p25": 0.0,
+    "p75": 2.0,
+    "p95": 4.0
+   },
+   "steps_with_two_or_more_candidates": 1607
+  },
+  "label": "offline_recipient_cost_projection",
+  "messages": 8904
+ },
+ "projection_g12": {
+  "broadcast": {
+   "bytes_that_would_never_be_sent_under_this_rule": 0,
+   "fanout": {
+    "max": 6.0,
+    "mean": 6.0,
+    "median": 6.0,
+    "min": 6.0,
+    "n": 2617,
+    "p25": 6.0,
+    "p75": 6.0,
+    "p95": 6.0
+   },
+   "fanout_by_message_class": {
+    "first_report": {
+     "distinct": [
+      6
+     ],
+     "max": 6.0,
+     "median": 6.0,
+     "min": 6.0,
+     "records": 1107
+    },
+    "refresh": {
+     "distinct": [
+      6
+     ],
+     "max": 6.0,
+     "median": 6.0,
+     "min": 6.0,
+     "records": 1510
+    }
+   },
+   "fanout_distinct_values": [
+    6
+   ],
+   "projected_charge_bytes": {
+    "max": 2946,
+    "mean": 2577.594956,
+    "median": 2604.0,
+    "min": 2178,
+    "n": 2617,
+    "p25": 2418.0,
+    "p75": 2736.0,
+    "p95": 2881.2
+   },
+   "share_of_messages_with_empty_recipient_set": 0.0
+  },
+  "broadcast_within_step": {
+   "absolute_spread_bytes": {
+    "max": 684.0,
+    "mean": 215.213974,
+    "median": 186.0,
+    "min": 0.0,
+    "n": 458,
+    "p25": 24.0,
+    "p75": 390.0,
+    "p95": 534.0
+   },
+   "relative_spread_of_prices_within_a_step": {
+    "max": 0.2803565939133108,
+    "mean": 0.084042,
+    "median": 0.071269,
+    "min": 0.0,
+    "n": 458,
+    "p25": 0.010457,
+    "p75": 0.154476,
+    "p95": 0.206804
+   },
+   "steps_with_two_or_more_candidates": 458
+  },
+  "coalition": {
+   "bytes_that_would_never_be_sent_under_this_rule": 481040,
+   "fanout": {
+    "max": 6.0,
+    "mean": 1.28888,
+    "median": 1.0,
+    "min": 0.0,
+    "n": 2617,
+    "p25": 0.0,
+    "p75": 2.0,
+    "p95": 6.0
+   },
+   "fanout_by_message_class": {
+    "first_report": {
+     "distinct": [
+      0
+     ],
+     "max": 0.0,
+     "median": 0.0,
+     "min": 0.0,
+     "records": 1107
+    },
+    "refresh": {
+     "distinct": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "max": 6.0,
+     "median": 2.0,
+     "min": 0.0,
+     "records": 1510
+    }
+   },
+   "fanout_distinct_values": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "projected_charge_bytes": {
+    "max": 2946,
+    "mean": 582.492931,
+    "median": 401.0,
+    "min": 0,
+    "n": 2617,
+    "p25": 0.0,
+    "p75": 878.0,
+    "p95": 2425.0
+   },
+   "share_of_messages_with_empty_recipient_set": 0.445166
+  },
+  "coalition_within_step": {
+   "absolute_spread_bytes": {
+    "max": 2940.0,
+    "mean": 586.31441,
+    "median": 433.0,
+    "min": 0.0,
+    "n": 458,
+    "p25": 0.0,
+    "p75": 905.0,
+    "p95": 1953.75
+   },
+   "relative_spread_of_prices_within_a_step": {
+    "max": 12.0,
+    "mean": 1.340311,
+    "median": 0.718091,
+    "min": 0.0,
+    "n": 458,
+    "p25": 0.0,
+    "p75": 2.0,
+    "p95": 5.0
+   },
+   "steps_with_two_or_more_candidates": 458
+  },
+  "label": "offline_recipient_cost_projection",
+  "messages": 2617
+ },
+ "round": "comm_recipient_topology_feasibility",
+ "rules_not_constructible_from_stored_state": {
+  "capability_and_deadline_matching": "requires other robots' positions and schedules; the relay is built with positions excluded (joint_driver.py:945-947, invariant 10) and no such view is recorded",
+  "coordinator_only": "there is no coordinator agent id in the subscriber space ({0..5} are rescue robots); this would be an architecture change, not a routing rule",
+  "radio_neighbourhood": "no per-robot position or range is recorded in the communication transcript"
+ },
+ "rules_testable_from_stored_state": [
+  "broadcast",
+  "coalition"
+ ]
+}

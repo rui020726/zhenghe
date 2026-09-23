@@ -1,6 +1,62 @@
 # 项目状态
 
-## 2026-09-23：通信动作几何与时序价值审计完成，L3 那 198 步被证明是残值窗口而非选择空间（0 训练、0 新 episode）
+## 2026-09-23：接收者与真实拓扑可行性审计完成——fan-out 是标量，该轴关闭（0 训练、0 新 episode）
+
+产物 [runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_RESULTS.md](runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_RESULTS.md)、
+判定 [COMM_RECIPIENT_TOPOLOGY_DECISION.md](runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_DECISION.md)、
+调用链 [COMM_RECIPIENT_TOPOLOGY_SOURCE_MAP.md](runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_SOURCE_MAP.md)。
+分支 `analysis/comm-recipient-topology-feasibility`（起点 `analysis/comm-action-geometry-audit@efa942857f5b…`，
+即上一轮 `no_temporal_allocation_signal` 的**已推送**头，`git ls-remote` 逐字符核对过），总纲 v3.7。
+
+**0 新 episode、0 新流、0 训练、0 `optimizer.step`、0 checkpoint、0 启动；未修改任何 production code。**
+机械核实（`COMM_RECIPIENT_TOPOLOGY_VERIFICATION.json`，`passed=true`）：618 个输入文件 SHA256 不变、
+账本 `starts` 恒为 666、五个环境入口 tripwire 日志为空、12 个被引用生产文件与起点无 diff、
+封存块 `800000..800399` 盘上 artefact 仍为 0。测试：本轮 `test_topology_harness` **13 项 0 episode OK**、
+项目套件 **690 项 OK (skipped=2)**、`python -m integrated_sar` **final_status=completed**。
+
+| 门 | 判定 | 决定性证据 |
+|---|---|---|
+| R0 语义可信 | **过** | 源码 15 个命名锚点全部在当前工作树定位成功（有一条测试专门盯锚点漂移）；定价恒等式 `cost == payload × subscribers` **8 904/8 904** 闭合；未读未来结局 |
+| R1 拓扑已异质 | **不过** | 四层全部发射的 subscriber count **distinct = {6}**；512 个有发射的 episode 中变化数 **0**；按首报/刷新/retry 分组同样是 {6} ⇒ 结论名 **`global_fanout_is_only_a_scalar`** |
+| R2 存在合法 recipient set | **不过** | 五种候选无一同时满足四条要求 |
+| R3 发送前可观测 | **不过** | `SendObservation.subscribers` 是**一个全局标量**（`comm_policy.py:112`）；`SendItem` 只有 `members_changed: bool`，没有成员集合 ⇒ 契约里缺这个概念，不是数据没记全 |
+| R4 报价形成真实选择 | **不过**（前提已失效，仍作诊断出数） | coalition 下 174 个"同一步两个新目标首报"**全部定价为 0**、出现价格差异的流 **0/16**；广播下 16/16 但中位差仅 **6 B**（一个包的 0.23 %），差异来自序列化字段长度而非接收者语义 |
+
+- **两条机械证明把 R1 从"没测到变化"加强成"变了也没有自由度"**：
+  ① 把 fan-out 乘 s ∈ {1/6, 1/3, 1, 2, 3, 6}，"**同一步内价格窗口 / 单包**"比值在六个尺度上恒等于
+  **0.190648**（比值里不含 k）；② `classify(charges×s, credit) ≡ classify(charges, credit/s)`
+  在 **1 875 次比较中不一致 0 次** ⇒ **加订阅者就是调预算档**，而档位本项目已扫过（75 % / 25 %，
+  当前四层用的正是 25 % 档）。费用分解同样闭合：报价极差 = payload 极差 × 6 逐层精确成立
+  （g12：128 B × 6 = 768 B），`log` 费用方差中 fan-out 占比 = **0.0**。
+- **唯一能从真实语义构造的接收者规则会取消"发现"本身**：`members`（coalition）在 g12 的
+  **1107/1107 条首报上全为空**。叠加调用链硬依赖
+  （未收到 ⇒ 不进 `known_tasks` ⇒ 不进 `action_map` ⇒ 该机整场不可派往该目标，
+  `old_task_env.py:320 / 855 / 902 / 931`、`assembly.py:166-168`、`coordinator.py:124/292/679`），
+  且 isolated 配置下视距刷新与一跳 gossip 被 `gossip_interval`（`old_task_env.py:1109`）
+  **同一个门一起关闭**、`task03.py:377-379` 明写运行期发现"只经通信与其自身传感进入 belief"
+  ⇒ 这条规则把新目标**永久孤儿化**。它买到的价格异质（同步内相对极差 0.071 → 0.718）
+  **全部落在续报那一侧**，携带新信息的那一类被定价为"永远不发"。
+- **一条对该方向以外也有用的结构性事实**：**通信接收者集合 = 动作可达性集合**。
+  今后任何改动多机信息共享的方案，都必须先回答"未收到消息的目标如何进入合法动作掩码"。
+  这也是"不得把 recipient selection 与 send timing 合并成一个动作空间"这条禁令的实证依据：
+  `send_once` 那 43–73 个未报出目标是**成本约束下的损失**，而限制性接收者规则会把它变成
+  **定义上的不可达**——两类不是同一种东西。
+- **不做的三件事**：未训练、未改 reward/预算/ACK/丢包/生产代码/观测维度、未随机生成拓扑或用
+  payload padding 扩报价；四层原判据与结果文件一个字节都没写（写盘沙箱 + 一条测试证明它会拒绝越界路径）。
+- **两级可引用的负结果，且互相支撑**：① `no_temporal_allocation_signal`（时机轴：额度冻在残值上、
+  窗口只有一包的 5.8 %、15/15 一步跨带、命中的候选 100 % 是续报）；
+  ② `global_fanout_is_only_a_scalar`（拓扑轴：fan-out 无自由度、唯一合法规则取消发现、
+  契约里没有 per-candidate 接收者概念）。两者都**只**限定在当前任务分布 / 当前广播协议 /
+  当前硬预算 / 当前观测·动作·奖励之下，**都不构成**"强化学习在其他拓扑或任务分布中无效"。
+- **本轮不是为学习模型制造有利场景的尝试**：判据在设计时允许失败，R1 的失败名字是**先写进协议**的；
+  协议 §5 明令禁止放宽 recipient set 的语义要求去凑 R4 的绿灯。
+
+**下一步由使用者定（本轮跑完即停，不自动展开）**：按协议 §6 分支 1，多订阅者/拓扑轴关闭，
+剩下三条是系统集成或任务分配、论文负结果整理（现有两级结论可直接引用）、
+或**先做一次显式的架构与契约变更**（位置感知的通信模型 + per-candidate 接收者视图 +
+"无人知晓的新目标如何被发现"的替代机制）再谈拓扑——在那样的系统存在之前，本轮不为它设计判据。
+
+## 2026-09-23（状态已由上一节接替）：通信动作几何与时序价值审计完成，L3 那 198 步被证明是残值窗口而非选择空间（0 训练、0 新 episode）
 
 产物 [runs/comm_action_geometry_audit_20260923/COMM_ACTION_GEOMETRY_AUDIT.md](runs/comm_action_geometry_audit_20260923/COMM_ACTION_GEOMETRY_AUDIT.md)，
 分支 `analysis/comm-action-geometry-audit`（起点 `analysis/comm-task-pressure-g12-extension@8e35a24e60a1…`，建分支前先 `git rev-parse HEAD` 逐字符核对），总纲 v3.6。

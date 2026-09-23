@@ -1,27 +1,41 @@
 # Zhenghe：搜索—协调—分配一体化搜救系统
 
-当前研究入口：[项目总纲 v3.6](PROJECT_CHARTER.md) 与
-[通信动作几何与时序价值审计](runs/comm_action_geometry_audit_20260923/COMM_ACTION_GEOMETRY_AUDIT.md)
-（被审计的数据：[任务压力第四层补跑实测](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_G12_EXTENSION_RESULTS.md)、
-[前三层已交付报告](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.md)）。
-这一轮是**回顾性机制审计**（0 新 episode、0 启动、无判据无门禁），回答"v3.5 那 198 个严格子集步到底是什么"：
-`send_once` 在前 ~20 步发完全部首报后额度就**冻在一个残值**上，而残值要落进一条**中位只有 144 B
-（一个包 2 478 B 的 5.8 %）**的包价带才会产生逐步选择——15 条断供流把额度往回倒一个包，
-**15/15 都在带之上，一步跨带**；最终 3/16 条流命中，且那 52 个采样步上
-**候选 100 % 是续报、0 个是新目标首报**。⇒ L3 缺口是几何问题，不是"再多一层就会出现"。
-同时算清三笔账：**576 格没有任何一格把预算用到 100 %**（最高 0.999 93）；
-"首次断供候选全为刷新"只对 `send_once` 与 `first_send_plus_bound_3_10` 成立（其余五臂 9–13/16，引用须带臂名）；
-交接里"g12 缺 16 次启动"是过期陈述，实测 656/656、144/144 格、0 失败。
-单包节省反事实在 `send_once` 上**没有对象**（它零续报），在 `event` 上机会普遍但其内容恰是
-"`send_once` 已经在做的事" ⇒ 全部标注 `ledger_only_opportunity`，不声称效果改善。
-四层 L0–L4 独立复算逐层一致，原判据文件字节不变。
-**统一判定名 `no_temporal_allocation_signal`**（不是第五道门禁，只是本轮机制证据的引用名）：
-在**当前任务分布 / 当前广播协议 / 当前硬预算 / 当前观测·动作·奖励**之下，发送时机上不存在可供学习器
-支配的时间性额度分配信号，且 `send_once` 已实现"把预算保留给未报告目标"这一有效行为；
-**这不构成"强化学习在其他通信拓扑或任务分布中无效"的任何证明**。
-下一步由使用者定：接受该轴关闭、或先构造"新目标之间"的报价分布再谈逐步选择（需新设计与新授权）、
-或换轴（非平稳信道 / 多订阅者与真实拓扑 / 把成本显式写进目标）。
+当前研究入口：[项目总纲 v3.7](PROJECT_CHARTER.md) 与
+[接收者与真实拓扑可行性审计](runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_RESULTS.md)
+（判定 [DECISION](runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_DECISION.md)、
+[源码调用链](runs/comm_recipient_topology_feasibility_20260923/COMM_RECIPIENT_TOPOLOGY_SOURCE_MAP.md)）。
+本轮 **0 新 episode、0 训练、未修改任何 production code**，回答上一轮留下的"其他通信拓扑未测"能否在本仓库兑现：**不能**。
+费用式 `payload × subscriber_count` 里的 `subscriber_count` 是一个**逐 episode 恒为 6 的常数**
+（四层 8 904 条发射 distinct = {6}，512 个有发射的 episode 变化数 0），
+并且两条机械证明把它加强成"没有自由度"：fan-out 乘任意尺度，
+**同一步内价格窗口 / 单包** 比值恒等 **0.190648**；而"涨订阅者"与"降预算档"的分类结果
+在 **1 875 次比较中 0 不一致** ⇒ **加订阅者就是调预算档**（75 % / 25 % 两档已扫过）。
+⇒ **`global_fanout_is_only_a_scalar`，多订阅者 / 拓扑轴关闭。**
+唯一能从真实系统语义构造的接收者规则（只发给当前 coalition）在 g12 的
+**1107/1107 条新目标首报上收件人集合为空**；叠加"未收到 ⇒ 不进 `known_tasks` ⇒ 不进合法动作掩码
+⇒ 整场不可派往该目标"这条硬依赖，以及 isolated 下视距刷新与一跳 gossip 被同一个门关闭，
+该规则会把新目标**永久孤儿化**——它买到的价格异质（同步内相对极差 0.071 → 0.718）
+**全部落在续报一侧**。其余三种候选（能力/deadline 匹配、无线邻域、coordinator-only）
+在当前代码里**不可构造**：位置被显式排除在通信之外，订阅者空间里没有协调器端点。
+`SendObservation.subscribers` 只是挂在整步观测上的**一个标量** ⇒ 这是**契约缺口，不是数据缺口**。
+**本轮不是为学习模型制造有利场景**：R0–R4 阈值先于数据冻结，R1 的失败名字写在跑分析之前，
+且协议明令禁止放宽 recipient 语义去凑绿灯。
+对方向以外留下的一条硬约束：**通信接收者集合 == 动作可达性集合**，
+任何多机信息共享改动都必须先回答"未收到消息的目标如何进入合法动作掩码"。
+
+现在有两级互相支撑、且都必须带范围引用的负结果：
+① [`no_temporal_allocation_signal`](runs/comm_action_geometry_audit_20260923/COMM_ACTION_GEOMETRY_AUDIT.md)
+（时机轴：额度冻在残值上、窗口只有一包的 5.8 %、15/15 一步跨带、命中候选 100 % 是续报）；
+② `global_fanout_is_only_a_scalar`（本轮，拓扑轴）。
+两者都**只**限定在当前任务分布 / 当前广播协议 / 当前硬预算 / 当前观测·动作·奖励之下，
+**都不构成**"强化学习在其他通信拓扑或任务分布中无效"，也不构成"不存在更优策略"或"规则全局最优"。
+下一步由使用者定：转回系统集成或任务分配、做论文负结果整理、
+或**先完成一次显式的架构与契约变更**（位置感知通信模型 + per-candidate 接收者视图 +
+"无人知晓的新目标如何被发现"的替代机制）再谈拓扑学习——在那样的系统存在之前不为它设计判据。
 最终封存块、H=20、ACK、丢包和观测扩维继续冻结。
+
+上一轮入口：[动作几何审计](runs/comm_action_geometry_audit_20260923/COMM_ACTION_GEOMETRY_AUDIT.md)
+与 [任务压力第四层补跑实测](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_G12_EXTENSION_RESULTS.md)。
 
 上一轮入口：[任务压力第四层协议](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_G12_EXTENSION_PROTOCOL.md)
 与 [任务压力标定指令（已执行完毕）](COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md)。

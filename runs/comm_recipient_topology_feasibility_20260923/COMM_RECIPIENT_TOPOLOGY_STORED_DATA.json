@@ -1,0 +1,525 @@
+{
+ "aggregate": {
+  "distinct_subscriber_counts_across_all_layers": [
+   6
+  ],
+  "episodes_observed": 512,
+  "episodes_with_varying_count": 0,
+  "pricing_identity_violations": 0,
+  "refused_records": 671604,
+  "send_records": 8904,
+  "varying": false
+ },
+ "environment_tripwire_calls": [],
+ "layers": {
+  "g10": {
+   "by_message_class": {
+    "first_attempt(revision==1)": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 628
+    },
+    "first_report": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 960
+    },
+    "refresh": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 1465
+    },
+    "retry(revision>1)": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 1797
+    }
+   },
+   "cells_seen": 144,
+   "cells_with_at_least_one_send": 128,
+   "cost_bytes": {
+    "max": 2940.0,
+    "mean": 2601.382268,
+    "median": 2652.0,
+    "min": 2190.0,
+    "n": 2425,
+    "p25": 2466.0,
+    "p75": 2784.0,
+    "p95": 2868.0
+   },
+   "cost_decomposition": {
+    "cost_equals_payload_times_count_on_every_record": true,
+    "cost_range": 750.0,
+    "cost_range_divided_by_fanout_equals_payload_range": true,
+    "cost_variance": 36497.533459,
+    "fanout_variance": 0.0,
+    "payload_range": 125.0,
+    "share_of_log_cost_variance_from_fanout": 0.0,
+    "share_of_log_cost_variance_from_payload": 1.0
+   },
+   "first_flag_conflicts": 0,
+   "layer": "g10",
+   "payload_bytes": {
+    "max": 490.0,
+    "mean": 433.563711,
+    "median": 442.0,
+    "min": 365.0,
+    "n": 2425,
+    "p25": 411.0,
+    "p75": 464.0,
+    "p95": 478.0
+   },
+   "pricing_identity_sample": [],
+   "pricing_identity_violations": 0,
+   "refused_records": 205190,
+   "refused_records_carrying_subscriber_count": 0,
+   "retried_records": 1797,
+   "revision_distribution": {
+    "1": 628,
+    "2": 353,
+    "3": 266,
+    "4": 94,
+    "5": 72,
+    "6": 98,
+    "7": 73,
+    "8": 72,
+    "9": 74,
+    "10": 74,
+    "11": 62,
+    "12": 61,
+    "13": 98,
+    "14": 50,
+    "15": 41,
+    "16": 39,
+    "17": 26,
+    "18": 26,
+    "19": 26,
+    "20": 26,
+    "21": 39,
+    "22": 20,
+    "23": 24,
+    "24": 27,
+    "25": 12,
+    "26": 9,
+    "27": 6,
+    "28": 9,
+    "29": 10,
+    "30": 5,
+    "31": 3,
+    "35": 2
+   },
+   "send_records": 2425,
+   "sends_missing_subscriber_field": 0,
+   "subscriber_count": {
+    "distinct_targets_observed": 960,
+    "distinct_values": [
+     6
+    ],
+    "episodes_observed": 128,
+    "episodes_with_a_constant_count": 128,
+    "episodes_with_varying_count": 0,
+    "max": 6,
+    "median": 6.0,
+    "min": 6,
+    "targets_sharing_one_count": 960,
+    "variance": 0.0,
+    "varies_across_targets_within_an_episode": false
+   }
+  },
+  "g12": {
+   "by_message_class": {
+    "first_attempt(revision==1)": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 732
+    },
+    "first_report": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 1107
+    },
+    "refresh": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 1510
+    },
+    "retry(revision>1)": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 1885
+    }
+   },
+   "cells_seen": 144,
+   "cells_with_at_least_one_send": 128,
+   "cost_bytes": {
+    "max": 2946.0,
+    "mean": 2577.594956,
+    "median": 2604.0,
+    "min": 2178.0,
+    "n": 2617,
+    "p25": 2418.0,
+    "p75": 2736.0,
+    "p95": 2881.2
+   },
+   "cost_decomposition": {
+    "cost_equals_payload_times_count_on_every_record": true,
+    "cost_range": 768.0,
+    "cost_range_divided_by_fanout_equals_payload_range": true,
+    "cost_variance": 40355.470636,
+    "fanout_variance": 0.0,
+    "payload_range": 128.0,
+    "share_of_log_cost_variance_from_fanout": 0.0,
+    "share_of_log_cost_variance_from_payload": 1.0
+   },
+   "first_flag_conflicts": 0,
+   "layer": "g12",
+   "payload_bytes": {
+    "max": 491.0,
+    "mean": 429.599159,
+    "median": 434.0,
+    "min": 363.0,
+    "n": 2617,
+    "p25": 403.0,
+    "p75": 456.0,
+    "p95": 480.2
+   },
+   "pricing_identity_sample": [],
+   "pricing_identity_violations": 0,
+   "refused_records": 250794,
+   "refused_records_carrying_subscriber_count": 0,
+   "retried_records": 1885,
+   "revision_distribution": {
+    "1": 732,
+    "2": 399,
+    "3": 264,
+    "4": 114,
+    "5": 83,
+    "6": 99,
+    "7": 94,
+    "8": 84,
+    "9": 72,
+    "10": 59,
+    "11": 60,
+    "12": 48,
+    "13": 89,
+    "14": 64,
+    "15": 51,
+    "16": 39,
+    "17": 30,
+    "18": 36,
+    "19": 31,
+    "20": 30,
+    "21": 30,
+    "22": 17,
+    "23": 17,
+    "24": 17,
+    "25": 17,
+    "26": 11,
+    "27": 7,
+    "28": 6,
+    "29": 4,
+    "30": 1,
+    "31": 4,
+    "32": 2,
+    "33": 3,
+    "34": 1,
+    "35": 1,
+    "37": 1
+   },
+   "send_records": 2617,
+   "sends_missing_subscriber_field": 0,
+   "subscriber_count": {
+    "distinct_targets_observed": 1107,
+    "distinct_values": [
+     6
+    ],
+    "episodes_observed": 128,
+    "episodes_with_a_constant_count": 128,
+    "episodes_with_varying_count": 0,
+    "max": 6,
+    "median": 6.0,
+    "min": 6,
+    "targets_sharing_one_count": 1107,
+    "variance": 0.0,
+    "varies_across_targets_within_an_episode": false
+   }
+  },
+  "g6": {
+   "by_message_class": {
+    "first_attempt(revision==1)": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 404
+    },
+    "first_report": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 650
+    },
+    "refresh": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 1142
+    },
+    "retry(revision>1)": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 1388
+    }
+   },
+   "cells_seen": 144,
+   "cells_with_at_least_one_send": 128,
+   "cost_bytes": {
+    "max": 2952.0,
+    "mean": 2609.072545,
+    "median": 2664.0,
+    "min": 2196.0,
+    "n": 1792,
+    "p25": 2464.5,
+    "p75": 2790.0,
+    "p95": 2886.0
+   },
+   "cost_decomposition": {
+    "cost_equals_payload_times_count_on_every_record": true,
+    "cost_range": 756.0,
+    "cost_range_divided_by_fanout_equals_payload_range": true,
+    "cost_variance": 38508.673309,
+    "fanout_variance": 0.0,
+    "payload_range": 126.0,
+    "share_of_log_cost_variance_from_fanout": 0.0,
+    "share_of_log_cost_variance_from_payload": 1.0
+   },
+   "first_flag_conflicts": 0,
+   "layer": "g6",
+   "payload_bytes": {
+    "max": 492.0,
+    "mean": 434.845424,
+    "median": 444.0,
+    "min": 366.0,
+    "n": 1792,
+    "p25": 410.75,
+    "p75": 465.0,
+    "p95": 481.0
+   },
+   "pricing_identity_sample": [],
+   "pricing_identity_violations": 0,
+   "refused_records": 75081,
+   "refused_records_carrying_subscriber_count": 0,
+   "retried_records": 1388,
+   "revision_distribution": {
+    "1": 404,
+    "2": 258,
+    "3": 182,
+    "4": 56,
+    "5": 54,
+    "6": 87,
+    "7": 63,
+    "8": 59,
+    "9": 57,
+    "10": 50,
+    "11": 61,
+    "12": 32,
+    "13": 104,
+    "14": 63,
+    "15": 36,
+    "16": 25,
+    "17": 21,
+    "18": 22,
+    "19": 14,
+    "20": 23,
+    "21": 36,
+    "22": 11,
+    "23": 11,
+    "24": 30,
+    "25": 18,
+    "26": 3,
+    "27": 2,
+    "28": 1,
+    "29": 3,
+    "30": 3,
+    "31": 2,
+    "33": 1
+   },
+   "send_records": 1792,
+   "sends_missing_subscriber_field": 0,
+   "subscriber_count": {
+    "distinct_targets_observed": 650,
+    "distinct_values": [
+     6
+    ],
+    "episodes_observed": 128,
+    "episodes_with_a_constant_count": 128,
+    "episodes_with_varying_count": 0,
+    "max": 6,
+    "median": 6.0,
+    "min": 6,
+    "targets_sharing_one_count": 650,
+    "variance": 0.0,
+    "varies_across_targets_within_an_episode": false
+   }
+  },
+  "g8": {
+   "by_message_class": {
+    "first_attempt(revision==1)": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 500
+    },
+    "first_report": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 776
+    },
+    "refresh": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 1294
+    },
+    "retry(revision>1)": {
+     "distinct_counts": [
+      6
+     ],
+     "max": 6,
+     "min": 6,
+     "records": 1570
+    }
+   },
+   "cells_seen": 144,
+   "cells_with_at_least_one_send": 128,
+   "cost_bytes": {
+    "max": 2940.0,
+    "mean": 2582.597101,
+    "median": 2604.0,
+    "min": 2268.0,
+    "n": 2070,
+    "p25": 2430.0,
+    "p75": 2742.0,
+    "p95": 2874.0
+   },
+   "cost_decomposition": {
+    "cost_equals_payload_times_count_on_every_record": true,
+    "cost_range": 672.0,
+    "cost_range_divided_by_fanout_equals_payload_range": true,
+    "cost_variance": 38334.785499,
+    "fanout_variance": 0.0,
+    "payload_range": 112.0,
+    "share_of_log_cost_variance_from_fanout": 0.0,
+    "share_of_log_cost_variance_from_payload": 1.0
+   },
+   "first_flag_conflicts": 0,
+   "layer": "g8",
+   "payload_bytes": {
+    "max": 490.0,
+    "mean": 430.43285,
+    "median": 434.0,
+    "min": 378.0,
+    "n": 2070,
+    "p25": 405.0,
+    "p75": 457.0,
+    "p95": 479.0
+   },
+   "pricing_identity_sample": [],
+   "pricing_identity_violations": 0,
+   "refused_records": 140539,
+   "refused_records_carrying_subscriber_count": 0,
+   "retried_records": 1570,
+   "revision_distribution": {
+    "1": 500,
+    "2": 288,
+    "3": 247,
+    "4": 85,
+    "5": 74,
+    "6": 98,
+    "7": 94,
+    "8": 66,
+    "9": 58,
+    "10": 53,
+    "11": 71,
+    "12": 43,
+    "13": 84,
+    "14": 60,
+    "15": 31,
+    "16": 34,
+    "17": 22,
+    "18": 30,
+    "19": 17,
+    "20": 14,
+    "21": 19,
+    "22": 13,
+    "23": 12,
+    "24": 24,
+    "25": 10,
+    "26": 8,
+    "27": 4,
+    "28": 4,
+    "29": 2,
+    "30": 4,
+    "31": 1
+   },
+   "send_records": 2070,
+   "sends_missing_subscriber_field": 0,
+   "subscriber_count": {
+    "distinct_targets_observed": 776,
+    "distinct_values": [
+     6
+    ],
+    "episodes_observed": 128,
+    "episodes_with_a_constant_count": 128,
+    "episodes_with_varying_count": 0,
+    "max": 6,
+    "median": 6.0,
+    "min": 6,
+    "targets_sharing_one_count": 776,
+    "variance": 0.0,
+    "varies_across_targets_within_an_episode": false
+   }
+  }
+ },
+ "question": "is subscriber_count a real per-message quantity, or one constant multiplied everywhere",
+ "round": "comm_recipient_topology_feasibility"
+}

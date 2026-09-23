@@ -1,0 +1,213 @@
+{
+ "answer": "constant: one value across 8 904 sends in four layers, and any global change of it is equivalent to changing the budget tier",
+ "authorisation": {
+  "ack_or_loss_enabled": false,
+  "budget_changed": false,
+  "checkpoint_loads": 0,
+  "lambda_chosen": false,
+  "new_episodes": 0,
+  "new_streams": 0,
+  "optimizer_steps": 0,
+  "payload_padding_used": false,
+  "production_code_changed": false,
+  "recipient_selection_merged_into_send_timing": false,
+  "reward_changed": false,
+  "sealed_block_800000_800399_touched": false,
+  "send_once_baseline_weakened": false,
+  "topology_randomised": false
+ },
+ "date": "2026-09-23",
+ "decision": {
+  "branch": "close_multi_subscriber_topology_axis",
+  "branch_source": "protocol section 6, row 1: R1 failed and no candidate passed R2",
+  "gates_passed": {
+   "R0_semantics_trustworthy": true,
+   "R1_topology_already_heterogeneous": false,
+   "R2_a_recipient_rule_is_legitimate": false,
+   "R3_observable_before_the_action": false,
+   "R4_offline_quotes_form_a_real_choice": false
+  },
+  "next_step_belongs_to_the_user": true
+ },
+ "gates": {
+  "R0_semantics_trustworthy": {
+   "episode_entry_point_calls": [],
+   "input_files_changed": [],
+   "launches_added": 0,
+   "passed": true,
+   "pricing_identity_holds_on_every_send_record": true,
+   "production_files_changed": [],
+   "sealed_block_artefacts": 0
+  },
+  "R1_topology_already_heterogeneous": {
+   "conclusion_when_failed": "global_fanout_is_only_a_scalar",
+   "distinct_subscriber_counts_across_all_four_layers": [
+    6
+   ],
+   "episodes_observed": 512,
+   "episodes_where_count_varies": 0,
+   "passed": false,
+   "raising_fanout_equals_lowering_budget": {
+    "classification_mismatches": 0,
+    "holds": true
+   },
+   "scale_invariance_of_the_window": {
+    "ratio_constant": true,
+    "window_as_fraction_of_one_packet_at_each_fanout_scale": {
+     "x0.166667": 0.190648,
+     "x0.333333": 0.190648,
+     "x1": 0.190648,
+     "x2": 0.190648,
+     "x3": 0.190648,
+     "x6": 0.190648
+    }
+   },
+   "send_records": 8904,
+   "share_of_log_cost_variance_from_fanout": {
+    "g10": 0.0,
+    "g12": 0.0,
+    "g6": 0.0,
+    "g8": 0.0
+   }
+  },
+  "R2_a_recipient_rule_is_legitimate": {
+   "candidates_evaluated": {
+    "capability_and_deadline_matching": {
+     "pre_action_determinable": false,
+     "verdict": "needs other robots' positions and schedules; positions are excluded from the relay by design (invariant 10)"
+    },
+    "coordinator_only": {
+     "pre_action_determinable": false,
+     "verdict": "there is no coordinator addressable in the subscriber space; this is an architecture change, not a routing rule"
+    },
+    "current_coalition": {
+     "creates_cost_heterogeneity": true,
+     "first_report_fanout_values": [
+      0
+     ],
+     "not_self_confirming": false,
+     "pre_action_determinable": true,
+     "preserves_discovery_semantics": false,
+     "refresh_fanout_values": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "share_of_messages_with_empty_recipient_set": 0.445166,
+     "uses_no_future_result": true,
+     "verdict": "recipients are the robots already told about the target, so a newly discovered one has an empty set: every first report is addressed to nobody, and under the isolated path an unreceived task can never enter any robot's action list (source map question 9)"
+    },
+    "global_broadcast": {
+     "creates_cost_heterogeneity": false,
+     "not_self_confirming": true,
+     "pre_action_determinable": true,
+     "preserves_discovery_semantics": true,
+     "uses_no_future_result": true,
+     "verdict": "the status quo; a constant fan-out adds no choice"
+    },
+    "radio_neighbourhood": {
+     "pre_action_determinable": false,
+     "verdict": "no per-robot position or range view exists in the transcript or the observation; only an artificial radius could supply one"
+    }
+   },
+   "passed": false
+  },
+  "R3_observable_before_the_action": {
+   "charge_is_a_network_input": false,
+   "charge_is_observable": true,
+   "passed": false,
+   "reason": "SendObservation exposes one scalar `subscribers` for the whole step (comm_policy.py:112), not a per-candidate recipient set, and SendItem carries only `members_changed: bool` -- no member list. The contract has no place to put 'whom would this go to'.",
+   "recipient_count_is_per_candidate": false,
+   "recipient_set_reason_is_observable": false
+  },
+  "R4_offline_quotes_form_a_real_choice": {
+   "condition_1_first_report_price_differences_ge_8_of_16_streams": {
+    "broadcast": 16,
+    "broadcast_median_spread_bytes": 6.0,
+    "coalition": 0,
+    "note": "broadcast reaches 16/16 only through a median 6-byte difference driven by serialized field lengths, not by recipients, so it satisfies the letter of condition 1 and violates condition 5",
+    "threshold": 8
+   },
+   "condition_4_not_only_refresh_choices": {
+    "coalition_steps_where_a_first_report_is_priced_to_zero": 174,
+    "note": "the heterogeneity coalition routing buys is entirely on the refresh side; the first-report side collapses to an empty recipient set",
+    "passed": false,
+    "within_step_relative_spread_median": {
+     "broadcast": 0.071269,
+     "coalition": 0.718091
+    }
+   },
+   "condition_5_difference_from_real_semantics_not_scaling": {
+    "passed": false,
+    "reason": "any global change of fan-out is provably equivalent to rescaling the budget (see R1's claim 2), so it is the scaling route the protocol forbids"
+   },
+   "label": "offline_recipient_cost_projection",
+   "passed": false,
+   "premise_failed_first": "R2 and R3 both failed; evaluated anyway as a diagnostic"
+  }
+ },
+ "grid": {
+  "g10": {
+   "arms": 9,
+   "cells": 144,
+   "streams": 16,
+   "transcripts_present": 144
+  },
+  "g12": {
+   "arms": 9,
+   "cells": 144,
+   "streams": 16,
+   "transcripts_present": 144
+  },
+  "g6": {
+   "arms": 9,
+   "cells": 144,
+   "streams": 16,
+   "transcripts_present": 144
+  },
+  "g8": {
+   "arms": 9,
+   "cells": 144,
+   "streams": 16,
+   "transcripts_present": 144
+  }
+ },
+ "inputs_not_read": {
+  "g10_rp_lifecycle_logs": 144,
+  "g10_tr_allocation_decision_traces": 144,
+  "g12_rp_lifecycle_logs": 144,
+  "g12_tr_allocation_decision_traces": 144,
+  "g6_rp_lifecycle_logs": 144,
+  "g6_tr_allocation_decision_traces": 144,
+  "g8_rp_lifecycle_logs": 144,
+  "g8_tr_allocation_decision_traces": 144
+ },
+ "missing": {
+  "per_message_subscriber_count_on_refusals": "not recorded on any of the 671 604 refused records; derived via the proven constant fan-out and labelled as derived",
+  "projected_budget_trajectory_under_coalition_pricing": "not computed; would require replaying the credit accumulation",
+  "recipient_sets_for_candidates_3_4_5": "not constructible from this system at all"
+ },
+ "not_claimed": [
+  "no claim that a learned controller would fail under a different topology",
+  "no claim that coalition routing worsens task outcomes; no environment was run",
+  "no claim that L3 should be re-judged either way",
+  "no relaxation of the previous round's no_temporal_allocation_signal"
+ ],
+ "question": "is subscriber_count a real per-message quantity, or one constant multiplied everywhere",
+ "round": "comm_recipient_topology_feasibility",
+ "status": "source and stored-data feasibility audit; not a performance experiment",
+ "verification": {
+  "episode_entry_point_calls": [],
+  "files_changed": [],
+  "files_frozen": 618,
+  "files_missing_now": [],
+  "launches_added_by_this_round": 0,
+  "passed": true,
+  "production_files_changed": [],
+  "sealed_block_800000_800399_artefacts_on_disk": 0
+ }
+}
