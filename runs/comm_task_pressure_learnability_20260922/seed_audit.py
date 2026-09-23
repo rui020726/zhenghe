@@ -67,6 +67,12 @@ DECLARED_BLOCKS: dict[str, tuple[int, int]] = {
 #: Scenario seeds are six digits or more in this project; smaller numbers are loop counters.
 MIN_SEED_DIGITS = 6
 
+#: The blocks this run audits. All four by default, which is what the delivered round did; the g12
+#: extension restricts the scope to its own sixteen seeds. That is a narrowing, not a whitelist: the
+#: three layers already recorded own streams at 1000000..1000215, and re-auditing those seeds would
+#: report this project's own delivered data as a conflict while saying nothing about g12's freshness.
+SCOPE: tuple[int, ...] = tuple(BLOCKS)
+
 #: The brief itself assigns these four blocks, so its own words are a pre-registration and not a
 #: prior claim on the data. The list is explicit and every file in it is reported with its commit:
 #: a mention of a candidate seed anywhere else is a conflict, and this list is never widened to
@@ -96,7 +102,22 @@ def git(*arguments: str, check: bool = True) -> str:
 
 
 def own_candidate_seeds() -> set[int]:
-    return {seed for seeds in BLOCKS.values() for seed in seeds}
+    return {seed for goals in SCOPE for seed in BLOCKS[goals]}
+
+
+def set_scope(goals: int | None) -> tuple[int, ...]:
+    """Narrow the audit to one layer's block, or restore all four. Never widens past BLOCKS."""
+    global SCOPE
+    if goals is None:
+        SCOPE = tuple(BLOCKS)
+    elif int(goals) in BLOCKS:
+        SCOPE = (int(goals),)
+    else:
+        raise ValueError(
+            f"no pre-registered block for num_goals={goals}; this script audits {sorted(BLOCKS)} "
+            "and inventing a block here is exactly the renumbering the audit exists to refuse"
+        )
+    return SCOPE
 
 
 # ---------------------------------------------------------------- source 1: git
@@ -264,9 +285,9 @@ def documentation_claims() -> list[dict[str, Any]]:
 def declared_range_conflicts() -> list[dict[str, Any]]:
     """Blocks the project already owns, checked against the candidates arithmetically."""
     conflicts: list[dict[str, Any]] = []
-    for goals, seeds in BLOCKS.items():
+    for goals in SCOPE:
         for name, (low, high) in DECLARED_BLOCKS.items():
-            overlap = sorted(set(seeds) & set(range(low, high)))
+            overlap = sorted(set(BLOCKS[goals]) & set(range(low, high)))
             if overlap:
                 conflicts.append(
                     {
@@ -282,7 +303,7 @@ def declared_range_conflicts() -> list[dict[str, Any]]:
 
 # ---------------------------------------------------------------- verdict
 def audit() -> dict[str, Any]:
-    blocks = BLOCKS
+    blocks = {goals: BLOCKS[goals] for goals in SCOPE}
     global_candidates = own_candidate_seeds()
     selected = global_candidates
 
@@ -385,6 +406,16 @@ def audit() -> dict[str, Any]:
             str(goals): {"seeds": [seeds[0], seeds[-1]], "count": len(seeds)}
             for goals, seeds in blocks.items()
         },
+        "scope": {
+            "goals_audited": list(SCOPE),
+            "note": (
+                "all four pre-registered blocks"
+                if SCOPE == tuple(BLOCKS)
+                else "narrowed to the blocks this run may still create; a seed this project has "
+                "already recorded is not a claim on a seed it has not, and narrowing is not a "
+                "whitelist -- every hit inside the audited block still stops the round"
+            ),
+        },
         "blocks_the_project_already_owns": {
             name: [low, high - 1] for name, (low, high) in DECLARED_BLOCKS.items()
         },
@@ -420,7 +451,23 @@ def main(argv: list[str]) -> int:
     parser.add_argument(
         "--out", default="SEED_COLLISION_AUDIT.json", help="where to write the audit"
     )
-    args = parser.parse_args()
+    parser.add_argument(
+        "--goals",
+        type=int,
+        default=None,
+        choices=sorted(BLOCKS),
+        help="audit only this layer's block; omit to audit all four pre-registered blocks",
+    )
+    #: ``main`` receives ``sys.argv[1:]``, so the script's own name is not in here. Reading
+    #: ``sys.argv`` instead would make the CLI untestable -- and a guard nobody can call is a guard
+    #: nobody has seen work.
+    args = parser.parse_args(argv)
+    if args.goals is not None and args.out == "SEED_COLLISION_AUDIT.json":
+        parser.error(
+            "a narrowed audit must name its own file: the delivered round's "
+            "SEED_COLLISION_AUDIT.json covers four blocks and is evidence about them"
+        )
+    set_scope(args.goals)
     result = audit()
     path = HERE / args.out
     path.write_text(
@@ -430,6 +477,7 @@ def main(argv: list[str]) -> int:
         "clean": result["clean"],
         "hit_counts": result["hit_counts"],
         "verdict": result["verdict"],
+        "scope": result["scope"]["goals_audited"],
         "sealed_block_clean": result["sealed_learning_block"]["clean"],
         "written": args.out,
     }

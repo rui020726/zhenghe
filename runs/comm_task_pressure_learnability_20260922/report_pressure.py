@@ -114,14 +114,23 @@ def arm_rows(goals: int, matrix: dict[str, Any]) -> list[dict[str, Any]]:
     return rows
 
 
-def ceiling_accounting() -> dict[str, Any]:
-    """What the brief's 640 bought, and what this round's own defects cost."""
+def ceiling_accounting(goals: int | None = None) -> dict[str, Any]:
+    """What the brief's 640 bought, and what this round's own defects cost.
+
+    ``goals`` selects the ceiling a layer actually ran against: the g12 extension is granted 16
+    launches over the brief's arithmetic, and reporting its remainder against 640 would say the
+    round overran when the order says it was topped up.
+    """
     ledger = common.ledger_totals()
     spent = int(ledger["matrix_starts"])
-    remaining = common.MATRIX_LAUNCH_CAP - spent
+    grant = common.launch_grant_for(goals) if goals is not None else None
+    ceiling = common.MATRIX_LAUNCH_CAP if grant is None else grant["effective_ceiling"]
+    remaining = ceiling - spent
     needed_for_next = common.STREAMS_PER_LAYER * (1 + len(common.ARM_ORDER))
     return {
         "matrix_ceiling": common.MATRIX_LAUNCH_CAP,
+        "effective_ceiling_for_this_layer": ceiling,
+        "extension_grant": 0 if grant is None else grant["extension_grant"],
         "matrix_starts_spent": spent,
         "recordings_included": True,
         "gate_ceiling": common.GATE_LAUNCH_CAP,
@@ -624,6 +633,12 @@ def data_tests() -> dict[str, str]:
 
 
 def main(argv: list[str]) -> int:
+    if common.json_path(f"GATES_g{common.G12_GOALS}.json").exists():
+        raise SystemExit(
+            "the g12 extension layer has been judged, so this round's delivered report is frozen: "
+            "regenerating it here would fold the extension into the verdict that said no. Write the "
+            "extension's own report with report_g12.py (extension protocol §2)"
+        )
     data = build()
     common.write_json(
         common.json_path("COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.json"), data

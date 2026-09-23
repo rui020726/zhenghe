@@ -30,23 +30,36 @@ import record_layer
 ARTEFACT_KEY = "artefacts"
 
 
-def registered_freeze() -> dict[str, Any]:
+def registered_freeze(goals: int) -> dict[str, Any]:
     """The freeze this process executes under, stamped into every row it writes.
 
     Round 10 and this round both hit the same question: a layer whose rows were produced by two
     different code states cannot say which code produced which number. The stamp makes that
     checkable from the rows themselves instead of from a narrative in the report.
+
+    The freeze file is chosen by layer, because the g12 extension registers its own next to the
+    delivered one rather than replacing the evidence about which code made those 432 episodes.
     """
-    path = common.json_path("CODE_FREEZE.json")
+    name = common.freeze_file(goals)
+    path = common.json_path(name)
     if not path.exists():
         raise SystemExit(
-            "CODE_FREEZE.json is missing: register the freeze before starting any cell, or the "
-            "round cannot say what code ran"
+            f"{name} is missing: register the freeze before starting any cell, or the round cannot "
+            "say what code ran"
         )
     payload = json.loads(path.read_text(encoding="utf-8"))
     identity = episode_code_identity()
+    registered = str(payload["head_at_registration"])
+    if payload.get("episode_code_identity") not in (None, identity["episode_code_identity"]):
+        raise SystemExit(
+            f"{name} was registered against episode code "
+            f"{payload['episode_code_identity']}, this process runs "
+            f"{identity['episode_code_identity']}: the world changed after the freeze, so the "
+            "cells would mix two code states in one aggregate"
+        )
     return {
-        "head": str(payload["head_at_registration"]),
+        "head": registered,
+        "freeze_file": name,
         "modules": int(payload["module_count"]),
         "freeze_file_sha256": common.sha256(path)[:16],
         "episode_code_identity": identity["episode_code_identity"],
@@ -83,8 +96,8 @@ def cells(goals: int) -> list[tuple[str, int]]:
 
 
 def run(goals: int, shard: int, shards: int) -> dict[str, Any]:
-    freeze = registered_freeze()
-    record_layer.require_clean_audit()
+    freeze = registered_freeze(goals)
+    record_layer.require_clean_audit(goals)
     manifest = common.json_path(f"STREAM_MANIFEST_g{goals}.json")
     if not manifest.exists():
         raise SystemExit(
@@ -219,6 +232,13 @@ def episode_code_identity(at_commit: str | None = None) -> dict[str, Any]:
 
     import pressure_env
 
+    #: Only commits are memoised: they name immutable content, and dozens of ``git rev-parse``
+    #: calls per freeze version would otherwise dominate the report. A working-tree identity is
+    #: recomputed every time, because the tree is exactly the thing a round must not edit mid-run.
+    memo: dict[str, dict[str, Any]] = episode_code_identity.__dict__.setdefault("_memo", {})
+    if at_commit is not None and at_commit in memo:
+        return memo[at_commit]
+
     production = sorted(
         str(path.relative_to(common.ROOT)).replace("\\", "/")
         for path in (common.ROOT / "integrated_sar").rglob("*.py")
@@ -242,37 +262,45 @@ def episode_code_identity(at_commit: str | None = None) -> dict[str, Any]:
         digest.update(f"{relative}:{blob}\n".encode("utf-8"))
     digest.update(b"run_episode\n")
     digest.update(source.encode("utf-8"))
-    return {
+    identity = {
         "episode_code_identity": digest.hexdigest()[:16],
         "production_modules": len(blobs),
         "run_episode_sha256": hashlib.sha256(source.encode("utf-8")).hexdigest()[:16],
         "commit": at_commit or "working tree",
     }
+    if at_commit is not None:
+        memo[at_commit] = identity
+    return identity
 
 
 def freeze_history() -> dict[str, Any]:
-    """Every CODE_FREEZE.json version in Git, with the episode identity each one names."""
-    commits = [
-        line.strip()
-        for line in common.git(
-            "log", "--format=%H", "--", f"runs/{common.HERE.name}/CODE_FREEZE.json"
-        ).splitlines()
-        if line.strip()
-    ]
+    """Every registered freeze version in Git, with the episode identity each one names.
+
+    Both freeze files are walked: the delivered layers stamped their rows against
+    ``CODE_FREEZE.json`` and the g12 extension stamps against ``G12_FREEZE.json``, and a row from
+    either one must be attributable to a named code state. Pooling only the first file would make
+    every g12 row look unstamped.
+    """
     history: dict[str, Any] = {}
     heads: dict[str, str] = {}
-    for commit in commits:
-        payload = json.loads(
-            common.git("show", f"{commit}:runs/{common.HERE.name}/CODE_FREEZE.json")
-        )
-        registered = str(payload["head_at_registration"])
-        identity = episode_code_identity(registered)
-        heads[registered] = registered[:9]
-        history[registered[:9]] = {
-            "registered_by_commit": commit[:9],
-            "modules": int(payload["module_count"]),
-            **identity,
-        }
+    for name in sorted({common.freeze_file(goals) for goals in common.LAYER_ORDER}):
+        relative = f"runs/{common.HERE.name}/{name}"
+        commits = [
+            line.strip()
+            for line in common.git("log", "--format=%H", "--", relative).splitlines()
+            if line.strip()
+        ]
+        for commit in commits:
+            payload = json.loads(common.git("show", f"{commit}:{relative}"))
+            registered = str(payload["head_at_registration"])
+            identity = episode_code_identity(registered)
+            heads[registered[:9]] = registered[:9]
+            history[registered[:9]] = {
+                "registered_by_commit": commit[:9],
+                "modules": int(payload["module_count"]),
+                "freeze_file": name,
+                **identity,
+            }
     history["_heads"] = heads
     return history
 
@@ -295,6 +323,7 @@ def row_provenance(goals: int) -> dict[str, Any]:
     identities = sorted(set(known.values()))
     stamped: dict[str, int] = {}
     stamped_identities: set[str] = set()
+    unknown_stamps: dict[str, int] = {}
     unstamped = 0
     for row in rows.values():
         head = str((row.get("code_freeze") or {}).get("head", ""))[:9]
@@ -302,16 +331,20 @@ def row_provenance(goals: int) -> dict[str, Any]:
             stamped[head] = stamped.get(head, 0) + 1
             if head in known:
                 stamped_identities.add(known[head])
+            else:
+                unknown_stamps[head] = unknown_stamps.get(head, 0) + 1
         else:
             unstamped += 1
     return {
         "cells": len(rows),
         "stamped": stamped,
         "un_stamped": unstamped,
+        "stamped_with_a_head_no_freeze_names": unknown_stamps,
         "freezes_registered_this_round": history,
         "distinct_episode_code_states": identities,
         "identities_named_by_stamped_rows": sorted(stamped_identities),
         "single_episode_code_state": len(identities) == 1
+        and not unknown_stamps
         and (not stamped_identities or stamped_identities == set(identities)),
         "caveat": (
             f"{unstamped} of {len(rows)} cells carry no stamp because the stamp was added after they "
@@ -328,6 +361,11 @@ def main(argv: list[str]) -> int:
     )
     parser.add_argument("--shards", type=int, default=1)
     parser.add_argument("--shard", type=int, default=0)
+    parser.add_argument(
+        "--old-dir",
+        default=None,
+        help="row files to compare a re-run against (--mode compare); never rewritten",
+    )
     args = parser.parse_args()
     if args.mode == "compare":
         if not args.old_dir:

@@ -455,6 +455,78 @@ def sender_visible_features(rows: list[dict[str, Any]], envelope_data: dict[str,
     }
 
 
+def step_geometry(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """The g12 extension protocol §5 diagnostics, per arm, from the probe counters already on disk.
+
+    A step with no candidate never reaches the probe (``comm.py:700`` returns before ``decide``),
+    so the zero-candidate count is the episode's steps minus the steps the probe was offered --
+    exact, because ``run_episode`` asserts the step count. The four multi-candidate outcomes plus
+    ``competition_points`` and ``joint_only_points`` are an exhaustive partition of the
+    multi-candidate steps, which is what makes "the credit never offered a subset to choose" a
+    statement about counts rather than a reading.
+    """
+    by_arm: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        by_arm[str(row["arm"])].append(row)
+    out: dict[str, dict[str, Any]] = {}
+    for arm, values in by_arm.items():
+        steps = sum(int(row["steps"]) for row in values)
+        probes = [row["probe"] or {} for row in values]
+        offered = sum(int(probe.get("steps_offered", 0)) for probe in probes)
+        one = sum(int(probe.get("steps_with_one_candidate", 0)) for probe in probes)
+        multi = sum(int(probe.get("steps_with_multiple_candidates", 0)) for probe in probes)
+        competition = sum(int(probe.get("competition_points", 0)) for probe in probes)
+        joint = sum(int(probe.get("joint_only_points", 0)) for probe in probes)
+        within = sum(int(probe.get("multi_all_payable_within_credit_steps", 0)) for probe in probes)
+        none_payable = sum(int(probe.get("multi_none_payable_steps", 0)) for probe in probes)
+        unclassified = sum(int(probe.get("multi_unclassifiable_steps", 0)) for probe in probes)
+        priced = [probe.get("multi_candidate_prices") or {} for probe in probes]
+        counted = [entry for entry in priced if int(entry.get("count", 0) or 0)]
+        minima = [int(entry["min"]) for entry in counted]
+        maxima = [int(entry["max"]) for entry in counted]
+        prices_total = sum(int(entry["sum"]) for entry in counted)
+        price_count = sum(int(entry["count"]) for entry in counted)
+        out[arm] = {
+            "episodes": len(values),
+            "steps": steps,
+            #: The three delivered layers ran before the geometry counters existed. Their L0-L4
+            #: verdicts are untouched by that; only this diagnostic is asymmetric, and saying so
+            #: is what keeps a g12 distribution from being read back into a delivered layer.
+            "geometry_recorded": any("steps_with_multiple_candidates" in probe for probe in probes),
+            "candidate_histogram": {
+                "zero": steps - offered,
+                "one": one,
+                "two_or_more": multi,
+            },
+            "multi_step_outcomes": {
+                "all_payable_within_credit": within,
+                "every_candidate_payable_but_not_jointly": joint,
+                "strict_subset_payable": competition,
+                "none_payable": none_payable,
+                "unclassifiable": unclassified,
+                "closes_on_multi_candidate_steps": within + joint + competition + none_payable
+                + unclassified
+                == multi,
+            },
+            "multi_candidate_price_bytes": {
+                "candidates_priced": price_count,
+                "min": min(minima) if minima else None,
+                "max": max(maxima) if maxima else None,
+                "mean": round(prices_total / price_count, 1) if price_count else None,
+                "spread": (max(maxima) - min(minima)) if minima else None,
+                "spread_as_fraction_of_credit": (
+                    round((max(maxima) - min(minima)) / common.BUDGET_BYTES, 5) if minima else None
+                ),
+            },
+            "first_credit_exhaustion": [
+                probe.get("first_credit_exhaustion_facts")
+                for probe in probes
+                if probe.get("first_credit_exhaustion_facts")
+            ],
+        }
+    return out
+
+
 def layer_report(goals: int) -> dict[str, Any]:
     rows = load(goals)
     arms = arm_tables(rows)
@@ -475,6 +547,7 @@ def layer_report(goals: int) -> dict[str, Any]:
         "mean_pareto_frontier": front,
         "per_stream_pairwise": dominance,
         "incomparable_bidirectional_pairs": incomparable_pairs(dominance, arms),
+        "step_geometry": step_geometry(rows),
         "lambda_break_even_adjacent_front": lambda_slopes(front, common.BUDGET_BYTES),
         "sender_visible_features": sender_visible_features(rows, env),
         "bootstrap": {

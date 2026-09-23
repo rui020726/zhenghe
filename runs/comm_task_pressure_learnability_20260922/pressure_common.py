@@ -322,12 +322,46 @@ def read_json(name: str) -> Any:
     return json.loads(json_path(name).read_text(encoding="utf-8"))
 
 
+#: The delivered round's evidence. This branch may read it, re-derive it and quote it, but it may
+#: not rewrite it into something else (extension protocol §2): a g12 result must never look like a
+#: post-hoc edit of the gate that said no. A write that reproduces the file byte for byte is still
+#: allowed, which makes every such write a recomputation check rather than a risk.
+DELIVERED_ARTEFACTS: tuple[str, ...] = (
+    "COMM_TASK_PRESSURE_LEARNABILITY_PROTOCOL.md",
+    "COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.md",
+    "COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.json",
+    "COMM_TASK_PRESSURE_LEARNABILITY_MANIFEST.json",
+    "SEED_COLLISION_AUDIT.json",
+    "AGREEMENT_GATE.json",
+    "GATE_SEQUENCE_EXPLANATION.json",
+    "CODE_FREEZE.json",
+    "RULE_MATRIX.json",
+    "PRESSURE_METRICS.json",
+    *(
+        f"{prefix}_g{goals}.json"
+        for goals in (6, 8, 10)
+        for prefix in ("GATES", "STREAM_MANIFEST", "ROW_PROVENANCE", "RULE_MATRIX", "PRESSURE_METRICS")
+    ),
+)
+
+
 def write_json(path: Path, payload: Any) -> Path:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
+    # No trailing newline: the delivered round's artefacts were written this way, and the guard
+    # below compares against those bytes.
+    text = json.dumps(payload, ensure_ascii=False, indent=1, sort_keys=True)
+    if path.name in DELIVERED_ARTEFACTS and path.exists():
+        if path.read_text(encoding="utf-8") != text:
+            raise SystemExit(
+                f"{path.name} is the delivered round's evidence and the new content differs: an "
+                "extension round must write its own files, not rewrite that verdict "
+                "(COMM_TASK_PRESSURE_G12_EXTENSION_PROTOCOL.md §2)"
+            )
+        return path
     temporary = path.with_suffix(path.suffix + ".part")
     with temporary.open("w", encoding="utf-8") as handle:
-        json.dump(payload, handle, ensure_ascii=False, indent=1, sort_keys=True)
+        handle.write(text)
         handle.flush()
         os.fsync(handle.fileno())
     os.replace(temporary, path)
@@ -383,14 +417,62 @@ GATE_LAUNCH_CAP = 12
 MATRIX_KINDS = ("record", "matrix")
 GATE_KINDS = ("gate", "selftest")
 
+#: The g12 extension's grant, stated as a difference so the original number survives on disk. The
+#: fourth layer was pre-registered and never ran because 20 launches went to this round's own
+#: defects, and failures spend the ceiling; the user then authorised exactly the 16 launches that
+#: layer is short by. Every one of the 496 launches already spent still counts against 656.
+G12_EXTENSION_GRANT = 16
+MATRIX_LAUNCH_CAP_WITH_GRANT = MATRIX_LAUNCH_CAP + G12_EXTENSION_GRANT
+G12_GOALS = 12
+
 LEDGER_PATTERN = "LAUNCH_LEDGER*.json"
 LEDGER_FILE = "LAUNCH_LEDGER.json"
+
+#: Which freeze file governs a layer. The three delivered layers were produced under
+#: ``CODE_FREEZE.json``; the extension registers its own file next to it rather than replacing it,
+#: because a freeze is evidence about a specific set of episodes and rewriting one erases that.
+FREEZE_FILES = {goals: "CODE_FREEZE.json" for goals in LAYER_ORDER}
+FREEZE_FILES[G12_GOALS] = "G12_FREEZE.json"
+
+#: Which seed audit authorises a layer's recording, for the same reason.
+AUDIT_FILES = {goals: "SEED_COLLISION_AUDIT.json" for goals in LAYER_ORDER}
+AUDIT_FILES[G12_GOALS] = "G12_SEED_COLLISION_AUDIT.json"
+
+
+def audit_file(goals: int) -> str:
+    _require_layer(goals)
+    return AUDIT_FILES[int(goals)]
+
+
+def freeze_file(goals: int) -> str:
+    _require_layer(goals)
+    return FREEZE_FILES[int(goals)]
+
+
+def launch_grant_for(goals: int) -> dict[str, Any]:
+    """The ceiling a layer runs under, and whether it needed an extension to run at all."""
+    _require_layer(goals)
+    extended = int(goals) == G12_GOALS
+    return {
+        "goals": int(goals),
+        "brief_ceiling": MATRIX_LAUNCH_CAP,
+        "effective_ceiling": MATRIX_LAUNCH_CAP_WITH_GRANT if extended else MATRIX_LAUNCH_CAP,
+        "extension_grant": G12_EXTENSION_GRANT if extended else 0,
+        "granted_by": (
+            "the user's explicit order of 2026-09-23, recorded in "
+            "COMM_TASK_PRESSURE_G12_EXTENSION_PROTOCOL.md §2"
+            if extended
+            else ""
+        ),
+    }
 
 
 def ledger_totals() -> dict[str, Any]:
     """Every ledger file added up: the round's real cost across processes and reruns."""
     totals: dict[str, Any] = {
         "matrix_cap": MATRIX_LAUNCH_CAP,
+        "matrix_cap_with_grant": MATRIX_LAUNCH_CAP_WITH_GRANT,
+        "extension_grant": G12_EXTENSION_GRANT,
         "gate_cap": GATE_LAUNCH_CAP,
         "starts": 0,
         "matrix_starts": 0,
@@ -442,11 +524,11 @@ class LaunchLedger:
                 f"unknown launch kind {kind!r}; ledger kinds are {MATRIX_KINDS + GATE_KINDS}"
             )
         totals = ledger_totals()
-        cap, used = (
-            (MATRIX_LAUNCH_CAP, totals["matrix_starts"])
-            if kind in MATRIX_KINDS
-            else (GATE_LAUNCH_CAP, totals["gate_starts"])
-        )
+        if kind in MATRIX_KINDS:
+            grant = launch_grant_for(goals)
+            cap, used = grant["effective_ceiling"], totals["matrix_starts"]
+        else:
+            cap, used = GATE_LAUNCH_CAP, totals["gate_starts"]
         if used >= cap:
             raise RuntimeError(
                 f"the {kind} ceiling of {cap} launches is spent ({used} started in "
@@ -597,15 +679,22 @@ __all__ = [
     "json_path",
     "read_json",
     "write_json",
+    "DELIVERED_ARTEFACTS",
     "BOOTSTRAP_REPLICATIONS",
     "BOOTSTRAP_SEED",
     "BOOTSTRAP_LABEL_ORDER",
     "paired_differences",
     "MATRIX_LAUNCH_CAP",
+    "MATRIX_LAUNCH_CAP_WITH_GRANT",
+    "G12_EXTENSION_GRANT",
+    "G12_GOALS",
     "GATE_LAUNCH_CAP",
     "LEDGER_PATTERN",
     "LaunchLedger",
     "ledger_totals",
+    "freeze_file",
+    "audit_file",
+    "launch_grant_for",
     "git",
     "blob_identity",
     "production_defaults_ok",
@@ -628,6 +717,17 @@ def _self_check() -> int:
     blocks = [seed for goals in LAYER_ORDER for seed in LAYERS[goals]]
     if len(set(blocks)) != len(blocks):
         problems.append("two pressure layers share a seed: the blocks must be disjoint")
+    if MATRIX_LAUNCH_CAP != len(LAYER_ORDER) * STREAMS_PER_LAYER * (1 + len(ARM_ORDER)):
+        problems.append("the 640 ceiling is no longer four layers of 16 + 16 x 9 launches")
+    if G12_EXTENSION_GRANT != STREAMS_PER_LAYER * (1 + len(ARM_ORDER)) - (
+        MATRIX_LAUNCH_CAP - ledger_totals()["matrix_starts"]
+    ):
+        problems.append(
+            f"the extension grant {G12_EXTENSION_GRANT} no longer equals what layer "
+            f"{G12_GOALS} is short by against the launches already spent"
+        )
+    if freeze_file(G12_GOALS) == freeze_file(6):
+        problems.append("the extension would overwrite the delivered layers' freeze file")
     if not production_defaults_ok()["ok"]:
         problems.append("a production default moved")
     for arm in ARM_ORDER:
@@ -639,6 +739,12 @@ def _self_check() -> int:
             "budget_bytes": BUDGET_BYTES,
             "layers": {str(k): [v[0], v[-1]] for k, v in LAYERS.items()},
             "arms": {arm: arm_spec(arm)["role"] for arm in ARM_ORDER},
+            "launch_ceiling": launch_grant_for(G12_GOALS),
+            "launches_spent": {
+                key: value
+                for key, value in ledger_totals().items()
+                if key in ("matrix_starts", "gate_starts", "failures")
+            },
             "problems": problems,
         },
         ensure_ascii=False,

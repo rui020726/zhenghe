@@ -71,8 +71,20 @@ class CandidateProbe:
             "capacity_blocked_steps": 0,
             "max_visible": 0,
             "max_payable": 0,
+            # The g12 extension protocol §5 step geometry: how many candidates a step offers, and
+            # which of the four exhaustive outcomes a multi-candidate step falls in. Counters only
+            # -- no threshold reads them, and L3 still reads ``competition_points`` alone.
+            "steps_with_one_candidate": 0,
+            "steps_with_multiple_candidates": 0,
+            "multi_all_payable_within_credit_steps": 0,
+            "multi_none_payable_steps": 0,
+            "multi_unclassifiable_steps": 0,
         }
+        #: Candidate prices over the multi-candidate steps only, kept apart from the counters
+        #: because a minimum has no zero-valued starting point.
+        self.prices: dict[str, Any] = {"count": 0, "min": None, "max": 0, "sum": 0}
         self.first_credit_block_step: int | None = None
+        self.first_credit_block_facts: dict[str, Any] | None = None
         self.block_reasons: dict[str, int] = {}
         self.sums: dict[str, float] = {
             "remaining_at_competition": 0.0,
@@ -201,8 +213,84 @@ class CandidateProbe:
                 counts["credit_blocked_steps"] += 1
                 if self.first_credit_block_step is None:
                     self.first_credit_block_step = int(observation.step)
+                    # "Which kind of message was the credit out for?" is a question about the
+                    # candidates that stood at that step, so the step is kept with them: a count
+                    # of first-versus-refresh emissions is what separates "the news ran out" from
+                    # "the refresh never got a chance".
+                    self.first_credit_block_facts = {
+                        "step": int(observation.step),
+                        "visible": visible,
+                        "payable": payable,
+                        "remaining_bytes": (
+                            None if not finite_remaining else int(remaining)
+                        ),
+                        "charges": [charge for charge in charges if charge is not None],
+                        "first_emissions": sum(1 for item in items if int(item.first_emission)),
+                        "refreshes": sum(1 for item in items if not int(item.first_emission)),
+                        "block_reasons": sorted(reasons),
+                    }
             elif "capacity_step" in reasons:
                 counts["capacity_blocked_steps"] += 1
+        self._observe_geometry(
+            visible=visible,
+            payable=payable,
+            prices=[charge for charge in charges if charge is not None],
+            total_charge=total_charge,
+            remaining=remaining,
+            finite_remaining=finite_remaining,
+            competition=competition,
+            joint_only=joint_only,
+        )
+
+    def _observe_geometry(
+        self,
+        *,
+        visible: int,
+        payable: int,
+        prices: list[int],
+        total_charge: int | None,
+        remaining: Any,
+        finite_remaining: bool,
+        competition: bool,
+        joint_only: bool,
+    ) -> None:
+        """The g12 extension protocol §5 step geometry: candidate count, price spread, outcome.
+
+        A strict-subset step needs the remaining credit to land *between* two candidate prices, so
+        the three quantities that decide whether such a step can exist at all are recorded here: how
+        often more than one candidate is in view, how far apart those candidates' prices are, and
+        which of four exhaustive outcomes the step falls in. Nothing in L0-L4 reads this.
+        """
+        counts = self.counts
+        if visible == 1:
+            counts["steps_with_one_candidate"] += 1
+            return
+        if visible < 2:
+            return
+        counts["steps_with_multiple_candidates"] += 1
+        if prices:
+            self.prices["count"] += len(prices)
+            self.prices["sum"] += sum(prices)
+            self.prices["min"] = (
+                min(prices) if self.prices["min"] is None else min(self.prices["min"], min(prices))
+            )
+            self.prices["max"] = max(self.prices["max"], max(prices))
+        within_credit = (
+            payable == visible
+            and finite_remaining
+            and total_charge is not None
+            and float(total_charge) <= float(remaining)
+        )
+        if within_credit:
+            counts["multi_all_payable_within_credit_steps"] += 1
+        elif joint_only:
+            pass  # already counted as ``joint_only_points``: each payable, the set not payable
+        elif competition:
+            pass  # already counted as ``competition_points``: the strict-subset step L3 asks for
+        elif payable == 0:
+            counts["multi_none_payable_steps"] += 1
+        else:
+            counts["multi_unclassifiable_steps"] += 1
 
     # -- reporting --------------------------------------------------------
     def summary(self) -> dict[str, Any]:
@@ -210,7 +298,21 @@ class CandidateProbe:
         steps = [int(entry["step"]) for entry in self.competition_sample]
         return {
             **self.counts,
+            "multi_candidate_prices": {
+                **self.prices,
+                "spread": (
+                    None
+                    if self.prices["min"] is None
+                    else int(self.prices["max"]) - int(self.prices["min"])
+                ),
+                "mean": (
+                    round(self.prices["sum"] / self.prices["count"], 1)
+                    if self.prices["count"]
+                    else None
+                ),
+            },
             "first_credit_exhaustion_step": self.first_credit_block_step,
+            "first_credit_exhaustion_facts": self.first_credit_block_facts,
             "block_reasons": dict(sorted(self.block_reasons.items())),
             "mean_remaining_bytes_at_competition": (
                 round(self.sums["remaining_at_competition"] / self.remaining_sums_n, 1)

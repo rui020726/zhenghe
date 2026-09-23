@@ -177,9 +177,10 @@ competition_points / joint_only_points / credit_blocked_steps`）。因此：
    `python -m unittest discover -s integrated_sar/tests`、`python -m integrated_sar`；
 2. `python pressure_common.py`（冻结自检）、`python seed_audit.py --goals 12 …`（§3）；
 3. harness 改动全部提交，工作树对 HEAD 干净；
-4. `python freeze_pressure.py --name G12_FREEZE.json --mode register` 写入
-   **生产代码 blob、runner 源码哈希、配置哈希、执行图模块集**；并核对
-   `episode_code_identity == c922ca100665609c`（§1.3）——**若不同，本轮不得与前三层同表比较，停止**；
+4. `python freeze_pressure.py --mode register --goals 12`（写 `G12_FREEZE.json`）与
+   `G12_START_LEDGER.json`，固化**生产代码 blob、runner 源码哈希、配置哈希、执行图模块集**；并按 §6.3
+   的**两条口径分别**核对 episode 代码身份与前三层相同——任一条不同 ⇒ 世界被换过，g12 不得与前三层
+   同表比较，本轮停止；
 5. 新建 `G12_START_LEDGER.json` 快照：登记本轮开始时的 496/640、10/12、20 次失败与 656 的有效上限。
 
 ### 6.2 第一条数据启动之后禁止
@@ -194,6 +195,27 @@ competition_points / joint_only_points / credit_blocked_steps`）。因此：
 （`orders_selection` 规则给出的有序元组一旦被重排，被测的就是另一个 episode）；
 新增测试要同时证明"加了计数器"与"没有改变 episode"两件事，并保留一条**会失败**的元测试
 （故意让探针改返回类型/顺序时断言必须报错）。
+
+### 6.3 登记冻结前发现的一处度量学问题（在任何一条 g12 episode 之前提交；不改任何判据）
+
+§6.1 第 4 条要求核对 episode 代码身份。核对时发现 `pressure_matrix.episode_code_identity()`
+有**两条口径不同、数值不同**的算法，二者都自洽但不可互换：
+
+| 读法 | 用什么文本 | 前三层的值 |
+|---|---|---|
+| 按 commit（`freeze_history` / 报告里的 freeze 时间线） | `git show <commit>:runs/.../pressure_env.py` 里从 `def run_episode(` 切到下一个 `\ndef `（**含函数后面的注释块**） | `c922ca100665609c`（`run_episode` 源哈希 `bdaf5cf95aac7c95`） |
+| 按工作树（`registered_freeze` 写进行戳的那个） | `inspect.getsource(run_episode)`，只到函数自身结束 | `ff0b4139b1fff700`（源哈希 `a6a00ec98030dbf1`） |
+
+因此 §6.1 第 4 条的核对按**同一条口径**执行，两条都要核，且核的是"本轮与前三层相同"而不是某个具体字面值：
+
+1. 工作树口径：本轮探针扩展之后必须仍等于前三层**行戳里实际记录**的 `ff0b4139b1fff700`
+   （已核：本轮改动后工作树值 = `ff0b4139b1fff700`，与 `rows_g*_shard*.jsonl` 的 `code_freeze` 全等）；
+2. 按 commit 口径：新冻结头算出的值必须仍等于前三层的 `c922ca100665609c`。
+
+任一条不等 ⇒ 世界被换过，g12 不得与前三层同表比较，本轮停止。
+**这条披露不改任何判据、任何阈值、任何一次启动**；它只防止一个真实的误读：把两个不同的哈希当成
+"代码变了"。改的只有 §5 的只读计数器与 `__pycache__` 之外的 harness 文件，生产模块 blob 一个都没动。
+
 
 ## 7. 严格禁止
 

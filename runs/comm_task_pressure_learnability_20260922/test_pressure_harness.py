@@ -15,6 +15,8 @@ own object, and a deliberately tampering probe *fails* the same assertion.
 
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import sys
 import tempfile
@@ -859,6 +861,375 @@ class FrozenSettingTests(unittest.TestCase):
         finally:
             common.ledger_totals = real  # type: ignore[assignment]
             path.unlink(missing_ok=True)
+
+
+class G12ExtensionCeilingTests(unittest.TestCase):
+    """The grant is 16 launches, for one layer, and nothing else about the arithmetic moved."""
+
+    def test_the_original_ceiling_survives_the_grant(self) -> None:
+        self.assertEqual(common.MATRIX_LAUNCH_CAP, 4 * (16 + 16 * 9), "640 is still the brief's number")
+        self.assertEqual(common.MATRIX_LAUNCH_CAP_WITH_GRANT, 656)
+        self.assertEqual(common.G12_EXTENSION_GRANT, 16)
+        self.assertEqual(common.GATE_LAUNCH_CAP, 12, "the extension may not buy verification episodes")
+        totals = common.ledger_totals()
+        self.assertEqual(
+            totals["matrix_cap"] + common.G12_EXTENSION_GRANT,
+            totals["matrix_cap_with_grant"],
+        )
+        remaining = common.MATRIX_LAUNCH_CAP_WITH_GRANT - totals["matrix_starts"]
+        self.assertEqual(
+            remaining,
+            common.STREAMS_PER_LAYER * (1 + len(common.ARM_ORDER)),
+            "the grant must be exactly what the fourth layer needs against the launches already spent",
+        )
+
+    def test_only_layer_twelve_runs_under_the_grant(self) -> None:
+        for goals in (6, 8, 10):
+            self.assertEqual(common.launch_grant_for(goals)["effective_ceiling"], 640, f"g{goals}")
+        self.assertEqual(common.launch_grant_for(12)["effective_ceiling"], 656)
+        self.assertEqual(common.launch_grant_for(12)["brief_ceiling"], 640)
+
+    def test_the_granted_ceiling_is_still_a_ceiling(self) -> None:
+        state = {"matrix": 0}
+        real = common.ledger_totals
+        common.ledger_totals = lambda: {  # type: ignore[assignment]
+            "matrix_starts": state["matrix"],
+            "gate_starts": 0,
+            "files": ["test"],
+        }
+        path = common.HERE / "LAUNCH_LEDGER_test_grant.json"
+        try:
+            ledger = common.LaunchLedger(path.name)
+            state["matrix"] = common.MATRIX_LAUNCH_CAP
+            ledger.reserve("matrix", 12, 1_000_300, arm="send_once")  # the grant lets this through
+            state["matrix"] = common.MATRIX_LAUNCH_CAP_WITH_GRANT
+            with self.assertRaises(RuntimeError):
+                ledger.reserve("matrix", 12, 1_000_301, arm="send_once")
+            state["matrix"] = common.MATRIX_LAUNCH_CAP
+            with self.assertRaises(RuntimeError):
+                ledger.reserve("matrix", 8, 100_000, arm="send_once")
+        finally:
+            common.ledger_totals = real  # type: ignore[assignment]
+            path.unlink(missing_ok=True)
+
+    def test_the_extension_registers_its_own_freeze_and_audit(self) -> None:
+        self.assertEqual(common.freeze_file(6), "CODE_FREEZE.json")
+        self.assertEqual(common.freeze_file(12), "G12_FREEZE.json")
+        self.assertEqual(common.audit_file(12), "G12_SEED_COLLISION_AUDIT.json")
+        self.assertNotEqual(common.audit_file(12), common.audit_file(6))
+
+
+class DeliveredArtefactTests(unittest.TestCase):
+    """An extension may re-derive the delivered round's numbers but never rewrite them."""
+
+    def test_a_changed_payload_for_a_delivered_file_is_refused(self) -> None:
+        name = "PRESSURE_METRICS_g6.json"
+        self.assertIn(name, common.DELIVERED_ARTEFACTS)
+        original = (common.HERE / name).read_text(encoding="utf-8")
+        try:
+            with self.assertRaises(SystemExit):
+                common.write_json(common.HERE / name, {"tampered": True})
+            self.assertEqual((common.HERE / name).read_text(encoding="utf-8"), original)
+        finally:
+            (common.HERE / name).write_text(original, encoding="utf-8")
+
+    def test_writing_the_same_content_is_allowed_and_recomputation_has_not_drifted(self) -> None:
+        """Re-deriving a delivered layer must reproduce it, apart from the keys this round added.
+
+        This is the delivered round's numbers checked against the current code, which is what makes
+        "we did not touch them" a fact rather than a claim: the extension's diagnostics are new
+        keys, and no judged quantity among the old keys may differ.
+        """
+        name = "RULE_MATRIX_g10.json"
+        stored = json.loads((common.HERE / name).read_text(encoding="utf-8"))
+        self.assertIn(name, common.DELIVERED_ARTEFACTS)
+        common.write_json(common.HERE / name, stored)  # identical content must not raise
+        fresh = pressure_metrics.layer_report(10)
+        added = {"step_geometry"}
+        self.assertEqual(set(fresh) - set(stored), added, "only diagnostics may be new")
+        differences = {
+            key: (stored[key], fresh[key])
+            for key in stored
+            if key not in added and json.dumps(stored[key], sort_keys=True) != json.dumps(
+                fresh[key], sort_keys=True
+            )
+        }
+        self.assertEqual(differences, {}, "a delivered aggregate must re-derive exactly")
+
+    def test_the_layer_twelve_files_are_not_delivered_evidence(self) -> None:
+        for name in ("GATES_g12.json", "RULE_MATRIX_g12.json", "STREAM_MANIFEST_g12.json"):
+            self.assertNotIn(name, common.DELIVERED_ARTEFACTS)
+
+    def test_the_extension_report_names_only_its_own_files(self) -> None:
+        import report_g12
+
+        for name in (
+            "COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.md",
+            "RULE_MATRIX.json",
+            "CODE_FREEZE.json",
+            "GATES_g10.json",
+        ):
+            with self.assertRaises(SystemExit):
+                report_g12.require_writable(name)
+        for name in (
+            "COMM_TASK_PRESSURE_G12_EXTENSION_VERDICT.json",
+            "GATES_g12.json",
+            "G12_FREEZE.json",
+        ):
+            report_g12.require_writable(name)
+
+    def test_the_branch_table_matches_the_protocols_four_rows(self) -> None:
+        import report_g12
+
+        gates = lambda **flags: {  # noqa: E731
+            "gates": {
+                name: {"passed": bool(flags.get(name, True))}
+                for name in ("L0", "L1", "L2", "L3", "L4")
+            }
+        }
+        cases = {
+            "L0 fails": (gates(L0=False), "invalid_data"),
+            "L1 fails": (gates(L1=False), "invalid_data"),
+            "L2 passes, L3 fails": (gates(L3=False, L4=False), "l2_pass_l3_fail"),
+            "L2 fails too": (gates(L2=False, L3=False, L4=False), "l2_fail_too"),
+            "L3 passes, L4 fails": (gates(L4=False), "l3_pass_l4_fail"),
+            "all pass": (gates(), "all_layers_pass"),
+        }
+        for label, (block, expected) in cases.items():
+            with self.subTest(label):
+                decision = report_g12.branch(block, True)
+                self.assertEqual(decision["branch"], expected)
+                self.assertFalse(decision["training_authorized"], "no branch authorises training")
+        self.assertEqual(report_g12.branch(gates(), False)["branch"], "incomplete_matrix")
+
+
+class NarrowedAuditTests(unittest.TestCase):
+    """A narrowed audit is a smaller question, not a wider whitelist."""
+
+    def tearDown(self) -> None:
+        seed_audit.set_scope(None)
+
+    def test_narrowing_keeps_only_the_layer_under_audit(self) -> None:
+        seed_audit.set_scope(12)
+        self.assertEqual(
+            seed_audit.own_candidate_seeds(), set(range(1_000_300, 1_000_316))
+        )
+        self.assertEqual(seed_audit.declared_range_conflicts(), [])
+        seed_audit.set_scope(None)
+        self.assertEqual(len(seed_audit.own_candidate_seeds()), 64)
+
+    def test_an_unregistered_block_cannot_be_audited_into_existence(self) -> None:
+        with self.assertRaises(ValueError):
+            seed_audit.set_scope(14)
+
+    def test_narrowing_does_not_hide_a_hit_inside_the_audited_block(self) -> None:
+        seed_audit.set_scope(12)
+        original = dict(seed_audit.DECLARED_BLOCKS)
+        try:
+            seed_audit.DECLARED_BLOCKS["synthetic collision"] = (1_000_300, 1_000_303)
+            conflicts = seed_audit.declared_range_conflicts()
+        finally:
+            seed_audit.DECLARED_BLOCKS.clear()
+            seed_audit.DECLARED_BLOCKS.update(original)
+        self.assertTrue(any(item["goals"] == 12 for item in conflicts), "the audited block still fails")
+
+    def test_recording_requires_the_audit_that_covers_the_layer_being_recorded(self) -> None:
+        """The narrowed file licenses layer 12 and nothing else.
+
+        Without the coverage check, pointing every layer at the g12 audit would "clear" layer 8 on
+        the strength of a question that was never asked about it.
+        """
+        self.assertTrue(
+            common.json_path("G12_SEED_COLLISION_AUDIT.json").exists(),
+            "the g12 audit is a pre-condition of the layer, and belongs in the repo",
+        )
+        g12 = json.loads(
+            common.json_path("G12_SEED_COLLISION_AUDIT.json").read_text(encoding="utf-8")
+        )
+        self.assertTrue(g12["clean"], g12["hit_counts"])
+        self.assertEqual(list(g12["blocks_audited"]), ["12"])
+        self.assertIsNotNone(record_layer.require_clean_audit(12))
+        real = common.audit_file
+        common.audit_file = lambda goals: "G12_SEED_COLLISION_AUDIT.json"  # type: ignore[assignment]
+        try:
+            with self.assertRaises(SystemExit):
+                record_layer.require_clean_audit(8)
+        finally:
+            common.audit_file = real  # type: ignore[assignment]
+
+    def test_a_narrowed_audit_never_overwrites_the_delivered_one(self) -> None:
+        """``--goals`` without an explicit ``--out`` would write the narrowed result over the
+        delivered round's four-block audit, so the script refuses it instead of guessing."""
+        with self.assertRaises(SystemExit), contextlib.redirect_stderr(io.StringIO()) as noise:
+            seed_audit.main(["--goals", "12"])
+        self.assertIn("must name its own file", noise.getvalue())
+        delivered = json.loads(
+            common.json_path("SEED_COLLISION_AUDIT.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(sorted(delivered["blocks_audited"]), ["10", "12", "6", "8"])
+        self.assertTrue(delivered["clean"])
+
+
+class StepGeometryTests(unittest.TestCase):
+    """The §5 mechanism counters: exhaustive over multi-candidate steps, and gate-blind."""
+
+    def _probe_with(self, cases: list[tuple[list[bool], int, int]]) -> dict[str, Any]:
+        probe = pressure_env.CandidateProbe(FixedRule(()))
+        for step, (flags, charge, remaining) in enumerate(cases):
+            probe.decide(
+                observation(
+                    [
+                        item(
+                            f"target-{index}",
+                            charge,
+                            flag,
+                            "allowed" if flag else "budget_exhausted",
+                            first=index % 2 == 0,
+                        )
+                        for index, flag in enumerate(flags)
+                    ],
+                    remaining,
+                    step=step,
+                )
+            )
+        return probe.summary()
+
+    def test_the_four_outcomes_partition_the_multi_candidate_steps(self) -> None:
+        summary = self._probe_with(
+            [
+                ([True, True], 10, 100),  # all payable, jointly within credit
+                ([True, True], 10, 15),  # each payable, not jointly
+                ([True, False], 10, 10),  # a strict subset is payable
+                ([False, False], 10, 0),  # nothing payable
+                ([True], 10, 10),  # one candidate: not a subset decision
+                ([True, True, False], 10, 25),  # strict subset again
+            ]
+        )
+        self.assertEqual(summary["steps_with_one_candidate"], 1)
+        self.assertEqual(summary["steps_with_multiple_candidates"], 5)
+        self.assertEqual(summary["multi_all_payable_within_credit_steps"], 1)
+        self.assertEqual(summary["joint_only_points"], 1)
+        self.assertEqual(summary["competition_points"], 2)
+        self.assertEqual(summary["multi_none_payable_steps"], 1)
+        self.assertEqual(summary["multi_unclassifiable_steps"], 0)
+        self.assertEqual(
+            summary["steps_with_multiple_candidates"],
+            summary["multi_all_payable_within_credit_steps"]
+            + summary["joint_only_points"]
+            + summary["competition_points"]
+            + summary["multi_none_payable_steps"]
+            + summary["multi_unclassifiable_steps"],
+            "a step that falls outside the four readings would let a cause be argued away",
+        )
+        prices = summary["multi_candidate_prices"]
+        self.assertEqual((prices["min"], prices["max"], prices["spread"]), (10, 10, 0))
+        self.assertEqual(prices["count"], 11, "five multi steps of two, two, two, two and three candidates")
+
+    def test_a_credit_that_cannot_run_out_is_all_payable_not_a_choice(self) -> None:
+        """The ceiling reference arm must land in the "nothing to decide" bin, not the subset bin."""
+        summary = self._probe_with([([True, True], 10, 10**18)])
+        self.assertEqual(summary["multi_all_payable_within_credit_steps"], 1)
+        self.assertEqual(summary["joint_only_points"], 0)
+        self.assertEqual(summary["competition_points"], 0)
+        self.assertEqual(summary["steps_with_multiple_candidates"], 1)
+
+    def test_the_exhaustion_facts_say_which_messages_were_standing(self) -> None:
+        summary = self._probe_with(
+            [
+                ([False, False], 10, 0),  # one first emission and one refresh, neither payable
+            ]
+        )
+        facts = summary["first_credit_exhaustion_facts"]
+        self.assertEqual(facts["visible"], 2)
+        self.assertEqual(facts["payable"], 0)
+        self.assertEqual(facts["first_emissions"], 1)
+        self.assertEqual(facts["refreshes"], 1)
+        self.assertEqual(facts["block_reasons"], ["budget_exhausted"])
+
+    def test_the_geometry_never_moves_a_gate(self) -> None:
+        """L3's verdict comes from ``competition_streams``; the counters cannot enter it."""
+
+        def report(competition: int, geometry: dict[str, Any]) -> dict[str, Any]:
+            return {
+                "best_fixed_rule": {"arm": "send_once"},
+                "arms": {
+                    "send_once": {
+                        "competition_streams": competition,
+                        "credit_used_ge_90_streams": 16,
+                        "per_stream_competition_points": {},
+                        "joint_only_points_total": 0,
+                        "payable_candidate_points_total": 0,
+                        "credit_exhausted_with_candidates_streams": 16,
+                        "mean_visible_at_competition": None,
+                        "mean_payable_at_competition": None,
+                    }
+                },
+                "step_geometry": {"send_once": geometry},
+            }
+
+        bare = {"episodes": 16, "steps": 16_000}
+        self.assertFalse(judge_layers.l3(report(0, bare))["passed"])
+        self.assertTrue(judge_layers.l3(report(8, bare))["passed"])
+        loaded = report(8, {"steps_with_multiple_candidates": 999, "competition_points": 999})
+        self.assertTrue(judge_layers.l3(loaded)["passed"])
+        self.assertFalse(judge_layers.l3(report(7, loaded["step_geometry"]))["passed"])
+
+    def test_the_aggregate_derives_the_zero_candidate_count_without_an_episode(self) -> None:
+        rows = [
+            {
+                "arm": "send_once",
+                "steps": 1000,
+                "probe": {
+                    "steps_offered": 100,
+                    "steps_with_one_candidate": 40,
+                    "steps_with_multiple_candidates": 60,
+                    "competition_points": 0,
+                    "joint_only_points": 20,
+                    "multi_all_payable_within_credit_steps": 30,
+                    "multi_none_payable_steps": 10,
+                    "multi_unclassifiable_steps": 0,
+                    "multi_candidate_prices": {"count": 120, "min": 2190, "max": 2952, "sum": 300000},
+                    "first_credit_exhaustion_facts": None,
+                },
+            }
+        ]
+        geometry = pressure_metrics.step_geometry(rows)["send_once"]
+        self.assertEqual(
+            geometry["candidate_histogram"], {"zero": 900, "one": 40, "two_or_more": 60}
+        )
+        self.assertTrue(geometry["multi_step_outcomes"]["closes_on_multi_candidate_steps"])
+        self.assertEqual(geometry["multi_candidate_price_bytes"]["spread"], 762)
+        self.assertTrue(geometry["geometry_recorded"])
+
+    def test_a_layer_without_the_counters_is_reported_as_such(self) -> None:
+        rows = [{"arm": "send_once", "steps": 1000, "probe": {"steps_offered": 100}}]
+        geometry = pressure_metrics.step_geometry(rows)["send_once"]
+        self.assertFalse(geometry["geometry_recorded"])
+        self.assertEqual(geometry["candidate_histogram"], {"zero": 900, "one": 0, "two_or_more": 0})
+
+    def test_the_l2_band_edge_reports_three_readings(self) -> None:
+        rows = [
+            {"arm": "send_once", "on_time": 9, "detected": 10},
+            {"arm": "send_once", "on_time": 8, "detected": 10},
+            {"arm": "send_once", "on_time": 7, "detected": 10},
+            {"arm": "send_once", "on_time": 7, "detected": 10},
+            {"arm": "send_once", "on_time": 3, "detected": 10},
+        ]
+        readings = judge_layers.band_edge_readings(rows, "send_once")
+        from fractions import Fraction
+
+        self.assertEqual(readings["streams"], 5)
+        self.assertEqual(readings["exact_rational_mean"], "17/25")
+        naive = Fraction(float(readings["naive_float_mean"]))
+        exact_sum = Fraction(float(readings["exact_sum_float_mean"]))
+        self.assertNotEqual(
+            naive,
+            exact_sum,
+            "summing five ratios two legitimate ways lands on neighbouring doubles, which is "
+            "exactly why a band edge is reported three ways instead of argued",
+        )
+        for value in (naive, exact_sum):
+            self.assertLess(abs(value - Fraction(17, 25)), Fraction(1, 10**12))
 
 
 if __name__ == "__main__":

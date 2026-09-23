@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from pathlib import Path
 from typing import Any
@@ -184,6 +185,7 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
                 "only requires that the transcript and the relay agree about how often it happened"
             ),
             "ledger_failures": failure_account,
+            "technical_failures_this_layer": failure_account["failures"],
             "episode_code_states": provenance["distinct_episode_code_states"],
             "stamped_rows": provenance["stamped"],
             "un_stamped_rows": provenance["un_stamped"],
@@ -192,6 +194,12 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
             "launches": {
                 "matrix": ledger["matrix_starts"],
                 "matrix_cap": ledger["matrix_cap"],
+                "matrix_cap_in_force_for_this_layer": common.launch_grant_for(goals)[
+                    "effective_ceiling"
+                ],
+                "extension_grant_for_this_layer": common.launch_grant_for(goals)[
+                    "extension_grant"
+                ],
                 "gate": ledger["gate_starts"],
                 "gate_cap": ledger["gate_cap"],
             },
@@ -201,6 +209,15 @@ def l0(goals: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
             "distinct_layer_wide_settings": invariants,
             "streams_with_mixed_settings": mixed_settings,
             "harness_agreement_with_archived_rows": agreement.get("agree", False),
+            "harness_agreement_provenance": (
+                "inherited: this layer was licensed by the delivered round's AGREEMENT_GATE.json, "
+                "which ran under CODE_FREEZE.json. The extension may not spend new verification "
+                "episodes, so the probe counters it added are proven transparent by zero-episode "
+                "tests, and the runner needs no new gate because this layer's freeze names the same "
+                "episode code identity the delivered layers do"
+                if common.freeze_file(goals) != "CODE_FREEZE.json"
+                else "this round's own AGREEMENT_GATE.json"
+            ),
             "allowed_configuration_differences": list(ALLOWED_CELL_DIFFERENCES),
         },
         "the layer's data, ledger and interface are trustworthy enough to be judged at all",
@@ -236,12 +253,43 @@ def l1(metrics: dict[str, Any]) -> dict[str, Any]:
     )
 
 
-def l2(report: dict[str, Any]) -> dict[str, Any]:
+def band_edge_readings(rows: list[dict[str, Any]], best: str) -> dict[str, Any]:
+    """Three readings of the L2 ratio, because g10's sat exactly on the band edge.
+
+    The harness's aggregate is ``round(sum(values)/len(values), 5)``; summing floats in one order or
+    another gives ``0.9000000000000001`` for a quantity whose exact rational value is 9/10. A gate
+    that turns on a boundary must show the boundary three ways, so the reading can be checked
+    instead of argued (extension protocol §1.4). The verdict still uses only ``rate``.
+    """
+    from fractions import Fraction
+
+    pairs = [
+        (int(row["on_time"]), int(row["detected"]))
+        for row in rows
+        if str(row["arm"]) == best and int(row["detected"]) > 0
+    ]
+    raw = [numerator / denominator for numerator, denominator in pairs]
+    exact = sum((Fraction(n, d) for n, d in pairs), Fraction(0))
+    exact = exact / len(pairs) if pairs else Fraction(0)
+    return {
+        "streams": len(pairs),
+        "naive_float_mean": repr(sum(raw) / len(raw)) if raw else None,
+        "exact_sum_float_mean": repr(math.fsum(raw) / len(raw)) if raw else None,
+        "exact_rational_mean": str(exact),
+        "note": (
+            "the closed interval is applied to the gate's own ``best_on_time_rate_of_detected``; the "
+            "other columns say whether a number sitting on a boundary is there for a reason"
+        ),
+    }
+
+
+def l2(report: dict[str, Any], rows: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     """Communication is worth something here, and the effect is not pinned at a ceiling."""
     best = report["best_fixed_rule"]["arm"]
     on_time = report["bootstrap"]["on_time_per_episode"]["always_hold"]["arms"].get(best, {})
     lower = (on_time.get("ci95") or [None, None])[0]
     rate = float(report["arms"][best]["on_time_rate_of_detected"])
+    near_edge = min(abs(rate - edge) for edge in L2_ON_TIME_BAND) <= 0.005
     return _verdict(
         "L2",
         lower is not None
@@ -256,6 +304,7 @@ def l2(report: dict[str, Any]) -> dict[str, Any]:
             "best_on_time_rate_of_detected": rate,
             "band": list(L2_ON_TIME_BAND),
             "band_holds": L2_ON_TIME_BAND[0] <= rate <= L2_ON_TIME_BAND[1],
+            "band_edge_readings": band_edge_readings(rows, best) if near_edge and rows else None,
             "reading_if_above_band": "effect ceiling: communication already buys nearly everything",
             "reading_if_below_band": "capacity/search floor: sending cannot recover the tasks",
         },
@@ -298,6 +347,9 @@ def l3(report: dict[str, Any]) -> dict[str, Any]:
             "all_arms_competition_streams": {
                 arm: value["competition_streams"] for arm, value in report["arms"].items()
             },
+            #: Extension protocol §5: why the gate is where it is. Counts only -- the verdict above
+            #: never reads them, and the L3 definition is still ``competition_points`` alone.
+            "step_geometry_of_the_best_rule": report.get("step_geometry", {}).get(best, {}),
         },
         "the budget is binding in a way that forces selection among candidates the sender can see",
     )
@@ -399,7 +451,7 @@ def judge(goals: int) -> dict[str, Any]:
     gates = [
         l0(goals, rows),
         l1(metrics),
-        l2(report),
+        l2(report, rows),
         l3(report),
         l4(report),
     ]

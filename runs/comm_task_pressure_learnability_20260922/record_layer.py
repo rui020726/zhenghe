@@ -52,23 +52,35 @@ RECORDED_MODULES = (
 RERUN_REASONS = ("process_killed", "disk_full", "checkpoint_load_failure")
 
 
-def require_clean_audit() -> dict[str, Any]:
-    path = common.json_path("SEED_COLLISION_AUDIT.json")
+def require_clean_audit(goals: int) -> dict[str, Any]:
+    """The audit that authorises *this* layer, and only that one.
+
+    Each layer names its own audit file so a later round cannot rewrite the evidence that licensed
+    an earlier one: the delivered three layers were licensed by ``SEED_COLLISION_AUDIT.json`` over
+    four blocks, and once those blocks had been recorded that audit could no longer be re-run
+    against all four without the project's own streams counting as conflicts.
+    """
+    name = common.audit_file(goals)
+    path = common.json_path(name)
     if not path.exists():
         raise SystemExit(
-            "SEED_COLLISION_AUDIT.json does not exist; the four-source audit runs before any "
-            "stream is recorded"
+            f"{name} does not exist; the four-source audit runs before any stream is recorded"
         )
     audit = json.loads(path.read_text(encoding="utf-8"))
     if not audit.get("clean"):
         raise SystemExit(f"the seed audit is not clean; recording is not allowed: {audit.get('verdict')}")
-    for goals, block in audit["blocks_audited"].items():
-        seeds = common.LAYERS[int(goals)]
-        if [seeds[0], seeds[-1]] != list(block["seeds"]):
-            raise SystemExit(
-                f"the audit covers {block['seeds']} for goals={goals} but this round registered "
-                f"{[seeds[0], seeds[-1]]}; the block moved after the audit"
-            )
+    audited = audit["blocks_audited"]
+    if str(int(goals)) not in audited:
+        raise SystemExit(
+            f"{name} audits blocks {sorted(audited)} but not goals={goals}; the layer whose streams "
+            "are being recorded must be the layer the audit cleared"
+        )
+    seeds = common.LAYERS[int(goals)]
+    if [seeds[0], seeds[-1]] != list(audited[str(goals)]["seeds"]):
+        raise SystemExit(
+            f"the audit covers {audited[str(goals)]['seeds']} for goals={goals} but this round "
+            f"registered {[seeds[0], seeds[-1]]}; the block moved after the audit"
+        )
     return audit
 
 
@@ -209,7 +221,8 @@ def fold(rows: list[dict[str, Any]], goals: int) -> dict[str, Any]:
 
 
 def registration(goals: int, rows: list[dict[str, Any]], shard: int | None) -> dict[str, Any]:
-    audit = require_clean_audit()
+    audit = require_clean_audit(goals)
+    name = common.audit_file(goals)
     payload = {
         "goals": int(goals),
         "block": [common.LAYERS[goals][0], common.LAYERS[goals][-1]],
@@ -219,9 +232,10 @@ def registration(goals: int, rows: list[dict[str, Any]], shard: int | None) -> d
             "independent test set for a learned model"
         ),
         "seed_audit": {
-            "file": "SEED_COLLISION_AUDIT.json",
+            "file": name,
             "clean": audit["clean"],
-            "sha256": common.sha256(common.json_path("SEED_COLLISION_AUDIT.json")),
+            "sha256": common.sha256(common.json_path(name)),
+            "blocks_audited": sorted(int(key) for key in audit["blocks_audited"]),
         },
         "recording_configuration": common.recording_configuration(goals),
         "only_variable_check": common.assert_only_num_goals_changed(goals),
@@ -315,7 +329,7 @@ def main(argv: list[str]) -> int:
         )
         return 0 if not payload["illegal_streams"] else 1
 
-    require_clean_audit()
+    require_clean_audit(args.goals)
     common.layer_streams(args.goals).mkdir(parents=True, exist_ok=True)
     if (args.rerun_seed is None) != (args.rerun_reason is None):
         parser.error("--rerun-seed and --rerun-reason go together")
