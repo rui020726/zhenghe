@@ -81,13 +81,17 @@ def judge_contrast(name: str, tag: str, seed: int) -> dict[str, Any]:
     return verdict
 
 
-def run() -> int:
-    import sys
+def main(argv: list[str] | None = None) -> int:
+    import argparse
 
-    tag = sys.argv[sys.argv.index("--tag") + 1] if "--tag" in sys.argv else "smoke"
-    seeds = [int(seed) for seed in
-             (sys.argv[sys.argv.index("--seeds").split("=")[1].split(",")]
-              if "--seeds" in sys.argv else ["1100000"])]
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--tag", default="smoke", choices=("smoke", "data"))
+    parser.add_argument("--seeds", default="1100000",
+                        help="comma-separated seeds to audit; the judgement is per seed, and "
+                             "a contrast is only as paired as its worst audited seed")
+    arguments = parser.parse_args(argv)
+    tag = arguments.tag
+    seeds = [int(seed) for seed in arguments.seeds.split(",") if seed.strip()]
     judgements = [{"cells": [judge_contrast(name, tag, seed) for seed in seeds]}
                   for name, _, _ in dc.CONTRASTS]
     flat = [cell for item in judgements for cell in item["cells"]]
@@ -128,15 +132,24 @@ def run() -> int:
         ),
     }
     dc.write_json(f"IDENTITY_AUDIT_{tag}.json", payload)
-    print(json.dumps({"tag": tag, "gates": gating,
-                      "phrasing": payload["phrasing_licensed"]}, ensure_ascii=False, indent=1))
-    for cell in flat:
-        print(cell["contrast"], cell["arms"], "det", cell["i1_detection_stream_identical"],
-              "emis", cell.get("i2_emission_sequence_identical"),
-              "packets", cell.get("packet_identity"),
-              "cfg-only", cell["i5_only_the_declared_field_differs"])
+    failures = [cell for cell in flat if not cell["i1_detection_stream_identical"]
+                or not cell["i5_only_the_declared_field_differs"]
+                or (cell["contrast"] == "C2" and not cell.get("i4_reference_arm_loses_nothing"))
+                or (cell["contrast"] == "C3"
+                    and not cell.get("i3_packet_outcomes_identical"))]
+    print(json.dumps({"tag": tag, "seeds_audited": len(seeds), "gates": gating,
+                      "phrasing": payload["phrasing_licensed"],
+                      "failing_cells": [
+                          {"contrast": cell["contrast"], "seed": cell["seed"],
+                           "det": cell["i1_detection_stream_identical"],
+                           "cfg_only": cell["i5_only_the_declared_field_differs"],
+                           "packets": cell.get("packet_identity")}
+                          for cell in failures][:12]},
+                     ensure_ascii=False, indent=1))
     return 0 if payload["all_passed"] else 1
 
 
 if __name__ == "__main__":
-    raise SystemExit(run())
+    import sys
+
+    raise SystemExit(main(sys.argv[1:]))

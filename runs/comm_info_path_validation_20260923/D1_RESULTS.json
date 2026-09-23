@@ -1,0 +1,394 @@
+{
+ "configuration": {
+  "arms": {
+   "A1": {},
+   "A2": {
+    "comm_policy": "always_hold"
+   },
+   "A3": {
+    "comm_delivery_probability": 0.7
+   },
+   "A4": {
+    "comm_delivery_probability": 0.7,
+    "gossip_interval": 100000
+   }
+  },
+  "base": {
+   "actor_kv_mode": "tokens",
+   "allocation_interval": 5,
+   "comm_delay_ticks": 0,
+   "comm_delivery_probability": 1.0,
+   "comm_policy": "immediate",
+   "comm_range": 0.3,
+   "comm_subscribers": "all",
+   "comm_timing_mode": "legacy_shared_bound",
+   "command_ttl": 10.0,
+   "coordination_interval": 5,
+   "coordinator_policy": "coalition_planner",
+   "detection_radius": 5,
+   "device": "cpu",
+   "dt": 1.0,
+   "gossip_interval": 2,
+   "grid_size": 60,
+   "mock": false,
+   "num_goals": 6,
+   "obstacle_density": 0.15,
+   "piloc_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+   "quiet": true,
+   "release_redundant_members": true,
+   "rescue_per_species": 2,
+   "rescue_species": 3,
+   "residual_scale": 0.25,
+   "search_agents": 2,
+   "steps": 1000,
+   "sticky_commitments": true,
+   "suppress_recommand_own_task": true,
+   "task_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+   "use_coordinator": true
+  },
+  "checkpoints": {
+   "allocation": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+   "search": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth"
+  },
+  "seed_count": 60,
+  "seeds": [
+   1100000,
+   1100059
+  ],
+  "training": "none; both networks are loaded frozen and are never updated"
+ },
+ "contrasts": [
+  {
+   "arms": [
+    "A1",
+    "A2"
+   ],
+   "charged_bytes_difference_left_minus_right_per_episode": 14573.3,
+   "expired_per_episode": {
+    "A1": 0.0,
+    "A2": 0.3
+   },
+   "name": "C1",
+   "on_time_difference_left_minus_right": {
+    "ci95": [
+     0.18333,
+     0.45
+    ],
+    "max": 2,
+    "mean": 0.31667,
+    "median": 0.0,
+    "min": 0,
+    "n": 60,
+    "replications": 10000,
+    "rng": 20260923,
+    "seeds_equal": 43,
+    "seeds_left_better": 17,
+    "seeds_right_better": 0
+   },
+   "packets_lost_difference_per_episode": 0.0,
+   "paired_seeds": 60,
+   "per_episode_means": {
+    "A1": 5.8667,
+    "A2": 5.55
+   }
+  },
+  {
+   "arms": [
+    "A1",
+    "A3"
+   ],
+   "charged_bytes_difference_left_minus_right_per_episode": 0.0,
+   "expired_per_episode": {
+    "A1": 0.0,
+    "A3": 0.0
+   },
+   "name": "C2",
+   "on_time_difference_left_minus_right": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "max": 0,
+    "mean": 0.0,
+    "median": 0.0,
+    "min": 0,
+    "n": 60,
+    "replications": 10000,
+    "rng": 20260923,
+    "seeds_equal": 60,
+    "seeds_left_better": 0,
+    "seeds_right_better": 0
+   },
+   "packets_lost_difference_per_episode": -10.25,
+   "paired_seeds": 60,
+   "per_episode_means": {
+    "A1": 5.8667,
+    "A3": 5.8667
+   }
+  },
+  {
+   "arms": [
+    "A3",
+    "A4"
+   ],
+   "charged_bytes_difference_left_minus_right_per_episode": 0.0,
+   "expired_per_episode": {
+    "A3": 0.0,
+    "A4": 1.2833
+   },
+   "name": "C3",
+   "on_time_difference_left_minus_right": {
+    "ci95": [
+     1.01667,
+     1.55
+    ],
+    "max": 4,
+    "mean": 1.28333,
+    "median": 1.0,
+    "min": 0,
+    "n": 60,
+    "replications": 10000,
+    "rng": 20260923,
+    "seeds_equal": 15,
+    "seeds_left_better": 45,
+    "seeds_right_better": 0
+   },
+   "packets_lost_difference_per_episode": 0.0,
+   "paired_seeds": 60,
+   "per_episode_means": {
+    "A3": 5.8667,
+    "A4": 4.5833
+   }
+  }
+ ],
+ "identity_gates": {
+  "C1": true,
+  "C2": true,
+  "C3": true
+ },
+ "launches": {
+  "by_kind": {
+   "b0": 16,
+   "data": 240,
+   "mode": 4,
+   "smoke": 4
+  },
+  "cap": 296,
+  "used": 264
+ },
+ "licensed_phrasing": {
+  "C1": "不得称同一批丢包",
+  "C2": "同一批包、阈值不同（嵌套）",
+  "C3": "同一批丢包"
+ },
+ "mechanism_record": {
+  "A3": {
+   "arm": "A3",
+   "chain_vs_metrics_conflict_count": 0,
+   "chain_vs_metrics_conflicts": [],
+   "co_occurrence_counts": {},
+   "denominators": {
+    "detected": 352,
+    "failed": 0,
+    "mechanism_determined": 0,
+    "mechanism_undetermined": 0,
+    "on_time": 352,
+    "placed": 360
+   },
+   "failed_with_no_mechanism_flag": 0,
+   "flag_counts": {},
+   "information_attribution_numerator": 0,
+   "m3_calibration": {
+    "reading": "nearly every goal carries the frozen M3 predicate, completed ones included, because a belief written on a poll is always behind the truth it describes; so M3 counts are reported, and the bottleneck verdict is not made to rest on M3 alone",
+    "share_of_failed_goals_flagged": null,
+    "share_of_on_time_goals_flagged": 1.0
+   },
+   "shares": {
+    "S_all": null,
+    "S_det": null,
+    "S_unres": null
+   },
+   "slack_at_completion_steps": {
+    "max": 174.97094077381072,
+    "mean": 98.02723,
+    "median": 96.10138594989172,
+    "min": 20.013822223530056,
+    "n": 352,
+    "p25": 64.98198753189365,
+    "p75": 128.47079029669533,
+    "p90": 147.98423052396998
+   },
+   "stale_age_steps_max": null,
+   "stale_mismatch_share_of_checks": null
+  },
+  "A4": {
+   "arm": "A4",
+   "chain_vs_metrics_conflict_count": 0,
+   "chain_vs_metrics_conflicts": [],
+   "co_occurrence_counts": {
+    "M0_no_mechanism_flag_applies": 9,
+    "M3_stale_at_a_decision": 68
+   },
+   "denominators": {
+    "detected": 352,
+    "failed": 77,
+    "mechanism_determined": 77,
+    "mechanism_undetermined": 0,
+    "on_time": 275,
+    "placed": 360
+   },
+   "failed_with_no_mechanism_flag": 9,
+   "flag_counts": {
+    "M3_stale_at_a_decision": 68
+   },
+   "information_attribution_numerator": 68,
+   "m3_calibration": {
+    "reading": "nearly every goal carries the frozen M3 predicate, completed ones included, because a belief written on a poll is always behind the truth it describes; so M3 counts are reported, and the bottleneck verdict is not made to rest on M3 alone",
+    "share_of_failed_goals_flagged": 0.88312,
+    "share_of_on_time_goals_flagged": 1.0
+   },
+   "shares": {
+    "S_all": 0.88312,
+    "S_det": 0.88312,
+    "S_unres": 0.0
+   },
+   "slack_at_completion_steps": {
+    "max": 174.97094077381072,
+    "mean": 92.54586,
+    "median": 91.01468843778599,
+    "min": 1.1086615080933626,
+    "n": 275,
+    "p25": 57.98198753189368,
+    "p75": 130.5850856068397,
+    "p90": 148.40337760269873
+   },
+   "stale_age_steps_max": {
+    "max": 999.0,
+    "mean": 600.1039,
+    "median": 823.0,
+    "min": 0.0,
+    "n": 77,
+    "p25": 129.0,
+    "p75": 984.0,
+    "p90": 998.0
+   },
+   "stale_mismatch_share_of_checks": {
+    "max": 0.999,
+    "mean": 0.79062,
+    "median": 0.98497,
+    "min": 0.0,
+    "n": 237,
+    "p25": 0.85385,
+    "p75": 0.99795,
+    "p90": 0.999
+   }
+  }
+ },
+ "per_arm": {
+  "A1": {
+   "airtime_bytes_per_episode": 14573.3,
+   "discovered_per_episode": 5.8667,
+   "episodes": 60,
+   "expired_per_episode": 0.0,
+   "on_time_per_episode": 5.8667,
+   "packets_lost_per_episode": 0.0,
+   "placed_per_episode": 6.0,
+   "probe_anomaly_cells": 0,
+   "targets_never_known_per_episode": 0.1333
+  },
+  "A2": {
+   "airtime_bytes_per_episode": 0.0,
+   "discovered_per_episode": 5.8667,
+   "episodes": 60,
+   "expired_per_episode": 0.3,
+   "on_time_per_episode": 5.55,
+   "packets_lost_per_episode": 0.0,
+   "placed_per_episode": 6.0,
+   "probe_anomaly_cells": 0,
+   "targets_never_known_per_episode": 0.45
+  },
+  "A3": {
+   "airtime_bytes_per_episode": 14573.3,
+   "discovered_per_episode": 5.8667,
+   "episodes": 60,
+   "expired_per_episode": 0.0,
+   "on_time_per_episode": 5.8667,
+   "packets_lost_per_episode": 10.25,
+   "placed_per_episode": 6.0,
+   "probe_anomaly_cells": 0,
+   "targets_never_known_per_episode": 0.1333
+  },
+  "A4": {
+   "airtime_bytes_per_episode": 14573.3,
+   "discovered_per_episode": 5.8667,
+   "episodes": 60,
+   "expired_per_episode": 1.2833,
+   "on_time_per_episode": 4.5833,
+   "packets_lost_per_episode": 10.25,
+   "placed_per_episode": 6.0,
+   "probe_anomaly_cells": 0,
+   "targets_never_known_per_episode": 0.1333
+  }
+ },
+ "protocol": "D1_PROTOCOL_REVISION.md",
+ "round": "comm_info_path_validation_20260923",
+ "start_sha": "b73876013e76a82bbaab2f886eedeb34df7fc039",
+ "verdict": {
+  "S_all": null,
+  "S_unres": null,
+  "all_identity_gates_passed": true,
+  "c1_on_time_difference": {
+   "ci95": [
+    0.18333,
+    0.45
+   ],
+   "max": 2,
+   "mean": 0.31667,
+   "median": 0.0,
+   "min": 0,
+   "n": 60,
+   "replications": 10000,
+   "rng": 20260923,
+   "seeds_equal": 43,
+   "seeds_left_better": 17,
+   "seeds_right_better": 0
+  },
+  "c2_on_time_difference": {
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "max": 0,
+   "mean": 0.0,
+   "median": 0.0,
+   "min": 0,
+   "n": 60,
+   "replications": 10000,
+   "rng": 20260923,
+   "seeds_equal": 60,
+   "seeds_left_better": 0,
+   "seeds_right_better": 0
+  },
+  "c3_on_time_difference": {
+   "ci95": [
+    1.01667,
+    1.55
+   ],
+   "max": 4,
+   "mean": 1.28333,
+   "median": 1.0,
+   "min": 0,
+   "n": 60,
+   "replications": 10000,
+   "rng": 20260923,
+   "seeds_equal": 15,
+   "seeds_left_better": 45,
+   "seeds_right_better": 0
+  },
+  "declared": "undecidable",
+  "deployed_failures_available": 0,
+  "guard_blocks_verdict": true,
+  "primary_mechanism_arm": "A3",
+  "reading_limit": "when the deployed arm has no on-time failures at the frozen difficulty, S_all has an empty denominator and the frozen criteria cannot be satisfied in either direction; that is reported as a vacated judgement, not as a null result about information in general"
+ }
+}

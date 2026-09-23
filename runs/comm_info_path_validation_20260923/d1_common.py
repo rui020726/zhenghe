@@ -147,6 +147,26 @@ def read_json(path: Path) -> Any:
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
+def quantiles(values: list[float]) -> dict[str, Any]:
+    """min/p25/median/p75/p90/max and mean, or None-filled for an empty list."""
+    if not values:
+        return {"n": 0, "min": None, "p25": None, "median": None, "p75": None,
+                "p90": None, "max": None, "mean": None}
+    ordered = sorted(float(value) for value in values)
+
+    def at(fraction: float) -> float:
+        position = min(len(ordered) - 1, max(0, int(round(fraction * (len(ordered) - 1)))))
+        return ordered[position]
+
+    return {"n": len(ordered), "min": ordered[0], "p25": at(0.25), "median": at(0.50),
+            "p75": at(0.75), "p90": at(0.90), "max": ordered[-1],
+            "mean": round(sum(ordered) / len(ordered), 5)}
+
+
+def ratio(numerator: float, denominator: float) -> float | None:
+    return round(numerator / denominator, 6) if denominator else None
+
+
 def iter_jsonl(path: Path) -> Any:
     with Path(path).open("r", encoding="utf-8") as handle:
         for number, line in enumerate(handle, start=1):

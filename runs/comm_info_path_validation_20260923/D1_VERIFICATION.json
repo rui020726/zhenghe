@@ -1,0 +1,82 @@
+{
+ "cell_census": {
+  "by_arm": {
+   "A1": 60,
+   "A2": 60,
+   "A3": 60,
+   "A4": 60
+  },
+  "cells_missing": [],
+  "data_rows": 240,
+  "launches": {
+   "by_kind": {
+    "b0": 16,
+    "data": 240,
+    "mode": 4,
+    "smoke": 4
+   },
+   "cap": 296,
+   "used": 264
+  },
+  "probe_anomaly_cells": 0,
+  "seeds_expected": 60,
+  "technical_failures": 0
+ },
+ "checkpoints": {
+  "allocation": {
+   "exists": true,
+   "modified_after_start": false,
+   "path": "runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+   "sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  },
+  "search": {
+   "exists": true,
+   "modified_after_start": false,
+   "path": "runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+   "sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33"
+  }
+ },
+ "gates": {
+  "B0_PAIRED_REPLAY.json": true,
+  "IDENTITY_AUDIT_data.json": true,
+  "IDENTITY_AUDIT_smoke.json": true,
+  "SEED_COLLISION_AUDIT.json": "passed"
+ },
+ "not_an_independent_test_set": "these 240 cells measure an information path, not a learned policy; no learned controller was run on them and they must not be cited as held-out evidence for one",
+ "passed": true,
+ "production_defaults": "unchanged: every arm sets its parameters explicitly on the command line, and RunConfiguration defaults were not edited",
+ "production_scope": {
+  "changed_vs_start_sha": [
+   ".gitignore",
+   "integrated_sar/adapters/piloc.py",
+   "integrated_sar/comm.py",
+   "integrated_sar/info_probe.py",
+   "integrated_sar/joint_driver.py",
+   "integrated_sar/tests/test_info_probe.py",
+   "runs/comm_info_path_validation_20260923/B0_PAIRED_REPLAY.json",
+   "runs/comm_info_path_validation_20260923/D1_PROTOCOL_REVISION.md",
+   "runs/comm_info_path_validation_20260923/IDENTITY_AUDIT_smoke.json",
+   "runs/comm_info_path_validation_20260923/SEED_COLLISION_AUDIT.json",
+   "runs/comm_info_path_validation_20260923/d1_common.py",
+   "runs/comm_info_path_validation_20260923/d1_gate.py",
+   "runs/comm_info_path_validation_20260923/d1_identity.py",
+   "runs/comm_info_path_validation_20260923/d1_run.py",
+   "runs/comm_info_path_validation_20260923/d1_seeds.py",
+   "runs/comm_info_path_validation_20260923/test_d1_harness.py"
+  ],
+  "outside_the_allowed_set": [],
+  "production_files_changed": [
+   "integrated_sar/adapters/piloc.py",
+   "integrated_sar/comm.py",
+   "integrated_sar/info_probe.py",
+   "integrated_sar/joint_driver.py",
+   "integrated_sar/tests/test_info_probe.py"
+  ],
+  "protected_paths_touched": []
+ },
+ "sealed_and_reserved": {
+  "checkpoints_written_by_this_round": 0,
+  "sealed_block_artefacts": 0
+ },
+ "training": "none requested and none performed; both networks are loaded frozen"
+}
