@@ -1,0 +1,81 @@
+{
+ "authorisation_boundaries": {
+  "next_step_documents_executed": false,
+  "no_added_goal_difficulty": "num_goals/steps/deadline are read from the archived run_config and never overridden",
+  "no_communication_change": "the two batches' logged transport parameters are read as-is; this round writes no configuration",
+  "no_piloc_retraining": "no training entry point was imported or called; torch/piloc/task_allocation never appear in sys.modules"
+ },
+ "bucket_closure": {
+  "B1_d1_20260923": {
+   "all_seeds_certified": true,
+   "buckets_sum_equal_misses": true,
+   "every_row_certified": true,
+   "line_of_sight_disagreements": 0,
+   "machinery_consistency": {
+    "detected_plus_remaining_equals_placed": true,
+    "detection_steps_inside_the_window": true,
+    "episodes": 60,
+    "one_event_per_target_id": true
+   },
+   "no_unreachable_claimed": true,
+   "placements_and_starts_agree": true,
+   "rows_equal_misses": true
+  },
+  "B2_systemloop_20260918": {
+   "all_seeds_certified": true,
+   "buckets_sum_equal_misses": true,
+   "every_row_certified": true,
+   "line_of_sight_disagreements": 0,
+   "machinery_consistency": {
+    "detected_plus_remaining_equals_placed": true,
+    "detection_steps_inside_the_window": true,
+    "episodes": 60,
+    "one_event_per_target_id": true
+   },
+   "no_unreachable_claimed": true,
+   "placements_and_starts_agree": true,
+   "rows_equal_misses": true
+  }
+ },
+ "episode_freedom": {
+  "analysis_calls": [],
+  "episode_attempt": "blocked",
+  "forbidden_imports": [],
+  "probe_calls_after_attempt": [
+   "integrated_sar.joint_driver.build_joint_run"
+  ],
+  "probe_stderr_tail": "",
+  "tripwire_resolved": [
+   "integrated_sar.joint_driver.build_joint_run",
+   "integrated_sar.joint_driver.JointRun.run",
+   "integrated_sar.detection_replay.record_detection_stream"
+  ]
+ },
+ "inputs_unchanged": {
+  "changed": [],
+  "inputs": 600,
+  "missing": []
+ },
+ "passed": true,
+ "round": "real_search_undetected_attribution_20260923",
+ "scope": {
+  "changed_vs_start_sha": [
+   ".gitignore",
+   "ARCHITECTURE.md",
+   "PROJECT_CHARTER.md",
+   "PROJECT_STATUS.md",
+   "README.md"
+  ],
+  "d1_frozen_artefacts_changed": [],
+  "gitignore_added_lines": 9,
+  "gitignore_additions_all_scope_this_round": true,
+  "outside_the_allowed_set": [],
+  "protected_paths_touched": [],
+  "start_sha_resolvable": true
+ },
+ "sealed": {
+  "sealed_seed_count_seen": 0,
+  "untracked_files_under_runs_matching_sealed_seeds": []
+ },
+ "start_sha": "037fde424b3c2c38176699085695d4a51bc8e67d"
+}
