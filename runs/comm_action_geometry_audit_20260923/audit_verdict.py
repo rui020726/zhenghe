@@ -237,6 +237,52 @@ def main(argv: list[str]) -> int:
             "本轮不声称 L3 应被改判",
             "D 节全部数字是 ledger-only opportunity，不是环境因果效应",
         ],
+        "decision": {
+            "name": "no_temporal_allocation_signal",
+            "statement": "在已测的任务分布、广播协议、硬预算、观测/动作/奖励之下，发送时机上"
+                         "不存在可供学习器支配的时间性额度分配信号：额度在 episode 前段就被一次性"
+                         "花完并冻结，其后出现的『严格子集可支付』步既不携带新信息之间的取舍，"
+                         "也不是由压力单调产生的可选区间。",
+            "why_this_name_and_not_a_gate_result": "本轮是回顾性机制审计，没有预登记判据，因此这条"
+                                                   "不是某道门禁的通过/不通过，而是对本轮全部测量"
+                                                   "的**统一结论名**；四层 L0–L4 原判据与取值未被改写，"
+                                                   "该名字只覆盖本轮新增的机制证据。",
+            "scope": {
+                "task_distribution": "本项目的搜救场景族，`num_goals` 取 6/8/10/12、"
+                                     "seed 块 1000000..1000315 的 64 条流；deadline_tightness "
+                                     "(0.5, 2.0)、60×60 地图、检测半径 5。未测其他分布。",
+                "broadcast_protocol": "`policy_owned_timing` 发送协议 + 一次发射对全部订阅者广播、"
+                                      "按订阅者数乘计费；isolated 信息路径（gossip 间隔大于步数）、"
+                                      "投递概率 1.0 无损、0 延迟、ACK 关闭。",
+                "budget": "29 300 B/episode 硬约束（锁定的 25 % 档），逐 episode 独立、"
+                          "不可跨集结转；本轮实测没有任何一格用到 100 %（最高 0.999 93）。",
+                "observation_action_reward": "19 维旧观测、SEND/HOLD 二动作、"
+                                             "reward 只奖励按时完成而字节仅为硬约束（未写进目标函数）；"
+                                             "未测扩维观测、未测成本进目标函数、未测 ACK 反馈。",
+                "send_once_already_does_the_useful_thing": "四层最佳固定规则中三个是 `send_once`"
+                                                           "（g6 是 `periodic_20`），它在四层一律"
+                                                           "**零续报**：只给尚未报出的目标花额度，"
+                                                           "这正是『把预算保留给未报告目标』这一"
+                                                           "假设中的学习器策略。因此时机轴上留给"
+                                                           "学习器的净收益空间已被这条固定规则占据。",
+                "not_a_claim_about_rl_in_general": "**没有**证明强化学习在其他通信拓扑"
+                                                   "（受限邻域通信、coalition 定向、coordinator-only、"
+                                                   "有损/有延迟信道、多订阅者异质 fan-out）"
+                                                   "或其他任务分布中无效；也未证明不存在更优发送策略、"
+                                                   "或规则全局最优。该结论只在此范围内成立。",
+            },
+            "what_would_reopen_it": [
+                "真实（非人工缩放）的接收者语义使报价随 recipient 集合异质变化，且该集合在发送前可观测",
+                "把成本显式写进目标函数（需先解决 reward 结构，且不得用未过门槛的层挑成本系数）",
+                "有损/有延迟信道或 ACK 反馈改变『一次发送是否足够』的判断",
+            ],
+            "evidence": [
+                "COMM_ACTION_GEOMETRY_AUDIT.json",
+                "COMM_ACTION_GEOMETRY_MECHANISM.json",
+                "RECOMPUTE_L0_L4.json",
+                "AUDIT_VERIFICATION.json",
+            ],
+        },
         "next_step_belongs_to_the_user": True,
     }
     A.write_json(A.HERE / "COMM_ACTION_GEOMETRY_AUDIT_VERDICT.json", verdict)
