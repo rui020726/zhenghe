@@ -1,0 +1,1487 @@
+{
+ "block": [
+  1000300,
+  1000315
+ ],
+ "executed_code": {
+  "all_modules_match_head": true,
+  "branch": "analysis/comm-task-pressure-g12-extension",
+  "comparison": "git blob identity (line-ending filters applied)",
+  "head": "aa6768eb96e5e2fa4f028a92168d45a678bfad7b",
+  "modules": {
+   "integrated_sar/adapters/piloc.py": {
+    "blob": "db4d8539e2855e5d621df37afb9408dd8cbcf190",
+    "blob_at_head": "db4d8539e2855e5d621df37afb9408dd8cbcf190",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "2ac3d1a5420c518c6f5319dfc5e791efbc8cb0a87a31b9815aeae6c82b0107b5"
+   },
+   "integrated_sar/adapters/task03.py": {
+    "blob": "8ba631ca1892bacc46dc24832d20f56c73173022",
+    "blob_at_head": "8ba631ca1892bacc46dc24832d20f56c73173022",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1"
+   },
+   "integrated_sar/comm.py": {
+    "blob": "c60471b29f4aea8fa4815481cb34b114a0421989",
+    "blob_at_head": "c60471b29f4aea8fa4815481cb34b114a0421989",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "d6e68275b220bbd5a4926aad9d03c567b1da9888e1cb605d7312d05bbdd64e43"
+   },
+   "integrated_sar/contracts.py": {
+    "blob": "156bbaf470e8480e918c06e94cee4ba70c6741f1",
+    "blob_at_head": "156bbaf470e8480e918c06e94cee4ba70c6741f1",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "7052a4d6bca870060a12890fe2117fe0a0a1097db11934d74c6136655dce09b7"
+   },
+   "integrated_sar/detection_replay.py": {
+    "blob": "36e6479ed8fd2e8e62425a8deb00c41b6ce871da",
+    "blob_at_head": "36e6479ed8fd2e8e62425a8deb00c41b6ce871da",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "349f57fc9bc804c1334ef09c1ba2ff2db948a9fb56b803c29092ea137babab58"
+   },
+   "integrated_sar/expired_attribution.py": {
+    "blob": "b8598eaa6ce840652fc7ee91e100675a46da3e5c",
+    "blob_at_head": "b8598eaa6ce840652fc7ee91e100675a46da3e5c",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "b95be5e01a31063f694f0fff9d93134068396fc46e1a9a6166bdba77cbdd6ab2"
+   },
+   "integrated_sar/joint_driver.py": {
+    "blob": "4f803803777a405ee293b32519e721704a95472c",
+    "blob_at_head": "4f803803777a405ee293b32519e721704a95472c",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "eac7a63cb770501e7abc80f4dc980a3adad82c917c2fe212d9d85727a069fcf7"
+   },
+   "integrated_sar/lifecycle_log.py": {
+    "blob": "8585ae13711460af26aaad5626eef49347453364",
+    "blob_at_head": "8585ae13711460af26aaad5626eef49347453364",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "f55931a08705f4ebef9c1f9b8e06a69f4cfef467041bc1feb71dc34a3d4533ec"
+   },
+   "integrated_sar/orchestrator.py": {
+    "blob": "013419cc77906c96aac472e74afc1840bb994758",
+    "blob_at_head": "013419cc77906c96aac472e74afc1840bb994758",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "ad1380d4695d8fb90ea646d2b4ebd0d6d736879885feff79bef8067a1a956b74"
+   },
+   "integrated_sar/piloc_runtime.py": {
+    "blob": "1445292230315d59439e8f4bb18c22b6f18f68a1",
+    "blob_at_head": "1445292230315d59439e8f4bb18c22b6f18f68a1",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "d8cd2df3bc49d202747a06284c7d4b6fdba1540a269d9c1f09c8d08876ce1c84"
+   },
+   "integrated_sar/scenarios.py": {
+    "blob": "fff051a7f6f78cc228ef5869ebed082956efc008",
+    "blob_at_head": "fff051a7f6f78cc228ef5869ebed082956efc008",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "2e9a2fa0791d1b8917b80f397b1f8f54f6618e56f3ddccebd8a7416e72df98c8"
+   },
+   "integrated_sar/search_runtime.py": {
+    "blob": "0a0799032149d43e563f7341041e2330694ee00d",
+    "blob_at_head": "0a0799032149d43e563f7341041e2330694ee00d",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "89e772bec630f32a37f843b2efda8551f8bf9bd0c693a21556ad8ac7491103b1"
+   },
+   "integrated_sar/task_registry.py": {
+    "blob": "bf3eba2bc10bf69292eef0fe03f9e60984a3a48a",
+    "blob_at_head": "bf3eba2bc10bf69292eef0fe03f9e60984a3a48a",
+    "exists": true,
+    "in_head": true,
+    "matches_head": true,
+    "sha256": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+   }
+  }
+ },
+ "fold": {
+  "bytes": 4402520,
+  "sha256_fold": "e5af89737f94c53362a1f381f43fde599ff190d494ec79e43c55c586347e9508",
+  "streams": 16
+ },
+ "goals": 12,
+ "illegal_streams": {},
+ "only_variable_check": {
+  "changed": [
+   "num_goals"
+  ],
+  "goals": 12,
+  "world_conflicts": {}
+ },
+ "purpose": "exploratory calibration data for the task-pressure learnability gate; never an independent test set for a learned model",
+ "recording_configuration": {
+  "actor_kv_mode": "tokens",
+  "comm_delay_ticks": 0,
+  "comm_delivery_probability": 1.0,
+  "comm_subscribers": "all",
+  "deadline_tightness": [
+   0.5,
+   2.0
+  ],
+  "detection_radius": 5,
+  "device": "cpu",
+  "dt": 1.0,
+  "grid_size": 60,
+  "mock": false,
+  "num_goals": 12,
+  "obstacle_density": 0.15,
+  "piloc_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+  "quiet": true,
+  "rescue_per_species": 2,
+  "rescue_species": 3,
+  "search_agents": 2,
+  "steps": 1000,
+  "task_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+  "task_membership_consistency": true,
+  "use_coordinator": false
+ },
+ "rerun_policy": {
+  "allowed_reasons": [
+   "process_killed",
+   "disk_full",
+   "checkpoint_load_failure"
+  ],
+  "rule": "same seed only, for a pre-registered reason; no replacement sample"
+ },
+ "seed_audit": {
+  "blocks_audited": [
+   12
+  ],
+  "clean": true,
+  "file": "G12_SEED_COLLISION_AUDIT.json",
+  "sha256": "9e3d2ca3094690103a82e672c776d3c642c6ab46648831638bf00f87e9f6450a"
+ },
+ "shards": [
+  "STREAM_MANIFEST_g12_shard0.json",
+  "STREAM_MANIFEST_g12_shard1.json",
+  "STREAM_MANIFEST_g12_shard2.json",
+  "STREAM_MANIFEST_g12_shard3.json"
+ ],
+ "size": 16,
+ "streams": [
+  {
+   "configured_goals": 12,
+   "detected": 12,
+   "detected_ratio_of_placed": 1.0,
+   "detection_times": [
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    10.0,
+    12.0,
+    15.0,
+    16.0,
+    18.0,
+    138.0,
+    164.0,
+    358.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     3,
+     17
+    ],
+    [
+     3,
+     22
+    ],
+    [
+     5,
+     13
+    ],
+    [
+     5,
+     21
+    ],
+    [
+     7,
+     9
+    ],
+    [
+     10,
+     21
+    ],
+    [
+     10,
+     23
+    ],
+    [
+     11,
+     22
+    ],
+    [
+     15,
+     9
+    ],
+    [
+     16,
+     20
+    ],
+    [
+     17,
+     5
+    ],
+    [
+     17,
+     6
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 358.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000300,
+   "sha256": "05ece0f61e6a4f6da849e766a515f7c21d55ee6d115c8bbee01325b0d2b54393",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 12
+  },
+  {
+   "configured_goals": 12,
+   "detected": 11,
+   "detected_ratio_of_placed": 0.91667,
+   "detection_times": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    2.0,
+    2.0,
+    4.0,
+    12.0,
+    16.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     41,
+     6
+    ],
+    [
+     42,
+     11
+    ],
+    [
+     44,
+     3
+    ],
+    [
+     48,
+     1
+    ],
+    [
+     48,
+     12
+    ],
+    [
+     49,
+     0
+    ],
+    [
+     52,
+     0
+    ],
+    [
+     54,
+     0
+    ],
+    [
+     54,
+     1
+    ],
+    [
+     55,
+     0
+    ],
+    [
+     55,
+     2
+    ],
+    [
+     56,
+     11
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 16.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000301,
+   "sha256": "0fa7868aee7f40e747b7245fed9e7d269bc626ce0ddc38c88f4dbe4be1d42504",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 11
+  },
+  {
+   "configured_goals": 12,
+   "detected": 11,
+   "detected_ratio_of_placed": 0.91667,
+   "detection_times": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    2.0,
+    8.0,
+    11.0,
+    153.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     33,
+     5
+    ],
+    [
+     35,
+     9
+    ],
+    [
+     36,
+     3
+    ],
+    [
+     38,
+     6
+    ],
+    [
+     38,
+     11
+    ],
+    [
+     39,
+     7
+    ],
+    [
+     41,
+     4
+    ],
+    [
+     41,
+     12
+    ],
+    [
+     45,
+     12
+    ],
+    [
+     46,
+     13
+    ],
+    [
+     51,
+     1
+    ],
+    [
+     51,
+     5
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 153.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000302,
+   "sha256": "3c32eace5f7cef1383fb024eaa28913631eb9c5ad30979279d1b9caff589fafd",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 11
+  },
+  {
+   "configured_goals": 12,
+   "detected": 12,
+   "detected_ratio_of_placed": 1.0,
+   "detection_times": [
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    4.0,
+    7.0,
+    8.0,
+    9.0,
+    10.0,
+    159.0,
+    230.0,
+    360.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     20,
+     0
+    ],
+    [
+     22,
+     5
+    ],
+    [
+     23,
+     15
+    ],
+    [
+     24,
+     15
+    ],
+    [
+     26,
+     2
+    ],
+    [
+     27,
+     13
+    ],
+    [
+     30,
+     0
+    ],
+    [
+     30,
+     1
+    ],
+    [
+     37,
+     7
+    ],
+    [
+     37,
+     14
+    ],
+    [
+     39,
+     4
+    ],
+    [
+     40,
+     7
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 360.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000303,
+   "sha256": "282b73bdedc73084e781ec59f153cca001da569aa6d938433cf2d8bc8b65d9c9",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 12
+  },
+  {
+   "configured_goals": 12,
+   "detected": 11,
+   "detected_ratio_of_placed": 0.91667,
+   "detection_times": [
+    1.0,
+    1.0,
+    2.0,
+    5.0,
+    7.0,
+    24.0,
+    26.0,
+    39.0,
+    39.0,
+    41.0,
+    42.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     0,
+     28
+    ],
+    [
+     0,
+     42
+    ],
+    [
+     3,
+     36
+    ],
+    [
+     4,
+     32
+    ],
+    [
+     4,
+     38
+    ],
+    [
+     5,
+     40
+    ],
+    [
+     6,
+     29
+    ],
+    [
+     7,
+     23
+    ],
+    [
+     7,
+     27
+    ],
+    [
+     9,
+     36
+    ],
+    [
+     9,
+     40
+    ],
+    [
+     11,
+     42
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 42.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000304,
+   "sha256": "d26e2bf48389249a4eb70862b137cc0462baac73b53ad03e334e367437ba8a1d",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 11
+  },
+  {
+   "configured_goals": 12,
+   "detected": 9,
+   "detected_ratio_of_placed": 0.75,
+   "detection_times": [
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    4.0,
+    5.0,
+    10.0,
+    14.0,
+    181.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     42,
+     48
+    ],
+    [
+     43,
+     45
+    ],
+    [
+     43,
+     54
+    ],
+    [
+     45,
+     44
+    ],
+    [
+     48,
+     46
+    ],
+    [
+     52,
+     47
+    ],
+    [
+     52,
+     52
+    ],
+    [
+     53,
+     51
+    ],
+    [
+     55,
+     51
+    ],
+    [
+     57,
+     45
+    ],
+    [
+     57,
+     46
+    ],
+    [
+     57,
+     47
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 181.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000305,
+   "sha256": "78dbc914f0d53e5d0143eb13417cfa4752bec39b73cfb994dec9763b94957ee3",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 9
+  },
+  {
+   "configured_goals": 12,
+   "detected": 11,
+   "detected_ratio_of_placed": 0.91667,
+   "detection_times": [
+    1.0,
+    3.0,
+    3.0,
+    5.0,
+    6.0,
+    142.0,
+    202.0,
+    218.0,
+    225.0,
+    230.0,
+    765.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     2,
+     46
+    ],
+    [
+     3,
+     36
+    ],
+    [
+     5,
+     33
+    ],
+    [
+     11,
+     35
+    ],
+    [
+     11,
+     38
+    ],
+    [
+     12,
+     50
+    ],
+    [
+     15,
+     41
+    ],
+    [
+     15,
+     42
+    ],
+    [
+     16,
+     40
+    ],
+    [
+     16,
+     51
+    ],
+    [
+     16,
+     53
+    ],
+    [
+     18,
+     51
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 765.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000306,
+   "sha256": "cba44f78443f8442b1f91e490da9d1d6f82476d27daba5bf93fc9c301b7eaf23",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 11
+  },
+  {
+   "configured_goals": 12,
+   "detected": 12,
+   "detected_ratio_of_placed": 1.0,
+   "detection_times": [
+    1.0,
+    1.0,
+    1.0,
+    3.0,
+    4.0,
+    5.0,
+    5.0,
+    7.0,
+    8.0,
+    56.0,
+    56.0,
+    58.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     0,
+     44
+    ],
+    [
+     1,
+     43
+    ],
+    [
+     2,
+     55
+    ],
+    [
+     3,
+     49
+    ],
+    [
+     4,
+     59
+    ],
+    [
+     5,
+     48
+    ],
+    [
+     6,
+     53
+    ],
+    [
+     6,
+     59
+    ],
+    [
+     8,
+     47
+    ],
+    [
+     11,
+     48
+    ],
+    [
+     11,
+     54
+    ],
+    [
+     11,
+     55
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 58.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000307,
+   "sha256": "5799c4441470ce171191a1efa8eb95146533a31ac824f35b6875183ce8be3aa1",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 12
+  },
+  {
+   "configured_goals": 12,
+   "detected": 12,
+   "detected_ratio_of_placed": 1.0,
+   "detection_times": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    4.0,
+    8.0,
+    10.0,
+    12.0,
+    478.0,
+    742.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     42,
+     36
+    ],
+    [
+     42,
+     50
+    ],
+    [
+     43,
+     34
+    ],
+    [
+     47,
+     52
+    ],
+    [
+     49,
+     34
+    ],
+    [
+     52,
+     46
+    ],
+    [
+     53,
+     47
+    ],
+    [
+     53,
+     48
+    ],
+    [
+     55,
+     39
+    ],
+    [
+     55,
+     40
+    ],
+    [
+     55,
+     48
+    ],
+    [
+     58,
+     42
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 742.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000308,
+   "sha256": "03d41162ebae047adf8c8a6a6e3a4019edd939138eea814bf2a014e7de72ca79",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 12
+  },
+  {
+   "configured_goals": 12,
+   "detected": 12,
+   "detected_ratio_of_placed": 1.0,
+   "detection_times": [
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    3.0,
+    3.0,
+    4.0,
+    5.0,
+    19.0,
+    38.0,
+    39.0,
+    72.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     19,
+     16
+    ],
+    [
+     19,
+     17
+    ],
+    [
+     20,
+     2
+    ],
+    [
+     20,
+     19
+    ],
+    [
+     21,
+     3
+    ],
+    [
+     22,
+     15
+    ],
+    [
+     26,
+     12
+    ],
+    [
+     27,
+     7
+    ],
+    [
+     27,
+     17
+    ],
+    [
+     28,
+     7
+    ],
+    [
+     28,
+     16
+    ],
+    [
+     32,
+     3
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 72.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000309,
+   "sha256": "11e5830ae01667ffeee99e9504264ae9d4c8ed25ee2248afcec5346fa32cc835",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 12
+  },
+  {
+   "configured_goals": 12,
+   "detected": 11,
+   "detected_ratio_of_placed": 0.91667,
+   "detection_times": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    4.0,
+    5.0,
+    33.0,
+    34.0,
+    471.0,
+    975.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     0,
+     40
+    ],
+    [
+     1,
+     54
+    ],
+    [
+     2,
+     50
+    ],
+    [
+     4,
+     35
+    ],
+    [
+     4,
+     46
+    ],
+    [
+     4,
+     49
+    ],
+    [
+     5,
+     45
+    ],
+    [
+     5,
+     51
+    ],
+    [
+     7,
+     41
+    ],
+    [
+     10,
+     55
+    ],
+    [
+     13,
+     37
+    ],
+    [
+     14,
+     35
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 975.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000310,
+   "sha256": "bb7a3686fb0ddd16b2fc631048cb827622bf8e094f724cbef60d99882da34af4",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 11
+  },
+  {
+   "configured_goals": 12,
+   "detected": 11,
+   "detected_ratio_of_placed": 0.91667,
+   "detection_times": [
+    1.0,
+    2.0,
+    2.0,
+    3.0,
+    4.0,
+    4.0,
+    5.0,
+    5.0,
+    7.0,
+    10.0,
+    10.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     8,
+     45
+    ],
+    [
+     9,
+     41
+    ],
+    [
+     13,
+     43
+    ],
+    [
+     13,
+     53
+    ],
+    [
+     16,
+     49
+    ],
+    [
+     17,
+     36
+    ],
+    [
+     20,
+     42
+    ],
+    [
+     20,
+     50
+    ],
+    [
+     21,
+     43
+    ],
+    [
+     22,
+     54
+    ],
+    [
+     26,
+     41
+    ],
+    [
+     27,
+     49
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 10.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000311,
+   "sha256": "1bee654be30b9c82a8db3cb99503ca86a2452402bbb5533885884609ae88f856",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 11
+  },
+  {
+   "configured_goals": 12,
+   "detected": 12,
+   "detected_ratio_of_placed": 1.0,
+   "detection_times": [
+    1.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    7.0,
+    12.0,
+    236.0,
+    238.0,
+    257.0,
+    275.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     1,
+     47
+    ],
+    [
+     1,
+     49
+    ],
+    [
+     2,
+     46
+    ],
+    [
+     5,
+     53
+    ],
+    [
+     5,
+     54
+    ],
+    [
+     6,
+     46
+    ],
+    [
+     8,
+     59
+    ],
+    [
+     10,
+     48
+    ],
+    [
+     12,
+     47
+    ],
+    [
+     14,
+     46
+    ],
+    [
+     14,
+     54
+    ],
+    [
+     16,
+     48
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 275.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000312,
+   "sha256": "232aa2cd15e9b4a4e5f2747e22ea8d96594b9dfb956f6b84ae744fe725d2b6e2",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 12
+  },
+  {
+   "configured_goals": 12,
+   "detected": 12,
+   "detected_ratio_of_placed": 1.0,
+   "detection_times": [
+    1.0,
+    2.0,
+    2.0,
+    7.0,
+    7.0,
+    7.0,
+    13.0,
+    13.0,
+    13.0,
+    17.0,
+    211.0,
+    227.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     0,
+     25
+    ],
+    [
+     0,
+     30
+    ],
+    [
+     2,
+     16
+    ],
+    [
+     4,
+     35
+    ],
+    [
+     6,
+     22
+    ],
+    [
+     6,
+     34
+    ],
+    [
+     7,
+     25
+    ],
+    [
+     9,
+     19
+    ],
+    [
+     9,
+     30
+    ],
+    [
+     10,
+     31
+    ],
+    [
+     12,
+     25
+    ],
+    [
+     12,
+     26
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 227.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000313,
+   "sha256": "18512c8d75acb046ff0f63bc3508a237da6a684a0c21c89ade674f58dfc44a7d",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 12
+  },
+  {
+   "configured_goals": 12,
+   "detected": 12,
+   "detected_ratio_of_placed": 1.0,
+   "detection_times": [
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    3.0,
+    179.0,
+    207.0,
+    224.0,
+    258.0,
+    283.0,
+    288.0,
+    291.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     25,
+     43
+    ],
+    [
+     27,
+     31
+    ],
+    [
+     28,
+     24
+    ],
+    [
+     28,
+     34
+    ],
+    [
+     28,
+     42
+    ],
+    [
+     30,
+     32
+    ],
+    [
+     30,
+     42
+    ],
+    [
+     33,
+     25
+    ],
+    [
+     40,
+     28
+    ],
+    [
+     40,
+     39
+    ],
+    [
+     42,
+     35
+    ],
+    [
+     43,
+     38
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 291.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000314,
+   "sha256": "27b17ed6d6b695e6397542f7983e9cd3316ec8e4b9247b173f1cd2acf0b3bcb4",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 12
+  },
+  {
+   "configured_goals": 12,
+   "detected": 12,
+   "detected_ratio_of_placed": 1.0,
+   "detection_times": [
+    1.0,
+    1.0,
+    2.0,
+    2.0,
+    4.0,
+    4.0,
+    5.0,
+    6.0,
+    17.0,
+    146.0,
+    162.0,
+    169.0
+   ],
+   "frames": 1000,
+   "goal_cells": [
+    [
+     21,
+     18
+    ],
+    [
+     22,
+     2
+    ],
+    [
+     23,
+     12
+    ],
+    [
+     24,
+     8
+    ],
+    [
+     26,
+     12
+    ],
+    [
+     27,
+     6
+    ],
+    [
+     32,
+     7
+    ],
+    [
+     32,
+     16
+    ],
+    [
+     36,
+     1
+    ],
+    [
+     37,
+     2
+    ],
+    [
+     38,
+     11
+    ],
+    [
+     41,
+     10
+    ]
+   ],
+   "goal_cells_distinct": true,
+   "goal_cells_on_agent_start": [],
+   "illegal": [],
+   "last_detection_step": 169.0,
+   "map_sha256_reproduced": true,
+   "placed": 12,
+   "rerun_reason": null,
+   "run_steps": 1000,
+   "seed": 1000315,
+   "sha256": "e810d728e87b35a2884978d592c305b1c0dc1935c78723b70a369b99e27742f6",
+   "steps_recorded": 1000,
+   "targets_discovered_by_registry": 12
+  }
+ ]
+}

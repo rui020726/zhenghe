@@ -210,6 +210,43 @@ def build() -> dict[str, Any]:
             for earlier in DELIVERED_LAYERS
         },
         "ceiling": report_pressure.ceiling_accounting(goals),
+        "grant_audit": common.launch_grant_audit(),
+        #: Disclosures the round owes the reader that are not gates. The first two were found after
+        #: the first data launch, so each one says what it touched and what it could not touch.
+        "post_launch_disclosures": [
+            {
+                "what": "the round's own grant invariant could only pass before the layer spent anything",
+                "found": "after the matrix ran, when `python -m unittest test_pressure_harness` failed "
+                "under the UTF-8 environment the report stage runs in",
+                "symptom": "grant == 160 - (640 - matrix_starts) reads 176 once matrix_starts is 656: "
+                "a live ledger cannot restate what was left at authorisation time",
+                "fixed": "pressure_common.launch_grant_audit() answers the question against "
+                "G12_START_LEDGER.json (matrix_starts = 496 before the layer), and the self-check and "
+                "the test read that instead",
+                "touched": "a self-check and one test; no episode, no row, no aggregate, no gate",
+            },
+            {
+                "what": "episode_code_identity has two routes and only one of them is stable",
+                "detail": "the route that stamps rows (inspect.getsource, locale-independent) gives "
+                "ff0b4139b1fff700 for the 288 stamped cells of the delivered round (g8, g10) and for "
+                "all 144 g12 cells; g6's 144 cells carry no stamp at all, as its delivered provenance "
+                "file already says. The route "
+                "the freeze timeline uses (git show, decoded in the ambient locale) gives "
+                "c922ca100665609c under cp936 and 23390f55a6b90afa under UTF-8 for the *same* commits",
+                "consequence": "the single-code-state claim is checked on the stamping route, which "
+                "agrees across all four layers; a timeline hash is only comparable inside one pinned "
+                "environment, and this report is generated in the one the delivered round used",
+                "not_fixed": "the hashing route is left as the delivered round froze it: changing it "
+                "after the launch would move an identity number without moving an episode",
+            },
+            {
+                "what": "GATES_g12.json's stop_reason says 'proceed to the next layer'",
+                "detail": "that sentence was written when layer 12 was not the last layer; the judge "
+                "is frozen from the first data launch, so the wording was not edited",
+                "consequence": "the next step the round actually prescribes is the §8 branch recorded in this "
+                "report's section 1, and there is no fifth layer",
+            },
+        ],
         "packet_cost_profile": report_pressure.packet_cost_profile(goals),
         "decision": decision,
         "tests": report_pressure.data_tests(),
@@ -350,16 +387,39 @@ def render(data: dict[str, Any]) -> str:
     add("")
     profile = data["packet_cost_profile"]
     add(
-        f"- 发包口径（与前三层同算法，来自已存转录，不花 episode）：{profile.get('packets', 0)} 包，"
+        f"- 发包口径（**已发出的包**，与前三层同算法、来自已存转录，不花 episode）："
+        f"{profile.get('packets', 0)} 包，"
         f"最小 {profile.get('min_bytes', 0)} B、中位 {profile.get('median_bytes', 0)} B、"
         f"最大 {profile.get('max_bytes', 0)} B、极差 {profile.get('spread_bytes', 0)} B "
         f"= 额度的 {profile.get('spread_as_fraction_of_credit', 0):.2%}；"
-        f"额度总共约 {profile.get('packets_the_credit_could_pay_in_total', 0)} 个包"
+        f"额度总共约 {profile.get('packets_the_credit_could_pay_in_total', 0)} 个包。"
+        "上面那行是**候选报价**口径（多候选步上所有候选的价格，含没发出去的），两个数不同是量纲不同，"
+        "不是矛盾。"
+    )
+    facts = (
+        data["matrix"]["step_geometry"].get(data["best_fixed_rule"], {}).get("first_credit_exhaustion", [])
     )
     add(
-        "- 首次额度耗尽发生在哪类消息：见 `GATES_g12.json` 的 "
-        "`gates.L3.evidence.step_geometry_of_the_best_rule.first_credit_exhaustion`"
-        "（每条列出该步候选数、包价与首发/刷新各几个）。"
+        f"- 首次额度耗尽发生在哪类消息：最佳规则 {len(facts)} 条流走到过\"看得见候选但一个都付不起\"，"
+        f"其中 **{sum(1 for f in facts if f['first_emissions'] == 0 and f['refreshes'] > 0)} 条**"
+        "的第一个 such 步上所有候选都是**刷新**（`first_emissions = 0`）——额度是在已经发过消息的目标"
+        "续报时耗尽的，不是在新目标的第一条消息上。逐条明细（步号、候选数、各候选包价、首发/刷新计数）"
+        "在 `GATES_g12.json` 的 `gates.L3.evidence.step_geometry_of_the_best_rule.first_credit_exhaustion`。"
+    )
+    outcomes = geometry["multi_step_outcomes"]
+    indicators = geometry["indicators"]
+    add("")
+    add(
+        "**L3 为什么仍未过（成因归类，按协议 §5 的三个指标，不设阈值）**：候选并发**不是**限制——"
+        f"16 流合计 {geometry['candidate_histogram']['two_or_more']} 个多候选步"
+        f"（占全部步的 {indicators['share_of_steps_with_two_or_more_candidates']:.1%}）；"
+        f"包价极差 {indicators['price_spread_as_fraction_of_credit']:.2%} 额度，"
+        "『剩余额度恰好落在两个候选报价之间』这条缝本来就窄；"
+        f"而多候选步里 {indicators['share_of_multi_steps_with_nothing_payable']:.1%} 直接是"
+        f"一个都付不起，只有 {indicators['share_of_multi_steps_where_any_subset_was_payable']:.1%} "
+        "出现真正的严格子集。**三种成因里 binding 的是第三种：额度成片跨进全拒付区**，"
+        "与前三层的读法同向，只是 12 目标把它推到了能量化的程度（严格子集步从三层的 0 变成 "
+        f"{outcomes['strict_subset_payable']} 步、集中在 3 条流）。"
     )
     add("")
     add("| 压力层 | 几何量已记录 | 多候选步 | 严格子集步 | 全不可付步 | 极差/额度 |")
@@ -411,7 +471,7 @@ def render(data: dict[str, Any]) -> str:
     )
     add(
         f"- 核验启动 **{ceiling['gate_starts_spent']} / {ceiling['gate_ceiling']}**：本轮没有新增核验 "
-        f"episode（执行指令 §3 不允许增加验证 episode），探针扩展只用零 episode 测试证透明。"
+        f"episode（执行指令 §3 不允许增加验证 episode），探针扩展只用零 episode 测试证明其透明。"
     )
     add(
         f"- 账本记录的技术失败 **{ceiling['technical_failures_recorded']}** 次（含前三层的 20 次），"
@@ -423,10 +483,19 @@ def render(data: dict[str, Any]) -> str:
     add("## 七、身份与卫生")
     add("")
     add(
-        f"- 冻结文件 `{data['freeze']['file']}`，登记头 `{str(data['freeze']['head'])[:9]}`，"
-        f"模块 {data['freeze']['modules']} 个，episode 代码身份 "
-        f"`{data['freeze']['episode_code_identity']}`（前三层是 `c922ca100665609c`）；"
-        f"`run_episode` 源哈希 `{data['freeze']['run_episode_sha256']}`"
+        f"- 冻结文件 `{data['freeze']['file']}`，登记头 `{str(data['freeze']['head'])[:9]}`，模块 "
+        f"{data['freeze']['modules']} 个。**给行打戳的那条身份路径**（`inspect.getsource`，与环境无关）"
+        f"给出 `{data['freeze']['episode_code_identity']}`，"
+        f"`run_episode` 源哈希 `{data['freeze']['run_episode_sha256']}`——"
+        "g8 与 g10 的全部 288 格行戳是同一个值，本轮 144 格也是，所以这三层加本层同属一个 episode "
+        "代码状态（由哈希核对）。g6 的 144 格**没有行戳**，因为戳是在那层跑完之后才加的——这一点"
+        "已交付轮的 `ROW_PROVENANCE_g6.json` 就写明了，本层不替它补叙述性归因。"
+    )
+    add(
+        "- 另一条按 commit 算的路径（报告里 freeze 时间线用的那条，`git show` 按当前 locale 解码）在 "
+        "cp936 下给出 `c922ca100665609c`、在 UTF-8 下给出 `23390f55a6b90afa`，**同一批 commit 也是这两个值**"
+        "——它是环境相关的，本文全程用与已交付报告相同的 cp936 环境生成，两个数都写在这里以免被当成"
+        "\"代码换了\"。"
     )
     add(
         f"- 行戳：{data['provenance']['stamped']}，未戳 {data['provenance']['un_stamped']}，"
@@ -451,12 +520,29 @@ def render(data: dict[str, Any]) -> str:
         f"集成 smoke {data['tests']['smoke']}"
     )
     add("")
-    add("## 八、结论范围与下一步")
+    add("## 八、本轮欠读者的披露（不是判据，逐条写明动了什么）")
+    add("")
+    for item in data["post_launch_disclosures"]:
+        add(f"- **{item['what']}**")
+        for key in ("found", "symptom", "fixed", "touched", "detail", "consequence", "not_fixed"):
+            if item.get(key):
+                add(f"  - {key}: {item[key]}")
+    add("")
+    grant = data["grant_audit"]
+    add(
+        f"- 追加授权的算术（对着开跑前的快照核）：授权前已花 "
+        f"{grant['spent_before_the_layer']} / {grant['brief_ceiling']}，有效上限 "
+        f"{grant['effective_ceiling']} ⇒ 空出 {grant['room_the_grant_opens']} 次，第四层需要 "
+        f"{grant['layer_needs']} 次，`exact = {grant['exact']}`；本轮实到 "
+        f"{data['ceiling']['matrix_starts_spent']} 次，未越线。"
+    )
+    add("")
+    add("## 九、结论范围与下一步")
     add("")
     for line in conclusion(data):
         add(f"- {line}")
     add("")
-    add("## 九、复跑")
+    add("## 十、复跑")
     add("")
     add("```bash")
     add("cd runs/comm_task_pressure_learnability_20260922")

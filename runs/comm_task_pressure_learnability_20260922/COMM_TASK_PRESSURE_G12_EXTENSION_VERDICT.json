@@ -1,0 +1,681 @@
+{
+ "branch_name": "analysis/comm-task-pressure-g12-extension",
+ "checkpoints_written": 0,
+ "coverage": {
+  "cells_expected": 144,
+  "cells_present": 144,
+  "missing": 0
+ },
+ "date": "2026-09-23",
+ "decision": {
+  "branch": "l2_pass_l3_fail",
+  "layer_verdict": "L2 过、L3 未过",
+  "next_round": "正式关闭“仅增加任务数量即可建立逐步预算选择”这条路线；不再往 14/16 个目标加。下一轮只做只读 action-geometry audit，不训练",
+  "training_authorized": false
+ },
+ "delivered_layers_unchanged": {
+  "10": {
+   "L0": true,
+   "L1": true,
+   "L2": true,
+   "L3": false,
+   "L4": false
+  },
+  "6": {
+   "L0": true,
+   "L1": true,
+   "L2": false,
+   "L3": false,
+   "L4": false
+  },
+  "8": {
+   "L0": true,
+   "L1": true,
+   "L2": false,
+   "L3": false,
+   "L4": false
+  }
+ },
+ "episode_code_identity": "ff0b4139b1fff700",
+ "gates": {
+  "L0": {
+   "evidence": {
+    "all_cells_probed": [
+     true
+    ],
+    "allowed_configuration_differences": [
+     "comm_policy",
+     "comm_policy_params",
+     "comm_budget_bytes"
+    ],
+    "budget_violations": [],
+    "cells_expected": 144,
+    "cells_present": 144,
+    "cells_where_the_credit_bit": 104,
+    "distinct_layer_wide_settings": [
+     [
+      "policy_owned_timing",
+      "1.0",
+      "False",
+      "1000",
+      "False",
+      "12",
+      "True"
+     ]
+    ],
+    "episode_code_states": [
+     "c922ca100665609c"
+    ],
+    "harness_agreement_provenance": "inherited: this layer was licensed by the delivered round's AGREEMENT_GATE.json, which ran under CODE_FREEZE.json. The extension may not spend new verification episodes, so the probe counters it added are proven transparent by zero-episode tests, and the runner needs no new gate because this layer's freeze names the same episode code identity the delivered layers do",
+    "harness_agreement_with_archived_rows": true,
+    "illegal_streams": {},
+    "launches": {
+     "extension_grant_for_this_layer": 16,
+     "gate": 10,
+     "gate_cap": 12,
+     "matrix": 656,
+     "matrix_cap": 640,
+     "matrix_cap_in_force_for_this_layer": 656
+    },
+    "ledger_closure_failures": [],
+    "ledger_failures": {
+     "entries": 160,
+     "failures": 0,
+     "matrix_failures": [],
+     "recovered": [],
+     "unrecovered": []
+    },
+    "missing_cells": [],
+    "note_on_refusals": "a fixed rule being refused is the credit binding, which is what L3 asks for; L0 only requires that the transcript and the relay agree about how often it happened",
+    "refusal_ledger_mismatches": [],
+    "single_episode_code_state": true,
+    "stamped_rows": {
+     "098ae183e": 144
+    },
+    "steps_per_episode": [
+     1000
+    ],
+    "streams_with_mixed_settings": {},
+    "streams_with_wrong_arm_count": 0,
+    "technical_failures_this_layer": 0,
+    "technical_failures_total": 20,
+    "un_stamped_rows": 0
+   },
+   "passed": true
+  },
+  "L1": {
+   "evidence": {
+    "illegal_streams": [],
+    "mean_detected_over_placed": 0.95313,
+    "per_stream": {
+     "1000300": {
+      "detected": 12,
+      "placed": 12,
+      "ratio": 1.0,
+      "registered": 12
+     },
+     "1000301": {
+      "detected": 11,
+      "placed": 12,
+      "ratio": 0.91667,
+      "registered": 11
+     },
+     "1000302": {
+      "detected": 11,
+      "placed": 12,
+      "ratio": 0.91667,
+      "registered": 11
+     },
+     "1000303": {
+      "detected": 12,
+      "placed": 12,
+      "ratio": 1.0,
+      "registered": 12
+     },
+     "1000304": {
+      "detected": 11,
+      "placed": 12,
+      "ratio": 0.91667,
+      "registered": 11
+     },
+     "1000305": {
+      "detected": 9,
+      "placed": 12,
+      "ratio": 0.75,
+      "registered": 9
+     },
+     "1000306": {
+      "detected": 11,
+      "placed": 12,
+      "ratio": 0.91667,
+      "registered": 11
+     },
+     "1000307": {
+      "detected": 12,
+      "placed": 12,
+      "ratio": 1.0,
+      "registered": 12
+     },
+     "1000308": {
+      "detected": 12,
+      "placed": 12,
+      "ratio": 1.0,
+      "registered": 12
+     },
+     "1000309": {
+      "detected": 12,
+      "placed": 12,
+      "ratio": 1.0,
+      "registered": 12
+     },
+     "1000310": {
+      "detected": 11,
+      "placed": 12,
+      "ratio": 0.91667,
+      "registered": 11
+     },
+     "1000311": {
+      "detected": 11,
+      "placed": 12,
+      "ratio": 0.91667,
+      "registered": 11
+     },
+     "1000312": {
+      "detected": 12,
+      "placed": 12,
+      "ratio": 1.0,
+      "registered": 12
+     },
+     "1000313": {
+      "detected": 12,
+      "placed": 12,
+      "ratio": 1.0,
+      "registered": 12
+     },
+     "1000314": {
+      "detected": 12,
+      "placed": 12,
+      "ratio": 1.0,
+      "registered": 12
+     },
+     "1000315": {
+      "detected": 12,
+      "placed": 12,
+      "ratio": 1.0,
+      "registered": 12
+     }
+    },
+    "threshold": 0.75,
+    "worst_stream": "1000305",
+    "worst_stream_ratio": 0.75
+   },
+   "passed": true
+  },
+  "L2": {
+   "evidence": {
+    "band": [
+     0.4,
+     0.9
+    ],
+    "band_edge_readings": null,
+    "band_holds": true,
+    "best_fixed_rule": "send_once",
+    "best_minus_always_hold_on_time": 8.875,
+    "best_on_time_rate_of_detected": 0.78172,
+    "ci95": [
+     7.625,
+     10.0
+    ],
+    "ci_lower_above_zero": true,
+    "pairs": 16,
+    "reading_if_above_band": "effect ceiling: communication already buys nearly everything",
+    "reading_if_below_band": "capacity/search floor: sending cannot recover the tasks"
+   },
+   "passed": true
+  },
+  "L3": {
+   "evidence": {
+    "all_arms_competition_streams": {
+     "always_hold": 0,
+     "bound_only_3_10": 4,
+     "event": 5,
+     "event_priority": 5,
+     "event_unbudgeted": 0,
+     "first_send_plus_bound_3_10": 4,
+     "periodic_20": 2,
+     "periodic_5": 0,
+     "send_once": 3
+    },
+    "best_fixed_rule": "send_once",
+    "definition_of_a_point": "visible candidates >= 2 and 1 <= payable < visible at the step's opening credit",
+    "per_stream_points": {
+     "1000300": 0,
+     "1000301": 147,
+     "1000302": 0,
+     "1000303": 0,
+     "1000304": 0,
+     "1000305": 0,
+     "1000306": 0,
+     "1000307": 0,
+     "1000308": 0,
+     "1000309": 0,
+     "1000310": 0,
+     "1000311": 39,
+     "1000312": 12,
+     "1000313": 0,
+     "1000314": 0,
+     "1000315": 0
+    },
+    "required_streams": 8,
+    "required_streams_90_percent": 4,
+    "secondary_readings_not_used_for_the_gate": {
+     "credit_exhausted_with_candidates_streams": 15,
+     "joint_only_points_total": 981,
+     "mean_payable_at_competition": 2.79467,
+     "mean_visible_at_competition": 5.36567,
+     "payable_candidate_points_total": 9707
+    },
+    "step_geometry_of_the_best_rule": {
+     "candidate_histogram": {
+      "one": 6336,
+      "two_or_more": 4852,
+      "zero": 4812
+     },
+     "episodes": 16,
+     "first_credit_exhaustion": [
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2508,
+        2514,
+        2718,
+        2652,
+        2700,
+        2790,
+        2850,
+        2328,
+        2802
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 9,
+       "remaining_bytes": 1076,
+       "step": 165,
+       "visible": 9
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2634
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 1,
+       "remaining_bytes": 2534,
+       "step": 166,
+       "visible": 1
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2700
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 1,
+       "remaining_bytes": 2336,
+       "step": 154,
+       "visible": 1
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2310
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 1,
+       "remaining_bytes": 2192,
+       "step": 231,
+       "visible": 1
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2526,
+        2514,
+        2796,
+        2622,
+        2808,
+        2502,
+        2502,
+        2496
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 8,
+       "remaining_bytes": 1574,
+       "step": 43,
+       "visible": 8
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2826,
+        2682
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 2,
+       "remaining_bytes": 2282,
+       "step": 766,
+       "visible": 2
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2832,
+        2796,
+        2868,
+        2682,
+        2700
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 5,
+       "remaining_bytes": 1292,
+       "step": 57,
+       "visible": 5
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2808,
+        2490
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 2,
+       "remaining_bytes": 2030,
+       "step": 479,
+       "visible": 2
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2700,
+        2664,
+        2508,
+        2496,
+        2682,
+        2778,
+        2820,
+        2820
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 8,
+       "remaining_bytes": 1028,
+       "step": 40,
+       "visible": 8
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2472
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 1,
+       "remaining_bytes": 2384,
+       "step": 977,
+       "visible": 1
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2688,
+        2622,
+        2712,
+        2634
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 4,
+       "remaining_bytes": 2606,
+       "step": 41,
+       "visible": 4
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2898,
+        2790
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 2,
+       "remaining_bytes": 2510,
+       "step": 270,
+       "visible": 2
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2322,
+        2868
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 2,
+       "remaining_bytes": 1196,
+       "step": 228,
+       "visible": 2
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2316,
+        2550,
+        2796,
+        2502,
+        2790,
+        2856,
+        2496
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 7,
+       "remaining_bytes": 1664,
+       "step": 289,
+       "visible": 7
+      },
+      {
+       "block_reasons": [
+        "budget_exhausted"
+       ],
+       "charges": [
+        2682,
+        2694
+       ],
+       "first_emissions": 0,
+       "payable": 0,
+       "refreshes": 2,
+       "remaining_bytes": 1184,
+       "step": 163,
+       "visible": 2
+      }
+     ],
+     "geometry_recorded": true,
+     "multi_candidate_price_bytes": {
+      "candidates_priced": 18295,
+      "max": 2940,
+      "mean": 2628.1,
+      "min": 2178,
+      "spread": 762,
+      "spread_as_fraction_of_credit": 0.02601
+     },
+     "multi_step_outcomes": {
+      "all_payable_within_credit": 612,
+      "closes_on_multi_candidate_steps": true,
+      "every_candidate_payable_but_not_jointly": 981,
+      "none_payable": 3061,
+      "strict_subset_payable": 198,
+      "unclassifiable": 0
+     },
+     "steps": 16000
+    },
+    "streams_at_or_above_90_percent_credit": 15,
+    "streams_with_competition_points": 3
+   },
+   "passed": false
+  },
+  "L4": {
+   "evidence": {
+    "conditions": {
+     "1_envelope_gain": {
+      "ci95": [
+       0.0,
+       0.1875
+      ],
+      "holds": false,
+      "threshold": 0.25,
+      "value": 0.0625
+     },
+     "2_two_rules_win_three_streams_each": {
+      "holds": false,
+      "rules": [
+       "send_once"
+      ],
+      "threshold": 2,
+      "unique_winner_counts": {
+       "send_once": 15
+      }
+     },
+     "3_bidirectional_pair": {
+      "holds": true,
+      "pairs": [
+       "bound_only_3_10 vs periodic_20",
+       "event vs first_send_plus_bound_3_10",
+       "event vs periodic_5",
+       "event_priority vs periodic_5",
+       "periodic_20 vs periodic_5"
+      ],
+      "threshold_per_side": 3
+     },
+     "4_frontier": {
+      "adjacent_pairs": [],
+      "holds": false,
+      "points": [
+       [
+        "send_once",
+        8.875,
+        27134.625
+       ]
+      ],
+      "qualifying_pairs": [],
+      "required_byte_gap": 2930,
+      "required_effect_gap": 0.25,
+      "required_points": 2
+     }
+    },
+    "envelope_definition": "per-stream maximum of the seven budgeted competitors on on-time targets, ties broken towards fewer bytes; an experience bound, not a deployable strategy",
+    "note": "L4 is a necessary-condition signal only: it says fixed rules cannot cover the measured situations uniformly. It does not show a network could learn the envelope."
+   },
+   "passed": false
+  }
+ },
+ "launch_ceiling": {
+  "brief_ceiling": 640,
+  "effective_ceiling": 656,
+  "extension_grant": 16,
+  "gate_cap": 12,
+  "gate_spent": 10,
+  "spent_after_this_round": 656,
+  "technical_failures_recorded": 20
+ },
+ "layer": 12,
+ "layer_passed": false,
+ "mechanism_geometry": {
+  "candidate_histogram": {
+   "one": 6336,
+   "two_or_more": 4852,
+   "zero": 4812
+  },
+  "geometry_recorded": true,
+  "indicators": {
+   "price_spread_as_fraction_of_credit": 0.02601,
+   "share_of_multi_steps_where_any_subset_was_payable": 0.04081,
+   "share_of_multi_steps_with_nothing_payable": 0.63087,
+   "share_of_steps_with_two_or_more_candidates": 0.30325
+  },
+  "multi_candidate_price_bytes": {
+   "candidates_priced": 18295,
+   "max": 2940,
+   "mean": 2628.1,
+   "min": 2178,
+   "spread": 762,
+   "spread_as_fraction_of_credit": 0.02601
+  },
+  "multi_step_outcomes": {
+   "all_payable_within_credit": 612,
+   "closes_on_multi_candidate_steps": true,
+   "every_candidate_payable_but_not_jointly": 981,
+   "none_payable": 3061,
+   "strict_subset_payable": 198,
+   "unclassifiable": 0
+  }
+ },
+ "new_streams": 16,
+ "optimizer_steps": 0,
+ "packet_cost_profile": {
+  "max_bytes": 2946,
+  "median_as_fraction_of_credit": 0.08887,
+  "median_bytes": 2604,
+  "min_bytes": 2178,
+  "p25_bytes": 2418,
+  "p75_bytes": 2736,
+  "packets": 2617,
+  "packets_the_credit_could_pay_in_total": 11.25,
+  "spread_as_fraction_of_credit": 0.02621,
+  "spread_bytes": 768
+ },
+ "round": "comm_task_pressure_g12_extension",
+ "seeds": [
+  1000300,
+  1000315
+ ],
+ "starting_head": "6b4452f5de88f7cfd0c17ce475de269eb13dd6b7",
+ "status": "capacity extension of the pre-registered fourth pressure layer; exploratory closure, not a revision of the delivered round's confirmatory gates",
+ "stops_after_this_round": true,
+ "training_steps": 0,
+ "verification_episodes_added": 0
+}

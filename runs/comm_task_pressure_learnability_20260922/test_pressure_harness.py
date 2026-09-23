@@ -876,11 +876,17 @@ class G12ExtensionCeilingTests(unittest.TestCase):
             totals["matrix_cap"] + common.G12_EXTENSION_GRANT,
             totals["matrix_cap_with_grant"],
         )
-        remaining = common.MATRIX_LAUNCH_CAP_WITH_GRANT - totals["matrix_starts"]
-        self.assertEqual(
-            remaining,
-            common.STREAMS_PER_LAYER * (1 + len(common.ARM_ORDER)),
-            "the grant must be exactly what the fourth layer needs against the launches already spent",
+        grant = common.launch_grant_audit()
+        self.assertTrue(grant["snapshot_present"], "the layer's ledger snapshot must exist")
+        self.assertEqual(grant["spent_before_the_layer"], 496, "the delivered round spent 496")
+        self.assertEqual(grant["layer_needs"], 160)
+        self.assertTrue(
+            grant["exact"],
+            f"the grant opened {grant['room_the_grant_opens']} launches; layer 12 needs "
+            f"{grant['layer_needs']}, so the arithmetic would not have covered the layer",
+        )
+        self.assertLessEqual(
+            totals["matrix_starts"], common.MATRIX_LAUNCH_CAP_WITH_GRANT, "the ceiling held"
         )
 
     def test_only_layer_twelve_runs_under_the_grant(self) -> None:

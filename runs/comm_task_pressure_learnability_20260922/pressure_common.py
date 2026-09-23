@@ -497,6 +497,33 @@ def ledger_totals() -> dict[str, Any]:
     return totals
 
 
+def launch_grant_audit() -> dict[str, Any]:
+    """Was the grant exactly what the unrun layer needed? Answered against the pre-launch snapshot.
+
+    This cannot be checked against the live ledger: once the layer has spent its launches, "what
+    was left" is no longer observable there. ``G12_START_LEDGER.json`` is the photograph taken
+    before the first launch, which is why the register step writes it.
+    """
+    path = json_path("G12_START_LEDGER.json")
+    needed = STREAMS_PER_LAYER * (1 + len(ARM_ORDER))
+    if not path.exists():
+        return {"snapshot_present": False, "layer_needs": needed}
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    spent_before = int(payload["ledger_before"]["matrix_starts"])
+    room = MATRIX_LAUNCH_CAP_WITH_GRANT - spent_before
+    return {
+        "snapshot_present": True,
+        "brief_ceiling": MATRIX_LAUNCH_CAP,
+        "effective_ceiling": MATRIX_LAUNCH_CAP_WITH_GRANT,
+        "extension_grant": G12_EXTENSION_GRANT,
+        "spent_before_the_layer": spent_before,
+        "room_the_grant_opens": room,
+        "layer_needs": needed,
+        "exact": room == needed,
+        "short_by": max(0, needed - room),
+    }
+
+
 class LaunchLedger:
     """One file per process, one global ceiling.
 
@@ -692,6 +719,7 @@ __all__ = [
     "LEDGER_PATTERN",
     "LaunchLedger",
     "ledger_totals",
+    "launch_grant_audit",
     "freeze_file",
     "audit_file",
     "launch_grant_for",
@@ -719,12 +747,14 @@ def _self_check() -> int:
         problems.append("two pressure layers share a seed: the blocks must be disjoint")
     if MATRIX_LAUNCH_CAP != len(LAYER_ORDER) * STREAMS_PER_LAYER * (1 + len(ARM_ORDER)):
         problems.append("the 640 ceiling is no longer four layers of 16 + 16 x 9 launches")
-    if G12_EXTENSION_GRANT != STREAMS_PER_LAYER * (1 + len(ARM_ORDER)) - (
-        MATRIX_LAUNCH_CAP - ledger_totals()["matrix_starts"]
-    ):
+    if G12_EXTENSION_GRANT != MATRIX_LAUNCH_CAP_WITH_GRANT - MATRIX_LAUNCH_CAP:
+        problems.append("the effective ceiling is not the brief's ceiling plus the grant")
+    grant = launch_grant_audit()
+    if grant["snapshot_present"] and not grant["exact"]:
         problems.append(
-            f"the extension grant {G12_EXTENSION_GRANT} no longer equals what layer "
-            f"{G12_GOALS} is short by against the launches already spent"
+            f"the grant opened {grant['room_the_grant_opens']} launches against a pre-launch "
+            f"spend of {grant['spent_before_the_layer']}, but layer {G12_GOALS} needs "
+            f"{grant['layer_needs']}"
         )
     if freeze_file(G12_GOALS) == freeze_file(6):
         problems.append("the extension would overwrite the delivered layers' freeze file")

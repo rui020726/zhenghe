@@ -1,0 +1,161 @@
+{
+ "artefacts_committed": [
+  "COMM_TASK_PRESSURE_G12_EXTENSION_PROTOCOL.md",
+  "COMM_TASK_PRESSURE_G12_EXTENSION_RESULTS.md/.json",
+  "COMM_TASK_PRESSURE_G12_EXTENSION_VERDICT.json",
+  "COMM_TASK_PRESSURE_G12_EXTENSION_MANIFEST.json",
+  "G12_FREEZE.json",
+  "G12_START_LEDGER.json",
+  "G12_SEED_COLLISION_AUDIT.json",
+  "STREAM_MANIFEST_g12.json",
+  "RULE_MATRIX_g12.json",
+  "PRESSURE_METRICS_g12.json",
+  "GATES_g12.json",
+  "ROW_PROVENANCE_g12.json",
+  "LAUNCH_LEDGER*g12*.json"
+ ],
+ "audit": {
+  "clean": true,
+  "hit_counts": {
+   "artefacts": 0,
+   "documentation": 0,
+   "git": 0,
+   "manifests": 0
+  },
+  "scope": {
+   "goals_audited": [
+    12
+   ],
+   "note": "narrowed to the blocks this run may still create; a seed this project has already recorded is not a claim on a seed it has not, and narrowing is not a whitelist -- every hit inside the audited block still stops the round"
+  }
+ },
+ "authorization": {
+  "by": "the user's order of 2026-09-23",
+  "granted": "16 additional data launches (640 -> 656) for the unrun fourth layer",
+  "not_granted": [
+   "training",
+   "reward changes",
+   "new arms or seeds",
+   "extra verification episodes",
+   "opening 800000..800399",
+   "raising the gate ceiling"
+  ],
+  "recorded_in": "COMM_TASK_PRESSURE_G12_EXTENSION_PROTOCOL.md §2"
+ },
+ "branch": "analysis/comm-task-pressure-g12-extension",
+ "date": "2026-09-23",
+ "decision": {
+  "branch": "l2_pass_l3_fail",
+  "layer_verdict": "L2 过、L3 未过",
+  "next_round": "正式关闭“仅增加任务数量即可建立逐步预算选择”这条路线；不再往 14/16 个目标加。下一轮只做只读 action-geometry audit，不训练",
+  "training_authorized": false
+ },
+ "delivered_artefacts_left_byte_identical": [
+  "AGREEMENT_GATE.json",
+  "CODE_FREEZE.json",
+  "COMM_TASK_PRESSURE_LEARNABILITY_MANIFEST.json",
+  "COMM_TASK_PRESSURE_LEARNABILITY_PROTOCOL.md",
+  "COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.json",
+  "COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.md",
+  "GATES_g10.json",
+  "GATES_g6.json",
+  "GATES_g8.json",
+  "GATE_SEQUENCE_EXPLANATION.json",
+  "PRESSURE_METRICS.json",
+  "PRESSURE_METRICS_g10.json",
+  "PRESSURE_METRICS_g6.json",
+  "PRESSURE_METRICS_g8.json",
+  "ROW_PROVENANCE_g10.json",
+  "ROW_PROVENANCE_g6.json",
+  "ROW_PROVENANCE_g8.json",
+  "RULE_MATRIX.json",
+  "RULE_MATRIX_g10.json",
+  "RULE_MATRIX_g6.json",
+  "RULE_MATRIX_g8.json",
+  "SEED_COLLISION_AUDIT.json",
+  "STREAM_MANIFEST_g10.json",
+  "STREAM_MANIFEST_g6.json",
+  "STREAM_MANIFEST_g8.json"
+ ],
+ "extends": {
+  "delivered_layer_verdicts": {
+   "10": {
+    "L0": true,
+    "L1": true,
+    "L2": true,
+    "L3": false,
+    "L4": false
+   },
+   "6": {
+    "L0": true,
+    "L1": true,
+    "L2": false,
+    "L3": false,
+    "L4": false
+   },
+   "8": {
+    "L0": true,
+    "L1": true,
+    "L2": false,
+    "L3": false,
+    "L4": false
+   }
+  },
+  "delivered_layers": [
+   6,
+   8,
+   10
+  ],
+  "protocol": "COMM_TASK_PRESSURE_LEARNABILITY_PROTOCOL.md",
+  "results": "COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.md"
+ },
+ "freeze": {
+  "episode_code_identity": "ff0b4139b1fff700",
+  "file": "G12_FREEZE.json",
+  "head": "098ae183ef852e60a8b61a43240075cdefc394bf",
+  "layer": {
+   "brief_ceiling": 640,
+   "effective_ceiling": 656,
+   "extension_grant": 16,
+   "goals": 12,
+   "granted_by": "the user's explicit order of 2026-09-23, recorded in COMM_TASK_PRESSURE_G12_EXTENSION_PROTOCOL.md §2"
+  },
+  "modules": 56,
+  "run_episode_sha256": "a6a00ec98030dbf1"
+ },
+ "head_at_report": "aa6768eb96e5e2fa4f028a92168d45a678bfad7b",
+ "never_committed": [
+  "streams",
+  "per-episode logs",
+  "checkpoints",
+  "rows/",
+  "runs/"
+ ],
+ "round": "comm_task_pressure_g12_extension",
+ "setting": {
+  "ack": false,
+  "arms": [
+   "send_once",
+   "event",
+   "event_priority",
+   "periodic_5",
+   "periodic_20",
+   "first_send_plus_bound_3_10",
+   "bound_only_3_10",
+   "always_hold",
+   "event_unbudgeted"
+  ],
+  "budget_bytes": 29300,
+  "delivery_probability": 1.0,
+  "information": "isolated",
+  "only_variable": "num_goals = 12",
+  "steps": 1000,
+  "timing_mode": "policy_owned_timing"
+ },
+ "starting_head": "6b4452f5de88f7cfd0c17ce475de269eb13dd6b7",
+ "tests": {
+  "project": "通过：OK (skipped=2)",
+  "round": "通过：OK",
+  "smoke": "通过：final_status=completed"
+ }
+}
