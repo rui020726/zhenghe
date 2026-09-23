@@ -1,21 +1,39 @@
 # Zhenghe：搜索—协调—分配一体化搜救系统
 
-当前研究入口：[项目总纲 v3.9](PROJECT_CHARTER.md) 与
-[D1 实测结果：部署路径的信息路径值多少按时任务](runs/comm_info_path_validation_20260923/D1_RESULTS.md)
-（判据 [D1_PROTOCOL_REVISION.md](runs/comm_info_path_validation_20260923/D1_PROTOCOL_REVISION.md)
-在任何新 episode 之前冻结并单独提交、上一轮的 `MINIMAL_PAIRED_VALIDATION_PROTOCOL.md` 原件一字未动；
-机读 `D1_RESULTS.json`、门禁件 `B0_PAIRED_REPLAY.json` 与 `IDENTITY_AUDIT_data.json`、
-边界核验 `D1_VERIFICATION.json`，均 `passed=true`）。
-本轮 **0 训练、0 参数改动**；生产侧唯一改动是 B0 的**被动日志**
-（`integrated_sar/info_probe.py` + `comm.py`/`adapters/piloc.py`/`joint_driver.py` 挂钩，默认关闭），
-它写侧文件、不加 lifecycle 事件类型、不进 actor 观测、不消耗随机数。
-机械核实：16 格成对回放在开/关探针之间**全部生命周期记录、检测序列、发射序列、扣费字节、任务结局相同**；
-身份门禁 I1–I5 在 60 个 seed 上全过、I6 时机模式惰性 4 格通过；四源 seed 冲突审计 clean；
-四臂 × 60 = **240/240 格完整、0 技术失败**、启动 264/296（技术失败计入上限）；
-两个 checkpoint 的 SHA256 与修改时间未被触碰、封存块盘上 artefact 仍 0、生产默认值逐条未变
-（`comm_policy=immediate`、`comm_delivery_probability=1.0`、`gossip_interval=2`、无额度、`comm_ack=False`）。
+当前研究入口：[项目总纲 v4.0](PROJECT_CHARTER.md) 与
+[真实 PILOC 未发现目标的逐个归因](runs/real_search_undetected_attribution_20260923/SEARCH_UNDETECTED_ATTRIBUTION.md)
+（机读：逐目标表 `UNDETECTED_GOAL_ATTRIBUTION.json`、认证几何 `SCENARIO_GEOMETRY.json`、
+字段负证据 `FIELD_INVENTORY.json`、计数闭合 `BATCH_RECONCILIATION.json`、
+核验 `ATTRIBUTION_VERIFICATION.json` `passed=true`）。
+本轮 **0 episode、0 训练、0 生产代码改动、0 通信配置改动、未加目标难度**；
+600 个输入文件重哈希 0 变 0 缺、`piloc`/`task_allocation`/`torch` 在分析进程里从未导入、
+环境入口 tripwire 解析到 3 个入口且分析期调用 0 次。
 
-三个同 seed 配对比较（唯一的因果陈述；配对百分位 bootstrap B=10 000）：
+* **两批真实搜索各自闭合、不相加**：D1 的搜索侧（seed `1100000..1100059`）
+  `360 放置 / 352 发现 / 352 按时`；2026-09-18 systemloop（`31000..31059`）`360 / 356`。
+* **四桶**：不可达或场景问题 **0/720**（判据是 8-连通引理，且 120/120 个 seed 的重建栅格
+  `map_sha256` 与运行记录逐字符相同）；曾进入合法范围却未发事件 **0 判定 + 2 个候选**；
+  可达但轨迹未覆盖 **10**（判读以探测器该格正常为前提，证据等级写明）；日志不足 **2**。
+* **未发现者不是疑难格**：距最近搜索起点的测地距中位 10.5 vs 已发现者 9.0、
+  合法可见格数 65.5 vs 65.0、**起点到其可见集只需 2 步 vs 3 步** ⇒ "改放置规则消掉未发现"这条路线被排除。
+* **一条会改变读法的环境事实**：未被发现的目标**每步自己走一格**（`timemap.py:814-845`）。
+  日志独立复现：708 条发现里只有 **35.9 %** 发生在放置格上，晚发现偏移中位 6 格、最大 45 格，
+  而"偏移 > 已过去步数"违例 **0** 条 ⇒ `scenario.goal_positions` 与 B0 的 `placed` 都只是 t=0 放置格，
+  **"某格子没被扫过"不再等价于"某目标没被发现"**；第十五/十六轮的计数与判定一个都不改，
+  只登记这条限定语。
+* **缺的是两条位置路径**：逐时刻搜索机器人位置、逐时刻目标位置，在两批 360 个生命周期文件里
+  存在数 **0/360**（B0 补了放置、没补路径）。两份**已冻结未执行**的下一步件因此交付：
+  [B1 最小被动记录方案与两个候选的最小复现](runs/real_search_undetected_attribution_20260923/MISSING_FIELDS_AND_PASSIVE_RECORD_PLAN.md)、
+  [只改搜索侧因素的 S1 配对验证协议](runs/real_search_undetected_attribution_20260923/SEARCH_SIDE_PAIRED_VALIDATION_PROTOCOL.md)。
+  两个候选（seed `1100051`、`1100053`：机器人起点格就在目标可见集内）在被复算证明之前
+  **不得**写成"发现逻辑有缺陷"——观测判据在机器人移动之后才评估。
+
+上一轮（第十六轮）入口：[D1 实测结果：部署路径的信息路径值多少按时任务](runs/comm_info_path_validation_20260923/D1_RESULTS.md)
+（判据 `D1_PROTOCOL_REVISION.md` 在任何新 episode 之前冻结并单独提交；`B0_PAIRED_REPLAY.json`、
+`IDENTITY_AUDIT_data.json`、`D1_VERIFICATION.json` 均 `passed=true`）。
+B0 的四类被动日志已进生产（写侧文件、不加 lifecycle 事件类型、不进观测、不消耗随机数），
+D1 四臂 × 60 配对 seed **240/240 完整、0 技术失败、启动 264/296**，三个同 seed 配对比较
+（配对 bootstrap B=10 000）：
 
 | 代号 | 干预 | 按时完成差（个/ep） | 95 % CI | 胜/平/负 |
 |---|---|---:|---|---|
@@ -23,21 +41,13 @@
 | C2 | 投递 1.0 → 0.7 | **0.00000** | [0.0, 0.0] | 0/60/0 |
 | C3 | 自带感知开 vs 关（**同一批丢包**） | **+1.28333** | [+1.01667, +1.55] | 45/15/0 |
 
-* **C3 的"同一批丢包"是核过的**：A3 与 A4 的发射序列与逐包送达结局逐条相同、计费字节相同 ⇒
-  同样每集 10.25 个丢失的包，部署路径上 0 个任务损失、关掉自带感知后 1.283 33 个/ep。
-  **部署路径对丢包的免疫来自环境传感旁路，不来自通信策略**（C2 的精确零是同一条事实的另一面）。
-  允许措辞逐对比机读登记：C2 只能说"同一批包、阈值不同的嵌套"，C1 不得使用"同一批丢包"。
-* **C1 不为零**：完全静默付 0.31667 个/ep、代价 14 573.3 B/ep ⇒ 约 **46 021 B/个**被上行救回的按时任务。
-* **冻结主判据机械适用的结果是 `undecidable`**：主口径臂（部署·0.7）在预登记难度下
-  按时失败数为 **0** ⇒ `information_bucket_share` 分母为空 ⇒ 守卫生效 ⇒
-  **既不判"信息侧不是瓶颈"，也不判它是瓶颈**。要出数只能另写一次预登记实验换难度，本轮明确未做。
-* **逐目标机制记录**（描述，不是归因）：隔离臂 77 个失败目标里"从未送达""整集无人知晓"
-  "知晓已在 deadline 之后"**各为 0**，68 个只带"决策时刻 belief 与真值不符"、9 个纯执行侧；
-  而该旗标在**按时完成的目标上 100 % 命中**（轮询式 belief 天然落后真值），故校准值与份额并排发表，
-  `S_all=0.883` **不得**读成"88 % 的失败由信息造成"。
-* 这 240 格**不是**学习模型的独立测试集（没有学习策略跑在其上）；`800000..800399` 继续封存。
+C3 的"同一批丢包"是逐包核过的（发射序列与送达结局全同、计费相同），所以"同样每集丢 10.25 个包、
+部署路径 0 损失 vs 隔离路径 1.283 33 个/ep"是本轮最硬的一条：**部署路径对丢包的免疫来自环境传感旁路，
+不来自通信策略**；C1 约 **46 021 B/个**救回的按时任务；冻结主判据因分母为空判 `undecidable`，
+N6 两方向都不判；机制记录的三条零与 `S_all=0.883` 的校准限制见该轮结果件（`800000..800399` 继续封存、
+那 240 格不是学习模型的独立测试集）。
 
-上一轮的**收束件**
+上一轮（第十五轮）的**收束件**
 （[通信研究收束：可引用的阶段结论](runs/comm_research_closure_20260923/COMMUNICATION_RESEARCH_CLOSURE.md)）
 把十四条轮次的结果分成四条**必须分开引用**的结论：
 ① 规则与协议层收益**成立**（`send_once` 以 14 916 B 拿 5.7917 个/ep 支配 `immediate` 的
@@ -363,7 +373,8 @@ checkpoint、录制流、逐 episode 日志与转录**不入 Git**，只在 mani
 | 动作几何与时序价值审计 | `runs/comm_action_geometry_audit_20260923/` | `COMM_ACTION_GEOMETRY_AUDIT.md`/`.json`（A-D 四问、七套分母各算各的）、`RECOMPUTE_L0_L4.json`（四层独立重跑，L0-L4 布尔逐层一致）、`COMM_ACTION_GEOMETRY_AUDIT_VERDICT.json`（判定名 **no_temporal_allocation_signal** + 六条范围）、`AUDIT_VERIFICATION.json`；**0 episode / 0 训练** |
 | 接收者与真实拓扑可行性 | `runs/comm_recipient_topology_feasibility_20260923/` | `COMM_RECIPIENT_TOPOLOGY_AUDIT_PROTOCOL.md`（R1 的失败名字先于数据写死）、`..._SOURCE_MAP.md`（九问调用链）、`..._RESULTS.md`/`.json`、`..._SCALAR_PROOF.json`（1 875 次分类比较 0 不一致）、`..._DECISION.md`（判定名 **global_fanout_is_only_a_scalar**）；**0 episode / 0 训练** |
 | 通信研究收束与完整系统瓶颈盘点（0 训练） | `runs/comm_research_closure_20260923/` | `COMMUNICATION_RESEARCH_CLOSURE.md`（四条结论分开引用 + 强规则基线与适用条件 + 重开条件 N1-N6）、`JOINT_SYSTEM_BOTTLENECK_AUDIT.md`/`.json`（八阶段链、四条路径分桶、**40 项核对全一致**）、`CHAIN_RECONSTRUCTION.json`（P1 120 + P2 90 + P3 576 格逐目标链）、`STAGE_CAPABILITY.json`（哪几阶段可归因、哪几处只有代理量）、`MINIMAL_PAIRED_VALIDATION_PROTOCOL.md`（D1，**由下一轮修订后执行**）、`CLOSURE_INPUT_MANIFEST.json`、`CLOSURE_VERIFICATION.json`、`test_closure_harness.py`（21 项）；逐集日志与转录不入库 |
-| **完整系统信息路径验证（最新：B0 日志 + D1 四臂 × 60 配对 seed）** | `runs/comm_info_path_validation_20260923/` | `D1_PROTOCOL_REVISION.md`（**判据在任何 episode 之前冻结并单独提交**：三个配对比较、三态机制谓词与显式分母、身份门禁 I1–I6、`information_bucket_share` 的分母定义与守卫、两条停止条件、296 次启动上限）、`B0_PAIRED_REPLAY.json`（16 格成对回放 + 4 格时机模式惰性，`passed=true` ⇒ 开日志前后检测/结局/发射/扣费全同）、`SEED_COLLISION_AUDIT.json`（`1100000..1100059` 四源命中 0）、`IDENTITY_AUDIT_smoke.json`/`IDENTITY_AUDIT_data.json`（I1–I5 逐 seed，`phrasing_licensed` 规定哪一句"同一批丢包"可说）、`D1_RESULTS.md`/`.json`（C1 +0.31667 [+0.18333,+0.45]、C2 0.00000 [0,0]、C3 +1.28333 [+1.01667,+1.55]；机制记录三条零；`declared=undecidable`）、`D1_VERIFICATION.json`（生产改动仅限 5 个 B0 文件、checkpoint 未动、封存块 artefact 0，`passed=true`）、`test_d1_harness.py`（14 项 0 episode）＋ 生产侧 `integrated_sar/info_probe.py` 与 `tests/test_info_probe.py`（12 项）；逐集日志、转录与探针文件不入库 |
+| 完整系统信息路径验证（B0 日志 + D1 四臂 × 60 配对 seed） | `runs/comm_info_path_validation_20260923/` | `D1_PROTOCOL_REVISION.md`（**判据在任何 episode 之前冻结并单独提交**：三个配对比较、三态机制谓词与显式分母、身份门禁 I1–I6、`information_bucket_share` 的分母定义与守卫、两条停止条件、296 次启动上限）、`B0_PAIRED_REPLAY.json`（16 格成对回放 + 4 格时机模式惰性，`passed=true` ⇒ 开日志前后检测/结局/发射/扣费全同）、`SEED_COLLISION_AUDIT.json`（`1100000..1100059` 四源命中 0）、`IDENTITY_AUDIT_smoke.json`/`IDENTITY_AUDIT_data.json`（I1–I5 逐 seed，`phrasing_licensed` 规定哪一句"同一批丢包"可说）、`D1_RESULTS.md`/`.json`（C1 +0.31667 [+0.18333,+0.45]、C2 0.00000 [0,0]、C3 +1.28333 [+1.01667,+1.55]；机制记录三条零；`declared=undecidable`）、`D1_VERIFICATION.json`（生产改动仅限 5 个 B0 文件、checkpoint 未动、封存块 artefact 0，`passed=true`）、`test_d1_harness.py`（14 项 0 episode）＋ 生产侧 `integrated_sar/info_probe.py` 与 `tests/test_info_probe.py`（12 项）；逐集日志、转录与探针文件不入库 |
+| **真实 PILOC 未发现目标归因（最新：0 episode、0 训练、只读）** | `runs/real_search_undetected_attribution_20260923/` | `SEARCH_UNDETECTED_ATTRIBUTION.md`（两批各自闭合 360/352/352 与 360/356、四桶判定、**目标每步移动**这条会改读法的事实、`search_coverage` 不是空间覆盖）、`UNDETECTED_GOAL_ATTRIBUTION.json`（12 行逐目标表：连通域/距起点/可见格数/距实测到达格 + 每行 `grade` 与 `why`）、`SCENARIO_GEOMETRY.json`（**120/120 seed 重建栅格经 `map_sha256` 认证**、两套视线判据 72 457 格对 0 分歧、未发现 vs 已发现对照）、`FIELD_INVENTORY.json`（四条所需路径在 **360/360** 文件里不存在、PILOC 源码证据按起点版本引用、工作树漂移为空）、`BATCH_RECONCILIATION.json`（四臂发现集合逐 seed 相同、`detected+remaining==placed` 120/120、目标移动性）、`ATTRIBUTION_VERIFICATION.json`（`passed=true`、600 输入重哈希 0 变 0 缺、后端从未导入、tripwire 调用 0）、`MISSING_FIELDS_AND_PASSIVE_RECORD_PLAN.md`（B1 最小被动记录 + 2 个正确性候选的最小复现与修复计划，**未执行**）、`SEARCH_SIDE_PAIRED_VALIDATION_PROTOCOL.md`（只改搜索侧因素的配对验证，判据与停止条件先写死，**未执行**）、`test_rs_harness.py`（19 项 0 episode） |
 
 传输层的两个协议由 `--comm-timing-mode` 选择：`legacy_shared_bound`（默认，全部历史实验，
 上界到点由传输层代发、计费、可拒付）与 `policy_owned_timing`（研究模式，只有策略自己请求的
