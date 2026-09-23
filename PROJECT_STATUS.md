@@ -1,6 +1,48 @@
 # 项目状态
 
-## 2026-09-22（报告完成于 09-23）：任务压力 calibration 已执行三层，没有任何层通过 L0–L4（0 训练，第四层未跑）
+## 2026-09-23：预登记的 12 目标层已按追加授权补跑完，任务压力这条轴四层全未通过（0 训练）
+
+产物 [runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_G12_EXTENSION_RESULTS.md](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_G12_EXTENSION_RESULTS.md)，
+分支 `analysis/comm-task-pressure-g12-extension`（起点 `analysis/comm-task-pressure-learnability@6b4452f5de88…`），总纲 v3.5。
+执行入口是使用者本轮指令；协议 [COMM_TASK_PRESSURE_G12_EXTENSION_PROTOCOL.md](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_G12_EXTENSION_PROTOCOL.md)
+在第一条 g12 episode 之前单独提交。
+
+**0 训练、0 `optimizer.step`、0 checkpoint、0 模型加载、0 新增验证 episode。** 唯一自变量 `num_goals = 12`；
+29 300 B、`policy_owned_timing`、isolated-lossless、ACK 关闭、九臂规则库与 bootstrap 口径逐项沿用前三层。
+
+| 压力层 | L0 | L1 | L2 | L3 | L4 | 该层结论（判据一字未改） |
+|---:|---|---|---|---|---|---|
+| 6 / 8 / 10 目标（已交付） | 过 | 过 | 仅 10 过（0.900） | 不过（0/16） | 不过 | 未通过——原判据，本轮未改写 |
+| **12 目标（本轮）** | 过 | 过（0.95313） | **过**（0.78172 在带内；+8.875 CI [+7.625, +10.000]） | **不过**（3/16 流有争用点，门槛 8/16） | **不过**（envelope +0.0625，CI [0, 0.1875]） | 未通过 |
+
+- **地位是这一条最容易被读错，先钉住**：g12 是原协议预登记的第四层，因上一轮技术失败计入 640 上限而差 16 次没跑；
+  使用者只追加授权这 16 次（640→656）。它是**容量扩展 / 探索性闭环**，不是对原三层门禁的事后改写；
+  原三层的 `GATES_g{6,8,10}.json`、结果、manifest、freeze、归档核验件全部字节不变
+  （`common.write_json` 对已交付件"内容不同即拒绝"，`report_g12.py` 只能写自己的文件名）。
+- **12 目标确实把额度逼紧了，但没有变成 L3 要的那种选择**：最佳规则 `send_once` 用满 ≥90 % 额度的流数
+  从前三层的 0/16 跳到 **15/16**，并且第一次出现"同一步只付得起严格子集"（3/16 流、合计 198 步）。
+  门槛是 8/16，所以 L3 仍不过。
+- **机制第一次被量清（不参与任何判据）**：16 流 × 1 000 步里 4 852 步有 ≥2 个可见候选（30.3 %），
+  其中 **63.1 % 是"一个都付不起"、只有 4.1 % 是严格子集**；候选报价极差 762 B = 额度的 2.6 %；
+  15 条流首次断供那一步上所有候选都是**已经发过消息的刷新**。⇒ 失效形式仍是成片跨进全拒付区。
+- **不做的三件事**：未算 λ（均值 Pareto 只有 1 点，且门槛未过）、未改 reward、未新增规则/seed/验证 episode；
+  `800000..800399` 盘上 artefact 仍为 0，生产默认值未改。
+- **上限诚实性**：数据启动 656/656（= 前三层 496 + 本层 16 录制 + 144 矩阵）、核验 10/12 未加、
+  历史技术失败 20 次照旧计入；本层 144 格 0 缺格 0 失败。
+- **两处披露（写在结果的"披露"节，不藏在脚注）**：
+  (1) `episode_code_identity` 的按-commit 那条路径随 locale 变（同批 commit：cp936 → `c922ca100665609c`，
+  UTF-8 → `23390f55a6b90afa`）；跨层"同一 episode 代码状态"改在**给行打戳**那条路径上核实
+  （g8/g10/g12 的 432 格同为 `ff0b4139b1fff700`；g6 的 144 格本就没有戳）。本轮没有改这条哈希路径。
+  (2) `GATES_g12.json` 的 `stop_reason` 仍写"进入下一层"——那句话写于 12 还不是末层时，判定器自第一次数据启动后
+  禁止修改，故未改文案；本轮真正的下一步是扩展协议 §8 的分支，且不存在第五层。
+  (3) 本轮自己的"追加授权恰好 16 次"这条不变量原先对着活账本算，跑完就不成立；改为对着开跑前的
+  `G12_START_LEDGER.json` 快照核（496 已花、656 上限、需要 160、空出 160）。只动自检与一条测试，不动 episode。
+
+**下一步由使用者定（本轮跑完即停）**：(a) 接受这条轴的四层负结果并按总纲 §9 停止场景扩展；
+(b) 做只读 **action-geometry audit**（机制诊断指出的方向，0 训练）；(c) 换轴（非平稳信道 / 多订阅者与真实拓扑 /
+把成本显式写进目标，最后一项要先解决 reward 结构）。
+
+## 2026-09-22（报告完成于 09-23，状态已由上一节接替）：任务压力 calibration 已执行三层，没有任何层通过 L0–L4（0 训练，第四层未跑）
 
 执行入口 [COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md](COMM_TASK_PRESSURE_LEARNABILITY_NEXT_ROUND.md) **已执行完毕**；
 产物 [runs/comm_task_pressure_learnability_20260922/](runs/comm_task_pressure_learnability_20260922/COMM_TASK_PRESSURE_LEARNABILITY_RESULTS.md)，
