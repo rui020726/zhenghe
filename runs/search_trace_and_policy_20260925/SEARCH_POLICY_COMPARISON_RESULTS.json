@@ -1,0 +1,3635 @@
+{
+ "criteria": {
+  "guard_G_mechanism": {
+   "declared": false,
+   "text": "某臂未发现目标里类别 4 占比 > 20 % ⇒ 只报效果、不报机制",
+   "undecidable_share_of_undetected": 0.0
+  },
+  "stop_1_no_object": {
+   "both_arms_below_half_percent": false,
+   "ci_contains_zero": false,
+   "ci_upper_below_1_per_batch": true,
+   "declared": false,
+   "text": "两臂未发现率都 < 0.5 %（360 放置里 < 2 个），且差的 CI 含 0 且上界 < 1 个/批"
+  },
+  "stop_2_has_object": {
+   "ci_lower_above_zero": false,
+   "declared": false,
+   "seeds_contributing_nonzero": 40,
+   "text": "差的 CI 下界 > 0，且 ≥ 15/60 个 seed 贡献非零差"
+  },
+  "units": {
+   "batch_equivalent": "个/批 = 60 集合计；1 个/批 = 0.0166667 个/episode",
+   "primary_effect": "个/episode（A − B，同 seed 配对）",
+   "task_level": "按时完成任务 个/episode，与目标级分母不同、不相加"
+  }
+ },
+ "criterion_verdict": "neither_criterion_met",
+ "design": {
+  "arms": {
+   "A": "冻结 checkpoint 的 PILOC 策略（piloc-trained）",
+   "B": "FrontierSearchPolicy 接入同一真实 PILOC 环境（piloc-frontier）"
+  },
+  "episodes_per_arm": 60,
+  "independent_variable": "只有动作提供器",
+  "missing_seeds": [],
+  "mock_backend_used": false,
+  "seeds": [
+   1200000,
+   1200059
+  ]
+ },
+ "gates": {
+  "P0_b1_passivity": true,
+  "P1_scenario_identity": {
+   "comm_fields_equal_per_seed": 60,
+   "differing_only_in": {
+    "allowed": [
+     "search_action_policy",
+     "search_backend",
+     "output",
+     "comm_transcript",
+     "search_probe"
+    ],
+    "observed": [
+     "search_action_policy",
+     "search_backend"
+    ]
+   },
+   "scenario_identical_per_seed": 60,
+   "scenario_mismatched_seeds": [],
+   "seeds_paired": 60
+  },
+  "P2_seed_collision_audit_clean": true,
+  "P3_communication_unchanged": true,
+  "correctness_gate_P2_verdict": "no_defect_found"
+ },
+ "launch_ledger": {
+  "by_phase": {
+   "b1": 12,
+   "data": 120,
+   "diag": 1,
+   "diag2": 1,
+   "diag3": 1,
+   "plumb": 1,
+   "repro": 14,
+   "smoke": 8
+  },
+  "cap": 160,
+  "entries": [
+   {
+    "cell": "b1/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 0
+   },
+   {
+    "cell": "b1/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 1
+   },
+   {
+    "cell": "b1/A1/s1100051/a2",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 1
+   },
+   {
+    "cell": "b1/A1/s1100051/a2",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 1
+   },
+   {
+    "cell": "plumb/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "plumb",
+    "round_total_before_this": 4
+   },
+   {
+    "cell": "diag/A1/s1100051/a1",
+    "detail": "probe-write diagnosis",
+    "n": 1,
+    "phase": "diag",
+    "round_total_before_this": 5
+   },
+   {
+    "cell": "diag2/A1/s1100051/a1",
+    "detail": "probe-write diagnosis 2",
+    "n": 1,
+    "phase": "diag2",
+    "round_total_before_this": 6
+   },
+   {
+    "cell": "diag3/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "diag3",
+    "round_total_before_this": 7
+   },
+   {
+    "cell": "b1/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 8
+   },
+   {
+    "cell": "b1/A1/s1100051/a2",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 8
+   },
+   {
+    "cell": "b1/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 10
+   },
+   {
+    "cell": "b1/A1/s1100051/a2",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 11
+   },
+   {
+    "cell": "b1/A1/s1100053/a2",
+    "detail": "d1",
+    "n": 2,
+    "phase": "b1",
+    "round_total_before_this": 12
+   },
+   {
+    "cell": "b1/A1/s1100053/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "b1",
+    "round_total_before_this": 13
+   },
+   {
+    "cell": "b1/A1/s1100053/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "b1",
+    "round_total_before_this": 14
+   },
+   {
+    "cell": "b1/A1/s1100053/a2",
+    "detail": "d1",
+    "n": 2,
+    "phase": "b1",
+    "round_total_before_this": 15
+   },
+   {
+    "cell": "repro/A1/s1100015/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "repro",
+    "round_total_before_this": 16
+   },
+   {
+    "cell": "repro/A1/s1100017/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "repro",
+    "round_total_before_this": 16
+   },
+   {
+    "cell": "repro/A1/s1100008/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "repro",
+    "round_total_before_this": 18
+   },
+   {
+    "cell": "repro/A1/s1100031/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "repro",
+    "round_total_before_this": 19
+   },
+   {
+    "cell": "repro/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "repro",
+    "round_total_before_this": 20
+   },
+   {
+    "cell": "repro/A1/s1100036/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "repro",
+    "round_total_before_this": 21
+   },
+   {
+    "cell": "repro/A1/s1100053/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "repro",
+    "round_total_before_this": 22
+   },
+   {
+    "cell": "repro/BASE/s31003/a1",
+    "detail": "systemloop",
+    "n": 2,
+    "phase": "repro",
+    "round_total_before_this": 23
+   },
+   {
+    "cell": "repro/BASE/s31009/a1",
+    "detail": "systemloop",
+    "n": 3,
+    "phase": "repro",
+    "round_total_before_this": 24
+   },
+   {
+    "cell": "repro/CTRL/s1100000/a1",
+    "detail": "d1",
+    "n": 3,
+    "phase": "repro",
+    "round_total_before_this": 25
+   },
+   {
+    "cell": "repro/CTRL/s1100001/a1",
+    "detail": "d1",
+    "n": 3,
+    "phase": "repro",
+    "round_total_before_this": 26
+   },
+   {
+    "cell": "repro/BASE/s31030/a1",
+    "detail": "systemloop",
+    "n": 3,
+    "phase": "repro",
+    "round_total_before_this": 27
+   },
+   {
+    "cell": "repro/CTRL/s1100002/a1",
+    "detail": "d1",
+    "n": 4,
+    "phase": "repro",
+    "round_total_before_this": 28
+   },
+   {
+    "cell": "repro/CTRL/s1100003/a1",
+    "detail": "d1",
+    "n": 4,
+    "phase": "repro",
+    "round_total_before_this": 29
+   },
+   {
+    "cell": "smoke/A/s1200000/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "smoke",
+    "round_total_before_this": 30
+   },
+   {
+    "cell": "smoke/B/s1200000/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "smoke",
+    "round_total_before_this": 31
+   },
+   {
+    "cell": "smoke/A/s1200001/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "smoke",
+    "round_total_before_this": 32
+   },
+   {
+    "cell": "smoke/B/s1200001/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "smoke",
+    "round_total_before_this": 33
+   },
+   {
+    "cell": "smoke/B/s1200000/a2",
+    "detail": "d1",
+    "n": 2,
+    "phase": "smoke",
+    "round_total_before_this": 34
+   },
+   {
+    "cell": "smoke/B/s1200001/a2",
+    "detail": "d1",
+    "n": 2,
+    "phase": "smoke",
+    "round_total_before_this": 35
+   },
+   {
+    "cell": "smoke/A/s1200001/a2",
+    "detail": "d1",
+    "n": 2,
+    "phase": "smoke",
+    "round_total_before_this": 36
+   },
+   {
+    "cell": "smoke/A/s1200000/a2",
+    "detail": "d1",
+    "n": 2,
+    "phase": "smoke",
+    "round_total_before_this": 37
+   },
+   {
+    "cell": "data/A/s1200000/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "data",
+    "round_total_before_this": 38
+   },
+   {
+    "cell": "data/A/s1200001/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "data",
+    "round_total_before_this": 38
+   },
+   {
+    "cell": "data/A/s1200002/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "data",
+    "round_total_before_this": 38
+   },
+   {
+    "cell": "data/B/s1200000/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "data",
+    "round_total_before_this": 38
+   },
+   {
+    "cell": "data/B/s1200001/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "data",
+    "round_total_before_this": 38
+   },
+   {
+    "cell": "data/B/s1200002/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "data",
+    "round_total_before_this": 38
+   },
+   {
+    "cell": "data/B/s1200003/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "data",
+    "round_total_before_this": 44
+   },
+   {
+    "cell": "data/B/s1200004/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "data",
+    "round_total_before_this": 45
+   },
+   {
+    "cell": "data/B/s1200005/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "data",
+    "round_total_before_this": 46
+   },
+   {
+    "cell": "data/A/s1200003/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "data",
+    "round_total_before_this": 47
+   },
+   {
+    "cell": "data/A/s1200004/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "data",
+    "round_total_before_this": 48
+   },
+   {
+    "cell": "data/A/s1200005/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "data",
+    "round_total_before_this": 49
+   },
+   {
+    "cell": "data/B/s1200007/a1",
+    "detail": "d1",
+    "n": 3,
+    "phase": "data",
+    "round_total_before_this": 50
+   },
+   {
+    "cell": "data/B/s1200006/a1",
+    "detail": "d1",
+    "n": 3,
+    "phase": "data",
+    "round_total_before_this": 51
+   },
+   {
+    "cell": "data/B/s1200008/a1",
+    "detail": "d1",
+    "n": 3,
+    "phase": "data",
+    "round_total_before_this": 52
+   },
+   {
+    "cell": "data/A/s1200007/a1",
+    "detail": "d1",
+    "n": 3,
+    "phase": "data",
+    "round_total_before_this": 53
+   },
+   {
+    "cell": "data/A/s1200008/a1",
+    "detail": "d1",
+    "n": 3,
+    "phase": "data",
+    "round_total_before_this": 54
+   },
+   {
+    "cell": "data/A/s1200006/a1",
+    "detail": "d1",
+    "n": 3,
+    "phase": "data",
+    "round_total_before_this": 55
+   },
+   {
+    "cell": "data/B/s1200010/a1",
+    "detail": "d1",
+    "n": 4,
+    "phase": "data",
+    "round_total_before_this": 56
+   },
+   {
+    "cell": "data/B/s1200011/a1",
+    "detail": "d1",
+    "n": 4,
+    "phase": "data",
+    "round_total_before_this": 57
+   },
+   {
+    "cell": "data/B/s1200009/a1",
+    "detail": "d1",
+    "n": 4,
+    "phase": "data",
+    "round_total_before_this": 58
+   },
+   {
+    "cell": "data/B/s1200014/a1",
+    "detail": "d1",
+    "n": 5,
+    "phase": "data",
+    "round_total_before_this": 59
+   },
+   {
+    "cell": "data/B/s1200013/a1",
+    "detail": "d1",
+    "n": 5,
+    "phase": "data",
+    "round_total_before_this": 60
+   },
+   {
+    "cell": "data/B/s1200012/a1",
+    "detail": "d1",
+    "n": 5,
+    "phase": "data",
+    "round_total_before_this": 61
+   },
+   {
+    "cell": "data/A/s1200010/a1",
+    "detail": "d1",
+    "n": 4,
+    "phase": "data",
+    "round_total_before_this": 62
+   },
+   {
+    "cell": "data/A/s1200011/a1",
+    "detail": "d1",
+    "n": 4,
+    "phase": "data",
+    "round_total_before_this": 63
+   },
+   {
+    "cell": "data/A/s1200009/a1",
+    "detail": "d1",
+    "n": 4,
+    "phase": "data",
+    "round_total_before_this": 64
+   },
+   {
+    "cell": "data/B/s1200017/a1",
+    "detail": "d1",
+    "n": 6,
+    "phase": "data",
+    "round_total_before_this": 65
+   },
+   {
+    "cell": "data/B/s1200015/a1",
+    "detail": "d1",
+    "n": 6,
+    "phase": "data",
+    "round_total_before_this": 66
+   },
+   {
+    "cell": "data/B/s1200016/a1",
+    "detail": "d1",
+    "n": 6,
+    "phase": "data",
+    "round_total_before_this": 67
+   },
+   {
+    "cell": "data/A/s1200012/a1",
+    "detail": "d1",
+    "n": 5,
+    "phase": "data",
+    "round_total_before_this": 68
+   },
+   {
+    "cell": "data/A/s1200013/a1",
+    "detail": "d1",
+    "n": 5,
+    "phase": "data",
+    "round_total_before_this": 69
+   },
+   {
+    "cell": "data/A/s1200014/a1",
+    "detail": "d1",
+    "n": 5,
+    "phase": "data",
+    "round_total_before_this": 70
+   },
+   {
+    "cell": "data/B/s1200020/a1",
+    "detail": "d1",
+    "n": 7,
+    "phase": "data",
+    "round_total_before_this": 71
+   },
+   {
+    "cell": "data/B/s1200018/a1",
+    "detail": "d1",
+    "n": 7,
+    "phase": "data",
+    "round_total_before_this": 72
+   },
+   {
+    "cell": "data/B/s1200019/a1",
+    "detail": "d1",
+    "n": 7,
+    "phase": "data",
+    "round_total_before_this": 73
+   },
+   {
+    "cell": "data/A/s1200015/a1",
+    "detail": "d1",
+    "n": 6,
+    "phase": "data",
+    "round_total_before_this": 74
+   },
+   {
+    "cell": "data/B/s1200023/a1",
+    "detail": "d1",
+    "n": 8,
+    "phase": "data",
+    "round_total_before_this": 75
+   },
+   {
+    "cell": "data/A/s1200017/a1",
+    "detail": "d1",
+    "n": 6,
+    "phase": "data",
+    "round_total_before_this": 76
+   },
+   {
+    "cell": "data/A/s1200016/a1",
+    "detail": "d1",
+    "n": 6,
+    "phase": "data",
+    "round_total_before_this": 77
+   },
+   {
+    "cell": "data/B/s1200021/a1",
+    "detail": "d1",
+    "n": 8,
+    "phase": "data",
+    "round_total_before_this": 78
+   },
+   {
+    "cell": "data/B/s1200022/a1",
+    "detail": "d1",
+    "n": 8,
+    "phase": "data",
+    "round_total_before_this": 79
+   },
+   {
+    "cell": "data/B/s1200026/a1",
+    "detail": "d1",
+    "n": 9,
+    "phase": "data",
+    "round_total_before_this": 80
+   },
+   {
+    "cell": "data/B/s1200024/a1",
+    "detail": "d1",
+    "n": 9,
+    "phase": "data",
+    "round_total_before_this": 81
+   },
+   {
+    "cell": "data/A/s1200018/a1",
+    "detail": "d1",
+    "n": 7,
+    "phase": "data",
+    "round_total_before_this": 82
+   },
+   {
+    "cell": "data/A/s1200020/a1",
+    "detail": "d1",
+    "n": 7,
+    "phase": "data",
+    "round_total_before_this": 83
+   },
+   {
+    "cell": "data/B/s1200025/a1",
+    "detail": "d1",
+    "n": 9,
+    "phase": "data",
+    "round_total_before_this": 84
+   },
+   {
+    "cell": "data/A/s1200019/a1",
+    "detail": "d1",
+    "n": 7,
+    "phase": "data",
+    "round_total_before_this": 85
+   },
+   {
+    "cell": "data/B/s1200029/a1",
+    "detail": "d1",
+    "n": 10,
+    "phase": "data",
+    "round_total_before_this": 86
+   },
+   {
+    "cell": "data/B/s1200027/a1",
+    "detail": "d1",
+    "n": 10,
+    "phase": "data",
+    "round_total_before_this": 87
+   },
+   {
+    "cell": "data/A/s1200021/a1",
+    "detail": "d1",
+    "n": 8,
+    "phase": "data",
+    "round_total_before_this": 88
+   },
+   {
+    "cell": "data/A/s1200023/a1",
+    "detail": "d1",
+    "n": 8,
+    "phase": "data",
+    "round_total_before_this": 89
+   },
+   {
+    "cell": "data/B/s1200028/a1",
+    "detail": "d1",
+    "n": 10,
+    "phase": "data",
+    "round_total_before_this": 90
+   },
+   {
+    "cell": "data/B/s1200032/a1",
+    "detail": "d1",
+    "n": 11,
+    "phase": "data",
+    "round_total_before_this": 91
+   },
+   {
+    "cell": "data/A/s1200022/a1",
+    "detail": "d1",
+    "n": 8,
+    "phase": "data",
+    "round_total_before_this": 92
+   },
+   {
+    "cell": "data/B/s1200030/a1",
+    "detail": "d1",
+    "n": 11,
+    "phase": "data",
+    "round_total_before_this": 93
+   },
+   {
+    "cell": "data/B/s1200035/a1",
+    "detail": "d1",
+    "n": 12,
+    "phase": "data",
+    "round_total_before_this": 94
+   },
+   {
+    "cell": "data/A/s1200024/a1",
+    "detail": "d1",
+    "n": 9,
+    "phase": "data",
+    "round_total_before_this": 95
+   },
+   {
+    "cell": "data/B/s1200031/a1",
+    "detail": "d1",
+    "n": 11,
+    "phase": "data",
+    "round_total_before_this": 96
+   },
+   {
+    "cell": "data/A/s1200026/a1",
+    "detail": "d1",
+    "n": 9,
+    "phase": "data",
+    "round_total_before_this": 97
+   },
+   {
+    "cell": "data/A/s1200025/a1",
+    "detail": "d1",
+    "n": 9,
+    "phase": "data",
+    "round_total_before_this": 98
+   },
+   {
+    "cell": "data/B/s1200033/a1",
+    "detail": "d1",
+    "n": 12,
+    "phase": "data",
+    "round_total_before_this": 99
+   },
+   {
+    "cell": "data/B/s1200038/a1",
+    "detail": "d1",
+    "n": 13,
+    "phase": "data",
+    "round_total_before_this": 100
+   },
+   {
+    "cell": "data/A/s1200027/a1",
+    "detail": "d1",
+    "n": 10,
+    "phase": "data",
+    "round_total_before_this": 101
+   },
+   {
+    "cell": "data/B/s1200034/a1",
+    "detail": "d1",
+    "n": 12,
+    "phase": "data",
+    "round_total_before_this": 102
+   },
+   {
+    "cell": "data/A/s1200029/a1",
+    "detail": "d1",
+    "n": 10,
+    "phase": "data",
+    "round_total_before_this": 103
+   },
+   {
+    "cell": "data/A/s1200028/a1",
+    "detail": "d1",
+    "n": 10,
+    "phase": "data",
+    "round_total_before_this": 104
+   },
+   {
+    "cell": "data/B/s1200041/a1",
+    "detail": "d1",
+    "n": 14,
+    "phase": "data",
+    "round_total_before_this": 105
+   },
+   {
+    "cell": "data/B/s1200036/a1",
+    "detail": "d1",
+    "n": 13,
+    "phase": "data",
+    "round_total_before_this": 106
+   },
+   {
+    "cell": "data/B/s1200037/a1",
+    "detail": "d1",
+    "n": 13,
+    "phase": "data",
+    "round_total_before_this": 107
+   },
+   {
+    "cell": "data/A/s1200030/a1",
+    "detail": "d1",
+    "n": 11,
+    "phase": "data",
+    "round_total_before_this": 108
+   },
+   {
+    "cell": "data/B/s1200044/a1",
+    "detail": "d1",
+    "n": 15,
+    "phase": "data",
+    "round_total_before_this": 109
+   },
+   {
+    "cell": "data/A/s1200032/a1",
+    "detail": "d1",
+    "n": 11,
+    "phase": "data",
+    "round_total_before_this": 110
+   },
+   {
+    "cell": "data/B/s1200039/a1",
+    "detail": "d1",
+    "n": 14,
+    "phase": "data",
+    "round_total_before_this": 111
+   },
+   {
+    "cell": "data/A/s1200031/a1",
+    "detail": "d1",
+    "n": 11,
+    "phase": "data",
+    "round_total_before_this": 112
+   },
+   {
+    "cell": "data/B/s1200040/a1",
+    "detail": "d1",
+    "n": 14,
+    "phase": "data",
+    "round_total_before_this": 113
+   },
+   {
+    "cell": "data/B/s1200047/a1",
+    "detail": "d1",
+    "n": 16,
+    "phase": "data",
+    "round_total_before_this": 114
+   },
+   {
+    "cell": "data/B/s1200042/a1",
+    "detail": "d1",
+    "n": 15,
+    "phase": "data",
+    "round_total_before_this": 115
+   },
+   {
+    "cell": "data/A/s1200033/a1",
+    "detail": "d1",
+    "n": 12,
+    "phase": "data",
+    "round_total_before_this": 116
+   },
+   {
+    "cell": "data/A/s1200035/a1",
+    "detail": "d1",
+    "n": 12,
+    "phase": "data",
+    "round_total_before_this": 117
+   },
+   {
+    "cell": "data/B/s1200043/a1",
+    "detail": "d1",
+    "n": 15,
+    "phase": "data",
+    "round_total_before_this": 118
+   },
+   {
+    "cell": "data/A/s1200034/a1",
+    "detail": "d1",
+    "n": 12,
+    "phase": "data",
+    "round_total_before_this": 119
+   },
+   {
+    "cell": "data/B/s1200050/a1",
+    "detail": "d1",
+    "n": 17,
+    "phase": "data",
+    "round_total_before_this": 120
+   },
+   {
+    "cell": "data/B/s1200045/a1",
+    "detail": "d1",
+    "n": 16,
+    "phase": "data",
+    "round_total_before_this": 121
+   },
+   {
+    "cell": "data/B/s1200046/a1",
+    "detail": "d1",
+    "n": 16,
+    "phase": "data",
+    "round_total_before_this": 122
+   },
+   {
+    "cell": "data/A/s1200036/a1",
+    "detail": "d1",
+    "n": 13,
+    "phase": "data",
+    "round_total_before_this": 123
+   },
+   {
+    "cell": "data/B/s1200053/a1",
+    "detail": "d1",
+    "n": 18,
+    "phase": "data",
+    "round_total_before_this": 124
+   },
+   {
+    "cell": "data/A/s1200037/a1",
+    "detail": "d1",
+    "n": 13,
+    "phase": "data",
+    "round_total_before_this": 125
+   },
+   {
+    "cell": "data/A/s1200038/a1",
+    "detail": "d1",
+    "n": 13,
+    "phase": "data",
+    "round_total_before_this": 126
+   },
+   {
+    "cell": "data/B/s1200049/a1",
+    "detail": "d1",
+    "n": 17,
+    "phase": "data",
+    "round_total_before_this": 127
+   },
+   {
+    "cell": "data/B/s1200048/a1",
+    "detail": "d1",
+    "n": 17,
+    "phase": "data",
+    "round_total_before_this": 128
+   },
+   {
+    "cell": "data/B/s1200056/a1",
+    "detail": "d1",
+    "n": 19,
+    "phase": "data",
+    "round_total_before_this": 129
+   },
+   {
+    "cell": "data/A/s1200039/a1",
+    "detail": "d1",
+    "n": 14,
+    "phase": "data",
+    "round_total_before_this": 130
+   },
+   {
+    "cell": "data/A/s1200041/a1",
+    "detail": "d1",
+    "n": 14,
+    "phase": "data",
+    "round_total_before_this": 131
+   },
+   {
+    "cell": "data/A/s1200040/a1",
+    "detail": "d1",
+    "n": 14,
+    "phase": "data",
+    "round_total_before_this": 132
+   },
+   {
+    "cell": "data/B/s1200052/a1",
+    "detail": "d1",
+    "n": 18,
+    "phase": "data",
+    "round_total_before_this": 133
+   },
+   {
+    "cell": "data/B/s1200051/a1",
+    "detail": "d1",
+    "n": 18,
+    "phase": "data",
+    "round_total_before_this": 134
+   },
+   {
+    "cell": "data/B/s1200059/a1",
+    "detail": "d1",
+    "n": 20,
+    "phase": "data",
+    "round_total_before_this": 135
+   },
+   {
+    "cell": "data/A/s1200042/a1",
+    "detail": "d1",
+    "n": 15,
+    "phase": "data",
+    "round_total_before_this": 136
+   },
+   {
+    "cell": "data/B/s1200055/a1",
+    "detail": "d1",
+    "n": 19,
+    "phase": "data",
+    "round_total_before_this": 137
+   },
+   {
+    "cell": "data/B/s1200054/a1",
+    "detail": "d1",
+    "n": 19,
+    "phase": "data",
+    "round_total_before_this": 138
+   },
+   {
+    "cell": "data/A/s1200044/a1",
+    "detail": "d1",
+    "n": 15,
+    "phase": "data",
+    "round_total_before_this": 139
+   },
+   {
+    "cell": "data/A/s1200043/a1",
+    "detail": "d1",
+    "n": 15,
+    "phase": "data",
+    "round_total_before_this": 140
+   },
+   {
+    "cell": "data/B/s1200058/a1",
+    "detail": "d1",
+    "n": 20,
+    "phase": "data",
+    "round_total_before_this": 141
+   },
+   {
+    "cell": "data/B/s1200057/a1",
+    "detail": "d1",
+    "n": 20,
+    "phase": "data",
+    "round_total_before_this": 142
+   },
+   {
+    "cell": "data/A/s1200045/a1",
+    "detail": "d1",
+    "n": 16,
+    "phase": "data",
+    "round_total_before_this": 143
+   },
+   {
+    "cell": "data/A/s1200046/a1",
+    "detail": "d1",
+    "n": 16,
+    "phase": "data",
+    "round_total_before_this": 144
+   },
+   {
+    "cell": "data/A/s1200047/a1",
+    "detail": "d1",
+    "n": 16,
+    "phase": "data",
+    "round_total_before_this": 145
+   },
+   {
+    "cell": "data/A/s1200048/a1",
+    "detail": "d1",
+    "n": 17,
+    "phase": "data",
+    "round_total_before_this": 146
+   },
+   {
+    "cell": "data/A/s1200049/a1",
+    "detail": "d1",
+    "n": 17,
+    "phase": "data",
+    "round_total_before_this": 147
+   },
+   {
+    "cell": "data/A/s1200050/a1",
+    "detail": "d1",
+    "n": 17,
+    "phase": "data",
+    "round_total_before_this": 148
+   },
+   {
+    "cell": "data/A/s1200051/a1",
+    "detail": "d1",
+    "n": 18,
+    "phase": "data",
+    "round_total_before_this": 149
+   },
+   {
+    "cell": "data/A/s1200052/a1",
+    "detail": "d1",
+    "n": 18,
+    "phase": "data",
+    "round_total_before_this": 150
+   },
+   {
+    "cell": "data/A/s1200053/a1",
+    "detail": "d1",
+    "n": 18,
+    "phase": "data",
+    "round_total_before_this": 151
+   },
+   {
+    "cell": "data/A/s1200054/a1",
+    "detail": "d1",
+    "n": 19,
+    "phase": "data",
+    "round_total_before_this": 152
+   },
+   {
+    "cell": "data/A/s1200055/a1",
+    "detail": "d1",
+    "n": 19,
+    "phase": "data",
+    "round_total_before_this": 153
+   },
+   {
+    "cell": "data/A/s1200056/a1",
+    "detail": "d1",
+    "n": 19,
+    "phase": "data",
+    "round_total_before_this": 154
+   },
+   {
+    "cell": "data/A/s1200057/a1",
+    "detail": "d1",
+    "n": 20,
+    "phase": "data",
+    "round_total_before_this": 155
+   },
+   {
+    "cell": "data/A/s1200058/a1",
+    "detail": "d1",
+    "n": 20,
+    "phase": "data",
+    "round_total_before_this": 156
+   },
+   {
+    "cell": "data/A/s1200059/a1",
+    "detail": "d1",
+    "n": 20,
+    "phase": "data",
+    "round_total_before_this": 157
+   }
+  ],
+  "normal_total": 150,
+  "plan": {
+   "b1": 8,
+   "data": 120,
+   "repro": 14,
+   "smoke": 8
+  },
+  "reserve": 10,
+  "used": 158
+ },
+ "per_seed_rows": {
+  "1200000": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 9,
+       "step": 1
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 9,
+       "step": 5
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200001": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200002": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200003": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-2"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-2": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-1": {
+       "chebyshev": 6,
+       "step": 8
+      },
+      "piloc-e1-target-2": {
+       "chebyshev": 3,
+       "step": 6
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200004": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-2"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-2": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-1": {
+       "chebyshev": 4,
+       "step": 10
+      },
+      "piloc-e1-target-2": {
+       "chebyshev": 6,
+       "step": 2
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200005": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-1": {
+       "chebyshev": 6,
+       "step": 7
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 9,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200006": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200007": {
+   "A_on_time": 5,
+   "A_undetected": 1,
+   "A_undetected_ids": [
+    "piloc-e1-target-0"
+   ],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 6,
+       "step": 10
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200008": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-2"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-2": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-2": {
+       "chebyshev": 4,
+       "step": 8
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200009": {
+   "A_on_time": 4,
+   "A_undetected": 2,
+   "A_undetected_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-5"
+   ],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-1": {
+       "chebyshev": 6,
+       "step": 5
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 6,
+       "step": 283
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200010": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-4"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-4": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-4": {
+       "chebyshev": 7,
+       "step": 26
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200011": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-4"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-4": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-1": {
+       "chebyshev": 3,
+       "step": 13
+      },
+      "piloc-e1-target-4": {
+       "chebyshev": 6,
+       "step": 7
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200012": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-2",
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-2": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-2": {
+       "chebyshev": 9,
+       "step": 1
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 6,
+       "step": 514
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200013": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200014": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200015": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-1"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-1": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-1": {
+       "chebyshev": 3,
+       "step": 985
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200016": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200017": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-1"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-1": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-1": {
+       "chebyshev": 5,
+       "step": 2
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200018": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 3,
+   "B_undetected": 3,
+   "B_undetected_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 3
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-3": null,
+      "piloc-e1-target-4": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-1": {
+       "chebyshev": 6,
+       "step": 643
+      },
+      "piloc-e1-target-3": {
+       "chebyshev": 7,
+       "step": 1
+      },
+      "piloc-e1-target-4": {
+       "chebyshev": 7,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200019": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-0"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 2,
+       "step": 21
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200020": {
+   "A_on_time": 5,
+   "A_undetected": 1,
+   "A_undetected_ids": [
+    "piloc-e1-target-0"
+   ],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-2"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 8,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-2": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-2": {
+       "chebyshev": 6,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200021": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-3",
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-3": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-3": {
+       "chebyshev": 7,
+       "step": 16
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 4,
+       "step": 962
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200022": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200023": {
+   "A_on_time": 5,
+   "A_undetected": 1,
+   "A_undetected_ids": [
+    "piloc-e1-target-0"
+   ],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 5,
+       "step": 10
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200024": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200025": {
+   "A_on_time": 5,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-5": {
+       "chebyshev": 9,
+       "step": 7
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200026": {
+   "A_on_time": 5,
+   "A_undetected": 1,
+   "A_undetected_ids": [
+    "piloc-e1-target-2"
+   ],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-2": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-2": {
+       "chebyshev": 7,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200027": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200028": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-4": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-4": {
+       "chebyshev": 10,
+       "step": 436
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 11,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200029": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200030": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 3,
+   "B_undetected": 3,
+   "B_undetected_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-2",
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 3
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null,
+      "piloc-e1-target-2": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 5,
+       "step": 2
+      },
+      "piloc-e1-target-2": {
+       "chebyshev": 6,
+       "step": 1
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 7,
+       "step": 5
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200031": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200032": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-4"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null,
+      "piloc-e1-target-4": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 8,
+       "step": 8
+      },
+      "piloc-e1-target-4": {
+       "chebyshev": 5,
+       "step": 10
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200033": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200034": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-0"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 6,
+       "step": 4
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200035": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-3",
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-3": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-3": {
+       "chebyshev": 6,
+       "step": 1
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 9,
+       "step": 2
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200036": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 7,
+       "step": 5
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 6,
+       "step": 13
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200037": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-5": {
+       "chebyshev": 7,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200038": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-0"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 6,
+       "step": 2
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200039": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-2"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-2": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-1": {
+       "chebyshev": 6,
+       "step": 13
+      },
+      "piloc-e1-target-2": {
+       "chebyshev": 6,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200040": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200041": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-5": {
+       "chebyshev": 11,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200042": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 3,
+   "B_undetected": 3,
+   "B_undetected_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 3
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null,
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 7,
+       "step": 2
+      },
+      "piloc-e1-target-1": {
+       "chebyshev": 7,
+       "step": 1
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 5,
+       "step": 14
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200043": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-5": {
+       "chebyshev": 10,
+       "step": 2
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200044": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200045": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200046": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200047": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200048": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200049": {
+   "A_on_time": 4,
+   "A_undetected": 2,
+   "A_undetected_ids": [
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "B_on_time": 6,
+   "B_undetected": 0,
+   "B_undetected_ids": [],
+   "mechanism": {
+    "A": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-4": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-4": {
+       "chebyshev": 9,
+       "step": 1
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 2,
+       "step": 91
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200050": {
+   "A_on_time": 5,
+   "A_undetected": 1,
+   "A_undetected_ids": [
+    "piloc-e1-target-0"
+   ],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-4"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 4,
+       "step": 8
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-4": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-4": {
+       "chebyshev": 5,
+       "step": 34
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200051": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-4"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-4": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-4": {
+       "chebyshev": 6,
+       "step": 11
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200052": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 2,
+   "B_undetected": 4,
+   "B_undetected_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 4
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null,
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-2": null,
+      "piloc-e1-target-3": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 8,
+       "step": 2
+      },
+      "piloc-e1-target-1": {
+       "chebyshev": 6,
+       "step": 1
+      },
+      "piloc-e1-target-2": {
+       "chebyshev": 6,
+       "step": 1
+      },
+      "piloc-e1-target-3": {
+       "chebyshev": 6,
+       "step": 10
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200053": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-4"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-4": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-1": {
+       "chebyshev": 6,
+       "step": 18
+      },
+      "piloc-e1-target-4": {
+       "chebyshev": 5,
+       "step": 112
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200054": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 5,
+   "B_undetected": 1,
+   "B_undetected_ids": [
+    "piloc-e1-target-2"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 1
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-2": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-2": {
+       "chebyshev": 7,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200055": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 3,
+   "B_undetected": 3,
+   "B_undetected_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 3
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null,
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 5,
+       "step": 1
+      },
+      "piloc-e1-target-1": {
+       "chebyshev": 5,
+       "step": 843
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 8,
+       "step": 3
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200056": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 2,
+   "B_undetected": 4,
+   "B_undetected_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-5"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 4
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null,
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-2": null,
+      "piloc-e1-target-5": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 8,
+       "step": 951
+      },
+      "piloc-e1-target-1": {
+       "chebyshev": 7,
+       "step": 1
+      },
+      "piloc-e1-target-2": {
+       "chebyshev": 6,
+       "step": 9
+      },
+      "piloc-e1-target-5": {
+       "chebyshev": 4,
+       "step": 5
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200057": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 2,
+   "B_undetected": 4,
+   "B_undetected_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 4
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null,
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-2": null,
+      "piloc-e1-target-3": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 10,
+       "step": 1
+      },
+      "piloc-e1-target-1": {
+       "chebyshev": 9,
+       "step": 1
+      },
+      "piloc-e1-target-2": {
+       "chebyshev": 7,
+       "step": 10
+      },
+      "piloc-e1-target-3": {
+       "chebyshev": 8,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200058": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-3"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-1": null,
+      "piloc-e1-target-3": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-1": {
+       "chebyshev": 8,
+       "step": 4
+      },
+      "piloc-e1-target-3": {
+       "chebyshev": 11,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  },
+  "1200059": {
+   "A_on_time": 6,
+   "A_undetected": 0,
+   "A_undetected_ids": [],
+   "B_on_time": 4,
+   "B_undetected": 2,
+   "B_undetected_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1"
+   ],
+   "mechanism": {
+    "A": {
+     "categories": {},
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {},
+     "nearest_approach": {},
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    },
+    "B": {
+     "categories": {
+      "never_visible_at_detection_step": 2
+     },
+     "closure_disagreement_steps": 0,
+     "first_deletion_steps": {
+      "piloc-e1-target-0": null,
+      "piloc-e1-target-1": null
+     },
+     "nearest_approach": {
+      "piloc-e1-target-0": {
+       "chebyshev": 7,
+       "step": 1
+      },
+      "piloc-e1-target-1": {
+       "chebyshev": 7,
+       "step": 1
+      }
+     },
+     "probe_anomalies": 0,
+     "probe_steps": 1000
+    }
+   }
+  }
+ },
+ "primary_result": {
+  "A_batch_total": 9,
+  "A_mean_per_episode": 0.15,
+  "A_per_batch_goals": 0.15,
+  "B_batch_total": 69,
+  "B_mean_per_episode": 1.15,
+  "difference_paired": {
+   "ci95_high": -0.666667,
+   "ci95_low": -1.333333,
+   "mean": -1.0,
+   "paired_seeds": 60,
+   "replications": 10000,
+   "rng_seed": 20260925
+  },
+  "direction": "A − B（正数表示 A 比 B 遗漏更多）",
+  "per_seed": {
+   "improved_A_worse": 5,
+   "tied": 20,
+   "worse_A_better": 35
+  },
+  "placement_denominators": {
+   "A": 360,
+   "B": 360
+  },
+  "quantity": "每 episode 未发现目标数",
+  "undetected_rate_A": 0.025,
+  "undetected_rate_B": 0.191667,
+  "unit": "个/episode"
+ },
+ "protocol": "S1b as revised by SEARCH_TRACE_AND_POLICY_PROTOCOL §一",
+ "registered_randomness_statement": "同 seed、同初始场景不保证两臂后续目标轨迹或噪声实现逐位相同：策略改变发现/删除时机就改变环境随机数的消耗次数（每个存活目标每步抽一次移动，少一个目标就少一次；视野噪声每 agent 每步也各抽一次）。因此只主张共享初始场景与 seed 的配对策略比较，不主张完全相同的移动目标路径。",
+ "round": "search_trace_and_policy_20260925",
+ "secondary_results": {
+  "airtime_bytes_per_episode_A": {
+   "max": 15894.0,
+   "mean": 14529.1,
+   "median": 14802.0,
+   "min": 9936.0,
+   "n": 60,
+   "p25": 14496.0,
+   "p75": 15072.0,
+   "p90": 15324.0
+  },
+  "airtime_bytes_per_episode_B": {
+   "max": 15528.0,
+   "mean": 12006.5,
+   "median": 12408.0,
+   "min": 4746.0,
+   "n": 60,
+   "p25": 9726.0,
+   "p75": 14862.0,
+   "p90": 15132.0
+  },
+  "closure_disagreement_steps_total": 0,
+  "detection_timing": {
+   "detection_step_pooled_over_events_A": {
+    "max": 970.0,
+    "mean": 60.89744,
+    "median": 4.0,
+    "min": 1.0,
+    "n": 351,
+    "p25": 1.0,
+    "p75": 33.0,
+    "p90": 222.0
+   },
+   "detection_step_pooled_over_events_B": {
+    "max": 969.0,
+    "mean": 35.44674,
+    "median": 4.0,
+    "min": 1.0,
+    "n": 291,
+    "p25": 1.0,
+    "p75": 10.0,
+    "p90": 71.0
+   },
+   "episodes_without_any_detection_A": 0,
+   "episodes_without_any_detection_B": 0,
+   "events_total_A": 351,
+   "events_total_B": 291,
+   "first_detection_step_per_episode_A": {
+    "max": 9.0,
+    "mean": 1.46667,
+    "median": 1.0,
+    "min": 1.0,
+    "n": 60,
+    "p25": 1.0,
+    "p75": 1.0,
+    "p90": 3.0
+   },
+   "first_detection_step_per_episode_B": {
+    "max": 112.0,
+    "mean": 3.33333,
+    "median": 1.0,
+    "min": 1.0,
+    "n": 60,
+    "p25": 1.0,
+    "p75": 1.0,
+    "p90": 2.0
+   },
+   "last_detection_step_per_episode_A": {
+    "max": 970.0,
+    "mean": 200.7,
+    "median": 187.0,
+    "min": 3.0,
+    "n": 60,
+    "p25": 28.0,
+    "p75": 251.0,
+    "p90": 405.0
+   },
+   "last_detection_step_per_episode_B": {
+    "max": 969.0,
+    "mean": 138.35,
+    "median": 20.0,
+    "min": 1.0,
+    "n": 60,
+    "p25": 6.0,
+    "p75": 144.0,
+    "p90": 468.0
+   },
+   "source": "B1 侧文件里 env_deleted_target_ids 首次出现的步，不是协调器时钟",
+   "unit": "搜索步（Environment.step 计数，1 步 = 1 拍，dt = 1.0 s）"
+  },
+  "detections_per_episode_A": {
+   "max": 6.0,
+   "mean": 5.85,
+   "median": 6.0,
+   "min": 4.0,
+   "n": 60,
+   "p25": 6.0,
+   "p75": 6.0,
+   "p90": 6.0
+  },
+  "detections_per_episode_B": {
+   "max": 6.0,
+   "mean": 4.85,
+   "median": 5.0,
+   "min": 2.0,
+   "n": 60,
+   "p25": 4.0,
+   "p75": 6.0,
+   "p90": 6.0
+  },
+  "mechanism_category_totals": {
+   "never_visible_at_detection_step": 78
+  },
+  "on_time_task_note": "任务级读数与目标级未发现数分母不同；下游任务的属性随发现位置与时刻生成，所以完成数差是搜索策略引起的总系统效应，不是对同一任务集的分配能力提升",
+  "on_time_tasks_per_episode_A": {
+   "max": 6.0,
+   "mean": 5.83333,
+   "median": 6.0,
+   "min": 4.0,
+   "n": 60,
+   "p25": 6.0,
+   "p75": 6.0,
+   "p90": 6.0
+  },
+  "on_time_tasks_per_episode_B": {
+   "max": 6.0,
+   "mean": 4.83333,
+   "median": 5.0,
+   "min": 2.0,
+   "n": 60,
+   "p25": 4.0,
+   "p75": 6.0,
+   "p90": 6.0
+  },
+  "probe_anomalies_total": 0,
+  "wall_seconds_per_episode_A": {
+   "max": 19.89,
+   "mean": 16.05367,
+   "median": 16.32,
+   "min": 12.55,
+   "n": 60,
+   "p25": 15.16,
+   "p75": 16.68,
+   "p90": 17.2
+  },
+  "wall_seconds_per_episode_B": {
+   "max": 16.07,
+   "mean": 12.66,
+   "median": 11.96,
+   "min": 10.7,
+   "n": 60,
+   "p25": 11.58,
+   "p75": 14.43,
+   "p90": 15.42
+  }
+ }
+}

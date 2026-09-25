@@ -132,22 +132,27 @@ def write_json(name: str, payload: Any, *, refresh: bool = False) -> Path:
 
     ``refresh`` is granted to exactly one file, the launch ledger's live tally: the plan block
     of that file is frozen and re-checked on every refresh, so the one file allowed to change
-    can still not have its budget rewritten.
+    can still not have its budget rewritten. The tally may only move forward -- a refresh that
+    reports fewer launches than the delivered file is a lost book, not an update.
     """
     if os.sep in name or "/" in name or ".." in name:
         raise ValueError(f"refusing to write outside the round directory: {name!r}")
     target = ROUND_DIR / name
     if refresh and name != "RUN_LEDGER.json":
         raise RuntimeError("only RUN_LEDGER.json may be refreshed")
+    if target.exists() and refresh:
+        previous = json.loads(target.read_text(encoding="utf-8"))
+        if previous.get("plan") != payload.get("plan"):
+            raise RuntimeError(f"the frozen plan block of {name} changed")
+        before = int((previous.get("live") or {}).get("used") or 0)
+        after = int((payload.get("live") or {}).get("used") or 0)
+        if after < before:
+            raise RuntimeError(f"{name}: tally shrank from {before} to {after}")
+        payload = {"plan": previous["plan"], "live": payload["live"]}
     rendered = json.dumps(payload, ensure_ascii=False, indent=1, sort_keys=True) + "\n"
     if target.exists():
-        if refresh:
-            previous = json.loads(target.read_text(encoding="utf-8"))
-            if previous.get("plan") != payload.get("plan"):
-                raise RuntimeError(f"the frozen plan block of {name} changed")
-        elif target.read_text(encoding="utf-8") != rendered:
+        if not refresh and target.read_text(encoding="utf-8") != rendered:
             raise RuntimeError(f"refusing to rewrite a delivered artefact: {name}")
-        return target
     target.write_text(rendered, encoding="utf-8")
     return target
 
@@ -270,11 +275,12 @@ def systemloop_archive_path(arm: str, seed: int) -> Path:
 #: dataclass default is the documented historical value, so the replay substitutes it and the
 #: identity report lists the substitution instead of hiding it.
 def configuration_from_archive(archived: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
+    import dataclasses
     from dataclasses import fields as dataclass_fields
 
     from integrated_sar.joint_driver import RunConfiguration
 
-    accepted = {field.name for field in dataclass_fields(RunConfiguration)}
+    accepted = {field.name: field.default for field in dataclass_fields(RunConfiguration)}
     used: dict[str, Any] = {}
     substituted: list[str] = []
     for name, value in archived.items():
@@ -284,8 +290,9 @@ def configuration_from_archive(archived: dict[str, Any]) -> tuple[dict[str, Any]
             substituted.append(f"{name}: dropped, not a field of the current configuration")
             continue
         if value is None:
-            substituted.append(f"{name}: archived null, current default "
-                               f"{getattr(RunConfiguration, name, None)!r} used")
+            default = accepted[name]
+            shown = "<required>" if default is dataclasses.MISSING else repr(default)
+            substituted.append(f"{name}: archived null, today's default {shown} used")
             continue
         used[name] = value
     for name in ("device", "quiet"):

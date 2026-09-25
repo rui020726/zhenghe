@@ -1,7 +1,42 @@
 # Zhenghe：搜索—协调—分配一体化搜救系统
 
-当前研究入口：[项目总纲 v4.0](PROJECT_CHARTER.md) 与
-[真实 PILOC 未发现目标的逐个归因](runs/real_search_undetected_attribution_20260923/SEARCH_UNDETECTED_ATTRIBUTION.md)
+当前研究入口：[项目总纲 v4.1](PROJECT_CHARTER.md) 与
+[搜索轨迹逐时刻证据 + 同一真实环境的搜索策略对照](runs/search_trace_and_policy_20260925/SEARCH_POLICY_COMPARISON_RESULTS.md)
+（机读：`SEARCH_TRACE_IDENTITY_REPORT.json`、`SEARCH_MISS_TIMELINES.json`、
+`SEARCH_DETECTION_CORRECTNESS_VERDICT.json`、`SEARCH_POLICY_COMPARISON_RESULTS.json`、
+`RUN_LEDGER.json`、`ROUND_VERIFICATION.json` `passed=true`、`MANIFEST.json`）。
+本轮 **0 训练、0 奖励改动、0 通信配置改动、0 机器人数增加、0 目标数增加、未用 mock 替代真实环境**；
+协议与启动账本在任何 episode 之前单独提交（R1：B1 被动日志正确性是 S1 的**硬前提**）。
+
+* **B1 已进生产，被动性是测出来的**：`integrated_sar/search_probe.py` +
+  `timemap.search_trace_enabled`（默认 `False`）在探测那一刻记快照——目标稳定 ID 与存活状态、
+  机器人移动前/后位置、环境自己判定发现并删除的 ID、由环境原语重数的观察者—目标对、
+  适配器实际发出的事件、未发现目标移动后的新格、终止原因与末尾位置。
+  8 格 × 1000 步**逐步**比较动作/奖励/`done`/两个位置数组/`_py_rng` 与 `_np_rng` 状态摘要
+  ⇒ **32 项检查全真**；回归 `test_search_probe.py` 11 项，项目套件 `Ran 713 tests, OK (skipped=2)`。
+* **探测链没有可复现缺陷**：14 个历史 seed（10 遗漏 + 4 登记控制）**14/14 复现**，
+  检测序列与归档逐条相同；三视图在 **120 000 步上 0 分歧、0 条身份异常**；
+  12 个遗漏目标的时间线里类别 1（判据成立而未登记）= **0**、类别 2（删除了但事件缺失/错 ID/重复）= **0**、
+  类别 4（记录不足）= **0** ⇒ `no_defect_found`，**未走修复分支**。
+  第十七轮那两个候选（`1100051`、`1100053`）就此关闭为"该次轨迹没有可见接触"（最近接近 Chebyshev 6 格外）。
+* **策略对照已完成，方向与预期相反**：同一真实环境、同 seed、只换动作提供器，
+  60 新 seed `1200000..1200059` × 2 臂 = **120/120 完整**。每 episode 未发现目标
+  **checkpoint 0.150 vs frontier 1.150**（2.50 % vs 19.17 %，分母 360 放置），
+  配对差 **−1.000 个/episode**（= −60 个/批），95 % CI [−1.333, −0.667]，逐 seed **35/20/5**。
+  预登记的停 1、停 2 **两条都不成立**（两条符号都按"换策略能减少遗漏"一侧写）⇒ 按协议"区间内"
+  报**未达判据、正常交付**，**不追加更强策略、不追加 seed、不训练**。
+* **系统级读数只能这样写**：按时完成任务 5.833 vs 4.833 个/episode 是搜索策略引起的
+  **总系统效应**（下游任务属性随发现位置/时刻生成，两臂任务集不是同一份），**不是**分配能力提升；
+  frontier 的输入经核查不含隐藏目标位置、未来状态或额外全局信息（合法性用与训练侧同源的
+  `env.map`，信息素先掩到自己视野窗口内）。
+* **启动 158/160**：超正常计划的 8 次全部走储备（4 次记录器 `TypeError` 技术失败 + 1 接线 + 3 诊断），
+  产物隔离未删除；`SEED_COLLISION_AUDIT.json` clean（未顺延改号）、控制 seed 规则先行登记。
+* **对学习型通信研究**：通信侧结论不必再向搜索侧借解释；本轮是整体系统的**搜索侧诊断**，
+  主线仍是学习型任务信息传递控制，**不**意味着 frontier 坏、**不**意味着分配器变差、
+  **不**提供新的通信效果读数。第十七轮那两份冻结件（B1 方案、S1 协议）**原件一字未改**，
+  修订全部写进本轮的独立补充件。
+
+上一轮（第十七轮）入口：[真实 PILOC 未发现目标的逐个归因](runs/real_search_undetected_attribution_20260923/SEARCH_UNDETECTED_ATTRIBUTION.md)
 （机读：逐目标表 `UNDETECTED_GOAL_ATTRIBUTION.json`、认证几何 `SCENARIO_GEOMETRY.json`、
 字段负证据 `FIELD_INVENTORY.json`、计数闭合 `BATCH_RECONCILIATION.json`、
 核验 `ATTRIBUTION_VERIFICATION.json` `passed=true`）。
@@ -241,7 +276,17 @@ oracle，只退还 belief 预算内到不了的任务）、
 逐接收者送达结局、逐 (目标, 机器人) 的知晓来源与时刻、真实到场步。它默认关闭，只读不写状态、
 不进 actor 观测、不消耗随机数，成对回放已证明开启前后全部生命周期记录与扣费字节逐字段相同
 （`runs/comm_info_path_validation_20260923/B0_PAIRED_REPLAY.json`）。
-`--mock` 与任一 checkpoint 参数互斥。
+`--search-probe <路径>` 打开 B1 的搜索侧逐时刻旁路（同一纪律：默认关闭、写侧文件、
+不加 lifecycle 事件类型、不进观测与奖励、不消耗随机数）：探测时刻的目标格与稳定 ID、
+机器人移动前/后位置、环境自己判定发现并删除的 ID、观察者—目标对、适配器实际发出的事件、
+未发现目标移动后的新格、终止原因与末尾位置，以及逐步三视图闭合旗标。它的被动性是**逐步实测**
+过的（1000 步的位置数组与两个随机流状态摘要全同，见
+`runs/search_trace_and_policy_20260925/SEARCH_TRACE_IDENTITY_REPORT.md`）。
+`--search-action-policy {checkpoint,frontier}` 决定谁驱动搜索环境：`checkpoint` 用冻结权重，
+`frontier` 用现成的 `FrontierSearchPolicy` 接**同一真实环境**（不是 mock）。
+启动即校验，不静默放行：`--search-probe` 要求给 `--piloc-checkpoint`（mock 后端没有那一步可记），
+且与 `--replay-stream` 互斥（重放流里没有搜索模块可记）；`--search-action-policy frontier`
+也与 `--replay-stream` 互斥（重放流没有可驱动的搜索环境）。`--mock` 与任一 checkpoint 参数互斥。
 
 使用 `--piloc-checkpoint` 时还有两个约束，启动即校验，不会静默放行：
 `--detection-radius` 必须为 5（时间戳地图、信息素窗口和 `last_actions` 的形状都由
@@ -374,7 +419,8 @@ checkpoint、录制流、逐 episode 日志与转录**不入 Git**，只在 mani
 | 接收者与真实拓扑可行性 | `runs/comm_recipient_topology_feasibility_20260923/` | `COMM_RECIPIENT_TOPOLOGY_AUDIT_PROTOCOL.md`（R1 的失败名字先于数据写死）、`..._SOURCE_MAP.md`（九问调用链）、`..._RESULTS.md`/`.json`、`..._SCALAR_PROOF.json`（1 875 次分类比较 0 不一致）、`..._DECISION.md`（判定名 **global_fanout_is_only_a_scalar**）；**0 episode / 0 训练** |
 | 通信研究收束与完整系统瓶颈盘点（0 训练） | `runs/comm_research_closure_20260923/` | `COMMUNICATION_RESEARCH_CLOSURE.md`（四条结论分开引用 + 强规则基线与适用条件 + 重开条件 N1-N6）、`JOINT_SYSTEM_BOTTLENECK_AUDIT.md`/`.json`（八阶段链、四条路径分桶、**40 项核对全一致**）、`CHAIN_RECONSTRUCTION.json`（P1 120 + P2 90 + P3 576 格逐目标链）、`STAGE_CAPABILITY.json`（哪几阶段可归因、哪几处只有代理量）、`MINIMAL_PAIRED_VALIDATION_PROTOCOL.md`（D1，**由下一轮修订后执行**）、`CLOSURE_INPUT_MANIFEST.json`、`CLOSURE_VERIFICATION.json`、`test_closure_harness.py`（21 项）；逐集日志与转录不入库 |
 | 完整系统信息路径验证（B0 日志 + D1 四臂 × 60 配对 seed） | `runs/comm_info_path_validation_20260923/` | `D1_PROTOCOL_REVISION.md`（**判据在任何 episode 之前冻结并单独提交**：三个配对比较、三态机制谓词与显式分母、身份门禁 I1–I6、`information_bucket_share` 的分母定义与守卫、两条停止条件、296 次启动上限）、`B0_PAIRED_REPLAY.json`（16 格成对回放 + 4 格时机模式惰性，`passed=true` ⇒ 开日志前后检测/结局/发射/扣费全同）、`SEED_COLLISION_AUDIT.json`（`1100000..1100059` 四源命中 0）、`IDENTITY_AUDIT_smoke.json`/`IDENTITY_AUDIT_data.json`（I1–I5 逐 seed，`phrasing_licensed` 规定哪一句"同一批丢包"可说）、`D1_RESULTS.md`/`.json`（C1 +0.31667 [+0.18333,+0.45]、C2 0.00000 [0,0]、C3 +1.28333 [+1.01667,+1.55]；机制记录三条零；`declared=undecidable`）、`D1_VERIFICATION.json`（生产改动仅限 5 个 B0 文件、checkpoint 未动、封存块 artefact 0，`passed=true`）、`test_d1_harness.py`（14 项 0 episode）＋ 生产侧 `integrated_sar/info_probe.py` 与 `tests/test_info_probe.py`（12 项）；逐集日志、转录与探针文件不入库 |
-| **真实 PILOC 未发现目标归因（最新：0 episode、0 训练、只读）** | `runs/real_search_undetected_attribution_20260923/` | `SEARCH_UNDETECTED_ATTRIBUTION.md`（两批各自闭合 360/352/352 与 360/356、四桶判定、**目标每步移动**这条会改读法的事实、`search_coverage` 不是空间覆盖）、`UNDETECTED_GOAL_ATTRIBUTION.json`（12 行逐目标表：连通域/距起点/可见格数/距实测到达格 + 每行 `grade` 与 `why`）、`SCENARIO_GEOMETRY.json`（**120/120 seed 重建栅格经 `map_sha256` 认证**、两套视线判据 72 457 格对 0 分歧、未发现 vs 已发现对照）、`FIELD_INVENTORY.json`（四条所需路径在 **360/360** 文件里不存在、PILOC 源码证据按起点版本引用、工作树漂移为空）、`BATCH_RECONCILIATION.json`（四臂发现集合逐 seed 相同、`detected+remaining==placed` 120/120、目标移动性）、`ATTRIBUTION_VERIFICATION.json`（`passed=true`、600 输入重哈希 0 变 0 缺、后端从未导入、tripwire 调用 0）、`MISSING_FIELDS_AND_PASSIVE_RECORD_PLAN.md`（B1 最小被动记录 + 2 个正确性候选的最小复现与修复计划，**未执行**）、`SEARCH_SIDE_PAIRED_VALIDATION_PROTOCOL.md`（只改搜索侧因素的配对验证，判据与停止条件先写死，**未执行**）、`test_rs_harness.py`（19 项 0 episode） |
+| **搜索轨迹逐时刻证据 + 同一真实环境的搜索策略对照（最新：158/160 启动、0 训练）** | `runs/search_trace_and_policy_20260925/` | `SEARCH_TRACE_AND_POLICY_PROTOCOL.md`（**协议与启动账本在任何 episode 之前单独提交**；R1 把 B1 被动日志正确性写成 S1 的硬前提、R2 只做 S1b、R3 不增机器人数不用 mock、R4 效应量一律带单位、R5 判据不放宽且冲突时停在 B1）、`SEARCH_TRACE_IDENTITY_REPORT.md`/`.json`（B1 开/关 × 两 seed × 两次重复：1000 步逐步比较动作/奖励/`done`/两个位置数组/`_py_rng` 与 `_np_rng` 状态摘要 ⇒ **32 项检查全真**；14 个历史 seed **14/14 复现**，检测序列与归档逐条相同）、`SEARCH_MISS_TIMELINES.md`/`.json`（12 个遗漏目标逐个时间线：类别 1 = 0、类别 2 = 0、类别 4 = 0、类别 3 = 12；含三条口径限定）、`SEARCH_DETECTION_CORRECTNESS_VERDICT.md`/`.json`（`no_defect_found`、`s1_matrix_allowed=true`、三视图 120 000 步 0 分歧 ⇒ **未走修复分支**）、`SEARCH_POLICY_COMPARISON_RESULTS.md`/`.json`（60 seed `1200000..1200059` × 2 臂 = **120/120 完整**；未发现目标 0.150 vs 1.150 个/episode、配对差 **−1.000** 个/episode CI [−1.333,−0.667]、逐 seed 35/20/5；停 1 与停 2 **都不成立** ⇒ `neither_criterion_met`、按"区间内"如实报未达判据；系统按时完成任务 5.833 vs 4.833 个/episode 只读作总系统效应）、`RUN_LEDGER.json`（计划块冻结 + 活账 158/160）、`SEED_COLLISION_AUDIT.json`（clean、未顺延改号）、`CONTROL_SEEDS.json`（无遗漏控制 seed 规则先行登记）、`ROUND_VERIFICATION.json`（`passed=true`）、`MANIFEST.json`（原始日志/流/step 记录的位置+大小+SHA，不入库）＋ 生产侧 `integrated_sar/search_probe.py` 与 `tests/test_search_probe.py`（**11 项**，在真实 `timemap.Environment` 上跑）；项目套件 **Ran 713 tests, OK(skipped=2)** |
+| 真实 PILOC 未发现目标归因（上一轮：0 episode、0 训练、只读） | `runs/real_search_undetected_attribution_20260923/` | `SEARCH_UNDETECTED_ATTRIBUTION.md`（两批各自闭合 360/352/352 与 360/356、四桶判定、**目标每步移动**这条会改读法的事实、`search_coverage` 不是空间覆盖）、`UNDETECTED_GOAL_ATTRIBUTION.json`（12 行逐目标表：连通域/距起点/可见格数/距实测到达格 + 每行 `grade` 与 `why`）、`SCENARIO_GEOMETRY.json`（**120/120 seed 重建栅格经 `map_sha256` 认证**、两套视线判据 72 457 格对 0 分歧、未发现 vs 已发现对照）、`FIELD_INVENTORY.json`（四条所需路径在 **360/360** 文件里不存在、PILOC 源码证据按起点版本引用、工作树漂移为空）、`BATCH_RECONCILIATION.json`（四臂发现集合逐 seed 相同、`detected+remaining==placed` 120/120、目标移动性）、`ATTRIBUTION_VERIFICATION.json`（`passed=true`、600 输入重哈希 0 变 0 缺、后端从未导入、tripwire 调用 0）、`MISSING_FIELDS_AND_PASSIVE_RECORD_PLAN.md`（B1 最小被动记录 + 2 个正确性候选的最小复现与修复计划，**未执行**）、`SEARCH_SIDE_PAIRED_VALIDATION_PROTOCOL.md`（只改搜索侧因素的配对验证，判据与停止条件先写死，**未执行**）、`test_rs_harness.py`（19 项 0 episode） |
 
 传输层的两个协议由 `--comm-timing-mode` 选择：`legacy_shared_bound`（默认，全部历史实验，
 上界到点由传输层代发、计费、可拒付）与 `policy_owned_timing`（研究模式，只有策略自己请求的

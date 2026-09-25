@@ -1,0 +1,95 @@
+{
+ "checkpoint_identity": {
+  "changed_training_or_reward_files": [],
+  "note": "checkpoints are large binaries kept off-tree by .gitignore; their digests are recorded here and in every run signature",
+  "passed": true,
+  "sha256": {
+   "ctde": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+   "piloc": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33"
+  }
+ },
+ "correctness_verdict": {
+  "category_counts": {
+   "env_deleted_but_event_missing_or_wrong": 0,
+   "never_visible_at_detection_step": 12,
+   "probe_satisfied_no_env_deletion": 0,
+   "still_undecidable": 0
+  },
+  "s1_matrix_allowed": true,
+  "verdict": "no_defect_found"
+ },
+ "goal_arithmetic": {
+  "cells": 151,
+  "passed": true,
+  "violations": []
+ },
+ "historical_reproduction": {
+  "cells": 14,
+  "not_reproduced": [],
+  "reproduced": 14
+ },
+ "launch_ledger": {
+  "booked": 158,
+  "booked_per_phase": {
+   "b1": 12,
+   "data": 120,
+   "diag": 1,
+   "diag2": 1,
+   "diag3": 1,
+   "plumb": 1,
+   "repro": 14,
+   "smoke": 8
+  },
+  "cap": 160,
+  "diagnostic_phases_booked": {
+   "diag": 1,
+   "diag2": 1,
+   "diag3": 1,
+   "plumb": 1
+  },
+  "planned_normal_total": 150,
+  "rows_per_phase": {
+   "b1": 8,
+   "data": 120,
+   "diag3": 1,
+   "repro": 14,
+   "smoke": 8
+  },
+  "technical_failures": [],
+  "within_budget": true
+ },
+ "passed": true,
+ "passivity_gate": {
+  "all_checks_true": true,
+  "cells_used": 8,
+  "checks_counted": 32
+ },
+ "policy_matrix": {
+  "criterion_verdict": "neither_criterion_met",
+  "episodes_per_arm": 60,
+  "missing_seeds": []
+ },
+ "protected_rounds_unchanged": {
+  "changed_vs_start_sha": [],
+  "dirty_paths": [],
+  "passed": true
+ },
+ "this_round_scope": {
+  "modified_outside_this_round": [],
+  "other_sessions_files_modified": [],
+  "passed": true,
+  "untracked_count": 20
+ },
+ "three_view_closure_data": {
+  "cells": 120,
+  "disagreement_steps_total": 0,
+  "passed": true,
+  "probe_anomalies_total": 0
+ },
+ "three_view_closure_repro": {
+  "cells": 14,
+  "disagreement_steps_total": 0,
+  "passed": true,
+  "probe_anomalies_total": 0
+ }
+}

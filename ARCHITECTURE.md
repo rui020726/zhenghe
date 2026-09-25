@@ -70,9 +70,34 @@ flowchart LR
 开/关探针的成对回放证据在 `runs/comm_info_path_validation_20260923/B0_PAIRED_REPLAY.json`，
 回归在 `integrated_sar/tests/test_info_probe.py`。
 它记录的是真值视角，**不得**被引用成"策略当时可见的信息"。
-注意它**没有**记录逐时刻的搜索机器人位置与目标位置，因此"曾进入合法探测范围却未发事件"
-这类判断目前仍不可判（缺失字段与最小补记录方案见
-`runs/real_search_undetected_attribution_20260923/MISSING_FIELDS_AND_PASSIVE_RECORD_PLAN.md`）。
+它**没有**记录逐时刻的搜索机器人位置与目标位置；那两条路径由 B1（下一节）补齐，
+第十七轮的缺失字段清单与最小补记录方案见
+`runs/real_search_undetected_attribution_20260923/MISSING_FIELDS_AND_PASSIVE_RECORD_PLAN.md`。
+
+### 搜索探测逐时刻旁路（`--search-probe`，默认关闭）
+
+`integrated_sar/search_probe.py` 补的是 B0 到不了的那一段：**"某目标在真正做探测的那一步
+有没有被看见"**。它与 `timemap.Environment.step` 内的探测阶段同步记录三类快照，
+每 episode 写一个侧文件：
+
+| kind | 内容 |
+|---|---|
+| `placed` | reset 顺序固定的稳定 ID（`piloc-e{episode}-target-{index}`）与 t=0 放置格 |
+| `step` | 探测时刻的目标格 + 数组下标 + 稳定 ID、机器人移动前/后位置、**环境自己判定发现并删除的 ID 集合**、由环境原语重数的观察者—目标对、适配器实际发出的 `DetectionEvent` ID、未发现目标移动后的新格、`done`、奖励，以及三视图闭合旗标 |
+| `final` | 终止原因（`all_found` / `step_cap`）、截止时机器人与剩余目标位置 |
+
+三条容易写错的地方，这一版按第十七轮的方案逐条钉住：快照必须取自**删除与移动之前**的数组
+（不能用整步结束后的位置反推可见性）；`goals_pos` 只删不增、下标会左移，因此
+`goal_index_at_reset` 与 `array_index_at_step` 同时记录、一切聚合只按稳定 ID；
+多机器人看见同一目标时按目标 ID 去重，**不要求**"观察者—目标对数 == DetectionEvent 数"。
+纪律与 B0 同级：默认关闭、不新增生命周期 `event_type`、不进 actor 观测、不进奖励、
+不消耗任何随机数；`piloc/src/Map/timemap.py` 的 `search_trace_enabled` 默认 `False`。
+它的被动性是**实测**出来的而不是声明的：两个 seed × 开/关 × 两次重复，1000 步逐步比较
+动作、奖励、`done`、两个位置数组以及 `_py_rng` / `_np_rng` 的状态摘要，全部相同
+（`runs/search_trace_and_policy_20260925/SEARCH_TRACE_IDENTITY_REPORT.md`，
+回归在 `integrated_sar/tests/test_search_probe.py`）。
+探针因此是分析旁路，不是第三条臂：任何用它得到的读数都不改变策略输入，
+也不能被引用成"策略当时可见的信息"。
 
 ### 任务注册表
 

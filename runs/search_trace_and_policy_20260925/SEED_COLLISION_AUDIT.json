@@ -1,0 +1,125 @@
+{
+ "bare_number_hits_adjudicated": [
+  {
+   "context": [
+    "     \"airtime_bytes_total\": 1200042,"
+   ],
+   "file": "runs/comm_protocol_v2_20260920/COMM_PROTOCOL_V2_RULE_SELECTION.json",
+   "is_seed_claim": false
+  },
+  {
+   "context": [
+    "   \"total_step_cap\": 1200000,"
+   ],
+   "file": "runs/comm_budget_masked_retrain_20260922/COMM_BUDGET_MASK_PROVENANCE_CORRECTION.json",
+   "is_seed_claim": false
+  },
+  {
+   "context": [
+    "  \"environment_steps\": 1200000,",
+    "  \"total_step_cap\": 1200000,"
+   ],
+   "file": "runs/comm_budget_masked_retrain_20260922/COMM_BUDGET_MASKED_RETRAIN_RESULTS.json",
+   "is_seed_claim": false
+  },
+  {
+   "context": [
+    "   \"total_step_cap\": 1200000,",
+    "  \"total_step_cap\": 1200000,"
+   ],
+   "file": "runs/comm_budget_masked_retrain_20260922/COMM_BUDGET_MASKED_RETRAIN_MANIFEST.json",
+   "is_seed_claim": false
+  },
+  {
+   "context": [
+    "  \"total_step_cap\": 1200000,"
+   ],
+   "file": "runs/comm_budget_masked_retrain_20260922/CODE_FREEZE.json",
+   "is_seed_claim": false
+  }
+ ],
+ "blocked_by": [],
+ "candidate_block": [
+  1200000,
+  1200059
+ ],
+ "candidate_count": 60,
+ "claimed_ranges": [
+  {
+   "high": 800399,
+   "label": "sealed_test_set",
+   "low": 800000,
+   "overlaps_candidate_block": false
+  },
+  {
+   "high": 900199,
+   "label": "learned_model_reported_stream",
+   "low": 900000,
+   "overlaps_candidate_block": false
+  },
+  {
+   "high": 1100059,
+   "label": "D1_20260923",
+   "low": 1100000,
+   "overlaps_candidate_block": false
+  },
+  {
+   "high": 31059,
+   "label": "systemloop_20260918",
+   "low": 31000,
+   "overlaps_candidate_block": false
+  }
+ ],
+ "clean": true,
+ "excluded_as_this_rounds_own": "runs/search_trace_and_policy_20260925",
+ "gate": "if a seed in the block has any recorded use the formal matrix stops; the block is not renumbered to find a clean interval",
+ "hits": {
+  "any_number_in_block": [
+   "runs/comm_protocol_v2_20260920/COMM_PROTOCOL_V2_RULE_SELECTION.json",
+   "runs/comm_budget_masked_retrain_20260922/COMM_BUDGET_MASK_PROVENANCE_CORRECTION.json",
+   "runs/comm_budget_masked_retrain_20260922/COMM_BUDGET_MASKED_RETRAIN_RESULTS.json",
+   "runs/comm_budget_masked_retrain_20260922/COMM_BUDGET_MASKED_RETRAIN_MANIFEST.json",
+   "runs/comm_budget_masked_retrain_20260922/CODE_FREEZE.json"
+  ],
+  "cell_named_with_seed": [],
+  "seed_field": []
+ },
+ "roots_scanned": [
+  "runs",
+  "integrated_sar",
+  "task_allocation",
+  "piloc",
+  "PROJECT_CHARTER.md",
+  "PROJECT_STATUS.md",
+  "README.md"
+ ],
+ "sealed_block_untouched": {
+  "artefacts_on_disk": [],
+  "range": [
+   800000,
+   800399
+  ]
+ },
+ "seed_identity_evidence": [],
+ "this_round_files_mentioning_the_block": [
+  "runs/search_trace_and_policy_20260925/SEARCH_TRACE_AND_POLICY_PROTOCOL.md",
+  "runs/search_trace_and_policy_20260925/logs/smoke_A_s1200000_a1_rp.jsonl",
+  "runs/search_trace_and_policy_20260925/logs/smoke_A_s1200000_a2_rp.jsonl",
+  "runs/search_trace_and_policy_20260925/logs/smoke_A_s1200001_a1_rp.jsonl",
+  "runs/search_trace_and_policy_20260925/logs/smoke_A_s1200001_a2_rp.jsonl",
+  "runs/search_trace_and_policy_20260925/logs/smoke_B_s1200000_a1_rp.jsonl",
+  "runs/search_trace_and_policy_20260925/logs/smoke_B_s1200000_a2_rp.jsonl",
+  "runs/search_trace_and_policy_20260925/logs/smoke_B_s1200001_a1_rp.jsonl",
+  "runs/search_trace_and_policy_20260925/logs/smoke_B_s1200001_a2_rp.jsonl",
+  "runs/search_trace_and_policy_20260925/rows/smoke_A_s1200000_a1.json",
+  "runs/search_trace_and_policy_20260925/rows/smoke_A_s1200000_a2.json",
+  "runs/search_trace_and_policy_20260925/rows/smoke_A_s1200001_a1.json",
+  "runs/search_trace_and_policy_20260925/rows/smoke_A_s1200001_a2.json",
+  "runs/search_trace_and_policy_20260925/rows/smoke_B_s1200000_a1.json",
+  "runs/search_trace_and_policy_20260925/rows/smoke_B_s1200000_a2.json",
+  "runs/search_trace_and_policy_20260925/rows/smoke_B_s1200001_a1.json",
+  "runs/search_trace_and_policy_20260925/rows/smoke_B_s1200001_a2.json"
+ ],
+ "this_round_mention_count": 17,
+ "tool": "C:\\Users\\Administrator\\.qoder-cn\\plugins\\cache\\qoderapp-bundler\\qoder-context\\1.0.61.7f8d7bb7\\bin\\rg.EXE"
+}

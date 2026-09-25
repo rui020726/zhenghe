@@ -1,5 +1,70 @@
 # 项目状态
 
+## 2026-09-25：搜索侧逐时刻证据补齐——探测链无缺陷、遗漏全是零接触；换策略后未发现目标反而增 1.0 个/episode（第十八轮，158/160 启动，0 训练）
+
+产物目录 [runs/search_trace_and_policy_20260925/](runs/search_trace_and_policy_20260925/)：
+协议 [SEARCH_TRACE_AND_POLICY_PROTOCOL.md](runs/search_trace_and_policy_20260925/SEARCH_TRACE_AND_POLICY_PROTOCOL.md)
+（**在任何 episode 之前单独提交**，R1–R5 五条修订把"缺日志仍可先跑"的歧义消掉）、
+[SEARCH_TRACE_IDENTITY_REPORT.md](runs/search_trace_and_policy_20260925/SEARCH_TRACE_IDENTITY_REPORT.md)、
+[SEARCH_MISS_TIMELINES.md](runs/search_trace_and_policy_20260925/SEARCH_MISS_TIMELINES.md)、
+[SEARCH_DETECTION_CORRECTNESS_VERDICT.md](runs/search_trace_and_policy_20260925/SEARCH_DETECTION_CORRECTNESS_VERDICT.md)、
+[SEARCH_POLICY_COMPARISON_RESULTS.md](runs/search_trace_and_policy_20260925/SEARCH_POLICY_COMPARISON_RESULTS.md)、
+`RUN_LEDGER.json`（计划块冻结 + 活账）、`MANIFEST.json`、`ROUND_VERIFICATION.json`（`passed=true`）。
+分支 `analysis/search-trace-and-policy`，起点 `analysis/real-search-undetected-attribution@80af16b`。
+**边界**：0 训练、0 奖励改动、0 通信协议/预算/ACK/丢包/拓扑/观测改动、0 机器人数增加、
+0 目标数增加、0 deadline 收紧、`detection_radius` 仍为与 checkpoint 绑定的 5、步数上限仍 1000、
+未用 mock 后端替代真实环境、未触碰封存测试集；第十七轮与第十六轮的协议/判据/结果一字未改。
+
+生产改动只有一处能力变更（B1 被动旁路，默认关闭）：新增 `integrated_sar/search_probe.py`
+与 `integrated_sar/tests/test_search_probe.py`，`piloc/src/Map/timemap.py` 加默认 `False` 的
+`search_trace_enabled`，`adapters/piloc.py` 记三视图并集，`joint_driver.py` 加
+`--search-probe` 与 `--search-action-policy {checkpoint,frontier}`，
+`info_probe.IDENTITY_FIELDS` 扩到探针自述字段。
+
+* **B1 的被动性是测出来的**：两个候选 seed × 日志开/关 × 两次重复（8 格 × 1000 步），
+  逐步比较动作、奖励、`done`、`agents_pos`、`goals_pos`、`_py_rng` 与 `_np_rng` 状态摘要，
+  再加原有生命周期/检测/发射/结局四类记录——**32 项检查全为真**，同条件两次重复亦相同。
+* **历史 14 格全部复现**（D1 七个遗漏 seed + systemloop 三个 + 规则先行登记的 4 个无遗漏控制
+  `1100000..1100003`）：配置行为字段、`map_sha256`、初始布局、两个 checkpoint 摘要、
+  **完整检测序列**逐条与归档相同；0 格记为"未复现历史运行"。
+* **正确性判定 = `no_defect_found`**：第十七轮留下的 2 个候选（`1100051`、`1100053`）
+  被逐时刻证据判为类别 3——机器人在任何探测时刻都距目标 Chebyshev 6 格以外；
+  12 个遗漏目标的时间线里类别 1 = 0、类别 2 = 0、类别 4 = 0。
+  三视图闭合是逐步强制的：120 000 个（格 × 步）检查里 **0 步不一致、0 条身份异常**
+  ⇒ **不进修复分支**，因为无可修缺陷。
+* **正式矩阵 120/120 完整、缺格 0**：同一真实环境、同 seed、只换动作提供器。
+  每 episode 未发现目标 **A 0.150 vs B 1.150**（分母 360 放置：2.50 % vs 19.17 %），
+  配对差 **A − B = −1.000 个/episode**（= −60 个/批），95 % CI
+  [−1.333333, −0.666667]（按 seed 配对百分位 bootstrap，B=10 000、RNG 20260925）；
+  逐 seed **35 个 A 更少 / 20 打平 / 5 个 B 更少**。⇒ 现成的 frontier 不是更好的搜索侧替换。
+* **预登记判据按原文跑完，两条都不成立**：停 1 需两臂 < 0.5 % 且 CI 含 0（B 为 19.17 %、
+  CI 不含 0 ⇒ 不成立）；停 2 需 CI 下界 > 0 且 ≥ 15/60 seed 非零（非零 40 个满足、
+  方向相反不满足 ⇒ 不成立）；守卫 G 未触发（类别 4 占比 0.000）。
+  两条的符号都按"换策略能减少遗漏"一侧写，实测反号 ⇒ 属协议 §七 的"区间内"，
+  如实报 **未达判据、正常交付**，**不追加更强策略、不追加 seed、不训练**；
+  这也不是 R5 所说的判据冲突（无需两个互斥解释各说一遍）。
+* **系统级读数只能这样写**：按时完成任务 A 5.833 vs B 4.833 个/episode（+1.000，个/批 +60）。
+  下游任务的属性随发现位置/时刻生成 ⇒ 这是搜索策略引起的**总系统效应**，
+  **不是**"对完全相同任务集的分配能力提升"。成本顺带读数：墙钟 16.05 s vs 12.66 s/episode，
+  上行字节 14 529 vs 12 007 B/episode（B 更省是**因为它发现得更少**，通信配置零改动）。
+* **登记在案的随机性**：同 seed 同初始场景不保证两臂后续目标轨迹逐位相同（策略改发现时机
+  就改随机数消耗次数），所以只主张"共享初始场景与 seed 的配对策略比较"。
+* **额度**：158/160。超正常计划的 8 次全部走储备（4 次记录器 `TypeError` 技术失败 +
+  1 次接线格 + 3 次诊断格），产物隔离在 `rows/rejected/` 与 `rejected/`，未删除；
+  储备余 2，未用于挑选案例或提高显著性。
+* **测试（本轮实测）**：新增回归 `integrated_sar/tests/test_search_probe.py` **11 项全绿**
+  （在真实 `timemap.Environment` 上跑，覆盖多机器人同看一目标、多目标同格、删除后下标左移、
+  移动前后可见性翻转、初始可见但移动后不可见、空目标集合正常终止、探针卸载/异常恢复）；
+  项目套件 **Ran 713 tests，OK (skipped=2)**，其中 `test_info_probe` 的 12 项仍绿。
+* **对学习型通信研究**：搜索骨干在此场景分布下把 351/360 放置转成发现事件、
+  剩余 2.5 % 是零接触而非事件链丢失 ⇒ 通信侧结论不必再向搜索侧借解释；
+  第十六轮"部署路径靠环境自带传感旁路"的诊断不因本轮而改，本轮也不为该诊断提供新证据。
+  **主线仍是学习型通信控制**，本轮是整体系统的搜索侧诊断；搜索质量被证明是一个真实杠杆，
+  但拉动它的代价（训练/奖励/场景改动）全在本轮禁止清单内。
+
+上一轮入口：[真实 PILOC 未发现目标的逐个归因](runs/real_search_undetected_attribution_20260923/SEARCH_UNDETECTED_ATTRIBUTION.md)。
+
+
 ## 2026-09-24：真实 PILOC 未发现目标逐个归因完成——不是死角、不是疑难格，缺的是两条位置路径（第十七轮，0 episode、0 训练）
 
 产物 [runs/real_search_undetected_attribution_20260923/SEARCH_UNDETECTED_ATTRIBUTION.md](runs/real_search_undetected_attribution_20260923/SEARCH_UNDETECTED_ATTRIBUTION.md)、

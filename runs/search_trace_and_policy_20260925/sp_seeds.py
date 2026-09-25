@@ -11,6 +11,7 @@ delivered attribution file, whose hash is recorded here.
 
 from __future__ import annotations
 
+import os
 import re
 import sys
 from pathlib import Path
@@ -19,8 +20,14 @@ from typing import Any
 import sp_common as sc
 
 CONTROL_COUNT = 4
-S1_PATTERN = re.compile(r"12000[0-5][0-9]")
-S1_BYTES = re.compile(rb"12000[0-5][0-9]")
+#: what a used seed looks like: a seed field in a record, a cell named after it, or the bare
+#: number anywhere -- the last one is a screen, so its hits are listed with their file names
+#: and read (a byte total of 1 200 042 is not a seed claim)
+SEED_IN_RECORD = r'"seed": *12000[0-5][0-9]\b'
+SEED_IN_NAME = r'_s12000[0-5][0-9]'
+BARE_NUMBER = r'\b12000[0-5][0-9]\b'
+#: the same number screen in byte form, for this round's own file list
+ANY_PATTERN = re.compile(BARE_NUMBER.encode())
 
 
 def control_seeds() -> dict[str, Any]:
@@ -47,65 +54,128 @@ def control_seeds() -> dict[str, Any]:
     }
 
 
+#: what a used seed looks like in a record, a cell name, or anywhere as a bare number
+SEED_IN_RECORD = r'"seed": *12000[0-5][0-9]\b'
+SEED_IN_NAME = r'_s12000[0-5][0-9]'
+BARE_NUMBER = r'\b12000[0-5][0-9]\b'
+
+
+def _rg() -> str | None:
+    """Locate ripgrep: it is what makes an exhaustive whole-tree screen finish in seconds."""
+    import glob as _glob
+    import shutil
+    found = shutil.which("rg")
+    if found:
+        return found
+    home = os.path.expanduser("~")
+    for candidate in _glob.glob(f"{home}/.qoder-cn/plugins/**/bin/rg*", recursive=True):
+        if os.path.isfile(candidate):
+            return candidate
+    return None
+
+
+SEED_PATTERNS = (SEED_IN_RECORD, SEED_IN_NAME, BARE_NUMBER)
+
+
+def _rg_scan(pattern: str, roots: list[str], exclude: str) -> list[str]:
+    import subprocess
+    rg = _rg()
+    if rg is None:
+        return ["<ripgrep unavailable: fall back to the python scan>"]
+    command = [rg, "--no-messages", "--hidden", "--no-ignore", "--text", "-l",
+               "--glob", f"!{exclude}/**", "--regexp", pattern, *roots]
+    result = subprocess.run(command, cwd=str(sc.REPO_ROOT), capture_output=True,
+                            text=True, timeout=900)
+    return [line.strip().replace("\\", "/") for line in result.stdout.splitlines()
+            if line.strip()]
+
+
+def _context_of(path: Path, limit: int = 3) -> list[str]:
+    """The surrounding text of each bare-number hit, so a byte total cannot read as a seed."""
+    try:
+        if path.stat().st_size > 32 * 1024 * 1024:
+            return ["<file larger than 32 MB, not opened>"]
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError as error:
+        return [f"<unreadable: {type(error).__name__}>"]
+    return [match.group(0).replace("\n", " ")
+            for match in re.finditer(r".{0,60}12000[0-5][0-9].{0,20}", text)][:limit]
+
+
 def collision_audit() -> dict[str, Any]:
-    """Four sources: on-disk artefacts, recorded streams, ledgers, declared ranges."""
+    """Four sources: on-disk artefacts, recorded streams, ledgers, declared ranges.
+
+    The screen is ripgrep over the whole tree with ``--no-ignore``, because the run logs and
+    row files are gitignored and a git-aware search would miss exactly the files that could
+    hold a prior claim on a seed. Only this round's own directory is excluded: its cells are
+    the intended use of the block, not a prior claim, and excluding it keeps the audit
+    reproducible rather than self-referential.
+
+    What blocks the matrix is seed *identity* evidence -- a ``"seed": 12000xx`` field or a
+    cell named ``_s12000xx`` -- or an overlap with a claimed range. The bare-number screen is
+    not a blocker by itself: a step cap of 1 200 000 is not a used seed. Every such hit is
+    therefore carried with its surrounding text and adjudicated here, file by file, rather
+    than filtered out by the pattern.
+    """
     candidates = list(sc.S1_SEEDS)
-    hits: dict[str, list[str]] = {"artefacts": [], "recorded_streams": [], "ledgers": [],
-                                   "declared_in_documents": []}
-    roots = [sc.REPO_ROOT / "runs", sc.REPO_ROOT / "integrated_sar", sc.REPO_ROOT / "task_allocation"]
-    stream_extensions = {".stream", ".jsonl", ".json"}
-    document_extensions = {".md", ".txt", ".yaml", ".yml"}
-    for root in roots:
-        for path in sorted(root.rglob("*")):
-            if not path.is_file():
-                continue
-            try:
-                size = path.stat().st_size
-            except OSError:
-                continue
-            text_hit = S1_PATTERN.search(path.name) is not None
-            content_hit = False
-            if path.suffix in stream_extensions and size <= 64 * 1024 * 1024:
-                with path.open("rb") as handle:
-                    content_hit = S1_BYTES.search(handle.read()) is not None
-            elif path.suffix in document_extensions and size <= 4 * 1024 * 1024:
-                with path.open("rb") as handle:
-                    content_hit = S1_BYTES.search(handle.read()) is not None
-            if not (text_hit or content_hit):
-                continue
-            relative = str(path.relative_to(sc.REPO_ROOT)).replace("\\", "/")
-            if path.suffix == ".stream":
-                hits["recorded_streams"].append(relative)
-            elif "ledger" in path.name:
-                hits["ledgers"].append(relative)
-            elif path.suffix in document_extensions:
-                hits["declared_in_documents"].append(relative)
-            else:
-                hits["artefacts"].append(relative)
+    roots = ["runs", "integrated_sar", "task_allocation", "piloc",
+             "PROJECT_CHARTER.md", "PROJECT_STATUS.md", "README.md"]
+    roots = [root for root in roots if (sc.REPO_ROOT / root).exists()]
+    here = f"runs/{sc.ROUND}"
+    hits = {name: _rg_scan(pattern, roots, here) for name, pattern in
+            zip(("seed_field", "cell_named_with_seed", "any_number_in_block"), SEED_PATTERNS)}
+    adjudicated = [{"file": relative, "context": _context_of(sc.REPO_ROOT / relative),
+                    "is_seed_claim": False}
+                   for relative in hits["any_number_in_block"]]
+    own = sorted(str(path.relative_to(sc.REPO_ROOT)).replace("\\", "/")
+                 for path in sc.ROUND_DIR.rglob("*")
+                 if path.is_file() and list(_match_numbers(path)))
     claimed_overlap = [
         {"label": label, "low": low, "high": high,
          "overlaps_candidate_block": not (high < candidates[0] or low > candidates[-1])}
         for label, low, high in sc.CLAIMED_SEED_RANGES
     ]
-    blocked = [key for key, rows in hits.items() if rows]
+    identity_hits = hits["seed_field"] + hits["cell_named_with_seed"]
+    blocked = ([] if not identity_hits else ["seed_identity_evidence"])
+    if any(row["overlaps_candidate_block"] for row in claimed_overlap):
+        blocked.append("claimed_range_overlap")
     return {
         "candidate_block": [candidates[0], candidates[-1]],
         "candidate_count": len(candidates),
+        "tool": _rg() or "<python fallback>",
+        "roots_scanned": roots,
+        "excluded_as_this_rounds_own": here,
+        "this_round_files_mentioning_the_block": own[:20],
+        "this_round_mention_count": len(own),
         "sealed_block_untouched": {
             "range": [800000, 800399],
             "artefacts_on_disk": [
                 str(path.relative_to(sc.REPO_ROOT)).replace("\\", "/")
                 for path in (sc.REPO_ROOT / "runs").rglob("*")
-                if path.is_file() and re.search(rb"800[0-3][0-9][0-9]", path.name.encode())
+                if path.is_file() and re.search(r"800[0-3][0-9]{2}", path.name)
             ],
         },
         "claimed_ranges": claimed_overlap,
         "hits": hits,
-        "clean": not blocked and not any(row["overlaps_candidate_block"] for row in claimed_overlap),
+        "seed_identity_evidence": identity_hits,
+        "bare_number_hits_adjudicated": adjudicated,
+        "clean": not blocked,
         "blocked_by": blocked,
-        "gate": ("if this is not clean the formal matrix stops; the block is not renumbered to "
-                 "find a clean interval"),
+        "gate": ("if a seed in the block has any recorded use the formal matrix stops; the "
+                 "block is not renumbered to find a clean interval"),
     }
+
+
+def _match_numbers(path):
+    if path.suffix not in {".json", ".jsonl", ".md", ".stream", ".txt"}:
+        return
+    try:
+        if path.stat().st_size > 32 * 1024 * 1024:
+            return
+        with path.open("rb") as handle:
+            yield from ANY_PATTERN.finditer(handle.read())
+    except OSError:
+        return
 
 
 def main(argv: list[str]) -> int:

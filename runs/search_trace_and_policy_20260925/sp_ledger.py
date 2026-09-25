@@ -60,6 +60,15 @@ def plan_block() -> dict[str, Any]:
 
 def main(argv: list[str]) -> int:
     payload = {"plan": plan_block(), "live": sc.ledger_report()}
+    ledger = sc.ROUND_DIR / "RUN_LEDGER.json"
+    if ledger.exists():
+        # Registered at the commit that existed when the budget was frozen; it records when
+        # the plan was declared, not what the plan allows, so it keeps its first value while
+        # every budget field is still re-checked against the delivered file.
+        delivered = sc.read_json(ledger)
+        declared = (delivered.get("plan") or {}).get("registered_at_commit")
+        if declared:
+            payload["plan"]["registered_at_commit"] = declared
     path = sc.write_json("RUN_LEDGER.json", payload, refresh=True)
     print(path)
     print(sys.stderr.write("") or "")
