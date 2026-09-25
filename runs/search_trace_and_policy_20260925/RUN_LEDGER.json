@@ -1,0 +1,61 @@
+{
+ "live": {
+  "by_phase": {},
+  "cap": 160,
+  "entries": [],
+  "normal_total": 150,
+  "plan": {
+   "b1": 8,
+   "data": 120,
+   "repro": 14,
+   "smoke": 8
+  },
+  "reserve": 10,
+  "used": 0
+ },
+ "plan": {
+  "cap": 160,
+  "counting_rule": "every joint-driver episode launch is booked, including failures, smoke starts and early terminations; synthetic unit tests -- including the ones that step the real timemap environment on hand-built maps -- are not episode launches and produce no experimental evidence",
+  "hard_gate": "B1 passivity and the detection-correctness verdict gate the S1 matrix (protocol revision R1): with either failing, no search-side effect number is produced at all",
+  "machine_books": "logs/ledger_<phase>_p<pid>.json",
+  "normal_total": 150,
+  "phases": {
+   "b1": {
+    "planned": 8,
+    "purpose": "B1 probe on/off x two candidate seeds x two repeats (passivity gate)"
+   },
+   "data": {
+    "planned": 120,
+    "purpose": "formal comparison: 60 new paired seeds x two arms"
+   },
+   "repro": {
+    "planned": 14,
+    "purpose": "ten historical miss seeds replayed + four registered no-miss controls"
+   },
+   "smoke": {
+    "planned": 8,
+    "purpose": "S1 interface, repeatability and configuration checks (simulation included)"
+   }
+  },
+  "registered_at_commit": "80af16ba4b90ce0c2d5456dd8b8e57068b4513e4",
+  "reserve": 10,
+  "reserve_may_be_used_for": [
+   "technical failure",
+   "correctness re-test"
+  ],
+  "reserve_may_not_be_used_for": [
+   "selecting more cases",
+   "raising statistical significance",
+   "converting the formal matrix into an open debugging budget"
+  ],
+  "round": "search_trace_and_policy_20260925",
+  "start_branch": "analysis/real-search-undetected-attribution",
+  "start_sha": "80af16ba4b90ce0c2d5456dd8b8e57068b4513e4",
+  "unit_statement": {
+   "batch": "undetected goals per batch of 60 episodes (个/批)",
+   "conversion": "1 个/批 = 1/60 ≈ 0.016667 个/episode",
+   "primary": "undetected goals per episode (个/episode), denominator 60 episodes",
+   "task_level": "on-time completed tasks per episode (个/episode); different denominator from goal counts, never added to them"
+  }
+ }
+}
