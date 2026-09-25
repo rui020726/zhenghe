@@ -63,8 +63,13 @@ def base_fields(batch: str, seed: int) -> tuple[dict[str, Any], list[str], dict[
 
 
 def build_configuration(phase: str, arm: str, seed: int, attempt: int, *, probe: bool,
-                        batch: str = "d1") -> tuple[RunConfiguration, dict[str, Any]]:
+                        batch: str = "d1",
+                        extra: dict[str, Any] | None = None) -> tuple[RunConfiguration, dict[str, Any]]:
     fields, substituted, archived = base_fields(batch, seed)
+    if extra:
+        # A plumbing check shortens the episode; it is booked and never read as evidence.
+        fields.update(extra)
+        substituted.extend(f"override: {key}={value}" for key, value in extra.items())
     paths = sc.cell_paths(phase, arm, seed, attempt, probe=probe if phase == "b1" else None)
     fields.update({
         "output": str(paths["lifecycle"]),
@@ -128,7 +133,7 @@ def _probe_facts(path: Path) -> dict[str, Any]:
 
 
 def run_cell(phase: str, arm: str, seed: int, attempt: int = 1, *, probe: bool = True,
-             batch: str = "d1") -> dict[str, Any]:
+             batch: str = "d1", extra: dict[str, Any] | None = None) -> dict[str, Any]:
     paths = sc.cell_paths(phase, arm, seed, attempt, probe=probe if phase == "b1" else None)
     if paths["row"].exists():
         return sc.read_json(paths["row"])
@@ -136,7 +141,7 @@ def run_cell(phase: str, arm: str, seed: int, attempt: int = 1, *, probe: bool =
     sc.ROWS.mkdir(parents=True, exist_ok=True)
     booked = sc.ledger_reserve(phase, f"{phase}/{arm}/s{seed}/a{attempt}", detail=batch)
     configuration, context = build_configuration(phase, arm, seed, attempt,
-                                                probe=probe, batch=batch)
+                                                probe=probe, batch=batch, extra=extra)
     started = time.time()
     try:
         run = build_joint_run(configuration)

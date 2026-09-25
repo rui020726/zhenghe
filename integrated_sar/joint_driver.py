@@ -877,13 +877,16 @@ class JointRun:
         if self.info_probe is not None and self.configuration.info_probe:
             summary["info_probe"] = str(self.info_probe.write())
         if self.search_probe is not None and self.configuration.search_probe:
-            # One closing record: why the episode ended and where both sides stood when it did.
+            # One closing record: why the episode ended and where both sides stood when it did,
+            # then the side file itself. summary() alone would report a path that was never
+            # written, which is exactly the kind of claim this round is not allowed to make.
             snapshot = self.search_adapter.search_side_snapshot()
             self.search_probe.note_final(
                 termination_reason="all_found" if snapshot["all_found"] else "step_cap",
                 configured_steps=int(self.configuration.steps),
                 **snapshot,
             )
+            summary["search_probe_artefact"] = str(self.search_probe.write())
             summary.update(self.search_probe.summary())
         if self.decision_trace is not None:
             self.decision_trace.finish(summary)

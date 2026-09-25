@@ -310,6 +310,7 @@ class StepRecorder:
         def wrapped(*args: Any, **kwargs: Any) -> Any:
             outcome = original(*args, **kwargs)
             self.rows.append(self._row(args, outcome))
+            return outcome
 
         self.env.step = wrapped
 
