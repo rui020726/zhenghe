@@ -37,7 +37,7 @@
   修订全部写进本轮的独立补充件。
 
 * **交付状态**：本轮全部提交在**本地分支** `analysis/search-trace-and-policy`；
-  远端**未核验**——`git push` 4 次与 `git fetch` 1 次全部连接失败（`github.com:443` 不可达），
+  远端**未核验**——`git push` 6 次、`git fetch` 1 次、`git ls-remote` 2 次全部连接失败（`github.com:443` 不可达），
   最后一次实际在线核验到的远端状态仍是 `80af16b…`。**不伪称推送成功**；
   网络恢复后执行 `git push -u origin analysis/search-trace-and-policy` +
   `git ls-remote origin refs/heads/analysis/search-trace-and-policy` 即可（结论与哈希不受影响，

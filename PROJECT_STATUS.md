@@ -62,7 +62,7 @@
   **主线仍是学习型通信控制**，本轮是整体系统的搜索侧诊断；搜索质量被证明是一个真实杠杆，
   但拉动它的代价（训练/奖励/场景改动）全在本轮禁止清单内。
 * **交付状态：本地已提交，远端未核验**（不伪称推送成功）。开跑前 `git ls-remote` 1 次失败，
-  交付阶段 `git push` 4 次 + `git fetch` 1 次全部失败（`github.com:443` 连不上 /
+  交付阶段 `git push` 6 次 + `git fetch` 1 次 + `git ls-remote` 2 次全部失败（`github.com:443` 连不上 /
   `Recv failure: Connection was reset`）⇒ `analysis/search-trace-and-policy` 的远端 SHA **未知**，
   最后一次**实际在线**核验到的远端状态仍是第十七轮回末 `80af16ba4b90…`
   （`refs/remotes/origin/analysis/real-search-undetected-attribution`）。
