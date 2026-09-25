@@ -43,6 +43,7 @@ from .detection_replay import scenario_map_sha256
 from .errors import ConfigurationError, IntegratedSARError
 from .event_bus import InMemoryEventBus
 from .info_probe import InfoProbe
+from .search_probe import SearchProbe
 from .lifecycle_log import LifecycleLogger
 from .orchestrator import JointSAROrchestrator
 from .profiles import DeterministicTargetProfileProvider
@@ -186,12 +187,25 @@ class RunConfiguration:
     # knowledge and arrival. Read-only, consumes no random number, and is not an input to
     # any observation, so a run with it on must produce an identical lifecycle log.
     info_probe: str | None = None
+    # B1 of the round-18 search protocol: a side file holding the detection-instant snapshot
+    # (robot positions before and after the move, the hidden targets' cells at the moment the
+    # environment judged discovery, what it actually deleted, what this adapter published).
+    # Read-only: it consumes no random number -- which matters here more than for B0, because
+    # the environment walks its hidden targets off its own rng -- and feeds no observation.
+    search_probe: str | None = None
+    # Which action provider drives the real PILOC environment. "checkpoint" is every run
+    # recorded before this field existed. "frontier" swaps the policy and nothing else --
+    # same environment, scenario, robot count, radius, step cap, movement mechanism, task
+    # allocation, communication and deadlines -- which is the S1b contrast.
+    search_action_policy: str = "checkpoint"
 
     @property
     def search_backend(self) -> str:
         if self.replay_stream is not None:
             return "replayed-detections"
-        return "mock-frontier" if self.piloc_checkpoint is None else "piloc-trained"
+        if self.piloc_checkpoint is None:
+            return "mock-frontier"
+        return "piloc-frontier" if self.search_action_policy == "frontier" else "piloc-trained"
 
     @property
     def allocation_backend(self) -> str:
@@ -213,6 +227,24 @@ class RunConfiguration:
             raise ConfigurationError(f"--dt must be positive, got {self.dt}")
         if self.search_agents < 1:
             raise ConfigurationError(f"--search-agents must be at least 1, got {self.search_agents}")
+        if self.search_action_policy not in ("checkpoint", "frontier"):
+            raise ConfigurationError(
+                f"--search-action-policy must be 'checkpoint' or 'frontier', "
+                f"got {self.search_action_policy!r}")
+        if self.search_probe and self.replay_stream:
+            raise ConfigurationError(
+                "--search-probe records the search module's own detection step; with "
+                "--replay-stream there is no search module to record, only a stored event "
+                "stream. Drop one of the two flags")
+        if self.search_probe and self.piloc_checkpoint is None:
+            raise ConfigurationError(
+                "--search-probe reads the real search environment's detection instant. The "
+                "mock backend does not implement that step, so a probe run there would record "
+                "nothing: pass --piloc-checkpoint")
+        if self.search_action_policy == "frontier" and self.replay_stream:
+            raise ConfigurationError(
+                "--search-action-policy chooses who drives the search environment, which a "
+                "replayed detection stream does not have")
         if self.num_goals < 0:
             raise ConfigurationError(f"--num-goals cannot be negative, got {self.num_goals}")
         low, high = (float(value) for value in self.deadline_tightness)
@@ -550,6 +582,20 @@ def build_parser() -> argparse.ArgumentParser:
                              "channel, arrival) to this path. It reads beliefs and rosters "
                              "only: it consumes no random number, feeds no observation, and "
                              "gates no decision, so the lifecycle log stays byte-identical")
+    parser.add_argument("--search-probe", dest="search_probe", default=None,
+                        help="write the passive search-side probe (per-step robot positions "
+                             "before and after the move, the hidden targets' cells at the "
+                             "detection instant, what the environment deleted, what the "
+                             "adapter published) to this path. Read-only: it consumes no "
+                             "random number -- the environment walks its targets off its own "
+                             "rng -- and feeds no observation")
+    parser.add_argument("--search-action-policy", dest="search_action_policy", default="checkpoint",
+                        choices=("checkpoint", "frontier"),
+                        help="which action provider drives the real PILOC environment: "
+                             "'checkpoint' (the trained policy, every run recorded before this "
+                             "flag existed) or 'frontier' (the same environment with the "
+                             "existing frontier policy substituted through the action-provider "
+                             "port -- the search-side contrast, and nothing else)")
     parser.add_argument("--comm-ack", action="store_true",
                         help="turn on the reverse channel: receivers acknowledge the views they "
                              "actually applied, over a delayed, lossy, separately billed channel, "
@@ -641,6 +687,8 @@ def configuration_from_args(args: argparse.Namespace) -> RunConfiguration:
         repository_root=args.repository_root,
         record_stream=args.record_stream,
         info_probe=getattr(args, "info_probe", None),
+        search_probe=getattr(args, "search_probe", None),
+        search_action_policy=getattr(args, "search_action_policy", "checkpoint"),
         replay_stream=args.replay_stream,
         decision_trace=args.decision_trace,
     )
@@ -760,6 +808,7 @@ class JointRun:
     decision_trace: Any = None
     comm_transcript: Any = None
     info_probe: Any = None
+    search_probe: Any = None
     counters: dict[str, int] = field(default_factory=dict)
     _signature: dict[str, Any] | None = field(default=None, repr=False)
 
@@ -827,6 +876,15 @@ class JointRun:
             )
         if self.info_probe is not None and self.configuration.info_probe:
             summary["info_probe"] = str(self.info_probe.write())
+        if self.search_probe is not None and self.configuration.search_probe:
+            # One closing record: why the episode ended and where both sides stood when it did.
+            snapshot = self.search_adapter.search_side_snapshot()
+            self.search_probe.note_final(
+                termination_reason="all_found" if snapshot["all_found"] else "step_cap",
+                configured_steps=int(self.configuration.steps),
+                **snapshot,
+            )
+            summary.update(self.search_probe.summary())
         if self.decision_trace is not None:
             self.decision_trace.finish(summary)
         self.logger.log_final(
@@ -905,7 +963,11 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         obstacle_density=configuration.obstacle_density,
     )
 
-    search_adapter = _build_search_side(configuration, scenario, device)
+    search_adapter = _build_search_side(
+        configuration, scenario, device,
+        search_probe=(SearchProbe(configuration.search_probe)
+                      if configuration.search_probe else None),
+    )
     recorder = None
     if configuration.replay_stream is not None:
         from .detection_replay import (
@@ -1053,12 +1115,14 @@ def build_joint_run(configuration: RunConfiguration) -> JointRun:
         decision_trace=trace_writer,
         comm_transcript=comm_transcript,
         info_probe=info_probe,
+        search_probe=getattr(search_adapter, "search_probe", None),
         _signature=signature,
     )
 
 
 def _build_search_side(
-    configuration: RunConfiguration, scenario: SearchScenario, device: str
+    configuration: RunConfiguration, scenario: SearchScenario, device: str,
+    search_probe: Any = None,
 ) -> PilocSearchAdapter:
     # One radius for the whole search side: it decides which cells an agent observes,
     # which targets the environment removes and which detections the adapter publishes.
@@ -1088,6 +1152,12 @@ def _build_search_side(
             # the pheromone, position history, timestamp maps and comm counters.
             reset_piloc_environment(environment, scenario, seed=configuration.seed)
 
+    if (configuration.search_action_policy == "frontier"
+            and configuration.piloc_checkpoint is not None):
+        # S1b：同一套真实 PILOC 环境、同一份场景，只把动作提供器换成既有的前沿贪心策略。
+        # 探测半径、机器人数、步数上限、目标移动机制、任务分配与通信配置一律不动。
+        action_provider = FrontierSearchPolicy(view_radius=radius)
+
     return PilocSearchAdapter(
         env=environment,
         action_provider=action_provider,
@@ -1097,6 +1167,7 @@ def _build_search_side(
         episode_horizon=max(configuration.steps, 1),
         detection_radius=radius,
         reset_world=reset_world,
+        search_probe=search_probe,
     )
 
 

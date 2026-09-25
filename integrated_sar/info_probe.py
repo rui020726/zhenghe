@@ -36,7 +36,8 @@ PROBE_SCHEMA = "sar-info-probe/1"
 
 #: Configuration and artefact-name fields. Two runs may differ in these without differing
 #: in behaviour, so a behavioural comparison has to remove them first — and say which ones.
-IDENTITY_FIELDS = ("output", "info_probe", "decision_trace", "record_stream", "comm_transcript")
+IDENTITY_FIELDS = ("output", "info_probe", "decision_trace", "record_stream", "comm_transcript",
+                  "search_probe")
 
 #: The run summary's self-description block. It mixes the knobs the transport was configured
 #: with and the counters it accumulated, so a caller cannot tell an echo from an observation

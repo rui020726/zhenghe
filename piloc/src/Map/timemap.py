@@ -163,6 +163,15 @@ class Environment:
         # 最近一步的结构化事件（碰撞、发现、覆盖前后值），供训练循环分别统计
         # collision / 短周期循环 / 重复覆盖，而不是全部混进 repeat。
         self.last_step_stats = {}
+        # B1 被动搜索探针（`--search-probe`）：默认关闭，关闭时 step() 与旧实现逐字节相同。
+        # 打开后 step() 在“探测时刻”多存一份只读快照 last_detection_trace：
+        # 不抽随机数、不改 goals_pos、不进观测也不进奖励，只写侧文件。
+        self.search_trace_enabled = False
+        # 两个发现分支里写死的 5（_observed_goal_indices 与 legacy 循环）就是探测判据的
+        # 半径；探针读这一个值，而不是再抄一份数字，避免出现第二套判据口径。
+        self.detection_rule_radius = 5
+        self.last_detection_trace: dict = {}
+        self._trace_alive: list = []
         # 本步各 agent 自身视野更新后、通信合并前的观测快照：边际信用只归因
         # 给真正观测到新格的机器人，而不是通过通信收到队友地图的机器人。
         self._local_obs_snapshot: dict = {}
@@ -635,6 +644,28 @@ class Environment:
         move_options = [[0, 0], [0, 1], [0, -1], [1, 0], [-1, 0]]
         new_goals_pos = []
         legacy = self.reward_mode == "legacy"
+        # 探针快照必须在任何删除与移动之前取：这一刻的 goals_pos 正是下面两个发现分支读取
+        # 的那一份数组。用步末的位置反推“当时是否看得见”会得出错误的可见性。
+        trace_on = bool(getattr(self, "search_trace_enabled", False))
+        if trace_on:
+            trace_goals_before = [[int(p[0]), int(p[1])] for p in self.goals_pos]
+            trace_agents_before = [[int(p[0]), int(p[1])] for p in self.agents_pos]
+            if len(self._trace_alive) != len(trace_goals_before):
+                # alive 记账与 goals 数组脱节（探针在回合中途接上，或 load() 换过目标数组）。
+                # 重新按当前数组长度起算，并把这件事写进记录，让分析知道下标从哪里开始可信。
+                self._trace_alive = list(range(len(trace_goals_before)))
+                trace_alive_reinitialised = True
+            else:
+                trace_alive_reinitialised = False
+            trace_alive = list(self._trace_alive)
+            trace_alive_start = list(trace_alive)
+            trace_deleted: list = []
+        else:
+            trace_goals_before = []
+            trace_agents_before = []
+            trace_alive_start = []
+            trace_deleted = []
+            trace_alive_reinitialised = False
 
         rewards = {agent_id: 0 for agent_id in actions.keys()}
         terms = {agent_id: {} for agent_id in actions.keys()} if self.track_reward_terms else None
@@ -743,6 +774,12 @@ class Environment:
                     if dx <= 5 and dy <= 5 and self._is_line_of_sight_blocked(x, y, nx, ny, self.map):
                         done[agent_id] = True
                         indices_to_delete.append(goal_index)
+                if trace_on:
+                    # legacy 分支逐 agent 删除，删完就把后面的下标整体左移一次，
+                    # 所以先把本 agent 的数组下标换回 reset 序号，再同步裁掉 alive。
+                    trace_deleted.extend(trace_alive[k] for k in indices_to_delete)
+                    dropped = set(indices_to_delete)
+                    trace_alive = [a for j, a in enumerate(trace_alive) if j not in dropped]
                 self.goals_pos = np.delete(self.goals_pos, indices_to_delete, axis=0)
 
             all_found = len(self.goals_pos) == 0
@@ -776,6 +813,11 @@ class Environment:
             #      目标（同一目标被两个机器人同时看到只计一次），先产生发现事件，再统一删除。
             #      旧流程先删目标再算 find-target 奖励，导致中间发现奖励恒为 0。----
             observed_indices = self._observed_goal_indices(self.agents_pos)
+            if trace_on:
+                # 这就是环境本步实际判定发现的那一批下标：探针读它，不另算一份。
+                trace_deleted = [trace_alive[int(i)] for i in sorted(observed_indices)]
+                dropped = set(observed_indices)
+                trace_alive = [a for j, a in enumerate(trace_alive) if j not in dropped]
             new_target_count = len(observed_indices)
             if observed_indices:
                 self.goals_pos = np.delete(self.goals_pos, sorted(observed_indices), axis=0)
@@ -870,6 +912,54 @@ class Environment:
             "coverage_after": coverage_after,
         }
         self.last_reward_terms = terms if terms is not None else {}
+        if trace_on:
+            self._trace_alive = list(trace_alive)
+            agents_after = [[int(p[0]), int(p[1])] for p in self.agents_pos]
+            goals_after = [[int(p[0]), int(p[1])] for p in self.goals_pos]
+            # 观察者—目标对：用环境自己的判据原语（同一条视线检查、同一张 self.map）在
+            # “机器人已移动、目标未删除也未移动”的那一刻重数一遍。它不是第二套口径：
+            # 下面同时写下环境自己实际删除的那一批，两者不一致就是可见的事实而非猜测。
+            pairs = []
+            for goal_index, (goal_row, goal_col) in enumerate(trace_goals_before):
+                for agent_index, (agent_row, agent_col) in enumerate(agents_after):
+                    if (abs(agent_row - goal_row) <= self.detection_rule_radius
+                            and abs(agent_col - goal_col) <= self.detection_rule_radius
+                            and self._is_line_of_sight_blocked(
+                                agent_row, agent_col, goal_row, goal_col, self.map)):
+                        pairs.append({
+                            "array_index_at_step": int(goal_index),
+                            "reset_index": int(trace_alive_start[goal_index]),
+                            "agent": (str(self.agents[agent_index])
+                                      if agent_index < len(self.agents)
+                                      else f"agent_{agent_index}"),
+                            "goal_cell": [int(goal_row), int(goal_col)],
+                            "agent_cell": [int(agent_row), int(agent_col)],
+                        })
+            self.last_detection_trace = {
+                "kind": "step_trace",
+                "step": int(self.steps),
+                "reward_mode": str(self.reward_mode),
+                "detection_rule_radius": int(self.detection_rule_radius),
+                "agents_before_move": trace_agents_before,
+                "agents_after_move": agents_after,
+                "goals_at_detection": [
+                    {"array_index_at_step": int(k),
+                     "reset_index": int(trace_alive_start[k]),
+                     "cell": trace_goals_before[k]}
+                    for k in range(len(trace_goals_before))
+                ],
+                "env_deleted_reset_indices": sorted(int(i) for i in trace_deleted),
+                "observed_pairs": pairs,
+                "alive_reset_indices_after": [int(i) for i in trace_alive],
+                "remaining_after_move": [
+                    {"reset_index": int(trace_alive[j]), "cell_after": goals_after[j]}
+                    for j in range(min(len(goals_after), len(trace_alive)))
+                ],
+                "alive_bookkeeping_reinitialised": bool(trace_alive_reinitialised),
+                "done": {str(k): bool(v) for k, v in (done or {}).items()},
+                "rewards": {str(k): float(v) for k, v in result.items()},
+                "repeat_agents": [str(v) for v in (repeat_mark or [])],
+            }
 
         return updated_obs, result, done, repeat_mark, next_two_channelmap
 
