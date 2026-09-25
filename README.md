@@ -36,6 +36,13 @@
   **不**提供新的通信效果读数。第十七轮那两份冻结件（B1 方案、S1 协议）**原件一字未改**，
   修订全部写进本轮的独立补充件。
 
+* **交付状态**：本轮全部提交在**本地分支** `analysis/search-trace-and-policy`；
+  远端**未核验**——`git push` 4 次与 `git fetch` 1 次全部连接失败（`github.com:443` 不可达），
+  最后一次实际在线核验到的远端状态仍是 `80af16b…`。**不伪称推送成功**；
+  网络恢复后执行 `git push -u origin analysis/search-trace-and-policy` +
+  `git ls-remote origin refs/heads/analysis/search-trace-and-policy` 即可（结论与哈希不受影响，
+  细节见 `runs/search_trace_and_policy_20260925/SEARCH_POLICY_COMPARISON_RESULTS.md` §十三）。
+
 上一轮（第十七轮）入口：[真实 PILOC 未发现目标的逐个归因](runs/real_search_undetected_attribution_20260923/SEARCH_UNDETECTED_ATTRIBUTION.md)
 （机读：逐目标表 `UNDETECTED_GOAL_ATTRIBUTION.json`、认证几何 `SCENARIO_GEOMETRY.json`、
 字段负证据 `FIELD_INVENTORY.json`、计数闭合 `BATCH_RECONCILIATION.json`、

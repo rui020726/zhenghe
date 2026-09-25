@@ -209,3 +209,20 @@
 [`ROUND_VERIFICATION.json`](ROUND_VERIFICATION.json)。
 `rejected/SEARCH_POLICY_COMPARISON_RESULTS.superseded_without_detection_timing.json` 是本机
 上一版缺"发现时间"读数的结果件，按"旧产物不覆盖"隔离保留，其全部数字与本版一致。
+
+## 十三、交付状态：本地已提交，**远端未核验**（网络失败，不伪称推送成功）
+
+| 项 | 实际值 |
+|---|---|
+| 本地分支 | `analysis/search-trace-and-policy` |
+| 本轮最后一个本地提交 | 见 `git log`（`MANIFEST.json → head` 记的是核验件生成时的父提交） |
+| 起点 | `80af16ba4b90ce0c2d5456dd8b8e57068b4513e4`（第十七轮回末提交） |
+| 最后一次**实际在线**核验到的远端状态 | `refs/remotes/origin/analysis/real-search-undetected-attribution = 80af16b…`，即第十七轮交付推送后的跟踪 ref |
+| 本轮在线核验尝试 | 开跑前 `git ls-remote` 1 次失败；交付阶段 `git push` **4 次失败**、`git fetch` 1 次失败（`Failed to connect to github.com port 443` / `Recv failure: Connection was reset`） |
+
+因此本轮**没有**任何"远端已收到本分支"的证据，`analysis/search-trace-and-policy` 的远端 SHA
+是**未知**而不是"等于本地"。网络恢复后需要重跑的只是一条命令：
+`git push -u origin analysis/search-trace-and-policy`，随后用
+`git ls-remote origin refs/heads/analysis/search-trace-and-policy` 取回远端 SHA 并核对是否
+等于本地 HEAD。本轮的产物、哈希与账本都已提交在本地历史里，推送不改变任何实验结论。
+
