@@ -1,0 +1,1298 @@
+{
+ "categories": {
+  "env_deleted_but_event_missing_or_wrong": "环境已发现/删除，但适配器漏发、错 ID 或重复发",
+  "never_visible_at_detection_step": "实际探测时刻从未满足可见条件（仅表示该次轨迹没有可见接触）",
+  "probe_satisfied_no_env_deletion": "探测时刻满足环境自己的真实判据（observed_pairs 命中），但环境未登记发现",
+  "still_undecidable": "日志或历史复现不足，仍不能判断"
+ },
+ "category_counts": {
+  "env_deleted_but_event_missing_or_wrong": 0,
+  "never_visible_at_detection_step": 12,
+  "probe_satisfied_no_env_deletion": 0,
+  "still_undecidable": 0
+ },
+ "cells": [
+  {
+   "adapter_event_ids": [
+    1,
+    2,
+    8,
+    9,
+    188
+   ],
+   "arm": "A1",
+   "batch": "d1",
+   "environment_deleted_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 1100008,
+   "targets": {
+    "piloc-e1-target-0": {
+     "category": "never_visible_at_detection_step",
+     "cell_at_reset": [
+      10,
+      26
+     ],
+     "episode_end_positions": [
+      [
+       10,
+       26
+      ],
+      [
+       55,
+       39
+      ]
+     ],
+     "grade": "measured",
+     "nearest_detection_instant_approach": {
+      "chebyshev": 6,
+      "step": 1
+     },
+     "remaining_targets_at_end": [
+      {
+       "cell": [
+        36,
+        12
+       ],
+       "target_id": "piloc-e1-target-0"
+      }
+     ],
+     "step_adapter_emitted_event": [],
+     "step_environment_deleted_it": null,
+     "steps_env_predicate_was_true": [],
+     "termination_reason": "step_cap",
+     "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+    }
+   },
+   "undetected": [
+    "piloc-e1-target-0"
+   ]
+  },
+  {
+   "adapter_event_ids": [
+    1,
+    5
+   ],
+   "arm": "A1",
+   "batch": "d1",
+   "environment_deleted_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 1100015,
+   "targets": {
+    "piloc-e1-target-5": {
+     "category": "never_visible_at_detection_step",
+     "cell_at_reset": [
+      42,
+      27
+     ],
+     "episode_end_positions": [
+      [
+       0,
+       22
+      ],
+      [
+       9,
+       13
+      ]
+     ],
+     "grade": "measured",
+     "nearest_detection_instant_approach": {
+      "chebyshev": 5,
+      "step": 832
+     },
+     "remaining_targets_at_end": [
+      {
+       "cell": [
+        20,
+        26
+       ],
+       "target_id": "piloc-e1-target-5"
+      }
+     ],
+     "step_adapter_emitted_event": [],
+     "step_environment_deleted_it": null,
+     "steps_env_predicate_was_true": [],
+     "termination_reason": "step_cap",
+     "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+    }
+   },
+   "undetected": [
+    "piloc-e1-target-5"
+   ]
+  },
+  {
+   "adapter_event_ids": [
+    10,
+    13,
+    53,
+    194
+   ],
+   "arm": "A1",
+   "batch": "d1",
+   "environment_deleted_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 4,
+    "detection_count_then": 4,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 1100017,
+   "targets": {
+    "piloc-e1-target-2": {
+     "category": "never_visible_at_detection_step",
+     "cell_at_reset": [
+      19,
+      31
+     ],
+     "episode_end_positions": [
+      [
+       55,
+       0
+      ],
+      [
+       59,
+       18
+      ]
+     ],
+     "grade": "measured",
+     "nearest_detection_instant_approach": {
+      "chebyshev": 7,
+      "step": 1
+     },
+     "remaining_targets_at_end": [
+      {
+       "cell": [
+        19,
+        30
+       ],
+       "target_id": "piloc-e1-target-2"
+      },
+      {
+       "cell": [
+        10,
+        55
+       ],
+       "target_id": "piloc-e1-target-3"
+      }
+     ],
+     "step_adapter_emitted_event": [],
+     "step_environment_deleted_it": null,
+     "steps_env_predicate_was_true": [],
+     "termination_reason": "step_cap",
+     "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+    },
+    "piloc-e1-target-3": {
+     "category": "never_visible_at_detection_step",
+     "cell_at_reset": [
+      26,
+      29
+     ],
+     "episode_end_positions": [
+      [
+       55,
+       0
+      ],
+      [
+       59,
+       18
+      ]
+     ],
+     "grade": "measured",
+     "nearest_detection_instant_approach": {
+      "chebyshev": 6,
+      "step": 1
+     },
+     "remaining_targets_at_end": [
+      {
+       "cell": [
+        19,
+        30
+       ],
+       "target_id": "piloc-e1-target-2"
+      },
+      {
+       "cell": [
+        10,
+        55
+       ],
+       "target_id": "piloc-e1-target-3"
+      }
+     ],
+     "step_adapter_emitted_event": [],
+     "step_environment_deleted_it": null,
+     "steps_env_predicate_was_true": [],
+     "termination_reason": "step_cap",
+     "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+    }
+   },
+   "undetected": [
+    "piloc-e1-target-2",
+    "piloc-e1-target-3"
+   ]
+  },
+  {
+   "adapter_event_ids": [
+    1,
+    3,
+    7,
+    12
+   ],
+   "arm": "A1",
+   "batch": "d1",
+   "environment_deleted_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 1100031,
+   "targets": {
+    "piloc-e1-target-5": {
+     "category": "never_visible_at_detection_step",
+     "cell_at_reset": [
+      55,
+      21
+     ],
+     "episode_end_positions": [
+      [
+       0,
+       21
+      ],
+      [
+       0,
+       21
+      ]
+     ],
+     "grade": "measured",
+     "nearest_detection_instant_approach": {
+      "chebyshev": 8,
+      "step": 1
+     },
+     "remaining_targets_at_end": [
+      {
+       "cell": [
+        45,
+        23
+       ],
+       "target_id": "piloc-e1-target-5"
+      }
+     ],
+     "step_adapter_emitted_event": [],
+     "step_environment_deleted_it": null,
+     "steps_env_predicate_was_true": [],
+     "termination_reason": "step_cap",
+     "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+    }
+   },
+   "undetected": [
+    "piloc-e1-target-5"
+   ]
+  },
+  {
+   "adapter_event_ids": [
+    1,
+    148,
+    449,
+    457
+   ],
+   "arm": "A1",
+   "batch": "d1",
+   "environment_deleted_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 1100036,
+   "targets": {
+    "piloc-e1-target-5": {
+     "category": "never_visible_at_detection_step",
+     "cell_at_reset": [
+      41,
+      17
+     ],
+     "episode_end_positions": [
+      [
+       3,
+       41
+      ],
+      [
+       3,
+       41
+      ]
+     ],
+     "grade": "measured",
+     "nearest_detection_instant_approach": {
+      "chebyshev": 4,
+      "step": 805
+     },
+     "remaining_targets_at_end": [
+      {
+       "cell": [
+        4,
+        7
+       ],
+       "target_id": "piloc-e1-target-5"
+      }
+     ],
+     "step_adapter_emitted_event": [],
+     "step_environment_deleted_it": null,
+     "steps_env_predicate_was_true": [],
+     "termination_reason": "step_cap",
+     "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+    }
+   },
+   "undetected": [
+    "piloc-e1-target-5"
+   ]
+  },
+  {
+   "adapter_event_ids": [
+    1,
+    4,
+    11,
+    58,
+    64
+   ],
+   "arm": "A1",
+   "batch": "d1",
+   "environment_deleted_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 1100051,
+   "targets": {
+    "piloc-e1-target-0": {
+     "category": "never_visible_at_detection_step",
+     "cell_at_reset": [
+      18,
+      44
+     ],
+     "episode_end_positions": [
+      [
+       8,
+       43
+      ],
+      [
+       8,
+       43
+      ]
+     ],
+     "grade": "measured",
+     "nearest_detection_instant_approach": {
+      "chebyshev": 6,
+      "step": 1
+     },
+     "remaining_targets_at_end": [
+      {
+       "cell": [
+        33,
+        43
+       ],
+       "target_id": "piloc-e1-target-0"
+      }
+     ],
+     "step_adapter_emitted_event": [],
+     "step_environment_deleted_it": null,
+     "steps_env_predicate_was_true": [],
+     "termination_reason": "step_cap",
+     "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+    }
+   },
+   "undetected": [
+    "piloc-e1-target-0"
+   ]
+  },
+  {
+   "adapter_event_ids": [
+    1,
+    2,
+    209,
+    282
+   ],
+   "arm": "A1",
+   "batch": "d1",
+   "environment_deleted_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 1100053,
+   "targets": {
+    "piloc-e1-target-2": {
+     "category": "never_visible_at_detection_step",
+     "cell_at_reset": [
+      22,
+      58
+     ],
+     "episode_end_positions": [
+      [
+       3,
+       45
+      ],
+      [
+       37,
+       5
+      ]
+     ],
+     "grade": "measured",
+     "nearest_detection_instant_approach": {
+      "chebyshev": 6,
+      "step": 1
+     },
+     "remaining_targets_at_end": [
+      {
+       "cell": [
+        19,
+        40
+       ],
+       "target_id": "piloc-e1-target-2"
+      }
+     ],
+     "step_adapter_emitted_event": [],
+     "step_environment_deleted_it": null,
+     "steps_env_predicate_was_true": [],
+     "termination_reason": "step_cap",
+     "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+    }
+   },
+   "undetected": [
+    "piloc-e1-target-2"
+   ]
+  },
+  {
+   "adapter_event_ids": [
+    1,
+    2,
+    239,
+    247,
+    657
+   ],
+   "arm": "BASE",
+   "batch": "systemloop",
+   "environment_deleted_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "allow_release_without_suppression",
+     "check_release_source_stage",
+     "comm_ack",
+     "comm_ack_delay_ticks",
+     "comm_ack_delivery_probability",
+     "comm_budget_bytes",
+     "comm_max_wait_steps",
+     "comm_policy",
+     "comm_policy_params",
+     "comm_range",
+     "comm_sends_per_tick",
+     "comm_timing_mode",
+     "comm_urgent_wait_steps",
+     "deadline_tightness",
+     "gossip_interval",
+     "search_action_policy",
+     "task_membership_consistency"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 31003,
+   "targets": {
+    "piloc-e1-target-3": {
+     "category": "never_visible_at_detection_step",
+     "cell_at_reset": [
+      53,
+      38
+     ],
+     "episode_end_positions": [
+      [
+       43,
+       6
+      ],
+      [
+       34,
+       51
+      ]
+     ],
+     "grade": "measured",
+     "nearest_detection_instant_approach": {
+      "chebyshev": 3,
+      "step": 608
+     },
+     "remaining_targets_at_end": [
+      {
+       "cell": [
+        24,
+        35
+       ],
+       "target_id": "piloc-e1-target-3"
+      }
+     ],
+     "step_adapter_emitted_event": [],
+     "step_environment_deleted_it": null,
+     "steps_env_predicate_was_true": [],
+     "termination_reason": "step_cap",
+     "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+    }
+   },
+   "undetected": [
+    "piloc-e1-target-3"
+   ]
+  },
+  {
+   "adapter_event_ids": [
+    1,
+    2,
+    139,
+    205
+   ],
+   "arm": "BASE",
+   "batch": "systemloop",
+   "environment_deleted_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "allow_release_without_suppression",
+     "check_release_source_stage",
+     "comm_ack",
+     "comm_ack_delay_ticks",
+     "comm_ack_delivery_probability",
+     "comm_budget_bytes",
+     "comm_max_wait_steps",
+     "comm_policy",
+     "comm_policy_params",
+     "comm_range",
+     "comm_sends_per_tick",
+     "comm_timing_mode",
+     "comm_urgent_wait_steps",
+     "deadline_tightness",
+     "gossip_interval",
+     "search_action_policy",
+     "task_membership_consistency"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 31009,
+   "targets": {
+    "piloc-e1-target-1": {
+     "category": "never_visible_at_detection_step",
+     "cell_at_reset": [
+      2,
+      43
+     ],
+     "episode_end_positions": [
+      [
+       43,
+       20
+      ],
+      [
+       52,
+       51
+      ]
+     ],
+     "grade": "measured",
+     "nearest_detection_instant_approach": {
+      "chebyshev": 7,
+      "step": 1
+     },
+     "remaining_targets_at_end": [
+      {
+       "cell": [
+        9,
+        39
+       ],
+       "target_id": "piloc-e1-target-1"
+      }
+     ],
+     "step_adapter_emitted_event": [],
+     "step_environment_deleted_it": null,
+     "steps_env_predicate_was_true": [],
+     "termination_reason": "step_cap",
+     "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+    }
+   },
+   "undetected": [
+    "piloc-e1-target-1"
+   ]
+  },
+  {
+   "adapter_event_ids": [
+    1,
+    2,
+    6,
+    392
+   ],
+   "arm": "BASE",
+   "batch": "systemloop",
+   "environment_deleted_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-5"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 4,
+    "detection_count_then": 4,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "allow_release_without_suppression",
+     "check_release_source_stage",
+     "comm_ack",
+     "comm_ack_delay_ticks",
+     "comm_ack_delivery_probability",
+     "comm_budget_bytes",
+     "comm_max_wait_steps",
+     "comm_policy",
+     "comm_policy_params",
+     "comm_range",
+     "comm_sends_per_tick",
+     "comm_timing_mode",
+     "comm_urgent_wait_steps",
+     "deadline_tightness",
+     "gossip_interval",
+     "search_action_policy",
+     "task_membership_consistency"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 31030,
+   "targets": {
+    "piloc-e1-target-3": {
+     "category": "never_visible_at_detection_step",
+     "cell_at_reset": [
+      57,
+      22
+     ],
+     "episode_end_positions": [
+      [
+       52,
+       46
+      ],
+      [
+       52,
+       46
+      ]
+     ],
+     "grade": "measured",
+     "nearest_detection_instant_approach": {
+      "chebyshev": 7,
+      "step": 1
+     },
+     "remaining_targets_at_end": [
+      {
+       "cell": [
+        48,
+        36
+       ],
+       "target_id": "piloc-e1-target-3"
+      },
+      {
+       "cell": [
+        47,
+        22
+       ],
+       "target_id": "piloc-e1-target-4"
+      }
+     ],
+     "step_adapter_emitted_event": [],
+     "step_environment_deleted_it": null,
+     "steps_env_predicate_was_true": [],
+     "termination_reason": "step_cap",
+     "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+    },
+    "piloc-e1-target-4": {
+     "category": "never_visible_at_detection_step",
+     "cell_at_reset": [
+      58,
+      24
+     ],
+     "episode_end_positions": [
+      [
+       52,
+       46
+      ],
+      [
+       52,
+       46
+      ]
+     ],
+     "grade": "measured",
+     "nearest_detection_instant_approach": {
+      "chebyshev": 6,
+      "step": 382
+     },
+     "remaining_targets_at_end": [
+      {
+       "cell": [
+        48,
+        36
+       ],
+       "target_id": "piloc-e1-target-3"
+      },
+      {
+       "cell": [
+        47,
+        22
+       ],
+       "target_id": "piloc-e1-target-4"
+      }
+     ],
+     "step_adapter_emitted_event": [],
+     "step_environment_deleted_it": null,
+     "steps_env_predicate_was_true": [],
+     "termination_reason": "step_cap",
+     "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+    }
+   },
+   "undetected": [
+    "piloc-e1-target-3",
+    "piloc-e1-target-4"
+   ]
+  },
+  {
+   "adapter_event_ids": [
+    1,
+    5,
+    209,
+    212
+   ],
+   "arm": "CTRL",
+   "batch": "d1",
+   "environment_deleted_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 6,
+    "detection_count_then": 6,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 1100000,
+   "targets": {},
+   "undetected": []
+  },
+  {
+   "adapter_event_ids": [
+    1,
+    16,
+    19,
+    182,
+    220,
+    227
+   ],
+   "arm": "CTRL",
+   "batch": "d1",
+   "environment_deleted_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 6,
+    "detection_count_then": 6,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 1100001,
+   "targets": {},
+   "undetected": []
+  },
+  {
+   "adapter_event_ids": [
+    1,
+    2,
+    5,
+    15,
+    198
+   ],
+   "arm": "CTRL",
+   "batch": "d1",
+   "environment_deleted_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 6,
+    "detection_count_then": 6,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 1100002,
+   "targets": {},
+   "undetected": []
+  },
+  {
+   "adapter_event_ids": [
+    1,
+    3,
+    149,
+    262
+   ],
+   "arm": "CTRL",
+   "batch": "d1",
+   "environment_deleted_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "goals_placed": 6,
+   "historical_run_reproduced": true,
+   "probe_anomalies": 0,
+   "probe_closure_disagreement_steps": [],
+   "probe_steps": 1000,
+   "reproduction_detail": {
+    "behaviour_fields_that_differ": [],
+    "detection_count_now": 6,
+    "detection_count_then": 6,
+    "detection_sequence_match": true,
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "map_and_layout_match": true,
+    "outcome_matches_then": true
+   },
+   "seed": 1100003,
+   "targets": {},
+   "undetected": []
+  }
+ ],
+ "closure_disagreement_cells": {},
+ "denominators": {
+  "cells": 14,
+  "goals_placed": 84,
+  "undetected_goals": 12
+ },
+ "per_target_rows": [
+  {
+   "arm": "A1",
+   "batch": "d1",
+   "category": "never_visible_at_detection_step",
+   "cell_at_reset": [
+    10,
+    26
+   ],
+   "grade": "measured",
+   "nearest_detection_instant_approach": {
+    "chebyshev": 6,
+    "step": 1
+   },
+   "seed": 1100008,
+   "target_id": "piloc-e1-target-0",
+   "termination_reason": "step_cap",
+   "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+  },
+  {
+   "arm": "A1",
+   "batch": "d1",
+   "category": "never_visible_at_detection_step",
+   "cell_at_reset": [
+    42,
+    27
+   ],
+   "grade": "measured",
+   "nearest_detection_instant_approach": {
+    "chebyshev": 5,
+    "step": 832
+   },
+   "seed": 1100015,
+   "target_id": "piloc-e1-target-5",
+   "termination_reason": "step_cap",
+   "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+  },
+  {
+   "arm": "A1",
+   "batch": "d1",
+   "category": "never_visible_at_detection_step",
+   "cell_at_reset": [
+    19,
+    31
+   ],
+   "grade": "measured",
+   "nearest_detection_instant_approach": {
+    "chebyshev": 7,
+    "step": 1
+   },
+   "seed": 1100017,
+   "target_id": "piloc-e1-target-2",
+   "termination_reason": "step_cap",
+   "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+  },
+  {
+   "arm": "A1",
+   "batch": "d1",
+   "category": "never_visible_at_detection_step",
+   "cell_at_reset": [
+    26,
+    29
+   ],
+   "grade": "measured",
+   "nearest_detection_instant_approach": {
+    "chebyshev": 6,
+    "step": 1
+   },
+   "seed": 1100017,
+   "target_id": "piloc-e1-target-3",
+   "termination_reason": "step_cap",
+   "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+  },
+  {
+   "arm": "A1",
+   "batch": "d1",
+   "category": "never_visible_at_detection_step",
+   "cell_at_reset": [
+    55,
+    21
+   ],
+   "grade": "measured",
+   "nearest_detection_instant_approach": {
+    "chebyshev": 8,
+    "step": 1
+   },
+   "seed": 1100031,
+   "target_id": "piloc-e1-target-5",
+   "termination_reason": "step_cap",
+   "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+  },
+  {
+   "arm": "A1",
+   "batch": "d1",
+   "category": "never_visible_at_detection_step",
+   "cell_at_reset": [
+    41,
+    17
+   ],
+   "grade": "measured",
+   "nearest_detection_instant_approach": {
+    "chebyshev": 4,
+    "step": 805
+   },
+   "seed": 1100036,
+   "target_id": "piloc-e1-target-5",
+   "termination_reason": "step_cap",
+   "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+  },
+  {
+   "arm": "A1",
+   "batch": "d1",
+   "category": "never_visible_at_detection_step",
+   "cell_at_reset": [
+    18,
+    44
+   ],
+   "grade": "measured",
+   "nearest_detection_instant_approach": {
+    "chebyshev": 6,
+    "step": 1
+   },
+   "seed": 1100051,
+   "target_id": "piloc-e1-target-0",
+   "termination_reason": "step_cap",
+   "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+  },
+  {
+   "arm": "A1",
+   "batch": "d1",
+   "category": "never_visible_at_detection_step",
+   "cell_at_reset": [
+    22,
+    58
+   ],
+   "grade": "measured",
+   "nearest_detection_instant_approach": {
+    "chebyshev": 6,
+    "step": 1
+   },
+   "seed": 1100053,
+   "target_id": "piloc-e1-target-2",
+   "termination_reason": "step_cap",
+   "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+  },
+  {
+   "arm": "BASE",
+   "batch": "systemloop",
+   "category": "never_visible_at_detection_step",
+   "cell_at_reset": [
+    53,
+    38
+   ],
+   "grade": "measured",
+   "nearest_detection_instant_approach": {
+    "chebyshev": 3,
+    "step": 608
+   },
+   "seed": 31003,
+   "target_id": "piloc-e1-target-3",
+   "termination_reason": "step_cap",
+   "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+  },
+  {
+   "arm": "BASE",
+   "batch": "systemloop",
+   "category": "never_visible_at_detection_step",
+   "cell_at_reset": [
+    2,
+    43
+   ],
+   "grade": "measured",
+   "nearest_detection_instant_approach": {
+    "chebyshev": 7,
+    "step": 1
+   },
+   "seed": 31009,
+   "target_id": "piloc-e1-target-1",
+   "termination_reason": "step_cap",
+   "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+  },
+  {
+   "arm": "BASE",
+   "batch": "systemloop",
+   "category": "never_visible_at_detection_step",
+   "cell_at_reset": [
+    57,
+    22
+   ],
+   "grade": "measured",
+   "nearest_detection_instant_approach": {
+    "chebyshev": 7,
+    "step": 1
+   },
+   "seed": 31030,
+   "target_id": "piloc-e1-target-3",
+   "termination_reason": "step_cap",
+   "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+  },
+  {
+   "arm": "BASE",
+   "batch": "systemloop",
+   "category": "never_visible_at_detection_step",
+   "cell_at_reset": [
+    58,
+    24
+   ],
+   "grade": "measured",
+   "nearest_detection_instant_approach": {
+    "chebyshev": 6,
+    "step": 382
+   },
+   "seed": 31030,
+   "target_id": "piloc-e1-target-4",
+   "termination_reason": "step_cap",
+   "why": "逐步位置里没有任何一步让环境自己的判据对它为真；这只说明该次轨迹没有可见接触，不说明它物理不可达"
+  }
+ ],
+ "probe_anomaly_cells": {},
+ "readings_that_must_not_be_skipped": [
+  "初始位置可见不等于第一次实际探测时仍可见：Environment.step 先移动机器人再判定观测",
+  "8 连通结论不能直接替代四方向机器人运动的可达性证明：它只是合法观测的必要条件",
+  "少量遗漏目标的距离中位数比较是描述性证据，不能据此彻底排除放置因素"
+ ],
+ "round": "search_trace_and_policy_20260925",
+ "start_sha": "80af16ba4b90ce0c2d5456dd8b8e57068b4513e4"
+}

@@ -166,7 +166,7 @@ def run_cell(phase: str, arm: str, seed: int, attempt: int = 1, *, probe: bool =
     communication = summary.get("communication") or {}
     archived = context["archived_run_config"]
     row = {
-        "phase": phase, "arm": arm, "seed": seed, "attempt": attempt, "probe": probe,
+        "phase": phase, "arm": arm, "seed": seed, "attempt": attempt, "probe_on": bool(probe),
         "batch": batch, "launch_index": booked, "ok": True,
         "wall_seconds": round(time.time() - started, 2),
         "code_commit": (summary.get("run_signature") or {}).get("code_commit"),

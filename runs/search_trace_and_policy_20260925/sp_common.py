@@ -253,6 +253,11 @@ def archived_scenario(path: Path) -> dict[str, Any]:
     return {}
 
 
+def configuration_of_lifecycle(path: Path) -> dict[str, Any]:
+    """The run_config record of any lifecycle file, archived or produced by this round."""
+    return archived_configuration(path)
+
+
 def d1_archive_path(arm: str, seed: int) -> Path:
     return D1_BATCH / f"data_{arm}_s{seed}_rp.jsonl"
 

@@ -1,0 +1,954 @@
+{
+ "code_identity": {
+  "checkpoints": {
+   "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "runs/joint_eval_20260916/ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  },
+  "earlier_round_files_changed": {},
+  "head": "e8873731a4fbfcda54e7f83196175e0f91649022",
+  "note": "the probe is a default-off side recorder; the two checkpoint digests are recorded so an arm cannot silently run on a different model",
+  "production_files_changed": {
+   "integrated_sar/adapters/piloc.py": "modified since the start sha",
+   "integrated_sar/info_probe.py": "modified since the start sha",
+   "integrated_sar/joint_driver.py": "modified since the start sha",
+   "integrated_sar/search_probe.py": "modified since the start sha",
+   "integrated_sar/tests/test_search_probe.py": "modified since the start sha",
+   "piloc/src/Map/timemap.py": "modified since the start sha"
+  },
+  "start_sha": "80af16ba4b90ce0c2d5456dd8b8e57068b4513e4"
+ },
+ "launch_ledger": {
+  "by_phase": {
+   "b1": 12,
+   "diag": 1,
+   "diag2": 1,
+   "diag3": 1,
+   "plumb": 1,
+   "repro": 14
+  },
+  "cap": 160,
+  "entries": [
+   {
+    "cell": "b1/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 0
+   },
+   {
+    "cell": "b1/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 1
+   },
+   {
+    "cell": "b1/A1/s1100051/a2",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 1
+   },
+   {
+    "cell": "b1/A1/s1100051/a2",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 1
+   },
+   {
+    "cell": "plumb/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "plumb",
+    "round_total_before_this": 4
+   },
+   {
+    "cell": "diag/A1/s1100051/a1",
+    "detail": "probe-write diagnosis",
+    "n": 1,
+    "phase": "diag",
+    "round_total_before_this": 5
+   },
+   {
+    "cell": "diag2/A1/s1100051/a1",
+    "detail": "probe-write diagnosis 2",
+    "n": 1,
+    "phase": "diag2",
+    "round_total_before_this": 6
+   },
+   {
+    "cell": "diag3/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "diag3",
+    "round_total_before_this": 7
+   },
+   {
+    "cell": "b1/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 8
+   },
+   {
+    "cell": "b1/A1/s1100051/a2",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 8
+   },
+   {
+    "cell": "b1/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 10
+   },
+   {
+    "cell": "b1/A1/s1100051/a2",
+    "detail": "d1",
+    "n": 1,
+    "phase": "b1",
+    "round_total_before_this": 11
+   },
+   {
+    "cell": "b1/A1/s1100053/a2",
+    "detail": "d1",
+    "n": 2,
+    "phase": "b1",
+    "round_total_before_this": 12
+   },
+   {
+    "cell": "b1/A1/s1100053/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "b1",
+    "round_total_before_this": 13
+   },
+   {
+    "cell": "b1/A1/s1100053/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "b1",
+    "round_total_before_this": 14
+   },
+   {
+    "cell": "b1/A1/s1100053/a2",
+    "detail": "d1",
+    "n": 2,
+    "phase": "b1",
+    "round_total_before_this": 15
+   },
+   {
+    "cell": "repro/A1/s1100015/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "repro",
+    "round_total_before_this": 16
+   },
+   {
+    "cell": "repro/A1/s1100017/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "repro",
+    "round_total_before_this": 16
+   },
+   {
+    "cell": "repro/A1/s1100008/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "repro",
+    "round_total_before_this": 18
+   },
+   {
+    "cell": "repro/A1/s1100031/a1",
+    "detail": "d1",
+    "n": 1,
+    "phase": "repro",
+    "round_total_before_this": 19
+   },
+   {
+    "cell": "repro/A1/s1100051/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "repro",
+    "round_total_before_this": 20
+   },
+   {
+    "cell": "repro/A1/s1100036/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "repro",
+    "round_total_before_this": 21
+   },
+   {
+    "cell": "repro/A1/s1100053/a1",
+    "detail": "d1",
+    "n": 2,
+    "phase": "repro",
+    "round_total_before_this": 22
+   },
+   {
+    "cell": "repro/BASE/s31003/a1",
+    "detail": "systemloop",
+    "n": 2,
+    "phase": "repro",
+    "round_total_before_this": 23
+   },
+   {
+    "cell": "repro/BASE/s31009/a1",
+    "detail": "systemloop",
+    "n": 3,
+    "phase": "repro",
+    "round_total_before_this": 24
+   },
+   {
+    "cell": "repro/CTRL/s1100000/a1",
+    "detail": "d1",
+    "n": 3,
+    "phase": "repro",
+    "round_total_before_this": 25
+   },
+   {
+    "cell": "repro/CTRL/s1100001/a1",
+    "detail": "d1",
+    "n": 3,
+    "phase": "repro",
+    "round_total_before_this": 26
+   },
+   {
+    "cell": "repro/BASE/s31030/a1",
+    "detail": "systemloop",
+    "n": 3,
+    "phase": "repro",
+    "round_total_before_this": 27
+   },
+   {
+    "cell": "repro/CTRL/s1100002/a1",
+    "detail": "d1",
+    "n": 4,
+    "phase": "repro",
+    "round_total_before_this": 28
+   },
+   {
+    "cell": "repro/CTRL/s1100003/a1",
+    "detail": "d1",
+    "n": 4,
+    "phase": "repro",
+    "round_total_before_this": 29
+   }
+  ],
+  "normal_total": 150,
+  "plan": {
+   "b1": 8,
+   "data": 120,
+   "repro": 14,
+   "smoke": 8
+  },
+  "reserve": 10,
+  "used": 30
+ },
+ "passivity_gate_P": {
+  "all_checks_true": true,
+  "cells_used": 8,
+  "checks_counted": 32,
+  "detail": {
+   "s1100051": {
+    "paired": {
+     "paired_attempt1": {
+      "airtime_bytes_identical": true,
+      "config_behaviour_identical": true,
+      "detection_sequence_identical": true,
+      "emission_sequence_identical": true,
+      "lifecycle_records_identical": true,
+      "outcome_identical": true,
+      "per_step": {
+       "first_difference_per_field": {},
+       "identical": true
+      },
+      "steps_compared": 1000
+     },
+     "paired_attempt2": {
+      "airtime_bytes_identical": true,
+      "config_behaviour_identical": true,
+      "detection_sequence_identical": true,
+      "emission_sequence_identical": true,
+      "lifecycle_records_identical": true,
+      "outcome_identical": true,
+      "per_step": {
+       "first_difference_per_field": {},
+       "identical": true
+      },
+      "steps_compared": 1000
+     }
+    },
+    "probe_side_files": {
+     "attempt1": "runs/search_trace_and_policy_20260925/logs/b1_A1_s1100051_a1pon_sp.jsonl",
+     "attempt2": "runs/search_trace_and_policy_20260925/logs/b1_A1_s1100051_a2pon_sp.jsonl"
+    },
+    "repeatability": {
+     "probe0_attempt1_vs_2": {
+      "behaviour_and_detection_identical": true,
+      "recomputed_behaviour_sha": [
+       "355fbc20291f4192",
+       "355fbc20291f4192"
+      ],
+      "stored_behaviour_sha_from_the_row": [
+       "355fbc20291f4192",
+       "355fbc20291f4192"
+      ]
+     },
+     "probe1_attempt1_vs_2": {
+      "behaviour_and_detection_identical": true,
+      "recomputed_behaviour_sha": [
+       "355fbc20291f4192",
+       "355fbc20291f4192"
+      ],
+      "stored_behaviour_sha_from_the_row": [
+       "c5ed24e75452940c",
+       "b9cea9ddd76bf32d"
+      ]
+     }
+    }
+   },
+   "s1100053": {
+    "paired": {
+     "paired_attempt1": {
+      "airtime_bytes_identical": true,
+      "config_behaviour_identical": true,
+      "detection_sequence_identical": true,
+      "emission_sequence_identical": true,
+      "lifecycle_records_identical": true,
+      "outcome_identical": true,
+      "per_step": {
+       "first_difference_per_field": {},
+       "identical": true
+      },
+      "steps_compared": 1000
+     },
+     "paired_attempt2": {
+      "airtime_bytes_identical": true,
+      "config_behaviour_identical": true,
+      "detection_sequence_identical": true,
+      "emission_sequence_identical": true,
+      "lifecycle_records_identical": true,
+      "outcome_identical": true,
+      "per_step": {
+       "first_difference_per_field": {},
+       "identical": true
+      },
+      "steps_compared": 1000
+     }
+    },
+    "probe_side_files": {
+     "attempt1": "runs/search_trace_and_policy_20260925/logs/b1_A1_s1100053_a1pon_sp.jsonl",
+     "attempt2": "runs/search_trace_and_policy_20260925/logs/b1_A1_s1100053_a2pon_sp.jsonl"
+    },
+    "repeatability": {
+     "probe0_attempt1_vs_2": {
+      "behaviour_and_detection_identical": true,
+      "recomputed_behaviour_sha": [
+       "338e10f76b9d6b00",
+       "338e10f76b9d6b00"
+      ],
+      "stored_behaviour_sha_from_the_row": [
+       "338e10f76b9d6b00",
+       "338e10f76b9d6b00"
+      ]
+     },
+     "probe1_attempt1_vs_2": {
+      "behaviour_and_detection_identical": true,
+      "recomputed_behaviour_sha": [
+       "338e10f76b9d6b00",
+       "338e10f76b9d6b00"
+      ],
+      "stored_behaviour_sha_from_the_row": [
+       "e29e16cfd9998c0d",
+       "fd84b554456138ae"
+      ]
+     }
+    }
+   }
+  },
+  "seeds": [
+   "1100051",
+   "1100053"
+  ],
+  "statement": "the side file is written beside the run, adds no lifecycle event_type, is not an observation, and changes nothing that was compared"
+ },
+ "reproduction_gate_Q": {
+  "cells": 14,
+  "detail": {
+   "A1/s1100008": {
+    "batch": "B1_d1_20260923",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 5,
+    "on_time_then": 5,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "comm_sends_per_tick: archived null, current default <member 'comm_sends_per_tick' of 'RunConfiguration' objects> used",
+     "comm_budget_bytes: archived null, current default <member 'comm_budget_bytes' of 'RunConfiguration' objects> used",
+     "comm_max_wait_steps: archived null, current default <member 'comm_max_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_urgent_wait_steps: archived null, current default <member 'comm_urgent_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_ack_delay_ticks: archived null, current default <member 'comm_ack_delay_ticks' of 'RunConfiguration' objects> used",
+     "comm_ack_delivery_probability: archived null, current default <member 'comm_ack_delivery_probability' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [
+     "piloc-e1-target-0"
+    ],
+    "undetected_now": [
+     "piloc-e1-target-0"
+    ]
+   },
+   "A1/s1100015": {
+    "batch": "B1_d1_20260923",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 5,
+    "on_time_then": 5,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "comm_sends_per_tick: archived null, current default <member 'comm_sends_per_tick' of 'RunConfiguration' objects> used",
+     "comm_budget_bytes: archived null, current default <member 'comm_budget_bytes' of 'RunConfiguration' objects> used",
+     "comm_max_wait_steps: archived null, current default <member 'comm_max_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_urgent_wait_steps: archived null, current default <member 'comm_urgent_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_ack_delay_ticks: archived null, current default <member 'comm_ack_delay_ticks' of 'RunConfiguration' objects> used",
+     "comm_ack_delivery_probability: archived null, current default <member 'comm_ack_delivery_probability' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [
+     "piloc-e1-target-5"
+    ],
+    "undetected_now": [
+     "piloc-e1-target-5"
+    ]
+   },
+   "A1/s1100017": {
+    "batch": "B1_d1_20260923",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 4,
+    "detection_count_then": 4,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 4,
+    "on_time_then": 4,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "comm_sends_per_tick: archived null, current default <member 'comm_sends_per_tick' of 'RunConfiguration' objects> used",
+     "comm_budget_bytes: archived null, current default <member 'comm_budget_bytes' of 'RunConfiguration' objects> used",
+     "comm_max_wait_steps: archived null, current default <member 'comm_max_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_urgent_wait_steps: archived null, current default <member 'comm_urgent_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_ack_delay_ticks: archived null, current default <member 'comm_ack_delay_ticks' of 'RunConfiguration' objects> used",
+     "comm_ack_delivery_probability: archived null, current default <member 'comm_ack_delivery_probability' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [
+     "piloc-e1-target-2",
+     "piloc-e1-target-3"
+    ],
+    "undetected_now": [
+     "piloc-e1-target-2",
+     "piloc-e1-target-3"
+    ]
+   },
+   "A1/s1100031": {
+    "batch": "B1_d1_20260923",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 5,
+    "on_time_then": 5,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "comm_sends_per_tick: archived null, current default <member 'comm_sends_per_tick' of 'RunConfiguration' objects> used",
+     "comm_budget_bytes: archived null, current default <member 'comm_budget_bytes' of 'RunConfiguration' objects> used",
+     "comm_max_wait_steps: archived null, current default <member 'comm_max_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_urgent_wait_steps: archived null, current default <member 'comm_urgent_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_ack_delay_ticks: archived null, current default <member 'comm_ack_delay_ticks' of 'RunConfiguration' objects> used",
+     "comm_ack_delivery_probability: archived null, current default <member 'comm_ack_delivery_probability' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [
+     "piloc-e1-target-5"
+    ],
+    "undetected_now": [
+     "piloc-e1-target-5"
+    ]
+   },
+   "A1/s1100036": {
+    "batch": "B1_d1_20260923",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 5,
+    "on_time_then": 5,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "comm_sends_per_tick: archived null, current default <member 'comm_sends_per_tick' of 'RunConfiguration' objects> used",
+     "comm_budget_bytes: archived null, current default <member 'comm_budget_bytes' of 'RunConfiguration' objects> used",
+     "comm_max_wait_steps: archived null, current default <member 'comm_max_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_urgent_wait_steps: archived null, current default <member 'comm_urgent_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_ack_delay_ticks: archived null, current default <member 'comm_ack_delay_ticks' of 'RunConfiguration' objects> used",
+     "comm_ack_delivery_probability: archived null, current default <member 'comm_ack_delivery_probability' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [
+     "piloc-e1-target-5"
+    ],
+    "undetected_now": [
+     "piloc-e1-target-5"
+    ]
+   },
+   "A1/s1100051": {
+    "batch": "B1_d1_20260923",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 5,
+    "on_time_then": 5,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "comm_sends_per_tick: archived null, current default <member 'comm_sends_per_tick' of 'RunConfiguration' objects> used",
+     "comm_budget_bytes: archived null, current default <member 'comm_budget_bytes' of 'RunConfiguration' objects> used",
+     "comm_max_wait_steps: archived null, current default <member 'comm_max_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_urgent_wait_steps: archived null, current default <member 'comm_urgent_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_ack_delay_ticks: archived null, current default <member 'comm_ack_delay_ticks' of 'RunConfiguration' objects> used",
+     "comm_ack_delivery_probability: archived null, current default <member 'comm_ack_delivery_probability' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [
+     "piloc-e1-target-0"
+    ],
+    "undetected_now": [
+     "piloc-e1-target-0"
+    ]
+   },
+   "A1/s1100053": {
+    "batch": "B1_d1_20260923",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 5,
+    "on_time_then": 5,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "comm_sends_per_tick: archived null, current default <member 'comm_sends_per_tick' of 'RunConfiguration' objects> used",
+     "comm_budget_bytes: archived null, current default <member 'comm_budget_bytes' of 'RunConfiguration' objects> used",
+     "comm_max_wait_steps: archived null, current default <member 'comm_max_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_urgent_wait_steps: archived null, current default <member 'comm_urgent_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_ack_delay_ticks: archived null, current default <member 'comm_ack_delay_ticks' of 'RunConfiguration' objects> used",
+     "comm_ack_delivery_probability: archived null, current default <member 'comm_ack_delivery_probability' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [
+     "piloc-e1-target-2"
+    ],
+    "undetected_now": [
+     "piloc-e1-target-2"
+    ]
+   },
+   "BASE/s31003": {
+    "batch": "B2_systemloop_20260918",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "allow_release_without_suppression",
+     "check_release_source_stage",
+     "comm_ack",
+     "comm_ack_delay_ticks",
+     "comm_ack_delivery_probability",
+     "comm_budget_bytes",
+     "comm_max_wait_steps",
+     "comm_policy",
+     "comm_policy_params",
+     "comm_range",
+     "comm_sends_per_tick",
+     "comm_timing_mode",
+     "comm_urgent_wait_steps",
+     "deadline_tightness",
+     "gossip_interval",
+     "search_action_policy",
+     "task_membership_consistency"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 5,
+    "on_time_then": 5,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [
+     "piloc-e1-target-3"
+    ],
+    "undetected_now": [
+     "piloc-e1-target-3"
+    ]
+   },
+   "BASE/s31009": {
+    "batch": "B2_systemloop_20260918",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 5,
+    "detection_count_then": 5,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "allow_release_without_suppression",
+     "check_release_source_stage",
+     "comm_ack",
+     "comm_ack_delay_ticks",
+     "comm_ack_delivery_probability",
+     "comm_budget_bytes",
+     "comm_max_wait_steps",
+     "comm_policy",
+     "comm_policy_params",
+     "comm_range",
+     "comm_sends_per_tick",
+     "comm_timing_mode",
+     "comm_urgent_wait_steps",
+     "deadline_tightness",
+     "gossip_interval",
+     "search_action_policy",
+     "task_membership_consistency"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 5,
+    "on_time_then": 5,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [
+     "piloc-e1-target-1"
+    ],
+    "undetected_now": [
+     "piloc-e1-target-1"
+    ]
+   },
+   "BASE/s31030": {
+    "batch": "B2_systemloop_20260918",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 4,
+    "detection_count_then": 4,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "allow_release_without_suppression",
+     "check_release_source_stage",
+     "comm_ack",
+     "comm_ack_delay_ticks",
+     "comm_ack_delivery_probability",
+     "comm_budget_bytes",
+     "comm_max_wait_steps",
+     "comm_policy",
+     "comm_policy_params",
+     "comm_range",
+     "comm_sends_per_tick",
+     "comm_timing_mode",
+     "comm_urgent_wait_steps",
+     "deadline_tightness",
+     "gossip_interval",
+     "search_action_policy",
+     "task_membership_consistency"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 4,
+    "on_time_then": 4,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "undetected_now": [
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ]
+   },
+   "CTRL/s1100000": {
+    "batch": "B1_d1_20260923",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 6,
+    "detection_count_then": 6,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 6,
+    "on_time_then": 6,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "comm_sends_per_tick: archived null, current default <member 'comm_sends_per_tick' of 'RunConfiguration' objects> used",
+     "comm_budget_bytes: archived null, current default <member 'comm_budget_bytes' of 'RunConfiguration' objects> used",
+     "comm_max_wait_steps: archived null, current default <member 'comm_max_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_urgent_wait_steps: archived null, current default <member 'comm_urgent_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_ack_delay_ticks: archived null, current default <member 'comm_ack_delay_ticks' of 'RunConfiguration' objects> used",
+     "comm_ack_delivery_probability: archived null, current default <member 'comm_ack_delivery_probability' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [],
+    "undetected_now": []
+   },
+   "CTRL/s1100001": {
+    "batch": "B1_d1_20260923",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 6,
+    "detection_count_then": 6,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 6,
+    "on_time_then": 6,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "comm_sends_per_tick: archived null, current default <member 'comm_sends_per_tick' of 'RunConfiguration' objects> used",
+     "comm_budget_bytes: archived null, current default <member 'comm_budget_bytes' of 'RunConfiguration' objects> used",
+     "comm_max_wait_steps: archived null, current default <member 'comm_max_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_urgent_wait_steps: archived null, current default <member 'comm_urgent_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_ack_delay_ticks: archived null, current default <member 'comm_ack_delay_ticks' of 'RunConfiguration' objects> used",
+     "comm_ack_delivery_probability: archived null, current default <member 'comm_ack_delivery_probability' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [],
+    "undetected_now": []
+   },
+   "CTRL/s1100002": {
+    "batch": "B1_d1_20260923",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 6,
+    "detection_count_then": 6,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 6,
+    "on_time_then": 6,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "comm_sends_per_tick: archived null, current default <member 'comm_sends_per_tick' of 'RunConfiguration' objects> used",
+     "comm_budget_bytes: archived null, current default <member 'comm_budget_bytes' of 'RunConfiguration' objects> used",
+     "comm_max_wait_steps: archived null, current default <member 'comm_max_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_urgent_wait_steps: archived null, current default <member 'comm_urgent_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_ack_delay_ticks: archived null, current default <member 'comm_ack_delay_ticks' of 'RunConfiguration' objects> used",
+     "comm_ack_delivery_probability: archived null, current default <member 'comm_ack_delivery_probability' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [],
+    "undetected_now": []
+   },
+   "CTRL/s1100003": {
+    "batch": "B1_d1_20260923",
+    "behaviour_fields_that_differ": [],
+    "code_commit": null,
+    "detection_count_now": 6,
+    "detection_count_then": 6,
+    "detection_sequence_match": true,
+    "fields_only_in_archived_record": [],
+    "fields_only_in_todays_record": [
+     "search_action_policy"
+    ],
+    "first_detection_step_differences": [],
+    "goals_placed": 6,
+    "historical_run_reproduced": true,
+    "map_and_layout_match": true,
+    "on_time_now": 6,
+    "on_time_then": 6,
+    "outcome_matches_then": true,
+    "substituted_fields": [
+     "map_path: archived null, current default <member 'map_path' of 'RunConfiguration' objects> used",
+     "comm_sends_per_tick: archived null, current default <member 'comm_sends_per_tick' of 'RunConfiguration' objects> used",
+     "comm_budget_bytes: archived null, current default <member 'comm_budget_bytes' of 'RunConfiguration' objects> used",
+     "comm_max_wait_steps: archived null, current default <member 'comm_max_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_urgent_wait_steps: archived null, current default <member 'comm_urgent_wait_steps' of 'RunConfiguration' objects> used",
+     "comm_ack_delay_ticks: archived null, current default <member 'comm_ack_delay_ticks' of 'RunConfiguration' objects> used",
+     "comm_ack_delivery_probability: archived null, current default <member 'comm_ack_delivery_probability' of 'RunConfiguration' objects> used",
+     "repository_root: archived null, current default <member 'repository_root' of 'RunConfiguration' objects> used",
+     "replay_stream: archived null, current default <member 'replay_stream' of 'RunConfiguration' objects> used",
+     "search_backend: dropped, not a field of the current configuration",
+     "allocation_backend: dropped, not a field of the current configuration"
+    ],
+    "undectected_then_ids_then": [],
+    "undetected_now": []
+   }
+  },
+  "not_reproduced": [],
+  "reproduced": [
+   "A1/s1100008",
+   "A1/s1100015",
+   "A1/s1100017",
+   "A1/s1100031",
+   "A1/s1100036",
+   "A1/s1100051",
+   "A1/s1100053",
+   "BASE/s31003",
+   "BASE/s31009",
+   "BASE/s31030",
+   "CTRL/s1100000",
+   "CTRL/s1100001",
+   "CTRL/s1100002",
+   "CTRL/s1100003"
+  ],
+  "rule": "a cell that does not reproduce is reported as not_reproduced with its reason attached; it is not deleted, and a configuration difference is never written as a detector defect"
+ },
+ "round": "search_trace_and_policy_20260925"
+}

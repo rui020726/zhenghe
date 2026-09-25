@@ -36,8 +36,12 @@ PROBE_SCHEMA = "sar-info-probe/1"
 
 #: Configuration and artefact-name fields. Two runs may differ in these without differing
 #: in behaviour, so a behavioural comparison has to remove them first — and say which ones.
+#: The five ``search_probe_*`` entries are the B1 probe echoing its own side file into the run
+#: metrics: a path, a row count and three counters. None of them is read by anything, so a run
+#: with the probe on and a run with it off differ here while being behaviourally identical.
 IDENTITY_FIELDS = ("output", "info_probe", "decision_trace", "record_stream", "comm_transcript",
-                  "search_probe")
+                  "search_probe", "search_probe_artefact", "search_probe_placed",
+                  "search_probe_steps", "search_probe_disagreements", "search_probe_anomalies")
 
 #: The run summary's self-description block. It mixes the knobs the transport was configured
 #: with and the counters it accumulated, so a caller cannot tell an echo from an observation
