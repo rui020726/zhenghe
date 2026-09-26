@@ -62,7 +62,8 @@ DNS 解析正常（`20.205.243.166`）、系统未配代理、IP:443 直连失�
 ```text
 分支   docs/comm-cost-objective-design
 起点   4c71fead0047298101869200a8518059afc42ccc（第十八轮头，本地逐字符核对）
-提交链 2afc0f6 → 8a6c63b → 2174760 → <本修订提交，见 git log>
+提交链 2afc0f6 → 8a6c63b → 2174760 → 53b1527（本修订，完整 SHA
+       53b1527b0195504e8334212c1fa128cbae4e02b7）
 远端   未核验；最后实际核验过的远端 ref 仍是
        refs/remotes/origin/analysis/real-search-undetected-attribution = 80af16ba4b90ce0c2d5456dd8b8e57068b4513e4
 ```
