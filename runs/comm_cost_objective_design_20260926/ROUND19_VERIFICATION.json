@@ -25,7 +25,7 @@
  "checks_total": 19,
  "defaults_changed": false,
  "episodes_launched": 0,
- "local_head_at_verification": "2afc0f6e4f89e63bb1b0ad3352df5ef8e437ed8d",
+ "local_head_at_verification": "8a6c63b91ffbb46c7a0439a94aaf046338637c72",
  "new_stream_files": 0,
  "notes": {
   "changed_files_vs_start": [
@@ -64,10 +64,12 @@
    "COMM_COST_COVERAGE.json.superseded_before_deadline_slack",
    "LEARNABILITY_PROBE_OFFLINE.json.superseded_merged_label_names",
    "MANIFEST.json.superseded_before_push_disclosure",
+   "MANIFEST.json.superseded_before_retry_log",
    "MANIFEST.json.superseded_comment_line_rejected",
    "MANIFEST.json.superseded_undeclared_gitignore_change",
    "ROUND18_ARCHIVE_CLOSURE.json.superseded_exact_equality_crosscheck",
    "ROUND19_VERIFICATION.json.superseded_before_push_disclosure",
+   "ROUND19_VERIFICATION.json.superseded_before_retry_log",
    "ROUND19_VERIFICATION.json.superseded_comment_line_rejected",
    "ROUND19_VERIFICATION.json.superseded_undeclared_gitignore_change"
   ],
@@ -85,8 +87,9 @@
   },
   "remote_verification": {
    "attempts_this_round": {
-    "git_fetch": 1,
-    "git_ls_remote": 3,
+    "detail": "REMOTE_RETRY_LOG.md (逐条含错误原文与诊断)",
+    "git_fetch": 2,
+    "git_ls_remote": 5,
     "git_push": 0,
     "successful_remote_contacts": 0
    },
@@ -106,6 +109,7 @@
    "CONSTRAINED_COMM_COST_DESIGN.md",
    "CONSTRAINED_COMM_COST_PILOT.md",
    "LEARNABILITY_PROBE_OFFLINE.json",
+   "REMOTE_RETRY_LOG.md",
    "ROUND18_ARCHIVE_CLOSURE.json",
    "ROUND18_ARCHIVE_CLOSURE.md",
    "ROUND19_SCOPE.md",

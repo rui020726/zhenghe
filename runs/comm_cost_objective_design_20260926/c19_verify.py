@@ -23,7 +23,7 @@ START_SHA = "4c71fead0047298101869200a8518059afc42ccc"
 BRANCH = "docs/comm-cost-objective-design"
 DELIVERED = (
     "ROUND19_SCOPE.md", "ROUND18_ARCHIVE_CLOSURE.md", "COMM_COST_COVERAGE.md",
-    "CONSTRAINED_COMM_COST_DESIGN.md", "CONSTRAINED_COMM_COST_PILOT.md",
+    "CONSTRAINED_COMM_COST_DESIGN.md", "CONSTRAINED_COMM_COST_PILOT.md", "REMOTE_RETRY_LOG.md",
     "ROUND18_ARCHIVE_CLOSURE.json", "COMM_COST_COVERAGE.json", "LEARNABILITY_PROBE_OFFLINE.json",
     "c19_common.py", "c19_closure_r18.py", "c19_cost_coverage.py", "c19_learnability.py",
     "c19_verify.py")
@@ -190,8 +190,9 @@ def main() -> int:
     notes["remote_verification"] = {
         "requested_plan_sha": "72c4c3f71e07339bf6533fbd771aef3b2682103c",
         "plan_sha_verified": False,
-        "attempts_this_round": {"git_fetch": 1, "git_ls_remote": 3, "git_push": 0,
-                                "successful_remote_contacts": 0},
+        "attempts_this_round": {"git_fetch": 2, "git_ls_remote": 5, "git_push": 0,
+                                "successful_remote_contacts": 0,
+                                "detail": "REMOTE_RETRY_LOG.md (逐条含错误原文与诊断)"},
         "reason": "git fetch/ls-remote to github.com:443 failed; the private repo cannot be read "
                   "through api.github.com unauthenticated (404), and no local object matches",
         "last_actually_verified_remote_ref":
