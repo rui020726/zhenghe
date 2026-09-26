@@ -24,9 +24,12 @@ BRANCH = "docs/comm-cost-objective-design"
 DELIVERED = (
     "ROUND19_SCOPE.md", "ROUND18_ARCHIVE_CLOSURE.md", "COMM_COST_COVERAGE.md",
     "CONSTRAINED_COMM_COST_DESIGN.md", "CONSTRAINED_COMM_COST_PILOT.md", "REMOTE_RETRY_LOG.md",
+    "COMM_COST_OBJECTIVE_DESIGN_REVISED.md", "COMM_PILOT_STAGED_APPROVAL.md",
+    "DECISION_SUMMARY.md", "DESIGN_SPEC_COMPLIANCE.md",
     "ROUND18_ARCHIVE_CLOSURE.json", "COMM_COST_COVERAGE.json", "LEARNABILITY_PROBE_OFFLINE.json",
+    "BUCKET_ARITHMETIC_RECHECK.json",
     "c19_common.py", "c19_closure_r18.py", "c19_cost_coverage.py", "c19_learnability.py",
-    "c19_verify.py")
+    "c19_recheck.py", "c19_verify.py")
 # Paths that belong to other sessions. The round must leave every one of them in place.
 OTHER_SESSION_PATHS = ("architecture", "runs/comm_multistep_stage1_20260922/_DOC_PATCH_NOTES.md",
                        "runs/coordinator_baselines_20260917/dev_summary.json",
@@ -178,6 +181,30 @@ def main() -> int:
     missing_files = [name for name in DELIVERED if name not in round_files]
     checks["all_declared_deliverables_exist"] = not missing_files
 
+    # the same-day revision: its arithmetic must close, and the spec comparison must still be
+    # declared pending rather than silently claimed
+    recheck = c19.read_json(c19.ROUND_DIR / "BUCKET_ARITHMETIC_RECHECK.json")
+    checks["revision_buckets_close"] = all(recheck["closure_checks"].values())
+    checks["revision_recompute_matches_delivered"] = all(
+        recheck["recomputation_matches_delivered_artefact"].values())
+    checks["revision_buckets_are_exhaustive"] = sum(
+        recheck["arithmetic"]["per_bucket"][name]["targets"]
+        for name in recheck["arithmetic"]["per_bucket"]) == 352
+    compliance = (c19.ROUND_DIR / "DESIGN_SPEC_COMPLIANCE.md").read_text(encoding="utf-8")
+    checks["spec_compliance_declared_pending"] = all(
+        marker in compliance for marker in (
+            "挂起待补", "未获得", "成功的远端接触数 = 0", "把本文件读成"))
+    revised = (c19.ROUND_DIR / "COMM_COST_OBJECTIVE_DESIGN_REVISED.md").read_text(encoding="utf-8")
+    checks["revision_keeps_the_two_denominators_apart"] = (
+        "5.3977 %" in revised and "31.2500 %" in revised and "63.3523 %" in revised
+        and "5.4559 %" in revised)
+    checks["revision_labels_are_descriptive"] = all(
+        name in revised for name in (
+            "outcome_differs_under_full_silence",
+            "known_no_later_and_outcome_same_under_full_silence",
+            "known_later_but_outcome_same_under_full_silence",
+            "开发集探索性", "late_discovery_gate", "载荷尝试成本"))
+
     notes["gitignore_added_lines"] = added
     notes["gitignore_removed_lines"] = removed
     notes["quoted_values"] = values
@@ -200,7 +227,10 @@ def main() -> int:
             "80af16ba4b90ce0c2d5456dd8b8e57068b4513e4",
         "documents_read": [],
         "documents_not_read": ["ROUND19_COMM_MAINLINE_RETURN.md",
-                               "ROUND19_CONSTRAINED_COMM_CONTROLLER_DESIGN.md"]}
+                               "ROUND19_CONSTRAINED_COMM_CONTROLLER_DESIGN.md"],
+        "revision_status": "the same-day revision is written against the user's 2026-09-26 "
+                           "instruction only; item-by-item comparison with the two spec files is "
+                           "suspended in DESIGN_SPEC_COMPLIANCE.md until they arrive"}
 
     payload = {
         "round": "19", "branch": BRANCH, "start_sha": START_SHA,

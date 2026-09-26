@@ -1,0 +1,159 @@
+{
+ "arithmetic": {
+  "denominators": {
+   "billed_bytes_over_the_batch": 874398,
+   "note": "count shares divide by targets, byte shares divide by billed bytes, per-episode values divide by seeds; the three must never be mixed in one sentence",
+   "seeds": 60,
+   "targets": 352
+  },
+  "per_bucket": {
+   "known_later_but_outcome_same_under_full_silence": {
+    "billed_bytes": 553530,
+    "byte_share_of_bill": 0.633041,
+    "bytes_per_episode": 9225.5,
+    "count_share_of_targets": 0.633523,
+    "targets": 223,
+    "targets_per_episode": 3.716667
+   },
+   "known_no_later_and_outcome_same_under_full_silence": {
+    "billed_bytes": 273162,
+    "byte_share_of_bill": 0.3124,
+    "bytes_per_episode": 4552.7,
+    "count_share_of_targets": 0.3125,
+    "targets": 110,
+    "targets_per_episode": 1.833333
+   },
+   "outcome_differs_under_full_silence": {
+    "billed_bytes": 47706,
+    "byte_share_of_bill": 0.054559,
+    "bytes_per_episode": 795.1,
+    "count_share_of_targets": 0.053977,
+    "targets": 19,
+    "targets_per_episode": 0.316667
+   }
+  },
+  "totals": {
+   "billed_bytes": 874398,
+   "byte_shares_sum": 1.0,
+   "bytes_per_episode": 14573.3,
+   "count_shares_sum": 1.0,
+   "targets": 352,
+   "targets_per_episode": 5.866667
+  }
+ },
+ "auc_provenance": {
+  "confound": "the outcome attributed to a dropped report is that arm's recorded outcome; A2's robots moved differently because they were not told, so the bookkeeping is not a per-message counterfactual",
+  "data_split": "NONE. The same 60 seeds produced the labels, the AUC and the threshold; there is no held-out part and no cross-validation",
+  "features_of_the_19_dim_schema_not_reconstructed": [
+   "since_last_emission_time",
+   "pending_event",
+   "changed_view",
+   "stage_changed",
+   "requirements_changed",
+   "members_changed",
+   "progress_delta_abs",
+   "revision_delta",
+   "queue_backlog_targets"
+  ],
+  "features_source": "reconstructed from the A1 transcript's first-report records and the A1 lifecycle detection records; not read from a decision tape (no deployed cell in the archive has one)",
+  "features_used": [
+   "step_reported_at",
+   "slack_at_report",
+   "slack_over_horizon",
+   "deadline_offset",
+   "severity",
+   "confidence",
+   "requirements_left",
+   "total_stages",
+   "backlog_steps",
+   "payload_bytes"
+  ],
+  "label": "the three descriptive buckets above, built from the A1/A2 whole-policy contrast on seeds 1100000..1100059",
+  "model_fitted": "none — a rank statistic (Mann-Whitney U / AUC) and an exhaustive threshold sweep",
+  "negative_class": "the other 333 targets",
+  "positive_class": "outcome_differs_under_full_silence (19 targets)",
+  "status": "development-set exploratory result. It is not a validated effect size and must not be cited as one; seeds 1100000..1100059 are 'seen' under PROJECT_CHARTER.md §10 and cannot serve as an unseen test set",
+  "threshold_selection": "every distinct feature value swept in both directions, scored by counterfactual bookkeeping, cheapest rule at full recorded effect reported",
+  "why_those_nine_are_constant_or_unused_here": "all 352 archived emissions are first reports (revision == 1, members empty), so the change-detection dims have no previous view to compare against; queue_backlog_targets was not reconstructed and is assumed small under `immediate` but was NOT verified per cell"
+ },
+ "citation_corrections": [
+  {
+   "action": "旧件不改，修订登记于 COMM_COST_OBJECTIVE_DESIGN_REVISED.md §二",
+   "correct": "按目标数 19/352 = 5.40 %、110/352 = 31.25 %、223/352 = 63.35 %；按计费字节 47 706/874 398 = 5.46 %、273 162/874 398 = 31.24 %、553 530/874 398 = 63.30 %",
+   "occurrences": [
+    "PROJECT_CHARTER.md v4.2 §一 与 §9 第十九轮段与 §13 v4.2 行",
+    "PROJECT_STATUS.md 2026-09-26 节",
+    "README.md 当前研究入口节",
+    "COMM_COST_COVERAGE.md §五 标题（'承重的那 5.5 %'）"
+   ],
+   "why_wrong": "5.46/31.24/63.30 是**字节份额**（分母 874 398 B），不是目标份额（分母 352 个）",
+   "wrong_reading": "19 份（5.46 %）、110 份（31.24 %）、223 份（63.30 %）"
+  },
+  {
+   "action": "同上",
+   "correct": "整策略对照下的描述性标签，见 label_semantics",
+   "occurrences": [
+    "COMM_COST_COVERAGE.md §四/§五",
+    "CONSTRAINED_COMM_COST_DESIGN.md §五",
+    "CONSTRAINED_COMM_COST_PILOT.md §一"
+   ],
+   "why_wrong": "从未做单消息干预；比的是两个整策略（A1 全即时 vs A2 全静默）",
+   "wrong_reading": "'承重'/'严格冗余' 当作单条消息的因果贡献"
+  }
+ ],
+ "closure_checks": {
+  "both_arms_see_the_same_targets": true,
+  "bytes_sum_to_bill": true,
+  "counts_sum_to_targets": true,
+  "matches_published_C1": true,
+  "outcome_difference_per_episode": 0.316667,
+  "outcome_difference_total": 19,
+  "per_episode_bill_matches_arm_A1": true,
+  "published_C1_mean": 0.31667,
+  "seeds_with_identical_target_sets": 60
+ },
+ "cost_nomenclature": {
+  "source": "integrated_sar/comm.py:97-123, 894-898, 953, 974; comm_budget.py:3-16",
+  "unmetered_and_listed_separately": [
+   "环境自带视距真值刷新（old_task_env.py:477-492）",
+   "机器人一跳 gossip（old_task_env.py:494-512）",
+   "事件总线分发与 TaskRegistry 入库",
+   "发送节点对 registry 的轮询",
+   "协调器 advice 与分配命令",
+   "ACK 反向信道（独立账本，永不共享额度）",
+   "被额度拒掉的发送（未发出，不计费）"
+  ],
+  "what_it_is_not": [
+   "真实无线空口时间",
+   "含包头/成帧/链路层/MAC 的成本",
+   "能量或时延成本",
+   "全系统通信成本"
+  ],
+  "what_the_number_is": "载荷尝试成本（当前计费模型口径）：payload-only 估算 × 被寻址的 订阅者数，按尝试计费、丢包照付"
+ },
+ "label_semantics": {
+  "kind": "descriptive label of a whole-policy contrast (A1 immediate vs A2 always_hold); no single-message intervention was performed, so none of these is a causal contribution of one packet",
+  "renamed_from": {
+   "known_later_but_outcome_same_under_full_silence": "uplink_bought_time_same_outcome",
+   "known_no_later_and_outcome_same_under_full_silence": "redundant_knowledge_and_outcome",
+   "outcome_differs_under_full_silence": "load_bearing_outcome_only_with_uplink"
+  },
+  "why_renamed": "the old names ('load bearing', 'strictly redundant') read as if one packet had been switched off; what was actually compared is two whole policies on the same seeds"
+ },
+ "phase": "design revision §二.3 / §二.4 recheck, 0 episode",
+ "recomputation_matches_delivered_artefact": {
+  "bytes_equal": true,
+  "counts_equal": true,
+  "recomputed_bytes": {
+   "known_later_but_outcome_same_under_full_silence": 553530,
+   "known_no_later_and_outcome_same_under_full_silence": 273162,
+   "outcome_differs_under_full_silence": 47706
+  },
+  "recomputed_counts": {
+   "known_later_but_outcome_same_under_full_silence": 223,
+   "known_no_later_and_outcome_same_under_full_silence": 110,
+   "outcome_differs_under_full_silence": 19
+  }
+ },
+ "round": "19-revision"
+}

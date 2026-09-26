@@ -40,6 +40,18 @@
   **未读到**、**cherry-pick 未执行**，本轮交付的是**决策包不是既成事实**：那两份文档到达后
   若已冻结基线/容忍度/资源上限，本轮提案**一律让位**。恢复命令见 pilot 件 §七。
 
+* **同日修订（独立提交，旧件一字未改）**：`COMM_COST_OBJECTIVE_DESIGN_REVISED.md`、
+  `COMM_PILOT_STAGED_APPROVAL.md`、`DECISION_SUMMARY.md`、`DESIGN_SPEC_COMPLIANCE.md`（**挂起待补**）、
+  `BUCKET_ARITHMETIC_RECHECK.json`。要点：三桶改为**整策略对照下的描述性标签**（不是单消息因果）；
+  上面写在目标数旁的 5.46 %/31.24 %/63.30 % 是**字节份额**，按目标数应为 **5.40 %/31.25 %/63.35 %**；
+  AUC 0.9174 与 ĉ=147 标为**开发集探索性结果**；`late_only` 明确为"晚发现才发送"并改名
+  `late_discovery_gate(ĉ)`；费用一律称**载荷尝试成本（当前计费模型口径）**。
+  **推荐路线改为**：最小化期望已计量成本、约束相对固定参考策略（`immediate`）的按时损失 ≤ δ，
+  用**带对偶变量 λ 的约束式策略梯度**实现（预算仍是硬栏杆、不是成本目标；
+  "≥3 个 binding 内点"前置已删除；额度扫描降为备选）；授权拆成 **A（0 启动）/ B（≤24）/ C（≤488，另行批准）**，
+  δ=0.10、降本门槛、训练量与规则臂实现**全部待批准**。
+  两份原 spec 仍未获得 ⇒ 推荐方案标注为"依据使用者指令，未经原 spec 核对"。
+
 上一轮（第十八轮）入口：[项目总纲 v4.1](PROJECT_CHARTER.md) 与
 [搜索轨迹逐时刻证据 + 同一真实环境的搜索策略对照](runs/search_trace_and_policy_20260925/SEARCH_POLICY_COMPARISON_RESULTS.md)
 （机读：`SEARCH_TRACE_IDENTITY_REPORT.json`、`SEARCH_MISS_TIMELINES.json`、

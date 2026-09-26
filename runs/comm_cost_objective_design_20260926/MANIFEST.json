@@ -2,6 +2,11 @@
  "branch": "docs/comm-cost-objective-design",
  "checkpoints": "none read or written this round (0 training, 0 new episode)",
  "delivered": {
+  "BUCKET_ARITHMETIC_RECHECK.json": {
+   "bytes": 7212,
+   "path": "runs/comm_cost_objective_design_20260926/BUCKET_ARITHMETIC_RECHECK.json",
+   "sha256": "9cd1a82dfd0920b5c21b6916ab93ddccd3d43f0393c7b0454aece0c086bf2fdd"
+  },
   "COMM_COST_COVERAGE.json": {
    "bytes": 58309,
    "path": "runs/comm_cost_objective_design_20260926/COMM_COST_COVERAGE.json",
@@ -12,6 +17,16 @@
    "path": "runs/comm_cost_objective_design_20260926/COMM_COST_COVERAGE.md",
    "sha256": "8dfd43e8afbdb28277e66d79183fe8247bb68542f589f6a0591453c54f137ec6"
   },
+  "COMM_COST_OBJECTIVE_DESIGN_REVISED.md": {
+   "bytes": 20221,
+   "path": "runs/comm_cost_objective_design_20260926/COMM_COST_OBJECTIVE_DESIGN_REVISED.md",
+   "sha256": "38215ff46cccca9acde5914ca224baa129974964ff1ff59485e17526f6a2c2ed"
+  },
+  "COMM_PILOT_STAGED_APPROVAL.md": {
+   "bytes": 11378,
+   "path": "runs/comm_cost_objective_design_20260926/COMM_PILOT_STAGED_APPROVAL.md",
+   "sha256": "1cf9ed1ced0ff9c6674815e0c05840511c73340b1f7fcf8ffcbe2795300ee410"
+  },
   "CONSTRAINED_COMM_COST_DESIGN.md": {
    "bytes": 10257,
    "path": "runs/comm_cost_objective_design_20260926/CONSTRAINED_COMM_COST_DESIGN.md",
@@ -21,6 +36,16 @@
    "bytes": 11052,
    "path": "runs/comm_cost_objective_design_20260926/CONSTRAINED_COMM_COST_PILOT.md",
    "sha256": "624a2ca1b80621a02151140f6d4b28abb8b74b789a38faa395c2dbf0229a466d"
+  },
+  "DECISION_SUMMARY.md": {
+   "bytes": 4630,
+   "path": "runs/comm_cost_objective_design_20260926/DECISION_SUMMARY.md",
+   "sha256": "28b322021737a764236a571335435b5f6250e9834dae1fe95272a384ddb46517"
+  },
+  "DESIGN_SPEC_COMPLIANCE.md": {
+   "bytes": 7383,
+   "path": "runs/comm_cost_objective_design_20260926/DESIGN_SPEC_COMPLIANCE.md",
+   "sha256": "e51ff74d418ae069dcc783835bfbaac256f48072133a6dfe10b1ce26e0d8fe60"
   },
   "LEARNABILITY_PROBE_OFFLINE.json": {
    "bytes": 15327,
@@ -67,13 +92,18 @@
    "path": "runs/comm_cost_objective_design_20260926/c19_learnability.py",
    "sha256": "203e2ad0364a8e193894ae460a297fbba876082d395b66bf4c4cf51ea433af72"
   },
+  "c19_recheck.py": {
+   "bytes": 13528,
+   "path": "runs/comm_cost_objective_design_20260926/c19_recheck.py",
+   "sha256": "65d1aea812d0a0a8f365b80f68c7326a6cd3265cc5ae7a3626c3a9fb4c9f61ac"
+  },
   "c19_verify.py": {
-   "bytes": 15518,
+   "bytes": 17512,
    "path": "runs/comm_cost_objective_design_20260926/c19_verify.py",
-   "sha256": "2342ebf020d3b4297f05926f2c96c181d8707576f219b96508dde22fee76a27b"
+   "sha256": "4aa3c31be743ad9f4665d96c196389ce8255365ee89400524aeb94729ec7a0d6"
   }
  },
- "head_at_manifest": "8a6c63b91ffbb46c7a0439a94aaf046338637c72",
+ "head_at_manifest": "2174760ba8909e292d03c746bbf1d0376b977625",
  "inputs_read": {
   "round_15": {
    "anchor_artefact_sha256": "34d2a8c9765f22970867ddbf9ea8179c4a1e13cc7d71270a69fef34b62fb772e",
@@ -114,11 +144,13 @@
   "COMM_COST_COVERAGE.json.superseded_a4_described_as_gossip_only": "8746f4267148a0a20b65f7a1f03dd1535d35239318f61298ae8667ebf42aeb0c",
   "COMM_COST_COVERAGE.json.superseded_before_deadline_slack": "60c252e698947aa26da246f5584d3cab1edc0011e5869d3332ff588f5f1e1e34",
   "LEARNABILITY_PROBE_OFFLINE.json.superseded_merged_label_names": "d6df65296b97ae46a2ea83e3ac1eeced167388454d6b5aaeb1f951acef642d87",
+  "MANIFEST.json.superseded_before_design_revision": "22ba4dde2fe5bf8934e71f6df2ed3c311766e1c2a2f0338b85e5b8bdfae69042",
   "MANIFEST.json.superseded_before_push_disclosure": "6e1ef6f223af66ceb218be8dd07d1ec50ddf7f950a18e95a378830393dd2b955",
   "MANIFEST.json.superseded_before_retry_log": "d1d641be37b4658d67bd37eaff57b141931cf80226d6b6f783b11cc336dfd254",
   "MANIFEST.json.superseded_comment_line_rejected": "fd6da26da0e1858da6f94aea8cae73b458e5553eaa90e1aea5551df51c3829c8",
   "MANIFEST.json.superseded_undeclared_gitignore_change": "a9c92ec1061c138bf1687168a98954e3b8566f53f9f91902361d8cb6383471f3",
   "ROUND18_ARCHIVE_CLOSURE.json.superseded_exact_equality_crosscheck": "683f0e60931aa5e91d9515c975f8e0af3b5eddfd6b214dba1baa51249114bbd7",
+  "ROUND19_VERIFICATION.json.superseded_before_design_revision": "f284d5e92e233ef4a896ef1c41a34fe9eb77ac456041b61d86ac7428fc20c793",
   "ROUND19_VERIFICATION.json.superseded_before_push_disclosure": "1660369349de9bcfc71f0965636939b617c34521d3f21b67b7beb1797ccf05bf",
   "ROUND19_VERIFICATION.json.superseded_before_retry_log": "fd728ee8d74fd1ff0910a8a47a475f5cdf14618e683f672d34544c9a8f963823",
   "ROUND19_VERIFICATION.json.superseded_comment_line_rejected": "faca91bbb1475f7162b68afdd5233e9dd5a86f65950d6e283a376e9ad2729a91",
