@@ -113,9 +113,9 @@ P3 明细按"规则臂共用、学习臂 ×3 seed"重算，避免隐式放大：
 ## 七、交付与恢复命令（网络恢复后第一条就是它）
 
 本轮实测：`git fetch` 1 次失败（`Recv failure: Connection was reset`）、
-`git ls-remote` 3 次失败（`Failed to connect to github.com port 443`）；
-`pypi.org` 可达 ⇒ 出站网络活着，只有 `github.com:443` 不通。
-本地提交链与最后核验的远端 SHA 见 `ROUND19_VERIFICATION.json`。
+`git ls-remote` 3 次失败（`Failed to connect to github.com port 443`）、`git push` **未能执行成功**
+⇒ **本会话成功的远端接触数 = 0**；`pypi.org` 可达 ⇒ 出站网络活着，只有 `github.com:443` 不通。
+本地提交链与最后核验的远端 SHA 见 `ROUND19_VERIFICATION.json` 与 `ROUND19_SCOPE.md` §五。
 
 ```bash
 cd /d/code/整合/zhenghe

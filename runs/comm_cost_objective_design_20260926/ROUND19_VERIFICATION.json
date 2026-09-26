@@ -1,0 +1,141 @@
+{
+ "branch": "docs/comm-cost-objective-design",
+ "checks": {
+  "all_declared_deliverables_exist": true,
+  "branch_is_the_one_declared": true,
+  "closure_24_checks_x_120_cells": true,
+  "gitignore_change_is_the_allow_list_only": true,
+  "governance_edits_are_only_the_three_status_docs": true,
+  "head_descends_from_round_18_head": true,
+  "no_interior_cost_point_exists_on_disk": true,
+  "no_production_code_changed": true,
+  "no_remote_ref_for_this_branch": true,
+  "only_this_rounds_files_changed": true,
+  "other_sessions_files_still_present": true,
+  "quoted_numbers_present_in_artefacts": true,
+  "r18_counts_partition": true,
+  "redundancy_and_learnability_agree": true,
+  "redundancy_classes_are_exhaustive": true,
+  "rejected_versions_are_kept_not_deleted": true,
+  "round_18_head_is_untouched": true,
+  "start_sha_exists_locally": true,
+  "zero_new_episodes": true
+ },
+ "checks_passed": 19,
+ "checks_total": 19,
+ "defaults_changed": false,
+ "episodes_launched": 0,
+ "local_head_at_verification": "2afc0f6e4f89e63bb1b0ad3352df5ef8e437ed8d",
+ "new_stream_files": 0,
+ "notes": {
+  "changed_files_vs_start": [
+   ".gitignore",
+   "PROJECT_CHARTER.md",
+   "PROJECT_STATUS.md",
+   "README.md",
+   "runs/comm_cost_objective_design_20260926/COMM_COST_COVERAGE.json",
+   "runs/comm_cost_objective_design_20260926/COMM_COST_COVERAGE.md",
+   "runs/comm_cost_objective_design_20260926/CONSTRAINED_COMM_COST_DESIGN.md",
+   "runs/comm_cost_objective_design_20260926/CONSTRAINED_COMM_COST_PILOT.md",
+   "runs/comm_cost_objective_design_20260926/LEARNABILITY_PROBE_OFFLINE.json",
+   "runs/comm_cost_objective_design_20260926/ROUND18_ARCHIVE_CLOSURE.json",
+   "runs/comm_cost_objective_design_20260926/ROUND18_ARCHIVE_CLOSURE.md",
+   "runs/comm_cost_objective_design_20260926/ROUND19_SCOPE.md",
+   "runs/comm_cost_objective_design_20260926/c19_closure_r18.py",
+   "runs/comm_cost_objective_design_20260926/c19_common.py",
+   "runs/comm_cost_objective_design_20260926/c19_cost_coverage.py",
+   "runs/comm_cost_objective_design_20260926/c19_learnability.py",
+   "runs/comm_cost_objective_design_20260926/c19_verify.py"
+  ],
+  "gitignore_added_lines": [
+   "!runs/comm_cost_objective_design_20260926/",
+   "runs/comm_cost_objective_design_20260926/*",
+   "!runs/comm_cost_objective_design_20260926/*.py",
+   "!runs/comm_cost_objective_design_20260926/*.md",
+   "!runs/comm_cost_objective_design_20260926/*.json",
+   "",
+   "# round-19 quarantine: superseded drafts stay on disk, out of Git",
+   "runs/comm_cost_objective_design_20260926/rejected/"
+  ],
+  "gitignore_removed_lines": [],
+  "missing_deliverables": [],
+  "quarantined": [
+   "COMM_COST_COVERAGE.json.superseded_a4_described_as_gossip_only",
+   "COMM_COST_COVERAGE.json.superseded_before_deadline_slack",
+   "LEARNABILITY_PROBE_OFFLINE.json.superseded_merged_label_names",
+   "MANIFEST.json.superseded_before_push_disclosure",
+   "MANIFEST.json.superseded_comment_line_rejected",
+   "MANIFEST.json.superseded_undeclared_gitignore_change",
+   "ROUND18_ARCHIVE_CLOSURE.json.superseded_exact_equality_crosscheck",
+   "ROUND19_VERIFICATION.json.superseded_before_push_disclosure",
+   "ROUND19_VERIFICATION.json.superseded_comment_line_rejected",
+   "ROUND19_VERIFICATION.json.superseded_undeclared_gitignore_change"
+  ],
+  "quoted_values": {
+   "coverage_payload_median": 414,
+   "coverage_slack_at_completion_median": 96.539,
+   "coverage_strict_share": 0.3124,
+   "coverage_value_of_uplink": 46020.898925,
+   "learn_auc_step": 0.9174,
+   "learn_rule_bytes": 3212.2,
+   "r18_A_undetected_mean": 0.15,
+   "r18_B_undetected_mean": 1.15,
+   "r18_all_checks_pass": true,
+   "r18_task_slack_A": 1
+  },
+  "remote_verification": {
+   "attempts_this_round": {
+    "git_fetch": 1,
+    "git_ls_remote": 3,
+    "git_push": 0,
+    "successful_remote_contacts": 0
+   },
+   "documents_not_read": [
+    "ROUND19_COMM_MAINLINE_RETURN.md",
+    "ROUND19_CONSTRAINED_COMM_CONTROLLER_DESIGN.md"
+   ],
+   "documents_read": [],
+   "last_actually_verified_remote_ref": "refs/remotes/origin/analysis/real-search-undetected-attribution = 80af16ba4b90ce0c2d5456dd8b8e57068b4513e4",
+   "plan_sha_verified": false,
+   "reason": "git fetch/ls-remote to github.com:443 failed; the private repo cannot be read through api.github.com unauthenticated (404), and no local object matches",
+   "requested_plan_sha": "72c4c3f71e07339bf6533fbd771aef3b2682103c"
+  },
+  "round_dir_files": [
+   "COMM_COST_COVERAGE.json",
+   "COMM_COST_COVERAGE.md",
+   "CONSTRAINED_COMM_COST_DESIGN.md",
+   "CONSTRAINED_COMM_COST_PILOT.md",
+   "LEARNABILITY_PROBE_OFFLINE.json",
+   "ROUND18_ARCHIVE_CLOSURE.json",
+   "ROUND18_ARCHIVE_CLOSURE.md",
+   "ROUND19_SCOPE.md",
+   "__pycache__",
+   "c19_closure_r18.py",
+   "c19_common.py",
+   "c19_cost_coverage.py",
+   "c19_learnability.py",
+   "c19_verify.py",
+   "rejected"
+  ],
+  "unexpected_changes": []
+ },
+ "passed": true,
+ "production_code_changed": false,
+ "repo_config_changed": {
+  "file": ".gitignore",
+  "lines": [
+   "!runs/comm_cost_objective_design_20260926/",
+   "runs/comm_cost_objective_design_20260926/*",
+   "!runs/comm_cost_objective_design_20260926/*.py",
+   "!runs/comm_cost_objective_design_20260926/*.md",
+   "!runs/comm_cost_objective_design_20260926/*.json",
+   "runs/comm_cost_objective_design_20260926/rejected/"
+  ],
+  "what": "appended the round-19 allow-list block (runs/* is ignored by default), checked below to add nothing else and remove nothing"
+ },
+ "round": "19",
+ "sealed_sets_touched": false,
+ "search_or_allocation_weights_changed": false,
+ "start_sha": "4c71fead0047298101869200a8518059afc42ccc",
+ "training_runs": 0
+}

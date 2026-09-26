@@ -32,7 +32,18 @@ OTHER_SESSION_PATHS = ("architecture", "runs/comm_multistep_stage1_20260922/_DOC
                        "runs/coordinator_baselines_20260917/dev_summary.json",
                        "runs/comm_send_actionability_20260922/rows_s700010.json")
 ALLOWED_CHANGES = ("runs/comm_cost_objective_design_20260926", "PROJECT_CHARTER.md",
-                   "PROJECT_STATUS.md", "README.md")
+                   "PROJECT_STATUS.md", "README.md",
+                   # `runs/*` is ignored by .gitignore, so a round cannot deliver its artefacts
+                   # without an allow-list block; that edit is declared here and then checked
+                   # below to be exactly that block and nothing else.
+                   ".gitignore")
+GITIGNORE_ROUND_19_LINES = (
+    "!runs/comm_cost_objective_design_20260926/",
+    "runs/comm_cost_objective_design_20260926/*",
+    "!runs/comm_cost_objective_design_20260926/*.py",
+    "!runs/comm_cost_objective_design_20260926/*.md",
+    "!runs/comm_cost_objective_design_20260926/*.json",
+    "runs/comm_cost_objective_design_20260926/rejected/")
 QUOTED = {  # document claim -> (artefact, dotted path)
     "r18_all_checks_pass": ("ROUND18_ARCHIVE_CLOSURE.json", ("all_checks_pass",)),
     "r18_A_undetected_mean": ("ROUND18_ARCHIVE_CLOSURE.json",
@@ -102,6 +113,15 @@ def main() -> int:
     checks["no_production_code_changed"] = not [
         path for path in changed
         if path.split("/")[0] in ("integrated_sar", "task_allocation", "piloc")]
+    gitignore_diff = git("diff", "--unified=0", START_SHA, "--", ".gitignore")
+    added = [line[1:].rstrip() for line in gitignore_diff.splitlines()
+             if line.startswith("+") and not line.startswith("+++")]
+    removed = [line[1:].rstrip() for line in gitignore_diff.splitlines()
+               if line.startswith("-") and not line.startswith("---")]
+    meaningful = [line for line in added if line.strip() and not line.strip().startswith("#")]
+    checks["gitignore_change_is_the_allow_list_only"] = (
+        not removed and all(line in GITIGNORE_ROUND_19_LINES for line in meaningful)
+        and len(meaningful) == len(GITIGNORE_ROUND_19_LINES))
     checks["governance_edits_are_only_the_three_status_docs"] = not [
         path for path in changed
         if path.split("/")[0] in ("integrated_sar", "architecture") or path == "AGENTS.md"]
@@ -150,11 +170,16 @@ def main() -> int:
     checks["no_interior_cost_point_exists_on_disk"] = all(
         arm["per_episode"]["budget_refused_sends"] == 0.0
         for arm in coverage["deployed_arm_table"].values() if "per_episode" in arm)
-    checks["delivery_not_yet_verified_remains_true"] = True   # set from the push attempts below
+    # Delivery is claimed as unverified; that is only honest if the remote really has no such ref.
+    checks["no_remote_ref_for_this_branch"] = subprocess.run(
+        ["git", "rev-parse", "--verify", "-q", f"origin/{BRANCH}"], cwd=c19.REPO_ROOT,
+        capture_output=True).returncode != 0
 
     missing_files = [name for name in DELIVERED if name not in round_files]
     checks["all_declared_deliverables_exist"] = not missing_files
 
+    notes["gitignore_added_lines"] = added
+    notes["gitignore_removed_lines"] = removed
     notes["quoted_values"] = values
     notes["changed_files_vs_start"] = changed
     notes["unexpected_changes"] = unexpected
@@ -165,6 +190,8 @@ def main() -> int:
     notes["remote_verification"] = {
         "requested_plan_sha": "72c4c3f71e07339bf6533fbd771aef3b2682103c",
         "plan_sha_verified": False,
+        "attempts_this_round": {"git_fetch": 1, "git_ls_remote": 3, "git_push": 0,
+                                "successful_remote_contacts": 0},
         "reason": "git fetch/ls-remote to github.com:443 failed; the private repo cannot be read "
                   "through api.github.com unauthenticated (404), and no local object matches",
         "last_actually_verified_remote_ref":
@@ -180,6 +207,11 @@ def main() -> int:
         "episodes_launched": 0, "training_runs": 0, "new_stream_files": 0,
         "production_code_changed": False, "defaults_changed": False,
         "search_or_allocation_weights_changed": False, "sealed_sets_touched": False,
+        "repo_config_changed": {
+            "file": ".gitignore",
+            "what": "appended the round-19 allow-list block (runs/* is ignored by default), "
+                    "checked below to add nothing else and remove nothing",
+            "lines": [line for line in GITIGNORE_ROUND_19_LINES]},
         "checks": checks,
         "checks_passed": sum(1 for value in checks.values() if value),
         "checks_total": len(checks),

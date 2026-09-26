@@ -1391,7 +1391,8 @@ pilot 方案（运行点标定 K1–K3、四臂 × 三额度档、δ = 0.10 个/
 `docs/comm-cost-objective-plan@72c4c3f71e07339bf6533fbd771aef3b2682103c` 无法核对
 （`github.com:443` 不通：1 次 fetch + 3 次 ls-remote 全失败；仓库私有 ⇒ 未认证 API 404），
 指定要读的 `ROUND19_COMM_MAINLINE_RETURN.md`、`ROUND19_CONSTRAINED_COMM_CONTROLLER_DESIGN.md`
-**未读到**，cherry-pick **未执行**；本轮提案在那两份文档到达后**一律让位**。
+**未读到**，cherry-pick **未执行**（本会话成功的远端接触数为 **0**，`git push` 未能执行成功）；
+本轮提案在那两份文档到达后**一律让位**。
 
 **v4.0 当前行动（等使用者定方向，本轮不自动展开）。** 上游"搜索未发现目标"这一桶已经判到底，
 结论是三句话：**不是场景问题**（0/720 不可达，判据是 8-连通引理 + 120/120 哈希认证栅格）、

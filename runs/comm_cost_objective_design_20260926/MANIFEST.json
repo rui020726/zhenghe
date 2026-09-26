@@ -1,0 +1,123 @@
+{
+ "branch": "docs/comm-cost-objective-design",
+ "checkpoints": "none read or written this round (0 training, 0 new episode)",
+ "delivered": {
+  "COMM_COST_COVERAGE.json": {
+   "bytes": 58309,
+   "path": "runs/comm_cost_objective_design_20260926/COMM_COST_COVERAGE.json",
+   "sha256": "45fc3c9756a1a9a278b57d3ad41e7a9a213a564e2e3b54afbf8b15a3ff791073"
+  },
+  "COMM_COST_COVERAGE.md": {
+   "bytes": 11135,
+   "path": "runs/comm_cost_objective_design_20260926/COMM_COST_COVERAGE.md",
+   "sha256": "8dfd43e8afbdb28277e66d79183fe8247bb68542f589f6a0591453c54f137ec6"
+  },
+  "CONSTRAINED_COMM_COST_DESIGN.md": {
+   "bytes": 10257,
+   "path": "runs/comm_cost_objective_design_20260926/CONSTRAINED_COMM_COST_DESIGN.md",
+   "sha256": "9aa6d1997ec5b0ff4cdace17494491d11678d22f40070a5f0ff3f1d541c1342b"
+  },
+  "CONSTRAINED_COMM_COST_PILOT.md": {
+   "bytes": 11052,
+   "path": "runs/comm_cost_objective_design_20260926/CONSTRAINED_COMM_COST_PILOT.md",
+   "sha256": "624a2ca1b80621a02151140f6d4b28abb8b74b789a38faa395c2dbf0229a466d"
+  },
+  "LEARNABILITY_PROBE_OFFLINE.json": {
+   "bytes": 15327,
+   "path": "runs/comm_cost_objective_design_20260926/LEARNABILITY_PROBE_OFFLINE.json",
+   "sha256": "3c91f38ccabcb809b829aecc208a19afc49baab0561f7f284ed60b67bc8bd809"
+  },
+  "ROUND18_ARCHIVE_CLOSURE.json": {
+   "bytes": 127195,
+   "path": "runs/comm_cost_objective_design_20260926/ROUND18_ARCHIVE_CLOSURE.json",
+   "sha256": "b24e356a4f7efe6fe35d644a7c3ee485f1e2f0866b89fa1a2a7de6047cc47ad5"
+  },
+  "ROUND18_ARCHIVE_CLOSURE.md": {
+   "bytes": 5183,
+   "path": "runs/comm_cost_objective_design_20260926/ROUND18_ARCHIVE_CLOSURE.md",
+   "sha256": "35c142c452a5416c81c4a22755850ea88fef7a1fb55b48018a56dc0732101b6c"
+  },
+  "ROUND19_SCOPE.md": {
+   "bytes": 8217,
+   "path": "runs/comm_cost_objective_design_20260926/ROUND19_SCOPE.md",
+   "sha256": "832aafc60d1bfde78faa7cb9beb65c49aaea9320525103d5bb7e652c1ce57739"
+  },
+  "c19_closure_r18.py": {
+   "bytes": 17531,
+   "path": "runs/comm_cost_objective_design_20260926/c19_closure_r18.py",
+   "sha256": "9c5fb3d6a706f5387671861c79e27f9be9a3f59cde095c9cc117931aa26cbd36"
+  },
+  "c19_common.py": {
+   "bytes": 2090,
+   "path": "runs/comm_cost_objective_design_20260926/c19_common.py",
+   "sha256": "acfdcb580714ed2bf601ee48263120b94979a89e352e7b43b2ec529738a58bd7"
+  },
+  "c19_cost_coverage.py": {
+   "bytes": 23272,
+   "path": "runs/comm_cost_objective_design_20260926/c19_cost_coverage.py",
+   "sha256": "68f3ad71a4f626b01ec85775eef64053a74f5c46075b043ddb11da8a59965d65"
+  },
+  "c19_learnability.py": {
+   "bytes": 16718,
+   "path": "runs/comm_cost_objective_design_20260926/c19_learnability.py",
+   "sha256": "203e2ad0364a8e193894ae460a297fbba876082d395b66bf4c4cf51ea433af72"
+  },
+  "c19_verify.py": {
+   "bytes": 15397,
+   "path": "runs/comm_cost_objective_design_20260926/c19_verify.py",
+   "sha256": "ce1b25b8ceb1c9151127a7a03af38c3e0a4d8936c6d34e1ebb437012fc608358"
+  }
+ },
+ "head_at_manifest": "2afc0f6e4f89e63bb1b0ad3352df5ef8e437ed8d",
+ "inputs_read": {
+  "round_15": {
+   "anchor_artefact_sha256": "34d2a8c9765f22970867ddbf9ea8179c4a1e13cc7d71270a69fef34b62fb772e",
+   "dir": "runs/comm_research_closure_20260923"
+  },
+  "round_16": {
+   "anchor_artefact_sha256": "65f88f70147ff2761d948773f54d7c3c817fb72a005d8c0963d88679b4b4cfa2",
+   "dir": "runs/comm_info_path_validation_20260923",
+   "logs_read": {
+    "info_probe_ip": 120,
+    "lifecycle_rp": 120,
+    "note": "only A1 and A2 logs are opened: those two arms carry the deployed cost bill and the silence counterfactual",
+    "transcript_ct": 120
+   },
+   "raw_logs_not_in_git": {
+    "location": "runs/comm_info_path_validation_20260923/logs/",
+    "note": "same as above - read only"
+   },
+   "rows_read": 240
+  },
+  "round_18": {
+   "anchor_artefact_sha256": "126af20d3db971f5d4f1392f596693780faf48de4ad57039bae28bc99ec9eeca",
+   "dir": "runs/search_trace_and_policy_20260925",
+   "logs_read": {
+    "lifecycle_rp": 120,
+    "search_probe_sp": 120,
+    "step_record_sr": 120,
+    "transcript_ct": 120
+   },
+   "raw_logs_not_in_git": {
+    "location": "runs/search_trace_and_policy_20260925/logs/",
+    "note": "round 18 already keeps its raw logs out of Git; this round read them, it created none"
+   },
+   "rows_read": 120
+  }
+ },
+ "quarantined": {
+  "COMM_COST_COVERAGE.json.superseded_a4_described_as_gossip_only": "8746f4267148a0a20b65f7a1f03dd1535d35239318f61298ae8667ebf42aeb0c",
+  "COMM_COST_COVERAGE.json.superseded_before_deadline_slack": "60c252e698947aa26da246f5584d3cab1edc0011e5869d3332ff588f5f1e1e34",
+  "LEARNABILITY_PROBE_OFFLINE.json.superseded_merged_label_names": "d6df65296b97ae46a2ea83e3ac1eeced167388454d6b5aaeb1f951acef642d87",
+  "MANIFEST.json.superseded_before_push_disclosure": "6e1ef6f223af66ceb218be8dd07d1ec50ddf7f950a18e95a378830393dd2b955",
+  "MANIFEST.json.superseded_comment_line_rejected": "fd6da26da0e1858da6f94aea8cae73b458e5553eaa90e1aea5551df51c3829c8",
+  "MANIFEST.json.superseded_undeclared_gitignore_change": "a9c92ec1061c138bf1687168a98954e3b8566f53f9f91902361d8cb6383471f3",
+  "ROUND18_ARCHIVE_CLOSURE.json.superseded_exact_equality_crosscheck": "683f0e60931aa5e91d9515c975f8e0af3b5eddfd6b214dba1baa51249114bbd7",
+  "ROUND19_VERIFICATION.json.superseded_before_push_disclosure": "1660369349de9bcfc71f0965636939b617c34521d3f21b67b7beb1797ccf05bf",
+  "ROUND19_VERIFICATION.json.superseded_comment_line_rejected": "faca91bbb1475f7162b68afdd5233e9dd5a86f65950d6e283a376e9ad2729a91",
+  "ROUND19_VERIFICATION.json.superseded_undeclared_gitignore_change": "833e5954be664fd15d04a105f065865f8181d403c4c6f2b52de9f060feba4253"
+ },
+ "round": "19",
+ "start_sha": "4c71fead0047298101869200a8518059afc42ccc",
+ "verification_passed": true
+}

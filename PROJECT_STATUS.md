@@ -57,11 +57,12 @@
   **明确不要**：加训练量、扩动作空间、改观测维度、开 ACK、动搜索/分配权重、开封存集。
 * **治理件按登记式修订，原文不动**：`PROJECT_CHARTER.md` 升到 **v4.2**，§8.1 与 §6.3 各补一条
   "部署降本问题上基线/目标侧的替换"并保留原句；第十八轮那节改为"历史状态（已被上一节接替）"。
-* **交付状态：本地已提交，远端未核验（不伪称交付成功）**。要求核对的
-  `docs/comm-cost-objective-plan@72c4c3f71e07339bf6533fbd771aef3b2682103c` **未能核对**：
+* **交付状态：本地已提交，远端未核验（不伪称交付成功）**。本会话**成功的远端接触数为 0**：
+  要求核对的
+  `docs/comm-cost-objective-plan@72c4c3f71e07339bf6533fbd771aef3b2682103c` **未能核对**——
   `git fetch` 1 次 + `git ls-remote` 3 次全部失败（`Recv failure: Connection was reset` /
   `Failed to connect to github.com port 443`），而 `pypi.org` 可达 ⇒ 只有 `github.com:443` 不通；
-  仓库私有 ⇒ 未认证 `api.github.com` 返回 404（本轮**不注入凭据**）。
+  仓库私有 ⇒ 未认证 `api.github.com` 返回 404（本轮**不注入凭据**）；`git push` 未能执行成功。
   指定要读的 `ROUND19_COMM_MAINLINE_RETURN.md`、`ROUND19_CONSTRAINED_COMM_CONTROLLER_DESIGN.md`
   **未读到**（本地对象库、reflog、`fsck` 游离对象、全库文件名搜索均无），**cherry-pick 未执行**。
   那两份文档到达后若已冻结基线/容忍度/资源上限，**本轮提案一律让位**（恢复命令在 pilot 件 §七）。
