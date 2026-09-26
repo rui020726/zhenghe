@@ -1,5 +1,71 @@
 # 项目状态
 
+## 2026-09-26：返回学习型通信主线——成本第一次被写成显式目标；降本设计与 pilot 方案已交付待批准（第十九轮，0 新 episode、0 训练、0 生产代码改动）
+
+产物目录 [runs/comm_cost_objective_design_20260926/](runs/comm_cost_objective_design_20260926/)：
+范围与起点核验 [ROUND19_SCOPE.md](runs/comm_cost_objective_design_20260926/ROUND19_SCOPE.md)、
+步骤① [ROUND18_ARCHIVE_CLOSURE.md](runs/comm_cost_objective_design_20260926/ROUND18_ARCHIVE_CLOSURE.md)
+（机读 `ROUND18_ARCHIVE_CLOSURE.json`，含 120 格逐格明细）、
+步骤② [COMM_COST_COVERAGE.md](runs/comm_cost_objective_design_20260926/COMM_COST_COVERAGE.md)
+（机读 `COMM_COST_COVERAGE.json` + `LEARNABILITY_PROBE_OFFLINE.json`）、
+步骤③ [CONSTRAINED_COMM_COST_DESIGN.md](runs/comm_cost_objective_design_20260926/CONSTRAINED_COMM_COST_DESIGN.md)、
+步骤④ **待批准** [CONSTRAINED_COMM_COST_PILOT.md](runs/comm_cost_objective_design_20260926/CONSTRAINED_COMM_COST_PILOT.md)、
+`ROUND19_VERIFICATION.json`、`MANIFEST.json`、`rejected/`（本轮内部三次改动的旧件，隔离不删除）。
+分支 `docs/comm-cost-objective-design`，**起点 = 第十八轮头
+`4c71fead0047298101869200a8518059afc42ccc`（本地逐字符核对）**，未切回旧代码执行。
+**边界**：0 新 episode、0 新流、0 训练、0 生产代码改动、0 默认值改动、0 搜索/分配权重改动、
+封存集 `800000..800399`/`900000..900199` 未开启、pilot 未启动、其他会话的未跟踪文件一个未动。
+
+* **步骤①：第十八轮按现状归档，两个数用它自己的日志闭合**。120/120 格、
+  24 项检查 × 120 = **2 880 次全部通过**：发现 + 未发现 = 放置 = 6/集（A 351+9、B 291+69）、
+  未发现目标**从未出现**在任务生命周期日志里、每笔 `airtime_bytes` = transcript 逐包
+  `payload × subscribers` 之和（0 例不符）、`subscribers` 恒 {6}。
+  按时/完成/过期用生产函数 `lifecycle_metrics.window_metrics` 重算，与已交付文档逐位一致
+  （A 5.833333、B 4.833333；文档写 5 位是四舍五入，容差已登记，旧件在 `rejected/`）。
+  **新增的限定语**：120 集里"发现但未按时"合计只有 **2 个** ⇒ 以按时任务为约束在此无分母。
+* **步骤②：只用磁盘上已有的部署数据把"通信成本"量化**。单价 **414 B 载荷 / 2 484 B 一份首报**；
+  第十六轮四臂 + 第十八轮两臂的 `refresh_emissions` **合计 0**、`emissions == 发现数` ⇒
+  **部署默认配置没有"省刷新"这件事**；240 个部署格里 `budget_refused_sends`/`capacity_refused_sends`
+  恒 0 且 `budget_enforced=null` ⇒ **磁盘上没有"部署 + 真预算"的格子**，成本端点仅
+  **0 B（`always_hold`）与 14 573.3 B/ep（`immediate`）两个**，上行值 **46 020.9 B / 新增 1 个按时任务**。
+* **冗余被逐目标判定（与沉默臂同 60 seed 配对）**：352 份首报 = **19 份承重（5.46 %、795.1 B/ep）
+  + 110 份严格冗余（31.24 %、4 552.7 B/ep）+ 223 份"买到时间"（63.30 %）**；
+  宽松口径 94.5 % **明令不得当作可省估计**（沉默改变机器人轨迹，免费视距信道取决于位置）。
+  机制量：该层任务完成时剩余中位 **96.5 秒**（p10 53.1）、发现到完成中位 20 拍、
+  A1 **352/352 全按时**。
+* **承重的那 5.5 % 在决策时刻可分**：报告步号 **AUC 0.9174**（承重中位 214 对 其余 4）；
+  剩余时间只有 0.585 且**承重者剩余时间反而更多**、`severity` 0.4608 ⇒
+  决定承重的是"发现晚不晚"，不是"任务紧不紧"。单阈值规则 `步号 > 147` 的反事实记账读数
+  **3 212.2 B/ep（账单 22.0 %）保住全部 352 个按时**——**只能当上界与基线定义**（同批 seed 读出、
+  混合静默运行不等于任何归档臂）。
+* **公平强规则基线被换掉**：隔离路径的 `send_once`（27 134.6 B / 8.875 个/ep）在部署默认配置下与
+  `immediate` **行为重合**（那里本无刷新可省）⇒ 部署降本基线是
+  `always_hold` + `immediate` + 一条同预算规则臂 `late_only`（需一次最小生产实现，待批准）。
+  `comm_policy.py:305-307` 那句"`event_priority` 是最强简单规则"与实测前沿矛盾，本轮按实测取值、**不改代码**。
+* **步骤③：设计 = 成本进目标、效果作约束，但 reward 一字不改**。落地形式是
+  **额度档扫描 + 同额度档配对比较**（报"效果守得住的最低档"，单位一律写明：B/episode 与个/episode），
+  λ/Lagrangian 明确留作下一台阶，前置条件是先有 ≥3 个 binding 的部署内点——
+  这是对 N4"字节不是 reward 项，所以省通信不能被假定会自然学出"与 §6.3:1189 的正面回答。
+  **合格出口预固定两个**：P＝学习臂同额度支配同预算规则；N＝规则已吃满该档前沿（同样正常交付）。
+  关键防自欺条款：**执行器拒付不算省**，主指标只取 policy 归因 attempts。
+* **步骤④：pilot 方案已冻结待批准**，本轮不启动。运行点标定门槛 K1（"发现但未按时" ≥ 0.50 个/ep）、
+  K2（`immediate − always_hold` ≥ 0.30 个/ep 且 CI 下界 > 0）、K3（额度真 binding）按阶梯顺序取第一个
+  满足层，**与任何臂的胜负无关**（`总纲 §11:1457` 禁止用更紧 deadline 让学习好看）；
+  额度档 {0.15, 0.30, 0.60} × B̄；δ = **0.10 个/episode**；启动上限 **1 148 正常 + 40 储备 = 1 188**
+  （单格耗时按第十八轮实测 16.054 s/格估 ≈ 5.1 h 串行、6 路分片 ≈ 51 min）、训练 ≤ 3 seed × 400k；
+  停止条件 S-1…S-7 全部预登记。**要批准的是**：`late_only` 的一次最小实现 + 这套矩阵；
+  **明确不要**：加训练量、扩动作空间、改观测维度、开 ACK、动搜索/分配权重、开封存集。
+* **治理件按登记式修订，原文不动**：`PROJECT_CHARTER.md` 升到 **v4.2**，§8.1 与 §6.3 各补一条
+  "部署降本问题上基线/目标侧的替换"并保留原句；第十八轮那节改为"历史状态（已被上一节接替）"。
+* **交付状态：本地已提交，远端未核验（不伪称交付成功）**。要求核对的
+  `docs/comm-cost-objective-plan@72c4c3f71e07339bf6533fbd771aef3b2682103c` **未能核对**：
+  `git fetch` 1 次 + `git ls-remote` 3 次全部失败（`Recv failure: Connection was reset` /
+  `Failed to connect to github.com port 443`），而 `pypi.org` 可达 ⇒ 只有 `github.com:443` 不通；
+  仓库私有 ⇒ 未认证 `api.github.com` 返回 404（本轮**不注入凭据**）。
+  指定要读的 `ROUND19_COMM_MAINLINE_RETURN.md`、`ROUND19_CONSTRAINED_COMM_CONTROLLER_DESIGN.md`
+  **未读到**（本地对象库、reflog、`fsck` 游离对象、全库文件名搜索均无），**cherry-pick 未执行**。
+  那两份文档到达后若已冻结基线/容忍度/资源上限，**本轮提案一律让位**（恢复命令在 pilot 件 §七）。
+
 ## 2026-09-25：搜索侧逐时刻证据补齐——探测链无缺陷、遗漏全是零接触；换策略后未发现目标反而增 1.0 个/episode（第十八轮，158/160 启动，0 训练）
 
 产物目录 [runs/search_trace_and_policy_20260925/](runs/search_trace_and_policy_20260925/)：

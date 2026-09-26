@@ -1,6 +1,45 @@
 # Zhenghe：搜索—协调—分配一体化搜救系统
 
-当前研究入口：[项目总纲 v4.1](PROJECT_CHARTER.md) 与
+当前研究入口：[项目总纲 v4.2](PROJECT_CHARTER.md) 与
+[任务效果约束下的通信降本：归档、成本覆盖、设计与待批准 pilot](runs/comm_cost_objective_design_20260926/CONSTRAINED_COMM_COST_DESIGN.md)
+（本轮五份文档：`ROUND19_SCOPE.md`（起点核验与**网络失败登记**）、
+`ROUND18_ARCHIVE_CLOSURE.md`、`COMM_COST_COVERAGE.md`、`CONSTRAINED_COMM_COST_DESIGN.md`、
+`CONSTRAINED_COMM_COST_PILOT.md`；机读 `ROUND18_ARCHIVE_CLOSURE.json`、`COMM_COST_COVERAGE.json`、
+`LEARNABILITY_PROBE_OFFLINE.json`、`ROUND19_VERIFICATION.json`、`MANIFEST.json`）。
+本轮 **0 新 episode、0 新流、0 训练、0 生产代码改动、0 默认值改动、0 搜索/分配权重改动、
+封存集未开、pilot 未启动**；起点从第十八轮头 `4c71fead0047…` 建分支，**未切回旧代码执行**。
+
+* **第十八轮按现状归档，两个数用它自己的日志闭合**：120/120 格、24 项检查 × 120 =
+  **2 880 次全通过**（发现 + 未发现 = 放置；未发现目标从未进入任务日志；
+  每笔字节 = 逐包 `payload × subscribers`）；按时数由生产函数 `lifecycle_metrics` 重算，
+  与已交付文档逐位一致（A 5.833333 / B 4.833333，文档 5 位是四舍五入，容差已登记）。
+  **新增限定语**：120 集里"发现但未按时"合计 **2 个** ⇒ 以按时任务为约束在此**没有分母**。
+* **通信成本被量化到可优化的程度（只用磁盘数据）**：一份首报 **2 484 B**（载荷 414 B × 6 个订阅者）、
+  **四臂 + 两臂的刷新流量合计为 0**、240 个部署格里预算**从未执行** ⇒
+  部署路径上没有"省刷新"这件事，成本端点只有 **0 B 与 14 573.3 B/ep** 两个，
+  上行值 **46 020.9 B / 新增 1 个按时任务**；与沉默臂逐目标配对：352 份首报 =
+  **19 承重（5.46 %）+ 110 严格冗余（31.24 %）+ 223 买到时间（63.30 %）**，
+  宽松口径 94.5 % **不得**当作可省估计（沉默改变了机器人轨迹，而免费的视距/gossip 信道取决于位置）。
+* **承重的 5.5 % 在决策时刻可分**：报告步号 **AUC 0.9174**（承重中位 214 对 其余 4），
+  剩余时间只有 0.585 且**承重者剩余时间反而更多** ⇒ 决定量是"发现晚不晚"，不是"任务紧不紧"；
+  单阈值规则的反事实记账读数（22.0 % 账单保住全部 352 个按时）**只能当上界与基线定义**。
+* **降本设计的公平基线不是 `send_once`**：它在部署默认配置下与 `immediate` 行为重合（那里本无刷新可省）
+  ⇒ 基线换成 `always_hold` + `immediate` + 一条**同预算规则臂** `late_only`（待批准的最小实现）。
+* **设计 = 成本进目标、效果作约束，但 reward 一字不改**：用**额度档扫描 + 同档配对比较**落地，
+  报"效果守得住的最低档"；λ/Lagrangian 留作需 ≥3 个 binding 内点之后的下一台阶。
+  **合格出口预固定两个**：P＝同额度下学习臂支配规则；N＝规则已吃满前沿（同样正常交付）。
+  防自欺条款：**执行器拒付不算省**，主指标只取 policy 归因的 attempts。
+* **pilot 方案冻结待批准，本轮不启动**：运行点标定 K1–K3（与任何臂胜负无关，遵守
+  `总纲 §11` "不得用更紧 deadline 让学习好看"）、四臂 × 三额度档 {0.15, 0.30, 0.60}×B̄、
+  δ = 0.10 个/episode、停止条件 S-1…S-7、启动上限 **1 148 + 40 储备 = 1 188**、训练 ≤ 1.2M 步。
+* **交付状态：本地已提交、远端未核验（不伪称交付成功）**。要求核对的
+  `docs/comm-cost-objective-plan@72c4c3f71e07…` 无法核对——`git fetch` 1 次 + `git ls-remote` 3 次
+  全部失败（`github.com:443` 不通，而 `pypi.org` 可达），仓库私有 ⇒ 未认证 API 404（本轮不注入凭据）；
+  指定要读的两份文档 `ROUND19_COMM_MAINLINE_RETURN.md`、`ROUND19_CONSTRAINED_COMM_CONTROLLER_DESIGN.md`
+  **未读到**、**cherry-pick 未执行**，本轮交付的是**决策包不是既成事实**：那两份文档到达后
+  若已冻结基线/容忍度/资源上限，本轮提案**一律让位**。恢复命令见 pilot 件 §七。
+
+上一轮（第十八轮）入口：[项目总纲 v4.1](PROJECT_CHARTER.md) 与
 [搜索轨迹逐时刻证据 + 同一真实环境的搜索策略对照](runs/search_trace_and_policy_20260925/SEARCH_POLICY_COMPARISON_RESULTS.md)
 （机读：`SEARCH_TRACE_IDENTITY_REPORT.json`、`SEARCH_MISS_TIMELINES.json`、
 `SEARCH_DETECTION_CORRECTNESS_VERDICT.json`、`SEARCH_POLICY_COMPARISON_RESULTS.json`、

@@ -1,0 +1,442 @@
+{
+ "counts": {
+  "load_bearing": 19,
+  "redundant_knowledge_and_outcome": 110,
+  "uplink_bought_time_same_outcome": 223
+ },
+ "feature_set": {
+  "backlog_steps": "steps this candidate has been waiting inside the sender",
+  "confidence": "registry field, in the packet",
+  "deadline_offset": "the task's own total window, set when it was created",
+  "payload_bytes": "the size of the packet about to be billed",
+  "requirements_left": "how many of the five capability slots are still needed",
+  "severity": "registry field, in the packet",
+  "slack_at_report": "deadline - now, seconds of task life left when the decision is made",
+  "slack_over_horizon": "the same quantity divided by the 1000 s episode horizon",
+  "step_reported_at": "the search step the report goes out on",
+  "total_stages": "how many stages the task has"
+ },
+ "feature_set_excludes": [
+  "rescue-robot positions",
+  "rescue-robot beliefs",
+  "search-robot positions",
+  "anything about the future"
+ ],
+ "honest_limits": [
+  "the outcome bookkeeping assumes a dropped report reproduces the A2 outcome for that target; A2's robots moved differently because they were not told, so this is a ceiling, not a prediction",
+  "no feature here is the quantity that actually decides redundancy, which is whether a capable robot will be in line of sight in time — that needs robot positions, and the sender is not allowed them (comm_learning.py:33-53, AGENTS.md invariant 10)",
+  "no model is fitted and no gradient is taken; AUC and a threshold sweep are bookkeeping",
+  "the archived deployed difficulty produces 0 on-time failures in the reporting arm (352 of 352), so no deployed-path cost rule can be judged there"
+ ],
+ "labels": {
+  "load_bearing": "silence changed this task's outcome in the recorded A2 run",
+  "redundant_knowledge_and_outcome": "silence knew it as early or earlier, same outcome",
+  "uplink_bought_time_same_outcome": "silence still made the deadline, but knowledge arrived later — the same names as COMM_COST_COVERAGE.json"
+ },
+ "learnability_verdict": {
+  "answer_to_the_question": "yes, one number separates them: the step the discovery happened on. Late discoveries are the ones silence loses, because a robot needs time to walk into line of sight before the deadline; early discoveries reach the receivers through the environment's own channels long before they matter.",
+  "as_a_share_of_the_deployed_bill": 0.220417,
+  "cheapest_one_threshold_rule_at_full_recorded_effect": {
+   "cut": 147.0,
+   "direction": "report_when_above",
+   "estimated_bytes_per_episode": 3212.2,
+   "estimated_on_time_per_episode": 5.866667,
+   "feature": "step_reported_at",
+   "recall_of_load_bearing": 1.0,
+   "share_of_reports_sent": 0.21875
+  },
+  "consequence_for_the_design": "the comparator a learned cost-minimising controller must beat is a single threshold on the discovery step, which is not a learning problem at all. Any pilot that spends training budget must therefore be judged against that rule first, and if the rule already holds task effect at its own budget level, a learned controller is only worth running where the rule cannot go: per-target decisions under loss, or an operating point tight enough that reporting early and reporting late differ.",
+  "strongest_single_feature_auc": 0.9174,
+  "what_this_is_not": "not a measured saving. The threshold is read off the same 60 seeds it would be scored on, and a mixed-silence run is not any run in the archive: which robot is in line of sight later depends on what the robots were told. It is a ceiling and a baseline definition — the pilot has to beat a one-number rule, measured, on seeds that have never been used."
+ },
+ "per_episode": {
+  "bytes": 14573.3,
+  "load_bearing": 0.316667,
+  "load_bearing_byte_share": 0.054559,
+  "load_bearing_bytes": 795.1,
+  "reports": 5.866667
+ },
+ "phase": "step 2b — offline learnability probe, 0 training, 0 episode",
+ "question": "of the deployed first reports, the ones that silence would have lost are 19 of 352; can a sender tell them apart at decision time from what it is allowed to see?",
+ "round": "19",
+ "separability": {
+  "backlog_steps": {
+   "auc_load_bearing_vs_rest": 0.5,
+   "distinct_values_rest": 1,
+   "load_bearing_median": 0.0,
+   "meaning": "steps this candidate has been waiting inside the sender",
+   "rest_median": 0.0
+  },
+  "confidence": {
+   "auc_load_bearing_vs_rest": 0.5,
+   "distinct_values_rest": 1,
+   "load_bearing_median": 1.0,
+   "meaning": "registry field, in the packet",
+   "rest_median": 1.0
+  },
+  "deadline_offset": {
+   "auc_load_bearing_vs_rest": 0.5853,
+   "distinct_values_rest": 310,
+   "load_bearing_median": 136.811,
+   "meaning": "the task's own total window, set when it was created",
+   "rest_median": 115.838
+  },
+  "payload_bytes": {
+   "auc_load_bearing_vs_rest": 0.635,
+   "distinct_values_rest": 39,
+   "load_bearing_median": 417.0,
+   "meaning": "the size of the packet about to be billed",
+   "rest_median": 414.0
+  },
+  "requirements_left": {
+   "auc_load_bearing_vs_rest": 0.5009,
+   "distinct_values_rest": 3,
+   "load_bearing_median": 2.0,
+   "meaning": "how many of the five capability slots are still needed",
+   "rest_median": 2.0
+  },
+  "severity": {
+   "auc_load_bearing_vs_rest": 0.4608,
+   "distinct_values_rest": 310,
+   "load_bearing_median": 0.724,
+   "meaning": "registry field, in the packet",
+   "rest_median": 0.637
+  },
+  "slack_at_report": {
+   "auc_load_bearing_vs_rest": 0.5854,
+   "distinct_values_rest": 316,
+   "load_bearing_median": 136.811,
+   "meaning": "deadline - now, seconds of task life left when the decision is made",
+   "rest_median": 115.838
+  },
+  "slack_over_horizon": {
+   "auc_load_bearing_vs_rest": 0.5854,
+   "distinct_values_rest": 316,
+   "load_bearing_median": 0.137,
+   "meaning": "the same quantity divided by the 1000 s episode horizon",
+   "rest_median": 0.116
+  },
+  "step_reported_at": {
+   "auc_load_bearing_vs_rest": 0.9174,
+   "distinct_values_rest": 91,
+   "load_bearing_median": 214.0,
+   "meaning": "the search step the report goes out on",
+   "rest_median": 4.0
+  },
+  "total_stages": {
+   "auc_load_bearing_vs_rest": 0.5122,
+   "distinct_values_rest": 3,
+   "load_bearing_median": 2.0,
+   "meaning": "how many stages the task has",
+   "rest_median": 2.0
+  }
+ },
+ "threshold_rule_search": {
+  "backlog_steps": {
+   "reason": "constant across the archive",
+   "usable": false
+  },
+  "confidence": {
+   "reason": "constant across the archive",
+   "usable": false
+  },
+  "deadline_offset": {
+   "cheapest_rule_at_full_task_effect": {
+    "cut": 75.6656,
+    "direction": "report_when_above",
+    "estimated_bytes_per_episode": 12682.2,
+    "estimated_on_time_per_episode": 5.866667,
+    "recall_of_load_bearing": 1.0,
+    "share_of_reports_sent": 0.869318
+   },
+   "distinct_values": 328,
+   "rules_scored": 654,
+   "top_three_by_bytes": [
+    {
+     "cut": 62.0452,
+     "direction": "report_when_below",
+     "estimated_bytes_per_episode": 41.2,
+     "estimated_on_time_per_episode": 5.55,
+     "recall_of_load_bearing": 0.0,
+     "share_of_reports_sent": 0.002841
+    },
+    {
+     "cut": 178.9709,
+     "direction": "report_when_above",
+     "estimated_bytes_per_episode": 41.3,
+     "estimated_on_time_per_episode": 5.55,
+     "recall_of_load_bearing": 0.0,
+     "share_of_reports_sent": 0.002841
+    },
+    {
+     "cut": 62.2074,
+     "direction": "report_when_below",
+     "estimated_bytes_per_episode": 79.3,
+     "estimated_on_time_per_episode": 5.55,
+     "recall_of_load_bearing": 0.0,
+     "share_of_reports_sent": 0.005682
+    }
+   ],
+   "usable": true
+  },
+  "payload_bytes": {
+   "cheapest_rule_at_full_task_effect": {
+    "cut": 383.0,
+    "direction": "report_when_above",
+    "estimated_bytes_per_episode": 11383.7,
+    "estimated_on_time_per_episode": 5.866667,
+    "recall_of_load_bearing": 1.0,
+    "share_of_reports_sent": 0.761364
+   },
+   "distinct_values": 40,
+   "rules_scored": 78,
+   "top_three_by_bytes": [
+    {
+     "cut": 452.0,
+     "direction": "report_when_above",
+     "estimated_bytes_per_episode": 45.3,
+     "estimated_on_time_per_episode": 5.566667,
+     "recall_of_load_bearing": 0.052632,
+     "share_of_reports_sent": 0.002841
+    },
+    {
+     "cut": 366.0,
+     "direction": "report_when_below",
+     "estimated_bytes_per_episode": 73.0,
+     "estimated_on_time_per_episode": 5.55,
+     "recall_of_load_bearing": 0.0,
+     "share_of_reports_sent": 0.005682
+    },
+    {
+     "cut": 451.0,
+     "direction": "report_when_above",
+     "estimated_bytes_per_episode": 135.7,
+     "estimated_on_time_per_episode": 5.583333,
+     "recall_of_load_bearing": 0.105263,
+     "share_of_reports_sent": 0.008523
+    }
+   ],
+   "usable": true
+  },
+  "requirements_left": {
+   "cheapest_rule_at_full_task_effect": null,
+   "distinct_values": 3,
+   "rules_scored": 4,
+   "top_three_by_bytes": [
+    {
+     "cut": 2.0,
+     "direction": "report_when_above",
+     "estimated_bytes_per_episode": 5203.0,
+     "estimated_on_time_per_episode": 5.683333,
+     "recall_of_load_bearing": 0.421053,
+     "share_of_reports_sent": 0.355114
+    },
+    {
+     "cut": 2.0,
+     "direction": "report_when_below",
+     "estimated_bytes_per_episode": 5208.2,
+     "estimated_on_time_per_episode": 5.683333,
+     "recall_of_load_bearing": 0.421053,
+     "share_of_reports_sent": 0.357955
+    },
+    {
+     "cut": 1.0,
+     "direction": "report_when_above",
+     "estimated_bytes_per_episode": 9365.1,
+     "estimated_on_time_per_episode": 5.733333,
+     "recall_of_load_bearing": 0.578947,
+     "share_of_reports_sent": 0.642045
+    }
+   ],
+   "usable": true
+  },
+  "severity": {
+   "cheapest_rule_at_full_task_effect": {
+    "cut": 0.9129,
+    "direction": "report_when_below",
+    "estimated_bytes_per_episode": 12883.8,
+    "estimated_on_time_per_episode": 5.866667,
+    "recall_of_load_bearing": 1.0,
+    "share_of_reports_sent": 0.883523
+   },
+   "distinct_values": 328,
+   "rules_scored": 654,
+   "top_three_by_bytes": [
+    {
+     "cut": 0.3031,
+     "direction": "report_when_below",
+     "estimated_bytes_per_episode": 38.5,
+     "estimated_on_time_per_episode": 5.566667,
+     "recall_of_load_bearing": 0.052632,
+     "share_of_reports_sent": 0.002841
+    },
+    {
+     "cut": 0.9991,
+     "direction": "report_when_above",
+     "estimated_bytes_per_episode": 41.2,
+     "estimated_on_time_per_episode": 5.55,
+     "recall_of_load_bearing": 0.0,
+     "share_of_reports_sent": 0.002841
+    },
+    {
+     "cut": 0.304,
+     "direction": "report_when_below",
+     "estimated_bytes_per_episode": 76.7,
+     "estimated_on_time_per_episode": 5.566667,
+     "recall_of_load_bearing": 0.052632,
+     "share_of_reports_sent": 0.005682
+    }
+   ],
+   "usable": true
+  },
+  "slack_at_report": {
+   "cheapest_rule_at_full_task_effect": {
+    "cut": 75.6656,
+    "direction": "report_when_above",
+    "estimated_bytes_per_episode": 12682.2,
+    "estimated_on_time_per_episode": 5.866667,
+    "recall_of_load_bearing": 1.0,
+    "share_of_reports_sent": 0.869318
+   },
+   "distinct_values": 335,
+   "rules_scored": 668,
+   "top_three_by_bytes": [
+    {
+     "cut": 62.0452,
+     "direction": "report_when_below",
+     "estimated_bytes_per_episode": 41.2,
+     "estimated_on_time_per_episode": 5.55,
+     "recall_of_load_bearing": 0.0,
+     "share_of_reports_sent": 0.002841
+    },
+    {
+     "cut": 178.9709,
+     "direction": "report_when_above",
+     "estimated_bytes_per_episode": 41.3,
+     "estimated_on_time_per_episode": 5.55,
+     "recall_of_load_bearing": 0.0,
+     "share_of_reports_sent": 0.002841
+    },
+    {
+     "cut": 62.2074,
+     "direction": "report_when_below",
+     "estimated_bytes_per_episode": 79.3,
+     "estimated_on_time_per_episode": 5.55,
+     "recall_of_load_bearing": 0.0,
+     "share_of_reports_sent": 0.005682
+    }
+   ],
+   "usable": true
+  },
+  "slack_over_horizon": {
+   "cheapest_rule_at_full_task_effect": {
+    "cut": 0.0757,
+    "direction": "report_when_above",
+    "estimated_bytes_per_episode": 12682.2,
+    "estimated_on_time_per_episode": 5.866667,
+    "recall_of_load_bearing": 1.0,
+    "share_of_reports_sent": 0.869318
+   },
+   "distinct_values": 335,
+   "rules_scored": 668,
+   "top_three_by_bytes": [
+    {
+     "cut": 0.062,
+     "direction": "report_when_below",
+     "estimated_bytes_per_episode": 41.2,
+     "estimated_on_time_per_episode": 5.55,
+     "recall_of_load_bearing": 0.0,
+     "share_of_reports_sent": 0.002841
+    },
+    {
+     "cut": 0.179,
+     "direction": "report_when_above",
+     "estimated_bytes_per_episode": 41.3,
+     "estimated_on_time_per_episode": 5.55,
+     "recall_of_load_bearing": 0.0,
+     "share_of_reports_sent": 0.002841
+    },
+    {
+     "cut": 0.0622,
+     "direction": "report_when_below",
+     "estimated_bytes_per_episode": 79.3,
+     "estimated_on_time_per_episode": 5.55,
+     "recall_of_load_bearing": 0.0,
+     "share_of_reports_sent": 0.005682
+    }
+   ],
+   "usable": true
+  },
+  "step_reported_at": {
+   "cheapest_rule_at_full_task_effect": {
+    "cut": 147.0,
+    "direction": "report_when_above",
+    "estimated_bytes_per_episode": 3212.2,
+    "estimated_on_time_per_episode": 5.866667,
+    "recall_of_load_bearing": 1.0,
+    "share_of_reports_sent": 0.21875
+   },
+   "distinct_values": 106,
+   "rules_scored": 210,
+   "top_three_by_bytes": [
+    {
+     "cut": 878.0,
+     "direction": "report_when_above",
+     "estimated_bytes_per_episode": 41.4,
+     "estimated_on_time_per_episode": 5.55,
+     "recall_of_load_bearing": 0.0,
+     "share_of_reports_sent": 0.002841
+    },
+    {
+     "cut": 781.0,
+     "direction": "report_when_above",
+     "estimated_bytes_per_episode": 82.8,
+     "estimated_on_time_per_episode": 5.566667,
+     "recall_of_load_bearing": 0.052632,
+     "share_of_reports_sent": 0.005682
+    },
+    {
+     "cut": 626.0,
+     "direction": "report_when_above",
+     "estimated_bytes_per_episode": 127.5,
+     "estimated_on_time_per_episode": 5.583333,
+     "recall_of_load_bearing": 0.105263,
+     "share_of_reports_sent": 0.008523
+    }
+   ],
+   "usable": true
+  },
+  "total_stages": {
+   "cheapest_rule_at_full_task_effect": null,
+   "distinct_values": 3,
+   "rules_scored": 4,
+   "top_three_by_bytes": [
+    {
+     "cut": 2.0,
+     "direction": "report_when_below",
+     "estimated_bytes_per_episode": 4074.3,
+     "estimated_on_time_per_episode": 5.65,
+     "recall_of_load_bearing": 0.315789,
+     "share_of_reports_sent": 0.303977
+    },
+    {
+     "cut": 2.0,
+     "direction": "report_when_above",
+     "estimated_bytes_per_episode": 5085.3,
+     "estimated_on_time_per_episode": 5.666667,
+     "recall_of_load_bearing": 0.368421,
+     "share_of_reports_sent": 0.323864
+    },
+    {
+     "cut": 3.0,
+     "direction": "report_when_below",
+     "estimated_bytes_per_episode": 9488.0,
+     "estimated_on_time_per_episode": 5.75,
+     "recall_of_load_bearing": 0.631579,
+     "share_of_reports_sent": 0.676136
+    }
+   ],
+   "usable": true
+  }
+ }
+}

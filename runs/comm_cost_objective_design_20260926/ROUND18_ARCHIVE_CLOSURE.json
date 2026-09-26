@@ -1,0 +1,4868 @@
+{
+ "all_checks_pass": true,
+ "batch_summary": {
+  "A": {
+   "bytes_per_detection": 2483.606838,
+   "bytes_per_on_time_task": 2490.702857,
+   "cells": 60,
+   "cells_with_any_detected_but_not_on_time": 1,
+   "closure": {
+    "detected_plus_undetected": 360,
+    "equals_placed": true
+   },
+   "detected": 351,
+   "detected_but_not_on_time": 1,
+   "expired": 1,
+   "on_time": 350,
+   "per_episode": {
+    "airtime_bytes": 14529.1,
+    "detected": 5.85,
+    "detected_but_not_on_time": 0.016667,
+    "emissions": 5.85,
+    "expired": 0.016667,
+    "on_time": 5.833333,
+    "placed": 6.0,
+    "refresh_emissions": 0.0,
+    "undetected": 0.15
+   },
+   "placed": 360,
+   "undetected": 9
+  },
+  "B": {
+   "bytes_per_detection": 2475.56701,
+   "bytes_per_on_time_task": 2484.103448,
+   "cells": 60,
+   "cells_with_any_detected_but_not_on_time": 1,
+   "closure": {
+    "detected_plus_undetected": 360,
+    "equals_placed": true
+   },
+   "detected": 291,
+   "detected_but_not_on_time": 1,
+   "expired": 0,
+   "on_time": 290,
+   "per_episode": {
+    "airtime_bytes": 12006.5,
+    "detected": 4.85,
+    "detected_but_not_on_time": 0.016667,
+    "emissions": 4.85,
+    "expired": 0.0,
+    "on_time": 4.833333,
+    "placed": 6.0,
+    "refresh_emissions": 0.0,
+    "undetected": 1.15
+   },
+   "placed": 360,
+   "undetected": 69
+  }
+ },
+ "cells_expected": {
+  "per_arm": 60,
+  "seeds": [
+   1200000,
+   1200059
+  ],
+  "total": 120
+ },
+ "checks": {
+  "airtime_bytes_reconstructed": 120,
+  "detected_plus_undetected_equals_placed": 120,
+  "discovered_field_equals_detected_ids": 120,
+  "emissions_equal_detected_targets": 120,
+  "every_emission_is_a_first_report": 120,
+  "every_price_is_payload_times_subscribers": 120,
+  "lifecycle_discovered_equals_detected": 120,
+  "lifecycle_log_complete": 120,
+  "on_time_never_exceeds_discovered": 120,
+  "packets_lost_is_zero_in_r18": 120,
+  "partition_is_exact": 120,
+  "placed_is_six": 120,
+  "probe_placed_equals_row_placed": 120,
+  "probe_reports_no_anomalies": 120,
+  "probe_step_matches_lifecycle_timestamp": 120,
+  "row_active_equals_recompute": 120,
+  "row_completed_equals_recompute": 120,
+  "row_discovered_equals_recompute": 120,
+  "row_expired_equals_recompute": 120,
+  "row_on_time_equals_recompute": 120,
+  "row_unassigned_equals_recompute": 120,
+  "subscribers_constant_six": 120,
+  "undetected_count_matches_ids": 120,
+  "undetected_targets_never_enter_lifecycle": 120
+ },
+ "checks_total_per_arm": 120,
+ "crosscheck_against_delivered_document": {
+  "A": {
+   "airtime_mean": {
+    "delivered": 14529.1,
+    "equal": true,
+    "recomputed": 14529.1
+   },
+   "detections_mean": {
+    "delivered": 5.85,
+    "equal": true,
+    "recomputed": 5.85
+   },
+   "on_time_mean": {
+    "delivered": 5.83333,
+    "equal": true,
+    "recomputed": 5.833333
+   },
+   "undetected_mean": {
+    "delivered": 0.15,
+    "equal": true,
+    "recomputed": 0.15
+   }
+  },
+  "B": {
+   "airtime_mean": {
+    "delivered": 12006.5,
+    "equal": true,
+    "recomputed": 12006.5
+   },
+   "detections_mean": {
+    "delivered": 4.85,
+    "equal": true,
+    "recomputed": 4.85
+   },
+   "on_time_mean": {
+    "delivered": 4.83333,
+    "equal": true,
+    "recomputed": 4.833333
+   },
+   "undetected_mean": {
+    "delivered": 1.15,
+    "equal": true,
+    "recomputed": 1.15
+   }
+  }
+ },
+ "failed_checks": [],
+ "pairing": {
+  "airtime_difference_A_minus_B_total_mean": 2522.6,
+  "on_time_difference_A_minus_B_total": 60,
+  "seeds_paired": 60
+ },
+ "per_cell": {
+  "A": [
+   {
+    "airtime_bytes": 14496,
+    "deadlines": {
+     "piloc-e1-target-0": 1003.047266451016,
+     "piloc-e1-target-1": 71.574157048003,
+     "piloc-e1-target-2": 166.32109269162538,
+     "piloc-e1-target-3": 109.55918328595001,
+     "piloc-e1-target-4": 67.38568994214276,
+     "piloc-e1-target-5": 1081.7329143003446
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 878.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 3.0,
+     "piloc-e1-target-5": 970.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2416,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200000,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14496,
+    "deadlines": {
+     "piloc-e1-target-0": 110.75561002908528,
+     "piloc-e1-target-1": 65.56644637656464,
+     "piloc-e1-target-2": 151.80178940398488,
+     "piloc-e1-target-3": 167.81046255445895,
+     "piloc-e1-target-4": 104.89312787221593,
+     "piloc-e1-target-5": 89.6550577072216
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 1.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 6.0,
+     "piloc-e1-target-4": 11.0,
+     "piloc-e1-target-5": 27.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2416,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200001,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15288,
+    "deadlines": {
+     "piloc-e1-target-0": 68.26132021320657,
+     "piloc-e1-target-1": 135.99278080780562,
+     "piloc-e1-target-2": 414.66206647056924,
+     "piloc-e1-target-3": 726.3267882518248,
+     "piloc-e1-target-4": 134.09932742917798,
+     "piloc-e1-target-5": 66.4498038639996
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 8.0,
+     "piloc-e1-target-1": 7.0,
+     "piloc-e1-target-2": 278.0,
+     "piloc-e1-target-3": 601.0,
+     "piloc-e1-target-4": 12.0,
+     "piloc-e1-target-5": 3.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2548,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200002,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14718,
+    "deadlines": {
+     "piloc-e1-target-0": 112.93812207279387,
+     "piloc-e1-target-1": 161.77516727659548,
+     "piloc-e1-target-2": 82.97510623176709,
+     "piloc-e1-target-3": 127.52881663025039,
+     "piloc-e1-target-4": 257.6275521020746,
+     "piloc-e1-target-5": 280.66909981512214
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 8.0,
+     "piloc-e1-target-1": 6.0,
+     "piloc-e1-target-2": 4.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 197.0,
+     "piloc-e1-target-5": 187.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2453,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200003,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15624,
+    "deadlines": {
+     "piloc-e1-target-0": 153.61280287401684,
+     "piloc-e1-target-1": 131.30135490254997,
+     "piloc-e1-target-2": 231.29371516912943,
+     "piloc-e1-target-3": 257.785750442966,
+     "piloc-e1-target-4": 129.21721259818162,
+     "piloc-e1-target-5": 126.21721259818162
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 6.0,
+     "piloc-e1-target-1": 6.0,
+     "piloc-e1-target-2": 168.0,
+     "piloc-e1-target-3": 174.0,
+     "piloc-e1-target-4": 12.0,
+     "piloc-e1-target-5": 9.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2604,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200004,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14916,
+    "deadlines": {
+     "piloc-e1-target-0": 136.0867392640592,
+     "piloc-e1-target-1": 89.76507380946845,
+     "piloc-e1-target-2": 180.89276167804215,
+     "piloc-e1-target-3": 120.39953427775929,
+     "piloc-e1-target-4": 339.4506651381481,
+     "piloc-e1-target-5": 328.76507380946845
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 6.0,
+     "piloc-e1-target-1": 3.0,
+     "piloc-e1-target-2": 4.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 251.0,
+     "piloc-e1-target-5": 242.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2486,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200005,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15714,
+    "deadlines": {
+     "piloc-e1-target-0": 103.39006730022855,
+     "piloc-e1-target-1": 165.35738697948165,
+     "piloc-e1-target-2": 312.06039379249415,
+     "piloc-e1-target-3": 123.32760158170457,
+     "piloc-e1-target-4": 176.47238153319702,
+     "piloc-e1-target-5": 261.8478679125449
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 2.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 154.0,
+     "piloc-e1-target-3": 18.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 82.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2619,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200006,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 12402,
+    "deadlines": {
+     "piloc-e1-target-1": 151.65874226828367,
+     "piloc-e1-target-2": 157.64896475595992,
+     "piloc-e1-target-3": 150.7296448491718,
+     "piloc-e1-target-4": 116.92718579559352,
+     "piloc-e1-target-5": 86.84513723198661
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 7.0,
+     "piloc-e1-target-5": 8.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2067,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200007,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-0"
+    ]
+   },
+   {
+    "airtime_bytes": 14910,
+    "deadlines": {
+     "piloc-e1-target-0": 167.49772045075804,
+     "piloc-e1-target-1": 163.49670203034276,
+     "piloc-e1-target-2": 325.1719442837873,
+     "piloc-e1-target-3": 179.97456592485645,
+     "piloc-e1-target-4": 167.21914282553286,
+     "piloc-e1-target-5": 253.86279088533104
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 1.0,
+     "piloc-e1-target-1": 4.0,
+     "piloc-e1-target-2": 169.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 2.0,
+     "piloc-e1-target-5": 190.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2485,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200008,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 10134,
+    "deadlines": {
+     "piloc-e1-target-0": 183.61637075130534,
+     "piloc-e1-target-2": 69.98402913758693,
+     "piloc-e1-target-3": 129.28268090606974,
+     "piloc-e1-target-4": 181.25906428814568
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 9.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 17.0,
+     "piloc-e1-target-4": 33.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1689,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200009,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 15474,
+    "deadlines": {
+     "piloc-e1-target-0": 122.02111099034158,
+     "piloc-e1-target-1": 159.64896475595992,
+     "piloc-e1-target-2": 78.79951075722397,
+     "piloc-e1-target-3": 112.95805321482072,
+     "piloc-e1-target-4": 95.42924562793158,
+     "piloc-e1-target-5": 286.46878087283824
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 1.0,
+     "piloc-e1-target-1": 3.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 6.0,
+     "piloc-e1-target-5": 188.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2579,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200010,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14802,
+    "deadlines": {
+     "piloc-e1-target-0": 325.5556453578587,
+     "piloc-e1-target-1": 368.40754971992465,
+     "piloc-e1-target-2": 109.84727543454377,
+     "piloc-e1-target-3": 326.27398262356905,
+     "piloc-e1-target-4": 299.29289527250444,
+     "piloc-e1-target-5": 280.69319139240986
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 179.0,
+     "piloc-e1-target-1": 190.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 179.0,
+     "piloc-e1-target-4": 177.0,
+     "piloc-e1-target-5": 144.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2467,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200011,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15252,
+    "deadlines": {
+     "piloc-e1-target-0": 114.55387482712273,
+     "piloc-e1-target-1": 155.3572250666405,
+     "piloc-e1-target-2": 81.68789637389956,
+     "piloc-e1-target-3": 173.11938876068177,
+     "piloc-e1-target-4": 81.0636336805438,
+     "piloc-e1-target-5": 194.55814192824369
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 1.0,
+     "piloc-e1-target-1": 94.0,
+     "piloc-e1-target-2": 4.0,
+     "piloc-e1-target-3": 68.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 31.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2542,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200012,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14730,
+    "deadlines": {
+     "piloc-e1-target-0": 358.0702732946593,
+     "piloc-e1-target-1": 79.88067203337404,
+     "piloc-e1-target-2": 123.58885396358292,
+     "piloc-e1-target-3": 159.58916138383103,
+     "piloc-e1-target-4": 140.56930002559793,
+     "piloc-e1-target-5": 321.33887468216324
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 197.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 8.0,
+     "piloc-e1-target-3": 13.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 166.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2455,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200013,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14880,
+    "deadlines": {
+     "piloc-e1-target-0": 70.4199129777983,
+     "piloc-e1-target-1": 134.22523342060148,
+     "piloc-e1-target-2": 143.04982659340155,
+     "piloc-e1-target-3": 162.46254952712582,
+     "piloc-e1-target-4": 141.24292296267058,
+     "piloc-e1-target-5": 97.87140982854075
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 3.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 3.0,
+     "piloc-e1-target-4": 2.0,
+     "piloc-e1-target-5": 1.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2480,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200014,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14658,
+    "deadlines": {
+     "piloc-e1-target-0": 158.67018790289,
+     "piloc-e1-target-1": 147.09409954019975,
+     "piloc-e1-target-2": 164.01895905425698,
+     "piloc-e1-target-3": 106.40915145243349,
+     "piloc-e1-target-4": 165.12142322077258,
+     "piloc-e1-target-5": 158.2178923572866
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 6.0,
+     "piloc-e1-target-1": 28.0,
+     "piloc-e1-target-2": 4.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 3.0,
+     "piloc-e1-target-5": 6.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2443,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200015,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15114,
+    "deadlines": {
+     "piloc-e1-target-0": 76.58194404459533,
+     "piloc-e1-target-1": 359.5556453578587,
+     "piloc-e1-target-2": 99.46878087283824,
+     "piloc-e1-target-3": 359.41943394122785,
+     "piloc-e1-target-4": 65.62094965131183,
+     "piloc-e1-target-5": 272.28560779509013
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 4.0,
+     "piloc-e1-target-1": 213.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 220.0,
+     "piloc-e1-target-4": 2.0,
+     "piloc-e1-target-5": 202.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2519,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200016,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15240,
+    "deadlines": {
+     "piloc-e1-target-0": 67.60472875994262,
+     "piloc-e1-target-1": 397.7100622832887,
+     "piloc-e1-target-2": 67.69949514583266,
+     "piloc-e1-target-3": 166.50077066140614,
+     "piloc-e1-target-4": 107.06197793028664,
+     "piloc-e1-target-5": 339.4338268163864
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 1.0,
+     "piloc-e1-target-1": 236.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 4.0,
+     "piloc-e1-target-5": 190.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2540,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200017,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14538,
+    "deadlines": {
+     "piloc-e1-target-0": 79.51701566461517,
+     "piloc-e1-target-1": 394.675415821623,
+     "piloc-e1-target-2": 91.12369203585644,
+     "piloc-e1-target-3": 70.22189877270542,
+     "piloc-e1-target-4": 164.93009260270995,
+     "piloc-e1-target-5": 404.2855120933212
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 8.0,
+     "piloc-e1-target-1": 237.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 5.0,
+     "piloc-e1-target-5": 245.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2423,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200018,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14850,
+    "deadlines": {
+     "piloc-e1-target-0": 174.05294204398376,
+     "piloc-e1-target-1": 164.49506067297327,
+     "piloc-e1-target-2": 168.28226363999357,
+     "piloc-e1-target-3": 123.07016728031542,
+     "piloc-e1-target-4": 132.10686400561167,
+     "piloc-e1-target-5": 66.86279088533105
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 4.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 6.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 3.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2475,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200019,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 12846,
+    "deadlines": {
+     "piloc-e1-target-1": 74.24810965393462,
+     "piloc-e1-target-2": 130.30135490254997,
+     "piloc-e1-target-3": 104.40325928372165,
+     "piloc-e1-target-4": 125.33263297706387,
+     "piloc-e1-target-5": 99.34279902795775
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 5.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 12.0,
+     "piloc-e1-target-5": 6.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2141,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200020,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-0"
+    ]
+   },
+   {
+    "airtime_bytes": 14730,
+    "deadlines": {
+     "piloc-e1-target-0": 71.97943822855147,
+     "piloc-e1-target-1": 100.34918775889811,
+     "piloc-e1-target-2": 171.4909731391166,
+     "piloc-e1-target-3": 142.30045369951262,
+     "piloc-e1-target-4": 307.0272445213981,
+     "piloc-e1-target-5": 209.23455174890145
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 4.0,
+     "piloc-e1-target-1": 4.0,
+     "piloc-e1-target-2": 6.0,
+     "piloc-e1-target-3": 16.0,
+     "piloc-e1-target-4": 175.0,
+     "piloc-e1-target-5": 121.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2455,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200021,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14484,
+    "deadlines": {
+     "piloc-e1-target-0": 97.23159056693476,
+     "piloc-e1-target-1": 135.60400157261586,
+     "piloc-e1-target-2": 180.3315153444276,
+     "piloc-e1-target-3": 179.29432692222238,
+     "piloc-e1-target-4": 143.64646071352135,
+     "piloc-e1-target-5": 105.8274724538771
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 11.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 3.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 5.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2414,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200022,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 12318,
+    "deadlines": {
+     "piloc-e1-target-1": 138.27624832427725,
+     "piloc-e1-target-2": 137.27624832427725,
+     "piloc-e1-target-3": 99.92430946964198,
+     "piloc-e1-target-4": 67.37353461822075,
+     "piloc-e1-target-5": 95.53441986827806
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-1": 2.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 2.0,
+     "piloc-e1-target-5": 5.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2053,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200023,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-0"
+    ]
+   },
+   {
+    "airtime_bytes": 14850,
+    "deadlines": {
+     "piloc-e1-target-0": 127.6170076441944,
+     "piloc-e1-target-1": 186.70165411087598,
+     "piloc-e1-target-2": 133.55990307047398,
+     "piloc-e1-target-3": 144.1579960836847,
+     "piloc-e1-target-4": 78.64935223982798,
+     "piloc-e1-target-5": 131.4080126901555
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 4.0,
+     "piloc-e1-target-1": 8.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 5.0,
+     "piloc-e1-target-5": 4.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2475,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200024,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14244,
+    "deadlines": {
+     "piloc-e1-target-0": 93.25579952741185,
+     "piloc-e1-target-1": 102.91922092756296,
+     "piloc-e1-target-2": 94.26998728353603,
+     "piloc-e1-target-3": 287.2716884656773,
+     "piloc-e1-target-4": 338.3942210180532,
+     "piloc-e1-target-5": 360.6773754598147
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 4.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 223.0,
+     "piloc-e1-target-4": 222.0,
+     "piloc-e1-target-5": 266.0
+    },
+    "emissions": 6,
+    "expired": 1,
+    "missed_after_detection": 1,
+    "on_time": 5,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2374,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200025,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 12666,
+    "deadlines": {
+     "piloc-e1-target-0": 255.84349249379343,
+     "piloc-e1-target-1": 267.6688066518741,
+     "piloc-e1-target-3": 61.714093716123315,
+     "piloc-e1-target-4": 312.3546683042694,
+     "piloc-e1-target-5": 150.27143964127626
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 178.0,
+     "piloc-e1-target-1": 156.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 143.0,
+     "piloc-e1-target-5": 7.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2111,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200026,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-2"
+    ]
+   },
+   {
+    "airtime_bytes": 14802,
+    "deadlines": {
+     "piloc-e1-target-0": 179.8279797775404,
+     "piloc-e1-target-1": 93.43427864028617,
+     "piloc-e1-target-2": 144.01034905242784,
+     "piloc-e1-target-3": 357.43984853420034,
+     "piloc-e1-target-4": 147.72404394351724,
+     "piloc-e1-target-5": 99.97051881049285
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 5.0,
+     "piloc-e1-target-1": 9.0,
+     "piloc-e1-target-2": 35.0,
+     "piloc-e1-target-3": 246.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 1.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2467,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200027,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14940,
+    "deadlines": {
+     "piloc-e1-target-0": 579.1742905202157,
+     "piloc-e1-target-1": 140.63981082510685,
+     "piloc-e1-target-2": 124.62254322412375,
+     "piloc-e1-target-3": 165.4620637636017,
+     "piloc-e1-target-4": 196.10434737833816,
+     "piloc-e1-target-5": 117.27760587336533
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 448.0,
+     "piloc-e1-target-1": 80.0,
+     "piloc-e1-target-2": 24.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 110.0,
+     "piloc-e1-target-5": 9.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2490,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200028,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14910,
+    "deadlines": {
+     "piloc-e1-target-0": 319.89772997329584,
+     "piloc-e1-target-1": 130.3990924005671,
+     "piloc-e1-target-2": 163.0702732946593,
+     "piloc-e1-target-3": 109.023864794668,
+     "piloc-e1-target-4": 163.2068764310598,
+     "piloc-e1-target-5": 192.78810066459243
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 187.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 2.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 32.0,
+     "piloc-e1-target-5": 121.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2485,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200029,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14694,
+    "deadlines": {
+     "piloc-e1-target-0": 289.39525024728454,
+     "piloc-e1-target-1": 101.97653248868251,
+     "piloc-e1-target-2": 109.37913761594616,
+     "piloc-e1-target-3": 173.360715377225,
+     "piloc-e1-target-4": 231.9836403617436,
+     "piloc-e1-target-5": 183.49580036705999
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 118.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 5.0,
+     "piloc-e1-target-4": 75.0,
+     "piloc-e1-target-5": 6.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2449,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200030,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15276,
+    "deadlines": {
+     "piloc-e1-target-0": 307.85732460503027,
+     "piloc-e1-target-1": 134.575543287252,
+     "piloc-e1-target-2": 176.23067062322673,
+     "piloc-e1-target-3": 500.00313905372695,
+     "piloc-e1-target-4": 82.0793659558054,
+     "piloc-e1-target-5": 106.06099754586202
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 236.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 325.0,
+     "piloc-e1-target-4": 3.0,
+     "piloc-e1-target-5": 4.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2546,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200031,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14274,
+    "deadlines": {
+     "piloc-e1-target-0": 126.30629908728739,
+     "piloc-e1-target-1": 71.17742350748084,
+     "piloc-e1-target-2": 63.62340625224659,
+     "piloc-e1-target-3": 77.35055449037228,
+     "piloc-e1-target-4": 161.405422452266,
+     "piloc-e1-target-5": 164.28298111593176
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 13.0,
+     "piloc-e1-target-1": 2.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 13.0,
+     "piloc-e1-target-5": 2.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2379,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200032,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14574,
+    "deadlines": {
+     "piloc-e1-target-0": 106.8579757549902,
+     "piloc-e1-target-1": 94.94549165218581,
+     "piloc-e1-target-2": 88.78038261443595,
+     "piloc-e1-target-3": 87.78038261443595,
+     "piloc-e1-target-4": 105.02230029057412,
+     "piloc-e1-target-5": 101.89566073157084
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 13.0,
+     "piloc-e1-target-1": 5.0,
+     "piloc-e1-target-2": 4.0,
+     "piloc-e1-target-3": 3.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 4.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2429,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200033,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14190,
+    "deadlines": {
+     "piloc-e1-target-0": 164.1374630960611,
+     "piloc-e1-target-1": 83.84528674983306,
+     "piloc-e1-target-2": 161.78946392657946,
+     "piloc-e1-target-3": 115.02055810973357,
+     "piloc-e1-target-4": 147.4521574698864,
+     "piloc-e1-target-5": 99.92430946964198
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 3.0,
+     "piloc-e1-target-1": 3.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 20.0,
+     "piloc-e1-target-5": 1.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2365,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200034,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14712,
+    "deadlines": {
+     "piloc-e1-target-0": 311.54341094506617,
+     "piloc-e1-target-1": 138.13348435836792,
+     "piloc-e1-target-2": 170.80420020074172,
+     "piloc-e1-target-3": 98.20160961777316,
+     "piloc-e1-target-4": 336.3655045689068,
+     "piloc-e1-target-5": 178.36722960048132
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 146.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 160.0,
+     "piloc-e1-target-5": 4.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2452,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200035,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14244,
+    "deadlines": {
+     "piloc-e1-target-0": 547.4895510424258,
+     "piloc-e1-target-1": 120.9246849299499,
+     "piloc-e1-target-2": 62.250117140173515,
+     "piloc-e1-target-3": 138.27737807829516,
+     "piloc-e1-target-4": 141.38287344743878,
+     "piloc-e1-target-5": 191.97094077381072
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 405.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 27.0,
+     "piloc-e1-target-4": 3.0,
+     "piloc-e1-target-5": 13.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2374,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200036,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14658,
+    "deadlines": {
+     "piloc-e1-target-0": 136.02235893543352,
+     "piloc-e1-target-1": 141.16048958837462,
+     "piloc-e1-target-2": 135.20127671658898,
+     "piloc-e1-target-3": 112.63156505045953,
+     "piloc-e1-target-4": 156.49877223842992,
+     "piloc-e1-target-5": 66.16930610654191
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 3.0,
+     "piloc-e1-target-1": 2.0,
+     "piloc-e1-target-2": 2.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 3.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2443,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200037,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15516,
+    "deadlines": {
+     "piloc-e1-target-0": 87.43264672641189,
+     "piloc-e1-target-1": 638.2945987307348,
+     "piloc-e1-target-2": 295.88870650756735,
+     "piloc-e1-target-3": 162.02598874192256,
+     "piloc-e1-target-4": 100.28693956751825,
+     "piloc-e1-target-5": 134.37513030131632
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 10.0,
+     "piloc-e1-target-1": 537.0,
+     "piloc-e1-target-2": 136.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 1.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2586,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200038,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15204,
+    "deadlines": {
+     "piloc-e1-target-0": 245.2091600115956,
+     "piloc-e1-target-1": 309.6988591420981,
+     "piloc-e1-target-2": 193.34373568925753,
+     "piloc-e1-target-3": 99.5780959691067,
+     "piloc-e1-target-4": 62.931494552310525,
+     "piloc-e1-target-5": 99.51842103387028
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 175.0,
+     "piloc-e1-target-1": 154.0,
+     "piloc-e1-target-2": 15.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 2.0,
+     "piloc-e1-target-5": 2.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2534,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200039,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15072,
+    "deadlines": {
+     "piloc-e1-target-0": 76.03104578643905,
+     "piloc-e1-target-1": 125.73943374383731,
+     "piloc-e1-target-2": 72.20130775429402,
+     "piloc-e1-target-3": 180.06228793148398,
+     "piloc-e1-target-4": 66.22725808536553,
+     "piloc-e1-target-5": 489.0932791477859
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 4.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 4.0,
+     "piloc-e1-target-5": 319.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2512,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200040,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14484,
+    "deadlines": {
+     "piloc-e1-target-0": 162.2178923572866,
+     "piloc-e1-target-1": 138.92283798668137,
+     "piloc-e1-target-2": 162.3621666164837,
+     "piloc-e1-target-3": 90.25462214089812,
+     "piloc-e1-target-4": 67.56973406720964,
+     "piloc-e1-target-5": 211.45803713670153
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 10.0,
+     "piloc-e1-target-1": 7.0,
+     "piloc-e1-target-2": 6.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 2.0,
+     "piloc-e1-target-5": 135.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2414,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200041,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14916,
+    "deadlines": {
+     "piloc-e1-target-0": 111.16710567936025,
+     "piloc-e1-target-1": 127.32790163805723,
+     "piloc-e1-target-2": 165.5983011137476,
+     "piloc-e1-target-3": 171.07056903014654,
+     "piloc-e1-target-4": 98.94792182364608,
+     "piloc-e1-target-5": 291.73448152354484
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 3.0,
+     "piloc-e1-target-1": 2.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 145.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2486,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200042,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15450,
+    "deadlines": {
+     "piloc-e1-target-0": 307.3802066561425,
+     "piloc-e1-target-1": 108.67367341856172,
+     "piloc-e1-target-2": 98.45021599368361,
+     "piloc-e1-target-3": 61.931494552310525,
+     "piloc-e1-target-4": 159.40573556551973,
+     "piloc-e1-target-5": 76.46578825924773
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 240.0,
+     "piloc-e1-target-1": 2.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 2.0,
+     "piloc-e1-target-5": 8.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2575,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200043,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15324,
+    "deadlines": {
+     "piloc-e1-target-0": 65.43987092341308,
+     "piloc-e1-target-1": 174.360715377225,
+     "piloc-e1-target-2": 91.72323652424951,
+     "piloc-e1-target-3": 134.40932552475113,
+     "piloc-e1-target-4": 412.4093255247511,
+     "piloc-e1-target-5": 327.34964500130906
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 3.0,
+     "piloc-e1-target-1": 6.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 3.0,
+     "piloc-e1-target-4": 281.0,
+     "piloc-e1-target-5": 159.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2554,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200044,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14682,
+    "deadlines": {
+     "piloc-e1-target-0": 124.43760495472142,
+     "piloc-e1-target-1": 142.12535093785618,
+     "piloc-e1-target-2": 374.1284434326224,
+     "piloc-e1-target-3": 96.5008209207339,
+     "piloc-e1-target-4": 172.9700478307679,
+     "piloc-e1-target-5": 184.3782279149084
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 3.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 295.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 6.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2447,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200045,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14934,
+    "deadlines": {
+     "piloc-e1-target-0": 245.0332075316986,
+     "piloc-e1-target-1": 117.07487300941557,
+     "piloc-e1-target-2": 106.25728470426606,
+     "piloc-e1-target-3": 253.69316125951454,
+     "piloc-e1-target-4": 157.29253106036867,
+     "piloc-e1-target-5": 167.7921183962957
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 148.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 155.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 11.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2489,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200046,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15036,
+    "deadlines": {
+     "piloc-e1-target-0": 70.06870806569569,
+     "piloc-e1-target-1": 152.84212040833341,
+     "piloc-e1-target-2": 83.42858142390196,
+     "piloc-e1-target-3": 151.4178014248305,
+     "piloc-e1-target-4": 130.5505173977342,
+     "piloc-e1-target-5": 95.52750950748214
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 3.0,
+     "piloc-e1-target-1": 2.0,
+     "piloc-e1-target-2": 5.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 3.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2506,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200047,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14898,
+    "deadlines": {
+     "piloc-e1-target-0": 74.86067690476742,
+     "piloc-e1-target-1": 146.83445540466994,
+     "piloc-e1-target-2": 160.2855120933212,
+     "piloc-e1-target-3": 179.0049963052624,
+     "piloc-e1-target-4": 442.50481805864956,
+     "piloc-e1-target-5": 420.2350886365678
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 3.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 265.0,
+     "piloc-e1-target-5": 244.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2483,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200048,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 9936,
+    "deadlines": {
+     "piloc-e1-target-0": 165.04114261562606,
+     "piloc-e1-target-1": 199.1972362577507,
+     "piloc-e1-target-2": 121.7457910813778,
+     "piloc-e1-target-3": 145.17742350748085
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 13.0,
+     "piloc-e1-target-1": 86.0,
+     "piloc-e1-target-2": 4.0,
+     "piloc-e1-target-3": 76.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1656,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200049,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 12786,
+    "deadlines": {
+     "piloc-e1-target-1": 97.29349407723157,
+     "piloc-e1-target-2": 90.6915991405562,
+     "piloc-e1-target-3": 94.62735029763442,
+     "piloc-e1-target-4": 160.38206871554758,
+     "piloc-e1-target-5": 83.79592122995382
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-1": 7.0,
+     "piloc-e1-target-2": 4.0,
+     "piloc-e1-target-3": 6.0,
+     "piloc-e1-target-4": 5.0,
+     "piloc-e1-target-5": 19.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2131,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200050,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-0"
+    ]
+   },
+   {
+    "airtime_bytes": 15288,
+    "deadlines": {
+     "piloc-e1-target-0": 144.26156089987973,
+     "piloc-e1-target-1": 94.22298460184547,
+     "piloc-e1-target-2": 102.87193038714852,
+     "piloc-e1-target-3": 131.32128965448652,
+     "piloc-e1-target-4": 163.20682661886775,
+     "piloc-e1-target-5": 146.39765059650418
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 5.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 4.0,
+     "piloc-e1-target-5": 1.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2548,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200051,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15138,
+    "deadlines": {
+     "piloc-e1-target-0": 134.76957297082222,
+     "piloc-e1-target-1": 123.73680339281921,
+     "piloc-e1-target-2": 111.18268115825936,
+     "piloc-e1-target-3": 159.93537224696374,
+     "piloc-e1-target-4": 405.07495917209644,
+     "piloc-e1-target-5": 486.8286312898222
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 13.0,
+     "piloc-e1-target-1": 11.0,
+     "piloc-e1-target-2": 13.0,
+     "piloc-e1-target-3": 9.0,
+     "piloc-e1-target-4": 250.0,
+     "piloc-e1-target-5": 318.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2523,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200052,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14334,
+    "deadlines": {
+     "piloc-e1-target-0": 154.84163951642356,
+     "piloc-e1-target-1": 665.6614263981662,
+     "piloc-e1-target-2": 85.12524985237306,
+     "piloc-e1-target-3": 143.16048958837462,
+     "piloc-e1-target-4": 346.30629908728736,
+     "piloc-e1-target-5": 295.7470495093345
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 15.0,
+     "piloc-e1-target-1": 489.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 4.0,
+     "piloc-e1-target-4": 233.0,
+     "piloc-e1-target-5": 199.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2389,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200053,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14490,
+    "deadlines": {
+     "piloc-e1-target-0": 88.46142829678969,
+     "piloc-e1-target-1": 88.40191567746191,
+     "piloc-e1-target-2": 179.46726380769638,
+     "piloc-e1-target-3": 178.92891635244467,
+     "piloc-e1-target-4": 283.89077306220327,
+     "piloc-e1-target-5": 299.73024703775354
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 5.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 2.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 184.0,
+     "piloc-e1-target-5": 203.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2415,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200054,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15894,
+    "deadlines": {
+     "piloc-e1-target-0": 370.4444756090604,
+     "piloc-e1-target-1": 995.2174893939891,
+     "piloc-e1-target-2": 139.62925053554054,
+     "piloc-e1-target-3": 149.56563726338968,
+     "piloc-e1-target-4": 147.83445540466994,
+     "piloc-e1-target-5": 418.765083276053
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 248.0,
+     "piloc-e1-target-1": 873.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 2.0,
+     "piloc-e1-target-5": 252.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2649,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200055,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14508,
+    "deadlines": {
+     "piloc-e1-target-0": 82.32993106166683,
+     "piloc-e1-target-1": 187.5691540215625,
+     "piloc-e1-target-2": 80.5830748289512,
+     "piloc-e1-target-3": 169.1643943446898,
+     "piloc-e1-target-4": 139.1926237019662,
+     "piloc-e1-target-5": 255.4297949835423
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 4.0,
+     "piloc-e1-target-1": 102.0,
+     "piloc-e1-target-2": 3.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 156.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2418,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200056,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14532,
+    "deadlines": {
+     "piloc-e1-target-0": 82.09444588106177,
+     "piloc-e1-target-1": 325.167761696513,
+     "piloc-e1-target-2": 144.8412051830238,
+     "piloc-e1-target-3": 356.5349535086705,
+     "piloc-e1-target-4": 181.3734992717683,
+     "piloc-e1-target-5": 387.74884427203546
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 10.0,
+     "piloc-e1-target-1": 241.0,
+     "piloc-e1-target-2": 10.0,
+     "piloc-e1-target-3": 234.0,
+     "piloc-e1-target-4": 3.0,
+     "piloc-e1-target-5": 241.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2422,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200057,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14898,
+    "deadlines": {
+     "piloc-e1-target-0": 385.02729459609986,
+     "piloc-e1-target-1": 116.47027590026134,
+     "piloc-e1-target-2": 107.63047869704164,
+     "piloc-e1-target-3": 168.03472122351405,
+     "piloc-e1-target-4": 93.40191567746191,
+     "piloc-e1-target-5": 109.21580009963631
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 267.0,
+     "piloc-e1-target-1": 44.0,
+     "piloc-e1-target-2": 2.0,
+     "piloc-e1-target-3": 26.0,
+     "piloc-e1-target-4": 6.0,
+     "piloc-e1-target-5": 5.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2483,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200058,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14778,
+    "deadlines": {
+     "piloc-e1-target-0": 146.11379539776271,
+     "piloc-e1-target-1": 150.62912356059223,
+     "piloc-e1-target-2": 64.3574454246885,
+     "piloc-e1-target-3": 164.6731442204932,
+     "piloc-e1-target-4": 173.69640131991417,
+     "piloc-e1-target-5": 314.63668830752965
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 9.0,
+     "piloc-e1-target-1": 7.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 228.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2463,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200059,
+    "undetected": 0,
+    "undetected_ids": []
+   }
+  ],
+  "B": [
+   {
+    "airtime_bytes": 9486,
+    "deadlines": {
+     "piloc-e1-target-1": 71.574157048003,
+     "piloc-e1-target-2": 166.32109269162538,
+     "piloc-e1-target-3": 109.55918328595001,
+     "piloc-e1-target-4": 67.38568994214276
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 3.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1581,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200000,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 15180,
+    "deadlines": {
+     "piloc-e1-target-0": 332.97331694038144,
+     "piloc-e1-target-1": 65.56644637656464,
+     "piloc-e1-target-2": 151.80178940398488,
+     "piloc-e1-target-3": 85.04092824493188,
+     "piloc-e1-target-4": 134.66540106472968,
+     "piloc-e1-target-5": 156.9831927719938
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 259.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 5.0,
+     "piloc-e1-target-4": 6.0,
+     "piloc-e1-target-5": 16.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2530,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200001,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15132,
+    "deadlines": {
+     "piloc-e1-target-0": 169.47326321628668,
+     "piloc-e1-target-1": 259.4624571872961,
+     "piloc-e1-target-2": 119.64798492682436,
+     "piloc-e1-target-3": 162.5969416736732,
+     "piloc-e1-target-4": 246.1233531265928,
+     "piloc-e1-target-5": 66.4498038639996
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 4.0,
+     "piloc-e1-target-1": 161.0,
+     "piloc-e1-target-2": 54.0,
+     "piloc-e1-target-3": 55.0,
+     "piloc-e1-target-4": 86.0,
+     "piloc-e1-target-5": 3.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2522,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200002,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 9912,
+    "deadlines": {
+     "piloc-e1-target-0": 76.87678261165772,
+     "piloc-e1-target-3": 127.52881663025039,
+     "piloc-e1-target-4": 128.09417735594758,
+     "piloc-e1-target-5": 151.46518243650752
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 7.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 5.0,
+     "piloc-e1-target-5": 18.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1652,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200003,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2"
+    ]
+   },
+   {
+    "airtime_bytes": 9480,
+    "deadlines": {
+     "piloc-e1-target-0": 98.50978274890848,
+     "piloc-e1-target-3": 1138.2306706232266,
+     "piloc-e1-target-4": 172.3988791188092,
+     "piloc-e1-target-5": 187.21484007551686
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 8.0,
+     "piloc-e1-target-3": 963.0,
+     "piloc-e1-target-4": 12.0,
+     "piloc-e1-target-5": 8.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1580,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200004,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2"
+    ]
+   },
+   {
+    "airtime_bytes": 9768,
+    "deadlines": {
+     "piloc-e1-target-0": 113.96850918659261,
+     "piloc-e1-target-2": 164.13045712185834,
+     "piloc-e1-target-3": 298.4672638076964,
+     "piloc-e1-target-4": 486.81309855676517
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 2.0,
+     "piloc-e1-target-2": 2.0,
+     "piloc-e1-target-3": 121.0,
+     "piloc-e1-target-4": 417.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1628,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200005,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 15528,
+    "deadlines": {
+     "piloc-e1-target-0": 103.39006730022855,
+     "piloc-e1-target-1": 165.35738697948165,
+     "piloc-e1-target-2": 132.72289845286815,
+     "piloc-e1-target-3": 828.239672346597,
+     "piloc-e1-target-4": 176.47238153319702,
+     "piloc-e1-target-5": 185.70901482663845
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 2.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 11.0,
+     "piloc-e1-target-3": 665.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 15.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2588,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200006,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14016,
+    "deadlines": {
+     "piloc-e1-target-0": 167.00140143495497,
+     "piloc-e1-target-1": 163.39505613295165,
+     "piloc-e1-target-2": 157.64896475595992,
+     "piloc-e1-target-3": 68.06870806569569,
+     "piloc-e1-target-4": 80.25384607079158,
+     "piloc-e1-target-5": 168.02188512742464
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 10.0,
+     "piloc-e1-target-1": 2.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 4.0,
+     "piloc-e1-target-5": 3.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2336,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200007,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 12408,
+    "deadlines": {
+     "piloc-e1-target-0": 167.49772045075804,
+     "piloc-e1-target-1": 166.49670203034276,
+     "piloc-e1-target-3": 179.97456592485645,
+     "piloc-e1-target-4": 74.24310864315129,
+     "piloc-e1-target-5": 227.28378563126324
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 1.0,
+     "piloc-e1-target-1": 7.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 78.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2068,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200008,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-2"
+    ]
+   },
+   {
+    "airtime_bytes": 14898,
+    "deadlines": {
+     "piloc-e1-target-0": 92.4653241916804,
+     "piloc-e1-target-1": 167.89312787221593,
+     "piloc-e1-target-2": 150.69111805037284,
+     "piloc-e1-target-3": 117.47418105628269,
+     "piloc-e1-target-4": 92.17257060094717,
+     "piloc-e1-target-5": 151.788915533
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 5.0,
+     "piloc-e1-target-1": 74.0,
+     "piloc-e1-target-2": 3.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 19.0,
+     "piloc-e1-target-5": 66.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2483,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200009,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 13014,
+    "deadlines": {
+     "piloc-e1-target-0": 150.07009214660982,
+     "piloc-e1-target-1": 161.64896475595992,
+     "piloc-e1-target-2": 78.79951075722397,
+     "piloc-e1-target-3": 1132.4950606729733,
+     "piloc-e1-target-5": 226.0614737536127
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 5.0,
+     "piloc-e1-target-1": 5.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 969.0,
+     "piloc-e1-target-5": 137.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 1,
+    "on_time": 4,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2169,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200010,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-4"
+    ]
+   },
+   {
+    "airtime_bytes": 9546,
+    "deadlines": {
+     "piloc-e1-target-0": 167.9537468880118,
+     "piloc-e1-target-2": 109.84727543454377,
+     "piloc-e1-target-3": 145.11379539776271,
+     "piloc-e1-target-5": 508.9357665196966
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 12.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 8.0,
+     "piloc-e1-target-5": 338.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1591,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200011,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-4"
+    ]
+   },
+   {
+    "airtime_bytes": 10104,
+    "deadlines": {
+     "piloc-e1-target-0": 114.55387482712273,
+     "piloc-e1-target-1": 69.62094965131183,
+     "piloc-e1-target-3": 90.18253259189184,
+     "piloc-e1-target-4": 174.02309241702037
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 1.0,
+     "piloc-e1-target-1": 6.0,
+     "piloc-e1-target-3": 3.0,
+     "piloc-e1-target-4": 2.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1684,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200012,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-2",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 14898,
+    "deadlines": {
+     "piloc-e1-target-0": 145.99341248944407,
+     "piloc-e1-target-1": 79.88067203337404,
+     "piloc-e1-target-2": 123.58885396358292,
+     "piloc-e1-target-3": 159.58916138383103,
+     "piloc-e1-target-4": 140.56930002559793,
+     "piloc-e1-target-5": 222.3362670375406
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 30.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 8.0,
+     "piloc-e1-target-3": 13.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 71.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2483,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200013,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14862,
+    "deadlines": {
+     "piloc-e1-target-0": 70.4199129777983,
+     "piloc-e1-target-1": 134.22523342060148,
+     "piloc-e1-target-2": 143.04982659340155,
+     "piloc-e1-target-3": 135.10686400561167,
+     "piloc-e1-target-4": 77.8963351534989,
+     "piloc-e1-target-5": 97.87140982854075
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 3.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 4.0,
+     "piloc-e1-target-4": 5.0,
+     "piloc-e1-target-5": 1.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2477,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200014,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 12204,
+    "deadlines": {
+     "piloc-e1-target-0": 68.88320847965105,
+     "piloc-e1-target-2": 97.79464225524805,
+     "piloc-e1-target-3": 106.40915145243349,
+     "piloc-e1-target-4": 169.62597240401155,
+     "piloc-e1-target-5": 128.86010773017108
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 5.0,
+     "piloc-e1-target-2": 5.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 5.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2034,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200015,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-1"
+    ]
+   },
+   {
+    "airtime_bytes": 14892,
+    "deadlines": {
+     "piloc-e1-target-0": 161.58000827440756,
+     "piloc-e1-target-1": 120.40396742735722,
+     "piloc-e1-target-2": 99.46878087283824,
+     "piloc-e1-target-3": 495.0097661011506,
+     "piloc-e1-target-4": 65.62094965131183,
+     "piloc-e1-target-5": 177.02575412069643
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 7.0,
+     "piloc-e1-target-1": 5.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 396.0,
+     "piloc-e1-target-4": 2.0,
+     "piloc-e1-target-5": 11.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2482,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200016,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 12516,
+    "deadlines": {
+     "piloc-e1-target-0": 68.60472875994262,
+     "piloc-e1-target-2": 68.69949514583266,
+     "piloc-e1-target-3": 166.50077066140614,
+     "piloc-e1-target-4": 156.27593289873698,
+     "piloc-e1-target-5": 84.81715826942828
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 2.0,
+     "piloc-e1-target-2": 2.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 5.0,
+     "piloc-e1-target-5": 17.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2086,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200017,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-1"
+    ]
+   },
+   {
+    "airtime_bytes": 7224,
+    "deadlines": {
+     "piloc-e1-target-0": 189.67201398082827,
+     "piloc-e1-target-2": 413.4446184703332,
+     "piloc-e1-target-5": 182.6427279932609
+    },
+    "detected": 3,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-2",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 127.0,
+     "piloc-e1-target-2": 314.0,
+     "piloc-e1-target-5": 112.0
+    },
+    "emissions": 3,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 3,
+    "packets": 18,
+    "packets_lost": 0,
+    "payload_bytes": 1204,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200018,
+    "undetected": 3,
+    "undetected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ]
+   },
+   {
+    "airtime_bytes": 12384,
+    "deadlines": {
+     "piloc-e1-target-1": 164.49506067297327,
+     "piloc-e1-target-2": 162.16982626302266,
+     "piloc-e1-target-3": 168.99531098149606,
+     "piloc-e1-target-4": 132.10686400561167,
+     "piloc-e1-target-5": 164.10686400561167
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 20.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 33.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2064,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200019,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-0"
+    ]
+   },
+   {
+    "airtime_bytes": 12366,
+    "deadlines": {
+     "piloc-e1-target-0": 145.22055284058433,
+     "piloc-e1-target-1": 74.24810965393462,
+     "piloc-e1-target-3": 104.40325928372165,
+     "piloc-e1-target-4": 170.69885914209812,
+     "piloc-e1-target-5": 96.24422062172286
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 6.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 15.0,
+     "piloc-e1-target-5": 14.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2061,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200020,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-2"
+    ]
+   },
+   {
+    "airtime_bytes": 9936,
+    "deadlines": {
+     "piloc-e1-target-0": 73.97943822855147,
+     "piloc-e1-target-1": 100.34918775889811,
+     "piloc-e1-target-2": 125.26084791226927,
+     "piloc-e1-target-4": 653.4446184703332
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 6.0,
+     "piloc-e1-target-1": 4.0,
+     "piloc-e1-target-2": 6.0,
+     "piloc-e1-target-4": 554.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1656,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200021,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-3",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 15066,
+    "deadlines": {
+     "piloc-e1-target-0": 81.90628300351722,
+     "piloc-e1-target-1": 135.60400157261586,
+     "piloc-e1-target-2": 180.3315153444276,
+     "piloc-e1-target-3": 157.39694395266656,
+     "piloc-e1-target-4": 143.64646071352135,
+     "piloc-e1-target-5": 138.60977040288648
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 7.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 3.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2511,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200022,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15252,
+    "deadlines": {
+     "piloc-e1-target-0": 155.35729360688487,
+     "piloc-e1-target-1": 138.27624832427725,
+     "piloc-e1-target-2": 137.27624832427725,
+     "piloc-e1-target-3": 99.92430946964198,
+     "piloc-e1-target-4": 220.85174457346875,
+     "piloc-e1-target-5": 250.9707007082304
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 20.0,
+     "piloc-e1-target-1": 2.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 52.0,
+     "piloc-e1-target-5": 162.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2542,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200023,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14982,
+    "deadlines": {
+     "piloc-e1-target-0": 174.72037828168038,
+     "piloc-e1-target-1": 96.76336090406596,
+     "piloc-e1-target-2": 108.90810862828172,
+     "piloc-e1-target-3": 144.1579960836847,
+     "piloc-e1-target-4": 121.8606067251589,
+     "piloc-e1-target-5": 100.23979921110073
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 6.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 2.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 4.0,
+     "piloc-e1-target-5": 6.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2497,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200024,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 11640,
+    "deadlines": {
+     "piloc-e1-target-0": 93.25579952741185,
+     "piloc-e1-target-1": 102.91922092756296,
+     "piloc-e1-target-2": 94.26998728353603,
+     "piloc-e1-target-3": 123.29992691766769,
+     "piloc-e1-target-4": 186.8725728620916
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 4.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 16.0,
+     "piloc-e1-target-4": 16.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 1940,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200025,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 14718,
+    "deadlines": {
+     "piloc-e1-target-0": 161.8052637513905,
+     "piloc-e1-target-1": 150.87294578291306,
+     "piloc-e1-target-2": 165.30560205980117,
+     "piloc-e1-target-3": 61.714093716123315,
+     "piloc-e1-target-4": 196.21793493305483,
+     "piloc-e1-target-5": 102.33927194647191
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 11.0,
+     "piloc-e1-target-1": 5.0,
+     "piloc-e1-target-2": 9.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 48.0,
+     "piloc-e1-target-5": 8.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2453,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200026,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 14778,
+    "deadlines": {
+     "piloc-e1-target-0": 78.37353461822075,
+     "piloc-e1-target-1": 142.12535093785618,
+     "piloc-e1-target-2": 177.53550667887748,
+     "piloc-e1-target-3": 181.69398305650725,
+     "piloc-e1-target-4": 147.72404394351724,
+     "piloc-e1-target-5": 81.12844343262242
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 13.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 8.0,
+     "piloc-e1-target-3": 7.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 2.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2463,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200027,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 9714,
+    "deadlines": {
+     "piloc-e1-target-0": 96.97481847242982,
+     "piloc-e1-target-1": 103.41137345373289,
+     "piloc-e1-target-2": 73.15083487834013,
+     "piloc-e1-target-3": 165.4620637636017
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 3.0,
+     "piloc-e1-target-1": 6.0,
+     "piloc-e1-target-2": 12.0,
+     "piloc-e1-target-3": 1.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1619,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200028,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 14460,
+    "deadlines": {
+     "piloc-e1-target-0": 160.78451072441476,
+     "piloc-e1-target-1": 130.3990924005671,
+     "piloc-e1-target-2": 162.0702732946593,
+     "piloc-e1-target-3": 109.023864794668,
+     "piloc-e1-target-4": 212.8661266675088,
+     "piloc-e1-target-5": 68.35813183329425
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 11.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 53.0,
+     "piloc-e1-target-5": 7.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2410,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200029,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 8016,
+    "deadlines": {
+     "piloc-e1-target-1": 101.97653248868251,
+     "piloc-e1-target-3": 66.67708638436105,
+     "piloc-e1-target-4": 161.55308583928303
+    },
+    "detected": 3,
+    "detected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-3": 4.0,
+     "piloc-e1-target-4": 5.0
+    },
+    "emissions": 3,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 3,
+    "packets": 18,
+    "packets_lost": 0,
+    "payload_bytes": 1336,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200030,
+    "undetected": 3,
+    "undetected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-2",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 15252,
+    "deadlines": {
+     "piloc-e1-target-0": 138.29371516912943,
+     "piloc-e1-target-1": 134.575543287252,
+     "piloc-e1-target-2": 176.23067062322673,
+     "piloc-e1-target-3": 218.87077327919022,
+     "piloc-e1-target-4": 124.95157416393117,
+     "piloc-e1-target-5": 120.32693762290026
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 75.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 87.0,
+     "piloc-e1-target-4": 9.0,
+     "piloc-e1-target-5": 4.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2542,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200031,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 9498,
+    "deadlines": {
+     "piloc-e1-target-1": 71.17742350748084,
+     "piloc-e1-target-2": 63.62340625224659,
+     "piloc-e1-target-3": 77.35055449037228,
+     "piloc-e1-target-5": 164.28298111593176
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-1": 2.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-5": 2.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1583,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200032,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-4"
+    ]
+   },
+   {
+    "airtime_bytes": 14754,
+    "deadlines": {
+     "piloc-e1-target-0": 73.05273016742036,
+     "piloc-e1-target-1": 94.94549165218581,
+     "piloc-e1-target-2": 88.78038261443595,
+     "piloc-e1-target-3": 87.78038261443595,
+     "piloc-e1-target-4": 105.02230029057412,
+     "piloc-e1-target-5": 101.89566073157084
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 11.0,
+     "piloc-e1-target-1": 5.0,
+     "piloc-e1-target-2": 4.0,
+     "piloc-e1-target-3": 3.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 4.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2459,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200033,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 12120,
+    "deadlines": {
+     "piloc-e1-target-1": 137.06073694172562,
+     "piloc-e1-target-2": 161.78946392657946,
+     "piloc-e1-target-3": 115.02055810973357,
+     "piloc-e1-target-4": 199.85079916936198,
+     "piloc-e1-target-5": 99.92430946964198
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-1": 4.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 20.0,
+     "piloc-e1-target-5": 1.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2020,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200034,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-0"
+    ]
+   },
+   {
+    "airtime_bytes": 10110,
+    "deadlines": {
+     "piloc-e1-target-0": 73.47403631629014,
+     "piloc-e1-target-1": 138.13348435836792,
+     "piloc-e1-target-2": 170.80420020074172,
+     "piloc-e1-target-4": 185.58000827440756
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 1.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-4": 31.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1685,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200035,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-3",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 9726,
+    "deadlines": {
+     "piloc-e1-target-1": 120.9246849299499,
+     "piloc-e1-target-2": 62.250117140173515,
+     "piloc-e1-target-3": 86.4436247799001,
+     "piloc-e1-target-4": 213.64948067919403
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 3.0,
+     "piloc-e1-target-4": 115.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1621,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200036,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 12180,
+    "deadlines": {
+     "piloc-e1-target-0": 136.02235893543352,
+     "piloc-e1-target-1": 141.16048958837462,
+     "piloc-e1-target-2": 135.20127671658898,
+     "piloc-e1-target-3": 112.63156505045953,
+     "piloc-e1-target-4": 156.49877223842992
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 3.0,
+     "piloc-e1-target-1": 2.0,
+     "piloc-e1-target-2": 2.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2030,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200037,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 12222,
+    "deadlines": {
+     "piloc-e1-target-1": 96.122274683959,
+     "piloc-e1-target-2": 135.23547238576305,
+     "piloc-e1-target-3": 162.02598874192256,
+     "piloc-e1-target-4": 100.28693956751825,
+     "piloc-e1-target-5": 134.37513030131632
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-1": 16.0,
+     "piloc-e1-target-2": 8.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 1.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2037,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200038,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-0"
+    ]
+   },
+   {
+    "airtime_bytes": 9792,
+    "deadlines": {
+     "piloc-e1-target-0": 83.83238602795326,
+     "piloc-e1-target-3": 99.5780959691067,
+     "piloc-e1-target-4": 62.931494552310525,
+     "piloc-e1-target-5": 99.51842103387028
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 5.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 2.0,
+     "piloc-e1-target-5": 2.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1632,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200039,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-2"
+    ]
+   },
+   {
+    "airtime_bytes": 14652,
+    "deadlines": {
+     "piloc-e1-target-0": 125.37241265945809,
+     "piloc-e1-target-1": 156.49056034582293,
+     "piloc-e1-target-2": 72.20130775429402,
+     "piloc-e1-target-3": 96.10866150809336,
+     "piloc-e1-target-4": 108.49680868218785,
+     "piloc-e1-target-5": 143.41158003367
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 5.0,
+     "piloc-e1-target-1": 2.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 3.0,
+     "piloc-e1-target-4": 5.0,
+     "piloc-e1-target-5": 3.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2442,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200040,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 11976,
+    "deadlines": {
+     "piloc-e1-target-0": 160.2178923572866,
+     "piloc-e1-target-1": 92.09799408744135,
+     "piloc-e1-target-2": 177.53039455233153,
+     "piloc-e1-target-3": 90.25462214089812,
+     "piloc-e1-target-4": 67.56973406720964
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 8.0,
+     "piloc-e1-target-1": 4.0,
+     "piloc-e1-target-2": 4.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 2.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 1996,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200041,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 7440,
+    "deadlines": {
+     "piloc-e1-target-2": 165.5983011137476,
+     "piloc-e1-target-3": 171.07056903014654,
+     "piloc-e1-target-4": 98.94792182364608
+    },
+    "detected": 3,
+    "detected_ids": [
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0
+    },
+    "emissions": 3,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 3,
+    "packets": 18,
+    "packets_lost": 0,
+    "payload_bytes": 1240,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200042,
+    "undetected": 3,
+    "undetected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 12576,
+    "deadlines": {
+     "piloc-e1-target-0": 118.72889346725614,
+     "piloc-e1-target-1": 107.39189163371375,
+     "piloc-e1-target-2": 98.45021599368361,
+     "piloc-e1-target-3": 61.931494552310525,
+     "piloc-e1-target-4": 818.866122962349
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 8.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 744.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2096,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200043,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 14700,
+    "deadlines": {
+     "piloc-e1-target-0": 70.43987092341308,
+     "piloc-e1-target-1": 172.360715377225,
+     "piloc-e1-target-2": 91.72323652424951,
+     "piloc-e1-target-3": 134.40932552475113,
+     "piloc-e1-target-4": 133.42438776475888,
+     "piloc-e1-target-5": 192.03750180732595
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 8.0,
+     "piloc-e1-target-1": 4.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 3.0,
+     "piloc-e1-target-4": 19.0,
+     "piloc-e1-target-5": 65.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2450,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200044,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15030,
+    "deadlines": {
+     "piloc-e1-target-0": 184.85174457346875,
+     "piloc-e1-target-1": 220.3964815830727,
+     "piloc-e1-target-2": 115.77479407287308,
+     "piloc-e1-target-3": 96.5008209207339,
+     "piloc-e1-target-4": 172.9700478307679,
+     "piloc-e1-target-5": 218.69960352057723
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 16.0,
+     "piloc-e1-target-1": 148.0,
+     "piloc-e1-target-2": 24.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 61.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2505,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200045,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15084,
+    "deadlines": {
+     "piloc-e1-target-0": 126.68640241248418,
+     "piloc-e1-target-1": 117.07487300941557,
+     "piloc-e1-target-2": 99.59070337770243,
+     "piloc-e1-target-3": 70.17073423570639,
+     "piloc-e1-target-4": 157.29253106036867,
+     "piloc-e1-target-5": 196.0723250713349
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 1.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 2.0,
+     "piloc-e1-target-3": 4.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 84.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2514,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200046,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15462,
+    "deadlines": {
+     "piloc-e1-target-0": 149.7296448491718,
+     "piloc-e1-target-1": 87.37224641625811,
+     "piloc-e1-target-2": 168.51327801604765,
+     "piloc-e1-target-3": 151.4178014248305,
+     "piloc-e1-target-4": 130.5505173977342,
+     "piloc-e1-target-5": 162.88870650756735
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 1.0,
+     "piloc-e1-target-1": 9.0,
+     "piloc-e1-target-2": 26.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 3.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2577,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200047,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15030,
+    "deadlines": {
+     "piloc-e1-target-0": 74.86067690476742,
+     "piloc-e1-target-1": 146.83445540466994,
+     "piloc-e1-target-2": 160.2855120933212,
+     "piloc-e1-target-3": 179.0049963052624,
+     "piloc-e1-target-4": 123.7590051970121,
+     "piloc-e1-target-5": 137.93237180815836
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 3.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 4.0,
+     "piloc-e1-target-5": 6.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2505,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200048,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 15432,
+    "deadlines": {
+     "piloc-e1-target-0": 601.8781991709802,
+     "piloc-e1-target-1": 154.89367964665402,
+     "piloc-e1-target-2": 194.95666085385488,
+     "piloc-e1-target-3": 127.45512914835358,
+     "piloc-e1-target-4": 73.7079829323866,
+     "piloc-e1-target-5": 183.36682129616423
+    },
+    "detected": 6,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 468.0,
+     "piloc-e1-target-1": 22.0,
+     "piloc-e1-target-2": 130.0,
+     "piloc-e1-target-3": 5.0,
+     "piloc-e1-target-4": 8.0,
+     "piloc-e1-target-5": 10.0
+    },
+    "emissions": 6,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 6,
+    "packets": 36,
+    "packets_lost": 0,
+    "payload_bytes": 2572,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200049,
+    "undetected": 0,
+    "undetected_ids": []
+   },
+   {
+    "airtime_bytes": 12588,
+    "deadlines": {
+     "piloc-e1-target-0": 98.29349407723157,
+     "piloc-e1-target-1": 115.4966034950977,
+     "piloc-e1-target-2": 106.58562154445994,
+     "piloc-e1-target-3": 100.46245718729608,
+     "piloc-e1-target-5": 96.42924562793158
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 8.0,
+     "piloc-e1-target-1": 6.0,
+     "piloc-e1-target-2": 9.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-5": 7.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2098,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200050,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-4"
+    ]
+   },
+   {
+    "airtime_bytes": 12804,
+    "deadlines": {
+     "piloc-e1-target-0": 144.26156089987973,
+     "piloc-e1-target-1": 94.22298460184547,
+     "piloc-e1-target-2": 102.87193038714852,
+     "piloc-e1-target-3": 131.32128965448652,
+     "piloc-e1-target-5": 146.39765059650418
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 5.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-5": 1.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2134,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200051,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-4"
+    ]
+   },
+   {
+    "airtime_bytes": 5160,
+    "deadlines": {
+     "piloc-e1-target-4": 175.6731442204932,
+     "piloc-e1-target-5": 121.23227377786716
+    },
+    "detected": 2,
+    "detected_ids": [
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-4": 13.0,
+     "piloc-e1-target-5": 9.0
+    },
+    "emissions": 2,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 2,
+    "packets": 12,
+    "packets_lost": 0,
+    "payload_bytes": 860,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200052,
+    "undetected": 4,
+    "undetected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3"
+    ]
+   },
+   {
+    "airtime_bytes": 9342,
+    "deadlines": {
+     "piloc-e1-target-0": 213.36039777801514,
+     "piloc-e1-target-2": 85.12524985237306,
+     "piloc-e1-target-3": 143.16048958837462,
+     "piloc-e1-target-5": 156.60138740835208
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 111.0,
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 4.0,
+     "piloc-e1-target-5": 6.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1557,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200053,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-4"
+    ]
+   },
+   {
+    "airtime_bytes": 12414,
+    "deadlines": {
+     "piloc-e1-target-0": 89.70400029258326,
+     "piloc-e1-target-1": 88.40191567746191,
+     "piloc-e1-target-3": 178.92891635244467,
+     "piloc-e1-target-4": 220.39694395266656,
+     "piloc-e1-target-5": 539.4597261196324
+    },
+    "detected": 5,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 1.0,
+     "piloc-e1-target-1": 1.0,
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 65.0,
+     "piloc-e1-target-5": 469.0
+    },
+    "emissions": 5,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 5,
+    "packets": 30,
+    "packets_lost": 0,
+    "payload_bytes": 2069,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200054,
+    "undetected": 1,
+    "undetected_ids": [
+     "piloc-e1-target-2"
+    ]
+   },
+   {
+    "airtime_bytes": 8016,
+    "deadlines": {
+     "piloc-e1-target-2": 139.62925053554054,
+     "piloc-e1-target-3": 149.56563726338968,
+     "piloc-e1-target-4": 147.83445540466994
+    },
+    "detected": 3,
+    "detected_ids": [
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 2.0
+    },
+    "emissions": 3,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 3,
+    "packets": 18,
+    "packets_lost": 0,
+    "payload_bytes": 1336,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200055,
+    "undetected": 3,
+    "undetected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 4962,
+    "deadlines": {
+     "piloc-e1-target-3": 169.1643943446898,
+     "piloc-e1-target-4": 139.1926237019662
+    },
+    "detected": 2,
+    "detected_ids": [
+     "piloc-e1-target-3",
+     "piloc-e1-target-4"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-3": 1.0,
+     "piloc-e1-target-4": 1.0
+    },
+    "emissions": 2,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 2,
+    "packets": 12,
+    "packets_lost": 0,
+    "payload_bytes": 827,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200056,
+    "undetected": 4,
+    "undetected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-5"
+    ]
+   },
+   {
+    "airtime_bytes": 4746,
+    "deadlines": {
+     "piloc-e1-target-4": 161.5775178901581,
+     "piloc-e1-target-5": 154.76551271127096
+    },
+    "detected": 2,
+    "detected_ids": [
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-4": 2.0,
+     "piloc-e1-target-5": 5.0
+    },
+    "emissions": 2,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 2,
+    "packets": 12,
+    "packets_lost": 0,
+    "payload_bytes": 791,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200057,
+    "undetected": 4,
+    "undetected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3"
+    ]
+   },
+   {
+    "airtime_bytes": 9534,
+    "deadlines": {
+     "piloc-e1-target-0": 210.5441952953023,
+     "piloc-e1-target-2": 107.63047869704164,
+     "piloc-e1-target-4": 93.40191567746191,
+     "piloc-e1-target-5": 109.21580009963631
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-2",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-0": 144.0,
+     "piloc-e1-target-2": 2.0,
+     "piloc-e1-target-4": 6.0,
+     "piloc-e1-target-5": 5.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1589,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200058,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-1",
+     "piloc-e1-target-3"
+    ]
+   },
+   {
+    "airtime_bytes": 9408,
+    "deadlines": {
+     "piloc-e1-target-2": 64.3574454246885,
+     "piloc-e1-target-3": 164.6731442204932,
+     "piloc-e1-target-4": 173.69640131991417,
+     "piloc-e1-target-5": 119.29852915029701
+    },
+    "detected": 4,
+    "detected_ids": [
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "detected_steps": {
+     "piloc-e1-target-2": 1.0,
+     "piloc-e1-target-3": 2.0,
+     "piloc-e1-target-4": 1.0,
+     "piloc-e1-target-5": 4.0
+    },
+    "emissions": 4,
+    "expired": 0,
+    "missed_after_detection": 0,
+    "on_time": 4,
+    "packets": 24,
+    "packets_lost": 0,
+    "payload_bytes": 1568,
+    "placed": 6,
+    "refresh_emissions": 0,
+    "seed": 1200059,
+    "undetected": 2,
+    "undetected_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1"
+    ]
+   }
+  ]
+ },
+ "phase": "step 1 — archive round 18, no new episode",
+ "read_for_round_19": {
+  "bytes_per_on_time_task": {
+   "A": 2490.702857,
+   "B": 2484.103448
+  },
+  "task_level_slack_in_deployed_path": {
+   "A": 1,
+   "B": 1,
+   "cells_with_any": 2,
+   "note": "detected − on_time over 120 episodes. The frozen six-goal deployed difficulty produces almost no post-detection failure, so a byte constraint judged against on-time tasks has no denominator here — the same vacated judgement round 16 recorded as `undecidable`."
+  },
+  "traffic_shape_under_the_frozen_defaults": {
+   "emissions_equal_detections": true,
+   "note": "`immediate` with no max-wait bound emits exactly one first report per detection and never refreshes: the deployed default traffic is already one packet-set per discovery, at payload x 6 receivers.",
+   "packets_lost_total": 0,
+   "refresh_emissions_total": 0,
+   "subscribers": 6
+  }
+ },
+ "round": "19",
+ "sources": {
+  "crosscheck": "runs/search_trace_and_policy_20260925/SEARCH_POLICY_COMPARISON_RESULTS.json",
+  "lifecycle": "*_rp.jsonl (recomputed with integrated_sar/lifecycle_metrics.py)",
+  "rows": "runs/search_trace_and_policy_20260925/rows/data_*.json",
+  "search_probe": "*_sp.jsonl",
+  "transcript": "*_ct.jsonl"
+ }
+}

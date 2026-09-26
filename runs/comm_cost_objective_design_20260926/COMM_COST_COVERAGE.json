@@ -1,0 +1,2421 @@
+{
+ "cost_model_from_source": {
+  "ack": "integrated_sar/comm_ack.py:136-168 (separate reverse ledger, never capped, does not share the credit)",
+  "budget": "integrated_sar/comm_budget.py:3-16, 83-94 (hard credit; a lost packet is billed in full)",
+  "charged_at": "integrated_sar/comm.py:894-898, 953, 974 (payload x subscribers, per send event)",
+  "pricer": "integrated_sar/comm.py:97-123 estimate_message_bytes (payload only)",
+  "unbilled": [
+   "PILOC sensing and DetectionEvent construction",
+   "event bus fan-out and TaskRegistry ingestion",
+   "registry polling by the sender",
+   "coordinator advice -> allocator logits",
+   "assignment commands -> executor",
+   "TaskEnv's own line-of-sight refresh and one-hop gossip",
+   "a send the budget refused"
+  ]
+ },
+ "deadline_slack_on_the_deployed_path": {
+  "arm": "A1 deployed, immediate, lossless, 60 seeds",
+  "deadline_horizon_per_task": {
+   "max": 179.89,
+   "mean": 119.317,
+   "median": 117.601,
+   "min": 60.002,
+   "n": 352,
+   "p10": 71.885,
+   "p90": 167.395
+  },
+  "detection_to_completion_duration": {
+   "max": 61.0,
+   "mean": 20.665,
+   "median": 20.0,
+   "min": 4.0,
+   "n": 352,
+   "p10": 9.0,
+   "p90": 34.0
+  },
+  "outcomes": {
+   "on_time": 352
+  },
+  "reading": "a report can be late by the slack at completion without changing that task's outcome; the distribution of that slack is what a pilot's tolerance has to be set against, and the near-empty failure count is why the frozen difficulty gives a cost constraint almost no contrast",
+  "remaining_slack_at_completion": {
+   "max": 174.971,
+   "mean": 98.652,
+   "median": 96.539,
+   "min": 20.014,
+   "n": 352,
+   "p10": 53.064,
+   "p90": 148.303
+  },
+  "unit": "秒（dt = 1.0，1 步 = 1 拍）"
+ },
+ "deployed_arm_table": {
+  "A1": {
+   "bytes_per_on_time_task": 2484.085227,
+   "cells": 60,
+   "comm_policy": "immediate",
+   "delivery_probability": 1.0,
+   "meaning": "deployed, immediate, lossless",
+   "per_episode": {
+    "airtime_bytes": 14573.3,
+    "budget_refused_sends": 0.0,
+    "discovered": 5.866667,
+    "emissions": 5.866667,
+    "expired": 0.0,
+    "first_emissions": 5.866667,
+    "on_time": 5.866667,
+    "packets_lost": 0.0,
+    "placed": 6.0,
+    "refresh_emissions": 0.0,
+    "targets_never_known": 0.133333
+   }
+  },
+  "A2": {
+   "bytes_per_on_time_task": 0.0,
+   "cells": 60,
+   "comm_policy": "always_hold",
+   "delivery_probability": 1.0,
+   "meaning": "deployed, always_hold (zero uplink traffic)",
+   "per_episode": {
+    "airtime_bytes": 0.0,
+    "budget_refused_sends": 0.0,
+    "discovered": 5.866667,
+    "emissions": 0.0,
+    "expired": 0.3,
+    "first_emissions": 0.0,
+    "on_time": 5.55,
+    "packets_lost": 0.0,
+    "placed": 6.0,
+    "refresh_emissions": 0.0,
+    "targets_never_known": 0.45
+   }
+  },
+  "A3": {
+   "bytes_per_on_time_task": 2484.085227,
+   "cells": 60,
+   "comm_policy": "immediate",
+   "delivery_probability": 0.7,
+   "meaning": "deployed, immediate, 30 % packet loss",
+   "per_episode": {
+    "airtime_bytes": 14573.3,
+    "budget_refused_sends": 0.0,
+    "discovered": 5.866667,
+    "emissions": 5.866667,
+    "expired": 0.0,
+    "first_emissions": 5.866667,
+    "on_time": 5.866667,
+    "packets_lost": 10.25,
+    "placed": 6.0,
+    "refresh_emissions": 0.0,
+    "targets_never_known": 0.133333
+   }
+  },
+  "A4": {
+   "bytes_per_on_time_task": 3179.629091,
+   "cells": 60,
+   "comm_policy": "immediate",
+   "delivery_probability": 0.7,
+   "meaning": "as A3 but with the environment's own knowledge channels switched off: D1 set gossip_interval=100000, and that counter gates propagate_task_completion (old_task_env.py:1107-1110), which is the line-of-sight truth refresh AND the one-hop gossip together (old_task_env.py:477-512) — so no archived arm separates the two",
+   "per_episode": {
+    "airtime_bytes": 14573.3,
+    "budget_refused_sends": 0.0,
+    "discovered": 5.866667,
+    "emissions": 5.866667,
+    "expired": 1.283333,
+    "first_emissions": 5.866667,
+    "on_time": 4.583333,
+    "packets_lost": 10.25,
+    "placed": 6.0,
+    "refresh_emissions": 0.0,
+    "targets_never_known": 0.133333
+   }
+  },
+  "derived": {
+   "budget_was_never_enforced": true,
+   "first_reports_are_the_whole_bill": true,
+   "value_of_the_uplink_C1": {
+    "bytes_per_episode": 14573.3,
+    "bytes_per_extra_on_time_task": 46020.898925,
+    "crosscheck": "round 16 published +0.31667 个/ep and 14 573.3 B/ep here",
+    "on_time_per_episode": 0.316667
+   }
+  }
+ },
+ "link_coverage": {
+  "consequence": "the bill covers one edge only, while the receivers can learn the same fact through two unbilled environment channels",
+  "free_knowledge_channels": [
+   "env line-of-sight truth refresh (task_allocation/old_task_env.py:477-492)",
+   "robot one-hop gossip (old_task_env.py:494-512, gated by gossip_interval)"
+  ],
+  "only_billed_boundary": "sending node -> rescue robots' belief (the uplink)"
+ },
+ "phase": "step 2 — reuse deployed data, no new episode",
+ "price_of_one_report": {
+  "cost_bytes": {
+   "max": 2718,
+   "mean": 2484.085227,
+   "median": 2484,
+   "min": 2190
+  },
+  "emissions": 1056,
+  "formula": "cost_bytes = payload_bytes x subscribers, billed per attempt",
+  "payload_bytes": {
+   "max": 453,
+   "mean": 414.014205,
+   "median": 414,
+   "min": 365
+  },
+  "subscribers_observed": [
+   6
+  ]
+ },
+ "redundancy_against_the_silence_counterfactual": {
+  "byte_share": {
+   "load_bearing_outcome_only_with_uplink": 0.054559,
+   "redundant_knowledge_and_outcome": 0.3124,
+   "uplink_bought_time_same_outcome": 0.633041
+  },
+  "bytes_by_category": {
+   "load_bearing_outcome_only_with_uplink": 47706,
+   "redundant_knowledge_and_outcome": 273162,
+   "uplink_bought_time_same_outcome": 553530
+  },
+  "category_definitions": {
+   "absent_from_both_arms": "residual bucket, expected empty",
+   "known_in_silence_but_different_outcome": "the target was still known in silence but the task ended differently — the uplink changed the outcome",
+   "load_bearing_outcome_only_with_uplink": "never known at all in silence — the report was necessary for the task to exist for any robot",
+   "redundant_knowledge_and_outcome": "some robot knew this target with no uplink at a step no later than with it, and the task ended the same way — the emission carried nothing",
+   "uplink_bought_time_same_outcome": "known without the uplink too, but later; the outcome happened to survive the delay"
+  },
+  "counts": {
+   "load_bearing_outcome_only_with_uplink": 19,
+   "redundant_knowledge_and_outcome": 110,
+   "uplink_bought_time_same_outcome": 223
+  },
+  "emission_costs_by_seed": {
+   "1100000": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2706,
+     "payload_bytes": 451
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2304,
+     "payload_bytes": 384
+    }
+   },
+   "1100001": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2310,
+     "payload_bytes": 385
+    }
+   },
+   "1100002": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2694,
+     "payload_bytes": 449
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2208,
+     "payload_bytes": 368
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2394,
+     "payload_bytes": 399
+    }
+   },
+   "1100003": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2658,
+     "payload_bytes": 443
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2304,
+     "payload_bytes": 384
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2694,
+     "payload_bytes": 449
+    }
+   },
+   "1100004": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2394,
+     "payload_bytes": 399
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2490,
+     "payload_bytes": 415
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    }
+   },
+   "1100005": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2508,
+     "payload_bytes": 418
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    }
+   },
+   "1100006": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2274,
+     "payload_bytes": 379
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    }
+   },
+   "1100007": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    }
+   },
+   "1100008": {
+    "piloc-e1-target-1": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2310,
+     "payload_bytes": 385
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2466,
+     "payload_bytes": 411
+    }
+   },
+   "1100009": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    }
+   },
+   "1100010": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2574,
+     "payload_bytes": 429
+    }
+   },
+   "1100011": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2304,
+     "payload_bytes": 384
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    }
+   },
+   "1100012": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2718,
+     "payload_bytes": 453
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2316,
+     "payload_bytes": 386
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2304,
+     "payload_bytes": 384
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2502,
+     "payload_bytes": 417
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    }
+   },
+   "1100013": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2508,
+     "payload_bytes": 418
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    }
+   },
+   "1100014": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2700,
+     "payload_bytes": 450
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2310,
+     "payload_bytes": 385
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    }
+   },
+   "1100015": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2658,
+     "payload_bytes": 443
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    }
+   },
+   "1100016": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2712,
+     "payload_bytes": 452
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2658,
+     "payload_bytes": 443
+    }
+   },
+   "1100017": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2502,
+     "payload_bytes": 417
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2310,
+     "payload_bytes": 385
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    }
+   },
+   "1100018": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2514,
+     "payload_bytes": 419
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2508,
+     "payload_bytes": 418
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2304,
+     "payload_bytes": 384
+    }
+   },
+   "1100019": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2274,
+     "payload_bytes": 379
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2658,
+     "payload_bytes": 443
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    }
+   },
+   "1100020": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2466,
+     "payload_bytes": 411
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2298,
+     "payload_bytes": 383
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    }
+   },
+   "1100021": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2658,
+     "payload_bytes": 443
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2418,
+     "payload_bytes": 403
+    }
+   },
+   "1100022": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2394,
+     "payload_bytes": 399
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2388,
+     "payload_bytes": 398
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2388,
+     "payload_bytes": 398
+    }
+   },
+   "1100023": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2502,
+     "payload_bytes": 417
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2694,
+     "payload_bytes": 449
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2226,
+     "payload_bytes": 371
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    }
+   },
+   "1100024": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2304,
+     "payload_bytes": 384
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2712,
+     "payload_bytes": 452
+    }
+   },
+   "1100025": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2460,
+     "payload_bytes": 410
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2208,
+     "payload_bytes": 368
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2298,
+     "payload_bytes": 383
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2298,
+     "payload_bytes": 383
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    }
+   },
+   "1100026": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2274,
+     "payload_bytes": 379
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    }
+   },
+   "1100027": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2190,
+     "payload_bytes": 365
+    }
+   },
+   "1100028": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2490,
+     "payload_bytes": 415
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2694,
+     "payload_bytes": 449
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    }
+   },
+   "1100029": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2274,
+     "payload_bytes": 379
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2466,
+     "payload_bytes": 411
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2700,
+     "payload_bytes": 450
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    }
+   },
+   "1100030": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2298,
+     "payload_bytes": 383
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2658,
+     "payload_bytes": 443
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2490,
+     "payload_bytes": 415
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    }
+   },
+   "1100031": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2298,
+     "payload_bytes": 383
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    }
+   },
+   "1100032": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2274,
+     "payload_bytes": 379
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    }
+   },
+   "1100033": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2460,
+     "payload_bytes": 410
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    }
+   },
+   "1100034": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2658,
+     "payload_bytes": 443
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2304,
+     "payload_bytes": 384
+    }
+   },
+   "1100035": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2490,
+     "payload_bytes": 415
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2658,
+     "payload_bytes": 443
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    }
+   },
+   "1100036": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    }
+   },
+   "1100037": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2502,
+     "payload_bytes": 417
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2502,
+     "payload_bytes": 417
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2490,
+     "payload_bytes": 415
+    }
+   },
+   "1100038": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2502,
+     "payload_bytes": 417
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2694,
+     "payload_bytes": 449
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2574,
+     "payload_bytes": 429
+    }
+   },
+   "1100039": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2268,
+     "payload_bytes": 378
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2310,
+     "payload_bytes": 385
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2190,
+     "payload_bytes": 365
+    }
+   },
+   "1100040": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2490,
+     "payload_bytes": 415
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    }
+   },
+   "1100041": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2490,
+     "payload_bytes": 415
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2310,
+     "payload_bytes": 385
+    }
+   },
+   "1100042": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2304,
+     "payload_bytes": 384
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2298,
+     "payload_bytes": 383
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2310,
+     "payload_bytes": 385
+    }
+   },
+   "1100043": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2466,
+     "payload_bytes": 411
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    }
+   },
+   "1100044": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2424,
+     "payload_bytes": 404
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2700,
+     "payload_bytes": 450
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2700,
+     "payload_bytes": 450
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    }
+   },
+   "1100045": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2460,
+     "payload_bytes": 410
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2454,
+     "payload_bytes": 409
+    }
+   },
+   "1100046": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2706,
+     "payload_bytes": 451
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2304,
+     "payload_bytes": 384
+    }
+   },
+   "1100047": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2700,
+     "payload_bytes": 450
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2304,
+     "payload_bytes": 384
+    }
+   },
+   "1100048": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    }
+   },
+   "1100049": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2694,
+     "payload_bytes": 449
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2310,
+     "payload_bytes": 385
+    }
+   },
+   "1100050": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2490,
+     "payload_bytes": 415
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2664,
+     "payload_bytes": 444
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2502,
+     "payload_bytes": 417
+    }
+   },
+   "1100051": {
+    "piloc-e1-target-1": {
+     "cost_bytes": 2658,
+     "payload_bytes": 443
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2658,
+     "payload_bytes": 443
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    }
+   },
+   "1100052": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2706,
+     "payload_bytes": 451
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2508,
+     "payload_bytes": 418
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2304,
+     "payload_bytes": 384
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2298,
+     "payload_bytes": 383
+    }
+   },
+   "1100053": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2310,
+     "payload_bytes": 385
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2658,
+     "payload_bytes": 443
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2502,
+     "payload_bytes": 417
+    }
+   },
+   "1100054": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2316,
+     "payload_bytes": 386
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2274,
+     "payload_bytes": 379
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    }
+   },
+   "1100055": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2472,
+     "payload_bytes": 412
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2508,
+     "payload_bytes": 418
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2466,
+     "payload_bytes": 411
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2490,
+     "payload_bytes": 415
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2502,
+     "payload_bytes": 417
+    }
+   },
+   "1100056": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2274,
+     "payload_bytes": 379
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2676,
+     "payload_bytes": 446
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2280,
+     "payload_bytes": 380
+    }
+   },
+   "1100057": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2292,
+     "payload_bytes": 382
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2688,
+     "payload_bytes": 448
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2196,
+     "payload_bytes": 366
+    }
+   },
+   "1100058": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2502,
+     "payload_bytes": 417
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2496,
+     "payload_bytes": 416
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2478,
+     "payload_bytes": 413
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2670,
+     "payload_bytes": 445
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2682,
+     "payload_bytes": 447
+    }
+   },
+   "1100059": {
+    "piloc-e1-target-0": {
+     "cost_bytes": 2316,
+     "payload_bytes": 386
+    },
+    "piloc-e1-target-1": {
+     "cost_bytes": 2286,
+     "payload_bytes": 381
+    },
+    "piloc-e1-target-2": {
+     "cost_bytes": 2484,
+     "payload_bytes": 414
+    },
+    "piloc-e1-target-3": {
+     "cost_bytes": 2196,
+     "payload_bytes": 366
+    },
+    "piloc-e1-target-4": {
+     "cost_bytes": 2490,
+     "payload_bytes": 415
+    },
+    "piloc-e1-target-5": {
+     "cost_bytes": 2502,
+     "payload_bytes": 417
+    }
+   }
+  },
+  "examples": {
+   "load_bearing_outcome_only_with_uplink": [
+    {
+     "cost_bytes": 2688,
+     "knowledge_A1": {
+      "channel": "uplink_arrived",
+      "first_step": 182
+     },
+     "knowledge_A2": null,
+     "outcome_A1": "on_time",
+     "outcome_A2": "expired",
+     "seed": 1100001,
+     "target": "piloc-e1-target-0"
+    },
+    {
+     "cost_bytes": 2304,
+     "knowledge_A1": {
+      "channel": "uplink_arrived",
+      "first_step": 149
+     },
+     "knowledge_A2": null,
+     "outcome_A1": "on_time",
+     "outcome_A2": "expired",
+     "seed": 1100003,
+     "target": "piloc-e1-target-4"
+    },
+    {
+     "cost_bytes": 2694,
+     "knowledge_A1": {
+      "channel": "uplink_arrived",
+      "first_step": 262
+     },
+     "knowledge_A2": null,
+     "outcome_A1": "on_time",
+     "outcome_A2": "expired",
+     "seed": 1100003,
+     "target": "piloc-e1-target-5"
+    },
+    {
+     "cost_bytes": 2508,
+     "knowledge_A1": {
+      "channel": "uplink_arrived",
+      "first_step": 173
+     },
+     "knowledge_A2": null,
+     "outcome_A1": "on_time",
+     "outcome_A2": "expired",
+     "seed": 1100005,
+     "target": "piloc-e1-target-0"
+    }
+   ],
+   "redundant_knowledge_and_outcome": [
+    {
+     "cost_bytes": 2304,
+     "knowledge_A1": {
+      "channel": "uplink_arrived",
+      "first_step": 212
+     },
+     "knowledge_A2": {
+      "channel": "non_uplink",
+      "first_step": 212
+     },
+     "outcome_A1": "on_time",
+     "outcome_A2": "on_time",
+     "seed": 1100000,
+     "target": "piloc-e1-target-5"
+    },
+    {
+     "cost_bytes": 2292,
+     "knowledge_A1": {
+      "channel": "uplink_arrived",
+      "first_step": 16
+     },
+     "knowledge_A2": {
+      "channel": "non_uplink",
+      "first_step": 16
+     },
+     "outcome_A1": "on_time",
+     "outcome_A2": "on_time",
+     "seed": 1100001,
+     "target": "piloc-e1-target-3"
+    },
+    {
+     "cost_bytes": 2310,
+     "knowledge_A1": {
+      "channel": "uplink_arrived",
+      "first_step": 220
+     },
+     "knowledge_A2": {
+      "channel": "non_uplink",
+      "first_step": 220
+     },
+     "outcome_A1": "on_time",
+     "outcome_A2": "on_time",
+     "seed": 1100001,
+     "target": "piloc-e1-target-5"
+    },
+    {
+     "cost_bytes": 2208,
+     "knowledge_A1": {
+      "channel": "uplink_arrived",
+      "first_step": 198
+     },
+     "knowledge_A2": {
+      "channel": "non_uplink",
+      "first_step": 198
+     },
+     "outcome_A1": "on_time",
+     "outcome_A2": "on_time",
+     "seed": 1100002,
+     "target": "piloc-e1-target-4"
+    }
+   ],
+   "uplink_bought_time_same_outcome": [
+    {
+     "cost_bytes": 2682,
+     "knowledge_A1": {
+      "channel": "uplink_arrived",
+      "first_step": 5
+     },
+     "knowledge_A2": {
+      "channel": "non_uplink",
+      "first_step": 6
+     },
+     "outcome_A1": "on_time",
+     "outcome_A2": "on_time",
+     "seed": 1100000,
+     "target": "piloc-e1-target-0"
+    },
+    {
+     "cost_bytes": 2280,
+     "knowledge_A1": {
+      "channel": "uplink_arrived",
+      "first_step": 1
+     },
+     "knowledge_A2": {
+      "channel": "non_uplink",
+      "first_step": 2
+     },
+     "outcome_A1": "on_time",
+     "outcome_A2": "on_time",
+     "seed": 1100000,
+     "target": "piloc-e1-target-1"
+    },
+    {
+     "cost_bytes": 2682,
+     "knowledge_A1": {
+      "channel": "uplink_arrived",
+      "first_step": 1
+     },
+     "knowledge_A2": {
+      "channel": "non_uplink",
+      "first_step": 2
+     },
+     "outcome_A1": "on_time",
+     "outcome_A2": "on_time",
+     "seed": 1100000,
+     "target": "piloc-e1-target-2"
+    },
+    {
+     "cost_bytes": 2706,
+     "knowledge_A1": {
+      "channel": "uplink_arrived",
+      "first_step": 209
+     },
+     "knowledge_A2": {
+      "channel": "non_uplink",
+      "first_step": 210
+     },
+     "outcome_A1": "on_time",
+     "outcome_A2": "on_time",
+     "seed": 1100000,
+     "target": "piloc-e1-target-3"
+    }
+   ]
+  },
+  "method": "paired by seed, target by target: arm A1 (immediate, lossless) against arm A2 (always_hold). A2 is the only archived deployed-path run where the uplink sent nothing, so it is the counterfactual the archive actually supports.",
+  "per_recipient_payload_by_category": {
+   "load_bearing_outcome_only_with_uplink": 7951,
+   "redundant_knowledge_and_outcome": 45527,
+   "uplink_bought_time_same_outcome": 92255
+  },
+  "per_seed_rows": [
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100000,
+    "strictly_removable_bytes": 2304
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100001,
+    "strictly_removable_bytes": 4602
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100002,
+    "strictly_removable_bytes": 4602
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100003,
+    "strictly_removable_bytes": 0
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100004,
+    "strictly_removable_bytes": 7644
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100005,
+    "strictly_removable_bytes": 2286
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100006,
+    "strictly_removable_bytes": 2484
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100007,
+    "strictly_removable_bytes": 2496
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 2
+    },
+    "seed": 1100008,
+    "strictly_removable_bytes": 7452
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100009,
+    "strictly_removable_bytes": 5148
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100010,
+    "strictly_removable_bytes": 2472
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 2
+    },
+    "seed": 1100011,
+    "strictly_removable_bytes": 7086
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 2
+    },
+    "seed": 1100012,
+    "strictly_removable_bytes": 7302
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 4,
+     "uplink_bought_time_same_outcome": 2
+    },
+    "seed": 1100013,
+    "strictly_removable_bytes": 10326
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100014,
+    "strictly_removable_bytes": 0
+   },
+   {
+    "categories": {
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100015,
+    "strictly_removable_bytes": 0
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100016,
+    "strictly_removable_bytes": 5154
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 2
+    },
+    "seed": 1100017,
+    "strictly_removable_bytes": 4812
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100018,
+    "strictly_removable_bytes": 4818
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100019,
+    "strictly_removable_bytes": 7446
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100020,
+    "strictly_removable_bytes": 2676
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100021,
+    "strictly_removable_bytes": 7548
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100022,
+    "strictly_removable_bytes": 2664
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100023,
+    "strictly_removable_bytes": 2694
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100024,
+    "strictly_removable_bytes": 7272
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100025,
+    "strictly_removable_bytes": 7038
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100026,
+    "strictly_removable_bytes": 4758
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100027,
+    "strictly_removable_bytes": 5154
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100028,
+    "strictly_removable_bytes": 4776
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100029,
+    "strictly_removable_bytes": 2274
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100030,
+    "strictly_removable_bytes": 2670
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100031,
+    "strictly_removable_bytes": 2298
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100032,
+    "strictly_removable_bytes": 2688
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100033,
+    "strictly_removable_bytes": 4746
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100034,
+    "strictly_removable_bytes": 0
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100035,
+    "strictly_removable_bytes": 2688
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100036,
+    "strictly_removable_bytes": 0
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100037,
+    "strictly_removable_bytes": 4992
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 2
+    },
+    "seed": 1100038,
+    "strictly_removable_bytes": 7752
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100039,
+    "strictly_removable_bytes": 4962
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100040,
+    "strictly_removable_bytes": 7830
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100041,
+    "strictly_removable_bytes": 4974
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100042,
+    "strictly_removable_bytes": 0
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 4,
+     "uplink_bought_time_same_outcome": 2
+    },
+    "seed": 1100043,
+    "strictly_removable_bytes": 9732
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100044,
+    "strictly_removable_bytes": 7452
+   },
+   {
+    "categories": {
+     "uplink_bought_time_same_outcome": 6
+    },
+    "seed": 1100045,
+    "strictly_removable_bytes": 0
+   },
+   {
+    "categories": {
+     "uplink_bought_time_same_outcome": 6
+    },
+    "seed": 1100046,
+    "strictly_removable_bytes": 0
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100047,
+    "strictly_removable_bytes": 4590
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100048,
+    "strictly_removable_bytes": 2496
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100049,
+    "strictly_removable_bytes": 5004
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100050,
+    "strictly_removable_bytes": 5340
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 2
+    },
+    "seed": 1100051,
+    "strictly_removable_bytes": 7818
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100052,
+    "strictly_removable_bytes": 7488
+   },
+   {
+    "categories": {
+     "load_bearing_outcome_only_with_uplink": 1,
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100053,
+    "strictly_removable_bytes": 2478
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100054,
+    "strictly_removable_bytes": 7434
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100055,
+    "strictly_removable_bytes": 4968
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 1,
+     "uplink_bought_time_same_outcome": 5
+    },
+    "seed": 1100056,
+    "strictly_removable_bytes": 2274
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 3,
+     "uplink_bought_time_same_outcome": 3
+    },
+    "seed": 1100057,
+    "strictly_removable_bytes": 7566
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 5,
+     "uplink_bought_time_same_outcome": 1
+    },
+    "seed": 1100058,
+    "strictly_removable_bytes": 12828
+   },
+   {
+    "categories": {
+     "redundant_knowledge_and_outcome": 2,
+     "uplink_bought_time_same_outcome": 4
+    },
+    "seed": 1100059,
+    "strictly_removable_bytes": 4806
+   }
+  ],
+  "savings_ceiling": {
+   "note": "strict = only emissions redundant in both knowledge and outcome; permissive additionally counts emissions where silence delayed knowledge but the recorded outcome survived. The permissive figure is NOT a savings estimate: A2's robots moved on a different trajectory precisely because they were not told, so 'later but still on time' is not a stable counterfactual. Only the strict figure may be quoted, and only as a ceiling on what a controller could aim at.",
+   "permissive_bytes_per_episode": 13778.2,
+   "permissive_share_of_bill": 0.945441,
+   "strict_bytes_per_episode": 4552.7,
+   "strict_share_of_bill": 0.3124
+  },
+  "seeds_paired": 60,
+  "targets_compared": 352
+ },
+ "round": "19",
+ "sources": {
+  "deployed_arms": "runs/comm_info_path_validation_20260923/{rows,logs}/data_{A1..A4}_s*.json[l]",
+  "isolated_rules_cited_from": "runs/comm_task_pressure_learnability_20260922/RULE_MATRIX_g12.json and runs/comm_research_closure_20260923/",
+  "round_18_cost": "runs/comm_cost_objective_design_20260926/ROUND18_ARCHIVE_CLOSURE.json",
+  "seeded_by": "round 16 four-arm matrix, 60 paired seeds 1100000..1100059"
+ },
+ "what_is_not_on_disk": {
+  "budgeted_deployed_path": "no archived run combines an enforced --comm-budget-bytes with the deployed information path (gossip_interval=2, comm_range=0.3). Round 16 is deployed but never binding (budget_refused_sends == 0 everywhere); rounds 12/15 are budgeted but isolated.",
+  "interior_cost_points": "the deployed archive holds two cost points only: 0 B (A2) and 14 573.3 B (A1). A cost-minimising controller needs the interior, and the interior cannot be obtained offline because silencing a report changes which robot is in line of sight later, which is what the unbilled channel depends on.",
+  "recipient_heterogeneity": "subscribers is a single scalar for the whole step (integrated_sar/comm_policy.py:112); per-recipient pricing does not exist, so 'address fewer robots' is not an available lever (round 17: global_fanout_is_only_a_scalar).",
+  "the_two_free_channels_separately": "the line-of-sight truth refresh and the one-hop gossip live in the same function (old_task_env.py:477-512) behind the same interval gate (:1107-1110), and every archived arm either leaves both on or switches both off. Which of the two carries the redundant knowledge is therefore not answerable from the archive, and the savings a controller could chase cannot be attributed to one channel."
+ }
+}
