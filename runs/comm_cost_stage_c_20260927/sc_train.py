@@ -122,6 +122,7 @@ def train_seed(training_seed: int, *, episodes: int, freeze: dict[str, Any],
                                         for parameter in group["params"]],
             "controller_parameter_ids": [id(parameter) for parameter in controller.parameters],
         }
+        common.CHECKPOINTS.mkdir(parents=True, exist_ok=True)
         (common.CHECKPOINTS / f"sc_batch_s{training_seed}_b{batch_index}.json").write_text(
             json.dumps(batch_record, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
         trainer.save_checkpoint(controller, optimizer, state, checkpoint, freeze=freeze)

@@ -148,6 +148,7 @@ HARNESS_MODULES = (
     "sc_check.py",
     "sc_resume_probe.py",
     "sc_freeze.py",
+    "sc_recover.py",
     "test_sc_math.py",
 )
 CHECKPOINT_FILES = (
