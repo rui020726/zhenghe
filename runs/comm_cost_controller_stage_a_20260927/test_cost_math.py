@@ -108,8 +108,8 @@ class Gradients(unittest.TestCase):
         c = (prob * price).mean()
         y = (prob * benefit).mean()
         g = y_reference - y - delta
-        loss = -(c) - lam * g          # 最小化 c + lam*g
-        loss.backward()
+        l_max = -(c) - lam * g       # L_max = -(c + lam*g)：最大化形式；
+        l_max.backward()             # grad L_max = -grad c + lam*grad y（不是 -dL_max/dtheta）
 
         self.assertTrue(torch.isfinite(theta.grad).all())
         # 参考臂是外部固定常数：不产生梯度，也不出现在 autograd 图里

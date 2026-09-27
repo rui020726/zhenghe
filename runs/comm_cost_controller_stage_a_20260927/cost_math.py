@@ -5,13 +5,18 @@
 "每条 rollout 字段、优势/return 定义、masked 项处理、成本按实际尝试结算的时点、
 HOLD 对后续费用的影响、episode 截断/终止区别、梯度来源"。
 
-符号（指令 §3.1，测试基准）：
+符号（指令 §3.1 测试基准；梯度形式与单位按 Stage B spec §2 逐字固定）：
 
     c = C_measured / B0                    已计量尝试字节 ÷ **预锁定**常数 B0
     g = E[Y_ref] - E[Y_policy] - delta     >0 表示约束被违背
-    L_max = -E[c] - lambda * g,  lambda >= 0
+    L_max = -E[c] - lambda * g,  lambda >= 0            （最大化形式）
+    grad L_max = -grad E[c] + lambda * grad E[Y_policy] （**不是** -dL_max/dtheta）
+    loss_to_minimize = -L_max = E[c] + lambda * g       （训练器的下降形式）
     lambda_next = project_nonnegative(lambda + eta * g_hat)
     A = lambda * A_task - A_cost           组合优势（推导见 actor_advantage）
+
+单位（Stage B spec §2）：c 无量纲（B/B0），g 与 A_task 为任务数，A_cost 为归一化成本；
+lambda 的量纲是 **归一化成本 / 任务数**（**不是**倒数），使 lambda*A_task 与 A_cost 同量纲。
 
 三条符号纪律（都有对应测试）：
   - 任务效果相同而字节更多 ⇒ 优化方向必须更差；
@@ -197,13 +202,20 @@ def actor_advantage(advantage_task: torch.Tensor, advantage_cost: torch.Tensor,
     """组合优势 `A = lambda * A_task - A_cost`（最小化成本、任务进约束的拉格朗日形式）。
 
     推导（不做机械替换）：拉格朗日量 `L = E[c] + lambda * g`，
-    `g = E[Y_ref] - E[Y_policy] - delta`。对策略参数取**上升**方向即
-    `-dL/dtheta = -dE[c]/dtheta + lambda * dE[Y_policy]/dtheta`（`Y_ref` 与 `delta`
-    是常数，不进 actor 求导）。逐决策奖励因此是 `r = -c + lambda * y`；优势算子对
-    奖励线性、双 critic 各估一项，组合优势即 `lambda * A_task - A_cost`。
+    `g = E[Y_ref] - E[Y_policy] - delta`。最大化形式 `L_max = -L` 对策略参数的梯度
+    （即训练器应上升的方向、也等于逐决策优势的期望方向）是
 
-    单位：`A_task` 为按时任务数，`A_cost` 为归一化成本；`lambda` 单位为
-    任务数 / 归一化成本。**不做逐 batch 分量标准化**：分别标准化两项会改变其有效
+        grad L_max = -grad E[c] + lambda * grad E[Y_policy]
+
+    注意**不要**把它写成 `-dL_max/dtheta`：那是 `L_max` 自身的下降方向，符号会反。
+    （`Y_ref` 与 `delta` 是常数，不进 actor 求导。）等价的下降形式
+    `loss_to_minimize = -L_max = E[c] + lambda*g`；逐决策奖励即 `r = -c + lambda*y`。
+    优势算子对奖励线性、双 critic 各估一项，组合优势即 `lambda * A_task - A_cost`。
+
+    单位：`A_task` 为按时任务数，`A_cost` 为归一化成本；`lambda` 的量纲是
+    **归一化成本 / 任务数**（不是倒数），使 `lambda*A_task` 与 `A_cost` 同量纲。
+    `dual_step` 的 `eta` 量纲随之是 归一化成本 / 任务数²。
+    **不做逐 batch 分量标准化**：分别标准化两项会改变其有效
     单位、等效改写 lambda，凡引入分量标准化必须作为独立变更重新登记
     （第十九轮 spec §2：训练若归一化，登记固定归一化常数）。
     """

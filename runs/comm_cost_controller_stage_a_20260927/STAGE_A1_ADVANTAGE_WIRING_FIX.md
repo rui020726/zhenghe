@@ -33,16 +33,21 @@
 
     L = E[c] + λ·g,   g = E[Y_ref] − E[Y_policy] − δ
 
-对策略参数取**上升**方向（`Y_ref` 与 `delta` 是常数，不进 actor 求导）：
+最大化形式与其对策略参数的梯度（`Y_ref` 与 `delta` 是常数，不进 actor 求导）：
 
-    −dL/dθ = −dE[c]/dθ + λ·dE[Y_policy]/dθ
+    L_max = −E[c] − λ·g
+    grad L_max = −grad E[c] + λ·grad E[Y_policy]     ← 训练器应上升的方向
+    loss_to_minimize = −L_max = E[c] + λ·g           ← 训练器的下降形式
 
+**注意**：`grad L_max` 不能写成 `−dL_max/dθ`——那是 `L_max` 自身的下降方向，符号会反。
 逐决策奖励即 `r = −c + λ·y`。优势算子对奖励线性、双 critic 各估一项
 （GAE 同样线性：`values` 可加、递推系数固定），所以
 
     A = λ·A_task − A_cost
 
 **λ 挂在任务项上**：任务经约束进目标（λ=0 表示当前约束松），成本直接以负号进目标。
+λ 的量纲是 **归一化成本 / 任务数**（Stage B spec §2 固定，不是倒数），
+`dual_step` 步长 `eta` 的量纲随之是 归一化成本 / 任务数²。
 
 ## 三、反例测试：经实际 actor surrogate，λ=0 与 λ=10 均验证方向
 
@@ -76,7 +81,7 @@
 |---|---|---|
 | GAE | **一致** | 递推 `A_t = δ_t + γ·λ_GAE·(1−done)·A_{t+1}`；真正终止不 bootstrap、时间截断用 bootstrap；γ=1 复现无折扣总量、γ<1 不等于无折扣总量均有测试锁定；是否折扣由调用方显式登记 |
 | 成本归一化 | **一致** | 固定**预锁定**常数 B0（运行身份，非每策略分母）；`normalise`/`to_bytes` 互逆且测试锁定；登记进训练状态（`cost-normalization/1`）；符合原 spec §2"登记固定归一化常数、评估同时报告原单位、不用每臂各自成功数作分母" |
-| 分量标准化 | **原为未登记缺口，现已登记决策** | 代码从未实现、文档从未声称，修订前无自相矛盾；但两项单位不同（任务数 vs 归一化成本），若 Stage B 改为逐 batch 标准化两个分量，λ 的有效单位被等效改写。**本版决策：不做分量标准化**，λ 以 任务数/归一化成本 为固定单位进入组合；凡引入分量标准化必须作为独立变更重新登记（已写入 `actor_advantage` docstring） |
+| 分量标准化 | **原为未登记缺口，现已登记决策** | 代码从未实现、文档从未声称，修订前无自相矛盾；但两项单位不同（任务数 vs 归一化成本），若 Stage B 改为逐 batch 标准化两个分量，λ 的有效量纲被等效改写。**本版决策：不做分量标准化**，λ 以 归一化成本/任务数 为固定量纲进入组合；凡引入分量标准化必须作为独立变更重新登记（已写入 `actor_advantage` docstring） |
 | 对偶更新 | **一致** | `λ_next = max(0, λ + η·ĝ)`，ĝ 是配对点估计（不是参考臂失败数、不是按消息池化）；方向与 `L = E[c] + λg` 的极小化匹配；`g ≤ 0` 与 spec 约束 `E[Y(policy)−Y(ref)] ≥ −δ` 等价 |
 
 修正后的闭环：`L_max = −E[c] − λg`（最大化形式）→ `r = −c + λy` →
@@ -127,3 +132,21 @@
 未执行/未授权（不伪称）：未接线真实 relay/trainer、未加载任何 checkpoint、未跑全量 smoke、
 未启动 B/C；δ、降本门槛 ρ、B0、训练量、启动上限 700/1600 仍是**待批准**建议值。
 生产三棵树（`integrated_sar`/`task_allocation`/`piloc`）相对起点 `efca2a5` 仍**零 diff**。
+
+## 七、Stage B 启动前复核（2026-09-27，0 环境启动）
+
+`ROUND21_COMM_COST_STAGE_B_INTEGRATION.md` §2 要求先更正 λ 量纲与 L_max/loss 梯度符号文案
+再进真实接线。本轮只改**文字**，无数值/接线变化，按 spec"若只是文字，登记更正，不另开全面审计"：
+
+- **λ 量纲**：A1 时误写为"任务数 / 归一化成本"（与被否决的旧公式自洽）。对 `A = λ·A_task − A_cost`
+  与 `L = E[c] + λg`，λ 的量纲必须是 **归一化成本 / 任务数**。已更正 `cost_math.py`
+  （模块符号表 + `actor_advantage` docstring）、本文档 §二/§四、`STAGE_A_IMPLEMENTATION.md` §二。
+- **梯度符号文案**：固定为 `grad L_max = −grad E[c] + λ·grad E[Y_policy]`、
+  `loss_to_minimize = −L_max = E[c] + λ·g`，并显式警告**不要**写成 `−dL_max/dθ`
+  （那是 `L_max` 的下降方向）。`test_cost_math.py` 里以 `loss = −(c)−λg` 命名最大化形式的
+  混淆已改为 `l_max`。
+- **步长/初始化数值**：`dual_step` 步长 `eta` 的量纲登记为 归一化成本/任务数²；
+  Stage A 中出现的 `eta_lambda=0.01` 只是测试桩，无生产数值继承；
+  Stage B 的 B0_test/lambda_test/delta_test 仅作接线算例（见 `STAGE_B_PROTOCOL.md`）。
+- **A1 反例复跑**：0 环境启动下 30 项合成测试重跑全绿（含 `CounterexampleWiring` 三项），
+  actor 接线无实质矛盾 ⇒ 不触发"停止本轮"条件。
