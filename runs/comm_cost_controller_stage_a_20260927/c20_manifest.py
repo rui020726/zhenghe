@@ -66,8 +66,11 @@ def main() -> int:
                                        specs["per_seed_difference_check"]["matches_round18_labels"]},
         "remote_verification": {
             "successful_remote_contacts": 0,
-            "note": "github.com:443 unreachable from this host; offline bundle transfer used "
-                    "instead; see REMOTE_RETRY_LOG.md"},
+            "note": "github.com:443 was TCP-reachable in this session, but the Stage A1 "
+                    "instruction ends with report-and-stop and does not authorize "
+                    "publishing; no push was performed and no remote ref was verified. "
+                    "The offline bundle import remains the only provenance for the two "
+                    "original specs"},
         "stage_a_passed": bool(results["passed"] and specs["all_checks_pass"])}
     c20.write_json("MANIFEST.json", payload)
     print(json.dumps({"stage_a_passed": payload["stage_a_passed"],
