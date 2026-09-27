@@ -144,6 +144,7 @@ HARNESS_MODULES = (
     "sc_trainer.py",
     "sc_run.py",
     "sc_train.py",
+    "sc_blocks.py",
     "sc_check.py",
     "sc_resume_probe.py",
     "sc_freeze.py",
@@ -220,9 +221,8 @@ def iter_jsonl(path: Path) -> Any:
 
 
 def cell_paths(kind: str, seed: int, attempt: int = 1, tag: str = "") -> dict[str, Path]:
-    """Every artefact of one cell; the name carries kind, seed, attempt and a free tag."""
-    label = f"{kind}_{tag}" if tag else kind
-    stem = f"sc_{label}_s{seed}_a{attempt}"
+    """Every artefact of one cell; the name carries the tag (or the kind), seed and attempt."""
+    stem = f"sc_{tag}_s{seed}_a{attempt}" if tag else f"sc_{kind}_s{seed}_a{attempt}"
     return {
         "lifecycle": LOGS / f"{stem}_rp.jsonl",
         "transcript": LOGS / f"{stem}_ct.jsonl",

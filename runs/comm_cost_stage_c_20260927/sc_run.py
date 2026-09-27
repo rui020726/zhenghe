@@ -118,10 +118,11 @@ def _behaviour_sha256(records: list[dict[str, Any]]) -> str:
 
 def _run_episode(label: str, kind: str, scenario_seed: int, *, policy: str,
                  attach: Any = None, attempt: int = 1, controller: Any = None,
-                 collector: Any = None, action_rng_seed: int | None = None) -> dict[str, Any]:
+                 collector: Any = None, action_rng_seed: int | None = None,
+                 tag: str = "") -> dict[str, Any]:
     fields, substituted = common.stage_b_inherited_config(scenario_seed)
     fields["comm_policy"] = policy
-    paths = common.cell_paths(kind, scenario_seed, attempt, tag=label)
+    paths = common.cell_paths(kind, scenario_seed, attempt, tag=tag)
     fields["output"] = str(paths["lifecycle"])
     fields["comm_transcript"] = str(paths["transcript"])
     configuration = RunConfiguration(**fields)
@@ -252,10 +253,11 @@ def run_rule(arm: str, scenario_seed: int, *, attempt: int = 1) -> dict[str, Any
     ledger.reserve("normal", label, scenario_seed, attempt)
     try:
         if arm == common.REFERENCE_ARM:
-            row = _run_episode(label, "rule", scenario_seed, policy="immediate")
+            row = _run_episode(label, "rule", scenario_seed, policy="immediate", tag=arm)
         else:
             policy = rules.build_rule(arm, scenario_seed)
-            row = _run_episode(label, "rule", scenario_seed, policy="learned", attach=policy)
+            row = _run_episode(label, "rule", scenario_seed, policy="learned", attach=policy,
+                               tag=arm)
             row["rule_identity"] = rules.rule_identity(arm)
             row["rule_identity"]["built_parameters"] = dict(policy.parameters())
     except Exception as error:
@@ -282,7 +284,8 @@ def run_training_episode(controller: Any, *, training_seed: int, episode_index: 
         row = _run_episode(label, "train", scenario_seed, policy="learned",
                            attach=collector.policy(), attempt=episode_index,
                            controller=controller, collector=collector,
-                           action_rng_seed=action_seed(training_seed, episode_index))
+                           action_rng_seed=action_seed(training_seed, episode_index),
+                           tag=f"train_s{training_seed}_e{episode_index}")
     except Exception as error:
         ledger.record(label=label, seed=scenario_seed, attempt=episode_index, ok=False,
                       detail=f"{type(error).__name__}: {error}")
@@ -311,7 +314,8 @@ def run_eval(controller: Any, *, training_seed: int, timepoint: str,
                                           greedy=True, budget_mask=True)
         row = _run_episode(label, "eval", scenario_seed, policy="learned",
                            attach=collector.policy(), attempt=0,
-                           controller=controller, collector=collector)
+                           controller=controller, collector=collector,
+                           tag=f"eval_s{training_seed}_{timepoint}")
     except Exception as error:
         ledger.record(label=label, seed=scenario_seed, attempt=0, ok=False,
                       detail=f"{type(error).__name__}: {error}")

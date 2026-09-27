@@ -32,7 +32,7 @@ from sc_controller import fresh_controller, parameter_identity
 def load_reference_cache() -> dict[int, dict[str, Any]]:
     """The cached immediate references, keyed by scenario seed."""
     cache: dict[int, dict[str, Any]] = {}
-    for path in sorted(common.ROWS.glob("sc_ref_s*_a1.json")):
+    for path in sorted(common.ROWS.glob("sc_reference_s*_a1.json")):
         row = json.loads(path.read_text(encoding="utf-8"))
         scenario = int(row["scenario_seed"])
         if scenario in cache and cache[scenario]["behaviour_sha256"] != row["behaviour_sha256"]:

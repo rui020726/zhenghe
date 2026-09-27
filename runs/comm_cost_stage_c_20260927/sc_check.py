@@ -293,12 +293,14 @@ def comparison_rows() -> dict[str, Any]:
     references = {scenario: load_row("reference", scenario)
                   for scenario in dev}
     learned: dict[str, dict[int, dict[str, Any]]] = {}
-    for row_path in sorted(common.ROWS.glob("sc_eval_s*_128_s*_a1.json")):
+    for row_path in sorted(common.ROWS.glob("sc_eval_s*_a0.json")):
         row = json.loads(row_path.read_text(encoding="utf-8"))
+        if row.get("timepoint") != "128":
+            continue
         learned.setdefault(str(row["training_seed"]), {})[int(row["scenario_seed"])] = row
     arm_rows: dict[str, dict[int, dict[str, Any]]] = {}
     for arm in common.RULE_ARMS:
-        for row_path in sorted(common.ROWS.glob(f"sc_rule_{arm}_s*_a1.json")):
+        for row_path in sorted(common.ROWS.glob(f"sc_{arm}_s*_a1.json")):
             row = json.loads(row_path.read_text(encoding="utf-8"))
             arm_rows.setdefault(arm, {})[int(row["scenario_seed"])] = row
     return {"development_scenarios": list(dev), "references": references,

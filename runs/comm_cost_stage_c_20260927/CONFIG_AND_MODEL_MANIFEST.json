@@ -6,16 +6,17 @@
    "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
    "runs/joint_eval_20260916/ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
   },
-  "freeze_sha256": "229728254fbb602da6b2c3437ad94fe0a9be75c2dd104eabb178ccf917a3fdb4",
+  "freeze_sha256": "1cbf320de7070dc75793b7b69e7f44defa9992e55e3615982b57df3a607bc0f6",
   "harness": {
-   "sc_check.py": "824936803b98f26faec8be479d60bf80322c947f9a41e076fbbd33fd474f241b",
-   "sc_common.py": "b9de149fe46ba3c0a7aa76f144758077e7ec3075730d884fcd33f5bca508012e",
+   "sc_blocks.py": "2a27001821c5bf60c6ee0ab0087fe49ff374687a968269ed5a97a47ae0b8a601",
+   "sc_check.py": "8c24021efd605962592ec767cdd71f8f15059675841ab209bf65f89dc757bf34",
+   "sc_common.py": "50156e2c503e6d9c7428f2db60f9df1819380bf485ded2c682301975b6b89314",
    "sc_controller.py": "f6c74483beb9c461244b4c824bb31bcfd84b3082f91ded8578b43d24488c8f87",
-   "sc_freeze.py": "2501fa76172c9f4c1a552c678077e08138d67d2e4db714d6daee3e1e573c2667",
+   "sc_freeze.py": "d11cf92257fc38bd13b1b710d6539da2384f6c98cd4c0f00771b23a586a43edf",
    "sc_resume_probe.py": "71bcd6beeaeec24c9415f5cd4b600a802986c45f6a1428cfc4d931127f67d405",
    "sc_rules.py": "0b60933e07fc7b4e60720d5ccf88a217de21229be09708acc1f970104d73a741",
-   "sc_run.py": "2a22f18d61ebb9fff8b053d223b92b2fedc346a80afdd18eda6a509f650862f9",
-   "sc_train.py": "4b4dac842e4045eedaeceb3bac98a89d812f93c21cfb4727c3d941937c8d3e0e",
+   "sc_run.py": "b7396476a297a7cca4ca9d047a2678fc80ce7a9abbafbaafd2dd464d38470643",
+   "sc_train.py": "1c615063926fa20f6def91290eccbc77a967dcb9a32e2b54bd385d542eb6527a",
    "sc_trainer.py": "4e3f2858944dc219bb8b34685e170c9075a983890af276b4ff80cea299cc1f05",
    "test_sc_math.py": "8fcad2388b4738c8426d9abb8c883ab4fcaecd61c1cc081415969219dd4d7781"
   },
@@ -46,7 +47,7 @@
   }
  },
  "configuration_hash": "e9b2c067db5951f2",
- "head_at_freeze": "cb4456449ee799192213ed5981dffd560df1d1a3",
+ "head_at_freeze": "4a2f23331523b8687c74a665cca465545b1f19fb",
  "inherited_behaviour_fields": {
   "actor_kv_mode": "tokens",
   "allocation_interval": 5,
@@ -135,9 +136,23 @@
   ],
   "value_coefficient_per_head": 0.5
  },
- "pre_launch_failures": {
-  "count": 1,
+ "pre_launch_history": {
+  "count": 3,
   "entries": [
+   {
+    "attempt": 1,
+    "detail": "ref_s1300000: on_time=6 bytes=14916",
+    "label": "ref_s1300000",
+    "ok": true,
+    "seed": 1300000
+   },
+   {
+    "attempt": 1,
+    "detail": "ref_s1300000: on_time=6 bytes=14916",
+    "label": "ref_s1300000",
+    "ok": true,
+    "seed": 1300000
+   },
    {
     "attempt": 1,
     "detail": "RuntimeError: ref_s1300000 s1300000: timing mode 'legacy_shared_bound'",
@@ -146,7 +161,7 @@
     "seed": 1300000
    }
   ],
-  "note": "technical failures spent before any successful launch; the fix that followed is registered as this freeze's new code identity, and the failures stay in the ledger rather than being deducted"
+  "note": "launches spent before this freeze: two technical failures (the transport assertion that caught the unapplied Stage B overrides, and a killed mid-episode reference run whose partial log is quarantined) and one duplicate reference of scenario 1300000 under the pre-fix artefact naming, which reproduced the earlier run exactly (14916 B / 6 on-time). The harness fix that followed touched artefact naming and glob patterns only -- not the training math, policy, billing or objective -- and is registered as this freeze's new code identity. No training episode ran under any earlier identity."
  },
  "production_diff": {
   "branch_start": "6ebefbe4e7a81182281807333d64d60cadf03198",

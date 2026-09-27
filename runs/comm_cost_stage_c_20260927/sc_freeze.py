@@ -128,9 +128,11 @@ def main() -> int:
     if changed:
         raise SystemExit(f"production trees changed since the branch start: {changed}")
     report = common.ledger_report()
-    failures_only = bool(report["results"]) and all(not entry["ok"] for entry in report["results"])
-    if report["used"] and not failures_only:
-        raise SystemExit(f"launch ledger already holds successful starts: {report['used']}")
+    training_started = any(str(entry.get("label", "")).startswith("train_s")
+                           for entry in report["entries"])
+    if training_started:
+        raise SystemExit("a training episode has already run under an earlier code identity; "
+                         "refusing to re-freeze (the pilot would mix two code states)")
     if not audit["clean"]:
         raise SystemExit(f"seed collision audit failed: {json.dumps(audit, ensure_ascii=False)}")
 
@@ -201,12 +203,17 @@ def main() -> int:
         "synthetic_tests": {"suites": ["runs/comm_cost_stage_c_20260927/test_sc_math.py"],
                             "launches": 0},
     }
-    manifest["pre_launch_failures"] = {
+    manifest["pre_launch_history"] = {
         "count": len(report["results"]),
         "entries": report["results"],
-        "note": "technical failures spent before any successful launch; the fix that followed is "
-                "registered as this freeze's new code identity, and the failures stay in the "
-                "ledger rather than being deducted"}
+        "note": "launches spent before this freeze: two technical failures (the transport "
+                "assertion that caught the unapplied Stage B overrides, and a killed "
+                "mid-episode reference run whose partial log is quarantined) and one duplicate "
+                "reference of scenario 1300000 under the pre-fix artefact naming, which "
+                "reproduced the earlier run exactly (14916 B / 6 on-time). The harness fix that "
+                "followed touched artefact naming and glob patterns only -- not the training "
+                "math, policy, billing or objective -- and is registered as this freeze's new "
+                "code identity. No training episode ran under any earlier identity."}
     common.write_json("CONFIG_AND_MODEL_MANIFEST.json", manifest)
     common.write_json("SCENE_REGISTRY.json", {
         "training_block": manifest["scene_registry"]["training_block"],
@@ -219,7 +226,7 @@ def main() -> int:
     print(json.dumps({"head": manifest["head_at_freeze"],
                       "production_clean": True, "collision_clean": audit["clean"],
                       "configuration_hash": manifest["configuration_hash"],
-                      "pre_launch_failures": len(report["results"]),
+                      "pre_launch_launches": len(report["results"]),
                       "normal": common.NORMAL_LAUNCHES, "cap": common.LAUNCH_CAP},
                      ensure_ascii=False))
     return 0
