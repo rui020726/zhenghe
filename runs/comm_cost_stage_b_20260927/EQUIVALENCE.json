@@ -1,0 +1,474 @@
+{
+ "gate": "B1 native/injected",
+ "round": "21",
+ "seeds": {
+  "1100000": {
+   "allowed_differences": [
+    "artefact_paths",
+    "run_id_and_arm_labels"
+   ],
+   "compared_fields": [
+    "emission_sequence",
+    "refusal_sequence",
+    "relay_counters",
+    "spent_bytes",
+    "airtime_tap_total",
+    "on_time",
+    "completed",
+    "expired",
+    "discovered",
+    "behaviour_sha256",
+    "ack_ledger"
+   ],
+   "gate_b1": {
+    "checks": [
+     {
+      "allowed_differences": [
+       "artefact_paths",
+       "run_id_and_arm_labels"
+      ],
+      "differences": {},
+      "hold_paths_spent_zero": null,
+      "label": "native immediate vs injected",
+      "match": true,
+      "note": "artefact paths / run labels are the only pre-listed differences and are not part of any compared field",
+      "pair": [
+       "R_send",
+       "I_send"
+      ]
+     },
+     {
+      "allowed_differences": [
+       "artefact_paths",
+       "run_id_and_arm_labels"
+      ],
+      "differences": {},
+      "hold_paths_spent_zero": true,
+      "label": "native always_hold vs injected",
+      "match": true,
+      "note": "artefact paths / run labels are the only pre-listed differences and are not part of any compared field",
+      "pair": [
+       "R_hold",
+       "I_hold"
+      ]
+     }
+    ],
+    "gate": "B1",
+    "passed": true,
+    "seed": 1100000
+   },
+   "injected_facts": {
+    "I_hold": {
+     "ack_ledger": {
+      "ack_attempt_bytes": 0,
+      "ack_attempts": 0,
+      "ack_delivered": 0,
+      "ack_emitted": 0,
+      "ack_frames_advanced": 0,
+      "ack_frames_reaffirmed": 0,
+      "ack_lost": 0
+     },
+     "behaviour_sha256": "7d081d267b97f98344f8b31ad79135366a4f07010f6050111a708a836784a39c",
+     "budget_refused_sends": 0,
+     "capacity_refused_sends": 0,
+     "deliveries_applied": 0,
+     "discovered": 6,
+     "emissions": 0,
+     "emissions_suppressed_terminal": 6,
+     "expired": 0,
+     "on_time": 6,
+     "packets_lost": 0,
+     "path": "I_hold",
+     "seed": 1100000,
+     "spent_bytes": 0
+    },
+    "I_send": {
+     "ack_ledger": {
+      "ack_attempt_bytes": 0,
+      "ack_attempts": 0,
+      "ack_delivered": 0,
+      "ack_emitted": 0,
+      "ack_frames_advanced": 0,
+      "ack_frames_reaffirmed": 0,
+      "ack_lost": 0
+     },
+     "behaviour_sha256": "c4d51fd5436dbcf69218f996f72a13ae5cddf3cc042e30551b59dd81da31ef96",
+     "budget_refused_sends": 0,
+     "capacity_refused_sends": 0,
+     "deliveries_applied": 26,
+     "discovered": 6,
+     "emissions": 6,
+     "emissions_suppressed_terminal": 0,
+     "expired": 0,
+     "on_time": 6,
+     "packets_lost": 10,
+     "path": "I_send",
+     "seed": 1100000,
+     "spent_bytes": 15132
+    }
+   },
+   "native_facts": {
+    "R_hold": {
+     "ack_ledger": {
+      "ack_attempt_bytes": 0,
+      "ack_attempts": 0,
+      "ack_delivered": 0,
+      "ack_emitted": 0,
+      "ack_frames_advanced": 0,
+      "ack_frames_reaffirmed": 0,
+      "ack_lost": 0
+     },
+     "behaviour_sha256": "7d081d267b97f98344f8b31ad79135366a4f07010f6050111a708a836784a39c",
+     "budget_refused_sends": 0,
+     "capacity_refused_sends": 0,
+     "deliveries_applied": 0,
+     "discovered": 6,
+     "emissions": 0,
+     "emissions_suppressed_terminal": 6,
+     "expired": 0,
+     "on_time": 6,
+     "packets_lost": 0,
+     "path": "R_hold",
+     "seed": 1100000,
+     "spent_bytes": 0
+    },
+    "R_send": {
+     "ack_ledger": {
+      "ack_attempt_bytes": 0,
+      "ack_attempts": 0,
+      "ack_delivered": 0,
+      "ack_emitted": 0,
+      "ack_frames_advanced": 0,
+      "ack_frames_reaffirmed": 0,
+      "ack_lost": 0
+     },
+     "behaviour_sha256": "c4d51fd5436dbcf69218f996f72a13ae5cddf3cc042e30551b59dd81da31ef96",
+     "budget_refused_sends": 0,
+     "capacity_refused_sends": 0,
+     "deliveries_applied": 26,
+     "discovered": 6,
+     "emissions": 6,
+     "emissions_suppressed_terminal": 0,
+     "expired": 0,
+     "on_time": 6,
+     "packets_lost": 10,
+     "path": "R_send",
+     "seed": 1100000,
+     "spent_bytes": 15132
+    }
+   }
+  },
+  "1100001": {
+   "allowed_differences": [
+    "artefact_paths",
+    "run_id_and_arm_labels"
+   ],
+   "compared_fields": [
+    "emission_sequence",
+    "refusal_sequence",
+    "relay_counters",
+    "spent_bytes",
+    "airtime_tap_total",
+    "on_time",
+    "completed",
+    "expired",
+    "discovered",
+    "behaviour_sha256",
+    "ack_ledger"
+   ],
+   "gate_b1": {
+    "checks": [
+     {
+      "allowed_differences": [
+       "artefact_paths",
+       "run_id_and_arm_labels"
+      ],
+      "differences": {},
+      "hold_paths_spent_zero": null,
+      "label": "native immediate vs injected",
+      "match": true,
+      "note": "artefact paths / run labels are the only pre-listed differences and are not part of any compared field",
+      "pair": [
+       "R_send",
+       "I_send"
+      ]
+     },
+     {
+      "allowed_differences": [
+       "artefact_paths",
+       "run_id_and_arm_labels"
+      ],
+      "differences": {},
+      "hold_paths_spent_zero": true,
+      "label": "native always_hold vs injected",
+      "match": true,
+      "note": "artefact paths / run labels are the only pre-listed differences and are not part of any compared field",
+      "pair": [
+       "R_hold",
+       "I_hold"
+      ]
+     }
+    ],
+    "gate": "B1",
+    "passed": true,
+    "seed": 1100001
+   },
+   "injected_facts": {
+    "I_hold": {
+     "ack_ledger": {
+      "ack_attempt_bytes": 0,
+      "ack_attempts": 0,
+      "ack_delivered": 0,
+      "ack_emitted": 0,
+      "ack_frames_advanced": 0,
+      "ack_frames_reaffirmed": 0,
+      "ack_lost": 0
+     },
+     "behaviour_sha256": "6fa0dec363c6adab4e51065e30c7e1ea4a3e4a6975983bd1d5a410cc68134f89",
+     "budget_refused_sends": 0,
+     "capacity_refused_sends": 0,
+     "deliveries_applied": 0,
+     "discovered": 6,
+     "emissions": 0,
+     "emissions_suppressed_terminal": 5,
+     "expired": 1,
+     "on_time": 5,
+     "packets_lost": 0,
+     "path": "I_hold",
+     "seed": 1100001,
+     "spent_bytes": 0
+    },
+    "I_send": {
+     "ack_ledger": {
+      "ack_attempt_bytes": 0,
+      "ack_attempts": 0,
+      "ack_delivered": 0,
+      "ack_emitted": 0,
+      "ack_frames_advanced": 0,
+      "ack_frames_reaffirmed": 0,
+      "ack_lost": 0
+     },
+     "behaviour_sha256": "cc7d1d2b723902bd0a27f2cebe13862a9f32fde8878a20198066df84e0832405",
+     "budget_refused_sends": 0,
+     "capacity_refused_sends": 0,
+     "deliveries_applied": 22,
+     "discovered": 6,
+     "emissions": 6,
+     "emissions_suppressed_terminal": 0,
+     "expired": 0,
+     "on_time": 6,
+     "packets_lost": 14,
+     "path": "I_send",
+     "seed": 1100001,
+     "spent_bytes": 14766
+    }
+   },
+   "native_facts": {
+    "R_hold": {
+     "ack_ledger": {
+      "ack_attempt_bytes": 0,
+      "ack_attempts": 0,
+      "ack_delivered": 0,
+      "ack_emitted": 0,
+      "ack_frames_advanced": 0,
+      "ack_frames_reaffirmed": 0,
+      "ack_lost": 0
+     },
+     "behaviour_sha256": "6fa0dec363c6adab4e51065e30c7e1ea4a3e4a6975983bd1d5a410cc68134f89",
+     "budget_refused_sends": 0,
+     "capacity_refused_sends": 0,
+     "deliveries_applied": 0,
+     "discovered": 6,
+     "emissions": 0,
+     "emissions_suppressed_terminal": 5,
+     "expired": 1,
+     "on_time": 5,
+     "packets_lost": 0,
+     "path": "R_hold",
+     "seed": 1100001,
+     "spent_bytes": 0
+    },
+    "R_send": {
+     "ack_ledger": {
+      "ack_attempt_bytes": 0,
+      "ack_attempts": 0,
+      "ack_delivered": 0,
+      "ack_emitted": 0,
+      "ack_frames_advanced": 0,
+      "ack_frames_reaffirmed": 0,
+      "ack_lost": 0
+     },
+     "behaviour_sha256": "cc7d1d2b723902bd0a27f2cebe13862a9f32fde8878a20198066df84e0832405",
+     "budget_refused_sends": 0,
+     "capacity_refused_sends": 0,
+     "deliveries_applied": 22,
+     "discovered": 6,
+     "emissions": 6,
+     "emissions_suppressed_terminal": 0,
+     "expired": 0,
+     "on_time": 6,
+     "packets_lost": 14,
+     "path": "R_send",
+     "seed": 1100001,
+     "spent_bytes": 14766
+    }
+   }
+  },
+  "1100002": {
+   "allowed_differences": [
+    "artefact_paths",
+    "run_id_and_arm_labels"
+   ],
+   "compared_fields": [
+    "emission_sequence",
+    "refusal_sequence",
+    "relay_counters",
+    "spent_bytes",
+    "airtime_tap_total",
+    "on_time",
+    "completed",
+    "expired",
+    "discovered",
+    "behaviour_sha256",
+    "ack_ledger"
+   ],
+   "gate_b1": {
+    "checks": [
+     {
+      "allowed_differences": [
+       "artefact_paths",
+       "run_id_and_arm_labels"
+      ],
+      "differences": {},
+      "hold_paths_spent_zero": null,
+      "label": "native immediate vs injected",
+      "match": true,
+      "note": "artefact paths / run labels are the only pre-listed differences and are not part of any compared field",
+      "pair": [
+       "R_send",
+       "I_send"
+      ]
+     },
+     {
+      "allowed_differences": [
+       "artefact_paths",
+       "run_id_and_arm_labels"
+      ],
+      "differences": {},
+      "hold_paths_spent_zero": true,
+      "label": "native always_hold vs injected",
+      "match": true,
+      "note": "artefact paths / run labels are the only pre-listed differences and are not part of any compared field",
+      "pair": [
+       "R_hold",
+       "I_hold"
+      ]
+     }
+    ],
+    "gate": "B1",
+    "passed": true,
+    "seed": 1100002
+   },
+   "injected_facts": {
+    "I_hold": {
+     "ack_ledger": {
+      "ack_attempt_bytes": 0,
+      "ack_attempts": 0,
+      "ack_delivered": 0,
+      "ack_emitted": 0,
+      "ack_frames_advanced": 0,
+      "ack_frames_reaffirmed": 0,
+      "ack_lost": 0
+     },
+     "behaviour_sha256": "1c39e1e6331bb9a182b04187bc04d86c5c706663cefc62e8e93a4c4612037f92",
+     "budget_refused_sends": 0,
+     "capacity_refused_sends": 0,
+     "deliveries_applied": 0,
+     "discovered": 6,
+     "emissions": 0,
+     "emissions_suppressed_terminal": 6,
+     "expired": 0,
+     "on_time": 6,
+     "packets_lost": 0,
+     "path": "I_hold",
+     "seed": 1100002,
+     "spent_bytes": 0
+    },
+    "I_send": {
+     "ack_ledger": {
+      "ack_attempt_bytes": 0,
+      "ack_attempts": 0,
+      "ack_delivered": 0,
+      "ack_emitted": 0,
+      "ack_frames_advanced": 0,
+      "ack_frames_reaffirmed": 0,
+      "ack_lost": 0
+     },
+     "behaviour_sha256": "1aaaa6e91492774fe0755c5323663aad59b783b831967545e460232d30de1100",
+     "budget_refused_sends": 0,
+     "capacity_refused_sends": 0,
+     "deliveries_applied": 27,
+     "discovered": 6,
+     "emissions": 6,
+     "emissions_suppressed_terminal": 0,
+     "expired": 0,
+     "on_time": 6,
+     "packets_lost": 9,
+     "path": "I_send",
+     "seed": 1100002,
+     "spent_bytes": 14526
+    }
+   },
+   "native_facts": {
+    "R_hold": {
+     "ack_ledger": {
+      "ack_attempt_bytes": 0,
+      "ack_attempts": 0,
+      "ack_delivered": 0,
+      "ack_emitted": 0,
+      "ack_frames_advanced": 0,
+      "ack_frames_reaffirmed": 0,
+      "ack_lost": 0
+     },
+     "behaviour_sha256": "1c39e1e6331bb9a182b04187bc04d86c5c706663cefc62e8e93a4c4612037f92",
+     "budget_refused_sends": 0,
+     "capacity_refused_sends": 0,
+     "deliveries_applied": 0,
+     "discovered": 6,
+     "emissions": 0,
+     "emissions_suppressed_terminal": 6,
+     "expired": 0,
+     "on_time": 6,
+     "packets_lost": 0,
+     "path": "R_hold",
+     "seed": 1100002,
+     "spent_bytes": 0
+    },
+    "R_send": {
+     "ack_ledger": {
+      "ack_attempt_bytes": 0,
+      "ack_attempts": 0,
+      "ack_delivered": 0,
+      "ack_emitted": 0,
+      "ack_frames_advanced": 0,
+      "ack_frames_reaffirmed": 0,
+      "ack_lost": 0
+     },
+     "behaviour_sha256": "1aaaa6e91492774fe0755c5323663aad59b783b831967545e460232d30de1100",
+     "budget_refused_sends": 0,
+     "capacity_refused_sends": 0,
+     "deliveries_applied": 27,
+     "discovered": 6,
+     "emissions": 6,
+     "emissions_suppressed_terminal": 0,
+     "expired": 0,
+     "on_time": 6,
+     "packets_lost": 9,
+     "path": "R_send",
+     "seed": 1100002,
+     "spent_bytes": 14526
+    }
+   }
+  }
+ }
+}

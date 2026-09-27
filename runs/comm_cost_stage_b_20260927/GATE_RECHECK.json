@@ -1,0 +1,404 @@
+{
+ "all_passed": true,
+ "seeds": [
+  {
+   "all_passed": true,
+   "gates": {
+    "B1": {
+     "checks": [
+      {
+       "allowed_differences": [
+        "artefact_paths",
+        "run_id_and_arm_labels"
+       ],
+       "differences": {},
+       "hold_paths_spent_zero": null,
+       "label": "native immediate vs injected",
+       "match": true,
+       "note": "artefact paths / run labels are the only pre-listed differences and are not part of any compared field",
+       "pair": [
+        "R_send",
+        "I_send"
+       ]
+      },
+      {
+       "allowed_differences": [
+        "artefact_paths",
+        "run_id_and_arm_labels"
+       ],
+       "differences": {},
+       "hold_paths_spent_zero": true,
+       "label": "native always_hold vs injected",
+       "match": true,
+       "note": "artefact paths / run labels are the only pre-listed differences and are not part of any compared field",
+       "pair": [
+        "R_hold",
+        "I_hold"
+       ]
+      }
+     ],
+     "gate": "B1",
+     "passed": true,
+     "seed": 1100000
+    },
+    "B2": {
+     "actor_feature_dim_ok": true,
+     "decision_steps": 65,
+     "forced_total": 0,
+     "gate": "B2",
+     "log_prob_tolerance": 1e-06,
+     "max_log_prob_gap": 1.1920928955078125e-07,
+     "optimizer_steps": 0,
+     "passed": true,
+     "request_execution_mismatches": [],
+     "seed": 1100000,
+     "weight_identity_rebuilt_matches_run": true
+    },
+    "B3": {
+     "checks": [
+      {
+       "differences": {},
+       "double_billed_emissions": false,
+       "dual_note": "hypothetical only: computed for the record, never written back and never read by any later decision",
+       "g_hat": 0.0,
+       "hypothetical_lambda_next": 1.0,
+       "match": true,
+       "path": "I_hold",
+       "send_pricing_consistent": true,
+       "y_policy_on_time": 6,
+       "y_reference_on_time": 6
+      },
+      {
+       "differences": {},
+       "double_billed_emissions": false,
+       "dual_note": "hypothetical only: computed for the record, never written back and never read by any later decision",
+       "g_hat": 0.0,
+       "hypothetical_lambda_next": 1.0,
+       "match": true,
+       "path": "P_init",
+       "send_pricing_consistent": true,
+       "y_policy_on_time": 6,
+       "y_reference_on_time": 6
+      },
+      {
+       "differences": {},
+       "double_billed_emissions": false,
+       "dual_note": "hypothetical only: computed for the record, never written back and never read by any later decision",
+       "g_hat": 0.0,
+       "hypothetical_lambda_next": 1.0,
+       "match": true,
+       "path": "P_repeat",
+       "send_pricing_consistent": true,
+       "y_policy_on_time": 6,
+       "y_reference_on_time": 6
+      }
+     ],
+     "gate": "B3",
+     "passed": true,
+     "seed": 1100000
+    },
+    "B3_math": {
+     "g_hat_check": {
+      "delta_test": 0.0,
+      "g_hat": 0.0,
+      "y_policy": 6,
+      "y_reference": 6
+     },
+     "gate": "B3-math",
+     "max_gaps": {
+      "advantages_cost": 4.992219970745282e-10,
+      "advantages_task": 4.984146428910208e-10,
+      "combined_advantage": 4.891207439072787e-10,
+      "sum_rewards_cost": 4.440892098500626e-16,
+      "sum_rewards_task": 0.0
+     },
+     "passed": true,
+     "seed": 1100000
+    },
+    "B4": {
+     "field_differences": {},
+     "gate": "B4",
+     "optimizer_steps": [
+      0,
+      0
+     ],
+     "passed": true,
+     "seed": 1100000,
+     "tape_identical": true,
+     "weights": {
+      "P_init_P_repeat_after_equal": true,
+      "P_init_before_after_equal": true,
+      "P_repeat_before_after_equal": true
+     }
+    }
+   },
+   "seed": 1100000
+  },
+  {
+   "all_passed": true,
+   "gates": {
+    "B1": {
+     "checks": [
+      {
+       "allowed_differences": [
+        "artefact_paths",
+        "run_id_and_arm_labels"
+       ],
+       "differences": {},
+       "hold_paths_spent_zero": null,
+       "label": "native immediate vs injected",
+       "match": true,
+       "note": "artefact paths / run labels are the only pre-listed differences and are not part of any compared field",
+       "pair": [
+        "R_send",
+        "I_send"
+       ]
+      },
+      {
+       "allowed_differences": [
+        "artefact_paths",
+        "run_id_and_arm_labels"
+       ],
+       "differences": {},
+       "hold_paths_spent_zero": true,
+       "label": "native always_hold vs injected",
+       "match": true,
+       "note": "artefact paths / run labels are the only pre-listed differences and are not part of any compared field",
+       "pair": [
+        "R_hold",
+        "I_hold"
+       ]
+      }
+     ],
+     "gate": "B1",
+     "passed": true,
+     "seed": 1100001
+    },
+    "B2": {
+     "actor_feature_dim_ok": true,
+     "decision_steps": 857,
+     "forced_total": 0,
+     "gate": "B2",
+     "log_prob_tolerance": 1e-06,
+     "max_log_prob_gap": 5.960464477539063e-08,
+     "optimizer_steps": 0,
+     "passed": true,
+     "request_execution_mismatches": [],
+     "seed": 1100001,
+     "weight_identity_rebuilt_matches_run": true
+    },
+    "B3": {
+     "checks": [
+      {
+       "differences": {},
+       "double_billed_emissions": false,
+       "dual_note": "hypothetical only: computed for the record, never written back and never read by any later decision",
+       "g_hat": 1.0,
+       "hypothetical_lambda_next": 2.0,
+       "match": true,
+       "path": "I_hold",
+       "send_pricing_consistent": true,
+       "y_policy_on_time": 5,
+       "y_reference_on_time": 6
+      },
+      {
+       "differences": {},
+       "double_billed_emissions": false,
+       "dual_note": "hypothetical only: computed for the record, never written back and never read by any later decision",
+       "g_hat": 1.0,
+       "hypothetical_lambda_next": 2.0,
+       "match": true,
+       "path": "P_init",
+       "send_pricing_consistent": true,
+       "y_policy_on_time": 5,
+       "y_reference_on_time": 6
+      },
+      {
+       "differences": {},
+       "double_billed_emissions": false,
+       "dual_note": "hypothetical only: computed for the record, never written back and never read by any later decision",
+       "g_hat": 1.0,
+       "hypothetical_lambda_next": 2.0,
+       "match": true,
+       "path": "P_repeat",
+       "send_pricing_consistent": true,
+       "y_policy_on_time": 5,
+       "y_reference_on_time": 6
+      }
+     ],
+     "gate": "B3",
+     "passed": true,
+     "seed": 1100001
+    },
+    "B3_math": {
+     "g_hat_check": {
+      "delta_test": 0.0,
+      "g_hat": 1.0,
+      "y_policy": 5,
+      "y_reference": 6
+     },
+     "gate": "B3-math",
+     "max_gaps": {
+      "advantages_cost": 4.995532876250763e-10,
+      "advantages_task": 4.990932112036717e-10,
+      "combined_advantage": 4.999352043455474e-10,
+      "sum_rewards_cost": 4.440892098500626e-16,
+      "sum_rewards_task": 0.0
+     },
+     "passed": true,
+     "seed": 1100001
+    },
+    "B4": {
+     "field_differences": {},
+     "gate": "B4",
+     "optimizer_steps": [
+      0,
+      0
+     ],
+     "passed": true,
+     "seed": 1100001,
+     "tape_identical": true,
+     "weights": {
+      "P_init_P_repeat_after_equal": true,
+      "P_init_before_after_equal": true,
+      "P_repeat_before_after_equal": true
+     }
+    }
+   },
+   "seed": 1100001
+  },
+  {
+   "all_passed": true,
+   "gates": {
+    "B1": {
+     "checks": [
+      {
+       "allowed_differences": [
+        "artefact_paths",
+        "run_id_and_arm_labels"
+       ],
+       "differences": {},
+       "hold_paths_spent_zero": null,
+       "label": "native immediate vs injected",
+       "match": true,
+       "note": "artefact paths / run labels are the only pre-listed differences and are not part of any compared field",
+       "pair": [
+        "R_send",
+        "I_send"
+       ]
+      },
+      {
+       "allowed_differences": [
+        "artefact_paths",
+        "run_id_and_arm_labels"
+       ],
+       "differences": {},
+       "hold_paths_spent_zero": true,
+       "label": "native always_hold vs injected",
+       "match": true,
+       "note": "artefact paths / run labels are the only pre-listed differences and are not part of any compared field",
+       "pair": [
+        "R_hold",
+        "I_hold"
+       ]
+      }
+     ],
+     "gate": "B1",
+     "passed": true,
+     "seed": 1100002
+    },
+    "B2": {
+     "actor_feature_dim_ok": true,
+     "decision_steps": 57,
+     "forced_total": 0,
+     "gate": "B2",
+     "log_prob_tolerance": 1e-06,
+     "max_log_prob_gap": 1.1920928955078125e-07,
+     "optimizer_steps": 0,
+     "passed": true,
+     "request_execution_mismatches": [],
+     "seed": 1100002,
+     "weight_identity_rebuilt_matches_run": true
+    },
+    "B3": {
+     "checks": [
+      {
+       "differences": {},
+       "double_billed_emissions": false,
+       "dual_note": "hypothetical only: computed for the record, never written back and never read by any later decision",
+       "g_hat": 0.0,
+       "hypothetical_lambda_next": 1.0,
+       "match": true,
+       "path": "I_hold",
+       "send_pricing_consistent": true,
+       "y_policy_on_time": 6,
+       "y_reference_on_time": 6
+      },
+      {
+       "differences": {},
+       "double_billed_emissions": false,
+       "dual_note": "hypothetical only: computed for the record, never written back and never read by any later decision",
+       "g_hat": 0.0,
+       "hypothetical_lambda_next": 1.0,
+       "match": true,
+       "path": "P_init",
+       "send_pricing_consistent": true,
+       "y_policy_on_time": 6,
+       "y_reference_on_time": 6
+      },
+      {
+       "differences": {},
+       "double_billed_emissions": false,
+       "dual_note": "hypothetical only: computed for the record, never written back and never read by any later decision",
+       "g_hat": 0.0,
+       "hypothetical_lambda_next": 1.0,
+       "match": true,
+       "path": "P_repeat",
+       "send_pricing_consistent": true,
+       "y_policy_on_time": 6,
+       "y_reference_on_time": 6
+      }
+     ],
+     "gate": "B3",
+     "passed": true,
+     "seed": 1100002
+    },
+    "B3_math": {
+     "g_hat_check": {
+      "delta_test": 0.0,
+      "g_hat": 0.0,
+      "y_policy": 6,
+      "y_reference": 6
+     },
+     "gate": "B3-math",
+     "max_gaps": {
+      "advantages_cost": 4.995355240566823e-10,
+      "advantages_task": 4.827633848236701e-10,
+      "combined_advantage": 4.905915673703021e-10,
+      "sum_rewards_cost": 0.0,
+      "sum_rewards_task": 0.0
+     },
+     "passed": true,
+     "seed": 1100002
+    },
+    "B4": {
+     "field_differences": {},
+     "gate": "B4",
+     "optimizer_steps": [
+      0,
+      0
+     ],
+     "passed": true,
+     "seed": 1100002,
+     "tape_identical": true,
+     "weights": {
+      "P_init_P_repeat_after_equal": true,
+      "P_init_before_after_equal": true,
+      "P_repeat_before_after_equal": true
+     }
+    }
+   },
+   "seed": 1100002
+  }
+ ]
+}

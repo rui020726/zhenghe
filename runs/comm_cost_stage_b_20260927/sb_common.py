@@ -149,11 +149,30 @@ def read_json(path: Path) -> Any:
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
-def write_json(name: str, payload: Any) -> Path:
-    """Write one artefact of this round, refusing to touch anything else."""
+def write_json(name: str, payload: Any, *, refresh: bool = False) -> Path:
+    """Write one artefact of this round, refusing to touch anything else.
+
+    ``refresh`` is granted to exactly one file, the launch ledger's live tally: the plan
+    block is frozen and re-checked on every refresh, and the tally may only move forward --
+    a refresh reporting fewer launches than the delivered file is a lost book.
+    """
     if os.sep in name or "/" in name or ".." in name:
         raise ValueError(f"refusing to write outside the round directory: {name!r}")
     target = HERE / name
+    if refresh and name != "START_LEDGER.json":
+        raise RuntimeError("only START_LEDGER.json may be refreshed")
+    if target.exists() and refresh:
+        previous = read_json(target)
+        if previous.get("plan") != payload.get("plan"):
+            raise RuntimeError(f"the frozen plan block of {name} changed")
+        before = int((previous.get("live") or {}).get("used") or 0)
+        after = int((payload.get("live") or {}).get("used") or 0)
+        if after < before:
+            raise RuntimeError(f"{name}: tally shrank from {before} to {after}")
+        merged = {"plan": previous["plan"], "live": payload["live"]}
+        target.write_text(json.dumps(merged, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
+                          encoding="utf-8")
+        return target
     if target.exists():
         raise RuntimeError(f"refusing to rewrite a delivered artefact: {name}")
     target.write_text(json.dumps(payload, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
@@ -253,10 +272,10 @@ def ledger_report() -> dict[str, Any]:
             book = read_json(path)
         except Exception:
             continue
-        per_kind[str(book.get("kind", "?"))] = per_kind.get(str(book.get("kind", "?")), 0) + int(
-            book.get("starts") or 0
-        )
-        entries.extend(book.get("entries") or [])
+        for entry in book.get("entries") or []:
+            kind = str(entry.get("kind", "?"))
+            per_kind[kind] = per_kind.get(kind, 0) + 1
+            entries.append(entry)
         results.extend(book.get("results") or [])
     return {
         "normal_launches": NORMAL_LAUNCHES, "reserve_launches": RESERVE_LAUNCHES,
