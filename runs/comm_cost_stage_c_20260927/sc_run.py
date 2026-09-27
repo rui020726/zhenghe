@@ -180,7 +180,10 @@ def _run_episode(label: str, kind: str, scenario_seed: int, *, policy: str,
     tape_summary = None
     parameters_after = None
     if collector is not None:
-        tape_summary = collector.tape_summary()
+        tape_summary = (collector.tape_summary() if hasattr(collector, "tape_summary")
+                        else {"timing": collector.timing(),
+                              "note": "greedy eval collector: the base collector's timing, "
+                                      "not the Stage B tape summary"})
         parameters_after = collector.controller.parameter_summary()
         paths["tape"].parent.mkdir(parents=True, exist_ok=True)
         with paths["tape"].open("w", encoding="utf-8", newline="\n") as handle:
