@@ -1,0 +1,278 @@
+{
+ "all_checks_pass": true,
+ "cost_terms_from_archive": {
+  "definitions": {
+   "C_ack": "ACK 反向信道的真实尝试成本；未开启是结构性零，缺日志不是零",
+   "C_measured": "只有当账本确实覆盖上面两项时才使用该名称",
+   "C_uplink": "载荷 × fan-out × 发送尝试，丢包计费；拒付计 0",
+   "unmetered": "本地感知/gossip/搜索内部通信等未计量项，不得称全系统总通信"
+  },
+  "note": "这些是第十六轮的归档读数，本轮只搬运定义与数值，不新跑一格",
+  "per_arm": {
+   "A1": {
+    "ack_state": "未开启 ⇒ 结构性零（归档格 comm_ack=false）",
+    "c_ack_bytes_per_episode": 0.0,
+    "c_uplink_bytes_per_episode": 14573.3,
+    "configuration_identity": {
+     "delivery_probability": 1.0,
+     "policy": "immediate"
+    }
+   },
+   "A2": {
+    "ack_state": "未开启 ⇒ 结构性零（归档格 comm_ack=false）",
+    "c_ack_bytes_per_episode": 0.0,
+    "c_uplink_bytes_per_episode": 0.0,
+    "configuration_identity": {
+     "delivery_probability": 1.0,
+     "policy": "always_hold"
+    }
+   },
+   "A3": {
+    "ack_state": "未开启 ⇒ 结构性零（归档格 comm_ack=false）",
+    "c_ack_bytes_per_episode": 0.0,
+    "c_uplink_bytes_per_episode": 14573.3,
+    "configuration_identity": {
+     "delivery_probability": 0.7,
+     "policy": "immediate"
+    }
+   },
+   "A4": {
+    "ack_state": "未开启 ⇒ 结构性零（归档格 comm_ack=false）",
+    "c_ack_bytes_per_episode": 0.0,
+    "c_uplink_bytes_per_episode": 14573.3,
+    "configuration_identity": {
+     "delivery_probability": 0.7,
+     "policy": "immediate"
+    }
+   }
+  },
+  "unmetered_and_listed_separately": [
+   "env line-of-sight truth refresh (task_allocation/old_task_env.py:477-492)",
+   "robot one-hop gossip (old_task_env.py:494-512, gated by gossip_interval)",
+   "ACK 反向信道（comm_ack.py:136-168，独立账本，永不共享额度）",
+   "被预算/容量拒付的发送（未发射，计费 0）"
+  ]
+ },
+ "integer_closure": {
+  "A": {
+   "completed": 350,
+   "detected": 351,
+   "detected_minus_on_time": 1,
+   "detected_plus_undetected_equals_placed": true,
+   "expired": 1,
+   "on_time": 350,
+   "placed": 360,
+   "undetected": 9
+  },
+  "B": {
+   "completed": 290,
+   "detected": 291,
+   "detected_minus_on_time": 1,
+   "detected_plus_undetected_equals_placed": true,
+   "expired": 0,
+   "on_time": 290,
+   "placed": 360,
+   "undetected": 69
+  }
+ },
+ "laggard_notes": [
+  "两者都是 detected 但未按时：一个 completed_late、一个 not_completed",
+  "它们解释了 A/B 各自 detected−on_time = 1 的全部来源，不存在第三个差出的目标",
+  "未发现的目标从未进入生命周期日志，因此不可能贡献 on_time 或 expired"
+ ],
+ "per_seed_difference_check": {
+  "direction": "A − B（正数 = A 遗漏更多）",
+  "histogram": {
+   "-4": 3,
+   "-3": 4,
+   "-2": 15,
+   "-1": 13,
+   "0": 20,
+   "1": 3,
+   "2": 2
+  },
+  "improved_A_fewer": 35,
+  "matches_round18_labels": true,
+  "nonzero": 40,
+  "tied": 20,
+  "worse_A_more": 5
+ },
+ "phase": "spec item verification, 0 new episode",
+ "round": "20",
+ "source": "runs/search_trace_and_policy_20260925/{rows,logs}",
+ "step_total_provenance": {
+  "consistency": true,
+  "meaning": "cells x configured steps of the formal matrix only",
+  "not_part_of_this_number": {
+   "b1_identity_cells": "8 cells x 1000 steps of step-by-step comparison are counted in the 32 passivity checks, not here",
+   "historical_reproductions": "14 seeds replayed through the detection stream, 1000 steps each, but they are identity checks on the archived detection sequence, not part of the three-view closure count",
+   "smoke_and_diagnostics": "excluded from the matrix entirely"
+  },
+  "per_arm": {
+   "A": {
+    "cells": 60,
+    "cells_checked": [
+     1000
+    ],
+    "seeds": [
+     1200000,
+     1200001,
+     1200002,
+     1200003,
+     1200004,
+     1200005,
+     1200006,
+     1200007,
+     1200008,
+     1200009,
+     1200010,
+     1200011,
+     1200012,
+     1200013,
+     1200014,
+     1200015,
+     1200016,
+     1200017,
+     1200018,
+     1200019,
+     1200020,
+     1200021,
+     1200022,
+     1200023,
+     1200024,
+     1200025,
+     1200026,
+     1200027,
+     1200028,
+     1200029,
+     1200030,
+     1200031,
+     1200032,
+     1200033,
+     1200034,
+     1200035,
+     1200036,
+     1200037,
+     1200038,
+     1200039,
+     1200040,
+     1200041,
+     1200042,
+     1200043,
+     1200044,
+     1200045,
+     1200046,
+     1200047,
+     1200048,
+     1200049,
+     1200050,
+     1200051,
+     1200052,
+     1200053,
+     1200054,
+     1200055,
+     1200056,
+     1200057,
+     1200058,
+     1200059
+    ],
+    "steps_per_cell": 1000
+   },
+   "B": {
+    "cells": 60,
+    "cells_checked": [
+     1000
+    ],
+    "seeds": [
+     1200000,
+     1200001,
+     1200002,
+     1200003,
+     1200004,
+     1200005,
+     1200006,
+     1200007,
+     1200008,
+     1200009,
+     1200010,
+     1200011,
+     1200012,
+     1200013,
+     1200014,
+     1200015,
+     1200016,
+     1200017,
+     1200018,
+     1200019,
+     1200020,
+     1200021,
+     1200022,
+     1200023,
+     1200024,
+     1200025,
+     1200026,
+     1200027,
+     1200028,
+     1200029,
+     1200030,
+     1200031,
+     1200032,
+     1200033,
+     1200034,
+     1200035,
+     1200036,
+     1200037,
+     1200038,
+     1200039,
+     1200040,
+     1200041,
+     1200042,
+     1200043,
+     1200044,
+     1200045,
+     1200046,
+     1200047,
+     1200048,
+     1200049,
+     1200050,
+     1200051,
+     1200052,
+     1200053,
+     1200054,
+     1200055,
+     1200056,
+     1200057,
+     1200058,
+     1200059
+    ],
+    "steps_per_cell": 1000
+   }
+  },
+  "three_view_closure_counted_separately": "120 000 (cell x step) three-view checks were reported over the 120 matrix cells",
+  "value_quoted_in_round18": 120000
+ },
+ "targets_that_were_detected_but_not_on_time": [
+  {
+   "arm": "A",
+   "completed_at": null,
+   "deadline": 360.6773754598147,
+   "discovered_at": 266.0,
+   "in_detected_ids": true,
+   "in_undetected_ids": false,
+   "outcome": "not_completed",
+   "seed": 1200025,
+   "target": "piloc-e1-target-5"
+  },
+  {
+   "arm": "B",
+   "completed_at": null,
+   "deadline": 1132.4950606729733,
+   "discovered_at": 969.0,
+   "in_detected_ids": true,
+   "in_undetected_ids": false,
+   "outcome": "not_completed",
+   "seed": 1200010,
+   "target": "piloc-e1-target-3"
+  }
+ ]
+}
