@@ -293,6 +293,7 @@ def run_training_episode(controller: Any, *, training_seed: int, episode_index: 
     row["training_seed"] = int(training_seed)
     row["episode_index"] = int(episode_index)
     row["lambda_at_rollout"] = float(lam)
+    row["lambda"] = float(lam)   # the trainer's contract key (frozen for the whole batch)
     _booked(label, "train", row, ledger)
     # The live objects are attached after the JSON row is written: they feed the PPO update
     # and must never be serialised into the artefact.
