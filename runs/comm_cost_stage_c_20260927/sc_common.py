@@ -340,6 +340,7 @@ def stage_b_inherited_config(seed: int) -> dict[str, Any]:
 
     source = sc.d1_archive_path("A3", 1100000)
     fields, substituted = sc.configuration_from_archive(sc.archived_configuration(source))
+    fields.update(STAGE_B_INHERITED_OVERRIDES)
     fields["seed"] = int(seed)
     substituted.append(f"Stage B frozen overrides applied: {sorted(STAGE_B_INHERITED_OVERRIDES)}")
     return fields, substituted

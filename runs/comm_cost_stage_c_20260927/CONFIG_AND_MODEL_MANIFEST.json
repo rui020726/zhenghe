@@ -6,12 +6,12 @@
    "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
    "runs/joint_eval_20260916/ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
   },
-  "freeze_sha256": "aa58e37710aa5afb2fd136bf6420879ee08a5847ab3b7607339b43a43bf314c8",
+  "freeze_sha256": "229728254fbb602da6b2c3437ad94fe0a9be75c2dd104eabb178ccf917a3fdb4",
   "harness": {
    "sc_check.py": "824936803b98f26faec8be479d60bf80322c947f9a41e076fbbd33fd474f241b",
-   "sc_common.py": "6e756d906b06573c25a4a4c228d16673b8e2674c4e526d581289b0ea7b24334f",
+   "sc_common.py": "b9de149fe46ba3c0a7aa76f144758077e7ec3075730d884fcd33f5bca508012e",
    "sc_controller.py": "f6c74483beb9c461244b4c824bb31bcfd84b3082f91ded8578b43d24488c8f87",
-   "sc_freeze.py": "73336557b2705173931d2e8226b4171775373fde115260c92438203bc93e5bfd",
+   "sc_freeze.py": "2501fa76172c9f4c1a552c678077e08138d67d2e4db714d6daee3e1e573c2667",
    "sc_resume_probe.py": "71bcd6beeaeec24c9415f5cd4b600a802986c45f6a1428cfc4d931127f67d405",
    "sc_rules.py": "0b60933e07fc7b4e60720d5ccf88a217de21229be09708acc1f970104d73a741",
    "sc_run.py": "2a22f18d61ebb9fff8b053d223b92b2fedc346a80afdd18eda6a509f650862f9",
@@ -45,19 +45,23 @@
    "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
   }
  },
- "configuration_hash": "da26010a4ddb7555",
- "head_at_freeze": "39a3da525079fc6fa06a7f4d95491b6ac64abf10",
+ "configuration_hash": "e9b2c067db5951f2",
+ "head_at_freeze": "cb4456449ee799192213ed5981dffd560df1d1a3",
  "inherited_behaviour_fields": {
   "actor_kv_mode": "tokens",
   "allocation_interval": 5,
   "allow_release_without_suppression": false,
   "check_release_source_stage": false,
   "comm_ack": false,
+  "comm_budget_bytes": 29300,
   "comm_delay_ticks": 0,
   "comm_delivery_probability": 0.7,
+  "comm_max_wait_steps": null,
   "comm_range": 0.3,
+  "comm_sends_per_tick": null,
   "comm_subscribers": "all",
-  "comm_timing_mode": "legacy_shared_bound",
+  "comm_timing_mode": "policy_owned_timing",
+  "comm_urgent_wait_steps": null,
   "command_ttl": 10.0,
   "coordination_interval": 5,
   "coordinator_policy": "coalition_planner",
@@ -130,6 +134,19 @@
    "entropy remains an extra regulariser at the pilot's coefficient; its effect on the pure cost objective is registered, not hidden"
   ],
   "value_coefficient_per_head": 0.5
+ },
+ "pre_launch_failures": {
+  "count": 1,
+  "entries": [
+   {
+    "attempt": 1,
+    "detail": "RuntimeError: ref_s1300000 s1300000: timing mode 'legacy_shared_bound'",
+    "label": "ref_s1300000",
+    "ok": false,
+    "seed": 1300000
+   }
+  ],
+  "note": "technical failures spent before any successful launch; the fix that followed is registered as this freeze's new code identity, and the failures stay in the ledger rather than being deducted"
  },
  "production_diff": {
   "branch_start": "6ebefbe4e7a81182281807333d64d60cadf03198",
