@@ -19,6 +19,8 @@ from collections import Counter
 import c20_common as c20
 
 R18 = c20.REPO_ROOT / "runs" / "search_trace_and_policy_20260925"
+#: 各格步数（`steps=1000`）；deadline/assignment 与它比较，和 lifecycle_metrics 的 window 同口径
+WINDOW = 1000.0
 
 
 def cells() -> dict[str, list[dict]]:
@@ -38,6 +40,7 @@ def per_target_outcomes(rows: list[dict]) -> dict[int, dict[str, dict]]:
         first_seen: dict[str, float] = {}
         deadline: dict[str, float] = {}
         completed_at: dict[str, float] = {}
+        assigned: set[str] = set()
         for record in records:
             target = str(record.get("target_id"))
             stamp = float(record.get("timestamp") or 0.0)
@@ -49,16 +52,32 @@ def per_target_outcomes(rows: list[dict]) -> dict[int, dict[str, dict]]:
             elif (event == "progress" and record.get("status") == "completed"
                     and target in first_seen):
                 completed_at.setdefault(target, stamp)
+            elif event == "assignment" and stamp <= WINDOW and target in first_seen:
+                assigned.add(target)
         targets: dict[str, dict] = {}
         for target, seen in first_seen.items():
             done = completed_at.get(target)
             targets[target] = {
                 "discovered_at": seen, "deadline": deadline[target],
-                "completed_at": done,
+                "completed_at": done, "assigned_in_window": target in assigned,
                 "outcome": ("on_time" if done is not None and done <= deadline[target] else
                             ("completed_late" if done is not None else "not_completed"))}
         out[int(row["seed"])] = targets
     return out
+
+
+def partition_label(info: dict) -> str:
+    """把逐目标结局映射到互斥结局字段（与 lifecycle_metrics 的划分同口径）。
+
+    未完成且 deadline > 窗口的再按"窗口内是否被分配"分成 unassigned / active。
+    """
+    if info["outcome"] == "on_time":
+        return "discovered_on_time"
+    if info["outcome"] == "completed_late":
+        return "discovered_completed_late"
+    if info["deadline"] <= WINDOW:
+        return "discovered_expired"
+    return "discovered_active" if info["assigned_in_window"] else "discovered_unassigned"
 
 
 def c20_common_jsonl(path: str) -> list[dict]:
@@ -104,11 +123,32 @@ def main() -> int:
         on_time = sum(int(r["on_time"]) for r in block)
         expired = sum(int(r["expired"]) for r in block)
         completed = sum(int(r["completed"]) for r in block)
+        active = sum(int(r["active"]) for r in block)
+        unassigned = sum(int(r["unassigned"]) for r in block)
+        # 互斥结局字段：completed/expired/unassigned/active 划分 discovered
+        # （lifecycle_metrics.py:125-139），on_time ⊆ completed；
+        # placed = discovered + never_discovered。
+        partition = {
+            "discovered_on_time": on_time,
+            "discovered_completed_late": completed - on_time,
+            "discovered_expired": expired,
+            "discovered_unassigned": unassigned,
+            "discovered_active": active,
+            "never_discovered": undetected_ids,
+        }
         payload.setdefault("integer_closure", {})[arm] = {
             "placed": placed, "detected": detected_ids, "undetected": undetected_ids,
             "on_time": on_time, "completed": completed, "expired": expired,
+            "active": active, "unassigned": unassigned,
             "detected_minus_on_time": detected_ids - on_time,
-            "detected_plus_undetected_equals_placed": detected_ids + undetected_ids == placed}
+            "detected_plus_undetected_equals_placed": detected_ids + undetected_ids == placed,
+            "outcome_partition_of_placed": partition,
+            "partition_sums_to_placed": sum(partition.values()) == placed,
+            "partition_note": "completed = on_time + completed_late；"
+                               "discovered = completed + expired + unassigned + active；"
+                               "placed = discovered + never_discovered。"
+                               "undetected 目标从未进入生命周期日志，"
+                               "因此不贡献 discovered 侧的任一档"}
 
     laggards = []
     for arm, block in rows.items():
@@ -120,16 +160,23 @@ def main() -> int:
                     laggards.append({
                         "arm": arm, "seed": seed, "target": target,
                         "outcome": info["outcome"],
+                        "partition_label": partition_label(info),
                         "discovered_at": info["discovered_at"],
                         "deadline": info["deadline"],
                         "completed_at": info["completed_at"],
+                        "assigned_in_window": info["assigned_in_window"],
                         "in_detected_ids": target in row["detected_target_ids"],
                         "in_undetected_ids": target in row["undetected_ids"]})
     payload["targets_that_were_detected_but_not_on_time"] = laggards
     payload["laggard_notes"] = [
-        "两者都是 detected 但未按时：一个 completed_late、一个 not_completed",
+        "两者都是 detected 且**从未完成**（completed_at 均为 null）：A 臂目标 deadline "
+        "360.68 ≤ 窗口 1000 ⇒ discovered_expired；B 臂目标 deadline 1132.50 > 1000、"
+        "窗口内已被分配、窗口末仍在进行 ⇒ discovered_active",
         "它们解释了 A/B 各自 detected−on_time = 1 的全部来源，不存在第三个差出的目标",
-        "未发现的目标从未进入生命周期日志，因此不可能贡献 on_time 或 expired"]
+        "未发现的目标从未进入生命周期日志，因此不可能贡献 on_time / completed / expired / "
+        "active / unassigned 任何一档（partition 的 never_discovered 档）",
+        "更正上一版 notes：原写'一个 completed_late、一个 not_completed'与数据不符——"
+        "两臂 completed−on_time 均为 0，没有任何 completed_late 目标"]
 
     # 3) 35/20/5 由逐 seed 数据验证
     seeds = {int(r["seed"]) for r in rows["A"]}
@@ -175,6 +222,8 @@ def main() -> int:
     payload["all_checks_pass"] = bool(
         payload["step_total_provenance"]["consistency"]
         and all(payload["integer_closure"][arm]["detected_plus_undetected_equals_placed"]
+                for arm in ("A", "B"))
+        and all(payload["integer_closure"][arm]["partition_sums_to_placed"]
                 for arm in ("A", "B"))
         and payload["per_seed_difference_check"]["matches_round18_labels"]
         and len(laggards) == 2)

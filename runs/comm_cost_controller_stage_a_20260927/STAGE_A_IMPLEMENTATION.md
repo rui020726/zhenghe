@@ -38,9 +38,15 @@ lambda_next = project_nonnegative(lambda + eta * g_hat)
 **两个 critic 各估什么、组合优势的符号**：
 - task critic `V_r(s)`：任务回报的价值（按时任务/episode 口径，折扣与否显式登记）；
 - cost critic `V_c(s)`：**已计量成本 to-go** 的价值（`c = C_measured/B0` 口径）；
-- 组合优势 `A = A_task − λ · A_cost`：策略梯度最大化加权对数似然，成本要变小 ⇒ 成本优势
-  **以负号进入**（`test_actor_advantage_sign_and_lambda_units`，λ=0 时恰好退回纯任务优势）。
-- λ 的单位 = 任务数 / 归一化成本单位，两项因此同量纲；若 Y 也归一化，则 delta 与 λ
+- 组合优势 `A = λ · A_task − A_cost`：由 `L = E[c] + λg` 对策略参数取上升方向得到
+  （`−dE[c]/dθ + λ·dE[Y_policy]/dθ`），逐决策奖励 `r = −c + λ·y`，优势算子线性 ⇒
+  **λ 挂在任务项上、成本以负号进目标**；λ=0 时只剩成本偏好（`−A_cost`）。
+  （`test_combined_advantage_is_lambda_task_minus_cost`）
+  > **A1 修订（2026-09-27，见 §十）**：原写 `A = A_task − λ · A_cost`、
+  > "λ=0 时恰好退回纯任务优势"是**实现错误**，已按推导更正；旧公式是对偶问题
+  > （最大化任务 s.t. 成本预算）的接线，在 λ=0 与 λ=10 都给反方向。
+- λ 的单位 = 任务数 / 归一化成本单位；本版**不做逐 batch 分量标准化**（标准化会等效改写
+  λ 的单位，引入它必须作为独立变更重新登记）。若 Y 也归一化，则 delta 与 λ
   **必须同步换单位**——本实现不归一化 Y，只归一化 C。
 
 **折扣与终止的区别**（`cost_math.gae` 的 docstring + 三个用例）：
@@ -90,7 +96,7 @@ ACK 两件事分开记：`ack_off_structural_zero`（未开启 ⇒ 结构性零�
 `test_episode_cost_increments_sum_to_total`、
 `test_ack_structural_zero_distinguished_from_missing`。
 
-## 六、§4 合成测试清单的覆盖情况（实测 27 项，全部通过）
+## 六、§4 合成测试清单的覆盖情况（实测 30 项，全部通过；A1 修订后计数，原交付为 27 项）
 
 | 清单条目 | 用例 |
 |---|---|
@@ -104,10 +110,10 @@ ACK 两件事分开记：`ack_off_structural_zero`（未开启 ⇒ 结构性零�
 | 新训练状态序列化保存/恢复 λ、双 critic、版本；旧版 fail-closed | `test_state_roundtrip_and_fail_closed_on_old_version` |
 | λ=0 成本方向正确、不强制复现 immediate | `test_lambda_zero_is_cost_minimising_not_all_send` |
 | 强制 SEND 走同执行器/报价路径 ⇒ 同配置 immediate（stub） | `test_forced_send_billing_matches_immediate_on_stub` |
-| 双 critic 各自的估计对象与组合优势符号 | `test_actor_advantage_sign_and_lambda_units` |
+| 双 critic 各自的估计对象与组合优势符号 | `test_combined_advantage_is_lambda_task_minus_cost`（A1 重写）、`CounterexampleWiring` 三项反例（A1 新增） |
 | γ<1 不等于无折扣总量 | `test_gamma_one_reproduces_undiscounted_total`、`test_gamma_below_one_is_not_the_undiscounted_total` |
 
-`c20_audit.py` 另外核对：27 项由 unittest 自身计数（不是引用旧项目套件数字）；
+`c20_audit.py` 另外核对：30 项由 unittest 自身计数（不是引用旧项目套件数字）；
 未跑全量 smoke（本阶段未授权，已列入未执行清单）。
 
 ## 七、模块与真实训练的接缝（先写清楚，Stage B 才接线）
@@ -132,3 +138,27 @@ ACK 两件事分开记：`ack_off_structural_zero`（未开启 ⇒ 结构性零�
  Stage A 的四个设计问题都以**可测**的形式落到代码里并通过合成测试：符号与单位固定、
 双 critic 与 λ 登记进训练状态、λ=0 不被误读为"全发"、拒付与账本分开。
 实现是纯函数集合，**没有第二套环境/训练器**，也没有触碰生产路径。
+
+## 十、A1 修订记录（2026-09-27，依据使用者 Stage A1 指令）
+
+上一交付 `6812a66` 后，使用者要求查处 `L_max = −E[c] − λg` 与
+`A = A_task − λ·A_cost` 的矛盾、补经实际 actor surrogate 的反例测试、
+核对 GAE/成本归一化/分量标准化/对偶更新的一致性、并为 B 臂 291/69/290/0 补互斥结局字段。
+完整记录见 **`STAGE_A1_ADVANTAGE_WIRING_FIX.md`**，要点：
+
+1. **判定为实现错误（actor 接线）**，不是文字误写：模块的拉格朗日量、约束统计量、
+   对偶更新与 N4 主线及原 spec §2/§4 全部一致，唯独 `actor_advantage` 实现了对偶问题
+   （最大化任务 s.t. 成本预算）的优势公式；同文件两条用例对 λ=0 的语义互相否定。
+2. **正确组合优势 `A = λ·A_task − A_cost`**（推导：`r = −c + λ·y`，优势算子线性）。
+   反例（SEND 任务 1/成本 0.2，HOLD 均 0）经 `masked_log_likelihood` +
+   `actor_advantage` 的真实路径验证：正确梯度 `(λ−0.2)p(1−p)`，λ=0 = −0.05（压 SEND）、
+   λ=10 = +2.45（抬 SEND）；旧接线两点皆反向。测试 27 → 30 项。
+3. **四项一致性核对通过**；分量标准化原为未登记缺口，现登记决策：本版不做，
+   λ 固定单位为 任务数/归一化成本，引入分量标准化须作独立变更。
+4. **互斥结局字段**：placed 360 = on_time + completed_late + expired + unassigned
+   + active + never_discovered（A：350/0/1/0/0/9；B：290/0/0/0/1/69）；
+   两个"发现但未按时"目标分别标注 `discovered_expired`（A）与 `discovered_active`（B），
+   并更正旧 notes 的"一个 completed_late"误写（实际无任何 completed_late 目标）。
+
+边界不变：0 环境启动、0 新流、0 optimizer.step、0 生产代码改动；δ、ρ、B0、
+训练量、700/1600 预算仍待批准；未启动 B/C。

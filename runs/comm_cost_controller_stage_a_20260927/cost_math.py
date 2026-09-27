@@ -11,6 +11,7 @@ HOLD 对后续费用的影响、episode 截断/终止区别、梯度来源"。
     g = E[Y_ref] - E[Y_policy] - delta     >0 表示约束被违背
     L_max = -E[c] - lambda * g,  lambda >= 0
     lambda_next = project_nonnegative(lambda + eta * g_hat)
+    A = lambda * A_task - A_cost           组合优势（推导见 actor_advantage）
 
 三条符号纪律（都有对应测试）：
   - 任务效果相同而字节更多 ⇒ 优化方向必须更差；
@@ -193,15 +194,22 @@ def dual_step(lam: float, g_hat: float, eta: float) -> float:
 
 def actor_advantage(advantage_task: torch.Tensor, advantage_cost: torch.Tensor,
                     lam: float) -> torch.Tensor:
-    """组合优势 `A = A_task - lambda * A_cost`。
+    """组合优势 `A = lambda * A_task - A_cost`（最小化成本、任务进约束的拉格朗日形式）。
 
-    符号：策略梯度**最大化**加权对数似然；成本要**变小**，所以成本优势以负号进入。
-    `A_cost` 估计"多花归一化成本"的优势，`lambda` 的单位是
-    任务数 / 归一化成本单位，两项因此同量纲。
+    推导（不做机械替换）：拉格朗日量 `L = E[c] + lambda * g`，
+    `g = E[Y_ref] - E[Y_policy] - delta`。对策略参数取**上升**方向即
+    `-dL/dtheta = -dE[c]/dtheta + lambda * dE[Y_policy]/dtheta`（`Y_ref` 与 `delta`
+    是常数，不进 actor 求导）。逐决策奖励因此是 `r = -c + lambda * y`；优势算子对
+    奖励线性、双 critic 各估一项，组合优势即 `lambda * A_task - A_cost`。
+
+    单位：`A_task` 为按时任务数，`A_cost` 为归一化成本；`lambda` 单位为
+    任务数 / 归一化成本。**不做逐 batch 分量标准化**：分别标准化两项会改变其有效
+    单位、等效改写 lambda，凡引入分量标准化必须作为独立变更重新登记
+    （第十九轮 spec §2：训练若归一化，登记固定归一化常数）。
     """
     if lam < 0:
         raise ValueError(f"lambda must be non-negative, got {lam}")
-    return advantage_task - float(lam) * advantage_cost
+    return float(lam) * advantage_task - advantage_cost
 
 
 def gae(rewards: torch.Tensor, values: torch.Tensor, gamma: float, gae_lambda: float,

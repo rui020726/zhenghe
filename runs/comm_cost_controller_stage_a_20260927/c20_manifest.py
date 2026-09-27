@@ -12,11 +12,14 @@ import c20_common as c20
 
 START_SHA = "efca2a50c8d06f6fa7062c204d94c98b137206a4"
 SPEC_COMMIT = "72c4c3f71e07339bf6533fbd771aef3b2682103c"
+#: 离线导入的两份原 spec 在 feat/comm-cost-stage-a 上的 cherry-pick 提交
+IMPORTED_COMMIT = "c539711002d51335a97925a4653a837288a1c629"
 BUNDLE = c20.REPO_ROOT.parent / "specs" / "comm-cost-original-specs-72c4c3f.bundle"
 DELIVERED = ("STAGE_A_IMPLEMENTATION.md", "STAGE_BC_RESOURCE_AND_STATISTICS.md",
+             "STAGE_A1_ADVANTAGE_WIRING_FIX.md",
              "STAGE_A_TEST_RESULTS.json", "SPEC_ITEM_VERIFICATION.json",
              "cost_math.py", "test_cost_math.py", "c20_common.py", "c20_audit.py",
-             "c20_spec_items.py")
+             "c20_spec_items.py", "c20_manifest.py")
 UPDATED = ("DESIGN_SPEC_COMPLIANCE.md",)
 
 
@@ -31,7 +34,7 @@ def main() -> int:
         "head_at_manifest": c20.git("rev-parse", "HEAD"),
         "imported_document_commit": {
             "sha": SPEC_COMMIT, "parent": "80af16ba4b90ce0c2d5456dd8b8e57068b4513e4",
-            "files": 2, "local_cherry_pick": c20.git("rev-parse", "HEAD^"),
+            "files": 2, "local_cherry_pick": IMPORTED_COMMIT,
             "bundle_path": str(BUNDLE),
             "bundle_sha256": c20.sha256_file(BUNDLE)},
         "boundary": {

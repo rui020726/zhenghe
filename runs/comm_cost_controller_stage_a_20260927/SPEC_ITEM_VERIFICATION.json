@@ -55,30 +55,55 @@
  },
  "integer_closure": {
   "A": {
+   "active": 0,
    "completed": 350,
    "detected": 351,
    "detected_minus_on_time": 1,
    "detected_plus_undetected_equals_placed": true,
    "expired": 1,
    "on_time": 350,
+   "outcome_partition_of_placed": {
+    "discovered_active": 0,
+    "discovered_completed_late": 0,
+    "discovered_expired": 1,
+    "discovered_on_time": 350,
+    "discovered_unassigned": 0,
+    "never_discovered": 9
+   },
+   "partition_note": "completed = on_time + completed_late；discovered = completed + expired + unassigned + active；placed = discovered + never_discovered。undetected 目标从未进入生命周期日志，因此不贡献 discovered 侧的任一档",
+   "partition_sums_to_placed": true,
    "placed": 360,
+   "unassigned": 0,
    "undetected": 9
   },
   "B": {
+   "active": 1,
    "completed": 290,
    "detected": 291,
    "detected_minus_on_time": 1,
    "detected_plus_undetected_equals_placed": true,
    "expired": 0,
    "on_time": 290,
+   "outcome_partition_of_placed": {
+    "discovered_active": 1,
+    "discovered_completed_late": 0,
+    "discovered_expired": 0,
+    "discovered_on_time": 290,
+    "discovered_unassigned": 0,
+    "never_discovered": 69
+   },
+   "partition_note": "completed = on_time + completed_late；discovered = completed + expired + unassigned + active；placed = discovered + never_discovered。undetected 目标从未进入生命周期日志，因此不贡献 discovered 侧的任一档",
+   "partition_sums_to_placed": true,
    "placed": 360,
+   "unassigned": 0,
    "undetected": 69
   }
  },
  "laggard_notes": [
-  "两者都是 detected 但未按时：一个 completed_late、一个 not_completed",
+  "两者都是 detected 且**从未完成**（completed_at 均为 null）：A 臂目标 deadline 360.68 ≤ 窗口 1000 ⇒ discovered_expired；B 臂目标 deadline 1132.50 > 1000、窗口内已被分配、窗口末仍在进行 ⇒ discovered_active",
   "它们解释了 A/B 各自 detected−on_time = 1 的全部来源，不存在第三个差出的目标",
-  "未发现的目标从未进入生命周期日志，因此不可能贡献 on_time 或 expired"
+  "未发现的目标从未进入生命周期日志，因此不可能贡献 on_time / completed / expired / active / unassigned 任何一档（partition 的 never_discovered 档）",
+  "更正上一版 notes：原写'一个 completed_late、一个 not_completed'与数据不符——两臂 completed−on_time 均为 0，没有任何 completed_late 目标"
  ],
  "per_seed_difference_check": {
   "direction": "A − B（正数 = A 遗漏更多）",
@@ -254,23 +279,27 @@
  "targets_that_were_detected_but_not_on_time": [
   {
    "arm": "A",
+   "assigned_in_window": true,
    "completed_at": null,
    "deadline": 360.6773754598147,
    "discovered_at": 266.0,
    "in_detected_ids": true,
    "in_undetected_ids": false,
    "outcome": "not_completed",
+   "partition_label": "discovered_expired",
    "seed": 1200025,
    "target": "piloc-e1-target-5"
   },
   {
    "arm": "B",
+   "assigned_in_window": true,
    "completed_at": null,
    "deadline": 1132.4950606729733,
    "discovered_at": 969.0,
    "in_detected_ids": true,
    "in_undetected_ids": false,
    "outcome": "not_completed",
+   "partition_label": "discovered_active",
    "seed": 1200010,
    "target": "piloc-e1-target-3"
   }

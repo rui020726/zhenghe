@@ -1,9 +1,17 @@
 {
  "branch": "feat/comm-cost-stage-a",
  "delivered": [
-  "M runs/comm_cost_objective_design_20260926/DESIGN_SPEC_COMPLIANCE.md"
+  " D runs/comm_cost_controller_stage_a_20260927/STAGE_A_TEST_RESULTS.json",
+  " M runs/comm_cost_controller_stage_a_20260927/MANIFEST.json",
+  " M runs/comm_cost_controller_stage_a_20260927/SPEC_ITEM_VERIFICATION.json",
+  " M runs/comm_cost_controller_stage_a_20260927/STAGE_A_IMPLEMENTATION.md",
+  " M runs/comm_cost_controller_stage_a_20260927/c20_manifest.py",
+  " M runs/comm_cost_controller_stage_a_20260927/c20_spec_items.py",
+  " M runs/comm_cost_controller_stage_a_20260927/cost_math.py",
+  " M runs/comm_cost_controller_stage_a_20260927/test_cost_math.py",
+  "M runs/comm_cost_controller_stage_a_20260927/DECISION_SUMMARY.md"
  ],
- "head": "c539711002d51335a97925a4653a837288a1c629",
+ "head": "6812a6641e045f19f114c986e51108d19d0e6b5e",
  "import_audit": {
   "clean": true,
   "offending": [],
@@ -163,27 +171,29 @@
  },
  "round": "20",
  "tests": {
-  "detail_lines_parsed": 23,
+  "detail_lines_parsed": 25,
   "passed": true,
   "returncode": 0,
   "stderr_tail": [
-   "Ran 27 tests in 0.023s",
+   "Ran 30 tests in 0.027s",
    "",
    "OK"
   ],
   "stdout_tail": [],
   "summary": [
-   "Ran 27 tests in 0.023s",
+   "Ran 30 tests in 0.027s",
    "OK"
   ],
-  "test_count": 27,
+  "test_count": 30,
   "tests": [
    "test_ack_structural_zero_distinguished_from_missing (test_cost_math.CostLedger)",
    "test_billed_buckets_are_only_real_attempts (test_cost_math.CostLedger)",
    "test_dropped_send_billed_refused_not_billed (test_cost_math.CostLedger)",
    "test_episode_cost_increments_sum_to_total (test_cost_math.CostLedger)",
    "test_terminal_task_counts_close (test_cost_math.CostLedger)",
-   "test_actor_advantage_sign_and_lambda_units (test_cost_math.Gradients)",
+   "test_directions_and_legacy_wiring_is_opposite (test_cost_math.CounterexampleWiring)",
+   "test_exact_gradient_matches_closed_form (test_cost_math.CounterexampleWiring)",
+   "test_combined_advantage_is_lambda_task_minus_cost (test_cost_math.Gradients)",
    "test_finite_difference_matches_autograd (test_cost_math.Gradients)",
    "test_forced_send_billing_matches_immediate_on_stub (test_cost_math.Gradients)",
    "test_reference_has_no_gradient_and_policy_has_correct_sign (test_cost_math.Gradients)",

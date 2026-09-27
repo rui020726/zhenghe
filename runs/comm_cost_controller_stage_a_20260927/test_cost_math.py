@@ -147,13 +147,15 @@ class Gradients(unittest.TestCase):
         finite = torch.tensor(finite, dtype=torch.float64)
         self.assertTrue(torch.allclose(analytic, finite, rtol=1e-4, atol=1e-6))
 
-    def test_actor_advantage_sign_and_lambda_units(self) -> None:
+    def test_combined_advantage_is_lambda_task_minus_cost(self) -> None:
         a_task = torch.tensor([1.0, 1.0], dtype=torch.float64)
         a_cost = torch.tensor([0.5, 2.0], dtype=torch.float64)
         combined = cm.actor_advantage(a_task, a_cost, lam=0.0)
-        self.assertTrue(torch.equal(combined, a_task))          # lambda=0 时不含成本项
+        self.assertTrue(torch.equal(combined, -a_cost))           # lambda=0 时只剩成本偏好
         combined = cm.actor_advantage(a_task, a_cost, lam=1.0)
-        self.assertTrue(torch.equal(combined, a_task - a_cost))  # 成本以负号进入
+        self.assertTrue(torch.equal(combined, a_task - a_cost))   # lambda=1 时两项等权
+        combined = cm.actor_advantage(a_task, a_cost, lam=10.0)
+        self.assertTrue(torch.equal(combined, 10.0 * a_task - a_cost))
 
     def test_lambda_zero_is_cost_minimising_not_all_send(self) -> None:
         """lambda=0 时目标只惩罚成本：方向必须正确，且**不得**断言它复现 immediate。
@@ -185,6 +187,78 @@ class Gradients(unittest.TestCase):
         self.assertEqual(closure["billed_bytes_total"], billed)
 
 
+# ------------------------------------------------------------------- 接线反例 -------------
+
+
+class CounterexampleWiring(unittest.TestCase):
+    """反例穿过真实 actor surrogate：SEND 得任务 1、成本 0.2；HOLD 均 0。
+
+    精确 surrogate `J = Σ_a π(a)·r(a)`，`r = λ·y − c`（本实现接线）⇒
+        ∂J/∂z_SEND = (λ − 0.2)·p·(1−p)
+    λ=0：−0.2·p(1−p) < 0（上升压低 SEND ⇒ 纯成本目标，与
+    `test_lambda_zero_is_cost_minimising_not_all_send` 同向）；
+    λ=10：+9.8·p(1−p) > 0（任务项压过成本）。
+    被否决的旧接线 `r' = y − λ·c` 在两点都给**反向**梯度：+p(1−p) 与 −p(1−p)。
+    """
+
+    LOGITS = [[0.7, -0.7]]
+    TASK = [1.0, 0.0]
+    COST = [0.2, 0.0]
+
+    def _p_send(self) -> float:
+        return float(torch.sigmoid(torch.tensor(1.4, dtype=torch.float64)))
+
+    def _exact_gradient(self, lam: float, wiring: str) -> float:
+        logits = torch.tensor(self.LOGITS, dtype=torch.float64, requires_grad=True)
+        task = torch.tensor(self.TASK, dtype=torch.float64)
+        cost = torch.tensor(self.COST, dtype=torch.float64)
+        reward = (cm.actor_advantage(task, cost, lam) if wiring == "correct"
+                  else task - lam * cost)          # 旧接线，仅作反证
+        objective = (torch.softmax(logits, dim=-1) * reward).sum()
+        objective.backward()
+        return float(logits.grad[0, 0])
+
+    def test_exact_gradient_matches_closed_form(self) -> None:
+        for lam in (0.0, 0.5, 1.5, 10.0):
+            expected = (lam - 0.2) * self._p_send() * (1.0 - self._p_send())
+            self.assertAlmostEqual(self._exact_gradient(lam, "correct"), expected, places=9)
+
+    def test_directions_and_legacy_wiring_is_opposite(self) -> None:
+        zero = self._exact_gradient(0.0, "correct")
+        ten = self._exact_gradient(10.0, "correct")
+        self.assertLess(zero, 0.0)          # lambda=0：压 SEND（纯成本目标）
+        self.assertGreater(ten, 0.0)        # lambda=10：抬 SEND（任务压过成本）
+        legacy_zero = self._exact_gradient(0.0, "legacy")
+        legacy_ten = self._exact_gradient(10.0, "legacy")
+        self.assertGreater(legacy_zero, 0.0)   # 旧接线 lambda=0 反而抬 SEND
+        self.assertLess(legacy_ten, 0.0)       # 旧接线 lambda=10 反而压 SEND
+        self.assertTrue(zero * legacy_zero < 0.0 and ten * legacy_ten < 0.0)
+
+    def test_gradient_through_masked_actor_surrogate(self) -> None:
+        """同一反例走 masked_log_likelihood + actor_advantage 的真实 actor 路径。"""
+        lam = 1.5
+        task = torch.tensor(self.TASK, dtype=torch.float64)
+        cost = torch.tensor(self.COST, dtype=torch.float64)
+        combined = cm.actor_advantage(task, cost, lam)
+        self.assertAlmostEqual(float(combined[1]), 0.0, places=12)   # HOLD 优势恰为 0
+        allowed = torch.tensor([[True, True]])
+
+        def loss_gradient(action: int) -> float:
+            logits = torch.tensor(self.LOGITS, dtype=torch.float64, requires_grad=True)
+            ll, _ = cm.masked_log_likelihood(logits, torch.tensor([action]), allowed)
+            (-combined[action] * ll).backward()
+            return float(logits.grad[0, 0])
+
+        grad_send = loss_gradient(0)
+        grad_hold = loss_gradient(1)
+        self.assertEqual(grad_hold, 0.0)                # A(HOLD)=0 ⇒ 零梯度样本
+        p = self._p_send()
+        expected_loss_grad = p * grad_send + (1.0 - p) * grad_hold   # 对采样分布取期望
+        self.assertAlmostEqual(-expected_loss_grad,
+                               self._exact_gradient(lam, "correct"), places=9)
+        self.assertAlmostEqual(-expected_loss_grad, (lam - 0.2) * p * (1.0 - p), places=9)
+
+
 # -------------------------------------------------------------------------- mask -------------
 
 
@@ -196,11 +270,11 @@ class Masking(unittest.TestCase):
         ll, entropy = cm.masked_log_likelihood(logits, actions, allowed)
         self.assertTrue(torch.isfinite(ll) and torch.isfinite(entropy))
         # 把被 mask 的项换成任意大 logit，actor 损失不应改变
-        before = float(ll)
+        before = float(ll.detach())
         with torch.no_grad():
             logits[0, 2] = 99.0
         after, _ = cm.masked_log_likelihood(logits, actions, allowed)
-        self.assertEqual(before, float(after))
+        self.assertEqual(before, float(after.detach()))
 
     def test_all_mask_batch_has_no_actor_sample_and_no_nan(self) -> None:
         logits = torch.zeros(2, 3, dtype=torch.float64, requires_grad=True)
