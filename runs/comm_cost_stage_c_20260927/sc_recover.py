@@ -136,9 +136,10 @@ def main(argv: list[str]) -> int:
         "lambda_at_rollout": common.LAMBDA_INIT, "update": update_report,
         "constraint": g_record, "dual": dual_record,
         "controller_parameters_before": before, "controller_parameters_after": after,
-        "optimizer_parameter_ids": [id(parameter) for group in optimizer.param_groups
-                                    for parameter in group["params"]],
-        "controller_parameter_ids": [id(parameter) for parameter in controller.parameters],
+        "optimizer_parameter_shapes": [list(parameter.shape) for group in optimizer.param_groups
+                                       for parameter in group["params"]],
+        "controller_parameter_shapes": [list(parameter.shape)
+                                        for parameter in controller.parameters],
         "frozen_checkpoints": {str(path.relative_to(common.ROOT)): common.sha256_file(path)
                                for path in common.CHECKPOINT_FILES},
         "recovery": {

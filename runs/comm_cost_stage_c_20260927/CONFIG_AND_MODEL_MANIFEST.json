@@ -6,17 +6,18 @@
    "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
    "runs/joint_eval_20260916/ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
   },
-  "freeze_sha256": "0fdbcd0bec48ff1b09b1d2c26a998add103bc1bda135ea3048a3a9ff637002b8",
+  "freeze_sha256": "ffca51cc2a054f01139c7a874e8510d6e5a8c19437e7e2dbd5421f25902e78eb",
   "harness": {
    "sc_blocks.py": "2a27001821c5bf60c6ee0ab0087fe49ff374687a968269ed5a97a47ae0b8a601",
    "sc_check.py": "8c24021efd605962592ec767cdd71f8f15059675841ab209bf65f89dc757bf34",
-   "sc_common.py": "50156e2c503e6d9c7428f2db60f9df1819380bf485ded2c682301975b6b89314",
+   "sc_common.py": "db02476ed3286c0c70f4d9ff58b1769fc4c7362be89d9091a5aa864ffce64c97",
    "sc_controller.py": "f6c74483beb9c461244b4c824bb31bcfd84b3082f91ded8578b43d24488c8f87",
-   "sc_freeze.py": "d11cf92257fc38bd13b1b710d6539da2384f6c98cd4c0f00771b23a586a43edf",
+   "sc_freeze.py": "bb16f1d992138ade8c019fc79b340317af81ecc4974e48d39e2d1bd64d0f95b0",
+   "sc_recover.py": "32089188dd8a299588b56f947cc578c5a895dde1457f3f6bdc236c186b03d943",
    "sc_resume_probe.py": "71bcd6beeaeec24c9415f5cd4b600a802986c45f6a1428cfc4d931127f67d405",
    "sc_rules.py": "0b60933e07fc7b4e60720d5ccf88a217de21229be09708acc1f970104d73a741",
    "sc_run.py": "acc6cdbcde9048eb0153af736219fa2b00f728d8af6d00163258eabbc7e3e2a2",
-   "sc_train.py": "1c615063926fa20f6def91290eccbc77a967dcb9a32e2b54bd385d542eb6527a",
+   "sc_train.py": "2bbcaf5ebb2e471e13e89a903fb7cd77b7bd9562ce62929c3ba214f01f856d48",
    "sc_trainer.py": "4e3f2858944dc219bb8b34685e170c9075a983890af276b4ff80cea299cc1f05",
    "test_sc_math.py": "8fcad2388b4738c8426d9abb8c883ab4fcaecd61c1cc081415969219dd4d7781"
   },
@@ -47,7 +48,7 @@
   }
  },
  "configuration_hash": "e9b2c067db5951f2",
- "head_at_freeze": "20d83c9ac53b4bacc0589cd6d14c29b9fcf476c2",
+ "head_at_freeze": "b71b6cfa4b2620fc7bc6f51ab09d5921598c7cf9",
  "inherited_behaviour_fields": {
   "actor_kv_mode": "tokens",
   "allocation_interval": 5,
@@ -137,7 +138,7 @@
   "value_coefficient_per_head": 0.5
  },
  "pre_launch_history": {
-  "count": 68,
+  "count": 72,
   "entries": [
    {
     "attempt": 1,
@@ -152,6 +153,34 @@
     "label": "ref_s1300001",
     "ok": false,
     "seed": 1300001
+   },
+   {
+    "attempt": 0,
+    "detail": "train_s11_e0: on_time=6 bytes=27714",
+    "label": "train_s11_e0",
+    "ok": true,
+    "seed": 1300027
+   },
+   {
+    "attempt": 1,
+    "detail": "train_s11_e1: on_time=5 bytes=27648",
+    "label": "train_s11_e1",
+    "ok": true,
+    "seed": 1300014
+   },
+   {
+    "attempt": 2,
+    "detail": "train_s11_e2: on_time=5 bytes=28572",
+    "label": "train_s11_e2",
+    "ok": true,
+    "seed": 1300028
+   },
+   {
+    "attempt": 3,
+    "detail": "train_s11_e3: on_time=6 bytes=29274",
+    "label": "train_s11_e3",
+    "ok": true,
+    "seed": 1300044
    },
    {
     "attempt": 1,

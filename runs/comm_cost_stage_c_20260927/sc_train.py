@@ -118,9 +118,10 @@ def train_seed(training_seed: int, *, episodes: int, freeze: dict[str, Any],
             "frozen_checkpoints": {
                 str(path.relative_to(common.ROOT)): common.sha256_file(path)
                 for path in common.CHECKPOINT_FILES},
-            "optimizer_parameter_ids": [id(parameter) for group in optimizer.param_groups
-                                        for parameter in group["params"]],
-            "controller_parameter_ids": [id(parameter) for parameter in controller.parameters],
+            "optimizer_parameter_shapes": [list(parameter.shape) for group in optimizer.param_groups
+                                           for parameter in group["params"]],
+            "controller_parameter_shapes": [list(parameter.shape)
+                                            for parameter in controller.parameters],
         }
         common.CHECKPOINTS.mkdir(parents=True, exist_ok=True)
         (common.CHECKPOINTS / f"sc_batch_s{training_seed}_b{batch_index}.json").write_text(

@@ -128,11 +128,12 @@ def main() -> int:
     if changed:
         raise SystemExit(f"production trees changed since the branch start: {changed}")
     report = common.ledger_report()
+    persisted = sorted(common.CHECKPOINTS.glob("sc_train_s*.pt")) if common.CHECKPOINTS.is_dir() else []
+    if persisted:
+        raise SystemExit("a persisted training checkpoint exists under an earlier code identity; "
+                         "refusing to re-freeze (the pilot would mix two code states)")
     training_started = any(str(entry.get("label", "")).startswith("train_s")
                            for entry in report["entries"])
-    if training_started:
-        raise SystemExit("a training episode has already run under an earlier code identity; "
-                         "refusing to re-freeze (the pilot would mix two code states)")
     if not audit["clean"]:
         raise SystemExit(f"seed collision audit failed: {json.dumps(audit, ensure_ascii=False)}")
 

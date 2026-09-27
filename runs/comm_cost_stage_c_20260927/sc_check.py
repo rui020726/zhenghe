@@ -128,17 +128,31 @@ def first4_gate(training_seed: int = 11) -> dict[str, Any]:
                        tag=f"train_s{training_seed}_e{row['episode_index']}")
              for row in episode_rows]
 
-    # G1: optimizer identity and frozen checkpoints
+    # G1: the optimiser must hold exactly the communication controller's parameters. Object
+    # identity is process-specific, so the comparison is on the recorded per-parameter shapes
+    # and counts, rebuilt against a fresh controller here.
     controller = fresh_controller(training_seed)
-    controller_ids = {id(parameter) for parameter in controller.parameters}
-    optimizer_ids = {int(value) for value in batch_record["optimizer_parameter_ids"]}
+    controller_shapes = [list(parameter.shape) for parameter in controller.parameters]
+    optimizer_shapes = batch_record.get("optimizer_parameter_shapes")
+    recorded_controller_shapes = batch_record.get("controller_parameter_shapes")
     frozen_now = {str(path.relative_to(common.ROOT)): common.sha256_file(path)
                   for path in common.CHECKPOINT_FILES}
     checks["G1_optimizer_updates_only_comm"] = {
-        "optimizer_parameters_are_controller_parameters": optimizer_ids == controller_ids,
-        "frozen_checkpoints_unchanged": frozen_now == batch_record["frozen_checkpoints"],
-        "controller_changed": batch_record["controller_parameters_before"]["parameter_sha256"]
-                              != batch_record["controller_parameters_after"]["parameter_sha256"],
+        "optimizer_parameters_are_controller_parameters": bool(
+            optimizer_shapes is not None and recorded_controller_shapes is not None
+            and optimizer_shapes == recorded_controller_shapes == controller_shapes),
+        "optimizer_parameter_count": len(optimizer_shapes or []),
+        "controller_parameter_count": len(controller_shapes),
+        "frozen_checkpoints_unchanged": bool(
+            frozen_now == batch_record["frozen_checkpoints"]),
+        "controller_changed": bool(
+            batch_record["controller_parameters_before"]["parameter_sha256"]
+            != batch_record["controller_parameters_after"]["parameter_sha256"]),
+        "passed": bool(optimizer_shapes is not None and recorded_controller_shapes is not None
+                       and optimizer_shapes == recorded_controller_shapes == controller_shapes
+                       and frozen_now == batch_record["frozen_checkpoints"]
+                       and batch_record["controller_parameters_before"]["parameter_sha256"]
+                       != batch_record["controller_parameters_after"]["parameter_sha256"]),
     }
 
     # G2: pre-update log_prob recomputation with the initial weights (batch 0's pre-update
@@ -178,22 +192,32 @@ def first4_gate(training_seed: int = 11) -> dict[str, Any]:
                                            [pair["y_policy"] for pair in pairs],
                                            common.DELTA)
     checks["G3_math_recomputable_from_disk"] = {
-        "reward_sums_close_on_episode_totals": totals_close,
-        "g_hat_matches_record": abs(g_recomputed - batch_record["constraint"]["g_hat"]) < 1e-12,
-        "all_finite": all(item.get("all_finite", True) for item in recomputed),
+        "reward_sums_close_on_episode_totals": bool(totals_close),
+        "g_hat_matches_record": bool(abs(g_recomputed - batch_record["constraint"]["g_hat"]) < 1e-12),
+        "all_finite": bool(all(item.get("all_finite", True) for item in recomputed)),
         "decision_steps": [item.get("decision_steps") for item in recomputed],
+        "passed": bool(totals_close
+                       and abs(g_recomputed - batch_record["constraint"]["g_hat"]) < 1e-12
+                       and all(item.get("all_finite", True) for item in recomputed)),
     }
 
     # G4: dual update formula and direction
     dual = batch_record["dual"]
     expected_lambda = max(0.0, dual["lambda_before"] + common.ETA_LAMBDA * dual["g_hat"])
     checks["G4_dual_direction_and_formula"] = {
-        "lambda_next_matches_formula": abs(dual["lambda_next"] - expected_lambda) < 1e-12,
-        "direction_consistent": (
+        "lambda_next_matches_formula": bool(abs(dual["lambda_next"] - expected_lambda) < 1e-12),
+        "direction_consistent": bool(
             (dual["g_hat"] > 0 and dual["lambda_next"] >= dual["lambda_before"])
             or (dual["g_hat"] < 0 and dual["lambda_next"] <= dual["lambda_before"])
             or (dual["g_hat"] == 0 and dual["lambda_next"] == dual["lambda_before"])),
-        "reference_is_scalar": all(isinstance(pair["y_reference"], float) for pair in pairs),
+        "reference_is_scalar": bool(all(isinstance(pair["y_reference"], float)
+                                        for pair in pairs)),
+        "passed": bool(abs(dual["lambda_next"] - expected_lambda) < 1e-12
+                       and ((dual["g_hat"] > 0 and dual["lambda_next"] >= dual["lambda_before"])
+                            or (dual["g_hat"] < 0 and dual["lambda_next"] <= dual["lambda_before"])
+                            or (dual["g_hat"] == 0
+                                and dual["lambda_next"] == dual["lambda_before"]))
+                       and all(isinstance(pair["y_reference"], float) for pair in pairs)),
     }
 
     # G5: critic finiteness (recomputed forward + loss + backward with initial weights) and
@@ -214,14 +238,19 @@ def first4_gate(training_seed: int = 11) -> dict[str, Any]:
                          not any(tape["requested"].values()) for tape in all_mask_steps)
     update = batch_record["update"]
     checks["G5_critics_finite_and_no_pseudo_samples"] = {
-        "critic_predictions_finite": finite,
-        "recorded_value_losses_finite": (
+        "critic_predictions_finite": bool(finite),
+        "recorded_value_losses_finite": bool(
             np.isfinite(update.get("value_loss_task", float("nan")))
             and np.isfinite(update.get("value_loss_cost", float("nan")))),
         "all_mask_steps": len(all_mask_steps),
-        "all_mask_steps_have_no_actor_sample": all_mask_clean,
+        "all_mask_steps_have_no_actor_sample": bool(all_mask_clean),
         "optimizer_steps": int(update.get("optimizer_steps", 0)),
-        "surrogate_finite": np.isfinite(update.get("policy_surrogate", float("nan"))),
+        "surrogate_finite": bool(np.isfinite(update.get("policy_surrogate", float("nan")))),
+        "passed": bool(finite
+                       and np.isfinite(update.get("value_loss_task", float("nan")))
+                       and np.isfinite(update.get("value_loss_cost", float("nan")))
+                       and all_mask_clean
+                       and np.isfinite(update.get("policy_surrogate", float("nan")))),
     }
 
     # G6: checkpoint restore in a pure computation process, same-observation forward
@@ -248,32 +277,41 @@ def first4_gate(training_seed: int = 11) -> dict[str, Any]:
     checks["G6_checkpoint_restore_pure_process"] = {
         "probe_returncode": probe.returncode,
         "probe_stderr_tail": probe.stderr.splitlines()[-2:] if probe.stderr else [],
-        "same_observation_forward_identical": same_forward,
+        "same_observation_forward_identical": bool(same_forward),
         "restored_state": {"lambda": state["lambda"],
                            "episodes_done": state["episodes_done"],
                            "updates": state["updates"]},
+        "passed": bool(probe.returncode == 0 and same_forward),
     }
 
     # G7: sample-count closure
     timing = episode_rows[0].get("collector_summary") or {}
     counters = episode_rows[0]["relay_counters"]
     checks["G7_sample_counts_close"] = {
-        "first_plus_refresh_equals_emissions": (
+        "first_plus_refresh_equals_emissions": bool(
             int(counters["first_emissions"]) + int(counters["refresh_emissions"])
             == int(counters["emissions"])),
-        "requests_equal_emissions_plus_refusals": (
+        "requests_equal_emissions_plus_refusals": bool(
             int((episode_rows[0].get("collector_summary") or {}).get("requested_sends_total", 0))
             == int(counters["emissions"]) + int(counters["budget_refused_sends"])
             + int(counters["capacity_refused_sends"])),
-        "candidate_classes_close": timing.get("candidate_classes_close"),
-        "candidate_classes_disjoint": timing.get("candidate_classes_disjoint"),
-        "masked_carry_no_likelihood": timing.get("masked_carry_no_likelihood"),
+        "candidate_classes_close": bool(timing.get("candidate_classes_close")),
+        "candidate_classes_disjoint": bool(timing.get("candidate_classes_disjoint")),
+        "masked_carry_no_likelihood": bool(timing.get("masked_carry_no_likelihood")),
         "policy_budget_refusals": int(counters["budget_refused_sends"]),
+        "passed": bool(
+            int(counters["first_emissions"]) + int(counters["refresh_emissions"])
+            == int(counters["emissions"])
+            and int((episode_rows[0].get("collector_summary") or {}).get("requested_sends_total", 0))
+            == int(counters["emissions"]) + int(counters["budget_refused_sends"])
+            + int(counters["capacity_refused_sends"])
+            and timing.get("candidate_classes_close")
+            and timing.get("candidate_classes_disjoint")
+            and timing.get("masked_carry_no_likelihood")),
     }
 
-    passed = all(
-        (check.get("passed", True) if isinstance(check, dict) else bool(check))
-        for check in checks.values())
+    passed = all(bool(check.get("passed")) for check in checks.values()
+                 if isinstance(check, dict))
     return {"training_seed": training_seed, "gate": "first4", "checks": checks,
             "passed": bool(passed)}
 
