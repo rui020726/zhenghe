@@ -268,3 +268,15 @@ runs/comm_cost_controller_stage_a_20260927/*
 # round-20 quarantine and caches stay on disk, out of Git
 runs/comm_cost_controller_stage_a_20260927/rejected/
 runs/comm_cost_controller_stage_a_20260927/__pycache__/
+
+# round-21 Stage B: harness, protocol and gate artefacts; live books and raw logs stay out
+!runs/comm_cost_stage_b_20260927/
+runs/comm_cost_stage_b_20260927/*
+!runs/comm_cost_stage_b_20260927/*.py
+!runs/comm_cost_stage_b_20260927/*.md
+!runs/comm_cost_stage_b_20260927/*.json
+runs/comm_cost_stage_b_20260927/START_LEDGER_*.json
+runs/comm_cost_stage_b_20260927/logs/
+runs/comm_cost_stage_b_20260927/rows/
+runs/comm_cost_stage_b_20260927/rejected/
+runs/comm_cost_stage_b_20260927/__pycache__/

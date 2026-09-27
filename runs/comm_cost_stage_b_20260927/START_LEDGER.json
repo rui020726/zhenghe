@@ -1,0 +1,32 @@
+{
+ "live": {
+  "used": 0
+ },
+ "plan": {
+  "counting_rule": "every environment start, technical failure, reference arm and smoke counts; pure math unit tests do not",
+  "execution_rule": "seed 1100000's six paths run first; the remaining two seeds run only after every wiring gate of the first seed passes",
+  "hard_cap": 24,
+  "normal_launches": 18,
+  "order": [
+   "R_send s1100000",
+   "I_send s1100000",
+   "R_hold s1100000",
+   "I_hold s1100000",
+   "P_init s1100000",
+   "P_repeat s1100000",
+   "R_send s1100001",
+   "I_send s1100001",
+   "R_hold s1100001",
+   "I_hold s1100001",
+   "P_init s1100001",
+   "P_repeat s1100001",
+   "R_send s1100002",
+   "I_send s1100002",
+   "R_hold s1100002",
+   "I_hold s1100002",
+   "P_init s1100002",
+   "P_repeat s1100002"
+  ],
+  "reserve_launches": 6
+ }
+}

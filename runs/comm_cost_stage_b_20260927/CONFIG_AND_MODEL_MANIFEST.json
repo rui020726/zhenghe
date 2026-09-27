@@ -1,0 +1,682 @@
+{
+ "branch": "feat/comm-cost-stage-b",
+ "branch_start": "5d0d71f4f779fb36982c468f34e7d801f1bc5de8",
+ "code_identity": {
+  "checkpoints": {
+   "runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "runs\\joint_eval_20260916\\ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  },
+  "harness": {
+   "sb_check.py": "fa5e6b39bad2643e21347483d66265d02af7114333430c251a484909882bdb5a",
+   "sb_collector.py": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+   "sb_common.py": "c2fdaa32cf33072e6731762d0743469d627b63e3c6a7bf27527515c1b3491772",
+   "sb_controller.py": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+   "sb_run.py": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+   "test_stage_b_math.py": "569de6ce4e89851344d06faaf12849beef5dc9b2cbfdb2bb5373ac9e733ebf74"
+  },
+  "imported_round_modules": {
+   "runs\\comm_budget_action_mask_fix_20260922\\budget_masked.py": "e64e0be4911ca3b3129247b3a443d045ad022f3bd9e6a1a22c4ebd1b3a4aff9b",
+   "runs\\comm_budget_pilot_20260919\\pilot_common.py": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8",
+   "runs\\comm_budget_pilot_20260919\\pilot_env.py": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b",
+   "runs\\comm_budget_pilot_20260919\\train_pilot.py": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81",
+   "runs\\comm_tight_budget_20260919\\onpolicy.py": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+   "runs\\search_trace_and_policy_20260925\\sp_common.py": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc"
+  },
+  "production": {
+   "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+   "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+   "integrated_sar/comm_ack.py": "fb2f91c93156354a37aa36d312d1acb59bf3d94bb2f8f2fbd0aa4013da46deb5",
+   "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+   "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+   "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+   "integrated_sar/expired_attribution.py": "b95be5e01a31063f694f0fff9d93134068396fc46e1a9a6166bdba77cbdd6ab2",
+   "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+   "integrated_sar/lifecycle_metrics.py": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+   "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+  },
+  "round_dir_allow_list_note": "logs/ rows/ rejected/ and START_LEDGER_p*.json stay out of Git"
+ },
+ "head_at_freeze": "1b6a45eb4d424598a9cbd623eee0fea15d545c0b",
+ "ledger_plan": {
+  "counting_rule": "every environment start, technical failure, reference arm and smoke counts; pure math unit tests do not",
+  "execution_rule": "seed 1100000's six paths run first; the remaining two seeds run only after every wiring gate of the first seed passes",
+  "hard_cap": 24,
+  "normal_launches": 18,
+  "order": [
+   "R_send s1100000",
+   "I_send s1100000",
+   "R_hold s1100000",
+   "I_hold s1100000",
+   "P_init s1100000",
+   "P_repeat s1100000",
+   "R_send s1100001",
+   "I_send s1100001",
+   "R_hold s1100001",
+   "I_hold s1100001",
+   "P_init s1100001",
+   "P_repeat s1100001",
+   "R_send s1100002",
+   "I_send s1100002",
+   "R_hold s1100002",
+   "I_hold s1100002",
+   "P_init s1100002",
+   "P_repeat s1100002"
+  ],
+  "reserve_launches": 6
+ },
+ "paths": {
+  "I_hold": {
+   "decision_maker": "LearnedSendPolicy(hold_equivalent_fn)",
+   "policy": "learned"
+  },
+  "I_send": {
+   "decision_maker": "LearnedSendPolicy(immediate_equivalent_fn)",
+   "policy": "learned"
+  },
+  "P_init": {
+   "decision_maker": "StageBCollector(StageBController(ACTOR_INIT_SEED))",
+   "policy": "learned"
+  },
+  "P_repeat": {
+   "decision_maker": "same as P_init",
+   "policy": "learned"
+  },
+  "R_hold": {
+   "decision_maker": "native AlwaysHoldPolicy",
+   "policy": "always_hold"
+  },
+  "R_send": {
+   "decision_maker": "native ImmediatePolicy",
+   "policy": "immediate"
+  }
+ },
+ "per_seed": {
+  "1100000": {
+   "archived_a3_run_config_sha256": "f011b57432f6a892f402b1425e37c3a1b922bda49ab1fe2451ab0003525d8224",
+   "archived_scenario": {
+    "agent_positions": [
+     [
+      48,
+      14
+     ],
+     [
+      47,
+      13
+     ]
+    ],
+    "cols": 60,
+    "free_cells": 3073,
+    "goal_positions": [
+     [
+      38,
+      13
+     ],
+     [
+      42,
+      15
+     ],
+     [
+      45,
+      13
+     ],
+     [
+      52,
+      5
+     ],
+     [
+      53,
+      23
+     ],
+     [
+      55,
+      20
+     ]
+    ],
+    "map_sha256": "db09a00d1fbcb2050ffabc9494f46b420ee7909f5b5bdafdccb5b533b5cb5f4f",
+    "num_goals_placed": 6,
+    "obstacle_cells": 527,
+    "rows": 60,
+    "seed": 1100000,
+    "source": "generated:60x60:density=0.15"
+   },
+   "inherited_behaviour_fields": {
+    "comm_ack": false,
+    "comm_delay_ticks": 0,
+    "comm_delivery_probability": 0.7,
+    "comm_range": 0.3,
+    "comm_subscribers": "all",
+    "deadline_tightness": [
+     0.5,
+     2.0
+    ],
+    "gossip_interval": 2,
+    "num_goals": 6,
+    "steps": 1000,
+    "use_coordinator": true
+   },
+   "per_path": {
+    "I_hold": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "learned",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for I_hold: learned"
+     ]
+    },
+    "I_send": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "learned",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for I_send: learned"
+     ]
+    },
+    "P_init": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "learned",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for P_init: learned"
+     ]
+    },
+    "P_repeat": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "learned",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for P_repeat: learned"
+     ]
+    },
+    "R_hold": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "always_hold",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for R_hold: always_hold"
+     ]
+    },
+    "R_send": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "immediate",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for R_send: immediate"
+     ]
+    }
+   }
+  },
+  "1100001": {
+   "archived_a3_run_config_sha256": "045afe9891fa2b22a6f5c5960bf903b0d83a7cf69f7f4d06ee3faf45ae862596",
+   "archived_scenario": {
+    "agent_positions": [
+     [
+      43,
+      39
+     ],
+     [
+      42,
+      39
+     ]
+    ],
+    "cols": 60,
+    "free_cells": 3053,
+    "goal_positions": [
+     [
+      35,
+      29
+     ],
+     [
+      36,
+      49
+     ],
+     [
+      43,
+      38
+     ],
+     [
+      45,
+      46
+     ],
+     [
+      53,
+      29
+     ],
+     [
+      53,
+      40
+     ]
+    ],
+    "map_sha256": "9b30d9c10d1c45f4ba18f50f80ad981d949d9d1b346b9312ff6a5b2d1d0787df",
+    "num_goals_placed": 6,
+    "obstacle_cells": 547,
+    "rows": 60,
+    "seed": 1100001,
+    "source": "generated:60x60:density=0.15"
+   },
+   "inherited_behaviour_fields": {
+    "comm_ack": false,
+    "comm_delay_ticks": 0,
+    "comm_delivery_probability": 0.7,
+    "comm_range": 0.3,
+    "comm_subscribers": "all",
+    "deadline_tightness": [
+     0.5,
+     2.0
+    ],
+    "gossip_interval": 2,
+    "num_goals": 6,
+    "steps": 1000,
+    "use_coordinator": true
+   },
+   "per_path": {
+    "I_hold": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "learned",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for I_hold: learned"
+     ]
+    },
+    "I_send": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "learned",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for I_send: learned"
+     ]
+    },
+    "P_init": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "learned",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for P_init: learned"
+     ]
+    },
+    "P_repeat": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "learned",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for P_repeat: learned"
+     ]
+    },
+    "R_hold": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "always_hold",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for R_hold: always_hold"
+     ]
+    },
+    "R_send": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "immediate",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for R_send: immediate"
+     ]
+    }
+   }
+  },
+  "1100002": {
+   "archived_a3_run_config_sha256": "791a261ee815eeb6ac4a9f4e7d5b046cb190f1b7d635209ae05eddca57e3736f",
+   "archived_scenario": {
+    "agent_positions": [
+     [
+      55,
+      30
+     ],
+     [
+      54,
+      29
+     ]
+    ],
+    "cols": 60,
+    "free_cells": 3060,
+    "goal_positions": [
+     [
+      46,
+      32
+     ],
+     [
+      50,
+      29
+     ],
+     [
+      55,
+      27
+     ],
+     [
+      57,
+      20
+     ],
+     [
+      58,
+      39
+     ],
+     [
+      59,
+      21
+     ]
+    ],
+    "map_sha256": "3fd93415c2c9bf08f66184562df0c9c05a2c2db2fed24b481284a49e4d623c8b",
+    "num_goals_placed": 6,
+    "obstacle_cells": 540,
+    "rows": 60,
+    "seed": 1100002,
+    "source": "generated:60x60:density=0.15"
+   },
+   "inherited_behaviour_fields": {
+    "comm_ack": false,
+    "comm_delay_ticks": 0,
+    "comm_delivery_probability": 0.7,
+    "comm_range": 0.3,
+    "comm_subscribers": "all",
+    "deadline_tightness": [
+     0.5,
+     2.0
+    ],
+    "gossip_interval": 2,
+    "num_goals": 6,
+    "steps": 1000,
+    "use_coordinator": true
+   },
+   "per_path": {
+    "I_hold": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "learned",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for I_hold: learned"
+     ]
+    },
+    "I_send": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "learned",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for I_send: learned"
+     ]
+    },
+    "P_init": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "learned",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for P_init: learned"
+     ]
+    },
+    "P_repeat": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "learned",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for P_repeat: learned"
+     ]
+    },
+    "R_hold": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "always_hold",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for R_hold: always_hold"
+     ]
+    },
+    "R_send": {
+     "comm_budget_bytes": 29300,
+     "comm_policy": "immediate",
+     "comm_timing_mode": "policy_owned_timing",
+     "substituted_fields": [
+      "map_path: archived null, today's default None used",
+      "comm_sends_per_tick: archived null, today's default None used",
+      "comm_budget_bytes: archived null, today's default None used",
+      "comm_max_wait_steps: archived null, today's default None used",
+      "comm_urgent_wait_steps: archived null, today's default None used",
+      "comm_ack_delay_ticks: archived null, today's default None used",
+      "comm_ack_delivery_probability: archived null, today's default None used",
+      "repository_root: archived null, today's default None used",
+      "replay_stream: archived null, today's default None used",
+      "search_backend: dropped, not a field of the current configuration",
+      "allocation_backend: dropped, not a field of the current configuration",
+      "Stage B overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+      "comm_policy overridden for R_send: immediate"
+     ]
+    }
+   }
+  }
+ },
+ "phase": "Stage B pre-launch freeze",
+ "production_diff": {
+  "branch_start": "5d0d71f4f779fb36982c468f34e7d801f1bc5de8",
+  "changed_files": [],
+  "clean": true,
+  "trees": [
+   "integrated_sar",
+   "task_allocation",
+   "piloc"
+  ]
+ },
+ "round": "21",
+ "synthetic_tests": {
+  "launches": 0,
+  "stage_a_suite": "runs/comm_cost_controller_stage_a_20260927/test_cost_math.py",
+  "stage_b_suite": "test_stage_b_math.py"
+ },
+ "wiring_constants": {
+  "B0_test_bytes": 10000.0,
+  "actor_init_seed": 20260927,
+  "delta_test": 0.0,
+  "eta_test": 1.0,
+  "gae_lambda": 0.95,
+  "gamma": 1.0,
+  "lambda_test": 1.0,
+  "log_prob_tolerance": 1e-06,
+  "note": "wiring examples only; not approved training hyper-parameters or a task loss tolerance",
+  "sampling_seed": 20260928
+ }
+}
