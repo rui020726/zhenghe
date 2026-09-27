@@ -98,6 +98,8 @@ budget/joint_driver/task03/lifecycle_metrics/expired_attribution/task_registry�
 仅 `=1` 时等于无折扣总和）已改为"闭合校验奖励和与执行器账本"，并有合成测试锁定。
 
 **本地 SHA**：分支 `feat/comm-cost-stage-b`；链
-`5d0d71f → 1b6a45e（启动前文案复核）→ ea34775（冻结件）`，
-本轮运行与交付件的提交 SHA 见 `git log`（回填后以回填提交为准）。
-**远端**：本轮授权普通推送 Stage A/A1 与 Stage B 分支；不 force；若远端分叉则停止推送并报告。
+`5d0d71f → 1b6a45e（启动前文案复核）→ ea34775（冻结件）→ dbf94dc（Stage B 执行与判定）`。
+**远端**：本轮授权普通推送 Stage A/A1 与 Stage B 分支、不 force、分叉则停。实际执行：
+本会话中一次 `github.com:443` TCP 探测曾成功，但随后两次 `git ls-remote origin`
+分别失败（连接被重置；连接超时）⇒ **未执行 push、未核验任何远端 ref，成功远端接触 0 次**
+（本地交付不受影响；网络恢复后需另行核验推送）。
