@@ -1,0 +1,30 @@
+{
+ "live": {
+  "used": 0
+ },
+ "plan": {
+  "breakdown": {
+   "immediate_reference": 64,
+   "learning_dev_eval": 144,
+   "rule_dev_eval": 80,
+   "training": 384
+  },
+  "eval_timepoints": [
+   "init",
+   "64",
+   "128"
+  ],
+  "execution_order": [
+   "64 immediate references (48 training + 16 development scenarios)",
+   "seed 11 first 4 training episodes + correctness gate (counted)",
+   "seed 11 remaining 124 episodes",
+   "seed 22 128 episodes",
+   "seed 33 128 episodes",
+   "learning-model dev evaluation at 0/64/128 episodes x 16 scenes",
+   "five rule arms x 16 dev scenes"
+  ],
+  "hard_cap": 700,
+  "normal_launches": 672,
+  "reserve_launches": 28
+ }
+}
