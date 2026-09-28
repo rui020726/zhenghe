@@ -155,6 +155,7 @@ HARNESS_MODULES = (
     "test_sc_cost_objective.py",
     "test_sc_cost_head_lifecycle.py",
     "test_sc_gae_next_value.py",
+    "test_sc_reward_timing.py",
 )
 CHECKPOINT_FILES = (
     ROOT / "runs" / "cur_v2rep05_s2" / "best" / "shared_mappo_model_21_3100.pth",

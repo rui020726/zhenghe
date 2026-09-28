@@ -134,11 +134,12 @@ class TrainerMath(unittest.TestCase):
         # deterministic stream this equals the independently computed combination.
         import cost_math as cm
 
-        # decision steps 2 and 5: cost 1000 lands on step 2; 2000+500 on step 5;
-        # task reward 1+2 lands on step 5 (the last decision step catches the tail).
-        rewards_cost = torch.tensor([1000.0 / common.B0_BYTES, 2500.0 / common.B0_BYTES],
+        # Decision steps 2 and 5 sample actions before their environment step. The tick-1
+        # cost is therefore an unassigned prefix; tick 3 and task tick 4 belong to action 2,
+        # while cost tick 6 and task tick 8 belong to action 5.
+        rewards_cost = torch.tensor([2000.0 / common.B0_BYTES, 500.0 / common.B0_BYTES],
                                     dtype=torch.float64)
-        rewards_task = torch.tensor([0.0, 3.0], dtype=torch.float64)
+        rewards_task = torch.tensor([1.0, 2.0], dtype=torch.float64)
         terminal = torch.tensor([False, True])
         values_task = torch.tensor([0.1, 0.3], dtype=torch.float64)
         values_cost = torch.tensor([0.2, 0.1], dtype=torch.float64)
