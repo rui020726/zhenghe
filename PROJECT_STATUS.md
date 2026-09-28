@@ -1,5 +1,35 @@
 # 项目状态
 
+## 2026-09-28：ROUND24 完成；ROUND25 固定候选复验执行完毕——降本证据未建立、观察到一次任务数退化（本地完成，远端发布待补）
+
+**ROUND24（修复版从初值重跑，672/672 启动，0 技术失败）**：三个通信模型全部从
+`Controller(seed)` 初值训练，不读 v1 checkpoint；训练/评估/参照/规则四类启动闭合，门禁全过。
+科学结论：**学习收益未建立**——三个 seed 差异大（seed33 最终 greedy 在 16 个开发场景任务数与
+immediate/late 全平且成本更低；seed22 greedy 0 B、seed11 与 sampled 接近 immediate 成本），
+sampled 与 greedy 的模式差是结构性的（seed33 的 p(SEND)≈0.33–0.41）。最稳的规则臂仍是
+`late_discovery_gate_147`（0 任务差、−10 101 B/ep、16/16 联合占优）。
+
+**ROUND25（固定 seed33 ep128 greedy 候选 × 64 个新场景 1400000..1400063 × 三臂，192 启动、
+0 失败、0 储备消耗）**：执行依据是本会话用户直接指令（`EXECUTION_BASIS.md`，hash 已登记），
+旧 spec 的离线 hash 校验维持 MISMATCH、未声称已核验。
+
+- 绝对：learned 2 779.7 B/场景、5.844 个/ep；immediate 14 672.8 B、5.875 个/ep；
+  late 3 476.0 B、5.781 个/ep；拒付 0、预算使用率 learned 9.5% / late 11.9% / immediate 50.1%。
+- 唯一主成本比较（vs late）：dC 均值 −696.3 B/场景，95% CI [−1 849.2, +502.2] **含 0**
+  ⇒ `primary_cost_evidence = lower_cost_not_established`；dY 60 平 / 4 改善 / 0 退化。
+- 对 immediate：dY 63 平 / 0 改善 / **1 退化**（1400031 净 −2，失去 target-0 与 target-5，
+  该场景成本也更低）⇒ `observed_task_count_status = task_count_tradeoff_observed`；
+  dC 64/64 更低（均值 −11 893 B，CI [−12 567, −11 492]）。
+- 目标身份：除该退化场景外无身份替换，没有"净数打平但换了目标"的场景。
+- 统计缺陷登记：首次 bootstrap 区间有重采样算术缺陷（`matrix @ values` 而非
+  `values[matrix].mean(axis=1)`），已用更正算法重算；均值与计数不变、0 episode 受影响，
+  作废的首次判定原样保存（`SUPERSEDED_FIRST_VERDICT.*`、`STATS_CORRECTION.json`）。
+- 结论边界：候选是看过开发集后**事后选定**的固定模型；64 场景是探索性复验规模，不是功效样本；
+  任务全打平不证明 delta=0 非劣；不把固定候选的结果写成学习方法普遍优于强规则。
+- **无自动下一步授权**：不续训、不换候选、不追加确认、不部署。远端 `remote_verification =
+  NOT_PERFORMED`、`publication_status = PENDING_NETWORK`（本会话按指令 0 次网络重试），
+  网络恢复后普通推送并核对远端，不 force。
+
 ## 2026-09-26：返回学习型通信主线——成本第一次被写成显式目标；降本设计与 pilot 方案已交付待批准（第十九轮，0 新 episode、0 训练、0 生产代码改动）
 
 产物目录 [runs/comm_cost_objective_design_20260926/](runs/comm_cost_objective_design_20260926/)：
