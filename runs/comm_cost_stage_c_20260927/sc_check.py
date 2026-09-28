@@ -91,13 +91,17 @@ def recompute_episode_math(row: dict[str, Any], tapes: list[dict[str, Any]],
                                dtype=torch.float64)
     terminal = torch.zeros(len(decision_steps), dtype=torch.bool)
     terminal[-1] = True
-    bootstrap = torch.zeros(len(decision_steps), dtype=torch.float64)
+    bootstrap_task = torch.zeros_like(values_task)
+    bootstrap_cost = torch.zeros_like(values_cost)
+    if len(decision_steps) > 1:
+        bootstrap_task[:-1] = values_task[1:]
+        bootstrap_cost[:-1] = values_cost[1:]
     advantages_task, returns_task = cm.gae(rewards_task, values_task, gamma=common.GAMMA,
                                            gae_lambda=common.GAE_LAMBDA, terminal=terminal,
-                                           bootstrap=bootstrap)
+                                           bootstrap=bootstrap_task)
     advantages_cost, returns_cost = cm.gae(rewards_cost, values_cost, gamma=common.GAMMA,
                                            gae_lambda=common.GAE_LAMBDA, terminal=terminal,
-                                           bootstrap=bootstrap)
+                                           bootstrap=bootstrap_cost)
     combined = cm.actor_advantage(advantages_task, advantages_cost, lam)
     return {
         "decision_steps": len(decision_steps),
