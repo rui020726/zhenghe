@@ -1,0 +1,863 @@
+{
+ "cells": [
+  {
+   "arm": "learned_s33_greedy",
+   "emissions": 2,
+   "on_time": 6,
+   "scene": 1400000,
+   "spent_bytes": 5286
+  },
+  {
+   "arm": "immediate",
+   "emissions": 6,
+   "on_time": 6,
+   "scene": 1400000,
+   "spent_bytes": 15210
+  },
+  {
+   "arm": "late_discovery_gate_147",
+   "emissions": 0,
+   "on_time": 6,
+   "scene": 1400000,
+   "spent_bytes": 0
+  },
+  {
+   "arm": "learned_s33_greedy",
+   "emissions": 0,
+   "on_time": 6,
+   "scene": 1400001,
+   "spent_bytes": 0
+  },
+  {
+   "arm": "immediate",
+   "emissions": 6,
+   "on_time": 6,
+   "scene": 1400001,
+   "spent_bytes": 14574
+  },
+  {
+   "arm": "late_discovery_gate_147",
+   "emissions": 4,
+   "on_time": 6,
+   "scene": 1400001,
+   "spent_bytes": 9606
+  }
+ ],
+ "checks": [
+  {
+   "check": "six_cells_present",
+   "detail": [
+    "learned_s33_greedy_s1400000",
+    "immediate_s1400000",
+    "late_discovery_gate_147_s1400000",
+    "learned_s33_greedy_s1400001",
+    "immediate_s1400001",
+    "late_discovery_gate_147_s1400001"
+   ],
+   "passed": true
+  },
+  {
+   "check": "behaviour_config_s1400000",
+   "detail": {
+    "immediate": "dfc0e96a51c27fcaef1c0511673da3f4f12ff67bad8d53c33250effc023ea26c",
+    "late_discovery_gate_147": "dfc0e96a51c27fcaef1c0511673da3f4f12ff67bad8d53c33250effc023ea26c",
+    "learned_s33_greedy": "dfc0e96a51c27fcaef1c0511673da3f4f12ff67bad8d53c33250effc023ea26c"
+   },
+   "passed": true
+  },
+  {
+   "check": "behaviour_config_matches_inheritance_s1400000",
+   "detail": "dfc0e96a51c27fcaef1c0511673da3f4f12ff67bad8d53c33250effc023ea26c",
+   "passed": true
+  },
+  {
+   "check": "transport_and_weights_learned_s33_greedy_s1400000",
+   "detail": {
+    "ack_billing": null,
+    "ack_delay_ticks": null,
+    "ack_delivery_probability": null,
+    "ack_enabled": false,
+    "ack_rng_scheme": null,
+    "ack_schema": null,
+    "ack_seed": null,
+    "ack_usage": null,
+    "bound_enforced_by_transport": false,
+    "budget": {
+     "budget_refused_bytes": 0,
+     "budget_refused_sends": 0,
+     "bytes_per_episode": 29300,
+     "capacity_refused_sends": 0,
+     "remaining_bytes": 29300.0,
+     "sends_per_step": null,
+     "spent_bytes": 0,
+     "used_fraction": 0.0
+    },
+    "delay_ticks": 0,
+    "delivery_probability": 0.7,
+    "max_wait_steps": null,
+    "policy": "learned",
+    "policy_parameters": {
+     "feature_layout": "comm-send-state/1",
+     "horizon": 1000.0
+    },
+    "subscribers": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    "timing_mode": "policy_owned_timing",
+    "urgency_time": null,
+    "urgent_wait_steps": null
+   },
+   "passed": true
+  },
+  {
+   "check": "transport_and_weights_immediate_s1400000",
+   "detail": {
+    "ack_billing": null,
+    "ack_delay_ticks": null,
+    "ack_delivery_probability": null,
+    "ack_enabled": false,
+    "ack_rng_scheme": null,
+    "ack_schema": null,
+    "ack_seed": null,
+    "ack_usage": null,
+    "bound_enforced_by_transport": false,
+    "budget": {
+     "budget_refused_bytes": 0,
+     "budget_refused_sends": 0,
+     "bytes_per_episode": 29300,
+     "capacity_refused_sends": 0,
+     "remaining_bytes": 29300.0,
+     "sends_per_step": null,
+     "spent_bytes": 0,
+     "used_fraction": 0.0
+    },
+    "delay_ticks": 0,
+    "delivery_probability": 0.7,
+    "max_wait_steps": null,
+    "policy": "immediate",
+    "policy_parameters": {},
+    "subscribers": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    "timing_mode": "policy_owned_timing",
+    "urgency_time": null,
+    "urgent_wait_steps": null
+   },
+   "passed": true
+  },
+  {
+   "check": "transport_and_weights_late_discovery_gate_147_s1400000",
+   "detail": {
+    "ack_billing": null,
+    "ack_delay_ticks": null,
+    "ack_delivery_probability": null,
+    "ack_enabled": false,
+    "ack_rng_scheme": null,
+    "ack_schema": null,
+    "ack_seed": null,
+    "ack_usage": null,
+    "bound_enforced_by_transport": false,
+    "budget": {
+     "budget_refused_bytes": 0,
+     "budget_refused_sends": 0,
+     "bytes_per_episode": 29300,
+     "capacity_refused_sends": 0,
+     "remaining_bytes": 29300.0,
+     "sends_per_step": null,
+     "spent_bytes": 0,
+     "used_fraction": 0.0
+    },
+    "delay_ticks": 0,
+    "delivery_probability": 0.7,
+    "max_wait_steps": null,
+    "policy": "learned",
+    "policy_parameters": {
+     "feature_layout": "comm-send-state/1",
+     "horizon": 1000.0
+    },
+    "subscribers": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    "timing_mode": "policy_owned_timing",
+    "urgency_time": null,
+    "urgent_wait_steps": null
+   },
+   "passed": true
+  },
+  {
+   "check": "behaviour_config_s1400001",
+   "detail": {
+    "immediate": "dfc0e96a51c27fcaef1c0511673da3f4f12ff67bad8d53c33250effc023ea26c",
+    "late_discovery_gate_147": "dfc0e96a51c27fcaef1c0511673da3f4f12ff67bad8d53c33250effc023ea26c",
+    "learned_s33_greedy": "dfc0e96a51c27fcaef1c0511673da3f4f12ff67bad8d53c33250effc023ea26c"
+   },
+   "passed": true
+  },
+  {
+   "check": "behaviour_config_matches_inheritance_s1400001",
+   "detail": "dfc0e96a51c27fcaef1c0511673da3f4f12ff67bad8d53c33250effc023ea26c",
+   "passed": true
+  },
+  {
+   "check": "transport_and_weights_learned_s33_greedy_s1400001",
+   "detail": {
+    "ack_billing": null,
+    "ack_delay_ticks": null,
+    "ack_delivery_probability": null,
+    "ack_enabled": false,
+    "ack_rng_scheme": null,
+    "ack_schema": null,
+    "ack_seed": null,
+    "ack_usage": null,
+    "bound_enforced_by_transport": false,
+    "budget": {
+     "budget_refused_bytes": 0,
+     "budget_refused_sends": 0,
+     "bytes_per_episode": 29300,
+     "capacity_refused_sends": 0,
+     "remaining_bytes": 29300.0,
+     "sends_per_step": null,
+     "spent_bytes": 0,
+     "used_fraction": 0.0
+    },
+    "delay_ticks": 0,
+    "delivery_probability": 0.7,
+    "max_wait_steps": null,
+    "policy": "learned",
+    "policy_parameters": {
+     "feature_layout": "comm-send-state/1",
+     "horizon": 1000.0
+    },
+    "subscribers": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    "timing_mode": "policy_owned_timing",
+    "urgency_time": null,
+    "urgent_wait_steps": null
+   },
+   "passed": true
+  },
+  {
+   "check": "transport_and_weights_immediate_s1400001",
+   "detail": {
+    "ack_billing": null,
+    "ack_delay_ticks": null,
+    "ack_delivery_probability": null,
+    "ack_enabled": false,
+    "ack_rng_scheme": null,
+    "ack_schema": null,
+    "ack_seed": null,
+    "ack_usage": null,
+    "bound_enforced_by_transport": false,
+    "budget": {
+     "budget_refused_bytes": 0,
+     "budget_refused_sends": 0,
+     "bytes_per_episode": 29300,
+     "capacity_refused_sends": 0,
+     "remaining_bytes": 29300.0,
+     "sends_per_step": null,
+     "spent_bytes": 0,
+     "used_fraction": 0.0
+    },
+    "delay_ticks": 0,
+    "delivery_probability": 0.7,
+    "max_wait_steps": null,
+    "policy": "immediate",
+    "policy_parameters": {},
+    "subscribers": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    "timing_mode": "policy_owned_timing",
+    "urgency_time": null,
+    "urgent_wait_steps": null
+   },
+   "passed": true
+  },
+  {
+   "check": "transport_and_weights_late_discovery_gate_147_s1400001",
+   "detail": {
+    "ack_billing": null,
+    "ack_delay_ticks": null,
+    "ack_delivery_probability": null,
+    "ack_enabled": false,
+    "ack_rng_scheme": null,
+    "ack_schema": null,
+    "ack_seed": null,
+    "ack_usage": null,
+    "bound_enforced_by_transport": false,
+    "budget": {
+     "budget_refused_bytes": 0,
+     "budget_refused_sends": 0,
+     "bytes_per_episode": 29300,
+     "capacity_refused_sends": 0,
+     "remaining_bytes": 29300.0,
+     "sends_per_step": null,
+     "spent_bytes": 0,
+     "used_fraction": 0.0
+    },
+    "delay_ticks": 0,
+    "delivery_probability": 0.7,
+    "max_wait_steps": null,
+    "policy": "learned",
+    "policy_parameters": {
+     "feature_layout": "comm-send-state/1",
+     "horizon": 1000.0
+    },
+    "subscribers": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    "timing_mode": "policy_owned_timing",
+    "urgency_time": null,
+    "urgent_wait_steps": null
+   },
+   "passed": true
+  },
+  {
+   "check": "parameters_unchanged_in_episode_s1400000",
+   "detail": {
+    "after": {
+     "heads": [
+      "action_head",
+      "value_task_head",
+      "value_cost_head"
+     ],
+     "init_seed": 20260927,
+     "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+     "parameter_count": 5700,
+     "parameter_sha256": "22cdbb937c285e526892491aaf2a54d9f89b924dc88dc5952d3c1d3f7eb5641a",
+     "shapes": {
+      "action_head.bias": [
+       2
+      ],
+      "action_head.weight": [
+       2,
+       64
+      ],
+      "trunk.0.bias": [
+       64
+      ],
+      "trunk.0.weight": [
+       64,
+       19
+      ],
+      "trunk.2.bias": [
+       64
+      ],
+      "trunk.2.weight": [
+       64,
+       64
+      ],
+      "value_cost_head.bias": [
+       1
+      ],
+      "value_cost_head.weight": [
+       1,
+       64
+      ],
+      "value_task_head.bias": [
+       1
+      ],
+      "value_task_head.weight": [
+       1,
+       64
+      ]
+     }
+    },
+    "before": {
+     "heads": [
+      "action_head",
+      "value_task_head",
+      "value_cost_head"
+     ],
+     "init_seed": 20260927,
+     "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+     "parameter_count": 5700,
+     "parameter_sha256": "22cdbb937c285e526892491aaf2a54d9f89b924dc88dc5952d3c1d3f7eb5641a",
+     "shapes": {
+      "action_head.bias": [
+       2
+      ],
+      "action_head.weight": [
+       2,
+       64
+      ],
+      "trunk.0.bias": [
+       64
+      ],
+      "trunk.0.weight": [
+       64,
+       19
+      ],
+      "trunk.2.bias": [
+       64
+      ],
+      "trunk.2.weight": [
+       64,
+       64
+      ],
+      "value_cost_head.bias": [
+       1
+      ],
+      "value_cost_head.weight": [
+       1,
+       64
+      ],
+      "value_task_head.bias": [
+       1
+      ],
+      "value_task_head.weight": [
+       1,
+       64
+      ]
+     }
+    }
+   },
+   "passed": true
+  },
+  {
+   "check": "parameters_unchanged_in_episode_s1400001",
+   "detail": {
+    "after": {
+     "heads": [
+      "action_head",
+      "value_task_head",
+      "value_cost_head"
+     ],
+     "init_seed": 20260927,
+     "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+     "parameter_count": 5700,
+     "parameter_sha256": "22cdbb937c285e526892491aaf2a54d9f89b924dc88dc5952d3c1d3f7eb5641a",
+     "shapes": {
+      "action_head.bias": [
+       2
+      ],
+      "action_head.weight": [
+       2,
+       64
+      ],
+      "trunk.0.bias": [
+       64
+      ],
+      "trunk.0.weight": [
+       64,
+       19
+      ],
+      "trunk.2.bias": [
+       64
+      ],
+      "trunk.2.weight": [
+       64,
+       64
+      ],
+      "value_cost_head.bias": [
+       1
+      ],
+      "value_cost_head.weight": [
+       1,
+       64
+      ],
+      "value_task_head.bias": [
+       1
+      ],
+      "value_task_head.weight": [
+       1,
+       64
+      ]
+     }
+    },
+    "before": {
+     "heads": [
+      "action_head",
+      "value_task_head",
+      "value_cost_head"
+     ],
+     "init_seed": 20260927,
+     "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+     "parameter_count": 5700,
+     "parameter_sha256": "22cdbb937c285e526892491aaf2a54d9f89b924dc88dc5952d3c1d3f7eb5641a",
+     "shapes": {
+      "action_head.bias": [
+       2
+      ],
+      "action_head.weight": [
+       2,
+       64
+      ],
+      "trunk.0.bias": [
+       64
+      ],
+      "trunk.0.weight": [
+       64,
+       19
+      ],
+      "trunk.2.bias": [
+       64
+      ],
+      "trunk.2.weight": [
+       64,
+       64
+      ],
+      "value_cost_head.bias": [
+       1
+      ],
+      "value_cost_head.weight": [
+       1,
+       64
+      ],
+      "value_task_head.bias": [
+       1
+      ],
+      "value_task_head.weight": [
+       1,
+       64
+      ]
+     }
+    }
+   },
+   "passed": true
+  },
+  {
+   "check": "parameters_identical_across_gate_episodes",
+   "detail": 1,
+   "passed": true
+  },
+  {
+   "check": "candidate_identity_matches_freeze",
+   "detail": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+   "passed": true
+  },
+  {
+   "check": "greedy_decode_and_mask_s1400000",
+   "detail": {
+    "max_probability_gap": 0.0,
+    "tape_rows": 58,
+    "violations": []
+   },
+   "passed": true
+  },
+  {
+   "check": "collector_schemas_s1400000",
+   "detail": {
+    "action_mask_schema": "budget-sequential-mask/1",
+    "actionable_share": 1.0,
+    "candidates_seen": 161,
+    "decide_milliseconds_per_call": 0.3614,
+    "decisions": 58,
+    "forced_sends": 0,
+    "free_candidates": 161,
+    "masked_by_capacity": 0,
+    "masked_by_credit": 0,
+    "tape_schema": "onpolicy-tape/2",
+    "trainer_tag": "onpolicy-v3-budget-mask",
+    "voluntary_send_rate": 0.0124
+   },
+   "passed": true
+  },
+  {
+   "check": "greedy_decode_and_mask_s1400001",
+   "detail": {
+    "max_probability_gap": 0.0,
+    "tape_rows": 69,
+    "violations": []
+   },
+   "passed": true
+  },
+  {
+   "check": "collector_schemas_s1400001",
+   "detail": {
+    "action_mask_schema": "budget-sequential-mask/1",
+    "actionable_share": 1.0,
+    "candidates_seen": 86,
+    "decide_milliseconds_per_call": 0.2941,
+    "decisions": 69,
+    "forced_sends": 0,
+    "free_candidates": 86,
+    "masked_by_capacity": 0,
+    "masked_by_credit": 0,
+    "tape_schema": "onpolicy-tape/2",
+    "trainer_tag": "onpolicy-v3-budget-mask",
+    "voluntary_send_rate": 0.0
+   },
+   "passed": true
+  },
+  {
+   "check": "cost_ledger_closes_learned_s33_greedy_s1400000",
+   "detail": {
+    "spent": 5286,
+    "tap": 5286
+   },
+   "passed": true
+  },
+  {
+   "check": "task_lifecycle_closes_learned_s33_greedy_s1400000",
+   "detail": {
+    "on_time": 6,
+    "tap": 6.0
+   },
+   "passed": true
+  },
+  {
+   "check": "refusals_split_learned_s33_greedy_s1400000",
+   "detail": {
+    "budget": 0,
+    "capacity": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "ack_zero_learned_s33_greedy_s1400000",
+   "detail": {
+    "ack_attempt_bytes": 0,
+    "ack_attempts": 0,
+    "ack_delivered": 0,
+    "ack_emitted": 0,
+    "ack_frames_advanced": 0,
+    "ack_frames_reaffirmed": 0,
+    "ack_lost": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "cost_ledger_closes_immediate_s1400000",
+   "detail": {
+    "spent": 15210,
+    "tap": 15210
+   },
+   "passed": true
+  },
+  {
+   "check": "task_lifecycle_closes_immediate_s1400000",
+   "detail": {
+    "on_time": 6,
+    "tap": 6.0
+   },
+   "passed": true
+  },
+  {
+   "check": "refusals_split_immediate_s1400000",
+   "detail": {
+    "budget": 0,
+    "capacity": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "ack_zero_immediate_s1400000",
+   "detail": {
+    "ack_attempt_bytes": 0,
+    "ack_attempts": 0,
+    "ack_delivered": 0,
+    "ack_emitted": 0,
+    "ack_frames_advanced": 0,
+    "ack_frames_reaffirmed": 0,
+    "ack_lost": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "cost_ledger_closes_late_discovery_gate_147_s1400000",
+   "detail": {
+    "spent": 0,
+    "tap": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "task_lifecycle_closes_late_discovery_gate_147_s1400000",
+   "detail": {
+    "on_time": 6,
+    "tap": 6.0
+   },
+   "passed": true
+  },
+  {
+   "check": "refusals_split_late_discovery_gate_147_s1400000",
+   "detail": {
+    "budget": 0,
+    "capacity": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "ack_zero_late_discovery_gate_147_s1400000",
+   "detail": {
+    "ack_attempt_bytes": 0,
+    "ack_attempts": 0,
+    "ack_delivered": 0,
+    "ack_emitted": 0,
+    "ack_frames_advanced": 0,
+    "ack_frames_reaffirmed": 0,
+    "ack_lost": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "cost_ledger_closes_learned_s33_greedy_s1400001",
+   "detail": {
+    "spent": 0,
+    "tap": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "task_lifecycle_closes_learned_s33_greedy_s1400001",
+   "detail": {
+    "on_time": 6,
+    "tap": 6.0
+   },
+   "passed": true
+  },
+  {
+   "check": "refusals_split_learned_s33_greedy_s1400001",
+   "detail": {
+    "budget": 0,
+    "capacity": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "ack_zero_learned_s33_greedy_s1400001",
+   "detail": {
+    "ack_attempt_bytes": 0,
+    "ack_attempts": 0,
+    "ack_delivered": 0,
+    "ack_emitted": 0,
+    "ack_frames_advanced": 0,
+    "ack_frames_reaffirmed": 0,
+    "ack_lost": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "cost_ledger_closes_immediate_s1400001",
+   "detail": {
+    "spent": 14574,
+    "tap": 14574
+   },
+   "passed": true
+  },
+  {
+   "check": "task_lifecycle_closes_immediate_s1400001",
+   "detail": {
+    "on_time": 6,
+    "tap": 6.0
+   },
+   "passed": true
+  },
+  {
+   "check": "refusals_split_immediate_s1400001",
+   "detail": {
+    "budget": 0,
+    "capacity": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "ack_zero_immediate_s1400001",
+   "detail": {
+    "ack_attempt_bytes": 0,
+    "ack_attempts": 0,
+    "ack_delivered": 0,
+    "ack_emitted": 0,
+    "ack_frames_advanced": 0,
+    "ack_frames_reaffirmed": 0,
+    "ack_lost": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "cost_ledger_closes_late_discovery_gate_147_s1400001",
+   "detail": {
+    "spent": 9606,
+    "tap": 9606
+   },
+   "passed": true
+  },
+  {
+   "check": "task_lifecycle_closes_late_discovery_gate_147_s1400001",
+   "detail": {
+    "on_time": 6,
+    "tap": 6.0
+   },
+   "passed": true
+  },
+  {
+   "check": "refusals_split_late_discovery_gate_147_s1400001",
+   "detail": {
+    "budget": 0,
+    "capacity": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "ack_zero_late_discovery_gate_147_s1400001",
+   "detail": {
+    "ack_attempt_bytes": 0,
+    "ack_attempts": 0,
+    "ack_delivered": 0,
+    "ack_emitted": 0,
+    "ack_frames_advanced": 0,
+    "ack_frames_reaffirmed": 0,
+    "ack_lost": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "round24_rows_untouched",
+   "detail": 672,
+   "passed": true
+  },
+  {
+   "check": "artefacts_inside_round_directory",
+   "detail": [
+    "D:\\code\\整合\\zhenghe\\runs\\comm_cost_greedy_replication_20260928\\rows\\r25_immediate_s1400000_a1.json",
+    "D:\\code\\整合\\zhenghe\\runs\\comm_cost_greedy_replication_20260928\\rows\\r25_immediate_s1400001_a1.json",
+    "D:\\code\\整合\\zhenghe\\runs\\comm_cost_greedy_replication_20260928\\rows\\r25_late_discovery_gate_147_s1400000_a1.json",
+    "D:\\code\\整合\\zhenghe\\runs\\comm_cost_greedy_replication_20260928\\rows\\r25_late_discovery_gate_147_s1400001_a1.json",
+    "D:\\code\\整合\\zhenghe\\runs\\comm_cost_greedy_replication_20260928\\rows\\r25_learned_s33_greedy_s1400000_a1.json",
+    "D:\\code\\整合\\zhenghe\\runs\\comm_cost_greedy_replication_20260928\\rows\\r25_learned_s33_greedy_s1400001_a1.json"
+   ],
+   "passed": true
+  }
+ ],
+ "failures": [],
+ "gate_scenes": [
+  1400000,
+  1400001
+ ],
+ "launches_used": 6,
+ "passed": true,
+ "round": "25",
+ "section": "first-6 technical gate (2 scenes x 3 arms, inside the 192 launches)",
+ "technical_only": "the gate never requires a task or cost improvement; a performance regression is not a technical failure and is not deleted, isolated or rerun for a better draw"
+}

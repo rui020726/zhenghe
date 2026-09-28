@@ -1,0 +1,232 @@
+{
+ "before_after": {
+  "immediate_dC_ci": {
+   "corrected": [
+    -12566.625,
+    -11191.5796875
+   ],
+   "superseded": [
+    -429605.95546875,
+    -319740.18046875
+   ]
+  },
+  "immediate_dY_ci": {
+   "corrected": [
+    -0.09375,
+    0.0
+   ],
+   "superseded": [
+    -1.9375,
+    -0.03125
+   ]
+  },
+  "late_dC_ci": {
+   "corrected": [
+    -1849.22109375,
+    502.16953124999935
+   ],
+   "superseded": [
+    -43626.62578125,
+    -419.3906250000007
+   ]
+  },
+  "late_dY_ci": {
+   "corrected": [
+    0.015625,
+    0.125
+   ],
+   "superseded": [
+    0.84375,
+    3.09375
+   ]
+  },
+  "note": "means and counts are identical before and after; only the intervals moved",
+  "observed_task_count_status": {
+   "corrected": "task_count_tradeoff_observed",
+   "superseded": "task_count_tradeoff_observed"
+  },
+  "primary_cost_evidence": {
+   "corrected": "lower_cost_not_established",
+   "superseded": "lower_cost_supported (defective CI)"
+  }
+ },
+ "defect": {
+  "affected_fields": [
+   "every bootstrap 95% CI (task and cost, both comparators)"
+  ],
+  "blast_radius": "the first PAIRED_COMPARISON.json and the first ROUND25_VERDICT.json/.md; both are preserved verbatim as SUPERSEDED_FIRST_STATISTICS.json and SUPERSEDED_FIRST_VERDICT.json/.md",
+  "correct_code": "means = values[matrix].mean(axis=1)",
+  "defective_code": "means = matrix @ values / float(matrix.shape[1])",
+  "first_verdict_was_wrong": "the superseded verdict claimed primary_cost_evidence = lower_cost_supported from a defective CI; that claim is void",
+  "function": "r25_stats.bootstrap_ci",
+  "nature": "the matrix product is an index-weighted sum, not the mean of the deltas at the resampled scene indices; every percentile CI was therefore wrong",
+  "unaffected_fields": [
+   "per-scene dY/dC",
+   "means",
+   "all count fields",
+   "the zero-event bound",
+   "absolute metrics",
+   "goal identity tradeoffs"
+  ]
+ },
+ "episodes_unaffected": {
+  "call_path": "bootstrap_ci is called only from paired_table (aggregation); the runner (r25_run/r25_blocks) never calls it",
+  "fix_timing": "r25_stats.py was edited after the last launch of the 192; no launch was affected and no cell was re-run",
+  "homogeneous_matrix": true,
+  "row_code_identities": [
+   "5ec93453fbadd95287eca157f39b20dea43df718062d4754a10363b220fcd1c8"
+  ]
+ },
+ "final_positions": {
+  "observed_task_count_status": "task_count_tradeoff_observed",
+  "primary_cost_evidence": "lower_cost_not_established"
+ },
+ "identity_reconciliation": {
+  "current_identity_after_fix": "4c5ed9b0a2c9813de0b6f77856c660c791b6403adc20945809570e3687e0a039",
+  "files_changed_after_launch_commit": [
+   {
+    "file": "r25_stats.py",
+    "state": "changed after the recorded commit"
+   }
+  ],
+  "freeze_time_note": "recorded before zero-episode preflight edits; the preflight is not part of any episode path",
+  "freeze_time_recorded_in_ARM_FREEZE": "a3a19cb9390b3e87cc4c82f28f9e1a96736d9f36d0954342141f815aeae23299",
+  "interpretation": "the rows embed the identity of the bytes that actually executed; the committed blobs are the same code with git's autocrlf normalisation applied to the pre-existing tracked files, so both identities are registered and the relation is proven file by file",
+  "launch_commit": "394aa0f",
+  "launch_commit_identity_lf_blobs": "6153b8aac30a667d206c4d6cbc5046bb3249c9124c588c3fed930d4550b66379",
+  "launch_commit_vs_run_time": {
+   "core_autocrlf": "true (git config)",
+   "files": [
+    {
+     "file": "integrated_sar/comm.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "integrated_sar/comm_policy.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "integrated_sar/comm_learning.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "integrated_sar/comm_budget.py",
+     "relation": "identical"
+    },
+    {
+     "file": "integrated_sar/joint_driver.py",
+     "relation": "identical"
+    },
+    {
+     "file": "integrated_sar/run_signature.py",
+     "relation": "identical"
+    },
+    {
+     "file": "integrated_sar/adapters/task03.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "integrated_sar/lifecycle_metrics.py",
+     "relation": "identical"
+    },
+    {
+     "file": "integrated_sar/task_registry.py",
+     "relation": "identical"
+    },
+    {
+     "file": "runs/comm_cost_v2_rerun_20260928/v2_controller.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "runs/comm_cost_v2_rerun_20260928/v2_rules.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "runs/comm_cost_v2_rerun_20260928/v2_common.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "runs/comm_cost_stage_b_20260927/sb_common.py",
+     "relation": "identical"
+    },
+    {
+     "file": "runs/comm_cost_stage_b_20260927/sb_controller.py",
+     "relation": "identical"
+    },
+    {
+     "file": "runs/comm_cost_stage_b_20260927/sb_collector.py",
+     "relation": "identical"
+    },
+    {
+     "file": "runs/comm_cost_stage_b_20260927/sb_run.py",
+     "relation": "identical"
+    },
+    {
+     "file": "runs/comm_budget_pilot_20260919/train_pilot.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "runs/comm_budget_pilot_20260919/pilot_common.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "runs/comm_budget_pilot_20260919/pilot_env.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "runs/comm_budget_action_mask_fix_20260922/budget_masked.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py",
+     "relation": "crlf_only"
+    },
+    {
+     "file": "runs/comm_tight_budget_20260919/onpolicy.py",
+     "relation": "identical"
+    },
+    {
+     "file": "runs/comm_tight_budget_20260919/train_onpolicy.py",
+     "relation": "identical"
+    },
+    {
+     "file": "runs/search_trace_and_policy_20260925/sp_common.py",
+     "relation": "identical"
+    }
+   ],
+   "only_eol_differences": true
+  },
+  "run_time_identity_in_rows": "5ec93453fbadd95287eca157f39b20dea43df718062d4754a10363b220fcd1c8",
+  "run_time_identity_reproduced": "5ec93453fbadd95287eca157f39b20dea43df718062d4754a10363b220fcd1c8",
+  "run_time_identity_reproduced_exactly": true
+ },
+ "matrix_digest_unchanged": true,
+ "round": "25",
+ "section": "statistics defect registration and correction",
+ "verification": {
+  "hand_computed_case": {
+   "case": "one scene dY=-2, 63 tied",
+   "expected_ci": [
+    -0.09375,
+    0.0
+   ],
+   "passed": true,
+   "recomputed_ci": [
+    -0.09375,
+    0.0
+   ]
+  },
+  "launch_ledger_final": {
+   "ledgers_agree": true,
+   "per_process_total": 192,
+   "used": 192
+  },
+  "range_invariant": "every CI must lie inside [min(deltas), max(deltas)]; the defective arithmetic would now raise instead of producing a number",
+  "shared_matrix_sha256": "799188508a6aa6e29a4e7b394b62e3c8221efe3425143013425a40fb7a6ad9c7",
+  "shared_matrix_unchanged": true
+ }
+}

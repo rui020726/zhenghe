@@ -55,13 +55,25 @@ def matrix_digest(matrix: np.ndarray) -> str:
 
 
 def bootstrap_ci(deltas: list[float], matrix: np.ndarray) -> dict[str, float]:
-    """Percentile bootstrap over scenes with the shared resampling matrix (linear quantiles)."""
+    """Percentile bootstrap over scenes with the shared resampling matrix (linear quantiles).
+
+    Each resampling row holds scene indices; the statistic is the mean of the deltas at those
+    indices (``values[matrix]``). The mean of bounded values stays inside their range, which is
+    asserted below: a matrix product or any other index-arithmetic slip cannot pass silently.
+    """
     values = np.asarray(deltas, dtype=np.float64)
     if values.shape[0] != matrix.shape[1]:
         raise RuntimeError(f"{values.shape[0]} scenes vs resampling matrix with {matrix.shape[1]}")
-    means = matrix @ values / float(matrix.shape[1])
+    means = values[matrix].mean(axis=1)
+    if means.shape != (matrix.shape[0],):
+        raise RuntimeError(f"resampled means have shape {means.shape}, expected "
+                           f"({matrix.shape[0]},)")
     low, high = np.quantile(means, [0.5 - CONFIDENCE / 2, 0.5 + CONFIDENCE / 2],
                             method=QUANTILE_METHOD)
+    if not (float(values.min()) <= float(low) <= float(high) <= float(values.max())):
+        raise RuntimeError(
+            f"bootstrap interval [{low}, {high}] leaves the range of the deltas "
+            f"[{values.min()}, {values.max()}]; the resampling arithmetic is wrong")
     return {"mean": float(values.mean()), "ci_low": float(low), "ci_high": float(high),
             "draws": int(matrix.shape[0]), "scenes": int(values.shape[0]),
             "quantile_method": QUANTILE_METHOD, "confidence": CONFIDENCE}
