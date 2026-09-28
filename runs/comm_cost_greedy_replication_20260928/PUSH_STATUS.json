@@ -1,0 +1,47 @@
+{
+  "round": "25",
+  "run_id": "comm_cost_greedy_replication_20260928",
+  "branch": "exp/comm-cost-greedy-replication",
+  "head_at_delivery": "3cf91a5",
+  "delivery_commits": [
+    "f0d9780 docs(comm): ROUND25 保存本轮执行依据原文并登记 hash",
+    "394aa0f feat(comm): ROUND25 启动前冻结——三臂协议、r25 harness、零环境预检 39 项全过",
+    "2f2eaf1 feat(comm): ROUND25 执行完毕——192/192 启动、门禁全过；降本证据未建立、观察到一次任务数退化",
+    "3cf91a5 docs(status): 登记 ROUND24 完成与 ROUND25 固定候选复验结果"
+  ],
+  "head_note": "head_at_delivery is the head when this file was written; this file is committed "
+               "immediately afterwards as the last artefact of the delivery",
+  "publication": {
+    "remote_verification": "NOT_PERFORMED",
+    "publication_status": "PENDING_NETWORK",
+    "network_attempts_this_session": 0,
+    "note": "the user's in-session execution instruction lifts the publication precondition and "
+            "forbids further network retries this session; publication is deferred, not claimed",
+    "when_a_channel_recovers": [
+      "ordinary push exp/comm-cost-v2-rerun (ROUND24, 4 commits, local head f920c55) and "
+      "exp/comm-cost-greedy-replication (this branch) with no force and no history rewrite",
+      "byte-verify the ROUND25 spec blob against docs/comm-cost-greedy-replication "
+      "@2fd8d9a96dfb60f24b6a03861ef9029315b7ce34 and record the tree-equivalence evidence; the "
+      "offline check stays MISMATCH until then",
+      "only then treat the ROUND24 and ROUND25 deliveries as published"
+    ]
+  },
+  "local_state": {
+    "execution": "complete: 192 normal launches of the fixed three-arm panel, 0 technical "
+                 "failures, 0 reserve launches used, ledger books agree",
+    "gate": "FIRST6_GATE.json passed (45 checks)",
+    "preflight": "RUN_PREFLIGHT.json passed (39 checks, 0 environment launches)",
+    "statistics_correction": "STATS_CORRECTION.json: the first bootstrap intervals were defective "
+                             "and were recomputed; means and counts unchanged; 0 episodes affected",
+    "verdict": {
+      "primary_cost_evidence": "lower_cost_not_established",
+      "observed_task_count_status": "task_count_tradeoff_observed"
+    }
+  },
+  "not_claimed": [
+    "no remote ref is verified for either branch",
+    "no push success is claimed for ROUND24 or ROUND25",
+    "the offline spec hash check remains MISMATCH; the old spec file is not edited and not "
+    "claimed as verified"
+  ]
+}
