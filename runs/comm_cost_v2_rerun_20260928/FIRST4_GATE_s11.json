@@ -1,0 +1,70 @@
+{
+ "checks": {
+  "G1_optimizer_updates_only_comm": {
+   "controller_changed": true,
+   "controller_contains_exact_module_collection": true,
+   "controller_parameter_count": 10,
+   "frozen_checkpoints_unchanged": true,
+   "module_parameters_unique": true,
+   "optimizer_parameter_count": 10,
+   "optimizer_shapes_match_complete_module_collection": true,
+   "passed": true
+  },
+  "G2_log_prob_recomputable_pre_update": {
+   "max_abs_gap": 2.384185791015625e-07,
+   "passed": true,
+   "pre_update_weights_are_the_registered_initialisation": true,
+   "tolerance": 1e-06
+  },
+  "G3_math_recomputable_from_disk": {
+   "all_finite": true,
+   "decision_steps": [
+    66,
+    429,
+    52,
+    76
+   ],
+   "g_hat_matches_record": true,
+   "passed": true,
+   "reward_sums_close_on_episode_totals": true
+  },
+  "G4_dual_direction_and_formula": {
+   "direction_consistent": true,
+   "lambda_next_matches_formula": true,
+   "passed": true,
+   "reference_is_scalar": true
+  },
+  "G5_critics_finite_and_no_pseudo_samples": {
+   "all_mask_steps": 593,
+   "all_mask_steps_have_no_actor_sample": true,
+   "critic_predictions_finite": true,
+   "optimizer_steps": 12,
+   "passed": true,
+   "recorded_value_losses_finite": true,
+   "surrogate_finite": true
+  },
+  "G6_checkpoint_restore_pure_process": {
+   "passed": true,
+   "probe_returncode": 0,
+   "probe_stderr_tail": [],
+   "restored_state": {
+    "episodes_done": 4,
+    "lambda": 1.0125,
+    "updates": 1
+   },
+   "same_observation_forward_identical": true
+  },
+  "G7_sample_counts_close": {
+   "candidate_classes_close": true,
+   "candidate_classes_disjoint": true,
+   "first_plus_refresh_equals_emissions": true,
+   "masked_carry_no_likelihood": true,
+   "passed": true,
+   "policy_budget_refusals": 0,
+   "requests_equal_emissions_plus_refusals": true
+  }
+ },
+ "gate": "first4",
+ "passed": true,
+ "training_seed": 11
+}

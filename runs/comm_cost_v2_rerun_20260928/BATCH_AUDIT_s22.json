@@ -1,0 +1,1073 @@
+{
+ "batches_contiguous": true,
+ "batches_found": 32,
+ "expected_batches": 32,
+ "freeze": {
+  "branch_start": "b7217d18b4e7f4e301d0b62a810892967adc6566",
+  "config_hash": "e9b2c067db5951f2",
+  "freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc",
+  "head_at_freeze": "5be3f1e6437309f4e92cf49807f2e0cbbf7f057f"
+ },
+ "gate": "batch_audit",
+ "passed": true,
+ "per_batch": [
+  {
+   "batch": 0,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "4c176389bbbaaf8a",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "g_hat": 0.25,
+   "lambda_at_rollout": 1.0,
+   "lambda_next": 1.0125,
+   "likelihood_max_abs_gap": 2.384185791015625e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.125006582,
+    "cost_head": 0.704274379,
+    "task_value_head": 4.285044506,
+    "trunk": 37.936746955
+   },
+   "optimizer_steps": 12
+  },
+  {
+   "batch": 1,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "c39a2da1ab877247",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    4,
+    5,
+    6,
+    7
+   ],
+   "g_hat": 0.25,
+   "lambda_at_rollout": 1.0125,
+   "lambda_next": 1.025,
+   "likelihood_max_abs_gap": 1.4901161193847656e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.0,
+    "cost_head": 0.418927051,
+    "task_value_head": 3.175475016,
+    "trunk": 29.046597123
+   },
+   "optimizer_steps": 12
+  },
+  {
+   "batch": 2,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "ed02876d338e477f",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "g_hat": 0.5,
+   "lambda_at_rollout": 1.025,
+   "lambda_next": 1.0499999999999998,
+   "likelihood_max_abs_gap": 2.384185791015625e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.047938886,
+    "cost_head": 0.193852659,
+    "task_value_head": 0.958701458,
+    "trunk": 7.898989379
+   },
+   "optimizer_steps": 24
+  },
+  {
+   "batch": 3,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "8ab8e403ce311425",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    12,
+    13,
+    14,
+    15
+   ],
+   "g_hat": 0.5,
+   "lambda_at_rollout": 1.0499999999999998,
+   "lambda_next": 1.0749999999999997,
+   "likelihood_max_abs_gap": 4.76837158203125e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.0,
+    "cost_head": 0.066300187,
+    "task_value_head": 0.64791085,
+    "trunk": 6.218495011
+   },
+   "optimizer_steps": 24
+  },
+  {
+   "batch": 4,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "4e0a9677d5c20d37",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    16,
+    17,
+    18,
+    19
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.0749999999999997,
+   "lambda_next": 1.0749999999999997,
+   "likelihood_max_abs_gap": 1.6391277313232422e-07,
+   "module_gradient_l1_min": {
+    "action_head": 1.54623333,
+    "cost_head": 4.493369758,
+    "task_value_head": 12.476588041,
+    "trunk": 55.558910072
+   },
+   "optimizer_steps": 8
+  },
+  {
+   "batch": 5,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "f0d7ca6e8b48e6e6",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    20,
+    21,
+    22,
+    23
+   ],
+   "g_hat": 0.75,
+   "lambda_at_rollout": 1.0749999999999997,
+   "lambda_next": 1.1124999999999998,
+   "likelihood_max_abs_gap": 1.9371509552001953e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.0,
+    "cost_head": 0.165852352,
+    "task_value_head": 0.249499537,
+    "trunk": 4.493905243
+   },
+   "optimizer_steps": 32
+  },
+  {
+   "batch": 6,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "ab3acca86d932daa",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.1124999999999998,
+   "lambda_next": 1.1124999999999998,
+   "likelihood_max_abs_gap": 3.5762786865234375e-07,
+   "module_gradient_l1_min": {
+    "action_head": 1.353110433,
+    "cost_head": 3.332076542,
+    "task_value_head": 23.184493124,
+    "trunk": 72.909832656
+   },
+   "optimizer_steps": 4
+  },
+  {
+   "batch": 7,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "ff8f3a60f74ab740",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    28,
+    29,
+    30,
+    31
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.1124999999999998,
+   "lambda_next": 1.1124999999999998,
+   "likelihood_max_abs_gap": 2.980232238769531e-07,
+   "module_gradient_l1_min": {
+    "action_head": 3.701939054,
+    "cost_head": 2.623325039,
+    "task_value_head": 23.064033091,
+    "trunk": 69.081577599
+   },
+   "optimizer_steps": 4
+  },
+  {
+   "batch": 8,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "fc603439e92c0f0e",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    32,
+    33,
+    34,
+    35
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.1124999999999998,
+   "lambda_next": 1.1124999999999998,
+   "likelihood_max_abs_gap": 3.5762786865234375e-07,
+   "module_gradient_l1_min": {
+    "action_head": 6.42506206,
+    "cost_head": 5.11403846,
+    "task_value_head": 17.7615484,
+    "trunk": 57.774104029
+   },
+   "optimizer_steps": 4
+  },
+  {
+   "batch": 9,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "fc912b82db5b281e",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    36,
+    37,
+    38,
+    39
+   ],
+   "g_hat": 0.5,
+   "lambda_at_rollout": 1.1124999999999998,
+   "lambda_next": 1.1374999999999997,
+   "likelihood_max_abs_gap": 2.5331974029541016e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.187221339,
+    "cost_head": 0.128464072,
+    "task_value_head": 0.535308883,
+    "trunk": 5.453219734
+   },
+   "optimizer_steps": 24
+  },
+  {
+   "batch": 10,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "4e69b859532a326f",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    40,
+    41,
+    42,
+    43
+   ],
+   "g_hat": 0.5,
+   "lambda_at_rollout": 1.1374999999999997,
+   "lambda_next": 1.1624999999999996,
+   "likelihood_max_abs_gap": 5.066394805908203e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.272837144,
+    "cost_head": 0.209143743,
+    "task_value_head": 1.306538025,
+    "trunk": 7.069076799
+   },
+   "optimizer_steps": 16
+  },
+  {
+   "batch": 11,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "1bd0d9b7361c10c4",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    44,
+    45,
+    46,
+    47
+   ],
+   "g_hat": 0.25,
+   "lambda_at_rollout": 1.1624999999999996,
+   "lambda_next": 1.1749999999999996,
+   "likelihood_max_abs_gap": 1.7881393432617188e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.177541718,
+    "cost_head": 0.585949319,
+    "task_value_head": 1.355924025,
+    "trunk": 21.821498677
+   },
+   "optimizer_steps": 12
+  },
+  {
+   "batch": 12,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "aee664a1904f6020",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    48,
+    49,
+    50,
+    51
+   ],
+   "g_hat": 0.25,
+   "lambda_at_rollout": 1.1749999999999996,
+   "lambda_next": 1.1874999999999996,
+   "likelihood_max_abs_gap": 2.086162567138672e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.308102517,
+    "cost_head": 0.553905913,
+    "task_value_head": 3.487678535,
+    "trunk": 15.120443016
+   },
+   "optimizer_steps": 8
+  },
+  {
+   "batch": 13,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "8a7eb5211cb37d10",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    52,
+    53,
+    54,
+    55
+   ],
+   "g_hat": 0.25,
+   "lambda_at_rollout": 1.1874999999999996,
+   "lambda_next": 1.1999999999999995,
+   "likelihood_max_abs_gap": 2.2351741790771484e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.294585274,
+    "cost_head": 0.307010385,
+    "task_value_head": 0.72546172,
+    "trunk": 8.042098477
+   },
+   "optimizer_steps": 20
+  },
+  {
+   "batch": 14,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "67796fda3f77f418",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    56,
+    57,
+    58,
+    59
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.1999999999999995,
+   "lambda_next": 1.1999999999999995,
+   "likelihood_max_abs_gap": 3.501772880554199e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.863197057,
+    "cost_head": 1.431533828,
+    "task_value_head": 7.92586726,
+    "trunk": 30.941814408
+   },
+   "optimizer_steps": 8
+  },
+  {
+   "batch": 15,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "4a0f37e1361ab198",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    60,
+    61,
+    62,
+    63
+   ],
+   "g_hat": 0.25,
+   "lambda_at_rollout": 1.1999999999999995,
+   "lambda_next": 1.2124999999999995,
+   "likelihood_max_abs_gap": 2.682209014892578e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.185768605,
+    "cost_head": 0.368086951,
+    "task_value_head": 0.754644975,
+    "trunk": 12.756050691
+   },
+   "optimizer_steps": 12
+  },
+  {
+   "batch": 16,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "a60a70ba2175c7f6",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    64,
+    65,
+    66,
+    67
+   ],
+   "g_hat": 0.25,
+   "lambda_at_rollout": 1.2124999999999995,
+   "lambda_next": 1.2249999999999994,
+   "likelihood_max_abs_gap": 3.2782554626464844e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.266092566,
+    "cost_head": 0.647463267,
+    "task_value_head": 1.780093912,
+    "trunk": 24.10806641
+   },
+   "optimizer_steps": 12
+  },
+  {
+   "batch": 17,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "8045d762e58235c0",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    68,
+    69,
+    70,
+    71
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2249999999999994,
+   "lambda_next": 1.2249999999999994,
+   "likelihood_max_abs_gap": 4.023313522338867e-07,
+   "module_gradient_l1_min": {
+    "action_head": 7.491093114,
+    "cost_head": 4.035465501,
+    "task_value_head": 4.34490443,
+    "trunk": 74.171025544
+   },
+   "optimizer_steps": 4
+  },
+  {
+   "batch": 18,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "d5006c40dffab9ad",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    72,
+    73,
+    74,
+    75
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2249999999999994,
+   "lambda_next": 1.2249999999999994,
+   "likelihood_max_abs_gap": 1.341104507446289e-07,
+   "module_gradient_l1_min": {
+    "action_head": 6.494319201,
+    "cost_head": 2.580054263,
+    "task_value_head": 3.091909915,
+    "trunk": 103.300917447
+   },
+   "optimizer_steps": 4
+  },
+  {
+   "batch": 19,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "fc8f4fc184d135b0",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    76,
+    77,
+    78,
+    79
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2249999999999994,
+   "lambda_next": 1.2249999999999994,
+   "likelihood_max_abs_gap": 2.4959444999694824e-07,
+   "module_gradient_l1_min": {
+    "action_head": 4.036968499,
+    "cost_head": 1.714488048,
+    "task_value_head": 5.371960953,
+    "trunk": 74.311907232
+   },
+   "optimizer_steps": 4
+  },
+  {
+   "batch": 20,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "770e1d0370440767",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    80,
+    81,
+    82,
+    83
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2249999999999994,
+   "lambda_next": 1.2249999999999994,
+   "likelihood_max_abs_gap": 2.123415470123291e-07,
+   "module_gradient_l1_min": {
+    "action_head": 1.372445844,
+    "cost_head": 1.117483586,
+    "task_value_head": 3.909902535,
+    "trunk": 65.554859489
+   },
+   "optimizer_steps": 4
+  },
+  {
+   "batch": 21,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "7317b072c9fa61f9",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    84,
+    85,
+    86,
+    87
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2249999999999994,
+   "lambda_next": 1.2249999999999994,
+   "likelihood_max_abs_gap": 2.644956111907959e-07,
+   "module_gradient_l1_min": {
+    "action_head": 1.115629956,
+    "cost_head": 4.657816634,
+    "task_value_head": 5.236139145,
+    "trunk": 73.544226736
+   },
+   "optimizer_steps": 4
+  },
+  {
+   "batch": 22,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "92883c5ea3fdafb6",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    88,
+    89,
+    90,
+    91
+   ],
+   "g_hat": 0.25,
+   "lambda_at_rollout": 1.2249999999999994,
+   "lambda_next": 1.2374999999999994,
+   "likelihood_max_abs_gap": 2.123415470123291e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.212092284,
+    "cost_head": 0.312267723,
+    "task_value_head": 0.597926421,
+    "trunk": 9.596994422
+   },
+   "optimizer_steps": 20
+  },
+  {
+   "batch": 23,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "d880b0921851ed40",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    92,
+    93,
+    94,
+    95
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2374999999999994,
+   "lambda_next": 1.2374999999999994,
+   "likelihood_max_abs_gap": 2.5704503059387207e-07,
+   "module_gradient_l1_min": {
+    "action_head": 1.852508634,
+    "cost_head": 1.164645817,
+    "task_value_head": 3.341519672,
+    "trunk": 41.579469025
+   },
+   "optimizer_steps": 8
+  },
+  {
+   "batch": 24,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "1ba686a5246537b5",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    96,
+    97,
+    98,
+    99
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2374999999999994,
+   "lambda_next": 1.2374999999999994,
+   "likelihood_max_abs_gap": 2.3469328880310059e-07,
+   "module_gradient_l1_min": {
+    "action_head": 3.270414159,
+    "cost_head": 0.64202758,
+    "task_value_head": 3.719995417,
+    "trunk": 27.750297219
+   },
+   "optimizer_steps": 8
+  },
+  {
+   "batch": 25,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "8a56bdf0e4e26b32",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    100,
+    101,
+    102,
+    103
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2374999999999994,
+   "lambda_next": 1.2374999999999994,
+   "likelihood_max_abs_gap": 1.564621925354004e-07,
+   "module_gradient_l1_min": {
+    "action_head": 1.179896429,
+    "cost_head": 0.618486156,
+    "task_value_head": 5.194926187,
+    "trunk": 57.964953899
+   },
+   "optimizer_steps": 8
+  },
+  {
+   "batch": 26,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "f44de94439d69be0",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    104,
+    105,
+    106,
+    107
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2374999999999994,
+   "lambda_next": 1.2374999999999994,
+   "likelihood_max_abs_gap": 3.3527612686157227e-07,
+   "module_gradient_l1_min": {
+    "action_head": 4.108996928,
+    "cost_head": 1.15333426,
+    "task_value_head": 3.454862051,
+    "trunk": 59.430441082
+   },
+   "optimizer_steps": 4
+  },
+  {
+   "batch": 27,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "15dd661b85641ef6",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    108,
+    109,
+    110,
+    111
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2374999999999994,
+   "lambda_next": 1.2374999999999994,
+   "likelihood_max_abs_gap": 1.1920928955078125e-07,
+   "module_gradient_l1_min": {
+    "action_head": 1.267846938,
+    "cost_head": 3.18612586,
+    "task_value_head": 5.608775616,
+    "trunk": 71.55502665
+   },
+   "optimizer_steps": 8
+  },
+  {
+   "batch": 28,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "ffa1876059b35235",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    112,
+    113,
+    114,
+    115
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2374999999999994,
+   "lambda_next": 1.2374999999999994,
+   "likelihood_max_abs_gap": 2.4586915969848633e-07,
+   "module_gradient_l1_min": {
+    "action_head": 1.035014446,
+    "cost_head": 0.829755997,
+    "task_value_head": 2.733907485,
+    "trunk": 34.34751074
+   },
+   "optimizer_steps": 8
+  },
+  {
+   "batch": 29,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "12e102efc74c8a1e",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    116,
+    117,
+    118,
+    119
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2374999999999994,
+   "lambda_next": 1.2374999999999994,
+   "likelihood_max_abs_gap": 1.471489667892456e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.907624475,
+    "cost_head": 1.178583289,
+    "task_value_head": 2.078114163,
+    "trunk": 26.3521474
+   },
+   "optimizer_steps": 8
+  },
+  {
+   "batch": 30,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "912182e5646392ef",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    120,
+    121,
+    122,
+    123
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2374999999999994,
+   "lambda_next": 1.2374999999999994,
+   "likelihood_max_abs_gap": 7.636845111846924e-07,
+   "module_gradient_l1_min": {
+    "action_head": 1.126368653,
+    "cost_head": 2.680826996,
+    "task_value_head": 5.249165677,
+    "trunk": 61.005513221
+   },
+   "optimizer_steps": 4
+  },
+  {
+   "batch": 31,
+   "checks": {
+    "controller_weights_moved": true,
+    "cost_head_gradient_nonzero": true,
+    "cost_head_weights_moved": true,
+    "dual_formula_consistent": true,
+    "frozen_checkpoints_unchanged": true,
+    "likelihood_alignment_passed": true,
+    "losses_finite": true,
+    "optimizer_steps_as_registered": true,
+    "parameter_collection_complete": true
+   },
+   "cost_head_digest_after": "eec32d0e8f2fcdb9",
+   "cost_head_digest_before": "23389c1e4163363b",
+   "episodes": [
+    124,
+    125,
+    126,
+    127
+   ],
+   "g_hat": 0.0,
+   "lambda_at_rollout": 1.2374999999999994,
+   "lambda_next": 1.2374999999999994,
+   "likelihood_max_abs_gap": 4.0605664253234863e-07,
+   "module_gradient_l1_min": {
+    "action_head": 0.69931387,
+    "cost_head": 1.26933346,
+    "task_value_head": 1.770126022,
+    "trunk": 40.100485906
+   },
+   "optimizer_steps": 8
+  }
+ ],
+ "problems": [],
+ "training_seed": 22
+}

@@ -1,0 +1,1024 @@
+{
+ "round": "24",
+ "execution_complete": true,
+ "execution": {
+  "branch": "exp/comm-cost-v2-rerun",
+  "head_at_freeze": "5be3f1e6437309f4e92cf49807f2e0cbbf7f057f",
+  "remote_start_head": "64cddcffc6f8796f132df8b8e003f005d0bdd749",
+  "start_equivalence_verified": true,
+  "launches": {
+   "used": 672,
+   "entries": 672,
+   "failed_results": [],
+   "normal_launches": 672,
+   "reserve_launches": 28,
+   "hard_cap": 700
+  },
+  "plan_fully_consumed": true,
+  "failures": 0,
+  "row_closure": {
+   "rows": 672,
+   "cost_ledger_violations": 0,
+   "task_tap_violations": 0,
+   "ack_off_violations": 0,
+   "by_kind": {
+    "train": 384,
+    "eval": 144,
+    "reference": 64,
+    "rule": 80
+   }
+  },
+  "milestones": {
+   "11": {
+    "0": {
+     "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s11_ep0.pt",
+     "sha256": "56889e7cb9a6fadbb6ed6672a141ba3f0b8eda6cb6769ff8a50fa97e7128c8fd"
+    },
+    "128": {
+     "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s11_ep128.pt",
+     "sha256": "59d88b69dfb592bd9700af62d724ef7bfc73d3dc8c56f04d608dd8239aebffbf"
+    },
+    "64": {
+     "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s11_ep64.pt",
+     "sha256": "71d294a37c36707df1beb17884f2be89c3ad5f05a19a61c1b3d600c7f3132325"
+    }
+   },
+   "22": {
+    "0": {
+     "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s22_ep0.pt",
+     "sha256": "f82d33b8b540303662a55429342ed5d2ce25d8cd98e7fd35ecfcf0e6157d778d"
+    },
+    "128": {
+     "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s22_ep128.pt",
+     "sha256": "f3229f45f147d1151433ce0f876e262bad5f57fca79777cb3c2b2b3897b99d93"
+    },
+    "64": {
+     "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s22_ep64.pt",
+     "sha256": "4a1d073ff60c7d002aad632f52c7b82d8877ffc85993eb8142c4443bdd2e59ef"
+    }
+   },
+   "33": {
+    "0": {
+     "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s33_ep0.pt",
+     "sha256": "cdfb491d325e06fa875726a9a5e4d0d8335d1668aaaf2b0a9a27b3276cf5d221"
+    },
+    "128": {
+     "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s33_ep128.pt",
+     "sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923"
+    },
+    "64": {
+     "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s33_ep64.pt",
+     "sha256": "301a9cc19c2b8ee45745bc9769e298762435310f91ab328a080efb891f5cf4a8"
+    }
+   }
+  },
+  "reference_immediate_dev_mean": {
+   "on_time": 6.0,
+   "bytes": 14939.25
+  }
+ },
+ "correctness_gates": {
+  "synthetic_gate": {
+   "passed": true,
+   "tests_run": 20,
+   "failures": 0,
+   "errors": 0,
+   "synthetic_optimizer_steps": {
+    "Adam": 12,
+    "SGD": 16,
+    "total": 28
+   },
+   "freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc"
+  },
+  "freeze": {
+   "configuration_hash": "e9b2c067db5951f2",
+   "stage_c_difference_audit_clean": true,
+   "collision_clean": true,
+   "reuse_registration": "intentional_development_reuse",
+   "production_clean": true
+  },
+  "first4_gate": {
+   "seed": 11,
+   "passed": true,
+   "checks": {
+    "G1_optimizer_updates_only_comm": true,
+    "G2_log_prob_recomputable_pre_update": true,
+    "G3_math_recomputable_from_disk": true,
+    "G4_dual_direction_and_formula": true,
+    "G5_critics_finite_and_no_pseudo_samples": true,
+    "G6_checkpoint_restore_pure_process": true,
+    "G7_sample_counts_close": true
+   }
+  },
+  "batch_audits": {
+   "11": {
+    "passed": false,
+    "problems": [
+     "batch 1: cost head digest identical to the previous batch's pre-update state"
+    ]
+   },
+   "22": {
+    "passed": true,
+    "problems": []
+   },
+   "33": {
+    "passed": true,
+    "problems": []
+   }
+  },
+  "batch_chain_reviews": {
+   "11": {
+    "passed": true,
+    "checks": {
+     "batch_records_contiguous": true,
+     "parameter_chain_consistent": true,
+     "cost_head_weights_change_every_batch": true,
+     "cost_head_gradient_nonzero_every_batch": true,
+     "all_module_gradients_recorded": true,
+     "lambda_recorded_every_batch": true,
+     "likelihood_within_tolerance": true,
+     "frozen_checkpoint_hashes_constant": true,
+     "optimizer_steps_positive": true
+    }
+   },
+   "22": {
+    "passed": true,
+    "checks": {
+     "batch_records_contiguous": true,
+     "parameter_chain_consistent": true,
+     "cost_head_weights_change_every_batch": true,
+     "cost_head_gradient_nonzero_every_batch": true,
+     "all_module_gradients_recorded": true,
+     "lambda_recorded_every_batch": true,
+     "likelihood_within_tolerance": true,
+     "frozen_checkpoint_hashes_constant": true,
+     "optimizer_steps_positive": true
+    }
+   },
+   "33": {
+    "passed": true,
+    "checks": {
+     "batch_records_contiguous": true,
+     "parameter_chain_consistent": true,
+     "cost_head_weights_change_every_batch": true,
+     "cost_head_gradient_nonzero_every_batch": true,
+     "all_module_gradients_recorded": true,
+     "lambda_recorded_every_batch": true,
+     "likelihood_within_tolerance": true,
+     "frozen_checkpoint_hashes_constant": true,
+     "optimizer_steps_positive": true
+    }
+   }
+  },
+  "registered_instrumentation_defect": {
+   "field": "controller_module_digests_before",
+   "behaviour": "frozen v2_train.py computes it once per training process start, so a resumed process writes the process-start value into batches 1..N-1",
+   "impact": "bookkeeping only: ppo_update never reads it and no training quantity depends on it; the per-batch controller_parameters_before/after chain, module gradients, lambda/g and likelihood records are per-batch correct",
+   "why_not_fixed_mid_run": "the frozen identity locks the code training ran under; re-editing the harness after checkpoints exist would mix code identities, so the compensating review is separate"
+  }
+ },
+ "constraint_diagnostics": {
+  "11": {
+   "batches_with_positive_g_hat": 23,
+   "batches": 32,
+   "lambda_final": 1.4999999999999993,
+   "lambda_history_tail": 1.4999999999999993
+  },
+  "22": {
+   "batches_with_positive_g_hat": 13,
+   "batches": 32,
+   "lambda_final": 1.2374999999999994,
+   "lambda_history_tail": 1.2374999999999994
+  },
+  "33": {
+   "batches_with_positive_g_hat": 23,
+   "batches": 32,
+   "lambda_final": 1.4749999999999992,
+   "lambda_history_tail": 1.4749999999999992
+  }
+ },
+ "sampled_comparison": {
+  "final_sampled": {
+   "11": {
+    "degraded": 16,
+    "improved": 0,
+    "mean_bytes_delta": 13189.5,
+    "mean_on_time_delta": -0.4375,
+    "per_scene_bytes_delta": {
+     "1301000": 13458,
+     "1301001": 13296,
+     "1301002": 13344,
+     "1301003": 13386,
+     "1301004": 11958,
+     "1301005": 12504,
+     "1301006": 12786,
+     "1301007": 13986,
+     "1301008": 12396,
+     "1301009": 13428,
+     "1301010": 14442,
+     "1301011": 13860,
+     "1301012": 13350,
+     "1301013": 12894,
+     "1301014": 12612,
+     "1301015": 13332
+    },
+    "per_scene_on_time_delta": {
+     "1301000": 0,
+     "1301001": -1,
+     "1301002": -4,
+     "1301003": -1,
+     "1301004": 0,
+     "1301005": 0,
+     "1301006": 0,
+     "1301007": 0,
+     "1301008": 0,
+     "1301009": 0,
+     "1301010": 0,
+     "1301011": 0,
+     "1301012": 0,
+     "1301013": 0,
+     "1301014": 0,
+     "1301015": -1
+    },
+    "scenes": 16,
+    "tied": 0
+   },
+   "22": {
+    "degraded": 7,
+    "improved": 9,
+    "mean_bytes_delta": 896.25,
+    "mean_on_time_delta": -0.125,
+    "per_scene_bytes_delta": {
+     "1301000": -9366,
+     "1301001": -1614,
+     "1301002": 4056,
+     "1301003": 11706,
+     "1301004": 12000,
+     "1301005": -8988,
+     "1301006": 4032,
+     "1301007": -6798,
+     "1301008": -2016,
+     "1301009": 12342,
+     "1301010": -1554,
+     "1301011": -3942,
+     "1301012": -4320,
+     "1301013": 10194,
+     "1301014": -1950,
+     "1301015": 558
+    },
+    "per_scene_on_time_delta": {
+     "1301000": 0,
+     "1301001": 0,
+     "1301002": 0,
+     "1301003": -1,
+     "1301004": 0,
+     "1301005": 0,
+     "1301006": 0,
+     "1301007": 0,
+     "1301008": 0,
+     "1301009": 0,
+     "1301010": 0,
+     "1301011": 0,
+     "1301012": 0,
+     "1301013": -1,
+     "1301014": 0,
+     "1301015": 0
+    },
+    "scenes": 16,
+    "tied": 0
+   },
+   "33": {
+    "degraded": 16,
+    "improved": 0,
+    "mean_bytes_delta": 13260.0,
+    "mean_on_time_delta": -0.4375,
+    "per_scene_bytes_delta": {
+     "1301000": 12444,
+     "1301001": 13320,
+     "1301002": 12450,
+     "1301003": 13416,
+     "1301004": 12228,
+     "1301005": 12450,
+     "1301006": 13296,
+     "1301007": 14094,
+     "1301008": 14136,
+     "1301009": 13266,
+     "1301010": 14448,
+     "1301011": 14010,
+     "1301012": 12936,
+     "1301013": 12900,
+     "1301014": 12846,
+     "1301015": 13920
+    },
+    "per_scene_on_time_delta": {
+     "1301000": 0,
+     "1301001": -1,
+     "1301002": -4,
+     "1301003": -1,
+     "1301004": 0,
+     "1301005": 0,
+     "1301006": 0,
+     "1301007": 0,
+     "1301008": 0,
+     "1301009": 0,
+     "1301010": 0,
+     "1301011": 0,
+     "1301012": 0,
+     "1301013": 0,
+     "1301014": 0,
+     "1301015": -1
+    },
+    "scenes": 16,
+    "tied": 0
+   }
+  }
+ },
+ "greedy_comparison": {
+  "final_greedy": {
+   "11": {
+    "degraded": 16,
+    "improved": 0,
+    "mean_bytes_delta": 13268.625,
+    "mean_on_time_delta": -0.5,
+    "per_scene_bytes_delta": {
+     "1301000": 13458,
+     "1301001": 13512,
+     "1301002": 13242,
+     "1301003": 13734,
+     "1301004": 11892,
+     "1301005": 12624,
+     "1301006": 12774,
+     "1301007": 13806,
+     "1301008": 12816,
+     "1301009": 13260,
+     "1301010": 14376,
+     "1301011": 13566,
+     "1301012": 13446,
+     "1301013": 14400,
+     "1301014": 12288,
+     "1301015": 13104
+    },
+    "per_scene_on_time_delta": {
+     "1301000": 0,
+     "1301001": -1,
+     "1301002": -4,
+     "1301003": -1,
+     "1301004": 0,
+     "1301005": 0,
+     "1301006": 0,
+     "1301007": 0,
+     "1301008": 0,
+     "1301009": 0,
+     "1301010": 0,
+     "1301011": 0,
+     "1301012": 0,
+     "1301013": -1,
+     "1301014": 0,
+     "1301015": -1
+    },
+    "scenes": 16,
+    "tied": 0
+   },
+   "22": {
+    "degraded": 5,
+    "improved": 11,
+    "mean_bytes_delta": -14939.25,
+    "mean_on_time_delta": -0.5,
+    "per_scene_bytes_delta": {
+     "1301000": -14730,
+     "1301001": -15696,
+     "1301002": -14862,
+     "1301003": -15480,
+     "1301004": -15420,
+     "1301005": -14556,
+     "1301006": -14898,
+     "1301007": -15030,
+     "1301008": -14850,
+     "1301009": -15648,
+     "1301010": -14520,
+     "1301011": -14328,
+     "1301012": -14922,
+     "1301013": -14796,
+     "1301014": -14952,
+     "1301015": -14340
+    },
+    "per_scene_on_time_delta": {
+     "1301000": 0,
+     "1301001": -1,
+     "1301002": -4,
+     "1301003": -1,
+     "1301004": 0,
+     "1301005": 0,
+     "1301006": 0,
+     "1301007": 0,
+     "1301008": 0,
+     "1301009": 0,
+     "1301010": 0,
+     "1301011": 0,
+     "1301012": 0,
+     "1301013": -1,
+     "1301014": 0,
+     "1301015": -1
+    },
+    "scenes": 16,
+    "tied": 0
+   },
+   "33": {
+    "degraded": 0,
+    "improved": 16,
+    "mean_bytes_delta": -12540.75,
+    "mean_on_time_delta": 0.0,
+    "per_scene_bytes_delta": {
+     "1301000": -14730,
+     "1301001": -13008,
+     "1301002": -7164,
+     "1301003": -7836,
+     "1301004": -7650,
+     "1301005": -14556,
+     "1301006": -14898,
+     "1301007": -15030,
+     "1301008": -12366,
+     "1301009": -12876,
+     "1301010": -14520,
+     "1301011": -14328,
+     "1301012": -14922,
+     "1301013": -9780,
+     "1301014": -14952,
+     "1301015": -12036
+    },
+    "per_scene_on_time_delta": {
+     "1301000": 0,
+     "1301001": 0,
+     "1301002": 0,
+     "1301003": 0,
+     "1301004": 0,
+     "1301005": 0,
+     "1301006": 0,
+     "1301007": 0,
+     "1301008": 0,
+     "1301009": 0,
+     "1301010": 0,
+     "1301011": 0,
+     "1301012": 0,
+     "1301013": 0,
+     "1301014": 0,
+     "1301015": 0
+    },
+    "scenes": 16,
+    "tied": 0
+   }
+  },
+  "init_greedy": {
+   "11": {
+    "degraded": 16,
+    "improved": 0,
+    "mean_bytes_delta": 13259.625,
+    "mean_on_time_delta": -0.5,
+    "per_scene_bytes_delta": {
+     "1301000": 13458,
+     "1301001": 13512,
+     "1301002": 13242,
+     "1301003": 13734,
+     "1301004": 11892,
+     "1301005": 12624,
+     "1301006": 12774,
+     "1301007": 13806,
+     "1301008": 12816,
+     "1301009": 13260,
+     "1301010": 14376,
+     "1301011": 13566,
+     "1301012": 13302,
+     "1301013": 14400,
+     "1301014": 12288,
+     "1301015": 13104
+    },
+    "per_scene_on_time_delta": {
+     "1301000": 0,
+     "1301001": -1,
+     "1301002": -4,
+     "1301003": -1,
+     "1301004": 0,
+     "1301005": 0,
+     "1301006": 0,
+     "1301007": 0,
+     "1301008": 0,
+     "1301009": 0,
+     "1301010": 0,
+     "1301011": 0,
+     "1301012": 0,
+     "1301013": -1,
+     "1301014": 0,
+     "1301015": -1
+    },
+    "scenes": 16,
+    "tied": 0
+   },
+   "22": {
+    "degraded": 4,
+    "improved": 12,
+    "mean_bytes_delta": -9963.75,
+    "mean_on_time_delta": -0.25,
+    "per_scene_bytes_delta": {
+     "1301000": -11886,
+     "1301001": -7194,
+     "1301002": -7164,
+     "1301003": -7236,
+     "1301004": -9804,
+     "1301005": -14556,
+     "1301006": -6522,
+     "1301007": -9672,
+     "1301008": -11916,
+     "1301009": -4650,
+     "1301010": -8886,
+     "1301011": -14328,
+     "1301012": -11994,
+     "1301013": -9456,
+     "1301014": -12120,
+     "1301015": -12036
+    },
+    "per_scene_on_time_delta": {
+     "1301000": 0,
+     "1301001": -1,
+     "1301002": -1,
+     "1301003": -1,
+     "1301004": 0,
+     "1301005": 0,
+     "1301006": 0,
+     "1301007": 0,
+     "1301008": 0,
+     "1301009": 0,
+     "1301010": 0,
+     "1301011": 0,
+     "1301012": 0,
+     "1301013": -1,
+     "1301014": 0,
+     "1301015": 0
+    },
+    "scenes": 16,
+    "tied": 0
+   },
+   "33": {
+    "degraded": 16,
+    "improved": 0,
+    "mean_bytes_delta": 13250.25,
+    "mean_on_time_delta": -0.5,
+    "per_scene_bytes_delta": {
+     "1301000": 13458,
+     "1301001": 13602,
+     "1301002": 13242,
+     "1301003": 13356,
+     "1301004": 12060,
+     "1301005": 12600,
+     "1301006": 12768,
+     "1301007": 13806,
+     "1301008": 12816,
+     "1301009": 13278,
+     "1301010": 14376,
+     "1301011": 13746,
+     "1301012": 13104,
+     "1301013": 14400,
+     "1301014": 12288,
+     "1301015": 13104
+    },
+    "per_scene_on_time_delta": {
+     "1301000": 0,
+     "1301001": -1,
+     "1301002": -4,
+     "1301003": -1,
+     "1301004": 0,
+     "1301005": 0,
+     "1301006": 0,
+     "1301007": 0,
+     "1301008": 0,
+     "1301009": 0,
+     "1301010": 0,
+     "1301011": 0,
+     "1301012": 0,
+     "1301013": -1,
+     "1301014": 0,
+     "1301015": -1
+    },
+    "scenes": 16,
+    "tied": 0
+   }
+  }
+ },
+ "rule_comparison": {
+  "always_hold": {
+   "degraded": 5,
+   "improved": 11,
+   "mean_bytes_delta": -14939.25,
+   "mean_on_time_delta": -0.5,
+   "per_scene_bytes_delta": {
+    "1301000": -14730,
+    "1301001": -15696,
+    "1301002": -14862,
+    "1301003": -15480,
+    "1301004": -15420,
+    "1301005": -14556,
+    "1301006": -14898,
+    "1301007": -15030,
+    "1301008": -14850,
+    "1301009": -15648,
+    "1301010": -14520,
+    "1301011": -14328,
+    "1301012": -14922,
+    "1301013": -14796,
+    "1301014": -14952,
+    "1301015": -14340
+   },
+   "per_scene_on_time_delta": {
+    "1301000": 0,
+    "1301001": -1,
+    "1301002": -4,
+    "1301003": -1,
+    "1301004": 0,
+    "1301005": 0,
+    "1301006": 0,
+    "1301007": 0,
+    "1301008": 0,
+    "1301009": 0,
+    "1301010": 0,
+    "1301011": 0,
+    "1301012": 0,
+    "1301013": -1,
+    "1301014": 0,
+    "1301015": -1
+   },
+   "scenes": 16,
+   "tied": 0
+  },
+  "event": {
+   "degraded": 16,
+   "improved": 0,
+   "mean_bytes_delta": 13123.125,
+   "mean_on_time_delta": -0.4375,
+   "per_scene_bytes_delta": {
+    "1301000": 14304,
+    "1301001": 11376,
+    "1301002": 12288,
+    "1301003": 13632,
+    "1301004": 12186,
+    "1301005": 12930,
+    "1301006": 12822,
+    "1301007": 13788,
+    "1301008": 12462,
+    "1301009": 13602,
+    "1301010": 14670,
+    "1301011": 13986,
+    "1301012": 13242,
+    "1301013": 13134,
+    "1301014": 12498,
+    "1301015": 13050
+   },
+   "per_scene_on_time_delta": {
+    "1301000": 0,
+    "1301001": -1,
+    "1301002": -4,
+    "1301003": -1,
+    "1301004": 0,
+    "1301005": 0,
+    "1301006": 0,
+    "1301007": 0,
+    "1301008": 0,
+    "1301009": 0,
+    "1301010": 0,
+    "1301011": 0,
+    "1301012": 0,
+    "1301013": 0,
+    "1301014": 0,
+    "1301015": -1
+   },
+   "scenes": 16,
+   "tied": 0
+  },
+  "late_discovery_gate": {
+   "degraded": 0,
+   "improved": 16,
+   "mean_bytes_delta": -10101.0,
+   "mean_on_time_delta": 0.0,
+   "per_scene_bytes_delta": {
+    "1301000": -9954,
+    "1301001": -7818,
+    "1301002": -4680,
+    "1301003": -12984,
+    "1301004": -15420,
+    "1301005": -12246,
+    "1301006": -12204,
+    "1301007": -10218,
+    "1301008": -7638,
+    "1301009": -10428,
+    "1301010": -9534,
+    "1301011": -11808,
+    "1301012": -9714,
+    "1301013": -2298,
+    "1301014": -14952,
+    "1301015": -9720
+   },
+   "per_scene_on_time_delta": {
+    "1301000": 0,
+    "1301001": 0,
+    "1301002": 0,
+    "1301003": 0,
+    "1301004": 0,
+    "1301005": 0,
+    "1301006": 0,
+    "1301007": 0,
+    "1301008": 0,
+    "1301009": 0,
+    "1301010": 0,
+    "1301011": 0,
+    "1301012": 0,
+    "1301013": 0,
+    "1301014": 0,
+    "1301015": 0
+   },
+   "scenes": 16,
+   "tied": 0
+  },
+  "periodic_20": {
+   "degraded": 8,
+   "improved": 8,
+   "mean_bytes_delta": -356.25,
+   "mean_on_time_delta": 0.0,
+   "per_scene_bytes_delta": {
+    "1301000": -4044,
+    "1301001": 996,
+    "1301002": 6012,
+    "1301003": 6318,
+    "1301004": 11334,
+    "1301005": -3954,
+    "1301006": -6474,
+    "1301007": -1464,
+    "1301008": 3318,
+    "1301009": 3780,
+    "1301010": -8796,
+    "1301011": -6306,
+    "1301012": 3390,
+    "1301013": 948,
+    "1301014": -4014,
+    "1301015": -6744
+   },
+   "per_scene_on_time_delta": {
+    "1301000": 0,
+    "1301001": 0,
+    "1301002": 0,
+    "1301003": 0,
+    "1301004": 0,
+    "1301005": 0,
+    "1301006": 0,
+    "1301007": 0,
+    "1301008": 0,
+    "1301009": 0,
+    "1301010": 0,
+    "1301011": 0,
+    "1301012": 0,
+    "1301013": 0,
+    "1301014": 0,
+    "1301015": 0
+   },
+   "scenes": 16,
+   "tied": 0
+  },
+  "random_send": {
+   "degraded": 16,
+   "improved": 0,
+   "mean_bytes_delta": 13105.5,
+   "mean_on_time_delta": -0.25,
+   "per_scene_bytes_delta": {
+    "1301000": 14334,
+    "1301001": 11208,
+    "1301002": 12918,
+    "1301003": 11766,
+    "1301004": 11748,
+    "1301005": 12804,
+    "1301006": 13524,
+    "1301007": 14064,
+    "1301008": 12528,
+    "1301009": 13554,
+    "1301010": 14580,
+    "1301011": 13782,
+    "1301012": 13626,
+    "1301013": 13158,
+    "1301014": 12924,
+    "1301015": 13170
+   },
+   "per_scene_on_time_delta": {
+    "1301000": 0,
+    "1301001": -1,
+    "1301002": -1,
+    "1301003": -1,
+    "1301004": 0,
+    "1301005": 0,
+    "1301006": 0,
+    "1301007": 0,
+    "1301008": 0,
+    "1301009": 0,
+    "1301010": 0,
+    "1301011": 0,
+    "1301012": 0,
+    "1301013": 0,
+    "1301014": 0,
+    "1301015": -1
+   },
+   "scenes": 16,
+   "tied": 0
+  }
+ },
+ "uncertainty_descriptive": {
+  "11/final_greedy": {
+   "mean_task_delta": -0.5,
+   "task_ci95": [
+    -1.0625,
+    -0.125
+   ],
+   "mean_byte_delta": 13268.6,
+   "byte_ci95": [
+    12946.5,
+    13583.6
+   ],
+   "scenes": 16
+  },
+  "11/final_sampled": {
+   "mean_task_delta": -0.4375,
+   "task_ci95": [
+    -1.0,
+    -0.0625
+   ],
+   "mean_byte_delta": 13189.5,
+   "byte_ci95": [
+    12879.4,
+    13484.6
+   ],
+   "scenes": 16
+  },
+  "11/init_greedy": {
+   "mean_task_delta": -0.5,
+   "task_ci95": [
+    -1.0625,
+    -0.125
+   ],
+   "mean_byte_delta": 13259.6,
+   "byte_ci95": [
+    12933.0,
+    13584.4
+   ],
+   "scenes": 16
+  },
+  "22/final_greedy": {
+   "mean_task_delta": -0.5,
+   "task_ci95": [
+    -1.0625,
+    -0.125
+   ],
+   "mean_byte_delta": -14939.2,
+   "byte_ci95": [
+    -15154.5,
+    -14740.9
+   ],
+   "scenes": 16
+  },
+  "22/final_sampled": {
+   "mean_task_delta": -0.125,
+   "task_ci95": [
+    -0.3125,
+    0.0
+   ],
+   "mean_byte_delta": 896.2,
+   "byte_ci95": [
+    -2556.0,
+    4505.6
+   ],
+   "scenes": 16
+  },
+  "22/init_greedy": {
+   "mean_task_delta": -0.25,
+   "task_ci95": [
+    -0.4375,
+    -0.0625
+   ],
+   "mean_byte_delta": -9963.8,
+   "byte_ci95": [
+    -11340.0,
+    -8579.6
+   ],
+   "scenes": 16
+  },
+  "33/final_greedy": {
+   "mean_task_delta": 0.0,
+   "task_ci95": [
+    0.0,
+    0.0
+   ],
+   "mean_byte_delta": -12540.8,
+   "byte_ci95": [
+    -13841.2,
+    -11123.2
+   ],
+   "scenes": 16
+  },
+  "33/final_sampled": {
+   "mean_task_delta": -0.4375,
+   "task_ci95": [
+    -1.0,
+    -0.0625
+   ],
+   "mean_byte_delta": 13260.0,
+   "byte_ci95": [
+    12932.6,
+    13589.2
+   ],
+   "scenes": 16
+  },
+  "33/init_greedy": {
+   "mean_task_delta": -0.5,
+   "task_ci95": [
+    -1.0625,
+    -0.125
+   ],
+   "mean_byte_delta": 13250.2,
+   "byte_ci95": [
+    12924.8,
+    13565.6
+   ],
+   "scenes": 16
+  },
+  "always_hold": {
+   "mean_task_delta": -0.5,
+   "task_ci95": [
+    -1.0625,
+    -0.125
+   ],
+   "mean_byte_delta": -14939.2,
+   "byte_ci95": [
+    -15148.1,
+    -14738.2
+   ],
+   "scenes": 16
+  },
+  "late_discovery_gate": {
+   "mean_task_delta": 0.0,
+   "task_ci95": [
+    0.0,
+    0.0
+   ],
+   "mean_byte_delta": -10101.0,
+   "byte_ci95": [
+    -11664.4,
+    -8486.2
+   ],
+   "scenes": 16
+  },
+  "periodic_20": {
+   "mean_task_delta": 0.0,
+   "task_ci95": [
+    0.0,
+    0.0
+   ],
+   "mean_byte_delta": -356.2,
+   "byte_ci95": [
+    -3019.1,
+    2429.2
+   ],
+   "scenes": 16
+  },
+  "random_send": {
+   "mean_task_delta": -0.25,
+   "task_ci95": [
+    -0.5,
+    -0.0625
+   ],
+   "mean_byte_delta": 13105.5,
+   "byte_ci95": [
+    12657.8,
+    13545.4
+   ],
+   "scenes": 16
+  },
+  "event": {
+   "mean_task_delta": -0.4375,
+   "task_ci95": [
+    -1.0,
+    -0.0625
+   ],
+   "mean_byte_delta": 13123.1,
+   "byte_ci95": [
+    12717.0,
+    13530.8
+   ],
+   "scenes": 16
+  }
+ },
+ "scientific_status": {
+  "verdict": "execution_complete_with_correctness_gates_passed",
+  "learning_benefit_established": false,
+  "non_inferiority_established": false,
+  "notes": [
+   "no learned block improved the task on any development scene",
+   "the only zero-task-loss learned block is seed 33's final greedy; it ties late_discovery_gate's task outcome in all 16 scenes and saves more bytes on average but is worse in 2 scenes (post-hoc observation, no selection)",
+   "the dual constraint estimate describes the sampled training policy, not the greedy decision rule",
+   "16 development scenes and one sampled evaluation per scene per mode are exploratory; training seeds are not new independent scenarios",
+   "old v1 results stay in the separate historical table and no round difference is attributed to any single one of the four repairs"
+  ]
+ }
+}
