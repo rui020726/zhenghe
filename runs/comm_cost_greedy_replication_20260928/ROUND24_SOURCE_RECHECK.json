@@ -1,0 +1,401 @@
+{
+ "round": "25",
+ "section": "1 source recheck of the ROUND24 delivery",
+ "round24_head": {
+  "head": "f920c555b7bfe7d01296b9099635f673c2e5dcb6",
+  "tree": "2543ab8314013d501c03441b2d9ec8d8beb88802",
+  "branch": "exp/comm-cost-v2-rerun",
+  "commits": [
+   {
+    "sha": "f920c555b7bfe7d01296b9099635f673c2e5dcb6",
+    "tree": "2543ab8314013d501c03441b2d9ec8d8beb88802",
+    "subject": "docs(comm): ROUND24 判定补登推送状态——4 次尝试因 443 不通未推送、无分叉"
+   },
+   {
+    "sha": "e3183457b321aa5c9840fae6393a334fb388289f",
+    "tree": "376b1a1d6b0be24d012358bd3952b18802a929f5",
+    "subject": "feat(comm): ROUND24 修复版重跑执行完毕——672/672 启动、门禁全过、学习收益未建立"
+   },
+   {
+    "sha": "70d0dc121fff9a75b2ff64acf09cb7aca03404d0",
+    "tree": "3c90294797aaa18e9db78586e86a3b2ce25a2f6b",
+    "subject": "feat(comm): ROUND24 修复版重跑启动前冻结——协议、harness 与零环境门禁（0 启动）"
+   },
+   {
+    "sha": "5be3f1e6437309f4e92cf49807f2e0cbbf7f057f",
+    "tree": "6e92c8715bb5be2398e1de94a82d6dab46d08031",
+    "subject": "docs: publish round 24 communication cost v2 rerun spec"
+   }
+  ],
+  "expected_head": "f920c555b7bfe7d01296b9099635f673c2e5dcb6",
+  "head_matches_verdict": true,
+  "tracked_diff_clean": true,
+  "untracked_outside_round_dirs": [
+   "architecture/",
+   "logs_block_references.out",
+   "runs/comm_multistep_stage1_20260922/_DOC_PATCH_NOTES.md",
+   "runs/comm_multistep_stage1_20260922/_fix_diag_json.py",
+   "runs/comm_send_actionability_20260922/rows_s700010.json",
+   "runs/comm_send_actionability_20260922/rows_s700018.json",
+   "runs/comm_send_actionability_20260922/rows_s700020.json",
+   "runs/comm_send_actionability_20260922/rows_s700022.json",
+   "runs/comm_send_actionability_20260922/rows_s700031.json",
+   "runs/comm_send_actionability_20260922/rows_s700033.json",
+   "runs/comm_send_actionability_20260922/rows_s700042.json",
+   "runs/comm_send_actionability_20260922/rows_s700046.json",
+   "runs/coordinator_baselines_20260917/dev_summary.json"
+  ],
+  "note": "other sessions' untracked files (architecture/, old rows) are preserved, not touched by this round"
+ },
+ "launch_ledger": {
+  "plan_normal": 672,
+  "plan_cap": 700,
+  "live_used": 672,
+  "results": 672,
+  "technical_failures": 0,
+  "rows": 672,
+  "by_kind": {
+   "train": 384,
+   "eval": 144,
+   "reference": 64,
+   "rule": 80
+  },
+  "closure": {
+   "cost_ledger_violations": 0,
+   "task_tap_violations": 0,
+   "ack_off_violations": 0
+  }
+ },
+ "checkpoints": {
+  "11": {
+   "ep0": {
+    "exists": true,
+    "sha256": "56889e7cb9a6fadbb6ed6672a141ba3f0b8eda6cb6769ff8a50fa97e7128c8fd",
+    "bytes": 45509,
+    "episodes_done": 0,
+    "updates": 0,
+    "optimizer_steps": 0,
+    "lambda": 1.0,
+    "training_seed": 11,
+    "schema": [
+     "constrained-cost-v2",
+     "constrained-lagrangian/2",
+     "per-decision-next-value/1",
+     "stage-c-four-module-parameter-set/1",
+     "post-action-most-recent-decision/1"
+    ],
+    "equals_fresh_initialisation": true
+   },
+   "ep64": {
+    "exists": true,
+    "sha256": "71d294a37c36707df1beb17884f2be89c3ad5f05a19a61c1b3d600c7f3132325",
+    "bytes": 100011,
+    "episodes_done": 64,
+    "updates": 16,
+    "optimizer_steps": 240,
+    "lambda": 1.2624999999999995,
+    "training_seed": 11,
+    "schema": [
+     "constrained-cost-v2",
+     "constrained-lagrangian/2",
+     "per-decision-next-value/1",
+     "stage-c-four-module-parameter-set/1",
+     "post-action-most-recent-decision/1"
+    ],
+    "equals_fresh_initialisation": null
+   },
+   "ep128": {
+    "exists": true,
+    "sha256": "59d88b69dfb592bd9700af62d724ef7bfc73d3dc8c56f04d608dd8239aebffbf",
+    "bytes": 100971,
+    "episodes_done": 128,
+    "updates": 32,
+    "optimizer_steps": 464,
+    "lambda": 1.4999999999999993,
+    "training_seed": 11,
+    "schema": [
+     "constrained-cost-v2",
+     "constrained-lagrangian/2",
+     "per-decision-next-value/1",
+     "stage-c-four-module-parameter-set/1",
+     "post-action-most-recent-decision/1"
+    ],
+    "equals_fresh_initialisation": null
+   }
+  },
+  "22": {
+   "ep0": {
+    "exists": true,
+    "sha256": "f82d33b8b540303662a55429342ed5d2ce25d8cd98e7fd35ecfcf0e6157d778d",
+    "bytes": 45445,
+    "episodes_done": 0,
+    "updates": 0,
+    "optimizer_steps": 0,
+    "lambda": 1.0,
+    "training_seed": 22,
+    "schema": [
+     "constrained-cost-v2",
+     "constrained-lagrangian/2",
+     "per-decision-next-value/1",
+     "stage-c-four-module-parameter-set/1",
+     "post-action-most-recent-decision/1"
+    ],
+    "equals_fresh_initialisation": true
+   },
+   "ep64": {
+    "exists": true,
+    "sha256": "4a1d073ff60c7d002aad632f52c7b82d8877ffc85993eb8142c4443bdd2e59ef",
+    "bytes": 99691,
+    "episodes_done": 64,
+    "updates": 16,
+    "optimizer_steps": 224,
+    "lambda": 1.2124999999999995,
+    "training_seed": 22,
+    "schema": [
+     "constrained-cost-v2",
+     "constrained-lagrangian/2",
+     "per-decision-next-value/1",
+     "stage-c-four-module-parameter-set/1",
+     "post-action-most-recent-decision/1"
+    ],
+    "equals_fresh_initialisation": null
+   },
+   "ep128": {
+    "exists": true,
+    "sha256": "f3229f45f147d1151433ce0f876e262bad5f57fca79777cb3c2b2b3897b99d93",
+    "bytes": 100651,
+    "episodes_done": 128,
+    "updates": 32,
+    "optimizer_steps": 340,
+    "lambda": 1.2374999999999994,
+    "training_seed": 22,
+    "schema": [
+     "constrained-cost-v2",
+     "constrained-lagrangian/2",
+     "per-decision-next-value/1",
+     "stage-c-four-module-parameter-set/1",
+     "post-action-most-recent-decision/1"
+    ],
+    "equals_fresh_initialisation": null
+   }
+  },
+  "33": {
+   "ep0": {
+    "exists": true,
+    "sha256": "cdfb491d325e06fa875726a9a5e4d0d8335d1668aaaf2b0a9a27b3276cf5d221",
+    "bytes": 45509,
+    "episodes_done": 0,
+    "updates": 0,
+    "optimizer_steps": 0,
+    "lambda": 1.0,
+    "training_seed": 33,
+    "schema": [
+     "constrained-cost-v2",
+     "constrained-lagrangian/2",
+     "per-decision-next-value/1",
+     "stage-c-four-module-parameter-set/1",
+     "post-action-most-recent-decision/1"
+    ],
+    "equals_fresh_initialisation": true
+   },
+   "ep64": {
+    "exists": true,
+    "sha256": "301a9cc19c2b8ee45745bc9769e298762435310f91ab328a080efb891f5cf4a8",
+    "bytes": 99691,
+    "episodes_done": 64,
+    "updates": 16,
+    "optimizer_steps": 240,
+    "lambda": 1.2499999999999996,
+    "training_seed": 33,
+    "schema": [
+     "constrained-cost-v2",
+     "constrained-lagrangian/2",
+     "per-decision-next-value/1",
+     "stage-c-four-module-parameter-set/1",
+     "post-action-most-recent-decision/1"
+    ],
+    "equals_fresh_initialisation": null
+   },
+   "ep128": {
+    "exists": true,
+    "sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+    "bytes": 100651,
+    "episodes_done": 128,
+    "updates": 32,
+    "optimizer_steps": 464,
+    "lambda": 1.4749999999999992,
+    "training_seed": 33,
+    "schema": [
+     "constrained-cost-v2",
+     "constrained-lagrangian/2",
+     "per-decision-next-value/1",
+     "stage-c-four-module-parameter-set/1",
+     "post-action-most-recent-decision/1"
+    ],
+    "equals_fresh_initialisation": null
+   }
+  }
+ },
+ "v1_checkpoint_reads_in_batch_records": 0,
+ "seed_chain_reviews": {
+  "11": {
+   "passed": true,
+   "batches": 32,
+   "checks": {
+    "batch_records_contiguous": true,
+    "parameter_chain_consistent": true,
+    "cost_head_weights_change_every_batch": true,
+    "cost_head_gradient_nonzero_every_batch": true,
+    "all_module_gradients_recorded": true,
+    "lambda_recorded_every_batch": true,
+    "likelihood_within_tolerance": true,
+    "frozen_checkpoint_hashes_constant": true,
+    "optimizer_steps_positive": true
+   },
+   "parameter_chain_links_verified": 31,
+   "cost_head_gradient_nonzero_every_batch": true,
+   "likelihood_max": 4.76837158203125e-07
+  },
+  "22": {
+   "passed": true,
+   "batches": 32,
+   "checks": {
+    "batch_records_contiguous": true,
+    "parameter_chain_consistent": true,
+    "cost_head_weights_change_every_batch": true,
+    "cost_head_gradient_nonzero_every_batch": true,
+    "all_module_gradients_recorded": true,
+    "lambda_recorded_every_batch": true,
+    "likelihood_within_tolerance": true,
+    "frozen_checkpoint_hashes_constant": true,
+    "optimizer_steps_positive": true
+   },
+   "parameter_chain_links_verified": 31,
+   "cost_head_gradient_nonzero_every_batch": true,
+   "likelihood_max": 7.636845111846924e-07
+  },
+  "33": {
+   "passed": true,
+   "batches": 32,
+   "checks": {
+    "batch_records_contiguous": true,
+    "parameter_chain_consistent": true,
+    "cost_head_weights_change_every_batch": true,
+    "cost_head_gradient_nonzero_every_batch": true,
+    "all_module_gradients_recorded": true,
+    "lambda_recorded_every_batch": true,
+    "likelihood_within_tolerance": true,
+    "frozen_checkpoint_hashes_constant": true,
+    "optimizer_steps_positive": true
+   },
+   "parameter_chain_links_verified": 31,
+   "cost_head_gradient_nonzero_every_batch": true,
+   "likelihood_max": 2.384185791015625e-07
+  }
+ },
+ "frozen_checker_outcome": {
+  "seed_11_batch_audit_passed": false,
+  "seed_11_problems": [
+   "batch 1: cost head digest identical to the previous batch's pre-update state"
+  ],
+  "seed_11_compensated_by": "BATCH_CHAIN_REVIEW_s11.json (read-only, per-batch chain)"
+ },
+ "delivered_artefact_hashes": {
+  "CONFIG_AND_MODEL_MANIFEST.json": {
+   "bytes": 18131,
+   "sha256": "70b75a9945b0ed6efef3e0ae16583d0f37d3e994c5e1e21634dfa97cb4577ee7"
+  },
+  "SCENE_REGISTRY.json": {
+   "bytes": 2954,
+   "sha256": "c14046d05cf27845b5a22736883fd0dbc31e5e0e936eb96259bf4abf31b57749"
+  },
+  "START_LEDGER.json": {
+   "bytes": 113171,
+   "sha256": "4f31b103c665feca14ed8498807beb0891a2dd0a0424871ee130e0c5e1f64261"
+  },
+  "SYNTHETIC_GATE.json": {
+   "bytes": 2289,
+   "sha256": "68a6a69f92c64ed184a9c6aee006e12f3a84f3fe3f57ec705cd99a48c698ca92"
+  },
+  "START_EQUIVALENCE.json": {
+   "bytes": 4394,
+   "sha256": "b6f2f738143a2edec01f89a7ce17918d94ac9b857e987c4a947612ee21f7bd56"
+  },
+  "FIRST4_GATE_s11.json": {
+   "bytes": 1928,
+   "sha256": "ba5afc90f97b5cec63e8a816b18dd90cbedc3015b74483beed35dfee5f3d88dc"
+  },
+  "BATCH_AUDIT_s11.json": {
+   "bytes": 29545,
+   "sha256": "3396c5849e5b40dd93475579ac9ab7368570d930ccd9fd978a1e05abf69f8d05"
+  },
+  "BATCH_AUDIT_s22.json": {
+   "bytes": 29675,
+   "sha256": "449750288396d33c3bc34bbca8a0ac9ae368032f1d523e0ab680c4e99b2ba594"
+  },
+  "BATCH_AUDIT_s33.json": {
+   "bytes": 29476,
+   "sha256": "2c66c866082d2688e14e5255c1c34e9d0f34c6fe8fbb02e5d1f2cac6b9191153"
+  },
+  "BATCH_CHAIN_REVIEW_s11.json": {
+   "bytes": 8315,
+   "sha256": "956c06d48cececa0ea512683423cd59e7ce932c9aa83af2d9bf235adc09f91af"
+  },
+  "BATCH_CHAIN_REVIEW_s22.json": {
+   "bytes": 8403,
+   "sha256": "55f7ad1d90d02153d2b4eb75fb5cb16275d8b90bb9867104f35cb66a56b2faee"
+  },
+  "BATCH_CHAIN_REVIEW_s33.json": {
+   "bytes": 8327,
+   "sha256": "f13b6c93a9c5c99d1baf217f4fea1bc479e85b7b497dcf570ca2dc7f365fc5d3"
+  },
+  "TRAINING_CURVES.json": {
+   "bytes": 16373,
+   "sha256": "4713764f45ab2d10a322e666bbb1ee9057bfe1d16ddca6e04f2509b459152b11"
+  },
+  "CHECKPOINT_INDEX.json": {
+   "bytes": 10760,
+   "sha256": "aae7983a7308ddc25e6d99b859b7b77a508494422ffddbb7bba313df1d880150"
+  },
+  "COMPARISON.json": {
+   "bytes": 14615,
+   "sha256": "d62b28ed17c1344e4b141009ffc8f610739964e365140f82b749484a9a847bf7"
+  },
+  "UNCERTAINTY.json": {
+   "bytes": 2771,
+   "sha256": "9d8069efab3b63a2eda7594ae1557d90e2b04fb8405b274a3354bcc4a89147d6"
+  },
+  "ROUND24_VERDICT.json": {
+   "bytes": 24242,
+   "sha256": "2d192dba91dae000611a88af7b4feefd201f5d3e6c9220eccc0d595c12d3c547"
+  },
+  "ROUND24_VERDICT.md": {
+   "bytes": 9592,
+   "sha256": "ae3cf10e391c3a3c6d95454700fe7c51d91563d264ac68ed6a7a80b2e05036a5"
+  },
+  "PUSH_STATUS.json": {
+   "bytes": 2190,
+   "sha256": "200b862187334d4941851a0f657a336887b1bdef49b2989da47fe8770cb020c7"
+  },
+  "ARTEFACT_MANIFEST.json": {
+   "bytes": 485708,
+   "sha256": "4233f52a683ee1279adafefc57902c6d002008dd666bdc321a77ed854f63007c"
+  },
+  "PROTOCOL_V2_RERUN.md": {
+   "bytes": 7172,
+   "sha256": "f5f27a86fff7c894e93650075e585cf27146265e8fab2846a7f2c6564fc09ef3"
+  },
+  "REMOTE_HEAD_ENTRIES.json": {
+   "bytes": 3809,
+   "sha256": "83944af52b08fab3bd1c847941a5f84607fd0b25a4ce4521d5ffb0a19fc8402c"
+  },
+  "AUDIT_MARKERS.json": {
+   "bytes": 951,
+   "sha256": "8b8d540536c1ec32a3596372413181aced7218101e265b1df46407ee0a9f8c21"
+  }
+ },
+ "passed": true,
+ "produced_by": "runs/comm_cost_v2_rerun_20260928/round25_source_recheck.py",
+ "original_path": "runs\\comm_cost_v2_rerun_20260928\\ROUND24_SOURCE_RECHECK.json",
+ "note": "read-only recheck of the ROUND24 delivery; copied here for the ROUND25 deliverable set; the original stays in the ROUND24 directory"
+}

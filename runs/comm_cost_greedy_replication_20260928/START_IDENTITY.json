@@ -1,0 +1,72 @@
+{
+ "round": "25",
+ "run_id": "comm_cost_greedy_replication_20260928",
+ "status": "section1_readonly_complete_publication_blocked",
+ "spec": {
+  "file": "ROUND25_COMM_COST_GREEDY_REPLICATION.md",
+  "claimed_source_branch": "docs/comm-cost-greedy-replication",
+  "claimed_source_commit": "2fd8d9a96dfb60f24b6a03861ef9029315b7ce34",
+  "delivery": "user-pasted full text in-session (all remote fetch channels unavailable)",
+  "local_sha256": "e05657c771bcac3048fee6e3a2631a9c0f0e99baa7099bfa7832980f1680b03a",
+  "local_git_blob_sha1": "d43bc3efdda206d0fa1978818690469b32f58b9b",
+  "remote_verification": "NOT_PERFORMED",
+  "verification_note": "git port 443 unreachable (connect failure) this session; the GitHub MCP channel was removed mid-session; WebFetch to raw/api github returned 404/fetch-failed; in-app browser navigation succeeded but snapshot/script is policy-blocked; QMind listing rejected. The claimed SHA therefore remains unverified against the remote and is registered as such; it must be byte-verified when a channel recovers.",
+  "consistency_signals": [
+   "spec states the ROUND24 report short SHA f920c55 -- matches the actual local HEAD",
+   "spec states the ROUND24 plan branch docs/comm-cost-v2-rerun-plan @86cff022 -- matches the commit byte-verified in ROUND24 via the then-authorised channel",
+   "spec states the remote had no exp/comm-cost-v2-rerun at drafting -- matches the ROUND24-era remote branch listing"
+  ]
+ },
+ "round24_execution_head": {
+  "branch": "exp/comm-cost-v2-rerun",
+  "head": "f920c555b7bfe7d01296b9099635f673c2e5dcb6",
+  "tree": "2543ab8314013d501c03441b2d9ec8d8beb88802",
+  "commits": [
+   [
+    "f920c555b7bfe7d01296b9099635f673c2e5dcb6",
+    "2543ab8314013d501c03441b2d9ec8d8beb88802",
+    "docs(comm): ROUND24 判定补登推送状态——4 次尝试因 443 不通未推送、无分叉"
+   ],
+   [
+    "e3183457b321aa5c9840fae6393a334fb388289f",
+    "376b1a1d6b0be24d012358bd3952b18802a929f5",
+    "feat(comm): ROUND24 修复版重跑执行完毕——672/672 启动、门禁全过、学习收益未建立"
+   ],
+   [
+    "70d0dc121fff9a75b2ff64acf09cb7aca03404d0",
+    "3c90294797aaa18e9db78586e86a3b2ce25a2f6b",
+    "feat(comm): ROUND24 修复版重跑启动前冻结——协议、harness 与零环境门禁（0 启动）"
+   ],
+   [
+    "5be3f1e6437309f4e92cf49807f2e0cbbf7f057f",
+    "6e92c8715bb5be2398e1de94a82d6dab46d08031",
+    "docs: publish round 24 communication cost v2 rerun spec"
+   ]
+  ],
+  "verdict_head_short_sha": "f920c55",
+  "head_matches_verdict": true
+ },
+ "round25_branch": {
+  "branch": "exp/comm-cost-greedy-replication",
+  "start": "f920c555b7bfe7d01296b9099635f673c2e5dcb6",
+  "head": "e2822f1c29d1927333b15d4a1af3d371b407483e",
+  "commits_ahead_of_round24_head": 1,
+  "single_document_commit": "e2822f1c29d1927333b15d4a1af3d371b407483e",
+  "note": "created from the verified ROUND24 execution head; only the spec document commit was imported; no fix chain re-import; no history rollback"
+ },
+ "publication": {
+  "round24_push": "FAILED_NO_AUTHORISED_CHANNEL",
+  "attempts": 2,
+  "errors": [
+   "git push -u origin exp/comm-cost-v2-rerun: Failed to connect to github.com port 443 after ~21s: Could not connect to server (attempt 1)",
+   "git push -u origin exp/comm-cost-v2-rerun: Failed to connect to github.com port 443 after ~21s: Could not connect to server (attempt 2)"
+  ],
+  "remote_ref_exp_comm_cost_v2_rerun": "unverifiable (git and GitHub channel both down); no claim of push success is made",
+  "spec_stop_rule": "ROUND25 §1.4: with both authorised publication paths unavailable, complete only this section's read-only organisation and report the publication block; the evaluation round is not started",
+  "next_step_when_a_channel_recovers": [
+   "push exp/comm-cost-v2-rerun (ROUND24, 4 commits) and exp/comm-cost-greedy-replication (this branch) with ordinary pushes; no force",
+   "byte-verify the ROUND25 spec blob against docs/comm-cost-greedy-replication @2fd8d9a96dfb60f24b6a03861ef9029315b7ce34 and record the tree-equivalence evidence",
+   "then resume at ROUND25 §2 with the user's go-ahead"
+  ]
+ }
+}
