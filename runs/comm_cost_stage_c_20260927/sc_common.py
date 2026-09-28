@@ -150,6 +150,8 @@ HARNESS_MODULES = (
     "sc_freeze.py",
     "sc_recover.py",
     "test_sc_math.py",
+    "sc_correctness_test_support.py",
+    "test_sc_cost_objective.py",
 )
 CHECKPOINT_FILES = (
     ROOT / "runs" / "cur_v2rep05_s2" / "best" / "shared_mappo_model_21_3100.pth",

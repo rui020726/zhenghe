@@ -58,7 +58,10 @@ def batch_samples(episodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
         task_stream = {int(step): float(value) for step, value in episode["task_stream"].items()}
         bundled_cost = _bundle(cost_stream, decision_steps, horizon)
         bundled_task = _bundle(task_stream, decision_steps, horizon)
-        rewards_cost = torch.tensor([-bundled_cost[s] / common.B0_BYTES for s in decision_steps],
+        # Keep the cost critic's target in the positive measured-cost convention used by
+        # ``lambda * A_task - A_cost``. Negating here and subtracting A_cost again makes
+        # higher-cost actions look better to the actor.
+        rewards_cost = torch.tensor([bundled_cost[s] / common.B0_BYTES for s in decision_steps],
                                     dtype=torch.float64)
         rewards_task = torch.tensor([bundled_task[s] for s in decision_steps],
                                     dtype=torch.float64)
