@@ -1,0 +1,41 @@
+{
+ "file": "ROUND25_COMM_COST_GREEDY_REPLICATION.md",
+ "claimed_source_branch": "docs/comm-cost-greedy-replication",
+ "claimed_source_commit": "2fd8d9a96dfb60f24b6a03861ef9029315b7ce34",
+ "expected": {
+  "sha256": "4e1f0027a08000b03928926f546389c5e5765e90773f4192fdd160efff6d3a1c",
+  "bytes": 17349
+ },
+ "actual_raw": {
+  "sha256": "e05657c771bcac3048fee6e3a2631a9c0f0e99baa7099bfa7832980f1680b03a",
+  "bytes": 17349
+ },
+ "actual_normalised": {
+  "sha256": "e05657c771bcac3048fee6e3a2631a9c0f0e99baa7099bfa7832980f1680b03a",
+  "bytes": 17349
+ },
+ "normalisation_steps_applied": [
+  "CRLF->LF applied (0 occurrences)"
+ ],
+ "strict_utf8_decode": true,
+ "bom_present": false,
+ "crlf_count": 0,
+ "bare_cr_count": 0,
+ "result": "MISMATCH",
+ "mismatch_nature": "byte length matches exactly (17349) but sha256 differs; the local file is already in the normalised form (LF, no BOM, no bare CR, strict UTF-8), so the difference is character-level and same-length -- no allowed normalisation can bridge it",
+ "diagnostics_performed": [
+  "raw and normalised sha256 computed; both differ from the expected value",
+  "BOM / CRLF / bare CR / trailing whitespace / tabs / double spaces / invisible codepoints scanned: none present",
+  "punctuation inventory (U+FF0C x129, U+FF1B x41, U+FF1A x27, U+201C/U+201D x16 each, U+FF08/U+FF09 x5 each, U+03BB x2, U+00D7 x2, U+03B7 x1) and quote/paren balance checked against the in-session pasted text: consistent",
+  "line-by-line comparison against the pasted spec text performed by inspection: no difference found"
+ ],
+ "conclusion": "the local copy's content matches the pasted text as far as inspection can establish, but it is NOT byte-identical to the claimed upstream blob; the upstream original cannot be fetched this session (user instruction: no further network attempts), so the difference cannot be located or repaired here",
+ "prohibited_actions_not_taken": [
+  "trimming",
+  "adding/removing the trailing newline",
+  "reordering text",
+  "editing content to force the hash",
+  "any network fetch"
+ ],
+ "user_rule_applied": "instruction 四: with the spec check failed, the zero-launch diagnostics (ROUND25 §2) may be completed, but the 64-scene x 3-arm evaluation must NOT start until the original file is supplied and verified"
+}

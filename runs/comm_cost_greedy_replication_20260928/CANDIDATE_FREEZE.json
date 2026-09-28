@@ -1,0 +1,166 @@
+{
+ "round": "25",
+ "section": "1.6/3 model identity freeze (read-only; the evaluation itself is not started)",
+ "candidate": {
+  "arm_id": "learned_s33_greedy",
+  "model": "seed33 ep128 milestone, original greedy decode",
+  "checkpoint": {
+   "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep128.pt",
+   "bytes": 100651,
+   "sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+   "live_sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+   "identity_verified": true
+  },
+  "decode": "archived collector branch: SEND iff p(SEND) >= p(HOLD), ties to SEND; the same BudgetMaskedCollector(greedy=True) the ROUND24 final_greedy block ran",
+  "selection_registration": "chosen after seeing the 16 development scenes (ROUND24); a post-hoc fixed candidate, NOT a randomly drawn training seed; this freeze cannot and does not remove the selection fact"
+ },
+ "all_three_communication_models": {
+  "checkpoints": {
+   "seed11_ep0": {
+    "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s11_ep0.pt",
+    "bytes": 45509,
+    "sha256": "56889e7cb9a6fadbb6ed6672a141ba3f0b8eda6cb6769ff8a50fa97e7128c8fd",
+    "live_sha256": "56889e7cb9a6fadbb6ed6672a141ba3f0b8eda6cb6769ff8a50fa97e7128c8fd",
+    "identity_verified": true
+   },
+   "seed11_ep64": {
+    "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s11_ep64.pt",
+    "bytes": 100011,
+    "sha256": "71d294a37c36707df1beb17884f2be89c3ad5f05a19a61c1b3d600c7f3132325",
+    "live_sha256": "71d294a37c36707df1beb17884f2be89c3ad5f05a19a61c1b3d600c7f3132325",
+    "identity_verified": true
+   },
+   "seed11_ep128": {
+    "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s11_ep128.pt",
+    "bytes": 100971,
+    "sha256": "59d88b69dfb592bd9700af62d724ef7bfc73d3dc8c56f04d608dd8239aebffbf",
+    "live_sha256": "59d88b69dfb592bd9700af62d724ef7bfc73d3dc8c56f04d608dd8239aebffbf",
+    "identity_verified": true
+   },
+   "seed22_ep0": {
+    "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s22_ep0.pt",
+    "bytes": 45445,
+    "sha256": "f82d33b8b540303662a55429342ed5d2ce25d8cd98e7fd35ecfcf0e6157d778d",
+    "live_sha256": "f82d33b8b540303662a55429342ed5d2ce25d8cd98e7fd35ecfcf0e6157d778d",
+    "identity_verified": true
+   },
+   "seed22_ep64": {
+    "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s22_ep64.pt",
+    "bytes": 99691,
+    "sha256": "4a1d073ff60c7d002aad632f52c7b82d8877ffc85993eb8142c4443bdd2e59ef",
+    "live_sha256": "4a1d073ff60c7d002aad632f52c7b82d8877ffc85993eb8142c4443bdd2e59ef",
+    "identity_verified": true
+   },
+   "seed22_ep128": {
+    "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s22_ep128.pt",
+    "bytes": 100651,
+    "sha256": "f3229f45f147d1151433ce0f876e262bad5f57fca79777cb3c2b2b3897b99d93",
+    "live_sha256": "f3229f45f147d1151433ce0f876e262bad5f57fca79777cb3c2b2b3897b99d93",
+    "identity_verified": true
+   },
+   "seed33_ep0": {
+    "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep0.pt",
+    "bytes": 45509,
+    "sha256": "cdfb491d325e06fa875726a9a5e4d0d8335d1668aaaf2b0a9a27b3276cf5d221",
+    "live_sha256": "cdfb491d325e06fa875726a9a5e4d0d8335d1668aaaf2b0a9a27b3276cf5d221",
+    "identity_verified": true
+   },
+   "seed33_ep64": {
+    "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep64.pt",
+    "bytes": 99691,
+    "sha256": "301a9cc19c2b8ee45745bc9769e298762435310f91ab328a080efb891f5cf4a8",
+    "live_sha256": "301a9cc19c2b8ee45745bc9769e298762435310f91ab328a080efb891f5cf4a8",
+    "identity_verified": true
+   },
+   "seed33_ep128": {
+    "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep128.pt",
+    "bytes": 100651,
+    "sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+    "live_sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+    "identity_verified": true
+   }
+  },
+  "training_seeds_inside_payloads": {
+   "11": 11,
+   "22": 22,
+   "33": 33
+  },
+  "episode_labels": {
+   "11": {
+    "ep64": 64,
+    "ep128": 128
+   },
+   "22": {
+    "ep64": 64,
+    "ep128": 128
+   },
+   "33": {
+    "ep64": 64,
+    "ep128": 128
+   }
+  },
+  "schema": [
+   "constrained-cost-v2",
+   "constrained-lagrangian/2",
+   "constrained-cost-state/2",
+   "per-decision-next-value/1",
+   "stage-c-four-module-parameter-set/1",
+   "post-action-most-recent-decision/1"
+  ],
+  "feature_schema": "actor features 19-d (integrated_sar.comm_learning.features), tape schema onpolicy-tape/2, action mask budget-sequential-mask/1",
+  "v1_resume": "refused by the trainer; ep0 equals a fresh Controller(seed) byte for byte",
+  "only_seed33_enters_new_environment_evaluation": true
+ },
+ "frozen_search_and_allocation_weights": {
+  "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": {
+   "live_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "recorded_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "identity_verified": true
+  },
+  "runs/joint_eval_20260916/ctde_final_7_1.pth": {
+   "live_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+   "recorded_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+   "identity_verified": true
+  }
+ },
+ "diagnostic_identity_evidence": {
+  "path": "DECODER_DIAGNOSTIC.json",
+  "passed": true,
+  "checkpoint_files_verified": {
+   "11": {
+    "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s11_ep128.pt",
+    "sha256": "59d88b69dfb592bd9700af62d724ef7bfc73d3dc8c56f04d608dd8239aebffbf"
+   },
+   "22": {
+    "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s22_ep128.pt",
+    "sha256": "f3229f45f147d1151433ce0f876e262bad5f57fca79777cb3c2b2b3897b99d93"
+   },
+   "33": {
+    "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s33_ep128.pt",
+    "sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923"
+   }
+  },
+  "probability_recompute_gaps": {
+   "11/final_greedy": 0.0,
+   "11/final_sampled": 0.0,
+   "22/final_greedy": 0.0,
+   "22/final_sampled": 0.0,
+   "33/final_greedy": 0.0,
+   "33/final_sampled": 0.0
+  },
+  "log_prob_recompute_gaps": {
+   "11/final_greedy": 5.960464477539063e-08,
+   "11/final_sampled": 1.7881393432617188e-07,
+   "22/final_greedy": 1.1920928955078125e-07,
+   "22/final_sampled": 2.980232238769531e-07,
+   "33/final_greedy": 2.384185791015625e-07,
+   "33/final_sampled": 2.682209014892578e-07
+  }
+ },
+ "stop_conditions_met": {
+  "missing_weights": false,
+  "missing_manifest": false,
+  "tree_inequivalence": false
+ },
+ "note": "scene registry, launch ledger, arm implementation freeze and the pre-registered statistics belong to the launch round and are deliberately NOT written while the evaluation is blocked by the spec verification failure"
+}

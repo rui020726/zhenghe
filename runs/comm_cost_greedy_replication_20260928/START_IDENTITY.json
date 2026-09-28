@@ -15,7 +15,16 @@
    "spec states the ROUND24 report short SHA f920c55 -- matches the actual local HEAD",
    "spec states the ROUND24 plan branch docs/comm-cost-v2-rerun-plan @86cff022 -- matches the commit byte-verified in ROUND24 via the then-authorised channel",
    "spec states the remote had no exp/comm-cost-v2-rerun at drafting -- matches the ROUND24-era remote branch listing"
-  ]
+  ],
+  "offline_hash_check": {
+   "expected_sha256": "4e1f0027a08000b03928926f546389c5e5765e90773f4192fdd160efff6d3a1c",
+   "expected_bytes": 17349,
+   "local_sha256": "e05657c771bcac3048fee6e3a2631a9c0f0e99baa7099bfa7832980f1680b03a",
+   "local_bytes": 17349,
+   "result": "MISMATCH_same_length_character_level_difference",
+   "details": "runs/comm_cost_greedy_replication_20260928/SPEC_VERIFICATION.json",
+   "consequence": "per the user's rule, §2 zero-launch diagnostics may run; the 192-launch evaluation must not start until the original file is supplied and verified"
+  }
  },
  "round24_execution_head": {
   "branch": "exp/comm-cost-v2-rerun",
@@ -55,7 +64,7 @@
   "note": "created from the verified ROUND24 execution head; only the spec document commit was imported; no fix chain re-import; no history rollback"
  },
  "publication": {
-  "round24_push": "FAILED_NO_AUTHORISED_CHANNEL",
+  "round24_push": "PENDING_NETWORK",
   "attempts": 2,
   "errors": [
    "git push -u origin exp/comm-cost-v2-rerun: Failed to connect to github.com port 443 after ~21s: Could not connect to server (attempt 1)",
@@ -67,6 +76,10 @@
    "push exp/comm-cost-v2-rerun (ROUND24, 4 commits) and exp/comm-cost-greedy-replication (this branch) with ordinary pushes; no force",
    "byte-verify the ROUND25 spec blob against docs/comm-cost-greedy-replication @2fd8d9a96dfb60f24b6a03861ef9029315b7ce34 and record the tree-equivalence evidence",
    "then resume at ROUND25 §2 with the user's go-ahead"
-  ]
- }
+  ],
+  "publication_status": "PENDING_NETWORK",
+  "authorisation": "user's supplementary instruction (this session): defer publication and continue offline; no further network retries this session; remote_verification stays NOT_PERFORMED; the historical §1 block record is not modified"
+ },
+ "evaluation_authorised": false,
+ "evaluation_block_reason": "spec offline hash verification failed (MISMATCH); awaiting the original file from the user"
 }
