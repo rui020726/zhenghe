@@ -1,0 +1,43 @@
+{
+  "round": "25",
+  "run_id": "comm_cost_greedy_replication_20260928",
+  "file": "runs/comm_cost_greedy_replication_20260928/EXECUTION_BASIS.md",
+  "source": "user's direct instruction delivered in-session (session message); it replaces the old ROUND25 spec and the supplementary authorisation file as the execution basis for the remainder of this round",
+  "registration": {
+    "bytes": 7129,
+    "sha256": "cada6bca546bb2efef778b75c9e2ccafab0e61615b9933b0301bc224f8d817f6",
+    "git_blob_sha1": "7fc27e7449b0c305e13aacc8c5578353360c6b2f",
+    "encoding": "UTF-8, LF newlines, no BOM (as received in-session and saved)"
+  },
+  "hash_use": {
+    "purpose": "drift prevention during this round: any change to this file invalidates the execution basis",
+    "not_a_substitute": "this hash is NOT the old spec's expected hash (4e1f0027a08000b03928926f546389c5e5765e90773f4192fdd160efff6d3a1c) and does not claim the pasted old spec was byte-verified against the remote",
+    "old_spec_status": "ROUND25_COMM_COST_GREEDY_REPLICATION.md offline check remains MISMATCH; the file is not edited to force a match and is not claimed as verified"
+  },
+  "branch_state_at_registration": {
+    "branch": "exp/comm-cost-greedy-replication",
+    "head": "c26a34697edabbe4c1ab2956cbad06da9cb445be",
+    "head_short": "c26a346",
+    "matches_last_delivery_short_sha": true,
+    "history_preserved": true,
+    "note": "the existing branch and all its commits are kept; no rebuild, no rollback, no re-import of the old spec"
+  },
+  "publication": {
+    "remote_verification": "NOT_PERFORMED",
+    "publication_status": "PENDING_NETWORK",
+    "network_retries_this_session": 0,
+    "note": "publication is not a precondition for continuing this round; no further network attempts are made in this session"
+  },
+  "reuse_registration": {
+    "rule": "completed ROUND24 source recheck, decoder diagnostics and model identity verification may be reused if source code and input file hashes are unchanged; evidence paths are registered instead of re-proving with new environment launches",
+    "planning_end_caveat": "the planning end did not independently obtain these originals; that fact stays in the report",
+    "evidence_paths": [
+      "runs/comm_cost_greedy_replication_20260928/ROUND24_SOURCE_RECHECK.json",
+      "runs/comm_cost_greedy_replication_20260928/DECODER_DIAGNOSTIC.json",
+      "runs/comm_cost_greedy_replication_20260928/DECODER_DIAGNOSTIC.md",
+      "runs/comm_cost_greedy_replication_20260928/CANDIDATE_FREEZE.json"
+    ],
+    "input_hash_recheck": "runs/comm_cost_greedy_replication_20260928/REUSE_VERIFICATION.json"
+  },
+  "commit_plan": "this file and the execution basis are committed in their own commit before the first environment launch of this round"
+}
