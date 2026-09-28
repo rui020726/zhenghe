@@ -104,7 +104,16 @@ s22 final_greedy 在这些场景上零支出（行为上等价 always_hold）。
 5. 未调 λ/η/δ/超参，未开封存块，未扩样，未挑选最佳 seed/checkpoint/模式，无训练中途
     harness 改动。结果不理想不等于应回到搜索优化主线。
 
-## 7. 交付物索引
+## 7. 推送状态（如实登记，不声称推送成功）
+
+`git push -u origin exp/comm-cost-v2-rerun` 尝试 4 次（含间隔重试）均因 github.com:443
+不通失败（connect 失败 / connection reset），未推送。经已授权 GitHub 通道核验远端分支：
+`docs/comm-cost-v2-rerun-plan@86cff022`、`fix/comm-cost-stage-c-training-contracts@64cddcf`
+与指令给定 SHA 一致；`exp/comm-cost-v2-rerun` 远端不存在 ⇒ 无分叉、本轮提交零远端接触。
+本分支是远端新分支，端口恢复后 `git push -u origin exp/comm-cost-v2-rerun` 不会冲突；
+不使用 force push。证据 `PUSH_STATUS.json`。
+
+## 8. 交付物索引
 
 机读：`CONFIG_AND_MODEL_MANIFEST.json`、`START_LEDGER.json`、`SCENE_REGISTRY.json`、
 `SYNTHETIC_GATE.json`、`START_EQUIVALENCE.json`、`FIRST4_GATE_s11.json`、

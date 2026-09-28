@@ -1,0 +1,33 @@
+{
+  "round": "24",
+  "branch": "exp/comm-cost-v2-rerun",
+  "push_status": "not_pushed_network_unreachable",
+  "local_commits": [
+    {"sha": "5be3f1e6437309f4e92cf49807f2e0cbbf7f057f",
+     "subject": "docs: publish round 24 communication cost v2 rerun spec"},
+    {"sha": "70d0dc1", "subject": "feat(comm): ROUND24 修复版重跑启动前冻结——协议、harness 与零环境门禁（0 启动）"},
+    {"sha": "e318345", "subject": "feat(comm): ROUND24 修复版重跑执行完毕——672/672 启动、门禁全过、学习收益未建立"}
+  ],
+  "attempts": 4,
+  "errors": [
+    "git push -u origin exp/comm-cost-v2-rerun: unable to access https://github.com/rui020726/zhenghe.git/: Failed to connect to github.com port 443 after ~21s: Could not connect to server (attempts 1-3, spaced retries)",
+    "git ls-remote --heads origin exp/comm-cost-v2-rerun: Recv failure: Connection was reset (post-retry probe)"
+  ],
+  "remote_state_via_authorised_channel": {
+    "channel": "GitHub MCP list_branches (git port 443 unreachable this session)",
+    "docs/comm-cost-v2-rerun-plan": "86cff0226e5552c66c799cc7d210fa6006d058e0",
+    "fix/comm-cost-stage-c-training-contracts": "64cddcffc6f8796f132df8b8e003f005d0bdd749",
+    "exp/comm-cost-v2-rerun": "absent (no remote branch of this name, so no fork and no remote "
+                              "contact for this round's commits)",
+    "spec_source_sha_matches_instruction": true,
+    "remote_fix_head_matches_instruction": true
+  },
+  "commit_metadata_note": "the local fix tip b7217d1 and the remote fix head 64cddcf share one tree "
+                          "(31/31 top-level blob/tree SHAs identical, START_EQUIVALENCE.json); only "
+                          "commit metadata differs, as ROUND24 §0 anticipated",
+  "conclusion": "push not completed; no claim of a successful push is made. The branch is a new "
+                "remote branch, so a later push cannot conflict; retry `git push -u origin "
+                "exp/comm-cost-v2-rerun` when the port recovers. Local delivery is complete and "
+                "self-verifying (ledger, gates, comparisons and artefact manifest all on disk).",
+  "force_push_used": false
+}
