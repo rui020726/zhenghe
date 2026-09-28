@@ -66,23 +66,37 @@ def load_batch_record(training_seed: int, batch: int) -> dict[str, Any]:
 def recompute_episode_math(row: dict[str, Any], tapes: list[dict[str, Any]],
                            lam: float) -> dict[str, Any]:
     """Rewards, GAE and the combined advantage, recomputed from the row and the tape only."""
-    if not tapes:
-        return {"decision_steps": 0}
     decision_steps = sorted(int(tape["step"]) for tape in tapes)
     horizon = int(row["steps"])
     cost_stream = {int(step): float(entry["airtime_bytes"])
                    for step, entry in row["cost_stream"].items()}
     task_stream = {int(step): float(value) for step, value in row["task_stream"].items()}
 
-    def bundle(stream: dict[int, float]) -> dict[int, float]:
+    def bundle(stream: dict[int, float]) -> tuple[dict[int, float], float]:
         bundled = {step: 0.0 for step in decision_steps}
-        for step in range(1, horizon + 1):
-            target = next((d for d in decision_steps if d >= step), decision_steps[-1])
-            bundled[target] += float(stream.get(step, 0.0))
-        return bundled
+        prefix = 0.0
+        if not decision_steps:
+            return bundled, sum(float(value) for value in stream.values())
+        prefix += sum(float(value) for step, value in stream.items()
+                      if int(step) < decision_steps[0])
+        for index, decision in enumerate(decision_steps):
+            stop = (decision_steps[index + 1]
+                    if index + 1 < len(decision_steps) else horizon + 1)
+            bundled[decision] = sum(float(value) for step, value in stream.items()
+                                    if decision <= int(step) < stop)
+        return bundled, prefix
 
-    bundled_cost = bundle(cost_stream)
-    bundled_task = bundle(task_stream)
+    bundled_cost, prefix_cost = bundle(cost_stream)
+    bundled_task, prefix_task = bundle(task_stream)
+    if not decision_steps:
+        return {
+            "decision_steps": 0,
+            "sum_rewards_task": 0.0,
+            "sum_rewards_cost": 0.0,
+            "unassigned_prefix_task_reward": prefix_task,
+            "unassigned_prefix_cost_bytes": prefix_cost,
+            "all_finite": True,
+        }
     rewards_cost = torch.tensor([bundled_cost[s] / common.B0_BYTES for s in decision_steps],
                                 dtype=torch.float64)
     rewards_task = torch.tensor([bundled_task[s] for s in decision_steps], dtype=torch.float64)
@@ -107,6 +121,8 @@ def recompute_episode_math(row: dict[str, Any], tapes: list[dict[str, Any]],
         "decision_steps": len(decision_steps),
         "sum_rewards_task": float(rewards_task.sum()),
         "sum_rewards_cost": float(rewards_cost.sum()),
+        "unassigned_prefix_task_reward": prefix_task,
+        "unassigned_prefix_cost_bytes": prefix_cost,
         "combined_first": float(combined[0]),
         "advantages_task_first": float(advantages_task[0]),
         "advantages_cost_first": float(advantages_cost[0]),
@@ -188,8 +204,11 @@ def first4_gate(training_seed: int = 11) -> dict[str, Any]:
     recomputed = [recompute_episode_math(row, tape_list, float(row["lambda_at_rollout"]))
                   for row, tape_list in zip(episode_rows, tapes)]
     totals_close = all(
-        abs(item["sum_rewards_task"] - row["task_reward_total"]) < 1e-9
-        and abs(item["sum_rewards_cost"] + row["spent_bytes"] / common.B0_BYTES) < 1e-9
+        abs(item["sum_rewards_task"] + item["unassigned_prefix_task_reward"]
+            - row["task_reward_total"]) < 1e-9
+        and abs(item["sum_rewards_cost"]
+                + item["unassigned_prefix_cost_bytes"] / common.B0_BYTES
+                - row["spent_bytes"] / common.B0_BYTES) < 1e-9
         for item, row in zip(recomputed, episode_rows))
     pairs = batch_record["constraint"]["pairs"]
     g_recomputed = cm.constraint_statistic([pair["y_reference"] for pair in pairs],

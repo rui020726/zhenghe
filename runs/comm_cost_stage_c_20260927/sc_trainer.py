@@ -1,21 +1,21 @@
-"""Stage C 训练器：双 critic PPO + 对偶 lambda 更新（ROUND22 spec §2）。
+"""Stage C correctness-v2 trainer: dual-critic PPO + dual lambda update (ROUND23).
 
 与旧 trainer 的登记差异（spec §2 要求显式记录）：
 - **不做任何 advantage 标准化**：旧 `train_onpolicy.flatten`/`train_pilot.update` 逐 episode
   除 `std(advantages)`（数据依赖），本版禁止；task/cost 分量也不分别标准化；
-- 组合优势 `lambda*A_task - A_cost`（cost_math.actor_advantage），任务经约束进目标；
+- 正归一化成本优势，组合 `lambda*A_task - A_cost`（cost_math.actor_advantage）；
 - **两个 critic**：task 价值头（pilot 既有）+ cost 价值头（Stage B 新增），各自 MSE，
   权重 VALUE_COEFFICIENT=0.5 每头（登记选择）；
-- gamma=1（旧 0.99）、GAE lambda=0.95、末决策步 terminal=True、bootstrap=0
-  （cost_math.gae，显式区分终止与截断；spec §2：bootstrapped return 不要求等于 episode 总量，
-  账本闭合用原始 reward 和与实际计费增量）；
+- gamma=1、GAE lambda=0.95；每个非终止决策行取下一决策的 task/cost value，真实终止行取0；
+- tick 奖励归给该 tick 发生后最近的一次决策，首决策前的前缀收益单独记账；
 - 对偶 lambda 每 4 集 PPO 更新后更新一次：`lambda_next = max(0, lambda + eta*g_hat)`，
   同一批 PPO 期间 lambda 固定；g_hat 用配对 reference 缓存标量（无梯度）；
 - 熵是额外正则项（ENTROPY_BONUS=0.01，与 pilot 同值），其对纯成本目标的影响在此登记、不隐去；
 - minibatch shuffle 用每批独立的 `random.Random(shuffle_seed)`，不碰全局 RNG。
 
-复用：joint_log_prob/action_entropy/rng_state/restore_rng 取自 train_onpolicy（原样），
-PPO 超参见 sc_common（全部引用 pilot 轮 train_pilot 的既有值）。
+兼容性：trainer/loss/state schema 均为 v2；v1 checkpoint 不允许恢复进修复版。
+复用：joint_log_prob/action_entropy/rng_state/restore_rng 取自 train_onpolicy，PPO 超参见
+sc_common（全部引用 pilot 轮 train_pilot 的既有值）。
 """
 
 from __future__ import annotations
@@ -23,6 +23,7 @@ from __future__ import annotations
 import hashlib
 import json
 import random
+from bisect import bisect_right
 from pathlib import Path
 from typing import Any
 
@@ -36,19 +37,22 @@ from onpolicy import action_entropy, joint_log_prob, restore_rng, rng_state
 TRAINER_TAG = "constrained-cost-v2"
 LOSS_VERSION = "constrained-lagrangian/2"
 STATE_SCHEMA = "constrained-cost-state/2"
+GAE_SCHEMA = "per-decision-next-value/1"
+OPTIMIZER_SCHEMA = "stage-c-four-module-parameter-set/1"
+REWARD_TIMING_SCHEMA = "post-action-most-recent-decision/1"
 
 
 # ------------------------------------------------------------------ 样本 -------------
 def batch_samples(episodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """One row per decision step, with the combined advantage and both critic targets.
 
-    Rewards between decision steps are bundled into the later decision step (the Stage B
-    wiring convention, re-registered here), so the reward sums close onto the episode
-    totals; the closure itself is checked against the executor's ledger, not assumed.
+    Each post-action reward is credited to the latest action already sampled at that point.
+    Rewards before the first action are unassigned and reported separately; episode totals
+    are still reconciled against the executor's ledger.
     """
     samples: list[dict[str, Any]] = []
     for episode in episodes:
-        tapes = episode["collector"].records
+        tapes = sorted(episode["collector"].records, key=lambda tape: int(tape["step"]))
         if not tapes:
             continue
         decision_steps = sorted(int(tape["step"]) for tape in tapes)
@@ -56,8 +60,8 @@ def batch_samples(episodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
         cost_stream = {int(step): float(row["airtime_bytes"])
                        for step, row in episode["cost_stream"].items()}
         task_stream = {int(step): float(value) for step, value in episode["task_stream"].items()}
-        bundled_cost = _bundle(cost_stream, decision_steps, horizon)
-        bundled_task = _bundle(task_stream, decision_steps, horizon)
+        bundled_cost, prefix_cost = _bundle(cost_stream, decision_steps, horizon)
+        bundled_task, prefix_task = _bundle(task_stream, decision_steps, horizon)
         # Keep the cost critic's target in the positive measured-cost convention used by
         # ``lambda * A_task - A_cost``. Negating here and subtracting A_cost again makes
         # higher-cost actions look better to the actor.
@@ -99,16 +103,49 @@ def batch_samples(episodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "behaviour_value_cost": float(values_cost[index]),
                 "step": int(tape["step"]),
                 "episode_index": int(episode["episode_index"]),
+                "unassigned_prefix_task_reward": float(prefix_task if index == 0 else 0.0),
+                "unassigned_prefix_cost_bytes": float(prefix_cost if index == 0 else 0.0),
             })
     return samples
 
 
-def _bundle(stream: dict[int, float], decision_steps: list[int], horizon: int) -> dict[int, float]:
+def _bundle(stream: dict[int, float], decision_steps: list[int],
+            horizon: int) -> tuple[dict[int, float], float]:
+    """Assign each tick's post-action reward to the latest decision at or before that tick.
+
+    The relay samples a policy action before ``env.step`` advances the world on a tick. An
+    event at that tick therefore follows that action. A prefix before the first decision has
+    no causal action to credit and is returned separately.
+    """
     bundled = {step: 0.0 for step in decision_steps}
+    prefix = 0.0
     for step in range(1, horizon + 1):
-        target = next((d for d in decision_steps if d >= step), decision_steps[-1])
-        bundled[target] += float(stream.get(step, 0.0))
-    return bundled
+        value = float(stream.get(step, 0.0))
+        previous = bisect_right(decision_steps, step) - 1
+        if previous < 0:
+            prefix += value
+        else:
+            bundled[decision_steps[previous]] += value
+    return bundled, prefix
+
+
+def _unassigned_prefix_totals(episodes: list[dict[str, Any]]) -> tuple[float, float]:
+    """Return pre-first-decision task reward and raw cost bytes across a batch."""
+    task_total = 0.0
+    cost_total = 0.0
+    for episode in episodes:
+        tapes = episode["collector"].records
+        decision_steps = sorted(int(tape["step"]) for tape in tapes)
+        horizon = int(episode["steps"])
+        task_stream = {int(step): float(value)
+                       for step, value in episode["task_stream"].items()}
+        cost_stream = {int(step): float(row["airtime_bytes"])
+                       for step, row in episode["cost_stream"].items()}
+        _task, task_prefix = _bundle(task_stream, decision_steps, horizon)
+        _cost, cost_prefix = _bundle(cost_stream, decision_steps, horizon)
+        task_total += task_prefix
+        cost_total += cost_prefix
+    return task_total, cost_total
 
 
 # ------------------------------------------------------------------ PPO 更新 -------------
@@ -140,12 +177,16 @@ def ppo_update(controller: Any, optimizer: torch.optim.Optimizer,
                episodes: list[dict[str, Any]], *, update_index: int) -> dict[str, Any]:
     """One PPO update over a 4-episode batch: combined advantage, two critics, no scaling."""
     samples = batch_samples(episodes)
+    prefix_task, prefix_cost_bytes = _unassigned_prefix_totals(episodes)
     alignment = likelihood_alignment(controller, samples)
     if not alignment["passed"]:
         raise RuntimeError(f"update {update_index}: the rollout's logged probability does not "
                            f"describe the action that was drawn: {alignment}")
     if not samples:
         return {"samples": 0, "minibatches": 0, "optimizer_steps": 0,
+                "unassigned_prefix_task_reward": prefix_task,
+                "unassigned_prefix_cost_bytes": prefix_cost_bytes,
+                "unassigned_prefix_cost_normalized": prefix_cost_bytes / common.B0_BYTES,
                 "likelihood_alignment": alignment,
                 "note": "no decision step in the batch: nothing to update"}
     shuffle = random.Random(int(hashlib.sha256(
@@ -217,6 +258,9 @@ def ppo_update(controller: Any, optimizer: torch.optim.Optimizer,
         "minibatches": minibatches,
         "optimizer_steps": minibatches,
         "epochs": common.EPOCHS_PER_BATCH,
+        "unassigned_prefix_task_reward": prefix_task,
+        "unassigned_prefix_cost_bytes": prefix_cost_bytes,
+        "unassigned_prefix_cost_normalized": prefix_cost_bytes / common.B0_BYTES,
         "policy_surrogate": round(totals["surrogate"] / minibatches, 6),
         "value_loss_task": round(totals["value_task"] / minibatches, 6),
         "value_loss_cost": round(totals["value_cost"] / minibatches, 6),
@@ -263,6 +307,8 @@ def save_checkpoint(controller: Any, optimizer: torch.optim.Optimizer, state: di
                     path: Path, *, freeze: dict[str, Any]) -> Path:
     payload = {
         "schema": STATE_SCHEMA, "trainer_tag": TRAINER_TAG, "loss_version": LOSS_VERSION,
+        "gae_schema": GAE_SCHEMA, "optimizer_schema": OPTIMIZER_SCHEMA,
+        "reward_timing_schema": REWARD_TIMING_SCHEMA,
         "freeze": freeze,
         "controller": {key: value for key, value in controller.state_dict().items()},
         "optimizer": optimizer.state_dict(),
@@ -284,11 +330,18 @@ def load_checkpoint(path: Path, *, freeze: dict[str, Any]) -> tuple[Any, torch.o
         raise RuntimeError(f"{path.name}: not this trainer's checkpoint")
     if payload.get("loss_version") != LOSS_VERSION:
         raise RuntimeError(f"{path.name}: loss version mismatch")
+    if (payload.get("gae_schema") != GAE_SCHEMA
+            or payload.get("optimizer_schema") != OPTIMIZER_SCHEMA
+            or payload.get("reward_timing_schema") != REWARD_TIMING_SCHEMA):
+        raise RuntimeError(f"{path.name}: trainer contract schema mismatch")
     training_state = payload.get("training_state")
     if not isinstance(training_state, dict) or (
             training_state.get("training_version") != TRAINER_TAG
             or training_state.get("loss_version") != LOSS_VERSION
-            or training_state.get("state_schema") != STATE_SCHEMA):
+            or training_state.get("state_schema") != STATE_SCHEMA
+            or training_state.get("gae_schema") != GAE_SCHEMA
+            or training_state.get("optimizer_schema") != OPTIMIZER_SCHEMA
+            or training_state.get("reward_timing_schema") != REWARD_TIMING_SCHEMA):
         raise RuntimeError(f"{path.name}: training state version mismatch")
     if payload.get("freeze") != freeze:
         raise RuntimeError(f"{path.name}: freeze identity mismatch; refusing to resume")
@@ -308,7 +361,9 @@ def load_checkpoint(path: Path, *, freeze: dict[str, Any]) -> tuple[Any, torch.o
 
 def fresh_training_state(training_seed: int) -> dict[str, Any]:
     return {"training_version": TRAINER_TAG, "loss_version": LOSS_VERSION,
-            "state_schema": STATE_SCHEMA,
+            "state_schema": STATE_SCHEMA, "gae_schema": GAE_SCHEMA,
+            "optimizer_schema": OPTIMIZER_SCHEMA,
+            "reward_timing_schema": REWARD_TIMING_SCHEMA,
             "training_seed": int(training_seed), "lambda": common.LAMBDA_INIT,
             "lambda_history": [], "updates": 0, "episodes_done": 0,
             "optimizer_steps": 0, "b0_bytes": common.B0_BYTES, "delta": common.DELTA,
