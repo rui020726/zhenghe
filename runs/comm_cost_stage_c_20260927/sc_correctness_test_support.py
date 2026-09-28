@@ -14,8 +14,10 @@ class Collector:
 
 
 def record(controller, step: int, *, value: float | None = None,
-           cost_value: float | None = None, action: int = 1) -> dict:
-    features = np.zeros((1, 19), dtype=np.float32)
+           cost_value: float | None = None, action: int = 1,
+           features: np.ndarray | None = None) -> dict:
+    features = (np.zeros((1, 19), dtype=np.float32) if features is None
+                else np.asarray(features, dtype=np.float32).reshape(1, 19))
     matrix = torch.as_tensor(features)
     with torch.no_grad():
         logits, values = controller.forward(matrix)

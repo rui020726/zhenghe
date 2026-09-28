@@ -30,7 +30,7 @@ TOL = common.LOG_PROB_TOLERANCE
 
 # ------------------------------------------------------------------ 冻结记录 -------------
 def freeze_record() -> dict[str, Any]:
-    manifest_path = common.HERE / "CONFIG_AND_MODEL_MANIFEST.json"
+    manifest_path = common.OUTPUT_DIR / "CONFIG_AND_MODEL_MANIFEST.json"
     if not manifest_path.exists():
         raise RuntimeError("CONFIG_AND_MODEL_MANIFEST.json is missing; freeze before starting")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))

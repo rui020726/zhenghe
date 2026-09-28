@@ -23,12 +23,15 @@ class StageCController(StageBController):
 
     @property
     def parameters(self) -> list:
-        return list(self.inner.parameters)
+        # Stage B's ``inner.parameters`` contains the actor trunk, action head and task
+        # critic. Stage C adds ``cost_head`` beside that frozen object, so every Stage C
+        # optimizer operation must include both lists.
+        return [*self.inner.parameters, *self.cost_head.parameters()]
 
 
-TRAINER_TAG = "constrained-cost-v1"
-LOSS_VERSION = "constrained-lagrangian/1"
-STATE_SCHEMA = "constrained-cost-state/1"
+TRAINER_TAG = "constrained-cost-v2"
+LOSS_VERSION = "constrained-lagrangian/2"
+STATE_SCHEMA = "constrained-cost-state/2"
 
 
 def fresh_controller(training_seed: int) -> StageCController:

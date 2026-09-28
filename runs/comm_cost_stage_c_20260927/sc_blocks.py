@@ -50,7 +50,7 @@ def run_evals(timepoints: list[str]) -> dict[str, Any]:
             else:
                 checkpoint = common.CHECKPOINTS / f"sc_train_s{training_seed}.pt"
                 manifest = json.loads(
-                    (common.HERE / "CONFIG_AND_MODEL_MANIFEST.json").read_text(encoding="utf-8"))
+                    (common.OUTPUT_DIR / "CONFIG_AND_MODEL_MANIFEST.json").read_text(encoding="utf-8"))
                 freeze = {"freeze_sha256": manifest["code_identity"]["freeze_sha256"],
                           "config_hash": manifest["configuration_hash"],
                           "branch_start": manifest["branch_start"],

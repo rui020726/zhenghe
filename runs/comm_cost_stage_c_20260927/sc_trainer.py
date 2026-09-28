@@ -33,9 +33,9 @@ import sc_common as common
 import cost_math as cm
 from onpolicy import action_entropy, joint_log_prob, restore_rng, rng_state
 
-TRAINER_TAG = "constrained-cost-v1"
-LOSS_VERSION = "constrained-lagrangian/1"
-STATE_SCHEMA = "constrained-cost-state/1"
+TRAINER_TAG = "constrained-cost-v2"
+LOSS_VERSION = "constrained-lagrangian/2"
+STATE_SCHEMA = "constrained-cost-state/2"
 
 
 # ------------------------------------------------------------------ 样本 -------------
@@ -277,9 +277,15 @@ def load_checkpoint(path: Path, *, freeze: dict[str, Any]) -> tuple[Any, torch.o
         raise RuntimeError(f"{path.name}: not this trainer's checkpoint")
     if payload.get("loss_version") != LOSS_VERSION:
         raise RuntimeError(f"{path.name}: loss version mismatch")
+    training_state = payload.get("training_state")
+    if not isinstance(training_state, dict) or (
+            training_state.get("training_version") != TRAINER_TAG
+            or training_state.get("loss_version") != LOSS_VERSION
+            or training_state.get("state_schema") != STATE_SCHEMA):
+        raise RuntimeError(f"{path.name}: training state version mismatch")
     if payload.get("freeze") != freeze:
         raise RuntimeError(f"{path.name}: freeze identity mismatch; refusing to resume")
-    controller = sc_controller.fresh_controller(int(payload["training_state"]["training_seed"]))
+    controller = sc_controller.fresh_controller(int(training_state["training_seed"]))
     # Loaded sub-module by sub-module: Stage B's controller exposes state_dict(), and touching
     # that frozen file is not necessary to restore it.
     saved = payload["controller"]
@@ -290,11 +296,13 @@ def load_checkpoint(path: Path, *, freeze: dict[str, Any]) -> tuple[Any, torch.o
     optimizer = torch.optim.Adam(controller.parameters, lr=common.LEARNING_RATE)
     optimizer.load_state_dict(payload["optimizer"])
     restore_rng(payload.get("rng"))
-    return controller, optimizer, payload["training_state"]
+    return controller, optimizer, training_state
 
 
 def fresh_training_state(training_seed: int) -> dict[str, Any]:
-    return {"training_seed": int(training_seed), "lambda": common.LAMBDA_INIT,
+    return {"training_version": TRAINER_TAG, "loss_version": LOSS_VERSION,
+            "state_schema": STATE_SCHEMA,
+            "training_seed": int(training_seed), "lambda": common.LAMBDA_INIT,
             "lambda_history": [], "updates": 0, "episodes_done": 0,
             "optimizer_steps": 0, "b0_bytes": common.B0_BYTES, "delta": common.DELTA,
             "eta_lambda": common.ETA_LAMBDA, "gamma": common.GAMMA,

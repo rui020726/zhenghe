@@ -60,14 +60,16 @@ def audit_collisions() -> dict[str, Any]:
     pattern = re.compile(r"13(?:00(?:0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-7])|10(?:0[0-9]|1[0-5]))")
     embedded = []
     for root, _dirs, files in __import__("os").walk(common.ROOT / "runs"):
-        if Path(root) == common.HERE or common.HERE in Path(root).parents:
+        if (Path(root) == common.HERE or common.HERE in Path(root).parents
+                or Path(root) == common.OUTPUT_DIR or common.OUTPUT_DIR in Path(root).parents):
             continue
         for name in files:
             if pattern.search(name):
                 embedded.append(str(Path(root, name).relative_to(common.ROOT)))
     seeded = []
     for path in sorted((common.ROOT / "runs").glob("**/*.json")):
-        if common.HERE in path.parents or path.parent == common.HERE:
+        if (common.HERE in path.parents or path.parent == common.HERE
+                or common.OUTPUT_DIR in path.parents or path.parent == common.OUTPUT_DIR):
             continue
         try:
             text = path.read_text(encoding="utf-8")
@@ -140,7 +142,7 @@ def main() -> int:
     identity = common.code_identity()
     fields = behaviour_fields()
     manifest = {
-        "round": "22", "phase": "Stage C learning pilot freeze",
+        "round": "23", "phase": "Stage C correctness repair freeze",
         "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
         "head_at_freeze": git("rev-parse", "HEAD"),
         "branch_start": BRANCH_START,
