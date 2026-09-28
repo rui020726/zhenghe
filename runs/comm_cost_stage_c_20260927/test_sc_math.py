@@ -136,7 +136,7 @@ class TrainerMath(unittest.TestCase):
 
         # decision steps 2 and 5: cost 1000 lands on step 2; 2000+500 on step 5;
         # task reward 1+2 lands on step 5 (the last decision step catches the tail).
-        rewards_cost = torch.tensor([-1000.0 / common.B0_BYTES, -2500.0 / common.B0_BYTES],
+        rewards_cost = torch.tensor([1000.0 / common.B0_BYTES, 2500.0 / common.B0_BYTES],
                                     dtype=torch.float64)
         rewards_task = torch.tensor([0.0, 3.0], dtype=torch.float64)
         terminal = torch.tensor([False, True])

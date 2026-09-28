@@ -83,7 +83,7 @@ def recompute_episode_math(row: dict[str, Any], tapes: list[dict[str, Any]],
 
     bundled_cost = bundle(cost_stream)
     bundled_task = bundle(task_stream)
-    rewards_cost = torch.tensor([-bundled_cost[s] / common.B0_BYTES for s in decision_steps],
+    rewards_cost = torch.tensor([bundled_cost[s] / common.B0_BYTES for s in decision_steps],
                                 dtype=torch.float64)
     rewards_task = torch.tensor([bundled_task[s] for s in decision_steps], dtype=torch.float64)
     values_task = torch.tensor([float(tape["value"]) for tape in tapes], dtype=torch.float64)
