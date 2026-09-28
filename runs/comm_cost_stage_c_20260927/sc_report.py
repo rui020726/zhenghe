@@ -94,13 +94,13 @@ def checkpoint_index() -> dict[str, Any]:
 def main() -> int:
     curves = training_curves()
     index = checkpoint_index()
-    common.write_json("TRAINING_CURVES.json", {"round": "22", "curves": curves,
+    common.write_json("TRAINING_CURVES.json", {"round": "23", "curves": curves,
                                                "note": "dev-scene means are greedy rollouts of "
                                                        "the frozen checkpoints; training-time "
                                                        "rows are sampled rollouts"})
     common.write_json("CHECKPOINT_INDEX.json", index)
     report = common.ledger_report()
-    plan = common.read_json(common.HERE / "START_LEDGER.json")["plan"]
+    plan = common.read_json(common.OUTPUT_DIR / "START_LEDGER.json")["plan"]
     common.write_json("START_LEDGER.json",
                       {"plan": plan, "live": {"used": report["used"],
                                               "by_kind": report["by_kind"],

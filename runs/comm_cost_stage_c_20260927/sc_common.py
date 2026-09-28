@@ -19,6 +19,7 @@ from typing import Any
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
+OUTPUT_DIR = ROOT / "runs" / "comm_cost_stage_c_correctness_20260928"
 STAGE_B_DIR = ROOT / "runs" / "comm_cost_stage_b_20260927"
 STAGE_A_DIR = ROOT / "runs" / "comm_cost_controller_stage_a_20260927"
 PILOT_ROUND = ROOT / "runs" / "comm_budget_pilot_20260919"
@@ -26,10 +27,10 @@ MASK_FIX_ROUND = ROOT / "runs" / "comm_budget_action_mask_fix_20260922"
 TIGHT_ROUND = ROOT / "runs" / "comm_tight_budget_20260919"
 ROUND18_DIR = ROOT / "runs" / "search_trace_and_policy_20260925"
 
-LOGS = HERE / "logs"
-ROWS = HERE / "rows"
-REJECTED = HERE / "rejected"
-CHECKPOINTS = HERE / "checkpoints"
+LOGS = OUTPUT_DIR / "logs"
+ROWS = OUTPUT_DIR / "rows"
+REJECTED = OUTPUT_DIR / "rejected"
+CHECKPOINTS = OUTPUT_DIR / "checkpoints"
 
 # ------------------------------------------------------------------ 冻结的运行常数 -------------
 #: 场景块（ROUND22 spec §4）：training 48 个 + development 16 个，均为新注册开发用途块。
@@ -152,6 +153,7 @@ HARNESS_MODULES = (
     "test_sc_math.py",
     "sc_correctness_test_support.py",
     "test_sc_cost_objective.py",
+    "test_sc_cost_head_lifecycle.py",
 )
 CHECKPOINT_FILES = (
     ROOT / "runs" / "cur_v2rep05_s2" / "best" / "shared_mappo_model_21_3100.pth",
@@ -189,7 +191,7 @@ def write_json(name: str, payload: Any, *, refresh: bool = False) -> Path:
     """Write one artefact of this round; only START_LEDGER.json may be refreshed (plan frozen)."""
     if os.sep in name or "/" in name or ".." in name:
         raise ValueError(f"refusing to write outside the round directory: {name!r}")
-    target = HERE / name
+    target = OUTPUT_DIR / name
     if refresh and name != "START_LEDGER.json":
         raise RuntimeError("only START_LEDGER.json may be refreshed")
     if target.exists() and refresh:
@@ -206,6 +208,7 @@ def write_json(name: str, payload: Any, *, refresh: bool = False) -> Path:
         return target
     if target.exists():
         raise RuntimeError(f"refusing to rewrite a delivered artefact: {name}")
+    target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(payload, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
                       encoding="utf-8")
     return target

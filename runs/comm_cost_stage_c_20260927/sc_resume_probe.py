@@ -25,7 +25,7 @@ def main(argv: list[str]) -> int:
     parser.add_argument("--seed", type=int, required=True)
     args = parser.parse_args(argv)
 
-    manifest = json.loads((common.HERE / "CONFIG_AND_MODEL_MANIFEST.json").read_text(
+    manifest = json.loads((common.OUTPUT_DIR / "CONFIG_AND_MODEL_MANIFEST.json").read_text(
         encoding="utf-8"))
     freeze = {"freeze_sha256": manifest["code_identity"]["freeze_sha256"],
               "config_hash": manifest["configuration_hash"],
