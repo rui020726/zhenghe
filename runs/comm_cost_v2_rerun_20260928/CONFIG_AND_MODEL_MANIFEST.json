@@ -1,0 +1,506 @@
+{
+ "branch": "exp/comm-cost-v2-rerun",
+ "branch_start": "b7217d18b4e7f4e301d0b62a810892967adc6566",
+ "code_identity": {
+  "checkpoints": {
+   "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "runs/joint_eval_20260916/ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  },
+  "freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc",
+  "harness": {
+   "AUDIT_MARKERS.json": "8b8d540536c1ec32a3596372413181aced7218101e265b1df46407ee0a9f8c21",
+   "v2_blocks.py": "607065f008a9b2177e86feb1c4b915d7e75ad3749fc42c2dfb44d983775052d9",
+   "v2_check.py": "60db0c52dd87db5bc395533f640075858ef1d2a0a8f0519305ccd3b1955b9468",
+   "v2_common.py": "049722480ceaf787a6467399cb7745f40352e048f42e2516b0a5eca7aea15efe",
+   "v2_controller.py": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+   "v2_correctness_test_support.py": "ba4ec445c96a409de613e73f7bb11f0e353bbdeeb681b2947867e5644e9805e2",
+   "v2_freeze.py": "53e5027c1fca249abf1c9f955a8fafb9de137b084c63b81365c1e7b584a00383",
+   "v2_recover.py": "b1abedd5033fde7e6ff10d42ac8a5935fef977f7569a81efa522bbccc56bc6bb",
+   "v2_resume_probe.py": "4a44f7fbef9aeec8e26b8be642d99115db9d6c3e987ec1ee8bdacd548c66609c",
+   "v2_rules.py": "a7ce36de2d465cadaba90bd70b36539b5e865a73be8c4e075b9faf5a86c53a57",
+   "v2_run.py": "83fc6ea60cf8a5ffd420763641212f1bda4c2bee8e08d87e70706f99f3b6a7c1",
+   "v2_start_equivalence.py": "f0ce61cc5b33db4f4d17b9efd637fb0a345dd45018bf631bd5fa8fea286af2ad",
+   "v2_synthetic_gate.py": "8d65982aed6fb9f68e4b705baf78d2d671b0c8a4cfdb115e43e265402d8ffc0b",
+   "v2_test_cost_head_lifecycle.py": "00312a95b7f1324201100af59eebfbbfea22adb6f4c77a6cf963e18e6b976852",
+   "v2_test_cost_objective.py": "5c9c156c9750aafdd2dd999a1121b678f6fb5e518f6c1e4e1eb264ba9128cfc1",
+   "v2_test_gae_next_value.py": "801c320479545c96f753cb9b8389185e88567e6e542883a54e16371d09cb1c34",
+   "v2_test_math.py": "296af05c79e7afdd25fbfa6b7ebb7dd53a1016ebe4d27c0cc5d8af06f04ba3ef",
+   "v2_test_reward_timing.py": "8b69f1b3238b5f9293bc5473226a029aad06cd54263c1da4d985e6f44a844172",
+   "v2_train.py": "8437aee920e6d9192c0298c2e4ffe01c2daea641d67336216cfeb7dcf0e56883",
+   "v2_trainer.py": "64452036ad2470596f0260b28f02a8358d1bca1b4c16c2320f6cc58f1ee7df51"
+  },
+  "imported_round_modules": {
+   "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": "e64e0be4911ca3b3129247b3a443d045ad022f3bd9e6a1a22c4ebd1b3a4aff9b",
+   "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": "bab0a65fb3ffda6dc9673eaa4e836e20f184b4cc16836b5d5cf169bd2d326e91",
+   "runs/comm_budget_pilot_20260919/pilot_common.py": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8",
+   "runs/comm_budget_pilot_20260919/pilot_env.py": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b",
+   "runs/comm_budget_pilot_20260919/train_pilot.py": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81",
+   "runs/comm_cost_stage_b_20260927/sb_check.py": "fa5e6b39bad2643e21347483d66265d02af7114333430c251a484909882bdb5a",
+   "runs/comm_cost_stage_b_20260927/sb_collector.py": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+   "runs/comm_cost_stage_b_20260927/sb_common.py": "66e674a03e0406299c8f9172d2865c5f83c3de58893bce7f87b71741ba3cf28f",
+   "runs/comm_cost_stage_b_20260927/sb_controller.py": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+   "runs/comm_cost_stage_b_20260927/sb_run.py": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+   "runs/comm_tight_budget_20260919/onpolicy.py": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+   "runs/comm_tight_budget_20260919/train_onpolicy.py": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f",
+   "runs/search_trace_and_policy_20260925/sp_common.py": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc"
+  },
+  "production": {
+   "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+   "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+   "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+   "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+   "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+   "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+   "integrated_sar/lifecycle_metrics.py": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+   "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+  }
+ },
+ "configuration_hash": "e9b2c067db5951f2",
+ "head_at_freeze": "5be3f1e6437309f4e92cf49807f2e0cbbf7f057f",
+ "inherited_behaviour_fields": {
+  "actor_kv_mode": "tokens",
+  "allocation_interval": 5,
+  "allow_release_without_suppression": false,
+  "check_release_source_stage": false,
+  "comm_ack": false,
+  "comm_budget_bytes": 29300,
+  "comm_delay_ticks": 0,
+  "comm_delivery_probability": 0.7,
+  "comm_max_wait_steps": null,
+  "comm_range": 0.3,
+  "comm_sends_per_tick": null,
+  "comm_subscribers": "all",
+  "comm_timing_mode": "policy_owned_timing",
+  "comm_urgent_wait_steps": null,
+  "command_ttl": 10.0,
+  "coordination_interval": 5,
+  "coordinator_policy": "coalition_planner",
+  "ctde_task_logit_offset": 0.0,
+  "deadline_tightness": [
+   0.5,
+   2.0
+  ],
+  "detection_radius": 5,
+  "device": "cpu",
+  "dt": 1.0,
+  "gossip_interval": 2,
+  "grid_size": 60,
+  "mock": false,
+  "num_goals": 6,
+  "obstacle_density": 0.15,
+  "piloc_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+  "quiet": true,
+  "release_redundant_members": true,
+  "rescue_per_species": 2,
+  "rescue_species": 3,
+  "residual_scale": 0.25,
+  "search_agents": 2,
+  "steps": 1000,
+  "sticky_commitments": true,
+  "suppress_recommand_own_task": true,
+  "task_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+  "task_membership_consistency": false,
+  "use_coordinator": true
+ },
+ "launch_plan": {
+  "breakdown": {
+   "immediate_reference": 64,
+   "learning_dev_eval": 144,
+   "rule_dev_eval": 80,
+   "training": 384
+  },
+  "eval_blocks": {
+   "final_greedy": {
+    "checkpoint": "milestone_128",
+    "mode": "greedy",
+    "timepoint": "final"
+   },
+   "final_sampled": {
+    "checkpoint": "milestone_128",
+    "mode": "sampled",
+    "timepoint": "final"
+   },
+   "init_greedy": {
+    "checkpoint": "initialisation",
+    "mode": "greedy",
+    "timepoint": "init"
+   }
+  },
+  "execution_order": [
+   "64 immediate references (48 training + 16 development scenarios)",
+   "seed 11 first 4 training episodes + correctness gate (counted)",
+   "seed 11 remaining 124 episodes",
+   "seed 22 128 episodes",
+   "seed 33 128 episodes",
+   "init_greedy / final_greedy / final_sampled development evaluation, 16 scenes each, per seed",
+   "five rule arms x 16 dev scenes"
+  ],
+  "hard_cap": 700,
+  "milestones": [
+   0,
+   64,
+   128
+  ],
+  "normal_launches": 672,
+  "note": "the old 677 launches and all old artefacts stay untouched; this ledger is an independent new budget (spec §4)",
+  "reserve_launches": 28
+ },
+ "phase": "ROUND24 correctness-v2 rerun freeze (start from initialisation)",
+ "ppo_hyperparameters": {
+  "clip": 0.2,
+  "entropy_bonus": 0.01,
+  "episodes_per_update": 4,
+  "epochs_per_batch": 4,
+  "learning_rate": 0.0003,
+  "max_grad_norm": 0.5,
+  "minibatch_steps": 256,
+  "provenance": "reused from the pilot round (runs/comm_budget_pilot_20260919/train_pilot.py); every value is stated rather than inherited by silence (spec §3)",
+  "registered_differences_from_old_trainer": [
+   "no advantage standardisation (old flatten divided by std per episode)",
+   "two critics (task + cost) with VALUE_COEFFICIENT each",
+   "gamma=1 (old 0.99), gae_lambda=0.95",
+   "entropy remains an extra regulariser at the pilot's coefficient; its effect on the pure cost objective is registered, not hidden"
+  ],
+  "value_coefficient_per_head": 0.5
+ },
+ "pre_launch_history": {
+  "count": 0,
+  "entries": [],
+  "note": "launches spent before this freeze in this round's ledger"
+ },
+ "production_diff": {
+  "branch_start": "b7217d18b4e7f4e301d0b62a810892967adc6566",
+  "changed_files": [],
+  "clean": true,
+  "trees": [
+   "integrated_sar",
+   "task_allocation",
+   "piloc"
+  ]
+ },
+ "remote_start_head": "64cddcffc6f8796f132df8b8e003f005d0bdd749",
+ "round": "24",
+ "rule_arms": {
+  "reference": "immediate",
+  "rules": {
+   "always_hold": {
+    "params": {},
+    "policy": "always_hold"
+   },
+   "event": {
+    "params": {
+     "progress_threshold": 0.2,
+     "urgency_time": 25.0
+    },
+    "policy": "event"
+   },
+   "late_discovery_gate": {
+    "params": {
+     "cut_steps": 147.0
+    },
+    "policy": "late_discovery_gate"
+   },
+   "periodic_20": {
+    "params": {
+     "interval": 20
+    },
+    "policy": "periodic"
+   },
+   "random_send": {
+    "params": {
+     "seed_from_scenario": true,
+     "send_probability": 0.5
+    },
+    "policy": "random_send"
+   }
+  },
+  "send_once_alias": "send_once 与 immediate 的 decide 函数体逐字相同（comm_policy.py: ImmediatePolicy 与 SendOncePolicy 均为 pending_event 谓词、orders_selection 均 False）⇒ 源码核验语义一致，按别名登记，不另耗运行（spec §6）"
+ },
+ "scene_registry": {
+  "collision_audit": {
+   "artefacts_embedding_block_seeds_outside_registered_use": [],
+   "artefacts_with_block_seeds_outside_registered_use": [],
+   "claimed_ranges": [
+    {
+     "high": 800399,
+     "low": 800000,
+     "name": "sealed_test_set"
+    },
+    {
+     "high": 900199,
+     "low": 900000,
+     "name": "learned_model_reported_stream"
+    },
+    {
+     "high": 31059,
+     "low": 31000,
+     "name": "systemloop_20260918"
+    },
+    {
+     "high": 1000015,
+     "low": 1000000,
+     "name": "task_pressure_g6"
+    },
+    {
+     "high": 1000115,
+     "low": 1000100,
+     "name": "task_pressure_g8"
+    },
+    {
+     "high": 1000215,
+     "low": 1000200,
+     "name": "task_pressure_g10"
+    },
+    {
+     "high": 1000315,
+     "low": 1000300,
+     "name": "task_pressure_g12"
+    },
+    {
+     "high": 1100059,
+     "low": 1100000,
+     "name": "D1_20260923"
+    },
+    {
+     "high": 1200059,
+     "low": 1200000,
+     "name": "search_trace_and_policy_20260925"
+    }
+   ],
+   "clean": true,
+   "new_blocks": {
+    "development": [
+     1301000,
+     1301015
+    ],
+    "training": [
+     1300000,
+     1300047
+    ]
+   },
+   "range_overlaps": [],
+   "reuse_registration": {
+    "note": "the same development blocks are reused deliberately; they are not claimed as new or unseen, and the sealed block stays sealed",
+    "prior_round_artefacts_embedding_block_seeds": 1682,
+    "prior_user": "runs/comm_cost_stage_c_20260927 (ROUND22 execution, 677 launches)",
+    "registered_by": "ROUND22_COMM_COST_LEARNING_PILOT.md §4",
+    "status": "intentional_development_reuse"
+   }
+  },
+  "development_block": [
+   1301000,
+   1301015
+  ],
+  "development_scenarios": [
+   1301000,
+   1301001,
+   1301002,
+   1301003,
+   1301004,
+   1301005,
+   1301006,
+   1301007,
+   1301008,
+   1301009,
+   1301010,
+   1301011,
+   1301012,
+   1301013,
+   1301014,
+   1301015
+  ],
+  "reuse_registration": {
+   "note": "the same development blocks are reused deliberately; they are not claimed as new or unseen, and the sealed block stays sealed",
+   "prior_round_artefacts_embedding_block_seeds": 1682,
+   "prior_user": "runs/comm_cost_stage_c_20260927 (ROUND22 execution, 677 launches)",
+   "registered_by": "ROUND22_COMM_COST_LEARNING_PILOT.md §4",
+   "status": "intentional_development_reuse"
+  },
+  "training_block": [
+   1300000,
+   1300047
+  ],
+  "training_scenarios": [
+   1300000,
+   1300001,
+   1300002,
+   1300003,
+   1300004,
+   1300005,
+   1300006,
+   1300007,
+   1300008,
+   1300009,
+   1300010,
+   1300011,
+   1300012,
+   1300013,
+   1300014,
+   1300015,
+   1300016,
+   1300017,
+   1300018,
+   1300019,
+   1300020,
+   1300021,
+   1300022,
+   1300023,
+   1300024,
+   1300025,
+   1300026,
+   1300027,
+   1300028,
+   1300029,
+   1300030,
+   1300031,
+   1300032,
+   1300033,
+   1300034,
+   1300035,
+   1300036,
+   1300037,
+   1300038,
+   1300039,
+   1300040,
+   1300041,
+   1300042,
+   1300043,
+   1300044,
+   1300045,
+   1300046,
+   1300047
+  ]
+ },
+ "spec": {
+  "blob_sha1": "5d8ae2a556636c747043dca648a19d2efe3c82bc",
+  "file": "ROUND24_COMM_COST_V2_RERUN.md",
+  "note": "git port unreachable this session; the document was fetched by the authorised GitHub channel at the fixed commit and saved byte-for-byte",
+  "sha256": "112b04c7af333ea871256145bae05b3ce8dddfc9a19eea5dc18a412abd66f0ad",
+  "source_branch": "docs/comm-cost-v2-rerun-plan",
+  "source_commit": "86cff0226e5552c66c799cc7d210fa6006d058e0"
+ },
+ "stage_c_difference_audit": {
+  "clean": true,
+  "diffs": [],
+  "note": "the four repairs are already inside the verified fix-chain code; this diff is against the old round-22 freeze to show no NEW parameter moved",
+  "old_manifest": "runs\\comm_cost_stage_c_20260927\\CONFIG_AND_MODEL_MANIFEST.json",
+  "registered_differences": [
+   {
+    "difference": "four trainer correctness repairs (cost sign, cost-head optimizer lifecycle, GAE next-value, reward attribution)",
+    "where": "inherited from the verified fix chain 8970ce9..b7217d1 (= remote 64cddcf tree); evidence: TRAINER_CORRECTNESS_FINDINGS.md, CORRECTNESS_REGRESSION_EVIDENCE.json"
+   },
+   {
+    "difference": "output isolation",
+    "where": "runs/comm_cost_v2_rerun_20260928 instead of any earlier directory; artefact stems v2_ instead of sc_; old round directory read-only"
+   },
+   {
+    "difference": "evaluation arrangement (ROUND24 §5)",
+    "where": "init_greedy / final_greedy / final_sampled replace the old 0/64/128 greedy blocks; no 64-episode development evaluation; milestones ep0/64/128 saved and only ep128 evaluated; eval action RNG registered per (seed, scene, mode)"
+   }
+  ]
+ },
+ "start_equivalence": {
+  "entries_compared": 31,
+  "head_at_freeze": "5be3f1e6437309f4e92cf49807f2e0cbbf7f057f",
+  "local_head": "b7217d18b4e7f4e301d0b62a810892967adc6566",
+  "local_tree": "2499fd957b3ee445b50fae66be0504777dee3f27",
+  "note": "tree/blob SHAs are content-addressed: identical entry SHAs at every top-level path (including the four subtree roots) prove the full recursive trees are identical; only commit metadata differs (ROUND24 §0 anticipated this)",
+  "remote_head": "64cddcffc6f8796f132df8b8e003f005d0bdd749"
+ },
+ "synthetic_gate": {
+  "note": "actual counts from the re-run ROUND23 counterexample suite under the frozen code identity; the historical 20/20 string is not reused",
+  "path": "runs/comm_cost_v2_rerun_20260928/SYNTHETIC_GATE.json",
+  "recorded": {
+   "counting_note": "one combined pass over the five modules with an in-process Adam/SGD step wrapper; iterative focused reruns during development are not included; no count here represents environment training",
+   "environment_starts": 0,
+   "errors": 0,
+   "failures": 0,
+   "freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc",
+   "gate": "ROUND24 §2 zero-environment synthetic gate",
+   "passed": true,
+   "per_module": {
+    "v2_test_cost_head_lifecycle": {
+     "errors": 0,
+     "failures": 0,
+     "synthetic_optimizer_steps": {
+      "Adam": 8,
+      "SGD": 0
+     },
+     "synthetic_optimizer_steps_total": 8,
+     "tests_run": 3
+    },
+    "v2_test_cost_objective": {
+     "errors": 0,
+     "failures": 0,
+     "synthetic_optimizer_steps": {
+      "Adam": 0,
+      "SGD": 16
+     },
+     "synthetic_optimizer_steps_total": 16,
+     "tests_run": 1
+    },
+    "v2_test_gae_next_value": {
+     "errors": 0,
+     "failures": 0,
+     "synthetic_optimizer_steps": {
+      "Adam": 0,
+      "SGD": 0
+     },
+     "synthetic_optimizer_steps_total": 0,
+     "tests_run": 3
+    },
+    "v2_test_math": {
+     "errors": 0,
+     "failures": 0,
+     "synthetic_optimizer_steps": {
+      "Adam": 4,
+      "SGD": 0
+     },
+     "synthetic_optimizer_steps_total": 4,
+     "tests_run": 12
+    },
+    "v2_test_reward_timing": {
+     "errors": 0,
+     "failures": 0,
+     "synthetic_optimizer_steps": {
+      "Adam": 0,
+      "SGD": 0
+     },
+     "synthetic_optimizer_steps_total": 0,
+     "tests_run": 1
+    }
+   },
+   "real_training_steps": 0,
+   "static_path_audit": {
+    "passed": true,
+    "problems": [],
+    "registered_old_round_reads": [
+     "v2_common.py -> runs/comm_cost_stage_c_20260927 (declares the read-only STAGE_C_DIR path constant; nothing in the harness writes there)",
+     "v2_freeze.py -> runs/comm_cost_stage_c_20260927 (reads the old Stage C machine-readable manifest as the §2.4 item-by-item diff baseline)",
+     "v2_test_cost_head_lifecycle.py -> runs/comm_cost_stage_c_correctness_20260928 (asserts output isolation against the ROUND23 hypothetical output directory; never reads or writes it)"
+    ],
+    "registered_sha_provenance": [
+     "v2_freeze.py",
+     "v2_start_equivalence.py"
+    ]
+   },
+   "synthetic_optimizer_steps": {
+    "Adam": 12,
+    "SGD": 16,
+    "total": 28
+   },
+   "tests_run": 20
+  }
+ },
+ "wiring_constants": {
+  "b0_bytes": 10000.0,
+  "data_order_seed": 20260927,
+  "delta": 0.0,
+  "eta_lambda": 0.05,
+  "gae_lambda": 0.95,
+  "gamma": 1.0,
+  "lambda_init": 1.0,
+  "log_prob_tolerance": 1e-06,
+  "note": "delta=0 is this round's experimental training target, not a deployment zero-degradation guarantee (spec §3)"
+ }
+}

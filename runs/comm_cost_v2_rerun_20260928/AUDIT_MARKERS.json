@@ -1,0 +1,14 @@
+{
+  "note": "data for v2_synthetic_gate.static_path_audit (ROUND24 §2.5); kept as data so the auditing code itself carries none of the forbidden literals",
+  "registered_old_round_reads": {
+    "v2_common.py": "declares the read-only STAGE_C_DIR path constant; nothing in the harness writes there",
+    "v2_freeze.py": "reads the old Stage C machine-readable manifest as the §2.4 item-by-item diff baseline",
+    "v2_test_cost_head_lifecycle.py": "asserts output isolation against the ROUND23 hypothetical output directory; never reads or writes it"
+  },
+  "registered_sha_provenance": ["v2_freeze.py", "v2_start_equivalence.py"],
+  "old_round_directory_names": ["comm_cost_stage_c_20260927", "comm_cost_stage_c_correctness_20260928"],
+  "forbidden_recovery_markers": ["git show"],
+  "path_constant_owner": "v2_common.py",
+  "path_constant_names": ["OUTPUT_DIR", "LOGS", "ROWS", "CHECKPOINTS", "REJECTED"],
+  "marker_source": "AUDIT_MARKERS.json"
+}

@@ -1,0 +1,81 @@
+{
+ "gate": "ROUND24 §2 zero-environment synthetic gate",
+ "environment_starts": 0,
+ "real_training_steps": 0,
+ "per_module": {
+  "v2_test_math": {
+   "tests_run": 12,
+   "failures": 0,
+   "errors": 0,
+   "synthetic_optimizer_steps": {
+    "Adam": 4,
+    "SGD": 0
+   },
+   "synthetic_optimizer_steps_total": 4
+  },
+  "v2_test_cost_objective": {
+   "tests_run": 1,
+   "failures": 0,
+   "errors": 0,
+   "synthetic_optimizer_steps": {
+    "Adam": 0,
+    "SGD": 16
+   },
+   "synthetic_optimizer_steps_total": 16
+  },
+  "v2_test_cost_head_lifecycle": {
+   "tests_run": 3,
+   "failures": 0,
+   "errors": 0,
+   "synthetic_optimizer_steps": {
+    "Adam": 8,
+    "SGD": 0
+   },
+   "synthetic_optimizer_steps_total": 8
+  },
+  "v2_test_gae_next_value": {
+   "tests_run": 3,
+   "failures": 0,
+   "errors": 0,
+   "synthetic_optimizer_steps": {
+    "Adam": 0,
+    "SGD": 0
+   },
+   "synthetic_optimizer_steps_total": 0
+  },
+  "v2_test_reward_timing": {
+   "tests_run": 1,
+   "failures": 0,
+   "errors": 0,
+   "synthetic_optimizer_steps": {
+    "Adam": 0,
+    "SGD": 0
+   },
+   "synthetic_optimizer_steps_total": 0
+  }
+ },
+ "tests_run": 20,
+ "failures": 0,
+ "errors": 0,
+ "synthetic_optimizer_steps": {
+  "Adam": 12,
+  "SGD": 16,
+  "total": 28
+ },
+ "counting_note": "one combined pass over the five modules with an in-process Adam/SGD step wrapper; iterative focused reruns during development are not included; no count here represents environment training",
+ "static_path_audit": {
+  "problems": [],
+  "registered_old_round_reads": [
+   "v2_common.py -> runs/comm_cost_stage_c_20260927 (declares the read-only STAGE_C_DIR path constant; nothing in the harness writes there)",
+   "v2_freeze.py -> runs/comm_cost_stage_c_20260927 (reads the old Stage C machine-readable manifest as the §2.4 item-by-item diff baseline)",
+   "v2_test_cost_head_lifecycle.py -> runs/comm_cost_stage_c_correctness_20260928 (asserts output isolation against the ROUND23 hypothetical output directory; never reads or writes it)"
+  ],
+  "registered_sha_provenance": [
+   "v2_freeze.py",
+   "v2_start_equivalence.py"
+  ],
+  "passed": true
+ },
+ "freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc",
+ "passed": true
+}

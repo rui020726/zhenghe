@@ -1,0 +1,48 @@
+{
+ "live": {
+  "used": 0
+ },
+ "plan": {
+  "breakdown": {
+   "immediate_reference": 64,
+   "learning_dev_eval": 144,
+   "rule_dev_eval": 80,
+   "training": 384
+  },
+  "eval_blocks": {
+   "final_greedy": {
+    "checkpoint": "milestone_128",
+    "mode": "greedy",
+    "timepoint": "final"
+   },
+   "final_sampled": {
+    "checkpoint": "milestone_128",
+    "mode": "sampled",
+    "timepoint": "final"
+   },
+   "init_greedy": {
+    "checkpoint": "initialisation",
+    "mode": "greedy",
+    "timepoint": "init"
+   }
+  },
+  "execution_order": [
+   "64 immediate references (48 training + 16 development scenarios)",
+   "seed 11 first 4 training episodes + correctness gate (counted)",
+   "seed 11 remaining 124 episodes",
+   "seed 22 128 episodes",
+   "seed 33 128 episodes",
+   "init_greedy / final_greedy / final_sampled development evaluation, 16 scenes each, per seed",
+   "five rule arms x 16 dev scenes"
+  ],
+  "hard_cap": 700,
+  "milestones": [
+   0,
+   64,
+   128
+  ],
+  "normal_launches": 672,
+  "note": "the old 677 launches and all old artefacts stay untouched; this ledger is an independent new budget (spec §4)",
+  "reserve_launches": 28
+ }
+}
