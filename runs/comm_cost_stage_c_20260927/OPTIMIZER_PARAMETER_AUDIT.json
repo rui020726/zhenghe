@@ -1,0 +1,123 @@
+{
+  "audit": "Stage C correctness repair optimizer parameter membership",
+  "checked_at": "2026-09-28",
+  "expected_modules": {
+    "trunk": {
+      "tensor_count": 4,
+      "numel": 5440,
+      "parameters": [
+        {"name": "0.weight", "shape": [64, 19], "numel": 1216},
+        {"name": "0.bias", "shape": [64], "numel": 64},
+        {"name": "2.weight", "shape": [64, 64], "numel": 4096},
+        {"name": "2.bias", "shape": [64], "numel": 64}
+      ]
+    },
+    "action_head": {
+      "tensor_count": 2,
+      "numel": 130,
+      "parameters": [
+        {"name": "weight", "shape": [2, 64], "numel": 128},
+        {"name": "bias", "shape": [2], "numel": 2}
+      ]
+    },
+    "task_value_head": {
+      "tensor_count": 2,
+      "numel": 65,
+      "parameters": [
+        {"name": "weight", "shape": [1, 64], "numel": 64},
+        {"name": "bias", "shape": [1], "numel": 1}
+      ]
+    },
+    "cost_head": {
+      "tensor_count": 2,
+      "numel": 65,
+      "parameters": [
+        {"name": "weight", "shape": [1, 64], "numel": 64},
+        {"name": "bias", "shape": [1], "numel": 1}
+      ]
+    }
+  },
+  "repaired_collection": {
+    "tensor_count": 10,
+    "numel": 5700,
+    "module_object_ids_unique": true,
+    "controller_parameter_ids_equal_module_union": true,
+    "optimizer_parameter_ids_equal_module_union": true,
+    "optimizer_duplicates": 0,
+    "external_parameters": 0,
+    "evidence": "test_sc_cost_head_lifecycle.py compares object-id sets in one process"
+  },
+  "synthetic_lifecycle_test": {
+    "passed": true,
+    "negative_controls": {
+      "omit_cost_head": "rejected",
+      "duplicate_trunk_parameter": "rejected",
+      "external_parameter": "rejected"
+    },
+    "per_module_nonzero_gradient_step": {
+      "trunk": true,
+      "action_head": true,
+      "task_value_head": true,
+      "cost_head": true
+    },
+    "ppo_update": {
+      "uses_batch_samples_actor_and_optimizer": true,
+      "cost_head_gradient_each_minibatch": true,
+      "zero_grad_covers_all_ten_parameters": true,
+      "gradient_clipping_covers_all_ten_parameters": true,
+      "cost_head_weights_updated": true,
+      "optimizer_state_for_all_ten_parameters": true
+    },
+    "save_restore": {
+      "optimizer_parameter_ids_match_all_four_modules": true,
+      "optimizer_moments_preserved_for_all_parameters": true,
+      "legacy_v1_checkpoint_rejected": true
+    },
+    "optimizer_steps_in_one_passing_lifecycle_test": {
+      "module_specific_synthetic_losses": 4,
+      "ppo_update": 4,
+      "total": 8
+    }
+  },
+  "historical_checkpoint_read_only_audit": {
+    "expected_corrected_collection": {"tensor_count": 10, "numel": 5700},
+    "checkpoints": [
+      {
+        "seed": 11,
+        "path": "checkpoints/sc_train_s11.pt",
+        "sha256": "6455d8e44dc1ea88a11e91ff31b91e870f62757de05f4b417448b0734496928b",
+        "episodes_done": 128,
+        "optimizer_steps": 464,
+        "optimizer_parameter_count": 8,
+        "optimizer_state_count": 8,
+        "cost_head_parameter_count": 2,
+        "cost_head_equals_seeded_initialization": true
+      },
+      {
+        "seed": 22,
+        "path": "checkpoints/sc_train_s22.pt",
+        "sha256": "233a6bdd5fbe1c02b36edcc293e6313388618bff99f4789b08e3ed768e753f7a",
+        "episodes_done": 128,
+        "optimizer_steps": 464,
+        "optimizer_parameter_count": 8,
+        "optimizer_state_count": 8,
+        "cost_head_parameter_count": 2,
+        "cost_head_equals_seeded_initialization": true
+      },
+      {
+        "seed": 33,
+        "path": "checkpoints/sc_train_s33.pt",
+        "sha256": "1dfaa5aeebd258d4d4b6447a99e0901c7d7f00fc36e67d2bf1f79acab7d556f2",
+        "episodes_done": 128,
+        "optimizer_steps": 464,
+        "optimizer_parameter_count": 8,
+        "optimizer_state_count": 8,
+        "cost_head_parameter_count": 2,
+        "cost_head_equals_seeded_initialization": true
+      }
+    ],
+    "initial_and_mid_checkpoints": "missing; no such files were present",
+    "read_only": true,
+    "checkpoint_files_modified": false
+  }
+}

@@ -1,15 +1,10 @@
-"""Stage C 训练驱动：三 seed × 128 集的约束式成本学习（ROUND22 spec §5/§7）。
+"""Stage C correctness-v2 training driver (ROUND23; training is not started by this patch).
 
-每个训练 seed：Controller(训练种子) 初值 → 32 批 ×（4 集 rollout + 一次 PPO 更新 +
-一次对偶 lambda 更新）→ 每批存 checkpoint（崩溃恢复只用本轮合法完整 checkpoint，恢复 RNG
-与顺序）。lambda 在同一批 PPO 期间固定，批后更新；g_hat 用配对的 immediate reference
-缓存标量。只训练通信模块（optimizer 只含 controller.parameters）；搜索/分配权重来自两个
-冻结 checkpoint 文件，逐阶段核对 SHA256。
+未来若获准训练，每个 seed 必须从 Controller(训练种子) 初值开始；每批 PPO 与对偶更新保持
+ROUND22 已登记的协议。恢复只读取 correctness-v2 checkpoint，绝不把旧训练状态作为热启动。
+optimizer 覆盖 trunk、action head、task value head 与 cost head。
 
-    python sc_train.py --seed 11 --episodes 4         # 首4集 + 正确性门禁
-    python sc_train.py --seed 11 --episodes 128       # 恢复后继续
-    python sc_train.py --seed 22 --episodes 128
-    python sc_train.py --seed 33 --episodes 128
+    # Training remains disabled until separately authorized.
 """
 
 from __future__ import annotations

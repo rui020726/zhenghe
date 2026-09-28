@@ -1,0 +1,24 @@
+{
+  "erratum_for": "runs/comm_cost_stage_c_20260927/STAGE_C_VERDICT.md",
+  "effective_date": "2026-09-28",
+  "execution_complete": true,
+  "registered_objective_valid": false,
+  "old_observed_comparisons": "retained as historical observations under the executed implementation",
+  "correct_n4_learning_verdict": "not_established_due_to_implementation",
+  "basis": [
+    "positive measured cost was negated before an actor objective that subtracts cost advantage",
+    "cost_head was outside optimizer parameter groups, zero_grad, clipping and optimizer state",
+    "nonterminal GAE rows used zero next-value instead of the next decision value",
+    "reward events were credited to a later decision, despite actions being sampled before env.step"
+  ],
+  "historical_scope": {
+    "completed_launch_count": 677,
+    "old_checkpoints_deleted": false,
+    "old_rows_tapes_verdict_and_passed_gates_overwritten": false
+  },
+  "this_repair_execution": {
+    "new_environment_starts": 0,
+    "real_training_steps": 0,
+    "synthetic_optimizer_steps_are_separately_reported": true
+  }
+}

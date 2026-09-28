@@ -182,6 +182,12 @@ class CostHeadLifecycleCounterexample(unittest.TestCase):
                     problems.append("restored optimizer state is incomplete")
             if len(restored_parameters) != len(expected):
                 problems.append("restored controller module set changed size")
+            if restored_state["gae_schema"] != trainer.GAE_SCHEMA:
+                problems.append("restored checkpoint GAE schema mismatch")
+            if restored_state["optimizer_schema"] != trainer.OPTIMIZER_SCHEMA:
+                problems.append("restored checkpoint optimizer schema mismatch")
+            if restored_state["reward_timing_schema"] != trainer.REWARD_TIMING_SCHEMA:
+                problems.append("restored checkpoint reward timing schema mismatch")
 
         self.assertEqual(synthetic_module_steps + ppo_optimizer_steps,
                          4 + common.EPOCHS_PER_BATCH)

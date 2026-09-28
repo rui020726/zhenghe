@@ -1,0 +1,79 @@
+{
+  "evidence": "ROUND23 old-fail/new-pass synthetic regressions",
+  "source_head": "cac8c60051f7cb89379104941113060758c36ab1",
+  "no_environment_starts": 0,
+  "real_training_steps": 0,
+  "red_replays": [
+    {
+      "finding": "F1 positive cost direction",
+      "test": "test_sc_cost_objective.CostObjectiveCounterexample.test_positive_cost_penalty_matches_enumerated_send_hold_gradient",
+      "old_behavior": "negative normalized cost was passed into batch_samples and the actual PPO actor optimizer",
+      "failure": "captured loss gradients were [-0.05,-0.075,-0.30,-2.55], expected [0.05,0.025,-0.20,-2.45] for lambda [0,0.1,1,10]",
+      "path_reached": ["batch_samples", "actor surrogate", "SGD optimizer.step"],
+      "synthetic_optimizer_steps": 16,
+      "result": "expected failure"
+    },
+    {
+      "finding": "F2 complete cost-head optimizer lifecycle",
+      "test": "test_sc_cost_head_lifecycle.CostHeadLifecycleCounterexample.test_every_module_is_in_optimizer_and_cost_head_lifecycle_is_complete",
+      "old_behavior": "controller.parameters returned inner.parameters and omitted cost_head",
+      "failure_checks": [
+        "cost_head synthetic parameters did not update and had no optimizer state",
+        "actual PPO optimizer parameter object-ID set was incomplete",
+        "zero_grad and gradient clipping omitted cost_head",
+        "cost_head did not update or retain optimizer state through PPO",
+        "save/restore optimizer membership and state remained incomplete"
+      ],
+      "path_reached": ["per-module synthetic losses", "batch_samples", "actor surrogate", "Adam optimizer.step", "zero_grad", "gradient clipping", "checkpoint save/restore"],
+      "synthetic_optimizer_steps": 8,
+      "result": "expected failure"
+    },
+    {
+      "finding": "F3 nonterminal next-value in GAE",
+      "test": "test_sc_gae_next_value.GaeNextValueCounterexample.test_batch_samples_uses_next_value_for_a_nonterminal_decision",
+      "old_behavior": "nonterminal bootstrap left at zero",
+      "failure": "batch_samples advantage 0.515; independent next-value expectation 0.815 (missing 0.3)",
+      "path_reached": ["batch_samples", "GAE target computation"],
+      "synthetic_optimizer_steps": 0,
+      "result": "expected failure"
+    },
+    {
+      "finding": "F4 causal reward attribution",
+      "test": "test_sc_reward_timing.RewardTimingCounterexample.test_same_tick_between_prefix_and_tail_rewards_follow_action_order",
+      "old_behavior": "reward ticks were assigned to the next decision row",
+      "failure": "first task return 9.55; action-order expectation 8.8",
+      "path_reached": ["batch_samples", "independent sc_check interval recomputation"],
+      "synthetic_optimizer_steps": 0,
+      "result": "expected failure"
+    }
+  ],
+  "corrected_focused_runs": {
+    "tests": [
+      "test_sc_cost_objective",
+      "test_sc_cost_head_lifecycle",
+      "test_sc_gae_next_value",
+      "test_sc_reward_timing"
+    ],
+    "result": "passed",
+    "optimizer_steps_counting_scope": "one selected corrected focused run per path; separate from the final full suite",
+    "synthetic_optimizer_steps": {
+      "cost_objective_PPO": 16,
+      "cost_head_module_and_PPO_lifecycle": 8,
+      "GAE_and_reward_timing": 0,
+      "total": 24
+    }
+  },
+  "final_full_suite": {
+    "command": "D:/project_env/python.exe; quiet unittest discovery with Adam/SGD optimizer.step counting wrapper",
+    "tests_run": 20,
+    "failures": 0,
+    "errors": 0,
+    "result": "passed",
+    "synthetic_optimizer_steps": {
+      "Adam": 12,
+      "SGD": 16,
+      "total": 28
+    }
+  },
+  "counting_note": "These are named red/green acceptance runs and the final full suite; iterative focused reruns during implementation are not included in these scoped counts. No count here represents environment training."
+}
