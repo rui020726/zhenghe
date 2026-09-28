@@ -1,0 +1,326 @@
+{
+ "checks": [
+  {
+   "check": "model_load_ep128_seed33",
+   "detail": {
+    "checkpoint_sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+    "episodes_done": 128,
+    "lambda_final": 1.4749999999999992,
+    "training_seed": 33
+   },
+   "passed": true
+  },
+  {
+   "check": "checkpoint_sha256_matches_freeze",
+   "detail": {
+    "frozen": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+    "live": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923"
+   },
+   "passed": true
+  },
+  {
+   "check": "checkpoint_freeze_payload_matches_round24",
+   "detail": {
+    "branch_start": "b7217d18b4e7f4e301d0b62a810892967adc6566",
+    "config_hash": "e9b2c067db5951f2",
+    "freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc",
+    "head_at_freeze": "5be3f1e6437309f4e92cf49807f2e0cbbf7f057f"
+   },
+   "passed": true
+  },
+  {
+   "check": "checkpoint_training_history_present",
+   "detail": 464,
+   "passed": true
+  },
+  {
+   "check": "two_loads_identical",
+   "detail": "parameter summaries compared field by field",
+   "passed": true
+  },
+  {
+   "check": "piloc_weight_frozen",
+   "detail": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "passed": true
+  },
+  {
+   "check": "ctde_weight_frozen",
+   "detail": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+   "passed": true
+  },
+  {
+   "check": "feature_rows_match_candidates",
+   "detail": 3,
+   "passed": true
+  },
+  {
+   "check": "feature_layout_19d",
+   "detail": [
+    19,
+    19,
+    19
+   ],
+   "passed": true
+  },
+  {
+   "check": "tape_schemas",
+   "detail": {
+    "mask": "budget-sequential-mask/1",
+    "tape": "onpolicy-tape/2"
+   },
+   "passed": true
+  },
+  {
+   "check": "recomputed_probabilities_match_tape",
+   "detail": {
+    "t-a": 0.0,
+    "t-b": 0.0,
+    "t-c": 0.0
+   },
+   "passed": true
+  },
+  {
+   "check": "greedy_matches_argmax_tie_to_send",
+   "detail": {
+    "t-a": 0,
+    "t-b": 0,
+    "t-c": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "masked_candidates_are_hold",
+   "detail": [],
+   "passed": true
+  },
+  {
+   "check": "free_equals_actionable",
+   "detail": {
+    "actionable": [
+     "t-a",
+     "t-b",
+     "t-c"
+    ],
+    "free": [
+     "t-a",
+     "t-b",
+     "t-c"
+    ]
+   },
+   "passed": true
+  },
+  {
+   "check": "shadow_charges_only_sends",
+   "detail": {
+    "after": 20000.0,
+    "before": 20000.0,
+    "charged": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "charges_are_the_priced_candidates",
+   "detail": {
+    "t-a": 900,
+    "t-b": 900,
+    "t-c": 900
+   },
+   "passed": true
+  },
+  {
+   "check": "stub_sends_until_credit_runs_out",
+   "detail": {
+    "actions": {
+     "t-a": 1,
+     "t-b": 1,
+     "t-c": 0
+    },
+    "free": [
+     "t-a",
+     "t-b"
+    ],
+    "masked": [
+     "t-c"
+    ],
+    "masked_reasons": {
+     "t-c": "budget_exhausted"
+    }
+   },
+   "passed": true
+  },
+  {
+   "check": "sequential_mask_reason_budget_exhausted",
+   "detail": {
+    "t-c": "budget_exhausted"
+   },
+   "passed": true
+  },
+  {
+   "check": "shadow_after_matches_remaining_minus_sends",
+   "detail": 2000.0,
+   "passed": true
+  },
+  {
+   "check": "unaffordable_candidate_masked",
+   "detail": {
+    "actions": {
+     "t-a": 1,
+     "t-huge": 0
+    },
+    "masked": [
+     "t-huge"
+    ],
+    "reasons": {
+     "t-huge": "budget_exhausted"
+    }
+   },
+   "passed": true
+  },
+  {
+   "check": "stub_holds_on_low_send_probability",
+   "detail": {
+    "actions": {
+     "t-a": 0,
+     "t-b": 0
+    },
+    "free": [
+     "t-a",
+     "t-b"
+    ]
+   },
+   "passed": true
+  },
+  {
+   "check": "row_paths_unique",
+   "detail": 192,
+   "passed": true
+  },
+  {
+   "check": "attempt_two_has_its_own_path",
+   "detail": "r25_immediate_s1400000_a2.json",
+   "passed": true
+  },
+  {
+   "check": "real_ledger_empty_before_launch",
+   "detail": {
+    "claims": 0,
+    "per_process": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "no_round_artefacts_yet",
+   "detail": {
+    "logs": 0,
+    "rows": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "claim_is_atomic_first_wins",
+   "detail": "second claim refused",
+   "passed": true
+  },
+  {
+   "check": "reserve_refuses_double_booking",
+   "detail": "double booking refused",
+   "passed": true
+  },
+  {
+   "check": "hard_cap_enforced",
+   "detail": "launch cap 208 reached at 209; refusing a normal start (immediate_s1400001 s1400001 a1)",
+   "passed": true
+  },
+  {
+   "check": "real_ledger_still_empty",
+   "detail": {
+    "claims": 0,
+    "per_process": 0
+   },
+   "passed": true
+  },
+  {
+   "check": "absolute_metrics_sums",
+   "detail": {
+    "on_time_mean_per_scene": 5.0,
+    "on_time_total": 320,
+    "spent_bytes_mean_per_scene": 12000.0,
+    "spent_bytes_total": 768000
+   },
+   "passed": true
+  },
+  {
+   "check": "synthetic_primary_dC",
+   "detail": {
+    "ci_high": -80906.25,
+    "ci_low": -108046.875,
+    "confidence": 0.95,
+    "draws": 10000,
+    "mean": -3000.0,
+    "quantile_method": "linear",
+    "scenes": 64
+   },
+   "passed": true
+  },
+  {
+   "check": "synthetic_counts_partition",
+   "detail": {
+    "cost_lower": 64,
+    "joint_dominant": 64,
+    "task_tied": 64
+   },
+   "passed": true
+  },
+  {
+   "check": "zero_event_bound_value",
+   "detail": 0.045729702330762456,
+   "passed": true
+  },
+  {
+   "check": "shared_matrix_matches_plan",
+   "detail": "799188508a6aa6e29a4e7b394b62e3c8221efe3425143013425a40fb7a6ad9c7",
+   "passed": true
+  },
+  {
+   "check": "aggregation_hard_fails_on_missing_cell",
+   "detail": "SystemExit on a missing cell",
+   "passed": true
+  },
+  {
+   "check": "statistics_artefact_absent_before_launch",
+   "detail": "not written yet",
+   "passed": true
+  },
+  {
+   "check": "statistics_reader_rejects_foreign_matrix",
+   "detail": "reader refused a statistics file with a foreign resampling matrix",
+   "passed": true
+  },
+  {
+   "check": "no_optimizer_in_round_harness",
+   "detail": {
+    "note": "the round harness never constructs or steps an optimizer; v2_trainer.load_checkpoint only restores Adam state",
+    "offenders": [],
+    "self_excluded": [
+     "r25_preflight.py"
+    ]
+   },
+   "passed": true
+  },
+  {
+   "check": "cost_unit_registered",
+   "detail": {
+    "b0": 10000.0,
+    "budget": 29300
+   },
+   "passed": true
+  }
+ ],
+ "environment_launches": 0,
+ "failures": [],
+ "launches_used": 0,
+ "optimizer_steps": 0,
+ "passed": true,
+ "round": "25",
+ "section": "zero-environment, zero-optimizer preflight of the actual inference path"
+}

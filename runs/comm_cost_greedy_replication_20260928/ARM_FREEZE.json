@@ -1,0 +1,54 @@
+{
+ "arms": {
+  "immediate": {
+   "behaviour": "original reference implementation",
+   "implementation": "driver-native ImmediatePolicy (no injection)",
+   "policy": "immediate",
+   "source_modules": [
+    "integrated_sar/comm_policy.py"
+   ]
+  },
+  "late_discovery_gate_147": {
+   "behaviour": "original threshold 147, original boundary and implementation",
+   "implementation": "v2_rules.LateDiscoveryGatePolicy, strict greater-than on ready_step (the ROUND24 harness file, imported not rewritten)",
+   "params": {
+    "cut_steps": 147.0
+   },
+   "policy": "late_discovery_gate",
+   "source_modules": [
+    "runs/comm_cost_v2_rerun_20260928/v2_rules.py"
+   ]
+  },
+  "learned_s33_greedy": {
+   "action_rng": "sha256('round24-eval:33:<scene>:greedy')[:16], inherited verbatim from the ROUND24 final_greedy block",
+   "behaviour": "ROUND24 seed33 ep128 final checkpoint, original greedy decode",
+   "checkpoint": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep128.pt",
+   "checkpoint_sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+   "collector": "budget_masked.BudgetMaskedCollector(forced=False, mask=False, greedy=True, budget_mask=True) -- the same class and parameters as the ROUND24 final_greedy block",
+   "decode": "SEND iff p(SEND) >= p(HOLD), ties to SEND",
+   "episodes": 128,
+   "selection_registration": "post-hoc fixed candidate chosen after seeing the 16 ROUND24 development scenes; not a randomly drawn training seed; generalisation can be tested, the selection fact cannot be removed",
+   "source_modules": [
+    "runs/comm_budget_action_mask_fix_20260922/budget_masked.py",
+    "runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
+    "runs/comm_cost_v2_rerun_20260928/v2_controller.py"
+   ],
+   "training_seed": 33
+  }
+ },
+ "code_identity_freeze_sha256": "a3a19cb9390b3e87cc4c82f28f9e1a96736d9f36d0954342141f815aeae23299",
+ "no_training": "0 training episodes, 0 optimizer steps, no distillation, no behaviour cloning, no lambda/entropy/reward/network changes",
+ "not_evaluated_note": "their ROUND24 results stay in the historical tables; no new environment launches are made for them and no candidate swap happens after seeing new results",
+ "not_evaluated_this_round": [
+  "seed11",
+  "seed22",
+  "sampled mode",
+  "always_hold",
+  "periodic_20",
+  "random_send",
+  "event",
+  "ep64 checkpoints"
+ ],
+ "round": "25",
+ "section": "arm implementation freeze (execution basis §2)"
+}

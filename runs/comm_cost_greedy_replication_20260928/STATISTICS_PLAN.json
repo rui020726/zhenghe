@@ -1,0 +1,46 @@
+{
+ "candidate_arm": "learned_s33_greedy",
+ "metrics": {
+  "dC": "candidate spent bytes minus comparator spent bytes per scene (negative is cheaper)",
+  "dY": "candidate on-time tasks minus comparator on-time tasks per scene (positive is better)"
+ },
+ "predicates": {
+  "both_tied": "dY == 0 and dC == 0",
+  "cost_equal": "dC == 0",
+  "cost_higher": "dC > 0",
+  "cost_lower": "dC < 0",
+  "cost_only_worse": "dY == 0 and dC > 0",
+  "joint_dominant": "dY >= 0 and dC <= 0 and not (dY == 0 and dC == 0)",
+  "task_degraded": "dY < 0",
+  "task_improved": "dY > 0",
+  "task_only_worse": "dY < 0 and dC == 0",
+  "task_tied": "dY == 0",
+  "tradeoff_task_gain_cost_loss": "dY > 0 and dC > 0",
+  "tradeoff_task_loss_cost_gain": "dY < 0 and dC < 0",
+  "worse_both": "dY < 0 and dC > 0"
+ },
+ "primary_cost_comparison": "late_discovery_gate_147",
+ "resampling": {
+  "generator": "numpy.random.Generator(numpy.random.PCG64(20260928))",
+  "interval": "95% percentile bootstrap, quantiles with method='linear'",
+  "matrix": "integers(0, 64, size=(10000, 64)) generated exactly once",
+  "matrix_sha256": "799188508a6aa6e29a4e7b394b62e3c8221efe3425143013425a40fb7a6ad9c7",
+  "shared_by": "every task and cost comparison of this round",
+  "unit": "the 64 scenes are the paired sampling unit; 192 launches are not 192 independent scenes"
+ },
+ "round": "25",
+ "section": "pre-registered statistics plan (frozen before the first launch)",
+ "single_reader": "tables, judgement and verdict read the one machine-readable statistics artefact (PAIRED_COMPARISON.json); no second sampling is performed",
+ "stopping": "none of these criteria stops the batch mid-run; only technical health and the launch quota decide stopping",
+ "task_comparators": [
+  "immediate",
+  "late_discovery_gate_147"
+ ],
+ "verdict_fields": {
+  "constraint_guarantee": "always not_established",
+  "observed_task_count_status": "no_observed_count_loss only when dY >= 0 in every scene against BOTH comparators",
+  "primary_cost_evidence": "lower_cost_supported only when the primary dC 95% CI upper bound < 0; otherwise lower_cost_not_established",
+  "training_seed_stability": "always not_established"
+ },
+ "zero_event_rule": "when zero net task degradations are observed against a comparator, attach 1-0.05^(1/64) (~4.57%) as the single-sided 95% upper bound on the per-scenario probability of a degradation event under an i.i.d. assumption; it is not an expected task-loss bound and not a deployment guarantee"
+}

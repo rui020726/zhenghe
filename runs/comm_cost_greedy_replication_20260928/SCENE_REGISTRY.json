@@ -1,0 +1,67 @@
+{
+  "round": "25",
+  "run_id": "comm_cost_greedy_replication_20260928",
+  "section": "scene registry freeze (execution basis §3/§4)",
+  "scenes": {
+    "count": 64,
+    "block": [1400000, 1400063],
+    "list": [
+      1400000, 1400001, 1400002, 1400003, 1400004, 1400005, 1400006, 1400007, 1400008,
+      1400009, 1400010, 1400011, 1400012, 1400013, 1400014, 1400015, 1400016, 1400017,
+      1400018, 1400019, 1400020, 1400021, 1400022, 1400023, 1400024, 1400025, 1400026,
+      1400027, 1400028, 1400029, 1400030, 1400031, 1400032, 1400033, 1400034, 1400035,
+      1400036, 1400037, 1400038, 1400039, 1400040, 1400041, 1400042, 1400043, 1400044,
+      1400045, 1400046, 1400047, 1400048, 1400049, 1400050, 1400051, 1400052, 1400053,
+      1400054, 1400055, 1400056, 1400057, 1400058, 1400059, 1400060, 1400061, 1400062,
+      1400063
+    ],
+    "selection_rule": "preferred block 1400000..1400063 from the execution basis; the collision audit found no use and no registered claim inside it, so the fallback rule (ascending from 1400000 to 1499999, first 64 unclaimed) was not needed",
+    "previously_unused": true,
+    "gate_scenes": [1400000, 1400001],
+    "gate_note": "the first two scenes run all three arms (6 launches) as the technical gate; those 6 are inside the 192 normal launches, not extra"
+  },
+  "collision_audit": {
+    "artefact": "runs/comm_cost_greedy_replication_20260928/SEED_COLLISION_AUDIT.json",
+    "passed": true,
+    "result": "no filename-embedded seed inside 1400000..1400063 anywhere in the versioned project or the sibling working directories; no overlap with any registered claim range; the only pre-existing seed-vocabulary mention is this round's own planning document; fallback first-64 also available",
+    "method": "read-only metadata: artefact filenames across the repo and siblings, plus a text scan of docs/protocols/harness code for the block; protected-set contents were not read",
+    "registered_claim_ranges_not_touched": [
+      "800000..800399 (sealed_test_set)",
+      "900000..900199 (learned_model_reported_stream)",
+      "31000..31059 (systemloop_20260918)",
+      "1000000..1000015 / 1000100..1000115 / 1000200..1000215 / 1000300..1000315 (task_pressure g6/g8/g10/g12)",
+      "1100000..1100059 (D1_20260923)",
+      "1200000..1200059 (search_trace_and_policy_20260925)",
+      "1300000..1300047 (ROUND22/24 training scenarios)",
+      "1301000..1301015 (ROUND22/24 development scenarios, kept as development history only)"
+    ]
+  },
+  "scene_identity": {
+    "rule": "the scenario seed is the only changed key of the ROUND24-inherited world configuration (the same provenance rule the round-18 runner used for new seeds); the initial map/goals/fleet/search/allocation weights and the channel RNG attachment all follow from it",
+    "reproducibility": "stage_b_inherited_config(seed) -> RunConfiguration -> build_joint_run; the ROUND24 freeze proved this path byte-stable per seed",
+    "no_difficulty_swap": "the list is frozen before any scene is generated or inspected; no scene is replaced after seeing difficulty or results"
+  },
+  "exogenous_randomness": {
+    "environment_and_channel": "come from the scenario seed inside the driver; identical for all three arms of a scene",
+    "learned_action_stream": "eval_action_seed(training_seed=33, scenario_seed, mode='greedy') with label 'round24-eval', inherited verbatim from the ROUND24 final_greedy block so the learned arm's RNG derivation is identical to the ROUND24 evaluated block",
+    "greedy_draws_no_samples": "the greedy decode draws no random action; the stream is seeded identically so nothing else can drift",
+    "same_seed_caveat": "the same scenario seed does not make the three arms experience the same packet losses message by message: policies change the message set and therefore the downstream states; the channel RNG is not modified to prettify the pairing"
+  },
+  "pooling_rule": "the old 16 development scenes are never merged with these 64 scenes in any statistic of this round",
+  "arms": {
+    "learned_s33_greedy": "ROUND24 seed33 ep128 milestone checkpoint, original greedy decode",
+    "immediate": "original reference implementation, unchanged",
+    "late_discovery_gate_147": "original LateDiscoveryGatePolicy, cut_steps=147.0, original boundary and implementation"
+  },
+  "launch_plan": {
+    "normal_launches": 192,
+    "reserve_launches": 16,
+    "hard_cap": 208,
+    "breakdown": {
+      "64 scenes x 3 arms": 192,
+      "technical gate (first two scenes, 3 arms)": 6,
+      "note": "the 6 gate launches are part of the 192; no extra reference, recording, throughput probe, full-simulation smoke, hidden reset or repeat confirmation is launched"
+    },
+    "independent_of_round24": "this budget does not borrow ROUND24's unused 28 launches"
+  }
+}

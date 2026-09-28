@@ -1,0 +1,149 @@
+{
+ "code_identity": {
+  "configuration_hash": "e9b2c067db5951f2",
+  "configuration_hash_unchanged": true,
+  "file_level_differences": [],
+  "freeze_sha256_unchanged": true,
+  "live_freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc",
+  "recorded_freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc"
+ },
+ "diagnostic_code_identity": {
+  "recorded": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc",
+  "unchanged": true
+ },
+ "failures": [],
+ "passed": true,
+ "purpose": "reuse verification of ROUND25 §1 evidence",
+ "reused_evidence": {
+  "CANDIDATE_FREEZE.json": "valid while the weights above are unchanged",
+  "DECODER_DIAGNOSTIC.json/.md": "valid while the code identity and checkpoints above are unchanged",
+  "ROUND24_SOURCE_RECHECK.json": "valid while the inputs above are unchanged",
+  "planning_end_caveat": "the planning end did not independently obtain these originals; this fact stays in every report of this round"
+ },
+ "round": "25",
+ "round24_inputs": {
+  "checkpoints": {
+   "aggregate_sha256": "9af1a7d5be4b66bbe97369ae67fa0a34926d998deb2755d1c68f165dfd086456",
+   "files": 108,
+   "manifest_file": "ROUND24_CHECKPOINTS_HASHES.json",
+   "total_bytes": 1512295
+  },
+  "logs": {
+   "aggregate_sha256": "effd1cff60178dacc764a20ef3c15f3bd1d22662dfff3d41b3b7edc32026f5e8",
+   "files": 1879,
+   "manifest_file": "ROUND24_LOGS_HASHES.json",
+   "total_bytes": 520086659
+  },
+  "rows": {
+   "aggregate_sha256": "5e4b4eb292c675a4d6c8be26613af59fe55851b543731a0c6e2625f922aa3450",
+   "files": 672,
+   "manifest_file": "ROUND24_ROWS_HASHES.json",
+   "total_bytes": 227499182
+  }
+ },
+ "round24_state": {
+  "branch_head": "f920c555b7bfe7d01296b9099635f673c2e5dcb6",
+  "branch_head_unchanged": true,
+  "branch_tree": "2543ab8314013d501c03441b2d9ec8d8beb88802",
+  "branch_tree_unchanged": true,
+  "ledger_matches_recorded_ledger": true,
+  "ledger_used": 672,
+  "recheck_artifact": "ROUND24_SOURCE_RECHECK.json (committed; inputs below re-hashed)",
+  "row_breakdown": {
+   "eval": 144,
+   "reference": 64,
+   "rule": 80,
+   "train": 384
+  },
+  "row_count_unchanged": true,
+  "row_files": 672,
+  "row_files_expected": 672,
+  "verdict_artifact": "ROUND24_VERDICT.json (committed in the ROUND24 branch)"
+ },
+ "weights": {
+  "diagnostic_recorded_s11": {
+   "live_sha256": "59d88b69dfb592bd9700af62d724ef7bfc73d3dc8c56f04d608dd8239aebffbf",
+   "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s11_ep128.pt",
+   "recorded_sha256": "59d88b69dfb592bd9700af62d724ef7bfc73d3dc8c56f04d608dd8239aebffbf",
+   "unchanged": true
+  },
+  "diagnostic_recorded_s22": {
+   "live_sha256": "f3229f45f147d1151433ce0f876e262bad5f57fca79777cb3c2b2b3897b99d93",
+   "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s22_ep128.pt",
+   "recorded_sha256": "f3229f45f147d1151433ce0f876e262bad5f57fca79777cb3c2b2b3897b99d93",
+   "unchanged": true
+  },
+  "diagnostic_recorded_s33": {
+   "live_sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+   "path": "runs\\comm_cost_v2_rerun_20260928\\checkpoints\\v2_train_s33_ep128.pt",
+   "recorded_sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+   "unchanged": true
+  },
+  "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": {
+   "live_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "path": "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth",
+   "recorded_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "unchanged": true
+  },
+  "runs/joint_eval_20260916/ctde_final_7_1.pth": {
+   "live_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+   "path": "runs/joint_eval_20260916/ctde_final_7_1.pth",
+   "recorded_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+   "unchanged": true
+  },
+  "seed11_ep0": {
+   "live_sha256": "56889e7cb9a6fadbb6ed6672a141ba3f0b8eda6cb6769ff8a50fa97e7128c8fd",
+   "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s11_ep0.pt",
+   "recorded_sha256": "56889e7cb9a6fadbb6ed6672a141ba3f0b8eda6cb6769ff8a50fa97e7128c8fd",
+   "unchanged": true
+  },
+  "seed11_ep128": {
+   "live_sha256": "59d88b69dfb592bd9700af62d724ef7bfc73d3dc8c56f04d608dd8239aebffbf",
+   "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s11_ep128.pt",
+   "recorded_sha256": "59d88b69dfb592bd9700af62d724ef7bfc73d3dc8c56f04d608dd8239aebffbf",
+   "unchanged": true
+  },
+  "seed11_ep64": {
+   "live_sha256": "71d294a37c36707df1beb17884f2be89c3ad5f05a19a61c1b3d600c7f3132325",
+   "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s11_ep64.pt",
+   "recorded_sha256": "71d294a37c36707df1beb17884f2be89c3ad5f05a19a61c1b3d600c7f3132325",
+   "unchanged": true
+  },
+  "seed22_ep0": {
+   "live_sha256": "f82d33b8b540303662a55429342ed5d2ce25d8cd98e7fd35ecfcf0e6157d778d",
+   "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s22_ep0.pt",
+   "recorded_sha256": "f82d33b8b540303662a55429342ed5d2ce25d8cd98e7fd35ecfcf0e6157d778d",
+   "unchanged": true
+  },
+  "seed22_ep128": {
+   "live_sha256": "f3229f45f147d1151433ce0f876e262bad5f57fca79777cb3c2b2b3897b99d93",
+   "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s22_ep128.pt",
+   "recorded_sha256": "f3229f45f147d1151433ce0f876e262bad5f57fca79777cb3c2b2b3897b99d93",
+   "unchanged": true
+  },
+  "seed22_ep64": {
+   "live_sha256": "4a1d073ff60c7d002aad632f52c7b82d8877ffc85993eb8142c4443bdd2e59ef",
+   "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s22_ep64.pt",
+   "recorded_sha256": "4a1d073ff60c7d002aad632f52c7b82d8877ffc85993eb8142c4443bdd2e59ef",
+   "unchanged": true
+  },
+  "seed33_ep0": {
+   "live_sha256": "cdfb491d325e06fa875726a9a5e4d0d8335d1668aaaf2b0a9a27b3276cf5d221",
+   "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep0.pt",
+   "recorded_sha256": "cdfb491d325e06fa875726a9a5e4d0d8335d1668aaaf2b0a9a27b3276cf5d221",
+   "unchanged": true
+  },
+  "seed33_ep128": {
+   "live_sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+   "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep128.pt",
+   "recorded_sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+   "unchanged": true
+  },
+  "seed33_ep64": {
+   "live_sha256": "301a9cc19c2b8ee45745bc9769e298762435310f91ab328a080efb891f5cf4a8",
+   "path": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep64.pt",
+   "recorded_sha256": "301a9cc19c2b8ee45745bc9769e298762435310f91ab328a080efb891f5cf4a8",
+   "unchanged": true
+  }
+ }
+}
