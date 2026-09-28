@@ -1,0 +1,43 @@
+{
+  "training_version": "constrained-cost-v2",
+  "loss_version": "constrained-lagrangian/2",
+  "state_schema": "constrained-cost-state/2",
+  "gae_schema": "per-decision-next-value/1",
+  "optimizer_schema": "stage-c-four-module-parameter-set/1",
+  "reward_timing_schema": "post-action-most-recent-decision/1",
+  "source_spec": {
+    "commit": "8970ce964ca820e85bce19537f35b98dff08a682",
+    "path": "ROUND23_COMM_COST_TRAINER_CORRECTNESS_FIX.md"
+  },
+  "base_stage_c_head": "cac8c60051f7cb89379104941113060758c36ab1",
+  "correctness_contract": {
+    "normalized_cost_input": "positive measured airtime bytes / B0",
+    "actor_advantage": "lambda * A_task - A_cost",
+    "optimizer_modules": ["trunk", "action_head", "task_value_head", "cost_head"],
+    "nonterminal_next_value": "the next decision row's frozen rollout value for each critic",
+    "terminal_next_value": 0,
+    "pre_first_decision_rewards": "unassigned prefix, separately reported",
+    "post_action_reward_owner": "latest decision sampled at or before the reward tick"
+  },
+  "checkpoint_policy": {
+    "output_directory": "runs/comm_cost_stage_c_correctness_20260928/checkpoints",
+    "legacy_v1_resume_allowed": false,
+    "schema_fields_required": [
+      "trainer_tag",
+      "loss_version",
+      "state_schema",
+      "gae_schema",
+      "optimizer_schema",
+      "reward_timing_schema"
+    ],
+    "old_checkpoint_as_warm_start_allowed": false,
+    "future_authorized_retraining": "start from the registered seed initialization"
+  },
+  "execution_status": {
+    "new_environment_starts": 0,
+    "real_training_steps": 0,
+    "historical_checkpoints_modified": false,
+    "historical_outputs_overwritten": false,
+    "repair_does_not_authorize_training": true
+  }
+}

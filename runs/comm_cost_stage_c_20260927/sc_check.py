@@ -1,9 +1,9 @@
-"""Stage C 检查器：冻结记录、首4集训练正确性门禁、最终对比（只读落盘 artefact）。
+"""Stage C checker: correctness-v2 gates and read-only artifact recomputation.
 
-首4集门禁（ROUND22 spec §7）逐条对应：
-  G1 optimizer 只更新通信模块（optimizer 参数恒等 + 冻结 checkpoint 文件哈希不变）
+ROUND23 将旧 G1/G3 passed 标记列为未能验证训练目标正确性的历史门禁；新版检查：
+  G1 按 trunk/action/task-value/cost-value 模块构造完整参数集合 + 冻结文件哈希
   G2 rollout log_prob 在任何更新前可重算（用初值权重重算，≤1e-6）
-  G3 成本/任务 reward、GAE、组合优势、对偶 g 从落盘数据独立重算且闭合
+  G3 从事件时间区间独立重算任务/成本归属、GAE、组合优势、对偶 g 与总账
   G4 lambda 更新方向与公式一致；reference 无梯度（标量）
   G5 task/cost critic 的 target/预测/loss/梯度有限；全 mask 无 actor 伪样本
   G6 checkpoint 在纯计算进程恢复后，同一观测前向一致（0 额外启动）
@@ -148,19 +148,35 @@ def first4_gate(training_seed: int = 11) -> dict[str, Any]:
                        tag=f"train_s{training_seed}_e{row['episode_index']}")
              for row in episode_rows]
 
-    # G1: the optimiser must hold exactly the communication controller's parameters. Object
-    # identity is process-specific, so the comparison is on the recorded per-parameter shapes
-    # and counts, rebuilt against a fresh controller here.
+    # G1: build the expected parameter collection independently from its owning modules.
+    # Historical records only saved shapes, so this check can reveal a missing module but the
+    # synthetic lifecycle test separately audits object identity, duplicates and outsiders.
     controller = fresh_controller(training_seed)
-    controller_shapes = [list(parameter.shape) for parameter in controller.parameters]
+    modules = [
+        ("trunk", controller.inner.trunk),
+        ("action_head", controller.inner.action_head),
+        ("task_value_head", controller.inner.value_head),
+        ("cost_head", controller.cost_head),
+    ]
+    expected_parameters = [parameter for _module_name, module in modules
+                           for parameter in module.parameters()]
+    expected_ids = [id(parameter) for parameter in expected_parameters]
+    module_parameters_unique = len(expected_ids) == len(set(expected_ids))
+    controller_ids = [id(parameter) for parameter in controller.parameters]
+    controller_contains_exact_modules = (
+        len(controller_ids) == len(set(controller_ids))
+        and set(controller_ids) == set(expected_ids))
+    controller_shapes = [list(parameter.shape) for parameter in expected_parameters]
     optimizer_shapes = batch_record.get("optimizer_parameter_shapes")
     recorded_controller_shapes = batch_record.get("controller_parameter_shapes")
     frozen_now = {str(path.relative_to(common.ROOT)): common.sha256_file(path)
                   for path in common.CHECKPOINT_FILES}
     checks["G1_optimizer_updates_only_comm"] = {
-        "optimizer_parameters_are_controller_parameters": bool(
+        "optimizer_shapes_match_complete_module_collection": bool(
             optimizer_shapes is not None and recorded_controller_shapes is not None
             and optimizer_shapes == recorded_controller_shapes == controller_shapes),
+        "module_parameters_unique": module_parameters_unique,
+        "controller_contains_exact_module_collection": controller_contains_exact_modules,
         "optimizer_parameter_count": len(optimizer_shapes or []),
         "controller_parameter_count": len(controller_shapes),
         "frozen_checkpoints_unchanged": bool(
@@ -168,7 +184,8 @@ def first4_gate(training_seed: int = 11) -> dict[str, Any]:
         "controller_changed": bool(
             batch_record["controller_parameters_before"]["parameter_sha256"]
             != batch_record["controller_parameters_after"]["parameter_sha256"]),
-        "passed": bool(optimizer_shapes is not None and recorded_controller_shapes is not None
+        "passed": bool(module_parameters_unique and controller_contains_exact_modules
+                       and optimizer_shapes is not None and recorded_controller_shapes is not None
                        and optimizer_shapes == recorded_controller_shapes == controller_shapes
                        and frozen_now == batch_record["frozen_checkpoints"]
                        and batch_record["controller_parameters_before"]["parameter_sha256"]

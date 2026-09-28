@@ -1,7 +1,7 @@
 """Stage C 启动前冻结：配置/模型 manifest、scene 注册表、seed 碰撞审计、启动台账。
 
 只读仓库与磁盘，不启动任何环境。冻结条件（任一不满足即退出非 0）：
-- 生产三棵树相对 Stage C 分支起点 6ebefbe 零 diff；
+- 生产三棵树相对已核验 Stage C 头 cac8c60 零 diff；
 - 启动台账为 0；
 - seed 碰撞审计通过（两个新区块与全项目已claim区间/既有 artefact 无交集）；
 - 合成测试已另行运行通过（本脚本不跑测试，只登记套件名）。
@@ -21,7 +21,7 @@ from typing import Any
 import sc_common as common
 
 PRODUCTION_TREES = ("integrated_sar", "task_allocation", "piloc")
-BRANCH_START = "6ebefbe4e7a81182281807333d64d60cadf03198"
+BRANCH_START = "cac8c60051f7cb89379104941113060758c36ab1"
 
 #: The ranges this project has already claimed or sealed, as registered in the rounds' own
 #: modules and manifests. The audit is run against this table and against the artefact scan.
@@ -146,9 +146,10 @@ def main() -> int:
         "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
         "head_at_freeze": git("rev-parse", "HEAD"),
         "branch_start": BRANCH_START,
-        "spec": {"file": "ROUND22_COMM_COST_LEARNING_PILOT.md",
-                 "source_commit": "f73ebdf8cc3ab60a6a866fdbe0e299b122245cf7",
-                 "sha256": common.sha256_file(common.ROOT / "ROUND22_COMM_COST_LEARNING_PILOT.md")},
+        "spec": {"file": "ROUND23_COMM_COST_TRAINER_CORRECTNESS_FIX.md",
+                 "source_commit": "8970ce964ca820e85bce19537f35b98dff08a682",
+                 "sha256": common.sha256_file(
+                     common.ROOT / "ROUND23_COMM_COST_TRAINER_CORRECTNESS_FIX.md")},
         "production_diff": {"branch_start": BRANCH_START, "trees": list(PRODUCTION_TREES),
                             "changed_files": changed, "clean": True},
         "code_identity": identity,
