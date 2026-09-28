@@ -140,12 +140,14 @@ class TrainerMath(unittest.TestCase):
                                     dtype=torch.float64)
         rewards_task = torch.tensor([0.0, 3.0], dtype=torch.float64)
         terminal = torch.tensor([False, True])
-        a_task, _ = cm.gae(rewards_task, torch.tensor([0.1, 0.3], dtype=torch.float64),
+        values_task = torch.tensor([0.1, 0.3], dtype=torch.float64)
+        values_cost = torch.tensor([0.2, 0.1], dtype=torch.float64)
+        a_task, _ = cm.gae(rewards_task, values_task,
                            gamma=common.GAMMA, gae_lambda=common.GAE_LAMBDA, terminal=terminal,
-                           bootstrap=torch.zeros(2, dtype=torch.float64))
-        a_cost, _ = cm.gae(rewards_cost, torch.tensor([0.2, 0.1], dtype=torch.float64),
+                           bootstrap=torch.tensor([0.3, 0.0], dtype=torch.float64))
+        a_cost, _ = cm.gae(rewards_cost, values_cost,
                            gamma=common.GAMMA, gae_lambda=common.GAE_LAMBDA, terminal=terminal,
-                           bootstrap=torch.zeros(2, dtype=torch.float64))
+                           bootstrap=torch.tensor([0.1, 0.0], dtype=torch.float64))
         expected = cm.actor_advantage(a_task, a_cost, 2.0)
         for sample, want in zip(samples, expected.tolist()):
             self.assertAlmostEqual(sample["advantage"], want, places=9)

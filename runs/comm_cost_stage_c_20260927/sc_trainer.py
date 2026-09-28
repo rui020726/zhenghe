@@ -70,13 +70,20 @@ def batch_samples(episodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
                                    dtype=torch.float64)
         terminal = torch.zeros(len(decision_steps), dtype=torch.bool)
         terminal[-1] = True
-        bootstrap = torch.zeros(len(decision_steps), dtype=torch.float64)
+        # For a nonterminal decision, delta_t needs V(s_{t+1}); the value captured on the
+        # next tape row is that state estimate. The last decision is a true episode terminal
+        # in this runner, so its bootstrap remains zero.
+        bootstrap_task = torch.zeros_like(values_task)
+        bootstrap_cost = torch.zeros_like(values_cost)
+        if len(decision_steps) > 1:
+            bootstrap_task[:-1] = values_task[1:]
+            bootstrap_cost[:-1] = values_cost[1:]
         advantages_task, returns_task = cm.gae(rewards_task, values_task, gamma=common.GAMMA,
                                                gae_lambda=common.GAE_LAMBDA, terminal=terminal,
-                                               bootstrap=bootstrap)
+                                               bootstrap=bootstrap_task)
         advantages_cost, returns_cost = cm.gae(rewards_cost, values_cost, gamma=common.GAMMA,
                                                gae_lambda=common.GAE_LAMBDA, terminal=terminal,
-                                               bootstrap=bootstrap)
+                                               bootstrap=bootstrap_cost)
         combined = cm.actor_advantage(advantages_task, advantages_cost, episode["lambda"])
         for index, tape in enumerate(tapes):
             samples.append({
