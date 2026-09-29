@@ -1,0 +1,17 @@
+{
+ "cap": 64,
+ "events": [
+  {
+   "count": 16,
+   "key": "T9",
+   "note": "T9 ALL_ROWS equivalence vs frozen v2_trainer (2 calls per trainer)"
+  },
+  {
+   "count": 8,
+   "key": "T10",
+   "note": "T10 per-arm reduction-effect probe (one call per reduction)"
+  }
+ ],
+ "note": "pure synthetic optimizer.step inside tests only; no environment is constructed and these are booked separately from the 1040 launch quota",
+ "used": 24
+}

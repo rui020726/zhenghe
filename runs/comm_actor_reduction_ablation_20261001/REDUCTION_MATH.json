@@ -1,0 +1,643 @@
+{
+ "T10_reduction_is_effective": {
+  "all_rows_scalars_match_frozen_report_shape": true,
+  "definitional_checks": {
+   "ACTIVE_equals_mean_over_active_rows": true,
+   "ALL_equals_mean_over_all_rows": true,
+   "active_definition_max_abs_gap": 2.9802000006684537e-08,
+   "all_definition_max_abs_gap": 0.0,
+   "note": "the loss SCALAR is not the N/M multiple of the other arm's scalar: a masked row's surrogate value is a non-zero constant even though its actor gradient is exactly zero. The gradient identity is checked separately in T1."
+  },
+  "divergence_after_minibatch_0_is_expected": true,
+  "fields_that_differ_after_minibatch_0": [
+   "actor_surrogate_mean",
+   "approx_kl",
+   "entropy_term",
+   "pre_clip_total_norm",
+   "ratio_max",
+   "ratio_min",
+   "value_loss_cost",
+   "value_loss_task"
+  ],
+  "first_minibatch_outcome_fields_differ": {
+   "actor_surrogate_mean": true,
+   "meaning": "the actor surrogate mean and the pre-clip total gradient norm already differ at minibatch 0: that IS the intervention being measured, so requiring equality there would be wrong",
+   "pre_clip_total_norm": true
+  },
+  "first_minibatch_untouched_fields_identical": {
+   "approx_kl": true,
+   "clip_fraction": true,
+   "entropy_term": true,
+   "lambda": true,
+   "m_active_rows": true,
+   "n_rows": true,
+   "ratio_max": true,
+   "ratio_min": true,
+   "value_loss_cost": true,
+   "value_loss_task": true
+  },
+  "frozen_scalars_all_rows_vs_base_trainer": "see T9_all_rows_equals_frozen_trainer.frozen_scalar_fields_equal",
+  "m_rows_identical": true,
+  "minibatches": 4,
+  "n_rows_identical": true,
+  "passed": true,
+  "synthetic_steps_booked_total": 24
+ },
+ "T1_mixed_rows": {
+  "expected_factor": 1.333333333,
+  "identity": "grad(ACTIVE_ROWS actor term) == (N/M) * grad(ALL_ROWS actor term)",
+  "l2_active": 0.12587487697601318,
+  "l2_all": 0.09440615028142929,
+  "l2_ratio": 1.333333439,
+  "loss_active": -0.23485037684440613,
+  "loss_all": -0.23684079945087433,
+  "m_active_rows": 9,
+  "max_abs_difference_after_scaling": 1.862645149230957e-08,
+  "n_rows": 12,
+  "passed": true,
+  "tolerance": "float32: the identity is exact in real arithmetic; the residual is summation rounding (observed ~2e-08 on a gradient of norm ~1e-01)"
+ },
+ "T1b_inactive_row_zero_gradient": {
+  "max_abs_actor_gradient_at_weight_shifts": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "note": "the archived joint_log_prob multiplies every candidate term by the saved usable flag, so a row with no free candidate is a constant zero for the actor at any weights; only its critic and surrogate VALUE still enter the mean denominator",
+  "passed": true,
+  "shifts": [
+   0.0,
+   0.013,
+   -0.021
+  ]
+ },
+ "T2_all_active": {
+  "gradient_max_abs_difference": 0.0,
+  "loss_difference": 0.0,
+  "m_active_rows": 12,
+  "n_rows": 12,
+  "passed": true
+ },
+ "T3_all_masked": {
+  "actor_gradient_l2_active_rows": 0.0,
+  "actor_gradient_l2_all_rows": 0.0,
+  "actor_loss_value": -0.0,
+  "critic_rows_retained": 3,
+  "full_loss_finite": true,
+  "m_active_rows": 0,
+  "n_rows": 3,
+  "note": "only the actor term must vanish; the critics keep every masked row and the shared trunk is still moved by them, so a fully masked minibatch is NOT a no-op",
+  "passed": true,
+  "value_loss_cost": 0.020040815696120262,
+  "value_loss_task": 0.2827726900577545
+ },
+ "T4_hold_counts_as_active": {
+  "M_with_hold_actions": 12,
+  "M_with_the_sampled_actions": 12,
+  "active_rows": 12,
+  "all_recorded_actions_are_HOLD": true,
+  "note": "a sampled HOLD on a free candidate is still a decision the policy took: the row carries likelihood and must count in M. The comparison below is the sharp form: M depends on which candidates were free, never on which action was chosen.",
+  "passed": true,
+  "rows": 12
+ },
+ "T5_real_saved_tapes": {
+  "all_actionable_equals_free": true,
+  "all_candidate_classes_close": true,
+  "all_masked_rows_have_no_likelihood_entry": true,
+  "cells": [
+   {
+    "actionable_equals_free": true,
+    "candidate_classes_close": true,
+    "fully_masked_rows": 62,
+    "m_active_rows": 4,
+    "m_over_n": 0.060606,
+    "masked_rows_never_appear_in_send_probabilities": true,
+    "n_rows": 66,
+    "row": "r30_train_old_s11_e0_s1300027_a0.json",
+    "rows_whose_free_candidates_all_chose_HOLD": 0,
+    "rows_with_forced_candidates": 0
+   },
+   {
+    "actionable_equals_free": true,
+    "candidate_classes_close": true,
+    "fully_masked_rows": 818,
+    "m_active_rows": 8,
+    "m_over_n": 0.009685,
+    "masked_rows_never_appear_in_send_probabilities": true,
+    "n_rows": 826,
+    "row": "r30_train_old_s11_e100_s1300032_a100.json",
+    "rows_whose_free_candidates_all_chose_HOLD": 1,
+    "rows_with_forced_candidates": 0
+   },
+   {
+    "actionable_equals_free": true,
+    "candidate_classes_close": true,
+    "fully_masked_rows": 51,
+    "m_active_rows": 5,
+    "m_over_n": 0.089286,
+    "masked_rows_never_appear_in_send_probabilities": true,
+    "n_rows": 56,
+    "row": "r30_train_old_s11_e101_s1300031_a101.json",
+    "rows_whose_free_candidates_all_chose_HOLD": 0,
+    "rows_with_forced_candidates": 0
+   },
+   {
+    "actionable_equals_free": true,
+    "candidate_classes_close": true,
+    "fully_masked_rows": 417,
+    "m_active_rows": 8,
+    "m_over_n": 0.018824,
+    "masked_rows_never_appear_in_send_probabilities": true,
+    "n_rows": 425,
+    "row": "r30_train_old_s11_e102_s1300015_a102.json",
+    "rows_whose_free_candidates_all_chose_HOLD": 1,
+    "rows_with_forced_candidates": 0
+   },
+   {
+    "actionable_equals_free": true,
+    "candidate_classes_close": true,
+    "fully_masked_rows": 46,
+    "m_active_rows": 5,
+    "m_over_n": 0.098039,
+    "masked_rows_never_appear_in_send_probabilities": true,
+    "n_rows": 51,
+    "row": "r30_train_old_s11_e103_s1300042_a103.json",
+    "rows_whose_free_candidates_all_chose_HOLD": 1,
+    "rows_with_forced_candidates": 0
+   },
+   {
+    "actionable_equals_free": true,
+    "candidate_classes_close": true,
+    "fully_masked_rows": 54,
+    "m_active_rows": 9,
+    "m_over_n": 0.142857,
+    "masked_rows_never_appear_in_send_probabilities": true,
+    "n_rows": 63,
+    "row": "r30_train_old_s11_e104_s1300004_a104.json",
+    "rows_whose_free_candidates_all_chose_HOLD": 1,
+    "rows_with_forced_candidates": 0
+   }
+  ],
+  "fully_masked_rows_present_in_every_cell": true,
+  "passed": true,
+  "source": "ROUND30 old-arm training tapes, already metered (0 new launches)"
+ },
+ "T6_zero_gradient_padding": {
+  "M_after": 9,
+  "M_before": 9,
+  "N_after": 16,
+  "N_before": 12,
+  "active_rows_gradient_max_abs_difference": 0.0,
+  "all_padding_rows_inactive": true,
+  "all_rows_l2_ratio_after_over_before": 0.74999998,
+  "expected_all_rows_ratio": 0.75,
+  "note": "synthetic-only counterexample. Adding zero-gradient rows shrinks ALL_ROWS' actor gradient by N/N' and leaves ACTIVE_ROWS' untouched. Real training never adds or drops rows; this only isolates what the denominator does.",
+  "padding_rows": 4,
+  "passed": true
+ },
+ "T7_other_losses_unchanged": {
+  "advantage_construction_identical_to_frozen_trainer": true,
+  "approx_kl_equal": true,
+  "clip_fraction_equal": true,
+  "entropy_term_equal": true,
+  "gradient_difference_is_exactly_the_actor_term_max_abs": 1.210719347000122e-08,
+  "passed": true,
+  "scope_note": "the ablation deliberately changes the actor's weight RELATIVE to entropy and the two critics; it does not change entropy, either critic loss, the advantage construction, the existing KL or the clip fields",
+  "value_loss_cost_equal": true,
+  "value_loss_task_equal": true
+ },
+ "T8_restore_contract": {
+  "passed": true,
+  "reduction_mode_in_payload": true,
+  "reduction_mode_in_training_state": "ALL_ROWS",
+  "refusals": [
+   "cross-reduction resume refused: r32_synth_checkpoint_probe.pt: reduction mode is 'ALL_ROWS' but 'ACTIVE_ROWS' was requested; a checkpoint trained under one reduction must never be resumed under the other",
+   "archived checkpoint refused: r30_train_old_s11_ep0.pt: reduction mode is None but 'ALL_ROWS' was requested; a checkpoint trained under one reduction must never be resumed under the other"
+  ],
+  "same_mode_resume_roundtrip_parameter_sha_equal": true
+ },
+ "T9_all_rows_equals_frozen_trainer": {
+  "equal_after_call1": true,
+  "equal_after_call2": true,
+  "frozen_scalar_fields_equal": {
+   "approx_kl": true,
+   "clip_fraction": true,
+   "entropy": true,
+   "epochs": true,
+   "gradient_norm_mean": true,
+   "minibatches": true,
+   "optimizer_steps": true,
+   "policy_surrogate": true,
+   "samples": true,
+   "unassigned_prefix_cost_bytes": true,
+   "unassigned_prefix_task_reward": true,
+   "value_loss_cost": true,
+   "value_loss_task": true
+  },
+  "hash_after_call1": {
+   "r32_trainer": [
+    "162528c3689a52d54214bea346b7e5982f3a0f5611b7055d11634034edc6d5ea",
+    "e1d3c7cfcebdb62c613111296530cd0054091c177e7ec81567d4dfddb2f216da"
+   ],
+   "v2_trainer": [
+    "162528c3689a52d54214bea346b7e5982f3a0f5611b7055d11634034edc6d5ea",
+    "e1d3c7cfcebdb62c613111296530cd0054091c177e7ec81567d4dfddb2f216da"
+   ]
+  },
+  "minibatches_per_call": 4,
+  "module_gradient_l1_mean_equal": true,
+  "passed": true,
+  "protocol": "same fresh Controller(seed), same synthetic batch, Adam(lr=3e-4), the full minibatch sequence run twice, weight hash after every call",
+  "synthetic_cap": 64,
+  "synthetic_steps_booked_so_far": 24,
+  "weights_actually_moved": true
+ },
+ "batch_shape": {
+  "active_rows": 9,
+  "inactive_rows": 3,
+  "reduction_differs_here": true,
+  "samples": 12
+ },
+ "environment_launches_used": 0,
+ "passed": true,
+ "premise_check": {
+  "actor_term_divides_by_row_count": true,
+  "free_set_is_saved_at_masked_selection": true,
+  "inactive_row_likelihood_is_identically_zero": true,
+  "one_sample_is_one_decision_row_not_one_candidate": true,
+  "parent_actor_term": "-surrogate.mean() == -(1/N) * sum_i s_i over the chunk's rows",
+  "surrogate_is_per_row_tensor": true,
+  "verdict": "premises hold. N is the number of logged decision rows in the chunk, every row enters the denominator, and a row with no free candidate carries a likelihood that is a constant zero, so its actor gradient is zero at any weights -- not only where the ratio happens to be 1"
+ },
+ "premise_consistent": true,
+ "round": "32",
+ "section": "reduction mathematics and wiring (0 launches)",
+ "source_diff": {
+  "block_categories": {
+   "passive_read": 4,
+   "research_variable": 8
+  },
+  "changed_blocks": [
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "episodes: list[dict[str, Any]], *, update_index: int,",
+     "reduction: str) -> dict[str, Any]:"
+    ],
+    "opcode": "replace",
+    "parent_lines": [
+     "episodes: list[dict[str, Any]], *, update_index: int) -> dict[str, Any]:"
+    ]
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "if reduction not in REDUCTIONS:",
+     "raise ValueError(f\"update {update_index}: unknown reduction {reduction!r}\")"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "\"reduction\": reduction, \"minibatch_reads\": [],"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "passive_read",
+    "child_lines": [
+     "minibatch_reads: list[dict[str, Any]] = []",
+     "surrogate_all_reads: list[float] = []",
+     "active_share_reads: list[float] = []",
+     "clipping_reads: list[int] = []",
+     "non_finite_reads: list[int] = []"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "passive_read",
+    "child_lines": [
+     "lambdas = sorted({float(episode[\"lambda\"]) for episode in episodes})",
+     "if len(lambdas) != 1:",
+     "raise RuntimeError(f\"update {update_index}: the batch's episodes did not share one \"",
+     "f\"lambda: {lambdas}\")",
+     "batch_lambda = lambdas[0]"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "row_active = row_active_mask(chunk)",
+     "actor_surrogate, n_rows, m_active = actor_surrogate_mean(",
+     "surrogate, row_active, reduction)",
+     "loss = (-actor_surrogate"
+    ],
+    "opcode": "replace",
+    "parent_lines": [
+     "loss = (-surrogate.mean()"
+    ]
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "pre_clip_module_l1 = {module_name: _module_grad_l1(module)",
+     "for module_name, module in modules}",
+     "pre_clip_module_l2 = {module_name: _module_grad_l2(module)",
+     "for module_name, module in modules}",
+     "surrogate_all = float(surrogate.mean().detach().item())",
+     "read_row: dict[str, Any] = {",
+     "\"minibatch\": minibatches,",
+     "\"epoch\": int(_epoch),",
+     "\"reduction\": reduction,",
+     "\"lambda\": batch_lambda,",
+     "\"n_rows\": int(n_rows),",
+     "\"m_active_rows\": int(m_active),",
+     "\"m_over_n\": round(m_active / n_rows, 9) if n_rows else None,",
+     "\"actor_surrogate_mean\": float(actor_surrogate.detach().item()),",
+     "\"actor_surrogate_mean_all_rows_reference\": surrogate_all,",
+     "\"actor_surrogate_mean_active_only_reference\": float(",
+     "surrogate[row_active.bool()].mean().detach().item()) if m_active else None,",
+     "\"entropy_term\": float(entropy_t.mean().detach().item()),",
+     "\"value_loss_task\": float(value_task_loss.detach().item()),",
+     "\"value_loss_cost\": float(value_cost_loss.detach().item()),",
+     "\"loss_total\": float(loss.detach().item()),",
+     "\"approx_kl\": float((old_log_prob - new_log_prob_t).mean().item()),",
+     "\"clip_fraction\": float(((ratio - 1.0).abs() > common.CLIP).float().mean().item()),",
+     "\"ratio_min\": float(ratio.detach().min().item()),",
+     "\"ratio_max\": float(ratio.detach().max().item()),",
+     "\"advantage_mean\": float(advantage.mean().item()),",
+     "\"advantage_mean_active_only\": float(",
+     "advantage[row_active.bool()].mean().item()) if m_active else None,",
+     "\"pre_clip_module_l1\": pre_clip_module_l1,",
+     "\"pre_clip_module_l2\": pre_clip_module_l2,",
+     "}"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "read_row[\"pre_clip_total_norm\"] = float(norm.detach().item())",
+     "read_row[\"post_clip_total_norm\"] = min(read_row[\"pre_clip_total_norm\"],",
+     "float(common.MAX_GRAD_NORM))",
+     "read_row[\"clipping_triggered\"] = bool(read_row[\"pre_clip_total_norm\"]",
+     "> float(common.MAX_GRAD_NORM))",
+     "read_row[\"clip_scale\"] = (round(read_row[\"post_clip_total_norm\"]",
+     "/ read_row[\"pre_clip_total_norm\"], 9)",
+     "if read_row[\"pre_clip_total_norm\"] > 0 else 1.0)",
+     "read_row[\"all_finite\"] = bool(all(",
+     "_finite_or_none(read_row[key]) for key in (",
+     "\"actor_surrogate_mean\", \"entropy_term\", \"value_loss_task\", \"value_loss_cost\",",
+     "\"loss_total\", \"approx_kl\", \"clip_fraction\", \"pre_clip_total_norm\",",
+     "\"ratio_min\", \"ratio_max\", \"advantage_mean\"))",
+     "and all(_finite_or_none(value) for value in pre_clip_module_l1.values())",
+     "and all(_finite_or_none(value) for value in pre_clip_module_l2.values()))",
+     "minibatch_reads.append({",
+     "key: (round(value, 12) if isinstance(value, float) else value)",
+     "if key not in (\"pre_clip_module_l1\", \"pre_clip_module_l2\")",
+     "else {name: round(amount, 12) for name, amount in value.items()}",
+     "for key, value in read_row.items()})",
+     "surrogate_all_reads.append(surrogate_all)",
+     "active_share_reads.append(m_active / n_rows if n_rows else 0.0)",
+     "clipping_reads.append(int(read_row[\"clipping_triggered\"]))",
+     "non_finite_reads.append(int(not read_row[\"all_finite\"]))"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "totals[\"surrogate\"] += float(actor_surrogate.item())"
+    ],
+    "opcode": "replace",
+    "parent_lines": [
+     "totals[\"surrogate\"] += float(surrogate.mean().item())"
+    ]
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "\"reduction\": reduction,",
+     "\"lambda\": batch_lambda,"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "passive_read",
+    "child_lines": [
+     "\"policy_surrogate_all_rows_reference\": round(",
+     "sum(surrogate_all_reads) / len(surrogate_all_reads), 6),"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "passive_read",
+    "child_lines": [
+     "\"minibatch_reads\": minibatch_reads,",
+     "\"active_row_share_mean\": round(sum(active_share_reads) / len(active_share_reads), 6),",
+     "\"clipping_minibatches\": sum(clipping_reads),",
+     "\"non_finite_minibatches\": sum(non_finite_reads),"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   }
+  ],
+  "child_signature_line": "def ppo_update(controller: Any, optimizer: torch.optim.Optimizer,",
+  "method": "difflib.SequenceMatcher over comment-stripped source lines of v2_trainer.ppo_update and r32_trainer.ppo_update; each changed BLOCK is classified as research variable / reduction plumbing / passive read, and any block that fits none is reported instead of being waved through",
+  "note": "the ablation deliberately changes the actor's weight relative to entropy and the two critics; nothing else in the loss expression is touched",
+  "parent_signature_line": "def ppo_update(controller: Any, optimizer: torch.optim.Optimizer,",
+  "passed": true,
+  "removed_actor_reduction_line": [
+   "loss = (-surrogate.mean()"
+  ],
+  "removed_line_categories": {
+   "episodes: list[dict[str, Any]], *, update_index: int) -> dict[str, Any]:": "reduction_plumbing -- the new reduction keyword argument",
+   "loss = (-surrogate.mean()": "research_variable -- the actor surrogate reduction itself",
+   "totals[\"surrogate\"] += float(surrogate.mean().item())": "reported_field_only -- the policy_surrogate accumulator now reads the arm's own mean; for ALL_ROWS that is the same value (proved by T9)"
+  },
+  "removed_parent_lines": [
+   "episodes: list[dict[str, Any]], *, update_index: int) -> dict[str, Any]:",
+   "loss = (-surrogate.mean()",
+   "totals[\"surrogate\"] += float(surrogate.mean().item())"
+  ],
+  "research_variable_blocks": [
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "episodes: list[dict[str, Any]], *, update_index: int,",
+     "reduction: str) -> dict[str, Any]:"
+    ],
+    "opcode": "replace",
+    "parent_lines": [
+     "episodes: list[dict[str, Any]], *, update_index: int) -> dict[str, Any]:"
+    ]
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "if reduction not in REDUCTIONS:",
+     "raise ValueError(f\"update {update_index}: unknown reduction {reduction!r}\")"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "\"reduction\": reduction, \"minibatch_reads\": [],"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "row_active = row_active_mask(chunk)",
+     "actor_surrogate, n_rows, m_active = actor_surrogate_mean(",
+     "surrogate, row_active, reduction)",
+     "loss = (-actor_surrogate"
+    ],
+    "opcode": "replace",
+    "parent_lines": [
+     "loss = (-surrogate.mean()"
+    ]
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "pre_clip_module_l1 = {module_name: _module_grad_l1(module)",
+     "for module_name, module in modules}",
+     "pre_clip_module_l2 = {module_name: _module_grad_l2(module)",
+     "for module_name, module in modules}",
+     "surrogate_all = float(surrogate.mean().detach().item())",
+     "read_row: dict[str, Any] = {",
+     "\"minibatch\": minibatches,",
+     "\"epoch\": int(_epoch),",
+     "\"reduction\": reduction,",
+     "\"lambda\": batch_lambda,",
+     "\"n_rows\": int(n_rows),",
+     "\"m_active_rows\": int(m_active),",
+     "\"m_over_n\": round(m_active / n_rows, 9) if n_rows else None,",
+     "\"actor_surrogate_mean\": float(actor_surrogate.detach().item()),",
+     "\"actor_surrogate_mean_all_rows_reference\": surrogate_all,",
+     "\"actor_surrogate_mean_active_only_reference\": float(",
+     "surrogate[row_active.bool()].mean().detach().item()) if m_active else None,",
+     "\"entropy_term\": float(entropy_t.mean().detach().item()),",
+     "\"value_loss_task\": float(value_task_loss.detach().item()),",
+     "\"value_loss_cost\": float(value_cost_loss.detach().item()),",
+     "\"loss_total\": float(loss.detach().item()),",
+     "\"approx_kl\": float((old_log_prob - new_log_prob_t).mean().item()),",
+     "\"clip_fraction\": float(((ratio - 1.0).abs() > common.CLIP).float().mean().item()),",
+     "\"ratio_min\": float(ratio.detach().min().item()),",
+     "\"ratio_max\": float(ratio.detach().max().item()),",
+     "\"advantage_mean\": float(advantage.mean().item()),",
+     "\"advantage_mean_active_only\": float(",
+     "advantage[row_active.bool()].mean().item()) if m_active else None,",
+     "\"pre_clip_module_l1\": pre_clip_module_l1,",
+     "\"pre_clip_module_l2\": pre_clip_module_l2,",
+     "}"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "read_row[\"pre_clip_total_norm\"] = float(norm.detach().item())",
+     "read_row[\"post_clip_total_norm\"] = min(read_row[\"pre_clip_total_norm\"],",
+     "float(common.MAX_GRAD_NORM))",
+     "read_row[\"clipping_triggered\"] = bool(read_row[\"pre_clip_total_norm\"]",
+     "> float(common.MAX_GRAD_NORM))",
+     "read_row[\"clip_scale\"] = (round(read_row[\"post_clip_total_norm\"]",
+     "/ read_row[\"pre_clip_total_norm\"], 9)",
+     "if read_row[\"pre_clip_total_norm\"] > 0 else 1.0)",
+     "read_row[\"all_finite\"] = bool(all(",
+     "_finite_or_none(read_row[key]) for key in (",
+     "\"actor_surrogate_mean\", \"entropy_term\", \"value_loss_task\", \"value_loss_cost\",",
+     "\"loss_total\", \"approx_kl\", \"clip_fraction\", \"pre_clip_total_norm\",",
+     "\"ratio_min\", \"ratio_max\", \"advantage_mean\"))",
+     "and all(_finite_or_none(value) for value in pre_clip_module_l1.values())",
+     "and all(_finite_or_none(value) for value in pre_clip_module_l2.values()))",
+     "minibatch_reads.append({",
+     "key: (round(value, 12) if isinstance(value, float) else value)",
+     "if key not in (\"pre_clip_module_l1\", \"pre_clip_module_l2\")",
+     "else {name: round(amount, 12) for name, amount in value.items()}",
+     "for key, value in read_row.items()})",
+     "surrogate_all_reads.append(surrogate_all)",
+     "active_share_reads.append(m_active / n_rows if n_rows else 0.0)",
+     "clipping_reads.append(int(read_row[\"clipping_triggered\"]))",
+     "non_finite_reads.append(int(not read_row[\"all_finite\"]))"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "totals[\"surrogate\"] += float(actor_surrogate.item())"
+    ],
+    "opcode": "replace",
+    "parent_lines": [
+     "totals[\"surrogate\"] += float(surrogate.mean().item())"
+    ]
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "\"reduction\": reduction,",
+     "\"lambda\": batch_lambda,"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   }
+  ],
+  "unexplained_blocks": [],
+  "unexplained_removed_lines": []
+ },
+ "synthetic_update_budget": {
+  "cap": 64,
+  "used": 24
+ },
+ "unchanged_machinery_identity": {
+  "actor_advantage_is_the_frozen_cost_math_object": true,
+  "batch_g_hat_is_frozen_object": true,
+  "batch_samples_is_frozen_object": true,
+  "bundle_is_frozen_object": true,
+  "cost_math_module_is_the_frozen_one": true,
+  "dual_update_is_frozen_object": true,
+  "gae_is_the_frozen_cost_math_object": true,
+  "gae_schema_inherited": true,
+  "likelihood_alignment_is_frozen_object": true,
+  "loss_version_inherited": true,
+  "prefix_totals_is_frozen_object": true,
+  "registered_scalar_values": {
+   "B0_BYTES": 10000.0,
+   "CLIP": 0.2,
+   "DELTA": 0.0,
+   "ENTROPY_BONUS": 0.01,
+   "EPOCHS_PER_BATCH": 4,
+   "ETA_LAMBDA": 0.05,
+   "GAE_LAMBDA": 0.95,
+   "GAMMA": 1.0,
+   "LAMBDA_INIT": 1.0,
+   "LEARNING_RATE": 0.0003,
+   "LOG_PROB_TOLERANCE": 1e-06,
+   "MAX_GRAD_NORM": 0.5,
+   "MINIBATCH_STEPS": 256,
+   "VALUE_COEFFICIENT": 0.5
+  },
+  "registered_scalars_are_the_frozen_module": true,
+  "state_schema_inherited": true,
+  "trainer_tag_inherited": true
+ }
+}
