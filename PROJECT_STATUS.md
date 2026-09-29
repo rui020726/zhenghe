@@ -1,5 +1,60 @@
 # 项目状态
 
+## 2026-09-30：ROUND31 通信控制器约束优化诊断——192/192 批 λ 公式与配对完全闭合、g_hat 从未为负；actor 确实收到任务与成本两项信号但 70 %–96 % 样本零 actor 梯度；未发现正确性错误（0 启动、0 optimizer.step）
+
+分支 `analysis/comm-constraint-optimization-diagnosis`（起点 ROUND30 报告头完整 SHA
+`915868297c08d4b01b7dfeff0ea810d5394057a3`，本地 `git rev-parse` 核验；该分支名此前不存在），
+产物 `runs/comm_constraint_optimization_diagnosis_20260930/`（`ROUND31_REPORT.md`、
+`ROUND31_VERDICT.json`、`ABSOLUTE_PERFORMANCE.json`、`DUAL_TRAJECTORIES.json`、
+`UPDATE_SIGNAL_DIAGNOSIS.json`、`EXECUTION_BASIS.md` sha256 `e8e9029c…`、`r31_*.py`）。
+纯读取 + 纯计算：新环境启动 0、新流 0、真实训练更新 0、合成 optimizer 更新 0、`.pt` 写入 0；
+梯度诊断为 `autograd.grad` 于 ep0 milestone 权重的内存副本（6 运行 × 1 minibatch）。
+发布状态：未推送、本轮 0 次网络尝试、该分支无 upstream（最近登记态
+`not_pushed_network_unreachable`）。
+
+- **身份**：1 040 行行内身份与文件名候选键逐项核对 **0 不一致**；6 × 11 项 milestone↔batch↔
+  eval 行↔CHECKPOINT_INDEX 交叉核对全真；192 批的搜索/分配 `frozen_checkpoints` 哈希完全相同、
+  optimizer 参数集合逐批等于 controller 集合、likelihood 192/192 passed；六格契约均为
+  `constrained-cost-v2`/`constrained-lagrangian/2`。**未发现新的正确性缺陷**。
+- **绝对表现（补齐 ROUND30 只报 Δ 的缺口）**：immediate 6.0/14 939.25 B、late 6.0/4 838.25 B。
+  greedy 六格：s11 两臂 5.5/≈28 200 B（immediate 的 1.89 倍）、s22 两臂 5.5/**0 B**、
+  s33 两臂 6.0/2 398.5 与 2 063.6 B。**配对任务损失 vs immediate：4/6 个 greedy 格仍为 0.5
+  个/ep**，最大单场景损失 4 个按时任务（1301002）。sampled 六格全部既有损失（0.0625–0.4375）
+  又普遍更贵。与 ROUND30 汇报数字 **92/92 相符**（含 `PAIRED_COMPARISON.json` 逐格）。
+  登记式澄清：ROUND30 的"cheaper_but_lost_task = 0"范围是 NEW vs OLD；以 late 为参照时
+  s22 greedy 两臂各有 5 个场景既更便宜又更少按时。
+- **约束与 λ（6 运行 × 32 批全量重建）**：`λ_after = max(0, λ_before + 0.05·g_hat)` **192/192
+  批成立**（差 < 1e-12）；`g_hat` 配对、λ 链、权重哈希链、ep128 `lambda_history` 四方逐批一致；
+  `lambda_at_rollout == lambda_before` 192/192 成立 ⇒ **每批 actor 用更新前的 λ**。
+  **192 批中 `g_hat` 无一次为负**（正/零 = 23/9 或 13/19），λ 只单调不降：1.0→1.5000（s11 两臂）、
+  1.2375（s22 两臂）、1.4750 vs 1.4875（s33，自第 29 批分叉）。零非有限值、零版本混用、零配对错误。
+  ⇒ "λ 按登记公式反应"已证，"约束被处理到满足"未证。
+- **更新信号（固定批 0/15/31，18 个点）**：样本数、前缀未归属收益、`λ·A_task − A_cost`
+  组合（最大误差 0.0）、批 0 似然重算（与记录差 < 1e-9）**全部与训练器记录一致**。
+  只有批 0 的更新前权重落盘，批 15/31 记为 **missing**（未用更新后权重冒充、未重放 optimizer）。
+  批 0 更新起点上**动作头只由 `λ·A_task`、`−A_cost`、熵驱动**（两个 critic 对动作头梯度恰为 0）：
+  动作头 pre-clip L1 task 0.39–1.06 / cost 0.25–0.78 / 熵 0.0003–0.0057，两支 cos −0.73…−1.00。
+  同时登记三项边界：① 全运行 **70.4 %–96.5 % 样本所在 tape 候选全被 mask**、actor 梯度恒 0
+  却仍进 `surrogate.mean()` 分母（候选级可执行占比仅 5.4 %–7.1 %，s22 为 41 %–42 %）；
+  ② 主干 L1 中任务 critic 88.5–107.0 远大于 policy 两项 1.4–7.2，总 pre-clip 范数与
+  critic 之和之比 0.9999–1.0011；③ 每批都触发 `MAX_GRAD_NORM=0.5` 裁剪（缩放 0.186–0.210）。
+  `clip_fraction ≤ 0.0115`、`|approx_kl| ≤ 1.3e-3`（训练器原字段，未重算未填零）。
+- **对偶尺度（仅描述）**：greedy 开发块 `s22_greedy` 对 late 的经验交叉点 `λ_cross = 0.96765`，
+  恰在训练走过的 [1.0, 1.5] 区间下沿之下；`s22_greedy` 对 immediate 为 2.98785；
+  `s11_greedy` 对两条规则与 `s33_greedy` 的 `λ_cross` 均为负（在 λ ≥ 0 上被支配）。
+  sampled 表内 λ ∈ [1, 1.5] 时 late 的 J 高于全部六个 learned 格。**不称最优 λ、不作充分条件、
+  不作部署参数、未据此选 λ。**
+- **五问**：① 绝对水平见上（"保任务"在 4/6 greedy 格未成立；"降成本"只在 s33 两臂相对两条规则
+  同时成立，且仅覆盖受控上行通道）；② 约束违背与 λ 更新**正确闭合**，但违背从未反向；
+  ③ actor **确实**收到登记的两项信号（同量级、近反向），范围与尺度限制已量化登记；
+  ④ 材料**不支持**实现/身份问题，**支持**"有限训练内约束仍未满足"与"sampled/greedy 解码差异
+  不可互换"，并给出更新尺度线索；**λ 太小、训练太少、熵太强均不足以判定**；
+  ⑤ 唯一后续最小实验（本轮不执行、需批准）：**只改 surrogate 归约分母**（全部决策 tape →
+  含可执行候选的 tape），用以区分"对偶上升在本登记尺度内太慢"与"成本信号被零梯度样本稀释"；
+  λ/ηλ/熵/学习率/clip/批结构/预算/场景/seed/搜索与分配 checkpoint 全冻结，seed22 作内部对照，
+  预计 960 次环境启动（64 个 reference 复用归档行，0 次启动）。
+- **停止**：本地交付后停止，不续训、不调参、不追加评估、不部署、不自动推送。
+
 ## 2026-09-30：ROUND30 原/新期限编码从初值配对训练消融——1040/1040 零失败；greedy 任务 48/48 持平、成本 −9/0/−335 B/ep 方向不一；sampled 有零星任务增益（启动 1040/1080）
 
 分支 `exp/comm-deadline-encoding-ablation`（起点 ROUND29 完整头

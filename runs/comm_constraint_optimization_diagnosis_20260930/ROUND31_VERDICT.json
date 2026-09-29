@@ -1,0 +1,479 @@
+{
+ "confirmed": {
+  "absolute_levels": {
+   "cells": {
+    "new_s11_greedy": {
+     "mean_on_time": 5.5,
+     "mean_spent_bytes": 28198.875,
+     "paired_task_loss_vs_immediate": 0.5,
+     "scenes_with_task_loss": 5
+    },
+    "new_s11_sampled": {
+     "mean_on_time": 5.5625,
+     "mean_spent_bytes": 28071.75,
+     "paired_task_loss_vs_immediate": 0.4375,
+     "scenes_with_task_loss": 4
+    },
+    "new_s22_greedy": {
+     "mean_on_time": 5.5,
+     "mean_spent_bytes": 0.0,
+     "paired_task_loss_vs_immediate": 0.5,
+     "scenes_with_task_loss": 5
+    },
+    "new_s22_sampled": {
+     "mean_on_time": 5.9375,
+     "mean_spent_bytes": 11637.75,
+     "paired_task_loss_vs_immediate": 0.0625,
+     "scenes_with_task_loss": 1
+    },
+    "new_s33_greedy": {
+     "mean_on_time": 6.0,
+     "mean_spent_bytes": 2063.625,
+     "paired_task_loss_vs_immediate": 0.0,
+     "scenes_with_task_loss": 0
+    },
+    "new_s33_sampled": {
+     "mean_on_time": 5.75,
+     "mean_spent_bytes": 28257.75,
+     "paired_task_loss_vs_immediate": 0.25,
+     "scenes_with_task_loss": 4
+    },
+    "old_s11_greedy": {
+     "mean_on_time": 5.5,
+     "mean_spent_bytes": 28207.875,
+     "paired_task_loss_vs_immediate": 0.5,
+     "scenes_with_task_loss": 5
+    },
+    "old_s11_sampled": {
+     "mean_on_time": 5.5625,
+     "mean_spent_bytes": 28128.75,
+     "paired_task_loss_vs_immediate": 0.4375,
+     "scenes_with_task_loss": 4
+    },
+    "old_s22_greedy": {
+     "mean_on_time": 5.5,
+     "mean_spent_bytes": 0.0,
+     "paired_task_loss_vs_immediate": 0.5,
+     "scenes_with_task_loss": 5
+    },
+    "old_s22_sampled": {
+     "mean_on_time": 5.875,
+     "mean_spent_bytes": 15835.5,
+     "paired_task_loss_vs_immediate": 0.125,
+     "scenes_with_task_loss": 2
+    },
+    "old_s33_greedy": {
+     "mean_on_time": 6.0,
+     "mean_spent_bytes": 2398.5,
+     "paired_task_loss_vs_immediate": 0.0,
+     "scenes_with_task_loss": 0
+    },
+    "old_s33_sampled": {
+     "mean_on_time": 5.5625,
+     "mean_spent_bytes": 28199.25,
+     "paired_task_loss_vs_immediate": 0.4375,
+     "scenes_with_task_loss": 4
+    }
+   },
+   "late_rule_dev": [
+    6.0,
+    4838.25
+   ],
+   "reading": "任务侧与成本侧必须分开读：greedy 的 old/new 六个格里 4 个仍有 0.5 个/ep 的配对任务损失，另外 2 个（seed33）按时任务数与 immediate 相同且已计量字节更低",
+   "reference_immediate_dev": [
+    6.0,
+    14939.25
+   ]
+  },
+  "action_head_gradient_split_at_update_start": {
+   "new_s11": {
+    "clipping_scale": 0.204853274,
+    "cosine_task_vs_cost": -0.73240259,
+    "critic_cost_l1": 0.0,
+    "critic_task_l1": 0.0,
+    "entropy_l1": 0.002219609916,
+    "policy_cost_l1": 0.280219137669,
+    "policy_task_l1": 0.391569703817,
+    "pre_clip_total_norm": 2.440771341
+   },
+   "new_s22": {
+    "clipping_scale": 0.185824341,
+    "cosine_task_vs_cost": -0.996068574,
+    "critic_cost_l1": 0.0,
+    "critic_task_l1": 0.0,
+    "entropy_l1": 0.005194828846,
+    "policy_cost_l1": 0.722499370575,
+    "policy_task_l1": 0.97530913353,
+    "pre_clip_total_norm": 2.690713167
+   },
+   "new_s33": {
+    "clipping_scale": 0.187641924,
+    "cosine_task_vs_cost": -0.988697236,
+    "critic_cost_l1": 0.0,
+    "critic_task_l1": 0.0,
+    "entropy_l1": 0.000249492819,
+    "policy_cost_l1": 0.262435168028,
+    "policy_task_l1": 0.399930536747,
+    "pre_clip_total_norm": 2.664649725
+   },
+   "old_s11": {
+    "clipping_scale": 0.209518818,
+    "cosine_task_vs_cost": -0.965636341,
+    "critic_cost_l1": 0.0,
+    "critic_task_l1": 0.0,
+    "entropy_l1": 0.002045160392,
+    "policy_cost_l1": 0.366742789745,
+    "policy_task_l1": 0.680455803871,
+    "pre_clip_total_norm": 2.386420488
+   },
+   "old_s22": {
+    "clipping_scale": 0.187185514,
+    "cosine_task_vs_cost": -0.99668008,
+    "critic_cost_l1": 0.0,
+    "critic_task_l1": 0.0,
+    "entropy_l1": 0.005645197351,
+    "policy_cost_l1": 0.779168665409,
+    "policy_task_l1": 1.057925462723,
+    "pre_clip_total_norm": 2.67114687
+   },
+   "old_s33": {
+    "clipping_scale": 0.186754367,
+    "cosine_task_vs_cost": -0.988957296,
+    "critic_cost_l1": 0.0,
+    "critic_task_l1": 0.0,
+    "entropy_l1": 0.000338708574,
+    "policy_cost_l1": 0.248955756426,
+    "policy_task_l1": 0.396025449038,
+    "pre_clip_total_norm": 2.677313566
+   }
+  },
+  "actor_receives_both_registered_signals": {
+   "new_s11_bb0": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": true,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "new_s11_bb15": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": false,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "new_s11_bb31": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": false,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "new_s22_bb0": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": true,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "new_s22_bb15": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": false,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "new_s22_bb31": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": false,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "new_s33_bb0": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": true,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "new_s33_bb15": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": false,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "new_s33_bb31": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": false,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "old_s11_bb0": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": true,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "old_s11_bb15": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": false,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "old_s11_bb31": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": false,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "old_s22_bb0": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": true,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "old_s22_bb15": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": false,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "old_s22_bb31": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": false,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "old_s33_bb0": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": true,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "old_s33_bb15": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": false,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   },
+   "old_s33_bb31": {
+    "advantage_combination_closed": true,
+    "advantage_decomposition": true,
+    "gradient_decomposition": false,
+    "prefix_recomputation_match": true,
+    "samples_match_trainer_count": true
+   }
+  },
+  "dual_update_is_exactly_the_registered_formula": {
+   "new_s11": true,
+   "new_s22": true,
+   "new_s33": true,
+   "old_s11": true,
+   "old_s22": true,
+   "old_s33": true
+  },
+  "g_hat_pairing_is_reproducible_from_rows": {
+   "new_s11": true,
+   "new_s22": true,
+   "new_s33": true,
+   "old_s11": true,
+   "old_s22": true,
+   "old_s33": true
+  },
+  "identity": {
+   "checkpoint_cross_checks_all_true": true,
+   "likelihood_recompute_matches_recorded_at_batch0": true,
+   "pre_update_weights_identity_at_batch0": true,
+   "row_census_matches_plan": true,
+   "row_identity_problems": 0
+  },
+  "lambda_never_decreased": {
+   "new_s11": {
+    "batches_with_negative_g_hat": 0,
+    "batches_with_positive_g_hat": 23,
+    "lambda_final": 1.4999999999999993,
+    "lambda_initial": 1.0
+   },
+   "new_s22": {
+    "batches_with_negative_g_hat": 0,
+    "batches_with_positive_g_hat": 13,
+    "lambda_final": 1.2374999999999994,
+    "lambda_initial": 1.0
+   },
+   "new_s33": {
+    "batches_with_negative_g_hat": 0,
+    "batches_with_positive_g_hat": 23,
+    "lambda_final": 1.4874999999999994,
+    "lambda_initial": 1.0
+   },
+   "old_s11": {
+    "batches_with_negative_g_hat": 0,
+    "batches_with_positive_g_hat": 23,
+    "lambda_final": 1.4999999999999993,
+    "lambda_initial": 1.0
+   },
+   "old_s22": {
+    "batches_with_negative_g_hat": 0,
+    "batches_with_positive_g_hat": 13,
+    "lambda_final": 1.2374999999999994,
+    "lambda_initial": 1.0
+   },
+   "old_s33": {
+    "batches_with_negative_g_hat": 0,
+    "batches_with_positive_g_hat": 23,
+    "lambda_final": 1.4749999999999992,
+    "lambda_initial": 1.0
+   }
+  },
+  "sample_level_actor_coverage": {
+   "new_s11": {
+    "candidate_actionable_share": 0.053842,
+    "samples": 26157,
+    "samples_without_any_actionable_candidate": 25228,
+    "share": 0.964484
+   },
+   "new_s22": {
+    "candidate_actionable_share": 0.42416,
+    "samples": 17825,
+    "samples_without_any_actionable_candidate": 12541,
+    "share": 0.703562
+   },
+   "new_s33": {
+    "candidate_actionable_share": 0.07084,
+    "samples": 26094,
+    "samples_without_any_actionable_candidate": 24951,
+    "share": 0.956197
+   },
+   "old_s11": {
+    "candidate_actionable_share": 0.057223,
+    "samples": 26156,
+    "samples_without_any_actionable_candidate": 25190,
+    "share": 0.963068
+   },
+   "old_s22": {
+    "candidate_actionable_share": 0.414507,
+    "samples": 17751,
+    "samples_without_any_actionable_candidate": 12656,
+    "share": 0.712974
+   },
+   "old_s33": {
+    "candidate_actionable_share": 0.070818,
+    "samples": 26010,
+    "samples_without_any_actionable_candidate": 24887,
+    "share": 0.956824
+   }
+  },
+  "trajectory_chains_and_problems": {
+   "new_s11": {
+    "checkpoint_history": true,
+    "lambda_chain": true,
+    "problems": 0,
+    "weights": true
+   },
+   "new_s22": {
+    "checkpoint_history": true,
+    "lambda_chain": true,
+    "problems": 0,
+    "weights": true
+   },
+   "new_s33": {
+    "checkpoint_history": true,
+    "lambda_chain": true,
+    "problems": 0,
+    "weights": true
+   },
+   "old_s11": {
+    "checkpoint_history": true,
+    "lambda_chain": true,
+    "problems": 0,
+    "weights": true
+   },
+   "old_s22": {
+    "checkpoint_history": true,
+    "lambda_chain": true,
+    "problems": 0,
+    "weights": true
+   },
+   "old_s33": {
+    "checkpoint_history": true,
+    "lambda_chain": true,
+    "problems": 0,
+    "weights": true
+   }
+  }
+ },
+ "evidence_grading": {
+  "absolute_levels": "确认级：从原始 final record 重算，与 ROUND30 存档统计逐格一致",
+  "dilution_mechanism": "关联级：观察到的是样本覆盖率与成本读数的共存关系，未做干预",
+  "dual_scale_ordering": "描述级：只排序已观察到的策略，不证明可达性",
+  "gradient_component_split": "限定级：只覆盖每批 epoch0/minibatch0（old=new）这一个局部点，且不含后续 minibatch",
+  "identity_and_closure": "确认级：逐批/逐行独立重算并闭合"
+ },
+ "not_confirmed": [
+  "约束在训练内被满足（而非仅被响应）：六条运行 192 批里 g_hat 无一为负，λ 只单调不降；ep128 的 greedy 开发读数中 4/6 格仍有 0.5 个/ep 的配对任务损失",
+  "追加训练能闭合约束：s11/s33 的后 8 批配对任务损失与前 8 批同为 0.3125，仍在改善的只有 s22（0.28125 -> 0.0，且该改善发生在 sampled 训练轨迹上）",
+  "经验交叉点是最优 λ、充分条件或部署参数：本轮只排序已存在的策略",
+  "sampled 轨迹的约束统计可用于 greedy：两条读数在同一批 ep128 权重上给出不同的任务损失（如 seed33：greedy 0.0，sampled 0.4375/0.25）",
+  "new 与 old 编码在约束处理上的差异：s11/s22 两臂的 λ 与 g_hat 序列逐批完全相同，s33 只在第 29 批起分叉（1.4750 vs 1.4875）",
+  "全系统通信成本下降：本轮所有成本都只是受控上行通道的已计量尝试字节，视距与 gossip 旁路不在计量内",
+  "批 15 与批 31 的梯度分量归因：对应更新前权重未落盘，按 missing 记录，未用更新后权重近似、未重放 optimizer",
+  "新的正确性缺陷：本轮未发现（行/权重/λ/配对/似然五类核对全闭合）"
+ ],
+ "question": "编码替换没有建立稳定收益后，已有训练记录能否说明约束违背被 λ 与实际策略更新有效处理？",
+ "round": "31",
+ "single_next_experiment": {
+  "expected_resources": "64 个 immediate reference 可直接复用本轮已核验的归档行（0 次启动）；2 归约 × 3 seed × 128 集 = 768 次训练启动 + 2 × 3 × 2 × 16 = 192 次评估启动，合计 960 次环境启动，量级与 ROUND30 相同；另需一次启动前冻结与首批门禁",
+  "frozen": [
+   "B0=10000、δ=0、λ_initial=1、ηλ=0.05",
+   "GAMMA=1、GAE_LAMBDA=0.95、CLIP=0.2、VALUE_COEFFICIENT=0.5、ENTROPY_BONUS=0.01、MAX_GRAD_NORM=0.5、EPOCHS=4、MINIBATCH=256",
+   "场景块 1300000..1300047 / 1301000..1301015 与冻结数据顺序",
+   "搜索与分配 checkpoint（本轮核验 192 批的 frozen_checkpoints 逐字节相同）",
+   "预算 29 300 B/ep、ACK 结构性关闭、mask 语义、编码臂（建议固定为 OLD 臂，把 ROUND30 的编码问题留给它自己的结论）",
+   "训练 seed 11/22/33 与每 episode 动作 RNG 派生"
+  ],
+  "hypotheses_separated": [
+   "H1 对偶上升在本轮登记尺度内太慢（ηλ=0.05、g_hat 多为 0.25，32 批只能把 λ 推到 1.2375–1.5000），因此约束未闭合主要来自乘子侧",
+   "H2 成本信号在 actor 侧被稀释：六条运行里 70.4%–96.4% 的样本所在 tape 的全部候选都被预算/容量 mask 掉，这些样本对 actor 梯度贡献恒为 0，却仍进入 `surrogate.mean()` 的分母；若如此，把分母改为有效样本数应让同预算、同步数下的 g_hat 与 greedy 任务损失发生变化"
+  ],
+  "internal_control": "seed22 两条臂的有效样本占比最高（fixed batch 31 仅 10.8%/13.9% 为零梯度），seed11/33 接近 96%；同一改动在两组上的预期差异就是稀释假说的方向性预测",
+  "not_authorized_here": "本轮不执行；需要另行批准",
+  "only_changed_variable": "loss 归约的分母（all decision tapes -> tapes with >=1 actionable candidate），等价于把零梯度样本移出 mean 的分母；不改优势定义、不改 λ 与 ηλ、不改熵系数、不改学习率、不改 clip、不改批大小与 epoch 数",
+  "title": "只改一项：PPO surrogate 的归约分母从'全部决策 tape'改为'含可执行候选的 tape'"
+ },
+ "source": {
+  "artefacts": [
+   "ABSOLUTE_PERFORMANCE.json",
+   "DUAL_TRAJECTORIES.json",
+   "UPDATE_SIGNAL_DIAGNOSIS.json",
+   "ROUND31_REPORT.md"
+  ],
+  "round30_branch": "exp/comm-deadline-encoding-ablation",
+  "round30_report_commit": "915868297c08d4b01b7dfeff0ea810d5394057a3",
+  "this_branch": "analysis/comm-constraint-optimization-diagnosis"
+ },
+ "stop_counters": {
+  "checkpoints_written_or_modified": 0,
+  "gradient_diagnostic_scope": "autograd.grad on an in-memory copy of the ep0 milestone weights, one minibatch per run, 6 runs; no optimizer.step, no .pt written",
+  "network_attempts_this_round": 0,
+  "new_environment_launches": 0,
+  "new_streams": 0,
+  "production_code_changed": 0,
+  "pure_computation_gradient_diagnostics_performed": true,
+  "real_training_updates": 0,
+  "remote_publication_status": "not_pushed_no_network_attempt_this_round; last registered state is not_pushed_network_unreachable (ROUND24 PUSH_STATUS.json), the current branch has no upstream",
+  "sealed_blocks_touched": 0,
+  "synthetic_optimizer_updates": 0
+ },
+ "title": "通信控制器约束优化诊断（零环境启动）"
+}

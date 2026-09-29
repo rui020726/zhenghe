@@ -1,0 +1,5133 @@
+{
+ "availability_matrix": {
+  "new_s11": {
+   "b0": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": true
+   },
+   "b15": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": false
+   },
+   "b31": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": false
+   }
+  },
+  "new_s22": {
+   "b0": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": true
+   },
+   "b15": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": false
+   },
+   "b31": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": false
+   }
+  },
+  "new_s33": {
+   "b0": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": true
+   },
+   "b15": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": false
+   },
+   "b31": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": false
+   }
+  },
+  "old_s11": {
+   "b0": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": true
+   },
+   "b15": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": false
+   },
+   "b31": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": false
+   }
+  },
+  "old_s22": {
+   "b0": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": true
+   },
+   "b15": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": false
+   },
+   "b31": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": false
+   }
+  },
+  "old_s33": {
+   "b0": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": true
+   },
+   "b15": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": false
+   },
+   "b31": {
+    "advantage_decomposition": true,
+    "gradient_decomposition": false
+   }
+  }
+ },
+ "fixed_batch_indices": [
+  0,
+  15,
+  31
+ ],
+ "path_examined": "tape -> v2_trainer.batch_samples (frozen GAE, reward timing, B0 normalisation) -> lambda*A_task - A_cost -> PPO surrogate -> entropy / two critic losses -> per-module gradients",
+ "reading_notes": [
+  "one sample is one decision-step tape, not one candidate message; a tape whose candidates are all masked still enters both critic losses and the surrogate mean denominator while contributing exactly zero actor gradient",
+  "A_cost is in normalised units (bytes/B0) and A_task in on-time tasks, so the two are only commensurable after the multiplication by lambda that the trainer performs",
+  "clip_fraction, approx_kl and the module gradient readings are the trainer's own per-batch means; nothing here substitutes a re-derived number for a missing field",
+  "gradient magnitudes describe direction at the update start; Adam is nonlinear in the gradient, so a component split of the gradient is not a component split of the parameter step"
+ ],
+ "round": "31",
+ "runs": {
+  "new_s11": {
+   "b0": {
+    "arm": "new",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_new_s11_b0.json",
+     "pre_update_weights_saved": true,
+     "pre_update_weights_source": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_train_new_s11_ep0.pt",
+     "reason_when_absent": null,
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 0,
+    "cell": "new_s11",
+    "gradient_at_update_start": {
+     "advantage_combination_closed": true,
+     "advantage_combination_max_abs_error": 2.384185791015625e-07,
+     "chunk_first_indices": [
+      341,
+      585,
+      384,
+      537,
+      84
+     ],
+     "chunk_samples": 256,
+     "chunk_samples_with_actionable_candidates": 12,
+     "chunk_samples_with_zero_actor_gradient": 244,
+     "clipping_scale_if_applied": 0.204853274,
+     "clipping_triggered_at_this_minibatch": true,
+     "closure_error_max_abs": 2.9802322387695312e-08,
+     "component_by_module": {
+      "critic_cost": {
+       "action_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "cost_head": {
+        "l1": 1.095146417618,
+        "l2": 0.170225828886
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 10.991577148438,
+        "l2": 0.226610168815
+       }
+      },
+      "critic_task": {
+       "action_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 11.190757751465,
+        "l2": 1.632437944412
+       },
+       "trunk": {
+        "l1": 90.331657409668,
+        "l2": 1.789050340652
+       }
+      },
+      "entropy_bonus": {
+       "action_head": {
+        "l1": 0.002219609916,
+        "l2": 0.000236749576
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 0.011217739433,
+        "l2": 0.000262151181
+       }
+      },
+      "policy_cost_minus_A_cost": {
+       "action_head": {
+        "l1": 0.280219137669,
+        "l2": 0.03049668856
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 1.385316491127,
+        "l2": 0.031417559832
+       }
+      },
+      "policy_task_lambda_A_task": {
+       "action_head": {
+        "l1": 0.391569703817,
+        "l2": 0.042472749949
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 1.887929320335,
+        "l2": 0.046637903899
+       }
+      },
+      "sum_of_the_five_parts": {
+       "action_head": {
+        "l1": 0.235569089651,
+        "l2": 0.02587736398
+       },
+       "cost_head": {
+        "l1": 1.095146417618,
+        "l2": 0.170225828886
+       },
+       "task_value_head": {
+        "l1": 11.190757751465,
+        "l2": 1.632437944412
+       },
+       "trunk": {
+        "l1": 91.445808410645,
+        "l2": 1.80634021759
+       }
+      },
+      "trainer_expression": {
+       "action_head": {
+        "l1": 0.235569089651,
+        "l2": 0.025877365842
+       },
+       "cost_head": {
+        "l1": 1.095146417618,
+        "l2": 0.170225828886
+       },
+       "task_value_head": {
+        "l1": 11.190757751465,
+        "l2": 1.632437944412
+       },
+       "trunk": {
+        "l1": 91.445808410645,
+        "l2": 1.80634021759
+       }
+      }
+     },
+     "component_l1": {
+      "critic_cost": 12.086723327637,
+      "critic_task": 101.522422790527,
+      "entropy_bonus": 0.013437350281,
+      "policy_cost_minus_A_cost": 1.6655356884,
+      "policy_task_lambda_A_task": 2.279499053955,
+      "sum_of_the_five_parts": 103.967277526855,
+      "trainer_expression": 103.967277526855
+     },
+     "component_l2": {
+      "critic_cost": 0.28342372179,
+      "critic_task": 2.421890735626,
+      "entropy_bonus": 0.000353233045,
+      "policy_cost_minus_A_cost": 0.043784826994,
+      "policy_task_lambda_A_task": 0.063079543412,
+      "sum_of_the_five_parts": 2.440771341324,
+      "trainer_expression": 2.440771341324
+     },
+     "critic_share_of_total_l2": 1.000069745,
+     "entropy_share_of_total_l2": 0.000144722,
+     "parts_sum_vs_trainer_expression_max_abs": 7.450580596923828e-09,
+     "policy_task_versus_policy_cost": {
+      "cosine": -0.73240259,
+      "l2_cost": 0.043784826994,
+      "l2_task": 0.063079543412,
+      "l2_task_over_l2_cost": 1.440671295,
+      "note": "magnitudes are pre-clip; the trainer then clips the TOTAL norm and Adam rescales per parameter, so these ratios describe the gradient direction at the update start, not the parameter step",
+      "policy_l2": 0.043016918004
+     },
+     "pre_clip_total_norm": 2.440771341,
+     "ratio_max_abs_deviation_from_one": 2.38419e-07,
+     "reduction": "surrogate.mean() and entropy.mean() over the chunk, uniform sample weights, no advantage standardisation anywhere (v2_trainer registers this as the explicit difference from the old trainer)",
+     "registered_scalars_used": {
+      "clip": 0.2,
+      "entropy_bonus": 0.01,
+      "epochs_per_batch": 4,
+      "lambda_of_this_batch": 1.0,
+      "max_grad_norm": 0.5,
+      "minibatch_steps": 256,
+      "value_coefficient_per_head": 0.5
+     },
+     "scope": "epoch 0 / minibatch 0 of this batch only -- the update start where old == new (ratio exactly 1). Later minibatches are NOT reconstructed: that would need replaying optimizer.step, which this round forbids"
+    },
+    "likelihood_recompute_agrees_with_recorded": {
+     "recomputed_max_abs_gap": 1.7881393432617188e-07,
+     "recorded_max_abs_gap": 1.7881393432617188e-07,
+     "same_sample_count": true,
+     "within_1e-9": true
+    },
+    "likelihood_recomputed_at_pre_update_weights": {
+     "max_abs_gap": 1.7881393432617188e-07,
+     "samples": 622,
+     "tolerance": 1e-06
+    },
+    "pre_update_weights_identity": {
+     "batch0_recorded_parameters_before_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+     "ep0_recomputed_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+     "match": true
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "lambda_after_recorded": 1.0125,
+     "lambda_before_recorded": 1.0,
+     "lambda_used_by_this_batch_actor": 1.0,
+     "minibatches_recorded": 12,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 622,
+     "samples_recorded_in_batch": 622,
+     "scenarios": [
+      1300027,
+      1300014,
+      1300028,
+      1300044
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": -0.000336,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0,
+     "entropy": 0.07963,
+     "epochs": 4,
+     "gradient_norm_mean": 1.4723,
+     "likelihood_max_abs_gap_recorded": 1.7881393432617188e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 0.298177255,
+      "cost_head": 0.92286655,
+      "task_value_head": 6.512445142,
+      "trunk": 54.933400525
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.154276838,
+      "cost_head": 0.511147354,
+      "task_value_head": 4.621923655,
+      "trunk": 39.441675961
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 12,
+     "policy_surrogate": 0.463647,
+     "value_loss_cost": 0.128792,
+     "value_loss_task": 0.679256
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.518663815,
+      "max": 3.095088580432762,
+      "mean": 0.471765686,
+      "median": 0.034459906,
+      "min": -1.7153349750973217,
+      "n": 622,
+      "q25": 0.009333495,
+      "q75": 0.951794308,
+      "std_pop": 0.775697017
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 0.842430281,
+      "max": 2.344649496142167,
+      "mean": 0.054233376,
+      "median": -0.097317,
+      "min": -1.7153349750973217,
+      "n": 29,
+      "q25": -0.662362893,
+      "q75": 0.752244648,
+      "std_pop": 1.010495992
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 1.553808823,
+      "max": 2.494608509106733,
+      "mean": 1.553808823,
+      "median": 1.64779241,
+      "min": 0.16403513964256855,
+      "n": 29,
+      "q25": 0.951062692,
+      "q75": 2.174466767,
+      "std_pop": 0.699159733
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.113174138,
+      "max": 2.494608509106733,
+      "mean": 0.056092284,
+      "median": -0.009890381,
+      "min": -0.31886520981788635,
+      "n": 622,
+      "q25": -0.025078036,
+      "q75": -0.003453584,
+      "std_pop": 0.370150129
+     },
+     "A_task": {
+      "abs_mean": 0.535300489,
+      "max": 3.11200591126066,
+      "mean": 0.52785797,
+      "median": 0.013668338,
+      "min": -0.37955858617006305,
+      "n": 622,
+      "q25": 0.004925202,
+      "q75": 1.039100126,
+      "std_pop": 0.791189104
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 1.608042199,
+      "max": 2.6483540884655996,
+      "mean": 1.608042199,
+      "median": 1.70245879,
+      "min": 0.5717624940392849,
+      "n": 29,
+      "q25": 1.071734514,
+      "q75": 2.050781055,
+      "std_pop": 0.60062718
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.197529738,
+      "max": 0.3303104639053345,
+      "mean": 0.190998409,
+      "median": 0.184307724,
+      "min": -0.20158007740974426,
+      "n": 622,
+      "q25": 0.15898658,
+      "q75": 0.271908343,
+      "std_pop": 0.097856388
+     },
+     "behaviour_values_task": {
+      "abs_mean": 0.210264469,
+      "max": 0.2741181552410126,
+      "mean": -0.186449974,
+      "median": -0.15942654,
+      "min": -0.5170819163322449,
+      "n": 622,
+      "q25": -0.243028484,
+      "q75": -0.131301597,
+      "std_pop": 0.148393667
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.535300489,
+      "max": 3.11200591126066,
+      "mean": 0.52785797,
+      "median": 0.013668338,
+      "min": -0.37955858617006305,
+      "n": 622,
+      "q25": 0.004925202,
+      "q75": 1.039100126,
+      "std_pop": 0.791189104
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 4.729883522,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.247094452,
+      "max": 2.6549634213877695,
+      "mean": 0.247090693,
+      "median": 0.17965922,
+      "min": -0.0010075016158253118,
+      "n": 622,
+      "q25": 0.141678937,
+      "q75": 0.25987502,
+      "std_pop": 0.366214307
+     },
+     "returns_task": {
+      "abs_mean": 0.53400184,
+      "max": 2.7518670181332188,
+      "mean": 0.341407996,
+      "median": -0.127421135,
+      "min": -0.24006872726975295,
+      "n": 622,
+      "q25": -0.155410219,
+      "q75": 0.772960502,
+      "std_pop": 0.762733748
+     },
+     "samples_total": 622,
+     "samples_with_actionable_candidates": 29,
+     "samples_with_zero_actor_gradient": 593,
+     "share_without_actor_gradient": 0.953376206
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s11_e0_s1300027_a0_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s11_e1_s1300014_a1_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s11_e2_s1300028_a2_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s11_e3_s1300044_a3_tape.jsonl"
+    ],
+    "training_seed": 11
+   },
+   "b15": {
+    "arm": "new",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_new_s11_b15.json",
+     "pre_update_weights_saved": false,
+     "pre_update_weights_source": null,
+     "reason_when_absent": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 15,
+    "cell": "new_s11",
+    "gradient_at_update_start": {
+     "optimizer_steps_performed_by_this_round": 0,
+     "reason": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "status": "missing",
+     "what_is_still_computed": "the tape-side advantage decomposition, which needs no weights because both critic values were logged at rollout"
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      60,
+      61,
+      62,
+      63
+     ],
+     "lambda_after_recorded": 1.2624999999999995,
+     "lambda_before_recorded": 1.2374999999999996,
+     "lambda_used_by_this_batch_actor": 1.2374999999999996,
+     "minibatches_recorded": 16,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 1003,
+     "samples_recorded_in_batch": 1003,
+     "scenarios": [
+      1300009,
+      1300047,
+      1300023,
+      1300027
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": 8e-05,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0,
+     "entropy": 0.032948,
+     "epochs": 4,
+     "gradient_norm_mean": 0.5215,
+     "likelihood_max_abs_gap_recorded": 1.1920928955078125e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 0.236336389,
+      "cost_head": 0.507563121,
+      "task_value_head": 1.615900549,
+      "trunk": 11.896680671
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.031119206,
+      "cost_head": 0.139399408,
+      "task_value_head": 0.718217668,
+      "trunk": 6.997341923
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 16,
+     "policy_surrogate": 0.045222,
+     "value_loss_cost": 0.042323,
+     "value_loss_task": 0.356209
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.361602469,
+      "max": 4.364626656245127,
+      "mean": 0.045517425,
+      "median": -0.000961962,
+      "min": -2.8855424754593986,
+      "n": 1003,
+      "q25": -0.050824909,
+      "q75": 0.039655346,
+      "std_pop": 0.719628415
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 0.636181086,
+      "max": 1.0571583964224833,
+      "mean": -0.235982114,
+      "median": -0.293792301,
+      "min": -1.4153192390702283,
+      "n": 27,
+      "q25": -0.817394899,
+      "q75": 0.286722251,
+      "std_pop": 0.696730148
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 0.840932451,
+      "max": 2.1676193199093188,
+      "mean": 0.779925773,
+      "median": 0.935758787,
+      "min": -0.3191457866563773,
+      "n": 27,
+      "q25": 0.258438572,
+      "q75": 1.208978724,
+      "std_pop": 0.598997017
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.08844723,
+      "max": 2.1676193199093188,
+      "mean": -0.001541489,
+      "median": -0.010229278,
+      "min": -0.9445456669919947,
+      "n": 1003,
+      "q25": -0.025228363,
+      "q75": 0.0138555,
+      "std_pop": 0.212934681
+     },
+     "A_task": {
+      "abs_mean": 0.310048092,
+      "max": 3.4715107913801857,
+      "mean": 0.03553611,
+      "median": -0.012605918,
+      "min": -2.5011612286321703,
+      "n": 1003,
+      "q25": -0.036671866,
+      "q75": 0.024513158,
+      "std_pop": 0.611319442
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 0.56043771,
+      "max": 2.225846928516321,
+      "mean": 0.439550431,
+      "median": 0.314590432,
+      "min": -0.38293945536151525,
+      "n": 27,
+      "q25": -0.053017353,
+      "q75": 0.848677891,
+      "std_pop": 0.636477172
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.169105401,
+      "max": 1.5736263990402222,
+      "mean": 0.023889382,
+      "median": -0.060333587,
+      "min": -0.1942373514175415,
+      "n": 1003,
+      "q25": -0.144657806,
+      "q75": 0.076916434,
+      "std_pop": 0.281235925
+     },
+     "behaviour_values_task": {
+      "abs_mean": 1.167391445,
+      "max": 5.63465690612793,
+      "mean": 1.167391445,
+      "median": 0.404731601,
+      "min": 0.2804937958717346,
+      "n": 1003,
+      "q25": 0.308612525,
+      "q75": 1.965137422,
+      "std_pop": 1.430851948
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.383684514,
+      "max": 4.295994604332979,
+      "mean": 0.043975937,
+      "median": -0.015599823,
+      "min": -3.0951870204323098,
+      "n": 1003,
+      "q25": -0.045381434,
+      "q75": 0.030335033,
+      "std_pop": 0.756507809
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 4.338004843,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.154970883,
+      "max": 3.067310067170366,
+      "mean": 0.022347893,
+      "median": -0.052643353,
+      "min": -0.17030138535055642,
+      "n": 1003,
+      "q25": -0.12421174,
+      "q75": 0.068417681,
+      "std_pop": 0.366303549
+     },
+     "returns_task": {
+      "abs_mean": 1.202927556,
+      "max": 7.986899280149717,
+      "mean": 1.202927556,
+      "median": 0.404975182,
+      "min": 0.0,
+      "n": 1003,
+      "q25": 0.295316074,
+      "q75": 1.237688939,
+      "std_pop": 1.620001546
+     },
+     "samples_total": 1003,
+     "samples_with_actionable_candidates": 27,
+     "samples_with_zero_actor_gradient": 976,
+     "share_without_actor_gradient": 0.973080758
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s11_e60_s1300009_a60_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s11_e61_s1300047_a61_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s11_e62_s1300023_a62_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s11_e63_s1300027_a63_tape.jsonl"
+    ],
+    "training_seed": 11
+   },
+   "b31": {
+    "arm": "new",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_new_s11_b31.json",
+     "pre_update_weights_saved": false,
+     "pre_update_weights_source": null,
+     "reason_when_absent": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 31,
+    "cell": "new_s11",
+    "gradient_at_update_start": {
+     "optimizer_steps_performed_by_this_round": 0,
+     "reason": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "status": "missing",
+     "what_is_still_computed": "the tape-side advantage decomposition, which needs no weights because both critic values were logged at rollout"
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      124,
+      125,
+      126,
+      127
+     ],
+     "lambda_after_recorded": 1.4999999999999993,
+     "lambda_before_recorded": 1.4749999999999994,
+     "lambda_used_by_this_batch_actor": 1.4749999999999994,
+     "minibatches_recorded": 16,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 996,
+     "samples_recorded_in_batch": 996,
+     "scenarios": [
+      1300002,
+      1300047,
+      1300030,
+      1300023
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": -0.000114,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0002,
+     "entropy": 0.038469,
+     "epochs": 4,
+     "gradient_norm_mean": 0.6689,
+     "likelihood_max_abs_gap_recorded": 3.5762786865234375e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 0.479295754,
+      "cost_head": 0.367050076,
+      "task_value_head": 1.085624522,
+      "trunk": 14.340461292
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.075540397,
+      "cost_head": 0.130135355,
+      "task_value_head": 0.617673626,
+      "trunk": 7.954214469
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 16,
+     "policy_surrogate": -0.008275,
+     "value_loss_cost": 0.033419,
+     "value_loss_task": 0.216308
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.334903201,
+      "max": 3.517032882539439,
+      "mean": -0.009144198,
+      "median": -0.035048734,
+      "min": -3.267419697539202,
+      "n": 996,
+      "q25": -0.079139884,
+      "q75": -0.014242268,
+      "std_pop": 0.656014285
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 0.896795689,
+      "max": 2.0129875373027266,
+      "mean": -0.432188295,
+      "median": -0.493254125,
+      "min": -2.0491839366098183,
+      "n": 35,
+      "q25": -1.21190684,
+      "q75": 0.28087119,
+      "std_pop": 1.01456716
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 0.641521148,
+      "max": 1.916328854781979,
+      "mean": 0.489627694,
+      "median": 0.61675077,
+      "min": -0.6729333092203985,
+      "n": 35,
+      "q25": 0.003515637,
+      "q75": 0.803811536,
+      "std_pop": 0.623214824
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.068645652,
+      "max": 1.916328854781979,
+      "mean": 0.003802015,
+      "median": -0.004707345,
+      "min": -1.1817591009568018,
+      "n": 996,
+      "q25": -0.01366622,
+      "q75": 0.007286582,
+      "std_pop": 0.185607185
+     },
+     "A_task": {
+      "abs_mean": 0.244410783,
+      "max": 2.54845051292265,
+      "mean": -0.003621819,
+      "median": -0.027425586,
+      "min": -2.2245111424113895,
+      "n": 996,
+      "q25": -0.061965668,
+      "q75": -0.010060129,
+      "std_pop": 0.47254333
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 0.674733979,
+      "max": 1.6471003996630573,
+      "mean": 0.038941965,
+      "median": 0.026584735,
+      "min": -1.0282836222230491,
+      "n": 35,
+      "q25": -0.539843115,
+      "q75": 0.648488509,
+      "std_pop": 0.766486723
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.160388278,
+      "max": 2.0870721340179443,
+      "mean": 0.000167892,
+      "median": -0.087381527,
+      "min": -0.27675512433052063,
+      "n": 996,
+      "q25": -0.13707364,
+      "q75": -0.013260841,
+      "std_pop": 0.302696542
+     },
+     "behaviour_values_task": {
+      "abs_mean": 1.230143635,
+      "max": 6.403874397277832,
+      "mean": 1.230143635,
+      "median": 0.582450986,
+      "min": 0.20697563886642456,
+      "n": 996,
+      "q25": 0.330059744,
+      "q75": 1.626469165,
+      "std_pop": 1.470342532
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.360505905,
+      "max": 3.758964506560907,
+      "mean": -0.005342182,
+      "median": -0.040452739,
+      "min": -3.281153935056798,
+      "n": 996,
+      "q25": -0.091399361,
+      "q75": -0.014838691,
+      "std_pop": 0.697001412
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 5.251693259,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.153445688,
+      "max": 2.9532654493062602,
+      "mean": 0.003969908,
+      "median": -0.07987387,
+      "min": -0.14932032386254074,
+      "n": 996,
+      "q25": -0.12700375,
+      "q75": -0.014186615,
+      "std_pop": 0.382998837
+     },
+     "returns_task": {
+      "abs_mean": 1.226521816,
+      "max": 6.38807461395243,
+      "mean": 1.226521816,
+      "median": 0.561388058,
+      "min": 0.0,
+      "n": 996,
+      "q25": 0.315003098,
+      "q75": 1.23247487,
+      "std_pop": 1.544143952
+     },
+     "samples_total": 996,
+     "samples_with_actionable_candidates": 35,
+     "samples_with_zero_actor_gradient": 961,
+     "share_without_actor_gradient": 0.964859438
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s11_e124_s1300002_a124_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s11_e125_s1300047_a125_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s11_e126_s1300030_a126_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s11_e127_s1300023_a127_tape.jsonl"
+    ],
+    "training_seed": 11
+   }
+  },
+  "new_s22": {
+   "b0": {
+    "arm": "new",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_new_s22_b0.json",
+     "pre_update_weights_saved": true,
+     "pre_update_weights_source": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_train_new_s22_ep0.pt",
+     "reason_when_absent": null,
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 0,
+    "cell": "new_s22",
+    "gradient_at_update_start": {
+     "advantage_combination_closed": true,
+     "advantage_combination_max_abs_error": 2.384185791015625e-07,
+     "chunk_first_indices": [
+      381,
+      462,
+      3,
+      261,
+      237
+     ],
+     "chunk_samples": 256,
+     "chunk_samples_with_actionable_candidates": 18,
+     "chunk_samples_with_zero_actor_gradient": 238,
+     "clipping_scale_if_applied": 0.185824341,
+     "clipping_triggered_at_this_minibatch": true,
+     "closure_error_max_abs": 2.9802322387695312e-08,
+     "component_by_module": {
+      "critic_cost": {
+       "action_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "cost_head": {
+        "l1": 2.164379358292,
+        "l2": 0.350087285042
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 18.817756652832,
+        "l2": 0.381982475519
+       }
+      },
+      "critic_task": {
+       "action_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 12.026837348938,
+        "l2": 1.786717653275
+       },
+       "trunk": {
+        "l1": 95.362579345703,
+        "l2": 1.919727325439
+       }
+      },
+      "entropy_bonus": {
+       "action_head": {
+        "l1": 0.005194828846,
+        "l2": 0.000587931892
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 0.036277443171,
+        "l2": 0.000713922025
+       }
+      },
+      "policy_cost_minus_A_cost": {
+       "action_head": {
+        "l1": 0.722499370575,
+        "l2": 0.082541808486
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 5.0425157547,
+        "l2": 0.100052908063
+       }
+      },
+      "policy_task_lambda_A_task": {
+       "action_head": {
+        "l1": 0.97530913353,
+        "l2": 0.110613144934
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 6.788401603699,
+        "l2": 0.1344114393
+       }
+      },
+      "sum_of_the_five_parts": {
+       "action_head": {
+        "l1": 0.269475668669,
+        "l2": 0.029780998826
+       },
+       "cost_head": {
+        "l1": 2.164379358292,
+        "l2": 0.350087285042
+       },
+       "task_value_head": {
+        "l1": 12.026837348938,
+        "l2": 1.786717653275
+       },
+       "trunk": {
+        "l1": 98.260177612305,
+        "l2": 1.980941295624
+       }
+      },
+      "trainer_expression": {
+       "action_head": {
+        "l1": 0.269475758076,
+        "l2": 0.029781004414
+       },
+       "cost_head": {
+        "l1": 2.164379358292,
+        "l2": 0.350087285042
+       },
+       "task_value_head": {
+        "l1": 12.026837348938,
+        "l2": 1.786717653275
+       },
+       "trunk": {
+        "l1": 98.260177612305,
+        "l2": 1.980941295624
+       }
+      }
+     },
+     "component_l1": {
+      "critic_cost": 20.982135772705,
+      "critic_task": 107.38941192627,
+      "entropy_bonus": 0.04147227481,
+      "policy_cost_minus_A_cost": 5.765014648438,
+      "policy_task_lambda_A_task": 7.763710975647,
+      "sum_of_the_five_parts": 112.72087097168,
+      "trainer_expression": 112.72087097168
+     },
+     "component_l2": {
+      "critic_cost": 0.518142580986,
+      "critic_task": 2.622539520264,
+      "entropy_bonus": 0.000924850523,
+      "policy_cost_minus_A_cost": 0.129706338048,
+      "policy_task_lambda_A_task": 0.174073845148,
+      "sum_of_the_five_parts": 2.690713167191,
+      "trainer_expression": 2.690713167191
+     },
+     "critic_share_of_total_l2": 1.000941548,
+     "entropy_share_of_total_l2": 0.000343719,
+     "parts_sum_vs_trainer_expression_max_abs": 7.450580596923828e-09,
+     "policy_task_versus_policy_cost": {
+      "cosine": -0.996068574,
+      "l2_cost": 0.129706338048,
+      "l2_task": 0.174073845148,
+      "l2_task_over_l2_cost": 1.342061211,
+      "note": "magnitudes are pre-clip; the trainer then clips the TOTAL norm and Adam rescales per parameter, so these ratios describe the gradient direction at the update start, not the parameter step",
+      "policy_l2": 0.046325027943
+     },
+     "pre_clip_total_norm": 2.690713167,
+     "ratio_max_abs_deviation_from_one": 2.38419e-07,
+     "reduction": "surrogate.mean() and entropy.mean() over the chunk, uniform sample weights, no advantage standardisation anywhere (v2_trainer registers this as the explicit difference from the old trainer)",
+     "registered_scalars_used": {
+      "clip": 0.2,
+      "entropy_bonus": 0.01,
+      "epochs_per_batch": 4,
+      "lambda_of_this_batch": 1.0,
+      "max_grad_norm": 0.5,
+      "minibatch_steps": 256,
+      "value_coefficient_per_head": 0.5
+     },
+     "scope": "epoch 0 / minibatch 0 of this batch only -- the update start where old == new (ratio exactly 1). Later minibatches are NOT reconstructed: that would need replaying optimizer.step, which this round forbids"
+    },
+    "likelihood_recompute_agrees_with_recorded": {
+     "recomputed_max_abs_gap": 2.384185791015625e-07,
+     "recorded_max_abs_gap": 2.384185791015625e-07,
+     "same_sample_count": true,
+     "within_1e-9": true
+    },
+    "likelihood_recomputed_at_pre_update_weights": {
+     "max_abs_gap": 2.384185791015625e-07,
+     "samples": 626,
+     "tolerance": 1e-06
+    },
+    "pre_update_weights_identity": {
+     "batch0_recorded_parameters_before_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+     "ep0_recomputed_parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+     "match": true
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "lambda_after_recorded": 1.0125,
+     "lambda_before_recorded": 1.0,
+     "lambda_used_by_this_batch_actor": 1.0,
+     "minibatches_recorded": 12,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 626,
+     "samples_recorded_in_batch": 626,
+     "scenarios": [
+      1300027,
+      1300014,
+      1300028,
+      1300044
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": -1.9e-05,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0,
+     "entropy": 0.117585,
+     "epochs": 4,
+     "gradient_norm_mean": 1.6129,
+     "likelihood_max_abs_gap_recorded": 2.384185791015625e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 0.307481672,
+      "cost_head": 1.549506722,
+      "task_value_head": 6.694711483,
+      "trunk": 58.518611052
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.121268946,
+      "cost_head": 0.682506211,
+      "task_value_head": 4.269517496,
+      "trunk": 37.351435423
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 12,
+     "policy_surrogate": 0.405814,
+     "value_loss_cost": 0.15185,
+     "value_loss_task": 0.743404
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.464033919,
+      "max": 3.3363219295644426,
+      "mean": 0.413016632,
+      "median": 0.001996962,
+      "min": -1.4768686264770037,
+      "n": 626,
+      "q25": -0.001326689,
+      "q75": 0.74691913,
+      "std_pop": 0.750838296
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 0.807361301,
+      "max": 1.701474520799921,
+      "mean": 0.323191956,
+      "median": 0.413924177,
+      "min": -1.4768686264770037,
+      "n": 45,
+      "q25": -0.202699783,
+      "q75": 1.052987871,
+      "std_pop": 0.889000335
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 1.368746344,
+      "max": 2.438197030287107,
+      "mean": 1.368746344,
+      "median": 1.515641141,
+      "min": 0.22226370879936466,
+      "n": 45,
+      "q25": 0.907541704,
+      "q75": 1.906264001,
+      "std_pop": 0.683357876
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.146790526,
+      "max": 2.438197030287107,
+      "mean": 0.140514543,
+      "median": 0.003208285,
+      "min": -0.1500651436101538,
+      "n": 626,
+      "q25": -0.000138896,
+      "q75": 0.107160983,
+      "std_pop": 0.396533467
+     },
+     "A_task": {
+      "abs_mean": 0.558909503,
+      "max": 3.3698255416177263,
+      "mean": 0.553531175,
+      "median": 0.008912254,
+      "min": -0.13096120515292312,
+      "n": 626,
+      "q25": -0.001236356,
+      "q75": 1.047990573,
+      "std_pop": 0.818359606
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 1.6919383,
+      "max": 2.7916085078630823,
+      "mean": 1.6919383,
+      "median": 1.636449004,
+      "min": 0.8382868086470449,
+      "n": 45,
+      "q25": 1.21082314,
+      "q75": 2.058302387,
+      "std_pop": 0.535151211
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.171244419,
+      "max": -0.026091665029525757,
+      "mean": -0.171244419,
+      "median": -0.052741908,
+      "min": -0.5272135734558105,
+      "n": 626,
+      "q25": -0.333582923,
+      "q75": -0.052456368,
+      "std_pop": 0.152919005
+     },
+     "behaviour_values_task": {
+      "abs_mean": 0.281770157,
+      "max": -0.08249887824058533,
+      "mean": -0.281770157,
+      "median": -0.283133283,
+      "min": -0.5092403888702393,
+      "n": 626,
+      "q25": -0.286916129,
+      "q75": -0.250018224,
+      "std_pop": 0.069496062
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.558909503,
+      "max": 3.3698255416177263,
+      "mean": 0.553531175,
+      "median": 0.008912254,
+      "min": -0.13096120515292312,
+      "n": 626,
+      "q25": -0.001236356,
+      "q75": 1.047990573,
+      "std_pop": 0.818359606
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 3.807531172,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.177783966,
+      "max": 2.116461707811674,
+      "mean": -0.030729876,
+      "median": -0.052473925,
+      "min": -0.398444057003538,
+      "n": 626,
+      "q25": -0.186253995,
+      "q75": -0.046716139,
+      "std_pop": 0.360127145
+     },
+     "returns_task": {
+      "abs_mean": 0.591254971,
+      "max": 3.0871739681981554,
+      "mean": 0.271761019,
+      "median": -0.236548482,
+      "min": -0.2846983219642357,
+      "n": 626,
+      "q25": -0.277523969,
+      "q75": 0.715147378,
+      "std_pop": 0.809624929
+     },
+     "samples_total": 626,
+     "samples_with_actionable_candidates": 45,
+     "samples_with_zero_actor_gradient": 581,
+     "share_without_actor_gradient": 0.928115016
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s22_e0_s1300027_a0_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s22_e1_s1300014_a1_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s22_e2_s1300028_a2_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s22_e3_s1300044_a3_tape.jsonl"
+    ],
+    "training_seed": 22
+   },
+   "b15": {
+    "arm": "new",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_new_s22_b15.json",
+     "pre_update_weights_saved": false,
+     "pre_update_weights_source": null,
+     "reason_when_absent": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 15,
+    "cell": "new_s22",
+    "gradient_at_update_start": {
+     "optimizer_steps_performed_by_this_round": 0,
+     "reason": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "status": "missing",
+     "what_is_still_computed": "the tape-side advantage decomposition, which needs no weights because both critic values were logged at rollout"
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      60,
+      61,
+      62,
+      63
+     ],
+     "lambda_after_recorded": 1.2124999999999995,
+     "lambda_before_recorded": 1.1999999999999995,
+     "lambda_used_by_this_batch_actor": 1.1999999999999995,
+     "minibatches_recorded": 12,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 764,
+     "samples_recorded_in_batch": 764,
+     "scenarios": [
+      1300009,
+      1300047,
+      1300023,
+      1300027
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": 0.000641,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0016,
+     "entropy": 0.149298,
+     "epochs": 4,
+     "gradient_norm_mean": 0.6068,
+     "likelihood_max_abs_gap_recorded": 2.2351741790771484e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 1.050754534,
+      "cost_head": 0.976854128,
+      "task_value_head": 1.61752777,
+      "trunk": 18.088659336
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.313787608,
+      "cost_head": 0.268335545,
+      "task_value_head": 0.836625418,
+      "trunk": 12.117761612
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 12,
+     "policy_surrogate": -0.004531,
+     "value_loss_cost": 0.17837,
+     "value_loss_task": 0.682215
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.368842003,
+      "max": 2.427379435000894,
+      "mean": -0.00535527,
+      "median": -0.000431544,
+      "min": -3.3566474437713607,
+      "n": 764,
+      "q25": -0.084024989,
+      "q75": 0.00190693,
+      "std_pop": 0.680646698
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 0.923226488,
+      "max": 2.427379435000894,
+      "mean": 0.454627853,
+      "median": 0.592931234,
+      "min": -3.107339384680985,
+      "n": 180,
+      "q25": -0.081432515,
+      "q75": 1.141541571,
+      "std_pop": 1.038056827
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 0.607685549,
+      "max": 1.6837141080265068,
+      "mean": 0.413832948,
+      "median": 0.46940768,
+      "min": -0.7728936217754308,
+      "n": 180,
+      "q25": -0.095050126,
+      "q75": 0.892445321,
+      "std_pop": 0.609071913
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.227871572,
+      "max": 1.6837141080265068,
+      "mean": 0.024867337,
+      "median": 0.000695731,
+      "min": -1.24785473883152,
+      "n": 764,
+      "q25": 0.000124158,
+      "q75": 0.012278287,
+      "std_pop": 0.431167481
+     },
+     "A_task": {
+      "abs_mean": 0.468138734,
+      "max": 3.0834039851685513,
+      "mean": 0.016260056,
+      "median": 8.4264e-05,
+      "min": -3.755920886993408,
+      "n": 764,
+      "q25": -0.062761249,
+      "q75": 0.009852794,
+      "std_pop": 0.840145333
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 1.226190096,
+      "max": 3.0834039851685513,
+      "mean": 0.723717334,
+      "median": 0.933946084,
+      "min": -2.7473276426196094,
+      "n": 180,
+      "q25": 0.184309754,
+      "q75": 1.505481094,
+      "std_pop": 1.206685541
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.48780017,
+      "max": 2.3431761264801025,
+      "mean": 0.45582737,
+      "median": -0.018746473,
+      "min": -0.08217896521091461,
+      "n": 764,
+      "q25": -0.021060336,
+      "q75": 1.034562111,
+      "std_pop": 0.685189216
+     },
+     "behaviour_values_task": {
+      "abs_mean": 1.788730034,
+      "max": 5.455918788909912,
+      "mean": 1.788730034,
+      "median": 0.260469928,
+      "min": 0.20900169014930725,
+      "n": 764,
+      "q25": 0.259839095,
+      "q75": 3.913905561,
+      "std_pop": 1.965283867
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.561766481,
+      "max": 3.7000847822022602,
+      "mean": 0.019512067,
+      "median": 0.000101117,
+      "min": -4.507105064392088,
+      "n": 764,
+      "q25": -0.075313498,
+      "q75": 0.011823353,
+      "std_pop": 1.0081744
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 2.465276721,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.510050009,
+      "max": 3.037690715680282,
+      "mean": 0.480694707,
+      "median": -0.018245412,
+      "min": -0.07044078168652565,
+      "n": 764,
+      "q25": -0.020717574,
+      "q75": 0.602220247,
+      "std_pop": 0.835301934
+     },
+     "returns_task": {
+      "abs_mean": 1.804990089,
+      "max": 6.991181168621588,
+      "mean": 1.804990089,
+      "median": 0.260206355,
+      "min": 0.0,
+      "n": 764,
+      "q25": 0.257864017,
+      "q75": 3.807920675,
+      "std_pop": 2.1905114
+     },
+     "samples_total": 764,
+     "samples_with_actionable_candidates": 180,
+     "samples_with_zero_actor_gradient": 584,
+     "share_without_actor_gradient": 0.764397906
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s22_e60_s1300009_a60_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s22_e61_s1300047_a61_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s22_e62_s1300023_a62_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s22_e63_s1300027_a63_tape.jsonl"
+    ],
+    "training_seed": 22
+   },
+   "b31": {
+    "arm": "new",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_new_s22_b31.json",
+     "pre_update_weights_saved": false,
+     "pre_update_weights_source": null,
+     "reason_when_absent": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 31,
+    "cell": "new_s22",
+    "gradient_at_update_start": {
+     "optimizer_steps_performed_by_this_round": 0,
+     "reason": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "status": "missing",
+     "what_is_still_computed": "the tape-side advantage decomposition, which needs no weights because both critic values were logged at rollout"
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      124,
+      125,
+      126,
+      127
+     ],
+     "lambda_after_recorded": 1.2374999999999994,
+     "lambda_before_recorded": 1.2374999999999994,
+     "lambda_used_by_this_batch_actor": 1.2374999999999994,
+     "minibatches_recorded": 8,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 325,
+     "samples_recorded_in_batch": 325,
+     "scenarios": [
+      1300002,
+      1300047,
+      1300030,
+      1300023
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": 5.9e-05,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0,
+     "entropy": 0.226882,
+     "epochs": 4,
+     "gradient_norm_mean": 2.387,
+     "likelihood_max_abs_gap_recorded": 2.8312206268310547e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 1.820245611,
+      "cost_head": 3.985482281,
+      "task_value_head": 6.738635045,
+      "trunk": 51.863677213
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.834396582,
+      "cost_head": 1.938243667,
+      "task_value_head": 2.74407788,
+      "trunk": 44.916612163
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 8,
+     "policy_surrogate": -0.040691,
+     "value_loss_cost": 0.311615,
+     "value_loss_task": 2.815122
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 1.382143738,
+      "max": 2.9524702261293188,
+      "mean": -0.000263687,
+      "median": 0.352285881,
+      "min": -4.214896059036252,
+      "n": 325,
+      "q25": -0.94177599,
+      "q75": 1.357519757,
+      "std_pop": 1.670048484
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 1.406076481,
+      "max": 2.9524702261293188,
+      "mean": 0.069150524,
+      "median": 0.420738707,
+      "min": -4.214896059036252,
+      "n": 290,
+      "q25": -0.815369879,
+      "q75": 1.464327303,
+      "std_pop": 1.679067047
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 0.448592827,
+      "max": 1.30847448829112,
+      "mean": -0.095672491,
+      "median": -0.135339802,
+      "min": -1.7213948965072632,
+      "n": 290,
+      "q25": -0.378596733,
+      "q75": 0.205193336,
+      "std_pop": 0.58915546
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.427465669,
+      "max": 1.30847448829112,
+      "mean": -0.091893492,
+      "median": -0.089766064,
+      "min": -1.7213948965072632,
+      "n": 325,
+      "q25": -0.36807085,
+      "q75": 0.168438478,
+      "std_pop": 0.569541446
+     },
+     "A_task": {
+      "abs_mean": 1.347445508,
+      "max": 2.90138110753705,
+      "mean": -0.074470448,
+      "median": 0.431178742,
+      "min": -4.797002792358398,
+      "n": 325,
+      "q25": -1.033085483,
+      "q75": 1.170905688,
+      "std_pop": 1.675012446
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 1.372253418,
+      "max": 2.90138110753705,
+      "mean": -0.021431892,
+      "median": 0.455939135,
+      "min": -4.797002792358398,
+      "n": 290,
+      "q25": -0.952012245,
+      "q75": 1.34622456,
+      "std_pop": 1.691587868
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 1.108174617,
+      "max": 1.7767488956451416,
+      "mean": 1.10814033,
+      "median": 1.28870666,
+      "min": -0.0038497522473335266,
+      "n": 325,
+      "q25": 0.587457538,
+      "q75": 1.627867103,
+      "std_pop": 0.581109206
+     },
+     "behaviour_values_task": {
+      "abs_mean": 4.878843866,
+      "max": 5.884415626525879,
+      "mean": 4.878843866,
+      "median": 5.318451881,
+      "min": 2.573544979095459,
+      "n": 325,
+      "q25": 4.129597664,
+      "q75": 5.68644619,
+      "std_pop": 0.979745483
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 1.667463816,
+      "max": 3.5904591205770977,
+      "mean": -0.092157179,
+      "median": 0.533583693,
+      "min": -5.936290955543515,
+      "n": 325,
+      "q25": -1.278443286,
+      "q75": 1.448995788,
+      "std_pop": 2.072827902
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 3.900813416,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 1.016246838,
+      "max": 2.0758567681146927,
+      "mean": 1.016246838,
+      "median": 1.10561215,
+      "min": 0.0,
+      "n": 325,
+      "q25": 0.568686934,
+      "q75": 1.508241952,
+      "std_pop": 0.529139501
+     },
+     "returns_task": {
+      "abs_mean": 4.804373418,
+      "max": 7.736988188790459,
+      "mean": 4.804373418,
+      "median": 4.873815719,
+      "min": 1.0,
+      "n": 325,
+      "q25": 3.651287396,
+      "q75": 6.301792692,
+      "std_pop": 1.707648579
+     },
+     "samples_total": 325,
+     "samples_with_actionable_candidates": 290,
+     "samples_with_zero_actor_gradient": 35,
+     "share_without_actor_gradient": 0.107692308
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s22_e124_s1300002_a124_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s22_e125_s1300047_a125_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s22_e126_s1300030_a126_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s22_e127_s1300023_a127_tape.jsonl"
+    ],
+    "training_seed": 22
+   }
+  },
+  "new_s33": {
+   "b0": {
+    "arm": "new",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_new_s33_b0.json",
+     "pre_update_weights_saved": true,
+     "pre_update_weights_source": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_train_new_s33_ep0.pt",
+     "reason_when_absent": null,
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 0,
+    "cell": "new_s33",
+    "gradient_at_update_start": {
+     "advantage_combination_closed": true,
+     "advantage_combination_max_abs_error": 2.384185791015625e-07,
+     "chunk_first_indices": [
+      608,
+      51,
+      463,
+      377,
+      485
+     ],
+     "chunk_samples": 256,
+     "chunk_samples_with_actionable_candidates": 10,
+     "chunk_samples_with_zero_actor_gradient": 246,
+     "clipping_scale_if_applied": 0.187641924,
+     "clipping_triggered_at_this_minibatch": true,
+     "closure_error_max_abs": 2.9802322387695312e-08,
+     "component_by_module": {
+      "critic_cost": {
+       "action_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "cost_head": {
+        "l1": 0.856859743595,
+        "l2": 0.131476148963
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 6.822236061096,
+        "l2": 0.131016090512
+       }
+      },
+      "critic_task": {
+       "action_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 10.800616264343,
+        "l2": 1.619857668877
+       },
+       "trunk": {
+        "l1": 106.104934692383,
+        "l2": 2.092653512955
+       }
+      },
+      "entropy_bonus": {
+       "action_head": {
+        "l1": 0.000249492819,
+        "l2": 2.6271149e-05
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 0.001353860716,
+        "l2": 2.778363e-05
+       }
+      },
+      "policy_cost_minus_A_cost": {
+       "action_head": {
+        "l1": 0.262435168028,
+        "l2": 0.029646430165
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 1.513910293579,
+        "l2": 0.031866226345
+       }
+      },
+      "policy_task_lambda_A_task": {
+       "action_head": {
+        "l1": 0.399930536747,
+        "l2": 0.045335762203
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 2.339206695557,
+        "l2": 0.05004017055
+       }
+      },
+      "sum_of_the_five_parts": {
+       "action_head": {
+        "l1": 0.144029840827,
+        "l2": 0.016278527677
+       },
+       "cost_head": {
+        "l1": 0.856859743595,
+        "l2": 0.131476148963
+       },
+       "task_value_head": {
+        "l1": 10.800616264343,
+        "l2": 1.619857668877
+       },
+       "trunk": {
+        "l1": 107.264823913574,
+        "l2": 2.11160326004
+       }
+      },
+      "trainer_expression": {
+       "action_head": {
+        "l1": 0.144029840827,
+        "l2": 0.016278527677
+       },
+       "cost_head": {
+        "l1": 0.856859743595,
+        "l2": 0.131476148963
+       },
+       "task_value_head": {
+        "l1": 10.800616264343,
+        "l2": 1.619857668877
+       },
+       "trunk": {
+        "l1": 107.264823913574,
+        "l2": 2.11160326004
+       }
+      }
+     },
+     "component_l1": {
+      "critic_cost": 7.679095745087,
+      "critic_task": 116.905555725098,
+      "entropy_bonus": 0.001603353536,
+      "policy_cost_minus_A_cost": 1.776345491409,
+      "policy_task_lambda_A_task": 2.739137172699,
+      "sum_of_the_five_parts": 119.066337585449,
+      "trainer_expression": 119.066337585449
+     },
+     "component_l2": {
+      "critic_cost": 0.185610339046,
+      "critic_task": 2.646344184875,
+      "entropy_bonus": 3.8237456e-05,
+      "policy_cost_minus_A_cost": 0.043524328619,
+      "policy_task_lambda_A_task": 0.067522957921,
+      "sum_of_the_five_parts": 2.66464972496,
+      "trainer_expression": 2.66464972496
+     },
+     "critic_share_of_total_l2": 1.000027916,
+     "entropy_share_of_total_l2": 1.435e-05,
+     "parts_sum_vs_trainer_expression_max_abs": 1.4901161193847656e-08,
+     "policy_task_versus_policy_cost": {
+      "cosine": -0.988697236,
+      "l2_cost": 0.043524328619,
+      "l2_task": 0.067522957921,
+      "l2_task_over_l2_cost": 1.55138425,
+      "note": "magnitudes are pre-clip; the trainer then clips the TOTAL norm and Adam rescales per parameter, so these ratios describe the gradient direction at the update start, not the parameter step",
+      "policy_l2": 0.025345023721
+     },
+     "pre_clip_total_norm": 2.664649725,
+     "ratio_max_abs_deviation_from_one": 2.38419e-07,
+     "reduction": "surrogate.mean() and entropy.mean() over the chunk, uniform sample weights, no advantage standardisation anywhere (v2_trainer registers this as the explicit difference from the old trainer)",
+     "registered_scalars_used": {
+      "clip": 0.2,
+      "entropy_bonus": 0.01,
+      "epochs_per_batch": 4,
+      "lambda_of_this_batch": 1.0,
+      "max_grad_norm": 0.5,
+      "minibatch_steps": 256,
+      "value_coefficient_per_head": 0.5
+     },
+     "scope": "epoch 0 / minibatch 0 of this batch only -- the update start where old == new (ratio exactly 1). Later minibatches are NOT reconstructed: that would need replaying optimizer.step, which this round forbids"
+    },
+    "likelihood_recompute_agrees_with_recorded": {
+     "recomputed_max_abs_gap": 1.7881393432617188e-07,
+     "recorded_max_abs_gap": 1.7881393432617188e-07,
+     "same_sample_count": true,
+     "within_1e-9": true
+    },
+    "likelihood_recomputed_at_pre_update_weights": {
+     "max_abs_gap": 1.7881393432617188e-07,
+     "samples": 616,
+     "tolerance": 1e-06
+    },
+    "pre_update_weights_identity": {
+     "batch0_recorded_parameters_before_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+     "ep0_recomputed_parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+     "match": true
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "lambda_after_recorded": 1.0125,
+     "lambda_before_recorded": 1.0,
+     "lambda_used_by_this_batch_actor": 1.0,
+     "minibatches_recorded": 12,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 616,
+     "samples_recorded_in_batch": 616,
+     "scenarios": [
+      1300027,
+      1300014,
+      1300028,
+      1300044
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": -0.000526,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0007,
+     "entropy": 0.086283,
+     "epochs": 4,
+     "gradient_norm_mean": 1.7912,
+     "likelihood_max_abs_gap_recorded": 1.7881393432617188e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 0.429867039,
+      "cost_head": 1.194697044,
+      "task_value_head": 6.489528531,
+      "trunk": 68.015723752
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.144029835,
+      "cost_head": 0.474896242,
+      "task_value_head": 4.527023733,
+      "trunk": 45.921556264
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 12,
+     "policy_surrogate": 0.464079,
+     "value_loss_cost": 0.137457,
+     "value_loss_task": 0.786077
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.531317106,
+      "max": 3.8050456220818942,
+      "mean": 0.475532404,
+      "median": 0.00691242,
+      "min": -1.8395105135126677,
+      "n": 616,
+      "q25": -0.000640621,
+      "q75": 0.896013735,
+      "std_pop": 0.853457861
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 1.055320293,
+      "max": 2.1460542054551768,
+      "mean": 0.194137046,
+      "median": 0.270621599,
+      "min": -1.8395105135126677,
+      "n": 33,
+      "q25": -0.737275822,
+      "q75": 1.054914872,
+      "std_pop": 1.196255411
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 1.42539425,
+      "max": 2.638837285850486,
+      "mean": 1.42539425,
+      "median": 1.298265765,
+      "min": 0.1470194955819441,
+      "n": 33,
+      "q25": 0.758543979,
+      "q75": 2.22228683,
+      "std_pop": 0.806006788
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.103825393,
+      "max": 2.638837285850486,
+      "mean": 0.084325228,
+      "median": 0.006446859,
+      "min": -0.16113510727882385,
+      "n": 616,
+      "q25": -0.003225183,
+      "q75": 0.024338478,
+      "std_pop": 0.372125561
+     },
+     "A_task": {
+      "abs_mean": 0.561810651,
+      "max": 3.7882103360670785,
+      "mean": 0.559857632,
+      "median": 0.01263307,
+      "min": -0.1482125112369862,
+      "n": 616,
+      "q25": 0.006074491,
+      "q75": 1.013160815,
+      "std_pop": 0.856918967
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 1.619531295,
+      "max": 2.782392028768943,
+      "mean": 1.619531295,
+      "median": 1.699132957,
+      "min": 0.6347046701945613,
+      "n": 33,
+      "q25": 1.029165578,
+      "q75": 2.10774659,
+      "std_pop": 0.618642267
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.108812423,
+      "max": 0.1649903506040573,
+      "mean": 0.054516257,
+      "median": 0.080488145,
+      "min": -0.1661468893289566,
+      "n": 616,
+      "q25": -0.050047907,
+      "q75": 0.161186486,
+      "std_pop": 0.106593071
+     },
+     "behaviour_values_task": {
+      "abs_mean": 0.182149854,
+      "max": 0.07894179224967957,
+      "mean": -0.181156266,
+      "median": -0.149324343,
+      "min": -0.5670912265777588,
+      "n": 616,
+      "q25": -0.234684125,
+      "q75": -0.086549219,
+      "std_pop": 0.130048728
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.561810651,
+      "max": 3.7882103360670785,
+      "mean": 0.559857632,
+      "median": 0.01263307,
+      "min": -0.1482125112369862,
+      "n": 616,
+      "q25": 0.006074491,
+      "q75": 1.013160815,
+      "std_pop": 0.856918967
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 5.4111103,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.161150803,
+      "max": 2.4976371159295647,
+      "mean": 0.138841485,
+      "median": 0.10531678,
+      "min": -0.07400484909473543,
+      "n": 616,
+      "q25": -0.004898717,
+      "q75": 0.157456072,
+      "std_pop": 0.345793926
+     },
+     "returns_task": {
+      "abs_mean": 0.519827204,
+      "max": 3.343557570077775,
+      "mean": 0.378701366,
+      "median": -0.069347809,
+      "min": -0.2246125842515063,
+      "n": 616,
+      "q25": -0.128159142,
+      "q75": 0.760484164,
+      "std_pop": 0.776163631
+     },
+     "samples_total": 616,
+     "samples_with_actionable_candidates": 33,
+     "samples_with_zero_actor_gradient": 583,
+     "share_without_actor_gradient": 0.946428571
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s33_e0_s1300027_a0_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s33_e1_s1300014_a1_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s33_e2_s1300028_a2_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s33_e3_s1300044_a3_tape.jsonl"
+    ],
+    "training_seed": 33
+   },
+   "b15": {
+    "arm": "new",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_new_s33_b15.json",
+     "pre_update_weights_saved": false,
+     "pre_update_weights_source": null,
+     "reason_when_absent": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 15,
+    "cell": "new_s33",
+    "gradient_at_update_start": {
+     "optimizer_steps_performed_by_this_round": 0,
+     "reason": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "status": "missing",
+     "what_is_still_computed": "the tape-side advantage decomposition, which needs no weights because both critic values were logged at rollout"
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      60,
+      61,
+      62,
+      63
+     ],
+     "lambda_after_recorded": 1.2499999999999996,
+     "lambda_before_recorded": 1.2249999999999996,
+     "lambda_used_by_this_batch_actor": 1.2249999999999996,
+     "minibatches_recorded": 16,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 1002,
+     "samples_recorded_in_batch": 1002,
+     "scenarios": [
+      1300009,
+      1300047,
+      1300023,
+      1300027
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": 2.8e-05,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0,
+     "entropy": 0.042391,
+     "epochs": 4,
+     "gradient_norm_mean": 0.5028,
+     "likelihood_max_abs_gap_recorded": 1.7881393432617188e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 0.74856682,
+      "cost_head": 0.522691165,
+      "task_value_head": 1.101837263,
+      "trunk": 10.666589062
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.051942024,
+      "cost_head": 0.162951377,
+      "task_value_head": 0.634310738,
+      "trunk": 5.334443733
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 16,
+     "policy_surrogate": 0.001468,
+     "value_loss_cost": 0.053525,
+     "value_loss_task": 0.290649
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.342197635,
+      "max": 3.0339571403476473,
+      "mean": 0.0014429,
+      "median": -0.034312334,
+      "min": -2.2208450285409977,
+      "n": 1002,
+      "q25": -0.066536729,
+      "q75": -0.002434323,
+      "std_pop": 0.638142741
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 0.856744479,
+      "max": 2.092902275196802,
+      "mean": 0.077421598,
+      "median": 0.228447937,
+      "min": -2.2208450285409977,
+      "n": 30,
+      "q25": -0.662716695,
+      "q75": 0.731034712,
+      "std_pop": 1.01698911
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 0.919432229,
+      "max": 1.928345297897986,
+      "mean": 0.735365113,
+      "median": 0.871306615,
+      "min": -0.6288689961485626,
+      "n": 30,
+      "q25": 0.103321412,
+      "q75": 1.333117286,
+      "std_pop": 0.75975034
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.082082339,
+      "max": 1.928345297897986,
+      "mean": -0.006209498,
+      "median": -0.000374674,
+      "min": -1.0291115769919008,
+      "n": 1002,
+      "q25": -0.006523742,
+      "q75": 0.003901128,
+      "std_pop": 0.235590555
+     },
+     "A_task": {
+      "abs_mean": 0.292119301,
+      "max": 2.404389123944489,
+      "mean": -0.003891101,
+      "median": -0.028171045,
+      "min": -2.050227777436346,
+      "n": 1002,
+      "q25": -0.057957061,
+      "q75": -0.001936829,
+      "std_pop": 0.546969205
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 0.859930599,
+      "max": 2.2439895655671966,
+      "mean": 0.663499356,
+      "median": 0.558694793,
+      "min": -0.7142355491750703,
+      "n": 30,
+      "q25": -0.120563976,
+      "q75": 1.323648839,
+      "std_pop": 0.87800805
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.138269586,
+      "max": 1.605276107788086,
+      "mean": 0.131788695,
+      "median": 0.051783856,
+      "min": -0.18073883652687073,
+      "n": 1002,
+      "q25": 0.049578037,
+      "q75": 0.075086378,
+      "std_pop": 0.276598568
+     },
+     "behaviour_values_task": {
+      "abs_mean": 1.377574986,
+      "max": 5.911972999572754,
+      "mean": 1.377574986,
+      "median": 0.648627251,
+      "min": 0.3972333073616028,
+      "n": 1002,
+      "q25": 0.424964234,
+      "q75": 1.947883725,
+      "std_pop": 1.485922049
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.357846143,
+      "max": 2.945376676831998,
+      "mean": -0.004766598,
+      "median": -0.03450953,
+      "min": -2.511529027359523,
+      "n": 1002,
+      "q25": -0.0709974,
+      "q75": -0.002372616,
+      "std_pop": 0.670037277
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 4.359599739,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.126761092,
+      "max": 3.052257274712256,
+      "mean": 0.125579197,
+      "median": 0.051520105,
+      "min": -0.036133449355250924,
+      "n": 1002,
+      "q25": 0.049776716,
+      "q75": 0.072732175,
+      "std_pop": 0.37587528
+     },
+     "returns_task": {
+      "abs_mean": 1.373683886,
+      "max": 6.815107215604128,
+      "mean": 1.373683886,
+      "median": 0.624656561,
+      "min": 0.0,
+      "n": 1002,
+      "q25": 0.417407908,
+      "q75": 1.353698718,
+      "std_pop": 1.62974959
+     },
+     "samples_total": 1002,
+     "samples_with_actionable_candidates": 30,
+     "samples_with_zero_actor_gradient": 972,
+     "share_without_actor_gradient": 0.97005988
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s33_e60_s1300009_a60_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s33_e61_s1300047_a61_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s33_e62_s1300023_a62_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s33_e63_s1300027_a63_tape.jsonl"
+    ],
+    "training_seed": 33
+   },
+   "b31": {
+    "arm": "new",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_new_s33_b31.json",
+     "pre_update_weights_saved": false,
+     "pre_update_weights_source": null,
+     "reason_when_absent": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 31,
+    "cell": "new_s33",
+    "gradient_at_update_start": {
+     "optimizer_steps_performed_by_this_round": 0,
+     "reason": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "status": "missing",
+     "what_is_still_computed": "the tape-side advantage decomposition, which needs no weights because both critic values were logged at rollout"
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      124,
+      125,
+      126,
+      127
+     ],
+     "lambda_after_recorded": 1.4874999999999994,
+     "lambda_before_recorded": 1.4624999999999995,
+     "lambda_used_by_this_batch_actor": 1.4624999999999995,
+     "minibatches_recorded": 16,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 987,
+     "samples_recorded_in_batch": 987,
+     "scenarios": [
+      1300002,
+      1300047,
+      1300030,
+      1300023
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": -0.000628,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0115,
+     "entropy": 0.089285,
+     "epochs": 4,
+     "gradient_norm_mean": 0.9897,
+     "likelihood_max_abs_gap_recorded": 2.384185791015625e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 1.199349777,
+      "cost_head": 0.539409217,
+      "task_value_head": 1.600953257,
+      "trunk": 19.573253306
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.133872916,
+      "cost_head": 0.099944544,
+      "task_value_head": 0.854856319,
+      "trunk": 12.91346924
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 16,
+     "policy_surrogate": -0.089024,
+     "value_loss_cost": 0.038645,
+     "value_loss_task": 0.230023
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.334347572,
+      "max": 3.120602955990411,
+      "mean": -0.090104794,
+      "median": -0.043398592,
+      "min": -3.6277659290536306,
+      "n": 987,
+      "q25": -0.108485627,
+      "q75": -0.01550605,
+      "std_pop": 0.675358453
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 1.119326114,
+      "max": 3.120602955990411,
+      "mean": 0.633708269,
+      "median": 0.772755521,
+      "min": -2.0618708785526985,
+      "n": 66,
+      "q25": -0.082744579,
+      "q75": 1.426677123,
+      "std_pop": 1.184829594
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 0.575408006,
+      "max": 1.613110941217744,
+      "mean": 0.490175652,
+      "median": 0.4927199,
+      "min": -0.8453854439899597,
+      "n": 66,
+      "q25": 0.202088512,
+      "q75": 0.764878603,
+      "std_pop": 0.499641165
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.076051287,
+      "max": 1.613110941217744,
+      "mean": 0.018050899,
+      "median": -0.010408416,
+      "min": -1.1218343479154154,
+      "n": 987,
+      "q25": -0.021088281,
+      "q75": 0.004530207,
+      "std_pop": 0.204134192
+     },
+     "A_task": {
+      "abs_mean": 0.246399336,
+      "max": 2.835802044445499,
+      "mean": -0.04926762,
+      "median": -0.039358855,
+      "min": -2.4732364607583905,
+      "n": 987,
+      "q25": -0.086326565,
+      "q75": -0.010619217,
+      "std_pop": 0.503675845
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 1.00944025,
+      "max": 2.835802044445499,
+      "mean": 0.768467639,
+      "median": 0.937688044,
+      "min": -1.060154310548427,
+      "n": 66,
+      "q25": 0.06101929,
+      "q75": 1.356007328,
+      "std_pop": 0.909989943
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.156380936,
+      "max": 2.2508440017700195,
+      "mean": 0.131726281,
+      "median": 0.037354037,
+      "min": -0.16953417658805847,
+      "n": 987,
+      "q25": -0.021226311,
+      "q75": 0.130857818,
+      "std_pop": 0.35022031
+     },
+     "behaviour_values_task": {
+      "abs_mean": 1.378794642,
+      "max": 6.439213275909424,
+      "mean": 1.378794642,
+      "median": 0.551375568,
+      "min": 0.1542528122663498,
+      "n": 987,
+      "q25": 0.295082435,
+      "q75": 1.194745362,
+      "std_pop": 1.78239261
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.360359029,
+      "max": 4.147360490001541,
+      "mean": -0.072053895,
+      "median": -0.057562325,
+      "min": -3.617108323859145,
+      "n": 987,
+      "q25": -0.126252602,
+      "q75": -0.015530605,
+      "std_pop": 0.736625923
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 4.738368561,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.163829191,
+      "max": 2.995587287886196,
+      "mean": 0.14977718,
+      "median": 0.023735585,
+      "min": -0.052927606143386645,
+      "n": 987,
+      "q25": -0.014879737,
+      "q75": 0.103363626,
+      "std_pop": 0.465140604
+     },
+     "returns_task": {
+      "abs_mean": 1.329527021,
+      "max": 7.036222169713582,
+      "mean": 1.329527021,
+      "median": 0.530857106,
+      "min": 0.0,
+      "n": 987,
+      "q25": 0.266852457,
+      "q75": 1.084350871,
+      "std_pop": 1.833223393
+     },
+     "samples_total": 987,
+     "samples_with_actionable_candidates": 66,
+     "samples_with_zero_actor_gradient": 921,
+     "share_without_actor_gradient": 0.933130699
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s33_e124_s1300002_a124_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s33_e125_s1300047_a125_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s33_e126_s1300030_a126_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_new_s33_e127_s1300023_a127_tape.jsonl"
+    ],
+    "training_seed": 33
+   }
+  },
+  "old_s11": {
+   "b0": {
+    "arm": "old",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_old_s11_b0.json",
+     "pre_update_weights_saved": true,
+     "pre_update_weights_source": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_train_old_s11_ep0.pt",
+     "reason_when_absent": null,
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 0,
+    "cell": "old_s11",
+    "gradient_at_update_start": {
+     "advantage_combination_closed": true,
+     "advantage_combination_max_abs_error": 2.384185791015625e-07,
+     "chunk_first_indices": [
+      341,
+      586,
+      384,
+      538,
+      84
+     ],
+     "chunk_samples": 256,
+     "chunk_samples_with_actionable_candidates": 13,
+     "chunk_samples_with_zero_actor_gradient": 243,
+     "clipping_scale_if_applied": 0.209518818,
+     "clipping_triggered_at_this_minibatch": true,
+     "closure_error_max_abs": 2.9802322387695312e-08,
+     "component_by_module": {
+      "critic_cost": {
+       "action_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "cost_head": {
+        "l1": 1.250766396523,
+        "l2": 0.195731565356
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 12.797471046448,
+        "l2": 0.260159045458
+       }
+      },
+      "critic_task": {
+       "action_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 10.900036811829,
+        "l2": 1.587448358536
+       },
+       "trunk": {
+        "l1": 88.534912109375,
+        "l2": 1.748962759972
+       }
+      },
+      "entropy_bonus": {
+       "action_head": {
+        "l1": 0.002045160392,
+        "l2": 0.000217515626
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 0.010451759212,
+        "l2": 0.000245126022
+       }
+      },
+      "policy_cost_minus_A_cost": {
+       "action_head": {
+        "l1": 0.366742789745,
+        "l2": 0.039174918085
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 1.779210329056,
+        "l2": 0.042441129684
+       }
+      },
+      "policy_task_lambda_A_task": {
+       "action_head": {
+        "l1": 0.680455803871,
+        "l2": 0.072796106339
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 3.345051050186,
+        "l2": 0.080969393253
+       }
+      },
+      "sum_of_the_five_parts": {
+       "action_head": {
+        "l1": 0.335721611977,
+        "l2": 0.035409484059
+       },
+       "cost_head": {
+        "l1": 1.250766396523,
+        "l2": 0.195731565356
+       },
+       "task_value_head": {
+        "l1": 10.900036811829,
+        "l2": 1.587448358536
+       },
+       "trunk": {
+        "l1": 90.08390045166,
+        "l2": 1.77071917057
+       }
+      },
+      "trainer_expression": {
+       "action_head": {
+        "l1": 0.33572152257,
+        "l2": 0.035409480333
+       },
+       "cost_head": {
+        "l1": 1.250766396523,
+        "l2": 0.195731565356
+       },
+       "task_value_head": {
+        "l1": 10.900036811829,
+        "l2": 1.587448358536
+       },
+       "trunk": {
+        "l1": 90.08390045166,
+        "l2": 1.77071917057
+       }
+      }
+     },
+     "component_l1": {
+      "critic_cost": 14.048236846924,
+      "critic_task": 99.434944152832,
+      "entropy_bonus": 0.012496919371,
+      "policy_cost_minus_A_cost": 2.145952939987,
+      "policy_task_lambda_A_task": 4.025506496429,
+      "sum_of_the_five_parts": 102.570419311523,
+      "trainer_expression": 102.570419311523
+     },
+     "component_l2": {
+      "critic_cost": 0.32556656003,
+      "critic_task": 2.361961603165,
+      "entropy_bonus": 0.000327719114,
+      "policy_cost_minus_A_cost": 0.057757455856,
+      "policy_task_lambda_A_task": 0.108882121742,
+      "sum_of_the_five_parts": 2.386420488358,
+      "trainer_expression": 2.386420488358
+     },
+     "critic_share_of_total_l2": 0.999898495,
+     "entropy_share_of_total_l2": 0.000137327,
+     "parts_sum_vs_trainer_expression_max_abs": 7.450580596923828e-09,
+     "policy_task_versus_policy_cost": {
+      "cosine": -0.965636341,
+      "l2_cost": 0.057757455856,
+      "l2_task": 0.108882121742,
+      "l2_task_over_l2_cost": 1.88516132,
+      "note": "magnitudes are pre-clip; the trainer then clips the TOTAL norm and Adam rescales per parameter, so these ratios describe the gradient direction at the update start, not the parameter step",
+      "policy_l2": 0.055190011859
+     },
+     "pre_clip_total_norm": 2.386420488,
+     "ratio_max_abs_deviation_from_one": 2.38419e-07,
+     "reduction": "surrogate.mean() and entropy.mean() over the chunk, uniform sample weights, no advantage standardisation anywhere (v2_trainer registers this as the explicit difference from the old trainer)",
+     "registered_scalars_used": {
+      "clip": 0.2,
+      "entropy_bonus": 0.01,
+      "epochs_per_batch": 4,
+      "lambda_of_this_batch": 1.0,
+      "max_grad_norm": 0.5,
+      "minibatch_steps": 256,
+      "value_coefficient_per_head": 0.5
+     },
+     "scope": "epoch 0 / minibatch 0 of this batch only -- the update start where old == new (ratio exactly 1). Later minibatches are NOT reconstructed: that would need replaying optimizer.step, which this round forbids"
+    },
+    "likelihood_recompute_agrees_with_recorded": {
+     "recomputed_max_abs_gap": 2.384185791015625e-07,
+     "recorded_max_abs_gap": 2.384185791015625e-07,
+     "same_sample_count": true,
+     "within_1e-9": true
+    },
+    "likelihood_recomputed_at_pre_update_weights": {
+     "max_abs_gap": 2.384185791015625e-07,
+     "samples": 623,
+     "tolerance": 1e-06
+    },
+    "pre_update_weights_identity": {
+     "batch0_recorded_parameters_before_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+     "ep0_recomputed_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+     "match": true
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "lambda_after_recorded": 1.0125,
+     "lambda_before_recorded": 1.0,
+     "lambda_used_by_this_batch_actor": 1.0,
+     "minibatches_recorded": 12,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 623,
+     "samples_recorded_in_batch": 623,
+     "scenarios": [
+      1300027,
+      1300014,
+      1300028,
+      1300044
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": -0.00031,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0,
+     "entropy": 0.081315,
+     "epochs": 4,
+     "gradient_norm_mean": 1.4959,
+     "likelihood_max_abs_gap_recorded": 2.384185791015625e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 0.325809328,
+      "cost_head": 0.921784024,
+      "task_value_head": 6.593073669,
+      "trunk": 55.939296098
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.087337734,
+      "cost_head": 0.445841111,
+      "task_value_head": 4.034400851,
+      "trunk": 36.089403436
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 12,
+     "policy_surrogate": 0.468154,
+     "value_loss_cost": 0.129772,
+     "value_loss_task": 0.692603
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.515751686,
+      "max": 3.098562502881232,
+      "mean": 0.468633339,
+      "median": 0.032348707,
+      "min": -1.7149637219472451,
+      "n": 623,
+      "q25": 0.008554452,
+      "q75": 0.95560989,
+      "std_pop": 0.772894389
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 0.813494597,
+      "max": 1.983793377563485,
+      "mean": 0.04699925,
+      "median": -0.030906524,
+      "min": -1.7149637219472451,
+      "n": 30,
+      "q25": -0.655662037,
+      "q75": 0.758133022,
+      "std_pop": 0.96523978
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 1.547572527,
+      "max": 2.505561278439904,
+      "mean": 1.547572527,
+      "median": 1.714617069,
+      "min": 0.17926684896935663,
+      "n": 30,
+      "q25": 0.981265663,
+      "q75": 2.134313417,
+      "std_pop": 0.693396403
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.11547898,
+      "max": 2.505561278439904,
+      "mean": 0.060579758,
+      "median": -0.007215668,
+      "min": -0.3314302861690521,
+      "n": 623,
+      "q25": -0.025098879,
+      "q75": -0.003684029,
+      "std_pop": 0.373834495
+     },
+     "A_task": {
+      "abs_mean": 0.536114491,
+      "max": 3.112407968150444,
+      "mean": 0.529213097,
+      "median": 0.012203683,
+      "min": -0.3568439098099653,
+      "n": 623,
+      "q25": 0.00451532,
+      "q75": 1.041325133,
+      "std_pop": 0.790145205
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 1.594571777,
+      "max": 2.543991278695518,
+      "mean": 1.594571777,
+      "median": 1.670162364,
+      "min": 0.5850012824131342,
+      "n": 30,
+      "q25": 1.115480619,
+      "q75": 2.016685078,
+      "std_pop": 0.5683118
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.191646134,
+      "max": 0.33723393082618713,
+      "mean": 0.182972441,
+      "median": 0.185073495,
+      "min": -0.2219715565443039,
+      "n": 623,
+      "q25": 0.160397492,
+      "q75": 0.254275799,
+      "std_pop": 0.099167268
+     },
+     "behaviour_values_task": {
+      "abs_mean": 0.206100764,
+      "max": 0.2565550208091736,
+      "mean": -0.184507819,
+      "median": -0.158033997,
+      "min": -0.5182451605796814,
+      "n": 623,
+      "q25": -0.230920598,
+      "q75": -0.131388038,
+      "std_pop": 0.144465183
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.536114491,
+      "max": 3.112407968150444,
+      "mean": 0.529213097,
+      "median": 0.012203683,
+      "min": -0.3568439098099653,
+      "n": 623,
+      "q25": 0.00451532,
+      "q75": 1.041325133,
+      "std_pop": 0.790145205
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 4.642528799,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.244035955,
+      "max": 2.635181502677346,
+      "mean": 0.243552198,
+      "median": 0.184011965,
+      "min": -0.011730903409721521,
+      "n": 623,
+      "q25": 0.142798299,
+      "q75": 0.246720572,
+      "std_pop": 0.363264753
+     },
+     "returns_task": {
+      "abs_mean": 0.532995705,
+      "max": 2.752800659047432,
+      "mean": 0.344705278,
+      "median": -0.127353891,
+      "min": -0.22692578417287174,
+      "n": 623,
+      "q25": -0.154723857,
+      "q75": 0.781387881,
+      "std_pop": 0.759763689
+     },
+     "samples_total": 623,
+     "samples_with_actionable_candidates": 30,
+     "samples_with_zero_actor_gradient": 593,
+     "share_without_actor_gradient": 0.951845907
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s11_e0_s1300027_a0_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s11_e1_s1300014_a1_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s11_e2_s1300028_a2_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s11_e3_s1300044_a3_tape.jsonl"
+    ],
+    "training_seed": 11
+   },
+   "b15": {
+    "arm": "old",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_old_s11_b15.json",
+     "pre_update_weights_saved": false,
+     "pre_update_weights_source": null,
+     "reason_when_absent": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 15,
+    "cell": "old_s11",
+    "gradient_at_update_start": {
+     "optimizer_steps_performed_by_this_round": 0,
+     "reason": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "status": "missing",
+     "what_is_still_computed": "the tape-side advantage decomposition, which needs no weights because both critic values were logged at rollout"
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      60,
+      61,
+      62,
+      63
+     ],
+     "lambda_after_recorded": 1.2624999999999995,
+     "lambda_before_recorded": 1.2374999999999996,
+     "lambda_used_by_this_batch_actor": 1.2374999999999996,
+     "minibatches_recorded": 16,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 1003,
+     "samples_recorded_in_batch": 1003,
+     "scenarios": [
+      1300009,
+      1300047,
+      1300023,
+      1300027
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": 0.000175,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0,
+     "entropy": 0.033936,
+     "epochs": 4,
+     "gradient_norm_mean": 0.4564,
+     "likelihood_max_abs_gap_recorded": 5.960464477539063e-08,
+     "module_gradient_l1_mean": {
+      "action_head": 0.244493273,
+      "cost_head": 0.487272159,
+      "task_value_head": 1.56344182,
+      "trunk": 11.530344529
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.053235624,
+      "cost_head": 0.136246971,
+      "task_value_head": 0.689697112,
+      "trunk": 6.695547551
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 16,
+     "policy_surrogate": 0.041508,
+     "value_loss_cost": 0.040489,
+     "value_loss_task": 0.356398
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.363053572,
+      "max": 4.340779633283697,
+      "mean": 0.041765279,
+      "median": -0.006907072,
+      "min": -2.9506432612408298,
+      "n": 1003,
+      "q25": -0.046699379,
+      "q75": 0.015925493,
+      "std_pop": 0.722842963
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 0.664547838,
+      "max": 0.9983927198413348,
+      "mean": -0.288603515,
+      "median": -0.323538233,
+      "min": -1.4925158031720462,
+      "n": 27,
+      "q25": -0.864030422,
+      "q75": 0.238924398,
+      "std_pop": 0.711474879
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 0.826590147,
+      "max": 2.132828470962686,
+      "mean": 0.765640146,
+      "median": 0.924960773,
+      "min": -0.30191365290510974,
+      "n": 27,
+      "q25": 0.262289508,
+      "q75": 1.19019146,
+      "std_pop": 0.587172767
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.074953733,
+      "max": 2.132828470962686,
+      "mean": -0.001057539,
+      "median": -0.002297643,
+      "min": -0.9482303504127474,
+      "n": 1003,
+      "q25": -0.005917752,
+      "q75": 6.876e-06,
+      "std_pop": 0.207897115
+     },
+     "A_task": {
+      "abs_mean": 0.308535983,
+      "max": 3.455478334415537,
+      "mean": 0.032895144,
+      "median": -0.007540659,
+      "min": -2.478727520718142,
+      "n": 1003,
+      "q25": -0.038694161,
+      "q75": 0.007353907,
+      "std_pop": 0.609771321
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 0.559369542,
+      "max": 2.2409808611094486,
+      "mean": 0.385484146,
+      "median": 0.275732609,
+      "min": -0.45792983385499353,
+      "n": 27,
+      "q25": -0.115064481,
+      "q75": 0.790237907,
+      "std_pop": 0.65345772
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.101783824,
+      "max": 1.5970979928970337,
+      "mean": 0.085199303,
+      "median": 0.012957266,
+      "min": -0.19467322528362274,
+      "n": 1003,
+      "q25": 0.00184322,
+      "q75": 0.042688049,
+      "std_pop": 0.248597203
+     },
+     "behaviour_values_task": {
+      "abs_mean": 1.14717358,
+      "max": 5.695755958557129,
+      "mean": 1.14717358,
+      "median": 0.344937086,
+      "min": 0.25424429774284363,
+      "n": 1003,
+      "q25": 0.27220802,
+      "q75": 1.918750644,
+      "std_pop": 1.452549054
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.381813279,
+      "max": 4.276154438839225,
+      "mean": 0.04070774,
+      "median": -0.009331566,
+      "min": -3.0674253068887,
+      "n": 1003,
+      "q25": -0.047884024,
+      "q75": 0.00910046,
+      "std_pop": 0.75459201
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 5.093986177,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.091571122,
+      "max": 3.0384755103761383,
+      "mean": 0.084141764,
+      "median": 0.01272051,
+      "min": -0.08278508213053803,
+      "n": 1003,
+      "q25": 0.001738041,
+      "q75": 0.04141951,
+      "std_pop": 0.342451859
+     },
+     "returns_task": {
+      "abs_mean": 1.180068724,
+      "max": 7.976132059085947,
+      "mean": 1.180068724,
+      "median": 0.345512405,
+      "min": 0.0,
+      "n": 1003,
+      "q25": 0.269825347,
+      "q75": 1.245925796,
+      "std_pop": 1.634105663
+     },
+     "samples_total": 1003,
+     "samples_with_actionable_candidates": 27,
+     "samples_with_zero_actor_gradient": 976,
+     "share_without_actor_gradient": 0.973080758
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s11_e60_s1300009_a60_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s11_e61_s1300047_a61_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s11_e62_s1300023_a62_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s11_e63_s1300027_a63_tape.jsonl"
+    ],
+    "training_seed": 11
+   },
+   "b31": {
+    "arm": "old",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_old_s11_b31.json",
+     "pre_update_weights_saved": false,
+     "pre_update_weights_source": null,
+     "reason_when_absent": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 31,
+    "cell": "old_s11",
+    "gradient_at_update_start": {
+     "optimizer_steps_performed_by_this_round": 0,
+     "reason": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "status": "missing",
+     "what_is_still_computed": "the tape-side advantage decomposition, which needs no weights because both critic values were logged at rollout"
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      124,
+      125,
+      126,
+      127
+     ],
+     "lambda_after_recorded": 1.4999999999999993,
+     "lambda_before_recorded": 1.4749999999999994,
+     "lambda_used_by_this_batch_actor": 1.4749999999999994,
+     "minibatches_recorded": 16,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 996,
+     "samples_recorded_in_batch": 996,
+     "scenarios": [
+      1300002,
+      1300047,
+      1300030,
+      1300023
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": 2e-05,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0,
+     "entropy": 0.04981,
+     "epochs": 4,
+     "gradient_norm_mean": 0.7605,
+     "likelihood_max_abs_gap_recorded": 1.1920928955078125e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 0.942117643,
+      "cost_head": 0.328403898,
+      "task_value_head": 1.157448526,
+      "trunk": 15.452001899
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.018162092,
+      "cost_head": 0.114254521,
+      "task_value_head": 0.48863693,
+      "trunk": 9.161991674
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 16,
+     "policy_surrogate": -0.00238,
+     "value_loss_cost": 0.041738,
+     "value_loss_task": 0.19855
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.329296202,
+      "max": 2.602270881781924,
+      "mean": -0.003026361,
+      "median": -0.01309951,
+      "min": -3.2760380509008726,
+      "n": 996,
+      "q25": -0.056470778,
+      "q75": 0.027102138,
+      "std_pop": 0.623168836
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 1.008493179,
+      "max": 2.602270881781924,
+      "mean": -0.255974548,
+      "median": -0.396457343,
+      "min": -2.079130795091028,
+      "n": 37,
+      "q25": -1.177582214,
+      "q75": 0.580104199,
+      "std_pop": 1.157677086
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 0.674782155,
+      "max": 2.587261171111787,
+      "mean": 0.536430756,
+      "median": 0.523374467,
+      "min": -0.7754696952977131,
+      "n": 37,
+      "q25": 0.102608443,
+      "q75": 0.816022167,
+      "std_pop": 0.715371393
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.065756729,
+      "max": 2.587261171111787,
+      "mean": 0.005450833,
+      "median": -0.000506976,
+      "min": -1.2471634540839482,
+      "n": 996,
+      "q25": -0.002811165,
+      "q75": 0.010345132,
+      "std_pop": 0.206853452
+     },
+     "A_task": {
+      "abs_mean": 0.237792094,
+      "max": 2.558322862118835,
+      "mean": 0.00164371,
+      "median": -0.009830887,
+      "min": -2.325357601611702,
+      "n": 996,
+      "q25": -0.038034561,
+      "q75": 0.016229395,
+      "std_pop": 0.453376328
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 0.804682248,
+      "max": 2.558322862118835,
+      "mean": 0.190139802,
+      "median": -0.007622337,
+      "min": -0.8612125089393727,
+      "n": 37,
+      "q25": -0.659388605,
+      "q75": 0.820070563,
+      "std_pop": 0.934366467
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.108084475,
+      "max": 2.217360019683838,
+      "mean": 0.06089322,
+      "median": -0.017190689,
+      "min": -0.29826620221138,
+      "n": 996,
+      "q25": -0.036888,
+      "q75": 0.002708999,
+      "std_pop": 0.300308067
+     },
+     "behaviour_values_task": {
+      "abs_mean": 1.264882759,
+      "max": 6.3649396896362305,
+      "mean": 1.264882759,
+      "median": 0.543220431,
+      "min": 0.38962501287460327,
+      "n": 996,
+      "q25": 0.465639845,
+      "q75": 1.563895375,
+      "std_pop": 1.41788456
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.350743339,
+      "max": 3.7735262216252803,
+      "mean": 0.002424473,
+      "median": -0.014500558,
+      "min": -3.4299024623772594,
+      "n": 996,
+      "q25": -0.056100978,
+      "q75": 0.023938357,
+      "std_pop": 0.668730084
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 5.333953549,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.100741889,
+      "max": 3.0816345820519575,
+      "mean": 0.066344053,
+      "median": -0.015048279,
+      "min": -0.08617895193779551,
+      "n": 996,
+      "q25": -0.032988366,
+      "q75": 0.002579835,
+      "std_pop": 0.392750286
+     },
+     "returns_task": {
+      "abs_mean": 1.26652647,
+      "max": 6.323474171496414,
+      "mean": 1.26652647,
+      "median": 0.561839451,
+      "min": 0.0,
+      "n": 996,
+      "q25": 0.45097302,
+      "q75": 1.307408985,
+      "std_pop": 1.500015922
+     },
+     "samples_total": 996,
+     "samples_with_actionable_candidates": 37,
+     "samples_with_zero_actor_gradient": 959,
+     "share_without_actor_gradient": 0.962851406
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s11_e124_s1300002_a124_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s11_e125_s1300047_a125_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s11_e126_s1300030_a126_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s11_e127_s1300023_a127_tape.jsonl"
+    ],
+    "training_seed": 11
+   }
+  },
+  "old_s22": {
+   "b0": {
+    "arm": "old",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_old_s22_b0.json",
+     "pre_update_weights_saved": true,
+     "pre_update_weights_source": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_train_old_s22_ep0.pt",
+     "reason_when_absent": null,
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 0,
+    "cell": "old_s22",
+    "gradient_at_update_start": {
+     "advantage_combination_closed": true,
+     "advantage_combination_max_abs_error": 2.384185791015625e-07,
+     "chunk_first_indices": [
+      381,
+      462,
+      3,
+      261,
+      237
+     ],
+     "chunk_samples": 256,
+     "chunk_samples_with_actionable_candidates": 18,
+     "chunk_samples_with_zero_actor_gradient": 238,
+     "clipping_scale_if_applied": 0.187185514,
+     "clipping_triggered_at_this_minibatch": true,
+     "closure_error_max_abs": 4.470348358154297e-08,
+     "component_by_module": {
+      "critic_cost": {
+       "action_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "cost_head": {
+        "l1": 2.163838148117,
+        "l2": 0.350409954786
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 18.701292037964,
+        "l2": 0.381098657846
+       }
+      },
+      "critic_task": {
+       "action_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 11.810762405396,
+        "l2": 1.762771844864
+       },
+       "trunk": {
+        "l1": 94.771835327148,
+        "l2": 1.91714322567
+       }
+      },
+      "entropy_bonus": {
+       "action_head": {
+        "l1": 0.005645197351,
+        "l2": 0.000622883497
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 0.038436584175,
+        "l2": 0.000741908909
+       }
+      },
+      "policy_cost_minus_A_cost": {
+       "action_head": {
+        "l1": 0.779168665409,
+        "l2": 0.08691894263
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 5.303261756897,
+        "l2": 0.103549703956
+       }
+      },
+      "policy_task_lambda_A_task": {
+       "action_head": {
+        "l1": 1.057925462723,
+        "l2": 0.117249727249
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 7.198312282562,
+        "l2": 0.140074208379
+       }
+      },
+      "sum_of_the_five_parts": {
+       "action_head": {
+        "l1": 0.29315546155,
+        "l2": 0.031920902431
+       },
+       "cost_head": {
+        "l1": 2.163838148117,
+        "l2": 0.350409954786
+       },
+       "task_value_head": {
+        "l1": 11.810762405396,
+        "l2": 1.762771844864
+       },
+       "trunk": {
+        "l1": 97.64485168457,
+        "l2": 1.975817680359
+       }
+      },
+      "trainer_expression": {
+       "action_head": {
+        "l1": 0.293155491352,
+        "l2": 0.031920906156
+       },
+       "cost_head": {
+        "l1": 2.163838148117,
+        "l2": 0.350409954786
+       },
+       "task_value_head": {
+        "l1": 11.810762405396,
+        "l2": 1.762771844864
+       },
+       "trunk": {
+        "l1": 97.64485168457,
+        "l2": 1.975817680359
+       }
+      }
+     },
+     "component_l1": {
+      "critic_cost": 20.865129470825,
+      "critic_task": 106.58260345459,
+      "entropy_bonus": 0.04408178106,
+      "policy_cost_minus_A_cost": 6.082430362701,
+      "policy_task_lambda_A_task": 8.256237983704,
+      "sum_of_the_five_parts": 111.912612915039,
+      "trainer_expression": 111.912612915039
+     },
+     "component_l2": {
+      "critic_cost": 0.517709732056,
+      "critic_task": 2.604381322861,
+      "entropy_bonus": 0.00096871698,
+      "policy_cost_minus_A_cost": 0.135194092989,
+      "policy_task_lambda_A_task": 0.182669878006,
+      "sum_of_the_five_parts": 2.671146869659,
+      "trainer_expression": 2.671146869659
+     },
+     "critic_share_of_total_l2": 1.001062069,
+     "entropy_share_of_total_l2": 0.00036266,
+     "parts_sum_vs_trainer_expression_max_abs": 1.4901161193847656e-08,
+     "policy_task_versus_policy_cost": {
+      "cosine": -0.99668008,
+      "l2_cost": 0.135194092989,
+      "l2_task": 0.182669878006,
+      "l2_task_over_l2_cost": 1.351167599,
+      "note": "magnitudes are pre-clip; the trainer then clips the TOTAL norm and Adam rescales per parameter, so these ratios describe the gradient direction at the update start, not the parameter step",
+      "policy_l2": 0.049172405154
+     },
+     "pre_clip_total_norm": 2.67114687,
+     "ratio_max_abs_deviation_from_one": 2.38419e-07,
+     "reduction": "surrogate.mean() and entropy.mean() over the chunk, uniform sample weights, no advantage standardisation anywhere (v2_trainer registers this as the explicit difference from the old trainer)",
+     "registered_scalars_used": {
+      "clip": 0.2,
+      "entropy_bonus": 0.01,
+      "epochs_per_batch": 4,
+      "lambda_of_this_batch": 1.0,
+      "max_grad_norm": 0.5,
+      "minibatch_steps": 256,
+      "value_coefficient_per_head": 0.5
+     },
+     "scope": "epoch 0 / minibatch 0 of this batch only -- the update start where old == new (ratio exactly 1). Later minibatches are NOT reconstructed: that would need replaying optimizer.step, which this round forbids"
+    },
+    "likelihood_recompute_agrees_with_recorded": {
+     "recomputed_max_abs_gap": 2.384185791015625e-07,
+     "recorded_max_abs_gap": 2.384185791015625e-07,
+     "same_sample_count": true,
+     "within_1e-9": true
+    },
+    "likelihood_recomputed_at_pre_update_weights": {
+     "max_abs_gap": 2.384185791015625e-07,
+     "samples": 626,
+     "tolerance": 1e-06
+    },
+    "pre_update_weights_identity": {
+     "batch0_recorded_parameters_before_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+     "ep0_recomputed_parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+     "match": true
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "lambda_after_recorded": 1.0125,
+     "lambda_before_recorded": 1.0,
+     "lambda_used_by_this_batch_actor": 1.0,
+     "minibatches_recorded": 12,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 626,
+     "samples_recorded_in_batch": 626,
+     "scenarios": [
+      1300027,
+      1300014,
+      1300028,
+      1300044
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": -1.9e-05,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0,
+     "entropy": 0.117405,
+     "epochs": 4,
+     "gradient_norm_mean": 1.6122,
+     "likelihood_max_abs_gap_recorded": 2.384185791015625e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 0.323010786,
+      "cost_head": 1.587397113,
+      "task_value_head": 6.608270098,
+      "trunk": 58.435304054
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.125006582,
+      "cost_head": 0.704274379,
+      "task_value_head": 4.285044506,
+      "trunk": 37.936746955
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 12,
+     "policy_surrogate": 0.406187,
+     "value_loss_cost": 0.150476,
+     "value_loss_task": 0.74464
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.464134212,
+      "max": 3.334433801418338,
+      "mean": 0.413352746,
+      "median": 0.002105319,
+      "min": -1.4731918559418609,
+      "n": 626,
+      "q25": -0.001910692,
+      "q75": 0.748158961,
+      "std_pop": 0.750328037
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 0.809209757,
+      "max": 1.7098123350041,
+      "mean": 0.327483803,
+      "median": 0.419167496,
+      "min": -1.4731918559418609,
+      "n": 45,
+      "q25": -0.201382914,
+      "q75": 1.059043459,
+      "std_pop": 0.890057012
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 1.363268974,
+      "max": 2.4294765740556676,
+      "mean": 1.363268974,
+      "median": 1.508396328,
+      "min": 0.22104519212693785,
+      "n": 45,
+      "q25": 0.908928695,
+      "q75": 1.902508339,
+      "std_pop": 0.682551725
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.146114735,
+      "max": 2.4294765740556676,
+      "mean": 0.139624454,
+      "median": 0.002974534,
+      "min": -0.1487311107097765,
+      "n": 626,
+      "q25": -0.000198045,
+      "q75": 0.102610627,
+      "std_pop": 0.395309524
+     },
+     "A_task": {
+      "abs_mean": 0.558708615,
+      "max": 3.3715119659101993,
+      "mean": 0.5529772,
+      "median": 0.007898963,
+      "min": -0.13045796452494013,
+      "n": 626,
+      "q25": -0.003120858,
+      "q75": 1.046921126,
+      "std_pop": 0.818306751
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 1.690752777,
+      "max": 2.7966950296662163,
+      "mean": 1.690752777,
+      "median": 1.635842232,
+      "min": 0.8351147138026137,
+      "n": 45,
+      "q25": 1.206280043,
+      "q75": 2.057149877,
+      "std_pop": 0.537748705
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.168690018,
+      "max": -0.023736730217933655,
+      "mean": -0.168690018,
+      "median": -0.052858301,
+      "min": -0.533252477645874,
+      "n": 626,
+      "q25": -0.33098495,
+      "q75": -0.052492134,
+      "std_pop": 0.150737327
+     },
+     "behaviour_values_task": {
+      "abs_mean": 0.280296686,
+      "max": -0.07755444943904877,
+      "mean": -0.280296686,
+      "median": -0.285453767,
+      "min": -0.5113029479980469,
+      "n": 626,
+      "q25": -0.289037406,
+      "q75": -0.246747933,
+      "std_pop": 0.070607577
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.558708615,
+      "max": 3.3715119659101993,
+      "mean": 0.5529772,
+      "median": 0.007898963,
+      "min": -0.13045796452494013,
+      "n": 626,
+      "q25": -0.003120858,
+      "q75": 1.046921126,
+      "std_pop": 0.818306751
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 3.823766411,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.176893594,
+      "max": 2.120802149168964,
+      "mean": -0.029065564,
+      "median": -0.052558161,
+      "min": -0.39486035384188306,
+      "n": 626,
+      "q25": -0.183791808,
+      "q75": -0.046310939,
+      "std_pop": 0.360768572
+     },
+     "returns_task": {
+      "abs_mean": 0.592284212,
+      "max": 3.0865768193399936,
+      "mean": 0.272680514,
+      "median": -0.235722378,
+      "min": -0.2872485941501688,
+      "n": 626,
+      "q25": -0.27877228,
+      "q75": 0.719076169,
+      "std_pop": 0.81037819
+     },
+     "samples_total": 626,
+     "samples_with_actionable_candidates": 45,
+     "samples_with_zero_actor_gradient": 581,
+     "share_without_actor_gradient": 0.928115016
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s22_e0_s1300027_a0_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s22_e1_s1300014_a1_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s22_e2_s1300028_a2_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s22_e3_s1300044_a3_tape.jsonl"
+    ],
+    "training_seed": 22
+   },
+   "b15": {
+    "arm": "old",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_old_s22_b15.json",
+     "pre_update_weights_saved": false,
+     "pre_update_weights_source": null,
+     "reason_when_absent": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 15,
+    "cell": "old_s22",
+    "gradient_at_update_start": {
+     "optimizer_steps_performed_by_this_round": 0,
+     "reason": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "status": "missing",
+     "what_is_still_computed": "the tape-side advantage decomposition, which needs no weights because both critic values were logged at rollout"
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      60,
+      61,
+      62,
+      63
+     ],
+     "lambda_after_recorded": 1.2124999999999995,
+     "lambda_before_recorded": 1.1999999999999995,
+     "lambda_used_by_this_batch_actor": 1.1999999999999995,
+     "minibatches_recorded": 12,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 764,
+     "samples_recorded_in_batch": 764,
+     "scenarios": [
+      1300009,
+      1300047,
+      1300023,
+      1300027
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": 0.000737,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0036,
+     "entropy": 0.153393,
+     "epochs": 4,
+     "gradient_norm_mean": 0.6081,
+     "likelihood_max_abs_gap_recorded": 2.682209014892578e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 0.889940265,
+      "cost_head": 1.05276183,
+      "task_value_head": 1.773013715,
+      "trunk": 18.409506492
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.185768605,
+      "cost_head": 0.368086951,
+      "task_value_head": 0.754644975,
+      "trunk": 12.756050691
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 12,
+     "policy_surrogate": -0.010068,
+     "value_loss_cost": 0.190098,
+     "value_loss_task": 0.675631
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.368677107,
+      "max": 2.7303838899060873,
+      "mean": -0.011521739,
+      "median": -0.000862502,
+      "min": -3.3836920738220195,
+      "n": 764,
+      "q25": -0.069561935,
+      "q75": -0.00011137,
+      "std_pop": 0.66670496
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 0.877496244,
+      "max": 2.7303838899060873,
+      "mean": 0.468319868,
+      "median": 0.533520864,
+      "min": -1.5726747658257294,
+      "n": 183,
+      "q25": -0.248608338,
+      "q75": 1.15104654,
+      "std_pop": 0.924826314
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 0.622153288,
+      "max": 1.8956542053382064,
+      "mean": 0.450637612,
+      "median": 0.491885633,
+      "min": -0.9203486731289594,
+      "n": 183,
+      "q25": -0.010557691,
+      "q75": 0.899325963,
+      "std_pop": 0.610093305
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.236981598,
+      "max": 1.8956542053382064,
+      "mean": 0.028206236,
+      "median": 0.000613567,
+      "min": -1.2926326238067678,
+      "n": 764,
+      "q25": 9.9394e-05,
+      "q75": 0.016835985,
+      "std_pop": 0.445049133
+     },
+     "A_task": {
+      "abs_mean": 0.464950533,
+      "max": 3.0048271589918345,
+      "mean": 0.013903747,
+      "median": 3.9987e-05,
+      "min": -3.6781206130981445,
+      "n": 764,
+      "q25": -0.059299628,
+      "q75": 0.000630092,
+      "std_pop": 0.8362206
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 1.155340699,
+      "max": 3.0048271589918345,
+      "mean": 0.7657979,
+      "median": 0.925637991,
+      "min": -1.7758658571865935,
+      "n": 183,
+      "q25": -0.128501982,
+      "q75": 1.505148997,
+      "std_pop": 1.086697235
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.523950714,
+      "max": 2.3330018520355225,
+      "mean": 0.47354743,
+      "median": -0.033740178,
+      "min": -0.11235275864601135,
+      "n": 764,
+      "q25": -0.035368819,
+      "q75": 1.128985375,
+      "std_pop": 0.719215643
+     },
+     "behaviour_values_task": {
+      "abs_mean": 1.781469795,
+      "max": 5.525211334228516,
+      "mean": 1.781469795,
+      "median": 0.200455233,
+      "min": 0.1829739212989807,
+      "n": 764,
+      "q25": 0.200107619,
+      "q75": 3.97480762,
+      "std_pop": 2.020982808
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.557940639,
+      "max": 3.6057925907902,
+      "mean": 0.016684497,
+      "median": 4.7985e-05,
+      "min": -4.4137447357177715,
+      "n": 764,
+      "q25": -0.071159554,
+      "q75": 0.00075611,
+      "std_pop": 1.00346472
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 2.354362715,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.548599719,
+      "max": 3.030248493539415,
+      "mean": 0.501753666,
+      "median": -0.032863269,
+      "min": -0.09666343442646749,
+      "n": 764,
+      "q25": -0.035096055,
+      "q75": 0.645006527,
+      "std_pop": 0.881084942
+     },
+     "returns_task": {
+      "abs_mean": 1.795373543,
+      "max": 7.0347727064128085,
+      "mean": 1.795373543,
+      "median": 0.200291104,
+      "min": 0.0,
+      "n": 764,
+      "q25": 0.199173055,
+      "q75": 3.912319701,
+      "std_pop": 2.245331587
+     },
+     "samples_total": 764,
+     "samples_with_actionable_candidates": 183,
+     "samples_with_zero_actor_gradient": 581,
+     "share_without_actor_gradient": 0.760471204
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s22_e60_s1300009_a60_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s22_e61_s1300047_a61_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s22_e62_s1300023_a62_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s22_e63_s1300027_a63_tape.jsonl"
+    ],
+    "training_seed": 22
+   },
+   "b31": {
+    "arm": "old",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_old_s22_b31.json",
+     "pre_update_weights_saved": false,
+     "pre_update_weights_source": null,
+     "reason_when_absent": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 31,
+    "cell": "old_s22",
+    "gradient_at_update_start": {
+     "optimizer_steps_performed_by_this_round": 0,
+     "reason": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "status": "missing",
+     "what_is_still_computed": "the tape-side advantage decomposition, which needs no weights because both critic values were logged at rollout"
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      124,
+      125,
+      126,
+      127
+     ],
+     "lambda_after_recorded": 1.2374999999999994,
+     "lambda_before_recorded": 1.2374999999999994,
+     "lambda_used_by_this_batch_actor": 1.2374999999999994,
+     "minibatches_recorded": 8,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 324,
+     "samples_recorded_in_batch": 324,
+     "scenarios": [
+      1300002,
+      1300047,
+      1300030,
+      1300023
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": 2.9e-05,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0,
+     "entropy": 0.263437,
+     "epochs": 4,
+     "gradient_norm_mean": 2.8327,
+     "likelihood_max_abs_gap_recorded": 4.0605664253234863e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 2.88789526,
+      "cost_head": 3.722883032,
+      "task_value_head": 5.609839267,
+      "trunk": 60.214883266
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.69931387,
+      "cost_head": 1.26933346,
+      "task_value_head": 1.770126022,
+      "trunk": 40.100485906
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 8,
+     "policy_surrogate": -0.043862,
+     "value_loss_cost": 0.331524,
+     "value_loss_task": 2.445995
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 1.284311765,
+      "max": 2.5013323537687597,
+      "mean": -0.004441124,
+      "median": 0.318022059,
+      "min": -3.8543859541416143,
+      "n": 324,
+      "q25": -0.983236055,
+      "q75": 1.261484457,
+      "std_pop": 1.527149106
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 1.302864435,
+      "max": 2.47528982555866,
+      "mean": -0.021941556,
+      "median": 0.22458703,
+      "min": -3.8543859541416143,
+      "n": 279,
+      "q25": -0.957502146,
+      "q75": 1.284030727,
+      "std_pop": 1.542050116
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 0.455607347,
+      "max": 1.4189950933490922,
+      "mean": -0.097321611,
+      "median": -0.062550043,
+      "min": -1.8794695138931274,
+      "n": 279,
+      "q25": -0.401323126,
+      "q75": 0.216555483,
+      "std_pop": 0.620120803
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.41972628,
+      "max": 1.4189950933490922,
+      "mean": -0.084777665,
+      "median": -0.021503463,
+      "min": -1.8794695138931274,
+      "n": 324,
+      "q25": -0.378547577,
+      "q75": 0.169079158,
+      "std_pop": 0.586627601
+     },
+     "A_task": {
+      "abs_mean": 1.290314607,
+      "max": 2.6834626858565964,
+      "mean": -0.072095991,
+      "median": 0.377568075,
+      "min": -4.633418560028076,
+      "n": 324,
+      "q25": -0.971165714,
+      "q75": 1.124516015,
+      "std_pop": 1.581623792
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 1.331905378,
+      "max": 2.6834626858565964,
+      "mean": -0.096374277,
+      "median": 0.328074219,
+      "min": -4.633418560028076,
+      "n": 279,
+      "q25": -1.066618222,
+      "q75": 1.140919222,
+      "std_pop": 1.622066256
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 1.265664397,
+      "max": 2.037642002105713,
+      "mean": 1.253840123,
+      "median": 1.398337305,
+      "min": -0.16368317604064941,
+      "n": 324,
+      "q25": 0.803178757,
+      "q75": 1.843385547,
+      "std_pop": 0.653382012
+     },
+     "behaviour_values_task": {
+      "abs_mean": 4.803457454,
+      "max": 5.922491550445557,
+      "mean": 4.803457454,
+      "median": 5.207266569,
+      "min": 2.262481927871704,
+      "n": 324,
+      "q25": 4.189112306,
+      "q75": 5.609646678,
+      "std_pop": 1.022268373
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 1.596764326,
+      "max": 3.3207850737475364,
+      "mean": -0.089218789,
+      "median": 0.467240493,
+      "min": -5.733855468034742,
+      "n": 324,
+      "q25": -1.201817571,
+      "q75": 1.391588568,
+      "std_pop": 1.957259443
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 3.804299143,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 1.169413006,
+      "max": 2.2396799163509806,
+      "mean": 1.169062458,
+      "median": 1.299103832,
+      "min": -0.014823901139553165,
+      "n": 324,
+      "q25": 0.698572099,
+      "q75": 1.786491425,
+      "std_pop": 0.659895978
+     },
+     "returns_task": {
+      "abs_mean": 4.731361463,
+      "max": 7.74539379813907,
+      "mean": 4.731361463,
+      "median": 4.935247911,
+      "min": 1.0,
+      "n": 324,
+      "q25": 3.563587007,
+      "q75": 6.218033661,
+      "std_pop": 1.707957665
+     },
+     "samples_total": 324,
+     "samples_with_actionable_candidates": 279,
+     "samples_with_zero_actor_gradient": 45,
+     "share_without_actor_gradient": 0.138888889
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s22_e124_s1300002_a124_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s22_e125_s1300047_a125_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s22_e126_s1300030_a126_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s22_e127_s1300023_a127_tape.jsonl"
+    ],
+    "training_seed": 22
+   }
+  },
+  "old_s33": {
+   "b0": {
+    "arm": "old",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_old_s33_b0.json",
+     "pre_update_weights_saved": true,
+     "pre_update_weights_source": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_train_old_s33_ep0.pt",
+     "reason_when_absent": null,
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 0,
+    "cell": "old_s33",
+    "gradient_at_update_start": {
+     "advantage_combination_closed": true,
+     "advantage_combination_max_abs_error": 2.384185791015625e-07,
+     "chunk_first_indices": [
+      608,
+      51,
+      463,
+      377,
+      485
+     ],
+     "chunk_samples": 256,
+     "chunk_samples_with_actionable_candidates": 10,
+     "chunk_samples_with_zero_actor_gradient": 246,
+     "clipping_scale_if_applied": 0.186754367,
+     "clipping_triggered_at_this_minibatch": true,
+     "closure_error_max_abs": 2.9802322387695312e-08,
+     "component_by_module": {
+      "critic_cost": {
+       "action_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "cost_head": {
+        "l1": 0.862272977829,
+        "l2": 0.133513495326
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 7.0310754776,
+        "l2": 0.13560885191
+       }
+      },
+      "critic_task": {
+       "action_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 10.961880683899,
+        "l2": 1.62913787365
+       },
+       "trunk": {
+        "l1": 106.967956542969,
+        "l2": 2.098781108856
+       }
+      },
+      "entropy_bonus": {
+       "action_head": {
+        "l1": 0.000338708574,
+        "l2": 3.6141311e-05
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 0.001848805463,
+        "l2": 3.76553e-05
+       }
+      },
+      "policy_cost_minus_A_cost": {
+       "action_head": {
+        "l1": 0.248955756426,
+        "l2": 0.02792358771
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 1.443601131439,
+        "l2": 0.030412619933
+       }
+      },
+      "policy_task_lambda_A_task": {
+       "action_head": {
+        "l1": 0.396025449038,
+        "l2": 0.044296473265
+       },
+       "cost_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "task_value_head": {
+        "l1": 0.0,
+        "l2": 0.0
+       },
+       "trunk": {
+        "l1": 2.347725868225,
+        "l2": 0.049273680896
+       }
+      },
+      "sum_of_the_five_parts": {
+       "action_head": {
+        "l1": 0.15283998847,
+        "l2": 0.016886828467
+       },
+       "cost_head": {
+        "l1": 0.862272977829,
+        "l2": 0.133513495326
+       },
+       "task_value_head": {
+        "l1": 10.961880683899,
+        "l2": 1.62913787365
+       },
+       "trunk": {
+        "l1": 108.167022705078,
+        "l2": 2.120331764221
+       }
+      },
+      "trainer_expression": {
+       "action_head": {
+        "l1": 0.152840018272,
+        "l2": 0.016886828467
+       },
+       "cost_head": {
+        "l1": 0.862272977829,
+        "l2": 0.133513495326
+       },
+       "task_value_head": {
+        "l1": 10.961880683899,
+        "l2": 1.62913787365
+       },
+       "trunk": {
+        "l1": 108.167022705078,
+        "l2": 2.120331764221
+       }
+      }
+     },
+     "component_l1": {
+      "critic_cost": 7.89334821701,
+      "critic_task": 117.929840087891,
+      "entropy_bonus": 0.002187514212,
+      "policy_cost_minus_A_cost": 1.692556858063,
+      "policy_task_lambda_A_task": 2.743751525879,
+      "sum_of_the_five_parts": 120.144012451172,
+      "trainer_expression": 120.144012451172
+     },
+     "component_l2": {
+      "critic_cost": 0.190304011106,
+      "critic_task": 2.656872749329,
+      "entropy_bonus": 5.2193067e-05,
+      "policy_cost_minus_A_cost": 0.041287455708,
+      "policy_task_lambda_A_task": 0.066257633269,
+      "sum_of_the_five_parts": 2.677313566208,
+      "trainer_expression": 2.677313566208
+     },
+     "critic_share_of_total_l2": 1.000017721,
+     "entropy_share_of_total_l2": 1.9495e-05,
+     "parts_sum_vs_trainer_expression_max_abs": 1.4901161193847656e-08,
+     "policy_task_versus_policy_cost": {
+      "cosine": -0.988957296,
+      "l2_cost": 0.041287455708,
+      "l2_task": 0.066257633269,
+      "l2_task_over_l2_cost": 1.60478848,
+      "note": "magnitudes are pre-clip; the trainer then clips the TOTAL norm and Adam rescales per parameter, so these ratios describe the gradient direction at the update start, not the parameter step",
+      "policy_l2": 0.026151973754
+     },
+     "pre_clip_total_norm": 2.677313566,
+     "ratio_max_abs_deviation_from_one": 2.38419e-07,
+     "reduction": "surrogate.mean() and entropy.mean() over the chunk, uniform sample weights, no advantage standardisation anywhere (v2_trainer registers this as the explicit difference from the old trainer)",
+     "registered_scalars_used": {
+      "clip": 0.2,
+      "entropy_bonus": 0.01,
+      "epochs_per_batch": 4,
+      "lambda_of_this_batch": 1.0,
+      "max_grad_norm": 0.5,
+      "minibatch_steps": 256,
+      "value_coefficient_per_head": 0.5
+     },
+     "scope": "epoch 0 / minibatch 0 of this batch only -- the update start where old == new (ratio exactly 1). Later minibatches are NOT reconstructed: that would need replaying optimizer.step, which this round forbids"
+    },
+    "likelihood_recompute_agrees_with_recorded": {
+     "recomputed_max_abs_gap": 2.384185791015625e-07,
+     "recorded_max_abs_gap": 2.384185791015625e-07,
+     "same_sample_count": true,
+     "within_1e-9": true
+    },
+    "likelihood_recomputed_at_pre_update_weights": {
+     "max_abs_gap": 2.384185791015625e-07,
+     "samples": 616,
+     "tolerance": 1e-06
+    },
+    "pre_update_weights_identity": {
+     "batch0_recorded_parameters_before_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+     "ep0_recomputed_parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+     "match": true
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "lambda_after_recorded": 1.0125,
+     "lambda_before_recorded": 1.0,
+     "lambda_used_by_this_batch_actor": 1.0,
+     "minibatches_recorded": 12,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 616,
+     "samples_recorded_in_batch": 616,
+     "scenarios": [
+      1300027,
+      1300014,
+      1300028,
+      1300044
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": -0.00052,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0007,
+     "entropy": 0.086257,
+     "epochs": 4,
+     "gradient_norm_mean": 1.7963,
+     "likelihood_max_abs_gap_recorded": 2.384185791015625e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 0.423913357,
+      "cost_head": 1.183643019,
+      "task_value_head": 6.583272293,
+      "trunk": 68.533878287
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.152840013,
+      "cost_head": 0.45305371,
+      "task_value_head": 4.661922082,
+      "trunk": 46.485032007
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 12,
+     "policy_surrogate": 0.463832,
+     "value_loss_cost": 0.136361,
+     "value_loss_task": 0.786893
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.531452047,
+      "max": 3.798529104052602,
+      "mean": 0.475241587,
+      "median": 0.007032897,
+      "min": -1.828089342411483,
+      "n": 616,
+      "q25": -0.002045175,
+      "q75": 0.89377134,
+      "std_pop": 0.852862946
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 1.054328076,
+      "max": 2.153966914809253,
+      "mean": 0.204108343,
+      "median": 0.281840842,
+      "min": -1.828089342411483,
+      "n": 33,
+      "q25": -0.728929609,
+      "q75": 1.063453909,
+      "std_pop": 1.194527154
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 1.421118302,
+      "max": 2.6282605574070836,
+      "mean": 1.421118302,
+      "median": 1.287773761,
+      "min": 0.1565744456742979,
+      "n": 33,
+      "q25": 0.753410277,
+      "q75": 2.214274552,
+      "std_pop": 0.802309306
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.104149102,
+      "max": 2.6282605574070836,
+      "mean": 0.085440407,
+      "median": 0.009707028,
+      "min": -0.16424253582954407,
+      "n": 616,
+      "q25": -0.003644314,
+      "q75": 0.024541311,
+      "std_pop": 0.370587304
+     },
+     "A_task": {
+      "abs_mean": 0.562445738,
+      "max": 3.786355207402027,
+      "mean": 0.560681994,
+      "median": 0.015296763,
+      "min": -0.13782019695831213,
+      "n": 616,
+      "q25": 0.005809683,
+      "q75": 1.016645618,
+      "std_pop": 0.857857627
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 1.625226645,
+      "max": 2.7910861743569817,
+      "mean": 1.625226645,
+      "median": 1.70900232,
+      "min": 0.6347954842987723,
+      "n": 33,
+      "q25": 1.035251119,
+      "q75": 2.113881068,
+      "std_pop": 0.619822469
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.110623686,
+      "max": 0.17136801779270172,
+      "mean": 0.049025786,
+      "median": 0.065377411,
+      "min": -0.17391473054885864,
+      "n": 616,
+      "q25": -0.060990875,
+      "q75": 0.165402398,
+      "std_pop": 0.112218003
+     },
+     "behaviour_values_task": {
+      "abs_mean": 0.183150257,
+      "max": 0.07269632816314697,
+      "mean": -0.182429282,
+      "median": -0.155266605,
+      "min": -0.5794106721878052,
+      "n": 616,
+      "q25": -0.227663454,
+      "q75": -0.082911907,
+      "std_pop": 0.131782307
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.562445738,
+      "max": 3.786355207402027,
+      "mean": 0.560681994,
+      "median": 0.015296763,
+      "min": -0.13782019695831213,
+      "n": 616,
+      "q25": 0.005809683,
+      "q75": 1.016645618,
+      "std_pop": 0.857857627
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 5.400389722,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.16235442,
+      "max": 2.487225626462641,
+      "mean": 0.134466193,
+      "median": 0.09529689,
+      "min": -0.086109923271988,
+      "n": 616,
+      "q25": -0.013272136,
+      "q75": 0.163002064,
+      "std_pop": 0.34620807
+     },
+     "returns_task": {
+      "abs_mean": 0.518606059,
+      "max": 3.342741171557224,
+      "mean": 0.378252712,
+      "median": -0.067124356,
+      "min": -0.21519497685725955,
+      "n": 616,
+      "q25": -0.128435116,
+      "q75": 0.758798981,
+      "std_pop": 0.77483531
+     },
+     "samples_total": 616,
+     "samples_with_actionable_candidates": 33,
+     "samples_with_zero_actor_gradient": 583,
+     "share_without_actor_gradient": 0.946428571
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s33_e0_s1300027_a0_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s33_e1_s1300014_a1_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s33_e2_s1300028_a2_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s33_e3_s1300044_a3_tape.jsonl"
+    ],
+    "training_seed": 33
+   },
+   "b15": {
+    "arm": "old",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_old_s33_b15.json",
+     "pre_update_weights_saved": false,
+     "pre_update_weights_source": null,
+     "reason_when_absent": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 15,
+    "cell": "old_s33",
+    "gradient_at_update_start": {
+     "optimizer_steps_performed_by_this_round": 0,
+     "reason": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "status": "missing",
+     "what_is_still_computed": "the tape-side advantage decomposition, which needs no weights because both critic values were logged at rollout"
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      60,
+      61,
+      62,
+      63
+     ],
+     "lambda_after_recorded": 1.2499999999999996,
+     "lambda_before_recorded": 1.2249999999999996,
+     "lambda_used_by_this_batch_actor": 1.2249999999999996,
+     "minibatches_recorded": 16,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 1002,
+     "samples_recorded_in_batch": 1002,
+     "scenarios": [
+      1300009,
+      1300047,
+      1300023,
+      1300027
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": 3.3e-05,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0,
+     "entropy": 0.042437,
+     "epochs": 4,
+     "gradient_norm_mean": 0.4591,
+     "likelihood_max_abs_gap_recorded": 1.7881393432617188e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 0.73699323,
+      "cost_head": 0.525460119,
+      "task_value_head": 1.12712217,
+      "trunk": 10.890569716
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.041810111,
+      "cost_head": 0.167486874,
+      "task_value_head": 0.667829201,
+      "trunk": 5.683157206
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 16,
+     "policy_surrogate": 0.000213,
+     "value_loss_cost": 0.053986,
+     "value_loss_task": 0.290605
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.350121003,
+      "max": 3.070805566063391,
+      "mean": 0.000167764,
+      "median": -0.038068661,
+      "min": -2.236132208756747,
+      "n": 1002,
+      "q25": -0.086469907,
+      "q75": -0.001462571,
+      "std_pop": 0.643748791
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 0.858354857,
+      "max": 2.1177097790715624,
+      "mean": 0.046993659,
+      "median": 0.302145267,
+      "min": -2.236132208756747,
+      "n": 30,
+      "q25": -0.742672412,
+      "q75": 0.624206293,
+      "std_pop": 1.026370737
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 0.930468862,
+      "max": 1.9559012207380886,
+      "mean": 0.742957413,
+      "median": 0.883749758,
+      "min": -0.641842366365373,
+      "n": 30,
+      "q25": 0.094259129,
+      "q75": 1.3532838,
+      "std_pop": 0.770370736
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.082963799,
+      "max": 1.9559012207380886,
+      "mean": -0.007048561,
+      "median": -0.00111702,
+      "min": -1.0137764537614877,
+      "n": 1002,
+      "q25": -0.013424968,
+      "q75": 0.002621324,
+      "std_pop": 0.236344815
+     },
+     "A_task": {
+      "abs_mean": 0.297777252,
+      "max": 2.4204552613972963,
+      "mean": -0.005616977,
+      "median": -0.035260876,
+      "min": -2.0476718003672216,
+      "n": 1002,
+      "q25": -0.080702867,
+      "q75": -0.00119715,
+      "std_pop": 0.546990647
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 0.831305932,
+      "max": 2.1672824888547924,
+      "mean": 0.644858019,
+      "median": 0.470213237,
+      "min": -0.7130871713369873,
+      "n": 30,
+      "q25": -0.081598583,
+      "q75": 1.281516846,
+      "std_pop": 0.855171485
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.124734595,
+      "max": 1.5883941650390625,
+      "mean": 0.118210752,
+      "median": 0.021545988,
+      "min": -0.19053888320922852,
+      "n": 1002,
+      "q25": 0.013198967,
+      "q75": 0.082598675,
+      "std_pop": 0.283152626
+     },
+     "behaviour_values_task": {
+      "abs_mean": 1.372225842,
+      "max": 5.85369348526001,
+      "mean": 1.372225842,
+      "median": 0.620760947,
+      "min": 0.36510658264160156,
+      "n": 1002,
+      "q25": 0.383682817,
+      "q75": 2.011487484,
+      "std_pop": 1.502729254
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.364777134,
+      "max": 2.965057695211687,
+      "mean": -0.006880796,
+      "median": -0.043194573,
+      "min": -2.508397955449846,
+      "n": 1002,
+      "q25": -0.098861012,
+      "q75": -0.001466509,
+      "std_pop": 0.670063543
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 4.396822952,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.11251269,
+      "max": 3.072800711094534,
+      "mean": 0.111162191,
+      "median": 0.023761161,
+      "min": -0.045604883393510875,
+      "n": 1002,
+      "q25": 0.013141504,
+      "q75": 0.076305927,
+      "std_pop": 0.382007098
+     },
+     "returns_task": {
+      "abs_mean": 1.366608865,
+      "max": 6.829616368001576,
+      "mean": 1.366608865,
+      "median": 0.599261755,
+      "min": 0.0,
+      "n": 1002,
+      "q25": 0.37787398,
+      "q75": 1.326454857,
+      "std_pop": 1.648606095
+     },
+     "samples_total": 1002,
+     "samples_with_actionable_candidates": 30,
+     "samples_with_zero_actor_gradient": 972,
+     "share_without_actor_gradient": 0.97005988
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s33_e60_s1300009_a60_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s33_e61_s1300047_a61_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s33_e62_s1300023_a62_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s33_e63_s1300027_a63_tape.jsonl"
+    ],
+    "training_seed": 33
+   },
+   "b31": {
+    "arm": "old",
+    "availability": {
+     "batch_record": "runs\\comm_deadline_encoding_ablation_20260930\\checkpoints\\r30_batch_old_s33_b31.json",
+     "pre_update_weights_saved": false,
+     "pre_update_weights_source": null,
+     "reason_when_absent": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "tapes_saved_for_this_batch": true
+    },
+    "batch": 31,
+    "cell": "old_s33",
+    "gradient_at_update_start": {
+     "optimizer_steps_performed_by_this_round": 0,
+     "reason": "r30_train writes the rolling checkpoint every batch (same path, overwritten) plus immutable ep0/64/128 milestones; this batch's pre-update weights are the previous batch's post-update weights and were never written, so they are reported missing -- not approximated by a later milestone, not recovered by replaying the optimizer",
+     "status": "missing",
+     "what_is_still_computed": "the tape-side advantage decomposition, which needs no weights because both critic values were logged at rollout"
+    },
+    "reconstruction": {
+     "actor_used_pre_update_lambda": true,
+     "episodes": [
+      124,
+      125,
+      126,
+      127
+     ],
+     "lambda_after_recorded": 1.4749999999999992,
+     "lambda_before_recorded": 1.4499999999999993,
+     "lambda_used_by_this_batch_actor": 1.4499999999999993,
+     "minibatches_recorded": 16,
+     "optimizer_steps_performed_by_this_round": 0,
+     "prefix_recomputation_matches": true,
+     "samples_match": true,
+     "samples_recomputed": 987,
+     "samples_recorded_in_batch": 987,
+     "scenarios": [
+      1300002,
+      1300047,
+      1300030,
+      1300023
+     ],
+     "unassigned_prefix_cost_bytes_recomputed": 0.0,
+     "unassigned_prefix_cost_bytes_recorded": 0.0,
+     "unassigned_prefix_task_reward_recomputed": 0.0,
+     "unassigned_prefix_task_reward_recorded": 0.0
+    },
+    "recorded_update_fields": {
+     "approx_kl": -0.001293,
+     "averaging_scope": "each scalar above is the mean over this batch's minibatches as recorded by v2_trainer.ppo_update",
+     "clip_fraction": 0.0087,
+     "entropy": 0.092463,
+     "epochs": 4,
+     "gradient_norm_mean": 0.6471,
+     "likelihood_max_abs_gap_recorded": 1.7881393432617188e-07,
+     "module_gradient_l1_mean": {
+      "action_head": 1.186897649,
+      "cost_head": 0.715460427,
+      "task_value_head": 1.565500802,
+      "trunk": 18.126324636
+     },
+     "module_gradient_l1_min": {
+      "action_head": 0.150931607,
+      "cost_head": 0.217570824,
+      "task_value_head": 0.734282855,
+      "trunk": 10.506243914
+     },
+     "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+     "optimizer_steps": 16,
+     "policy_surrogate": -0.096869,
+     "value_loss_cost": 0.036068,
+     "value_loss_task": 0.239217
+    },
+    "signals": {
+     "A_combined": {
+      "abs_mean": 0.338734259,
+      "max": 3.162273092499034,
+      "mean": -0.098107407,
+      "median": -0.017737555,
+      "min": -4.0977709269566605,
+      "n": 987,
+      "q25": -0.127070953,
+      "q75": -0.004596969,
+      "std_pop": 0.69743805
+     },
+     "A_combined_actor_bearing_only": {
+      "abs_mean": 1.114767099,
+      "max": 3.162273092499034,
+      "mean": 0.602013141,
+      "median": 0.834557508,
+      "min": -2.1223504890266316,
+      "n": 65,
+      "q25": -0.167068894,
+      "q75": 1.499459346,
+      "std_pop": 1.210883296
+     },
+     "A_cost_actor_bearing_only": {
+      "abs_mean": 0.583911291,
+      "max": 1.6215426509080206,
+      "mean": 0.512822913,
+      "median": 0.502402808,
+      "min": -0.6395392285181628,
+      "n": 65,
+      "q25": 0.226676444,
+      "q75": 0.775917695,
+      "std_pop": 0.483938845
+     },
+     "A_cost_positive_normalised": {
+      "abs_mean": 0.067939079,
+      "max": 1.6215426509080206,
+      "mean": 0.0231541,
+      "median": 0.00016677,
+      "min": -1.06489115713327,
+      "n": 987,
+      "q25": -0.011264913,
+      "q75": 0.001090473,
+      "std_pop": 0.198514696
+     },
+     "A_task": {
+      "abs_mean": 0.247596824,
+      "max": 2.7154289109411853,
+      "mean": -0.051691936,
+      "median": -0.012999804,
+      "min": -2.87073013666982,
+      "n": 987,
+      "q25": -0.088312301,
+      "q75": -0.002684906,
+      "std_pop": 0.521638974
+     },
+     "A_task_actor_bearing_only": {
+      "abs_mean": 0.996928345,
+      "max": 2.7154289109411853,
+      "mean": 0.768852451,
+      "median": 0.904212562,
+      "min": -1.0828742863813055,
+      "n": 65,
+      "q25": 0.119204096,
+      "q75": 1.381433063,
+      "std_pop": 0.92040228
+     },
+     "behaviour_values_cost": {
+      "abs_mean": 0.111862361,
+      "max": 2.189992904663086,
+      "mean": 0.082397634,
+      "median": -0.005770316,
+      "min": -0.21511460840702057,
+      "n": 987,
+      "q25": -0.012251122,
+      "q75": 0.027144225,
+      "std_pop": 0.332074375
+     },
+     "behaviour_values_task": {
+      "abs_mean": 1.392658427,
+      "max": 6.334610462188721,
+      "mean": 1.392658427,
+      "median": 0.4371351,
+      "min": 0.34793829917907715,
+      "n": 987,
+      "q25": 0.384608477,
+      "q75": 1.210368454,
+      "std_pop": 1.793043117
+     },
+     "combination_closed": true,
+     "combination_max_abs_error": 0.0,
+     "lambda_times_A_task": {
+      "abs_mean": 0.359015394,
+      "max": 3.9373719208647167,
+      "mean": -0.074953307,
+      "median": -0.018849715,
+      "min": -4.162558698171237,
+      "n": 987,
+      "q25": -0.128052836,
+      "q75": -0.003893114,
+      "std_pop": 0.756376512
+     },
+     "mean_abs_lambda_A_task_over_mean_abs_A_cost": 5.284372383,
+     "prefix_not_credited_to_any_decision": {
+      "cost_byte_samples": 0,
+      "task_reward_samples": 0
+     },
+     "returns_cost": {
+      "abs_mean": 0.124042908,
+      "max": 2.920653006843038,
+      "mean": 0.105551734,
+      "median": -0.00572762,
+      "min": -0.07575561942500314,
+      "n": 987,
+      "q25": -0.012609562,
+      "q75": 0.009699129,
+      "std_pop": 0.45397744
+     },
+     "returns_task": {
+      "abs_mean": 1.340966492,
+      "max": 7.091484223825883,
+      "mean": 1.340966492,
+      "median": 0.447766068,
+      "min": 0.0,
+      "n": 987,
+      "q25": 0.380842758,
+      "q75": 1.080131315,
+      "std_pop": 1.839012536
+     },
+     "samples_total": 987,
+     "samples_with_actionable_candidates": 65,
+     "samples_with_zero_actor_gradient": 922,
+     "share_without_actor_gradient": 0.93414387
+    },
+    "tape_files": [
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s33_e124_s1300002_a124_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s33_e125_s1300047_a125_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s33_e126_s1300030_a126_tape.jsonl",
+     "runs\\comm_deadline_encoding_ablation_20260930\\logs\\r30_train_old_s33_e127_s1300023_a127_tape.jsonl"
+    ],
+    "training_seed": 33
+   }
+  }
+ },
+ "section": "task/cost signal inside the real actor updates, fixed batches 0/15/31 (0 launches, 0 optimizer.step; pure-computation forward and autograd.grad on an in-memory copy of the saved pre-update weights)",
+ "selection_rule": "fixed by the execution basis; not chosen from results"
+}
