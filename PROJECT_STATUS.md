@@ -1,5 +1,32 @@
 # 项目状态
 
+## 2026-09-29：ROUND27 固定失败场景的首报提前干预——E5 在该场景该实现中改变失败结局；E0 accepted 仍不足（启动 5/8）
+
+分支 `exp/comm-cost-firstreport-intervention`（起点 ROUND26 头 `e22db99`），产物
+`runs/comm_cost_firstreport_intervention_20260929/`（`ROUND27_REPORT.md`、
+`ROUND27_VERDICT.json/.md`、`ROUND27_PROTOCOL.md`、`FIVE_PATH_COMPARISON.json`、
+`PER_TARGET_TIMELINES.json`、`FIRST2_GATE.json`、`RUN_PREFLIGHT.json`、`CODE_IDENTITY.json`、
+`ALIAS_REGISTRATION.json`、`TARGET5_STEPS3_11_READBACK.json`、`ARTEFACT_MANIFEST.json`）。
+执行依据 `EXECUTION_BASIS.md`（sha256 `eeb982de…`），首启前独立提交；`remote_verification=
+NOT_PERFORMED`、`publication_status=PENDING_NETWORK`、本会话网络重试 0。
+
+- **五路径（场景 1400031，各一次启动）**：L/L0/E0 均为 on_time 4、expired 2、10578 B、4 发射；
+  **E5 = on_time 6、expired 0、7764 B、3 发射**（target-5 t=60、target-0 t=70 均按时）；
+  **E05 = on_time 6、0、10578 B、4 发射**（两目标 t=60/66 按时）。0 失败、0 重试、
+  储备 3 未动、0 训练、0 optimizer.step、0 阈值调整、生产树零 diff。
+- **干预器**：`FirstReportAdvancer` 在 `BudgetMaskedCollector` 顺序预算路径内单点覆盖
+  HOLD→SEND（同 shadow gate、同报价、同候选顺序、不绕 mask、不免费、不追加发射；每目标一次、
+  首发射后恢复原 greedy）；零环境预检 16/16，生产套件 OK(skipped=2)。
+- **门禁**：L 与 L0 行为字段零差异、tape 逐行相同；L 与 ROUND25 该场景行 27 个共同字段零差异、
+  tape 逐行相同 ⇒ 干预器安装零扰动。
+- **机制（描述性）**：E0 首报被 5/6 accepted 但 target-0 分配链与 L 逐事件相同 ⇒
+  "accepted 不足以改变结局"的一例，不是"提前发送无效"的证据；E5 的 step-1 accepted 之后
+  target-5 分配链自 t=1 展开并按时完成，但同路径里 target-0 的首报仍在 step 32 且全部
+  superseded ⇒ 两个目标的变化不共享同一机制。
+- **措辞更正四条已登记**（早期首报是关联非充分原因、ACK 盲区未证须加观测、superseded 不等于
+  可安全删除、视距/gossip 是未计量旁路非免费）；immediate/send_once 行为等价（64/64 场景
+  零刷新）⇒ 登记别名、不新增同义规则。
+
 ## 2026-09-29：ROUND26 ROUND25 统计复核与任务得失机制诊断——结论不变，失败近因在分配侧（0 新启动）
 
 分支 `exp/round26-round25-recheck`（起点 ROUND25 完整头 `fdf97d1`），产物

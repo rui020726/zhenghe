@@ -1,0 +1,2423 @@
+{
+ "chains": {
+  "E0": {
+   "piloc-e1-target-0": {
+    "assignment_events": [
+     {
+      "agents": [
+       "3"
+      ],
+      "command_id": "assignment:17",
+      "t": 31.0,
+      "valid_until": 41.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "command_id": "assignment:20",
+      "t": 54.0,
+      "valid_until": 64.0
+     },
+     {
+      "agents": [
+       "5"
+      ],
+      "command_id": "assignment:21",
+      "t": 54.0,
+      "valid_until": 64.0
+     },
+     {
+      "agents": [
+       "1"
+      ],
+      "command_id": "assignment:22",
+      "t": 66.0,
+      "valid_until": 76.0
+     }
+    ],
+    "deliveries": [
+     {
+      "accepted": true,
+      "agent": "0",
+      "reason": "accepted",
+      "sent_at": 19.0,
+      "sent_step": 19,
+      "step": 19
+     },
+     {
+      "accepted": true,
+      "agent": "1",
+      "reason": "accepted",
+      "sent_at": 19.0,
+      "sent_step": 19,
+      "step": 19
+     },
+     {
+      "accepted": true,
+      "agent": "2",
+      "reason": "accepted",
+      "sent_at": 19.0,
+      "sent_step": 19,
+      "step": 19
+     },
+     {
+      "accepted": true,
+      "agent": "4",
+      "reason": "accepted",
+      "sent_at": 19.0,
+      "sent_step": 19,
+      "step": 19
+     },
+     {
+      "accepted": true,
+      "agent": "5",
+      "reason": "accepted",
+      "sent_at": 19.0,
+      "sent_step": 19,
+      "step": 19
+     }
+    ],
+    "discovery": {
+     "deadline_offset": 64.95666085385487,
+     "discovered_by": "agent_1",
+     "observed_by": "agent_1",
+     "t": 19.0
+    },
+    "final_record": {
+     "detail": {
+      "deadline": 83.95666085385487,
+      "discovered_at": 19.0,
+      "position": [
+       0.3559322033898305,
+       0.8135593220338984
+      ],
+      "step": 1000,
+      "updated_at": 93.0
+     },
+     "status": "expired"
+    },
+    "intervention": {
+     "first_opportunity_step": 19,
+     "non_override_outcomes": [],
+     "opportunities_recorded": 1,
+     "override_applied": true,
+     "override_details": [
+      {
+       "attempt_charge_bytes": 2682,
+       "budget_before_bytes": 29300.0,
+       "class": "actionable",
+       "first_emission_flag_before": true,
+       "greedy_action": "HOLD",
+       "greedy_send_probability": 0.395373,
+       "outcome": "overridden_hold_to_send",
+       "override_action": "SEND",
+       "override_applied": true,
+       "ready_step": 19,
+       "sent_count_before": 0,
+       "step": 19,
+       "target": "piloc-e1-target-0"
+      }
+     ],
+     "override_steps": [
+      19
+     ]
+    },
+    "measured_cost_bytes": 10578,
+    "outcome": {
+     "completed_at": null,
+     "deadline": 83.95666085385487,
+     "discovered_at": 19.0,
+     "expired": true,
+     "on_time": false
+    },
+    "path": "E0",
+    "refusals": [],
+    "sends": [
+     {
+      "cost_bytes": 2682,
+      "first": true,
+      "packets": 5,
+      "packets_lost": 1,
+      "progress": 0.0,
+      "ready_step": 19,
+      "revision": 1,
+      "send_reason": "policy",
+      "step": 19,
+      "subscribers": 6
+     }
+    ],
+    "target": "piloc-e1-target-0",
+    "whole_scene": {
+     "emissions": 4,
+     "expired": 2,
+     "on_time": 4
+    },
+    "work_segments": [
+     {
+      "agents": [],
+      "from": 19.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 19.0
+     },
+     {
+      "agents": [],
+      "from": 32.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 32.0
+     },
+     {
+      "agents": [
+       "3"
+      ],
+      "from": 33.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 33.0
+     },
+     {
+      "agents": [
+       "3",
+       "2",
+       "5"
+      ],
+      "from": 55.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 55.0
+     },
+     {
+      "agents": [
+       "3",
+       "2",
+       "5",
+       "1"
+      ],
+      "from": 68.0,
+      "progress_at_end": 0.655768,
+      "stage_at_end": 1,
+      "to": 88.0
+     },
+     {
+      "agents": [
+       "3",
+       "2",
+       "5"
+      ],
+      "from": 89.0,
+      "progress_at_end": 0.987857,
+      "stage_at_end": 2,
+      "to": 92.0
+     },
+     {
+      "agents": [],
+      "from": 93.0,
+      "progress_at_end": 1.0,
+      "stage_at_end": 2,
+      "to": 93.0
+     }
+    ]
+   },
+   "piloc-e1-target-5": {
+    "assignment_events": [
+     {
+      "agents": [
+       "3"
+      ],
+      "command_id": "assignment:10",
+      "t": 2.0,
+      "valid_until": 12.0
+     },
+     {
+      "agents": [
+       "4"
+      ],
+      "command_id": "assignment:11",
+      "t": 2.0,
+      "valid_until": 12.0
+     },
+     {
+      "agents": [
+       "1"
+      ],
+      "command_id": "assignment:19",
+      "t": 54.0,
+      "valid_until": 64.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "command_id": "assignment:26",
+      "t": 93.0,
+      "valid_until": 103.0
+     },
+     {
+      "agents": [
+       "4"
+      ],
+      "command_id": "assignment:30",
+      "t": 95.0,
+      "valid_until": 105.0
+     }
+    ],
+    "deliveries": [
+     {
+      "accepted": false,
+      "agent": "2",
+      "reason": "delivery_superseded",
+      "sent_at": 11.0,
+      "sent_step": 34,
+      "step": 34
+     },
+     {
+      "accepted": false,
+      "agent": "3",
+      "reason": "delivery_superseded",
+      "sent_at": 11.0,
+      "sent_step": 34,
+      "step": 34
+     },
+     {
+      "accepted": false,
+      "agent": "4",
+      "reason": "delivery_superseded",
+      "sent_at": 11.0,
+      "sent_step": 34,
+      "step": 34
+     },
+     {
+      "accepted": false,
+      "agent": "5",
+      "reason": "delivery_superseded",
+      "sent_at": 11.0,
+      "sent_step": 34,
+      "step": 34
+     }
+    ],
+    "discovery": {
+     "deadline_offset": 95.52539215745361,
+     "discovered_by": "agent_0",
+     "observed_by": "agent_0",
+     "t": 1.0
+    },
+    "final_record": {
+     "detail": {
+      "deadline": 96.52539215745361,
+      "discovered_at": 1.0,
+      "position": [
+       0.576271186440678,
+       1.0
+      ],
+      "step": 1000,
+      "updated_at": 101.0
+     },
+     "status": "expired"
+    },
+    "intervention": {
+     "first_opportunity_step": null,
+     "non_override_outcomes": null,
+     "opportunities_recorded": null,
+     "override_applied": null,
+     "override_details": null,
+     "override_steps": null
+    },
+    "measured_cost_bytes": 10578,
+    "outcome": {
+     "completed_at": null,
+     "deadline": 96.52539215745361,
+     "discovered_at": 1.0,
+     "expired": true,
+     "on_time": false
+    },
+    "path": "E0",
+    "refusals": [],
+    "sends": [
+     {
+      "cost_bytes": 2682,
+      "first": true,
+      "packets": 4,
+      "packets_lost": 2,
+      "progress": 0.3333333333333333,
+      "ready_step": 1,
+      "revision": 11,
+      "send_reason": "policy",
+      "step": 34,
+      "subscribers": 6
+     }
+    ],
+    "target": "piloc-e1-target-5",
+    "whole_scene": {
+     "emissions": 4,
+     "expired": 2,
+     "on_time": 4
+    },
+    "work_segments": [
+     {
+      "agents": [],
+      "from": 1.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 1.0
+     },
+     {
+      "agents": [
+       "3",
+       "4"
+      ],
+      "from": 3.0,
+      "progress_at_end": 0.319727,
+      "stage_at_end": 0,
+      "to": 10.0
+     },
+     {
+      "agents": [],
+      "from": 11.0,
+      "progress_at_end": 0.333333,
+      "stage_at_end": 1,
+      "to": 11.0
+     },
+     {
+      "agents": [
+       "1"
+      ],
+      "from": 55.0,
+      "progress_at_end": 0.660991,
+      "stage_at_end": 1,
+      "to": 65.0
+     },
+     {
+      "agents": [],
+      "from": 66.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 66.0
+     },
+     {
+      "agents": [],
+      "from": 94.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 94.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "from": 95.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 95.0
+     },
+     {
+      "agents": [
+       "2",
+       "4"
+      ],
+      "from": 97.0,
+      "progress_at_end": 0.944508,
+      "stage_at_end": 2,
+      "to": 100.0
+     },
+     {
+      "agents": [],
+      "from": 101.0,
+      "progress_at_end": 1.0,
+      "stage_at_end": 2,
+      "to": 101.0
+     }
+    ]
+   }
+  },
+  "E05": {
+   "piloc-e1-target-0": {
+    "assignment_events": [
+     {
+      "agents": [
+       "2"
+      ],
+      "command_id": "assignment:14",
+      "t": 21.0,
+      "valid_until": 31.0
+     },
+     {
+      "agents": [
+       "0"
+      ],
+      "command_id": "assignment:15",
+      "t": 22.0,
+      "valid_until": 32.0
+     },
+     {
+      "agents": [
+       "5"
+      ],
+      "command_id": "assignment:17",
+      "t": 33.0,
+      "valid_until": 43.0
+     }
+    ],
+    "deliveries": [
+     {
+      "accepted": true,
+      "agent": "0",
+      "reason": "accepted",
+      "sent_at": 19.0,
+      "sent_step": 19,
+      "step": 19
+     },
+     {
+      "accepted": true,
+      "agent": "2",
+      "reason": "accepted",
+      "sent_at": 19.0,
+      "sent_step": 19,
+      "step": 19
+     },
+     {
+      "accepted": true,
+      "agent": "4",
+      "reason": "accepted",
+      "sent_at": 19.0,
+      "sent_step": 19,
+      "step": 19
+     },
+     {
+      "accepted": true,
+      "agent": "5",
+      "reason": "accepted",
+      "sent_at": 19.0,
+      "sent_step": 19,
+      "step": 19
+     }
+    ],
+    "discovery": {
+     "deadline_offset": 64.95666085385487,
+     "discovered_by": "agent_1",
+     "observed_by": "agent_1",
+     "t": 19.0
+    },
+    "final_record": {
+     "detail": {
+      "deadline": 83.95666085385487,
+      "discovered_at": 19.0,
+      "position": [
+       0.3559322033898305,
+       0.8135593220338984
+      ],
+      "step": 1000,
+      "updated_at": 60.0
+     },
+     "status": "completed"
+    },
+    "intervention": {
+     "first_opportunity_step": 19,
+     "non_override_outcomes": [],
+     "opportunities_recorded": 1,
+     "override_applied": true,
+     "override_details": [
+      {
+       "attempt_charge_bytes": 2682,
+       "budget_before_bytes": 26726.0,
+       "class": "actionable",
+       "first_emission_flag_before": true,
+       "greedy_action": "HOLD",
+       "greedy_send_probability": 0.398252,
+       "outcome": "overridden_hold_to_send",
+       "override_action": "SEND",
+       "override_applied": true,
+       "ready_step": 19,
+       "sent_count_before": 0,
+       "step": 19,
+       "target": "piloc-e1-target-0"
+      }
+     ],
+     "override_steps": [
+      19
+     ]
+    },
+    "measured_cost_bytes": 10578,
+    "outcome": {
+     "completed_at": 60.0,
+     "deadline": 83.95666085385487,
+     "discovered_at": 19.0,
+     "expired": false,
+     "on_time": true
+    },
+    "path": "E05",
+    "refusals": [],
+    "sends": [
+     {
+      "cost_bytes": 2682,
+      "first": true,
+      "packets": 4,
+      "packets_lost": 2,
+      "progress": 0.0,
+      "ready_step": 19,
+      "revision": 1,
+      "send_reason": "policy",
+      "step": 19,
+      "subscribers": 6
+     }
+    ],
+    "target": "piloc-e1-target-0",
+    "whole_scene": {
+     "emissions": 4,
+     "expired": 0,
+     "on_time": 6
+    },
+    "work_segments": [
+     {
+      "agents": [],
+      "from": 19.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 19.0
+     },
+     {
+      "agents": [],
+      "from": 22.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 22.0
+     },
+     {
+      "agents": [
+       "0",
+       "2"
+      ],
+      "from": 23.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 23.0
+     },
+     {
+      "agents": [
+       "0",
+       "2",
+       "5"
+      ],
+      "from": 35.0,
+      "progress_at_end": 0.655768,
+      "stage_at_end": 1,
+      "to": 55.0
+     },
+     {
+      "agents": [
+       "2",
+       "5"
+      ],
+      "from": 56.0,
+      "progress_at_end": 0.987857,
+      "stage_at_end": 2,
+      "to": 59.0
+     },
+     {
+      "agents": [],
+      "from": 60.0,
+      "progress_at_end": 1.0,
+      "stage_at_end": 2,
+      "to": 60.0
+     }
+    ]
+   },
+   "piloc-e1-target-5": {
+    "assignment_events": [
+     {
+      "agents": [
+       "0"
+      ],
+      "command_id": "assignment:1",
+      "t": 1.0,
+      "valid_until": 11.0
+     },
+     {
+      "agents": [
+       "1"
+      ],
+      "command_id": "assignment:2",
+      "t": 1.0,
+      "valid_until": 11.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "command_id": "assignment:3",
+      "t": 1.0,
+      "valid_until": 11.0
+     },
+     {
+      "agents": [
+       "4"
+      ],
+      "command_id": "assignment:5",
+      "t": 1.0,
+      "valid_until": 11.0
+     },
+     {
+      "agents": [
+       "5"
+      ],
+      "command_id": "assignment:6",
+      "t": 1.0,
+      "valid_until": 11.0
+     },
+     {
+      "agents": [
+       "5"
+      ],
+      "command_id": "assignment:23",
+      "t": 57.0,
+      "valid_until": 67.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "command_id": "assignment:24",
+      "t": 60.0,
+      "valid_until": 70.0
+     }
+    ],
+    "deliveries": [
+     {
+      "accepted": true,
+      "agent": "0",
+      "reason": "accepted",
+      "sent_at": 1.0,
+      "sent_step": 1,
+      "step": 1
+     },
+     {
+      "accepted": true,
+      "agent": "1",
+      "reason": "accepted",
+      "sent_at": 1.0,
+      "sent_step": 1,
+      "step": 1
+     },
+     {
+      "accepted": true,
+      "agent": "2",
+      "reason": "accepted",
+      "sent_at": 1.0,
+      "sent_step": 1,
+      "step": 1
+     },
+     {
+      "accepted": true,
+      "agent": "4",
+      "reason": "accepted",
+      "sent_at": 1.0,
+      "sent_step": 1,
+      "step": 1
+     },
+     {
+      "accepted": true,
+      "agent": "5",
+      "reason": "accepted",
+      "sent_at": 1.0,
+      "sent_step": 1,
+      "step": 1
+     }
+    ],
+    "discovery": {
+     "deadline_offset": 95.52539215745361,
+     "discovered_by": "agent_0",
+     "observed_by": "agent_0",
+     "t": 1.0
+    },
+    "final_record": {
+     "detail": {
+      "deadline": 96.52539215745361,
+      "discovered_at": 1.0,
+      "position": [
+       0.576271186440678,
+       1.0
+      ],
+      "step": 1000,
+      "updated_at": 66.0
+     },
+     "status": "completed"
+    },
+    "intervention": {
+     "first_opportunity_step": 1,
+     "non_override_outcomes": [],
+     "opportunities_recorded": 1,
+     "override_applied": true,
+     "override_details": [
+      {
+       "attempt_charge_bytes": 2574,
+       "budget_before_bytes": 29300.0,
+       "class": "actionable",
+       "first_emission_flag_before": true,
+       "greedy_action": "HOLD",
+       "greedy_send_probability": 0.348194,
+       "outcome": "overridden_hold_to_send",
+       "override_action": "SEND",
+       "override_applied": true,
+       "ready_step": 1,
+       "sent_count_before": 0,
+       "step": 1,
+       "target": "piloc-e1-target-5"
+      }
+     ],
+     "override_steps": [
+      1
+     ]
+    },
+    "measured_cost_bytes": 10578,
+    "outcome": {
+     "completed_at": 66.0,
+     "deadline": 96.52539215745361,
+     "discovered_at": 1.0,
+     "expired": false,
+     "on_time": true
+    },
+    "path": "E05",
+    "refusals": [],
+    "sends": [
+     {
+      "cost_bytes": 2574,
+      "first": true,
+      "packets": 5,
+      "packets_lost": 1,
+      "progress": 0.0,
+      "ready_step": 1,
+      "revision": 1,
+      "send_reason": "policy",
+      "step": 1,
+      "subscribers": 6
+     }
+    ],
+    "target": "piloc-e1-target-5",
+    "whole_scene": {
+     "emissions": 4,
+     "expired": 0,
+     "on_time": 6
+    },
+    "work_segments": [
+     {
+      "agents": [],
+      "from": 1.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 1.0
+     },
+     {
+      "agents": [
+       "0",
+       "1",
+       "2",
+       "4",
+       "5"
+      ],
+      "from": 2.0,
+      "progress_at_end": 0.319727,
+      "stage_at_end": 0,
+      "to": 9.0
+     },
+     {
+      "agents": [
+       "0",
+       "1"
+      ],
+      "from": 10.0,
+      "progress_at_end": 0.660991,
+      "stage_at_end": 1,
+      "to": 21.0
+     },
+     {
+      "agents": [],
+      "from": 22.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 22.0
+     },
+     {
+      "agents": [
+       "5"
+      ],
+      "from": 58.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 58.0
+     },
+     {
+      "agents": [
+       "5",
+       "2"
+      ],
+      "from": 62.0,
+      "progress_at_end": 0.944508,
+      "stage_at_end": 2,
+      "to": 65.0
+     },
+     {
+      "agents": [],
+      "from": 66.0,
+      "progress_at_end": 1.0,
+      "stage_at_end": 2,
+      "to": 66.0
+     }
+    ]
+   }
+  },
+  "E5": {
+   "piloc-e1-target-0": {
+    "assignment_events": [
+     {
+      "agents": [
+       "2"
+      ],
+      "command_id": "assignment:17",
+      "t": 31.0,
+      "valid_until": 41.0
+     },
+     {
+      "agents": [
+       "3"
+      ],
+      "command_id": "assignment:19",
+      "t": 34.0,
+      "valid_until": 44.0
+     },
+     {
+      "agents": [
+       "1"
+      ],
+      "command_id": "assignment:20",
+      "t": 43.0,
+      "valid_until": 53.0
+     },
+     {
+      "agents": [
+       "4"
+      ],
+      "command_id": "assignment:21",
+      "t": 43.0,
+      "valid_until": 53.0
+     },
+     {
+      "agents": [
+       "0"
+      ],
+      "command_id": "assignment:22",
+      "t": 44.0,
+      "valid_until": 54.0
+     },
+     {
+      "agents": [
+       "4"
+      ],
+      "command_id": "assignment:26",
+      "t": 54.0,
+      "valid_until": 64.0
+     },
+     {
+      "agents": [
+       "3"
+      ],
+      "command_id": "assignment:28",
+      "t": 60.0,
+      "valid_until": 70.0
+     },
+     {
+      "agents": [
+       "5"
+      ],
+      "command_id": "assignment:29",
+      "t": 60.0,
+      "valid_until": 70.0
+     }
+    ],
+    "deliveries": [
+     {
+      "accepted": false,
+      "agent": "2",
+      "reason": "delivery_superseded",
+      "sent_at": 19.0,
+      "sent_step": 32,
+      "step": 32
+     },
+     {
+      "accepted": false,
+      "agent": "3",
+      "reason": "delivery_superseded",
+      "sent_at": 19.0,
+      "sent_step": 32,
+      "step": 32
+     },
+     {
+      "accepted": false,
+      "agent": "4",
+      "reason": "delivery_superseded",
+      "sent_at": 19.0,
+      "sent_step": 32,
+      "step": 32
+     },
+     {
+      "accepted": false,
+      "agent": "5",
+      "reason": "delivery_superseded",
+      "sent_at": 19.0,
+      "sent_step": 32,
+      "step": 32
+     }
+    ],
+    "discovery": {
+     "deadline_offset": 64.95666085385487,
+     "discovered_by": "agent_1",
+     "observed_by": "agent_1",
+     "t": 19.0
+    },
+    "final_record": {
+     "detail": {
+      "deadline": 83.95666085385487,
+      "discovered_at": 19.0,
+      "position": [
+       0.3559322033898305,
+       0.8135593220338984
+      ],
+      "step": 1000,
+      "updated_at": 70.0
+     },
+     "status": "completed"
+    },
+    "intervention": {
+     "first_opportunity_step": null,
+     "non_override_outcomes": null,
+     "opportunities_recorded": null,
+     "override_applied": null,
+     "override_details": null,
+     "override_steps": null
+    },
+    "measured_cost_bytes": 7764,
+    "outcome": {
+     "completed_at": 70.0,
+     "deadline": 83.95666085385487,
+     "discovered_at": 19.0,
+     "expired": false,
+     "on_time": true
+    },
+    "path": "E5",
+    "refusals": [],
+    "sends": [
+     {
+      "cost_bytes": 2682,
+      "first": true,
+      "packets": 4,
+      "packets_lost": 2,
+      "progress": 0.0,
+      "ready_step": 19,
+      "revision": 2,
+      "send_reason": "policy",
+      "step": 32,
+      "subscribers": 6
+     }
+    ],
+    "target": "piloc-e1-target-0",
+    "whole_scene": {
+     "emissions": 3,
+     "expired": 0,
+     "on_time": 6
+    },
+    "work_segments": [
+     {
+      "agents": [],
+      "from": 19.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 19.0
+     },
+     {
+      "agents": [],
+      "from": 32.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 32.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "from": 33.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 33.0
+     },
+     {
+      "agents": [
+       "2",
+       "3"
+      ],
+      "from": 35.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 35.0
+     },
+     {
+      "agents": [
+       "2",
+       "3",
+       "1",
+       "4"
+      ],
+      "from": 45.0,
+      "progress_at_end": 0.030661,
+      "stage_at_end": 0,
+      "to": 45.0
+     },
+     {
+      "agents": [
+       "2",
+       "3",
+       "1",
+       "4",
+       "0"
+      ],
+      "from": 46.0,
+      "progress_at_end": 0.526794,
+      "stage_at_end": 1,
+      "to": 61.0
+     },
+     {
+      "agents": [
+       "2",
+       "3",
+       "1",
+       "4",
+       "0",
+       "5"
+      ],
+      "from": 62.0,
+      "progress_at_end": 0.655768,
+      "stage_at_end": 1,
+      "to": 65.0
+     },
+     {
+      "agents": [
+       "2",
+       "3",
+       "4",
+       "5"
+      ],
+      "from": 66.0,
+      "progress_at_end": 0.987857,
+      "stage_at_end": 2,
+      "to": 69.0
+     },
+     {
+      "agents": [],
+      "from": 70.0,
+      "progress_at_end": 1.0,
+      "stage_at_end": 2,
+      "to": 70.0
+     }
+    ]
+   },
+   "piloc-e1-target-5": {
+    "assignment_events": [
+     {
+      "agents": [
+       "0"
+      ],
+      "command_id": "assignment:1",
+      "t": 1.0,
+      "valid_until": 11.0
+     },
+     {
+      "agents": [
+       "1"
+      ],
+      "command_id": "assignment:2",
+      "t": 1.0,
+      "valid_until": 11.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "command_id": "assignment:3",
+      "t": 1.0,
+      "valid_until": 11.0
+     },
+     {
+      "agents": [
+       "4"
+      ],
+      "command_id": "assignment:5",
+      "t": 1.0,
+      "valid_until": 11.0
+     },
+     {
+      "agents": [
+       "5"
+      ],
+      "command_id": "assignment:6",
+      "t": 1.0,
+      "valid_until": 11.0
+     },
+     {
+      "agents": [
+       "5"
+      ],
+      "command_id": "assignment:24",
+      "t": 44.0,
+      "valid_until": 54.0
+     },
+     {
+      "agents": [
+       "3"
+      ],
+      "command_id": "assignment:25",
+      "t": 54.0,
+      "valid_until": 64.0
+     }
+    ],
+    "deliveries": [
+     {
+      "accepted": true,
+      "agent": "0",
+      "reason": "accepted",
+      "sent_at": 1.0,
+      "sent_step": 1,
+      "step": 1
+     },
+     {
+      "accepted": true,
+      "agent": "1",
+      "reason": "accepted",
+      "sent_at": 1.0,
+      "sent_step": 1,
+      "step": 1
+     },
+     {
+      "accepted": true,
+      "agent": "2",
+      "reason": "accepted",
+      "sent_at": 1.0,
+      "sent_step": 1,
+      "step": 1
+     },
+     {
+      "accepted": true,
+      "agent": "4",
+      "reason": "accepted",
+      "sent_at": 1.0,
+      "sent_step": 1,
+      "step": 1
+     },
+     {
+      "accepted": true,
+      "agent": "5",
+      "reason": "accepted",
+      "sent_at": 1.0,
+      "sent_step": 1,
+      "step": 1
+     }
+    ],
+    "discovery": {
+     "deadline_offset": 95.52539215745361,
+     "discovered_by": "agent_0",
+     "observed_by": "agent_0",
+     "t": 1.0
+    },
+    "final_record": {
+     "detail": {
+      "deadline": 96.52539215745361,
+      "discovered_at": 1.0,
+      "position": [
+       0.576271186440678,
+       1.0
+      ],
+      "step": 1000,
+      "updated_at": 60.0
+     },
+     "status": "completed"
+    },
+    "intervention": {
+     "first_opportunity_step": 1,
+     "non_override_outcomes": [],
+     "opportunities_recorded": 1,
+     "override_applied": true,
+     "override_details": [
+      {
+       "attempt_charge_bytes": 2574,
+       "budget_before_bytes": 29300.0,
+       "class": "actionable",
+       "first_emission_flag_before": true,
+       "greedy_action": "HOLD",
+       "greedy_send_probability": 0.348194,
+       "outcome": "overridden_hold_to_send",
+       "override_action": "SEND",
+       "override_applied": true,
+       "ready_step": 1,
+       "sent_count_before": 0,
+       "step": 1,
+       "target": "piloc-e1-target-5"
+      }
+     ],
+     "override_steps": [
+      1
+     ]
+    },
+    "measured_cost_bytes": 7764,
+    "outcome": {
+     "completed_at": 60.0,
+     "deadline": 96.52539215745361,
+     "discovered_at": 1.0,
+     "expired": false,
+     "on_time": true
+    },
+    "path": "E5",
+    "refusals": [],
+    "sends": [
+     {
+      "cost_bytes": 2574,
+      "first": true,
+      "packets": 5,
+      "packets_lost": 1,
+      "progress": 0.0,
+      "ready_step": 1,
+      "revision": 1,
+      "send_reason": "policy",
+      "step": 1,
+      "subscribers": 6
+     }
+    ],
+    "target": "piloc-e1-target-5",
+    "whole_scene": {
+     "emissions": 3,
+     "expired": 0,
+     "on_time": 6
+    },
+    "work_segments": [
+     {
+      "agents": [],
+      "from": 1.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 1.0
+     },
+     {
+      "agents": [
+       "0",
+       "1",
+       "2",
+       "4",
+       "5"
+      ],
+      "from": 2.0,
+      "progress_at_end": 0.319727,
+      "stage_at_end": 0,
+      "to": 9.0
+     },
+     {
+      "agents": [
+       "0",
+       "1"
+      ],
+      "from": 10.0,
+      "progress_at_end": 0.660991,
+      "stage_at_end": 1,
+      "to": 21.0
+     },
+     {
+      "agents": [],
+      "from": 22.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 22.0
+     },
+     {
+      "agents": [
+       "5"
+      ],
+      "from": 45.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 45.0
+     },
+     {
+      "agents": [
+       "5",
+       "3"
+      ],
+      "from": 56.0,
+      "progress_at_end": 0.944508,
+      "stage_at_end": 2,
+      "to": 59.0
+     },
+     {
+      "agents": [],
+      "from": 60.0,
+      "progress_at_end": 1.0,
+      "stage_at_end": 2,
+      "to": 60.0
+     }
+    ]
+   }
+  },
+  "L": {
+   "piloc-e1-target-0": {
+    "assignment_events": [
+     {
+      "agents": [
+       "3"
+      ],
+      "command_id": "assignment:17",
+      "t": 31.0,
+      "valid_until": 41.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "command_id": "assignment:20",
+      "t": 54.0,
+      "valid_until": 64.0
+     },
+     {
+      "agents": [
+       "5"
+      ],
+      "command_id": "assignment:21",
+      "t": 54.0,
+      "valid_until": 64.0
+     },
+     {
+      "agents": [
+       "1"
+      ],
+      "command_id": "assignment:22",
+      "t": 66.0,
+      "valid_until": 76.0
+     }
+    ],
+    "deliveries": [
+     {
+      "accepted": false,
+      "agent": "0",
+      "reason": "delivery_superseded",
+      "sent_at": 19.0,
+      "sent_step": 31,
+      "step": 31
+     },
+     {
+      "accepted": false,
+      "agent": "2",
+      "reason": "delivery_superseded",
+      "sent_at": 19.0,
+      "sent_step": 31,
+      "step": 31
+     },
+     {
+      "accepted": false,
+      "agent": "4",
+      "reason": "delivery_superseded",
+      "sent_at": 19.0,
+      "sent_step": 31,
+      "step": 31
+     },
+     {
+      "accepted": false,
+      "agent": "5",
+      "reason": "delivery_superseded",
+      "sent_at": 19.0,
+      "sent_step": 31,
+      "step": 31
+     }
+    ],
+    "discovery": {
+     "deadline_offset": 64.95666085385487,
+     "discovered_by": "agent_1",
+     "observed_by": "agent_1",
+     "t": 19.0
+    },
+    "final_record": {
+     "detail": {
+      "deadline": 83.95666085385487,
+      "discovered_at": 19.0,
+      "position": [
+       0.3559322033898305,
+       0.8135593220338984
+      ],
+      "step": 1000,
+      "updated_at": 93.0
+     },
+     "status": "expired"
+    },
+    "intervention": {
+     "first_opportunity_step": null,
+     "non_override_outcomes": null,
+     "opportunities_recorded": null,
+     "override_applied": null,
+     "override_details": null,
+     "override_steps": null
+    },
+    "measured_cost_bytes": 10578,
+    "outcome": {
+     "completed_at": null,
+     "deadline": 83.95666085385487,
+     "discovered_at": 19.0,
+     "expired": true,
+     "on_time": false
+    },
+    "path": "L",
+    "refusals": [],
+    "sends": [
+     {
+      "cost_bytes": 2682,
+      "first": true,
+      "packets": 4,
+      "packets_lost": 2,
+      "progress": 0.0,
+      "ready_step": 19,
+      "revision": 2,
+      "send_reason": "policy",
+      "step": 31,
+      "subscribers": 6
+     }
+    ],
+    "target": "piloc-e1-target-0",
+    "whole_scene": {
+     "emissions": 4,
+     "expired": 2,
+     "on_time": 4
+    },
+    "work_segments": [
+     {
+      "agents": [],
+      "from": 19.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 19.0
+     },
+     {
+      "agents": [],
+      "from": 32.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 32.0
+     },
+     {
+      "agents": [
+       "3"
+      ],
+      "from": 33.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 33.0
+     },
+     {
+      "agents": [
+       "3",
+       "2",
+       "5"
+      ],
+      "from": 55.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 55.0
+     },
+     {
+      "agents": [
+       "3",
+       "2",
+       "5",
+       "1"
+      ],
+      "from": 68.0,
+      "progress_at_end": 0.655768,
+      "stage_at_end": 1,
+      "to": 88.0
+     },
+     {
+      "agents": [
+       "3",
+       "2",
+       "5"
+      ],
+      "from": 89.0,
+      "progress_at_end": 0.987857,
+      "stage_at_end": 2,
+      "to": 92.0
+     },
+     {
+      "agents": [],
+      "from": 93.0,
+      "progress_at_end": 1.0,
+      "stage_at_end": 2,
+      "to": 93.0
+     }
+    ]
+   },
+   "piloc-e1-target-5": {
+    "assignment_events": [
+     {
+      "agents": [
+       "3"
+      ],
+      "command_id": "assignment:10",
+      "t": 2.0,
+      "valid_until": 12.0
+     },
+     {
+      "agents": [
+       "4"
+      ],
+      "command_id": "assignment:11",
+      "t": 2.0,
+      "valid_until": 12.0
+     },
+     {
+      "agents": [
+       "1"
+      ],
+      "command_id": "assignment:19",
+      "t": 54.0,
+      "valid_until": 64.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "command_id": "assignment:26",
+      "t": 93.0,
+      "valid_until": 103.0
+     },
+     {
+      "agents": [
+       "4"
+      ],
+      "command_id": "assignment:30",
+      "t": 95.0,
+      "valid_until": 105.0
+     }
+    ],
+    "deliveries": [
+     {
+      "accepted": false,
+      "agent": "2",
+      "reason": "delivery_superseded",
+      "sent_at": 11.0,
+      "sent_step": 34,
+      "step": 34
+     },
+     {
+      "accepted": false,
+      "agent": "3",
+      "reason": "delivery_superseded",
+      "sent_at": 11.0,
+      "sent_step": 34,
+      "step": 34
+     },
+     {
+      "accepted": false,
+      "agent": "4",
+      "reason": "delivery_superseded",
+      "sent_at": 11.0,
+      "sent_step": 34,
+      "step": 34
+     },
+     {
+      "accepted": false,
+      "agent": "5",
+      "reason": "delivery_superseded",
+      "sent_at": 11.0,
+      "sent_step": 34,
+      "step": 34
+     }
+    ],
+    "discovery": {
+     "deadline_offset": 95.52539215745361,
+     "discovered_by": "agent_0",
+     "observed_by": "agent_0",
+     "t": 1.0
+    },
+    "final_record": {
+     "detail": {
+      "deadline": 96.52539215745361,
+      "discovered_at": 1.0,
+      "position": [
+       0.576271186440678,
+       1.0
+      ],
+      "step": 1000,
+      "updated_at": 101.0
+     },
+     "status": "expired"
+    },
+    "intervention": {
+     "first_opportunity_step": null,
+     "non_override_outcomes": null,
+     "opportunities_recorded": null,
+     "override_applied": null,
+     "override_details": null,
+     "override_steps": null
+    },
+    "measured_cost_bytes": 10578,
+    "outcome": {
+     "completed_at": null,
+     "deadline": 96.52539215745361,
+     "discovered_at": 1.0,
+     "expired": true,
+     "on_time": false
+    },
+    "path": "L",
+    "refusals": [],
+    "sends": [
+     {
+      "cost_bytes": 2682,
+      "first": true,
+      "packets": 4,
+      "packets_lost": 2,
+      "progress": 0.3333333333333333,
+      "ready_step": 1,
+      "revision": 11,
+      "send_reason": "policy",
+      "step": 34,
+      "subscribers": 6
+     }
+    ],
+    "target": "piloc-e1-target-5",
+    "whole_scene": {
+     "emissions": 4,
+     "expired": 2,
+     "on_time": 4
+    },
+    "work_segments": [
+     {
+      "agents": [],
+      "from": 1.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 1.0
+     },
+     {
+      "agents": [
+       "3",
+       "4"
+      ],
+      "from": 3.0,
+      "progress_at_end": 0.319727,
+      "stage_at_end": 0,
+      "to": 10.0
+     },
+     {
+      "agents": [],
+      "from": 11.0,
+      "progress_at_end": 0.333333,
+      "stage_at_end": 1,
+      "to": 11.0
+     },
+     {
+      "agents": [
+       "1"
+      ],
+      "from": 55.0,
+      "progress_at_end": 0.660991,
+      "stage_at_end": 1,
+      "to": 65.0
+     },
+     {
+      "agents": [],
+      "from": 66.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 66.0
+     },
+     {
+      "agents": [],
+      "from": 94.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 94.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "from": 95.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 95.0
+     },
+     {
+      "agents": [
+       "2",
+       "4"
+      ],
+      "from": 97.0,
+      "progress_at_end": 0.944508,
+      "stage_at_end": 2,
+      "to": 100.0
+     },
+     {
+      "agents": [],
+      "from": 101.0,
+      "progress_at_end": 1.0,
+      "stage_at_end": 2,
+      "to": 101.0
+     }
+    ]
+   }
+  },
+  "L0": {
+   "piloc-e1-target-0": {
+    "assignment_events": [
+     {
+      "agents": [
+       "3"
+      ],
+      "command_id": "assignment:17",
+      "t": 31.0,
+      "valid_until": 41.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "command_id": "assignment:20",
+      "t": 54.0,
+      "valid_until": 64.0
+     },
+     {
+      "agents": [
+       "5"
+      ],
+      "command_id": "assignment:21",
+      "t": 54.0,
+      "valid_until": 64.0
+     },
+     {
+      "agents": [
+       "1"
+      ],
+      "command_id": "assignment:22",
+      "t": 66.0,
+      "valid_until": 76.0
+     }
+    ],
+    "deliveries": [
+     {
+      "accepted": false,
+      "agent": "0",
+      "reason": "delivery_superseded",
+      "sent_at": 19.0,
+      "sent_step": 31,
+      "step": 31
+     },
+     {
+      "accepted": false,
+      "agent": "2",
+      "reason": "delivery_superseded",
+      "sent_at": 19.0,
+      "sent_step": 31,
+      "step": 31
+     },
+     {
+      "accepted": false,
+      "agent": "4",
+      "reason": "delivery_superseded",
+      "sent_at": 19.0,
+      "sent_step": 31,
+      "step": 31
+     },
+     {
+      "accepted": false,
+      "agent": "5",
+      "reason": "delivery_superseded",
+      "sent_at": 19.0,
+      "sent_step": 31,
+      "step": 31
+     }
+    ],
+    "discovery": {
+     "deadline_offset": 64.95666085385487,
+     "discovered_by": "agent_1",
+     "observed_by": "agent_1",
+     "t": 19.0
+    },
+    "final_record": {
+     "detail": {
+      "deadline": 83.95666085385487,
+      "discovered_at": 19.0,
+      "position": [
+       0.3559322033898305,
+       0.8135593220338984
+      ],
+      "step": 1000,
+      "updated_at": 93.0
+     },
+     "status": "expired"
+    },
+    "intervention": {
+     "first_opportunity_step": null,
+     "non_override_outcomes": [],
+     "opportunities_recorded": 0,
+     "override_applied": false,
+     "override_details": [],
+     "override_steps": []
+    },
+    "measured_cost_bytes": 10578,
+    "outcome": {
+     "completed_at": null,
+     "deadline": 83.95666085385487,
+     "discovered_at": 19.0,
+     "expired": true,
+     "on_time": false
+    },
+    "path": "L0",
+    "refusals": [],
+    "sends": [
+     {
+      "cost_bytes": 2682,
+      "first": true,
+      "packets": 4,
+      "packets_lost": 2,
+      "progress": 0.0,
+      "ready_step": 19,
+      "revision": 2,
+      "send_reason": "policy",
+      "step": 31,
+      "subscribers": 6
+     }
+    ],
+    "target": "piloc-e1-target-0",
+    "whole_scene": {
+     "emissions": 4,
+     "expired": 2,
+     "on_time": 4
+    },
+    "work_segments": [
+     {
+      "agents": [],
+      "from": 19.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 19.0
+     },
+     {
+      "agents": [],
+      "from": 32.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 32.0
+     },
+     {
+      "agents": [
+       "3"
+      ],
+      "from": 33.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 33.0
+     },
+     {
+      "agents": [
+       "3",
+       "2",
+       "5"
+      ],
+      "from": 55.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 55.0
+     },
+     {
+      "agents": [
+       "3",
+       "2",
+       "5",
+       "1"
+      ],
+      "from": 68.0,
+      "progress_at_end": 0.655768,
+      "stage_at_end": 1,
+      "to": 88.0
+     },
+     {
+      "agents": [
+       "3",
+       "2",
+       "5"
+      ],
+      "from": 89.0,
+      "progress_at_end": 0.987857,
+      "stage_at_end": 2,
+      "to": 92.0
+     },
+     {
+      "agents": [],
+      "from": 93.0,
+      "progress_at_end": 1.0,
+      "stage_at_end": 2,
+      "to": 93.0
+     }
+    ]
+   },
+   "piloc-e1-target-5": {
+    "assignment_events": [
+     {
+      "agents": [
+       "3"
+      ],
+      "command_id": "assignment:10",
+      "t": 2.0,
+      "valid_until": 12.0
+     },
+     {
+      "agents": [
+       "4"
+      ],
+      "command_id": "assignment:11",
+      "t": 2.0,
+      "valid_until": 12.0
+     },
+     {
+      "agents": [
+       "1"
+      ],
+      "command_id": "assignment:19",
+      "t": 54.0,
+      "valid_until": 64.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "command_id": "assignment:26",
+      "t": 93.0,
+      "valid_until": 103.0
+     },
+     {
+      "agents": [
+       "4"
+      ],
+      "command_id": "assignment:30",
+      "t": 95.0,
+      "valid_until": 105.0
+     }
+    ],
+    "deliveries": [
+     {
+      "accepted": false,
+      "agent": "2",
+      "reason": "delivery_superseded",
+      "sent_at": 11.0,
+      "sent_step": 34,
+      "step": 34
+     },
+     {
+      "accepted": false,
+      "agent": "3",
+      "reason": "delivery_superseded",
+      "sent_at": 11.0,
+      "sent_step": 34,
+      "step": 34
+     },
+     {
+      "accepted": false,
+      "agent": "4",
+      "reason": "delivery_superseded",
+      "sent_at": 11.0,
+      "sent_step": 34,
+      "step": 34
+     },
+     {
+      "accepted": false,
+      "agent": "5",
+      "reason": "delivery_superseded",
+      "sent_at": 11.0,
+      "sent_step": 34,
+      "step": 34
+     }
+    ],
+    "discovery": {
+     "deadline_offset": 95.52539215745361,
+     "discovered_by": "agent_0",
+     "observed_by": "agent_0",
+     "t": 1.0
+    },
+    "final_record": {
+     "detail": {
+      "deadline": 96.52539215745361,
+      "discovered_at": 1.0,
+      "position": [
+       0.576271186440678,
+       1.0
+      ],
+      "step": 1000,
+      "updated_at": 101.0
+     },
+     "status": "expired"
+    },
+    "intervention": {
+     "first_opportunity_step": null,
+     "non_override_outcomes": [],
+     "opportunities_recorded": 0,
+     "override_applied": false,
+     "override_details": [],
+     "override_steps": []
+    },
+    "measured_cost_bytes": 10578,
+    "outcome": {
+     "completed_at": null,
+     "deadline": 96.52539215745361,
+     "discovered_at": 1.0,
+     "expired": true,
+     "on_time": false
+    },
+    "path": "L0",
+    "refusals": [],
+    "sends": [
+     {
+      "cost_bytes": 2682,
+      "first": true,
+      "packets": 4,
+      "packets_lost": 2,
+      "progress": 0.3333333333333333,
+      "ready_step": 1,
+      "revision": 11,
+      "send_reason": "policy",
+      "step": 34,
+      "subscribers": 6
+     }
+    ],
+    "target": "piloc-e1-target-5",
+    "whole_scene": {
+     "emissions": 4,
+     "expired": 2,
+     "on_time": 4
+    },
+    "work_segments": [
+     {
+      "agents": [],
+      "from": 1.0,
+      "progress_at_end": 0.0,
+      "stage_at_end": 0,
+      "to": 1.0
+     },
+     {
+      "agents": [
+       "3",
+       "4"
+      ],
+      "from": 3.0,
+      "progress_at_end": 0.319727,
+      "stage_at_end": 0,
+      "to": 10.0
+     },
+     {
+      "agents": [],
+      "from": 11.0,
+      "progress_at_end": 0.333333,
+      "stage_at_end": 1,
+      "to": 11.0
+     },
+     {
+      "agents": [
+       "1"
+      ],
+      "from": 55.0,
+      "progress_at_end": 0.660991,
+      "stage_at_end": 1,
+      "to": 65.0
+     },
+     {
+      "agents": [],
+      "from": 66.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 66.0
+     },
+     {
+      "agents": [],
+      "from": 94.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 94.0
+     },
+     {
+      "agents": [
+       "2"
+      ],
+      "from": 95.0,
+      "progress_at_end": 0.666667,
+      "stage_at_end": 2,
+      "to": 95.0
+     },
+     {
+      "agents": [
+       "2",
+       "4"
+      ],
+      "from": 97.0,
+      "progress_at_end": 0.944508,
+      "stage_at_end": 2,
+      "to": 100.0
+     },
+     {
+      "agents": [],
+      "from": 101.0,
+      "progress_at_end": 1.0,
+      "stage_at_end": 2,
+      "to": 101.0
+     }
+    ]
+   }
+  }
+ },
+ "paths": [
+  "L",
+  "L0",
+  "E0",
+  "E5",
+  "E05"
+ ],
+ "round": "27",
+ "scene": 1400031,
+ "section": "five-path per-target timelines (zero launches)",
+ "summary": {
+  "E0": {
+   "piloc-e1-target-0": {
+    "completed_at": null,
+    "deadline": 83.95666085385487,
+    "dropped_agents": [],
+    "first_send_accepted_agents": [
+     "0",
+     "1",
+     "2",
+     "4",
+     "5"
+    ],
+    "first_send_step": 19,
+    "first_work_step": 19.0,
+    "intervention_applied_at": [
+     19
+    ],
+    "last_work_with_agents": 92.0,
+    "measured_cost_bytes": 10578,
+    "on_time": false,
+    "superseded_agents": []
+   },
+   "piloc-e1-target-5": {
+    "completed_at": null,
+    "deadline": 96.52539215745361,
+    "dropped_agents": [
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    "first_send_accepted_agents": [],
+    "first_send_step": 34,
+    "first_work_step": 1.0,
+    "intervention_applied_at": null,
+    "last_work_with_agents": 100.0,
+    "measured_cost_bytes": 10578,
+    "on_time": false,
+    "superseded_agents": [
+     "2",
+     "3",
+     "4",
+     "5"
+    ]
+   }
+  },
+  "E05": {
+   "piloc-e1-target-0": {
+    "completed_at": 60.0,
+    "deadline": 83.95666085385487,
+    "dropped_agents": [],
+    "first_send_accepted_agents": [
+     "0",
+     "2",
+     "4",
+     "5"
+    ],
+    "first_send_step": 19,
+    "first_work_step": 19.0,
+    "intervention_applied_at": [
+     19
+    ],
+    "last_work_with_agents": 59.0,
+    "measured_cost_bytes": 10578,
+    "on_time": true,
+    "superseded_agents": []
+   },
+   "piloc-e1-target-5": {
+    "completed_at": 66.0,
+    "deadline": 96.52539215745361,
+    "dropped_agents": [],
+    "first_send_accepted_agents": [
+     "0",
+     "1",
+     "2",
+     "4",
+     "5"
+    ],
+    "first_send_step": 1,
+    "first_work_step": 1.0,
+    "intervention_applied_at": [
+     1
+    ],
+    "last_work_with_agents": 65.0,
+    "measured_cost_bytes": 10578,
+    "on_time": true,
+    "superseded_agents": []
+   }
+  },
+  "E5": {
+   "piloc-e1-target-0": {
+    "completed_at": 70.0,
+    "deadline": 83.95666085385487,
+    "dropped_agents": [
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    "first_send_accepted_agents": [],
+    "first_send_step": 32,
+    "first_work_step": 19.0,
+    "intervention_applied_at": null,
+    "last_work_with_agents": 69.0,
+    "measured_cost_bytes": 7764,
+    "on_time": true,
+    "superseded_agents": [
+     "2",
+     "3",
+     "4",
+     "5"
+    ]
+   },
+   "piloc-e1-target-5": {
+    "completed_at": 60.0,
+    "deadline": 96.52539215745361,
+    "dropped_agents": [],
+    "first_send_accepted_agents": [
+     "0",
+     "1",
+     "2",
+     "4",
+     "5"
+    ],
+    "first_send_step": 1,
+    "first_work_step": 1.0,
+    "intervention_applied_at": [
+     1
+    ],
+    "last_work_with_agents": 59.0,
+    "measured_cost_bytes": 7764,
+    "on_time": true,
+    "superseded_agents": []
+   }
+  },
+  "L": {
+   "piloc-e1-target-0": {
+    "completed_at": null,
+    "deadline": 83.95666085385487,
+    "dropped_agents": [
+     "0",
+     "2",
+     "4",
+     "5"
+    ],
+    "first_send_accepted_agents": [],
+    "first_send_step": 31,
+    "first_work_step": 19.0,
+    "intervention_applied_at": null,
+    "last_work_with_agents": 92.0,
+    "measured_cost_bytes": 10578,
+    "on_time": false,
+    "superseded_agents": [
+     "0",
+     "2",
+     "4",
+     "5"
+    ]
+   },
+   "piloc-e1-target-5": {
+    "completed_at": null,
+    "deadline": 96.52539215745361,
+    "dropped_agents": [
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    "first_send_accepted_agents": [],
+    "first_send_step": 34,
+    "first_work_step": 1.0,
+    "intervention_applied_at": null,
+    "last_work_with_agents": 100.0,
+    "measured_cost_bytes": 10578,
+    "on_time": false,
+    "superseded_agents": [
+     "2",
+     "3",
+     "4",
+     "5"
+    ]
+   }
+  },
+  "L0": {
+   "piloc-e1-target-0": {
+    "completed_at": null,
+    "deadline": 83.95666085385487,
+    "dropped_agents": [
+     "0",
+     "2",
+     "4",
+     "5"
+    ],
+    "first_send_accepted_agents": [],
+    "first_send_step": 31,
+    "first_work_step": 19.0,
+    "intervention_applied_at": [],
+    "last_work_with_agents": 92.0,
+    "measured_cost_bytes": 10578,
+    "on_time": false,
+    "superseded_agents": [
+     "0",
+     "2",
+     "4",
+     "5"
+    ]
+   },
+   "piloc-e1-target-5": {
+    "completed_at": null,
+    "deadline": 96.52539215745361,
+    "dropped_agents": [
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    "first_send_accepted_agents": [],
+    "first_send_step": 34,
+    "first_work_step": 1.0,
+    "intervention_applied_at": [],
+    "last_work_with_agents": 100.0,
+    "measured_cost_bytes": 10578,
+    "on_time": false,
+    "superseded_agents": [
+     "2",
+     "3",
+     "4",
+     "5"
+    ]
+   }
+  }
+ },
+ "targets": [
+  "piloc-e1-target-0",
+  "piloc-e1-target-5"
+ ]
+}

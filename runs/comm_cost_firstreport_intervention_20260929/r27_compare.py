@@ -148,11 +148,19 @@ def prefix_consistency(reference_row: dict[str, Any], candidate_row: dict[str, A
     reference_transcript = list(common.iter_jsonl(Path(reference_row["artefacts"]["transcript"])))
     candidate_transcript = list(common.iter_jsonl(Path(candidate_row["artefacts"]["transcript"])))
     transcript_divergence = None
+    identical_prefix = 0
     for index, (left, right) in enumerate(zip(reference_transcript, candidate_transcript)):
         if left != right:
-            transcript_divergence = {"record_index": index, "step": int(left.get("step", -1)),
-                                     "kind": left.get("kind"), "target": left.get("target")}
+            transcript_divergence = {
+                "record_index": index,
+                "identical_prefix_records": index,
+                "reference_record": {"kind": left.get("kind"), "step": int(left.get("step", -1)),
+                                     "target": left.get("target"), "agent": left.get("agent")},
+                "candidate_record": {"kind": right.get("kind"), "step": int(right.get("step", -1)),
+                                     "target": right.get("target"), "agent": right.get("agent")},
+            }
             break
+        identical_prefix += 1
     return {
         "first_divergent_tape_step": divergent_step,
         "first_override_step": first_override_step,
@@ -160,6 +168,7 @@ def prefix_consistency(reference_row: dict[str, Any], candidate_row: dict[str, A
             divergent_step is not None and first_override_step is not None
             and divergent_step >= first_override_step),
         "transcript_first_divergence": transcript_divergence,
+        "transcript_identical_prefix_records": identical_prefix,
         "note": "different emissions change the channel RNG consumption, so the post-override "
                 "paths are not the same per-message loss batch and outcome changes are not "
                 "attributable to one accepted message",

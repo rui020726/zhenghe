@@ -1,0 +1,102 @@
+{
+ "current_full_identity": {
+  "freeze_sha256": "ff82860334ad1cb52c52eee87eabe3c0faf491fbce1bd54bca96eb0f46e288ce",
+  "note": "the identity a fresh run would record now; NOT the launch-time identity, because r27_compare.py changed after the last launch"
+ },
+ "launch_time": {
+  "module_sha256_at_launch": {
+   "r27_common.py": "5671d0ff06c873978babb73a1031a550ca2b84231fa0b1a7d58e5481a1b80a36",
+   "r27_compare.py": "c3ca1aaf13a5c015389485f416a9c1a27abe3587399b1d4621da3093eea6a159",
+   "r27_freeze.py": "1139c8dc011868076afb557d0be1a5d585435dba3838bc9771676f4509483b44",
+   "r27_gate.py": "698afbcf08d8cf4994330877c13ea47f95a547072ee9ddb9f9337e84883ebacd",
+   "r27_intervention.py": "3029f86d313343eb3271403a6b0d356fe3e3860eb09bb54e87b757e37bd21b85",
+   "r27_preflight.py": "242df9b9cb75d8ab1f0a8d13abf00dea312dfe96b8b4fd8d972680797ca9ace0",
+   "r27_run.py": "c13bbf49a98a42676a4cb07663949b6c3b0dbac31f1263eb744c2188b84953b3",
+   "r27_target5_readback.py": "25c8834073c77dfc6dd75be52ddba323ea927e58c54a76ff6e20fc7bd3ee83fb"
+  },
+  "modules": [
+   "r27_common.py",
+   "r27_intervention.py",
+   "r27_run.py",
+   "r27_freeze.py",
+   "r27_preflight.py",
+   "r27_gate.py",
+   "r27_compare.py",
+   "r27_target5_readback.py"
+  ],
+  "recomputed_identity": "5b5ca69bb4e9db78840ff6ff405d06f569309286b252952d8b78930d7b1a1980",
+  "recorded_in_rows": [
+   "5b5ca69bb4e9db78840ff6ff405d06f569309286b252952d8b78930d7b1a1980"
+  ],
+  "reproduced_from_commit": "12a2a87",
+  "reproduction_rule": "sha256 of each module's LF blob at that commit (the working tree holds LF bytes here), hashed into the same identity payload",
+  "reproduction_verified": true,
+  "single_identity_across_all_five_cells": true
+ },
+ "post_launch_edits": [
+  {
+   "change": "the prefix-consistency record now names both sides of the first transcript divergence and the identical-prefix length",
+   "current_sha256": "49cf59a9162489b4220b4c896b87f25ee0facfc24c9f0a1a0810adcd3b15a299",
+   "launches_after": 0,
+   "module": "r27_compare.py",
+   "note": "analysis-only; the five rows are untouched and keep the launch-time identity"
+  }
+ ],
+ "post_processing_modules": {
+  "module_sha256": {
+   "r27_code_identity.py": "d35fc502fda4479f8b07bb316b955cbd127219483b1dba11345d57858eb77785",
+   "r27_manifest.py": "9d4f5b94bb06ffb2ca9c3ccdca4c3fc0a13e5db883957aaca3d92d468d146985",
+   "r27_preflight_report.py": "cc4edd78414bc804983a6e94a09c80083d7c69dfd3f34e107674b9f5159b38ed",
+   "r27_timelines.py": "5d4688ed6e497690c311ea5574c1fac61d9bc520fb047b8e1ac555593a6367a7",
+   "r27_verdict.py": "a730d751064ab51249bf05c28f9a31a3148fd87b173c0ff8687a593f7b60ee29"
+  },
+  "modules": [
+   "r27_preflight_report.py",
+   "r27_timelines.py",
+   "r27_manifest.py",
+   "r27_verdict.py",
+   "r27_code_identity.py"
+  ],
+  "note": "written after the last launch; they read artefacts and construct no driver"
+ },
+ "round": "27",
+ "run_id": "comm_cost_firstreport_intervention_20260929",
+ "shared_sections": {
+  "checkpoints": {
+   "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "runs/joint_eval_20260916/ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  },
+  "imported_round_modules": {
+   "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": "e64e0be4911ca3b3129247b3a443d045ad022f3bd9e6a1a22c4ebd1b3a4aff9b",
+   "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": "bab0a65fb3ffda6dc9673eaa4e836e20f184b4cc16836b5d5cf169bd2d326e91",
+   "runs/comm_budget_pilot_20260919/pilot_common.py": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8",
+   "runs/comm_budget_pilot_20260919/pilot_env.py": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b",
+   "runs/comm_budget_pilot_20260919/train_pilot.py": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81",
+   "runs/comm_cost_stage_b_20260927/sb_collector.py": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+   "runs/comm_cost_stage_b_20260927/sb_common.py": "66e674a03e0406299c8f9172d2865c5f83c3de58893bce7f87b71741ba3cf28f",
+   "runs/comm_cost_stage_b_20260927/sb_controller.py": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+   "runs/comm_cost_stage_b_20260927/sb_run.py": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+   "runs/comm_cost_v2_rerun_20260928/v2_common.py": "049722480ceaf787a6467399cb7745f40352e048f42e2516b0a5eca7aea15efe",
+   "runs/comm_cost_v2_rerun_20260928/v2_controller.py": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+   "runs/comm_cost_v2_rerun_20260928/v2_rules.py": "a7ce36de2d465cadaba90bd70b36539b5e865a73be8c4e075b9faf5a86c53a57",
+   "runs/comm_cost_v2_rerun_20260928/v2_trainer.py": "64452036ad2470596f0260b28f02a8358d1bca1b4c16c2320f6cc58f1ee7df51",
+   "runs/comm_tight_budget_20260919/onpolicy.py": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+   "runs/comm_tight_budget_20260919/train_onpolicy.py": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f",
+   "runs/search_trace_and_policy_20260925/sp_common.py": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc"
+  },
+  "learned_checkpoint": {
+   "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep128.pt": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923"
+  },
+  "production": {
+   "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+   "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+   "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+   "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+   "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+   "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+   "integrated_sar/lifecycle_metrics.py": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+   "integrated_sar/run_signature.py": "fbe4f0af4e1d7fa1a8a14fbed102bfee1b78aed55413e8a80f5c5620ddcbaeb1",
+   "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+  }
+ }
+}

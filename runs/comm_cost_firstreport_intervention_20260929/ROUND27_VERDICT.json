@@ -1,0 +1,406 @@
+{
+ "comparisons": {
+  "E0-L": {
+   "candidate_refusals": [],
+   "cost_delta_bytes": 0,
+   "emissions_delta": 0,
+   "gained": [],
+   "lost": [],
+   "on_time_delta": 0,
+   "other_targets_affected": [],
+   "per_named_target_task_change": {
+    "piloc-e1-target-0": "lost_to_lost",
+    "piloc-e1-target-5": "lost_to_lost"
+   },
+   "prefix_consistent_until_override": true
+  },
+  "E05-L": {
+   "candidate_refusals": [],
+   "cost_delta_bytes": 0,
+   "emissions_delta": 0,
+   "gained": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "lost": [],
+   "on_time_delta": 2,
+   "other_targets_affected": [],
+   "per_named_target_task_change": {
+    "piloc-e1-target-0": "lost_to_on_time",
+    "piloc-e1-target-5": "lost_to_on_time"
+   },
+   "prefix_consistent_until_override": true
+  },
+  "E5-L": {
+   "candidate_refusals": [],
+   "cost_delta_bytes": -2814,
+   "emissions_delta": -1,
+   "gained": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "lost": [],
+   "on_time_delta": 2,
+   "other_targets_affected": [],
+   "per_named_target_task_change": {
+    "piloc-e1-target-0": "lost_to_on_time",
+    "piloc-e1-target-5": "lost_to_on_time"
+   },
+   "prefix_consistent_until_override": true
+  }
+ },
+ "experiment_nature": "post-hoc selected failing scene; a privileged diagnostic intervention, not a generalisation evaluation, rule search, learning-benefit proof or deployment strategy",
+ "five_path_table": [
+  {
+   "emissions": 4,
+   "expired": 2,
+   "expired_goal_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "on_time": 4,
+   "on_time_goal_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4"
+   ],
+   "override_targets": [],
+   "path": "L",
+   "role": "original learned path, no interceptor installed",
+   "spent_bytes": 10578,
+   "target_outcomes": {
+    "piloc-e1-target-0": {
+     "completed_at": null,
+     "deadline": 83.95666085385487,
+     "discovered_at": 19.0,
+     "expired": true,
+     "on_time": false
+    },
+    "piloc-e1-target-5": {
+     "completed_at": null,
+     "deadline": 96.52539215745361,
+     "discovered_at": 1.0,
+     "expired": true,
+     "on_time": false
+    }
+   }
+  },
+  {
+   "emissions": 4,
+   "expired": 2,
+   "expired_goal_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "on_time": 4,
+   "on_time_goal_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4"
+   ],
+   "override_targets": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "path": "L0",
+   "role": "interceptor installed, every override disabled",
+   "spent_bytes": 10578,
+   "target_outcomes": {
+    "piloc-e1-target-0": {
+     "completed_at": null,
+     "deadline": 83.95666085385487,
+     "discovered_at": 19.0,
+     "expired": true,
+     "on_time": false
+    },
+    "piloc-e1-target-5": {
+     "completed_at": null,
+     "deadline": 96.52539215745361,
+     "discovered_at": 1.0,
+     "expired": true,
+     "on_time": false
+    }
+   }
+  },
+  {
+   "emissions": 4,
+   "expired": 2,
+   "expired_goal_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "on_time": 4,
+   "on_time_goal_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4"
+   ],
+   "override_targets": [
+    "piloc-e1-target-0"
+   ],
+   "path": "E0",
+   "role": "advance target-0 first report only",
+   "spent_bytes": 10578,
+   "target_outcomes": {
+    "piloc-e1-target-0": {
+     "completed_at": null,
+     "deadline": 83.95666085385487,
+     "discovered_at": 19.0,
+     "expired": true,
+     "on_time": false
+    },
+    "piloc-e1-target-5": {
+     "completed_at": null,
+     "deadline": 96.52539215745361,
+     "discovered_at": 1.0,
+     "expired": true,
+     "on_time": false
+    }
+   }
+  },
+  {
+   "emissions": 3,
+   "expired": 0,
+   "expired_goal_ids": [],
+   "on_time": 6,
+   "on_time_goal_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "override_targets": [
+    "piloc-e1-target-5"
+   ],
+   "path": "E5",
+   "role": "advance target-5 first report only",
+   "spent_bytes": 7764,
+   "target_outcomes": {
+    "piloc-e1-target-0": {
+     "completed_at": 70.0,
+     "deadline": 83.95666085385487,
+     "discovered_at": 19.0,
+     "expired": false,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "completed_at": 60.0,
+     "deadline": 96.52539215745361,
+     "discovered_at": 1.0,
+     "expired": false,
+     "on_time": true
+    }
+   }
+  },
+  {
+   "emissions": 4,
+   "expired": 0,
+   "expired_goal_ids": [],
+   "on_time": 6,
+   "on_time_goal_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "override_targets": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "path": "E05",
+   "role": "advance both targets' first reports",
+   "spent_bytes": 10578,
+   "target_outcomes": {
+    "piloc-e1-target-0": {
+     "completed_at": 60.0,
+     "deadline": 83.95666085385487,
+     "discovered_at": 19.0,
+     "expired": false,
+     "on_time": true
+    },
+    "piloc-e1-target-5": {
+     "completed_at": 66.0,
+     "deadline": 96.52539215745361,
+     "discovered_at": 1.0,
+     "expired": false,
+     "on_time": true
+    }
+   }
+  }
+ ],
+ "gate": {
+  "checks": {
+   "L0_interceptor_disabled_and_idle": true,
+   "L_has_no_interceptor": true,
+   "L_vs_L0_behaviour_fields": true,
+   "L_vs_L0_tape_lines": true,
+   "L_vs_ROUND25_common_fields": true,
+   "L_vs_ROUND25_tape_lines": true,
+   "frozen_weights_unchanged": true,
+   "optimizer_steps_zero": true
+  },
+  "passed": true,
+  "verdict": "L and L0 are the same episode and L matches the ROUND25 cell; the intervention paths may run"
+ },
+ "interventions": {
+  "E0": {
+   "piloc-e1-target-0": {
+    "accepted_agents": [
+     "0",
+     "1",
+     "2",
+     "4",
+     "5"
+    ],
+    "dropped_or_other_agents": [],
+    "opportunities_recorded": 1,
+    "override_applied": true,
+    "override_steps": [
+     19
+    ],
+    "real_sends": [
+     [
+      19,
+      5,
+      1
+     ]
+    ],
+    "refusals": [],
+    "superseded_agents": []
+   },
+   "piloc-e1-target-5": {
+    "note": "not a named override target of this path; its own messages are in PER_TARGET_TIMELINES.json",
+    "override_applied": false
+   }
+  },
+  "E05": {
+   "piloc-e1-target-0": {
+    "accepted_agents": [
+     "0",
+     "2",
+     "4",
+     "5"
+    ],
+    "dropped_or_other_agents": [],
+    "opportunities_recorded": 1,
+    "override_applied": true,
+    "override_steps": [
+     19
+    ],
+    "real_sends": [
+     [
+      19,
+      4,
+      2
+     ]
+    ],
+    "refusals": [],
+    "superseded_agents": []
+   },
+   "piloc-e1-target-5": {
+    "accepted_agents": [
+     "0",
+     "1",
+     "2",
+     "4",
+     "5"
+    ],
+    "dropped_or_other_agents": [],
+    "opportunities_recorded": 1,
+    "override_applied": true,
+    "override_steps": [
+     1
+    ],
+    "real_sends": [
+     [
+      1,
+      5,
+      1
+     ]
+    ],
+    "refusals": [],
+    "superseded_agents": []
+   }
+  },
+  "E5": {
+   "piloc-e1-target-0": {
+    "note": "not a named override target of this path; its own messages are in PER_TARGET_TIMELINES.json",
+    "override_applied": false
+   },
+   "piloc-e1-target-5": {
+    "accepted_agents": [
+     "0",
+     "1",
+     "2",
+     "4",
+     "5"
+    ],
+    "dropped_or_other_agents": [],
+    "opportunities_recorded": 1,
+    "override_applied": true,
+    "override_steps": [
+     1
+    ],
+    "real_sends": [
+     [
+      1,
+      5,
+      1
+     ]
+    ],
+    "refusals": [],
+    "superseded_agents": []
+   }
+  }
+ },
+ "launches": {
+  "failures": 0,
+  "hard_cap": 8,
+  "normal": 5,
+  "optimizer_steps": 0,
+  "reserve_used": 0,
+  "retries": 0,
+  "threshold_adjustments": 0,
+  "training": 0
+ },
+ "mechanism": {
+  "decisive_intervention": "E5",
+  "e05": {
+   "action_difference": "both overrides fired (steps 1 and 19); 5 of 6 receivers accepted each",
+   "interaction": "the combination did not show a task effect beyond E5's; the two targets' work chains interleaved differently but the deadline outcomes coincide",
+   "task_effect": "both named targets on time (60.0 and 66.0), whole scene 6/6"
+  },
+  "e0_alone": {
+   "action_difference": "the step-19 HOLD became a real SEND, 5 of 6 receivers accepted it",
+   "mechanism": "an accepted first report for target-0 did not move the allocation chain: the first assignment of target-0 still waited for step 31 and the work pattern was already the same segments as L",
+   "task_effect": "no change: both named targets still expired, on-time count unchanged, cost unchanged"
+  },
+  "e5": {
+   "action_difference": "the step-1 HOLD became a real SEND, 5 of 6 receivers accepted it",
+   "mechanism": "the acceptance at step 1 seeded the belief of five robots; the assignment chain for target-5 started at step 1 and the work segments ran 2-21 with five then two robots; target-0's chain restarted at steps 31-60 with five robots and finished at 70.0",
+   "task_effect": "target-5 completed at 60.0 (deadline 96.5) and target-0 completed at 70.0 (deadline 84.0); whole scene 6/6 on time"
+  }
+ },
+ "publication": {
+  "network_retries_this_session": 0,
+  "publication_status": "PENDING_NETWORK",
+  "remote_verification": "NOT_PERFORMED"
+ },
+ "round": "27",
+ "scene": 1400031,
+ "section": "verdict: fixed-scene first-report advance intervention",
+ "statement_rules": [
+  "in this one post-hoc selected scene and this random implementation, advancing the first report of target-5 changed the failing outcome; that is all this run supports",
+  "it is not established that early sending is generally effective, that all tasks should be announced early, or that the actor needs an ACK channel",
+  "one scene, one RNG implementation: no significance, no bootstrap, no non-inferiority claim, no new seeds, channel repeats or rule searches",
+  "different emissions change the channel RNG consumption, so the post-override paths are not the same per-message loss batch; outcome changes are not attributable to the single accepted message",
+  "E0 is a real intervention with an accepted message that changed no outcome: it is evidence that an accepted first report is not sufficient here, not evidence that early sending is ineffective"
+ ]
+}

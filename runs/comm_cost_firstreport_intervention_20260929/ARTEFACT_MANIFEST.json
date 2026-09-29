@@ -1,0 +1,243 @@
+{
+ "git_policy": "rows, logs, tapes and claims stay out of version control; this manifest is the external hash list that lets a reviewer find and verify the originals",
+ "launch_ledger": {
+  "atomic_claim_total": 5,
+  "by_kind": {
+   "normal": 5
+  },
+  "by_label": {
+   "E05_s1400031": 1,
+   "E0_s1400031": 1,
+   "E5_s1400031": 1,
+   "L0_s1400031": 1,
+   "L_s1400031": 1
+  },
+  "hard_cap": 8,
+  "ledgers_agree": true,
+  "normal_launches": 5,
+  "per_process_ledger_total": 5,
+  "reserve_launches": 3,
+  "used": 5
+ },
+ "ledger_entries": [
+  {
+   "attempt": 1,
+   "kind": "normal",
+   "label": "L_s1400031",
+   "n": 1,
+   "round_total_before_this": 0
+  },
+  {
+   "attempt": 1,
+   "kind": "normal",
+   "label": "E05_s1400031",
+   "n": 1,
+   "round_total_before_this": 4
+  },
+  {
+   "attempt": 1,
+   "kind": "normal",
+   "label": "E0_s1400031",
+   "n": 1,
+   "round_total_before_this": 2
+  },
+  {
+   "attempt": 1,
+   "kind": "normal",
+   "label": "E5_s1400031",
+   "n": 1,
+   "round_total_before_this": 3
+  },
+  {
+   "attempt": 1,
+   "kind": "normal",
+   "label": "L0_s1400031",
+   "n": 1,
+   "round_total_before_this": 1
+  }
+ ],
+ "ledger_results": [
+  {
+   "attempt": 1,
+   "detail": "L: on_time=4 bytes=10578",
+   "label": "L_s1400031",
+   "ok": true
+  },
+  {
+   "attempt": 1,
+   "detail": "E05: on_time=6 bytes=10578",
+   "label": "E05_s1400031",
+   "ok": true
+  },
+  {
+   "attempt": 1,
+   "detail": "E0: on_time=4 bytes=10578",
+   "label": "E0_s1400031",
+   "ok": true
+  },
+  {
+   "attempt": 1,
+   "detail": "E5: on_time=6 bytes=7764",
+   "label": "E5_s1400031",
+   "ok": true
+  },
+  {
+   "attempt": 1,
+   "detail": "L0: on_time=4 bytes=10578",
+   "label": "L0_s1400031",
+   "ok": true
+  }
+ ],
+ "read_only_sources": [
+  "runs/comm_cost_greedy_replication_20260928 (ROUND25 execution artefacts, never written)"
+ ],
+ "round": "27",
+ "run_id": "comm_cost_firstreport_intervention_20260929",
+ "sections": {
+  "CLAIMS": {
+   "runs/comm_cost_firstreport_intervention_20260929/ledger_claims/E05_a1.json": {
+    "bytes": 130,
+    "sha256": "747216e184970ff47d6182e8f2b8a979487d631db8c4aca0ec5bafeb1d3b41f7"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/ledger_claims/E0_a1.json": {
+    "bytes": 128,
+    "sha256": "6a0a4266e26083da59285f4c69844476a304b4b7a59fd42155e53190940b0a9f"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/ledger_claims/E5_a1.json": {
+    "bytes": 128,
+    "sha256": "2a9416a17cd86355b09198b5ce92ec2840e7aa0882a5bdf4d56cee79321a0eb6"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/ledger_claims/L0_a1.json": {
+    "bytes": 127,
+    "sha256": "595a723a2a1d6752c4a46d562b081c55f1cb4537d257ce8968ab094631edf164"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/ledger_claims/L_a1.json": {
+    "bytes": 126,
+    "sha256": "9d4b64cc2a57131ce22f89d28be8b5a8e250099fdced3ce4895fe2e135861164"
+   }
+  },
+  "LOGS": {
+   "runs/comm_cost_firstreport_intervention_20260929/logs/START_LEDGER_p20188.json": {
+    "bytes": 292,
+    "sha256": "85db11fef38901c8228743cf6bffce4de045cf62cce6021dffe64df2fa0de1b0"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/START_LEDGER_p37792.json": {
+    "bytes": 298,
+    "sha256": "135c00d2775bd8b2b1c53f8b17951626b74ec98a7ef7c241fb724ce168933df2"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/START_LEDGER_p44992.json": {
+    "bytes": 295,
+    "sha256": "42ef0e09e307beb1374db17c9de2bcee571a3f30d144583565d01d11ebb6d62a"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/START_LEDGER_p45532.json": {
+    "bytes": 294,
+    "sha256": "28d9bef341539276a0dface1b93c26a0d48a891086e0853fea3c79a3b1ce8a79"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/START_LEDGER_p6256.json": {
+    "bytes": 295,
+    "sha256": "9ed9e2c742f30abc6d23124aae5cc01f468070fbc9e64e032908c47c48c09385"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_E05_s1400031_a1_ct.jsonl": {
+    "bytes": 6039,
+    "sha256": "4468d18cda9ae5bb8ed83ebacd3e0133627d633bd7dd6dc03299f811465a1f6e"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_E05_s1400031_a1_rp.jsonl": {
+    "bytes": 544276,
+    "sha256": "e92cafaf34c336cbdc0d03ba9d80dff784084aec7f155f18ee85ffd27b4b7cab"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_E05_s1400031_a1_tape.jsonl": {
+    "bytes": 221944,
+    "sha256": "c331bce55035ca3be137ecd84515a4ec638827863fcddff3472c5b0adad81c94"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_E0_s1400031_a1_ct.jsonl": {
+    "bytes": 6115,
+    "sha256": "2fbe7aa12991ed76bc9daa32192375b75891f5c44f193c57fd82bf04bf1c7cd3"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_E0_s1400031_a1_rp.jsonl": {
+    "bytes": 535311,
+    "sha256": "02526478b8ca8096252e4c5200b595631523df40643adbb7109af82fbaca4ee0"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_E0_s1400031_a1_tape.jsonl": {
+    "bytes": 315426,
+    "sha256": "6910859bb2efbe704e58749ee130ca89194a541a667c0d5b265d6cb9c12fa5cf"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_E5_s1400031_a1_ct.jsonl": {
+    "bytes": 4757,
+    "sha256": "96c7a4f5a3aae37cc1efc90de2ed1aaef1d1086ace91c3b38d067b63ca09baf8"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_E5_s1400031_a1_rp.jsonl": {
+    "bytes": 541370,
+    "sha256": "196759838c9f7ee7a4cbffb930ff7553031a090cd4644687b8c5795ac1ae7248"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_E5_s1400031_a1_tape.jsonl": {
+    "bytes": 187504,
+    "sha256": "9e082fb913d76afcd4bba8c20ef31a2318a9ae3118dd4cf34a8f648246ea95c4"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_L0_s1400031_a1_ct.jsonl": {
+    "bytes": 6176,
+    "sha256": "0ffc2eff3615d9c72ae3670b71d8aa5e3ce8c5ae94bfe04622d610bd6167a57b"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_L0_s1400031_a1_rp.jsonl": {
+    "bytes": 535308,
+    "sha256": "1de6d5bd431f07e599941de3999c06dd9caeff2abc780f22f87e7cabefb0a36a"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_L0_s1400031_a1_tape.jsonl": {
+    "bytes": 313884,
+    "sha256": "30ed9c35405878c1febe85bad58c1f28e6d700f0b8616656cb058576a442d681"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_L_s1400031_a1_ct.jsonl": {
+    "bytes": 6176,
+    "sha256": "0ffc2eff3615d9c72ae3670b71d8aa5e3ce8c5ae94bfe04622d610bd6167a57b"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_L_s1400031_a1_rp.jsonl": {
+    "bytes": 535305,
+    "sha256": "aa9e52bc0d9a9a636fdb01c5e9174f5e6cd9a0c885fc1f2a01d58afb4f7f907d"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/logs/r27_L_s1400031_a1_tape.jsonl": {
+    "bytes": 313884,
+    "sha256": "30ed9c35405878c1febe85bad58c1f28e6d700f0b8616656cb058576a442d681"
+   }
+  },
+  "REJECTED": {},
+  "ROWS": {
+   "runs/comm_cost_firstreport_intervention_20260929/rows/r27_E05_s1400031_a1.json": {
+    "bytes": 347728,
+    "sha256": "866eaaea33032a09d0b5dbfa49ff9bfe288cf57ecbda3290b2c125386233d144"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/rows/r27_E0_s1400031_a1.json": {
+    "bytes": 345957,
+    "sha256": "2551f838481da048312ab038af93e26875097fb34679f78c4c20b99d0a4ce602"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/rows/r27_E5_s1400031_a1.json": {
+    "bytes": 345910,
+    "sha256": "5e5e2f44a02d4f027fbef8c7c7bf01653ca266641cd534579e4dd490296c7533"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/rows/r27_L0_s1400031_a1.json": {
+    "bytes": 346556,
+    "sha256": "402be63d8f6051dc7b529686e167c81546b66adab0cfa3d433275a0002f6047a"
+   },
+   "runs/comm_cost_firstreport_intervention_20260929/rows/r27_L_s1400031_a1.json": {
+    "bytes": 342628,
+    "sha256": "f1f8d66725c5191764ef3ded600ab01c346321a7792a7e74efe858ece35bf43d"
+   }
+  }
+ },
+ "totals": {
+  "CLAIMS": {
+   "bytes": 639,
+   "files": 5
+  },
+  "LOGS": {
+   "bytes": 4074949,
+   "files": 20
+  },
+  "REJECTED": {
+   "bytes": 0,
+   "files": 0
+  },
+  "ROWS": {
+   "bytes": 1728779,
+   "files": 5
+  }
+ }
+}
