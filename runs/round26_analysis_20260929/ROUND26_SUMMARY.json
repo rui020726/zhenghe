@@ -1,0 +1,132 @@
+{
+  "round": "26",
+  "run_id": "round26_analysis_20260929",
+  "branch": "exp/round26-round25-recheck",
+  "branch_head": "fdf97d1e7a0fd90f6fe9e0f332077075f13148cf",
+  "execution_basis": "user's in-session instruction (no external spec created; no network wait)",
+  "launches": {"environment_starts": 0, "training_episodes": 0, "optimizer_steps": 0},
+  "inputs_reused": {
+    "reuse_verification": "runs/comm_cost_greedy_replication_20260928/REUSE_VERIFICATION.json "
+                          "(re-run passed: ROUND24 672 rows, 9+2 weight hashes, 720MB input digests "
+                          "unchanged)",
+    "planning_end_caveat": "the planning end did not independently obtain the originals"
+  },
+  "statistical_recheck": {
+    "artefact": "STATISTICAL_RECHECK.json",
+    "checks_passed": "22/22",
+    "hand_counterexample": {
+      "values": [0, 10], "indices": [[0, 0], [0, 1], [1, 1]],
+      "index_gather_means": [0, 5, 10], "count_matrix_normalised_means": [0, 5, 10],
+      "defective_matrix_product": [0, 10, 20]
+    },
+    "shared_matrix_sha256_matches_committed": true,
+    "arm_totals_from_raw_integers": {
+      "learned_s33_greedy": {"on_time": 374, "spent_bytes": 177900, "emissions": 71},
+      "immediate": {"on_time": 376, "spent_bytes": 939060, "emissions": 376},
+      "late_discovery_gate_147": {"on_time": 370, "spent_bytes": 222462, "emissions": 88}
+    },
+    "conclusion_unchanged": true,
+    "verdict_fields_retained": {
+      "primary_cost_evidence": "lower_cost_not_established",
+      "observed_task_count_status": "task_count_tradeoff_observed",
+      "training_seed_stability": "not_established",
+      "constraint_guarantee": "not_established"
+    },
+    "primary_comparison": {"dC_mean": -696.28, "dC_ci": [-1849.22, 502.17],
+                           "dY_counts": {"improved": 4, "tied": 60, "degraded": 0}},
+    "immediate_comparison": {"dY_mean": -0.03125, "dY_ci": [-0.09375, 0.0],
+                             "dY_counts": {"improved": 0, "tied": 63, "degraded": 1},
+                             "dC_mean": -11893.12, "dC_ci": [-12566.62, -11191.58]}
+  },
+  "scene_1400031_diagnosis": {
+    "artefact": "SCENE_1400031_DIAGNOSIS.json",
+    "learned_vs_late_timelines_identical_for_both_lost_targets": true,
+    "learned_first_reports": {
+      "piloc-e1-target-0": {"discovered": 19, "deadline": 83.957, "sent_step": 31,
+                            "held_ticks": 12, "p_at_discovery": 0.3954, "p_at_send": 0.5016,
+                            "deliveries": "4/4 delivery_superseded"},
+      "piloc-e1-target-5": {"discovered": 1, "deadline": 96.525, "sent_step": 34,
+                            "held_ticks": 33, "p_at_discovery": 0.3482, "p_at_send": 0.5024,
+                            "deliveries": "4/4 delivery_superseded"}
+    },
+    "immediate_first_reports": {
+      "piloc-e1-target-0": {"sent_step": 19, "deliveries": "3 accepted", "completed": 65},
+      "piloc-e1-target-5": {"sent_step": 1, "deliveries": "4 accepted", "completed": 59}
+    },
+    "proximate_failure_mechanism": "allocation-side idle gaps (target-5: 44-tick gap 11->55 and "
+                                   "29-tick gap 66->95 under learned/late; immediate worked "
+                                   "2->28 then 40->59)",
+    "classification": "A (legal payable first reports actively held) + B (late sends superseded) + "
+                      "C (allocation/execution is the proximate cause); E for the counterfactual "
+                      "(no log supports that an early send would have saved either target); "
+                      "D noted because the same scene seed does not give the same packet losses",
+    "confirmed_facts": [
+      "learned and late have byte-identical lifecycle chains for both lost targets in this scene",
+      "all 8 deliveries of the learned arm's two first reports were delivery_superseded",
+      "both first reports were legal and payable throughout the hold (actionable every tick, "
+      "~2.7kB charge, 0 refusals, budget 29300B)",
+      "sends happened exactly when p(SEND) crossed 0.5 (frozen greedy tie-break behaviour)"
+    ]
+  },
+  "improved_scenes": {
+    "artefacts": ["IMPROVED_SCENES.json", "IMPROVED_SCENES_SUMMARY.json"],
+    "pattern": "in all four scenes the gained target was discovered before tick 147 (late's gate is "
+               "silent), the learned first report was accepted (3-6 agents, 0 superseded), and the "
+               "first assignment happened at the same tick as the accepted delivery",
+    "scenes": {
+      "1400010": {"target": "piloc-e1-target-2", "discovered": 143, "learned_send": 156,
+                  "held_ticks": 13, "learned_completed": 184, "late": "never assigned"},
+      "1400014": {"target": "piloc-e1-target-5", "discovered": 97, "learned_send": 109,
+                  "held_ticks": 12, "learned_completed": 120, "late": "never assigned"},
+      "1400017": {"target": "piloc-e1-target-1", "discovered": 132, "learned_send": 144,
+                  "held_ticks": 12, "learned_completed": 155, "late": "never assigned"},
+      "1400020": {"target": "piloc-e1-target-4", "discovered": 100, "learned_send": 113,
+                  "held_ticks": 13, "learned_completed": 130, "late": "assigned at 520"}
+    },
+    "descriptive_delivery_stats_all_64_scenes": {
+      "learned_s33_greedy": {"sends": 71, "accepted": 76, "superseded": 221},
+      "immediate": {"sends": 376, "accepted": 1538, "superseded": 0},
+      "late_discovery_gate_147": {"sends": 88, "accepted": 364, "superseded": 0}
+    }
+  },
+  "mechanism_hypotheses": [
+    "H1: the 1400031 failures are associated with having no accepted first report at the discovery "
+    "tick (immediate had it; learned/late did not), transmitted through allocator idle gaps",
+    "H2: the four improvements are the same mechanism's positive side (first report accepted before "
+    "the free channel gets there)",
+    "H3: allocation/execution is the proximate bottleneck; message content never was an obstacle"
+  ],
+  "missing_evidence": [
+    "receiver/coordinator belief state over time (why agents were dropped at t=11 and re-engaged at "
+    "t=55) is not in the archived logs",
+    "per-target free-channel delivery timestamps are not logged separately; superseded is the only "
+    "observable",
+    "no log supports the counterfactual that an early send would have saved the two lost targets"
+  ],
+  "actor_information_boundary": {
+    "visible": "sender-side age, since-last-emission, sent_count, change flags, progress/revision "
+               "deltas, remaining time and urgency indicator, backlog, budget/capacity fractions, "
+               "subscribers, normalised step",
+    "not_visible": "whether receivers already know (ACK structurally off), other robots' beliefs; "
+                   "the variable that decides whether a first report takes effect is exactly the "
+                   "receiver state, so the borderline p(SEND)~0.5 behaviour is an urgency prior, "
+                   "not a receiver-need estimate"
+  },
+  "recommended_next_step": {
+    "type": "minimal closed-loop intervention (proposal only; not executed this round)",
+    "intervention": "a fixed rule arm 'first_report_at_discovery' (first report at the discovery "
+                    "tick, no refreshes; uses only sender-legal ready_step/pending_event)",
+    "controls": "always_hold on the same 64 unused scenes; late_discovery_gate_147 and immediate "
+                "archives as references",
+    "estimated_launches": "128 (2 arms x 64 scenes) plus a separately reported technical reserve",
+    "supports_if_positive": "the marginal causal effect of first-report timing on on-time tasks on "
+                            "the same scenario distribution, with accepted/superseded as the "
+                            "process indicator",
+    "does_not_support": "any learning claim, training-seed stability, non-inferiority, or a change "
+                        "of production defaults",
+    "requires_user_approval": true
+  },
+  "publication": {"remote_verification": "NOT_PERFORMED",
+                  "publication_status": "PENDING_NETWORK",
+                  "network_attempts_this_session": 0}
+}

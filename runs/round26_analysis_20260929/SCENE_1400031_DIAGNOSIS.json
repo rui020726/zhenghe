@@ -1,0 +1,2855 @@
+{
+ "data_sources": {
+  "lifecycle": "runs/comm_cost_greedy_replication_20260928/logs/r25_<arm>_s1400031_a1_rp.jsonl",
+  "rows": "runs/comm_cost_greedy_replication_20260928/rows/r25_<arm>_s1400031_a1.json",
+  "tape": "runs/comm_cost_greedy_replication_20260928/logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+  "transcript": "runs/comm_cost_greedy_replication_20260928/logs/r25_<arm>_s1400031_a1_ct.jsonl"
+ },
+ "episode_summaries": [
+  {
+   "arm": "learned_s33_greedy",
+   "emissions": 4,
+   "expired_goal_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "on_time": 4,
+   "on_time_goal_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4"
+   ],
+   "relay_counters": {
+    "budget_refused_sends": 0,
+    "capacity_refused_sends": 0,
+    "deliveries_applied": 0,
+    "emissions": 4,
+    "packets_delivered": 17,
+    "packets_lost": 7
+   },
+   "spent_bytes": 10578
+  },
+  {
+   "arm": "immediate",
+   "emissions": 6,
+   "expired_goal_ids": [],
+   "on_time": 6,
+   "on_time_goal_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "relay_counters": {
+    "budget_refused_sends": 0,
+    "capacity_refused_sends": 0,
+    "deliveries_applied": 23,
+    "emissions": 6,
+    "packets_delivered": 23,
+    "packets_lost": 13
+   },
+   "spent_bytes": 15684
+  },
+  {
+   "arm": "late_discovery_gate_147",
+   "emissions": 0,
+   "expired_goal_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "on_time": 4,
+   "on_time_goal_ids": [
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4"
+   ],
+   "relay_counters": {
+    "budget_refused_sends": 0,
+    "capacity_refused_sends": 0,
+    "deliveries_applied": 0,
+    "emissions": 0,
+    "packets_delivered": 0,
+    "packets_lost": 0
+   },
+   "spent_bytes": 0
+  }
+ ],
+ "round": "26",
+ "scene": 1400031,
+ "section": "scene 1400031 diagnosis: the two lost targets across all three arms",
+ "targets": {
+  "piloc-e1-target-0": {
+   "arms": {
+    "immediate": {
+     "messages": {
+      "deliveries": [
+       {
+        "accepted": true,
+        "agent": "0",
+        "delivered_at_step": 19,
+        "reason": "accepted",
+        "revision": 1,
+        "sent_step": 19
+       },
+       {
+        "accepted": true,
+        "agent": "2",
+        "delivered_at_step": 19,
+        "reason": "accepted",
+        "revision": 1,
+        "sent_step": 19
+       },
+       {
+        "accepted": true,
+        "agent": "5",
+        "delivered_at_step": 19,
+        "reason": "accepted",
+        "revision": 1,
+        "sent_step": 19
+       }
+      ],
+      "sends": [
+       {
+        "charge_bytes": 2682,
+        "first": true,
+        "packets": 3,
+        "packets_lost": 3,
+        "payload_bytes": 447,
+        "ready_step": 19,
+        "revision": 1,
+        "send_reason": "policy",
+        "sender_view_progress": 0.0,
+        "source": "logs/r25_immediate_s1400031_a1_ct.jsonl",
+        "step": 19,
+        "subscribers": 6
+       }
+      ]
+     },
+     "timeline": {
+      "assignment_events": [
+       {
+        "agents": [
+         "2"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": "piloc-e1-target-3",
+        "t": 29.0
+       },
+       {
+        "agents": [
+         "5"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 31.0
+       },
+       {
+        "agents": [
+         "3"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 37.0
+       },
+       {
+        "agents": [
+         "3"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 38.0
+       },
+       {
+        "agents": [
+         "1"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 39.0
+       },
+       {
+        "agents": [
+         "2"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 39.0
+       }
+      ],
+      "completed_at": 65.0,
+      "deadline": 83.957,
+      "discovered_at": 19.0,
+      "evaluation_window": 1000,
+      "expired_at": null,
+      "first_assignment_at": 29.0,
+      "idle_gaps_between_work_spans": [],
+      "on_time": true,
+      "outcome": "completed",
+      "sources": {
+       "lifecycle": "logs/r25_immediate_s1400031_a1_rp.jsonl",
+       "transcript": "logs/r25_immediate_s1400031_a1_ct.jsonl"
+      },
+      "target": "piloc-e1-target-0",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "2"
+        ],
+        "from": 30.0,
+        "to": 33.0
+       },
+       {
+        "agents": [
+         "2",
+         "5"
+        ],
+        "from": 33.0,
+        "to": 39.0
+       },
+       {
+        "agents": [
+         "2",
+         "3",
+         "5"
+        ],
+        "from": 39.0,
+        "to": 40.0
+       },
+       {
+        "agents": [
+         "1",
+         "2",
+         "3",
+         "5"
+        ],
+        "from": 40.0,
+        "to": 61.0
+       },
+       {
+        "agents": [
+         "2",
+         "3",
+         "5"
+        ],
+        "from": 61.0,
+        "to": 65.0
+       }
+      ]
+     }
+    },
+    "late_discovery_gate_147": {
+     "messages": {
+      "deliveries": [],
+      "sends": []
+     },
+     "timeline": {
+      "assignment_events": [
+       {
+        "agents": [
+         "3"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 31.0
+       },
+       {
+        "agents": [
+         "2"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 54.0
+       },
+       {
+        "agents": [
+         "5"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 54.0
+       },
+       {
+        "agents": [
+         "1"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 66.0
+       }
+      ],
+      "completed_at": null,
+      "deadline": 83.957,
+      "discovered_at": 19.0,
+      "evaluation_window": 1000,
+      "expired_at": 93.0,
+      "first_assignment_at": 31.0,
+      "idle_gaps_between_work_spans": [],
+      "on_time": false,
+      "outcome": "expired",
+      "sources": {
+       "lifecycle": "logs/r25_late_discovery_gate_147_s1400031_a1_rp.jsonl",
+       "transcript": "logs/r25_late_discovery_gate_147_s1400031_a1_ct.jsonl"
+      },
+      "target": "piloc-e1-target-0",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "3"
+        ],
+        "from": 33.0,
+        "to": 55.0
+       },
+       {
+        "agents": [
+         "2",
+         "3",
+         "5"
+        ],
+        "from": 55.0,
+        "to": 68.0
+       },
+       {
+        "agents": [
+         "1",
+         "2",
+         "3",
+         "5"
+        ],
+        "from": 68.0,
+        "to": 89.0
+       },
+       {
+        "agents": [
+         "2",
+         "3",
+         "5"
+        ],
+        "from": 89.0,
+        "to": 93.0
+       }
+      ]
+     }
+    },
+    "learned_s33_greedy": {
+     "messages": {
+      "deliveries": [
+       {
+        "accepted": false,
+        "agent": "0",
+        "delivered_at_step": 31,
+        "reason": "delivery_superseded",
+        "revision": 2,
+        "sent_step": 31
+       },
+       {
+        "accepted": false,
+        "agent": "2",
+        "delivered_at_step": 31,
+        "reason": "delivery_superseded",
+        "revision": 2,
+        "sent_step": 31
+       },
+       {
+        "accepted": false,
+        "agent": "4",
+        "delivered_at_step": 31,
+        "reason": "delivery_superseded",
+        "revision": 2,
+        "sent_step": 31
+       },
+       {
+        "accepted": false,
+        "agent": "5",
+        "delivered_at_step": 31,
+        "reason": "delivery_superseded",
+        "revision": 2,
+        "sent_step": 31
+       }
+      ],
+      "sends": [
+       {
+        "charge_bytes": 2682,
+        "first": true,
+        "packets": 4,
+        "packets_lost": 2,
+        "payload_bytes": 447,
+        "ready_step": 19,
+        "revision": 2,
+        "send_reason": "policy",
+        "sender_view_progress": 0.0,
+        "source": "logs/r25_learned_s33_greedy_s1400031_a1_ct.jsonl",
+        "step": 31,
+        "subscribers": 6
+       }
+      ]
+     },
+     "timeline": {
+      "assignment_events": [
+       {
+        "agents": [
+         "3"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 31.0
+       },
+       {
+        "agents": [
+         "2"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 54.0
+       },
+       {
+        "agents": [
+         "5"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 54.0
+       },
+       {
+        "agents": [
+         "1"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 66.0
+       }
+      ],
+      "completed_at": null,
+      "deadline": 83.957,
+      "discovered_at": 19.0,
+      "evaluation_window": 1000,
+      "expired_at": 93.0,
+      "first_assignment_at": 31.0,
+      "idle_gaps_between_work_spans": [],
+      "on_time": false,
+      "outcome": "expired",
+      "sources": {
+       "lifecycle": "logs/r25_learned_s33_greedy_s1400031_a1_rp.jsonl",
+       "transcript": "logs/r25_learned_s33_greedy_s1400031_a1_ct.jsonl"
+      },
+      "target": "piloc-e1-target-0",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "3"
+        ],
+        "from": 33.0,
+        "to": 55.0
+       },
+       {
+        "agents": [
+         "2",
+         "3",
+         "5"
+        ],
+        "from": 55.0,
+        "to": 68.0
+       },
+       {
+        "agents": [
+         "1",
+         "2",
+         "3",
+         "5"
+        ],
+        "from": 68.0,
+        "to": 89.0
+       },
+       {
+        "agents": [
+         "2",
+         "3",
+         "5"
+        ],
+        "from": 89.0,
+        "to": 93.0
+       }
+      ]
+     }
+    }
+   },
+   "learned_policy_decisions": [
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.395372599363327,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 19
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.40612244606018066,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 20
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.42749032378196716,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 21
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4454246461391449,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 22
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4597263038158417,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 23
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.47063037753105164,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 24
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.47859084606170654,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 25
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4841992259025574,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 26
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4881264269351959,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 27
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.49103713035583496,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 28
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.49534961581230164,
+     "shadow_budget_before": 26606.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 29
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.49843910336494446,
+     "shadow_budget_before": 26606.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 30
+    },
+    {
+     "action": "SEND",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.5015877485275269,
+     "shadow_budget_before": 26606.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 31
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.32960325479507446,
+     "shadow_budget_before": 23924.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 32
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.30404558777809143,
+     "shadow_budget_before": 23924.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 33
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29555806517601013,
+     "shadow_budget_before": 23924.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 34
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2953551411628723,
+     "shadow_budget_before": 21242.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 35
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3006817102432251,
+     "shadow_budget_before": 21242.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 36
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.30476269125938416,
+     "shadow_budget_before": 21242.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 37
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.30726319551467896,
+     "shadow_budget_before": 21242.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 38
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3084922730922699,
+     "shadow_budget_before": 21242.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 39
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.30882054567337036,
+     "shadow_budget_before": 21242.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 40
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3053787052631378,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 41
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3046964704990387,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 42
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3034569323062897,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 43
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2998199164867401,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 44
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29843664169311523,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 45
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29711025953292847,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 46
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.295901894569397,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 47
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2948179543018341,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 48
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29384082555770874,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 49
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2929491102695465,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 50
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29212576150894165,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 51
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29135990142822266,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 52
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29064568877220154,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 53
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2899813652038574,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 54
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29082855582237244,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 55
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28815051913261414,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 56
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28760674595832825,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 57
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2871372401714325,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 58
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2867460548877716,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 59
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28185102343559265,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 60
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28161171078681946,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 61
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2814633846282959,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 62
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2814048230648041,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 63
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2814348042011261,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 64
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28155139088630676,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 65
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28175240755081177,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 66
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28203529119491577,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 67
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2748,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2823970913887024,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 68
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28261297941207886,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 69
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28330668807029724,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 70
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28429898619651794,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 71
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28543218970298767,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 72
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28658637404441833,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 73
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2874,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28768688440322876,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 74
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28869959712028503,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 75
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2874,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28961998224258423,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 76
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2874,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2904612123966217,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 77
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29124534130096436,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 78
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2929059863090515,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 79
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2874,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2934003174304962,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 80
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2874,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29288819432258606,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 81
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2935400903224945,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 82
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29421475529670715,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 83
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29490211606025696,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 84
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.296806663274765,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 85
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29728883504867554,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 86
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2862,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29772642254829407,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 87
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2980882227420807,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 88
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2868,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29835638403892517,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 89
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2844,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29846036434173584,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 90
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2844,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29848119616508484,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 91
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2844,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2984428405761719,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 92
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2844,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2983618974685669,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 93
+    }
+   ],
+   "timeline_signatures": {
+    "immediate": "{\"assignment_ts\": [29.0, 31.0, 37.0, 38.0, 39.0, 39.0], \"completed_at\": 65.0, \"expired_at\": null, \"outcome\": \"completed\", \"work\": [{\"agents\": [\"2\"], \"from\": 30.0, \"to\": 33.0}, {\"agents\": [\"2\", \"5\"], \"from\": 33.0, \"to\": 39.0}, {\"agents\": [\"2\", \"3\", \"5\"], \"from\": 39.0, \"to\": 40.0}, {\"agents\": [\"1\", \"2\", \"3\", \"5\"], \"from\": 40.0, \"to\": 61.0}, {\"agents\": [\"2\", \"3\", \"5\"], \"from\": 61.0, \"to\": 65.0}]}",
+    "late_discovery_gate_147": "{\"assignment_ts\": [31.0, 54.0, 54.0, 66.0], \"completed_at\": null, \"expired_at\": 93.0, \"outcome\": \"expired\", \"work\": [{\"agents\": [\"3\"], \"from\": 33.0, \"to\": 55.0}, {\"agents\": [\"2\", \"3\", \"5\"], \"from\": 55.0, \"to\": 68.0}, {\"agents\": [\"1\", \"2\", \"3\", \"5\"], \"from\": 68.0, \"to\": 89.0}, {\"agents\": [\"2\", \"3\", \"5\"], \"from\": 89.0, \"to\": 93.0}]}",
+    "learned_s33_greedy": "{\"assignment_ts\": [31.0, 54.0, 54.0, 66.0], \"completed_at\": null, \"expired_at\": 93.0, \"outcome\": \"expired\", \"work\": [{\"agents\": [\"3\"], \"from\": 33.0, \"to\": 55.0}, {\"agents\": [\"2\", \"3\", \"5\"], \"from\": 55.0, \"to\": 68.0}, {\"agents\": [\"1\", \"2\", \"3\", \"5\"], \"from\": 68.0, \"to\": 89.0}, {\"agents\": [\"2\", \"3\", \"5\"], \"from\": 89.0, \"to\": 93.0}]}"
+   },
+   "timelines_identical": false
+  },
+  "piloc-e1-target-5": {
+   "arms": {
+    "immediate": {
+     "messages": {
+      "deliveries": [
+       {
+        "accepted": true,
+        "agent": "0",
+        "delivered_at_step": 1,
+        "reason": "accepted",
+        "revision": 1,
+        "sent_step": 1
+       },
+       {
+        "accepted": true,
+        "agent": "2",
+        "delivered_at_step": 1,
+        "reason": "accepted",
+        "revision": 1,
+        "sent_step": 1
+       },
+       {
+        "accepted": true,
+        "agent": "4",
+        "delivered_at_step": 1,
+        "reason": "accepted",
+        "revision": 1,
+        "sent_step": 1
+       },
+       {
+        "accepted": true,
+        "agent": "5",
+        "delivered_at_step": 1,
+        "reason": "accepted",
+        "revision": 1,
+        "sent_step": 1
+       }
+      ],
+      "sends": [
+       {
+        "charge_bytes": 2574,
+        "first": true,
+        "packets": 4,
+        "packets_lost": 2,
+        "payload_bytes": 429,
+        "ready_step": 1,
+        "revision": 1,
+        "send_reason": "policy",
+        "sender_view_progress": 0.0,
+        "source": "logs/r25_immediate_s1400031_a1_ct.jsonl",
+        "step": 1,
+        "subscribers": 6
+       }
+      ]
+     },
+     "timeline": {
+      "assignment_events": [
+       {
+        "agents": [
+         "4"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 1.0
+       },
+       {
+        "agents": [
+         "3"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 19.0
+       },
+       {
+        "agents": [
+         "0"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 39.0
+       },
+       {
+        "agents": [
+         "2"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": "piloc-e1-target-0",
+        "t": 52.0
+       },
+       {
+        "agents": [
+         "4"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": "piloc-e1-target-1",
+        "t": 53.0
+       }
+      ],
+      "completed_at": 59.0,
+      "deadline": 96.525,
+      "discovered_at": 1.0,
+      "evaluation_window": 1000,
+      "expired_at": null,
+      "first_assignment_at": 1.0,
+      "idle_gaps_between_work_spans": [
+       {
+        "from": 28.0,
+        "to": 40.0
+       },
+       {
+        "from": 51.0,
+        "to": 54.0
+       }
+      ],
+      "on_time": true,
+      "outcome": "completed",
+      "sources": {
+       "lifecycle": "logs/r25_immediate_s1400031_a1_rp.jsonl",
+       "transcript": "logs/r25_immediate_s1400031_a1_ct.jsonl"
+      },
+      "target": "piloc-e1-target-5",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "4"
+        ],
+        "from": 2.0,
+        "to": 20.0
+       },
+       {
+        "agents": [
+         "3",
+         "4"
+        ],
+        "from": 20.0,
+        "to": 28.0
+       },
+       {
+        "agents": [
+         "0"
+        ],
+        "from": 40.0,
+        "to": 51.0
+       },
+       {
+        "agents": [
+         "2"
+        ],
+        "from": 54.0,
+        "to": 55.0
+       },
+       {
+        "agents": [
+         "2",
+         "4"
+        ],
+        "from": 55.0,
+        "to": 59.0
+       }
+      ]
+     }
+    },
+    "late_discovery_gate_147": {
+     "messages": {
+      "deliveries": [],
+      "sends": []
+     },
+     "timeline": {
+      "assignment_events": [
+       {
+        "agents": [
+         "3"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 2.0
+       },
+       {
+        "agents": [
+         "4"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 2.0
+       },
+       {
+        "agents": [
+         "1"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 54.0
+       },
+       {
+        "agents": [
+         "2"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 93.0
+       },
+       {
+        "agents": [
+         "4"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 95.0
+       }
+      ],
+      "completed_at": null,
+      "deadline": 96.525,
+      "discovered_at": 1.0,
+      "evaluation_window": 1000,
+      "expired_at": 101.0,
+      "first_assignment_at": 2.0,
+      "idle_gaps_between_work_spans": [
+       {
+        "from": 11.0,
+        "to": 55.0
+       },
+       {
+        "from": 66.0,
+        "to": 95.0
+       }
+      ],
+      "on_time": false,
+      "outcome": "expired",
+      "sources": {
+       "lifecycle": "logs/r25_late_discovery_gate_147_s1400031_a1_rp.jsonl",
+       "transcript": "logs/r25_late_discovery_gate_147_s1400031_a1_ct.jsonl"
+      },
+      "target": "piloc-e1-target-5",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "3",
+         "4"
+        ],
+        "from": 3.0,
+        "to": 11.0
+       },
+       {
+        "agents": [
+         "1"
+        ],
+        "from": 55.0,
+        "to": 66.0
+       },
+       {
+        "agents": [
+         "2"
+        ],
+        "from": 95.0,
+        "to": 97.0
+       },
+       {
+        "agents": [
+         "2",
+         "4"
+        ],
+        "from": 97.0,
+        "to": 101.0
+       }
+      ]
+     }
+    },
+    "learned_s33_greedy": {
+     "messages": {
+      "deliveries": [
+       {
+        "accepted": false,
+        "agent": "2",
+        "delivered_at_step": 34,
+        "reason": "delivery_superseded",
+        "revision": 11,
+        "sent_step": 34
+       },
+       {
+        "accepted": false,
+        "agent": "3",
+        "delivered_at_step": 34,
+        "reason": "delivery_superseded",
+        "revision": 11,
+        "sent_step": 34
+       },
+       {
+        "accepted": false,
+        "agent": "4",
+        "delivered_at_step": 34,
+        "reason": "delivery_superseded",
+        "revision": 11,
+        "sent_step": 34
+       },
+       {
+        "accepted": false,
+        "agent": "5",
+        "delivered_at_step": 34,
+        "reason": "delivery_superseded",
+        "revision": 11,
+        "sent_step": 34
+       }
+      ],
+      "sends": [
+       {
+        "charge_bytes": 2682,
+        "first": true,
+        "packets": 4,
+        "packets_lost": 2,
+        "payload_bytes": 447,
+        "ready_step": 1,
+        "revision": 11,
+        "send_reason": "policy",
+        "sender_view_progress": 0.3333333333333333,
+        "source": "logs/r25_learned_s33_greedy_s1400031_a1_ct.jsonl",
+        "step": 34,
+        "subscribers": 6
+       }
+      ]
+     },
+     "timeline": {
+      "assignment_events": [
+       {
+        "agents": [
+         "3"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 2.0
+       },
+       {
+        "agents": [
+         "4"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 2.0
+       },
+       {
+        "agents": [
+         "1"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 54.0
+       },
+       {
+        "agents": [
+         "2"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 93.0
+       },
+       {
+        "agents": [
+         "4"
+        ],
+        "reason": "ctde+coordination",
+        "release_from_task": null,
+        "t": 95.0
+       }
+      ],
+      "completed_at": null,
+      "deadline": 96.525,
+      "discovered_at": 1.0,
+      "evaluation_window": 1000,
+      "expired_at": 101.0,
+      "first_assignment_at": 2.0,
+      "idle_gaps_between_work_spans": [
+       {
+        "from": 11.0,
+        "to": 55.0
+       },
+       {
+        "from": 66.0,
+        "to": 95.0
+       }
+      ],
+      "on_time": false,
+      "outcome": "expired",
+      "sources": {
+       "lifecycle": "logs/r25_learned_s33_greedy_s1400031_a1_rp.jsonl",
+       "transcript": "logs/r25_learned_s33_greedy_s1400031_a1_ct.jsonl"
+      },
+      "target": "piloc-e1-target-5",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "3",
+         "4"
+        ],
+        "from": 3.0,
+        "to": 11.0
+       },
+       {
+        "agents": [
+         "1"
+        ],
+        "from": 55.0,
+        "to": 66.0
+       },
+       {
+        "agents": [
+         "2"
+        ],
+        "from": 95.0,
+        "to": 97.0
+       },
+       {
+        "agents": [
+         "2",
+         "4"
+        ],
+        "from": 97.0,
+        "to": 101.0
+       }
+      ]
+     }
+    }
+   },
+   "learned_policy_decisions": [
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2574,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3481942117214203,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 1
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2574,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.36066746711730957,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 2
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2574,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.38599804043769836,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 3
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2712,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.41205185651779175,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 4
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2712,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.41630521416664124,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 5
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2712,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.41677650809288025,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 6
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2712,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.41620251536369324,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 7
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2712,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4160313606262207,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 8
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2712,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4164483845233917,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 9
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2712,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4123041033744812,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 10
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2724,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4125518798828125,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 11
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.41305068135261536,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 12
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.42036473751068115,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 13
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.42693379521369934,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 14
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.43292203545570374,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 15
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.43845972418785095,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 16
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.44364339113235474,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 17
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4485408663749695,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 18
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4466082751750946,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 19
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4513930678367615,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 20
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4560285210609436,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 21
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4605138897895813,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 22
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.46484485268592834,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 23
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.469015508890152,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 24
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4730202853679657,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 25
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.476854532957077,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 26
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.48051509261131287,
+     "shadow_budget_before": 29300.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 27
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4840015470981598,
+     "shadow_budget_before": 26606.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 28
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.48952415585517883,
+     "shadow_budget_before": 26606.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 29
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.49215638637542725,
+     "shadow_budget_before": 26606.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 30
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4946739673614502,
+     "shadow_budget_before": 23924.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 31
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.4971431493759155,
+     "shadow_budget_before": 23924.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 32
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.49941325187683105,
+     "shadow_budget_before": 23924.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 33
+    },
+    {
+     "action": "SEND",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.5024341940879822,
+     "shadow_budget_before": 23924.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 34
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3317716121673584,
+     "shadow_budget_before": 21242.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 35
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.31373462080955505,
+     "shadow_budget_before": 21242.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 36
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3018166720867157,
+     "shadow_budget_before": 21242.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 37
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.29434317350387573,
+     "shadow_budget_before": 21242.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 38
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28984057903289795,
+     "shadow_budget_before": 21242.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 39
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28735673427581787,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 40
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28226736187934875,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 41
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28270411491394043,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 42
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2837398052215576,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 43
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28328442573547363,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 44
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.28589797019958496,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 45
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.288909375667572,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 46
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2923068404197693,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 47
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.2961207926273346,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 48
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3003515601158142,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 49
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.30491459369659424,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 50
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.30973243713378906,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 51
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.31470730900764465,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 52
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.31973302364349365,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 53
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3247077763080597,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 54
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3346650302410126,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 55
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3294125497341156,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 56
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3289887607097626,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 57
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2706,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.32837483286857605,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 58
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2706,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.32755157351493835,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 59
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3266436755657196,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 60
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3257845938205719,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 61
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3250749111175537,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 62
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.324594110250473,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 63
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.32440340518951416,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 64
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2694,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3245032727718353,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 65
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.32475122809410095,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 66
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.326434850692749,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 67
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3278976082801819,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 68
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.32966339588165283,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 69
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3316822350025177,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 70
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.33391430974006653,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 71
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.33633530139923096,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 72
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3343521058559418,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 73
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3373514413833618,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 74
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3404887914657593,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 75
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3437119722366333,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 76
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3469545841217041,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 77
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.35014060139656067,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 78
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.35319310426712036,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 79
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.35604411363601685,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 80
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.35962000489234924,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 81
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.36194100975990295,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 82
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.36396676301956177,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 83
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3657098710536957,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 84
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3671923279762268,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 85
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3684408366680145,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 86
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3694828152656555,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 87
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3703439235687256,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 88
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.37104687094688416,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 89
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3716107904911041,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 90
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3720512092113495,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 91
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.37238016724586487,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 92
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.37260687351226807,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 93
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3727380931377411,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 94
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2682,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3698612153530121,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 95
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3693549633026123,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 96
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2700,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.36938509345054626,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 97
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2718,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3700767457485199,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 98
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2724,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3661125898361206,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 99
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2730,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3625383675098419,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 100
+    },
+    {
+     "action": "HOLD",
+     "attempt_charge_bytes": 2736,
+     "class": "actionable",
+     "honours_this_candidate": true,
+     "masked_reason": null,
+     "send_probability": 0.3594039976596832,
+     "shadow_budget_before": 18722.0,
+     "source": "logs/r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+     "step": 101
+    }
+   ],
+   "timeline_signatures": {
+    "immediate": "{\"assignment_ts\": [1.0, 19.0, 39.0, 52.0, 53.0], \"completed_at\": 59.0, \"expired_at\": null, \"outcome\": \"completed\", \"work\": [{\"agents\": [\"4\"], \"from\": 2.0, \"to\": 20.0}, {\"agents\": [\"3\", \"4\"], \"from\": 20.0, \"to\": 28.0}, {\"agents\": [\"0\"], \"from\": 40.0, \"to\": 51.0}, {\"agents\": [\"2\"], \"from\": 54.0, \"to\": 55.0}, {\"agents\": [\"2\", \"4\"], \"from\": 55.0, \"to\": 59.0}]}",
+    "late_discovery_gate_147": "{\"assignment_ts\": [2.0, 2.0, 54.0, 93.0, 95.0], \"completed_at\": null, \"expired_at\": 101.0, \"outcome\": \"expired\", \"work\": [{\"agents\": [\"3\", \"4\"], \"from\": 3.0, \"to\": 11.0}, {\"agents\": [\"1\"], \"from\": 55.0, \"to\": 66.0}, {\"agents\": [\"2\"], \"from\": 95.0, \"to\": 97.0}, {\"agents\": [\"2\", \"4\"], \"from\": 97.0, \"to\": 101.0}]}",
+    "learned_s33_greedy": "{\"assignment_ts\": [2.0, 2.0, 54.0, 93.0, 95.0], \"completed_at\": null, \"expired_at\": 101.0, \"outcome\": \"expired\", \"work\": [{\"agents\": [\"3\", \"4\"], \"from\": 3.0, \"to\": 11.0}, {\"agents\": [\"1\"], \"from\": 55.0, \"to\": 66.0}, {\"agents\": [\"2\"], \"from\": 95.0, \"to\": 97.0}, {\"agents\": [\"2\", \"4\"], \"from\": 97.0, \"to\": 101.0}]}"
+   },
+   "timelines_identical": false
+  }
+ }
+}

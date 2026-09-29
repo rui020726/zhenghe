@@ -1,0 +1,1080 @@
+{
+ "round": "26",
+ "scenes": {
+  "1400010": {
+   "arm_on_time": {
+    "immediate": {
+     "emissions": 6,
+     "on_time": 6,
+     "spent_bytes": 15504
+    },
+    "late_discovery_gate_147": {
+     "emissions": 1,
+     "on_time": 5,
+     "spent_bytes": 2508
+    },
+    "learned_s33_greedy": {
+     "emissions": 2,
+     "on_time": 6,
+     "spent_bytes": 5202
+    }
+   },
+   "arm_send_lists": {
+    "immediate": [
+     {
+      "charge_bytes": 2676,
+      "first": true,
+      "step": 1,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "charge_bytes": 2472,
+      "first": true,
+      "step": 3,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "charge_bytes": 2478,
+      "first": true,
+      "step": 8,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "charge_bytes": 2676,
+      "first": true,
+      "step": 9,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "charge_bytes": 2694,
+      "first": true,
+      "step": 143,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "charge_bytes": 2508,
+      "first": true,
+      "step": 170,
+      "target": "piloc-e1-target-0"
+     }
+    ],
+    "late_discovery_gate_147": [
+     {
+      "charge_bytes": 2508,
+      "first": true,
+      "step": 170,
+      "target": "piloc-e1-target-0"
+     }
+    ],
+    "learned_s33_greedy": [
+     {
+      "charge_bytes": 2694,
+      "first": true,
+      "step": 156,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "charge_bytes": 2508,
+      "first": true,
+      "step": 182,
+      "target": "piloc-e1-target-0"
+     }
+    ]
+   },
+   "arms": {},
+   "gained_targets": [
+    "piloc-e1-target-2"
+   ],
+   "piloc-e1-target-2": {
+    "immediate": {
+     "chain": {
+      "completed_at": 171.0,
+      "deadline": 308.049,
+      "discovered_at": 143.0,
+      "expired_at": null,
+      "first_assignment_at": 143.0,
+      "on_time": true,
+      "outcome": "completed",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "3",
+         "4"
+        ],
+        "from": 145.0,
+        "to": 146.0
+       },
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "3",
+         "4",
+         "5"
+        ],
+        "from": 146.0,
+        "to": 151.0
+       },
+       {
+        "agents": [
+         "2",
+         "3",
+         "4",
+         "5"
+        ],
+        "from": 151.0,
+        "to": 171.0
+       }
+      ]
+     },
+     "messages": {
+      "accepted_count": 5,
+      "deliveries": [
+       {
+        "accepted": true,
+        "agent": "0",
+        "delivered_at_step": 143,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "1",
+        "delivered_at_step": 143,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "2",
+        "delivered_at_step": 143,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "3",
+        "delivered_at_step": 143,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "4",
+        "delivered_at_step": 143,
+        "reason": "accepted"
+       }
+      ],
+      "sends": [
+       {
+        "charge_bytes": 2694,
+        "first": true,
+        "ready_step": 143,
+        "revision": 1,
+        "sender_view_progress": 0.0,
+        "step": 143
+       }
+      ],
+      "superseded_count": 0
+     }
+    },
+    "late_discovery_gate_147": {
+     "chain": {
+      "completed_at": null,
+      "deadline": 308.049,
+      "discovered_at": 143.0,
+      "expired_at": null,
+      "first_assignment_at": null,
+      "on_time": false,
+      "outcome": "detected",
+      "work_spans_with_agents": []
+     },
+     "messages": {
+      "accepted_count": 0,
+      "deliveries": [],
+      "sends": [],
+      "superseded_count": 0
+     }
+    },
+    "learned_s33_greedy": {
+     "chain": {
+      "completed_at": 184.0,
+      "deadline": 308.049,
+      "discovered_at": 143.0,
+      "expired_at": null,
+      "first_assignment_at": 156.0,
+      "on_time": true,
+      "outcome": "completed",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "3",
+         "4",
+         "5"
+        ],
+        "from": 158.0,
+        "to": 164.0
+       },
+       {
+        "agents": [
+         "2",
+         "3",
+         "4",
+         "5"
+        ],
+        "from": 164.0,
+        "to": 184.0
+       }
+      ]
+     },
+     "messages": {
+      "accepted_count": 5,
+      "deliveries": [
+       {
+        "accepted": true,
+        "agent": "0",
+        "delivered_at_step": 156,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "2",
+        "delivered_at_step": 156,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "3",
+        "delivered_at_step": 156,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "4",
+        "delivered_at_step": 156,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "5",
+        "delivered_at_step": 156,
+        "reason": "accepted"
+       }
+      ],
+      "sends": [
+       {
+        "charge_bytes": 2694,
+        "first": true,
+        "ready_step": 143,
+        "revision": 2,
+        "sender_view_progress": 0.0,
+        "step": 156
+       }
+      ],
+      "superseded_count": 0
+     }
+    }
+   }
+  },
+  "1400014": {
+   "arm_on_time": {
+    "immediate": {
+     "emissions": 5,
+     "on_time": 5,
+     "spent_bytes": 11652
+    },
+    "late_discovery_gate_147": {
+     "emissions": 0,
+     "on_time": 4,
+     "spent_bytes": 0
+    },
+    "learned_s33_greedy": {
+     "emissions": 1,
+     "on_time": 5,
+     "spent_bytes": 2292
+    }
+   },
+   "arm_send_lists": {
+    "immediate": [
+     {
+      "charge_bytes": 2274,
+      "first": true,
+      "step": 1,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "charge_bytes": 2292,
+      "first": true,
+      "step": 3,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "charge_bytes": 2292,
+      "first": true,
+      "step": 4,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "charge_bytes": 2508,
+      "first": true,
+      "step": 16,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "charge_bytes": 2286,
+      "first": true,
+      "step": 97,
+      "target": "piloc-e1-target-5"
+     }
+    ],
+    "late_discovery_gate_147": [],
+    "learned_s33_greedy": [
+     {
+      "charge_bytes": 2292,
+      "first": true,
+      "step": 109,
+      "target": "piloc-e1-target-5"
+     }
+    ]
+   },
+   "arms": {},
+   "gained_targets": [
+    "piloc-e1-target-5"
+   ],
+   "piloc-e1-target-5": {
+    "immediate": {
+     "chain": {
+      "completed_at": 108.0,
+      "deadline": 266.557,
+      "discovered_at": 97.0,
+      "expired_at": null,
+      "first_assignment_at": 97.0,
+      "on_time": true,
+      "outcome": "completed",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "4"
+        ],
+        "from": 99.0,
+        "to": 108.0
+       }
+      ]
+     },
+     "messages": {
+      "accepted_count": 4,
+      "deliveries": [
+       {
+        "accepted": true,
+        "agent": "0",
+        "delivered_at_step": 97,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "1",
+        "delivered_at_step": 97,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "2",
+        "delivered_at_step": 97,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "4",
+        "delivered_at_step": 97,
+        "reason": "accepted"
+       }
+      ],
+      "sends": [
+       {
+        "charge_bytes": 2286,
+        "first": true,
+        "ready_step": 97,
+        "revision": 1,
+        "sender_view_progress": 0.0,
+        "step": 97
+       }
+      ],
+      "superseded_count": 0
+     }
+    },
+    "late_discovery_gate_147": {
+     "chain": {
+      "completed_at": null,
+      "deadline": 266.557,
+      "discovered_at": 97.0,
+      "expired_at": null,
+      "first_assignment_at": null,
+      "on_time": false,
+      "outcome": "detected",
+      "work_spans_with_agents": []
+     },
+     "messages": {
+      "accepted_count": 0,
+      "deliveries": [],
+      "sends": [],
+      "superseded_count": 0
+     }
+    },
+    "learned_s33_greedy": {
+     "chain": {
+      "completed_at": 120.0,
+      "deadline": 266.557,
+      "discovered_at": 97.0,
+      "expired_at": null,
+      "first_assignment_at": 109.0,
+      "on_time": true,
+      "outcome": "completed",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "1",
+         "4",
+         "5"
+        ],
+        "from": 111.0,
+        "to": 120.0
+       }
+      ]
+     },
+     "messages": {
+      "accepted_count": 3,
+      "deliveries": [
+       {
+        "accepted": true,
+        "agent": "1",
+        "delivered_at_step": 109,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "4",
+        "delivered_at_step": 109,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "5",
+        "delivered_at_step": 109,
+        "reason": "accepted"
+       }
+      ],
+      "sends": [
+       {
+        "charge_bytes": 2292,
+        "first": true,
+        "ready_step": 97,
+        "revision": 2,
+        "sender_view_progress": 0.0,
+        "step": 109
+       }
+      ],
+      "superseded_count": 0
+     }
+    }
+   }
+  },
+  "1400017": {
+   "arm_on_time": {
+    "immediate": {
+     "emissions": 6,
+     "on_time": 6,
+     "spent_bytes": 14916
+    },
+    "late_discovery_gate_147": {
+     "emissions": 0,
+     "on_time": 5,
+     "spent_bytes": 0
+    },
+    "learned_s33_greedy": {
+     "emissions": 2,
+     "on_time": 6,
+     "spent_bytes": 5028
+    }
+   },
+   "arm_send_lists": {
+    "immediate": [
+     {
+      "charge_bytes": 2682,
+      "first": true,
+      "step": 1,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "charge_bytes": 2286,
+      "first": true,
+      "step": 1,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "charge_bytes": 2670,
+      "first": true,
+      "step": 1,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "charge_bytes": 2484,
+      "first": true,
+      "step": 2,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "charge_bytes": 2280,
+      "first": true,
+      "step": 9,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "charge_bytes": 2514,
+      "first": true,
+      "step": 132,
+      "target": "piloc-e1-target-1"
+     }
+    ],
+    "late_discovery_gate_147": [],
+    "learned_s33_greedy": [
+     {
+      "charge_bytes": 2514,
+      "first": true,
+      "step": 17,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "charge_bytes": 2514,
+      "first": true,
+      "step": 144,
+      "target": "piloc-e1-target-1"
+     }
+    ]
+   },
+   "arms": {},
+   "gained_targets": [
+    "piloc-e1-target-1"
+   ],
+   "piloc-e1-target-1": {
+    "immediate": {
+     "chain": {
+      "completed_at": 143.0,
+      "deadline": 225.678,
+      "discovered_at": 132.0,
+      "expired_at": null,
+      "first_assignment_at": 132.0,
+      "on_time": true,
+      "outcome": "completed",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "3",
+         "4",
+         "5"
+        ],
+        "from": 134.0,
+        "to": 143.0
+       }
+      ]
+     },
+     "messages": {
+      "accepted_count": 5,
+      "deliveries": [
+       {
+        "accepted": true,
+        "agent": "0",
+        "delivered_at_step": 132,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "1",
+        "delivered_at_step": 132,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "3",
+        "delivered_at_step": 132,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "4",
+        "delivered_at_step": 132,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "5",
+        "delivered_at_step": 132,
+        "reason": "accepted"
+       }
+      ],
+      "sends": [
+       {
+        "charge_bytes": 2514,
+        "first": true,
+        "ready_step": 132,
+        "revision": 1,
+        "sender_view_progress": 0.0,
+        "step": 132
+       }
+      ],
+      "superseded_count": 0
+     }
+    },
+    "late_discovery_gate_147": {
+     "chain": {
+      "completed_at": null,
+      "deadline": 225.678,
+      "discovered_at": 132.0,
+      "expired_at": null,
+      "first_assignment_at": null,
+      "on_time": false,
+      "outcome": "detected",
+      "work_spans_with_agents": []
+     },
+     "messages": {
+      "accepted_count": 0,
+      "deliveries": [],
+      "sends": [],
+      "superseded_count": 0
+     }
+    },
+    "learned_s33_greedy": {
+     "chain": {
+      "completed_at": 155.0,
+      "deadline": 225.678,
+      "discovered_at": 132.0,
+      "expired_at": null,
+      "first_assignment_at": 144.0,
+      "on_time": true,
+      "outcome": "completed",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "3",
+         "4",
+         "5"
+        ],
+        "from": 146.0,
+        "to": 155.0
+       }
+      ]
+     },
+     "messages": {
+      "accepted_count": 6,
+      "deliveries": [
+       {
+        "accepted": true,
+        "agent": "0",
+        "delivered_at_step": 144,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "1",
+        "delivered_at_step": 144,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "2",
+        "delivered_at_step": 144,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "3",
+        "delivered_at_step": 144,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "4",
+        "delivered_at_step": 144,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "5",
+        "delivered_at_step": 144,
+        "reason": "accepted"
+       }
+      ],
+      "sends": [
+       {
+        "charge_bytes": 2514,
+        "first": true,
+        "ready_step": 132,
+        "revision": 2,
+        "sender_view_progress": 0.0,
+        "step": 144
+       }
+      ],
+      "superseded_count": 0
+     }
+    }
+   }
+  },
+  "1400020": {
+   "arm_on_time": {
+    "immediate": {
+     "emissions": 6,
+     "on_time": 6,
+     "spent_bytes": 15186
+    },
+    "late_discovery_gate_147": {
+     "emissions": 4,
+     "on_time": 5,
+     "spent_bytes": 10398
+    },
+    "learned_s33_greedy": {
+     "emissions": 1,
+     "on_time": 6,
+     "spent_bytes": 2496
+    }
+   },
+   "arm_send_lists": {
+    "immediate": [
+     {
+      "charge_bytes": 2292,
+      "first": true,
+      "step": 2,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "charge_bytes": 2496,
+      "first": true,
+      "step": 100,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "charge_bytes": 2700,
+      "first": true,
+      "step": 504,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "charge_bytes": 2700,
+      "first": true,
+      "step": 518,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "charge_bytes": 2298,
+      "first": true,
+      "step": 557,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "charge_bytes": 2700,
+      "first": true,
+      "step": 681,
+      "target": "piloc-e1-target-3"
+     }
+    ],
+    "late_discovery_gate_147": [
+     {
+      "charge_bytes": 2700,
+      "first": true,
+      "step": 504,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "charge_bytes": 2700,
+      "first": true,
+      "step": 518,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "charge_bytes": 2298,
+      "first": true,
+      "step": 557,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "charge_bytes": 2700,
+      "first": true,
+      "step": 681,
+      "target": "piloc-e1-target-3"
+     }
+    ],
+    "learned_s33_greedy": [
+     {
+      "charge_bytes": 2496,
+      "first": true,
+      "step": 113,
+      "target": "piloc-e1-target-4"
+     }
+    ]
+   },
+   "arms": {},
+   "gained_targets": [
+    "piloc-e1-target-4"
+   ],
+   "piloc-e1-target-4": {
+    "immediate": {
+     "chain": {
+      "completed_at": 117.0,
+      "deadline": 186.28,
+      "discovered_at": 100.0,
+      "expired_at": null,
+      "first_assignment_at": 100.0,
+      "on_time": true,
+      "outcome": "completed",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "3",
+         "4",
+         "5"
+        ],
+        "from": 102.0,
+        "to": 109.0
+       },
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "3"
+        ],
+        "from": 109.0,
+        "to": 117.0
+       }
+      ]
+     },
+     "messages": {
+      "accepted_count": 6,
+      "deliveries": [
+       {
+        "accepted": true,
+        "agent": "0",
+        "delivered_at_step": 100,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "1",
+        "delivered_at_step": 100,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "2",
+        "delivered_at_step": 100,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "3",
+        "delivered_at_step": 100,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "4",
+        "delivered_at_step": 100,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "5",
+        "delivered_at_step": 100,
+        "reason": "accepted"
+       }
+      ],
+      "sends": [
+       {
+        "charge_bytes": 2496,
+        "first": true,
+        "ready_step": 100,
+        "revision": 1,
+        "sender_view_progress": 0.0,
+        "step": 100
+       }
+      ],
+      "superseded_count": 0
+     }
+    },
+    "late_discovery_gate_147": {
+     "chain": {
+      "completed_at": null,
+      "deadline": 186.28,
+      "discovered_at": 100.0,
+      "expired_at": 587.0,
+      "first_assignment_at": 520.0,
+      "on_time": false,
+      "outcome": "expired",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "0",
+         "1"
+        ],
+        "from": 521.0,
+        "to": 526.0
+       },
+       {
+        "agents": [
+         "0",
+         "1",
+         "3"
+        ],
+        "from": 526.0,
+        "to": 527.0
+       },
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "3"
+        ],
+        "from": 527.0,
+        "to": 572.0
+       },
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "3",
+         "4"
+        ],
+        "from": 572.0,
+        "to": 579.0
+       },
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "3"
+        ],
+        "from": 579.0,
+        "to": 587.0
+       }
+      ]
+     },
+     "messages": {
+      "accepted_count": 0,
+      "deliveries": [],
+      "sends": [],
+      "superseded_count": 0
+     }
+    },
+    "learned_s33_greedy": {
+     "chain": {
+      "completed_at": 130.0,
+      "deadline": 186.28,
+      "discovered_at": 100.0,
+      "expired_at": null,
+      "first_assignment_at": 113.0,
+      "on_time": true,
+      "outcome": "completed",
+      "work_spans_with_agents": [
+       {
+        "agents": [
+         "0",
+         "2",
+         "3",
+         "4",
+         "5"
+        ],
+        "from": 115.0,
+        "to": 116.0
+       },
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "3",
+         "4",
+         "5"
+        ],
+        "from": 116.0,
+        "to": 122.0
+       },
+       {
+        "agents": [
+         "0",
+         "1",
+         "2",
+         "3"
+        ],
+        "from": 122.0,
+        "to": 130.0
+       }
+      ]
+     },
+     "messages": {
+      "accepted_count": 5,
+      "deliveries": [
+       {
+        "accepted": true,
+        "agent": "0",
+        "delivered_at_step": 113,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "2",
+        "delivered_at_step": 113,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "3",
+        "delivered_at_step": 113,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "4",
+        "delivered_at_step": 113,
+        "reason": "accepted"
+       },
+       {
+        "accepted": true,
+        "agent": "5",
+        "delivered_at_step": 113,
+        "reason": "accepted"
+       }
+      ],
+      "sends": [
+       {
+        "charge_bytes": 2496,
+        "first": true,
+        "ready_step": 100,
+        "revision": 2,
+        "sender_view_progress": 0.0,
+        "step": 113
+       }
+      ],
+      "superseded_count": 0
+     }
+    }
+   }
+  }
+ },
+ "section": "the four scenes where the candidate gained on-time targets versus late"
+}

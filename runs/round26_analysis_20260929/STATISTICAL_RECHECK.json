@@ -1,0 +1,404 @@
+{
+ "branch_head": "fdf97d1e7a0fd90f6fe9e0f332077075f13148cf",
+ "comparison_with_committed": {
+  "checks": [
+   {
+    "check": "shared_matrix_sha256",
+    "detail": {
+     "committed": "799188508a6aa6e29a4e7b394b62e3c8221efe3425143013425a40fb7a6ad9c7",
+     "independent": "799188508a6aa6e29a4e7b394b62e3c8221efe3425143013425a40fb7a6ad9c7"
+    },
+    "passed": true
+   },
+   {
+    "check": "late_discovery_gate_147_dY_mean",
+    "detail": {
+     "committed": 0.0625,
+     "independent": 0.0625
+    },
+    "passed": true
+   },
+   {
+    "check": "late_discovery_gate_147_dC_mean",
+    "detail": {
+     "committed": -696.28125,
+     "independent": -696.28125
+    },
+    "passed": true
+   },
+   {
+    "check": "late_discovery_gate_147_dY_ci",
+    "detail": {
+     "committed": [
+      0.015625,
+      0.125
+     ],
+     "independent": [
+      0.015625,
+      0.125
+     ]
+    },
+    "passed": true
+   },
+   {
+    "check": "late_discovery_gate_147_dC_ci",
+    "detail": {
+     "committed": [
+      -1849.22109375,
+      502.16953124999935
+     ],
+     "independent": [
+      -1849.22109375,
+      502.16953124999935
+     ]
+    },
+    "passed": true
+   },
+   {
+    "check": "late_discovery_gate_147_counts",
+    "detail": {
+     "committed": {
+      "both_tied": 7,
+      "cost_equal": 7,
+      "cost_higher": 23,
+      "cost_lower": 34,
+      "cost_only_worse": 20,
+      "joint_dominant": 34,
+      "task_improved": 4,
+      "task_tied": 60,
+      "tradeoff_task_gain_cost_loss": 3
+     },
+     "independent": {
+      "both_tied": 7,
+      "cost_equal": 7,
+      "cost_higher": 23,
+      "cost_lower": 34,
+      "cost_only_worse": 20,
+      "joint_dominant": 34,
+      "task_degraded": 0,
+      "task_improved": 4,
+      "task_only_worse": 0,
+      "task_tied": 60,
+      "tradeoff_task_gain_cost_loss": 3,
+      "tradeoff_task_loss_cost_gain": 0,
+      "worse_both": 0
+     },
+     "note": "the committed artefact omits zero-valued predicate keys; missing keys are read as zero on both sides"
+    },
+    "passed": true
+   },
+   {
+    "check": "late_discovery_gate_147_degraded_scenes",
+    "detail": {
+     "committed": [],
+     "independent": []
+    },
+    "passed": true
+   },
+   {
+    "check": "late_discovery_gate_147_per_scene_diffs",
+    "detail": "64 scenes compared",
+    "passed": true
+   },
+   {
+    "check": "immediate_dY_mean",
+    "detail": {
+     "committed": -0.03125,
+     "independent": -0.03125
+    },
+    "passed": true
+   },
+   {
+    "check": "immediate_dC_mean",
+    "detail": {
+     "committed": -11893.125,
+     "independent": -11893.125
+    },
+    "passed": true
+   },
+   {
+    "check": "immediate_dY_ci",
+    "detail": {
+     "committed": [
+      -0.09375,
+      0.0
+     ],
+     "independent": [
+      -0.09375,
+      0.0
+     ]
+    },
+    "passed": true
+   },
+   {
+    "check": "immediate_dC_ci",
+    "detail": {
+     "committed": [
+      -12566.625,
+      -11191.5796875
+     ],
+     "independent": [
+      -12566.625,
+      -11191.5796875
+     ]
+    },
+    "passed": true
+   },
+   {
+    "check": "immediate_counts",
+    "detail": {
+     "committed": {
+      "cost_lower": 64,
+      "joint_dominant": 63,
+      "task_degraded": 1,
+      "task_tied": 63,
+      "tradeoff_task_loss_cost_gain": 1
+     },
+     "independent": {
+      "both_tied": 0,
+      "cost_equal": 0,
+      "cost_higher": 0,
+      "cost_lower": 64,
+      "cost_only_worse": 0,
+      "joint_dominant": 63,
+      "task_degraded": 1,
+      "task_improved": 0,
+      "task_only_worse": 0,
+      "task_tied": 63,
+      "tradeoff_task_gain_cost_loss": 0,
+      "tradeoff_task_loss_cost_gain": 1,
+      "worse_both": 0
+     },
+     "note": "the committed artefact omits zero-valued predicate keys; missing keys are read as zero on both sides"
+    },
+    "passed": true
+   },
+   {
+    "check": "immediate_degraded_scenes",
+    "detail": {
+     "committed": [
+      1400031
+     ],
+     "independent": [
+      1400031
+     ]
+    },
+    "passed": true
+   },
+   {
+    "check": "immediate_per_scene_diffs",
+    "detail": "64 scenes compared",
+    "passed": true
+   },
+   {
+    "check": "per_scene_differences_match",
+    "detail": "PER_SCENE_DIFFERENCES.json per-scene rows",
+    "passed": true
+   },
+   {
+    "check": "verdict_primary_cost_evidence",
+    "detail": {
+     "primary_ci_high": 502.16953124999935,
+     "rule": "CI upper < 0 ? lower_cost_supported : lower_cost_not_established",
+     "verdict": "lower_cost_not_established"
+    },
+    "passed": true
+   },
+   {
+    "check": "verdict_task_status",
+    "detail": {
+     "no_zero_degradation": false,
+     "verdict": "task_count_tradeoff_observed"
+    },
+    "passed": true
+   },
+   {
+    "check": "verdict_markdown_quotes_same_numbers",
+    "detail": "ROUND25_VERDICT.md restates the committed dC mean and CI upper bound",
+    "passed": true
+   },
+   {
+    "check": "absolute_learned_s33_greedy",
+    "detail": {
+     "committed": {
+      "emissions_total": 71,
+      "on_time_total": 374,
+      "spent_bytes_total": 177900
+     },
+     "independent": {
+      "emissions_total": 71,
+      "on_time_total": 374,
+      "scenes": 64,
+      "spent_bytes_total": 177900
+     }
+    },
+    "passed": true
+   },
+   {
+    "check": "absolute_immediate",
+    "detail": {
+     "committed": {
+      "emissions_total": 376,
+      "on_time_total": 376,
+      "spent_bytes_total": 939060
+     },
+     "independent": {
+      "emissions_total": 376,
+      "on_time_total": 376,
+      "scenes": 64,
+      "spent_bytes_total": 939060
+     }
+    },
+    "passed": true
+   },
+   {
+    "check": "absolute_late_discovery_gate_147",
+    "detail": {
+     "committed": {
+      "emissions_total": 88,
+      "on_time_total": 370,
+      "spent_bytes_total": 222462
+     },
+     "independent": {
+      "emissions_total": 88,
+      "on_time_total": 370,
+      "scenes": 64,
+      "spent_bytes_total": 222462
+     }
+    },
+    "passed": true
+   }
+  ],
+  "passed": true
+ },
+ "conclusion": "the committed statistics are reproduced exactly by an independent index-gather implementation from the raw integers; the earlier defect is not present in the corrected artefact",
+ "data_source": "runs/comm_cost_greedy_replication_20260928/rows/r25_*_a1.json (192 final records; per-cell identity and goal-id closure re-verified)",
+ "hand_counterexample": {
+  "count_matrix_path": [
+   0.0,
+   5.0,
+   10.0
+  ],
+  "count_path_matches_expected": true,
+  "defective_matrix_product_path": [
+   0.0,
+   5.0,
+   5.0
+  ],
+  "defective_path_differs": true,
+  "expected_means": [
+   0.0,
+   5.0,
+   10.0
+  ],
+  "gather_matches_expected": true,
+  "index_gather_path": [
+   0.0,
+   5.0,
+   10.0
+  ],
+  "indices": [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "note": "a matrix product is valid only for a draw-count matrix (each row: how many times each scene index was drawn), after dividing by the row length; the index matrix itself must be used to gather values",
+  "values": [
+   0.0,
+   10.0
+  ]
+ },
+ "independent": {
+  "arm_totals": {
+   "immediate": {
+    "emissions_total": 376,
+    "on_time_total": 376,
+    "scenes": 64,
+    "spent_bytes_total": 939060
+   },
+   "late_discovery_gate_147": {
+    "emissions_total": 88,
+    "on_time_total": 370,
+    "scenes": 64,
+    "spent_bytes_total": 222462
+   },
+   "learned_s33_greedy": {
+    "emissions_total": 71,
+    "on_time_total": 374,
+    "scenes": 64,
+    "spent_bytes_total": 177900
+   }
+  },
+  "comparisons": {
+   "immediate": {
+    "counts": {
+     "both_tied": 0,
+     "cost_equal": 0,
+     "cost_higher": 0,
+     "cost_lower": 64,
+     "cost_only_worse": 0,
+     "joint_dominant": 63,
+     "task_degraded": 1,
+     "task_improved": 0,
+     "task_only_worse": 0,
+     "task_tied": 63,
+     "tradeoff_task_gain_cost_loss": 0,
+     "tradeoff_task_loss_cost_gain": 1,
+     "worse_both": 0
+    },
+    "dC_ci": [
+     -12566.625,
+     -11191.5796875
+    ],
+    "dC_mean": -11893.125,
+    "dY_ci": [
+     -0.09375,
+     0.0
+    ],
+    "dY_mean": -0.03125,
+    "degraded_scenes": [
+     1400031
+    ]
+   },
+   "late_discovery_gate_147": {
+    "counts": {
+     "both_tied": 7,
+     "cost_equal": 7,
+     "cost_higher": 23,
+     "cost_lower": 34,
+     "cost_only_worse": 20,
+     "joint_dominant": 34,
+     "task_degraded": 0,
+     "task_improved": 4,
+     "task_only_worse": 0,
+     "task_tied": 60,
+     "tradeoff_task_gain_cost_loss": 3,
+     "tradeoff_task_loss_cost_gain": 0,
+     "worse_both": 0
+    },
+    "dC_ci": [
+     -1849.22109375,
+     502.16953124999935
+    ],
+    "dC_mean": -696.28125,
+    "dY_ci": [
+     0.015625,
+     0.125
+    ],
+    "dY_mean": 0.0625,
+    "degraded_scenes": []
+   }
+  }
+ },
+ "round": "26",
+ "section": "independent recheck of the corrected ROUND25 statistics (0 launches)"
+}
