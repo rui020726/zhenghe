@@ -1,0 +1,51 @@
+{
+  "round": "27",
+  "run_id": "comm_cost_firstreport_intervention_20260929",
+  "file": "runs/comm_cost_firstreport_intervention_20260929/EXECUTION_BASIS.md",
+  "source": "user's direct instruction delivered in-session (session message); it is the sole execution basis of this round and supersedes nothing already committed on disk",
+  "registration": {
+    "bytes": 6037,
+    "sha256": "eeb982dee928aa5c605a724404eb61c0758806b5cad9faa5b4dc66110f2ff259",
+    "encoding": "UTF-8, LF newlines, no BOM (as received in-session and saved)",
+    "git_blob_sha1_note": "recorded after the commit; with core.autocrlf=true the git blob is the LF form of the same bytes"
+  },
+  "hash_use": {
+    "purpose": "drift prevention during this round: any change to this file invalidates the execution basis",
+    "not_a_substitute": "this hash is this round's own instruction hash only; it verifies nothing about any earlier spec"
+  },
+  "branch_state_at_registration": {
+    "parent_branch": "exp/round26-round25-recheck",
+    "parent_head": "e22db99ee1e1db9b536f4d8f9161b6538adf7ea8",
+    "parent_head_short": "e22db99",
+    "matches_last_delivery_short_sha": true,
+    "history_preserved": true,
+    "note": "a new independent experiment branch exp/comm-cost-firstreport-intervention was created from that head; the ROUND26 branch and all its commits are kept",
+    "tracked_worktree_state": "clean (git diff HEAD empty at branch creation)"
+  },
+  "launches_before_this_commit": 0,
+  "publication": {
+    "remote_verification": "NOT_PERFORMED",
+    "publication_status": "PENDING_NETWORK",
+    "network_retries_this_session": 0,
+    "note": "publication is not a precondition for continuing this round; no network attempt is made in this session"
+  },
+  "reuse_registration": {
+    "rule": "identity verification of already completed rounds is reused when source code and input file hashes are unchanged; evidence paths are registered instead of re-proving with new environment launches",
+    "reused_evidence_paths": [
+      "runs/comm_cost_greedy_replication_20260928/REUSE_VERIFICATION.json",
+      "runs/comm_cost_greedy_replication_20260928/CANDIDATE_FREEZE.json",
+      "runs/comm_cost_greedy_replication_20260928/ARM_FREEZE.json",
+      "runs/comm_cost_v2_rerun_20260928/CONFIG_AND_MODEL_MANIFEST.json",
+      "runs/round26_analysis_20260929/STATISTICAL_RECHECK.json"
+    ],
+    "code_identity_freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc",
+    "configuration_hash": "e9b2c067db5951f2"
+  },
+  "wording_corrections_registered": [
+    "an early accepted first report is associated with success; sufficiency is not established",
+    "ACK-off creates an information blind spot; it is not established that an observation must be added or that learning is impossible",
+    "superseded is a delivery-processing outcome; it does not automatically qualify as safely droppable traffic",
+    "line-of-sight / gossip is called a bypass not measured by the current cost accounting, never physically free"
+  ],
+  "commit_plan": "this verification file, the execution basis and the section-1 read-back are committed before the first environment launch of this round"
+}

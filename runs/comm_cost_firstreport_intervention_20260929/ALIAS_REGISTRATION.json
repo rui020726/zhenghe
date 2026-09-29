@@ -1,0 +1,27 @@
+{
+  "round": "27",
+  "run_id": "comm_cost_firstreport_intervention_20260929",
+  "section": "1 alias registration: immediate vs send_once",
+  "question": "are the current immediate / send_once policies already 'one first report per discovery, no refresh'? If equivalent, register the alias and add no new synonymous rule",
+  "code_level": {
+    "decide_source_identical": true,
+    "note": "ImmediatePolicy.decide and SendOncePolicy.decide have byte-identical source "
+            "(tuple(item.target_id for item in observation.items if item.pending_event)); "
+            "both inherit parameters() -> {} and orders_selection=False; only the name attribute differs",
+    "pending_event_lifecycle": "pending_event is set only by an accepted, de-duplicated detection event (comm.py:421) and cleared on emit (comm.py:960); view changes set ready_step/ready_view but not pending_event, so neither policy ever refreshes",
+    "verdict": "behaviourally equivalent on this path; registered as an alias, no new synonymous rule is added"
+  },
+  "empirical_round25_rows": {
+    "scenes_checked": 64,
+    "rule": "for every r25_immediate_s<seed>_a1.json row: emissions == discovered == sum(first_emissions) and sum(refresh_emissions) == 0",
+    "result": "64/64 passed",
+    "totals": {"emissions": 376, "discovered": 376, "refresh_emissions": 0},
+    "scene_1400031_immediate_row": {
+      "discovered": 6, "emissions": 6, "spent_bytes": 15684,
+      "emission_sequence_all_first_true": true,
+      "refusals": {"budget_refused_sends": 0, "capacity_refused_sends": 0}
+    }
+  },
+  "cost_naming": "measured payload-attempt cost under the current billing model; refusals billed zero and listed separately; line-of-sight / gossip is an unmeasured bypass, not a free channel",
+  "zero_launches": true
+}

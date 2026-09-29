@@ -1,0 +1,2079 @@
+{
+ "round": "27",
+ "scene": 1400031,
+ "section": "§1 target-5 steps 3-11 read-back from existing ROUND25 logs (zero launches)",
+ "sources": {
+  "lifecycle": "runs\\comm_cost_greedy_replication_20260928\\logs\\r25_learned_s33_greedy_s1400031_a1_rp.jsonl",
+  "transcript": "runs\\comm_cost_greedy_replication_20260928\\logs\\r25_learned_s33_greedy_s1400031_a1_ct.jsonl",
+  "tape": "runs\\comm_cost_greedy_replication_20260928\\logs\\r25_learned_s33_greedy_s1400031_a1_tape.jsonl",
+  "rows": "runs\\comm_cost_greedy_replication_20260928\\rows\\r25_learned_s33_greedy_s1400031_a1.json"
+ },
+ "target5_learned_window": {
+  "arm": "learned_s33_greedy",
+  "target": "piloc-e1-target-5",
+  "window": [
+   1,
+   54
+  ],
+  "detection": [
+   {
+    "t": 1.0,
+    "discovered_by": "agent_0",
+    "detail_observed_by": "agent_0",
+    "detail_grid_position": [
+     59,
+     34
+    ],
+    "detail_deadline_offset": 95.52539215745361
+   }
+  ],
+  "assignment_events": [
+   {
+    "t": 2.0,
+    "agents": [
+     "3"
+    ],
+    "reason": "ctde+coordination",
+    "command_id": "assignment:10",
+    "valid_until": 12.0
+   },
+   {
+    "t": 2.0,
+    "agents": [
+     "4"
+    ],
+    "reason": "ctde+coordination",
+    "command_id": "assignment:11",
+    "valid_until": 12.0
+   },
+   {
+    "t": 54.0,
+    "agents": [
+     "1"
+    ],
+    "reason": "ctde+coordination",
+    "command_id": "assignment:19",
+    "valid_until": 64.0
+   }
+  ],
+  "progress_events": [
+   {
+    "t": 1.0,
+    "assigned_agents": [],
+    "progress": 0.0,
+    "stage_index": 0,
+    "status": "detected",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     1,
+     1
+    ]
+   },
+   {
+    "t": 3.0,
+    "assigned_agents": [
+     "3",
+     "4"
+    ],
+    "progress": 0.039966,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 4.0,
+    "assigned_agents": [
+     "3",
+     "4"
+    ],
+    "progress": 0.079932,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 5.0,
+    "assigned_agents": [
+     "3",
+     "4"
+    ],
+    "progress": 0.119898,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 6.0,
+    "assigned_agents": [
+     "3",
+     "4"
+    ],
+    "progress": 0.159864,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 7.0,
+    "assigned_agents": [
+     "3",
+     "4"
+    ],
+    "progress": 0.199829,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 8.0,
+    "assigned_agents": [
+     "3",
+     "4"
+    ],
+    "progress": 0.239795,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 9.0,
+    "assigned_agents": [
+     "3",
+     "4"
+    ],
+    "progress": 0.279761,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 10.0,
+    "assigned_agents": [
+     "3",
+     "4"
+    ],
+    "progress": 0.319727,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 11.0,
+    "assigned_agents": [],
+    "progress": 0.333333,
+    "stage_index": 1,
+    "status": "detected",
+    "remaining_requirements": [
+     0,
+     1,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "uplink_sends_window": [
+   {
+    "step": 34,
+    "target": "piloc-e1-target-5",
+    "revision": 11,
+    "cost_bytes": 2682,
+    "payload_bytes": 447,
+    "packets": 4,
+    "packets_lost": 2,
+    "subscribers": 6,
+    "first": true,
+    "send_reason": "policy",
+    "ready_step": 1,
+    "progress": 0.3333333333333333
+   }
+  ],
+  "uplink_deliveries_window": [
+   {
+    "step": 34,
+    "agent": "2",
+    "revision": 11,
+    "accepted": false,
+    "reason": "delivery_superseded",
+    "sent_step": 34,
+    "sent_at": 11.0,
+    "now": 33.0
+   },
+   {
+    "step": 34,
+    "agent": "3",
+    "revision": 11,
+    "accepted": false,
+    "reason": "delivery_superseded",
+    "sent_step": 34,
+    "sent_at": 11.0,
+    "now": 33.0
+   },
+   {
+    "step": 34,
+    "agent": "4",
+    "revision": 11,
+    "accepted": false,
+    "reason": "delivery_superseded",
+    "sent_step": 34,
+    "sent_at": 11.0,
+    "now": 33.0
+   },
+   {
+    "step": 34,
+    "agent": "5",
+    "revision": 11,
+    "accepted": false,
+    "reason": "delivery_superseded",
+    "sent_step": 34,
+    "sent_at": 11.0,
+    "now": 33.0
+   }
+  ]
+ },
+ "target5_immediate_window": {
+  "arm": "immediate",
+  "target": "piloc-e1-target-5",
+  "window": [
+   1,
+   54
+  ],
+  "detection": [
+   {
+    "t": 1.0,
+    "discovered_by": "agent_0",
+    "detail_observed_by": "agent_0",
+    "detail_grid_position": [
+     59,
+     34
+    ],
+    "detail_deadline_offset": 95.52539215745361
+   }
+  ],
+  "assignment_events": [
+   {
+    "t": 1.0,
+    "agents": [
+     "4"
+    ],
+    "reason": "ctde+coordination",
+    "command_id": "assignment:5",
+    "valid_until": 11.0
+   },
+   {
+    "t": 19.0,
+    "agents": [
+     "3"
+    ],
+    "reason": "ctde+coordination",
+    "command_id": "assignment:9",
+    "valid_until": 29.0
+   },
+   {
+    "t": 39.0,
+    "agents": [
+     "0"
+    ],
+    "reason": "ctde+coordination",
+    "command_id": "assignment:16",
+    "valid_until": 49.0
+   },
+   {
+    "t": 52.0,
+    "agents": [
+     "2"
+    ],
+    "reason": "ctde+coordination",
+    "command_id": "assignment:23",
+    "valid_until": 62.0
+   },
+   {
+    "t": 53.0,
+    "agents": [
+     "4"
+    ],
+    "reason": "ctde+coordination",
+    "command_id": "assignment:24",
+    "valid_until": 63.0
+   }
+  ],
+  "progress_events": [
+   {
+    "t": 1.0,
+    "assigned_agents": [],
+    "progress": 0.0,
+    "stage_index": 0,
+    "status": "detected",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     1,
+     1
+    ]
+   },
+   {
+    "t": 2.0,
+    "assigned_agents": [
+     "4"
+    ],
+    "progress": 0.0,
+    "stage_index": 0,
+    "status": "assigned",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     1
+    ]
+   },
+   {
+    "t": 20.0,
+    "assigned_agents": [
+     "4",
+     "3"
+    ],
+    "progress": 0.039966,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 21.0,
+    "assigned_agents": [
+     "4",
+     "3"
+    ],
+    "progress": 0.079932,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 22.0,
+    "assigned_agents": [
+     "4",
+     "3"
+    ],
+    "progress": 0.119898,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 23.0,
+    "assigned_agents": [
+     "4",
+     "3"
+    ],
+    "progress": 0.159864,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 24.0,
+    "assigned_agents": [
+     "4",
+     "3"
+    ],
+    "progress": 0.199829,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 25.0,
+    "assigned_agents": [
+     "4",
+     "3"
+    ],
+    "progress": 0.239795,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 26.0,
+    "assigned_agents": [
+     "4",
+     "3"
+    ],
+    "progress": 0.279761,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 27.0,
+    "assigned_agents": [
+     "4",
+     "3"
+    ],
+    "progress": 0.319727,
+    "stage_index": 0,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 28.0,
+    "assigned_agents": [],
+    "progress": 0.333333,
+    "stage_index": 1,
+    "status": "detected",
+    "remaining_requirements": [
+     0,
+     1,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 40.0,
+    "assigned_agents": [
+     "0"
+    ],
+    "progress": 0.36312,
+    "stage_index": 1,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 41.0,
+    "assigned_agents": [
+     "0"
+    ],
+    "progress": 0.392907,
+    "stage_index": 1,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 42.0,
+    "assigned_agents": [
+     "0"
+    ],
+    "progress": 0.422694,
+    "stage_index": 1,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 43.0,
+    "assigned_agents": [
+     "0"
+    ],
+    "progress": 0.452482,
+    "stage_index": 1,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 44.0,
+    "assigned_agents": [
+     "0"
+    ],
+    "progress": 0.482269,
+    "stage_index": 1,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 45.0,
+    "assigned_agents": [
+     "0"
+    ],
+    "progress": 0.512056,
+    "stage_index": 1,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 46.0,
+    "assigned_agents": [
+     "0"
+    ],
+    "progress": 0.541843,
+    "stage_index": 1,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 47.0,
+    "assigned_agents": [
+     "0"
+    ],
+    "progress": 0.57163,
+    "stage_index": 1,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 48.0,
+    "assigned_agents": [
+     "0"
+    ],
+    "progress": 0.601417,
+    "stage_index": 1,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 49.0,
+    "assigned_agents": [
+     "0"
+    ],
+    "progress": 0.631204,
+    "stage_index": 1,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 50.0,
+    "assigned_agents": [
+     "0"
+    ],
+    "progress": 0.660991,
+    "stage_index": 1,
+    "status": "in_progress",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": 51.0,
+    "assigned_agents": [],
+    "progress": 0.666667,
+    "stage_index": 2,
+    "status": "detected",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     1,
+     1
+    ]
+   },
+   {
+    "t": 53.0,
+    "assigned_agents": [],
+    "progress": 0.666667,
+    "stage_index": 2,
+    "status": "en_route",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     1,
+     1
+    ]
+   },
+   {
+    "t": 54.0,
+    "assigned_agents": [
+     "2"
+    ],
+    "progress": 0.666667,
+    "stage_index": 2,
+    "status": "assigned",
+    "remaining_requirements": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  ],
+  "uplink_sends_window": [
+   {
+    "step": 1,
+    "target": "piloc-e1-target-5",
+    "revision": 1,
+    "cost_bytes": 2574,
+    "payload_bytes": 429,
+    "packets": 4,
+    "packets_lost": 2,
+    "subscribers": 6,
+    "first": true,
+    "send_reason": "policy",
+    "ready_step": 1,
+    "progress": 0.0
+   }
+  ],
+  "uplink_deliveries_window": [
+   {
+    "step": 1,
+    "agent": "0",
+    "revision": 1,
+    "accepted": true,
+    "reason": "accepted",
+    "sent_step": 1,
+    "sent_at": 1.0,
+    "now": 0.0
+   },
+   {
+    "step": 1,
+    "agent": "2",
+    "revision": 1,
+    "accepted": true,
+    "reason": "accepted",
+    "sent_step": 1,
+    "sent_at": 1.0,
+    "now": 0.0
+   },
+   {
+    "step": 1,
+    "agent": "4",
+    "revision": 1,
+    "accepted": true,
+    "reason": "accepted",
+    "sent_step": 1,
+    "sent_at": 1.0,
+    "now": 0.0
+   },
+   {
+    "step": 1,
+    "agent": "5",
+    "revision": 1,
+    "accepted": true,
+    "reason": "accepted",
+    "sent_step": 1,
+    "sent_at": 1.0,
+    "now": 0.0
+   }
+  ]
+ },
+ "target5_full_episode_messages": {
+  "learned_s33_greedy": {
+   "arm": "learned_s33_greedy",
+   "target": "piloc-e1-target-5",
+   "sends": [
+    {
+     "step": 34,
+     "revision": 11,
+     "cost_bytes": 2682,
+     "packets": 4,
+     "packets_lost": 2,
+     "subscribers": 6,
+     "first": true,
+     "send_reason": "policy",
+     "ready_step": 1,
+     "progress": 0.3333333333333333
+    }
+   ],
+   "deliveries": [
+    {
+     "step": 34,
+     "agent": "2",
+     "accepted": false,
+     "reason": "delivery_superseded",
+     "sent_step": 34,
+     "sent_at": 11.0
+    },
+    {
+     "step": 34,
+     "agent": "3",
+     "accepted": false,
+     "reason": "delivery_superseded",
+     "sent_step": 34,
+     "sent_at": 11.0
+    },
+    {
+     "step": 34,
+     "agent": "4",
+     "accepted": false,
+     "reason": "delivery_superseded",
+     "sent_step": 34,
+     "sent_at": 11.0
+    },
+    {
+     "step": 34,
+     "agent": "5",
+     "accepted": false,
+     "reason": "delivery_superseded",
+     "sent_step": 34,
+     "sent_at": 11.0
+    }
+   ],
+   "assignments": [
+    {
+     "t": 2.0,
+     "agents": [
+      "3"
+     ],
+     "valid_until": 12.0
+    },
+    {
+     "t": 2.0,
+     "agents": [
+      "4"
+     ],
+     "valid_until": 12.0
+    },
+    {
+     "t": 54.0,
+     "agents": [
+      "1"
+     ],
+     "valid_until": 64.0
+    },
+    {
+     "t": 93.0,
+     "agents": [
+      "2"
+     ],
+     "valid_until": 103.0
+    },
+    {
+     "t": 95.0,
+     "agents": [
+      "4"
+     ],
+     "valid_until": 105.0
+    }
+   ],
+   "final": [
+    {
+     "t": 1000.0,
+     "status": "expired",
+     "detail": {
+      "step": 1000,
+      "deadline": 96.52539215745361,
+      "discovered_at": 1.0,
+      "updated_at": 101.0,
+      "position": [
+       0.576271186440678,
+       1.0
+      ]
+     }
+    }
+   ]
+  },
+  "immediate": {
+   "arm": "immediate",
+   "target": "piloc-e1-target-5",
+   "sends": [
+    {
+     "step": 1,
+     "revision": 1,
+     "cost_bytes": 2574,
+     "packets": 4,
+     "packets_lost": 2,
+     "subscribers": 6,
+     "first": true,
+     "send_reason": "policy",
+     "ready_step": 1,
+     "progress": 0.0
+    }
+   ],
+   "deliveries": [
+    {
+     "step": 1,
+     "agent": "0",
+     "accepted": true,
+     "reason": "accepted",
+     "sent_step": 1,
+     "sent_at": 1.0
+    },
+    {
+     "step": 1,
+     "agent": "2",
+     "accepted": true,
+     "reason": "accepted",
+     "sent_step": 1,
+     "sent_at": 1.0
+    },
+    {
+     "step": 1,
+     "agent": "4",
+     "accepted": true,
+     "reason": "accepted",
+     "sent_step": 1,
+     "sent_at": 1.0
+    },
+    {
+     "step": 1,
+     "agent": "5",
+     "accepted": true,
+     "reason": "accepted",
+     "sent_step": 1,
+     "sent_at": 1.0
+    }
+   ],
+   "assignments": [
+    {
+     "t": 1.0,
+     "agents": [
+      "4"
+     ],
+     "valid_until": 11.0
+    },
+    {
+     "t": 19.0,
+     "agents": [
+      "3"
+     ],
+     "valid_until": 29.0
+    },
+    {
+     "t": 39.0,
+     "agents": [
+      "0"
+     ],
+     "valid_until": 49.0
+    },
+    {
+     "t": 52.0,
+     "agents": [
+      "2"
+     ],
+     "valid_until": 62.0
+    },
+    {
+     "t": 53.0,
+     "agents": [
+      "4"
+     ],
+     "valid_until": 63.0
+    }
+   ],
+   "final": [
+    {
+     "t": 1000.0,
+     "status": "completed",
+     "detail": {
+      "step": 1000,
+      "deadline": 96.52539215745361,
+      "discovered_at": 1.0,
+      "updated_at": 59.0,
+      "position": [
+       0.576271186440678,
+       1.0
+      ]
+     }
+    }
+   ]
+  },
+  "late_discovery_gate_147": {
+   "arm": "late_discovery_gate_147",
+   "target": "piloc-e1-target-5",
+   "sends": [],
+   "deliveries": [],
+   "assignments": [
+    {
+     "t": 2.0,
+     "agents": [
+      "3"
+     ],
+     "valid_until": 12.0
+    },
+    {
+     "t": 2.0,
+     "agents": [
+      "4"
+     ],
+     "valid_until": 12.0
+    },
+    {
+     "t": 54.0,
+     "agents": [
+      "1"
+     ],
+     "valid_until": 64.0
+    },
+    {
+     "t": 93.0,
+     "agents": [
+      "2"
+     ],
+     "valid_until": 103.0
+    },
+    {
+     "t": 95.0,
+     "agents": [
+      "4"
+     ],
+     "valid_until": 105.0
+    }
+   ],
+   "final": [
+    {
+     "t": 1000.0,
+     "status": "expired",
+     "detail": {
+      "step": 1000,
+      "deadline": 96.52539215745361,
+      "discovered_at": 1.0,
+      "updated_at": 101.0,
+      "position": [
+       0.576271186440678,
+       1.0
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "target0_full_episode_messages": {
+  "learned_s33_greedy": {
+   "arm": "learned_s33_greedy",
+   "target": "piloc-e1-target-0",
+   "sends": [
+    {
+     "step": 31,
+     "revision": 2,
+     "cost_bytes": 2682,
+     "packets": 4,
+     "packets_lost": 2,
+     "subscribers": 6,
+     "first": true,
+     "send_reason": "policy",
+     "ready_step": 19,
+     "progress": 0.0
+    }
+   ],
+   "deliveries": [
+    {
+     "step": 31,
+     "agent": "0",
+     "accepted": false,
+     "reason": "delivery_superseded",
+     "sent_step": 31,
+     "sent_at": 19.0
+    },
+    {
+     "step": 31,
+     "agent": "2",
+     "accepted": false,
+     "reason": "delivery_superseded",
+     "sent_step": 31,
+     "sent_at": 19.0
+    },
+    {
+     "step": 31,
+     "agent": "4",
+     "accepted": false,
+     "reason": "delivery_superseded",
+     "sent_step": 31,
+     "sent_at": 19.0
+    },
+    {
+     "step": 31,
+     "agent": "5",
+     "accepted": false,
+     "reason": "delivery_superseded",
+     "sent_step": 31,
+     "sent_at": 19.0
+    }
+   ],
+   "assignments": [
+    {
+     "t": 31.0,
+     "agents": [
+      "3"
+     ],
+     "valid_until": 41.0
+    },
+    {
+     "t": 54.0,
+     "agents": [
+      "2"
+     ],
+     "valid_until": 64.0
+    },
+    {
+     "t": 54.0,
+     "agents": [
+      "5"
+     ],
+     "valid_until": 64.0
+    },
+    {
+     "t": 66.0,
+     "agents": [
+      "1"
+     ],
+     "valid_until": 76.0
+    }
+   ],
+   "final": [
+    {
+     "t": 1000.0,
+     "status": "expired",
+     "detail": {
+      "step": 1000,
+      "deadline": 83.95666085385487,
+      "discovered_at": 19.0,
+      "updated_at": 93.0,
+      "position": [
+       0.3559322033898305,
+       0.8135593220338984
+      ]
+     }
+    }
+   ]
+  },
+  "immediate": {
+   "arm": "immediate",
+   "target": "piloc-e1-target-0",
+   "sends": [
+    {
+     "step": 19,
+     "revision": 1,
+     "cost_bytes": 2682,
+     "packets": 3,
+     "packets_lost": 3,
+     "subscribers": 6,
+     "first": true,
+     "send_reason": "policy",
+     "ready_step": 19,
+     "progress": 0.0
+    }
+   ],
+   "deliveries": [
+    {
+     "step": 19,
+     "agent": "0",
+     "accepted": true,
+     "reason": "accepted",
+     "sent_step": 19,
+     "sent_at": 19.0
+    },
+    {
+     "step": 19,
+     "agent": "2",
+     "accepted": true,
+     "reason": "accepted",
+     "sent_step": 19,
+     "sent_at": 19.0
+    },
+    {
+     "step": 19,
+     "agent": "5",
+     "accepted": true,
+     "reason": "accepted",
+     "sent_step": 19,
+     "sent_at": 19.0
+    }
+   ],
+   "assignments": [
+    {
+     "t": 29.0,
+     "agents": [
+      "2"
+     ],
+     "valid_until": 39.0
+    },
+    {
+     "t": 31.0,
+     "agents": [
+      "5"
+     ],
+     "valid_until": 41.0
+    },
+    {
+     "t": 37.0,
+     "agents": [
+      "3"
+     ],
+     "valid_until": 47.0
+    },
+    {
+     "t": 38.0,
+     "agents": [
+      "3"
+     ],
+     "valid_until": 48.0
+    },
+    {
+     "t": 39.0,
+     "agents": [
+      "1"
+     ],
+     "valid_until": 49.0
+    },
+    {
+     "t": 39.0,
+     "agents": [
+      "2"
+     ],
+     "valid_until": 49.0
+    }
+   ],
+   "final": [
+    {
+     "t": 1000.0,
+     "status": "completed",
+     "detail": {
+      "step": 1000,
+      "deadline": 83.95666085385487,
+      "discovered_at": 19.0,
+      "updated_at": 65.0,
+      "position": [
+       0.3559322033898305,
+       0.8135593220338984
+      ]
+     }
+    }
+   ]
+  },
+  "late_discovery_gate_147": {
+   "arm": "late_discovery_gate_147",
+   "target": "piloc-e1-target-0",
+   "sends": [],
+   "deliveries": [],
+   "assignments": [
+    {
+     "t": 31.0,
+     "agents": [
+      "3"
+     ],
+     "valid_until": 41.0
+    },
+    {
+     "t": 54.0,
+     "agents": [
+      "2"
+     ],
+     "valid_until": 64.0
+    },
+    {
+     "t": 54.0,
+     "agents": [
+      "5"
+     ],
+     "valid_until": 64.0
+    },
+    {
+     "t": 66.0,
+     "agents": [
+      "1"
+     ],
+     "valid_until": 76.0
+    }
+   ],
+   "final": [
+    {
+     "t": 1000.0,
+     "status": "expired",
+     "detail": {
+      "step": 1000,
+      "deadline": 83.95666085385487,
+      "discovered_at": 19.0,
+      "updated_at": 93.0,
+      "position": [
+       0.3559322033898305,
+       0.8135593220338984
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "target5_tape_decisions_window": [
+  {
+   "step": 1,
+   "action": "HOLD",
+   "send_probability": 0.348194,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2574,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 2,
+   "action": "HOLD",
+   "send_probability": 0.360667,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2574,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 3,
+   "action": "HOLD",
+   "send_probability": 0.385998,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2574,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 4,
+   "action": "HOLD",
+   "send_probability": 0.412052,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2712,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 5,
+   "action": "HOLD",
+   "send_probability": 0.416305,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2712,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 6,
+   "action": "HOLD",
+   "send_probability": 0.416777,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2712,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 7,
+   "action": "HOLD",
+   "send_probability": 0.416203,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2712,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 8,
+   "action": "HOLD",
+   "send_probability": 0.416031,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2712,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 9,
+   "action": "HOLD",
+   "send_probability": 0.416448,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2712,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 10,
+   "action": "HOLD",
+   "send_probability": 0.412304,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2712,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 11,
+   "action": "HOLD",
+   "send_probability": 0.412552,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2724,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 12,
+   "action": "HOLD",
+   "send_probability": 0.413051,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 13,
+   "action": "HOLD",
+   "send_probability": 0.420365,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 14,
+   "action": "HOLD",
+   "send_probability": 0.426934,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 15,
+   "action": "HOLD",
+   "send_probability": 0.432922,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 16,
+   "action": "HOLD",
+   "send_probability": 0.43846,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 17,
+   "action": "HOLD",
+   "send_probability": 0.443643,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 18,
+   "action": "HOLD",
+   "send_probability": 0.448541,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 19,
+   "action": "HOLD",
+   "send_probability": 0.446608,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 20,
+   "action": "HOLD",
+   "send_probability": 0.451393,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 21,
+   "action": "HOLD",
+   "send_probability": 0.456029,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 22,
+   "action": "HOLD",
+   "send_probability": 0.460514,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 23,
+   "action": "HOLD",
+   "send_probability": 0.464845,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 24,
+   "action": "HOLD",
+   "send_probability": 0.469016,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 25,
+   "action": "HOLD",
+   "send_probability": 0.47302,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 26,
+   "action": "HOLD",
+   "send_probability": 0.476855,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 27,
+   "action": "HOLD",
+   "send_probability": 0.480515,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 29300.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 28,
+   "action": "HOLD",
+   "send_probability": 0.484002,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 26606.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 29,
+   "action": "HOLD",
+   "send_probability": 0.489524,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 26606.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 30,
+   "action": "HOLD",
+   "send_probability": 0.492156,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 26606.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 31,
+   "action": "HOLD",
+   "send_probability": 0.494674,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 23924.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 32,
+   "action": "HOLD",
+   "send_probability": 0.497143,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 23924.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 33,
+   "action": "HOLD",
+   "send_probability": 0.499413,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 23924.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 34,
+   "action": "SEND",
+   "send_probability": 0.502434,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 23924.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 35,
+   "action": "HOLD",
+   "send_probability": 0.331772,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 21242.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 36,
+   "action": "HOLD",
+   "send_probability": 0.313735,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 21242.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 37,
+   "action": "HOLD",
+   "send_probability": 0.301817,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 21242.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 38,
+   "action": "HOLD",
+   "send_probability": 0.294343,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 21242.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 39,
+   "action": "HOLD",
+   "send_probability": 0.289841,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 21242.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 40,
+   "action": "HOLD",
+   "send_probability": 0.287357,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 41,
+   "action": "HOLD",
+   "send_probability": 0.282267,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 42,
+   "action": "HOLD",
+   "send_probability": 0.282704,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 43,
+   "action": "HOLD",
+   "send_probability": 0.28374,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 44,
+   "action": "HOLD",
+   "send_probability": 0.283284,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 45,
+   "action": "HOLD",
+   "send_probability": 0.285898,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 46,
+   "action": "HOLD",
+   "send_probability": 0.288909,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 47,
+   "action": "HOLD",
+   "send_probability": 0.292307,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 48,
+   "action": "HOLD",
+   "send_probability": 0.296121,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 49,
+   "action": "HOLD",
+   "send_probability": 0.300352,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 50,
+   "action": "HOLD",
+   "send_probability": 0.304915,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 51,
+   "action": "HOLD",
+   "send_probability": 0.309732,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 52,
+   "action": "HOLD",
+   "send_probability": 0.314707,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 53,
+   "action": "HOLD",
+   "send_probability": 0.319733,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  },
+  {
+   "step": 54,
+   "action": "HOLD",
+   "send_probability": 0.324708,
+   "class": "actionable",
+   "honours_this_candidate": true,
+   "shadow_budget_before": 18722.0,
+   "attempt_charge_bytes": 2682,
+   "first_emission_flag_missing": "SendItem.first_emission is not stored on the tape; the transcript's send record carries `first`"
+  }
+ ],
+ "who_knew": {
+  "known_by_own_detection": [
+   "agent_0"
+  ],
+  "assigned_during_window": [
+   "1",
+   "3",
+   "4"
+  ],
+  "uplink_deliveries_learned_window": [
+   "2",
+   "3",
+   "4",
+   "5"
+  ],
+  "uplink_sends_learned_window_count": 1,
+  "uplink_accepted_deliveries_immediate_window": [
+   "0",
+   "2",
+   "4",
+   "5"
+  ],
+  "receivers_that_held_a_belief_by_t34": [
+   "2",
+   "3",
+   "4",
+   "5"
+  ],
+  "superseded_evidence": [
+   {
+    "agent": "2",
+    "step": 34,
+    "reason": "delivery_superseded",
+    "sent_at_of_message": 11.0
+   },
+   {
+    "agent": "3",
+    "step": 34,
+    "reason": "delivery_superseded",
+    "sent_at_of_message": 11.0
+   },
+   {
+    "agent": "4",
+    "step": 34,
+    "reason": "delivery_superseded",
+    "sent_at_of_message": 11.0
+   },
+   {
+    "agent": "5",
+    "step": 34,
+    "reason": "delivery_superseded",
+    "sent_at_of_message": 11.0
+   }
+  ],
+  "info_source_evidence": {
+   "measured_uplink": "the learned arm's transcript holds exactly one send for this target inside steps 1-53 (step 34, first=true), so no receiver could have learned about target-5 from the measured uplink between its discovery at t=1.0 and that step-34 send",
+   "unmeasured_bypass": "assignment of agents 3 and 4 at t=2.0 and their work from t=3.0 exist without any measured uplink traffic for this target, and the step-34 send was refused as superseded for agents 2, 3, 4 and 5, so the knowledge must have arrived over the line-of-sight / gossip bypass, which the current cost accounting does not measure",
+   "bypass_separation": "missing: line-of-sight refresh and one-hop gossip share one code path and one switch in old_task_env, and no log separates them; no per-robot belief log exists in this configuration (info_probe is null)",
+   "allocator_belief_source": "missing: the assignment records name the reason 'ctde+coordination' but not whether the allocator consulted robot beliefs or the registry truth",
+   "exact_time_agents_2_and_5_learned": "missing: only the t=34 superseded verdicts bound it to 'by t=34', with no finer timestamp"
+  },
+  "still_unknown_during_steps_3_to_11": {
+   "agents_without_any_logged_path_to_know": [
+    "agent_1",
+    "agent_2",
+    "agent_5"
+   ],
+   "note": "during the 3-11 work window the logs hold no detection, no accepted uplink delivery and no assignment for these three agents for this target; the unmeasured bypass leaves no per-agent record, so this is the absence of evidence rather than a logged fact (agents 2 and 5 are later proven to have held a belief by t=34)"
+  },
+  "learners_during_steps_3_to_11": {
+   "agent_0": "own search detection at t=1.0 (lifecycle detail.observed_by)",
+   "agent_3": "assigned at t=2.0, worked t=3.0-10.0 (assignment + progress records)",
+   "agent_4": "assigned at t=2.0, worked t=3.0-10.0 (assignment + progress records)"
+  }
+ },
+ "interruption_evidence": {
+  "last_work_with_agents": {
+   "t": 10.0,
+   "assigned_agents": [
+    "3",
+    "4"
+   ],
+   "progress": 0.319727,
+   "stage_index": 0,
+   "status": "in_progress",
+   "remaining_requirements": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "first_record_without_agents_after": {
+   "t": 11.0,
+   "assigned_agents": [],
+   "progress": 0.333333,
+   "stage_index": 1,
+   "status": "detected",
+   "remaining_requirements": [
+    0,
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  "stage_change_at_interruption": {
+   "stage_index_before": 0,
+   "stage_index_after": 1,
+   "remaining_requirements_before": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "remaining_requirements_after": [
+    0,
+    1,
+    0,
+    0,
+    0
+   ],
+   "status_after": "detected"
+  },
+  "assignment_gap": {
+   "from_t": 11.0,
+   "next_assignment": {
+    "t": 54.0,
+    "agents": [
+     "1"
+    ],
+    "reason": "ctde+coordination",
+    "command_id": "assignment:19",
+    "valid_until": 64.0
+   },
+   "gap_note": "no assignment record for this target between these two events"
+  },
+  "progress_gap": {
+   "from_t": 11.0,
+   "next_progress_t": null
+  },
+  "other_targets_assigned_during_gap": {
+   "piloc-e1-target-2": [
+    {
+     "t": 11.0,
+     "agents": [
+      "3"
+     ]
+    }
+   ],
+   "piloc-e1-target-1": [
+    {
+     "t": 11.0,
+     "agents": [
+      "4"
+     ]
+    }
+   ],
+   "piloc-e1-target-4": [
+    {
+     "t": 20.0,
+     "agents": [
+      "3"
+     ]
+    }
+   ],
+   "piloc-e1-target-0": [
+    {
+     "t": 31.0,
+     "agents": [
+      "3"
+     ]
+    },
+    {
+     "t": 54.0,
+     "agents": [
+      "2"
+     ]
+    },
+    {
+     "t": 54.0,
+     "agents": [
+      "5"
+     ]
+    }
+   ],
+   "piloc-e1-target-3": [
+    {
+     "t": 43.0,
+     "agents": [
+      "5"
+     ]
+    }
+   ]
+  },
+  "capability_read": "missing: the logs carry no per-agent capability schedule, so why the stage-1 requirement was not re-assigned to anyone is not decidable from these records"
+ }
+}
