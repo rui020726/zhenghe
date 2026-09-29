@@ -110,7 +110,8 @@ def write_gate() -> dict[str, Any]:
 
 
 # ------------------------------------------------------------------ per-sample prefix check ------
-def verify_sample(scene: int, target: str, step: int) -> dict[str, Any]:
+def verify_sample(scene: int, target: str, step: int,
+                  point: dict[str, Any] | None = None) -> dict[str, Any]:
     """One intervention cell against its baseline: prefix identity and opportunity reproduction."""
     baseline = _load("baseline", scene)
     cell = _load("intervention", scene, target)

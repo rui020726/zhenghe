@@ -1,5 +1,35 @@
 # 项目状态
 
+## 2026-09-29：ROUND28 训练场景首报反事实样本诊断——96/96 accepted、0 任务效应，首报决策点特征近乎退化（启动 113/120）
+
+分支 `exp/comm-cost-firstreport-diagnosis`（起点 ROUND27 头 `5982677`），产物
+`runs/comm_cost_firstreport_diagnosis_20260929/`（`ROUND28_REPORT.md`、
+`ROUND28_VERDICT.json`、`PAIRED_SAMPLES.json`、`ANALYSIS_SUMMARY.json`、
+`INTERVENTION_POINTS.json`、`FIRST_SCENE_GATE.json`、`RUN_PREFLIGHT.json`、
+`CODE_IDENTITY.json`、`ARTEFACT_MANIFEST.json`、`ROUND27_SCOPE_REGISTRATION.json`）。
+执行依据 sha256 `f9185812…`，首启前独立提交；`remote_verification=NOT_PERFORMED`、
+`publication_status=PENDING_NETWORK`、本会话网络重试 0。
+
+- **启动 113/113 正常**（16 baseline + 1 禁用门禁 + 96 干预），硬上限 120、储备 0 未动、
+  0 失败、0 重试、0 训练、0 optimizer.step；单一启动身份 `d5b3cee7…` 且可从 harness 提交
+  `0db4ef2` 复现（两个模块按 CRLF 工作树字节）。
+- **§1 套件范围登记**：只读源码核查确认 ROUND27 那次生产套件包含 17 个 `build_joint_run`
+  调用点、8–20 步长短仿真构造（从未进入 ROUND27 五格账本）；措辞更正为“套件通过但范围含
+  账本外仿真构造”，本轮不再重跑套件、未凭通过推断零、未重新追账；模型/身份/结果污染检查无。
+- **选择算法（冻结于干预启动前）**：首次合法可付机会且原 greedy 动作为 HOLD 才登记干预点；
+  16 场景 96 个目标全部合格、0 排除（这批 greedy 在首报机会上全是 HOLD）。
+- **结果**：ΔY 0 正 / 96 零 / 0 负（16 个 baseline 全部 6/6 按时 ⇒ 构造上没有救回信号，
+  ROUND27 的结局改变效应只出现在有失败目标的开发场景 1400031）；ΔC 83 正 / 6 零 / 7 负
+  （中位 +2484 B；最负 −5238 B 来自早发抑制了后续两次发送）。96/96 干预消息被 3–6 个接收方
+  accepted 且 0 superseded，但 0 个改变任务结局、只有 60/96 触动分配/作业链。
+- **特征观察**：首报决策点上 19 维发送端特征有 15 维恒定（age 0、sent_count 0、pending 1、
+  first_emission 1、revision_delta 1、remaining 裁剪饱和、urgency 0 等），仅
+  step_over_horizon / queue_backlog_targets / budget_remaining_fraction /
+  has_future_requirements 变化；96 个目标期限余量全部 > 50 步（紧性信号不可见）。
+- **下一步建议（仅建议、非授权）**：把同一冻结选择器+最小单发覆盖协议跑到含已观测失败的
+  场景族（ROUND25 开发块 1301000..1301015），以制造标签方差；下一步方向指向观测设计分支，
+  当前合法观测下首报决策“几乎无信息量”，动作价值研究暂无可估计信号。
+
 ## 2026-09-29：ROUND27 固定失败场景的首报提前干预——E5 在该场景该实现中改变失败结局；E0 accepted 仍不足（启动 5/8）
 
 分支 `exp/comm-cost-firstreport-intervention`（起点 ROUND26 头 `e22db99`），产物

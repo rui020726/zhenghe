@@ -1,0 +1,73 @@
+{
+ "checks": {
+  "baseline_vs_disabled_behaviour_fields": {
+   "fields_compared": [
+    "on_time",
+    "completed",
+    "expired",
+    "discovered",
+    "active",
+    "unassigned",
+    "task_reward_total",
+    "spent_bytes",
+    "budget_bytes",
+    "emissions",
+    "budget_refused_sends",
+    "capacity_refused_sends",
+    "airtime_tap_total",
+    "goal_identity",
+    "emission_sequence",
+    "refusal_sequence",
+    "cost_stream",
+    "task_stream",
+    "ack_ledger",
+    "transport_parameters",
+    "relay_counters",
+    "behaviour_sha256",
+    "behaviour_config_sha256",
+    "steps",
+    "substituted_fields",
+    "run_signature_checkpoints",
+    "controller_parameters_before",
+    "controller_parameters_after",
+    "optimizer_steps"
+   ],
+   "mismatches": [],
+   "passed": true
+  },
+  "baseline_vs_disabled_tape_lines": {
+   "identical": true,
+   "lines": 58
+  },
+  "disabled_interceptor_idle": {
+   "identity": {
+    "class": "FirstReportAdvancer",
+    "consumed": [],
+    "enabled": false,
+    "log_prob_semantics": "an overridden row's log-probability describes the forced action, not the model's draw; the tape is inert (no training)",
+    "not_a_forced_send": true,
+    "not_an_appended_emission": true,
+    "really_sent": [],
+    "rule": "at the first decision opportunity after discovery where the candidate is legal and payable in the real sequential budget walk, an original greedy HOLD for a named target is overridden to SEND; if the original action is already SEND there is no action difference; at most one override per target; after the first emission the original learned logic resumes",
+    "schema": "round27-first-report-override/1",
+    "targets": []
+   },
+   "passed": true
+  },
+  "frozen_weights_unchanged": {
+   "baseline": true,
+   "disabled": true,
+   "passed": true
+  },
+  "optimizer_steps_zero": {
+   "baseline": 0,
+   "disabled": 0,
+   "passed": true
+  }
+ },
+ "passed": true,
+ "round": "28",
+ "scene": 1300000,
+ "section": "first-scene gate (baseline vs disabled interceptor)",
+ "verdict": "the installed-but-disabled interceptor is inert on the gate scene; the frozen plan may continue"
+}

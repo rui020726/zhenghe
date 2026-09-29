@@ -1,0 +1,665 @@
+{
+ "accepted_vs_task_benefit": {
+  "accepted_samples": 96,
+  "accepted_with_allocation_change": 60,
+  "accepted_with_outcome_change": 0,
+  "not_accepted_samples": 0,
+  "not_accepted_with_allocation_change": 0,
+  "not_accepted_with_outcome_change": 0
+ },
+ "actor_input_distribution": {
+  "first_report_step": {
+   "max": 672,
+   "median": 5.5,
+   "min": 1
+  },
+  "send_probability": {
+   "max": 0.399817,
+   "median": 0.348206,
+   "min": 0.338551
+  }
+ },
+ "delta_c": {
+  "counts": {
+   "negative": 7,
+   "positive": 83,
+   "zero": 6
+  },
+  "max": 13002,
+  "mean": 2611.625,
+  "min": -5238,
+  "total": 250716,
+  "values": [
+   2490,
+   2274,
+   2484,
+   2466,
+   2700,
+   2502,
+   2724,
+   2292,
+   2652,
+   2472,
+   2682,
+   2286,
+   -42,
+   -6,
+   -5238,
+   -54,
+   2688,
+   2310,
+   2304,
+   4968,
+   4560,
+   4962,
+   4584,
+   0,
+   2664,
+   2292,
+   2676,
+   2478,
+   2676,
+   2310,
+   2286,
+   2286,
+   4974,
+   9762,
+   13002,
+   2670,
+   2700,
+   2508,
+   2670,
+   2310,
+   2484,
+   2496,
+   2292,
+   2676,
+   2280,
+   0,
+   2682,
+   0,
+   2418,
+   2670,
+   2658,
+   2682,
+   -30,
+   -6,
+   4782,
+   4974,
+   4800,
+   2496,
+   4572,
+   2298,
+   2322,
+   2694,
+   2292,
+   2490,
+   2478,
+   2286,
+   2670,
+   2292,
+   2280,
+   2286,
+   2682,
+   2490,
+   4962,
+   2490,
+   2466,
+   2508,
+   0,
+   2310,
+   2292,
+   7242,
+   7296,
+   2286,
+   2676,
+   2484,
+   2466,
+   2484,
+   -24,
+   2280,
+   2502,
+   0,
+   2670,
+   2280,
+   0,
+   2670,
+   2286,
+   2280
+  ]
+ },
+ "delta_y": {
+  "counts": {
+   "negative": 0,
+   "positive": 0,
+   "zero": 96
+  },
+  "max": 0,
+  "mean": 0.0,
+  "min": 0,
+  "values": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ "four_label_cross_tab": {
+  "(True, True, False, False)": 36,
+  "(True, True, True, False)": 60
+ },
+ "four_labels": {
+  "accepted": 96,
+  "allocation_changed": 60,
+  "emitted": 96,
+  "task_outcome_changed": 0
+ },
+ "independence_warning": "these are closed-loop interventions on 16 scenes under a fixed greedy follow-up policy; they are not 96 independent scenes and per-scene gains are not additive evidence for joint sends",
+ "intervened_target_outcome_changes": {
+  "on_time_to_on_time": 96
+ },
+ "per_scene": [
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 0,
+   "delta_c_values": [
+    2490,
+    2274,
+    2484,
+    2466,
+    2700,
+    2502
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300000
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 2700,
+   "delta_c_values": [
+    2724,
+    2292,
+    2652,
+    2472,
+    2682,
+    2286
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300001
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 7524,
+   "delta_c_values": [
+    -42,
+    -6,
+    -5238,
+    -54,
+    2688,
+    2310
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300002
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 2502,
+   "delta_c_values": [
+    2304,
+    4968,
+    4560,
+    4962,
+    4584,
+    0
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300003
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 0,
+   "delta_c_values": [
+    2664,
+    2292,
+    2676,
+    2478,
+    2676,
+    2310
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300004
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 0,
+   "delta_c_values": [
+    2286,
+    2286,
+    4974,
+    9762,
+    13002,
+    2670
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300005
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 0,
+   "delta_c_values": [
+    2700,
+    2508,
+    2670,
+    2310,
+    2484,
+    2496
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300006
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 5364,
+   "delta_c_values": [
+    2292,
+    2676,
+    2280,
+    0,
+    2682,
+    0
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300007
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 4998,
+   "delta_c_values": [
+    2418,
+    2670,
+    2658,
+    2682,
+    -30,
+    -6
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300008
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 0,
+   "delta_c_values": [
+    4782,
+    4974,
+    4800,
+    2496,
+    4572,
+    2298
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300009
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 0,
+   "delta_c_values": [
+    2322,
+    2694,
+    2292,
+    2490,
+    2478,
+    2286
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300010
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 0,
+   "delta_c_values": [
+    2670,
+    2292,
+    2280,
+    2286,
+    2682,
+    2490
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300011
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 2706,
+   "delta_c_values": [
+    4962,
+    2490,
+    2466,
+    2508,
+    0,
+    2310
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300012
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 0,
+   "delta_c_values": [
+    2292,
+    7242,
+    7296,
+    2286,
+    2676,
+    2484
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300013
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 4812,
+   "delta_c_values": [
+    2466,
+    2484,
+    -24,
+    2280,
+    2502,
+    0
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300014
+  },
+  {
+   "baseline_on_time": 6,
+   "baseline_spent_bytes": 2694,
+   "delta_c_values": [
+    2670,
+    2280,
+    0,
+    2670,
+    2286,
+    2280
+   ],
+   "delta_y_values": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "interventions": 6,
+   "outcome_changes": [
+    "on_time_to_on_time"
+   ],
+   "scene": 1300015
+  }
+ ],
+ "prefix_verification": {
+  "opportunity_reproduced_samples": 96,
+  "override_applied_samples": 96,
+  "prefix_identical_samples": 96,
+  "verified_samples": 96
+ },
+ "round": "28",
+ "samples": 96,
+ "scenes": 16,
+ "section": "descriptive statistics of the paired first-report samples"
+}

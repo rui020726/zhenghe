@@ -1,0 +1,248 @@
+{
+ "gate": {
+  "first_scene": "baseline(1300000) 与禁用覆盖格在全部行为字段与 tape 逐行相同（FIRST_SCENE_GATE.json）"
+ },
+ "identity": {
+  "launch_identity": [
+   "d5b3cee7f47e8ff4631ada3f5572d18989e3a0e769da685c0f650fd5b993f1e0"
+  ],
+  "reproduction_verified": true,
+  "single_launch_identity": true
+ },
+ "launches": {
+  "baselines": 16,
+  "disabled_gate": 1,
+  "failures": 0,
+  "hard_cap": 120,
+  "interventions": 96,
+  "normal_cap": 113,
+  "optimizer_steps": 0,
+  "reserve_used": 0,
+  "retries": 0,
+  "training": 0,
+  "used": 113
+ },
+ "publication": {
+  "network_retries_this_session": 0,
+  "publication_status": "PENDING_NETWORK",
+  "remote_verification": "NOT_PERFORMED"
+ },
+ "q1_reappearance": {
+  "answer": "没有任务结局效应：16 个 baseline 本就全部按时，提前首报没有可救回的失败，观测到的效应只有成本与链路层面。",
+  "ceiling_effect": "96/96 目标在 baseline 里全部按时，构造上不可能有救回效应；本批度量的是干预的成本与链路效应。结局改变效应只在有失败目标的 ROUND27 开发场景（1400031，两个目标过期）出现过。",
+  "evidence": {
+   "baseline_discovered_values": [
+    6
+   ],
+   "baseline_on_time_values": [
+    6
+   ],
+   "baseline_spent_bytes_values": [
+    0,
+    2502,
+    2694,
+    2700,
+    2706,
+    4812,
+    4998,
+    5364,
+    7524
+   ],
+   "cheaper_examples": [
+    {
+     "baseline_emissions": 3,
+     "delta_c_bytes": -5238,
+     "intervention_emissions": 1,
+     "scene": 1300002,
+     "step": 1,
+     "target": "piloc-e1-target-2"
+    },
+    {
+     "baseline_emissions": 3,
+     "delta_c_bytes": -54,
+     "intervention_emissions": 3,
+     "scene": 1300002,
+     "step": 1,
+     "target": "piloc-e1-target-3"
+    },
+    {
+     "baseline_emissions": 3,
+     "delta_c_bytes": -42,
+     "intervention_emissions": 3,
+     "scene": 1300002,
+     "step": 14,
+     "target": "piloc-e1-target-0"
+    }
+   ],
+   "cheaper_samples": 7,
+   "costlier_samples": 83,
+   "delta_c_counts": {
+    "negative": 7,
+    "positive": 83,
+    "zero": 6
+   },
+   "delta_c_mean_bytes": 2611.6,
+   "delta_c_median_bytes": 2484.0,
+   "delta_y_counts": {
+    "negative": 0,
+    "positive": 0,
+    "zero": 96
+   },
+   "delta_y_values_all_zero": true,
+   "emission_neutral_note": "提前的首报恰好替换了 greedy 之后会发的那一次，首报仍只出去一次",
+   "emission_neutral_samples": 12,
+   "task_losses": 0
+  },
+  "question": "does the ROUND27-style 'advancing the first report changes the global outcome' reappear in these training scenes, and what are the positive and negative effects?"
+ },
+ "q2_accepted_vs_benefit": {
+  "answer": "明显不同。96 条干预消息全部被 3-6 个接收方接受（无 superseded、无丢弃），但 0 条改变任何任务结局；只有 60/96 触动了分配或作业链，且这些触动从未抵达截止时间。",
+  "evidence": {
+   "accepted_receiver_distribution": {
+    "3": 28,
+    "4": 24,
+    "5": 27,
+    "6": 17
+   },
+   "accepted_samples": 96,
+   "accepted_with_allocation_change": 60,
+   "accepted_without_allocation_change": 36,
+   "allocation_chained_changed": 60,
+   "four_label_cross_tab": {
+    "(True, True, False, False)": 36,
+    "(True, True, True, False)": 60
+   },
+   "superseded_override_sends": 0,
+   "task_outcome_changes": 0
+  },
+  "question": "is 'accepted' clearly different from a real task benefit?",
+  "reading": "accepted、链路改变、结局改变是三个不同标签；本批把它们干净分开：96 / 60 / 0。"
+ },
+ "q3_features_and_blind_spots": {
+  "answer": "在首报决策点上，19 维发送端特征向量近乎退化：15 / 19 维在全部 96 个机会上恒定，只有 4 维变化。",
+  "associations_descriptive_only": [
+   {
+    "allocation_changed": "30/30",
+    "note": "第 1 步的发射在任何其他抽取之前扰动信道 RNG 流；这是位置关联，不是因果特征",
+    "slice": "step == 1"
+   },
+   {
+    "allocation_changed": "30/66",
+    "note": "更晚的机会改变链路的情况更少",
+    "slice": "step > 1"
+   },
+   {
+    "note": "成本符号由下游 greedy 发射模式产生，不是机会点上任何可见量",
+    "slice": "没有任何特征分开 delta 成本的符号"
+   }
+  ],
+  "inference_flag": "上面的切片是 16 场景 96 样本、无任务结局方差下的描述性汇总；不是拟合模型，不得读成任何特征对决策充分或不充分的证据。",
+  "invisible_states": [
+   "哪些接收方仍未掌握该任务（反向信道结构性关闭）",
+   "分配器收到信息后是否会行动",
+   "各接收方的位置、能力与当前承诺",
+   "目标身份（本轮规则禁止作为特征）与场景难度",
+   "被提前发送扰动的下游 greedy 路径"
+  ],
+  "observed": {
+   "constant_features": [
+    "age_steps",
+    "since_last_emission_time",
+    "sent_count",
+    "pending_event",
+    "changed_view",
+    "first_emission",
+    "stage_changed",
+    "requirements_changed",
+    "members_changed",
+    "progress_delta_abs",
+    "revision_delta",
+    "remaining_time_over_horizon",
+    "urgency_now",
+    "capacity_remaining_fraction",
+    "subscribers"
+   ],
+   "deadline_slack": {
+    "max": 176.6,
+    "median": 116.8,
+    "min": 61.9,
+    "note": "remaining_time_over_horizon 在 URGENCY_SCALE_STEPS=50 处裁剪，因此这些机会上看不到任何紧性信号",
+    "urgency_clip_saturated_for_all": true
+   },
+   "first_report_step_range": {
+    "max": 672,
+    "median": 5.5,
+    "min": 1
+   },
+   "p_send_range": {
+    "max": 0.399817,
+    "min": 0.338551
+   },
+   "varying_features": [
+    {
+     "distinct": 2,
+     "max": 1.0,
+     "min": 0.0,
+     "name": "has_future_requirements"
+    },
+    {
+     "distinct": 6,
+     "max": 6.0,
+     "min": 1.0,
+     "name": "queue_backlog_targets"
+    },
+    {
+     "distinct": 4,
+     "max": 1.0,
+     "min": 0.743208,
+     "name": "budget_remaining_fraction"
+    },
+    {
+     "distinct": 42,
+     "max": 0.672,
+     "min": 0.001,
+     "name": "step_over_horizon"
+    }
+   ]
+  },
+  "question": "what clues exist in the actor's currently legitimate features, and what key states remain invisible? separate observation from inference."
+ },
+ "q4_next_step": {
+  "question": "what should the next round prioritise: action value / credit assignment under the current observation, an observation-design discussion, or is the evidence still insufficient?",
+  "rationale": [
+   "选择性首报规则需要的标签——早发是否帮到这个目标——在本批没有方差（96/96 baseline 全按时），信用分配在这批数据上无从验证",
+   "在这些机会上可见特征向量 19 维里有 15 维恒定，紧性维度对全部 96 个目标饱和",
+   "干预的可观测效应（链路改变、成本符号）产生于 actor 可见范围之外，由分配器与被扰动的 RNG 路径决定"
+  ],
+  "recommendation": "观测设计分支：在当前合法观测下，首报决策在真正要紧的时刻几乎没有信息量，动作价值研究暂时没有可估计的信号。",
+  "single_next_step": {
+   "status": "仅作建议；本轮不执行，也不据此授权训练、阈值拟合、换候选或部署",
+   "what": "把同一套冻结选择器与同一套最小单发覆盖协议，跑到一个含已观测失败的场景族上——ROUND25 开发块（1301000..1301015）在相同模型与配置下已有按时损失记录",
+   "what_it_would_not_support": "部署规则、训练授权或泛化结论；同样适用单场景族、描述性、零训练纪律",
+   "what_it_would_support": "在确有失败发生的场景里，是否存在任何合法发送端特征能区分该发与可省的首报",
+   "why": "这是唯一能为本轮无法提出的问题制造标签方差的分支；观测设计结论目前只是观察，不是实验"
+  }
+ },
+ "round": "28",
+ "section": "verdict: training-scene first-report counterfactual diagnosis",
+ "selection": {
+  "exclusions": 0,
+  "intervention_points": 96,
+  "planned_launches_within_normal_cap": true,
+  "rule": "首次合法可付机会且原 greedy 动作为 HOLD；排除原因分别登记",
+  "universe": 96
+ },
+ "statement_rules": [
+  "16 个场景、各一次随机实现：不做显著性检验、不做 bootstrap、不宣称非劣",
+  "96 个干预不是 96 个独立场景；不把逐场景收益相加",
+  "提前发射改变信道 RNG 消耗：结局不能归因于单条被接受的消息",
+  "全部 baseline 本就按时：本批构造上没有救回信号",
+  "不训练、不拟合阈值或分类器、不造新策略、不部署"
+ ],
+ "verification": {
+  "opportunity_reproduced_samples": 96,
+  "override_applied_samples": 96,
+  "prefix_identical_samples": 96,
+  "verified_samples": 96
+ }
+}

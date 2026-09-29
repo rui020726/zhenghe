@@ -1,0 +1,82 @@
+{
+ "current_working_tree_identity": {
+  "freeze_sha256": "d6673dec1df86178e4df10f43ea84eab12cea10d61c25b9b2b69e6c96d6eb7e9",
+  "note": "what a fresh run would record now; NOT the launch-time identity, because r28_verify.py changed after the last launch"
+ },
+ "launch_time": {
+  "cells": 113,
+  "modules": [
+   "r28_common.py",
+   "r28_freeze.py",
+   "r28_preflight.py",
+   "r28_run.py",
+   "r28_select.py",
+   "r28_verify.py"
+  ],
+  "post_launch_edits": [
+   {
+    "change": "verify_sample gained its optional frozen-point argument so the analysis could check opportunity reproduction",
+    "launches_after": 0,
+    "module": "r28_verify.py",
+    "note": "analysis-only; the 113 rows are untouched and keep the launch-time identity"
+   }
+  ],
+  "recomputed_identity": "d5b3cee7f47e8ff4631ada3f5572d18989e3a0e769da685c0f650fd5b993f1e0",
+  "recorded_in_rows": [
+   "d5b3cee7f47e8ff4631ada3f5572d18989e3a0e769da685c0f650fd5b993f1e0"
+  ],
+  "reproduced_from_commit": "0db4ef2",
+  "reproduction_rule": "hash the commit blob of each launch-time module, converting r28_common.py and r28_preflight.py from LF to CRLF (the working-tree bytes the harness actually ran with; both had been touched by a Python text-mode edit before launch); every other module uses its blob as stored",
+  "reproduction_verified": true,
+  "single_identity_across_all_cells": true
+ },
+ "post_processing_modules": {
+  "module_sha256": {
+   "r28_analyse.py": "ee362d0fca9ed1b0754da7954b547f47dc838fdbfd12ba70fbf5d354b62a40bf",
+   "r28_code_identity.py": "546e563184ae9ed555ca219a8f305c95c34039b163781e1366a4402a3a34ac74",
+   "r28_manifest.py": "937c013a05cb5c32d60314f0cb49de1921bd03443161c2e48d149eb450151586",
+   "r28_preflight_report.py": "467ffd06925bd644a1b4b5d22ee89239801384b1f641303dac3276096bfbe7d6"
+  },
+  "modules": [
+   "r28_preflight_report.py",
+   "r28_analyse.py",
+   "r28_manifest.py",
+   "r28_verdict.py",
+   "r28_code_identity.py"
+  ],
+  "note": "written after the last launch; they read artefacts and construct no driver"
+ },
+ "round": "28",
+ "run_id": "comm_cost_firstreport_diagnosis_20260929",
+ "shared_sections": {
+  "checkpoints": {
+   "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "runs/joint_eval_20260916/ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  },
+  "imported_round_modules": {
+   "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": "e64e0be4911ca3b3129247b3a443d045ad022f3bd9e6a1a22c4ebd1b3a4aff9b",
+   "runs/comm_budget_pilot_20260919/pilot_common.py": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8",
+   "runs/comm_budget_pilot_20260919/pilot_env.py": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b",
+   "runs/comm_budget_pilot_20260919/train_pilot.py": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81",
+   "runs/comm_cost_firstreport_intervention_20260929/r27_intervention.py": "3029f86d313343eb3271403a6b0d356fe3e3860eb09bb54e87b757e37bd21b85",
+   "runs/comm_cost_v2_rerun_20260928/v2_controller.py": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+   "runs/comm_cost_v2_rerun_20260928/v2_trainer.py": "64452036ad2470596f0260b28f02a8358d1bca1b4c16c2320f6cc58f1ee7df51",
+   "runs/comm_tight_budget_20260919/onpolicy.py": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+   "runs/search_trace_and_policy_20260925/sp_common.py": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc"
+  },
+  "learned_checkpoint": {
+   "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep128.pt": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923"
+  },
+  "production": {
+   "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+   "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+   "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+   "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+   "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+   "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+   "integrated_sar/lifecycle_metrics.py": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+   "integrated_sar/run_signature.py": "fbe4f0af4e1d7fa1a8a14fbed102bfee1b78aed55413e8a80f5c5620ddcbaeb1",
+   "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+  }
+ }
+}
