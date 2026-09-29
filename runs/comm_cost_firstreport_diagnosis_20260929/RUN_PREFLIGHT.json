@@ -1,0 +1,50 @@
+{
+ "errors": 0,
+ "failures": 0,
+ "launches": 0,
+ "passed": true,
+ "production_suite_note": "not re-run on purpose: ROUND27's suite run constructed short simulators outside its cell ledger (ROUND27_SCOPE_REGISTRATION.json); re-running would add more unbooked constructions",
+ "production_suite_rerun": false,
+ "required_six_for_the_reused_interceptor": {
+  "already_sent_no_duplicate": "TestReusedInterceptor.test_already_sent_not_forced_again",
+  "disabled_delegates": "TestReusedInterceptor.test_disabled_delegates_verbatim",
+  "no_legal_opportunity": "TestReusedInterceptor.test_no_legal_opportunity_no_bypass",
+  "no_rng_or_action_change": "TestReusedInterceptor.test_no_rng_consumption",
+  "only_named_target": "TestReusedInterceptor.test_only_named_target_is_hit",
+  "sequential_budget": "TestReusedInterceptor.test_sequential_budget_exact"
+ },
+ "round": "28",
+ "section": "zero-environment, zero-optimizer preflight (synthetic only, 0 launches)",
+ "selection_algorithm_tests": [
+  "TestSelectionAlgorithm.test_hold_at_first_payable_opportunity_is_a_point",
+  "TestSelectionAlgorithm.test_send_at_first_payable_opportunity_is_excluded",
+  "TestSelectionAlgorithm.test_never_payable_is_excluded_and_masked_steps_are_skipped",
+  "TestSelectionAlgorithm.test_never_discovered_is_excluded_without_being_a_candidate",
+  "TestSelectionAlgorithm.test_detected_but_never_offered_is_excluded_as_terminal",
+  "TestSelectionAlgorithm.test_first_payable_beats_earlier_masked_steps",
+  "TestSelectionAlgorithm.test_cap_is_enforced",
+  "TestSelectionAlgorithm.test_goal_id_space_guard"
+ ],
+ "skipped": 0,
+ "test_names": [
+  "TestLedgerAndScans.test_cap_and_double_claim",
+  "TestLedgerAndScans.test_cell_naming",
+  "TestLedgerAndScans.test_no_optimizer_in_this_rounds_harness",
+  "TestLedgerAndScans.test_override_set_matches_round27_frozen_set",
+  "TestReusedInterceptor.test_already_sent_not_forced_again",
+  "TestReusedInterceptor.test_disabled_delegates_verbatim",
+  "TestReusedInterceptor.test_no_legal_opportunity_no_bypass",
+  "TestReusedInterceptor.test_no_rng_consumption",
+  "TestReusedInterceptor.test_only_named_target_is_hit",
+  "TestReusedInterceptor.test_sequential_budget_exact",
+  "TestSelectionAlgorithm.test_cap_is_enforced",
+  "TestSelectionAlgorithm.test_detected_but_never_offered_is_excluded_as_terminal",
+  "TestSelectionAlgorithm.test_first_payable_beats_earlier_masked_steps",
+  "TestSelectionAlgorithm.test_goal_id_space_guard",
+  "TestSelectionAlgorithm.test_hold_at_first_payable_opportunity_is_a_point",
+  "TestSelectionAlgorithm.test_never_discovered_is_excluded_without_being_a_candidate",
+  "TestSelectionAlgorithm.test_never_payable_is_excluded_and_masked_steps_are_skipped",
+  "TestSelectionAlgorithm.test_send_at_first_payable_opportunity_is_excluded"
+ ],
+ "tests_run": 18
+}

@@ -1,0 +1,51 @@
+{
+ "existing_evidence": {
+  "command": "python -m unittest discover -s integrated_sar/tests",
+  "interpreter": "D:\\project_env\\python.exe",
+  "recorded_in": "runs/comm_cost_firstreport_intervention_20260929/ROUND27_PROTOCOL.md (precheck record) and runs/comm_cost_firstreport_intervention_20260929/RUN_PREFLIGHT.json context",
+  "result": "OK (skipped=2), exit code 0",
+  "run_when": "ROUND27, background task b0knhzawh"
+ },
+ "registration": {
+  "beyond_the_five_cells": "yes: the suite constructs and steps short simulators in a subset of modules, so there were simulator constructions outside the five ROUND27 cell launches",
+  "contamination_found": "none: the ROUND27 model, run identities and cell results are unaffected by the suite run, so the round proceeds",
+  "no_research_configuration_overlap": "the inspected configurations are test configurations (8-20 step horizons, mock flags, fixed small seeds); none uses the frozen research configuration (1000 steps, scene 1400031, the frozen PILOC/CTDE checkpoints, the budget-masked collector) of the five ROUND27 cells",
+  "not_in_the_launch_ledger": "those constructions never entered the ROUND27 atomic claim ledger; the ledger's 5/5 tally covers only the five cell launches",
+  "possible_extra_consumption": "an unmeasured number of short-horizon simulator constructions, bounded above by 17 build_joint_run call sites and 18 .run() call sites across 4 modules; the actual executed count was not measured and is not re-measured here",
+  "wording_correction": "the ROUND27 wording 'production suite OK' is registered here as 'the suite passed, and its scope includes short simulator constructions outside the cell ledger'; it must not be read as 'zero extra simulation'"
+ },
+ "round": "28",
+ "scope_inspection": {
+  "build_joint_run_call_sites_total": 17,
+  "example_configurations": [
+   {
+    "mock": true,
+    "module": "test_full_reset.py",
+    "steps": 8
+   },
+   {
+    "mock": true,
+    "module": "test_info_probe.py",
+    "seed": 42,
+    "steps": 8
+   },
+   {
+    "module": "test_joint_driver.py",
+    "steps": 20
+   }
+  ],
+  "method": "read-only grep/inspection of integrated_sar/tests sources; no test was executed",
+  "modules_constructing_environments_or_drivers": 12,
+  "modules_with_build_joint_run_call_sites": {
+   "test_comm_topology.py": 3,
+   "test_full_reset.py": 5,
+   "test_info_probe.py": 5,
+   "test_joint_driver.py": 4
+  },
+  "run_run_call_sites_total": 18,
+  "test_modules_total": 49
+ },
+ "section": "1 ROUND27 production-suite scope registration (read-only source inspection; the suite was NOT re-run)",
+ "why": "ROUND28 execution basis section 1 asks whether the ROUND27 'production suite' run contained any simulator construction or launch beyond the five ROUND27 cell launches, and says to register the existing evidence and the possible extra consumption by the original scope rather than inferring zero from a green suite or re-running to count",
+ "zero_launches": true
+}

@@ -1,0 +1,273 @@
+{
+ "branch": "exp/comm-cost-firstreport-diagnosis",
+ "comparison_plan": {
+  "deltas": "intervention minus baseline (ΔY on-time count, ΔC measured bytes)",
+  "descriptive_only": "counts and distributions; no significance test, no classifier, no threshold fitting, no new policy",
+  "independence_warning": "up to 96 interventions over only 16 scenes; interventions are not 96 independent scenes and per-scene gains are not added up to predict joint sends",
+  "labels_kept_distinct": [
+   "emitted",
+   "accepted",
+   "allocation changed",
+   "task outcome changed"
+  ],
+  "per_sample": [
+   "ΔY",
+   "ΔC",
+   "intervened target outcome",
+   "other targets gained/lost",
+   "real emission",
+   "accepted/superseded/drop",
+   "allocation and work continuity change",
+   "intervention effectiveness",
+   "prefix identity",
+   "actor-visible features and analysis metadata (kept separate)"
+  ],
+  "unit": "per intervention cell against the same scene's baseline"
+ },
+ "config": {
+  "behaviour_config_sha256": "dfc0e96a51c27fcaef1c0511673da3f4f12ff67bad8d53c33250effc023ea26c",
+  "matches_round27": true,
+  "round27_L_behaviour_config_sha256": "dfc0e96a51c27fcaef1c0511673da3f4f12ff67bad8d53c33250effc023ea26c",
+  "substituted_fields": [
+   "map_path: archived null, today's default None used",
+   "comm_sends_per_tick: archived null, today's default None used",
+   "comm_budget_bytes: archived null, today's default None used",
+   "comm_max_wait_steps: archived null, today's default None used",
+   "comm_urgent_wait_steps: archived null, today's default None used",
+   "comm_ack_delay_ticks: archived null, today's default None used",
+   "comm_ack_delivery_probability: archived null, today's default None used",
+   "repository_root: archived null, today's default None used",
+   "replay_stream: archived null, today's default None used",
+   "search_backend: dropped, not a field of the current configuration",
+   "allocation_backend: dropped, not a field of the current configuration",
+   "Stage B frozen overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']"
+  ]
+ },
+ "execution_basis": {
+  "file": "runs/comm_cost_firstreport_diagnosis_20260929/EXECUTION_BASIS.md",
+  "sha256": "f91858127f2f9ab664f161351bf2b187be247e655e0f16033a3581c5ad5b6943"
+ },
+ "gate": {
+  "first_scene": "baseline(1300000) must equal its disabled-interceptor cell on every behaviour field and tape line",
+  "per_sample_prefix": "the intervention tape before the intervention step must be the baseline tape, and the frozen point's state must reproduce the baseline row at that step",
+  "synthetic_only": "zero-environment, zero-optimizer synthetic checks; the full production unittest suite is NOT re-run this round (its scope was registered in ROUND27_SCOPE_REGISTRATION.json)"
+ },
+ "intervention": {
+  "mechanism": "ROUND27's FirstReportAdvancer, imported read-only; one HOLD->SEND override per cell at the frozen (scene, target, step)",
+  "not_allowed": [
+   "free send",
+   "forced accepted",
+   "mask bypass",
+   "extra budget",
+   "second send for the same target",
+   "receiver-truth injection",
+   "target id as a new actor feature"
+  ],
+  "same_scene_restart": "each intervention cell re-runs the whole episode from the scene's initial state; the prefix must reproduce the baseline until the intervention step"
+ },
+ "launch_budget": {
+  "baselines": 16,
+  "counting_rule": "every failure, retry and smoke run counts; fewer interventions are fine, no top-up with other targets or scenes",
+  "disabled_gate_paths": 1,
+  "extra_recording_or_throughput_probes": 0,
+  "hard_cap": 120,
+  "interventions_max": 96,
+  "normal_cap": 113,
+  "optimizer_steps": 0,
+  "reserve_launches": 7,
+  "threshold_adjustments": 0,
+  "training": 0
+ },
+ "model": {
+  "checkpoint_sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+  "identity": {
+   "checkpoint": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep128.pt",
+   "checkpoint_sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+   "controller_parameter_summary": {
+    "heads": [
+     "action_head",
+     "value_task_head",
+     "value_cost_head"
+    ],
+    "init_seed": 20260927,
+    "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+    "parameter_count": 5700,
+    "parameter_sha256": "22cdbb937c285e526892491aaf2a54d9f89b924dc88dc5952d3c1d3f7eb5641a",
+    "shapes": {
+     "action_head.bias": [
+      2
+     ],
+     "action_head.weight": [
+      2,
+      64
+     ],
+     "trunk.0.bias": [
+      64
+     ],
+     "trunk.0.weight": [
+      64,
+      19
+     ],
+     "trunk.2.bias": [
+      64
+     ],
+     "trunk.2.weight": [
+      64,
+      64
+     ],
+     "value_cost_head.bias": [
+      1
+     ],
+     "value_cost_head.weight": [
+      1,
+      64
+     ],
+     "value_task_head.bias": [
+      1
+     ],
+     "value_task_head.weight": [
+      1,
+      64
+     ]
+    }
+   },
+   "decode": "SEND iff p(SEND) >= p(HOLD), ties to SEND (original frozen greedy decode)",
+   "episodes_done": 128,
+   "lambda_final": 1.4749999999999992,
+   "mode": "greedy",
+   "training_seed": 33
+  },
+  "parameters": {
+   "heads": [
+    "action_head",
+    "value_task_head",
+    "value_cost_head"
+   ],
+   "init_seed": 20260927,
+   "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+   "parameter_count": 5700,
+   "parameter_sha256": "22cdbb937c285e526892491aaf2a54d9f89b924dc88dc5952d3c1d3f7eb5641a",
+   "shapes": {
+    "action_head.bias": [
+     2
+    ],
+    "action_head.weight": [
+     2,
+     64
+    ],
+    "trunk.0.bias": [
+     64
+    ],
+    "trunk.0.weight": [
+     64,
+     19
+    ],
+    "trunk.2.bias": [
+     64
+    ],
+    "trunk.2.weight": [
+     64,
+     64
+    ],
+    "value_cost_head.bias": [
+     1
+    ],
+    "value_cost_head.weight": [
+     1,
+     64
+    ],
+    "value_task_head.bias": [
+     1
+    ],
+    "value_task_head.weight": [
+     1,
+     64
+    ]
+   }
+  }
+ },
+ "parent_branch": "exp/comm-cost-firstreport-intervention",
+ "parent_head": "5982677c9370a9a73acf082000e6865bf0d86a72",
+ "publication": {
+  "network_retries_this_session": 0,
+  "publication_status": "PENDING_NETWORK",
+  "remote_verification": "NOT_PERFORMED"
+ },
+ "round": "28",
+ "run_id": "comm_cost_firstreport_diagnosis_20260929",
+ "scenes": {
+  "prior_user": "runs/comm_cost_stage_c_20260927 (ROUND22 execution, 677 launches)",
+  "registered_by": "ROUND22_COMM_COST_LEARNING_PILOT.md §4",
+  "registered_training_block": [
+   1300000,
+   1300047
+  ],
+  "registered_training_scenes_count": 48,
+  "requested_equals_first_16_of_registered_training_block": true,
+  "requested_scenes": [
+   1300000,
+   1300001,
+   1300002,
+   1300003,
+   1300004,
+   1300005,
+   1300006,
+   1300007,
+   1300008,
+   1300009,
+   1300010,
+   1300011,
+   1300012,
+   1300013,
+   1300014,
+   1300015
+  ],
+  "scene_selection_rule": "the fixed first 16 of the registered training block; no new selection rule, no outcome-based scene swap",
+  "sealed_blocks_untouched": [
+   {
+    "high": 800399,
+    "low": 800000,
+    "name": "sealed_test_set"
+   },
+   {
+    "high": 900199,
+    "low": 900000,
+    "name": "learned_model_reported_stream"
+   }
+  ],
+  "source_registry": "runs/comm_cost_v2_rerun_20260928/SCENE_REGISTRY.json",
+  "training_set_diagnosis_not_validation": true
+ },
+ "selection_algorithm": {
+  "exclusion_reasons": [
+   "first_legal_opportunity_greedy_send",
+   "no_legal_payable_opportunity",
+   "never_discovered",
+   "terminal_before_first_candidate"
+  ],
+  "frozen_before_launch": true,
+  "inputs_allowed": [
+   "pre-action candidate set",
+   "send history (requested flags)",
+   "effective sequential mask (actionable/masked)",
+   "original greedy action",
+   "time identity (step, discovery time)"
+  ],
+  "inputs_forbidden": [
+   "completion",
+   "expiry",
+   "on-time",
+   "spent bytes",
+   "final cost",
+   "any receiver-side truth"
+  ],
+  "redistribution_allowed_after_effects_seen": false,
+  "rule": "per baseline target: the first tape step where the target is actionable (sequential shadow gate: payable in transport order); an intervention point exists only if the original greedy action there is HOLD"
+ },
+ "stopping_rules": [
+  "stop after the frozen plan completes, or on a technical-health/quota stop",
+  "an unexplained baseline/disabled drift stops the round",
+  "a failed prefix reproduction is reported as a technical problem; no nearby-moment substitution",
+  "no continued training, no candidate swap, no confirmation, no deployment"
+ ]
+}
