@@ -1,0 +1,317 @@
+{
+ "comparison_plan": {
+  "comparisons": [
+   "E0-L",
+   "E5-L",
+   "E05-L"
+  ],
+  "interaction_note": "whether the combined intervention shows an interaction is observed, never generalised from one scene",
+  "no_significance_testing": "no single-scene significance, no bootstrap, no non-inferiority claim",
+  "per_comparison": [
+   "task change of each named target (on-time / expired / window-end status)",
+   "whole-scene task change (on-time count, goal identity gained/lost)",
+   "other targets damaged (goal identity)",
+   "cost change (measured payload-attempt bytes, refusals listed separately)",
+   "allocation continuity (assignment chain gaps for the named targets)"
+  ],
+  "reference_for_task_and_cost": "L (the original learned path of this scene)"
+ },
+ "config": {
+  "behaviour_config_sha256": "dfc0e96a51c27fcaef1c0511673da3f4f12ff67bad8d53c33250effc023ea26c",
+  "behaviour_fields": {
+   "actor_kv_mode": "tokens",
+   "allocation_interval": 5,
+   "allow_release_without_suppression": false,
+   "check_release_source_stage": false,
+   "comm_ack": false,
+   "comm_budget_bytes": 29300,
+   "comm_delay_ticks": 0,
+   "comm_delivery_probability": 0.7,
+   "comm_max_wait_steps": null,
+   "comm_range": 0.3,
+   "comm_sends_per_tick": null,
+   "comm_subscribers": "all",
+   "comm_timing_mode": "policy_owned_timing",
+   "comm_urgent_wait_steps": null,
+   "command_ttl": 10.0,
+   "coordination_interval": 5,
+   "coordinator_policy": "coalition_planner",
+   "ctde_task_logit_offset": 0.0,
+   "deadline_tightness": [
+    0.5,
+    2.0
+   ],
+   "detection_radius": 5,
+   "device": "cpu",
+   "dt": 1.0,
+   "gossip_interval": 2,
+   "grid_size": 60,
+   "mock": false,
+   "num_goals": 6,
+   "obstacle_density": 0.15,
+   "piloc_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+   "quiet": true,
+   "release_redundant_members": true,
+   "rescue_per_species": 2,
+   "rescue_species": 3,
+   "residual_scale": 0.25,
+   "search_agents": 2,
+   "steps": 1000,
+   "sticky_commitments": true,
+   "suppress_recommand_own_task": true,
+   "task_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+   "task_membership_consistency": false,
+   "use_coordinator": true
+  },
+  "matches_round25": true,
+  "round25_learned_behaviour_config_sha256": "dfc0e96a51c27fcaef1c0511673da3f4f12ff67bad8d53c33250effc023ea26c",
+  "substituted_fields": [
+   "map_path: archived null, today's default None used",
+   "comm_sends_per_tick: archived null, today's default None used",
+   "comm_budget_bytes: archived null, today's default None used",
+   "comm_max_wait_steps: archived null, today's default None used",
+   "comm_urgent_wait_steps: archived null, today's default None used",
+   "comm_ack_delay_ticks: archived null, today's default None used",
+   "comm_ack_delivery_probability: archived null, today's default None used",
+   "repository_root: archived null, today's default None used",
+   "replay_stream: archived null, today's default None used",
+   "search_backend: dropped, not a field of the current configuration",
+   "allocation_backend: dropped, not a field of the current configuration",
+   "Stage B frozen overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']"
+  ]
+ },
+ "execution_basis": {
+  "file": "runs/comm_cost_firstreport_intervention_20260929/EXECUTION_BASIS.md",
+  "sha256": "eeb982dee928aa5c605a724404eb61c0758806b5cad9faa5b4dc66110f2ff259"
+ },
+ "intervention_definition": {
+  "advance_rule": "at the first decision opportunity after discovery where the candidate is legal and payable in the real sequential budget walk, the original greedy HOLD of a named target is overridden to SEND",
+  "already_sending": "if the original action is already SEND there is no second send; the no-action-difference is recorded",
+  "not_deployable": "the target IDs come from a failing case; this is a privileged diagnostic intervention, not a general deployable rule",
+  "one_per_target": "at most one override per target; a lost packet adds no retransmission",
+  "real_path_only": "the override lives inside the real sequential budget decision path, uses the actual balance and quote, keeps the candidate order, never appends an emission after the collector decided, never sends free, reserves extra budget or bypasses the mask",
+  "restore_after_first_emission": "after the first emission the original learned logic is fully restored; other targets are never overridden; later actions are recomputed in the real closed-loop state"
+ },
+ "launch_budget": {
+  "counting_rule": "every failure, retry and smoke run counts; no throughput probe or confirmation run beyond the five paths",
+  "hard_cap": 8,
+  "normal_launches": 5,
+  "optimizer_steps": 0,
+  "reserve_launches": 3,
+  "threshold_adjustments": 0,
+  "training": 0
+ },
+ "model": {
+  "checkpoint_sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+  "identity": {
+   "checkpoint": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep128.pt",
+   "checkpoint_sha256": "52f490ab96a2ddad5f5b4fcc32c35b21fdcb529b6d6e15c3682a14d21a0c6923",
+   "controller_parameter_summary": {
+    "heads": [
+     "action_head",
+     "value_task_head",
+     "value_cost_head"
+    ],
+    "init_seed": 20260927,
+    "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+    "parameter_count": 5700,
+    "parameter_sha256": "22cdbb937c285e526892491aaf2a54d9f89b924dc88dc5952d3c1d3f7eb5641a",
+    "shapes": {
+     "action_head.bias": [
+      2
+     ],
+     "action_head.weight": [
+      2,
+      64
+     ],
+     "trunk.0.bias": [
+      64
+     ],
+     "trunk.0.weight": [
+      64,
+      19
+     ],
+     "trunk.2.bias": [
+      64
+     ],
+     "trunk.2.weight": [
+      64,
+      64
+     ],
+     "value_cost_head.bias": [
+      1
+     ],
+     "value_cost_head.weight": [
+      1,
+      64
+     ],
+     "value_task_head.bias": [
+      1
+     ],
+     "value_task_head.weight": [
+      1,
+      64
+     ]
+    }
+   },
+   "decode": "SEND iff p(SEND) >= p(HOLD), ties to SEND (original frozen greedy decode)",
+   "episodes_done": 128,
+   "lambda_final": 1.4749999999999992,
+   "mode": "greedy",
+   "training_seed": 33
+  },
+  "parameters": {
+   "heads": [
+    "action_head",
+    "value_task_head",
+    "value_cost_head"
+   ],
+   "init_seed": 20260927,
+   "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+   "parameter_count": 5700,
+   "parameter_sha256": "22cdbb937c285e526892491aaf2a54d9f89b924dc88dc5952d3c1d3f7eb5641a",
+   "shapes": {
+    "action_head.bias": [
+     2
+    ],
+    "action_head.weight": [
+     2,
+     64
+    ],
+    "trunk.0.bias": [
+     64
+    ],
+    "trunk.0.weight": [
+     64,
+     19
+    ],
+    "trunk.2.bias": [
+     64
+    ],
+    "trunk.2.weight": [
+     64,
+     64
+    ],
+    "value_cost_head.bias": [
+     1
+    ],
+    "value_cost_head.weight": [
+     1,
+     64
+    ],
+    "value_task_head.bias": [
+     1
+    ],
+    "value_task_head.weight": [
+     1,
+     64
+    ]
+   }
+  }
+ },
+ "parent_head": "e22db99ee1e1db9b536f4d8f9161b6538adf7ea8",
+ "path_order": [
+  "L",
+  "L0",
+  "E0",
+  "E5",
+  "E05"
+ ],
+ "paths": {
+  "E0": {
+   "interceptor": true,
+   "kind": "learned",
+   "override_enabled": true,
+   "override_targets": [
+    "piloc-e1-target-0"
+   ],
+   "role": "advance target-0 first report only"
+  },
+  "E05": {
+   "interceptor": true,
+   "kind": "learned",
+   "override_enabled": true,
+   "override_targets": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "role": "advance both targets' first reports"
+  },
+  "E5": {
+   "interceptor": true,
+   "kind": "learned",
+   "override_enabled": true,
+   "override_targets": [
+    "piloc-e1-target-5"
+   ],
+   "role": "advance target-5 first report only"
+  },
+  "L": {
+   "interceptor": false,
+   "kind": "learned",
+   "override_enabled": false,
+   "override_targets": [],
+   "role": "original learned path, no interceptor installed"
+  },
+  "L0": {
+   "interceptor": true,
+   "kind": "learned",
+   "override_enabled": false,
+   "override_targets": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-5"
+   ],
+   "role": "interceptor installed, every override disabled"
+  }
+ },
+ "publication": {
+  "network_retries_this_session": 0,
+  "publication_status": "PENDING_NETWORK",
+  "remote_verification": "NOT_PERFORMED"
+ },
+ "rng_registration": {
+  "action_rng": "torch.manual_seed(eval_action_seed(33, 1400031, 'greedy')) per path, identical label and formula to ROUND25",
+  "environment_and_channel_rng": "derived inside the driver from the scenario seed; the override draws nothing, but an extra emission consumes channel loss draws, so post-intervention paths legitimately diverge",
+  "forbidden_claims": "not the same per-message loss batch; outcome changes are not attributable to one accepted message"
+ },
+ "round": "27",
+ "run_id": "comm_cost_firstreport_intervention_20260929",
+ "scenario_seminar": "post-hoc selected failing scene from the ROUND26 diagnosis; a privileged diagnostic scenario, not a random sample",
+ "scene": 1400031,
+ "start_ledger_plan": {
+  "cells": [
+   {
+    "attempt": 1,
+    "kind": "normal",
+    "path": "L"
+   },
+   {
+    "attempt": 1,
+    "kind": "normal",
+    "path": "L0"
+   },
+   {
+    "attempt": 1,
+    "kind": "normal",
+    "path": "E0"
+   },
+   {
+    "attempt": 1,
+    "kind": "normal",
+    "path": "E5"
+   },
+   {
+    "attempt": 1,
+    "kind": "normal",
+    "path": "E05"
+   }
+  ],
+  "reserve": "3 launches reserved for technical failures and retries of a failed cell only; reserve consumption is booked like any launch"
+ },
+ "stopping_rules": [
+  "stop after the five paths complete, or on a technical-health/quota stop",
+  "an unexplained behavioural drift between L and L0 stops the round before E0/E5/E05",
+  "a behavioural-semantics defect stops the round; no mixed implementations in one panel",
+  "no continued training, candidate swap, confirmation or deployment"
+ ]
+}

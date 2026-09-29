@@ -1,0 +1,50 @@
+{
+ "errors": 0,
+ "failures": 0,
+ "launches": 0,
+ "passed": true,
+ "required_six": {
+  "already_sent_no_duplicate": "TestAlreadySent.test_already_sent_not_forced_again",
+  "disabled_delegates": "TestDisableDelegation.test_disabled_delegates_verbatim",
+  "no_legal_opportunity": "TestNoLegalOpportunity.test_masked_named_target_never_overridden",
+  "no_rng_or_action_change": [
+   "TestNoRngTouch.test_override_draws_no_randomness",
+   "TestNoRngTouch.test_hook_source_references_no_rng_objects"
+  ],
+  "only_named_target": "TestOnlyNamedTarget.test_only_named_target_is_hit",
+  "sequential_budget": [
+   "TestSequentialBudget.test_override_behind_later_candidate_keeps_shadow_exact",
+   "TestSequentialBudget.test_override_behind_earlier_send_keeps_shadow_exact"
+  ]
+ },
+ "round": "27",
+ "section": "zero-environment, zero-optimizer preflight (synthetic only)",
+ "skipped": 0,
+ "stream_tail": [
+  "test_override_behind_later_candidate_keeps_shadow_exact (r27_preflight.TestSequentialBudget) ... ok",
+  "",
+  "----------------------------------------------------------------------",
+  "Ran 16 tests in 0.103s",
+  "",
+  "OK"
+ ],
+ "test_names": [
+  "TestAlreadySent.test_already_sent_not_forced_again",
+  "TestDisableDelegation.test_disabled_delegates_verbatim",
+  "TestDisableDelegation.test_parent_tape_has_no_override_key",
+  "TestLedgerAndCap.test_cap_and_double_claim",
+  "TestNoLegalOpportunity.test_masked_named_target_never_overridden",
+  "TestNoLegalOpportunity.test_unpriceable_candidate_fails_closed_like_the_parent",
+  "TestNoRngTouch.test_hook_source_references_no_rng_objects",
+  "TestNoRngTouch.test_override_draws_no_randomness",
+  "TestOnlyNamedTarget.test_one_override_per_target_then_original_logic",
+  "TestOnlyNamedTarget.test_only_named_target_is_hit",
+  "TestProvenanceAndScans.test_cell_naming_and_paths",
+  "TestProvenanceAndScans.test_intervention_evidence_join",
+  "TestProvenanceAndScans.test_no_optimizer_anywhere_in_the_harness",
+  "TestProvenanceAndScans.test_override_set_matches_round25_frozen_set",
+  "TestSequentialBudget.test_override_behind_earlier_send_keeps_shadow_exact",
+  "TestSequentialBudget.test_override_behind_later_candidate_keeps_shadow_exact"
+ ],
+ "tests_run": 16
+}
