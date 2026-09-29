@@ -45,9 +45,37 @@ class _CollectorShim:
         self.records = records
 
 
+def mean(values):
+    """Local descriptive mean (post-run analysis only; no training constant lives here)."""
+    return sum(float(v) for v in values) / len(values)
+
+
+def summary(values):
+    """Local descriptive summary; the quantile rule is linear interpolation on sorted values."""
+    floats = [float(v) for v in values]
+    ordered = sorted(floats)
+    n = len(ordered)
+    average = mean(floats)
+
+    def quantile(fraction):
+        if n == 1:
+            return ordered[0]
+        position = (n - 1) * fraction
+        low = int(position // 1)
+        high = min(low + 1, n - 1)
+        weight = position - low
+        return ordered[low] * (1.0 - weight) + ordered[high] * weight
+
+    return {"n": n, "mean": round(average, 9), "min": ordered[0], "max": ordered[-1],
+            "q25": round(quantile(0.25), 9), "median": round(quantile(0.5), 9),
+            "q75": round(quantile(0.75), 9),
+            "std_pop": round((sum((v - average) ** 2 for v in floats) / n) ** 0.5, 9),
+            "abs_mean": round(mean([abs(v) for v in floats]), 9)}
+
+
 def load_episode(reduction: str, seed: int, episode: int) -> dict[str, Any]:
     """One archived training row of this round, shaped the way the frozen trainer wants it."""
-    matches = sorted(common.ROWS.glob(f"r32_train_{reduction}_s{seed}_e{episode}_a*.json"))
+    matches = sorted(common.ROWS.glob(f"r32_train_{reduction}_s{seed}_e{episode}_s*_a{episode}.json"))
     if len(matches) != 1:
         raise RuntimeError(f"expected exactly one training row for {reduction} s{seed} "
                            f"e{episode}, found {[path.name for path in matches]}")
@@ -302,10 +330,10 @@ def analyse(reduction: str, seed: int, batch: int) -> dict[str, Any]:
         "advantage_combination_closed": bool(built["combination_max_abs_error"] < 1e-5),
         "advantage_combination_max_abs_error": round(built["combination_max_abs_error"], 15),
         "advantages": {
-            "A_task": common.summary(task), "A_cost": common.summary(cost),
-            "lambda_times_A_task": common.summary([lam * value for value in task]),
-            "A_combined": common.summary([float(sample["advantage"]) for sample in samples]),
-            "A_combined_active_rows_only": common.summary(
+            "A_task": summary(task), "A_cost": summary(cost),
+            "lambda_times_A_task": summary([lam * value for value in task]),
+            "A_combined": summary([float(sample["advantage"]) for sample in samples]),
+            "A_combined_active_rows_only": summary(
                 [float(sample["advantage"]) for sample in samples if sample["free"]]),
             "lambda_of_this_batch": lam},
         "untouched_terms_at_this_point": {
@@ -320,9 +348,16 @@ def analyse(reduction: str, seed: int, batch: int) -> dict[str, Any]:
                               common.ARM_ORDER[1]: round(actor_test, 12)},
             "observed_amplification": round(observed, 9) if observed is not None else None,
             "expected_N_over_M": round(expected, 9) if expected is not None else None,
+            "absolute_gap": (round(abs(observed - expected), 12)
+                             if observed is not None and expected is not None else None),
+            "relative_gap": (round(abs(observed - expected) / expected, 12)
+                             if observed is not None and expected else None),
+            "tolerance_rule": "relative 1e-5 on the ratio. The ratio itself is O(N/M) and reaches "
+                              "51 at these points, so a fixed absolute band would really only be "
+                              "testing float32 digit count. Both residuals are recorded.",
             "amplification_matches_within_float32": bool(
-                observed is not None and expected is not None
-                and abs(observed - expected) < 1e-5),
+                observed is not None and expected
+                and abs(observed - expected) / expected < 1e-5),
             "total_pre_clip_l2": {arm: views[arm]["pre_clip_total_norm"]
                                   for arm in common.ARM_ORDER},
             "total_post_clip_l2": {arm: views[arm]["post_clip_total_norm"]
@@ -434,6 +469,16 @@ def main() -> int:
                    if value.get("status") == "analysed" and not
                    value["arithmetical_comparison_same_state_same_tape"]
                    ["amplification_matches_within_float32"]]
+    relative_gaps = [
+        value["arithmetical_comparison_same_state_same_tape"]["relative_gap"]
+        for blocks in payload["runs"].values() for value in blocks.values()
+        if value.get("status") == "analysed"
+        and value["arithmetical_comparison_same_state_same_tape"]["relative_gap"] is not None]
+    absolute_gaps = [
+        value["arithmetical_comparison_same_state_same_tape"]["absolute_gap"]
+        for blocks in payload["runs"].values() for value in blocks.values()
+        if value.get("status") == "analysed"
+        and value["arithmetical_comparison_same_state_same_tape"]["absolute_gap"] is not None]
     not_closed = [f"{key}/{batch}" for key, blocks in payload["runs"].items()
                   for batch, value in blocks.items()
                   if value.get("status") == "analysed" and not value["advantage_combination_closed"]]
@@ -449,6 +494,9 @@ def main() -> int:
         "missing_points": missing_points,
         "amplification_holds_at_every_analysed_point": bool(analysed_points and not mismatching),
         "amplification_mismatching_points": mismatching,
+        "amplification_points_with_a_ratio": len(relative_gaps),
+        "amplification_max_relative_gap": max(relative_gaps) if relative_gaps else None,
+        "amplification_max_absolute_gap": max(absolute_gaps) if absolute_gaps else None,
         "advantage_combination_closed_everywhere": not not_closed,
         "samples_record_equal_recomputed_everywhere": not samples_mismatch,
         "question_answers": {

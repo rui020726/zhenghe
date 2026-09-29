@@ -1,0 +1,500 @@
+{
+ "bootstrap_recheck": {
+  "cells_checked": 6,
+  "clean": true,
+  "hand_check": {
+   "hand_computed_first_five": [
+    8.5625,
+    9.75,
+    7.0,
+    9.0,
+    8.625
+   ],
+   "max_abs_gap": 0.0,
+   "note": "the check uses the round's real index matrix; the same index matrix object is passed to every comparison in this script",
+   "passed": true,
+   "vectorised_first_five": [
+    8.5625,
+    9.75,
+    7.0,
+    9.0,
+    8.625
+   ]
+  },
+  "max_unrounded_gap_between_slow_loop_and_delivered": 0.000375,
+  "note": "the estimator, the shared index matrix, the seed, the count and the linear quantile are all inherited from ROUND30's frozen plan; nothing was re-tuned",
+  "problems": [],
+  "rounding_rule_compared_at": "delta_y 6 decimals, delta_c 3 decimals (as delivered)"
+ },
+ "clean": true,
+ "init_pairing_provenance": {
+  "all_load_bearing_fields_identical": true,
+  "cells": {
+   "ACTIVE_ROWS_s11": {
+    "keys_only_in_the_pre_launch_file": [
+     "written_before_the_first_environment_launch"
+    ],
+    "keys_only_in_the_run_time_file": [],
+    "load_bearing_fields_changed": [],
+    "pre_launch_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "run_time_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff"
+   },
+   "ACTIVE_ROWS_s22": {
+    "keys_only_in_the_pre_launch_file": [
+     "written_before_the_first_environment_launch"
+    ],
+    "keys_only_in_the_run_time_file": [],
+    "load_bearing_fields_changed": [],
+    "pre_launch_parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+    "run_time_parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095"
+   },
+   "ACTIVE_ROWS_s33": {
+    "keys_only_in_the_pre_launch_file": [
+     "written_before_the_first_environment_launch"
+    ],
+    "keys_only_in_the_run_time_file": [],
+    "load_bearing_fields_changed": [],
+    "pre_launch_parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+    "run_time_parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa"
+   },
+   "ALL_ROWS_s11": {
+    "keys_only_in_the_pre_launch_file": [
+     "written_before_the_first_environment_launch"
+    ],
+    "keys_only_in_the_run_time_file": [],
+    "load_bearing_fields_changed": [],
+    "pre_launch_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "run_time_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff"
+   },
+   "ALL_ROWS_s22": {
+    "keys_only_in_the_pre_launch_file": [
+     "written_before_the_first_environment_launch"
+    ],
+    "keys_only_in_the_run_time_file": [],
+    "load_bearing_fields_changed": [],
+    "pre_launch_parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+    "run_time_parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095"
+   },
+   "ALL_ROWS_s33": {
+    "keys_only_in_the_pre_launch_file": [
+     "written_before_the_first_environment_launch"
+    ],
+    "keys_only_in_the_run_time_file": [],
+    "load_bearing_fields_changed": [],
+    "pre_launch_parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+    "run_time_parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa"
+   }
+  },
+  "clean": true,
+  "findings": [
+   "every cell lost the key `written_before_the_first_environment_launch` when r32_train rewrote the file at its first fresh initialisation; the values are identical, so the pairing claim stands, but the in-file provenance assertion survives only in the committed pre-launch version (df176bdf8c3c265d8109494446073b23aee384a6) -- and r32_freeze.init_pairing_evidence's docstring claim that r32_train re-verifies instead of rewriting is therefore wrong in the delivered code"
+  ],
+  "freeze_commit": "df176bdf8c3c265d8109494446073b23aee384a6",
+  "pre_launch_marker_still_in_the_working_file": false
+ },
+ "lambda_recheck": {
+  "batches_checked": 192,
+  "clean": true,
+  "final_lambdas": {
+   "ACTIVE_ROWS_s11": {
+    "batches": 32,
+    "lambda_final": 1.4874999999999994
+   },
+   "ACTIVE_ROWS_s22": {
+    "batches": 32,
+    "lambda_final": 1.4249999999999992
+   },
+   "ACTIVE_ROWS_s33": {
+    "batches": 32,
+    "lambda_final": 1.4874999999999992
+   },
+   "ALL_ROWS_s11": {
+    "batches": 32,
+    "lambda_final": 1.4999999999999993
+   },
+   "ALL_ROWS_s22": {
+    "batches": 32,
+    "lambda_final": 1.2374999999999994
+   },
+   "ALL_ROWS_s33": {
+    "batches": 32,
+    "lambda_final": 1.4749999999999992
+   }
+  },
+  "problems": []
+ },
+ "ledger_recheck": {
+  "batch_record_files": 192,
+  "batch_records_match_plan": true,
+  "failures": [],
+  "hard_cap": 1080,
+  "labels_written_more_than_once": {},
+  "lifecycle_files": 1040,
+  "normal_expected": 1040,
+  "pre_update_checkpoint_files": 18,
+  "pre_update_checkpoints_match_plan": true,
+  "reserve_expected": 40,
+  "results_recorded": 1040,
+  "row_files": 1040,
+  "row_files_match_plan": true,
+  "synthetic_updates": {
+   "cap": 64,
+   "events": [
+    {
+     "count": 16,
+     "key": "T9",
+     "note": "T9 ALL_ROWS equivalence vs frozen v2_trainer (2 calls per trainer)",
+     "performed_times": 1
+    },
+    {
+     "count": 8,
+     "key": "T10",
+     "note": "T10 per-arm reduction-effect probe (one call per reduction)",
+     "performed_times": 1
+    },
+    {
+     "count": 8,
+     "key": "preflight-restore-determinism",
+     "note": "preflight restore determinism (2 calls)",
+     "performed_times": 2
+    }
+   ],
+   "note": "pure synthetic optimizer.step inside zero-launch tests only; no environment is constructed and these are booked separately from the 1040 launch quota. `used` counts distinct keyed bookings (the authorised bound); `performed_total` also counts repeated executions of the same keyed step during development.",
+   "performed_repeats": 8,
+   "performed_total": 40,
+   "used": 32
+  },
+  "tape_files": 960,
+  "tape_files_match_plan": true,
+  "transcript_files": 1040,
+  "used": 1040,
+  "within_cap": true
+ },
+ "rebuilt_table_from_rows": {
+  "s11_greedy": {
+   "absolute": {
+    "ACTIVE_ROWS": {
+     "mean_on_time": 5.5,
+     "mean_paired_task_loss_vs_immediate": 0.5,
+     "mean_spent_bytes": 28198.875
+    },
+    "ALL_ROWS": {
+     "mean_on_time": 5.5,
+     "mean_paired_task_loss_vs_immediate": 0.5,
+     "mean_spent_bytes": 28207.875
+    }
+   },
+   "delta_c_counts": {
+    "cheaper": 1,
+    "costlier": 0,
+    "equal": 15
+   },
+   "delta_c_mean": -9.0,
+   "delta_y_counts": {
+    "negative": 0,
+    "positive": 0,
+    "zero": 16
+   },
+   "delta_y_mean": 0.0,
+   "late_mean_bytes": 4838.25,
+   "late_mean_on_time": 6.0,
+   "reference_immediate_mean_on_time": 6.0,
+   "scenes": [
+    1301000,
+    1301001,
+    1301002,
+    1301003,
+    1301004,
+    1301005,
+    1301006,
+    1301007,
+    1301008,
+    1301009,
+    1301010,
+    1301011,
+    1301012,
+    1301013,
+    1301014,
+    1301015
+   ]
+  },
+  "s11_sampled": {
+   "absolute": {
+    "ACTIVE_ROWS": {
+     "mean_on_time": 5.5625,
+     "mean_paired_task_loss_vs_immediate": 0.4375,
+     "mean_spent_bytes": 28206.375
+    },
+    "ALL_ROWS": {
+     "mean_on_time": 5.5625,
+     "mean_paired_task_loss_vs_immediate": 0.4375,
+     "mean_spent_bytes": 28128.75
+    }
+   },
+   "delta_c_counts": {
+    "cheaper": 8,
+    "costlier": 6,
+    "equal": 2
+   },
+   "delta_c_mean": 77.625,
+   "delta_y_counts": {
+    "negative": 0,
+    "positive": 0,
+    "zero": 16
+   },
+   "delta_y_mean": 0.0,
+   "late_mean_bytes": 4838.25,
+   "late_mean_on_time": 6.0,
+   "reference_immediate_mean_on_time": 6.0,
+   "scenes": [
+    1301000,
+    1301001,
+    1301002,
+    1301003,
+    1301004,
+    1301005,
+    1301006,
+    1301007,
+    1301008,
+    1301009,
+    1301010,
+    1301011,
+    1301012,
+    1301013,
+    1301014,
+    1301015
+   ]
+  },
+  "s22_greedy": {
+   "absolute": {
+    "ACTIVE_ROWS": {
+     "mean_on_time": 5.5,
+     "mean_paired_task_loss_vs_immediate": 0.5,
+     "mean_spent_bytes": 0.0
+    },
+    "ALL_ROWS": {
+     "mean_on_time": 5.5,
+     "mean_paired_task_loss_vs_immediate": 0.5,
+     "mean_spent_bytes": 0.0
+    }
+   },
+   "delta_c_counts": {
+    "cheaper": 0,
+    "costlier": 0,
+    "equal": 16
+   },
+   "delta_c_mean": 0.0,
+   "delta_y_counts": {
+    "negative": 0,
+    "positive": 0,
+    "zero": 16
+   },
+   "delta_y_mean": 0.0,
+   "late_mean_bytes": 4838.25,
+   "late_mean_on_time": 6.0,
+   "reference_immediate_mean_on_time": 6.0,
+   "scenes": [
+    1301000,
+    1301001,
+    1301002,
+    1301003,
+    1301004,
+    1301005,
+    1301006,
+    1301007,
+    1301008,
+    1301009,
+    1301010,
+    1301011,
+    1301012,
+    1301013,
+    1301014,
+    1301015
+   ]
+  },
+  "s22_sampled": {
+   "absolute": {
+    "ACTIVE_ROWS": {
+     "mean_on_time": 5.8125,
+     "mean_paired_task_loss_vs_immediate": 0.1875,
+     "mean_spent_bytes": 26899.5
+    },
+    "ALL_ROWS": {
+     "mean_on_time": 5.875,
+     "mean_paired_task_loss_vs_immediate": 0.125,
+     "mean_spent_bytes": 15835.5
+    }
+   },
+   "delta_c_counts": {
+    "cheaper": 2,
+    "costlier": 14,
+    "equal": 0
+   },
+   "delta_c_mean": 11064.0,
+   "delta_y_counts": {
+    "negative": 2,
+    "positive": 1,
+    "zero": 13
+   },
+   "delta_y_mean": -0.0625,
+   "late_mean_bytes": 4838.25,
+   "late_mean_on_time": 6.0,
+   "reference_immediate_mean_on_time": 6.0,
+   "scenes": [
+    1301000,
+    1301001,
+    1301002,
+    1301003,
+    1301004,
+    1301005,
+    1301006,
+    1301007,
+    1301008,
+    1301009,
+    1301010,
+    1301011,
+    1301012,
+    1301013,
+    1301014,
+    1301015
+   ]
+  },
+  "s33_greedy": {
+   "absolute": {
+    "ACTIVE_ROWS": {
+     "mean_on_time": 5.5,
+     "mean_paired_task_loss_vs_immediate": 0.5,
+     "mean_spent_bytes": 28107.75
+    },
+    "ALL_ROWS": {
+     "mean_on_time": 6.0,
+     "mean_paired_task_loss_vs_immediate": 0.0,
+     "mean_spent_bytes": 2398.5
+    }
+   },
+   "delta_c_counts": {
+    "cheaper": 0,
+    "costlier": 16,
+    "equal": 0
+   },
+   "delta_c_mean": 25709.25,
+   "delta_y_counts": {
+    "negative": 5,
+    "positive": 0,
+    "zero": 11
+   },
+   "delta_y_mean": -0.5,
+   "late_mean_bytes": 4838.25,
+   "late_mean_on_time": 6.0,
+   "reference_immediate_mean_on_time": 6.0,
+   "scenes": [
+    1301000,
+    1301001,
+    1301002,
+    1301003,
+    1301004,
+    1301005,
+    1301006,
+    1301007,
+    1301008,
+    1301009,
+    1301010,
+    1301011,
+    1301012,
+    1301013,
+    1301014,
+    1301015
+   ]
+  },
+  "s33_sampled": {
+   "absolute": {
+    "ACTIVE_ROWS": {
+     "mean_on_time": 5.5625,
+     "mean_paired_task_loss_vs_immediate": 0.4375,
+     "mean_spent_bytes": 28136.625
+    },
+    "ALL_ROWS": {
+     "mean_on_time": 5.5625,
+     "mean_paired_task_loss_vs_immediate": 0.4375,
+     "mean_spent_bytes": 28199.25
+    }
+   },
+   "delta_c_counts": {
+    "cheaper": 9,
+    "costlier": 6,
+    "equal": 1
+   },
+   "delta_c_mean": -62.625,
+   "delta_y_counts": {
+    "negative": 0,
+    "positive": 0,
+    "zero": 16
+   },
+   "delta_y_mean": 0.0,
+   "late_mean_bytes": 4838.25,
+   "late_mean_on_time": 6.0,
+   "reference_immediate_mean_on_time": 6.0,
+   "scenes": [
+    1301000,
+    1301001,
+    1301002,
+    1301003,
+    1301004,
+    1301005,
+    1301006,
+    1301007,
+    1301008,
+    1301009,
+    1301010,
+    1301011,
+    1301012,
+    1301013,
+    1301014,
+    1301015
+   ]
+  }
+ },
+ "rebuilt_vs_delivered": {
+  "cells_checked": 6,
+  "clean": true,
+  "problems": []
+ },
+ "relative_vs_absolute": {
+  "clean": true,
+  "delta_zero_but_absolute_loss_present": [
+   "s11_greedy/ALL_ROWS: delta_y is 0 while the arm still loses 0.5 tasks/episode against immediate",
+   "s11_greedy/ACTIVE_ROWS: delta_y is 0 while the arm still loses 0.5 tasks/episode against immediate",
+   "s11_sampled/ALL_ROWS: delta_y is 0 while the arm still loses 0.4375 tasks/episode against immediate",
+   "s11_sampled/ACTIVE_ROWS: delta_y is 0 while the arm still loses 0.4375 tasks/episode against immediate",
+   "s22_greedy/ALL_ROWS: delta_y is 0 while the arm still loses 0.5 tasks/episode against immediate",
+   "s22_greedy/ACTIVE_ROWS: delta_y is 0 while the arm still loses 0.5 tasks/episode against immediate",
+   "s33_sampled/ALL_ROWS: delta_y is 0 while the arm still loses 0.4375 tasks/episode against immediate",
+   "s33_sampled/ACTIVE_ROWS: delta_y is 0 while the arm still loses 0.4375 tasks/episode against immediate"
+  ],
+  "rule": "relative improvement is never written as absolute constraint satisfaction; the constraint is judged only against the paired immediate reference",
+  "runs_where_g_hat_was_never_negative": [
+   "ACTIVE_ROWS_s11",
+   "ACTIVE_ROWS_s22",
+   "ACTIVE_ROWS_s33",
+   "ALL_ROWS_s11",
+   "ALL_ROWS_s22",
+   "ALL_ROWS_s33"
+  ]
+ },
+ "report_same_source": {
+  "clean": true,
+  "missing_number_strings": [],
+  "note": "a formatting-level check that the report quotes the delivered statistics rather than a second, hand-typed set of numbers",
+  "status": "checked"
+ },
+ "round": "32",
+ "section": "independent recheck of the delivered statistics (0 launches)",
+ "trajectory_problems": {
+  "ACTIVE_ROWS_s11": [],
+  "ACTIVE_ROWS_s22": [],
+  "ACTIVE_ROWS_s33": [],
+  "ALL_ROWS_s11": [],
+  "ALL_ROWS_s22": [],
+  "ALL_ROWS_s33": []
+ }
+}

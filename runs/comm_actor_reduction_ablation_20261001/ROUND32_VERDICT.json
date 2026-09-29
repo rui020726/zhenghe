@@ -1,0 +1,774 @@
+{
+ "answers": {
+  "1_only_change_is_the_actor_reduction": {
+   "clean": true,
+   "evidence": {
+    "all_rows_reproduces_frozen_trainer": true,
+    "encoder_fixed_to_round30_old": true,
+    "identity_sections_unchanged_vs_round30": {
+     "checkpoints": {
+      "compared": 2,
+      "differing_keys": [],
+      "identical": true
+     },
+     "imported_round_modules": {
+      "compared": 13,
+      "differing_keys": [],
+      "identical": true
+     },
+     "production": {
+      "compared": 8,
+      "differing_keys": [],
+      "identical": true
+     }
+    },
+    "init_pairing_provenance": {
+     "all_load_bearing_fields_identical": true,
+     "findings": [
+      "every cell lost the key `written_before_the_first_environment_launch` when r32_train rewrote the file at its first fresh initialisation; the values are identical, so the pairing claim stands, but the in-file provenance assertion survives only in the committed pre-launch version (df176bdf8c3c265d8109494446073b23aee384a6) -- and r32_freeze.init_pairing_evidence's docstring claim that r32_train re-verifies instead of rewriting is therefore wrong in the delivered code"
+     ],
+     "meaning": "the pairing claim itself holds (same initial parameters, optimizer state, lambda and module digests for both arms of every seed); what was lost when the run rewrote its own evidence file is the in-file statement that the payload predates the first launch. Registered, not patched, because both involved files sit on the training path",
+     "pre_launch_marker_still_in_the_working_file": false
+    },
+    "math_checks_passed": true,
+    "post_freeze_changed_files": [
+     "r32_check.py",
+     "r32_curves.py",
+     "r32_mechanism.py",
+     "r32_stats.py",
+     "r32_verdict.py",
+     "r32_verify.py"
+    ],
+    "post_freeze_changes_registered_clean": true,
+    "post_freeze_training_path_unchanged": true,
+    "removed_line_categories": {
+     "episodes: list[dict[str, Any]], *, update_index: int) -> dict[str, Any]:": "reduction_plumbing -- the new reduction keyword argument",
+     "loss = (-surrogate.mean()": "research_variable -- the actor surrogate reduction itself",
+     "totals[\"surrogate\"] += float(surrogate.mean().item())": "reported_field_only -- the policy_surrogate accumulator now reads the arm's own mean; for ALL_ROWS that is the same value (proved by T9)"
+    },
+    "round30_identity_audit_clean": true,
+    "runner_run_episode_body_identical": true,
+    "runner_seam_unexplained": [],
+    "trainer_diff_unexplained_blocks": [],
+    "trainer_diff_unexplained_removed_lines": [],
+    "trainer_removed_parent_lines": [
+     "episodes: list[dict[str, Any]], *, update_index: int) -> dict[str, Any]:",
+     "loss = (-surrogate.mean()",
+     "totals[\"surrogate\"] += float(surrogate.mean().item())"
+    ]
+   },
+   "statement": "两条臂之间唯一被主动改变的是 actor surrogate 的归约集合与分母 (sum/N -> sum over active rows / max(M,1))；相对冻结父件被删掉的行共 3 行，其分类逐行登记在 evidence.removed_line_categories。代价是 actor 相对 entropy 与两个 critic 的更新权重随之改变——这正是本消融的作用范围，不宣称其他优化关系不受影响。",
+   "verdict": "是：核验项全过（另有一处不影响测量、但影响证据自述能力的来源缺陷已登记在 registered_defects 与报告 §1.1）"
+  },
+  "2_what_actually_changed_in_the_update": {
+   "advantage_scale_read": {
+    "limitation": "这是幅度读数，不是尺度干预；'改成多少才能闭合约束'本轮没有做任何干预",
+    "max": 0.424743,
+    "min": 0.18284,
+    "per_point": {
+     "ACTIVE_ROWS_s11/b0": {
+      "abs_mean_A_cost": 0.11547898,
+      "abs_mean_lambda_times_A_task": 0.536114491,
+      "cost_over_task": 0.2154,
+      "lambda_of_this_batch": 1.0
+     },
+     "ACTIVE_ROWS_s11/b15": {
+      "abs_mean_A_cost": 0.080783925,
+      "abs_mean_lambda_times_A_task": 0.441456219,
+      "cost_over_task": 0.182994,
+      "lambda_of_this_batch": 1.2249999999999996
+     },
+     "ACTIVE_ROWS_s11/b31": {
+      "abs_mean_A_cost": 0.064187328,
+      "abs_mean_lambda_times_A_task": 0.351057091,
+      "cost_over_task": 0.18284,
+      "lambda_of_this_batch": 1.4624999999999995
+     },
+     "ACTIVE_ROWS_s22/b0": {
+      "abs_mean_A_cost": 0.146114735,
+      "abs_mean_lambda_times_A_task": 0.558708615,
+      "cost_over_task": 0.261522,
+      "lambda_of_this_batch": 1.0
+     },
+     "ACTIVE_ROWS_s22/b15": {
+      "abs_mean_A_cost": 0.156147661,
+      "abs_mean_lambda_times_A_task": 0.42381087,
+      "cost_over_task": 0.368437,
+      "lambda_of_this_batch": 1.2374999999999996
+     },
+     "ACTIVE_ROWS_s22/b31": {
+      "abs_mean_A_cost": 0.164874569,
+      "abs_mean_lambda_times_A_task": 0.507988838,
+      "cost_over_task": 0.324563,
+      "lambda_of_this_batch": 1.4124999999999992
+     },
+     "ACTIVE_ROWS_s33/b0": {
+      "abs_mean_A_cost": 0.104149102,
+      "abs_mean_lambda_times_A_task": 0.562445738,
+      "cost_over_task": 0.185172,
+      "lambda_of_this_batch": 1.0
+     },
+     "ACTIVE_ROWS_s33/b15": {
+      "abs_mean_A_cost": 0.090818037,
+      "abs_mean_lambda_times_A_task": 0.416877066,
+      "cost_over_task": 0.217853,
+      "lambda_of_this_batch": 1.2374999999999996
+     },
+     "ACTIVE_ROWS_s33/b31": {
+      "abs_mean_A_cost": 0.070968964,
+      "abs_mean_lambda_times_A_task": 0.368541994,
+      "cost_over_task": 0.192567,
+      "lambda_of_this_batch": 1.4624999999999992
+     },
+     "ALL_ROWS_s11/b0": {
+      "abs_mean_A_cost": 0.11547898,
+      "abs_mean_lambda_times_A_task": 0.536114491,
+      "cost_over_task": 0.2154,
+      "lambda_of_this_batch": 1.0
+     },
+     "ALL_ROWS_s11/b15": {
+      "abs_mean_A_cost": 0.074953733,
+      "abs_mean_lambda_times_A_task": 0.381813279,
+      "cost_over_task": 0.19631,
+      "lambda_of_this_batch": 1.2374999999999996
+     },
+     "ALL_ROWS_s11/b31": {
+      "abs_mean_A_cost": 0.065756729,
+      "abs_mean_lambda_times_A_task": 0.350743339,
+      "cost_over_task": 0.187478,
+      "lambda_of_this_batch": 1.4749999999999994
+     },
+     "ALL_ROWS_s22/b0": {
+      "abs_mean_A_cost": 0.146114735,
+      "abs_mean_lambda_times_A_task": 0.558708615,
+      "cost_over_task": 0.261522,
+      "lambda_of_this_batch": 1.0
+     },
+     "ALL_ROWS_s22/b15": {
+      "abs_mean_A_cost": 0.236981598,
+      "abs_mean_lambda_times_A_task": 0.557940639,
+      "cost_over_task": 0.424743,
+      "lambda_of_this_batch": 1.1999999999999995
+     },
+     "ALL_ROWS_s22/b31": {
+      "abs_mean_A_cost": 0.41972628,
+      "abs_mean_lambda_times_A_task": 1.596764326,
+      "cost_over_task": 0.262861,
+      "lambda_of_this_batch": 1.2374999999999994
+     },
+     "ALL_ROWS_s33/b0": {
+      "abs_mean_A_cost": 0.104149102,
+      "abs_mean_lambda_times_A_task": 0.562445738,
+      "cost_over_task": 0.185172,
+      "lambda_of_this_batch": 1.0
+     },
+     "ALL_ROWS_s33/b15": {
+      "abs_mean_A_cost": 0.082963799,
+      "abs_mean_lambda_times_A_task": 0.364777134,
+      "cost_over_task": 0.227437,
+      "lambda_of_this_batch": 1.2249999999999996
+     },
+     "ALL_ROWS_s33/b31": {
+      "abs_mean_A_cost": 0.067939079,
+      "abs_mean_lambda_times_A_task": 0.359015394,
+      "cost_over_task": 0.189237,
+      "lambda_of_this_batch": 1.4499999999999993
+     }
+    },
+    "points": 18,
+    "read": "在每一个分析点上成本项都小于任务项，所以归约放大的是以任务侧为主的一项"
+   },
+   "evidence": {
+    "advantage_combination_closed_everywhere": true,
+    "amplification_holds_at_every_analysed_point": true,
+    "amplification_max_absolute_gap": 1.4922896e-05,
+    "amplification_max_relative_gap": 2.91463e-07,
+    "amplification_mismatching_points": [],
+    "amplification_points_with_a_ratio": 18,
+    "analysed_points": 18,
+    "expected_points": 18,
+    "missing_points": [],
+    "question_answers": {
+     "did_constraint_violation_and_policy_behaviour_change": "TRAINING_CURVES.json (per-batch g_hat, lambda, cost, active share) plus PAIRED_COMPARISON.json (behaviour), never inferred from gradient norms alone",
+     "did_the_expected_actor_amplification_happen": "answerable from arithmetical_comparison_same_state_same_tape at all six runs and three batches; the observed ratio is the actor term's L2 under ACTIVE_ROWS over ALL_ROWS on identical weights and identical tape",
+     "does_it_survive_into_the_total_and_post_clip_gradient": "answerable from total_pre_clip_l2, policy_share_of_pre_clip, clipping_triggered and total_post_clip_l2; a post-clip equality with clipping on both sides means only the direction changed, not the magnitude",
+     "if_there_is_no_improvement_what_is_excluded": "excludable: that the reduction never reached the actor, or that the actor term was not amplified. Not excludable by this evidence: whether a different lambda, more batches, or a different observation would help -- none of those was intervened on"
+    },
+    "samples_record_equal_recomputed_everywhere": true
+   },
+   "note": "the actor term's own gradient scales by N/M; the total pre-clip norm and the post-clip vector move much less because the two critics dominate and global clipping rescales everything; and the term that gets scaled is itself task-side dominated at every point measured",
+   "per_arm_active_row_share_run": {
+    "ACTIVE_ROWS_s11": 0.031602709,
+    "ACTIVE_ROWS_s22": 0.108258012,
+    "ACTIVE_ROWS_s33": 0.038073693,
+    "ALL_ROWS_s11": 0.036932253,
+    "ALL_ROWS_s22": 0.287026083,
+    "ALL_ROWS_s33": 0.043175702
+   }
+  },
+  "3_greedy_and_sampled_results": {
+   "s11_greedy": {
+    "absolute": {
+     "ACTIVE_ROWS": {
+      "mean_on_time": 5.5,
+      "mean_spent_bytes": 28198.875,
+      "paired_task_loss_vs_immediate": 0.5,
+      "scenes_with_task_loss": 5
+     },
+     "ALL_ROWS": {
+      "mean_on_time": 5.5,
+      "mean_spent_bytes": 28207.875,
+      "paired_task_loss_vs_immediate": 0.5,
+      "scenes_with_task_loss": 5
+     }
+    },
+    "cheaper_but_lost_task_vs_base": 0,
+    "delta_c_ci95": [
+     -27.0,
+     0.0
+    ],
+    "delta_c_counts": {
+     "cheaper": 1,
+     "costlier": 0,
+     "equal": 15
+    },
+    "delta_c_mean": -9.0,
+    "delta_y_ci95": [
+     0.0,
+     0.0
+    ],
+    "delta_y_counts": {
+     "negative": 0,
+     "positive": 0,
+     "zero": 16
+    },
+    "delta_y_mean": 0.0,
+    "goal_set_swap": false
+   },
+   "s11_sampled": {
+    "absolute": {
+     "ACTIVE_ROWS": {
+      "mean_on_time": 5.5625,
+      "mean_spent_bytes": 28206.375,
+      "paired_task_loss_vs_immediate": 0.4375,
+      "scenes_with_task_loss": 4
+     },
+     "ALL_ROWS": {
+      "mean_on_time": 5.5625,
+      "mean_spent_bytes": 28128.75,
+      "paired_task_loss_vs_immediate": 0.4375,
+      "scenes_with_task_loss": 4
+     }
+    },
+    "cheaper_but_lost_task_vs_base": 0,
+    "delta_c_ci95": [
+     -82.125,
+     303.375
+    ],
+    "delta_c_counts": {
+     "cheaper": 8,
+     "costlier": 6,
+     "equal": 2
+    },
+    "delta_c_mean": 77.625,
+    "delta_y_ci95": [
+     0.0,
+     0.0
+    ],
+    "delta_y_counts": {
+     "negative": 0,
+     "positive": 0,
+     "zero": 16
+    },
+    "delta_y_mean": 0.0,
+    "goal_set_swap": false
+   },
+   "s22_greedy": {
+    "absolute": {
+     "ACTIVE_ROWS": {
+      "mean_on_time": 5.5,
+      "mean_spent_bytes": 0.0,
+      "paired_task_loss_vs_immediate": 0.5,
+      "scenes_with_task_loss": 5
+     },
+     "ALL_ROWS": {
+      "mean_on_time": 5.5,
+      "mean_spent_bytes": 0.0,
+      "paired_task_loss_vs_immediate": 0.5,
+      "scenes_with_task_loss": 5
+     }
+    },
+    "cheaper_but_lost_task_vs_base": 0,
+    "delta_c_ci95": [
+     0.0,
+     0.0
+    ],
+    "delta_c_counts": {
+     "cheaper": 0,
+     "costlier": 0,
+     "equal": 16
+    },
+    "delta_c_mean": 0.0,
+    "delta_y_ci95": [
+     0.0,
+     0.0
+    ],
+    "delta_y_counts": {
+     "negative": 0,
+     "positive": 0,
+     "zero": 16
+    },
+    "delta_y_mean": 0.0,
+    "goal_set_swap": false
+   },
+   "s22_sampled": {
+    "absolute": {
+     "ACTIVE_ROWS": {
+      "mean_on_time": 5.8125,
+      "mean_spent_bytes": 26899.5,
+      "paired_task_loss_vs_immediate": 0.1875,
+      "scenes_with_task_loss": 3
+     },
+     "ALL_ROWS": {
+      "mean_on_time": 5.875,
+      "mean_spent_bytes": 15835.5,
+      "paired_task_loss_vs_immediate": 0.125,
+      "scenes_with_task_loss": 2
+     }
+    },
+    "cheaper_but_lost_task_vs_base": 0,
+    "delta_c_ci95": [
+     7339.05,
+     14652.009
+    ],
+    "delta_c_counts": {
+     "cheaper": 2,
+     "costlier": 14,
+     "equal": 0
+    },
+    "delta_c_mean": 11064.0,
+    "delta_y_ci95": [
+     -0.25,
+     0.125
+    ],
+    "delta_y_counts": {
+     "negative": 2,
+     "positive": 1,
+     "zero": 13
+    },
+    "delta_y_mean": -0.0625,
+    "goal_set_swap": true
+   },
+   "s33_greedy": {
+    "absolute": {
+     "ACTIVE_ROWS": {
+      "mean_on_time": 5.5,
+      "mean_spent_bytes": 28107.75,
+      "paired_task_loss_vs_immediate": 0.5,
+      "scenes_with_task_loss": 5
+     },
+     "ALL_ROWS": {
+      "mean_on_time": 6.0,
+      "mean_spent_bytes": 2398.5,
+      "paired_task_loss_vs_immediate": 0.0,
+      "scenes_with_task_loss": 0
+     }
+    },
+    "cheaper_but_lost_task_vs_base": 0,
+    "delta_c_ci95": [
+     24153.741,
+     27076.509
+    ],
+    "delta_c_counts": {
+     "cheaper": 0,
+     "costlier": 16,
+     "equal": 0
+    },
+    "delta_c_mean": 25709.25,
+    "delta_y_ci95": [
+     -1.0625,
+     -0.125
+    ],
+    "delta_y_counts": {
+     "negative": 5,
+     "positive": 0,
+     "zero": 11
+    },
+    "delta_y_mean": -0.5,
+    "goal_set_swap": false
+   },
+   "s33_sampled": {
+    "absolute": {
+     "ACTIVE_ROWS": {
+      "mean_on_time": 5.5625,
+      "mean_spent_bytes": 28136.625,
+      "paired_task_loss_vs_immediate": 0.4375,
+      "scenes_with_task_loss": 4
+     },
+     "ALL_ROWS": {
+      "mean_on_time": 5.5625,
+      "mean_spent_bytes": 28199.25,
+      "paired_task_loss_vs_immediate": 0.4375,
+      "scenes_with_task_loss": 4
+     }
+    },
+    "cheaper_but_lost_task_vs_base": 0,
+    "delta_c_ci95": [
+     -376.134,
+     295.5
+    ],
+    "delta_c_counts": {
+     "cheaper": 9,
+     "costlier": 6,
+     "equal": 1
+    },
+    "delta_c_mean": -62.625,
+    "delta_y_ci95": [
+     0.0,
+     0.0
+    ],
+    "delta_y_counts": {
+     "negative": 0,
+     "positive": 0,
+     "zero": 16
+    },
+    "delta_y_mean": 0.0,
+    "goal_set_swap": false
+   }
+  },
+  "4_seed_consistency": {
+   "best_mode_never_selected": true,
+   "delta_c_by_seed_and_mode": {
+    "s11_greedy": -9.0,
+    "s11_sampled": 77.625,
+    "s22_greedy": 0.0,
+    "s22_sampled": 11064.0,
+    "s33_greedy": 25709.25,
+    "s33_sampled": -62.625
+   },
+   "delta_y_by_seed_and_mode": {
+    "s11_greedy": 0.0,
+    "s11_sampled": 0.0,
+    "s22_greedy": 0.0,
+    "s22_sampled": -0.0625,
+    "s33_greedy": -0.5,
+    "s33_sampled": 0.0
+   },
+   "seeds_never_pooled": true
+  },
+  "5_did_the_violation_shrink_or_did_sending_rise": {
+   "advantage_scale": {
+    "limitation": "这是幅度读数，不是尺度干预；'改成多少才能闭合约束'本轮没有做任何干预",
+    "max": 0.424743,
+    "min": 0.18284,
+    "points": 18,
+    "read": "在每一个分析点上成本项都小于任务项，所以归约放大的是以任务侧为主的一项"
+   },
+   "messages_at_ep128": {
+    "cells_where_message_count_is_identical": 3,
+    "cells_where_test_arm_sends_less": 0,
+    "cells_where_test_arm_sends_more": 3,
+    "costlier_and_sends_more_agree": true,
+    "mean_emissions_per_episode_at_ep128": {
+     "s11_greedy": {
+      "ACTIVE_ROWS": {
+       "emissions_total_16_scenes": 177,
+       "mean_emissions_per_episode": 11.0625
+      },
+      "ALL_ROWS": {
+       "emissions_total_16_scenes": 177,
+       "mean_emissions_per_episode": 11.0625
+      },
+      "delta_test_minus_base_per_episode": 0.0
+     },
+     "s11_sampled": {
+      "ACTIVE_ROWS": {
+       "emissions_total_16_scenes": 177,
+       "mean_emissions_per_episode": 11.0625
+      },
+      "ALL_ROWS": {
+       "emissions_total_16_scenes": 176,
+       "mean_emissions_per_episode": 11.0
+      },
+      "delta_test_minus_base_per_episode": 0.0625
+     },
+     "s22_greedy": {
+      "ACTIVE_ROWS": {
+       "emissions_total_16_scenes": 0,
+       "mean_emissions_per_episode": 0.0
+      },
+      "ALL_ROWS": {
+       "emissions_total_16_scenes": 0,
+       "mean_emissions_per_episode": 0.0
+      },
+      "delta_test_minus_base_per_episode": 0.0
+     },
+     "s22_sampled": {
+      "ACTIVE_ROWS": {
+       "emissions_total_16_scenes": 162,
+       "mean_emissions_per_episode": 10.125
+      },
+      "ALL_ROWS": {
+       "emissions_total_16_scenes": 95,
+       "mean_emissions_per_episode": 5.9375
+      },
+      "delta_test_minus_base_per_episode": 4.1875
+     },
+     "s33_greedy": {
+      "ACTIVE_ROWS": {
+       "emissions_total_16_scenes": 176,
+       "mean_emissions_per_episode": 11.0
+      },
+      "ALL_ROWS": {
+       "emissions_total_16_scenes": 15,
+       "mean_emissions_per_episode": 0.9375
+      },
+      "delta_test_minus_base_per_episode": 10.0625
+     },
+     "s33_sampled": {
+      "ACTIVE_ROWS": {
+       "emissions_total_16_scenes": 176,
+       "mean_emissions_per_episode": 11.0
+      },
+      "ALL_ROWS": {
+       "emissions_total_16_scenes": 176,
+       "mean_emissions_per_episode": 11.0
+      },
+      "delta_test_minus_base_per_episode": 0.0
+     }
+    },
+    "source": "PAIRED_COMPARISON.json / absolute / emissions_total_16_scenes (16 development scenes x 1 rollout per arm, seed and mode)"
+   },
+   "note": "violation is judged against the paired immediate reference, never by the message count",
+   "per_run": {
+    "ACTIVE_ROWS_s11": {
+     "active_row_share_run": 0.031602709,
+     "g_hat_negative_batches": 0,
+     "g_hat_positive_batches": 23,
+     "g_hat_zero_batches": 9,
+     "lambda_final": 1.4874999999999994,
+     "mean_cost_c_all_episodes": 2.826759375,
+     "mean_paired_task_loss_all_episodes": 0.3046875,
+     "zero_actor_gradient_row_share_run": 0.968397291
+    },
+    "ACTIVE_ROWS_s22": {
+     "active_row_share_run": 0.108258012,
+     "g_hat_negative_batches": 0,
+     "g_hat_positive_batches": 21,
+     "g_hat_zero_batches": 11,
+     "lambda_final": 1.4249999999999992,
+     "mean_cost_c_all_episodes": 2.81859375,
+     "mean_paired_task_loss_all_episodes": 0.265625,
+     "zero_actor_gradient_row_share_run": 0.891741988
+    },
+    "ACTIVE_ROWS_s33": {
+     "active_row_share_run": 0.038073693,
+     "g_hat_negative_batches": 0,
+     "g_hat_positive_batches": 23,
+     "g_hat_zero_batches": 9,
+     "lambda_final": 1.4874999999999992,
+     "mean_cost_c_all_episodes": 2.8288875,
+     "mean_paired_task_loss_all_episodes": 0.3046875,
+     "zero_actor_gradient_row_share_run": 0.961926307
+    },
+    "ALL_ROWS_s11": {
+     "active_row_share_run": 0.036932253,
+     "g_hat_negative_batches": 0,
+     "g_hat_positive_batches": 23,
+     "g_hat_zero_batches": 9,
+     "lambda_final": 1.4999999999999993,
+     "mean_cost_c_all_episodes": 2.827795313,
+     "mean_paired_task_loss_all_episodes": 0.3125,
+     "zero_actor_gradient_row_share_run": 0.963067747
+    },
+    "ALL_ROWS_s22": {
+     "active_row_share_run": 0.287026083,
+     "g_hat_negative_batches": 0,
+     "g_hat_positive_batches": 13,
+     "g_hat_zero_batches": 19,
+     "lambda_final": 1.2374999999999994,
+     "mean_cost_c_all_episodes": 2.498751563,
+     "mean_paired_task_loss_all_episodes": 0.1484375,
+     "zero_actor_gradient_row_share_run": 0.712973917
+    },
+    "ALL_ROWS_s33": {
+     "active_row_share_run": 0.043175702,
+     "g_hat_negative_batches": 0,
+     "g_hat_positive_batches": 23,
+     "g_hat_zero_batches": 9,
+     "lambda_final": 1.4749999999999992,
+     "mean_cost_c_all_episodes": 2.831695312,
+     "mean_paired_task_loss_all_episodes": 0.296875,
+     "zero_actor_gradient_row_share_run": 0.956824298
+    }
+   },
+   "read": {
+    "absolute_loss_never_improved": true,
+    "cells_where_test_arm_costs_more": 3,
+    "cells_where_test_arm_sends_more": 3,
+    "never_violated_in_training": true,
+    "note": "约束是否满足只看与配对 immediate reference 的任务差与已计量成本；消息数只是行为读数，不是判据",
+    "violation_shrank": {
+     "answer": "没有减少",
+     "cells_improved": 0,
+     "cells_tied": 4,
+     "cells_worse": 2,
+     "mean_absolute_paired_task_loss": {
+      "ACTIVE_ROWS": 0.427083,
+      "ALL_ROWS": 0.333333
+     }
+    }
+   }
+  },
+  "6_not_established": [
+   "更多批数或不同的 lambda 能否闭合约束：两者本轮都没有做任何干预",
+   "actor 梯度被放大是否等于参数步被放大：Adam 对梯度非线性，entropy 与两个 critic 也在同一总向量里，全局裁剪在两侧同时触发时只改变方向不改变大小",
+   "独立泛化：训练块 1300000..1300047 与开发块 1301000..1301015 都已被多轮反复使用",
+   "全系统通信成本下降：本轮计量只是受控上行通道的已计量尝试字节，视距与 gossip 旁路不在内",
+   "delta=0 的部署级保证：δ=0 是训练目标，ACTIVE_ROWS 的绝对任务损失只要大于 0，约束就没有满足，无论相对改善多大",
+   "把 3 个训练 seed 当总体：三个 seed 分别展示、未池化",
+   "把 sampled 训练轨迹当成 greedy 的约束轨迹",
+   "组合优势里任务项与成本项的幅度比本轮已直接读出（abs_mean(A_cost)/abs_mean(λ·A_task) 在 18/18 点为 0.1828–0.4247），但'把成本项尺度改成多少才能闭合约束'没有做任何干预，因此不能由该读数判定"
+  ],
+  "7_next_single_experiment": {
+   "estimated_resources": "0 次环境启动、0 次 optimizer.step、0 个 checkpoint 写回；只读已落盘的 lifecycle / tape / row",
+   "not_executed_here": true,
+   "only_changed_variable": "归因口径（沿用十九轮的承重首报/严格冗余/买到时间分类），本轮 192 份评估记录与 lifecycle，不改任何训练设置",
+   "reason": "本轮已排除'信号没进 actor'与'零梯度行稀释是主要瓶颈'，也已经在 18/18 个点上读出组合优势里 λ·A_task 与 A_cost 的幅度比（0.18284–0.424743，见 UPDATE_MECHANISM 各点 advantages），所以尺度读数本身不是缺口。缺口是：ACTIVE_ROWS 多花 10 条/集仍换不到任务，那么剩余任务损失里有多少**根本不在通信这一侧**（搜索零接触）？不先量这个上界，任何目标函数改动（含尺度）都是在未知收益的空间里试",
+   "requires_approval": true,
+   "title": "只换一个读数：把六格里剩余的任务损失按场景归因，算出通信侧可达的任务上界（不训练、不启动环境）",
+   "what_would_follow": "若上界接近 0，控制器侧的目标函数消融（包括只改尺度）都不值得再申请；若上界明显大于 0，才另案申请一次**只改尺度、不改归约**的训练消融"
+  }
+ },
+ "confirmed": {
+  "amplification_observed_on_this_rounds_own_artefacts": true,
+  "cross_arm_gate": true,
+  "first4_gates": {
+   "ACTIVE_ROWS_s11": true,
+   "ALL_ROWS_s11": true
+  },
+  "independent_recheck_clean": true,
+  "ledger": {
+   "batch_record_files": 192,
+   "batch_records_match_plan": true,
+   "failures": [],
+   "hard_cap": 1080,
+   "labels_written_more_than_once": {},
+   "lifecycle_files": 1040,
+   "normal_expected": 1040,
+   "pre_update_checkpoint_files": 18,
+   "pre_update_checkpoints_match_plan": true,
+   "reserve_expected": 40,
+   "results_recorded": 1040,
+   "row_files": 1040,
+   "row_files_match_plan": true,
+   "synthetic_updates": {
+    "cap": 64,
+    "events": [
+     {
+      "count": 16,
+      "key": "T9",
+      "note": "T9 ALL_ROWS equivalence vs frozen v2_trainer (2 calls per trainer)",
+      "performed_times": 1
+     },
+     {
+      "count": 8,
+      "key": "T10",
+      "note": "T10 per-arm reduction-effect probe (one call per reduction)",
+      "performed_times": 1
+     },
+     {
+      "count": 8,
+      "key": "preflight-restore-determinism",
+      "note": "preflight restore determinism (2 calls)",
+      "performed_times": 2
+     }
+    ],
+    "note": "pure synthetic optimizer.step inside zero-launch tests only; no environment is constructed and these are booked separately from the 1040 launch quota. `used` counts distinct keyed bookings (the authorised bound); `performed_total` also counts repeated executions of the same keyed step during development.",
+    "performed_repeats": 8,
+    "performed_total": 40,
+    "used": 32
+   },
+   "tape_files": 960,
+   "tape_files_match_plan": true,
+   "transcript_files": 1040,
+   "used": 1040,
+   "within_cap": true
+  },
+  "reduction_mathematics": {
+   "all_checks_passed": true,
+   "all_rows_equals_frozen_trainer": true,
+   "gradient_identity": "grad(ACTIVE actor term) = (N/M) * grad(ALL actor term)",
+   "other_terms_unchanged": true
+  }
+ },
+ "counters": {
+  "checkpoints_written_by_diagnosis": 0,
+  "hard_cap": 1080,
+  "launch_plan_normal": 1040,
+  "network_attempts": 0,
+  "new_environment_launches": 1040,
+  "production_code_changed": 0,
+  "pure_computation_gradient_diagnostics": true,
+  "real_optimizer_steps": 2628,
+  "real_training_batches": 192,
+  "real_training_updates_performed_by_this_analysis_round": 0,
+  "remote_publication_status": "not_pushed_no_network_attempt_this_round; the branch has no upstream; the last registered state is not_pushed_network_unreachable",
+  "sealed_blocks_touched": 0,
+  "synthetic_cap": 64,
+  "synthetic_optimizer_updates": 32,
+  "synthetic_optimizer_updates_performed": 40,
+  "technical_failures": []
+ },
+ "inputs": {
+  "checkpoint_index_pre_update_all_match": true,
+  "cross_arm_gate_s11": true,
+  "first4_gates": {
+   "ACTIVE_ROWS_s11": true,
+   "ALL_ROWS_s11": true
+  },
+  "independent_recheck": true,
+  "paired_comparison": true,
+  "reduction_math": true,
+  "training_curves": true,
+  "update_mechanism": true
+ },
+ "kind": "optimisation-design ablation, not claimed as a bug fix",
+ "not_confirmed": [
+  "更多批数或不同的 lambda 能否闭合约束：两者本轮都没有做任何干预",
+  "actor 梯度被放大是否等于参数步被放大：Adam 对梯度非线性，entropy 与两个 critic 也在同一总向量里，全局裁剪在两侧同时触发时只改变方向不改变大小",
+  "独立泛化：训练块 1300000..1300047 与开发块 1301000..1301015 都已被多轮反复使用",
+  "全系统通信成本下降：本轮计量只是受控上行通道的已计量尝试字节，视距与 gossip 旁路不在内",
+  "delta=0 的部署级保证：δ=0 是训练目标，ACTIVE_ROWS 的绝对任务损失只要大于 0，约束就没有满足，无论相对改善多大",
+  "把 3 个训练 seed 当总体：三个 seed 分别展示、未池化",
+  "把 sampled 训练轨迹当成 greedy 的约束轨迹",
+  "组合优势里任务项与成本项的幅度比本轮已直接读出（abs_mean(A_cost)/abs_mean(λ·A_task) 在 18/18 点为 0.1828–0.4247），但'把成本项尺度改成多少才能闭合约束'没有做任何干预，因此不能由该读数判定"
+ ],
+ "outcome_direction_read": {
+  "cells": 6,
+  "cells_cheaper": 2,
+  "cells_where_absolute_loss_reduced": 0,
+  "cells_where_test_arm_has_zero_absolute_loss": 0,
+  "cells_with_task_gain": 0,
+  "cells_with_task_loss": 2
+ },
+ "question": "仅把 PPO actor surrogate 从'所有记录行平均'改为'有自由决策的记录行平均'，是否改善有限训练内的任务—成本表现？",
+ "registered_defects": [
+  "every cell lost the key `written_before_the_first_environment_launch` when r32_train rewrote the file at its first fresh initialisation; the values are identical, so the pairing claim stands, but the in-file provenance assertion survives only in the committed pre-launch version (df176bdf8c3c265d8109494446073b23aee384a6) -- and r32_freeze.init_pairing_evidence's docstring claim that r32_train re-verifies instead of rewriting is therefore wrong in the delivered code",
+  "本轮不修改 r32_freeze.py / r32_train.py：二者都在 POST_FREEZE_CHANGES.json 的训练/采样/更新/恢复路径清单里，冻结后改动它们属于'拼接修复前后训练链'，执行依据禁止",
+  "补救（0 启动、不改训练路径）：r32_postfreeze.preserve_prelaunch_pairing 已把生效冻结提交里那六份带标记的原件另存为 INIT_PAIRING_PRELAUNCH.json，并逐格比对启动前/运行期字段（all_load_bearing_fields_equal = true）；下一轮应把运行期证据写入独立文件名"
+ ],
+ "round": "32",
+ "title": "Actor 归约分母消融：ALL_ROWS vs ACTIVE_ROWS",
+ "verified": {
+  "first_batch_gate_passed": true,
+  "independent_recheck_clean": true,
+  "init_pairing_load_bearing_fields_identical": true,
+  "note": "each entry is derived from an artefact in this directory, not typed in; the same claims are what the report's section 1 table asserts",
+  "pre_update_checkpoints_identity_matched": true,
+  "the_intervention_survived_to_lambdas": true,
+  "the_reduction_changed_the_actual_update": true,
+  "the_reduction_is_the_only_active_change": true,
+  "the_scene_block_was_not_re_shuffled": true
+ }
+}

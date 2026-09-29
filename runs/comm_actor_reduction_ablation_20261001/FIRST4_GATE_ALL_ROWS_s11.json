@@ -1,0 +1,149 @@
+{
+ "arm": "ALL_ROWS",
+ "checks": {
+  "G0_input_encoding_correct": {
+   "all_finite": true,
+   "arm_layout": "comm-send-state/1",
+   "column_is_within_the_clip_range": true,
+   "deadline_column_max": 1.0,
+   "deadline_column_min": -1.0,
+   "passed": true,
+   "rows_with_wrong_encoder_arm": [],
+   "rows_with_wrong_layout": []
+  },
+  "G1_reward_cost_ledger_closure": {
+   "episodes": 4,
+   "passed": true
+  },
+  "G2_math_recomputable_from_disk": {
+   "batch_record_samples": 623,
+   "critic_keeps_masked_rows": true,
+   "decision_steps": 623,
+   "fully_masked_rows_retained_as_critic_samples": 593,
+   "passed": true,
+   "samples_match": true,
+   "unassigned_prefix_cost_bytes": 0.0,
+   "unassigned_prefix_task_reward": 0.0
+  },
+  "G3_log_prob_recomputable_pre_update": {
+   "all_four_sources_agree": true,
+   "max_abs_gap": 2.384185791015625e-07,
+   "passed": true,
+   "pre_update_weight_hash_sources": {
+    "batch_record_before": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "ep0_milestone": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "pre_update_checkpoint": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "seed_reconstruction": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff"
+   },
+   "tolerance": 1e-06
+  },
+  "G4_optimizer_covers_comm_only": {
+   "comm_parameter_count": 10,
+   "exact_same_set": true,
+   "listed_parameter_count": 10,
+   "passed": true
+  },
+  "G5_dual_direction_and_formula": {
+   "actor_used_the_pre_update_lambda": true,
+   "direction": "increase",
+   "eta": 0.05,
+   "g_hat": 0.25,
+   "lambda_before": 1.0,
+   "lambda_next_expected": 1.0125,
+   "lambda_next_recorded": 1.0125,
+   "passed": true
+  },
+  "G6_finite_and_no_pseudo_samples": {
+   "module_gradient_l1_mean": {
+    "action_head": 0.325809328,
+    "cost_head": 0.921784024,
+    "task_value_head": 6.593073669,
+    "trunk": 55.939296098
+   },
+   "non_finite_minibatches": 0,
+   "optimizer_steps": 12,
+   "passed": true
+  },
+  "G7_checkpoint_restore_contract": {
+   "cross_reduction_resume_refused": true,
+   "freeze_carries_reduction_encoder_and_layout": true,
+   "passed": true,
+   "restore_ok": true,
+   "rolling_checkpoint_present": true
+  },
+  "G8_reduction_effective_and_counted": {
+   "counts_match": true,
+   "each_arms_own_definition_holds": true,
+   "epochs_per_batch": 4,
+   "every_epoch_carries_exactly_the_tape_counts": true,
+   "minibatches": 12,
+   "passed": true,
+   "per_epoch_N_M": {
+    "0": [
+     623,
+     30
+    ],
+    "1": [
+     623,
+     30
+    ],
+    "2": [
+     623,
+     30
+    ],
+    "3": [
+     623,
+     30
+    ]
+   },
+   "recorded_M_sum_over_minibatches": 120,
+   "recorded_N_sum_over_minibatches": 2492,
+   "reduction": "ALL_ROWS",
+   "reduction_can_differ_this_batch": true,
+   "tapes_recount_M": 30,
+   "tapes_recount_N": 623
+  },
+  "G9_pre_update_checkpoint_contract": {
+   "contents": [
+    "controller",
+    "freeze",
+    "gae_schema",
+    "loss_version",
+    "optimizer",
+    "optimizer_schema",
+    "reduction_mode",
+    "reduction_trainer_tag",
+    "reward_timing_schema",
+    "rng",
+    "schema",
+    "trainer_tag",
+    "training_state"
+   ],
+   "episodes_done_at_this_start": 4,
+   "feature_layout_recorded": true,
+   "has_model_optimizer_rng_lambda": true,
+   "lambda_matches_batch_record": true,
+   "parameter_sha_equals_batch_record_before": true,
+   "passed": true,
+   "path": "runs\\comm_actor_reduction_ablation_20261001\\checkpoints\\r32_pre_ALL_ROWS_s11_b0.pt",
+   "reduction_mode_recorded": true
+  }
+ },
+ "encoder_arm": "old",
+ "episodes": [
+  0,
+  1,
+  2,
+  3
+ ],
+ "gate": "round32-first4",
+ "passed": true,
+ "reduction": "ALL_ROWS",
+ "scenarios": [
+  1300027,
+  1300014,
+  1300028,
+  1300044
+ ],
+ "training_seed": 11
+}

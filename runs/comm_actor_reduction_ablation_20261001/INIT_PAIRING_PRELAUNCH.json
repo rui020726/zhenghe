@@ -1,0 +1,509 @@
+{
+ "comparison_with_the_run_time_files_on_disk": {
+  "ACTIVE_ROWS_s11": {
+   "found_in_freeze_commit": true,
+   "keys_only_in_the_prelaunch_version": [
+    "written_before_the_first_environment_launch"
+   ],
+   "keys_only_in_the_run_time_version": [],
+   "lambda_equal": true,
+   "module_digests_equal": true,
+   "optimizer_state_equal": true,
+   "other_fields_equal": true,
+   "parameter_sha256_equal": true
+  },
+  "ACTIVE_ROWS_s22": {
+   "found_in_freeze_commit": true,
+   "keys_only_in_the_prelaunch_version": [
+    "written_before_the_first_environment_launch"
+   ],
+   "keys_only_in_the_run_time_version": [],
+   "lambda_equal": true,
+   "module_digests_equal": true,
+   "optimizer_state_equal": true,
+   "other_fields_equal": true,
+   "parameter_sha256_equal": true
+  },
+  "ACTIVE_ROWS_s33": {
+   "found_in_freeze_commit": true,
+   "keys_only_in_the_prelaunch_version": [
+    "written_before_the_first_environment_launch"
+   ],
+   "keys_only_in_the_run_time_version": [],
+   "lambda_equal": true,
+   "module_digests_equal": true,
+   "optimizer_state_equal": true,
+   "other_fields_equal": true,
+   "parameter_sha256_equal": true
+  },
+  "ALL_ROWS_s11": {
+   "found_in_freeze_commit": true,
+   "keys_only_in_the_prelaunch_version": [
+    "written_before_the_first_environment_launch"
+   ],
+   "keys_only_in_the_run_time_version": [],
+   "lambda_equal": true,
+   "module_digests_equal": true,
+   "optimizer_state_equal": true,
+   "other_fields_equal": true,
+   "parameter_sha256_equal": true
+  },
+  "ALL_ROWS_s22": {
+   "found_in_freeze_commit": true,
+   "keys_only_in_the_prelaunch_version": [
+    "written_before_the_first_environment_launch"
+   ],
+   "keys_only_in_the_run_time_version": [],
+   "lambda_equal": true,
+   "module_digests_equal": true,
+   "optimizer_state_equal": true,
+   "other_fields_equal": true,
+   "parameter_sha256_equal": true
+  },
+  "ALL_ROWS_s33": {
+   "found_in_freeze_commit": true,
+   "keys_only_in_the_prelaunch_version": [
+    "written_before_the_first_environment_launch"
+   ],
+   "keys_only_in_the_run_time_version": [],
+   "lambda_equal": true,
+   "module_digests_equal": true,
+   "optimizer_state_equal": true,
+   "other_fields_equal": true,
+   "parameter_sha256_equal": true
+  }
+ },
+ "defect_registered": true,
+ "prelaunch_pairing_evidence": {
+  "ACTIVE_ROWS_s11": {
+   "arm": "ACTIVE_ROWS",
+   "controller_parameters": {
+    "heads": [
+     "action_head",
+     "value_task_head",
+     "value_cost_head"
+    ],
+    "init_seed": 20260927,
+    "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+    "parameter_count": 5700,
+    "parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "shapes": {
+     "action_head.bias": [
+      2
+     ],
+     "action_head.weight": [
+      2,
+      64
+     ],
+     "trunk.0.bias": [
+      64
+     ],
+     "trunk.0.weight": [
+      64,
+      19
+     ],
+     "trunk.2.bias": [
+      64
+     ],
+     "trunk.2.weight": [
+      64,
+      64
+     ],
+     "value_cost_head.bias": [
+      1
+     ],
+     "value_cost_head.weight": [
+      1,
+      64
+     ],
+     "value_task_head.bias": [
+      1
+     ],
+     "value_task_head.weight": [
+      1,
+      64
+     ]
+    }
+   },
+   "encoder_arm": "old",
+   "feature_layout": "comm-send-state/1",
+   "fresh_state": {
+    "episodes_done": 0,
+    "lambda": 1.0,
+    "optimizer_steps": 0,
+    "training_seed": 11,
+    "updates": 0
+   },
+   "lambda": 1.0,
+   "module_digests": {
+    "action_head": "919b468b0b64ea35",
+    "cost_head": "2678d4c8b7b1caa8",
+    "task_value_head": "e94ae85e5c97bfc5",
+    "trunk": "b1d3494d691270bf"
+   },
+   "optimizer_state_sha256": "89d034b395e9e76889ea6dc37c86ab06771b39cc828cfe171a17cd71dc96f6c2",
+   "reduction": "ACTIVE_ROWS",
+   "training_seed": 11,
+   "written_before_the_first_environment_launch": true
+  },
+  "ACTIVE_ROWS_s22": {
+   "arm": "ACTIVE_ROWS",
+   "controller_parameters": {
+    "heads": [
+     "action_head",
+     "value_task_head",
+     "value_cost_head"
+    ],
+    "init_seed": 20260927,
+    "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+    "parameter_count": 5700,
+    "parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+    "shapes": {
+     "action_head.bias": [
+      2
+     ],
+     "action_head.weight": [
+      2,
+      64
+     ],
+     "trunk.0.bias": [
+      64
+     ],
+     "trunk.0.weight": [
+      64,
+      19
+     ],
+     "trunk.2.bias": [
+      64
+     ],
+     "trunk.2.weight": [
+      64,
+      64
+     ],
+     "value_cost_head.bias": [
+      1
+     ],
+     "value_cost_head.weight": [
+      1,
+      64
+     ],
+     "value_task_head.bias": [
+      1
+     ],
+     "value_task_head.weight": [
+      1,
+      64
+     ]
+    }
+   },
+   "encoder_arm": "old",
+   "feature_layout": "comm-send-state/1",
+   "fresh_state": {
+    "episodes_done": 0,
+    "lambda": 1.0,
+    "optimizer_steps": 0,
+    "training_seed": 22,
+    "updates": 0
+   },
+   "lambda": 1.0,
+   "module_digests": {
+    "action_head": "fca467c3f0ebb576",
+    "cost_head": "23389c1e4163363b",
+    "task_value_head": "4d30bcf031207efa",
+    "trunk": "a346a1b0df5c8806"
+   },
+   "optimizer_state_sha256": "89d034b395e9e76889ea6dc37c86ab06771b39cc828cfe171a17cd71dc96f6c2",
+   "reduction": "ACTIVE_ROWS",
+   "training_seed": 22,
+   "written_before_the_first_environment_launch": true
+  },
+  "ACTIVE_ROWS_s33": {
+   "arm": "ACTIVE_ROWS",
+   "controller_parameters": {
+    "heads": [
+     "action_head",
+     "value_task_head",
+     "value_cost_head"
+    ],
+    "init_seed": 20260927,
+    "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+    "parameter_count": 5700,
+    "parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+    "shapes": {
+     "action_head.bias": [
+      2
+     ],
+     "action_head.weight": [
+      2,
+      64
+     ],
+     "trunk.0.bias": [
+      64
+     ],
+     "trunk.0.weight": [
+      64,
+      19
+     ],
+     "trunk.2.bias": [
+      64
+     ],
+     "trunk.2.weight": [
+      64,
+      64
+     ],
+     "value_cost_head.bias": [
+      1
+     ],
+     "value_cost_head.weight": [
+      1,
+      64
+     ],
+     "value_task_head.bias": [
+      1
+     ],
+     "value_task_head.weight": [
+      1,
+      64
+     ]
+    }
+   },
+   "encoder_arm": "old",
+   "feature_layout": "comm-send-state/1",
+   "fresh_state": {
+    "episodes_done": 0,
+    "lambda": 1.0,
+    "optimizer_steps": 0,
+    "training_seed": 33,
+    "updates": 0
+   },
+   "lambda": 1.0,
+   "module_digests": {
+    "action_head": "c355229517aba666",
+    "cost_head": "bddb33723efa5ff6",
+    "task_value_head": "d2d4270b71c7546e",
+    "trunk": "973040578caedf4b"
+   },
+   "optimizer_state_sha256": "89d034b395e9e76889ea6dc37c86ab06771b39cc828cfe171a17cd71dc96f6c2",
+   "reduction": "ACTIVE_ROWS",
+   "training_seed": 33,
+   "written_before_the_first_environment_launch": true
+  },
+  "ALL_ROWS_s11": {
+   "arm": "ALL_ROWS",
+   "controller_parameters": {
+    "heads": [
+     "action_head",
+     "value_task_head",
+     "value_cost_head"
+    ],
+    "init_seed": 20260927,
+    "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+    "parameter_count": 5700,
+    "parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "shapes": {
+     "action_head.bias": [
+      2
+     ],
+     "action_head.weight": [
+      2,
+      64
+     ],
+     "trunk.0.bias": [
+      64
+     ],
+     "trunk.0.weight": [
+      64,
+      19
+     ],
+     "trunk.2.bias": [
+      64
+     ],
+     "trunk.2.weight": [
+      64,
+      64
+     ],
+     "value_cost_head.bias": [
+      1
+     ],
+     "value_cost_head.weight": [
+      1,
+      64
+     ],
+     "value_task_head.bias": [
+      1
+     ],
+     "value_task_head.weight": [
+      1,
+      64
+     ]
+    }
+   },
+   "encoder_arm": "old",
+   "feature_layout": "comm-send-state/1",
+   "fresh_state": {
+    "episodes_done": 0,
+    "lambda": 1.0,
+    "optimizer_steps": 0,
+    "training_seed": 11,
+    "updates": 0
+   },
+   "lambda": 1.0,
+   "module_digests": {
+    "action_head": "919b468b0b64ea35",
+    "cost_head": "2678d4c8b7b1caa8",
+    "task_value_head": "e94ae85e5c97bfc5",
+    "trunk": "b1d3494d691270bf"
+   },
+   "optimizer_state_sha256": "89d034b395e9e76889ea6dc37c86ab06771b39cc828cfe171a17cd71dc96f6c2",
+   "reduction": "ALL_ROWS",
+   "training_seed": 11,
+   "written_before_the_first_environment_launch": true
+  },
+  "ALL_ROWS_s22": {
+   "arm": "ALL_ROWS",
+   "controller_parameters": {
+    "heads": [
+     "action_head",
+     "value_task_head",
+     "value_cost_head"
+    ],
+    "init_seed": 20260927,
+    "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+    "parameter_count": 5700,
+    "parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+    "shapes": {
+     "action_head.bias": [
+      2
+     ],
+     "action_head.weight": [
+      2,
+      64
+     ],
+     "trunk.0.bias": [
+      64
+     ],
+     "trunk.0.weight": [
+      64,
+      19
+     ],
+     "trunk.2.bias": [
+      64
+     ],
+     "trunk.2.weight": [
+      64,
+      64
+     ],
+     "value_cost_head.bias": [
+      1
+     ],
+     "value_cost_head.weight": [
+      1,
+      64
+     ],
+     "value_task_head.bias": [
+      1
+     ],
+     "value_task_head.weight": [
+      1,
+      64
+     ]
+    }
+   },
+   "encoder_arm": "old",
+   "feature_layout": "comm-send-state/1",
+   "fresh_state": {
+    "episodes_done": 0,
+    "lambda": 1.0,
+    "optimizer_steps": 0,
+    "training_seed": 22,
+    "updates": 0
+   },
+   "lambda": 1.0,
+   "module_digests": {
+    "action_head": "fca467c3f0ebb576",
+    "cost_head": "23389c1e4163363b",
+    "task_value_head": "4d30bcf031207efa",
+    "trunk": "a346a1b0df5c8806"
+   },
+   "optimizer_state_sha256": "89d034b395e9e76889ea6dc37c86ab06771b39cc828cfe171a17cd71dc96f6c2",
+   "reduction": "ALL_ROWS",
+   "training_seed": 22,
+   "written_before_the_first_environment_launch": true
+  },
+  "ALL_ROWS_s33": {
+   "arm": "ALL_ROWS",
+   "controller_parameters": {
+    "heads": [
+     "action_head",
+     "value_task_head",
+     "value_cost_head"
+    ],
+    "init_seed": 20260927,
+    "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+    "parameter_count": 5700,
+    "parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+    "shapes": {
+     "action_head.bias": [
+      2
+     ],
+     "action_head.weight": [
+      2,
+      64
+     ],
+     "trunk.0.bias": [
+      64
+     ],
+     "trunk.0.weight": [
+      64,
+      19
+     ],
+     "trunk.2.bias": [
+      64
+     ],
+     "trunk.2.weight": [
+      64,
+      64
+     ],
+     "value_cost_head.bias": [
+      1
+     ],
+     "value_cost_head.weight": [
+      1,
+      64
+     ],
+     "value_task_head.bias": [
+      1
+     ],
+     "value_task_head.weight": [
+      1,
+      64
+     ]
+    }
+   },
+   "encoder_arm": "old",
+   "feature_layout": "comm-send-state/1",
+   "fresh_state": {
+    "episodes_done": 0,
+    "lambda": 1.0,
+    "optimizer_steps": 0,
+    "training_seed": 33,
+    "updates": 0
+   },
+   "lambda": 1.0,
+   "module_digests": {
+    "action_head": "c355229517aba666",
+    "cost_head": "bddb33723efa5ff6",
+    "task_value_head": "d2d4270b71c7546e",
+    "trunk": "973040578caedf4b"
+   },
+   "optimizer_state_sha256": "89d034b395e9e76889ea6dc37c86ab06771b39cc828cfe171a17cd71dc96f6c2",
+   "reduction": "ALL_ROWS",
+   "training_seed": 33,
+   "written_before_the_first_environment_launch": true
+  }
+ },
+ "round": "32",
+ "section": "pre-launch initialisation pairing, as committed before the first launch",
+ "taken_from_commit": "3bafb36c07d4309ae3411c33c3ecd4dca20fdd3b",
+ "why_this_file_exists": "r32_train rewrites its own copy of these six files when a run first initialises, and that payload drops the written_before_the_first_environment_launch marker; the values are the same, so this file preserves the version that carries the provenance statement instead of leaving it only in Git"
+}

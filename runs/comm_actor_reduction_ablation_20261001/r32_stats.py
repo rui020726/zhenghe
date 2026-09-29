@@ -113,15 +113,20 @@ def hand_check(indices: np.ndarray) -> dict[str, Any]:
 
 def absolute_block(cells: dict[int, dict[str, Any]], reference: dict[int, int],
                    late: dict[int, dict[str, Any]]) -> dict[str, Any]:
-    """One arm's absolute position: task count, metered bytes, paired loss vs immediate, vs late."""
+    """One arm's absolute position: task count, metered bytes, message count, paired loss vs
+    immediate, vs late. Messages are reported so "cost" is never confused with "how often the
+    controller sent": the constraint is judged on bytes and on-time tasks, not on message count."""
     on_time = [float(cells[s]["on_time"]) for s in DEV]
     bytes_ = [float(cells[s]["spent_bytes"]) for s in DEV]
+    emissions = [int(cells[s]["emissions"]) for s in DEV]
     losses = [float(reference[s]) - float(cells[s]["on_time"]) for s in DEV]
     late_y = [float(cells[s]["on_time"]) - float(late[s]["on_time"]) for s in DEV]
     late_c = [float(cells[s]["spent_bytes"]) - float(late[s]["spent_bytes"]) for s in DEV]
     return {
         "mean_on_time": round(float(np.mean(on_time)), 6),
         "mean_spent_bytes": round(float(np.mean(bytes_)), 3),
+        "emissions_total_16_scenes": int(sum(emissions)),
+        "mean_emissions_per_episode": round(float(np.mean(emissions)), 6),
         "mean_normalised_cost_c": round(float(np.mean(bytes_)) / common.B0_BYTES, 6),
         "mean_paired_task_loss_vs_immediate": round(float(np.mean(losses)), 6),
         "counts_vs_immediate_task": {

@@ -23,6 +23,34 @@ import r32_common as common
 from r32_train import batch_record_path
 
 
+def mean(values):
+    """Local descriptive mean (post-run analysis only; no training constant lives here)."""
+    return sum(float(v) for v in values) / len(values)
+
+
+def summary(values):
+    """Local descriptive summary; the quantile rule is linear interpolation on sorted values."""
+    floats = [float(v) for v in values]
+    ordered = sorted(floats)
+    n = len(ordered)
+    average = mean(floats)
+
+    def quantile(fraction):
+        if n == 1:
+            return ordered[0]
+        position = (n - 1) * fraction
+        low = int(position // 1)
+        high = min(low + 1, n - 1)
+        weight = position - low
+        return ordered[low] * (1.0 - weight) + ordered[high] * weight
+
+    return {"n": n, "mean": round(average, 9), "min": ordered[0], "max": ordered[-1],
+            "q25": round(quantile(0.25), 9), "median": round(quantile(0.5), 9),
+            "q75": round(quantile(0.75), 9),
+            "std_pop": round((sum((v - average) ** 2 for v in floats) / n) ** 0.5, 9),
+            "abs_mean": round(mean([abs(v) for v in floats]), 9)}
+
+
 def reference_on_time() -> dict[int, float]:
     out: dict[int, float] = {}
     for path in sorted(common.ROWS.glob("r32_reference_s*_a1.json")):
@@ -130,13 +158,29 @@ def run(reduction: str, seed: int, references: dict[int, float],
         previous_next = lam_next
         update = record.get("update") or {}
         reads = update.get("minibatch_reads") or []
+        # reads are per minibatch and the batch runs EPOCHS_PER_BATCH epochs over the same
+        # sample list, so the batch sums must be epochs x rows (gate arithmetic, fixed once and
+        # applied consistently here too)
+        epochs = int(common.v2c.EPOCHS_PER_BATCH)
+        per_epoch: dict[int, list[int]] = {}
+        for read in reads:
+            slot = per_epoch.setdefault(int(read["epoch"]), [0, 0])
+            slot[0] += int(read["n_rows"])
+            slot[1] += int(read["m_active_rows"])
         read_n = sum(int(read["n_rows"]) for read in reads)
         read_m = sum(int(read["m_active_rows"]) for read in reads)
-        if read_n != counts["n_rows"]:
-            problems.append(f"batch {index}: recorded N {read_n} != tape rows {counts['n_rows']}")
-        if read_m != counts["m_active_rows"]:
-            problems.append(f"batch {index}: recorded M {read_m} != tape active rows "
-                            f"{counts['m_active_rows']}")
+        epochs_ok = (len(per_epoch) == epochs
+                     and all(pair[0] == counts["n_rows"] and pair[1] == counts["m_active_rows"]
+                             for pair in per_epoch.values()))
+        if read_n != epochs * counts["n_rows"]:
+            problems.append(f"batch {index}: recorded N {read_n} != epochs x tape rows "
+                            f"{epochs * counts['n_rows']}")
+        if read_m != epochs * counts["m_active_rows"]:
+            problems.append(f"batch {index}: recorded M {read_m} != epochs x tape active rows "
+                            f"{epochs * counts['m_active_rows']}")
+        if not epochs_ok:
+            problems.append(f"batch {index}: per-epoch N/M sums do not each equal the tape "
+                            f"counts: {sorted(per_epoch.items())}")
         if int(update.get("samples", -1)) != counts["n_rows"]:
             problems.append(f"batch {index}: update.samples != tape decision rows")
         if index + 1 < 32:
@@ -163,7 +207,7 @@ def run(reduction: str, seed: int, references: dict[int, float],
                 abs(float(record["lambda_at_rollout"]) - lam_before) < 1e-12),
             "spent_bytes_by_episode": spent,
             "cost_c_by_episode": [round(value / common.B0_BYTES, 9) for value in spent],
-            "cost_c_batch_mean": round(common.mean([value / common.B0_BYTES for value in spent]),
+            "cost_c_batch_mean": round(mean([value / common.B0_BYTES for value in spent]),
                                        9),
             "tape_counts": counts,
             "recorded_N": read_n, "recorded_M": read_m,
@@ -210,15 +254,15 @@ def run(reduction: str, seed: int, references: dict[int, float],
         "batches_with_positive_g_hat": sum(1 for value in g_values if value > 0),
         "batches_with_zero_g_hat": sum(1 for value in g_values if value == 0),
         "batches_with_negative_g_hat": sum(1 for value in g_values if value < 0),
-        "mean_paired_task_loss_all_episodes": round(common.mean(losses_all), 9),
-        "mean_cost_c_all_episodes": round(common.mean(costs_all), 9),
-        "first8_mean_paired_task_loss": round(common.mean(
+        "mean_paired_task_loss_all_episodes": round(mean(losses_all), 9),
+        "mean_cost_c_all_episodes": round(mean(costs_all), 9),
+        "first8_mean_paired_task_loss": round(mean(
             [value for batch in first for value in batch["paired_task_loss_by_scene"]]), 9),
-        "last8_mean_paired_task_loss": round(common.mean(
+        "last8_mean_paired_task_loss": round(mean(
             [value for batch in last for value in batch["paired_task_loss_by_scene"]]), 9),
-        "first8_mean_cost_c": round(common.mean(
+        "first8_mean_cost_c": round(mean(
             [value for batch in first for value in batch["cost_c_by_episode"]]), 9),
-        "last8_mean_cost_c": round(common.mean(
+        "last8_mean_cost_c": round(mean(
             [value for batch in last for value in batch["cost_c_by_episode"]]), 9),
         "active_row_share_run": round(sum(batch["tape_counts"]["m_active_rows"]
                                           for batch in batches)

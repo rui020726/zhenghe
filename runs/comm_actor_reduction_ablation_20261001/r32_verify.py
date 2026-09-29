@@ -117,7 +117,7 @@ def lambda_recheck() -> dict[str, Any]:
                 policies = []
                 for episode, scenario in zip(record["episodes"], scenarios):
                     matches = sorted(common.ROWS.glob(
-                        f"r32_train_{reduction}_s{seed}_e{episode}_a{episode}.json"))
+                        f"r32_train_{reduction}_s{seed}_e{episode}_s*_a{episode}.json"))
                     if len(matches) != 1:
                         problems.append(f"{reduction} s{seed} b{index}: row e{episode} not unique")
                         continue
@@ -144,6 +144,64 @@ def lambda_recheck() -> dict[str, Any]:
                                               "batches": 32}
     return {"batches_checked": checked, "problems": problems, "clean": not problems,
             "final_lambdas": finals}
+
+
+def init_pairing_provenance_recheck(
+        freeze_commit: str = "df176bdf8c3c265d8109494446073b23aee384a6") -> dict[str, Any]:
+    """Compare each cell's pairing file on disk against the committed pre-launch version.
+
+    The pre-launch evidence is written by r32_freeze (before any environment is constructed);
+    r32_train::record_init_pairing writes the same path again at the first real fresh
+    initialisation. If the two payloads differ in any load-bearing field, the pairing claim
+    would be resting on a file that was produced after training started.
+    """
+    import subprocess
+
+    findings: list[str] = []
+    cells: dict[str, Any] = {}
+    for reduction in common.ARM_ORDER:
+        for seed in common.TRAIN_SEEDS:
+            key = f"{reduction}_s{seed}"
+            relative = f"runs/{common.OUTPUT_DIR.name}/INIT_PAIRING_{reduction}_s{seed}.json"
+            committed = subprocess.run(("git", "show", f"{freeze_commit}:{relative}"),
+                                       capture_output=True, text=True,
+                                       encoding="utf-8").stdout
+            if not committed.strip():
+                findings.append(f"{key}: no committed pre-launch pairing file at "
+                                f"{freeze_commit}")
+                continue
+            before = json.loads(committed)
+            after = common.read_json(common.OUTPUT_DIR / f"INIT_PAIRING_{reduction}_s{seed}.json")
+            dropped = sorted(set(before) - set(after))
+            added = sorted(set(after) - set(before))
+            changed = sorted(field for field in set(before) & set(after)
+                             if before[field] != after[field])
+            cells[key] = {"pre_launch_parameter_sha256":
+                          before["controller_parameters"]["parameter_sha256"],
+                          "run_time_parameter_sha256":
+                          after["controller_parameters"]["parameter_sha256"],
+                          "keys_only_in_the_pre_launch_file": dropped,
+                          "keys_only_in_the_run_time_file": added,
+                          "load_bearing_fields_changed": changed}
+            if changed or added:
+                findings.append(f"{key}: the run-time pairing file differs from the pre-launch "
+                                f"one in {changed or added}")
+    marker_kept = all(not value["keys_only_in_the_pre_launch_file"] for value in cells.values())
+    if not marker_kept:
+        findings.append(
+            "every cell lost the key `written_before_the_first_environment_launch` when "
+            "r32_train rewrote the file at its first fresh initialisation; the values are "
+            "identical, so the pairing claim stands, but the in-file provenance assertion "
+            "survives only in the committed pre-launch version "
+            f"({freeze_commit}) -- and r32_freeze.init_pairing_evidence's docstring claim that "
+            "r32_train re-verifies instead of rewriting is therefore wrong in the delivered "
+            "code")
+    return {"cells": cells, "freeze_commit": freeze_commit,
+            "all_load_bearing_fields_identical": all(
+                not value["load_bearing_fields_changed"] for value in cells.values()),
+            "pre_launch_marker_still_in_the_working_file": marker_kept,
+            "findings": findings,
+            "clean": not [f for f in findings if "differs from the pre-launch" in f]}
 
 
 def ledger_recheck() -> dict[str, Any]:
@@ -186,6 +244,7 @@ def bootstrap_recheck(delivered: dict[str, Any]) -> dict[str, Any]:
     indices = np.random.Generator(np.random.PCG64(int(plan["resample_seed"]))).integers(
         0, 16, size=(int(plan["resamples"]), 16))
     problems: list[str] = []
+    worst_unrounded = 0.0
     for key, block in delivered["comparisons"].items():
         for quantity in ("delta_y", "delta_c"):
             field = "delta_y" if quantity == "delta_y" else "delta_c_bytes"
@@ -198,11 +257,19 @@ def bootstrap_recheck(delivered: dict[str, Any]) -> dict[str, Any]:
                     total += float(values[position])
                 means[row] = total / 16.0
             low, high = float(np.quantile(means, 0.025)), float(np.quantile(means, 0.975))
-            if [round(low, 6), round(high, 6)] != block[quantity]["ci95"]:
-                problems.append(f"{key}/{quantity}: slow-loop CI "
-                                f"{[round(low, 6), round(high, 6)]} != delivered "
+            # compare at the delivered artefact's own rounding (r32_stats rounds delta_y to 6 and
+            # delta_c to 3 decimals); an exact-float comparison would only test the formatting
+            digits = 6 if quantity == "delta_y" else 3
+            slow_ci = [round(low, digits), round(high, digits)]
+            if slow_ci != block[quantity]["ci95"]:
+                problems.append(f"{key}/{quantity}: slow-loop CI {slow_ci} != delivered "
                                 f"{block[quantity]['ci95']}")
+            unrounded_gap = max(abs(low - block[quantity]["ci95"][0]),
+                                abs(high - block[quantity]["ci95"][1]))
+            worst_unrounded = max(worst_unrounded, unrounded_gap)
     return {"cells_checked": len(delivered["comparisons"]), "problems": problems,
+            "max_unrounded_gap_between_slow_loop_and_delivered": round(worst_unrounded, 9),
+            "rounding_rule_compared_at": "delta_y 6 decimals, delta_c 3 decimals (as delivered)",
             "clean": not problems,
             "hand_check": delivered["hand_check"],
             "note": "the estimator, the shared index matrix, the seed, the count and the linear "
@@ -261,6 +328,7 @@ def main() -> int:
         "rebuilt_table_from_rows": rebuilt,
         "rebuilt_vs_delivered": compare_with_delivered(rebuilt, delivered),
         "lambda_recheck": lambda_recheck(),
+        "init_pairing_provenance": init_pairing_provenance_recheck(),
         "ledger_recheck": ledger_recheck(),
         "bootstrap_recheck": bootstrap_recheck(delivered),
         "report_same_source": report_and_machine_same_source(
@@ -277,7 +345,7 @@ def main() -> int:
         and payload["ledger_recheck"]["batch_records_match_plan"]
         and payload["ledger_recheck"]["pre_update_checkpoints_match_plan"]
         and not payload["ledger_recheck"]["failures"]
-        and not payload["trajectory_problems"]
+        and all(len(values) == 0 for values in payload["trajectory_problems"].values())
         and (payload["report_same_source"].get("clean", True)))
     out = common.OUTPUT_DIR / "INDEPENDENT_RECHECK.json"
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=1, sort_keys=True) + "\n",

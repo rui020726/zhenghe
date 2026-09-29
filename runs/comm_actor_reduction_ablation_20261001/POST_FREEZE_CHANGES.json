@@ -1,0 +1,189 @@
+{
+ "changed_files": [
+  {
+   "allowed_function_names": [
+    "cross_arm_gate",
+    "first4_gate"
+   ],
+   "current_sha256": "2a13594e208b4af0d280de635b44b95ecdb4d3a134851e034e1c772f6ba752a3",
+   "file": "r32_check.py",
+   "frozen_sha256": "c16173d87f9810916bd2546b4bad4fefd46e0a23c323a267655606ecf78d4627",
+   "functions_touched": [
+    "first4_gate"
+   ],
+   "lines_changed": 22,
+   "module_level_changed_lines": [],
+   "on_training_path": false
+  },
+  {
+   "allowed_function_names": [
+    "<module>",
+    "main",
+    "mean",
+    "recount",
+    "run",
+    "summary",
+    "train_rows"
+   ],
+   "current_sha256": "1801280ed3f43823a591ce4dc31291084acddfd664ad5ae06c4f4386c55621e5",
+   "file": "r32_curves.py",
+   "frozen_sha256": "c1052e0373540084496febf5136fbfff81b52e6e5e5be439be92a5c2b6b8ad18",
+   "functions_touched": [
+    "<module>",
+    "mean",
+    "run",
+    "summary"
+   ],
+   "lines_changed": 56,
+   "module_level_changed_lines": [
+    "",
+    "",
+    "",
+    ""
+   ],
+   "on_training_path": false
+  },
+  {
+   "allowed_function_names": [
+    "<module>",
+    "analyse",
+    "load_episode",
+    "main",
+    "mean",
+    "summary"
+   ],
+   "current_sha256": "9d1ed1917d5e4716a452825c4f72db7cff008b7c5f23c234f82fa5ac0d010d61",
+   "file": "r32_mechanism.py",
+   "frozen_sha256": "5371047c32413d8eac47879e566bd526ba5865e185fc22bd81c3b0ee6e45ae71",
+   "functions_touched": [
+    "<module>",
+    "analyse",
+    "load_episode",
+    "main",
+    "mean",
+    "summary"
+   ],
+   "lines_changed": 55,
+   "module_level_changed_lines": [
+    "",
+    "",
+    "",
+    ""
+   ],
+   "on_training_path": false
+  },
+  {
+   "allowed_function_names": [
+    "absolute_block"
+   ],
+   "current_sha256": "b0c8800808178077f91e0fb0ff28a83a9fb2c5f01ff3cda7de97e492deab7bb5",
+   "file": "r32_stats.py",
+   "frozen_sha256": "69e5f7dc92f6f813f2046667c1043f81ec96007e1ee43eac025a949bebf40934",
+   "functions_touched": [
+    "absolute_block"
+   ],
+   "lines_changed": 6,
+   "module_level_changed_lines": [],
+   "on_training_path": false
+  },
+  {
+   "allowed_function_names": [
+    "<module>",
+    "advantage_scale_read",
+    "main",
+    "message_read",
+    "outcome_direction",
+    "sending"
+   ],
+   "current_sha256": "1adb0f69170d320319426285822ccd1113699010d4f58b00ba7ec2cca8e03ebd",
+   "file": "r32_verdict.py",
+   "frozen_sha256": "e408410e71b2e1c61d866fd2fb5c7f1fd37e536e183e364437d4e6b27d82836e",
+   "functions_touched": [
+    "<module>",
+    "main"
+   ],
+   "lines_changed": 226,
+   "module_level_changed_lines": [
+    "import r32_postfreeze"
+   ],
+   "on_training_path": false
+  },
+  {
+   "allowed_function_names": [
+    "<module>",
+    "bootstrap_recheck",
+    "init_pairing_provenance_recheck",
+    "lambda_recheck",
+    "main",
+    "rebuilt_table"
+   ],
+   "current_sha256": "f409a924455394c243d6b36cb4b6f20ad75e553f39454995f8bb35fbe14ae063",
+   "file": "r32_verify.py",
+   "frozen_sha256": "25121c5f785c1c1298f480e5fc00d3924e63f571188969edfcf6adee284dd5d6",
+   "functions_touched": [
+    "<module>",
+    "bootstrap_recheck",
+    "init_pairing_provenance_recheck",
+    "lambda_recheck",
+    "main"
+   ],
+   "lines_changed": 73,
+   "module_level_changed_lines": [
+    "",
+    ""
+   ],
+   "on_training_path": false
+  }
+ ],
+ "clean": true,
+ "freeze_sha256": "b5615c1bed8b5686c478df4c92517e69558b986936dcbc026bd96dc82f40b6d2",
+ "frozen_at_head": "3bafb36c07d4309ae3411c33c3ecd4dca20fdd3b",
+ "prelaunch_pairing_preserved": {
+  "all_load_bearing_fields_equal": true,
+  "cells": 6,
+  "marker_key_lost_in_the_run_time_copy": {
+   "ACTIVE_ROWS_s11": [
+    "written_before_the_first_environment_launch"
+   ],
+   "ACTIVE_ROWS_s22": [
+    "written_before_the_first_environment_launch"
+   ],
+   "ACTIVE_ROWS_s33": [
+    "written_before_the_first_environment_launch"
+   ],
+   "ALL_ROWS_s11": [
+    "written_before_the_first_environment_launch"
+   ],
+   "ALL_ROWS_s22": [
+    "written_before_the_first_environment_launch"
+   ],
+   "ALL_ROWS_s33": [
+    "written_before_the_first_environment_launch"
+   ]
+  },
+  "written": "INIT_PAIRING_PRELAUNCH.json"
+ },
+ "problems": [],
+ "reasons": {
+  "r32_check.py": "G8 compared per-minibatch N/M sums (which are per epoch, so the batch sum is epochs x rows: recorded 2492 = 4*623 rows and 120 = 4*30 active rows) against raw tape row counts. The counts were right; the assertion was wrong.",
+  "r32_curves.py": "the same epochs x rows relation was asserted per epoch instead of against the raw row count, and local descriptive helpers were added so no training constant is re-declared here.",
+  "r32_mechanism.py": "the amplification check used an absolute 1e-5 band on a ratio that reaches 51, which only tests float32 digit count; it now uses a relative 1e-5 band and records both residuals. The episode loader's row glob omitted the `_s{scenario}` segment of the archived file names, so it read nothing.",
+  "r32_stats.py": "the absolute per-arm block now also carries the message count (emissions_total_16_scenes, mean_emissions_per_episode) so the behavioural reading 'who sent more' is in the same artefact as the criterion (bytes and on-time tasks) instead of being retyped in prose. Purely additive: no existing field, estimator, resampling index or rounding rule was touched, and r32_verify's rebuilt table re-derives the delta fields from the raw rows independently.",
+  "r32_verdict.py": "the verdict file is generated from the delivered artefacts; its seven answers, the verified block and the message read were added so no number in the conclusion is hand-typed. It reads JSON only.",
+  "r32_verify.py": "the bootstrap recheck compared unrounded slow-loop intervals against the delivered artefact's own rounding (delta_y 6 decimals, delta_c 3 decimals), and the training-row glob omitted the scenario segment of the archived file names. Row pattern fix also applied to the mechanism loader. A new independent check, init_pairing_provenance_recheck, compares every cell's pairing file against the committed pre-launch version -- that is what caught the lost `written_before_the_first_environment_launch` marker (report section 1.1)."
+ },
+ "round": "32",
+ "section": "post-freeze changes registered, not silently applied (0 launches)",
+ "training_path_files": [
+  "r32_common.py",
+  "r32_trainer.py",
+  "r32_run.py",
+  "r32_train.py",
+  "r32_blocks.py",
+  "r32_freeze.py",
+  "r32_math.py",
+  "r32_preflight.py"
+ ],
+ "training_path_unchanged": true,
+ "why_no_launch_is_repeated": "every change below sits in a read-only verification or post-run analysis function over artefacts that were already metered; no episode, action, reward, advantage, update or checkpoint is produced by these functions, so no cell is re-run and the ledger is untouched"
+}

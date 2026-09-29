@@ -250,8 +250,21 @@ def first4_gate(reduction: str, training_seed: int, *, episodes: int = 4) -> dic
     recount = [recount_rows(tapes) for tapes in tapes_all]
     total_n = sum(pair[0] for pair in recount)
     total_m = sum(pair[1] for pair in recount)
+    # The reads are PER MINIBATCH and the batch runs EPOCHS_PER_BATCH epochs over the same
+    # sample list, so the batch-level sums are epochs x rows: comparing them against the raw
+    # tape counts was the gate's own arithmetic mistake, not a training defect. Compare
+    # per epoch instead, and require every epoch to carry the same counts.
+    epochs = int(common.v2c.EPOCHS_PER_BATCH)
+    per_epoch: dict[int, tuple[int, int]] = {}
+    for read in reads:
+        e_key = int(read["epoch"])
+        n_e, m_e = per_epoch.get(e_key, (0, 0))
+        per_epoch[e_key] = (n_e + int(read["n_rows"]), m_e + int(read["m_active_rows"]))
     read_n = sum(int(read["n_rows"]) for read in reads)
     read_m = sum(int(read["m_active_rows"]) for read in reads)
+    epoch_sums_equal_rows = (len(per_epoch) == epochs
+                             and all(n == total_n for n, _m in per_epoch.values())
+                             and all(m == total_m for _n, m in per_epoch.values()))
     definition_ok = True
     for read in reads:
         if read["reduction"] == "ALL_ROWS":
@@ -266,12 +279,18 @@ def first4_gate(reduction: str, training_seed: int, *, episodes: int = 4) -> dic
     checks["G8_reduction_effective_and_counted"] = {
         "reduction": reduction,
         "tapes_recount_N": total_n, "tapes_recount_M": total_m,
-        "recorded_N": read_n, "recorded_M": read_m,
-        "counts_match": total_n == read_n and total_m == read_m,
+        "recorded_N_sum_over_minibatches": read_n,
+        "recorded_M_sum_over_minibatches": read_m,
+        "epochs_per_batch": epochs,
+        "per_epoch_N_M": {str(key): list(value) for key, value in sorted(per_epoch.items())},
+        "every_epoch_carries_exactly_the_tape_counts": epoch_sums_equal_rows,
+        "counts_match": bool(read_n == epochs * total_n and read_m == epochs * total_m
+                             and epoch_sums_equal_rows),
         "reduction_can_differ_this_batch": 0 < total_m < total_n,
         "minibatches": len(reads),
         "each_arms_own_definition_holds": bool(definition_ok),
-        "passed": bool(total_n == read_n and total_m == read_m and definition_ok and reads)}
+        "passed": bool(read_n == epochs * total_n and read_m == epochs * total_m
+                       and epoch_sums_equal_rows and definition_ok and reads)}
 
     # G9 the batch-0 pre-update checkpoint is a complete, restorable update-start record
     payload = torch.load(pre_update_path(reduction, training_seed, 0), map_location="cpu",

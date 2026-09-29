@@ -1,5 +1,79 @@
 # 项目状态
 
+## 2026-09-30/10-01：ROUND32 actor surrogate 归约分母消融（ALL_ROWS vs ACTIVE_ROWS）——1040/1040 零失败；6 格里 0 格变好、2 格变差；N/M 放大在 18/18 点成立但成本项幅度始终小于任务项；"零梯度行稀释"假设被排除
+
+分支 `exp/comm-actor-reduction-ablation`（起点 ROUND31 交付头完整 SHA
+`614df51709a8d82525405b46468a537f4ccd259e`，本地 `git merge-base --is-ancestor` 核验），
+产物 `runs/comm_actor_reduction_ablation_20261001/`（`ROUND32_REPORT.md`、`ROUND32_VERDICT.json`、
+`REDUCTION_MATH.md/.json`、`CONFIG_AND_MODEL_MANIFEST.json`、`RUN_PREFLIGHT.json`、
+`FIRST4_GATE_*.json`、`START_LEDGER.json`、`TRAINING_CURVES.json`、`PAIRED_COMPARISON.json`、
+`UPDATE_MECHANISM.json`、`INDEPENDENT_RECHECK.json`、`POST_FREEZE_CHANGES.json`、
+`CHECKPOINT_INDEX.json`、`ARTEFACT_MANIFEST.json`、`EXECUTION_BASIS.md` sha256 `49d52f95…`、
+`r32_*.py`）。生效冻结 `b5615c1bed8b5686…`（提交 `3bafb36`：首次启动之前修 CLI 入口缺陷
+`main()` 未接 `sys.argv` 后重新冻结，该修正消耗 0 次启动、0 次合成更新；差异只有
+`r32_blocks.py`/`r32_train.py` 各一行 `__main__`）。
+
+```text
+新环境启动 1040 / 计划 1040 / 硬上限 1080（技术失败 0、重试 0、储备 40 未动用）
+真实训练 = 6 运行 × 32 批 = 192 批、2628 次 optimizer 步（逐运行 464/464/340 vs 464/432/464）
+纯合成 optimizer 更新 = 授权 32 / 实执行 40（上限 64，与真实更新分账）
+新流 0；只用既有 1300000..1300047 与 1301000..1301015；未触碰封存块；诊断阶段 0 次 optimizer.step、
+0 个 .pt 写回；未推送、本轮 0 次网络尝试、该分支无 upstream
+```
+
+- **唯一主动变化**：`ppo_update` 里 actor surrogate 的归约集合与分母
+  （`-surrogate.mean()` → `ACTIVE_ROWS: (surrogate*row_active).sum()/max(M,1)`）。相对冻结父件
+  被删行 3 行（归约行 / `reduction` 形参 / 仅报告字段），逐块差异 unexplained = 0；
+  `r32_run` 与 ROUND30 运行器 11 处接缝全属声明、`run_episode` 函数体逐行一致；
+  生产/导入模块/搜索分配三段身份哈希 vs ROUND30 **0 差异**；`batch_samples`、`_bundle`、
+  `likelihood_alignment`、`dual_update`、`batch_g_hat`、`cost_math.gae`、`cost_math.actor_advantage`
+  与冻结件是**同一函数对象**。`ALL_ROWS` 与冻结 `v2_trainer.ppo_update` **逐 optimizer 步权重哈希
+  相同**（T9），故两臂任何行为差都可归到那一行。代价如实登记：actor 相对 entropy 与两个 critic 的
+  更新权重本轮**确实**改变，不宣称其他优化关系不受影响。`verified` 块 7 项全真、由机读件派生。
+- **结果（对"稀释假设"是否定）**：Δ = ACTIVE_ROWS − ALL_ROWS，16 个已使用开发场景、ep128、
+  greedy/sampled 分开、三 seed 不池化。
+  ΔY = {s11g 0, s11s 0, s22g 0, s22s −0.0625, s33g **−0.5**, s33s 0}，
+  ΔC = {−9.0, +77.625, 0, **+11064.0**, **+25709.25**, −62.625} B/ep；
+  两个 CI 不含 0 的格都是**变差/变贵**。绝对配对任务损失（vs immediate）六格均值
+  ALL_ROWS 0.333333 → ACTIVE_ROWS 0.427083（改善 0 格、持平 4 格、变差 2 格）；
+  s33 greedy 从 ALL_ROWS 的"6 按时 / 2398.5 B / 损失 0"退化为"5.5 按时 / 28107.8 B / 损失 0.5"。
+  规则参照 immediate 6.0/14939.25 B、late 6.0/4838.25 B。
+- **机制（补齐 ROUND31 只存活批 0 的证据缺口）**：本轮为批 0/15/31 在**权重移动之前**落盘 18 份
+  完整更新前 checkpoint（模型/优化器/λ/RNG/数据位置/编码与归约模式），身份与批记录
+  `controller_parameters_before` 18/18 相符。同状态、同 tape 的算术比较：actor 项梯度精确放大
+  `N/M`（18/18 点，最大相对残差 2.9e-07）；actor 在裁剪前总梯度里的占比
+  0.95 %–20.4 % → 14.9 %–97.1 %；但 **13/18 点两臂同时触发 `MAX_GRAD_NORM=0.5`**，裁剪后同为 0.5
+  ⇒ 变的是方向不是大小，因此不把 `N/M` 称为参数更新倍数。新增读数：
+  `abs_mean(A_cost)/abs_mean(λ·A_task)` 在 18/18 点为 **0.18284–0.424743**（λ 1.0→1.475 仍 <0.5）
+  ⇒ 被放大的那一整项始终以任务侧为主。行为侧：ACTIVE_ROWS 三格消息更多（+0.0625/+4.1875/
+  +10.0625 条/集）且**正是**成本上升的三格，三格两臂消息数完全相同，`s22_greedy` 两臂 0 条/0 B。
+- **约束与 λ**：192 批里 `g_hat` **仍无一次为负**；两臂 λ/g_hat 序列本轮真正分叉（首轮 λ 分叉批
+  s11=10、s22=3、s33=14；行为分叉批 1/1/2），`ACTIVE_ROWS_s22` 违背批数 21 vs 13、λ 终值 1.4250 vs
+  1.2375 ⇒ **加强 actor 权重没有让约束更接近满足**。λ 链、权重链、样本计数、优势组合、
+  likelihood 对齐全闭、零非有限值。
+- **独立复核**（0 启动）：从原始行重建 6 格 ΔY/ΔC/绝对值与交付件**逐格全等**；192/192 批 λ 公式
+  独立重算闭合；bootstrap 用 10000×16 慢循环重算并与交付舍入一致（含独立手算反例）；
+  账本、1040 行/960 tape/192 批记录/18 更新前 checkpoint 计数相符；报告表格 42 个数字串与机读件
+  同源。冻结后 6 处工具级修正逐处 AST+difflib 登记（G8/曲线断言的 `epochs × 行数` 关系、
+  相对 1e-5 容差、行文件通配符漏 `_s{scenario}` 段、bootstrap 舍入口径、新增消息数读数、
+  判定件派生字段），**训练/采样/更新/恢复路径八件哈希未变、未重跑任何环境**。
+- **独立复核抓到的一处来源缺陷（只登记不修补）**：`init_pairing_provenance` 逐格比对启动前配对件
+  （提交 `df176bdf…`）与工作区文件 ⇒ 承重字段 **6/6 格 0 处变化**（两臂同初值的主张成立），但
+  `r32_train.record_init_pairing` 在首次真初始化处**重写**了同一文件，工作区版本因此丢掉
+  `written_before_the_first_environment_launch` 标记；`r32_freeze` 文档字符串所称"改为复核而非
+  覆写"与交付代码不符。因二者均在训练路径清单内，冻结后不改，改为在报告 §1.1 如实登记，
+  并把生效冻结提交里那六份带标记的原件另存为 `INIT_PAIRING_PRELAUNCH.json`
+  （`all_load_bearing_fields_equal = true`，丢失的键恰只有那一个标记），
+  下一轮应把运行期证据写入独立文件名。
+- **结论边界**：已削弱/排除 = "成本或任务信号没进 actor"、"零梯度行占分母是主要瓶颈"。
+  仍未建立 = 更多批数、不同 λ/η_λ、不同熵系数、成本项尺度取值的效应（本轮只读出比值、未干预）、
+  "actor 占比上升 = 参数步更大"、独立泛化、全系统通信成本、δ=0 的部署级保证、三 seed 当总体。
+  下一步唯一建议（本轮不执行、需批准）：**0 启动**地把六格剩余任务损失按场景归因
+  （承重首报/严格冗余/搜索侧零接触，沿用十九轮分类），量出通信侧可达的任务上界；
+  若上界接近 0，则控制器侧目标函数的进一步消融不值得再申请。
+- **停止**：本地交付后停止。不续训、不调 λ、不改熵系数、不选中间 checkpoint、不加场景、
+  不部署、不推送、不开启下一轮。
+
 ## 2026-09-30：ROUND31 通信控制器约束优化诊断——192/192 批 λ 公式与配对完全闭合、g_hat 从未为负；actor 确实收到任务与成本两项信号但 70 %–96 % 样本零 actor 梯度；未发现正确性错误（0 启动、0 optimizer.step）
 
 分支 `analysis/comm-constraint-optimization-diagnosis`（起点 ROUND30 报告头完整 SHA
