@@ -1,0 +1,437 @@
+{
+ "branch": "exp/comm-deadline-encoding-ablation",
+ "branch_start": "99eb746baaa073550f9062fec5c87a4b4711827b",
+ "code_identity": {
+  "checkpoints": {
+   "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "runs/joint_eval_20260916/ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  },
+  "freeze_sha256": "b05f07bbfe6ffe8c7c321754f4a72c826cddaffd3809c4a66456ef93c61ba086",
+  "harness": {
+   "r30_blocks.py": "7b19d1cd4c34bd44a134fde871e278c1a4cf77bb92d9da402feae94cd56eaec2",
+   "r30_check.py": "1412686fd59a5c0306da9620f51eea01c128380b34066f52f87edf4cc2a9459b",
+   "r30_clock_recheck.py": "f0e105e120b1fa80755e011595a7361f0ca8503353983ec05a4240ae53207c9d",
+   "r30_common.py": "b3ab6797bd2acd0c1bab0c0f74b1b215ac35dfb6e0e360f6786add8edd045030",
+   "r30_conflict_recheck.py": "018d2aaab89c3b22399332c7d68936025cd43ab44c7e713304500abaee1c9ca7",
+   "r30_encoding.py": "82a5e3ce168b6c2a4108a88c40424b20ee8f8bd7179e21cc27144a416a18a773",
+   "r30_manifest.py": "bf4de8186d13f85c143d74e15fa125f7de463696a962532c790b4291ff02ee5e",
+   "r30_preflight.py": "528d79c129e67f72bcac8afe304d699b5b34f37f712a3184ea2f3ca6d125ab15",
+   "r30_run.py": "2db7e0be1f921683c3862b39aa28ea531a55a60be546085e5a1a24d10476fbad",
+   "r30_stats.py": "1cf4e5c577782417ebe5ea57f196c30c5fbed3f782f60f2b061334bad0c8dac9",
+   "r30_train.py": "1fd0cf5da1b026b065bbcf3f7fca2dcc969886a8599405b54661933149c9ea54",
+   "r30_verdict.py": "0c09c0c00ded0bb77bf0954bcc4bee2dd99caa27532dd698d43939c7a82f97eb"
+  },
+  "imported_round_modules": {
+   "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": "e64e0be4911ca3b3129247b3a443d045ad022f3bd9e6a1a22c4ebd1b3a4aff9b",
+   "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": "bab0a65fb3ffda6dc9673eaa4e836e20f184b4cc16836b5d5cf169bd2d326e91",
+   "runs/comm_budget_pilot_20260919/pilot_common.py": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8",
+   "runs/comm_budget_pilot_20260919/pilot_env.py": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b",
+   "runs/comm_budget_pilot_20260919/train_pilot.py": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81",
+   "runs/comm_cost_stage_b_20260927/sb_check.py": "fa5e6b39bad2643e21347483d66265d02af7114333430c251a484909882bdb5a",
+   "runs/comm_cost_stage_b_20260927/sb_collector.py": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+   "runs/comm_cost_stage_b_20260927/sb_common.py": "66e674a03e0406299c8f9172d2865c5f83c3de58893bce7f87b71741ba3cf28f",
+   "runs/comm_cost_stage_b_20260927/sb_controller.py": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+   "runs/comm_cost_stage_b_20260927/sb_run.py": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+   "runs/comm_tight_budget_20260919/onpolicy.py": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+   "runs/comm_tight_budget_20260919/train_onpolicy.py": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f",
+   "runs/search_trace_and_policy_20260925/sp_common.py": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc"
+  },
+  "production": {
+   "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+   "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+   "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+   "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+   "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+   "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+   "integrated_sar/lifecycle_metrics.py": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+   "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+  },
+  "round29_encoder_prototype": {
+   "runs/comm_deadline_encoding_audit_20260929/r29_encoding_prototype.py": "f5f5a4a6540dba00182626776fb47bcee50f8a2f1eef6a1b8c70729e8d38299e"
+  }
+ },
+ "configuration_hash": "e9b2c067db5951f2",
+ "data_order": {
+  "algorithm": "random.Random(DATA_ORDER_SEED); the 48 training scenarios reshuffled each of 3 rounds, 48 + 48 + 32 taken (frozen ROUND24 algorithm)",
+  "episodes_per_seed": 128,
+  "order_first_8": [
+   1300027,
+   1300014,
+   1300028,
+   1300044,
+   1300003,
+   1300010,
+   1300005,
+   1300008
+  ],
+  "order_sha256": "[1300027, 1300014, 1300028, 1300044, 1300003, 1300010, 1300005, 1300008, 1300021, 1300034, 1300013, 1300001, 1300047, 1300012, 1300033, 1300039, 1300009, 1300002, 1300022, 1300030, 1300032, 1300041, 1300040, 1300038, 1300037, 1300045, 1300024, 1300017, 1300026, 1300035, 1300036, 1300000, 1300016, 1300018, 1300029, 1300011, 1300042, 1300019, 1300006, 1300023, 1300025, 1300046, 1300043, 1300004, 1300007, 1300020, 1300031, 1300015, 1300041, 1300022, 1300039, 1300036, 1300040, 1300038, 1300010, 1300007, 1300016, 1300029, 1300008, 1300046, 1300009, 1300047, 1300023, 1300027, 1300004, 1300002, 1300024, 1300015, 1300017, 1300034, 1300045, 1300020, 1300037, 1300031, 1300035, 1300011, 1300033, 1300026, 1300030, 1300044, 1300003, 1300018, 1300013, 1300042, 1300028, 1300012, 1300005, 1300025, 1300043, 1300019, 1300021, 1300000, 1300001, 1300014, 1300032, 1300006, 1300008, 1300013, 1300006, 1300024, 1300032, 1300031, 1300015, 1300042, 1300004, 1300005, 1300021, 1300027, 1300016, 1300010, 1300000, 1300009, 1300029, 1300022, 1300045, 1300039, 1300019, 1300035, 1300046, 1300020, 1300028, 1300036, 1300003, 1300038, 1300002, 1300047, 1300030, 1300023]",
+  "seed": 20260927
+ },
+ "encoder_arms": {
+  "arms": {
+   "new": {
+    "deadline_column": "remaining_time / 1000.0（不截断）",
+    "dim": 19,
+    "episode_horizon_steps": 1000.0,
+    "feature_layout": "comm-send-state/1r29-deadline-over-horizon",
+    "feature_names": [
+     "age_steps",
+     "since_last_emission_time",
+     "sent_count",
+     "pending_event",
+     "changed_view",
+     "first_emission",
+     "stage_changed",
+     "requirements_changed",
+     "members_changed",
+     "progress_delta_abs",
+     "revision_delta",
+     "remaining_time_over_horizon",
+     "urgency_now",
+     "has_future_requirements",
+     "queue_backlog_targets",
+     "budget_remaining_fraction",
+     "capacity_remaining_fraction",
+     "subscribers",
+     "step_over_horizon"
+    ],
+    "urgency_scale_steps": 50.0
+   },
+   "old": {
+    "deadline_column": "clip(remaining_time / 50.0, -1, 1)",
+    "dim": 19,
+    "episode_horizon_steps": 1000.0,
+    "feature_layout": "comm-send-state/1",
+    "feature_names": [
+     "age_steps",
+     "since_last_emission_time",
+     "sent_count",
+     "pending_event",
+     "changed_view",
+     "first_emission",
+     "stage_changed",
+     "requirements_changed",
+     "members_changed",
+     "progress_delta_abs",
+     "revision_delta",
+     "remaining_time_over_horizon",
+     "urgency_now",
+     "has_future_requirements",
+     "queue_backlog_targets",
+     "budget_remaining_fraction",
+     "capacity_remaining_fraction",
+     "subscribers",
+     "step_over_horizon"
+    ],
+    "urgency_scale_steps": 50.0
+   }
+  },
+  "checkpoint_compatibility": "same parameter shape does not make arms interchangeable: a checkpoint trained under one layout must never be resumed or evaluated under the other; r30_train.encode this by carrying the arm and layout inside the freeze record that the save/restore contract compares",
+  "only_difference": "the definition of feature column 12 (index 11); the other 18 columns, their order, the tape schema, the mask semantics, the controller, the trainer and every hyperparameter are shared code",
+  "round29_semantic_registry": {
+   "ack_note": "layout comm-send-state/2 (23 dims with ACK features) is orthogonal: this prototype is the 19-dim /1 shape with one changed column; if an ACK build is ever done it would combine the two changes under a new layout name, never silently.",
+   "candidate_semantics": {
+    "constants": {
+     "EPISODE_HORIZON_STEPS": 1000.0
+    },
+    "formula": "remaining_time / configured_episode_horizon",
+    "layout": "comm-send-state/1r29-deadline-over-horizon",
+    "negative_and_above_horizon_allowed": true,
+    "no_truncation": true
+   },
+   "changed_column": {
+    "index": 11,
+    "name": "remaining_time_over_horizon"
+   },
+   "compatibility_rule": "a checkpoint, optimizer state or replay buffer produced under comm-send-state/1 must be refused rather than silently reused under this layout: the same input dimension does not make the same weights. This round registers the requirement only; no production resume/eval entry point was modified and none is claimed to be verified.",
+   "layout_unchanged_columns": [
+    "age_steps",
+    "since_last_emission_time",
+    "sent_count",
+    "pending_event",
+    "changed_view",
+    "first_emission",
+    "stage_changed",
+    "requirements_changed",
+    "members_changed",
+    "progress_delta_abs",
+    "revision_delta",
+    "urgency_now",
+    "has_future_requirements",
+    "queue_backlog_targets",
+    "budget_remaining_fraction",
+    "capacity_remaining_fraction",
+    "subscribers",
+    "step_over_horizon"
+   ],
+   "old_semantics": {
+    "constants": {
+     "URGENCY_SCALE_STEPS": 50.0
+    },
+    "formula": "clip(remaining_time / 50.0, -1.0, 1.0)",
+    "layout": "comm-send-state/1"
+   }
+  }
+ },
+ "head_at_freeze": "b5ca44518e663dbc08dfb84d0c1ade9ab18171fe",
+ "inherited_behaviour_fields": {
+  "actor_kv_mode": "tokens",
+  "allocation_interval": 5,
+  "allow_release_without_suppression": false,
+  "check_release_source_stage": false,
+  "comm_ack": false,
+  "comm_budget_bytes": 29300,
+  "comm_delay_ticks": 0,
+  "comm_delivery_probability": 0.7,
+  "comm_max_wait_steps": null,
+  "comm_range": 0.3,
+  "comm_sends_per_tick": null,
+  "comm_subscribers": "all",
+  "comm_timing_mode": "policy_owned_timing",
+  "comm_urgent_wait_steps": null,
+  "command_ttl": 10.0,
+  "coordination_interval": 5,
+  "coordinator_policy": "coalition_planner",
+  "ctde_task_logit_offset": 0.0,
+  "deadline_tightness": [
+   0.5,
+   2.0
+  ],
+  "detection_radius": 5,
+  "device": "cpu",
+  "dt": 1.0,
+  "gossip_interval": 2,
+  "grid_size": 60,
+  "mock": false,
+  "num_goals": 6,
+  "obstacle_density": 0.15,
+  "piloc_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+  "quiet": true,
+  "release_redundant_members": true,
+  "rescue_per_species": 2,
+  "rescue_species": 3,
+  "residual_scale": 0.25,
+  "search_agents": 2,
+  "steps": 1000,
+  "sticky_commitments": true,
+  "suppress_recommand_own_task": true,
+  "task_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+  "task_membership_consistency": false,
+  "use_coordinator": true
+ },
+ "launch_plan": {
+  "eval": 192,
+  "hard_cap": 1080,
+  "late_rule": 16,
+  "normal_launches": 1040,
+  "reference": 64,
+  "reserve_launches": 40,
+  "synthetic_update_cap": 64,
+  "training": 768
+ },
+ "passive_diagnostics": {
+  "note": "fields recorded from artefacts the fixed plan already produces; frozen before the first launch, never collected by an extra simulation",
+  "per_batch": [
+   "task/cost/g_hat/lambda",
+   "effective two-action and masked sample counts",
+   "task/cost critic losses and per-module gradient reads",
+   "likelihood alignment"
+  ],
+  "per_episode_first_report": [
+   "raw remaining_time (registry deadline minus the verified decision clock)",
+   "actual encoded deadline column",
+   "p(SEND)",
+   "original action"
+  ]
+ },
+ "phase": "old/new deadline encoding paired ablation: pre-launch freeze",
+ "ppo_hyperparameters": {
+  "clip": 0.2,
+  "entropy_bonus": 0.01,
+  "epochs_per_batch": 4,
+  "learning_rate": 0.0003,
+  "max_grad_norm": 0.5,
+  "minibatch_steps": 256,
+  "value_coefficient": 0.5
+ },
+ "remote_start_head": null,
+ "round": "30",
+ "round24_difference_audit": {
+  "clean": true,
+  "problems": [],
+  "registered_differences": [
+   {
+    "difference": "round identity, output directory and artefact naming (r30_* cells)",
+    "where": "this round's own directories; ROUND24's rows/logs are never written"
+   },
+   {
+    "difference": "the two encoder arms (old/new deadline column)",
+    "where": "r30_encoding; the only behavioural difference between the arms, registered by the single-line source diff and ROUND29's semantic registry"
+   },
+   {
+    "difference": "evaluation arrangement: 2 arms x 3 seeds x 2 modes x 16 dev scenes = 192 (ROUND24 ran 3 seeds x 3 blocks x 16 = 144, including an init_greedy block this round does not need because both arms start from the same fresh initialisation)",
+    "where": "the fixed launch plan"
+   },
+   {
+    "difference": "launch plan: 1040 normal + 40 reserve = 1080 hard cap",
+    "where": "r30_common"
+   }
+  ]
+ },
+ "round30_conflict_rechecks": {
+  "3_1": "CONFLICT_RECHECK_3_1.json (development-block task counts)",
+  "3_2": "CLOCK_RECHECK_3_2.json (clock relation)"
+ },
+ "rule_arms": {
+  "always_hold": {
+   "params": {},
+   "policy": "always_hold"
+  },
+  "event": {
+   "params": {
+    "progress_threshold": 0.2,
+    "urgency_time": 25.0
+   },
+   "policy": "event"
+  },
+  "late_discovery_gate": {
+   "params": {
+    "cut_steps": 147.0
+   },
+   "policy": "late_discovery_gate"
+  },
+  "periodic_20": {
+   "params": {
+    "interval": 20
+   },
+   "policy": "periodic"
+  },
+  "random_send": {
+   "params": {
+    "seed_from_scenario": true,
+    "send_probability": 0.5
+   },
+   "policy": "random_send"
+  }
+ },
+ "scene_registry": {
+  "development": [
+   1301000,
+   1301001,
+   1301002,
+   1301003,
+   1301004,
+   1301005,
+   1301006,
+   1301007,
+   1301008,
+   1301009,
+   1301010,
+   1301011,
+   1301012,
+   1301013,
+   1301014,
+   1301015
+  ],
+  "note": "already-used blocks; this is a development ablation, not an unseen test set and not an independent confirmation; the ROUND25 evaluation block 1400000..1400063 is not used for parameter, checkpoint or stopping decisions in this round",
+  "training": [
+   1300000,
+   1300001,
+   1300002,
+   1300003,
+   1300004,
+   1300005,
+   1300006,
+   1300007,
+   1300008,
+   1300009,
+   1300010,
+   1300011,
+   1300012,
+   1300013,
+   1300014,
+   1300015,
+   1300016,
+   1300017,
+   1300018,
+   1300019,
+   1300020,
+   1300021,
+   1300022,
+   1300023,
+   1300024,
+   1300025,
+   1300026,
+   1300027,
+   1300028,
+   1300029,
+   1300030,
+   1300031,
+   1300032,
+   1300033,
+   1300034,
+   1300035,
+   1300036,
+   1300037,
+   1300038,
+   1300039,
+   1300040,
+   1300041,
+   1300042,
+   1300043,
+   1300044,
+   1300045,
+   1300046,
+   1300047
+  ]
+ },
+ "scoped_collector_source_diff": {
+  "changed_blocks": [
+   {
+    "child_lines": [
+     "        rows = [self._encoder(observation, item) for item in items]"
+    ],
+    "op": "replace",
+    "parent_lines": [
+     "        rows = [features(observation, item) for item in items]"
+    ]
+   }
+  ],
+  "changed_line_is_the_feature_row_construction": true,
+  "exactly_one_changed_line": true,
+  "method": "difflib.SequenceMatcher over blank-stripped source lines of the parent and subclass _choose_masked",
+  "note": "the shadow gate, action choice, tape schema and closure assertions are the parent's code verbatim; only the encoder used to build the rows is bound per instance",
+  "passed": true
+ },
+ "spec": "execution basis EXECUTION_BASIS.md (sha256 in the same directory)",
+ "statistics_plan": {
+  "cluster_unit": "the 16 development scenes (paired per training seed and mode)",
+  "coverage_note": "a per-seed descriptive 95% interval covers scene uncertainty under the fixed trained weights only; it does not cover training-seed uncertainty, and a single sampled rollout per scene does not estimate its full sampling variance",
+  "estimator": "values[indices].mean(axis=1)",
+  "hand_check": "an independent hand-computed counterexample is kept in r30_stats.py",
+  "index_matrix": "one shared 10000 x 16 index matrix reused by every comparison",
+  "quantile": "linear",
+  "resample_seed": 20260930,
+  "resampler": "numpy PCG64",
+  "resamples": 10000,
+  "scene_order": "ascending scenario seed"
+ },
+ "train_seeds": [
+  11,
+  22,
+  33
+ ],
+ "wiring_constants": {
+  "b0_bytes": 10000.0,
+  "data_order_seed": 20260927,
+  "delta": 0.0,
+  "episodes_per_seed": 128,
+  "episodes_per_update": 4,
+  "eta_lambda": 0.05,
+  "gae_lambda": 0.95,
+  "gamma": 1.0,
+  "lambda_init": 1.0,
+  "log_prob_tolerance": 1e-06,
+  "steps_per_episode": 1000
+ }
+}

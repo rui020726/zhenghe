@@ -1,0 +1,161 @@
+{
+ "archived_counterexample_modules": {
+  "v2_test_cost_head_lifecycle": {
+   "errors": 0,
+   "failures": 0,
+   "tests_run": 3
+  },
+  "v2_test_cost_objective": {
+   "errors": 0,
+   "failures": 0,
+   "tests_run": 1
+  },
+  "v2_test_gae_next_value": {
+   "errors": 0,
+   "failures": 0,
+   "tests_run": 3
+  },
+  "v2_test_math": {
+   "errors": 0,
+   "failures": 0,
+   "tests_run": 12
+  },
+  "v2_test_reward_timing": {
+   "errors": 0,
+   "failures": 0,
+   "tests_run": 1
+  }
+ },
+ "arm_declaration": {
+  "arms": {
+   "new": {
+    "deadline_column": "remaining_time / 1000.0（不截断）",
+    "dim": 19,
+    "episode_horizon_steps": 1000.0,
+    "feature_layout": "comm-send-state/1r29-deadline-over-horizon",
+    "feature_names": [
+     "age_steps",
+     "since_last_emission_time",
+     "sent_count",
+     "pending_event",
+     "changed_view",
+     "first_emission",
+     "stage_changed",
+     "requirements_changed",
+     "members_changed",
+     "progress_delta_abs",
+     "revision_delta",
+     "remaining_time_over_horizon",
+     "urgency_now",
+     "has_future_requirements",
+     "queue_backlog_targets",
+     "budget_remaining_fraction",
+     "capacity_remaining_fraction",
+     "subscribers",
+     "step_over_horizon"
+    ],
+    "urgency_scale_steps": 50.0
+   },
+   "old": {
+    "deadline_column": "clip(remaining_time / 50.0, -1, 1)",
+    "dim": 19,
+    "episode_horizon_steps": 1000.0,
+    "feature_layout": "comm-send-state/1",
+    "feature_names": [
+     "age_steps",
+     "since_last_emission_time",
+     "sent_count",
+     "pending_event",
+     "changed_view",
+     "first_emission",
+     "stage_changed",
+     "requirements_changed",
+     "members_changed",
+     "progress_delta_abs",
+     "revision_delta",
+     "remaining_time_over_horizon",
+     "urgency_now",
+     "has_future_requirements",
+     "queue_backlog_targets",
+     "budget_remaining_fraction",
+     "capacity_remaining_fraction",
+     "subscribers",
+     "step_over_horizon"
+    ],
+    "urgency_scale_steps": 50.0
+   }
+  },
+  "checkpoint_compatibility": "same parameter shape does not make arms interchangeable: a checkpoint trained under one layout must never be resumed or evaluated under the other; r30_train.encode this by carrying the arm and layout inside the freeze record that the save/restore contract compares",
+  "only_difference": "the definition of feature column 12 (index 11); the other 18 columns, their order, the tape schema, the mask semantics, the controller, the trainer and every hyperparameter are shared code",
+  "round29_semantic_registry": {
+   "ack_note": "layout comm-send-state/2 (23 dims with ACK features) is orthogonal: this prototype is the 19-dim /1 shape with one changed column; if an ACK build is ever done it would combine the two changes under a new layout name, never silently.",
+   "candidate_semantics": {
+    "constants": {
+     "EPISODE_HORIZON_STEPS": 1000.0
+    },
+    "formula": "remaining_time / configured_episode_horizon",
+    "layout": "comm-send-state/1r29-deadline-over-horizon",
+    "negative_and_above_horizon_allowed": true,
+    "no_truncation": true
+   },
+   "changed_column": {
+    "index": 11,
+    "name": "remaining_time_over_horizon"
+   },
+   "compatibility_rule": "a checkpoint, optimizer state or replay buffer produced under comm-send-state/1 must be refused rather than silently reused under this layout: the same input dimension does not make the same weights. This round registers the requirement only; no production resume/eval entry point was modified and none is claimed to be verified.",
+   "layout_unchanged_columns": [
+    "age_steps",
+    "since_last_emission_time",
+    "sent_count",
+    "pending_event",
+    "changed_view",
+    "first_emission",
+    "stage_changed",
+    "requirements_changed",
+    "members_changed",
+    "progress_delta_abs",
+    "revision_delta",
+    "urgency_now",
+    "has_future_requirements",
+    "queue_backlog_targets",
+    "budget_remaining_fraction",
+    "capacity_remaining_fraction",
+    "subscribers",
+    "step_over_horizon"
+   ],
+   "old_semantics": {
+    "constants": {
+     "URGENCY_SCALE_STEPS": 50.0
+    },
+    "formula": "clip(remaining_time / 50.0, -1.0, 1.0)",
+    "layout": "comm-send-state/1"
+   }
+  }
+ },
+ "checks": 132,
+ "environment_starts": 0,
+ "failures": [],
+ "freeze_sha256_at_preflight": "b05f07bbfe6ffe8c7c321754f4a72c826cddaffd3809c4a66456ef93c61ba086",
+ "gate": "ROUND30 §6 zero-environment preflight",
+ "passed": true,
+ "source_diff_registration": {
+  "changed_blocks": [
+   {
+    "child_lines": [
+     "        rows = [self._encoder(observation, item) for item in items]"
+    ],
+    "op": "replace",
+    "parent_lines": [
+     "        rows = [features(observation, item) for item in items]"
+    ]
+   }
+  ],
+  "changed_line_is_the_feature_row_construction": true,
+  "exactly_one_changed_line": true,
+  "method": "difflib.SequenceMatcher over blank-stripped source lines of the parent and subclass _choose_masked",
+  "note": "the shadow gate, action choice, tape schema and closure assertions are the parent's code verbatim; only the encoder used to build the rows is bound per instance",
+  "passed": true
+ },
+ "synthetic_optimizer_steps": 44,
+ "synthetic_update_cap": 64
+}

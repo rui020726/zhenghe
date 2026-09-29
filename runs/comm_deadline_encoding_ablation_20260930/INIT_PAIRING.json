@@ -1,0 +1,41 @@
+{
+ "all_passed": true,
+ "artefacts": [
+  "INIT_PAIRING_old_s11.json",
+  "INIT_PAIRING_new_s11.json",
+  "INIT_PAIRING_old_s22.json",
+  "INIT_PAIRING_new_s22.json",
+  "INIT_PAIRING_old_s33.json",
+  "INIT_PAIRING_new_s33.json"
+ ],
+ "learning_rate": 0.0003,
+ "pairs": {
+  "s11": {
+   "parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+   "passed": true,
+   "same_lambda": true,
+   "same_module_digests": true,
+   "same_optimizer_state": true,
+   "same_parameters": true
+  },
+  "s22": {
+   "parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+   "passed": true,
+   "same_lambda": true,
+   "same_module_digests": true,
+   "same_optimizer_state": true,
+   "same_parameters": true
+  },
+  "s33": {
+   "parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+   "passed": true,
+   "same_lambda": true,
+   "same_module_digests": true,
+   "same_optimizer_state": true,
+   "same_parameters": true
+  }
+ },
+ "round": "30",
+ "rule": "both arms of one training seed start from Controller(training_seed) and nothing else; parameters, per-module digests, optimizer state digest and lambda must be byte-identical before the first update",
+ "section": "per-seed initialisation pairing evidence (pure computation, 0 launches)"
+}

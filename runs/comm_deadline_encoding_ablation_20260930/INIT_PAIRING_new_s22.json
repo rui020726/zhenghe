@@ -1,0 +1,67 @@
+{
+ "arm": "new",
+ "controller_parameters": {
+  "heads": [
+   "action_head",
+   "value_task_head",
+   "value_cost_head"
+  ],
+  "init_seed": 20260927,
+  "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+  "parameter_count": 5700,
+  "parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+  "shapes": {
+   "action_head.bias": [
+    2
+   ],
+   "action_head.weight": [
+    2,
+    64
+   ],
+   "trunk.0.bias": [
+    64
+   ],
+   "trunk.0.weight": [
+    64,
+    19
+   ],
+   "trunk.2.bias": [
+    64
+   ],
+   "trunk.2.weight": [
+    64,
+    64
+   ],
+   "value_cost_head.bias": [
+    1
+   ],
+   "value_cost_head.weight": [
+    1,
+    64
+   ],
+   "value_task_head.bias": [
+    1
+   ],
+   "value_task_head.weight": [
+    1,
+    64
+   ]
+  }
+ },
+ "fresh_state": {
+  "episodes_done": 0,
+  "lambda": 1.0,
+  "optimizer_steps": 0,
+  "training_seed": 22,
+  "updates": 0
+ },
+ "lambda": 1.0,
+ "module_digests": {
+  "action_head": "fca467c3f0ebb576",
+  "cost_head": "23389c1e4163363b",
+  "task_value_head": "4d30bcf031207efa",
+  "trunk": "a346a1b0df5c8806"
+ },
+ "optimizer_state_sha256": "89d034b395e9e76889ea6dc37c86ab06771b39cc828cfe171a17cd71dc96f6c2",
+ "training_seed": 22
+}
