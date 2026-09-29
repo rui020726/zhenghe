@@ -1,0 +1,92 @@
+{
+  "round": "29",
+  "section": "verdict: sender-side deadline encoding audit and minimal observation prototype",
+  "execution_status": {
+    "branch": "analysis/comm-deadline-encoding-audit",
+    "start_sha_verified": "21250b5eb093dd1a7f97cd06e9993ef1ac6abab0 (ROUND28 full head, matches the reported 21250b5)",
+    "execution_basis_sha256": "873df4f89576c7a15aca4f61e811c7267ac6e15fffaa0674a877b49bdd41101c",
+    "new_environment_launches": 0,
+    "new_streams": 0,
+    "training_episodes": 0,
+    "optimizer_steps": 0,
+    "production_suite_runs": 0,
+    "production_defaults_modified": 0,
+    "new_encoding_attached_to_old_checkpoint": false,
+    "round28_remaining_budget_inherited": false,
+    "sealed_blocks_touched": false,
+    "receiver_side_observations_added": false,
+    "publication_status": "PENDING_NETWORK",
+    "network_retries_this_round": 0,
+    "other_sessions_files_modified": false
+  },
+  "identity": {
+    "production_modules_byte_identical_to_round28_launch_record": true,
+    "modules_checked": 18,
+    "checkpoint_sha256_match": true,
+    "learned_checkpoint": "runs/comm_cost_v2_rerun_20260928/checkpoints/v2_train_s33_ep128.pt",
+    "historical_commit_64cddcff_present_locally": false,
+    "note": "the planning-side historical commit is not in this repository; every source-level claim in this round rests on the current bytes, which are byte-identical to ROUND28's launch-time record"
+  },
+  "scene_block_correction": {
+    "registered_in": "SCENE_BLOCK_CORRECTION.json",
+    "what": "1301000..1301015 is the ROUND22/24 development block, not a ROUND25 block, and it is not the block containing the reported failing scene 1400031 (which is in the ROUND25 evaluation block 1400000..1400063)",
+    "old_reports_preserved": true
+  },
+  "q1_encoding_compresses_visible_deadline_differences": {
+    "answer": "yes",
+    "evidence": {
+      "source_code": "integrated_sar/comm_learning.py:113 computes clip(remaining_time / URGENCY_SCALE_STEPS=50, -1, 1) for the column named remaining_time_over_horizon; comm_learning.py:114 urgency_now uses a separate near-deadline threshold (25); no second scaling or normalisation exists between features() and the network (budget_masked.py:177-179, train_pilot.py:54-75)",
+      "source_and_units": "integrated_sar/comm.py:819-820 remaining_time = registry snapshot deadline - clock.now (steps); snapshot via joint_driver.py:1058, clock via joint_driver.py:1072; deadline = detected_at + deadline_offset (comm.py:1146)",
+      "horizon_is_prerun_constant": "EPISODE_HORIZON_STEPS=1000.0 (comm_learning.py:71) equals the run configuration steps=1000 (v2_common.py:110, r28_common.py:79); the horizon=summary['steps'] usages in old env wrappers are belief_age_accounting analysis metrics, not actor inputs",
+      "audit_samples": 102,
+      "audit_sources": {
+        "A_round28_96_points": {"points": 96, "raw_remaining_range": [62.92871341880317, 177.56072158963866], "raw_distinct": 95, "old_column_distinct": 1, "saturated": "96/96"},
+        "B_round27_two_interventions": {"points": 2, "raw_remaining_range": [65.95666085385487, 96.52539215745361], "raw_distinct": 2, "old_column_distinct": 1, "saturated": "2/2"},
+        "C_round26_four_improved_scenes": {"points": 4, "raw_remaining_range": [74.27970027387047, 158.55742756405255], "raw_distinct": 4, "old_column_distinct": 1, "saturated": "4/4"}
+      },
+      "reconstruction_cross_validation": "clock rule now = tape step - 1 verified on 197/197 candidate rows of scene 1400010; stored encoded features match clip(reconstructed_raw/50) on 102/102 points across the three sources",
+      "classification": "naming inaccuracy plus a declared lossy scale; not an implementation that violates a contract"
+    }
+  },
+  "q2_new_encoding_preserves_differences": {
+    "answer": "yes, in the checkable sense of information preservation only",
+    "evidence": {
+      "prototype": "r29_encoding_prototype.py: candidate column remaining_time / configured_episode_horizon (1000), no extra truncation; exactly one column changed; 18 other columns and order unchanged by construction; urgency_now retained; horizon must be positive and finite; non-finite inputs raise",
+      "layout_registered": "comm-send-state/1r29-deadline-over-horizon",
+      "compatibility_rule_registered": "same dimension does not make old checkpoints/optimizer states/replay buffers reusable: silent reuse must be refused; this round registers the interface requirement only and does not claim any production resume/eval entry point was modified or verified",
+      "tests": {"file": "r29_proto_tests.py", "checks": 167, "failures": 0, "expected_values": "hand-computed, not copied from the implementation"},
+      "on_real_data": {"file": "r29_proto_on_data.py", "output": "ENCODING_PROTO_ON_DATA.json", "sources_with_full_preservation": "3/3", "new_column_range": [0.0629287, 0.1775607]}
+    }
+  },
+  "q3_do_differences_improve_learning_or_task_performance": {
+    "answer": "not proven this round; cannot be proven from this round's evidence",
+    "why": [
+      "0 environment launches, 0 training, 0 optimizer.step; the prototype was never attached to a network or an evaluator",
+      "no Δtask or Δcost was produced by the candidate encoding; the descriptive ROUND27/ROUND28 numbers tabulated alongside the audit are from the old encoding and old interventions, and carry no causal reading for the new column",
+      "whether the visible deadline differences are learnable or useful under the current task and budget structure is an empirical question only a paired from-scratch training ablation can answer"
+    ]
+  },
+  "next_step_recommendation": {
+    "status": "recommendation only; no training authorisation implied; launch amounts to be approved separately",
+    "what": "paired from-initialisation training ablation: original encoding (comm-send-state/1) vs the single-column candidate encoding (comm-send-state/1r29-deadline-over-horizon)",
+    "keep_identical": ["network architecture", "objective/loss", "training budget", "all other hyperparameters", "evaluation streams and criteria"],
+    "only_difference": "the definition of feature column 12",
+    "rules": [
+      "each arm starts from Controller(training_seed) with no warm start (and per the registered compatibility rule, no silent reuse of /1 checkpoints under the new semantics)",
+      "register beforehand whether urgency_now is retained as-is; changing it is a second, separately justified edit, not a side effect",
+      "scene blocks, seed discipline and ledger counting follow the existing experiment protocol; old artefacts stay untouched",
+      "a positive or negative result in one pair of arms is a mechanism datapoint, not a deployment decision"
+    ]
+  },
+  "artefacts": {
+    "report": "ROUND29_REPORT.md",
+    "audit": "ENCODING_AUDIT.json",
+    "scene_correction": "SCENE_BLOCK_CORRECTION.json",
+    "prototype": "r29_encoding_prototype.py",
+    "prototype_tests": "r29_proto_tests.py",
+    "prototype_on_data": "r29_proto_on_data.py / ENCODING_PROTO_ON_DATA.json",
+    "audit_script": "r29_audit.py",
+    "execution_basis": "EXECUTION_BASIS.md"
+  },
+  "stop": "local commit and stop: no training, no sampling expansion, no further interventions, no threshold tuning, no deployment, no automatic push"
+}

@@ -1,0 +1,1691 @@
+{
+ "clock_rule": {
+  "evidence": "scene 1400010 learned tape: 197/197 candidate rows reproduce the stored remaining_time_over_horizon exactly from deadline - (step - 1); 0 mismatch",
+  "rule": "now = tape step - 1"
+ },
+ "encoding_constants": {
+  "EPISODE_HORIZON_STEPS": 1000.0,
+  "URGENCY_SCALE_STEPS": 50.0,
+  "deadline_column_index": 11,
+  "source_code": "integrated_sar/comm_learning.py:113 (clip), :114 (urgency_now), :120 (step_over_horizon)"
+ },
+ "field_provenance": {
+  "decision_time": "the tape row's step under the verified clock rule now = tape step - 1 (evidence below)",
+  "encoded_feature_columns": "tape rows and archived intervention points stored by ROUND25/ROUND26/ROUND27/ROUND28 (same production features() output, stored verbatim)",
+  "not_used": "receiver beliefs, delivery/accepted outcomes, final task state, send probabilities of other rounds, and any post-hoc terminal field are not inputs to any number in this audit",
+  "raw_deadline": "registry probe (_rp.jsonl) detection records: timestamp + detail.deadline_offset; this is the sender-visible registry snapshot the relay reads at decision time (comm.py:819-820, joint_driver.py:1058)"
+ },
+ "missing_and_gaps": {
+  "ROUND26_own_records_lack_features": "runs/round26_analysis_20260929/IMPROVED_SCENES.json stores per-target first-send steps, charges and chain records but no actor feature rows; source C's feature rows were joined from the ROUND25 learned-greedy tapes ROUND26 itself read, and every point is cross-validated by the stored==recomputed check",
+  "first_report_points_only": "the 102 points are first-report decision points; this round makes no claim about refresh decision points or other opportunity classes",
+  "nonfinite_inputs": "no raw deadline in these records was non-finite; the prototype's explicit-failure behaviour is covered by the synthetic tests, not by data",
+  "round28_point_count_is_not_scene_count": "A source's 96 points live on 16 scenes; per-source statistics are descriptive and are not 96 independent scenarios"
+ },
+ "round": "29",
+ "section": "deadline encoding audit: quantifying information loss from frozen artefacts",
+ "sources": {
+  "A_round28_96_points": {
+   "columns": [
+    {
+     "distinct": 1,
+     "index": 0,
+     "name": "age_steps",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 1,
+     "name": "since_last_emission_time",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 2,
+     "name": "sent_count",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 3,
+     "name": "pending_event",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 4,
+     "name": "changed_view",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 5,
+     "name": "first_emission",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 6,
+     "name": "stage_changed",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 7,
+     "name": "requirements_changed",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 8,
+     "name": "members_changed",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 9,
+     "name": "progress_delta_abs",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 10,
+     "name": "revision_delta",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 11,
+     "name": "remaining_time_over_horizon",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 12,
+     "name": "urgency_now",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 2,
+     "index": 13,
+     "name": "has_future_requirements",
+     "values": [
+      0.0,
+      1.0
+     ]
+    },
+    {
+     "distinct": 6,
+     "index": 14,
+     "name": "queue_backlog_targets",
+     "values": [
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0
+     ]
+    },
+    {
+     "distinct": 4,
+     "index": 15,
+     "name": "budget_remaining_fraction",
+     "values": [
+      0.7432081911262799,
+      0.829419795221843,
+      0.9213651877133106,
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 16,
+     "name": "capacity_remaining_fraction",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 17,
+     "name": "subscribers",
+     "values": [
+      6.0
+     ]
+    },
+    {
+     "distinct": 42,
+     "index": 18,
+     "name": "step_over_horizon",
+     "values": [
+      0.001,
+      0.002,
+      0.003,
+      0.004,
+      0.005,
+      0.006,
+      0.007,
+      0.009,
+      "..."
+     ]
+    }
+   ],
+   "constancy_causes": {
+    "age_steps": "证据不足：本周证据无法判定该列恒定的机制原因",
+    "capacity_remaining_fraction": "证据不足：本周证据无法判定该列恒定的机制原因",
+    "changed_view": "item 生成条件即视图有变更，首报点恒为 1",
+    "first_emission": "首报选择条件：首报点上尚无历史发送，first_emission 恒为 1",
+    "members_changed": "首报点无已发视图可比较，语义恒为 0/False",
+    "pending_event": "relay 仅在有待报变更/检测时生成 item，首报点恒为 1",
+    "progress_delta_abs": "首报点无已发进度，差值恒为 0",
+    "remaining_time_over_horizon": "编码截断：原始期限全部 >= 50 步，clip(remaining/50,-1,1) 恒为 1",
+    "requirements_changed": "首报点无已发视图可比较，语义恒为 0/False",
+    "revision_delta": "首报点无已发 revision 可减，恒等于当前 revision",
+    "sent_count": "首报选择条件：尚无发送，sent_count 恒为 0",
+    "since_last_emission_time": "首报选择条件：无上次发送，恒为 0",
+    "stage_changed": "首报点无已发视图可比较，语义恒为 0/False",
+    "subscribers": "证据不足：本周证据无法判定该列恒定的机制原因",
+    "urgency_now": "近截止阈值：原始期限全部 > 25 步，urgency_now 恒为 0"
+   },
+   "constant_columns": [
+    "age_steps",
+    "since_last_emission_time",
+    "sent_count",
+    "pending_event",
+    "changed_view",
+    "first_emission",
+    "stage_changed",
+    "requirements_changed",
+    "members_changed",
+    "progress_delta_abs",
+    "revision_delta",
+    "remaining_time_over_horizon",
+    "urgency_now",
+    "capacity_remaining_fraction",
+    "subscribers"
+   ],
+   "encoded_collisions": [
+    {
+     "distinct_raw_count": 94,
+     "encoded_value": 1.0,
+     "raw_values": [
+      62.928713,
+      64.461459,
+      64.730058,
+      67.170734,
+      67.478809,
+      68.380207,
+      70.876783,
+      71.511131
+     ]
+    }
+   ],
+   "new_encoded_column": {
+    "distinct": 95,
+    "max": 0.17756072158963865,
+    "min": 0.06292871341880317,
+    "values": [
+     0.06292871341880317,
+     0.06446145851295584,
+     0.06473005822545966,
+     0.0671707342357064,
+     0.06747880906600957,
+     0.06838020665614249,
+     0.07087678261165772,
+     0.07151113104768188,
+     0.0724110017643733,
+     0.07336270711804213,
+     0.07389354625691777,
+     0.07440209865473059,
+     0.07590628300351722,
+     0.07770285730975834,
+     0.07852944462897515,
+     0.07942858142390195,
+     0.0819263844135587,
+     0.0819696283354342,
+     0.08395967859723033,
+     0.08448903146812194,
+     0.08730235919681872,
+     0.08886354148887794,
+     0.08976451068889567,
+     0.09006147375361268,
+     0.09044536874560992,
+     0.09409339391260864,
+     0.09437708179685263,
+     0.09820672638508858,
+     0.09833740746691788,
+     0.09974974024858989,
+     0.10087477091664232,
+     0.10242248384872954,
+     0.10255390840927589,
+     0.1048856318630275,
+     0.10599889467539662,
+     0.10612968880917337,
+     0.10671861409649137,
+     0.1085280665382151,
+     0.1087834880423261,
+     0.10937913761594617,
+     0.11090376597301753,
+     0.11225172747693386,
+     0.11266880665187406,
+     0.11295805321482072,
+     0.11299970536908864,
+     0.11455387482712273,
+     0.11542438776475886,
+     0.11769520625973026,
+     0.11786304126401806,
+     0.11847126059329915,
+     0.11993002022452094,
+     0.12375399039987542,
+     0.12485517729384774,
+     0.1250312974404704,
+     0.12552056599133932,
+     0.1257082550333189,
+     0.12653760071445763,
+     0.12653760071445766,
+     0.12774233431864596,
+     0.12821937995870825,
+     0.13228757591317042,
+     0.13575319863801877,
+     0.13631389666489094,
+     0.13769319139240985,
+     0.13871850509315686,
+     0.13936183572341015,
+     0.1412682191543234,
+     0.14224795438988388,
+     0.1451971348278816,
+     0.14573898838140759,
+     0.14617755351753334,
+     0.14749903630525665,
+     0.15157422406490492,
+     0.15158178519581225,
+     0.1544563616803207,
+     0.15656403461828544,
+     0.1579836403617436,
+     0.15932999162008007,
+     0.16071660633523757,
+     0.16075113512367517,
+     0.16262173504060398,
+     0.16397323352369678,
+     0.1643282533195556,
+     0.1665558517986114,
+     0.16779582764294787,
+     0.1709580940540732,
+     0.17108764715614797,
+     0.17113478009070285,
+     0.17302309241702035,
+     0.17314845273822274,
+     0.17415270391285617,
+     0.1754918927818506,
+     0.17603004987216248,
+     0.17708342205042174,
+     0.17756072158963865
+    ]
+   },
+   "old_encoded_column": {
+    "distinct": 1,
+    "saturated_high_count": 96,
+    "saturated_low_count": 0,
+    "saturated_share": 1.0,
+    "values": [
+     1.0
+    ]
+   },
+   "raw_recoverable_from_encoded_value": {
+    "count": 0,
+    "rule": "remaining = encoded_value * 50 exactly when -1 < encoded < 1; saturated records only give a bound (remaining >= 50 or <= -50), not the value"
+   },
+   "raw_remaining": {
+    "distinct": 95,
+    "max": 177.56072158963866,
+    "min": 62.92871341880317,
+    "values": [
+     62.92871341880317,
+     64.46145851295584,
+     64.73005822545966,
+     67.17073423570639,
+     67.47880906600957,
+     68.38020665614249,
+     70.87678261165772,
+     71.51113104768187,
+     72.41100176437331,
+     73.36270711804212,
+     73.89354625691777,
+     74.4020986547306,
+     75.90628300351722,
+     77.70285730975834,
+     78.52944462897516,
+     79.42858142390196,
+     81.92638441355871,
+     81.9696283354342,
+     83.95967859723034,
+     84.48903146812194,
+     87.30235919681873,
+     88.86354148887794,
+     89.76451068889567,
+     90.06147375361267,
+     90.44536874560993,
+     94.09339391260863,
+     94.37708179685262,
+     98.20672638508859,
+     98.33740746691788,
+     99.74974024858989,
+     100.87477091664232,
+     102.42248384872954,
+     102.55390840927589,
+     104.8856318630275,
+     105.99889467539663,
+     106.12968880917337,
+     106.71861409649138,
+     108.5280665382151,
+     108.7834880423261,
+     109.37913761594616,
+     110.90376597301753,
+     112.25172747693387,
+     112.66880665187406,
+     112.95805321482072,
+     112.99970536908864,
+     114.55387482712273,
+     115.42438776475886,
+     117.69520625973026,
+     117.86304126401807,
+     118.47126059329915,
+     119.93002022452094,
+     123.75399039987542,
+     124.85517729384773,
+     125.03129744047038,
+     125.52056599133931,
+     125.70825503331889,
+     126.53760071445762,
+     126.53760071445765,
+     127.74233431864594,
+     128.21937995870826,
+     132.28757591317043,
+     135.75319863801877,
+     136.31389666489093,
+     137.69319139240986,
+     138.71850509315686,
+     139.36183572341017,
+     141.2682191543234,
+     142.2479543898839,
+     145.1971348278816,
+     145.73898838140758,
+     146.17755351753334,
+     147.49903630525665,
+     151.5742240649049,
+     151.58178519581224,
+     154.4563616803207,
+     156.56403461828543,
+     157.9836403617436,
+     159.32999162008008,
+     160.71660633523757,
+     160.75113512367517,
+     162.621735040604,
+     163.97323352369676,
+     164.3282533195556,
+     166.5558517986114,
+     167.79582764294787,
+     170.9580940540732,
+     171.08764715614797,
+     171.13478009070286,
+     173.02309241702037,
+     173.14845273822274,
+     174.15270391285617,
+     175.4918927818506,
+     176.03004987216246,
+     177.08342205042175,
+     177.56072158963866
+    ]
+   },
+   "raw_unrecoverable_from_encoded_value": {
+    "count": 96,
+    "records": [
+     {
+      "raw_remaining": 119.93002022452094,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300000,
+      "step": 13,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 137.69319139240986,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300000,
+      "step": 1,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 126.53760071445762,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300000,
+      "step": 1,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 74.4020986547306,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300000,
+      "step": 2,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 94.09339391260863,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300000,
+      "step": 219,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 167.79582764294787,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300000,
+      "step": 217,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 125.52056599133931,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300001,
+      "step": 162,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 114.55387482712273,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300001,
+      "step": 2,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 157.9836403617436,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300001,
+      "step": 2,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 160.71660633523757,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300001,
+      "step": 1,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 162.621735040604,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300001,
+      "step": 164,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 102.42248384872954,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300001,
+      "step": 147,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 173.02309241702037,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300002,
+      "step": 14,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 170.9580940540732,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300002,
+      "step": 3,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 177.08342205042175,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300002,
+      "step": 1,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 159.32999162008008,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300002,
+      "step": 1,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 64.73005822545966,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300002,
+      "step": 1,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 102.55390840927589,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300002,
+      "step": 194,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 151.58178519581224,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300003,
+      "step": 21,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 106.12968880917337,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300003,
+      "step": 7,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 128.21937995870826,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300003,
+      "step": 1,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 166.5558517986114,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300003,
+      "step": 1,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 138.71850509315686,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300003,
+      "step": 1,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 100.87477091664232,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300003,
+      "step": 672,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 70.87678261165772,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300004,
+      "step": 1,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 136.31389666489093,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300004,
+      "step": 6,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 145.1971348278816,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300004,
+      "step": 320,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 125.70825503331889,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300004,
+      "step": 7,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 67.47880906600957,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300004,
+      "step": 5,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 84.48903146812194,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300004,
+      "step": 302,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 164.3282533195556,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300005,
+      "step": 6,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 141.2682191543234,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300005,
+      "step": 2,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 71.51113104768187,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300005,
+      "step": 1,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 112.95805321482072,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300005,
+      "step": 1,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 127.74233431864594,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300005,
+      "step": 1,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 110.90376597301753,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300005,
+      "step": 1,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 108.7834880423261,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300006,
+      "step": 291,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 132.28757591317043,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300006,
+      "step": 266,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 123.75399039987542,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300006,
+      "step": 82,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 73.36270711804212,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300006,
+      "step": 254,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 108.5280665382151,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300006,
+      "step": 1,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 124.85517729384773,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300006,
+      "step": 84,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 98.33740746691788,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300007,
+      "step": 3,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 67.17073423570639,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300007,
+      "step": 4,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 115.42438776475886,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300007,
+      "step": 1,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 145.73898838140758,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300007,
+      "step": 367,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 75.90628300351722,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300007,
+      "step": 365,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 145.73898838140758,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300007,
+      "step": 367,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 62.92871341880317,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300008,
+      "step": 184,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 176.03004987216246,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300008,
+      "step": 1,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 72.41100176437331,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300008,
+      "step": 6,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 105.99889467539663,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300008,
+      "step": 3,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 68.38020665614249,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300008,
+      "step": 9,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 160.75113512367517,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300008,
+      "step": 6,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 90.06147375361267,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300009,
+      "step": 5,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 173.14845273822274,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300009,
+      "step": 1,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 98.20672638508859,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300009,
+      "step": 172,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 142.2479543898839,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300009,
+      "step": 203,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 81.9696283354342,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300009,
+      "step": 9,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 99.74974024858989,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300009,
+      "step": 164,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 146.17755351753334,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300010,
+      "step": 195,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 81.92638441355871,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300010,
+      "step": 379,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 117.86304126401807,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300010,
+      "step": 1,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 125.03129744047038,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300010,
+      "step": 1,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 118.47126059329915,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300010,
+      "step": 2,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 135.75319863801877,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300010,
+      "step": 7,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 151.5742240649049,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300011,
+      "step": 1,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 112.66880665187406,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300011,
+      "step": 35,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 171.08764715614797,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300011,
+      "step": 1,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 117.69520625973026,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300011,
+      "step": 4,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 175.4918927818506,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300011,
+      "step": 15,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 106.71861409649138,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300011,
+      "step": 18,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 87.30235919681873,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300012,
+      "step": 1,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 163.97323352369676,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300012,
+      "step": 2,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 104.8856318630275,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300012,
+      "step": 1,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 126.53760071445765,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300012,
+      "step": 152,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 112.25172747693387,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300012,
+      "step": 194,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 147.49903630525665,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300012,
+      "step": 169,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 88.86354148887794,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300013,
+      "step": 5,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 64.46145851295584,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300013,
+      "step": 1,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 83.95967859723034,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300013,
+      "step": 1,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 139.36183572341017,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300013,
+      "step": 2,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 154.4563616803207,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300013,
+      "step": 37,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 109.37913761594616,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300013,
+      "step": 6,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 89.76451068889567,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300014,
+      "step": 1,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 112.99970536908864,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300014,
+      "step": 2,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 94.37708179685262,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300014,
+      "step": 1,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 171.13478009070286,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300014,
+      "step": 1,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 90.44536874560993,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300014,
+      "step": 480,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 174.15270391285617,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300014,
+      "step": 613,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 73.89354625691777,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300015,
+      "step": 5,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 79.42858142390196,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300015,
+      "step": 1,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 177.56072158963866,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300015,
+      "step": 616,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 78.52944462897516,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300015,
+      "step": 11,
+      "target": "piloc-e1-target-3"
+     },
+     {
+      "raw_remaining": 156.56403461828543,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300015,
+      "step": 5,
+      "target": "piloc-e1-target-4"
+     },
+     {
+      "raw_remaining": 77.70285730975834,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1300015,
+      "step": 6,
+      "target": "piloc-e1-target-5"
+     }
+    ]
+   },
+   "sample_count": 96,
+   "stored_vs_recomputed_mismatch": []
+  },
+  "B_round27_two_interventions": {
+   "columns": [
+    {
+     "distinct": 1,
+     "index": 0,
+     "name": "age_steps",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 1,
+     "name": "since_last_emission_time",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 2,
+     "name": "sent_count",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 3,
+     "name": "pending_event",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 4,
+     "name": "changed_view",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 5,
+     "name": "first_emission",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 6,
+     "name": "stage_changed",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 7,
+     "name": "requirements_changed",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 8,
+     "name": "members_changed",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 9,
+     "name": "progress_delta_abs",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 10,
+     "name": "revision_delta",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 11,
+     "name": "remaining_time_over_horizon",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 12,
+     "name": "urgency_now",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 13,
+     "name": "has_future_requirements",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 2,
+     "index": 14,
+     "name": "queue_backlog_targets",
+     "values": [
+      3.0,
+      6.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 15,
+     "name": "budget_remaining_fraction",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 16,
+     "name": "capacity_remaining_fraction",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 17,
+     "name": "subscribers",
+     "values": [
+      6.0
+     ]
+    },
+    {
+     "distinct": 2,
+     "index": 18,
+     "name": "step_over_horizon",
+     "values": [
+      0.001,
+      0.019
+     ]
+    }
+   ],
+   "constancy_causes": {
+    "age_steps": "证据不足：本周证据无法判定该列恒定的机制原因",
+    "budget_remaining_fraction": "证据不足：本周证据无法判定该列恒定的机制原因",
+    "capacity_remaining_fraction": "证据不足：本周证据无法判定该列恒定的机制原因",
+    "changed_view": "item 生成条件即视图有变更，首报点恒为 1",
+    "first_emission": "首报选择条件：首报点上尚无历史发送，first_emission 恒为 1",
+    "has_future_requirements": "证据不足：本周证据无法判定该列恒定的机制原因",
+    "members_changed": "首报点无已发视图可比较，语义恒为 0/False",
+    "pending_event": "relay 仅在有待报变更/检测时生成 item，首报点恒为 1",
+    "progress_delta_abs": "首报点无已发进度，差值恒为 0",
+    "remaining_time_over_horizon": "编码截断：原始期限全部 >= 50 步，clip(remaining/50,-1,1) 恒为 1",
+    "requirements_changed": "首报点无已发视图可比较，语义恒为 0/False",
+    "revision_delta": "首报点无已发 revision 可减，恒等于当前 revision",
+    "sent_count": "首报选择条件：尚无发送，sent_count 恒为 0",
+    "since_last_emission_time": "首报选择条件：无上次发送，恒为 0",
+    "stage_changed": "首报点无已发视图可比较，语义恒为 0/False",
+    "subscribers": "证据不足：本周证据无法判定该列恒定的机制原因",
+    "urgency_now": "近截止阈值：原始期限全部 > 25 步，urgency_now 恒为 0"
+   },
+   "constant_columns": [
+    "age_steps",
+    "since_last_emission_time",
+    "sent_count",
+    "pending_event",
+    "changed_view",
+    "first_emission",
+    "stage_changed",
+    "requirements_changed",
+    "members_changed",
+    "progress_delta_abs",
+    "revision_delta",
+    "remaining_time_over_horizon",
+    "urgency_now",
+    "has_future_requirements",
+    "budget_remaining_fraction",
+    "capacity_remaining_fraction",
+    "subscribers"
+   ],
+   "encoded_collisions": [
+    {
+     "distinct_raw_count": 2,
+     "encoded_value": 1.0,
+     "raw_values": [
+      65.956661,
+      96.525392
+     ]
+    }
+   ],
+   "new_encoded_column": {
+    "distinct": 2,
+    "max": 0.09652539215745361,
+    "min": 0.06595666085385488,
+    "values": [
+     0.06595666085385488,
+     0.09652539215745361
+    ]
+   },
+   "old_encoded_column": {
+    "distinct": 1,
+    "saturated_high_count": 2,
+    "saturated_low_count": 0,
+    "saturated_share": 1.0,
+    "values": [
+     1.0
+    ]
+   },
+   "raw_recoverable_from_encoded_value": {
+    "count": 0,
+    "rule": "remaining = encoded_value * 50 exactly when -1 < encoded < 1; saturated records only give a bound (remaining >= 50 or <= -50), not the value"
+   },
+   "raw_remaining": {
+    "distinct": 2,
+    "max": 96.52539215745361,
+    "min": 65.95666085385487,
+    "values": [
+     65.95666085385487,
+     96.52539215745361
+    ]
+   },
+   "raw_unrecoverable_from_encoded_value": {
+    "count": 2,
+    "records": [
+     {
+      "raw_remaining": 65.95666085385487,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1400031,
+      "step": 19,
+      "target": "piloc-e1-target-0"
+     },
+     {
+      "raw_remaining": 96.52539215745361,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1400031,
+      "step": 1,
+      "target": "piloc-e1-target-5"
+     }
+    ]
+   },
+   "sample_count": 2,
+   "stored_vs_recomputed_mismatch": []
+  },
+  "C_round26_four_improved_scenes": {
+   "columns": [
+    {
+     "distinct": 2,
+     "index": 0,
+     "name": "age_steps",
+     "values": [
+      12.0,
+      13.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 1,
+     "name": "since_last_emission_time",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 2,
+     "name": "sent_count",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 3,
+     "name": "pending_event",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 4,
+     "name": "changed_view",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 5,
+     "name": "first_emission",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 6,
+     "name": "stage_changed",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 7,
+     "name": "requirements_changed",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 8,
+     "name": "members_changed",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 9,
+     "name": "progress_delta_abs",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 10,
+     "name": "revision_delta",
+     "values": [
+      2.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 11,
+     "name": "remaining_time_over_horizon",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 12,
+     "name": "urgency_now",
+     "values": [
+      0.0
+     ]
+    },
+    {
+     "distinct": 2,
+     "index": 13,
+     "name": "has_future_requirements",
+     "values": [
+      0.0,
+      1.0
+     ]
+    },
+    {
+     "distinct": 2,
+     "index": 14,
+     "name": "queue_backlog_targets",
+     "values": [
+      1.0,
+      2.0
+     ]
+    },
+    {
+     "distinct": 2,
+     "index": 15,
+     "name": "budget_remaining_fraction",
+     "values": [
+      0.91419795221843,
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 16,
+     "name": "capacity_remaining_fraction",
+     "values": [
+      1.0
+     ]
+    },
+    {
+     "distinct": 1,
+     "index": 17,
+     "name": "subscribers",
+     "values": [
+      6.0
+     ]
+    },
+    {
+     "distinct": 4,
+     "index": 18,
+     "name": "step_over_horizon",
+     "values": [
+      0.109,
+      0.113,
+      0.144,
+      0.156
+     ]
+    }
+   ],
+   "constancy_causes": {
+    "capacity_remaining_fraction": "证据不足：本周证据无法判定该列恒定的机制原因",
+    "changed_view": "item 生成条件即视图有变更，首报点恒为 1",
+    "first_emission": "首报选择条件：首报点上尚无历史发送，first_emission 恒为 1",
+    "members_changed": "首报点无已发视图可比较，语义恒为 0/False",
+    "pending_event": "relay 仅在有待报变更/检测时生成 item，首报点恒为 1",
+    "progress_delta_abs": "首报点无已发进度，差值恒为 0",
+    "remaining_time_over_horizon": "编码截断：原始期限全部 >= 50 步，clip(remaining/50,-1,1) 恒为 1",
+    "requirements_changed": "首报点无已发视图可比较，语义恒为 0/False",
+    "revision_delta": "首报点无已发 revision 可减，恒等于当前 revision",
+    "sent_count": "首报选择条件：尚无发送，sent_count 恒为 0",
+    "since_last_emission_time": "首报选择条件：无上次发送，恒为 0",
+    "stage_changed": "首报点无已发视图可比较，语义恒为 0/False",
+    "subscribers": "证据不足：本周证据无法判定该列恒定的机制原因",
+    "urgency_now": "近截止阈值：原始期限全部 > 25 步，urgency_now 恒为 0"
+   },
+   "constant_columns": [
+    "since_last_emission_time",
+    "sent_count",
+    "pending_event",
+    "changed_view",
+    "first_emission",
+    "stage_changed",
+    "requirements_changed",
+    "members_changed",
+    "progress_delta_abs",
+    "revision_delta",
+    "remaining_time_over_horizon",
+    "urgency_now",
+    "capacity_remaining_fraction",
+    "subscribers"
+   ],
+   "encoded_collisions": [
+    {
+     "distinct_raw_count": 4,
+     "encoded_value": 1.0,
+     "raw_values": [
+      74.2797,
+      82.677595,
+      153.049138,
+      158.557428
+     ]
+    }
+   ],
+   "new_encoded_column": {
+    "distinct": 4,
+    "max": 0.15855742756405256,
+    "min": 0.07427970027387047,
+    "values": [
+     0.07427970027387047,
+     0.08267759516649917,
+     0.15304913763731748,
+     0.15855742756405256
+    ]
+   },
+   "old_encoded_column": {
+    "distinct": 1,
+    "saturated_high_count": 4,
+    "saturated_low_count": 0,
+    "saturated_share": 1.0,
+    "values": [
+     1.0
+    ]
+   },
+   "raw_recoverable_from_encoded_value": {
+    "count": 0,
+    "rule": "remaining = encoded_value * 50 exactly when -1 < encoded < 1; saturated records only give a bound (remaining >= 50 or <= -50), not the value"
+   },
+   "raw_remaining": {
+    "distinct": 4,
+    "max": 158.55742756405255,
+    "min": 74.27970027387047,
+    "values": [
+     74.27970027387047,
+     82.67759516649917,
+     153.04913763731747,
+     158.55742756405255
+    ]
+   },
+   "raw_unrecoverable_from_encoded_value": {
+    "count": 4,
+    "records": [
+     {
+      "raw_remaining": 153.04913763731747,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1400010,
+      "step": 156,
+      "target": "piloc-e1-target-2"
+     },
+     {
+      "raw_remaining": 158.55742756405255,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1400014,
+      "step": 109,
+      "target": "piloc-e1-target-5"
+     },
+     {
+      "raw_remaining": 82.67759516649917,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1400017,
+      "step": 144,
+      "target": "piloc-e1-target-1"
+     },
+     {
+      "raw_remaining": 74.27970027387047,
+      "reason": "saturated_at_+1_raw_at_least_50",
+      "scene": 1400020,
+      "step": 113,
+      "target": "piloc-e1-target-4"
+     }
+    ]
+   },
+   "sample_count": 4,
+   "stored_vs_recomputed_mismatch": []
+  }
+ },
+ "totals": {
+  "note": "三来源选择机制不同，不合并为单一总体；除标注的描述性并排外不做跨源统计",
+  "per_source": {
+   "A_round28_96_points": 96,
+   "B_round27_two_interventions": 2,
+   "C_round26_four_improved_scenes": 4
+  },
+  "sum_of_samples": 102
+ }
+}

@@ -1,0 +1,72 @@
+{
+  "round": "29",
+  "section": "scene block ownership correction (read-only reconciliation against existing records)",
+  "status": "correction registered; old reports kept, no historical verdict rewritten",
+  "verified_blocks": {
+    "1300000..1300047": {
+      "role": "original training block (ROUND22/24 training scenarios)",
+      "round28_usage": "ROUND28 ran its 16 baselines and 96 interventions on the first 16 scenes 1300000..1300015 (r28_common.SCENARIOS = range(1300000, 1300016))",
+      "evidence": [
+        "runs/comm_cost_greedy_replication_20260928/SCENE_REGISTRY.json lists '1300000..1300047 (ROUND22/24 training scenarios)' in registered_claim_ranges_not_touched",
+        "runs/comm_cost_firstreport_diagnosis_20260929/r28_common.py SCENARIOS",
+        "ROUND28 verdict: all 16 baselines at 6/6 on-time (ceiling)"
+      ]
+    },
+    "1301000..1301015": {
+      "role": "ROUND22/24 development block, kept as development history only",
+      "round28_mislabel": "ROUND28's report and verdict q4 call this the 'ROUND25 开发块'; that attribution is wrong",
+      "seed33_final_greedy_per_scene_on_time": {
+        "1301000": 6,
+        "1301001": 5,
+        "1301002": 2,
+        "1301003": 5,
+        "1301004": 6,
+        "1301005": 6,
+        "1301006": 6,
+        "1301007": 6,
+        "1301008": 6,
+        "1301009": 6,
+        "1301010": 6,
+        "1301011": 6,
+        "1301012": 6,
+        "1301013": 5,
+        "1301014": 6,
+        "1301015": 5
+      },
+      "on_time_failure_scenes_in_this_block": [1301001, 1301002, 1301003, 1301013, 1301015],
+      "expired_counts": [1, 4, 1, 1, 1],
+      "evidence": [
+        "ROUND25_COMM_COST_GREEDY_REPLICATION.md line 63: '旧 1301000..1301015 仅作开发历史'",
+        "runs/comm_cost_v2_rerun_20260928/rows/v2_eval_s33_final_greedy_s13010*.json: on_time/expired per scene (16 rows, no new launch)"
+      ]
+    },
+    "1400000..1400063": {
+      "role": "ROUND25 evaluation block (64 scenes, previously unused)",
+      "reported_failing_scene": 1400031,
+      "failing_scene_rows": {
+        "r25_learned_s33_greedy_s1400031_a1": {"on_time": 4, "expired": 2, "spent_bytes": 10578, "emissions": 4},
+        "r25_immediate_s1400031_a1": {"on_time": 6, "expired": 2, "spent_bytes": 15684, "emissions": 6, "note": "immediate arm row; expired field read as recorded"},
+        "r25_late_discovery_gate_147_s1400031_a1": {"on_time": 4, "expired": 2, "spent_bytes": 0, "emissions": 0}
+      },
+      "evidence": [
+        "runs/comm_cost_greedy_replication_20260928/SCENE_REGISTRY.json (block [1400000, 1400063], 64 scenes, previously unused)",
+        "ROUND25_VERDICT.json task_degraded_scenes: [1400031], dY=-2, lost_on_time_goal_ids [piloc-e1-target-0, piloc-e1-target-5]",
+        "rows on disk for 1400031 in runs/comm_cost_greedy_replication_20260928/rows/"
+      ]
+    }
+  },
+  "correction": {
+    "what_was_wrong": "ROUND28's next-step suggestion named 'ROUND25 开发块（1301000..1301015）' as the scene family already containing on-time failure records under the same model and greedy decode. Two things are off: (1) 1301000..1301015 is the ROUND22/24 development block that ROUND25 itself documents as 'kept as development history only', not a ROUND25 block; (2) it is not the block that contains the reported failing scene 1400031, which sits in the ROUND25 evaluation block 1400000..1400063.",
+    "consequence": "one cannot expect 1301000..1301015 to yield the 1400031-kind rescuable failure labels; its own on-time failures (5/16 scenes under seed33 final greedy, already recorded on disk from ROUND24) are development-history scenes with their own failure instances, not the ROUND25 evaluation failure. Any future use of that block is reuse of development history, and its outcome numbers are already known without new launches."
+  },
+  "conclusion_boundaries_registered": [
+    "a full-score baseline leaves no room to increase the on-time count, but an intervention can still degrade it; ROUND28's 16 baselines were all 6/6",
+    "ROUND28's zero task change does not prove first-report timing is ineffective",
+    "96 targets are not 96 independent scenarios; the scene count is 16",
+    "cost changes already exist in ROUND28 (7 cheaper / 83 costlier / 6 zero), so manufacturing task-benefit labels by picking failing scenes is not needed"
+  ],
+  "old_reports_preserved": [
+    "runs/comm_cost_firstreport_diagnosis_20260929/ROUND28_REPORT.md",
+    "runs/comm_cost_firstreport_diagnosis_20260929/ROUND28_VERDICT.json"
+  ]
+}

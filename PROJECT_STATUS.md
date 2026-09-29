@@ -1,5 +1,41 @@
 # 项目状态
 
+## 2026-09-29：ROUND29 发送端期限编码审计与最小观测原型——期限列在全部 102 个首报点饱和为 1.0；单列新编码保留差异；学习收益未证（0 启动）
+
+分支 `analysis/comm-deadline-encoding-audit`（起点 ROUND28 完整头
+`21250b5eb093dd1a7f97cd06e9993ef1ac6abab0`），产物
+`runs/comm_deadline_encoding_audit_20260929/`（`ROUND29_REPORT.md`、
+`ROUND29_VERDICT.json`、`ENCODING_AUDIT.json`、`SCENE_BLOCK_CORRECTION.json`、
+`r29_encoding_prototype.py`、`r29_proto_tests.py`、`r29_audit.py`、
+`r29_proto_on_data.py`、`ENCODING_PROTO_ON_DATA.json`）。执行依据 sha256
+`873df4f8…`，首启前独立提交；`publication_status=PENDING_NETWORK`、本会话网络重试 0；
+**0 环境启动、0 新流、0 训练、0 optimizer.step、0 生产套件运行**。
+
+- **场景归属更正**（`SCENE_BLOCK_CORRECTION.json`，旧报告保留）：1301000..1301015 是
+  ROUND22/24 **开发**块（"仅作开发历史"，其 seed33 final greedy 5/16 场景有按时失败、
+  行已在盘上），不是 ROUND25 块，也不是含 1400031 失败的块；1400031 在 ROUND25 评估块
+  1400000..1400063。ROUND28 建议中的"ROUND25 开发块"称谓据此更正。
+- **真实编码路径**（18 个生产/导入模块与 ROUND28 启动身份逐字节一致）：`remaining_time =
+  registry 快照 deadline − clock.now`（步，`comm.py:819-820`，动作前可用、发送端合法可见）；
+  第 12 列实际为 `clip(remaining/50, -1, 1)`（`comm_learning.py:113`，
+  `URGENCY_SCALE_STEPS=50`），`urgency_now` 另用 25 步阈值（:114）；horizon=1000 是运行前
+  常量且等于配置 steps（`comm_learning.py:71`、`v2_common.py:110`）；collector→网络无二次
+  缩放/归一化（`budget_masked.py:177-179`、`train_pilot.py:54-75`）。性质判定：**命名不
+  准确 + 声明式有损编码，非实现违反契约**。
+- **信息损失量化**（三来源 102 个首报点，分来源不合并；原始期限由 registry deadline 与已
+  实证时钟规则 `now = tape step − 1` 重建，197/197 行与 102/102 点交叉验证）：A 源 ROUND28
+  96 点原始期限 62.9–177.6 步、95 个不同值，编码列仅 **1 个值（全 1.0）**；B 源 ROUND27
+  target-0/5 两点、C 源 ROUND26 四改善场景同此（全部饱和）。102/102 记录无法从编码值恢复
+  原始期限。15 个恒定列的恒定原因逐列分类（选择条件/编码截断/证据不足）。
+- **原型与测试**：候选列 `remaining/1000` 不截断、只改这一列（其余 18 列由构造保证一致），
+  登记语义版本 `comm-send-state/1r29-deadline-over-horizon` 与"旧 checkpoint 不得静默换用"
+  的兼容规则；167 项纯计算检查 0 失败（从真实 `SendItem`/`SendObservation` 进入，预期值手算）；
+  原型作用于 102 个真实原始值 **3/3 来源完整保留差异**（新列 range 0.063–0.178）。
+- **三问结论**：(1) 是——编码压缩了合法可见的期限差异；(2) 是——新编码在现有数据中保留这些
+  差异（仅就可证的信息保持而言）；(3) **本轮不能**证明这些差异能改善学习或任务表现。
+- **下一步建议（仅建议、非授权）**：从初值配对训练消融"原编码 vs 单列新编码"，网络/目标/
+  训练预算/其余超参一致，唯一差异是第 12 列定义，启动额度另行批准。
+
 ## 2026-09-29：ROUND28 训练场景首报反事实样本诊断——96/96 accepted、0 任务效应，首报决策点特征近乎退化（启动 113/120）
 
 分支 `exp/comm-cost-firstreport-diagnosis`（起点 ROUND27 头 `5982677`），产物
