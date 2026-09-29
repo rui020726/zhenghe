@@ -1,0 +1,1088 @@
+{
+ "arms": {
+  "ACTIVE_ROWS": {
+   "actor_reduction": "sum(s_i for rows with >=1 free candidate) / M, M=0 -> exact zero",
+   "encoder_arm": "old",
+   "feature_layout": "comm-send-state/1",
+   "implementation": "(surrogate * row_active).sum() / max(M, 1); row_active is the saved tape's non-empty `actionable`/`free` set"
+  },
+  "ALL_ROWS": {
+   "actor_reduction": "sum(s_i for every logged row) / N",
+   "encoder_arm": "old",
+   "feature_layout": "comm-send-state/1",
+   "implementation": "the frozen v2_trainer expression -surrogate.mean() verbatim"
+  }
+ },
+ "branch": "exp/comm-actor-reduction-ablation",
+ "branch_current_at_freeze": "exp/comm-actor-reduction-ablation",
+ "branch_start": "614df51709a8d82525405b46468a537f4ccd259e",
+ "carry_forward_from_archived_rounds": [
+  "ROUND23 correctness fixes: reused as archived, identity unchanged, not re-run",
+  "ROUND24/30 reference behaviour identity: re-checked against both archives before training starts (block_reference compares behaviour fields with both)",
+  "the clock rule now = tape step - 1: verified in ROUND30, reused not re-derived"
+ ],
+ "code_identity": {
+  "checkpoints": {
+   "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "runs/joint_eval_20260916/ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  },
+  "freeze_sha256": "fa5e7638c1eafbe30c524f9f4fe461af46a23d0ba9063b8b5822d929842e8348",
+  "harness": {
+   "r32_blocks.py": "ce1b4f38b7c4215d041f616b375bb66fc93e18132821b16664f9cac84eda4e49",
+   "r32_check.py": "c16173d87f9810916bd2546b4bad4fefd46e0a23c323a267655606ecf78d4627",
+   "r32_common.py": "e738959380e5bcce8c0879cf24e202b55c17ead899fdd58a13d9efb0c8a7b768",
+   "r32_curves.py": "c1052e0373540084496febf5136fbfff81b52e6e5e5be439be92a5c2b6b8ad18",
+   "r32_freeze.py": "910674f313a2dd9363a43cfe043ef6a98146e0fd5d71aed91b274e7ce22db1be",
+   "r32_manifest.py": "d71e8e6218455446d4bc023b3f05262c27f023406577170c1b05451cc111b44a",
+   "r32_math.py": "b359de696ff01c5bdfb4d442464b3031337d334a148b2b0a3bf2e1cfd845144d",
+   "r32_mechanism.py": "5371047c32413d8eac47879e566bd526ba5865e185fc22bd81c3b0ee6e45ae71",
+   "r32_preflight.py": "e81d0ea0c943c0ae5320955a482dc3c086204aa3804e15cad2d44593934f67a3",
+   "r32_run.py": "de87374ec4687fd2168ff9bf3b5842cd53e8bb36259cd78a8bad0c857978cd81",
+   "r32_stats.py": "69e5f7dc92f6f813f2046667c1043f81ec96007e1ee43eac025a949bebf40934",
+   "r32_train.py": "45b3bd6010ce81d2c2be9c7d8cd1a503defce70eddc413f62123e5d880d6322d",
+   "r32_trainer.py": "9f1df61c75d7df7166f1aef7c214f81d8718819abf3f7047a94907e6a1bf68d5",
+   "r32_verdict.py": "e408410e71b2e1c61d866fd2fb5c7f1fd37e536e183e364437d4e6b27d82836e",
+   "r32_verify.py": "25121c5f785c1c1298f480e5fc00d3924e63f571188969edfcf6adee284dd5d6"
+  },
+  "imported_round_modules": {
+   "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": "e64e0be4911ca3b3129247b3a443d045ad022f3bd9e6a1a22c4ebd1b3a4aff9b",
+   "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": "bab0a65fb3ffda6dc9673eaa4e836e20f184b4cc16836b5d5cf169bd2d326e91",
+   "runs/comm_budget_pilot_20260919/pilot_common.py": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8",
+   "runs/comm_budget_pilot_20260919/pilot_env.py": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b",
+   "runs/comm_budget_pilot_20260919/train_pilot.py": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81",
+   "runs/comm_cost_stage_b_20260927/sb_check.py": "fa5e6b39bad2643e21347483d66265d02af7114333430c251a484909882bdb5a",
+   "runs/comm_cost_stage_b_20260927/sb_collector.py": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+   "runs/comm_cost_stage_b_20260927/sb_common.py": "66e674a03e0406299c8f9172d2865c5f83c3de58893bce7f87b71741ba3cf28f",
+   "runs/comm_cost_stage_b_20260927/sb_controller.py": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+   "runs/comm_cost_stage_b_20260927/sb_run.py": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+   "runs/comm_tight_budget_20260919/onpolicy.py": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+   "runs/comm_tight_budget_20260919/train_onpolicy.py": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f",
+   "runs/search_trace_and_policy_20260925/sp_common.py": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc"
+  },
+  "inherited_round30_modules": {
+   "runs/comm_deadline_encoding_ablation_20260930/ARTEFACT_MANIFEST.json": "7a4a39c89b74820e365a00c0b8be41ea148c273914d69c3d4f1d86597da9ba23",
+   "runs/comm_deadline_encoding_ablation_20260930/CONFIG_AND_MODEL_MANIFEST.json": "108450b837db1cc6aa1304d3bcced0fa28f5160b9a22c8f871e1cccd72d1aa59",
+   "runs/comm_deadline_encoding_ablation_20260930/r30_check.py": "56de23af5744ccef85ab5552bfae32c2f150753f187a3b2ddebf0cc8cc462609",
+   "runs/comm_deadline_encoding_ablation_20260930/r30_code_identity.py": "c06261de49aec8eb206881e4eff6c5ae307b9dbf0a25c8439537502a513b83aa",
+   "runs/comm_deadline_encoding_ablation_20260930/r30_common.py": "b3ab6797bd2acd0c1bab0c0f74b1b215ac35dfb6e0e360f6786add8edd045030",
+   "runs/comm_deadline_encoding_ablation_20260930/r30_encoding.py": "82a5e3ce168b6c2a4108a88c40424b20ee8f8bd7179e21cc27144a416a18a773",
+   "runs/comm_deadline_encoding_ablation_20260930/r30_manifest.py": "bf4de8186d13f85c143d74e15fa125f7de463696a962532c790b4291ff02ee5e",
+   "runs/comm_deadline_encoding_ablation_20260930/r30_run.py": "2db7e0be1f921683c3862b39aa28ea531a55a60be546085e5a1a24d10476fbad",
+   "runs/comm_deadline_encoding_ablation_20260930/r30_stats.py": "1cf4e5c577782417ebe5ea57f196c30c5fbed3f782f60f2b061334bad0c8dac9",
+   "runs/comm_deadline_encoding_ablation_20260930/r30_train.py": "1fd0cf5da1b026b065bbcf3f7fca2dcc969886a8599405b54661933149c9ea54"
+  },
+  "inherited_round31_modules": {
+   "runs/comm_constraint_optimization_diagnosis_20260930/ABSOLUTE_PERFORMANCE.json": "a119cd58f4f4ba2e0bcfa0f74dc623b0fbcbc2fae56b725a855748ad3cc327bc",
+   "runs/comm_constraint_optimization_diagnosis_20260930/DUAL_TRAJECTORIES.json": "078c446200e9e1fb9d57f9b3c4d43b9589d3a9349d9bdb89cb615756e260e3a4",
+   "runs/comm_constraint_optimization_diagnosis_20260930/ROUND31_VERDICT.json": "284c9f4add9fd66ced460b701188396b043c9e94c93b9e0623557b41fe6e3d85",
+   "runs/comm_constraint_optimization_diagnosis_20260930/UPDATE_SIGNAL_DIAGNOSIS.json": "14b16b2fbb3f0e4a2205851d0ced618084a7cc4418e47c12c25f4561e4ec2fa7",
+   "runs/comm_constraint_optimization_diagnosis_20260930/r31_common.py": "0777da03766c410e8f18a002c01720539da0588154ba4e62f088f75c3b276d1b"
+  },
+  "production": {
+   "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+   "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+   "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+   "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+   "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+   "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+   "integrated_sar/lifecycle_metrics.py": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+   "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+  }
+ },
+ "configuration_hash": "e9b2c067db5951f2",
+ "configuration_hash_construction": "r30_check.configuration_hash(behaviour_fields) -- the same construction ROUND24/30 used, reused rather than re-implemented",
+ "data_order": {
+  "algorithm": "random.Random(DATA_ORDER_SEED); the 48 training scenarios reshuffled each of 3 rounds, 48 + 48 + 32 taken (frozen ROUND24 algorithm)",
+  "episodes_per_seed": 128,
+  "order_digest_sha256": "346f2cdde8d658f927ea282f83e143d54a600f4f5c729e4521fe657421afe840",
+  "order_first_8": [
+   1300027,
+   1300014,
+   1300028,
+   1300044,
+   1300003,
+   1300010,
+   1300005,
+   1300008
+  ],
+  "order_sha256": "[1300027, 1300014, 1300028, 1300044, 1300003, 1300010, 1300005, 1300008, 1300021, 1300034, 1300013, 1300001, 1300047, 1300012, 1300033, 1300039, 1300009, 1300002, 1300022, 1300030, 1300032, 1300041, 1300040, 1300038, 1300037, 1300045, 1300024, 1300017, 1300026, 1300035, 1300036, 1300000, 1300016, 1300018, 1300029, 1300011, 1300042, 1300019, 1300006, 1300023, 1300025, 1300046, 1300043, 1300004, 1300007, 1300020, 1300031, 1300015, 1300041, 1300022, 1300039, 1300036, 1300040, 1300038, 1300010, 1300007, 1300016, 1300029, 1300008, 1300046, 1300009, 1300047, 1300023, 1300027, 1300004, 1300002, 1300024, 1300015, 1300017, 1300034, 1300045, 1300020, 1300037, 1300031, 1300035, 1300011, 1300033, 1300026, 1300030, 1300044, 1300003, 1300018, 1300013, 1300042, 1300028, 1300012, 1300005, 1300025, 1300043, 1300019, 1300021, 1300000, 1300001, 1300014, 1300032, 1300006, 1300008, 1300013, 1300006, 1300024, 1300032, 1300031, 1300015, 1300042, 1300004, 1300005, 1300021, 1300027, 1300016, 1300010, 1300000, 1300009, 1300029, 1300022, 1300045, 1300039, 1300019, 1300035, 1300046, 1300020, 1300028, 1300036, 1300003, 1300038, 1300002, 1300047, 1300030, 1300023]",
+  "order_sha256_note": "the ROUND24/30 field name is kept for comparability; the value is the sorted JSON dump of the 128-scenario order, not a digest",
+  "seed": 20260927
+ },
+ "diagnostic_evidence_plan": {
+  "per_batch": [
+   "weight hash before and after",
+   "module digests before and after",
+   "optimizer parameter shapes vs controller parameter shapes",
+   "frozen search/allocation checkpoint hashes",
+   "g_hat and its pairing",
+   "dual record",
+   "reduction mode and feature layout",
+   "aggregated N/M and gradient readings"
+  ],
+  "per_minibatch": [
+   "n_rows N",
+   "m_active_rows M",
+   "M/N",
+   "actor surrogate mean (arm-specific)",
+   "arm-independent surrogate mean over all rows",
+   "mean over active rows (reference)",
+   "entropy term",
+   "both critic losses",
+   "approx_kl",
+   "clip_fraction",
+   "ratio min/max",
+   "advantage mean (all and active-only)",
+   "actual lambda",
+   "pre-clip total gradient norm",
+   "post-clip total norm, clipping flag and scale",
+   "per-module pre-clip L1 and L2",
+   "non-finite flag"
+  ],
+  "pre_update_checkpoint_contents": [
+   "model",
+   "optimizer",
+   "lambda and history",
+   "episodes_done / updates / optimizer_steps",
+   "python + numpy + torch RNG state",
+   "data position (batch and its scenarios)",
+   "freeze carrying reduction mode, feature layout and round identity"
+  ],
+  "pre_update_checkpoints_saved_for_batches": [
+   0,
+   15,
+   31
+  ],
+  "record_must_not_touch": "RNG, actions and the parameter update; proved by REDUCTION_MATH.json T9, where ALL_ROWS reproduces the frozen trainer's weight hash after every optimizer step",
+  "why_b0_is_not_enough_any_more": "ROUND31 could only analyse batch 0 because only the initial milestone survived; this round saves the pre-update weights of batches 0, 15 and 31"
+ },
+ "encoder_identity": {
+  "both_arms_use": "old",
+  "collector": "r30_encoding.scoped_training_collector(controller, 'old') -- the ROUND30 collector whose tape was verified field-by-field against the frozen parent collector",
+  "deadline_column": "clip(remaining_time / 50.0, -1.0, 1.0)",
+  "encoder_object": "integrated_sar.comm_learning.features (production encoder)",
+  "feature_layout": "comm-send-state/1",
+  "new_deadline_encoding_used": false,
+  "round30_scoped_collector_source_diff": {
+   "changed_blocks": [
+    {
+     "child_lines": [
+      "        rows = [self._encoder(observation, item) for item in items]"
+     ],
+     "op": "replace",
+     "parent_lines": [
+      "        rows = [features(observation, item) for item in items]"
+     ]
+    }
+   ],
+   "changed_line_is_the_feature_row_construction": true,
+   "exactly_one_changed_line": true,
+   "method": "difflib.SequenceMatcher over blank-stripped source lines of the parent and subclass _choose_masked",
+   "note": "the shadow gate, action choice, tape schema and closure assertions are the parent's code verbatim; only the encoder used to build the rows is bound per instance",
+   "passed": true
+  }
+ },
+ "episodes_per_seed": 128,
+ "evaluation_plan": {
+  "checkpoint": "ep128 milestone of each (reduction, seed) run, fixed before launch",
+  "eval_action_rng": "sha256(\"round24-eval:<seed>:<scenario>:<mode>\")  (v2_run.eval_action_seed)",
+  "modes": {
+   "greedy": "argmax with ties to SEND (archived implementation)",
+   "sampled": "the archived masked multinomial sampler"
+  },
+  "rollouts_per_cell": 1,
+  "same_seed_does_not_mean_same_per_message_losses": "channel RNG comes from the scenario seed and the streams diverge as soon as the send sequences differ",
+  "training_action_rng": "sha256(\"sc-action:<seed>:<episode>\")           (v2_run.action_seed)"
+ },
+ "head_at_freeze": "a1c082f0a702e29cc32d50718e27f861364b36e4",
+ "inherited_behaviour_fields": {
+  "actor_kv_mode": "tokens",
+  "allocation_interval": 5,
+  "allow_release_without_suppression": false,
+  "check_release_source_stage": false,
+  "comm_ack": false,
+  "comm_budget_bytes": 29300,
+  "comm_delay_ticks": 0,
+  "comm_delivery_probability": 0.7,
+  "comm_max_wait_steps": null,
+  "comm_range": 0.3,
+  "comm_sends_per_tick": null,
+  "comm_subscribers": "all",
+  "comm_timing_mode": "policy_owned_timing",
+  "comm_urgent_wait_steps": null,
+  "command_ttl": 10.0,
+  "coordination_interval": 5,
+  "coordinator_policy": "coalition_planner",
+  "ctde_task_logit_offset": 0.0,
+  "deadline_tightness": [
+   0.5,
+   2.0
+  ],
+  "detection_radius": 5,
+  "device": "cpu",
+  "dt": 1.0,
+  "gossip_interval": 2,
+  "grid_size": 60,
+  "mock": false,
+  "num_goals": 6,
+  "obstacle_density": 0.15,
+  "piloc_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+  "quiet": true,
+  "release_redundant_members": true,
+  "rescue_per_species": 2,
+  "rescue_species": 3,
+  "residual_scale": 0.25,
+  "search_agents": 2,
+  "steps": 1000,
+  "sticky_commitments": true,
+  "suppress_recommand_own_task": true,
+  "task_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+  "task_membership_consistency": false,
+  "use_coordinator": true
+ },
+ "launch_plan": {
+  "all_launches_counted_including_failures_and_retries": true,
+  "eval": 192,
+  "first_batch_gate_uses_official_episodes_only": true,
+  "hard_cap": 1080,
+  "late_rule": 16,
+  "max_parallel_workers": 4,
+  "no_extra_smoke": true,
+  "normal_launches": 1040,
+  "reference": 64,
+  "reserve_launches": 40,
+  "synthetic_update_cap": 64,
+  "training": 768
+ },
+ "objective": {
+  "A_actor": "lambda*A_task - A_positive_cost",
+  "L_max": "-E[c] - lambda*g",
+  "advantage_standardisation": "none (the registered difference of the correctness-v2 trainer; neither component is standardised separately)",
+  "c": "C_measured / B0",
+  "delta_is_a_training_target_not_a_deployment_guarantee": true,
+  "dual": "lambda_next = max(0, lambda + eta_lambda * g_hat)",
+  "g": "E[Y_reference] - E[Y_policy] - delta",
+  "lambda_unit": "normalised cost per task"
+ },
+ "output_dir": "runs\\comm_actor_reduction_ablation_20261001",
+ "phase": "actor surrogate reduction paired ablation: pre-launch freeze",
+ "ppo_hyperparameters": {
+  "clip": 0.2,
+  "entropy_bonus": 0.01,
+  "epochs_per_batch": 4,
+  "learning_rate": 0.0003,
+  "max_grad_norm": 0.5,
+  "minibatch_steps": 256,
+  "value_coefficient": 0.5
+ },
+ "reduction_definition": {
+  "ACTIVE_ROWS": "-sum(s_i*1[i active])/max(M,1)",
+  "ALL_ROWS": "-sum(s_i for i<N)/N  (the frozen expression, verbatim)",
+  "M": "rows whose saved `actionable`/`free` set is non-empty",
+  "M_is_zero": "the numerator is already an exact zero and keeps a grad_fn, so no special branch is needed and no NaN can appear",
+  "N": "number of logged decision rows in the minibatch",
+  "active_row_rules": [
+   "recorded rows, not environment steps and not candidates",
+   "a legal sampled HOLD still counts as a free decision",
+   "forced or masked candidates never make a row active",
+   "the saved executed-action prefix decides activity; the PPO recompute does not re-sample",
+   "several free candidates in one row still count as one row"
+  ],
+  "explicitly_not_claimed": "that no other optimisation relationship is unaffected: the actor's weight relative to entropy and the critics is exactly what this ablation changes, and no fully masked row is removed from the tape, GAE, critics or minibatches",
+  "gradient_identity": "grad(ACTIVE) = (N/M) * grad(ALL) holds for the ACTOR SURROGATE term only; the loss scalar does not scale that way because a masked row's surrogate value is a non-zero constant while its gradient is exactly zero",
+  "unchanged": [
+   "task/cost advantages and their normalisation",
+   "GAE",
+   "reward timing",
+   "both critics' samples, reduction and coefficients",
+   "entropy reduction and coefficient",
+   "the lambda update and when it takes effect",
+   "PPO clipping, the KL field and the existing stop logic",
+   "minibatch construction and order",
+   "optimizer, learning rate, global clipping",
+   "network, observation, mask and environment"
+  ]
+ },
+ "reduction_math_evidence": "REDUCTION_MATH.json (11 checks, all passed, 0 launches, 24/64 synthetic optimizer steps)",
+ "remote_start_head": null,
+ "round": "32",
+ "round30_head": "915868297c08d4b01b7dfeff0ea810d5394057a3",
+ "round30_identity_audit": {
+  "clean": true,
+  "compared": {
+   "code_identity.checkpoints": {
+    "differences": {},
+    "identical": true
+   },
+   "code_identity.imported_round_modules": {
+    "differences": {},
+    "identical": true
+   },
+   "code_identity.production": {
+    "differences": {},
+    "identical": true
+   },
+   "configuration_hash": {
+    "annotation_keys_declared_in_this_round": [],
+    "annotation_only_differences": [],
+    "differences": {},
+    "identical_on_load_bearing_values": true
+   },
+   "data_order": {
+    "annotation_keys_declared_in_this_round": [
+     "order_digest_sha256",
+     "order_sha256_note"
+    ],
+    "annotation_only_differences": [
+     "order_digest_sha256",
+     "order_sha256_note"
+    ],
+    "differences": {},
+    "identical_on_load_bearing_values": true
+   },
+   "inherited_behaviour_fields": {
+    "annotation_keys_declared_in_this_round": [],
+    "annotation_only_differences": [],
+    "differences": {},
+    "identical_on_load_bearing_values": true
+   },
+   "launch_plan": {
+    "differences": {
+     "all_launches_counted_including_failures_and_retries": {
+      "round30": null,
+      "round32": true
+     },
+     "first_batch_gate_uses_official_episodes_only": {
+      "round30": null,
+      "round32": true
+     },
+     "max_parallel_workers": {
+      "round30": null,
+      "round32": 4
+     },
+     "no_extra_smoke": {
+      "round30": null,
+      "round32": true
+     }
+    },
+    "identical_except_declared": true,
+    "new_or_changed_keys": [
+     "all_launches_counted_including_failures_and_retries",
+     "first_batch_gate_uses_official_episodes_only",
+     "max_parallel_workers",
+     "no_extra_smoke"
+    ],
+    "unexpected_keys": []
+   },
+   "ppo_hyperparameters": {
+    "annotation_keys_declared_in_this_round": [],
+    "annotation_only_differences": [],
+    "differences": {},
+    "identical_on_load_bearing_values": true
+   },
+   "rule_arms": {
+    "annotation_keys_declared_in_this_round": [],
+    "annotation_only_differences": [],
+    "differences": {},
+    "identical_on_load_bearing_values": true
+   },
+   "scene_registry": {
+    "annotation_keys_declared_in_this_round": [
+     "note"
+    ],
+    "annotation_only_differences": [
+     "note"
+    ],
+    "differences": {},
+    "identical_on_load_bearing_values": true
+   },
+   "statistics_plan": {
+    "differences": {
+     "inherited_from": {
+      "round30": null,
+      "round32": "ROUND30 STATISTICS_PLAN, byte-copied; the only change is that the two arms are reductions instead of encoders"
+     }
+    },
+    "identical_except_declared": true,
+    "new_or_changed_keys": [
+     "inherited_from"
+    ],
+    "unexpected_keys": []
+   },
+   "train_seeds": {
+    "annotation_keys_declared_in_this_round": [],
+    "annotation_only_differences": [],
+    "differences": {},
+    "identical_on_load_bearing_values": true
+   },
+   "wiring_constants": {
+    "annotation_keys_declared_in_this_round": [],
+    "annotation_only_differences": [],
+    "differences": {},
+    "identical_on_load_bearing_values": true
+   }
+  },
+  "problems": [],
+  "reference": "runs\\comm_deadline_encoding_ablation_20260930\\CONFIG_AND_MODEL_MANIFEST.json",
+  "reference_freeze_sha256": "b05f07bbfe6ffe8c7c321754f4a72c826cddaffd3809c4a66456ef93c61ba086",
+  "reference_round30_head": "915868297c08d4b01b7dfeff0ea810d5394057a3",
+  "registered_differences": [
+   {
+    "difference": "round identity, branch, head and output directory (r32_* cells)",
+    "where": "this round's own directory; ROUND24/30/31 rows, logs and weights are never written"
+   },
+   {
+    "difference": "the two arms are surrogate reductions (ALL_ROWS / ACTIVE_ROWS) instead of encoder layouts",
+    "where": "r32_trainer.actor_surrogate_mean, registered by the block-classified source diff; the encoder is pinned to ROUND30's old arm for both arms"
+   },
+   {
+    "difference": "diagnostic evidence added: per-minibatch N/M/loss/KL/clip/gradient-norm reads and the pre-update checkpoints of batches 0/15/31",
+    "where": "r32_trainer.ppo_update passive reads and r32_train.save_immutable; proved not to change the update by REDUCTION_MATH.json T9"
+   },
+   {
+    "difference": "evaluation arrangement: 2 reductions x 3 seeds x 2 modes x 16 dev scenes = 192",
+    "where": "the same shape as ROUND30, with reductions replacing encoder arms"
+   }
+  ]
+ },
+ "round31_heads": {
+  "delivery_commit": "614df51709a8d82525405b46468a537f4ccd259e",
+  "execution_basis_commit": "c49a678e051832175a8980bd15b40b74a89a4552"
+ },
+ "rule_arms": {
+  "always_hold": {
+   "params": {},
+   "policy": "always_hold"
+  },
+  "event": {
+   "params": {
+    "progress_threshold": 0.2,
+    "urgency_time": 25.0
+   },
+   "policy": "event"
+  },
+  "late_discovery_gate": {
+   "params": {
+    "cut_steps": 147.0
+   },
+   "policy": "late_discovery_gate"
+  },
+  "periodic_20": {
+   "params": {
+    "interval": 20
+   },
+   "policy": "periodic"
+  },
+  "random_send": {
+   "params": {
+    "seed_from_scenario": true,
+    "send_probability": 0.5
+   },
+   "policy": "random_send"
+  }
+ },
+ "runner_seam_diff": {
+  "changed_blocks": [
+   {
+    "child_lines": [
+     "def run_training_episode(controller: Any, *, reduction: str, training_seed: int,",
+     "episode_index: int, scenario_seed: int,",
+     "lam: float) -> dict[str, Any]:",
+     "\"\"\"One training rollout on the frozen old encoder arm; only the reduction differs.",
+     "No weight is touched here; the PPO update happens between episodes (r32_train calls the",
+     "reduction-aware trainer with the frozen batch/GAE/likelihood machinery)."
+    ],
+    "function": "run_training_episode",
+    "opcode": "replace",
+    "parent_lines": [
+     "def run_training_episode(controller: Any, *, arm: str, training_seed: int, episode_index: int,",
+     "scenario_seed: int, lam: float) -> dict[str, Any]:",
+     "\"\"\"One training rollout on the bound encoder arm: sampling collector, per-episode action RNG.",
+     "No weight is touched here; the PPO update happens between episodes (r30_train reuses the",
+     "frozen v2_trainer update)."
+    ]
+   },
+   {
+    "child_lines": [
+     "label = f\"train_{reduction}_s{training_seed}_e{episode_index}\""
+    ],
+    "function": "run_training_episode",
+    "opcode": "replace",
+    "parent_lines": [
+     "label = f\"train_{arm}_s{training_seed}_e{episode_index}\""
+    ]
+   },
+   {
+    "child_lines": [
+     "collector = enc.scoped_training_collector(controller, ENCODER_ARM)"
+    ],
+    "function": "run_training_episode",
+    "opcode": "replace",
+    "parent_lines": [
+     "collector = enc.scoped_training_collector(controller, arm)"
+    ]
+   },
+   {
+    "child_lines": [
+     "tag=f\"train_{reduction}_s{training_seed}_e{episode_index}\")"
+    ],
+    "function": "run_training_episode",
+    "opcode": "replace",
+    "parent_lines": [
+     "tag=f\"train_{arm}_s{training_seed}_e{episode_index}\")"
+    ]
+   },
+   {
+    "child_lines": [
+     "row[\"reduction\"] = str(reduction)",
+     "row[\"arm\"] = str(reduction)      # cell identity for the ledger and the statistics",
+     "row[\"encoder_arm\"] = ENCODER_ARM",
+     "row[\"feature_layout\"] = enc.ENCODERS[ENCODER_ARM][\"layout\"]"
+    ],
+    "function": "run_training_episode",
+    "opcode": "replace",
+    "parent_lines": [
+     "row[\"arm\"] = str(arm)",
+     "row[\"feature_layout\"] = enc.ENCODERS[arm][\"layout\"]"
+    ]
+   },
+   {
+    "child_lines": [
+     "row[\"lambda\"] = float(lam)       # the trainer's contract key (frozen for the whole batch)"
+    ],
+    "function": "run_training_episode",
+    "opcode": "replace",
+    "parent_lines": [
+     "row[\"lambda\"] = float(lam)   # the trainer's contract key (frozen for the whole batch)"
+    ]
+   },
+   {
+    "child_lines": [
+     "def run_eval(controller: Any, *, reduction: str, training_seed: int, timepoint: str, mode: str,"
+    ],
+    "function": "run_eval",
+    "opcode": "replace",
+    "parent_lines": [
+     "def run_eval(controller: Any, *, arm: str, training_seed: int, timepoint: str, mode: str,"
+    ]
+   },
+   {
+    "child_lines": [
+     "label = f\"eval_{reduction}_s{training_seed}_{block}_s{scenario_seed}\""
+    ],
+    "function": "run_eval",
+    "opcode": "replace",
+    "parent_lines": [
+     "label = f\"eval_{arm}_s{training_seed}_{block}_s{scenario_seed}\""
+    ]
+   },
+   {
+    "child_lines": [
+     "collector = enc.scoped_eval_collector(controller, ENCODER_ARM, greedy=(mode == \"greedy\"))"
+    ],
+    "function": "run_eval",
+    "opcode": "replace",
+    "parent_lines": [
+     "collector = enc.scoped_eval_collector(controller, arm, greedy=(mode == \"greedy\"))"
+    ]
+   },
+   {
+    "child_lines": [
+     "tag=f\"eval_{reduction}_s{training_seed}_{block}\")"
+    ],
+    "function": "run_eval",
+    "opcode": "replace",
+    "parent_lines": [
+     "tag=f\"eval_{arm}_s{training_seed}_{block}\")"
+    ]
+   },
+   {
+    "child_lines": [
+     "row[\"reduction\"] = str(reduction)",
+     "row[\"arm\"] = str(reduction)",
+     "row[\"encoder_arm\"] = ENCODER_ARM",
+     "row[\"feature_layout\"] = enc.ENCODERS[ENCODER_ARM][\"layout\"]"
+    ],
+    "function": "run_eval",
+    "opcode": "replace",
+    "parent_lines": [
+     "row[\"arm\"] = str(arm)",
+     "row[\"feature_layout\"] = enc.ENCODERS[arm][\"layout\"]"
+    ]
+   }
+  ],
+  "encoder_arm_is_fixed_to_round30_old": true,
+  "encoder_is_production_clip_over_50": true,
+  "method": "difflib per function against the ROUND30 runner that is itself the registered copy of v2_run._run_episode; every changed line must be a declared seam",
+  "passed": true,
+  "run_episode_body_identical_modulo_module_alias": true,
+  "unexplained_lines": []
+ },
+ "scene_registry": {
+  "development": [
+   1301000,
+   1301001,
+   1301002,
+   1301003,
+   1301004,
+   1301005,
+   1301006,
+   1301007,
+   1301008,
+   1301009,
+   1301010,
+   1301011,
+   1301012,
+   1301013,
+   1301014,
+   1301015
+  ],
+  "note": "already-used blocks; this is a development ablation, not an unseen test set and not an independent confirmation; the ROUND25 evaluation block 1400000..1400063 is not used for parameter, checkpoint or stopping decisions in this round; the sealed blocks 800000..800399 and 900000..900199 are not touched",
+  "training": [
+   1300000,
+   1300001,
+   1300002,
+   1300003,
+   1300004,
+   1300005,
+   1300006,
+   1300007,
+   1300008,
+   1300009,
+   1300010,
+   1300011,
+   1300012,
+   1300013,
+   1300014,
+   1300015,
+   1300016,
+   1300017,
+   1300018,
+   1300019,
+   1300020,
+   1300021,
+   1300022,
+   1300023,
+   1300024,
+   1300025,
+   1300026,
+   1300027,
+   1300028,
+   1300029,
+   1300030,
+   1300031,
+   1300032,
+   1300033,
+   1300034,
+   1300035,
+   1300036,
+   1300037,
+   1300038,
+   1300039,
+   1300040,
+   1300041,
+   1300042,
+   1300043,
+   1300044,
+   1300045,
+   1300046,
+   1300047
+  ]
+ },
+ "spec": "execution basis EXECUTION_BASIS.md (sha256 49d52f9511400e68085cc8872be7853e8b0239ee8821f9053bd2fb20b0638780)",
+ "statistics_plan": {
+  "cluster_unit": "the 16 development scenes (paired per training seed and mode)",
+  "coverage_note": "a per-seed descriptive 95% interval covers scene uncertainty under the fixed trained weights only; it does not cover training-seed uncertainty, and a single sampled rollout per scene does not estimate its full sampling variance",
+  "estimator": "values[indices].mean(axis=1)",
+  "hand_check": "an independent hand-computed counterexample is kept in r30_stats.py",
+  "index_matrix": "one shared 10000 x 16 index matrix reused by every comparison",
+  "inherited_from": "ROUND30 STATISTICS_PLAN, byte-copied; the only change is that the two arms are reductions instead of encoders",
+  "quantile": "linear",
+  "resample_seed": 20260930,
+  "resampler": "numpy PCG64",
+  "resamples": 10000,
+  "scene_order": "ascending scenario seed"
+ },
+ "train_seeds": [
+  11,
+  22,
+  33
+ ],
+ "trainer_identity_assertions": {
+  "actor_advantage_is_the_frozen_cost_math_object": true,
+  "batch_g_hat_is_frozen_object": true,
+  "batch_samples_is_frozen_object": true,
+  "bundle_is_frozen_object": true,
+  "cost_math_module_is_the_frozen_one": true,
+  "dual_update_is_frozen_object": true,
+  "gae_is_the_frozen_cost_math_object": true,
+  "gae_schema_inherited": true,
+  "likelihood_alignment_is_frozen_object": true,
+  "loss_version_inherited": true,
+  "prefix_totals_is_frozen_object": true,
+  "registered_scalar_values": {
+   "B0_BYTES": 10000.0,
+   "CLIP": 0.2,
+   "DELTA": 0.0,
+   "ENTROPY_BONUS": 0.01,
+   "EPOCHS_PER_BATCH": 4,
+   "ETA_LAMBDA": 0.05,
+   "GAE_LAMBDA": 0.95,
+   "GAMMA": 1.0,
+   "LAMBDA_INIT": 1.0,
+   "LEARNING_RATE": 0.0003,
+   "LOG_PROB_TOLERANCE": 1e-06,
+   "MAX_GRAD_NORM": 0.5,
+   "MINIBATCH_STEPS": 256,
+   "VALUE_COEFFICIENT": 0.5
+  },
+  "registered_scalars_are_the_frozen_module": true,
+  "state_schema_inherited": true,
+  "trainer_tag_inherited": true
+ },
+ "trainer_source_diff": {
+  "block_categories": {
+   "passive_read": 4,
+   "research_variable": 8
+  },
+  "changed_blocks": [
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "episodes: list[dict[str, Any]], *, update_index: int,",
+     "reduction: str) -> dict[str, Any]:"
+    ],
+    "opcode": "replace",
+    "parent_lines": [
+     "episodes: list[dict[str, Any]], *, update_index: int) -> dict[str, Any]:"
+    ]
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "if reduction not in REDUCTIONS:",
+     "raise ValueError(f\"update {update_index}: unknown reduction {reduction!r}\")"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "\"reduction\": reduction, \"minibatch_reads\": [],"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "passive_read",
+    "child_lines": [
+     "minibatch_reads: list[dict[str, Any]] = []",
+     "surrogate_all_reads: list[float] = []",
+     "active_share_reads: list[float] = []",
+     "clipping_reads: list[int] = []",
+     "non_finite_reads: list[int] = []"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "passive_read",
+    "child_lines": [
+     "lambdas = sorted({float(episode[\"lambda\"]) for episode in episodes})",
+     "if len(lambdas) != 1:",
+     "raise RuntimeError(f\"update {update_index}: the batch's episodes did not share one \"",
+     "f\"lambda: {lambdas}\")",
+     "batch_lambda = lambdas[0]"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "row_active = row_active_mask(chunk)",
+     "actor_surrogate, n_rows, m_active = actor_surrogate_mean(",
+     "surrogate, row_active, reduction)",
+     "loss = (-actor_surrogate"
+    ],
+    "opcode": "replace",
+    "parent_lines": [
+     "loss = (-surrogate.mean()"
+    ]
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "pre_clip_module_l1 = {module_name: _module_grad_l1(module)",
+     "for module_name, module in modules}",
+     "pre_clip_module_l2 = {module_name: _module_grad_l2(module)",
+     "for module_name, module in modules}",
+     "surrogate_all = float(surrogate.mean().detach().item())",
+     "read_row: dict[str, Any] = {",
+     "\"minibatch\": minibatches,",
+     "\"epoch\": int(_epoch),",
+     "\"reduction\": reduction,",
+     "\"lambda\": batch_lambda,",
+     "\"n_rows\": int(n_rows),",
+     "\"m_active_rows\": int(m_active),",
+     "\"m_over_n\": round(m_active / n_rows, 9) if n_rows else None,",
+     "\"actor_surrogate_mean\": float(actor_surrogate.detach().item()),",
+     "\"actor_surrogate_mean_all_rows_reference\": surrogate_all,",
+     "\"actor_surrogate_mean_active_only_reference\": float(",
+     "surrogate[row_active.bool()].mean().detach().item()) if m_active else None,",
+     "\"entropy_term\": float(entropy_t.mean().detach().item()),",
+     "\"value_loss_task\": float(value_task_loss.detach().item()),",
+     "\"value_loss_cost\": float(value_cost_loss.detach().item()),",
+     "\"loss_total\": float(loss.detach().item()),",
+     "\"approx_kl\": float((old_log_prob - new_log_prob_t).mean().item()),",
+     "\"clip_fraction\": float(((ratio - 1.0).abs() > common.CLIP).float().mean().item()),",
+     "\"ratio_min\": float(ratio.detach().min().item()),",
+     "\"ratio_max\": float(ratio.detach().max().item()),",
+     "\"advantage_mean\": float(advantage.mean().item()),",
+     "\"advantage_mean_active_only\": float(",
+     "advantage[row_active.bool()].mean().item()) if m_active else None,",
+     "\"pre_clip_module_l1\": pre_clip_module_l1,",
+     "\"pre_clip_module_l2\": pre_clip_module_l2,",
+     "}"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "read_row[\"pre_clip_total_norm\"] = float(norm.detach().item())",
+     "read_row[\"post_clip_total_norm\"] = min(read_row[\"pre_clip_total_norm\"],",
+     "float(common.MAX_GRAD_NORM))",
+     "read_row[\"clipping_triggered\"] = bool(read_row[\"pre_clip_total_norm\"]",
+     "> float(common.MAX_GRAD_NORM))",
+     "read_row[\"clip_scale\"] = (round(read_row[\"post_clip_total_norm\"]",
+     "/ read_row[\"pre_clip_total_norm\"], 9)",
+     "if read_row[\"pre_clip_total_norm\"] > 0 else 1.0)",
+     "read_row[\"all_finite\"] = bool(all(",
+     "_finite_or_none(read_row[key]) for key in (",
+     "\"actor_surrogate_mean\", \"entropy_term\", \"value_loss_task\", \"value_loss_cost\",",
+     "\"loss_total\", \"approx_kl\", \"clip_fraction\", \"pre_clip_total_norm\",",
+     "\"ratio_min\", \"ratio_max\", \"advantage_mean\"))",
+     "and all(_finite_or_none(value) for value in pre_clip_module_l1.values())",
+     "and all(_finite_or_none(value) for value in pre_clip_module_l2.values()))",
+     "minibatch_reads.append({",
+     "key: (round(value, 12) if isinstance(value, float) else value)",
+     "if key not in (\"pre_clip_module_l1\", \"pre_clip_module_l2\")",
+     "else {name: round(amount, 12) for name, amount in value.items()}",
+     "for key, value in read_row.items()})",
+     "surrogate_all_reads.append(surrogate_all)",
+     "active_share_reads.append(m_active / n_rows if n_rows else 0.0)",
+     "clipping_reads.append(int(read_row[\"clipping_triggered\"]))",
+     "non_finite_reads.append(int(not read_row[\"all_finite\"]))"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "totals[\"surrogate\"] += float(actor_surrogate.item())"
+    ],
+    "opcode": "replace",
+    "parent_lines": [
+     "totals[\"surrogate\"] += float(surrogate.mean().item())"
+    ]
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "\"reduction\": reduction,",
+     "\"lambda\": batch_lambda,"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "passive_read",
+    "child_lines": [
+     "\"policy_surrogate_all_rows_reference\": round(",
+     "sum(surrogate_all_reads) / len(surrogate_all_reads), 6),"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "passive_read",
+    "child_lines": [
+     "\"minibatch_reads\": minibatch_reads,",
+     "\"active_row_share_mean\": round(sum(active_share_reads) / len(active_share_reads), 6),",
+     "\"clipping_minibatches\": sum(clipping_reads),",
+     "\"non_finite_minibatches\": sum(non_finite_reads),"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   }
+  ],
+  "child_signature_line": "def ppo_update(controller: Any, optimizer: torch.optim.Optimizer,",
+  "method": "difflib.SequenceMatcher over comment-stripped source lines of v2_trainer.ppo_update and r32_trainer.ppo_update; each changed BLOCK is classified as research variable / reduction plumbing / passive read, and any block that fits none is reported instead of being waved through",
+  "note": "the ablation deliberately changes the actor's weight relative to entropy and the two critics; nothing else in the loss expression is touched",
+  "parent_signature_line": "def ppo_update(controller: Any, optimizer: torch.optim.Optimizer,",
+  "passed": true,
+  "removed_actor_reduction_line": [
+   "loss = (-surrogate.mean()"
+  ],
+  "removed_line_categories": {
+   "episodes: list[dict[str, Any]], *, update_index: int) -> dict[str, Any]:": "reduction_plumbing -- the new reduction keyword argument",
+   "loss = (-surrogate.mean()": "research_variable -- the actor surrogate reduction itself",
+   "totals[\"surrogate\"] += float(surrogate.mean().item())": "reported_field_only -- the policy_surrogate accumulator now reads the arm's own mean; for ALL_ROWS that is the same value (proved by T9)"
+  },
+  "removed_parent_lines": [
+   "episodes: list[dict[str, Any]], *, update_index: int) -> dict[str, Any]:",
+   "loss = (-surrogate.mean()",
+   "totals[\"surrogate\"] += float(surrogate.mean().item())"
+  ],
+  "research_variable_blocks": [
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "episodes: list[dict[str, Any]], *, update_index: int,",
+     "reduction: str) -> dict[str, Any]:"
+    ],
+    "opcode": "replace",
+    "parent_lines": [
+     "episodes: list[dict[str, Any]], *, update_index: int) -> dict[str, Any]:"
+    ]
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "if reduction not in REDUCTIONS:",
+     "raise ValueError(f\"update {update_index}: unknown reduction {reduction!r}\")"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "\"reduction\": reduction, \"minibatch_reads\": [],"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "row_active = row_active_mask(chunk)",
+     "actor_surrogate, n_rows, m_active = actor_surrogate_mean(",
+     "surrogate, row_active, reduction)",
+     "loss = (-actor_surrogate"
+    ],
+    "opcode": "replace",
+    "parent_lines": [
+     "loss = (-surrogate.mean()"
+    ]
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "pre_clip_module_l1 = {module_name: _module_grad_l1(module)",
+     "for module_name, module in modules}",
+     "pre_clip_module_l2 = {module_name: _module_grad_l2(module)",
+     "for module_name, module in modules}",
+     "surrogate_all = float(surrogate.mean().detach().item())",
+     "read_row: dict[str, Any] = {",
+     "\"minibatch\": minibatches,",
+     "\"epoch\": int(_epoch),",
+     "\"reduction\": reduction,",
+     "\"lambda\": batch_lambda,",
+     "\"n_rows\": int(n_rows),",
+     "\"m_active_rows\": int(m_active),",
+     "\"m_over_n\": round(m_active / n_rows, 9) if n_rows else None,",
+     "\"actor_surrogate_mean\": float(actor_surrogate.detach().item()),",
+     "\"actor_surrogate_mean_all_rows_reference\": surrogate_all,",
+     "\"actor_surrogate_mean_active_only_reference\": float(",
+     "surrogate[row_active.bool()].mean().detach().item()) if m_active else None,",
+     "\"entropy_term\": float(entropy_t.mean().detach().item()),",
+     "\"value_loss_task\": float(value_task_loss.detach().item()),",
+     "\"value_loss_cost\": float(value_cost_loss.detach().item()),",
+     "\"loss_total\": float(loss.detach().item()),",
+     "\"approx_kl\": float((old_log_prob - new_log_prob_t).mean().item()),",
+     "\"clip_fraction\": float(((ratio - 1.0).abs() > common.CLIP).float().mean().item()),",
+     "\"ratio_min\": float(ratio.detach().min().item()),",
+     "\"ratio_max\": float(ratio.detach().max().item()),",
+     "\"advantage_mean\": float(advantage.mean().item()),",
+     "\"advantage_mean_active_only\": float(",
+     "advantage[row_active.bool()].mean().item()) if m_active else None,",
+     "\"pre_clip_module_l1\": pre_clip_module_l1,",
+     "\"pre_clip_module_l2\": pre_clip_module_l2,",
+     "}"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "read_row[\"pre_clip_total_norm\"] = float(norm.detach().item())",
+     "read_row[\"post_clip_total_norm\"] = min(read_row[\"pre_clip_total_norm\"],",
+     "float(common.MAX_GRAD_NORM))",
+     "read_row[\"clipping_triggered\"] = bool(read_row[\"pre_clip_total_norm\"]",
+     "> float(common.MAX_GRAD_NORM))",
+     "read_row[\"clip_scale\"] = (round(read_row[\"post_clip_total_norm\"]",
+     "/ read_row[\"pre_clip_total_norm\"], 9)",
+     "if read_row[\"pre_clip_total_norm\"] > 0 else 1.0)",
+     "read_row[\"all_finite\"] = bool(all(",
+     "_finite_or_none(read_row[key]) for key in (",
+     "\"actor_surrogate_mean\", \"entropy_term\", \"value_loss_task\", \"value_loss_cost\",",
+     "\"loss_total\", \"approx_kl\", \"clip_fraction\", \"pre_clip_total_norm\",",
+     "\"ratio_min\", \"ratio_max\", \"advantage_mean\"))",
+     "and all(_finite_or_none(value) for value in pre_clip_module_l1.values())",
+     "and all(_finite_or_none(value) for value in pre_clip_module_l2.values()))",
+     "minibatch_reads.append({",
+     "key: (round(value, 12) if isinstance(value, float) else value)",
+     "if key not in (\"pre_clip_module_l1\", \"pre_clip_module_l2\")",
+     "else {name: round(amount, 12) for name, amount in value.items()}",
+     "for key, value in read_row.items()})",
+     "surrogate_all_reads.append(surrogate_all)",
+     "active_share_reads.append(m_active / n_rows if n_rows else 0.0)",
+     "clipping_reads.append(int(read_row[\"clipping_triggered\"]))",
+     "non_finite_reads.append(int(not read_row[\"all_finite\"]))"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "totals[\"surrogate\"] += float(actor_surrogate.item())"
+    ],
+    "opcode": "replace",
+    "parent_lines": [
+     "totals[\"surrogate\"] += float(surrogate.mean().item())"
+    ]
+   },
+   {
+    "category": "research_variable",
+    "child_lines": [
+     "\"reduction\": reduction,",
+     "\"lambda\": batch_lambda,"
+    ],
+    "opcode": "insert",
+    "parent_lines": []
+   }
+  ],
+  "unexplained_blocks": [],
+  "unexplained_removed_lines": []
+ },
+ "wiring_constants": {
+  "b0_bytes": 10000.0,
+  "data_order_seed": 20260927,
+  "delta": 0.0,
+  "episodes_per_seed": 128,
+  "episodes_per_update": 4,
+  "eta_lambda": 0.05,
+  "gae_lambda": 0.95,
+  "gamma": 1.0,
+  "lambda_init": 1.0,
+  "log_prob_tolerance": 1e-06,
+  "steps_per_episode": 1000
+ }
+}

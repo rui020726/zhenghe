@@ -85,6 +85,7 @@ REDUCTIONS: dict[str, dict[str, Any]] = {
     },
 }
 ARM_ORDER = ("ALL_ROWS", "ACTIVE_ROWS")
+MODES = ("greedy", "sampled")
 
 # ------------------------------------------------------------------ 启动额度（执行依据 §4.3）
 REFERENCE_LAUNCHES = len(TRAINING_SCENARIOS) + len(DEVELOPMENT_SCENARIOS)   # 64
@@ -297,26 +298,39 @@ def synthetic_updates_used() -> int:
 def book_synthetic_updates(count: int, note: str, key: str = "") -> int:
     """Count pure synthetic optimizer steps against their own cap; never an environment start.
 
-    `key` makes a booking idempotent, so re-running a zero-launch test suite does not double-book
-    the same synthetic steps: the cap protects the work, not the number of retries.
+    The cap bounds the distinct synthetic work that was authorised, so a `key` is booked once.
+    Repeated executions during development are not hidden: they are counted separately in
+    `performed_repeats`, so the artefact reports both "distinct booked steps" and "steps actually
+    performed across all runs of the test suite".
     """
     with _FileLock():
         SYNTHETIC_BOOK.parent.mkdir(parents=True, exist_ok=True)
-        events = (read_json(SYNTHETIC_BOOK).get("events") or []) if SYNTHETIC_BOOK.exists() else []
-        if key and any(event.get("key") == key for event in events):
-            return sum(int(event.get("count") or 0) for event in events)
+        book = read_json(SYNTHETIC_BOOK) if SYNTHETIC_BOOK.exists() else {}
+        events = book.get("events") or []
         used = sum(int(event.get("count") or 0) for event in events)
-        if used + count > SYNTHETIC_UPDATE_CAP:
-            raise RuntimeError(f"synthetic optimizer update cap {SYNTHETIC_UPDATE_CAP} reached "
-                               f"at {used}; refusing {count} more ({note})")
-        events = events + [{"count": count, "note": note, "key": key}]
+        repeats = int(book.get("performed_repeats") or 0)
+        match = next((event for event in events if key and event.get("key") == key), None)
+        if match is not None:
+            match["performed_times"] = int(match.get("performed_times", 1)) + 1
+            repeats += int(match.get("count") or 0)
+        else:
+            if used + count > SYNTHETIC_UPDATE_CAP:
+                raise RuntimeError(
+                    f"synthetic optimizer update cap {SYNTHETIC_UPDATE_CAP} reached at {used}; "
+                    f"refusing {count} more ({note})")
+            used += count
+            events = events + [{"count": count, "note": note, "key": key, "performed_times": 1}]
         SYNTHETIC_BOOK.write_text(json.dumps({
-            "used": used + count, "cap": SYNTHETIC_UPDATE_CAP,
-            "note": "pure synthetic optimizer.step inside tests only; no environment is "
-                    "constructed and these are booked separately from the 1040 launch quota",
+            "used": used, "cap": SYNTHETIC_UPDATE_CAP, "performed_repeats": repeats,
+            "performed_total": used + repeats,
+            "note": "pure synthetic optimizer.step inside zero-launch tests only; no environment "
+                    "is constructed and these are booked separately from the 1040 launch quota. "
+                    "`used` counts distinct keyed bookings (the authorised bound); "
+                    "`performed_total` also counts repeated executions of the same keyed step "
+                    "during development.",
             "events": events},
             ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
-        return used + count
+        return used
 
 
 # ------------------------------------------------------------------ 代码身份
@@ -357,6 +371,7 @@ HARNESS_MODULES = (
     "r32_freeze.py",
     "r32_stats.py",
     "r32_curves.py",
+    "r32_mechanism.py",
     "r32_manifest.py",
     "r32_verify.py",
     "r32_verdict.py",
@@ -386,6 +401,11 @@ def code_identity() -> dict[str, Any]:
     payload["freeze_sha256"] = hashlib.sha256(json.dumps(
         payload, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
     return payload
+
+
+def round30_manifest() -> dict[str, Any]:
+    """ROUND30's full frozen manifest (the reference for the identity audit)."""
+    return read_json(R30_DIR / "CONFIG_AND_MODEL_MANIFEST.json")
 
 
 def round30_frozen_code_identity() -> dict[str, Any]:

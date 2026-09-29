@@ -1,0 +1,168 @@
+{
+ "environment_launches": 0,
+ "gates": {
+  "active_semantics_on_real_tapes": true,
+  "configuration_hash_unchanged": true,
+  "data_order_unchanged": true,
+  "identity_sections_unchanged": true,
+  "ledger_arithmetic": true,
+  "reduction_math_passed": true,
+  "restore_contract": true,
+  "round30_audit_clean": true,
+  "runner_seam_clean": true,
+  "synthetic_within_cap": true,
+  "trainer_source_clean": true
+ },
+ "identity": {
+  "code_identity_sections": {
+   "checkpoints": {
+    "compared": 2,
+    "differing_keys": [],
+    "identical": true
+   },
+   "imported_round_modules": {
+    "compared": 13,
+    "differing_keys": [],
+    "identical": true
+   },
+   "production": {
+    "compared": 8,
+    "differing_keys": [],
+    "identical": true
+   }
+  },
+  "configuration_hash_matches_round30": true,
+  "configuration_hash_value": "e9b2c067db5951f2",
+  "data_order_digest": "346f2cdde8d658f9",
+  "data_order_first_8": [
+   1300027,
+   1300014,
+   1300028,
+   1300044,
+   1300003,
+   1300010,
+   1300005,
+   1300008
+  ],
+  "data_order_matches_round30_record": true,
+  "manifest_written": true,
+  "round30_audit_problems": [],
+  "round30_difference_audit_clean": true,
+  "runner_seam_clean": true,
+  "trainer_source_clean": true
+ },
+ "ledger_arithmetic": {
+  "booked_so_far": 0,
+  "cells_and_shards": [
+   {
+    "reduction": "ALL_ROWS",
+    "seed": 11
+   },
+   {
+    "reduction": "ALL_ROWS",
+    "seed": 22
+   },
+   {
+    "reduction": "ALL_ROWS",
+    "seed": 33
+   },
+   {
+    "reduction": "ACTIVE_ROWS",
+    "seed": 11
+   },
+   {
+    "reduction": "ACTIVE_ROWS",
+    "seed": 22
+   },
+   {
+    "reduction": "ACTIVE_ROWS",
+    "seed": 33
+   }
+  ],
+  "eval": 192,
+  "eval_is_2_arms_3_seeds_2_modes_16": true,
+  "hard_cap": 1080,
+  "hard_cap_is_normal_plus_reserve": true,
+  "late_rule": 16,
+  "max_parallel_workers": 4,
+  "normal_total": 1040,
+  "reference": 64,
+  "reserve": 40,
+  "sealed_blocks_absent_from_plans": true,
+  "seals_untouched": "800000..800399 and 900000..900199 never appear in this round's scenario lists",
+  "shards_are_disjoint": true,
+  "total_matches_parts": true,
+  "training": 768,
+  "training_is_2_arms_3_seeds_128": true
+ },
+ "new_streams": 0,
+ "passed": true,
+ "real_training_updates": 0,
+ "reduction_math_reference": {
+  "file": "REDUCTION_MATH.json",
+  "passed": true
+ },
+ "reduction_semantics": {
+  "M_zero_safe_by_construction": true,
+  "actionable_equals_free_everywhere": true,
+  "active_rows": 39,
+  "archived_rows_used": 1487,
+  "arm_definitions": {
+   "ACTIVE_ROWS": {
+    "actor_reduction": "sum(s_i for rows with >=1 free candidate) / M, M=0 -> exact zero",
+    "encoder_arm": "old",
+    "feature_layout": "comm-send-state/1",
+    "implementation": "(surrogate * row_active).sum() / max(M, 1); row_active is the saved tape's non-empty `actionable`/`free` set"
+   },
+   "ALL_ROWS": {
+    "actor_reduction": "sum(s_i for every logged row) / N",
+    "encoder_arm": "old",
+    "feature_layout": "comm-send-state/1",
+    "implementation": "the frozen v2_trainer expression -surrogate.mean() verbatim"
+   }
+  },
+  "fully_masked_rows": 1448,
+  "hold_rows_are_active": true,
+  "inactive_row_actor_gradient_max_abs": 0.0,
+  "inactive_row_likelihood_value": 0.0,
+  "m_over_n": 0.026227,
+  "masked_candidates_never_in_send_probabilities": true,
+  "rows_with_only_HOLD_on_free_candidates": 4,
+  "samples_equal_rows_no_row_dropped": true,
+  "tape_files": [
+   "r30_train_old_s11_e0_s1300027_a0.json",
+   "r30_train_old_s11_e100_s1300032_a100.json",
+   "r30_train_old_s11_e101_s1300031_a101.json",
+   "r30_train_old_s11_e102_s1300015_a102.json",
+   "r30_train_old_s11_e103_s1300042_a103.json",
+   "r30_train_old_s11_e104_s1300004_a104.json"
+  ]
+ },
+ "restore_contract": {
+  "archived_round30_checkpoint_refused": true,
+  "cross_reduction_resume_refused": true,
+  "frozen_v2_loader_on_this_payload": {
+   "error": null,
+   "meaning": "the v2 trainer's own schema checks pass because this payload keeps the inherited contract tags; the actual barrier is the freeze block, which carries round=32 + reduction + feature layout and differs per round, and the r32 loader additionally demands reduction_mode. Registered as a fact rather than forced to be a refusal.",
+   "rejects": false
+  },
+  "likelihood_guard_still_fires_on_a_mismatched_tape": {
+   "detail": "update 0: the rollout's logged probability does not describe the action that was drawn: {'samples': 66, 'max_abs_gap': 1.3105721473693848, 'tolerance': 1e-06, 'passed': False}",
+   "refused": true
+  },
+  "minibatches_per_probe_call": 4,
+  "payload_records_reduction": true,
+  "probe_rows_from": "archived ROUND30 old-arm training rows/tapes (0 new launches); the update path is exercised on the weights that actually produced them",
+  "restored_continuation_matches_uninterrupted": true,
+  "restored_hash": "513c3178f20ca20d8dd2e5ea36e0b45fc4d33b37fb6c4eb39a375be0c30c242d",
+  "rng_state_serialisable": true,
+  "same_mode_roundtrip_weights_equal": true,
+  "samples_in_probe_batch": 66,
+  "synthetic_steps_before": 24,
+  "synthetic_steps_used": 32,
+  "training_state_records_reduction": "ALL_ROWS",
+  "uninterrupted_hash": "513c3178f20ca20d8dd2e5ea36e0b45fc4d33b37fb6c4eb39a375be0c30c242d"
+ },
+ "round": "32",
+ "section": "pre-launch preflight (0 launches)"
+}
