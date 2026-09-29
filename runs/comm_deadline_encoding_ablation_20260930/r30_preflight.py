@@ -118,6 +118,16 @@ def main() -> int:
     case = Case()
     torch.manual_seed(0)
 
+    # Every Adam step in this process is a synthetic update (no environment is ever built here);
+    # the wrapper counts them all, archived suites and this round's own alike.
+    original_step = torch.optim.Adam.step
+
+    def counted_step(self, *args: Any, **kwargs: Any) -> Any:
+        case.synthetic_optimizer_steps += 1
+        return original_step(self, *args, **kwargs)
+
+    torch.optim.Adam.step = counted_step
+
     # A legal observation whose candidate remaining times make both encodings visible.
     items = [
         make_item("piloc-e1-target-0", remaining=200.0, charge=2400, executable=True),
@@ -140,8 +150,12 @@ def main() -> int:
     tape_old = tape_of("old")
     tape_new = tape_of("new")
     case.check(tape_old["targets"] == tape_new["targets"], "candidate sets must match")
-    case.check(tape_old["masked"] == tape_new["masked"], "masked sets must match")
-    case.check(tape_old["actionable"] == tape_new["actionable"], "actionable sets must match")
+    # The mask is stateful inside a step (a sampled/greedy SEND spends the shadow credit), so
+    # masked/actionable may legitimately differ once the arms' actions differ; they must match
+    # exactly whenever the action dicts match.
+    if tape_old["actions"] == tape_new["actions"]:
+        case.check(tape_old["masked"] == tape_new["masked"], "masked sets must match")
+        case.check(tape_old["actionable"] == tape_new["actionable"], "actionable sets must match")
     for index in range(len(tape_old["features"])):
         for column in range(19):
             if column == enc.DEADLINE_COLUMN:
@@ -162,6 +176,9 @@ def main() -> int:
                "equal here)")
 
     # ------------------------------------------------------------------ 2) tape == 网络实际输入
+    # The collector feeds the network the float32 rounding of the encoder rows and stores the
+    # encoder's float64 values in the tape (the archived parent behaves identically); the check
+    # is therefore exact under that one conversion, with no other transformation.
     controller = FakeController()
     collector = enc.scoped_eval_collector(controller, "new", greedy=True)
     torch.manual_seed(7)
@@ -170,8 +187,9 @@ def main() -> int:
     seen = controller.seen[-1]
     case.check(len(seen) == len(tape["features"]), "every candidate row must reach the network")
     for row_index, (matrix_row, tape_row) in enumerate(zip(seen, tape["features"])):
-        case.check(matrix_row == [float(value) for value in tape_row],
-                   f"network input row {row_index} must equal the tape's stored features")
+        case.check(matrix_row == [float(value) for value in np.asarray(tape_row,
+                                                                       dtype=np.float32)],
+                   f"network input row {row_index} must equal the float32 of the tape's features")
     # Stage B cost critic 的输入也是同一份特征（训练 collector 的 cost_value 读数）
     stage_b_controller = FakeController()
     training_collector = enc.scoped_training_collector(stage_b_controller, "new")
@@ -210,8 +228,10 @@ def main() -> int:
     samples = trainer.batch_samples([synthetic_episode])
     case.check(len(samples) == 1, "one decision step per tape row in the synthetic episode")
     sample = samples[0]
-    case.check(np.asarray(sample["features"]).tolist() == tape_b["features"],
-               "PPO samples must carry the arm's tape features verbatim")
+    case.check(np.asarray(sample["features"]).tolist()
+               == np.asarray(tape_b["features"], dtype=np.float32).tolist(),
+               "PPO samples must carry the arm's tape features (float32 of the stored values, "
+               "the same conversion the network input uses)")
     case.check(sample["free"] == set(tape_b["actionable"]),
                "PPO free set must be the arm's actionable set")
 
@@ -235,6 +255,7 @@ def main() -> int:
 
     # ------------------------------------------------------------------ 5) optimizer 参数覆盖
     import v2_controller
+    from v2_controller import parameter_identity
 
     fresh = v2_controller.fresh_controller(11)
     modules = [fresh.inner.trunk, fresh.inner.action_head, fresh.inner.value_head, fresh.cost_head]
@@ -244,14 +265,6 @@ def main() -> int:
                "optimizer set must be exactly trunk + action head + task critic + cost critic")
 
     # ------------------------------------------------------------------ 6) 归档独立反例套件
-    original_step = torch.optim.Adam.step
-    steps_taken = {"n": 0}
-
-    def counted_step(self, *args: Any, **kwargs: Any) -> Any:
-        steps_taken["n"] += 1
-        return original_step(self, *args, **kwargs)
-
-    torch.optim.Adam.step = counted_step
     per_module: dict[str, Any] = {}
     failures: list[str] = []
     for name in SYNTHETIC_MODULES:
@@ -263,8 +276,6 @@ def main() -> int:
                             "failures": len(result.failures), "errors": len(result.errors)}
         for failed, _traceback in result.failures + result.errors:
             failures.append(f"{name}: {failed}")
-    torch.optim.Adam.step = original_step
-    case.synthetic_optimizer_steps = steps_taken["n"]
     case.check(not failures, f"archived counterexample suites must pass: {failures[:3]}")
     case.check(case.synthetic_optimizer_steps <= common.SYNTHETIC_UPDATE_CAP,
                f"synthetic optimizer steps {case.synthetic_optimizer_steps} exceed the "
@@ -286,38 +297,33 @@ def main() -> int:
 
     # ------------------------------------------------------------------ 8) 保存/恢复 + 跨版本拒绝
     def synthetic_episodes(controller: Any, seed: int) -> list[dict[str, Any]]:
+        """Tape rows produced by the real scoped collector, so the logged probability truly
+        describes the drawn action (the alignment check inside ppo_update enforces this).
+        The per-episode torch reseed mirrors the registered per-episode action RNG scheme."""
         generator = torch.Generator().manual_seed(seed)
-        records = []
-        for step in (5, 12, 21):
-            rows = np.asarray([[float(value) for value in torch.randn(19, generator=generator)]
-                               for _ in range(2)], dtype=np.float32)
-            with torch.no_grad():
-                logits, values = controller.forward(torch.as_tensor(rows))
-                probabilities = torch.softmax(logits, dim=-1)
-            actions = {}
-            for index, target in enumerate(("piloc-e1-target-0", "piloc-e1-target-1")):
-                actions[target] = 1 if float(probabilities[index, 1]) >= 0.5 else 0
-            records.append({
-                "step": step, "targets": ["piloc-e1-target-0", "piloc-e1-target-1"],
-                "features": rows.tolist(), "actions": actions,
-                "free": ["piloc-e1-target-0", "piloc-e1-target-1"],
-                "actionable": ["piloc-e1-target-0", "piloc-e1-target-1"],
-                "forced": [], "masked": [],
-                "log_prob": 0.0, "value": float(values.mean()),
-                "cost_value": 0.0,
-            })
-        return records
+        collector = enc.scoped_training_collector(controller, "new")
+        for call in range(3):
+            items = []
+            for index in range(6):
+                remaining = float(torch.rand(1, generator=generator) * 400.0 - 20.0)
+                charge = int(float(torch.rand(1, generator=generator) * 4000.0)) + 100
+                items.append(make_item(
+                    f"piloc-e1-target-{index}", remaining=remaining, charge=charge,
+                    executable=charge < 3000,
+                    reason="allowed" if charge < 3000 else "budget_exhausted"))
+            observation = make_observation(items, remaining_budget=29000.0)
+            observation = observation.__class__(**{**observation.__dict__, "step": 5 + 8 * call})
+            torch.manual_seed(int(seed) * 1000 + call)
+            collector.decide(observation)
+        return collector.records
 
     def run_synthetic_updates(controller: Any, optimizer: Any, updates: int) -> None:
         for index in range(updates):
             records = synthetic_episodes(controller, 100 + index)
             episode = {"collector": _Collector(records), "steps": 25,
                        "cost_stream": {str(step): cost_row(1) for step in range(1, 26)},
-                       "task_stream": {"21": 1.0}, "lambda": 1.0}
+                       "task_stream": {"21": 1.0}, "lambda": 1.0, "episode_index": index}
             trainer.ppo_update(controller, optimizer, [episode], update_index=index)
-            case.synthetic_optimizer_steps += int((len(records) + 255) // 256) * 4
-        case.check(case.synthetic_optimizer_steps <= common.SYNTHETIC_UPDATE_CAP,
-                   "synthetic update budget exceeded")
 
     arm_freeze = check.freeze_record("new")
     controller_a = v2_controller.fresh_controller(22)
@@ -359,7 +365,7 @@ def main() -> int:
         records = synthetic_episodes(controller, 999)
         episode = {"collector": _Collector(records), "steps": 25,
                    "cost_stream": {str(step): cost_row(1) for step in range(1, 26)},
-                   "task_stream": {"21": 1.0}, "lambda": 1.0}
+                   "task_stream": {"21": 1.0}, "lambda": 1.0, "episode_index": 5}
         report = trainer.ppo_update(controller, optimizer, [episode], update_index=77)
         return parameter_identity(controller)["parameter_sha256"] + "|" + str(
             report["optimizer_steps"])
@@ -386,6 +392,10 @@ def main() -> int:
                f"path ({uninterrupted} vs {after_restore})")
 
     # ------------------------------------------------------------------ 登记：源码差异与臂声明
+    torch.optim.Adam.step = original_step
+    case.check(case.synthetic_optimizer_steps <= common.SYNTHETIC_UPDATE_CAP,
+               f"synthetic optimizer steps {case.synthetic_optimizer_steps} exceed the "
+               f"{common.SYNTHETIC_UPDATE_CAP} synthetic cap")
     diff = enc.source_diff()
     case.check(diff["passed"], "the scoped collector must differ from the parent in exactly the "
                                "registered one line")
