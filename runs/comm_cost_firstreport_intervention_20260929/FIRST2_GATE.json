@@ -1,0 +1,132 @@
+{
+ "checks": {
+  "L0_interceptor_disabled_and_idle": {
+   "identity": {
+    "class": "FirstReportAdvancer",
+    "consumed": [],
+    "enabled": false,
+    "log_prob_semantics": "an overridden row's log-probability describes the forced action, not the model's draw; the tape is inert (no training)",
+    "not_a_forced_send": true,
+    "not_an_appended_emission": true,
+    "really_sent": [],
+    "rule": "at the first decision opportunity after discovery where the candidate is legal and payable in the real sequential budget walk, an original greedy HOLD for a named target is overridden to SEND; if the original action is already SEND there is no action difference; at most one override per target; after the first emission the original learned logic resumes",
+    "schema": "round27-first-report-override/1",
+    "targets": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-5"
+    ]
+   },
+   "passed": true,
+   "per_target": {
+    "piloc-e1-target-0": {
+     "opportunities_recorded": 0,
+     "override_applied": false,
+     "real_sends": 1
+    },
+    "piloc-e1-target-5": {
+     "opportunities_recorded": 0,
+     "override_applied": false,
+     "real_sends": 1
+    }
+   }
+  },
+  "L_has_no_interceptor": {
+   "identity": {
+    "note": "no interceptor installed on this path"
+   },
+   "passed": true
+  },
+  "L_vs_L0_behaviour_fields": {
+   "fields_compared": [
+    "on_time",
+    "completed",
+    "expired",
+    "discovered",
+    "active",
+    "unassigned",
+    "task_reward_total",
+    "spent_bytes",
+    "budget_bytes",
+    "emissions",
+    "budget_refused_sends",
+    "capacity_refused_sends",
+    "airtime_tap_total",
+    "goal_identity",
+    "emission_sequence",
+    "refusal_sequence",
+    "cost_stream",
+    "task_stream",
+    "ack_ledger",
+    "transport_parameters",
+    "relay_counters",
+    "behaviour_sha256",
+    "behaviour_config_sha256",
+    "steps",
+    "substituted_fields",
+    "run_signature_checkpoints",
+    "controller_parameters_before",
+    "controller_parameters_after",
+    "optimizer_steps"
+   ],
+   "mismatches": [],
+   "passed": true
+  },
+  "L_vs_L0_tape_lines": {
+   "identical": true,
+   "lines": 114,
+   "note": "L installs no interceptor and L0 delegates to the parent collector while the overrides are disabled, so the two tapes must be the same lines"
+  },
+  "L_vs_ROUND25_common_fields": {
+   "fields_compared": [
+    "on_time",
+    "completed",
+    "expired",
+    "discovered",
+    "active",
+    "unassigned",
+    "task_reward_total",
+    "spent_bytes",
+    "budget_bytes",
+    "emissions",
+    "budget_refused_sends",
+    "capacity_refused_sends",
+    "airtime_tap_total",
+    "goal_identity",
+    "emission_sequence",
+    "refusal_sequence",
+    "cost_stream",
+    "task_stream",
+    "ack_ledger",
+    "transport_parameters",
+    "relay_counters",
+    "behaviour_sha256",
+    "behaviour_config_sha256",
+    "steps",
+    "substituted_fields",
+    "run_signature_checkpoints"
+   ],
+   "mismatches": [],
+   "passed": true
+  },
+  "L_vs_ROUND25_tape_lines": {
+   "identical": true,
+   "lines": 114,
+   "note": "L runs the same controller, action seed, configuration and the archived parent collector, so its tape must match the ROUND25 learned tape line for line"
+  },
+  "frozen_weights_unchanged": {
+   "L": true,
+   "L0": true,
+   "passed": true
+  },
+  "optimizer_steps_zero": {
+   "L": 0,
+   "L0": 0,
+   "passed": true
+  }
+ },
+ "passed": true,
+ "round": "27",
+ "scene": 1400031,
+ "section": "first-two gate (L, L0)",
+ "verdict": "L and L0 are the same episode and L matches the ROUND25 cell; the intervention paths may run"
+}
