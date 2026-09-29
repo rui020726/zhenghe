@@ -1,0 +1,70 @@
+{
+ "arm": "new",
+ "training_seed": 11,
+ "gate": "round30-first4",
+ "episodes": [
+  0,
+  1,
+  2,
+  3
+ ],
+ "checks": {
+  "G0_input_encoding_correct": {
+   "arm_layout": "comm-send-state/1r29-deadline-over-horizon",
+   "rows_with_wrong_layout": [],
+   "deadline_column_min": -0.21284729608714384,
+   "deadline_column_max": 0.18023762953870778,
+   "all_finite": true,
+   "passed": true
+  },
+  "G1_reward_cost_ledger_closure": {
+   "passed": true,
+   "episodes": 4
+  },
+  "G2_math_recomputable_from_disk": {
+   "decision_steps": 622,
+   "unassigned_prefix_task_reward": 0.0,
+   "unassigned_prefix_cost_bytes": 0.0,
+   "batch_record_samples": 622,
+   "samples_match": true,
+   "passed": true
+  },
+  "G3_log_prob_recomputable_pre_update": {
+   "pre_update_weights_are_the_registered_initialisation": true,
+   "max_abs_gap": 1.7881393432617188e-07,
+   "tolerance": 1e-06,
+   "passed": true
+  },
+  "G4_optimizer_covers_comm_only": {
+   "comm_parameter_count": 10,
+   "optimizer_parameter_count": 10,
+   "exact_same_set": true,
+   "passed": true
+  },
+  "G5_dual_direction_and_formula": {
+   "lambda_before": 1.0,
+   "g_hat": 0.25,
+   "eta": 0.05,
+   "lambda_next_recorded": 1.0125,
+   "lambda_next_expected": 1.0125,
+   "direction": "increase",
+   "passed": true
+  },
+  "G6_finite_and_no_pseudo_samples": {
+   "module_gradient_l1_mean": {
+    "trunk": 54.933400525,
+    "action_head": 0.298177255,
+    "task_value_head": 6.512445142,
+    "cost_head": 0.92286655
+   },
+   "optimizer_steps": 12,
+   "passed": true
+  },
+  "G7_checkpoint_restore_contract": {
+   "rolling_checkpoint_present": true,
+   "freeze_carries_arm_and_layout": true,
+   "passed": true
+  }
+ },
+ "passed": true
+}

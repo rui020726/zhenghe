@@ -226,12 +226,19 @@ def freeze_record(arm: str) -> dict[str, Any]:
 
 # ------------------------------------------------------------------ 首批门禁 -------------
 def load_cell_row(kind: str, seed: int, attempt: int, tag: str) -> dict[str, Any]:
-    path = common.cell_paths(kind, seed, attempt, tag=tag)["row"]
-    return json.loads(path.read_text(encoding="utf-8"))
+    matches = sorted(common.ROWS.glob(f"r30_{tag}_s*_a{attempt}.json"))
+    if len(matches) != 1:
+        raise FileNotFoundError(f"expected exactly one row for tag {tag} attempt {attempt}, "
+                                f"found {len(matches)}: {[path.name for path in matches][:4]}")
+    return json.loads(matches[0].read_text(encoding="utf-8"))
 
 
 def load_cell_tape(kind: str, seed: int, attempt: int, tag: str) -> list[dict[str, Any]]:
-    path = common.cell_paths(kind, seed, attempt, tag=tag)["tape"]
+    matches = sorted(common.LOGS.glob(f"r30_{tag}_s*_a{attempt}_tape.jsonl"))
+    if len(matches) != 1:
+        raise FileNotFoundError(f"expected exactly one tape for tag {tag} attempt {attempt}, "
+                                f"found {len(matches)}: {[path.name for path in matches][:4]}")
+    path = matches[0]
     return list(common.iter_jsonl(path)) if path.exists() else []
 
 
@@ -321,13 +328,21 @@ def first4_gate(arm: str, training_seed: int, *, episodes: int = 4) -> dict[str,
         "passed": bool(math_ok),
     }
 
-    # G3: log_prob recompute <= 1e-6 with the controller weights this batch actually used
-    payload = torch.load(common.CHECKPOINTS / f"r30_train_{arm}_s{training_seed}.pt",
-                         map_location="cpu", weights_only=False)
+    # G3: log_prob recompute <= 1e-6. For batch 0 the pre-update weights are the registered
+    # fresh initialisation (reconstructible from the seed alone); the check therefore recomputes
+    # with fresh_controller(training_seed) and also asserts the batch record's pre-update
+    # parameter hash equals that initialisation.
+    import v2_controller
+    from v2_controller import parameter_identity
+
+    initial = v2_controller.fresh_controller(training_seed)
+    pre_update_is_initial = (batch_record["controller_parameters_before"]["parameter_sha256"]
+                             == parameter_identity(initial)["parameter_sha256"])
     gaps_max = 0.0
     for tapes in tapes_all:
         for tape in tapes:
-            logits, _values = controller_forward(payload, tape["features"])
+            logits, _values = initial.forward(torch.as_tensor(tape["features"],
+                                                              dtype=torch.float32))
             with torch.no_grad():
                 recomputed = float(joint_log_prob(
                     logits,
@@ -336,9 +351,10 @@ def first4_gate(arm: str, training_seed: int, *, episodes: int = 4) -> dict[str,
                     torch.tensor([1.0 if t in tape["actionable"] else 0.0
                                   for t in tape["targets"]], dtype=torch.float32)))
             gaps_max = max(gaps_max, abs(recomputed - float(tape["log_prob"])))
-    checks["G3_log_prob_recomputable"] = {
+    checks["G3_log_prob_recomputable_pre_update"] = {
+        "pre_update_weights_are_the_registered_initialisation": pre_update_is_initial,
         "max_abs_gap": gaps_max, "tolerance": v2c.LOG_PROB_TOLERANCE,
-        "passed": gaps_max <= v2c.LOG_PROB_TOLERANCE,
+        "passed": pre_update_is_initial and gaps_max <= v2c.LOG_PROB_TOLERANCE,
     }
 
     # G4: optimizer parameter coverage: the four comm modules, nothing outside

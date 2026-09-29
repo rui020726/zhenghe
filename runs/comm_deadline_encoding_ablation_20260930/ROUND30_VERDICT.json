@@ -1,0 +1,304 @@
+{
+ "artefacts": {
+  "artefact_manifest": "ARTEFACT_MANIFEST.json",
+  "checkpoint_index": "CHECKPOINT_INDEX.json",
+  "first4_gates": [
+   "FIRST4_GATE_new_s11",
+   "FIRST4_GATE_old_s11"
+  ],
+  "freeze_manifest": "CONFIG_AND_MODEL_MANIFEST.json",
+  "paired_comparison": "PAIRED_COMPARISON.json",
+  "preflight": "RUN_PREFLIGHT.json",
+  "report": "ROUND30_REPORT.md",
+  "start_ledger": "START_LEDGER.json",
+  "training_curves": "TRAINING_CURVES.json"
+ },
+ "conflict_resolutions": {
+  "3_1_development_block_counts": {
+   "dev_block_failures_under_seed33_final_greedy": [],
+   "not_used_for": "no simulation was run to settle this historical question; the rows and checkpoints already on disk were the only evidence",
+   "root_cause": "file selection in ROUND29's audit read: the values ROUND29 presented under the seed33 label match the seed-11 final_greedy rows scene by scene and value by value (on_time/spent/emissions, 16/16); no milestone, mode, version or config difference is involved — the same v2 trainer contract, the same ep128 milestone convention, the same greedy decoder, rows whose controller parameter hash equals their own seed's ep128 checkpoint",
+   "round24_verdict_status": "stands: seed33 final greedy is 6/6 on-time on all 16 dev scenes; ROUND24's zero-degradation claim is what the raw rows say",
+   "round29_audit_status": "its dev-block task numbers (5/16 failures) were seed-11 rows and are corrected here; the block-ownership core of the ROUND29 correction (1301000..1301015 is the ROUND22/24 development block, 1400031 lives in 1400000..1400063) is unaffected and remains registered"
+  },
+  "3_2_clock_relation": {
+   "candidate_rows": 11901,
+   "conclusion": "every unsaturated candidate row across all checked tapes reproduces the stored remaining_time_over_horizon exactly under now = step - 1 and disagrees under now = step; the first-candidate-step identity (remaining == raw deadline offset + 1 and first candidate step == detection timestamp) holds for every target, which is itself another consequence of the same one-step clock wiring. The ROUND29 reconstruction rule is confirmed by unsaturated rows and by an independent source-level argument; saturated rows alone were never the proof.",
+   "first_candidate_identity_exceptions": 0,
+   "first_candidate_identity_holds": 478,
+   "mismatch_rule": 0,
+   "mismatch_zero": 811,
+   "round29_original_197_rows": {
+    "note": "ROUND29's scene-1400010 tape: 6 unsaturated rows; with now = step - 1 all 6 match exactly and with now = step all 6 are off by one step's worth of encoding value, so even that single tape was decisive; this round widens it to the aggregate above",
+    "saturated": 191,
+    "total": 197,
+    "unsaturated": 6
+   },
+   "tapes_checked": 81,
+   "unsaturated_rows": 756
+  }
+ },
+ "execution_status": {
+  "branch": "exp/comm-deadline-encoding-ablation",
+  "first4_gates": {
+   "FIRST4_GATE_new_s11": true,
+   "FIRST4_GATE_old_s11": true
+  },
+  "hard_cap": 1080,
+  "launches_used": 1040,
+  "network_retries_this_round": 0,
+  "normal_launches": 1040,
+  "optimizer_steps": {
+   "new_s11": 464,
+   "new_s22": 340,
+   "new_s33": 464,
+   "old_s11": 464,
+   "old_s22": 340,
+   "old_s33": 464
+  },
+  "preflight_passed": true,
+  "publication_status": "PENDING_NETWORK",
+  "reserve_launches": 40,
+  "reserve_used": 0,
+  "start_sha": "99eb746baaa073550f9062fec5c87a4b4711827b",
+  "synthetic_optimizer_steps": 44,
+  "synthetic_update_cap": 64,
+  "training_episodes_per_arm_per_seed": 128
+ },
+ "q1_only_registered_encoding_difference": {
+  "answer": "yes",
+  "evidence": [
+   "the scoped collector differs from the archived parent in exactly one source line (the feature-row construction), registered by a programmatic source diff in the freeze manifest",
+   "OLD reproduces the archived collector's tape field for field in the preflight",
+   "everything else -- controller class, trainer, PPO hyperparameters, budget, ACK-off, mask semantics, scenario order, action/eval RNG derivations, evaluation decoders -- is the shared frozen code, and the production/imported module identity is byte-identical to ROUND24's recorded freeze",
+   "the two arms of one seed start from byte-identical parameters, optimizer state and lambda (INIT_PAIRING artefacts)"
+  ]
+ },
+ "q2_task_and_cost_changes": {
+  "greedy_primary": {
+   "s11": {
+    "delta_c_ci95": [
+     -27.0,
+     0.0
+    ],
+    "delta_c_counts": {
+     "cheaper": 1,
+     "costlier": 0,
+     "equal": 15
+    },
+    "delta_c_mean_bytes": -9.0,
+    "delta_y_ci95": [
+     0.0,
+     0.0
+    ],
+    "delta_y_counts": {
+     "negative": 0,
+     "positive": 0,
+     "zero": 16
+    },
+    "delta_y_mean": 0.0,
+    "goal_set_swaps": {
+     "gained": [],
+     "identity_swap_despite_net_tie": false,
+     "lost": []
+    },
+    "joint_counts": {
+     "both_better": 0,
+     "both_worse": 0,
+     "cheaper_but_lost_task": 0,
+     "other": 16,
+     "task_better_cost_worse": 0
+    },
+    "vs_immediate_and_late": {
+     "late_mean_bytes": 4838.25,
+     "late_mean_on_time": 6.0,
+     "new_mean_bytes": 28198.875,
+     "new_mean_on_time": 5.5,
+     "old_mean_bytes": 28207.875,
+     "old_mean_on_time": 5.5,
+     "reference_mean_bytes": 14939.25,
+     "reference_mean_on_time": 6.0
+    }
+   },
+   "s22": {
+    "delta_c_ci95": [
+     0.0,
+     0.0
+    ],
+    "delta_c_counts": {
+     "cheaper": 0,
+     "costlier": 0,
+     "equal": 16
+    },
+    "delta_c_mean_bytes": 0.0,
+    "delta_y_ci95": [
+     0.0,
+     0.0
+    ],
+    "delta_y_counts": {
+     "negative": 0,
+     "positive": 0,
+     "zero": 16
+    },
+    "delta_y_mean": 0.0,
+    "goal_set_swaps": {
+     "gained": [],
+     "identity_swap_despite_net_tie": false,
+     "lost": []
+    },
+    "joint_counts": {
+     "both_better": 0,
+     "both_worse": 0,
+     "cheaper_but_lost_task": 0,
+     "other": 16,
+     "task_better_cost_worse": 0
+    },
+    "vs_immediate_and_late": {
+     "late_mean_bytes": 4838.25,
+     "late_mean_on_time": 6.0,
+     "new_mean_bytes": 0.0,
+     "new_mean_on_time": 5.5,
+     "old_mean_bytes": 0.0,
+     "old_mean_on_time": 5.5,
+     "reference_mean_bytes": 14939.25,
+     "reference_mean_on_time": 6.0
+    }
+   },
+   "s33": {
+    "delta_c_ci95": [
+     -847.5,
+     0.0
+    ],
+    "delta_c_counts": {
+     "cheaper": 2,
+     "costlier": 0,
+     "equal": 14
+    },
+    "delta_c_mean_bytes": -334.875,
+    "delta_y_ci95": [
+     0.0,
+     0.0
+    ],
+    "delta_y_counts": {
+     "negative": 0,
+     "positive": 0,
+     "zero": 16
+    },
+    "delta_y_mean": 0.0,
+    "goal_set_swaps": {
+     "gained": [],
+     "identity_swap_despite_net_tie": false,
+     "lost": []
+    },
+    "joint_counts": {
+     "both_better": 0,
+     "both_worse": 0,
+     "cheaper_but_lost_task": 0,
+     "other": 16,
+     "task_better_cost_worse": 0
+    },
+    "vs_immediate_and_late": {
+     "late_mean_bytes": 4838.25,
+     "late_mean_on_time": 6.0,
+     "new_mean_bytes": 2063.625,
+     "new_mean_on_time": 6.0,
+     "old_mean_bytes": 2398.5,
+     "old_mean_on_time": 6.0,
+     "reference_mean_bytes": 14939.25,
+     "reference_mean_on_time": 6.0
+    }
+   }
+  },
+  "sampled_separate": {
+   "s11": {
+    "delta_c_counts": {
+     "cheaper": 6,
+     "costlier": 4,
+     "equal": 6
+    },
+    "delta_c_mean_bytes": -57.0,
+    "delta_y_counts": {
+     "negative": 0,
+     "positive": 0,
+     "zero": 16
+    },
+    "delta_y_mean": 0.0
+   },
+   "s22": {
+    "delta_c_counts": {
+     "cheaper": 13,
+     "costlier": 2,
+     "equal": 1
+    },
+    "delta_c_mean_bytes": -4197.75,
+    "delta_y_counts": {
+     "negative": 0,
+     "positive": 1,
+     "zero": 15
+    },
+    "delta_y_mean": 0.0625
+   },
+   "s33": {
+    "delta_c_counts": {
+     "cheaper": 3,
+     "costlier": 11,
+     "equal": 2
+    },
+    "delta_c_mean_bytes": 58.5,
+    "delta_y_counts": {
+     "negative": 0,
+     "positive": 1,
+     "zero": 15
+    },
+    "delta_y_mean": 0.1875
+   }
+  }
+ },
+ "q3_seed_consistency": {
+  "consistent_sign": false,
+  "greedy_delta_c_means": {
+   "s11": -9.0,
+   "s22": 0.0,
+   "s33": -334.875
+  },
+  "greedy_delta_y_means": {
+   "s11": 0.0,
+   "s22": 0.0,
+   "s33": 0.0
+  },
+  "note": "three seeds shown separately; consistency is read as sign agreement of the per-seed means, never as a statistical stability or non-inferiority claim"
+ },
+ "q4_greedy_vs_sampled": {
+  "greedy_delta_c_means": {
+   "s11": -9.0,
+   "s22": 0.0,
+   "s33": -334.875
+  },
+  "greedy_delta_y_means": {
+   "s11": 0.0,
+   "s22": 0.0,
+   "s33": 0.0
+  },
+  "note": "sampled observes the trained policy itself; its constraint estimate is not transferred to greedy",
+  "same_direction": false,
+  "sampled_delta_c_means": {
+   "s11": -57.0,
+   "s22": -4197.75,
+   "s33": 58.5
+  },
+  "sampled_delta_y_means": {
+   "s11": 0.0,
+   "s22": 0.0625,
+   "s33": 0.1875
+  }
+ },
+ "q5_not_established": [
+  "no confirmatory significance claim, no delta=0 guarantee and no independent generalisation claim: the development block is already-used data and each block runs once per cell",
+  "a descriptive 95% interval covers scene uncertainty under the fixed trained weights only, not training-seed uncertainty, and one sampled rollout per scene does not estimate its full sampling variance",
+  "a better new-encoding result attributes to the whole encoding replacement (both information retention and numerical scale changed together); no claim that removing saturation alone is the cause",
+  "the feasibility, effort or deployment value of the candidate layout is not established; no new checkpoint is authorised for any deployment path"
+ ],
+ "round": "30",
+ "section": "verdict: old vs new deadline encoding, paired from-initialisation ablation",
+ "stop": "local delivery and stop: no added training, no tuning, no candidate change, no confirmation experiment, no deployment, no automatic push"
+}

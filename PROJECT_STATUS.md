@@ -1,5 +1,45 @@
 # 项目状态
 
+## 2026-09-30：ROUND30 原/新期限编码从初值配对训练消融——1040/1040 零失败；greedy 任务 48/48 持平、成本 −9/0/−335 B/ep 方向不一；sampled 有零星任务增益（启动 1040/1080）
+
+分支 `exp/comm-deadline-encoding-ablation`（起点 ROUND29 完整头
+`99eb746baaa073550f9062fec5c87a4b4711827b`，继承 ROUND28 `21250b5`），产物
+`runs/comm_deadline_encoding_ablation_20260930/`（`ROUND30_REPORT.md`、
+`ROUND30_VERDICT.json`、`PAIRED_COMPARISON.json`、`DIAGNOSTICS.json`、
+`CONFLICT_RECHECK_3_1.json`、`CLOCK_RECHECK_3_2.json`、`RUN_PREFLIGHT.json`、
+`FIRST4_GATE_{old,new}_s11.json`、`INIT_PAIRING*.json`、`START_LEDGER.json`、
+`CHECKPOINT_INDEX.json`、`TRAINING_CURVES.json`、`ARTEFACT_MANIFEST.json`、
+`CODE_IDENTITY.json`、`CONFIG_AND_MODEL_MANIFEST.json`、`ROUND30_PROTOCOL.md`）。
+执行依据 sha256 `d80a7055…`，冻结件 freeze_sha256 `b05f07bb…`；
+`publication_status=PENDING_NETWORK`、本会话网络重试 0。
+
+- **两处冲突零启动裁定**：① ROUND29 的"seed33 greedy 开发块 5/16 失败"实为 **seed11 行误挂
+  seed33 标签**（96 行身份表 + checkpoint 参数哈希；seed33 final greedy 实为 16/16 全按时，
+  ROUND24 判定成立；ROUND29 块归属核心不受影响）；② `clock.now = tape step − 1` 经源码调用
+  顺序（relay.tick 先于 clock.advance_to）+ 81 tape 756 个未饱和行 0 失配 + 首候选步恒等式
+  478/478 独立证实。
+- **接线**：作用域 collector = 父类 `_choose_masked` 逐字复制 + difflib 登记单行差异
+  （特征行构造）；OLD 与父类 tape 逐字段一致；同 seed 两臂参数/optimizer/λ 逐字节相等；
+  64 个新跑 reference 与 ROUND24 归档行 behaviour_sha256 逐字节一致 64/64；
+  configuration_hash `e9b2c067db5951f2` 与 ROUND24 相同；预检 132 项 0 失败（合成
+  optimizer 步 44 ≤ 64）。
+- **执行**：64 reference + 768 训练（6 cell × 128 集，两臂首批门禁 G0–G7 全过）+ 192 评估
+  + 16 late 规则 = **1040/1040 正常、0 失败、储备 40 未动**。
+- **结果（配对 Δ=NEW−OLD，16 场景描述性区间）**：greedy **ΔY 48/48 全零**、无目标集合交换、
+  无"省字节丢任务"；ΔC −9.0 / 0.0 / −334.9 B/ep（s11/s22/s33，CI 分别 [−27,0]/[0,0]/
+  [−847.5,0]）。sampled：ΔY 0 / +0.0625 / +0.1875（s22 场景 1301003 +1 目标且省 14 328 B；
+  s33 场景 1301002 +3 目标且贵 552 B），ΔC −57.0 / −4197.8 / +58.5 B/ep（中间者 CI 不含 0）。
+- **诊断**：OLD 臂 272 个不同原始期限（61.1–180.2 步）在训练内全部折叠为 1 个编码值；
+  NEW 臂保留 272 个（0.061–0.180）——ROUND29 审计在训练内部复现。λ：s11/s22 两轨完全相同
+  （1.5/1.2375），s33 微叉（1.4875 vs 1.4750）。
+- **五问结论**：① 两臂仅有登记的单列编码差异（是）；② 任务 greedy 全零变化、成本小且方向
+  不一致；③ 任务侧跨 seed 一致（全零），成本侧不一致；④ greedy 与 sampled 结论不同
+  （任务增益只出现在 sampled 的 2/16 场景）；⑤ 学习/任务表现改善的证据**未建立**——
+  无确认性显著性/非劣效/泛化主张，出现收益也只能归因于整项编码替换（信息保留与数值尺度
+  同时改变）。
+- **下一轮建议（仅建议、非授权）**：在编码替换内部解耦信息保留与数值尺度（如新列再做无
+  截断尺度归一），或推进 ACK/接收端状态的观测设计讨论；均需另行批准。
+
 ## 2026-09-29：ROUND29 发送端期限编码审计与最小观测原型——期限列在全部 102 个首报点饱和为 1.0；单列新编码保留差异；学习收益未证（0 启动）
 
 分支 `analysis/comm-deadline-encoding-audit`（起点 ROUND28 完整头
