@@ -1,0 +1,76 @@
+{
+ "evidence_E1_source_call_order": {
+  "claim": "clock.now = tape step - 1 at the moment the relay reads SendItem.remaining_time",
+  "source": [
+   "integrated_sar/orchestrator.py:79-100 step(): search/executor step at `now`, then clock.advance_to(now+dt) after the executor step",
+   "integrated_sar/joint_driver.py:1072 now_of=lambda: clock.now wires the relay's clock reader; the relay ticks inside executor.step()",
+   "integrated_sar/comm.py:446-448 tick(): _tick += 1 then _emit_selected(); the tape records step=_tick (comm.py:851); _now_value returns the wired clock, not the tick (comm.py:743)",
+   "first orchestrator iteration: step_index 0 -> report step 1, clock.now 0, relay._tick 1 => now(0) = step(1) - 1, and by induction every later iteration keeps the one-step offset"
+  ],
+  "verdict": "the one-step offset is a property of the wiring, not of any encoding value"
+ },
+ "evidence_E2_data_aggregate": {
+  "r25_eval_learned": {
+   "candidate_rows": 9293,
+   "first_candidate_remaining_equals_raw_offset_plus_one": 376,
+   "first_candidate_targets": 376,
+   "mismatch_under_now_equals_step": 536,
+   "mismatch_under_now_equals_step_minus_1": 0,
+   "tapes": 64,
+   "unsaturated_rows": 496
+  },
+  "r27_L": {
+   "candidate_rows": 480,
+   "first_candidate_remaining_equals_raw_offset_plus_one": 6,
+   "first_candidate_targets": 6,
+   "mismatch_under_now_equals_step": 177,
+   "mismatch_under_now_equals_step_minus_1": 0,
+   "tapes": 1,
+   "unsaturated_rows": 173
+  },
+  "r28_baseline": {
+   "candidate_rows": 2128,
+   "first_candidate_remaining_equals_raw_offset_plus_one": 96,
+   "first_candidate_targets": 96,
+   "mismatch_under_now_equals_step": 98,
+   "mismatch_under_now_equals_step_minus_1": 0,
+   "tapes": 16,
+   "unsaturated_rows": 87
+  }
+ },
+ "evidence_E3_first_candidate_identity": {
+  "r25_eval_learned": {
+   "exceptions": [],
+   "identity_holds": 376,
+   "targets": 376
+  },
+  "r27_L": {
+   "exceptions": [],
+   "identity_holds": 6,
+   "targets": 6
+  },
+  "r28_baseline": {
+   "exceptions": [],
+   "identity_holds": 96,
+   "targets": 96
+  }
+ },
+ "round": "30",
+ "section": "independent recheck of the clock relation used by ROUND29's reconstruction",
+ "totals": {
+  "candidate_rows": 11901,
+  "conclusion": "every unsaturated candidate row across all checked tapes reproduces the stored remaining_time_over_horizon exactly under now = step - 1 and disagrees under now = step; the first-candidate-step identity (remaining == raw deadline offset + 1 and first candidate step == detection timestamp) holds for every target, which is itself another consequence of the same one-step clock wiring. The ROUND29 reconstruction rule is confirmed by unsaturated rows and by an independent source-level argument; saturated rows alone were never the proof.",
+  "first_candidate_identity_exceptions": 0,
+  "first_candidate_identity_holds": 478,
+  "mismatch_rule": 0,
+  "mismatch_zero": 811,
+  "round29_original_197_rows": {
+   "note": "ROUND29's scene-1400010 tape: 6 unsaturated rows; with now = step - 1 all 6 match exactly and with now = step all 6 are off by one step's worth of encoding value, so even that single tape was decisive; this round widens it to the aggregate above",
+   "saturated": 191,
+   "total": 197,
+   "unsaturated": 6
+  },
+  "tapes_checked": 81,
+  "unsaturated_rows": 756
+ }
+}
