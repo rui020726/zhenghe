@@ -309,17 +309,21 @@ HARNESS_MODULES = (
 )
 
 
+def _rel(path: Path) -> str:
+    """Repo-relative POSIX path, so keys are stable across platforms."""
+    return Path(path).resolve().relative_to(ROOT).as_posix()
+
+
 def code_identity() -> dict[str, Any]:
     payload: dict[str, Any] = {
         "production": {name: sha256_file(ROOT / name) for name in PRODUCTION_DEPENDENCIES},
         "imported_round_modules": {
-            str(path.resolve().relative_to(ROOT)): sha256_file(path)
+            _rel(path): sha256_file(path)
             for path in IMPORTED_ROUND_MODULES if path.exists()},
-        "round29_encoder_prototype": {str(ROUND29_PROTOTYPE.resolve().relative_to(ROOT)):
-                                     sha256_file(ROUND29_PROTOTYPE)},
+        "round29_encoder_prototype": {_rel(ROUND29_PROTOTYPE): sha256_file(ROUND29_PROTOTYPE)},
         "harness": {name: sha256_file(HERE / name) for name in HARNESS_MODULES
                     if (HERE / name).exists()},
-        "checkpoints": {str(path.resolve().relative_to(ROOT)): sha256_file(path)
+        "checkpoints": {_rel(path): sha256_file(path)
                         for path in CHECKPOINT_FILES},
     }
     payload["freeze_sha256"] = hashlib.sha256(json.dumps(
