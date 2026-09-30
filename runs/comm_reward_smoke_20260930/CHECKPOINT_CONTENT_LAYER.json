@@ -1,0 +1,1506 @@
+{
+ "checks": {
+  "L_legacy_round32_checkpoints_content_layer": {
+   "all_four_declared_unavailable_layers_now_filled": true,
+   "does_not_rewrite_round34": true,
+   "legacy_checkpoint_files": 18,
+   "native_forward_runs": 18,
+   "parameter_digests_matching_their_claims": 18,
+   "passed": true,
+   "per_file_records": {
+    "r32_pre_ACTIVE_ROWS_s11_b0.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "95ad711aedcc47a031f6234f141ebbfd7d6af6ef992777c7ed64ec8f0264b08f",
+      "round34_observed": "95ad711aedcc47a031f6234f141ebbfd7d6af6ef992777c7ed64ec8f0264b08f",
+      "round35_recomputed": "95ad711aedcc47a031f6234f141ebbfd7d6af6ef992777c7ed64ec8f0264b08f"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 4,
+      "lambda": 1.0,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 0,
+      "reduction_mode": "ACTIVE_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 0
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "index_claim": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "919b468b0b64ea35",
+       "cost_head": "2678d4c8b7b1caa8",
+       "task_value_head": "e94ae85e5c97bfc5",
+       "trunk": "b1d3494d691270bf"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "919b468b0b64ea35",
+       "cost_head": "2678d4c8b7b1caa8",
+       "task_value_head": "e94ae85e5c97bfc5",
+       "trunk": "b1d3494d691270bf"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 2.384185791015625e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 2.384185791015625e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 623,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "95ad711aedcc47a031f6234f141ebbfd7d6af6ef992777c7ed64ec8f0264b08f",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ACTIVE_ROWS_s11_b15.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "f73e554749f68bce25f8d24796ee84451bc068f8e59017cdeee263bf03ed6ed8",
+      "round34_observed": "f73e554749f68bce25f8d24796ee84451bc068f8e59017cdeee263bf03ed6ed8",
+      "round35_recomputed": "f73e554749f68bce25f8d24796ee84451bc068f8e59017cdeee263bf03ed6ed8"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 64,
+      "lambda": 1.2249999999999996,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 224,
+      "reduction_mode": "ACTIVE_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 15
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "6674645636a12152e6b8b363bced860fa73857abf7ae8751cba31ec47e41340c",
+      "index_claim": "6674645636a12152e6b8b363bced860fa73857abf7ae8751cba31ec47e41340c",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "6674645636a12152e6b8b363bced860fa73857abf7ae8751cba31ec47e41340c",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "184c9af8445d3140",
+       "cost_head": "6a9e10b64efd0e14",
+       "task_value_head": "91660318d6a92937",
+       "trunk": "0aa5b6fa9fecf318"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "184c9af8445d3140",
+       "cost_head": "6a9e10b64efd0e14",
+       "task_value_head": "91660318d6a92937",
+       "trunk": "0aa5b6fa9fecf318"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 8.940696716308594e-08,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 8.940696716308594e-08,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 1002,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "f73e554749f68bce25f8d24796ee84451bc068f8e59017cdeee263bf03ed6ed8",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ACTIVE_ROWS_s11_b31.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "fce83e924739e3a840366ad8e2136588dd06cc9ef2bf78320d02ac262efcd801",
+      "round34_observed": "fce83e924739e3a840366ad8e2136588dd06cc9ef2bf78320d02ac262efcd801",
+      "round35_recomputed": "fce83e924739e3a840366ad8e2136588dd06cc9ef2bf78320d02ac262efcd801"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 128,
+      "lambda": 1.4624999999999995,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 448,
+      "reduction_mode": "ACTIVE_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 31
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "135ddfff8d36a58791d4d6aa40467fba3dbeabb78f07825d578533b3e8f46b86",
+      "index_claim": "135ddfff8d36a58791d4d6aa40467fba3dbeabb78f07825d578533b3e8f46b86",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "135ddfff8d36a58791d4d6aa40467fba3dbeabb78f07825d578533b3e8f46b86",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "7eb91764314439fd",
+       "cost_head": "d4ee94f15f079a2c",
+       "task_value_head": "335f85269bba6f73",
+       "trunk": "1bc46a04d1724c35"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "7eb91764314439fd",
+       "cost_head": "d4ee94f15f079a2c",
+       "task_value_head": "335f85269bba6f73",
+       "trunk": "1bc46a04d1724c35"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 2.384185791015625e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 2.384185791015625e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 997,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "fce83e924739e3a840366ad8e2136588dd06cc9ef2bf78320d02ac262efcd801",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ACTIVE_ROWS_s22_b0.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "f198051be21a6983d43a31a836de83e9a92ef82fd8d0c5f724f124ff4d08413b",
+      "round34_observed": "f198051be21a6983d43a31a836de83e9a92ef82fd8d0c5f724f124ff4d08413b",
+      "round35_recomputed": "f198051be21a6983d43a31a836de83e9a92ef82fd8d0c5f724f124ff4d08413b"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 4,
+      "lambda": 1.0,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 0,
+      "reduction_mode": "ACTIVE_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 0
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "index_claim": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "fca467c3f0ebb576",
+       "cost_head": "23389c1e4163363b",
+       "task_value_head": "4d30bcf031207efa",
+       "trunk": "a346a1b0df5c8806"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "fca467c3f0ebb576",
+       "cost_head": "23389c1e4163363b",
+       "task_value_head": "4d30bcf031207efa",
+       "trunk": "a346a1b0df5c8806"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 2.384185791015625e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 2.384185791015625e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 626,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "f198051be21a6983d43a31a836de83e9a92ef82fd8d0c5f724f124ff4d08413b",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ACTIVE_ROWS_s22_b15.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "6be00bb904353eb963f1e095a1571c9cfec03597180a2c36b37946626b989033",
+      "round34_observed": "6be00bb904353eb963f1e095a1571c9cfec03597180a2c36b37946626b989033",
+      "round35_recomputed": "6be00bb904353eb963f1e095a1571c9cfec03597180a2c36b37946626b989033"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 64,
+      "lambda": 1.2374999999999996,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 224,
+      "reduction_mode": "ACTIVE_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 15
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "7f192e6d0860be0967968af3445c4d483e582da15d34fdbc1ed43443516aa61a",
+      "index_claim": "7f192e6d0860be0967968af3445c4d483e582da15d34fdbc1ed43443516aa61a",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "7f192e6d0860be0967968af3445c4d483e582da15d34fdbc1ed43443516aa61a",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "995551055e28c8a1",
+       "cost_head": "b74f590b67401b49",
+       "task_value_head": "398902336f5c8f70",
+       "trunk": "69bb0caf1856a050"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "995551055e28c8a1",
+       "cost_head": "b74f590b67401b49",
+       "task_value_head": "398902336f5c8f70",
+       "trunk": "69bb0caf1856a050"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 2.5331974029541016e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 2.5331974029541016e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 1004,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "6be00bb904353eb963f1e095a1571c9cfec03597180a2c36b37946626b989033",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ACTIVE_ROWS_s22_b31.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "b2a3e9c74f8995b26f70c045a768bd2ac79c4a3e2c45c9d042076ff48d0d8916",
+      "round34_observed": "b2a3e9c74f8995b26f70c045a768bd2ac79c4a3e2c45c9d042076ff48d0d8916",
+      "round35_recomputed": "b2a3e9c74f8995b26f70c045a768bd2ac79c4a3e2c45c9d042076ff48d0d8916"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 128,
+      "lambda": 1.4124999999999992,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 420,
+      "reduction_mode": "ACTIVE_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 31
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "fdac41764b80dc685d84ffafe8323d6983865f01904cafd71c0573a3eb22bd2d",
+      "index_claim": "fdac41764b80dc685d84ffafe8323d6983865f01904cafd71c0573a3eb22bd2d",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "fdac41764b80dc685d84ffafe8323d6983865f01904cafd71c0573a3eb22bd2d",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "7a0a084a4e6f3ddb",
+       "cost_head": "b3ff120c11fe3c93",
+       "task_value_head": "79abc4079b65ffa3",
+       "trunk": "5134ef58b2bbb3f8"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "7a0a084a4e6f3ddb",
+       "cost_head": "b3ff120c11fe3c93",
+       "task_value_head": "79abc4079b65ffa3",
+       "trunk": "5134ef58b2bbb3f8"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 3.203749656677246e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 3.203749656677246e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 756,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "b2a3e9c74f8995b26f70c045a768bd2ac79c4a3e2c45c9d042076ff48d0d8916",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ACTIVE_ROWS_s33_b0.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "f86b544c31ff26e3b5b382394cd0fc81617337282ff3df0de4a205bdf7fcbd5c",
+      "round34_observed": "f86b544c31ff26e3b5b382394cd0fc81617337282ff3df0de4a205bdf7fcbd5c",
+      "round35_recomputed": "f86b544c31ff26e3b5b382394cd0fc81617337282ff3df0de4a205bdf7fcbd5c"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 4,
+      "lambda": 1.0,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 0,
+      "reduction_mode": "ACTIVE_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 0
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "index_claim": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "c355229517aba666",
+       "cost_head": "bddb33723efa5ff6",
+       "task_value_head": "d2d4270b71c7546e",
+       "trunk": "973040578caedf4b"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "c355229517aba666",
+       "cost_head": "bddb33723efa5ff6",
+       "task_value_head": "d2d4270b71c7546e",
+       "trunk": "973040578caedf4b"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 2.384185791015625e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 2.384185791015625e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 616,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "f86b544c31ff26e3b5b382394cd0fc81617337282ff3df0de4a205bdf7fcbd5c",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ACTIVE_ROWS_s33_b15.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "c69c97420d290e6c71cb4c15dcbadb886c4ee86d3780006273d68ba030c00915",
+      "round34_observed": "c69c97420d290e6c71cb4c15dcbadb886c4ee86d3780006273d68ba030c00915",
+      "round35_recomputed": "c69c97420d290e6c71cb4c15dcbadb886c4ee86d3780006273d68ba030c00915"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 64,
+      "lambda": 1.2374999999999996,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 224,
+      "reduction_mode": "ACTIVE_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 15
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "0ea077133f966425f13d9750d6e19c940aa1dbf9ca35a64ddab3050d008dd240",
+      "index_claim": "0ea077133f966425f13d9750d6e19c940aa1dbf9ca35a64ddab3050d008dd240",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "0ea077133f966425f13d9750d6e19c940aa1dbf9ca35a64ddab3050d008dd240",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "5e0160cce6608e78",
+       "cost_head": "67dcfe5c4398cd66",
+       "task_value_head": "c0026ed18bc7d479",
+       "trunk": "79bb5a289cd7d177"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "5e0160cce6608e78",
+       "cost_head": "67dcfe5c4398cd66",
+       "task_value_head": "c0026ed18bc7d479",
+       "trunk": "79bb5a289cd7d177"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 1.1920928955078125e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 1.1920928955078125e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 1002,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "c69c97420d290e6c71cb4c15dcbadb886c4ee86d3780006273d68ba030c00915",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ACTIVE_ROWS_s33_b31.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "c66361e49f63e4cbe7c35ddfcab29e36ad4e6841d332930e14467dfb2774ecd2",
+      "round34_observed": "c66361e49f63e4cbe7c35ddfcab29e36ad4e6841d332930e14467dfb2774ecd2",
+      "round35_recomputed": "c66361e49f63e4cbe7c35ddfcab29e36ad4e6841d332930e14467dfb2774ecd2"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 128,
+      "lambda": 1.4624999999999992,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 448,
+      "reduction_mode": "ACTIVE_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 31
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "50d1cd3f35de562ee017ab48efe3791d65d011fa59c422ed6f8940a0c1261b68",
+      "index_claim": "50d1cd3f35de562ee017ab48efe3791d65d011fa59c422ed6f8940a0c1261b68",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "50d1cd3f35de562ee017ab48efe3791d65d011fa59c422ed6f8940a0c1261b68",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "21b68859df50a226",
+       "cost_head": "c8c03cbb454fcb06",
+       "task_value_head": "56fabdbe895d3f66",
+       "trunk": "bf99e98ae2381413"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "21b68859df50a226",
+       "cost_head": "c8c03cbb454fcb06",
+       "task_value_head": "56fabdbe895d3f66",
+       "trunk": "bf99e98ae2381413"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 1.7881393432617188e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 1.7881393432617188e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 988,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "c66361e49f63e4cbe7c35ddfcab29e36ad4e6841d332930e14467dfb2774ecd2",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ALL_ROWS_s11_b0.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "f0414df67a5a04f7e3ebcb4d85cd97f46d239215d8416686b0d684acf449a17d",
+      "round34_observed": "f0414df67a5a04f7e3ebcb4d85cd97f46d239215d8416686b0d684acf449a17d",
+      "round35_recomputed": "f0414df67a5a04f7e3ebcb4d85cd97f46d239215d8416686b0d684acf449a17d"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 4,
+      "lambda": 1.0,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 0,
+      "reduction_mode": "ALL_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 0
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "index_claim": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "919b468b0b64ea35",
+       "cost_head": "2678d4c8b7b1caa8",
+       "task_value_head": "e94ae85e5c97bfc5",
+       "trunk": "b1d3494d691270bf"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "919b468b0b64ea35",
+       "cost_head": "2678d4c8b7b1caa8",
+       "task_value_head": "e94ae85e5c97bfc5",
+       "trunk": "b1d3494d691270bf"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 2.384185791015625e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 2.384185791015625e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 623,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "f0414df67a5a04f7e3ebcb4d85cd97f46d239215d8416686b0d684acf449a17d",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ALL_ROWS_s11_b15.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "6fc08d631a9987b3c2fad2c89c573a39577cd3a6c28a98157c29e23defb6c9de",
+      "round34_observed": "6fc08d631a9987b3c2fad2c89c573a39577cd3a6c28a98157c29e23defb6c9de",
+      "round35_recomputed": "6fc08d631a9987b3c2fad2c89c573a39577cd3a6c28a98157c29e23defb6c9de"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 64,
+      "lambda": 1.2374999999999996,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 224,
+      "reduction_mode": "ALL_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 15
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "616cc2caeee04145290fcc91371ca434f4ccfc8ab89b5cb32dc492cf8959c53f",
+      "index_claim": "616cc2caeee04145290fcc91371ca434f4ccfc8ab89b5cb32dc492cf8959c53f",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "616cc2caeee04145290fcc91371ca434f4ccfc8ab89b5cb32dc492cf8959c53f",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "2327db22bd317a3e",
+       "cost_head": "34c54e6bf8a4431e",
+       "task_value_head": "b6a55095c5572f3a",
+       "trunk": "d9d16e3c69f42b38"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "2327db22bd317a3e",
+       "cost_head": "34c54e6bf8a4431e",
+       "task_value_head": "b6a55095c5572f3a",
+       "trunk": "d9d16e3c69f42b38"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 5.960464477539063e-08,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 5.960464477539063e-08,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 1003,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "6fc08d631a9987b3c2fad2c89c573a39577cd3a6c28a98157c29e23defb6c9de",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ALL_ROWS_s11_b31.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "4121da912770c41ec64310f4c2907bd74fc3b2e3e30aac8ccaf77b156829dba4",
+      "round34_observed": "4121da912770c41ec64310f4c2907bd74fc3b2e3e30aac8ccaf77b156829dba4",
+      "round35_recomputed": "4121da912770c41ec64310f4c2907bd74fc3b2e3e30aac8ccaf77b156829dba4"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 128,
+      "lambda": 1.4749999999999994,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 448,
+      "reduction_mode": "ALL_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 31
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "3989f6ac3f55623ea804d86316b89679f7e2e8bc15b123a8e0902d172acb8e17",
+      "index_claim": "3989f6ac3f55623ea804d86316b89679f7e2e8bc15b123a8e0902d172acb8e17",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "3989f6ac3f55623ea804d86316b89679f7e2e8bc15b123a8e0902d172acb8e17",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "89cf70d032cc4e61",
+       "cost_head": "b13fd1c15c220a58",
+       "task_value_head": "548c1799683319c1",
+       "trunk": "e871d030f871f69a"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "89cf70d032cc4e61",
+       "cost_head": "b13fd1c15c220a58",
+       "task_value_head": "548c1799683319c1",
+       "trunk": "e871d030f871f69a"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 1.1920928955078125e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 1.1920928955078125e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 996,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "4121da912770c41ec64310f4c2907bd74fc3b2e3e30aac8ccaf77b156829dba4",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ALL_ROWS_s22_b0.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "a0ebe625549c39b8a04c4d441853328e7c4a2a26079d90e41676a78227588415",
+      "round34_observed": "a0ebe625549c39b8a04c4d441853328e7c4a2a26079d90e41676a78227588415",
+      "round35_recomputed": "a0ebe625549c39b8a04c4d441853328e7c4a2a26079d90e41676a78227588415"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 4,
+      "lambda": 1.0,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 0,
+      "reduction_mode": "ALL_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 0
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "index_claim": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "fca467c3f0ebb576",
+       "cost_head": "23389c1e4163363b",
+       "task_value_head": "4d30bcf031207efa",
+       "trunk": "a346a1b0df5c8806"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "fca467c3f0ebb576",
+       "cost_head": "23389c1e4163363b",
+       "task_value_head": "4d30bcf031207efa",
+       "trunk": "a346a1b0df5c8806"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 2.384185791015625e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 2.384185791015625e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 626,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "a0ebe625549c39b8a04c4d441853328e7c4a2a26079d90e41676a78227588415",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ALL_ROWS_s22_b15.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "b9ff87587c8c8e67ab50fbeb89ec526140e09cb2b7fa5cf77d88093475933731",
+      "round34_observed": "b9ff87587c8c8e67ab50fbeb89ec526140e09cb2b7fa5cf77d88093475933731",
+      "round35_recomputed": "b9ff87587c8c8e67ab50fbeb89ec526140e09cb2b7fa5cf77d88093475933731"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 64,
+      "lambda": 1.1999999999999995,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 212,
+      "reduction_mode": "ALL_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 15
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "5d1ffbc195ace4a016ca7b51ae740e74416f2b85baf18a33385e3dc647d5faf8",
+      "index_claim": "5d1ffbc195ace4a016ca7b51ae740e74416f2b85baf18a33385e3dc647d5faf8",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "5d1ffbc195ace4a016ca7b51ae740e74416f2b85baf18a33385e3dc647d5faf8",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "13f3d63db17bfa62",
+       "cost_head": "67796fda3f77f418",
+       "task_value_head": "8292e16dcac367cf",
+       "trunk": "766557c5777e8edb"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "13f3d63db17bfa62",
+       "cost_head": "67796fda3f77f418",
+       "task_value_head": "8292e16dcac367cf",
+       "trunk": "766557c5777e8edb"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 2.682209014892578e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 2.682209014892578e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 764,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "b9ff87587c8c8e67ab50fbeb89ec526140e09cb2b7fa5cf77d88093475933731",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ALL_ROWS_s22_b31.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "da7a61c31c9488c4a701f6f393bbad013b00663cacf56f3e0ad97b08cc06fe2b",
+      "round34_observed": "da7a61c31c9488c4a701f6f393bbad013b00663cacf56f3e0ad97b08cc06fe2b",
+      "round35_recomputed": "da7a61c31c9488c4a701f6f393bbad013b00663cacf56f3e0ad97b08cc06fe2b"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 128,
+      "lambda": 1.2374999999999994,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 332,
+      "reduction_mode": "ALL_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 31
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "e337a02cd0127af4548072f52b9967d72595b892a15d93dd23d7cf0103e42a1d",
+      "index_claim": "e337a02cd0127af4548072f52b9967d72595b892a15d93dd23d7cf0103e42a1d",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "e337a02cd0127af4548072f52b9967d72595b892a15d93dd23d7cf0103e42a1d",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "150f191adf7b915a",
+       "cost_head": "912182e5646392ef",
+       "task_value_head": "5f5a3d023e623faa",
+       "trunk": "e304faaa51ead1e6"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "150f191adf7b915a",
+       "cost_head": "912182e5646392ef",
+       "task_value_head": "5f5a3d023e623faa",
+       "trunk": "e304faaa51ead1e6"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 4.0605664253234863e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 4.0605664253234863e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 324,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "da7a61c31c9488c4a701f6f393bbad013b00663cacf56f3e0ad97b08cc06fe2b",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ALL_ROWS_s33_b0.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "ab9a3dfd3a1b68a64b86db4612bb746a5d626f2e59bf33bb0849f245517c5927",
+      "round34_observed": "ab9a3dfd3a1b68a64b86db4612bb746a5d626f2e59bf33bb0849f245517c5927",
+      "round35_recomputed": "ab9a3dfd3a1b68a64b86db4612bb746a5d626f2e59bf33bb0849f245517c5927"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 4,
+      "lambda": 1.0,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 0,
+      "reduction_mode": "ALL_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 0
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "index_claim": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "c355229517aba666",
+       "cost_head": "bddb33723efa5ff6",
+       "task_value_head": "d2d4270b71c7546e",
+       "trunk": "973040578caedf4b"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "c355229517aba666",
+       "cost_head": "bddb33723efa5ff6",
+       "task_value_head": "d2d4270b71c7546e",
+       "trunk": "973040578caedf4b"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 2.384185791015625e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 2.384185791015625e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 616,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "ab9a3dfd3a1b68a64b86db4612bb746a5d626f2e59bf33bb0849f245517c5927",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ALL_ROWS_s33_b15.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "def4300a3b7669bc255e0815ad36db0197d8331762144ae88d17ce8549df213b",
+      "round34_observed": "def4300a3b7669bc255e0815ad36db0197d8331762144ae88d17ce8549df213b",
+      "round35_recomputed": "def4300a3b7669bc255e0815ad36db0197d8331762144ae88d17ce8549df213b"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 64,
+      "lambda": 1.2249999999999996,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 224,
+      "reduction_mode": "ALL_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 15
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "29b2fcb971dd2e2bc2468a569aa29aaacaf8295ed8b2452df80405e07b07636f",
+      "index_claim": "29b2fcb971dd2e2bc2468a569aa29aaacaf8295ed8b2452df80405e07b07636f",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "29b2fcb971dd2e2bc2468a569aa29aaacaf8295ed8b2452df80405e07b07636f",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "81d716fd9ea2f24d",
+       "cost_head": "bbc6c271de5e2f66",
+       "task_value_head": "89288bad6fc8473d",
+       "trunk": "efb09c6af51aebc7"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "81d716fd9ea2f24d",
+       "cost_head": "bbc6c271de5e2f66",
+       "task_value_head": "89288bad6fc8473d",
+       "trunk": "efb09c6af51aebc7"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 1.7881393432617188e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 1.7881393432617188e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 1002,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "def4300a3b7669bc255e0815ad36db0197d8331762144ae88d17ce8549df213b",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    },
+    "r32_pre_ALL_ROWS_s33_b31.pt": {
+     "L1_file_sha256": {
+      "all_three_equal": true,
+      "index_claim": "12753b43bff23e3d7e4bdf403e84cc408a22155d24c239a68cdf1a11f1313a91",
+      "round34_observed": "12753b43bff23e3d7e4bdf403e84cc408a22155d24c239a68cdf1a11f1313a91",
+      "round35_recomputed": "12753b43bff23e3d7e4bdf403e84cc408a22155d24c239a68cdf1a11f1313a91"
+     },
+     "L2_payload_metadata": {
+      "episodes_done": 128,
+      "lambda": 1.4499999999999993,
+      "lambda_matches_index_claim": true,
+      "optimizer_steps": 448,
+      "reduction_mode": "ALL_ROWS",
+      "reward_timing_version": null,
+      "round34_declared_unavailable": [
+       "unavailable_without_pytorch",
+       "unavailable_without_pytorch"
+      ],
+      "schemas": {
+       "gae_schema": "per-decision-next-value/1",
+       "loss_version": "constrained-lagrangian/2",
+       "optimizer_schema": "stage-c-four-module-parameter-set/1",
+       "reward_timing_schema": "post-action-most-recent-decision/1",
+       "schema": "constrained-cost-state/2",
+       "trainer_tag": "constrained-cost-v2"
+      },
+      "training_version": null,
+      "updates": 31
+     },
+     "L3_parameter_content": {
+      "batch_record_before_claim": "0384e4bda2bf9732881eb4b00ca092a598759a4d2113bca3e4bb2b21b6fdd958",
+      "index_claim": "0384e4bda2bf9732881eb4b00ca092a598759a4d2113bca3e4bb2b21b6fdd958",
+      "parameter_count_claimed": 5700,
+      "parameter_count_recomputed": 5700,
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": "0384e4bda2bf9732881eb4b00ca092a598759a4d2113bca3e4bb2b21b6fdd958",
+      "shapes_match": true
+     },
+     "L4_module_digests": {
+      "claim": {
+       "action_head": "5197fd2a028e88bd",
+       "cost_head": "c926b6219e22ee2c",
+       "task_value_head": "bcae871139cbf304",
+       "trunk": "3ead0c57e04c71d7"
+      },
+      "round34_declared": "not recomputed (PyTorch unavailable)",
+      "round35_recomputed": {
+       "action_head": "5197fd2a028e88bd",
+       "cost_head": "c926b6219e22ee2c",
+       "task_value_head": "bcae871139cbf304",
+       "trunk": "3ead0c57e04c71d7"
+      }
+     },
+     "L5_forward_likelihood": {
+      "archived_sidecar_recorded_gap": 1.7881393432617188e-07,
+      "gap_difference_vs_sidecar": 0.0,
+      "max_abs_gap_recomputed": 1.7881393432617188e-07,
+      "round34_declared": "not run (PyTorch unavailable)",
+      "sidecar_comparable": true,
+      "tapes": 987,
+      "within_tolerance": true
+     },
+     "file_byte_hash_after_processing": "12753b43bff23e3d7e4bdf403e84cc408a22155d24c239a68cdf1a11f1313a91",
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     }
+    }
+   },
+   "problems": []
+  },
+  "N_new_checkpoints_content_layer": {
+   "files": {
+    "v2_train_s11.pt": {
+     "L1_file_sha256": "4d68f867229507ba6c640c43ed155de9aea55334ff161a3e071995dc27fd3c5b",
+     "L2_payload_metadata": {
+      "gae_schema": "per-decision-next-value/1",
+      "loss_version": "constrained-lagrangian/2",
+      "optimizer_schema": "stage-c-four-module-parameter-set/1",
+      "reward_timing_schema": "post-action-most-recent-decision/1",
+      "reward_timing_version": "published-completion-event-at-relay-tick/2",
+      "schema": "constrained-cost-state/2",
+      "trainer_tag": "constrained-cost-v2",
+      "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2"
+     },
+     "L2_training_state_self_description": {
+      "data_order_seed": 20260927,
+      "episodes_done": 8,
+      "gae_schema": "per-decision-next-value/1",
+      "lambda": 1.025,
+      "loss_version": "constrained-lagrangian/2",
+      "optimizer_schema": "stage-c-four-module-parameter-set/1",
+      "optimizer_steps": 24,
+      "reward_timing_schema": "post-action-most-recent-decision/1",
+      "reward_timing_version": "published-completion-event-at-relay-tick/2",
+      "state_schema": "constrained-cost-state/2",
+      "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+      "updates": 2
+     },
+     "L3_parameter_content": {
+      "all_saved_tensors_finite": true,
+      "parameter_count_recomputed": 5700,
+      "parameter_sha256_recomputed": "2b4bcc0cfaba8da7ee112663c022ac4c4f1eb0cb6008bff1a487e54bc2ac6470",
+      "shapes_recomputed": {
+       "action_head.bias": [
+        2
+       ],
+       "action_head.weight": [
+        2,
+        64
+       ],
+       "trunk.0.bias": [
+        64
+       ],
+       "trunk.0.weight": [
+        64,
+        19
+       ],
+       "trunk.2.bias": [
+        64
+       ],
+       "trunk.2.weight": [
+        64,
+        64
+       ],
+       "value_cost_head.bias": [
+        1
+       ],
+       "value_cost_head.weight": [
+        1,
+        64
+       ],
+       "value_task_head.bias": [
+        1
+       ],
+       "value_task_head.weight": [
+        1,
+        64
+       ]
+      }
+     },
+     "L4_module_digests": {
+      "action_head": "e216b2f6287e29a0",
+      "cost_head": "d8f68d16e6a6c6c9",
+      "task_value_head": "710eefa0b45377e2",
+      "trunk": "bbfa734a8d13188a"
+     },
+     "L5_forward_likelihood": null,
+     "bytes": 99435,
+     "file_byte_hash_after_processing": "4d68f867229507ba6c640c43ed155de9aea55334ff161a3e071995dc27fd3c5b"
+    },
+    "v2_train_s11_ep0.pt": {
+     "L1_file_sha256": "8d2fc11eebae92286c8b626962eef0a67e3b1690c825a45275526dcd9b2b8d1c",
+     "L2_payload_metadata": {
+      "gae_schema": "per-decision-next-value/1",
+      "loss_version": "constrained-lagrangian/2",
+      "optimizer_schema": "stage-c-four-module-parameter-set/1",
+      "reward_timing_schema": "post-action-most-recent-decision/1",
+      "reward_timing_version": "published-completion-event-at-relay-tick/2",
+      "schema": "constrained-cost-state/2",
+      "trainer_tag": "constrained-cost-v2",
+      "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2"
+     },
+     "L2_training_state_self_description": {
+      "data_order_seed": 20260927,
+      "episodes_done": 0,
+      "gae_schema": "per-decision-next-value/1",
+      "lambda": 1.0,
+      "loss_version": "constrained-lagrangian/2",
+      "optimizer_schema": "stage-c-four-module-parameter-set/1",
+      "optimizer_steps": 0,
+      "reward_timing_schema": "post-action-most-recent-decision/1",
+      "reward_timing_version": "published-completion-event-at-relay-tick/2",
+      "state_schema": "constrained-cost-state/2",
+      "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+      "updates": 0
+     },
+     "L3_parameter_content": {
+      "all_saved_tensors_finite": true,
+      "parameter_count_recomputed": 5700,
+      "parameter_sha256_recomputed": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "shapes_recomputed": {
+       "action_head.bias": [
+        2
+       ],
+       "action_head.weight": [
+        2,
+        64
+       ],
+       "trunk.0.bias": [
+        64
+       ],
+       "trunk.0.weight": [
+        64,
+        19
+       ],
+       "trunk.2.bias": [
+        64
+       ],
+       "trunk.2.weight": [
+        64,
+        64
+       ],
+       "value_cost_head.bias": [
+        1
+       ],
+       "value_cost_head.weight": [
+        1,
+        64
+       ],
+       "value_task_head.bias": [
+        1
+       ],
+       "value_task_head.weight": [
+        1,
+        64
+       ]
+      }
+     },
+     "L4_module_digests": {
+      "action_head": "919b468b0b64ea35",
+      "cost_head": "2678d4c8b7b1caa8",
+      "task_value_head": "e94ae85e5c97bfc5",
+      "trunk": "b1d3494d691270bf"
+     },
+     "L5_forward_likelihood": {
+      "max_abs_gap_recomputed_here": 2.384185791015625e-07,
+      "recorded_in_this_rounds_batch_record": {
+       "max_abs_gap": 2.384185791015625e-07,
+       "passed": true,
+       "samples": 623,
+       "tolerance": 1e-06
+      },
+      "tapes_of_batch": 623,
+      "tolerance": 1e-06,
+      "within_tolerance": true
+     },
+     "bytes": 46021,
+     "file_byte_hash_after_processing": "8d2fc11eebae92286c8b626962eef0a67e3b1690c825a45275526dcd9b2b8d1c"
+    }
+   },
+   "note": "the whole-controller parameter digest and the four module digests are separate namespaces and are compared only against claims of the same kind",
+   "passed": true,
+   "problems": []
+  }
+ },
+ "clean": true,
+ "environment_launches_used_by_this_script": 0,
+ "episode_constructions_by_this_script": 0,
+ "legacy_files_written": 0,
+ "note": "ROUND34's conclusions are left exactly as delivered; this file is the independent completion of the layers it could not reach",
+ "optimizer_steps_by_this_script": 0,
+ "problems": [],
+ "round": 35,
+ "round34_layers_it_declared_unavailable": [
+  "checkpoint payload metadata",
+  "parameter content / module digests",
+  "native forward",
+  "native likelihood"
+ ],
+ "round35_status_of_those_layers": "all executed for real on this machine (torch 2.9.0+cu128), see the per-file records",
+ "schema": "round35-checkpoint-content-layer/1",
+ "summary_counts": {
+  "legacy_checkpoints": 18,
+  "native_forward_and_likelihood_runs_on_legacy": 18,
+  "parameter_digests_matching_claims": 18
+ }
+}

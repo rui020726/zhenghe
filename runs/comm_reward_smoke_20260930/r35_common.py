@@ -203,6 +203,30 @@ def archived_expectation(arm: str = "ALL_ROWS", seed: int = SMOKE_SEED,
     return {"arm": arm, "seed": seed, "episodes": per_episode}
 
 
+def book_verification_optimizer_steps(steps: int, purpose: str) -> dict[str, Any]:
+    """Book real optimizer.step calls made by a verification script, not by a launch.
+
+    The smoke's authorisation counts every optimizer step against one ceiling of 100, including
+    the steps a restore check performs while recomputing an update from a checkpoint.
+    """
+    book = smoke_book()
+    book["verification_optimizer_steps"] = int(book.get("verification_optimizer_steps") or 0) + \
+        int(steps)
+    book["optimizer_steps"] = int(book.get("optimizer_steps") or 0) + int(steps)
+    book["events"].append({"kind": "verification", "optimizer_steps": int(steps),
+                           "pid": os.getpid(), "purpose": purpose})
+    if book["optimizer_steps"] > MAX_OPTIMIZER_STEPS:
+        raise RuntimeError(f"booking {steps} more steps would exceed the authorised ceiling of "
+                           f"{MAX_OPTIMIZER_STEPS} (running total "
+                           f"{book['optimizer_steps']})")
+    write_json("SMOKE_LAUNCH_BOOK.json", book, refresh=True)
+    return book
+
+
+def digest_of(value: Any) -> str:
+    return hashlib.sha256(json.dumps(value, sort_keys=True, default=str).encode("utf-8")).hexdigest()
+
+
 def write_json(name: str, payload: dict[str, Any], *, refresh: bool = False) -> Path:
     """This round's artefact writer: refuses to rewrite a delivered file unless asked."""
     if os.sep in name or "/" in name or ".." in name:

@@ -1,0 +1,358 @@
+{
+ "authorised_launch_position": "this script needs no runner launch; the cross-process continuation test still needs a decision",
+ "checks": {
+  "R1_new_checkpoint_real_resume": {
+   "both_version_fields_present_in_new_checkpoints": true,
+   "observations": {
+    "ep0_milestone": {
+     "bytes": 46021,
+     "data_order_seed": 20260927,
+     "episodes_done": 0,
+     "file_sha256": "8d2fc11eebae92286c8b626962eef0a67e3b1690c825a45275526dcd9b2b8d1c",
+     "gae_schema": "per-decision-next-value/1",
+     "lambda": 1.0,
+     "loss_version": "constrained-lagrangian/2",
+     "module_digests_after_restore": {
+      "action_head": "919b468b0b64ea35",
+      "cost_head": "2678d4c8b7b1caa8",
+      "task_value_head": "e94ae85e5c97bfc5",
+      "trunk": "b1d3494d691270bf"
+     },
+     "optimizer_schema": "stage-c-four-module-parameter-set/1",
+     "optimizer_state_sha256": "89d034b395e9e76889ea6dc37c86ab06771b39cc828cfe171a17cd71dc96f6c2",
+     "optimizer_steps": 0,
+     "parameter_sha256_after_restore": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+     "parameter_sha256_declared_in_payload": null,
+     "path": "v2_train_s11_ep0.pt",
+     "reward_timing_schema": "post-action-most-recent-decision/1",
+     "reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "rng_keys": [
+      "numpy",
+      "python",
+      "torch"
+     ],
+     "rng_restored_matches_file": true,
+     "second_load_identical": true,
+     "state_schema": "constrained-cost-state/2",
+     "trainer_tag": "constrained-cost-v2",
+     "training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "updates": 0
+    },
+    "rolling_after_8_episodes": {
+     "bytes": 99435,
+     "data_order_seed": 20260927,
+     "episodes_done": 8,
+     "file_sha256": "4d68f867229507ba6c640c43ed155de9aea55334ff161a3e071995dc27fd3c5b",
+     "gae_schema": "per-decision-next-value/1",
+     "lambda": 1.025,
+     "loss_version": "constrained-lagrangian/2",
+     "module_digests_after_restore": {
+      "action_head": "e216b2f6287e29a0",
+      "cost_head": "d8f68d16e6a6c6c9",
+      "task_value_head": "710eefa0b45377e2",
+      "trunk": "bbfa734a8d13188a"
+     },
+     "optimizer_schema": "stage-c-four-module-parameter-set/1",
+     "optimizer_state_sha256": "c495a0338a1800e242f8cce0f748c297e790e5dcf91822d39fdf121af5c417b2",
+     "optimizer_steps": 24,
+     "parameter_sha256_after_restore": "2b4bcc0cfaba8da7ee112663c022ac4c4f1eb0cb6008bff1a487e54bc2ac6470",
+     "parameter_sha256_declared_in_payload": null,
+     "path": "v2_train_s11.pt",
+     "reward_timing_schema": "post-action-most-recent-decision/1",
+     "reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "rng_keys": [
+      "numpy",
+      "python",
+      "torch"
+     ],
+     "rng_restored_matches_file": true,
+     "second_load_identical": true,
+     "state_schema": "constrained-cost-state/2",
+     "trainer_tag": "constrained-cost-v2",
+     "training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "updates": 2
+    }
+   },
+   "passed": true,
+   "problems": []
+  },
+  "R2_tampered_copies_refused_before_restore": {
+   "method": "the controller builder, the Adam constructor and restore_rng were wrapped with counters, so 'refused before restoring' is an observed call count, not an assertion about the code",
+   "original_checkpoints_unmodified": true,
+   "passed": true,
+   "problems": [],
+   "process_rng_untouched_by_the_refusals": true,
+   "variants": {
+    "payload_reward_timing_version_wrong": {
+     "accepted": false,
+     "controller_built_after_the_refusal": 0,
+     "message": "tampered_payload_reward_timing_version_wrong.pt: training/reward timing version mismatch; this checkpoint is read-only under the current reward-capture version",
+     "optimizer_built_after_the_refusal": 0,
+     "refused_before_any_restore": true,
+     "rng_restored_after_the_refusal": 0
+    },
+    "payload_training_version_wrong": {
+     "accepted": false,
+     "controller_built_after_the_refusal": 0,
+     "message": "tampered_payload_training_version_wrong.pt: training/reward timing version mismatch; this checkpoint is read-only under the current reward-capture version",
+     "optimizer_built_after_the_refusal": 0,
+     "refused_before_any_restore": true,
+     "rng_restored_after_the_refusal": 0
+    },
+    "payload_versions_absent": {
+     "accepted": false,
+     "controller_built_after_the_refusal": 0,
+     "message": "tampered_payload_versions_absent.pt: training/reward timing version mismatch; this checkpoint is read-only under the current reward-capture version",
+     "optimizer_built_after_the_refusal": 0,
+     "refused_before_any_restore": true,
+     "rng_restored_after_the_refusal": 0
+    },
+    "training_state_reward_timing_version_absent": {
+     "accepted": false,
+     "controller_built_after_the_refusal": 0,
+     "message": "tampered_training_state_reward_timing_version_absent.pt: training/reward timing version mismatch; this checkpoint is read-only under the current reward-capture version",
+     "optimizer_built_after_the_refusal": 0,
+     "refused_before_any_restore": true,
+     "rng_restored_after_the_refusal": 0
+    },
+    "training_state_training_version_wrong": {
+     "accepted": false,
+     "controller_built_after_the_refusal": 0,
+     "message": "tampered_training_state_training_version_wrong.pt: training/reward timing version mismatch; this checkpoint is read-only under the current reward-capture version",
+     "optimizer_built_after_the_refusal": 0,
+     "refused_before_any_restore": true,
+     "rng_restored_after_the_refusal": 0
+    }
+   }
+  },
+  "R3_real_legacy_checkpoints": {
+   "check_order_note": "with the matching freeze identity the version gate is what refuses; with a foreign freeze identity the earlier freeze gate refuses first, so both refusals are reported separately rather than merged",
+   "files": {
+    "r32_pre_ALL_ROWS_s11_b0.pt": {
+     "file_sha256": "f0414df67a5a04f7e3ebcb4d85cd97f46d239215d8416686b0d684acf449a17d",
+     "freeze_fields_recorded_by_the_file": [
+      "branch_start",
+      "config_hash",
+      "encoder_arm",
+      "feature_layout",
+      "freeze_sha256",
+      "head_at_freeze",
+      "reduction",
+      "reduction_definition",
+      "round"
+     ],
+     "freeze_matches_the_archived_manifest_fields": true,
+     "path": "r32_pre_ALL_ROWS_s11_b0.pt",
+     "payload_keys": [
+      "controller",
+      "freeze",
+      "gae_schema",
+      "loss_version",
+      "optimizer",
+      "optimizer_schema",
+      "reduction_mode",
+      "reduction_trainer_tag",
+      "reward_timing_schema",
+      "rng",
+      "schema",
+      "trainer_tag",
+      "training_state"
+     ],
+     "payload_reward_timing_version": null,
+     "payload_training_version": null,
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     },
+     "read_only_load_succeeded": true,
+     "read_only_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+     "read_only_training_state_episodes_done": 4,
+     "reconstructed_identity_equals_the_file_claim": true,
+     "reduction_mode_recorded": "ALL_ROWS",
+     "resume_with_matching_freeze": {
+      "message": "r32_pre_ALL_ROWS_s11_b0.pt: training/reward timing version mismatch; this checkpoint is read-only under the current reward-capture version",
+      "refusal_is_the_version_gate": true,
+      "refused": true
+     },
+     "resume_with_stage_c_freeze": {
+      "message": "r32_pre_ALL_ROWS_s11_b0.pt: freeze identity mismatch; refusing to resume",
+      "refused": true,
+      "which_gate_fired_first": "freeze identity"
+     },
+     "schemas": {
+      "gae_schema": "per-decision-next-value/1",
+      "loss_version": "constrained-lagrangian/2",
+      "optimizer_schema": "stage-c-four-module-parameter-set/1",
+      "reward_timing_schema": "post-action-most-recent-decision/1",
+      "schema": "constrained-cost-state/2",
+      "trainer_tag": "constrained-cost-v2"
+     }
+    },
+    "r32_train_ALL_ROWS_s11.pt": {
+     "file_sha256": "7ef85daef5bae7624a9cdf2f8cb7c35a1ffe82a48cae1cd706bb12bc4b86e79b",
+     "freeze_fields_recorded_by_the_file": [
+      "branch_start",
+      "config_hash",
+      "encoder_arm",
+      "feature_layout",
+      "freeze_sha256",
+      "head_at_freeze",
+      "reduction",
+      "reduction_definition",
+      "round"
+     ],
+     "freeze_matches_the_archived_manifest_fields": true,
+     "path": "r32_train_ALL_ROWS_s11.pt",
+     "payload_keys": [
+      "controller",
+      "freeze",
+      "gae_schema",
+      "loss_version",
+      "optimizer",
+      "optimizer_schema",
+      "reduction_mode",
+      "reduction_trainer_tag",
+      "reward_timing_schema",
+      "rng",
+      "schema",
+      "trainer_tag",
+      "training_state"
+     ],
+     "payload_reward_timing_version": null,
+     "payload_training_version": null,
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     },
+     "read_only_load_succeeded": true,
+     "read_only_parameter_sha256": "f56fca850402c5b16a1d02da1d9afdc626e9c4e5e529aa3daea45612a00196c9",
+     "read_only_training_state_episodes_done": 128,
+     "reconstructed_identity_equals_the_file_claim": true,
+     "reduction_mode_recorded": "ALL_ROWS",
+     "resume_with_matching_freeze": {
+      "message": "r32_train_ALL_ROWS_s11.pt: training/reward timing version mismatch; this checkpoint is read-only under the current reward-capture version",
+      "refusal_is_the_version_gate": true,
+      "refused": true
+     },
+     "resume_with_stage_c_freeze": {
+      "message": "r32_train_ALL_ROWS_s11.pt: freeze identity mismatch; refusing to resume",
+      "refused": true,
+      "which_gate_fired_first": "freeze identity"
+     },
+     "schemas": {
+      "gae_schema": "per-decision-next-value/1",
+      "loss_version": "constrained-lagrangian/2",
+      "optimizer_schema": "stage-c-four-module-parameter-set/1",
+      "reward_timing_schema": "post-action-most-recent-decision/1",
+      "schema": "constrained-cost-state/2",
+      "trainer_tag": "constrained-cost-v2"
+     }
+    },
+    "r32_train_ALL_ROWS_s11_ep0.pt": {
+     "file_sha256": "6d1761cfaa04ce9dad9c989ccf48b73d68caccf89aa3b493c968dcefc6f29abf",
+     "freeze_fields_recorded_by_the_file": [
+      "branch_start",
+      "config_hash",
+      "encoder_arm",
+      "feature_layout",
+      "freeze_sha256",
+      "head_at_freeze",
+      "reduction",
+      "reduction_definition",
+      "round"
+     ],
+     "freeze_matches_the_archived_manifest_fields": true,
+     "path": "r32_train_ALL_ROWS_s11_ep0.pt",
+     "payload_keys": [
+      "controller",
+      "freeze",
+      "gae_schema",
+      "loss_version",
+      "optimizer",
+      "optimizer_schema",
+      "reduction_mode",
+      "reduction_trainer_tag",
+      "reward_timing_schema",
+      "rng",
+      "schema",
+      "trainer_tag",
+      "training_state"
+     ],
+     "payload_reward_timing_version": null,
+     "payload_training_version": null,
+     "read_only_identity": {
+      "load_mode": "read_only",
+      "optimizer_restored": false,
+      "reward_timing_version": null,
+      "rng_restored": false,
+      "timing_interpretation": "legacy_unversioned_capture_semantics",
+      "training_version": null
+     },
+     "read_only_load_succeeded": true,
+     "read_only_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+     "read_only_training_state_episodes_done": 0,
+     "reconstructed_identity_equals_the_file_claim": true,
+     "reduction_mode_recorded": "ALL_ROWS",
+     "resume_with_matching_freeze": {
+      "message": "r32_train_ALL_ROWS_s11_ep0.pt: training/reward timing version mismatch; this checkpoint is read-only under the current reward-capture version",
+      "refusal_is_the_version_gate": true,
+      "refused": true
+     },
+     "resume_with_stage_c_freeze": {
+      "message": "r32_train_ALL_ROWS_s11_ep0.pt: freeze identity mismatch; refusing to resume",
+      "refused": true,
+      "which_gate_fired_first": "freeze identity"
+     },
+     "schemas": {
+      "gae_schema": "per-decision-next-value/1",
+      "loss_version": "constrained-lagrangian/2",
+      "optimizer_schema": "stage-c-four-module-parameter-set/1",
+      "reward_timing_schema": "post-action-most-recent-decision/1",
+      "schema": "constrained-cost-state/2",
+      "trainer_tag": "constrained-cost-v2"
+     }
+    }
+   },
+   "legacy_files_selected": [
+    "r32_pre_ALL_ROWS_s11_b0.pt",
+    "r32_train_ALL_ROWS_s11.pt",
+    "r32_train_ALL_ROWS_s11_ep0.pt"
+   ],
+   "passed": true,
+   "problems": [],
+   "selection_rule": "one b0 pre-update checkpoint, one rolling checkpoint and one ep0 milestone from ROUND32, all unversioned"
+  },
+  "R4_deterministic_continuation_from_the_restored_state": {
+   "optimizer_steps_performed_here": 12,
+   "passed": true,
+   "problems": [],
+   "recomputed_lambda_equal": true,
+   "recomputed_optimizer_steps_equal": true,
+   "recomputed_parameters_after_equal_the_record": true,
+   "restored_initial_parameters_equal_the_batch_record": true,
+   "samples_recomputed": 623,
+   "samples_recorded": 623,
+   "these_steps_are_booked": true,
+   "what_this_does_not_cover": "running new episode rollouts after a cross-process resume needs another runner invocation and is outside the authorised launch count; it is registered as an uncovered item rather than claimed"
+  }
+ },
+ "clean": true,
+ "environment_launches_used_by_this_script": 0,
+ "episode_constructions_by_this_script": 0,
+ "old_round_files_modified": 0,
+ "problems": [],
+ "round": 35,
+ "schema": "round35-restore-boundary/1"
+}

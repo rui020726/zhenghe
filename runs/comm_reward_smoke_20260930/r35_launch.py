@@ -32,8 +32,14 @@ def _summary(result: dict[str, Any]) -> dict[str, Any]:
              "seconds", "checkpoint", "controller_parameters")}
 
 
-def run(launch_tag: str) -> int:
+def run(launch_tag: str, *, with_probe: bool = False) -> int:
     paths = smoke.configure(launch_tag)
+    probe = None
+    if with_probe:
+        import r35_probe
+
+        probe = r35_probe.Probe()
+        probe.install()
     identity = smoke.code_identity()
     freeze = smoke.freeze_identity()
     cache = smoke.reference_cache()
@@ -86,6 +92,19 @@ def run(launch_tag: str) -> int:
     out = smoke.HERE / f"{launch_tag.upper()}_SUMMARY.json"
     out.write_text(json.dumps(detail, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
                    encoding="utf-8")
+    if probe is not None:
+        r35_probe_dump = smoke.write_json(f"{launch_tag.upper()}_COLLECTOR_PROBE.json",
+                                          {"schema": "round35-collector-probe/1",
+                                           "launch_tag": launch_tag,
+                                           "instrumentation": "class-level read-only wrapper "
+                                                              "around "
+                                                              "PublishedProgressRewardCollector"
+                                                              ".handle_progress and "
+                                                              "InMemoryEventBus.publish, "
+                                                              "installed in this process only",
+                                           **probe.summary()},
+                                          refresh=True)
+        print("probe written to", r35_probe_dump, flush=True)
     print(json.dumps({"launch_tag": launch_tag, "phases": [
         {key: phase["result"][key] for key in
          ("episodes_done", "updates", "optimizer_steps", "lambda")} for phase in phases],
@@ -100,4 +119,7 @@ if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="one authorised ROUND35 smoke launch")
     parser.add_argument("--launch-tag", required=True, choices=("launch1", "launch2"))
-    raise SystemExit(run(parser.parse_args(sys.argv[1:]).launch_tag))
+    parser.add_argument("--with-probe", action="store_true",
+                        help="attach the read-only collector probe (launch 2 only)")
+    arguments = parser.parse_args(sys.argv[1:])
+    raise SystemExit(run(arguments.launch_tag, with_probe=arguments.with_probe))

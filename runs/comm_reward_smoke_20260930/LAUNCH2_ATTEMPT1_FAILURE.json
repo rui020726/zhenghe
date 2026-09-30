@@ -1,0 +1,73 @@
+{
+ "action_taken": "stopped; no further launch attempted until the boundary question above is answered. All launch-free verification work continues.",
+ "attempt": 1,
+ "cause": "this round's own read-only probe read TaskSnapshot.task_revision, a field that does not exist on that class, so the wrapper raised before the real handler ran",
+ "consumed_by_this_attempt": {
+  "booked_in_the_round_launch_book": false,
+  "checkpoints_written": [
+   "launch2/checkpoints/v2_train_s11_ep0.pt (the registered initialisation milestone, written before the rollout)"
+  ],
+  "episode_constructions_in_the_launch2_ledger": 1,
+  "episode_row_written": false,
+  "optimizer_steps_performed": 0,
+  "refunded": false
+ },
+ "file_and_line": {
+  "production_files_faulty": [
+   "runs/comm_reward_smoke_20260930/r35_probe.py only"
+  ],
+  "raised_in": "runs/comm_reward_smoke_20260930/r35_probe.py:50 (_registry_view)",
+  "reached_through": [
+   "runs/comm_reward_smoke_20260930/r35_launch.py:64 (train_seed for launch2)",
+   "runs/comm_cost_v2_rerun_20260928/v2_train.py:140 (run_training_episode)",
+   "runs/comm_cost_v2_rerun_20260928/v2_run.py:159 (run.run)",
+   "integrated_sar/orchestrator.py:96 (event_bus.publish)",
+   "runs/comm_reward_smoke_20260930/r35_probe.py:77 (patched_handler)"
+  ]
+ },
+ "launch_tag": "launch2",
+ "minimal_reproduction": {
+  "artefact": "LAUNCH2_ATTEMPT1_REPRO.json",
+  "case_A_raises": "AttributeError: 'TaskSnapshot' object has no attribute 'task_revision'",
+  "case_A_snapshot_fields_present": [
+   "active",
+   "confidence",
+   "current_stage",
+   "deadline",
+   "discovered_at",
+   "expired",
+   "members",
+   "metadata",
+   "position",
+   "progress",
+   "remaining_requirements",
+   "revision",
+   "severity",
+   "source_event_id",
+   "stages",
+   "status",
+   "task_id",
+   "updated_at"
+  ],
+  "case_B_after_the_fix": "handler completed with the probe attached",
+  "case_B_credits_written": {
+   "1": 1.0
+  },
+  "executed_by": "r35_failure_repro.py",
+  "traceback_from_the_real_run": "Traceback (most recent call last):\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_reward_smoke_20260930\r35_launch.py\", line 125, in <module>\n    raise SystemExit(run(arguments.launch_tag, with_probe=arguments.with_probe))\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_reward_smoke_20260930\r35_launch.py\", line 64, in run\n    first = v2_train.train_seed(smoke.SMOKE_SEED, episodes=4, freeze=freeze,\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_cost_v2_rerun_20260928\u000b2_train.py\", line 140, in train_seed\n    episode = runner.run_training_episode(\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_cost_v2_rerun_20260928\u000b2_run.py\", line 309, in run_training_episode\n    row = _run_episode(label, \"train\", scenario_seed, policy=\"learned\",\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_cost_v2_rerun_20260928\u000b2_run.py\", line 159, in _run_episode\n    summary = run.run()\n  File \"D:\\code\\整合\\zhenghe\\integrated_sar\\joint_driver.py\", line 833, in run\n    for report in self.orchestrator.run(total):\n  File \"D:\\code\\整合\\zhenghe\\integrated_sar\\orchestrator.py\", line 169, in run\n    yield self.step()\n  File \"D:\\code\\整合\\zhenghe\\integrated_sar\\orchestrator.py\", line 96, in step\n    self.event_bus.publish(event)\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_reward_smoke_20260930\r35_probe.py\", line 72, in patched_publish\n    return original_publish(self_bus, event)\n  File \"D:\\code\\整合\\zhenghe\\integrated_sar\\event_bus.py\", line 46, in publish\n    handler(current)\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_reward_smoke_20260930\r35_probe.py\", line 77, in patched_handler\n    registry_before = _registry_view(self_collector.registry, event.task_id)\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_reward_smoke_20260930\r35_probe.py\", line 50, in _registry_view\n    \"revision\": None if snapshot is None else int(snapshot.task_revision)}\nAttributeError: 'TaskSnapshot' object has no attribute 'task_revision'\n"
+ },
+ "no_production_or_trainer_file_was_changed": true,
+ "quota_after_this_attempt": {
+  "episode_constructions_remaining": 7,
+  "episode_constructions_used_counting_this_crash": 9,
+  "open_question_put_to_the_user": "does a runner invocation that died four seconds in, with no row and no update, count against the two authorised short launches? The strict reading says the second launch is now spent and the save/restore chain cannot be exercised without a new authorisation.",
+  "runner_invocations_authorised": 2,
+  "runner_invocations_started_including_this_one": 3
+ },
+ "round": 35,
+ "schema": "round35-launch-attempt-failure/1",
+ "traceback": "Traceback (most recent call last):\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_reward_smoke_20260930\r35_launch.py\", line 125, in <module>\n    raise SystemExit(run(arguments.launch_tag, with_probe=arguments.with_probe))\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_reward_smoke_20260930\r35_launch.py\", line 64, in run\n    first = v2_train.train_seed(smoke.SMOKE_SEED, episodes=4, freeze=freeze,\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_cost_v2_rerun_20260928\u000b2_train.py\", line 140, in train_seed\n    episode = runner.run_training_episode(\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_cost_v2_rerun_20260928\u000b2_run.py\", line 309, in run_training_episode\n    row = _run_episode(label, \"train\", scenario_seed, policy=\"learned\",\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_cost_v2_rerun_20260928\u000b2_run.py\", line 159, in _run_episode\n    summary = run.run()\n  File \"D:\\code\\整合\\zhenghe\\integrated_sar\\joint_driver.py\", line 833, in run\n    for report in self.orchestrator.run(total):\n  File \"D:\\code\\整合\\zhenghe\\integrated_sar\\orchestrator.py\", line 169, in run\n    yield self.step()\n  File \"D:\\code\\整合\\zhenghe\\integrated_sar\\orchestrator.py\", line 96, in step\n    self.event_bus.publish(event)\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_reward_smoke_20260930\r35_probe.py\", line 72, in patched_publish\n    return original_publish(self_bus, event)\n  File \"D:\\code\\整合\\zhenghe\\integrated_sar\\event_bus.py\", line 46, in publish\n    handler(current)\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_reward_smoke_20260930\r35_probe.py\", line 77, in patched_handler\n    registry_before = _registry_view(self_collector.registry, event.task_id)\n  File \"D:\\code\\整合\\zhenghe\runs\\comm_reward_smoke_20260930\r35_probe.py\", line 50, in _registry_view\n    \"revision\": None if snapshot is None else int(snapshot.task_revision)}\nAttributeError: 'TaskSnapshot' object has no attribute 'task_revision'\n",
+ "traceback_source": "stdout/stderr capture of the failed process (captured at the time of the crash, reproduced verbatim here)",
+ "utc": "2026-09-30T14:56:39+00:00",
+ "wall_clock_seconds_before_failure": 4.0
+}

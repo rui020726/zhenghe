@@ -277,8 +277,21 @@
    "launch_tag": "launch1",
    "optimizer_steps": 24,
    "pid": 612
+  },
+  {
+   "kind": "verification",
+   "optimizer_steps": 12,
+   "pid": 47188,
+   "purpose": "R4: recomputing batch 0's update from the restored ep0 milestone, to test whether the checkpoint preserves everything the continuation needs"
+  },
+  {
+   "kind": "verification",
+   "optimizer_steps": 12,
+   "pid": 51936,
+   "purpose": "R4: recomputing batch 0's update from the restored ep0 milestone, to test whether the checkpoint preserves everything the continuation needs"
   }
  ],
  "invocations": 1,
- "optimizer_steps": 24
+ "optimizer_steps": 48,
+ "verification_optimizer_steps": 24
 }

@@ -1,0 +1,53 @@
+{
+ "case_A_the_faulty_field_access": {
+  "error": "AttributeError: 'TaskSnapshot' object has no attribute 'task_revision'",
+  "raised": true,
+  "snapshot_fields_present": [
+   "active",
+   "confidence",
+   "current_stage",
+   "deadline",
+   "discovered_at",
+   "expired",
+   "members",
+   "metadata",
+   "position",
+   "progress",
+   "remaining_requirements",
+   "revision",
+   "severity",
+   "source_event_id",
+   "stages",
+   "status",
+   "task_id",
+   "updated_at"
+  ]
+ },
+ "case_B_outcome": "handler completed with the probe attached",
+ "case_B_with_the_fixed_probe": {
+  "ledger_rows": 1,
+  "task_stream": {
+   "1": 1.0
+  }
+ },
+ "environment_launches": 0,
+ "environments_stepped": 0,
+ "fixture": "production InMemoryEventBus + TaskRegistry + PublishedProgressRewardCollector, fake relay/clock holders only (the same class of fixture ROUND34 used)",
+ "probe_installed": true,
+ "probe_records_captured": 1,
+ "probe_summary_if_any": {
+  "calls_caught_by_the_probe": 1,
+  "clock_never_moved": true,
+  "completed_events": 1,
+  "credits_written": 1.0,
+  "events_never_published_by_the_handler": true,
+  "handler_calls": 1,
+  "non_completed_events_seen": 0,
+  "offenders": [],
+  "publishes_during_handler_total": 0,
+  "registry_never_mutated": true,
+  "rng_never_moved": true
+ },
+ "run_at": "2026-09-30T15:02:12+00:00",
+ "schema": "round35-failure-reproduction/1"
+}
