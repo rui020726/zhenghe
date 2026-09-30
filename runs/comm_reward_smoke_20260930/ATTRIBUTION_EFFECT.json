@@ -1,0 +1,458 @@
+{
+ "batches": {
+  "b0": {
+   "changed_readings": {
+    "approx_kl": {
+     "archived": -0.00031,
+     "smoke": -0.000287
+    },
+    "entropy": {
+     "archived": 0.081315,
+     "smoke": 0.081339
+    },
+    "gradient_norm_mean": {
+     "archived": 1.4959,
+     "smoke": 1.473
+    },
+    "policy_surrogate": {
+     "archived": 0.468154,
+     "smoke": 0.46128
+    },
+    "value_loss_cost": {
+     "archived": 0.129772,
+     "smoke": 0.129711
+    },
+    "value_loss_task": {
+     "archived": 0.692603,
+     "smoke": 0.671612
+    }
+   },
+   "episodes_and_scenarios_equal": true,
+   "g_hat": {
+    "archived": 0.25,
+    "equal": true,
+    "smoke": 0.25
+   },
+   "lambda_at_rollout_equal": true,
+   "lambda_next": {
+    "archived": 1.0125,
+    "equal": true,
+    "smoke": 1.0125
+   },
+   "minibatches_equal": true,
+   "module_digests_after": {
+    "archived": {
+     "action_head": "f1fcecee6b1b2bee",
+     "cost_head": "9893198ba40cd191",
+     "task_value_head": "b638e457409f3db1",
+     "trunk": "3446dcb59a3db6f3"
+    },
+    "smoke": {
+     "action_head": "4679f390ad01b11f",
+     "cost_head": "e826e79af3403ad6",
+     "task_value_head": "91273b0a3e3c806e",
+     "trunk": "127e83436ea7fced"
+    }
+   },
+   "optimizer_steps_equal": true,
+   "parameters_after_equal": false,
+   "samples": {
+    "archived": 623,
+    "equal": true,
+    "smoke": 623
+   },
+   "unassigned_prefix_task_reward_equal": true
+  },
+  "b1": {
+   "changed_readings": {
+    "approx_kl": {
+     "archived": 7e-06,
+     "smoke": -1.2e-05
+    },
+    "entropy": {
+     "archived": 0.088972,
+     "smoke": 0.089055
+    },
+    "gradient_norm_mean": {
+     "archived": 1.8136,
+     "smoke": 1.7842
+    },
+    "policy_surrogate": {
+     "archived": 0.535605,
+     "smoke": 0.528292
+    },
+    "value_loss_cost": {
+     "archived": 0.128182,
+     "smoke": 0.128072
+    },
+    "value_loss_task": {
+     "archived": 0.911878,
+     "smoke": 0.890506
+    }
+   },
+   "episodes_and_scenarios_equal": true,
+   "g_hat": {
+    "archived": 0.25,
+    "equal": true,
+    "smoke": 0.25
+   },
+   "lambda_at_rollout_equal": true,
+   "lambda_next": {
+    "archived": 1.025,
+    "equal": true,
+    "smoke": 1.025
+   },
+   "minibatches_equal": true,
+   "module_digests_after": {
+    "archived": {
+     "action_head": "d947802d3c8b08d3",
+     "cost_head": "1dc03138e479b032",
+     "task_value_head": "e0b32579cefc1205",
+     "trunk": "84569b40ed6e9285"
+    },
+    "smoke": {
+     "action_head": "e216b2f6287e29a0",
+     "cost_head": "d8f68d16e6a6c6c9",
+     "task_value_head": "710eefa0b45377e2",
+     "trunk": "bbfa734a8d13188a"
+    }
+   },
+   "optimizer_steps_equal": true,
+   "parameters_after_equal": false,
+   "samples": {
+    "archived": 555,
+    "equal": true,
+    "smoke": 555
+   },
+   "unassigned_prefix_task_reward_equal": true
+  }
+ },
+ "compared": "this launch's own rows/tapes/batch records against the archived ROUND32 ALL_ROWS_s11 cells of the same episodes and scenarios",
+ "credits_whose_owner_row_changed_total_over_eight_episodes": 30,
+ "environment_launches_used_by_this_script": 0,
+ "launch": "launch1",
+ "not_claimed": "no statement about learning quality; a 24-step smoke cannot show whether the corrected attribution helps or hurts learning",
+ "per_episode": {
+  "e0": {
+   "actions_identical_row_by_row": true,
+   "archived_keys": [
+    9,
+    26,
+    28,
+    34,
+    48,
+    194
+   ],
+   "credits_whose_owner_row_changed": 4,
+   "episode_totals_unchanged": true,
+   "features_identical_row_by_row": true,
+   "keys_one_tick_earlier": true,
+   "max_abs_log_prob_gap": 0.0,
+   "owner_rows_affected": [
+    "25",
+    "26",
+    "27",
+    "28",
+    "33",
+    "34",
+    "8",
+    "9"
+   ],
+   "scenario_archived": 1300027,
+   "scenario_smoke": 1300027,
+   "smoke_keys": [
+    8,
+    25,
+    27,
+    33,
+    47,
+    193
+   ],
+   "tape_rows": {
+    "archived": 66,
+    "smoke": 66
+   },
+   "weights_differ_at_this_rollout": false
+  },
+  "e1": {
+   "actions_identical_row_by_row": true,
+   "archived_keys": [
+    6,
+    14,
+    19,
+    24,
+    498
+   ],
+   "credits_whose_owner_row_changed": 3,
+   "episode_totals_unchanged": true,
+   "features_identical_row_by_row": true,
+   "keys_one_tick_earlier": true,
+   "max_abs_log_prob_gap": 0.0,
+   "owner_rows_affected": [
+    "13",
+    "14",
+    "18",
+    "19",
+    "5",
+    "6"
+   ],
+   "scenario_archived": 1300014,
+   "scenario_smoke": 1300014,
+   "smoke_keys": [
+    5,
+    13,
+    18,
+    23,
+    497
+   ],
+   "tape_rows": {
+    "archived": 429,
+    "smoke": 429
+   },
+   "weights_differ_at_this_rollout": false
+  },
+  "e2": {
+   "actions_identical_row_by_row": true,
+   "archived_keys": [
+    23,
+    31,
+    32,
+    39,
+    53
+   ],
+   "credits_whose_owner_row_changed": 4,
+   "episode_totals_unchanged": true,
+   "features_identical_row_by_row": true,
+   "keys_one_tick_earlier": true,
+   "max_abs_log_prob_gap": 0.0,
+   "owner_rows_affected": [
+    "22",
+    "23",
+    "30",
+    "31",
+    "32",
+    "38",
+    "39"
+   ],
+   "scenario_archived": 1300028,
+   "scenario_smoke": 1300028,
+   "smoke_keys": [
+    22,
+    30,
+    31,
+    38,
+    52
+   ],
+   "tape_rows": {
+    "archived": 52,
+    "smoke": 52
+   },
+   "weights_differ_at_this_rollout": false
+  },
+  "e3": {
+   "actions_identical_row_by_row": true,
+   "archived_keys": [
+    18,
+    23,
+    337,
+    347,
+    411,
+    435
+   ],
+   "credits_whose_owner_row_changed": 3,
+   "episode_totals_unchanged": true,
+   "features_identical_row_by_row": true,
+   "keys_one_tick_earlier": true,
+   "max_abs_log_prob_gap": 0.0,
+   "owner_rows_affected": [
+    "17",
+    "18",
+    "336",
+    "337",
+    "410",
+    "411"
+   ],
+   "scenario_archived": 1300044,
+   "scenario_smoke": 1300044,
+   "smoke_keys": [
+    17,
+    22,
+    336,
+    346,
+    410,
+    434
+   ],
+   "tape_rows": {
+    "archived": 76,
+    "smoke": 76
+   },
+   "weights_differ_at_this_rollout": false
+  },
+  "e4": {
+   "actions_identical_row_by_row": true,
+   "archived_keys": [
+    7,
+    10,
+    19,
+    38,
+    42
+   ],
+   "credits_whose_owner_row_changed": 4,
+   "episode_totals_unchanged": true,
+   "features_identical_row_by_row": true,
+   "keys_one_tick_earlier": true,
+   "max_abs_log_prob_gap": 0.0038237273693084717,
+   "owner_rows_affected": [
+    "10",
+    "18",
+    "19",
+    "37",
+    "38",
+    "6",
+    "7",
+    "9"
+   ],
+   "scenario_archived": 1300003,
+   "scenario_smoke": 1300003,
+   "smoke_keys": [
+    6,
+    9,
+    18,
+    37,
+    41
+   ],
+   "tape_rows": {
+    "archived": 370,
+    "smoke": 370
+   },
+   "weights_differ_at_this_rollout": true
+  },
+  "e5": {
+   "actions_identical_row_by_row": true,
+   "archived_keys": [
+    11,
+    17,
+    20,
+    22,
+    205,
+    408
+   ],
+   "credits_whose_owner_row_changed": 3,
+   "episode_totals_unchanged": true,
+   "features_identical_row_by_row": true,
+   "keys_one_tick_earlier": true,
+   "max_abs_log_prob_gap": 0.003388822078704834,
+   "owner_rows_affected": [
+    "10",
+    "11",
+    "16",
+    "17",
+    "19",
+    "20"
+   ],
+   "scenario_archived": 1300010,
+   "scenario_smoke": 1300010,
+   "smoke_keys": [
+    10,
+    16,
+    19,
+    21,
+    204,
+    407
+   ],
+   "tape_rows": {
+    "archived": 60,
+    "smoke": 60
+   },
+   "weights_differ_at_this_rollout": true
+  },
+  "e6": {
+   "actions_identical_row_by_row": true,
+   "archived_keys": [
+    29,
+    31,
+    35,
+    39,
+    47,
+    50
+   ],
+   "credits_whose_owner_row_changed": 5,
+   "episode_totals_unchanged": true,
+   "features_identical_row_by_row": true,
+   "keys_one_tick_earlier": true,
+   "max_abs_log_prob_gap": 0.008041739463806152,
+   "owner_rows_affected": [
+    "28",
+    "29",
+    "30",
+    "31",
+    "34",
+    "35",
+    "38",
+    "39",
+    "46",
+    "47"
+   ],
+   "scenario_archived": 1300005,
+   "scenario_smoke": 1300005,
+   "smoke_keys": [
+    28,
+    30,
+    34,
+    38,
+    46,
+    49
+   ],
+   "tape_rows": {
+    "archived": 49,
+    "smoke": 49
+   },
+   "weights_differ_at_this_rollout": true
+  },
+  "e7": {
+   "actions_identical_row_by_row": true,
+   "archived_keys": [
+    26,
+    33,
+    35,
+    43,
+    58,
+    203
+   ],
+   "credits_whose_owner_row_changed": 4,
+   "episode_totals_unchanged": true,
+   "features_identical_row_by_row": true,
+   "keys_one_tick_earlier": true,
+   "max_abs_log_prob_gap": 0.007051229476928711,
+   "owner_rows_affected": [
+    "25",
+    "26",
+    "32",
+    "33",
+    "34",
+    "35",
+    "42",
+    "43"
+   ],
+   "scenario_archived": 1300008,
+   "scenario_smoke": 1300008,
+   "smoke_keys": [
+    25,
+    32,
+    34,
+    42,
+    57,
+    202
+   ],
+   "tape_rows": {
+    "archived": 76,
+    "smoke": 76
+   },
+   "weights_differ_at_this_rollout": true
+  }
+ },
+ "round": 35,
+ "schema": "round35-attribution-effect/1",
+ "what_did_change": "which tick and which action row carries each credit, and therefore the surrogate, both critic losses, the gradient norm and the post-update parameter hash",
+ "what_did_not_change": "episode totals (on_time, emissions, spent bytes), the batch sample count, the minibatch count, the optimizer-step count, g_hat and lambda: g_hat is a paired episode-level statistic, so the timing fix does not move it"
+}
