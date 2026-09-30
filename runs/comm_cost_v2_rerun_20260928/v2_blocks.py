@@ -46,13 +46,19 @@ def run_references() -> dict[str, Any]:
 
 
 def _eval_controller(training_seed: int, block: str):
-    """The registered initialisation (fresh) or the immutable 128-episode milestone."""
+    """The registered initialisation or an explicitly read-only immutable milestone."""
     import v2_controller
     import v2_trainer as trainer
 
     spec = common.EVAL_BLOCKS[block]
     if spec["checkpoint"] == "initialisation":
-        return v2_controller.fresh_controller(training_seed)
+        return v2_controller.fresh_controller(training_seed), {
+            "load_mode": "fresh_initialization",
+            "training_version": trainer.TRAINING_VERSION,
+            "reward_timing_version": trainer.REWARD_TIMING_VERSION,
+            "optimizer_restored": False,
+            "rng_restored": False,
+        }
     manifest = json.loads(
         (common.OUTPUT_DIR / "CONFIG_AND_MODEL_MANIFEST.json").read_text(encoding="utf-8"))
     freeze = {"freeze_sha256": manifest["code_identity"]["freeze_sha256"],
@@ -64,12 +70,15 @@ def _eval_controller(training_seed: int, block: str):
     import v2_train as train_driver
 
     path = train_driver.milestone_path(training_seed, common.EPISODES_PER_SEED)
-    controller, _optimizer, state = trainer.load_checkpoint(path, freeze=freeze)
+    controller, state, identity = trainer.load_checkpoint_read_only(path, freeze=freeze)
     if int(state["episodes_done"]) != common.EPISODES_PER_SEED:
         raise SystemExit(
             f"seed {training_seed}: milestone holds {state['episodes_done']} episodes, expected "
             f"{common.EPISODES_PER_SEED}")
-    return controller
+    identity.update({"checkpoint": str(path.relative_to(common.ROOT)),
+                     "training_seed": int(state["training_seed"]),
+                     "episodes_done": int(state["episodes_done"])})
+    return controller, identity
 
 
 def run_evals(blocks: list[str]) -> dict[str, Any]:
@@ -81,14 +90,16 @@ def run_evals(blocks: list[str]) -> dict[str, Any]:
             # The controller is rebuilt once per (seed, block); the same frozen weights serve
             # every scene of that block.
             controller = None
+            checkpoint_load_identity = None
             for scenario in common.DEVELOPMENT_SCENARIOS:
                 if (common.ROWS / f"v2_{tag}_s{scenario}_a0.json").exists():
                     continue
                 if controller is None:
-                    controller = _eval_controller(training_seed, block)
+                    controller, checkpoint_load_identity = _eval_controller(training_seed, block)
                 row = runner.run_eval(controller, training_seed=training_seed,
                                       timepoint=spec["timepoint"], mode=spec["mode"],
-                                      scenario_seed=scenario)
+                                      scenario_seed=scenario,
+                                      checkpoint_load_identity=checkpoint_load_identity)
                 ran += 1
                 print(f"eval s{training_seed} {block} scene {scenario}: "
                       f"on_time={row['on_time']} bytes={row['spent_bytes']}", flush=True)

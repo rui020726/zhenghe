@@ -21,6 +21,7 @@ from pathlib import Path
 from typing import Any
 
 import v2_common as common
+from v2_reward_timing import REWARD_TIMING_VERSION, TRAINING_VERSION
 
 PRODUCTION_TREES = ("integrated_sar", "task_allocation", "piloc")
 #: 本地修复 tip（树等价于远端修复头 64cddcffc6f8796f132df8b8e003f005d0bdd749）。
@@ -296,6 +297,8 @@ def main() -> int:
                          + json.dumps(difference_audit["diffs"], ensure_ascii=False))
     manifest = {
         "round": "24", "phase": "ROUND24 correctness-v2 rerun freeze (start from initialisation)",
+        "training_version": TRAINING_VERSION,
+        "reward_timing_version": REWARD_TIMING_VERSION,
         "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
         "head_at_freeze": local_head,
         "branch_start": BRANCH_START,

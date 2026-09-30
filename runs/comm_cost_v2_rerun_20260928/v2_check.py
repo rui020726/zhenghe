@@ -303,7 +303,7 @@ def first4_gate(training_seed: int = 11) -> dict[str, Any]:
     probe_payload = {}
     if probe.returncode == 0 and probe.stdout.strip():
         probe_payload = json.loads(probe.stdout.strip().splitlines()[-1])
-    restored_controller, _optimizer, state = _load_in_process(training_seed)
+    restored_controller, state, read_only_identity = _load_in_process(training_seed)
     matrix = torch.arange(19 * 4, dtype=torch.float32).reshape(4, 19) / 19.0
     with torch.no_grad():
         logits, task_values = restored_controller.forward(matrix)
@@ -321,6 +321,7 @@ def first4_gate(training_seed: int = 11) -> dict[str, Any]:
         "restored_state": {"lambda": state["lambda"],
                            "episodes_done": state["episodes_done"],
                            "updates": state["updates"]},
+        "checkpoint_load_identity": read_only_identity,
         "passed": bool(probe.returncode == 0 and same_forward),
     }
 
@@ -359,7 +360,7 @@ def first4_gate(training_seed: int = 11) -> dict[str, Any]:
 def _load_in_process(training_seed: int):
     import v2_trainer as trainer
 
-    return trainer.load_checkpoint(
+    return trainer.load_checkpoint_read_only(
         common.CHECKPOINTS / f"v2_train_s{training_seed}.pt", freeze=freeze_record())
 
 

@@ -31,7 +31,8 @@ def main(argv: list[str]) -> int:
               "config_hash": manifest["configuration_hash"],
               "branch_start": manifest["branch_start"],
               "head_at_freeze": manifest["head_at_freeze"]}
-    controller, _optimizer, state = trainer.load_checkpoint(Path(args.checkpoint), freeze=freeze)
+    controller, state, load_identity = trainer.load_checkpoint_read_only(
+        Path(args.checkpoint), freeze=freeze)
     matrix = torch.arange(19 * 4, dtype=torch.float32).reshape(4, 19) / 19.0
     with torch.no_grad():
         logits, task_values = controller.forward(matrix)
@@ -39,7 +40,8 @@ def main(argv: list[str]) -> int:
     print(json.dumps({"action_logits": logits.tolist(), "task_values": task_values.tolist(),
                       "cost_values": cost_values.tolist(), "lambda": state["lambda"],
                       "episodes_done": state["episodes_done"], "updates": state["updates"],
-                      "optimizer_steps": state["optimizer_steps"]}, ensure_ascii=False))
+                      "optimizer_steps": state["optimizer_steps"],
+                      "checkpoint_load_identity": load_identity}, ensure_ascii=False))
     return 0
 
 

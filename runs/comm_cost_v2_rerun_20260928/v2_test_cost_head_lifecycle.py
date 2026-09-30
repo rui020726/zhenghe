@@ -188,6 +188,10 @@ class CostHeadLifecycleCounterexample(unittest.TestCase):
                 problems.append("restored checkpoint optimizer schema mismatch")
             if restored_state["reward_timing_schema"] != trainer.REWARD_TIMING_SCHEMA:
                 problems.append("restored checkpoint reward timing schema mismatch")
+            if restored_state["training_version"] != trainer.TRAINING_VERSION:
+                problems.append("restored checkpoint training version mismatch")
+            if restored_state["reward_timing_version"] != trainer.REWARD_TIMING_VERSION:
+                problems.append("restored checkpoint reward timing version mismatch")
 
         self.assertEqual(synthetic_module_steps + ppo_optimizer_steps,
                          4 + common.EPOCHS_PER_BATCH)

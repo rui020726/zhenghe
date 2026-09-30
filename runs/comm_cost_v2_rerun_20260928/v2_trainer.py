@@ -33,6 +33,7 @@ import torch
 import v2_common as common
 import cost_math as cm
 from onpolicy import action_entropy, joint_log_prob, restore_rng, rng_state
+from v2_reward_timing import REWARD_TIMING_VERSION, TRAINING_VERSION
 
 TRAINER_TAG = "constrained-cost-v2"
 LOSS_VERSION = "constrained-lagrangian/2"
@@ -330,7 +331,10 @@ def batch_g_hat(episodes: list[dict[str, Any]], references: dict[int, float]) ->
 def save_checkpoint(controller: Any, optimizer: torch.optim.Optimizer, state: dict[str, Any],
                     path: Path, *, freeze: dict[str, Any]) -> Path:
     payload = {
-        "schema": STATE_SCHEMA, "trainer_tag": TRAINER_TAG, "loss_version": LOSS_VERSION,
+        "schema": STATE_SCHEMA, "trainer_tag": TRAINER_TAG,
+        "training_version": TRAINING_VERSION,
+        "reward_timing_version": REWARD_TIMING_VERSION,
+        "loss_version": LOSS_VERSION,
         "gae_schema": GAE_SCHEMA, "optimizer_schema": OPTIMIZER_SCHEMA,
         "reward_timing_schema": REWARD_TIMING_SCHEMA,
         "freeze": freeze,
@@ -344,12 +348,8 @@ def save_checkpoint(controller: Any, optimizer: torch.optim.Optimizer, state: di
     return path
 
 
-def load_checkpoint(path: Path, *, freeze: dict[str, Any]) -> tuple[Any, torch.optim.Optimizer,
-                                                                    dict[str, Any]]:
-    """Resume only a checkpoint this round legitimately produced; refuse anything else."""
-    import v2_controller
-
-    payload = torch.load(path, map_location="cpu", weights_only=False)
+def _validate_checkpoint_base(path: Path, payload: dict[str, Any], *,
+                              freeze: dict[str, Any]) -> dict[str, Any]:
     if payload.get("schema") != STATE_SCHEMA or payload.get("trainer_tag") != TRAINER_TAG:
         raise RuntimeError(f"{path.name}: not this trainer's checkpoint")
     if payload.get("loss_version") != LOSS_VERSION:
@@ -360,8 +360,7 @@ def load_checkpoint(path: Path, *, freeze: dict[str, Any]) -> tuple[Any, torch.o
         raise RuntimeError(f"{path.name}: trainer contract schema mismatch")
     training_state = payload.get("training_state")
     if not isinstance(training_state, dict) or (
-            training_state.get("training_version") != TRAINER_TAG
-            or training_state.get("loss_version") != LOSS_VERSION
+            training_state.get("loss_version") != LOSS_VERSION
             or training_state.get("state_schema") != STATE_SCHEMA
             or training_state.get("gae_schema") != GAE_SCHEMA
             or training_state.get("optimizer_schema") != OPTIMIZER_SCHEMA
@@ -369,6 +368,13 @@ def load_checkpoint(path: Path, *, freeze: dict[str, Any]) -> tuple[Any, torch.o
         raise RuntimeError(f"{path.name}: training state version mismatch")
     if payload.get("freeze") != freeze:
         raise RuntimeError(f"{path.name}: freeze identity mismatch; refusing to resume")
+
+    return training_state
+
+
+def _restore_controller(payload: dict[str, Any], training_state: dict[str, Any]) -> Any:
+    import v2_controller
+
     controller = v2_controller.fresh_controller(int(training_state["training_seed"]))
     # Loaded sub-module by sub-module: Stage B's controller exposes state_dict(), and touching
     # that frozen file is not necessary to restore it.
@@ -377,14 +383,58 @@ def load_checkpoint(path: Path, *, freeze: dict[str, Any]) -> tuple[Any, torch.o
     controller.inner.action_head.load_state_dict(saved["action_head"])
     controller.inner.value_head.load_state_dict(saved["value_task_head"])
     controller.cost_head.load_state_dict(saved["value_cost_head"])
+    return controller
+
+
+def load_checkpoint(path: Path, *, freeze: dict[str, Any]) -> tuple[Any, torch.optim.Optimizer,
+                                                                    dict[str, Any]]:
+    """Resume only a checkpoint from this exact training/reward-timing version."""
+    payload = torch.load(path, map_location="cpu", weights_only=False)
+    training_state = _validate_checkpoint_base(path, payload, freeze=freeze)
+    if (payload.get("training_version") != TRAINING_VERSION
+            or training_state.get("training_version") != TRAINING_VERSION
+            or payload.get("reward_timing_version") != REWARD_TIMING_VERSION
+            or training_state.get("reward_timing_version") != REWARD_TIMING_VERSION):
+        raise RuntimeError(
+            f"{path.name}: training/reward timing version mismatch; this checkpoint is "
+            "read-only under the current reward-capture version")
+
+    controller = _restore_controller(payload, training_state)
     optimizer = torch.optim.Adam(controller.parameters, lr=common.LEARNING_RATE)
     optimizer.load_state_dict(payload["optimizer"])
     restore_rng(payload.get("rng"))
     return controller, optimizer, training_state
 
 
+def load_checkpoint_read_only(path: Path, *, freeze: dict[str, Any]
+                              ) -> tuple[Any, dict[str, Any], dict[str, Any]]:
+    """Read controller weights without restoring optimizer/RNG or enabling training.
+
+    The returned identity explicitly marks legacy checkpoints that predate a reward timing
+    version. Callers should preserve this object in evaluation/report artifacts.
+    """
+    payload = torch.load(path, map_location="cpu", weights_only=False)
+    training_state = _validate_checkpoint_base(path, payload, freeze=freeze)
+    controller = _restore_controller(payload, training_state)
+    timing_version = payload.get("reward_timing_version")
+    training_version = payload.get("training_version")
+    identity = {
+        "load_mode": "read_only",
+        "training_version": training_version,
+        "reward_timing_version": timing_version,
+        "timing_interpretation": (
+            "legacy_unversioned_capture_semantics" if timing_version is None
+            else "versioned_capture_semantics"),
+        "optimizer_restored": False,
+        "rng_restored": False,
+    }
+    return controller, training_state, identity
+
+
 def fresh_training_state(training_seed: int) -> dict[str, Any]:
-    return {"training_version": TRAINER_TAG, "loss_version": LOSS_VERSION,
+    return {"training_version": TRAINING_VERSION,
+            "reward_timing_version": REWARD_TIMING_VERSION,
+            "loss_version": LOSS_VERSION,
             "state_schema": STATE_SCHEMA, "gae_schema": GAE_SCHEMA,
             "optimizer_schema": OPTIMIZER_SCHEMA,
             "reward_timing_schema": REWARD_TIMING_SCHEMA,

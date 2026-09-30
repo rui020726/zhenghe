@@ -1,0 +1,85 @@
+{
+  "schema": "round34-training-version-manifest/1",
+  "round": 34,
+  "scope": "Stage C task reward capture version and checkpoint restore boundary",
+  "current_version": {
+    "trainer_tag": "constrained-cost-v2",
+    "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+    "reward_timing_version": "published-completion-event-at-relay-tick/2",
+    "reward_timing_schema": "post-action-most-recent-decision/1",
+    "training_state_fields_required_for_resume": [
+      "training_version",
+      "reward_timing_version",
+      "loss_version",
+      "state_schema",
+      "gae_schema",
+      "optimizer_schema",
+      "reward_timing_schema"
+    ],
+    "checkpoint_payload_fields_required_for_resume": [
+      "training_version",
+      "reward_timing_version",
+      "loss_version",
+      "schema",
+      "gae_schema",
+      "optimizer_schema",
+      "reward_timing_schema"
+    ]
+  },
+  "previous_version": {
+    "trainer_tag": "constrained-cost-v2",
+    "training_state_training_version": "constrained-cost-v2",
+    "reward_timing_schema": "post-action-most-recent-decision/1",
+    "reward_timing_version": "absent",
+    "source": "ROUND32 frozen Stage C trainer and ROUND32 checkpoints; original artifacts preserved"
+  },
+  "restore_policy": {
+    "resume_entrypoint": "v2_trainer.load_checkpoint",
+    "resume_behavior": "Rejects missing or different training_version/reward_timing_version before controller construction, optimizer construction/state restore, or RNG restore.",
+    "real_resume_callers": [
+      "v2_train.train_seed",
+      "v2_train.save_milestone verification",
+      "v2_recover.main"
+    ],
+    "old_checkpoint_resume": "refused; no silent continuation under corrected task credit",
+    "read_only_entrypoint": "v2_trainer.load_checkpoint_read_only",
+    "read_only_callers": [
+      "v2_blocks._eval_controller",
+      "v2_check._load_in_process",
+      "v2_resume_probe.main"
+    ],
+    "read_only_label": "Returned identity states load_mode=read_only and labels missing reward_timing_version as legacy_unversioned_capture_semantics.",
+    "read_only_restore_effects": {
+      "controller_weights": "loaded",
+      "optimizer": "not restored",
+      "rng": "not restored",
+      "training_enabled": false
+    },
+    "freeze_requirement": "Read-only caller must supply the checkpoint's recorded freeze identity from its archived manifest."
+  },
+  "future_freeze_manifest_fields": {
+    "source": "runs/comm_cost_v2_rerun_20260928/v2_freeze.py",
+    "fields": ["training_version", "reward_timing_version"],
+    "training_version_source": "runs/comm_cost_v2_rerun_20260928/v2_reward_timing.py"
+  },
+  "historical_interpretation": {
+    "past_task_counts_bytes_actions_and_model_behavior": "remain observations of the executed ROUND32 trajectories",
+    "past_training_reward_contract": "limited by one-tick-late capture relative to published completion events",
+    "round32_reduction_comparison": "measured under the legacy reward-capture semantics and must not be directly generalized to training under the corrected version",
+    "causal_scope": "The capture offset does not, by itself, explain all learning failures or establish a corrected-version policy outcome.",
+    "old_verdicts": "Not rewritten as corrected-version results."
+  },
+  "version_boundary_tests": {
+    "test_source": "runs/comm_task_reward_event_timing_20260930/test_checkpoint_version_boundary.py",
+    "legacy_resume_rejection": "passed through v2_trainer.load_checkpoint with mocked torch.load; no controller/optimizer/RNG restore and no optimizer.step",
+    "legacy_read_only_label": "passed through v2_trainer.load_checkpoint_read_only with mocked payload/controller; optimizer/RNG untouched",
+    "actual_round32_pt_load": "not run because PyTorch is unavailable"
+  },
+  "unchanged_training_contract": {
+    "objective": "unchanged",
+    "reward_value": "unchanged",
+    "cost_definition_and_collection": "unchanged",
+    "observation_mask_network_and_optimizer_hyperparameters": "unchanged",
+    "gamma_lambda_gae_lambda_dual_budget_and_training_volume": "unchanged"
+  }
+}
