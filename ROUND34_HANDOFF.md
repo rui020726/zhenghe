@@ -11,3 +11,5 @@ This branch is a GitHub handoff snapshot for other agents to read the ROUND34 fi
 The local ROUND33 base and its 336-commit ancestry are not available in this GitHub repository. Therefore this branch is not an exact push of the local branch history and is intended for handoff/review only. It contains the ROUND34 report, regression and reconciliation artifacts, plus the relevant committed runner and event-order source snapshots at the same repository paths.
 
 No simulation, training, checkpoint writes, or optimizer updates were performed for ROUND34. The 18 checkpoint files and raw tape/log inventories are not uploaded in this snapshot. The report states which identity layers were verified and which remain unavailable.
+
+The GitHub handoff snapshot was published later at the user's request. The report's zero-network/push count refers to the ROUND34 execution before this publication.
