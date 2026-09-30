@@ -1,0 +1,453 @@
+{
+ "authorised_limits": {
+  "episode_constructions": 16,
+  "episodes": 8,
+  "launch_invocations": 2,
+  "optimizer_steps": 100,
+  "seed": 11,
+  "wall_clock_per_launch_hours": 2
+ },
+ "clean": true,
+ "decision": "launches may start only while clean is true",
+ "environment_launches_used_by_this_script": 0,
+ "environments_constructed": 0,
+ "environments_stepped": 0,
+ "gates": {
+  "P10_frozen_model_weights": {
+   "archived_batch_record_declares": {
+    "runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+    "runs\\joint_eval_20260916\\ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+   },
+   "current_files": {
+    "runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+    "runs\\joint_eval_20260916\\ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+   },
+   "identical": true,
+   "passed": true
+  },
+  "P11_workspace": {
+   "entries": [
+    "?? architecture/",
+    "?? logs_block_references.out",
+    "?? runs/comm_cost_v2_rerun_20260928/ROUND24_SOURCE_RECHECK.json",
+    "?? runs/comm_cost_v2_rerun_20260928/round25_source_recheck.py",
+    "?? runs/comm_multistep_stage1_20260922/_DOC_PATCH_NOTES.md",
+    "?? runs/comm_multistep_stage1_20260922/_fix_diag_json.py",
+    "?? runs/comm_reward_smoke_20260930/ROUND35_PREFLIGHT.json",
+    "?? runs/comm_reward_smoke_20260930/r35_common.py",
+    "?? runs/comm_reward_smoke_20260930/r35_launch.py",
+    "?? runs/comm_reward_smoke_20260930/r35_preflight.py",
+    "?? runs/comm_send_actionability_20260922/rows_s700010.json",
+    "?? runs/comm_send_actionability_20260922/rows_s700018.json",
+    "?? runs/comm_send_actionability_20260922/rows_s700020.json",
+    "?? runs/comm_send_actionability_20260922/rows_s700022.json",
+    "?? runs/comm_send_actionability_20260922/rows_s700031.json",
+    "?? runs/comm_send_actionability_20260922/rows_s700033.json",
+    "?? runs/comm_send_actionability_20260922/rows_s700042.json",
+    "?? runs/comm_send_actionability_20260922/rows_s700046.json",
+    "?? runs/coordinator_baselines_20260917/dev_summary.json"
+   ],
+   "old_round_artefacts_modified": [],
+   "passed": true,
+   "tracked_files_changed": []
+  },
+  "P12_scope_and_case_reachability": {
+   "cases_not_reachable_in_this_scenario_block": [
+    "no_action_row_at_the_event_tick",
+    "completion_before_the_first_action"
+   ],
+   "coverage_evidence": {
+    "cross_tick_new_action_next_tick": [
+     "ALL_ROWS_s11_e0 (4)",
+     "ALL_ROWS_s11_e1 (3)",
+     "ALL_ROWS_s11_e4 (4)",
+     "ALL_ROWS_s11_e5 (3)",
+     "ACTIVE_ROWS_s11_e0 (4)",
+     "ACTIVE_ROWS_s11_e1 (3)",
+     "ACTIVE_ROWS_s11_e4 (4)",
+     "ACTIVE_ROWS_s11_e5 (3)",
+     "ALL_ROWS_s22_e0 (4)",
+     "ALL_ROWS_s22_e1 (3)",
+     "ALL_ROWS_s22_e4 (4)",
+     "ALL_ROWS_s22_e5 (3)",
+     "ACTIVE_ROWS_s22_e0 (4)",
+     "ACTIVE_ROWS_s22_e1 (3)",
+     "ACTIVE_ROWS_s22_e4 (4)",
+     "ACTIVE_ROWS_s22_e5 (3)",
+     "ALL_ROWS_s33_e0 (4)",
+     "ALL_ROWS_s33_e1 (3)",
+     "ALL_ROWS_s33_e4 (4)",
+     "ALL_ROWS_s33_e5 (3)",
+     "ACTIVE_ROWS_s33_e0 (4)",
+     "ACTIVE_ROWS_s33_e1 (3)",
+     "ACTIVE_ROWS_s33_e4 (4)",
+     "ACTIVE_ROWS_s33_e5 (3)",
+     "ALL_ROWS_s11_e100 (2)",
+     "ALL_ROWS_s11_e102 (4)",
+     "ALL_ROWS_s11_e115 (4)",
+     "ALL_ROWS_s11_e116 (4)",
+     "ALL_ROWS_s11_e118 (3)",
+     "ALL_ROWS_s11_e11 (3)",
+     "ALL_ROWS_s11_e122 (4)",
+     "ALL_ROWS_s11_e125 (4)",
+     "ALL_ROWS_s11_e127 (3)",
+     "ALL_ROWS_s11_e12 (4)",
+     "ALL_ROWS_s11_e13 (3)",
+     "ALL_ROWS_s11_e15 (4)"
+    ],
+    "final_execution_tick": [
+     "ALL_ROWS_s11_e0 (1)",
+     "ALL_ROWS_s11_e5 (1)",
+     "ACTIVE_ROWS_s11_e0 (1)",
+     "ACTIVE_ROWS_s11_e5 (1)",
+     "ALL_ROWS_s22_e0 (1)",
+     "ALL_ROWS_s22_e5 (1)",
+     "ACTIVE_ROWS_s22_e0 (1)",
+     "ACTIVE_ROWS_s22_e5 (1)",
+     "ALL_ROWS_s33_e0 (1)",
+     "ALL_ROWS_s33_e5 (1)",
+     "ACTIVE_ROWS_s33_e0 (1)",
+     "ACTIVE_ROWS_s33_e5 (1)"
+    ],
+    "same_tick": [
+     "ALL_ROWS_s11_e0 (6)",
+     "ALL_ROWS_s11_e1 (5)",
+     "ALL_ROWS_s11_e4 (5)",
+     "ALL_ROWS_s11_e5 (6)",
+     "ACTIVE_ROWS_s11_e0 (6)",
+     "ACTIVE_ROWS_s11_e1 (5)",
+     "ACTIVE_ROWS_s11_e4 (5)",
+     "ACTIVE_ROWS_s11_e5 (6)",
+     "ALL_ROWS_s22_e0 (6)",
+     "ALL_ROWS_s22_e1 (5)",
+     "ALL_ROWS_s22_e4 (5)",
+     "ALL_ROWS_s22_e5 (6)",
+     "ACTIVE_ROWS_s22_e0 (6)",
+     "ACTIVE_ROWS_s22_e1 (5)",
+     "ACTIVE_ROWS_s22_e4 (5)",
+     "ACTIVE_ROWS_s22_e5 (6)",
+     "ALL_ROWS_s33_e0 (6)",
+     "ALL_ROWS_s33_e1 (5)",
+     "ALL_ROWS_s33_e4 (5)",
+     "ALL_ROWS_s33_e5 (6)",
+     "ACTIVE_ROWS_s33_e0 (6)",
+     "ACTIVE_ROWS_s33_e1 (5)",
+     "ACTIVE_ROWS_s33_e4 (5)",
+     "ACTIVE_ROWS_s33_e5 (6)",
+     "ALL_ROWS_s11_e100 (4)",
+     "ALL_ROWS_s11_e102 (5)",
+     "ALL_ROWS_s11_e115 (5)",
+     "ALL_ROWS_s11_e116 (5)",
+     "ALL_ROWS_s11_e118 (4)",
+     "ALL_ROWS_s11_e11 (5)",
+     "ALL_ROWS_s11_e122 (5)",
+     "ALL_ROWS_s11_e125 (5)",
+     "ALL_ROWS_s11_e127 (5)",
+     "ALL_ROWS_s11_e12 (5)",
+     "ALL_ROWS_s11_e13 (5)",
+     "ALL_ROWS_s11_e15 (5)"
+    ]
+   },
+   "expected_reachable_contract_cases": [
+    "same_tick",
+    "cross_tick_new_action_next_tick",
+    "final_execution_tick",
+    "deadline_expired_without_credit"
+   ],
+   "forbidden": [
+    "hyper-parameter, network, objective, reward value or cost path change",
+    "grid search or result-selected extra training",
+    "hot start or silent continuation of any old checkpoint",
+    "rewriting ROUND32/33/34 artefacts",
+    "pushing to GitHub",
+    "presenting smoke numbers as learning-quality evidence"
+   ],
+   "passed": true,
+   "single_question": "does the ROUND34 fix behave as the contract says on real runs, and can the real checkpoint chain save and restore it?"
+  },
+  "P1_anchors": {
+   "branch": "fix/comm-task-reward-event-timing",
+   "branch_as_authorised": true,
+   "commits_since_the_opening_check_not_round35": [],
+   "differing_round34_files": [],
+   "head": "c75113fe417ac79b3325068bee41425c2d877154",
+   "head_recorded_at_the_opening_check": "c43ec5f1a12ef18238d4eed3aa90e3681e9ae58e",
+   "opening_head_is_ancestor_of_head": true,
+   "passed": true,
+   "round33_baseline_is_ancestor_of_head": true,
+   "round34_files_unchanged_since_the_opening_check": true
+  },
+  "P2_environment": {
+   "cuda_available": true,
+   "dependencies_installed": false,
+   "executable": "D:\\project_env\\python.exe",
+   "numpy": "2.2.6",
+   "passed": true,
+   "python": "3.10.19",
+   "round34_pytorch_exemption_withdrawn": true,
+   "torch": "2.9.0+cu128",
+   "virtualenv_created": false
+  },
+  "P3_training_versions": {
+   "fresh_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+   "fresh_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+   "passed": true,
+   "required_by_the_contract": {
+    "reward_timing_version": "published-completion-event-at-relay-tick/2",
+    "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2"
+   },
+   "trainer_reward_timing_version": "published-completion-event-at-relay-tick/2",
+   "trainer_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2"
+  },
+  "P4_code_identity": {
+   "differing": [],
+   "passed": true,
+   "production_files_unchanged_since_the_round24_freeze": true,
+   "round34_deliverables_hashed": 10,
+   "round35_scripts_hashed": [
+    "r35_common.py",
+    "r35_launch.py",
+    "r35_preflight.py",
+    "r35_presmoke.py"
+   ],
+   "stage_c_modules_unchanged_since_the_opening_check": true,
+   "tracked_modifications_under_stage_c_directory": [],
+   "untracked_files_from_other_sessions_left_untouched": [
+    "?? runs/comm_cost_v2_rerun_20260928/ROUND24_SOURCE_RECHECK.json",
+    "?? runs/comm_cost_v2_rerun_20260928/round25_source_recheck.py"
+   ]
+  },
+  "P5_initial_weights": {
+   "all_four_identical": true,
+   "failure": null,
+   "parameter_sha256_per_source": {
+    "archived_round32_batch0_parameters_before": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "archived_round32_prelaunch_pairing_from_git": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "fresh_controller_this_machine": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "round24_ep0_milestone_restored_by_the_real_loader": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff"
+   },
+   "passed": true,
+   "why_this_matters": "the passivity claim is a byte comparison against the archived legacy run, and it is only legitimate if episode 0 starts from the same registered weights that run used"
+  },
+  "P6_reference_cache": {
+   "cached_references": 64,
+   "config_hash_is_round_local": true,
+   "covers_the_eight_smoke_scenarios": true,
+   "files_read_only": 64,
+   "identity_fields_all_equal": true,
+   "new_reference_launches_required": 0,
+   "passed": true,
+   "per_scenario_cross_round_identity": {
+    "1300003": {
+     "behaviour_sha256_equal": true,
+     "config_hash_equal": false,
+     "emission_sequence_equal": true,
+     "on_time_round24": 6,
+     "on_time_round32": 6,
+     "present_in_both_caches": true,
+     "relay_counters_equal": true,
+     "transport_parameters_equal": true
+    },
+    "1300005": {
+     "behaviour_sha256_equal": true,
+     "config_hash_equal": false,
+     "emission_sequence_equal": true,
+     "on_time_round24": 6,
+     "on_time_round32": 6,
+     "present_in_both_caches": true,
+     "relay_counters_equal": true,
+     "transport_parameters_equal": true
+    },
+    "1300008": {
+     "behaviour_sha256_equal": true,
+     "config_hash_equal": false,
+     "emission_sequence_equal": true,
+     "on_time_round24": 6,
+     "on_time_round32": 6,
+     "present_in_both_caches": true,
+     "relay_counters_equal": true,
+     "transport_parameters_equal": true
+    },
+    "1300010": {
+     "behaviour_sha256_equal": true,
+     "config_hash_equal": false,
+     "emission_sequence_equal": true,
+     "on_time_round24": 6,
+     "on_time_round32": 6,
+     "present_in_both_caches": true,
+     "relay_counters_equal": true,
+     "transport_parameters_equal": true
+    },
+    "1300014": {
+     "behaviour_sha256_equal": true,
+     "config_hash_equal": false,
+     "emission_sequence_equal": true,
+     "on_time_round24": 6,
+     "on_time_round32": 6,
+     "present_in_both_caches": true,
+     "relay_counters_equal": true,
+     "transport_parameters_equal": true
+    },
+    "1300027": {
+     "behaviour_sha256_equal": true,
+     "config_hash_equal": false,
+     "emission_sequence_equal": true,
+     "on_time_round24": 6,
+     "on_time_round32": 6,
+     "present_in_both_caches": true,
+     "relay_counters_equal": true,
+     "transport_parameters_equal": true
+    },
+    "1300028": {
+     "behaviour_sha256_equal": true,
+     "config_hash_equal": false,
+     "emission_sequence_equal": true,
+     "on_time_round24": 5,
+     "on_time_round32": 5,
+     "present_in_both_caches": true,
+     "relay_counters_equal": true,
+     "transport_parameters_equal": true
+    },
+    "1300044": {
+     "behaviour_sha256_equal": true,
+     "config_hash_equal": false,
+     "emission_sequence_equal": true,
+     "on_time_round24": 6,
+     "on_time_round32": 6,
+     "present_in_both_caches": true,
+     "relay_counters_equal": true,
+     "transport_parameters_equal": true
+    }
+   },
+   "why_that_is_expected": "config_hash covers this round's own lifecycle and transcript paths, so two rounds running the same scenario differ in it by construction; the passivity comparison therefore uses the behaviour hash, the transport declaration, the emission sequence and the relay counters"
+  },
+  "P7_order_and_registered_predictions": {
+   "keys_whose_owner_row_the_fix_moves": {
+    "e0": [
+     "9",
+     "26",
+     "28",
+     "34"
+    ],
+    "e1": [
+     "6",
+     "14",
+     "19"
+    ],
+    "e2": [
+     "23",
+     "31",
+     "32",
+     "39"
+    ],
+    "e3": [
+     "18",
+     "337",
+     "411"
+    ]
+   },
+   "legacy_keys": {
+    "e0": [
+     9,
+     26,
+     28,
+     34,
+     48,
+     194
+    ],
+    "e1": [
+     6,
+     14,
+     19,
+     24,
+     498
+    ],
+    "e2": [
+     23,
+     31,
+     32,
+     39,
+     53
+    ],
+    "e3": [
+     18,
+     23,
+     337,
+     347,
+     411,
+     435
+    ]
+   },
+   "note": "registered before the launch: the fixed run must write exactly the predicted keys in episodes 0..3, and must not move the credit to the next action row",
+   "passed": true,
+   "predicted_fixed_keys": {
+    "e0": [
+     8,
+     25,
+     27,
+     33,
+     47,
+     193
+    ],
+    "e1": [
+     5,
+     13,
+     18,
+     23,
+     497
+    ],
+    "e2": [
+     22,
+     30,
+     31,
+     38,
+     52
+    ],
+    "e3": [
+     17,
+     22,
+     336,
+     346,
+     410,
+     434
+    ]
+   },
+   "predictions_are_falsifiable": true,
+   "scenario_matches_the_frozen_order": {
+    "e0": true,
+    "e1": true,
+    "e2": true,
+    "e3": true
+   }
+  },
+  "P8_limits_and_paths": {
+   "OUTPUT_DIR": "D:\\code\\整合\\zhenghe\\runs\\comm_reward_smoke_20260930\\preflight",
+   "ROWS": "D:\\code\\整合\\zhenghe\\runs\\comm_reward_smoke_20260930\\preflight\\rows",
+   "authorised": {
+    "episode_constructions": 16,
+    "episodes": 8,
+    "invocations": 2,
+    "optimizer_steps": 100,
+    "seed": 11
+   },
+   "launch_cap_seen_by_the_real_ledger": 16,
+   "nothing_bound_outside_this_round": true,
+   "passed": true,
+   "rows_inside_this_round": true
+  },
+  "P9_round34_tests_rerun_with_real_torch": {
+   "environments_constructed": 0,
+   "note": "ROUND34 executed these suites with a torch stub; the stub branch is not taken on this machine because torch imports",
+   "passed": true,
+   "returncode": 0,
+   "summary": [
+    "Ran 12 tests in 0.003s",
+    "OK"
+   ]
+  }
+ },
+ "optimizer_steps_performed": 0,
+ "problems": [],
+ "round": 35,
+ "schema": "round35-preflight/1"
+}
