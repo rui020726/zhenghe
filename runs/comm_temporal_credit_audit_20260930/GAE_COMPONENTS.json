@@ -1,0 +1,4195 @@
+{
+  "source": {
+    "rows_directory": "runs/comm_actor_reduction_ablation_20261001/rows",
+    "tapes_directory": "runs/comm_actor_reduction_ablation_20261001/logs",
+    "checkpoint_index": "runs/comm_actor_reduction_ablation_20261001/CHECKPOINT_INDEX.json",
+    "update_mechanism": "runs/comm_actor_reduction_ablation_20261001/UPDATE_MECHANISM.json"
+  },
+  "definition": {
+    "gamma": 1,
+    "lambda_GAE": 0.95,
+    "terminal": "from frozen batch_samples: final recorded decision row true, all earlier rows false",
+    "bootstrap": "recorded task/cost value at next tape row for every earlier row; final row zero",
+    "no_component_normalization": true,
+    "active_row": "tape.actionable has at least one target",
+    "full_mask_row": "tape.targets nonempty and tape.actionable empty",
+    "update_source_identity": "fixed-point eligibility requires checkpoint file SHA256, checkpoint parameter/lambda identity vs current batch record, saved likelihood count vs tape, and UPDATE_MECHANISM sample counts to agree. The six b0 points agree; b15/b31 points fail identity/count gates and are stopped."
+  },
+  "synthetic_gae_validation": {
+    "engine": "source-bound JavaScript translation of frozen cost_math.gae; native Python/PyTorch unavailable",
+    "tests_run": 4,
+    "passed": 4,
+    "failed": 0,
+    "cases": [
+      {
+        "name": "two_step_nonzero_value_terminal_closed_form",
+        "passed": true,
+        "expected": {
+          "advantages": [
+            0.58,
+            0.4
+          ],
+          "returns": [
+            0.98,
+            1
+          ]
+        }
+      },
+      {
+        "name": "late_reward_through_masked_tape_rows",
+        "passed": true,
+        "training_row_distance": 3,
+        "environment_step_distance": 6,
+        "expected_direct_coefficient": 0.8573749999999999
+      },
+      {
+        "name": "nonterminal_truncation_bootstrap",
+        "passed": true,
+        "expected": {
+          "advantages": [
+            1.055,
+            0.9
+          ]
+        }
+      },
+      {
+        "name": "terminal_boundary_stops_future_episode_recursion",
+        "passed": true,
+        "expected_post_terminal_transfer_to_prior_episode": 0
+      }
+    ]
+  },
+  "points": [
+    {
+      "point": "ACTIVE_ROWS_s11/b0",
+      "batch": 0,
+      "training_seed": 11,
+      "reduction": "ACTIVE_ROWS",
+      "lambda_dual": 1,
+      "checkpoint_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "checkpoint_file_sha256_verified": true,
+      "row_tape_parameter_link": true,
+      "samples": 623,
+      "active_row_count": 30,
+      "full_mask_row_count": 593,
+      "no_candidate_rows": 0,
+      "prefix_task_reward": 0,
+      "prefix_cost_bytes": 0,
+      "closure_error_max_abs": 1.7763568394002505e-15,
+      "full_batch": {
+        "reward_task_component": {
+          "n": 623,
+          "mean": 0.516300761505852,
+          "abs_mean": 0.516300761505852,
+          "std_pop": 0.7890037354780519,
+          "min": 0,
+          "q25": 0,
+          "median": 0,
+          "q75": 0.9077380300183435,
+          "max": 3.0349942141422805,
+          "variance_zero": false,
+          "positive": 235,
+          "negative": 0,
+          "zero": 388
+        },
+        "current_value_component": {
+          "n": 623,
+          "mean": 3.4448220042683544,
+          "abs_mean": 3.4448220042683544,
+          "std_pop": 1.2824919772045515,
+          "min": 0.12575018405914307,
+          "q25": 2.6544334615385976,
+          "median": 3.191532711197819,
+          "q75": 4.23201949097654,
+          "max": 6.31479680679391,
+          "variance_zero": false,
+          "positive": 623,
+          "negative": 0,
+          "zero": 0
+        },
+        "next_value_bootstrap_component": {
+          "n": 623,
+          "mean": -3.4319096690447566,
+          "abs_mean": 3.4319096690447566,
+          "std_pop": 1.3037103220390258,
+          "min": -6.31479680679391,
+          "q25": -4.23201949097654,
+          "median": -3.191532711197819,
+          "q75": -2.6511963458123247,
+          "max": 0,
+          "variance_zero": false,
+          "positive": 0,
+          "negative": 619,
+          "zero": 4
+        },
+        "A_task": {
+          "n": 623,
+          "mean": 0.5292130967294518,
+          "abs_mean": 0.536114490506286,
+          "std_pop": 0.7901452048588514,
+          "min": -0.3568439098099653,
+          "q25": 0.00451532049107854,
+          "median": 0.012203683492556818,
+          "q75": 1.0413251326201851,
+          "max": 3.112407968150444,
+          "variance_zero": false,
+          "positive": 605,
+          "negative": 18,
+          "zero": 0
+        },
+        "A_cost": {
+          "n": 623,
+          "mean": 0.06057975756521017,
+          "abs_mean": 0.11547898004919058,
+          "std_pop": 0.3738344953082911,
+          "min": -0.3314302861690521,
+          "q25": -0.025098879306273636,
+          "median": -0.0072156679113147045,
+          "q75": -0.003684029264069485,
+          "max": 2.505561278439904,
+          "variance_zero": false,
+          "positive": 148,
+          "negative": 475,
+          "zero": 0
+        },
+        "lambda_times_A_task": {
+          "n": 623,
+          "mean": 0.5292130967294518,
+          "abs_mean": 0.536114490506286,
+          "std_pop": 0.7901452048588514,
+          "min": -0.3568439098099653,
+          "q25": 0.00451532049107854,
+          "median": 0.012203683492556818,
+          "q75": 1.0413251326201851,
+          "max": 3.112407968150444,
+          "variance_zero": false,
+          "positive": 605,
+          "negative": 18,
+          "zero": 0
+        },
+        "A_actor": {
+          "n": 623,
+          "mean": 0.46863333916424166,
+          "abs_mean": 0.5157516859172804,
+          "std_pop": 0.7728943893563712,
+          "min": -1.7149637219472451,
+          "q25": 0.0085544517201867,
+          "median": 0.032348707282721066,
+          "q75": 0.9556098904278361,
+          "max": 3.098562502881232,
+          "variance_zero": false,
+          "positive": 581,
+          "negative": 42,
+          "zero": 0
+        }
+      },
+      "active_rows": {
+        "reward_task_component": {
+          "n": 30,
+          "mean": 1.8711968699745885,
+          "abs_mean": 1.8711968699745885,
+          "std_pop": 0.534063435007202,
+          "min": 0.9575726025216886,
+          "q25": 1.525102709471662,
+          "median": 1.8328331009602328,
+          "q75": 2.312162018758375,
+          "max": 2.760966233775351,
+          "variance_zero": false,
+          "positive": 30,
+          "negative": 0,
+          "zero": 0
+        },
+        "current_value_component": {
+          "n": 30,
+          "mean": 2.616563813136744,
+          "abs_mean": 2.616563813136744,
+          "std_pop": 1.3360987221083187,
+          "min": 0.16902830841852212,
+          "q25": 1.6192892209400003,
+          "median": 2.8074835881646947,
+          "q75": 3.704369723736991,
+          "max": 5.017015223435475,
+          "variance_zero": false,
+          "positive": 30,
+          "negative": 0,
+          "zero": 0
+        },
+        "next_value_bootstrap_component": {
+          "n": 30,
+          "mean": -2.8931889059804803,
+          "abs_mean": 2.8931889059804803,
+          "std_pop": 1.3901723157896566,
+          "min": -5.296118379077801,
+          "q25": -4.008693870202215,
+          "median": -3.1831770241319584,
+          "q75": -1.792936458081453,
+          "max": -0.4273497707249092,
+          "variance_zero": false,
+          "positive": 0,
+          "negative": 30,
+          "zero": 0
+        },
+        "A_task": {
+          "n": 30,
+          "mean": 1.5945717771308525,
+          "abs_mean": 1.5945717771308525,
+          "std_pop": 0.5683117998210581,
+          "min": 0.5850012824131342,
+          "q25": 1.1154806185022519,
+          "median": 1.6701623640454004,
+          "q75": 2.0166850781547674,
+          "max": 2.543991278695518,
+          "variance_zero": false,
+          "positive": 30,
+          "negative": 0,
+          "zero": 0
+        },
+        "A_cost": {
+          "n": 30,
+          "mean": 1.5475725268045137,
+          "abs_mean": 1.5475725268045137,
+          "std_pop": 0.693396402772463,
+          "min": 0.17926684896935663,
+          "q25": 0.9812656625093803,
+          "median": 1.7146170692418479,
+          "q75": 2.1343134174701657,
+          "max": 2.505561278439904,
+          "variance_zero": false,
+          "positive": 30,
+          "negative": 0,
+          "zero": 0
+        },
+        "lambda_times_A_task": {
+          "n": 30,
+          "mean": 1.5945717771308525,
+          "abs_mean": 1.5945717771308525,
+          "std_pop": 0.5683117998210581,
+          "min": 0.5850012824131342,
+          "q25": 1.1154806185022519,
+          "median": 1.6701623640454004,
+          "q75": 2.0166850781547674,
+          "max": 2.543991278695518,
+          "variance_zero": false,
+          "positive": 30,
+          "negative": 0,
+          "zero": 0
+        },
+        "A_actor": {
+          "n": 30,
+          "mean": 0.0469992503263387,
+          "abs_mean": 0.8134945966135291,
+          "std_pop": 0.9652397796500096,
+          "min": -1.7149637219472451,
+          "q25": -0.6556620372140035,
+          "median": -0.03090652435388963,
+          "q75": 0.7581330224844514,
+          "max": 1.983793377563485,
+          "variance_zero": false,
+          "positive": 15,
+          "negative": 15,
+          "zero": 0
+        },
+        "lambda_task_minus_cost_relation": {
+          "abs_mean_lambda_A_task": 1.5945717771308525,
+          "abs_mean_A_cost": 1.5475725268045137,
+          "abs_mean_cost_over_task": 0.9705254721045511,
+          "signs": {
+            "lambda_A_task": {
+              "n": 30,
+              "positive": 30,
+              "negative": 0,
+              "zero": 0
+            },
+            "minus_A_cost": {
+              "n": 30,
+              "positive": 0,
+              "negative": 30,
+              "zero": 0
+            },
+            "actor_combined": {
+              "n": 30,
+              "positive": 15,
+              "negative": 15,
+              "zero": 0
+            }
+          }
+        }
+      },
+      "full_mask_row_A_task": {
+        "n": 593,
+        "mean": 0.4753163675354517,
+        "abs_mean": 0.482566904336409,
+        "std_pop": 0.7610851854008581,
+        "min": -0.3568439098099653,
+        "q25": 0.004351023125817444,
+        "median": 0.011806467525090956,
+        "q75": 0.9088933167395729,
+        "max": 3.112407968150444,
+        "variance_zero": false,
+        "positive": 575,
+        "negative": 18,
+        "zero": 0
+      },
+      "stored_mechanism_comparison": {
+        "A_task": {
+          "label": "A_task all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.937139586047579e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 2.705481394471576e-10,
+            "abs_mean": 4.937139586047579e-10,
+            "std_pop": 1.4114853730262666e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_cost": {
+          "label": "A_cost all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.347898291401364e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 4.347898291401364e-10,
+            "abs_mean": 4.919058216312777e-11,
+            "std_pop": 3.0829111485886074e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_combined": {
+          "label": "A_actor all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 3.5637126583054624e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 1.64241675815191e-10,
+            "abs_mean": 8.271960894035146e-11,
+            "std_pop": 3.5637126583054624e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "stored_point_closure_error": 2.38418579e-7,
+        "this_round_recompute_closure_error": 1.7763568394002505e-15
+      }
+    },
+    {
+      "point": "ACTIVE_ROWS_s11/b15",
+      "availability": "stopped_fixed_batch_provenance_conflict",
+      "provenance": {
+        "point": "ACTIVE_ROWS_s11/b15",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+        "batch_record_samples": 1067,
+        "current_tape_line_count": 1067,
+        "saved_update_mechanism_sample_counts": {
+          "A_task_n": 1002,
+          "recorded_samples": 1002,
+          "mechanism_recomputed_samples": 1002
+        },
+        "checkpoint_file_sha_matches_index": true,
+        "checkpoint_parameter_sha_matches_batch": false,
+        "checkpoint_lambda_matches_batch": false,
+        "saved_checkpoint_identity_claim_matches_current_record": true,
+        "saved_likelihood_gate_passed": true,
+        "batch_record_tape_count_matches_likelihood_gate": true
+      }
+    },
+    {
+      "point": "ACTIVE_ROWS_s11/b31",
+      "availability": "stopped_fixed_batch_provenance_conflict",
+      "provenance": {
+        "point": "ACTIVE_ROWS_s11/b31",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+        "batch_record_samples": 1520,
+        "current_tape_line_count": 1520,
+        "saved_update_mechanism_sample_counts": {
+          "A_task_n": 997,
+          "recorded_samples": 997,
+          "mechanism_recomputed_samples": 997
+        },
+        "checkpoint_file_sha_matches_index": true,
+        "checkpoint_parameter_sha_matches_batch": false,
+        "checkpoint_lambda_matches_batch": false,
+        "saved_checkpoint_identity_claim_matches_current_record": true,
+        "saved_likelihood_gate_passed": true,
+        "batch_record_tape_count_matches_likelihood_gate": true
+      }
+    },
+    {
+      "point": "ACTIVE_ROWS_s22/b0",
+      "batch": 0,
+      "training_seed": 22,
+      "reduction": "ACTIVE_ROWS",
+      "lambda_dual": 1,
+      "checkpoint_parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "checkpoint_file_sha256_verified": true,
+      "row_tape_parameter_link": true,
+      "samples": 626,
+      "active_row_count": 45,
+      "full_mask_row_count": 581,
+      "no_candidate_rows": 0,
+      "prefix_task_reward": 0,
+      "prefix_cost_bytes": 0,
+      "closure_error_max_abs": 1.3322676295501878e-15,
+      "full_batch": {
+        "reward_task_component": {
+          "n": 626,
+          "mean": 0.5234667642282184,
+          "abs_mean": 0.5234667642282184,
+          "std_pop": 0.810469664266614,
+          "min": 0,
+          "q25": 0,
+          "median": 0,
+          "q75": 0.9025,
+          "max": 3.3604260471145104,
+          "variance_zero": false,
+          "positive": 238,
+          "negative": 0,
+          "zero": 388
+        },
+        "current_value_component": {
+          "n": 626,
+          "mean": 5.045235445051198,
+          "abs_mean": 5.045235445051198,
+          "std_pop": 1.0463960239158088,
+          "min": 0.2893095910549164,
+          "q25": 4.740296121707339,
+          "median": 5.394661858936413,
+          "q75": 5.707291051188891,
+          "max": 6.705354691841386,
+          "variance_zero": false,
+          "positive": 626,
+          "negative": 0,
+          "zero": 0
+        },
+        "next_value_bootstrap_component": {
+          "n": 626,
+          "mean": -5.015725009726677,
+          "abs_mean": 5.015725009726677,
+          "std_pop": 1.1201781488657112,
+          "min": -6.705354691841386,
+          "q25": -5.707291051188891,
+          "median": -5.394661858936413,
+          "q75": -4.736889386607478,
+          "max": 0,
+          "variance_zero": false,
+          "positive": 0,
+          "negative": 622,
+          "zero": 4
+        },
+        "A_task": {
+          "n": 626,
+          "mean": 0.5529771995527429,
+          "abs_mean": 0.5587086149239626,
+          "std_pop": 0.8183067513655505,
+          "min": -0.13045796452494013,
+          "q25": -0.0031208582534391106,
+          "median": 0.007898962854849076,
+          "q75": 1.0469211260825242,
+          "max": 3.3715119659101993,
+          "variance_zero": false,
+          "positive": 379,
+          "negative": 247,
+          "zero": 0
+        },
+        "A_cost": {
+          "n": 626,
+          "mean": 0.13962445402213794,
+          "abs_mean": 0.1461147347605611,
+          "std_pop": 0.39530952380878076,
+          "min": -0.1487311107097765,
+          "q25": -0.00019804475238061872,
+          "median": 0.002974534070531773,
+          "q75": 0.10261062726441271,
+          "max": 2.4294765740556676,
+          "variance_zero": false,
+          "positive": 413,
+          "negative": 213,
+          "zero": 0
+        },
+        "lambda_times_A_task": {
+          "n": 626,
+          "mean": 0.5529771995527429,
+          "abs_mean": 0.5587086149239626,
+          "std_pop": 0.8183067513655505,
+          "min": -0.13045796452494013,
+          "q25": -0.0031208582534391106,
+          "median": 0.007898962854849076,
+          "q75": 1.0469211260825242,
+          "max": 3.3715119659101993,
+          "variance_zero": false,
+          "positive": 379,
+          "negative": 247,
+          "zero": 0
+        },
+        "A_actor": {
+          "n": 626,
+          "mean": 0.4133527455306049,
+          "abs_mean": 0.4641342121927857,
+          "std_pop": 0.750328037499591,
+          "min": -1.4731918559418609,
+          "q25": -0.001910691699910648,
+          "median": 0.002105318849172556,
+          "q75": 0.7481589605080639,
+          "max": 3.334433801418338,
+          "variance_zero": false,
+          "positive": 351,
+          "negative": 275,
+          "zero": 0
+        }
+      },
+      "active_rows": {
+        "reward_task_component": {
+          "n": 45,
+          "mean": 1.7694443624800227,
+          "abs_mean": 1.7694443624800227,
+          "std_pop": 0.5332368415543008,
+          "min": 0.9312005839857138,
+          "q25": 1.2680688749321427,
+          "median": 1.6990266152501785,
+          "q75": 2.1433849120309,
+          "max": 2.837684638952492,
+          "variance_zero": false,
+          "positive": 45,
+          "negative": 0,
+          "zero": 0
+        },
+        "current_value_component": {
+          "n": 45,
+          "mean": 4.961679367800499,
+          "abs_mean": 4.961679367800499,
+          "std_pop": 0.43765472559196444,
+          "min": 4.347368014291471,
+          "q25": 4.612315087223003,
+          "median": 4.79321057164453,
+          "q75": 5.277675936567069,
+          "max": 5.953909911502501,
+          "variance_zero": false,
+          "positive": 45,
+          "negative": 0,
+          "zero": 0
+        },
+        "next_value_bootstrap_component": {
+          "n": 45,
+          "mean": -5.040370953271206,
+          "abs_mean": 5.040370953271206,
+          "std_pop": 0.45737383975238727,
+          "min": -6.133742450401554,
+          "q25": -5.350631532906734,
+          "median": -4.871546328908817,
+          "q75": -4.691941631402801,
+          "max": -4.445485187659709,
+          "variance_zero": false,
+          "positive": 0,
+          "negative": 45,
+          "zero": 0
+        },
+        "A_task": {
+          "n": 45,
+          "mean": 1.6907527770093156,
+          "abs_mean": 1.6907527770093156,
+          "std_pop": 0.5377487049060461,
+          "min": 0.8351147138026137,
+          "q25": 1.206280042820548,
+          "median": 1.6358422320607338,
+          "q75": 2.0571498768855694,
+          "max": 2.7966950296662163,
+          "variance_zero": false,
+          "positive": 45,
+          "negative": 0,
+          "zero": 0
+        },
+        "A_cost": {
+          "n": 45,
+          "mean": 1.3632689737120216,
+          "abs_mean": 1.3632689737120216,
+          "std_pop": 0.6825517251773906,
+          "min": 0.22104519212693785,
+          "q25": 0.908928695164754,
+          "median": 1.5083963281208146,
+          "q75": 1.9025083389565596,
+          "max": 2.4294765740556676,
+          "variance_zero": false,
+          "positive": 45,
+          "negative": 0,
+          "zero": 0
+        },
+        "lambda_times_A_task": {
+          "n": 45,
+          "mean": 1.6907527770093156,
+          "abs_mean": 1.6907527770093156,
+          "std_pop": 0.5377487049060461,
+          "min": 0.8351147138026137,
+          "q25": 1.206280042820548,
+          "median": 1.6358422320607338,
+          "q75": 2.0571498768855694,
+          "max": 2.7966950296662163,
+          "variance_zero": false,
+          "positive": 45,
+          "negative": 0,
+          "zero": 0
+        },
+        "A_actor": {
+          "n": 45,
+          "mean": 0.32748380329729365,
+          "abs_mean": 0.8092097568468745,
+          "std_pop": 0.890057011750946,
+          "min": -1.4731918559418609,
+          "q25": -0.2013829137045473,
+          "median": 0.41916749626868954,
+          "q75": 1.0590434590744642,
+          "max": 1.7098123350041,
+          "variance_zero": false,
+          "positive": 30,
+          "negative": 15,
+          "zero": 0
+        },
+        "lambda_task_minus_cost_relation": {
+          "abs_mean_lambda_A_task": 1.6907527770093156,
+          "abs_mean_A_cost": 1.3632689737120216,
+          "abs_mean_cost_over_task": 0.8063088774713929,
+          "signs": {
+            "lambda_A_task": {
+              "n": 45,
+              "positive": 45,
+              "negative": 0,
+              "zero": 0
+            },
+            "minus_A_cost": {
+              "n": 45,
+              "positive": 0,
+              "negative": 45,
+              "zero": 0
+            },
+            "actor_combined": {
+              "n": 45,
+              "positive": 30,
+              "negative": 15,
+              "zero": 0
+            }
+          }
+        }
+      },
+      "full_mask_row_A_task": {
+        "n": 581,
+        "mean": 0.4648534457049878,
+        "abs_mean": 0.4710287744870593,
+        "std_pop": 0.7688056527373022,
+        "min": -0.13045796452494013,
+        "q25": -0.004051072644364998,
+        "median": 0.0027030920376296848,
+        "q75": 0.8209493938213605,
+        "max": 3.3715119659101993,
+        "variance_zero": false,
+        "positive": 334,
+        "negative": 247,
+        "zero": 0
+      },
+      "stored_mechanism_comparison": {
+        "A_task": {
+          "label": "A_task all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.472570092062256e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 4.472570092062256e-10,
+            "abs_mean": 7.603739859973757e-11,
+            "std_pop": 3.6555047877584457e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_cost": {
+          "label": "A_cost all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 2.3943888538546787e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 2.2137930377752468e-11,
+            "abs_mean": 2.3943888538546787e-10,
+            "std_pop": 1.9121926264631384e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_combined": {
+          "label": "A_actor all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.995910352079136e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 4.693950783618561e-10,
+            "abs_mean": 1.927857318229087e-10,
+            "std_pop": 4.995910352079136e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "stored_point_closure_error": 2.38418579e-7,
+        "this_round_recompute_closure_error": 1.3322676295501878e-15
+      }
+    },
+    {
+      "point": "ACTIVE_ROWS_s22/b15",
+      "availability": "stopped_fixed_batch_provenance_conflict",
+      "provenance": {
+        "point": "ACTIVE_ROWS_s22/b15",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+        "batch_record_samples": 1069,
+        "current_tape_line_count": 1069,
+        "saved_update_mechanism_sample_counts": {
+          "A_task_n": 1004,
+          "recorded_samples": 1004,
+          "mechanism_recomputed_samples": 1004
+        },
+        "checkpoint_file_sha_matches_index": true,
+        "checkpoint_parameter_sha_matches_batch": false,
+        "checkpoint_lambda_matches_batch": false,
+        "saved_checkpoint_identity_claim_matches_current_record": true,
+        "saved_likelihood_gate_passed": true,
+        "batch_record_tape_count_matches_likelihood_gate": true
+      }
+    },
+    {
+      "point": "ACTIVE_ROWS_s22/b31",
+      "availability": "stopped_fixed_batch_provenance_conflict",
+      "provenance": {
+        "point": "ACTIVE_ROWS_s22/b31",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+        "batch_record_samples": 1518,
+        "current_tape_line_count": 1518,
+        "saved_update_mechanism_sample_counts": {
+          "A_task_n": 756,
+          "recorded_samples": 756,
+          "mechanism_recomputed_samples": 756
+        },
+        "checkpoint_file_sha_matches_index": true,
+        "checkpoint_parameter_sha_matches_batch": false,
+        "checkpoint_lambda_matches_batch": false,
+        "saved_checkpoint_identity_claim_matches_current_record": true,
+        "saved_likelihood_gate_passed": true,
+        "batch_record_tape_count_matches_likelihood_gate": true
+      }
+    },
+    {
+      "point": "ACTIVE_ROWS_s33/b0",
+      "batch": 0,
+      "training_seed": 33,
+      "reduction": "ACTIVE_ROWS",
+      "lambda_dual": 1,
+      "checkpoint_parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "checkpoint_file_sha256_verified": true,
+      "row_tape_parameter_link": true,
+      "samples": 616,
+      "active_row_count": 33,
+      "full_mask_row_count": 583,
+      "no_candidate_rows": 0,
+      "prefix_task_reward": 0,
+      "prefix_cost_bytes": 0,
+      "closure_error_max_abs": 1.7763568394002505e-15,
+      "full_batch": {
+        "reward_task_component": {
+          "n": 616,
+          "mean": 0.5320163022937365,
+          "abs_mean": 0.5320163022937365,
+          "std_pop": 0.8382699891555894,
+          "min": 0,
+          "q25": 0,
+          "median": 0,
+          "q75": 0.9025,
+          "max": 3.6691502765438773,
+          "variance_zero": false,
+          "positive": 228,
+          "negative": 0,
+          "zero": 388
+        },
+        "current_value_component": {
+          "n": 616,
+          "mean": 3.1039375070199373,
+          "abs_mean": 3.1039375070199373,
+          "std_pop": 1.806093908086045,
+          "min": 0.06316383183002472,
+          "q25": 1.616694830464175,
+          "median": 2.9762703389717613,
+          "q75": 3.807901803641281,
+          "max": 7.588539708998262,
+          "variance_zero": false,
+          "positive": 616,
+          "negative": 0,
+          "zero": 0
+        },
+        "next_value_bootstrap_component": {
+          "n": 616,
+          "mean": -3.0752718156011922,
+          "abs_mean": 3.0752718156011922,
+          "std_pop": 1.8173299833347576,
+          "min": -7.588539708998262,
+          "q25": -3.7809065033919103,
+          "median": -2.9564218099731225,
+          "q75": -1.6043028214940964,
+          "max": 0,
+          "variance_zero": false,
+          "positive": 0,
+          "negative": 612,
+          "zero": 4
+        },
+        "A_task": {
+          "n": 616,
+          "mean": 0.5606819937124822,
+          "abs_mean": 0.5624457376799625,
+          "std_pop": 0.8578576265839561,
+          "min": -0.13782019695831213,
+          "q25": 0.00580968344302113,
+          "median": 0.015296762944255197,
+          "q75": 1.0166456184958435,
+          "max": 3.786355207402027,
+          "variance_zero": false,
+          "positive": 574,
+          "negative": 42,
+          "zero": 0
+        },
+        "A_cost": {
+          "n": 616,
+          "mean": 0.0854404068167661,
+          "abs_mean": 0.10414910156944046,
+          "std_pop": 0.3705873043804056,
+          "min": -0.16424253582954407,
+          "q25": -0.0036443140528337695,
+          "median": 0.009707028280101003,
+          "q75": 0.02454131069338803,
+          "max": 2.6282605574070836,
+          "variance_zero": false,
+          "positive": 390,
+          "negative": 226,
+          "zero": 0
+        },
+        "lambda_times_A_task": {
+          "n": 616,
+          "mean": 0.5606819937124822,
+          "abs_mean": 0.5624457376799625,
+          "std_pop": 0.8578576265839561,
+          "min": -0.13782019695831213,
+          "q25": 0.00580968344302113,
+          "median": 0.015296762944255197,
+          "q75": 1.0166456184958435,
+          "max": 3.786355207402027,
+          "variance_zero": false,
+          "positive": 574,
+          "negative": 42,
+          "zero": 0
+        },
+        "A_actor": {
+          "n": 616,
+          "mean": 0.4752415868957161,
+          "abs_mean": 0.5314520467965087,
+          "std_pop": 0.8528629460623667,
+          "min": -1.828089342411483,
+          "q25": -0.0020451747182044858,
+          "median": 0.007032897412528361,
+          "q75": 0.8937713397585447,
+          "max": 3.798529104052602,
+          "variance_zero": false,
+          "positive": 430,
+          "negative": 186,
+          "zero": 0
+        }
+      },
+      "active_rows": {
+        "reward_task_component": {
+          "n": 33,
+          "mean": 1.7866521106755824,
+          "abs_mean": 1.7866521106755824,
+          "std_pop": 0.5356080663312517,
+          "min": 0.9312005839857138,
+          "q25": 1.3153387213423886,
+          "median": 1.8655498857218034,
+          "q75": 2.175885564335097,
+          "max": 2.812017534788517,
+          "variance_zero": false,
+          "positive": 33,
+          "negative": 0,
+          "zero": 0
+        },
+        "current_value_component": {
+          "n": 33,
+          "mean": 4.582131148422063,
+          "abs_mean": 4.582131148422063,
+          "std_pop": 1.5192529551001925,
+          "min": 2.314036175168137,
+          "q25": 2.9878201572621217,
+          "median": 5.188596260202994,
+          "q75": 5.969945603215489,
+          "max": 6.759018341830053,
+          "variance_zero": false,
+          "positive": 33,
+          "negative": 0,
+          "zero": 0
+        },
+        "next_value_bootstrap_component": {
+          "n": 33,
+          "mean": -4.743556614060894,
+          "abs_mean": 4.743556614060894,
+          "std_pop": 1.611424444382288,
+          "min": -6.905947651916093,
+          "q25": -6.266275981332721,
+          "median": -5.474818162061217,
+          "q75": -2.9878201572621217,
+          "max": -2.512350003506615,
+          "variance_zero": false,
+          "positive": 0,
+          "negative": 33,
+          "zero": 0
+        },
+        "A_task": {
+          "n": 33,
+          "mean": 1.625226645036752,
+          "abs_mean": 1.625226645036752,
+          "std_pop": 0.6198224692715303,
+          "min": 0.6347954842987723,
+          "q25": 1.0352511188004185,
+          "median": 1.7090023196822897,
+          "q75": 2.1138810682237397,
+          "max": 2.7910861743569817,
+          "variance_zero": false,
+          "positive": 33,
+          "negative": 0,
+          "zero": 0
+        },
+        "A_cost": {
+          "n": 33,
+          "mean": 1.4211183017796432,
+          "abs_mean": 1.4211183017796432,
+          "std_pop": 0.8023093057553523,
+          "min": 0.1565744456742979,
+          "q25": 0.7534102768705255,
+          "median": 1.2877737607677568,
+          "q75": 2.2142745522967946,
+          "max": 2.6282605574070836,
+          "variance_zero": false,
+          "positive": 33,
+          "negative": 0,
+          "zero": 0
+        },
+        "lambda_times_A_task": {
+          "n": 33,
+          "mean": 1.625226645036752,
+          "abs_mean": 1.625226645036752,
+          "std_pop": 0.6198224692715303,
+          "min": 0.6347954842987723,
+          "q25": 1.0352511188004185,
+          "median": 1.7090023196822897,
+          "q75": 2.1138810682237397,
+          "max": 2.7910861743569817,
+          "variance_zero": false,
+          "positive": 33,
+          "negative": 0,
+          "zero": 0
+        },
+        "A_actor": {
+          "n": 33,
+          "mean": 0.20410834325710878,
+          "abs_mean": 1.0543280756283804,
+          "std_pop": 1.194527153756081,
+          "min": -1.828089342411483,
+          "q25": -0.728929608771345,
+          "median": 0.281840841929893,
+          "q75": 1.0634539092750286,
+          "max": 2.153966914809253,
+          "variance_zero": false,
+          "positive": 18,
+          "negative": 15,
+          "zero": 0
+        },
+        "lambda_task_minus_cost_relation": {
+          "abs_mean_lambda_A_task": 1.625226645036752,
+          "abs_mean_A_cost": 1.4211183017796432,
+          "abs_mean_cost_over_task": 0.874412381878902,
+          "signs": {
+            "lambda_A_task": {
+              "n": 33,
+              "positive": 33,
+              "negative": 0,
+              "zero": 0
+            },
+            "minus_A_cost": {
+              "n": 33,
+              "positive": 0,
+              "negative": 33,
+              "zero": 0
+            },
+            "actor_combined": {
+              "n": 33,
+              "positive": 18,
+              "negative": 15,
+              "zero": 0
+            }
+          }
+        }
+      },
+      "full_mask_row_A_task": {
+        "n": 583,
+        "mean": 0.5004247492979009,
+        "abs_mean": 0.5022883278295783,
+        "std_pop": 0.8294890267721463,
+        "min": -0.13782019695831213,
+        "q25": 0.005481017773661062,
+        "median": 0.014367180540770649,
+        "q75": 0.8608467920033382,
+        "max": 3.786355207402027,
+        "variance_zero": false,
+        "positive": 541,
+        "negative": 42,
+        "zero": 0
+      },
+      "stored_mechanism_comparison": {
+        "A_task": {
+          "label": "A_task all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.1604386602500654e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 2.8751778735625066e-10,
+            "abs_mean": 3.200374409928486e-10,
+            "std_pop": 4.1604386602500654e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_cost": {
+          "label": "A_cost all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.305595324716194e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 1.8323390027497055e-10,
+            "abs_mean": 4.305595324716194e-10,
+            "std_pop": 3.8040559591223655e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_combined": {
+          "label": "A_actor all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 2.0349133489361293e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 1.0428391483685573e-10,
+            "abs_mean": 2.0349133489361293e-10,
+            "std_pop": 6.23666673860157e-11,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "stored_point_closure_error": 2.38418579e-7,
+        "this_round_recompute_closure_error": 1.7763568394002505e-15
+      }
+    },
+    {
+      "point": "ACTIVE_ROWS_s33/b15",
+      "availability": "stopped_fixed_batch_provenance_conflict",
+      "provenance": {
+        "point": "ACTIVE_ROWS_s33/b15",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+        "batch_record_samples": 1068,
+        "current_tape_line_count": 1068,
+        "saved_update_mechanism_sample_counts": {
+          "A_task_n": 1002,
+          "recorded_samples": 1002,
+          "mechanism_recomputed_samples": 1002
+        },
+        "checkpoint_file_sha_matches_index": true,
+        "checkpoint_parameter_sha_matches_batch": false,
+        "checkpoint_lambda_matches_batch": false,
+        "saved_checkpoint_identity_claim_matches_current_record": true,
+        "saved_likelihood_gate_passed": true,
+        "batch_record_tape_count_matches_likelihood_gate": true
+      }
+    },
+    {
+      "point": "ACTIVE_ROWS_s33/b31",
+      "availability": "stopped_fixed_batch_provenance_conflict",
+      "provenance": {
+        "point": "ACTIVE_ROWS_s33/b31",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+        "batch_record_samples": 1525,
+        "current_tape_line_count": 1525,
+        "saved_update_mechanism_sample_counts": {
+          "A_task_n": 988,
+          "recorded_samples": 988,
+          "mechanism_recomputed_samples": 988
+        },
+        "checkpoint_file_sha_matches_index": true,
+        "checkpoint_parameter_sha_matches_batch": false,
+        "checkpoint_lambda_matches_batch": false,
+        "saved_checkpoint_identity_claim_matches_current_record": true,
+        "saved_likelihood_gate_passed": true,
+        "batch_record_tape_count_matches_likelihood_gate": true
+      }
+    },
+    {
+      "point": "ALL_ROWS_s11/b0",
+      "batch": 0,
+      "training_seed": 11,
+      "reduction": "ALL_ROWS",
+      "lambda_dual": 1,
+      "checkpoint_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "checkpoint_file_sha256_verified": true,
+      "row_tape_parameter_link": true,
+      "samples": 623,
+      "active_row_count": 30,
+      "full_mask_row_count": 593,
+      "no_candidate_rows": 0,
+      "prefix_task_reward": 0,
+      "prefix_cost_bytes": 0,
+      "closure_error_max_abs": 1.7763568394002505e-15,
+      "full_batch": {
+        "reward_task_component": {
+          "n": 623,
+          "mean": 0.516300761505852,
+          "abs_mean": 0.516300761505852,
+          "std_pop": 0.7890037354780519,
+          "min": 0,
+          "q25": 0,
+          "median": 0,
+          "q75": 0.9077380300183435,
+          "max": 3.0349942141422805,
+          "variance_zero": false,
+          "positive": 235,
+          "negative": 0,
+          "zero": 388
+        },
+        "current_value_component": {
+          "n": 623,
+          "mean": 3.4448220042683544,
+          "abs_mean": 3.4448220042683544,
+          "std_pop": 1.2824919772045515,
+          "min": 0.12575018405914307,
+          "q25": 2.6544334615385976,
+          "median": 3.191532711197819,
+          "q75": 4.23201949097654,
+          "max": 6.31479680679391,
+          "variance_zero": false,
+          "positive": 623,
+          "negative": 0,
+          "zero": 0
+        },
+        "next_value_bootstrap_component": {
+          "n": 623,
+          "mean": -3.4319096690447566,
+          "abs_mean": 3.4319096690447566,
+          "std_pop": 1.3037103220390258,
+          "min": -6.31479680679391,
+          "q25": -4.23201949097654,
+          "median": -3.191532711197819,
+          "q75": -2.6511963458123247,
+          "max": 0,
+          "variance_zero": false,
+          "positive": 0,
+          "negative": 619,
+          "zero": 4
+        },
+        "A_task": {
+          "n": 623,
+          "mean": 0.5292130967294518,
+          "abs_mean": 0.536114490506286,
+          "std_pop": 0.7901452048588514,
+          "min": -0.3568439098099653,
+          "q25": 0.00451532049107854,
+          "median": 0.012203683492556818,
+          "q75": 1.0413251326201851,
+          "max": 3.112407968150444,
+          "variance_zero": false,
+          "positive": 605,
+          "negative": 18,
+          "zero": 0
+        },
+        "A_cost": {
+          "n": 623,
+          "mean": 0.06057975756521017,
+          "abs_mean": 0.11547898004919058,
+          "std_pop": 0.3738344953082911,
+          "min": -0.3314302861690521,
+          "q25": -0.025098879306273636,
+          "median": -0.0072156679113147045,
+          "q75": -0.003684029264069485,
+          "max": 2.505561278439904,
+          "variance_zero": false,
+          "positive": 148,
+          "negative": 475,
+          "zero": 0
+        },
+        "lambda_times_A_task": {
+          "n": 623,
+          "mean": 0.5292130967294518,
+          "abs_mean": 0.536114490506286,
+          "std_pop": 0.7901452048588514,
+          "min": -0.3568439098099653,
+          "q25": 0.00451532049107854,
+          "median": 0.012203683492556818,
+          "q75": 1.0413251326201851,
+          "max": 3.112407968150444,
+          "variance_zero": false,
+          "positive": 605,
+          "negative": 18,
+          "zero": 0
+        },
+        "A_actor": {
+          "n": 623,
+          "mean": 0.46863333916424166,
+          "abs_mean": 0.5157516859172804,
+          "std_pop": 0.7728943893563712,
+          "min": -1.7149637219472451,
+          "q25": 0.0085544517201867,
+          "median": 0.032348707282721066,
+          "q75": 0.9556098904278361,
+          "max": 3.098562502881232,
+          "variance_zero": false,
+          "positive": 581,
+          "negative": 42,
+          "zero": 0
+        }
+      },
+      "active_rows": {
+        "reward_task_component": {
+          "n": 30,
+          "mean": 1.8711968699745885,
+          "abs_mean": 1.8711968699745885,
+          "std_pop": 0.534063435007202,
+          "min": 0.9575726025216886,
+          "q25": 1.525102709471662,
+          "median": 1.8328331009602328,
+          "q75": 2.312162018758375,
+          "max": 2.760966233775351,
+          "variance_zero": false,
+          "positive": 30,
+          "negative": 0,
+          "zero": 0
+        },
+        "current_value_component": {
+          "n": 30,
+          "mean": 2.616563813136744,
+          "abs_mean": 2.616563813136744,
+          "std_pop": 1.3360987221083187,
+          "min": 0.16902830841852212,
+          "q25": 1.6192892209400003,
+          "median": 2.8074835881646947,
+          "q75": 3.704369723736991,
+          "max": 5.017015223435475,
+          "variance_zero": false,
+          "positive": 30,
+          "negative": 0,
+          "zero": 0
+        },
+        "next_value_bootstrap_component": {
+          "n": 30,
+          "mean": -2.8931889059804803,
+          "abs_mean": 2.8931889059804803,
+          "std_pop": 1.3901723157896566,
+          "min": -5.296118379077801,
+          "q25": -4.008693870202215,
+          "median": -3.1831770241319584,
+          "q75": -1.792936458081453,
+          "max": -0.4273497707249092,
+          "variance_zero": false,
+          "positive": 0,
+          "negative": 30,
+          "zero": 0
+        },
+        "A_task": {
+          "n": 30,
+          "mean": 1.5945717771308525,
+          "abs_mean": 1.5945717771308525,
+          "std_pop": 0.5683117998210581,
+          "min": 0.5850012824131342,
+          "q25": 1.1154806185022519,
+          "median": 1.6701623640454004,
+          "q75": 2.0166850781547674,
+          "max": 2.543991278695518,
+          "variance_zero": false,
+          "positive": 30,
+          "negative": 0,
+          "zero": 0
+        },
+        "A_cost": {
+          "n": 30,
+          "mean": 1.5475725268045137,
+          "abs_mean": 1.5475725268045137,
+          "std_pop": 0.693396402772463,
+          "min": 0.17926684896935663,
+          "q25": 0.9812656625093803,
+          "median": 1.7146170692418479,
+          "q75": 2.1343134174701657,
+          "max": 2.505561278439904,
+          "variance_zero": false,
+          "positive": 30,
+          "negative": 0,
+          "zero": 0
+        },
+        "lambda_times_A_task": {
+          "n": 30,
+          "mean": 1.5945717771308525,
+          "abs_mean": 1.5945717771308525,
+          "std_pop": 0.5683117998210581,
+          "min": 0.5850012824131342,
+          "q25": 1.1154806185022519,
+          "median": 1.6701623640454004,
+          "q75": 2.0166850781547674,
+          "max": 2.543991278695518,
+          "variance_zero": false,
+          "positive": 30,
+          "negative": 0,
+          "zero": 0
+        },
+        "A_actor": {
+          "n": 30,
+          "mean": 0.0469992503263387,
+          "abs_mean": 0.8134945966135291,
+          "std_pop": 0.9652397796500096,
+          "min": -1.7149637219472451,
+          "q25": -0.6556620372140035,
+          "median": -0.03090652435388963,
+          "q75": 0.7581330224844514,
+          "max": 1.983793377563485,
+          "variance_zero": false,
+          "positive": 15,
+          "negative": 15,
+          "zero": 0
+        },
+        "lambda_task_minus_cost_relation": {
+          "abs_mean_lambda_A_task": 1.5945717771308525,
+          "abs_mean_A_cost": 1.5475725268045137,
+          "abs_mean_cost_over_task": 0.9705254721045511,
+          "signs": {
+            "lambda_A_task": {
+              "n": 30,
+              "positive": 30,
+              "negative": 0,
+              "zero": 0
+            },
+            "minus_A_cost": {
+              "n": 30,
+              "positive": 0,
+              "negative": 30,
+              "zero": 0
+            },
+            "actor_combined": {
+              "n": 30,
+              "positive": 15,
+              "negative": 15,
+              "zero": 0
+            }
+          }
+        }
+      },
+      "full_mask_row_A_task": {
+        "n": 593,
+        "mean": 0.4753163675354517,
+        "abs_mean": 0.482566904336409,
+        "std_pop": 0.7610851854008581,
+        "min": -0.3568439098099653,
+        "q25": 0.004351023125817444,
+        "median": 0.011806467525090956,
+        "q75": 0.9088933167395729,
+        "max": 3.112407968150444,
+        "variance_zero": false,
+        "positive": 575,
+        "negative": 18,
+        "zero": 0
+      },
+      "stored_mechanism_comparison": {
+        "A_task": {
+          "label": "A_task all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.937139586047579e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 2.705481394471576e-10,
+            "abs_mean": 4.937139586047579e-10,
+            "std_pop": 1.4114853730262666e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_cost": {
+          "label": "A_cost all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.347898291401364e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 4.347898291401364e-10,
+            "abs_mean": 4.919058216312777e-11,
+            "std_pop": 3.0829111485886074e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_combined": {
+          "label": "A_actor all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 3.5637126583054624e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 1.64241675815191e-10,
+            "abs_mean": 8.271960894035146e-11,
+            "std_pop": 3.5637126583054624e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "stored_point_closure_error": 2.38418579e-7,
+        "this_round_recompute_closure_error": 1.7763568394002505e-15
+      }
+    },
+    {
+      "point": "ALL_ROWS_s11/b15",
+      "availability": "stopped_fixed_batch_provenance_conflict",
+      "provenance": {
+        "point": "ALL_ROWS_s11/b15",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+        "batch_record_samples": 1068,
+        "current_tape_line_count": 1068,
+        "saved_update_mechanism_sample_counts": {
+          "A_task_n": 1003,
+          "recorded_samples": 1003,
+          "mechanism_recomputed_samples": 1003
+        },
+        "checkpoint_file_sha_matches_index": true,
+        "checkpoint_parameter_sha_matches_batch": false,
+        "checkpoint_lambda_matches_batch": false,
+        "saved_checkpoint_identity_claim_matches_current_record": true,
+        "saved_likelihood_gate_passed": true,
+        "batch_record_tape_count_matches_likelihood_gate": true
+      }
+    },
+    {
+      "point": "ALL_ROWS_s11/b31",
+      "availability": "stopped_fixed_batch_provenance_conflict",
+      "provenance": {
+        "point": "ALL_ROWS_s11/b31",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+        "batch_record_samples": 1520,
+        "current_tape_line_count": 1520,
+        "saved_update_mechanism_sample_counts": {
+          "A_task_n": 996,
+          "recorded_samples": 996,
+          "mechanism_recomputed_samples": 996
+        },
+        "checkpoint_file_sha_matches_index": true,
+        "checkpoint_parameter_sha_matches_batch": false,
+        "checkpoint_lambda_matches_batch": false,
+        "saved_checkpoint_identity_claim_matches_current_record": true,
+        "saved_likelihood_gate_passed": true,
+        "batch_record_tape_count_matches_likelihood_gate": true
+      }
+    },
+    {
+      "point": "ALL_ROWS_s22/b0",
+      "batch": 0,
+      "training_seed": 22,
+      "reduction": "ALL_ROWS",
+      "lambda_dual": 1,
+      "checkpoint_parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "checkpoint_file_sha256_verified": true,
+      "row_tape_parameter_link": true,
+      "samples": 626,
+      "active_row_count": 45,
+      "full_mask_row_count": 581,
+      "no_candidate_rows": 0,
+      "prefix_task_reward": 0,
+      "prefix_cost_bytes": 0,
+      "closure_error_max_abs": 1.3322676295501878e-15,
+      "full_batch": {
+        "reward_task_component": {
+          "n": 626,
+          "mean": 0.5234667642282184,
+          "abs_mean": 0.5234667642282184,
+          "std_pop": 0.810469664266614,
+          "min": 0,
+          "q25": 0,
+          "median": 0,
+          "q75": 0.9025,
+          "max": 3.3604260471145104,
+          "variance_zero": false,
+          "positive": 238,
+          "negative": 0,
+          "zero": 388
+        },
+        "current_value_component": {
+          "n": 626,
+          "mean": 5.045235445051198,
+          "abs_mean": 5.045235445051198,
+          "std_pop": 1.0463960239158088,
+          "min": 0.2893095910549164,
+          "q25": 4.740296121707339,
+          "median": 5.394661858936413,
+          "q75": 5.707291051188891,
+          "max": 6.705354691841386,
+          "variance_zero": false,
+          "positive": 626,
+          "negative": 0,
+          "zero": 0
+        },
+        "next_value_bootstrap_component": {
+          "n": 626,
+          "mean": -5.015725009726677,
+          "abs_mean": 5.015725009726677,
+          "std_pop": 1.1201781488657112,
+          "min": -6.705354691841386,
+          "q25": -5.707291051188891,
+          "median": -5.394661858936413,
+          "q75": -4.736889386607478,
+          "max": 0,
+          "variance_zero": false,
+          "positive": 0,
+          "negative": 622,
+          "zero": 4
+        },
+        "A_task": {
+          "n": 626,
+          "mean": 0.5529771995527429,
+          "abs_mean": 0.5587086149239626,
+          "std_pop": 0.8183067513655505,
+          "min": -0.13045796452494013,
+          "q25": -0.0031208582534391106,
+          "median": 0.007898962854849076,
+          "q75": 1.0469211260825242,
+          "max": 3.3715119659101993,
+          "variance_zero": false,
+          "positive": 379,
+          "negative": 247,
+          "zero": 0
+        },
+        "A_cost": {
+          "n": 626,
+          "mean": 0.13962445402213794,
+          "abs_mean": 0.1461147347605611,
+          "std_pop": 0.39530952380878076,
+          "min": -0.1487311107097765,
+          "q25": -0.00019804475238061872,
+          "median": 0.002974534070531773,
+          "q75": 0.10261062726441271,
+          "max": 2.4294765740556676,
+          "variance_zero": false,
+          "positive": 413,
+          "negative": 213,
+          "zero": 0
+        },
+        "lambda_times_A_task": {
+          "n": 626,
+          "mean": 0.5529771995527429,
+          "abs_mean": 0.5587086149239626,
+          "std_pop": 0.8183067513655505,
+          "min": -0.13045796452494013,
+          "q25": -0.0031208582534391106,
+          "median": 0.007898962854849076,
+          "q75": 1.0469211260825242,
+          "max": 3.3715119659101993,
+          "variance_zero": false,
+          "positive": 379,
+          "negative": 247,
+          "zero": 0
+        },
+        "A_actor": {
+          "n": 626,
+          "mean": 0.4133527455306049,
+          "abs_mean": 0.4641342121927857,
+          "std_pop": 0.750328037499591,
+          "min": -1.4731918559418609,
+          "q25": -0.001910691699910648,
+          "median": 0.002105318849172556,
+          "q75": 0.7481589605080639,
+          "max": 3.334433801418338,
+          "variance_zero": false,
+          "positive": 351,
+          "negative": 275,
+          "zero": 0
+        }
+      },
+      "active_rows": {
+        "reward_task_component": {
+          "n": 45,
+          "mean": 1.7694443624800227,
+          "abs_mean": 1.7694443624800227,
+          "std_pop": 0.5332368415543008,
+          "min": 0.9312005839857138,
+          "q25": 1.2680688749321427,
+          "median": 1.6990266152501785,
+          "q75": 2.1433849120309,
+          "max": 2.837684638952492,
+          "variance_zero": false,
+          "positive": 45,
+          "negative": 0,
+          "zero": 0
+        },
+        "current_value_component": {
+          "n": 45,
+          "mean": 4.961679367800499,
+          "abs_mean": 4.961679367800499,
+          "std_pop": 0.43765472559196444,
+          "min": 4.347368014291471,
+          "q25": 4.612315087223003,
+          "median": 4.79321057164453,
+          "q75": 5.277675936567069,
+          "max": 5.953909911502501,
+          "variance_zero": false,
+          "positive": 45,
+          "negative": 0,
+          "zero": 0
+        },
+        "next_value_bootstrap_component": {
+          "n": 45,
+          "mean": -5.040370953271206,
+          "abs_mean": 5.040370953271206,
+          "std_pop": 0.45737383975238727,
+          "min": -6.133742450401554,
+          "q25": -5.350631532906734,
+          "median": -4.871546328908817,
+          "q75": -4.691941631402801,
+          "max": -4.445485187659709,
+          "variance_zero": false,
+          "positive": 0,
+          "negative": 45,
+          "zero": 0
+        },
+        "A_task": {
+          "n": 45,
+          "mean": 1.6907527770093156,
+          "abs_mean": 1.6907527770093156,
+          "std_pop": 0.5377487049060461,
+          "min": 0.8351147138026137,
+          "q25": 1.206280042820548,
+          "median": 1.6358422320607338,
+          "q75": 2.0571498768855694,
+          "max": 2.7966950296662163,
+          "variance_zero": false,
+          "positive": 45,
+          "negative": 0,
+          "zero": 0
+        },
+        "A_cost": {
+          "n": 45,
+          "mean": 1.3632689737120216,
+          "abs_mean": 1.3632689737120216,
+          "std_pop": 0.6825517251773906,
+          "min": 0.22104519212693785,
+          "q25": 0.908928695164754,
+          "median": 1.5083963281208146,
+          "q75": 1.9025083389565596,
+          "max": 2.4294765740556676,
+          "variance_zero": false,
+          "positive": 45,
+          "negative": 0,
+          "zero": 0
+        },
+        "lambda_times_A_task": {
+          "n": 45,
+          "mean": 1.6907527770093156,
+          "abs_mean": 1.6907527770093156,
+          "std_pop": 0.5377487049060461,
+          "min": 0.8351147138026137,
+          "q25": 1.206280042820548,
+          "median": 1.6358422320607338,
+          "q75": 2.0571498768855694,
+          "max": 2.7966950296662163,
+          "variance_zero": false,
+          "positive": 45,
+          "negative": 0,
+          "zero": 0
+        },
+        "A_actor": {
+          "n": 45,
+          "mean": 0.32748380329729365,
+          "abs_mean": 0.8092097568468745,
+          "std_pop": 0.890057011750946,
+          "min": -1.4731918559418609,
+          "q25": -0.2013829137045473,
+          "median": 0.41916749626868954,
+          "q75": 1.0590434590744642,
+          "max": 1.7098123350041,
+          "variance_zero": false,
+          "positive": 30,
+          "negative": 15,
+          "zero": 0
+        },
+        "lambda_task_minus_cost_relation": {
+          "abs_mean_lambda_A_task": 1.6907527770093156,
+          "abs_mean_A_cost": 1.3632689737120216,
+          "abs_mean_cost_over_task": 0.8063088774713929,
+          "signs": {
+            "lambda_A_task": {
+              "n": 45,
+              "positive": 45,
+              "negative": 0,
+              "zero": 0
+            },
+            "minus_A_cost": {
+              "n": 45,
+              "positive": 0,
+              "negative": 45,
+              "zero": 0
+            },
+            "actor_combined": {
+              "n": 45,
+              "positive": 30,
+              "negative": 15,
+              "zero": 0
+            }
+          }
+        }
+      },
+      "full_mask_row_A_task": {
+        "n": 581,
+        "mean": 0.4648534457049878,
+        "abs_mean": 0.4710287744870593,
+        "std_pop": 0.7688056527373022,
+        "min": -0.13045796452494013,
+        "q25": -0.004051072644364998,
+        "median": 0.0027030920376296848,
+        "q75": 0.8209493938213605,
+        "max": 3.3715119659101993,
+        "variance_zero": false,
+        "positive": 334,
+        "negative": 247,
+        "zero": 0
+      },
+      "stored_mechanism_comparison": {
+        "A_task": {
+          "label": "A_task all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.472570092062256e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 4.472570092062256e-10,
+            "abs_mean": 7.603739859973757e-11,
+            "std_pop": 3.6555047877584457e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_cost": {
+          "label": "A_cost all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 2.3943888538546787e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 2.2137930377752468e-11,
+            "abs_mean": 2.3943888538546787e-10,
+            "std_pop": 1.9121926264631384e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_combined": {
+          "label": "A_actor all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.995910352079136e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 4.693950783618561e-10,
+            "abs_mean": 1.927857318229087e-10,
+            "std_pop": 4.995910352079136e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "stored_point_closure_error": 2.38418579e-7,
+        "this_round_recompute_closure_error": 1.3322676295501878e-15
+      }
+    },
+    {
+      "point": "ALL_ROWS_s22/b15",
+      "availability": "stopped_fixed_batch_provenance_conflict",
+      "provenance": {
+        "point": "ALL_ROWS_s22/b15",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+        "batch_record_samples": 1068,
+        "current_tape_line_count": 1068,
+        "saved_update_mechanism_sample_counts": {
+          "A_task_n": 764,
+          "recorded_samples": 764,
+          "mechanism_recomputed_samples": 764
+        },
+        "checkpoint_file_sha_matches_index": true,
+        "checkpoint_parameter_sha_matches_batch": false,
+        "checkpoint_lambda_matches_batch": false,
+        "saved_checkpoint_identity_claim_matches_current_record": true,
+        "saved_likelihood_gate_passed": true,
+        "batch_record_tape_count_matches_likelihood_gate": true
+      }
+    },
+    {
+      "point": "ALL_ROWS_s22/b31",
+      "availability": "stopped_fixed_batch_provenance_conflict",
+      "provenance": {
+        "point": "ALL_ROWS_s22/b31",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+        "batch_record_samples": 1518,
+        "current_tape_line_count": 1518,
+        "saved_update_mechanism_sample_counts": {
+          "A_task_n": 324,
+          "recorded_samples": 324,
+          "mechanism_recomputed_samples": 324
+        },
+        "checkpoint_file_sha_matches_index": true,
+        "checkpoint_parameter_sha_matches_batch": false,
+        "checkpoint_lambda_matches_batch": false,
+        "saved_checkpoint_identity_claim_matches_current_record": true,
+        "saved_likelihood_gate_passed": true,
+        "batch_record_tape_count_matches_likelihood_gate": true
+      }
+    },
+    {
+      "point": "ALL_ROWS_s33/b0",
+      "batch": 0,
+      "training_seed": 33,
+      "reduction": "ALL_ROWS",
+      "lambda_dual": 1,
+      "checkpoint_parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "checkpoint_file_sha256_verified": true,
+      "row_tape_parameter_link": true,
+      "samples": 616,
+      "active_row_count": 33,
+      "full_mask_row_count": 583,
+      "no_candidate_rows": 0,
+      "prefix_task_reward": 0,
+      "prefix_cost_bytes": 0,
+      "closure_error_max_abs": 1.7763568394002505e-15,
+      "full_batch": {
+        "reward_task_component": {
+          "n": 616,
+          "mean": 0.5320163022937365,
+          "abs_mean": 0.5320163022937365,
+          "std_pop": 0.8382699891555894,
+          "min": 0,
+          "q25": 0,
+          "median": 0,
+          "q75": 0.9025,
+          "max": 3.6691502765438773,
+          "variance_zero": false,
+          "positive": 228,
+          "negative": 0,
+          "zero": 388
+        },
+        "current_value_component": {
+          "n": 616,
+          "mean": 3.1039375070199373,
+          "abs_mean": 3.1039375070199373,
+          "std_pop": 1.806093908086045,
+          "min": 0.06316383183002472,
+          "q25": 1.616694830464175,
+          "median": 2.9762703389717613,
+          "q75": 3.807901803641281,
+          "max": 7.588539708998262,
+          "variance_zero": false,
+          "positive": 616,
+          "negative": 0,
+          "zero": 0
+        },
+        "next_value_bootstrap_component": {
+          "n": 616,
+          "mean": -3.0752718156011922,
+          "abs_mean": 3.0752718156011922,
+          "std_pop": 1.8173299833347576,
+          "min": -7.588539708998262,
+          "q25": -3.7809065033919103,
+          "median": -2.9564218099731225,
+          "q75": -1.6043028214940964,
+          "max": 0,
+          "variance_zero": false,
+          "positive": 0,
+          "negative": 612,
+          "zero": 4
+        },
+        "A_task": {
+          "n": 616,
+          "mean": 0.5606819937124822,
+          "abs_mean": 0.5624457376799625,
+          "std_pop": 0.8578576265839561,
+          "min": -0.13782019695831213,
+          "q25": 0.00580968344302113,
+          "median": 0.015296762944255197,
+          "q75": 1.0166456184958435,
+          "max": 3.786355207402027,
+          "variance_zero": false,
+          "positive": 574,
+          "negative": 42,
+          "zero": 0
+        },
+        "A_cost": {
+          "n": 616,
+          "mean": 0.0854404068167661,
+          "abs_mean": 0.10414910156944046,
+          "std_pop": 0.3705873043804056,
+          "min": -0.16424253582954407,
+          "q25": -0.0036443140528337695,
+          "median": 0.009707028280101003,
+          "q75": 0.02454131069338803,
+          "max": 2.6282605574070836,
+          "variance_zero": false,
+          "positive": 390,
+          "negative": 226,
+          "zero": 0
+        },
+        "lambda_times_A_task": {
+          "n": 616,
+          "mean": 0.5606819937124822,
+          "abs_mean": 0.5624457376799625,
+          "std_pop": 0.8578576265839561,
+          "min": -0.13782019695831213,
+          "q25": 0.00580968344302113,
+          "median": 0.015296762944255197,
+          "q75": 1.0166456184958435,
+          "max": 3.786355207402027,
+          "variance_zero": false,
+          "positive": 574,
+          "negative": 42,
+          "zero": 0
+        },
+        "A_actor": {
+          "n": 616,
+          "mean": 0.4752415868957161,
+          "abs_mean": 0.5314520467965087,
+          "std_pop": 0.8528629460623667,
+          "min": -1.828089342411483,
+          "q25": -0.0020451747182044858,
+          "median": 0.007032897412528361,
+          "q75": 0.8937713397585447,
+          "max": 3.798529104052602,
+          "variance_zero": false,
+          "positive": 430,
+          "negative": 186,
+          "zero": 0
+        }
+      },
+      "active_rows": {
+        "reward_task_component": {
+          "n": 33,
+          "mean": 1.7866521106755824,
+          "abs_mean": 1.7866521106755824,
+          "std_pop": 0.5356080663312517,
+          "min": 0.9312005839857138,
+          "q25": 1.3153387213423886,
+          "median": 1.8655498857218034,
+          "q75": 2.175885564335097,
+          "max": 2.812017534788517,
+          "variance_zero": false,
+          "positive": 33,
+          "negative": 0,
+          "zero": 0
+        },
+        "current_value_component": {
+          "n": 33,
+          "mean": 4.582131148422063,
+          "abs_mean": 4.582131148422063,
+          "std_pop": 1.5192529551001925,
+          "min": 2.314036175168137,
+          "q25": 2.9878201572621217,
+          "median": 5.188596260202994,
+          "q75": 5.969945603215489,
+          "max": 6.759018341830053,
+          "variance_zero": false,
+          "positive": 33,
+          "negative": 0,
+          "zero": 0
+        },
+        "next_value_bootstrap_component": {
+          "n": 33,
+          "mean": -4.743556614060894,
+          "abs_mean": 4.743556614060894,
+          "std_pop": 1.611424444382288,
+          "min": -6.905947651916093,
+          "q25": -6.266275981332721,
+          "median": -5.474818162061217,
+          "q75": -2.9878201572621217,
+          "max": -2.512350003506615,
+          "variance_zero": false,
+          "positive": 0,
+          "negative": 33,
+          "zero": 0
+        },
+        "A_task": {
+          "n": 33,
+          "mean": 1.625226645036752,
+          "abs_mean": 1.625226645036752,
+          "std_pop": 0.6198224692715303,
+          "min": 0.6347954842987723,
+          "q25": 1.0352511188004185,
+          "median": 1.7090023196822897,
+          "q75": 2.1138810682237397,
+          "max": 2.7910861743569817,
+          "variance_zero": false,
+          "positive": 33,
+          "negative": 0,
+          "zero": 0
+        },
+        "A_cost": {
+          "n": 33,
+          "mean": 1.4211183017796432,
+          "abs_mean": 1.4211183017796432,
+          "std_pop": 0.8023093057553523,
+          "min": 0.1565744456742979,
+          "q25": 0.7534102768705255,
+          "median": 1.2877737607677568,
+          "q75": 2.2142745522967946,
+          "max": 2.6282605574070836,
+          "variance_zero": false,
+          "positive": 33,
+          "negative": 0,
+          "zero": 0
+        },
+        "lambda_times_A_task": {
+          "n": 33,
+          "mean": 1.625226645036752,
+          "abs_mean": 1.625226645036752,
+          "std_pop": 0.6198224692715303,
+          "min": 0.6347954842987723,
+          "q25": 1.0352511188004185,
+          "median": 1.7090023196822897,
+          "q75": 2.1138810682237397,
+          "max": 2.7910861743569817,
+          "variance_zero": false,
+          "positive": 33,
+          "negative": 0,
+          "zero": 0
+        },
+        "A_actor": {
+          "n": 33,
+          "mean": 0.20410834325710878,
+          "abs_mean": 1.0543280756283804,
+          "std_pop": 1.194527153756081,
+          "min": -1.828089342411483,
+          "q25": -0.728929608771345,
+          "median": 0.281840841929893,
+          "q75": 1.0634539092750286,
+          "max": 2.153966914809253,
+          "variance_zero": false,
+          "positive": 18,
+          "negative": 15,
+          "zero": 0
+        },
+        "lambda_task_minus_cost_relation": {
+          "abs_mean_lambda_A_task": 1.625226645036752,
+          "abs_mean_A_cost": 1.4211183017796432,
+          "abs_mean_cost_over_task": 0.874412381878902,
+          "signs": {
+            "lambda_A_task": {
+              "n": 33,
+              "positive": 33,
+              "negative": 0,
+              "zero": 0
+            },
+            "minus_A_cost": {
+              "n": 33,
+              "positive": 0,
+              "negative": 33,
+              "zero": 0
+            },
+            "actor_combined": {
+              "n": 33,
+              "positive": 18,
+              "negative": 15,
+              "zero": 0
+            }
+          }
+        }
+      },
+      "full_mask_row_A_task": {
+        "n": 583,
+        "mean": 0.5004247492979009,
+        "abs_mean": 0.5022883278295783,
+        "std_pop": 0.8294890267721463,
+        "min": -0.13782019695831213,
+        "q25": 0.005481017773661062,
+        "median": 0.014367180540770649,
+        "q75": 0.8608467920033382,
+        "max": 3.786355207402027,
+        "variance_zero": false,
+        "positive": 541,
+        "negative": 42,
+        "zero": 0
+      },
+      "stored_mechanism_comparison": {
+        "A_task": {
+          "label": "A_task all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.1604386602500654e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 2.8751778735625066e-10,
+            "abs_mean": 3.200374409928486e-10,
+            "std_pop": 4.1604386602500654e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_cost": {
+          "label": "A_cost all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.305595324716194e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 1.8323390027497055e-10,
+            "abs_mean": 4.305595324716194e-10,
+            "std_pop": 3.8040559591223655e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_combined": {
+          "label": "A_actor all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 2.0349133489361293e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 1.0428391483685573e-10,
+            "abs_mean": 2.0349133489361293e-10,
+            "std_pop": 6.23666673860157e-11,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "stored_point_closure_error": 2.38418579e-7,
+        "this_round_recompute_closure_error": 1.7763568394002505e-15
+      }
+    },
+    {
+      "point": "ALL_ROWS_s33/b15",
+      "availability": "stopped_fixed_batch_provenance_conflict",
+      "provenance": {
+        "point": "ALL_ROWS_s33/b15",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+        "batch_record_samples": 1068,
+        "current_tape_line_count": 1068,
+        "saved_update_mechanism_sample_counts": {
+          "A_task_n": 1002,
+          "recorded_samples": 1002,
+          "mechanism_recomputed_samples": 1002
+        },
+        "checkpoint_file_sha_matches_index": true,
+        "checkpoint_parameter_sha_matches_batch": false,
+        "checkpoint_lambda_matches_batch": false,
+        "saved_checkpoint_identity_claim_matches_current_record": true,
+        "saved_likelihood_gate_passed": true,
+        "batch_record_tape_count_matches_likelihood_gate": true
+      }
+    },
+    {
+      "point": "ALL_ROWS_s33/b31",
+      "availability": "stopped_fixed_batch_provenance_conflict",
+      "provenance": {
+        "point": "ALL_ROWS_s33/b31",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+        "batch_record_samples": 1525,
+        "current_tape_line_count": 1525,
+        "saved_update_mechanism_sample_counts": {
+          "A_task_n": 987,
+          "recorded_samples": 987,
+          "mechanism_recomputed_samples": 987
+        },
+        "checkpoint_file_sha_matches_index": true,
+        "checkpoint_parameter_sha_matches_batch": false,
+        "checkpoint_lambda_matches_batch": false,
+        "saved_checkpoint_identity_claim_matches_current_record": true,
+        "saved_likelihood_gate_passed": true,
+        "batch_record_tape_count_matches_likelihood_gate": true
+      }
+    }
+  ],
+  "direct_reward_transfer": {
+    "fixed_points_expected": 18,
+    "fixed_points_observed": 18,
+    "analyzable_points": 6,
+    "stopped_points": [
+      {
+        "point": "ACTIVE_ROWS_s11/b15",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently."
+      },
+      {
+        "point": "ACTIVE_ROWS_s11/b31",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently."
+      },
+      {
+        "point": "ACTIVE_ROWS_s22/b15",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently."
+      },
+      {
+        "point": "ACTIVE_ROWS_s22/b31",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently."
+      },
+      {
+        "point": "ACTIVE_ROWS_s33/b15",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently."
+      },
+      {
+        "point": "ACTIVE_ROWS_s33/b31",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently."
+      },
+      {
+        "point": "ALL_ROWS_s11/b15",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently."
+      },
+      {
+        "point": "ALL_ROWS_s11/b31",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently."
+      },
+      {
+        "point": "ALL_ROWS_s22/b15",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently."
+      },
+      {
+        "point": "ALL_ROWS_s22/b31",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently."
+      },
+      {
+        "point": "ALL_ROWS_s33/b15",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently."
+      },
+      {
+        "point": "ALL_ROWS_s33/b31",
+        "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently."
+      }
+    ],
+    "formula": "For a task reward in tape row j, its direct contribution to A_task at earlier row i with no terminal boundary between is (gamma*lambda_GAE)^(j-i); full-mask rows remain in j-i.",
+    "interpretation": "Coefficient measures only the explicit reward path with critic predictions fixed; a small value does not mean the training signal has no long-term information because critic value/bootstrap terms may compensate.",
+    "per_batch": [
+      {
+        "point": "ACTIVE_ROWS_s11/b0",
+        "reward_to_nearest_active_pairs": 22,
+        "nearest_distance_rows": {
+          "n": 22,
+          "mean": 24.636363636363637,
+          "abs_mean": 24.636363636363637,
+          "std_pop": 17.77011140944626,
+          "min": 0,
+          "q25": 12.5,
+          "median": 23.5,
+          "q75": 33.5,
+          "max": 64,
+          "variance_zero": false,
+          "positive": 20,
+          "negative": 0,
+          "zero": 2
+        },
+        "nearest_distance_env_steps": {
+          "n": 22,
+          "mean": 111.04545454545455,
+          "abs_mean": 111.04545454545455,
+          "std_pop": 158.16288418552656,
+          "min": 0,
+          "q25": 13,
+          "median": 24.5,
+          "q75": 154,
+          "max": 491,
+          "variance_zero": false,
+          "positive": 20,
+          "negative": 0,
+          "zero": 2
+        },
+        "nearest_direct_reward_coefficient": {
+          "n": 22,
+          "mean": 0.3965466629115717,
+          "abs_mean": 0.3965466629115717,
+          "std_pop": 0.2923330600372544,
+          "min": 0.03752413921111602,
+          "q25": 0.17954633215747298,
+          "median": 0.299672946031898,
+          "q75": 0.5271888105258599,
+          "max": 1,
+          "variance_zero": false,
+          "positive": 22,
+          "negative": 0,
+          "zero": 0
+        },
+        "all_prior_active_pairs": 164,
+        "all_prior_active_distance_rows": {
+          "n": 164,
+          "mean": 27.963414634146343,
+          "abs_mean": 27.963414634146343,
+          "std_pop": 18.722586543446898,
+          "min": 0,
+          "q25": 13.75,
+          "median": 25,
+          "q75": 38.25,
+          "max": 75,
+          "variance_zero": false,
+          "positive": 162,
+          "negative": 0,
+          "zero": 2
+        },
+        "all_prior_active_env_steps": {
+          "n": 164,
+          "mean": 146.77439024390245,
+          "abs_mean": 146.77439024390245,
+          "std_pop": 174.67346979852854,
+          "min": 0,
+          "q25": 14,
+          "median": 30,
+          "q75": 329.25,
+          "max": 497,
+          "variance_zero": false,
+          "positive": 162,
+          "negative": 0,
+          "zero": 2
+        },
+        "all_prior_active_direct_reward_coefficient": {
+          "n": 164,
+          "mean": 0.3422921103612052,
+          "abs_mean": 0.3422921103612052,
+          "std_pop": 0.25460471489278114,
+          "min": 0.02134373384587751,
+          "q25": 0.14061579457954498,
+          "median": 0.27738957312183377,
+          "q75": 0.49409175515652337,
+          "max": 1,
+          "variance_zero": false,
+          "positive": 164,
+          "negative": 0,
+          "zero": 0
+        },
+        "row_distance_histogram": {
+          "0": 2,
+          "1": 2,
+          "2": 2,
+          "3": 3,
+          "4": 3,
+          "5": 4,
+          "6": 3,
+          "7": 4,
+          "8": 4,
+          "9": 3,
+          "10": 3,
+          "11": 2,
+          "12": 3,
+          "13": 3,
+          "14": 3,
+          "15": 2,
+          "16": 4,
+          "17": 4,
+          "18": 4,
+          "19": 3,
+          "20": 3,
+          "21": 3,
+          "22": 4,
+          "23": 3,
+          "24": 5,
+          "25": 6,
+          "26": 4,
+          "27": 4,
+          "28": 3,
+          "29": 3,
+          "30": 4,
+          "31": 3,
+          "32": 3,
+          "33": 3,
+          "34": 3,
+          "35": 2,
+          "36": 2,
+          "37": 2,
+          "38": 2,
+          "39": 1,
+          "40": 1,
+          "41": 1,
+          "42": 1,
+          "43": 2,
+          "44": 2,
+          "45": 3,
+          "46": 3,
+          "47": 2,
+          "48": 2,
+          "49": 2,
+          "50": 2,
+          "51": 2,
+          "52": 1,
+          "62": 1,
+          "63": 1,
+          "64": 2,
+          "65": 2,
+          "66": 1,
+          "67": 1,
+          "68": 1,
+          "69": 1,
+          "70": 1,
+          "71": 1,
+          "72": 1,
+          "73": 1,
+          "74": 1,
+          "75": 1
+        }
+      },
+      {
+        "point": "ACTIVE_ROWS_s11/b15",
+        "availability": "stopped_fixed_batch_provenance_conflict",
+        "provenance": {
+          "point": "ACTIVE_ROWS_s11/b15",
+          "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+          "batch_record_samples": 1067,
+          "current_tape_line_count": 1067,
+          "saved_update_mechanism_sample_counts": {
+            "A_task_n": 1002,
+            "recorded_samples": 1002,
+            "mechanism_recomputed_samples": 1002
+          },
+          "checkpoint_file_sha_matches_index": true,
+          "checkpoint_parameter_sha_matches_batch": false,
+          "checkpoint_lambda_matches_batch": false,
+          "saved_checkpoint_identity_claim_matches_current_record": true,
+          "saved_likelihood_gate_passed": true,
+          "batch_record_tape_count_matches_likelihood_gate": true
+        }
+      },
+      {
+        "point": "ACTIVE_ROWS_s11/b31",
+        "availability": "stopped_fixed_batch_provenance_conflict",
+        "provenance": {
+          "point": "ACTIVE_ROWS_s11/b31",
+          "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+          "batch_record_samples": 1520,
+          "current_tape_line_count": 1520,
+          "saved_update_mechanism_sample_counts": {
+            "A_task_n": 997,
+            "recorded_samples": 997,
+            "mechanism_recomputed_samples": 997
+          },
+          "checkpoint_file_sha_matches_index": true,
+          "checkpoint_parameter_sha_matches_batch": false,
+          "checkpoint_lambda_matches_batch": false,
+          "saved_checkpoint_identity_claim_matches_current_record": true,
+          "saved_likelihood_gate_passed": true,
+          "batch_record_tape_count_matches_likelihood_gate": true
+        }
+      },
+      {
+        "point": "ACTIVE_ROWS_s22/b0",
+        "reward_to_nearest_active_pairs": 22,
+        "nearest_distance_rows": {
+          "n": 22,
+          "mean": 22.045454545454547,
+          "abs_mean": 22.045454545454547,
+          "std_pop": 17.081295652175356,
+          "min": 0,
+          "q25": 10.5,
+          "median": 19,
+          "q75": 30.75,
+          "max": 62,
+          "variance_zero": false,
+          "positive": 19,
+          "negative": 0,
+          "zero": 3
+        },
+        "nearest_distance_env_steps": {
+          "n": 22,
+          "mean": 53,
+          "abs_mean": 53,
+          "std_pop": 104.00131118054584,
+          "min": 0,
+          "q25": 10.5,
+          "median": 19,
+          "q75": 37.5,
+          "max": 489,
+          "variance_zero": false,
+          "positive": 20,
+          "negative": 0,
+          "zero": 2
+        },
+        "nearest_direct_reward_coefficient": {
+          "n": 22,
+          "mean": 0.43621545887440033,
+          "abs_mean": 0.43621545887440033,
+          "std_pop": 0.2933412982838266,
+          "min": 0.04157799358572413,
+          "q25": 0.2078696357794894,
+          "median": 0.37735360253530725,
+          "q75": 0.5841427263444432,
+          "max": 1,
+          "variance_zero": false,
+          "positive": 22,
+          "negative": 0,
+          "zero": 0
+        },
+        "all_prior_active_pairs": 239,
+        "all_prior_active_distance_rows": {
+          "n": 239,
+          "mean": 27.89958158995816,
+          "abs_mean": 27.89958158995816,
+          "std_pop": 17.88709241712415,
+          "min": 0,
+          "q25": 15,
+          "median": 24,
+          "q75": 38,
+          "max": 74,
+          "variance_zero": false,
+          "positive": 236,
+          "negative": 0,
+          "zero": 3
+        },
+        "all_prior_active_env_steps": {
+          "n": 239,
+          "mean": 127.33054393305439,
+          "abs_mean": 127.33054393305439,
+          "std_pop": 163.79711002080768,
+          "min": 0,
+          "q25": 17,
+          "median": 28,
+          "q75": 319.5,
+          "max": 497,
+          "variance_zero": false,
+          "positive": 237,
+          "negative": 0,
+          "zero": 2
+        },
+        "all_prior_active_direct_reward_coefficient": {
+          "n": 239,
+          "mean": 0.333158980383268,
+          "abs_mean": 0.333158980383268,
+          "std_pop": 0.2394477436249625,
+          "min": 0.022467088258818435,
+          "q25": 0.14239574134637467,
+          "median": 0.2919890243387724,
+          "q75": 0.46329123015975304,
+          "max": 1,
+          "variance_zero": false,
+          "positive": 239,
+          "negative": 0,
+          "zero": 0
+        },
+        "row_distance_histogram": {
+          "0": 3,
+          "1": 3,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 4,
+          "6": 3,
+          "7": 3,
+          "8": 4,
+          "9": 4,
+          "10": 5,
+          "11": 4,
+          "12": 5,
+          "13": 5,
+          "14": 5,
+          "15": 5,
+          "16": 5,
+          "17": 5,
+          "18": 6,
+          "19": 7,
+          "20": 8,
+          "21": 9,
+          "22": 8,
+          "23": 7,
+          "24": 5,
+          "25": 5,
+          "26": 6,
+          "27": 6,
+          "28": 5,
+          "29": 5,
+          "30": 5,
+          "31": 4,
+          "32": 5,
+          "33": 4,
+          "34": 2,
+          "35": 2,
+          "36": 3,
+          "37": 3,
+          "38": 3,
+          "39": 2,
+          "40": 3,
+          "41": 2,
+          "42": 2,
+          "43": 3,
+          "44": 3,
+          "45": 3,
+          "46": 3,
+          "47": 3,
+          "48": 3,
+          "49": 3,
+          "50": 3,
+          "51": 2,
+          "59": 1,
+          "60": 1,
+          "61": 1,
+          "62": 2,
+          "63": 2,
+          "64": 2,
+          "65": 2,
+          "66": 2,
+          "67": 2,
+          "68": 2,
+          "69": 2,
+          "70": 1,
+          "71": 1,
+          "72": 1,
+          "73": 1,
+          "74": 1
+        }
+      },
+      {
+        "point": "ACTIVE_ROWS_s22/b15",
+        "availability": "stopped_fixed_batch_provenance_conflict",
+        "provenance": {
+          "point": "ACTIVE_ROWS_s22/b15",
+          "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+          "batch_record_samples": 1069,
+          "current_tape_line_count": 1069,
+          "saved_update_mechanism_sample_counts": {
+            "A_task_n": 1004,
+            "recorded_samples": 1004,
+            "mechanism_recomputed_samples": 1004
+          },
+          "checkpoint_file_sha_matches_index": true,
+          "checkpoint_parameter_sha_matches_batch": false,
+          "checkpoint_lambda_matches_batch": false,
+          "saved_checkpoint_identity_claim_matches_current_record": true,
+          "saved_likelihood_gate_passed": true,
+          "batch_record_tape_count_matches_likelihood_gate": true
+        }
+      },
+      {
+        "point": "ACTIVE_ROWS_s22/b31",
+        "availability": "stopped_fixed_batch_provenance_conflict",
+        "provenance": {
+          "point": "ACTIVE_ROWS_s22/b31",
+          "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+          "batch_record_samples": 1518,
+          "current_tape_line_count": 1518,
+          "saved_update_mechanism_sample_counts": {
+            "A_task_n": 756,
+            "recorded_samples": 756,
+            "mechanism_recomputed_samples": 756
+          },
+          "checkpoint_file_sha_matches_index": true,
+          "checkpoint_parameter_sha_matches_batch": false,
+          "checkpoint_lambda_matches_batch": false,
+          "saved_checkpoint_identity_claim_matches_current_record": true,
+          "saved_likelihood_gate_passed": true,
+          "batch_record_tape_count_matches_likelihood_gate": true
+        }
+      },
+      {
+        "point": "ACTIVE_ROWS_s33/b0",
+        "reward_to_nearest_active_pairs": 22,
+        "nearest_distance_rows": {
+          "n": 22,
+          "mean": 23.90909090909091,
+          "abs_mean": 23.90909090909091,
+          "std_pop": 15.69860761315269,
+          "min": 0,
+          "q25": 15.5,
+          "median": 21.5,
+          "q75": 32.25,
+          "max": 61,
+          "variance_zero": false,
+          "positive": 20,
+          "negative": 0,
+          "zero": 2
+        },
+        "nearest_distance_env_steps": {
+          "n": 22,
+          "mean": 110.77272727272727,
+          "abs_mean": 110.77272727272727,
+          "std_pop": 157.64313317749216,
+          "min": 0,
+          "q25": 17.25,
+          "median": 23.5,
+          "q75": 152.75,
+          "max": 493,
+          "variance_zero": false,
+          "positive": 21,
+          "negative": 0,
+          "zero": 1
+        },
+        "nearest_direct_reward_coefficient": {
+          "n": 22,
+          "mean": 0.3891760850894368,
+          "abs_mean": 0.3891760850894368,
+          "std_pop": 0.2797646486653448,
+          "min": 0.043766309037604346,
+          "q25": 0.19167912366241618,
+          "median": 0.3320475856309119,
+          "q75": 0.45199850642460904,
+          "max": 1,
+          "variance_zero": false,
+          "positive": 22,
+          "negative": 0,
+          "zero": 0
+        },
+        "all_prior_active_pairs": 181,
+        "all_prior_active_distance_rows": {
+          "n": 181,
+          "mean": 28.375690607734807,
+          "abs_mean": 28.375690607734807,
+          "std_pop": 17.58019557504303,
+          "min": 0,
+          "q25": 17,
+          "median": 25,
+          "q75": 39,
+          "max": 74,
+          "variance_zero": false,
+          "positive": 179,
+          "negative": 0,
+          "zero": 2
+        },
+        "all_prior_active_env_steps": {
+          "n": 181,
+          "mean": 146.67403314917127,
+          "abs_mean": 146.67403314917127,
+          "std_pop": 170.61250995235372,
+          "min": 0,
+          "q25": 20,
+          "median": 32,
+          "q75": 328,
+          "max": 497,
+          "variance_zero": false,
+          "positive": 180,
+          "negative": 0,
+          "zero": 1
+        },
+        "all_prior_active_direct_reward_coefficient": {
+          "n": 181,
+          "mean": 0.3257432024988632,
+          "abs_mean": 0.3257432024988632,
+          "std_pop": 0.24461377216542818,
+          "min": 0.022467088258818435,
+          "q25": 0.13527595427905592,
+          "median": 0.27738957312183377,
+          "q75": 0.4181203352191771,
+          "max": 1,
+          "variance_zero": false,
+          "positive": 181,
+          "negative": 0,
+          "zero": 0
+        },
+        "row_distance_histogram": {
+          "0": 2,
+          "1": 2,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 3,
+          "6": 4,
+          "7": 3,
+          "8": 3,
+          "9": 3,
+          "10": 3,
+          "11": 2,
+          "12": 2,
+          "13": 2,
+          "14": 1,
+          "15": 2,
+          "16": 2,
+          "17": 3,
+          "18": 4,
+          "19": 4,
+          "20": 5,
+          "21": 7,
+          "22": 7,
+          "23": 7,
+          "24": 7,
+          "25": 6,
+          "26": 4,
+          "27": 4,
+          "28": 3,
+          "29": 3,
+          "30": 5,
+          "31": 4,
+          "32": 4,
+          "33": 4,
+          "34": 3,
+          "35": 2,
+          "36": 2,
+          "37": 2,
+          "38": 2,
+          "39": 2,
+          "40": 2,
+          "41": 2,
+          "42": 2,
+          "43": 3,
+          "44": 2,
+          "45": 2,
+          "46": 2,
+          "47": 2,
+          "48": 2,
+          "49": 2,
+          "50": 2,
+          "51": 2,
+          "52": 1,
+          "53": 1,
+          "54": 1,
+          "55": 1,
+          "56": 1,
+          "61": 1,
+          "62": 1,
+          "63": 1,
+          "64": 1,
+          "65": 1,
+          "66": 1,
+          "67": 1,
+          "68": 1,
+          "69": 1,
+          "70": 1,
+          "71": 1,
+          "72": 1,
+          "73": 1,
+          "74": 1
+        }
+      },
+      {
+        "point": "ACTIVE_ROWS_s33/b15",
+        "availability": "stopped_fixed_batch_provenance_conflict",
+        "provenance": {
+          "point": "ACTIVE_ROWS_s33/b15",
+          "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+          "batch_record_samples": 1068,
+          "current_tape_line_count": 1068,
+          "saved_update_mechanism_sample_counts": {
+            "A_task_n": 1002,
+            "recorded_samples": 1002,
+            "mechanism_recomputed_samples": 1002
+          },
+          "checkpoint_file_sha_matches_index": true,
+          "checkpoint_parameter_sha_matches_batch": false,
+          "checkpoint_lambda_matches_batch": false,
+          "saved_checkpoint_identity_claim_matches_current_record": true,
+          "saved_likelihood_gate_passed": true,
+          "batch_record_tape_count_matches_likelihood_gate": true
+        }
+      },
+      {
+        "point": "ACTIVE_ROWS_s33/b31",
+        "availability": "stopped_fixed_batch_provenance_conflict",
+        "provenance": {
+          "point": "ACTIVE_ROWS_s33/b31",
+          "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+          "batch_record_samples": 1525,
+          "current_tape_line_count": 1525,
+          "saved_update_mechanism_sample_counts": {
+            "A_task_n": 988,
+            "recorded_samples": 988,
+            "mechanism_recomputed_samples": 988
+          },
+          "checkpoint_file_sha_matches_index": true,
+          "checkpoint_parameter_sha_matches_batch": false,
+          "checkpoint_lambda_matches_batch": false,
+          "saved_checkpoint_identity_claim_matches_current_record": true,
+          "saved_likelihood_gate_passed": true,
+          "batch_record_tape_count_matches_likelihood_gate": true
+        }
+      },
+      {
+        "point": "ALL_ROWS_s11/b0",
+        "reward_to_nearest_active_pairs": 22,
+        "nearest_distance_rows": {
+          "n": 22,
+          "mean": 24.636363636363637,
+          "abs_mean": 24.636363636363637,
+          "std_pop": 17.77011140944626,
+          "min": 0,
+          "q25": 12.5,
+          "median": 23.5,
+          "q75": 33.5,
+          "max": 64,
+          "variance_zero": false,
+          "positive": 20,
+          "negative": 0,
+          "zero": 2
+        },
+        "nearest_distance_env_steps": {
+          "n": 22,
+          "mean": 111.04545454545455,
+          "abs_mean": 111.04545454545455,
+          "std_pop": 158.16288418552656,
+          "min": 0,
+          "q25": 13,
+          "median": 24.5,
+          "q75": 154,
+          "max": 491,
+          "variance_zero": false,
+          "positive": 20,
+          "negative": 0,
+          "zero": 2
+        },
+        "nearest_direct_reward_coefficient": {
+          "n": 22,
+          "mean": 0.3965466629115717,
+          "abs_mean": 0.3965466629115717,
+          "std_pop": 0.2923330600372544,
+          "min": 0.03752413921111602,
+          "q25": 0.17954633215747298,
+          "median": 0.299672946031898,
+          "q75": 0.5271888105258599,
+          "max": 1,
+          "variance_zero": false,
+          "positive": 22,
+          "negative": 0,
+          "zero": 0
+        },
+        "all_prior_active_pairs": 164,
+        "all_prior_active_distance_rows": {
+          "n": 164,
+          "mean": 27.963414634146343,
+          "abs_mean": 27.963414634146343,
+          "std_pop": 18.722586543446898,
+          "min": 0,
+          "q25": 13.75,
+          "median": 25,
+          "q75": 38.25,
+          "max": 75,
+          "variance_zero": false,
+          "positive": 162,
+          "negative": 0,
+          "zero": 2
+        },
+        "all_prior_active_env_steps": {
+          "n": 164,
+          "mean": 146.77439024390245,
+          "abs_mean": 146.77439024390245,
+          "std_pop": 174.67346979852854,
+          "min": 0,
+          "q25": 14,
+          "median": 30,
+          "q75": 329.25,
+          "max": 497,
+          "variance_zero": false,
+          "positive": 162,
+          "negative": 0,
+          "zero": 2
+        },
+        "all_prior_active_direct_reward_coefficient": {
+          "n": 164,
+          "mean": 0.3422921103612052,
+          "abs_mean": 0.3422921103612052,
+          "std_pop": 0.25460471489278114,
+          "min": 0.02134373384587751,
+          "q25": 0.14061579457954498,
+          "median": 0.27738957312183377,
+          "q75": 0.49409175515652337,
+          "max": 1,
+          "variance_zero": false,
+          "positive": 164,
+          "negative": 0,
+          "zero": 0
+        },
+        "row_distance_histogram": {
+          "0": 2,
+          "1": 2,
+          "2": 2,
+          "3": 3,
+          "4": 3,
+          "5": 4,
+          "6": 3,
+          "7": 4,
+          "8": 4,
+          "9": 3,
+          "10": 3,
+          "11": 2,
+          "12": 3,
+          "13": 3,
+          "14": 3,
+          "15": 2,
+          "16": 4,
+          "17": 4,
+          "18": 4,
+          "19": 3,
+          "20": 3,
+          "21": 3,
+          "22": 4,
+          "23": 3,
+          "24": 5,
+          "25": 6,
+          "26": 4,
+          "27": 4,
+          "28": 3,
+          "29": 3,
+          "30": 4,
+          "31": 3,
+          "32": 3,
+          "33": 3,
+          "34": 3,
+          "35": 2,
+          "36": 2,
+          "37": 2,
+          "38": 2,
+          "39": 1,
+          "40": 1,
+          "41": 1,
+          "42": 1,
+          "43": 2,
+          "44": 2,
+          "45": 3,
+          "46": 3,
+          "47": 2,
+          "48": 2,
+          "49": 2,
+          "50": 2,
+          "51": 2,
+          "52": 1,
+          "62": 1,
+          "63": 1,
+          "64": 2,
+          "65": 2,
+          "66": 1,
+          "67": 1,
+          "68": 1,
+          "69": 1,
+          "70": 1,
+          "71": 1,
+          "72": 1,
+          "73": 1,
+          "74": 1,
+          "75": 1
+        }
+      },
+      {
+        "point": "ALL_ROWS_s11/b15",
+        "availability": "stopped_fixed_batch_provenance_conflict",
+        "provenance": {
+          "point": "ALL_ROWS_s11/b15",
+          "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+          "batch_record_samples": 1068,
+          "current_tape_line_count": 1068,
+          "saved_update_mechanism_sample_counts": {
+            "A_task_n": 1003,
+            "recorded_samples": 1003,
+            "mechanism_recomputed_samples": 1003
+          },
+          "checkpoint_file_sha_matches_index": true,
+          "checkpoint_parameter_sha_matches_batch": false,
+          "checkpoint_lambda_matches_batch": false,
+          "saved_checkpoint_identity_claim_matches_current_record": true,
+          "saved_likelihood_gate_passed": true,
+          "batch_record_tape_count_matches_likelihood_gate": true
+        }
+      },
+      {
+        "point": "ALL_ROWS_s11/b31",
+        "availability": "stopped_fixed_batch_provenance_conflict",
+        "provenance": {
+          "point": "ALL_ROWS_s11/b31",
+          "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+          "batch_record_samples": 1520,
+          "current_tape_line_count": 1520,
+          "saved_update_mechanism_sample_counts": {
+            "A_task_n": 996,
+            "recorded_samples": 996,
+            "mechanism_recomputed_samples": 996
+          },
+          "checkpoint_file_sha_matches_index": true,
+          "checkpoint_parameter_sha_matches_batch": false,
+          "checkpoint_lambda_matches_batch": false,
+          "saved_checkpoint_identity_claim_matches_current_record": true,
+          "saved_likelihood_gate_passed": true,
+          "batch_record_tape_count_matches_likelihood_gate": true
+        }
+      },
+      {
+        "point": "ALL_ROWS_s22/b0",
+        "reward_to_nearest_active_pairs": 22,
+        "nearest_distance_rows": {
+          "n": 22,
+          "mean": 22.045454545454547,
+          "abs_mean": 22.045454545454547,
+          "std_pop": 17.081295652175356,
+          "min": 0,
+          "q25": 10.5,
+          "median": 19,
+          "q75": 30.75,
+          "max": 62,
+          "variance_zero": false,
+          "positive": 19,
+          "negative": 0,
+          "zero": 3
+        },
+        "nearest_distance_env_steps": {
+          "n": 22,
+          "mean": 53,
+          "abs_mean": 53,
+          "std_pop": 104.00131118054584,
+          "min": 0,
+          "q25": 10.5,
+          "median": 19,
+          "q75": 37.5,
+          "max": 489,
+          "variance_zero": false,
+          "positive": 20,
+          "negative": 0,
+          "zero": 2
+        },
+        "nearest_direct_reward_coefficient": {
+          "n": 22,
+          "mean": 0.43621545887440033,
+          "abs_mean": 0.43621545887440033,
+          "std_pop": 0.2933412982838266,
+          "min": 0.04157799358572413,
+          "q25": 0.2078696357794894,
+          "median": 0.37735360253530725,
+          "q75": 0.5841427263444432,
+          "max": 1,
+          "variance_zero": false,
+          "positive": 22,
+          "negative": 0,
+          "zero": 0
+        },
+        "all_prior_active_pairs": 239,
+        "all_prior_active_distance_rows": {
+          "n": 239,
+          "mean": 27.89958158995816,
+          "abs_mean": 27.89958158995816,
+          "std_pop": 17.88709241712415,
+          "min": 0,
+          "q25": 15,
+          "median": 24,
+          "q75": 38,
+          "max": 74,
+          "variance_zero": false,
+          "positive": 236,
+          "negative": 0,
+          "zero": 3
+        },
+        "all_prior_active_env_steps": {
+          "n": 239,
+          "mean": 127.33054393305439,
+          "abs_mean": 127.33054393305439,
+          "std_pop": 163.79711002080768,
+          "min": 0,
+          "q25": 17,
+          "median": 28,
+          "q75": 319.5,
+          "max": 497,
+          "variance_zero": false,
+          "positive": 237,
+          "negative": 0,
+          "zero": 2
+        },
+        "all_prior_active_direct_reward_coefficient": {
+          "n": 239,
+          "mean": 0.333158980383268,
+          "abs_mean": 0.333158980383268,
+          "std_pop": 0.2394477436249625,
+          "min": 0.022467088258818435,
+          "q25": 0.14239574134637467,
+          "median": 0.2919890243387724,
+          "q75": 0.46329123015975304,
+          "max": 1,
+          "variance_zero": false,
+          "positive": 239,
+          "negative": 0,
+          "zero": 0
+        },
+        "row_distance_histogram": {
+          "0": 3,
+          "1": 3,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 4,
+          "6": 3,
+          "7": 3,
+          "8": 4,
+          "9": 4,
+          "10": 5,
+          "11": 4,
+          "12": 5,
+          "13": 5,
+          "14": 5,
+          "15": 5,
+          "16": 5,
+          "17": 5,
+          "18": 6,
+          "19": 7,
+          "20": 8,
+          "21": 9,
+          "22": 8,
+          "23": 7,
+          "24": 5,
+          "25": 5,
+          "26": 6,
+          "27": 6,
+          "28": 5,
+          "29": 5,
+          "30": 5,
+          "31": 4,
+          "32": 5,
+          "33": 4,
+          "34": 2,
+          "35": 2,
+          "36": 3,
+          "37": 3,
+          "38": 3,
+          "39": 2,
+          "40": 3,
+          "41": 2,
+          "42": 2,
+          "43": 3,
+          "44": 3,
+          "45": 3,
+          "46": 3,
+          "47": 3,
+          "48": 3,
+          "49": 3,
+          "50": 3,
+          "51": 2,
+          "59": 1,
+          "60": 1,
+          "61": 1,
+          "62": 2,
+          "63": 2,
+          "64": 2,
+          "65": 2,
+          "66": 2,
+          "67": 2,
+          "68": 2,
+          "69": 2,
+          "70": 1,
+          "71": 1,
+          "72": 1,
+          "73": 1,
+          "74": 1
+        }
+      },
+      {
+        "point": "ALL_ROWS_s22/b15",
+        "availability": "stopped_fixed_batch_provenance_conflict",
+        "provenance": {
+          "point": "ALL_ROWS_s22/b15",
+          "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+          "batch_record_samples": 1068,
+          "current_tape_line_count": 1068,
+          "saved_update_mechanism_sample_counts": {
+            "A_task_n": 764,
+            "recorded_samples": 764,
+            "mechanism_recomputed_samples": 764
+          },
+          "checkpoint_file_sha_matches_index": true,
+          "checkpoint_parameter_sha_matches_batch": false,
+          "checkpoint_lambda_matches_batch": false,
+          "saved_checkpoint_identity_claim_matches_current_record": true,
+          "saved_likelihood_gate_passed": true,
+          "batch_record_tape_count_matches_likelihood_gate": true
+        }
+      },
+      {
+        "point": "ALL_ROWS_s22/b31",
+        "availability": "stopped_fixed_batch_provenance_conflict",
+        "provenance": {
+          "point": "ALL_ROWS_s22/b31",
+          "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+          "batch_record_samples": 1518,
+          "current_tape_line_count": 1518,
+          "saved_update_mechanism_sample_counts": {
+            "A_task_n": 324,
+            "recorded_samples": 324,
+            "mechanism_recomputed_samples": 324
+          },
+          "checkpoint_file_sha_matches_index": true,
+          "checkpoint_parameter_sha_matches_batch": false,
+          "checkpoint_lambda_matches_batch": false,
+          "saved_checkpoint_identity_claim_matches_current_record": true,
+          "saved_likelihood_gate_passed": true,
+          "batch_record_tape_count_matches_likelihood_gate": true
+        }
+      },
+      {
+        "point": "ALL_ROWS_s33/b0",
+        "reward_to_nearest_active_pairs": 22,
+        "nearest_distance_rows": {
+          "n": 22,
+          "mean": 23.90909090909091,
+          "abs_mean": 23.90909090909091,
+          "std_pop": 15.69860761315269,
+          "min": 0,
+          "q25": 15.5,
+          "median": 21.5,
+          "q75": 32.25,
+          "max": 61,
+          "variance_zero": false,
+          "positive": 20,
+          "negative": 0,
+          "zero": 2
+        },
+        "nearest_distance_env_steps": {
+          "n": 22,
+          "mean": 110.77272727272727,
+          "abs_mean": 110.77272727272727,
+          "std_pop": 157.64313317749216,
+          "min": 0,
+          "q25": 17.25,
+          "median": 23.5,
+          "q75": 152.75,
+          "max": 493,
+          "variance_zero": false,
+          "positive": 21,
+          "negative": 0,
+          "zero": 1
+        },
+        "nearest_direct_reward_coefficient": {
+          "n": 22,
+          "mean": 0.3891760850894368,
+          "abs_mean": 0.3891760850894368,
+          "std_pop": 0.2797646486653448,
+          "min": 0.043766309037604346,
+          "q25": 0.19167912366241618,
+          "median": 0.3320475856309119,
+          "q75": 0.45199850642460904,
+          "max": 1,
+          "variance_zero": false,
+          "positive": 22,
+          "negative": 0,
+          "zero": 0
+        },
+        "all_prior_active_pairs": 181,
+        "all_prior_active_distance_rows": {
+          "n": 181,
+          "mean": 28.375690607734807,
+          "abs_mean": 28.375690607734807,
+          "std_pop": 17.58019557504303,
+          "min": 0,
+          "q25": 17,
+          "median": 25,
+          "q75": 39,
+          "max": 74,
+          "variance_zero": false,
+          "positive": 179,
+          "negative": 0,
+          "zero": 2
+        },
+        "all_prior_active_env_steps": {
+          "n": 181,
+          "mean": 146.67403314917127,
+          "abs_mean": 146.67403314917127,
+          "std_pop": 170.61250995235372,
+          "min": 0,
+          "q25": 20,
+          "median": 32,
+          "q75": 328,
+          "max": 497,
+          "variance_zero": false,
+          "positive": 180,
+          "negative": 0,
+          "zero": 1
+        },
+        "all_prior_active_direct_reward_coefficient": {
+          "n": 181,
+          "mean": 0.3257432024988632,
+          "abs_mean": 0.3257432024988632,
+          "std_pop": 0.24461377216542818,
+          "min": 0.022467088258818435,
+          "q25": 0.13527595427905592,
+          "median": 0.27738957312183377,
+          "q75": 0.4181203352191771,
+          "max": 1,
+          "variance_zero": false,
+          "positive": 181,
+          "negative": 0,
+          "zero": 0
+        },
+        "row_distance_histogram": {
+          "0": 2,
+          "1": 2,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 3,
+          "6": 4,
+          "7": 3,
+          "8": 3,
+          "9": 3,
+          "10": 3,
+          "11": 2,
+          "12": 2,
+          "13": 2,
+          "14": 1,
+          "15": 2,
+          "16": 2,
+          "17": 3,
+          "18": 4,
+          "19": 4,
+          "20": 5,
+          "21": 7,
+          "22": 7,
+          "23": 7,
+          "24": 7,
+          "25": 6,
+          "26": 4,
+          "27": 4,
+          "28": 3,
+          "29": 3,
+          "30": 5,
+          "31": 4,
+          "32": 4,
+          "33": 4,
+          "34": 3,
+          "35": 2,
+          "36": 2,
+          "37": 2,
+          "38": 2,
+          "39": 2,
+          "40": 2,
+          "41": 2,
+          "42": 2,
+          "43": 3,
+          "44": 2,
+          "45": 2,
+          "46": 2,
+          "47": 2,
+          "48": 2,
+          "49": 2,
+          "50": 2,
+          "51": 2,
+          "52": 1,
+          "53": 1,
+          "54": 1,
+          "55": 1,
+          "56": 1,
+          "61": 1,
+          "62": 1,
+          "63": 1,
+          "64": 1,
+          "65": 1,
+          "66": 1,
+          "67": 1,
+          "68": 1,
+          "69": 1,
+          "70": 1,
+          "71": 1,
+          "72": 1,
+          "73": 1,
+          "74": 1
+        }
+      },
+      {
+        "point": "ALL_ROWS_s33/b15",
+        "availability": "stopped_fixed_batch_provenance_conflict",
+        "provenance": {
+          "point": "ALL_ROWS_s33/b15",
+          "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+          "batch_record_samples": 1068,
+          "current_tape_line_count": 1068,
+          "saved_update_mechanism_sample_counts": {
+            "A_task_n": 1002,
+            "recorded_samples": 1002,
+            "mechanism_recomputed_samples": 1002
+          },
+          "checkpoint_file_sha_matches_index": true,
+          "checkpoint_parameter_sha_matches_batch": false,
+          "checkpoint_lambda_matches_batch": false,
+          "saved_checkpoint_identity_claim_matches_current_record": true,
+          "saved_likelihood_gate_passed": true,
+          "batch_record_tape_count_matches_likelihood_gate": true
+        }
+      },
+      {
+        "point": "ALL_ROWS_s33/b31",
+        "availability": "stopped_fixed_batch_provenance_conflict",
+        "provenance": {
+          "point": "ALL_ROWS_s33/b31",
+          "reason": "At least one fixed-point provenance gate fails: checkpoint parameter/lambda identity or the saved UPDATE_MECHANISM sample counts disagree with the current batch record/tape set. Per the audit stop rule, do not choose one source silently.",
+          "batch_record_samples": 1525,
+          "current_tape_line_count": 1525,
+          "saved_update_mechanism_sample_counts": {
+            "A_task_n": 987,
+            "recorded_samples": 987,
+            "mechanism_recomputed_samples": 987
+          },
+          "checkpoint_file_sha_matches_index": true,
+          "checkpoint_parameter_sha_matches_batch": false,
+          "checkpoint_lambda_matches_batch": false,
+          "saved_checkpoint_identity_claim_matches_current_record": true,
+          "saved_likelihood_gate_passed": true,
+          "batch_record_tape_count_matches_likelihood_gate": true
+        }
+      }
+    ],
+    "all_prior_active_reward_row_pairs": {
+      "count": 1168,
+      "training_row_distance": {
+        "n": 1168,
+        "mean": 28.065068493150687,
+        "abs_mean": 28.065068493150687,
+        "std_pop": 18.03352696668965,
+        "min": 0,
+        "q25": 15,
+        "median": 25,
+        "q75": 38.25,
+        "max": 75,
+        "variance_zero": false,
+        "positive": 1154,
+        "negative": 0,
+        "zero": 14
+      },
+      "environment_step_distance": {
+        "n": 1168,
+        "mean": 138.78595890410958,
+        "abs_mean": 138.78595890410958,
+        "std_pop": 169.29434651444137,
+        "min": 0,
+        "q25": 17,
+        "median": 30,
+        "q75": 327,
+        "max": 497,
+        "variance_zero": false,
+        "positive": 1158,
+        "negative": 0,
+        "zero": 10
+      },
+      "direct_reward_coefficient": {
+        "n": 1168,
+        "mean": 0.3334253802450909,
+        "abs_mean": 0.3334253802450909,
+        "std_pop": 0.24546598055493224,
+        "min": 0.02134373384587751,
+        "q25": 0.14061579457954498,
+        "median": 0.27738957312183377,
+        "q75": 0.46329123015975304,
+        "max": 1,
+        "variance_zero": false,
+        "positive": 1168,
+        "negative": 0,
+        "zero": 0
+      },
+      "distance_histogram": {
+        "0": 14,
+        "1": 14,
+        "2": 16,
+        "3": 18,
+        "4": 18,
+        "5": 22,
+        "6": 20,
+        "7": 20,
+        "8": 22,
+        "9": 20,
+        "10": 22,
+        "11": 16,
+        "12": 20,
+        "13": 20,
+        "14": 18,
+        "15": 18,
+        "16": 22,
+        "17": 24,
+        "18": 28,
+        "19": 28,
+        "20": 32,
+        "21": 38,
+        "22": 38,
+        "23": 34,
+        "24": 34,
+        "25": 34,
+        "26": 28,
+        "27": 28,
+        "28": 22,
+        "29": 22,
+        "30": 28,
+        "31": 22,
+        "32": 24,
+        "33": 22,
+        "34": 16,
+        "35": 12,
+        "36": 14,
+        "37": 14,
+        "38": 14,
+        "39": 10,
+        "40": 12,
+        "41": 10,
+        "42": 10,
+        "43": 16,
+        "44": 14,
+        "45": 16,
+        "46": 16,
+        "47": 14,
+        "48": 14,
+        "49": 14,
+        "50": 14,
+        "51": 12,
+        "52": 4,
+        "53": 2,
+        "54": 2,
+        "55": 2,
+        "56": 2,
+        "59": 2,
+        "60": 2,
+        "61": 4,
+        "62": 8,
+        "63": 8,
+        "64": 10,
+        "65": 10,
+        "66": 8,
+        "67": 8,
+        "68": 8,
+        "69": 8,
+        "70": 6,
+        "71": 6,
+        "72": 6,
+        "73": 6,
+        "74": 6,
+        "75": 2
+      }
+    }
+  },
+  "recorded_saved_summary_checks": [
+    {
+      "point": "ACTIVE_ROWS_s11/b0",
+      "comparison": {
+        "A_task": {
+          "label": "A_task all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.937139586047579e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 2.705481394471576e-10,
+            "abs_mean": 4.937139586047579e-10,
+            "std_pop": 1.4114853730262666e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_cost": {
+          "label": "A_cost all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.347898291401364e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 4.347898291401364e-10,
+            "abs_mean": 4.919058216312777e-11,
+            "std_pop": 3.0829111485886074e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_combined": {
+          "label": "A_actor all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 3.5637126583054624e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 1.64241675815191e-10,
+            "abs_mean": 8.271960894035146e-11,
+            "std_pop": 3.5637126583054624e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "stored_point_closure_error": 2.38418579e-7,
+        "this_round_recompute_closure_error": 1.7763568394002505e-15
+      }
+    },
+    {
+      "point": "ACTIVE_ROWS_s22/b0",
+      "comparison": {
+        "A_task": {
+          "label": "A_task all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.472570092062256e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 4.472570092062256e-10,
+            "abs_mean": 7.603739859973757e-11,
+            "std_pop": 3.6555047877584457e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_cost": {
+          "label": "A_cost all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 2.3943888538546787e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 2.2137930377752468e-11,
+            "abs_mean": 2.3943888538546787e-10,
+            "std_pop": 1.9121926264631384e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_combined": {
+          "label": "A_actor all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.995910352079136e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 4.693950783618561e-10,
+            "abs_mean": 1.927857318229087e-10,
+            "std_pop": 4.995910352079136e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "stored_point_closure_error": 2.38418579e-7,
+        "this_round_recompute_closure_error": 1.3322676295501878e-15
+      }
+    },
+    {
+      "point": "ACTIVE_ROWS_s33/b0",
+      "comparison": {
+        "A_task": {
+          "label": "A_task all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.1604386602500654e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 2.8751778735625066e-10,
+            "abs_mean": 3.200374409928486e-10,
+            "std_pop": 4.1604386602500654e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_cost": {
+          "label": "A_cost all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.305595324716194e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 1.8323390027497055e-10,
+            "abs_mean": 4.305595324716194e-10,
+            "std_pop": 3.8040559591223655e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_combined": {
+          "label": "A_actor all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 2.0349133489361293e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 1.0428391483685573e-10,
+            "abs_mean": 2.0349133489361293e-10,
+            "std_pop": 6.23666673860157e-11,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "stored_point_closure_error": 2.38418579e-7,
+        "this_round_recompute_closure_error": 1.7763568394002505e-15
+      }
+    },
+    {
+      "point": "ALL_ROWS_s11/b0",
+      "comparison": {
+        "A_task": {
+          "label": "A_task all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.937139586047579e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 2.705481394471576e-10,
+            "abs_mean": 4.937139586047579e-10,
+            "std_pop": 1.4114853730262666e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_cost": {
+          "label": "A_cost all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.347898291401364e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 4.347898291401364e-10,
+            "abs_mean": 4.919058216312777e-11,
+            "std_pop": 3.0829111485886074e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_combined": {
+          "label": "A_actor all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 3.5637126583054624e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 1.64241675815191e-10,
+            "abs_mean": 8.271960894035146e-11,
+            "std_pop": 3.5637126583054624e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "stored_point_closure_error": 2.38418579e-7,
+        "this_round_recompute_closure_error": 1.7763568394002505e-15
+      }
+    },
+    {
+      "point": "ALL_ROWS_s22/b0",
+      "comparison": {
+        "A_task": {
+          "label": "A_task all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.472570092062256e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 4.472570092062256e-10,
+            "abs_mean": 7.603739859973757e-11,
+            "std_pop": 3.6555047877584457e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_cost": {
+          "label": "A_cost all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 2.3943888538546787e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 2.2137930377752468e-11,
+            "abs_mean": 2.3943888538546787e-10,
+            "std_pop": 1.9121926264631384e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_combined": {
+          "label": "A_actor all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.995910352079136e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 4.693950783618561e-10,
+            "abs_mean": 1.927857318229087e-10,
+            "std_pop": 4.995910352079136e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "stored_point_closure_error": 2.38418579e-7,
+        "this_round_recompute_closure_error": 1.3322676295501878e-15
+      }
+    },
+    {
+      "point": "ALL_ROWS_s33/b0",
+      "comparison": {
+        "A_task": {
+          "label": "A_task all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.1604386602500654e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 2.8751778735625066e-10,
+            "abs_mean": 3.200374409928486e-10,
+            "std_pop": 4.1604386602500654e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_cost": {
+          "label": "A_cost all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 4.305595324716194e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 1.8323390027497055e-10,
+            "abs_mean": 4.305595324716194e-10,
+            "std_pop": 3.8040559591223655e-10,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "A_combined": {
+          "label": "A_actor all rows",
+          "fields_compared": [
+            "n",
+            "mean",
+            "abs_mean",
+            "std_pop",
+            "min",
+            "max"
+          ],
+          "max_abs_gap": 2.0349133489361293e-10,
+          "gaps": {
+            "n": 0,
+            "mean": 1.0428391483685573e-10,
+            "abs_mean": 2.0349133489361293e-10,
+            "std_pop": 6.23666673860157e-11,
+            "min": 0,
+            "max": 0
+          },
+          "stored_available": true
+        },
+        "stored_point_closure_error": 2.38418579e-7,
+        "this_round_recompute_closure_error": 1.7763568394002505e-15
+      }
+    }
+  ]
+}

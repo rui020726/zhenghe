@@ -1,0 +1,67 @@
+{
+  "round": 33,
+  "local_branch": "analysis/comm-temporal-credit-audit",
+  "branch_base": "01e5a677cd18a7abfdb97585315ba05251d4e0de",
+  "audit_type": "read-only archival temporal-credit audit",
+  "verified": {
+    "latest_prior_row_bundler_matches_registered_rule": true,
+    "task_reward_capture_order_matches_round23_event_time_contract": false,
+    "source_gae_formula_matches_source_bound_translation": true,
+    "all_readable_training_tapes_covered": true,
+    "all_18_pre_update_checkpoint_files_exist_and_match_index_sha256": true,
+    "all_18_pre_update_checkpoint_parameter_lambda_metadata_match_current_records": false,
+    "all_18_saved_likelihood_gate_counts_match_tapes": true,
+    "recomputed_A_task_summary_matches_saved_mechanism_on_provenance_consistent_points": true,
+    "full_18_batch_identity_resolved": false,
+    "sixteen_scene_immediate_task_ceiling_established": true,
+    "dev_inputs_match_across_reference_and_learned": true
+  },
+  "conclusions": [
+    "The task reward bundler chooses the latest tape row at or before its logged tick, but the producer logs each physical task-completion reward one tick late. In 2,821 of 4,363 completion cases, that tick has a new post-completion decision row and the reward is credited to it; the registered event-time reward contract is violated. Prefix task reward/cost behavior remains separately identified.",
+    "GAE recurses over tape rows, including fully masked rows, rather than environment ticks. Gamma is 1 and lambda_GAE is 0.95; lambda_dual is a separate constraint multiplier.",
+    "The 16 already-used development scenes have immediate completing all six on-time tasks at the same 29,300-byte hard budget, conditional on the row/config/discovery cross-checks recorded in this audit. This establishes an observed task ceiling for those scenes only.",
+    "The ROUND32 ALL_ROWS versus ACTIVE_ROWS negative result only weakens the explanation that merely amplifying the actor surrogate is sufficient. Large advantage magnitude is not proof of correct long-term task credit, and equal post-clip norm is not equal Adam parameter-step length.",
+    "Direct fixed-critic reward transfer is quantified separately from task value and next-value/bootstrap terms. It cannot alone establish absence of long-term information."
+  ],
+  "contract_disposition": "Confirmed task-reward timing contract violation: v2_run scans the registry before Task03's new ProgressEvents are published, and all 4,363 archived completion timestamps align to task_stream one tick later. The delayed stream assigns 2,821 rewards to a later tape row after completion. Stop parameter diagnosis; do not alter GAE/lambda or train on this basis. Independently, C/D/E real-batch conclusions stop at six batch-0 points because twelve b15/b31 checkpoint parameter/lambda and UPDATE_MECHANISM sample identities conflict with current batch/tape artifacts. The GAE formula and latest-prior-row bundler implementation match inspected source; final-row terminal vs time-limit identity remains unresolved.",
+  "not_established": [
+    "Whether critic values/bootstrap compensate for decayed explicit reward-path coefficients as an expectation or on independent episodes.",
+    "A causal claim that the nearest active row caused the later task completion.",
+    "A lower-cost policy that preserves six tasks; the immediate baseline is already at the task ceiling but is not evidence of the lowest possible cost.",
+    "Greedy and sampled behavior are not interchangeable; no mixed-mode mean is used.",
+    "Deployment-level zero-regression guarantee from delta=0.",
+    "Independent generalization from repeatedly used training/development blocks.",
+    "Checkpoint re-forward under PyTorch in this execution environment.",
+    "A complete fixed-18 real-batch decomposition/critic diagnosis until the 12 checkpoint/batch/mechanism provenance conflicts are reconciled.",
+    "A parameter-level interpretation of credit limitation while task reward capture remains one tick late relative to physical completion."
+  ],
+  "follow_up": {
+    "status": "proposed_not_executed",
+    "action": "Correct the task reward tap to capture newly completed ProgressEvents in the same relay tick after the action/env step, then add a pure source-order/replay regression for event tick t -> reward tick t before proposing any parameter experiment. Do not execute this correction in ROUND33.",
+    "hypothesis": "The registry scan in v2_run observes the previous registry snapshot because Task03 returns completion events after env.step and the orchestrator publishes those events only after executor.step returns; the resulting one-tick lag moves 2,821 rewards to a post-completion tape row.",
+    "expected_resources": "For the proposed source correction/replay check: 0 environment starts, 0 input streams, 0 optimizer steps, 0 checkpoint writes. After that is independently verified, reconcile the 12 fixed-batch provenance conflicts before any parameter experiment.",
+    "rationale_limit": "Do not select gamma, lambda_GAE, lambda_dual, reward shaping, or training volume while the reward timeline violates contract and only six of 18 batches pass identity."
+  },
+  "execution_counters": {
+    "new_environment_launches": 0,
+    "new_input_streams": 0,
+    "real_training_updates": 0,
+    "synthetic_optimizer_updates": 0,
+    "synthetic_gae_tests": 4,
+    "analysis_type": "Node.js parsing, SHA256, exact-formula translation, GAE arithmetic and finite-difference tests only"
+  },
+  "remote_publication": "not_pushed; no network attempt; new branch has no configured upstream",
+  "source_sha256": {
+    "runs/comm_cost_v2_rerun_20260928/v2_common.py": "049722480ceaf787a6467399cb7745f40352e048f42e2516b0a5eca7aea15efe",
+    "runs/comm_cost_v2_rerun_20260928/v2_trainer.py": "64452036ad2470596f0260b28f02a8358d1bca1b4c16c2320f6cc58f1ee7df51",
+    "runs/comm_cost_v2_rerun_20260928/v2_run.py": "83fc6ea60cf8a5ffd420763641212f1bda4c2bee8e08d87e70706f99f3b6a7c1",
+    "runs/comm_cost_controller_stage_a_20260927/cost_math.py": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+    "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+    "integrated_sar/orchestrator.py": "ad1380d4695d8fb90ea646d2b4ebd0d6d736879885feff79bef8067a1a956b74",
+    "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+    "runs/comm_actor_reduction_ablation_20261001/r32_common.py": "e738959380e5bcce8c0879cf24e202b55c17ead899fdd58a13d9efb0c8a7b768",
+    "runs/comm_actor_reduction_ablation_20261001/r32_run.py": "de87374ec4687fd2168ff9bf3b5842cd53e8bb36259cd78a8bad0c857978cd81",
+    "runs/comm_actor_reduction_ablation_20261001/r32_trainer.py": "9f1df61c75d7df7166f1aef7c214f81d8718819abf3f7047a94907e6a1bf68d5"
+  },
+  "elapsed_seconds": 4.579
+}

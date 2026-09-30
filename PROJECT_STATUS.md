@@ -1,5 +1,19 @@
 # 项目状态
 
+## 2026-09-30：ROUND33 任务奖励时间跨度与信用传递审计——发现 task reward tap 晚一 relay tick；2821/4363 奖励转给完成后的 tape 行；不调参、不修复、不训练
+
+分支 `analysis/comm-temporal-credit-audit`，基于 ROUND32 交付头
+`01e5a677cd18a7abfdb97585315ba05251d4e0de`。完整报告与机读件位于
+`runs/comm_temporal_credit_audit_20260930/`（`ROUND33_REPORT.md`、`TEMPORAL_CREDIT_AUDIT.json`、
+`GAE_COMPONENTS.json`、`CRITIC_DIAGNOSTIC.json`、`ROUND33_VERDICT.json`、
+`SYNTHETIC_GAE_TESTS.json`、只读审计脚本与纯计算测试）。执行依据原文独立提交。
+
+- **契约缺陷**：`v2_run._install_taps` 在原始 `env.step` 返回后、Task03 的新 `ProgressEvent` 返回并被 orchestrator 发布之前读取旧 registry。全量 768 集中 4,363 个完成事件均在同一时间戳后一 tick 才进入 task stream；其中 2,821 个奖励由完成后的新 tape 行接收。总量仍闭合，但时序信用不符合 ROUND23 契约。只登记、不改训练器。
+- **完整度**：训练 tape 768/768，无缺失或解析错误；16/16 已用开发场景的 immediate 行均 6/6 按时且共用 29,300 B 硬预算；GAE 源码翻译的合成算例 4/4 通过。
+- **固定批边界**：18/18 checkpoint 文件 SHA256 符合 index；当前 checkpoint 参数/lambda 与批记录身份仅 6/18 相符，另外 12 个 b15/b31 点与 `UPDATE_MECHANISM` 样本数也冲突。C/D/E 实际批次计算只报告六个 b0 点，完整 18 点诊断停止。
+- 新环境启动 0、新流 0、真实训练更新 0、合成 optimizer 更新 0、checkpoint 写回 0；Python/PyTorch 不可用，checkpoint 未反序列化/forward replay。未推送、未进行网络尝试。
+- **唯一后续动作**：修正 task reward tap 的同 tick 事件归属并添加纯计算回归；通过后再只读协调 12 点批次身份冲突，之后才判断是否需要参数实验。
+
 ## 2026-09-30/10-01：ROUND32 actor surrogate 归约分母消融（ALL_ROWS vs ACTIVE_ROWS）——1040/1040 零失败；6 格里 0 格变好、2 格变差；N/M 放大在 18/18 点成立但成本项幅度始终小于任务项；"零梯度行稀释"假设被排除
 
 分支 `exp/comm-actor-reduction-ablation`（起点 ROUND31 交付头完整 SHA

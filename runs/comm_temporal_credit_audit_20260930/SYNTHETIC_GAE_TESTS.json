@@ -1,0 +1,44 @@
+{
+  "engine": "source-bound JavaScript translation of frozen cost_math.gae; native Python/PyTorch unavailable",
+  "tests_run": 4,
+  "passed": 4,
+  "failed": 0,
+  "cases": [
+    {
+      "name": "two_step_nonzero_value_terminal_closed_form",
+      "passed": true,
+      "expected": {
+        "advantages": [
+          0.58,
+          0.4
+        ],
+        "returns": [
+          0.98,
+          1
+        ]
+      }
+    },
+    {
+      "name": "late_reward_through_masked_tape_rows",
+      "passed": true,
+      "training_row_distance": 3,
+      "environment_step_distance": 6,
+      "expected_direct_coefficient": 0.8573749999999999
+    },
+    {
+      "name": "nonterminal_truncation_bootstrap",
+      "passed": true,
+      "expected": {
+        "advantages": [
+          1.055,
+          0.9
+        ]
+      }
+    },
+    {
+      "name": "terminal_boundary_stops_future_episode_recursion",
+      "passed": true,
+      "expected_post_terminal_transfer_to_prior_episode": 0
+    }
+  ]
+}
