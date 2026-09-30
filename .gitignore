@@ -401,3 +401,18 @@ runs/comm_actor_reduction_ablation_20261001/rows/
 runs/comm_actor_reduction_ablation_20261001/checkpoints/
 runs/comm_actor_reduction_ablation_20261001/rejected/
 runs/comm_actor_reduction_ablation_20261001/__pycache__/
+
+# round-35 ROUND35 reward-wiring smoke verification and restore-boundary recheck: harness, anchors,
+# gates, per-event tables and reports; live books, logs, tapes, rows and weights stay out of git
+# exactly as in rounds 24/28-32
+!runs/comm_reward_smoke_20260930/
+runs/comm_reward_smoke_20260930/*
+!runs/comm_reward_smoke_20260930/*.py
+!runs/comm_reward_smoke_20260930/*.md
+!runs/comm_reward_smoke_20260930/*.json
+runs/comm_reward_smoke_20260930/START_LEDGER_*.json
+runs/comm_reward_smoke_20260930/logs/
+runs/comm_reward_smoke_20260930/rows/
+runs/comm_reward_smoke_20260930/checkpoints/
+runs/comm_reward_smoke_20260930/rejected/
+runs/comm_reward_smoke_20260930/__pycache__/

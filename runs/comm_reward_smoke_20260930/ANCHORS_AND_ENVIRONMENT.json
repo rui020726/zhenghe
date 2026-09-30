@@ -1,0 +1,59 @@
+{
+ "checked_at": "2026-09-30",
+ "python_environment": {
+  "cpu_count": 20,
+  "cuda_available": true,
+  "dependency_installed": false,
+  "executable": "D:\\project_env\\python.exe",
+  "numpy": "2.2.6",
+  "python": "3.10.19",
+  "torch": "2.9.0+cu128",
+  "virtualenv_created": false
+ },
+ "repository": {
+  "branch": "fix/comm-task-reward-event-timing",
+  "commits_since_baseline": [
+   "c43ec5f",
+   "161bc6b",
+   "aa170c7",
+   "38e7a3f"
+  ],
+  "head": "c43ec5f1a12ef18238d4eed3aa90e3681e9ae58e",
+  "path": "D:\\code\\整合\\zhenghe",
+  "round32_head_is_ancestor_of_head": true,
+  "round33_baseline_present_as_ancestor": true,
+  "untracked_files_from_other_sessions": 15,
+  "working_tree_tracked_modification_list": [],
+  "working_tree_tracked_modifications": 0
+ },
+ "round34_directory_present": true,
+ "round34_file_sha256": {
+  "runs\\comm_task_reward_event_timing_20260930\\CHECKPOINT_IDENTITY_RECONCILIATION.json": "85ce7cc7e3dfcc640186c564a7d5d3112ff638afec26c79aded899e34b36348e",
+  "runs\\comm_task_reward_event_timing_20260930\\EXECUTION_BASIS.md": "fffa47d00cf822e9052215074c6830f62ad0365092cbb934a53d399707873d6d",
+  "runs\\comm_task_reward_event_timing_20260930\\REWARD_TIMING_REGRESSION.json": "2f3cf517ed8a8e683d9a740f837123cf0279b344eb21bb84ea85e58ac46e439d",
+  "runs\\comm_task_reward_event_timing_20260930\\ROUND33_CHECKPOINT_MAPPING_ERRATUM.md": "36bb48faae386a8a6c293c3f94b936e77664fff66742331dfeb2bfdfe8f57466",
+  "runs\\comm_task_reward_event_timing_20260930\\ROUND34_REPORT.md": "08b2308917068594ae4272679e8fa1748b10e3023ace5542260e26b46aa17604",
+  "runs\\comm_task_reward_event_timing_20260930\\TASK_REWARD_TIMING_CONTRACT.md": "4b512a4594909ecdb24569c6108d98ea74f2325210869b40c379f40928f63df9",
+  "runs\\comm_task_reward_event_timing_20260930\\TRAINING_VERSION_MANIFEST.json": "87ce38300583da41e6b720e6e1d5616779f9053b9c03ccb9771e3affcd40aee6",
+  "runs\\comm_task_reward_event_timing_20260930\\reconcile_round34_checkpoints.py": "6fef6c53af51ec1c073a866c413c7334853cec4ce1cbeb136e8ca6ece7742728",
+  "runs\\comm_task_reward_event_timing_20260930\\test_checkpoint_version_boundary.py": "d5f168c43a7a453833ef7c37e4f784b4f1c432d5c2d3ef540e2ca092fc695711",
+  "runs\\comm_task_reward_event_timing_20260930\\test_reward_timing_regression.py": "09516efecf8c245961b1e9cc84bb9555d6cec8a4bbd86e4c93b01e114eb515c3"
+ },
+ "schema": "round35-anchors-and-environment/1",
+ "source_selected": {
+  "github_snapshot_needed": false,
+  "network_attempts": 0,
+  "note": "the local path and the expected branch/head exist, so the GitHub snapshot (handoff/round34-task-reward-event-timing at f716b683..., based on main a557e80) was not used and no network access was attempted; if it had been used the source difference would have been registered here",
+  "used": "local repository D:\\code\\整合\\zhenghe on branch fix/comm-task-reward-event-timing"
+ },
+ "stage_c_modules_read_for_this_round_sha256": {
+  "v2_check.py": "ead3da2feae866765260409c88b335f2195b43be92ed0fa4f1e5b420fface2d0",
+  "v2_common.py": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+  "v2_recover.py": "b1abedd5033fde7e6ff10d42ac8a5935fef977f7569a81efa522bbccc56bc6bb",
+  "v2_reward_timing.py": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+  "v2_run.py": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7",
+  "v2_train.py": "8437aee920e6d9192c0298c2e4ffe01c2daea641d67336216cfeb7dcf0e56883",
+  "v2_trainer.py": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
+ },
+ "superseded_record": "ROUND34 reported PyTorch unavailable on the execution machine (python 3.13.5 / numpy 2.1.3). That limitation does not apply to this round: this interpreter imports torch and numpy, so every deserialisation / forward / likelihood item below has no environment exemption."
+}
