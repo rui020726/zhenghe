@@ -119,7 +119,9 @@ def _bundle(stream: dict[int, float], decision_steps: list[int],
     """
     bundled = {step: 0.0 for step in decision_steps}
     prefix = 0.0
-    for step in range(1, horizon + 1):
+    # Tick zero is reserved for an event before the first policy action. It remains an
+    # unassigned prefix; ordinary relay cost/reward ticks still begin at one.
+    for step in range(0, horizon + 1):
         value = float(stream.get(step, 0.0))
         previous = bisect_right(decision_steps, step) - 1
         if previous < 0:

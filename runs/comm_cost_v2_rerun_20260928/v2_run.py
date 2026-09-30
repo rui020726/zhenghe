@@ -25,9 +25,14 @@ import v2_rules as rules
 from sb_collector import StageBCollector
 
 from integrated_sar.comm_learning import LearnedSendPolicy
-from integrated_sar.contracts import TaskStatus
+from integrated_sar.contracts import ProgressEvent
 from integrated_sar.joint_driver import RunConfiguration, build_joint_run
 from integrated_sar.lifecycle_metrics import load_records, window_metrics
+from v2_reward_timing import (
+    PublishedProgressRewardCollector,
+    REWARD_TIMING_VERSION,
+    TRAINING_VERSION,
+)
 
 EXPECTED_ACK_ZERO_KEYS = (
     "ack_emitted", "ack_attempts", "ack_attempt_bytes", "ack_delivered", "ack_lost",
@@ -85,11 +90,10 @@ def _assert_transport(run: Any, label: str, expected_policy: str) -> dict[str, A
 
 
 def _install_taps(run: Any) -> dict[str, Any]:
-    """Per-step cost and task streams, keyed on the relay tick (Stage B convention)."""
+    """Per-step cost tap and registry-committed task reward observer."""
     relay = run.task_adapter.comm_relay
     cost_stream: dict[int, dict[str, int]] = {}
     task_stream: dict[int, float] = {}
-    credited: set[str] = set()
 
     original_tick = relay.tick
 
@@ -101,25 +105,22 @@ def _install_taps(run: Any) -> dict[str, Any]:
         return result
 
     relay.tick = tapped_tick
-    environment = run.task_adapter.env
-    original_step = environment.step
-
-    def tapped_step(*args: Any, **kwargs: Any) -> Any:
-        result = original_step(*args, **kwargs)
-        gained = 0.0
-        for snapshot in run.registry.snapshots():
-            if (snapshot.status is TaskStatus.COMPLETED and not snapshot.expired
-                    and snapshot.task_id not in credited):
-                credited.add(snapshot.task_id)
-                gained += 1.0
-        if gained:
-            step = int(relay._tick)
-            task_stream[step] = task_stream.get(step, 0.0) + gained
-        return result
-
-    environment.step = tapped_step
+    event_bus = run.orchestrator.event_bus
+    reward_collector = PublishedProgressRewardCollector(
+        registry=run.registry,
+        relay=relay,
+        clock=run.orchestrator.clock,
+        task_stream=task_stream,
+    )
+    reward_handler = reward_collector.handle_progress
+    # JointSAROrchestrator subscribed the registry first. This observer therefore sees the
+    # committed registry verdict during the same synchronous ProgressEvent publication.
+    event_bus.subscribe(ProgressEvent, reward_handler)
     return {"relay": relay, "cost_stream": cost_stream, "task_stream": task_stream,
-            "original_tick": original_tick, "original_step": original_step}
+            "task_reward_events": reward_collector.records,
+            "reward_timing_version": REWARD_TIMING_VERSION,
+            "event_bus": event_bus, "reward_handler": reward_handler,
+            "original_tick": original_tick}
 
 
 def _behaviour_sha256(records: list[dict[str, Any]]) -> str:
@@ -133,7 +134,8 @@ def _behaviour_sha256(records: list[dict[str, Any]]) -> str:
 def _run_episode(label: str, kind: str, scenario_seed: int, *, policy: str,
                  attach: Any = None, attempt: int = 1, controller: Any = None,
                  collector: Any = None, action_rng_seed: int | None = None,
-                 tag: str = "") -> dict[str, Any]:
+                 tag: str = "",
+                 checkpoint_load_identity: dict[str, Any] | None = None) -> dict[str, Any]:
     fields, substituted = common.stage_b_inherited_config(scenario_seed)
     fields["comm_policy"] = policy
     paths = common.cell_paths(kind, scenario_seed, attempt, tag=tag)
@@ -157,7 +159,7 @@ def _run_episode(label: str, kind: str, scenario_seed: int, *, policy: str,
         summary = run.run()
     finally:
         taps["relay"].tick = taps["original_tick"]
-        run.task_adapter.env.step = taps["original_step"]
+        taps["event_bus"].unsubscribe(ProgressEvent, taps["reward_handler"])
 
     relay = run.task_adapter.comm_relay
     records = load_records(Path(str(fields["output"])))
@@ -204,7 +206,7 @@ def _run_episode(label: str, kind: str, scenario_seed: int, *, policy: str,
             for tape in collector.records:
                 handle.write(json.dumps(tape, ensure_ascii=False, sort_keys=True) + "\n")
 
-    return {
+    row = {
         "kind": kind, "label": label, "scenario_seed": int(scenario_seed),
         "attempt": int(attempt), "policy": policy,
         "spent_bytes": spent, "budget_bytes": int(fields["comm_budget_bytes"]),
@@ -215,6 +217,8 @@ def _run_episode(label: str, kind: str, scenario_seed: int, *, policy: str,
         "expired": int(metrics.expired), "discovered": int(metrics.discovered),
         "active": int(metrics.active), "unassigned": int(metrics.unassigned),
         "task_reward_total": credited_total,
+        "training_version": TRAINING_VERSION,
+        "reward_timing_version": taps["reward_timing_version"],
         "b0_bytes": common.B0_BYTES,
         "normalised_cost_total": round(spent / common.B0_BYTES, 9),
         "emission_sequence": [[int(r["step"]), str(r["target"]), int(r["revision"]),
@@ -224,6 +228,7 @@ def _run_episode(label: str, kind: str, scenario_seed: int, *, policy: str,
                              for r in refusals],
         "cost_stream": {str(step): row for step, row in sorted(taps["cost_stream"].items())},
         "task_stream": {str(step): value for step, value in sorted(taps["task_stream"].items())},
+        "task_reward_events": list(taps["task_reward_events"]),
         "ack_ledger": ack_summary,
         "transport_parameters": declared,
         "relay_counters": {key: int(value) for key, value in relay.counters.items()},
@@ -238,6 +243,9 @@ def _run_episode(label: str, kind: str, scenario_seed: int, *, policy: str,
         "artefacts": {"lifecycle": str(paths["lifecycle"]), "transcript": str(paths["transcript"]),
                       "tape": str(paths["tape"]), "row": str(paths["row"])},
     }
+    if checkpoint_load_identity is not None:
+        row["checkpoint_load_identity"] = dict(checkpoint_load_identity)
+    return row
 
 
 def _booked(label: str, kind: str, row: dict[str, Any], ledger: Any) -> None:
@@ -320,7 +328,8 @@ def run_training_episode(controller: Any, *, training_seed: int, episode_index: 
 
 
 def run_eval(controller: Any, *, training_seed: int, timepoint: str, mode: str,
-             scenario_seed: int) -> dict[str, Any]:
+             scenario_seed: int,
+             checkpoint_load_identity: dict[str, Any] | None = None) -> dict[str, Any]:
     """One dev-evaluation rollout in a registered mode: greedy (argmax) or sampled.
 
     ``sampled`` is the training masked random policy itself (same collector class and
@@ -343,7 +352,8 @@ def run_eval(controller: Any, *, training_seed: int, timepoint: str, mode: str,
                            attach=collector.policy(), attempt=0,
                            controller=controller, collector=collector,
                            action_rng_seed=eval_action_seed(training_seed, scenario_seed, mode),
-                           tag=f"eval_s{training_seed}_{block}")
+                           tag=f"eval_s{training_seed}_{block}",
+                           checkpoint_load_identity=checkpoint_load_identity)
     except Exception as error:
         ledger.record(label=label, seed=scenario_seed, attempt=0, ok=False,
                       detail=f"{type(error).__name__}: {error}")

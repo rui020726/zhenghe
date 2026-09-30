@@ -166,6 +166,7 @@ HARNESS_MODULES = (
     "v2_controller.py",
     "v2_trainer.py",
     "v2_run.py",
+    "v2_reward_timing.py",
     "v2_train.py",
     "v2_blocks.py",
     "v2_check.py",
