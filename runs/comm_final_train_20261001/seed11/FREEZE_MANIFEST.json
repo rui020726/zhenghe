@@ -1,0 +1,94 @@
+{
+ "batches_per_seed": 32,
+ "code_identity_at_launch": {
+  "freeze_sha256_of_this_identity_block": "10915310bda3401f7982fe1f6094ad790ac0a16501768bcd8c50650fa5cfbe29",
+  "frozen_checkpoints": {
+   "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "runs/joint_eval_20260916/ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  },
+  "imported_training_modules": {
+   "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": "e64e0be4911ca3b3129247b3a443d045ad022f3bd9e6a1a22c4ebd1b3a4aff9b",
+   "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": "bab0a65fb3ffda6dc9673eaa4e836e20f184b4cc16836b5d5cf169bd2d326e91",
+   "runs/comm_budget_pilot_20260919/pilot_common.py": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8",
+   "runs/comm_budget_pilot_20260919/pilot_env.py": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b",
+   "runs/comm_budget_pilot_20260919/train_pilot.py": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81",
+   "runs/comm_cost_controller_stage_a_20260927/cost_math.py": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+   "runs/comm_cost_stage_b_20260927/sb_collector.py": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+   "runs/comm_cost_stage_b_20260927/sb_common.py": "66e674a03e0406299c8f9172d2865c5f83c3de58893bce7f87b71741ba3cf28f",
+   "runs/comm_cost_stage_b_20260927/sb_controller.py": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+   "runs/comm_cost_stage_b_20260927/sb_run.py": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+   "runs/comm_tight_budget_20260919/onpolicy.py": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+   "runs/comm_tight_budget_20260919/train_onpolicy.py": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f",
+   "runs/search_trace_and_policy_20260925/sp_common.py": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc"
+  },
+  "production": {
+   "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+   "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+   "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+   "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+   "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+   "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+   "integrated_sar/lifecycle_metrics.py": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+   "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+  },
+  "round36_scripts": {
+   "r36_common.py": "ba0936a9552119cf879cec16139c6188be918066f46f4f849623b8149eea506f",
+   "r36_launch.py": "2863a6e0e921ed60aa471dce716579f5fb850ac0a77a1476ae9d5d1a6bd4495b",
+   "r36_preflight.py": "ed44e0d7b8f1ab26c559b4113890d5a77a3ba8fe138e55cca602fb4644fda368",
+   "r36_sanity.py": "cef7eefc81eb1a9062aec06667543984e9eb5124dcaedc61b6fc1dc37092e583",
+   "r36_worker.py": "944f03a2357b4cca9917b2c2d3d408927b4a42130808e5ff0907068da52fe437"
+  },
+  "runner_reward_collector": "PublishedProgressRewardCollector",
+  "stage_c_harness": {
+   "v2_blocks.py": "342cdb69b920dfdfeee5bd7a9070321b9a0642fc1b80d5ad974b3f89602c78c8",
+   "v2_check.py": "ead3da2feae866765260409c88b335f2195b43be92ed0fa4f1e5b420fface2d0",
+   "v2_common.py": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+   "v2_controller.py": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+   "v2_recover.py": "b1abedd5033fde7e6ff10d42ac8a5935fef977f7569a81efa522bbccc56bc6bb",
+   "v2_reward_timing.py": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+   "v2_rules.py": "a7ce36de2d465cadaba90bd70b36539b5e865a73be8c4e075b9faf5a86c53a57",
+   "v2_run.py": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7",
+   "v2_train.py": "8437aee920e6d9192c0298c2e4ffe01c2daea641d67336216cfeb7dcf0e56883",
+   "v2_trainer.py": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
+  },
+  "trainer_versions": {
+   "gae_schema": "per-decision-next-value/1",
+   "loss_version": "constrained-lagrangian/2",
+   "optimizer_schema": "stage-c-four-module-parameter-set/1",
+   "reward_timing_schema": "post-action-most-recent-decision/1",
+   "reward_timing_version": "published-completion-event-at-relay-tick/2",
+   "state_schema": "constrained-cost-state/2",
+   "trainer_tag": "constrained-cost-v2",
+   "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2"
+  }
+ },
+ "episodes_per_seed": 128,
+ "gae_schema": "per-decision-next-value/1",
+ "inherited_freeze_token": {
+  "branch_start": "b7217d18b4e7f4e301d0b62a810892967adc6566",
+  "config_hash": "e9b2c067db5951f2",
+  "freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc",
+  "head_at_freeze": "5be3f1e6437309f4e92cf49807f2e0cbbf7f057f",
+  "reward_timing_version": "published-completion-event-at-relay-tick/2",
+  "token_provenance": "read from runs/comm_cost_v2_rerun_20260928/CONFIG_AND_MODEL_MANIFEST.json through v2_check.freeze_record(); it is an inherited identity string, not a hash of the current files -- the current files are hashed in code_identity() and the two version fields are recorded in FROZEN_CONFIG_MANIFEST.json",
+  "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2"
+ },
+ "kind": "round36-per-launch-freeze-manifest",
+ "launch_tag": "seed11",
+ "loss_version": "constrained-lagrangian/2",
+ "optimizer_schema": "stage-c-four-module-parameter-set/1",
+ "reserve": false,
+ "reward_timing_schema": "post-action-most-recent-decision/1",
+ "reward_timing_version": "published-completion-event-at-relay-tick/2",
+ "seeds_frozen_from_stage_c": [
+  11,
+  22,
+  33
+ ],
+ "state_schema": "constrained-cost-state/2",
+ "trainer_tag": "constrained-cost-v2",
+ "training_seed": 11,
+ "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+ "wall_clock_ceiling_seconds": 2270.28,
+ "written_at": "2026-10-01 09:22:07"
+}

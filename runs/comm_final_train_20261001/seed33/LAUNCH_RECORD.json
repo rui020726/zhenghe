@@ -1,0 +1,459 @@
+{
+ "code_identity_at_launch": {
+  "freeze_sha256_of_this_identity_block": "10915310bda3401f7982fe1f6094ad790ac0a16501768bcd8c50650fa5cfbe29",
+  "frozen_checkpoints": {
+   "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "runs/joint_eval_20260916/ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  },
+  "imported_training_modules": {
+   "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": "e64e0be4911ca3b3129247b3a443d045ad022f3bd9e6a1a22c4ebd1b3a4aff9b",
+   "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": "bab0a65fb3ffda6dc9673eaa4e836e20f184b4cc16836b5d5cf169bd2d326e91",
+   "runs/comm_budget_pilot_20260919/pilot_common.py": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8",
+   "runs/comm_budget_pilot_20260919/pilot_env.py": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b",
+   "runs/comm_budget_pilot_20260919/train_pilot.py": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81",
+   "runs/comm_cost_controller_stage_a_20260927/cost_math.py": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+   "runs/comm_cost_stage_b_20260927/sb_collector.py": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+   "runs/comm_cost_stage_b_20260927/sb_common.py": "66e674a03e0406299c8f9172d2865c5f83c3de58893bce7f87b71741ba3cf28f",
+   "runs/comm_cost_stage_b_20260927/sb_controller.py": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+   "runs/comm_cost_stage_b_20260927/sb_run.py": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+   "runs/comm_tight_budget_20260919/onpolicy.py": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+   "runs/comm_tight_budget_20260919/train_onpolicy.py": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f",
+   "runs/search_trace_and_policy_20260925/sp_common.py": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc"
+  },
+  "production": {
+   "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+   "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+   "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+   "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+   "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+   "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+   "integrated_sar/lifecycle_metrics.py": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+   "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+  },
+  "round36_scripts": {
+   "r36_common.py": "ba0936a9552119cf879cec16139c6188be918066f46f4f849623b8149eea506f",
+   "r36_delivery.py": "698a9fd25e5c01d3167955f9ce366f66b7ccb0cccefd79357bb55cd0262a807a",
+   "r36_launch.py": "2863a6e0e921ed60aa471dce716579f5fb850ac0a77a1476ae9d5d1a6bd4495b",
+   "r36_preflight.py": "ed44e0d7b8f1ab26c559b4113890d5a77a3ba8fe138e55cca602fb4644fda368",
+   "r36_reconcile.py": "01f64499db9fef8f8dbe29e212137260aa86b924505b3999c8fde3f092842af0",
+   "r36_sanity.py": "479154fad32a2f0f3fe93bc38d9b34ce2c0c770100c81fdafb93e449c12b78ab",
+   "r36_verify.py": "1de1eb014498eaf151df81df89eda65942c28baff56b8f5fe92b33fc74431762",
+   "r36_worker.py": "944f03a2357b4cca9917b2c2d3d408927b4a42130808e5ff0907068da52fe437"
+  },
+  "runner_reward_collector": "PublishedProgressRewardCollector",
+  "stage_c_harness": {
+   "v2_blocks.py": "342cdb69b920dfdfeee5bd7a9070321b9a0642fc1b80d5ad974b3f89602c78c8",
+   "v2_check.py": "ead3da2feae866765260409c88b335f2195b43be92ed0fa4f1e5b420fface2d0",
+   "v2_common.py": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+   "v2_controller.py": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+   "v2_recover.py": "b1abedd5033fde7e6ff10d42ac8a5935fef977f7569a81efa522bbccc56bc6bb",
+   "v2_reward_timing.py": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+   "v2_rules.py": "a7ce36de2d465cadaba90bd70b36539b5e865a73be8c4e075b9faf5a86c53a57",
+   "v2_run.py": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7",
+   "v2_train.py": "8437aee920e6d9192c0298c2e4ffe01c2daea641d67336216cfeb7dcf0e56883",
+   "v2_trainer.py": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
+  },
+  "trainer_versions": {
+   "gae_schema": "per-decision-next-value/1",
+   "loss_version": "constrained-lagrangian/2",
+   "optimizer_schema": "stage-c-four-module-parameter-set/1",
+   "reward_timing_schema": "post-action-most-recent-decision/1",
+   "reward_timing_version": "published-completion-event-at-relay-tick/2",
+   "state_schema": "constrained-cost-state/2",
+   "trainer_tag": "constrained-cost-v2",
+   "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2"
+  }
+ },
+ "console_log": "D:\\code\\整合\\zhenghe\\runs\\comm_final_train_20261001\\seed33\\launch_console.log",
+ "console_tail_last": [
+  "actor_type:discrete",
+  "seed 33 episode 124: scenario 1300002 on_time=6 bytes=28122 lambda=1.4500",
+  "actor_type:discrete",
+  "seed 33 episode 125: scenario 1300047 on_time=5 bytes=26922 lambda=1.4500",
+  "actor_type:discrete",
+  "seed 33 episode 126: scenario 1300030 on_time=6 bytes=27678 lambda=1.4500",
+  "actor_type:discrete",
+  "seed 33 episode 127: scenario 1300023 on_time=5 bytes=28266 lambda=1.4500",
+  "seed 33 batch 31: samples=988 opt_steps=16 g_hat=+0.5000 lambda 1.4500 -> 1.4750 (-0.05857 surrogate)",
+  "{\"seed\": 33, \"episodes_done\": 128, \"updates\": 32, \"optimizer_steps\": 464, \"lambda\": 1.4749999999999992, \"worker_seconds\": 1579.19, \"parameters\": \"cd0498693f7636aea5f75cb6a54bd18f64c7410fe2f16e8791b7aa3966a5cb9d\"}",
+  "# exit code 0, parent-measured wall clock 1581.44s"
+ ],
+ "episode_constructions_in_this_seed_directory": 128,
+ "exit_code": 0,
+ "failed_starts_in_this_seed_directory": [],
+ "freeze_identity_used": {
+  "branch_start": "b7217d18b4e7f4e301d0b62a810892967adc6566",
+  "config_hash": "e9b2c067db5951f2",
+  "freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc",
+  "head_at_freeze": "5be3f1e6437309f4e92cf49807f2e0cbbf7f057f",
+  "reward_timing_version": "published-completion-event-at-relay-tick/2",
+  "token_provenance": "read from runs/comm_cost_v2_rerun_20260928/CONFIG_AND_MODEL_MANIFEST.json through v2_check.freeze_record(); it is an inherited identity string, not a hash of the current files -- the current files are hashed in code_identity() and the two version fields are recorded in FROZEN_CONFIG_MANIFEST.json",
+  "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2"
+ },
+ "launch_tag": "seed33",
+ "note": "loss and reward values are recorded only as evidence that the frozen protocol executed; this round reports no learning-effect numbers",
+ "optimizer_steps": 464,
+ "outcome": "completed",
+ "parent_wall_clock_seconds": 1581.44,
+ "pid": 43512,
+ "training_record": {
+  "bound_paths": {
+   "CHECKPOINTS": "D:\\code\\整合\\zhenghe\\runs\\comm_final_train_20261001\\seed33\\checkpoints",
+   "LOGS": "D:\\code\\整合\\zhenghe\\runs\\comm_final_train_20261001\\seed33\\logs",
+   "OUTPUT_DIR": "D:\\code\\整合\\zhenghe\\runs\\comm_final_train_20261001\\seed33",
+   "REJECTED": "D:\\code\\整合\\zhenghe\\runs\\comm_final_train_20261001\\seed33\\rejected",
+   "ROWS": "D:\\code\\整合\\zhenghe\\runs\\comm_final_train_20261001\\seed33\\rows"
+  },
+  "episodes_requested": 128,
+  "freeze_identity_used": {
+   "branch_start": "b7217d18b4e7f4e301d0b62a810892967adc6566",
+   "config_hash": "e9b2c067db5951f2",
+   "freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc",
+   "head_at_freeze": "5be3f1e6437309f4e92cf49807f2e0cbbf7f057f",
+   "reward_timing_version": "published-completion-event-at-relay-tick/2",
+   "token_provenance": "read from runs/comm_cost_v2_rerun_20260928/CONFIG_AND_MODEL_MANIFEST.json through v2_check.freeze_record(); it is an inherited identity string, not a hash of the current files -- the current files are hashed in code_identity() and the two version fields are recorded in FROZEN_CONFIG_MANIFEST.json",
+   "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2"
+  },
+  "kind": "round36-seed-training-record",
+  "lambda_history": [
+   {
+    "batch": 0,
+    "g_hat": 0.25,
+    "lambda_before": 1.0,
+    "lambda_next": 1.0125
+   },
+   {
+    "batch": 1,
+    "g_hat": 0.25,
+    "lambda_before": 1.0125,
+    "lambda_next": 1.025
+   },
+   {
+    "batch": 2,
+    "g_hat": 0.5,
+    "lambda_before": 1.025,
+    "lambda_next": 1.0499999999999998
+   },
+   {
+    "batch": 3,
+    "g_hat": 0.75,
+    "lambda_before": 1.0499999999999998,
+    "lambda_next": 1.0875
+   },
+   {
+    "batch": 4,
+    "g_hat": 0.0,
+    "lambda_before": 1.0875,
+    "lambda_next": 1.0875
+   },
+   {
+    "batch": 5,
+    "g_hat": 0.75,
+    "lambda_before": 1.0875,
+    "lambda_next": 1.125
+   },
+   {
+    "batch": 6,
+    "g_hat": 0.0,
+    "lambda_before": 1.125,
+    "lambda_next": 1.125
+   },
+   {
+    "batch": 7,
+    "g_hat": 0.0,
+    "lambda_before": 1.125,
+    "lambda_next": 1.125
+   },
+   {
+    "batch": 8,
+    "g_hat": 0.0,
+    "lambda_before": 1.125,
+    "lambda_next": 1.125
+   },
+   {
+    "batch": 9,
+    "g_hat": 0.5,
+    "lambda_before": 1.125,
+    "lambda_next": 1.15
+   },
+   {
+    "batch": 10,
+    "g_hat": 0.5,
+    "lambda_before": 1.15,
+    "lambda_next": 1.1749999999999998
+   },
+   {
+    "batch": 11,
+    "g_hat": 0.25,
+    "lambda_before": 1.1749999999999998,
+    "lambda_next": 1.1874999999999998
+   },
+   {
+    "batch": 12,
+    "g_hat": 0.25,
+    "lambda_before": 1.1874999999999998,
+    "lambda_next": 1.1999999999999997
+   },
+   {
+    "batch": 13,
+    "g_hat": 0.25,
+    "lambda_before": 1.1999999999999997,
+    "lambda_next": 1.2124999999999997
+   },
+   {
+    "batch": 14,
+    "g_hat": 0.25,
+    "lambda_before": 1.2124999999999997,
+    "lambda_next": 1.2249999999999996
+   },
+   {
+    "batch": 15,
+    "g_hat": 0.5,
+    "lambda_before": 1.2249999999999996,
+    "lambda_next": 1.2499999999999996
+   },
+   {
+    "batch": 16,
+    "g_hat": 0.25,
+    "lambda_before": 1.2499999999999996,
+    "lambda_next": 1.2624999999999995
+   },
+   {
+    "batch": 17,
+    "g_hat": 0.25,
+    "lambda_before": 1.2624999999999995,
+    "lambda_next": 1.2749999999999995
+   },
+   {
+    "batch": 18,
+    "g_hat": 0.0,
+    "lambda_before": 1.2749999999999995,
+    "lambda_next": 1.2749999999999995
+   },
+   {
+    "batch": 19,
+    "g_hat": 0.0,
+    "lambda_before": 1.2749999999999995,
+    "lambda_next": 1.2749999999999995
+   },
+   {
+    "batch": 20,
+    "g_hat": 0.25,
+    "lambda_before": 1.2749999999999995,
+    "lambda_next": 1.2874999999999994
+   },
+   {
+    "batch": 21,
+    "g_hat": 0.25,
+    "lambda_before": 1.2874999999999994,
+    "lambda_next": 1.2999999999999994
+   },
+   {
+    "batch": 22,
+    "g_hat": 0.25,
+    "lambda_before": 1.2999999999999994,
+    "lambda_next": 1.3124999999999993
+   },
+   {
+    "batch": 23,
+    "g_hat": 1.0,
+    "lambda_before": 1.3124999999999993,
+    "lambda_next": 1.3624999999999994
+   },
+   {
+    "batch": 24,
+    "g_hat": 0.0,
+    "lambda_before": 1.3624999999999994,
+    "lambda_next": 1.3624999999999994
+   },
+   {
+    "batch": 25,
+    "g_hat": 0.75,
+    "lambda_before": 1.3624999999999994,
+    "lambda_next": 1.3999999999999995
+   },
+   {
+    "batch": 26,
+    "g_hat": 0.0,
+    "lambda_before": 1.3999999999999995,
+    "lambda_next": 1.3999999999999995
+   },
+   {
+    "batch": 27,
+    "g_hat": 0.0,
+    "lambda_before": 1.3999999999999995,
+    "lambda_next": 1.3999999999999995
+   },
+   {
+    "batch": 28,
+    "g_hat": 0.25,
+    "lambda_before": 1.3999999999999995,
+    "lambda_next": 1.4124999999999994
+   },
+   {
+    "batch": 29,
+    "g_hat": 0.5,
+    "lambda_before": 1.4124999999999994,
+    "lambda_next": 1.4374999999999993
+   },
+   {
+    "batch": 30,
+    "g_hat": 0.25,
+    "lambda_before": 1.4374999999999993,
+    "lambda_next": 1.4499999999999993
+   },
+   {
+    "batch": 31,
+    "g_hat": 0.5,
+    "lambda_before": 1.4499999999999993,
+    "lambda_next": 1.4749999999999992
+   }
+  ],
+  "ledger_after": {
+   "directory": "logs",
+   "starts": {
+    "directory": "seed33",
+    "failed": [],
+    "starts": 128
+   }
+  },
+  "note": "loss and reward values in this record show that the frozen training protocol executed; they are not evidence about learning quality and are not reported as results in this round",
+  "pid": 47280,
+  "reference_cache_files_read_only": {
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300000_a1.json": "eff55affae9d4943d55a071c0ea67058f2f0c11aced23804ecd579b66b9bfd49",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300001_a1.json": "5c417921446a272ba2c0eafbda0ad9e4673ae89212c354fdbd6b04b0a282fbea",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300002_a1.json": "8a02b21bc5ffdb9ee3cb2d4dbdc49fc1182ad54661f55c6add87e3a9c4afdefe",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300003_a1.json": "2851189530805518d7926a2ea63ed40df85cd5d17818a8a40d7abd18c023ae95",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300004_a1.json": "331de926650901908cb4990ef82efc0681f27ff09789892ccdd77bc2ca24ec35",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300005_a1.json": "15df8eff02c21d0550082855f7b4bd9133ff4049950653c6897a2e6ba741795c",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300006_a1.json": "f7e18b9eb853baa361059c957bd7f91d23c9f683b0a7ada48b32ab96c7d0c468",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300007_a1.json": "4d9ae3df5b1653843b54ce7cecedbd119c5c9b7098db98e7d052db7f32ee21b2",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300008_a1.json": "0514ae5ee0370df041cdb5bf7a181147ec7780c27895bb41ad2f1557b343c954",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300009_a1.json": "b1afd57c1c5ceefce31db90f9c906425e5a80da035852d1a9a9634ec40c8ae72",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300010_a1.json": "b61c0366ef2a55f851440d003fa37c2527f724b856770aca6ee72e70935080a1",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300011_a1.json": "61464f01ac77ce8067346ff7bed82f6c24582f58d5e6cd435f04beaa8aaeb71a",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300012_a1.json": "9a1b2d81a1e04d16b525029b69138152905d79d03768b18cbb97486a8ffa6bd9",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300013_a1.json": "a8635df62546899c50e96b749651d2565064b91fadca0116d7493c9ce396231a",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300014_a1.json": "bf302e6fa3f50878166c12890267ceeb0019fe5221c7e41b5fb4838d3c14afab",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300015_a1.json": "473274f26b5d5ae6e39b84c6e24096601e178f00af89f13b5303d3f02f7ff4cb",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300016_a1.json": "af9db62adc9e9a0ba44447dd5695813dedac8a02b157d23ee2059e15311554a4",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300017_a1.json": "f993951ba2f5260833cbeb63bc4507db802aed8974ec6dbf8e4a015223fe3d5e",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300018_a1.json": "e10f08699e9c29cf6d479f79623a9e257947780a738022b964fa8c1bc1b43dc1",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300019_a1.json": "4f9310480d18ce178da3db69da2c7199babd2c8cd660eee177c8551c8eaa8895",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300020_a1.json": "b09d75c244c2a5bd13f9a7f670730e51a31bca1e09d55420e88f7d9cc69ac13a",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300021_a1.json": "8d4b8f5c68cafbdf337d053eefdc11dfc78d4b34d656bb5d8f0be0c2c51f459c",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300022_a1.json": "38c36d27b61adfcf730dc983ee7af85f4236f414e324985af8f91371e66fc5e9",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300023_a1.json": "1ba711bd876d8861ffd90e89c2f14b74d0bcf487ff066ee6c1e2250b3a7132af",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300024_a1.json": "d98d7a68ca211e37c90a7bcbd8c32c396e54978b8fd1acc59cb54b79f9e3eb15",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300025_a1.json": "1eedc1c7d8fce9eb863253b7092b39900ec6b8dbda21fbf766cf1a22532605e2",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300026_a1.json": "5574fc3c49dde9172082ddaeca33958fbeb59868d42aa9cf40ba8936db4292a4",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300027_a1.json": "f219d93296304383f2576ef7f0e95db14a452fb2811cedd2ab65706eb390780d",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300028_a1.json": "c7bf6c49e6a2a9ad0485f6b78014ca6fbf74ff820f8d254b74c742d3a1536ee5",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300029_a1.json": "9b6e0b41c3f2a56145d380d3c77b20ffa883b3e40062825d8d82d75269be92d2",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300030_a1.json": "d39786a77bbddac27e0bf34e31c2116ca3f449a6dfa646bcc7316476210bb924",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300031_a1.json": "2152f09818ae58fdd78a874d9de448cdaf8c39b4d929c8c267726285e5b818e1",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300032_a1.json": "245d10182caaf97e779c1fa452efced96e806103033787b45bad3f00c530e8ee",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300033_a1.json": "af5f16c853dec3b24968887499571aa8890fc56e9e188ab5c194b9e94a7b1fa1",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300034_a1.json": "eb60ac75db52ba139f1b1b0454e5b61e28a6c85a5fc32c4d16c4a4862267200f",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300035_a1.json": "afa948d9e914ef58ddd669bb1ab831d3dfccecef33ecd7269030dc0e157edc22",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300036_a1.json": "69c3ef2cdfe35590c42ecf476a4d815ecbccc9fef58b211332b73921fa1bd336",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300037_a1.json": "1e279211b636e9a1e215040006a367f65845a3719d4fa93dfab0dbace22c9b87",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300038_a1.json": "0dde1abbf8e0b95e581f83cee50d81871560e15333202f589a17dc298fc48796",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300039_a1.json": "ce48c3d9e7f8e056aa4ede028636caf363bcb942b8b9565383aee40e9016f5fc",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300040_a1.json": "aefbb624660472e512ac4ca291ee7575218a87709d054b192c7a370b5262e2ec",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300041_a1.json": "33a818ad71b6d9d5e5c4544a20be5af5b4a9ccb19681b5509037ed2175977b7b",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300042_a1.json": "aac0490be1c0e82163ec5d77f3e807d5486298a3f2d09c1d12328478bc182329",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300043_a1.json": "43e75f7dc1dda5c565162f6247739d1878421e50a8159939357da561b8195d60",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300044_a1.json": "e1b2caeadb7eda5de61c4012326e33f20e859bcdc3d540f0e8383ac4f713c57a",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300045_a1.json": "35eefda93f0b28cab5d4e9e7bae4913880e68be5211ba08353662033c9665a42",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300046_a1.json": "5cf54a4364b9c644de0ab018afc64fd840b6de16e3084b971db5620d79e15eef",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1300047_a1.json": "af9c11a0bd1ba9a14ed705a7ab90b928ddd57841b675cd83d5996813ff53ae7a",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301000_a1.json": "2ac116bbb78a1cc4d4850b6d7e84936b8236c0e874fd62f2f81065523a0fdf90",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301001_a1.json": "645047a2b47f5c7f6fea513d86c2b3f883bb4db0beeca6cebb5002c5922ca34e",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301002_a1.json": "d6ceee818b2dd7f375743baae975a6f426fcf70c32b5f9d8179f77ca0816893f",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301003_a1.json": "fd19e05a34cdc12a51c2d8f1ac449f376e0bc2c3ac0e1819bbe3e4f0111fa5bc",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301004_a1.json": "37bc3f9a7e4f151850238e041e86a05cf7a3347ca3d896aa2571bac751f96c89",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301005_a1.json": "e5dfcf6853826197d9d230c18428c7ace64a481b9c1c3017b9584f896cd6bbfe",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301006_a1.json": "2ab7bb0e948f5d8a96f0046ba350281a0bb989eb0aaea7f04aaf270fe4b02688",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301007_a1.json": "7eb2224d9f4e2b5315fb2b5ae441a616694ed780cdb25992996f4d55fdbd56b5",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301008_a1.json": "013acbc1522118a7f760a89a6cd6c02e431a7d287323923b179339f4f337d677",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301009_a1.json": "ea9df3bbca1199efaaf97104dae07e1a5982e7f82e914e9e34230787f9711de8",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301010_a1.json": "070108dbff70a450da81bd1e7b6ecb363c88f187ad1b8e06a3f4440f102ec31e",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301011_a1.json": "f6f8cb54e5b26fdb599e005d1e04aa96637cc2d0967b541efe2d18410a1b11dc",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301012_a1.json": "e7ced166f19f14b195c9314f9a132a15459bfb857993467d22c95ee06c621362",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301013_a1.json": "0c324ee40718b7dca6301824b6966ea87044bfe978c58b874b4742e8871f6fc6",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301014_a1.json": "58fec5577b4a816ac1de201ba935549c1a7b76c46b0d708d9c1cf9b3b1aa7572",
+   "runs\\comm_cost_v2_rerun_20260928\\rows\\v2_reference_s1301015_a1.json": "705ba0652b74e5861e6bcd0089681410a762a37d8e385b4904329775c8b1e3b6"
+  },
+  "registered_initialisation": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+  "reserve": false,
+  "result": {
+   "checkpoint": "D:\\code\\整合\\zhenghe\\runs\\comm_final_train_20261001\\seed33\\checkpoints\\v2_train_s33.pt",
+   "controller_parameters": {
+    "heads": [
+     "action_head",
+     "value_task_head",
+     "value_cost_head"
+    ],
+    "init_seed": 20260927,
+    "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)",
+    "parameter_count": 5700,
+    "parameter_sha256": "cd0498693f7636aea5f75cb6a54bd18f64c7410fe2f16e8791b7aa3966a5cb9d",
+    "shapes": {
+     "action_head.bias": [
+      2
+     ],
+     "action_head.weight": [
+      2,
+      64
+     ],
+     "trunk.0.bias": [
+      64
+     ],
+     "trunk.0.weight": [
+      64,
+      19
+     ],
+     "trunk.2.bias": [
+      64
+     ],
+     "trunk.2.weight": [
+      64,
+      64
+     ],
+     "value_cost_head.bias": [
+      1
+     ],
+     "value_cost_head.weight": [
+      1,
+      64
+     ],
+     "value_task_head.bias": [
+      1
+     ],
+     "value_task_head.weight": [
+      1,
+      64
+     ]
+    }
+   },
+   "episodes_done": 128,
+   "lambda": 1.4749999999999992,
+   "optimizer_steps": 464,
+   "seconds": 1578.33,
+   "training_seed": 33,
+   "updates": 32
+  },
+  "round": "36",
+  "training_seed": 33,
+  "worker_wall_clock_seconds": 1579.19
+ },
+ "wall_clock_ceiling_seconds": 2281.95,
+ "within_ceiling": true,
+ "worker_command": [
+  "D:\\project_env\\python.exe",
+  "D:\\code\\整合\\zhenghe\\runs\\comm_final_train_20261001\\r36_worker.py",
+  "--seed",
+  "33"
+ ]
+}
