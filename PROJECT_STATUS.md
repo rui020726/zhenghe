@@ -1,5 +1,56 @@
 # 项目状态
 
+## 2026-10-01：ROUND36 修复版冻结训练（最后一次有界训练）——3 个 seed 从登记初值跑满冻结训练量（384/384 构造、96 批、1284 步、0 失败、储备未动用），三次都在归档构造的 wall-clock 上限内，12 个 checkpoint 与 384 行两个版本字段齐全且经真实版本门可恢复；结论 go（可进入第 4 天固定评估，效果数字仍为空白）
+
+分支 `fix/comm-task-reward-event-timing`（开工头 `577344aab8a5c9bfcf75e7ffbf6f77e503dbc200` =
+ROUND35 交付头，harness 于启动前落为 `93b27059c914…`，训练路径文件在两枚头之下逐字节相同）；
+产物 `runs/comm_final_train_20261001/`。未用 GitHub 快照、0 次网络、未推送、未建 venv、未装依赖
+（torch 2.9.0+cu128 / numpy 2.2.6 / Python 3.10.19）。
+
+```text
+训练启动 3 / 3；失败储备 0 / 1（未触发）；episode 构造 384 / 384，剩 0；优化器步 1284
+wall-clock 1606.26 / 1572.48 / 1581.44 s，上限 2270.28 / 2395.66 / 2281.95 s（占 70.8/65.6/69.3 %）
+评估启动 0；sanity 前向 3（0 构造、0 步）；旧产物改写 0；热启动 0；ACTIVE_ROWS 未启用；v2_recover 未用
+失败计数分两栏：被测系统正确性失败 0 处；本轮自有 harness 缺陷 2 处（均登记并复现，不影响证据）
+```
+
+- **任务 1 冻结核验（0 启动，G1-G12 全清）**：超参、目标与对偶常量、训练量（128 集/32 批/4 集每批/
+  1000 步/里程碑 0-64-128）、seed 集合 (11,22,33)、48+16 场景块与 128 集顺序 sha256、40 个世界行为字段、
+  ALL_ROWS 行过滤、8 个 `integrated_sar` 生产件与 13 个跨轮导入件、两个冻结 `.pth` 全部与 ROUND32
+  冻结件相同；`integrated_sar/` 自 ROUND33 基线 **0 次提交**。**函数级源码比对**证明唯一干预就是
+  ROUND34 的时序修复：`ppo_update`/`batch_samples`/`likelihood_alignment`/`dual_update`/`batch_g_hat`/
+  `run_training_episode`/`action_seed` 与 ROUND32 时代**逐字节相同**，变化的只有 `_bundle` 的 tick 0
+  前缀、两个版本字段与恢复门、`_install_taps` 的采集器搬家。G9 三 seed 初值**四源全等**
+  （s11 `7eff0f40203fdae6…`、s22 `b74c10c85c148a4b…`、s33 `0ddebe7dc04019eb…`），且每次启动前断言
+  seed 目录内无任何 `.pt` ⇒ "不热启动"是机器条件。wall-clock 上限按归档逐集 `seconds` 之和 ×1.5 构造
+  并由子进程超时**强制执行**；实测更新开销 83.71 / 74.40 / 81.67 s 每 seed，落在余量内。
+- **任务 2 三次从初值训练**：每次只重绑定 `v2_common` 的五个输出路径到本 seed 目录，训练全部走真实
+  `v2_train.train_seed`。三 seed 各自 128 集、批覆盖恰为 0..127、likelihood 对齐 32/32 通过、
+  每批更新前后参数摘要都变化；优化器步 464 / 356 / 464。ep0/ep64/ep128/rolling 共 12 个 checkpoint
+  在 payload 与 `training_state` **双处**携带 `constrained-cost-v2/published-completion-event-at-relay-tick/2`
+  与 `published-completion-event-at-relay-tick/2`，且每次训练后各 1 次最小 sanity 前向（logits `[4, 2]`、
+  values `[4]`、19 列特征、全部有限）——0 评估启动，不产出结果数字。
+- **任务 3 并行文档**：`delivery_draft/` 下架构与事件顺序图（含生产码行号）、复现命令、结果表模板
+  （greedy/sample 分列、开发块标注"已被历轮使用"、独立测试块连块本身都留空待登记，7 条填写禁则）、
+  交付目录骨架与 348 KB 的哈希登记表（每 seed 554 件 Git 外原件逐件 SHA256 + 只读恢复后的四模块 digest）。
+- **任务 4 对账与规模复核（V1-V6 全 passed）**：账本重算 384/384 构造、12/12 checkpoint 与 384/384 行
+  版本字段齐全。事件账本 2187 笔逐集闭合（`on_time == sum(task_stream) == credited == task_reward_total`
+  384/384）、0 笔落在无动作行的 tick、0 笔 prefix、0 次重复 event_id、0 次同目标重复入账、
+  0 笔完成已过 deadline；有目标过期的集数 34/19/34，账本对它们 0 记录。**A 级逐字节**：批 0 的 12 格
+  （3 seed × e0..e3）与归档 20 个可观测字段与逐决策 `features/actions/log_prob/…` 全等、`log_prob` 差
+  **0.0**、写入键 12/12 集恰为归档键 −1。修复改变了什么：批 0 的 66 笔入账中 **42 笔**归属行动作行改变、
+  三 seed 批 0 的 surrogate 与更新后参数摘要全部与归档不同；没改变什么：episode 级统计、样本数、
+  `g_hat`（批 0 逐 seed 与归档相同）。行为分叉点 s33 e17 / s11 e26 / s22 e68，`spent_bytes` 相同集数
+  78/82/80（分母 128）。三个 seed 的 `g_hat` 32 批仍**从未为负**、λ 走到 1.5 / 1.2625 / 1.475 —— 与
+  三十一/三十二轮诊断同形，**不得**读成约束满足得更好或更差。
+- **旧件保护**：本轮所有写入都在 `runs/comm_final_train_20261001/` 内；18 个 legacy `.pt` 与 10 件
+  ROUND34 交付件的字节哈希与 ROUND35 登记值全等（V5），`raw_artefacts` 目录 mtime 亦未被今日改动。
+
+结论：**go，可进入第 4 天固定评估**，带 8 条残余风险（效果仍为空白需新额度评估、开发块非未见测试集、
+`g_hat` 从未为负、两类契约情形在本块不可达、幂等未经实机触发、恢复边界本轮未重跑、wall-clock 基线为
+同口径近似、本轮 harness 两处缺陷需带走）。本轮不追加额度、不调参、不续训、不做评估、不开启下一轮、
+不部署、不推送。
+
 ## 2026-10-01：ROUND35 修复版奖励接线的真实 smoke 验证与恢复边界实机核对——45 个完成事件逐条全对、8/8 集写入键恰为归档键减 1、A 级被动性逐字节复现归档、5/5 篡改副本在恢复前被拒、18/18 旧 checkpoint 内容层与 native likelihood 实做补齐；结论 go（15/16 构造、60/100 步；被测系统 0 项正确性失败，本轮自有 harness 2 处缺陷已登记并复现）
 
 分支 `fix/comm-task-reward-event-timing`（开工头 `c43ec5f1a12ef18238d4eed3aa90e3681e9ae58e`，
