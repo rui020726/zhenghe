@@ -1,6 +1,6 @@
 {
  "all_passed": true,
- "checked_at": "2026-10-01 11:07:47",
+ "checked_at": "2026-10-01 11:10:05",
  "environment_launches_used": 0,
  "kind": "round36-independent-recheck",
  "note": "ROUND36_PREFLIGHT.json 的 G1 与 G10 是启动前门禁（断言开工头与空账本），交付之后再跑它们本就会按设计失败；本复核因此改为从 git 与账本重算同一批事实，且不重写任何已交付文件",
@@ -11,6 +11,7 @@
    "branch": "fix/comm-task-reward-event-timing",
    "commit_count_at_least_the_six_themed_deliveries": true,
    "commits_since_round35_head": [
+    "50b16d0",
     "da751fe",
     "9c6946f",
     "fa1da0a",
@@ -67,7 +68,7 @@
    "first_launch_recorded_at": "2026-10-01 09:22:07",
    "harness_commit_unix_time": 1790817707,
    "harness_was_committed_before_the_first_launch": true,
-   "head": "da751fed2664d2d87ffe093bcbb062d8eb4a6af9",
+   "head": "50b16d09d3b0405c2fa042ed9fe466131bcce14e",
    "passed": true,
    "paths_outside_this_round_touched": [],
    "per_file_identical": {
