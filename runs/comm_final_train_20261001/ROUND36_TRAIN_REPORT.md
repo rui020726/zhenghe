@@ -18,6 +18,8 @@ wall-clock 1606.26 / 1572.48 / 1581.44 s，上限 2270.28 / 2395.66 / 2281.95 s�
 版本字段齐全率 checkpoint 12/12、row 384/384；事件账本 2187 笔逐集闭合
 旧产物改写 0；新数据流 0；超参/目标/成本路径改动 0；热启动旧 checkpoint 0；ACTIVE_ROWS 未启用
 网络尝试 0、未推送、本分支无 upstream
+独立复核 R1-R6 全 passed（0 启动、0 步）：18 个训练路径/生产文件在三个 git 头之下 blob 相同、
+12 个 checkpoint 哈希在四处记录全同、96 份批记录自 sanity 之后未被改动、受保护目录今日 0 写入
 环境：torch 2.9.0+cu128、numpy 2.2.6、Python 3.10.19（D:\project_env\python.exe），未建 venv、未装依赖
 ```
 
@@ -200,6 +202,24 @@ sanity 不读任何结果数字，也不做决策；它只证明"固定 checkpoi
 故只算结构与计数级，不等同于独立仪表）；B 级（同场景配对）= §5/§6 中与归档的观测差；
 **本轮不产出 D 级以外的任何效果判断**。
 
+### 6.1 独立复核（`ROUND36_INDEPENDENT_RECHECK.json`，0 启动、0 optimizer.step）
+
+R1-R6 全 passed，且复核脚本不重写任何已交付文件：
+
+| 项 | 重算方式 | 结果 |
+|---|---|---|
+| R1 git 身份与训练路径 | 18 个文件（10 个 `v2_*` 训练路径 + 8 个 `integrated_sar` 生产件）在开工头 / harness 提交 / 当前头三处的 **blob id** 比对 | 三头全同；本轮 6 枚提交；ROUND33 基线为祖先；harness 提交时间 1790817707 ≤ 首次启动登记时间 2026-10-01 09:22:07 |
+| R2 账本闭合 | `TRAIN_LAUNCH_BOOK` vs 每 seed 的 `START_LEDGER_p*.json` vs `LAUNCH_RECORD` | 3 启动、384 构造、三处逐 seed 相等；失败起始 0；储备 0；三次 outcome=completed 且 within_ceiling |
+| R3 checkpoint 哈希 | 同一事实在四处记录（磁盘重算 / `CHECKPOINT_HASHES` / `SANITY` 层 / 登记表模型清单）对账 | 12 个文件四方全等，0 处不一致 |
+| R4 批记录未改动与步数 | sanity 之后重算 96 份批记录哈希；步数在批记录/对账/账本/终态四处对账 | 哈希全等；步数 464 / 356 / 464 四处一致 |
+| R5 旧轮未被写入 | 7 个受保护目录（ROUND24 的 rows/logs/checkpoints、ROUND32 的 rows/logs/checkpoints、ROUND34 目录）今日 mtime 扫描 + 18 个 legacy `.pt` 哈希对账 ROUND35 登记值 | 今日 0 写入；18/18 字节相等 |
+| R6 额度与禁则计数 | 从账本重算 | 启动 3/3、构造 384/384（剩 0）、储备 0/1、评估 0、sanity 3、复核脚本 0 步、`v2_recover` 未用、ACTIVE_ROWS 未启用、旧产物改写 0 |
+
+需要留一条给后续轮次的说明：`ROUND36_PREFLIGHT.json` 的 **G1/G10 是启动前门禁**（断言开工头与空
+账本），交付之后再跑它们会按设计失败——这不是缺陷，而是"不许在跑块期间重写冻结件"的体现；因此
+交付后的重算一律走 `r36_recheck.py` 而不是重跑 preflight。
+
+
 ## 7. go / no-go
 
 **go：可以进入第 4 天固定评估。** 判据是：三个 seed 都从登记初值跑满冻结训练量（128 集 / 32 批，
@@ -243,13 +263,14 @@ sanity 不读任何结果数字，也不做决策；它只证明"固定 checkpoi
 网络尝试 0、未推送、本分支无 upstream
 ```
 
-交付件（Git 内，按主题提交）：`EXECUTION_BASIS.md`、`FROZEN_CONFIG_MANIFEST.json`、
+交付件（Git 内，按主题分 7 次提交）：`EXECUTION_BASIS.md`、`FROZEN_CONFIG_MANIFEST.json`、
 `ROUND36_PREFLIGHT.json`、`TRAIN_LAUNCH_BOOK.json`、`ROUND36_VERIFICATION.json`、
-`ROUND36_HARNESS_DEFECTS.json`、`LEDGER_RECONCILIATION.json`、`ROUND36_TRAIN_REPORT.md`、
-`r36_*.py`（7 个脚本）、`seed{11,22,33}/*.json`（每 seed 6 份记录：freeze manifest、launch
-record、training record、sanity、checkpoint 哈希清单、λ 轨迹）、`delivery_draft/`（4 份草稿 +
-哈希登记表）。Git 外原件：每 seed 554 件（rows / tapes / lifecycles / transcripts / checkpoints /
-批记录，约 150 MB/seed），逐件路径与 SHA256 登记在 `delivery_draft/ARTEFACT_HASH_REGISTRY.json`。
+`ROUND36_HARNESS_DEFECTS.json`、`ROUND36_INDEPENDENT_RECHECK.json`、`LEDGER_RECONCILIATION.json`、
+`ROUND36_TRAIN_REPORT.md`、`r36_*.py`（8 个脚本）、`seed{11,22,33}/*.json`（每 seed 6 份记录：
+freeze manifest、launch record、training record、sanity、checkpoint 哈希清单、λ 轨迹）、
+`delivery_draft/`（4 份草稿 + 哈希登记表）。Git 外原件：每 seed 554 件（rows / tapes / lifecycles /
+transcripts / checkpoints / 批记录，约 150 MB/seed），逐件路径与 SHA256 登记在
+`delivery_draft/ARTEFACT_HASH_REGISTRY.json`。
 
 最终头哈希在交付提交完成后由 `git log --oneline -1` 给出，本文件不预填（避免猜）。
 本轮到此停止：不追加额度、不调参、不续训、不做评估、不开启下一轮、不部署、不推送。

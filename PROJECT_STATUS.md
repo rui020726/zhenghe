@@ -43,6 +43,13 @@ wall-clock 1606.26 / 1572.48 / 1581.44 s，上限 2270.28 / 2395.66 / 2281.95 s�
   `g_hat`（批 0 逐 seed 与归档相同）。行为分叉点 s33 e17 / s11 e26 / s22 e68，`spent_bytes` 相同集数
   78/82/80（分母 128）。三个 seed 的 `g_hat` 32 批仍**从未为负**、λ 走到 1.5 / 1.2625 / 1.475 —— 与
   三十一/三十二轮诊断同形，**不得**读成约束满足得更好或更差。
+- **独立复核 R1-R6 全 passed（0 启动、0 optimizer.step，`ROUND36_INDEPENDENT_RECHECK.json`）**：18 个
+  训练路径/生产文件的 blob 在开工头、harness 提交、当前头三处全同；12 个 checkpoint 的字节哈希在
+  "磁盘重算 / CHECKPOINT_HASHES / SANITY 层 / 登记表模型清单"四处记录全等；96 份批记录自 sanity 之后
+  未被改动；步数 464/356/464 在批记录、对账件、账本、终态四处一致；7 个受保护目录今日 0 写入、
+  18 个 legacy `.pt` 哈希对账 ROUND35 登记值全等；额度算术 3/3 启动、384/384 构造（剩 0）、储备 0/1。
+  另需注意：`ROUND36_PREFLIGHT.json` 的 G1/G10 是**启动前**门禁（断言开工头与空账本），交付后重跑
+  必然按设计失败，交付后的重算一律走 `r36_recheck.py`。
 - **旧件保护**：本轮所有写入都在 `runs/comm_final_train_20261001/` 内；18 个 legacy `.pt` 与 10 件
   ROUND34 交付件的字节哈希与 ROUND35 登记值全等（V5），`raw_artefacts` 目录 mtime 亦未被今日改动。
 

@@ -1,0 +1,282 @@
+{
+ "all_passed": true,
+ "checked_at": "2026-10-01 11:03:06",
+ "environment_launches_used": 0,
+ "kind": "round36-independent-recheck",
+ "note": "ROUND36_PREFLIGHT.json 的 G1 与 G10 是启动前门禁（断言开工头与空账本），交付之后再跑它们本就会按设计失败；本复核因此改为从 git 与账本重算同一批事实，且不重写任何已交付文件",
+ "optimizer_steps_used": 0,
+ "results": {
+  "R1_git_identity_and_training_path": {
+   "all_identical_at_the_three_heads": true,
+   "branch": "fix/comm-task-reward-event-timing",
+   "commits_since_round35_head": [
+    "9c6946f",
+    "fa1da0a",
+    "634e995",
+    "c66c66d",
+    "3c7c849",
+    "93b2705"
+   ],
+   "first_launch_recorded_at": "2026-10-01 09:22:07",
+   "harness_commit_unix_time": 1790817707,
+   "harness_was_committed_before_the_first_launch": true,
+   "head": "9c6946fa5e03f4f1a1dff99db178955dd2bca0aa",
+   "passed": true,
+   "per_file_identical": {
+    "integrated_sar/adapters/task03.py": true,
+    "integrated_sar/comm.py": true,
+    "integrated_sar/comm_budget.py": true,
+    "integrated_sar/comm_learning.py": true,
+    "integrated_sar/comm_policy.py": true,
+    "integrated_sar/joint_driver.py": true,
+    "integrated_sar/lifecycle_metrics.py": true,
+    "integrated_sar/task_registry.py": true,
+    "runs/comm_cost_v2_rerun_20260928/v2_blocks.py": true,
+    "runs/comm_cost_v2_rerun_20260928/v2_check.py": true,
+    "runs/comm_cost_v2_rerun_20260928/v2_common.py": true,
+    "runs/comm_cost_v2_rerun_20260928/v2_controller.py": true,
+    "runs/comm_cost_v2_rerun_20260928/v2_recover.py": true,
+    "runs/comm_cost_v2_rerun_20260928/v2_reward_timing.py": true,
+    "runs/comm_cost_v2_rerun_20260928/v2_rules.py": true,
+    "runs/comm_cost_v2_rerun_20260928/v2_run.py": true,
+    "runs/comm_cost_v2_rerun_20260928/v2_train.py": true,
+    "runs/comm_cost_v2_rerun_20260928/v2_trainer.py": true
+   },
+   "round33_baseline_is_ancestor": true,
+   "training_path_and_production_files": 18
+  },
+  "R2_book_vs_ledgers_vs_launch_records": {
+   "book": {
+    "episode_constructions": 384,
+    "optimizer_steps": 1284,
+    "reserve_reruns": 0,
+    "training_launches": 3
+   },
+   "book_agrees_with_every_launch_record": true,
+   "launch_records": {
+    "s11": {
+     "ceiling": 2270.28,
+     "constructions": 128,
+     "failed_starts": [],
+     "outcome": "completed",
+     "wall_clock": 1606.26,
+     "within_ceiling": true
+    },
+    "s22": {
+     "ceiling": 2395.66,
+     "constructions": 128,
+     "failed_starts": [],
+     "outcome": "completed",
+     "wall_clock": 1572.48,
+     "within_ceiling": true
+    },
+    "s33": {
+     "ceiling": 2281.95,
+     "constructions": 128,
+     "failed_starts": [],
+     "outcome": "completed",
+     "wall_clock": 1581.44,
+     "within_ceiling": true
+    }
+   },
+   "passed": true,
+   "reserve_unused_and_no_failures": true,
+   "seed_ledger_starts": {
+    "s11": 128,
+    "s22": 128,
+    "s33": 128
+   },
+   "sum_of_seed_ledgers": 384
+  },
+  "R3_checkpoint_hashes_agree_four_ways": {
+   "files_checked": 12,
+   "mismatches": [],
+   "passed": true,
+   "per_file": {
+    "s11": {
+     "ep0": {
+      "checkpoint_hashes_json": "6855823aaf185bc2c10720e5b8a081d27d1435af6c209b29311c6a9cd38abfb9",
+      "on_disk": "6855823aaf185bc2c10720e5b8a081d27d1435af6c209b29311c6a9cd38abfb9",
+      "registry_model_inventory": "6855823aaf185bc2c10720e5b8a081d27d1435af6c209b29311c6a9cd38abfb9",
+      "sanity_layer": "6855823aaf185bc2c10720e5b8a081d27d1435af6c209b29311c6a9cd38abfb9"
+     },
+     "ep128": {
+      "checkpoint_hashes_json": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+      "on_disk": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+      "registry_model_inventory": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+      "sanity_layer": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09"
+     },
+     "ep64": {
+      "checkpoint_hashes_json": "69822c41df7018b10353abdccc72235606660434577cd8f289672a0007a094bf",
+      "on_disk": "69822c41df7018b10353abdccc72235606660434577cd8f289672a0007a094bf",
+      "registry_model_inventory": "69822c41df7018b10353abdccc72235606660434577cd8f289672a0007a094bf",
+      "sanity_layer": "69822c41df7018b10353abdccc72235606660434577cd8f289672a0007a094bf"
+     },
+     "rolling": {
+      "checkpoint_hashes_json": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+      "on_disk": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+      "registry_model_inventory": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+      "sanity_layer": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09"
+     }
+    },
+    "s22": {
+     "ep0": {
+      "checkpoint_hashes_json": "42923125bc46db9135f2d998ac2e2fd9c4fb09f5738004b09da8f20fd8ce1e33",
+      "on_disk": "42923125bc46db9135f2d998ac2e2fd9c4fb09f5738004b09da8f20fd8ce1e33",
+      "registry_model_inventory": "42923125bc46db9135f2d998ac2e2fd9c4fb09f5738004b09da8f20fd8ce1e33",
+      "sanity_layer": "42923125bc46db9135f2d998ac2e2fd9c4fb09f5738004b09da8f20fd8ce1e33"
+     },
+     "ep128": {
+      "checkpoint_hashes_json": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+      "on_disk": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+      "registry_model_inventory": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+      "sanity_layer": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e"
+     },
+     "ep64": {
+      "checkpoint_hashes_json": "37a9acd7631b87994ea367ce75287f3a7ebabc8ecdcf46fae9325c1201f0bfcf",
+      "on_disk": "37a9acd7631b87994ea367ce75287f3a7ebabc8ecdcf46fae9325c1201f0bfcf",
+      "registry_model_inventory": "37a9acd7631b87994ea367ce75287f3a7ebabc8ecdcf46fae9325c1201f0bfcf",
+      "sanity_layer": "37a9acd7631b87994ea367ce75287f3a7ebabc8ecdcf46fae9325c1201f0bfcf"
+     },
+     "rolling": {
+      "checkpoint_hashes_json": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+      "on_disk": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+      "registry_model_inventory": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+      "sanity_layer": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e"
+     }
+    },
+    "s33": {
+     "ep0": {
+      "checkpoint_hashes_json": "4333c494ae5d2445f8d2f15d028388cd868ac6ef943e88a93f71dce3b6b40bd8",
+      "on_disk": "4333c494ae5d2445f8d2f15d028388cd868ac6ef943e88a93f71dce3b6b40bd8",
+      "registry_model_inventory": "4333c494ae5d2445f8d2f15d028388cd868ac6ef943e88a93f71dce3b6b40bd8",
+      "sanity_layer": "4333c494ae5d2445f8d2f15d028388cd868ac6ef943e88a93f71dce3b6b40bd8"
+     },
+     "ep128": {
+      "checkpoint_hashes_json": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+      "on_disk": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+      "registry_model_inventory": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+      "sanity_layer": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f"
+     },
+     "ep64": {
+      "checkpoint_hashes_json": "6e5f39086a6dd8e81ad0eb72552264e8e4285e321b50b6b571cf7affbcb7b7e2",
+      "on_disk": "6e5f39086a6dd8e81ad0eb72552264e8e4285e321b50b6b571cf7affbcb7b7e2",
+      "registry_model_inventory": "6e5f39086a6dd8e81ad0eb72552264e8e4285e321b50b6b571cf7affbcb7b7e2",
+      "sanity_layer": "6e5f39086a6dd8e81ad0eb72552264e8e4285e321b50b6b571cf7affbcb7b7e2"
+     },
+     "rolling": {
+      "checkpoint_hashes_json": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+      "on_disk": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+      "registry_model_inventory": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+      "sanity_layer": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f"
+     }
+    }
+   }
+  },
+  "R4_batch_records_and_volume_recomputed": {
+   "all_records_of_steps_agree": true,
+   "batch_record_hashes_unchanged_since_sanity": {
+    "s11": {
+     "all_equal": true,
+     "recomputed_now": 32,
+     "recorded_at_sanity": 32
+    },
+    "s22": {
+     "all_equal": true,
+     "recomputed_now": 32,
+     "recorded_at_sanity": 32
+    },
+    "s33": {
+     "all_equal": true,
+     "recomputed_now": 32,
+     "recorded_at_sanity": 32
+    }
+   },
+   "passed": true,
+   "volume": {
+    "s11": {
+     "batches": 32,
+     "rows": 128,
+     "steps_in_book": 464,
+     "steps_in_final_state": 464,
+     "steps_in_reconciliation": 464,
+     "steps_recomputed_from_batch_records": 464
+    },
+    "s22": {
+     "batches": 32,
+     "rows": 128,
+     "steps_in_book": 356,
+     "steps_in_final_state": 356,
+     "steps_in_reconciliation": 356,
+     "steps_recomputed_from_batch_records": 356
+    },
+    "s33": {
+     "batches": 32,
+     "rows": 128,
+     "steps_in_book": 464,
+     "steps_in_final_state": 464,
+     "steps_in_reconciliation": 464,
+     "steps_recomputed_from_batch_records": 464
+    }
+   }
+  },
+  "R5_old_rounds_not_written": {
+   "files_written_today": {
+    "runs/comm_actor_reduction_ablation_20261001/checkpoints": [],
+    "runs/comm_actor_reduction_ablation_20261001/logs": [],
+    "runs/comm_actor_reduction_ablation_20261001/rows": [],
+    "runs/comm_cost_v2_rerun_20260928/checkpoints": [],
+    "runs/comm_cost_v2_rerun_20260928/logs": [],
+    "runs/comm_cost_v2_rerun_20260928/rows": [],
+    "runs/comm_task_reward_event_timing_20260930": []
+   },
+   "legacy_checkpoint_count": 18,
+   "legacy_checkpoints_byte_equal_to_round35_record": true,
+   "passed": true,
+   "protected_directories": [
+    "runs/comm_cost_v2_rerun_20260928/rows",
+    "runs/comm_cost_v2_rerun_20260928/logs",
+    "runs/comm_cost_v2_rerun_20260928/checkpoints",
+    "runs/comm_actor_reduction_ablation_20261001/rows",
+    "runs/comm_actor_reduction_ablation_20261001/logs",
+    "runs/comm_actor_reduction_ablation_20261001/checkpoints",
+    "runs/comm_task_reward_event_timing_20260930"
+   ],
+   "round35_dir_note": "ROUND35 自己的产物写于 2026-10-01 那次会话，mtime 为当日属预期；本轮对它的字节哈希全部对账相符（见 legacy 项与 V5）"
+  },
+  "R6_quota_and_boundaries": {
+   "active_rows_enabled": false,
+   "episode_constructions": {
+    "authorised": 384,
+    "remaining": 0,
+    "used": 384
+   },
+   "evaluation_launches": {
+    "authorised": 0,
+    "used": 0
+   },
+   "github_push_attempts": 0,
+   "network_attempts": 0,
+   "new_venvs_or_dependencies": 0,
+   "numpy": "2.2.6",
+   "old_artefacts_rewritten": 0,
+   "optimizer_steps_performed_by_verification_or_recheck_scripts": 0,
+   "passed": true,
+   "reserve_reruns": {
+    "authorised": 1,
+    "used": 0
+   },
+   "sanity_forwards": {
+    "authorised": "每次训练后 1 次",
+    "used": 3
+   },
+   "torch": "2.9.0+cu128",
+   "training_launches": {
+    "authorised": 3,
+    "used": 3
+   },
+   "v2_recover_used": false
+  }
+ },
+ "round": "36"
+}
