@@ -16,7 +16,10 @@ optimizer.step 60 / 上限 100（启动内 36 + 验证重算 24）；单次最�
 
 **结论：go（可进入第 3 天冻结训练）**，附 3 条残余风险与 2 项未覆盖（见 §9、§10）。
 smoke 的任何 loss/回报数字只用于证明链路走通，**不**作为学习效果证据；本轮验证的是机制与账本，
-不是"学习效果变好"。
+不是"学习效果变好"。失败计数分两栏：**被测系统正确性失败 0 处**；**本轮自有 harness 缺陷 2 处**
+（仪表读了一个不存在的快照字段名，使启动②第一次尝试在 4 秒处失败并消耗 1 次 episode 构造；
+`r35_launch.py` 绑定每目录上限时少算一次失败起始，使 launch2 提前停在 6 次新构造——误差方向保守，
+从未超预算），两者均已登记、复现并说明（§10）。
 
 ## 1. 唯一改动就是采集时点，且真实代码路径被原样执行
 
@@ -77,10 +80,11 @@ clock_now、accepted、deadline、两个 expired 标记、on_time、credited）�
 - 尾段：每个完成事件的写入键就是事件发布当拍（C2），所以末拍完成不需要后续 step；
   闭合 `on_time == 入账总数` 证明尾部没有漏捕（8/8 集成立）。
 - deadline：本块里目标过期表现为**非完成**进度事件（`detail.expired=true`、
-  `failure_reason=deadline_expired`）。真实数据里出现 2 集（`e1`、`e4`），事件时间分别在其目标
-  deadline 之后一拍的同一时刻；这些事件**既不在账本里也不产生入账**，且行的 `expired` 计数与
-  lifecycle 的过期事件数逐集相符（C9）。因此 collector 的第一道闸（状态必须是 COMPLETED）就把它
-  挡住，deadline 守卫是第二层、本块真实数据走不到。
+  `failure_reason=deadline_expired`）。真实数据里出现 2 集：`e1` 在 tick 787（该目标 deadline
+  786.1527039128562）、`e4` 在 tick 772（deadline 771.8747709166423），事件状态都是 `detected`
+  而非 `completed`；这些事件**既不在账本里也不产生入账**，且行的 `expired` 计数与 lifecycle 的
+  过期事件数逐集相符（C9：1 == 1、1 == 1）。因此 collector 的第一道闸（状态必须是 COMPLETED）
+  就把它挡住，deadline 守卫是第二层、本块真实数据走不到它。
 
 ## 5. 任务 5：被动性证据与等级（`PASSIVITY_EVIDENCE.json`）
 
