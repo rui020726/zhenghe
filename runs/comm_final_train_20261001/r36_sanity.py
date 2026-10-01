@@ -64,13 +64,18 @@ def main(argv: list[str]) -> int:
     controller, _optimizer, state = v2_trainer.load_checkpoint(milestones[128], freeze=freeze)
     identity = v2_controller.parameter_identity(controller)
 
-    # one forward pass over this round's own episode-0 tape; nothing is decided from it
+    # one forward pass over this round's own episode-0 tape; nothing is decided from it.
+    # Each tape row carries the candidate matrix of one decision step (rows = candidates),
+    # so the forward is made on the first decision step's matrix, exactly as the trainer
+    # concatenates them in ppo_update.
     tape = list(v2_common.iter_jsonl(tape_path(seed)))
-    features = torch.as_tensor(np.asarray([item["features"] for item in tape[:8]],
-                                          dtype=np.float32))
+    matrix = np.asarray(tape[0]["features"], dtype=np.float32)
+    features = torch.as_tensor(matrix)
     with torch.no_grad():
         logits, values = controller.forward(features)
-    forward = {"tape_rows_in_episode_0": len(tape), "rows_used": int(min(8, len(tape))),
+    forward = {"tape_rows_in_episode_0": len(tape),
+               "candidates_in_the_row_used": int(matrix.shape[0]),
+               "feature_columns": int(matrix.shape[1]),
                "logits_shape": list(logits.shape), "values_shape": list(values.shape),
                "all_finite": bool(torch.isfinite(logits).all() and torch.isfinite(values).all()),
                "note": "shapes and finiteness only; no action is chosen, no outcome is read"}

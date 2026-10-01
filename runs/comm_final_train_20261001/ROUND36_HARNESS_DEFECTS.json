@@ -1,0 +1,40 @@
+{
+ "kind": "round36-harness-defect-register",
+ "round": "36",
+ "note": "本轮自有 harness 的缺陷登记。计数分两栏：被测系统（真实训练路径与世界模型）正确性失败 0 处；本轮 harness 缺陷 2 处（另有 1 处在首次运行前即被发现并修正，不影响任何证据）。所有训练启动与产物不受影响。",
+ "subject_system_correctness_failures": 0,
+ "defects": [
+  {
+   "id": "R36-D1",
+   "file": "r36_sanity.py",
+   "symptom": "第一次运行 seed 11 的 sanity 时抛 ValueError: setting an array element with a sequence（inhomogeneous shape）",
+   "cause": "脚本把 8 条 tape 的 features 直接堆成数组，假设特征是一维向量；实际每条决策行的 features 是「候选×特征」的矩阵，且候选数随决策步变化（s11 e0 首行 4×19）",
+   "fix": "改为对本轮自己 e0 tape 的第一条决策行矩阵做一次前向，并登记 candidates_in_the_row_used / feature_columns / logits_shape / values_shape",
+   "evidence": "seed11/SANITY.json 与 seed22/SANITY.json、seed33/SANITY.json 均为修正后的形态",
+   "affected_quota": "0 次 episode 构造、0 次 optimizer.step、0 个产物",
+   "direction_of_error": "失败是响亮的（抛错而非静默），且发生在写产物之前"
+  },
+  {
+   "id": "R36-D2",
+   "file": "r36_verify.py",
+   "symptom": "V5 首跑报 passed=false，round34_deliverable_mismatches 列出 10 项且 now=null",
+   "cause": "ROUND35 的 ANCHORS_AND_ENVIRONMENT.json 用平台分隔符的仓库相对路径登记 ROUND34 文件（runs\\comm_task_reward_event_timing_20260930\\…），V5 却把它拼在 ROUND34 目录之下，路径不存在于是被判为不等",
+   "fix": "改为相对仓库根解析，并把找不到的文件单独记进 round34_deliverables_not_located，而不是与真实哈希变化混在一起",
+   "evidence": "修正后 V5 的 18 个 legacy .pt 与 10 个 ROUND34 交付件全部 equal=true（见 ROUND36_VERIFICATION.json）",
+   "affected_quota": "0 次启动、0 步；未改写任何旧件",
+   "direction_of_error": "假警报（把'没找到'当成'不相等'），不是假通过；18 个 legacy checkpoint 的字节比对本身不受影响"
+  }
+ ],
+ "found_before_first_run": [
+  {
+   "file": "r36_common.py",
+   "issue": "archived_baseline 里 parameters_after_last_batch 的下标写成条件表达式，语法上会产生非法下标",
+   "caught_by": "py_compile 静态检查（首次运行前）",
+   "evidence_affected": "无"
+  }
+ ],
+ "post_fix_reruns": {
+  "r36_verify.py": "V5 修正后整体重跑一遍（0 启动、0 步），六项全部 passed",
+  "r36_sanity.py": "三个 seed 各跑一次（每次训练后各 1 次，共 3 次，均为授权的最小 sanity）"
+ }
+}

@@ -1,0 +1,1601 @@
+{
+ "all_passed": true,
+ "checks": {
+  "V1_milestone_row_and_checkpoint_version_fields": {
+   "passed": true,
+   "per_seed": {
+    "s11": {
+     "all_four_files_carry_both_fields_in_payload_and_state": true,
+     "batch_records": 32,
+     "checkpoints": {
+      "ep0": {
+       "both_fields_complete": true,
+       "bytes_sha256": "6855823aaf185bc2c10720e5b8a081d27d1435af6c209b29311c6a9cd38abfb9",
+       "episodes_done": 0,
+       "file": "v2_train_s11_ep0.pt",
+       "in_training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "in_training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "lambda": 1.0,
+       "optimizer_steps": 0,
+       "reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "updates": 0
+      },
+      "ep128": {
+       "both_fields_complete": true,
+       "bytes_sha256": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+       "episodes_done": 128,
+       "file": "v2_train_s11_ep128.pt",
+       "in_training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "in_training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "lambda": 1.4999999999999993,
+       "optimizer_steps": 464,
+       "reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "updates": 32
+      },
+      "ep64": {
+       "both_fields_complete": true,
+       "bytes_sha256": "69822c41df7018b10353abdccc72235606660434577cd8f289672a0007a094bf",
+       "episodes_done": 64,
+       "file": "v2_train_s11_ep64.pt",
+       "in_training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "in_training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "lambda": 1.2624999999999995,
+       "optimizer_steps": 240,
+       "reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "updates": 16
+      },
+      "rolling": {
+       "both_fields_complete": true,
+       "bytes_sha256": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+       "episodes_done": 128,
+       "file": "v2_train_s11.pt",
+       "in_training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "in_training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "lambda": 1.4999999999999993,
+       "optimizer_steps": 464,
+       "reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "updates": 32
+      }
+     },
+     "milestone_state_fields": {
+      "ep0": {
+       "episodes_done": 0,
+       "lambda": 1.0,
+       "optimizer_steps": 0,
+       "updates": 0
+      },
+      "ep128": {
+       "episodes_done": 128,
+       "lambda": 1.4999999999999993,
+       "optimizer_steps": 464,
+       "updates": 32
+      },
+      "ep64": {
+       "episodes_done": 64,
+       "lambda": 1.2624999999999995,
+       "optimizer_steps": 240,
+       "updates": 16
+      },
+      "rolling": {
+       "episodes_done": 128,
+       "lambda": 1.4999999999999993,
+       "optimizer_steps": 464,
+       "updates": 32
+      }
+     },
+     "rows_carrying_both_fields": "128/128"
+    },
+    "s22": {
+     "all_four_files_carry_both_fields_in_payload_and_state": true,
+     "batch_records": 32,
+     "checkpoints": {
+      "ep0": {
+       "both_fields_complete": true,
+       "bytes_sha256": "42923125bc46db9135f2d998ac2e2fd9c4fb09f5738004b09da8f20fd8ce1e33",
+       "episodes_done": 0,
+       "file": "v2_train_s22_ep0.pt",
+       "in_training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "in_training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "lambda": 1.0,
+       "optimizer_steps": 0,
+       "reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "updates": 0
+      },
+      "ep128": {
+       "both_fields_complete": true,
+       "bytes_sha256": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+       "episodes_done": 128,
+       "file": "v2_train_s22_ep128.pt",
+       "in_training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "in_training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "lambda": 1.2624999999999993,
+       "optimizer_steps": 356,
+       "reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "updates": 32
+      },
+      "ep64": {
+       "both_fields_complete": true,
+       "bytes_sha256": "37a9acd7631b87994ea367ce75287f3a7ebabc8ecdcf46fae9325c1201f0bfcf",
+       "episodes_done": 64,
+       "file": "v2_train_s22_ep64.pt",
+       "in_training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "in_training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "lambda": 1.2124999999999995,
+       "optimizer_steps": 224,
+       "reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "updates": 16
+      },
+      "rolling": {
+       "both_fields_complete": true,
+       "bytes_sha256": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+       "episodes_done": 128,
+       "file": "v2_train_s22.pt",
+       "in_training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "in_training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "lambda": 1.2624999999999993,
+       "optimizer_steps": 356,
+       "reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "updates": 32
+      }
+     },
+     "milestone_state_fields": {
+      "ep0": {
+       "episodes_done": 0,
+       "lambda": 1.0,
+       "optimizer_steps": 0,
+       "updates": 0
+      },
+      "ep128": {
+       "episodes_done": 128,
+       "lambda": 1.2624999999999993,
+       "optimizer_steps": 356,
+       "updates": 32
+      },
+      "ep64": {
+       "episodes_done": 64,
+       "lambda": 1.2124999999999995,
+       "optimizer_steps": 224,
+       "updates": 16
+      },
+      "rolling": {
+       "episodes_done": 128,
+       "lambda": 1.2624999999999993,
+       "optimizer_steps": 356,
+       "updates": 32
+      }
+     },
+     "rows_carrying_both_fields": "128/128"
+    },
+    "s33": {
+     "all_four_files_carry_both_fields_in_payload_and_state": true,
+     "batch_records": 32,
+     "checkpoints": {
+      "ep0": {
+       "both_fields_complete": true,
+       "bytes_sha256": "4333c494ae5d2445f8d2f15d028388cd868ac6ef943e88a93f71dce3b6b40bd8",
+       "episodes_done": 0,
+       "file": "v2_train_s33_ep0.pt",
+       "in_training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "in_training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "lambda": 1.0,
+       "optimizer_steps": 0,
+       "reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "updates": 0
+      },
+      "ep128": {
+       "both_fields_complete": true,
+       "bytes_sha256": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+       "episodes_done": 128,
+       "file": "v2_train_s33_ep128.pt",
+       "in_training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "in_training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "lambda": 1.4749999999999992,
+       "optimizer_steps": 464,
+       "reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "updates": 32
+      },
+      "ep64": {
+       "both_fields_complete": true,
+       "bytes_sha256": "6e5f39086a6dd8e81ad0eb72552264e8e4285e321b50b6b571cf7affbcb7b7e2",
+       "episodes_done": 64,
+       "file": "v2_train_s33_ep64.pt",
+       "in_training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "in_training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "lambda": 1.2499999999999996,
+       "optimizer_steps": 240,
+       "reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "updates": 16
+      },
+      "rolling": {
+       "both_fields_complete": true,
+       "bytes_sha256": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+       "episodes_done": 128,
+       "file": "v2_train_s33.pt",
+       "in_training_state_reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "in_training_state_training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "lambda": 1.4749999999999992,
+       "optimizer_steps": 464,
+       "reward_timing_version": "published-completion-event-at-relay-tick/2",
+       "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+       "updates": 32
+      }
+     },
+     "milestone_state_fields": {
+      "ep0": {
+       "episodes_done": 0,
+       "lambda": 1.0,
+       "optimizer_steps": 0,
+       "updates": 0
+      },
+      "ep128": {
+       "episodes_done": 128,
+       "lambda": 1.4749999999999992,
+       "optimizer_steps": 464,
+       "updates": 32
+      },
+      "ep64": {
+       "episodes_done": 64,
+       "lambda": 1.2499999999999996,
+       "optimizer_steps": 240,
+       "updates": 16
+      },
+      "rolling": {
+       "episodes_done": 128,
+       "lambda": 1.4749999999999992,
+       "optimizer_steps": 464,
+       "updates": 32
+      }
+     },
+     "rows_carrying_both_fields": "128/128"
+    }
+   },
+   "required": {
+    "reward_timing_version": "published-completion-event-at-relay-tick/2",
+    "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2"
+   }
+  },
+  "V2_event_ledger_integrity": {
+   "case_counts": {
+    "completed_event_recorded_after_its_deadline": 0,
+    "credit_at_a_tick_that_has_a_decision_row": 2187,
+    "credit_at_a_tick_with_no_decision_row": 0,
+    "credit_before_the_first_decision_row": 0,
+    "credit_owned_by_the_final_decision_row": 303,
+    "duplicate_dispatch_of_the_same_event_id": 0,
+    "same_target_credited_twice": 0
+   },
+   "note": "closure means: for every episode lifecycle on_time == sum(task_stream) == credited ledger rows == task_reward_total; every written task_stream key is the relay tick of a crediting event; a duplicate event id inside one episode would be an idempotency failure. The collector only ever sees COMPLETED events, so an expiry shows up as a non-completed ProgressEvent that is not in the ledger at all (ROUND35 C9 same reading)",
+   "passed": true,
+   "per_seed": {
+    "s11": {
+     "closure_failures": [],
+     "credited_events": 722,
+     "episodes_whose_written_keys_are_crediting_event_ticks": 128,
+     "episodes_with_an_expired_target": [
+      "s11e1",
+      "s11e4",
+      "s11e9",
+      "s11e11",
+      "s11e12",
+      "s11e13",
+      "s11e15",
+      "s11e20",
+      "s11e22",
+      "s11e37",
+      "s11e39",
+      "s11e41",
+      "s11e47",
+      "s11e50",
+      "s11e52",
+      "s11e59",
+      "s11e61",
+      "s11e62",
+      "s11e67",
+      "s11e69",
+      "s11e80",
+      "s11e85",
+      "s11e89",
+      "s11e92",
+      "s11e93",
+      "s11e94",
+      "s11e100",
+      "s11e102",
+      "s11e115",
+      "s11e116",
+      "s11e118",
+      "s11e122",
+      "s11e125",
+      "s11e127"
+     ],
+     "episodes_with_duplicate_event_ids": [],
+     "event_ledger_rows": 722,
+     "event_rows_missing_a_required_field": 0,
+     "relay_tick_not_equal_to_rounded_event_time": [],
+     "rows": 128,
+     "unassigned_prefix_task_reward": 0.0
+    },
+    "s22": {
+     "closure_failures": [],
+     "credited_events": 741,
+     "episodes_whose_written_keys_are_crediting_event_ticks": 128,
+     "episodes_with_an_expired_target": [
+      "s22e1",
+      "s22e4",
+      "s22e9",
+      "s22e11",
+      "s22e13",
+      "s22e15",
+      "s22e20",
+      "s22e22",
+      "s22e37",
+      "s22e39",
+      "s22e41",
+      "s22e47",
+      "s22e50",
+      "s22e52",
+      "s22e62",
+      "s22e67",
+      "s22e89",
+      "s22e93",
+      "s22e116"
+     ],
+     "episodes_with_duplicate_event_ids": [],
+     "event_ledger_rows": 741,
+     "event_rows_missing_a_required_field": 0,
+     "relay_tick_not_equal_to_rounded_event_time": [],
+     "rows": 128,
+     "unassigned_prefix_task_reward": 0.0
+    },
+    "s33": {
+     "closure_failures": [],
+     "credited_events": 724,
+     "episodes_whose_written_keys_are_crediting_event_ticks": 128,
+     "episodes_with_an_expired_target": [
+      "s33e1",
+      "s33e4",
+      "s33e9",
+      "s33e11",
+      "s33e12",
+      "s33e13",
+      "s33e15",
+      "s33e20",
+      "s33e22",
+      "s33e37",
+      "s33e39",
+      "s33e41",
+      "s33e47",
+      "s33e50",
+      "s33e52",
+      "s33e59",
+      "s33e61",
+      "s33e62",
+      "s33e67",
+      "s33e69",
+      "s33e80",
+      "s33e85",
+      "s33e89",
+      "s33e92",
+      "s33e93",
+      "s33e94",
+      "s33e100",
+      "s33e102",
+      "s33e115",
+      "s33e116",
+      "s33e118",
+      "s33e122",
+      "s33e125",
+      "s33e127"
+     ],
+     "episodes_with_duplicate_event_ids": [],
+     "event_ledger_rows": 724,
+     "event_rows_missing_a_required_field": 0,
+     "relay_tick_not_equal_to_rounded_event_time": [],
+     "rows": 128,
+     "unassigned_prefix_task_reward": 0.0
+    }
+   },
+   "violations": []
+  },
+  "V3_batch_zero_byte_identity_vs_round32": {
+   "all_keys_are_archived_minus_one": true,
+   "all_log_prob_gaps_zero": true,
+   "all_observable_fields_equal": true,
+   "all_tapes_equal": true,
+   "config_hash_not_compared": "它覆盖本轮自己的输出路径，跨轮不等是预期（ROUND35 P6 同口径）",
+   "grade": "A 直接逐字节（批 0 在任何权重移动之前，初值四源相同已由 G9 证明）",
+   "passed": true,
+   "per_seed": {
+    "s11": {
+     "e0": {
+      "archived_task_stream_keys": [
+       9,
+       26,
+       28,
+       34,
+       48,
+       194
+      ],
+      "credits_total": 6,
+      "credits_whose_owning_action_row_the_fix_moves": 4,
+      "fields_equal_to_the_archive": {
+       "active": true,
+       "airtime_tap_total": true,
+       "b0_bytes": true,
+       "behaviour_sha256": true,
+       "budget_bytes": true,
+       "completed": true,
+       "cost_stream": true,
+       "discovered": true,
+       "emission_sequence": true,
+       "emissions": true,
+       "expired": true,
+       "on_time": true,
+       "refusal_sequence": true,
+       "relay_counters": true,
+       "scenario_seed": true,
+       "spent_bytes": true,
+       "steps": true,
+       "transport_parameters": true
+      },
+      "fields_that_differ": [],
+      "fixed_task_stream_keys": [
+       8,
+       25,
+       27,
+       33,
+       47,
+       193
+      ],
+      "keys_are_exactly_archived_minus_one": true,
+      "scenario_matches_order": true,
+      "tape_rows": {
+       "all_recorded_fields_equal": true,
+       "archived": 66,
+       "max_abs_log_prob_gap": 0.0,
+       "new": 66
+      }
+     },
+     "e1": {
+      "archived_task_stream_keys": [
+       6,
+       14,
+       19,
+       24,
+       498
+      ],
+      "credits_total": 5,
+      "credits_whose_owning_action_row_the_fix_moves": 3,
+      "fields_equal_to_the_archive": {
+       "active": true,
+       "airtime_tap_total": true,
+       "b0_bytes": true,
+       "behaviour_sha256": true,
+       "budget_bytes": true,
+       "completed": true,
+       "cost_stream": true,
+       "discovered": true,
+       "emission_sequence": true,
+       "emissions": true,
+       "expired": true,
+       "on_time": true,
+       "refusal_sequence": true,
+       "relay_counters": true,
+       "scenario_seed": true,
+       "spent_bytes": true,
+       "steps": true,
+       "transport_parameters": true
+      },
+      "fields_that_differ": [],
+      "fixed_task_stream_keys": [
+       5,
+       13,
+       18,
+       23,
+       497
+      ],
+      "keys_are_exactly_archived_minus_one": true,
+      "scenario_matches_order": true,
+      "tape_rows": {
+       "all_recorded_fields_equal": true,
+       "archived": 429,
+       "max_abs_log_prob_gap": 0.0,
+       "new": 429
+      }
+     },
+     "e2": {
+      "archived_task_stream_keys": [
+       23,
+       31,
+       32,
+       39,
+       53
+      ],
+      "credits_total": 5,
+      "credits_whose_owning_action_row_the_fix_moves": 4,
+      "fields_equal_to_the_archive": {
+       "active": true,
+       "airtime_tap_total": true,
+       "b0_bytes": true,
+       "behaviour_sha256": true,
+       "budget_bytes": true,
+       "completed": true,
+       "cost_stream": true,
+       "discovered": true,
+       "emission_sequence": true,
+       "emissions": true,
+       "expired": true,
+       "on_time": true,
+       "refusal_sequence": true,
+       "relay_counters": true,
+       "scenario_seed": true,
+       "spent_bytes": true,
+       "steps": true,
+       "transport_parameters": true
+      },
+      "fields_that_differ": [],
+      "fixed_task_stream_keys": [
+       22,
+       30,
+       31,
+       38,
+       52
+      ],
+      "keys_are_exactly_archived_minus_one": true,
+      "scenario_matches_order": true,
+      "tape_rows": {
+       "all_recorded_fields_equal": true,
+       "archived": 52,
+       "max_abs_log_prob_gap": 0.0,
+       "new": 52
+      }
+     },
+     "e3": {
+      "archived_task_stream_keys": [
+       18,
+       23,
+       337,
+       347,
+       411,
+       435
+      ],
+      "credits_total": 6,
+      "credits_whose_owning_action_row_the_fix_moves": 3,
+      "fields_equal_to_the_archive": {
+       "active": true,
+       "airtime_tap_total": true,
+       "b0_bytes": true,
+       "behaviour_sha256": true,
+       "budget_bytes": true,
+       "completed": true,
+       "cost_stream": true,
+       "discovered": true,
+       "emission_sequence": true,
+       "emissions": true,
+       "expired": true,
+       "on_time": true,
+       "refusal_sequence": true,
+       "relay_counters": true,
+       "scenario_seed": true,
+       "spent_bytes": true,
+       "steps": true,
+       "transport_parameters": true
+      },
+      "fields_that_differ": [],
+      "fixed_task_stream_keys": [
+       17,
+       22,
+       336,
+       346,
+       410,
+       434
+      ],
+      "keys_are_exactly_archived_minus_one": true,
+      "scenario_matches_order": true,
+      "tape_rows": {
+       "all_recorded_fields_equal": true,
+       "archived": 76,
+       "max_abs_log_prob_gap": 0.0,
+       "new": 76
+      }
+     }
+    },
+    "s22": {
+     "e0": {
+      "archived_task_stream_keys": [
+       22,
+       27,
+       28,
+       34,
+       52,
+       194
+      ],
+      "credits_total": 6,
+      "credits_whose_owning_action_row_the_fix_moves": 4,
+      "fields_equal_to_the_archive": {
+       "active": true,
+       "airtime_tap_total": true,
+       "b0_bytes": true,
+       "behaviour_sha256": true,
+       "budget_bytes": true,
+       "completed": true,
+       "cost_stream": true,
+       "discovered": true,
+       "emission_sequence": true,
+       "emissions": true,
+       "expired": true,
+       "on_time": true,
+       "refusal_sequence": true,
+       "relay_counters": true,
+       "scenario_seed": true,
+       "spent_bytes": true,
+       "steps": true,
+       "transport_parameters": true
+      },
+      "fields_that_differ": [],
+      "fixed_task_stream_keys": [
+       21,
+       26,
+       27,
+       33,
+       51,
+       193
+      ],
+      "keys_are_exactly_archived_minus_one": true,
+      "scenario_matches_order": true,
+      "tape_rows": {
+       "all_recorded_fields_equal": true,
+       "archived": 70,
+       "max_abs_log_prob_gap": 0.0,
+       "new": 70
+      }
+     },
+     "e1": {
+      "archived_task_stream_keys": [
+       6,
+       14,
+       19,
+       24,
+       498
+      ],
+      "credits_total": 5,
+      "credits_whose_owning_action_row_the_fix_moves": 3,
+      "fields_equal_to_the_archive": {
+       "active": true,
+       "airtime_tap_total": true,
+       "b0_bytes": true,
+       "behaviour_sha256": true,
+       "budget_bytes": true,
+       "completed": true,
+       "cost_stream": true,
+       "discovered": true,
+       "emission_sequence": true,
+       "emissions": true,
+       "expired": true,
+       "on_time": true,
+       "refusal_sequence": true,
+       "relay_counters": true,
+       "scenario_seed": true,
+       "spent_bytes": true,
+       "steps": true,
+       "transport_parameters": true
+      },
+      "fields_that_differ": [],
+      "fixed_task_stream_keys": [
+       5,
+       13,
+       18,
+       23,
+       497
+      ],
+      "keys_are_exactly_archived_minus_one": true,
+      "scenario_matches_order": true,
+      "tape_rows": {
+       "all_recorded_fields_equal": true,
+       "archived": 429,
+       "max_abs_log_prob_gap": 0.0,
+       "new": 429
+      }
+     },
+     "e2": {
+      "archived_task_stream_keys": [
+       24,
+       31,
+       33,
+       39,
+       53
+      ],
+      "credits_total": 5,
+      "credits_whose_owning_action_row_the_fix_moves": 4,
+      "fields_equal_to_the_archive": {
+       "active": true,
+       "airtime_tap_total": true,
+       "b0_bytes": true,
+       "behaviour_sha256": true,
+       "budget_bytes": true,
+       "completed": true,
+       "cost_stream": true,
+       "discovered": true,
+       "emission_sequence": true,
+       "emissions": true,
+       "expired": true,
+       "on_time": true,
+       "refusal_sequence": true,
+       "relay_counters": true,
+       "scenario_seed": true,
+       "spent_bytes": true,
+       "steps": true,
+       "transport_parameters": true
+      },
+      "fields_that_differ": [],
+      "fixed_task_stream_keys": [
+       23,
+       30,
+       32,
+       38,
+       52
+      ],
+      "keys_are_exactly_archived_minus_one": true,
+      "scenario_matches_order": true,
+      "tape_rows": {
+       "all_recorded_fields_equal": true,
+       "archived": 52,
+       "max_abs_log_prob_gap": 0.0,
+       "new": 52
+      }
+     },
+     "e3": {
+      "archived_task_stream_keys": [
+       18,
+       22,
+       336,
+       347,
+       411,
+       435
+      ],
+      "credits_total": 6,
+      "credits_whose_owning_action_row_the_fix_moves": 3,
+      "fields_equal_to_the_archive": {
+       "active": true,
+       "airtime_tap_total": true,
+       "b0_bytes": true,
+       "behaviour_sha256": true,
+       "budget_bytes": true,
+       "completed": true,
+       "cost_stream": true,
+       "discovered": true,
+       "emission_sequence": true,
+       "emissions": true,
+       "expired": true,
+       "on_time": true,
+       "refusal_sequence": true,
+       "relay_counters": true,
+       "scenario_seed": true,
+       "spent_bytes": true,
+       "steps": true,
+       "transport_parameters": true
+      },
+      "fields_that_differ": [],
+      "fixed_task_stream_keys": [
+       17,
+       21,
+       335,
+       346,
+       410,
+       434
+      ],
+      "keys_are_exactly_archived_minus_one": true,
+      "scenario_matches_order": true,
+      "tape_rows": {
+       "all_recorded_fields_equal": true,
+       "archived": 75,
+       "max_abs_log_prob_gap": 0.0,
+       "new": 75
+      }
+     }
+    },
+    "s33": {
+     "e0": {
+      "archived_task_stream_keys": [
+       22,
+       26,
+       28,
+       35,
+       39,
+       194
+      ],
+      "credits_total": 6,
+      "credits_whose_owning_action_row_the_fix_moves": 4,
+      "fields_equal_to_the_archive": {
+       "active": true,
+       "airtime_tap_total": true,
+       "b0_bytes": true,
+       "behaviour_sha256": true,
+       "budget_bytes": true,
+       "completed": true,
+       "cost_stream": true,
+       "discovered": true,
+       "emission_sequence": true,
+       "emissions": true,
+       "expired": true,
+       "on_time": true,
+       "refusal_sequence": true,
+       "relay_counters": true,
+       "scenario_seed": true,
+       "spent_bytes": true,
+       "steps": true,
+       "transport_parameters": true
+      },
+      "fields_that_differ": [],
+      "fixed_task_stream_keys": [
+       21,
+       25,
+       27,
+       34,
+       38,
+       193
+      ],
+      "keys_are_exactly_archived_minus_one": true,
+      "scenario_matches_order": true,
+      "tape_rows": {
+       "all_recorded_fields_equal": true,
+       "archived": 57,
+       "max_abs_log_prob_gap": 0.0,
+       "new": 57
+      }
+     },
+     "e1": {
+      "archived_task_stream_keys": [
+       7,
+       11,
+       23,
+       27,
+       498
+      ],
+      "credits_total": 5,
+      "credits_whose_owning_action_row_the_fix_moves": 3,
+      "fields_equal_to_the_archive": {
+       "active": true,
+       "airtime_tap_total": true,
+       "b0_bytes": true,
+       "behaviour_sha256": true,
+       "budget_bytes": true,
+       "completed": true,
+       "cost_stream": true,
+       "discovered": true,
+       "emission_sequence": true,
+       "emissions": true,
+       "expired": true,
+       "on_time": true,
+       "refusal_sequence": true,
+       "relay_counters": true,
+       "scenario_seed": true,
+       "spent_bytes": true,
+       "steps": true,
+       "transport_parameters": true
+      },
+      "fields_that_differ": [],
+      "fixed_task_stream_keys": [
+       6,
+       10,
+       22,
+       26,
+       497
+      ],
+      "keys_are_exactly_archived_minus_one": true,
+      "scenario_matches_order": true,
+      "tape_rows": {
+       "all_recorded_fields_equal": true,
+       "archived": 432,
+       "max_abs_log_prob_gap": 0.0,
+       "new": 432
+      }
+     },
+     "e2": {
+      "archived_task_stream_keys": [
+       24,
+       31,
+       33,
+       39,
+       53
+      ],
+      "credits_total": 5,
+      "credits_whose_owning_action_row_the_fix_moves": 4,
+      "fields_equal_to_the_archive": {
+       "active": true,
+       "airtime_tap_total": true,
+       "b0_bytes": true,
+       "behaviour_sha256": true,
+       "budget_bytes": true,
+       "completed": true,
+       "cost_stream": true,
+       "discovered": true,
+       "emission_sequence": true,
+       "emissions": true,
+       "expired": true,
+       "on_time": true,
+       "refusal_sequence": true,
+       "relay_counters": true,
+       "scenario_seed": true,
+       "spent_bytes": true,
+       "steps": true,
+       "transport_parameters": true
+      },
+      "fields_that_differ": [],
+      "fixed_task_stream_keys": [
+       23,
+       30,
+       32,
+       38,
+       52
+      ],
+      "keys_are_exactly_archived_minus_one": true,
+      "scenario_matches_order": true,
+      "tape_rows": {
+       "all_recorded_fields_equal": true,
+       "archived": 52,
+       "max_abs_log_prob_gap": 0.0,
+       "new": 52
+      }
+     },
+     "e3": {
+      "archived_task_stream_keys": [
+       18,
+       22,
+       337,
+       347,
+       411,
+       435
+      ],
+      "credits_total": 6,
+      "credits_whose_owning_action_row_the_fix_moves": 3,
+      "fields_equal_to_the_archive": {
+       "active": true,
+       "airtime_tap_total": true,
+       "b0_bytes": true,
+       "behaviour_sha256": true,
+       "budget_bytes": true,
+       "completed": true,
+       "cost_stream": true,
+       "discovered": true,
+       "emission_sequence": true,
+       "emissions": true,
+       "expired": true,
+       "on_time": true,
+       "refusal_sequence": true,
+       "relay_counters": true,
+       "scenario_seed": true,
+       "spent_bytes": true,
+       "steps": true,
+       "transport_parameters": true
+      },
+      "fields_that_differ": [],
+      "fixed_task_stream_keys": [
+       17,
+       21,
+       336,
+       346,
+       410,
+       434
+      ],
+      "keys_are_exactly_archived_minus_one": true,
+      "scenario_matches_order": true,
+      "tape_rows": {
+       "all_recorded_fields_equal": true,
+       "archived": 75,
+       "max_abs_log_prob_gap": 0.0,
+       "new": 75
+      }
+     }
+    }
+   }
+  },
+  "V4_frozen_training_volume": {
+   "frozen_volume_requirement": {
+    "batches_per_seed": 32,
+    "episodes_per_seed": 128,
+    "episodes_per_update": 4
+   },
+   "passed": true,
+   "per_seed": {
+    "s11": {
+     "archived_lambda_last": 1.4999999999999993,
+     "batch0_sample_count_equals_the_archive": true,
+     "batches": {
+      "archived": 32,
+      "frozen_requirement": 32,
+      "this_round": 32
+     },
+     "controller_changed_in_every_batch": true,
+     "episodes": {
+      "archived": 128,
+      "frozen_requirement": 128,
+      "this_round": 128
+     },
+     "epochs_and_minibatch_rule": {
+      "episodes_per_update": 4,
+      "epochs_per_batch": 4,
+      "minibatch_steps": 256
+     },
+     "g_hat_never_negative_this_round": true,
+     "lambda_first": 1.0125,
+     "lambda_last": 1.4999999999999993,
+     "likelihood_alignment_all_passed": true,
+     "optimizer_steps": {
+      "archived": 464,
+      "rule": "epochs(4) x ceil(sample rows / 256) per batch; the rule is the frozen one, the count is a consequence of how many decision rows the rollouts logged",
+      "this_round": 464
+     },
+     "per_batch_samples_this_round": [
+      623,
+      555,
+      1531,
+      1541,
+      271,
+      1810,
+      212,
+      225,
+      249,
+      1520,
+      981,
+      596,
+      476,
+      1049,
+      993,
+      1003,
+      604,
+      720,
+      195,
+      227,
+      554,
+      1013,
+      1068,
+      2212,
+      277,
+      1358,
+      228,
+      282,
+      498,
+      1757,
+      540,
+      996
+     ],
+     "per_batch_steps_this_round": [
+      12,
+      12,
+      24,
+      28,
+      8,
+      32,
+      4,
+      4,
+      4,
+      24,
+      16,
+      12,
+      8,
+      20,
+      16,
+      16,
+      12,
+      12,
+      4,
+      4,
+      12,
+      16,
+      20,
+      36,
+      8,
+      24,
+      4,
+      8,
+      8,
+      28,
+      12,
+      16
+     ],
+     "samples": {
+      "archived": 26156,
+      "this_round": 26164
+     },
+     "updates_in_state": {
+      "archived": 32,
+      "this_round": 32
+     }
+    },
+    "s22": {
+     "archived_lambda_last": 1.2374999999999994,
+     "batch0_sample_count_equals_the_archive": true,
+     "batches": {
+      "archived": 32,
+      "frozen_requirement": 32,
+      "this_round": 32
+     },
+     "controller_changed_in_every_batch": true,
+     "episodes": {
+      "archived": 128,
+      "frozen_requirement": 128,
+      "this_round": 128
+     },
+     "epochs_and_minibatch_rule": {
+      "episodes_per_update": 4,
+      "epochs_per_batch": 4,
+      "minibatch_steps": 256
+     },
+     "g_hat_never_negative_this_round": true,
+     "lambda_first": 1.0125,
+     "lambda_last": 1.2624999999999993,
+     "likelihood_alignment_all_passed": true,
+     "optimizer_steps": {
+      "archived": 340,
+      "rule": "epochs(4) x ceil(sample rows / 256) per batch; the rule is the frozen one, the count is a consequence of how many decision rows the rollouts logged",
+      "this_round": 356
+     },
+     "per_batch_samples_this_round": [
+      626,
+      564,
+      1527,
+      1290,
+      266,
+      1811,
+      213,
+      231,
+      235,
+      1518,
+      986,
+      607,
+      481,
+      1049,
+      267,
+      764,
+      605,
+      226,
+      196,
+      249,
+      235,
+      220,
+      1068,
+      720,
+      270,
+      279,
+      223,
+      271,
+      263,
+      1068,
+      231,
+      321
+     ],
+     "per_batch_steps_this_round": [
+      12,
+      12,
+      24,
+      24,
+      8,
+      32,
+      4,
+      4,
+      4,
+      24,
+      16,
+      12,
+      8,
+      20,
+      8,
+      12,
+      12,
+      4,
+      4,
+      4,
+      4,
+      4,
+      20,
+      12,
+      8,
+      8,
+      4,
+      8,
+      8,
+      20,
+      4,
+      8
+     ],
+     "samples": {
+      "archived": 17751,
+      "this_round": 18880
+     },
+     "updates_in_state": {
+      "archived": 32,
+      "this_round": 32
+     }
+    },
+    "s33": {
+     "archived_lambda_last": 1.4749999999999992,
+     "batch0_sample_count_equals_the_archive": true,
+     "batches": {
+      "archived": 32,
+      "frozen_requirement": 32,
+      "this_round": 32
+     },
+     "controller_changed_in_every_batch": true,
+     "episodes": {
+      "archived": 128,
+      "frozen_requirement": 128,
+      "this_round": 128
+     },
+     "epochs_and_minibatch_rule": {
+      "episodes_per_update": 4,
+      "epochs_per_batch": 4,
+      "minibatch_steps": 256
+     },
+     "g_hat_never_negative_this_round": true,
+     "lambda_first": 1.0125,
+     "lambda_last": 1.4749999999999992,
+     "likelihood_alignment_all_passed": true,
+     "optimizer_steps": {
+      "archived": 464,
+      "rule": "epochs(4) x ceil(sample rows / 256) per batch; the rule is the frozen one, the count is a consequence of how many decision rows the rollouts logged",
+      "this_round": 464
+     },
+     "per_batch_samples_this_round": [
+      616,
+      569,
+      1527,
+      1556,
+      272,
+      1811,
+      205,
+      242,
+      249,
+      1525,
+      981,
+      591,
+      485,
+      1048,
+      934,
+      1002,
+      605,
+      720,
+      195,
+      231,
+      554,
+      1003,
+      1068,
+      2214,
+      275,
+      1342,
+      219,
+      271,
+      486,
+      1708,
+      540,
+      988
+     ],
+     "per_batch_steps_this_round": [
+      12,
+      12,
+      24,
+      28,
+      8,
+      32,
+      4,
+      4,
+      4,
+      24,
+      16,
+      12,
+      8,
+      20,
+      16,
+      16,
+      12,
+      12,
+      4,
+      4,
+      12,
+      16,
+      20,
+      36,
+      8,
+      24,
+      4,
+      8,
+      8,
+      28,
+      12,
+      16
+     ],
+     "samples": {
+      "archived": 26010,
+      "this_round": 26032
+     },
+     "updates_in_state": {
+      "archived": 32,
+      "this_round": 32
+     }
+    }
+   }
+  },
+  "V5_old_artefacts_not_rewritten": {
+   "legacy_checkpoint_mismatches": [],
+   "legacy_round32_checkpoints_compared": 18,
+   "passed": true,
+   "per_legacy_file": {
+    "r32_pre_ACTIVE_ROWS_s11_b0.pt": {
+     "equal": true,
+     "now": "95ad711aedcc47a031f6234f141ebbfd7d6af6ef992777c7ed64ec8f0264b08f",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ACTIVE_ROWS_s11_b0.pt",
+     "recorded_by_round35": "95ad711aedcc47a031f6234f141ebbfd7d6af6ef992777c7ed64ec8f0264b08f"
+    },
+    "r32_pre_ACTIVE_ROWS_s11_b15.pt": {
+     "equal": true,
+     "now": "f73e554749f68bce25f8d24796ee84451bc068f8e59017cdeee263bf03ed6ed8",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ACTIVE_ROWS_s11_b15.pt",
+     "recorded_by_round35": "f73e554749f68bce25f8d24796ee84451bc068f8e59017cdeee263bf03ed6ed8"
+    },
+    "r32_pre_ACTIVE_ROWS_s11_b31.pt": {
+     "equal": true,
+     "now": "fce83e924739e3a840366ad8e2136588dd06cc9ef2bf78320d02ac262efcd801",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ACTIVE_ROWS_s11_b31.pt",
+     "recorded_by_round35": "fce83e924739e3a840366ad8e2136588dd06cc9ef2bf78320d02ac262efcd801"
+    },
+    "r32_pre_ACTIVE_ROWS_s22_b0.pt": {
+     "equal": true,
+     "now": "f198051be21a6983d43a31a836de83e9a92ef82fd8d0c5f724f124ff4d08413b",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ACTIVE_ROWS_s22_b0.pt",
+     "recorded_by_round35": "f198051be21a6983d43a31a836de83e9a92ef82fd8d0c5f724f124ff4d08413b"
+    },
+    "r32_pre_ACTIVE_ROWS_s22_b15.pt": {
+     "equal": true,
+     "now": "6be00bb904353eb963f1e095a1571c9cfec03597180a2c36b37946626b989033",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ACTIVE_ROWS_s22_b15.pt",
+     "recorded_by_round35": "6be00bb904353eb963f1e095a1571c9cfec03597180a2c36b37946626b989033"
+    },
+    "r32_pre_ACTIVE_ROWS_s22_b31.pt": {
+     "equal": true,
+     "now": "b2a3e9c74f8995b26f70c045a768bd2ac79c4a3e2c45c9d042076ff48d0d8916",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ACTIVE_ROWS_s22_b31.pt",
+     "recorded_by_round35": "b2a3e9c74f8995b26f70c045a768bd2ac79c4a3e2c45c9d042076ff48d0d8916"
+    },
+    "r32_pre_ACTIVE_ROWS_s33_b0.pt": {
+     "equal": true,
+     "now": "f86b544c31ff26e3b5b382394cd0fc81617337282ff3df0de4a205bdf7fcbd5c",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ACTIVE_ROWS_s33_b0.pt",
+     "recorded_by_round35": "f86b544c31ff26e3b5b382394cd0fc81617337282ff3df0de4a205bdf7fcbd5c"
+    },
+    "r32_pre_ACTIVE_ROWS_s33_b15.pt": {
+     "equal": true,
+     "now": "c69c97420d290e6c71cb4c15dcbadb886c4ee86d3780006273d68ba030c00915",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ACTIVE_ROWS_s33_b15.pt",
+     "recorded_by_round35": "c69c97420d290e6c71cb4c15dcbadb886c4ee86d3780006273d68ba030c00915"
+    },
+    "r32_pre_ACTIVE_ROWS_s33_b31.pt": {
+     "equal": true,
+     "now": "c66361e49f63e4cbe7c35ddfcab29e36ad4e6841d332930e14467dfb2774ecd2",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ACTIVE_ROWS_s33_b31.pt",
+     "recorded_by_round35": "c66361e49f63e4cbe7c35ddfcab29e36ad4e6841d332930e14467dfb2774ecd2"
+    },
+    "r32_pre_ALL_ROWS_s11_b0.pt": {
+     "equal": true,
+     "now": "f0414df67a5a04f7e3ebcb4d85cd97f46d239215d8416686b0d684acf449a17d",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ALL_ROWS_s11_b0.pt",
+     "recorded_by_round35": "f0414df67a5a04f7e3ebcb4d85cd97f46d239215d8416686b0d684acf449a17d"
+    },
+    "r32_pre_ALL_ROWS_s11_b15.pt": {
+     "equal": true,
+     "now": "6fc08d631a9987b3c2fad2c89c573a39577cd3a6c28a98157c29e23defb6c9de",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ALL_ROWS_s11_b15.pt",
+     "recorded_by_round35": "6fc08d631a9987b3c2fad2c89c573a39577cd3a6c28a98157c29e23defb6c9de"
+    },
+    "r32_pre_ALL_ROWS_s11_b31.pt": {
+     "equal": true,
+     "now": "4121da912770c41ec64310f4c2907bd74fc3b2e3e30aac8ccaf77b156829dba4",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ALL_ROWS_s11_b31.pt",
+     "recorded_by_round35": "4121da912770c41ec64310f4c2907bd74fc3b2e3e30aac8ccaf77b156829dba4"
+    },
+    "r32_pre_ALL_ROWS_s22_b0.pt": {
+     "equal": true,
+     "now": "a0ebe625549c39b8a04c4d441853328e7c4a2a26079d90e41676a78227588415",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ALL_ROWS_s22_b0.pt",
+     "recorded_by_round35": "a0ebe625549c39b8a04c4d441853328e7c4a2a26079d90e41676a78227588415"
+    },
+    "r32_pre_ALL_ROWS_s22_b15.pt": {
+     "equal": true,
+     "now": "b9ff87587c8c8e67ab50fbeb89ec526140e09cb2b7fa5cf77d88093475933731",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ALL_ROWS_s22_b15.pt",
+     "recorded_by_round35": "b9ff87587c8c8e67ab50fbeb89ec526140e09cb2b7fa5cf77d88093475933731"
+    },
+    "r32_pre_ALL_ROWS_s22_b31.pt": {
+     "equal": true,
+     "now": "da7a61c31c9488c4a701f6f393bbad013b00663cacf56f3e0ad97b08cc06fe2b",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ALL_ROWS_s22_b31.pt",
+     "recorded_by_round35": "da7a61c31c9488c4a701f6f393bbad013b00663cacf56f3e0ad97b08cc06fe2b"
+    },
+    "r32_pre_ALL_ROWS_s33_b0.pt": {
+     "equal": true,
+     "now": "ab9a3dfd3a1b68a64b86db4612bb746a5d626f2e59bf33bb0849f245517c5927",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ALL_ROWS_s33_b0.pt",
+     "recorded_by_round35": "ab9a3dfd3a1b68a64b86db4612bb746a5d626f2e59bf33bb0849f245517c5927"
+    },
+    "r32_pre_ALL_ROWS_s33_b15.pt": {
+     "equal": true,
+     "now": "def4300a3b7669bc255e0815ad36db0197d8331762144ae88d17ce8549df213b",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ALL_ROWS_s33_b15.pt",
+     "recorded_by_round35": "def4300a3b7669bc255e0815ad36db0197d8331762144ae88d17ce8549df213b"
+    },
+    "r32_pre_ALL_ROWS_s33_b31.pt": {
+     "equal": true,
+     "now": "12753b43bff23e3d7e4bdf403e84cc408a22155d24c239a68cdf1a11f1313a91",
+     "path": "runs/comm_actor_reduction_ablation_20261001/checkpoints/r32_pre_ALL_ROWS_s33_b31.pt",
+     "recorded_by_round35": "12753b43bff23e3d7e4bdf403e84cc408a22155d24c239a68cdf1a11f1313a91"
+    }
+   },
+   "round34_deliverable_mismatches": [],
+   "round34_deliverables_compared": 10,
+   "round34_deliverables_not_located": [],
+   "round34_per_file": {
+    "runs/comm_task_reward_event_timing_20260930/CHECKPOINT_IDENTITY_RECONCILIATION.json": {
+     "equal": true,
+     "now": "85ce7cc7e3dfcc640186c564a7d5d3112ff638afec26c79aded899e34b36348e",
+     "recorded_by_round35": "85ce7cc7e3dfcc640186c564a7d5d3112ff638afec26c79aded899e34b36348e"
+    },
+    "runs/comm_task_reward_event_timing_20260930/EXECUTION_BASIS.md": {
+     "equal": true,
+     "now": "fffa47d00cf822e9052215074c6830f62ad0365092cbb934a53d399707873d6d",
+     "recorded_by_round35": "fffa47d00cf822e9052215074c6830f62ad0365092cbb934a53d399707873d6d"
+    },
+    "runs/comm_task_reward_event_timing_20260930/REWARD_TIMING_REGRESSION.json": {
+     "equal": true,
+     "now": "2f3cf517ed8a8e683d9a740f837123cf0279b344eb21bb84ea85e58ac46e439d",
+     "recorded_by_round35": "2f3cf517ed8a8e683d9a740f837123cf0279b344eb21bb84ea85e58ac46e439d"
+    },
+    "runs/comm_task_reward_event_timing_20260930/ROUND33_CHECKPOINT_MAPPING_ERRATUM.md": {
+     "equal": true,
+     "now": "36bb48faae386a8a6c293c3f94b936e77664fff66742331dfeb2bfdfe8f57466",
+     "recorded_by_round35": "36bb48faae386a8a6c293c3f94b936e77664fff66742331dfeb2bfdfe8f57466"
+    },
+    "runs/comm_task_reward_event_timing_20260930/ROUND34_REPORT.md": {
+     "equal": true,
+     "now": "08b2308917068594ae4272679e8fa1748b10e3023ace5542260e26b46aa17604",
+     "recorded_by_round35": "08b2308917068594ae4272679e8fa1748b10e3023ace5542260e26b46aa17604"
+    },
+    "runs/comm_task_reward_event_timing_20260930/TASK_REWARD_TIMING_CONTRACT.md": {
+     "equal": true,
+     "now": "4b512a4594909ecdb24569c6108d98ea74f2325210869b40c379f40928f63df9",
+     "recorded_by_round35": "4b512a4594909ecdb24569c6108d98ea74f2325210869b40c379f40928f63df9"
+    },
+    "runs/comm_task_reward_event_timing_20260930/TRAINING_VERSION_MANIFEST.json": {
+     "equal": true,
+     "now": "87ce38300583da41e6b720e6e1d5616779f9053b9c03ccb9771e3affcd40aee6",
+     "recorded_by_round35": "87ce38300583da41e6b720e6e1d5616779f9053b9c03ccb9771e3affcd40aee6"
+    },
+    "runs/comm_task_reward_event_timing_20260930/reconcile_round34_checkpoints.py": {
+     "equal": true,
+     "now": "6fef6c53af51ec1c073a866c413c7334853cec4ce1cbeb136e8ca6ece7742728",
+     "recorded_by_round35": "6fef6c53af51ec1c073a866c413c7334853cec4ce1cbeb136e8ca6ece7742728"
+    },
+    "runs/comm_task_reward_event_timing_20260930/test_checkpoint_version_boundary.py": {
+     "equal": true,
+     "now": "d5f168c43a7a453833ef7c37e4f784b4f1c432d5c2d3ef540e2ca092fc695711",
+     "recorded_by_round35": "d5f168c43a7a453833ef7c37e4f784b4f1c432d5c2d3ef540e2ca092fc695711"
+    },
+    "runs/comm_task_reward_event_timing_20260930/test_reward_timing_regression.py": {
+     "equal": true,
+     "now": "09516efecf8c245961b1e9cc84bb9555d6cec8a4bbd86e4c93b01e114eb515c3",
+     "recorded_by_round35": "09516efecf8c245961b1e9cc84bb9555d6cec8a4bbd86e4c93b01e114eb515c3"
+    }
+   },
+   "stage_c_harness_hashes_at_verification": {
+    "v2_blocks.py": "342cdb69b920dfdfeee5bd7a9070321b9a0642fc1b80d5ad974b3f89602c78c8",
+    "v2_check.py": "ead3da2feae866765260409c88b335f2195b43be92ed0fa4f1e5b420fface2d0",
+    "v2_common.py": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+    "v2_controller.py": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+    "v2_recover.py": "b1abedd5033fde7e6ff10d42ac8a5935fef977f7569a81efa522bbccc56bc6bb",
+    "v2_reward_timing.py": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+    "v2_rules.py": "a7ce36de2d465cadaba90bd70b36539b5e865a73be8c4e075b9faf5a86c53a57",
+    "v2_run.py": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7",
+    "v2_train.py": "8437aee920e6d9192c0298c2e4ffe01c2daea641d67336216cfeb7dcf0e56883",
+    "v2_trainer.py": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
+   },
+   "written_by_this_round_only_inside": "runs\\comm_final_train_20261001"
+  },
+  "V6_trajectory_divergence_vs_round32": {
+   "interpretation": "the batch-0 episodes are byte-identical (V3); from the first update onward the weights and the sampled stream differ, which is the intervention itself. Equal outcome counts across episodes are observations with a denominator, not evidence that the constraint is better satisfied, and nothing here is a learning claim",
+   "passed": true,
+   "per_seed": {
+    "s11": {
+     "batch_zero_update_effect": {
+      "g_hat_equal_to_the_archive": true,
+      "meaning": "same starting weights, same logged decision rows, same g_hat, but a different surrogate and therefore different weights afterwards: that is the intervention itself (credit moved to an earlier action row), not a performance statement",
+      "policy_surrogate_archived": 0.468154,
+      "policy_surrogate_this_round": 0.46128,
+      "samples_equal_to_the_archive": true,
+      "weights_after_batch0_equal_to_the_archive": false,
+      "weights_before_batch0_equal_to_the_archive": true
+     },
+     "batches_with_equal_sample_count_prefix": 6,
+     "episodes_compared": 128,
+     "episodes_with_equal_behaviour_hash": 111,
+     "episodes_with_equal_decision_row_sequence": 123,
+     "episodes_with_equal_on_time": 128,
+     "episodes_with_equal_spent_bytes": 78,
+     "first_episode_whose_behaviour_hash_differs": 26,
+     "lambda_after_last_batch": 1.4999999999999993,
+     "lambda_after_last_batch_archived": 1.4999999999999993,
+     "optimizer_steps_archived": 464,
+     "optimizer_steps_this_round": 464,
+     "parameter_hash_after_last_batch": "553d02dd1de285a736f7fd2a25ce04dc52b00f48ee8226eb08e2a14c5aacdda6",
+     "parameter_hash_after_last_batch_archived": "f56fca850402c5b16a1d02da1d9afdc626e9c4e5e529aa3daea45612a00196c9",
+     "samples_archived": 26156,
+     "samples_this_round": 26164
+    },
+    "s22": {
+     "batch_zero_update_effect": {
+      "g_hat_equal_to_the_archive": true,
+      "meaning": "same starting weights, same logged decision rows, same g_hat, but a different surrogate and therefore different weights afterwards: that is the intervention itself (credit moved to an earlier action row), not a performance statement",
+      "policy_surrogate_archived": 0.406187,
+      "policy_surrogate_this_round": 0.39768,
+      "samples_equal_to_the_archive": true,
+      "weights_after_batch0_equal_to_the_archive": false,
+      "weights_before_batch0_equal_to_the_archive": true
+     },
+     "batches_with_equal_sample_count_prefix": 17,
+     "episodes_compared": 128,
+     "episodes_with_equal_behaviour_hash": 120,
+     "episodes_with_equal_decision_row_sequence": 122,
+     "episodes_with_equal_on_time": 126,
+     "episodes_with_equal_spent_bytes": 82,
+     "first_episode_whose_behaviour_hash_differs": 68,
+     "lambda_after_last_batch": 1.2624999999999993,
+     "lambda_after_last_batch_archived": 1.2374999999999994,
+     "optimizer_steps_archived": 340,
+     "optimizer_steps_this_round": 356,
+     "parameter_hash_after_last_batch": "6a84ab76e206a5115527ddedec5bf7251c3785f229a078a02c50b1dd3dc7bdfb",
+     "parameter_hash_after_last_batch_archived": "29225786a8d9eb0d6e75233252b2ef69aa7a1ee7800703f0b4a28cf8a5812ac7",
+     "samples_archived": 17751,
+     "samples_this_round": 18880
+    },
+    "s33": {
+     "batch_zero_update_effect": {
+      "g_hat_equal_to_the_archive": true,
+      "meaning": "same starting weights, same logged decision rows, same g_hat, but a different surrogate and therefore different weights afterwards: that is the intervention itself (credit moved to an earlier action row), not a performance statement",
+      "policy_surrogate_archived": 0.463832,
+      "policy_surrogate_this_round": 0.45725,
+      "samples_equal_to_the_archive": true,
+      "weights_after_batch0_equal_to_the_archive": false,
+      "weights_before_batch0_equal_to_the_archive": true
+     },
+     "batches_with_equal_sample_count_prefix": 4,
+     "episodes_compared": 128,
+     "episodes_with_equal_behaviour_hash": 117,
+     "episodes_with_equal_decision_row_sequence": 120,
+     "episodes_with_equal_on_time": 128,
+     "episodes_with_equal_spent_bytes": 80,
+     "first_episode_whose_behaviour_hash_differs": 17,
+     "lambda_after_last_batch": 1.4749999999999992,
+     "lambda_after_last_batch_archived": 1.4749999999999992,
+     "optimizer_steps_archived": 464,
+     "optimizer_steps_this_round": 464,
+     "parameter_hash_after_last_batch": "cd0498693f7636aea5f75cb6a54bd18f64c7410fe2f16e8791b7aa3966a5cb9d",
+     "parameter_hash_after_last_batch_archived": "22cdbb937c285e526892491aaf2a54d9f89b924dc88dc5952d3c1d3f7eb5641a",
+     "samples_archived": 26010,
+     "samples_this_round": 26032
+    }
+   }
+  }
+ },
+ "environment_launches_used": 0,
+ "kind": "round36-verification",
+ "note": "these checks read only on-disk artefacts; the trajectory after batch 0 is expected to differ from ROUND32 because the fix changed credit assignment, and no check here treats any difference as a performance claim",
+ "optimizer_steps_used": 0,
+ "round": "36"
+}
