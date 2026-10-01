@@ -1,0 +1,379 @@
+{
+ "all_gates_passed": true,
+ "environment_launches_used": 0,
+ "gate_count": 12,
+ "gates": {
+  "G10_quota_and_no_hot_start": {
+   "authorised": {
+    "batches_per_seed": 32,
+    "episode_constructions": 384,
+    "episodes_per_seed": 128,
+    "reserve_reruns": 1,
+    "training_launches": 3,
+    "wall_clock_multiplier": 1.5
+   },
+   "book_before_any_launch": {
+    "episode_constructions": 0,
+    "events": [],
+    "failures": [],
+    "optimizer_steps": 0,
+    "reserve_reruns": 0,
+    "reserve_used": false,
+    "training_launches": 0
+   },
+   "checkpoints_already_present_in_the_seed_directories": {},
+   "constructions_already_booked": 0,
+   "no_rolling_checkpoint_before_start": true,
+   "passed": true,
+   "seed": [
+    11,
+    22,
+    33
+   ],
+   "seed_selection_provenance": "v2_common.TRAIN_SEEDS as declared by the frozen Stage C manifest; fixed before the first launch",
+   "v2_recover_used": false
+  },
+  "G11_wall_clock_ceiling_from_the_archive": {
+   "archived_per_seed_rollout_seconds": {
+    "s11": 1513.52,
+    "s22": 1597.11,
+    "s33": 1521.3
+   },
+   "archived_rows_per_seed": {
+    "s11": 128,
+    "s22": 128,
+    "s33": 128
+   },
+   "baseline_construction": "ROUND32 recorded no per-launch wall-clock, only a per-episode `seconds` field, so the ceiling is 1.5x the archived sum of that seed's 128 episode seconds; the update overhead is not in the archived baseline and is registered separately from this round's own measurement",
+   "ceiling_hours": {
+    "s11": 0.631,
+    "s22": 0.665,
+    "s33": 0.634
+   },
+   "ceiling_seconds": {
+    "s11": 2270.28,
+    "s22": 2395.66,
+    "s33": 2281.95
+   },
+   "passed": true
+  },
+  "G12_round34_regression_suites_under_real_torch": {
+   "environment_exemption_used": false,
+   "errors": 0,
+   "failures": 0,
+   "passed": true,
+   "tests_run": 12,
+   "torch_real_not_stub": true
+  },
+  "G1_repository_identity": {
+   "branch": "fix/comm-task-reward-event-timing",
+   "expected_branch": "fix/comm-task-reward-event-timing",
+   "expected_head_at_start": "577344aab8a5c9bfcf75e7ffbf6f77e503dbc200",
+   "github_snapshot_used": false,
+   "head": "577344aab8a5c9bfcf75e7ffbf6f77e503dbc200",
+   "head_equals_round35_delivery_head": true,
+   "missing_files": [],
+   "passed": true,
+   "round33_baseline_is_ancestor": true,
+   "round34_and_round32_and_round35_directories_present": true
+  },
+  "G2_environment": {
+   "cuda_available": true,
+   "dependencies_installed": 0,
+   "frozen_checkpoints_present": {
+    "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": true,
+    "runs/joint_eval_20260916/ctde_final_7_1.pth": true
+   },
+   "import_torch_succeeded": true,
+   "interpreter": "D:\\project_env\\python.exe",
+   "logical_cpus": 20,
+   "new_virtualenv_created": false,
+   "numpy": "2.2.6",
+   "passed": true,
+   "python": "3.10.19",
+   "round34_pytorch_exemption_applies_to_this_machine": false,
+   "torch": "2.9.0+cu128"
+  },
+  "G3_training_version_fields": {
+   "collector_class_on_the_event_bus": "PublishedProgressRewardCollector",
+   "every_checkpoint_payload_writes_both_fields": true,
+   "every_row_writes_both_fields": true,
+   "loss_version": "constrained-lagrangian/2",
+   "passed": true,
+   "reward_timing_version": "published-completion-event-at-relay-tick/2",
+   "trainer_tag": "constrained-cost-v2",
+   "training_state_carries_both_fields": true,
+   "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2"
+  },
+  "G4_frozen_training_constants": {
+   "batches_per_seed": {
+    "actual": 32,
+    "archived": 32
+   },
+   "data_order": {
+    "actual_sha256": "346f2cdde8d658f927ea282f83e143d54a600f4f5c729e4521fe657421afe840",
+    "archived_sha256": "346f2cdde8d658f927ea282f83e143d54a600f4f5c729e4521fe657421afe840",
+    "equal": true,
+    "first_8": [
+     1300027,
+     1300014,
+     1300028,
+     1300044,
+     1300003,
+     1300010,
+     1300005,
+     1300008
+    ]
+   },
+   "episodes_per_seed": {
+    "actual": 128,
+    "archived": 128,
+    "equal": true
+   },
+   "episodes_per_update": {
+    "actual": 4,
+    "archived": 4
+   },
+   "milestones": {
+    "actual": [
+     0,
+     64,
+     128
+    ],
+    "archived": [
+     0,
+     64,
+     128
+    ]
+   },
+   "objective_and_dual": {
+    "advantage_standardisation": "none",
+    "b0_bytes": 10000.0,
+    "delta": 0.0,
+    "eta_lambda": 0.05,
+    "gae_lambda": 0.95,
+    "gamma": 1.0,
+    "lambda_init": 1.0,
+    "log_prob_tolerance": 1e-06
+   },
+   "passed": true,
+   "ppo_hyperparameters": {
+    "actual": {
+     "clip": 0.2,
+     "entropy_bonus": 0.01,
+     "epochs_per_batch": 4,
+     "learning_rate": 0.0003,
+     "max_grad_norm": 0.5,
+     "minibatch_steps": 256,
+     "value_coefficient": 0.5
+    },
+    "archived": {
+     "clip": 0.2,
+     "entropy_bonus": 0.01,
+     "epochs_per_batch": 4,
+     "learning_rate": 0.0003,
+     "max_grad_norm": 0.5,
+     "minibatch_steps": 256,
+     "value_coefficient": 0.5
+    },
+    "equal": true
+   },
+   "row_filtering": {
+    "active_rows_module_used": false,
+    "policy": "ALL_ROWS as encoded in the frozen v2_trainer; ACTIVE_ROWS is not reachable from this round's entry points",
+    "trainer_module_used": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py"
+   },
+   "scenario_block": {
+    "archived_development": [
+     1301000,
+     1301001,
+     1301002,
+     1301003,
+     1301004,
+     1301005,
+     1301006,
+     1301007,
+     1301008,
+     1301009,
+     1301010,
+     1301011,
+     1301012,
+     1301013,
+     1301014,
+     1301015
+    ],
+    "development": [
+     1301000,
+     1301015,
+     16
+    ],
+    "equal": true,
+    "training": [
+     1300000,
+     1300047,
+     48
+    ]
+   },
+   "steps_per_episode": {
+    "actual": 1000,
+    "archived": 1000
+   },
+   "train_seeds": {
+    "actual": [
+     11,
+     22,
+     33
+    ],
+    "archived": [
+     11,
+     22,
+     33
+    ]
+   }
+  },
+  "G5_world_and_transport_config": {
+   "archived_behaviour_field_count": 40,
+   "differing_fields_per_scenario": {
+    "1300000": {},
+    "1300014": {},
+    "1300027": {}
+   },
+   "fields_the_archived_behaviour_block_does_not_record": {
+    "comm_policy": "immediate",
+    "comm_policy_params": "",
+    "decision_trace": null,
+    "info_probe": null,
+    "record_stream": null,
+    "replay_stream": null,
+    "search_probe": null,
+    "seed": 1300027
+   },
+   "note": "the archived manifest records the 40 behaviour fields the frozen configuration hash is built from; the unrecorded keys are the per-arm policy selection and the disabled probes, all of which are re-checked empirically by the batch-0 byte comparison after the launches",
+   "passed": true,
+   "shared_fields_compared_per_scenario": {
+    "1300000": 40,
+    "1300014": 40,
+    "1300027": 40
+   }
+  },
+  "G6_produced_and_imported_code_identity": {
+   "frozen_search_and_allocation_checkpoints_equal": true,
+   "imported_round_modules_changed_vs_round32": [],
+   "integrated_sar_has_zero_commits_since_round33_baseline": true,
+   "passed": true,
+   "production_changed_vs_round32": [],
+   "production_files": 8
+  },
+  "G7_only_the_reward_timing_intervention_differs": {
+   "passed": true,
+   "per_module": {
+    "v2_run.py": {
+     "added_functions": [],
+     "changed_functions": [
+      "_install_taps",
+      "_run_episode",
+      "run_eval"
+     ],
+     "changed_outside_the_allowed_set": [],
+     "missing_or_changed_required": [],
+     "passed": true,
+     "removed_functions": [],
+     "update_math_functions_required_identical": [
+      "_assert_transport",
+      "_booked",
+      "action_seed",
+      "eval_action_seed",
+      "run_training_episode"
+     ],
+     "verified_identical": [
+      "_assert_transport",
+      "_booked",
+      "action_seed",
+      "eval_action_seed",
+      "run_training_episode"
+     ]
+    },
+    "v2_trainer.py": {
+     "added_functions": [
+      "_restore_controller",
+      "_validate_checkpoint_base",
+      "load_checkpoint_read_only"
+     ],
+     "changed_functions": [
+      "_bundle",
+      "fresh_training_state",
+      "load_checkpoint",
+      "save_checkpoint"
+     ],
+     "changed_outside_the_allowed_set": [],
+     "missing_or_changed_required": [],
+     "passed": true,
+     "removed_functions": [],
+     "update_math_functions_required_identical": [
+      "_unassigned_prefix_totals",
+      "batch_g_hat",
+      "batch_samples",
+      "dual_update",
+      "likelihood_alignment",
+      "ppo_update"
+     ],
+     "verified_identical": [
+      "_unassigned_prefix_totals",
+      "batch_g_hat",
+      "batch_samples",
+      "dual_update",
+      "likelihood_alignment",
+      "ppo_update"
+     ]
+    }
+   },
+   "what_the_fix_is": "the task-reward tap moved from a post-env.step registry scan to a PublishedProgressRewardCollector observing the synchronous ProgressEvent at the current relay tick; plus tick 0 reserved as an unassigned prefix; plus the two version fields and the resume gate"
+  },
+  "G8_read_only_reference_cache": {
+   "cached_references": 64,
+   "files_read_only": 64,
+   "missing": [],
+   "order_sha256": "346f2cdde8d658f927ea282f83e143d54a600f4f5c729e4521fe657421afe840",
+   "passed": true,
+   "reference_launches_needed": 0,
+   "unique_scenarios_in_the_frozen_128_episode_order": 48
+  },
+  "G9_initial_weights_match_the_archived_run_per_seed": {
+   "passed": true,
+   "per_seed": {
+    "s11": {
+     "all_four_identical": true,
+     "parameter_sha256_per_source": {
+      "archived_round32_batch0_before": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "archived_round32_prelaunch_pairing_from_git": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "fresh_controller_this_machine": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "round24_ep0_milestone_restored_by_the_real_loader": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff"
+     }
+    },
+    "s22": {
+     "all_four_identical": true,
+     "parameter_sha256_per_source": {
+      "archived_round32_batch0_before": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "archived_round32_prelaunch_pairing_from_git": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "fresh_controller_this_machine": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "round24_ep0_milestone_restored_by_the_real_loader": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095"
+     }
+    },
+    "s33": {
+     "all_four_identical": true,
+     "parameter_sha256_per_source": {
+      "archived_round32_batch0_before": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "archived_round32_prelaunch_pairing_from_git": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "fresh_controller_this_machine": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "round24_ep0_milestone_restored_by_the_real_loader": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa"
+     }
+    }
+   },
+   "why_this_matters": "the batch-0 byte comparison against ROUND32 only means something if episode 0 starts from the same registered weights that run used"
+  }
+ },
+ "kind": "round36-preflight",
+ "note": "every gate above reads only archived artefacts, git objects and the imported modules; no JointRun is constructed and no weight is updated",
+ "optimizer_steps_used": 0,
+ "round": "36"
+}

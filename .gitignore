@@ -416,3 +416,24 @@ runs/comm_reward_smoke_20260930/rows/
 runs/comm_reward_smoke_20260930/checkpoints/
 runs/comm_reward_smoke_20260930/rejected/
 runs/comm_reward_smoke_20260930/__pycache__/
+
+# round-36 fixed training (last bounded training) plus parallel delivery documentation: harness,
+# gates, per-seed records, ledgers and drafts are tracked; raw lifecycles, transcripts, tapes,
+# rows, checkpoints and console logs stay outside git exactly as in rounds 24/28-35
+!runs/comm_final_train_20261001/
+runs/comm_final_train_20261001/*
+!runs/comm_final_train_20261001/*.py
+!runs/comm_final_train_20261001/*.md
+!runs/comm_final_train_20261001/*.json
+!runs/comm_final_train_20261001/delivery_draft/
+runs/comm_final_train_20261001/delivery_draft/*
+!runs/comm_final_train_20261001/delivery_draft/*.md
+!runs/comm_final_train_20261001/delivery_draft/*.json
+!runs/comm_final_train_20261001/seed*/
+runs/comm_final_train_20261001/seed*/*
+!runs/comm_final_train_20261001/seed*/*.json
+runs/comm_final_train_20261001/seed*/logs/
+runs/comm_final_train_20261001/seed*/rows/
+runs/comm_final_train_20261001/seed*/checkpoints/
+runs/comm_final_train_20261001/seed*/rejected/
+runs/comm_final_train_20261001/__pycache__/
