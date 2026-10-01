@@ -43,6 +43,16 @@ def main(argv: list[str]) -> int:
                               cwd=str(r36.ROOT), capture_output=True).returncode == 0
     commits = [line for line in r36.git("log", "--format=%h",
                                         f"{r36.EXPECTED_HEAD_AT_START}..{head}").split() if line]
+    # every commit of this round must touch only this round's directory plus the two shared
+    # bookkeeping files -- this is the machine form of "不提交其他会话的文件"
+    allowed_prefixes = ("runs/comm_final_train_20261001/", "PROJECT_STATUS.md", ".gitignore")
+    touched_by: dict[str, list[str]] = {}
+    unexpected_paths: list[str] = []
+    for short in commits:
+        paths = [line for line in r36.git("show", "--format=", "--name-only",
+                                          short).splitlines() if line.strip()]
+        touched_by[short] = paths
+        unexpected_paths.extend(path for path in paths if not path.startswith(allowed_prefixes))
 
     per_file = {path: blob(r36.EXPECTED_HEAD_AT_START, path) == blob(HARNESS_COMMIT, path)
                 == blob(head, path) for path in STAGE_C_REL + PRODUCTION_REL}
@@ -60,7 +70,13 @@ def main(argv: list[str]) -> int:
         "first_launch_recorded_at": first_launch_written_at,
         "harness_was_committed_before_the_first_launch":
             harness_commit_time <= when(first_launch_written_at),
-        "passed": (branch == r36.EXPECTED_BRANCH and ancestor and len(commits) == 6
+        "commit_count_at_least_the_six_themed_deliveries": len(commits) >= 6,
+        "every_path_touched_by_this_round_commits": sorted(
+            {path for paths in touched_by.values() for path in paths}),
+        "paths_outside_this_round_touched": unexpected_paths,
+        "passed": (branch == r36.EXPECTED_BRANCH and ancestor
+                   and len(commits) >= 6
+                   and not unexpected_paths
                    and all(per_file.values())
                    and harness_commit_time <= when(first_launch_written_at))}
 
