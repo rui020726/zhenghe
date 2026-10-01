@@ -33,10 +33,7 @@
     "?? runs/comm_cost_v2_rerun_20260928/round25_source_recheck.py",
     "?? runs/comm_multistep_stage1_20260922/_DOC_PATCH_NOTES.md",
     "?? runs/comm_multistep_stage1_20260922/_fix_diag_json.py",
-    "?? runs/comm_reward_smoke_20260930/ROUND35_PREFLIGHT.json",
-    "?? runs/comm_reward_smoke_20260930/r35_common.py",
-    "?? runs/comm_reward_smoke_20260930/r35_launch.py",
-    "?? runs/comm_reward_smoke_20260930/r35_preflight.py",
+    "?? runs/comm_reward_smoke_20260930/ROUND35_SMOKE_REPORT.md",
     "?? runs/comm_send_actionability_20260922/rows_s700010.json",
     "?? runs/comm_send_actionability_20260922/rows_s700018.json",
     "?? runs/comm_send_actionability_20260922/rows_s700020.json",
@@ -170,7 +167,7 @@
    "branch_as_authorised": true,
    "commits_since_the_opening_check_not_round35": [],
    "differing_round34_files": [],
-   "head": "c75113fe417ac79b3325068bee41425c2d877154",
+   "head": "5f13b8b5544e8a90810bc8bbdd20c97abb49e1fe",
    "head_recorded_at_the_opening_check": "c43ec5f1a12ef18238d4eed3aa90e3681e9ae58e",
    "opening_head_is_ancestor_of_head": true,
    "passed": true,
@@ -205,10 +202,19 @@
    "production_files_unchanged_since_the_round24_freeze": true,
    "round34_deliverables_hashed": 10,
    "round35_scripts_hashed": [
+    "r35_attribution_effect.py",
+    "r35_checkpoint_content.py",
     "r35_common.py",
+    "r35_event_check.py",
+    "r35_failure_repro.py",
     "r35_launch.py",
+    "r35_passivity.py",
     "r35_preflight.py",
-    "r35_presmoke.py"
+    "r35_presmoke.py",
+    "r35_probe.py",
+    "r35_reconcile_book.py",
+    "r35_restore_boundary.py",
+    "r35_resume_chain.py"
    ],
    "stage_c_modules_unchanged_since_the_opening_check": true,
    "tracked_modifications_under_stage_c_directory": [],
@@ -441,7 +447,7 @@
    "passed": true,
    "returncode": 0,
    "summary": [
-    "Ran 12 tests in 0.003s",
+    "Ran 12 tests in 0.002s",
     "OK"
    ]
   }
