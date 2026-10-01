@@ -1,0 +1,13 @@
+{
+ "answer_option_label": "允许再跑 1 次（7 集，额度正好 16/16）",
+ "answer_verbatim": "允许再跑 1 次（7 集，额度正好 16/16）",
+ "answered_at_utc": "2026-10-01T00:11:14+00:00",
+ "asked_at": "2026-09-30 (round evening)",
+ "consequence": "跨进程恢复后的 rollout 一致性在 e4、e5 两格上得到 A 级逐字节证据；恢复之后的那一次更新未能在 launch2 内跑到，由 R4 的确定性重算间接覆盖，并作为未覆盖项登记。",
+ "question_put": "启动②的第一次尝试在 4 秒处失败（本轮仪表 r35_probe.py 取错字段名，非被测系统问题；已登记失败并消耗 1 次 episode 构造且不退还，附最小复现）。任务4 的 a/b/c 与 d 的确定性续算部分已用 0 启动方式实机核完；只剩「跨进程恢复后继续跑 rollout」需要再一次 runner 进程。提示词写的是最多 2 次短程启动，已用掉启动①(8 集) + 这次崩溃(1 集)。是否允许再跑一次最小进程补齐这一项？",
+ "recorded_by": "the agent, immediately after the answer, before running the authorised process",
+ "runner_processes_started_after_this_authorisation": 1,
+ "schema": "round35-extra-invocation-authorisation/1",
+ "scope_of_the_authorisation": "一次额外的最小 runner 进程：seed 11，先跑 e0..e3 存 checkpoint，再由真实 v2_trainer.load_checkpoint 跨进程恢复续跑；episode 构造总额正好等于已登记的 16 上限；同进程挂只读 collector 仪表。不得用于任何追加训练、调参、选结果或新开一轮实验。",
+ "what_was_actually_run": "launch2 第二次尝试：e0..e3 + 批 0 更新（12 步）+ 恢复 + e4、e5；到 e6 时被真实 ledger 的上限拒绝（我绑定每目录上限时少算了一次失败起始，属于保守方向的误差：提前停止，未超预算）。"
+}

@@ -1,0 +1,92 @@
+{
+ "authorised": {
+  "episode_constructions": 16,
+  "optimizer_steps": 100,
+  "runner_invocations": 2,
+  "wall_clock_per_invocation_hours": 2
+ },
+ "episode_constructions_per_launch": {
+  "launch1": 8,
+  "launch2": 7
+ },
+ "extra_invocation_authorisation": {
+  "answer_option_label": "允许再跑 1 次（7 集，额度正好 16/16）",
+  "answer_verbatim": "允许再跑 1 次（7 集，额度正好 16/16）",
+  "answered_at_utc": "2026-10-01T00:11:14+00:00",
+  "asked_at": "2026-09-30 (round evening)",
+  "consequence": "跨进程恢复后的 rollout 一致性在 e4、e5 两格上得到 A 级逐字节证据；恢复之后的那一次更新未能在 launch2 内跑到，由 R4 的确定性重算间接覆盖，并作为未覆盖项登记。",
+  "question_put": "启动②的第一次尝试在 4 秒处失败（本轮仪表 r35_probe.py 取错字段名，非被测系统问题；已登记失败并消耗 1 次 episode 构造且不退还，附最小复现）。任务4 的 a/b/c 与 d 的确定性续算部分已用 0 启动方式实机核完；只剩「跨进程恢复后继续跑 rollout」需要再一次 runner 进程。提示词写的是最多 2 次短程启动，已用掉启动①(8 集) + 这次崩溃(1 集)。是否允许再跑一次最小进程补齐这一项？",
+  "recorded_by": "the agent, immediately after the answer, before running the authorised process",
+  "runner_processes_started_after_this_authorisation": 1,
+  "schema": "round35-extra-invocation-authorisation/1",
+  "scope_of_the_authorisation": "一次额外的最小 runner 进程：seed 11，先跑 e0..e3 存 checkpoint，再由真实 v2_trainer.load_checkpoint 跨进程恢复续跑；episode 构造总额正好等于已登记的 16 上限；同进程挂只读 collector 仪表。不得用于任何追加训练、调参、选结果或新开一轮实验。",
+  "what_was_actually_run": "launch2 第二次尝试：e0..e3 + 批 0 更新（12 步）+ 恢复 + e4、e5；到 e6 时被真实 ledger 的上限拒绝（我绑定每目录上限时少算了一次失败起始，属于保守方向的误差：提前停止，未超预算）。"
+ },
+ "failed_starts": [
+  {
+   "attempt": 0,
+   "detail": "AttributeError: 'TaskSnapshot' object has no attribute 'task_revision'",
+   "label": "train_s11_e0",
+   "launch": "launch2",
+   "ok": false,
+   "seed": 1300027
+  }
+ ],
+ "network_attempts": 0,
+ "new_streams_created": 0,
+ "old_round_artefacts_rewritten": 0,
+ "per_batch_optimizer_steps": {
+  "launch1/v2_batch_s11_b0": 12,
+  "launch1/v2_batch_s11_b1": 12,
+  "launch2/v2_batch_s11_b0": 12
+ },
+ "push_to_github": 0,
+ "quota_discipline": "the failed attempt's episode start stays spent; nothing was re-run to look better and no result was selected",
+ "round": 35,
+ "runner_processes": [
+  {
+   "episode_starts_in_its_own_ledger": 8,
+   "name": "launch1",
+   "outcome": "completed 8 episodes and 2 updates"
+  },
+  {
+   "episode_starts_in_its_own_ledger": 1,
+   "name": "launch2 attempt 1",
+   "note": "the failed start stays in the ledger",
+   "outcome": "crashed 4 s in, inside this round's own probe"
+  },
+  {
+   "episode_starts_in_its_own_ledger": 6,
+   "name": "launch2 attempt 2",
+   "outcome": "4 episodes, batch 0, cross-process resume, 2 more episodes, stopped by the ledger cap at episode 6"
+  }
+ ],
+ "schema": "round35-launch-accounting/1",
+ "sealed_blocks_touched": 0,
+ "used": {
+  "episode_constructions_remaining": 1,
+  "episode_constructions_total": 15,
+  "episode_seconds_measured_per_launch": {
+   "launch1": {
+    "episode_rows": 8,
+    "sum_of_measured_episode_seconds": 91.15
+   },
+   "launch2": {
+    "episode_rows": 6,
+    "sum_of_measured_episode_seconds": 72.14
+   }
+  },
+  "farthest_measured_single_invocation_seconds": 97.85,
+  "optimizer_steps_split": {
+   "inside_the_launches": 36,
+   "inside_verification_recomputations": 24
+  },
+  "optimizer_steps_total": 60,
+  "process_wall_clock_seconds": {
+   "launch1": 97.85
+  },
+  "productive_runner_invocations": 2,
+  "runner_processes_started": 3,
+  "wall_clock_note": "the wall-clock summary file exists only for launch1 because launch2's second attempt ended on the ledger refusal before it could write one; the per-episode seconds above are the measured rollouts and the 2 h per-invocation bound was nowhere near being reached"
+ }
+}

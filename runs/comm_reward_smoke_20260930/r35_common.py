@@ -61,11 +61,13 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def configure(launch_tag: str) -> dict[str, Path]:
+def configure(launch_tag: str, cap: int | None = None) -> dict[str, Path]:
     """Point the real Stage C writer at this round, inside one subdirectory per launch.
 
     Only the five path globals and the launch cap are touched; hyper-parameters, world config,
     scenario order, reward value and cost definition stay exactly as the frozen round defines them.
+    `cap` lets a launch be bound to the constructions still available rather than to the whole
+    round's total, so the real ledger is the thing that refuses an over-budget start.
     """
     base = HERE / launch_tag
     paths = {"OUTPUT_DIR": base, "LOGS": base / "logs", "ROWS": base / "rows",
@@ -75,10 +77,33 @@ def configure(launch_tag: str) -> dict[str, Path]:
     v2_common.ROWS = paths["ROWS"]
     v2_common.REJECTED = paths["REJECTED"]
     v2_common.CHECKPOINTS = paths["CHECKPOINTS"]
-    v2_common.LAUNCH_CAP = MAX_EPISODE_CONSTRUCTIONS
+    v2_common.LAUNCH_CAP = MAX_EPISODE_CONSTRUCTIONS if cap is None else int(cap)
     for path in paths.values():
         path.mkdir(parents=True, exist_ok=True)
     return paths
+
+
+def ledger_starts_across_launches() -> dict[str, Any]:
+    """Sum every episode start this round's own ledgers recorded, failures included.
+
+    A failed start stays in the book: the quota is spent by the attempt to run the environment,
+    not by a successful row.
+    """
+    per_launch: dict[str, Any] = {}
+    total = 0
+    failures: list[dict[str, Any]] = []
+    for directory in sorted(HERE.glob("launch*/logs")):
+        starts = 0
+        for book in sorted(directory.glob("START_LEDGER_p*.json")):
+            payload = json.loads(book.read_text(encoding="utf-8"))
+            starts += int(payload.get("starts") or 0)
+            for result in payload.get("results") or []:
+                if not result.get("ok"):
+                    failures.append({"launch": directory.parent.name, **result})
+        per_launch[directory.parent.name] = starts
+        total += starts
+    return {"per_launch": per_launch, "total_starts": total, "failed_starts": failures,
+            "remaining": MAX_EPISODE_CONSTRUCTIONS - total}
 
 
 def freeze_identity() -> dict[str, Any]:

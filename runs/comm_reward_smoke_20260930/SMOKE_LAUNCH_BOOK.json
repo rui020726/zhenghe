@@ -1,5 +1,5 @@
 {
- "episode_constructions": 8,
+ "episode_constructions": 15,
  "events": [
   {
    "detail": {
@@ -289,9 +289,41 @@
    "optimizer_steps": 12,
    "pid": 51936,
    "purpose": "R4: recomputing batch 0's update from the restored ep0 milestone, to test whether the checkpoint preserves everything the continuation needs"
+  },
+  {
+   "booked_by": "r35_reconcile_book.py",
+   "detail": {
+    "failed_starts": [
+     {
+      "attempt": 0,
+      "detail": "AttributeError: 'TaskSnapshot' object has no attribute 'task_revision'",
+      "label": "train_s11_e0",
+      "launch": "launch2",
+      "ok": false,
+      "seed": 1300027
+     }
+    ],
+    "optimizer_steps_by_batch_record": {
+     "launch1/v2_batch_s11_b0": 12,
+     "launch1/v2_batch_s11_b1": 12,
+     "launch2/v2_batch_s11_b0": 12
+    },
+    "per_launch_starts": {
+     "launch1": 8,
+     "launch2": 7
+    },
+    "r4_ran_twice_because_the_first_run_stopped_at_a_harness_bug": true,
+    "verification_steps_booked_separately": 24
+   },
+   "episode_constructions": 15,
+   "kind": "reconciliation",
+   "optimizer_steps": 60,
+   "pid": 24692,
+   "why": "r35_launch books only on success, so the crashed attempt and launch2 were missing from the tally; these figures are summed from the real ledgers and batch records"
   }
  ],
  "invocations": 1,
- "optimizer_steps": 48,
+ "optimizer_steps": 60,
+ "reconciliation_note": "episode_constructions and optimizer_steps are the reconciled totals recomputed from the ledgers and batch records, not the sum of the success-only bookings",
  "verification_optimizer_steps": 24
 }

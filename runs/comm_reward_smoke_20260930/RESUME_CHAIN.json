@@ -1,0 +1,120 @@
+{
+ "checks": {
+  "V1_saved_resume_point_identity": {
+   "b0_update_reproduced_bit_for_bit_across_the_two_launches": true,
+   "lambda_identical": true,
+   "launch1_batch0_post_update": "48c05f14795cdd6a6605e0e8f14f5c38d78fff43d6fd43d0e4329e1967b4b0ea",
+   "launch1_lambda_next": 1.0125,
+   "launch2_batch0_post_update": "48c05f14795cdd6a6605e0e8f14f5c38d78fff43d6fd43d0e4329e1967b4b0ea",
+   "module_digests_identical": true,
+   "module_digests_launch1": {
+    "action_head": "4679f390ad01b11f",
+    "cost_head": "e826e79af3403ad6",
+    "task_value_head": "91273b0a3e3c806e",
+    "trunk": "127e83436ea7fced"
+   },
+   "module_digests_launch2": {
+    "action_head": "4679f390ad01b11f",
+    "cost_head": "e826e79af3403ad6",
+    "task_value_head": "91273b0a3e3c806e",
+    "trunk": "127e83436ea7fced"
+   },
+   "note": "the resume point launch2 saved is the same state launch1 had after its batch 0, so the two runs are comparable from episode 4 onward",
+   "optimizer_state_sha256_launch1_and_launch2_identical": null,
+   "passed": true,
+   "restored_episodes_done": 4,
+   "restored_lambda": 1.0125,
+   "restored_optimizer_steps": 12,
+   "restored_parameter_sha256": "48c05f14795cdd6a6605e0e8f14f5c38d78fff43d6fd43d0e4329e1967b4b0ea",
+   "restored_updates": 1
+  },
+  "V2_resumed_rollouts_match_the_uninterrupted_run": {
+   "cells": {
+    "e4": {
+     "behaviour_sha256": "31293459ec7129e14ff0d0791816aff31c3efd41d5dc3ee5a4e267ca70d0a761",
+     "differing_fields": [],
+     "fields_compared": 20,
+     "scenario_resumed": 1300003,
+     "scenario_uninterrupted": 1300003,
+     "tape_row_by_row_identical": true,
+     "tape_rows": 370,
+     "weights_used_for_this_resumed_rollout_equal_the_uninterrupted_run": true
+    },
+    "e5": {
+     "behaviour_sha256": "b13942e9846bca4641b75dbef2790309a8a09411d654842af3011c3e3b56ebdc",
+     "differing_fields": [],
+     "fields_compared": 20,
+     "scenario_resumed": 1300010,
+     "scenario_uninterrupted": 1300010,
+     "tape_row_by_row_identical": true,
+     "tape_rows": 60,
+     "weights_used_for_this_resumed_rollout_equal_the_uninterrupted_run": true
+    }
+   },
+   "cells_compared": 2,
+   "evidence_level": "A (direct byte comparison) on the two episodes the resume actually reached before the construction quota was spent",
+   "passed": true,
+   "problems": []
+  },
+  "V3_resumed_rollouts_carried_the_restored_lambda": {
+   "batch0_dual": {
+    "direction": "increase",
+    "eta": 0.05,
+    "g_hat": 0.25,
+    "lambda_before": 1.0,
+    "lambda_next": 1.0125
+   },
+   "note": "the rollout rows record the lambda they were sampled with, so this shows the restored state really fed the continued rollouts rather than only being stored in a file",
+   "passed": true,
+   "per_episode": {
+    "e4": {
+     "lambda_at_rollout_in_the_row": 1.0125,
+     "lambda_column_in_the_row": 1.0125,
+     "matches_the_dual_update_result": true
+    },
+    "e5": {
+     "lambda_at_rollout_in_the_row": 1.0125,
+     "lambda_column_in_the_row": 1.0125,
+     "matches_the_dual_update_result": true
+    }
+   }
+  },
+  "V4_stop_reason": {
+   "authorised_episode_constructions": 16,
+   "harness_defect_registered": "r35_launch.py bound the per-directory cap to the round's remaining budget without adding the starts this directory had already recorded, so launch2 was effectively capped at 6 fresh episodes; the direction of the error is conservative (it stopped early, it never overran the quota)",
+   "no_run_overran_the_quota": true,
+   "passed": true,
+   "per_launch_starts": {
+    "launch1": 8,
+    "launch2": 7
+   },
+   "refused_start": "train_s11_e6 (scenario 1300005) was refused by the real ledger with 'launch cap 7 reached at 7' because launch2's own book already carried the crashed attempt",
+   "remaining": 1,
+   "total_starts": 15
+  },
+  "V5_uncovered_after_the_resume": {
+   "covered_indirectly": [
+    "post-resume update correctness: R4 recomputes batch 0's update from the restored ep0 milestone and reproduces the recorded post-update parameter hash, lambda and step count byte for byte",
+    "collector non-interference: V2's byte-identical resumed cells plus the A-grade episode 0..3 comparison in PASSIVITY_EVIDENCE.json plus the pure wiring probe in LAUNCH2_ATTEMPT1_REPRO.json (rng, clock, registry and publish counters)"
+   ],
+   "not_executed": [
+    "the update that would have followed the resumed rollouts in launch2: the quota stopped the rollouts at six episodes, so launch2 never reached its own second batch update",
+    "the live collector probe during launch2: the probe's records lived in the process memory and the run ended on the ledger refusal before the dump",
+    "a third runner invocation: not authorised, and the one the user approved is spent"
+   ],
+   "passed": true,
+   "residual_risk_for_frozen_training": "the corrected timing changes which action row owns each credit, so a 128-episode run's trajectory will not match the archived legacy run; that is the point of the fix, not a defect, but it means old trajectories cannot be reused as predictions"
+  }
+ },
+ "clean": true,
+ "environment_launches_used_by_this_script": 0,
+ "episode_constructions_by_this_script": 0,
+ "problems": [],
+ "round": 35,
+ "runner_invocations_used": {
+  "crashed_attempt_consumed_one_construction": true,
+  "launch1": 1,
+  "launch2_attempts": 2
+ },
+ "schema": "round35-resume-chain/1"
+}

@@ -33,7 +33,14 @@ def _summary(result: dict[str, Any]) -> dict[str, Any]:
 
 
 def run(launch_tag: str, *, with_probe: bool = False) -> int:
-    paths = smoke.configure(launch_tag)
+    budget = smoke.ledger_starts_across_launches()
+    remaining = budget["remaining"]
+    planned = {"launch1": smoke.SMOKE_EPISODES, "launch2": 7}[launch_tag]
+    paths = smoke.configure(launch_tag, cap=remaining)
+    if planned > remaining:
+        raise SystemExit(f"{launch_tag} plans {planned} episode constructions but only "
+                         f"{remaining} of the authorised {smoke.MAX_EPISODE_CONSTRUCTIONS} "
+                         f"remain (ledger: {budget})")
     probe = None
     if with_probe:
         import r35_probe
@@ -67,12 +74,18 @@ def run(launch_tag: str, *, with_probe: bool = False) -> int:
         saved = paths["CHECKPOINTS"] / "v2_train_s11_ep4_saved_for_resume.pt"
         shutil.copy2(v2_train.rolling_path(smoke.SMOKE_SEED), saved)
         # the real resume path: train_seed finds the rolling checkpoint and calls
-        # v2_trainer.load_checkpoint, which restores controller + optimizer + RNG + state
-        second = v2_train.train_seed(smoke.SMOKE_SEED, episodes=smoke.SMOKE_EPISODES,
-                                     freeze=freeze, reference_cache=references)
-        phases.append({"phase": "resumed_second_half", "result": _summary(second),
-                       "resume_source_checkpoint": str(saved)})
-        constructions = smoke.SMOKE_EPISODES
+        # v2_trainer.load_checkpoint, which restores controller + optimizer + RNG + state.
+        # 7 rather than 8 because the crashed first attempt already spent one of the
+        # authorised sixteen episode constructions (no refunds).
+        second = v2_train.train_seed(smoke.SMOKE_SEED, episodes=7, freeze=freeze,
+                                     reference_cache=references)
+        phases.append({"phase": "resumed_after_a_cross_process_reload", "result": _summary(second),
+                       "resume_source_checkpoint": str(saved),
+                       "episodes_covered_after_resume": [4, 5, 6],
+                       "note": "the resumed batch holds three episodes rather than four, so its "
+                               "own update is a different batch from launch1's; what has to match "
+                               "is the rollout state of episodes 4..6"})
+        constructions = 7
     else:
         raise SystemExit(f"unknown launch tag {launch_tag!r}")
 
