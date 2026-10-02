@@ -1,0 +1,369 @@
+{
+ "arms": [
+  {
+   "id": "model_s11_greedy",
+   "kind": "model",
+   "mode": "greedy",
+   "rule_params": null,
+   "seed": 11
+  },
+  {
+   "id": "model_s11_sampled",
+   "kind": "model",
+   "mode": "sampled",
+   "rule_params": null,
+   "seed": 11
+  },
+  {
+   "id": "model_s22_greedy",
+   "kind": "model",
+   "mode": "greedy",
+   "rule_params": null,
+   "seed": 22
+  },
+  {
+   "id": "model_s22_sampled",
+   "kind": "model",
+   "mode": "sampled",
+   "rule_params": null,
+   "seed": 22
+  },
+  {
+   "id": "model_s33_greedy",
+   "kind": "model",
+   "mode": "greedy",
+   "rule_params": null,
+   "seed": 33
+  },
+  {
+   "id": "model_s33_sampled",
+   "kind": "model",
+   "mode": "sampled",
+   "rule_params": null,
+   "seed": 33
+  },
+  {
+   "id": "immediate",
+   "kind": "rule",
+   "mode": null,
+   "rule_params": null,
+   "seed": null
+  },
+  {
+   "id": "late_discovery_gate",
+   "kind": "rule",
+   "mode": null,
+   "rule_params": {
+    "cut_steps": 147.0
+   },
+   "seed": null
+  },
+  {
+   "id": "always_hold",
+   "kind": "rule",
+   "mode": null,
+   "rule_params": {},
+   "seed": null
+  }
+ ],
+ "branch": "eval/comm-final-fixed-evaluation",
+ "configuration": {
+  "frozen_search_and_allocation_weights": {
+   "runs/cur_v2rep05_s2/best/shared_mappo_model_21_3100.pth": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+   "runs/joint_eval_20260916/ctde_final_7_1.pth": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+  },
+  "inherited_freeze_token": {
+   "branch_start": "b7217d18b4e7f4e301d0b62a810892967adc6566",
+   "config_hash": "e9b2c067db5951f2",
+   "freeze_sha256": "9cfc0650f2705e8b9d1e00e963bebd2c640de7f3b788ee85a3ade0daeffc82cc",
+   "head_at_freeze": "5be3f1e6437309f4e92cf49807f2e0cbbf7f057f",
+   "token_provenance": "ROUND36 saved its milestones with exactly this inherited token (see runs/comm_final_train_20261001/seed*/FREEZE_MANIFEST.json); the read-only loader requires it to match"
+  },
+  "loss_version": "constrained-lagrangian/2",
+  "production_files": {
+   "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+   "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+   "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+   "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+   "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+   "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+   "integrated_sar/lifecycle_metrics.py": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+   "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2"
+  },
+  "reward_capture_in_eval_rows": "评估不做更新；每行必须带 reward_timing_version=published-completion-event-at-relay-tick/2（技术门禁检查项）",
+  "reward_timing_version": "published-completion-event-at-relay-tick/2",
+  "stage_c_harness": {
+   "v2_blocks.py": "342cdb69b920dfdfeee5bd7a9070321b9a0642fc1b80d5ad974b3f89602c78c8",
+   "v2_check.py": "ead3da2feae866765260409c88b335f2195b43be92ed0fa4f1e5b420fface2d0",
+   "v2_common.py": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+   "v2_controller.py": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+   "v2_reward_timing.py": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+   "v2_rules.py": "a7ce36de2d465cadaba90bd70b36539b5e865a73be8c4e075b9faf5a86c53a57",
+   "v2_run.py": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7",
+   "v2_train.py": "8437aee920e6d9192c0298c2e4ffe01c2daea641d67336216cfeb7dcf0e56883",
+   "v2_trainer.py": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
+  },
+  "trainer_tag": "constrained-cost-v2",
+  "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2"
+ },
+ "decoder_semantics": {
+  "action_rng": "sha256(\"round24-eval:<seed>:<scenario>:<mode>\")  (v2_run.eval_action_seed, common.EVAL_RNG_LABEL 未改)",
+  "greedy": "argmax with ties to SEND；实现 `BudgetMaskedCollector(greedy=True, mask=False, budget_mask=True, forced=lambda item: False)`（v2_run.run_eval）",
+  "never_mixed": "greedy 与 sampled 是同一权重的两种决策规则，分开报表，不合并成一个均值",
+  "sampled": "与训练同一个 masked 多项式采样器：`BudgetMaskedCollector(greedy=False, mask=False, budget_mask=True, forced=lambda item: False)`"
+ },
+ "episodes_vs_batches": {
+  "episodes": "episode_index 0..127 —— 128 次 rollout，每次 1000 步",
+  "milestones": "ep0（登记初值）/ ep64 / ep128；只有 ep128 是本轮评估对象",
+  "update_batches": "每 4 个 episode 一次 PPO + 对偶更新 ⇒ 32 批，批索引 0..31",
+  "warning": "128 是 episode 数，不是更新批数；更新批数是 32"
+ },
+ "head": "e2a272c0303f580d957e778f7e222a56d265372f",
+ "kind": "round37-frozen-evaluation-plan",
+ "models": {
+  "s11": {
+   "bytes_sha256": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+   "episodes_done": 128,
+   "freeze_token_canonical_fields_match_round24_manifest": true,
+   "freeze_token_fields": [
+    "branch_start",
+    "config_hash",
+    "freeze_sha256",
+    "head_at_freeze",
+    "reward_timing_version",
+    "token_provenance",
+    "training_version"
+   ],
+   "lambda_final": 1.4999999999999993,
+   "load_mode": "read_only",
+   "matches_round36_registry": true,
+   "module_digests": {
+    "action_head": "4e6537647c711a19",
+    "cost_head": "900bdc8c8d29886b",
+    "task_value_head": "c84f1e13656069ec",
+    "trunk": "4f334053876b71ab"
+   },
+   "optimizer_restored": false,
+   "optimizer_steps": 464,
+   "parameter_sha256": "553d02dd1de285a736f7fd2a25ce04dc52b00f48ee8226eb08e2a14c5aacdda6",
+   "path": "runs/comm_final_train_20261001/seed11/checkpoints/v2_train_s11_ep128.pt",
+   "reward_timing_version": "published-completion-event-at-relay-tick/2",
+   "rng_restored": false,
+   "timing_interpretation": "versioned_capture_semantics",
+   "training_seed_in_state": 11,
+   "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+   "updates": 32
+  },
+  "s22": {
+   "bytes_sha256": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+   "episodes_done": 128,
+   "freeze_token_canonical_fields_match_round24_manifest": true,
+   "freeze_token_fields": [
+    "branch_start",
+    "config_hash",
+    "freeze_sha256",
+    "head_at_freeze",
+    "reward_timing_version",
+    "token_provenance",
+    "training_version"
+   ],
+   "lambda_final": 1.2624999999999993,
+   "load_mode": "read_only",
+   "matches_round36_registry": true,
+   "module_digests": {
+    "action_head": "18b901be6504ee69",
+    "cost_head": "cf861686c4c654ec",
+    "task_value_head": "9b1bbf8a7ae4edac",
+    "trunk": "c8ba9b2bc204368a"
+   },
+   "optimizer_restored": false,
+   "optimizer_steps": 356,
+   "parameter_sha256": "6a84ab76e206a5115527ddedec5bf7251c3785f229a078a02c50b1dd3dc7bdfb",
+   "path": "runs/comm_final_train_20261001/seed22/checkpoints/v2_train_s22_ep128.pt",
+   "reward_timing_version": "published-completion-event-at-relay-tick/2",
+   "rng_restored": false,
+   "timing_interpretation": "versioned_capture_semantics",
+   "training_seed_in_state": 22,
+   "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+   "updates": 32
+  },
+  "s33": {
+   "bytes_sha256": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+   "episodes_done": 128,
+   "freeze_token_canonical_fields_match_round24_manifest": true,
+   "freeze_token_fields": [
+    "branch_start",
+    "config_hash",
+    "freeze_sha256",
+    "head_at_freeze",
+    "reward_timing_version",
+    "token_provenance",
+    "training_version"
+   ],
+   "lambda_final": 1.4749999999999992,
+   "load_mode": "read_only",
+   "matches_round36_registry": true,
+   "module_digests": {
+    "action_head": "0109dc2d875de008",
+    "cost_head": "6f97a4db95d3630a",
+    "task_value_head": "a4c86c8e2e933ecf",
+    "trunk": "db79226934a38a30"
+   },
+   "optimizer_restored": false,
+   "optimizer_steps": 464,
+   "parameter_sha256": "cd0498693f7636aea5f75cb6a54bd18f64c7410fe2f16e8791b7aa3966a5cb9d",
+   "path": "runs/comm_final_train_20261001/seed33/checkpoints/v2_train_s33_ep128.pt",
+   "reward_timing_version": "published-completion-event-at-relay-tick/2",
+   "rng_restored": false,
+   "timing_interpretation": "versioned_capture_semantics",
+   "training_seed_in_state": 33,
+   "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+   "updates": 32
+  }
+ },
+ "prohibitions": [
+  "0 训练、0 optimizer.step",
+  "不挑最佳 seed、不改用中间里程碑",
+  "不调阈值、不改默认协议",
+  "不因首场景效果换模型或停止扩展",
+  "性能差不算技术失败",
+  "不部署、不推送、不替用户决定最终部署选择"
+ ],
+ "quota": {
+  "arithmetic": "9 arms x 64 scenarios = 576; + 64 + 32 <= 672",
+  "arm_count": 9,
+  "arms": [
+   "model_s11_greedy",
+   "model_s11_sampled",
+   "model_s22_greedy",
+   "model_s22_sampled",
+   "model_s33_greedy",
+   "model_s33_sampled",
+   "immediate",
+   "late_discovery_gate",
+   "always_hold"
+  ],
+  "failure_reserve": 32,
+  "first_scenario_gate": {
+   "arms": 9,
+   "counted_in_normal_launches": true,
+   "effect_based_stop": "禁止：只按技术正确性决定是否扩展",
+   "scenario": 1600000
+  },
+  "hard_cap": 672,
+  "max_parallel_workers": 4,
+  "normal_evaluation_launches": 576,
+  "optimizer_steps_allowed": 0,
+  "recording_reserve": 64,
+  "recording_reserve_needed": false,
+  "recording_reserve_reason": "immediate 本身就是九臂之一且其行即为配对参照，不需要另录独立参照流；因此正常评估就是 576 次，未用额度不得挪用",
+  "scenario_count": 64,
+  "scenarios": [
+   1600000,
+   1600063
+  ],
+  "training_launches_allowed": 0
+ },
+ "reporting_rules": [
+  "greedy 是主表，sampled 是辅助表，两者不合并成一个均值",
+  "三个训练 seed 分别报告，不池化成独立场景样本",
+  "所有表格与文字引用同一份统计结果件",
+  "区间包含零不等于等效；未观察到任务损失不等于 δ=0 的总体保证",
+  "单个 seed 成功不代表训练算法稳定；不得挑一个显著结果宣称整体方法成立",
+  "sampled 每场景一次不是完整采样不确定性评估",
+  "场景配对不等于逐消息信道实现相同：不同发送轨迹遭遇的是各自独立的丢包实现"
+ ],
+ "round": "37",
+ "scenario_provenance": {
+  "audit_artefact": "SCENE_USAGE_AUDIT.json",
+  "basis": "occupancy only: no artefact, registration, claim or committed content uses 1600000..1600063; outcomes were never read when choosing it",
+  "block": [
+   1600000,
+   1600063
+  ],
+  "historical_or_development_blocks_reused": false,
+  "why_not_the_old_blocks": "封存块与开发块不能冒充新测试；本块在路径、跟踪文本、全 ref git 历史与 runs/ 之外均无占用记录"
+ },
+ "scenarios": [
+  1600000,
+  1600001,
+  1600002,
+  1600003,
+  1600004,
+  1600005,
+  1600006,
+  1600007,
+  1600008,
+  1600009,
+  1600010,
+  1600011,
+  1600012,
+  1600013,
+  1600014,
+  1600015,
+  1600016,
+  1600017,
+  1600018,
+  1600019,
+  1600020,
+  1600021,
+  1600022,
+  1600023,
+  1600024,
+  1600025,
+  1600026,
+  1600027,
+  1600028,
+  1600029,
+  1600030,
+  1600031,
+  1600032,
+  1600033,
+  1600034,
+  1600035,
+  1600036,
+  1600037,
+  1600038,
+  1600039,
+  1600040,
+  1600041,
+  1600042,
+  1600043,
+  1600044,
+  1600045,
+  1600046,
+  1600047,
+  1600048,
+  1600049,
+  1600050,
+  1600051,
+  1600052,
+  1600053,
+  1600054,
+  1600055,
+  1600056,
+  1600057,
+  1600058,
+  1600059,
+  1600060,
+  1600061,
+  1600062,
+  1600063
+ ],
+ "schema": "round37-frozen-plan/1",
+ "statistics": {
+  "draws": 10000,
+  "generator": "numpy.random.Generator(PCG64)",
+  "interval": [
+   2.5,
+   97.5
+  ],
+  "pcg64_seed": 20261002,
+  "quantile_method": "linear",
+  "scenarios_sorted": "ascending",
+  "shared_indices": 64,
+  "statistic": "values[indices].mean(axis=1)"
+ },
+ "status": "frozen before the first environment start",
+ "written_at": "2026-10-02 10:37:09"
+}

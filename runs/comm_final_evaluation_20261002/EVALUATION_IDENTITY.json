@@ -1,0 +1,320 @@
+{
+ "all_passed": true,
+ "carried_forward": {
+  "not_re_executed": [
+   "ROUND34 回归套件",
+   "ROUND35 smoke 与恢复边界",
+   "ROUND36 的 G1-G12 / V1-V6 / R1-R6"
+  ],
+  "note": "本轮按授权只做必要身份核验：读取上一轮已交付的通过项，不重跑历史套件",
+  "residual_risks_carried": [
+   "1. **效果仍为空白**：本轮 0 评估启动，三个模型（ep128）与初值（ep0）的表现未测。第 4 天的",
+   "2. **开发块不是未见测试集**：1301000..1301015 已被 ROUND22/24/25/28-32/35 使用过；任何\"泛化\"",
+   "3. **`g_hat` 仍从未为负、λ 一路上行**：与三十一/三十二轮的诊断同形（成本侧被响应、任务侧未",
+   "4. **两类契约情形在本场景块仍不可达**（事件拍无动作行、首动作前 prefix）：本轮 2187 笔入账",
+   "5. **幂等仍未经实机触发**：384 集里没有重复发布，因此\"重复分发不重复入账\"仍是合成 + 结构证据。",
+   "6. **恢复边界本轮未重跑**：ROUND35 已在真实 `.pt` 上验过 5/5 篡改拒绝与旧件拒续训；本轮只新增",
+   "7. **wall-clock 基线的口径局限**：ROUND32 未记 per-launch 耗时，上限由逐集 `seconds` 之和构造，",
+   "8. **本轮 harness 的两处缺陷**（`ROUND36_HARNESS_DEFECTS.json`）需带走：tape 特征形状假设错误、"
+  ],
+  "round34": {
+   "contract": "TASK_REWARD_TIMING_CONTRACT.md",
+   "restore_policy": "legacy checkpoints are refused by the version gate and are only readable through load_checkpoint_read_only",
+   "training_version_manifest": "TRAINING_VERSION_MANIFEST.json"
+  },
+  "round35": {
+   "checkpoint_content_layer_clean": true,
+   "gate_count": 12,
+   "preflight_clean": true,
+   "restore_boundary_clean": true,
+   "smoke_verdict": "go"
+  },
+  "round36": {
+   "all_verification_checks_passed": true,
+   "checks": {
+    "V1_milestone_row_and_checkpoint_version_fields": true,
+    "V2_event_ledger_integrity": true,
+    "V3_batch_zero_byte_identity_vs_round32": true,
+    "V4_frozen_training_volume": true,
+    "V5_old_artefacts_not_rewritten": true,
+    "V6_trajectory_divergence_vs_round32": true
+   },
+   "independent_recheck_passed": true,
+   "quota_used": {
+    "episode_constructions": 384,
+    "optimizer_steps": 1284,
+    "reserve_reruns": 0,
+    "training_launches": 3
+   },
+   "recheck_items": {
+    "R1_git_identity_and_training_path": true,
+    "R2_book_vs_ledgers_vs_launch_records": true,
+    "R3_checkpoint_hashes_agree_four_ways": true,
+    "R4_batch_records_and_volume_recomputed": true,
+    "R5_old_rounds_not_written": true,
+    "R6_quota_and_boundaries": true
+   }
+  }
+ },
+ "environment": {
+  "ack_enabled": false,
+  "b0_bytes": 10000.0,
+  "budget_bytes": 29300,
+  "delivery_probability": 0.7,
+  "delta": 0.0,
+  "dependencies_installed": 0,
+  "inherited_world_fields": {
+   "actor_kv_mode": "tokens",
+   "allocation_interval": 5,
+   "allow_release_without_suppression": false,
+   "check_release_source_stage": false,
+   "comm_ack": false,
+   "comm_budget_bytes": 29300,
+   "comm_delay_ticks": 0,
+   "comm_delivery_probability": 0.7,
+   "comm_max_wait_steps": null,
+   "comm_policy": "immediate",
+   "comm_policy_params": "",
+   "comm_range": 0.3,
+   "comm_sends_per_tick": null,
+   "comm_subscribers": "all",
+   "comm_timing_mode": "policy_owned_timing",
+   "comm_urgent_wait_steps": null,
+   "command_ttl": 10.0,
+   "coordination_interval": 5,
+   "coordinator_policy": "coalition_planner",
+   "ctde_task_logit_offset": 0.0,
+   "deadline_tightness": [
+    0.5,
+    2.0
+   ],
+   "decision_trace": null,
+   "detection_radius": 5,
+   "device": "cpu",
+   "dt": 1.0,
+   "gossip_interval": 2,
+   "grid_size": 60,
+   "info_probe": null,
+   "mock": false,
+   "num_goals": 6,
+   "obstacle_density": 0.15,
+   "piloc_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+   "quiet": true,
+   "record_stream": null,
+   "release_redundant_members": true,
+   "replay_stream": null,
+   "rescue_per_species": 2,
+   "rescue_species": 3,
+   "residual_scale": 0.25,
+   "search_agents": 2,
+   "search_probe": null,
+   "seed": 1600000,
+   "steps": 1000,
+   "sticky_commitments": true,
+   "suppress_recommand_own_task": true,
+   "task_checkpoint": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+   "task_membership_consistency": false,
+   "use_coordinator": true
+  },
+  "interpreter": "D:\\project_env\\python.exe",
+  "new_virtualenv": false,
+  "numpy": "2.2.6",
+  "python": "3.10.19",
+  "replay_or_online": "每个 cell 独立在线运行一集（1000 步），不做回放；与训练块同一运行方式",
+  "steps_per_episode": 1000,
+  "substituted_fields_note": "Stage B frozen overrides applied: ['comm_ack', 'comm_budget_bytes', 'comm_delay_ticks', 'comm_delivery_probability', 'comm_max_wait_steps', 'comm_range', 'comm_sends_per_tick', 'comm_subscribers', 'comm_timing_mode', 'comm_urgent_wait_steps', 'decision_trace', 'device', 'gossip_interval', 'info_probe', 'mock', 'num_goals', 'quiet', 'record_stream', 'replay_stream', 'search_probe', 'steps']",
+  "torch": "2.9.0+cu128",
+  "transport_overrides": {
+   "comm_ack": false,
+   "comm_budget_bytes": 29300,
+   "comm_delay_ticks": 0,
+   "comm_delivery_probability": 0.7,
+   "comm_max_wait_steps": null,
+   "comm_range": 0.3,
+   "comm_sends_per_tick": null,
+   "comm_subscribers": "all",
+   "comm_timing_mode": "policy_owned_timing",
+   "comm_urgent_wait_steps": null,
+   "decision_trace": null,
+   "device": "cpu",
+   "gossip_interval": 2,
+   "info_probe": null,
+   "mock": false,
+   "num_goals": 6,
+   "quiet": true,
+   "record_stream": null,
+   "replay_stream": null,
+   "search_probe": null,
+   "steps": 1000
+  }
+ },
+ "kind": "round37-evaluation-identity",
+ "model_registry": {
+  "all_match_round36_registry": true,
+  "expected_episodes": 128,
+  "expected_update_batches": 32,
+  "intermediate_milestones_used": false,
+  "models": {
+   "s11": {
+    "bytes_sha256": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+    "episodes_done": 128,
+    "freeze_token_canonical_fields_match_round24_manifest": true,
+    "freeze_token_fields": [
+     "branch_start",
+     "config_hash",
+     "freeze_sha256",
+     "head_at_freeze",
+     "reward_timing_version",
+     "token_provenance",
+     "training_version"
+    ],
+    "lambda_final": 1.4999999999999993,
+    "load_mode": "read_only",
+    "matches_round36_registry": true,
+    "module_digests": {
+     "action_head": "4e6537647c711a19",
+     "cost_head": "900bdc8c8d29886b",
+     "task_value_head": "c84f1e13656069ec",
+     "trunk": "4f334053876b71ab"
+    },
+    "optimizer_restored": false,
+    "optimizer_steps": 464,
+    "parameter_sha256": "553d02dd1de285a736f7fd2a25ce04dc52b00f48ee8226eb08e2a14c5aacdda6",
+    "path": "runs/comm_final_train_20261001/seed11/checkpoints/v2_train_s11_ep128.pt",
+    "reward_timing_version": "published-completion-event-at-relay-tick/2",
+    "rng_restored": false,
+    "timing_interpretation": "versioned_capture_semantics",
+    "training_seed_in_state": 11,
+    "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+    "updates": 32
+   },
+   "s22": {
+    "bytes_sha256": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+    "episodes_done": 128,
+    "freeze_token_canonical_fields_match_round24_manifest": true,
+    "freeze_token_fields": [
+     "branch_start",
+     "config_hash",
+     "freeze_sha256",
+     "head_at_freeze",
+     "reward_timing_version",
+     "token_provenance",
+     "training_version"
+    ],
+    "lambda_final": 1.2624999999999993,
+    "load_mode": "read_only",
+    "matches_round36_registry": true,
+    "module_digests": {
+     "action_head": "18b901be6504ee69",
+     "cost_head": "cf861686c4c654ec",
+     "task_value_head": "9b1bbf8a7ae4edac",
+     "trunk": "c8ba9b2bc204368a"
+    },
+    "optimizer_restored": false,
+    "optimizer_steps": 356,
+    "parameter_sha256": "6a84ab76e206a5115527ddedec5bf7251c3785f229a078a02c50b1dd3dc7bdfb",
+    "path": "runs/comm_final_train_20261001/seed22/checkpoints/v2_train_s22_ep128.pt",
+    "reward_timing_version": "published-completion-event-at-relay-tick/2",
+    "rng_restored": false,
+    "timing_interpretation": "versioned_capture_semantics",
+    "training_seed_in_state": 22,
+    "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+    "updates": 32
+   },
+   "s33": {
+    "bytes_sha256": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+    "episodes_done": 128,
+    "freeze_token_canonical_fields_match_round24_manifest": true,
+    "freeze_token_fields": [
+     "branch_start",
+     "config_hash",
+     "freeze_sha256",
+     "head_at_freeze",
+     "reward_timing_version",
+     "token_provenance",
+     "training_version"
+    ],
+    "lambda_final": 1.4749999999999992,
+    "load_mode": "read_only",
+    "matches_round36_registry": true,
+    "module_digests": {
+     "action_head": "0109dc2d875de008",
+     "cost_head": "6f97a4db95d3630a",
+     "task_value_head": "a4c86c8e2e933ecf",
+     "trunk": "db79226934a38a30"
+    },
+    "optimizer_restored": false,
+    "optimizer_steps": 464,
+    "parameter_sha256": "cd0498693f7636aea5f75cb6a54bd18f64c7410fe2f16e8791b7aa3966a5cb9d",
+    "path": "runs/comm_final_train_20261001/seed33/checkpoints/v2_train_s33_ep128.pt",
+    "reward_timing_version": "published-completion-event-at-relay-tick/2",
+    "rng_restored": false,
+    "timing_interpretation": "versioned_capture_semantics",
+    "training_seed_in_state": 33,
+    "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+    "updates": 32
+   }
+  },
+  "numbering_convention": {
+   "episodes": "episode_index 0..127 —— 128 次 rollout，每次 1000 步",
+   "milestones": "ep0（登记初值）/ ep64 / ep128；只有 ep128 是本轮评估对象",
+   "update_batches": "每 4 个 episode 一次 PPO + 对偶更新 ⇒ 32 批，批索引 0..31",
+   "warning": "128 是 episode 数，不是更新批数；更新批数是 32"
+  },
+  "read_only_only": true,
+  "rolling_checkpoints_used": false
+ },
+ "numbering_convention": {
+  "episodes": "episode_index 0..127 —— 128 次 rollout，每次 1000 步",
+  "milestones": "ep0（登记初值）/ ep64 / ep128；只有 ep128 是本轮评估对象",
+  "update_batches": "每 4 个 episode 一次 PPO + 对偶更新 ⇒ 32 批，批索引 0..31",
+  "warning": "128 是 episode 数，不是更新批数；更新批数是 32"
+ },
+ "round": "37",
+ "scenario_audit": {
+  "chosen_block": [
+   1600000,
+   1600063
+  ],
+  "history_and_outside_runs": {
+   "clean": true,
+   "paths_outside_runs_containing_the_block": [],
+   "pickaxe_all_refs_per_probe": {
+    "1600000": 0,
+    "1600031": 0,
+    "1600063": 0
+   }
+  },
+  "occupied_members_in_block": {
+   "block": [
+    1600000,
+    1600063
+   ],
+   "free": true,
+   "occupied_count": 0,
+   "occupied_members": [],
+   "size": 64
+  },
+  "outcome_data_read": false
+ },
+ "schema": "round37-eval-identity/1",
+ "start": {
+  "branch": "eval/comm-final-fixed-evaluation",
+  "expected_branch": "eval/comm-final-fixed-evaluation",
+  "expected_head": "e2a272c0303f580d957e778f7e222a56d265372f",
+  "head": "e2a272c0303f580d957e778f7e222a56d265372f",
+  "head_is_the_round36_delivery_head": true,
+  "round34_contract_present": true,
+  "round35_smoke_report_present": true,
+  "round36_deliverables_present": {
+   "frozen_config": true,
+   "launch_book": true,
+   "recheck": true,
+   "registry": true,
+   "report": true,
+   "verification": true
+  },
+  "tracked_modifications_at_start": []
+ },
+ "written_at": "2026-10-02 10:37:09"
+}

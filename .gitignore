@@ -437,3 +437,23 @@ runs/comm_final_train_20261001/seed*/rows/
 runs/comm_final_train_20261001/seed*/checkpoints/
 runs/comm_final_train_20261001/seed*/rejected/
 runs/comm_final_train_20261001/__pycache__/
+
+# round-37 fixed final evaluation of the corrected communication models: frozen plan, gate,
+# ledgers, statistics and reports are tracked; raw lifecycles, transcripts, tapes, rows, claims,
+# shard summaries and checkpoints stay outside git as in every previous round
+!runs/comm_final_evaluation_20261002/
+runs/comm_final_evaluation_20261002/*
+!runs/comm_final_evaluation_20261002/*.py
+!runs/comm_final_evaluation_20261002/*.md
+!runs/comm_final_evaluation_20261002/*.json
+!runs/comm_final_evaluation_20261002/delivery_draft/
+runs/comm_final_evaluation_20261002/delivery_draft/*
+!runs/comm_final_evaluation_20261002/delivery_draft/*.md
+!runs/comm_final_evaluation_20261002/delivery_draft/*.json
+runs/comm_final_evaluation_20261002/logs/
+runs/comm_final_evaluation_20261002/rows/
+runs/comm_final_evaluation_20261002/checkpoints/
+runs/comm_final_evaluation_20261002/rejected/
+runs/comm_final_evaluation_20261002/claims/
+runs/comm_final_evaluation_20261002/shards/
+runs/comm_final_evaluation_20261002/__pycache__/
