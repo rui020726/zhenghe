@@ -59,5 +59,14 @@
     "retries_used_so_far": 0,
     "optimizer_steps": 0,
     "checkpoint_writes": 0
+  },
+  "continuation_preflight": {
+    "runner": "runs/comm_refresh_held_mechanism_20261002/r39_continue.py",
+    "observed_round39_ledger_path": "runs/comm_refresh_held_mechanism_20261002/logs/START_LEDGER_p*.json",
+    "observed_starts_before_continuation": 9,
+    "initial_issue": "A fresh process imported v2_common with its historical Stage C LOGS path, so the first read-only preflight saw the wrong ledger location.",
+    "resolution": "Bind all v2_common output paths to ROUND39 before querying the shared launch ledger.",
+    "verified_before_any_additional_start": true,
+    "environment_starts_during_preflight": 0
   }
 }

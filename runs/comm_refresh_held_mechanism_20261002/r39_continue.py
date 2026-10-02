@@ -47,6 +47,16 @@ def git(*args: str) -> str:
                           capture_output=True, text=True, encoding="utf-8").stdout.strip()
 
 
+def bind_round39_output() -> None:
+    common = r39_run.v2_common
+    common.OUTPUT_DIR = HERE
+    common.LOGS = HERE / "logs"
+    common.ROWS = HERE / "rows"
+    common.REJECTED = HERE / "rejected"
+    common.CHECKPOINTS = HERE / "checkpoints"
+    common.LAUNCH_CAP = 153
+
+
 def require_gate_and_resume_state() -> tuple[dict[str, Any], list[dict[str, Any]]]:
     if git("branch", "--show-current") != EXPECTED_BRANCH:
         raise RuntimeError("not on the dedicated ROUND39 branch")
@@ -91,6 +101,9 @@ def require_gate_and_resume_state() -> tuple[dict[str, Any], list[dict[str, Any]
     if book.get("hard_cap") != 153 or book.get("planned_normal_starts") != 144:
         raise RuntimeError("normal launch plan or hard cap changed")
 
+    # v2_common imports with its historical Stage C paths. Bind this fresh
+    # process to ROUND39 before reading the already-populated shared ledger.
+    bind_round39_output()
     claim_names = {path.name for path in (HERE / "claims").glob("*.claim")}
     expected_claims = {f"cell_{index:03d}_retry_0.claim" for index in range(9)}
     if claim_names != expected_claims:
@@ -120,13 +133,8 @@ def continue_matrix() -> None:
                                "continuation_commit": git("rev-parse", "HEAD"),
                                "started_at": time.strftime("%Y-%m-%d %H:%M:%S")}) + "\n")
     try:
+        bind_round39_output()
         common = r39_run.v2_common
-        common.OUTPUT_DIR = HERE
-        common.LOGS = HERE / "logs"
-        common.ROWS = HERE / "rows"
-        common.REJECTED = HERE / "rejected"
-        common.CHECKPOINTS = HERE / "checkpoints"
-        common.LAUNCH_CAP = 153
         for directory in (common.OUTPUT_DIR, common.LOGS, common.ROWS,
                           common.REJECTED, common.CHECKPOINTS):
             directory.mkdir(parents=True, exist_ok=True)
