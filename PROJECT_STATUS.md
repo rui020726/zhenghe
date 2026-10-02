@@ -1,5 +1,59 @@
 # 项目状态
 
+## 2026-10-02：ROUND37 修复版通信模型固定终评（新 64 场景块，576 格全齐）——系统可复现，但学习模型未胜过强规则：greedy 三 seed 逐场景按时任务数与"从不发送"完全相同（64/64），其中两个 seed 多花约 28 000 B/集，比 `immediate` 贵 13.5 kB、比 `late_discovery_gate_147` 贵 24.7 kB；三 seed 成本符号不一致
+
+分支 `eval/comm-final-fixed-evaluation`（自 ROUND36 交付头 `e2a272c0303f580d957e778f7e222a56d265372f`
+新建，同名分支事先检查不存在、未覆盖未重置）；产物 `runs/comm_final_evaluation_20261002/`。
+0 训练、0 optimizer.step、0 次网络尝试、未推送。授权原文与开工核验在 `EXECUTION_BASIS.md`。
+
+```text
+九臂 x 64 新场景 = 576 格全部到齐：行 / 原子 claim / 真实 Stage C ledger 三方一致，技术失败 0
+额度：正常评估 576/576；独立流录制 0/64（判定不需要，未挪用）；技术失败储备 0/32（未动用）
+并行 4 进程（上限 4），各 1840-1856 s，四路并行约 31 分钟；单格 12.7-13.3 s
+场景块 1600000..1600063：路径 / 跟踪文本 / 9 处登记 / git 全 ref pickaxe / runs 之外 四层审计均无占用，
+                        选块只按占用、不读任何结局字段
+失败计数分两栏：被测系统正确性失败 0 处；本轮 harness 与报告件缺陷 4 处（均已登记并复现）
+```
+
+- **任务 1-2 起点与冻结对象**：指定头逐字相符、tracked 0 处；ROUND36 V1-V6/R1-R6、ROUND35 三件
+  `clean`、ROUND34 契约只读引用，未重跑历史套件。编号口径登记：0..127 是 128 次 rollout、
+  **32 个更新批**（批 0..31）。三个 ep128 里程碑在首次启动前登记路径、字节 SHA256、
+  whole-controller 参数摘要（`553d02dd1de285a7` / `6a84ab76e206a511` / `cd0498693f7636ae`）、
+  四模块 digest、两个版本字段与 episodes/updates/λ 状态，且与 ROUND36 登记表全等；
+  装载走 `load_checkpoint_read_only` ⇒ 不建 optimizer、不动 RNG；ep64 与 rolling 未参评。
+- **任务 5 技术门禁（首场景九臂，计入 576）T1-T8 全通过**：模型与配置身份（排除 `policy`
+  与 `policy_parameters` 两个臂身份字段并登记理由）；训练 0 步、参数摘要与冻结件一致；
+  计费/任务/final record 闭合（tap==账本、发射==transcript、task tap==on_time、步数 1000、ACK 全零）；
+  **greedy 在全部自由候选上满足 `p[SEND] >= p[HOLD]`（违例 0）**、sampled 逐决策联合似然与 tape
+  相符（≤1e-6）、两臂动作流种子互不相交；两个版本字段与 `task_stream` 键==入账 tick 证明修复后的
+  采集接线在评估路径同样生效；9 臂同场景且**不声称"同一批丢包"**（各臂尝试数 0/8/35/66 不同）。
+  判定只依据技术正确性，首场景效果未用于任何继续/换模型决策。
+- **任务 6 结果（`RESULTS_TABLES.md` 由 `ROUND37_STATISTICS.json` 机械渲染；`ROUND37_REPORT_CHECK.json`
+  K1-K4 保证报告与机器件同源）**：分母 64 场景 × 1 集，区间为描述性 bootstrap
+  （PCG64(20261002)、10000×64 共享索引、linear 分位）。
+  ① 三个 greedy 臂按时 5.6875 个/集、合计 364，与 `always_hold` **逐场景 64/64 完全相同**；
+  `immediate` 5.8594（375）、`late_discovery_gate_147` 5.8281（373）。
+  ② 配对差：vs immediate **−0.1719 个/集 [−0.2812, −0.0781]**（0 改善 / 54 持平 / 10 退化），
+  vs late_147 −0.1406 [−0.2344, −0.0625]；按时目标集合**没有交换**，是"少 11 个、多 0 个"。
+  ③ 成本：s11/s33 greedy 分别 +13516.9 / +13522.8 B/集 vs immediate（更贵 64/64），
+  +24722 / +24728 vs late；s22 greedy 为 0 B —— 它一条都不发，与 `always_hold` 同行为，
+  其"更省"不是学到的取舍。④ sampled 辅表：仅 s22_sampled 接近 immediate（5.8438，dY −0.0156
+  [−0.0469, 0.0000]）但仍多花 6000 B；三臂相对两条规则的字节差全为正。
+  ⑤ 三 seed 一致性：任务差符号一致为负，**成本差符号不一致**（+13.5k / −14.6k / +13.5k），
+  行为定性不同（两发一静）。
+- **交付冻结**：`FROZEN_EVALUATION_PLAN.json`（模型/场景/九臂/配置/统计/额度先冻结后运行，
+  有行之后拒绝重写）、`EVALUATION_IDENTITY.json`、`SCENE_USAGE_AUDIT.json`、`ROUND37_GATE.json`、
+  `EVALUATION_LEDGER_RECONCILIATION.json`、`ROUND37_STATISTICS.json`、`RESULTS_TABLES.md`、
+  `ROUND37_REPORT_CHECK.json`、`ROUND37_HARNESS_DEFECTS.json`、`ROUND37_EVALUATION_REPORT.md`、
+  `delivery_draft/`（架构与事件顺序、运行手册、清单、历史与修复边界、结果模板与禁则、
+  交付目录与故障排查 + 2693 件 Git 外原件逐件 SHA256 约 580 MB）。
+- **五项明确区分**：① 系统可运行且可复现 = 是；② 是否观察到任务损失 = 是（本块三 seed greedy
+  均 −0.1719 且逐场景等于不发送）；③ 是否比强规则省成本 = 否（两条规则在任务与成本上同时占优，
+  唯一省成本的臂是退化为不发送的那个 seed）；④ 三 seed 是否一致 = 否（成本与行为不一致）；
+  ⑤ 仍未建立：δ=0 总体保证、跨块泛化、算法稳定性、重复分发幂等实机、两类不可达契约情形、
+  sampled 采样不确定性（每场景一次）、逐消息"同一批丢包"式配对。
+  结果好坏不触发重训；学习模型与规则基线的最终部署选择不由本轮代替用户决定。
+
 ## 2026-10-01：ROUND36 修复版冻结训练（最后一次有界训练）——3 个 seed 从登记初值跑满冻结训练量（384/384 构造、96 批、1284 步、0 失败、储备未动用），三次都在归档构造的 wall-clock 上限内，12 个 checkpoint 与 384 行两个版本字段齐全且经真实版本门可恢复；结论 go（可进入第 4 天固定评估，效果数字仍为空白）
 
 分支 `fix/comm-task-reward-event-timing`（开工头 `577344aab8a5c9bfcf75e7ffbf6f77e503dbc200` =

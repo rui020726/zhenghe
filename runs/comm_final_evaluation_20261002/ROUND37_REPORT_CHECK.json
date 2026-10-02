@@ -1,0 +1,89 @@
+{
+ "all_passed": true,
+ "checked_at": "2026-10-02 11:41:19",
+ "checks": {
+  "K1_report_numbers_are_all_present_in_the_rendered_tables": {
+   "distinct_checked": 74,
+   "not_found_in_tables": [],
+   "numbers_checked": 150,
+   "passed": true
+  },
+  "K2_greedy_arms_match_the_never_send_baseline_per_scenario": {
+   "always_hold_total": 364,
+   "model_s11_greedy": {
+    "identical_in_every_scenario": true,
+    "scenarios_compared": 64,
+    "timely_total": 364
+   },
+   "model_s22_greedy": {
+    "identical_in_every_scenario": true,
+    "scenarios_compared": 64,
+    "timely_total": 364
+   },
+   "model_s33_greedy": {
+    "identical_in_every_scenario": true,
+    "scenarios_compared": 64,
+    "timely_total": 364
+   },
+   "passed": true
+  },
+  "K3_reported_totals_match_the_statistics_artefact": {
+   "model_greedy_totals_from_rows": {
+    "model_s11_greedy": {
+     "identical_in_every_scenario": true,
+     "scenarios_compared": 64,
+     "timely_total": 364
+    },
+    "model_s22_greedy": {
+     "identical_in_every_scenario": true,
+     "scenarios_compared": 64,
+     "timely_total": 364
+    },
+    "model_s33_greedy": {
+     "identical_in_every_scenario": true,
+     "scenarios_compared": 64,
+     "timely_total": 364
+    }
+   },
+   "passed": true,
+   "rule_totals_from_rows": {
+    "always_hold": 364,
+    "immediate": 375,
+    "late_discovery_gate": 373
+   },
+   "totals_from_statistics": {
+    "always_hold": 364,
+    "immediate": 375,
+    "late_discovery_gate": 373,
+    "model_s11_greedy": 364,
+    "model_s11_sampled": 364,
+    "model_s22_greedy": 364,
+    "model_s22_sampled": 374,
+    "model_s33_greedy": 364,
+    "model_s33_sampled": 365
+   }
+  },
+  "K4_gate_matrix_and_quota_numbers": {
+   "authoritative_claims": 576,
+   "authoritative_rows": 576,
+   "authoritative_stage_c_ledger": 576,
+   "gate_all_passed": true,
+   "gate_checks": 7,
+   "gate_launches_counted_in_matrix": 9,
+   "matrix_complete": true,
+   "optimizer_steps": 0,
+   "passed": true,
+   "reconciliation_all_passed": true,
+   "recording_reserve_used": 0,
+   "statistics_cells": 576,
+   "technical_failures_in_ledger": 0,
+   "training_launches": 0
+  }
+ },
+ "environment_launches_used": 0,
+ "kind": "round37-report-consistency",
+ "note": "the report never carries a number that the machine artefacts do not carry; the headline per-scenario claim is recomputed here from the rows",
+ "optimizer_steps_used": 0,
+ "round": "37",
+ "schema": "round37-reportcheck/1"
+}
