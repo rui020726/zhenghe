@@ -1,0 +1,63 @@
+{
+  "schema": "round39-postgate-validation-identity/1",
+  "recorded_at": "2026-10-02T23:26:18+08:00",
+  "branch": "exp/comm-refresh-held-mechanism",
+  "required_base": "233a44fc10048488a0c71bda9d88e977c99c800e",
+  "prelaunch_commit": "e8f3e76f5555e1da271e6d8d560c32fadf151ba2",
+  "prelaunch_parent": "233a44fc10048488a0c71bda9d88e977c99c800e",
+  "first_scene_gate": {
+    "path": "runs/comm_refresh_held_mechanism_20261002/FIRST_SCENE_GATE.json",
+    "sha256": "b54816901a2e67e39108a2286b0bada6a41712992dacaab5850fe1ce7f61828b",
+    "passed": true,
+    "normal_cells_reused": 9,
+    "environment_starts_during_recheck": 0
+  },
+  "gate_comparator_correction": {
+    "path": "runs/comm_refresh_held_mechanism_20261002/GATE_COMPARATOR_AMENDMENT.md",
+    "sha256": "b961fc30c9e33ff726004a2104889f00e39f0b75f0b2e3f8d35b368f5919aedf",
+    "excluded_runtime_path_fields": [
+      "output",
+      "comm_transcript",
+      "decision_trace",
+      "reservation_log"
+    ],
+    "run_config_record_excluded_from_execution_prefix": true,
+    "configuration_digests_round39": {
+      "s11_original_greedy": "ae374a0744803beea8b32209b83080388838f8baec957108a9e2dd5471789ad6",
+      "s22_original_greedy": "ae374a0744803beea8b32209b83080388838f8baec957108a9e2dd5471789ad6",
+      "s33_original_greedy": "ae374a0744803beea8b32209b83080388838f8baec957108a9e2dd5471789ad6",
+      "immediate": "760ad2c959343b35216a697df485845f359b3f03ae3bf1e9238d29e4de8232a4",
+      "late_discovery_gate_147": "ae374a0744803beea8b32209b83080388838f8baec957108a9e2dd5471789ad6",
+      "always_hold": "ae374a0744803beea8b32209b83080388838f8baec957108a9e2dd5471789ad6"
+    },
+    "six_round37_controls_match": true,
+    "source_hashes_checked": 17,
+    "all_17_frozen_round37_source_hashes_match": true
+  },
+  "frozen_execution_code": {
+    "runner": {
+      "path": "runs/comm_refresh_held_mechanism_20261002/r39_run.py",
+      "current_git_blob": "4ba807b7d4098ca923f46c7c8029beb0c606c6da",
+      "prelaunch_git_blob": "4ba807b7d4098ca923f46c7c8029beb0c606c6da"
+    },
+    "collector": {
+      "path": "runs/comm_refresh_held_mechanism_20261002/r39_collector.py",
+      "current_git_blob": "4ca23160826175396aee884f441c77a4d9a6e367",
+      "prelaunch_git_blob": "4ca23160826175396aee884f441c77a4d9a6e367"
+    },
+    "v2_run_sha256": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7",
+    "production_modules_modified": [],
+    "treatment_and_frozen_runner_unchanged": true
+  },
+  "resume_boundary": {
+    "completed_normal_cells_before_continuation": 9,
+    "remaining_normal_cells": 135,
+    "normal_cap": 144,
+    "technical_retry_reserve": 9,
+    "hard_cap": 153,
+    "technical_failures_so_far": 0,
+    "retries_used_so_far": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0
+  }
+}
