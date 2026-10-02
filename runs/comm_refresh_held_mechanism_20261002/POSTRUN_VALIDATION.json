@@ -1,0 +1,98 @@
+{
+  "schema": "round39-postrun-validation/1",
+  "status": "passed",
+  "branch": "exp/comm-refresh-held-mechanism",
+  "prelaunch_commit": "e8f3e76f5555e1da271e6d8d560c32fadf151ba2",
+  "head_before_final_delivery_commit": "d93a18e59131404d371c2e73d1a8261e969c2a8a",
+  "matrix": {
+    "scenes": 16,
+    "arms_per_scene": 9,
+    "normal_starts": 144,
+    "completed_cells": 144,
+    "technical_failures": 0,
+    "retries": 0,
+    "hard_cap": 153,
+    "optimizer_steps": 0,
+    "training_launches": 0,
+    "checkpoint_writes": 0,
+    "claims": 144,
+    "rows": 144,
+    "row_cost_task_budget_checks": 144,
+    "read_only_checkpoint_row_checks": 96,
+    "mechanism_chains": 165,
+    "real_ledger_entries": 144,
+    "real_ledger_process_files": [
+      "START_LEDGER_p23516.json",
+      "START_LEDGER_p54704.json"
+    ],
+    "raw_checkpoint_outputs": 0
+  },
+  "gate": {
+    "all_passed": true,
+    "first_scene_cells": 9,
+    "additional_starts_during_comparator_recheck": 0,
+    "round37_frozen_sources_matched": 17
+  },
+  "source_integrity": {
+    "r39_run_frozen_blob_matches_prelaunch": true,
+    "r39_collector_frozen_blob_matches_prelaunch": true,
+    "production_modules_modified": [],
+    "checkpoints": {
+      "s11": {
+        "path": "runs/comm_final_train_20261001/seed11/checkpoints/v2_train_s11_ep128.pt",
+        "bytes_sha256": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+        "parameter_sha256": "553d02dd1de285a736f7fd2a25ce04dc52b00f48ee8226eb08e2a14c5aacdda6",
+        "unchanged_from_prelaunch_identity": true
+      },
+      "s22": {
+        "path": "runs/comm_final_train_20261001/seed22/checkpoints/v2_train_s22_ep128.pt",
+        "bytes_sha256": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+        "parameter_sha256": "6a84ab76e206a5115527ddedec5bf7251c3785f229a078a02c50b1dd3dc7bdfb",
+        "unchanged_from_prelaunch_identity": true
+      },
+      "s33": {
+        "path": "runs/comm_final_train_20261001/seed33/checkpoints/v2_train_s33_ep128.pt",
+        "bytes_sha256": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+        "parameter_sha256": "cd0498693f7636aea5f75cb6a54bd18f64c7410fe2f16e8791b7aa3966a5cb9d",
+        "unchanged_from_prelaunch_identity": true
+      }
+    }
+  },
+  "job_status_reconciliation": {
+    "derived_from_attempts": true,
+    "attempt_rows_changed": false,
+    "attempt_statuses": {
+      "completed": 144
+    },
+    "planned_job_statuses_before": {
+      "not_started": 144
+    },
+    "planned_job_statuses_after": {
+      "completed": 144
+    },
+    "attempts_sha256_before_after_equal": true,
+    "reconciled_at": "2026-10-03T00:07:03+08:00"
+  },
+  "external_original_manifest": {
+    "files": 557,
+    "total_bytes": 240405278,
+    "all_size_and_sha256_rechecked": true,
+    "raw_run_artifacts_git_tracked": false
+  },
+  "analysis_audit": {
+    "prelaunch_analyzer_blob": "6cf1386295d6277e14b0ce4d641119005503fac3",
+    "final_analyzer_git_blob": "42512b109dda505f32750bb04bd56da10db6259d",
+    "round18_import_path_added_after_initial_read_only_failure": true,
+    "first_report_delivery_matching_corrected_to_recipient_deliver_records": true,
+    "delivery_and_receiver_acceptance_reported_separately": true,
+    "no_environment_starts_during_analysis": true
+  },
+  "required_output_sha256": {
+    "ROUND39_RESULTS.json": "e1d6abc2d501d06a0d456d04268874e5b504596329d29b2c61daeb88c4d961dc",
+    "PAIRED_ANALYSIS.json": "911c9feaf32003e99b09f5b8548c827bc3c4ca33a015db5b51ae41c47546f06a",
+    "MECHANISM_CHAINS.json": "4d3e906e8bf5185f8728ee981722f576968f2be29722cf2f840830d56d5f0dbc",
+    "GIT_EXTERNAL_ORIGINALS.json": "73adbcf790a62ff68e67e4a758bb321816f5f0985141f74c47f5c5e7bb323dd2",
+    "MACHINE_VERDICT.json": "a0c53fed9fc7fa6ad697b4f255f0b1a9ae636f9c38f6292f1824ae7c165bfb12",
+    "ROUND39_REPORT.md": "ed7d2325cd9302c51c7eec525f9efc4ef5aabb20e1761f9f0c7ab93cb76902de"
+  }
+}

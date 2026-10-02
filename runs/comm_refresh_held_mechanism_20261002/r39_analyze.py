@@ -7,6 +7,7 @@ import json
 import statistics
 import subprocess
 import sys
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -14,7 +15,9 @@ ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 R37 = ROOT / "runs" / "comm_final_evaluation_20261002"
 R38 = ROOT / "runs" / "comm_research_recovery_20261002"
-sys.path[:0] = [str(ROOT), str(ROOT / "runs" / "comm_cost_v2_rerun_20260928")]
+ROUND18 = ROOT / "runs" / "search_trace_and_policy_20260925"
+sys.path[:0] = [str(ROOT), str(ROOT / "runs" / "comm_cost_v2_rerun_20260928"),
+                str(ROUND18)]
 SEEDS = [11, 22, 33]
 SCENES = [1600000, 1600001, 1600002, 1600003, 1600004, 1600005, 1600006,
           1600011, 1600018, 1600034, 1600036, 1600040, 1600049, 1600056,
@@ -139,14 +142,42 @@ def cell_data(arm: str, scene: int) -> dict[str, Any]:
     first_deliveries: dict[str, dict[str, Any]] = {}
     for record in sends:
         if bool(record.get("first")):
-            first_deliveries[str(record["target"])] = {
+            target = str(record["target"])
+            if target in first_deliveries:
+                raise RuntimeError(f"multiple first-send transcript records for {target} in {arm} s{scene}")
+            first_deliveries[target] = {
                 "step": int(record["step"]),
-                "packets_sent": int(record.get("packets", 0)),
+                "revision": int(record.get("revision", 0)),
+                "packets_surviving_channel_loss": int(record.get("packets", 0)),
                 "packets_lost": int(record.get("packets_lost", 0)),
                 "recipient_attempts": int(record.get("attempts", 0)),
                 "cost_bytes": int(record.get("cost_bytes", 0)),
-                "revision": int(record.get("revision", 0)),
+                "recipient_delivery_records": [],
             }
+    for record in transcript_records:
+        if record.get("kind") != "deliver":
+            continue
+        target = str(record.get("target"))
+        first = first_deliveries.get(target)
+        if first is None:
+            continue
+        if (int(record.get("revision", -1)) == first["revision"]
+                and int(record.get("sent_step", -1)) == first["step"]):
+            first["recipient_delivery_records"].append({
+                "step": int(record["step"]),
+                "sent_step": int(record["sent_step"]),
+                "agent": str(record["agent"]),
+                "accepted": bool(record.get("accepted")),
+                "reason": str(record.get("reason", "")),
+                "payload_bytes": int(record.get("payload_bytes", 0)),
+            })
+    for first in first_deliveries.values():
+        first["recipient_packets_delivered"] = len(first["recipient_delivery_records"])
+        first["recipient_packets_accepted"] = sum(
+            int(item["accepted"]) for item in first["recipient_delivery_records"]
+        )
+        first["delivered_to_any_receiver"] = first["recipient_packets_delivered"] > 0
+        first["accepted_by_any_receiver"] = first["recipient_packets_accepted"] > 0
 
     target_opportunities: dict[str, dict[str, Any]] = {}
     if arm.startswith("s") and "_" in arm:
@@ -175,7 +206,11 @@ def cell_data(arm: str, scene: int) -> dict[str, Any]:
         "sender_recipient_attempts": int(row["relay_counters"].get("transmission_attempts", 0)),
         "first_report_actual_delivery_targets": sorted(
             target for target, evidence in first_deliveries.items()
-            if evidence["packets_sent"] > 0
+            if evidence["delivered_to_any_receiver"]
+        ),
+        "first_report_accepted_targets": sorted(
+            target for target, evidence in first_deliveries.items()
+            if evidence["accepted_by_any_receiver"]
         ),
         "first_report_opportunities": target_opportunities,
         "row_path": str(row_file.relative_to(ROOT)).replace("\\", "/"),
@@ -195,10 +230,6 @@ def learned_target_opportunities(
     for tape in tape_records:
         for index, target in enumerate(tape["targets"]):
             is_first = bool(float(tape["features"][index][5]) >= 0.5)
-            if not is_first:
-                continue
-            row = result.setdefault(str(target), {"candidate_rows": [],
-                                                  "ever_sequentially_affordable": False})
             if held:
                 audit = tape["candidate_budget_audit"][target]
                 sequential = bool(audit["effective_run"]["sequential_affordable_before_action"])
@@ -207,6 +238,9 @@ def learned_target_opportunities(
                 source = tape["decision_source"][target]
                 initial = bool(tape["send_executable_initial"][target])
                 charge = int(tape["attempt_charge_bytes"][target])
+                budget_before = float(audit["effective_run"]["budget_before"])
+                budget_after = float(audit["effective_run"]["budget_after"])
+                mask_reason = audit.get("relay_initial_block_reason") if not initial else None
             else:
                 shadow = tape["candidate_shadow"][target]
                 sequential = bool(shadow["honours_this_candidate"])
@@ -216,21 +250,80 @@ def learned_target_opportunities(
                     else "existing_sequential_budget_mask"
                 initial = bool(tape["send_executable_initial"][target])
                 charge = int(tape["attempt_charge_bytes"][target])
-            row["candidate_rows"].append({
-                "step": int(tape["step"]),
+                budget_before = float(shadow["budget_before"])
+                budget_after = float(shadow["budget_after"])
+                mask_reason = tape.get("masked_reasons", {}).get(target)
+            target = str(target)
+            row = result.setdefault(target, {
+                "candidate_rows_seen": 0,
+                "first_report_candidate_rows": 0,
+                "refresh_candidate_rows": 0,
+                "sequentially_affordable_first_report_rows": 0,
+                "budget_masked_first_report_rows": 0,
+                "raw_policy_action_counts": {"SEND": 0, "HOLD": 0, "missing": 0},
+                "effective_action_counts": {"SEND": 0, "HOLD": 0},
+                "decision_source_counts": {},
+                "intervention_reason_counts": {},
+                "ever_sequentially_affordable": False,
+                "key_decisions": {},
+            })
+            step = int(tape["step"])
+            candidate_kind = "first_report" if is_first else "refresh"
+            row["candidate_rows_seen"] += 1
+            row["first_report_candidate_rows" if is_first else "refresh_candidate_rows"] += 1
+            if is_first:
+                row["sequentially_affordable_first_report_rows"] += int(sequential)
+                row["budget_masked_first_report_rows"] += int(not sequential or not initial)
+                row["ever_sequentially_affordable"] |= sequential
+            row["raw_policy_action_counts"][
+                "missing" if raw_action is None else ("SEND" if raw_action == 1 else "HOLD")
+            ] += 1
+            row["effective_action_counts"]["SEND" if effective_action == 1 else "HOLD"] += 1
+            row["decision_source_counts"][source] = row["decision_source_counts"].get(source, 0) + 1
+            intervention_reason = tape.get("intervention_reason", {}).get(target)
+            if intervention_reason:
+                row["intervention_reason_counts"][intervention_reason] = (
+                    row["intervention_reason_counts"].get(intervention_reason, 0) + 1
+                )
+            detail = {
+                "step": step,
+                "candidate_type": candidate_kind,
                 "relay_initial_executable": initial,
                 "sequential_affordable": sequential,
+                "mask_reason": mask_reason,
+                "budget_before": budget_before,
+                "budget_after_effective_action": budget_after,
                 "attempt_charge_bytes": charge,
-                "raw_policy_action": raw_action,
+                "raw_model_action": raw_action,
                 "effective_action": effective_action,
                 "decision_source": source,
-            })
-            row["ever_sequentially_affordable"] |= sequential
+                "intervention_reason": intervention_reason,
+            }
+            if "first_candidate" not in row["key_decisions"]:
+                row["key_decisions"]["first_candidate"] = detail
+            if is_first and "first_first_report_candidate" not in row["key_decisions"]:
+                row["key_decisions"]["first_first_report_candidate"] = detail
+            if is_first and sequential and "first_affordable_first_report" not in row["key_decisions"]:
+                row["key_decisions"]["first_affordable_first_report"] = detail
+            if is_first and (not sequential or not initial) \
+                    and "first_masked_first_report" not in row["key_decisions"]:
+                row["key_decisions"]["first_masked_first_report"] = detail
+            if raw_action == 1 and "first_model_send_request" not in row["key_decisions"]:
+                row["key_decisions"]["first_model_send_request"] = detail
+            if effective_action == 1 and "first_effective_send" not in row["key_decisions"]:
+                row["key_decisions"]["first_effective_send"] = detail
+            if not is_first and "first_refresh_candidate" not in row["key_decisions"]:
+                row["key_decisions"]["first_refresh_candidate"] = detail
+            if intervention_reason and "first_refresh_intervention" not in row["key_decisions"]:
+                row["key_decisions"]["first_refresh_intervention"] = detail
     for target, row in result.items():
         row["first_report_emitted"] = target in first_deliveries
         row["first_report_delivery"] = first_deliveries.get(target)
         row["first_report_delivered_to_any_receiver"] = bool(
-            first_deliveries.get(target, {}).get("packets_sent", 0) > 0
+            first_deliveries.get(target, {}).get("delivered_to_any_receiver", False)
+        )
+        row["first_report_accepted_by_any_receiver"] = bool(
+            first_deliveries.get(target, {}).get("accepted_by_any_receiver", False)
         )
     return result
 
@@ -283,6 +376,8 @@ def paired_matrix(cells: dict[tuple[str, int], dict[str, Any]]) -> dict[str, Any
             held_emitted: set[tuple[int, str]] = set()
             original_delivered: set[tuple[int, str]] = set()
             held_delivered: set[tuple[int, str]] = set()
+            original_accepted: set[tuple[int, str]] = set()
+            held_accepted: set[tuple[int, str]] = set()
             for scene in scenarios:
                 original = cells[(f"s{seed}_original_greedy", scene)]
                 held = cells[(f"s{seed}_refresh_held", scene)]
@@ -333,6 +428,8 @@ def paired_matrix(cells: dict[tuple[str, int], dict[str, Any]]) -> dict[str, Any
                         original_emitted.add(key)
                     if opp["first_report_delivered_to_any_receiver"]:
                         original_delivered.add(key)
+                    if opp["first_report_accepted_by_any_receiver"]:
+                        original_accepted.add(key)
                 for target, opp in held["first_report_opportunities"].items():
                     key = (scene, target)
                     if opp["ever_sequentially_affordable"]:
@@ -341,6 +438,8 @@ def paired_matrix(cells: dict[tuple[str, int], dict[str, Any]]) -> dict[str, Any
                         held_emitted.add(key)
                     if opp["first_report_delivered_to_any_receiver"]:
                         held_delivered.add(key)
+                    if opp["first_report_accepted_by_any_receiver"]:
+                        held_accepted.add(key)
                 target_changes.append({"seed": seed, **comparisons[-1]})
             main[f"s{seed}"][group] = {
                 "n_scenes": len(scenarios),
@@ -374,6 +473,7 @@ def paired_matrix(cells: dict[tuple[str, int], dict[str, Any]]) -> dict[str, Any
                     "targets_with_any_affordable_first_report_opportunity": len(original_affordable),
                     "targets_first_report_emitted": len(original_emitted),
                     "targets_with_any_first_report_packet_delivered": len(original_delivered),
+                    "targets_with_any_first_report_packet_accepted": len(original_accepted),
                 },
                 "refresh_held": {
                     "discovered_target_occurrences": sum(len(cells[
@@ -386,6 +486,7 @@ def paired_matrix(cells: dict[tuple[str, int], dict[str, Any]]) -> dict[str, Any
                     "targets_with_any_affordable_first_report_opportunity": len(held_affordable),
                     "targets_first_report_emitted": len(held_emitted),
                     "targets_with_any_first_report_packet_delivered": len(held_delivered),
+                    "targets_with_any_first_report_packet_accepted": len(held_accepted),
                 },
                 "new_affordable_target_opportunities": [
                     {"scene": scene, "target_id": target}
@@ -406,6 +507,18 @@ def paired_matrix(cells: dict[tuple[str, int], dict[str, Any]]) -> dict[str, Any
                 "new_first_reports_delivered_to_any_receiver": [
                     {"scene": scene, "target_id": target}
                     for scene, target in sorted(held_delivered - original_delivered)
+                ],
+                "first_reports_no_longer_delivered_to_any_receiver": [
+                    {"scene": scene, "target_id": target}
+                    for scene, target in sorted(original_delivered - held_delivered)
+                ],
+                "new_first_reports_accepted_by_any_receiver": [
+                    {"scene": scene, "target_id": target}
+                    for scene, target in sorted(held_accepted - original_accepted)
+                ],
+                "first_reports_no_longer_accepted_by_any_receiver": [
+                    {"scene": scene, "target_id": target}
+                    for scene, target in sorted(original_accepted - held_accepted)
                 ],
                 "denominator_definition": (
                     "discovered target occurrences in the corresponding arm and scene group; "
@@ -475,42 +588,68 @@ def designated_chains(cells: dict[tuple[str, int], dict[str, Any]]) -> list[dict
                 lifecycle = read_jsonl(Path(cell["lifecycle_path"]))
                 events = [record for record in lifecycle
                           if str(record.get("target_id")) == target]
+                selected_events: list[dict[str, Any]] = []
+                progress_segment: list[dict[str, Any]] = []
+
+                def flush_progress_segment() -> None:
+                    if not progress_segment:
+                        return
+                    selected_events.append(progress_segment[0])
+                    if progress_segment[-1] is not progress_segment[0]:
+                        selected_events.append(progress_segment[-1])
+                    progress_segment.clear()
+
+                last_progress_key: tuple[Any, Any] | None = None
+                for event in events:
+                    if event.get("event_type") != "progress":
+                        flush_progress_segment()
+                        selected_events.append(event)
+                        last_progress_key = None
+                        continue
+                    key = (event.get("status"), event.get("stage_index"))
+                    if last_progress_key is not None and key != last_progress_key:
+                        flush_progress_segment()
+                    if not progress_segment:
+                        progress_segment.extend((event, event))
+                    else:
+                        progress_segment[-1] = event
+                    last_progress_key = key
+                flush_progress_segment()
                 communications = read_jsonl(Path(cell["transcript_path"]))
                 communications = [record for record in communications
                                   if str(record.get("target")) == target]
-                decisions = []
                 tape_path = cell.get("tape_path")
-                if arm.startswith("s") and tape_path and Path(tape_path).is_file():
-                    for tape in read_jsonl(Path(tape_path)):
-                        if target not in tape["targets"]:
-                            continue
-                        index = tape["targets"].index(target)
-                        is_first = bool(float(tape["features"][index][5]) >= 0.5)
-                        decisions.append({
-                            "step": int(tape["step"]),
-                            "is_first_emission_candidate": is_first,
-                            "raw_model_action": tape.get("raw_model_actions", {}).get(target),
-                            "effective_action": tape.get("effective_actions", tape.get("actions", {}))
-                                .get(target),
-                            "decision_source": tape.get("decision_source", {}).get(target),
-                            "intervention_reason": tape.get("intervention_reason", {}).get(target),
-                            "candidate_charge_bytes": tape.get("attempt_charge_bytes", {}).get(target),
-                            "budget_audit": tape.get("candidate_budget_audit", {}).get(target,
-                                tape.get("candidate_shadow", {}).get(target)),
-                        })
+                opportunity_summary = cell.get("first_report_opportunities", {}).get(target)
+                decisions = [] if not opportunity_summary else sorted(
+                    [{"selection": label, **detail} for label, detail in
+                     opportunity_summary.get("key_decisions", {}).items()],
+                    key=lambda item: (int(item["step"]), item["selection"]),
+                )
+                event_counts = Counter(
+                    f"{event.get('event_type')}:{event.get('status', '')}".rstrip(":")
+                    for event in events
+                )
                 chain_list.append({
                     "scene": scene,
                     "target_id": target,
                     "training_seed": seed if arm.startswith("s") else None,
                     "arm": arm,
                     "on_time_target": target in set(cell["on_time_target_ids"]),
-                    "lifecycle_events_discovery_assignment_progress_terminal": events,
-                    "communication_decision_chain": decisions,
+                    "lifecycle_event_counts": dict(sorted(event_counts.items())),
+                    "lifecycle_timeline_compacted_from_full_log": selected_events,
+                    "communication_decision_keypoints_compacted_from_tape": decisions,
                     "sender_transmission_and_delivery_counts": communications,
                     "sender_emission_target_rows": [item for item in row["emission_sequence"]
                                                      if str(item[1]) == target],
+                    "source_paths": {
+                        "row": cell["row_path"],
+                        "lifecycle": cell["lifecycle_path"],
+                        "transcript": cell["transcript_path"],
+                        "decision_tape": tape_path,
+                    },
                     "information_limit": (
-                        "transcript records delivered/lost packet counts, not recipient identities"
+                        "successful recipient delivery rows identify agent and acceptance; the send "
+                        "summary has only an aggregate loss count, so dropped-recipient identity is absent"
                     ),
                 })
     return chain_list
@@ -657,7 +796,8 @@ def main() -> None:
                 "per target occurrence, ever-sequentially-affordable versus original path"
             ),
             "first_report_emitted_and_delivered": (
-                "sender attempt and recipient packet count remain separate"
+                "sender first-emission, recipient deliver events, and accepted receiver outcomes "
+                "are counted separately"
             ),
             "task_and_cost": "on-time target IDs, new losses, byte splits, and rule gaps are explicit",
         },
@@ -678,8 +818,10 @@ def main() -> None:
         "designated_round37_missing_occurrences": len(r38_cases),
         "chains": chains,
         "known_information_gaps": [
-            "recipient identities are not in the sender transcript",
-            "relay records delivery packet counts, while task-side gossip/LOS may also supply state",
+            "dropped packet recipient identities are absent from the aggregate sender send record; "
+            "successful delivery rows identify recipient and acceptance outcome",
+            "task-side gossip/LOS may also supply state, so receipt alone does not establish the "
+            "exclusive source of downstream knowledge",
             "different emission paths use their own packet-loss sequence even for the same scenario seed",
         ],
     })
