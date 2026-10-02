@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import time
 from typing import Any
@@ -73,9 +74,7 @@ def run_job(job: dict[str, Any]) -> dict[str, Any]:
     kind, seed, mode = r37.parse_arm(arm)
     started = time.time()
     if r37.row_path(job).exists():
-        state = r37.book()
-        state["reused_rows"] += 1
-        r37.write_json("EVALUATION_LAUNCH_BOOK.json", state, refresh=True)
+        r37.bump_reused_rows()
         return {"job": job, "reused": True, "ok": True}
     try:
         if kind == "model":
@@ -97,13 +96,52 @@ def run_job(job: dict[str, Any]) -> dict[str, Any]:
                 "seconds": round(time.time() - started, 2)}
 
 
+def retry_claim_held(index: int) -> bool:
+    return (r37.HERE / "claims" / f"job_{index:04d}.retry.claim").exists()
+
+
+def claim_retry(index: int) -> bool:
+    path = r37.HERE / "claims" / f"job_{index:04d}.retry.claim"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        handle = os.open(str(path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    except FileExistsError:
+        return False
+    with os.fdopen(handle, "w", encoding="utf-8") as sink:
+        sink.write(json.dumps({"index": index, "pid": os.getpid(), "kind": "retry",
+                               "claimed_at": time.strftime("%F %T")}) + "\n")
+    return True
+
+
+def retry_targets() -> list[dict[str, Any]]:
+    """Cells whose last booked event failed technically and that still have no row.
+
+    Performance is never a reason to retry: a cell that ran and completed is left alone even if
+    its scenario is an easy or a hard one.
+    """
+    last: dict[tuple[str, int], bool] = {}
+    for event in r37.book()["events"]:
+        last[(str(event["arm"]), int(event["scenario"]))] = bool(event["ok"])
+    out = []
+    for job in r37.jobs():
+        key = (job["arm"], job["scenario"])
+        if last.get(key) is False and not r37.row_path(job).exists() \
+                and not retry_claim_held(job["index"]):
+            out.append(job)
+    return out
+
+
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description="one shard of the frozen ROUND37 matrix")
-    parser.add_argument("--shard", type=int, required=True)
+    parser.add_argument("--shard", type=int, default=0)
     parser.add_argument("--shards", type=int, default=r37.MAX_PARALLEL_WORKERS)
     parser.add_argument("--scenario", type=int, default=None,
                         help="restrict the shard to one scenario (the technical gate)")
     parser.add_argument("--limit", type=int, default=None, help="stop after N jobs (dry planning)")
+    parser.add_argument("--retry-failed", action="store_true",
+                        help="re-run only cells that ended in a technical failure and have no row")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="list the selected cells without starting any environment")
     arguments = parser.parse_args(argv)
     if not 0 <= arguments.shard < arguments.shards:
         raise SystemExit("shard must be in [0, shards)")
@@ -112,11 +150,31 @@ def main(argv: list[str]) -> int:
     r37.configure()
     load_plan()
 
+    if arguments.retry_failed:
+        mine = [job for job in retry_targets()
+                if job["index"] % arguments.shards == arguments.shard]
+        if arguments.dry_run:
+            print(json.dumps({"retry_selected": len(mine),
+                              "cells": [{"arm": job["arm"], "scenario": job["scenario"]}
+                                        for job in mine]}, ensure_ascii=False))
+            return 0
+        for job in mine:
+            if not claim_retry(job["index"]):
+                continue
+            outcome = run_job(job)
+            print(json.dumps({"retry": job["arm"], "scenario": job["scenario"],
+                              "ok": outcome["ok"]}, ensure_ascii=False), flush=True)
+        return 0
+
     mine = [job for job in r37.jobs()
             if job["index"] % arguments.shards == arguments.shard
             and (arguments.scenario is None or job["scenario"] == arguments.scenario)]
     if arguments.limit:
         mine = mine[:arguments.limit]
+    if arguments.dry_run:
+        print(json.dumps({"shard": arguments.shard, "shards": arguments.shards,
+                          "cells_selected": len(mine)}, ensure_ascii=False))
+        return 0
     ran = reused = failed = 0
     started = time.time()
     for job in mine:

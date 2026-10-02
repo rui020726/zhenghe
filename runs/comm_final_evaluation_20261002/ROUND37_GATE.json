@@ -1,0 +1,486 @@
+{
+ "all_passed": true,
+ "arms": 9,
+ "checked_at": "2026-10-02 10:50:59",
+ "checks": {
+  "T1_model_and_configuration_identity": {
+   "aggregate": {
+    "bytes_sha256_matches": true,
+    "checkpoint_matches_frozen_plan": true,
+    "decoding_mode_label_matches_arm": true,
+    "episodes_done_is_128": true,
+    "load_mode_is_read_only": true,
+    "optimizer_restored_false": true,
+    "parameter_sha256_matches_frozen_model": true,
+    "rng_restored_false": true,
+    "scenario": true
+   },
+   "distinct_configuration_signatures": 1,
+   "exclusion_reason": "relay.transport_parameters() reports the attached policy's own identity; the native immediate policy carries no parameters while a learned policy reports horizon and feature layout, so these keys differ by arm kind by construction and are not world configuration",
+   "non_policy_configuration_identical_across_arms": true,
+   "passed": true,
+   "per_model_row": {
+    "model_s11_greedy": {
+     "bytes_sha256_matches": true,
+     "checkpoint_matches_frozen_plan": true,
+     "decoding_mode_label_matches_arm": true,
+     "episodes_done_is_128": true,
+     "load_mode_is_read_only": true,
+     "optimizer_restored_false": true,
+     "parameter_sha256_matches_frozen_model": true,
+     "rng_restored_false": true,
+     "scenario": true
+    },
+    "model_s11_sampled": {
+     "bytes_sha256_matches": true,
+     "checkpoint_matches_frozen_plan": true,
+     "decoding_mode_label_matches_arm": true,
+     "episodes_done_is_128": true,
+     "load_mode_is_read_only": true,
+     "optimizer_restored_false": true,
+     "parameter_sha256_matches_frozen_model": true,
+     "rng_restored_false": true,
+     "scenario": true
+    },
+    "model_s22_greedy": {
+     "bytes_sha256_matches": true,
+     "checkpoint_matches_frozen_plan": true,
+     "decoding_mode_label_matches_arm": true,
+     "episodes_done_is_128": true,
+     "load_mode_is_read_only": true,
+     "optimizer_restored_false": true,
+     "parameter_sha256_matches_frozen_model": true,
+     "rng_restored_false": true,
+     "scenario": true
+    },
+    "model_s22_sampled": {
+     "bytes_sha256_matches": true,
+     "checkpoint_matches_frozen_plan": true,
+     "decoding_mode_label_matches_arm": true,
+     "episodes_done_is_128": true,
+     "load_mode_is_read_only": true,
+     "optimizer_restored_false": true,
+     "parameter_sha256_matches_frozen_model": true,
+     "rng_restored_false": true,
+     "scenario": true
+    },
+    "model_s33_greedy": {
+     "bytes_sha256_matches": true,
+     "checkpoint_matches_frozen_plan": true,
+     "decoding_mode_label_matches_arm": true,
+     "episodes_done_is_128": true,
+     "load_mode_is_read_only": true,
+     "optimizer_restored_false": true,
+     "parameter_sha256_matches_frozen_model": true,
+     "rng_restored_false": true,
+     "scenario": true
+    },
+    "model_s33_sampled": {
+     "bytes_sha256_matches": true,
+     "checkpoint_matches_frozen_plan": true,
+     "decoding_mode_label_matches_arm": true,
+     "episodes_done_is_128": true,
+     "load_mode_is_read_only": true,
+     "optimizer_restored_false": true,
+     "parameter_sha256_matches_frozen_model": true,
+     "rng_restored_false": true,
+     "scenario": true
+    }
+   },
+   "policy_side_keys_excluded": [
+    "policy",
+    "policy_parameters"
+   ],
+   "rule_arm_policy_fields": {
+    "always_hold": true,
+    "immediate": true,
+    "late_discovery_gate": true
+   }
+  },
+  "T2_no_unexpected_training": {
+   "frozen_models_are_ep128_only": true,
+   "optimizer_steps_in_book": 0,
+   "parameters_unchanged_within_an_arm_across_cells": {
+    "model_s11_greedy": true,
+    "model_s11_sampled": true,
+    "model_s22_greedy": true,
+    "model_s22_sampled": true,
+    "model_s33_greedy": true,
+    "model_s33_sampled": true
+   },
+   "passed": true,
+   "read_only_load_proved": false,
+   "training_launches_in_book": 0,
+   "training_version_fields_in_every_row": true
+  },
+  "T3_billing_and_records_complete": {
+   "passed": true,
+   "per_arm": {
+    "always_hold": {
+     "ack_ledger_all_zero": true,
+     "budget_within_credit": true,
+     "cost_tap_equals_ledger": true,
+     "emissions_match_sequence": true,
+     "lifecycle_records": true,
+     "steps_1000": true,
+     "task_tap_equals_on_time": true
+    },
+    "immediate": {
+     "ack_ledger_all_zero": true,
+     "budget_within_credit": true,
+     "cost_tap_equals_ledger": true,
+     "emissions_match_sequence": true,
+     "lifecycle_records": true,
+     "steps_1000": true,
+     "task_tap_equals_on_time": true
+    },
+    "late_discovery_gate": {
+     "ack_ledger_all_zero": true,
+     "budget_within_credit": true,
+     "cost_tap_equals_ledger": true,
+     "emissions_match_sequence": true,
+     "lifecycle_records": true,
+     "steps_1000": true,
+     "task_tap_equals_on_time": true
+    },
+    "model_s11_greedy": {
+     "ack_ledger_all_zero": true,
+     "budget_within_credit": true,
+     "cost_tap_equals_ledger": true,
+     "emissions_match_sequence": true,
+     "lifecycle_records": true,
+     "steps_1000": true,
+     "task_tap_equals_on_time": true
+    },
+    "model_s11_sampled": {
+     "ack_ledger_all_zero": true,
+     "budget_within_credit": true,
+     "cost_tap_equals_ledger": true,
+     "emissions_match_sequence": true,
+     "lifecycle_records": true,
+     "steps_1000": true,
+     "task_tap_equals_on_time": true
+    },
+    "model_s22_greedy": {
+     "ack_ledger_all_zero": true,
+     "budget_within_credit": true,
+     "cost_tap_equals_ledger": true,
+     "emissions_match_sequence": true,
+     "lifecycle_records": true,
+     "steps_1000": true,
+     "task_tap_equals_on_time": true
+    },
+    "model_s22_sampled": {
+     "ack_ledger_all_zero": true,
+     "budget_within_credit": true,
+     "cost_tap_equals_ledger": true,
+     "emissions_match_sequence": true,
+     "lifecycle_records": true,
+     "steps_1000": true,
+     "task_tap_equals_on_time": true
+    },
+    "model_s33_greedy": {
+     "ack_ledger_all_zero": true,
+     "budget_within_credit": true,
+     "cost_tap_equals_ledger": true,
+     "emissions_match_sequence": true,
+     "lifecycle_records": true,
+     "steps_1000": true,
+     "task_tap_equals_on_time": true
+    },
+    "model_s33_sampled": {
+     "ack_ledger_all_zero": true,
+     "budget_within_credit": true,
+     "cost_tap_equals_ledger": true,
+     "emissions_match_sequence": true,
+     "lifecycle_records": true,
+     "steps_1000": true,
+     "task_tap_equals_on_time": true
+    }
+   }
+  },
+  "T4_decoder_labels_match_code_paths": {
+   "greedy_definition": "SEND if p[SEND] >= p[HOLD] else HOLD, applied only to candidates the credit and capacity leave free (budget_masked.py:238-239)",
+   "greedy_rule_violations": [],
+   "greedy_stream_seeds": [
+    333043307035,
+    940133318052,
+    44258972549
+   ],
+   "likelihood_violations": [],
+   "passed": true,
+   "per_arm": {
+    "always_hold": {
+     "policy": "learned",
+     "rule_arm": true,
+     "tape_rows": 0
+    },
+    "immediate": {
+     "policy": "immediate",
+     "rule_arm": true,
+     "tape_rows": 0
+    },
+    "late_discovery_gate": {
+     "policy": "learned",
+     "rule_arm": true,
+     "tape_rows": 0
+    },
+    "model_s11_greedy": {
+     "action_rng_seed": 333043307035,
+     "actionable_candidates": 11,
+     "decision_candidates": 832,
+     "decisions_deviating_from_greedy_rule": 0,
+     "greedy_rule_violations": 0,
+     "log_prob_within_tolerance": true,
+     "max_abs_log_prob_gap": 2.9802322387695312e-08,
+     "tape_rows": 789
+    },
+    "model_s11_sampled": {
+     "action_rng_seed": 255456381408,
+     "actionable_candidates": 14,
+     "decision_candidates": 832,
+     "decisions_deviating_from_greedy_rule": 3,
+     "greedy_rule_violations": null,
+     "log_prob_within_tolerance": true,
+     "max_abs_log_prob_gap": 2.9802322387695312e-08,
+     "tape_rows": 789
+    },
+    "model_s22_greedy": {
+     "action_rng_seed": 940133318052,
+     "actionable_candidates": 833,
+     "decision_candidates": 833,
+     "decisions_deviating_from_greedy_rule": 0,
+     "greedy_rule_violations": 0,
+     "log_prob_within_tolerance": true,
+     "max_abs_log_prob_gap": 2.9802322387695312e-08,
+     "tape_rows": 789
+    },
+    "model_s22_sampled": {
+     "action_rng_seed": 410359598426,
+     "actionable_candidates": 102,
+     "decision_candidates": 102,
+     "decisions_deviating_from_greedy_rule": 10,
+     "greedy_rule_violations": null,
+     "log_prob_within_tolerance": true,
+     "max_abs_log_prob_gap": 8.940696716308594e-08,
+     "tape_rows": 82
+    },
+    "model_s33_greedy": {
+     "action_rng_seed": 44258972549,
+     "actionable_candidates": 12,
+     "decision_candidates": 832,
+     "decisions_deviating_from_greedy_rule": 0,
+     "greedy_rule_violations": 0,
+     "log_prob_within_tolerance": true,
+     "max_abs_log_prob_gap": 5.960464477539063e-08,
+     "tape_rows": 789
+    },
+    "model_s33_sampled": {
+     "action_rng_seed": 75079036845,
+     "actionable_candidates": 21,
+     "decision_candidates": 833,
+     "decisions_deviating_from_greedy_rule": 12,
+     "greedy_rule_violations": null,
+     "log_prob_within_tolerance": true,
+     "max_abs_log_prob_gap": 5.960464477539063e-08,
+     "tape_rows": 789
+    }
+   },
+   "sampled_stream_differs_from_greedy_stream": true,
+   "sampled_stream_seeds": [
+    255456381408,
+    410359598426,
+    75079036845
+   ],
+   "tolerance": 1e-06
+  },
+  "T5_corrected_reward_capture_is_live": {
+   "collector": "PublishedProgressRewardCollector",
+   "passed": true,
+   "per_arm": {
+    "always_hold": {
+     "both_fields_present": true,
+     "credited": 5,
+     "every_relay_tick_equals_rounded_event_time": true,
+     "ledger_rows": 5,
+     "on_time_equals_credited": true,
+     "reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "written_keys_are_crediting_ticks": true
+    },
+    "immediate": {
+     "both_fields_present": true,
+     "credited": 6,
+     "every_relay_tick_equals_rounded_event_time": true,
+     "ledger_rows": 6,
+     "on_time_equals_credited": true,
+     "reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "written_keys_are_crediting_ticks": true
+    },
+    "late_discovery_gate": {
+     "both_fields_present": true,
+     "credited": 6,
+     "every_relay_tick_equals_rounded_event_time": true,
+     "ledger_rows": 6,
+     "on_time_equals_credited": true,
+     "reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "written_keys_are_crediting_ticks": true
+    },
+    "model_s11_greedy": {
+     "both_fields_present": true,
+     "credited": 5,
+     "every_relay_tick_equals_rounded_event_time": true,
+     "ledger_rows": 5,
+     "on_time_equals_credited": true,
+     "reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "written_keys_are_crediting_ticks": true
+    },
+    "model_s11_sampled": {
+     "both_fields_present": true,
+     "credited": 5,
+     "every_relay_tick_equals_rounded_event_time": true,
+     "ledger_rows": 5,
+     "on_time_equals_credited": true,
+     "reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "written_keys_are_crediting_ticks": true
+    },
+    "model_s22_greedy": {
+     "both_fields_present": true,
+     "credited": 5,
+     "every_relay_tick_equals_rounded_event_time": true,
+     "ledger_rows": 5,
+     "on_time_equals_credited": true,
+     "reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "written_keys_are_crediting_ticks": true
+    },
+    "model_s22_sampled": {
+     "both_fields_present": true,
+     "credited": 6,
+     "every_relay_tick_equals_rounded_event_time": true,
+     "ledger_rows": 6,
+     "on_time_equals_credited": true,
+     "reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "written_keys_are_crediting_ticks": true
+    },
+    "model_s33_greedy": {
+     "both_fields_present": true,
+     "credited": 5,
+     "every_relay_tick_equals_rounded_event_time": true,
+     "ledger_rows": 5,
+     "on_time_equals_credited": true,
+     "reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "written_keys_are_crediting_ticks": true
+    },
+    "model_s33_sampled": {
+     "both_fields_present": true,
+     "credited": 5,
+     "every_relay_tick_equals_rounded_event_time": true,
+     "ledger_rows": 5,
+     "on_time_equals_credited": true,
+     "reward_timing_version": "published-completion-event-at-relay-tick/2",
+     "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+     "written_keys_are_crediting_ticks": true
+    }
+   }
+  },
+  "T7_pairing_versus_per_message_channel_realisation": {
+   "arms_are_paired_by_scenario": true,
+   "passed": true,
+   "per_arm_counters": {
+    "always_hold": {
+     "attempts": 0,
+     "delivered": 0,
+     "emissions": 0,
+     "lost": 0,
+     "refused_budget": 0
+    },
+    "immediate": {
+     "attempts": 36,
+     "delivered": 25,
+     "emissions": 6,
+     "lost": 11,
+     "refused_budget": 0
+    },
+    "late_discovery_gate": {
+     "attempts": 18,
+     "delivered": 15,
+     "emissions": 3,
+     "lost": 3,
+     "refused_budget": 0
+    },
+    "model_s11_greedy": {
+     "attempts": 66,
+     "delivered": 50,
+     "emissions": 11,
+     "lost": 16,
+     "refused_budget": 0
+    },
+    "model_s11_sampled": {
+     "attempts": 66,
+     "delivered": 50,
+     "emissions": 11,
+     "lost": 16,
+     "refused_budget": 0
+    },
+    "model_s22_greedy": {
+     "attempts": 0,
+     "delivered": 0,
+     "emissions": 0,
+     "lost": 0,
+     "refused_budget": 0
+    },
+    "model_s22_sampled": {
+     "attempts": 60,
+     "delivered": 46,
+     "emissions": 10,
+     "lost": 14,
+     "refused_budget": 0
+    },
+    "model_s33_greedy": {
+     "attempts": 66,
+     "delivered": 50,
+     "emissions": 11,
+     "lost": 16,
+     "refused_budget": 0
+    },
+    "model_s33_sampled": {
+     "attempts": 66,
+     "delivered": 50,
+     "emissions": 11,
+     "lost": 16,
+     "refused_budget": 0
+    }
+   },
+   "per_message_channel_identity_claimed": false,
+   "statement": "配对是在场景层面（同一场景号、同一初始状态、同一世界种子）；各臂的发送轨迹不同 ⇒ 抽取的丢包实现次数与顺序也不同，因此不得声称不同臂遭遇同一批丢包",
+   "transmission_attempt_counts_differ_across_arms": true
+  },
+  "T8_quota_and_isolation": {
+   "book_starts": 9,
+   "claims_held": 9,
+   "completed": 9,
+   "files_written_today_in_other_round_directories": [],
+   "gate_cells_expected": 9,
+   "hard_cap": 672,
+   "passed": true,
+   "real_ledger_total": 9,
+   "technical_failures": 0
+  }
+ },
+ "counted_in_normal_evaluation_launches": true,
+ "decision_basis": "只有技术正确性决定是否可以扩展；首场景的效果差不构成停止理由",
+ "environment_launches_used_by_this_script": 0,
+ "kind": "round37-technical-gate",
+ "launches_consumed_by_the_gate": 9,
+ "optimizer_steps_used": 0,
+ "round": "37",
+ "scenario": 1600000,
+ "schema": "round37-gate/1"
+}

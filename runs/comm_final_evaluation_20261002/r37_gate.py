@@ -89,12 +89,16 @@ def check_identity(rows: dict[str, dict[str, Any]], frozen: dict[str, Any],
                      for arm in r37.RULE_ARMS}
     shared_fields = {}
     for arm, row in rows.items():
+        # `policy` and `policy_parameters` are the arm's own identity (relay.transport_parameters()
+        # reports the attached policy's parameters: the native immediate policy carries none, while
+        # a learned policy reports horizon and feature layout). They must not be mistaken for a
+        # world-configuration difference, so the identity check compares everything else.
         transport = {key: value for key, value in row["transport_parameters"].items()
-                     if key != "policy"}
+                     if key not in ("policy", "policy_parameters")}
         shared_fields[arm] = {"steps": int(row["steps"]),
                               "budget_bytes": int(row["budget_bytes"]),
                               "b0_bytes": float(row["b0_bytes"]),
-                              "transport_without_policy": transport,
+                              "transport_without_policy_identity": transport,
                               "scenario_seed": int(row["scenario_seed"])}
     signature = {key: json.dumps(value, sort_keys=True)
                  for key, value in shared_fields.items()}
@@ -103,6 +107,11 @@ def check_identity(rows: dict[str, dict[str, Any]], frozen: dict[str, Any],
     GATE["T1_model_and_configuration_identity"] = {
         "per_model_row": identity, "aggregate": flags,
         "rule_arm_policy_fields": rule_identity,
+        "policy_side_keys_excluded": ["policy", "policy_parameters"],
+        "exclusion_reason": "relay.transport_parameters() reports the attached policy's own "
+                            "identity; the native immediate policy carries no parameters while a "
+                            "learned policy reports horizon and feature layout, so these keys "
+                            "differ by arm kind by construction and are not world configuration",
         "non_policy_configuration_identical_across_arms": len(set(signature.values())) == 1,
         "distinct_configuration_signatures": len(set(signature.values())),
         "passed": bool(flags) and all(flags.values())

@@ -306,23 +306,71 @@ def book() -> dict[str, Any]:
     return read_json(BOOK) if BOOK.exists() else empty_book()
 
 
+class _Lock:
+    """Cross-process mutex for the shared book: O_CREAT|O_EXCL with a bounded wait."""
+
+    def __init__(self, timeout: float = 120.0) -> None:
+        self.path = HERE / "logs" / "_book.lock"
+        self.timeout = timeout
+
+    def __enter__(self) -> "_Lock":
+        import time as _time
+
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        started = _time.time()
+        while True:
+            try:
+                self.handle = os.open(str(self.path), os.O_CREAT | os.O_EXCL | os.O_RDWR)
+                return self
+            except FileExistsError:
+                if _time.time() - started > self.timeout:
+                    raise RuntimeError(f"book lock {self.path} stayed held past {self.timeout}s")
+                _time.sleep(0.05)
+
+    def __exit__(self, *_exc: Any) -> None:
+        os.close(self.handle)
+        try:
+            self.path.unlink()
+        except FileNotFoundError:
+            pass
+
+
 def book_event(kind: str, *, arm: str, scenario: int, ok: bool, detail: str,
                seconds: float) -> dict[str, Any]:
-    state = book()
-    state["starts"] += 1
-    state["events"].append({"kind": kind, "arm": arm, "scenario": int(scenario), "ok": bool(ok),
-                            "pid": os.getpid(), "seconds": round(float(seconds), 2),
-                            "detail": detail[:300]})
-    if ok:
-        state["completed"] += 1
-    else:
-        state["technical_failures"] += 1
-    if state["starts"] > HARD_CAP:
-        raise RuntimeError(f"{state['starts']} starts exceed the hard cap {HARD_CAP}")
-    write_json("EVALUATION_LAUNCH_BOOK.json", state, refresh=True)
-    return state
+    """Book one cell start in this round's own book, under the cross-process lock.
+
+    The authoritative record of a start is the Stage C per-PID ledger (written before the driver
+    is constructed); this book is a convenience tally, so its correctness matters for reporting
+    only. Without the lock, four parallel shards lose increments to read-modify-write races --
+    exactly what happened in the first run of this round (registered in
+    `ROUND37_HARNESS_DEFECTS.json`).
+    """
+    with _Lock():
+        state = book()
+        state["starts"] += 1
+        state["events"].append({"kind": kind, "arm": arm, "scenario": int(scenario),
+                                "ok": bool(ok), "pid": os.getpid(),
+                                "seconds": round(float(seconds), 2),
+                                "detail": detail[:300]})
+        if ok:
+            state["completed"] += 1
+        else:
+            state["technical_failures"] += 1
+        if state["starts"] > HARD_CAP:
+            raise RuntimeError(f"{state['starts']} starts exceed the hard cap {HARD_CAP}")
+        write_json("EVALUATION_LAUNCH_BOOK.json", state, refresh=True)
+        return state
 
 
 def real_ledger_total() -> int:
     """Episode/cell starts as booked by the real Stage C ledger (failures included)."""
     return v2_common.ledger_total()
+
+
+def bump_reused_rows() -> dict[str, Any]:
+    """Count a skipped cell (row already on disk) without spending a launch, under the lock."""
+    with _Lock():
+        state = book()
+        state["reused_rows"] += 1
+        write_json("EVALUATION_LAUNCH_BOOK.json", state, refresh=True)
+        return state
