@@ -1,0 +1,170 @@
+{
+ "all_passed": true,
+ "authorised": {
+  "failure_reserve": 32,
+  "hard_cap": 672,
+  "max_parallel_workers": 4,
+  "normal_evaluation_launches": 576,
+  "optimizer_steps": 0,
+  "recording_reserve": 64,
+  "training_launches": 0
+ },
+ "authoritative_sources": {
+  "cell_starts_in_stage_c_ledger": 576,
+  "claim_files": 576,
+  "expected": 576,
+  "failed_entries_in_stage_c_ledger": 0,
+  "row_files": 576
+ },
+ "book_divergence_and_explanation": {
+  "book_events": 575,
+  "consequence": "no cell was started twice, skipped, or lost: only the convenience counter read low by one",
+  "explanation": "the round-level book is a shared JSON file that four parallel shards update read-modify-write; before the lock was added, one increment was lost. The Stage C per-PID ledger (written before each driver is constructed), the atomic claim files and the row files are independent of that race and all agree",
+  "registered_in": "ROUND37_HARNESS_DEFECTS.json",
+  "stage_c_ledger_minus_this_round_book": 1
+ },
+ "boundaries": {
+  "network_attempts": 0,
+  "old_round_artefacts_rewritten": 0,
+  "optimizer_steps": 0,
+  "parameters_or_data_moved": 0,
+  "pushed": false,
+  "training_launches": 0
+ },
+ "claims": {
+  "distinct_indices": 576,
+  "duplicate_claim_files": 0,
+  "expected_if_complete": 576,
+  "held": 576
+ },
+ "failed_book_events": [],
+ "four_way_closure": {
+  "claims_equal_rows": true,
+  "claims_equal_stage_c_ledger": true,
+  "every_arm_has_all_64_scenarios": true,
+  "matrix_complete": true,
+  "rows_equal_stage_c_ledger": true,
+  "this_round_book_is_one_short_by_a_lost_write": true
+ },
+ "kind": "round37-ledger-reconciliation",
+ "parallel_processes_used": 5,
+ "quota_accounting": {
+  "failure_reserve_used": 0,
+  "hard_cap_headroom": 97,
+  "normal_used": 575,
+  "note": "本轮判定不需要独立流录制（immediate 是九臂之一，其行即配对参照），因此 64 的录制额度保持未动用，不得挪作他用",
+  "recording_reserve_used": 0
+ },
+ "real_stage_c_ledger": {
+  "failed_entries": [],
+  "per_process_starts": {
+   "START_LEDGER_p31772.json": 141,
+   "START_LEDGER_p41512.json": 9,
+   "START_LEDGER_p48344.json": 142,
+   "START_LEDGER_p48824.json": 142,
+   "START_LEDGER_p59084.json": 142
+  },
+  "total": 576
+ },
+ "reconciled_at": "2026-10-02 11:27:47",
+ "round": "37",
+ "rows": {
+  "duplicate_scenarios_within_an_arm": {},
+  "missing_scenarios_per_arm": {},
+  "per_arm_counts": {
+   "always_hold": 64,
+   "immediate": 64,
+   "late_discovery_gate": 64,
+   "model_s11_greedy": 64,
+   "model_s11_sampled": 64,
+   "model_s22_greedy": 64,
+   "model_s22_sampled": 64,
+   "model_s33_greedy": 64,
+   "model_s33_sampled": 64
+  },
+  "unmatched_row_files": [],
+  "written": 576
+ },
+ "schema": "round37-reconciliation/1",
+ "shard_summaries": [
+  {
+   "cells_in_shard": 144,
+   "claims_held_round_wide": 575,
+   "optimizer_steps": 0,
+   "ran": 141,
+   "real_ledger_total": 575,
+   "reused_existing_rows": 0,
+   "scenario_filter": null,
+   "seconds": 1840.12,
+   "shard": 0,
+   "shards": 4,
+   "technical_failures": 0,
+   "training_launches": 0
+  },
+  {
+   "cells_in_shard": 9,
+   "claims_held_round_wide": 9,
+   "optimizer_steps": 0,
+   "ran": 9,
+   "real_ledger_total": 9,
+   "reused_existing_rows": 0,
+   "scenario_filter": 1600000,
+   "seconds": 108.26,
+   "shard": 0,
+   "shards": 1,
+   "technical_failures": 0,
+   "training_launches": 0
+  },
+  {
+   "cells_in_shard": 144,
+   "claims_held_round_wide": 576,
+   "optimizer_steps": 0,
+   "ran": 142,
+   "real_ledger_total": 576,
+   "reused_existing_rows": 0,
+   "scenario_filter": null,
+   "seconds": 1855.9,
+   "shard": 1,
+   "shards": 4,
+   "technical_failures": 0,
+   "training_launches": 0
+  },
+  {
+   "cells_in_shard": 144,
+   "claims_held_round_wide": 576,
+   "optimizer_steps": 0,
+   "ran": 142,
+   "real_ledger_total": 576,
+   "reused_existing_rows": 0,
+   "scenario_filter": null,
+   "seconds": 1851.18,
+   "shard": 2,
+   "shards": 4,
+   "technical_failures": 0,
+   "training_launches": 0
+  },
+  {
+   "cells_in_shard": 144,
+   "claims_held_round_wide": 576,
+   "optimizer_steps": 0,
+   "ran": 142,
+   "real_ledger_total": 576,
+   "reused_existing_rows": 0,
+   "scenario_filter": null,
+   "seconds": 1847.88,
+   "shard": 3,
+   "shards": 4,
+   "technical_failures": 0,
+   "training_launches": 0
+  }
+ ],
+ "this_round_book": {
+  "completed": 575,
+  "optimizer_steps": 0,
+  "recording_launches": 0,
+  "reused_rows": 0,
+  "starts": 575,
+  "technical_failures": 0,
+  "training_launches": 0
+ }
+}

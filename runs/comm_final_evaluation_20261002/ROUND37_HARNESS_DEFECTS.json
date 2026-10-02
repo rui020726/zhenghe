@@ -1,0 +1,61 @@
+{
+ "kind": "round37-harness-defect-register",
+ "round": "37",
+ "counting": "两栏分开：被测系统（真实运行器、事件总线、采集接线、通信传输、评估路径）正确性失败 0 处；本轮自有 harness 与报告件缺陷 4 处（另有 4 类在首次环境启动之前即被发现并修正，不影响任何产物）。",
+ "subject_system_correctness_failures": 0,
+ "defects": [
+  {
+   "id": "R37-D1",
+   "where": "r37_gate.py 的 T1 模型与配置身份检查",
+   "symptom": "首跑 T1=false：non_policy_configuration_identical_across_arms=False，9 臂出现 2 个不同的配置签名",
+   "cause": "比较对象里保留了 relay.transport_parameters() 的 policy 与 policy_parameters 两项。这两项是臂自身的身份：原生 immediate 策略不携带参数，学习策略回报 horizon 与 feature_layout，因此按臂类型必然不同，不是世界配置差异",
+   "fix": "把 policy 与 policy_parameters 排除并显式登记排除理由；排除后 9 臂在步数、预算、B0 与其余传输字段上完全相同，T1 通过",
+   "evidence": "ROUND37_GATE.json 的 T1.policy_side_keys_excluded 与 exclusion_reason；修正后 8 项核对全 true",
+   "quota_affected": "0 次额外启动（门禁的 9 格只跑了一次）",
+   "direction": "假警报方向：检查过严导致失败，而不是把不一致放过去"
+  },
+  {
+   "id": "R37-D2",
+   "where": "r37_common.book_event 与 run_job 的 reused_rows 自记账本",
+   "symptom": "矩阵跑完后对账发现本轮自记 book.starts=575，而 claim 文件、行文件与真实 Stage C ledger 都是 576，all_passed 一度为 false",
+   "cause": "四个并行分片对同一个 JSON 账本做读-改-写且没有跨进程互斥，丢了一次增量。真实 Stage C ledger 是每 PID 一个文件、在构造 driver 之前写，不共享计数器，因此不受该竞态影响",
+   "fix": "给自记账本加 O_CREAT|O_EXCL 跨进程锁（_Lock），并把交付对账的权威计数改为 Stage C ledger / claim / 行三方，自记件只作旁证；差异本身连同解释写入 EVALUATION_LEDGER_RECONCILIATION.json.book_divergence_and_explanation",
+   "evidence": "EVALUATION_LEDGER_RECONCILIATION.json：authoritative_sources 三项均为 576、failed_entries_in_stage_c_ledger=[]、每臂 64 个场景齐全且无重复；book_events=575 与丢写解释并列登记",
+   "consequence": "没有任何格被重复启动、跳过或丢失；只有便利计数器少计一次。矩阵完整性的判定不依赖该计数器",
+   "direction": "自记件偏低（保守方向），权威件三方一致"
+  },
+  {
+   "id": "R37-D3",
+   "where": "r37_stats.py 的入口",
+   "symptom": "统计脚本报 missing cell，并打印出指向 runs/comm_cost_v2_rerun_20260928/rows/ 的路径",
+   "cause": "row_path 由被重绑定的 v2_common 全局推导；该脚本在解析路径之前没有调用 configure()，于是路径仍指向 ROUND24 目录",
+   "risk_check": "不会误读旧轮数据：本轮场景号 1600000..1600063 在 ROUND24 目录里不存在任何同名行，因此失败方式是'缺格即停'而不是静默读到别的数据",
+   "fix": "统计入口先 configure() 再解析路径；同时把该行名逻辑集中到 r37_common.row_path 一处",
+   "evidence": "修正后统计件正常生成 576 格矩阵；本轮所有对账均以 claim / 行 / 真实 ledger 三方一致为准",
+   "quota_affected": "0 次启动"
+  },
+  {
+   "id": "R37-D4",
+   "where": "ROUND37_EVALUATION_REPORT.md 的 §6.1 表",
+   "symptom": "报告一致性核验 K1 首跑为 false：报告表格里有 7 个数字（5.86、10.61、11.02、20.08、24.55、35.16、65.72）在机械渲染的 RESULTS_TABLES.md 中找不到",
+   "cause": "报告手抄时把机器件的三位小数自行四舍五入成两位，违反“表格与文字同源”的自订规则（三十二轮已有同类教训）",
+   "fix": "报告 §6.1 的数字改为逐字照抄渲染件（含新增的场景数列），并写 `r37_reportcheck.py` 把该约束变成可重跑的机械检查",
+   "evidence": "ROUND37_REPORT_CHECK.json：修正后 K1-K4 全 true",
+   "quota_affected": "0 次启动；被抄的数值本身全部来自统计件，无一处数值错误，只有小数位不一致"
+  }
+ ],
+ "found_before_first_environment_start": [
+  {
+   "where": "r37_common.archived-style 辅助与 r37_freeze.py",
+   "issues": [
+    "model_registry 返回结构把汇总标志混进逐模型字典，调用方 KeyError",
+    "引用 ROUND35 交付件时假设键名 all_gates_passed，实际是 clean（与 ROUND36 登记过的同类坑一致）",
+    "臂 id 解析把 model_s11_greedy 的 seed 段当作纯数字，int('s11') 抛错；同时 row_path 用同一错误拼法，若不修正会指向不存在的行名",
+    "装载冻结模型时直接传本轮重构的 4 字段 freeze token，而 ROUND36 存盘时携带的是含 provenance 与版本字段的完整块，被恢复门拒绝；改为读回文件自身携带的 freeze 块并另行核验其四个规范字段"
+   ],
+   "caught_by": "首次运行 freeze/gate 前的实跑与 py_compile；全部发生在 0 次环境启动阶段",
+   "evidence_affected": "无"
+  }
+ ],
+ "carried_forward_lesson": "引用其他轮次的登记件时先读实际结构再取键（本轮又踩一次键名假设）；并行写共享计数器必须加锁，且交付判定应建立在每进程独立、写前即记账的权威账本上。"
+}
