@@ -1,5 +1,19 @@
 # 项目状态
 
+## 2026-10-02：ROUND38-R 离线恢复机制研究——研发目标未达成，打包/演示暂停；三条 greedy 逐场景同 always_hold，11 个 immediate 独有目标显示两种不同阻塞路径
+
+当前分支 analysis/comm-research-recovery，ROUND37 交付头 382b6dbc22addb8b9cd33ecb1e1ba055517564a1 起步。新执行依据已独立提交。用户最新决定优先完成研究目标，原 ROUND38 打包、演示与便携复现计划暂停。开工进程核对未发现旧仿真/训练运行，也未停止其他会话。
+
+- 只读核验 2,693 个 ROUND37 原始文件哈希/大小，576 个结果行及发送端与接收端账本；所有登记输入匹配。三个 ep128 权重只核验文件 SHA256，未反序列化。
+- 三条 greedy 逐场景按时目标集合均与 always_hold 完全一致：364/64；相对 immediate 同一配对目标缺失 11 个、没有新增。
+- seed11 与 seed33 分别花费 1,797,864 / 1,798,242 B；刷新占计量字节约 73.9% / 72.7%。64/64 场景至少使用预算 90%，后来首报候选在 63 / 60 场景受预算 mask；首次 mask 后仍有 6 / 9 个其他合法候选机会，均已按 tape 顺序计数。
+- seed22 greedy 的 13,201 个合法候选全 HOLD，预算 mask 和执行器拒付均为 0。11 个 immediate 独有目标在 seed11/33 上首报受预算 mask，在 seed22 上则可付但策略 HOLD；这支持两种近端阻塞线索，不证明消息对任务结局的因果效应。
+- 交付详见 runs/comm_research_recovery_20261002/RESEARCH_RESTART.md、ABSOLUTE_PERFORMANCE.json、COMMUNICATION_USAGE.json、MISSING_TARGET_CHAINS.json、NEXT_EXPERIMENT_PROPOSAL.md。1600000..1600063 从本轮起属于方法分析块，不再是未参与开发的确认块。
+- ROUND37 T4 应准确表述为 greedy 在未 mask 的合法候选上执行 argmax；它不是要求所有候选的 p(SEND) ≥ 0.5。
+- 下一项仅建议：保留原冻结模型首报策略、只把后续 refresh 置为 HOLD；新登记 16 场景，9 臂共 144 正常格，最多 9 技术储备格。未登记、未运行、尚待授权；训练与 optimizer 更新均为 0。
+
+本轮计数：新环境启动 0；新流 0；真实训练更新 0；合成 optimizer 更新 0；checkpoint 反序列化/forward 0；网络访问/推送 0。本地提交后停止。规则参照不替代学习目标；任务损失边界、成本门槛、跨 seed 稳定标准与最终独立确认要求均待项目决策者确认，未新增数值标准。
+
 ## 2026-10-02：ROUND37 修复版通信模型固定终评（新 64 场景块，576 格全齐）——系统可复现，但学习模型未胜过强规则：greedy 三 seed 逐场景按时任务数与"从不发送"完全相同（64/64），其中两个 seed 多花约 28 000 B/集，比 `immediate` 贵 13.5 kB、比 `late_discovery_gate_147` 贵 24.7 kB；三 seed 成本符号不一致
 
 分支 `eval/comm-final-fixed-evaluation`（自 ROUND36 交付头 `e2a272c0303f580d957e778f7e222a56d265372f`
