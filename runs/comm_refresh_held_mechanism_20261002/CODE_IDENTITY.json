@@ -1,0 +1,132 @@
+{
+  "additional_runner_and_relay_sources": {
+    "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+    "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+    "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+    "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+    "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+    "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2",
+    "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": "e64e0be4911ca3b3129247b3a443d045ad022f3bd9e6a1a22c4ebd1b3a4aff9b",
+    "runs/comm_cost_stage_b_20260927/sb_collector.py": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+    "runs/comm_cost_v2_rerun_20260928/v2_common.py": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+    "runs/comm_cost_v2_rerun_20260928/v2_run.py": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7",
+    "runs/comm_final_evaluation_20261002/r37_common.py": "7a08310854e80001d24c43c165aeebf57e6e5005096235d841428adf98126bbd",
+    "runs/comm_final_evaluation_20261002/r37_gate.py": "6cbdd7185abb1f8ef003fb551948de50deb6f9024c90a0b9e181c6defcf5c84b",
+    "runs/comm_final_evaluation_20261002/r37_run.py": "e641ea0b92b17bfdb26dc0f42bb9a1550ee2831c40fed48f274ef644ec9fc24c",
+    "runs/comm_tight_budget_20260919/onpolicy.py": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3"
+  },
+  "auxiliary_document_sha256": {
+    "EXECUTION_BASIS.md": "d6912912609a239eba255d0a89019a156a1c22b36f42916d13d3acd4f2966bf4",
+    "REPORT_ERRATA.md": "14bc8ee44173f020c143c4c4a9b5d2f8cbaedbd39072efb2773a72412e4d2d6c"
+  },
+  "base_commit": "233a44fc10048488a0c71bda9d88e977c99c800e",
+  "execution_path": [
+    "r37_run.controller_for read-only ep128 loader",
+    "v2_run.run_eval for original frozen greedy and real output taps",
+    "v2_run.run_rule for immediate, late_discovery_gate, always_hold",
+    "r39_collector.RefreshHeldCollector for the local refresh-held arm",
+    "v2_run._run_episode for the same integrated SAR run and accounting path"
+  ],
+  "production_modules_modified": [],
+  "relay_first_emission_authority": {
+    "candidate": "CommRelay._observation sets first_emission from last_sent is None",
+    "commit": "CommRelay._emit updates last_sent only after budget can_send passes",
+    "loss": "CommRelay._emit updates sender ledger after packet attempt even when lost",
+    "source": "integrated_sar/comm.py"
+  },
+  "round37_frozen_source_check": {
+    "integrated_sar/adapters/task03.py": {
+      "actual_sha256": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+      "expected_sha256": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+      "matches_round37_freeze": true
+    },
+    "integrated_sar/comm.py": {
+      "actual_sha256": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+      "expected_sha256": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+      "matches_round37_freeze": true
+    },
+    "integrated_sar/comm_budget.py": {
+      "actual_sha256": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+      "expected_sha256": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+      "matches_round37_freeze": true
+    },
+    "integrated_sar/comm_learning.py": {
+      "actual_sha256": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+      "expected_sha256": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+      "matches_round37_freeze": true
+    },
+    "integrated_sar/comm_policy.py": {
+      "actual_sha256": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+      "expected_sha256": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+      "matches_round37_freeze": true
+    },
+    "integrated_sar/joint_driver.py": {
+      "actual_sha256": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+      "expected_sha256": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+      "matches_round37_freeze": true
+    },
+    "integrated_sar/lifecycle_metrics.py": {
+      "actual_sha256": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+      "expected_sha256": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+      "matches_round37_freeze": true
+    },
+    "integrated_sar/task_registry.py": {
+      "actual_sha256": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2",
+      "expected_sha256": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2",
+      "matches_round37_freeze": true
+    },
+    "runs/comm_cost_v2_rerun_20260928/v2_blocks.py": {
+      "actual_sha256": "342cdb69b920dfdfeee5bd7a9070321b9a0642fc1b80d5ad974b3f89602c78c8",
+      "expected_sha256": "342cdb69b920dfdfeee5bd7a9070321b9a0642fc1b80d5ad974b3f89602c78c8",
+      "matches_round37_freeze": true
+    },
+    "runs/comm_cost_v2_rerun_20260928/v2_check.py": {
+      "actual_sha256": "ead3da2feae866765260409c88b335f2195b43be92ed0fa4f1e5b420fface2d0",
+      "expected_sha256": "ead3da2feae866765260409c88b335f2195b43be92ed0fa4f1e5b420fface2d0",
+      "matches_round37_freeze": true
+    },
+    "runs/comm_cost_v2_rerun_20260928/v2_common.py": {
+      "actual_sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+      "expected_sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+      "matches_round37_freeze": true
+    },
+    "runs/comm_cost_v2_rerun_20260928/v2_controller.py": {
+      "actual_sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+      "expected_sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+      "matches_round37_freeze": true
+    },
+    "runs/comm_cost_v2_rerun_20260928/v2_reward_timing.py": {
+      "actual_sha256": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+      "expected_sha256": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+      "matches_round37_freeze": true
+    },
+    "runs/comm_cost_v2_rerun_20260928/v2_rules.py": {
+      "actual_sha256": "a7ce36de2d465cadaba90bd70b36539b5e865a73be8c4e075b9faf5a86c53a57",
+      "expected_sha256": "a7ce36de2d465cadaba90bd70b36539b5e865a73be8c4e075b9faf5a86c53a57",
+      "matches_round37_freeze": true
+    },
+    "runs/comm_cost_v2_rerun_20260928/v2_run.py": {
+      "actual_sha256": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7",
+      "expected_sha256": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7",
+      "matches_round37_freeze": true
+    },
+    "runs/comm_cost_v2_rerun_20260928/v2_train.py": {
+      "actual_sha256": "8437aee920e6d9192c0298c2e4ffe01c2daea641d67336216cfeb7dcf0e56883",
+      "expected_sha256": "8437aee920e6d9192c0298c2e4ffe01c2daea641d67336216cfeb7dcf0e56883",
+      "matches_round37_freeze": true
+    },
+    "runs/comm_cost_v2_rerun_20260928/v2_trainer.py": {
+      "actual_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+      "expected_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+      "matches_round37_freeze": true
+    }
+  },
+  "round39_experiment_sources": {
+    "r39_analyze.py": "10f8e55cc9d192d8f03785c06d6c01ec36b9a09cc795ee904b3f4997eecb4dba",
+    "r39_collector.py": "7c92090813a7d03b5fd2b393ee582b6e2e69231fad59ffabfafa0d8de6579e96",
+    "r39_freeze.py": "62aef1d188f91087f48de28c1e4d7495743d49a6f1e40eb8b66d9a0d3e5d795f",
+    "r39_preflight.py": "72f9544228dd429a8c306a4a3262d7a00093180b3f73d0e2e2380bf35a2d11c7",
+    "r39_run.py": "470c69aabd31bdaaae015be2b9c2c5f206da8bfd22fbf694a40d3ca2507fbd49"
+  },
+  "schema": "round39-code-identity/1"
+}

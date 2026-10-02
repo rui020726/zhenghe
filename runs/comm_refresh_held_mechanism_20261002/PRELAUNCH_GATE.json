@@ -1,0 +1,78 @@
+{
+  "schema": "round39-pure-preflight/1",
+  "all_passed": true,
+  "tests": {
+    "A_disabled_identity": {
+      "same_return_tuple_and_tape": true,
+      "torch_rng_unchanged": true,
+      "asked": [
+        "first-a"
+      ],
+      "actions": {
+        "first-a": 1,
+        "first-b": 0
+      }
+    },
+    "B_first_emission_preserved": {
+      "first_report_actions_preserved": {
+        "HOLD": 0,
+        "SEND": 1
+      }
+    },
+    "C_refresh_hold_no_charge": {
+      "refresh_budget_before_after": [
+        6,
+        6
+      ],
+      "first_report_budget_after": 2,
+      "asked": [
+        "new-target"
+      ]
+    },
+    "D_ordered_budget_hand_case": {
+      "credit": 6,
+      "quotes": [
+        4,
+        4
+      ],
+      "baseline_actions": {
+        "refresh": 1,
+        "first-report": 0
+      },
+      "refresh_held_actions": {
+        "refresh": 0,
+        "first-report": 1
+      }
+    },
+    "E_authoritative_relay_semantics": {
+      "dropped_first_emission_stays_first_sent": true,
+      "new_revision_does_not_restore_first_send": true,
+      "budget_refusal_does_not_count_as_first_send": true,
+      "relay_cost_charged_for_lost_first_packet": 284
+    },
+    "F_all_hold_negative_case": {
+      "baseline_asked": [],
+      "intervention_asked": [],
+      "actions_equal": true,
+      "bytes_and_shadow_equal": true,
+      "refresh_send_suppressed": false
+    },
+    "G_episode_state_reset": {
+      "same_target_old_episode_held": true,
+      "new_episode_first_send_untouched": true
+    },
+    "H_budget_and_charge_closure": {
+      "charged_target_ids": [
+        "first-a",
+        "first-c"
+      ],
+      "charged_bytes": 8,
+      "remaining_budget": 0,
+      "duplicate_target_rejected": true
+    }
+  },
+  "environment_constructions": 0,
+  "joint_runs": 0,
+  "optimizer_steps": 0,
+  "checkpoint_writes": 0
+}

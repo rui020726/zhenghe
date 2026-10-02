@@ -1,0 +1,112 @@
+{
+  "all_three_read_only_verified_against_round36_and_round37": true,
+  "checks": {
+    "file_sha256": "byte-level file digest",
+    "loader": "load_checkpoint_read_only; optimizer and RNG not restored",
+    "module_digests": "loaded module parameter summaries",
+    "parameter_sha256": "loaded model parameter digest",
+    "training_seed_episode_update_lambda": "checkpoint state fields"
+  },
+  "models": {
+    "s11": {
+      "bytes_sha256": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+      "episodes_done": 128,
+      "freeze_token_canonical_fields_match_round24_manifest": true,
+      "freeze_token_fields": [
+        "branch_start",
+        "config_hash",
+        "freeze_sha256",
+        "head_at_freeze",
+        "reward_timing_version",
+        "token_provenance",
+        "training_version"
+      ],
+      "lambda_final": 1.4999999999999993,
+      "load_mode": "read_only",
+      "matches_round36_registry": true,
+      "module_digests": {
+        "action_head": "4e6537647c711a19",
+        "cost_head": "900bdc8c8d29886b",
+        "task_value_head": "c84f1e13656069ec",
+        "trunk": "4f334053876b71ab"
+      },
+      "optimizer_restored": false,
+      "optimizer_steps": 464,
+      "parameter_sha256": "553d02dd1de285a736f7fd2a25ce04dc52b00f48ee8226eb08e2a14c5aacdda6",
+      "path": "runs/comm_final_train_20261001/seed11/checkpoints/v2_train_s11_ep128.pt",
+      "reward_timing_version": "published-completion-event-at-relay-tick/2",
+      "rng_restored": false,
+      "timing_interpretation": "versioned_capture_semantics",
+      "training_seed_in_state": 11,
+      "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+      "updates": 32
+    },
+    "s22": {
+      "bytes_sha256": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+      "episodes_done": 128,
+      "freeze_token_canonical_fields_match_round24_manifest": true,
+      "freeze_token_fields": [
+        "branch_start",
+        "config_hash",
+        "freeze_sha256",
+        "head_at_freeze",
+        "reward_timing_version",
+        "token_provenance",
+        "training_version"
+      ],
+      "lambda_final": 1.2624999999999993,
+      "load_mode": "read_only",
+      "matches_round36_registry": true,
+      "module_digests": {
+        "action_head": "18b901be6504ee69",
+        "cost_head": "cf861686c4c654ec",
+        "task_value_head": "9b1bbf8a7ae4edac",
+        "trunk": "c8ba9b2bc204368a"
+      },
+      "optimizer_restored": false,
+      "optimizer_steps": 356,
+      "parameter_sha256": "6a84ab76e206a5115527ddedec5bf7251c3785f229a078a02c50b1dd3dc7bdfb",
+      "path": "runs/comm_final_train_20261001/seed22/checkpoints/v2_train_s22_ep128.pt",
+      "reward_timing_version": "published-completion-event-at-relay-tick/2",
+      "rng_restored": false,
+      "timing_interpretation": "versioned_capture_semantics",
+      "training_seed_in_state": 22,
+      "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+      "updates": 32
+    },
+    "s33": {
+      "bytes_sha256": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+      "episodes_done": 128,
+      "freeze_token_canonical_fields_match_round24_manifest": true,
+      "freeze_token_fields": [
+        "branch_start",
+        "config_hash",
+        "freeze_sha256",
+        "head_at_freeze",
+        "reward_timing_version",
+        "token_provenance",
+        "training_version"
+      ],
+      "lambda_final": 1.4749999999999992,
+      "load_mode": "read_only",
+      "matches_round36_registry": true,
+      "module_digests": {
+        "action_head": "0109dc2d875de008",
+        "cost_head": "6f97a4db95d3630a",
+        "task_value_head": "a4c86c8e2e933ecf",
+        "trunk": "db79226934a38a30"
+      },
+      "optimizer_restored": false,
+      "optimizer_steps": 464,
+      "parameter_sha256": "cd0498693f7636aea5f75cb6a54bd18f64c7410fe2f16e8791b7aa3966a5cb9d",
+      "path": "runs/comm_final_train_20261001/seed33/checkpoints/v2_train_s33_ep128.pt",
+      "reward_timing_version": "published-completion-event-at-relay-tick/2",
+      "rng_restored": false,
+      "timing_interpretation": "versioned_capture_semantics",
+      "training_seed_in_state": 33,
+      "training_version": "constrained-cost-v2/published-completion-event-at-relay-tick/2",
+      "updates": 32
+    }
+  },
+  "schema": "round39-checkpoint-identity/1"
+}
