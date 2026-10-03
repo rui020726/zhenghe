@@ -1,0 +1,66 @@
+{
+  "kind": "round42-gate-path-identity-regression/1",
+  "status": "passed",
+  "function_under_test": "r42_analysis._validate_frozen_checkpoint_path_map",
+  "wired_into_real_gate": true,
+  "historical_failure_reproduced": {
+    "old_raw_set_assertion_would_fail": true,
+    "reason": "Windows batch keys use backslashes while expected keys used forward slashes",
+    "same_two_registered_paths_after_normalization": true
+  },
+  "test_command": "D:\\project_env\\python.exe -m unittest discover -s runs/comm_one_shot_gate_resume_20261003_v2 -p test_r42_gate_resume.py -v",
+  "runtime": {
+    "python": "3.10.19",
+    "numpy": "2.2.6",
+    "pytorch": "2.9.0+cu128",
+    "device_for_later_model_checks": "cpu"
+  },
+  "tests": [
+    {
+      "name": "slash_and_backslash_spellings_are_equivalent",
+      "status": "passed"
+    },
+    {
+      "name": "real_seed11_batch_record_and_freeze_match_by_full_identity",
+      "status": "passed"
+    },
+    {
+      "name": "absolute_forward_slash_spelling_stays_below_declared_root",
+      "status": "passed"
+    },
+    {
+      "name": "same_basename_in_a_different_directory_is_rejected",
+      "status": "passed"
+    },
+    {
+      "name": "record_hash_mismatch_is_rejected",
+      "status": "passed"
+    },
+    {
+      "name": "missing_frozen_file_is_rejected",
+      "status": "passed"
+    },
+    {
+      "name": "record_keys_that_normalize_to_a_collision_are_rejected",
+      "status": "passed"
+    },
+    {
+      "name": "frozen_keys_that_normalize_to_a_collision_are_rejected",
+      "status": "passed"
+    },
+    {
+      "name": "other_drive_or_absolute_path_outside_root_is_rejected",
+      "status": "passed"
+    }
+  ],
+  "counts": {
+    "tests_passed": 9,
+    "tests_failed": 0,
+    "environment_constructions": 0,
+    "environment_starts": 0,
+    "optimizer_step_calls": 0,
+    "training_checkpoint_writes": 0,
+    "old_artifact_writes": 0
+  },
+  "interpretation": "Synthetic path-identity regression only; it does not assert that the full real first-batch gate or exact-resume check has passed."
+}

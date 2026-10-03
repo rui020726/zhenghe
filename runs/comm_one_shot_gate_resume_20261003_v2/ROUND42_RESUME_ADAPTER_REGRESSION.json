@@ -1,0 +1,83 @@
+{
+  "kind": "round42-gate-and-resume-adapter-regression/1",
+  "status": "passed",
+  "resume_execution_version": "round42-gate-and-exact-resume/2",
+  "gate_path_version": "round42-frozen-checkpoint-path-map/2",
+  "tests": {
+    "frozen_checkpoint_path_identity": {
+      "passed": 9,
+      "failed": 0
+    },
+    "resume_adapter_ast": {
+      "passed": 2,
+      "failed": 0
+    },
+    "py_compile": {
+      "status": "passed",
+      "files": [
+        "r42_resume.py",
+        "r42_analysis.py",
+        "r40_train_resume_adapter.py",
+        "test_r42_resume_adapter.py"
+      ]
+    }
+  },
+  "copied_input_reconciliation": {
+    "launch_claims": {
+      "file_count": 69,
+      "same_paths_sizes_hashes": true
+    },
+    "launch_slots": {
+      "file_count": 69,
+      "same_paths_sizes_hashes": true
+    },
+    "rows": {
+      "file_count": 68,
+      "same_paths_sizes_hashes": true
+    },
+    "checkpoints": {
+      "file_count": 6,
+      "same_paths_sizes_hashes": true
+    },
+    "training_progress": {
+      "file_count": 2,
+      "same_paths_sizes_hashes": true
+    },
+    "runtime_checkpoint_write_journal_sha256": "c8ec579c70556bf76c1d62af63a7f8ab14fbcf5fceb8acc91f4c648dbc4b7400"
+  },
+  "previous_attempt_1": {
+    "status": "stopped_before_new_environment_claim",
+    "quota_delta": {
+      "normal_claims": 0,
+      "reserve_claims": 0,
+      "environment_constructions": 0,
+      "environment_starts": 0,
+      "completed_steps": 0,
+      "ppo_updates": 0,
+      "optimizer_step_calls": 0,
+      "checkpoint_writes": 0,
+      "new_rows": 0
+    },
+    "evidence_sha256": {
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_RESUME_ATTEMPT01_STOP.json": "3dfb9394ede5a9b5213dcce67dfbcec5cfa816514c27a2c052f3a795dcd98fd1",
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_RESUME_ATTEMPT01_STOP.md": "e996ee070614817ef62d7216b9da65739de5ffcc108c2f1c4846f9104a9a32f7",
+      "runs/comm_one_shot_gate_resume_20261003/runtime/ROUND42_REAL_GATE_RECHECK.json": "8c6014fdb17eacd5bafb6c19e90316a034e155de74e95a67f02831f8cedf2139",
+      "runs/comm_one_shot_gate_resume_20261003/runtime/ROUND42_EXACT_RESUME_VERIFICATION.json": "721b7173345dd1010c11c825328a72cd6056e9bb849f5a1e205e99f8f359673d",
+      "runs/comm_one_shot_gate_resume_20261003/runtime/ROUND42_RESUME_START.json": "ffa8b3d3a35a53916367c6a33873f75ea3634f3a063f581737b6168f87373f3d",
+      "runs/comm_one_shot_gate_resume_20261003/runtime/ROUND42_RESUME_STOP.json": "0b78e2a58b9c207936dacf9b910f4e8b4576c26b57d1dc630425b94dea848367",
+      "runs/comm_one_shot_gate_resume_20261003/runtime/ROUND42_RESUME_PROGRESS.json": "23f611d5a22ce4134f3c8054c187783fff2182c77064f0601c2e89286f09fa45",
+      "runs/comm_one_shot_gate_resume_20261003/runtime/ROUND42_EXECUTION_LEDGER.json": "167bba1bff9447604e33d5c6f9ee262ce7232e4fe7a62bda8bbb56cd9ffee25a"
+    },
+    "snapshot_file_count": 8,
+    "snapshot_byte_identical": true
+  },
+  "counts": {
+    "environment_constructions": 0,
+    "environment_starts": 0,
+    "completed_steps": 0,
+    "ppo_updates": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_writes": 0,
+    "new_rows": 0
+  }
+}
