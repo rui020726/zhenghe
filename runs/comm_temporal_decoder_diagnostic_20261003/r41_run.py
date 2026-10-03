@@ -238,7 +238,8 @@ def normalized_world_configuration(common: Any, runner: Any, scene: int,
     configuration.validate()
     actual = asdict(configuration)
     actual = {key: value for key, value in actual.items()
-              if key not in {"output", "comm_transcript", "record_stream", "replay_stream"}}
+              if key not in {"output", "comm_transcript", "record_stream", "replay_stream",
+                             "search_backend", "allocation_backend"}}
     serialized = json.dumps(actual, ensure_ascii=False, sort_keys=True, default=str)
     return actual, hashlib.sha256(serialized.encode("utf-8")).hexdigest()
 

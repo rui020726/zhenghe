@@ -114,7 +114,8 @@ def world_configuration(row: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(config, dict):
         raise RuntimeError(f"lifecycle row has no serialized run configuration: {lifecycle}")
     return {key: value for key, value in config.items()
-            if key not in {"output", "comm_transcript", "record_stream", "replay_stream"}}
+            if key not in {"output", "comm_transcript", "record_stream", "replay_stream",
+                           "search_backend", "allocation_backend"}}
 
 
 def main() -> None:
