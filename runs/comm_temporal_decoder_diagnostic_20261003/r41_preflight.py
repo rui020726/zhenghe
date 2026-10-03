@@ -467,6 +467,15 @@ def main() -> None:
         if digest(path) != before_hashes[str(seed)]:
             raise RuntimeError(f"read-only load changed ep128 checkpoint {seed}")
 
+    # The row/tape/lifecycle/transcript files are content-addressed above.  Keep their
+    # essential row identity and target set in the freeze, but store the full 53-field world
+    # configuration once per scene rather than once for every seed and mode.
+    compact_baseline_rows = {
+        key: {name: value for name, value in record.items()
+              if name not in {"world_configuration", "emission_sequence", "refusal_sequence"}}
+        for key, record in baseline_rows.items()
+    }
+
     # Rerun the same A-J pure-compute tests under the resolved project runtime; they import
     # only the decoder, policy contracts, and production budget shadow object.
     test_path = RUN_DIR / "test_r41_hazard_median.py"
@@ -575,7 +584,7 @@ def main() -> None:
             "late_discovery_gate_cut_147": 16,
             "always_hold": 16,
             "old_models_used_as_candidates": False,
-            "rows": baseline_rows,
+            "rows": compact_baseline_rows,
             "totals": model_totals,
             "rule_totals": {
                 key: {name: value for name, value in record.items() if name != "rows"}
