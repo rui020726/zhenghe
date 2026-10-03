@@ -1,0 +1,58 @@
+{
+  "kind": "round42-resume-attempt-stop-record/1",
+  "attempt": 1,
+  "resume_execution_version": "round42-gate-and-exact-resume/1",
+  "execution_head": "d54b84468421a11633b4bf3e045e404649f74fa6",
+  "status": "stopped_before_new_environment_claim",
+  "exception": "UnboundLocalError: local variable 'parameter_identity' referenced before assignment",
+  "failure_location": {
+    "file": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\r40_train.py",
+    "function": "train_seed",
+    "line": 386
+  },
+  "cause": "The frozen resume branch loads controller/optimizer/state, then reads parameter_identity even though that function-local import is assigned only in the fresh-start branch.",
+  "gate_and_resume_checks": {
+    "seed11_real_first_batch_gate": "passed",
+    "frozen_search_allocation_files_checked": 2,
+    "exact_resume_verification": "passed",
+    "resume_cursor": {"next_episode": 4, "updates": 1, "optimizer_steps": 12, "lambda": 1.0125}
+  },
+  "attempt_delta": {
+    "normal_claims": 0,
+    "reserve_claims": 0,
+    "environment_constructions": 0,
+    "environment_starts": 0,
+    "completed_steps": 0,
+    "ppo_updates": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_writes": 0,
+    "new_rows": 0
+  },
+  "cumulative_ledger_unchanged": {
+    "normal_used": 68,
+    "reserve_used": 1,
+    "total_used": 69,
+    "environment_constructor_calls": 69,
+    "completed_steps": 68000,
+    "completed_logical_jobs": 68,
+    "optimizer_step_calls": 12,
+    "ppo_update_calls": 1,
+    "checkpoint_write_calls": 4
+  },
+  "unchanged_input_evidence": {
+    "all_6_checkpoint_files_match_source": true,
+    "69_claim_paths_match_source": true,
+    "old_gate_failure_and_stop_state_rewritten": false,
+    "approved_episode4_checkpoint_sha256": "a85722e0864456ea3eb735195c7ffcde4be9d42301bdf2bc0781db6747a851ef"
+  },
+  "evidence_sha256": {
+    "real_gate_recheck": "8c6014fdb17eacd5bafb6c19e90316a034e155de74e95a67f02831f8cedf2139",
+    "exact_resume_verification": "721b7173345dd1010c11c825328a72cd6056e9bb849f5a1e205e99f8f359673d",
+    "resume_start_marker": "ffa8b3d3a35a53916367c6a33873f75ea3634f3a063f581737b6168f87373f3d",
+    "resume_stop_record": "0b78e2a58b9c207936dacf9b910f4e8b4576c26b57d1dc630425b94dea848367",
+    "resume_progress": "23f611d5a22ce4134f3c8054c187783fff2182c77064f0601c2e89286f09fa45",
+    "execution_ledger": "167bba1bff9447604e33d5c6f9ee262ce7232e4fe7a62bda8bbb56cd9ffee25a"
+  },
+  "quota_charge": "none; no environment claim was created",
+  "next_action": "Preserve this stopped attempt and use a separately frozen resume-only adapter/code identity before any environment starts."
+}
