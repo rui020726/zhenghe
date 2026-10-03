@@ -306,7 +306,7 @@ def main() -> None:
                 "status": claim["status"],
             },
         }
-        if row.get("artefacts", {}).get("tape"):
+        if row.get("collector_summary") is not None and row.get("artefacts", {}).get("tape"):
             tape_path = Path(row["artefacts"]["tape"])
             row_identity["tape"] = verified_external(tape_path)
         baseline_rows[key] = row_identity
