@@ -1,5 +1,14 @@
 # 项目状态
 
+## 2026-10-03：ROUND41 固定累计风险解码器诊断完成——s11/s22 各恢复 8 个 greedy 缺失的按时目标，三 seed 收敛到 96/96；成本同时收敛到 immediate 水平，远高于 late-147
+
+分支 `exp/comm-temporal-decoder-diagnostic`，从已核验的 ROUND40 完整交付 HEAD `8f8245a665b15960e70194fc6e245221b70db90e` 独立建立。完整报告与机读交付位于 `runs/comm_temporal_decoder_diagnostic_20261003/ROUND41_REPORT.md`。本轮只新增外部确定性推理解码器 `hazard_median`，不改训练器、权重、预算或生产默认值。
+
+- 使用 ROUND40 NEW 三份 ep128 权重只读评估 16 个已使用开发场景。A–J 纯计算接线测试 10/10、首场景六格门禁通过；逐候选 H 递推与请求/真实发送后核对 48/48。全 48 格共 480 次合法首报累计、mask 0、真实 first report 288、拒付 0、refresh 0。
+- s11/s22 各为 96/96、239,040 B，分别比 greedy 多 8 个按时目标且无旧目标损失；s33 为 96/96、239,028 B，与 greedy 完全持平。三 seed 都与 immediate 任务数相同、成本差仅 +12/+12/0 B；相对 late-147 均多约 161.6 kB/16 集。结果支持累计概率解码能打破 s11/s22 的逐步 greedy HOLD，不支持学到通信成本节流。
+- 正常环境启动 51/51，reserve 0/5，技术失败和重试均 0；训练更新、optimizer.step、checkpoint 写回、独立流录制、网络尝试均 0。权重文件执行后 SHA256 不变。所有场景是已使用开发块，不作确认、泛化、显著性或总体非劣声明。
+- 下一步唯一建议：停止在本开发块调参；如需继续，由决策 agent 另行登记并授权一个未触碰场景块，启动前冻结 decoder 与任务/成本判据作独立确认。本地交付，无推送或部署。
+
 ## 2026-10-03：ROUND40 first-report-only 训练消融完成——动作资格限制正确生效，但未建立稳定的任务/成本收益
 
 分支 `exp/comm-first-report-training-ablation`，从指定 ROUND36 起点分支 `exp/comm-refresh-held-mechanism` / HEAD `4e989a9088111ce6d9171cb1a21629a4b2b1e861` 建立独立执行工作树。完整执行依据、冻结件、门禁、账本、配对结果与报告位于 `runs/comm_first_report_training_ablation_20261003/`。本状态只新增 ROUND40 入口，ROUND39 及更早历史保留。
