@@ -42,6 +42,25 @@ def _install_summary_and_resume_adapter(common: Any, runner: Any, trainer: Any,
     r40_train.common = common
     r40_train.runner = runner
     r40_train.trainer = trainer
+    import r40_worker
+
+    original_independent_bundle = r40_worker._independent_bundle
+    if not getattr(original_independent_bundle, "_round40_structured_cost_adapter", False):
+        def independent_bundle_with_airtime(stream: dict[str, Any], decision_steps: list[int],
+                                            horizon: int):
+            numeric_stream = {}
+            for key, value in stream.items():
+                if isinstance(value, dict):
+                    if "airtime_bytes" not in value:
+                        raise RuntimeError(f"structured cost event has no airtime_bytes: {key}")
+                    numeric_stream[str(key)] = float(value["airtime_bytes"])
+                else:
+                    numeric_stream[str(key)] = float(value)
+            return original_independent_bundle(numeric_stream, decision_steps, horizon)
+
+        independent_bundle_with_airtime._round40_structured_cost_adapter = True
+        r40_worker._independent_bundle = independent_bundle_with_airtime
+
     if getattr(r40_train.train_seed, "_round40_continuation_adapter", False):
         return {"already_installed": True}
 
@@ -124,6 +143,7 @@ def _install_summary_and_resume_adapter(common: Any, runner: Any, trainer: Any,
             "purpose": "make the existing parameter_identity local available on the checkpoint-resume branch",
         },
         "post_return_field": "milestone_checkpoints",
+        "independent_cost_bundle_input": "extract airtime_bytes from structured cost-stream records",
         "progress_receipt_identity_comparison": "canonical JSON; preserves tuple-to-list round-trip equality",
         "scope_excludes_rollouts_actions_returns_loss_optimizer_rng_and_checkpoint_bytes": True,
         "environment_constructed_by_adapter_setup": False,

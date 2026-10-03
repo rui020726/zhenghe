@@ -1,12 +1,12 @@
 {
   "kind": "round40-continuation-metadata-adapter/1",
-  "recorded_at_utc": "2026-10-03T02:29:42.178795+00:00",
+  "recorded_at_utc": "2026-10-03T02:32:40.362468+00:00",
   "adapter_path": "runs/comm_first_report_training_ablation_20261003/r40_resume_adapter.py",
-  "adapter_sha256": "3c7c85710d4ecade8e8c54d34643ae6b98cc30eae447f50729e12621012890e7",
+  "adapter_sha256": "a09da817ff8d09e9e99518dc9f6f95cf9601916cd5e8814ef7c3f6a3493a4edd",
   "checkpoint_freeze_identity_sha256": "51c92666cc7d5ea340eb2b3066acebcfe8cf7988fa88f4166a1673802c71dd67",
   "frozen_config_file_sha256": "4efc9e3a4e87653a9cf30b656dbe462cb4d0f5b37089628d29b98d1f93bd8891",
   "trigger": "worker summary expected milestone_checkpoints, absent from the frozen train_seed return value",
-  "scope": "in-memory resume import availability fix, canonical JSON comparison for an existing progress receipt, and addition of milestone_checkpoints to train_seed result metadata",
+  "scope": "in-memory validator correction reading airtime_bytes from structured cost events, resume import availability, canonical receipt comparison, and milestone path metadata",
   "training_version_unchanged": true,
   "comm_action_eligibility_unchanged": true,
   "episodes_done_at_extension": 4,
@@ -20,11 +20,12 @@
   "environment_constructed_by_adapter_setup": false,
   "optimizer_steps_by_adapter_setup": 0,
   "git_external_raw_artifacts_remain_untracked": true,
-  "adapter_revision": 3,
-  "supersedes_adapter_sha256": "b33742149ce5d1da201c0028a4eb80d7ca861f574059b5aa9f81f9d1d52dbf2a",
+  "adapter_revision": 4,
+  "supersedes_adapter_sha256": "3c7c85710d4ecade8e8c54d34643ae6b98cc30eae447f50729e12621012890e7",
   "training_update_semantics_changed": false,
   "checkpoint_resume_freeze_identity_changed": false,
   "runtime_function_source_patch": "insert from v2_controller import parameter_identity before checkpoint cursor selection",
   "runtime_use_receipt": "training_progress/continuation_adapter_use_*.json",
-  "progress_receipt_identity_comparison": "canonical JSON to account for tuple shapes serialized as JSON lists; no receipt overwrite"
+  "progress_receipt_identity_comparison": "canonical JSON to account for tuple shapes serialized as JSON lists; no receipt overwrite",
+  "independent_cost_bundle_input": "structured event dictionaries map to airtime_bytes; other transport counters are excluded from cost reward recomputation"
 }
