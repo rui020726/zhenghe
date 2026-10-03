@@ -164,6 +164,7 @@ def configure(frozen: dict[str, Any], round40_freeze: dict[str, Any]) -> dict[st
 
     import torch
     import v2_run as runner
+    import v2_controller
     import v2_trainer as trainer
     import r40_run
     import r40_train

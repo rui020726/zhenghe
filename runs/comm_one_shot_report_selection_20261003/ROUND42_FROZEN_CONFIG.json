@@ -34,7 +34,7 @@
     "round42_code_sha256": {
       "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
       "r42_versions.py": "32940b48a0166c1b4488d7649e46f50ccb1a5831f81506aed2fe3490e7f2dee0",
-      "r42_run.py": "b275d18deb21242df5bbfec125c1679b709a538279c3da8fa7adfb1458c7eadf",
+      "r42_run.py": "5e1f4228c1aa1f2216966f4d5742a33ed5d64d4d648e8a35fc944cd65947f584",
       "r42_execute.py": "8433dbd4348c37c32e077d55e787f42350ac977c1fcaa56f83e7bd4d941df1da",
       "r42_analysis.py": "3f7497b8e378f77a6d7eb1ceb29484285ac3c62ad09480e8cee1747bafcbd478",
       "r42_report.py": "2d2c3c2c14bbdffce52d53cc89b6f7099f4b2b5252bebef32b23cbdbb1774162",
@@ -278,7 +278,7 @@
       "round42_code_sha256": {
         "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
         "r42_versions.py": "32940b48a0166c1b4488d7649e46f50ccb1a5831f81506aed2fe3490e7f2dee0",
-        "r42_run.py": "b275d18deb21242df5bbfec125c1679b709a538279c3da8fa7adfb1458c7eadf",
+        "r42_run.py": "5e1f4228c1aa1f2216966f4d5742a33ed5d64d4d648e8a35fc944cd65947f584",
         "r42_execute.py": "8433dbd4348c37c32e077d55e787f42350ac977c1fcaa56f83e7bd4d941df1da",
         "r42_analysis.py": "3f7497b8e378f77a6d7eb1ceb29484285ac3c62ad09480e8cee1747bafcbd478",
         "r42_report.py": "2d2c3c2c14bbdffce52d53cc89b6f7099f4b2b5252bebef32b23cbdbb1774162",
@@ -477,7 +477,7 @@
       },
       "configuration_diff_sha256": "2a6c9dcfcdf75310f77221dc96679244e91f025442220076894a9155c611e74c",
       "output_directory_repo_relative": "runs/comm_one_shot_report_selection_20261003",
-      "freeze_sha256": "af8a9f06cf2376ce0236d091589558b9728b6174796cce73ba4a1108d9cff5ad"
+      "freeze_sha256": "feaa930ee4ba02fbf21c7db65626bf3b69a04a0aed5008ab36af893959269767"
     },
     "allowed_differences_vs_round40": [
       "target action semantics: one-shot SEND_NOW/SKIP_EPISODE with per-target episode latch",
@@ -984,7 +984,7 @@
           "unexpected_real_emit_refusal_stops_before_next_tick",
           "hand_derived_expected_objective_directions"
         ],
-        "stdout_stderr": "ROUND42_TEST_GUARD {\"checkpoint_write_calls\": 0, \"joint_run_constructors\": 0, \"optimizer_step_calls\": 0, \"passed\": true, \"test_count\": 12}\ntest_01_free_choice_latches_once_and_revision_cannot_reopen (__main__.Round42OneShotTests) ... ok\ntest_02_skip_is_a_real_likelihood_entropy_and_actor_action (__main__.Round42OneShotTests) ... ok\ntest_03_closed_skip_stays_in_features_but_never_sends_or_charges (__main__.Round42OneShotTests) ... ok\ntest_04_real_send_costs_even_when_lost_and_closes_refreshes (__main__.Round42OneShotTests) ... ok\ntest_05_masks_do_not_decide_and_new_episode_resets_latch (__main__.Round42OneShotTests) ... ok\ntest_06_multi_target_latches_are_independent_and_budget_is_sequential (__main__.Round42OneShotTests) ... ok\ntest_07_batch_likelihood_matches_independent_action_prefix_product (__main__.Round42OneShotTests) ... ok\ntest_08_all_closed_rows_keep_both_critics_and_zero_actor_gradient (__main__.Round42OneShotTests) ... ok\ntest_09_old_training_restore_refuses_before_state_restore_old_readonly_succeeds (__main__.Round42OneShotTests) ... ok\ntest_10_round40_ep0_matches_fresh_same_seed_initialization (__main__.Round42OneShotTests) ... ok\ntest_11_unexpected_real_emit_refusal_stops_before_next_tick (__main__.Round42OneShotTests) ... ok\ntest_12_hand_derived_expected_objective_directions (__main__.Round42OneShotTests) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 0.135s\n\nOK\n",
+        "stdout_stderr": "ROUND42_TEST_GUARD {\"checkpoint_write_calls\": 0, \"joint_run_constructors\": 0, \"optimizer_step_calls\": 0, \"passed\": true, \"test_count\": 12}\ntest_01_free_choice_latches_once_and_revision_cannot_reopen (__main__.Round42OneShotTests) ... ok\ntest_02_skip_is_a_real_likelihood_entropy_and_actor_action (__main__.Round42OneShotTests) ... ok\ntest_03_closed_skip_stays_in_features_but_never_sends_or_charges (__main__.Round42OneShotTests) ... ok\ntest_04_real_send_costs_even_when_lost_and_closes_refreshes (__main__.Round42OneShotTests) ... ok\ntest_05_masks_do_not_decide_and_new_episode_resets_latch (__main__.Round42OneShotTests) ... ok\ntest_06_multi_target_latches_are_independent_and_budget_is_sequential (__main__.Round42OneShotTests) ... ok\ntest_07_batch_likelihood_matches_independent_action_prefix_product (__main__.Round42OneShotTests) ... ok\ntest_08_all_closed_rows_keep_both_critics_and_zero_actor_gradient (__main__.Round42OneShotTests) ... ok\ntest_09_old_training_restore_refuses_before_state_restore_old_readonly_succeeds (__main__.Round42OneShotTests) ... ok\ntest_10_round40_ep0_matches_fresh_same_seed_initialization (__main__.Round42OneShotTests) ... ok\ntest_11_unexpected_real_emit_refusal_stops_before_next_tick (__main__.Round42OneShotTests) ... ok\ntest_12_hand_derived_expected_objective_directions (__main__.Round42OneShotTests) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 0.136s\n\nOK\n",
         "simulator_constructed": false,
         "joint_run_constructed": false,
         "real_environment_constructed": false,
