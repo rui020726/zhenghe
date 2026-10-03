@@ -1,0 +1,233 @@
+{
+  "kind": "round42-training-version-manifest/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+  "reward_timing_version": "published-completion-event-at-relay-tick/2",
+  "comm_action_eligibility": "first-report-only/1",
+  "comm_action_semantics": "one-shot-send-skip/1",
+  "old_round40_training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+  "old_checkpoint_training_restore": "rejected",
+  "round40_ep0_initialization": "read-only source; NEW optimizer and state start fresh",
+  "old_round40_ep128_evaluation": "read-only under explicit ROUND42 protocol adaptation",
+  "round42_checkpoint_identity_fields": [
+    "training_version",
+    "reward_timing_version",
+    "comm_action_eligibility",
+    "comm_action_semantics",
+    "freeze",
+    "training_state"
+  ],
+  "strict_resume_entry": "r42_versions.install -> trainer.load_checkpoint",
+  "round42_freeze_sha256": "af8a9f06cf2376ce0236d091589558b9728b6174796cce73ba4a1108d9cff5ad",
+  "old_checkpoint_param_identities": {
+    "11": "033de1384f8ab7aa96314a428b2bf4e7e2e792116db250dc024dca9ae9df4ca2",
+    "22": "0170f9a052c11149330156f76d03c5038bb6beb0e27768f6f838261685a58183",
+    "33": "7d324a3f823d46cac78a90becdb57ff04770a728f2ae649664771be778d795ee"
+  },
+  "initial_parameter_identities": {
+    "11": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "22": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+    "33": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa"
+  },
+  "round42_code_sha256": {
+    "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+    "r42_versions.py": "32940b48a0166c1b4488d7649e46f50ccb1a5831f81506aed2fe3490e7f2dee0",
+    "r42_run.py": "b275d18deb21242df5bbfec125c1679b709a538279c3da8fa7adfb1458c7eadf",
+    "r42_execute.py": "8433dbd4348c37c32e077d55e787f42350ac977c1fcaa56f83e7bd4d941df1da",
+    "r42_analysis.py": "3f7497b8e378f77a6d7eb1ceb29484285ac3c62ad09480e8cee1747bafcbd478",
+    "r42_report.py": "2d2c3c2c14bbdffce52d53cc89b6f7099f4b2b5252bebef32b23cbdbb1774162",
+    "r42_preflight.py": "6e53a95dfc837fa361a3d10739e481fc5be1a8433452f0b2e4b58d955ed39ec9",
+    "test_r42_one_shot.py": "08633c0038fa74c590cf640acf06481a1241b3f270dc79c2e7f9518b4ccd558a"
+  },
+  "active_dependency_sha256": {
+    "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+    "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+    "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+    "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+    "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+    "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+    "integrated_sar/lifecycle_metrics.py": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+    "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2",
+    "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": "e64e0be4911ca3b3129247b3a443d045ad022f3bd9e6a1a22c4ebd1b3a4aff9b",
+    "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": "bab0a65fb3ffda6dc9673eaa4e836e20f184b4cc16836b5d5cf169bd2d326e91",
+    "runs/comm_budget_pilot_20260919/pilot_common.py": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8",
+    "runs/comm_budget_pilot_20260919/pilot_env.py": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b",
+    "runs/comm_budget_pilot_20260919/train_pilot.py": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81",
+    "runs/comm_cost_controller_stage_a_20260927/cost_math.py": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+    "runs/comm_cost_stage_b_20260927/sb_collector.py": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+    "runs/comm_cost_stage_b_20260927/sb_common.py": "66e674a03e0406299c8f9172d2865c5f83c3de58893bce7f87b71741ba3cf28f",
+    "runs/comm_cost_stage_b_20260927/sb_controller.py": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+    "runs/comm_cost_stage_b_20260927/sb_run.py": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+    "runs/comm_tight_budget_20260919/onpolicy.py": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+    "runs/comm_tight_budget_20260919/train_onpolicy.py": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f",
+    "runs/search_trace_and_policy_20260925/sp_common.py": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc",
+    "v2_blocks.py": "342cdb69b920dfdfeee5bd7a9070321b9a0642fc1b80d5ad974b3f89602c78c8",
+    "v2_check.py": "ead3da2feae866765260409c88b335f2195b43be92ed0fa4f1e5b420fface2d0",
+    "v2_common.py": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+    "v2_controller.py": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+    "v2_recover.py": "b1abedd5033fde7e6ff10d42ac8a5935fef977f7569a81efa522bbccc56bc6bb",
+    "v2_reward_timing.py": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+    "v2_rules.py": "a7ce36de2d465cadaba90bd70b36539b5e865a73be8c4e075b9faf5a86c53a57",
+    "v2_run.py": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7",
+    "v2_train.py": "8437aee920e6d9192c0298c2e4ffe01c2daea641d67336216cfeb7dcf0e56883",
+    "v2_trainer.py": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
+  },
+  "round42_checkout_dependency_sha256": {
+    "integrated_sar/adapters/task03.py": {
+      "sha256": "f20aec2be9e909152f930937d9bedb677719830b5fd237a14f1bdc213c6ea1da",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "integrated_sar/comm.py": {
+      "sha256": "9be1e9097b6b5285c52b4f0c939e29d57e7aabb949c651fc0d427060e90a8a46",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "integrated_sar/comm_budget.py": {
+      "sha256": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "integrated_sar/comm_learning.py": {
+      "sha256": "a9add53099c2fe86f459797bd7c38d24361934b264e235ed9fb36118d55cf60f",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "integrated_sar/comm_policy.py": {
+      "sha256": "d3015f89469b095a7bddade3640fd59402b688c17acd886c9a14155b6e5ed16a",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "integrated_sar/joint_driver.py": {
+      "sha256": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "integrated_sar/lifecycle_metrics.py": {
+      "sha256": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "integrated_sar/task_registry.py": {
+      "sha256": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": {
+      "sha256": "73c251cdb98011f7762908f92a969f75e5584b3e7106a782f1ddc7b6bb05c7b8",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": {
+      "sha256": "92d7fda200dc9573b1ded31879dcd92b8725c53face3746753243f577360b428",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "runs/comm_budget_pilot_20260919/pilot_common.py": {
+      "sha256": "eda2c28caee30b4afe201fc90e037fe579476a8f4fd4de12b77a8eb1d3913175",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "runs/comm_budget_pilot_20260919/pilot_env.py": {
+      "sha256": "7bcf43ef01814108dd1feb0609bc15569ca1410ed03aef27ebf4246b96b9fbea",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "runs/comm_budget_pilot_20260919/train_pilot.py": {
+      "sha256": "1862f670f2ccd013e8e4b481075ea8bd63f2961b547e7a55ac2ef04efbaccce8",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "runs/comm_cost_controller_stage_a_20260927/cost_math.py": {
+      "sha256": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "runs/comm_cost_stage_b_20260927/sb_collector.py": {
+      "sha256": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "runs/comm_cost_stage_b_20260927/sb_common.py": {
+      "sha256": "66e674a03e0406299c8f9172d2865c5f83c3de58893bce7f87b71741ba3cf28f",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "runs/comm_cost_stage_b_20260927/sb_controller.py": {
+      "sha256": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "runs/comm_cost_stage_b_20260927/sb_run.py": {
+      "sha256": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "runs/comm_tight_budget_20260919/onpolicy.py": {
+      "sha256": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "runs/comm_tight_budget_20260919/train_onpolicy.py": {
+      "sha256": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "runs/search_trace_and_policy_20260925/sp_common.py": {
+      "sha256": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "v2_blocks.py": {
+      "sha256": "f54bf2f39faa2baa7a3c78bce065ab346fdda262dc7d02ab01c87bb565531492",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "v2_check.py": {
+      "sha256": "fc4e764273e8895892bd35adfe8e7e557c1e32d241b53860f2fd331ae9cda6e1",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "v2_common.py": {
+      "sha256": "d526eaa16f0f9619d1ce8c9539364671a5d18041668523f0ada0f30ff4c257c2",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "v2_controller.py": {
+      "sha256": "95691c57571102ad3ee6682904f3823f13229e3e0c92ebc526db1b89992e67a6",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "v2_recover.py": {
+      "sha256": "b1abedd5033fde7e6ff10d42ac8a5935fef977f7569a81efa522bbccc56bc6bb",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "v2_reward_timing.py": {
+      "sha256": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+      "matches_round40_active_dependency": true,
+      "active_for_round42_execution": false
+    },
+    "v2_rules.py": {
+      "sha256": "e307bdd17a88600cbeb5ea97c6ee0d8a6bf9d7f7a2df979c478aaf73b7254662",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "v2_run.py": {
+      "sha256": "8356fb68661962263bb82513e4197e75f242f0c7cbc0af8a02487332899d9c61",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "v2_train.py": {
+      "sha256": "47c8895365f384bec9f58b775c5c6be77982f5b860f3cb9ae4a6ff2ada4c6e2a",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    },
+    "v2_trainer.py": {
+      "sha256": "ffb6953034cbc2548e6f7458a7c1d560fe3337ad3ccb846543bb8f6f4dcc05a6",
+      "matches_round40_active_dependency": false,
+      "active_for_round42_execution": false
+    }
+  },
+  "configuration_diff_sha256": "2a6c9dcfcdf75310f77221dc96679244e91f025442220076894a9155c611e74c",
+  "optimizer_step_allowed_only_in_real_round42_training": true
+}
