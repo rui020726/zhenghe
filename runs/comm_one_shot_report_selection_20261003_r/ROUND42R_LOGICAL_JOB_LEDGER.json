@@ -1,0 +1,33 @@
+{
+  "kind": "round42r-logical-job-ledger/1",
+  "scope": "explicit old-failure-to-reserve-retry mapping; all other logical jobs are recorded by their atomic attempt claims",
+  "carryover_manifest_sha256": "53259276c726682eb7e75dd613f364bea5d403c3cc2df9a9043bbb211c358e4d",
+  "jobs": {
+    "immediate_reference_scene1300000": {
+      "status": "complete",
+      "attempts": [
+        {
+          "attempt": 1,
+          "category": "normal",
+          "status": "failed_technical",
+          "source": "runs/comm_one_shot_report_selection_20261003/launch_claims/immediate_reference_scene1300000/attempt_0001.json"
+        },
+        {
+          "attempt": 2,
+          "category": "reserve",
+          "status": "complete",
+          "retry_of_attempt": 1,
+          "row_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003_r\\rows\\v2_reference_s1300000_a2.json",
+          "steps": 1000,
+          "on_time": 6,
+          "spent_bytes": 14916
+        }
+      ]
+    }
+  },
+  "normal_slots_imported": 1,
+  "reserve_slots_imported": 0,
+  "new_normal_jobs_remaining": 671,
+  "logical_job_target": 672,
+  "hard_cap": 700
+}

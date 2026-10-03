@@ -1,0 +1,54 @@
+{
+  "kind": "round42r-reference-retry-gate/1",
+  "status": "passed",
+  "logical_job": "immediate_reference_scene1300000",
+  "old_failed_attempt": {
+    "attempt": 1,
+    "category": "normal",
+    "status": "failed_technical",
+    "claim_path": "runs/comm_one_shot_report_selection_20261003/launch_claims/immediate_reference_scene1300000/attempt_0001.json",
+    "claim_sha256": "5a74e2f57908e0e2be37e34d83b74889851bd5e457125da480ba04ff81fe001a"
+  },
+  "successful_attempt": {
+    "attempt": 2,
+    "category": "reserve",
+    "status": "complete",
+    "row_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003_r\\rows\\v2_reference_s1300000_a2.json",
+    "row_sha256": "a0ebfd8511c3f08bfdd67ec47a998cc5f39f013b8d23163df90ec0d5a4afb688",
+    "lifecycle_sha256": "97e26fef1ca310deb3198cdbced597bd6f0fa0281b138e706c39eada490365b0",
+    "run_signature": {
+      "format": "run-signature/1",
+      "arm": "coalplan0.25sticky+redrel+noself+bud29300+policy_owned_timing",
+      "sticky_commitments": true,
+      "code_commit": "4e989a9088111ce6d9171cb1a21629a4b2b1e861",
+      "checkpoints": {
+        "piloc": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+        "ctde": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+      },
+      "seed": 1300000,
+      "stream": {
+        "path": null,
+        "sha256": null
+      },
+      "config_hash": "4b71516be763c1bb",
+      "trace_schema": "allocation-decision-trace/3"
+    },
+    "counts": {
+      "constructors_cumulative": 2,
+      "joint_runs_constructed_cumulative": 2,
+      "run_calls": 1,
+      "completed_steps": 1000
+    },
+    "outcome": {
+      "steps": 1000,
+      "on_time": 6,
+      "task_reward_total": 6,
+      "spent_bytes": 14916,
+      "airtime_tap_total": 14916
+    }
+  },
+  "old_failure_preserved": true,
+  "reserve_linkage_valid": true,
+  "scientific_configuration_and_search_allocation_identity_valid": true,
+  "next_action": "continue the remaining 63 immediate references, then the frozen training and evaluation plan"
+}
