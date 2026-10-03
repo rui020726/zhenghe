@@ -1,0 +1,7 @@
+{
+  "kind": "round42-execution-stop/1",
+  "status": "stopped_without_automatic_retry",
+  "exception": "AttributeError: 'JointRun' object attribute 'run' is read-only",
+  "time_unix": 1791018448.9291723,
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003\\r42_execute.py\", line 285, in main\n    result = _execute()\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003\\r42_execute.py\", line 115, in _execute\n    row = run_reference(int(scene))\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003\\r42_run.py\", line 446, in run_reference\n    row = _execute_cell(\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003\\r42_run.py\", line 415, in _execute_cell\n    row = runner._run_episode(\n  File \"D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_run.py\", line 146, in _run_episode\n    run = build_joint_run(configuration)\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003\\r42_run.py\", line 272, in counted_build\n    run.run = counted_run\nAttributeError: 'JointRun' object attribute 'run' is read-only\n"
+}

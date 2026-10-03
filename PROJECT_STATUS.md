@@ -1,5 +1,14 @@
 # 项目状态
 
+## 2026-10-03：ROUND42 一次性 SEND/SKIP 首报选择消融在首个环境构造后停止——运行器对 JointRun.run 只读属性赋值失败，仿真和训练均未开始
+
+执行分支 `exp/comm-one-shot-report-selection`，首次尝试前冻结 HEAD `3c0b61cbdb702c3e4d8b1a4668030bda2db102ab`。完整故障报告、机读 verdict、执行账本和 Git 外原件清单位于 `runs/comm_one_shot_report_selection_20261003/`。
+
+- 启动前 12 项纯计算/接线测试、8 个脚本 `py_compile`、只读 checkpoint/CPU forward 门禁与配置导入来源检查通过；这些不代表真实仿真正确。
+- 首个 immediate reference `scene1300000` 的 `JointRun` 构造成功，运行器尝试实例级覆盖只读 `run` 属性时失败。1 次 normal claim 已计费；仿真开始 0、成功 episode 0、optimizer.step 0、ROUND42 checkpoint 写入 0、reserve 0/28、重试 0。
+- ROUND40 六份 ep0/ep128 checkpoint 与两份冻结搜索/分配 checkpoint 均在尝试后重新核验 SHA256，与 preflight 一致。ROUND42 新训练未开始；没有策略结果，不能判断首报是否减少或任务表现是否保持。
+- 按 ROUND42 故障纪律保留冻结版本和失败原件并停止；未热修、未重试、未推送或部署。若继续，须先由决策者另行批准修复版本及重新冻结/门禁。
+
 ## 2026-10-03：ROUND41 固定累计风险解码器诊断完成——s11/s22 各恢复 8 个 greedy 缺失的按时目标，三 seed 收敛到 96/96；成本同时收敛到 immediate 水平，远高于 late-147
 
 分支 `exp/comm-temporal-decoder-diagnostic`，从已核验的 ROUND40 完整交付 HEAD `8f8245a665b15960e70194fc6e245221b70db90e` 独立建立。完整报告与机读交付位于 `runs/comm_temporal_decoder_diagnostic_20261003/ROUND41_REPORT.md`。本轮只新增外部确定性推理解码器 `hazard_median`，不改训练器、权重、预算或生产默认值。

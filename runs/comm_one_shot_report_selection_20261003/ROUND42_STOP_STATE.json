@@ -1,0 +1,102 @@
+{
+  "kind": "round42-stopped-execution-state/1",
+  "status": "stopped_without_automatic_retry",
+  "exception": "AttributeError: 'JointRun' object attribute 'run' is read-only",
+  "normal_launch_claims": 1,
+  "reserve_launch_claims": 0,
+  "total_launch_claims": 1,
+  "environment_constructor_calls": 1,
+  "simulation_started_calls": 0,
+  "failed_claims": [
+    {
+      "logical_job": "immediate_reference_scene1300000",
+      "attempt": 1,
+      "category": "normal",
+      "status": "failed_technical",
+      "claimed_at_unix": 1791018446.8767142,
+      "launch_slot": 1,
+      "metadata": {
+        "arm": "immediate",
+        "scenario_seed": 1300000
+      },
+      "environment_constructor_calls": 1,
+      "simulation_started": false,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 0,
+      "prelaunch_head": "3c0b61cbdb702c3e4d8b1a4668030bda2db102ab",
+      "round": 42,
+      "comm_action_semantics": "one-shot-send-skip/1",
+      "constructor_called_at_unix": 1791018446.8992298,
+      "finished_at_unix": 1791018448.9109366,
+      "detail": "AttributeError: 'JointRun' object attribute 'run' is read-only; preserved={\"exception\": \"AttributeError: 'JointRun' object attribute 'run' is read-only\", \"failure_record\": \"D:\\\\code\\\\整合\\\\zhenghe-round42\\\\runs\\\\comm_one_shot_report_selection_20261003\\\\failures\\\\ref_immediate_s1300000_r42.json\"}"
+    }
+  ],
+  "claim_count": 1,
+  "no_automatic_retry_or_resume": true,
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003\\r42_execute.py\", line 285, in main\n    result = _execute()\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003\\r42_execute.py\", line 115, in _execute\n    row = run_reference(int(scene))\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003\\r42_run.py\", line 446, in run_reference\n    row = _execute_cell(\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003\\r42_run.py\", line 415, in _execute_cell\n    row = runner._run_episode(\n  File \"D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_run.py\", line 146, in _run_episode\n    run = build_joint_run(configuration)\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003\\r42_run.py\", line 272, in counted_build\n    run.run = counted_run\nAttributeError: 'JointRun' object attribute 'run' is read-only\n",
+  "optimizer_step_hook_calls_in_process": 0,
+  "execution_ledger": {
+    "normal": [
+      {
+        "category": "normal",
+        "slot": 1,
+        "logical_job": "immediate_reference_scene1300000",
+        "attempt": 1,
+        "claimed_at_unix": 1791018446.8787231
+      }
+    ],
+    "reserve": [],
+    "claims": [
+      {
+        "logical_job": "immediate_reference_scene1300000",
+        "attempt": 1,
+        "category": "normal",
+        "status": "failed_technical",
+        "claimed_at_unix": 1791018446.8767142,
+        "launch_slot": 1,
+        "metadata": {
+          "arm": "immediate",
+          "scenario_seed": 1300000
+        },
+        "environment_constructor_calls": 1,
+        "simulation_started": false,
+        "optimizer_step_calls": 0,
+        "checkpoint_write_calls": 0,
+        "prelaunch_head": "3c0b61cbdb702c3e4d8b1a4668030bda2db102ab",
+        "round": 42,
+        "comm_action_semantics": "one-shot-send-skip/1",
+        "constructor_called_at_unix": 1791018446.8992298,
+        "finished_at_unix": 1791018448.9109366,
+        "detail": "AttributeError: 'JointRun' object attribute 'run' is read-only; preserved={\"exception\": \"AttributeError: 'JointRun' object attribute 'run' is read-only\", \"failure_record\": \"D:\\\\code\\\\整合\\\\zhenghe-round42\\\\runs\\\\comm_one_shot_report_selection_20261003\\\\failures\\\\ref_immediate_s1300000_r42.json\"}"
+      }
+    ],
+    "normal_used": 1,
+    "reserve_used": 0,
+    "total_used": 1,
+    "plan": {
+      "normal": {
+        "immediate_reference": 64,
+        "new_training": 384,
+        "old_new_development": 192,
+        "rule_development": 32
+      },
+      "normal_total": 672,
+      "technical_reserve_max": 28,
+      "hard_cap": 700
+    },
+    "counts": {
+      "normal_used": 1,
+      "reserve_used": 0,
+      "total_used": 1,
+      "environment_constructor_calls": 1,
+      "simulation_started": 0,
+      "technical_failed_claims": 1,
+      "retry_claims": 0,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 0,
+      "checkpoint_write_journal_entries": 0,
+      "optimizer_step_count_matches_committed_batches": true,
+      "hard_cap": 700
+    }
+  }
+}

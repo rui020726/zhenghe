@@ -1,0 +1,39 @@
+{
+  "kind": "round42-experiment-verdict/1",
+  "status": "stopped_before_simulation_due_to_harness_error",
+  "experiment_effect_verdict": "not_estimable",
+  "prelaunch_head": "3c0b61cbdb702c3e4d8b1a4668030bda2db102ab",
+  "basis_commit": "ffa87ceb1a9d48abe27fc124ef1a963470878604",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+  "comm_action_semantics": "one-shot-send-skip/1",
+  "first_logical_job": "immediate_reference_scene1300000",
+  "exception": "AttributeError: 'JointRun' object attribute 'run' is read-only",
+  "failure_stage": "after JointRun construction and before JointRun.run invocation",
+  "counts": {
+    "normal_claims_used": 1,
+    "normal_plan": 672,
+    "technical_reserve_used": 0,
+    "technical_reserve_max": 28,
+    "total_claims_used": 1,
+    "hard_cap": 700,
+    "environment_constructor_calls": 1,
+    "simulation_started": 0,
+    "successful_episodes": 0,
+    "optimizer_step_calls": 0,
+    "round42_checkpoint_writes": 0,
+    "retries": 0
+  },
+  "prelaunch_pure_compute_tests": {
+    "passed": 12,
+    "failed": 0,
+    "environment_or_joint_run_constructors": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_write_calls": 0
+  },
+  "source_checkpoints_unchanged_after_attempt": true,
+  "new_training_performed": false,
+  "automatic_retry_authorized": false,
+  "push_merge_deploy_authorized": false,
+  "report": "ROUND42_REPORT.md",
+  "artifact_inventory": "ROUND42_ARTIFACT_INVENTORY.json"
+}
