@@ -454,8 +454,8 @@ def _run_seed(common: Any, runner: Any, trainer: Any, seed: int, episodes: int,
     path = r40.ROUND_DIR / "training_progress" / f"TRAINING_SUMMARY_s{seed}_ep{episodes}.json"
     summary = {key: result[key] for key in (
         "training_seed", "episodes_done", "updates", "optimizer_steps", "lambda",
-        "lambda_history", "checkpoint", "controller_parameters", "training_version",
-        "comm_action_eligibility")}
+        "lambda_history", "checkpoint", "milestone_checkpoints", "controller_parameters",
+        "training_version", "comm_action_eligibility")}
     _write_once(path, summary)
     return result
 

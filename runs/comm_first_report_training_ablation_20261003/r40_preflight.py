@@ -616,6 +616,48 @@ def _checkpoint_gate(root: Path, common: Any, trainer: Any, v2_controller: Any,
     }
 
 
+def _preserved_preconstruction_checkpoints(root: Path, common: Any, trainer: Any,
+                                           freeze: dict[str, Any], old_identities: dict[str, Any]
+                                           ) -> list[dict[str, Any]]:
+    path = common.CHECKPOINTS / "v2_train_s11_ep0.pt"
+    if not path.is_file():
+        return []
+    payload = torch.load(path, map_location="cpu", weights_only=False)
+    controller, state, identity = trainer.load_checkpoint_read_only(path)
+    old_initial = old_identities["old_checkpoint_milestones"]["11"]["ep0"][
+        "parameter_sha256"]
+    _assert(payload.get("freeze") != freeze,
+            "preserved preconstruction checkpoint unexpectedly has the current freeze")
+    _assert(controller.parameter_summary()["parameter_sha256"] == old_initial,
+            "preserved preconstruction checkpoint does not match registered ROUND36 ep0")
+    _assert(int(state["episodes_done"]) == 0 and int(state["updates"]) == 0
+            and int(state["optimizer_steps"]) == 0,
+            "preserved preconstruction checkpoint contains a training update")
+    _assert(identity.get("load_mode") == "read_only"
+            and identity.get("optimizer_restored") is False
+            and identity.get("rng_restored") is False,
+            "preserved preconstruction checkpoint was not inspected read-only")
+    import r40_train
+
+    r40_train.common = common
+    successor = r40_train._milestone_path(11, 0, freeze)
+    _assert(successor != path and not successor.exists(),
+            "new freeze would overwrite the preserved preconstruction checkpoint")
+    return [{
+        "path": str(path), "file_sha256": _sha256(path),
+        "previous_freeze_sha256": hashlib.sha256(json.dumps(
+            payload["freeze"], ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")).hexdigest(),
+        "parameter_sha256": controller.parameter_summary()["parameter_sha256"],
+        "episodes_done": int(state["episodes_done"]), "updates": int(state["updates"]),
+        "optimizer_steps": int(state["optimizer_steps"]),
+        "load_mode": identity["load_mode"], "optimizer_restored": False,
+        "rng_restored": False, "preserved_without_writeback": True,
+        "current_freeze_successor_path": str(successor),
+        "current_freeze_successor_does_not_exist_at_preflight": True,
+    }]
+
+
 def _preflight_launch_boundary(common: Any) -> dict[str, Any]:
     """Allow initial freeze, or an exact 64-reference-only continuation boundary."""
     ledger = r40.ledger_snapshot()
@@ -716,6 +758,9 @@ def run(input_root: str | Path) -> dict[str, Any]:
         optimizer_results = _optimizer_preflight(v2_controller)
         checkpoint_results = _checkpoint_gate(root, common, trainer, v2_controller, freeze)
 
+    preserved_preconstruction_checkpoints = _preserved_preconstruction_checkpoints(
+        root, common, trainer, freeze, checkpoint_source[1])
+
     # A non-constructive syntax/import guard on the R40 modules.
     for name in R40_CODE_FILES:
         source = r40.ROUND_DIR / name
@@ -790,6 +835,7 @@ def run(input_root: str | Path) -> dict[str, Any]:
                 REFERENCE_PHASE_FREEZE_COMMIT if prior_phase["prior_environment_launches"]
                 else None),
             "prior_phase": prior_phase,
+            "preserved_preconstruction_checkpoints": preserved_preconstruction_checkpoints,
             "unchanged_method_code_since_reference_phase": unchanged_method_code,
             "code_revisions_are_driver_or_audit_only": True,
         },
@@ -818,6 +864,7 @@ def run(input_root: str | Path) -> dict[str, Any]:
         "round40_basis_commit": worktree_parent,
         "preexisting_environment_launches": prior_phase["prior_environment_launches"],
         "preexisting_reference_rows": prior_phase["completed_reference_rows"],
+        "preserved_preconstruction_checkpoints": preserved_preconstruction_checkpoints,
         "python": sys.version,
         "torch": torch.__version__,
         "device": "cpu",

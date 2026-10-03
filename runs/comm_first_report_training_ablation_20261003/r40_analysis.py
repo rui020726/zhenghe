@@ -558,7 +558,11 @@ def analyze(common: Any, *, write_artifacts: bool = True) -> dict[str, Any]:
     freeze_doc = _json(r40.ROUND_DIR / "ROUND40_FROZEN_CONFIG.json")
     freeze = freeze_doc["round40"]["freeze_identity"]
     preflight = _json(r40.ROUND_DIR / "ROUND40_PREFLIGHT.json")
-    checkpoint_results: dict[str, Any] = {"OLD_read_only_inputs": {}, "NEW_training_outputs": {}}
+    checkpoint_results: dict[str, Any] = {
+        "OLD_read_only_inputs": {}, "NEW_training_outputs": {},
+        "preserved_preconstruction_checkpoints": preflight.get(
+            "preserved_preconstruction_checkpoints", []),
+    }
     for seed in r40.TRAIN_SEEDS:
         old_record = preflight["checkpoint_identities"]["old_checkpoint_milestones"][str(seed)]
         old_ep128 = Path(old_record["ep128"]["path"])
@@ -573,8 +577,12 @@ def analyze(common: Any, *, write_artifacts: bool = True) -> dict[str, Any]:
             "read_only_evaluation_only": True,
         }
         new_points = {}
+        milestone_paths = summary.get("milestone_checkpoints", {})
         for episodes in (0, 64, 128):
-            path = common.CHECKPOINTS / f"v2_train_s{seed}_ep{episodes}.pt"
+            milestone_value = milestone_paths.get(str(episodes))
+            if not milestone_value:
+                raise RuntimeError(f"seed {seed} lacks a versioned ep{episodes} milestone path")
+            path = Path(milestone_value)
             payload = torch.load(path, map_location="cpu", weights_only=False)
             controller, state, identity = trainer.load_checkpoint_read_only(path, freeze=freeze)
             if (payload.get("training_version") != "constrained-cost-v2/first-report-only/1/"

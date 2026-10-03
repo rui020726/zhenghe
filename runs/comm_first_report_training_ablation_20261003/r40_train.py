@@ -80,8 +80,19 @@ def _module_digests(controller: Any) -> dict[str, str]:
     return result
 
 
-def _milestone_path(training_seed: int, episodes: int) -> Path:
-    return common.CHECKPOINTS / f"v2_train_s{training_seed}_ep{episodes}.pt"
+def _milestone_path(training_seed: int, episodes: int,
+                    freeze: dict[str, Any]) -> Path:
+    path = common.CHECKPOINTS / f"v2_train_s{training_seed}_ep{episodes}.pt"
+    if episodes == 0 and path.is_file():
+        payload = torch.load(path, map_location="cpu", weights_only=False)
+        if payload.get("freeze") != freeze:
+            freeze_key = hashlib.sha256(json.dumps(
+                freeze, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+            ).encode("utf-8")).hexdigest()[:12]
+            path = common.CHECKPOINTS / (
+                f"v2_train_s{training_seed}_ep0_r40f{freeze_key}.pt"
+            )
+    return path
 
 
 def _rolling_path(training_seed: int) -> Path:
@@ -91,7 +102,7 @@ def _rolling_path(training_seed: int) -> Path:
 def _save_milestone(controller: Any, optimizer: torch.optim.Optimizer,
                     state: dict[str, Any], training_seed: int, episodes: int,
                     freeze: dict[str, Any]) -> Path:
-    path = _milestone_path(training_seed, episodes)
+    path = _milestone_path(training_seed, episodes, freeze)
     if path.exists():
         restored, restored_state, identity = trainer.load_checkpoint_read_only(path,
                                                                                 freeze=freeze)
@@ -317,6 +328,7 @@ def train_seed(training_seed: int, *, episodes: int, freeze: dict[str, Any],
         raise TypeError("immediate cache must be a scenario-keyed dictionary")
 
     checkpoint = _rolling_path(training_seed)
+    milestone_paths: dict[str, str] = {}
     resume_source = _latest_resume_source(training_seed, freeze)
     if resume_source is not None:
         controller, optimizer, state = trainer.load_checkpoint(resume_source, freeze=freeze)
@@ -333,7 +345,8 @@ def train_seed(training_seed: int, *, episodes: int, freeze: dict[str, Any],
         controller = fresh_controller(training_seed)
         optimizer = torch.optim.Adam(controller.parameters, lr=common.LEARNING_RATE)
         state = trainer.fresh_training_state(training_seed)
-        _save_milestone(controller, optimizer, state, training_seed, 0, freeze)
+        initial_milestone = _save_milestone(controller, optimizer, state, training_seed, 0, freeze)
+        milestone_paths["0"] = str(initial_milestone)
         print(f"R40 seed {training_seed}: fresh Controller({training_seed}); "
               "no old weights loaded", flush=True)
 
@@ -354,10 +367,18 @@ def train_seed(training_seed: int, *, episodes: int, freeze: dict[str, Any],
     history: list[dict[str, Any]] = []
     started = time.time()
 
+    # Record only immutable milestones whose content carries the current freeze identity.
+    for milestone in (0, 64, 128):
+        if milestone > int(state["episodes_done"]):
+            continue
+        milestone_path = _milestone_path(training_seed, milestone, freeze)
+        if milestone_path.is_file():
+            milestone_paths[str(milestone)] = str(milestone_path)
     # Repair only a missing ep64/ep128 immutable copy from a same-version rolling checkpoint.
     if int(state["episodes_done"]) in common.MILESTONE_EPISODES:
-        _save_milestone(controller, optimizer, state, training_seed,
-                        int(state["episodes_done"]), freeze)
+        milestone_path = _save_milestone(controller, optimizer, state, training_seed,
+                                         int(state["episodes_done"]), freeze)
+        milestone_paths[str(int(state["episodes_done"]))] = str(milestone_path)
 
     from r40_run import run_training_episode
 
@@ -478,8 +499,9 @@ def train_seed(training_seed: int, *, episodes: int, freeze: dict[str, Any],
         _write_batch_commit(training_seed, batch_index, batch_record_path, checkpoint,
                             postupdate_checkpoint, state, after)
         if int(state["episodes_done"]) in common.MILESTONE_EPISODES:
-            _save_milestone(controller, optimizer, state, training_seed,
-                            int(state["episodes_done"]), freeze)
+            milestone_path = _save_milestone(controller, optimizer, state, training_seed,
+                                             int(state["episodes_done"]), freeze)
+            milestone_paths[str(int(state["episodes_done"]))] = str(milestone_path)
         _save_progress(training_seed, state, status="batch_checkpoint_committed",
                        parameter_identity=after)
         before = after
