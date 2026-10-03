@@ -1,0 +1,112 @@
+{
+  "kind": "round41-first-six-gate/1",
+  "status": "passed",
+  "cells": 6,
+  "greedy_reproduction": {
+    "11": {
+      "round40_row_sha256": "b411ad21837c04a77be781fc4b5e142a85ae2916fc521bc537f9a41ee3a6a37c",
+      "round40_tape_sha256": "7a80f97305ed1f570ca89e987dc7071bd4434d5914d0a75dc332860c830c4cb4",
+      "round41_row_sha256": "bd9ee605aa729928ff80c2e0864112c07133d362ca2667e44ded7d1ffc592b71",
+      "round41_tape_sha256": "7a80f97305ed1f570ca89e987dc7071bd4434d5914d0a75dc332860c830c4cb4",
+      "behavior_fields_equal": true,
+      "behavior_sha256": "e260ae40a6b1f8f4177cdf34c5a1675d2a061454566e695c154d72cf48e18910",
+      "on_time": 6,
+      "spent_bytes": 0
+    },
+    "22": {
+      "round40_row_sha256": "942815a354f7824aeccea29d70fc93a03d8810a3e4f8ea57a2f25ed5df011dac",
+      "round40_tape_sha256": "05466ae776406dbe5f76d3595d215a725f0d0f422b1c71f320efd9fc94b99315",
+      "round41_row_sha256": "cc051996d84ac6bdd7b7088e039851369fd52a1704ef04291fd869a59412a761",
+      "round41_tape_sha256": "05466ae776406dbe5f76d3595d215a725f0d0f422b1c71f320efd9fc94b99315",
+      "behavior_fields_equal": true,
+      "behavior_sha256": "e260ae40a6b1f8f4177cdf34c5a1675d2a061454566e695c154d72cf48e18910",
+      "on_time": 6,
+      "spent_bytes": 2850
+    },
+    "33": {
+      "round40_row_sha256": "60856f4f25d13c85153cc38ef31163527ea385061765adf3ea2db38f1780c13d",
+      "round40_tape_sha256": "1686a042baf4fbc72cbd74752fb6ff7c50ea089d74916c5ef5555ac36f363292",
+      "round41_row_sha256": "f43ec4911bff69d7bc092a238eb6e421ffe0188d2044c9d1b46571ec28cabfcb",
+      "round41_tape_sha256": "1686a042baf4fbc72cbd74752fb6ff7c50ea089d74916c5ef5555ac36f363292",
+      "behavior_fields_equal": true,
+      "behavior_sha256": "cc9c9cf40fea879c43f2b5c716b52f9e4d22b3977e098842e326951b100326d9",
+      "on_time": 6,
+      "spent_bytes": 14730
+    }
+  },
+  "hazard_tape_recurrence": {
+    "11": {
+      "tape_rows": 87,
+      "free_legal_opportunities": 12,
+      "H_updates": 12,
+      "masked_opportunities": 0,
+      "unique_target_tick_updates": 12,
+      "request_send_or_refusal_events": 6,
+      "real_first_emissions": 6,
+      "refresh_emissions": 0,
+      "candidate_audit_sha256": "f28107b5498d8fa3933f1fbf265a00ebf18790f2585f60cddcb69874fab653dc"
+    },
+    "22": {
+      "tape_rows": 87,
+      "free_legal_opportunities": 12,
+      "H_updates": 12,
+      "masked_opportunities": 0,
+      "unique_target_tick_updates": 12,
+      "request_send_or_refusal_events": 6,
+      "real_first_emissions": 6,
+      "refresh_emissions": 0,
+      "candidate_audit_sha256": "a18eb63c7f199daa8f9a94482e45d493228ec8dd9c2e6049d0716c809ec8cd2a"
+    },
+    "33": {
+      "tape_rows": 84,
+      "free_legal_opportunities": 6,
+      "H_updates": 6,
+      "masked_opportunities": 0,
+      "unique_target_tick_updates": 6,
+      "request_send_or_refusal_events": 6,
+      "real_first_emissions": 6,
+      "refresh_emissions": 0,
+      "candidate_audit_sha256": "e9aec1d1db7c8696676583f5d270cd87583983ae678b6fa5aaa3c754cbdfbb0b"
+    }
+  },
+  "common_execution_prefix": {
+    "11": {
+      "tape_index": 1,
+      "relay_tick": 2,
+      "first_differing_candidate": "piloc-e1-target-2",
+      "changed_candidates_in_original_order": [
+        "piloc-e1-target-2"
+      ],
+      "same_observation_and_probability_prefix": true,
+      "same_predecision_shadow_budget_and_capacity": true
+    },
+    "22": {
+      "tape_index": 1,
+      "relay_tick": 2,
+      "first_differing_candidate": "piloc-e1-target-2",
+      "changed_candidates_in_original_order": [
+        "piloc-e1-target-2"
+      ],
+      "same_observation_and_probability_prefix": true,
+      "same_predecision_shadow_budget_and_capacity": true
+    },
+    "33": {
+      "tape_index": null,
+      "relay_tick": null,
+      "first_differing_candidate": null,
+      "same_observation_and_probability_prefix": true,
+      "no_action_divergence": true
+    }
+  },
+  "task_and_cost_closure": true,
+  "mask_H_invariance": true,
+  "refresh_emissions": 0,
+  "model_parameters_unchanged": true,
+  "checkpoint_bytes_unchanged": true,
+  "optimizer_step_calls": 0,
+  "checkpoint_write_calls": 0,
+  "environment_constructions": 6,
+  "simulations_started": 6,
+  "launch_attempts_including_retries": 6,
+  "remaining_formal_hazard_cells": 45
+}
