@@ -1,12 +1,12 @@
 {
   "kind": "round40-continuation-metadata-adapter/1",
-  "recorded_at_utc": "2026-10-03T02:21:49.704162+00:00",
+  "recorded_at_utc": "2026-10-03T02:25:54.715761+00:00",
   "adapter_path": "runs/comm_first_report_training_ablation_20261003/r40_resume_adapter.py",
-  "adapter_sha256": "28269a49da8a0dd8c04007a3606cbe442c10f1e97189cf483ad0d23af04e0528",
+  "adapter_sha256": "b33742149ce5d1da201c0028a4eb80d7ca861f574059b5aa9f81f9d1d52dbf2a",
   "checkpoint_freeze_identity_sha256": "51c92666cc7d5ea340eb2b3066acebcfe8cf7988fa88f4166a1673802c71dd67",
   "frozen_config_file_sha256": "4efc9e3a4e87653a9cf30b656dbe462cb4d0f5b37089628d29b98d1f93bd8891",
   "trigger": "worker summary expected milestone_checkpoints, absent from the frozen train_seed return value",
-  "scope": "adds only the milestone_checkpoints return field after the frozen train_seed function returns",
+  "scope": "moves one existing parameter_identity import above the existing resume branch in memory; then adds only milestone_checkpoints to train_seed return metadata",
   "training_version_unchanged": true,
   "comm_action_eligibility_unchanged": true,
   "episodes_done_at_extension": 4,
@@ -19,5 +19,11 @@
   "old_round36_checkpoint_writeback_count": 0,
   "environment_constructed_by_adapter_setup": false,
   "optimizer_steps_by_adapter_setup": 0,
-  "git_external_raw_artifacts_remain_untracked": true
+  "git_external_raw_artifacts_remain_untracked": true,
+  "adapter_revision": 2,
+  "supersedes_adapter_sha256": "28269a49da8a0dd8c04007a3606cbe442c10f1e97189cf483ad0d23af04e0528",
+  "training_update_semantics_changed": false,
+  "checkpoint_resume_freeze_identity_changed": false,
+  "runtime_function_source_patch": "insert from v2_controller import parameter_identity before checkpoint cursor selection",
+  "runtime_use_receipt": "training_progress/continuation_adapter_use_*.json"
 }
