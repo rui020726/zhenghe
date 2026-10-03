@@ -183,7 +183,8 @@ def verify_resume_source(frozen: dict[str, Any]) -> str:
     original_prelaunch_path = ORIGINAL_RUN_DIR / "runtime" / "ROUND42_PRELAUNCH_IDENTITY.json"
     prelaunch = _read(original_prelaunch_path)
     if (prelaunch.get("head") != PRELAUNCH_HEAD
-            or prelaunch.get("frozen_config_sha256") != declared_config_sha):
+            or prelaunch.get("frozen_config_sha256")
+            != frozen["round42"]["freeze_identity"]["freeze_sha256"]):
         raise RuntimeError("original ROUND42 prelaunch identity changed")
     if _sha256(freeze_path) != _sha256(ORIGINAL_RUN_DIR / "ROUND42_FROZEN_CONFIG.json"):
         raise RuntimeError("copied freeze differs byte-for-byte from the original execution")
