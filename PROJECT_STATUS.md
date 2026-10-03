@@ -1,5 +1,9 @@
 # 项目状态
 
+## 2026-10-03：ROUND42-R 固定计划续执行复核暂停在 seed 11 首批 gate
+
+续执行依据与本轮详细复核见 `runs/comm_one_shot_report_selection_20261003_r/ROUND42R_FIXED_PLAN_CONTINUATION_REVIEW.md`。现有账本为 68 个 normal claim（含 ROUND42 原失败）、1 个 reserve claim、69 次构造、68 次 `run()`、68,000 步、1 次 PPO 更新和 12 次 Adam step。64 个 immediate reference 完成；seed 11 前四集已运行并提交更新，但首批 gate 因 Windows 路径分隔符比较失败。独立只读核对发现归一化后的 PILOC/CTDE 路径、批记录与文件 SHA256 相符；原 gate 仍保留 `failed`，没有手工改成通过。seed 11 rolling checkpoint 含完整 optimizer 与 RNG 状态，但本轮未恢复或续训。原入口禁止隐式恢复且当前 HEAD 已晚于预启动 HEAD，因此没有绕过冻结门禁继续运行。此次复核新增环境启动、训练更新与 checkpoint 写回均为 0；没有推送。
+
 ## 2026-10-03：ROUND42 一次性 SEND/SKIP 首报选择消融在首个环境构造后停止——运行器对 JointRun.run 只读属性赋值失败，仿真和训练均未开始
 
 执行分支 `exp/comm-one-shot-report-selection`，首次尝试前冻结 HEAD `3c0b61cbdb702c3e4d8b1a4668030bda2db102ab`。完整故障报告、机读 verdict、执行账本和 Git 外原件清单位于 `runs/comm_one_shot_report_selection_20261003/`。

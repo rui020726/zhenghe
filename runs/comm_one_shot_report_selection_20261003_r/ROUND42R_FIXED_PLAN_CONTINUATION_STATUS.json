@@ -1,0 +1,85 @@
+{
+  "kind": "round42r-fixed-plan-continuation-review/1",
+  "date": "2026-10-03",
+  "status": "stopped_existing_first_batch_gate_failed",
+  "plan_complete": false,
+  "repository": {
+    "branch": "fix/comm-one-shot-runner-counting",
+    "head": "2825069eaf9acf0fff87a9a02e69ae2f8e88c785",
+    "prelaunch_head": "f46fe4703aa03ce6400f63c601c3203ef741dd9d",
+    "prelaunch_head_is_ancestor": true,
+    "worktree_clean": true,
+    "frozen_runner_code_unchanged_since_prelaunch": true,
+    "frozen_code_and_dependency_hashes_match": true,
+    "frozen_code_and_dependency_hash_count": 84,
+    "canonical_input_round40_round41_heads_match": true,
+    "push_performed": false
+  },
+  "execution_identity": {
+    "runner_version": "counted-jointrun-proxy/1",
+    "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+    "action_semantics": "one-shot-send-skip/1",
+    "frozen_config_sha256": "8054593ee60b6a7a78bd18f72f6316fe90ab346b3550f4393b1b81d9ae555fa2"
+  },
+  "continuation_basis": {
+    "path": "runs/comm_one_shot_report_selection_20261003_r/CONTINUATION_BASIS_FIXED_PLAN_20261003.md",
+    "sha256": "ee3f66902e53489acc2a8bf38fbda0fbc498a34b4bc68306f9fa8a50834d3095"
+  },
+  "prior_stop": {
+    "exception": "RuntimeError: seed 11: frozen PILOC/CTDE checkpoint path set changed",
+    "original_gate_status": "failed",
+    "gate_status_rewritten": false,
+    "underlying_path_keys_match_after_separator_normalization": true,
+    "both_checkpoint_file_hashes_match_record_and_freeze": true
+  },
+  "ledger": {
+    "planned_successful_logical_jobs": 672,
+    "normal_claims_used_including_original_failure": 68,
+    "reserve_claims_used": 1,
+    "total_claims_used": 69,
+    "builder_invocations": 69,
+    "joint_run_constructions": 69,
+    "run_invocations": 68,
+    "underlying_run_calls": 68,
+    "normal_returns": 68,
+    "completed_steps": 68000,
+    "completed_logical_jobs": 68,
+    "new_technical_failures": 0,
+    "ppo_updates": 1,
+    "adam_steps": 12,
+    "checkpoint_write_calls": 4,
+    "remaining_logical_jobs": 604,
+    "technical_reserve_remaining": 27,
+    "launch_hard_cap": 700
+  },
+  "progress": {
+    "immediate_references_complete": 64,
+    "seed11_episodes_completed_but_first_batch_gate_failed": 4,
+    "seed11_remaining_episodes": 124,
+    "seed22_episodes_completed": 0,
+    "seed33_episodes_completed": 0,
+    "model_evaluation_cells_complete": 0,
+    "rule_evaluation_cells_complete": 0
+  },
+  "resume_checkpoint": {
+    "path": "runs/comm_one_shot_report_selection_20261003_r/checkpoints/v2_train_s11.pt",
+    "sha256": "a85722e0864456ea3eb735195c7ffcde4be9d42301bdf2bc0781db6747a851ef",
+    "freeze_matches_original_round42_freeze": true,
+    "training_version_matches": true,
+    "episode_cursor": 4,
+    "update_cursor": 1,
+    "optimizer_steps": 12,
+    "lambda": 1.0125,
+    "contains_optimizer_state": true,
+    "contains_python_numpy_torch_rng_state": true,
+    "loaded_for_resume_this_turn": false
+  },
+  "this_review": {
+    "environment_launches": 0,
+    "real_training_updates": 0,
+    "synthetic_optimizer_updates": 0,
+    "checkpoint_writes": 0,
+    "old_artifacts_overwritten": 0
+  },
+  "required_before_continuation": "A versioned continuation/resume identity and read-only gate recovery must preserve the failed original gate, use the matching full training state, and prevent replay of the committed optimizer update."
+}
