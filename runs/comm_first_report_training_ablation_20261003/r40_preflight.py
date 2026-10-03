@@ -789,6 +789,9 @@ def run(input_root: str | Path) -> dict[str, Any]:
             "runs/comm_first_report_training_ablation_20261003/r40_worker.py",
             "runs/comm_first_report_training_ablation_20261003/r40_preflight.py",
             "runs/comm_first_report_training_ablation_20261003/r40_analysis.py",
+            "runs/comm_first_report_training_ablation_20261003/ROUND40_FROZEN_CONFIG.json",
+            "runs/comm_first_report_training_ablation_20261003/ROUND40_PREFLIGHT.json",
+            "runs/comm_first_report_training_ablation_20261003/TRAINING_VERSION_MANIFEST.json",
         }
         _assert(changed_since_reference <= allowed_driver_changes,
                 f"unexpected files changed since completed reference phase: {changed_since_reference}")
