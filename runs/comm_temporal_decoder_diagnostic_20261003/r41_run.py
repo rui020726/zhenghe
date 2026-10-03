@@ -38,6 +38,10 @@ def json_read(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def json_canonical(value: Any) -> Any:
+    return json.loads(json.dumps(value, ensure_ascii=False, sort_keys=True, default=str))
+
+
 def json_write(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + f".{os.getpid()}.tmp")
@@ -214,7 +218,7 @@ def load_model(seed: int, frozen: dict[str, Any], trainer: Any,
         "updates": int(state["updates"]),
         "optimizer_steps": int(state["optimizer_steps"]),
         "lambda": float(state["lambda"]),
-        "parameter_identity": controller.parameter_summary(),
+        "parameter_identity": json_canonical(controller.parameter_summary()),
     })
     if identity["parameter_identity"] != source["parameter_identity"]:
         raise RuntimeError(f"read-only model parameter identity changed for seed {seed}")
@@ -369,10 +373,11 @@ def run_cell(seed: int, mode: str, scene: int, *, common: Any, runner: Any,
             "optimizer_step_calls": 0,
             "checkpoint_write_calls": 0,
         })
+        row["controller_parameters_after"] = json_canonical(row["controller_parameters_after"])
         versions = importlib.import_module("r40_versions")
         versions.add_row_identity(row, checkpoint=identity)
         on_time_ids = closure(row)
-        if row.get("controller_parameters_after") != identity["parameter_identity"]:
+        if json_canonical(row.get("controller_parameters_after")) != identity["parameter_identity"]:
             raise RuntimeError(f"frozen model parameters changed during {logical}")
         if digest(Path(identity["path"])) != identity["file_sha256"]:
             raise RuntimeError(f"frozen checkpoint bytes changed during {logical}")
@@ -615,7 +620,7 @@ def first_six_gate(rows: dict[str, dict[str, Any]], frozen: dict[str, Any]) -> d
                     raise RuntimeError(f"first-six reward closure mismatch for {mode}/s{seed}")
                 if int(row.get("spent_bytes", -1)) != int(row.get("airtime_tap_total", -2)):
                     raise RuntimeError(f"first-six cost closure mismatch for {mode}/s{seed}")
-                if row.get("controller_parameters_after") != frozen["models"][str(seed)]["parameter_identity"]:
+                if json_canonical(row.get("controller_parameters_after")) != frozen["models"][str(seed)]["parameter_identity"]:
                     raise RuntimeError(f"first-six model parameter identity changed for {mode}/s{seed}")
                 if digest(Path(frozen["models"][str(seed)]["path"])) != frozen["models"][str(seed)]["sha256"]:
                     raise RuntimeError(f"checkpoint bytes changed for seed {seed}")

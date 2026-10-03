@@ -55,6 +55,10 @@ def load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def json_canonical(value: Any) -> Any:
+    return json.loads(json.dumps(value, ensure_ascii=False, sort_keys=True, default=str))
+
+
 def normalized(path: Path | str) -> str:
     return str(Path(path).resolve()).replace("/", "\\").casefold()
 
@@ -217,7 +221,7 @@ def main() -> None:
         controller, state, read_identity = trainer.load_checkpoint_read_only(
             checkpoint, freeze=freeze
         )
-        parameter_identity = controller.parameter_summary()
+        parameter_identity = json_canonical(controller.parameter_summary())
         if parameter_identity["parameter_sha256"] != expected["parameter_sha256"]:
             raise RuntimeError(f"ep128 parameter identity changed for seed {seed}")
         if (read_identity.get("load_mode") != "read_only"
