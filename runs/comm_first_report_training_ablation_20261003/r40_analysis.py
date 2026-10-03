@@ -103,6 +103,8 @@ def _write_report(results: dict[str, Any], *, artifacts_manifest: dict[str, Any]
         f"- 分支：`exp/comm-first-report-training-ablation`。",
         f"- 实际环境启动：{ledger['total_used']} 次；正常计划 {ledger['normal_used']}/672，"
         f"技术储备 {ledger['reserve_used']}/28，上限 700。",
+        f"- 未构造环境的启动前 worker 失败 {ledger['preconstruction_failure_count']} 次；"
+        "不计入环境启动额度，具体异常见 Git 外原件清单。",
         f"- 训练：NEW 三个 seed 各 128 集、32 个 PPO 批；实际 PPO 批数 "
         f"{sum(int(results['training_diagnostics'][str(seed)]['summary']['updates']) for seed in r40.TRAIN_SEEDS)}；"
         f"训练 optimizer.step 次数 "
@@ -615,6 +617,12 @@ def analyze(common: Any, *, write_artifacts: bool = True) -> dict[str, Any]:
         checkpoint_results["NEW_training_outputs"][str(seed)] = new_points
 
     ledger = r40.ledger_snapshot()
+    preconstruction_dir = r40.ROUND_DIR / "preconstruction_failures"
+    preconstruction_records = [
+        _json(path) for path in sorted(preconstruction_dir.glob("failure_*.json"))
+    ] if preconstruction_dir.exists() else []
+    ledger["preconstruction_failure_count"] = len(preconstruction_records)
+    ledger["preconstruction_failures"] = preconstruction_records
     if ledger["normal_used"] != r40.NORMAL_CAP or ledger["total_used"] != r40.NORMAL_CAP + ledger[
             "reserve_used"]:
         raise RuntimeError(f"ROUND40 launch ledger does not reconcile to the 672 plan: {ledger}")
@@ -643,7 +651,8 @@ def analyze(common: Any, *, write_artifacts: bool = True) -> dict[str, Any]:
     raw_files = []
     for folder in (common.LOGS, common.ROWS, common.CHECKPOINTS,
                    r40.ROUND_DIR / "launch_claims", r40.ROUND_DIR / "launch_slots",
-                   r40.ROUND_DIR / "training_progress"):
+                   r40.ROUND_DIR / "training_progress",
+                   r40.ROUND_DIR / "preconstruction_failures"):
         for path in sorted(folder.rglob("*")):
             if path.is_file():
                 raw_files.append({"path": str(path), "size_bytes": path.stat().st_size,

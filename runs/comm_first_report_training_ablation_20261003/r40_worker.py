@@ -6,8 +6,11 @@ import hashlib
 import importlib
 import json
 import math
+import os
 import subprocess
 import sys
+import time
+import traceback
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -49,6 +52,25 @@ def _write_once(path: Path, payload: dict[str, Any]) -> None:
 
 def _git(root: Path, *args: str) -> str:
     return subprocess.check_output(["git", "-C", str(root), *args], text=True).strip()
+
+
+def _record_preconstruction_failure(phase: str, error: BaseException,
+                                   launches_before: int, launches_after: int) -> None:
+    directory = r40.ROUND_DIR / "preconstruction_failures"
+    directory.mkdir(parents=True, exist_ok=True)
+    record = {
+        "kind": "round40-preconstruction-worker-failure/1",
+        "phase": phase,
+        "recorded_at_unix": time.time(),
+        "exception_type": type(error).__name__,
+        "exception": str(error),
+        "traceback": traceback.format_exc(),
+        "launch_slots_before_invocation": int(launches_before),
+        "launch_slots_after_invocation": int(launches_after),
+        "new_launch_slots_consumed": 0,
+        "environment_constructed_by_failure": False,
+    }
+    _write_once(directory / f"failure_{time.time_ns()}_{os.getpid()}.json", record)
 
 
 def _load_context(input_root: str | Path):
@@ -558,7 +580,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--phase", choices=("full", "references", "training", "models", "rules"),
                         default="full")
     args = parser.parse_args(argv)
-    result = run(args.input_root, args.phase)
+    before = r40.ledger_snapshot()["total_used"]
+    try:
+        result = run(args.input_root, args.phase)
+    except BaseException as error:
+        after = r40.ledger_snapshot()["total_used"]
+        if after == before:
+            _record_preconstruction_failure(args.phase, error, before, after)
+        raise
     print(json.dumps({"phase": result["phase"], "ledger": {
         key: result["ledger"][key] for key in
         ("normal_used", "reserve_used", "total_used")}}, ensure_ascii=False), flush=True)

@@ -28,6 +28,7 @@ FirstReportOnlyCollector = None
 
 BASE_HEAD = "4e989a9088111ce6d9171cb1a21629a4b2b1e861"
 ROUND40_BASIS_COMMIT = "e8a1841cf997baafbf16cb77005c7a496ee09589"
+REFERENCE_PHASE_FREEZE_COMMIT = "2ac0933bffb8f7883b8ae35df025ce29d0c8a15d"
 OLD_TRAINING_VERSION = (
     "constrained-cost-v2/published-completion-event-at-relay-tick/2"
 )
@@ -615,6 +616,52 @@ def _checkpoint_gate(root: Path, common: Any, trainer: Any, v2_controller: Any,
     }
 
 
+def _preflight_launch_boundary(common: Any) -> dict[str, Any]:
+    """Allow initial freeze, or an exact 64-reference-only continuation boundary."""
+    ledger = r40.ledger_snapshot()
+    slots_path = r40.ROUND_DIR / "launch_slots"
+    if ledger["total_used"] == 0:
+        _assert(not slots_path.exists(), "empty launch ledger has stray launch slots")
+        return {"prior_environment_launches": 0, "completed_reference_rows": []}
+
+    expected_scenarios = sorted((*r40.TRAIN_SCENARIOS, *r40.DEV_SCENARIOS))
+    expected_jobs = {f"reference_immediate_s{scenario}" for scenario in expected_scenarios}
+    claims = ledger["claims"]
+    actual_jobs = {str(row.get("logical_job")) for row in claims}
+    _assert(ledger["normal_used"] == 64 and ledger["reserve_used"] == 0
+            and ledger["total_used"] == 64,
+            f"revalidation is only permitted after the exact 64-reference phase: {ledger}")
+    _assert(actual_jobs == expected_jobs and len(claims) == 64,
+            "preexisting launch claims are not exactly the 64 immediate references")
+    _assert(all(row.get("attempt") == 1 and row.get("category") == "normal"
+                and row.get("status") == "complete"
+                and (row.get("metadata") or {}).get("kind") == "immediate_reference"
+                for row in claims),
+            "preexisting reference attempts are incomplete or contain another launch class")
+    artifacts = []
+    for scenario in expected_scenarios:
+        claim = next(row for row in claims
+                     if row.get("logical_job") == f"reference_immediate_s{scenario}")
+        row_path = common.ROWS / f"v2_reference_s{scenario}_a{claim['attempt']}.json"
+        _assert(row_path.is_file(), f"preexisting immediate row is missing: {row_path}")
+        row = _json(row_path)
+        _assert(row.get("reference_arm") == "immediate"
+                and int(row.get("scenario_seed", -1)) == scenario
+                and row.get("training_version") == TRAINING_VERSION
+                and row.get("comm_action_eligibility") == COMM_ACTION_ELIGIBILITY,
+                f"preexisting immediate row identity differs: {row_path}")
+        artifacts.append({"scenario_seed": scenario, "path": str(row_path),
+                          "sha256": _sha256(row_path), "attempt": int(claim["attempt"])})
+    all_rows = sorted(common.ROWS.glob("*.json"))
+    _assert(len(all_rows) == 64 and {path.resolve() for path in all_rows}
+            == {Path(row["path"]).resolve() for row in artifacts},
+            "the prior phase contains rows outside the immediate reference block")
+    return {"prior_environment_launches": 64,
+            "completed_reference_rows": artifacts,
+            "training_or_evaluation_launches_before_revalidation": 0,
+            "preexisting_reserve_launches": 0}
+
+
 def run(input_root: str | Path) -> dict[str, Any]:
     root = Path(input_root).resolve()
     common = r40.bootstrap(root)
@@ -631,6 +678,9 @@ def run(input_root: str | Path) -> dict[str, Any]:
     v2_controller = importlib.import_module("v2_controller")
     inherited_path = root / "runs" / "comm_final_train_20261001" / "FROZEN_CONFIG_MANIFEST.json"
     archived = _json(inherited_path)
+    prior_freeze_path = r40.ROUND_DIR / "ROUND40_FROZEN_CONFIG.json"
+    prior_freeze_doc = _json(prior_freeze_path) if prior_freeze_path.is_file() else None
+    prior_freeze_sha256 = _sha256(prior_freeze_path) if prior_freeze_path.is_file() else None
     source_head = _git(root, "rev-parse", "HEAD")
     worktree = Path(__file__).resolve().parents[2]
     worktree_parent = _git(worktree, "rev-parse", "HEAD")
@@ -671,9 +721,36 @@ def run(input_root: str | Path) -> dict[str, Any]:
         source = r40.ROUND_DIR / name
         compile(source.read_text(encoding="utf-8"), str(source), "exec")
 
-    _assert(not (r40.ROUND_DIR / "launch_slots").exists(),
-            "environment launch slot exists before the freeze commit")
-    code_hashes = {name: _sha256(r40.ROUND_DIR / name) for name in R40_CODE_FILES}
+    prior_phase = _preflight_launch_boundary(common)
+    prior_code = ((prior_freeze_doc or {}).get("round40", {}).get("freeze_identity", {})
+                  .get("round40_code_sha256", {}))
+    current_code = {name: _sha256(r40.ROUND_DIR / name) for name in R40_CODE_FILES}
+    unchanged_method_code = {
+        name: {"previous_sha256": prior_code[name], "current_sha256": current_code[name],
+               "unchanged": prior_code[name] == current_code[name]}
+        for name in ("r40_common.py", "r40_eligibility.py", "r40_versions.py", "r40_run.py")
+        if name in prior_code
+    }
+    if prior_phase["prior_environment_launches"]:
+        _assert(prior_freeze_doc is not None,
+                "reference continuation lacks its previously committed freeze")
+        _assert(_git(worktree, "merge-base", "--is-ancestor",
+                      REFERENCE_PHASE_FREEZE_COMMIT, "HEAD") == "",
+                "reference continuation does not descend from its registered freeze commit")
+        changed_since_reference = set(filter(None, _git(
+            worktree, "diff", "--name-only", REFERENCE_PHASE_FREEZE_COMMIT, "HEAD").splitlines()))
+        allowed_driver_changes = {
+            "runs/comm_first_report_training_ablation_20261003/r40_train.py",
+            "runs/comm_first_report_training_ablation_20261003/r40_worker.py",
+            "runs/comm_first_report_training_ablation_20261003/r40_preflight.py",
+            "runs/comm_first_report_training_ablation_20261003/r40_analysis.py",
+        }
+        _assert(changed_since_reference <= allowed_driver_changes,
+                f"unexpected files changed since completed reference phase: {changed_since_reference}")
+        _assert(all(row["unchanged"] for row in unchanged_method_code.values())
+                and len(unchanged_method_code) == 4,
+                "collector, relay version, or runner behavior changed after references")
+    code_hashes = current_code
     identities["round36_checkpoint_inputs"] = checkpoint_source["old_checkpoint_milestones"]
     identities["frozen_search_allocation_inputs"] = checkpoint_source[
         "frozen_search_allocation_inputs"]
@@ -707,6 +784,15 @@ def run(input_root: str | Path) -> dict[str, Any]:
             "fixed evaluation matrix specified by ROUND40 execution basis",
         ],
         "unexpected_research_configuration_differences": [],
+        "phase_continuation": {
+            "prior_freeze_file_sha256": prior_freeze_sha256,
+            "prior_reference_phase_commit": (
+                REFERENCE_PHASE_FREEZE_COMMIT if prior_phase["prior_environment_launches"]
+                else None),
+            "prior_phase": prior_phase,
+            "unchanged_method_code_since_reference_phase": unchanged_method_code,
+            "code_revisions_are_driver_or_audit_only": True,
+        },
         "objective": archived["objective_and_dual"],
         "ppo_hyperparameters": archived["hyperparameters"],
         "world_config_comparison": archived["world_config_comparison"],
@@ -730,6 +816,8 @@ def run(input_root: str | Path) -> dict[str, Any]:
         "canonical_input_root": str(root),
         "canonical_input_head": source_head,
         "round40_basis_commit": worktree_parent,
+        "preexisting_environment_launches": prior_phase["prior_environment_launches"],
+        "preexisting_reference_rows": prior_phase["completed_reference_rows"],
         "python": sys.version,
         "torch": torch.__version__,
         "device": "cpu",
@@ -743,7 +831,7 @@ def run(input_root: str | Path) -> dict[str, Any]:
             "optimizer_scope": optimizer_results,
             "checkpoint_version_boundary": checkpoint_results,
         },
-        "prelaunch_gate": "passed; requires local commit of this freeze before first environment",
+        "prelaunch_gate": "passed; requires local commit of this amended freeze before the next environment",
     }
     (r40.ROUND_DIR / "ROUND40_FROZEN_CONFIG.json").write_text(
         json.dumps({"inherited_round36": inherited_config,

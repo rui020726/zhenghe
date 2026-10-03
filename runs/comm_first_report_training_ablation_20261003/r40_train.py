@@ -359,6 +359,8 @@ def train_seed(training_seed: int, *, episodes: int, freeze: dict[str, Any],
         _save_milestone(controller, optimizer, state, training_seed,
                         int(state["episodes_done"]), freeze)
 
+    from r40_run import run_training_episode
+
     while int(state["episodes_done"]) < episodes:
         batch_index = int(state["updates"])
         if int(state["episodes_done"]) != batch_index * common.EPISODES_PER_UPDATE:
@@ -375,7 +377,7 @@ def train_seed(training_seed: int, *, episodes: int, freeze: dict[str, Any],
             scenario = int(order[episode_index])
             if scenario not in references:
                 raise RuntimeError(f"scenario {scenario} has no paired immediate reference")
-            episode = runner.run_training_episode(
+            episode = run_training_episode(
                 common, runner, controller,
                 training_seed=training_seed,
                 episode_index=episode_index,
