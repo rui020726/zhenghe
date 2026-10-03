@@ -67,7 +67,7 @@ def run(input_root: str | Path) -> dict[str, Any]:
         raise RuntimeError("ROUND40 analyze() function source differs from the audited version")
     exec(compile(patched_source, str(analyzer_path), "exec"), r40_analysis.__dict__)
 
-    ledger = common.ledger_snapshot()
+    ledger = r40_worker.r40.ledger_snapshot()
     if ledger["normal_used"] != 672 or ledger["reserve_used"] > 28:
         raise RuntimeError("ROUND40 environment ledger is incomplete or exceeds its cap")
     if sum(claim.get("status") == "complete" for claim in ledger["claims"]) != 672:

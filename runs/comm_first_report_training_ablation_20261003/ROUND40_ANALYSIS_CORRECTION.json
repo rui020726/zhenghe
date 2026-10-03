@@ -1,8 +1,8 @@
 {
   "kind": "round40-postrun-analysis-correction/1",
-  "recorded_at_utc": "2026-10-03T04:44:50.174782+00:00",
+  "recorded_at_utc": "2026-10-03T04:45:59.317002+00:00",
   "correction_script": "runs/comm_first_report_training_ablation_20261003/r40_analysis_correction.py",
-  "correction_script_sha256": "8084be6ba1517543020b408789a091baf376b748355756b2835068c1869acf3c",
+  "correction_script_sha256": "4d210cde30bdff8bb10a3acff2ac801335052bddca7465bf9d7d5516fc01786b",
   "frozen_analyzer": "runs/comm_first_report_training_ablation_20261003/r40_analysis.py",
   "frozen_analyzer_sha256": "aa0b6fe70d2e994b43d71ae97f677fe12e4d91bf911525566402f238cfd93429",
   "analyze_function_source_sha256": "6971de9d0a55cd6abaae254ed9e53a544d70345535841d58fe7850076455b233",
@@ -24,5 +24,15 @@
   "environment_constructed": false,
   "optimizer_steps": 0,
   "analysis_is_descriptive_only": true,
-  "training_or_evaluation_semantics_changed": false
+  "training_or_evaluation_semantics_changed": false,
+  "supersedes_correction_script_sha256": "8084be6ba1517543020b408789a091baf376b748355756b2835068c1869acf3c",
+  "correction_revision": 2,
+  "postrun_setup_failures": [
+    {
+      "record": "training_progress/worker_failures/failure_06.json",
+      "cause": "wrong module was used for the launch ledger lookup",
+      "environment_or_optimizer_effect": false,
+      "recovery": "use the execution ledger module r40_worker.r40"
+    }
+  ]
 }
