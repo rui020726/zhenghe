@@ -1,0 +1,90 @@
+{
+  "kind": "round42r-carryover-ledger/1",
+  "status": "verified_before_new_execution",
+  "old_execution_identity": {
+    "repair_basis_head": "b6bf7ac4ce5e82c80c32f587e36e9599c0f5ddd0",
+    "old_first_execution_head": "3c0b61cbdb702c3e4d8b1a4668030bda2db102ab",
+    "old_execution_basis_head": "ffa87ceb1a9d48abe27fc124ef1a963470878604",
+    "old_stop_delivery_head": "70faab3f451b3c17690c189216c315cccaf4a6d6",
+    "old_stop_report_commit_verified": "70faab3f451b3c17690c189216c315cccaf4a6d6"
+  },
+  "sources": {
+    "old_claim": {
+      "repo_relative_path": "runs/comm_one_shot_report_selection_20261003/launch_claims/immediate_reference_scene1300000/attempt_0001.json",
+      "size_bytes": 974,
+      "sha256": "5a74e2f57908e0e2be37e34d83b74889851bd5e457125da480ba04ff81fe001a"
+    },
+    "old_normal_slot": {
+      "repo_relative_path": "runs/comm_one_shot_report_selection_20261003/launch_slots/normal/0001.json",
+      "size_bytes": 150,
+      "sha256": "9ca2e59298f677b0797d05a56f18c879dd0e816672505622cf59a362829e999e"
+    },
+    "old_execution_ledger": {
+      "repo_relative_path": "runs/comm_one_shot_report_selection_20261003/ROUND42_EXECUTION_LEDGER.json",
+      "size_bytes": 2039,
+      "sha256": "1f2950deaf27f848f6a4e18b5c8d1ef95103a1ac4bd08012ed0f35e0dfb812cf"
+    },
+    "old_stop_state": {
+      "repo_relative_path": "runs/comm_one_shot_report_selection_20261003/ROUND42_STOP_STATE.json",
+      "size_bytes": 4709,
+      "sha256": "fcb03967fe374d71259d47f936f45a3bb8bca38fd24b6464b6dd7fe7a8c82940"
+    },
+    "old_stop_report": {
+      "repo_relative_path": "runs/comm_one_shot_report_selection_20261003/ROUND42_STOP_REPORT.md",
+      "size_bytes": 552,
+      "sha256": "3c8ff5999b3652f7e4551376f9ce7daa0699a4632562b2a4ce803c1c7a165aa7"
+    },
+    "old_artifact_inventory": {
+      "repo_relative_path": "runs/comm_one_shot_report_selection_20261003/ROUND42_ARTIFACT_INVENTORY.json",
+      "size_bytes": 9556,
+      "sha256": "71a31ec03f10af94f4f2bcf32ce9cfbc2e2e108d41f04462e71a80e07e12043c"
+    },
+    "old_runtime_ledger": {
+      "repo_relative_path": "runs/comm_one_shot_report_selection_20261003/runtime/ROUND42_EXECUTION_LEDGER.json",
+      "size_bytes": 2039,
+      "sha256": "1f2950deaf27f848f6a4e18b5c8d1ef95103a1ac4bd08012ed0f35e0dfb812cf"
+    },
+    "old_execution_stop": {
+      "repo_relative_path": "runs/comm_one_shot_report_selection_20261003/runtime/ROUND42_EXECUTION_STOP.json",
+      "size_bytes": 1282,
+      "sha256": "141bdd5ff5a4d883ac4e0b502151ec3e5f6b081a26c6379692c65f9675cd37b5"
+    },
+    "old_failure_output": {
+      "repo_relative_path": "runs/comm_one_shot_report_selection_20261003/failures/ref_immediate_s1300000_r42.json",
+      "size_bytes": 84,
+      "sha256": "82e3f5b1fe82705109a779bc09fe8211ef7ed9ade4fe8924952d3ced26f697c1"
+    },
+    "old_empty_log": {
+      "repo_relative_path": "runs/comm_one_shot_report_selection_20261003/logs/v2_reference_s1300000_a1_rp.jsonl",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "old_failure": {
+    "logical_job": "immediate_reference_scene1300000",
+    "attempt": 1,
+    "category": "normal",
+    "status": "failed_technical",
+    "builder_invocation": 1,
+    "joint_run_constructed_calls": 1,
+    "run_invocation_calls": 0,
+    "completed_steps": 0,
+    "basis": "The preserved traceback reaches run.run assignment after the original builder returned; the original claim, stop state and raw exception agree.",
+    "claim_is_immutable_and_remains_failed": true
+  },
+  "continuation": {
+    "retry_attempt": 2,
+    "retry_category": "reserve",
+    "retry_reserve_slot": 1,
+    "retry_of": "runs/comm_one_shot_report_selection_20261003/launch_claims/immediate_reference_scene1300000/attempt_0001.json",
+    "remaining_new_normal_jobs": 671,
+    "original_plan_normal_total_including_old_failed_claim": 672,
+    "planned_successful_logical_jobs_if_all_pass": 672,
+    "cumulative_constructor_calls_if_all_pass": 673,
+    "technical_reserve_used_by_retry": 1,
+    "technical_reserve_remaining": 27,
+    "hard_cap": 700,
+    "no_refund_of_old_failure": true
+  },
+  "runtime_import_action": "copy old attempt 1 and normal slot 1 byte-for-byte into the isolated ROUND42-R ledger; keep its failed status; retry the same logical job as reserve attempt 2"
+}

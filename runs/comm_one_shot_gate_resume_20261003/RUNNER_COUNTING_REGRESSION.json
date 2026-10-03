@@ -1,0 +1,30 @@
+{
+  "kind": "round42r-runner-counting-regression/1",
+  "status": "passed",
+  "command": [
+    "D:\\project_env\\python.exe",
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003_r\\test_r42_runner_counting.py"
+  ],
+  "return_code": 0,
+  "guard": {
+    "checkpoint_write_calls": 0,
+    "covered": [
+      "old_read_only_run_assignment_rejected",
+      "builder_once_and_wrapper_does_not_run",
+      "same_collaborators_and_delegated_attributes",
+      "one_underlying_run_with_identical_args_and_return_object",
+      "run_exception_identity_and_failure_counters",
+      "builder_exception_identity_and_no_secondary_object_access",
+      "completed_steps_drive_simulation_started",
+      "no_duplicate_construction_or_run"
+    ],
+    "optimizer_step_calls": 0,
+    "passed": true,
+    "real_joint_run_constructors": 0,
+    "sar_environment_constructors": 0,
+    "test_count": 8
+  },
+  "stdout_stderr": "ROUND42_RUNNER_COUNTING_GUARD {\"checkpoint_write_calls\": 0, \"covered\": [\"old_read_only_run_assignment_rejected\", \"builder_once_and_wrapper_does_not_run\", \"same_collaborators_and_delegated_attributes\", \"one_underlying_run_with_identical_args_and_return_object\", \"run_exception_identity_and_failure_counters\", \"builder_exception_identity_and_no_secondary_object_access\", \"completed_steps_drive_simulation_started\", \"no_duplicate_construction_or_run\"], \"optimizer_step_calls\": 0, \"passed\": true, \"real_joint_run_constructors\": 0, \"sar_environment_constructors\": 0, \"test_count\": 8}\n",
+  "old_assignment_reproduction": "slots-backed instance run assignment raises AttributeError",
+  "production_seam": "r42_run._make_counted_builder, the factory installed by configure()"
+}
