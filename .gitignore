@@ -491,3 +491,20 @@ runs/comm_one_shot_report_selection_20261003_r/rejected/
 runs/comm_one_shot_report_selection_20261003_r/failures/
 runs/comm_one_shot_report_selection_20261003_r/launch_claims/
 runs/comm_one_shot_report_selection_20261003_r/launch_slots/
+
+# ROUND42-R gate repair and exact resume: code and curated records are tracked;
+# copied execution inputs and all resumed raw outputs stay in this isolated directory.
+!runs/comm_one_shot_gate_resume_20261003/
+runs/comm_one_shot_gate_resume_20261003/*
+!runs/comm_one_shot_gate_resume_20261003/*.py
+!runs/comm_one_shot_gate_resume_20261003/*.md
+!runs/comm_one_shot_gate_resume_20261003/*.json
+runs/comm_one_shot_gate_resume_20261003/__pycache__/
+runs/comm_one_shot_gate_resume_20261003/runtime/
+runs/comm_one_shot_gate_resume_20261003/logs/
+runs/comm_one_shot_gate_resume_20261003/rows/
+runs/comm_one_shot_gate_resume_20261003/checkpoints/
+runs/comm_one_shot_gate_resume_20261003/rejected/
+runs/comm_one_shot_gate_resume_20261003/failures/
+runs/comm_one_shot_gate_resume_20261003/launch_claims/
+runs/comm_one_shot_gate_resume_20261003/launch_slots/
