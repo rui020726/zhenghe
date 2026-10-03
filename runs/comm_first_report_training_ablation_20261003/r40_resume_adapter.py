@@ -74,6 +74,31 @@ def _install_summary_and_resume_adapter(common: Any, runner: Any, trainer: Any,
     train_seed_with_milestone_paths._round40_continuation_adapter = True
     r40_train.train_seed = train_seed_with_milestone_paths
 
+    original_save_progress = r40_train._save_progress
+    if not getattr(original_save_progress, "_round40_canonical_receipt_adapter", False):
+        def save_progress_with_json_identity(training_seed: int, state: dict[str, Any], *,
+                                             status: str,
+                                             parameter_identity: dict[str, Any]) -> None:
+            path = common.OUTPUT_DIR / "training_progress" / (
+                f"seed{training_seed}_ep{int(state['episodes_done']):03d}_"
+                f"u{int(state['updates']):02d}_{status}.json"
+            )
+            if path.exists():
+                prior = json.loads(path.read_text(encoding="utf-8"))
+                normalized_identity = json.loads(json.dumps(
+                    parameter_identity, ensure_ascii=False, sort_keys=True
+                ))
+                if prior.get("parameter_identity") != normalized_identity:
+                    raise RuntimeError(
+                        f"training progress receipt exists with a different state: {path}"
+                    )
+                return
+            original_save_progress(training_seed, state, status=status,
+                                   parameter_identity=parameter_identity)
+
+        save_progress_with_json_identity._round40_canonical_receipt_adapter = True
+        r40_train._save_progress = save_progress_with_json_identity
+
     rolling = common.CHECKPOINTS / "v2_train_s11.pt"
     if not rolling.is_file():
         raise RuntimeError("ROUND40 rolling checkpoint is missing before continuation adapter setup")
@@ -99,6 +124,7 @@ def _install_summary_and_resume_adapter(common: Any, runner: Any, trainer: Any,
             "purpose": "make the existing parameter_identity local available on the checkpoint-resume branch",
         },
         "post_return_field": "milestone_checkpoints",
+        "progress_receipt_identity_comparison": "canonical JSON; preserves tuple-to-list round-trip equality",
         "scope_excludes_rollouts_actions_returns_loss_optimizer_rng_and_checkpoint_bytes": True,
         "environment_constructed_by_adapter_setup": False,
         "optimizer_steps_by_adapter_setup": 0,
