@@ -191,8 +191,14 @@ def main() -> None:
     version_manifest = load_json(R40_DIR / "TRAINING_VERSION_MANIFEST.json")
     if action_diag.get("environment_constructed") is not False:
         raise RuntimeError("ROUND40 action diagnostics unexpectedly constructed an environment")
-    if int(action_diag.get("optimizer_steps", -1)) != 556:
-        raise RuntimeError("ROUND40 training optimizer-step summary changed")
+    if int(action_diag.get("optimizer_steps", -1)) != 0:
+        raise RuntimeError("ROUND40 passive action diagnostic unexpectedly performed optimizer steps")
+    historical_optimizer_steps = sum(
+        int(paired["checkpoint_results"]["NEW_training_outputs"][str(seed)]["ep128"]["optimizer_steps"])
+        for seed in SEEDS
+    )
+    if historical_optimizer_steps != 556:
+        raise RuntimeError("ROUND40 ep128 optimizer counters no longer sum to the reported 556")
     for name, expected in action_diag["source_hashes"].items():
         if digest(R40_DIR / name) != expected:
             raise RuntimeError(f"ROUND40 diagnostic source hash mismatch: {name}")
@@ -573,6 +579,11 @@ def main() -> None:
             "round40_action_diagnostics_source_hashes": action_diag["source_hashes"],
             "round40_training_diagnostics_seed_keys": sorted(training_diag["by_seed"].keys()),
             "round40_paired_results_kind": paired["kind"],
+            "round40_ep128_optimizer_steps_by_seed": {
+                str(seed): int(paired["checkpoint_results"]["NEW_training_outputs"][str(seed)]["ep128"]["optimizer_steps"])
+                for seed in SEEDS
+            },
+            "round40_ep128_optimizer_steps_total": historical_optimizer_steps,
             "seed_mapping_method": "direct raw row, claim, tape and checkpoint joins; ROUND40 summary used only as cross-check",
             "round40_summary_binding_correction_reapplied": True,
         },
