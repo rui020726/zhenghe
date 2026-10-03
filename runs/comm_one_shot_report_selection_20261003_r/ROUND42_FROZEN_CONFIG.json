@@ -1,0 +1,1277 @@
+{
+  "kind": "round42-one-shot-send-skip-prelaunch-freeze/1",
+  "status": "passed_before_environment_start",
+  "execution_identity": {
+    "branch": "fix/comm-one-shot-runner-counting",
+    "round42_worktree": "D:\\code\\整合\\zhenghe-round42",
+    "round42_basis_commit": "b6bf7ac4ce5e82c80c32f587e36e9599c0f5ddd0",
+    "round42_previous_freeze_sha256": "409f65eef5ae1cfdb76f28fc788fdcf5674b8cc5d92395965090e371f7374ecc",
+    "round42_prior_stop_delivery_head": "70faab3f451b3c17690c189216c315cccaf4a6d6",
+    "round42_initial_execution_head": "3c0b61cbdb702c3e4d8b1a4668030bda2db102ab",
+    "runner_version": "counted-jointrun-proxy/1",
+    "carryover_manifest_sha256": "53259276c726682eb7e75dd613f364bea5d403c3cc2df9a9043bbb211c358e4d",
+    "runner_counting_regression_sha256": "fa0aef22b19c2ce67994819de5bfacf40e0e34563e3e1a34c0ca8345ab9a897b",
+    "pure_compute_gate_sha256": "0fc68d41bdcbab32841b93c14272aaef6012459a80217dd3c219950e9b039bbc",
+    "round41_branch": "exp/comm-temporal-decoder-diagnostic",
+    "round41_delivery_head": "cc28a28fc5fb13e31ab9ed0fc3456797aadcc115",
+    "round41_worktree": "D:\\code\\整合\\zhenghe-round41",
+    "round40_branch": "exp/comm-first-report-training-ablation",
+    "round40_delivery_head": "8f8245a665b15960e70194fc6e245221b70db90e",
+    "round40_worktree": "D:\\code\\整合\\zhenghe-round40",
+    "canonical_read_only_input_root": "D:\\code\\整合\\zhenghe",
+    "canonical_read_only_input_head": "4e989a9088111ce6d9171cb1a21629a4b2b1e861",
+    "python_executable": "D:\\project_env\\python.exe",
+    "round40_code_sha256": {
+      "r40_common.py": "61d2e90be702c96aee6c48b83a0eeb27f3296bff03504e5320158dcbaa289397",
+      "r40_eligibility.py": "226405817dcc92dbb120439429833569f594e3be054b5c0ac32c59b58de2e1e4",
+      "r40_versions.py": "62c4db5343bdbfd9b34a1b66380c9d0c8a79155175a70988c9f52a7e75266972",
+      "r40_run.py": "c710b12d4196d306904d746295ea10afe5b01b8d507de969120abe7b2d09dbe2",
+      "r40_train.py": "25863fb1d93944d48c35ef0adb289b4316012c027fc768e5c0469fc8e116fb7d",
+      "r40_worker.py": "42c78553296668e88dd06d517ab57531a777ec5626ed9413bf792000df4c1e16",
+      "r40_analysis.py": "aa0b6fe70d2e994b43d71ae97f677fe12e4d91bf911525566402f238cfd93429",
+      "r40_preflight.py": "b41d611e081abb48ad284e760f8504c1c82b5a0d500ead47f8af40fe953fd8bf"
+    },
+    "round41_code_sha256": {
+      "r41_common.py": "c5e1d456286b62cca5c9512db3341ccb878f7e605e08920103a206d07bf9c152",
+      "r41_hazard_median.py": "19b70179dbde3e30e8f1931f7776ac839fc16aef0fab4db28e175c82c9d908c4",
+      "r41_preflight.py": "7cc1ad746a236ecf68ffccd2661c5775fdfa95895ee9fe87c1b7855711e7c07c",
+      "r41_run.py": "275ab44c3fa13216a63f14213d29ebe3089457c82f0c8f88fdbf445b3fb99086",
+      "test_r41_hazard_median.py": "81c07c38e75516452d21aeaf5d92ff99472711d4493a02d3b16dc44b3636acd4"
+    },
+    "round42_code_sha256": {
+      "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+      "r42_versions.py": "32940b48a0166c1b4488d7649e46f50ccb1a5831f81506aed2fe3490e7f2dee0",
+      "r42_run.py": "d44fa6363e1c236f9288329597280c4684f0c33f4110fb0a85bf5574a39a1cd9",
+      "r42_execute.py": "1ff55d2e5f9870fc743954fa1eef09758fc96f2a94cbf740c614e041d1547dec",
+      "r42_analysis.py": "3f7497b8e378f77a6d7eb1ceb29484285ac3c62ad09480e8cee1747bafcbd478",
+      "r42_report.py": "0af7f15e90d3916a49a724a17036c100a5f8f47ff8e2a2a79569d092ad651e60",
+      "r42_preflight.py": "79459dfe85b85b5600d3e597fd83bb0b3c2d83913d2ffd490d7efc3d48a43411",
+      "test_r42_one_shot.py": "08633c0038fa74c590cf640acf06481a1241b3f270dc79c2e7f9518b4ccd558a",
+      "test_r42_runner_counting.py": "ad5b1e76426cd2a4c7538b0c3fcef320609b586887a4a6e1c7c16121788a41f8"
+    },
+    "frozen_dependency_sha256": {
+      "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+      "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+      "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+      "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+      "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+      "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+      "integrated_sar/lifecycle_metrics.py": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+      "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2",
+      "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": "e64e0be4911ca3b3129247b3a443d045ad022f3bd9e6a1a22c4ebd1b3a4aff9b",
+      "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": "bab0a65fb3ffda6dc9673eaa4e836e20f184b4cc16836b5d5cf169bd2d326e91",
+      "runs/comm_budget_pilot_20260919/pilot_common.py": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8",
+      "runs/comm_budget_pilot_20260919/pilot_env.py": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b",
+      "runs/comm_budget_pilot_20260919/train_pilot.py": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81",
+      "runs/comm_cost_controller_stage_a_20260927/cost_math.py": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+      "runs/comm_cost_stage_b_20260927/sb_collector.py": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+      "runs/comm_cost_stage_b_20260927/sb_common.py": "66e674a03e0406299c8f9172d2865c5f83c3de58893bce7f87b71741ba3cf28f",
+      "runs/comm_cost_stage_b_20260927/sb_controller.py": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+      "runs/comm_cost_stage_b_20260927/sb_run.py": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+      "runs/comm_tight_budget_20260919/onpolicy.py": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+      "runs/comm_tight_budget_20260919/train_onpolicy.py": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f",
+      "runs/search_trace_and_policy_20260925/sp_common.py": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc",
+      "v2_blocks.py": "342cdb69b920dfdfeee5bd7a9070321b9a0642fc1b80d5ad974b3f89602c78c8",
+      "v2_check.py": "ead3da2feae866765260409c88b335f2195b43be92ed0fa4f1e5b420fface2d0",
+      "v2_common.py": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+      "v2_controller.py": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+      "v2_recover.py": "b1abedd5033fde7e6ff10d42ac8a5935fef977f7569a81efa522bbccc56bc6bb",
+      "v2_reward_timing.py": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+      "v2_rules.py": "a7ce36de2d465cadaba90bd70b36539b5e865a73be8c4e075b9faf5a86c53a57",
+      "v2_run.py": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7",
+      "v2_train.py": "8437aee920e6d9192c0298c2e4ffe01c2daea641d67336216cfeb7dcf0e56883",
+      "v2_trainer.py": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
+    },
+    "round42_checkout_dependency_sha256": {
+      "integrated_sar/adapters/task03.py": {
+        "sha256": "f20aec2be9e909152f930937d9bedb677719830b5fd237a14f1bdc213c6ea1da",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "integrated_sar/comm.py": {
+        "sha256": "9be1e9097b6b5285c52b4f0c939e29d57e7aabb949c651fc0d427060e90a8a46",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "integrated_sar/comm_budget.py": {
+        "sha256": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "integrated_sar/comm_learning.py": {
+        "sha256": "a9add53099c2fe86f459797bd7c38d24361934b264e235ed9fb36118d55cf60f",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "integrated_sar/comm_policy.py": {
+        "sha256": "d3015f89469b095a7bddade3640fd59402b688c17acd886c9a14155b6e5ed16a",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "integrated_sar/joint_driver.py": {
+        "sha256": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "integrated_sar/lifecycle_metrics.py": {
+        "sha256": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "integrated_sar/task_registry.py": {
+        "sha256": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": {
+        "sha256": "73c251cdb98011f7762908f92a969f75e5584b3e7106a782f1ddc7b6bb05c7b8",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": {
+        "sha256": "92d7fda200dc9573b1ded31879dcd92b8725c53face3746753243f577360b428",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "runs/comm_budget_pilot_20260919/pilot_common.py": {
+        "sha256": "eda2c28caee30b4afe201fc90e037fe579476a8f4fd4de12b77a8eb1d3913175",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "runs/comm_budget_pilot_20260919/pilot_env.py": {
+        "sha256": "7bcf43ef01814108dd1feb0609bc15569ca1410ed03aef27ebf4246b96b9fbea",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "runs/comm_budget_pilot_20260919/train_pilot.py": {
+        "sha256": "1862f670f2ccd013e8e4b481075ea8bd63f2961b547e7a55ac2ef04efbaccce8",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "runs/comm_cost_controller_stage_a_20260927/cost_math.py": {
+        "sha256": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "runs/comm_cost_stage_b_20260927/sb_collector.py": {
+        "sha256": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "runs/comm_cost_stage_b_20260927/sb_common.py": {
+        "sha256": "66e674a03e0406299c8f9172d2865c5f83c3de58893bce7f87b71741ba3cf28f",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "runs/comm_cost_stage_b_20260927/sb_controller.py": {
+        "sha256": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "runs/comm_cost_stage_b_20260927/sb_run.py": {
+        "sha256": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "runs/comm_tight_budget_20260919/onpolicy.py": {
+        "sha256": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "runs/comm_tight_budget_20260919/train_onpolicy.py": {
+        "sha256": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "runs/search_trace_and_policy_20260925/sp_common.py": {
+        "sha256": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "v2_blocks.py": {
+        "sha256": "f54bf2f39faa2baa7a3c78bce065ab346fdda262dc7d02ab01c87bb565531492",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "v2_check.py": {
+        "sha256": "fc4e764273e8895892bd35adfe8e7e557c1e32d241b53860f2fd331ae9cda6e1",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "v2_common.py": {
+        "sha256": "d526eaa16f0f9619d1ce8c9539364671a5d18041668523f0ada0f30ff4c257c2",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "v2_controller.py": {
+        "sha256": "95691c57571102ad3ee6682904f3823f13229e3e0c92ebc526db1b89992e67a6",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "v2_recover.py": {
+        "sha256": "b1abedd5033fde7e6ff10d42ac8a5935fef977f7569a81efa522bbccc56bc6bb",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "v2_reward_timing.py": {
+        "sha256": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+        "matches_round40_active_dependency": true,
+        "active_for_round42_execution": false
+      },
+      "v2_rules.py": {
+        "sha256": "e307bdd17a88600cbeb5ea97c6ee0d8a6bf9d7f7a2df979c478aaf73b7254662",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "v2_run.py": {
+        "sha256": "8356fb68661962263bb82513e4197e75f242f0c7cbc0af8a02487332899d9c61",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "v2_train.py": {
+        "sha256": "47c8895365f384bec9f58b775c5c6be77982f5b860f3cb9ae4a6ff2ada4c6e2a",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      },
+      "v2_trainer.py": {
+        "sha256": "ffb6953034cbc2548e6f7458a7c1d560fe3337ad3ccb846543bb8f6f4dcc05a6",
+        "matches_round40_active_dependency": false,
+        "active_for_round42_execution": false
+      }
+    }
+  },
+  "round42": {
+    "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+    "runner_version": "counted-jointrun-proxy/1",
+    "reward_timing_version": "published-completion-event-at-relay-tick/2",
+    "comm_action_eligibility": "first-report-only/1",
+    "comm_action_semantics": "one-shot-send-skip/1",
+    "old_checkpoint_training_restore": "rejected_before_controller_optimizer_or_rng_restore",
+    "old_checkpoint_read_only_evaluation": "allowed_with_explicit_protocol_adaptation_identity",
+    "round40_freeze_sha256": "51c92666cc7d5ea340eb2b3066acebcfe8cf7988fa88f4166a1673802c71dd67",
+    "freeze_identity": {
+      "kind": "round42-one-shot-send-skip-training-freeze/1",
+      "base_head": "cc28a28fc5fb13e31ab9ed0fc3456797aadcc115",
+      "round40_head": "8f8245a665b15960e70194fc6e245221b70db90e",
+      "round42_basis_commit": "b6bf7ac4ce5e82c80c32f587e36e9599c0f5ddd0",
+      "round42_previous_freeze_sha256": "409f65eef5ae1cfdb76f28fc788fdcf5674b8cc5d92395965090e371f7374ecc",
+      "runner_version": "counted-jointrun-proxy/1",
+      "carryover_manifest_sha256": "53259276c726682eb7e75dd613f364bea5d403c3cc2df9a9043bbb211c358e4d",
+      "runner_counting_regression_sha256": "fa0aef22b19c2ce67994819de5bfacf40e0e34563e3e1a34c0ca8345ab9a897b",
+      "pure_compute_gate_sha256": "0fc68d41bdcbab32841b93c14272aaef6012459a80217dd3c219950e9b039bbc",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+      "reward_timing_version": "published-completion-event-at-relay-tick/2",
+      "comm_action_eligibility": "first-report-only/1",
+      "comm_action_semantics": "one-shot-send-skip/1",
+      "round40_freeze_sha256": "51c92666cc7d5ea340eb2b3066acebcfe8cf7988fa88f4166a1673802c71dd67",
+      "round41_freeze_sha256": "39af1b83a78bae0b9261d5d1932e260e9538aa0730e1c748ab089dd226b8463a",
+      "scenario_order_sha256": "346f2cdde8d658f927ea282f83e143d54a600f4f5c729e4521fe657421afe840",
+      "old_checkpoint_parameter_identities": {
+        "11": "553d02dd1de285a736f7fd2a25ce04dc52b00f48ee8226eb08e2a14c5aacdda6",
+        "22": "6a84ab76e206a5115527ddedec5bf7251c3785f229a078a02c50b1dd3dc7bdfb",
+        "33": "cd0498693f7636aea5f75cb6a54bd18f64c7410fe2f16e8791b7aa3966a5cb9d"
+      },
+      "round40_initial_parameter_identities": {
+        "11": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+        "22": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+        "33": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa"
+      },
+      "round40_ep128_parameter_identities": {
+        "11": "033de1384f8ab7aa96314a428b2bf4e7e2e792116db250dc024dca9ae9df4ca2",
+        "22": "0170f9a052c11149330156f76d03c5038bb6beb0e27768f6f838261685a58183",
+        "33": "7d324a3f823d46cac78a90becdb57ff04770a728f2ae649664771be778d795ee"
+      },
+      "round40_source_checkpoint_hashes": {
+        "s11_ep0": "7153571af526a0da1550cc8186846282de16d886f5d1e606376e83f7b2a4579d",
+        "s11_ep128": "9e231412c4836abbfea9b5ac1d92f5383405637714e1d955fe3d036d261e3881",
+        "s22_ep0": "fa0d668f51c33e175301adb7ddc9e581e6ebd136aeb9a884aaf302750badd7b0",
+        "s22_ep128": "8489b39cc0d483c353b5896a42c259af517be7db0f5b345672e3a4c9d01f5bb4",
+        "s33_ep0": "11dd8a803191232ef6725f9cfed34da343003fb5cd77c20fbda4fdc0fa6f6ede",
+        "s33_ep128": "770783fd98b079d2da6b13933158cb7d5a479933262fa1112eee7f06166e192e"
+      },
+      "round42_code_sha256": {
+        "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+        "r42_versions.py": "32940b48a0166c1b4488d7649e46f50ccb1a5831f81506aed2fe3490e7f2dee0",
+        "r42_run.py": "d44fa6363e1c236f9288329597280c4684f0c33f4110fb0a85bf5574a39a1cd9",
+        "r42_execute.py": "1ff55d2e5f9870fc743954fa1eef09758fc96f2a94cbf740c614e041d1547dec",
+        "r42_analysis.py": "3f7497b8e378f77a6d7eb1ceb29484285ac3c62ad09480e8cee1747bafcbd478",
+        "r42_report.py": "0af7f15e90d3916a49a724a17036c100a5f8f47ff8e2a2a79569d092ad651e60",
+        "r42_preflight.py": "79459dfe85b85b5600d3e597fd83bb0b3c2d83913d2ffd490d7efc3d48a43411",
+        "test_r42_one_shot.py": "08633c0038fa74c590cf640acf06481a1241b3f270dc79c2e7f9518b4ccd558a",
+        "test_r42_runner_counting.py": "ad5b1e76426cd2a4c7538b0c3fcef320609b586887a4a6e1c7c16121788a41f8"
+      },
+      "active_dependency_sha256": {
+        "integrated_sar/adapters/task03.py": "4dcd548f192690df383b9ddc5b254d54abf02891d6480f4aa244045acddbe7d1",
+        "integrated_sar/comm.py": "9b7938ae1af6697a7f977026c7920a8e17bd71492cb605407fb02f7019828dbd",
+        "integrated_sar/comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+        "integrated_sar/comm_learning.py": "c91754801957f0b26375a11d29e29783e39014cd4567ba9c3ebae8f065ea39ed",
+        "integrated_sar/comm_policy.py": "972db63a8c144df69c580634e445cff4b0c49e86922972bb9f3e721ae5f72f5d",
+        "integrated_sar/joint_driver.py": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+        "integrated_sar/lifecycle_metrics.py": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+        "integrated_sar/task_registry.py": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2",
+        "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": "e64e0be4911ca3b3129247b3a443d045ad022f3bd9e6a1a22c4ebd1b3a4aff9b",
+        "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": "bab0a65fb3ffda6dc9673eaa4e836e20f184b4cc16836b5d5cf169bd2d326e91",
+        "runs/comm_budget_pilot_20260919/pilot_common.py": "829be79cd60965d98209863e860cc35d7c427bc5870a6d2da378602c8b34c1d8",
+        "runs/comm_budget_pilot_20260919/pilot_env.py": "aec4a53e6f9c45618b5c0c9a5edd82b24eec00eff56d0ff6e55d1b08ef5d571b",
+        "runs/comm_budget_pilot_20260919/train_pilot.py": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81",
+        "runs/comm_cost_controller_stage_a_20260927/cost_math.py": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+        "runs/comm_cost_stage_b_20260927/sb_collector.py": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+        "runs/comm_cost_stage_b_20260927/sb_common.py": "66e674a03e0406299c8f9172d2865c5f83c3de58893bce7f87b71741ba3cf28f",
+        "runs/comm_cost_stage_b_20260927/sb_controller.py": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+        "runs/comm_cost_stage_b_20260927/sb_run.py": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+        "runs/comm_tight_budget_20260919/onpolicy.py": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+        "runs/comm_tight_budget_20260919/train_onpolicy.py": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f",
+        "runs/search_trace_and_policy_20260925/sp_common.py": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc",
+        "v2_blocks.py": "342cdb69b920dfdfeee5bd7a9070321b9a0642fc1b80d5ad974b3f89602c78c8",
+        "v2_check.py": "ead3da2feae866765260409c88b335f2195b43be92ed0fa4f1e5b420fface2d0",
+        "v2_common.py": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+        "v2_controller.py": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+        "v2_recover.py": "b1abedd5033fde7e6ff10d42ac8a5935fef977f7569a81efa522bbccc56bc6bb",
+        "v2_reward_timing.py": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+        "v2_rules.py": "a7ce36de2d465cadaba90bd70b36539b5e865a73be8c4e075b9faf5a86c53a57",
+        "v2_run.py": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7",
+        "v2_train.py": "8437aee920e6d9192c0298c2e4ffe01c2daea641d67336216cfeb7dcf0e56883",
+        "v2_trainer.py": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
+      },
+      "round42_checkout_dependency_sha256": {
+        "integrated_sar/adapters/task03.py": {
+          "sha256": "f20aec2be9e909152f930937d9bedb677719830b5fd237a14f1bdc213c6ea1da",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "integrated_sar/comm.py": {
+          "sha256": "9be1e9097b6b5285c52b4f0c939e29d57e7aabb949c651fc0d427060e90a8a46",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "integrated_sar/comm_budget.py": {
+          "sha256": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "integrated_sar/comm_learning.py": {
+          "sha256": "a9add53099c2fe86f459797bd7c38d24361934b264e235ed9fb36118d55cf60f",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "integrated_sar/comm_policy.py": {
+          "sha256": "d3015f89469b095a7bddade3640fd59402b688c17acd886c9a14155b6e5ed16a",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "integrated_sar/joint_driver.py": {
+          "sha256": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "integrated_sar/lifecycle_metrics.py": {
+          "sha256": "ecddbffef312df9d0dfe397f18ad326ab0e3a75d2c96cded2ebc35d875bdf3db",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "integrated_sar/task_registry.py": {
+          "sha256": "4c720b1ded087098975575f6ac7111dcf7fc54ec74e6d561d82a28d875b898f2",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "runs/comm_budget_action_mask_fix_20260922/budget_masked.py": {
+          "sha256": "73c251cdb98011f7762908f92a969f75e5584b3e7106a782f1ddc7b6bb05c7b8",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "runs/comm_budget_action_mask_fix_20260922/train_budget_masked.py": {
+          "sha256": "92d7fda200dc9573b1ded31879dcd92b8725c53face3746753243f577360b428",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "runs/comm_budget_pilot_20260919/pilot_common.py": {
+          "sha256": "eda2c28caee30b4afe201fc90e037fe579476a8f4fd4de12b77a8eb1d3913175",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "runs/comm_budget_pilot_20260919/pilot_env.py": {
+          "sha256": "7bcf43ef01814108dd1feb0609bc15569ca1410ed03aef27ebf4246b96b9fbea",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "runs/comm_budget_pilot_20260919/train_pilot.py": {
+          "sha256": "1862f670f2ccd013e8e4b481075ea8bd63f2961b547e7a55ac2ef04efbaccce8",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "runs/comm_cost_controller_stage_a_20260927/cost_math.py": {
+          "sha256": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "runs/comm_cost_stage_b_20260927/sb_collector.py": {
+          "sha256": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "runs/comm_cost_stage_b_20260927/sb_common.py": {
+          "sha256": "66e674a03e0406299c8f9172d2865c5f83c3de58893bce7f87b71741ba3cf28f",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "runs/comm_cost_stage_b_20260927/sb_controller.py": {
+          "sha256": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "runs/comm_cost_stage_b_20260927/sb_run.py": {
+          "sha256": "91d1a6a4026155019866131a2212db5eb193c90f94f640cb9d5d53d125614937",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "runs/comm_tight_budget_20260919/onpolicy.py": {
+          "sha256": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "runs/comm_tight_budget_20260919/train_onpolicy.py": {
+          "sha256": "6dfd73db77af814005762b1302fcf51b989efd0173aab7baba5a52b58c106e9f",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "runs/search_trace_and_policy_20260925/sp_common.py": {
+          "sha256": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "v2_blocks.py": {
+          "sha256": "f54bf2f39faa2baa7a3c78bce065ab346fdda262dc7d02ab01c87bb565531492",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "v2_check.py": {
+          "sha256": "fc4e764273e8895892bd35adfe8e7e557c1e32d241b53860f2fd331ae9cda6e1",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "v2_common.py": {
+          "sha256": "d526eaa16f0f9619d1ce8c9539364671a5d18041668523f0ada0f30ff4c257c2",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "v2_controller.py": {
+          "sha256": "95691c57571102ad3ee6682904f3823f13229e3e0c92ebc526db1b89992e67a6",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "v2_recover.py": {
+          "sha256": "b1abedd5033fde7e6ff10d42ac8a5935fef977f7569a81efa522bbccc56bc6bb",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "v2_reward_timing.py": {
+          "sha256": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+          "matches_round40_active_dependency": true,
+          "active_for_round42_execution": false
+        },
+        "v2_rules.py": {
+          "sha256": "e307bdd17a88600cbeb5ea97c6ee0d8a6bf9d7f7a2df979c478aaf73b7254662",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "v2_run.py": {
+          "sha256": "8356fb68661962263bb82513e4197e75f242f0c7cbc0af8a02487332899d9c61",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "v2_train.py": {
+          "sha256": "47c8895365f384bec9f58b775c5c6be77982f5b860f3cb9ae4a6ff2ada4c6e2a",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        },
+        "v2_trainer.py": {
+          "sha256": "ffb6953034cbc2548e6f7458a7c1d560fe3337ad3ccb846543bb8f6f4dcc05a6",
+          "matches_round40_active_dependency": false,
+          "active_for_round42_execution": false
+        }
+      },
+      "configuration_diff_sha256": "8715a129dcd561b9ac07a87050470c688476087aa1a20677d052f1258aba2529",
+      "output_directory_repo_relative": "runs/comm_one_shot_report_selection_20261003_r",
+      "freeze_sha256": "8054593ee60b6a7a78bd18f72f6316fe90ab346b3550f4393b1b81d9ae555fa2"
+    },
+    "allowed_differences_vs_round40": [
+      "target action semantics: one-shot SEND_NOW/SKIP_EPISODE with per-target episode latch",
+      "training version, checkpoint/freeze identity and action-semantics fields",
+      "ROUND42-R runner counting repair, isolated output namespace and carried-over launch ledger",
+      "read-only OLD/NEW comparisons use the ROUND42 one-shot evaluation protocol"
+    ],
+    "unexpected_research_configuration_differences": [],
+    "training_seeds": [
+      11,
+      22,
+      33
+    ],
+    "episodes_per_seed": 128,
+    "episodes_per_update": 4,
+    "batches_per_seed": 32,
+    "training_order": [
+      1300027,
+      1300014,
+      1300028,
+      1300044,
+      1300003,
+      1300010,
+      1300005,
+      1300008,
+      1300021,
+      1300034,
+      1300013,
+      1300001,
+      1300047,
+      1300012,
+      1300033,
+      1300039,
+      1300009,
+      1300002,
+      1300022,
+      1300030,
+      1300032,
+      1300041,
+      1300040,
+      1300038,
+      1300037,
+      1300045,
+      1300024,
+      1300017,
+      1300026,
+      1300035,
+      1300036,
+      1300000,
+      1300016,
+      1300018,
+      1300029,
+      1300011,
+      1300042,
+      1300019,
+      1300006,
+      1300023,
+      1300025,
+      1300046,
+      1300043,
+      1300004,
+      1300007,
+      1300020,
+      1300031,
+      1300015,
+      1300041,
+      1300022,
+      1300039,
+      1300036,
+      1300040,
+      1300038,
+      1300010,
+      1300007,
+      1300016,
+      1300029,
+      1300008,
+      1300046,
+      1300009,
+      1300047,
+      1300023,
+      1300027,
+      1300004,
+      1300002,
+      1300024,
+      1300015,
+      1300017,
+      1300034,
+      1300045,
+      1300020,
+      1300037,
+      1300031,
+      1300035,
+      1300011,
+      1300033,
+      1300026,
+      1300030,
+      1300044,
+      1300003,
+      1300018,
+      1300013,
+      1300042,
+      1300028,
+      1300012,
+      1300005,
+      1300025,
+      1300043,
+      1300019,
+      1300021,
+      1300000,
+      1300001,
+      1300014,
+      1300032,
+      1300006,
+      1300008,
+      1300013,
+      1300006,
+      1300024,
+      1300032,
+      1300031,
+      1300015,
+      1300042,
+      1300004,
+      1300005,
+      1300021,
+      1300027,
+      1300016,
+      1300010,
+      1300000,
+      1300009,
+      1300029,
+      1300022,
+      1300045,
+      1300039,
+      1300019,
+      1300035,
+      1300046,
+      1300020,
+      1300028,
+      1300036,
+      1300003,
+      1300038,
+      1300002,
+      1300047,
+      1300030,
+      1300023
+    ],
+    "training_order_sha256": "346f2cdde8d658f927ea282f83e143d54a600f4f5c729e4521fe657421afe840",
+    "training_scenes": [
+      1300000,
+      1300047,
+      48
+    ],
+    "development_scenes": [
+      1301000,
+      1301001,
+      1301002,
+      1301003,
+      1301004,
+      1301005,
+      1301006,
+      1301007,
+      1301008,
+      1301009,
+      1301010,
+      1301011,
+      1301012,
+      1301013,
+      1301014,
+      1301015
+    ],
+    "objective": {
+      "advantage_standardisation": "none",
+      "b0_bytes": 10000.0,
+      "delta": 0.0,
+      "eta_lambda": 0.05,
+      "gae_lambda": 0.95,
+      "gamma": 1.0,
+      "lambda_init": 1.0,
+      "log_prob_tolerance": 1e-06
+    },
+    "ppo_hyperparameters": {
+      "clip": 0.2,
+      "entropy_bonus": 0.01,
+      "epochs_per_batch": 4,
+      "learning_rate": 0.0003,
+      "max_grad_norm": 0.5,
+      "minibatch_steps": 256,
+      "value_coefficient": 0.5
+    },
+    "steps_per_episode": 1000,
+    "world_config_source": "ROUND40_FROZEN_CONFIG.json; no fields changed",
+    "candidate_order": "inherited relay observation order",
+    "actor_feature_width": 19,
+    "row_filtering": {
+      "active_rows_module_used": false,
+      "policy": "ALL_ROWS as encoded in the frozen v2_trainer; ACTIVE_ROWS is not reachable from this round's entry points",
+      "trainer_module_used": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py"
+    },
+    "old_models": {
+      "11": {
+        "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_ep128.pt",
+        "size_bytes": 107563,
+        "file_sha256_before": "9e231412c4836abbfea9b5ac1d92f5383405637714e1d955fe3d036d261e3881",
+        "file_sha256_after": "9e231412c4836abbfea9b5ac1d92f5383405637714e1d955fe3d036d261e3881",
+        "parameter_sha256": "033de1384f8ab7aa96314a428b2bf4e7e2e792116db250dc024dca9ae9df4ca2",
+        "episodes_done": 128,
+        "updates": 32,
+        "optimizer_steps": 188,
+        "lambda": 1.0,
+        "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+        "comm_action_eligibility": "first-report-only/1",
+        "native_cpu_forward": {
+          "logits_shape": [
+            4,
+            2
+          ],
+          "task_value_shape": [
+            4
+          ],
+          "cost_value_shape": [
+            4
+          ],
+          "finite": true
+        },
+        "read_only": {
+          "load_mode": "read_only",
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "timing_interpretation": "versioned_capture_semantics",
+          "optimizer_restored": false,
+          "rng_restored": false,
+          "comm_action_eligibility": "first-report-only/1",
+          "action_eligibility_interpretation": "first-report-only/1",
+          "read_only_for_round40": true
+        },
+        "arm": "OLD",
+        "protocol_adaptation": "ROUND40 first-report-only weights read-only under ROUND42 one-shot SEND/SKIP"
+      },
+      "22": {
+        "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s22_ep128.pt",
+        "size_bytes": 107563,
+        "file_sha256_before": "8489b39cc0d483c353b5896a42c259af517be7db0f5b345672e3a4c9d01f5bb4",
+        "file_sha256_after": "8489b39cc0d483c353b5896a42c259af517be7db0f5b345672e3a4c9d01f5bb4",
+        "parameter_sha256": "0170f9a052c11149330156f76d03c5038bb6beb0e27768f6f838261685a58183",
+        "episodes_done": 128,
+        "updates": 32,
+        "optimizer_steps": 188,
+        "lambda": 1.0,
+        "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+        "comm_action_eligibility": "first-report-only/1",
+        "native_cpu_forward": {
+          "logits_shape": [
+            4,
+            2
+          ],
+          "task_value_shape": [
+            4
+          ],
+          "cost_value_shape": [
+            4
+          ],
+          "finite": true
+        },
+        "read_only": {
+          "load_mode": "read_only",
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "timing_interpretation": "versioned_capture_semantics",
+          "optimizer_restored": false,
+          "rng_restored": false,
+          "comm_action_eligibility": "first-report-only/1",
+          "action_eligibility_interpretation": "first-report-only/1",
+          "read_only_for_round40": true
+        },
+        "arm": "OLD",
+        "protocol_adaptation": "ROUND40 first-report-only weights read-only under ROUND42 one-shot SEND/SKIP"
+      },
+      "33": {
+        "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s33_ep128.pt",
+        "size_bytes": 107563,
+        "file_sha256_before": "770783fd98b079d2da6b13933158cb7d5a479933262fa1112eee7f06166e192e",
+        "file_sha256_after": "770783fd98b079d2da6b13933158cb7d5a479933262fa1112eee7f06166e192e",
+        "parameter_sha256": "7d324a3f823d46cac78a90becdb57ff04770a728f2ae649664771be778d795ee",
+        "episodes_done": 128,
+        "updates": 32,
+        "optimizer_steps": 180,
+        "lambda": 1.0,
+        "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+        "comm_action_eligibility": "first-report-only/1",
+        "native_cpu_forward": {
+          "logits_shape": [
+            4,
+            2
+          ],
+          "task_value_shape": [
+            4
+          ],
+          "cost_value_shape": [
+            4
+          ],
+          "finite": true
+        },
+        "read_only": {
+          "load_mode": "read_only",
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "timing_interpretation": "versioned_capture_semantics",
+          "optimizer_restored": false,
+          "rng_restored": false,
+          "comm_action_eligibility": "first-report-only/1",
+          "action_eligibility_interpretation": "first-report-only/1",
+          "read_only_for_round40": true
+        },
+        "arm": "OLD",
+        "protocol_adaptation": "ROUND40 first-report-only weights read-only under ROUND42 one-shot SEND/SKIP"
+      }
+    },
+    "new_initial_models": {
+      "11": {
+        "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_ep0_r40f51c92666cc7d.pt",
+        "size_bytes": 51589,
+        "file_sha256_before": "7153571af526a0da1550cc8186846282de16d886f5d1e606376e83f7b2a4579d",
+        "file_sha256_after": "7153571af526a0da1550cc8186846282de16d886f5d1e606376e83f7b2a4579d",
+        "parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "lambda": 1.0,
+        "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+        "comm_action_eligibility": "first-report-only/1",
+        "native_cpu_forward": {
+          "logits_shape": [
+            4,
+            2
+          ],
+          "task_value_shape": [
+            4
+          ],
+          "cost_value_shape": [
+            4
+          ],
+          "finite": true
+        },
+        "read_only": {
+          "load_mode": "read_only",
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "timing_interpretation": "versioned_capture_semantics",
+          "optimizer_restored": false,
+          "rng_restored": false,
+          "comm_action_eligibility": "first-report-only/1",
+          "action_eligibility_interpretation": "first-report-only/1",
+          "read_only_for_round40": true
+        }
+      },
+      "22": {
+        "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s22_ep0.pt",
+        "size_bytes": 51525,
+        "file_sha256_before": "fa0d668f51c33e175301adb7ddc9e581e6ebd136aeb9a884aaf302750badd7b0",
+        "file_sha256_after": "fa0d668f51c33e175301adb7ddc9e581e6ebd136aeb9a884aaf302750badd7b0",
+        "parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "lambda": 1.0,
+        "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+        "comm_action_eligibility": "first-report-only/1",
+        "native_cpu_forward": {
+          "logits_shape": [
+            4,
+            2
+          ],
+          "task_value_shape": [
+            4
+          ],
+          "cost_value_shape": [
+            4
+          ],
+          "finite": true
+        },
+        "read_only": {
+          "load_mode": "read_only",
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "timing_interpretation": "versioned_capture_semantics",
+          "optimizer_restored": false,
+          "rng_restored": false,
+          "comm_action_eligibility": "first-report-only/1",
+          "action_eligibility_interpretation": "first-report-only/1",
+          "read_only_for_round40": true
+        }
+      },
+      "33": {
+        "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s33_ep0.pt",
+        "size_bytes": 51525,
+        "file_sha256_before": "11dd8a803191232ef6725f9cfed34da343003fb5cd77c20fbda4fdc0fa6f6ede",
+        "file_sha256_after": "11dd8a803191232ef6725f9cfed34da343003fb5cd77c20fbda4fdc0fa6f6ede",
+        "parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "lambda": 1.0,
+        "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+        "comm_action_eligibility": "first-report-only/1",
+        "native_cpu_forward": {
+          "logits_shape": [
+            4,
+            2
+          ],
+          "task_value_shape": [
+            4
+          ],
+          "cost_value_shape": [
+            4
+          ],
+          "finite": true
+        },
+        "read_only": {
+          "load_mode": "read_only",
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "timing_interpretation": "versioned_capture_semantics",
+          "optimizer_restored": false,
+          "rng_restored": false,
+          "comm_action_eligibility": "first-report-only/1",
+          "action_eligibility_interpretation": "first-report-only/1",
+          "read_only_for_round40": true
+        }
+      }
+    },
+    "frozen_search_allocation_checkpoints": {
+      "shared_mappo_model_21_3100.pth": {
+        "path": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+        "size_bytes": 62614754,
+        "sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33"
+      },
+      "ctde_final_7_1.pth": {
+        "path": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+        "size_bytes": 2124729,
+        "sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+      }
+    },
+    "plan": {
+      "immediate_reference": {
+        "train_scenes": 48,
+        "dev_scenes": 16,
+        "total": 64
+      },
+      "new_training": {
+        "seeds": 3,
+        "episodes_each": 128,
+        "total": 384
+      },
+      "old_new_dev": {
+        "arms": [
+          "OLD",
+          "NEW"
+        ],
+        "seeds": 3,
+        "modes": [
+          "greedy",
+          "sampled"
+        ],
+        "scenes": 16,
+        "total": 192
+      },
+      "rules": {
+        "arms": [
+          "late_discovery_gate",
+          "always_hold"
+        ],
+        "scenes": 16,
+        "total": 32
+      },
+      "normal_total": 672,
+      "technical_reserve_max": 28,
+      "hard_cap": 700,
+      "continuation": {
+        "new_normal_jobs": 671,
+        "carryover_old_failed_normal_claims": 1,
+        "retry_uses_reserve": 1,
+        "logical_job_success_target": 672,
+        "cumulative_constructors_if_all_pass": 673,
+        "carryover_manifest_sha256": "53259276c726682eb7e75dd613f364bea5d403c3cc2df9a9043bbb211c358e4d"
+      },
+      "reserve_policy": "attempts after first logical cell attempt consume reserve and do not refund prior claims"
+    },
+    "prelaunch_gate": {
+      "pure_compute": {
+        "kind": "round42r-pure-compute-gate/1",
+        "status": "passed",
+        "commands": [
+          [
+            "D:\\project_env\\python.exe",
+            "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003_r\\test_r42_one_shot.py"
+          ],
+          [
+            "D:\\project_env\\python.exe",
+            "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_report_selection_20261003_r\\test_r42_runner_counting.py"
+          ]
+        ],
+        "test_count": 20,
+        "passed": true,
+        "joint_run_constructors": 0,
+        "optimizer_step_calls": 0,
+        "checkpoint_write_calls": 0,
+        "original_12_freshly_rerun": {
+          "checkpoint_write_calls": 0,
+          "joint_run_constructors": 0,
+          "optimizer_step_calls": 0,
+          "passed": true,
+          "test_count": 12
+        },
+        "runner_seam_regression": {
+          "checkpoint_write_calls": 0,
+          "covered": [
+            "old_read_only_run_assignment_rejected",
+            "builder_once_and_wrapper_does_not_run",
+            "same_collaborators_and_delegated_attributes",
+            "one_underlying_run_with_identical_args_and_return_object",
+            "run_exception_identity_and_failure_counters",
+            "builder_exception_identity_and_no_secondary_object_access",
+            "completed_steps_drive_simulation_started",
+            "no_duplicate_construction_or_run"
+          ],
+          "optimizer_step_calls": 0,
+          "passed": true,
+          "real_joint_run_constructors": 0,
+          "sar_environment_constructors": 0,
+          "test_count": 8
+        },
+        "test_names": [
+          "free_choice_latches_once_and_revision_cannot_reopen",
+          "skip_is_a_real_likelihood_entropy_and_actor_action",
+          "closed_skip_stays_in_features_but_never_sends_or_charges",
+          "real_send_costs_even_when_lost_and_closes_refreshes",
+          "masks_do_not_decide_and_new_episode_resets_latch",
+          "multi_target_latches_are_independent_and_budget_is_sequential",
+          "batch_likelihood_matches_independent_action_prefix_product",
+          "all_closed_rows_keep_both_critics_and_zero_actor_gradient",
+          "old_training_restore_refuses_before_state_restore_old_readonly_succeeds",
+          "round40_ep0_matches_fresh_same_seed_initialization",
+          "unexpected_real_emit_refusal_stops_before_next_tick",
+          "hand_derived_expected_objective_directions"
+        ],
+        "stdout_stderr": "ROUND42_TEST_GUARD {\"checkpoint_write_calls\": 0, \"joint_run_constructors\": 0, \"optimizer_step_calls\": 0, \"passed\": true, \"test_count\": 12}\ntest_01_free_choice_latches_once_and_revision_cannot_reopen (__main__.Round42OneShotTests) ... ok\ntest_02_skip_is_a_real_likelihood_entropy_and_actor_action (__main__.Round42OneShotTests) ... ok\ntest_03_closed_skip_stays_in_features_but_never_sends_or_charges (__main__.Round42OneShotTests) ... ok\ntest_04_real_send_costs_even_when_lost_and_closes_refreshes (__main__.Round42OneShotTests) ... ok\ntest_05_masks_do_not_decide_and_new_episode_resets_latch (__main__.Round42OneShotTests) ... ok\ntest_06_multi_target_latches_are_independent_and_budget_is_sequential (__main__.Round42OneShotTests) ... ok\ntest_07_batch_likelihood_matches_independent_action_prefix_product (__main__.Round42OneShotTests) ... ok\ntest_08_all_closed_rows_keep_both_critics_and_zero_actor_gradient (__main__.Round42OneShotTests) ... ok\ntest_09_old_training_restore_refuses_before_state_restore_old_readonly_succeeds (__main__.Round42OneShotTests) ... ok\ntest_10_round40_ep0_matches_fresh_same_seed_initialization (__main__.Round42OneShotTests) ... ok\ntest_11_unexpected_real_emit_refusal_stops_before_next_tick (__main__.Round42OneShotTests) ... ok\ntest_12_hand_derived_expected_objective_directions (__main__.Round42OneShotTests) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 0.132s\n\nOK\n\n--- runner seam ---\nROUND42_RUNNER_COUNTING_GUARD {\"checkpoint_write_calls\": 0, \"covered\": [\"old_read_only_run_assignment_rejected\", \"builder_once_and_wrapper_does_not_run\", \"same_collaborators_and_delegated_attributes\", \"one_underlying_run_with_identical_args_and_return_object\", \"run_exception_identity_and_failure_counters\", \"builder_exception_identity_and_no_secondary_object_access\", \"completed_steps_drive_simulation_started\", \"no_duplicate_construction_or_run\"], \"optimizer_step_calls\": 0, \"passed\": true, \"real_joint_run_constructors\": 0, \"sar_environment_constructors\": 0, \"test_count\": 8}\n",
+        "simulator_constructed": false,
+        "joint_run_constructed": false,
+        "real_environment_constructed": false,
+        "synthetic_optimizer_step": 0
+      },
+      "checkpoint_content_and_forward": {
+        "s11_ep0": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_ep0_r40f51c92666cc7d.pt",
+          "size_bytes": 51589,
+          "file_sha256_before": "7153571af526a0da1550cc8186846282de16d886f5d1e606376e83f7b2a4579d",
+          "file_sha256_after": "7153571af526a0da1550cc8186846282de16d886f5d1e606376e83f7b2a4579d",
+          "parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+          "episodes_done": 0,
+          "updates": 0,
+          "optimizer_steps": 0,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "native_cpu_forward": {
+            "logits_shape": [
+              4,
+              2
+            ],
+            "task_value_shape": [
+              4
+            ],
+            "cost_value_shape": [
+              4
+            ],
+            "finite": true
+          },
+          "read_only": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        },
+        "s11_ep128": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_ep128.pt",
+          "size_bytes": 107563,
+          "file_sha256_before": "9e231412c4836abbfea9b5ac1d92f5383405637714e1d955fe3d036d261e3881",
+          "file_sha256_after": "9e231412c4836abbfea9b5ac1d92f5383405637714e1d955fe3d036d261e3881",
+          "parameter_sha256": "033de1384f8ab7aa96314a428b2bf4e7e2e792116db250dc024dca9ae9df4ca2",
+          "episodes_done": 128,
+          "updates": 32,
+          "optimizer_steps": 188,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "native_cpu_forward": {
+            "logits_shape": [
+              4,
+              2
+            ],
+            "task_value_shape": [
+              4
+            ],
+            "cost_value_shape": [
+              4
+            ],
+            "finite": true
+          },
+          "read_only": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        },
+        "s22_ep0": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s22_ep0.pt",
+          "size_bytes": 51525,
+          "file_sha256_before": "fa0d668f51c33e175301adb7ddc9e581e6ebd136aeb9a884aaf302750badd7b0",
+          "file_sha256_after": "fa0d668f51c33e175301adb7ddc9e581e6ebd136aeb9a884aaf302750badd7b0",
+          "parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+          "episodes_done": 0,
+          "updates": 0,
+          "optimizer_steps": 0,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "native_cpu_forward": {
+            "logits_shape": [
+              4,
+              2
+            ],
+            "task_value_shape": [
+              4
+            ],
+            "cost_value_shape": [
+              4
+            ],
+            "finite": true
+          },
+          "read_only": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        },
+        "s22_ep128": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s22_ep128.pt",
+          "size_bytes": 107563,
+          "file_sha256_before": "8489b39cc0d483c353b5896a42c259af517be7db0f5b345672e3a4c9d01f5bb4",
+          "file_sha256_after": "8489b39cc0d483c353b5896a42c259af517be7db0f5b345672e3a4c9d01f5bb4",
+          "parameter_sha256": "0170f9a052c11149330156f76d03c5038bb6beb0e27768f6f838261685a58183",
+          "episodes_done": 128,
+          "updates": 32,
+          "optimizer_steps": 188,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "native_cpu_forward": {
+            "logits_shape": [
+              4,
+              2
+            ],
+            "task_value_shape": [
+              4
+            ],
+            "cost_value_shape": [
+              4
+            ],
+            "finite": true
+          },
+          "read_only": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        },
+        "s33_ep0": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s33_ep0.pt",
+          "size_bytes": 51525,
+          "file_sha256_before": "11dd8a803191232ef6725f9cfed34da343003fb5cd77c20fbda4fdc0fa6f6ede",
+          "file_sha256_after": "11dd8a803191232ef6725f9cfed34da343003fb5cd77c20fbda4fdc0fa6f6ede",
+          "parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+          "episodes_done": 0,
+          "updates": 0,
+          "optimizer_steps": 0,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "native_cpu_forward": {
+            "logits_shape": [
+              4,
+              2
+            ],
+            "task_value_shape": [
+              4
+            ],
+            "cost_value_shape": [
+              4
+            ],
+            "finite": true
+          },
+          "read_only": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        },
+        "s33_ep128": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s33_ep128.pt",
+          "size_bytes": 107563,
+          "file_sha256_before": "770783fd98b079d2da6b13933158cb7d5a479933262fa1112eee7f06166e192e",
+          "file_sha256_after": "770783fd98b079d2da6b13933158cb7d5a479933262fa1112eee7f06166e192e",
+          "parameter_sha256": "7d324a3f823d46cac78a90becdb57ff04770a728f2ae649664771be778d795ee",
+          "episodes_done": 128,
+          "updates": 32,
+          "optimizer_steps": 180,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "native_cpu_forward": {
+            "logits_shape": [
+              4,
+              2
+            ],
+            "task_value_shape": [
+              4
+            ],
+            "cost_value_shape": [
+              4
+            ],
+            "finite": true
+          },
+          "read_only": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        }
+      },
+      "environment_constructed": 0,
+      "joint_run_constructed": 0,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 0
+    }
+  }
+}
