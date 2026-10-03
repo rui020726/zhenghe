@@ -1,0 +1,28 @@
+{
+  "kind": "round40-postrun-analysis-correction/1",
+  "recorded_at_utc": "2026-10-03T04:44:50.174782+00:00",
+  "correction_script": "runs/comm_first_report_training_ablation_20261003/r40_analysis_correction.py",
+  "correction_script_sha256": "8084be6ba1517543020b408789a091baf376b748355756b2835068c1869acf3c",
+  "frozen_analyzer": "runs/comm_first_report_training_ablation_20261003/r40_analysis.py",
+  "frozen_analyzer_sha256": "aa0b6fe70d2e994b43d71ae97f677fe12e4d91bf911525566402f238cfd93429",
+  "analyze_function_source_sha256": "6971de9d0a55cd6abaae254ed9e53a544d70345535841d58fe7850076455b233",
+  "failure": {
+    "exception": "NEW seed 11 ep0 differs from the registered OLD ep0",
+    "cause": "the checkpoint reconciliation loop reused the summary left from the previous loop, whose last value belonged to seed33; seed11 was therefore compared using seed33 milestone paths"
+  },
+  "evidence": {
+    "registered_seed11_old_ep0_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "reloaded_seed11_new_ep0_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+    "seed11_new_ep0_matches_registered_old_ep0": true,
+    "checkpoint_or_raw_artifact_mutated": false
+  },
+  "exact_in_memory_patch": {
+    "inserted_before": "milestone_paths = summary.get(\"milestone_checkpoints\", {})",
+    "inserted_line": "summary = training[str(seed)][\"summary\"]"
+  },
+  "scope": "rebinds per-seed report-analysis metadata only; does not modify the frozen analyzer source, training/evaluation semantics, rows, tapes, checkpoints, model outputs, or RNG",
+  "environment_constructed": false,
+  "optimizer_steps": 0,
+  "analysis_is_descriptive_only": true,
+  "training_or_evaluation_semantics_changed": false
+}
