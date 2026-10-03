@@ -1,0 +1,70 @@
+{
+  "kind": "round41-verdict/1",
+  "status": "development_diagnostic_complete",
+  "branch": "exp/comm-temporal-decoder-diagnostic",
+  "round40_base_head": "8f8245a665b15960e70194fc6e245221b70db90e",
+  "prelaunch_head": "c31a22e2bdae44fe9044175c1a4b3f0b16e3eb98",
+  "method": "hazard_median / fixed cumulative-risk decoder",
+  "threshold": "log(2)",
+  "development_block": [1301000, 1301015],
+  "per_seed": {
+    "11": {
+      "hazard_median": {"on_time": 96, "spent_bytes": 239040, "first_emissions": 96},
+      "NEW_greedy": {"on_time": 88, "spent_bytes": 0},
+      "NEW_sampled": {"on_time": 96, "spent_bytes": 234924},
+      "immediate": {"on_time": 96, "spent_bytes": 239028},
+      "late_discovery_gate_147": {"on_time": 96, "spent_bytes": 77412},
+      "always_hold": {"on_time": 88, "spent_bytes": 0},
+      "delta_vs_greedy": {"on_time": 8, "spent_bytes": 239040, "gained_target_occurrences": 8, "lost_target_occurrences": 0},
+      "delta_vs_immediate": {"on_time": 0, "spent_bytes": 12},
+      "delta_vs_late_147": {"on_time": 0, "spent_bytes": 161628}
+    },
+    "22": {
+      "hazard_median": {"on_time": 96, "spent_bytes": 239040, "first_emissions": 96},
+      "NEW_greedy": {"on_time": 88, "spent_bytes": 72960},
+      "NEW_sampled": {"on_time": 96, "spent_bytes": 240762},
+      "immediate": {"on_time": 96, "spent_bytes": 239028},
+      "late_discovery_gate_147": {"on_time": 96, "spent_bytes": 77412},
+      "always_hold": {"on_time": 88, "spent_bytes": 0},
+      "delta_vs_greedy": {"on_time": 8, "spent_bytes": 166080, "gained_target_occurrences": 8, "lost_target_occurrences": 0},
+      "delta_vs_immediate": {"on_time": 0, "spent_bytes": 12},
+      "delta_vs_late_147": {"on_time": 0, "spent_bytes": 161628}
+    },
+    "33": {
+      "hazard_median": {"on_time": 96, "spent_bytes": 239028, "first_emissions": 96},
+      "NEW_greedy": {"on_time": 96, "spent_bytes": 239028},
+      "NEW_sampled": {"on_time": 96, "spent_bytes": 239376},
+      "immediate": {"on_time": 96, "spent_bytes": 239028},
+      "late_discovery_gate_147": {"on_time": 96, "spent_bytes": 77412},
+      "always_hold": {"on_time": 88, "spent_bytes": 0},
+      "delta_vs_greedy": {"on_time": 0, "spent_bytes": 0, "gained_target_occurrences": 0, "lost_target_occurrences": 0},
+      "delta_vs_immediate": {"on_time": 0, "spent_bytes": 0},
+      "delta_vs_late_147": {"on_time": 0, "spent_bytes": 161616}
+    }
+  },
+  "mechanism_reading": {
+    "supports_preplanned_reading_A": true,
+    "supports_preplanned_reading_B": false,
+    "cost_near_immediate": true,
+    "improves_on_late_147_cost": false,
+    "independent_confirmation": false,
+    "overall_noninferiority_or_generalization": false,
+    "interpretation": "s11/s22 recovered eight greedy-missing on-time targets each; all three seeds reached 96/96 at costs essentially equal to immediate and far above late-147. This supports a development-block execution-decoding effect, not learned communication cost control."
+  },
+  "execution_counts": {
+    "normal_launches": 51,
+    "reserve_used": 0,
+    "hard_cap": 56,
+    "environments_constructed": 51,
+    "simulations_started": 51,
+    "technical_retries": 0,
+    "new_independent_recorded_streams": 0,
+    "training_updates": 0,
+    "optimizer_step_calls": 0,
+    "synthetic_optimizer_updates": 0,
+    "checkpoint_write_calls": 0,
+    "network_attempts": 0,
+    "postrun_hazard_rows_reverified_read_only": 48
+  },
+  "next_recommendation": "Stop tuning on this already-used development block. If the decision agent elects to continue, separately register and authorize one untouched scene block with the decoder, task/cost criteria, and interpretation rules frozen before execution."
+}
