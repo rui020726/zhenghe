@@ -457,10 +457,10 @@ def main() -> None:
                 default=str).encode("utf-8")).hexdigest():
             raise RuntimeError(f"inherited ROUND40 config does not reconstruct scenario {scene}")
         for seed in SEEDS:
-            greedy = baseline_rows[f"NEW/s{seed}/greedy/{scene}"]["config_hash"]
-            sampled = baseline_rows[f"NEW/s{seed}/sampled/{scene}"]["config_hash"]
-            if greedy != sampled:
-                raise RuntimeError(f"ROUND40 greedy/sample run config mismatch at {seed}/{scene}")
+            greedy_world = baseline_rows[f"NEW/s{seed}/greedy/{scene}"]["world_configuration"]
+            sampled_world = baseline_rows[f"NEW/s{seed}/sampled/{scene}"]["world_configuration"]
+            if greedy_world != sampled_world:
+                raise RuntimeError(f"ROUND40 greedy/sample world config mismatch at {seed}/{scene}")
 
     for seed in SEEDS:
         path = R40_DIR / "checkpoints" / f"v2_train_s{seed}_ep128.pt"
