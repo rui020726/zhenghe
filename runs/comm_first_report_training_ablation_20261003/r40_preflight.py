@@ -27,6 +27,7 @@ TRAINING_VERSION = (
 FirstReportOnlyCollector = None
 
 BASE_HEAD = "4e989a9088111ce6d9171cb1a21629a4b2b1e861"
+ROUND40_BASIS_COMMIT = "e8a1841cf997baafbf16cb77005c7a496ee09589"
 OLD_TRAINING_VERSION = (
     "constrained-cost-v2/published-completion-event-at-relay-tick/2"
 )
@@ -631,10 +632,11 @@ def run(input_root: str | Path) -> dict[str, Any]:
     inherited_path = root / "runs" / "comm_final_train_20261001" / "FROZEN_CONFIG_MANIFEST.json"
     archived = _json(inherited_path)
     source_head = _git(root, "rev-parse", "HEAD")
-    worktree_parent = _git(Path(__file__).resolve().parents[2], "rev-parse", "HEAD")
+    worktree = Path(__file__).resolve().parents[2]
+    worktree_parent = _git(worktree, "rev-parse", "HEAD")
     _assert(source_head == BASE_HEAD, f"canonical input checkout HEAD {source_head} != {BASE_HEAD}")
-    _assert(worktree_parent == "e8a1841cf997baafbf16cb77005c7a496ee09589",
-            f"ROUND40 basis commit changed before the freeze gate: {worktree_parent}")
+    _assert(_git(worktree, "merge-base", "--is-ancestor", ROUND40_BASIS_COMMIT, "HEAD") == "",
+            f"ROUND40 execution branch no longer descends from its basis commit {ROUND40_BASIS_COMMIT}")
     _assert(_git(root, "branch", "--show-current") == "exp/comm-refresh-held-mechanism",
             "canonical read-only source checkout is not on the registered ROUND39 branch")
 

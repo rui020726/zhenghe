@@ -69,15 +69,15 @@ def _load_context(input_root: str | Path):
     if (_git(root, "rev-parse", "HEAD") != freeze["base_head"]
             or _git(root, "branch", "--show-current") != "exp/comm-refresh-held-mechanism"):
         raise RuntimeError("canonical input checkout changed after the freeze")
-    current_head = _git(r40.ROUND_DIR.parents[2], "rev-parse", "HEAD")
-    branch = _git(r40.ROUND_DIR.parents[2], "branch", "--show-current")
+    current_head = _git(r40.ROUND_DIR.parents[1], "rev-parse", "HEAD")
+    branch = _git(r40.ROUND_DIR.parents[1], "branch", "--show-current")
     if branch != "exp/comm-first-report-training-ablation":
         raise RuntimeError(f"unexpected execution branch {branch!r}")
     if current_head == preflight["round40_basis_commit"]:
         raise RuntimeError("freeze/preflight have not been committed; refusing first environment")
-    if _git(r40.ROUND_DIR.parents[2], "status", "--porcelain"):
+    if _git(r40.ROUND_DIR.parents[1], "status", "--porcelain"):
         raise RuntimeError("worktree is dirty after freeze; refusing an environment launch")
-    worktree = r40.ROUND_DIR.parents[2]
+    worktree = r40.ROUND_DIR.parents[1]
     required_committed = [
         "runs/comm_first_report_training_ablation_20261003/EXECUTION_BASIS.md",
         "runs/comm_first_report_training_ablation_20261003/ROUND40_FROZEN_CONFIG.json",
