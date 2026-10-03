@@ -772,6 +772,10 @@ def run(phase: str) -> None:
                                 if current["reserve_used"] >= 5 or retry_count > 5:
                                     raise
                                 continue
+                        # Every formal hazard cell gets the same recurrence, mask and billing
+                        # audit as the first-six gate.  A decoder invariant failure stops the
+                        # round; it is not retried as a technical execution failure.
+                        rows[key]["round41_hazard_verification"] = verify_hazard_row(rows[key])
                         print(f"ROUND41 hazard_median seed={seed} scene={scene} "
                               f"on_time={rows[key]['on_time']} bytes={rows[key]['spent_bytes']}",
                               flush=True)
