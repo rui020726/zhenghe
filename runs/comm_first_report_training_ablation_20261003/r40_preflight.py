@@ -759,7 +759,7 @@ def run(input_root: str | Path) -> dict[str, Any]:
         checkpoint_results = _checkpoint_gate(root, common, trainer, v2_controller, freeze)
 
     preserved_preconstruction_checkpoints = _preserved_preconstruction_checkpoints(
-        root, common, trainer, freeze, checkpoint_source[1])
+        root, common, trainer, freeze, checkpoint_source)
 
     # A non-constructive syntax/import guard on the R40 modules.
     for name in R40_CODE_FILES:
@@ -920,3 +920,4 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
