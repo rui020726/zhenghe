@@ -103,8 +103,8 @@ def _write_report(results: dict[str, Any], *, artifacts_manifest: dict[str, Any]
         f"- 分支：`exp/comm-first-report-training-ablation`。",
         f"- 实际环境启动：{ledger['total_used']} 次；正常计划 {ledger['normal_used']}/672，"
         f"技术储备 {ledger['reserve_used']}/28，上限 700。",
-        f"- 未构造环境的启动前 worker 失败 {ledger['preconstruction_failure_count']} 次；"
-        "不计入环境启动额度，具体异常见 Git 外原件清单。",
+        f"- 未构造环境的 preflight/worker 失败 {ledger['preconstruction_failure_count']} 次；"
+        "不计入环境启动额度，逐次类型与恢复记录见启动前失败文件及 Git 外原件清单。",
         f"- 训练：NEW 三个 seed 各 128 集、32 个 PPO 批；实际 PPO 批数 "
         f"{sum(int(results['training_diagnostics'][str(seed)]['summary']['updates']) for seed in r40.TRAIN_SEEDS)}；"
         f"训练 optimizer.step 次数 "
