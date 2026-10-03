@@ -1,0 +1,323 @@
+{
+  "kind": "round42r-completion-audit/1",
+  "status": "complete",
+  "execution_identity": {
+    "branch": "fix/comm-one-shot-gate-resume",
+    "execution_head": "0369408dec2cfabffb623e0445174725f9dde0d5",
+    "resume_execution_version": "round42-gate-and-exact-resume/2",
+    "gate_path_identity_version": "round42-frozen-checkpoint-path-map/2",
+    "original_prelaunch_head": "f46fe4703aa03ce6400f63c601c3203ef741dd9d",
+    "review_head": "2825069eaf9acf0fff87a9a02e69ae2f8e88c785",
+    "latest_pre_repair_delivery_head": "5cf41b5edd1b5e13f41b15abc08ae5876da4cd11",
+    "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+    "action_semantics": "one-shot-send-skip/1",
+    "runner_version": "counted-jointrun-proxy/1",
+    "version_manifest_sha256": "dc10ac79b83e1b34d48126d18cd04876275d6178ce0f9b7d3409ea31ee894003",
+    "duration_seconds": 7795.11
+  },
+  "gate_repair_and_recovery": {
+    "synthetic_gate_path_tests_passed": 9,
+    "resume_adapter_ast_tests_passed": 2,
+    "all_three_seed_first_batch_gates_passed": true,
+    "gate_by_seed": {
+      "11": "passed",
+      "22": "passed",
+      "33": "passed"
+    },
+    "seed11_real_gate_status": "passed",
+    "read_only_gate_environment_constructions": 0,
+    "read_only_gate_optimizer_steps": 0,
+    "exact_resume_status": "passed",
+    "resume_source_sha256": "a85722e0864456ea3eb735195c7ffcde4be9d42301bdf2bc0781db6747a851ef",
+    "resume_cursor": {
+      "training_seed": 11,
+      "episodes_done": 4,
+      "updates": 1,
+      "optimizer_steps": 12,
+      "lambda": 1.0125
+    },
+    "modules_exact": [
+      "trunk",
+      "action_head",
+      "value_task_head",
+      "value_cost_head"
+    ],
+    "adam_state_exact": true,
+    "rng_streams": [
+      "python_global",
+      "numpy_global",
+      "torch_cpu_global"
+    ],
+    "next_random_outputs_match": true,
+    "zero_env_zero_update_zero_checkpoint_write": {
+      "environment_constructions": 0,
+      "environment_starts": 0,
+      "optimizer_step_calls": 0,
+      "ppo_update_calls": 0,
+      "checkpoint_writes": 0,
+      "checkpoint_files_unchanged": true,
+      "checkpoint_write_journal_unchanged": true
+    },
+    "adapter_sha256": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+    "external_frozen_round40_source_modified": false
+  },
+  "attempt_history": [
+    {
+      "attempt": 1,
+      "version": "round42-gate-and-exact-resume/1",
+      "status": "stopped_before_new_environment_claim",
+      "exception": "UnboundLocalError: parameter_identity imported only in fresh-start branch",
+      "claims": 0,
+      "environment_constructions": 0,
+      "environment_starts": 0,
+      "steps": 0,
+      "ppo_updates": 0,
+      "optimizer_steps": 0,
+      "checkpoint_writes": 0,
+      "quota_charge": 0,
+      "preserved_stop_record": "runs/comm_one_shot_gate_resume_20261003/ROUND42_RESUME_ATTEMPT01_STOP.json"
+    },
+    {
+      "attempt": 2,
+      "version": "round42-gate-and-exact-resume/2",
+      "status": "complete",
+      "isolated_output": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2"
+    }
+  ],
+  "fixed_plan": {
+    "completed_before_resume": 68,
+    "completed_in_resume": 604,
+    "remaining_jobs": {
+      "seed11_episodes4_to127": 124,
+      "seed22_training_128": 128,
+      "seed33_training_128": 128,
+      "old_new_greedy_sampled_development": 192,
+      "late_and_hold_rule_development": 32
+    },
+    "successful_total": 672,
+    "training_by_seed": [
+      {
+        "seed": 11,
+        "episodes": 128,
+        "on_time_tasks": 739,
+        "bytes": 762114,
+        "first_reports": 305,
+        "free_send": 305,
+        "free_skip": 457,
+        "final_lambda": 1.2875,
+        "adam_steps": 352
+      },
+      {
+        "seed": 22,
+        "episodes": 128,
+        "on_time_tasks": 732,
+        "bytes": 449154,
+        "first_reports": 180,
+        "free_send": 180,
+        "free_skip": 582,
+        "final_lambda": 1.375,
+        "adam_steps": 400
+      },
+      {
+        "seed": 33,
+        "episodes": 128,
+        "on_time_tasks": 741,
+        "bytes": 737754,
+        "first_reports": 296,
+        "free_send": 296,
+        "free_skip": 466,
+        "final_lambda": 1.2625,
+        "adam_steps": 340
+      }
+    ],
+    "paired_old_new_by_seed_mode": [
+      {
+        "seed": 11,
+        "mode": "greedy",
+        "old_tasks": 88,
+        "old_bytes": 0,
+        "old_first_reports": 0,
+        "new_tasks": 88,
+        "new_bytes": 0,
+        "new_first_reports": 0,
+        "lost_targets": 0,
+        "recovered_targets": 0,
+        "target_swaps": 0
+      },
+      {
+        "seed": 11,
+        "mode": "sampled",
+        "old_tasks": 94,
+        "old_bytes": 99276,
+        "old_first_reports": 40,
+        "new_tasks": 94,
+        "new_bytes": 94710,
+        "new_first_reports": 38,
+        "lost_targets": 0,
+        "recovered_targets": 0,
+        "target_swaps": 0
+      },
+      {
+        "seed": 22,
+        "mode": "greedy",
+        "old_tasks": 88,
+        "old_bytes": 0,
+        "old_first_reports": 0,
+        "new_tasks": 88,
+        "new_bytes": 0,
+        "new_first_reports": 0,
+        "lost_targets": 0,
+        "recovered_targets": 0,
+        "target_swaps": 0
+      },
+      {
+        "seed": 22,
+        "mode": "sampled",
+        "old_tasks": 95,
+        "old_bytes": 110304,
+        "old_first_reports": 44,
+        "new_tasks": 93,
+        "new_bytes": 55896,
+        "new_first_reports": 22,
+        "lost_targets": 2,
+        "recovered_targets": 0,
+        "target_swaps": 0
+      },
+      {
+        "seed": 33,
+        "mode": "greedy",
+        "old_tasks": 96,
+        "old_bytes": 239028,
+        "old_first_reports": 96,
+        "new_tasks": 88,
+        "new_bytes": 0,
+        "new_first_reports": 0,
+        "lost_targets": 8,
+        "recovered_targets": 0,
+        "target_swaps": 0
+      },
+      {
+        "seed": 33,
+        "mode": "sampled",
+        "old_tasks": 95,
+        "old_bytes": 151374,
+        "old_first_reports": 61,
+        "new_tasks": 92,
+        "new_bytes": 50250,
+        "new_first_reports": 20,
+        "lost_targets": 3,
+        "recovered_targets": 0,
+        "target_swaps": 0
+      }
+    ],
+    "immediate_development_baseline": {
+      "scenes": 16,
+      "tasks": 96,
+      "bytes": 239028
+    },
+    "rule_baselines": [
+      {
+        "arm": "late_discovery_gate",
+        "scenes": 16,
+        "on_time_tasks": 96,
+        "bytes": 77412,
+        "first_reports": 31,
+        "packets_delivered": 125,
+        "packets_lost": 61
+      },
+      {
+        "arm": "always_hold",
+        "scenes": 16,
+        "on_time_tasks": 88,
+        "bytes": 0,
+        "first_reports": 0,
+        "packets_delivered": 0,
+        "packets_lost": 0
+      }
+    ],
+    "verdict": {
+      "all_seed_mode_pairs_preserve_tasks_and_reduce_first_reports_and_cost": false,
+      "preserve_tasks_and_reduce_cost_vs_old_in_one_registered_pair": {
+        "seed": 11,
+        "mode": "sampled",
+        "task_delta": 0,
+        "byte_delta": -4566
+      },
+      "preserves_task_count_vs_immediate_in_any_seed_mode_pair": false,
+      "interpretation": "restricted descriptive evidence on a previously used 16-scene development block; no generalization or population guarantee"
+    }
+  },
+  "cumulative_ledger": {
+    "normal_used": 672,
+    "reserve_used": 1,
+    "total_used": 673,
+    "environment_constructor_calls": 673,
+    "joint_run_build_failures": 0,
+    "joint_run_constructed_calls": 673,
+    "run_invocation_calls": 672,
+    "joint_run_method_calls": 672,
+    "run_return_calls": 672,
+    "run_failure_calls": 0,
+    "completed_steps": 672000,
+    "completed_logical_jobs": 672,
+    "simulation_started": 672,
+    "technical_failed_claims": 1,
+    "retry_claims": 1,
+    "optimizer_step_calls": 1092,
+    "ppo_update_calls": 96,
+    "ppo_update_count_matches_committed_batches": true,
+    "checkpoint_write_calls": 297,
+    "checkpoint_write_journal_entries": 297,
+    "optimizer_step_count_matches_committed_batches": true,
+    "hard_cap": 700
+  },
+  "quota": {
+    "normal_claims": 672,
+    "reserve_claims": 1,
+    "total_claims_and_constructions": 673,
+    "hard_cap": 700,
+    "reserve_remaining": 27,
+    "original_technical_failed_claims": 1,
+    "new_technical_failures": 0
+  },
+  "preservation": {
+    "kind": "round42-old-source-preservation-result/1",
+    "status": "passed",
+    "old_source_file_count": 370,
+    "old_source_sha256_inventory_unchanged": true,
+    "inventory_sha256": "5756513d565efbafcbfd65a1187f3262222e2dcb1e8a877309ffe269156adbce",
+    "old_gate_failure_preserved": true,
+    "old_stop_state_preserved": true,
+    "old_claims_ledgers_rows_tapes_checkpoints_unchanged": true
+  },
+  "raw_artifact_inventory": {
+    "file_count": 4349,
+    "raw_files_committed": false,
+    "checkpoint_index": "ROUND42_CHECKPOINT_INDEX.json",
+    "raw_manifest": "ROUND42_RAW_ARTIFACT_MANIFEST.json"
+  },
+  "deliverables": [
+    "ROUND42R_COMPLETION_REPORT.md",
+    "ROUND42_REPORT.md",
+    "ROUND42_RESUME_REPORT.md",
+    "ROUND42_RESUME_FINAL_RESULT.json",
+    "ROUND42R_EXECUTION_LEDGER.json",
+    "ROUND42R_LOGICAL_JOB_LEDGER.json",
+    "ROUND42_PAIRED_RESULTS.json",
+    "ROUND42_CHECKPOINT_INDEX.json",
+    "ROUND42_RAW_ARTIFACT_MANIFEST.json",
+    "ROUND42_FIRST_BATCH_GATES.json",
+    "runtime/ROUND42_EXACT_RESUME_VERIFICATION.json",
+    "ROUND42_VERDICT.json"
+  ],
+  "reproduction": {
+    "source_head": "0369408dec2cfabffb623e0445174725f9dde0d5",
+    "environment": "D:\\project_env\\python.exe",
+    "commands": [
+      "D:\\project_env\\python.exe -m unittest discover -s runs/comm_one_shot_gate_resume_20261003_v2 -p test_r42_gate_resume.py -v",
+      "D:\\project_env\\python.exe -m unittest discover -s runs/comm_one_shot_gate_resume_20261003_v2 -p test_r42_resume_adapter.py -v",
+      "D:\\project_env\\python.exe -u runs/comm_one_shot_gate_resume_20261003_v2/r42_resume.py"
+    ],
+    "note": "The resume command completed on the recorded execution head. The completed output directory contains a start marker and intentionally refuses duplicate execution; do not delete artifacts to rerun it."
+  }
+}

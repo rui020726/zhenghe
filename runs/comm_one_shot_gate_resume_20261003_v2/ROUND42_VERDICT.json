@@ -1,0 +1,118 @@
+{
+  "kind": "round42-verdict/1",
+  "status": "complete",
+  "primary_scope": "one-shot target-level first-report SEND_NOW vs SKIP_EPISODE",
+  "new_preserves_task_count_and_reduces_first_reports_and_cost_in_all_seed_mode_pairs": false,
+  "all_new_free_choices_are_send": false,
+  "all_new_free_choices_are_skip": false,
+  "old_is_exactly_equal_to_new_for_tasks_and_cost_in_all_pairs": false,
+  "one_seed_task_count_match_by_seed": {
+    "11": false,
+    "22": false,
+    "33": false
+  },
+  "greedy_sampled_outcomes_differ_by_seed": {
+    "11": true,
+    "22": true,
+    "33": true
+  },
+  "seed_mode_evidence": {
+    "s11_greedy": {
+      "new_tasks_match_immediate_per_scene": false,
+      "new_total_on_time": 88,
+      "immediate_total_on_time": 96,
+      "new_spent_bytes": 0,
+      "immediate_spent_bytes": 239028,
+      "new_first_report_emissions": 0,
+      "immediate_first_report_emissions": 96,
+      "new_all_free_choices_send": false,
+      "new_all_free_choices_skip": true,
+      "old_and_new_match_task_and_cost_in_every_scene": true,
+      "new_minus_old_task_delta": 0,
+      "new_minus_old_cost_delta_bytes": 0,
+      "new_minus_immediate_max_scene_loss": 4
+    },
+    "s11_sampled": {
+      "new_tasks_match_immediate_per_scene": false,
+      "new_total_on_time": 94,
+      "immediate_total_on_time": 96,
+      "new_spent_bytes": 94710,
+      "immediate_spent_bytes": 239028,
+      "new_first_report_emissions": 38,
+      "immediate_first_report_emissions": 96,
+      "new_all_free_choices_send": false,
+      "new_all_free_choices_skip": false,
+      "old_and_new_match_task_and_cost_in_every_scene": false,
+      "new_minus_old_task_delta": 0,
+      "new_minus_old_cost_delta_bytes": -4566,
+      "new_minus_immediate_max_scene_loss": 1
+    },
+    "s22_greedy": {
+      "new_tasks_match_immediate_per_scene": false,
+      "new_total_on_time": 88,
+      "immediate_total_on_time": 96,
+      "new_spent_bytes": 0,
+      "immediate_spent_bytes": 239028,
+      "new_first_report_emissions": 0,
+      "immediate_first_report_emissions": 96,
+      "new_all_free_choices_send": false,
+      "new_all_free_choices_skip": true,
+      "old_and_new_match_task_and_cost_in_every_scene": true,
+      "new_minus_old_task_delta": 0,
+      "new_minus_old_cost_delta_bytes": 0,
+      "new_minus_immediate_max_scene_loss": 4
+    },
+    "s22_sampled": {
+      "new_tasks_match_immediate_per_scene": false,
+      "new_total_on_time": 93,
+      "immediate_total_on_time": 96,
+      "new_spent_bytes": 55896,
+      "immediate_spent_bytes": 239028,
+      "new_first_report_emissions": 22,
+      "immediate_first_report_emissions": 96,
+      "new_all_free_choices_send": false,
+      "new_all_free_choices_skip": false,
+      "old_and_new_match_task_and_cost_in_every_scene": false,
+      "new_minus_old_task_delta": -2,
+      "new_minus_old_cost_delta_bytes": -54408,
+      "new_minus_immediate_max_scene_loss": 1
+    },
+    "s33_greedy": {
+      "new_tasks_match_immediate_per_scene": false,
+      "new_total_on_time": 88,
+      "immediate_total_on_time": 96,
+      "new_spent_bytes": 0,
+      "immediate_spent_bytes": 239028,
+      "new_first_report_emissions": 0,
+      "immediate_first_report_emissions": 96,
+      "new_all_free_choices_send": false,
+      "new_all_free_choices_skip": true,
+      "old_and_new_match_task_and_cost_in_every_scene": false,
+      "new_minus_old_task_delta": -8,
+      "new_minus_old_cost_delta_bytes": -239028,
+      "new_minus_immediate_max_scene_loss": 4
+    },
+    "s33_sampled": {
+      "new_tasks_match_immediate_per_scene": false,
+      "new_total_on_time": 92,
+      "immediate_total_on_time": 96,
+      "new_spent_bytes": 50250,
+      "immediate_spent_bytes": 239028,
+      "new_first_report_emissions": 20,
+      "immediate_first_report_emissions": 96,
+      "new_all_free_choices_send": false,
+      "new_all_free_choices_skip": false,
+      "old_and_new_match_task_and_cost_in_every_scene": false,
+      "new_minus_old_task_delta": -3,
+      "new_minus_old_cost_delta_bytes": -101124,
+      "new_minus_immediate_max_scene_loss": 1
+    }
+  },
+  "interpretation": [
+    "These indicators describe this registered 16-scene development block only.",
+    "No statistical, population noninferiority, or generalization claim is made.",
+    "A one-shot SEND/SKIP choice tests report selection; it does not solve general timing.",
+    "One-shot choices cannot defer a send: later fixed HOLDs are latch closure, not WAIT.",
+    "The result does not justify tuning or a follow-up run without separate authorization."
+  ]
+}

@@ -1,0 +1,459 @@
+{
+  "kind": "round42-real-first-batch-gates/1",
+  "all_passed_before_continuation": true,
+  "by_seed": {
+    "11": {
+      "kind": "round42-first-four-real-batch-gate/1",
+      "status": "passed",
+      "training_seed": 11,
+      "episodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "batch": 0,
+      "batch_record": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\r40_batch_s11_b0_attempt01.json",
+        "sha256": "85f2192e18838506a198198e4f88fa090168c4aeaeb754f42e268b89c22b10b0"
+      },
+      "preupdate_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "postupdate_parameter_sha256": "a2facc3f2171d661de87275898685d968bc61bf1740615a24bd20c891381e039",
+      "preupdate_checkpoint": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_before_b0.pt",
+        "sha256": "70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd",
+        "read_only": {
+          "load_mode": "read_only",
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "timing_interpretation": "versioned_capture_semantics",
+          "optimizer_restored": false,
+          "rng_restored": false,
+          "comm_action_eligibility": "first-report-only/1",
+          "action_eligibility_interpretation": "first-report-only/1",
+          "read_only_for_round40": true,
+          "comm_action_semantics": "one-shot-send-skip/1",
+          "action_semantics_interpretation": "one-shot-send-skip/1",
+          "read_only_for_round42": true,
+          "ambient_rng_preserved": true
+        }
+      },
+      "postupdate_checkpoint": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_after_b0.pt",
+        "sha256": "a85722e0864456ea3eb735195c7ffcde4be9d42301bdf2bc0781db6747a851ef",
+        "read_only": {
+          "load_mode": "read_only",
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "timing_interpretation": "versioned_capture_semantics",
+          "optimizer_restored": false,
+          "rng_restored": false,
+          "comm_action_eligibility": "first-report-only/1",
+          "action_eligibility_interpretation": "first-report-only/1",
+          "read_only_for_round40": true,
+          "comm_action_semantics": "one-shot-send-skip/1",
+          "action_semantics_interpretation": "one-shot-send-skip/1",
+          "read_only_for_round42": true,
+          "ambient_rng_preserved": true
+        },
+        "episodes_done": 4,
+        "updates": 1,
+        "optimizer_steps": 12
+      },
+      "candidate_and_action_audit": {
+        "decision_tape_rows": 631,
+        "free_choices": 23,
+        "send_now_choices": 15,
+        "skip_episode_choices": 8,
+        "budget_or_capacity_masked_candidates": 0,
+        "closed_fixed_hold_candidates": 904,
+        "all_skip_choices_in_free_likelihood_set": true,
+        "closed_and_masked_excluded": true,
+        "one_free_choice_per_target_per_episode": true
+      },
+      "independent_likelihood": {
+        "max_abs_logged_vs_recomputed": 0.0,
+        "max_abs_entropy_helper_vs_independent_free_set_sum": 0.0,
+        "trainer_preupdate_alignment": {
+          "samples": 631,
+          "max_abs_gap": 0.0,
+          "tolerance": 1e-06,
+          "passed": true
+        },
+        "tolerance": 1e-06
+      },
+      "independent_reward_gae": {
+        "max_abs_sample_target_gap": 0.0,
+        "independent_prefix_task_reward": 0.0,
+        "independent_prefix_cost_bytes": 0.0,
+        "actual_batch_samples": 631,
+        "task_event_tick_and_cost_closure": true
+      },
+      "paired_constraint": {
+        "same_scene_reference_values": [
+          6.0,
+          6.0,
+          5.0,
+          6.0
+        ],
+        "policy_on_time_values": [
+          6.0,
+          5.0,
+          5.0,
+          6.0
+        ],
+        "independent_g_hat": 0.25,
+        "recorded_g_hat": 0.25,
+        "lambda_before": 1.0,
+        "lambda_next": 1.0125,
+        "direction": "increase"
+      },
+      "optimizer_and_gradient_scope": {
+        "optimizer_parameter_count": 10,
+        "communication_modules": [
+          "action_head",
+          "cost_head",
+          "task_value_head",
+          "trunk"
+        ],
+        "task_critic_included": true,
+        "cost_critic_included": true,
+        "finite_metrics_gradients_and_critic_targets": true,
+        "module_gradient_l1_mean": {
+          "trunk": 56.26089663,
+          "action_head": 0.124344185,
+          "task_value_head": 6.508702726,
+          "cost_head": 0.353988877
+        },
+        "module_gradient_l1_min": {
+          "trunk": 28.625029765,
+          "action_head": 0.007097985,
+          "task_value_head": 3.766223213,
+          "cost_head": 0.124542601
+        },
+        "gradient_norm_mean": 1.5293,
+        "optimizer_steps": 12,
+        "extra_optimizer_steps_or_checkpoint_writes_during_gate": 0
+      },
+      "frozen_search_allocation_hashes_unchanged": true,
+      "frozen_checkpoint_path_identity": [
+        {
+          "frozen_name": "shared_mappo_model_21_3100.pth",
+          "record_key": "runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+          "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+          "declared_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+          "actual_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33"
+        },
+        {
+          "frozen_name": "ctde_final_7_1.pth",
+          "record_key": "runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+          "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+          "declared_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+          "actual_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+        }
+      ]
+    },
+    "22": {
+      "kind": "round42-first-four-real-batch-gate/1",
+      "status": "passed",
+      "training_seed": 22,
+      "episodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "batch": 0,
+      "batch_record": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\r40_batch_s22_b0_attempt01.json",
+        "sha256": "0310dcaf7ee6577042893186f77320b110bf2a8b7cc5491bf49cf068ef0e6844"
+      },
+      "preupdate_parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "postupdate_parameter_sha256": "3121449ef0c2379028b71c6cab4aa15d27f14f6c15258a8e76fb942bd40bbb01",
+      "preupdate_checkpoint": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s22_before_b0.pt",
+        "sha256": "96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5",
+        "read_only": {
+          "load_mode": "read_only",
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "timing_interpretation": "versioned_capture_semantics",
+          "optimizer_restored": false,
+          "rng_restored": false,
+          "comm_action_eligibility": "first-report-only/1",
+          "action_eligibility_interpretation": "first-report-only/1",
+          "read_only_for_round40": true,
+          "comm_action_semantics": "one-shot-send-skip/1",
+          "action_semantics_interpretation": "one-shot-send-skip/1",
+          "read_only_for_round42": true,
+          "ambient_rng_preserved": true
+        }
+      },
+      "postupdate_checkpoint": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s22_after_b0.pt",
+        "sha256": "f8f54748784b2e2e84794f344534af14f97592c305fa22cfa59488282d8ec8c5",
+        "read_only": {
+          "load_mode": "read_only",
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "timing_interpretation": "versioned_capture_semantics",
+          "optimizer_restored": false,
+          "rng_restored": false,
+          "comm_action_eligibility": "first-report-only/1",
+          "action_eligibility_interpretation": "first-report-only/1",
+          "read_only_for_round40": true,
+          "comm_action_semantics": "one-shot-send-skip/1",
+          "action_semantics_interpretation": "one-shot-send-skip/1",
+          "read_only_for_round42": true,
+          "ambient_rng_preserved": true
+        },
+        "episodes_done": 4,
+        "updates": 1,
+        "optimizer_steps": 8
+      },
+      "candidate_and_action_audit": {
+        "decision_tape_rows": 263,
+        "free_choices": 23,
+        "send_now_choices": 8,
+        "skip_episode_choices": 15,
+        "budget_or_capacity_masked_candidates": 0,
+        "closed_fixed_hold_candidates": 499,
+        "all_skip_choices_in_free_likelihood_set": true,
+        "closed_and_masked_excluded": true,
+        "one_free_choice_per_target_per_episode": true
+      },
+      "independent_likelihood": {
+        "max_abs_logged_vs_recomputed": 0.0,
+        "max_abs_entropy_helper_vs_independent_free_set_sum": 1.1920928955078125e-07,
+        "trainer_preupdate_alignment": {
+          "samples": 263,
+          "max_abs_gap": 1.4901161193847656e-07,
+          "tolerance": 1e-06,
+          "passed": true
+        },
+        "tolerance": 1e-06
+      },
+      "independent_reward_gae": {
+        "max_abs_sample_target_gap": 0.0,
+        "independent_prefix_task_reward": 0.0,
+        "independent_prefix_cost_bytes": 0.0,
+        "actual_batch_samples": 263,
+        "task_event_tick_and_cost_closure": true
+      },
+      "paired_constraint": {
+        "same_scene_reference_values": [
+          6.0,
+          6.0,
+          5.0,
+          6.0
+        ],
+        "policy_on_time_values": [
+          6.0,
+          6.0,
+          5.0,
+          6.0
+        ],
+        "independent_g_hat": 0.0,
+        "recorded_g_hat": 0.0,
+        "lambda_before": 1.0,
+        "lambda_next": 1.0,
+        "direction": "unchanged"
+      },
+      "optimizer_and_gradient_scope": {
+        "optimizer_parameter_count": 10,
+        "communication_modules": [
+          "action_head",
+          "cost_head",
+          "task_value_head",
+          "trunk"
+        ],
+        "task_critic_included": true,
+        "cost_critic_included": true,
+        "finite_metrics_gradients_and_critic_targets": true,
+        "module_gradient_l1_mean": {
+          "trunk": 179.472221769,
+          "action_head": 0.501480218,
+          "task_value_head": 21.459566928,
+          "cost_head": 2.039406636
+        },
+        "module_gradient_l1_min": {
+          "trunk": 137.786863685,
+          "action_head": 0.0,
+          "task_value_head": 16.248222649,
+          "cost_head": 1.356294803
+        },
+        "gradient_norm_mean": 4.9574,
+        "optimizer_steps": 8,
+        "extra_optimizer_steps_or_checkpoint_writes_during_gate": 0
+      },
+      "frozen_search_allocation_hashes_unchanged": true,
+      "frozen_checkpoint_path_identity": [
+        {
+          "frozen_name": "shared_mappo_model_21_3100.pth",
+          "record_key": "runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+          "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+          "declared_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+          "actual_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33"
+        },
+        {
+          "frozen_name": "ctde_final_7_1.pth",
+          "record_key": "runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+          "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+          "declared_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+          "actual_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+        }
+      ]
+    },
+    "33": {
+      "kind": "round42-first-four-real-batch-gate/1",
+      "status": "passed",
+      "training_seed": 33,
+      "episodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "batch": 0,
+      "batch_record": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\r40_batch_s33_b0_attempt01.json",
+        "sha256": "f1c7ed9ff2227f6b28c34749b1099a02070428134966b10b61e8bfd1fd81a07d"
+      },
+      "preupdate_parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "postupdate_parameter_sha256": "664b2d974fa3e161fb4ca4773df1d45cc3b81c507181e9633591872116f9c62f",
+      "preupdate_checkpoint": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s33_before_b0.pt",
+        "sha256": "9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d",
+        "read_only": {
+          "load_mode": "read_only",
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "timing_interpretation": "versioned_capture_semantics",
+          "optimizer_restored": false,
+          "rng_restored": false,
+          "comm_action_eligibility": "first-report-only/1",
+          "action_eligibility_interpretation": "first-report-only/1",
+          "read_only_for_round40": true,
+          "comm_action_semantics": "one-shot-send-skip/1",
+          "action_semantics_interpretation": "one-shot-send-skip/1",
+          "read_only_for_round42": true,
+          "ambient_rng_preserved": true
+        }
+      },
+      "postupdate_checkpoint": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s33_after_b0.pt",
+        "sha256": "560204e2ef35a8050351d5291191a152f213960d2004fbea52e3f37d69cbfba3",
+        "read_only": {
+          "load_mode": "read_only",
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "timing_interpretation": "versioned_capture_semantics",
+          "optimizer_restored": false,
+          "rng_restored": false,
+          "comm_action_eligibility": "first-report-only/1",
+          "action_eligibility_interpretation": "first-report-only/1",
+          "read_only_for_round40": true,
+          "comm_action_semantics": "one-shot-send-skip/1",
+          "action_semantics_interpretation": "one-shot-send-skip/1",
+          "read_only_for_round42": true,
+          "ambient_rng_preserved": true
+        },
+        "episodes_done": 4,
+        "updates": 1,
+        "optimizer_steps": 8
+      },
+      "candidate_and_action_audit": {
+        "decision_tape_rows": 260,
+        "free_choices": 23,
+        "send_now_choices": 11,
+        "skip_episode_choices": 12,
+        "budget_or_capacity_masked_candidates": 0,
+        "closed_fixed_hold_candidates": 551,
+        "all_skip_choices_in_free_likelihood_set": true,
+        "closed_and_masked_excluded": true,
+        "one_free_choice_per_target_per_episode": true
+      },
+      "independent_likelihood": {
+        "max_abs_logged_vs_recomputed": 0.0,
+        "max_abs_entropy_helper_vs_independent_free_set_sum": 5.960464477539063e-08,
+        "trainer_preupdate_alignment": {
+          "samples": 260,
+          "max_abs_gap": 1.1920928955078125e-07,
+          "tolerance": 1e-06,
+          "passed": true
+        },
+        "tolerance": 1e-06
+      },
+      "independent_reward_gae": {
+        "max_abs_sample_target_gap": 0.0,
+        "independent_prefix_task_reward": 0.0,
+        "independent_prefix_cost_bytes": 0.0,
+        "actual_batch_samples": 260,
+        "task_event_tick_and_cost_closure": true
+      },
+      "paired_constraint": {
+        "same_scene_reference_values": [
+          6.0,
+          6.0,
+          5.0,
+          6.0
+        ],
+        "policy_on_time_values": [
+          6.0,
+          6.0,
+          5.0,
+          6.0
+        ],
+        "independent_g_hat": 0.0,
+        "recorded_g_hat": 0.0,
+        "lambda_before": 1.0,
+        "lambda_next": 1.0,
+        "direction": "unchanged"
+      },
+      "optimizer_and_gradient_scope": {
+        "optimizer_parameter_count": 10,
+        "communication_modules": [
+          "action_head",
+          "cost_head",
+          "task_value_head",
+          "trunk"
+        ],
+        "task_critic_included": true,
+        "cost_critic_included": true,
+        "finite_metrics_gradients_and_critic_targets": true,
+        "module_gradient_l1_mean": {
+          "trunk": 228.539860405,
+          "action_head": 0.068354166,
+          "task_value_head": 22.892211199,
+          "cost_head": 1.024513725
+        },
+        "module_gradient_l1_min": {
+          "trunk": 193.746848762,
+          "action_head": 0.0,
+          "task_value_head": 19.350332856,
+          "cost_head": 0.17214749
+        },
+        "gradient_norm_mean": 5.6244,
+        "optimizer_steps": 8,
+        "extra_optimizer_steps_or_checkpoint_writes_during_gate": 0
+      },
+      "frozen_search_allocation_hashes_unchanged": true,
+      "frozen_checkpoint_path_identity": [
+        {
+          "frozen_name": "shared_mappo_model_21_3100.pth",
+          "record_key": "runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+          "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+          "declared_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+          "actual_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33"
+        },
+        {
+          "frozen_name": "ctde_final_7_1.pth",
+          "record_key": "runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+          "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+          "declared_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+          "actual_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+        }
+      ]
+    }
+  }
+}
