@@ -619,44 +619,51 @@ def _checkpoint_gate(root: Path, common: Any, trainer: Any, v2_controller: Any,
 def _preserved_preconstruction_checkpoints(root: Path, common: Any, trainer: Any,
                                            freeze: dict[str, Any], old_identities: dict[str, Any]
                                            ) -> list[dict[str, Any]]:
-    path = common.CHECKPOINTS / "v2_train_s11_ep0.pt"
-    if not path.is_file():
+    paths = sorted(common.CHECKPOINTS.glob("v2_train_s11*.pt"))
+    if not paths:
         return []
-    payload = torch.load(path, map_location="cpu", weights_only=False)
-    controller, state, identity = trainer.load_checkpoint_read_only(path)
-    old_initial = old_identities["old_checkpoint_milestones"]["11"]["ep0"][
-        "parameter_sha256"]
-    _assert(payload.get("freeze") != freeze,
-            "preserved preconstruction checkpoint unexpectedly has the current freeze")
-    _assert(controller.parameter_summary()["parameter_sha256"] == old_initial,
-            "preserved preconstruction checkpoint does not match registered ROUND36 ep0")
-    _assert(int(state["episodes_done"]) == 0 and int(state["updates"]) == 0
-            and int(state["optimizer_steps"]) == 0,
-            "preserved preconstruction checkpoint contains a training update")
-    _assert(identity.get("load_mode") == "read_only"
-            and identity.get("optimizer_restored") is False
-            and identity.get("rng_restored") is False,
-            "preserved preconstruction checkpoint was not inspected read-only")
     import r40_train
 
     r40_train.common = common
-    successor = r40_train._milestone_path(11, 0, freeze)
-    _assert(successor != path and not successor.exists(),
-            "new freeze would overwrite the preserved preconstruction checkpoint")
-    return [{
-        "path": str(path), "file_sha256": _sha256(path),
-        "previous_freeze_sha256": hashlib.sha256(json.dumps(
-            payload["freeze"], ensure_ascii=False, sort_keys=True, separators=(",", ":")
-        ).encode("utf-8")).hexdigest(),
-        "parameter_sha256": controller.parameter_summary()["parameter_sha256"],
-        "episodes_done": int(state["episodes_done"]), "updates": int(state["updates"]),
-        "optimizer_steps": int(state["optimizer_steps"]),
-        "load_mode": identity["load_mode"], "optimizer_restored": False,
-        "rng_restored": False, "preserved_without_writeback": True,
-        "current_freeze_successor_path": str(successor),
-        "current_freeze_successor_does_not_exist_at_preflight": True,
-    }]
-
+    expected_parameter = old_identities["old_checkpoint_milestones"]["11"]["ep0"][
+        "parameter_sha256"]
+    results = []
+    for path in paths:
+        payload = torch.load(path, map_location="cpu", weights_only=False)
+        controller, state, identity = trainer.load_checkpoint_read_only(path)
+        _assert(payload.get("freeze") != freeze,
+                f"preserved preconstruction checkpoint unexpectedly has the current freeze: {path}")
+        _assert(controller.parameter_summary()["parameter_sha256"] == expected_parameter,
+                f"preconstruction checkpoint is not the registered ROUND36 ep0: {path}")
+        _assert(int(state["episodes_done"]) == 0 and int(state["updates"]) == 0
+                and int(state["optimizer_steps"]) == 0,
+                f"preconstruction checkpoint contains a training update: {path}")
+        _assert(identity.get("load_mode") == "read_only"
+                and identity.get("optimizer_restored") is False
+                and identity.get("rng_restored") is False,
+                f"preconstruction checkpoint was not inspected read-only: {path}")
+        if "_before_b0" in path.stem:
+            successor = r40_train._preupdate_checkpoint_path(11, 0, freeze)
+        elif "_ep0" in path.stem:
+            successor = r40_train._milestone_path(11, 0, freeze)
+        else:
+            raise AssertionError(f"unexpected preconstruction checkpoint type: {path.name}")
+        _assert(successor != path and not successor.exists(),
+                f"new freeze would overwrite or collide with a preserved checkpoint: {path}")
+        results.append({
+            "path": str(path), "file_sha256": _sha256(path),
+            "previous_freeze_sha256": hashlib.sha256(json.dumps(
+                payload["freeze"], ensure_ascii=False, sort_keys=True, separators=(",", ":")
+            ).encode("utf-8")).hexdigest(),
+            "parameter_sha256": controller.parameter_summary()["parameter_sha256"],
+            "episodes_done": int(state["episodes_done"]), "updates": int(state["updates"]),
+            "optimizer_steps": int(state["optimizer_steps"]),
+            "load_mode": identity["load_mode"], "optimizer_restored": False,
+            "rng_restored": False, "preserved_without_writeback": True,
+            "current_freeze_successor_path": str(successor),
+            "current_freeze_successor_does_not_exist_at_preflight": True,
+        })
+    return results
 
 def _preflight_launch_boundary(common: Any) -> dict[str, Any]:
     """Allow initial freeze, or an exact 64-reference-only continuation boundary."""

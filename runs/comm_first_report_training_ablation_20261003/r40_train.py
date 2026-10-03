@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import time
 from pathlib import Path
 from typing import Any
@@ -80,19 +81,31 @@ def _module_digests(controller: Any) -> dict[str, str]:
     return result
 
 
+def _freeze_key(freeze: dict[str, Any]) -> str:
+    return hashlib.sha256(json.dumps(
+        freeze, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")).hexdigest()[:12]
+
+
+def _preserving_checkpoint_path(path: Path, freeze: dict[str, Any]) -> Path:
+    """Choose a freeze-keyed sibling when an immutable path belongs to another freeze."""
+    if not path.is_file():
+        return path
+    payload = torch.load(path, map_location="cpu", weights_only=False)
+    if payload.get("freeze") == freeze:
+        return path
+    candidate = path.with_name(f"{path.stem}_r40f{_freeze_key(freeze)}{path.suffix}")
+    if candidate.is_file():
+        candidate_payload = torch.load(candidate, map_location="cpu", weights_only=False)
+        if candidate_payload.get("freeze") != freeze:
+            raise RuntimeError(f"freeze-keyed checkpoint path conflicts: {candidate}")
+    return candidate
+
+
 def _milestone_path(training_seed: int, episodes: int,
                     freeze: dict[str, Any]) -> Path:
     path = common.CHECKPOINTS / f"v2_train_s{training_seed}_ep{episodes}.pt"
-    if episodes == 0 and path.is_file():
-        payload = torch.load(path, map_location="cpu", weights_only=False)
-        if payload.get("freeze") != freeze:
-            freeze_key = hashlib.sha256(json.dumps(
-                freeze, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-            ).encode("utf-8")).hexdigest()[:12]
-            path = common.CHECKPOINTS / (
-                f"v2_train_s{training_seed}_ep0_r40f{freeze_key}.pt"
-            )
-    return path
+    return _preserving_checkpoint_path(path, freeze) if episodes == 0 else path
 
 
 def _rolling_path(training_seed: int) -> Path:
@@ -149,12 +162,16 @@ def _batch_commit_path(training_seed: int, batch_index: int) -> Path:
     return common.CHECKPOINTS / f"r40_batch_commit_s{training_seed}_b{batch_index}.json"
 
 
-def _preupdate_checkpoint_path(training_seed: int, batch_index: int) -> Path:
-    return common.CHECKPOINTS / f"v2_train_s{training_seed}_before_b{batch_index}.pt"
+def _preupdate_checkpoint_path(training_seed: int, batch_index: int,
+                               freeze: dict[str, Any]) -> Path:
+    path = common.CHECKPOINTS / f"v2_train_s{training_seed}_before_b{batch_index}.pt"
+    return _preserving_checkpoint_path(path, freeze)
 
 
-def _postupdate_checkpoint_path(training_seed: int, batch_index: int) -> Path:
-    return common.CHECKPOINTS / f"v2_train_s{training_seed}_after_b{batch_index}.pt"
+def _postupdate_checkpoint_path(training_seed: int, batch_index: int,
+                                freeze: dict[str, Any]) -> Path:
+    path = common.CHECKPOINTS / f"v2_train_s{training_seed}_after_b{batch_index}.pt"
+    return _preserving_checkpoint_path(path, freeze)
 
 
 def _write_immutable_snapshot(path: Path, controller: Any, optimizer: torch.optim.Optimizer,
@@ -188,7 +205,7 @@ def _write_immutable_snapshot(path: Path, controller: Any, optimizer: torch.opti
 def _save_preupdate_checkpoint(controller: Any, optimizer: torch.optim.Optimizer,
                                state: dict[str, Any], training_seed: int,
                                batch_index: int, freeze: dict[str, Any]) -> tuple[Path, str]:
-    path = _preupdate_checkpoint_path(training_seed, batch_index)
+    path = _preupdate_checkpoint_path(training_seed, batch_index, freeze)
     if int(state["episodes_done"]) != batch_index * common.EPISODES_PER_UPDATE:
         raise RuntimeError("pre-update checkpoint cursor is not at a batch boundary")
     return path, _write_immutable_snapshot(path, controller, optimizer, state, freeze)
@@ -258,10 +275,14 @@ def _recover_final_batch_commit(training_seed: int, state: dict[str, Any],
 
 def _latest_resume_source(training_seed: int, freeze: dict[str, Any]) -> Path | None:
     rolling = _rolling_path(training_seed)
-    candidates = ([rolling] if rolling.exists() else []) + sorted(
-        common.CHECKPOINTS.glob(f"v2_train_s{training_seed}_after_b*.pt"),
-        key=lambda path: int(path.stem.rsplit("b", 1)[-1]),
-    )
+    after_paths = list(common.CHECKPOINTS.glob(f"v2_train_s{training_seed}_after_b*.pt"))
+    def _batch_number(path: Path) -> int:
+        match = re.match(rf"v2_train_s{training_seed}_after_b(\d+)", path.stem)
+        if match is None:
+            raise RuntimeError(f"malformed immutable post-update checkpoint name: {path.name}")
+        return int(match.group(1))
+    candidates = ([rolling] if rolling.exists() else []) + sorted(after_paths,
+                                                                key=_batch_number)
     valid: list[tuple[int, int, Path, str]] = []
     for priority, path in enumerate(candidates):
         try:
@@ -472,7 +493,7 @@ def train_seed(training_seed: int, *, episodes: int, freeze: dict[str, Any],
             "updates_after": int(state["updates"]),
             "optimizer_steps_after": int(state["optimizer_steps"]),
             "postupdate_checkpoint": _postupdate_checkpoint_path(training_seed,
-                                                                   batch_index).name,
+                                                                   batch_index, freeze).name,
             "controller_module_digests_before": module_before,
             "controller_module_digests_after": _module_digests(controller),
             "frozen_checkpoints": {
@@ -491,7 +512,7 @@ def train_seed(training_seed: int, *, episodes: int, freeze: dict[str, Any],
         }
         batch_record_path = _batch_record_path(training_seed, batch_index)
         _write_json_exclusive(batch_record_path, batch_record)
-        postupdate_checkpoint = _postupdate_checkpoint_path(training_seed, batch_index)
+        postupdate_checkpoint = _postupdate_checkpoint_path(training_seed, batch_index, freeze)
         _write_immutable_snapshot(postupdate_checkpoint, controller, optimizer, state, freeze)
         # The immutable post-update checkpoint is the recovery commit point. The rolling copy
         # and receipt follow; a prior batch record is never overwritten on recovery.
