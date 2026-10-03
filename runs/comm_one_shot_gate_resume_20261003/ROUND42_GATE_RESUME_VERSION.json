@@ -1,0 +1,230 @@
+{
+  "kind": "round42-gate-resume-version-manifest/1",
+  "resume_execution_version": "round42-gate-and-exact-resume/1",
+  "gate_path_identity_version": "round42-frozen-checkpoint-path-map/2",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+  "action_semantics": "one-shot-send-skip/1",
+  "runner_version": "counted-jointrun-proxy/1",
+  "new_execution_code_sha256": {
+    "r42_analysis.py": "c758d7bdc84be011474d33f147fcfa1d769ebdf0b017405404773649d78a8e44",
+    "r42_resume.py": "672c087e7e7691cb0b9031d08657a64f8a5e5752387f5b7cabc084776d70cb63",
+    "test_r42_gate_resume.py": "ab332028327de006f91d064b800540bfa233fa5ec9711f020e56148d3ce47e22"
+  },
+  "repository": {
+    "branch": "fix/comm-one-shot-gate-resume",
+    "review_base_head": "2825069eaf9acf0fff87a9a02e69ae2f8e88c785",
+    "latest_source_delivery_head": "5cf41b5edd1b5e13f41b15abc08ae5876da4cd11",
+    "original_prelaunch_head": "f46fe4703aa03ce6400f63c601c3203ef741dd9d",
+    "registered_paths_since_review_head": [
+      ".gitignore",
+      "PROJECT_STATUS.md",
+      "runs/comm_one_shot_gate_resume_20261003/CONTINUATION_BASIS.md",
+      "runs/comm_one_shot_gate_resume_20261003/CONTINUATION_BASIS_FIXED_PLAN_20261003.md",
+      "runs/comm_one_shot_gate_resume_20261003/CONTINUATION_BASIS_GATE_RESUME_20261003.md",
+      "runs/comm_one_shot_gate_resume_20261003/EXECUTION_BASIS.md",
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42R_CARRYOVER.json",
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_CONFIGURATION_DIFF.json",
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_FROZEN_CONFIG.json",
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_GATE_PATH_FIX.md",
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_GATE_PATH_REGRESSION.json",
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_GATE_RESUME_VERSION.json",
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_PREFLIGHT.json",
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_PURE_COMPUTE_GATE.json",
+      "runs/comm_one_shot_gate_resume_20261003/RUNNER_COUNTING_REGRESSION.json",
+      "runs/comm_one_shot_gate_resume_20261003/RUNNER_FIX.md",
+      "runs/comm_one_shot_gate_resume_20261003/TRAINING_VERSION_MANIFEST.json",
+      "runs/comm_one_shot_gate_resume_20261003/r42_analysis.py",
+      "runs/comm_one_shot_gate_resume_20261003/r42_execute.py",
+      "runs/comm_one_shot_gate_resume_20261003/r42_one_shot.py",
+      "runs/comm_one_shot_gate_resume_20261003/r42_preflight.py",
+      "runs/comm_one_shot_gate_resume_20261003/r42_report.py",
+      "runs/comm_one_shot_gate_resume_20261003/r42_resume.py",
+      "runs/comm_one_shot_gate_resume_20261003/r42_run.py",
+      "runs/comm_one_shot_gate_resume_20261003/r42_versions.py",
+      "runs/comm_one_shot_gate_resume_20261003/test_r42_gate_resume.py",
+      "runs/comm_one_shot_gate_resume_20261003/test_r42_one_shot.py",
+      "runs/comm_one_shot_gate_resume_20261003/test_r42_runner_counting.py",
+      "runs/comm_one_shot_report_selection_20261003_r/CONTINUATION_BASIS_FIXED_PLAN_20261003.md",
+      "runs/comm_one_shot_report_selection_20261003_r/ROUND42R_FIXED_PLAN_CONTINUATION_REVIEW.md",
+      "runs/comm_one_shot_report_selection_20261003_r/ROUND42R_FIXED_PLAN_CONTINUATION_STATUS.json"
+    ],
+    "registered_file_sha256": {
+      ".gitignore": {
+        "worktree_sha256": "7454b0b18e8574402522762b4a3d96f1c89da208adea3e175da8f2cc38dfd649",
+        "committed_blob_sha256": "9e3da79e1d9139e93502e14680f4cbf7314e66c7502a40f26447e5f1bfab8e04"
+      },
+      "PROJECT_STATUS.md": {
+        "worktree_sha256": "2d4bddac1fd0ad690e15d38894c6915cc4f7b54fa812954a2bef6ccfde4e1bbf",
+        "committed_blob_sha256": "b397ab13d0bff41d13a8edf25e36c7cbb944250b6bfaabfbef1d28e0a2fa77f3"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/CONTINUATION_BASIS.md": {
+        "worktree_sha256": "046c6c8eeef27b73ceb1e91b7ef72ecf9d2e3948e59a49801cc76ec59526ad3d",
+        "committed_blob_sha256": "046c6c8eeef27b73ceb1e91b7ef72ecf9d2e3948e59a49801cc76ec59526ad3d"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/CONTINUATION_BASIS_FIXED_PLAN_20261003.md": {
+        "worktree_sha256": "ee3f66902e53489acc2a8bf38fbda0fbc498a34b4bc68306f9fa8a50834d3095",
+        "committed_blob_sha256": "ee3f66902e53489acc2a8bf38fbda0fbc498a34b4bc68306f9fa8a50834d3095"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/CONTINUATION_BASIS_GATE_RESUME_20261003.md": {
+        "worktree_sha256": "44c3eec06034207cb1505a92bed1a08eea42554479945417c2623bed8e1dee94",
+        "committed_blob_sha256": "44c3eec06034207cb1505a92bed1a08eea42554479945417c2623bed8e1dee94"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/EXECUTION_BASIS.md": {
+        "worktree_sha256": "2d4d3c213b205227c5050657056d92eb1737f184db6a19b0fcd6a7f4c9092874",
+        "committed_blob_sha256": "2d4d3c213b205227c5050657056d92eb1737f184db6a19b0fcd6a7f4c9092874"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42R_CARRYOVER.json": {
+        "worktree_sha256": "53259276c726682eb7e75dd613f364bea5d403c3cc2df9a9043bbb211c358e4d",
+        "committed_blob_sha256": "c18fa8ce50f776f8145da739d662535a52bf93c4aad067d004329365ed34eec8"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_CONFIGURATION_DIFF.json": {
+        "worktree_sha256": "17ca4ff5de3b02d5b87bbaebe4c57ba66a9abfad3f48693bf34d7cd82790d1aa",
+        "committed_blob_sha256": "efbdd6ee0dbd6c08ee8302b7c97f921f4f0880d7900e8d62aebc24c593038349"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_FROZEN_CONFIG.json": {
+        "worktree_sha256": "85be730880821f298a285554e2e2bbd4ba29012bf7dee6460f5cc5ec54118256",
+        "committed_blob_sha256": "f18257d34c1129f0a43113c650b89b42735faa82ac79cc63661ecda46cf551fd"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_GATE_PATH_FIX.md": {
+        "worktree_sha256": "6ee75d93f18cb0dfc0b00349c09fc4456f9258186514b1afbc325010a3b3a207",
+        "committed_blob_sha256": "6ee75d93f18cb0dfc0b00349c09fc4456f9258186514b1afbc325010a3b3a207"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_GATE_PATH_REGRESSION.json": {
+        "worktree_sha256": "91edf28abfc8008f6a70927b9bc9f4c7355d21e2a6b07a7fe3ef7f76e5f92bd0",
+        "committed_blob_sha256": "91edf28abfc8008f6a70927b9bc9f4c7355d21e2a6b07a7fe3ef7f76e5f92bd0"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_PREFLIGHT.json": {
+        "worktree_sha256": "7b971bfacca031018aba4dc477e846346501d38c6ab32ff2303b69e167b38a3c",
+        "committed_blob_sha256": "bb4322c5c478aadafadd7460895526910a50c6d6fbf1a8fa2e20e2ca4d6ee604"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/ROUND42_PURE_COMPUTE_GATE.json": {
+        "worktree_sha256": "0fc68d41bdcbab32841b93c14272aaef6012459a80217dd3c219950e9b039bbc",
+        "committed_blob_sha256": "ca6c12605197d5c2f6fa393b120f884e81543756bf7bc3aa41ca651d5283b930"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/RUNNER_COUNTING_REGRESSION.json": {
+        "worktree_sha256": "fa0aef22b19c2ce67994819de5bfacf40e0e34563e3e1a34c0ca8345ab9a897b",
+        "committed_blob_sha256": "0fca27fb84f3be355f84497c23f134a603cbb101534aa7271215f1b37e245289"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/RUNNER_FIX.md": {
+        "worktree_sha256": "9584b148f1c15747fe56212004a2894ff4c2a894dc4df666d0859426773d03df",
+        "committed_blob_sha256": "9584b148f1c15747fe56212004a2894ff4c2a894dc4df666d0859426773d03df"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/TRAINING_VERSION_MANIFEST.json": {
+        "worktree_sha256": "59dd0122e10f0c61508c12ef0764fe20c15f15d6dfd65b6a0ec35cc144fc67d4",
+        "committed_blob_sha256": "b061cd1cd0e669d20d55101811db6317668def8a1873b4258c39a94cf6612fda"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/r42_analysis.py": {
+        "worktree_sha256": "c758d7bdc84be011474d33f147fcfa1d769ebdf0b017405404773649d78a8e44",
+        "committed_blob_sha256": "c758d7bdc84be011474d33f147fcfa1d769ebdf0b017405404773649d78a8e44"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/r42_execute.py": {
+        "worktree_sha256": "1ff55d2e5f9870fc743954fa1eef09758fc96f2a94cbf740c614e041d1547dec",
+        "committed_blob_sha256": "1ff55d2e5f9870fc743954fa1eef09758fc96f2a94cbf740c614e041d1547dec"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/r42_one_shot.py": {
+        "worktree_sha256": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+        "committed_blob_sha256": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/r42_preflight.py": {
+        "worktree_sha256": "79459dfe85b85b5600d3e597fd83bb0b3c2d83913d2ffd490d7efc3d48a43411",
+        "committed_blob_sha256": "79459dfe85b85b5600d3e597fd83bb0b3c2d83913d2ffd490d7efc3d48a43411"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/r42_report.py": {
+        "worktree_sha256": "0af7f15e90d3916a49a724a17036c100a5f8f47ff8e2a2a79569d092ad651e60",
+        "committed_blob_sha256": "0af7f15e90d3916a49a724a17036c100a5f8f47ff8e2a2a79569d092ad651e60"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/r42_resume.py": {
+        "worktree_sha256": "672c087e7e7691cb0b9031d08657a64f8a5e5752387f5b7cabc084776d70cb63",
+        "committed_blob_sha256": "672c087e7e7691cb0b9031d08657a64f8a5e5752387f5b7cabc084776d70cb63"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/r42_run.py": {
+        "worktree_sha256": "d44fa6363e1c236f9288329597280c4684f0c33f4110fb0a85bf5574a39a1cd9",
+        "committed_blob_sha256": "d44fa6363e1c236f9288329597280c4684f0c33f4110fb0a85bf5574a39a1cd9"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/r42_versions.py": {
+        "worktree_sha256": "32940b48a0166c1b4488d7649e46f50ccb1a5831f81506aed2fe3490e7f2dee0",
+        "committed_blob_sha256": "32940b48a0166c1b4488d7649e46f50ccb1a5831f81506aed2fe3490e7f2dee0"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/test_r42_gate_resume.py": {
+        "worktree_sha256": "ab332028327de006f91d064b800540bfa233fa5ec9711f020e56148d3ce47e22",
+        "committed_blob_sha256": "ab332028327de006f91d064b800540bfa233fa5ec9711f020e56148d3ce47e22"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/test_r42_one_shot.py": {
+        "worktree_sha256": "08633c0038fa74c590cf640acf06481a1241b3f270dc79c2e7f9518b4ccd558a",
+        "committed_blob_sha256": "08633c0038fa74c590cf640acf06481a1241b3f270dc79c2e7f9518b4ccd558a"
+      },
+      "runs/comm_one_shot_gate_resume_20261003/test_r42_runner_counting.py": {
+        "worktree_sha256": "ad5b1e76426cd2a4c7538b0c3fcef320609b586887a4a6e1c7c16121788a41f8",
+        "committed_blob_sha256": "ad5b1e76426cd2a4c7538b0c3fcef320609b586887a4a6e1c7c16121788a41f8"
+      },
+      "runs/comm_one_shot_report_selection_20261003_r/CONTINUATION_BASIS_FIXED_PLAN_20261003.md": {
+        "worktree_sha256": "ee3f66902e53489acc2a8bf38fbda0fbc498a34b4bc68306f9fa8a50834d3095",
+        "committed_blob_sha256": "ee3f66902e53489acc2a8bf38fbda0fbc498a34b4bc68306f9fa8a50834d3095"
+      },
+      "runs/comm_one_shot_report_selection_20261003_r/ROUND42R_FIXED_PLAN_CONTINUATION_REVIEW.md": {
+        "worktree_sha256": "1064438f362375995d7b0a6db9e67e09b90212eda9bf3c51f019cdd93882b46d",
+        "committed_blob_sha256": "1064438f362375995d7b0a6db9e67e09b90212eda9bf3c51f019cdd93882b46d"
+      },
+      "runs/comm_one_shot_report_selection_20261003_r/ROUND42R_FIXED_PLAN_CONTINUATION_STATUS.json": {
+        "worktree_sha256": "20c541512d15c587c64473741e9f89d51a88036e93919a144c2ed12e2b295ec1",
+        "committed_blob_sha256": "20c541512d15c587c64473741e9f89d51a88036e93919a144c2ed12e2b295ec1"
+      }
+    },
+    "manifest_self_hash_policy": "manifest is tracked and its working bytes are compared with the committed HEAD blob; it is omitted from its own hash map"
+  },
+  "original_execution": {
+    "branch": "fix/comm-one-shot-runner-counting",
+    "prelaunch_head": "f46fe4703aa03ce6400f63c601c3203ef741dd9d",
+    "known_stopped_review_head": "2825069eaf9acf0fff87a9a02e69ae2f8e88c785",
+    "latest_pre_repair_delivery_head": "5cf41b5edd1b5e13f41b15abc08ae5876da4cd11",
+    "frozen_config_file_sha256": "85be730880821f298a285554e2e2bbd4ba29012bf7dee6460f5cc5ec54118256",
+    "freeze_identity_sha256": "8054593ee60b6a7a78bd18f72f6316fe90ab346b3550f4393b1b81d9ae555fa2",
+    "prelaunch_identity_sha256": "735e164add2286a83a7acd3d1129daeddf0eb3d22e6a1a6e210ee71b37513589",
+    "stop_state_sha256": "ff5ea96c45cde35005955901ffba872d2cb6790699d4aab5ec2c3bfc3dec7895",
+    "batch0_resume_checkpoint_sha256": "a85722e0864456ea3eb735195c7ffcde4be9d42301bdf2bc0781db6747a851ef",
+    "old_gate_failure": "RuntimeError: seed 11: frozen PILOC/CTDE checkpoint path set changed",
+    "old_gate_and_stop_state_rewritten": false
+  },
+  "scientific_identity": {
+    "training_version_changed": false,
+    "action_semantics_changed": false,
+    "runner_core_version_changed": false,
+    "policy_or_training_math_changed": false,
+    "production_dependencies_changed": false,
+    "frozen_configuration_changed": false,
+    "allowed_execution_changes": [
+      "copied first-batch audit path normalization and content validation",
+      "explicit isolated resume orchestration and identity recording",
+      "zero-environment path/recovery regression tests"
+    ],
+    "original_round42_training_code_sha256": {
+      "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+      "r42_versions.py": "32940b48a0166c1b4488d7649e46f50ccb1a5831f81506aed2fe3490e7f2dee0",
+      "r42_run.py": "d44fa6363e1c236f9288329597280c4684f0c33f4110fb0a85bf5574a39a1cd9",
+      "r42_execute.py": "1ff55d2e5f9870fc743954fa1eef09758fc96f2a94cbf740c614e041d1547dec",
+      "r42_analysis.py": "3f7497b8e378f77a6d7eb1ceb29484285ac3c62ad09480e8cee1747bafcbd478",
+      "r42_report.py": "0af7f15e90d3916a49a724a17036c100a5f8f47ff8e2a2a79569d092ad651e60",
+      "r42_preflight.py": "79459dfe85b85b5600d3e597fd83bb0b3c2d83913d2ffd490d7efc3d48a43411",
+      "test_r42_one_shot.py": "08633c0038fa74c590cf640acf06481a1241b3f270dc79c2e7f9518b4ccd558a",
+      "test_r42_runner_counting.py": "ad5b1e76426cd2a4c7538b0c3fcef320609b586887a4a6e1c7c16121788a41f8"
+    },
+    "newly-versioned_files": [
+      "r42_analysis.py",
+      "r42_resume.py",
+      "test_r42_gate_resume.py"
+    ]
+  },
+  "quota_carryover": {
+    "remaining_logical_jobs": 604,
+    "remaining_normal_slots": 604,
+    "previous_reserve_attempts": 1,
+    "remaining_technical_reserve": 27,
+    "cumulative_hard_cap": 700
+  },
+  "execution_mode": {
+    "output_directory": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003",
+    "old_raw_artifacts_modified": false,
+    "push_or_deploy": false,
+    "environment_launch_before_full_gate_and_resume_check": false
+  }
+}
