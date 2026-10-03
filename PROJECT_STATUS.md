@@ -1,5 +1,15 @@
 # 项目状态
 
+## 2026-10-03：ROUND40 first-report-only 训练消融完成——动作资格限制正确生效，但未建立稳定的任务/成本收益
+
+分支 `exp/comm-first-report-training-ablation`，从指定 ROUND36 起点分支 `exp/comm-refresh-held-mechanism` / HEAD `4e989a9088111ce6d9171cb1a21629a4b2b1e861` 建立独立执行工作树。完整执行依据、冻结件、门禁、账本、配对结果与报告位于 `runs/comm_first_report_training_ablation_20261003/`。本状态只新增 ROUND40 入口，ROUND39 及更早历史保留。
+
+- 环境启动 672/672，技术储备 0/28，总硬上限 700；672 个启动 claim 全部完成，失败技术 claim 0。NEW 三 seed 各 128 集、96 个 PPO 批，实际 `optimizer.step` 556；合成 optimizer 更新 0。所有 OLD checkpoint 只读，写回 0。
+- `first-report-only/1` 在训练采样、续跑和评估中生效；训练行 refresh emission 为 0，三 seed 首 4 集门禁均通过。旧 NEW/OLD ep0 分析报警经内容级只读核验为分析器 seed-summary 复用错误，seed11 两份参数摘要相同；冻结分析器文件未改，以版本化内存适配器修正后报告成功生成。
+- NEW−OLD：greedy s11 任务 −7、字节 −234,624；s22 任务持平、字节 +72,960；s33 任务和字节持平。sampled 三 seed 任务均持平，字节差为 −4,836 / +69,822 / −996 B。sampled 只有 s11 同任务下比 immediate 省 4,104 B；s22/s33 分别多 1,734 / 348 B。规则 `late_discovery_gate_147` 在同一已使用开发块 96/96、77,412 B；没有保持同任务时成本低于该规则的 NEW 模式。
+- 结果不支持将本变体作为已胜出方法；开发块已使用，不作显著性、总体非劣或泛化主张。建议由决策 agent 决定是否另行登记、授权新的机制实验；本轮未续训、调参、推送或开始新实验。
+- 6 条构造环境前 worker/preflight 错误和 6 条续跑/后处理适配错误均有保留记录；全部 672 个实验环境 claim 仍成功，无失败启动占额度，reserve 未动用。ROUND39 的净字节节省文案勘误追加在 `runs/comm_refresh_held_mechanism_20261002/REPORT_ERRATA.md`，旧报告和旧结果未改写。
+
 ## 2026-10-03：ROUND39 冻结模型 refresh-held 机制诊断完成——s11/s33 释放首报预算并救回预定缺失目标；s22 负对照不变
 
 分支 `exp/comm-refresh-held-mechanism`，从已核验基线 `233a44fc10048488a0c71bda9d88e977c99c800e` 建立；冻结执行提交 `e8f3e76f5555e1da271e6d8d560c32fadf151ba2`。结果目录 `runs/comm_refresh_held_mechanism_20261002/`，完整判读见 `ROUND39_REPORT.md`。本入口只新增本轮状态，ROUND38、ROUND37 及更早历史条目保留。

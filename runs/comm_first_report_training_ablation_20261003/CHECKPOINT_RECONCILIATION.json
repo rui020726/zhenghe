@@ -1,0 +1,305 @@
+{
+  "kind": "round40-checkpoint-reconciliation/1",
+  "validation_layers": {
+    "file_hash": "passed",
+    "metadata_and_parameter_identity": "passed",
+    "training_cursor_and_parameter_chain": "passed",
+    "forward_and_likelihood": "see per-batch training diagnostics and preflight"
+  },
+  "checkpoints": {
+    "OLD_read_only_inputs": {
+      "11": {
+        "path": "D:\\code\\整合\\zhenghe\\runs\\comm_final_train_20261001\\seed11\\checkpoints\\v2_train_s11_ep128.pt",
+        "size_bytes": 101099,
+        "file_sha256": "032c2b77f60f15196ab8e6af509553beb2de9afc58feefe4ada2034837338e09",
+        "parameter_sha256": "553d02dd1de285a736f7fd2a25ce04dc52b00f48ee8226eb08e2a14c5aacdda6",
+        "bytes_unchanged_from_prelaunch": true,
+        "read_only_evaluation_only": true
+      },
+      "22": {
+        "path": "D:\\code\\整合\\zhenghe\\runs\\comm_final_train_20261001\\seed22\\checkpoints\\v2_train_s22_ep128.pt",
+        "size_bytes": 101099,
+        "file_sha256": "de47f3c90789a8bd9cb9fdb5c5df1a54f4d711c8dc7c38f6c273ae18d2a79c0e",
+        "parameter_sha256": "6a84ab76e206a5115527ddedec5bf7251c3785f229a078a02c50b1dd3dc7bdfb",
+        "bytes_unchanged_from_prelaunch": true,
+        "read_only_evaluation_only": true
+      },
+      "33": {
+        "path": "D:\\code\\整合\\zhenghe\\runs\\comm_final_train_20261001\\seed33\\checkpoints\\v2_train_s33_ep128.pt",
+        "size_bytes": 101099,
+        "file_sha256": "98bb6e74e25fa7de1d0deb0edcec8277c81d95837b9e1d13ab83169f12e0930f",
+        "parameter_sha256": "cd0498693f7636aea5f75cb6a54bd18f64c7410fe2f16e8791b7aa3966a5cb9d",
+        "bytes_unchanged_from_prelaunch": true,
+        "read_only_evaluation_only": true
+      }
+    },
+    "NEW_training_outputs": {
+      "11": {
+        "ep0": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_ep0_r40f51c92666cc7d.pt",
+          "size_bytes": 51589,
+          "file_sha256": "7153571af526a0da1550cc8186846282de16d886f5d1e606376e83f7b2a4579d",
+          "parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+          "episodes_done": 0,
+          "updates": 0,
+          "optimizer_steps": 0,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "read_only_identity": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        },
+        "ep64": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_ep64.pt",
+          "size_bytes": 106603,
+          "file_sha256": "41866aa060db31a41605a78ac2cf807e671dcd729165f0be504d18983382153c",
+          "parameter_sha256": "47ae4a98df2821f23f219ebec2b0a14991e3ce966dd5d937b04f2a32b739c8fb",
+          "episodes_done": 64,
+          "updates": 16,
+          "optimizer_steps": 100,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "read_only_identity": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        },
+        "ep128": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_ep128.pt",
+          "size_bytes": 107563,
+          "file_sha256": "9e231412c4836abbfea9b5ac1d92f5383405637714e1d955fe3d036d261e3881",
+          "parameter_sha256": "033de1384f8ab7aa96314a428b2bf4e7e2e792116db250dc024dca9ae9df4ca2",
+          "episodes_done": 128,
+          "updates": 32,
+          "optimizer_steps": 188,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "read_only_identity": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        }
+      },
+      "22": {
+        "ep0": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s22_ep0.pt",
+          "size_bytes": 51525,
+          "file_sha256": "fa0d668f51c33e175301adb7ddc9e581e6ebd136aeb9a884aaf302750badd7b0",
+          "parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+          "episodes_done": 0,
+          "updates": 0,
+          "optimizer_steps": 0,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "read_only_identity": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        },
+        "ep64": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s22_ep64.pt",
+          "size_bytes": 106603,
+          "file_sha256": "4458e1719c9628234f092b11fda5e67875e3b28df1dbefd759aa12da402ca6e4",
+          "parameter_sha256": "37a8c201a6ac6ca7dd84df5b1c6f45a641245b28197be68c5adfe49dfed3924a",
+          "episodes_done": 64,
+          "updates": 16,
+          "optimizer_steps": 96,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "read_only_identity": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        },
+        "ep128": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s22_ep128.pt",
+          "size_bytes": 107563,
+          "file_sha256": "8489b39cc0d483c353b5896a42c259af517be7db0f5b345672e3a4c9d01f5bb4",
+          "parameter_sha256": "0170f9a052c11149330156f76d03c5038bb6beb0e27768f6f838261685a58183",
+          "episodes_done": 128,
+          "updates": 32,
+          "optimizer_steps": 188,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "read_only_identity": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        }
+      },
+      "33": {
+        "ep0": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s33_ep0.pt",
+          "size_bytes": 51525,
+          "file_sha256": "11dd8a803191232ef6725f9cfed34da343003fb5cd77c20fbda4fdc0fa6f6ede",
+          "parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+          "episodes_done": 0,
+          "updates": 0,
+          "optimizer_steps": 0,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "read_only_identity": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        },
+        "ep64": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s33_ep64.pt",
+          "size_bytes": 106603,
+          "file_sha256": "e93afe68dc43c5d50a7623be9b7d089894fd45e1d3a1c06eb4a46473deef4d5c",
+          "parameter_sha256": "beb2353e60066e54c2168dcc64049167b524af99bd084d19158805a838b7e9e7",
+          "episodes_done": 64,
+          "updates": 16,
+          "optimizer_steps": 92,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "read_only_identity": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        },
+        "ep128": {
+          "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s33_ep128.pt",
+          "size_bytes": 107563,
+          "file_sha256": "770783fd98b079d2da6b13933158cb7d5a479933262fa1112eee7f06166e192e",
+          "parameter_sha256": "7d324a3f823d46cac78a90becdb57ff04770a728f2ae649664771be778d795ee",
+          "episodes_done": 128,
+          "updates": 32,
+          "optimizer_steps": 180,
+          "lambda": 1.0,
+          "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+          "comm_action_eligibility": "first-report-only/1",
+          "read_only_identity": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/first-report-only/1/published-completion-event-at-relay-tick/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true
+          }
+        }
+      }
+    },
+    "preserved_preconstruction_checkpoints": [
+      {
+        "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_before_b0.pt",
+        "file_sha256": "49fd8c40c8184d5b44b94da099f89d57d23e3f77969c30a698458901dd4026dd",
+        "previous_freeze_sha256": "f9f05c4119f8f376097a4fa6419975f0022dd608eb6722093ef3628597bc451e",
+        "parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "load_mode": "read_only",
+        "optimizer_restored": false,
+        "rng_restored": false,
+        "preserved_without_writeback": true,
+        "current_freeze_successor_path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_before_b0_r40f51c92666cc7d.pt",
+        "current_freeze_successor_does_not_exist_at_preflight": true
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_ep0.pt",
+        "file_sha256": "49fd8c40c8184d5b44b94da099f89d57d23e3f77969c30a698458901dd4026dd",
+        "previous_freeze_sha256": "f9f05c4119f8f376097a4fa6419975f0022dd608eb6722093ef3628597bc451e",
+        "parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "load_mode": "read_only",
+        "optimizer_restored": false,
+        "rng_restored": false,
+        "preserved_without_writeback": true,
+        "current_freeze_successor_path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_ep0_r40f51c92666cc7d.pt",
+        "current_freeze_successor_does_not_exist_at_preflight": true
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_ep0_r40f377bd5abbeb3.pt",
+        "file_sha256": "ae3ec382211f6e539042f3ae483eb444ce0a36e05fe0be461531ed45c7f315fd",
+        "previous_freeze_sha256": "377bd5abbeb3ab18c0b841ca4f98cfea7307955b2bc003fa85d3eee44d536ea7",
+        "parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "load_mode": "read_only",
+        "optimizer_restored": false,
+        "rng_restored": false,
+        "preserved_without_writeback": true,
+        "current_freeze_successor_path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\checkpoints\\v2_train_s11_ep0_r40f51c92666cc7d.pt",
+        "current_freeze_successor_does_not_exist_at_preflight": true
+      }
+    ]
+  },
+  "batch_count_by_seed": {
+    "11": 32,
+    "22": 32,
+    "33": 32
+  },
+  "old_checkpoint_writeback_count": 0
+}

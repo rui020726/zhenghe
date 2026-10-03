@@ -101,6 +101,7 @@ def _finalize(summary: dict[str, Any]) -> dict[str, Any]:
     result["p_send_max"] = (float(summary["p_send_max"]) if count else None)
     result.pop("p_send_sum")
     result.pop("probability_candidate_count")
+    result.pop("greedy_action_mismatches", None)
     return result
 
 
@@ -200,19 +201,27 @@ def build() -> dict[str, Any]:
                             group[key] = max(group[key], local[key])
                         else:
                             group[key] += local[key]
+                    scene_metrics = _finalize(local)
+                    if mode == "greedy":
+                        scene_metrics["greedy_action_mismatches"] = local[
+                            "greedy_action_mismatches"]
                     per_scene.append({
                         "scenario_seed": scene,
                         "on_time": int(row["on_time"]),
                         "spent_bytes": int(row["spent_bytes"]),
                         "tape_sha256": _sha256(tape_path),
-                        **_finalize(local),
+                        **scene_metrics,
                     })
                 if seen_scenes != set(SCENES):
                     raise RuntimeError(f"evaluation scenes do not close for {arm}/{seed}/{mode}")
                 if mode == "greedy" and group["greedy_action_mismatches"] != 0:
                     raise RuntimeError(f"greedy evaluation disagrees with saved P(SEND), {arm}/{seed}")
                 key = f"{arm}/s{seed}/{mode}"
-                final_eval[key] = {"totals": _finalize(group), "per_scene": per_scene}
+                group_metrics = _finalize(group)
+                if mode == "greedy":
+                    group_metrics["greedy_action_mismatches"] = group[
+                        "greedy_action_mismatches"]
+                final_eval[key] = {"totals": group_metrics, "per_scene": per_scene}
 
     return {
         "kind": "round40-training-and-final-action-diagnostics/1",
@@ -221,6 +230,7 @@ def build() -> dict[str, Any]:
             "SEND": 1,
             "training_recorded_action": "sampled action saved on tape, counted only for free_first_reports",
             "greedy_action": "SEND iff P(SEND) >= P(HOLD); verified in r40_eligibility.py",
+            "greedy_action_mismatches": "reported only for greedy evaluation tapes; sampled actions are not expected to match argmax",
             "masked_or_fixed_hold_candidates_in_actor_probability_counts": False,
         },
         "gradient_interpretation": {
@@ -231,6 +241,7 @@ def build() -> dict[str, Any]:
         "training_by_seed": training,
         "final_ep128_evaluation_by_arm_seed_mode": final_eval,
         "source_hashes": {
+            "r40_postrun_action_diagnostics.py": _sha256(Path(__file__).resolve()),
             "r40_eligibility.py": _sha256(ROUND_DIR / "r40_eligibility.py"),
             "r40_train.py": _sha256(ROUND_DIR / "r40_train.py"),
             "r40_analysis.py": _sha256(ROUND_DIR / "r40_analysis.py"),

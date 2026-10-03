@@ -22,3 +22,15 @@
 - `runs/comm_final_evaluation_20261002/ROUND37_EVALUATION_REPORT.md` 的 T4 行及交付 runbook 中的解码说明。
 
 本勘误只修正文案含义，不改变 checkpoint、策略输出、评估行或 ROUND37/ROUND38 verdict。
+
+## 3. ROUND39 refresh-held 总字节净节省
+
+ROUND39 报告“四层判读”中“字节减少恰等于对应原臂刷新字节”的说法不准确。refresh-held 臂移除了旧 refresh 字节，也新增了首报字节，因此：
+
+```text
+净节省 = 删除的 refresh 字节 - 新增的首报字节
+s11 失败组：218,502 - 77,154 = 141,348 B
+s33 失败组：218,838 - 87,342 = 131,496 B
+```
+
+ROUND39 原表的总计费字节整数和实验结果保持不变；本条只登记文字勘误，不重跑实验、不改写旧报告。

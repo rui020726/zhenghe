@@ -1,0 +1,93 @@
+{
+  "kind": "round40-verdict/1",
+  "training_refresh_suppression": "passed pure-compute, relay and all three first-four gates",
+  "new_vs_old_by_seed_and_mode": {
+    "s11/greedy": {
+      "new_minus_old_on_time_total": -7,
+      "new_minus_old_bytes_total": -234624,
+      "all_hold_scenes": 16,
+      "immediate_equivalent_scenes": 0
+    },
+    "s11/sampled": {
+      "new_minus_old_on_time_total": 0,
+      "new_minus_old_bytes_total": -4836,
+      "all_hold_scenes": 0,
+      "immediate_equivalent_scenes": 0
+    },
+    "s22/greedy": {
+      "new_minus_old_on_time_total": 0,
+      "new_minus_old_bytes_total": 72960,
+      "all_hold_scenes": 3,
+      "immediate_equivalent_scenes": 0
+    },
+    "s22/sampled": {
+      "new_minus_old_on_time_total": 0,
+      "new_minus_old_bytes_total": 69822,
+      "all_hold_scenes": 0,
+      "immediate_equivalent_scenes": 0
+    },
+    "s33/greedy": {
+      "new_minus_old_on_time_total": 0,
+      "new_minus_old_bytes_total": 0,
+      "all_hold_scenes": 0,
+      "immediate_equivalent_scenes": 9
+    },
+    "s33/sampled": {
+      "new_minus_old_on_time_total": 0,
+      "new_minus_old_bytes_total": -996,
+      "all_hold_scenes": 0,
+      "immediate_equivalent_scenes": 1
+    }
+  },
+  "greedy_and_sampled_task_signs": {
+    "greedy": [
+      -7,
+      0,
+      0
+    ],
+    "sampled": [
+      0,
+      0,
+      0
+    ]
+  },
+  "three_seed_consistency": {
+    "greedy": "all_tied_or_regressed",
+    "sampled": "all_tied_or_improved"
+  },
+  "new_vs_immediate": {
+    "NEW/s11/greedy": {
+      "task_delta": -8,
+      "byte_delta": -239028,
+      "same_task_lower_cost": false
+    },
+    "NEW/s11/sampled": {
+      "task_delta": 0,
+      "byte_delta": -4104,
+      "same_task_lower_cost": true
+    },
+    "NEW/s22/greedy": {
+      "task_delta": -8,
+      "byte_delta": -166068,
+      "same_task_lower_cost": false
+    },
+    "NEW/s22/sampled": {
+      "task_delta": 0,
+      "byte_delta": 1734,
+      "same_task_lower_cost": false
+    },
+    "NEW/s33/greedy": {
+      "task_delta": 0,
+      "byte_delta": 0,
+      "same_task_lower_cost": false
+    },
+    "NEW/s33/sampled": {
+      "task_delta": 0,
+      "byte_delta": 348,
+      "same_task_lower_cost": false
+    }
+  },
+  "development_block_confirmatory": false,
+  "generalization_claim": false,
+  "recommendation": "Use the fixed per-seed results to decide whether to design a separately authorized independent confirmation; do not reuse this development block for confirmation."
+}
