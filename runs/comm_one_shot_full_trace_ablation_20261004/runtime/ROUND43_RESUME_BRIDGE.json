@@ -8,11 +8,11 @@
     "r42_versions.py": "f451503d40657d210ba7c81caffe5d6918f1a9de737625b057e0c9354e7bcffd",
     "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
     "r42_analysis.py": "3342367be6d8a3c732ac7bf541575d17ae8a168618bc3f9b1493781bf8345633",
-    "r43_preflight.py": "d52d210f6c69d9142b14c838957eb9dd4e855cf15c568e21dfd7eb914d95fa0b",
+    "r43_preflight.py": "544f887b05b3a11cfcd6448ef7cc8f88fd6c29fc7f6e5d373d033f4373b651b8",
     "r43_analysis.py": "1994da0d1d726df54537cf78da0a03a2dbf61132fe196a6bc2de63a37b460810",
     "r43_execute.py": "553ef28fb620d6c3af8ac26dd173ec79315f37b92e2831807c8ea989f29fcac1",
-    "r43_report.py": "a771acafa9e88a4127b7c2d9d997dc69e8c3fb0128861765286d7617e13cb052",
-    "r43_freeze.py": "4ccd714a2867797c205bf1e9aab10f869334be20a14b7a19494e07c1e9d5bedb",
+    "r43_report.py": "8a546d7aad40c95481b74bb329deab72e577e54c76c5d0d9eaeff9616894c324",
+    "r43_freeze.py": "9784280d49a9f983ef403961671a5c18431dc0c46bf4aa330a6d6167a824a783",
     "r40_train_resume_adapter.py": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
     "r43_call_counter_hooks.py": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
     "test_r43_call_counter_hooks.py": "29b76f1007e18fc300db6bd6676e420b3e75c263840a49fb0a3ccd296c2ad3c3",
@@ -67,7 +67,7 @@
   },
   "recovery_gate": {
     "path": "ROUND43_RESUME_RECOVERY_GATE.json",
-    "sha256": "f357f8c426ec826b23228c7f99110dc150cd9f83ba97cacd97fa2c50d3b6a32d"
+    "sha256": "6fec347b209d3faebc4dc58cc7a35146368b9e76b7a1b7bba79248184a4a20b0"
   },
   "failed_resume_invocation": {
     "path": "failures/ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json",
@@ -99,7 +99,7 @@
     {
       "relative_path": "ROUND43_RESUME_RECOVERY_GATE.json",
       "size_bytes": 5134,
-      "sha256": "f357f8c426ec826b23228c7f99110dc150cd9f83ba97cacd97fa2c50d3b6a32d"
+      "sha256": "6fec347b209d3faebc4dc58cc7a35146368b9e76b7a1b7bba79248184a4a20b0"
     },
     {
       "relative_path": "ROUND43_SEED11_BATCH0_STATE_RECONCILIATION.json",
@@ -135,6 +135,11 @@
       "relative_path": "checkpoints/v2_train_s11_ep0.pt",
       "size_bytes": 57093,
       "sha256": "aa20178eb47b11f48673e7832156b15af7c6784a45cc62683da7d0b092511752"
+    },
+    {
+      "relative_path": "failures/ROUND43_PREFLIGHT_COUNTER_ASSERTION_C8.json",
+      "size_bytes": 1634,
+      "sha256": "030865e9d8fad109485c6c136821ce17f8bcf70320af1ebb87be653cd4cab8b1"
     },
     {
       "relative_path": "failures/ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json",

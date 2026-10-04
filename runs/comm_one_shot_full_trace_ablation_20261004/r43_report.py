@@ -65,6 +65,8 @@ def write_final_report(*, frozen: dict[str, Any], analysis: dict[str, Any],
     ledger_reconciliation = _read(RUN_DIR / "ROUND43_LEDGER_RECONCILIATION.json")
     failed_resume = _read(
         RUN_DIR / "failures" / "ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json")
+    preflight_failure = _read(
+        RUN_DIR / "failures" / "ROUND43_PREFLIGHT_COUNTER_ASSERTION_C8.json")
     counters = ledger["counts"]
     branch = _git(ROUND42_ROOT, "branch", "--show-current")
     source_freeze_head = _git(ROUND42_ROOT, "rev-parse", "HEAD")
@@ -207,6 +209,20 @@ def write_final_report(*, frozen: dict[str, Any], analysis: dict[str, Any],
                 RUN_DIR / "failures" / "ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json"),
             "classification": "runner defect before a new launch claim; not a zero-result episode",
         },
+        "superseded_preflight_counter_assertion": {
+            "path": str(
+                RUN_DIR / "failures" / "ROUND43_PREFLIGHT_COUNTER_ASSERTION_C8.json"),
+            "sha256": _sha256(
+                RUN_DIR / "failures" / "ROUND43_PREFLIGHT_COUNTER_ASSERTION_C8.json"),
+            "exception": preflight_failure["exception"],
+            "execution_claims_delta": preflight_failure["observed_at_failure"][
+                "normal_claim_delta"],
+            "environment_constructors_delta": preflight_failure["observed_at_failure"][
+                "environment_constructor_delta"],
+            "real_optimizer_updates": preflight_failure["observed_at_failure"][
+                "real_optimizer_updates"],
+            "classification": "preflight assertion assumed zero historical Adam calls; fixed to assert zero delta",
+        },
         "old_ledger_snapshot": {
             "normal_used": ledger_reconciliation["original_persisted_ledger"][
                 "counts"]["normal_used"],
@@ -251,7 +267,8 @@ def write_final_report(*, frozen: dict[str, Any], analysis: dict[str, Any],
             or resume_reconciliation["remaining_normal_claims_at_resume"] != 476
             or not recovery_gate["status"] == "passed"
             or not state_reconciliation["status"] == "passed"
-            or not ledger_reconciliation["status"] == "passed"):
+            or not ledger_reconciliation["status"] == "passed"
+            or not preflight_failure["preserved_artifacts_unchanged"]):
         raise RuntimeError("ROUND43 resume reconciliation did not close")
     _atomic_json(RUN_DIR / "ROUND43_RESUME_RECONCILIATION.json",
                  resume_reconciliation)
@@ -371,6 +388,8 @@ def write_final_report(*, frozen: dict[str, Any], analysis: dict[str, Any],
 首次冻结 `{resume_bridge['prior_prelaunch_head']}` 下，seed11 已完成 episode0–3 并提交 batch0。继续运行时在下一次 episode claim 前，冻结 ROUND40 训练入口因 `parameter_identity` 局部导入作用域错误抛出 `UnboundLocalError`。这次是运行器缺陷：新增 claim、环境构造、run 调用和优化更新均为0，不作为零任务/零成本 episode，也不计入480个正常任务。
 
 恢复门禁复核了 after_b0 与 rolling 状态、完整模型与 Adam 状态、12个 Adam step、λ与历史、训练版本、游标、RNG 和剩余场景顺序。ROUND42 验证过的适配器只把 `parameter_identity` 导入移到训练入口作用域；训练语义版本保持 `{resume_bridge['training_version']}`。恢复从 episode4、update1、Adam step12、λ={resume_bridge['resume_cursor']['lambda_dual']:.4f} 开始，首批没有重放。恢复冻结 `{source_freeze_head}` 使用执行代码身份 `{frozen['execution_identity']['execution_code_version']}`。
+
+第一次 recovery preflight 因旧累计计数断言而停止：它把历史 Adam 12次调用误判为本次门禁调用。该次无 claim、无环境构造；测试内的伪优化器只到达立即抛错的更新边界，真实模型、优化器与 checkpoint 未变。断言现改为比较门禁前后的累计计数；失败记录与产物哈希核验见 `failures/ROUND43_PREFLIGHT_COUNTER_ASSERTION_C8.json`。
 
 停机时原始 ledger 的快照把 PPO/Adam 计数记为0、checkpoint 保存调用记为2。该旧快照作为原件保留；批提交、逐调用日志及 checkpoint 状态核验出的累计值分别为 PPO 1、Adam 12、checkpoint 保存调用4。checkpoint 保存调用依据调用日志，不由文件数量推算。精确证据和哈希见 `ROUND43_RESUME_RECONCILIATION.json`、`ROUND43_LEDGER_RECONCILIATION.json` 与 `ROUND43_SEED11_BATCH0_STATE_RECONCILIATION.json`。
 

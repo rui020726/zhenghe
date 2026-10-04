@@ -425,8 +425,11 @@ def _test_batch_samples_and_gae(runtime: dict[str, Any]) -> dict[str, Any]:
 
 
 def _test_live_actor_path(runtime: dict[str, Any]) -> dict[str, Any]:
+    import r42_run
+
     trainer = runtime["trainer"]
     common = runtime["common"]
+    optimizer_calls_before = int(r42_run._OPTIMIZER_STEP_CALLS)
     ambient = trainer.rng_state()
     controller = runtime["controller_module"].fresh_controller(11)
     with torch.no_grad():
@@ -507,8 +510,9 @@ def _test_live_actor_path(runtime: dict[str, Any]) -> dict[str, Any]:
     _assert(all(torch.equal(before, after.detach())
                 for before, after in zip(parameters_before, controller.parameters)),
             "guarded gradient gate changed model parameters")
-    _assert(int(__import__("r42_run")._OPTIMIZER_STEP_CALLS) == 0,
-            "synthetic actor gate invoked an Adam optimizer update")
+    optimizer_calls_after = int(r42_run._OPTIMIZER_STEP_CALLS)
+    _assert(optimizer_calls_after == optimizer_calls_before,
+            "synthetic actor gate changed the cumulative Adam.step call count")
     actual_gradient = optimizer.gradients["action_head.bias"]
     n_rows = len(samples)  # ALL_ROWS denominator includes the critic-only closed-HOLD row.
     preclip_class1 = -0.8 / (2.0 * n_rows)
@@ -545,6 +549,8 @@ def _test_live_actor_path(runtime: dict[str, Any]) -> dict[str, Any]:
         "preclip_expected_gradient": [preclip_class0, preclip_class1],
         "clip_norm_before_clip": clip_norms[0],
         "clip_scale": scale,
+        "historical_adam_step_calls_before_gate": optimizer_calls_before,
+        "adam_step_call_delta_during_gate": optimizer_calls_after - optimizer_calls_before,
         "send_class": 1,
         "gradient_moves_toward_send": True,
         "first_skip_log_probability": send_skip_ll,

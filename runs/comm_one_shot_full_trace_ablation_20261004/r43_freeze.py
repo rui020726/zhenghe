@@ -208,6 +208,7 @@ def main() -> None:
         "runtime/optimizer_step_calls.jsonl",
         "runtime/ppo_update_calls.jsonl",
         "failures/ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json",
+        "failures/ROUND43_PREFLIGHT_COUNTER_ASSERTION_C8.json",
         "checkpoints/r40_batch_commit_s11_b0.json",
         "checkpoints/r40_batch_s11_b0_attempt01.json",
         "checkpoints/v2_train_s11.pt",

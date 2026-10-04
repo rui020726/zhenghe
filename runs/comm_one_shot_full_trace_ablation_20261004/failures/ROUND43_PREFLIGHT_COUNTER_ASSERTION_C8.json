@@ -1,0 +1,39 @@
+{
+  "kind": "round43-preflight-gate-failure/1",
+  "status": "preserved_superseded_assertion_failure",
+  "source_freeze_head": "09003d9be0ece554583f2bb474015bc69f22825c",
+  "command": "D:\\project_env\\python.exe r43_preflight.py",
+  "failure": {
+    "type": "RuntimeError",
+    "message": "synthetic actor gate invoked an Adam optimizer update",
+    "source": "r43_preflight.py:_test_live_actor_path cumulative counter assertion",
+    "cause": "the no-update check expected the process-lifetime Adam call counter to be zero even though the committed batch0 already had 12 historical Adam calls"
+  },
+  "observed_at_failure": {
+    "normal_claim_delta": 0,
+    "environment_constructor_delta": 0,
+    "environment_run_call_delta": 0,
+    "ppo_update_delta": 0,
+    "real_optimizer_updates": 0,
+    "synthetic_optimizer_step_attempts": 1,
+    "synthetic_optimizer_updates": 0,
+    "checkpoint_serialization_writes": 0,
+    "cumulative_normal_claims": 4,
+    "cumulative_ppo_calls_from_journal": 1,
+    "cumulative_adam_calls_from_journal": 12,
+    "cumulative_checkpoint_save_calls_from_journal": 4,
+    "persisted_pre_reconciliation_ledger": {
+      "ppo_update_calls": 0,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 2
+    }
+  },
+  "post_failure_read_only_audit": {
+    "resume_bridge_immutable_artifact_mismatches": 0,
+    "batch0_checkpoint_or_row_changed": false,
+    "call_journals_changed": false,
+    "progress_or_claims_changed": false,
+    "preserved_artifacts_unchanged": true
+  },
+  "classification": "prelaunch gate implementation defect; not an experiment failure, launch claim, or optimizer update"
+}
