@@ -15,7 +15,7 @@ from typing import Any
 from r44_eval_index import (SCENES, SEEDS, MODES, audit_fixed_matrix,
                             build_eval_index, verify_new_cell)
 from r44_prepare import (RUN_DIR, ROOT, R43_DIR, TRAINING_VERSION, RUNNER_VERSION,
-                         prepare, read, sha256, write_new)
+                         prepare, read, sha256, verify_r43_source_identity, write_new)
 from r44_runtime import PRELAUNCH_PATH, configure, verify_frozen_source
 
 
@@ -87,12 +87,8 @@ def write_prelaunch_receipt() -> dict[str, Any]:
         subprocess.run(["git", "-C", str(ROOT), "cat-file", "-e", f"HEAD:runs/{RUN_DIR.name}/{relative}"],
                        check=True, stdout=subprocess.DEVNULL)
 
-    r43_freeze = read(R43_DIR / "ROUND43_FROZEN_CONFIG.json")
-    r43_hashes = r43_freeze["execution_identity"]["source_code_sha256"]
-    for relative, expected in r43_hashes.items():
-        source_path = R43_DIR / relative
-        if not source_path.is_file() or sha256(source_path) != expected:
-            raise RuntimeError(f"ROUND43 inherited source changed before ROUND44: {relative}")
+    r43_source_identity = verify_r43_source_identity()
+    r43_hashes = r43_source_identity["current_source_code_sha256"]
     copied = {name: {"sha256": source_hashes[name],
                      "source_sha256": r43_hashes[name]}
               for name in ("r42_one_shot.py", "r40_train_resume_adapter.py",
@@ -107,7 +103,11 @@ def write_prelaunch_receipt() -> dict[str, Any]:
         "eta_lambda": 0.5, "gae_lambda": 1.0, "gamma": 1.0,
         "source_code_sha256": source_hashes,
         "copied_r43_helpers": copied,
-        "r43_source_code_sha256": r43_hashes,
+        "r43_frozen_source_code_sha256": r43_source_identity[
+            "frozen_source_code_sha256"],
+        "r43_final_delivery_source_code_sha256": r43_hashes,
+        "r43_report_only_finalization_identity": r43_source_identity[
+            "report_only_finalization_identity"],
         "frozen_config_sha256": sha256(RUN_DIR / "ROUND44_FROZEN_CONFIG.json"),
         "configuration_diff_sha256": sha256(RUN_DIR / "ROUND44_CONFIGURATION_DIFF.json"),
         "baseline_reuse_sha256": sha256(RUN_DIR / "ROUND44_BASELINE_REUSE.json"),

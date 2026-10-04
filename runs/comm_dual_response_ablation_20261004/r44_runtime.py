@@ -74,6 +74,14 @@ def verify_frozen_source(frozen: dict[str, Any]) -> str:
         check=True, capture_output=True, text=True).stdout.strip()
     if r43_branch_head != receipt.get("reused_round43_delivery_head"):
         raise RuntimeError("ROUND44 read-only OLD source branch no longer matches its frozen head")
+    report_identity = receipt.get("r43_report_only_finalization_identity", {})
+    if (report_identity.get("status") != "verified"
+            or report_identity.get("final_delivery_head") != r43_branch_head):
+        raise RuntimeError("ROUND43 report-only finalization identity differs from its delivery head")
+    for relative, expected in receipt.get("r43_final_delivery_source_code_sha256", {}).items():
+        path = R43_DIR / relative
+        if not path.is_file() or _sha256(path) != expected:
+            raise RuntimeError(f"ROUND43 inherited source changed after ROUND44 freeze: {relative}")
     for key, root in (
         ("canonical_read_only_input_head", INPUT_ROOT),
         ("round40_delivery_head", ROUND40_ROOT),

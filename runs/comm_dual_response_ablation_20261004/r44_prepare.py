@@ -22,6 +22,7 @@ R43_BASELINE = R43_DIR / "ROUND43_BASELINE_REUSE.json"
 R43_CHECKPOINT_INDEX = R43_DIR / "ROUND43_CHECKPOINT_INDEX.json"
 R43_PAIRED = R43_DIR / "ROUND43_PAIRED_RESULTS.json"
 R43_STATUS = R43_DIR / "ROUND43_STATUS.json"
+R43_REPORT_CORRECTION = R43_DIR / "ROUND43_REPORT_FAILURE_CORRECTION.json"
 R42_MANIFEST = R42_DIR / "ROUND42_RAW_ARTIFACT_MANIFEST.json"
 R42_CHECKPOINT_INDEX = R42_DIR / "ROUND42_CHECKPOINT_INDEX.json"
 R42_PAIRED = R42_DIR / "ROUND42_PAIRED_RESULTS.json"
@@ -66,6 +67,89 @@ def write_new(path: Path, value: Any) -> None:
     with path.open("x", encoding="utf-8", newline="\n") as handle:
         handle.write(body)
         handle.flush()
+
+
+def verify_r43_source_identity() -> dict[str, Any]:
+    """Reconcile the execution freeze with R43's separately versioned report finalizer."""
+    frozen = read(R43_FREEZE)
+    status = read(R43_STATUS)
+    correction = read(R43_REPORT_CORRECTION)
+    identity = frozen["execution_identity"]
+    expected_sources = identity["source_code_sha256"]
+    if (status.get("status") != "complete_local_delivery"
+            or status.get("branch") != "exp/comm-one-shot-full-trace-ablation"
+            or status.get("source_freeze_head") != R43_EXECUTION_HEAD
+            or correction.get("status") != "report_only_recovery_complete"):
+        raise RuntimeError("ROUND43 final delivery/report-only recovery identity is incomplete")
+
+    delivery_head = subprocess.run(
+        ["git", "-C", str(ROOT), "rev-parse", "exp/comm-one-shot-full-trace-ablation"],
+        check=True, capture_output=True, text=True).stdout.strip()
+    if delivery_head != TRAINING_SOURCE_HEAD:
+        raise RuntimeError(f"ROUND43 final delivery branch moved: {delivery_head}")
+
+    report_path = "r43_report.py"
+    report_code = correction.get("report_code_identity", {})
+    if (report_code.get("head") != status.get("report_code_head")
+            or report_code.get("renderer_sha256") != status.get("report_code_sha256")
+            or report_code.get("version") != status.get("report_version")):
+        raise RuntimeError("ROUND43 report-only finalizer identity disagrees across records")
+    finalizer_sha = sha256(R43_DIR / report_path)
+    if finalizer_sha != status.get("report_code_sha256"):
+        raise RuntimeError("ROUND43 final report renderer differs from its registered hash")
+    finalizer_repo_path = f"runs/{R43_DIR.name}/{report_path}"
+    committed_finalizer = subprocess.run(
+        ["git", "-C", str(ROOT), "show", f"{report_code['head']}:{finalizer_repo_path}"],
+        check=True, capture_output=True).stdout
+    committed_finalizer_sha = hashlib.sha256(committed_finalizer).hexdigest()
+    if committed_finalizer_sha != finalizer_sha:
+        raise RuntimeError("ROUND43 report renderer does not match its report-code commit")
+    report_file_sha = sha256(R43_DIR / "ROUND43_REPORT.md")
+    if report_file_sha != status.get("report_sha256"):
+        raise RuntimeError("ROUND43 finalized report differs from its registered hash")
+    if not subprocess.run(
+            ["git", "-C", str(ROOT), "merge-base", "--is-ancestor",
+             str(report_code["head"]), delivery_head],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
+        raise RuntimeError("ROUND43 report-only code head is not in its final delivery history")
+
+    finalization_counts = correction.get("finalization_accounting", {})
+    report_only_zero_fields = (
+        "environment_constructor_calls", "run_invocation_calls", "ppo_update_calls",
+        "optimizer_step_calls", "checkpoint_write_calls", "checkpoint_deserializations",
+        "forward_calls",
+    )
+    if any(int(finalization_counts.get(name, -1)) != 0 for name in report_only_zero_fields):
+        raise RuntimeError("ROUND43 report finalization records nonzero experiment activity")
+
+    current_sources = {}
+    for relative, expected in expected_sources.items():
+        path = R43_DIR / relative
+        if not path.is_file():
+            raise RuntimeError(f"ROUND43 frozen source file is missing: {relative}")
+        actual = sha256(path)
+        current_sources[relative] = actual
+        if actual != expected and relative != report_path:
+            raise RuntimeError(f"ROUND43 inherited execution source changed: {relative}")
+
+    finalization_identity = {
+        "kind": "round43-report-only-finalization-identity/1",
+        "status": "verified",
+        "path": report_path,
+        "role": "report-only finalizer; not loaded by ROUND44 runner",
+        "execution_freeze_head": R43_EXECUTION_HEAD,
+        "execution_freeze_sha256": expected_sources[report_path],
+        "report_code_head": report_code["head"],
+        "report_code_sha256": finalizer_sha,
+        "final_delivery_head": delivery_head,
+        "final_report_sha256": report_file_sha,
+        "finalization_activity": {name: 0 for name in report_only_zero_fields},
+    }
+    return {
+        "frozen_source_code_sha256": expected_sources,
+        "current_source_code_sha256": current_sources,
+        "report_only_finalization_identity": finalization_identity,
+    }
 
 
 def canonical_sha(value: Any) -> str:
