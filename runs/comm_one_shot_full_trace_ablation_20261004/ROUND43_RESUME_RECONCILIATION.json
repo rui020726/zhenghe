@@ -1,0 +1,138 @@
+{
+  "kind": "round43-exact-resume-reconciliation/1",
+  "status": "passed",
+  "initial_freeze_head": "c7bc89d995c1a5e5c2b53303bebd036e85aa4c2d",
+  "recovery_freeze_head": "7ed1a03c445fa31fe90fd70a224a97b8366fa182",
+  "report_code_head": "3fc1e5814cdb99d22caa53cb5dc8a8cb37c1841d",
+  "report_code_sha256": "9964f87695b00f5aebc19896ea9aab62a9411d3c8febdadf918cd4b96562f8a1",
+  "execution_code_version": "round43-resume-adapter-and-ledger-reconciliation/1",
+  "training_semantics_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+  "resume_cursor": {
+    "training_seed": 11,
+    "episodes_done": 4,
+    "updates": 1,
+    "optimizer_steps": 12,
+    "lambda_dual": 1.0125,
+    "next_episode_index": 4
+  },
+  "previously_completed_normal_claims": 4,
+  "remaining_normal_claims_at_resume": 476,
+  "technical_reserve_max": 24,
+  "hard_cap": 600,
+  "initial_runner_failure": {
+    "kind": "round43-runner-resume-failure/1",
+    "status": "preserved_harness_failure_before_next_environment_claim",
+    "exception": {
+      "type": "UnboundLocalError",
+      "message": "local variable 'parameter_identity' referenced before assignment",
+      "source_location": {
+        "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\r40_train.py",
+        "line": 386
+      },
+      "reason": "parameter_identity is imported only inside the fresh-start branch, while the resume branch reaches its use without executing that local import"
+    },
+    "claim_delta": 0,
+    "environment_constructor_delta": 0,
+    "run_call_delta": 0,
+    "optimizer_update_delta": 0,
+    "source_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\failures\\ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json",
+    "source_sha256": "b002c9084e014d395500d80d1109c6f0f0a60fd833542bebfff3e8de7f29656f",
+    "classification": "runner defect before a new launch claim; not a zero-result episode"
+  },
+  "superseded_preflight_counter_assertion": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\failures\\ROUND43_PREFLIGHT_COUNTER_ASSERTION_C8.json",
+    "sha256": "030865e9d8fad109485c6c136821ce17f8bcf70320af1ebb87be653cd4cab8b1",
+    "schema_layout": "nested_failure_and_post_failure_audit",
+    "exception": {
+      "type": "RuntimeError",
+      "message": "synthetic actor gate invoked an Adam optimizer update",
+      "source": "r43_preflight.py:_test_live_actor_path cumulative counter assertion",
+      "cause": "the no-update check expected the process-lifetime Adam call counter to be zero even though the committed batch0 already had 12 historical Adam calls"
+    },
+    "record_status": "preserved_superseded_assertion_failure",
+    "execution_claims_delta": 0,
+    "environment_constructors_delta": 0,
+    "real_optimizer_updates": 0,
+    "observed_at_failure": {
+      "normal_claim_delta": 0,
+      "environment_constructor_delta": 0,
+      "environment_run_call_delta": 0,
+      "ppo_update_delta": 0,
+      "real_optimizer_updates": 0,
+      "synthetic_optimizer_step_attempts": 1,
+      "synthetic_optimizer_updates": 0,
+      "checkpoint_serialization_writes": 0,
+      "cumulative_normal_claims": 4,
+      "cumulative_ppo_calls_from_journal": 1,
+      "cumulative_adam_calls_from_journal": 12,
+      "cumulative_checkpoint_save_calls_from_journal": 4,
+      "persisted_pre_reconciliation_ledger": {
+        "ppo_update_calls": 0,
+        "optimizer_step_calls": 0,
+        "checkpoint_write_calls": 2
+      }
+    },
+    "preservation_audit": {
+      "resume_bridge_immutable_artifact_mismatches": 0,
+      "batch0_checkpoint_or_row_changed": false,
+      "call_journals_changed": false,
+      "progress_or_claims_changed": false,
+      "preserved_artifacts_unchanged": true
+    },
+    "preserved_artifacts_unchanged": true,
+    "classification": "preflight assertion assumed zero historical Adam calls; fixed to assert zero delta"
+  },
+  "old_ledger_snapshot": {
+    "normal_used": 4,
+    "ppo_update_calls": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_save_calls": 2,
+    "preserved_without_rewrite": true
+  },
+  "reconciled_at_pause": {
+    "normal_used": 4,
+    "reserve_used": 0,
+    "total_used": 4,
+    "environment_constructor_calls": 4,
+    "joint_run_build_failures": 0,
+    "joint_run_constructed_calls": 4,
+    "run_invocation_calls": 4,
+    "joint_run_method_calls": 4,
+    "run_return_calls": 4,
+    "run_failure_calls": 0,
+    "completed_steps": 4000,
+    "completed_logical_jobs": 4,
+    "simulation_started": 4,
+    "technical_failed_claims": 0,
+    "retry_claims": 0,
+    "optimizer_step_calls": 12,
+    "optimizer_step_journal_entries": 12,
+    "ppo_update_calls": 1,
+    "ppo_update_journal_entries": 1,
+    "ppo_update_count_matches_committed_batches": true,
+    "checkpoint_write_calls": 4,
+    "checkpoint_write_journal_entries": 4,
+    "optimizer_step_count_matches_committed_batches": true,
+    "hard_cap": 600
+  },
+  "evidence": {
+    "seed11_batch0_state_reconciliation": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\ROUND43_SEED11_BATCH0_STATE_RECONCILIATION.json",
+      "sha256": "2b73f3b51b3c1732144f5371fd6c1bb44ca4049e3b349058ad6925fbdf338001",
+      "status": "passed"
+    },
+    "ledger_reconciliation": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\ROUND43_LEDGER_RECONCILIATION.json",
+      "sha256": "54799a746dc42fd6464421510a620cea42b466e4e3d3f6b749b9baefa4da19fb",
+      "status": "passed"
+    },
+    "resume_recovery_gate": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\ROUND43_RESUME_RECOVERY_GATE.json",
+      "sha256": "6fec347b209d3faebc4dc58cc7a35146368b9e76b7a1b7bba79248184a4a20b0",
+      "status": "passed"
+    }
+  },
+  "first_batch_replayed": false,
+  "optimizer_step_replayed": false,
+  "round42_trained_checkpoint_used_as_resume_state": false
+}

@@ -1,0 +1,1359 @@
+{
+  "kind": "round43-machine-verdict/1",
+  "completion": "complete",
+  "scientific_result": "development_block_joint_improvement_not_observed",
+  "greedy_primary": {
+    "all_three_seeds_exactly_preserve_immediate_task_set": false,
+    "all_three_seeds_below_late_discovery_gate_mean_cost": false,
+    "joint_improvement_by_registered_development_rule": false,
+    "by_seed": {
+      "11": {
+        "exact_immediate_on_time_task_set_by_scene": false,
+        "new_on_time_total": 88,
+        "immediate_on_time_total": 96,
+        "late_on_time_total": 96,
+        "new_spent_bytes_total": 0,
+        "late_spent_bytes_total": 77412,
+        "new_mean_spent_bytes_per_scene": 0.0,
+        "late_mean_spent_bytes_per_scene": 4838.25,
+        "cost_below_late_discovery_gate": true,
+        "free_choices": 96,
+        "send_now_choices": 0,
+        "skip_episode_choices": 96
+      },
+      "22": {
+        "exact_immediate_on_time_task_set_by_scene": true,
+        "new_on_time_total": 96,
+        "immediate_on_time_total": 96,
+        "late_on_time_total": 96,
+        "new_spent_bytes_total": 239028,
+        "late_spent_bytes_total": 77412,
+        "new_mean_spent_bytes_per_scene": 14939.25,
+        "late_mean_spent_bytes_per_scene": 4838.25,
+        "cost_below_late_discovery_gate": false,
+        "free_choices": 96,
+        "send_now_choices": 96,
+        "skip_episode_choices": 0
+      },
+      "33": {
+        "exact_immediate_on_time_task_set_by_scene": false,
+        "new_on_time_total": 88,
+        "immediate_on_time_total": 96,
+        "late_on_time_total": 96,
+        "new_spent_bytes_total": 0,
+        "late_spent_bytes_total": 77412,
+        "new_mean_spent_bytes_per_scene": 0.0,
+        "late_mean_spent_bytes_per_scene": 4838.25,
+        "cost_below_late_discovery_gate": true,
+        "free_choices": 96,
+        "send_now_choices": 0,
+        "skip_episode_choices": 96
+      }
+    }
+  },
+  "sampled_secondary": {
+    "reported_separately": true,
+    "by_seed": {
+      "11": {
+        "paired_vs_old": {
+          "left": "OLD_round42_new_ep128",
+          "right": "NEW_round43_ep128",
+          "comparison": "right_minus_left_paired_by_scene",
+          "scene_count": 16,
+          "on_time_total_left": 94,
+          "on_time_total_right": 94,
+          "on_time_total_delta": 0,
+          "on_time_mean_scene_delta": 0.0,
+          "improved_scenes": 0,
+          "tied_scenes": 16,
+          "degraded_scenes": 0,
+          "maximum_single_scene_loss": 0,
+          "recovered_task_ids": [],
+          "lost_task_ids": [],
+          "target_swap_count": 0,
+          "spent_bytes_total_left": 94710,
+          "spent_bytes_total_right": 84870,
+          "scenes": [
+            {
+              "scene": 1301000,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 7230,
+              "NEW_round43_ep128_spent_bytes": 7230,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301001,
+              "OLD_round42_new_ep128_on_time": 5,
+              "NEW_round43_ep128_on_time": 5,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 7860,
+              "NEW_round43_ep128_spent_bytes": 7860,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301002,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 7668,
+              "NEW_round43_ep128_spent_bytes": 7668,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301003,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 2496,
+              "NEW_round43_ep128_spent_bytes": 2496,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301004,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 10158,
+              "NEW_round43_ep128_spent_bytes": 10158,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301005,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 2478,
+              "NEW_round43_ep128_spent_bytes": 0,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301006,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 9750,
+              "NEW_round43_ep128_spent_bytes": 7458,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301007,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 12552,
+              "NEW_round43_ep128_spent_bytes": 9966,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301008,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 2310,
+              "NEW_round43_ep128_spent_bytes": 2310,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301009,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 5190,
+              "NEW_round43_ep128_spent_bytes": 5190,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301010,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 4962,
+              "NEW_round43_ep128_spent_bytes": 4962,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301011,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 2292,
+              "NEW_round43_ep128_spent_bytes": 2292,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301012,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 7464,
+              "NEW_round43_ep128_spent_bytes": 7464,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301013,
+              "OLD_round42_new_ep128_on_time": 5,
+              "NEW_round43_ep128_on_time": 5,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 4998,
+              "NEW_round43_ep128_spent_bytes": 4998,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301014,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 2514,
+              "NEW_round43_ep128_spent_bytes": 2514,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301015,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 4788,
+              "NEW_round43_ep128_spent_bytes": 2304,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            }
+          ]
+        },
+        "vs_immediate": {
+          "left": "immediate",
+          "right": "NEW_round43",
+          "comparison": "right_minus_left_paired_by_scene",
+          "scene_count": 16,
+          "on_time_total_left": 96,
+          "on_time_total_right": 94,
+          "on_time_total_delta": -2,
+          "on_time_mean_scene_delta": -0.125,
+          "improved_scenes": 0,
+          "tied_scenes": 14,
+          "degraded_scenes": 2,
+          "maximum_single_scene_loss": 1,
+          "recovered_task_ids": [],
+          "lost_task_ids": [
+            {
+              "scene": 1301001,
+              "task_id": "piloc-e1-target-5"
+            },
+            {
+              "scene": 1301013,
+              "task_id": "piloc-e1-target-2"
+            }
+          ],
+          "target_swap_count": 0,
+          "spent_bytes_total_left": 239028,
+          "spent_bytes_total_right": 84870,
+          "scenes": [
+            {
+              "scene": 1301000,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14730,
+              "NEW_round43_spent_bytes": 7230,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301001,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 5,
+              "delta_right_minus_left": -1,
+              "immediate_spent_bytes": 15696,
+              "NEW_round43_spent_bytes": 7860,
+              "recovered_task_ids": [],
+              "lost_task_ids": [
+                "piloc-e1-target-5"
+              ],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301002,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14862,
+              "NEW_round43_spent_bytes": 7668,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301003,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15480,
+              "NEW_round43_spent_bytes": 2496,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301004,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15420,
+              "NEW_round43_spent_bytes": 10158,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301005,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14556,
+              "NEW_round43_spent_bytes": 0,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301006,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14898,
+              "NEW_round43_spent_bytes": 7458,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301007,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15030,
+              "NEW_round43_spent_bytes": 9966,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301008,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14850,
+              "NEW_round43_spent_bytes": 2310,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301009,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15648,
+              "NEW_round43_spent_bytes": 5190,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301010,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14520,
+              "NEW_round43_spent_bytes": 4962,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301011,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14328,
+              "NEW_round43_spent_bytes": 2292,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301012,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14922,
+              "NEW_round43_spent_bytes": 7464,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301013,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 5,
+              "delta_right_minus_left": -1,
+              "immediate_spent_bytes": 14796,
+              "NEW_round43_spent_bytes": 4998,
+              "recovered_task_ids": [],
+              "lost_task_ids": [
+                "piloc-e1-target-2"
+              ],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301014,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14952,
+              "NEW_round43_spent_bytes": 2514,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301015,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14340,
+              "NEW_round43_spent_bytes": 2304,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            }
+          ]
+        }
+      },
+      "22": {
+        "paired_vs_old": {
+          "left": "OLD_round42_new_ep128",
+          "right": "NEW_round43_ep128",
+          "comparison": "right_minus_left_paired_by_scene",
+          "scene_count": 16,
+          "on_time_total_left": 93,
+          "on_time_total_right": 95,
+          "on_time_total_delta": 2,
+          "on_time_mean_scene_delta": 0.125,
+          "improved_scenes": 2,
+          "tied_scenes": 14,
+          "degraded_scenes": 0,
+          "maximum_single_scene_loss": 0,
+          "recovered_task_ids": [
+            {
+              "scene": 1301001,
+              "task_id": "piloc-e1-target-5"
+            },
+            {
+              "scene": 1301015,
+              "task_id": "piloc-e1-target-0"
+            }
+          ],
+          "lost_task_ids": [],
+          "target_swap_count": 0,
+          "spent_bytes_total_left": 55896,
+          "spent_bytes_total_right": 154428,
+          "scenes": [
+            {
+              "scene": 1301000,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 4932,
+              "NEW_round43_ep128_spent_bytes": 14730,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301001,
+              "OLD_round42_new_ep128_on_time": 5,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 1,
+              "OLD_round42_new_ep128_spent_bytes": 7638,
+              "NEW_round43_ep128_spent_bytes": 12996,
+              "recovered_task_ids": [
+                "piloc-e1-target-5"
+              ],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301002,
+              "OLD_round42_new_ep128_on_time": 5,
+              "NEW_round43_ep128_on_time": 5,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 4806,
+              "NEW_round43_ep128_spent_bytes": 4806,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301003,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 7440,
+              "NEW_round43_ep128_spent_bytes": 12804,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301004,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 2496,
+              "NEW_round43_ep128_spent_bytes": 7464,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301005,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 2682,
+              "NEW_round43_ep128_spent_bytes": 7308,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301006,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 5172,
+              "NEW_round43_ep128_spent_bytes": 7464,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301007,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 0,
+              "NEW_round43_ep128_spent_bytes": 9864,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301008,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 0,
+              "NEW_round43_ep128_spent_bytes": 10170,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301009,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 0,
+              "NEW_round43_ep128_spent_bytes": 8040,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301010,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 2676,
+              "NEW_round43_ep128_spent_bytes": 2676,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301011,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 0,
+              "NEW_round43_ep128_spent_bytes": 4572,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301012,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 7680,
+              "NEW_round43_ep128_spent_bytes": 14922,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301013,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 5202,
+              "NEW_round43_ep128_spent_bytes": 14796,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301014,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 5172,
+              "NEW_round43_ep128_spent_bytes": 12438,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301015,
+              "OLD_round42_new_ep128_on_time": 5,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 1,
+              "OLD_round42_new_ep128_spent_bytes": 0,
+              "NEW_round43_ep128_spent_bytes": 9378,
+              "recovered_task_ids": [
+                "piloc-e1-target-0"
+              ],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            }
+          ]
+        },
+        "vs_immediate": {
+          "left": "immediate",
+          "right": "NEW_round43",
+          "comparison": "right_minus_left_paired_by_scene",
+          "scene_count": 16,
+          "on_time_total_left": 96,
+          "on_time_total_right": 95,
+          "on_time_total_delta": -1,
+          "on_time_mean_scene_delta": -0.0625,
+          "improved_scenes": 0,
+          "tied_scenes": 15,
+          "degraded_scenes": 1,
+          "maximum_single_scene_loss": 1,
+          "recovered_task_ids": [],
+          "lost_task_ids": [
+            {
+              "scene": 1301002,
+              "task_id": "piloc-e1-target-3"
+            }
+          ],
+          "target_swap_count": 0,
+          "spent_bytes_total_left": 239028,
+          "spent_bytes_total_right": 154428,
+          "scenes": [
+            {
+              "scene": 1301000,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14730,
+              "NEW_round43_spent_bytes": 14730,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301001,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15696,
+              "NEW_round43_spent_bytes": 12996,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301002,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 5,
+              "delta_right_minus_left": -1,
+              "immediate_spent_bytes": 14862,
+              "NEW_round43_spent_bytes": 4806,
+              "recovered_task_ids": [],
+              "lost_task_ids": [
+                "piloc-e1-target-3"
+              ],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301003,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15480,
+              "NEW_round43_spent_bytes": 12804,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301004,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15420,
+              "NEW_round43_spent_bytes": 7464,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301005,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14556,
+              "NEW_round43_spent_bytes": 7308,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301006,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14898,
+              "NEW_round43_spent_bytes": 7464,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301007,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15030,
+              "NEW_round43_spent_bytes": 9864,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301008,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14850,
+              "NEW_round43_spent_bytes": 10170,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301009,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15648,
+              "NEW_round43_spent_bytes": 8040,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301010,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14520,
+              "NEW_round43_spent_bytes": 2676,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301011,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14328,
+              "NEW_round43_spent_bytes": 4572,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301012,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14922,
+              "NEW_round43_spent_bytes": 14922,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301013,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14796,
+              "NEW_round43_spent_bytes": 14796,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301014,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14952,
+              "NEW_round43_spent_bytes": 12438,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301015,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14340,
+              "NEW_round43_spent_bytes": 9378,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            }
+          ]
+        }
+      },
+      "33": {
+        "paired_vs_old": {
+          "left": "OLD_round42_new_ep128",
+          "right": "NEW_round43_ep128",
+          "comparison": "right_minus_left_paired_by_scene",
+          "scene_count": 16,
+          "on_time_total_left": 92,
+          "on_time_total_right": 93,
+          "on_time_total_delta": 1,
+          "on_time_mean_scene_delta": 0.0625,
+          "improved_scenes": 1,
+          "tied_scenes": 15,
+          "degraded_scenes": 0,
+          "maximum_single_scene_loss": 0,
+          "recovered_task_ids": [
+            {
+              "scene": 1301001,
+              "task_id": "piloc-e1-target-5"
+            }
+          ],
+          "lost_task_ids": [],
+          "target_swap_count": 0,
+          "spent_bytes_total_left": 50250,
+          "spent_bytes_total_right": 90138,
+          "scenes": [
+            {
+              "scene": 1301000,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 4776,
+              "NEW_round43_ep128_spent_bytes": 4776,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301001,
+              "OLD_round42_new_ep128_on_time": 5,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 1,
+              "OLD_round42_new_ep128_spent_bytes": 2664,
+              "NEW_round43_ep128_spent_bytes": 13212,
+              "recovered_task_ids": [
+                "piloc-e1-target-5"
+              ],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301002,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 5196,
+              "NEW_round43_ep128_spent_bytes": 7488,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301003,
+              "OLD_round42_new_ep128_on_time": 5,
+              "NEW_round43_ep128_on_time": 5,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 5346,
+              "NEW_round43_ep128_spent_bytes": 7626,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301004,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 2298,
+              "NEW_round43_ep128_spent_bytes": 2298,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301005,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 4992,
+              "NEW_round43_ep128_spent_bytes": 4992,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301006,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 0,
+              "NEW_round43_ep128_spent_bytes": 0,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301007,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 2304,
+              "NEW_round43_ep128_spent_bytes": 7548,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301008,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 7680,
+              "NEW_round43_ep128_spent_bytes": 10170,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301009,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 5076,
+              "NEW_round43_ep128_spent_bytes": 5076,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301010,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 2676,
+              "NEW_round43_ep128_spent_bytes": 2676,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301011,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 2280,
+              "NEW_round43_ep128_spent_bytes": 4950,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301012,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 0,
+              "NEW_round43_ep128_spent_bytes": 4806,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301013,
+              "OLD_round42_new_ep128_on_time": 5,
+              "NEW_round43_ep128_on_time": 5,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 0,
+              "NEW_round43_ep128_spent_bytes": 4800,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301014,
+              "OLD_round42_new_ep128_on_time": 6,
+              "NEW_round43_ep128_on_time": 6,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 4962,
+              "NEW_round43_ep128_spent_bytes": 7242,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301015,
+              "OLD_round42_new_ep128_on_time": 5,
+              "NEW_round43_ep128_on_time": 5,
+              "delta_right_minus_left": 0,
+              "OLD_round42_new_ep128_spent_bytes": 0,
+              "NEW_round43_ep128_spent_bytes": 2478,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            }
+          ]
+        },
+        "vs_immediate": {
+          "left": "immediate",
+          "right": "NEW_round43",
+          "comparison": "right_minus_left_paired_by_scene",
+          "scene_count": 16,
+          "on_time_total_left": 96,
+          "on_time_total_right": 93,
+          "on_time_total_delta": -3,
+          "on_time_mean_scene_delta": -0.1875,
+          "improved_scenes": 0,
+          "tied_scenes": 13,
+          "degraded_scenes": 3,
+          "maximum_single_scene_loss": 1,
+          "recovered_task_ids": [],
+          "lost_task_ids": [
+            {
+              "scene": 1301003,
+              "task_id": "piloc-e1-target-5"
+            },
+            {
+              "scene": 1301013,
+              "task_id": "piloc-e1-target-2"
+            },
+            {
+              "scene": 1301015,
+              "task_id": "piloc-e1-target-0"
+            }
+          ],
+          "target_swap_count": 0,
+          "spent_bytes_total_left": 239028,
+          "spent_bytes_total_right": 90138,
+          "scenes": [
+            {
+              "scene": 1301000,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14730,
+              "NEW_round43_spent_bytes": 4776,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301001,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15696,
+              "NEW_round43_spent_bytes": 13212,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301002,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14862,
+              "NEW_round43_spent_bytes": 7488,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301003,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 5,
+              "delta_right_minus_left": -1,
+              "immediate_spent_bytes": 15480,
+              "NEW_round43_spent_bytes": 7626,
+              "recovered_task_ids": [],
+              "lost_task_ids": [
+                "piloc-e1-target-5"
+              ],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301004,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15420,
+              "NEW_round43_spent_bytes": 2298,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301005,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14556,
+              "NEW_round43_spent_bytes": 4992,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301006,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14898,
+              "NEW_round43_spent_bytes": 0,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301007,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15030,
+              "NEW_round43_spent_bytes": 7548,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301008,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14850,
+              "NEW_round43_spent_bytes": 10170,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301009,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 15648,
+              "NEW_round43_spent_bytes": 5076,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301010,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14520,
+              "NEW_round43_spent_bytes": 2676,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301011,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14328,
+              "NEW_round43_spent_bytes": 4950,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301012,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14922,
+              "NEW_round43_spent_bytes": 4806,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301013,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 5,
+              "delta_right_minus_left": -1,
+              "immediate_spent_bytes": 14796,
+              "NEW_round43_spent_bytes": 4800,
+              "recovered_task_ids": [],
+              "lost_task_ids": [
+                "piloc-e1-target-2"
+              ],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301014,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 6,
+              "delta_right_minus_left": 0,
+              "immediate_spent_bytes": 14952,
+              "NEW_round43_spent_bytes": 7242,
+              "recovered_task_ids": [],
+              "lost_task_ids": [],
+              "target_swaps": 0
+            },
+            {
+              "scene": 1301015,
+              "immediate_on_time": 6,
+              "NEW_round43_on_time": 5,
+              "delta_right_minus_left": -1,
+              "immediate_spent_bytes": 14340,
+              "NEW_round43_spent_bytes": 2478,
+              "recovered_task_ids": [],
+              "lost_task_ids": [
+                "piloc-e1-target-0"
+              ],
+              "target_swaps": 0
+            }
+          ]
+        }
+      }
+    }
+  },
+  "cross_seed_consistency": {
+    "greedy_joint_criterion_all_seeds": false,
+    "seed_count": 3,
+    "outcome_classes": {
+      "11": {
+        "exact_immediate_on_time_task_set_by_scene": false,
+        "new_on_time_total": 88,
+        "immediate_on_time_total": 96,
+        "late_on_time_total": 96,
+        "new_spent_bytes_total": 0,
+        "late_spent_bytes_total": 77412,
+        "new_mean_spent_bytes_per_scene": 0.0,
+        "late_mean_spent_bytes_per_scene": 4838.25,
+        "cost_below_late_discovery_gate": true,
+        "free_choices": 96,
+        "send_now_choices": 0,
+        "skip_episode_choices": 96
+      },
+      "22": {
+        "exact_immediate_on_time_task_set_by_scene": true,
+        "new_on_time_total": 96,
+        "immediate_on_time_total": 96,
+        "late_on_time_total": 96,
+        "new_spent_bytes_total": 239028,
+        "late_spent_bytes_total": 77412,
+        "new_mean_spent_bytes_per_scene": 14939.25,
+        "late_mean_spent_bytes_per_scene": 4838.25,
+        "cost_below_late_discovery_gate": false,
+        "free_choices": 96,
+        "send_now_choices": 96,
+        "skip_episode_choices": 0
+      },
+      "33": {
+        "exact_immediate_on_time_task_set_by_scene": false,
+        "new_on_time_total": 88,
+        "immediate_on_time_total": 96,
+        "late_on_time_total": 96,
+        "new_spent_bytes_total": 0,
+        "late_spent_bytes_total": 77412,
+        "new_mean_spent_bytes_per_scene": 0.0,
+        "late_mean_spent_bytes_per_scene": 4838.25,
+        "cost_below_late_discovery_gate": true,
+        "free_choices": 96,
+        "send_now_choices": 0,
+        "skip_episode_choices": 96
+      }
+    }
+  },
+  "limits": [
+    "This is an exploratory comparison on the already-used 16-scene development block.",
+    "No independent confirmation, population no-loss, formal noninferiority, or generalization claim.",
+    "The GAE trace change can affect actor credit and critic targets; observed changes do not prove that credit decay was the sole previous cause."
+  ]
+}

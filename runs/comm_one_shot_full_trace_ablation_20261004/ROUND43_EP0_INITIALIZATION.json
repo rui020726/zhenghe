@@ -1,0 +1,115 @@
+{
+  "kind": "round43-registered-ep0-initialization/1",
+  "status": "passed",
+  "by_seed": {
+    "11": {
+      "registered_ep0_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_ep0.pt",
+      "registered_ep0_file_sha256": "70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd",
+      "parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+      "optimizer_empty_and_matching": true,
+      "registered_rng_exactly_matches_ep0_after_fresh_init": true,
+      "generator_keys": [
+        "numpy",
+        "python",
+        "torch"
+      ],
+      "fresh_initializer_natural_stream_differences": [
+        "numpy",
+        "python"
+      ],
+      "natural_initializer_streams_replaced_before_first_episode": true,
+      "fresh_state": {
+        "training_seed": 11,
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "lambda": 1.0,
+        "gamma": 1.0,
+        "gae_lambda": 1.0,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2"
+      },
+      "loaded_model_or_optimizer": false
+    },
+    "22": {
+      "registered_ep0_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s22_ep0.pt",
+      "registered_ep0_file_sha256": "96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5",
+      "parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+      "optimizer_empty_and_matching": true,
+      "registered_rng_exactly_matches_ep0_after_fresh_init": true,
+      "generator_keys": [
+        "numpy",
+        "python",
+        "torch"
+      ],
+      "fresh_initializer_natural_stream_differences": [
+        "numpy",
+        "python"
+      ],
+      "natural_initializer_streams_replaced_before_first_episode": true,
+      "fresh_state": {
+        "training_seed": 22,
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "lambda": 1.0,
+        "gamma": 1.0,
+        "gae_lambda": 1.0,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2"
+      },
+      "loaded_model_or_optimizer": false
+    },
+    "33": {
+      "registered_ep0_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s33_ep0.pt",
+      "registered_ep0_file_sha256": "9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d",
+      "parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+      "optimizer_empty_and_matching": true,
+      "registered_rng_exactly_matches_ep0_after_fresh_init": true,
+      "generator_keys": [
+        "numpy",
+        "python",
+        "torch"
+      ],
+      "fresh_initializer_natural_stream_differences": [],
+      "natural_initializer_streams_replaced_before_first_episode": true,
+      "fresh_state": {
+        "training_seed": 33,
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "lambda": 1.0,
+        "gamma": 1.0,
+        "gae_lambda": 1.0,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2"
+      },
+      "loaded_model_or_optimizer": false
+    }
+  },
+  "actual_rng_sources": [
+    {
+      "stream": "Python/NumPy global",
+      "source": "registered ROUND42 ep0 RNG restored after fresh controller init; the real PILOC constructor then seeds these globals from RunConfiguration.seed, and reset_piloc_environment reseeds the environment's own streams from the same scenario seed",
+      "call_path": [
+        "r42_run._registered_ep0_rng_after_init",
+        "v2_run._run_episode -> build_joint_run(configuration.seed=scenario_seed)",
+        "integrated_sar.piloc_runtime.build_piloc_search_side",
+        "integrated_sar.piloc_runtime.reset_piloc_environment"
+      ]
+    },
+    {
+      "stream": "Torch CPU global for one-shot policy sampling",
+      "source": "v2_run._run_episode applies the unchanged per-episode action_seed after environment construction and before the first step",
+      "derivation": "sha256('sc-action:{training_seed}:{episode_index}')[:16]"
+    },
+    {
+      "stream": "PPO minibatch ordering",
+      "source": "dedicated random.Random instance per update; does not consume the Python global stream",
+      "derivation": "sha256(f'{DATA_ORDER_SEED}:{update_index}')[:16]"
+    },
+    {
+      "stream": "scenario, PILOC environment, and forward communication channel",
+      "source": "dedicated deterministic generators seeded from the registered scenario_seed; environment reseed is performed by the original run path",
+      "independent_of_global_rng": true
+    }
+  ],
+  "interpretation": "Fresh same-seed controller and empty Adam were constructed locally; only after controller initialization does the training runner apply the registered ep0 RNG. No ROUND42 model weights or optimizer state are used to train ROUND43."
+}

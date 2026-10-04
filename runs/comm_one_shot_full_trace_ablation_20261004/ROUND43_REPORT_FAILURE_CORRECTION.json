@@ -1,0 +1,199 @@
+{
+  "kind": "round43-report-failure-correction/1",
+  "status": "report_only_recovery_complete",
+  "original_executor": {
+    "command": "D:\\project_env\\python.exe r43_execute.py",
+    "exit_code": 1,
+    "failure": {
+      "type": "KeyError",
+      "message": "'exception'",
+      "source_location": "r43_report.py:217 before report compatibility fix",
+      "evidence_source": "original r43_execute command session output; recorded exit code 1",
+      "classification": "report generator failure after training, evaluation, ledger closure, and analysis; no failed scientific cell"
+    },
+    "new_claims_after_report_failure": 0,
+    "new_environment_starts_after_report_failure": 0
+  },
+  "reported_session_or_usage_interruption": {
+    "classification": "separate interaction/session notice; not an experiment claim or runner result",
+    "counted_in_execution_ledger": false
+  },
+  "matrix_audit": {
+    "execution_source_freeze_head": "7ed1a03c445fa31fe90fd70a224a97b8366fa182",
+    "normal_claims": 480,
+    "new_training_episodes": 384,
+    "new_evaluations": {
+      "status": "passed",
+      "expected_keys": 96,
+      "observed_keys": 96,
+      "groups": {
+        "s11_greedy": 16,
+        "s11_sampled": 16,
+        "s22_greedy": 16,
+        "s22_sampled": 16,
+        "s33_greedy": 16,
+        "s33_sampled": 16
+      },
+      "complete_normal_claims": 96,
+      "claim_row_and_linked_artifact_files_sha256_checked": 480,
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+      "runner_version": "counted-jointrun-proxy/1",
+      "checkpoint_parameter_identity_checked_against_ep128_index": true,
+      "scope": {
+        "immediate_references_reused": 64,
+        "late_and_always_hold_rows_reused": 32,
+        "old_round42_new_ep128_evaluations_reused": 96,
+        "new_training_episodes": 384,
+        "new_ep128_final_evaluations": 96
+      }
+    },
+    "seed_training": {
+      "11": {
+        "episodes": 128,
+        "batches": 32,
+        "optimizer_steps": 352,
+        "lambda_final": 1.2749999999999992,
+        "first_batch_gate": "passed"
+      },
+      "22": {
+        "episodes": 128,
+        "batches": 32,
+        "optimizer_steps": 376,
+        "lambda_final": 1.324999999999999,
+        "first_batch_gate": "passed"
+      },
+      "33": {
+        "episodes": 128,
+        "batches": 32,
+        "optimizer_steps": 288,
+        "lambda_final": 1.1874999999999993,
+        "first_batch_gate": "passed"
+      }
+    },
+    "execution_ledger_counts": {
+      "normal_used": 480,
+      "reserve_used": 0,
+      "total_used": 480,
+      "environment_constructor_calls": 480,
+      "joint_run_build_failures": 0,
+      "joint_run_constructed_calls": 480,
+      "run_invocation_calls": 480,
+      "joint_run_method_calls": 480,
+      "run_return_calls": 480,
+      "run_failure_calls": 0,
+      "completed_steps": 480000,
+      "completed_logical_jobs": 480,
+      "simulation_started": 480,
+      "technical_failed_claims": 0,
+      "retry_claims": 0,
+      "optimizer_step_calls": 1016,
+      "optimizer_step_journal_entries": 1016,
+      "ppo_update_calls": 96,
+      "ppo_update_journal_entries": 96,
+      "ppo_update_count_matches_committed_batches": true,
+      "checkpoint_write_calls": 297,
+      "checkpoint_write_journal_entries": 297,
+      "optimizer_step_count_matches_committed_batches": true,
+      "hard_cap": 600
+    },
+    "original_progress_status_preserved": "running"
+  },
+  "execution_source_identity": {
+    "prelaunch_head": "7ed1a03c445fa31fe90fd70a224a97b8366fa182",
+    "execution_code_version": "round43-resume-adapter-and-ledger-reconciliation/1",
+    "frozen_source_code_sha256": {
+      "r42_run.py": "9c5feacb2ffcb2bb930d2b6022e2fca5210408765dc664859d400e6f2b5f8c2e",
+      "r42_versions.py": "f451503d40657d210ba7c81caffe5d6918f1a9de737625b057e0c9354e7bcffd",
+      "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+      "r42_analysis.py": "3342367be6d8a3c732ac7bf541575d17ae8a168618bc3f9b1493781bf8345633",
+      "r43_preflight.py": "544f887b05b3a11cfcd6448ef7cc8f88fd6c29fc7f6e5d373d033f4373b651b8",
+      "r43_analysis.py": "1994da0d1d726df54537cf78da0a03a2dbf61132fe196a6bc2de63a37b460810",
+      "r43_execute.py": "553ef28fb620d6c3af8ac26dd173ec79315f37b92e2831807c8ea989f29fcac1",
+      "r43_report.py": "8a546d7aad40c95481b74bb329deab72e577e54c76c5d0d9eaeff9616894c324",
+      "r43_freeze.py": "9784280d49a9f983ef403961671a5c18431dc0c46bf4aa330a6d6167a824a783",
+      "r40_train_resume_adapter.py": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+      "r43_call_counter_hooks.py": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
+      "test_r43_call_counter_hooks.py": "29b76f1007e18fc300db6bd6676e420b3e75c263840a49fb0a3ccd296c2ad3c3",
+      "test_r43_resume_adapter.py": "0fb4c275be50408ce4099f44d839c99ef77b689f8d762c4c41124a108cb61a8d",
+      "r43_recovery_gate.py": "520666ee2b71378601c86348c10f11f86dc521256138649f38b878000ce75d7f"
+    }
+  },
+  "report_code_identity": {
+    "head": "3fc1e5814cdb99d22caa53cb5dc8a8cb37c1841d",
+    "renderer_sha256": "9964f87695b00f5aebc19896ea9aab62a9411d3c8febdadf918cd4b96562f8a1",
+    "version": "round43-report-only-finalization/2"
+  },
+  "preservation": {
+    "execution_progress_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\runtime\\ROUND43_EXECUTION_PROGRESS.json",
+    "execution_progress_status": "running",
+    "execution_progress_sha256_before": "6e855d9ee098c29a57e09b52863ea35d43a2fbcb62b1010a7c795be5963dfcd9",
+    "execution_progress_sha256_after": "6e855d9ee098c29a57e09b52863ea35d43a2fbcb62b1010a7c795be5963dfcd9",
+    "execution_progress_unchanged": true,
+    "execution_ledger_sha256_before": "51ab7975636b48813750b43993e77f77232db4ce67c9884e19e1f473cfb9e23f",
+    "execution_ledger_sha256_after": "51ab7975636b48813750b43993e77f77232db4ce67c9884e19e1f473cfb9e23f",
+    "execution_ledger_unchanged": true,
+    "prior_output_hashes": {
+      "ROUND43_SOURCE_INVENTORY.json": "d7be0ba5d2f1fec58525ca447344c96521ab370c38252e2deb53602ce14bae82",
+      "ROUND43_RAW_ARTIFACT_MANIFEST.json": "2be5ddcc6a7c5282add650830b02a488df25766c58867eaea4d1e8eb2da4108e",
+      "TRAINING_VERSION_MANIFEST.json": "75066417d72db17f2521e21b0ff3e598fc8d1d2b5c137be3c8c8ace386159418",
+      "ROUND43_RESUME_RECONCILIATION.json": null,
+      "ROUND42_REPORT_CORRECTION.json": null,
+      "ROUND43_REPORT.md": null,
+      "ROUND43_STATUS.json": null,
+      "ROUND43_REPORT_FAILURE_CORRECTION.json": null
+    },
+    "persisted_analysis_input_hashes": {
+      "ROUND43_PAIRED_RESULTS.json": "907122c9abc6e6fae285a03065e5f5c924d9a17e3e72dfc825c6c670dfa342b2",
+      "ROUND43_TRAINING_CURVES.json": "5e902b99a9fd4e11b7b64fd82d4b71b56e3c3b5e35479af0bb25d3ba02efeae3",
+      "ROUND43_CHECKPOINT_INDEX.json": "41a9747e2280d90f23bf43844728374d8ab7c426f0a681dc17fe673b79c46dcd",
+      "MACHINE_VERDICT.json": "4542027e455f02e6209086a26d89e11a500094db9cd8a5be4c630c58e3a24dd8"
+    }
+  },
+  "finalization_accounting": {
+    "environment_constructor_calls": 0,
+    "run_invocation_calls": 0,
+    "ppo_update_calls": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_write_calls": 0,
+    "checkpoint_deserializations": 0,
+    "forward_calls": 0,
+    "execution_ledger_counts": {
+      "normal_used": 480,
+      "reserve_used": 0,
+      "total_used": 480,
+      "environment_constructor_calls": 480,
+      "joint_run_build_failures": 0,
+      "joint_run_constructed_calls": 480,
+      "run_invocation_calls": 480,
+      "joint_run_method_calls": 480,
+      "run_return_calls": 480,
+      "run_failure_calls": 0,
+      "completed_steps": 480000,
+      "completed_logical_jobs": 480,
+      "simulation_started": 480,
+      "technical_failed_claims": 0,
+      "retry_claims": 0,
+      "optimizer_step_calls": 1016,
+      "optimizer_step_journal_entries": 1016,
+      "ppo_update_calls": 96,
+      "ppo_update_journal_entries": 96,
+      "ppo_update_count_matches_committed_batches": true,
+      "checkpoint_write_calls": 297,
+      "checkpoint_write_journal_entries": 297,
+      "optimizer_step_count_matches_committed_batches": true,
+      "hard_cap": 600
+    }
+  },
+  "new_output_hashes": {
+    "ROUND43_SOURCE_INVENTORY.json": "4b5a67ebb97ac01bb95bc0f547b187fb7da741815078f0391c9b8903e95c1edb",
+    "ROUND43_RAW_ARTIFACT_MANIFEST.json": "2be5ddcc6a7c5282add650830b02a488df25766c58867eaea4d1e8eb2da4108e",
+    "TRAINING_VERSION_MANIFEST.json": "75066417d72db17f2521e21b0ff3e598fc8d1d2b5c137be3c8c8ace386159418",
+    "ROUND43_RESUME_RECONCILIATION.json": "8ada0e65ce2a5ef46f080eb8595d18ddea0288b52b83b0ec8943056928dc3f92",
+    "ROUND42_REPORT_CORRECTION.json": "fc50af7b08d5d2985c17969c68c0d4e9d4fd916cb19068138c71fbd8c81c34ed",
+    "ROUND43_REPORT.md": "0d24891779b4ecd2d7c4fbfcc520aab333a7c1f5c6cf9ed60d029e1dc0043a12",
+    "ROUND43_STATUS.json": "2adde14cb3e2d428f565d2c5b171c50d6f96f4894b329880104bf39e9e95a35d"
+  },
+  "scientific_interpretation": "development_block_joint_improvement_not_observed",
+  "original_failure_records_edited": false,
+  "raw_rows_claims_tapes_checkpoints_or_logs_overwritten": false
+}

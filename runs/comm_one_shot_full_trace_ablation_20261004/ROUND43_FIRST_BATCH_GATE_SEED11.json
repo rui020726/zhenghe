@@ -1,0 +1,151 @@
+{
+  "kind": "round42-first-four-real-batch-gate/1",
+  "status": "passed",
+  "training_seed": 11,
+  "episodes": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "batch": 0,
+  "batch_record": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\r40_batch_s11_b0_attempt01.json",
+    "sha256": "d4bf3b6f2b84b94cd933023e292a60d19c5ff0b6de8b441fc34fbef9b5823755"
+  },
+  "preupdate_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+  "postupdate_parameter_sha256": "db8a462b9f36ee6c75de04c0dc34d5e98c06f566aee80153d58cdc6463a58bdb",
+  "preupdate_checkpoint": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\v2_train_s11_before_b0.pt",
+    "sha256": "aa20178eb47b11f48673e7832156b15af7c6784a45cc62683da7d0b092511752",
+    "read_only": {
+      "load_mode": "read_only",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+      "reward_timing_version": "published-completion-event-at-relay-tick/2",
+      "timing_interpretation": "versioned_capture_semantics",
+      "optimizer_restored": false,
+      "rng_restored": false,
+      "comm_action_eligibility": "first-report-only/1",
+      "action_eligibility_interpretation": "first-report-only/1",
+      "read_only_for_round40": true,
+      "comm_action_semantics": "one-shot-send-skip/1",
+      "action_semantics_interpretation": "one-shot-send-skip/1",
+      "read_only_for_round42": true,
+      "ambient_rng_preserved": true
+    }
+  },
+  "postupdate_checkpoint": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\v2_train_s11_after_b0.pt",
+    "sha256": "31e246dc3691759e40329fd3aa640ddac20af0c68e7207659b6364645ff28c6c",
+    "read_only": {
+      "load_mode": "read_only",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+      "reward_timing_version": "published-completion-event-at-relay-tick/2",
+      "timing_interpretation": "versioned_capture_semantics",
+      "optimizer_restored": false,
+      "rng_restored": false,
+      "comm_action_eligibility": "first-report-only/1",
+      "action_eligibility_interpretation": "first-report-only/1",
+      "read_only_for_round40": true,
+      "comm_action_semantics": "one-shot-send-skip/1",
+      "action_semantics_interpretation": "one-shot-send-skip/1",
+      "read_only_for_round42": true,
+      "ambient_rng_preserved": true
+    },
+    "episodes_done": 4,
+    "updates": 1,
+    "optimizer_steps": 12
+  },
+  "candidate_and_action_audit": {
+    "decision_tape_rows": 631,
+    "free_choices": 23,
+    "send_now_choices": 15,
+    "skip_episode_choices": 8,
+    "budget_or_capacity_masked_candidates": 0,
+    "closed_fixed_hold_candidates": 904,
+    "all_skip_choices_in_free_likelihood_set": true,
+    "closed_and_masked_excluded": true,
+    "one_free_choice_per_target_per_episode": true
+  },
+  "independent_likelihood": {
+    "max_abs_logged_vs_recomputed": 0.0,
+    "max_abs_entropy_helper_vs_independent_free_set_sum": 0.0,
+    "trainer_preupdate_alignment": {
+      "samples": 631,
+      "max_abs_gap": 0.0,
+      "tolerance": 1e-06,
+      "passed": true
+    },
+    "tolerance": 1e-06
+  },
+  "independent_reward_gae": {
+    "max_abs_sample_target_gap": 0.0,
+    "independent_prefix_task_reward": 0.0,
+    "independent_prefix_cost_bytes": 0.0,
+    "actual_batch_samples": 631,
+    "task_event_tick_and_cost_closure": true
+  },
+  "paired_constraint": {
+    "same_scene_reference_values": [
+      6.0,
+      6.0,
+      5.0,
+      6.0
+    ],
+    "policy_on_time_values": [
+      6.0,
+      5.0,
+      5.0,
+      6.0
+    ],
+    "independent_g_hat": 0.25,
+    "recorded_g_hat": 0.25,
+    "lambda_before": 1.0,
+    "lambda_next": 1.0125,
+    "direction": "increase"
+  },
+  "optimizer_and_gradient_scope": {
+    "optimizer_parameter_count": 10,
+    "communication_modules": [
+      "action_head",
+      "cost_head",
+      "task_value_head",
+      "trunk"
+    ],
+    "task_critic_included": true,
+    "cost_critic_included": true,
+    "finite_metrics_gradients_and_critic_targets": true,
+    "module_gradient_l1_mean": {
+      "trunk": 167.171085378,
+      "action_head": 0.816591271,
+      "task_value_head": 19.380478546,
+      "cost_head": 1.56782175
+    },
+    "module_gradient_l1_min": {
+      "trunk": 105.171296358,
+      "action_head": 0.237885347,
+      "task_value_head": 12.036715567,
+      "cost_head": 0.266191998
+    },
+    "gradient_norm_mean": 4.4549,
+    "optimizer_steps": 12,
+    "extra_optimizer_steps_or_checkpoint_writes_during_gate": 0
+  },
+  "frozen_search_allocation_hashes_unchanged": true,
+  "frozen_checkpoint_path_identity": [
+    {
+      "frozen_name": "shared_mappo_model_21_3100.pth",
+      "record_key": "runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+      "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+      "declared_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+      "actual_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33"
+    },
+    {
+      "frozen_name": "ctde_final_7_1.pth",
+      "record_key": "runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+      "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+      "declared_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+      "actual_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+    }
+  ]
+}

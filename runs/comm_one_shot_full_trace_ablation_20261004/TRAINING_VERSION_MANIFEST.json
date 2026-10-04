@@ -1,0 +1,33 @@
+{
+  "kind": "training-version-manifest/1",
+  "previous_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+  "previous_checkpoint_policy": {
+    "resume": "rejected by the actual ROUND43 restore entry before controller, optimizer, or RNG restore",
+    "read_only": "allowed with explicit ROUND42 identity"
+  },
+  "new_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+  "new_checkpoint_policy": {
+    "resume": "accepted only with the exact ROUND43 version and freeze identity",
+    "initialization": "fresh same-seed controller and empty Adam; ROUND42 ep0 supplies only the registered RNG state"
+  },
+  "only_research_variable": {
+    "gae_lambda": {
+      "old": 0.95,
+      "new": 1.0
+    }
+  },
+  "unchanged": {
+    "gamma": 1.0,
+    "lambda_dual_initial": 1.0,
+    "eta_lambda": 0.05,
+    "delta": 0.0,
+    "b0_bytes": 10000,
+    "comm_action_semantics": "one-shot-send-skip/1",
+    "reward_timing_version": "published-completion-event-at-relay-tick/2"
+  },
+  "round42_report_correction": {
+    "original_text_claimed": "two greedy NEW seeds were all-SKIP",
+    "corrected_from_original_table_and_rows": "all three greedy NEW seeds were all-SKIP",
+    "original_round42_report_edited": false
+  }
+}
