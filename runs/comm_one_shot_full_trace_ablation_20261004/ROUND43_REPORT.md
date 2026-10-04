@@ -38,21 +38,21 @@
 
 | 组 | 按时 Y 总数 / 每集均值 | 计费 C 总数 / 每集均值 | 首报发射 / 首报字节 | 自由 SEND / SKIP | 丢包 |
 |---|---:|---:|---:|---:|---:|
-| immediate_reference_development | 96 / 6.000 | 239,028 / 14,939.25 B | 96 / 239,028 B | 0 / 0 | 175 |
-| late_discovery_gate | 96 / 6.000 | 77,412 / 4,838.25 B | 31 / 77,412 B | 0 / 0 | 61 |
-| always_hold | 88 / 5.500 | 0 / 0.00 B | 0 / 0 B | 0 / 0 | 0 |
-| s11_greedy_OLD_round42_new_ep128 | 88 / 5.500 | 0 / 0.00 B | 0 / 0 B | 0 / 96 | 0 |
-| s11_greedy_NEW_round43_ep128 | 88 / 5.500 | 0 / 0.00 B | 0 / 0 B | 0 / 96 | 0 |
-| s11_sampled_OLD_round42_new_ep128 | 94 / 5.875 | 94,710 / 5,919.38 B | 38 / 94,710 B | 38 / 58 | 64 |
-| s11_sampled_NEW_round43_ep128 | 94 / 5.875 | 84,870 / 5,304.38 B | 34 / 84,870 B | 34 / 62 | 56 |
-| s22_greedy_OLD_round42_new_ep128 | 88 / 5.500 | 0 / 0.00 B | 0 / 0 B | 0 / 96 | 0 |
-| s22_greedy_NEW_round43_ep128 | 96 / 6.000 | 239,028 / 14,939.25 B | 96 / 239,028 B | 96 / 0 | 175 |
-| s22_sampled_OLD_round42_new_ep128 | 93 / 5.812 | 55,896 / 3,493.50 B | 22 / 55,896 B | 22 / 74 | 36 |
-| s22_sampled_NEW_round43_ep128 | 95 / 5.938 | 154,428 / 9,651.75 B | 62 / 154,428 B | 62 / 34 | 107 |
-| s33_greedy_OLD_round42_new_ep128 | 88 / 5.500 | 0 / 0.00 B | 0 / 0 B | 0 / 96 | 0 |
-| s33_greedy_NEW_round43_ep128 | 88 / 5.500 | 0 / 0.00 B | 0 / 0 B | 0 / 96 | 0 |
-| s33_sampled_OLD_round42_new_ep128 | 92 / 5.750 | 50,250 / 3,140.62 B | 20 / 50,250 B | 20 / 76 | 36 |
-| s33_sampled_NEW_round43_ep128 | 93 / 5.812 | 90,138 / 5,633.62 B | 36 / 90,138 B | 36 / 60 | 65 |
+| immediate_reference_development | 96 / 6.0000 | 239,028 / 14,939.2500 B | 96 / 239,028 B | 0 / 0 | 175 |
+| late_discovery_gate | 96 / 6.0000 | 77,412 / 4,838.2500 B | 31 / 77,412 B | 0 / 0 | 61 |
+| always_hold | 88 / 5.5000 | 0 / 0.0000 B | 0 / 0 B | 0 / 0 | 0 |
+| s11_greedy_OLD_round42_new_ep128 | 88 / 5.5000 | 0 / 0.0000 B | 0 / 0 B | 0 / 96 | 0 |
+| s11_greedy_NEW_round43_ep128 | 88 / 5.5000 | 0 / 0.0000 B | 0 / 0 B | 0 / 96 | 0 |
+| s11_sampled_OLD_round42_new_ep128 | 94 / 5.8750 | 94,710 / 5,919.3750 B | 38 / 94,710 B | 38 / 58 | 64 |
+| s11_sampled_NEW_round43_ep128 | 94 / 5.8750 | 84,870 / 5,304.3750 B | 34 / 84,870 B | 34 / 62 | 56 |
+| s22_greedy_OLD_round42_new_ep128 | 88 / 5.5000 | 0 / 0.0000 B | 0 / 0 B | 0 / 96 | 0 |
+| s22_greedy_NEW_round43_ep128 | 96 / 6.0000 | 239,028 / 14,939.2500 B | 96 / 239,028 B | 96 / 0 | 175 |
+| s22_sampled_OLD_round42_new_ep128 | 93 / 5.8125 | 55,896 / 3,493.5000 B | 22 / 55,896 B | 22 / 74 | 36 |
+| s22_sampled_NEW_round43_ep128 | 95 / 5.9375 | 154,428 / 9,651.7500 B | 62 / 154,428 B | 62 / 34 | 107 |
+| s33_greedy_OLD_round42_new_ep128 | 88 / 5.5000 | 0 / 0.0000 B | 0 / 0 B | 0 / 96 | 0 |
+| s33_greedy_NEW_round43_ep128 | 88 / 5.5000 | 0 / 0.0000 B | 0 / 0 B | 0 / 96 | 0 |
+| s33_sampled_OLD_round42_new_ep128 | 92 / 5.7500 | 50,250 / 3,140.6250 B | 20 / 50,250 B | 20 / 76 | 36 |
+| s33_sampled_NEW_round43_ep128 | 93 / 5.8125 | 90,138 / 5,633.6250 B | 36 / 90,138 B | 36 / 60 | 65 |
 
 ## 按场景配对差和目标身份变化
 
@@ -60,30 +60,30 @@
 
 | Seed | 模式 | 对照（NEW−对照） | ΔY 总数 / 每集 | ΔC 总数 / 每集 | NEW救回目标 | NEW丢失目标 |
 |---:|---|---|---:|---:|---|---|
-| 11 | greedy | OLD_round42_new_ep128 | +0 / +0.000 | +0 / +0.00 B | ∅ | ∅ |
-| 11 | greedy | immediate | -8 / -0.500 | -239,028 / -14,939.25 B | ∅ | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 |
-| 11 | greedy | late_discovery_gate | -8 / -0.500 | -77,412 / -4,838.25 B | ∅ | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 |
-| 11 | greedy | always_hold | +0 / +0.000 | +0 / +0.00 B | ∅ | ∅ |
-| 11 | sampled | OLD_round42_new_ep128 | +0 / +0.000 | -9,840 / -615.00 B | ∅ | ∅ |
-| 11 | sampled | immediate | -2 / -0.125 | -154,158 / -9,634.88 B | ∅ | 1301001:piloc-e1-target-5, 1301013:piloc-e1-target-2 |
-| 11 | sampled | late_discovery_gate | -2 / -0.125 | +7,458 / +466.12 B | ∅ | 1301001:piloc-e1-target-5, 1301013:piloc-e1-target-2 |
-| 11 | sampled | always_hold | +6 / +0.375 | +84,870 / +5,304.38 B | 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301015:piloc-e1-target-0 | ∅ |
-| 22 | greedy | OLD_round42_new_ep128 | +8 / +0.500 | +239,028 / +14,939.25 B | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 | ∅ |
-| 22 | greedy | immediate | +0 / +0.000 | +0 / +0.00 B | ∅ | ∅ |
-| 22 | greedy | late_discovery_gate | +0 / +0.000 | +161,616 / +10,101.00 B | ∅ | ∅ |
-| 22 | greedy | always_hold | +8 / +0.500 | +239,028 / +14,939.25 B | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 | ∅ |
-| 22 | sampled | OLD_round42_new_ep128 | +2 / +0.125 | +98,532 / +6,158.25 B | 1301001:piloc-e1-target-5, 1301015:piloc-e1-target-0 | ∅ |
-| 22 | sampled | immediate | -1 / -0.062 | -84,600 / -5,287.50 B | ∅ | 1301002:piloc-e1-target-3 |
-| 22 | sampled | late_discovery_gate | -1 / -0.062 | +77,016 / +4,813.50 B | ∅ | 1301002:piloc-e1-target-3 |
-| 22 | sampled | always_hold | +7 / +0.438 | +154,428 / +9,651.75 B | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 | ∅ |
-| 33 | greedy | OLD_round42_new_ep128 | +0 / +0.000 | +0 / +0.00 B | ∅ | ∅ |
-| 33 | greedy | immediate | -8 / -0.500 | -239,028 / -14,939.25 B | ∅ | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 |
-| 33 | greedy | late_discovery_gate | -8 / -0.500 | -77,412 / -4,838.25 B | ∅ | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 |
-| 33 | greedy | always_hold | +0 / +0.000 | +0 / +0.00 B | ∅ | ∅ |
-| 33 | sampled | OLD_round42_new_ep128 | +1 / +0.062 | +39,888 / +2,493.00 B | 1301001:piloc-e1-target-5 | ∅ |
-| 33 | sampled | immediate | -3 / -0.188 | -148,890 / -9,305.62 B | ∅ | 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 |
-| 33 | sampled | late_discovery_gate | -3 / -0.188 | +12,726 / +795.38 B | ∅ | 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 |
-| 33 | sampled | always_hold | +5 / +0.312 | +90,138 / +5,633.62 B | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5 | ∅ |
+| 11 | greedy | OLD_round42_new_ep128 | +0 / +0.0000 | +0 / +0.0000 B | ∅ | ∅ |
+| 11 | greedy | immediate | -8 / -0.5000 | -239,028 / -14,939.2500 B | ∅ | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 |
+| 11 | greedy | late_discovery_gate | -8 / -0.5000 | -77,412 / -4,838.2500 B | ∅ | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 |
+| 11 | greedy | always_hold | +0 / +0.0000 | +0 / +0.0000 B | ∅ | ∅ |
+| 11 | sampled | OLD_round42_new_ep128 | +0 / +0.0000 | -9,840 / -615.0000 B | ∅ | ∅ |
+| 11 | sampled | immediate | -2 / -0.1250 | -154,158 / -9,634.8750 B | ∅ | 1301001:piloc-e1-target-5, 1301013:piloc-e1-target-2 |
+| 11 | sampled | late_discovery_gate | -2 / -0.1250 | +7,458 / +466.1250 B | ∅ | 1301001:piloc-e1-target-5, 1301013:piloc-e1-target-2 |
+| 11 | sampled | always_hold | +6 / +0.3750 | +84,870 / +5,304.3750 B | 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301015:piloc-e1-target-0 | ∅ |
+| 22 | greedy | OLD_round42_new_ep128 | +8 / +0.5000 | +239,028 / +14,939.2500 B | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 | ∅ |
+| 22 | greedy | immediate | +0 / +0.0000 | +0 / +0.0000 B | ∅ | ∅ |
+| 22 | greedy | late_discovery_gate | +0 / +0.0000 | +161,616 / +10,101.0000 B | ∅ | ∅ |
+| 22 | greedy | always_hold | +8 / +0.5000 | +239,028 / +14,939.2500 B | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 | ∅ |
+| 22 | sampled | OLD_round42_new_ep128 | +2 / +0.1250 | +98,532 / +6,158.2500 B | 1301001:piloc-e1-target-5, 1301015:piloc-e1-target-0 | ∅ |
+| 22 | sampled | immediate | -1 / -0.0625 | -84,600 / -5,287.5000 B | ∅ | 1301002:piloc-e1-target-3 |
+| 22 | sampled | late_discovery_gate | -1 / -0.0625 | +77,016 / +4,813.5000 B | ∅ | 1301002:piloc-e1-target-3 |
+| 22 | sampled | always_hold | +7 / +0.4375 | +154,428 / +9,651.7500 B | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 | ∅ |
+| 33 | greedy | OLD_round42_new_ep128 | +0 / +0.0000 | +0 / +0.0000 B | ∅ | ∅ |
+| 33 | greedy | immediate | -8 / -0.5000 | -239,028 / -14,939.2500 B | ∅ | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 |
+| 33 | greedy | late_discovery_gate | -8 / -0.5000 | -77,412 / -4,838.2500 B | ∅ | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5, 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 |
+| 33 | greedy | always_hold | +0 / +0.0000 | +0 / +0.0000 B | ∅ | ∅ |
+| 33 | sampled | OLD_round42_new_ep128 | +1 / +0.0625 | +39,888 / +2,493.0000 B | 1301001:piloc-e1-target-5 | ∅ |
+| 33 | sampled | immediate | -3 / -0.1875 | -148,890 / -9,305.6250 B | ∅ | 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 |
+| 33 | sampled | late_discovery_gate | -3 / -0.1875 | +12,726 / +795.3750 B | ∅ | 1301003:piloc-e1-target-5, 1301013:piloc-e1-target-2, 1301015:piloc-e1-target-0 |
+| 33 | sampled | always_hold | +5 / +0.3125 | +90,138 / +5,633.6250 B | 1301001:piloc-e1-target-5, 1301002:piloc-e1-target-1, 1301002:piloc-e1-target-2, 1301002:piloc-e1-target-3, 1301002:piloc-e1-target-5 | ∅ |
 
 ## λ_dual 完整轨迹
 
@@ -143,7 +143,7 @@ ROUND43 登记新训练版本 `constrained-cost-v2/one-shot-send-skip/1/full-tra
 
 - Branch：`exp/comm-one-shot-full-trace-ablation`
 - 预启动执行源码 HEAD：`7ed1a03c445fa31fe90fd70a224a97b8366fa182`
-- 报告终结器 HEAD：`3fc1e5814cdb99d22caa53cb5dc8a8cb37c1841d`；`r43_report.py` SHA256：`9964f87695b00f5aebc19896ea9aab62a9411d3c8febdadf918cd4b96562f8a1`（与执行源码身份分列）
+- 报告终结器 HEAD：`8730418882bf6f6d814debce249329665bcb057e`；`r43_report.py` SHA256：`0a6137333230e135210a32e7a22e4e0ad33d2ce1e363a5acf32607e4c736ec6b`（与执行源码身份分列）
 - Python：`D:\project_env\python.exe`；实验设备：CPU
 - Runtime：Python 3.10.19、NumPy 2.2.6、PyTorch 2.9.0+cu128（CUDA 可用性=True，本轮运行固定 CPU）
 - 执行依据 SHA256：`711e61495d9d7883cd9d636f8f1cf7b50e1336b0890245bc41a54ea370b7be89`
