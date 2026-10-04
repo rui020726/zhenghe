@@ -1,0 +1,114 @@
+{
+  "kind": "round44-prelaunch-identity/1",
+  "status": "passed",
+  "head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
+  "branch": "exp/comm-dual-response-ablation",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/published-completion-event-at-relay-tick/2",
+  "runner_version": "counted-jointrun-proxy/1+eval-key-index/1",
+  "eta_lambda": 0.5,
+  "gae_lambda": 1.0,
+  "gamma": 1.0,
+  "source_code_sha256": {
+    "EXECUTION_BASIS.md": "bc60e096b0bfcd08b202c69f20b8a5d4cc1a58ff9118d1e13d6385f80d37c584",
+    "r42_versions.py": "26b9e1a3d4f3b9a5d39ca020a5ebd3653615c09a76a77ae4138f4ab98420a3d8",
+    "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+    "r40_train_resume_adapter.py": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+    "r43_call_counter_hooks.py": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
+    "r44_eval_index.py": "4e7d23505c06083a91738e2b88a36cbc0a9cb325e81631443c453360d3562546",
+    "test_r44_eval_index.py": "fffe671c6cf4add3fcff9e1836b606f2884a73776bcc9969bc147336d83f4d16",
+    "r44_prepare.py": "00454502ef5cee97d3592eb09dba53673ed421168f84eda27893fca2934b0124",
+    "r44_runtime.py": "8fce8772c1bad04a4bc2acdb590e95de491dcbc4b0c21119a91a5842dd461177",
+    "r44_preflight.py": "85a7aa71f50818164faf7974ce18a654ffd5b76ec75439353b9a88bedbdbc247",
+    "r44_analysis.py": "b451f913a35c25e114ca8afc0896dff8ab76c0ed45633b2ba4a7fbfbcdd59e19",
+    "r44_report.py": "1adcad2b2fe88326df37c92a2bbafc22d07bf8a84db21dc4b89846d0be7206e6",
+    "r44_execute.py": "50b7fc3d9fae214ece96fa528c63443f266049a81bea62cff6d901b8013bb2a1"
+  },
+  "copied_r43_helpers": {
+    "r42_one_shot.py": {
+      "sha256": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+      "source_sha256": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d"
+    },
+    "r40_train_resume_adapter.py": {
+      "sha256": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+      "source_sha256": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca"
+    },
+    "r43_call_counter_hooks.py": {
+      "sha256": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
+      "source_sha256": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7"
+    }
+  },
+  "r43_frozen_source_code_sha256": {
+    "r42_run.py": "9c5feacb2ffcb2bb930d2b6022e2fca5210408765dc664859d400e6f2b5f8c2e",
+    "r42_versions.py": "f451503d40657d210ba7c81caffe5d6918f1a9de737625b057e0c9354e7bcffd",
+    "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+    "r42_analysis.py": "3342367be6d8a3c732ac7bf541575d17ae8a168618bc3f9b1493781bf8345633",
+    "r43_preflight.py": "544f887b05b3a11cfcd6448ef7cc8f88fd6c29fc7f6e5d373d033f4373b651b8",
+    "r43_analysis.py": "1994da0d1d726df54537cf78da0a03a2dbf61132fe196a6bc2de63a37b460810",
+    "r43_execute.py": "553ef28fb620d6c3af8ac26dd173ec79315f37b92e2831807c8ea989f29fcac1",
+    "r43_report.py": "8a546d7aad40c95481b74bb329deab72e577e54c76c5d0d9eaeff9616894c324",
+    "r43_freeze.py": "9784280d49a9f983ef403961671a5c18431dc0c46bf4aa330a6d6167a824a783",
+    "r40_train_resume_adapter.py": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+    "r43_call_counter_hooks.py": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
+    "test_r43_call_counter_hooks.py": "29b76f1007e18fc300db6bd6676e420b3e75c263840a49fb0a3ccd296c2ad3c3",
+    "test_r43_resume_adapter.py": "0fb4c275be50408ce4099f44d839c99ef77b689f8d762c4c41124a108cb61a8d",
+    "r43_recovery_gate.py": "520666ee2b71378601c86348c10f11f86dc521256138649f38b878000ce75d7f"
+  },
+  "r43_final_delivery_source_code_sha256": {
+    "r42_run.py": "9c5feacb2ffcb2bb930d2b6022e2fca5210408765dc664859d400e6f2b5f8c2e",
+    "r42_versions.py": "f451503d40657d210ba7c81caffe5d6918f1a9de737625b057e0c9354e7bcffd",
+    "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+    "r42_analysis.py": "3342367be6d8a3c732ac7bf541575d17ae8a168618bc3f9b1493781bf8345633",
+    "r43_preflight.py": "544f887b05b3a11cfcd6448ef7cc8f88fd6c29fc7f6e5d373d033f4373b651b8",
+    "r43_analysis.py": "1994da0d1d726df54537cf78da0a03a2dbf61132fe196a6bc2de63a37b460810",
+    "r43_execute.py": "553ef28fb620d6c3af8ac26dd173ec79315f37b92e2831807c8ea989f29fcac1",
+    "r43_report.py": "0a6137333230e135210a32e7a22e4e0ad33d2ce1e363a5acf32607e4c736ec6b",
+    "r43_freeze.py": "9784280d49a9f983ef403961671a5c18431dc0c46bf4aa330a6d6167a824a783",
+    "r40_train_resume_adapter.py": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+    "r43_call_counter_hooks.py": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
+    "test_r43_call_counter_hooks.py": "29b76f1007e18fc300db6bd6676e420b3e75c263840a49fb0a3ccd296c2ad3c3",
+    "test_r43_resume_adapter.py": "0fb4c275be50408ce4099f44d839c99ef77b689f8d762c4c41124a108cb61a8d",
+    "r43_recovery_gate.py": "520666ee2b71378601c86348c10f11f86dc521256138649f38b878000ce75d7f"
+  },
+  "r43_report_only_finalization_identity": {
+    "kind": "round43-report-only-finalization-identity/1",
+    "status": "verified",
+    "path": "r43_report.py",
+    "role": "report-only finalizer; not loaded by ROUND44 runner",
+    "execution_freeze_head": "7ed1a03c445fa31fe90fd70a224a97b8366fa182",
+    "execution_freeze_sha256": "8a546d7aad40c95481b74bb329deab72e577e54c76c5d0d9eaeff9616894c324",
+    "report_code_head": "8730418882bf6f6d814debce249329665bcb057e",
+    "report_code_sha256": "0a6137333230e135210a32e7a22e4e0ad33d2ce1e363a5acf32607e4c736ec6b",
+    "final_delivery_head": "9f2b6b6411c50849ce1a9eedbaedffaf0aededa5",
+    "final_report_sha256": "7e0f3ec38842c42e1f0b456be956665001328270672b4afcf55230c4d109b245",
+    "finalization_activity": {
+      "environment_constructor_calls": 0,
+      "run_invocation_calls": 0,
+      "ppo_update_calls": 0,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 0,
+      "checkpoint_deserializations": 0,
+      "forward_calls": 0
+    }
+  },
+  "frozen_config_sha256": "354b2d4441ec1d4ce8d4aa6ba6f79b29d4cba17c82d525f2a566a68c4e5190ed",
+  "configuration_diff_sha256": "281e32473a396632cc5dc3db5c1afb9933c1c25122cb244dcf0b0adf9941d994",
+  "baseline_reuse_sha256": "6decb2e53693694b75bca045534c7be559eeeda4faed6181cec1665d99e816e5",
+  "zero_environment_gate_sha256": "172387e84c5b4703f12282857095bbc6d5de26f6e19c98124b9344410838337b",
+  "zero_environment_test_sha256": "9cf1a4c6c8d883b4a62410e4a75146b6bbf5c128a99d78ba44265f8d24a61bff",
+  "source_delivery_head": "9143aedee12699943957441d3b0ffa9a4969b5bd",
+  "source_execution_head": "0369408dec2cfabffb623e0445174725f9dde0d5",
+  "reused_round43_delivery_head": "9f2b6b6411c50849ce1a9eedbaedffaf0aededa5",
+  "prelaunch_environment_constructor_calls": 0,
+  "prelaunch_optimizer_step_calls": 0,
+  "prelaunch_experimental_checkpoint_write_calls": 0,
+  "quota": {
+    "normal": 480,
+    "reserve": 24,
+    "hard_cap": 504
+  },
+  "fixed_plan": {
+    "training_episodes": 384,
+    "new_evaluations": 96,
+    "baseline_repair": 0
+  }
+}

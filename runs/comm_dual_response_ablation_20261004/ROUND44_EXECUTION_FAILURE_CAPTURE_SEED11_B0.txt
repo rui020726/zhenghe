@@ -1,0 +1,23 @@
+ROUND44 seed11 batch-zero executor failure (captured PTY output; line wrapping normalized)
+
+Command: D:\project_env\python.exe runs\comm_dual_response_ablation_20261004\r44_execute.py
+Frozen prelaunch HEAD: 2353c4616746cf0a7c9fcb3a519a7042a28ba176
+Process exit code: 1
+
+Observed completed work before the exception:
+- seed11 episodes 0-3 completed on scenes 1300027, 1300014, 1300028, 1300044
+- each episode completed 1000 steps; 4 normal claims completed
+- batch0 committed: 631 rows, 1 PPO update, 12 optimizer steps, g_hat=+0.25, lambda 1.0000 -> 1.1250
+
+Traceback (normalized from PTY line wraps):
+  File "runs/comm_dual_response_ablation_20261004/r44_execute.py", line 615, in <module>
+    raise SystemExit(main())
+  File "runs/comm_dual_response_ablation_20261004/r44_execute.py", line 604, in main
+    result = run()
+  File "runs/comm_dual_response_ablation_20261004/r44_execute.py", line 408, in run
+    comparison = _compare_first_batch(seed, runtime, gate)
+  File "runs/comm_dual_response_ablation_20261004/r44_execute.py", line 192, in _compare_first_batch
+    run_module.torch_load_cpu(old_postupdate)["optimizer"])
+NameError: name 'run_module' is not defined
+
+The first-four local gate and after-batch checkpoint receipts exist. The R43/R44 first-batch comparison receipt was not completed. No seed11 continuation, seed22/33 training, or final evaluation followed. The original execution progress and ledger are retained unchanged.

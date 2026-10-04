@@ -1,0 +1,116 @@
+{
+  "kind": "round44-stop-state/1",
+  "status": "stopped_after_seed11_batch0_runner_failure",
+  "round": 44,
+  "branch": "exp/comm-dual-response-ablation",
+  "execution_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
+  "runner_version": "counted-jointrun-proxy/1+eval-key-index/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/published-completion-event-at-relay-tick/2",
+  "failure": {
+    "exception": "NameError",
+    "message": "name 'run_module' is not defined",
+    "location": "r44_execute.py:_compare_first_batch, old post-update optimizer state load",
+    "exit_code": 1,
+    "first_batch_comparison_completed": false,
+    "scientific_gate_ready_record": "training_progress/seed11_ep004_u01_first_four_gate_ready.json"
+  },
+  "execution_state": {
+    "active_python_process_after_exit": false,
+    "progress_status_preserved": "running",
+    "progress_file_preserved_unchanged": true,
+    "ledger_file_preserved_unchanged": true,
+    "seeds_started": [
+      11
+    ],
+    "seeds_not_started": [
+      22,
+      33
+    ],
+    "final_evaluation_cells_completed": 0
+  },
+  "completed_work": {
+    "normal_claims": 4,
+    "reserve_claims": 0,
+    "environment_constructor_calls": 4,
+    "run_invocation_calls": 4,
+    "completed_steps": 4000,
+    "completed_logical_jobs": 4,
+    "ppo_update_calls": 1,
+    "optimizer_step_calls": 12,
+    "checkpoint_write_calls": 4,
+    "episodes": [
+      {
+        "episode_index": 0,
+        "scenario_seed": 1300027,
+        "on_time_tasks": 6,
+        "payload_attempt_bytes": 14922,
+        "row_sha256": "dae84c591f6298a728f29662a5b87da246d8772508980c706ba92341c49eae2c"
+      },
+      {
+        "episode_index": 1,
+        "scenario_seed": 1300014,
+        "on_time_tasks": 5,
+        "payload_attempt_bytes": 7230,
+        "row_sha256": "9c3e2e61116eb0bfb105d9087f4e87a0299cb2be7652e3d488673204386c8f2b"
+      },
+      {
+        "episode_index": 2,
+        "scenario_seed": 1300028,
+        "on_time_tasks": 5,
+        "payload_attempt_bytes": 4962,
+        "row_sha256": "b314307410883bc8d0baff3b8c3c5b604f2dca5951bf925664a9cc1101d1729e"
+      },
+      {
+        "episode_index": 3,
+        "scenario_seed": 1300044,
+        "on_time_tasks": 6,
+        "payload_attempt_bytes": 9984,
+        "row_sha256": "bc1caaf02ee36a557b0e9a414333ff477ec5b36522502bbbbad08a4cac3adfc5"
+      }
+    ],
+    "episode_total_tasks": 22,
+    "episode_total_payload_attempt_bytes": 37098
+  },
+  "saved_state": {
+    "path": "checkpoints/v2_train_s11_after_b0.pt",
+    "sha256": "42a5160ead497ef3ce5dcb2e9783fe094b30f6a1f245630149bdde2c75946d25",
+    "episodes_done": 4,
+    "updates": 1,
+    "optimizer_steps": 12,
+    "lambda_dual": 1.125,
+    "eta_lambda": 0.5,
+    "rng_sources": [
+      "numpy",
+      "python",
+      "torch"
+    ],
+    "parameter_sha256": "db8a462b9f36ee6c75de04c0dc34d5e98c06f566aee80153d58cdc6463a58bdb",
+    "batch_checkpoint_receipt": "training_progress/seed11_ep004_u01_batch_checkpoint_committed.json"
+  },
+  "quota": {
+    "normal_planned": 480,
+    "normal_used": 4,
+    "reserve_cap": 24,
+    "reserve_used": 0,
+    "hard_cap": 504,
+    "no_claim_refund": true
+  },
+  "identity_reconciliation": {
+    "original_frozen_head": "597d02aed42b7b332c604c61630e461233c74868",
+    "original_frozen_config_sha256": "354b2d4441ec1d4ce8d4aa6ba6f79b29d4cba17c82d525f2a566a68c4e5190ed",
+    "corrected_prelaunch_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
+    "r43_report_source_negative_regression": "passed",
+    "regression_path": "runtime/ROUND44_SOURCE_IDENTITY_REGRESSION.json",
+    "regression_sha256": "57b21c52c1959ecb0bdcedb3e31fea69dc3a5498cd9400ff4b8db8ece937c4da"
+  },
+  "failure_evidence": {
+    "prelaunch_failure_capture": "runtime/ROUND44_PRELAUNCH_IDENTITY_FAILURE_597d02a.txt",
+    "prelaunch_failure_sha256": "6dc6994e286cb7f0af8e04da0a21d0162cbffa4db10eb5624c75c73b617a67b5",
+    "runtime_failure_capture": "ROUND44_EXECUTION_FAILURE_CAPTURE_SEED11_B0.txt",
+    "runtime_failure_sha256": "2d5c0768a99f26ee0879802d87e12a2517858acae80d931eef1b6653cc0f979c",
+    "artifact_inventory": "ROUND44_STOP_ARTIFACT_INVENTORY.json",
+    "artifact_inventory_sha256": "bcc2c8c7ea56b3135a50f9d995aebf9999d7094e658b933b3361d87bc1ad4225"
+  },
+  "continuation_status": "not continued: ROUND44 basis requires stopping affected work after a real run failure and prohibits hot-fixing the frozen runner; an exact checkpoint exists but no repair/restart authorization is inferred",
+  "result_verdict": "unavailable; fixed three-seed matrix and 96-cell evaluation did not complete"
+}

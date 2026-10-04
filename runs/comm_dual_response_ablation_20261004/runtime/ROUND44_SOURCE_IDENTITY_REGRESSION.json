@@ -1,0 +1,39 @@
+{
+  "kind": "round44-r43-source-identity-regression/1",
+  "status": "passed",
+  "validation_entry": "r44_prepare.verify_r43_source_identity",
+  "positive_case": {
+    "case": "exact_registered_report_finalization_hash",
+    "status": "accepted_as_expected",
+    "path": "r43_report.py",
+    "report_code_sha256": "0a6137333230e135210a32e7a22e4e0ad33d2ce1e363a5acf32607e4c736ec6b",
+    "verified_source_count": 2
+  },
+  "negative_cases": [
+    {
+      "case": "arbitrary_unregistered_report_bytes",
+      "status": "rejected_as_expected",
+      "exception": "RuntimeError",
+      "message": "ROUND43 final report renderer differs from its registered hash"
+    },
+    {
+      "case": "arbitrary_report_bytes_with_matching_local_labels",
+      "status": "rejected_as_expected",
+      "exception": "RuntimeError",
+      "message": "ROUND43 report renderer does not match its report-code commit"
+    },
+    {
+      "case": "training_source_hash_drift",
+      "status": "rejected_as_expected",
+      "exception": "RuntimeError",
+      "message": "ROUND43 inherited execution source changed: r42_run.py"
+    }
+  ],
+  "source_validation_sha256": "00454502ef5cee97d3592eb09dba53673ed421168f84eda27893fca2934b0124",
+  "head_under_test": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
+  "environment_starts": 0,
+  "run_calls": 0,
+  "optimizer_steps": 0,
+  "checkpoint_writes": 0,
+  "fixtures": "temporary R43 source/report identity copies only; deleted after each case"
+}

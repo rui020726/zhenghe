@@ -1,0 +1,16 @@
+ROUND44 prelaunch identity failure captured before any R44 claim
+
+Command: D:\project_env\python.exe runs\comm_dual_response_ablation_20261004\r44_execute.py --write-prelaunch-receipt
+Original HEAD: 597d02aed42b7b332c604c61630e461233c74868
+Exit code: 1
+
+Traceback (most recent call last):
+  File "D:\code\[terminal path rendered with replacement characters]\zhenghe-round42\runs\comm_dual_response_ablation_20261004\r44_execute.py", line 615, in <module>
+    raise SystemExit(main())
+  File "D:\code\[terminal path rendered with replacement characters]\zhenghe-round42\runs\comm_dual_response_ablation_20261004\r44_execute.py", line 599, in main
+    result = write_prelaunch_receipt()
+  File "D:\code\[terminal path rendered with replacement characters]\zhenghe-round42\runs\comm_dual_response_ablation_20261004\r44_execute.py", line 95, in write_prelaunch_receipt
+    raise RuntimeError(f"ROUND43 inherited source changed before ROUND44: {relative}")
+RuntimeError: ROUND43 inherited source changed before ROUND44: r43_report.py
+
+Classification after read-only provenance check: the sole mismatch was the registered R43 report-only finalizer. No ROUND44 claim, environment construction, run call, optimizer update, or experimental checkpoint existed at this failed prelaunch attempt.
