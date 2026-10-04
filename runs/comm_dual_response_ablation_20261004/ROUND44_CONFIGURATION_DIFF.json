@@ -1,0 +1,78 @@
+{
+  "kind": "round44-scientific-configuration-diff/1",
+  "source_round": 43,
+  "source_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+  "new_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/published-completion-event-at-relay-tick/2",
+  "scientific_variable_count": 1,
+  "scientific_differences": [
+    {
+      "path": "round42.objective.eta_lambda",
+      "from": 0.05,
+      "to": 0.5,
+      "interpretation": "dual response step size per completed four-episode PPO batch"
+    }
+  ],
+  "verified_unchanged": {
+    "gae_lambda": 1.0,
+    "gamma": 1.0,
+    "lambda_init": 1.0,
+    "delta": 0.0,
+    "b0_bytes": 10000.0,
+    "training_seeds": [
+      11,
+      22,
+      33
+    ],
+    "episodes_per_seed": 128,
+    "batches_per_seed": 32,
+    "training_order_sha256": "346f2cdde8d658f927ea282f83e143d54a600f4f5c729e4521fe657421afe840",
+    "training_scenes": [
+      1300000,
+      1300047,
+      48
+    ],
+    "development_scenes": [
+      1301000,
+      1301001,
+      1301002,
+      1301003,
+      1301004,
+      1301005,
+      1301006,
+      1301007,
+      1301008,
+      1301009,
+      1301010,
+      1301011,
+      1301012,
+      1301013,
+      1301014,
+      1301015
+    ],
+    "action_semantics": "one-shot-send-skip/1",
+    "actor_dual_timing": "pre-update lambda_dual is used throughout a batch"
+  },
+  "execution_only_differences": {
+    "hard_launch_cap": {
+      "round43": 600,
+      "round44": 504
+    },
+    "runner_version": {
+      "round43": "counted-jointrun-proxy/1",
+      "round44": "counted-jointrun-proxy/1+eval-key-index/1"
+    },
+    "evaluation_completion_index": "one-time scan then verified incremental updates",
+    "old_arm": {
+      "round43": "ROUND42 NEW ep128",
+      "round44": "ROUND43 NEW ep128"
+    }
+  },
+  "scientific_configuration_zero_drift": true,
+  "verification_checks": {
+    "objective_equals_r43_except_eta_lambda": true,
+    "round43_gaE_rng_and_protocol_block_byte_semantics_unchanged": true,
+    "registered_ep0_parameter_identities_unchanged": true,
+    "training_order_scenes_ppo_world_observation_mask_unchanged": true
+  },
+  "canonical_sha256": "d0a878cbaed980b8edbe5727d8f63d436a96c7669d968070997dc2ec00f638c5"
+}

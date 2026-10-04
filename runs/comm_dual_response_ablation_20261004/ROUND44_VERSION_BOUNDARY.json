@@ -1,0 +1,44 @@
+{
+  "kind": "round44-version-boundary/1",
+  "status": "passed",
+  "r43_ep128_read_only_evaluation": "passed",
+  "r43_trained_restore_into_round44": "rejected_before_optimizer_or_rng_restore",
+  "by_seed": {
+    "11": {
+      "readonly_eval_parameter_sha256": "40b8e0821b16b6376dff2ee2cb7dea6409490ddf0b6cb466bbd6a6730764553f",
+      "readonly_optimizer_restored": false,
+      "readonly_rng_restored": false,
+      "training_restore_rejected": true,
+      "training_restore_rejection": "v2_train_s11_ep128.pt: training_version mismatch; checkpoint is read-only under ROUND44 one-shot-send-skip/1 / eta_lambda=0.5",
+      "optimizer_constructor_calls_on_rejection": 0,
+      "ambient_rng_preserved_on_rejection": true
+    },
+    "22": {
+      "readonly_eval_parameter_sha256": "e683dcd0b0a9f3d1cd743f153821ee31a41deb6135d3017d9ac33ff22e16e2c1",
+      "readonly_optimizer_restored": false,
+      "readonly_rng_restored": false,
+      "training_restore_rejected": true,
+      "training_restore_rejection": "v2_train_s22_ep128.pt: training_version mismatch; checkpoint is read-only under ROUND44 one-shot-send-skip/1 / eta_lambda=0.5",
+      "optimizer_constructor_calls_on_rejection": 0,
+      "ambient_rng_preserved_on_rejection": true
+    },
+    "33": {
+      "readonly_eval_parameter_sha256": "429b2c0ac7bb80c335cedf39fd980a4205ca74804fe35eaa2be491a08cf02757",
+      "readonly_optimizer_restored": false,
+      "readonly_rng_restored": false,
+      "training_restore_rejected": true,
+      "training_restore_rejection": "v2_train_s33_ep128.pt: training_version mismatch; checkpoint is read-only under ROUND44 one-shot-send-skip/1 / eta_lambda=0.5",
+      "optimizer_constructor_calls_on_rejection": 0,
+      "ambient_rng_preserved_on_rejection": true
+    }
+  },
+  "same_version_restore": {
+    "kind": "round44-same-version-restore-gate/1",
+    "status": "passed",
+    "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/published-completion-event-at-relay-tick/2",
+    "eta_lambda": 0.5,
+    "temporary_fixture_deleted": true,
+    "optimizer_step_calls": 0,
+    "restored_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff"
+  }
+}

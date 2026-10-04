@@ -1,0 +1,36 @@
+{
+  "kind": "round44-actual-dual-update-gate/1",
+  "status": "passed",
+  "cases": [
+    {
+      "lambda_before": 1.0,
+      "g_hat": 0.25,
+      "eta": 0.5,
+      "lambda_next": 1.125,
+      "independent_expected": 1.125
+    },
+    {
+      "lambda_before": 1.0,
+      "g_hat": -0.25,
+      "eta": 0.5,
+      "lambda_next": 0.875,
+      "independent_expected": 0.875
+    },
+    {
+      "lambda_before": 1.0,
+      "g_hat": 0.0,
+      "eta": 0.5,
+      "lambda_next": 1.0,
+      "independent_expected": 1.0
+    },
+    {
+      "lambda_before": 0.05,
+      "g_hat": -0.25,
+      "eta": 0.5,
+      "lambda_next": 0.0,
+      "independent_expected": 0.0
+    }
+  ],
+  "actual_function": "v2_trainer.dual_update",
+  "optimizer_step_calls": 0
+}
