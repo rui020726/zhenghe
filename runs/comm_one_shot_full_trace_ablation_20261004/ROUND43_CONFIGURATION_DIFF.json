@@ -1,0 +1,591 @@
+{
+  "kind": "round43-single-variable-configuration-diff/2",
+  "scope": "one-shot-send-skip full-trace GAE trace ablation",
+  "training_version_change": {
+    "old": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+    "new": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+    "checkpoint_policy": "ROUND42 trained states are rejected for ROUND43 training restore; ROUND42 NEW ep128 is read-only OLD"
+  },
+  "only_research_configuration_change": {
+    "path": "shared_gae_lambda",
+    "old": 0.95,
+    "new": 1.0,
+    "used_by": [
+      "task_advantage_gae",
+      "positive_cost_advantage_gae"
+    ],
+    "actual_call_path": "v2_trainer.batch_samples -> common.GAE_LAMBDA -> cm.gae for task and positive cost"
+  },
+  "objective_and_ppo": {
+    "old": {
+      "advantage_standardisation": "none",
+      "b0_bytes": 10000.0,
+      "delta": 0.0,
+      "eta_lambda": 0.05,
+      "gae_lambda": 0.95,
+      "gamma": 1.0,
+      "lambda_init": 1.0,
+      "log_prob_tolerance": 1e-06
+    },
+    "new": {
+      "advantage_standardisation": "none",
+      "b0_bytes": 10000.0,
+      "delta": 0.0,
+      "eta_lambda": 0.05,
+      "gae_lambda": 1.0,
+      "gamma": 1.0,
+      "lambda_init": 1.0,
+      "log_prob_tolerance": 1e-06
+    },
+    "old_ppo_hyperparameters": {
+      "clip": 0.2,
+      "entropy_bonus": 0.01,
+      "epochs_per_batch": 4,
+      "learning_rate": 0.0003,
+      "max_grad_norm": 0.5,
+      "minibatch_steps": 256,
+      "value_coefficient": 0.5
+    },
+    "new_ppo_hyperparameters": {
+      "clip": 0.2,
+      "entropy_bonus": 0.01,
+      "epochs_per_batch": 4,
+      "learning_rate": 0.0003,
+      "max_grad_norm": 0.5,
+      "minibatch_steps": 256,
+      "value_coefficient": 0.5
+    },
+    "actor_objective": "lambda_dual*A_task - A_positive_cost",
+    "critic_target_consequence": "GAE=1 changes A+V critic targets as a direct consequence of the trace intervention; no extra loss or weight change"
+  },
+  "preserved_scientific_configuration": {
+    "runner_version": "counted-jointrun-proxy/1",
+    "reward_timing_version": "published-completion-event-at-relay-tick/2",
+    "comm_action_eligibility": "first-report-only/1",
+    "comm_action_semantics": "one-shot-send-skip/1",
+    "training_seeds": [
+      11,
+      22,
+      33
+    ],
+    "episodes_per_seed": 128,
+    "episodes_per_update": 4,
+    "batches_per_seed": 32,
+    "training_order": [
+      1300027,
+      1300014,
+      1300028,
+      1300044,
+      1300003,
+      1300010,
+      1300005,
+      1300008,
+      1300021,
+      1300034,
+      1300013,
+      1300001,
+      1300047,
+      1300012,
+      1300033,
+      1300039,
+      1300009,
+      1300002,
+      1300022,
+      1300030,
+      1300032,
+      1300041,
+      1300040,
+      1300038,
+      1300037,
+      1300045,
+      1300024,
+      1300017,
+      1300026,
+      1300035,
+      1300036,
+      1300000,
+      1300016,
+      1300018,
+      1300029,
+      1300011,
+      1300042,
+      1300019,
+      1300006,
+      1300023,
+      1300025,
+      1300046,
+      1300043,
+      1300004,
+      1300007,
+      1300020,
+      1300031,
+      1300015,
+      1300041,
+      1300022,
+      1300039,
+      1300036,
+      1300040,
+      1300038,
+      1300010,
+      1300007,
+      1300016,
+      1300029,
+      1300008,
+      1300046,
+      1300009,
+      1300047,
+      1300023,
+      1300027,
+      1300004,
+      1300002,
+      1300024,
+      1300015,
+      1300017,
+      1300034,
+      1300045,
+      1300020,
+      1300037,
+      1300031,
+      1300035,
+      1300011,
+      1300033,
+      1300026,
+      1300030,
+      1300044,
+      1300003,
+      1300018,
+      1300013,
+      1300042,
+      1300028,
+      1300012,
+      1300005,
+      1300025,
+      1300043,
+      1300019,
+      1300021,
+      1300000,
+      1300001,
+      1300014,
+      1300032,
+      1300006,
+      1300008,
+      1300013,
+      1300006,
+      1300024,
+      1300032,
+      1300031,
+      1300015,
+      1300042,
+      1300004,
+      1300005,
+      1300021,
+      1300027,
+      1300016,
+      1300010,
+      1300000,
+      1300009,
+      1300029,
+      1300022,
+      1300045,
+      1300039,
+      1300019,
+      1300035,
+      1300046,
+      1300020,
+      1300028,
+      1300036,
+      1300003,
+      1300038,
+      1300002,
+      1300047,
+      1300030,
+      1300023
+    ],
+    "training_order_sha256": "346f2cdde8d658f927ea282f83e143d54a600f4f5c729e4521fe657421afe840",
+    "training_scenes": [
+      1300000,
+      1300047,
+      48
+    ],
+    "development_scenes": [
+      1301000,
+      1301001,
+      1301002,
+      1301003,
+      1301004,
+      1301005,
+      1301006,
+      1301007,
+      1301008,
+      1301009,
+      1301010,
+      1301011,
+      1301012,
+      1301013,
+      1301014,
+      1301015
+    ],
+    "steps_per_episode": 1000,
+    "world_config_source": "ROUND40_FROZEN_CONFIG.json; no fields changed",
+    "candidate_order": "inherited relay observation order",
+    "actor_feature_width": 19,
+    "row_filtering": {
+      "active_rows_module_used": false,
+      "policy": "ALL_ROWS as encoded in the frozen v2_trainer; ACTIVE_ROWS is not reachable from this round's entry points",
+      "trainer_module_used": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py"
+    },
+    "frozen_search_allocation_checkpoints": {
+      "shared_mappo_model_21_3100.pth": {
+        "path": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+        "size_bytes": 62614754,
+        "sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33"
+      },
+      "ctde_final_7_1.pth": {
+        "path": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+        "size_bytes": 2124729,
+        "sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+      }
+    }
+  },
+  "initialization_and_comparison": {
+    "new_seed_initial_state": "fresh same-seed controller plus empty Adam; parameters, initial optimizer state and lambda_dual checked against registered ROUND42 ep0; registered full RNG state restored after construction before first rollout",
+    "registered_round42_ep0": {
+      "11": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_ep0.pt",
+        "file_sha256": "70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd",
+        "parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "lambda_dual": 1.0
+      },
+      "22": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s22_ep0.pt",
+        "file_sha256": "96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5",
+        "parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "lambda_dual": 1.0
+      },
+      "33": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s33_ep0.pt",
+        "file_sha256": "9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d",
+        "parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "lambda_dual": 1.0
+      }
+    },
+    "old_model": "ROUND42 NEW ep128, read-only, same one-shot SEND/SKIP protocol",
+    "old_model_identities": {
+      "11": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_ep128.pt",
+        "size_bytes": 112235,
+        "file_sha256": "e36517c4a4cb76addb1e9a4232305290ab4d611910fa7cdb9f0c41f4ff1cb0e9",
+        "parameter_identity": {
+          "parameter_count": 5700,
+          "parameter_sha256": "8d25e86d307c168591ade0e7ae1775999bd7a092d70c12d38a5119252ac67ceb",
+          "shapes": {
+            "action_head.bias": [
+              2
+            ],
+            "action_head.weight": [
+              2,
+              64
+            ],
+            "trunk.0.bias": [
+              64
+            ],
+            "trunk.0.weight": [
+              64,
+              19
+            ],
+            "trunk.2.bias": [
+              64
+            ],
+            "trunk.2.weight": [
+              64,
+              64
+            ],
+            "value_cost_head.bias": [
+              1
+            ],
+            "value_cost_head.weight": [
+              1,
+              64
+            ],
+            "value_task_head.bias": [
+              1
+            ],
+            "value_task_head.weight": [
+              1,
+              64
+            ]
+          },
+          "init_seed": 20260927,
+          "heads": [
+            "action_head",
+            "value_task_head",
+            "value_cost_head"
+          ],
+          "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)"
+        },
+        "module_parameter_sha256": {
+          "trunk": "738bc7394a2157d20d602f8b4706d6f0622976d2f5892bda4dac06a79adede34",
+          "action_head": "2a45c670ed047f3205b664598f5260b84719b9843ec08b9e5a65c9c6b0e56e62",
+          "task_value_head": "0a08628aabb8719c3ddb92a0f107a4eb3047115791c0e7c4ccea28bdf19e78e9",
+          "cost_value_head": "24a2790d79d786fb07018e7d2982dd5898fbd04c46705cd3587f5988ded9338f"
+        },
+        "episodes_done": 128,
+        "updates": 32,
+        "optimizer_steps": 352,
+        "lambda_dual": 1.2874999999999992,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+        "reward_timing_version": "published-completion-event-at-relay-tick/2",
+        "comm_action_semantics": "one-shot-send-skip/1",
+        "read_only": true,
+        "round42_arm": "NEW",
+        "round43_role": "OLD",
+        "protocol_adaptation": "none; same one-shot SEND/SKIP protocol"
+      },
+      "22": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s22_ep128.pt",
+        "size_bytes": 112235,
+        "file_sha256": "5262969abad6e3338e5378f646ccc52468b20e71824a575883218fc7b0bf66b6",
+        "parameter_identity": {
+          "parameter_count": 5700,
+          "parameter_sha256": "17fd8e8e575162f3b6245cfb2a62d40e1c7cd443ca1f483afaa2cf49f28dbeb8",
+          "shapes": {
+            "action_head.bias": [
+              2
+            ],
+            "action_head.weight": [
+              2,
+              64
+            ],
+            "trunk.0.bias": [
+              64
+            ],
+            "trunk.0.weight": [
+              64,
+              19
+            ],
+            "trunk.2.bias": [
+              64
+            ],
+            "trunk.2.weight": [
+              64,
+              64
+            ],
+            "value_cost_head.bias": [
+              1
+            ],
+            "value_cost_head.weight": [
+              1,
+              64
+            ],
+            "value_task_head.bias": [
+              1
+            ],
+            "value_task_head.weight": [
+              1,
+              64
+            ]
+          },
+          "init_seed": 20260927,
+          "heads": [
+            "action_head",
+            "value_task_head",
+            "value_cost_head"
+          ],
+          "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)"
+        },
+        "module_parameter_sha256": {
+          "trunk": "9cd637785805818938dd68a75a4238e7aac7e64e7119341b976d9bca73f42d73",
+          "action_head": "cb0035b586a0df97ea55451bca730aed8e118433dc10cbdc3b41ae0beb63dafa",
+          "task_value_head": "9c6b570a9676cbe55c805dba0807d7f5fae7a39fff6475a9c113850896737b6d",
+          "cost_value_head": "1542ee29ea43bf3d4da15711b11f1f37e434abb084f68dab255dd3cd08e32d6f"
+        },
+        "episodes_done": 128,
+        "updates": 32,
+        "optimizer_steps": 400,
+        "lambda_dual": 1.3749999999999991,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+        "reward_timing_version": "published-completion-event-at-relay-tick/2",
+        "comm_action_semantics": "one-shot-send-skip/1",
+        "read_only": true,
+        "round42_arm": "NEW",
+        "round43_role": "OLD",
+        "protocol_adaptation": "none; same one-shot SEND/SKIP protocol"
+      },
+      "33": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s33_ep128.pt",
+        "size_bytes": 112235,
+        "file_sha256": "2bac7d636b940fef5b2c87269fb7fa9cfab08f67a4e13c1af9554934931f7aa6",
+        "parameter_identity": {
+          "parameter_count": 5700,
+          "parameter_sha256": "ae99deeafe49937f520a1093935c3df8de62dd5dfae090e04a99ec0c752ddc5c",
+          "shapes": {
+            "action_head.bias": [
+              2
+            ],
+            "action_head.weight": [
+              2,
+              64
+            ],
+            "trunk.0.bias": [
+              64
+            ],
+            "trunk.0.weight": [
+              64,
+              19
+            ],
+            "trunk.2.bias": [
+              64
+            ],
+            "trunk.2.weight": [
+              64,
+              64
+            ],
+            "value_cost_head.bias": [
+              1
+            ],
+            "value_cost_head.weight": [
+              1,
+              64
+            ],
+            "value_task_head.bias": [
+              1
+            ],
+            "value_task_head.weight": [
+              1,
+              64
+            ]
+          },
+          "init_seed": 20260927,
+          "heads": [
+            "action_head",
+            "value_task_head",
+            "value_cost_head"
+          ],
+          "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)"
+        },
+        "module_parameter_sha256": {
+          "trunk": "494fa9a3ca3c9f24be8d1e36f5256871b9ef3f55a92bb8ebae9a6e55cb71a8c7",
+          "action_head": "c0a756b36f97e0e879e2ddc56b24bd459c2f6ccb6b39e3176b2b08beda674d41",
+          "task_value_head": "704daa5246bb73bec7d93cb96e033cbd1dc77c300b0c68dbd0f3c837d3b24a14",
+          "cost_value_head": "e5f374ecf8b59e6ddf13950e4c63320376ea56506feba9a2837df761288819bb"
+        },
+        "episodes_done": 128,
+        "updates": 32,
+        "optimizer_steps": 340,
+        "lambda_dual": 1.2624999999999993,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+        "reward_timing_version": "published-completion-event-at-relay-tick/2",
+        "comm_action_semantics": "one-shot-send-skip/1",
+        "read_only": true,
+        "round42_arm": "NEW",
+        "round43_role": "OLD",
+        "protocol_adaptation": "none; same one-shot SEND/SKIP protocol"
+      }
+    },
+    "new_initial_parameter_identities": {
+      "11": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_ep0.pt",
+        "file_sha256": "70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd",
+        "parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+        "module_parameter_sha256": {
+          "trunk": "b1d3494d691270bfe31a4479f985ab271c7eced3d2b0df333408be0ddee1c7b7",
+          "action_head": "919b468b0b64ea3563ad9b09f2002236cf54fe7a18cfd260a81814acccc3e7b1",
+          "task_value_head": "e94ae85e5c97bfc5d9157370f03a5ac789507093f6151e135e0a2338537656b6",
+          "cost_value_head": "2678d4c8b7b1caa8a3c2f19375ad7deb93dadf5da18cc70b48a65f148032765a"
+        },
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "lambda_dual": 1.0,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+        "read_only_identity_only": true
+      },
+      "22": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s22_ep0.pt",
+        "file_sha256": "96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5",
+        "parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+        "module_parameter_sha256": {
+          "trunk": "a346a1b0df5c880639a0d7ca71f11930e9c1fbe86d76d6dfa0ed2ad125cbd46f",
+          "action_head": "fca467c3f0ebb5763a94cf585ff5ca1e48581469b6fcc3a5b3d3a0c83242cc28",
+          "task_value_head": "4d30bcf031207efa0f21ccb1450ec26ca43ac96adc3dea617784096afe6b4758",
+          "cost_value_head": "23389c1e4163363b651be3f14b2fe013dd0736ddd16103d896566277bd413598"
+        },
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "lambda_dual": 1.0,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+        "read_only_identity_only": true
+      },
+      "33": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s33_ep0.pt",
+        "file_sha256": "9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d",
+        "parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+        "module_parameter_sha256": {
+          "trunk": "973040578caedf4bbbb092f508ceba1c03c8226d5857f20d1b096cb3a0eefc50",
+          "action_head": "c355229517aba666ad46b76eeba3719b353f1c0dc031b7e009a55d5ebf2c1f84",
+          "task_value_head": "d2d4270b71c7546e54b32b15cfc5a2cc41ce5538cc19909a7376425e80db5e58",
+          "cost_value_head": "bddb33723efa5ff6f36d96f6dd8cacc207a92a00136cea7dc1f2f9d43449f861"
+        },
+        "episodes_done": 0,
+        "updates": 0,
+        "optimizer_steps": 0,
+        "lambda_dual": 1.0,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/published-completion-event-at-relay-tick/2",
+        "read_only_identity_only": true
+      }
+    },
+    "no_round42_ep64_or_ep128_hot_start": true
+  },
+  "reused_baselines": {
+    "round42_artifacts": {
+      "completion_audit": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\ROUND42R_COMPLETION_AUDIT.json",
+        "size_bytes": 10165,
+        "sha256": "8c70649d110ab7433073ec0c150596f0140e29b752bb64809b15037fd3f64a44"
+      },
+      "final_result": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\ROUND42_RESUME_FINAL_RESULT.json",
+        "size_bytes": 2396536,
+        "sha256": "4046109cf9c7003a2bc90dc540c8fb6e302e5499dfaeae07aaf360278a8fa76b"
+      },
+      "paired_results": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\ROUND42_PAIRED_RESULTS.json",
+        "size_bytes": 1149872,
+        "sha256": "4a8f857f02bd2b76dcf837421d1a39bfc0fc91d6442f8ac8b6e3248a43e44a36"
+      },
+      "checkpoint_index": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\ROUND42_CHECKPOINT_INDEX.json",
+        "size_bytes": 317115,
+        "sha256": "a5ed3c389c57cdbf42e8b949bcdea1f8e8a385708f5f3a837583db43a53beaed"
+      },
+      "raw_artifact_manifest": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\ROUND42_RAW_ARTIFACT_MANIFEST.json",
+        "size_bytes": 1727575,
+        "sha256": "581852ea659e6433642e24745fe1b0ead417cd35bc8d443a388a90182ef7bb17"
+      }
+    },
+    "immediate_reference_cells": 64,
+    "rule_cells": 32,
+    "round42_new_ep128_evaluation_cells": 96,
+    "baseline_repair_cells_scheduled": 0,
+    "development_scenes_are_exploratory_and_already_used": true
+  },
+  "launch_quota": {
+    "normal_training": 384,
+    "normal_new_final_evaluation": 96,
+    "normal_total": 480,
+    "reserve": 24,
+    "hard_cap": 600
+  },
+  "claim_limit": "GAE=1 is a method ablation, not a correction of an old mathematical error or proof that trace attenuation alone caused the previous result."
+}
