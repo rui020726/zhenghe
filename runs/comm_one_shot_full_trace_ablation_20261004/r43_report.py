@@ -185,7 +185,7 @@ def _absolute_row(label: str, group: dict[str, Any]) -> str:
     emissions = _nonnegative_int(group.get("first_report_emissions_total"), f"{label}.first_report_emissions_total")
     first_bytes = _nonnegative_int(group.get("first_report_bytes_total"), f"{label}.first_report_bytes_total")
     packet_lost = _nonnegative_int(group.get("packet_lost_total"), f"{label}.packet_lost_total")
-    return (f"| {label} | {y} / {y / n:.3f} | {cost:,} / {cost / n:,.2f} B | "
+    return (f"| {label} | {y} / {y / n:.4f} | {cost:,} / {cost / n:,.4f} B | "
             f"{emissions} / {first_bytes:,} B | {sends} / {skips} | {packet_lost} |")
 
 
@@ -202,8 +202,8 @@ def _paired_row(seed: int, mode: str, comparator: str,
     scene_count = comparison.get("scene_count")
     if type(scene_count) is not int or scene_count != 16:
         raise ValueError(f"seed {seed} {mode} vs {comparator}: paired scene count is not 16")
-    return (f"| {seed} | {mode} | {comparator} | {signed_dy:+d} / {signed_dy / 16:+.3f} | "
-            f"{dc:+,} / {dc / 16:+,.2f} B | "
+    return (f"| {seed} | {mode} | {comparator} | {signed_dy:+d} / {signed_dy / 16:+.4f} | "
+            f"{dc:+,} / {dc / 16:+,.4f} B | "
             f"{_format_ids(comparison.get('recovered_task_ids'))} | "
             f"{_format_ids(comparison.get('lost_task_ids'))} |")
 

@@ -5,7 +5,11 @@ from __future__ import annotations
 import copy
 import unittest
 
-from r43_report import render_preflight_failure_correction
+from r43_report import (
+    _absolute_row,
+    _paired_row,
+    render_preflight_failure_correction,
+)
 
 
 CURRENT_FAILURE_MESSAGE = "synthetic actor gate invoked an Adam optimizer update"
@@ -143,6 +147,39 @@ class ReportFailureSchemaTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "SHA256 is malformed"):
             render_preflight_failure_correction(
                 current_record(), source_path="failure.json", source_sha256="not-a-hash")
+
+
+class ReportMeanPrecisionTests(unittest.TestCase):
+    def test_absolute_means_preserve_exact_sixteenth_scene_precision(self) -> None:
+        row = _absolute_row("sampled", {
+            "n": 16,
+            "on_time_total": 93,
+            "spent_bytes_total": 90138,
+            "send_now_choices_total": 36,
+            "skip_episode_choices_total": 60,
+            "first_report_emissions_total": 36,
+            "first_report_bytes_total": 90138,
+            "packet_lost_total": 65,
+        })
+        self.assertEqual(
+            row,
+            "| sampled | 93 / 5.8125 | 90,138 / 5,633.6250 B | "
+            "36 / 90,138 B | 36 / 60 | 65 |",
+        )
+
+    def test_paired_delta_means_preserve_exact_sixteenth_scene_precision(self) -> None:
+        row = _paired_row(33, "sampled", "OLD", {
+            "on_time_total_delta": -1,
+            "spent_bytes_total_left": 90138,
+            "spent_bytes_total_right": 0,
+            "scene_count": 16,
+            "recovered_task_ids": [],
+            "lost_task_ids": [],
+        })
+        self.assertEqual(
+            row,
+            "| 33 | sampled | OLD | -1 / -0.0625 | -90,138 / -5,633.6250 B | ∅ | ∅ |",
+        )
 
 
 if __name__ == "__main__":
