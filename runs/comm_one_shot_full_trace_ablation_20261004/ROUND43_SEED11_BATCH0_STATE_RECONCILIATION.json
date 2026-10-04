@@ -1,0 +1,472 @@
+{
+  "kind": "round43-seed11-batch0-full-state-reconciliation/1",
+  "status": "passed",
+  "source_of_truth": "immutable after_b0 checkpoint plus matching batch commit and batch record",
+  "paths": {
+    "batch_commit": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\r40_batch_commit_s11_b0.json",
+      "sha256": "c978d8b21119b10b3d98bbf2caa3901f908714dd2d95f1253932eac5e60374e8",
+      "size_bytes": 1632
+    },
+    "batch_record": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\r40_batch_s11_b0_attempt01.json",
+      "sha256": "d4bf3b6f2b84b94cd933023e292a60d19c5ff0b6de8b441fc34fbef9b5823755",
+      "size_bytes": 7876
+    },
+    "immutable_after_b0": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\v2_train_s11_after_b0.pt",
+      "sha256": "31e246dc3691759e40329fd3aa640ddac20af0c68e7207659b6364645ff28c6c",
+      "size_bytes": 111147
+    },
+    "rolling": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\v2_train_s11.pt",
+      "sha256": "31e246dc3691759e40329fd3aa640ddac20af0c68e7207659b6364645ff28c6c",
+      "size_bytes": 111147
+    },
+    "preupdate": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\v2_train_s11_before_b0.pt",
+      "sha256": "aa20178eb47b11f48673e7832156b15af7c6784a45cc62683da7d0b092511752",
+      "size_bytes": 57093
+    }
+  },
+  "checkpoint_sections": {
+    "controller": {
+      "after_b0_sha256": "b6438d86689eb16eaabfdfd825aadd9e4740c0f665b25242b63b4c529a36bc4e",
+      "rolling_sha256": "b6438d86689eb16eaabfdfd825aadd9e4740c0f665b25242b63b4c529a36bc4e",
+      "identical": true
+    },
+    "optimizer": {
+      "after_b0_sha256": "b665d93c85f6890ad3192adb409d2c2198db5bf8fa6258e7b8650a52c6836714",
+      "rolling_sha256": "b665d93c85f6890ad3192adb409d2c2198db5bf8fa6258e7b8650a52c6836714",
+      "identical": true
+    },
+    "training_state": {
+      "after_b0_sha256": "057cc8ee0dde4276f6616c7776f8fa4f6da826a2b05087ad89dc7aa4e8565576",
+      "rolling_sha256": "057cc8ee0dde4276f6616c7776f8fa4f6da826a2b05087ad89dc7aa4e8565576",
+      "identical": true
+    },
+    "rng": {
+      "after_b0_sha256": "438c611ab76fe74b6205d8201bb8f4a4be21f9b6ed7f45aa80948b284e8a729d",
+      "rolling_sha256": "438c611ab76fe74b6205d8201bb8f4a4be21f9b6ed7f45aa80948b284e8a729d",
+      "identical": true
+    },
+    "freeze": {
+      "after_b0_sha256": "0a623a63c2df7533d015ea05a35ee2b2f2dc8a269832c9b1b1b22b4fdb4754b0",
+      "rolling_sha256": "0a623a63c2df7533d015ea05a35ee2b2f2dc8a269832c9b1b1b22b4fdb4754b0",
+      "identical": true
+    }
+  },
+  "state_cursor": {
+    "training_seed": 11,
+    "episodes_done": 4,
+    "updates": 1,
+    "optimizer_steps": 12,
+    "lambda": 1.0125,
+    "lambda_history": [
+      {
+        "batch": 0,
+        "g_hat": 0.25,
+        "lambda_before": 1.0,
+        "lambda_next": 1.0125
+      }
+    ],
+    "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+    "gae_lambda": 1.0,
+    "gamma": 1.0,
+    "data_order_seed": 20260927
+  },
+  "controller": {
+    "parameter_identity": {
+      "parameter_count": 5700,
+      "parameter_sha256": "db8a462b9f36ee6c75de04c0dc34d5e98c06f566aee80153d58cdc6463a58bdb",
+      "shapes": {
+        "action_head.bias": [
+          2
+        ],
+        "action_head.weight": [
+          2,
+          64
+        ],
+        "trunk.0.bias": [
+          64
+        ],
+        "trunk.0.weight": [
+          64,
+          19
+        ],
+        "trunk.2.bias": [
+          64
+        ],
+        "trunk.2.weight": [
+          64,
+          64
+        ],
+        "value_cost_head.bias": [
+          1
+        ],
+        "value_cost_head.weight": [
+          1,
+          64
+        ],
+        "value_task_head.bias": [
+          1
+        ],
+        "value_task_head.weight": [
+          1,
+          64
+        ]
+      },
+      "init_seed": 20260927,
+      "heads": [
+        "action_head",
+        "value_task_head",
+        "value_cost_head"
+      ],
+      "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)"
+    },
+    "module_parameter_sha256": {
+      "trunk": "886e2976608bf88d68ee49b9e7af869e01919a5081194a1b170aaec0f9462d87",
+      "action_head": "c5436f79302b4457232d0111df57718477e18bc0d84af5ef608070b7eae52cd9",
+      "task_value_head": "09420ac2284dc34da1342b2725a3ff156c8d6e9c0f6603f864e4ef35dd8ca22d",
+      "cost_value_head": "988186c83fee5fcf41c1b950390175a0273ee79b794a89d496472a28efeee714"
+    },
+    "read_only_load_identity": {
+      "load_mode": "read_only",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+      "reward_timing_version": "published-completion-event-at-relay-tick/2",
+      "timing_interpretation": "versioned_capture_semantics",
+      "optimizer_restored": false,
+      "rng_restored": false,
+      "comm_action_eligibility": "first-report-only/1",
+      "action_eligibility_interpretation": "first-report-only/1",
+      "read_only_for_round40": true,
+      "comm_action_semantics": "one-shot-send-skip/1",
+      "action_semantics_interpretation": "one-shot-send-skip/1",
+      "read_only_for_round42": true,
+      "ambient_rng_preserved": true
+    }
+  },
+  "optimizer": {
+    "class": "torch.optim.Adam",
+    "parameter_group_count": 1,
+    "parameter_count": 10,
+    "parameter_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "optimizer_state_count": 10,
+    "step_values_by_parameter": [
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12
+    ],
+    "all_steps_equal_committed_optimizer_steps": true,
+    "param_group_hyperparameters": {
+      "lr": 0.0003,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0,
+      "amsgrad": false,
+      "maximize": false,
+      "foreach": null,
+      "capturable": false,
+      "differentiable": false,
+      "fused": null,
+      "decoupled_weight_decay": false
+    },
+    "moments_by_parameter": [
+      {
+        "parameter_id": 0,
+        "name": "trunk.0.weight",
+        "shape": [
+          64,
+          19
+        ],
+        "step": 12,
+        "exp_avg_sha256": "3110b0fdaa52d3febeb79e4c16b48d1fb71f6d774fa8e3c78a7eeacb3109cad7",
+        "exp_avg_sq_sha256": "2de270c48d07e593815b9173b2b7243f86112305574a3d8e70a5ab6e46ea0ccd",
+        "exp_avg_l1": 1.9426432847976685,
+        "exp_avg_sq_l1": 0.00048800173681229353
+      },
+      {
+        "parameter_id": 1,
+        "name": "trunk.0.bias",
+        "shape": [
+          64
+        ],
+        "step": 12,
+        "exp_avg_sha256": "de5275caa521a101ad838e0416e5a359dac63b933d30ea5ba4922d9a173f8475",
+        "exp_avg_sq_sha256": "823878d88b968d9e51574a3fed861c784e9f7aa4718653ad1780250965ab4c25",
+        "exp_avg_l1": 0.05888374149799347,
+        "exp_avg_sq_l1": 2.4015896542550763e-06
+      },
+      {
+        "parameter_id": 2,
+        "name": "trunk.2.weight",
+        "shape": [
+          64,
+          64
+        ],
+        "step": 12,
+        "exp_avg_sha256": "aaf6d27d80dc3c1aaeb5ce1766ba1d80f26b2c9edf9630547080dcb886dc0f83",
+        "exp_avg_sq_sha256": "015e25d4d86d0a11d192374bbb8659129af416024c3efa318be956e251bf9e78",
+        "exp_avg_l1": 11.093997955322266,
+        "exp_avg_sq_l1": 0.001196563127450645
+      },
+      {
+        "parameter_id": 3,
+        "name": "trunk.2.bias",
+        "shape": [
+          64
+        ],
+        "step": 12,
+        "exp_avg_sha256": "4e24cf83a4b7f984b72cb387f52c8c68d0d77986ae2873515af4e63f1f8c722b",
+        "exp_avg_sq_sha256": "827f20b3ea28032d16a8fec5dae940ce63e38bd31430d32227500fcb104c78bc",
+        "exp_avg_l1": 0.301361620426178,
+        "exp_avg_sq_l1": 4.430025364854373e-05
+      },
+      {
+        "parameter_id": 4,
+        "name": "action_head.weight",
+        "shape": [
+          2,
+          64
+        ],
+        "step": 12,
+        "exp_avg_sha256": "a6bd999b7b7709aafa66964fda6e355c5c5272938fa149faad5df7d4318ef643",
+        "exp_avg_sq_sha256": "80e42d9fc133bbbb342e78332db7aa166fcddd2e21f807462f3b9255a708a81c",
+        "exp_avg_l1": 0.03948826342821121,
+        "exp_avg_sq_l1": 1.3177854043533443e-06
+      },
+      {
+        "parameter_id": 5,
+        "name": "action_head.bias",
+        "shape": [
+          2
+        ],
+        "step": 12,
+        "exp_avg_sha256": "26122659e38abc2aa15bda00e57b2de1ae04dd1e3bf365329f2850e9a43ecb5a",
+        "exp_avg_sq_sha256": "3b6608eb7446a1b58c00e76db282748b5022005d0c25d95b152e295c9f7629ec",
+        "exp_avg_l1": 0.0023345365189015865,
+        "exp_avg_sq_l1": 2.218020114241881e-07
+      },
+      {
+        "parameter_id": 6,
+        "name": "task_value_head.weight",
+        "shape": [
+          1,
+          64
+        ],
+        "step": 12,
+        "exp_avg_sha256": "0415ac198528982f1121d4c1b79a9efe898e16912c8f3116b091ec6377199bbb",
+        "exp_avg_sq_sha256": "4535764a201758a52e0b503b6ee970ff9aefa010c4a480db9ebde476e1e23d5d",
+        "exp_avg_l1": 1.4595452547073364,
+        "exp_avg_sq_l1": 0.0010500457137823105
+      },
+      {
+        "parameter_id": 7,
+        "name": "task_value_head.bias",
+        "shape": [
+          1
+        ],
+        "step": 12,
+        "exp_avg_sha256": "f6ed8d7c8f4378ee6261ec439fdded87ca71f9b34b035c9fe1d7abc2a91db364",
+        "exp_avg_sq_sha256": "b58ed2804fe58fde243fdb417b29a86684a29a3b20bb00e456862ead32fe121c",
+        "exp_avg_l1": 0.09022875875234604,
+        "exp_avg_sq_l1": 0.00019086500105913728
+      },
+      {
+        "parameter_id": 8,
+        "name": "cost_head.weight",
+        "shape": [
+          1,
+          64
+        ],
+        "step": 12,
+        "exp_avg_sha256": "9a678bdb330274c5fc7c7f883cb0e2c3e6cca56d691109d7ee3085f01e0b72c6",
+        "exp_avg_sq_sha256": "f51ba6c0df27adf1d9ed089e481acc36c74e9723be0afa6557910dda49f6535c",
+        "exp_avg_l1": 0.08887379616498947,
+        "exp_avg_sq_l1": 9.480388143856544e-06
+      },
+      {
+        "parameter_id": 9,
+        "name": "cost_head.bias",
+        "shape": [
+          1
+        ],
+        "step": 12,
+        "exp_avg_sha256": "7ec0dbc2d89a2855ac5ae51509125962a866a14b11b50120126745d5dc9c1e78",
+        "exp_avg_sq_sha256": "8befce55b403e6bfa4a48fceb7b728ff650c45e21d4aac43421c909bfbe2a6cf",
+        "exp_avg_l1": 0.0016840619500726461,
+        "exp_avg_sq_l1": 3.5627257943815493e-07
+      }
+    ],
+    "full_optimizer_state_sha256": "b665d93c85f6890ad3192adb409d2c2198db5bf8fa6258e7b8650a52c6836714"
+  },
+  "rng": {
+    "components": {
+      "python": "99c3f6867aaca448670835e6d133552ebc6a22e9d17fd0b57b058fcc6c7c06fc",
+      "numpy": "8941f27dc1a8105277d459093fc86616987dc89407d53dd985a0d6265521ffad",
+      "torch": "525a028a071f0db36364354adad20f8e40ced33abc301f23ccd23dbca05fc012"
+    },
+    "serialized_rng_sha256": "438c611ab76fe74b6205d8201bb8f4a4be21f9b6ed7f45aa80948b284e8a729d",
+    "ambient_rng_unchanged_by_read_only_load": true
+  },
+  "scenario_cursor": {
+    "batch0_scenarios": [
+      1300027,
+      1300014,
+      1300028,
+      1300044
+    ],
+    "remaining_episode_indices": [
+      4,
+      127
+    ],
+    "remaining_scenarios": [
+      1300003,
+      1300010,
+      1300005,
+      1300008,
+      1300021,
+      1300034,
+      1300013,
+      1300001,
+      1300047,
+      1300012,
+      1300033,
+      1300039,
+      1300009,
+      1300002,
+      1300022,
+      1300030,
+      1300032,
+      1300041,
+      1300040,
+      1300038,
+      1300037,
+      1300045,
+      1300024,
+      1300017,
+      1300026,
+      1300035,
+      1300036,
+      1300000,
+      1300016,
+      1300018,
+      1300029,
+      1300011,
+      1300042,
+      1300019,
+      1300006,
+      1300023,
+      1300025,
+      1300046,
+      1300043,
+      1300004,
+      1300007,
+      1300020,
+      1300031,
+      1300015,
+      1300041,
+      1300022,
+      1300039,
+      1300036,
+      1300040,
+      1300038,
+      1300010,
+      1300007,
+      1300016,
+      1300029,
+      1300008,
+      1300046,
+      1300009,
+      1300047,
+      1300023,
+      1300027,
+      1300004,
+      1300002,
+      1300024,
+      1300015,
+      1300017,
+      1300034,
+      1300045,
+      1300020,
+      1300037,
+      1300031,
+      1300035,
+      1300011,
+      1300033,
+      1300026,
+      1300030,
+      1300044,
+      1300003,
+      1300018,
+      1300013,
+      1300042,
+      1300028,
+      1300012,
+      1300005,
+      1300025,
+      1300043,
+      1300019,
+      1300021,
+      1300000,
+      1300001,
+      1300014,
+      1300032,
+      1300006,
+      1300008,
+      1300013,
+      1300006,
+      1300024,
+      1300032,
+      1300031,
+      1300015,
+      1300042,
+      1300004,
+      1300005,
+      1300021,
+      1300027,
+      1300016,
+      1300010,
+      1300000,
+      1300009,
+      1300029,
+      1300022,
+      1300045,
+      1300039,
+      1300019,
+      1300035,
+      1300046,
+      1300020,
+      1300028,
+      1300036,
+      1300003,
+      1300038,
+      1300002,
+      1300047,
+      1300030,
+      1300023
+    ],
+    "remaining_scenarios_sha256": "e8e9cffa25385570b4fe690110fe8836eb7088023777cf15da616ab06f8989d0"
+  }
+}

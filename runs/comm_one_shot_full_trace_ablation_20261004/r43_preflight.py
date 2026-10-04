@@ -21,6 +21,11 @@ from r42_run import ROUND42_OUTPUT, RUN_DIR, configure, verify_frozen_source
 
 FROZEN_PATH = RUN_DIR / "ROUND43_FROZEN_CONFIG.json"
 CONFIG_DIFF_PATH = RUN_DIR / "ROUND43_CONFIGURATION_DIFF.json"
+RECOVERY_GATE_PATH = RUN_DIR / "ROUND43_RESUME_RECOVERY_GATE.json"
+ARTIFACT_DIRS = (
+    "launch_claims", "launch_slots", "logs", "rows", "checkpoints",
+    "training_progress", "runtime", "failures", "rejected",
+)
 R42_MANIFEST_PATH = ROUND42_OUTPUT / "ROUND42_RAW_ARTIFACT_MANIFEST.json"
 R42_INDEX_PATH = ROUND42_OUTPUT / "ROUND42_CHECKPOINT_INDEX.json"
 R42_PAIRED_PATH = ROUND42_OUTPUT / "ROUND42_PAIRED_RESULTS.json"
@@ -36,6 +41,20 @@ def _sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1 << 20), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _snapshot_existing_artifacts() -> dict[str, tuple[int, str]]:
+    """Hash the pre-existing execution state so this gate can run during exact resume."""
+    result: dict[str, tuple[int, str]] = {}
+    for name in ARTIFACT_DIRS:
+        root = RUN_DIR / name
+        if not root.exists():
+            continue
+        for path in sorted(root.rglob("*")):
+            if path.is_file() and not path.name.endswith(".tmp"):
+                result[path.relative_to(RUN_DIR).as_posix()] = (
+                    path.stat().st_size, _sha256(path))
+    return result
 
 
 def _canonical_sha256(value: Any) -> str:
@@ -868,6 +887,7 @@ def _test_version_boundary(runtime: dict[str, Any], frozen: dict[str, Any]
 
 def run_preflight(*, draft: bool = False) -> dict[str, Any]:
     frozen = _read(FROZEN_PATH)
+    artifacts_before = _snapshot_existing_artifacts()
     if not draft:
         verify_frozen_source(frozen)
     round40_path = Path(frozen["execution_identity"]["round40_worktree"]) / "runs" / (
@@ -876,6 +896,25 @@ def run_preflight(*, draft: bool = False) -> dict[str, Any]:
     runtime = configure(frozen, round40_frozen["round40"]["freeze_identity"])
     if not draft:
         verify_frozen_source(frozen)
+    import r42_run
+
+    prior_ledger = r42_run.ledger_snapshot(strict=True)
+    prior_counters = {
+        "environment_constructors": prior_ledger["counts"][
+            "environment_constructor_calls"],
+        "ppo_update_calls": r42_run._PPO_UPDATE_CALLS,
+        "optimizer_step_calls": r42_run._OPTIMIZER_STEP_CALLS,
+        "checkpoint_write_calls": runtime["r42_versions"].CHECKPOINT_WRITE_CALLS,
+        "normal_claims": prior_ledger["counts"]["normal_used"],
+        "reserve_claims": prior_ledger["counts"]["reserve_used"],
+    }
+    recovery_gate = _read(RECOVERY_GATE_PATH)
+    recovery_gate_identity = frozen["execution_identity"].get("resume_recovery_gate", {})
+    _assert(recovery_gate.get("status") == "passed"
+            and _sha256(RECOVERY_GATE_PATH) == recovery_gate_identity.get("sha256")
+            and recovery_gate.get("source_code_sha256_for_next_freeze")
+            == frozen["execution_identity"].get("source_code_sha256"),
+            "ROUND43 exact-resume recovery gate differs from the committed source identity")
     common = runtime["common"]
     _assert(float(common.GAE_LAMBDA) == 1.0 and float(common.GAMMA) == 1.0,
             "active real training path has the wrong GAE/gamma after configuration")
@@ -936,17 +975,25 @@ def run_preflight(*, draft: bool = False) -> dict[str, Any]:
     version = _test_version_boundary(runtime, frozen)
     common.GAE_LAMBDA = 1.0
 
-    import r42_run
-    _assert(r42_run._OPTIMIZER_STEP_CALLS == 0
-            and r42_run._PPO_UPDATE_CALLS == 0
-            and runtime["r42_versions"].CHECKPOINT_WRITE_CALLS == 0,
-            "ROUND43 preflight changed environment/optimizer/checkpoint counters")
-    _assert(not any((RUN_DIR / key).exists() and any((RUN_DIR / key).rglob("*"))
-                    for key in ("launch_claims", "launch_slots", "logs", "rows", "checkpoints")),
-            "ROUND43 preflight created an environment or training artifact")
+    after_ledger = r42_run.ledger_snapshot(strict=True)
+    after_counters = {
+        "environment_constructors": after_ledger["counts"][
+            "environment_constructor_calls"],
+        "ppo_update_calls": r42_run._PPO_UPDATE_CALLS,
+        "optimizer_step_calls": r42_run._OPTIMIZER_STEP_CALLS,
+        "checkpoint_write_calls": runtime["r42_versions"].CHECKPOINT_WRITE_CALLS,
+        "normal_claims": after_ledger["counts"]["normal_used"],
+        "reserve_claims": after_ledger["counts"]["reserve_used"],
+    }
+    artifacts_after = _snapshot_existing_artifacts()
+    _assert(prior_counters == after_counters
+            and json.dumps(prior_ledger, sort_keys=True, default=str)
+            == json.dumps(after_ledger, sort_keys=True, default=str)
+            and artifacts_before == artifacts_after,
+            "ROUND43 read-only preflight changed a persisted counter or execution artifact")
 
     result = {
-        "kind": "round43-prelaunch-correctness-gate/1",
+        "kind": "round43-prelaunch-correctness-gate/2",
         "status": "passed",
         "draft_mode": bool(draft),
         "active_call_path": code_status,
@@ -964,8 +1011,17 @@ def run_preflight(*, draft: bool = False) -> dict[str, Any]:
             "ppo_update_calls": 0,
             "optimizer_step_calls": 0,
             "checkpoint_write_calls": 0,
+            "meaning": "deltas during this no-environment recovery preflight",
+            "cumulative_before_preflight": prior_counters,
+            "cumulative_after_preflight": after_counters,
             "synthetic_blocked_actor_step_attempts": actor["guarded_step_boundary_attempts"],
         },
+        "resume_recovery_gate": {
+            "path": str(RECOVERY_GATE_PATH),
+            "sha256": _sha256(RECOVERY_GATE_PATH),
+            "status": recovery_gate["status"],
+        },
+        "persisted_execution_artifacts_unchanged": True,
         "baseline_repair_cells": 0,
         "normal_plan": 480,
         "technical_reserve": 24,

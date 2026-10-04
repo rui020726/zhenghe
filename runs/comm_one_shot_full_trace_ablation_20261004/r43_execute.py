@@ -24,6 +24,7 @@ import r43_report
 FROZEN_PATH = RUN_DIR / "ROUND43_FROZEN_CONFIG.json"
 PREFLIGHT_PATH = RUN_DIR / "ROUND43_PREFLIGHT.json"
 PRELAUNCH_PATH = RUN_DIR / "runtime" / "ROUND43_PRELAUNCH_IDENTITY.json"
+RESUME_BRIDGE_PATH = RUN_DIR / "runtime" / "ROUND43_RESUME_BRIDGE.json"
 
 
 def _read(path: Path) -> Any:
@@ -60,6 +61,71 @@ def _write_new_or_match(path: Path, value: Any) -> None:
         handle.write(body)
         handle.flush()
         os.fsync(handle.fileno())
+
+
+def _validate_resume_bridge(frozen: dict[str, Any], *, current_head: str,
+                            old_progress: dict[str, Any]) -> dict[str, Any]:
+    identity = frozen["execution_identity"].get("resume_bridge")
+    if not identity or not RESUME_BRIDGE_PATH.is_file():
+        raise RuntimeError("ROUND43 progress belongs to another freeze and has no bridge")
+    if identity.get("path") != "runtime/ROUND43_RESUME_BRIDGE.json" \
+            or _sha256(RESUME_BRIDGE_PATH) != identity.get("sha256"):
+        raise RuntimeError("ROUND43 resume bridge does not match the committed source freeze")
+    bridge = _read(RESUME_BRIDGE_PATH)
+    if bridge.get("status") != "passed" or bridge.get("kind") != "round43-exact-resume-bridge/1":
+        raise RuntimeError("ROUND43 resume bridge status or schema is invalid")
+    if bridge.get("target_source_code_sha256") != frozen["execution_identity"][
+            "source_code_sha256"]:
+        raise RuntimeError("ROUND43 resume bridge is not bound to this frozen source code")
+    if old_progress.get("prelaunch_head") != bridge.get("prior_prelaunch_head"):
+        raise RuntimeError("ROUND43 prior progress does not match the bridge source HEAD")
+    if _sha256(RUN_DIR / "runtime" / "ROUND43_EXECUTION_PROGRESS.json") \
+            != bridge.get("prior_progress_sha256"):
+        raise RuntimeError("ROUND43 pre-transition progress changed after its audit")
+    for artifact in bridge.get("immutable_artifacts", []):
+        path = RUN_DIR / artifact["relative_path"]
+        if not path.is_file() or _sha256(path) != artifact["sha256"]:
+            raise RuntimeError(f"ROUND43 carryover artifact changed: {artifact['relative_path']}")
+    ledger = r42_run.ledger_snapshot(strict=True)
+    expected_counts = bridge["reconciled_counts_at_pause"]
+    for key, value in expected_counts.items():
+        if ledger["counts"].get(key) != value:
+            raise RuntimeError(
+                f"ROUND43 exact-resume bridge ledger mismatch for {key}: "
+                f"{ledger['counts'].get(key)} != {value}")
+    if bridge["resume_cursor"] != {
+        "training_seed": 11, "episodes_done": 4, "updates": 1,
+        "optimizer_steps": 12, "lambda_dual": 1.0125,
+        "next_episode_index": 4,
+    }:
+        raise RuntimeError("ROUND43 exact-resume cursor is not the audited seed 11 batch-0 state")
+    if bridge.get("training_version") != frozen["round42"]["training_version"]:
+        raise RuntimeError("ROUND43 bridge training version differs from the full-trace version")
+    return bridge
+
+
+def _promote_progress_for_bridge(old_progress: dict[str, Any], bridge: dict[str, Any],
+                                 current_head: str) -> dict[str, Any]:
+    """Carry durable progress across the one audited c7→recovery-freeze transition."""
+    progress = dict(old_progress)
+    history = list(progress.get("source_freeze_history", []))
+    history.extend((
+        {
+            "head": bridge["prior_prelaunch_head"],
+            "role": "initial_full-trace_freeze; seed11 ep0-3 and batch0 completed",
+        },
+        {
+            "head": current_head,
+            "role": "resume-only import-scope adapter and reconciled call ledger",
+        },
+    ))
+    progress["source_freeze_history"] = history
+    progress["resume_bridge"] = {
+        "path": str(RESUME_BRIDGE_PATH),
+        "sha256": _sha256(RESUME_BRIDGE_PATH),
+    }
+    progress["prelaunch_head"] = current_head
+    return progress
 
 
 def _stage_summary(report: dict[str, Any], *, stage: str) -> dict[str, Any]:
@@ -225,10 +291,17 @@ def run(*, resume: bool = True) -> dict[str, Any]:
     if progress_path.is_file():
         old_progress = _read(progress_path)
         if old_progress.get("prelaunch_head") != current_head:
-            raise RuntimeError("existing ROUND43 progress belongs to a different source HEAD")
-        progress.update(old_progress)
+            bridge = _validate_resume_bridge(
+                frozen, current_head=current_head, old_progress=old_progress)
+            progress = _promote_progress_for_bridge(old_progress, bridge, current_head)
+        else:
+            progress = dict(old_progress)
         if progress.get("status") == "complete":
             raise RuntimeError("ROUND43 progress already says complete; inspect final artifacts")
+    progress["prelaunch_head"] = current_head
+    # Reconcile the durable call journals and committed batches before another episode can
+    # claim a normal slot. This also corrects a pre-update ledger snapshot without replaying b0.
+    r42_run.write_execution_ledger(strict=True)
     _write_atomic(progress_path, progress)
 
     round40_freeze_path = (Path(frozen["execution_identity"]["round40_worktree"])

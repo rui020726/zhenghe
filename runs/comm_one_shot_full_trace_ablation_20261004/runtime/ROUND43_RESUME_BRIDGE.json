@@ -1,0 +1,260 @@
+{
+  "kind": "round43-exact-resume-bridge/1",
+  "status": "passed",
+  "prior_prelaunch_head": "c7bc89d995c1a5e5c2b53303bebd036e85aa4c2d",
+  "prior_branch": "exp/comm-one-shot-full-trace-ablation",
+  "target_source_code_sha256": {
+    "r42_run.py": "9c5feacb2ffcb2bb930d2b6022e2fca5210408765dc664859d400e6f2b5f8c2e",
+    "r42_versions.py": "f451503d40657d210ba7c81caffe5d6918f1a9de737625b057e0c9354e7bcffd",
+    "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+    "r42_analysis.py": "3342367be6d8a3c732ac7bf541575d17ae8a168618bc3f9b1493781bf8345633",
+    "r43_preflight.py": "d52d210f6c69d9142b14c838957eb9dd4e855cf15c568e21dfd7eb914d95fa0b",
+    "r43_analysis.py": "1994da0d1d726df54537cf78da0a03a2dbf61132fe196a6bc2de63a37b460810",
+    "r43_execute.py": "553ef28fb620d6c3af8ac26dd173ec79315f37b92e2831807c8ea989f29fcac1",
+    "r43_report.py": "a771acafa9e88a4127b7c2d9d997dc69e8c3fb0128861765286d7617e13cb052",
+    "r43_freeze.py": "4ccd714a2867797c205bf1e9aab10f869334be20a14b7a19494e07c1e9d5bedb",
+    "r40_train_resume_adapter.py": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+    "r43_call_counter_hooks.py": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
+    "test_r43_call_counter_hooks.py": "29b76f1007e18fc300db6bd6676e420b3e75c263840a49fb0a3ccd296c2ad3c3",
+    "test_r43_resume_adapter.py": "0fb4c275be50408ce4099f44d839c99ef77b689f8d762c4c41124a108cb61a8d",
+    "r43_recovery_gate.py": "520666ee2b71378601c86348c10f11f86dc521256138649f38b878000ce75d7f"
+  },
+  "mechanical_change": "ROUND42-validated training-entry adapter moves only the parameter_identity import to train_seed function entry; counter ledger flush is bookkeeping-only",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+  "resume_cursor": {
+    "training_seed": 11,
+    "episodes_done": 4,
+    "updates": 1,
+    "optimizer_steps": 12,
+    "lambda_dual": 1.0125,
+    "next_episode_index": 4
+  },
+  "reconciled_counts_at_pause": {
+    "normal_used": 4,
+    "reserve_used": 0,
+    "total_used": 4,
+    "environment_constructor_calls": 4,
+    "joint_run_build_failures": 0,
+    "joint_run_constructed_calls": 4,
+    "run_invocation_calls": 4,
+    "joint_run_method_calls": 4,
+    "run_return_calls": 4,
+    "run_failure_calls": 0,
+    "completed_steps": 4000,
+    "completed_logical_jobs": 4,
+    "simulation_started": 4,
+    "technical_failed_claims": 0,
+    "retry_claims": 0,
+    "optimizer_step_calls": 12,
+    "optimizer_step_journal_entries": 12,
+    "ppo_update_calls": 1,
+    "ppo_update_journal_entries": 1,
+    "ppo_update_count_matches_committed_batches": true,
+    "checkpoint_write_calls": 4,
+    "checkpoint_write_journal_entries": 4,
+    "optimizer_step_count_matches_committed_batches": true,
+    "hard_cap": 600
+  },
+  "prior_progress_sha256": "ebcc0d1ebcf713c45dcc343c6d20f3a6df1cd00e9970e542158e9c55d2c953d3",
+  "prior_ledger_snapshot_sha256": "c180202e277704f13a2dc4d3a91a0335d2ccd90c0f4e8233dc9a36ec50fb3f77",
+  "state_audit": {
+    "path": "ROUND43_SEED11_BATCH0_STATE_RECONCILIATION.json",
+    "sha256": "2b73f3b51b3c1732144f5371fd6c1bb44ca4049e3b349058ad6925fbdf338001"
+  },
+  "ledger_audit": {
+    "path": "ROUND43_LEDGER_RECONCILIATION.json",
+    "sha256": "54799a746dc42fd6464421510a620cea42b466e4e3d3f6b749b9baefa4da19fb"
+  },
+  "recovery_gate": {
+    "path": "ROUND43_RESUME_RECOVERY_GATE.json",
+    "sha256": "f357f8c426ec826b23228c7f99110dc150cd9f83ba97cacd97fa2c50d3b6a32d"
+  },
+  "failed_resume_invocation": {
+    "path": "failures/ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json",
+    "sha256": "b002c9084e014d395500d80d1109c6f0f0a60fd833542bebfff3e8de7f29656f",
+    "new_claims": 0,
+    "new_environment_constructors": 0,
+    "new_optimizer_updates": 0
+  },
+  "normal_plan": {
+    "total": 480,
+    "used_before_resume": 4,
+    "remaining": 476,
+    "technical_reserve": 24,
+    "hard_cap": 600
+  },
+  "completed_seed11_first_four_and_batch0_are_not_replayed": true,
+  "round42_trained_checkpoints_accepted_for_training_resume": false,
+  "immutable_artifacts": [
+    {
+      "relative_path": "ROUND43_FIRST_BATCH_GATE_SEED11.json",
+      "size_bytes": 5690,
+      "sha256": "955396c2bb27a45d020a038c005b3b559c159c27e0a43d8529b0e93b45a939eb"
+    },
+    {
+      "relative_path": "ROUND43_LEDGER_RECONCILIATION.json",
+      "size_bytes": 5147,
+      "sha256": "54799a746dc42fd6464421510a620cea42b466e4e3d3f6b749b9baefa4da19fb"
+    },
+    {
+      "relative_path": "ROUND43_RESUME_RECOVERY_GATE.json",
+      "size_bytes": 5134,
+      "sha256": "f357f8c426ec826b23228c7f99110dc150cd9f83ba97cacd97fa2c50d3b6a32d"
+    },
+    {
+      "relative_path": "ROUND43_SEED11_BATCH0_STATE_RECONCILIATION.json",
+      "size_bytes": 13446,
+      "sha256": "2b73f3b51b3c1732144f5371fd6c1bb44ca4049e3b349058ad6925fbdf338001"
+    },
+    {
+      "relative_path": "checkpoints/r40_batch_commit_s11_b0.json",
+      "size_bytes": 1632,
+      "sha256": "c978d8b21119b10b3d98bbf2caa3901f908714dd2d95f1253932eac5e60374e8"
+    },
+    {
+      "relative_path": "checkpoints/r40_batch_s11_b0_attempt01.json",
+      "size_bytes": 7876,
+      "sha256": "d4bf3b6f2b84b94cd933023e292a60d19c5ff0b6de8b441fc34fbef9b5823755"
+    },
+    {
+      "relative_path": "checkpoints/v2_train_s11.pt",
+      "size_bytes": 111147,
+      "sha256": "31e246dc3691759e40329fd3aa640ddac20af0c68e7207659b6364645ff28c6c"
+    },
+    {
+      "relative_path": "checkpoints/v2_train_s11_after_b0.pt",
+      "size_bytes": 111147,
+      "sha256": "31e246dc3691759e40329fd3aa640ddac20af0c68e7207659b6364645ff28c6c"
+    },
+    {
+      "relative_path": "checkpoints/v2_train_s11_before_b0.pt",
+      "size_bytes": 57093,
+      "sha256": "aa20178eb47b11f48673e7832156b15af7c6784a45cc62683da7d0b092511752"
+    },
+    {
+      "relative_path": "checkpoints/v2_train_s11_ep0.pt",
+      "size_bytes": 57093,
+      "sha256": "aa20178eb47b11f48673e7832156b15af7c6784a45cc62683da7d0b092511752"
+    },
+    {
+      "relative_path": "failures/ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json",
+      "size_bytes": 2198,
+      "sha256": "b002c9084e014d395500d80d1109c6f0f0a60fd833542bebfff3e8de7f29656f"
+    },
+    {
+      "relative_path": "launch_claims/new_training_s11_e0/attempt_0001.json",
+      "size_bytes": 1169,
+      "sha256": "48081ca7145857339ed60edef6e7bbda4471ce893f0d26c6bd48388bec2a8040"
+    },
+    {
+      "relative_path": "launch_claims/new_training_s11_e1/attempt_0001.json",
+      "size_bytes": 1169,
+      "sha256": "b802e998fe95bf8cc173744ced878041c85ee8960449278d828f68a879c2c37d"
+    },
+    {
+      "relative_path": "launch_claims/new_training_s11_e2/attempt_0001.json",
+      "size_bytes": 1168,
+      "sha256": "091904c9de3060201fdd9822518e273142e6328dd8552bdf66ff9ee265b52be6"
+    },
+    {
+      "relative_path": "launch_claims/new_training_s11_e3/attempt_0001.json",
+      "size_bytes": 1169,
+      "sha256": "af2c86ddebf4faa3311cc5a9d7f03a67769cf31bb94e81e5b9e8ab10c4a2fc31"
+    },
+    {
+      "relative_path": "logs/v2_r43_train_s11_e0_s1300027_a1_tape.jsonl",
+      "size_bytes": 209420,
+      "sha256": "9d876413d802bcee7f933f01d4faac1d6d6125abd089b4dc5cd5317d374a76e2"
+    },
+    {
+      "relative_path": "logs/v2_r43_train_s11_e1_s1300014_a1_tape.jsonl",
+      "size_bytes": 942199,
+      "sha256": "7290075d92cb9259cc04eefae4156b0bd55e253330c72496b1f889b19951b72d"
+    },
+    {
+      "relative_path": "logs/v2_r43_train_s11_e2_s1300028_a1_tape.jsonl",
+      "size_bytes": 246691,
+      "sha256": "4ba200b00c7a35e7f45bf72da7e2c7df20017c7b33bbb6c31d69de3a82310d0e"
+    },
+    {
+      "relative_path": "logs/v2_r43_train_s11_e3_s1300044_a1_tape.jsonl",
+      "size_bytes": 170349,
+      "sha256": "8e7ae00c7bed7637e3b4cda43b61700c1e0d1f64aaf40fe038a410a18a70831b"
+    },
+    {
+      "relative_path": "rows/v2_r43_train_s11_e0_s1300027_a1.json",
+      "size_bytes": 341699,
+      "sha256": "e7e9306959ae6e27919d212fa06f628c94bc27d85fcdf6dad2016c07c141120d"
+    },
+    {
+      "relative_path": "rows/v2_r43_train_s11_e1_s1300014_a1.json",
+      "size_bytes": 341113,
+      "sha256": "922f065d3840623f626dfbbadba80d709dce8c466981f103fda0d19282b31734"
+    },
+    {
+      "relative_path": "rows/v2_r43_train_s11_e2_s1300028_a1.json",
+      "size_bytes": 341036,
+      "sha256": "6acafad25dc5b8d567e3e8b509921997f0480ac7f3e650077399e44b50590257"
+    },
+    {
+      "relative_path": "rows/v2_r43_train_s11_e3_s1300044_a1.json",
+      "size_bytes": 341566,
+      "sha256": "45dfaed7613fa48315175fb471b317b0f84f2701e9bd64ba9953f8e4cc2ca822"
+    },
+    {
+      "relative_path": "runtime/ROUND43_EXECUTION_LEDGER.json",
+      "size_bytes": 7066,
+      "sha256": "c180202e277704f13a2dc4d3a91a0335d2ccd90c0f4e8233dc9a36ec50fb3f77"
+    },
+    {
+      "relative_path": "runtime/ROUND43_EXECUTION_LEDGER_FREEZE1_AT_STOP.json",
+      "size_bytes": 7066,
+      "sha256": "c180202e277704f13a2dc4d3a91a0335d2ccd90c0f4e8233dc9a36ec50fb3f77"
+    },
+    {
+      "relative_path": "runtime/ROUND43_EXECUTION_PROGRESS_FREEZE1.json",
+      "size_bytes": 221,
+      "sha256": "ebcc0d1ebcf713c45dcc343c6d20f3a6df1cd00e9970e542158e9c55d2c953d3"
+    },
+    {
+      "relative_path": "runtime/ROUND43_PREFLIGHT_FREEZE1.json",
+      "size_bytes": 101550533,
+      "sha256": "1a34f32adf31d570d8047261d73db120de60a514a41dd998ae716340172336e9"
+    },
+    {
+      "relative_path": "runtime/ROUND43_PRELAUNCH_IDENTITY_FREEZE1.json",
+      "size_bytes": 1420,
+      "sha256": "75959dcaf03c8874ccf3925b43e32be10c9972df8abbd98eb8cf2b71231d5133"
+    },
+    {
+      "relative_path": "runtime/checkpoint_writes.jsonl",
+      "size_bytes": 1637,
+      "sha256": "e6c341d72e00c0e78cec2b064d0796e1e567dbf7a53b0c5dc4e4986cb1f04af1"
+    },
+    {
+      "relative_path": "runtime/optimizer_step_calls.jsonl",
+      "size_bytes": 1307,
+      "sha256": "68bde868fc526f035856c998bba6d94f02952f6d7cb3c16af73d3136ffd8aa2b"
+    },
+    {
+      "relative_path": "runtime/ppo_update_calls.jsonl",
+      "size_bytes": 107,
+      "sha256": "02855072515ff747f827b099d381d3d3a3e10ae0711391c1e0c01d156c140289"
+    },
+    {
+      "relative_path": "training_progress/seed11_ep004_u01_batch_checkpoint_committed.json",
+      "size_bytes": 1172,
+      "sha256": "06847654bd9889ce0ce076fd16bc5dea82ce2971c0743c490dbc16eb4c524668"
+    },
+    {
+      "relative_path": "training_progress/seed11_ep004_u01_first_four_gate_ready.json",
+      "size_bytes": 1167,
+      "sha256": "01e87784d6b0b3b82ce87e4fb4be43ad85f80f821550ebf4e97039b064f2832a"
+    },
+    {
+      "relative_path": "training_reports/ROUND43_SEED11_FIRST4.json",
+      "size_bytes": 2716,
+      "sha256": "9c4da62bc3de58f51b87bd62ee09de31d19c3428eea682a01104919ada6930d0"
+    }
+  ]
+}

@@ -19,6 +19,15 @@ ROUND42_PAIRED = ROUND42_DIR / "ROUND42_PAIRED_RESULTS.json"
 ROUND42_AUDIT = ROUND42_DIR / "ROUND42R_COMPLETION_AUDIT.json"
 FREEZE_PATH = RUN_DIR / "ROUND43_FROZEN_CONFIG.json"
 DIFF_PATH = RUN_DIR / "ROUND43_CONFIGURATION_DIFF.json"
+RECOVERY_GATE_PATH = RUN_DIR / "ROUND43_RESUME_RECOVERY_GATE.json"
+STATE_AUDIT_PATH = RUN_DIR / "ROUND43_SEED11_BATCH0_STATE_RECONCILIATION.json"
+LEDGER_AUDIT_PATH = RUN_DIR / "ROUND43_LEDGER_RECONCILIATION.json"
+BRIDGE_PATH = RUN_DIR / "runtime" / "ROUND43_RESUME_BRIDGE.json"
+OLD_LEDGER_COPY = RUN_DIR / "runtime" / "ROUND43_EXECUTION_LEDGER_FREEZE1_AT_STOP.json"
+OLD_PROGRESS_COPY = RUN_DIR / "runtime" / "ROUND43_EXECUTION_PROGRESS_FREEZE1.json"
+OLD_RECEIPT_COPY = RUN_DIR / "runtime" / "ROUND43_PRELAUNCH_IDENTITY_FREEZE1.json"
+OLD_PREFLIGHT_COPY = RUN_DIR / "runtime" / "ROUND43_PREFLIGHT_FREEZE1.json"
+FAILURE_PATH = RUN_DIR / "failures" / "ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json"
 
 CODE_FILES = (
     "r42_run.py",
@@ -30,6 +39,11 @@ CODE_FILES = (
     "r43_execute.py",
     "r43_report.py",
     "r43_freeze.py",
+    "r40_train_resume_adapter.py",
+    "r43_call_counter_hooks.py",
+    "test_r43_call_counter_hooks.py",
+    "test_r43_resume_adapter.py",
+    "r43_recovery_gate.py",
 )
 
 
@@ -151,6 +165,113 @@ def main() -> None:
         "confirmation_scenes": 0,
     }
 
+    # The only cross-freeze continuation accepted by ROUND43 is the exact ep4/batch0
+    # committed state that stopped before episode 4 acquired a launch claim.
+    recovery_gate = read(RECOVERY_GATE_PATH)
+    state_audit = read(STATE_AUDIT_PATH)
+    ledger_audit = read(LEDGER_AUDIT_PATH)
+    prior_ledger = read(OLD_LEDGER_COPY)
+    prior_progress = read(OLD_PROGRESS_COPY)
+    live_progress = read(RUN_DIR / "runtime" / "ROUND43_EXECUTION_PROGRESS.json")
+    prior_receipt = read(OLD_RECEIPT_COPY)
+    if recovery_gate.get("status") != "passed" or state_audit.get("status") != "passed" \
+            or ledger_audit.get("status") != "passed":
+        raise RuntimeError("ROUND43 exact-resume recovery evidence is incomplete")
+    if (sha256(RUN_DIR / "runtime" / "ROUND43_EXECUTION_LEDGER.json")
+            != sha256(OLD_LEDGER_COPY)):
+        raise RuntimeError("ROUND43 pre-recovery ledger changed before it was preserved")
+    if (sha256(RUN_DIR / "runtime" / "ROUND43_EXECUTION_PROGRESS.json")
+            != sha256(OLD_PROGRESS_COPY)):
+        raise RuntimeError("ROUND43 pre-recovery progress changed before it was preserved")
+    if live_progress.get("prelaunch_head") != prior_receipt["head"] \
+            or prior_progress.get("prelaunch_head") != prior_receipt["head"]:
+        raise RuntimeError("ROUND43 prior progress and source receipt disagree")
+
+    source_code_sha256 = {name: sha256(RUN_DIR / name) for name in CODE_FILES}
+    if recovery_gate.get("source_code_sha256_for_next_freeze") != source_code_sha256:
+        raise RuntimeError("ROUND43 recovery gate was not run against the final continuation source")
+
+    batch_record = read(RUN_DIR / "checkpoints" / "r40_batch_s11_b0_attempt01.json")
+    logical_jobs = {str(row["logical_job"]) for row in prior_ledger["claims"]}
+    artifact_paths = {
+        "ROUND43_FIRST_BATCH_GATE_SEED11.json",
+        "ROUND43_SEED11_BATCH0_STATE_RECONCILIATION.json",
+        "ROUND43_LEDGER_RECONCILIATION.json",
+        "ROUND43_RESUME_RECOVERY_GATE.json",
+        "training_reports/ROUND43_SEED11_FIRST4.json",
+        "runtime/ROUND43_EXECUTION_LEDGER.json",
+        "runtime/ROUND43_EXECUTION_LEDGER_FREEZE1_AT_STOP.json",
+        "runtime/ROUND43_EXECUTION_PROGRESS_FREEZE1.json",
+        "runtime/ROUND43_PRELAUNCH_IDENTITY_FREEZE1.json",
+        "runtime/ROUND43_PREFLIGHT_FREEZE1.json",
+        "runtime/checkpoint_writes.jsonl",
+        "runtime/optimizer_step_calls.jsonl",
+        "runtime/ppo_update_calls.jsonl",
+        "failures/ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json",
+        "checkpoints/r40_batch_commit_s11_b0.json",
+        "checkpoints/r40_batch_s11_b0_attempt01.json",
+        "checkpoints/v2_train_s11.pt",
+        "checkpoints/v2_train_s11_after_b0.pt",
+        "checkpoints/v2_train_s11_before_b0.pt",
+        "checkpoints/v2_train_s11_ep0.pt",
+    }
+    for episode in batch_record["episode_artifacts"]:
+        for key in ("row_path", "tape_path"):
+            artifact_path = Path(episode[key]).resolve()
+            artifact_paths.add(artifact_path.relative_to(RUN_DIR.resolve()).as_posix())
+    for path in (RUN_DIR / "launch_claims").rglob("attempt_*.json"):
+        claim = read(path)
+        if claim.get("logical_job") in logical_jobs:
+            artifact_paths.add(path.relative_to(RUN_DIR).as_posix())
+    for path in (RUN_DIR / "training_progress").glob("seed11_*.json"):
+        artifact_paths.add(path.relative_to(RUN_DIR).as_posix())
+    immutable_artifacts = []
+    for relative_path in sorted(artifact_paths):
+        path = RUN_DIR / relative_path
+        if not path.is_file():
+            raise RuntimeError(f"ROUND43 exact-resume evidence is missing: {relative_path}")
+        immutable_artifacts.append({
+            "relative_path": relative_path,
+            "size_bytes": path.stat().st_size,
+            "sha256": sha256(path),
+        })
+    bridge = {
+        "kind": "round43-exact-resume-bridge/1",
+        "status": "passed",
+        "prior_prelaunch_head": prior_receipt["head"],
+        "prior_branch": prior_receipt["branch"],
+        "target_source_code_sha256": source_code_sha256,
+        "mechanical_change": "ROUND42-validated training-entry adapter moves only the parameter_identity import to train_seed function entry; counter ledger flush is bookkeeping-only",
+        "training_version": round43_training_version,
+        "resume_cursor": {
+            "training_seed": 11,
+            "episodes_done": int(state_audit["state_cursor"]["episodes_done"]),
+            "updates": int(state_audit["state_cursor"]["updates"]),
+            "optimizer_steps": int(state_audit["state_cursor"]["optimizer_steps"]),
+            "lambda_dual": float(state_audit["state_cursor"]["lambda"]),
+            "next_episode_index": int(state_audit["state_cursor"]["episodes_done"]),
+        },
+        "reconciled_counts_at_pause": ledger_audit["corrected_cumulative_snapshot"],
+        "prior_progress_sha256": sha256(RUN_DIR / "runtime" / "ROUND43_EXECUTION_PROGRESS.json"),
+        "prior_ledger_snapshot_sha256": sha256(OLD_LEDGER_COPY),
+        "state_audit": {"path": STATE_AUDIT_PATH.name, "sha256": sha256(STATE_AUDIT_PATH)},
+        "ledger_audit": {"path": LEDGER_AUDIT_PATH.name, "sha256": sha256(LEDGER_AUDIT_PATH)},
+        "recovery_gate": {"path": RECOVERY_GATE_PATH.name, "sha256": sha256(RECOVERY_GATE_PATH)},
+        "failed_resume_invocation": {
+            "path": FAILURE_PATH.relative_to(RUN_DIR).as_posix(),
+            "sha256": sha256(FAILURE_PATH),
+            "new_claims": 0,
+            "new_environment_constructors": 0,
+            "new_optimizer_updates": 0,
+        },
+        "normal_plan": {"total": 480, "used_before_resume": 4,
+                        "remaining": 476, "technical_reserve": 24, "hard_cap": 600},
+        "completed_seed11_first_four_and_batch0_are_not_replayed": True,
+        "round42_trained_checkpoints_accepted_for_training_resume": False,
+        "immutable_artifacts": immutable_artifacts,
+    }
+    write(BRIDGE_PATH, bridge)
+
     config_diff = {
         "kind": "round43-single-variable-configuration-diff/2",
         "scope": "one-shot-send-skip full-trace GAE trace ablation",
@@ -220,13 +341,21 @@ def main() -> None:
 
     diff_sha = canonical_sha(config_diff)
     identity = frozen["execution_identity"]
-    identity["source_code_sha256"] = {
-        name: sha256(RUN_DIR / name) for name in CODE_FILES
-    }
+    identity["source_code_sha256"] = source_code_sha256
     identity["inherited_dependency_sha256"] = copy.deepcopy(
         frozen["round42"]["freeze_identity"]["active_dependency_sha256"]
     )
     identity["prelaunch_head"] = None
+    identity["execution_code_version"] = "round43-resume-adapter-and-ledger-reconciliation/1"
+    identity["resume_bridge"] = {
+        "path": "runtime/ROUND43_RESUME_BRIDGE.json",
+        "sha256": sha256(BRIDGE_PATH),
+    }
+    identity["resume_recovery_gate"] = {
+        "path": "ROUND43_RESUME_RECOVERY_GATE.json",
+        "sha256": sha256(RECOVERY_GATE_PATH),
+    }
+    identity["prior_prelaunch_head"] = prior_receipt["head"]
     freeze_identity = frozen["round42"]["freeze_identity"]
     freeze_identity["configuration_diff_sha256"] = diff_sha
     freeze_identity["round43_gae_lambda"] = 1.0

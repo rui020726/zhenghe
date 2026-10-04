@@ -58,6 +58,13 @@ def write_final_report(*, frozen: dict[str, Any], analysis: dict[str, Any],
     preflight = _read(RUN_DIR / "ROUND43_PREFLIGHT.json")
     baseline = _read(RUN_DIR / "ROUND43_BASELINE_REUSE.json")
     ep0 = _read(RUN_DIR / "ROUND43_EP0_INITIALIZATION.json")
+    resume_bridge = _read(RUN_DIR / "runtime" / "ROUND43_RESUME_BRIDGE.json")
+    recovery_gate = _read(RUN_DIR / "ROUND43_RESUME_RECOVERY_GATE.json")
+    state_reconciliation = _read(
+        RUN_DIR / "ROUND43_SEED11_BATCH0_STATE_RECONCILIATION.json")
+    ledger_reconciliation = _read(RUN_DIR / "ROUND43_LEDGER_RECONCILIATION.json")
+    failed_resume = _read(
+        RUN_DIR / "failures" / "ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json")
     counters = ledger["counts"]
     branch = _git(ROUND42_ROOT, "branch", "--show-current")
     source_freeze_head = _git(ROUND42_ROOT, "rev-parse", "HEAD")
@@ -81,6 +88,22 @@ def write_final_report(*, frozen: dict[str, Any], analysis: dict[str, Any],
             "path": str(RUN_DIR / "ROUND43_PREFLIGHT.json"),
             "sha256": _sha256(RUN_DIR / "ROUND43_PREFLIGHT.json"),
             "runtime_environment": preflight["runtime_environment"],
+        },
+        "execution_recovery": {
+            "initial_freeze_head": resume_bridge["prior_prelaunch_head"],
+            "recovery_freeze_head": source_freeze_head,
+            "execution_code_version": frozen["execution_identity"][
+                "execution_code_version"],
+            "training_semantics_version_unchanged": (
+                resume_bridge["training_version"] == frozen["round42"]["training_version"]),
+            "resume_bridge": {
+                "path": str(RUN_DIR / "runtime" / "ROUND43_RESUME_BRIDGE.json"),
+                "sha256": _sha256(RUN_DIR / "runtime" / "ROUND43_RESUME_BRIDGE.json"),
+            },
+            "recovery_gate": {
+                "path": str(RUN_DIR / "ROUND43_RESUME_RECOVERY_GATE.json"),
+                "sha256": _sha256(RUN_DIR / "ROUND43_RESUME_RECOVERY_GATE.json"),
+            },
         },
         "frozen_search_allocation_inputs": preflight[
             "frozen_search_allocation_inputs"],
@@ -151,6 +174,87 @@ def write_final_report(*, frozen: dict[str, Any], analysis: dict[str, Any],
         },
     }
     _atomic_json(RUN_DIR / "TRAINING_VERSION_MANIFEST.json", version_manifest)
+
+    resume_reconciliation = {
+        "kind": "round43-exact-resume-reconciliation/1",
+        "status": "passed",
+        "initial_freeze_head": resume_bridge["prior_prelaunch_head"],
+        "recovery_freeze_head": source_freeze_head,
+        "execution_code_version": frozen["execution_identity"][
+            "execution_code_version"],
+        "training_semantics_version": frozen["round42"]["training_version"],
+        "resume_cursor": resume_bridge["resume_cursor"],
+        "previously_completed_normal_claims": resume_bridge["normal_plan"][
+            "used_before_resume"],
+        "remaining_normal_claims_at_resume": resume_bridge["normal_plan"]["remaining"],
+        "technical_reserve_max": resume_bridge["normal_plan"]["technical_reserve"],
+        "hard_cap": resume_bridge["normal_plan"]["hard_cap"],
+        "initial_runner_failure": {
+            "kind": failed_resume["kind"],
+            "status": failed_resume["status"],
+            "exception": failed_resume["exception"],
+            "claim_delta": failed_resume["accounting_at_stop"][
+                "environment_claims_delta_during_failed_resume"],
+            "environment_constructor_delta": failed_resume["accounting_at_stop"][
+                "environment_constructors_delta"],
+            "run_call_delta": failed_resume["accounting_at_stop"][
+                "environment_run_calls_delta"],
+            "optimizer_update_delta": failed_resume["accounting_at_stop"][
+                "PPO_or_optimizer_call_delta"],
+            "source_path": str(
+                RUN_DIR / "failures" / "ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json"),
+            "source_sha256": _sha256(
+                RUN_DIR / "failures" / "ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json"),
+            "classification": "runner defect before a new launch claim; not a zero-result episode",
+        },
+        "old_ledger_snapshot": {
+            "normal_used": ledger_reconciliation["original_persisted_ledger"][
+                "counts"]["normal_used"],
+            "ppo_update_calls": ledger_reconciliation[
+                "original_persisted_ledger"]["counts"]["ppo_update_calls"],
+            "optimizer_step_calls": ledger_reconciliation[
+                "original_persisted_ledger"]["counts"]["optimizer_step_calls"],
+            "checkpoint_save_calls": ledger_reconciliation[
+                "original_persisted_ledger"]["counts"]["checkpoint_write_calls"],
+            "preserved_without_rewrite": True,
+        },
+        "reconciled_at_pause": ledger_reconciliation[
+            "corrected_cumulative_snapshot"],
+        "evidence": {
+            "seed11_batch0_state_reconciliation": {
+                "path": str(RUN_DIR / "ROUND43_SEED11_BATCH0_STATE_RECONCILIATION.json"),
+                "sha256": _sha256(
+                    RUN_DIR / "ROUND43_SEED11_BATCH0_STATE_RECONCILIATION.json"),
+                "status": state_reconciliation["status"],
+            },
+            "ledger_reconciliation": {
+                "path": str(RUN_DIR / "ROUND43_LEDGER_RECONCILIATION.json"),
+                "sha256": _sha256(RUN_DIR / "ROUND43_LEDGER_RECONCILIATION.json"),
+                "status": ledger_reconciliation["status"],
+            },
+            "resume_recovery_gate": {
+                "path": str(RUN_DIR / "ROUND43_RESUME_RECOVERY_GATE.json"),
+                "sha256": _sha256(RUN_DIR / "ROUND43_RESUME_RECOVERY_GATE.json"),
+                "status": recovery_gate["status"],
+            },
+        },
+        "first_batch_replayed": False,
+        "optimizer_step_replayed": False,
+        "round42_trained_checkpoint_used_as_resume_state": False,
+    }
+    if (resume_reconciliation["initial_runner_failure"]["claim_delta"] != 0
+            or resume_reconciliation["initial_runner_failure"][
+                "environment_constructor_delta"] != 0
+            or resume_reconciliation["initial_runner_failure"]["run_call_delta"] != 0
+            or resume_reconciliation["initial_runner_failure"][
+                "optimizer_update_delta"] != 0
+            or resume_reconciliation["remaining_normal_claims_at_resume"] != 476
+            or not recovery_gate["status"] == "passed"
+            or not state_reconciliation["status"] == "passed"
+            or not ledger_reconciliation["status"] == "passed"):
+        raise RuntimeError("ROUND43 resume reconciliation did not close")
+    _atomic_json(RUN_DIR / "ROUND43_RESUME_RECONCILIATION.json",
+                 resume_reconciliation)
 
     old_eval = baseline["reused"]["old_round42_new_ep128_evaluations"]
     correction = {
@@ -261,6 +365,14 @@ def write_final_report(*, frozen: dict[str, Any], analysis: dict[str, Any],
 - 执行账本和逐 claim 计数：`runtime/ROUND43_EXECUTION_LEDGER.json`；完成逻辑任务={counters['completed_logical_jobs']}，真实完成步={counters['completed_steps']}。
 
 启动与更新对账：{json.dumps(ledger_summary, ensure_ascii=False)}。
+
+## 恢复与计数勘误
+
+首次冻结 `{resume_bridge['prior_prelaunch_head']}` 下，seed11 已完成 episode0–3 并提交 batch0。继续运行时在下一次 episode claim 前，冻结 ROUND40 训练入口因 `parameter_identity` 局部导入作用域错误抛出 `UnboundLocalError`。这次是运行器缺陷：新增 claim、环境构造、run 调用和优化更新均为0，不作为零任务/零成本 episode，也不计入480个正常任务。
+
+恢复门禁复核了 after_b0 与 rolling 状态、完整模型与 Adam 状态、12个 Adam step、λ与历史、训练版本、游标、RNG 和剩余场景顺序。ROUND42 验证过的适配器只把 `parameter_identity` 导入移到训练入口作用域；训练语义版本保持 `{resume_bridge['training_version']}`。恢复从 episode4、update1、Adam step12、λ={resume_bridge['resume_cursor']['lambda_dual']:.4f} 开始，首批没有重放。恢复冻结 `{source_freeze_head}` 使用执行代码身份 `{frozen['execution_identity']['execution_code_version']}`。
+
+停机时原始 ledger 的快照把 PPO/Adam 计数记为0、checkpoint 保存调用记为2。该旧快照作为原件保留；批提交、逐调用日志及 checkpoint 状态核验出的累计值分别为 PPO 1、Adam 12、checkpoint 保存调用4。checkpoint 保存调用依据调用日志，不由文件数量推算。精确证据和哈希见 `ROUND43_RESUME_RECONCILIATION.json`、`ROUND43_LEDGER_RECONCILIATION.json` 与 `ROUND43_SEED11_BATCH0_STATE_RECONCILIATION.json`。
 
 ## 初值与随机状态
 

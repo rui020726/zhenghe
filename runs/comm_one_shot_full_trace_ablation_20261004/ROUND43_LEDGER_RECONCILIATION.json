@@ -1,0 +1,138 @@
+{
+  "kind": "round43-ledger-reconciliation/1",
+  "status": "passed",
+  "original_persisted_ledger": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\runtime\\ROUND43_EXECUTION_LEDGER_FREEZE1_AT_STOP.json",
+    "sha256": "c180202e277704f13a2dc4d3a91a0335d2ccd90c0f4e8233dc9a36ec50fb3f77",
+    "counts": {
+      "normal_used": 4,
+      "reserve_used": 0,
+      "total_used": 4,
+      "environment_constructor_calls": 4,
+      "joint_run_build_failures": 0,
+      "joint_run_constructed_calls": 4,
+      "run_invocation_calls": 4,
+      "joint_run_method_calls": 4,
+      "run_return_calls": 4,
+      "run_failure_calls": 0,
+      "completed_steps": 4000,
+      "completed_logical_jobs": 4,
+      "simulation_started": 4,
+      "technical_failed_claims": 0,
+      "retry_claims": 0,
+      "optimizer_step_calls": 0,
+      "optimizer_step_journal_entries": 0,
+      "ppo_update_calls": 0,
+      "ppo_update_journal_entries": 0,
+      "ppo_update_count_matches_committed_batches": true,
+      "checkpoint_write_calls": 2,
+      "checkpoint_write_journal_entries": 2,
+      "optimizer_step_count_matches_committed_batches": true,
+      "hard_cap": 600
+    },
+    "interpretation": "pre-batch-update snapshot; retains zero PPO/Adam counts as originally written"
+  },
+  "corrected_cumulative_snapshot": {
+    "normal_used": 4,
+    "reserve_used": 0,
+    "total_used": 4,
+    "environment_constructor_calls": 4,
+    "joint_run_build_failures": 0,
+    "joint_run_constructed_calls": 4,
+    "run_invocation_calls": 4,
+    "joint_run_method_calls": 4,
+    "run_return_calls": 4,
+    "run_failure_calls": 0,
+    "completed_steps": 4000,
+    "completed_logical_jobs": 4,
+    "simulation_started": 4,
+    "technical_failed_claims": 0,
+    "retry_claims": 0,
+    "optimizer_step_calls": 12,
+    "optimizer_step_journal_entries": 12,
+    "ppo_update_calls": 1,
+    "ppo_update_journal_entries": 1,
+    "ppo_update_count_matches_committed_batches": true,
+    "checkpoint_write_calls": 4,
+    "checkpoint_write_journal_entries": 4,
+    "optimizer_step_count_matches_committed_batches": true,
+    "hard_cap": 600
+  },
+  "evidence": {
+    "ppo_update_call_entries": [
+      {
+        "call_index": 1,
+        "call_status": "ppo_update_invoked",
+        "unix_time": 1791083587.1939921,
+        "update_index": 0
+      }
+    ],
+    "optimizer_step_call_entry_count": 12,
+    "optimizer_step_call_indices": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "checkpoint_save_call_entries": [
+      {
+        "episodes_done": 0,
+        "path_at_write": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\v2_train_s11_ep0.pt.30952.milestone-tmp",
+        "sha256_at_write": "aa20178eb47b11f48673e7832156b15af7c6784a45cc62683da7d0b092511752",
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+        "updates": 0
+      },
+      {
+        "episodes_done": 0,
+        "path_at_write": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\v2_train_s11_before_b0.pt.30952.snapshot-tmp",
+        "sha256_at_write": "aa20178eb47b11f48673e7832156b15af7c6784a45cc62683da7d0b092511752",
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+        "updates": 0
+      },
+      {
+        "episodes_done": 4,
+        "path_at_write": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\v2_train_s11_after_b0.pt.30952.snapshot-tmp",
+        "sha256_at_write": "31e246dc3691759e40329fd3aa640ddac20af0c68e7207659b6364645ff28c6c",
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+        "updates": 1
+      },
+      {
+        "episodes_done": 4,
+        "path_at_write": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\v2_train_s11.pt",
+        "sha256_at_write": "31e246dc3691759e40329fd3aa640ddac20af0c68e7207659b6364645ff28c6c",
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+        "updates": 1
+      }
+    ],
+    "committed_batch_records": [
+      "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\checkpoints\\r40_batch_s11_b0_attempt01.json"
+    ],
+    "batch_record_optimizer_steps": 12,
+    "after_b0_optimizer_state_steps": [
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  "scientific_vs_accounting": {
+    "scientific_configuration_changed": false,
+    "training_update_replayed": false,
+    "main_ledger_reconciled_from_durable_call_journals_and_committed_batch": true,
+    "checkpoint_save_calls_source": "checkpoint_writes.jsonl invocation wrapper records, not checkpoint file count"
+  }
+}

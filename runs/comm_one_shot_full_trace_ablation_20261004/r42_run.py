@@ -290,6 +290,17 @@ def verify_frozen_source(frozen: dict[str, Any]) -> str:
                     f"ROUND43 prelaunch identity receipt mismatch for {key}")
         if prelaunch.get("status") != "passed":
             raise RuntimeError("ROUND43 prelaunch identity does not record a passed gate")
+    resume_bridge_identity = identity.get("resume_bridge")
+    if resume_bridge_identity:
+        bridge_path = RUN_DIR / resume_bridge_identity["path"]
+        if not bridge_path.is_file() or sha256(bridge_path) != resume_bridge_identity["sha256"]:
+            raise RuntimeError("ROUND43 exact-resume bridge changed after source freeze")
+    recovery_gate_identity = identity.get("resume_recovery_gate")
+    if recovery_gate_identity:
+        recovery_gate_path = RUN_DIR / recovery_gate_identity["path"]
+        if (not recovery_gate_path.is_file()
+                or sha256(recovery_gate_path) != recovery_gate_identity["sha256"]):
+            raise RuntimeError("ROUND43 read-only recovery gate changed after source freeze")
     return head
 
 
@@ -320,7 +331,8 @@ def configure(frozen: dict[str, Any], round40_freeze: dict[str, Any]) -> dict[st
     import v2_controller
     import v2_trainer as trainer
     import r40_run
-    import r40_train
+    import r40_train_resume_adapter as r40_train
+    import r43_call_counter_hooks
     import r42_versions
     import r42_one_shot
 
@@ -345,7 +357,8 @@ def configure(frozen: dict[str, Any], round40_freeze: dict[str, Any]) -> dict[st
         "integrated_sar.adapters.task03": INPUT_ROOT / "integrated_sar" / "adapters" / "task03.py",
         "r40_common": ROUND40_OUTPUT / "r40_common.py",
         "r40_run": ROUND40_OUTPUT / "r40_run.py",
-        "r40_train": ROUND40_OUTPUT / "r40_train.py",
+        "r40_train_resume_adapter": RUN_DIR / "r40_train_resume_adapter.py",
+        "r43_call_counter_hooks": RUN_DIR / "r43_call_counter_hooks.py",
         "r40_versions": ROUND40_OUTPUT / "r40_versions.py",
         "r42_one_shot": RUN_DIR / "r42_one_shot.py",
         "r42_versions": RUN_DIR / "r42_versions.py",
@@ -501,23 +514,24 @@ def configure(frozen: dict[str, Any], round40_freeze: dict[str, Any]) -> dict[st
 
     original_step = torch.optim.Adam.step
 
-    def count_optimizer_step(self: Any, *args: Any, **kwargs: Any):
+    def record_optimizer_step(self: Any, *args: Any, **kwargs: Any) -> None:
         global _OPTIMIZER_STEP_CALLS
         _OPTIMIZER_STEP_CALLS += 1
         _append_journal(optimizer_call_journal, {
             "call_index": _OPTIMIZER_STEP_CALLS,
             "optimizer_class": type(self).__qualname__,
             "call_status": "step_invoked",
+            "counter_hook_version": r43_call_counter_hooks.COUNTER_HOOK_VERSION,
             "unix_time": time.time(),
         })
-        return original_step(self, *args, **kwargs)
 
-    torch.optim.Adam.step = count_optimizer_step
+    torch.optim.Adam.step = r43_call_counter_hooks.count_at_entry(
+        original_step, record_optimizer_step)
     _RUNTIME["restore_adam_step"] = original_step
 
     original_ppo_update = trainer.ppo_update
 
-    def count_ppo_update(*args: Any, **kwargs: Any):
+    def record_ppo_update(*args: Any, **kwargs: Any) -> None:
         global _PPO_UPDATE_CALLS
         _PPO_UPDATE_CALLS += 1
         update_index = args[3] if len(args) > 3 else kwargs.get("update_index")
@@ -525,11 +539,12 @@ def configure(frozen: dict[str, Any], round40_freeze: dict[str, Any]) -> dict[st
             "call_index": _PPO_UPDATE_CALLS,
             "update_index": int(update_index) if update_index is not None else None,
             "call_status": "ppo_update_invoked",
+            "counter_hook_version": r43_call_counter_hooks.COUNTER_HOOK_VERSION,
             "unix_time": time.time(),
         })
-        return original_ppo_update(*args, **kwargs)
 
-    trainer.ppo_update = count_ppo_update
+    trainer.ppo_update = r43_call_counter_hooks.count_at_entry(
+        original_ppo_update, record_ppo_update)
     _RUNTIME["restore_ppo_update"] = original_ppo_update
     return _RUNTIME
 
@@ -837,10 +852,20 @@ def train_seed(training_seed: int, *, episodes: int, frozen: dict[str, Any]) -> 
             runtime, int(training_seed), start_payload["rng"])
     else:
         prime_context = contextlib.nullcontext({"done": True})
-    with prime_context as priming:
-        report = r40_train.train_seed(
-            int(training_seed), episodes=int(episodes),
-            freeze=runtime["round42_freeze"], reference_cache=cache)
+    try:
+        with prime_context as priming:
+            report = r40_train.train_seed(
+                int(training_seed), episodes=int(episodes),
+                freeze=runtime["round42_freeze"], reference_cache=cache)
+    except BaseException:
+        # The durable PPO/Adam call journals can be ahead of the last environment-ledger
+        # flush when training fails between batches. Persist their reconciled state without
+        # masking the original training exception.
+        try:
+            write_execution_ledger(strict=False)
+        except BaseException:
+            pass
+        raise
     if fresh_start and not priming["done"]:
         raise RuntimeError(f"seed {training_seed}: registered ep0 RNG was not applied after initialization")
     if fresh_start:
@@ -850,6 +875,7 @@ def train_seed(training_seed: int, *, episodes: int, frozen: dict[str, Any]) -> 
     report["rng_priming"] = dict(runtime.get("rng_priming", {}).get(
         str(int(training_seed)), {"source": "same_round43_process_resume",
                                   "loaded_model": False, "loaded_optimizer": False}))
+    write_execution_ledger(strict=True)
     return report
 
 

@@ -1,0 +1,84 @@
+{
+  "kind": "round43-resume-recovery-gate/1",
+  "status": "passed",
+  "prior_execution_head": "c7bc89d995c1a5e5c2b53303bebd036e85aa4c2d",
+  "source_code_sha256_for_next_freeze": {
+    "r42_run.py": "096cfaafe75b61d5231976f6998ac26e9063d986f199d3d99c5742f49e1f02d0",
+    "r42_versions.py": "f451503d40657d210ba7c81caffe5d6918f1a9de737625b057e0c9354e7bcffd",
+    "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+    "r42_analysis.py": "3342367be6d8a3c732ac7bf541575d17ae8a168618bc3f9b1493781bf8345633",
+    "r43_preflight.py": "b28230d4ae777701a7e66814b9b0d2f7975156f7906b32a11153bd711f902f37",
+    "r43_analysis.py": "1994da0d1d726df54537cf78da0a03a2dbf61132fe196a6bc2de63a37b460810",
+    "r43_execute.py": "e0ce50c00270bb2feb0a01800dac2fd5a26514bf8d1390ff4908abd10ad45a84",
+    "r43_report.py": "c4272a7ac5ba158dca90d98c5640b536227f09be07e3488552b96db40a7d0366",
+    "r43_freeze.py": "cf70778b84f9b4293d8717f000daa2266931a37fbb2cc958297e864326e25dfa",
+    "r40_train_resume_adapter.py": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+    "r43_call_counter_hooks.py": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
+    "test_r43_call_counter_hooks.py": "29b76f1007e18fc300db6bd6676e420b3e75c263840a49fb0a3ccd296c2ad3c3",
+    "test_r43_resume_adapter.py": "0fb4c275be50408ce4099f44d839c99ef77b689f8d762c4c41124a108cb61a8d",
+    "r43_recovery_gate.py": "3a5bcbe554097dbea62ee0b07b9992c470bf5d332452629641018e32d25c161f"
+  },
+  "training_semantics_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
+  "mechanical_resume_adapter": "ROUND42-validated import-scope adapter; only parameter_identity import moved to function entry",
+  "batch0_state_audit": {
+    "path": "ROUND43_SEED11_BATCH0_STATE_RECONCILIATION.json",
+    "sha256": "2b73f3b51b3c1732144f5371fd6c1bb44ca4049e3b349058ad6925fbdf338001"
+  },
+  "ledger_reconciliation": {
+    "path": "ROUND43_LEDGER_RECONCILIATION.json",
+    "sha256": "54799a746dc42fd6464421510a620cea42b466e4e3d3f6b749b9baefa4da19fb"
+  },
+  "resume_failure_record": {
+    "path": "failures/ROUND43_RUNCALL_RESUME_FAILURE_FREEZE1.json",
+    "sha256": "b002c9084e014d395500d80d1109c6f0f0a60fd833542bebfff3e8de7f29656f"
+  },
+  "actual_entry_regression": {
+    "kind": "round43-actual-resume-entry-regression/1",
+    "status": "passed",
+    "frozen_round40_source_path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\r40_train.py",
+    "frozen_round40_source_sha256": "25863fb1d93944d48c35ef0adb289b4316012c027fc768e5c0469fc8e116fb7d",
+    "old_entry_actual_resume_failure": {
+      "exception_type": "UnboundLocalError",
+      "message": "local variable 'parameter_identity' referenced before assignment",
+      "contains_parameter_identity": true
+    },
+    "patched_adapter_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\r40_train_resume_adapter.py",
+    "patched_adapter_sha256": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+    "patched_entry": {
+      "resume_source": "isolated byte-for-byte copy of immutable after_b0/rolling state",
+      "state_cursor": "episode 4, update 1, Adam state step 12, lambda 1.0125",
+      "next_episode_index": 4,
+      "entry_reached": "run_training_episode guard before any environment constructor"
+    },
+    "guard_calls": {
+      "next_episode_entry_before_environment": 1,
+      "real_or_synthetic_optimizer_updates": 0,
+      "ppo_updates": 0,
+      "actual_checkpoint_saves": 0,
+      "isolated_checkpoint_writes": 0
+    },
+    "ambient_rng_restored": true
+  },
+  "adapter_ast_regression": {
+    "module": "test_r43_resume_adapter",
+    "tests_run": 2,
+    "failures": 0,
+    "errors": 0,
+    "stdout": "test_import_is_available_before_resume_branch (test_r43_resume_adapter.ResumeAdapterRegression) ... ok\ntest_only_moves_parameter_identity_import (test_r43_resume_adapter.ResumeAdapterRegression) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.053s\n\nOK\n"
+  },
+  "training_call_counter_boundary_regression": {
+    "module": "test_r43_call_counter_hooks",
+    "tests_run": 2,
+    "failures": 0,
+    "errors": 0,
+    "stdout": "test_entry_count_and_argument_return_identity (test_r43_call_counter_hooks.CallCounterHookTests) ... ok\ntest_entry_count_precedes_and_preserves_original_exception (test_r43_call_counter_hooks.CallCounterHookTests) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+  },
+  "state_sources_unchanged_during_gate": true,
+  "ambient_rng_restored": true,
+  "environment_constructors": 0,
+  "joint_run_constructors": 0,
+  "episode_claims_created": 0,
+  "real_optimizer_updates": 0,
+  "synthetic_optimizer_updates": 0,
+  "checkpoint_state_writes": 0
+}

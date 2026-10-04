@@ -1,0 +1,44 @@
+{
+  "kind": "round43-runner-resume-failure/1",
+  "status": "preserved_harness_failure_before_next_environment_claim",
+  "execution_head": "c7bc89d995c1a5e5c2b53303bebd036e85aa4c2d",
+  "branch": "exp/comm-one-shot-full-trace-ablation",
+  "source_code_version": "ROUND43 initial source freeze; full-trace semantics unchanged",
+  "call_path": [
+    "r43_execute.run seed11 ep128 continuation",
+    "r42_run.train_seed resume=True",
+    "ROUND40 r40_train.train_seed resume_source branch",
+    "before = parameter_identity(controller)"
+  ],
+  "exception": {
+    "type": "UnboundLocalError",
+    "message": "local variable 'parameter_identity' referenced before assignment",
+    "source_location": {
+      "path": "D:\\code\\整合\\zhenghe-round40\\runs\\comm_first_report_training_ablation_20261003\\r40_train.py",
+      "line": 386
+    },
+    "reason": "parameter_identity is imported only inside the fresh-start branch, while the resume branch reaches its use without executing that local import"
+  },
+  "pre_failure_cursor": {
+    "seed": 11,
+    "episodes_done": 4,
+    "updates": 1,
+    "optimizer_steps_committed": 12,
+    "lambda_dual": 1.0125
+  },
+  "accounting_at_stop": {
+    "environment_claims_delta_during_failed_resume": 0,
+    "environment_constructors_delta": 0,
+    "environment_run_calls_delta": 0,
+    "PPO_or_optimizer_call_delta": 0,
+    "normal_slots_used_before_failure": 4,
+    "technical_reserve_used_before_failure": 0
+  },
+  "preservation": {
+    "original_ledger_copy": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\runtime\\ROUND43_EXECUTION_LEDGER_FREEZE1_AT_STOP.json",
+    "original_progress_copy": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\runtime\\ROUND43_EXECUTION_PROGRESS_FREEZE1.json",
+    "original_prelaunch_identity_copy": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\runtime\\ROUND43_PRELAUNCH_IDENTITY_FREEZE1.json",
+    "original_preflight_copy": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\runtime\\ROUND43_PREFLIGHT_FREEZE1.json",
+    "batch0_commit_and_checkpoint_unchanged": true
+  }
+}
