@@ -26,6 +26,7 @@ RUN_DIR = Path(__file__).resolve().parent
 RUN_REL = f"runs/{RUN_DIR.name}"
 BASE_STOP_HEAD = "12c3bdde0c85d9cf31eb1f1fc264f397701babac"
 INITIAL_SOURCE_HEAD = "347da3b8b559e669c57334f51ed17bcb3e90e3b2"
+SOURCE_IDENTITY_VALIDATOR_HEAD = "3fbd702c398b9cc45d3495183b0ce73ac3ded178"
 SCIENTIFIC_FREEZE_HEAD = "2353c4616746cf0a7c9fcb3a519a7042a28ba176"
 TRAINING_EXECUTION_HEAD = "26b22680b8c3c5cb9bb91bc44799c76cec6f874a"
 BRANCH = "exp/comm-dual-response-ablation"
@@ -54,7 +55,9 @@ SOURCE_REVISION_ALLOWED_PATHS = {
     f"{RUN_REL}/r44_eval_resume.py",
     f"{RUN_REL}/test_r44_eval_resume.py",
 }
-SOURCE_ALLOWED_PATHS = INITIAL_SOURCE_ALLOWED_PATHS | SOURCE_REVISION_ALLOWED_PATHS
+SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS = set(SOURCE_REVISION_ALLOWED_PATHS)
+SOURCE_ALLOWED_PATHS = (INITIAL_SOURCE_ALLOWED_PATHS | SOURCE_REVISION_ALLOWED_PATHS
+                        | SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS)
 IDENTITY_ALLOWED_PATHS = {
     f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_GATE_R1.json",
     f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R1.json",
@@ -214,6 +217,15 @@ def _forbid(action: str) -> Callable[..., Any]:
     return rejected
 
 
+def _rng_state_sha256(value: Any) -> str:
+    if type(value) is not dict or set(value) != {"python", "numpy", "torch"}:
+        raise EvalResumeError("ambient RNG snapshot has an unexpected shape")
+    _validate_json_finite(value)
+    encoded = json.dumps(value, sort_keys=True, separators=(",", ":"),
+                         ensure_ascii=False, allow_nan=False).encode("utf-8")
+    return sha256_bytes(encoded)
+
+
 def install_read_only_guards(run_module: Any, runtime: dict[str, Any],
                              torch_module: Any) -> list[str]:
     """Make unauthorized training/update/restore/write operations fail immediately."""
@@ -231,9 +243,61 @@ def install_read_only_guards(run_module: Any, runtime: dict[str, Any],
         ("ppo_update", "trainer.ppo_update"),
         ("save_checkpoint", "trainer.save_checkpoint"),
         ("load_checkpoint", "trainer.load_checkpoint_training_state"),
-        ("restore_rng", "trainer.restore_rng"),
     ):
         patch(trainer, name, action)
+    for name in ("restore_rng", "rng_state", "load_checkpoint_read_only"):
+        if not callable(getattr(trainer, name, None)):
+            raise EvalResumeError(f"required read-only trainer boundary is missing: {name}")
+    original_restore_rng = trainer.restore_rng
+    original_read_only_loader = trainer.load_checkpoint_read_only
+    rng_guard_state: dict[str, Any] = {
+        "active": False, "expected_ambient_sha256": None,
+        "restore_calls_in_loader": 0, "read_only_load_calls": 0,
+        "ambient_restore_calls": 0,
+    }
+
+    def guarded_restore_rng(state: Any) -> Any:
+        if not rng_guard_state["active"]:
+            raise EvalOnlyViolation(
+                "ROUND44 eval-only guard rejected trainer.restore_rng outside the read-only loader")
+        if int(rng_guard_state["restore_calls_in_loader"]) != 0:
+            raise EvalOnlyViolation("ROUND44 read-only loader attempted multiple RNG restores")
+        if _rng_state_sha256(state) != rng_guard_state["expected_ambient_sha256"]:
+            raise EvalOnlyViolation(
+                "ROUND44 read-only loader attempted to restore non-ambient/checkpoint RNG state")
+        result = original_restore_rng(state)
+        if result is not True:
+            raise EvalOnlyViolation("ROUND44 ambient RNG preservation did not restore a valid snapshot")
+        rng_guard_state["restore_calls_in_loader"] = 1
+        rng_guard_state["ambient_restore_calls"] += 1
+        return result
+
+    def guarded_read_only_loader(*args: Any, **kwargs: Any) -> Any:
+        if rng_guard_state["active"]:
+            raise EvalOnlyViolation("nested read-only checkpoint loads are forbidden")
+        ambient_sha = _rng_state_sha256(trainer.rng_state())
+        rng_guard_state["active"] = True
+        rng_guard_state["expected_ambient_sha256"] = ambient_sha
+        rng_guard_state["restore_calls_in_loader"] = 0
+        try:
+            result = original_read_only_loader(*args, **kwargs)
+            if int(rng_guard_state["restore_calls_in_loader"]) != 1:
+                raise EvalOnlyViolation(
+                    "read-only checkpoint loader did not restore its exact ambient RNG snapshot")
+            if _rng_state_sha256(trainer.rng_state()) != ambient_sha:
+                raise EvalOnlyViolation("read-only checkpoint load changed ambient RNG state")
+            rng_guard_state["read_only_load_calls"] += 1
+            return result
+        finally:
+            rng_guard_state["active"] = False
+            rng_guard_state["expected_ambient_sha256"] = None
+            rng_guard_state["restore_calls_in_loader"] = 0
+
+    trainer.restore_rng = guarded_restore_rng
+    trainer.load_checkpoint_read_only = guarded_read_only_loader
+    guarded.extend(("trainer.restore_rng_checkpoint_state_rejected",
+                    "trainer.load_checkpoint_read_only_ambient_preservation_guard"))
+    runtime["eval_only_rng_guard_state"] = rng_guard_state
     r40_train = runtime.get("r40_train")
     if r40_train is not None:
         for name in ("train_seed", "_save_milestone", "_write_immutable_snapshot",
@@ -247,7 +311,9 @@ def install_read_only_guards(run_module: Any, runtime: dict[str, Any],
     if not all(name in guarded for name in (
             "r42_run.train_seed", "r42_run.run_training_episode", "trainer.ppo_update",
             "trainer.save_checkpoint", "trainer.load_checkpoint_training_state",
-            "trainer.restore_rng", "torch.save", "Adam.step")):
+            "trainer.restore_rng_checkpoint_state_rejected",
+            "trainer.load_checkpoint_read_only_ambient_preservation_guard",
+            "torch.save", "Adam.step")):
         raise EvalResumeError(f"required eval-only rejection hook was not installed: {guarded}")
     return guarded
 
@@ -383,10 +449,14 @@ def _verify_source_commit_chain(source_head: str) -> dict[str, Any]:
         raise EvalResumeError("initial eval-only source commit no longer directly follows the stop head")
     if _changed_paths(BASE_STOP_HEAD, INITIAL_SOURCE_HEAD) != INITIAL_SOURCE_ALLOWED_PATHS:
         raise EvalResumeError("initial eval-only source commit differs from its exact path allowlist")
-    if _parent(source_head) != INITIAL_SOURCE_HEAD:
-        raise EvalResumeError("revised eval-only source commit must directly follow the preserved initial commit")
-    if _changed_paths(INITIAL_SOURCE_HEAD, source_head) != SOURCE_REVISION_ALLOWED_PATHS:
-        raise EvalResumeError("revised eval-only source commit differs from its exact path allowlist")
+    if _parent(SOURCE_IDENTITY_VALIDATOR_HEAD) != INITIAL_SOURCE_HEAD:
+        raise EvalResumeError("source identity-validator revision no longer directly follows its preserved parent")
+    if _changed_paths(INITIAL_SOURCE_HEAD, SOURCE_IDENTITY_VALIDATOR_HEAD) != SOURCE_REVISION_ALLOWED_PATHS:
+        raise EvalResumeError("source identity-validator revision differs from its exact path allowlist")
+    if _parent(source_head) != SOURCE_IDENTITY_VALIDATOR_HEAD:
+        raise EvalResumeError("ambient-guard revision must directly follow the preserved identity-validator commit")
+    if _changed_paths(SOURCE_IDENTITY_VALIDATOR_HEAD, source_head) != SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS:
+        raise EvalResumeError("ambient-guard revision differs from its exact path allowlist")
     _assert_ancestor(SCIENTIFIC_FREEZE_HEAD, source_head)
     _assert_ancestor(TRAINING_EXECUTION_HEAD, source_head)
     hashes = {}
@@ -395,9 +465,11 @@ def _verify_source_commit_chain(source_head: str) -> dict[str, Any]:
     return {
         "base_stop_head": BASE_STOP_HEAD,
         "initial_source_head": INITIAL_SOURCE_HEAD,
+        "source_identity_validator_head": SOURCE_IDENTITY_VALIDATOR_HEAD,
         "revised_source_head": source_head,
         "initial_source_allowed_paths": sorted(INITIAL_SOURCE_ALLOWED_PATHS),
-        "revision_allowed_paths": sorted(SOURCE_REVISION_ALLOWED_PATHS),
+        "source_identity_validator_revision_allowed_paths": sorted(SOURCE_REVISION_ALLOWED_PATHS),
+        "ambient_guard_revision_allowed_paths": sorted(SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS),
         "source_file_sha256": hashes,
     }
 
@@ -438,7 +510,8 @@ def verify_eval_identity() -> tuple[str, dict[str, Any], dict[str, Any]]:
         raise EvalResumeError("eval-only execution identity is malformed or not passed")
     if identity.get("gate_sha256") != sha256_file(EVAL_GATE):
         raise EvalResumeError("eval-only identity does not bind this exact prelaunch gate")
-    expected_chain = [BASE_STOP_HEAD, INITIAL_SOURCE_HEAD, source_head]
+    expected_chain = [BASE_STOP_HEAD, INITIAL_SOURCE_HEAD,
+                      SOURCE_IDENTITY_VALIDATOR_HEAD, source_head]
     if identity.get("source_commit_chain") != expected_chain:
         raise EvalResumeError("eval-only identity does not bind the exact mechanical source commit chain")
     if _parent(head) != source_head or _changed_paths(source_head, head) != IDENTITY_ALLOWED_PATHS:
@@ -645,6 +718,10 @@ def _model_gate(*, runtime: dict[str, Any], identity_head: str,
     checkpoint_parameters: dict[int, str] = {}
     loaded: dict[int, tuple[Any, dict[str, Any], dict[str, Any]]] = {}
     model_records = []
+    trainer = runtime["trainer"]
+    rng_guard_state = runtime.get("eval_only_rng_guard_state")
+    if type(rng_guard_state) is not dict:
+        raise EvalResumeError("read-only model gate lacks its installed ambient RNG guard state")
     tape_path = RUN_DIR / "logs" / "v2_r44_eval_new_s11_greedy_s1301000_a1_tape.jsonl"
     manifest = read_json(IMMUTABLE_MANIFEST)
     failed_tape = manifest["failed_attempt1"]["artifacts"]["tape"]
@@ -671,17 +748,32 @@ def _model_gate(*, runtime: dict[str, Any], identity_head: str,
                 or EP128_FILE_SHA[seed] != expected["checkpoint_file_sha256"]
                 or PARAMETER_SHA[seed] != expected["parameter_sha256"]):
             raise EvalResumeError(f"ep128 checkpoint byte identity mismatch for seed {seed}")
+        rng_before_load = _rng_state_sha256(trainer.rng_state())
+        loads_before = int(rng_guard_state["read_only_load_calls"])
+        restores_before = int(rng_guard_state["ambient_restore_calls"])
         controller, loaded_identity = run_module.load_eval_model("NEW", seed)
+        rng_after_load = _rng_state_sha256(trainer.rng_state())
         if (loaded_identity.get("optimizer_restored") is not False
                 or loaded_identity.get("rng_restored") is not False
+                or loaded_identity.get("ambient_rng_preserved") is not True
                 or loaded_identity.get("episodes_done") != 128
                 or loaded_identity.get("parameter_identity", {}).get("parameter_sha256")
                 != PARAMETER_SHA[seed]
                 or sha256_file(path) != EP128_FILE_SHA[seed]):
             raise EvalResumeError(f"ep128 read-only load identity mismatch for seed {seed}")
+        if rng_after_load != rng_before_load:
+            raise EvalResumeError(f"ep128 read-only load changed ambient RNG state for s{seed}")
+        if (int(rng_guard_state["read_only_load_calls"]) != loads_before + 1
+                or int(rng_guard_state["ambient_restore_calls"]) != restores_before + 1
+                or bool(rng_guard_state["active"])):
+            raise EvalResumeError(f"ep128 read-only load bypassed or repeated its RNG guard for s{seed}")
+        rng_before_forward = _rng_state_sha256(trainer.rng_state())
         with torch.inference_mode():
             logits, task_values = controller.forward(observation)
             cost_values = controller.cost_values(observation)
+        rng_after_forward = _rng_state_sha256(trainer.rng_state())
+        if rng_after_forward != rng_before_forward:
+            raise EvalResumeError(f"ep128 CPU forward changed ambient RNG state for s{seed}")
         for label, tensor, expected_shape in (
                 ("logits", logits, (1, 2)), ("task_values", task_values, (1,)),
                 ("cost_values", cost_values, (1,))):
@@ -699,6 +791,13 @@ def _model_gate(*, runtime: dict[str, Any], identity_head: str,
             "training_version": loaded_identity.get("training_version"),
             "episodes_done": loaded_identity["episodes_done"],
             "optimizer_restored": False, "rng_restored": False,
+            "ambient_rng_preserved": True,
+            "ambient_rng_sha256": {
+                "before_read_only_load": rng_before_load,
+                "after_read_only_load": rng_after_load,
+                "before_cpu_forward": rng_before_forward,
+                "after_cpu_forward": rng_after_forward,
+            },
             "read_only_loader": "trainer.load_checkpoint_read_only",
             "forward_input": {"source": str(tape_path.resolve()),
                               "attempt": 1, "step": int(first_tape["step"]),
@@ -708,6 +807,10 @@ def _model_gate(*, runtime: dict[str, Any], identity_head: str,
                                 "cost_values": [float(v) for v in cost_values.detach().cpu().reshape(-1)]},
             "parameter_identity_unchanged_after_forward": True,
         })
+    if (int(rng_guard_state["read_only_load_calls"]) != len(SEEDS)
+            or int(rng_guard_state["ambient_restore_calls"]) != len(SEEDS)
+            or bool(rng_guard_state["active"])):
+        raise EvalResumeError("three-seed model gate did not use exactly one guarded load per seed")
     after_ledger = run_module.ledger_snapshot(strict=True)
     after_counters = _counter_snapshot(after_ledger)
     if before_counters != after_counters:
@@ -737,6 +840,13 @@ def _model_gate(*, runtime: dict[str, Any], identity_head: str,
                               "budget_bytes": 29300},
         "current_counts_before_after": {"before": before_counters, "after": after_counters},
         "model_loads_and_forward": model_records,
+        "ambient_rng_audit": {
+            "snapshot_fields": ["python", "numpy", "torch"],
+            "read_only_load_calls": int(rng_guard_state["read_only_load_calls"]),
+            "allowed_ambient_restore_calls": int(rng_guard_state["ambient_restore_calls"]),
+            "all_loads_preserved_ambient_rng": True,
+            "all_cpu_forwards_preserved_ambient_rng": True,
+        },
         "initial_valid_eval_index_count": index.completed_count,
         "failed_attempt1_claim_sha256": sha256_file(retry_claims[0]),
         "failed_attempt1_row_sha256": sha256_file(RUN_DIR / "rows" /

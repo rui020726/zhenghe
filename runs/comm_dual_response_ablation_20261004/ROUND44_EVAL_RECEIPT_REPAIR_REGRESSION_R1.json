@@ -6,7 +6,7 @@
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_index.py",
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
     ],
-    "status": "passed after exact-chain verifier revision"
+    "status": "passed after ambient-guard model-gate revision"
   },
   "immutable_input_manifest_sha256": "b3bb6f7c2488b2acb03f467c799b6eb74554795cf9041eb30529031774a3ebeb",
   "kind": "round44-eval-receipt-repair-regression/1",
@@ -22,10 +22,41 @@
   },
   "python_executable": "D:\\project_env\\python.exe",
   "python_version": "3.10.19 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 16:41:31) [MSC v.1929 64 bit (AMD64)]",
+  "read_only_checkpoint_attempts": [
+    {
+      "checkpoint_writes": 0,
+      "environment_constructors": 0,
+      "optimizer_steps": 0,
+      "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EVAL_PRELAUNCH_GUARD_FAILURE_3FBD702.json",
+      "sha256": "bbc63ea41f5e69bd08c5ff666c69dd7c9930df71e3cf3e1765f15808b663e37f",
+      "status": "prelaunch failed before forward; one read-only deserialization/controller construction"
+    }
+  ],
+  "read_only_loader_guard": {
+    "actual_wrapper_source": "runs/comm_dual_response_ablation_20261004/r42_versions.py:151-188",
+    "ambient_restore_call_limit": 1,
+    "exact_ambient_snapshot_required": true,
+    "external_checkpoint_rng_restore": "rejected",
+    "post_load_state_equal": "passed",
+    "test_scope": "torch.load is a pure fixture and base controller loader is an in-memory stub; no checkpoint file is created or written"
+  },
+  "three_seed_model_gate_rng_audit": {
+    "checks_implemented": [
+      "ambient Python/NumPy/Torch snapshot hash before and after each read-only checkpoint load",
+      "loaded identity reports ambient_rng_preserved true",
+      "one guarded read-only load and one ambient restore per seed",
+      "ambient Python/NumPy/Torch snapshot hash before and after each CPU forward/cost-value call"
+    ],
+    "actual_ep128_gate": "pending; not yet run",
+    "real_checkpoint_forward_count": 0,
+    "environment_starts": 0
+  },
   "regressions": {
     "actual_preserved_attempt1_is_not_indexed": "passed",
     "actual_verify_eval_identity_accepts_exact_source_parent_and_identity_child": "passed",
     "actual_verify_eval_identity_rejects_wrong_parent_unregistered_path_dirty_worktree_and_content_drift": "passed",
+    "actual_versioned_read_only_loader_preserves_exact_ambient_rng": "passed; actual r42_versions.py wrapper with no checkpoint file write",
+    "ambient_rng_restore_external_and_checkpoint_payload_rejected": "passed",
     "duplicate_keys_nonstandard_constants_and_nested_nonfinite_values_rejected": "passed",
     "eval_only_source_chain_path_allowlists": "passed static regression; full Git blob chain validation remains part of the zero-environment gate",
     "eval_only_training_optimizer_and_checkpoint_write_guards": "passed",
@@ -44,13 +75,14 @@
     "optimizer_steps": 0,
     "ppo_updates": 0,
     "read_only_checkpoint_loads": 0,
+    "real_eval_environment_starts": 0,
     "run_calls": 0
   },
   "source_identity_gate_attempts": [
     {
       "all_source_hashes_remain_required": true,
       "checkpoint_writes": 0,
-      "corrected_gate_rerun": "pending after exact two-commit source revision",
+      "corrected_gate_rerun": "source/hash gates passed on 3fbd702; read-only loader guard then rejected exact ambient snapshot preservation; preserved separately",
       "environment_constructors": 0,
       "head": "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
       "optimizer_steps": 0,
@@ -86,13 +118,13 @@
         "test_r44_eval_resume.EvalScheduleTests.test_queue_rejects_consumption_out_of_order",
         "test_r44_eval_resume.EvalScheduleTests.test_retry_queue_must_precede_remaining_fixed_cells",
         "test_r44_eval_resume.EvalScheduleTests.test_retry_requires_attempt_two_and_reserve_metadata",
-        "test_r44_eval_resume.EvalScheduleTests.test_source_identity_uses_two_exact_mechanical_commits",
+      "test_r44_eval_resume.EvalScheduleTests.test_source_identity_uses_three_exact_mechanical_commits",
         "test_r44_eval_resume.VerifyEvalIdentityTests.test_actual_identity_verifier_accepts_source_head_and_identity_child",
         "test_r44_eval_resume.VerifyEvalIdentityTests.test_actual_identity_verifier_rejects_worktree_and_content_drift",
         "test_r44_eval_resume.VerifyEvalIdentityTests.test_actual_identity_verifier_rejects_wrong_parent_and_unregistered_path",
         "test_r44_eval_resume.VerifyEvalIdentityTests.test_historical_freeze_and_r4_sources_match_real_git_identities"
       ],
-      "tests_run": 13
+      "tests_run": 14
     }
   ]
 }

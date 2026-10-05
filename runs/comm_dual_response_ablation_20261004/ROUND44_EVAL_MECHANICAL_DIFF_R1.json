@@ -1,4 +1,24 @@
 {
+  "ambient_rng_guard_review": {
+    "actual_read_only_loader_path": "r42_versions.load_checkpoint_read_only",
+    "all_other_restore_rng_calls_fail_closed": true,
+    "allowed_call_scope": "only while its actual read-only loader wrapper is active",
+    "allowed_payload": "exact JSON-compatible snapshot of Python, NumPy and Torch streams captured before load",
+    "before_after_snapshot_hash_equal_required": true,
+    "frozen_trainer_and_version_sources_modified": false,
+    "three_seed_model_gate_audit": {
+      "each_read_only_load_requires_equal_before_after_snapshot_hash": true,
+      "each_cpu_forward_requires_equal_before_after_snapshot_hash": true,
+      "loaded_identity_must_report_ambient_rng_preserved": true,
+      "expected_read_only_load_calls": 3,
+      "expected_ambient_restore_calls": 3,
+      "status": "implemented; awaiting zero-environment prelaunch audit"
+    },
+    "prelaunch_failure_evidence": {
+      "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EVAL_PRELAUNCH_GUARD_FAILURE_3FBD702.json",
+      "sha256": "bbc63ea41f5e69bd08c5ff666c69dd7c9930df71e3cf3e1765f15808b663e37f"
+    }
+  },
   "base_stop_head": "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
   "changes": [
     {
@@ -39,6 +59,22 @@
     },
     {
       "change": "13 pure/read-only tests call actual verify_eval_identity through controlled Git/blob evidence, verify positive source-parent/identity-child flow, reject parent/path/dirty/content/evidence drift, and inspect actual R4 source-layer Git identities.",
+      "path": "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
+    },
+    {
+      "change": "RNG guard narrowly permits only the real versioned read-only loader to restore one exact pre-load ambient snapshot and verifies the post-load snapshot is equal; direct, repeated, or checkpoint RNG restoration remains rejected.",
+      "path": "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py"
+    },
+    {
+      "change": "pure integration test executes the real r42_versions.py read-only loader wrapper with torch.load stubbed and an in-memory controller fixture; proves exact ambient preservation and rejects checkpoint RNG restore without creating a checkpoint file.",
+      "path": "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
+    },
+    {
+      "change": "three-seed read-only model gate records Python/NumPy/Torch ambient RNG hashes before and after each checkpoint load and CPU forward, requires the loader identity to certify ambient preservation, and requires exactly one guarded load/restore per seed.",
+      "path": "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py"
+    },
+    {
+      "change": "source identity regression now asserts the exact union of the initial, identity-validator and ambient-guard source allowlists.",
       "path": "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
     }
   ],
@@ -128,10 +164,18 @@
     "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
   ],
   "source_commit_chain": {
+    "ambient_guard_revision_allowed_paths": [
+      "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json",
+      "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
+      "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
+    ],
     "chain": [
       "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
       "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
-      "<revised eval-only source head>"
+      "3fbd702c398b9cc45d3495183b0ce73ac3ded178",
+      "<ambient-guard eval-only source head>"
     ],
     "first_commit_allowed_paths": [
       "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
@@ -142,23 +186,17 @@
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_index.py",
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
     ],
-    "first_commit_preserved": true,
-    "first_commit_rewritten": false,
-    "revised_source_head": "bound by the later identity child; no self-reference in this source commit",
-    "revision_allowed_paths": [
+    "identity_validator_commit_preserved": true,
+    "identity_validator_revision_allowed_paths": [
       "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
       "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
       "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json",
       "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
     ],
-    "revision_commit_allowed_paths": [
-      "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
-      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
-      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json",
-      "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
-      "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
-    ]
+    "initial_commit_preserved": true,
+    "revised_source_head": "bound by the later identity child; no self-reference in this source commit",
+    "source_identity_validator_commit": "3fbd702c398b9cc45d3495183b0ce73ac3ded178"
   },
   "status": "reviewed",
   "unchanged_scientific_configuration": {

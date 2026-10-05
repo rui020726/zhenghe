@@ -29,6 +29,17 @@
     "valid_new_eval_cells": 0
   },
   "active_round": 44,
+  "ambient_rng_read_only_guard": {
+    "actual_loader": "r42_versions.load_checkpoint_read_only",
+    "actual_wrapper_pure_regression": "passed",
+    "allowed": "only one restore in that loader scope, exact pre-load ambient Python/NumPy/Torch snapshot, followed by equal post-load snapshot",
+    "three_seed_model_gate": "now records and compares ambient Python/NumPy/Torch snapshot hashes around each read-only load and CPU forward; requires exactly one load and ambient restore per seed",
+    "three_seed_model_gate_status": "implemented; awaits the zero-environment prelaunch audit",
+    "checkpoint_rng_restore": "rejected",
+    "external_or_repeated_restore": "rejected",
+    "optimizer_and_checkpoint_write": "rejected",
+    "real_ep128_load_gate": "pending after source freeze"
+  },
   "authorization": {
     "saved_basis": "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_CONTINUATION_BASIS.md",
     "saved_basis_sha256": "8205cc4314a68ba3e3cdef2a95a564bb4bb45f87982cb9d951e3b140ae8880f7",
@@ -106,7 +117,7 @@
     "total_used": 385,
     "valid_new_eval_cells": 0
   },
-  "current_stage": "ROUND44 eval-only source validator repaired: original freeze and R4 source identities validate independently; source-head versus identity-child checks have direct positive/negative tests; preparing the preserved mechanical revision commit before rerunning the read-only model audit.",
+  "current_stage": "ROUND44 eval-only ambient-RNG guard revision: the exact three-seed read-only load and CPU-forward RNG audit is implemented; 17 receipt/index tests and 14 eval-only tests passed; source commit, actual CPU-only checkpoint/forward gate, and final identity remain pending.",
   "current_state": {
     "as_of": "2026-10-06",
     "counts": {
@@ -252,7 +263,7 @@
     "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3"
   },
   "latest_current_head_at_continuation": "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
-  "next_action": "Commit only the exact source-revision whitelist as a child of preserved 347da3b; run the zero-environment CPU ep128/tape forward audit; freeze its gate and identity in the exact identity child; then run only the reserve retry and original remaining 95 evaluation cells.",
+  "next_action": "Commit the exact five-path ambient-guard source child of 3fbd702; rerun py_compile, all 17 receipt/index and 14 eval-only tests; pass the real three-seed CPU read-only checkpoint/forward audit including RNG preservation; freeze the exact identity child and only then execute the reserve retry plus original remaining 95 cells.",
   "old_projection_failure_evidence": {
     "episodes": 4,
     "old_projection_differences_each_episode": 3,
@@ -285,6 +296,21 @@
     "training_episodes_complete": 384
   },
   "pre_resume_snapshot_manifest_sha256": "65348220c10e8c9158cf994e991eb2019bb6e99771a117a752d57c879450891e",
+  "prelaunch_model_gate_attempts": [
+    {
+      "checkpoint_deserializations": 1,
+      "checkpoint_writes": 0,
+      "controller_constructions": 1,
+      "environment_constructors": 0,
+      "forward_calls": 0,
+      "head": "3fbd702c398b9cc45d3495183b0ce73ac3ded178",
+      "optimizer_steps": 0,
+      "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EVAL_PRELAUNCH_GUARD_FAILURE_3FBD702.json",
+      "preserved": true,
+      "sha256": "bbc63ea41f5e69bd08c5ff666c69dd7c9930df71e3cf3e1765f15808b663e37f",
+      "status": "failed_during_first_read_only_checkpoint_load_before_forward"
+    }
+  ],
   "prelaunch_source_gate_attempts": [
     {
       "checkpoint_writes": 0,
@@ -346,14 +372,17 @@
   },
   "source_identity_revision": {
     "R4_historical_source_commit": "26b22680b8c3c5cb9bb91bc44799c76cec6f874a",
+    "ambient_guard_revision_scope": "the same five eval-only source/test/evidence paths; no training science or frozen runtime sources",
     "hashes_may_be_skipped": false,
+    "preserved_identity_validator_commit": "3fbd702c398b9cc45d3495183b0ce73ac3ded178",
     "preserved_initial_source_commit": "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
     "required_chain": [
       "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
       "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
-      "<revised eval-only source head>"
+      "3fbd702c398b9cc45d3495183b0ce73ac3ded178",
+      "<ambient-guard eval-only source head>"
     ],
-    "revised_source_head": "pending exact child commit; initial 347da3b commit remains preserved",
+    "revised_source_head": "pending exact child commit; 347da3b and 3fbd702 preserved",
     "revision_scope": "r44_eval_resume.py, test_r44_eval_resume.py, current task, receipt regression, mechanical diff only"
   },
   "stage": "eval_receipt_repair_then_fixed_evaluation",

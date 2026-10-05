@@ -6,6 +6,10 @@ import unittest
 import hashlib
 import json
 import tempfile
+import copy
+import importlib.util
+import sys
+import types
 from contextlib import ExitStack
 from pathlib import Path
 from types import SimpleNamespace
@@ -24,7 +28,7 @@ class _Index:
 
 
 class EvalScheduleTests(unittest.TestCase):
-    def test_source_identity_uses_two_exact_mechanical_commits(self):
+    def test_source_identity_uses_three_exact_mechanical_commits(self):
         self.assertEqual(
             resume.BASE_STOP_HEAD,
             "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
@@ -32,6 +36,10 @@ class EvalScheduleTests(unittest.TestCase):
         self.assertEqual(
             resume.INITIAL_SOURCE_HEAD,
             "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
+        )
+        self.assertEqual(
+            resume.SOURCE_IDENTITY_VALIDATOR_HEAD,
+            "3fbd702c398b9cc45d3495183b0ce73ac3ded178",
         )
         self.assertEqual(
             resume.SOURCE_REVISION_ALLOWED_PATHS,
@@ -42,6 +50,14 @@ class EvalScheduleTests(unittest.TestCase):
                 f"{resume.RUN_REL}/r44_eval_resume.py",
                 f"{resume.RUN_REL}/test_r44_eval_resume.py",
             },
+        )
+        self.assertEqual(resume.SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS,
+                         resume.SOURCE_REVISION_ALLOWED_PATHS)
+        self.assertEqual(
+            resume.SOURCE_ALLOWED_PATHS,
+            resume.INITIAL_SOURCE_ALLOWED_PATHS
+            | resume.SOURCE_REVISION_ALLOWED_PATHS
+            | resume.SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS,
         )
 
     def test_fixed_matrix_has_96_cells_and_retry_is_first(self):
@@ -132,11 +148,37 @@ class EvalOnlyGuardTests(unittest.TestCase):
             run_reference=untouched,
             run_rule=untouched,
         )
+        ambient = {
+            "python": [3, [1, 2, 3], None],
+            "numpy": ["MT19937", [4, 5, 6], 7, 0, 0.0],
+            "torch": [8, 9, 10],
+        }
+        restore_behavior = {"wrong_payload": False}
+
+        def rng_state():
+            return copy.deepcopy(ambient)
+
+        def restore_rng(state):
+            ambient.clear()
+            ambient.update(copy.deepcopy(state))
+            return True
+
+        def read_only_loader(*_args, **_kwargs):
+            saved = rng_state()
+            ambient["torch"] = [77, 88]
+            if restore_behavior["wrong_payload"]:
+                trainer.restore_rng({**saved, "torch": [999]})
+            else:
+                trainer.restore_rng(saved)
+            return {"load_mode": "read_only"}
+
         trainer = SimpleNamespace(
             ppo_update=untouched,
             save_checkpoint=untouched,
             load_checkpoint=untouched,
-            restore_rng=untouched,
+            restore_rng=restore_rng,
+            rng_state=rng_state,
+            load_checkpoint_read_only=read_only_loader,
         )
         r40_train = SimpleNamespace(
             train_seed=untouched,
@@ -148,8 +190,9 @@ class EvalOnlyGuardTests(unittest.TestCase):
             save=untouched,
             optim=SimpleNamespace(Optimizer=Optimizer, Adam=Adam),
         )
+        eval_runtime = {"trainer": trainer, "r40_train": r40_train}
         guarded = resume.install_read_only_guards(
-            run_module, {"trainer": trainer, "r40_train": r40_train}, torch_module)
+            run_module, eval_runtime, torch_module)
 
         self.assertIn("r42_run.train_seed", guarded)
         self.assertIn("Adam.step", guarded)
@@ -159,6 +202,124 @@ class EvalOnlyGuardTests(unittest.TestCase):
             Adam().step()
         with self.assertRaises(resume.EvalOnlyViolation):
             torch_module.save(object(), "forbidden.pt")
+        ambient_before = rng_state()
+        self.assertEqual(trainer.load_checkpoint_read_only("ep128.pt")["load_mode"],
+                         "read_only")
+        self.assertEqual(rng_state(), ambient_before)
+        self.assertEqual(eval_runtime["eval_only_rng_guard_state"]["read_only_load_calls"], 1)
+        self.assertEqual(eval_runtime["eval_only_rng_guard_state"]["ambient_restore_calls"], 1)
+        with self.assertRaises(resume.EvalOnlyViolation):
+            trainer.restore_rng(ambient_before)
+        restore_behavior["wrong_payload"] = True
+        with self.assertRaisesRegex(resume.EvalOnlyViolation, "non-ambient/checkpoint RNG"):
+            trainer.load_checkpoint_read_only("bad.pt")
+
+    def test_real_versioned_read_only_loader_preserves_only_ambient_rng(self):
+        import torch
+
+        run_dir = Path(resume.RUN_DIR)
+        ambient = {
+            "python": [3, [1, 2, 3], None],
+            "numpy": ["MT19937", [4, 5, 6], 7, 0, 0.0],
+            "torch": [8, 9, 10],
+        }
+        behavior = {"restore_checkpoint_rng": False}
+        one_shot = types.ModuleType("r42_one_shot")
+        one_shot.COMM_ACTION_SEMANTICS = "one-shot-send-skip/1"
+        r40_versions = types.ModuleType("r40_versions")
+        r40_versions.COMM_ACTION_ELIGIBILITY = "one-shot-send-skip/1"
+        r40_versions.REWARD_TIMING_VERSION = "published-completion-event-at-relay-tick/2"
+        r40_versions.install = lambda *_args, **_kwargs: None
+        training_state = {"comm_action_semantics": "one-shot-send-skip/1"}
+        payload = {
+            "training_state": training_state,
+            "comm_action_semantics": "one-shot-send-skip/1",
+            "freeze": {"source": "synthetic read-only fixture"},
+            "rng": {"python": [999], "numpy": [999], "torch": [999]},
+        }
+        trainer_holder = {}
+
+        def rng_state():
+            return copy.deepcopy(ambient)
+
+        def restore_rng(state):
+            ambient.clear()
+            ambient.update(copy.deepcopy(state))
+            return True
+
+        def base_read_only(_path, *, freeze):
+            self.assertEqual(freeze, payload["freeze"])
+            ambient["torch"] = [77, 88]
+            if behavior["restore_checkpoint_rng"]:
+                trainer_holder["trainer"].restore_rng(payload["rng"])
+            return object(), training_state, {
+                "optimizer_restored": False, "rng_restored": False,
+            }
+
+        trainer = SimpleNamespace(
+            _round42_one_shot_installed=False,
+            STATE_SCHEMA="schema", TRAINER_TAG="trainer",
+            LOSS_VERSION="loss", GAE_SCHEMA="gae", OPTIMIZER_SCHEMA="optim",
+            REWARD_TIMING_SCHEMA="timing", LEARNING_RATE=0.001,
+            fresh_training_state=lambda _seed: {"eta_lambda": 0.5},
+            ppo_update=lambda: None,
+            load_checkpoint_read_only=base_read_only,
+            rng_state=rng_state, restore_rng=restore_rng,
+            _validate_checkpoint_base=lambda *_args, **_kwargs: training_state,
+            _restore_controller=lambda *_args, **_kwargs: object(),
+        )
+        trainer_holder["trainer"] = trainer
+        runner = SimpleNamespace()
+        common = SimpleNamespace(ETA_LAMBDA=0.5, LEARNING_RATE=0.001)
+        checkpoint_path = Path(run_dir) / "runtime" / "nonexistent_read_only_fixture.pt"
+
+        with ExitStack() as stack:
+            stack.enter_context(patch.dict(sys.modules, {
+                "r42_one_shot": one_shot, "r40_versions": r40_versions,
+            }))
+            original_sys_path = list(sys.path)
+            stack.callback(lambda: sys.path.__setitem__(slice(None), original_sys_path))
+            sys.path.insert(0, str(run_dir))
+            spec = importlib.util.spec_from_file_location(
+                "r42_versions_eval_identity_test", run_dir / "r42_versions.py")
+            self.assertIsNotNone(spec)
+            self.assertIsNotNone(spec.loader)
+            versioned = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(versioned)
+
+            original_save = torch.save
+            original_optimizer_step = torch.optim.Optimizer.step
+            original_adam_step = torch.optim.Adam.step
+            stack.enter_context(patch.object(torch, "save", original_save))
+            stack.enter_context(patch.object(torch.optim.Optimizer, "step", original_optimizer_step))
+            stack.enter_context(patch.object(torch.optim.Adam, "step", original_adam_step))
+            stack.enter_context(patch.object(torch, "load", return_value=payload))
+
+            versioned.install(
+                trainer, runner, common=common,
+                freeze={"comm_action_semantics": "one-shot-send-skip/1"},
+                round40_freeze={},
+            )
+            eval_runtime = {"trainer": trainer, "r40_train": None}
+            resume.install_read_only_guards(
+                SimpleNamespace(train_seed=lambda: None, run_training_episode=lambda: None),
+                eval_runtime, torch,
+            )
+            before = rng_state()
+            _, _, identity = trainer.load_checkpoint_read_only(checkpoint_path)
+            self.assertTrue(identity["ambient_rng_preserved"])
+            self.assertIs(identity["optimizer_restored"], False)
+            self.assertIs(identity["rng_restored"], False)
+            self.assertEqual(rng_state(), before)
+
+            with self.assertRaises(resume.EvalOnlyViolation):
+                trainer.restore_rng(payload["rng"])
+            behavior["restore_checkpoint_rng"] = True
+            before_failed_load = rng_state()
+            with self.assertRaisesRegex(
+                    resume.EvalOnlyViolation, "non-ambient/checkpoint RNG"):
+                trainer.load_checkpoint_read_only(checkpoint_path)
+            self.assertEqual(rng_state(), before_failed_load)
 
 
 class VerifyEvalIdentityTests(unittest.TestCase):
@@ -221,7 +382,8 @@ class VerifyEvalIdentityTests(unittest.TestCase):
             "branch": resume.BRANCH,
             "source_commit": self.SOURCE_HEAD,
             "source_commit_chain": [
-                resume.BASE_STOP_HEAD, resume.INITIAL_SOURCE_HEAD, self.SOURCE_HEAD],
+                resume.BASE_STOP_HEAD, resume.INITIAL_SOURCE_HEAD,
+                resume.SOURCE_IDENTITY_VALIDATOR_HEAD, self.SOURCE_HEAD],
             "source_commit_chain_evidence": stored_chain_evidence,
             "gate_sha256": self._sha(gate_path),
             "fixed_eval_keys_sha256": gate["fixed_eval_keys_sha256"],
