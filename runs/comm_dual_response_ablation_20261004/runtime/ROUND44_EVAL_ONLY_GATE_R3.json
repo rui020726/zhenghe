@@ -12,7 +12,8 @@
     "test_module": "test_r44_eval_resume.py",
     "wrong_order_duplicate_exhaustion_rejected": true
   },
-  "current_snapshot_counts": {
+  "claim_queue_source_commit": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+  "current_ledger_counts": {
     "checkpoint_write_calls": 297,
     "completed_logical_jobs": 385,
     "completed_steps": 386000,
@@ -26,14 +27,28 @@
     "technical_failed_claims": 1,
     "total_used": 386
   },
+  "first_r3_identity_attempt_commit": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+  "first_r3_identity_attempt_gate_sha256": "526b0adbff5448ba7b4bbe56f6706c42a9d9f021aa74c104d33abd5bf47dee0d",
+  "first_r3_identity_attempt_identity_sha256": "665a05868f70a1714f0c3b023427eb9f1628f0c3ee13d634d4979dfeefadd01e",
   "fixed_eval_key_count": 96,
   "fixed_eval_keys_encoding": "UTF-8 JSON list of [seed, mode, scene] triples; compact separators; allow_nan=false",
   "fixed_eval_keys_sha256": "cf7850cd3ee31905de75e80af5c80b7f64b011e20e3485897555f38e93a52053",
+  "identity_hash_repair_evidence": {
+    "committed_mechanical_diff_sha256": "a5d97593680992e86288cc3f9ed7217d4e875a44ca2a510dea69fbf53eb1a7d2",
+    "committed_receipt_regression_sha256": "133a005b12cfa7df0b32ff802de944878c5c3db68b2845128c4904e3623a066f",
+    "current_hashes_use_committed_LF_blob_bytes": true,
+    "prior_attempt_environment_starts": 0,
+    "prior_attempt_new_claims": 0,
+    "prior_attempt_recorded_mechanical_diff_sha256": "960b9117e419943dc8b2187ba8302992a8cccd9df5d378253caf6c9e363d59d9",
+    "prior_attempt_recorded_receipt_regression_sha256": "88d0da248c7d1881a0f53e612ac9ef4b157865a860971ccd03373f7fa3aa6fe1",
+    "prior_attempt_rejected_before_claims": true,
+    "status": "passed"
+  },
   "immutable_checkpoint_count": 204,
   "immutable_input_manifest_sha256": "b3bb6f7c2488b2acb03f467c799b6eb74554795cf9041eb30529031774a3ebeb",
   "kind": "round44-eval-only-prelaunch-gate/1",
-  "mechanical_diff_sha256": "960b9117e419943dc8b2187ba8302992a8cccd9df5d378253caf6c9e363d59d9",
-  "model_loads_in_R3_gate": 0,
+  "mechanical_diff_sha256": "d2cfad8bfc69878ae993666093ee3db68997e8fa3ee32a9acdd18186fc3fa127",
+  "model_loads_in_r3_source_gate": 0,
   "new_environment_starts_before_gate": 0,
   "optimizer_steps_before_gate": 0,
   "post_retry_receipt_audit_sha256": "608a93434bd24f8c40b6b8ee40e8f811db49ea9a7bdf729b5bb91a5fdf406321",
@@ -50,10 +65,10 @@
     "normal": 480,
     "reserve": 24
   },
-  "read_only_model_gate_reuse_basis": "The preserved three-seed CPU load/forward and ambient RNG gate passed at b7 and was bound by R1/R2; R3 changes only the eval-only claim guard cursor and its tests/evidence, so it is hash-checked and reused without repeating model loads.",
+  "read_only_model_gate_reuse_basis": "The original three-seed read-only CPU load/forward and ambient RNG gate passed at b7 and is preserved by R1/R2. Queue and identity repair commits change only eval-only cursor, identity source checks, tests and evidence; no model or science path changed, so the exact prior gate hash is reused.",
   "read_only_model_gate_reused_from_source_commit": "b7c27b809cb7ac1fd3f6282a6c03265dfc44ea60",
   "readonly_model_gate_sha256": "23606c1b825b7a3e9b656008090f46a517b9605592f15dfa5bc7de1f845afff8",
-  "receipt_regression_sha256": "88d0da248c7d1881a0f53e612ac9ef4b157865a860971ccd03373f7fa3aa6fe1",
+  "receipt_regression_sha256": "ee23af52a916ff0c1fa43c7af60deec1393924e364e26dc6695456a0039154c1",
   "retry_resume_state": {
     "attempt2_environment_repeated": false,
     "attempt2_status": "complete",
@@ -64,7 +79,7 @@
     "retry_gate_rebuilt_from_durable_receipt_before_remaining_cells": true,
     "valid_eval_cells_before_resume": 1
   },
-  "source_commit": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+  "source_commit": "c918259ee5d8c862f501fbdb30ca948fc05446d8",
   "source_commit_allowed_paths": [
     "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
     "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
@@ -72,7 +87,7 @@
     "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
     "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
   ],
-  "source_commit_parent": "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
+  "source_commit_parent": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
   "status": "passed",
-  "training_journal_count": 3
+  "training_counter_journal_count": 3
 }

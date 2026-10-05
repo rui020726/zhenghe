@@ -11,11 +11,14 @@
     "reserve_used": 1,
     "valid_new_eval_cells": 1
   },
+  "first_r3_identity_attempt_commit": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+  "first_r3_identity_attempt_gate_sha256": "526b0adbff5448ba7b4bbe56f6706c42a9d9f021aa74c104d33abd5bf47dee0d",
+  "first_r3_identity_attempt_identity_sha256": "665a05868f70a1714f0c3b023427eb9f1628f0c3ee13d634d4979dfeefadd01e",
   "fixed_eval_keys_sha256": "cf7850cd3ee31905de75e80af5c80b7f64b011e20e3485897555f38e93a52053",
-  "gate_sha256": "526b0adbff5448ba7b4bbe56f6706c42a9d9f021aa74c104d33abd5bf47dee0d",
+  "gate_sha256": "737a9f52640a205a42609e70e8cda8775af1387af3d9a29076f38e61e761e151",
   "immutable_input_manifest_sha256": "b3bb6f7c2488b2acb03f467c799b6eb74554795cf9041eb30529031774a3ebeb",
   "kind": "round44-eval-only-execution-identity/1",
-  "mechanical_diff_sha256": "960b9117e419943dc8b2187ba8302992a8cccd9df5d378253caf6c9e363d59d9",
+  "mechanical_diff_sha256": "d2cfad8bfc69878ae993666093ee3db68997e8fa3ee32a9acdd18186fc3fa127",
   "post_retry_receipt_audit_sha256": "608a93434bd24f8c40b6b8ee40e8f811db49ea9a7bdf729b5bb91a5fdf406321",
   "preserved_r4_history_hashes": {
     "original_freeze_source_count": 13,
@@ -58,7 +61,7 @@
   "prior_r2_identity_sha256": "df2b4404d1c4f3dff91206ddee62d04e453fadb1f97b1a07b170bd7d3ea80847",
   "prior_r2_progress_sha256": null,
   "readonly_model_gate_sha256": "23606c1b825b7a3e9b656008090f46a517b9605592f15dfa5bc7de1f845afff8",
-  "receipt_regression_sha256": "88d0da248c7d1881a0f53e612ac9ef4b157865a860971ccd03373f7fa3aa6fe1",
+  "receipt_regression_sha256": "ee23af52a916ff0c1fa43c7af60deec1393924e364e26dc6695456a0039154c1",
   "retry_key": [
     11,
     "greedy",
@@ -546,7 +549,7 @@
       1301015
     ]
   ],
-  "source_commit": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+  "source_commit": "c918259ee5d8c862f501fbdb30ca948fc05446d8",
   "source_commit_chain": [
     "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
     "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
@@ -555,7 +558,9 @@
     "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
     "c18e7d6564aac132104649dc18c3ab52acb76023",
     "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
-    "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4"
+    "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+    "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+    "c918259ee5d8c862f501fbdb30ca948fc05446d8"
   ],
   "source_commit_chain_evidence": {
     "ambient_guard_head": "b7c27b809cb7ac1fd3f6282a6c03265dfc44ea60",
@@ -574,7 +579,32 @@
       "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
     ],
+    "claim_queue_source_head": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
     "claim_queue_source_parent": "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
+    "first_r3_identity_attempt": {
+      "commit": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+      "environment_starts": 0,
+      "gate_sha256": "526b0adbff5448ba7b4bbe56f6706c42a9d9f021aa74c104d33abd5bf47dee0d",
+      "identity_sha256": "665a05868f70a1714f0c3b023427eb9f1628f0c3ee13d634d4979dfeefadd01e",
+      "identity_verification_result": "rejected before claims because regression/mechanical working-byte hashes differed from committed source blobs",
+      "new_claims": 0,
+      "parent": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+      "stale_evidence_hashes": {
+        "gate_sha256": "526b0adbff5448ba7b4bbe56f6706c42a9d9f021aa74c104d33abd5bf47dee0d",
+        "mechanical_diff_sha256": "960b9117e419943dc8b2187ba8302992a8cccd9df5d378253caf6c9e363d59d9",
+        "receipt_regression_sha256": "88d0da248c7d1881a0f53e612ac9ef4b157865a860971ccd03373f7fa3aa6fe1",
+        "source_mechanical_diff_sha256": "a5d97593680992e86288cc3f9ed7217d4e875a44ca2a510dea69fbf53eb1a7d2",
+        "source_receipt_regression_sha256": "133a005b12cfa7df0b32ff802de944878c5c3db68b2845128c4904e3623a066f"
+      }
+    },
+    "identity_hash_repair_revision_allowed_paths": [
+      "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json",
+      "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
+      "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
+    ],
+    "identity_hash_repair_source_parent": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
     "initial_source_allowed_paths": [
       "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
       "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
@@ -599,15 +629,15 @@
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
     ],
     "receipt_resume_source_head": "c18e7d6564aac132104649dc18c3ab52acb76023",
-    "revised_source_head": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+    "revised_source_head": "c918259ee5d8c862f501fbdb30ca948fc05446d8",
     "source_file_sha256": {
-      "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json": "33712d3d6697c1d573089a2d066519628ac3b90be00b7e26f380d344383901df",
-      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json": "a5d97593680992e86288cc3f9ed7217d4e875a44ca2a510dea69fbf53eb1a7d2",
-      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json": "133a005b12cfa7df0b32ff802de944878c5c3db68b2845128c4904e3623a066f",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json": "281d0f487f332f574129a4a78a3949ecc1ad4f50917232c247a04ec4569eac64",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json": "d2cfad8bfc69878ae993666093ee3db68997e8fa3ee32a9acdd18186fc3fa127",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json": "ee23af52a916ff0c1fa43c7af60deec1393924e364e26dc6695456a0039154c1",
       "runs/comm_dual_response_ablation_20261004/r44_eval_index.py": "27131543835537325a0f8749dae0c4a5230638da106b09e2a45713f17f97e7fa",
-      "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py": "0440cd463eddcaab53ea41be0cad187bb21d8e97d62af69db944f2f7f2660160",
+      "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py": "6d231be49e21c24f32de6d0287b9c33994214170e42d7303ad24935be9dc23e7",
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_index.py": "5c9110b34f91d72709ec2720de834b1d79f691a6a96b4190f730ba0be85b27fe",
-      "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py": "e65f8f2fd965ab794ac047749bd418aa0fb65c3dda2713b2959e637aefcec862"
+      "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py": "976bbf12d7e63825ec8cdcc08395cbfba170dfd017c22bdfb25dcf3f568d44af"
     },
     "source_identity_validator_head": "3fbd702c398b9cc45d3495183b0ce73ac3ded178",
     "source_identity_validator_revision_allowed_paths": [
@@ -619,13 +649,13 @@
     ]
   },
   "source_file_sha256": {
-    "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json": "33712d3d6697c1d573089a2d066519628ac3b90be00b7e26f380d344383901df",
-    "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json": "a5d97593680992e86288cc3f9ed7217d4e875a44ca2a510dea69fbf53eb1a7d2",
-    "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json": "133a005b12cfa7df0b32ff802de944878c5c3db68b2845128c4904e3623a066f",
+    "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json": "281d0f487f332f574129a4a78a3949ecc1ad4f50917232c247a04ec4569eac64",
+    "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json": "d2cfad8bfc69878ae993666093ee3db68997e8fa3ee32a9acdd18186fc3fa127",
+    "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json": "ee23af52a916ff0c1fa43c7af60deec1393924e364e26dc6695456a0039154c1",
     "runs/comm_dual_response_ablation_20261004/r44_eval_index.py": "27131543835537325a0f8749dae0c4a5230638da106b09e2a45713f17f97e7fa",
-    "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py": "0440cd463eddcaab53ea41be0cad187bb21d8e97d62af69db944f2f7f2660160",
+    "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py": "6d231be49e21c24f32de6d0287b9c33994214170e42d7303ad24935be9dc23e7",
     "runs/comm_dual_response_ablation_20261004/test_r44_eval_index.py": "5c9110b34f91d72709ec2720de834b1d79f691a6a96b4190f730ba0be85b27fe",
-    "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py": "e65f8f2fd965ab794ac047749bd418aa0fb65c3dda2713b2959e637aefcec862"
+    "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py": "976bbf12d7e63825ec8cdcc08395cbfba170dfd017c22bdfb25dcf3f568d44af"
   },
   "status": "passed"
 }
