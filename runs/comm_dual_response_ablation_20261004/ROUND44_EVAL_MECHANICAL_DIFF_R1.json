@@ -1,0 +1,104 @@
+{
+  "base_stop_head": "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
+  "changes": [
+    {
+      "change": "receipt/index version 1 to 2; strict JSON value parser rejects duplicate keys, invalid constants, non-finite floats and unsupported types; JSON structural comparison treats tuple/list as the same persisted array while preserving numeric types and signed zero; verifies exact row/claim key and lifecycle closure.",
+      "path": "runs/comm_dual_response_ablation_20261004/r44_eval_index.py"
+    },
+    {
+      "change": "17 pure tests include the real preserved failed row, an executable old-implementation counterexample, strict JSON edge cases, receipts, hashes and exact schedule.",
+      "path": "runs/comm_dual_response_ablation_20261004/test_r44_eval_index.py"
+    },
+    {
+      "change": "new eval-only entrypoint with exact source/identity gate, read-only checkpoint loading/CPU forward, locked fixed schedule, reserve attempt 2 retry, normal attempt 1 remaining cells, and runtime guards blocking train/update/restore/write paths.",
+      "path": "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py"
+    },
+    {
+      "change": "8 pure tests for exact schedule, attempt/category metadata, retry-to-fixed-cell queue advance and forbidden-operation guards.",
+      "path": "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
+    },
+    {
+      "change": "records current live 385 normal / 0 reserve state and current 95 normal plus 24 reserve availability; preserves former four-episode snapshot in historical_before_training_resume.",
+      "path": "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json"
+    },
+    {
+      "change": "records the current turn targeted test and compilation outcomes.",
+      "path": "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json"
+    },
+    {
+      "change": "this bounded change inventory and scientific-configuration boundary.",
+      "path": "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json"
+    }
+  ],
+  "execution_plan": {
+    "checkpoint_write": false,
+    "first_claim": {
+      "attempt": 2,
+      "category": "reserve",
+      "key": [
+        11,
+        "greedy",
+        1301000
+      ]
+    },
+    "hard_cap": 504,
+    "new_scenes_or_streams": false,
+    "no_training": true,
+    "normal_remaining_before_launch": 95,
+    "optimizer_step": false,
+    "push_or_deploy": false,
+    "reserve_remaining_before_launch": 24,
+    "then": "only the other 95 original NEW evaluation keys in frozen order, each attempt 1/category normal"
+  },
+  "historical_boundary": {
+    "R4_execution_identity_is_historical_only": true,
+    "R4_ready_sha256": "19dea7caf332c430b62a0884c1c3bd4f9704a5690abf40c18c0b593e41707e98",
+    "old_training_resume_entrypoint_invoked": false
+  },
+  "kind": "round44-eval-only-mechanical-diff/1",
+  "protected_science_source_sha256": {
+    "EXECUTION_BASIS.md": "bc60e096b0bfcd08b202c69f20b8a5d4cc1a58ff9118d1e13d6385f80d37c584",
+    "ROUND44_FROZEN_CONFIG.json": "354b2d4441ec1d4ce8d4aa6ba6f79b29d4cba17c82d525f2a566a68c4e5190ed",
+    "r40_train_resume_adapter.py": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+    "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+    "r42_versions.py": "26b9e1a3d4f3b9a5d39ca020a5ebd3653615c09a76a77ae4138f4ab98420a3d8",
+    "r43_call_counter_hooks.py": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
+    "r44_analysis.py": "b451f913a35c25e114ca8afc0896dff8ab76c0ed45633b2ba4a7fbfbcdd59e19",
+    "r44_execute.py": "0aeae43414e8aeb9ed629cb145dc67f6549cbfda278747fab66997ac68cab207",
+    "r44_prepare.py": "00454502ef5cee97d3592eb09dba53673ed421168f84eda27893fca2934b0124",
+    "r44_report.py": "1adcad2b2fe88326df37c92a2bbafc22d07bf8a84db21dc4b89846d0be7206e6",
+    "r44_resume_bridge.py": "2dcda6fbf11337ede0c5b44c26926051c286e5507a4b29489ac781ced9922750",
+    "r44_resume_gate.py": "77a48761f6b4bd8fab2c3811d60d3fdc2aa6b5b4b43f568d2e59e8e4009a35a9",
+    "r44_runtime.py": "aca3a837d6d29e3bf6256033f9580dfd7f72e45769af1470cc3f124f93555c0a"
+  },
+  "read_only_model_gate_requirements": {
+    "ep128_seeds": [
+      11,
+      22,
+      33
+    ],
+    "forward_device": "CPU",
+    "forward_input": "preserved attempt1 tape feature vector",
+    "optimizer_restore": false,
+    "rng_restore": false
+  },
+  "source_commit_allowlist": [
+    "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
+    "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
+    "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json",
+    "runs/comm_dual_response_ablation_20261004/r44_eval_index.py",
+    "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
+    "runs/comm_dual_response_ablation_20261004/test_r44_eval_index.py",
+    "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
+  ],
+  "status": "reviewed",
+  "unchanged_scientific_configuration": {
+    "changed_fields": [],
+    "claims": "No changes to training, model, optimizer, actions, observations, reward, costs, GAE, dual response, gamma, masks, evaluation decoding, environment transitions or event ordering.",
+    "evidence_boundary": "The source allowlist contains only the receipt/index, eval-only guard/entrypoint, pure tests, task status and evidence files; protected science sources below are byte-identical to the stop commit.",
+    "frozen_config_path": "runs/comm_dual_response_ablation_20261004/ROUND44_FROZEN_CONFIG.json",
+    "frozen_config_sha256": "354b2d4441ec1d4ce8d4aa6ba6f79b29d4cba17c82d525f2a566a68c4e5190ed",
+    "reward_timing_version": "published-completion-event-at-relay-tick/2",
+    "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/published-completion-event-at-relay-tick/2"
+  }
+}

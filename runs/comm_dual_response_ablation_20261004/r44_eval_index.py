@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import copy
 import json
+import math
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -13,7 +14,8 @@ from typing import Any, Callable, Iterable
 SEEDS = (11, 22, 33)
 MODES = ("greedy", "sampled")
 SCENES = tuple(range(1_301_000, 1_301_016))
-INDEX_KIND = "round44-eval-artifact-receipt/1"
+INDEX_KIND = "round44-eval-artifact-receipt/2"
+JSON_REPRESENTATION_VERSION = "round44-strict-json-value/1"
 EVAL_LOGICAL_RE = re.compile(
     r"^model_eval_new_s(11|22|33)_(greedy|sampled)_scene(13010\d{2})$")
 ARTIFACT_NAMES = ("row", "lifecycle", "transcript", "tape")
@@ -21,6 +23,68 @@ ARTIFACT_NAMES = ("row", "lifecycle", "transcript", "tape")
 
 class EvalIndexError(RuntimeError):
     """A recorded evaluation cannot be safely resumed or counted."""
+
+
+class _DuplicateJSONKey(ValueError):
+    """Raised when a persisted JSON object repeats a field name."""
+
+
+def _unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise _DuplicateJSONKey(f"duplicate JSON object key: {key!r}")
+        result[key] = value
+    return result
+
+
+def _reject_json_constant(value: str) -> Any:
+    raise ValueError(f"non-standard JSON number is not allowed: {value}")
+
+
+def _validate_json_value(value: Any, path: str = "$", *, allow_tuples: bool = True) -> None:
+    """Accept only strict JSON values, optionally including tuple array inputs."""
+    if value is None or type(value) in (bool, int, str):
+        return
+    if type(value) is float:
+        if not math.isfinite(value):
+            raise EvalIndexError(f"non-finite JSON number at {path}")
+        return
+    if type(value) is dict:
+        for key, item in value.items():
+            if type(key) is not str:
+                raise EvalIndexError(f"JSON object key at {path} must be a string")
+            _validate_json_value(item, f"{path}.{key}", allow_tuples=allow_tuples)
+        return
+    if type(value) is list or (allow_tuples and type(value) is tuple):
+        for index, item in enumerate(value):
+            _validate_json_value(item, f"{path}[{index}]", allow_tuples=allow_tuples)
+        return
+    raise EvalIndexError(f"unsupported JSON value at {path}: {type(value).__name__}")
+
+
+def _json_value_equal(left: Any, right: Any) -> bool:
+    """Compare strict JSON values, treating Python tuple/list as the same JSON array."""
+    _validate_json_value(left)
+    _validate_json_value(right)
+
+    def equal(a: Any, b: Any) -> bool:
+        a_array = type(a) in (list, tuple)
+        b_array = type(b) in (list, tuple)
+        if a_array or b_array:
+            return (a_array and b_array and len(a) == len(b)
+                    and all(equal(x, y) for x, y in zip(a, b)))
+        if type(a) is not type(b):
+            return False
+        if type(a) is dict:
+            return (a.keys() == b.keys()
+                    and all(equal(a[key], b[key]) for key in a))
+        if type(a) is float:
+            # hex() preserves exact binary value and distinguishes -0.0 from +0.0.
+            return a.hex() == b.hex()
+        return a == b
+
+    return equal(left, right)
 
 
 def expected_eval_keys() -> tuple[tuple[int, str, int], ...]:
@@ -41,11 +105,16 @@ def _sha256(path: Path) -> str:
 
 def _read_json(path: Path) -> dict[str, Any]:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as error:
+        value = json.loads(
+            path.read_text(encoding="utf-8"),
+            object_pairs_hook=_unique_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeError, ValueError) as error:
         raise EvalIndexError(f"unreadable JSON artifact: {path}") from error
     if not isinstance(value, dict):
         raise EvalIndexError(f"JSON artifact must be an object: {path}")
+    _validate_json_value(value, str(path), allow_tuples=False)
     return value
 
 
@@ -56,11 +125,16 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
             for number, line in enumerate(handle, 1):
                 if not line.strip():
                     continue
-                value = json.loads(line)
+                value = json.loads(
+                    line,
+                    object_pairs_hook=_unique_object,
+                    parse_constant=_reject_json_constant,
+                )
                 if not isinstance(value, dict):
                     raise EvalIndexError(f"JSONL record is not an object: {path}:{number}")
+                _validate_json_value(value, f"{path}:{number}", allow_tuples=False)
                 records.append(value)
-    except (OSError, json.JSONDecodeError) as error:
+    except (OSError, UnicodeError, ValueError) as error:
         raise EvalIndexError(f"unreadable JSONL artifact: {path}") from error
     return records
 
@@ -96,12 +170,12 @@ def _key_from_claim(claim: dict[str, Any], path: Path) -> tuple[int, str, int] |
     if not match:
         raise EvalIndexError(f"foreign or malformed evaluation claim: {logical}")
     seed, mode, scene = int(match.group(1)), match.group(2), int(match.group(3))
-    if int(claim.get("attempt", -1)) < 1:
+    if _strict_int(claim.get("attempt"), "claim.attempt") < 1:
         raise EvalIndexError(f"invalid evaluation attempt in {path}")
     metadata = claim.get("metadata")
-    if not isinstance(metadata, dict) or metadata != {
+    if not isinstance(metadata, dict) or not _json_value_equal(metadata, {
         "arm": "NEW", "training_seed": seed, "mode": mode, "scenario_seed": scene,
-    }:
+    }):
         raise EvalIndexError(f"evaluation claim metadata mismatch: {path}")
     return seed, mode, scene
 
@@ -150,13 +224,16 @@ def _verify_artifact_receipt(
     runner_version: str,
     checkpoint_parameter_sha256: str,
 ) -> dict[str, Any]:
+    if _key_from_row(row, row_path) != key:
+        raise EvalIndexError(f"evaluation row identity does not match its claim key: {row_path}")
     attempt = _strict_int(row.get("attempt"), "row.attempt")
     if attempt < 1 or _strict_int(claim.get("attempt"), "claim.attempt") != attempt:
         raise EvalIndexError(f"row/claim attempt mismatch for {key}")
     expected_category = "normal" if attempt == 1 else "reserve"
     if claim.get("category") != expected_category:
         raise EvalIndexError(f"evaluation attempt used the wrong quota category: {claim_path}")
-    if claim.get("status") != "complete" or claim.get("round") != 44:
+    if (claim.get("status") != "complete"
+            or type(claim.get("round")) is not int or claim.get("round") != 44):
         raise EvalIndexError(f"evaluation claim is not complete ROUND44: {claim_path}")
     if claim.get("training_version") != training_version:
         raise EvalIndexError(f"evaluation claim training version mismatch: {claim_path}")
@@ -164,12 +241,12 @@ def _verify_artifact_receipt(
         raise EvalIndexError(f"evaluation claim runner version mismatch: {claim_path}")
     if claim.get("comm_action_semantics") != "one-shot-send-skip/1":
         raise EvalIndexError(f"evaluation claim action semantics mismatch: {claim_path}")
-    if claim.get("environment_constructor_calls") != 1 \
-            or claim.get("run_invocation_calls") != 1 \
-            or claim.get("joint_run_method_calls") != 1 \
-            or claim.get("run_return_calls") != 1 \
-            or claim.get("run_failure_calls") != 0 \
-            or claim.get("completed_steps") != 1000:
+    if claim.get("logical_job") != f"model_eval_new_s{key[0]}_{key[1]}_scene{key[2]}":
+        raise EvalIndexError(f"evaluation claim logical key mismatch: {claim_path}")
+    if any(_strict_int(claim.get(field), f"claim.{field}") != expected for field, expected in (
+            ("environment_constructor_calls", 1), ("run_invocation_calls", 1),
+            ("joint_run_method_calls", 1), ("run_return_calls", 1),
+            ("run_failure_calls", 0), ("completed_steps", 1000))):
         raise EvalIndexError(f"evaluation claim run accounting is incomplete: {claim_path}")
     if row.get("training_version") != training_version \
             or row.get("reward_timing_version") != reward_timing_version \
@@ -179,9 +256,9 @@ def _verify_artifact_receipt(
     if row.get("label") != _expected_label(key) or row.get("eval_block") != f"one_shot_{key[1]}":
         raise EvalIndexError(f"foreign or mismatched evaluation label: {row_path}")
     metadata = claim.get("metadata")
-    if not isinstance(metadata, dict) or metadata != {
+    if not isinstance(metadata, dict) or not _json_value_equal(metadata, {
         "arm": "NEW", "training_seed": key[0], "mode": key[1], "scenario_seed": key[2],
-    }:
+    }):
         raise EvalIndexError(f"evaluation claim metadata mismatch: {claim_path}")
     identity = row.get("checkpoint_parameter_identity")
     if not isinstance(identity, dict) or identity.get("parameter_sha256") != checkpoint_parameter_sha256:
@@ -212,8 +289,13 @@ def _verify_artifact_receipt(
     receipt = claim.get("round44_eval_artifact_receipt")
     if not isinstance(receipt, dict) or receipt.get("kind") != INDEX_KIND:
         raise EvalIndexError(f"completed evaluation claim lacks ROUND44 artifact receipt: {claim_path}")
-    if receipt.get("eval_key") != [key[0], key[1], key[2]] \
-            or receipt.get("attempt") != attempt \
+    if set(receipt) != {
+            "kind", "json_representation", "eval_key", "attempt", "training_version",
+            "runner_version", "checkpoint_parameter_sha256", "artifacts"}:
+        raise EvalIndexError(f"claim artifact receipt has missing or unknown fields: {claim_path}")
+    if not _json_value_equal(receipt.get("eval_key"), [key[0], key[1], key[2]]) \
+            or _strict_int(receipt.get("attempt"), "receipt.attempt") != attempt \
+            or receipt.get("json_representation") != JSON_REPRESENTATION_VERSION \
             or receipt.get("training_version") != training_version \
             or receipt.get("runner_version") != runner_version \
             or receipt.get("checkpoint_parameter_sha256") != checkpoint_parameter_sha256:
@@ -225,11 +307,12 @@ def _verify_artifact_receipt(
     for name, path in resolved.items():
         entry = declared_artifacts.get(name)
         actual = {"path": str(path), "sha256": _sha256(path), "size_bytes": path.stat().st_size}
-        if entry != actual:
+        if not _json_value_equal(entry, actual):
             raise EvalIndexError(f"{name} artifact hash/size differs from completion receipt: {path}")
         actual_artifacts[name] = actual
     return {
         "kind": INDEX_KIND,
+        "json_representation": JSON_REPRESENTATION_VERSION,
         "eval_key": [key[0], key[1], key[2]],
         "attempt": attempt,
         "logical_job": claim["logical_job"],
@@ -263,10 +346,16 @@ def create_claim_artifact_receipt(
         raise EvalIndexError(f"artifact receipt key is outside the frozen matrix: {key}")
     if row.get("kind") != "eval" or row.get("model_arm") != "NEW":
         raise EvalIndexError("artifact receipt may only be created for a NEW evaluation row")
+    if _key_from_row(row, Path("<in-memory-row>")) != key:
+        raise EvalIndexError(f"new evaluation row identity does not match its key: {key}")
     if row.get("training_version") != training_version or row.get("runner_version") != runner_version:
         raise EvalIndexError("new evaluation row has wrong version before claim completion")
-    if row.get("label") != _expected_label(key):
+    if (row.get("label") != _expected_label(key)
+            or row.get("eval_block") != f"one_shot_{key[1]}"
+            or row.get("comm_action_semantics") != "one-shot-send-skip/1"):
         raise EvalIndexError(f"new evaluation has a foreign label: {row.get('label')!r}")
+    if _strict_int(row.get("attempt"), "row.attempt") < 1:
+        raise EvalIndexError("new evaluation attempt must be positive")
     identity = row.get("checkpoint_parameter_identity")
     if not isinstance(identity, dict) or identity.get("parameter_sha256") != checkpoint_parameter_sha256:
         raise EvalIndexError(f"new evaluation does not point at its frozen ep128 checkpoint: {key}")
@@ -276,8 +365,9 @@ def create_claim_artifact_receipt(
     resolved: dict[str, Path] = {}
     for name in ("row", "lifecycle", "transcript", "tape"):
         resolved[name] = _resolve_in_run(run_dir, artifacts.get(name), f"row.artefacts.{name}")
+    _validate_json_value(row)
     stored_row = _read_json(resolved["row"])
-    if stored_row != row:
+    if not _json_value_equal(stored_row, row):
         raise EvalIndexError(f"persisted row differs from the completed in-memory row: {key}")
     lifecycle = _read_jsonl(resolved["lifecycle"])
     transcript = _read_jsonl(resolved["transcript"])
@@ -290,6 +380,7 @@ def create_claim_artifact_receipt(
         raise EvalIndexError(f"one or more eval artifacts are incomplete for {key}")
     return {
         "kind": INDEX_KIND,
+        "json_representation": JSON_REPRESENTATION_VERSION,
         "eval_key": [key[0], key[1], key[2]],
         "attempt": _strict_int(row.get("attempt"), "row.attempt"),
         "training_version": training_version,
@@ -361,6 +452,9 @@ def _collect_claims(run_dir: Path) -> tuple[dict[tuple[str, int], tuple[Path, di
         all_claims[claim_key] = (path, claim)
         eval_key = _key_from_claim(claim, path)
         if eval_key is not None:
+            expected_category = "normal" if attempt == 1 else "reserve"
+            if claim.get("category") != expected_category:
+                raise EvalIndexError(f"evaluation claim has the wrong quota category: {path}")
             by_key.setdefault(eval_key, []).append((path, claim))
     return all_claims, by_key
 
@@ -404,15 +498,41 @@ def build_eval_index(
             raise EvalIndexError(
                 f"evaluation has a nonterminal claim requiring inspection: "
                 f"{unresolved_claims[0][0]}")
+        claims_by_attempt = {
+            _strict_int(claim.get("attempt"), "claim.attempt"): (path, claim)
+            for path, claim in claims
+        }
         completed_claims = [(path, claim) for path, claim in claims
                             if claim.get("status") == "complete"]
-        if len(rows) > 1 or len(completed_claims) > 1:
+        successful_rows: list[tuple[Path, dict[str, Any]]] = []
+        for row_path, row in rows:
+            attempt = _strict_int(row.get("attempt"), "row.attempt")
+            linked = claims_by_attempt.get(attempt)
+            if linked is None:
+                raise EvalIndexError(f"evaluation row has no matching attempt claim for {key}: {row_path}")
+            claim_path, claim = linked
+            if (_key_from_row(row, row_path) != key
+                    or _strict_int(claim.get("attempt"), "claim.attempt") != attempt
+                    or claim.get("logical_job")
+                    != f"model_eval_new_s{key[0]}_{key[1]}_scene{key[2]}"):
+                raise EvalIndexError(f"evaluation row is linked to the wrong attempt claim for {key}")
+            artifacts = row.get("artefacts")
+            if not isinstance(artifacts, dict) or not isinstance(artifacts.get("row"), str) \
+                    or Path(artifacts["row"]).resolve() != row_path.resolve():
+                raise EvalIndexError(f"evaluation row path does not match its attempt row: {row_path}")
+            if claim.get("status") in {
+                    "failed_technical", "failed_non_technical", "failed_nontechnical"}:
+                if "round44_eval_artifact_receipt" in claim:
+                    raise EvalIndexError(f"failed evaluation attempt carries a completion receipt: {claim_path}")
+                continue
+            successful_rows.append((row_path, row))
+        if len(successful_rows) > 1 or len(completed_claims) > 1:
             raise EvalIndexError(f"duplicate successful evaluation evidence for {key}")
-        if not rows and not completed_claims:
+        if not successful_rows and not completed_claims:
             continue
-        if len(rows) != 1 or len(completed_claims) != 1:
+        if len(successful_rows) != 1 or len(completed_claims) != 1:
             raise EvalIndexError(f"row/complete-claim pair is incomplete for {key}")
-        row_path, row = rows[0]
+        row_path, row = successful_rows[0]
         claim_path, claim = completed_claims[0]
         attempt = _strict_int(row.get("attempt"), "row.attempt")
         maximum_attempt = max(_strict_int(item.get("attempt"), "claim.attempt")
@@ -469,12 +589,15 @@ def verify_new_cell(
     claim_path, claim = claims[0]
     attempt_numbers = [_strict_int(_read_json(path).get("attempt"), "claim.attempt")
                        for path in sorted(claim_dir.glob("attempt_*.json"))]
-    if not attempt_numbers or int(claim["attempt"]) != max(attempt_numbers):
+    attempt = _strict_int(claim.get("attempt"), "claim.attempt")
+    if not attempt_numbers or attempt != max(attempt_numbers):
         raise EvalIndexError(f"a later claim exists after the successful evaluation attempt for {key}")
-    row_path = run_dir / "rows" / f"v2_r44_eval_new_s{key[0]}_{key[1]}_s{key[2]}_a{claim['attempt']}.json"
+    row_path = run_dir / "rows" / f"v2_r44_eval_new_s{key[0]}_{key[1]}_s{key[2]}_a{attempt}.json"
     if not row_path.is_file():
         raise EvalIndexError(f"new evaluation row is missing for {key}: {row_path}")
     row = _read_json(row_path)
+    if _key_from_row(row, row_path) != key:
+        raise EvalIndexError(f"new evaluation row key does not match requested cell {key}")
     entry = _verify_artifact_receipt(
         run_dir, claim_path, claim, row_path, row, key,
         training_version=training_version,

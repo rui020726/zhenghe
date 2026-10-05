@@ -1,0 +1,63 @@
+{
+  "compile": {
+    "scope": [
+      "runs/comm_dual_response_ablation_20261004/r44_eval_index.py",
+      "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
+      "runs/comm_dual_response_ablation_20261004/test_r44_eval_index.py",
+      "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
+    ],
+    "status": "passed"
+  },
+  "immutable_input_manifest_sha256": "b3bb6f7c2488b2acb03f467c799b6eb74554795cf9041eb30529031774a3ebeb",
+  "kind": "round44-eval-receipt-repair-regression/1",
+  "preserved_failure_evidence": {
+    "failed_attempt1_is_not_scientific_data": true,
+    "original_failed_attempt1_is_unchanged": true,
+    "reproduction_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_OLD_RECEIPT_FAILURE_REPRODUCTION_R1.json",
+    "sha256": "93e904d1cc1efb962ee52ea334fdb2de1925320ec1cf5364ea242c29eeefc8ac"
+  },
+  "preserved_prepatch_index": {
+    "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_R44_EVAL_INDEX_PREPATCH_R1.py",
+    "sha256": "4e7d23505c06083a91738e2b88a36cbc0a9cb325e81631443c453360d3562546"
+  },
+  "python_executable": "D:\\project_env\\python.exe",
+  "python_version": "3.10.19 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 16:41:31) [MSC v.1929 64 bit (AMD64)]",
+  "regressions": {
+    "actual_preserved_attempt1_is_not_indexed": "passed",
+    "duplicate_keys_nonstandard_constants_and_nested_nonfinite_values_rejected": "passed",
+    "eval_only_training_optimizer_and_checkpoint_write_guards": "passed",
+    "exact_retry_attempt2_reserve_and_normal_attempt1_schedule": "passed",
+    "preserved_prepatch_implementation_rejects_actual_tuple_list_row": "passed",
+    "retry_queue_advances_to_first_remaining_fixed_cell": "passed",
+    "tuple_list_json_arrays_round_trip": "passed"
+  },
+  "scope_limit": "Pure synthetic index/schedule/guard tests only; this is not a real-environment or post-repair simulation passivity test.",
+  "side_effect_counts": {
+    "JointRun_constructions": 0,
+    "checkpoint_writes": 0,
+    "environment_constructors": 0,
+    "environment_starts": 0,
+    "optimizer_steps": 0,
+    "ppo_updates": 0,
+    "run_calls": 0
+  },
+  "status": "passed",
+  "targeted_test_runs": [
+    {
+      "command": "D:\\project_env\\python.exe -m unittest discover -s runs/comm_dual_response_ablation_20261004 -p test_r44_eval_index.py -v",
+      "errors": 0,
+      "failures": 0,
+      "module": "test_r44_eval_index.py",
+      "status": "passed",
+      "tests_run": 17
+    },
+    {
+      "command": "D:\\project_env\\python.exe -m unittest discover -s runs/comm_dual_response_ablation_20261004 -p test_r44_eval_resume.py -v",
+      "errors": 0,
+      "failures": 0,
+      "module": "test_r44_eval_resume.py",
+      "status": "passed",
+      "tests_run": 8
+    }
+  ]
+}
