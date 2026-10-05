@@ -26,3 +26,20 @@ ROUND44 首批比较器最小修复＋精确续执行（同轮、原额度，不
 8. 已核的唯一报告终结身份修订仍须按上一条精确正/负身份门禁记录；不要回退报告。给机械回归/保存/恢复错误单独栏，不把它们当模型结果。report-only错误从已存结果修，不重跑科研。完整本地报告后停止，不推送/合并/部署/续训或第二步长。
 
 这条是当前停止后明确、有限的继续授权；请一轮完成真实比较器修复→只读gate/状态桥→原476任务→最终判定，不仅输出恢复建议。真正确性阻断照常保留并报告我。
+
+## 当前比较澄清/执行依据（2026-10-05）
+
+ROUND44 首批比较门禁的有限澄清：这是同轮机械比较修复，不是放宽科学等价、重跑4集或新实验。
+
+我已直接读到43399eb9b74031e1ee88752618c04e84082bb811的真实门禁退出与逐字段输出：episode0的当前投影差异为顶层seconds（12.05 vs12.73）、collector_summary.timing.decide_milliseconds_per_call（0.318 vs0.3123）、config_hash（c41e6b73d6633ce1 vs9bc65eb9c1984784）。除那一耗时叶子外，该episode打印的collector_summary相同。此证据仅是episode0，不能直接外推其余三集，也不能把config_hash差异自动称为无害。
+
+授权在以下条件下完成本轮比较接缝修正，并继续原精确恢复和476任务：
+
+1. 对四集逐字段列出所有差异，保持原row/tape/checkpoint/stop/R1失败与身份原件不改。沿实际runtime内runner/collector模块的__file__与已冻结来源找config_hash和计时的构造函数；不要继续搜索所有runs JSON来猜来源。核出原始/canonical运行配置或可重建的构造输入，证明每一config_hash来源与其旧/新实际配置一致。若无法证实，或发现世界、预算、协议、模型、步数、观测、事件、行为等额外差异，保持阻断并给具体证据。
+2. 仅在来源证明后，科学投影可排除顶层seconds及collector_summary.timing.decide_milliseconds_per_call这两个纯wall-clock叶子。不能删除整个timing/collector_summary，也不能忽略其中的决策、candidate、mask、SEND/SKIP、概率与闭合计数。原始耗时数值保留并单列，不改原数据。
+3. config_hash不能仅从exclude集合删掉了事：新增独立逐字段配置身份核验，严格保留全部科研/行为字段；只允许已登记的运行label/输出路径等元数据差异以及本轮明确的版本/eta差异。完整hash分别按自身正确配置重算，科学配置对照遵守原单变量冻结；之后可不把两个不同输出路径/label的原始digest要求相等。未知字段或无法定位的输入差异必须拒绝，不可临时统称metadata。
+4. 先保留旧投影在真实四集的失败证据，再用极小纯计算反例核验实际新比较入口：纯耗时/已验证label路径变化可接受；on_time/任务集合、成本、动作/概率/奖励、预算或任一其余timing计数变化须拒绝。参数/dual/optimizer三个既有负例保留。0环境、0optimizer、0真实checkpoint写回；输入未变的已有验证可复用，不能为这项修复重训或重复batch0。
+5. 因43399eb机械身份已封存，新增明确的投影/比较修订及新机械identity/receipt（例如R2），不覆盖R1身份/失败，不回退历史，不笼统豁免原freeze/HEAD检查。科学freeze2353c4616746cf0a7c9fcb3a519a7042a28ba176、训练版本/eta=.5保持。新mechanic仍只接受原seed11 ep4 checkpoint SHA42a5160ead497ef3ce5dcb2e9783fe094b30f6a1f245630149bdde2c75946d25，原4成功claim/1PPO/12Adam/dual1.125不退额。已有只读first_batch_gate是必需部分，不用元数据投影替代它；完整optimizer/4模块/dual-history/Python-NumPy-Torch RNG与下一输出/游标/顺序/下一场景均仍要真实通过。
+6. 全部门禁通过后，沿已保存原授权一轮自动完成余476（s11 e4..127=124+s22/33各128+96固定评估）。总480normal+24reserve=504，不变。只读复用R43 ep128 OLD及原基线，不加smoke/新场景/参数、R45或配额；不推送、合并或部署。真行为差异仍停止报告，不能为了继续删除断言。压缩后从ROUND44_CURRENT_TASK入口续接，不转回R43总结。
+
+请把本条存为当前比较澄清/执行依据（不是新设计spec），然后实际做上述条件性修复与原门禁；它不是“先忽略差异再跑”的授权。

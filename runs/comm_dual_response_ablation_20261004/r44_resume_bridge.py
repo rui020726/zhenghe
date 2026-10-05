@@ -14,16 +14,27 @@ from r44_prepare import RUN_DIR, TRAINING_VERSION
 
 BASE_EXECUTION_HEAD = "2353c4616746cf0a7c9fcb3a519a7042a28ba176"
 TASK_START_HEAD = "2af9f7e66982eb046725057e026c05512b788169"
+R1_EXECUTION_HEAD = "43399eb9b74031e1ee88752618c04e84082bb811"
+R1_IDENTITY_SHA256 = "ffc75ffeca743134a9f0df0bff173e1b0b4e6f544bf88ad4d3ef31119336c860"
 BRANCH = "exp/comm-dual-response-ablation"
 STATE_BRIDGE_VERSION = "round44-exact-resume-state-bridge/1"
-MECHANICAL_VERSION = "round44-resume-comparator-and-restore/1"
+MECHANICAL_VERSION = "round44-resume-comparator-and-restore/2"
 WHITELIST_PATH = RUN_DIR / "ROUND44_RESUME_STATE_WHITELIST_R1.json"
 SNAPSHOT_MANIFEST_PATH = RUN_DIR / "runtime" / "ROUND44_PRE_RESUME_R1_SNAPSHOT_MANIFEST.json"
-IDENTITY_PATH = RUN_DIR / "runtime" / "ROUND44_RESUME_EXECUTION_IDENTITY_R1.json"
-RESUME_PROGRESS_PATH = RUN_DIR / "runtime" / "ROUND44_EXECUTION_PROGRESS_RESUME_R1.json"
-GATE_PATH = RUN_DIR / "runtime" / "ROUND44_EXACT_RESUME_GATE_R1.json"
-COMPARATOR_TEST_PATH = RUN_DIR / "runtime" / "ROUND44_COMPARATOR_REGRESSION_R1.json"
-READY_PATH = RUN_DIR / "runtime" / "ROUND44_RESUME_READY_R1.json"
+R1_IDENTITY_PATH = RUN_DIR / "runtime" / "ROUND44_RESUME_EXECUTION_IDENTITY_R1.json"
+R1_GATE_PATH = RUN_DIR / "runtime" / "ROUND44_EXACT_RESUME_GATE_R1.json"
+R1_COMPARATOR_TEST_PATH = RUN_DIR / "runtime" / "ROUND44_COMPARATOR_REGRESSION_R1.json"
+R1_READY_PATH = RUN_DIR / "runtime" / "ROUND44_RESUME_READY_R1.json"
+IDENTITY_PATH = RUN_DIR / "runtime" / "ROUND44_RESUME_EXECUTION_IDENTITY_R2.json"
+RESUME_PROGRESS_PATH = RUN_DIR / "runtime" / "ROUND44_EXECUTION_PROGRESS_RESUME_R2.json"
+GATE_PATH = RUN_DIR / "runtime" / "ROUND44_EXACT_RESUME_GATE_R2.json"
+COMPARATOR_TEST_PATH = RUN_DIR / "runtime" / "ROUND44_COMPARATOR_REGRESSION_R2.json"
+READY_PATH = RUN_DIR / "runtime" / "ROUND44_RESUME_READY_R2.json"
+OLD_PROJECTION_PATH = RUN_DIR / "runtime" / "ROUND44_OLD_PROJECTION_FOUR_EPISODES_R2.json"
+SOURCE_CONFIG_RECONCILIATION_PATH = (
+    RUN_DIR / "runtime" / "ROUND44_SOURCE_CONFIG_RECONCILIATION_R2.json"
+)
+R1_FAILURE_REPRODUCTION_PATH = RUN_DIR / "runtime" / "ROUND44_OLD_COMPARATOR_REPRODUCTION.json"
 SNAPSHOT_ROOT = RUN_DIR / "runtime" / "ROUND44_PRE_RESUME_R1_SNAPSHOT"
 STOP_FILES = (
     "ROUND44_STATUS.json",
@@ -44,6 +55,7 @@ SOURCE_FILES = (
     "r44_execute.py", "r44_runtime.py", "r44_resume_bridge.py",
     "r44_resume_gate.py", "test_r44_resume_gate.py",
     "RUNNER_FIX.md", "ROUND44_RESUME_STATE_WHITELIST_R1.json",
+    "ROUND44_CURRENT_CONTINUATION_BASIS.md", "ROUND44_CURRENT_TASK.json",
 )
 ALLOWED_TASK_DELTA = {
     "PROJECT_STATUS.md",
@@ -57,6 +69,20 @@ ALLOWED_TASK_DELTA = {
     f"runs/{RUN_DIR.name}/RUNNER_FIX.md",
     f"runs/{RUN_DIR.name}/ROUND44_RESUME_STATE_WHITELIST_R1.json",
 }
+R2_ALLOWED_TASK_DELTA = {
+    f"runs/{RUN_DIR.name}/ROUND44_CURRENT_CONTINUATION_BASIS.md",
+    f"runs/{RUN_DIR.name}/ROUND44_CURRENT_TASK.json",
+    f"runs/{RUN_DIR.name}/r44_execute.py",
+    f"runs/{RUN_DIR.name}/r44_resume_bridge.py",
+    f"runs/{RUN_DIR.name}/r44_resume_gate.py",
+    f"runs/{RUN_DIR.name}/test_r44_resume_gate.py",
+    f"runs/{RUN_DIR.name}/RUNNER_FIX.md",
+}
+EXPECTED_COMPARATOR_REJECTIONS = [
+    "parameter", "dual", "optimizer", "configuration", "artifact_path",
+    "transcript", "on_time", "task_set", "cost", "task_reward", "budget_mask",
+    "candidate_counter", "decision_counter", "action", "probability", "likelihood",
+]
 
 
 def _sha256(path: Path) -> str:
@@ -315,48 +341,123 @@ def verify_state_whitelist(*, check_live_mutables: bool) -> dict[str, Any]:
     return whitelist
 
 
+def _verify_r1_identity_unchanged() -> dict[str, Any]:
+    if not R1_IDENTITY_PATH.is_file() or _sha256(R1_IDENTITY_PATH) != R1_IDENTITY_SHA256:
+        raise RuntimeError("ROUND44 R1 resume identity is missing or was modified")
+    identity = _read(R1_IDENTITY_PATH)
+    if (identity.get("status") != "passed"
+            or identity.get("head") != R1_EXECUTION_HEAD
+            or identity.get("branch") != BRANCH
+            or identity.get("mechanical_version") != "round44-resume-comparator-and-restore/1"
+            or identity.get("state_bridge_version") != STATE_BRIDGE_VERSION):
+        raise RuntimeError("ROUND44 R1 identity is not the preserved 43399eb parent receipt")
+    for relative, expected in identity.get("source_code_sha256", {}).items():
+        object_path = f"runs/{RUN_DIR.name}/{relative}"
+        result = subprocess.run(
+            ["git", "-C", str(_repo_root()), "show", f"{R1_EXECUTION_HEAD}:{object_path}"],
+            check=True, capture_output=True,
+        )
+        if hashlib.sha256(result.stdout).hexdigest() != expected:
+            raise RuntimeError(f"ROUND44 R1 committed source identity differs: {relative}")
+    return identity
+
+
+def _verify_r2_source_evidence() -> tuple[dict[str, Any], dict[str, Any]]:
+    if not OLD_PROJECTION_PATH.is_file() or not SOURCE_CONFIG_RECONCILIATION_PATH.is_file():
+        raise RuntimeError("ROUND44 R2 four-episode source evidence is missing")
+    old_projection = _read(OLD_PROJECTION_PATH)
+    source_config = _read(SOURCE_CONFIG_RECONCILIATION_PATH)
+    if (old_projection.get("status") != "captured_before_comparator_revision"
+            or len(old_projection.get("episodes", [])) != 4
+            or any(len(item.get("whole_row_diff", [])) != 11
+                   or len(item.get("old_science_projection_diff", [])) != 3
+                   or item.get("tape_bytes_equal") is not True
+                   for item in old_projection["episodes"])):
+        raise RuntimeError("ROUND44 old projection evidence does not cover the real four episodes")
+    modules = source_config.get("runtime_module_sources", {})
+    if (source_config.get("status") != "passed_source_and_config_only"
+            or len(source_config.get("episodes", [])) != 4
+            or not modules or any(item.get("matches_frozen_source") is not True
+                                  for item in modules.values())
+            or any(item.get("configuration_differing_fields")
+                   != ["comm_transcript", "output"]
+                   or item.get("normalized_hash_equal") is not True
+                   for item in source_config["episodes"])):
+        raise RuntimeError("ROUND44 source/config evidence is incomplete or found extra drift")
+    return old_projection, source_config
+
+
+def _r2_preserved_originals() -> dict[str, str]:
+    result = {relative: _sha256(RUN_DIR / relative) for relative in STOP_FILES}
+    result["runtime/ROUND44_OLD_COMPARATOR_REPRODUCTION.json"] = _sha256(
+        R1_FAILURE_REPRODUCTION_PATH)
+    result["runtime/ROUND44_RESUME_EXECUTION_IDENTITY_R1.json"] = _sha256(R1_IDENTITY_PATH)
+    return result
+
+
+def _assert_r1_gate_outputs_absent() -> None:
+    for path in (R1_GATE_PATH, R1_COMPARATOR_TEST_PATH, R1_READY_PATH):
+        if path.exists():
+            raise RuntimeError(f"ROUND44 R1 failed-gate namespace must remain untouched: {path}")
+
+
 def seal_resume_execution_identity() -> dict[str, Any]:
-    """Bind the committed mechanical repair to one HEAD and one exact ep4 state."""
+    """Seal comparator projection R2 while preserving the committed R1 identity and failure."""
     branch = _git("branch", "--show-current")
     head = _git("rev-parse", "HEAD")
     if branch != BRANCH or _git("status", "--porcelain"):
-        raise RuntimeError("ROUND44 resume source must be committed and the worktree clean")
-    for ancestor in (BASE_EXECUTION_HEAD, TASK_START_HEAD):
+        raise RuntimeError("ROUND44 R2 resume source must be committed and the worktree clean")
+    if head == R1_EXECUTION_HEAD:
+        raise RuntimeError("ROUND44 R2 must descend from, not replace, the R1 mechanical identity")
+    for ancestor in (BASE_EXECUTION_HEAD, TASK_START_HEAD, R1_EXECUTION_HEAD):
         subprocess.run(["git", "-C", str(_repo_root()), "merge-base", "--is-ancestor",
                         ancestor, head], check=True, stdout=subprocess.DEVNULL)
+    r1_identity = _verify_r1_identity_unchanged()
+    _assert_r1_gate_outputs_absent()
     whitelist = verify_state_whitelist(check_live_mutables=True)
-    allowed_delta = sorted(ALLOWED_TASK_DELTA)
-    changed = sorted(path.replace("\\", "/") for path in _git(
+    changed_from_r1 = sorted(path.replace("\\", "/") for path in _git(
+        "diff", "--name-only", f"{R1_EXECUTION_HEAD}..{head}").splitlines())
+    if not set(changed_from_r1).issubset(R2_ALLOWED_TASK_DELTA):
+        raise RuntimeError(f"ROUND44 R2 commit changed a path outside its narrow delta: {changed_from_r1}")
+    changed_from_start = sorted(path.replace("\\", "/") for path in _git(
         "diff", "--name-only", f"{TASK_START_HEAD}..{head}").splitlines())
-    if not set(changed).issubset(ALLOWED_TASK_DELTA):
-        raise RuntimeError(f"ROUND44 mechanical resume commit changed an unauthorized path: {changed}")
+    if not set(changed_from_start).issubset(ALLOWED_TASK_DELTA):
+        raise RuntimeError(f"ROUND44 R2 cumulative source delta is unauthorized: {changed_from_start}")
 
+    old_projection, source_config = _verify_r2_source_evidence()
     original = _load_original_receipt()
     original_path = RUN_DIR / "runtime" / "ROUND44_PRELAUNCH_IDENTITY.json"
-    source_hashes = {}
-    for relative in original["source_code_sha256"]:
+    source_hashes: dict[str, str] = {}
+    for relative, expected in original["source_code_sha256"].items():
         path = RUN_DIR / relative
         if not path.is_file():
             raise RuntimeError(f"ROUND44 frozen code source is missing: {relative}")
         source_hashes[relative] = _sha256(path)
         if relative not in ("r44_execute.py", "r44_runtime.py") \
-                and source_hashes[relative] != original["source_code_sha256"][relative]:
+                and source_hashes[relative] != expected:
             raise RuntimeError(f"ROUND44 unrelated frozen executor code changed: {relative}")
     for relative in SOURCE_FILES:
         path = RUN_DIR / relative
+        if not path.is_file():
+            raise RuntimeError(f"ROUND44 R2 source artifact is missing: {relative}")
         source_hashes[relative] = _sha256(path)
 
     identity = {
-        "kind": "round44-resume-execution-identity/1",
+        "kind": "round44-resume-execution-identity/2",
         "status": "passed",
         "mechanical_version": MECHANICAL_VERSION,
         "state_bridge_version": STATE_BRIDGE_VERSION,
         "head": head,
         "branch": branch,
         "authorized_base_execution_head": BASE_EXECUTION_HEAD,
+        "r1_parent_head": R1_EXECUTION_HEAD,
+        "r1_identity_path": R1_IDENTITY_PATH.name,
+        "r1_identity_sha256": _sha256(R1_IDENTITY_PATH),
         "task_start_head": TASK_START_HEAD,
-        "allowed_task_delta_paths": allowed_delta,
-        "observed_task_delta_paths": changed,
+        "r2_allowed_task_delta_paths": sorted(R2_ALLOWED_TASK_DELTA),
+        "observed_r2_task_delta_paths": changed_from_r1,
+        "cumulative_allowed_task_delta_paths": sorted(ALLOWED_TASK_DELTA),
+        "observed_cumulative_task_delta_paths": changed_from_start,
         "training_version": TRAINING_VERSION,
         "runner_version": original["runner_version"],
         "eta_lambda": 0.5,
@@ -369,6 +470,18 @@ def seal_resume_execution_identity() -> dict[str, Any]:
         "original_prelaunch_head": original["head"],
         "original_frozen_config_sha256": _sha256(RUN_DIR / "ROUND44_FROZEN_CONFIG.json"),
         "seed11_resume": whitelist["permitted_resume"],
+        "old_projection_failure_evidence": {
+            "path": str(OLD_PROJECTION_PATH.relative_to(RUN_DIR)).replace("\\", "/"),
+            "sha256": _sha256(OLD_PROJECTION_PATH),
+            "episodes": len(old_projection["episodes"]),
+        },
+        "source_config_reconciliation": {
+            "path": str(SOURCE_CONFIG_RECONCILIATION_PATH.relative_to(RUN_DIR)).replace("\\", "/"),
+            "sha256": _sha256(SOURCE_CONFIG_RECONCILIATION_PATH),
+            "episodes": len(source_config["episodes"]),
+        },
+        "preserved_r1_failure_and_stop_hashes": _r2_preserved_originals(),
+        "r1_gate_outputs_remain_absent": True,
         "no_scientific_configuration_change": True,
     }
     _write_exclusive_or_match(IDENTITY_PATH, identity)
@@ -377,84 +490,127 @@ def seal_resume_execution_identity() -> dict[str, Any]:
 
 def verify_resume_execution_identity(frozen: dict[str, Any], current_head: str) -> dict[str, Any]:
     if not IDENTITY_PATH.is_file():
-        raise RuntimeError("ROUND44 versioned resume execution identity is missing")
+        raise RuntimeError("ROUND44 R2 versioned resume execution identity is missing")
     identity = _read(IDENTITY_PATH)
     branch = _git("branch", "--show-current")
     if (identity.get("status") != "passed"
+            or identity.get("kind") != "round44-resume-execution-identity/2"
             or identity.get("mechanical_version") != MECHANICAL_VERSION
             or identity.get("state_bridge_version") != STATE_BRIDGE_VERSION
             or identity.get("head") != current_head
             or current_head != _git("rev-parse", "HEAD")
             or branch != BRANCH or identity.get("branch") != BRANCH
             or _git("status", "--porcelain")):
-        raise RuntimeError("ROUND44 current branch/HEAD/worktree differs from resume identity")
-    for ancestor in (BASE_EXECUTION_HEAD, TASK_START_HEAD):
+        raise RuntimeError("ROUND44 current branch/HEAD/worktree differs from R2 resume identity")
+    for ancestor in (BASE_EXECUTION_HEAD, TASK_START_HEAD, R1_EXECUTION_HEAD):
         subprocess.run(["git", "-C", str(_repo_root()), "merge-base", "--is-ancestor",
                         ancestor, current_head], check=True, stdout=subprocess.DEVNULL)
-    changed = sorted(path.replace("\\", "/") for path in _git(
+    r1_identity = _verify_r1_identity_unchanged()
+    if (identity.get("r1_identity_sha256") != _sha256(R1_IDENTITY_PATH)
+            or r1_identity.get("head") != identity.get("r1_parent_head")):
+        raise RuntimeError("ROUND44 R1 identity changed after R2 was sealed")
+    _assert_r1_gate_outputs_absent()
+    changed_from_r1 = sorted(path.replace("\\", "/") for path in _git(
+        "diff", "--name-only", f"{R1_EXECUTION_HEAD}..{current_head}").splitlines())
+    changed_from_start = sorted(path.replace("\\", "/") for path in _git(
         "diff", "--name-only", f"{TASK_START_HEAD}..{current_head}").splitlines())
-    if changed != identity.get("observed_task_delta_paths") \
-            or not set(changed).issubset(ALLOWED_TASK_DELTA):
-        raise RuntimeError("ROUND44 resume source delta differs from its committed whitelist")
+    if (changed_from_r1 != identity.get("observed_r2_task_delta_paths")
+            or not set(changed_from_r1).issubset(R2_ALLOWED_TASK_DELTA)
+            or changed_from_start != identity.get("observed_cumulative_task_delta_paths")
+            or not set(changed_from_start).issubset(ALLOWED_TASK_DELTA)):
+        raise RuntimeError("ROUND44 R2 source delta differs from its exact committed whitelist")
     if (identity.get("training_version") != TRAINING_VERSION
             or frozen.get("round42", {}).get("training_version") != TRAINING_VERSION
             or identity.get("eta_lambda") != 0.5
             or frozen.get("round42", {}).get("objective", {}).get("eta_lambda") != 0.5):
-        raise RuntimeError("ROUND44 resume identity changed the scientific training version/eta")
+        raise RuntimeError("ROUND44 R2 identity changed the scientific training version/eta")
     whitelist = verify_state_whitelist(check_live_mutables=False)
+    original_path = RUN_DIR / "runtime" / "ROUND44_PRELAUNCH_IDENTITY.json"
     if (_sha256(WHITELIST_PATH) != identity.get("state_whitelist_sha256")
-            or _sha256(RUN_DIR / "runtime" / "ROUND44_PRELAUNCH_IDENTITY.json")
-            != identity.get("original_prelaunch_receipt_sha256")
+            or _sha256(original_path) != identity.get("original_prelaunch_receipt_sha256")
             or _sha256(RUN_DIR / "ROUND44_FROZEN_CONFIG.json")
-            != identity.get("original_frozen_config_sha256")):
-        raise RuntimeError("ROUND44 resume identity no longer matches its original freeze/whitelist")
+            != identity.get("original_frozen_config_sha256")
+            or whitelist["preserved_mutable_state_snapshots"]["manifest_sha256"]
+            != identity.get("snapshot_manifest_sha256")):
+        raise RuntimeError("ROUND44 R2 identity no longer matches the original freeze/whitelist")
     original = _load_original_receipt()
     for relative, expected in identity.get("source_code_sha256", {}).items():
         path = RUN_DIR / relative
         if not path.is_file() or _sha256(path) != expected:
-            raise RuntimeError(f"ROUND44 resume source code hash mismatch: {relative}")
+            raise RuntimeError(f"ROUND44 R2 resume source code hash mismatch: {relative}")
         if relative in original["source_code_sha256"] \
                 and relative not in ("r44_execute.py", "r44_runtime.py") \
                 and expected != original["source_code_sha256"][relative]:
             raise RuntimeError(f"ROUND44 original executor source drifted: {relative}")
+    old_projection, source_config = _verify_r2_source_evidence()
+    if (_sha256(OLD_PROJECTION_PATH) != identity["old_projection_failure_evidence"]["sha256"]
+            or len(old_projection["episodes"]) != identity["old_projection_failure_evidence"]["episodes"]
+            or _sha256(SOURCE_CONFIG_RECONCILIATION_PATH)
+            != identity["source_config_reconciliation"]["sha256"]
+            or len(source_config["episodes"])
+            != identity["source_config_reconciliation"]["episodes"]
+            or _r2_preserved_originals() != identity.get("preserved_r1_failure_and_stop_hashes")):
+        raise RuntimeError("ROUND44 R2 source evidence or preserved R1 failure material changed")
     return identity
 
 
 def verify_resume_ready(frozen: dict[str, Any], current_head: str) -> dict[str, Any]:
     identity = verify_resume_execution_identity(frozen, current_head)
     if not READY_PATH.is_file():
-        raise RuntimeError("ROUND44 exact-resume and comparator gates are not ready for a claim")
+        raise RuntimeError("ROUND44 R2 exact-resume/comparator gates are not ready for a claim")
     ready = _read(READY_PATH)
-    if (ready.get("kind") != "round44-resume-ready/1"
+    if (ready.get("kind") != "round44-resume-ready/2"
             or ready.get("status") != "passed"
             or ready.get("execution_head") != current_head
             or ready.get("mechanical_version") != MECHANICAL_VERSION
             or ready.get("state_bridge_version") != STATE_BRIDGE_VERSION
             or ready.get("execution_identity_sha256") != _sha256(IDENTITY_PATH)
-            or ready.get("state_whitelist_sha256") != _sha256(WHITELIST_PATH)):
-        raise RuntimeError("ROUND44 resume-ready receipt does not match this frozen execution")
+            or ready.get("state_whitelist_sha256") != _sha256(WHITELIST_PATH)
+            or ready.get("r1_identity_sha256") != _sha256(R1_IDENTITY_PATH)
+            or ready.get("old_projection_evidence_sha256") != _sha256(OLD_PROJECTION_PATH)
+            or ready.get("source_config_reconciliation_sha256")
+            != _sha256(SOURCE_CONFIG_RECONCILIATION_PATH)):
+        raise RuntimeError("ROUND44 R2 resume-ready receipt does not match its source identity")
     for key, path in (("exact_resume_gate_sha256", GATE_PATH),
                       ("comparator_regression_sha256", COMPARATOR_TEST_PATH),
                       ("first_batch_comparison_sha256",
                        RUN_DIR / "ROUND44_FIRST_BATCH_COMPARISON_SEED11.json"),
                       ("first_batch_gate_sha256", RUN_DIR / "ROUND44_FIRST_BATCH_GATE_SEED11.json")):
         if not path.is_file() or ready.get(key) != _sha256(path):
-            raise RuntimeError(f"ROUND44 ready receipt lacks the sealed gate artifact: {key}")
+            raise RuntimeError(f"ROUND44 R2 ready receipt lacks its sealed gate artifact: {key}")
     gate = _read(GATE_PATH)
     regression = _read(COMPARATOR_TEST_PATH)
     comparison = _read(RUN_DIR / "ROUND44_FIRST_BATCH_COMPARISON_SEED11.json")
     first_batch = _read(RUN_DIR / "ROUND44_FIRST_BATCH_GATE_SEED11.json")
-    if (gate.get("status") != "passed" or gate.get("environment_starts") != 0
+    episode_gates = comparison.get("episodes", [])
+    if (gate.get("kind") != "round44-exact-resume-gate/2"
+            or gate.get("status") != "passed" or gate.get("environment_starts") != 0
             or gate.get("optimizer_steps") != 0 or gate.get("checkpoint_writes") != 0
             or gate.get("training_seed") != 11 or gate.get("episodes_done") != 4
             or gate.get("updates") != 1 or gate.get("optimizer_steps_saved") != 12
             or gate.get("lambda") != 1.125
+            or regression.get("kind") != "round44-comparator-regression/2"
             or regression.get("status") != "passed"
-            or regression.get("expected_rejections") != ["parameter", "dual", "optimizer"]
-            or comparison.get("status") != "passed"
+            or regression.get("expected_rejections") != EXPECTED_COMPARATOR_REJECTIONS
+            or regression.get("accepted_wallclock_timing_perturbation", {}).get("status") != "passed"
+            or len(regression.get("accepted_real_registered_row_labels_and_output_paths", [])) != 4
+            or comparison.get("kind") != "round44-first-batch-vs-r43-comparison/2"
+            or comparison.get("projection_version") != "round44-row-projection/2"
+            or comparison.get("status") != "passed" or len(episode_gates) != 4
+            or any(item.get("science_projection_equal") is not True
+                   or item.get("tape_equal") is not True
+                   or item.get("metadata_reconciliation", {}).get(
+                       "r43_config_hash_matches_row_and_signature") is not True
+                   or item.get("metadata_reconciliation", {}).get(
+                       "r44_config_hash_matches_row_and_signature") is not True
+                   or item.get("metadata_reconciliation", {}).get(
+                       "path_normalized_config_equal") is not True
+                   for item in episode_gates)
             or first_batch.get("status") != "passed"
-            or first_batch.get("training_seed") != 11):
-        raise RuntimeError("ROUND44 resume-ready gate contents are incomplete or failed")
+            or first_batch.get("training_seed") != 11
+            or first_batch.get("r43_batch0_comparison", {}).get("projection_version")
+            != "round44-row-projection/2"):
+        raise RuntimeError("ROUND44 R2 resume-ready gate contents are incomplete or failed")
     return identity
 
 
@@ -465,9 +621,12 @@ def verify_pre_resume_state(frozen: dict[str, Any], current_head: str) -> dict[s
 
 
 __all__ = [
-    "BASE_EXECUTION_HEAD", "BRANCH", "GATE_PATH", "IDENTITY_PATH",
-    "MECHANICAL_VERSION", "READY_PATH", "RESUME_PROGRESS_PATH", "STATE_BRIDGE_VERSION",
-    "TASK_START_HEAD", "WHITELIST_PATH", "build_state_whitelist",
+    "BASE_EXECUTION_HEAD", "BRANCH", "COMPARATOR_TEST_PATH",
+    "EXPECTED_COMPARATOR_REJECTIONS", "GATE_PATH", "IDENTITY_PATH",
+    "MECHANICAL_VERSION", "OLD_PROJECTION_PATH", "R1_EXECUTION_HEAD",
+    "R1_IDENTITY_PATH", "READY_PATH", "RESUME_PROGRESS_PATH",
+    "SOURCE_CONFIG_RECONCILIATION_PATH", "STATE_BRIDGE_VERSION", "TASK_START_HEAD",
+    "WHITELIST_PATH", "build_state_whitelist",
     "seal_resume_execution_identity", "verify_pre_resume_state",
     "verify_resume_execution_identity", "verify_resume_ready", "verify_state_whitelist",
 ]

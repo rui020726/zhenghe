@@ -4,7 +4,7 @@
   "repository": "D:\\code\\整合\\zhenghe-round42",
   "branch": "exp/comm-dual-response-ablation",
   "base_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
-  "current_head_at_persist": "2af9f7e66982eb046725057e026c05512b788169",
+  "current_head_at_persist": "43399eb9b74031e1ee88752618c04e84082bb811",
   "r43_read_only_parent_delivery": "9f2b6b6411c50849ce1a9eedbaedffaf0aededa5",
   "round44_scientific_execution_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
   "stop_record": {
@@ -41,6 +41,72 @@
   "pre_resume_snapshot_manifest_sha256": "65348220c10e8c9158cf994e991eb2019bb6e99771a117a752d57c879450891e",
   "resume_state_whitelist": "runs/comm_dual_response_ablation_20261004/ROUND44_RESUME_STATE_WHITELIST_R1.json",
   "resume_state_whitelist_sha256": "8313068d9c6797d713ad270345fadc43ba49a1e38e6a60a914bcc9a93762fda0",
-  "current_stage": "mechanical loader-scope fix and ep4-only whitelist implemented; original mutable artifacts snapshotted; py_compile passed and pure deterministic restore helper tests passed 2/2; no experimental run has started",
-  "next_action": "Commit the mechanical bridge/fix, seal the new execution identity, run actual comparator regression and exact in-memory ep4 restore gate; only then start the remaining 476 fixed tasks"
+  "current_stage": "R2 field-aware comparator and transcript identity are implemented; py_compile and both targeted unit tests passed; no new claim or environment has started",
+  "next_action": "Validate this JSON and inspect the complete authorized diff, locally commit only the 7 authorized R2 files, seal the separate R2 identity, run the real saved-batch/comparator/ep4 restore gate, and continue the original fixed remaining 476 tasks only if every gate passes.",
+  "pure_verification": {
+    "python": "D:\\project_env\\python.exe",
+    "py_compile": "passed for r44_execute.py, r44_resume_bridge.py, r44_resume_gate.py, test_r44_resume_gate.py",
+    "targeted_unit_tests": "2 passed",
+    "git_diff_check": "passed",
+    "environment_starts": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0
+  },
+  "comparison_clarification": {
+    "saved_basis": "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_CONTINUATION_BASIS.md",
+    "saved_basis_sha256": "6cf1b53b53fcb4b6adf5aed26f3e66e625a4d467b698dbedbb64df8e7dda4100",
+    "received_at": "2026-10-05",
+    "scope": "four-episode old-projection evidence; source-backed config/timing reconciliation; narrow comparator revision R2; exact restore; then original remaining 476 normal tasks only"
+  },
+  "last_read_only_gate_attempt": {
+    "head": "43399eb9b74031e1ee88752618c04e84082bb811",
+    "status": "stopped_before_receipts",
+    "failure": "RuntimeError: seed 11 episode 0: pre-update rollout outcomes changed",
+    "differences_seen": [
+      "config_hash",
+      "seconds",
+      "collector_summary.timing.decide_milliseconds_per_call",
+      "label",
+      "runner_version",
+      "training_version",
+      "eta_lambda",
+      "artefact paths"
+    ],
+    "environment_starts": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0,
+    "new_claims": 0,
+    "interpretation": "preliminary field diff only; do not label gate passed or infer config_hash harmless until all four episodes and runtime construction sources are reconciled"
+  },
+  "old_projection_failure_evidence": {
+    "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_OLD_PROJECTION_FOUR_EPISODES_R2.json",
+    "sha256": "054a77fb5e60d6c09c83811c3e128fa88a06d67e59e260e5c8aba70f5efa4eda",
+    "episodes": 4,
+    "whole_row_differences_each_episode": 11,
+    "old_projection_differences_each_episode": 3,
+    "tape_bytes_equal_each_episode": true
+  },
+  "source_config_reconciliation": {
+    "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_SOURCE_CONFIG_RECONCILIATION_R2.json",
+    "sha256": "c4766b30dce225d0448a77086abe5aac281a76838e95ffd823949cf54b425d70",
+    "status": "passed_source_and_config_only",
+    "episodes": 4,
+    "actual_config_hashes_recomputed": true,
+    "runtime_source_paths_verified": true,
+    "new_comparator_gate_not_yet_run": true
+  },
+  "comparator_revision": {
+    "version": "round44-row-projection/2",
+    "mechanical_version": "round44-resume-comparator-and-restore/2",
+    "r1_identity_sha256": "ffc75ffeca743134a9f0df0bff173e1b0b4e6f544bf88ad4d3ef31119336c860",
+    "old_projection_evidence_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_OLD_PROJECTION_FOUR_EPISODES_R2.json",
+    "source_config_reconciliation_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_SOURCE_CONFIG_RECONCILIATION_R2.json",
+    "r2_gate_receipt_paths": [
+      "runtime/ROUND44_EXACT_RESUME_GATE_R2.json",
+      "runtime/ROUND44_COMPARATOR_REGRESSION_R2.json",
+      "runtime/ROUND44_RESUME_READY_R2.json"
+    ],
+    "additional_exact_artifact_check": "R43/R44 transcript SHA256 equality; synthetic transcript-hash mismatch must be rejected",
+    "resume_progress_identity": "round44-execution-progress-resume-r2/2"
+  }
 }

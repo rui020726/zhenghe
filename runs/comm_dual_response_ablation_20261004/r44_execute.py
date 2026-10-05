@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib
 import json
+import math
 import os
 import subprocess
 import sys
@@ -18,7 +20,9 @@ from r44_prepare import (RUN_DIR, ROOT, R43_DIR, TRAINING_VERSION, RUNNER_VERSIO
                          prepare, read, sha256, verify_r43_source_identity, write_new)
 from r44_runtime import PRELAUNCH_PATH, configure, verify_frozen_source
 from r44_resume_bridge import (
-    RESUME_PROGRESS_PATH, verify_pre_resume_state, verify_resume_ready,
+    IDENTITY_PATH as RESUME_IDENTITY_PATH, MECHANICAL_VERSION,
+    RESUME_PROGRESS_PATH, STATE_BRIDGE_VERSION,
+    verify_pre_resume_state, verify_resume_ready,
 )
 
 
@@ -153,11 +157,221 @@ def _load_r43_batch0(seed: int) -> tuple[dict[str, Any], str]:
 
 
 def _row_science_projection(row: dict[str, Any]) -> dict[str, Any]:
-    excluded = {
-        "label", "attempt", "training_version", "runner_version", "eta_lambda",
-        "artefacts", "execution_identity", "checkpoint_identity", "checkpoint_load_identity",
+    """Compare every saved row value except the two source-proven wall-clock readings.
+
+    Round label/version/config identity and artifact paths are reconciled separately by
+    :func:`_reconcile_round_row_metadata`; task, cost, event, policy, and all remaining
+    collector timing fields stay in this projection.
+    """
+    projected = {key: value for key, value in row.items()
+                 if key not in {"seconds", "config_hash", "label", "runner_version",
+                                "training_version", "eta_lambda", "artefacts"}}
+    summary = projected.get("collector_summary")
+    timing = summary.get("timing") if isinstance(summary, dict) else None
+    if not isinstance(timing, dict) or "decide_milliseconds_per_call" not in timing:
+        raise RuntimeError("row is missing the registered collector wall-clock timing value")
+    timing = dict(timing)
+    timing.pop("decide_milliseconds_per_call")
+    summary = dict(summary)
+    summary["timing"] = timing
+    projected["collector_summary"] = summary
+    return projected
+
+
+def _validate_artifact_path_pair(old_row: dict[str, Any], new_row: dict[str, Any],
+                                 episode_index: int) -> dict[str, str]:
+    old_artifacts = old_row.get("artefacts")
+    new_artifacts = new_row.get("artefacts")
+    if (not isinstance(old_artifacts, dict) or not isinstance(new_artifacts, dict)
+            or set(old_artifacts) != set(new_artifacts) or not old_artifacts):
+        raise RuntimeError(f"episode {episode_index}: artifact roles differ or are missing")
+    resolved: dict[str, str] = {}
+    for role in sorted(old_artifacts):
+        old_path, new_path = Path(str(old_artifacts[role])).resolve(), Path(
+            str(new_artifacts[role])).resolve()
+        if not old_path.is_file() or not new_path.is_file():
+            raise RuntimeError(f"episode {episode_index}: {role} artifact path is missing")
+        try:
+            old_relative = old_path.relative_to(R43_DIR.resolve()).as_posix()
+            new_relative = new_path.relative_to(RUN_DIR.resolve()).as_posix()
+        except ValueError as exc:
+            raise RuntimeError(
+                f"episode {episode_index}: {role} artifact escaped its registered run directory"
+            ) from exc
+        if old_relative.replace("v2_r43_", "v2_r44_") != new_relative:
+            raise RuntimeError(
+                f"episode {episode_index}: {role} path is not the registered R43/R44 label pair"
+            )
+        resolved[role] = str(new_path)
+    return resolved
+
+
+def _reconcile_round_row_metadata(old_row: dict[str, Any], new_row: dict[str, Any],
+                                  training_seed: int, episode_index: int,
+                                  runtime: dict[str, Any]) -> dict[str, Any]:
+    """Validate the registered R43/R44 identity and explain each permitted row difference."""
+    r43_freeze = read(R43_DIR / "ROUND43_FROZEN_CONFIG.json")
+    r44_freeze = read(RUN_DIR / "ROUND44_FROZEN_CONFIG.json")
+    config_diff = read(RUN_DIR / "ROUND44_CONFIGURATION_DIFF.json")
+    source_receipt_path = RUN_DIR / "runtime" / "ROUND44_SOURCE_CONFIG_RECONCILIATION_R2.json"
+    if not source_receipt_path.is_file():
+        raise RuntimeError("source-proven R2 config_hash reconciliation receipt is missing")
+    source_receipt = read(source_receipt_path)
+    if source_receipt.get("status") != "passed_source_and_config_only":
+        raise RuntimeError("R2 runtime-source/config reconciliation did not pass")
+
+    # These are the only row identity changes registered by the frozen ROUND44 single-variable diff.
+    differences = config_diff.get("scientific_differences", [])
+    if (config_diff.get("scientific_variable_count") != 1 or len(differences) != 1
+            or differences[0].get("path") != "round42.objective.eta_lambda"
+            or float(differences[0].get("from", float("nan"))) != 0.05
+            or float(differences[0].get("to", float("nan"))) != 0.5):
+        raise RuntimeError("ROUND44 row metadata no longer matches the one-variable eta freeze")
+    old_version = str(r43_freeze["round42"]["training_version"])
+    new_version = str(r44_freeze["round42"]["training_version"])
+    old_runner = str(r43_freeze["round42"]["runner_version"])
+    registered_runners = config_diff["execution_only_differences"]["runner_version"]
+    new_runner = str(registered_runners["round44"])
+    if (old_version != str(config_diff["source_training_version"])
+            or new_version != TRAINING_VERSION
+            or new_version != str(config_diff["new_training_version"])
+            or old_runner != str(registered_runners["round43"])
+            or new_runner != RUNNER_VERSION):
+        raise RuntimeError("R43/R44 row version metadata differs from the registered freezes")
+
+    expected_episode = int(old_row.get("episode_index", -1))
+    if expected_episode != episode_index or int(new_row.get("episode_index", -2)) != episode_index:
+        raise RuntimeError(f"episode {episode_index}: row episode identity differs")
+    if old_row.get("label") != f"train_s{training_seed}_e{episode_index}_r43" \
+            or new_row.get("label") != f"train_s{training_seed}_e{episode_index}_r44":
+        raise RuntimeError(f"episode {episode_index}: row labels are not the registered run labels")
+    if old_row.get("runner_version") != old_runner or new_row.get("runner_version") != new_runner:
+        raise RuntimeError(f"episode {episode_index}: row runner versions are not registered")
+    if old_row.get("training_version") != old_version or new_row.get("training_version") != new_version:
+        raise RuntimeError(f"episode {episode_index}: row training versions are not registered")
+    if "eta_lambda" in old_row or float(new_row.get("eta_lambda", float("nan"))) != 0.5:
+        raise RuntimeError(f"episode {episode_index}: row eta fields do not encode the registered change")
+    if (int(old_row.get("attempt", -1)) != 1
+            or int(new_row.get("attempt", -1)) != 1
+            or old_row.get("attempt") != new_row.get("attempt")):
+        raise RuntimeError(f"episode {episode_index}: attempt identity differs")
+
+    old_seconds, new_seconds = old_row.get("seconds"), new_row.get("seconds")
+    old_timing = (old_row.get("collector_summary") or {}).get("timing")
+    new_timing = (new_row.get("collector_summary") or {}).get("timing")
+    old_decide_ms = old_timing.get("decide_milliseconds_per_call") if isinstance(old_timing, dict) else None
+    new_decide_ms = new_timing.get("decide_milliseconds_per_call") if isinstance(new_timing, dict) else None
+    for label, value in (("R43 seconds", old_seconds), ("R44 seconds", new_seconds),
+                         ("R43 decide milliseconds", old_decide_ms),
+                         ("R44 decide milliseconds", new_decide_ms)):
+        if not isinstance(value, (int, float)) or not math.isfinite(float(value)):
+            raise RuntimeError(f"episode {episode_index}: {label} is not a finite wall-clock value")
+
+    resolved_artifacts = _validate_artifact_path_pair(old_row, new_row, episode_index)
+    old_transcript = Path(old_row["artefacts"]["transcript"]).resolve()
+    new_transcript = Path(new_row["artefacts"]["transcript"]).resolve()
+    old_transcript_sha = sha256(old_transcript)
+    new_transcript_sha = sha256(new_transcript)
+    if old_transcript_sha != new_transcript_sha:
+        raise RuntimeError(f"episode {episode_index}: R43/R44 transcript content differs")
+    old_lifecycle = Path(old_row["artefacts"]["lifecycle"]).resolve()
+    new_lifecycle = Path(new_row["artefacts"]["lifecycle"]).resolve()
+    old_records, new_records = _read_jsonl(old_lifecycle), _read_jsonl(new_lifecycle)
+    if (not old_records or not new_records
+            or old_records[0].get("event_type") != "run_config"
+            or new_records[0].get("event_type") != "run_config"):
+        raise RuntimeError(f"episode {episode_index}: lifecycle run_config identity is missing")
+    for records, label in ((old_records, "R43"), (new_records, "R44")):
+        final = records[-1]
+        if not (final.get("event_type") == "final" and final.get("status") == "run_finished"
+                and str(final.get("target_id")) == "__run__"):
+            raise RuntimeError(f"episode {episode_index}: {label} lifecycle log is incomplete")
+    old_detail, new_detail = old_records[0].get("detail", {}), new_records[0].get("detail", {})
+    old_config, new_config = old_detail.get("configuration"), new_detail.get("configuration")
+    old_signature, new_signature = old_detail.get("run_signature"), new_detail.get("run_signature")
+    if not all(isinstance(item, dict) for item in
+               (old_config, new_config, old_signature, new_signature)):
+        raise RuntimeError(f"episode {episode_index}: run configuration/signature is malformed")
+    if old_detail.get("scenario") != new_detail.get("scenario"):
+        raise RuntimeError(f"episode {episode_index}: saved environment scenario differs")
+    config_differences = sorted(
+        key for key in set(old_config) | set(new_config)
+        if key not in old_config or key not in new_config or old_config[key] != new_config[key]
+    )
+    if config_differences != ["comm_transcript", "output"]:
+        raise RuntimeError(
+            f"episode {episode_index}: run configuration has unregistered differences: "
+            f"{config_differences}"
+        )
+    if (Path(str(old_config.get("output"))).resolve() != old_lifecycle
+            or Path(str(new_config.get("output"))).resolve() != new_lifecycle
+            or Path(str(old_config.get("comm_transcript"))).resolve()
+            != Path(old_row["artefacts"]["transcript"]).resolve()
+            or Path(str(new_config.get("comm_transcript"))).resolve()
+            != Path(new_row["artefacts"]["transcript"]).resolve()):
+        raise RuntimeError(f"episode {episode_index}: run-config output path does not match its artifact")
+
+    signature_module = importlib.import_module("integrated_sar.run_signature")
+    source_identity = source_receipt["runtime_module_sources"].get("integrated_sar.run_signature")
+    expected_signature_path = (Path(runtime["r42_run"].INPUT_ROOT).resolve()
+                               / "integrated_sar" / "run_signature.py").resolve()
+    actual_signature_path = Path(signature_module.__file__).resolve()
+    actual_signature_sha = sha256(actual_signature_path)
+    if (not isinstance(source_identity, dict)
+            or actual_signature_path != expected_signature_path
+            or str(actual_signature_path) != source_identity.get("file")
+            or actual_signature_sha != source_identity.get("sha256")
+            or source_identity.get("matches_frozen_source") is not True):
+        raise RuntimeError("actual run_signature.config_hash source differs from its frozen provenance")
+    old_hash = signature_module.config_hash(old_config)
+    new_hash = signature_module.config_hash(new_config)
+    if (old_hash != old_signature.get("config_hash")
+            or new_hash != new_signature.get("config_hash")
+            or old_hash != old_row.get("config_hash")
+            or new_hash != new_row.get("config_hash")):
+        raise RuntimeError(f"episode {episode_index}: config_hash does not match its own full config")
+    signature_differences = sorted(
+        key for key in set(old_signature) | set(new_signature)
+        if key not in old_signature or key not in new_signature
+        or old_signature[key] != new_signature[key]
+    )
+    if signature_differences != ["config_hash"]:
+        raise RuntimeError(f"episode {episode_index}: run signature differs beyond config_hash")
+    old_normalized, new_normalized = dict(old_config), dict(new_config)
+    for config in (old_normalized, new_normalized):
+        config["output"] = "<verified per-run lifecycle output>"
+        config["comm_transcript"] = "<verified per-run transcript output>"
+    if old_normalized != new_normalized:
+        raise RuntimeError(f"episode {episode_index}: path-normalized run configs differ")
+    old_normalized_hash = signature_module.config_hash(old_normalized)
+    new_normalized_hash = signature_module.config_hash(new_normalized)
+    if old_normalized_hash != new_normalized_hash:
+        raise RuntimeError(f"episode {episode_index}: path-normalized config hashes differ")
+
+    return {
+        "registered_row_label_change": [old_row["label"], new_row["label"]],
+        "registered_runner_version_change": [old_runner, new_runner],
+        "registered_training_version_change": [old_version, new_version],
+        "registered_eta_change": {"r43": 0.05, "r44": float(new_row["eta_lambda"])},
+        "row_attempt_equal": True,
+        "verified_artifact_paths": resolved_artifacts,
+        "transcript_sha256": old_transcript_sha,
+        "transcript_content_equal": True,
+        "run_configuration_differing_fields": config_differences,
+        "run_config_scenario_equal": True,
+        "run_signature_differing_fields": signature_differences,
+        "r43_config_hash_recomputed": old_hash,
+        "r44_config_hash_recomputed": new_hash,
+        "r43_config_hash_matches_row_and_signature": True,
+        "r44_config_hash_matches_row_and_signature": True,
+        "path_normalized_config_hash": old_normalized_hash,
+        "path_normalized_config_equal": True,
+        "wall_clock_measurements": {
+            "r43_seconds": float(old_seconds), "r44_seconds": float(new_seconds),
+            "r43_decide_milliseconds_per_call": float(old_decide_ms),
+            "r44_decide_milliseconds_per_call": float(new_decide_ms),
+        },
     }
-    return {key: value for key, value in row.items() if key not in excluded}
 
 
 def _compare_first_batch(seed: int, runtime: dict[str, Any], gate: dict[str, Any]) -> dict[str, Any]:
@@ -223,6 +437,8 @@ def _compare_first_batch(seed: int, runtime: dict[str, Any], gate: dict[str, Any
                 or sha256(new_tape_path) != new_artifact["tape_sha256"]):
             raise RuntimeError(f"seed {seed}: batch-zero row/tape source hash mismatch")
         old_row, new_row = read(old_row_path), read(new_row_path)
+        metadata_reconciliation = _reconcile_round_row_metadata(
+            old_row, new_row, seed, int(old_artifact["episode_index"]), runtime)
         if _row_science_projection(old_row) != _row_science_projection(new_row):
             raise RuntimeError(
                 f"seed {seed} episode {old_artifact['episode_index']}: pre-update rollout outcomes changed")
@@ -236,12 +452,14 @@ def _compare_first_batch(seed: int, runtime: dict[str, Any], gate: dict[str, Any
             "new_row_sha256": new_artifact["row_sha256"],
             "old_tape_sha256": old_artifact["tape_sha256"],
             "new_tape_sha256": new_artifact["tape_sha256"],
+            "metadata_reconciliation": metadata_reconciliation,
             "science_projection_equal": True, "tape_equal": True,
         })
     if len(compared_episodes) != 4:
         raise RuntimeError(f"seed {seed}: expected exactly four batch-zero episodes")
     result = {
-        "kind": "round44-first-batch-vs-r43-comparison/1", "status": "passed",
+        "kind": "round44-first-batch-vs-r43-comparison/2", "status": "passed",
+        "projection_version": "round44-row-projection/2",
         "training_seed": seed,
         "r43_batch_record_sha256": old_sha,
         "r44_batch_record_sha256": sha256(r44_record_path),
@@ -372,7 +590,7 @@ def run() -> dict[str, Any]:
         if order != [int(value) for value in frozen["round42"]["training_order"]]:
             raise RuntimeError("ROUND44 actual scenario order differs from the committed freeze")
         original_progress_path = RUN_DIR / "runtime" / "ROUND44_EXECUTION_PROGRESS.json"
-        resuming = (RUN_DIR / "runtime" / "ROUND44_RESUME_EXECUTION_IDENTITY_R1.json").is_file()
+        resuming = RESUME_IDENTITY_PATH.is_file()
         progress_path = RESUME_PROGRESS_PATH if resuming else original_progress_path
         if progress_path.is_file():
             progress = read(progress_path)
@@ -384,9 +602,10 @@ def run() -> dict[str, Any]:
             if resuming:
                 verify_pre_resume_state(frozen, current_head)
             progress = {
-                "kind": "round44-execution-progress-resume-r1/1",
+                "kind": "round44-execution-progress-resume-r2/2",
                 "status": "running", "prelaunch_head": current_head,
-                "resume_bridge": "round44-exact-resume-state-bridge/1",
+                "resume_bridge": STATE_BRIDGE_VERSION,
+                "mechanical_version": MECHANICAL_VERSION,
                 "started_at_unix": time.time(),
                 "training": {}, "evaluations_completed": 0, "completed_eval_keys": [],
             }
@@ -572,7 +791,7 @@ def run() -> dict[str, Any]:
         })
         _write_atomic(progress_path, progress)
         status = {
-            "kind": "round44-project-status/1", "round": 44,
+            "kind": "round44-project-status/2", "round": 44,
             "status": "complete_local_delivery_pending_commits",
             "execution_matrix_status": "complete", "branch": _git("branch", "--show-current"),
             "scientific_execution_head": current_head,
@@ -596,7 +815,8 @@ def run() -> dict[str, Any]:
         }
         status["stop_record_preserved"] = str(RUN_DIR / "ROUND44_STOP_REPORT.md")
         status["resume_bridge"] = "round44-exact-resume-state-bridge/1"
-        _write_new_or_match(RUN_DIR / "ROUND44_STATUS_COMPLETE_R1.json", status)
+        status["mechanical_version"] = "round44-resume-comparator-and-restore/2"
+        _write_new_or_match(RUN_DIR / "ROUND44_STATUS_COMPLETE_R2.json", status)
         return {"progress": progress, "ledger": ledger, "analysis": analysis,
                 "report": report, "eval_audit": eval_audit, "status": status}
     finally:

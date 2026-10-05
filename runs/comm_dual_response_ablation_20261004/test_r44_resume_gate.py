@@ -15,7 +15,7 @@ from r44_resume_gate import _next_values_from_saved_rng
 class Round44ResumeGateTests(unittest.TestCase):
     def test_resume_bridge_is_versioned_and_mechanical(self) -> None:
         self.assertEqual(STATE_BRIDGE_VERSION, "round44-exact-resume-state-bridge/1")
-        self.assertEqual(MECHANICAL_VERSION, "round44-resume-comparator-and-restore/1")
+        self.assertEqual(MECHANICAL_VERSION, "round44-resume-comparator-and-restore/2")
 
     def test_next_values_match_independent_python_numpy_torch_streams(self) -> None:
         py = random.Random(13579)

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import importlib
 import json
 import random
 import subprocess
@@ -16,8 +17,9 @@ import torch
 
 from r44_prepare import RUN_DIR, TRAINING_VERSION, read, sha256, write_new
 from r44_resume_bridge import (
-    COMPARATOR_TEST_PATH, GATE_PATH, IDENTITY_PATH, MECHANICAL_VERSION,
-    READY_PATH, STATE_BRIDGE_VERSION, WHITELIST_PATH, build_state_whitelist,
+    COMPARATOR_TEST_PATH, EXPECTED_COMPARATOR_REJECTIONS, GATE_PATH, IDENTITY_PATH,
+    MECHANICAL_VERSION, OLD_PROJECTION_PATH, R1_IDENTITY_PATH, READY_PATH,
+    SOURCE_CONFIG_RECONCILIATION_PATH, STATE_BRIDGE_VERSION, WHITELIST_PATH, build_state_whitelist,
     seal_resume_execution_identity, verify_pre_resume_state, verify_resume_execution_identity,
     verify_state_whitelist,
 )
@@ -66,7 +68,8 @@ def _expect_comparator_rejection(label: str, call: Callable[[], Any], expected_f
     raise RuntimeError(f"{label}: comparator accepted a deliberately altered in-memory record")
 
 
-def _run_comparator_regression(runtime: dict[str, Any], gate: dict[str, Any]) -> dict[str, Any]:
+def _run_comparator_regression(runtime: dict[str, Any], gate: dict[str, Any],
+                               real_comparison: dict[str, Any]) -> dict[str, Any]:
     import r44_execute
 
     seed = 11
@@ -75,24 +78,78 @@ def _run_comparator_regression(runtime: dict[str, Any], gate: dict[str, Any]) ->
     commit = read(runtime["common"].CHECKPOINTS / "r40_batch_commit_s11_b0.json")
     record_path = runtime["common"].CHECKPOINTS / str(commit["batch_record"])
     post_path = runtime["common"].CHECKPOINTS / str(commit["postupdate_checkpoint"])
-    row_tape_hashes_before = {
-        item["row_path"]: sha256(Path(item["row_path"]))
-        for item in read(record_path)["episode_artifacts"]
-    }
-    row_tape_hashes_before.update({
-        item["tape_path"]: sha256(Path(item["tape_path"]))
-        for item in read(record_path)["episode_artifacts"]
-    })
+    artifacts = read(record_path)["episode_artifacts"]
+    protected_artifacts: dict[str, str] = {}
+    for item in artifacts:
+        old_row = read(Path(item["row_path"]))
+        new_row_path = RUN_DIR / "rows" / Path(item["row_path"]).name.replace("v2_r43_", "v2_r44_")
+        old_paths = old_row["artefacts"]
+        new_row = read(new_row_path)
+        for row in (old_row, new_row):
+            for artifact_path in row["artefacts"].values():
+                protected_artifacts[str(artifact_path)] = sha256(Path(artifact_path))
+        for path in (Path(item["row_path"]), new_row_path,
+                     Path(item["tape_path"]), RUN_DIR / "logs" / Path(item["tape_path"]).name.replace("v2_r43_", "v2_r44_")):
+            protected_artifacts[str(path)] = sha256(path)
     checkpoint_paths = (
         runtime["common"].CHECKPOINTS / "v2_train_s11_after_b0.pt",
         runtime["common"].CHECKPOINTS / "v2_train_s11.pt",
     )
     checkpoint_hashes_before = {str(path): sha256(path) for path in checkpoint_paths}
+    protected_runtime = (
+        RUN_DIR / "runtime" / "ROUND44_EXECUTION_LEDGER.json",
+        RUN_DIR / "runtime" / "ROUND44_EXECUTION_PROGRESS.json",
+        RUN_DIR / "runtime" / "ROUND44_PRELAUNCH_IDENTITY.json",
+        RUN_DIR / "runtime" / "ROUND44_RESUME_EXECUTION_IDENTITY_R1.json",
+        RUN_DIR / "runtime" / "ROUND44_OLD_COMPARATOR_REPRODUCTION.json",
+        RUN_DIR / "ROUND44_STATUS.json",
+        RUN_DIR / "ROUND44_STOP_REPORT.md",
+        RUN_DIR / "ROUND44_STOP_STATE.json",
+        RUN_DIR / "ROUND44_STOP_ARTIFACT_INVENTORY.json",
+        RUN_DIR / "ROUND44_EXECUTION_FAILURE_CAPTURE_SEED11_B0.txt",
+    )
+    protected_runtime_hashes = {str(path): sha256(path) for path in protected_runtime}
+    original_ledger_hash = sha256(RUN_DIR / "runtime" / "ROUND44_EXECUTION_LEDGER.json")
+    original_progress_hash = sha256(RUN_DIR / "runtime" / "ROUND44_EXECUTION_PROGRESS.json")
     counters_before = _counter_snapshot(runtime)
     ambient_before = _ambient_rng_hash(runtime)
     original_read = r44_execute.read
     original_loader = run.torch_load_cpu
+    original_jsonl = r44_execute._read_jsonl
+    original_writer = r44_execute._write_new_or_match
+    original_sha256 = r44_execute.sha256
     rejections: dict[str, str] = {}
+    new_episode = artifacts[0]
+    r43_row_path = Path(new_episode["row_path"]).resolve()
+    r44_row_path = (RUN_DIR / "rows" / r43_row_path.name.replace("v2_r43_", "v2_r44_")).resolve()
+    r43_tape_path = Path(new_episode["tape_path"]).resolve()
+    r44_tape_path = (RUN_DIR / "logs" / r43_tape_path.name.replace("v2_r43_", "v2_r44_")).resolve()
+    old_row_data = original_read(r43_row_path)
+    new_row_data = original_read(r44_row_path)
+    r44_lifecycle_path = Path(new_row_data["artefacts"]["lifecycle"]).resolve()
+
+    def reset_hooks() -> None:
+        r44_execute.read = original_read
+        r44_execute._read_jsonl = original_jsonl
+        r44_execute._write_new_or_match = original_writer
+        r44_execute.sha256 = original_sha256
+        run.torch_load_cpu = original_loader
+
+    def expect_rejection(label: str, expected_fragment: str, *,
+                         read_hook: Callable[[Path], Any] | None = None,
+                         jsonl_hook: Callable[[Path], Any] | None = None,
+                         loader_hook: Callable[[Path], Any] | None = None,
+                         sha_hook: Callable[[Path], str] | None = None) -> None:
+        r44_execute.read = read_hook or original_read
+        r44_execute._read_jsonl = jsonl_hook or original_jsonl
+        run.torch_load_cpu = loader_hook or original_loader
+        r44_execute.sha256 = sha_hook or original_sha256
+        try:
+            rejections[label] = _expect_comparator_rejection(
+                label, lambda: r44_execute._compare_first_batch(seed, runtime, gate),
+                expected_fragment)
+        finally:
+            reset_hooks()
 
     def altered_record(mutator: Callable[[dict[str, Any]], None]) -> Callable[[Path], Any]:
         def patched(path: Path) -> Any:
@@ -104,18 +161,15 @@ def _run_comparator_regression(runtime: dict[str, Any], gate: dict[str, Any]) ->
         return patched
 
     try:
-        r44_execute.read = altered_record(
-            lambda item: item["controller_parameters_after"].__setitem__(
-                "parameter_sha256", "0" * 64))
-        rejections["parameter"] = _expect_comparator_rejection(
-            "parameter", lambda: r44_execute._compare_first_batch(seed, runtime, gate),
-            "actor/optimizer parameter path differs")
-
-        r44_execute.read = altered_record(
-            lambda item: item["dual"].__setitem__("lambda_next", 9.0))
-        rejections["dual"] = _expect_comparator_rejection(
-            "dual", lambda: r44_execute._compare_first_batch(seed, runtime, gate),
-            "dual update did not isolate eta")
+        expect_rejection(
+            "parameter", "actor/optimizer parameter path differs",
+            read_hook=altered_record(
+                lambda item: item["controller_parameters_after"].__setitem__(
+                    "parameter_sha256", "0" * 64)))
+        expect_rejection(
+            "dual", "dual update did not isolate eta",
+            read_hook=altered_record(
+                lambda item: item["dual"].__setitem__("lambda_next", 9.0)))
 
         def altered_optimizer(path: Path) -> Any:
             payload = original_loader(path)
@@ -124,14 +178,127 @@ def _run_comparator_regression(runtime: dict[str, Any], gate: dict[str, Any]) ->
                 payload["optimizer"]["param_groups"][0]["lr"] += 1e-7
             return payload
 
-        r44_execute.read = original_read
-        run.torch_load_cpu = altered_optimizer
-        rejections["optimizer"] = _expect_comparator_rejection(
-            "optimizer", lambda: r44_execute._compare_first_batch(seed, runtime, gate),
-            "batch-zero optimizer state differs")
+        expect_rejection("optimizer", "batch-zero optimizer state differs",
+                         loader_hook=altered_optimizer)
+
+        signature_module = importlib.import_module("integrated_sar.run_signature")
+        lifecycle_records = original_jsonl(r44_lifecycle_path)
+        modified_config = copy.deepcopy(lifecycle_records[0]["detail"]["configuration"])
+        modified_config["comm_range"] = float(modified_config["comm_range"]) + 0.01
+        modified_hash = signature_module.config_hash(modified_config)
+
+        def changed_config_row(path: Path) -> Any:
+            value = original_read(path)
+            if Path(path).resolve() == r44_row_path:
+                value = copy.deepcopy(value)
+                value["config_hash"] = modified_hash
+            return value
+
+        def changed_config_lifecycle(path: Path) -> Any:
+            value = original_jsonl(path)
+            if Path(path).resolve() == r44_lifecycle_path:
+                value = copy.deepcopy(value)
+                value[0]["detail"]["configuration"]["comm_range"] = modified_config["comm_range"]
+                value[0]["detail"]["run_signature"]["config_hash"] = modified_hash
+            return value
+
+        expect_rejection(
+            "configuration", "run configuration has unregistered differences",
+            read_hook=changed_config_row, jsonl_hook=changed_config_lifecycle)
+
+        def changed_artifact_path(path: Path) -> Any:
+            value = original_read(path)
+            if Path(path).resolve() == r44_row_path:
+                value = copy.deepcopy(value)
+                value["artefacts"]["transcript"] = value["artefacts"]["lifecycle"]
+            return value
+
+        expect_rejection(
+            "artifact_path", "registered R43/R44 label pair", read_hook=changed_artifact_path)
+
+        r44_transcript_path = Path(new_row_data["artefacts"]["transcript"]).resolve()
+
+        def changed_transcript_hash(path: Path) -> str:
+            if Path(path).resolve() == r44_transcript_path:
+                return "0" * 64
+            return original_sha256(path)
+
+        expect_rejection(
+            "transcript", "R43/R44 transcript content differs",
+            sha_hook=changed_transcript_hash)
+
+        # A timing-only in-memory perturbation must pass through the actual comparator entry.
+        def changed_wallclock(path: Path) -> Any:
+            value = original_read(path)
+            if Path(path).resolve() == r44_row_path:
+                value = copy.deepcopy(value)
+                value["seconds"] += 100.0
+                value["collector_summary"]["timing"]["decide_milliseconds_per_call"] += 100.0
+            return value
+
+        r44_execute.read = changed_wallclock
+        r44_execute._write_new_or_match = lambda _path, _value: None
+        positive_timing = r44_execute._compare_first_batch(seed, runtime, gate)
+        if positive_timing.get("status") != "passed":
+            raise RuntimeError("timing-only row perturbation was not accepted by the new comparator")
+        reset_hooks()
+
+        def changed_row(mutator: Callable[[dict[str, Any]], None]) -> Callable[[Path], Any]:
+            def patched(path: Path) -> Any:
+                value = original_read(path)
+                if Path(path).resolve() == r44_row_path:
+                    value = copy.deepcopy(value)
+                    mutator(value)
+                return value
+            return patched
+
+        row_negatives = (
+            ("on_time", lambda row: row.__setitem__("on_time", int(row["on_time"]) + 1)),
+            ("task_set", lambda row: row["task_reward_events"][0].__setitem__("task_id", "tampered-task")),
+            ("cost", lambda row: row.__setitem__("spent_bytes", int(row["spent_bytes"]) + 1)),
+            ("task_reward", lambda row: row["task_stream"].__setitem__(
+                next(iter(row["task_stream"])), float(row["task_stream"][next(iter(row["task_stream"]))]) + 1.0)),
+            ("budget_mask", lambda row: row["collector_summary"]["timing"].__setitem__(
+                "masked_by_credit", int(row["collector_summary"]["timing"]["masked_by_credit"]) + 1)),
+            ("candidate_counter", lambda row: row["collector_summary"]["timing"][
+                "first_report_only_counts"].__setitem__(
+                    "first_report_candidates",
+                    int(row["collector_summary"]["timing"]["first_report_only_counts"][
+                        "first_report_candidates"]) + 1)),
+            ("decision_counter", lambda row: row["collector_summary"]["timing"].__setitem__(
+                "decisions", int(row["collector_summary"]["timing"]["decisions"]) + 1)),
+        )
+        for label, mutator in row_negatives:
+            expect_rejection(label, "pre-update rollout outcomes changed",
+                             read_hook=changed_row(mutator))
+
+        def changed_tape(mutator: Callable[[dict[str, Any]], None]) -> Callable[[Path], Any]:
+            def patched(path: Path) -> Any:
+                value = original_jsonl(path)
+                if Path(path).resolve() == r44_tape_path:
+                    value = copy.deepcopy(value)
+                    mutator(value[0])
+                return value
+            return patched
+
+        def change_action(tape: dict[str, Any]) -> None:
+            target = next(iter(tape["actions"]))
+            tape["actions"][target] = 0 if int(tape["actions"][target]) else 1
+
+        def change_probability(tape: dict[str, Any]) -> None:
+            target = next(iter(tape["send_probabilities"]))
+            before = float(tape["send_probabilities"][target])
+            tape["send_probabilities"][target] = before + 0.11 if before < 0.88 else before - 0.11
+
+        expect_rejection("action", "action/features/log-prob tape differs",
+                         jsonl_hook=changed_tape(change_action))
+        expect_rejection("probability", "action/features/log-prob tape differs",
+                         jsonl_hook=changed_tape(change_probability))
+        expect_rejection("likelihood", "action/features/log-prob tape differs",
+                         jsonl_hook=changed_tape(
+                             lambda tape: tape.__setitem__("log_prob", float(tape["log_prob"]) + 0.1)))
     finally:
-        r44_execute.read = original_read
-        run.torch_load_cpu = original_loader
+        reset_hooks()
 
     if _counter_snapshot(runtime) != counters_before:
         raise RuntimeError("ROUND44 comparator regression changed cumulative update/write counters")
@@ -140,18 +307,51 @@ def _run_comparator_regression(runtime: dict[str, Any], gate: dict[str, Any]) ->
     for path, expected in checkpoint_hashes_before.items():
         if sha256(Path(path)) != expected:
             raise RuntimeError(f"ROUND44 comparator regression changed a checkpoint: {path}")
-    for path, expected in row_tape_hashes_before.items():
+    for path, expected in protected_artifacts.items():
         if sha256(Path(path)) != expected:
-            raise RuntimeError(f"ROUND44 comparator regression changed a row/tape: {path}")
+            raise RuntimeError(f"ROUND44 comparator regression changed a saved run artifact: {path}")
+    for path, expected in protected_runtime_hashes.items():
+        if sha256(Path(path)) != expected:
+            raise RuntimeError(f"ROUND44 comparator regression changed an original stop/R1 file: {path}")
+    if (sha256(RUN_DIR / "runtime" / "ROUND44_EXECUTION_LEDGER.json") != original_ledger_hash
+            or sha256(RUN_DIR / "runtime" / "ROUND44_EXECUTION_PROGRESS.json")
+            != original_progress_hash):
+        raise RuntimeError("ROUND44 comparator regression changed original ledger/progress")
+    actual_episode_metadata = real_comparison.get("episodes", [])
+    if (len(actual_episode_metadata) != 4
+            or any(item.get("metadata_reconciliation", {}).get(
+                "run_configuration_differing_fields") != ["comm_transcript", "output"]
+                   for item in actual_episode_metadata)
+            or any(item.get("metadata_reconciliation", {}).get(
+                "registered_row_label_change", [None, None])[0]
+                   == item.get("metadata_reconciliation", {}).get(
+                       "registered_row_label_change", [None, None])[1]
+                   for item in actual_episode_metadata)):
+        raise RuntimeError("ROUND44 real comparator did not accept only the registered label/output changes")
+    if positive_timing.get("projection_version") != "round44-row-projection/2":
+        raise RuntimeError("ROUND44 wall-clock positive did not use the R2 projection")
     result = {
-        "kind": "round44-comparator-regression/1", "status": "passed",
+        "kind": "round44-comparator-regression/2", "status": "passed",
         "tested_entry": "r44_execute._compare_first_batch(seed=11) with committed batch0",
-        "expected_rejections": ["parameter", "dual", "optimizer"],
+        "projection_version": "round44-row-projection/2",
+        "expected_rejections": [
+            "parameter", "dual", "optimizer", "configuration", "artifact_path", "transcript",
+            "on_time", "task_set", "cost", "task_reward", "budget_mask",
+            "candidate_counter", "decision_counter", "action", "probability", "likelihood",
+        ],
         "rejection_messages": rejections,
+        "accepted_wallclock_timing_perturbation": {
+            "status": "passed", "seconds_delta": 100.0,
+            "decide_milliseconds_per_call_delta": 100.0,
+            "writer_suppressed_only_for_synthetic_in_memory_call": True,
+        },
+        "accepted_real_registered_row_labels_and_output_paths": [
+            item["metadata_reconciliation"] for item in actual_episode_metadata
+        ],
         "counters_before": counters_before, "counters_after": _counter_snapshot(runtime),
         "ambient_rng_hash_before": ambient_before,
         "ambient_rng_hash_after": _ambient_rng_hash(runtime),
-        "immutable_row_tape_checkpoint_hashes_unchanged": True,
+        "immutable_row_tape_lifecycle_transcript_checkpoint_stop_r1_hashes_unchanged": True,
         "environment_starts": 0, "optimizer_steps": 0, "checkpoint_writes": 0,
     }
     write_new(COMPARATOR_TEST_PATH, result)
@@ -318,7 +518,7 @@ def _exact_restore_gate(runtime: dict[str, Any], frozen: dict[str, Any]) -> dict
         raise RuntimeError("ROUND44 read-only precheck module hashes disagree with actual restore")
 
     return {
-        "kind": "round44-exact-resume-gate/1", "status": "passed",
+        "kind": "round44-exact-resume-gate/2", "status": "passed",
         "training_seed": 11, "episodes_done": 4, "updates": 1,
         "optimizer_steps_saved": 12, "lambda": 1.125,
         "eta_lambda": 0.5, "training_version": TRAINING_VERSION,
@@ -365,6 +565,7 @@ def run_read_only_gates() -> dict[str, Any]:
         raise RuntimeError("ROUND44 saved batch0 did not pass the actual first-batch gate")
     comparison = r44_execute._compare_first_batch(11, runtime, gate)
     if (comparison.get("status") != "passed"
+            or comparison.get("projection_version") != "round44-row-projection/2"
             or comparison.get("actor_lambda_before") != 1.0
             or comparison.get("r44_eta_lambda") != 0.5
             or comparison.get("r43_eta_lambda") != 0.05
@@ -374,7 +575,7 @@ def run_read_only_gates() -> dict[str, Any]:
             or comparison.get("postupdate_optimizer_state_equal") is not True
             or comparison.get("postupdate_parameters_equal") is not True):
         raise RuntimeError("ROUND44 first-batch comparison did not isolate eta at batch end")
-    comparator_regression = _run_comparator_regression(runtime, gate)
+    comparator_regression = _run_comparator_regression(runtime, gate, comparison)
     if _ambient_rng_hash(runtime) != ambient_hash_before:
         raise RuntimeError("ROUND44 comparator/gate changed ambient RNG before exact restore")
 
@@ -431,7 +632,7 @@ def run_read_only_gates() -> dict[str, Any]:
     if source_regression.get("status") != "passed":
         raise RuntimeError("previous R43 report/source identity positive-negative gate is missing")
     ready = {
-        "kind": "round44-resume-ready/1", "status": "passed",
+        "kind": "round44-resume-ready/2", "status": "passed",
         "mechanical_version": MECHANICAL_VERSION,
         "state_bridge_version": STATE_BRIDGE_VERSION,
         "execution_head": head,
@@ -440,6 +641,9 @@ def run_read_only_gates() -> dict[str, Any]:
             RUN_DIR / "runtime" / "ROUND44_PRELAUNCH_IDENTITY.json"),
         "original_prelaunch_head": original_identity["head"],
         "state_whitelist_sha256": sha256(WHITELIST_PATH),
+        "r1_identity_sha256": sha256(R1_IDENTITY_PATH),
+        "old_projection_evidence_sha256": sha256(OLD_PROJECTION_PATH),
+        "source_config_reconciliation_sha256": sha256(SOURCE_CONFIG_RECONCILIATION_PATH),
         "state_whitelist": immutable_state_before["permitted_resume"],
         "exact_resume_gate_sha256": sha256(GATE_PATH),
         "comparator_regression_sha256": sha256(COMPARATOR_TEST_PATH),
