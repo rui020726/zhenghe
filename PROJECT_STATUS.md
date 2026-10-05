@@ -1,5 +1,7 @@
 # 项目状态
 
+## 2026-10-05：ROUND44 精确续执行进行中——当前入口见 `runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json` 与完整续执行依据 `runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_CONTINUATION_BASIS.md`；仅在同轮授权下修复比较器并从 seed11 ep4 恢复。
+
 ## 2026-10-03：ROUND42-R 固定计划续执行复核暂停在 seed 11 首批 gate
 
 续执行依据与本轮详细复核见 `runs/comm_one_shot_report_selection_20261003_r/ROUND42R_FIXED_PLAN_CONTINUATION_REVIEW.md`。现有账本为 68 个 normal claim（含 ROUND42 原失败）、1 个 reserve claim、69 次构造、68 次 `run()`、68,000 步、1 次 PPO 更新和 12 次 Adam step。64 个 immediate reference 完成；seed 11 前四集已运行并提交更新，但首批 gate 因 Windows 路径分隔符比较失败。独立只读核对发现归一化后的 PILOC/CTDE 路径、批记录与文件 SHA256 相符；原 gate 仍保留 `failed`，没有手工改成通过。seed 11 rolling checkpoint 含完整 optimizer 与 RNG 状态，但本轮未恢复或续训。原入口禁止隐式恢复且当前 HEAD 已晚于预启动 HEAD，因此没有绕过冻结门禁继续运行。此次复核新增环境启动、训练更新与 checkpoint 写回均为 0；没有推送。

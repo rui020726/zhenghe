@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
 import os
 import subprocess
@@ -12,6 +13,9 @@ from typing import Any
 
 from r44_eval_index import create_claim_artifact_receipt
 from r44_prepare import RUN_DIR, ROOT, R43_DIR, TRAINING_VERSION, RUNNER_VERSION, ETA_NEW
+from r44_resume_bridge import (
+    BASE_EXECUTION_HEAD, verify_resume_ready,
+)
 
 
 INPUT_ROOT = ROOT.parent / "zhenghe"
@@ -42,7 +46,7 @@ def _read(path: Path) -> Any:
 
 
 def verify_frozen_source(frozen: dict[str, Any]) -> str:
-    """Check committed R44 code/config identities before each atomic environment claim."""
+    """Check the original science freeze and the narrowly authorized R44 resume identity."""
     if frozen.get("status") != "prelaunch_frozen":
         raise RuntimeError("ROUND44 configuration is not in prelaunch_frozen state")
     if not PRELAUNCH_PATH.is_file():
@@ -50,16 +54,34 @@ def verify_frozen_source(frozen: dict[str, Any]) -> str:
     receipt = _read(PRELAUNCH_PATH)
     head = _git("rev-parse", "HEAD")
     branch = _git("branch", "--show-current")
-    if head != receipt.get("head") or branch != "exp/comm-dual-response-ablation":
-        raise RuntimeError("ROUND44 branch/HEAD differs from the committed prelaunch identity")
+    if branch != "exp/comm-dual-response-ablation":
+        raise RuntimeError("ROUND44 branch differs from the committed prelaunch identity")
     if _git("status", "--porcelain"):
         raise RuntimeError("ROUND44 tracked worktree is dirty; refusing an environment claim")
-    if receipt.get("branch") != branch or receipt.get("status") != "passed":
+    if receipt.get("branch") != branch or receipt.get("status") != "passed" \
+            or receipt.get("head") != BASE_EXECUTION_HEAD:
         raise RuntimeError("ROUND44 prelaunch receipt branch/status mismatch")
-    for relative, expected in receipt.get("source_code_sha256", {}).items():
-        path = RUN_DIR / relative
-        if not path.is_file() or _sha256(path) != expected:
-            raise RuntimeError(f"ROUND44 frozen executor source changed: {relative}")
+    if head == receipt.get("head"):
+        for relative, expected in receipt.get("source_code_sha256", {}).items():
+            path = RUN_DIR / relative
+            if not path.is_file() or _sha256(path) != expected:
+                raise RuntimeError(f"ROUND44 frozen executor source changed: {relative}")
+    else:
+        resume_identity = verify_resume_ready(frozen, head)
+        changed_sources = {"r44_execute.py", "r44_runtime.py"}
+        for relative, expected in receipt.get("source_code_sha256", {}).items():
+            if relative in changed_sources:
+                continue
+            object_path = f"runs/{RUN_DIR.name}/{relative}"
+            committed = subprocess.run(
+                ["git", "-C", str(ROOT), "show", f"{BASE_EXECUTION_HEAD}:{object_path}"],
+                check=True, capture_output=True).stdout
+            if hashlib.sha256(committed).hexdigest() != expected:
+                raise RuntimeError(f"ROUND44 original frozen source object changed: {relative}")
+        if (resume_identity.get("head") != head
+                or resume_identity.get("state_bridge_version")
+                != "round44-exact-resume-state-bridge/1"):
+            raise RuntimeError("ROUND44 mechanical resume identity is not the exact-state bridge")
     for name, path in (
         ("frozen_config_sha256", RUN_DIR / "ROUND44_FROZEN_CONFIG.json"),
         ("configuration_diff_sha256", RUN_DIR / "ROUND44_CONFIGURATION_DIFF.json"),

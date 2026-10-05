@@ -1,0 +1,208 @@
+{
+  "kind": "round44-exact-resume-state-bridge/1",
+  "status": "sealed_for_ep4_only",
+  "base_execution_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
+  "stop_head_before_mechanical_fix": "2af9f7e66982eb046725057e026c05512b788169",
+  "branch": "exp/comm-dual-response-ablation",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/published-completion-event-at-relay-tick/2",
+  "runner_version": "counted-jointrun-proxy/1+eval-key-index/1",
+  "permitted_resume": {
+    "training_seed": 11,
+    "batch": 0,
+    "episodes_done": 4,
+    "updates": 1,
+    "optimizer_steps": 12,
+    "lambda": 1.125,
+    "eta_lambda": 0.5,
+    "parameter_sha256": "db8a462b9f36ee6c75de04c0dc34d5e98c06f566aee80153d58cdc6463a58bdb",
+    "postupdate_checkpoint_sha256": "42a5160ead497ef3ce5dcb2e9783fe094b30f6a1f245630149bdde2c75946d25"
+  },
+  "dual_history": {
+    "lambda_before": 1.0,
+    "g_hat": 0.25,
+    "eta": 0.5,
+    "lambda_next": 1.125,
+    "delta": 0.0
+  },
+  "accounting_before_resume": {
+    "normal_used": 4,
+    "reserve_used": 0,
+    "completed_steps": 4000,
+    "ppo_update_calls": 1,
+    "optimizer_step_calls": 12,
+    "checkpoint_write_calls": 4,
+    "hard_cap": 504
+  },
+  "immutable_artifacts": {
+    "ROUND44_STATUS.json": {
+      "sha256": "a86382bea1d0b550907a78f4b554bec0d7224e63c5f398f4a33143a864a534fe",
+      "size_bytes": 1918
+    },
+    "ROUND44_STOP_REPORT.md": {
+      "sha256": "f5479320217482df1de85d28cf0f71ea256a1eb234375ab964c04c14cfa48ded",
+      "size_bytes": 4164
+    },
+    "ROUND44_STOP_STATE.json": {
+      "sha256": "1758b876ee24d0e0f191faf55f91df7074d3db90b82b63d05e9982f183d326ec",
+      "size_bytes": 4608
+    },
+    "ROUND44_STOP_ARTIFACT_INVENTORY.json": {
+      "sha256": "bcc2c8c7ea56b3135a50f9d995aebf9999d7094e658b933b3361d87bc1ad4225",
+      "size_bytes": 7625
+    },
+    "ROUND44_EXECUTION_FAILURE_CAPTURE_SEED11_B0.txt": {
+      "sha256": "2d5c0768a99f26ee0879802d87e12a2517858acae80d931eef1b6653cc0f979c",
+      "size_bytes": 1445
+    },
+    "ROUND44_FROZEN_CONFIG.json": {
+      "sha256": "354b2d4441ec1d4ce8d4aa6ba6f79b29d4cba17c82d525f2a566a68c4e5190ed",
+      "size_bytes": 57924
+    },
+    "runtime/ROUND44_PRELAUNCH_IDENTITY.json": {
+      "sha256": "c361ecf64aead48d8511f30083eef6a1eb7182923a30353e9ce81a6b5c8392c3",
+      "size_bytes": 7125
+    },
+    "checkpoints/r40_batch_commit_s11_b0.json": {
+      "sha256": "cb36d235cdcb59c2903082fcdc7cd8d8463d245633938e674fd213b707c1aa9c",
+      "size_bytes": 1653
+    },
+    "checkpoints/r40_batch_s11_b0_attempt01.json": {
+      "sha256": "3175966ba0cc4b3ac3820645f2435f6bfcb8b58ad7783ca0ea06444573b35c30",
+      "size_bytes": 7848
+    },
+    "checkpoints/v2_train_s11_before_b0.pt": {
+      "sha256": "bd7be8e68bf1acaee8d4e09ffc597b1b28f8e27835bf0fbb0a4acfe157c9b26d",
+      "size_bytes": 57477
+    },
+    "checkpoints/v2_train_s11_after_b0.pt": {
+      "sha256": "42a5160ead497ef3ce5dcb2e9783fe094b30f6a1f245630149bdde2c75946d25",
+      "size_bytes": 111531
+    },
+    "checkpoints/v2_train_s11_ep0.pt": {
+      "sha256": "bd7be8e68bf1acaee8d4e09ffc597b1b28f8e27835bf0fbb0a4acfe157c9b26d",
+      "size_bytes": 57477
+    },
+    "training_reports/ROUND44_SEED11_FIRST4.json": {
+      "sha256": "077377be3fa0f25f4693078a0fd717386b104463105a818b4e418cc21a8dde21",
+      "size_bytes": 845
+    },
+    "launch_slots/normal/0001.json": {
+      "sha256": "3b4c11ff930056186dba358e12769300343155404755f09d0d8816b5870f492f",
+      "size_bytes": 137
+    },
+    "launch_claims/new_training_s11_e0/attempt_0001.json": {
+      "sha256": "018d9db3bb732ae7d14ca9877af8906d1083257106be618892ab2bfc2b6e968c",
+      "size_bytes": 1209
+    },
+    "launch_slots/normal/0002.json": {
+      "sha256": "63a870e0c92062fb204ec27c03bda1cd00e2e4d7b972a866ccbc095d27295aab",
+      "size_bytes": 137
+    },
+    "launch_claims/new_training_s11_e1/attempt_0001.json": {
+      "sha256": "d158e8eb616bdf2294e2e90aae20b1fabe9c5584b7db18e771cc765869b3d98a",
+      "size_bytes": 1207
+    },
+    "launch_slots/normal/0003.json": {
+      "sha256": "b894ca16483f2c8a0a3c853a8e20e08a53c71cc34bb6a5926ab7f8925b749afc",
+      "size_bytes": 137
+    },
+    "launch_claims/new_training_s11_e2/attempt_0001.json": {
+      "sha256": "76bcc5fc1f3c998958b009b4d06c86c438cfb2f1795fdc5257f68acc82911749",
+      "size_bytes": 1206
+    },
+    "launch_slots/normal/0004.json": {
+      "sha256": "e52b0463f62eccec091794bb7d99860733bb458bb6ff9914ec6a4e953bdec672",
+      "size_bytes": 137
+    },
+    "launch_claims/new_training_s11_e3/attempt_0001.json": {
+      "sha256": "3f42628962f216c8d3b5d9fc38892e34b50e90e89283b9d5b25b9cc1854931ed",
+      "size_bytes": 1206
+    },
+    "rows/v2_r44_train_s11_e0_s1300027_a1.json": {
+      "sha256": "dae84c591f6298a728f29662a5b87da246d8772508980c706ba92341c49eae2c",
+      "size_bytes": 341736
+    },
+    "logs/v2_r44_train_s11_e0_s1300027_a1_tape.jsonl": {
+      "sha256": "9d876413d802bcee7f933f01d4faac1d6d6125abd089b4dc5cd5317d374a76e2",
+      "size_bytes": 209420
+    },
+    "rows/v2_r44_train_s11_e1_s1300014_a1.json": {
+      "sha256": "9c3e2e61116eb0bfb105d9087f4e87a0299cb2be7652e3d488673204386c8f2b",
+      "size_bytes": 341148
+    },
+    "logs/v2_r44_train_s11_e1_s1300014_a1_tape.jsonl": {
+      "sha256": "7290075d92cb9259cc04eefae4156b0bd55e253330c72496b1f889b19951b72d",
+      "size_bytes": 942199
+    },
+    "rows/v2_r44_train_s11_e2_s1300028_a1.json": {
+      "sha256": "b314307410883bc8d0baff3b8c3c5b604f2dca5951bf925664a9cc1101d1729e",
+      "size_bytes": 341071
+    },
+    "logs/v2_r44_train_s11_e2_s1300028_a1_tape.jsonl": {
+      "sha256": "4ba200b00c7a35e7f45bf72da7e2c7df20017c7b33bbb6c31d69de3a82310d0e",
+      "size_bytes": 246691
+    },
+    "rows/v2_r44_train_s11_e3_s1300044_a1.json": {
+      "sha256": "bc1caaf02ee36a557b0e9a414333ff477ec5b36522502bbbbad08a4cac3adfc5",
+      "size_bytes": 341602
+    },
+    "logs/v2_r44_train_s11_e3_s1300044_a1_tape.jsonl": {
+      "sha256": "8e7ae00c7bed7637e3b4cda43b61700c1e0d1f64aaf40fe038a410a18a70831b",
+      "size_bytes": 170349
+    }
+  },
+  "preserved_mutable_state_snapshots": {
+    "manifest_path": "runtime/ROUND44_PRE_RESUME_R1_SNAPSHOT_MANIFEST.json",
+    "manifest_sha256": "65348220c10e8c9158cf994e991eb2019bb6e99771a117a752d57c879450891e",
+    "snapshot_files": {
+      "runtime/ROUND44_EXECUTION_LEDGER.json": {
+        "sha256": "e892e452a4802a10347b84b6d4a315109e5be7ae0e25036979348802c0f0a32f",
+        "size_bytes": 7279
+      },
+      "runtime/ROUND44_EXECUTION_PROGRESS.json": {
+        "sha256": "6738d2b61251d2b1edf418ab4aed2252bc9bfa30825786328c8bf8c7df049841",
+        "size_bytes": 250
+      },
+      "runtime/optimizer_step_calls.jsonl": {
+        "sha256": "c6742d3a5f42bf9cf6194e6bd009d470553c2bf1252e85abf28c0347af3c7a9c",
+        "size_bytes": 2017
+      },
+      "runtime/ppo_update_calls.jsonl": {
+        "sha256": "886c34d84549cc614819aee611d1024ac6140b09b39cd428e9fe5e98e42e927b",
+        "size_bytes": 165
+      },
+      "runtime/checkpoint_writes.jsonl": {
+        "sha256": "6403b7ec9b968290146bd4d365c5a0f341218550738dca46f70cdcc730183d91",
+        "size_bytes": 1701
+      },
+      "checkpoints/v2_train_s11.pt": {
+        "sha256": "42a5160ead497ef3ce5dcb2e9783fe094b30f6a1f245630149bdde2c75946d25",
+        "size_bytes": 111531
+      }
+    }
+  },
+  "original_prelaunch_receipt_sha256": "c361ecf64aead48d8511f30083eef6a1eb7182923a30353e9ce81a6b5c8392c3",
+  "original_frozen_config_sha256": "354b2d4441ec1d4ce8d4aa6ba6f79b29d4cba17c82d525f2a566a68c4e5190ed",
+  "original_prelaunch_source_code_sha256": {
+    "EXECUTION_BASIS.md": "bc60e096b0bfcd08b202c69f20b8a5d4cc1a58ff9118d1e13d6385f80d37c584",
+    "r42_versions.py": "26b9e1a3d4f3b9a5d39ca020a5ebd3653615c09a76a77ae4138f4ab98420a3d8",
+    "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+    "r40_train_resume_adapter.py": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+    "r43_call_counter_hooks.py": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
+    "r44_eval_index.py": "4e7d23505c06083a91738e2b88a36cbc0a9cb325e81631443c453360d3562546",
+    "test_r44_eval_index.py": "fffe671c6cf4add3fcff9e1836b606f2884a73776bcc9969bc147336d83f4d16",
+    "r44_prepare.py": "00454502ef5cee97d3592eb09dba53673ed421168f84eda27893fca2934b0124",
+    "r44_runtime.py": "8fce8772c1bad04a4bc2acdb590e95de491dcbc4b0c21119a91a5842dd461177",
+    "r44_preflight.py": "85a7aa71f50818164faf7974ce18a654ffd5b76ec75439353b9a88bedbdbc247",
+    "r44_analysis.py": "b451f913a35c25e114ca8afc0896dff8ab76c0ed45633b2ba4a7fbfbcdd59e19",
+    "r44_report.py": "1adcad2b2fe88326df37c92a2bbafc22d07bf8a84db21dc4b89846d0be7206e6",
+    "r44_execute.py": "50b7fc3d9fae214ece96fa528c63443f266049a81bea62cff6d901b8013bb2a1"
+  },
+  "not_permitted": [
+    "ROUND43 or other seed checkpoints as resume input",
+    "any checkpoint other than the exact seed11 ep4/update1 state",
+    "replay of seed11 batch zero",
+    "fresh seed11 training state",
+    "change to scientific training version or eta_lambda"
+  ]
+}

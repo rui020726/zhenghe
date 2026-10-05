@@ -17,6 +17,9 @@ from r44_eval_index import (SCENES, SEEDS, MODES, audit_fixed_matrix,
 from r44_prepare import (RUN_DIR, ROOT, R43_DIR, TRAINING_VERSION, RUNNER_VERSION,
                          prepare, read, sha256, verify_r43_source_identity, write_new)
 from r44_runtime import PRELAUNCH_PATH, configure, verify_frozen_source
+from r44_resume_bridge import (
+    RESUME_PROGRESS_PATH, verify_pre_resume_state, verify_resume_ready,
+)
 
 
 CODE_FILES = (
@@ -189,9 +192,9 @@ def _compare_first_batch(seed: int, runtime: dict[str, Any], gate: dict[str, Any
             or sha256(new_postupdate) != commit["postupdate_checkpoint_sha256"]):
         raise RuntimeError(f"seed {seed}: postupdate checkpoint hash did not match its commit")
     old_optimizer_hash = runtime["r40_train"]._state_hash(
-        run_module.torch_load_cpu(old_postupdate)["optimizer"])
+        run.torch_load_cpu(old_postupdate)["optimizer"])
     new_optimizer_hash = runtime["r40_train"]._state_hash(
-        run_module.torch_load_cpu(new_postupdate)["optimizer"])
+        run.torch_load_cpu(new_postupdate)["optimizer"])
     if old_optimizer_hash != new_optimizer_hash:
         raise RuntimeError(f"seed {seed}: batch-zero optimizer state differs from R43")
     old_dual, new_dual = old_record["dual"], new_record["dual"]
@@ -357,6 +360,7 @@ def _release_lock(path: Path) -> None:
 def run() -> dict[str, Any]:
     frozen = read(RUN_DIR / "ROUND44_FROZEN_CONFIG.json")
     current_head = verify_frozen_source(frozen)
+    verify_resume_ready(frozen, current_head)
     lock = _acquire_lock(current_head)
     try:
         runtime = configure(frozen)
@@ -367,7 +371,9 @@ def run() -> dict[str, Any]:
         order = [int(value) for value in common.scenario_order()]
         if order != [int(value) for value in frozen["round42"]["training_order"]]:
             raise RuntimeError("ROUND44 actual scenario order differs from the committed freeze")
-        progress_path = RUN_DIR / "runtime" / "ROUND44_EXECUTION_PROGRESS.json"
+        original_progress_path = RUN_DIR / "runtime" / "ROUND44_EXECUTION_PROGRESS.json"
+        resuming = (RUN_DIR / "runtime" / "ROUND44_RESUME_EXECUTION_IDENTITY_R1.json").is_file()
+        progress_path = RESUME_PROGRESS_PATH if resuming else original_progress_path
         if progress_path.is_file():
             progress = read(progress_path)
             if progress.get("prelaunch_head") != current_head:
@@ -375,9 +381,13 @@ def run() -> dict[str, Any]:
             if progress.get("status") == "complete":
                 raise RuntimeError("ROUND44 progress is already complete; inspect report-only outputs")
         else:
+            if resuming:
+                verify_pre_resume_state(frozen, current_head)
             progress = {
-                "kind": "round44-execution-progress/1", "status": "running",
-                "prelaunch_head": current_head, "started_at_unix": time.time(),
+                "kind": "round44-execution-progress-resume-r1/1",
+                "status": "running", "prelaunch_head": current_head,
+                "resume_bridge": "round44-exact-resume-state-bridge/1",
+                "started_at_unix": time.time(),
                 "training": {}, "evaluations_completed": 0, "completed_eval_keys": [],
             }
         run_module.write_execution_ledger(strict=True)
@@ -584,7 +594,9 @@ def run() -> dict[str, Any]:
             "report_path": report["path"], "report_sha256": report["sha256"],
             "raw_artifact_count": raw_manifest["raw_files_count"],
         }
-        _write_atomic(RUN_DIR / "ROUND44_STATUS.json", status)
+        status["stop_record_preserved"] = str(RUN_DIR / "ROUND44_STOP_REPORT.md")
+        status["resume_bridge"] = "round44-exact-resume-state-bridge/1"
+        _write_new_or_match(RUN_DIR / "ROUND44_STATUS_COMPLETE_R1.json", status)
         return {"progress": progress, "ledger": ledger, "analysis": analysis,
                 "report": report, "eval_audit": eval_audit, "status": status}
     finally:
