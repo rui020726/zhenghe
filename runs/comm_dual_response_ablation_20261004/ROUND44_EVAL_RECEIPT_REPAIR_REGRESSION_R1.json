@@ -6,7 +6,8 @@
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_index.py",
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
     ],
-    "status": "passed after receipt-resume comparator and claim reconciliation changes"
+    "status": "passed after receipt-resume comparator and claim reconciliation changes",
+    "claim_queue_revision_status": "passed for r44_eval_resume.py and test_r44_eval_resume.py"
   },
   "immutable_input_manifest_sha256": "b3bb6f7c2488b2acb03f467c799b6eb74554795cf9041eb30529031774a3ebeb",
   "kind": "round44-eval-receipt-repair-regression/1",
@@ -64,7 +65,10 @@
     "preserved_prepatch_implementation_rejects_actual_tuple_list_row": "passed",
     "r4_original_freeze_to_execution_source_layer_validation": "passed; exactly r44_execute.py and r44_runtime.py differ under the R4 identity",
     "retry_queue_advances_to_first_remaining_fixed_cell": "passed",
-    "tuple_list_json_arrays_round_trip": "passed"
+    "tuple_list_json_arrays_round_trip": "passed",
+    "actual_installed_claim_guard_three_normal_keys": "passed; actual installer and returned run_module._claim exercised with only base claim mocked",
+    "claim_cursor_rejects_wrong_order_duplicate_exhaustion": "passed; no unexpected base claim reached",
+    "claim_cursor_is_fixed_list_single_advance": "passed; three verified completions advance cursor 0→1→2→3 without pop"
   },
   "scope_limit": "Pure synthetic index/schedule/guard tests only; this is not a real-environment or post-repair simulation passivity test.",
   "side_effect_counts": {
@@ -93,7 +97,7 @@
       "status": "failed_before_read_only_model_gate"
     }
   ],
-  "status": "passed_repair_tests_pending_R2_identity_and_remaining_evaluation",
+  "status": "R3_queue_guard_regression_passed_source_identity_and_95_eval_pending",
   "targeted_test_runs": [
     {
       "command": "D:\\project_env\\python.exe -m unittest discover -s runs/comm_dual_response_ablation_20261004 -p test_r44_eval_index.py -v",
@@ -150,14 +154,15 @@
     "tests_failed": 0,
     "excluded_test": "test_actual_failed_attempt1_row_is_not_admitted_by_actual_index",
     "reason": "its old assertion requires completed_count==0; after the valid reserve attempt2, the correct strict index count is 1. The synthetic failed-attempt-only test still passes.",
-    "pre_retry_full_index_suite": "17/17 passed before the reserve attempt2 was run"
+    "pre_retry_full_index_suite": "17/17 passed before the reserve attempt2 was run",
+    "status": "passed after attempt2; 16 state-independent tests rerun"
   },
   "post_retry_eval_resume_suite": {
     "module": "test_r44_eval_resume.py",
-    "tests_run": 16,
+    "tests_run": 17,
     "failures": 0,
     "errors": 0,
-    "status": "passed"
+    "status": "passed after R3 fixed-list/single-cursor change"
   },
   "eval_execution_side_effects": {
     "new_environment_starts": 1,
@@ -173,11 +178,56 @@
     "training_journal_hashes_changed": false
   },
   "resume_identity_transition": {
-    "prior_execution_head": "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
-    "prior_R1_gate_and_identity_preserved": true,
-    "prior_R1_progress_preserved": true,
-    "next_identity_version": "R2",
-    "new_progress_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EXECUTION_PROGRESS_EVAL_R2.json",
-    "source_chain_includes_prior_execution_identity": true
+    "R1_identity_commit": "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
+    "receipt_resume_source_commit": "c18e7d6564aac132104649dc18c3ab52acb76023",
+    "R2_identity_commit": "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
+    "R2_gate_and_identity_preserved": true,
+    "R1_and_R2_progress_paths_preserved": true,
+    "R2_progress_path_was_absent": true,
+    "queue_source_parent": "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
+    "next_identity_version": "R3",
+    "new_progress_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EXECUTION_PROGRESS_EVAL_R3.json",
+    "completed_attempt2_receipt_sha256": "9acc52b91428fce0c9ccc7478b7df43a324b6664cac11918e14caf23ccb70eda",
+    "remaining_normal_cells": 95,
+    "R3_identity_status": "pending source commit and gate creation"
+  },
+  "claim_queue_cursor_regression": {
+    "expected_keys": [
+      [
+        11,
+        "greedy",
+        1301001
+      ],
+      [
+        11,
+        "greedy",
+        1301002
+      ],
+      [
+        11,
+        "greedy",
+        1301003
+      ]
+    ],
+    "accepted_in_order": 3,
+    "wrong_order_rejection": true,
+    "duplicate_rejection": true,
+    "schedule_exhaustion_rejection": true,
+    "mock_base_claim_calls": 3,
+    "identity_validator_calls": 6,
+    "real_environment_constructors": 0,
+    "real_JointRun_constructions": 0,
+    "run_calls": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0,
+    "status": "passed"
+  },
+  "r3_queue_revision_side_effects": {
+    "environment_starts": 0,
+    "environment_constructors": 0,
+    "JointRun_constructions": 0,
+    "run_calls": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0
   }
 }

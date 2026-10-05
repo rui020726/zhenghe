@@ -28,7 +28,7 @@ class _Index:
 
 
 class EvalScheduleTests(unittest.TestCase):
-    def test_source_identity_uses_four_exact_mechanical_revisions(self):
+    def test_source_identity_uses_exact_preserved_and_current_revisions(self):
         self.assertEqual(
             resume.BASE_STOP_HEAD,
             "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
@@ -49,6 +49,14 @@ class EvalScheduleTests(unittest.TestCase):
             resume.PRIOR_EXECUTION_COMMIT,
             "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
         )
+        self.assertEqual(
+            resume.RECEIPT_RESUME_SOURCE_HEAD,
+            "c18e7d6564aac132104649dc18c3ab52acb76023",
+        )
+        self.assertEqual(
+            resume.R2_EXECUTION_IDENTITY_HEAD,
+            "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
+        )
         self.assertEqual(resume.IDENTITY_ALLOWED_PATHS_R1, {
             f"{resume.RUN_REL}/runtime/ROUND44_EVAL_ONLY_GATE_R1.json",
             f"{resume.RUN_REL}/runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R1.json",
@@ -67,12 +75,15 @@ class EvalScheduleTests(unittest.TestCase):
                          resume.SOURCE_REVISION_ALLOWED_PATHS)
         self.assertEqual(resume.SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS,
                          resume.SOURCE_REVISION_ALLOWED_PATHS)
+        self.assertEqual(resume.SOURCE_CLAIM_QUEUE_REVISION_ALLOWED_PATHS,
+                         resume.SOURCE_REVISION_ALLOWED_PATHS)
         self.assertEqual(
             resume.SOURCE_ALLOWED_PATHS,
             resume.INITIAL_SOURCE_ALLOWED_PATHS
             | resume.SOURCE_REVISION_ALLOWED_PATHS
             | resume.SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS
-            | resume.SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS,
+            | resume.SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS
+            | resume.SOURCE_CLAIM_QUEUE_REVISION_ALLOWED_PATHS,
         )
 
     def test_eval_row_comparison_uses_strict_persisted_json_array_semantics(self):
@@ -218,15 +229,64 @@ class EvalScheduleTests(unittest.TestCase):
         self.assertEqual(completed_retry[0], (11, "greedy", 1_301_001))
 
     def test_queue_advances_from_retry_to_next_fixed_cell(self):
-        queue = resume._make_claim_guard_queue(_Index())
-        resume._consume_claim_queue_key(queue, resume.RETRY_KEY)
-        self.assertEqual(queue[0], (11, "greedy", 1_301_001))
-        self.assertEqual(len(queue), 95)
+        cursor = {"index": 0, "keys": resume._make_claim_guard_queue(_Index())}
+        resume._consume_claim_queue_key(cursor, resume.RETRY_KEY)
+        self.assertEqual(cursor["keys"][cursor["index"]], (11, "greedy", 1_301_001))
+        self.assertEqual(len(cursor["keys"]), 96)
+        self.assertEqual(cursor["index"], 1)
 
     def test_queue_rejects_consumption_out_of_order(self):
-        queue = resume._make_claim_guard_queue(_Index())
+        cursor = {"index": 0, "keys": resume._make_claim_guard_queue(_Index())}
         with self.assertRaises(resume.EvalResumeError):
-            resume._consume_claim_queue_key(queue, (11, "greedy", 1_301_001))
+            resume._consume_claim_queue_key(cursor, (11, "greedy", 1_301_001))
+
+    def test_actual_installed_claim_guard_advances_one_fixed_cursor_only(self):
+        schedule = resume.evaluation_schedule()
+        keys = list(schedule[1:4])
+        self.assertEqual(len(keys), 3)
+        self.assertTrue(all(key != resume.RETRY_KEY for key in keys))
+        self.assertEqual(keys, sorted(keys, key=schedule.index))
+        base_calls = []
+
+        def base_claim(logical_job, *, attempt, metadata):
+            base_calls.append((logical_job, attempt, metadata["scenario_seed"]))
+            return Path(f"mock-claim-{metadata['scenario_seed']}.json")
+
+        run_module = SimpleNamespace(_claim=base_claim)
+        runtime = {}
+        validator_calls = []
+        cursor = resume._install_claim_order_guard(
+            run_module, runtime, frozen={"frozen": True},
+            identity_validator=lambda frozen: validator_calls.append(frozen),
+            expected_keys=keys,
+        )
+
+        def call_claim(key):
+            seed, mode, scene = key
+            logical = f"model_eval_new_s{seed}_{mode}_scene{scene}"
+            metadata = {"arm": "NEW", "training_seed": seed,
+                        "mode": mode, "scenario_seed": scene}
+            return run_module._claim(logical, attempt=1, metadata=metadata)
+
+        with patch.object(resume, "read_json", return_value={"category": "normal"}):
+            with self.assertRaisesRegex(resume.EvalResumeError, "claim order mismatch"):
+                call_claim(keys[1])
+            self.assertEqual(base_calls, [])
+            for key in keys:
+                self.assertEqual(call_claim(key), Path(f"mock-claim-{key[2]}.json"))
+                resume._consume_claim_queue_key(cursor, key)
+                if key == keys[0]:
+                    with self.assertRaisesRegex(resume.EvalResumeError, "claim order mismatch"):
+                        call_claim(key)
+                    self.assertEqual(len(base_calls), 1)
+            with self.assertRaisesRegex(resume.EvalResumeError, "schedule ended"):
+                call_claim(schedule[4])
+
+        self.assertEqual([item[2] for item in base_calls], [key[2] for key in keys])
+        self.assertEqual(cursor["keys"], keys)
+        self.assertEqual(cursor["index"], len(keys))
+        self.assertEqual(len(validator_calls), 6)
+        self.assertTrue(all(value == {"frozen": True} for value in validator_calls))
 
 
 class EvalOnlyGuardTests(unittest.TestCase):
@@ -515,6 +575,13 @@ class VerifyEvalIdentityTests(unittest.TestCase):
             "source_file_sha256": {self.SOURCE_FILE: self._sha(source_path)},
         }
         stored_chain_evidence = dict(chain_evidence)
+        r2_evidence = {
+            "commit": resume.R2_EXECUTION_IDENTITY_HEAD,
+            "identity_sha256": "2" * 64,
+            "gate_sha256": "3" * 64,
+            "progress_sha256": None,
+            "progress_exists": False,
+        }
         history = {"r4_identity_sha256": "a" * 64}
         gate = {
             "kind": "round44-eval-only-prelaunch-gate/1",
@@ -527,6 +594,10 @@ class VerifyEvalIdentityTests(unittest.TestCase):
             "prior_execution_identity_sha256": self._sha(prior_identity_path),
             "prior_execution_gate_sha256": self._sha(prior_gate_path),
             "prior_progress_sha256": self._sha(prior_progress_path),
+            "prior_r2_identity_commit": r2_evidence["commit"],
+            "prior_r2_identity_sha256": r2_evidence["identity_sha256"],
+            "prior_r2_gate_sha256": r2_evidence["gate_sha256"],
+            "prior_r2_progress_sha256": r2_evidence["progress_sha256"],
             "read_only_model_gate_reused_from_source_commit": resume.SOURCE_AMBIENT_GUARD_HEAD,
             "quota": {"normal": 480, "reserve": 24, "hard_cap": 504},
         }
@@ -540,7 +611,8 @@ class VerifyEvalIdentityTests(unittest.TestCase):
                 resume.BASE_STOP_HEAD, resume.INITIAL_SOURCE_HEAD,
                 resume.SOURCE_IDENTITY_VALIDATOR_HEAD,
                 resume.SOURCE_AMBIENT_GUARD_HEAD,
-                resume.PRIOR_EXECUTION_COMMIT, self.SOURCE_HEAD],
+                resume.PRIOR_EXECUTION_COMMIT, resume.RECEIPT_RESUME_SOURCE_HEAD,
+                resume.R2_EXECUTION_IDENTITY_HEAD, self.SOURCE_HEAD],
             "source_commit_chain_evidence": stored_chain_evidence,
             "gate_sha256": self._sha(gate_path),
             "fixed_eval_keys_sha256": gate["fixed_eval_keys_sha256"],
@@ -549,6 +621,10 @@ class VerifyEvalIdentityTests(unittest.TestCase):
             "prior_execution_identity_sha256": self._sha(prior_identity_path),
             "prior_execution_gate_sha256": self._sha(prior_gate_path),
             "prior_progress_sha256": self._sha(prior_progress_path),
+            "prior_r2_identity_commit": r2_evidence["commit"],
+            "prior_r2_identity_sha256": r2_evidence["identity_sha256"],
+            "prior_r2_gate_sha256": r2_evidence["gate_sha256"],
+            "prior_r2_progress_sha256": r2_evidence["progress_sha256"],
             "attempt2_claim_sha256": post_retry_audit["failure"]["attempt2_claim_sha256"],
             "attempt2_row_sha256": post_retry_audit["failure"]["attempt2_row_sha256"],
             "readonly_model_gate_sha256": self._sha(readonly_path),
@@ -559,9 +635,9 @@ class VerifyEvalIdentityTests(unittest.TestCase):
             "preserved_r4_history_hashes": history,
             "retry_key": [11, "greedy", 1_301_000],
             "schedule": [[s, m, scene] for s, m, scene in resume.evaluation_schedule()],
-            "counts_before_first_eval": {
-                "normal_used": 385, "reserve_used": 0,
-                "completed_training_jobs": 384, "valid_new_eval_cells": 0,
+            "counts_before_r3_resume": {
+                "normal_used": 385, "reserve_used": 1,
+                "completed_training_jobs": 384, "valid_new_eval_cells": 1,
                 "optimizer_step_calls": 1016, "ppo_update_calls": 96,
                 "checkpoint_write_calls": 297,
             },
@@ -617,6 +693,8 @@ class VerifyEvalIdentityTests(unittest.TestCase):
                 resume, "_changed_paths", return_value=changed_paths))
             chain_mock = stack.enter_context(patch.object(
                 resume, "_verify_source_commit_chain", return_value=chain_evidence))
+            stack.enter_context(patch.object(
+                resume, "_verify_preserved_r2_identity", return_value=r2_evidence))
             stack.enter_context(patch.object(resume, "_verify_r4_history", return_value=history))
             stack.enter_context(patch.object(resume, "_blob_sha", side_effect=fake_blob))
             result = resume.verify_eval_identity()
