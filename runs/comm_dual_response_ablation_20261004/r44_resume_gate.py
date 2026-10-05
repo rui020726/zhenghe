@@ -18,8 +18,9 @@ import torch
 from r44_prepare import RUN_DIR, TRAINING_VERSION, read, sha256, write_new
 from r44_resume_bridge import (
     COMPARATOR_TEST_PATH, EXPECTED_COMPARATOR_REJECTIONS, GATE_PATH, IDENTITY_PATH,
-    MECHANICAL_VERSION, OLD_PROJECTION_PATH, R1_IDENTITY_PATH, READY_PATH,
-    SOURCE_CONFIG_RECONCILIATION_PATH, STATE_BRIDGE_VERSION, WHITELIST_PATH, build_state_whitelist,
+    MECHANICAL_VERSION, OLD_PROJECTION_PATH, R1_IDENTITY_PATH, R2_FAILURE_PATH,
+    R2_IDENTITY_PATH, READY_PATH, SOURCE_CONFIG_RECONCILIATION_PATH,
+    STATE_BRIDGE_VERSION, WHITELIST_PATH, build_state_whitelist,
     seal_resume_execution_identity, verify_pre_resume_state, verify_resume_execution_identity,
     verify_state_whitelist,
 )
@@ -66,6 +67,13 @@ def _expect_comparator_rejection(label: str, call: Callable[[], Any], expected_f
             raise RuntimeError(f"{label}: rejected for an unexpected reason: {message}") from exc
         return message
     raise RuntimeError(f"{label}: comparator accepted a deliberately altered in-memory record")
+
+
+def _is_expected_old_training_checkpoint_rejection(message: str) -> bool:
+    """Accept only the registered version/freeze rejection spellings."""
+    return any(token in message for token in (
+        "training_version mismatch", "training version mismatch", "freeze identity mismatch",
+    ))
 
 
 def _run_comparator_regression(runtime: dict[str, Any], gate: dict[str, Any],
@@ -518,7 +526,7 @@ def _exact_restore_gate(runtime: dict[str, Any], frozen: dict[str, Any]) -> dict
         raise RuntimeError("ROUND44 read-only precheck module hashes disagree with actual restore")
 
     return {
-        "kind": "round44-exact-resume-gate/2", "status": "passed",
+        "kind": "round44-exact-resume-gate/3", "status": "passed",
         "training_seed": 11, "episodes_done": 4, "updates": 1,
         "optimizer_steps_saved": 12, "lambda": 1.125,
         "eta_lambda": 0.5, "training_version": TRAINING_VERSION,
@@ -591,8 +599,7 @@ def run_read_only_gates() -> dict[str, Any]:
             old_checkpoint, freeze=runtime["round42_freeze"])
     except RuntimeError as exc:
         old_rejection = str(exc)
-        if not any(token in old_rejection for token in ("training version mismatch",
-                                                         "freeze identity mismatch")):
+        if not _is_expected_old_training_checkpoint_rejection(old_rejection):
             raise RuntimeError(f"R43 checkpoint rejected for an unexpected reason: {exc}") from exc
     else:
         raise RuntimeError("ROUND44 actual resume loader accepted the trained R43 checkpoint")
@@ -632,7 +639,7 @@ def run_read_only_gates() -> dict[str, Any]:
     if source_regression.get("status") != "passed":
         raise RuntimeError("previous R43 report/source identity positive-negative gate is missing")
     ready = {
-        "kind": "round44-resume-ready/2", "status": "passed",
+        "kind": "round44-resume-ready/3", "status": "passed",
         "mechanical_version": MECHANICAL_VERSION,
         "state_bridge_version": STATE_BRIDGE_VERSION,
         "execution_head": head,
@@ -642,6 +649,8 @@ def run_read_only_gates() -> dict[str, Any]:
         "original_prelaunch_head": original_identity["head"],
         "state_whitelist_sha256": sha256(WHITELIST_PATH),
         "r1_identity_sha256": sha256(R1_IDENTITY_PATH),
+        "r2_identity_sha256": sha256(R2_IDENTITY_PATH),
+        "r2_failure_sha256": sha256(R2_FAILURE_PATH),
         "old_projection_evidence_sha256": sha256(OLD_PROJECTION_PATH),
         "source_config_reconciliation_sha256": sha256(SOURCE_CONFIG_RECONCILIATION_PATH),
         "state_whitelist": immutable_state_before["permitted_resume"],

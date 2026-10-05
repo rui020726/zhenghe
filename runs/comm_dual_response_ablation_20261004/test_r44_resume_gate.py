@@ -9,13 +9,26 @@ import numpy as np
 import torch
 
 from r44_resume_bridge import MECHANICAL_VERSION, STATE_BRIDGE_VERSION
-from r44_resume_gate import _next_values_from_saved_rng
+from r44_resume_gate import (
+    _is_expected_old_training_checkpoint_rejection,
+    _next_values_from_saved_rng,
+)
 
 
 class Round44ResumeGateTests(unittest.TestCase):
     def test_resume_bridge_is_versioned_and_mechanical(self) -> None:
         self.assertEqual(STATE_BRIDGE_VERSION, "round44-exact-resume-state-bridge/1")
-        self.assertEqual(MECHANICAL_VERSION, "round44-resume-comparator-and-restore/2")
+        self.assertEqual(MECHANICAL_VERSION, "round44-resume-comparator-and-restore/3")
+
+    def test_old_r43_checkpoint_rejection_accepts_exact_version_field_spelling(self) -> None:
+        self.assertTrue(_is_expected_old_training_checkpoint_rejection(
+            "v2_train_s11_ep128.pt: training_version mismatch; read-only"))
+        self.assertTrue(_is_expected_old_training_checkpoint_rejection(
+            "checkpoint: training version mismatch"))
+        self.assertTrue(_is_expected_old_training_checkpoint_rejection(
+            "checkpoint: freeze identity mismatch"))
+        self.assertFalse(_is_expected_old_training_checkpoint_rejection(
+            "checkpoint: unexpected tensor shape mismatch"))
 
     def test_next_values_match_independent_python_numpy_torch_streams(self) -> None:
         py = random.Random(13579)

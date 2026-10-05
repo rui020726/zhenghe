@@ -21,7 +21,7 @@ from r44_prepare import (RUN_DIR, ROOT, R43_DIR, TRAINING_VERSION, RUNNER_VERSIO
 from r44_runtime import PRELAUNCH_PATH, configure, verify_frozen_source
 from r44_resume_bridge import (
     IDENTITY_PATH as RESUME_IDENTITY_PATH, MECHANICAL_VERSION,
-    RESUME_PROGRESS_PATH, STATE_BRIDGE_VERSION,
+    RESUME_PROGRESS_KIND, RESUME_PROGRESS_PATH, STATE_BRIDGE_VERSION,
     verify_pre_resume_state, verify_resume_ready,
 )
 
@@ -602,7 +602,7 @@ def run() -> dict[str, Any]:
             if resuming:
                 verify_pre_resume_state(frozen, current_head)
             progress = {
-                "kind": "round44-execution-progress-resume-r2/2",
+                "kind": RESUME_PROGRESS_KIND,
                 "status": "running", "prelaunch_head": current_head,
                 "resume_bridge": STATE_BRIDGE_VERSION,
                 "mechanical_version": MECHANICAL_VERSION,
@@ -791,7 +791,7 @@ def run() -> dict[str, Any]:
         })
         _write_atomic(progress_path, progress)
         status = {
-            "kind": "round44-project-status/2", "round": 44,
+            "kind": "round44-project-status/3", "round": 44,
             "status": "complete_local_delivery_pending_commits",
             "execution_matrix_status": "complete", "branch": _git("branch", "--show-current"),
             "scientific_execution_head": current_head,
@@ -814,9 +814,9 @@ def run() -> dict[str, Any]:
             "raw_artifact_count": raw_manifest["raw_files_count"],
         }
         status["stop_record_preserved"] = str(RUN_DIR / "ROUND44_STOP_REPORT.md")
-        status["resume_bridge"] = "round44-exact-resume-state-bridge/1"
-        status["mechanical_version"] = "round44-resume-comparator-and-restore/2"
-        _write_new_or_match(RUN_DIR / "ROUND44_STATUS_COMPLETE_R2.json", status)
+        status["resume_bridge"] = STATE_BRIDGE_VERSION
+        status["mechanical_version"] = MECHANICAL_VERSION
+        _write_new_or_match(RUN_DIR / "ROUND44_STATUS_COMPLETE_R3.json", status)
         return {"progress": progress, "ledger": ledger, "analysis": analysis,
                 "report": report, "eval_audit": eval_audit, "status": status}
     finally:
