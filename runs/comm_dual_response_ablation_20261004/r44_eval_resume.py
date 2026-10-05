@@ -31,6 +31,10 @@ SOURCE_AMBIENT_GUARD_HEAD = "b7c27b809cb7ac1fd3f6282a6c03265dfc44ea60"
 PRIOR_EXECUTION_COMMIT = "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10"
 RECEIPT_RESUME_SOURCE_HEAD = "c18e7d6564aac132104649dc18c3ab52acb76023"
 R2_EXECUTION_IDENTITY_HEAD = "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1"
+R3_CLAIM_QUEUE_SOURCE_HEAD = "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4"
+R3_INITIAL_IDENTITY_ATTEMPT_HEAD = "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066"
+R3_INITIAL_IDENTITY_GATE_SHA256 = "526b0adbff5448ba7b4bbe56f6706c42a9d9f021aa74c104d33abd5bf47dee0d"
+R3_INITIAL_IDENTITY_SHA256 = "665a05868f70a1714f0c3b023427eb9f1628f0c3ee13d634d4979dfeefadd01e"
 SCIENTIFIC_FREEZE_HEAD = "2353c4616746cf0a7c9fcb3a519a7042a28ba176"
 TRAINING_EXECUTION_HEAD = "26b22680b8c3c5cb9bb91bc44799c76cec6f874a"
 BRANCH = "exp/comm-dual-response-ablation"
@@ -62,10 +66,12 @@ SOURCE_REVISION_ALLOWED_PATHS = {
 SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS = set(SOURCE_REVISION_ALLOWED_PATHS)
 SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS = set(SOURCE_REVISION_ALLOWED_PATHS)
 SOURCE_CLAIM_QUEUE_REVISION_ALLOWED_PATHS = set(SOURCE_REVISION_ALLOWED_PATHS)
+SOURCE_R3_IDENTITY_REPAIR_ALLOWED_PATHS = set(SOURCE_REVISION_ALLOWED_PATHS)
 SOURCE_ALLOWED_PATHS = (INITIAL_SOURCE_ALLOWED_PATHS | SOURCE_REVISION_ALLOWED_PATHS
                         | SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS
                         | SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS
-                        | SOURCE_CLAIM_QUEUE_REVISION_ALLOWED_PATHS)
+                        | SOURCE_CLAIM_QUEUE_REVISION_ALLOWED_PATHS
+                        | SOURCE_R3_IDENTITY_REPAIR_ALLOWED_PATHS)
 IDENTITY_ALLOWED_PATHS = {
     f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_GATE_R3.json",
     f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R3.json",
@@ -516,19 +522,20 @@ def _verify_receipt_resume_source_chain() -> dict[str, Any]:
     }
 
 
-def _verify_source_commit_chain(source_head: str) -> dict[str, Any]:
+def _verify_claim_queue_source_chain() -> dict[str, Any]:
     receipt_evidence = _verify_receipt_resume_source_chain()
     if _parent(R2_EXECUTION_IDENTITY_HEAD) != RECEIPT_RESUME_SOURCE_HEAD:
         raise EvalResumeError("preserved R2 identity no longer directly follows receipt-resume source")
     if _changed_paths(RECEIPT_RESUME_SOURCE_HEAD, R2_EXECUTION_IDENTITY_HEAD) != IDENTITY_ALLOWED_PATHS_R2:
         raise EvalResumeError("preserved R2 identity commit differs from its exact two-path allowlist")
-    if _parent(source_head) != R2_EXECUTION_IDENTITY_HEAD:
+    if _parent(R3_CLAIM_QUEUE_SOURCE_HEAD) != R2_EXECUTION_IDENTITY_HEAD:
         raise EvalResumeError("claim-queue source revision must directly follow the preserved R2 identity")
-    if _changed_paths(R2_EXECUTION_IDENTITY_HEAD, source_head) != SOURCE_CLAIM_QUEUE_REVISION_ALLOWED_PATHS:
+    if _changed_paths(R2_EXECUTION_IDENTITY_HEAD, R3_CLAIM_QUEUE_SOURCE_HEAD) != SOURCE_CLAIM_QUEUE_REVISION_ALLOWED_PATHS:
         raise EvalResumeError("claim-queue source revision differs from its exact path allowlist")
-    _assert_ancestor(SCIENTIFIC_FREEZE_HEAD, source_head)
-    _assert_ancestor(TRAINING_EXECUTION_HEAD, source_head)
-    hashes = {relative: _blob_sha(source_head, relative) for relative in SOURCE_ALLOWED_PATHS}
+    _assert_ancestor(SCIENTIFIC_FREEZE_HEAD, R3_CLAIM_QUEUE_SOURCE_HEAD)
+    _assert_ancestor(TRAINING_EXECUTION_HEAD, R3_CLAIM_QUEUE_SOURCE_HEAD)
+    hashes = {relative: _blob_sha(R3_CLAIM_QUEUE_SOURCE_HEAD, relative)
+              for relative in SOURCE_ALLOWED_PATHS}
     return {
         **receipt_evidence,
         "receipt_resume_source_head": RECEIPT_RESUME_SOURCE_HEAD,
@@ -536,6 +543,75 @@ def _verify_source_commit_chain(source_head: str) -> dict[str, Any]:
         "r2_identity_allowed_paths": sorted(IDENTITY_ALLOWED_PATHS_R2),
         "claim_queue_source_parent": R2_EXECUTION_IDENTITY_HEAD,
         "claim_queue_revision_allowed_paths": sorted(SOURCE_CLAIM_QUEUE_REVISION_ALLOWED_PATHS),
+        "claim_queue_source_head": R3_CLAIM_QUEUE_SOURCE_HEAD,
+        "revised_source_head": R3_CLAIM_QUEUE_SOURCE_HEAD,
+        "source_file_sha256": hashes,
+    }
+
+
+def _verify_preserved_first_r3_identity_attempt() -> dict[str, Any]:
+    if _parent(R3_INITIAL_IDENTITY_ATTEMPT_HEAD) != R3_CLAIM_QUEUE_SOURCE_HEAD:
+        raise EvalResumeError("preserved first R3 identity attempt no longer directly follows queue source")
+    if (_changed_paths(R3_CLAIM_QUEUE_SOURCE_HEAD, R3_INITIAL_IDENTITY_ATTEMPT_HEAD)
+            != IDENTITY_ALLOWED_PATHS):
+        raise EvalResumeError("preserved first R3 identity attempt differs from its exact two-path allowlist")
+    gate_rel, identity_rel = _identity_paths()
+    gate_sha = _blob_sha(R3_INITIAL_IDENTITY_ATTEMPT_HEAD, gate_rel)
+    identity_sha = _blob_sha(R3_INITIAL_IDENTITY_ATTEMPT_HEAD, identity_rel)
+    if (gate_sha != R3_INITIAL_IDENTITY_GATE_SHA256
+            or identity_sha != R3_INITIAL_IDENTITY_SHA256):
+        raise EvalResumeError("preserved first R3 identity attempt content hash changed")
+    gate_bytes = _git("show", f"{R3_INITIAL_IDENTITY_ATTEMPT_HEAD}:{gate_rel}", binary=True)
+    identity_bytes = _git("show", f"{R3_INITIAL_IDENTITY_ATTEMPT_HEAD}:{identity_rel}", binary=True)
+    assert isinstance(gate_bytes, bytes) and isinstance(identity_bytes, bytes)
+    attempt_gate = json.loads(gate_bytes)
+    attempt_identity = json.loads(identity_bytes)
+    regression_path = f"{RUN_REL}/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json"
+    diff_path = f"{RUN_REL}/ROUND44_EVAL_MECHANICAL_DIFF_R1.json"
+    source_regression_sha = _blob_sha(R3_CLAIM_QUEUE_SOURCE_HEAD, regression_path)
+    source_diff_sha = _blob_sha(R3_CLAIM_QUEUE_SOURCE_HEAD, diff_path)
+    stale_hashes = {
+        "gate_sha256": attempt_identity.get("gate_sha256"),
+        "receipt_regression_sha256": attempt_identity.get("receipt_regression_sha256"),
+        "source_receipt_regression_sha256": source_regression_sha,
+        "mechanical_diff_sha256": attempt_identity.get("mechanical_diff_sha256"),
+        "source_mechanical_diff_sha256": source_diff_sha,
+    }
+    if (attempt_identity.get("source_commit") != R3_CLAIM_QUEUE_SOURCE_HEAD
+            or attempt_identity.get("gate_sha256") != gate_sha
+            or attempt_gate.get("source_commit") != R3_CLAIM_QUEUE_SOURCE_HEAD
+            or attempt_identity.get("receipt_regression_sha256") == source_regression_sha
+            or attempt_identity.get("mechanical_diff_sha256") == source_diff_sha):
+        raise EvalResumeError("first R3 identity attempt no longer demonstrates the exact stale evidence hashes")
+    return {
+        "commit": R3_INITIAL_IDENTITY_ATTEMPT_HEAD,
+        "parent": R3_CLAIM_QUEUE_SOURCE_HEAD,
+        "gate_sha256": gate_sha,
+        "identity_sha256": identity_sha,
+        "stale_evidence_hashes": stale_hashes,
+        "identity_verification_result": "rejected before claims because regression/mechanical working-byte hashes differed from committed source blobs",
+        "environment_starts": 0,
+        "new_claims": 0,
+    }
+
+
+def _verify_source_commit_chain(source_head: str) -> dict[str, Any]:
+    queue_evidence = _verify_claim_queue_source_chain()
+    failed_identity_evidence = _verify_preserved_first_r3_identity_attempt()
+    if _parent(source_head) != R3_INITIAL_IDENTITY_ATTEMPT_HEAD:
+        raise EvalResumeError("R3 identity-hash repair source must directly follow the preserved failed identity attempt")
+    if (_changed_paths(R3_INITIAL_IDENTITY_ATTEMPT_HEAD, source_head)
+            != SOURCE_R3_IDENTITY_REPAIR_ALLOWED_PATHS):
+        raise EvalResumeError("R3 identity-hash repair source differs from its exact path allowlist")
+    _assert_ancestor(SCIENTIFIC_FREEZE_HEAD, source_head)
+    _assert_ancestor(TRAINING_EXECUTION_HEAD, source_head)
+    hashes = {relative: _blob_sha(source_head, relative) for relative in SOURCE_ALLOWED_PATHS}
+    return {
+        **queue_evidence,
+        "first_r3_identity_attempt": failed_identity_evidence,
+        "identity_hash_repair_source_parent": R3_INITIAL_IDENTITY_ATTEMPT_HEAD,
+        "identity_hash_repair_revision_allowed_paths": sorted(
+            SOURCE_R3_IDENTITY_REPAIR_ALLOWED_PATHS),
         "revised_source_head": source_head,
         "source_file_sha256": hashes,
     }
@@ -645,10 +721,23 @@ def verify_eval_identity() -> tuple[str, dict[str, Any], dict[str, Any]]:
             or gate.get("prior_r2_gate_sha256") != r2_evidence["gate_sha256"]
             or gate.get("prior_r2_progress_sha256") != r2_evidence["progress_sha256"]):
         raise EvalResumeError("R3 gate/identity does not bind the preserved R2 identity and progress state")
+    failed_attempt = source_chain_evidence["first_r3_identity_attempt"]
+    if (identity.get("first_r3_identity_attempt_commit") != failed_attempt["commit"]
+            or identity.get("first_r3_identity_attempt_gate_sha256")
+            != failed_attempt["gate_sha256"]
+            or identity.get("first_r3_identity_attempt_identity_sha256")
+            != failed_attempt["identity_sha256"]
+            or gate.get("first_r3_identity_attempt_commit") != failed_attempt["commit"]
+            or gate.get("first_r3_identity_attempt_gate_sha256")
+            != failed_attempt["gate_sha256"]
+            or gate.get("first_r3_identity_attempt_identity_sha256")
+            != failed_attempt["identity_sha256"]):
+        raise EvalResumeError("R3 gate/identity does not bind the preserved failed identity attempt")
     expected_chain = [BASE_STOP_HEAD, INITIAL_SOURCE_HEAD,
                       SOURCE_IDENTITY_VALIDATOR_HEAD, SOURCE_AMBIENT_GUARD_HEAD,
                       PRIOR_EXECUTION_COMMIT, RECEIPT_RESUME_SOURCE_HEAD,
-                      R2_EXECUTION_IDENTITY_HEAD, source_head]
+                      R2_EXECUTION_IDENTITY_HEAD, R3_CLAIM_QUEUE_SOURCE_HEAD,
+                      R3_INITIAL_IDENTITY_ATTEMPT_HEAD, source_head]
     if identity.get("source_commit_chain") != expected_chain:
         raise EvalResumeError("eval-only identity does not bind the exact mechanical source commit chain")
     if _parent(head) != source_head or _changed_paths(source_head, head) != IDENTITY_ALLOWED_PATHS:
@@ -656,6 +745,10 @@ def verify_eval_identity() -> tuple[str, dict[str, Any], dict[str, Any]]:
     if gate.get("kind") != "round44-eval-only-prelaunch-gate/1" \
             or gate.get("status") != "passed" or gate.get("source_commit") != source_head:
         raise EvalResumeError("eval-only prelaunch gate does not match its source commit")
+    if (gate.get("source_commit_parent") != R3_INITIAL_IDENTITY_ATTEMPT_HEAD
+            or gate.get("source_commit_allowed_paths")
+            != sorted(SOURCE_R3_IDENTITY_REPAIR_ALLOWED_PATHS)):
+        raise EvalResumeError("R3 source parent or exact identity-repair path allowlist changed")
     if (gate.get("readonly_model_gate_sha256") != identity.get("readonly_model_gate_sha256")
             or gate.get("fixed_eval_keys_sha256") != identity.get("fixed_eval_keys_sha256")
             or gate.get("quota") != {"normal": 480, "reserve": 24, "hard_cap": 504}):

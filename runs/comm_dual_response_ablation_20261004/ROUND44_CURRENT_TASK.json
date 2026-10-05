@@ -95,7 +95,7 @@
     "sha256": "d6ebc99354f02c61f6f986cd76adc612449a126bd612d896c12e8a271b15adf1",
     "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3"
   },
-  "current_head_at_persist": "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
+  "current_head_at_persist": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
   "current_quota": {
     "normal_plan": 480,
     "normal_used": 385,
@@ -119,7 +119,7 @@
       "blocked_until": "receipt-resume source and R2 identity pass; retry gate is rebuilt from durable attempt2"
     }
   },
-  "current_stage": "ROUND44 queue cursor repair: pure regression passed through the production-installed claim guard; source and R3 identity freeze remain before retry-gate reconstruction and the remaining 95 normal cells.",
+  "current_stage": "ROUND44 queue cursor regression passed and R3 source was frozen. The first R3 identity was correctly rejected on stale raw evidence hashes before claims; preserve it and create an exact identity-hash repair source/identity pair, then resume the original 95 normal cells.",
   "current_state": {
     "as_of": "2026-10-06",
     "counts": {
@@ -222,7 +222,7 @@
   },
   "identity_verifier_review": {
     "checkpoint_writes": 0,
-    "classification": "R3 claim-order source repair is limited to evaluation-only guard/cursor; pure regression passed; R3 identity and fixed evaluation remain pending.",
+    "classification": "R3 first identity attempt failed closed before claims because two committed evidence hashes were stale after newline normalization; queue repair and science remain unchanged.",
     "direct_actual_function_tests": "13 test module cases include accepted child plus wrong parent, foreign path, dirty tree, content drift and chain-evidence drift rejection.",
     "environment_constructors": 0,
     "finding": "A prior implementation required current HEAD to equal source_head, although the final identity contract requires current HEAD to be a child of source_head.",
@@ -265,8 +265,8 @@
     "sha256": "d6ebc99354f02c61f6f986cd76adc612449a126bd612d896c12e8a271b15adf1",
     "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3"
   },
-  "latest_current_head_at_continuation": "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
-  "next_action": "Commit the exact five-path queue-source revision as a direct child of preserved R2 identity a48261e; verify the full 12c3→347→3fbd→b7→1f43→c18→a482→source→R3-identity chain and passed R3 gate; rebuild the retry gate from completed attempt2 without a claim, then run only the original 95 normal eval cells and finish report/local commits.",
+  "latest_current_head_at_continuation": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+  "next_action": "Commit the exact five-path identity-hash repair source as a direct child of the preserved failed R3 identity attempt; verify the explicit ancestry and path allowlists; freeze and verify the corrected R3 gate/identity; rehydrate retry gate from attempt2 with no new claim, then execute only the original 95 normal cells and complete report/local commits.",
   "old_projection_failure_evidence": {
     "episodes": 4,
     "old_projection_differences_each_episode": 3,
@@ -398,10 +398,12 @@
       "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
       "c18e7d6564aac132104649dc18c3ab52acb76023",
       "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
-      "<R3 queue-source direct child of a48261e>"
+      "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+      "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+      "<R3 identity-hash repair source direct child of a7e2f86>"
     ],
     "receipt_resume_revision_scope": "same five eval-only source/test/evidence paths; row JSON equality, claim-count reconciliation, retry-gate rehydration and R2 identity paths only",
-    "resume_source_head": "pending exact direct child of preserved R2 identity a48261e",
+    "resume_source_head": "pending exact direct child of the preserved first R3 identity attempt",
     "identity_artifacts": [
       "runtime/ROUND44_EVAL_ONLY_GATE_R3.json",
       "runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R3.json"
@@ -413,10 +415,19 @@
     "prior_R2_progress_preserved": true,
     "prior_R2_progress_state_at_R3_freeze": "absent; verified absent and bound as null SHA256",
     "claim_queue_source_parent": "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
-    "claim_queue_source_revision_scope": "same five eval-only source/test/task/evidence paths; fixed key list plus single cursor; no scientific source/configuration changes"
+    "claim_queue_source_revision_scope": "same five eval-only source/test/task/evidence paths; fixed key list plus single cursor; no scientific source/configuration changes",
+    "R3_claim_queue_source_commit": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+    "first_R3_identity_attempt_commit": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+    "first_R3_identity_attempt_parent": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+    "first_R3_identity_attempt_gate_sha256": "526b0adbff5448ba7b4bbe56f6706c42a9d9f021aa74c104d33abd5bf47dee0d",
+    "first_R3_identity_attempt_identity_sha256": "665a05868f70a1714f0c3b023427eb9f1628f0c3ee13d634d4979dfeefadd01e",
+    "first_R3_identity_attempt_failure": "verify_eval_identity rejected before any claim at the immutable/prelaunch evidence check",
+    "identity_hash_repair_source_parent": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+    "identity_hash_repair_revision_scope": "same five eval-only source/test/task/evidence paths; bind committed LF evidence blob hashes and preserve first rejected R3 identity attempt",
+    "final_identity_commit": "exact direct child of the identity-hash repair source with only the two R3 gate/identity paths"
   },
   "stage": "eval_receipt_repair_then_fixed_evaluation",
-  "status": "authorized_eval_only_R3_queue_repair_and_resume_pending_identity",
+  "status": "authorized_eval_only_R3_identity_hash_repair_and_resume_pending",
   "stop_record": {
     "failure": "NameError: name 'run_module' is not defined in _compare_first_batch",
     "failure_capture": "runs/comm_dual_response_ablation_20261004/ROUND44_EXECUTION_FAILURE_CAPTURE_SEED11_B0.txt",
@@ -444,8 +455,8 @@
       "three_ep128_cpu_loads_and_forwards_passed": true,
       "ambient_rng_preserved": true
     },
-    "new_execution_identity": "R3, direct child of the queue-source commit; source parent is preserved R2 identity a48261e",
-    "progress": "use a separate R3 progress file; preserve R1 running_retry_gate and the absent R2 progress path"
+    "new_execution_identity": "Corrected R3 identity, direct child of the identity-hash repair source; first R3 identity attempt a7e2f86 remains preserved as rejected before claims.",
+    "progress": "R1 and absent R2 progress remain preserved; create a separate R3 progress file only after the corrected R3 identity passes."
   },
   "claim_queue_cursor_repair": {
     "finding": "The installed guard validated keys[index], while successful completion popped keys[0] and then separately incremented index. After the first completion the fixed schedule could advance twice and reject/skip the next normal key.",
@@ -468,6 +479,27 @@
       "checkpoint_writes": 0,
       "mock_base_claim_calls": 3
     },
-    "source_freeze": "pending clean commit; exact parent and allowlist are enforced by source identity verifier"
+    "source_freeze": "queue cursor source commit 9c7fb0bc; actual installed-guard regression remains passed and immutable"
+  },
+  "r3_identity_hash_repair_attempt": {
+    "commit": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+    "parent": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+    "gate_sha256": "526b0adbff5448ba7b4bbe56f6706c42a9d9f021aa74c104d33abd5bf47dee0d",
+    "identity_sha256": "665a05868f70a1714f0c3b023427eb9f1628f0c3ee13d634d4979dfeefadd01e",
+    "verification_result": "verify_eval_identity rejected before any claim at the immutable/prelaunch evidence check",
+    "stale_hashes": {
+      "identity_receipt_regression_sha256": "88d0da248c7d1881a0f53e612ac9ef4b157865a860971ccd03373f7fa3aa6fe1",
+      "committed_receipt_regression_blob_sha256": "133a005b12cfa7df0b32ff802de944878c5c3db68b2845128c4904e3623a066f",
+      "identity_mechanical_diff_sha256": "960b9117e419943dc8b2187ba8302992a8cccd9df5d378253caf6c9e363d59d9",
+      "committed_mechanical_diff_blob_sha256": "a5d97593680992e86288cc3f9ed7217d4e875a44ca2a510dea69fbf53eb1a7d2"
+    },
+    "diagnosis": "Those two artifact hashes were taken from pre-normalized CRLF working bytes; the source commit contains LF blobs. The verifier compared the committed evidence files and correctly rejected the identity.",
+    "environment_starts": 0,
+    "new_claims": 0,
+    "run_calls": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0,
+    "attempt2_unchanged": true,
+    "R1_R2_artifacts_unchanged": true
   }
 }

@@ -7,7 +7,8 @@
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
     ],
     "status": "passed after receipt-resume comparator and claim reconciliation changes",
-    "claim_queue_revision_status": "passed for r44_eval_resume.py and test_r44_eval_resume.py"
+    "claim_queue_revision_status": "passed for r44_eval_resume.py and test_r44_eval_resume.py",
+    "identity_hash_repair_revision_status": "pending source freeze; current code/test changes are isolated to exact identity chain and hash verification"
   },
   "immutable_input_manifest_sha256": "b3bb6f7c2488b2acb03f467c799b6eb74554795cf9041eb30529031774a3ebeb",
   "kind": "round44-eval-receipt-repair-regression/1",
@@ -68,7 +69,8 @@
     "tuple_list_json_arrays_round_trip": "passed",
     "actual_installed_claim_guard_three_normal_keys": "passed; actual installer and returned run_module._claim exercised with only base claim mocked",
     "claim_cursor_rejects_wrong_order_duplicate_exhaustion": "passed; no unexpected base claim reached",
-    "claim_cursor_is_fixed_list_single_advance": "passed; three verified completions advance cursor 0→1→2→3 without pop"
+    "claim_cursor_is_fixed_list_single_advance": "passed; three verified completions advance cursor 0→1→2→3 without pop",
+    "preserved_first_r3_identity_attempt_hash_drift": "actual Git commit blobs verified: identity recorded pre-normalized hashes; committed LF source blobs differ; verify_eval_identity failed before claims as intended"
   },
   "scope_limit": "Pure synthetic index/schedule/guard tests only; this is not a real-environment or post-repair simulation passivity test.",
   "side_effect_counts": {
@@ -95,9 +97,20 @@
       "sha256": "7541442507cec50922ecdbe783833a74ef0a82e5bf079379954ab3e36590e0e6",
       "source_layer_confusion_detected": "original ROUND44 freeze source hash was compared to later R4 execution source for r44_runtime.py",
       "status": "failed_before_read_only_model_gate"
+    },
+    {
+      "head": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+      "status": "failed_before_claims",
+      "reason": "verify_eval_identity rejected stale receipt_regression_sha256 and mechanical_diff_sha256 against committed LF blob hashes",
+      "attempt_gate_sha256": "526b0adbff5448ba7b4bbe56f6706c42a9d9f021aa74c104d33abd5bf47dee0d",
+      "attempt_identity_sha256": "665a05868f70a1714f0c3b023427eb9f1628f0c3ee13d634d4979dfeefadd01e",
+      "environment_starts": 0,
+      "new_claims": 0,
+      "optimizer_steps": 0,
+      "checkpoint_writes": 0
     }
   ],
-  "status": "R3_queue_guard_regression_passed_source_identity_and_95_eval_pending",
+  "status": "queue_cursor_regression_passed; identity_hash_attempt_preserved; correction_source_and_95_eval_pending",
   "targeted_test_runs": [
     {
       "command": "D:\\project_env\\python.exe -m unittest discover -s runs/comm_dual_response_ablation_20261004 -p test_r44_eval_index.py -v",
@@ -189,7 +202,12 @@
     "new_progress_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EXECUTION_PROGRESS_EVAL_R3.json",
     "completed_attempt2_receipt_sha256": "9acc52b91428fce0c9ccc7478b7df43a324b6664cac11918e14caf23ccb70eda",
     "remaining_normal_cells": 95,
-    "R3_identity_status": "pending source commit and gate creation"
+    "R3_identity_status": "pending source commit and gate creation",
+    "R3_claim_queue_source_commit": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+    "first_R3_identity_attempt_commit": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+    "first_R3_identity_attempt_rejected_before_claims": true,
+    "identity_hash_repair_source_parent": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+    "corrected_R3_identity_pending": true
   },
   "claim_queue_cursor_regression": {
     "expected_keys": [
@@ -229,5 +247,26 @@
     "run_calls": 0,
     "optimizer_steps": 0,
     "checkpoint_writes": 0
+  },
+  "r3_identity_hash_repair_attempt": {
+    "commit": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+    "parent": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+    "gate_sha256": "526b0adbff5448ba7b4bbe56f6706c42a9d9f021aa74c104d33abd5bf47dee0d",
+    "identity_sha256": "665a05868f70a1714f0c3b023427eb9f1628f0c3ee13d634d4979dfeefadd01e",
+    "verification_result": "verify_eval_identity rejected before any claim at the immutable/prelaunch evidence check",
+    "stale_hashes": {
+      "identity_receipt_regression_sha256": "88d0da248c7d1881a0f53e612ac9ef4b157865a860971ccd03373f7fa3aa6fe1",
+      "committed_receipt_regression_blob_sha256": "133a005b12cfa7df0b32ff802de944878c5c3db68b2845128c4904e3623a066f",
+      "identity_mechanical_diff_sha256": "960b9117e419943dc8b2187ba8302992a8cccd9df5d378253caf6c9e363d59d9",
+      "committed_mechanical_diff_blob_sha256": "a5d97593680992e86288cc3f9ed7217d4e875a44ca2a510dea69fbf53eb1a7d2"
+    },
+    "diagnosis": "Those two artifact hashes were taken from pre-normalized CRLF working bytes; the source commit contains LF blobs. The verifier compared the committed evidence files and correctly rejected the identity.",
+    "environment_starts": 0,
+    "new_claims": 0,
+    "run_calls": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0,
+    "attempt2_unchanged": true,
+    "R1_R2_artifacts_unchanged": true
   }
 }

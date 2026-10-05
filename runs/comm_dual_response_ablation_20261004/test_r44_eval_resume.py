@@ -57,6 +57,10 @@ class EvalScheduleTests(unittest.TestCase):
             resume.R2_EXECUTION_IDENTITY_HEAD,
             "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
         )
+        self.assertEqual(resume.R3_CLAIM_QUEUE_SOURCE_HEAD,
+                         "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4")
+        self.assertEqual(resume.R3_INITIAL_IDENTITY_ATTEMPT_HEAD,
+                         "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066")
         self.assertEqual(resume.IDENTITY_ALLOWED_PATHS_R1, {
             f"{resume.RUN_REL}/runtime/ROUND44_EVAL_ONLY_GATE_R1.json",
             f"{resume.RUN_REL}/runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R1.json",
@@ -77,14 +81,29 @@ class EvalScheduleTests(unittest.TestCase):
                          resume.SOURCE_REVISION_ALLOWED_PATHS)
         self.assertEqual(resume.SOURCE_CLAIM_QUEUE_REVISION_ALLOWED_PATHS,
                          resume.SOURCE_REVISION_ALLOWED_PATHS)
+        self.assertEqual(resume.SOURCE_R3_IDENTITY_REPAIR_ALLOWED_PATHS,
+                         resume.SOURCE_REVISION_ALLOWED_PATHS)
         self.assertEqual(
             resume.SOURCE_ALLOWED_PATHS,
             resume.INITIAL_SOURCE_ALLOWED_PATHS
             | resume.SOURCE_REVISION_ALLOWED_PATHS
             | resume.SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS
             | resume.SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS
-            | resume.SOURCE_CLAIM_QUEUE_REVISION_ALLOWED_PATHS,
+            | resume.SOURCE_CLAIM_QUEUE_REVISION_ALLOWED_PATHS
+            | resume.SOURCE_R3_IDENTITY_REPAIR_ALLOWED_PATHS,
         )
+
+    def test_preserved_first_r3_identity_attempt_records_exact_stale_evidence_hashes(self):
+        evidence = resume._verify_preserved_first_r3_identity_attempt()
+        self.assertEqual(evidence["commit"], resume.R3_INITIAL_IDENTITY_ATTEMPT_HEAD)
+        self.assertEqual(evidence["parent"], resume.R3_CLAIM_QUEUE_SOURCE_HEAD)
+        stale = evidence["stale_evidence_hashes"]
+        self.assertNotEqual(stale["receipt_regression_sha256"],
+                            stale["source_receipt_regression_sha256"])
+        self.assertNotEqual(stale["mechanical_diff_sha256"],
+                            stale["source_mechanical_diff_sha256"])
+        self.assertEqual(evidence["environment_starts"], 0)
+        self.assertEqual(evidence["new_claims"], 0)
 
     def test_eval_row_comparison_uses_strict_persisted_json_array_semantics(self):
         in_memory = {"emission_sequence": [(1, "target-a", 0)], "attempt": 2}
@@ -574,6 +593,13 @@ class VerifyEvalIdentityTests(unittest.TestCase):
                 resume.SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS),
             "source_file_sha256": {self.SOURCE_FILE: self._sha(source_path)},
         }
+        failed_attempt_evidence = {
+            "commit": resume.R3_INITIAL_IDENTITY_ATTEMPT_HEAD,
+            "parent": resume.R3_CLAIM_QUEUE_SOURCE_HEAD,
+            "gate_sha256": "4" * 64,
+            "identity_sha256": "5" * 64,
+        }
+        chain_evidence["first_r3_identity_attempt"] = failed_attempt_evidence
         stored_chain_evidence = dict(chain_evidence)
         r2_evidence = {
             "commit": resume.R2_EXECUTION_IDENTITY_HEAD,
@@ -587,6 +613,12 @@ class VerifyEvalIdentityTests(unittest.TestCase):
             "kind": "round44-eval-only-prelaunch-gate/1",
             "status": "passed",
             "source_commit": self.SOURCE_HEAD,
+            "source_commit_parent": resume.R3_INITIAL_IDENTITY_ATTEMPT_HEAD,
+            "source_commit_allowed_paths": sorted(
+                resume.SOURCE_R3_IDENTITY_REPAIR_ALLOWED_PATHS),
+            "first_r3_identity_attempt_commit": failed_attempt_evidence["commit"],
+            "first_r3_identity_attempt_gate_sha256": failed_attempt_evidence["gate_sha256"],
+            "first_r3_identity_attempt_identity_sha256": failed_attempt_evidence["identity_sha256"],
             "readonly_model_gate_sha256": self._sha(readonly_path),
             "fixed_eval_keys_sha256": "b" * 64,
             "post_retry_receipt_audit_sha256": self._sha(post_retry_audit_path),
@@ -607,12 +639,19 @@ class VerifyEvalIdentityTests(unittest.TestCase):
             "status": "passed",
             "branch": resume.BRANCH,
             "source_commit": self.SOURCE_HEAD,
+            "source_commit_parent": resume.R3_INITIAL_IDENTITY_ATTEMPT_HEAD,
+            "source_commit_allowed_paths": sorted(
+                resume.SOURCE_R3_IDENTITY_REPAIR_ALLOWED_PATHS),
+            "first_r3_identity_attempt_commit": failed_attempt_evidence["commit"],
+            "first_r3_identity_attempt_gate_sha256": failed_attempt_evidence["gate_sha256"],
+            "first_r3_identity_attempt_identity_sha256": failed_attempt_evidence["identity_sha256"],
             "source_commit_chain": [
                 resume.BASE_STOP_HEAD, resume.INITIAL_SOURCE_HEAD,
                 resume.SOURCE_IDENTITY_VALIDATOR_HEAD,
                 resume.SOURCE_AMBIENT_GUARD_HEAD,
                 resume.PRIOR_EXECUTION_COMMIT, resume.RECEIPT_RESUME_SOURCE_HEAD,
-                resume.R2_EXECUTION_IDENTITY_HEAD, self.SOURCE_HEAD],
+                resume.R2_EXECUTION_IDENTITY_HEAD, resume.R3_CLAIM_QUEUE_SOURCE_HEAD,
+                resume.R3_INITIAL_IDENTITY_ATTEMPT_HEAD, self.SOURCE_HEAD],
             "source_commit_chain_evidence": stored_chain_evidence,
             "gate_sha256": self._sha(gate_path),
             "fixed_eval_keys_sha256": gate["fixed_eval_keys_sha256"],

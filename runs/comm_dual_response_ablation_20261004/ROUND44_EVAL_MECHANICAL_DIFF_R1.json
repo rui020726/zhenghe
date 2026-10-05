@@ -207,7 +207,9 @@
       "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
       "c18e7d6564aac132104649dc18c3ab52acb76023",
       "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
-      "<R3 queue-source direct child of a48261e>"
+      "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+      "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+      "<R3 identity-hash repair source>"
     ],
     "first_commit_allowed_paths": [
       "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
@@ -255,10 +257,24 @@
       "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
     ],
-    "claim_queue_source_head": "pending direct child of a48261e; exact source commit SHA will be in the committed R3 gate/identity",
-    "identity_commit_after_source": "R3 gate/identity commit must be the exact direct child with only the two R3 identity paths"
+    "claim_queue_source_head": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+    "identity_commit_after_source": "R3 gate/identity commit must be the exact direct child with only the two R3 identity paths",
+    "first_R3_identity_attempt_commit": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+    "first_R3_identity_attempt_parent": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+    "first_R3_identity_attempt_gate_sha256": "526b0adbff5448ba7b4bbe56f6706c42a9d9f021aa74c104d33abd5bf47dee0d",
+    "first_R3_identity_attempt_identity_sha256": "665a05868f70a1714f0c3b023427eb9f1628f0c3ee13d634d4979dfeefadd01e",
+    "first_R3_identity_attempt_failure": "rejected before claims: stale receipt-regression and mechanical-diff file hashes",
+    "identity_hash_repair_source_parent": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+    "identity_hash_repair_revision_allowed_paths": [
+      "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json",
+      "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
+      "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
+    ],
+    "identity_hash_repair_source_head": "pending exact child of first R3 identity attempt; corrected R3 identity follows as exact child"
   },
-  "status": "R3_queue_cursor_regression_passed_source_freeze_and_fixed_evaluation_pending",
+  "status": "queue_cursor_regression_passed; first_R3_identity_rejected_before_claim; exact_hash_repair_and_fixed_evaluation_pending",
   "unchanged_scientific_configuration": {
     "changed_fields": [],
     "claims": "No changes to training, model, optimizer, actions, observations, reward, costs, GAE, dual response, gamma, masks, evaluation decoding, environment transitions or event ordering.",
@@ -305,5 +321,26 @@
     "checkpoint_writes": 0,
     "changed_science_or_schedule": false,
     "status": "pure regression passed; awaiting source commit and R3 identity verification"
+  },
+  "r3_identity_hash_repair": {
+    "commit": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+    "parent": "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
+    "gate_sha256": "526b0adbff5448ba7b4bbe56f6706c42a9d9f021aa74c104d33abd5bf47dee0d",
+    "identity_sha256": "665a05868f70a1714f0c3b023427eb9f1628f0c3ee13d634d4979dfeefadd01e",
+    "verification_result": "verify_eval_identity rejected before any claim at the immutable/prelaunch evidence check",
+    "stale_hashes": {
+      "identity_receipt_regression_sha256": "88d0da248c7d1881a0f53e612ac9ef4b157865a860971ccd03373f7fa3aa6fe1",
+      "committed_receipt_regression_blob_sha256": "133a005b12cfa7df0b32ff802de944878c5c3db68b2845128c4904e3623a066f",
+      "identity_mechanical_diff_sha256": "960b9117e419943dc8b2187ba8302992a8cccd9df5d378253caf6c9e363d59d9",
+      "committed_mechanical_diff_blob_sha256": "a5d97593680992e86288cc3f9ed7217d4e875a44ca2a510dea69fbf53eb1a7d2"
+    },
+    "diagnosis": "Those two artifact hashes were taken from pre-normalized CRLF working bytes; the source commit contains LF blobs. The verifier compared the committed evidence files and correctly rejected the identity.",
+    "environment_starts": 0,
+    "new_claims": 0,
+    "run_calls": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0,
+    "attempt2_unchanged": true,
+    "R1_R2_artifacts_unchanged": true
   }
 }
