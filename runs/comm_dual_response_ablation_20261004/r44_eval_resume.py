@@ -1,7 +1,7 @@
 """ROUND44 receipt repair and fixed evaluation continuation.
 
-This entry point is intentionally evaluation-only.  It validates a two-commit
-mechanical identity, configures the frozen R44 evaluation runtime, reads the
+This entry point is intentionally evaluation-only.  It validates the exact
+source and execution identity chain, configures the frozen R44 evaluation runtime, reads the
 three already-completed ep128 models, then runs only the registered 96 cells.
 It never enters the training or exact-resume runner.
 """
@@ -27,6 +27,8 @@ RUN_REL = f"runs/{RUN_DIR.name}"
 BASE_STOP_HEAD = "12c3bdde0c85d9cf31eb1f1fc264f397701babac"
 INITIAL_SOURCE_HEAD = "347da3b8b559e669c57334f51ed17bcb3e90e3b2"
 SOURCE_IDENTITY_VALIDATOR_HEAD = "3fbd702c398b9cc45d3495183b0ce73ac3ded178"
+SOURCE_AMBIENT_GUARD_HEAD = "b7c27b809cb7ac1fd3f6282a6c03265dfc44ea60"
+PRIOR_EXECUTION_COMMIT = "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10"
 SCIENTIFIC_FREEZE_HEAD = "2353c4616746cf0a7c9fcb3a519a7042a28ba176"
 TRAINING_EXECUTION_HEAD = "26b22680b8c3c5cb9bb91bc44799c76cec6f874a"
 BRANCH = "exp/comm-dual-response-ablation"
@@ -56,9 +58,15 @@ SOURCE_REVISION_ALLOWED_PATHS = {
     f"{RUN_REL}/test_r44_eval_resume.py",
 }
 SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS = set(SOURCE_REVISION_ALLOWED_PATHS)
+SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS = set(SOURCE_REVISION_ALLOWED_PATHS)
 SOURCE_ALLOWED_PATHS = (INITIAL_SOURCE_ALLOWED_PATHS | SOURCE_REVISION_ALLOWED_PATHS
-                        | SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS)
+                        | SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS
+                        | SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS)
 IDENTITY_ALLOWED_PATHS = {
+    f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_GATE_R2.json",
+    f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R2.json",
+}
+IDENTITY_ALLOWED_PATHS_R1 = {
     f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_GATE_R1.json",
     f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R1.json",
 }
@@ -66,10 +74,14 @@ IMMUTABLE_MANIFEST = RUN_DIR / "runtime" / "ROUND44_EVAL_INPUT_IMMUTABLE_MANIFES
 PREPATCH_INDEX = RUN_DIR / "runtime" / "ROUND44_R44_EVAL_INDEX_PREPATCH_R1.py"
 OLD_FAILURE_REPRO = RUN_DIR / "runtime" / "ROUND44_OLD_RECEIPT_FAILURE_REPRODUCTION_R1.json"
 READONLY_GATE = RUN_DIR / "runtime" / "ROUND44_EVAL_READONLY_MODEL_GATE_R1.json"
-EVAL_GATE = RUN_DIR / "runtime" / "ROUND44_EVAL_ONLY_GATE_R1.json"
-EVAL_IDENTITY = RUN_DIR / "runtime" / "ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R1.json"
+EVAL_GATE_R1 = RUN_DIR / "runtime" / "ROUND44_EVAL_ONLY_GATE_R1.json"
+EVAL_IDENTITY_R1 = RUN_DIR / "runtime" / "ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R1.json"
+EVAL_GATE = RUN_DIR / "runtime" / "ROUND44_EVAL_ONLY_GATE_R2.json"
+EVAL_IDENTITY = RUN_DIR / "runtime" / "ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R2.json"
+POST_RETRY_AUDIT = RUN_DIR / "runtime" / "ROUND44_EVAL_POST_RETRY_RECEIPT_AUDIT_R1.json"
 RETRY_GATE = RUN_DIR / "runtime" / "ROUND44_EVAL_RETRY_GATE_R1.json"
-PROGRESS = RUN_DIR / "runtime" / "ROUND44_EXECUTION_PROGRESS_EVAL_R1.json"
+PRIOR_PROGRESS_R1 = RUN_DIR / "runtime" / "ROUND44_EXECUTION_PROGRESS_EVAL_R1.json"
+PROGRESS = RUN_DIR / "runtime" / "ROUND44_EXECUTION_PROGRESS_EVAL_R2.json"
 LOCK_PATH = RUN_DIR / "runtime" / "ROUND44_EXECUTOR_LOCK.json"
 TASK_PATH = RUN_DIR / "ROUND44_CURRENT_TASK.json"
 PARTIAL_LEDGER = RUN_DIR / "ROUND44_PARTIAL_EXECUTION_LEDGER.json"
@@ -224,6 +236,13 @@ def _rng_state_sha256(value: Any) -> str:
     encoded = json.dumps(value, sort_keys=True, separators=(",", ":"),
                          ensure_ascii=False, allow_nan=False).encode("utf-8")
     return sha256_bytes(encoded)
+
+
+def _eval_rows_equivalent(in_memory: dict[str, Any], durable: dict[str, Any]) -> bool:
+    """Compare a runner row to its JSON receipt under the strict persisted-value contract."""
+    from r44_eval_index import _json_value_equal
+
+    return _json_value_equal(in_memory, durable)
 
 
 def install_read_only_guards(run_module: Any, runtime: dict[str, Any],
@@ -453,10 +472,18 @@ def _verify_source_commit_chain(source_head: str) -> dict[str, Any]:
         raise EvalResumeError("source identity-validator revision no longer directly follows its preserved parent")
     if _changed_paths(INITIAL_SOURCE_HEAD, SOURCE_IDENTITY_VALIDATOR_HEAD) != SOURCE_REVISION_ALLOWED_PATHS:
         raise EvalResumeError("source identity-validator revision differs from its exact path allowlist")
-    if _parent(source_head) != SOURCE_IDENTITY_VALIDATOR_HEAD:
-        raise EvalResumeError("ambient-guard revision must directly follow the preserved identity-validator commit")
-    if _changed_paths(SOURCE_IDENTITY_VALIDATOR_HEAD, source_head) != SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS:
-        raise EvalResumeError("ambient-guard revision differs from its exact path allowlist")
+    if _parent(SOURCE_AMBIENT_GUARD_HEAD) != SOURCE_IDENTITY_VALIDATOR_HEAD:
+        raise EvalResumeError("ambient-guard source no longer directly follows the identity-validator commit")
+    if _changed_paths(SOURCE_IDENTITY_VALIDATOR_HEAD, SOURCE_AMBIENT_GUARD_HEAD) != SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS:
+        raise EvalResumeError("ambient-guard source differs from its exact path allowlist")
+    if _parent(PRIOR_EXECUTION_COMMIT) != SOURCE_AMBIENT_GUARD_HEAD:
+        raise EvalResumeError("prior eval identity no longer directly follows the ambient-guard source")
+    if _changed_paths(SOURCE_AMBIENT_GUARD_HEAD, PRIOR_EXECUTION_COMMIT) != IDENTITY_ALLOWED_PATHS_R1:
+        raise EvalResumeError("prior eval identity commit differs from its exact R1 path allowlist")
+    if _parent(source_head) != PRIOR_EXECUTION_COMMIT:
+        raise EvalResumeError("receipt-resume revision must directly follow the preserved R1 identity")
+    if _changed_paths(PRIOR_EXECUTION_COMMIT, source_head) != SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS:
+        raise EvalResumeError("receipt-resume revision differs from its exact path allowlist")
     _assert_ancestor(SCIENTIFIC_FREEZE_HEAD, source_head)
     _assert_ancestor(TRAINING_EXECUTION_HEAD, source_head)
     hashes = {}
@@ -466,10 +493,13 @@ def _verify_source_commit_chain(source_head: str) -> dict[str, Any]:
         "base_stop_head": BASE_STOP_HEAD,
         "initial_source_head": INITIAL_SOURCE_HEAD,
         "source_identity_validator_head": SOURCE_IDENTITY_VALIDATOR_HEAD,
+        "ambient_guard_head": SOURCE_AMBIENT_GUARD_HEAD,
+        "prior_execution_commit": PRIOR_EXECUTION_COMMIT,
         "revised_source_head": source_head,
         "initial_source_allowed_paths": sorted(INITIAL_SOURCE_ALLOWED_PATHS),
         "source_identity_validator_revision_allowed_paths": sorted(SOURCE_REVISION_ALLOWED_PATHS),
         "ambient_guard_revision_allowed_paths": sorted(SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS),
+        "receipt_resume_revision_allowed_paths": sorted(SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS),
         "source_file_sha256": hashes,
     }
 
@@ -489,8 +519,8 @@ def _assert_source_commit(*, expected_head: str | None = None) -> str:
 
 
 def _identity_paths() -> tuple[str, str]:
-    return (f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_GATE_R1.json",
-            f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R1.json")
+    return (f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_GATE_R2.json",
+            f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R2.json")
 
 
 def verify_eval_identity() -> tuple[str, dict[str, Any], dict[str, Any]]:
@@ -511,7 +541,8 @@ def verify_eval_identity() -> tuple[str, dict[str, Any], dict[str, Any]]:
     if identity.get("gate_sha256") != sha256_file(EVAL_GATE):
         raise EvalResumeError("eval-only identity does not bind this exact prelaunch gate")
     expected_chain = [BASE_STOP_HEAD, INITIAL_SOURCE_HEAD,
-                      SOURCE_IDENTITY_VALIDATOR_HEAD, source_head]
+                      SOURCE_IDENTITY_VALIDATOR_HEAD, SOURCE_AMBIENT_GUARD_HEAD,
+                      PRIOR_EXECUTION_COMMIT, source_head]
     if identity.get("source_commit_chain") != expected_chain:
         raise EvalResumeError("eval-only identity does not bind the exact mechanical source commit chain")
     if _parent(head) != source_head or _changed_paths(source_head, head) != IDENTITY_ALLOWED_PATHS:
@@ -523,6 +554,61 @@ def verify_eval_identity() -> tuple[str, dict[str, Any], dict[str, Any]]:
             or gate.get("fixed_eval_keys_sha256") != identity.get("fixed_eval_keys_sha256")
             or gate.get("quota") != {"normal": 480, "reserve": 24, "hard_cap": 504}):
         raise EvalResumeError("prelaunch gate does not match model/plan/quota identity")
+    if (gate.get("post_retry_receipt_audit_sha256")
+            != identity.get("post_retry_receipt_audit_sha256")
+            or gate.get("prior_execution_commit") != identity.get("prior_execution_commit")
+            or gate.get("prior_execution_identity_sha256")
+            != identity.get("prior_execution_identity_sha256")
+            or gate.get("prior_execution_gate_sha256")
+            != identity.get("prior_execution_gate_sha256")
+            or gate.get("prior_progress_sha256") != identity.get("prior_progress_sha256")
+            or gate.get("read_only_model_gate_reused_from_source_commit")
+            != SOURCE_AMBIENT_GUARD_HEAD
+            or identity.get("post_retry_receipt_audit_sha256") != sha256_file(POST_RETRY_AUDIT)):
+        raise EvalResumeError("eval-only identity does not bind the completed retry receipt audit")
+    if (identity.get("prior_execution_identity_sha256") != sha256_file(EVAL_IDENTITY_R1)
+            or identity.get("prior_execution_gate_sha256") != sha256_file(EVAL_GATE_R1)
+            or identity.get("prior_progress_sha256") != sha256_file(PRIOR_PROGRESS_R1)):
+        raise EvalResumeError("retry-resume identity does not preserve the prior execution attempt")
+    prior_identity = read_json(EVAL_IDENTITY_R1)
+    prior_gate = read_json(EVAL_GATE_R1)
+    prior_progress = read_json(PRIOR_PROGRESS_R1)
+    post_retry_audit = read_json(POST_RETRY_AUDIT)
+    readonly_model_gate = read_json(READONLY_GATE)
+    for relative in IDENTITY_ALLOWED_PATHS_R1:
+        if (sha256_file(ROOT / Path(relative))
+                != _blob_sha(PRIOR_EXECUTION_COMMIT, relative)):
+            raise EvalResumeError(f"preserved R1 identity artifact differs from its commit: {relative}")
+    if (prior_identity.get("source_commit") != SOURCE_AMBIENT_GUARD_HEAD
+            or prior_identity.get("status") != "passed"
+            or prior_gate.get("status") != "passed"
+            or prior_gate.get("source_commit") != SOURCE_AMBIENT_GUARD_HEAD
+            or prior_identity.get("source_commit_chain") != [
+                BASE_STOP_HEAD, INITIAL_SOURCE_HEAD, SOURCE_IDENTITY_VALIDATOR_HEAD,
+                SOURCE_AMBIENT_GUARD_HEAD]
+            or prior_progress.get("prelaunch_head") != identity.get("prior_execution_commit")
+            or prior_progress.get("status") != "running_retry_gate"
+            or prior_progress.get("retry_gate_passed") is not False
+            or prior_progress.get("completed_eval_keys") != []
+            or prior_progress.get("evaluations_completed") != 0
+            or identity.get("prior_execution_commit") != PRIOR_EXECUTION_COMMIT
+            or readonly_model_gate.get("status") != "passed"
+            or readonly_model_gate.get("source_or_execution_head") != SOURCE_AMBIENT_GUARD_HEAD
+            or post_retry_audit.get("status") != "passed"
+            or post_retry_audit.get("attempt2", {}).get("claim_status") != "complete"
+            or post_retry_audit.get("attempt2", {}).get("eval_index_completed_count") != 1
+            or post_retry_audit.get("old_attempt1", {}).get("unchanged") is not True
+            or post_retry_audit.get("training_immutability", {}).get(
+                "all_204_checkpoint_hashes_unchanged") is not True
+            or post_retry_audit.get("training_immutability", {}).get(
+                "all_training_journal_hashes_unchanged") is not True
+            or identity.get("attempt2_claim_sha256")
+            != post_retry_audit.get("failure", {}).get("attempt2_claim_sha256")
+            or identity.get("attempt2_row_sha256")
+            != post_retry_audit.get("failure", {}).get("attempt2_row_sha256")
+            or post_retry_audit.get("failure", {}).get("execution_identity_head")
+            != identity.get("prior_execution_commit")):
+        raise EvalResumeError("preserved attempt2 evidence does not match the retry-resume identity")
     for relative in IDENTITY_ALLOWED_PATHS:
         working_sha = sha256_file(ROOT / Path(relative))
         if working_sha != _blob_sha(head, relative):
@@ -584,17 +670,26 @@ def _counter_snapshot(ledger: dict[str, Any]) -> dict[str, int]:
         "ppo_update_calls", "checkpoint_write_calls")}
 
 
-def _verify_snapshot_inputs(manifest: dict[str, Any]) -> dict[str, Any]:
+def _verify_snapshot_inputs(manifest: dict[str, Any], *,
+                           allow_completed_eval_progress: bool = False) -> dict[str, Any]:
     partial = read_json(PARTIAL_LEDGER)
     live = read_json(LIVE_LEDGER)
     current_counts = _counter_snapshot(live)
     expected_counts = manifest["counts_at_snapshot"]
-    for field in ("normal_used", "reserve_used", "total_used", "environment_constructor_calls",
-                  "run_invocation_calls", "completed_steps", "completed_logical_jobs",
-                  "technical_failed_claims", "retry_claims", "optimizer_step_calls",
-                  "ppo_update_calls", "checkpoint_write_calls"):
-        if current_counts[field] != int(expected_counts[field]):
-            raise EvalResumeError(f"live ledger differs from immutable snapshot at {field}")
+    if allow_completed_eval_progress:
+        expected_live_counts = _counts_after_verified_eval_claims(manifest, expected_counts)
+        if current_counts != expected_live_counts:
+            changed = sorted(key for key in current_counts
+                             if current_counts[key] != expected_live_counts[key])
+            raise EvalResumeError(
+                f"live ledger does not reconcile to complete fixed-evaluation claims: {changed}")
+    else:
+        for field in ("normal_used", "reserve_used", "total_used", "environment_constructor_calls",
+                      "run_invocation_calls", "completed_steps", "completed_logical_jobs",
+                      "technical_failed_claims", "retry_claims", "optimizer_step_calls",
+                      "ppo_update_calls", "checkpoint_write_calls"):
+            if current_counts[field] != int(expected_counts[field]):
+                raise EvalResumeError(f"live ledger differs from immutable snapshot at {field}")
     if partial.get("execution_counts") != expected_counts:
         # The partial closeout is a historical stop copy and is exact for these fields.
         for field, value in partial.get("execution_counts", {}).items():
@@ -689,6 +784,84 @@ def _claim_attempt_paths(key: tuple[int, str, int]) -> list[Path]:
     logical = f"model_eval_new_s{key[0]}_{key[1]}_scene{key[2]}"
     slug = re.sub(r"[^A-Za-z0-9_.-]+", "_", logical).strip("_.")
     return sorted((RUN_DIR / "launch_claims" / slug).glob("attempt_*.json"))
+
+
+def _counts_after_verified_eval_claims(
+        manifest: dict[str, Any], baseline: dict[str, Any]) -> dict[str, int]:
+    """Reconcile only terminal fixed-matrix claim deltas over the immutable training snapshot."""
+    failed_claim_sha = manifest.get("failed_attempt1", {}).get("artifacts", {}).get(
+        "claim", {}).get("sha256")
+    if not isinstance(failed_claim_sha, str):
+        raise EvalResumeError("immutable manifest lacks the preserved failed-attempt claim hash")
+    baseline_claim_seen = False
+    new_claims: list[tuple[tuple[int, str, int], str, dict[str, Any]]] = []
+    for key in evaluation_schedule():
+        logical_job = f"model_eval_new_s{key[0]}_{key[1]}_scene{key[2]}"
+        paths = _claim_attempt_paths(key)
+        attempts = []
+        for path in paths:
+            digest = sha256_file(path)
+            claim = read_json(path)
+            if digest == failed_claim_sha:
+                if baseline_claim_seen or key != RETRY_KEY:
+                    raise EvalResumeError("preserved failed attempt claim appears more than once or at a foreign key")
+                baseline_claim_seen = True
+                continue
+            if type(claim.get("attempt")) is not int:
+                raise EvalResumeError(f"evaluation claim attempt must be an integer: {path}")
+            attempt = claim["attempt"]
+            resolved_key, category = validate_eval_claim(
+                logical_job, attempt, claim.get("metadata"))
+            if resolved_key != key or claim.get("category") != category:
+                raise EvalResumeError(f"evaluation claim identity/category mismatch: {path}")
+            if (claim.get("round") != 44
+                    or claim.get("training_version") != TRAINING_VERSION
+                    or claim.get("comm_action_semantics") != "one-shot-send-skip/1"):
+                raise EvalResumeError(f"evaluation claim version identity mismatch: {path}")
+            if claim.get("status") not in {"complete", "failed_technical"}:
+                raise EvalResumeError(f"cannot resume with a nonterminal evaluation claim: {path}")
+            if claim.get("status") == "complete":
+                for field, expected in (
+                    ("environment_constructor_calls", 1), ("run_invocation_calls", 1),
+                    ("joint_run_constructed_calls", 1), ("joint_run_method_calls", 1),
+                    ("run_return_calls", 1), ("run_failure_calls", 0),
+                    ("completed_steps", 1_000), ("optimizer_step_calls", 0),
+                    ("checkpoint_write_calls", 0),
+                ):
+                    if type(claim.get(field)) is not int or claim[field] != expected:
+                        raise EvalResumeError(f"completed evaluation claim has bad {field}: {path}")
+            attempts.append(attempt)
+            new_claims.append((key, category, claim))
+        if key == RETRY_KEY:
+            if attempts not in ([], [2]):
+                raise EvalResumeError(f"reserve retry claims are not the preserved 1 then new 2: {attempts}")
+        elif attempts not in ([], [1]):
+            raise EvalResumeError(f"ordinary evaluation attempts differ from the frozen single attempt: {key}")
+    if not baseline_claim_seen:
+        raise EvalResumeError("the original failed attempt claim is missing from the fixed retry key")
+
+    result = {key: int(baseline[key]) for key in _counter_snapshot_keys()}
+    for _key, category, claim in new_claims:
+        result["normal_used"] += int(category == "normal")
+        result["reserve_used"] += int(category == "reserve")
+        result["total_used"] += 1
+        result["environment_constructor_calls"] += int(claim.get("environment_constructor_calls", 0))
+        result["run_invocation_calls"] += int(claim.get("run_invocation_calls", 0))
+        result["completed_steps"] += int(claim.get("completed_steps", 0))
+        result["completed_logical_jobs"] += int(claim.get("status") == "complete")
+        result["technical_failed_claims"] += int(claim.get("status") == "failed_technical")
+        result["retry_claims"] += int(category == "reserve")
+    if (result["normal_used"] > 480 or result["reserve_used"] > 24
+            or result["total_used"] > 504):
+        raise EvalResumeError("observed eval claim deltas exceed the frozen quota")
+    return result
+
+
+def _counter_snapshot_keys() -> tuple[str, ...]:
+    return ("normal_used", "reserve_used", "total_used", "environment_constructor_calls",
+            "run_invocation_calls", "completed_steps", "completed_logical_jobs",
+            "technical_failed_claims", "retry_claims", "optimizer_step_calls",
+            "ppo_update_calls", "checkpoint_write_calls")
 
 
 def _model_gate(*, runtime: dict[str, Any], identity_head: str,
@@ -909,7 +1082,7 @@ def _update_progress(head: str, identity: dict[str, Any], index: Any,
     existing = read_json(PROGRESS) if PROGRESS.is_file() else None
     if existing is None:
         progress = {
-            "kind": "round44-execution-progress-eval-only-r1/1",
+            "kind": "round44-execution-progress-eval-only-r2/1",
             "status": status, "prelaunch_head": head,
             "source_commit": identity["source_commit"],
             "execution_identity_sha256": sha256_file(EVAL_IDENTITY),
@@ -920,7 +1093,7 @@ def _update_progress(head: str, identity: dict[str, Any], index: Any,
         }
     else:
         expected_identity_sha = sha256_file(EVAL_IDENTITY)
-        if (existing.get("kind") != "round44-execution-progress-eval-only-r1/1"
+        if (existing.get("kind") != "round44-execution-progress-eval-only-r2/1"
                 or existing.get("prelaunch_head") != head
                 or existing.get("execution_identity_sha256") != expected_identity_sha
                 or existing.get("status") == "complete"):
@@ -1044,15 +1217,14 @@ def run_evaluation() -> dict[str, Any]:
         manifest = read_json(IMMUTABLE_MANIFEST)
         if sha256_file(IMMUTABLE_MANIFEST) != identity["immutable_input_manifest_sha256"]:
             raise EvalResumeError("immutable input manifest changed after identity freeze")
-        snapshot = _verify_snapshot_inputs(manifest)
+        snapshot = _verify_snapshot_inputs(manifest, allow_completed_eval_progress=True)
         sys.path.insert(0, str(RUN_DIR))
         import torch
         import r44_prepare
         import r44_runtime
         import r44_analysis
         import r44_report
-        from r44_eval_index import (audit_fixed_matrix, build_eval_index,
-                                    verify_new_cell)
+        from r44_eval_index import audit_fixed_matrix, build_eval_index, verify_new_cell
         from r44_prepare import RUNNER_VERSION, TRAINING_VERSION
 
         frozen = r44_prepare.read(RUN_DIR / "ROUND44_FROZEN_CONFIG.json")
@@ -1099,7 +1271,8 @@ def run_evaluation() -> dict[str, Any]:
         runtime["eval_only_claim_cursor"]["keys"] = missing
         runtime["eval_only_claim_cursor"]["index"] = 0
         progress = _update_progress(head, identity, index, "running_retry_gate",
-                                    retry_gate_passed=RETRY_KEY not in missing)
+                                    retry_gate_passed=(RETRY_KEY not in missing
+                                                       and RETRY_GATE.is_file()))
         checkpoints_before = _checkpoint_hash_map()
         journals_before = _journal_hash_map()
         if len(checkpoints_before) != 204:
@@ -1121,7 +1294,7 @@ def run_evaluation() -> dict[str, Any]:
                 runner_version=RUNNER_VERSION,
                 checkpoint_parameter_sha256=checkpoint_parameters[RETRY_KEY[0]],
             )
-            if row != verified_row or int(row.get("attempt", -1)) != 2:
+            if not _eval_rows_equivalent(row, verified_row) or int(row.get("attempt", -1)) != 2:
                 raise EvalResumeError("reserve retry in-memory row differs from its durable receipt")
             index.add_verified(entry, verified_row)
             runtime["eval_only_claim_cursor"]["index"] += 1
@@ -1137,12 +1310,22 @@ def run_evaluation() -> dict[str, Any]:
                                         retry_gate_passed=True)
             print("ROUND44: retry gate passed; continuing original fixed schedule", flush=True)
         else:
-            if not RETRY_GATE.is_file():
-                raise EvalResumeError("retry is complete but its immutable gate receipt is missing")
-            retry_result = read_json(RETRY_GATE)
-            if retry_result.get("status") != "passed" or sha256_file(READONLY_GATE) != identity_gate.get(
-                    "readonly_model_gate_sha256"):
-                raise EvalResumeError("previous retry gate does not match the execution identity")
+            if RETRY_GATE.is_file():
+                retry_result = read_json(RETRY_GATE)
+                if (retry_result.get("status") != "passed"
+                        or sha256_file(READONLY_GATE) != identity_gate.get(
+                            "readonly_model_gate_sha256")):
+                    raise EvalResumeError("previous retry gate does not match the execution identity")
+            else:
+                if index.get(*RETRY_KEY) is None:
+                    raise EvalResumeError("retry gate is missing and the durable retry row is unavailable")
+                print("ROUND44: rebuilding retry gate from the already verified attempt2 receipt; no new claim",
+                      flush=True)
+                controller, model_identity = loaded_models[RETRY_KEY[0]]
+                retry_result = _retry_gate(
+                    runtime, index, checkpoint_parameters, controller,
+                    model_identity, before_parameter_sha, checkpoints_before, journals_before)
+                _write_new_or_match(RETRY_GATE, retry_result)
             progress = _update_progress(head, identity, index, "running_fixed_95",
                                         retry_gate_passed=True)
 
@@ -1172,7 +1355,7 @@ def run_evaluation() -> dict[str, Any]:
                 runner_version=RUNNER_VERSION,
                 checkpoint_parameter_sha256=checkpoint_parameters[seed],
             )
-            if row != verified_row or int(row.get("attempt", -1)) != expected_attempt:
+            if not _eval_rows_equivalent(row, verified_row) or int(row.get("attempt", -1)) != expected_attempt:
                 raise EvalResumeError(f"normal evaluation row/attempt mismatch for {key}")
             if controller.parameter_summary()["parameter_sha256"] != before_parameter_sha[str(seed)]:
                 raise EvalResumeError(f"read-only model parameters changed during evaluation: seed {seed}")

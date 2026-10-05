@@ -28,7 +28,7 @@ class _Index:
 
 
 class EvalScheduleTests(unittest.TestCase):
-    def test_source_identity_uses_three_exact_mechanical_commits(self):
+    def test_source_identity_uses_four_exact_mechanical_revisions(self):
         self.assertEqual(
             resume.BASE_STOP_HEAD,
             "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
@@ -42,6 +42,18 @@ class EvalScheduleTests(unittest.TestCase):
             "3fbd702c398b9cc45d3495183b0ce73ac3ded178",
         )
         self.assertEqual(
+            resume.SOURCE_AMBIENT_GUARD_HEAD,
+            "b7c27b809cb7ac1fd3f6282a6c03265dfc44ea60",
+        )
+        self.assertEqual(
+            resume.PRIOR_EXECUTION_COMMIT,
+            "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
+        )
+        self.assertEqual(resume.IDENTITY_ALLOWED_PATHS_R1, {
+            f"{resume.RUN_REL}/runtime/ROUND44_EVAL_ONLY_GATE_R1.json",
+            f"{resume.RUN_REL}/runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R1.json",
+        })
+        self.assertEqual(
             resume.SOURCE_REVISION_ALLOWED_PATHS,
             {
                 f"{resume.RUN_REL}/ROUND44_CURRENT_TASK.json",
@@ -53,12 +65,99 @@ class EvalScheduleTests(unittest.TestCase):
         )
         self.assertEqual(resume.SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS,
                          resume.SOURCE_REVISION_ALLOWED_PATHS)
+        self.assertEqual(resume.SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS,
+                         resume.SOURCE_REVISION_ALLOWED_PATHS)
         self.assertEqual(
             resume.SOURCE_ALLOWED_PATHS,
             resume.INITIAL_SOURCE_ALLOWED_PATHS
             | resume.SOURCE_REVISION_ALLOWED_PATHS
-            | resume.SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS,
+            | resume.SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS
+            | resume.SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS,
         )
+
+    def test_eval_row_comparison_uses_strict_persisted_json_array_semantics(self):
+        in_memory = {"emission_sequence": [(1, "target-a", 0)], "attempt": 2}
+        durable = {"emission_sequence": [[1, "target-a", 0]], "attempt": 2}
+        self.assertNotEqual(in_memory, durable)
+        self.assertTrue(resume._eval_rows_equivalent(in_memory, durable))
+        self.assertFalse(resume._eval_rows_equivalent(
+            {"value": 1}, {"value": 1.0}))
+        self.assertFalse(resume._eval_rows_equivalent(
+            {"value": -0.0}, {"value": 0.0}))
+
+    def test_live_ledger_resume_reconciles_only_terminal_matrix_claims(self):
+        retry = resume.RETRY_KEY
+        normal = (11, "greedy", 1_301_001)
+        old_path = Path("attempt_0001.json")
+        retry_path = Path("attempt_0002.json")
+        normal_path = Path("normal_attempt_0001.json")
+        metadata_retry = {"arm": "NEW", "training_seed": 11,
+                          "mode": "greedy", "scenario_seed": 1_301_000}
+        metadata_normal = {"arm": "NEW", "training_seed": 11,
+                           "mode": "greedy", "scenario_seed": 1_301_001}
+        baseline_claim = {"attempt": 1, "status": "failed_technical"}
+        complete = {
+            "attempt": 2, "category": "reserve", "status": "complete",
+            "logical_job": "model_eval_new_s11_greedy_scene1301000",
+            "metadata": metadata_retry, "round": 44,
+            "training_version": resume.TRAINING_VERSION,
+            "comm_action_semantics": "one-shot-send-skip/1",
+            "environment_constructor_calls": 1, "run_invocation_calls": 1,
+            "joint_run_constructed_calls": 1, "joint_run_method_calls": 1,
+            "run_return_calls": 1, "run_failure_calls": 0,
+            "completed_steps": 1_000, "optimizer_step_calls": 0,
+            "checkpoint_write_calls": 0,
+        }
+        normal_complete = {
+            **complete, "attempt": 1, "category": "normal",
+            "logical_job": "model_eval_new_s11_greedy_scene1301001",
+            "metadata": metadata_normal,
+        }
+        claims = {old_path: baseline_claim, retry_path: complete,
+                  normal_path: normal_complete}
+        hashes = {old_path: "f" * 64, retry_path: "a" * 64,
+                  normal_path: "b" * 64}
+        baseline = {
+            "normal_used": 385, "reserve_used": 0, "total_used": 385,
+            "environment_constructor_calls": 385, "run_invocation_calls": 385,
+            "completed_steps": 385_000, "completed_logical_jobs": 384,
+            "technical_failed_claims": 1, "retry_claims": 0,
+            "optimizer_step_calls": 1_016, "ppo_update_calls": 96,
+            "checkpoint_write_calls": 297,
+        }
+
+        def claim_paths(key):
+            return ([old_path, retry_path] if key == retry
+                    else ([normal_path] if key == normal else []))
+
+        with ExitStack() as stack:
+            stack.enter_context(patch.object(resume, "evaluation_schedule", return_value=(retry, normal)))
+            stack.enter_context(patch.object(resume, "_claim_attempt_paths", side_effect=claim_paths))
+            stack.enter_context(patch.object(resume, "read_json", side_effect=claims.__getitem__))
+            stack.enter_context(patch.object(resume, "sha256_file", side_effect=hashes.__getitem__))
+            result = resume._counts_after_verified_eval_claims(
+                {"failed_attempt1": {"artifacts": {"claim": {"sha256": "f" * 64}}}},
+                baseline,
+            )
+        self.assertEqual(result["normal_used"], 386)
+        self.assertEqual(result["reserve_used"], 1)
+        self.assertEqual(result["total_used"], 387)
+        self.assertEqual(result["completed_steps"], 387_000)
+        self.assertEqual(result["completed_logical_jobs"], 386)
+        self.assertEqual(result["retry_claims"], 1)
+
+        incomplete = dict(normal_complete, status="claimed_before_environment")
+        claims[normal_path] = incomplete
+        with ExitStack() as stack:
+            stack.enter_context(patch.object(resume, "evaluation_schedule", return_value=(retry, normal)))
+            stack.enter_context(patch.object(resume, "_claim_attempt_paths", side_effect=claim_paths))
+            stack.enter_context(patch.object(resume, "read_json", side_effect=claims.__getitem__))
+            stack.enter_context(patch.object(resume, "sha256_file", side_effect=hashes.__getitem__))
+            with self.assertRaisesRegex(resume.EvalResumeError, "nonterminal"):
+                resume._counts_after_verified_eval_claims(
+                    {"failed_attempt1": {"artifacts": {"claim": {"sha256": "f" * 64}}}},
+                    baseline,
+                )
 
     def test_fixed_matrix_has_96_cells_and_retry_is_first(self):
         schedule = resume.evaluation_schedule()
@@ -325,6 +424,7 @@ class EvalOnlyGuardTests(unittest.TestCase):
 class VerifyEvalIdentityTests(unittest.TestCase):
     SOURCE_HEAD = "f" * 40
     IDENTITY_HEAD = "e" * 40
+    PRIOR_EXECUTION_HEAD = "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10"
     SOURCE_FILE = f"{resume.RUN_REL}/r44_eval_resume.py"
 
     @staticmethod
@@ -354,15 +454,64 @@ class VerifyEvalIdentityTests(unittest.TestCase):
         gate_path, identity_path = relative_paths[gate_rel], relative_paths[identity_rel]
         readonly_path = runtime_dir / "readonly.json"
         manifest_path = runtime_dir / "manifest.json"
+        post_retry_audit_path = runtime_dir / "post_retry_audit.json"
+        prior_gate_rel, prior_identity_rel = sorted(resume.IDENTITY_ALLOWED_PATHS_R1)
+        prior_identity_path = root / Path(prior_identity_rel)
+        prior_gate_path = root / Path(prior_gate_rel)
+        prior_identity_path.parent.mkdir(parents=True, exist_ok=True)
+        prior_gate_path.parent.mkdir(parents=True, exist_ok=True)
+        prior_progress_path = runtime_dir / "prior_progress.json"
         regression_path = run_dir / "ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json"
         diff_path = run_dir / "ROUND44_EVAL_MECHANICAL_DIFF_R1.json"
-        for path in (readonly_path, manifest_path, regression_path, diff_path):
+        for path in (manifest_path, regression_path, diff_path):
             path.write_text("{}\n", encoding="utf-8")
+        readonly_path.write_text(json.dumps({
+            "status": "passed", "source_or_execution_head": resume.SOURCE_AMBIENT_GUARD_HEAD,
+        }) + "\n", encoding="utf-8")
+        prior_identity = {
+            "status": "passed", "source_commit": resume.SOURCE_AMBIENT_GUARD_HEAD,
+            "source_commit_chain": [resume.BASE_STOP_HEAD, resume.INITIAL_SOURCE_HEAD,
+                resume.SOURCE_IDENTITY_VALIDATOR_HEAD, resume.SOURCE_AMBIENT_GUARD_HEAD],
+        }
+        prior_gate = {"status": "passed", "source_commit": resume.SOURCE_AMBIENT_GUARD_HEAD}
+        prior_progress = {
+            "prelaunch_head": self.PRIOR_EXECUTION_HEAD,
+            "status": "running_retry_gate", "retry_gate_passed": False,
+            "completed_eval_keys": [], "evaluations_completed": 0,
+        }
+        post_retry_audit = {
+            "status": "passed",
+            "failure": {
+                "execution_identity_head": self.PRIOR_EXECUTION_HEAD,
+                "attempt2_claim_sha256": "c" * 64,
+                "attempt2_row_sha256": "d" * 64,
+            },
+            "attempt2": {"claim_status": "complete", "eval_index_completed_count": 1},
+            "old_attempt1": {"unchanged": True},
+            "training_immutability": {
+                "all_204_checkpoint_hashes_unchanged": True,
+                "all_training_journal_hashes_unchanged": True,
+            },
+        }
+        prior_identity_path.write_text(json.dumps(prior_identity) + "\n", encoding="utf-8")
+        prior_gate_path.write_text(json.dumps(prior_gate) + "\n", encoding="utf-8")
+        prior_progress_path.write_text(json.dumps(prior_progress) + "\n", encoding="utf-8")
+        post_retry_audit_path.write_text(json.dumps(post_retry_audit) + "\n", encoding="utf-8")
 
         chain_evidence = {
             "base_stop_head": resume.BASE_STOP_HEAD,
             "initial_source_head": resume.INITIAL_SOURCE_HEAD,
+            "source_identity_validator_head": resume.SOURCE_IDENTITY_VALIDATOR_HEAD,
+            "ambient_guard_head": resume.SOURCE_AMBIENT_GUARD_HEAD,
+            "prior_execution_commit": resume.PRIOR_EXECUTION_COMMIT,
             "revised_source_head": self.SOURCE_HEAD,
+            "initial_source_allowed_paths": sorted(resume.INITIAL_SOURCE_ALLOWED_PATHS),
+            "source_identity_validator_revision_allowed_paths": sorted(
+                resume.SOURCE_REVISION_ALLOWED_PATHS),
+            "ambient_guard_revision_allowed_paths": sorted(
+                resume.SOURCE_AMBIENT_GUARD_REVISION_ALLOWED_PATHS),
+            "receipt_resume_revision_allowed_paths": sorted(
+                resume.SOURCE_RECEIPT_RESUME_REVISION_ALLOWED_PATHS),
             "source_file_sha256": {self.SOURCE_FILE: self._sha(source_path)},
         }
         stored_chain_evidence = dict(chain_evidence)
@@ -373,6 +522,12 @@ class VerifyEvalIdentityTests(unittest.TestCase):
             "source_commit": self.SOURCE_HEAD,
             "readonly_model_gate_sha256": self._sha(readonly_path),
             "fixed_eval_keys_sha256": "b" * 64,
+            "post_retry_receipt_audit_sha256": self._sha(post_retry_audit_path),
+            "prior_execution_commit": self.PRIOR_EXECUTION_HEAD,
+            "prior_execution_identity_sha256": self._sha(prior_identity_path),
+            "prior_execution_gate_sha256": self._sha(prior_gate_path),
+            "prior_progress_sha256": self._sha(prior_progress_path),
+            "read_only_model_gate_reused_from_source_commit": resume.SOURCE_AMBIENT_GUARD_HEAD,
             "quota": {"normal": 480, "reserve": 24, "hard_cap": 504},
         }
         gate_path.write_text(json.dumps(gate, sort_keys=True) + "\n", encoding="utf-8")
@@ -383,10 +538,19 @@ class VerifyEvalIdentityTests(unittest.TestCase):
             "source_commit": self.SOURCE_HEAD,
             "source_commit_chain": [
                 resume.BASE_STOP_HEAD, resume.INITIAL_SOURCE_HEAD,
-                resume.SOURCE_IDENTITY_VALIDATOR_HEAD, self.SOURCE_HEAD],
+                resume.SOURCE_IDENTITY_VALIDATOR_HEAD,
+                resume.SOURCE_AMBIENT_GUARD_HEAD,
+                resume.PRIOR_EXECUTION_COMMIT, self.SOURCE_HEAD],
             "source_commit_chain_evidence": stored_chain_evidence,
             "gate_sha256": self._sha(gate_path),
             "fixed_eval_keys_sha256": gate["fixed_eval_keys_sha256"],
+            "post_retry_receipt_audit_sha256": self._sha(post_retry_audit_path),
+            "prior_execution_commit": self.PRIOR_EXECUTION_HEAD,
+            "prior_execution_identity_sha256": self._sha(prior_identity_path),
+            "prior_execution_gate_sha256": self._sha(prior_gate_path),
+            "prior_progress_sha256": self._sha(prior_progress_path),
+            "attempt2_claim_sha256": post_retry_audit["failure"]["attempt2_claim_sha256"],
+            "attempt2_row_sha256": post_retry_audit["failure"]["attempt2_row_sha256"],
             "readonly_model_gate_sha256": self._sha(readonly_path),
             "source_file_sha256": {self.SOURCE_FILE: self._sha(source_path)},
             "immutable_input_manifest_sha256": self._sha(manifest_path),
@@ -409,6 +573,8 @@ class VerifyEvalIdentityTests(unittest.TestCase):
             (self.IDENTITY_HEAD, gate_rel): self._sha(gate_path),
             (self.IDENTITY_HEAD, identity_rel): self._sha(identity_path),
             (self.SOURCE_HEAD, self.SOURCE_FILE): self._sha(source_path),
+            (resume.PRIOR_EXECUTION_COMMIT, prior_gate_rel): self._sha(prior_gate_path),
+            (resume.PRIOR_EXECUTION_COMMIT, prior_identity_rel): self._sha(prior_identity_path),
         }
         if drift_gate:
             gate_path.write_text("{}\n", encoding="utf-8")
@@ -437,6 +603,10 @@ class VerifyEvalIdentityTests(unittest.TestCase):
                 "RUN_DIR": run_dir,
                 "EVAL_IDENTITY": identity_path,
                 "EVAL_GATE": gate_path,
+                "EVAL_IDENTITY_R1": prior_identity_path,
+                "EVAL_GATE_R1": prior_gate_path,
+                "PRIOR_PROGRESS_R1": prior_progress_path,
+                "POST_RETRY_AUDIT": post_retry_audit_path,
                 "IMMUTABLE_MANIFEST": manifest_path,
                 "READONLY_GATE": readonly_path,
             }.items():

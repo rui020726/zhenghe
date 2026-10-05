@@ -1,32 +1,33 @@
 {
   "active_execution_quota_snapshot": {
+    "normal_plan": 480,
+    "normal_used": 385,
+    "normal_remaining": 95,
+    "reserve_max": 24,
+    "reserve_used": 1,
+    "reserve_remaining": 23,
+    "total_used": 386,
+    "hard_cap": 504,
+    "hard_cap_remaining": 118,
+    "planned_new_eval_cells": 96,
+    "valid_new_eval_cells": 1,
+    "next_authorized_attempt": {
+      "attempt": 1,
+      "category": "normal",
+      "key": [
+        11,
+        "greedy",
+        1301001
+      ],
+      "blocked_until": "receipt-resume source and R2 identity pass; retry gate is rebuilt from durable attempt2"
+    },
     "failed_key": [
       11,
       "greedy",
       1301000
     ],
-    "hard_cap": 504,
-    "hard_cap_remaining": 119,
-    "next_authorized_attempt": {
-      "attempt": 2,
-      "category": "reserve",
-      "key": [
-        11,
-        "greedy",
-        1301000
-      ]
-    },
-    "normal_plan": 480,
-    "normal_remaining": 95,
-    "normal_used": 385,
-    "planned_new_eval_cells": 96,
-    "reserve_max": 24,
-    "reserve_remaining": 24,
-    "reserve_used": 0,
-    "total_used": 385,
-    "training_authorized_again": false,
     "training_complete": 384,
-    "valid_new_eval_cells": 0
+    "training_authorized_again": false
   },
   "active_round": 44,
   "ambient_rng_read_only_guard": {
@@ -43,7 +44,7 @@
   "authorization": {
     "saved_basis": "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_CONTINUATION_BASIS.md",
     "saved_basis_sha256": "8205cc4314a68ba3e3cdef2a95a564bb4bb45f87982cb9d951e3b140ae8880f7",
-    "scope": "minimal comparator fix; exact in-memory ep4 recovery; then only the original remaining 476 normal tasks; local completion, no push/merge/deploy",
+    "scope": "Minimal eval-row JSON-equivalence and receipt-resume repair; validate and gate the already completed reserve attempt 2, then execute only the original remaining 95 normal cells; no training, optimizer updates, new experiment, push, merge or deploy.",
     "source": "Codex continuation handoff message received 2026-10-05"
   },
   "base_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
@@ -94,48 +95,49 @@
     "sha256": "d6ebc99354f02c61f6f986cd76adc612449a126bd612d896c12e8a271b15adf1",
     "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3"
   },
-  "current_head_at_persist": "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
+  "current_head_at_persist": "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
   "current_quota": {
+    "normal_plan": 480,
+    "normal_used": 385,
+    "normal_remaining": 95,
+    "reserve_max": 24,
+    "reserve_used": 1,
+    "reserve_remaining": 23,
+    "total_used": 386,
     "hard_cap": 504,
-    "hard_cap_remaining": 119,
+    "hard_cap_remaining": 118,
+    "planned_new_eval_cells": 96,
+    "valid_new_eval_cells": 1,
     "next_authorized_attempt": {
-      "attempt": 2,
-      "category": "reserve",
+      "attempt": 1,
+      "category": "normal",
       "key": [
         11,
         "greedy",
-        1301000
-      ]
-    },
-    "normal_plan": 480,
-    "normal_remaining": 95,
-    "normal_used": 385,
-    "planned_new_eval_cells": 96,
-    "reserve_max": 24,
-    "reserve_remaining": 24,
-    "reserve_used": 0,
-    "total_used": 385,
-    "valid_new_eval_cells": 0
+        1301001
+      ],
+      "blocked_until": "receipt-resume source and R2 identity pass; retry gate is rebuilt from durable attempt2"
+    }
   },
-  "current_stage": "ROUND44 eval-only ambient-RNG guard revision: the exact three-seed read-only load and CPU-forward RNG audit is implemented; 17 receipt/index tests and 14 eval-only tests passed; source commit, actual CPU-only checkpoint/forward gate, and final identity remain pending.",
+  "current_stage": "ROUND44 reserve attempt 2 completed 1000 steps and is valid in the strict receipt index; the runner stopped on a false-negative direct Python tuple/list comparison before writing its retry gate. Original attempt 1, model checkpoints and training journals remain unchanged. A narrow receipt-equivalence/recovery source revision and R2 identity are required before the remaining 95 normal eval cells.",
   "current_state": {
     "as_of": "2026-10-06",
     "counts": {
       "checkpoint_write_calls": 297,
-      "completed_logical_jobs": 384,
-      "completed_steps": 385000,
-      "environment_constructor_calls": 385,
-      "joint_run_constructed_calls": 385,
+      "completed_logical_jobs": 385,
+      "completed_steps": 386000,
+      "environment_constructor_calls": 386,
+      "joint_run_constructed_calls": 386,
       "normal_used": 385,
       "optimizer_step_calls": 1016,
       "planned_new_eval_cells": 96,
       "ppo_update_calls": 96,
-      "reserve_used": 0,
-      "retry_claims": 0,
-      "run_invocation_calls": 385,
+      "reserve_used": 1,
+      "retry_claims": 1,
+      "run_invocation_calls": 386,
       "technical_failed_claims": 1,
-      "total_used": 385,
-      "valid_new_eval_cells": 0
+      "total_used": 386,
+      "valid_new_eval_cells": 1
     },
     "ep128_index": {
       "11": {
@@ -174,9 +176,10 @@
     ],
     "source_live_ledger": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EXECUTION_LEDGER.json",
     "source_partial_ledger": "runs/comm_dual_response_ablation_20261004/ROUND44_PARTIAL_EXECUTION_LEDGER.json",
-    "stage": "eval_receipt_repair_then_fixed_evaluation",
-    "training_complete": true,
-    "training_resume_authorized": false
+    "stage": "receipt_resume_repair_after_completed_reserve_attempt2",
+    "training_complete": 384,
+    "training_resume_authorized": false,
+    "current_eval_index_count": 1
   },
   "current_task_archive": {
     "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_CURRENT_TASK_BEFORE_EVAL_20261006_R1.json",
@@ -262,8 +265,8 @@
     "sha256": "d6ebc99354f02c61f6f986cd76adc612449a126bd612d896c12e8a271b15adf1",
     "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3"
   },
-  "latest_current_head_at_continuation": "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
-  "next_action": "Commit the exact five-path ambient-guard source child of 3fbd702; rerun py_compile, all 17 receipt/index and 14 eval-only tests; pass the real three-seed CPU read-only checkpoint/forward audit including RNG preservation; freeze the exact identity child and only then execute the reserve retry plus original remaining 95 cells.",
+  "latest_current_head_at_continuation": "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
+  "next_action": "Commit the exact five-path receipt-resume source child of the preserved R1 identity; rerun py_compile, 16 eval-resume tests and the 16 state-independent receipt/index tests; bind the post-retry audit and reused read-only model gate into R2 identity; verify it; resume from the already completed attempt2 receipt, rebuild and pass the retry gate without another claim, then execute the original 95 normal cells.",
   "old_projection_failure_evidence": {
     "episodes": 4,
     "old_projection_differences_each_episode": 3,
@@ -335,26 +338,27 @@
     "python": "D:\\project_env\\python.exe"
   },
   "quota": {
+    "normal_plan": 480,
+    "normal_used": 385,
+    "normal_remaining": 95,
+    "reserve_max": 24,
+    "reserve_used": 1,
+    "reserve_remaining": 23,
+    "total_used": 386,
     "hard_cap": 504,
-    "hard_cap_remaining": 119,
+    "hard_cap_remaining": 118,
+    "planned_new_eval_cells": 96,
+    "valid_new_eval_cells": 1,
     "next_authorized_attempt": {
-      "attempt": 2,
-      "category": "reserve",
+      "attempt": 1,
+      "category": "normal",
       "key": [
         11,
         "greedy",
-        1301000
-      ]
-    },
-    "normal_plan": 480,
-    "normal_remaining": 95,
-    "normal_used": 385,
-    "planned_new_eval_cells": 96,
-    "reserve_max": 24,
-    "reserve_remaining": 24,
-    "reserve_used": 0,
-    "total_used": 385,
-    "valid_new_eval_cells": 0
+        1301001
+      ],
+      "blocked_until": "receipt-resume source and R2 identity pass; retry gate is rebuilt from durable attempt2"
+    }
   },
   "r43_read_only_parent_delivery": "9f2b6b6411c50849ce1a9eedbaedffaf0aededa5",
   "repository": "D:\\code\\整合\\zhenghe-round42",
@@ -372,18 +376,27 @@
   },
   "source_identity_revision": {
     "R4_historical_source_commit": "26b22680b8c3c5cb9bb91bc44799c76cec6f874a",
-    "ambient_guard_revision_scope": "the same five eval-only source/test/evidence paths; no training science or frozen runtime sources",
-    "hashes_may_be_skipped": false,
     "preserved_identity_validator_commit": "3fbd702c398b9cc45d3495183b0ce73ac3ded178",
     "preserved_initial_source_commit": "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
+    "ambient_guard_source_commit": "b7c27b809cb7ac1fd3f6282a6c03265dfc44ea60",
+    "prior_eval_identity_commit": "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
+    "prior_R1_identity_and_gate_preserved": true,
+    "prior_R1_progress_preserved": true,
     "required_chain": [
       "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
       "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
       "3fbd702c398b9cc45d3495183b0ce73ac3ded178",
-      "<ambient-guard eval-only source head>"
+      "b7c27b809cb7ac1fd3f6282a6c03265dfc44ea60",
+      "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
+      "<receipt-resume source head>"
     ],
-    "revised_source_head": "pending exact child commit; 347da3b and 3fbd702 preserved",
-    "revision_scope": "r44_eval_resume.py, test_r44_eval_resume.py, current task, receipt regression, mechanical diff only"
+    "receipt_resume_revision_scope": "same five eval-only source/test/evidence paths; row JSON equality, claim-count reconciliation, retry-gate rehydration and R2 identity paths only",
+    "resume_source_head": "pending exact direct child of prior R1 identity 1f43d86",
+    "identity_artifacts": [
+      "runtime/ROUND44_EVAL_ONLY_GATE_R2.json",
+      "runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R2.json"
+    ],
+    "hashes_may_be_skipped": false
   },
   "stage": "eval_receipt_repair_then_fixed_evaluation",
   "status": "authorized_eval_receipt_repair_and_eval_only_resume",
@@ -392,5 +405,29 @@
     "failure_capture": "runs/comm_dual_response_ablation_20261004/ROUND44_EXECUTION_FAILURE_CAPTURE_SEED11_B0.txt",
     "report": "runs/comm_dual_response_ablation_20261004/ROUND44_STOP_REPORT.md",
     "status": "runs/comm_dual_response_ablation_20261004/ROUND44_STATUS.json"
+  },
+  "post_retry_runner_failure": {
+    "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EVAL_POST_RETRY_RECEIPT_AUDIT_R1.json",
+    "sha256": "608a93434bd24f8c40b6b8ee40e8f811db49ea9a7bdf729b5bb91a5fdf406321",
+    "attempt2_status": "complete reserve claim, 1000 steps",
+    "strict_receipt_index": "passed; exactly one valid new eval cell",
+    "on_time": 6,
+    "spent_bytes": 0,
+    "failure": "false negative at direct dict equality after durable receipt validation; tuple/list JSON arrays are equivalent under the registered strict JSON contract",
+    "remaining_95_launched": false,
+    "training_checkpoints_and_journals_unchanged": true
+  },
+  "retry_resume_boundary": {
+    "preserve_failed_attempt1": true,
+    "preserve_completed_attempt2_without_rerun": true,
+    "reuse_read_only_model_gate": {
+      "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EVAL_READONLY_MODEL_GATE_R1.json",
+      "sha256": "23606c1b825b7a3e9b656008090f46a517b9605592f15dfa5bc7de1f845afff8",
+      "source_commit": "b7c27b809cb7ac1fd3f6282a6c03265dfc44ea60",
+      "three_ep128_cpu_loads_and_forwards_passed": true,
+      "ambient_rng_preserved": true
+    },
+    "new_execution_identity": "R2, direct child of the receipt-resume source commit",
+    "progress": "use new R2 progress path; preserve R1 running_retry_gate record"
   }
 }

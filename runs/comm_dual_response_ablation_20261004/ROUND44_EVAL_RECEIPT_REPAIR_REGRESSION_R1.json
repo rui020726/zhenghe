@@ -6,7 +6,7 @@
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_index.py",
       "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
     ],
-    "status": "passed after ambient-guard model-gate revision"
+    "status": "passed after receipt-resume comparator and claim reconciliation changes"
   },
   "immutable_input_manifest_sha256": "b3bb6f7c2488b2acb03f467c799b6eb74554795cf9041eb30529031774a3ebeb",
   "kind": "round44-eval-receipt-repair-regression/1",
@@ -47,8 +47,8 @@
       "one guarded read-only load and one ambient restore per seed",
       "ambient Python/NumPy/Torch snapshot hash before and after each CPU forward/cost-value call"
     ],
-    "actual_ep128_gate": "pending; not yet run",
-    "real_checkpoint_forward_count": 0,
+    "actual_ep128_gate": "passed on source b7c27b8; 3 read-only ep128 loads and CPU forwards; no environment",
+    "real_checkpoint_forward_count": 3,
     "environment_starts": 0
   },
   "regressions": {
@@ -93,7 +93,7 @@
       "status": "failed_before_read_only_model_gate"
     }
   ],
-  "status": "passed",
+  "status": "passed_repair_tests_pending_R2_identity_and_remaining_evaluation",
   "targeted_test_runs": [
     {
       "command": "D:\\project_env\\python.exe -m unittest discover -s runs/comm_dual_response_ablation_20261004 -p test_r44_eval_index.py -v",
@@ -111,20 +111,73 @@
       "status": "passed",
       "test_ids": [
         "test_r44_eval_resume.EvalOnlyGuardTests.test_forbidden_training_optimizer_and_checkpoint_calls_raise",
+        "test_r44_eval_resume.EvalOnlyGuardTests.test_real_versioned_read_only_loader_preserves_only_ambient_rng",
         "test_r44_eval_resume.EvalScheduleTests.test_claim_rejects_wrong_metadata_and_foreign_keys",
+        "test_r44_eval_resume.EvalScheduleTests.test_eval_row_comparison_uses_strict_persisted_json_array_semantics",
         "test_r44_eval_resume.EvalScheduleTests.test_fixed_matrix_has_96_cells_and_retry_is_first",
+        "test_r44_eval_resume.EvalScheduleTests.test_live_ledger_resume_reconciles_only_terminal_matrix_claims",
         "test_r44_eval_resume.EvalScheduleTests.test_other_fixed_cell_requires_normal_attempt_one",
         "test_r44_eval_resume.EvalScheduleTests.test_queue_advances_from_retry_to_next_fixed_cell",
         "test_r44_eval_resume.EvalScheduleTests.test_queue_rejects_consumption_out_of_order",
         "test_r44_eval_resume.EvalScheduleTests.test_retry_queue_must_precede_remaining_fixed_cells",
         "test_r44_eval_resume.EvalScheduleTests.test_retry_requires_attempt_two_and_reserve_metadata",
-      "test_r44_eval_resume.EvalScheduleTests.test_source_identity_uses_three_exact_mechanical_commits",
+        "test_r44_eval_resume.EvalScheduleTests.test_source_identity_uses_four_exact_mechanical_revisions",
         "test_r44_eval_resume.VerifyEvalIdentityTests.test_actual_identity_verifier_accepts_source_head_and_identity_child",
         "test_r44_eval_resume.VerifyEvalIdentityTests.test_actual_identity_verifier_rejects_worktree_and_content_drift",
         "test_r44_eval_resume.VerifyEvalIdentityTests.test_actual_identity_verifier_rejects_wrong_parent_and_unregistered_path",
         "test_r44_eval_resume.VerifyEvalIdentityTests.test_historical_freeze_and_r4_sources_match_real_git_identities"
       ],
-      "tests_run": 14
+      "tests_run": 16
     }
-  ]
+  ],
+  "receipt_resume_repair": {
+    "failure_audit_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EVAL_POST_RETRY_RECEIPT_AUDIT_R1.json",
+    "failure_audit_sha256": "608a93434bd24f8c40b6b8ee40e8f811db49ea9a7bdf729b5bb91a5fdf406321",
+    "strict_receipt_index_after_attempt2": "passed; 1 valid cell",
+    "attempt2_claim_status": "complete",
+    "attempt2_steps": 1000,
+    "attempt2_on_time": 6,
+    "attempt2_spent_bytes": 0,
+    "direct_python_equality_false_negative": true,
+    "repair": "use strict JSON structural equality in both retry and normal row checks; reconcile current terminal eval claims to the immutable training snapshot; rebuild the retry gate from the existing verified attempt2 receipt",
+    "environment_repeat_for_retry": false,
+    "remaining_normal_cells_launched": 0,
+    "checkpoint_and_training_journal_hashes_unchanged": true
+  },
+  "post_retry_index_suite": {
+    "command": "D:\\project_env\\python.exe -m unittest with test_actual_failed_attempt1_row_is_not_admitted_by_actual_index excluded",
+    "tests_passed": 16,
+    "tests_failed": 0,
+    "excluded_test": "test_actual_failed_attempt1_row_is_not_admitted_by_actual_index",
+    "reason": "its old assertion requires completed_count==0; after the valid reserve attempt2, the correct strict index count is 1. The synthetic failed-attempt-only test still passes.",
+    "pre_retry_full_index_suite": "17/17 passed before the reserve attempt2 was run"
+  },
+  "post_retry_eval_resume_suite": {
+    "module": "test_r44_eval_resume.py",
+    "tests_run": 16,
+    "failures": 0,
+    "errors": 0,
+    "status": "passed"
+  },
+  "eval_execution_side_effects": {
+    "new_environment_starts": 1,
+    "completed_eval_cells": 1,
+    "reserve_claims": 1,
+    "normal_eval_claims": 0,
+    "completed_steps": 1000,
+    "optimizer_steps": 0,
+    "ppo_updates": 0,
+    "checkpoint_writes": 0,
+    "old_failed_attempt1_modified": false,
+    "training_checkpoint_hashes_changed": false,
+    "training_journal_hashes_changed": false
+  },
+  "resume_identity_transition": {
+    "prior_execution_head": "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
+    "prior_R1_gate_and_identity_preserved": true,
+    "prior_R1_progress_preserved": true,
+    "next_identity_version": "R2",
+    "new_progress_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EXECUTION_PROGRESS_EVAL_R2.json",
+    "source_chain_includes_prior_execution_identity": true
+  }
 }
