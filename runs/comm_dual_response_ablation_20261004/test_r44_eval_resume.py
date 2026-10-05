@@ -3,7 +3,13 @@
 from __future__ import annotations
 
 import unittest
+import hashlib
+import json
+import tempfile
+from contextlib import ExitStack
+from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 import r44_eval_resume as resume
 
@@ -18,6 +24,26 @@ class _Index:
 
 
 class EvalScheduleTests(unittest.TestCase):
+    def test_source_identity_uses_two_exact_mechanical_commits(self):
+        self.assertEqual(
+            resume.BASE_STOP_HEAD,
+            "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
+        )
+        self.assertEqual(
+            resume.INITIAL_SOURCE_HEAD,
+            "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
+        )
+        self.assertEqual(
+            resume.SOURCE_REVISION_ALLOWED_PATHS,
+            {
+                f"{resume.RUN_REL}/ROUND44_CURRENT_TASK.json",
+                f"{resume.RUN_REL}/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
+                f"{resume.RUN_REL}/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json",
+                f"{resume.RUN_REL}/r44_eval_resume.py",
+                f"{resume.RUN_REL}/test_r44_eval_resume.py",
+            },
+        )
+
     def test_fixed_matrix_has_96_cells_and_retry_is_first(self):
         schedule = resume.evaluation_schedule()
         self.assertEqual(len(schedule), 96)
@@ -133,6 +159,173 @@ class EvalOnlyGuardTests(unittest.TestCase):
             Adam().step()
         with self.assertRaises(resume.EvalOnlyViolation):
             torch_module.save(object(), "forbidden.pt")
+
+
+class VerifyEvalIdentityTests(unittest.TestCase):
+    SOURCE_HEAD = "f" * 40
+    IDENTITY_HEAD = "e" * 40
+    SOURCE_FILE = f"{resume.RUN_REL}/r44_eval_resume.py"
+
+    @staticmethod
+    def _sha(path: Path) -> str:
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+
+    def _verify(self, *, wrong_parent=False, unregistered_path=False,
+                dirty_status="", drift_gate=False, drift_source=False,
+                drift_chain_evidence=False):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        root = Path(temp.name)
+        relative_paths = {
+            name: root / Path(name) for name in resume.IDENTITY_ALLOWED_PATHS
+        }
+        for path in relative_paths.values():
+            path.parent.mkdir(parents=True, exist_ok=True)
+        run_dir = root / "runs" / Path(resume.RUN_DIR.name)
+        run_dir.mkdir(parents=True, exist_ok=True)
+        runtime_dir = run_dir / "runtime"
+        runtime_dir.mkdir(parents=True, exist_ok=True)
+        source_path = root / Path(self.SOURCE_FILE)
+        source_path.parent.mkdir(parents=True, exist_ok=True)
+        source_path.write_bytes(b"committed eval-only source\n")
+
+        gate_rel, identity_rel = resume._identity_paths()
+        gate_path, identity_path = relative_paths[gate_rel], relative_paths[identity_rel]
+        readonly_path = runtime_dir / "readonly.json"
+        manifest_path = runtime_dir / "manifest.json"
+        regression_path = run_dir / "ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json"
+        diff_path = run_dir / "ROUND44_EVAL_MECHANICAL_DIFF_R1.json"
+        for path in (readonly_path, manifest_path, regression_path, diff_path):
+            path.write_text("{}\n", encoding="utf-8")
+
+        chain_evidence = {
+            "base_stop_head": resume.BASE_STOP_HEAD,
+            "initial_source_head": resume.INITIAL_SOURCE_HEAD,
+            "revised_source_head": self.SOURCE_HEAD,
+            "source_file_sha256": {self.SOURCE_FILE: self._sha(source_path)},
+        }
+        stored_chain_evidence = dict(chain_evidence)
+        history = {"r4_identity_sha256": "a" * 64}
+        gate = {
+            "kind": "round44-eval-only-prelaunch-gate/1",
+            "status": "passed",
+            "source_commit": self.SOURCE_HEAD,
+            "readonly_model_gate_sha256": self._sha(readonly_path),
+            "fixed_eval_keys_sha256": "b" * 64,
+            "quota": {"normal": 480, "reserve": 24, "hard_cap": 504},
+        }
+        gate_path.write_text(json.dumps(gate, sort_keys=True) + "\n", encoding="utf-8")
+        identity = {
+            "kind": "round44-eval-only-execution-identity/1",
+            "status": "passed",
+            "branch": resume.BRANCH,
+            "source_commit": self.SOURCE_HEAD,
+            "source_commit_chain": [
+                resume.BASE_STOP_HEAD, resume.INITIAL_SOURCE_HEAD, self.SOURCE_HEAD],
+            "source_commit_chain_evidence": stored_chain_evidence,
+            "gate_sha256": self._sha(gate_path),
+            "fixed_eval_keys_sha256": gate["fixed_eval_keys_sha256"],
+            "readonly_model_gate_sha256": self._sha(readonly_path),
+            "source_file_sha256": {self.SOURCE_FILE: self._sha(source_path)},
+            "immutable_input_manifest_sha256": self._sha(manifest_path),
+            "receipt_regression_sha256": self._sha(regression_path),
+            "mechanical_diff_sha256": self._sha(diff_path),
+            "preserved_r4_history_hashes": history,
+            "retry_key": [11, "greedy", 1_301_000],
+            "schedule": [[s, m, scene] for s, m, scene in resume.evaluation_schedule()],
+            "counts_before_first_eval": {
+                "normal_used": 385, "reserve_used": 0,
+                "completed_training_jobs": 384, "valid_new_eval_cells": 0,
+                "optimizer_step_calls": 1016, "ppo_update_calls": 96,
+                "checkpoint_write_calls": 297,
+            },
+        }
+        identity_path.write_text(json.dumps(identity, sort_keys=True) + "\n", encoding="utf-8")
+        if drift_chain_evidence:
+            chain_evidence = {**chain_evidence, "unexpected": True}
+        blobs = {
+            (self.IDENTITY_HEAD, gate_rel): self._sha(gate_path),
+            (self.IDENTITY_HEAD, identity_rel): self._sha(identity_path),
+            (self.SOURCE_HEAD, self.SOURCE_FILE): self._sha(source_path),
+        }
+        if drift_gate:
+            gate_path.write_text("{}\n", encoding="utf-8")
+        if drift_source:
+            source_path.write_bytes(b"uncommitted source drift\n")
+        changed_paths = set(resume.IDENTITY_ALLOWED_PATHS)
+        if unregistered_path:
+            changed_paths.add("unregistered/foreign.json")
+        parent = "bad-parent" if wrong_parent else self.SOURCE_HEAD
+
+        def fake_git(*args, **_kwargs):
+            if args[:2] == ("branch", "--show-current"):
+                return resume.BRANCH
+            if args and args[0] == "status":
+                return dirty_status
+            if args[:2] == ("rev-parse", "HEAD"):
+                return self.IDENTITY_HEAD
+            raise AssertionError(f"unexpected git read in identity test: {args}")
+
+        def fake_blob(commit, repo_relative):
+            return blobs.get((commit, repo_relative), "0" * 64)
+
+        with ExitStack() as stack:
+            for name, value in {
+                "ROOT": root,
+                "RUN_DIR": run_dir,
+                "EVAL_IDENTITY": identity_path,
+                "EVAL_GATE": gate_path,
+                "IMMUTABLE_MANIFEST": manifest_path,
+                "READONLY_GATE": readonly_path,
+            }.items():
+                stack.enter_context(patch.object(resume, name, value))
+            stack.enter_context(patch.object(resume, "_git", side_effect=fake_git))
+            stack.enter_context(patch.object(resume, "_parent", return_value=parent))
+            stack.enter_context(patch.object(
+                resume, "_changed_paths", return_value=changed_paths))
+            chain_mock = stack.enter_context(patch.object(
+                resume, "_verify_source_commit_chain", return_value=chain_evidence))
+            stack.enter_context(patch.object(resume, "_verify_r4_history", return_value=history))
+            stack.enter_context(patch.object(resume, "_blob_sha", side_effect=fake_blob))
+            result = resume.verify_eval_identity()
+            chain_mock.assert_called_once_with(self.SOURCE_HEAD)
+            return result
+
+    def test_actual_identity_verifier_accepts_source_head_and_identity_child(self):
+        head, identity, gate = self._verify()
+        self.assertEqual(head, self.IDENTITY_HEAD)
+        self.assertEqual(identity["source_commit"], self.SOURCE_HEAD)
+        self.assertEqual(gate["source_commit"], self.SOURCE_HEAD)
+
+    def test_actual_identity_verifier_rejects_wrong_parent_and_unregistered_path(self):
+        for options in ({"wrong_parent": True}, {"unregistered_path": True}):
+            with self.subTest(options=options):
+                with self.assertRaises(resume.EvalResumeError):
+                    self._verify(**options)
+
+    def test_actual_identity_verifier_rejects_worktree_and_content_drift(self):
+        cases = (
+            {"dirty_status": " M source.py"},
+            {"drift_gate": True},
+            {"drift_source": True},
+            {"drift_chain_evidence": True},
+        )
+        for options in cases:
+            with self.subTest(options=options):
+                with self.assertRaises(resume.EvalResumeError):
+                    self._verify(**options)
+
+    def test_historical_freeze_and_r4_sources_match_real_git_identities(self):
+        evidence = resume._verify_r4_history(resume.INITIAL_SOURCE_HEAD)
+        self.assertEqual(evidence["original_freeze_source_count"], 13)
+        self.assertEqual(
+            evidence["r4_registered_mechanical_source_delta"]["paths"],
+            ["r44_execute.py", "r44_runtime.py"],
+        )
+        self.assertEqual(
+            evidence["r4_registered_mechanical_source_delta"]["training_execution_head"],
+            resume.TRAINING_EXECUTION_HEAD,
+        )
 
 
 if __name__ == "__main__":

@@ -28,6 +28,18 @@
     {
       "change": "this bounded change inventory and scientific-configuration boundary.",
       "path": "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json"
+    },
+    {
+      "change": "source validator revision: require the exact stop -> preserved initial-source -> revised eval-only commit chain and exact per-commit path allowlists; bind the final identity to chain and blob evidence.",
+      "path": "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py"
+    },
+    {
+      "change": "identity validation now validates the frozen source commit chain separately from current HEAD; current HEAD must be the exact identity child with the exact two identity paths and committed file hashes.",
+      "path": "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py"
+    },
+    {
+      "change": "13 pure/read-only tests call actual verify_eval_identity through controlled Git/blob evidence, verify positive source-parent/identity-child flow, reject parent/path/dirty/content/evidence drift, and inspect actual R4 source-layer Git identities.",
+      "path": "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
     }
   ],
   "execution_plan": {
@@ -54,6 +66,30 @@
     "R4_execution_identity_is_historical_only": true,
     "R4_ready_sha256": "19dea7caf332c430b62a0884c1c3bd4f9704a5690abf40c18c0b593e41707e98",
     "old_training_resume_entrypoint_invoked": false
+  },
+  "historical_source_verification": {
+    "hash_comparisons_skipped": false,
+    "original_prelaunch_receipt_sha256": "c361ecf64aead48d8511f30083eef6a1eb7182923a30353e9ce81a6b5c8392c3",
+    "original_science_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
+    "r4_execution_head": "26b22680b8c3c5cb9bb91bc44799c76cec6f874a",
+    "r4_execution_identity_sha256": "0173f0bd93e07b30b9d0b2e6a31d29cea2c30b4a70b60aae7328ce571f20a805",
+    "r4_registered_mechanical_source_delta_git_diff_sha256": "82c8f038e277a3d3e372cd43154225fb0438e7dac4f814eff8fd020eae75c7bd",
+    "r4_registered_mechanical_source_delta_paths": [
+      "r44_execute.py",
+      "r44_runtime.py"
+    ],
+    "source_gate_failure_evidence": {
+      "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EVAL_SOURCE_GATE_FAILURE_347DA3B.json",
+      "sha256": "7541442507cec50922ecdbe783833a74ef0a82e5bf079379954ab3e36590e0e6"
+    },
+    "source_layer_unit_and_git_tests": "passed",
+    "unregistered_differences_fail_closed": true,
+    "verification_rule": "Each original prelaunch source hash must match its Git blob at 2353c461. Every such file must also match the R4 identity map and R4 commit blob at 26b22680. The deliberately repaired index/test are checked against preserved original blobs; other current source files must equal their registered R4 bytes."
+  },
+  "identity_validator_revision": {
+    "current_head_validation": "validate current HEAD as the unique direct identity child, exact two committed identity paths, clean worktree, and committed gate/identity content hashes",
+    "real_verify_eval_identity_positive_and_negative_tests": true,
+    "source_head_validation": "validate the source_head commit chain and every source blob against exact paths / revision bytes / R4 identity"
   },
   "kind": "round44-eval-only-mechanical-diff/1",
   "protected_science_source_sha256": {
@@ -91,6 +127,39 @@
     "runs/comm_dual_response_ablation_20261004/test_r44_eval_index.py",
     "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
   ],
+  "source_commit_chain": {
+    "chain": [
+      "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
+      "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
+      "<revised eval-only source head>"
+    ],
+    "first_commit_allowed_paths": [
+      "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json",
+      "runs/comm_dual_response_ablation_20261004/r44_eval_index.py",
+      "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
+      "runs/comm_dual_response_ablation_20261004/test_r44_eval_index.py",
+      "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
+    ],
+    "first_commit_preserved": true,
+    "first_commit_rewritten": false,
+    "revised_source_head": "bound by the later identity child; no self-reference in this source commit",
+    "revision_allowed_paths": [
+      "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json",
+      "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
+      "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
+    ],
+    "revision_commit_allowed_paths": [
+      "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
+      "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json",
+      "runs/comm_dual_response_ablation_20261004/r44_eval_resume.py",
+      "runs/comm_dual_response_ablation_20261004/test_r44_eval_resume.py"
+    ]
+  },
   "status": "reviewed",
   "unchanged_scientific_configuration": {
     "changed_fields": [],

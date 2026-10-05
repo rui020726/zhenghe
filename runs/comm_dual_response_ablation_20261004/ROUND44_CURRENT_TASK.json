@@ -1,50 +1,224 @@
 {
-  "kind": "round44-current-task/1",
-  "status": "authorized_eval_receipt_repair_and_eval_only_resume",
-  "repository": "D:\\code\\整合\\zhenghe-round42",
-  "branch": "exp/comm-dual-response-ablation",
-  "base_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
-  "current_head_at_persist": "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
-  "r43_read_only_parent_delivery": "9f2b6b6411c50849ce1a9eedbaedffaf0aededa5",
-  "round44_scientific_execution_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
-  "stop_record": {
-    "report": "runs/comm_dual_response_ablation_20261004/ROUND44_STOP_REPORT.md",
-    "status": "runs/comm_dual_response_ablation_20261004/ROUND44_STATUS.json",
-    "failure_capture": "runs/comm_dual_response_ablation_20261004/ROUND44_EXECUTION_FAILURE_CAPTURE_SEED11_B0.txt",
-    "failure": "NameError: name 'run_module' is not defined in _compare_first_batch"
+  "active_execution_quota_snapshot": {
+    "failed_key": [
+      11,
+      "greedy",
+      1301000
+    ],
+    "hard_cap": 504,
+    "hard_cap_remaining": 119,
+    "next_authorized_attempt": {
+      "attempt": 2,
+      "category": "reserve",
+      "key": [
+        11,
+        "greedy",
+        1301000
+      ]
+    },
+    "normal_plan": 480,
+    "normal_remaining": 95,
+    "normal_used": 385,
+    "planned_new_eval_cells": 96,
+    "reserve_max": 24,
+    "reserve_remaining": 24,
+    "reserve_used": 0,
+    "total_used": 385,
+    "training_authorized_again": false,
+    "training_complete": 384,
+    "valid_new_eval_cells": 0
   },
+  "active_round": 44,
   "authorization": {
-    "source": "Codex continuation handoff message received 2026-10-05",
     "saved_basis": "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_CONTINUATION_BASIS.md",
     "saved_basis_sha256": "8205cc4314a68ba3e3cdef2a95a564bb4bb45f87982cb9d951e3b140ae8880f7",
-    "scope": "minimal comparator fix; exact in-memory ep4 recovery; then only the original remaining 476 normal tasks; local completion, no push/merge/deploy"
+    "scope": "minimal comparator fix; exact in-memory ep4 recovery; then only the original remaining 476 normal tasks; local completion, no push/merge/deploy",
+    "source": "Codex continuation handoff message received 2026-10-05"
   },
-  "pre_resume_snapshot_manifest_sha256": "65348220c10e8c9158cf994e991eb2019bb6e99771a117a752d57c879450891e",
-  "resume_state_whitelist": "runs/comm_dual_response_ablation_20261004/ROUND44_RESUME_STATE_WHITELIST_R1.json",
-  "resume_state_whitelist_sha256": "8313068d9c6797d713ad270345fadc43ba49a1e38e6a60a914bcc9a93762fda0",
-  "current_stage": "ROUND44 eval-only continuation: strict receipt/index repair is pure-tested; next freeze eval identity, retry failed key at reserve attempt 2, then run only remaining fixed cells.",
-  "next_action": "Commit strict JSON repair/regression and eval-only entrypoint; commit exact eval-only identity; perform retry attempt 2 and, only after its receipt/index gate passes, run remaining fixed 95 cells and report.",
-  "pure_verification": {
-    "python": "D:\\project_env\\python.exe",
-    "R2_py_compile": "passed for r44_execute.py, r44_resume_bridge.py, r44_resume_gate.py, test_r44_resume_gate.py",
-    "R2_targeted_unit_tests": "2 passed",
-    "R3_py_compile": "passed for r44_execute.py, r44_resume_bridge.py, r44_resume_gate.py, test_r44_resume_gate.py",
-    "R3_targeted_unit_tests": "3 passed",
-    "R4_checks": "pending after replacing the stale episode-4 scene literal with the committed frozen order",
-    "environment_starts": 0,
-    "optimizer_steps": 0,
-    "checkpoint_writes": 0
+  "base_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
+  "branch": "exp/comm-dual-response-ablation",
+  "comparator_revision": {
+    "R2_comparator_receipt_sha256": "289daaf8c595fe83828fa50639291bbba2b6c905f6c7f33a3a67b59c017e2b6c",
+    "R2_exact_restore_and_ready_receipts": "absent; R2 attempt stopped before these were written",
+    "R3_exact_restore_and_ready_receipts": "absent; R3 stopped on stale scene literal after the registered order check",
+    "R3_gate_attempt_failure": {
+      "frozen_episode4_scene": 1300003,
+      "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_R3_GATE_ATTEMPT_FAILURE.json",
+      "sha256": "dd360d1c2174dd86a1bb6305bc5a410cfb6f5fc292d3d5ac721d06843c1b270d",
+      "stale_literal": 1300014,
+      "status": "failed_during_exact_restore_schedule_check"
+    },
+    "R3_identity_head": "c3a975ef0b36176cc4572dc0fb618d5ca96f037f",
+    "R3_identity_sha256": "f67713c5a11b17e11d558823fcf3cafb48f9558404cd1d975a266977c03ed908",
+    "additional_exact_artifact_check": "R43/R44 transcript SHA256 equality; synthetic transcript-hash mismatch must be rejected",
+    "mechanical_version": "round44-resume-comparator-and-restore/4",
+    "old_projection_evidence_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_OLD_PROJECTION_FOUR_EPISODES_R2.json",
+    "r1_identity_sha256": "ffc75ffeca743134a9f0df0bff173e1b0b4e6f544bf88ad4d3ef31119336c860",
+    "r2_gate_attempt_failure": {
+      "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_R2_GATE_ATTEMPT_FAILURE.json",
+      "reason": "actual training_version mismatch spelling was not accepted by the R2 harness",
+      "sha256": "7d2a4e8b7a8f73aa28efcd2936d0afdc30016ab6a11ebd585f66afec384c52e2",
+      "status": "failed_before_exact_restore_receipt"
+    },
+    "r2_identity_head": "453924cf4abb0dcc649c1d877236fe12c73e12e5",
+    "r2_identity_sha256": "15aa3cbb34f6b52574d4852eb42503fd7c491a6119302e2da7945dfdde28252b",
+    "r4_gate_receipt_paths": [
+      "runtime/ROUND44_EXACT_RESUME_GATE_R4.json",
+      "runtime/ROUND44_COMPARATOR_REGRESSION_R4.json",
+      "runtime/ROUND44_RESUME_READY_R4.json"
+    ],
+    "resume_progress_identity": "round44-execution-progress-resume-r4/4",
+    "source_config_reconciliation_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_SOURCE_CONFIG_RECONCILIATION_R2.json",
+    "version": "round44-row-projection/2"
   },
   "comparison_clarification": {
+    "received_at": "2026-10-05",
     "saved_basis": "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_CONTINUATION_BASIS.md",
     "saved_basis_sha256": "6cf1b53b53fcb4b6adf5aed26f3e66e625a4d467b698dbedbb64df8e7dda4100",
-    "received_at": "2026-10-05",
     "scope": "four-episode old-projection evidence; source-backed config/timing reconciliation; narrow comparator revision R2; exact restore; then original remaining 476 normal tasks only"
   },
+  "continuation_basis": {
+    "path": "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_EVAL_CONTINUATION_20261005_R1.md",
+    "received_date": "2026-10-05",
+    "sha256": "d6ebc99354f02c61f6f986cd76adc612449a126bd612d896c12e8a271b15adf1",
+    "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3"
+  },
+  "current_head_at_persist": "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
+  "current_quota": {
+    "hard_cap": 504,
+    "hard_cap_remaining": 119,
+    "next_authorized_attempt": {
+      "attempt": 2,
+      "category": "reserve",
+      "key": [
+        11,
+        "greedy",
+        1301000
+      ]
+    },
+    "normal_plan": 480,
+    "normal_remaining": 95,
+    "normal_used": 385,
+    "planned_new_eval_cells": 96,
+    "reserve_max": 24,
+    "reserve_remaining": 24,
+    "reserve_used": 0,
+    "total_used": 385,
+    "valid_new_eval_cells": 0
+  },
+  "current_stage": "ROUND44 eval-only source validator repaired: original freeze and R4 source identities validate independently; source-head versus identity-child checks have direct positive/negative tests; preparing the preserved mechanical revision commit before rerunning the read-only model audit.",
+  "current_state": {
+    "as_of": "2026-10-06",
+    "counts": {
+      "checkpoint_write_calls": 297,
+      "completed_logical_jobs": 384,
+      "completed_steps": 385000,
+      "environment_constructor_calls": 385,
+      "joint_run_constructed_calls": 385,
+      "normal_used": 385,
+      "optimizer_step_calls": 1016,
+      "planned_new_eval_cells": 96,
+      "ppo_update_calls": 96,
+      "reserve_used": 0,
+      "retry_claims": 0,
+      "run_invocation_calls": 385,
+      "technical_failed_claims": 1,
+      "total_used": 385,
+      "valid_new_eval_cells": 0
+    },
+    "ep128_index": {
+      "11": {
+        "batches": 32,
+        "episodes": 128,
+        "file_sha256": "7b08115cc286df69fdf16d7fc8e4b170d61f94e343f1caecd5d4b4191b727205",
+        "lambda": 3.5,
+        "optimizer_steps": 348,
+        "parameter_sha256": "a0e9e60a5f2ed040b9f40963a9c9129c84afcf71b5c39d3cad91ff78a6d2323c",
+        "path": "runs/comm_dual_response_ablation_20261004/checkpoints/v2_train_s11_ep128.pt"
+      },
+      "22": {
+        "batches": 32,
+        "episodes": 128,
+        "file_sha256": "22a7df79697dd18d465cc0c9e9d6a292f2251bed980a0883ec18c02bb5ab0268",
+        "lambda": 4.125,
+        "optimizer_steps": 372,
+        "parameter_sha256": "ce45ad13794d6d39691dfe872f29fcec83a20b2fd5bfb032eac30aa22b6993fd",
+        "path": "runs/comm_dual_response_ablation_20261004/checkpoints/v2_train_s22_ep128.pt"
+      },
+      "33": {
+        "batches": 32,
+        "episodes": 128,
+        "file_sha256": "03dbdb0c6e021b97d1d67824271eda6703f9389aad02f0f3f3bdb8b9892b7b63",
+        "lambda": 2.875,
+        "optimizer_steps": 296,
+        "parameter_sha256": "3af3f52dd0c293b2d71f9d5191d4b9d3f4641a8eb90cba4ee19b93744908c5a2",
+        "path": "runs/comm_dual_response_ablation_20261004/checkpoints/v2_train_s33_ep128.pt"
+      }
+    },
+    "failed_attempt1_is_not_science": true,
+    "failed_key": [
+      11,
+      "greedy",
+      1301000
+    ],
+    "source_live_ledger": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EXECUTION_LEDGER.json",
+    "source_partial_ledger": "runs/comm_dual_response_ablation_20261004/ROUND44_PARTIAL_EXECUTION_LEDGER.json",
+    "stage": "eval_receipt_repair_then_fixed_evaluation",
+    "training_complete": true,
+    "training_resume_authorized": false
+  },
+  "current_task_archive": {
+    "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_CURRENT_TASK_BEFORE_EVAL_20261006_R1.json",
+    "sha256": "e3836b30bb6191e0aee12149e5ecefd75207ba5ed5544674a92179df17d98bc5"
+  },
+  "forbidden_actions": [
+    "training",
+    "optimizer.step",
+    "checkpoint writes",
+    "new scenes/streams",
+    "push",
+    "merge",
+    "deploy",
+    "ROUND45"
+  ],
+  "historical_before_training_resume": {
+    "completed_state_to_preserve_before_training_resume": {
+      "after_batch0_checkpoint": "runs/comm_dual_response_ablation_20261004/checkpoints/v2_train_s11_after_b0.pt",
+      "after_batch0_checkpoint_sha256": "42a5160ead497ef3ce5dcb2e9783fe094b30f6a1f245630149bdde2c75946d25",
+      "checkpoint_writes": 4,
+      "controller_parameter_sha256": "db8a462b9f36ee6c75de04c0dc34d5e98c06f566aee80153d58cdc6463a58bdb",
+      "dual_lambda": 1.125,
+      "normal_claims": 4,
+      "optimizer_steps": 12,
+      "ppo_updates": 1,
+      "reserve_claims": 0,
+      "seed11_episodes_done": 4
+    },
+    "note": "Historical four-episode pre-resume stop only; use current_state/current_quota for live ROUND44 continuation.",
+    "quota_before_training_resume": {
+      "hard_cap": 504,
+      "normal_already_used": 4,
+      "normal_plan": 480,
+      "normal_remaining": 476,
+      "reserve_max": 24
+    },
+    "source_snapshot_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_CURRENT_TASK_BEFORE_EVAL_20261006_R1.json",
+    "source_snapshot_sha256": "e3836b30bb6191e0aee12149e5ecefd75207ba5ed5544674a92179df17d98bc5",
+    "stage_at_snapshot": "ROUND44 active: repair strict JSON receipt/index representation; preserve attempt1; reserve attempt2 for (11,greedy,1301000); then original remaining 95 fixed evaluation cells, analysis and local commits. No retraining."
+  },
+  "identity_verifier_review": {
+    "checkpoint_writes": 0,
+    "classification": "eval-only entrypoint logic issue found before any environment claim; no scientific source/configuration changed.",
+    "direct_actual_function_tests": "13 test module cases include accepted child plus wrong parent, foreign path, dirty tree, content drift and chain-evidence drift rejection.",
+    "environment_constructors": 0,
+    "finding": "A prior implementation required current HEAD to equal source_head, although the final identity contract requires current HEAD to be a child of source_head.",
+    "optimizer_steps": 0,
+    "repair": "source_head is checked with the exact source commit chain and blobs; current HEAD is checked separately as its exact identity child with an exact two-file allowlist and content hashes.",
+    "run_calls": 0
+  },
+  "kind": "round44-current-task/1",
   "last_read_only_gate_attempt": {
-    "head": "43399eb9b74031e1ee88752618c04e84082bb811",
-    "status": "stopped_before_receipts",
-    "failure": "RuntimeError: seed 11 episode 0: pre-update rollout outcomes changed",
+    "checkpoint_writes": 0,
     "differences_seen": [
       "config_hash",
       "seconds",
@@ -56,278 +230,138 @@
       "artefact paths"
     ],
     "environment_starts": 0,
-    "optimizer_steps": 0,
-    "checkpoint_writes": 0,
+    "failure": "RuntimeError: seed 11 episode 0: pre-update rollout outcomes changed",
+    "head": "43399eb9b74031e1ee88752618c04e84082bb811",
+    "interpretation": "preliminary field diff only; do not label gate passed or infer config_hash harmless until all four episodes and runtime construction sources are reconciled",
     "new_claims": 0,
-    "interpretation": "preliminary field diff only; do not label gate passed or infer config_hash harmless until all four episodes and runtime construction sources are reconciled"
-  },
-  "old_projection_failure_evidence": {
-    "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_OLD_PROJECTION_FOUR_EPISODES_R2.json",
-    "sha256": "054a77fb5e60d6c09c83811c3e128fa88a06d67e59e260e5c8aba70f5efa4eda",
-    "episodes": 4,
-    "whole_row_differences_each_episode": 11,
-    "old_projection_differences_each_episode": 3,
-    "tape_bytes_equal_each_episode": true
-  },
-  "source_config_reconciliation": {
-    "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_SOURCE_CONFIG_RECONCILIATION_R2.json",
-    "sha256": "c4766b30dce225d0448a77086abe5aac281a76838e95ffd823949cf54b425d70",
-    "status": "passed_source_and_config_only",
-    "episodes": 4,
-    "actual_config_hashes_recomputed": true,
-    "runtime_source_paths_verified": true,
-    "new_comparator_gate_not_yet_run": true
-  },
-  "comparator_revision": {
-    "version": "round44-row-projection/2",
-    "mechanical_version": "round44-resume-comparator-and-restore/4",
-    "r1_identity_sha256": "ffc75ffeca743134a9f0df0bff173e1b0b4e6f544bf88ad4d3ef31119336c860",
-    "r2_identity_head": "453924cf4abb0dcc649c1d877236fe12c73e12e5",
-    "r2_identity_sha256": "15aa3cbb34f6b52574d4852eb42503fd7c491a6119302e2da7945dfdde28252b",
-    "r2_gate_attempt_failure": {
-      "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_R2_GATE_ATTEMPT_FAILURE.json",
-      "sha256": "7d2a4e8b7a8f73aa28efcd2936d0afdc30016ab6a11ebd585f66afec384c52e2",
-      "status": "failed_before_exact_restore_receipt",
-      "reason": "actual training_version mismatch spelling was not accepted by the R2 harness"
-    },
-    "old_projection_evidence_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_OLD_PROJECTION_FOUR_EPISODES_R2.json",
-    "source_config_reconciliation_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_SOURCE_CONFIG_RECONCILIATION_R2.json",
-    "r4_gate_receipt_paths": [
-      "runtime/ROUND44_EXACT_RESUME_GATE_R4.json",
-      "runtime/ROUND44_COMPARATOR_REGRESSION_R4.json",
-      "runtime/ROUND44_RESUME_READY_R4.json"
-    ],
-    "additional_exact_artifact_check": "R43/R44 transcript SHA256 equality; synthetic transcript-hash mismatch must be rejected",
-    "resume_progress_identity": "round44-execution-progress-resume-r4/4",
-    "R2_comparator_receipt_sha256": "289daaf8c595fe83828fa50639291bbba2b6c905f6c7f33a3a67b59c017e2b6c",
-    "R2_exact_restore_and_ready_receipts": "absent; R2 attempt stopped before these were written",
-    "R3_identity_head": "c3a975ef0b36176cc4572dc0fb618d5ca96f037f",
-    "R3_identity_sha256": "f67713c5a11b17e11d558823fcf3cafb48f9558404cd1d975a266977c03ed908",
-    "R3_gate_attempt_failure": {
-      "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_R3_GATE_ATTEMPT_FAILURE.json",
-      "sha256": "dd360d1c2174dd86a1bb6305bc5a410cfb6f5fc292d3d5ac721d06843c1b270d",
-      "status": "failed_during_exact_restore_schedule_check",
-      "frozen_episode4_scene": 1300003,
-      "stale_literal": 1300014
-    },
-    "R3_exact_restore_and_ready_receipts": "absent; R3 stopped on stale scene literal after the registered order check"
-  },
-  "post_execution_stop": {
-    "report": "runs/comm_dual_response_ablation_20261004/ROUND44_STOP_REPORT_EVAL_RECEIPT_MISMATCH.md",
-    "report_sha256": "f0161c15fe788116fc09c594a4710b3d3da99dbfd4664aace36516af808abb5b",
-    "partial_ledger": "runs/comm_dual_response_ablation_20261004/ROUND44_PARTIAL_EXECUTION_LEDGER.json",
-    "partial_ledger_sha256": "f4805e0cb5660bd17415f0f65dc94413a21b267042b99db85fa6c104e44a3591",
-    "execution_head": "26b22680b8c3c5cb9bb91bc44799c76cec6f874a",
-    "normal_claims_used": 385,
-    "reserve_claims_used": 0,
-    "total_claims_used": 385,
-    "training_episodes_complete": 384,
-    "optimizer_steps": 1016,
-    "ppo_updates": 96,
-    "checkpoint_write_journal_entries": 297,
-    "new_eval_cells_completed": 0,
-    "failed_eval_key": [
-      11,
-      "greedy",
-      1301000
-    ],
-    "failed_claim_path": "runs/comm_dual_response_ablation_20261004/launch_claims/model_eval_new_s11_greedy_scene1301000/attempt_0001.json",
-    "failed_claim_sha256": "b81d51ea0d79dd4b276167b1708a9982314662eda8166d657f0d6e9d384b94d7",
-    "reason": "stored JSON row differs from in-memory row because tuple fields are serialized as arrays"
+    "optimizer_steps": 0,
+    "status": "stopped_before_receipts"
   },
   "latest_authorization": {
-    "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3",
     "basis_path": "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_EVAL_CONTINUATION_BASIS.md",
     "basis_sha256": "6514f0372d0a60e24158e73ce25613bc8d2247a8f5f4bf9466bd7b10266bccc5",
     "continuation_record_path": "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_EVAL_CONTINUATION_20261005_R1.md",
     "continuation_record_sha256": "d6ebc99354f02c61f6f986cd76adc612449a126bd612d896c12e8a271b15adf1",
     "received_date": "2026-10-05",
-    "scope": "strict JSON row/JSONL receipt repair, pure regression, exact whitelisted eval-only identity, reserve attempt2 for the failed key, then only the original remaining 95 fixed evaluation keys, analysis/report/local commits; no training, push, merge or deploy"
+    "scope": "strict JSON row/JSONL receipt repair, pure regression, exact whitelisted eval-only identity, reserve attempt2 for the failed key, then only the original remaining 95 fixed evaluation keys, analysis/report/local commits; no training, push, merge or deploy",
+    "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3"
   },
-  "active_round": 44,
-  "stage": "eval_receipt_repair_then_fixed_evaluation",
-  "forbidden_actions": [
-    "training",
-    "optimizer.step",
-    "checkpoint writes",
-    "new scenes/streams",
-    "push",
-    "merge",
-    "deploy",
-    "ROUND45"
-  ],
-  "continuation_basis": {
-    "path": "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_EVAL_CONTINUATION_20261005_R1.md",
-    "sha256": "d6ebc99354f02c61f6f986cd76adc612449a126bd612d896c12e8a271b15adf1",
-    "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3",
-    "received_date": "2026-10-05"
-  },
-  "latest_current_head_at_continuation": "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
   "latest_continuation_record": {
     "path": "runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_EVAL_CONTINUATION_20261005_R1.md",
     "sha256": "d6ebc99354f02c61f6f986cd76adc612449a126bd612d896c12e8a271b15adf1",
     "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3"
   },
-  "active_execution_quota_snapshot": {
-    "normal_plan": 480,
-    "normal_used": 385,
-    "normal_remaining": 95,
-    "reserve_max": 24,
-    "reserve_used": 0,
-    "reserve_remaining": 24,
-    "hard_cap": 504,
-    "total_used": 385,
-    "hard_cap_remaining": 119,
-    "next_authorized_attempt": {
-      "key": [
-        11,
-        "greedy",
-        1301000
-      ],
-      "attempt": 2,
-      "category": "reserve"
-    },
-    "valid_new_eval_cells": 0,
-    "planned_new_eval_cells": 96,
-    "training_complete": 384,
-    "training_authorized_again": false,
-    "failed_key": [
-      11,
-      "greedy",
-      1301000
-    ]
+  "latest_current_head_at_continuation": "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
+  "next_action": "Commit only the exact source-revision whitelist as a child of preserved 347da3b; run the zero-environment CPU ep128/tape forward audit; freeze its gate and identity in the exact identity child; then run only the reserve retry and original remaining 95 evaluation cells.",
+  "old_projection_failure_evidence": {
+    "episodes": 4,
+    "old_projection_differences_each_episode": 3,
+    "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_OLD_PROJECTION_FOUR_EPISODES_R2.json",
+    "sha256": "054a77fb5e60d6c09c83811c3e128fa88a06d67e59e260e5c8aba70f5efa4eda",
+    "tape_bytes_equal_each_episode": true,
+    "whole_row_differences_each_episode": 11
   },
-  "historical_before_training_resume": {
-    "source_snapshot_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_CURRENT_TASK_BEFORE_EVAL_20261006_R1.json",
-    "source_snapshot_sha256": "e3836b30bb6191e0aee12149e5ecefd75207ba5ed5544674a92179df17d98bc5",
-    "stage_at_snapshot": "ROUND44 active: repair strict JSON receipt/index representation; preserve attempt1; reserve attempt2 for (11,greedy,1301000); then original remaining 95 fixed evaluation cells, analysis and local commits. No retraining.",
-    "completed_state_to_preserve_before_training_resume": {
-      "normal_claims": 4,
-      "reserve_claims": 0,
-      "seed11_episodes_done": 4,
-      "ppo_updates": 1,
-      "optimizer_steps": 12,
-      "checkpoint_writes": 4,
-      "dual_lambda": 1.125,
-      "after_batch0_checkpoint": "runs/comm_dual_response_ablation_20261004/checkpoints/v2_train_s11_after_b0.pt",
-      "after_batch0_checkpoint_sha256": "42a5160ead497ef3ce5dcb2e9783fe094b30f6a1f245630149bdde2c75946d25",
-      "controller_parameter_sha256": "db8a462b9f36ee6c75de04c0dc34d5e98c06f566aee80153d58cdc6463a58bdb"
-    },
-    "quota_before_training_resume": {
-      "normal_plan": 480,
-      "normal_already_used": 4,
-      "normal_remaining": 476,
-      "reserve_max": 24,
-      "hard_cap": 504
-    },
-    "note": "Historical four-episode pre-resume stop only; use current_state/current_quota for live ROUND44 continuation."
-  },
-  "current_state": {
-    "as_of": "2026-10-06",
-    "stage": "eval_receipt_repair_then_fixed_evaluation",
-    "source_live_ledger": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EXECUTION_LEDGER.json",
-    "source_partial_ledger": "runs/comm_dual_response_ablation_20261004/ROUND44_PARTIAL_EXECUTION_LEDGER.json",
-    "counts": {
-      "normal_used": 385,
-      "reserve_used": 0,
-      "total_used": 385,
-      "environment_constructor_calls": 385,
-      "joint_run_constructed_calls": 385,
-      "run_invocation_calls": 385,
-      "completed_steps": 385000,
-      "completed_logical_jobs": 384,
-      "technical_failed_claims": 1,
-      "retry_claims": 0,
-      "optimizer_step_calls": 1016,
-      "ppo_update_calls": 96,
-      "checkpoint_write_calls": 297,
-      "valid_new_eval_cells": 0,
-      "planned_new_eval_cells": 96
-    },
-    "training_complete": true,
-    "training_resume_authorized": false,
-    "ep128_index": {
-      "11": {
-        "path": "runs/comm_dual_response_ablation_20261004/checkpoints/v2_train_s11_ep128.pt",
-        "file_sha256": "7b08115cc286df69fdf16d7fc8e4b170d61f94e343f1caecd5d4b4191b727205",
-        "parameter_sha256": "a0e9e60a5f2ed040b9f40963a9c9129c84afcf71b5c39d3cad91ff78a6d2323c",
-        "episodes": 128,
-        "batches": 32,
-        "optimizer_steps": 348,
-        "lambda": 3.5
-      },
-      "22": {
-        "path": "runs/comm_dual_response_ablation_20261004/checkpoints/v2_train_s22_ep128.pt",
-        "file_sha256": "22a7df79697dd18d465cc0c9e9d6a292f2251bed980a0883ec18c02bb5ab0268",
-        "parameter_sha256": "ce45ad13794d6d39691dfe872f29fcec83a20b2fd5bfb032eac30aa22b6993fd",
-        "episodes": 128,
-        "batches": 32,
-        "optimizer_steps": 372,
-        "lambda": 4.125
-      },
-      "33": {
-        "path": "runs/comm_dual_response_ablation_20261004/checkpoints/v2_train_s33_ep128.pt",
-        "file_sha256": "03dbdb0c6e021b97d1d67824271eda6703f9389aad02f0f3f3bdb8b9892b7b63",
-        "parameter_sha256": "3af3f52dd0c293b2d71f9d5191d4b9d3f4641a8eb90cba4ee19b93744908c5a2",
-        "episodes": 128,
-        "batches": 32,
-        "optimizer_steps": 296,
-        "lambda": 2.875
-      }
-    },
-    "failed_key": [
+  "post_execution_stop": {
+    "checkpoint_write_journal_entries": 297,
+    "execution_head": "26b22680b8c3c5cb9bb91bc44799c76cec6f874a",
+    "failed_claim_path": "runs/comm_dual_response_ablation_20261004/launch_claims/model_eval_new_s11_greedy_scene1301000/attempt_0001.json",
+    "failed_claim_sha256": "b81d51ea0d79dd4b276167b1708a9982314662eda8166d657f0d6e9d384b94d7",
+    "failed_eval_key": [
       11,
       "greedy",
       1301000
     ],
-    "failed_attempt1_is_not_science": true
+    "new_eval_cells_completed": 0,
+    "normal_claims_used": 385,
+    "optimizer_steps": 1016,
+    "partial_ledger": "runs/comm_dual_response_ablation_20261004/ROUND44_PARTIAL_EXECUTION_LEDGER.json",
+    "partial_ledger_sha256": "f4805e0cb5660bd17415f0f65dc94413a21b267042b99db85fa6c104e44a3591",
+    "ppo_updates": 96,
+    "reason": "stored JSON row differs from in-memory row because tuple fields are serialized as arrays",
+    "report": "runs/comm_dual_response_ablation_20261004/ROUND44_STOP_REPORT_EVAL_RECEIPT_MISMATCH.md",
+    "report_sha256": "f0161c15fe788116fc09c594a4710b3d3da99dbfd4664aace36516af808abb5b",
+    "reserve_claims_used": 0,
+    "total_claims_used": 385,
+    "training_episodes_complete": 384
   },
-  "current_quota": {
-    "normal_plan": 480,
-    "normal_used": 385,
-    "normal_remaining": 95,
-    "reserve_max": 24,
-    "reserve_used": 0,
-    "reserve_remaining": 24,
-    "hard_cap": 504,
-    "total_used": 385,
-    "hard_cap_remaining": 119,
-    "next_authorized_attempt": {
-      "key": [
-        11,
-        "greedy",
-        1301000
-      ],
-      "attempt": 2,
-      "category": "reserve"
-    },
-    "valid_new_eval_cells": 0,
-    "planned_new_eval_cells": 96
+  "pre_resume_snapshot_manifest_sha256": "65348220c10e8c9158cf994e991eb2019bb6e99771a117a752d57c879450891e",
+  "prelaunch_source_gate_attempts": [
+    {
+      "checkpoint_writes": 0,
+      "environment_constructors": 0,
+      "head": "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
+      "optimizer_steps": 0,
+      "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EVAL_SOURCE_GATE_FAILURE_347DA3B.json",
+      "preserved": true,
+      "sha256": "7541442507cec50922ecdbe783833a74ef0a82e5bf079379954ab3e36590e0e6",
+      "status": "failed_before_read_only_model_gate"
+    }
+  ],
+  "pure_verification": {
+    "R2_py_compile": "passed for r44_execute.py, r44_resume_bridge.py, r44_resume_gate.py, test_r44_resume_gate.py",
+    "R2_targeted_unit_tests": "2 passed",
+    "R3_py_compile": "passed for r44_execute.py, r44_resume_bridge.py, r44_resume_gate.py, test_r44_resume_gate.py",
+    "R3_targeted_unit_tests": "3 passed",
+    "R4_checks": "pending after replacing the stale episode-4 scene literal with the committed frozen order",
+    "checkpoint_writes": 0,
+    "environment_starts": 0,
+    "optimizer_steps": 0,
+    "python": "D:\\project_env\\python.exe"
   },
   "quota": {
-    "normal_plan": 480,
-    "normal_used": 385,
-    "normal_remaining": 95,
-    "reserve_max": 24,
-    "reserve_used": 0,
-    "reserve_remaining": 24,
     "hard_cap": 504,
-    "total_used": 385,
     "hard_cap_remaining": 119,
     "next_authorized_attempt": {
+      "attempt": 2,
+      "category": "reserve",
       "key": [
         11,
         "greedy",
         1301000
-      ],
-      "attempt": 2,
-      "category": "reserve"
+      ]
     },
-    "valid_new_eval_cells": 0,
-    "planned_new_eval_cells": 96
+    "normal_plan": 480,
+    "normal_remaining": 95,
+    "normal_used": 385,
+    "planned_new_eval_cells": 96,
+    "reserve_max": 24,
+    "reserve_remaining": 24,
+    "reserve_used": 0,
+    "total_used": 385,
+    "valid_new_eval_cells": 0
   },
-  "current_task_archive": {
-    "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_CURRENT_TASK_BEFORE_EVAL_20261006_R1.json",
-    "sha256": "e3836b30bb6191e0aee12149e5ecefd75207ba5ed5544674a92179df17d98bc5"
+  "r43_read_only_parent_delivery": "9f2b6b6411c50849ce1a9eedbaedffaf0aededa5",
+  "repository": "D:\\code\\整合\\zhenghe-round42",
+  "resume_state_whitelist": "runs/comm_dual_response_ablation_20261004/ROUND44_RESUME_STATE_WHITELIST_R1.json",
+  "resume_state_whitelist_sha256": "8313068d9c6797d713ad270345fadc43ba49a1e38e6a60a914bcc9a93762fda0",
+  "round44_scientific_execution_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
+  "source_config_reconciliation": {
+    "actual_config_hashes_recomputed": true,
+    "episodes": 4,
+    "new_comparator_gate_not_yet_run": true,
+    "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_SOURCE_CONFIG_RECONCILIATION_R2.json",
+    "runtime_source_paths_verified": true,
+    "sha256": "c4766b30dce225d0448a77086abe5aac281a76838e95ffd823949cf54b425d70",
+    "status": "passed_source_and_config_only"
+  },
+  "source_identity_revision": {
+    "R4_historical_source_commit": "26b22680b8c3c5cb9bb91bc44799c76cec6f874a",
+    "hashes_may_be_skipped": false,
+    "preserved_initial_source_commit": "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
+    "required_chain": [
+      "12c3bdde0c85d9cf31eb1f1fc264f397701babac",
+      "347da3b8b559e669c57334f51ed17bcb3e90e3b2",
+      "<revised eval-only source head>"
+    ],
+    "revised_source_head": "pending exact child commit; initial 347da3b commit remains preserved",
+    "revision_scope": "r44_eval_resume.py, test_r44_eval_resume.py, current task, receipt regression, mechanical diff only"
+  },
+  "stage": "eval_receipt_repair_then_fixed_evaluation",
+  "status": "authorized_eval_receipt_repair_and_eval_only_resume",
+  "stop_record": {
+    "failure": "NameError: name 'run_module' is not defined in _compare_first_batch",
+    "failure_capture": "runs/comm_dual_response_ablation_20261004/ROUND44_EXECUTION_FAILURE_CAPTURE_SEED11_B0.txt",
+    "report": "runs/comm_dual_response_ablation_20261004/ROUND44_STOP_REPORT.md",
+    "status": "runs/comm_dual_response_ablation_20261004/ROUND44_STATUS.json"
   }
 }

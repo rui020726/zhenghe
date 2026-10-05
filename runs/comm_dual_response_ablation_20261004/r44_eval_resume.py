@@ -25,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RUN_DIR = Path(__file__).resolve().parent
 RUN_REL = f"runs/{RUN_DIR.name}"
 BASE_STOP_HEAD = "12c3bdde0c85d9cf31eb1f1fc264f397701babac"
+INITIAL_SOURCE_HEAD = "347da3b8b559e669c57334f51ed17bcb3e90e3b2"
 SCIENTIFIC_FREEZE_HEAD = "2353c4616746cf0a7c9fcb3a519a7042a28ba176"
 TRAINING_EXECUTION_HEAD = "26b22680b8c3c5cb9bb91bc44799c76cec6f874a"
 BRANCH = "exp/comm-dual-response-ablation"
@@ -37,7 +38,7 @@ TRAINING_VERSION = (
     "dual-eta-lambda-0p5/1/published-completion-event-at-relay-tick/2"
 )
 REPRESENTATION_KIND = "round44-strict-json-value/1"
-SOURCE_ALLOWED_PATHS = {
+INITIAL_SOURCE_ALLOWED_PATHS = {
     f"{RUN_REL}/ROUND44_CURRENT_TASK.json",
     f"{RUN_REL}/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
     f"{RUN_REL}/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json",
@@ -46,6 +47,14 @@ SOURCE_ALLOWED_PATHS = {
     f"{RUN_REL}/r44_eval_resume.py",
     f"{RUN_REL}/test_r44_eval_resume.py",
 }
+SOURCE_REVISION_ALLOWED_PATHS = {
+    f"{RUN_REL}/ROUND44_CURRENT_TASK.json",
+    f"{RUN_REL}/ROUND44_EVAL_MECHANICAL_DIFF_R1.json",
+    f"{RUN_REL}/ROUND44_EVAL_RECEIPT_REPAIR_REGRESSION_R1.json",
+    f"{RUN_REL}/r44_eval_resume.py",
+    f"{RUN_REL}/test_r44_eval_resume.py",
+}
+SOURCE_ALLOWED_PATHS = INITIAL_SOURCE_ALLOWED_PATHS | SOURCE_REVISION_ALLOWED_PATHS
 IDENTITY_ALLOWED_PATHS = {
     f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_GATE_R1.json",
     f"{RUN_REL}/runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R1.json",
@@ -304,6 +313,9 @@ def _verify_r4_history(source_or_identity_head: str) -> dict[str, Any]:
         raise EvalResumeError("R4 ready receipt no longer binds its original identity file")
     if gate.get("status") != "passed" or comparator.get("status") != "passed":
         raise EvalResumeError("historical R4 exact-resume/comparator gate evidence is not passed")
+    if (_parent(TRAINING_EXECUTION_HEAD) != identity.get("r3_parent_head")
+            or identity.get("no_scientific_configuration_change") is not True):
+        raise EvalResumeError("R4 execution head/registered mechanical continuation identity changed")
     _assert_ancestor(SCIENTIFIC_FREEZE_HEAD, TRAINING_EXECUTION_HEAD)
     _assert_ancestor(TRAINING_EXECUTION_HEAD, source_or_identity_head)
     prelaunch = read_json(PRELAUNCH_RECEIPT)
@@ -311,24 +323,83 @@ def _verify_r4_history(source_or_identity_head: str) -> dict[str, Any]:
             or prelaunch.get("head") != SCIENTIFIC_FREEZE_HEAD
             or prelaunch.get("branch") != BRANCH):
         raise EvalResumeError("original ROUND44 scientific prelaunch receipt changed")
+    r4_source_hashes = identity.get("source_code_sha256", {})
+    if not isinstance(r4_source_hashes, dict):
+        raise EvalResumeError("historical R4 identity lacks its source hash map")
+    checked_r4_source_hashes: dict[str, str] = {}
+    r4_source_differences: set[str] = set()
     for relative, expected in prelaunch.get("source_code_sha256", {}).items():
+        repo_path = f"{RUN_REL}/{relative}"
+        frozen_blob = _blob_sha(SCIENTIFIC_FREEZE_HEAD, repo_path)
+        if frozen_blob != expected:
+            raise EvalResumeError(
+                f"original ROUND44 freeze blob does not match its prelaunch receipt: {relative}")
+        r4_expected = r4_source_hashes.get(relative)
+        if not isinstance(r4_expected, str):
+            raise EvalResumeError(f"R4 source identity omits a prelaunch source: {relative}")
+        r4_blob = _blob_sha(TRAINING_EXECUTION_HEAD, repo_path)
+        if r4_blob != r4_expected:
+            raise EvalResumeError(f"R4 committed source blob differs from its identity: {relative}")
+        if expected != r4_expected:
+            r4_source_differences.add(relative)
         if relative in {"r44_eval_index.py", "test_r44_eval_index.py"}:
-            # Keep the original blob checkable even though the working source is versioned now.
-            committed_original = _blob_sha(TRAINING_EXECUTION_HEAD,
-                                           f"{RUN_REL}/{relative}")
-            if committed_original != expected:
-                raise EvalResumeError(f"historical R4 source blob no longer matches its receipt: {relative}")
+            # These two files are intentionally versioned in the new receipt repair.
+            if r4_expected != expected:
+                raise EvalResumeError(f"historical R4 index baseline changed: {relative}")
             if relative == "r44_eval_index.py" and sha256_file(PREPATCH_INDEX) != expected:
                 raise EvalResumeError("preserved prepatch receipt/index source hash changed")
+            checked_r4_source_hashes[relative] = r4_expected
             continue
         path = RUN_DIR / relative
-        if not path.is_file() or sha256_file(path) != expected:
-            raise EvalResumeError(f"frozen ROUND44 executor source changed: {relative}")
+        if not path.is_file() or sha256_file(path) != r4_expected:
+            raise EvalResumeError(f"R4 execution source differs from its committed identity: {relative}")
+        checked_r4_source_hashes[relative] = r4_expected
+    expected_r4_mechanical_paths = {"r44_execute.py", "r44_runtime.py"}
+    if r4_source_differences != expected_r4_mechanical_paths:
+        raise EvalResumeError(
+            "R4 source delta from the original freeze is not the registered mechanical pair: "
+            f"{sorted(r4_source_differences)}")
+    diff_value = _git(
+        "diff", "--binary", "--no-ext-diff", SCIENTIFIC_FREEZE_HEAD,
+        TRAINING_EXECUTION_HEAD, "--", f"{RUN_REL}/r44_execute.py",
+        f"{RUN_REL}/r44_runtime.py", binary=True)
+    assert isinstance(diff_value, bytes)
     return {"r4_identity_sha256": hashes[R4_IDENTITY.name],
             "r4_ready_sha256": hashes[R4_READY.name],
             "r4_exact_gate_sha256": hashes[R4_GATE.name],
             "r4_comparator_sha256": hashes[R4_COMPARATOR.name],
-            "original_prelaunch_identity_sha256": sha256_file(PRELAUNCH_RECEIPT)}
+            "original_prelaunch_identity_sha256": sha256_file(PRELAUNCH_RECEIPT),
+            "original_freeze_source_count": len(prelaunch.get("source_code_sha256", {})),
+            "r4_execution_source_sha256": checked_r4_source_hashes,
+            "r4_registered_mechanical_source_delta": {
+                "paths": sorted(r4_source_differences),
+                "git_diff_sha256": sha256_bytes(diff_value),
+                "training_execution_head": TRAINING_EXECUTION_HEAD,
+                "head_parent": _parent(TRAINING_EXECUTION_HEAD)}}
+
+
+def _verify_source_commit_chain(source_head: str) -> dict[str, Any]:
+    if _parent(INITIAL_SOURCE_HEAD) != BASE_STOP_HEAD:
+        raise EvalResumeError("initial eval-only source commit no longer directly follows the stop head")
+    if _changed_paths(BASE_STOP_HEAD, INITIAL_SOURCE_HEAD) != INITIAL_SOURCE_ALLOWED_PATHS:
+        raise EvalResumeError("initial eval-only source commit differs from its exact path allowlist")
+    if _parent(source_head) != INITIAL_SOURCE_HEAD:
+        raise EvalResumeError("revised eval-only source commit must directly follow the preserved initial commit")
+    if _changed_paths(INITIAL_SOURCE_HEAD, source_head) != SOURCE_REVISION_ALLOWED_PATHS:
+        raise EvalResumeError("revised eval-only source commit differs from its exact path allowlist")
+    _assert_ancestor(SCIENTIFIC_FREEZE_HEAD, source_head)
+    _assert_ancestor(TRAINING_EXECUTION_HEAD, source_head)
+    hashes = {}
+    for relative in SOURCE_ALLOWED_PATHS:
+        hashes[relative] = _blob_sha(source_head, relative)
+    return {
+        "base_stop_head": BASE_STOP_HEAD,
+        "initial_source_head": INITIAL_SOURCE_HEAD,
+        "revised_source_head": source_head,
+        "initial_source_allowed_paths": sorted(INITIAL_SOURCE_ALLOWED_PATHS),
+        "revision_allowed_paths": sorted(SOURCE_REVISION_ALLOWED_PATHS),
+        "source_file_sha256": hashes,
+    }
 
 
 def _assert_source_commit(*, expected_head: str | None = None) -> str:
@@ -340,14 +411,7 @@ def _assert_source_commit(*, expected_head: str | None = None) -> str:
     head = str(_git("rev-parse", "HEAD"))
     if expected_head is not None and head != expected_head:
         raise EvalResumeError(f"eval-only source head changed: expected {expected_head}, got {head}")
-    if _parent(head) != BASE_STOP_HEAD:
-        raise EvalResumeError("eval-only source commit must directly follow the verified stop head")
-    if _changed_paths(BASE_STOP_HEAD, head) != SOURCE_ALLOWED_PATHS:
-        raise EvalResumeError("eval-only source commit contains paths outside its explicit whitelist")
-    _assert_ancestor(SCIENTIFIC_FREEZE_HEAD, head)
-    _assert_ancestor(TRAINING_EXECUTION_HEAD, head)
-    for relative in SOURCE_ALLOWED_PATHS:
-        _blob_sha(head, relative)
+    _verify_source_commit_chain(head)
     _verify_r4_history(head)
     return head
 
@@ -368,11 +432,15 @@ def verify_eval_identity() -> tuple[str, dict[str, Any], dict[str, Any]]:
     identity = read_json(EVAL_IDENTITY)
     gate = read_json(EVAL_GATE)
     source_head = identity.get("source_commit")
+    source_chain_evidence = _verify_source_commit_chain(source_head)
     if identity.get("kind") != "round44-eval-only-execution-identity/1" \
             or identity.get("status") != "passed" or identity.get("branch") != BRANCH:
         raise EvalResumeError("eval-only execution identity is malformed or not passed")
     if identity.get("gate_sha256") != sha256_file(EVAL_GATE):
         raise EvalResumeError("eval-only identity does not bind this exact prelaunch gate")
+    expected_chain = [BASE_STOP_HEAD, INITIAL_SOURCE_HEAD, source_head]
+    if identity.get("source_commit_chain") != expected_chain:
+        raise EvalResumeError("eval-only identity does not bind the exact mechanical source commit chain")
     if _parent(head) != source_head or _changed_paths(source_head, head) != IDENTITY_ALLOWED_PATHS:
         raise EvalResumeError("eval-only identity commit parent/path whitelist mismatch")
     if gate.get("kind") != "round44-eval-only-prelaunch-gate/1" \
@@ -386,6 +454,8 @@ def verify_eval_identity() -> tuple[str, dict[str, Any], dict[str, Any]]:
         working_sha = sha256_file(ROOT / Path(relative))
         if working_sha != _blob_sha(head, relative):
             raise EvalResumeError(f"committed eval identity artifact changed: {relative}")
+    if identity.get("source_commit_chain_evidence") != source_chain_evidence:
+        raise EvalResumeError("eval-only identity source chain blob evidence changed")
     for relative, expected in identity.get("source_file_sha256", {}).items():
         if sha256_file(ROOT / Path(relative)) != expected \
                 or _blob_sha(source_head, relative) != expected:
@@ -398,7 +468,7 @@ def verify_eval_identity() -> tuple[str, dict[str, Any], dict[str, Any]]:
             or sha256_file(diff_path) != identity.get("mechanical_diff_sha256")
             or sha256_file(READONLY_GATE) != identity.get("readonly_model_gate_sha256")):
         raise EvalResumeError("eval-only identity's immutable input or prelaunch evidence changed")
-    history = _verify_r4_history(head)
+    history = _verify_r4_history(source_head)
     if history != identity.get("preserved_r4_history_hashes"):
         raise EvalResumeError("historical R4 identity evidence changed after eval-only freeze")
     if identity.get("retry_key") != [11, "greedy", 1_301_000] \
