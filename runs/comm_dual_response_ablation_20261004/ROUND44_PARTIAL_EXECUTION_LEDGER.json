@@ -1,0 +1,234 @@
+{
+  "kind": "round44-partial-execution-closeout/1",
+  "status": "stopped_incomplete_after_first_eval_receipt_validation_failure",
+  "repository": "D:\\code\\整合\\zhenghe-round42",
+  "branch": "exp/comm-dual-response-ablation",
+  "execution_head": "26b22680b8c3c5cb9bb91bc44799c76cec6f874a",
+  "scientific_freeze_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
+  "quota": {
+    "normal_plan": 480,
+    "normal_used": 385,
+    "normal_remaining": 95,
+    "reserve_max": 24,
+    "reserve_used": 0,
+    "reserve_remaining": 24,
+    "hard_cap": 504,
+    "total_used": 385,
+    "hard_cap_remaining": 119
+  },
+  "execution_counts": {
+    "normal_used": 385,
+    "reserve_used": 0,
+    "total_used": 385,
+    "environment_constructor_calls": 385,
+    "joint_run_build_failures": 0,
+    "joint_run_constructed_calls": 385,
+    "run_invocation_calls": 385,
+    "joint_run_method_calls": 385,
+    "run_return_calls": 385,
+    "run_failure_calls": 0,
+    "completed_steps": 385000,
+    "completed_logical_jobs": 384,
+    "simulation_started": 385,
+    "technical_failed_claims": 1,
+    "retry_claims": 0,
+    "optimizer_step_calls": 1016,
+    "optimizer_step_journal_entries": 1016,
+    "ppo_update_calls": 96,
+    "ppo_update_journal_entries": 96,
+    "checkpoint_write_calls": 297,
+    "checkpoint_write_journal_entries": 297
+  },
+  "training": {
+    "11": {
+      "episodes_done": 128,
+      "batches": 32,
+      "optimizer_steps": 348,
+      "lambda_final": 3.5,
+      "parameter_sha256": "a0e9e60a5f2ed040b9f40963a9c9129c84afcf71b5c39d3cad91ff78a6d2323c",
+      "checkpoint_path": "runs/comm_dual_response_ablation_20261004/checkpoints/v2_train_s11_ep128.pt",
+      "checkpoint_file_sha256": "7b08115cc286df69fdf16d7fc8e4b170d61f94e343f1caecd5d4b4191b727205",
+      "first_batch_gate_path": "runs/comm_dual_response_ablation_20261004/ROUND44_FIRST_BATCH_GATE_SEED11.json",
+      "first_batch_gate_sha256": "22a5a85c1a681db8435a9dc952d6c44f0bc894336027ff8c0940cf0a81733596",
+      "training_receipt_path": "runs/comm_dual_response_ablation_20261004/training_reports/ROUND44_SEED11_EP128.json",
+      "training_receipt_sha256": "b6b85e65a8783f2911d9d7feb7ec8f609e93d38ac248a41b8a7e569d136184a3"
+    },
+    "22": {
+      "episodes_done": 128,
+      "batches": 32,
+      "optimizer_steps": 372,
+      "lambda_final": 4.125,
+      "parameter_sha256": "ce45ad13794d6d39691dfe872f29fcec83a20b2fd5bfb032eac30aa22b6993fd",
+      "checkpoint_path": "runs/comm_dual_response_ablation_20261004/checkpoints/v2_train_s22_ep128.pt",
+      "checkpoint_file_sha256": "22a7df79697dd18d465cc0c9e9d6a292f2251bed980a0883ec18c02bb5ab0268",
+      "first_batch_gate_path": "runs/comm_dual_response_ablation_20261004/ROUND44_FIRST_BATCH_GATE_SEED22.json",
+      "first_batch_gate_sha256": "646cee3497be2dc834f14cf4f0e47c33bb5d43c61c9ea4bf3e30682b9c108211",
+      "training_receipt_path": "runs/comm_dual_response_ablation_20261004/training_reports/ROUND44_SEED22_EP128.json",
+      "training_receipt_sha256": "36f3eaad9d45a0e34b56fb335e3cbccd834e9b0fbb938e340c8bfe677c893ee9"
+    },
+    "33": {
+      "episodes_done": 128,
+      "batches": 32,
+      "optimizer_steps": 296,
+      "lambda_final": 2.875,
+      "parameter_sha256": "3af3f52dd0c293b2d71f9d5191d4b9d3f4641a8eb90cba4ee19b93744908c5a2",
+      "checkpoint_path": "runs/comm_dual_response_ablation_20261004/checkpoints/v2_train_s33_ep128.pt",
+      "checkpoint_file_sha256": "03dbdb0c6e021b97d1d67824271eda6703f9389aad02f0f3f3bdb8b9892b7b63",
+      "first_batch_gate_path": "runs/comm_dual_response_ablation_20261004/ROUND44_FIRST_BATCH_GATE_SEED33.json",
+      "first_batch_gate_sha256": "b386c0bc40ea5c7d0e05f0a0dbb3c48dc75d2ff8ab6d87a0708abb12dd14b8a6",
+      "training_receipt_path": "runs/comm_dual_response_ablation_20261004/training_reports/ROUND44_SEED33_EP128.json",
+      "training_receipt_sha256": "474d59112492ccc6c8c802e6595e553aa67adc145d8ec27eaa7e70872b894f16"
+    }
+  },
+  "evaluation": {
+    "planned_new_eval_cells": 96,
+    "valid_claimed_completed_cells": 0,
+    "attempted_cells": 1,
+    "failed_logical_key": [
+      11,
+      "greedy",
+      1301000
+    ],
+    "unstarted_cells": 95,
+    "failed_row_counted_as_scientific_result": false,
+    "failed_row_observation_only": {
+      "on_time": 6,
+      "spent_bytes": 0,
+      "task_reward_total": 6,
+      "steps": 1000
+    },
+    "failure_reason": "EvalIndexError: persisted row differs from the completed in-memory row: (11, 'greedy', 1301000)"
+  },
+  "failed_eval_attempt": {
+    "claim_path": "runs/comm_dual_response_ablation_20261004/launch_claims/model_eval_new_s11_greedy_scene1301000/attempt_0001.json",
+    "claim_sha256": "b81d51ea0d79dd4b276167b1708a9982314662eda8166d657f0d6e9d384b94d7",
+    "status": "failed_technical",
+    "category": "normal",
+    "attempt": 1,
+    "environment_constructor_calls": 1,
+    "joint_run_constructed_calls": 1,
+    "run_invocation_calls": 1,
+    "run_return_calls": 1,
+    "completed_steps": 1000,
+    "optimizer_step_calls": 0,
+    "checkpoint_write_calls": 0,
+    "row_path": "runs/comm_dual_response_ablation_20261004/rows/v2_r44_eval_new_s11_greedy_s1301000_a1.json",
+    "row_sha256": "409e8bd5d6a08a988c34486c1476c89104d341189c8064c988402387787417e5",
+    "row_size_bytes": 346385,
+    "failure_capture_path": "runs/comm_dual_response_ablation_20261004/failures/eval_new_s11_greedy_s1301000_r44_a1.json",
+    "failure_capture_sha256": "9c23c46c95da06fec2b7d88f22dbdda7e8c580ecd252733b0923fa7b51a90140",
+    "failure_artifacts": {
+      "lifecycle": {
+        "path": "runs/comm_dual_response_ablation_20261004/logs/v2_r44_eval_new_s11_greedy_s1301000_a1_rp.jsonl",
+        "sha256": "7166ab1475b3859340ae8b1b899ba489742ecf90d394a73004e90df2bb5875d0",
+        "size_bytes": 564307
+      },
+      "transcript": {
+        "path": "runs/comm_dual_response_ablation_20261004/logs/v2_r44_eval_new_s11_greedy_s1301000_a1_ct.jsonl",
+        "sha256": "80a6e736c798fa96ad87366724466e60f30f8f42029bdfbb931f5fd6f868edaa",
+        "size_bytes": 736
+      },
+      "tape": {
+        "path": "runs/comm_dual_response_ablation_20261004/logs/v2_r44_eval_new_s11_greedy_s1301000_a1_tape.jsonl",
+        "sha256": "1a2ceb461470ced342b2fa34aff44574a8edbe9ed9820016144b49bc314cd0b2",
+        "size_bytes": 186782
+      }
+    }
+  },
+  "failure_mechanism": {
+    "classification": "mechanical JSON serialization type mismatch in artifact receipt equality; no science result accepted",
+    "source_evidence": {
+      "parameter_summary_returns_heads_tuple": {
+        "path": "zhenghe-round40/runs/comm_cost_stage_b_20260927/sb_controller.py",
+        "line": 61,
+        "sha256": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49"
+      },
+      "row_writer_serializes_with_json": {
+        "path": "zhenghe/runs/comm_cost_v2_rerun_20260928/v2_run.py",
+        "line": 256,
+        "sha256": "90c6936c24c93999d03aac3f09b9b6506a9e4f8050f9115a0ef3fc839c9f16b7"
+      },
+      "receipt_direct_equality_check": {
+        "path": "runs/comm_dual_response_ablation_20261004/r44_eval_index.py",
+        "line": 280,
+        "sha256": "4e7d23505c06083a91738e2b88a36cbc0a9cb325e81631443c453360d3562546"
+      }
+    },
+    "description": "The parameter summary includes a Python tuple under heads. The row writer serializes it to a JSON array. Receipt validation decodes that persisted array and compares it directly with the original in-memory tuple, so equality fails after the completed run."
+  },
+  "gate_and_run_evidence": {
+    "ROUND44_FIRST_BATCH_COMPARISON_SEED11.json": {
+      "path": "ROUND44_FIRST_BATCH_COMPARISON_SEED11.json",
+      "sha256": "95e5eb88a16be5c2db1dfb3e791db2ae114d8419b835ad900e72005f6f44ac08",
+      "size_bytes": 18313
+    },
+    "ROUND44_FIRST_BATCH_COMPARISON_SEED22.json": {
+      "path": "ROUND44_FIRST_BATCH_COMPARISON_SEED22.json",
+      "sha256": "de3eb72302b1cc84269f4696fad5fd7e23b7f14c1cad697c783abdf18b6f577e",
+      "size_bytes": 18334
+    },
+    "ROUND44_FIRST_BATCH_COMPARISON_SEED33.json": {
+      "path": "ROUND44_FIRST_BATCH_COMPARISON_SEED33.json",
+      "sha256": "325bc7e02576788280ae0b5d8b08f4df38fa20bfdfc41c51b5ee57a9b37df6dc",
+      "size_bytes": 18332
+    },
+    "ROUND44_FIRST_BATCH_GATE_SEED11.json": {
+      "path": "ROUND44_FIRST_BATCH_GATE_SEED11.json",
+      "sha256": "22a5a85c1a681db8435a9dc952d6c44f0bc894336027ff8c0940cf0a81733596",
+      "size_bytes": 25067
+    },
+    "ROUND44_FIRST_BATCH_GATE_SEED22.json": {
+      "path": "ROUND44_FIRST_BATCH_GATE_SEED22.json",
+      "sha256": "646cee3497be2dc834f14cf4f0e47c33bb5d43c61c9ea4bf3e30682b9c108211",
+      "size_bytes": 25112
+    },
+    "ROUND44_FIRST_BATCH_GATE_SEED33.json": {
+      "path": "ROUND44_FIRST_BATCH_GATE_SEED33.json",
+      "sha256": "b386c0bc40ea5c7d0e05f0a0dbb3c48dc75d2ff8ab6d87a0708abb12dd14b8a6",
+      "size_bytes": 25112
+    },
+    "runtime/ROUND44_EXACT_RESUME_GATE_R4.json": {
+      "path": "runtime/ROUND44_EXACT_RESUME_GATE_R4.json",
+      "sha256": "efe0a83ec32a310ccd9f6d3bc54035c2e5d873b4c2cd4b8c28ea282530b78d9e",
+      "size_bytes": 3765
+    },
+    "runtime/ROUND44_COMPARATOR_REGRESSION_R4.json": {
+      "path": "runtime/ROUND44_COMPARATOR_REGRESSION_R4.json",
+      "sha256": "cdcffa90fd3f491dfdf9e06a9d1f54772a0dd2c7fa46ff118f16fe08079b24bc",
+      "size_bytes": 11517
+    },
+    "runtime/ROUND44_RESUME_READY_R4.json": {
+      "path": "runtime/ROUND44_RESUME_READY_R4.json",
+      "sha256": "19dea7caf332c430b62a0884c1c3bd4f9704a5690abf40c18c0b593e41707e98",
+      "size_bytes": 2276
+    },
+    "runtime/ROUND44_EXECUTION_LEDGER.json": {
+      "path": "runtime/ROUND44_EXECUTION_LEDGER.json",
+      "sha256": "bd50c8c43f2cf376efd8758aeb46a78eb51ae0d70c9a067ba8813afa9234bab6",
+      "size_bytes": 589107
+    },
+    "runtime/ROUND44_EXECUTION_PROGRESS_RESUME_R4.json": {
+      "path": "runtime/ROUND44_EXECUTION_PROGRESS_RESUME_R4.json",
+      "sha256": "4faced78a364d9b369f0d304eb542195cdd3be44c39180f63312ccfedfe3cf50",
+      "size_bytes": 2440
+    },
+    "runtime/optimizer_step_calls.jsonl": {
+      "path": "runtime/optimizer_step_calls.jsonl",
+      "sha256": "7d47c9a208160ac0ef943663eb7b04f21bf1ca91072dc8ec619c7e5395771bd5",
+      "size_bytes": 172360
+    },
+    "runtime/ppo_update_calls.jsonl": {
+      "path": "runtime/ppo_update_calls.jsonl",
+      "sha256": "6f653bcb1bdd55ef570322ea1ac7d719e103ff798f5483942abf464ed2df93a0",
+      "size_bytes": 16064
+    },
+    "runtime/checkpoint_writes.jsonl": {
+      "path": "runtime/checkpoint_writes.jsonl",
+      "sha256": "7957ec093b345da3b0a1488e0fb09641ce437fd45d28d23ac2436ea793718bdd",
+      "size_bytes": 126669
+    }
+  },
+  "final_analysis_status": "not_run_because_fixed_new_evaluation_matrix_is_incomplete",
+  "scientific_verdict": "not_available_no_valid_96_cell_new_evaluation_matrix",
+  "next_action": "Await explicit authorization for a separately versioned mechanical receipt fix and isolated technical-reserve retry for logical key (11, greedy, 1301000). Preserve the failed attempt; do not hotfix or restart under the current frozen runner identity."
+}

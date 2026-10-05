@@ -1,6 +1,6 @@
 # 项目状态
 
-## 2026-10-05：ROUND44 精确续执行进行中——当前入口见 `runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json` 与完整续执行依据 `runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_CONTINUATION_BASIS.md`；仅在同轮授权下修复比较器并从 seed11 ep4 恢复。
+## 2026-10-05：ROUND44 三 seed 训练完成、首个固定评估因收据序列化不匹配停止——当前状态见 `runs/comm_dual_response_ablation_20261004/ROUND44_CURRENT_TASK.json`，停止报告见 `runs/comm_dual_response_ablation_20261004/ROUND44_STOP_REPORT_EVAL_RECEIPT_MISMATCH.md`；等待版本化修复授权。
 
 ## 2026-10-03：ROUND42-R 固定计划续执行复核暂停在 seed 11 首批 gate
 

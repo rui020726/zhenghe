@@ -1,6 +1,6 @@
 {
   "kind": "round44-current-task/1",
-  "status": "in_progress_comparator_fix_and_exact_resume_gate",
+  "status": "stopped_eval_receipt_serialization_mismatch",
   "repository": "D:\\code\\整合\\zhenghe-round42",
   "branch": "exp/comm-dual-response-ablation",
   "base_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
@@ -41,8 +41,8 @@
   "pre_resume_snapshot_manifest_sha256": "65348220c10e8c9158cf994e991eb2019bb6e99771a117a752d57c879450891e",
   "resume_state_whitelist": "runs/comm_dual_response_ablation_20261004/ROUND44_RESUME_STATE_WHITELIST_R1.json",
   "resume_state_whitelist_sha256": "8313068d9c6797d713ad270345fadc43ba49a1e38e6a60a914bcc9a93762fda0",
-  "current_stage": "R3 saved-batch gate, comparator, and optimizer/RNG/module restore checks passed up to the next-scene assertion; the assertion used episode 1 scene 1300014 instead of the frozen episode 4 scene 1300003; R3 identity and failure are preserved; R4 correction is in progress; no new claim or environment has started",
-  "next_action": "Run targeted R4 pure checks, commit only the frozen-order assertion and new identity changes, seal R4 against preserved R1/R2/R3 identities and failures, run the actual saved-batch/comparator/ep4 exact-restore gate, then continue the original fixed remaining 476 tasks only if all checks pass.",
+  "current_stage": "All three seeds completed 128 episodes and 32 batches. The first NEW seed11 greedy fixed evaluation returned after 1000 steps, then receipt validation failed because JSON-decoded lists were compared directly with in-memory tuples. The evaluation claim is failed_technical; no valid eval matrix cell has been accepted. No hotfix or further run was started.",
+  "next_action": "Await explicit authorization for a separately versioned mechanical receipt fix and technical-reserve retry of logical key (11, greedy, 1301000); then run the other 95 unstarted fixed evaluation cells only. Do not hotfix or restart under the current frozen runner identity.",
   "pure_verification": {
     "python": "D:\\project_env\\python.exe",
     "R2_py_compile": "passed for r44_execute.py, r44_resume_bridge.py, r44_resume_gate.py, test_r44_resume_gate.py",
@@ -130,5 +130,28 @@
       "stale_literal": 1300014
     },
     "R3_exact_restore_and_ready_receipts": "absent; R3 stopped on stale scene literal after the registered order check"
+  },
+  "post_execution_stop": {
+    "report": "runs/comm_dual_response_ablation_20261004/ROUND44_STOP_REPORT_EVAL_RECEIPT_MISMATCH.md",
+    "report_sha256": "f0161c15fe788116fc09c594a4710b3d3da99dbfd4664aace36516af808abb5b",
+    "partial_ledger": "runs/comm_dual_response_ablation_20261004/ROUND44_PARTIAL_EXECUTION_LEDGER.json",
+    "partial_ledger_sha256": "f4805e0cb5660bd17415f0f65dc94413a21b267042b99db85fa6c104e44a3591",
+    "execution_head": "26b22680b8c3c5cb9bb91bc44799c76cec6f874a",
+    "normal_claims_used": 385,
+    "reserve_claims_used": 0,
+    "total_claims_used": 385,
+    "training_episodes_complete": 384,
+    "optimizer_steps": 1016,
+    "ppo_updates": 96,
+    "checkpoint_write_journal_entries": 297,
+    "new_eval_cells_completed": 0,
+    "failed_eval_key": [
+      11,
+      "greedy",
+      1301000
+    ],
+    "failed_claim_path": "runs/comm_dual_response_ablation_20261004/launch_claims/model_eval_new_s11_greedy_scene1301000/attempt_0001.json",
+    "failed_claim_sha256": "b81d51ea0d79dd4b276167b1708a9982314662eda8166d657f0d6e9d384b94d7",
+    "reason": "stored JSON row differs from in-memory row because tuple fields are serialized as arrays"
   }
 }
