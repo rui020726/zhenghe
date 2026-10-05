@@ -791,7 +791,7 @@ def run() -> dict[str, Any]:
         })
         _write_atomic(progress_path, progress)
         status = {
-            "kind": "round44-project-status/3", "round": 44,
+            "kind": "round44-project-status/4", "round": 44,
             "status": "complete_local_delivery_pending_commits",
             "execution_matrix_status": "complete", "branch": _git("branch", "--show-current"),
             "scientific_execution_head": current_head,
@@ -816,7 +816,7 @@ def run() -> dict[str, Any]:
         status["stop_record_preserved"] = str(RUN_DIR / "ROUND44_STOP_REPORT.md")
         status["resume_bridge"] = STATE_BRIDGE_VERSION
         status["mechanical_version"] = MECHANICAL_VERSION
-        _write_new_or_match(RUN_DIR / "ROUND44_STATUS_COMPLETE_R3.json", status)
+        _write_new_or_match(RUN_DIR / "ROUND44_STATUS_COMPLETE_R4.json", status)
         return {"progress": progress, "ledger": ledger, "analysis": analysis,
                 "report": report, "eval_audit": eval_audit, "status": status}
     finally:

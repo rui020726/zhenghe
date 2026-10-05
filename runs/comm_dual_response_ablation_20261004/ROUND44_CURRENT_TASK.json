@@ -4,7 +4,7 @@
   "repository": "D:\\code\\整合\\zhenghe-round42",
   "branch": "exp/comm-dual-response-ablation",
   "base_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
-  "current_head_at_persist": "453924cf4abb0dcc649c1d877236fe12c73e12e5",
+  "current_head_at_persist": "c3a975ef0b36176cc4572dc0fb618d5ca96f037f",
   "r43_read_only_parent_delivery": "9f2b6b6411c50849ce1a9eedbaedffaf0aededa5",
   "round44_scientific_execution_head": "2353c4616746cf0a7c9fcb3a519a7042a28ba176",
   "stop_record": {
@@ -41,13 +41,15 @@
   "pre_resume_snapshot_manifest_sha256": "65348220c10e8c9158cf994e991eb2019bb6e99771a117a752d57c879450891e",
   "resume_state_whitelist": "runs/comm_dual_response_ablation_20261004/ROUND44_RESUME_STATE_WHITELIST_R1.json",
   "resume_state_whitelist_sha256": "8313068d9c6797d713ad270345fadc43ba49a1e38e6a60a914bcc9a93762fda0",
-  "current_stage": "R2 real saved-batch gate and comparator regression passed, then stopped at an expected-error spelling assertion for the OLD R43 checkpoint; R2 identity and failure are preserved; R3 matcher repair is in progress; no new claim or environment has started",
-  "next_action": "Run targeted R3 pure checks, inspect and commit only the narrow R3 gate-matcher/identity changes, seal R3 against the immutable R2 identity and failure receipt, run the actual R3 saved-batch/comparator/ep4 exact-restore gate, then continue the original fixed remaining 476 tasks only if all gates pass.",
+  "current_stage": "R3 saved-batch gate, comparator, and optimizer/RNG/module restore checks passed up to the next-scene assertion; the assertion used episode 1 scene 1300014 instead of the frozen episode 4 scene 1300003; R3 identity and failure are preserved; R4 correction is in progress; no new claim or environment has started",
+  "next_action": "Run targeted R4 pure checks, commit only the frozen-order assertion and new identity changes, seal R4 against preserved R1/R2/R3 identities and failures, run the actual saved-batch/comparator/ep4 exact-restore gate, then continue the original fixed remaining 476 tasks only if all checks pass.",
   "pure_verification": {
     "python": "D:\\project_env\\python.exe",
     "R2_py_compile": "passed for r44_execute.py, r44_resume_bridge.py, r44_resume_gate.py, test_r44_resume_gate.py",
     "R2_targeted_unit_tests": "2 passed",
-    "R3_checks": "pending after the strict expected-error matcher repair",
+    "R3_py_compile": "passed for r44_execute.py, r44_resume_bridge.py, r44_resume_gate.py, test_r44_resume_gate.py",
+    "R3_targeted_unit_tests": "3 passed",
+    "R4_checks": "pending after replacing the stale episode-4 scene literal with the committed frozen order",
     "environment_starts": 0,
     "optimizer_steps": 0,
     "checkpoint_writes": 0
@@ -97,7 +99,7 @@
   },
   "comparator_revision": {
     "version": "round44-row-projection/2",
-    "mechanical_version": "round44-resume-comparator-and-restore/3",
+    "mechanical_version": "round44-resume-comparator-and-restore/4",
     "r1_identity_sha256": "ffc75ffeca743134a9f0df0bff173e1b0b4e6f544bf88ad4d3ef31119336c860",
     "r2_identity_head": "453924cf4abb0dcc649c1d877236fe12c73e12e5",
     "r2_identity_sha256": "15aa3cbb34f6b52574d4852eb42503fd7c491a6119302e2da7945dfdde28252b",
@@ -109,14 +111,24 @@
     },
     "old_projection_evidence_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_OLD_PROJECTION_FOUR_EPISODES_R2.json",
     "source_config_reconciliation_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_SOURCE_CONFIG_RECONCILIATION_R2.json",
-    "r3_gate_receipt_paths": [
-      "runtime/ROUND44_EXACT_RESUME_GATE_R3.json",
-      "runtime/ROUND44_COMPARATOR_REGRESSION_R3.json",
-      "runtime/ROUND44_RESUME_READY_R3.json"
+    "r4_gate_receipt_paths": [
+      "runtime/ROUND44_EXACT_RESUME_GATE_R4.json",
+      "runtime/ROUND44_COMPARATOR_REGRESSION_R4.json",
+      "runtime/ROUND44_RESUME_READY_R4.json"
     ],
     "additional_exact_artifact_check": "R43/R44 transcript SHA256 equality; synthetic transcript-hash mismatch must be rejected",
-    "resume_progress_identity": "round44-execution-progress-resume-r3/3",
+    "resume_progress_identity": "round44-execution-progress-resume-r4/4",
     "R2_comparator_receipt_sha256": "289daaf8c595fe83828fa50639291bbba2b6c905f6c7f33a3a67b59c017e2b6c",
-    "R2_exact_restore_and_ready_receipts": "absent; R2 attempt stopped before these were written"
+    "R2_exact_restore_and_ready_receipts": "absent; R2 attempt stopped before these were written",
+    "R3_identity_head": "c3a975ef0b36176cc4572dc0fb618d5ca96f037f",
+    "R3_identity_sha256": "f67713c5a11b17e11d558823fcf3cafb48f9558404cd1d975a266977c03ed908",
+    "R3_gate_attempt_failure": {
+      "path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_R3_GATE_ATTEMPT_FAILURE.json",
+      "sha256": "dd360d1c2174dd86a1bb6305bc5a410cfb6f5fc292d3d5ac721d06843c1b270d",
+      "status": "failed_during_exact_restore_schedule_check",
+      "frozen_episode4_scene": 1300003,
+      "stale_literal": 1300014
+    },
+    "R3_exact_restore_and_ready_receipts": "absent; R3 stopped on stale scene literal after the registered order check"
   }
 }

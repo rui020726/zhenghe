@@ -12,13 +12,14 @@ from r44_resume_bridge import MECHANICAL_VERSION, STATE_BRIDGE_VERSION
 from r44_resume_gate import (
     _is_expected_old_training_checkpoint_rejection,
     _next_values_from_saved_rng,
+    _validate_training_order,
 )
 
 
 class Round44ResumeGateTests(unittest.TestCase):
     def test_resume_bridge_is_versioned_and_mechanical(self) -> None:
         self.assertEqual(STATE_BRIDGE_VERSION, "round44-exact-resume-state-bridge/1")
-        self.assertEqual(MECHANICAL_VERSION, "round44-resume-comparator-and-restore/3")
+        self.assertEqual(MECHANICAL_VERSION, "round44-resume-comparator-and-restore/4")
 
     def test_old_r43_checkpoint_rejection_accepts_exact_version_field_spelling(self) -> None:
         self.assertTrue(_is_expected_old_training_checkpoint_rejection(
@@ -29,6 +30,15 @@ class Round44ResumeGateTests(unittest.TestCase):
             "checkpoint: freeze identity mismatch"))
         self.assertFalse(_is_expected_old_training_checkpoint_rejection(
             "checkpoint: unexpected tensor shape mismatch"))
+
+    def test_resume_scene_comes_from_the_full_frozen_order(self) -> None:
+        frozen_order = list(range(1300000, 1300128))
+        frozen_order[4] = 1300003
+        self.assertEqual(_validate_training_order(frozen_order.copy(), frozen_order), 1300003)
+        changed_order = frozen_order.copy()
+        changed_order[4] = 1300014
+        with self.assertRaisesRegex(RuntimeError, "differs from the committed freeze"):
+            _validate_training_order(changed_order, frozen_order)
 
     def test_next_values_match_independent_python_numpy_torch_streams(self) -> None:
         py = random.Random(13579)

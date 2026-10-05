@@ -19,7 +19,8 @@ from r44_prepare import RUN_DIR, TRAINING_VERSION, read, sha256, write_new
 from r44_resume_bridge import (
     COMPARATOR_TEST_PATH, EXPECTED_COMPARATOR_REJECTIONS, GATE_PATH, IDENTITY_PATH,
     MECHANICAL_VERSION, OLD_PROJECTION_PATH, R1_IDENTITY_PATH, R2_FAILURE_PATH,
-    R2_IDENTITY_PATH, READY_PATH, SOURCE_CONFIG_RECONCILIATION_PATH,
+    R2_IDENTITY_PATH, R3_FAILURE_PATH, R3_IDENTITY_PATH, READY_PATH,
+    SOURCE_CONFIG_RECONCILIATION_PATH,
     STATE_BRIDGE_VERSION, WHITELIST_PATH, build_state_whitelist,
     seal_resume_execution_identity, verify_pre_resume_state, verify_resume_execution_identity,
     verify_state_whitelist,
@@ -386,6 +387,16 @@ def _next_values_from_saved_rng(rng: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _validate_training_order(actual_order: list[int], frozen_order: list[int]) -> int:
+    """Require the complete frozen schedule and return its registered ep4 scene."""
+    if len(actual_order) != 128 or actual_order != frozen_order or len(frozen_order) != 128:
+        raise RuntimeError("ROUND44 actual scenario order differs from the committed freeze")
+    next_scene = int(frozen_order[4])
+    if int(actual_order[4]) != next_scene:
+        raise RuntimeError("ROUND44 next scene at episode4 differs from the frozen schedule")
+    return next_scene
+
+
 def _exact_restore_gate(runtime: dict[str, Any], frozen: dict[str, Any]) -> dict[str, Any]:
     run = runtime["r42_run"]
     train = runtime["r40_train"]
@@ -486,10 +497,7 @@ def _exact_restore_gate(runtime: dict[str, Any], frozen: dict[str, Any]) -> dict
             raise RuntimeError("ROUND44 restored RNG next values do not match the saved streams")
         order = [int(value) for value in runtime["common"].scenario_order()]
         expected_order = [int(value) for value in frozen["round42"]["training_order"]]
-        if len(order) != 128 or order != expected_order:
-            raise RuntimeError("ROUND44 resumed training scene schedule differs from frozen 128 order")
-        if int(order[4]) != 1300014:
-            raise RuntimeError("ROUND44 next scene at episode4 differs from the registered schedule")
+        next_scene = _validate_training_order(order, expected_order)
         restore_identity = {
             "training_seed": int(state["training_seed"]),
             "episodes_done": int(state["episodes_done"]),
@@ -510,7 +518,7 @@ def _exact_restore_gate(runtime: dict[str, Any], frozen: dict[str, Any]) -> dict
             "scenario_order_sha256": hashlib.sha256(
                 json.dumps(order, separators=(",", ":")).encode("ascii")).hexdigest(),
             "next_episode_index": 4,
-            "next_scenario_seed": int(order[4]),
+            "next_scenario_seed": next_scene,
         }
     finally:
         _restore_ambient_rng(ambient)
@@ -526,7 +534,7 @@ def _exact_restore_gate(runtime: dict[str, Any], frozen: dict[str, Any]) -> dict
         raise RuntimeError("ROUND44 read-only precheck module hashes disagree with actual restore")
 
     return {
-        "kind": "round44-exact-resume-gate/3", "status": "passed",
+        "kind": "round44-exact-resume-gate/4", "status": "passed",
         "training_seed": 11, "episodes_done": 4, "updates": 1,
         "optimizer_steps_saved": 12, "lambda": 1.125,
         "eta_lambda": 0.5, "training_version": TRAINING_VERSION,
@@ -639,7 +647,7 @@ def run_read_only_gates() -> dict[str, Any]:
     if source_regression.get("status") != "passed":
         raise RuntimeError("previous R43 report/source identity positive-negative gate is missing")
     ready = {
-        "kind": "round44-resume-ready/3", "status": "passed",
+        "kind": "round44-resume-ready/4", "status": "passed",
         "mechanical_version": MECHANICAL_VERSION,
         "state_bridge_version": STATE_BRIDGE_VERSION,
         "execution_head": head,
@@ -651,6 +659,8 @@ def run_read_only_gates() -> dict[str, Any]:
         "r1_identity_sha256": sha256(R1_IDENTITY_PATH),
         "r2_identity_sha256": sha256(R2_IDENTITY_PATH),
         "r2_failure_sha256": sha256(R2_FAILURE_PATH),
+        "r3_identity_sha256": sha256(R3_IDENTITY_PATH),
+        "r3_failure_sha256": sha256(R3_FAILURE_PATH),
         "old_projection_evidence_sha256": sha256(OLD_PROJECTION_PATH),
         "source_config_reconciliation_sha256": sha256(SOURCE_CONFIG_RECONCILIATION_PATH),
         "state_whitelist": immutable_state_before["permitted_resume"],
