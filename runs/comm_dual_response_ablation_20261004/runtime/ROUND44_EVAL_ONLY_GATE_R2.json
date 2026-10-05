@@ -1,0 +1,32 @@
+{
+  "kind": "round44-eval-only-prelaunch-gate/1",
+  "status": "passed",
+  "source_commit": "c18e7d6564aac132104649dc18c3ab52acb76023",
+  "readonly_model_gate_sha256": "23606c1b825b7a3e9b656008090f46a517b9605592f15dfa5bc7de1f845afff8",
+  "fixed_eval_keys_sha256": "cf7850cd3ee31905de75e80af5c80b7f64b011e20e3485897555f38e93a52053",
+  "fixed_eval_keys_encoding": "UTF-8 JSON list of [seed, mode, scene] triples; compact separators; allow_nan=false",
+  "fixed_eval_key_count": 96,
+  "quota": {
+    "normal": 480,
+    "reserve": 24,
+    "hard_cap": 504
+  },
+  "post_retry_receipt_audit_sha256": "608a93434bd24f8c40b6b8ee40e8f811db49ea9a7bdf729b5bb91a5fdf406321",
+  "prior_execution_commit": "1f43d869df6200f9de3e6bd7ae139e8c6e7f7c10",
+  "prior_execution_identity_sha256": "0b3f90496d76ea2b01e30fd6f51e0dbd1f6bdc05cfc40dfdd86321a666232b3e",
+  "prior_execution_gate_sha256": "92530ea1a116bb7ba823a58e1eda136d96e2e33ddbc0d641a21c98e785902b85",
+  "prior_progress_sha256": "041eca42006d28e8c55930716c443ea78879a3be7459487f847b10f17d9bc243",
+  "attempt2_claim_sha256": "9acc52b91428fce0c9ccc7478b7df43a324b6664cac11918e14caf23ccb70eda",
+  "attempt2_row_sha256": "76d8e3fb4896ed9464cbc4d3b5608c1b25294ce3305c22b0cbbf4a481a04164c",
+  "read_only_model_gate_reused_from_source_commit": "b7c27b809cb7ac1fd3f6282a6c03265dfc44ea60",
+  "read_only_model_gate_reuse_basis": "the preserved three-seed CPU load/forward gate passed on the immutable ambient-guard ancestor; the receipt-resume source diff changes only strict row equivalence, terminal claim reconciliation, retry-gate recovery and identity/progress versioning",
+  "retry_resume_state": {
+    "attempt2_status": "complete",
+    "attempt2_strict_receipt_index": "passed",
+    "attempt2_environment_repeated": false,
+    "valid_eval_cells_before_resume": 1,
+    "normal_cells_remaining": 95,
+    "reserve_used": 1,
+    "reserve_remaining": 23
+  }
+}
