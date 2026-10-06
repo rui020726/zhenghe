@@ -1,13 +1,14 @@
 {
   "kind": "round46-current-task/1",
-  "stage": "R2/3 stopped before first claim: inner R45 prelaunch identity rejected",
+  "stage": "ROUND46-R2/4 runner committed; V4 freeze prepared; zero-environment preflight pending",
   "branch": "fix/comm-bc-initialization-readback",
-  "head": "730679cf86330e64fff92c0638335aeb4d222156",
+  "head": "351eed33e640c3c2edcc5d2345df0958587baa4f",
   "runner_version_previous": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
-  "runner_version_current": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
-  "runner_source_sha256": "035d49799ebc3ce21eb6230fd36b6163af8bed7223b403e41b67c1d6712561f2",
+  "runner_version_current": "round46-bc-initialized-constrained-ppo/4+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/1+reused-zero-environment-gates/1",
+  "runner_source_sha256": "822e5d1d9dd4bcc6a0903d19d12a9bdf503d2e9c7763e3573ab19603ec560b98",
   "freeze_input_route_audit_sha256": "18e57894e599c5bc646db20e72a44261fa293cdb69e684c234997d41f934481b",
-  "prelaunch_gate_sha256": "ae5cc182976c810cf6d30cf1a387d3f064e83bd6f4e19820c08113d04d212ca5",
+  "prior_v3_prelaunch_gate_sha256": "ae5cc182976c810cf6d30cf1a387d3f064e83bd6f4e19820c08113d04d212ca5",
+  "v4_prelaunch_gate_sha256": null,
   "checkpoint_readback_regression_sha256": "9103b56acfc426f3ef85913e6931e5ac4b94854c4289765e7db481d147edfe83",
   "checkpoint_journal_route_regression_sha256": "91de357f855a1ea04f9cfb5383433629aef20c8b363f8b1ca32bc23e12488378",
   "preserved_prejournal_freeze_archive_sha256": "662e4a9fd531a7b8559063b4f34a4e0830fe618cf5e4f497bb0225dc0d1ef075",
@@ -28,11 +29,11 @@
     "v3_fixture_writes": 6,
     "unclassified": 0,
     "r2_local_copy_created": true,
-    "actual_writer_rebind_probe": "passed; 0 save calls yet; formal route save gate pending"
+    "actual_writer_rebind_probe": "V3 route regression reused by hash; no V4 fixture/save rerun"
   },
   "counts": {
     "ppo_updates": 0,
-    "checkpoint_write_calls": 16,
+    "checkpoint_write_calls": 18,
     "run_invocation_calls": 0,
     "claims": 0,
     "optimizer_step_calls": 0,
@@ -44,7 +45,7 @@
   "python": "D:\\project_env\\python.exe",
   "runtime_device": "cpu",
   "training_started": false,
-  "next_action": "commit formal preflight receipts, run the actual task-state status regression and commit its receipt, then enter only the fixed plan if all gates pass",
+  "next_action": "commit the six V4 freeze artifacts and task state; run reuse-only zero-environment preflight and commit its gate",
   "repository": "D:\\code\\整合\\zhenghe-round42",
   "actual_cursor": {
     "normal_used": 0,
@@ -67,7 +68,7 @@
     "available_seed33_progress": false,
     "note": "Per-seed progress files absent for seeds 22/33; actual unclaimed cursor is taken from strict runtime ledger."
   },
-  "next_actual_command": "STOPPED: do not re-enter /3; proceed only under the separately authorized /4 binding fix.",
+  "next_actual_command": "Run reuse-only zero-environment V4 preflight after the freeze artifacts are committed; do not rerun old fixtures.",
   "round": 46,
   "execution_attempted": true,
   "execution_exit_code": 1,
@@ -82,6 +83,11 @@
     "episodes_done": 0,
     "updates": 0
   },
+  "v4_freeze_status": "prepared; zero environments; no training",
+  "v4_preflight_gate": "pending",
+  "old_zero_environment_regressions_reexecuted": false,
+  "v3_stop_archive_sha256": "c66fb42fa8fc1e4513eb6a768b14ea24e231091da55c14e6c47b7ccadc0d327a",
+  "v4_binding_audit_sha256": "140bba1fcc4141df4b1cedb6117fe6cd51d22fc1129520ec735794c498c30a6b",
   "failure_record": "ROUND46_EXECUTION_FAILURE.json",
   "traceback_record": "ROUND46_EXECUTION_FAILURE_TRACEBACK.txt",
   "stop_report": "ROUND46_STOP_REPORT.md"
