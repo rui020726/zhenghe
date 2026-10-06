@@ -1,0 +1,54 @@
+{
+  "kind": "round46-r2-current-task/1",
+  "stage": "prepared; seam regression passed; formal preflight pending",
+  "isolated_output": "runs/comm_bc_initialized_constrained_ppo_20261007_r2",
+  "status": {
+    "branch": "fix/comm-bc-initialization-readback",
+    "counts": {
+      "run_invocation_calls": 0,
+      "environment_constructor_calls": 0,
+      "total_used": 0,
+      "completed_steps": 0,
+      "normal_used": 0,
+      "synthetic_fixture_checkpoint_writes": 6,
+      "ppo_updates": 0,
+      "reserve_used": 0,
+      "optimizer_step_calls": 0,
+      "claims": 0,
+      "checkpoint_write_journal_entries": 6,
+      "experiment_checkpoint_writes": 0,
+      "checkpoint_write_calls": 6
+    },
+    "formal_preflight": "pending",
+    "python_processes": 0,
+    "runner_version": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
+    "regression": {
+      "receipt_sha256": "e5597c5a726f6a435981a8529f9cb498e88a515088560e87dc46f4a54a9a07a3",
+      "status": "passed",
+      "fixed_fresh_seeds": [
+        11,
+        22,
+        33
+      ],
+      "fixture_manifest_sha256": "18351ddccfb1b10bb0f991ddb0527d404cc6724bc650d9661046c2198e03b2be",
+      "old_fresh_failures_reproduced": 3,
+      "old_resume_failures_reproduced": 3,
+      "fixed_resume_seeds": [
+        11,
+        22,
+        33
+      ],
+      "source_sha256": "6dbce21f3eab9b52448a3095e138d56ca142e63633ba6ef9a97508b1ac724ee1"
+    },
+    "head": "f27bed1904ed3d8b08ead2d821c325bdaab6d04f",
+    "first_four_real_training_gate": "not started",
+    "prior_v1_preserved": true,
+    "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2"
+  },
+  "previous_development_probe_errors": [
+    "R45 loader initially resolved BC reload receipts under R2 instead of the immutable R45 source; fixed by read-in-place scope.",
+    "Regression helper initially referenced the R45 BC module and R2 digest helper on the wrong objects; fixed.",
+    "Synthetic fresh/resume calls initially shared progress paths and overconstrained read-only call count; isolated per-process progress paths and matched actual R40 restore counts."
+  ],
+  "next_action": "review exact staged files and commit frozen R2 runner/config before formal --preflight"
+}
