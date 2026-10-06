@@ -1,0 +1,24 @@
+{
+  "kind": "round45-bc-current-source-regression/1",
+  "status": "passed",
+  "dataset_sha256": "93ffba45bfa484aa0f0aa5cbb334bd76c1284d0b21e7ca704b459ae6126f378d",
+  "current_bc_source_sha256": "04ff2b2cffaefc5fb15928d2e785079aa23539fc7d60194fba7c639792d3c398",
+  "current_test_source_sha256": "9b938b36478b8549fc9a9cff1551ca31f32eb1e9cca19536771e840abf84cd72",
+  "actual_forward_backward_clip_path": "prepare_bc_gradients",
+  "correct_label_analytic_gradient": [
+    0.4798641502857208,
+    -0.47986412048339844
+  ],
+  "actual_correct_label_gradient": [
+    0.47986412048339844,
+    -0.47986412048339844
+  ],
+  "wrong_label_rejected_by_analytic_gradient": true,
+  "actual_clip_parameter_ids_match_independent_trunk_action_enumeration": true,
+  "invalid_critic_parameter_optimizer_scope_rejected": true,
+  "task_and_cost_head_own_parameters_unchanged": true,
+  "optimizer_step_calls_in_this_regression": 0,
+  "environment_constructed": 0,
+  "prior_synthetic_optimizer_updates_from_completed_update_test": 2,
+  "synthetic_optimizer_steps": 2
+}
