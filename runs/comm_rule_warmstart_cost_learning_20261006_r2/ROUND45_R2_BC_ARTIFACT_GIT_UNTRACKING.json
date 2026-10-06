@@ -1,0 +1,55 @@
+{
+  "kind": "round45-r2-bc-artifact-git-untracking/1",
+  "status": "removed_from_current_index_local_originals_retained",
+  "reason": "The ROUND45-R2 source commit accidentally tracked model weights and optimizer journals despite repository policy. Preserve local originals and their identities while removing exactly these six paths from the Git index.",
+  "source_commit_that_introduced_paths": "333d9226c6da46b0638b8a2078eb327666e816c4",
+  "files": [
+    {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt",
+      "role": "BC seed 11 checkpoint",
+      "size_bytes": 77327,
+      "sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+      "git_blob_before_untracking": "7779241b05b1bb18db436163e798745670bb1762"
+    },
+    {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s22.pt",
+      "role": "BC seed 22 checkpoint",
+      "size_bytes": 77327,
+      "sha256": "3cdb83785c51f9e40005d66a1d024d06a5ba6940616e22f3b01a9bf65b5e609d",
+      "git_blob_before_untracking": "5dcfe2b4b8ae8f93921510a2798b7be4e9a88997"
+    },
+    {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s33.pt",
+      "role": "BC seed 33 checkpoint",
+      "size_bytes": 77327,
+      "sha256": "9329ef048dfc5c1805af5756c7ea0962eedfc8d01aa26841e35af7001616803a",
+      "git_blob_before_untracking": "14bc2b0650606b0d7fe38365c32a34f65b276634"
+    },
+    {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/BC_OPTIMIZER_STEPS_s11.jsonl",
+      "role": "BC seed 11 optimizer journal",
+      "size_bytes": 389786,
+      "sha256": "754f3828e768ac4779904415d726ec7bde08be579f63d3dad5206ffffef27341",
+      "git_blob_before_untracking": "71b307a7d0253d147861aa7bf4b6d7726c4fbc0a"
+    },
+    {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/BC_OPTIMIZER_STEPS_s22.jsonl",
+      "role": "BC seed 22 optimizer journal",
+      "size_bytes": 389786,
+      "sha256": "763e04f92b516ba7deda67ebb019d43fc097ca1e679c7f091dcd6ea4cb59dce8",
+      "git_blob_before_untracking": "f878320bfc080b51482f9f5dd0184b8397b4bbe5"
+    },
+    {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/BC_OPTIMIZER_STEPS_s33.jsonl",
+      "role": "BC seed 33 optimizer journal",
+      "size_bytes": 389786,
+      "sha256": "e9ec5a399d4a0712a68ce2fe097b4ec7e0cd8ee611a7790c60ec78aab67a1ab0",
+      "git_blob_before_untracking": "fa0ee7330e0b3b3e98d51e819ed33213b2733412"
+    }
+  ],
+  "working_tree_originals_deleted": false,
+  "local_originals_reverified_after_index_removal": true,
+  "all_six_paths_removed_from_current_index": true,
+  "history_rewritten": false,
+  "push_performed": false
+}

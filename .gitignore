@@ -137,6 +137,21 @@ failure_analysis*.csv
 test_results*.csv
 single_episode_*
 *.jsonl
+
+# ROUND45-R2 run artifacts remain ignored. The BC files below stay local; their
+# exact identities are recorded in the curated JSON receipt.
+!runs/comm_rule_warmstart_cost_learning_20261006_r2/
+runs/comm_rule_warmstart_cost_learning_20261006_r2/*
+!runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/
+runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/*
+!runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/
+runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/*
+/runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt
+/runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s22.pt
+/runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s33.pt
+/runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/BC_OPTIMIZER_STEPS_s11.jsonl
+/runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/BC_OPTIMIZER_STEPS_s22.jsonl
+/runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/BC_OPTIMIZER_STEPS_s33.jsonl
 !runs/comm_tight_budget_20260919/
 runs/comm_tight_budget_20260919/*
 !runs/comm_tight_budget_20260919/*.py

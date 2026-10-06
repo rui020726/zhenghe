@@ -1,0 +1,62 @@
+{
+  "kind": "round45-r2-pre-environment-entry-failure/1",
+  "status": "preserved_no_environment_entry",
+  "branch": "exp/comm-rule-warmstart-cost-learning-r2",
+  "attempt": "ROUND45-R/fresh-seed-attempt/2",
+  "head_at_failure": "fbeb14bef7e2d1d5a53f5d9a1ad14049b16acae8",
+  "source_commit": "333d9226c6da46b0638b8a2078eb327666e816c4",
+  "freeze_commit": "a5c012957c315c3e61ed38a83cb553a19e8de62a",
+  "runner": {
+    "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/r45_r2_execute.py",
+    "version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1",
+    "sha256": "0ed633d0b8d4ffcb261ff0ed107a5683cc72b7f9c51827ae38956e26762bc126"
+  },
+  "failure": {
+    "phase": "BC-only controller read before first control-cell claim",
+    "call_path": "_load_bc_eval_controller -> controller.eval()",
+    "exception_type": "AttributeError",
+    "exception_message": "'StageCController' object has no attribute 'eval'",
+    "cause": "StageCController is a controller container; eval mode belongs on its four torch.nn.Module components"
+  },
+  "counts": {
+    "normal_claims": 0,
+    "reserve_claims": 0,
+    "total_claims": 0,
+    "environment_constructor_calls": 0,
+    "joint_run_constructed_calls": 0,
+    "run_invocation_calls": 0,
+    "successful_episodes": 0,
+    "completed_steps": 0,
+    "ppo_update_calls": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_write_calls": 0,
+    "bc_rerun": false
+  },
+  "ledger_snapshot": {
+    "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/runtime/ROUND45_R2_EXECUTION_LEDGER.json",
+    "claims": [],
+    "normal_used": 0,
+    "reserve_used": 0,
+    "total_used": 0,
+    "environment_constructor_calls": 0,
+    "run_invocation_calls": 0,
+    "ppo_update_calls": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_write_calls": 0
+  },
+  "old_identity_preserved": {
+    "post_bc_freeze_path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_POST_BC_ENV_FREEZE.json",
+    "post_bc_freeze_sha256": "e16e6a4e6c6e41c1d64eb220b21d75066f64f7afe88c64b68f8c31154d9263ff",
+    "key_plan_path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_ENVIRONMENT_KEY_PLAN.json",
+    "key_plan_sha256": "482d7942dcf5b88b807524124ad8d6f1b1fd6de8fcf2e37bbaf158023430b11f",
+    "prelaunch_receipt_path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_PRELAUNCH_IDENTITY.json",
+    "prelaunch_receipt_sha256": "5ad37629a00f401748442ff02ca4f6ad7a4f59e07bdd68bc8bbcba637000e9d6",
+    "zero_environment_seam_regression_sha256": "142ac5ffa15e6f26addc2d8e701ba4d2eb94661b1a132d11c750cf1631a7bfae"
+  },
+  "recovery": {
+    "bc_rerun": false,
+    "new_runner_identity_required": true,
+    "old_freeze_and_receipt_overwritten": false,
+    "environment_execution_authorized_after_new_prelaunch_pass": true
+  }
+}

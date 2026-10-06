@@ -10,7 +10,7 @@
   "prior_failed_real_bc_updates_preserved": 1000,
   "family_cumulative_bc_update_hard_cap": 4000,
   "this_attempt_bc_update_cap": 3000,
-  "stage": "R2 source, post-BC models, 528 keys, and zero-environment seam frozen; ready for 48 controls",
+  "stage": "stopped with preserved R2 evidence",
   "pre_bc_freeze_sha256": "a42b6693ea0b3d83262517b386386f718d09038785b9e8ac1c79a09e52d5ed9c",
   "pre_bc_source_commit": "c47fb18eb15381841283fa83b42b01963c45e68f",
   "source_commit": "333d9226c6da46b0638b8a2078eb327666e816c4",
@@ -32,5 +32,32 @@
   "reserve_claims_before_prelaunch": 0,
   "python_executable": "D:\\project_env\\python.exe",
   "device": "cpu",
-  "prelaunch_receipt_sha256": "5ad37629a00f401748442ff02ca4f6ad7a4f59e07bdd68bc8bbcba637000e9d6"
+  "prelaunch_receipt_sha256": "5ad37629a00f401748442ff02ca4f6ad7a4f59e07bdd68bc8bbcba637000e9d6",
+  "updated_at_local": "2026-10-06 18:12:26",
+  "pre_env_stops": [
+    {
+      "kind": "ROUND45-R2 pre-environment runner interface failure",
+      "head": "fbeb14bef7e2d1d5a53f5d9a1ad14049b16acae8",
+      "runner_file": "runs/comm_rule_warmstart_cost_learning_20261006_r2/r45_r2_execute.py",
+      "runner_sha256": "0ed633d0b8d4ffcb261ff0ed107a5683cc72b7f9c51827ae38956e26762bc126",
+      "failure_at": "_load_bc_eval_controller -> controller.eval()",
+      "exception": {
+        "type": "AttributeError",
+        "message": "'StageCController' object has no attribute 'eval'"
+      },
+      "counts": {
+        "normal_claims": 0,
+        "reserve_claims": 0,
+        "environment_constructed": 0,
+        "run_calls": 0,
+        "successful_episodes": 0,
+        "ppo_updates": 0,
+        "adam_steps": 0,
+        "checkpoint_writes": 0
+      },
+      "preserved_evidence": "ROUND45_R2_PRE_ENV_ENTRY_FAILURE_V1.json"
+    }
+  ],
+  "normal_claims": 0,
+  "reserve_claims": 0
 }
