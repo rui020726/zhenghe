@@ -1,0 +1,38 @@
+{
+  "kind": "round45-r2-training-ast-reuse/1",
+  "status": "passed_reused",
+  "evidence_origin": "preceding ROUND45-R continuation preflight execution",
+  "recomputed_in_this_continuation": false,
+  "baseline_source_git_commit": "6367afbb9fb19bde1a61f19634b70955dce77d70",
+  "baseline_source_git_blob_sha256": "04ff2b2cffaefc5fb15928d2e785079aa23539fc7d60194fba7c639792d3c398",
+  "historical_pre_bc_worktree_sha256": "04ff2b2cffaefc5fb15928d2e785079aa23539fc7d60194fba7c639792d3c398",
+  "repaired_bc_source_sha256": "705a3e2b5e732e89a185e598396223bb46d217f817685ea5d8f248f308509a30",
+  "training_core_ast_unchanged": true,
+  "train_seed_through_metrics_write_ast_unchanged": true,
+  "compared_training_functions": [
+    "inverse_frequency_weights",
+    "bc_parameters",
+    "make_bc_optimizer",
+    "validate_optimizer_scope",
+    "prepare_bc_gradients",
+    "one_bc_update",
+    "_metrics",
+    "main"
+  ],
+  "compared_source_constants": [
+    "SEEDS",
+    "FEATURE_WIDTH",
+    "BC_UPDATES",
+    "BC_LR",
+    "MAX_GRAD_NORM",
+    "BC_VERSION",
+    "PPO_TRAINING_VERSION"
+  ],
+  "negative_controls": {
+    "update_count_change_rejected": true,
+    "ce_loss_change_rejected": true
+  },
+  "old_real_seed11_updates_replayed": 0,
+  "additional_optimizer_updates": 0,
+  "environment_constructed": 0
+}

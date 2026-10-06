@@ -1,0 +1,48 @@
+{
+  "kind": "round45-r2-file-path-checkpoint-regression/1",
+  "status": "passed",
+  "repair_version": "round45-bc-nested-controller-state/2",
+  "fixture_only_not_a_real_bc_checkpoint": true,
+  "old_frozen_comprehension_fails": true,
+  "old_failure": "'collections.OrderedDict' object has no attribute 'detach'",
+  "production_functions": [
+    "build_bc_checkpoint_payload",
+    "write_bc_checkpoint(path)",
+    "read_bc_checkpoint(path)",
+    "load_bc_controller_state"
+  ],
+  "fixture_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\serialization_fixtures\\SYNTHETIC_NOT_REAL_BC_CHECKPOINT.fixture.pt",
+  "fixture_sha256": "22a53a7db019ee63f26111b6ab252f9d24ec8a22998b5c8ff223662a4cbd5992",
+  "fixture_size_bytes": 75919,
+  "controller_state_tensor_count": 10,
+  "parameter_sha256_before": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+  "parameter_sha256_after": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+  "module_parameter_sha256_before": {
+    "trunk": "b1d3494d691270bfe31a4479f985ab271c7eced3d2b0df333408be0ddee1c7b7",
+    "action_head": "919b468b0b64ea3563ad9b09f2002236cf54fe7a18cfd260a81814acccc3e7b1",
+    "task_value_head": "e94ae85e5c97bfc5d9157370f03a5ac789507093f6151e135e0a2338537656b6",
+    "cost_value_head": "2678d4c8b7b1caa8a3c2f19375ad7deb93dadf5da18cc70b48a65f148032765a"
+  },
+  "module_parameter_sha256_after": {
+    "trunk": "b1d3494d691270bfe31a4479f985ab271c7eced3d2b0df333408be0ddee1c7b7",
+    "action_head": "919b468b0b64ea3563ad9b09f2002236cf54fe7a18cfd260a81814acccc3e7b1",
+    "task_value_head": "e94ae85e5c97bfc5d9157370f03a5ac789507093f6151e135e0a2338537656b6",
+    "cost_value_head": "2678d4c8b7b1caa8a3c2f19375ad7deb93dadf5da18cc70b48a65f148032765a"
+  },
+  "actor_task_cost_forward_equal": true,
+  "adam_state_entries": 6,
+  "adam_slot_keys": [
+    "step",
+    "exp_avg",
+    "exp_avg_sq"
+  ],
+  "adam_state_hash_before": "56b679922362ab38ce39a4ff0a0148593accec094517458fab1d72495b57b77d",
+  "adam_state_hash_after": "56b679922362ab38ce39a4ff0a0148593accec094517458fab1d72495b57b77d",
+  "rng_unchanged": true,
+  "optimizer_step_calls": 0,
+  "synthetic_optimizer_updates": 0,
+  "environment_constructed": 0,
+  "checkpoint_claimed_as_experiment_model": false,
+  "test_source_sha256": "bd66ef0eb43e765d5bf77bd2ddd29f2cbbc6fc7a587d9fe5e06d1c1253fce5fa",
+  "production_source_sha256": "705a3e2b5e732e89a185e598396223bb46d217f817685ea5d8f248f308509a30"
+}

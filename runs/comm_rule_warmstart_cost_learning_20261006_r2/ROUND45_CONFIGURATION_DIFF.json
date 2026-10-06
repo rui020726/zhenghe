@@ -1,0 +1,58 @@
+{
+  "kind": "round45-configuration-diff/1",
+  "status": "preregistered",
+  "parent_round": 44,
+  "parent_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/published-completion-event-at-relay-tick/2",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+  "reward_timing_version": "published-completion-event-at-relay-tick/2",
+  "runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2",
+  "execution_attempt": "ROUND45-R/fresh-seed-attempt/2",
+  "comm_action_semantics": "one-shot-send-skip/1",
+  "comm_action_eligibility": "first-report-only/1",
+  "sole_research_method_difference": {
+    "from": "same-seed R44 fresh ep0 controller initialization",
+    "to": "fixed offline behavior cloning initialization from the registered late_discovery_gate_147 teacher, then the unchanged R44 constrained PPO update rule",
+    "teacher_source": "canonical v2_rules.LateDiscoveryGatePolicy(cut_steps=147.0)",
+    "training_dataset": "R44 training tapes only; 384 episodes; fit scenes 1300000..1300031; validation scenes 1300032..1300047",
+    "bc_updates_per_seed": 1000,
+    "bc_learning_rate": 0.001,
+    "bc_loss": "fit-only inverse-frequency weighted two-class cross entropy",
+    "bc_global_gradient_clip": 0.5,
+    "bc_optimizer_parameter_scope": ["shared_trunk", "action_head"],
+    "validation_usage": "report only; no early stop, checkpoint selection, tuning, or extra updates"
+  },
+  "inherited_without_change": {
+    "seeds": [11, 22, 33],
+    "ppo_episodes_per_seed": 128,
+    "ppo_updates_per_seed": 32,
+    "gamma": 1.0,
+    "gae_lambda": 1.0,
+    "lambda_init": 1.0,
+    "eta_lambda": 0.5,
+    "delta": 0.0,
+    "b0_bytes": 10000.0,
+    "ppo_batch_episodes": 4,
+    "observation_width": 19,
+    "all_rows": true,
+    "network_capacity": "canonical shared trunk, action head, task critic, cost critic",
+    "reward_and_cost_collection": "R44 published-completion-event-at-relay-tick/2",
+    "world_search_allocation_channel_ack_budget_horizon_and_scene_order": "R44 frozen values",
+    "ppo_optimizer": "fresh full-parameter Adam with empty state after BC; no BC optimizer state carried",
+    "rollout_rng": "reset to the registered same-seed R44 ep0 Python/NumPy/Torch RNG state before the first rollout"
+  },
+  "fixed_environment_plan": {
+    "bc_only_greedy_controls": 48,
+    "ppo_training_episodes": 384,
+    "final_ep128_greedy_and_sampled_evaluations": 96,
+    "normal_claims": 528,
+    "technical_reserve": 24,
+    "hard_cap": 552
+  },
+  "forbidden_changes": [
+    "teacher or label semantics",
+    "BC hyperparameters or checkpoint selection",
+    "PPO/GAE/dual/reward/cost mathematics",
+    "observation, masking, network capacity, scenario order, or policy decoding",
+    "extra scenes, extra streams, or additional training"
+  ]
+}

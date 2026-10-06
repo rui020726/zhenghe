@@ -1,0 +1,75 @@
+{
+  "kind": "round45-r2-prior-artifact-reuse-manifest/1",
+  "attempt": "ROUND45-R/fresh-seed-attempt/2",
+  "parent_delivery_head": "c80ffa843e0307bfae20ba85bb36458fe21144c0",
+  "prior_attempt": {
+    "output": "runs/comm_rule_warmstart_cost_learning_20261006/",
+    "stop_state": "stopped_unrecoverable_bc_checkpoint_failure",
+    "seed11_real_bc_updates_preserved": 1000,
+    "seed11_post_bc_checkpoint_exists": false,
+    "seed11_state_recovered": false,
+    "seed11_updates_replayed": false,
+    "existing_environment_calls": 0,
+    "existing_synthetic_optimizer_updates": 2,
+    "post_failure_repair_commit": "bfa0a952f9c558331c4d4033584d0231e93742be",
+    "post_failure_repair_source_sha256": "705a3e2b5e732e89a185e598396223bb46d217f817685ea5d8f248f308509a30",
+    "serialization_regression_sha256": "0fc654d199469cd879606e337ed499ed7cbb2fde039dcdbe277cf4954516cfff"
+  },
+  "reused_unchanged_inputs": {
+    "dataset_path_in_r2": "BC_DATASET.jsonl",
+    "dataset_sha256": "93ffba45bfa484aa0f0aa5cbb334bd76c1284d0b21e7ca704b459ae6126f378d",
+    "dataset_rows": 2286,
+    "fit_rows": 1548,
+    "validation_rows": 738,
+    "data_audit_r2_sha256": "f3b85d73e676fa1788d5ac623d60eacdf6e6a146b6877b21db0da76b4dddc988",
+    "r45_data_source_sha256": "e98307ad5be263cb981f4395be6ae64bbce5223e3ad8a8df3651de2bb76a2537",
+    "teacher_test_source_sha256": "17bfbf59d6389ab0350f33916b22a593f402e27ee7f6fc0e852ec83ef08a93dd",
+    "teacher_regression_receipt_sha256": "9b5456798cb6cbc28e7a4510c4d6ef59dd4737b7e2d4133eb57ae9d7d8042136",
+    "teacher_identity": "canonical v2_rules.LateDiscoveryGatePolicy(cut_steps=147.0); first_emission and ready_step > 147",
+    "synthetic_bc_regression_receipt_sha256": "a578a1969c3c92cebe6a763cb5a9ee75ec111b249d6f6a154796dba941e4540f",
+    "tie_break_receipt_sha256": "04709f6db0b3200e78877721bed83cad07a78dc4d072aab09d10330330ae7a64",
+    "historical_serializer_roundtrip_receipt_sha256": "0fc654d199469cd879606e337ed499ed7cbb2fde039dcdbe277cf4954516cfff",
+    "round44_primary_eval_matrix_audit_sha256": "16e8c9d628ca2bd8351b21a6e9fcccac335ecd6404136e41761cbbf51dda45bc",
+    "round44_primary_eval_cells": 96,
+    "round44_selected_retry": {
+      "key": [11, "greedy", 1301000],
+      "attempt": 2,
+      "row_sha256": "76d8e3fb4896ed9464cbc4d3b5608c1b25294ce3305c22b0cbbf4a481a04164c"
+    },
+    "r43_eval_rows_are_historical_only": true,
+    "old_synthetic_optimizer_updates_retested": false,
+    "old_training_tapes_rescanned": false
+  },
+  "repair_diff_scope": {
+    "pre_repair_source_git_commit": "6367afbb9fb19bde1a61f19634b70955dce77d70",
+    "pre_repair_source_path": "runs/comm_rule_warmstart_cost_learning_20261006/r45_bc.py",
+    "pre_repair_source_git_blob_sha256": "04ff2b2cffaefc5fb15928d2e785079aa23539fc7d60194fba7c639792d3c398",
+    "historical_pre_bc_worktree_sha256": "04ff2b2cffaefc5fb15928d2e785079aa23539fc7d60194fba7c639792d3c398",
+    "pre_repair_git_blob_line_endings": "LF only",
+    "blob_to_historical_worktree_line_ending_relation": "SHA256 identical; the freeze digest records the same LF source bytes, with no line-ending normalization difference",
+    "baseline_r45_bc_source_sha256": "04ff2b2cffaefc5fb15928d2e785079aa23539fc7d60194fba7c639792d3c398",
+    "current_old_directory_repaired_source_sha256": "705a3e2b5e732e89a185e598396223bb46d217f817685ea5d8f248f308509a30",
+    "current_r2_repaired_source_sha256": "705a3e2b5e732e89a185e598396223bb46d217f817685ea5d8f248f308509a30",
+    "repaired_r45_bc_source_sha256": "705a3e2b5e732e89a185e598396223bb46d217f817685ea5d8f248f308509a30",
+    "changed_functions": [
+      "_checkpoint_controller_state",
+      "build_bc_checkpoint_payload",
+      "write_bc_checkpoint",
+      "read_bc_checkpoint",
+      "load_bc_controller_state",
+      "train_seed checkpoint payload serialization seam"
+    ],
+    "training_core_teacher_dataset_hyperparameters_and_ppo_math_changed": false,
+    "training_version_unchanged": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2"
+  },
+  "new_authorized_attempt_caps": {
+    "new_real_bc_optimizer_updates_max": 3000,
+    "prior_failed_real_bc_optimizer_updates_preserved": 1000,
+    "family_cumulative_real_bc_optimizer_updates_hard_cap": 4000,
+    "synthetic_optimizer_updates_previously_used": 2,
+    "synthetic_optimizer_update_cap": 64,
+    "environment_normal_claims_max": 528,
+    "environment_technical_reserve_max": 24,
+    "environment_cumulative_hard_cap": 552
+  }
+}
