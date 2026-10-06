@@ -403,6 +403,19 @@ def _checkpoint_journal_route_audit(*, create: bool) -> dict[str, Any]:
             f"misrouted ROUND46 checkpoint journal is missing: {LEGACY_CHECKPOINT_JOURNAL_PATH}"
         )
     source_bytes = LEGACY_CHECKPOINT_JOURNAL_PATH.read_bytes()
+    if not create and CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH.is_file():
+        audit = _json(CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH)
+        local_bytes = CHECKPOINT_JOURNAL_PATH.read_bytes() if CHECKPOINT_JOURNAL_PATH.is_file() else b""
+        source_hash = hashlib.sha256(source_bytes).hexdigest()
+        if (audit.get("kind") != "round46-r2-checkpoint-journal-route-audit/2"
+                or audit.get("legacy_path") != str(LEGACY_CHECKPOINT_JOURNAL_PATH.resolve())
+                or audit.get("legacy_sha256") != source_hash
+                or audit.get("legacy_entry_count") != len(source_bytes.splitlines())
+                or audit.get("r2_local_copy_path") != str(CHECKPOINT_JOURNAL_PATH.resolve())
+                or audit.get("r2_local_copy_initial_sha256") != source_hash
+                or not local_bytes.startswith(source_bytes)):
+            raise RuntimeError("preserved checkpoint-journal route identity or local prefix changed")
+        return audit
     raw_lines = source_bytes.splitlines()
     entries = [json.loads(line.decode("utf-8")) for line in raw_lines if line.strip()]
     if len(entries) != 15 or len(raw_lines) != 15:
@@ -1227,7 +1240,7 @@ def prepare() -> None:
             or binding_audit.get("head") != "02fd982354de2cf20e5363c8c68f50d9899eb1e9"):
         raise RuntimeError("ROUND46 V3 freeze/gate/archive/audit lineage failed")
 
-    _checkpoint_journal_route_audit(create=True)
+    _checkpoint_journal_route_audit(create=False)
     input_identity = _input_identity()
     if input_identity != _json(V3_INPUT_IDENTITY_PATH):
         raise RuntimeError("ROUND46 V4 source inputs differ from the stopped V3 frozen inputs")
@@ -1678,6 +1691,12 @@ def _preflight_reuse_v3_zero_environment_evidence() -> dict[str, Any]:
     counts = before["counts"]
     journal_entries = len(CHECKPOINT_JOURNAL_PATH.read_text(encoding="utf-8").splitlines())
     archive_journal = _json(V3_STOP_ARCHIVE_PATH)
+    journal_snapshots = [item for item in archive_journal.get("archived_files", [])
+                         if item.get("role") == "checkpoint_write_journal_snapshot"]
+    if len(journal_snapshots) != 1:
+        raise RuntimeError("ROUND46 V3 stop archive does not identify exactly one journal snapshot")
+    journal_snapshot = journal_snapshots[0]
+    archived_journal_path = Path(journal_snapshot["archive"])
     if (int(before.get("normal_used", -1)) != 0
             or int(before.get("reserve_used", -1)) != 0
             or int(before.get("total_used", -1)) != 0
@@ -1689,7 +1708,10 @@ def _preflight_reuse_v3_zero_environment_evidence() -> dict[str, Any]:
             or int(counts.get("checkpoint_write_calls", -1)) != 18
             or int(counts.get("checkpoint_write_journal_entries", -1)) != 18
             or journal_entries != 18
-            or archive_journal.get("checkpoint_write_journal_entries") != 18):
+            or archive_journal.get("checkpoint_write_journal_entries") != 18
+            or not archived_journal_path.is_file()
+            or _sha256(archived_journal_path) != journal_snapshot.get("sha256")
+            or _sha256(CHECKPOINT_JOURNAL_PATH) != journal_snapshot.get("sha256")):
         raise RuntimeError("ROUND46 V4 actual ledger no longer matches the preserved zero-claim stop")
     for relative, expected in (
         (frozen["runner_path"], frozen["runner_source_sha256"]),
