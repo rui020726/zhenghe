@@ -9,6 +9,7 @@ quota, fixed key sequence, execution order, and reports.
 from __future__ import annotations
 
 import argparse
+import ast
 import contextlib
 import copy
 import hashlib
@@ -36,12 +37,14 @@ ROUND40_OUTPUT = ROUND40_ROOT / "runs" / "comm_first_report_training_ablation_20
 ROUND46_BRANCH = "fix/comm-bc-initialization-readback"
 ROUND46_START_HEAD = "f27bed1904ed3d8b08ead2d821c325bdaab6d04f"
 ROUND46_RUNNER_VERSION = (
-    "round46-bc-initialized-constrained-ppo/3+"
+    "round46-bc-initialized-constrained-ppo/4+"
     "round45-model-only-bc-loader/1+"
     "round44-constrained-ppo-runtime/1+"
     "cross-seed-batch0-gate/1+"
     "checkpoint-readback-factory-scope/1+"
-    "mutable-task-state-guard/1"
+    "mutable-task-state-guard/1+"
+    "inner-claim-frozen-source-binding/1+"
+    "reused-zero-environment-gates/1"
 )
 R2_BASIS_FIRST_LINE = (
     "当前任务=ROUND46-R2；分支=fix/comm-bc-initialization-readback；"
@@ -75,14 +78,14 @@ R44_FREEZE_PATH = R44_DIR / "ROUND44_FROZEN_CONFIG.json"
 R44_BASELINE_PATH = R44_DIR / "ROUND44_BASELINE_REUSE.json"
 R44_MATRIX_AUDIT_PATH = R44_DIR / "ROUND44_EVAL_MATRIX_AUDIT.json"
 
-FROZEN_CONFIG_PATH = R46_DIR / "ROUND46_FROZEN_CONFIG.json"
-CONFIG_DIFF_PATH = R46_DIR / "ROUND46_CONFIGURATION_DIFF.json"
-KEY_PLAN_PATH = R46_DIR / "ROUND46_KEY_PLAN.json"
-TRAINING_VERSION_PATH = R46_DIR / "TRAINING_VERSION_MANIFEST.json"
-INPUT_IDENTITY_PATH = R46_DIR / "ROUND46_INPUT_IDENTITY.json"
-RUNTIME_FREEZE_PATH = R46_DIR / "ROUND46_RUNTIME_FREEZE.json"
-PRELAUNCH_GATE_PATH = R46_DIR / "ROUND46_PRELAUNCH_GATE.json"
-PRELAUNCH_SHA_PATH = R46_DIR / "ROUND46_PRELAUNCH_GATE.sha256"
+FROZEN_CONFIG_PATH = R46_DIR / "ROUND46_R2_V4_FROZEN_CONFIG.json"
+CONFIG_DIFF_PATH = R46_DIR / "ROUND46_R2_V4_CONFIGURATION_DIFF.json"
+KEY_PLAN_PATH = R46_DIR / "ROUND46_R2_V4_KEY_PLAN.json"
+TRAINING_VERSION_PATH = R46_DIR / "ROUND46_R2_V4_TRAINING_VERSION_MANIFEST.json"
+INPUT_IDENTITY_PATH = R46_DIR / "ROUND46_R2_V4_INPUT_IDENTITY.json"
+RUNTIME_FREEZE_PATH = R46_DIR / "ROUND46_R2_V4_RUNTIME_FREEZE.json"
+PRELAUNCH_GATE_PATH = R46_DIR / "ROUND46_R2_V4_PRELAUNCH_GATE.json"
+PRELAUNCH_SHA_PATH = R46_DIR / "ROUND46_R2_V4_PRELAUNCH_GATE.sha256"
 CURRENT_TASK_PATH = R46_DIR / "ROUND46_CURRENT_TASK.json"
 LEDGER_PATH = R46_DIR / "runtime" / "ROUND46_EXECUTION_LEDGER.json"
 REPORT_PATH = R46_DIR / "ROUND46_REPORT.md"
@@ -92,11 +95,23 @@ TARGET_DIFFS_PATH = R46_DIR / "ROUND46_TARGET_ID_DIFFS.json"
 CURVES_PATH = R46_DIR / "ROUND46_TRAINING_CURVES.json"
 CHECKPOINT_INDEX_PATH = R46_DIR / "ROUND46_CHECKPOINT_INDEX.json"
 ARTIFACT_MANIFEST_PATH = R46_DIR / "ROUND46_ARTIFACT_MANIFEST.json"
-STOP_STATE_PATH = R46_DIR / "ROUND46_STOP_STATE.json"
+STOP_STATE_PATH = R46_DIR / "ROUND46_R2_V4_STOP_STATE.json"
 PRIOR_R46_DIR = REPO / "runs" / "comm_bc_initialized_constrained_ppo_20261007"
 READBACK_REGRESSION_PATH = R46_DIR / "test_round46_r2_checkpoint_readback.py"
 READBACK_REGRESSION_RESULT_PATH = R46_DIR / "ROUND46_R2_CHECKPOINT_READBACK_REGRESSION_R3.json"
 STATUS_GUARD_REGRESSION_PATH = R46_DIR / "ROUND46_R2_STATUS_GUARD_REGRESSION.json"
+V3_FROZEN_CONFIG_PATH = R46_DIR / "ROUND46_FROZEN_CONFIG.json"
+V3_CONFIG_DIFF_PATH = R46_DIR / "ROUND46_CONFIGURATION_DIFF.json"
+V3_INPUT_IDENTITY_PATH = R46_DIR / "ROUND46_INPUT_IDENTITY.json"
+V3_KEY_PLAN_PATH = R46_DIR / "ROUND46_KEY_PLAN.json"
+V3_TRAINING_VERSION_PATH = R46_DIR / "TRAINING_VERSION_MANIFEST.json"
+V3_PRELAUNCH_GATE_PATH = R46_DIR / "ROUND46_PRELAUNCH_GATE.json"
+V3_PRELAUNCH_SHA_PATH = R46_DIR / "ROUND46_PRELAUNCH_GATE.sha256"
+V3_RUNTIME_FREEZE_PATH = R46_DIR / "ROUND46_RUNTIME_FREEZE.json"
+V3_STOP_ARCHIVE_PATH = R46_DIR / "ROUND46_R2_V3_STOP_ARCHIVE.json"
+V4_BINDING_AUDIT_PATH = R46_DIR / "ROUND46_R2V4_BINDING_AUDIT.json"
+V4_BINDING_REGRESSION_PATH = R46_DIR / "ROUND46_R2_V4_BINDING_REGRESSION.json"
+V4_STATUS_GUARD_REUSE_PATH = R46_DIR / "ROUND46_R2_V4_STATUS_GUARD_REUSE.json"
 CHECKPOINT_JOURNAL_PATH = R46_DIR / "runtime" / "checkpoint_writes.jsonl"
 CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH = (
     R46_DIR / "ROUND46_R2_CHECKPOINT_JOURNAL_ROUTE_AUDIT_R2.json"
@@ -113,6 +128,7 @@ R2_V2_PRECLAIM_ARCHIVE_PATH = (
 
 _R45_MODULE: Any = None
 _RUNTIME: dict[str, Any] | None = None
+_R2_V4_REQUIRE_EXECUTION_EVIDENCE = False
 
 
 def _json(path: Path) -> Any:
@@ -944,6 +960,7 @@ def _configure_runtime_module() -> Any:
     module._task_state = task_state
     runtime["module"] = module
     _install_round46_r2_training_factory_scope(module, runtime)
+    _bind_r44_claim_verifier(module, runtime)
     _R45_MODULE = module
     _RUNTIME = runtime
     return module
@@ -1007,6 +1024,161 @@ def _input_identity() -> dict[str, Any]:
     }
 
 
+def _closure_values(function: Any) -> dict[str, Any]:
+    code = getattr(function, "__code__", None)
+    cells = getattr(function, "__closure__", None)
+    if code is None or cells is None or len(code.co_freevars) != len(cells):
+        return {}
+    values = {}
+    for name, cell in zip(code.co_freevars, cells, strict=True):
+        try:
+            values[name] = cell.cell_contents
+        except ValueError:
+            continue
+    return values
+
+
+def _actual_r44_claim(runtime: dict[str, Any], module: Any) -> tuple[Any, Any]:
+    r44_module = getattr(module, "R44_RUNTIME_MODULE", None)
+    run_module = runtime.get("r42_run")
+    if r44_module is None or run_module is None:
+        raise RuntimeError("ROUND46 could not locate the configured R44/R42 claim modules")
+    wrapped_claim = getattr(run_module, "_claim", None)
+    base_claim = _closure_values(wrapped_claim).get("base_claim")
+    base_code = getattr(base_claim, "__code__", None)
+    if (not callable(base_claim) or base_code is None
+            or Path(base_code.co_filename).resolve()
+            != (R44_DIR / "r44_runtime.py").resolve()
+            or getattr(base_claim, "__globals__", None) is not r44_module.__dict__):
+        raise RuntimeError("ROUND46 claim wrapper no longer reaches the configured R44 claim function")
+    if base_claim.__globals__.get("verify_frozen_source") is not getattr(
+            r44_module, "verify_frozen_source", None):
+        raise RuntimeError("R44 claim global verifier pointer differs from the R44 module attribute")
+    return r44_module, base_claim
+
+
+def _bind_r44_claim_verifier(module: Any, runtime: dict[str, Any]) -> dict[str, Any]:
+    """Bind only the R46 adapter's strict verifier into the real R44 module global."""
+    r44_module, claim_function = _actual_r44_claim(runtime, module)
+    stale_verifier = r44_module.verify_frozen_source
+    if stale_verifier is not getattr(module, "verify_prelaunch_identity", None):
+        raise RuntimeError("ROUND46 expected the audited R45 verifier pointer before rebinding R44")
+
+    def strict_claim_verifier(frozen: dict[str, Any]) -> str:
+        expected_frozen = _json(R44_FREEZE_PATH)
+        if _json_sha256(frozen, sort_keys=True) != _json_sha256(
+                expected_frozen, sort_keys=True):
+            raise RuntimeError("R44 claim supplied a frozen object outside the registered R44 source")
+        _verify_prelaunch_identity(
+            runtime, require_r2_v4_evidence=_R2_V4_REQUIRE_EXECUTION_EVIDENCE)
+        return _run_git("rev-parse", "HEAD")
+
+    strict_claim_verifier.__name__ = "round46_r2_v4_claim_source_verifier"
+    strict_claim_verifier.__qualname__ = strict_claim_verifier.__name__
+    r44_module.verify_frozen_source = strict_claim_verifier
+    bound_r44_module, bound_claim = _actual_r44_claim(runtime, module)
+    if (bound_r44_module is not r44_module or bound_claim is not claim_function
+            or bound_claim.__globals__.get("verify_frozen_source") is not strict_claim_verifier):
+        raise RuntimeError("ROUND46 inner R44 claim verifier binding did not take effect")
+    binding = {
+        "r44_module": r44_module,
+        "claim_function": claim_function,
+        "stale_verifier": stale_verifier,
+        "strict_verifier": strict_claim_verifier,
+    }
+    runtime["round46_r44_claim_binding"] = binding
+    module._round46_r44_claim_binding = binding
+    return binding
+
+
+def _git_blob_sha(relative_path: str) -> str:
+    object_id = _run_git("rev-parse", f"HEAD:{relative_path}")
+    content = subprocess.run(
+        ["git", "-C", str(REPO), "cat-file", "blob", object_id],
+        check=True, capture_output=True,
+    ).stdout
+    return hashlib.sha256(content).hexdigest()
+
+
+def _require_committed_file(path: Path, expected_sha256: str) -> None:
+    relative = path.resolve().relative_to(REPO).as_posix()
+    if _git_blob_sha(relative) != expected_sha256 or _sha256(path) != expected_sha256:
+        raise RuntimeError(f"ROUND46 required committed evidence is not byte-identical: {relative}")
+
+
+def _function_source_hashes(source_bytes: bytes, names: tuple[str, ...]) -> dict[str, str]:
+    source = source_bytes.decode("utf-8").replace("\r\n", "\n")
+    tree = ast.parse(source)
+    definitions = {
+        node.name: node for node in tree.body
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+    }
+    result = {}
+    for name in names:
+        node = definitions.get(name)
+        segment = ast.get_source_segment(source, node) if node is not None else None
+        if not segment:
+            raise RuntimeError(f"ROUND46 status guard source function is unavailable: {name}")
+        result[name] = hashlib.sha256(segment.encode("utf-8")).hexdigest()
+    return result
+
+
+def _status_guard_function_hashes(source_bytes: bytes) -> dict[str, str]:
+    return _function_source_hashes(source_bytes, (
+        "_assert_source_worktree_clean",
+        "_unexpected_source_status_lines",
+        "run_status_guard_regression",
+    ))
+
+
+def _create_status_guard_reuse_receipt() -> dict[str, Any]:
+    if not PRELAUNCH_GATE_PATH.is_file() or not STATUS_GUARD_REGRESSION_PATH.is_file():
+        raise RuntimeError("ROUND46 V4 cannot reuse the prior status guard before its gate exists")
+    prior = _json(STATUS_GUARD_REGRESSION_PATH)
+    prior_gate = _json(V3_PRELAUNCH_GATE_PATH)
+    if (prior.get("kind") != "round46-r2-status-guard-regression/1"
+            or prior.get("status") != "passed"
+            or prior.get("prelaunch_gate_sha256") != _sha256(V3_PRELAUNCH_GATE_PATH)
+            or prior_gate.get("status") != "passed"
+            or prior_gate.get("runner_source_sha256")
+            != _json(V3_FROZEN_CONFIG_PATH).get("runner_source_sha256")):
+        raise RuntimeError("ROUND46 prior status guard evidence no longer closes on the V3 gate")
+    old_source = subprocess.run(
+        ["git", "-C", str(REPO), "show",
+         "02fd982354de2cf20e5363c8c68f50d9899eb1e9:"
+         + Path(__file__).resolve().relative_to(REPO).as_posix()],
+        check=True, capture_output=True,
+    ).stdout
+    old_hashes = _status_guard_function_hashes(old_source)
+    current_hashes = _status_guard_function_hashes(Path(__file__).read_bytes())
+    if old_hashes != current_hashes:
+        raise RuntimeError("ROUND46 status guard implementation changed; prior receipt cannot be reused")
+    result = {
+        "kind": "round46-r2-v4-status-guard-reuse/1",
+        "status": "passed_reused_exact_implementation",
+        "runner_version": ROUND46_RUNNER_VERSION,
+        "training_version": TRAINING_VERSION,
+        "prior_runner_version": prior.get("runner_version"),
+        "prior_status_guard_receipt_sha256": _sha256(STATUS_GUARD_REGRESSION_PATH),
+        "prior_prelaunch_gate_sha256": _sha256(V3_PRELAUNCH_GATE_PATH),
+        "v4_prelaunch_gate_sha256": _sha256(PRELAUNCH_GATE_PATH),
+        "v3_source_commit": "02fd982354de2cf20e5363c8c68f50d9899eb1e9",
+        "v3_status_guard_source_function_sha256": old_hashes,
+        "v4_status_guard_source_function_sha256": current_hashes,
+        "actual_status_guard_regression_rerun": False,
+        "old_receipt_status_preserved": prior["status"],
+        "old_gate_status_preserved": prior_gate["status"],
+        "environment_constructor_calls": 0,
+        "run_invocation_calls": 0,
+        "normal_claims": 0,
+        "reserve_claims": 0,
+        "ppo_updates": 0,
+        "optimizer_step_calls": 0,
+    }
+    _write_json(V4_STATUS_GUARD_REUSE_PATH, result, immutable=True)
+    return result
+
+
 def prepare() -> None:
     # A pre-claim runner-gate failure can require a new execution freeze. Keep
     # all ROUND46 commits on the named branch and preserve the original start
@@ -1020,11 +1192,45 @@ def prepare() -> None:
         raise RuntimeError("ROUND46-R2 execution basis first-line identity mismatch")
     if not READBACK_REGRESSION_PATH.is_file():
         raise FileNotFoundError("ROUND46-R2 real checkpoint-readback regression is missing")
+    v4_artifacts = (
+        FROZEN_CONFIG_PATH, CONFIG_DIFF_PATH, KEY_PLAN_PATH, TRAINING_VERSION_PATH,
+        INPUT_IDENTITY_PATH, RUNTIME_FREEZE_PATH, PRELAUNCH_GATE_PATH,
+        PRELAUNCH_SHA_PATH, V4_BINDING_REGRESSION_PATH, V4_STATUS_GUARD_REUSE_PATH,
+        STOP_STATE_PATH,
+    )
+    if any(path.exists() for path in v4_artifacts):
+        raise RuntimeError("ROUND46 V4 freeze/evidence already exists; refusing to overwrite it")
     if list((R46_DIR / "checkpoints").glob("v2_train_s*.pt")):
         raise RuntimeError("ROUND46-R2 will not freeze while a prior untrained checkpoint is active")
 
+    if not all(path.is_file() for path in (
+            V3_FROZEN_CONFIG_PATH, V3_INPUT_IDENTITY_PATH, V3_KEY_PLAN_PATH,
+            V3_PRELAUNCH_GATE_PATH, V3_PRELAUNCH_SHA_PATH, V3_RUNTIME_FREEZE_PATH,
+            STATUS_GUARD_REGRESSION_PATH, V3_STOP_ARCHIVE_PATH, V4_BINDING_AUDIT_PATH)):
+        raise RuntimeError("ROUND46 V4 requires the complete committed V3 stop/audit lineage")
+    v3_freeze = _json(V3_FROZEN_CONFIG_PATH)
+    v3_gate = _json(V3_PRELAUNCH_GATE_PATH)
+    v3_archive = _json(V3_STOP_ARCHIVE_PATH)
+    binding_audit = _json(V4_BINDING_AUDIT_PATH)
+    if (v3_freeze.get("runner_version", "").split("+")[0]
+            != "round46-bc-initialized-constrained-ppo/3"
+            or v3_gate.get("status") != "passed"
+            or V3_PRELAUNCH_SHA_PATH.read_text(encoding="ascii").strip()
+            != _sha256(V3_PRELAUNCH_GATE_PATH)
+            or v3_gate.get("runner_source_sha256") != v3_freeze.get("runner_source_sha256")
+            or v3_archive.get("status") != "hash_closed"
+            or v3_archive.get("normal_claims") != 0
+            or v3_archive.get("reserve_claims") != 0
+            or v3_archive.get("active_checkpoint_files_remaining") != 0
+            or v3_archive.get("active_progress_files_remaining") != 0
+            or binding_audit.get("status") != "confirmed_misbound"
+            or binding_audit.get("head") != "02fd982354de2cf20e5363c8c68f50d9899eb1e9"):
+        raise RuntimeError("ROUND46 V3 freeze/gate/archive/audit lineage failed")
+
     _checkpoint_journal_route_audit(create=True)
     input_identity = _input_identity()
+    if input_identity != _json(V3_INPUT_IDENTITY_PATH):
+        raise RuntimeError("ROUND46 V4 source inputs differ from the stopped V3 frozen inputs")
     _copy_runtime_aliases(input_identity)
     order = list(input_identity["scenario_order"])
     sequence_check = input_identity["scenario_order_verification"]
@@ -1115,6 +1321,26 @@ def prepare() -> None:
         "readback_regression_path": READBACK_REGRESSION_PATH.relative_to(REPO).as_posix(),
         "readback_regression_sha256": _sha256(READBACK_REGRESSION_PATH),
         "training_version": TRAINING_VERSION,
+        "predecessor_runner_version": v3_freeze["runner_version"],
+        "predecessor_stop_commit": v3_archive["stop_commit"],
+        "predecessor_stop_archive_sha256": _sha256(V3_STOP_ARCHIVE_PATH),
+        "binding_audit_sha256": _sha256(V4_BINDING_AUDIT_PATH),
+        "reused_preflight_lineage": {
+            "v3_frozen_config_sha256": _sha256(V3_FROZEN_CONFIG_PATH),
+            "v3_configuration_diff_sha256": _sha256(V3_CONFIG_DIFF_PATH),
+            "v3_input_identity_sha256": _sha256(V3_INPUT_IDENTITY_PATH),
+            "v3_key_plan_sha256": _sha256(V3_KEY_PLAN_PATH),
+            "v3_training_version_manifest_sha256": _sha256(V3_TRAINING_VERSION_PATH),
+            "v3_runtime_freeze_sha256": _sha256(V3_RUNTIME_FREEZE_PATH),
+            "v3_prelaunch_gate_sha256": _sha256(V3_PRELAUNCH_GATE_PATH),
+            "v3_prelaunch_sha_file_sha256": _sha256(V3_PRELAUNCH_SHA_PATH),
+            "v3_readback_regression_sha256": _sha256(READBACK_REGRESSION_RESULT_PATH),
+            "v3_checkpoint_journal_route_regression_sha256":
+                _sha256(CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH),
+            "v3_status_guard_regression_sha256":
+                _sha256(STATUS_GUARD_REGRESSION_PATH),
+            "old_receipts_reexecuted": False,
+        },
         "training_version_manifest_sha256": _sha256(TRAINING_VERSION_PATH),
         "configuration_diff_sha256": _sha256(CONFIG_DIFF_PATH),
         "key_plan_sha256": _sha256(KEY_PLAN_PATH),
@@ -1317,7 +1543,263 @@ def _run_checkpoint_journal_route_regression(runtime: dict[str, Any]) -> dict[st
     return result
 
 
+def _preflight_reuse_v3_zero_environment_evidence() -> dict[str, Any]:
+    """Freeze V4 using exact V3 zero-environment receipts without replaying fixtures."""
+    _assert_branch_head()
+    _assert_source_worktree_clean()
+    if PRELAUNCH_GATE_PATH.exists() or PRELAUNCH_SHA_PATH.exists():
+        raise RuntimeError("ROUND46 V4 preflight receipt already exists; refusing to rewrite it")
+    if not FROZEN_CONFIG_PATH.is_file() or not KEY_PLAN_PATH.is_file():
+        raise RuntimeError("ROUND46 V4 prepare/freeze files are missing")
+    frozen = _json(FROZEN_CONFIG_PATH)
+    expected_runner_sha = _sha256(Path(__file__))
+    if (frozen.get("status") != "prepared_before_environment"
+            or frozen.get("runner_version") != ROUND46_RUNNER_VERSION
+            or frozen.get("training_version") != TRAINING_VERSION
+            or frozen.get("runner_source_sha256") != expected_runner_sha
+            or frozen.get("readback_regression_sha256") != _sha256(READBACK_REGRESSION_PATH)
+            or _sha256(KEY_PLAN_PATH) != frozen.get("key_plan_sha256")
+            or _sha256(CONFIG_DIFF_PATH) != frozen.get("configuration_diff_sha256")
+            or _sha256(TRAINING_VERSION_PATH) != frozen.get("training_version_manifest_sha256")
+            or _sha256(INPUT_IDENTITY_PATH) != frozen.get("input_identity_sha256")
+            or _sha256(RUNTIME_FREEZE_PATH) != frozen.get("runtime_freeze_sha256")):
+        raise RuntimeError("ROUND46 V4 frozen runner/config/key/input identities failed")
+    if (_run_git("rev-parse", "HEAD") == frozen.get("prepare_head")
+            or _run_git("rev-parse", "HEAD^") != frozen.get("prepare_head")):
+        raise RuntimeError("ROUND46 V4 source/config freeze must be one local commit before preflight")
+    runner_relative = Path(__file__).resolve().relative_to(REPO).as_posix()
+    if _git_blob_sha(runner_relative) != expected_runner_sha:
+        raise RuntimeError("ROUND46 V4 committed runner bytes differ from executed source")
+
+    lineage = frozen.get("reused_preflight_lineage", {})
+    lineage_paths = (
+        (V3_FROZEN_CONFIG_PATH, "v3_frozen_config_sha256"),
+        (V3_CONFIG_DIFF_PATH, "v3_configuration_diff_sha256"),
+        (V3_INPUT_IDENTITY_PATH, "v3_input_identity_sha256"),
+        (V3_KEY_PLAN_PATH, "v3_key_plan_sha256"),
+        (V3_TRAINING_VERSION_PATH, "v3_training_version_manifest_sha256"),
+        (V3_RUNTIME_FREEZE_PATH, "v3_runtime_freeze_sha256"),
+        (V3_PRELAUNCH_GATE_PATH, "v3_prelaunch_gate_sha256"),
+        (V3_PRELAUNCH_SHA_PATH, "v3_prelaunch_sha_file_sha256"),
+        (READBACK_REGRESSION_RESULT_PATH, "v3_readback_regression_sha256"),
+        (CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH,
+         "v3_checkpoint_journal_route_regression_sha256"),
+        (STATUS_GUARD_REGRESSION_PATH, "v3_status_guard_regression_sha256"),
+        (V3_STOP_ARCHIVE_PATH, None), (V4_BINDING_AUDIT_PATH, None),
+    )
+    for path, key in lineage_paths:
+        expected = _sha256(path) if key is None else lineage.get(key)
+        if expected is None:
+            raise RuntimeError(f"ROUND46 V4 prior evidence hash is missing: {path.name}")
+        _require_committed_file(path, expected)
+    v3_freeze = _json(V3_FROZEN_CONFIG_PATH)
+    v3_gate = _json(V3_PRELAUNCH_GATE_PATH)
+    v3_identity = _json(V3_INPUT_IDENTITY_PATH)
+    v3_archive = _json(V3_STOP_ARCHIVE_PATH)
+    binding_audit = _json(V4_BINDING_AUDIT_PATH)
+    v3_gate_sha = _sha256(V3_PRELAUNCH_GATE_PATH)
+    if (V3_PRELAUNCH_SHA_PATH.read_text(encoding="ascii").strip() != v3_gate_sha
+            or v3_gate.get("kind") != "round46-zero-environment-preflight/1"
+            or v3_gate.get("status") != "passed"
+            or v3_gate.get("runner_source_sha256") != v3_freeze.get("runner_source_sha256")
+            or v3_gate.get("training_version") != TRAINING_VERSION
+            or v3_archive.get("status") != "hash_closed"
+            or v3_archive.get("normal_claims") != 0
+            or v3_archive.get("reserve_claims") != 0
+            or v3_archive.get("environment_constructor_calls") != 0
+            or v3_archive.get("run_invocation_calls") != 0
+            or v3_archive.get("completed_steps") != 0
+            or v3_archive.get("ppo_updates") != 0
+            or v3_archive.get("optimizer_steps") != 0
+            or v3_archive.get("checkpoint_write_calls") != 18
+            or binding_audit.get("status") != "confirmed_misbound"):
+        raise RuntimeError("ROUND46 V3 prior preflight and stopped-attempt archive failed")
+    if _sha256(V3_STOP_ARCHIVE_PATH) != frozen.get("predecessor_stop_archive_sha256"):
+        raise RuntimeError("ROUND46 V4 freeze no longer identifies the preserved V3 stop archive")
+    if _sha256(V4_BINDING_AUDIT_PATH) != frozen.get("binding_audit_sha256"):
+        raise RuntimeError("ROUND46 V4 freeze no longer identifies its binding audit")
+    if lineage.get("old_receipts_reexecuted") is not False:
+        raise RuntimeError("ROUND46 V4 freeze does not preserve the reuse-only gate decision")
+
+    actual_inputs = _input_identity()
+    if actual_inputs != _json(INPUT_IDENTITY_PATH) or actual_inputs != v3_identity:
+        raise RuntimeError("ROUND46 V4 live source inputs differ from V3 or the V4 freeze")
+    if _sha256(R45_CONTROL_GATE_PATH) != actual_inputs["round45_control_gate_sha256"]:
+        raise RuntimeError("ROUND45 original failed gate changed before ROUND46 V4 preflight")
+    v3_plan = _json(V3_KEY_PLAN_PATH)
+    v4_plan = _json(KEY_PLAN_PATH)
+    if (v4_plan.get("logical_jobs") != v3_plan.get("logical_jobs")
+            or v4_plan.get("training_scenario_order") != v3_plan.get("training_scenario_order")
+            or v4_plan.get("final_evaluation_keys") != v3_plan.get("final_evaluation_keys")):
+        raise RuntimeError("ROUND46 V4 key plan differs from the fixed stopped V3 plan")
+
+    old_readback = v3_gate.get("checkpoint_readback_regression", {})
+    readback = _json(READBACK_REGRESSION_RESULT_PATH)
+    old_route = v3_gate.get("checkpoint_journal_route_regression", {})
+    route = _json(CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH)
+    if (old_readback.get("status") != "passed"
+            or old_readback.get("source_sha256") != _sha256(READBACK_REGRESSION_PATH)
+            or old_readback.get("receipt_sha256") != _sha256(READBACK_REGRESSION_RESULT_PATH)
+            or readback.get("kind") != "round46-r2-checkpoint-readback-regression/1"
+            or readback.get("status") != "passed"
+            or readback.get("test_source_sha256") != _sha256(READBACK_REGRESSION_PATH)
+            or int(readback.get("synthetic_fixture_trainer_save_calls_this_preflight", -1)) != 0
+            or int(readback.get("environment_constructor_calls", -1)) != 0
+            or int(readback.get("ppo_update_calls", -1)) != 0
+            or int(readback.get("optimizer_step_calls", -1)) != 0):
+        raise RuntimeError("ROUND46 V3 checkpoint-readback regression is not reusable unchanged")
+    if (old_route.get("status") != "passed"
+            or old_route.get("receipt_sha256") != _sha256(CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH)
+            or route.get("kind") != "round46-r2-checkpoint-journal-route-regression/1"
+            or route.get("status") != "passed"
+            or route.get("trainer_save_calls_delta") != 1
+            or route.get("claims") != 0
+            or route.get("environment_constructor_calls") != 0
+            or route.get("run_invocation_calls") != 0
+            or route.get("optimizer_step_calls") != 0
+            or route.get("ambient_rng_preserved") is not True):
+        raise RuntimeError("ROUND46 V3 checkpoint-journal routing regression is not reusable unchanged")
+    if (_sha256(READBACK_REGRESSION_PATH) != v3_freeze.get("readback_regression_sha256")
+            or _sha256(READBACK_REGRESSION_RESULT_PATH) != old_readback.get("receipt_sha256")):
+        raise RuntimeError("ROUND46 V3 readback source/result do not match their committed freeze")
+
+    module = _configure_runtime_module()
+    runtime = _RUNTIME
+    assert runtime is not None
+    if (len(runtime.get("r2_reference_cache", {})) != 64
+            or runtime.get("r2_reference_cache_sha256") is None
+            or runtime["r42_versions"].TRAINING_VERSION != TRAINING_VERSION):
+        raise RuntimeError("ROUND46 V4 actual runtime/reference cache does not match its freeze")
+    if list((R46_DIR / "checkpoints").glob("v2_train_s*.pt")):
+        raise RuntimeError("ROUND46 V4 found an active V3 checkpoint; refusing to resume it")
+    if list((R46_DIR / "training_progress").glob("*.json")):
+        raise RuntimeError("ROUND46 V4 found active V3 progress; refusing to resume it")
+    before = runtime["r42_run"].ledger_snapshot(strict=True)
+    counts = before["counts"]
+    journal_entries = len(CHECKPOINT_JOURNAL_PATH.read_text(encoding="utf-8").splitlines())
+    archive_journal = _json(V3_STOP_ARCHIVE_PATH)
+    if (int(before.get("normal_used", -1)) != 0
+            or int(before.get("reserve_used", -1)) != 0
+            or int(before.get("total_used", -1)) != 0
+            or int(counts.get("environment_constructor_calls", -1)) != 0
+            or int(counts.get("run_invocation_calls", -1)) != 0
+            or int(counts.get("completed_steps", -1)) != 0
+            or int(counts.get("ppo_update_calls", -1)) != 0
+            or int(counts.get("optimizer_step_calls", -1)) != 0
+            or int(counts.get("checkpoint_write_calls", -1)) != 18
+            or int(counts.get("checkpoint_write_journal_entries", -1)) != 18
+            or journal_entries != 18
+            or archive_journal.get("checkpoint_write_journal_entries") != 18):
+        raise RuntimeError("ROUND46 V4 actual ledger no longer matches the preserved zero-claim stop")
+    for relative, expected in (
+        (frozen["runner_path"], frozen["runner_source_sha256"]),
+        (frozen["readback_regression_path"], frozen["readback_regression_sha256"]),
+        (V3_PRELAUNCH_GATE_PATH.relative_to(REPO).as_posix(), v3_gate_sha),
+    ):
+        if _git_blob_sha(relative) != expected:
+            raise RuntimeError(f"ROUND46 V4 inherited committed source identity differs: {relative}")
+    for path, expected in (
+        (FROZEN_CONFIG_PATH, _sha256(FROZEN_CONFIG_PATH)),
+        (CONFIG_DIFF_PATH, frozen["configuration_diff_sha256"]),
+        (KEY_PLAN_PATH, frozen["key_plan_sha256"]),
+        (TRAINING_VERSION_PATH, frozen["training_version_manifest_sha256"]),
+        (INPUT_IDENTITY_PATH, frozen["input_identity_sha256"]),
+        (RUNTIME_FREEZE_PATH, frozen["runtime_freeze_sha256"]),
+    ):
+        if _git_blob_sha(path.resolve().relative_to(REPO).as_posix()) != expected:
+            raise RuntimeError(f"ROUND46 V4 committed freeze artifact differs: {path.name}")
+
+    import torch
+    if (str(runtime["common"].DEVICE) != "cpu"
+            or torch.get_num_threads() != 1
+            or torch.get_num_interop_threads() != 1):
+        raise RuntimeError("ROUND46 V4 runtime device/thread boundary changed")
+    old_models = v3_gate.get("bc_model_only_checks", [])
+    if (len(old_models) != 3
+            or {int(item.get("seed", -1)) for item in old_models} != set(SEEDS)
+            or any(item.get("fresh_adam_state_empty") is not True
+                   or item.get("optimizer_parameter_ids_unique") is not True
+                   or item.get("bc_load_preserved_ambient_rng") is not True
+                   for item in old_models)):
+        raise RuntimeError("ROUND46 V3 four-module BC/fresh-Adam checks no longer close")
+
+    after = runtime["r42_run"].ledger_snapshot(strict=True)
+    if before != after:
+        raise RuntimeError("ROUND46 V4 receipt construction changed the real ledger")
+    receipt = {
+        "kind": "round46-zero-environment-preflight/1",
+        "status": "passed", "round": 46, "branch": ROUND46_BRANCH,
+        "head_at_preflight": _run_git("rev-parse", "HEAD"),
+        "runner_version": ROUND46_RUNNER_VERSION,
+        "runner_path": runner_relative,
+        "runner_source_sha256": expected_runner_sha,
+        "frozen_config_sha256": _sha256(FROZEN_CONFIG_PATH),
+        "key_plan_sha256": _sha256(KEY_PLAN_PATH),
+        "input_identity_sha256": _sha256(INPUT_IDENTITY_PATH),
+        "training_version": TRAINING_VERSION,
+        "normal_cap": NORMAL_CAP, "technical_reserve_max": RESERVE_CAP,
+        "hard_cap": HARD_CAP,
+        "round45_failed_gate_sha256_unchanged": _sha256(R45_CONTROL_GATE_PATH),
+        "round45_failed_gate_status_preserved": True,
+        "round44_scenario_sequence_all_seeds_exact": True,
+        "scenario_order_check": v4_plan["scenario_sequence_verification"],
+        "bc_model_only_checks_reused_from_v3": old_models,
+        "registered_r44_ep0_rng_reused_from_v3": v3_gate.get("registered_r44_ep0_rng"),
+        "checkpoint_readback_regression": {
+            "kind": readback["kind"], "status": readback["status"],
+            "source_sha256": readback["test_source_sha256"],
+            "receipt_sha256": _sha256(READBACK_REGRESSION_RESULT_PATH),
+            "legacy_fresh_failures_reproduced": readback["legacy_fresh_failures_reproduced"],
+            "legacy_resume_failures_reproduced": readback["legacy_resume_failures_reproduced"],
+            "fixed_fresh_seeds_passed": readback["fixed_fresh_seeds_passed"],
+            "fixed_resume_seeds_passed": readback["fixed_resume_seeds_passed"],
+            "synthetic_fixture_trainer_save_calls_this_preflight": 0,
+            "environment_constructor_calls": 0,
+            "ppo_update_calls": 0, "optimizer_step_calls": 0,
+            "reused_prior_receipt": True,
+        },
+        "checkpoint_journal_route_regression": {
+            "kind": route["kind"], "status": route["status"],
+            "receipt_path": CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH.relative_to(REPO).as_posix(),
+            "receipt_sha256": _sha256(CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH),
+            "checkpoint_sha256": route["checkpoint_sha256"],
+            "trainer_save_calls_delta": route["trainer_save_calls_delta"],
+            "claims": 0, "environment_constructor_calls": 0,
+            "optimizer_step_calls": 0, "reused_prior_receipt": True,
+        },
+        "reused_prelaunch_lineage": lineage,
+        "actual_input_identity_rechecked": True,
+        "active_prior_checkpoint_count": 0,
+        "active_prior_progress_count": 0,
+        "checkpoint_write_accounting": {
+            "cumulative_checkpoint_write_calls": int(counts["checkpoint_write_calls"]),
+            "v3_preflight_gate_checkpoint_write_calls": int(
+                v3_gate.get("checkpoint_write_calls", v3_gate.get("after_counts", {}).get(
+                    "checkpoint_write_calls", -1))),
+            "v3_failed_execute_untrained_ep0_saves": 2,
+            "new_v4_preflight_checkpoint_writes": 0,
+            "legacy_preflight_and_fixture_tests_reexecuted": False,
+        },
+        "frozen_runtime_source_sha256": module._source_hashes(),
+        "device": str(runtime["common"].DEVICE),
+        "torch_threads": torch.get_num_threads(),
+        "torch_interop_threads": torch.get_num_interop_threads(),
+        "before_counts": before["counts"], "after_counts": after["counts"],
+        "environment_constructed": 0, "run_invocation_calls": 0,
+        "completed_episodes": 0, "ppo_updates": 0,
+        "optimizer_step_calls": 0,
+        "checkpoint_write_calls": int(counts["checkpoint_write_calls"]),
+        "claims": 0, "network_or_push": False,
+    }
+    _write_json(PRELAUNCH_GATE_PATH, receipt, immutable=True)
+    _write_text_lf(PRELAUNCH_SHA_PATH, _sha256(PRELAUNCH_GATE_PATH) + "\n")
+    print(json.dumps(receipt, ensure_ascii=False, indent=2))
+    return receipt
+
+
 def preflight() -> None:
+    _preflight_reuse_v3_zero_environment_evidence()
+    return
     _assert_branch_head()
     _assert_source_worktree_clean()
     if not FROZEN_CONFIG_PATH.is_file() or not KEY_PLAN_PATH.is_file():
@@ -1580,7 +2062,8 @@ def preflight() -> None:
     print(json.dumps(receipt, ensure_ascii=False, indent=2))
 
 
-def _verify_prelaunch_identity(runtime: dict[str, Any]) -> None:
+def _verify_prelaunch_identity(runtime: dict[str, Any], *,
+                               require_r2_v4_evidence: bool = False) -> None:
     _assert_branch_head()
     _assert_source_worktree_clean()
     journal_route = _checkpoint_journal_route_audit(create=False)
@@ -1596,6 +2079,39 @@ def _verify_prelaunch_identity(runtime: dict[str, Any]) -> None:
     frozen = _json(FROZEN_CONFIG_PATH)
     receipt = _json(PRELAUNCH_GATE_PATH)
     pointer = PRELAUNCH_SHA_PATH.read_text(encoding="ascii").strip()
+    actual_inputs = _input_identity()
+    if actual_inputs != _json(INPUT_IDENTITY_PATH):
+        raise RuntimeError("ROUND46 V4 frozen inputs changed after prelaunch")
+    if (frozen.get("kind") != "round46-execution-freeze/1"
+            or frozen.get("status") != "prepared_before_environment"
+            or frozen.get("runner_version") != ROUND46_RUNNER_VERSION
+            or frozen.get("training_version") != TRAINING_VERSION
+            or frozen.get("branch") != ROUND46_BRANCH
+            or frozen.get("runtime_freeze_sha256") != _sha256(RUNTIME_FREEZE_PATH)
+            or receipt.get("branch") != ROUND46_BRANCH
+            or receipt.get("runner_version") != ROUND46_RUNNER_VERSION):
+        raise RuntimeError("ROUND46 V4 execution freeze/runner identity is not active")
+    reused = frozen.get("reused_preflight_lineage", {})
+    for path, key in (
+        (V3_FROZEN_CONFIG_PATH, "v3_frozen_config_sha256"),
+        (V3_CONFIG_DIFF_PATH, "v3_configuration_diff_sha256"),
+        (V3_INPUT_IDENTITY_PATH, "v3_input_identity_sha256"),
+        (V3_KEY_PLAN_PATH, "v3_key_plan_sha256"),
+        (V3_TRAINING_VERSION_PATH, "v3_training_version_manifest_sha256"),
+        (V3_RUNTIME_FREEZE_PATH, "v3_runtime_freeze_sha256"),
+        (V3_PRELAUNCH_GATE_PATH, "v3_prelaunch_gate_sha256"),
+        (V3_PRELAUNCH_SHA_PATH, "v3_prelaunch_sha_file_sha256"),
+        (READBACK_REGRESSION_RESULT_PATH, "v3_readback_regression_sha256"),
+        (CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH,
+         "v3_checkpoint_journal_route_regression_sha256"),
+        (STATUS_GUARD_REGRESSION_PATH, "v3_status_guard_regression_sha256"),
+    ):
+        if _sha256(path) != reused.get(key):
+            raise RuntimeError(f"ROUND46 V3 reused evidence identity changed: {path.name}")
+    if (_sha256(V3_STOP_ARCHIVE_PATH) != frozen.get("predecessor_stop_archive_sha256")
+            or _sha256(V4_BINDING_AUDIT_PATH) != frozen.get("binding_audit_sha256")
+            or actual_inputs != _json(V3_INPUT_IDENTITY_PATH)):
+        raise RuntimeError("ROUND46 V4 stopped-attempt lineage or source inputs changed")
     route_regression_receipt = receipt.get("checkpoint_journal_route_regression", {})
     if (route_regression_receipt.get("kind")
             != "round46-r2-checkpoint-journal-route-regression/1"
@@ -1669,6 +2185,9 @@ def _verify_prelaunch_identity(runtime: dict[str, Any]) -> None:
     if ((int(runtime["common"].NORMAL_LAUNCHES), int(runtime["common"].RESERVE_LAUNCHES),
             int(runtime["common"].LAUNCH_CAP)) != (NORMAL_CAP, RESERVE_CAP, HARD_CAP)):
         raise RuntimeError("ROUND46 runtime quota drifted after preflight")
+    if require_r2_v4_evidence:
+        _verify_status_guard_regression_receipt()
+        _verify_v4_binding_regression_receipt()
 
 
 def run_status_guard_regression() -> dict[str, Any]:
@@ -1824,12 +2343,9 @@ def _verify_status_guard_regression_receipt() -> None:
     if not STATUS_GUARD_REGRESSION_PATH.is_file():
         raise RuntimeError("ROUND46-R2 zero-environment status-guard regression is missing")
     result = _json(STATUS_GUARD_REGRESSION_PATH)
-    expected_gate_sha = _sha256(PRELAUNCH_GATE_PATH)
     if (result.get("kind") != "round46-r2-status-guard-regression/1"
             or result.get("status") != "passed"
-            or result.get("runner_version") != ROUND46_RUNNER_VERSION
             or result.get("training_version") != TRAINING_VERSION
-            or result.get("prelaunch_gate_sha256") != expected_gate_sha
             or result.get("actual_task_state_then_preclaim_identity_passed") is not True
             or result.get("temporary_status_files_restored_byte_identically") is not True
             or result.get("git_status_leading_space_preserved") is not True
@@ -1841,14 +2357,312 @@ def _verify_status_guard_regression_receipt() -> None:
                 "run_invocation_calls", "completed_steps", "ppo_updates",
                 "optimizer_step_calls"))):
         raise RuntimeError("ROUND46-R2 zero-environment status-guard regression receipt failed")
-    relative = STATUS_GUARD_REGRESSION_PATH.relative_to(REPO).as_posix()
-    object_id = _run_git("rev-parse", f"HEAD:{relative}")
-    committed = subprocess.run(
-        ["git", "-C", str(REPO), "cat-file", "blob", object_id],
-        check=True, capture_output=True,
-    ).stdout
-    if hashlib.sha256(committed).hexdigest() != _sha256(STATUS_GUARD_REGRESSION_PATH):
-        raise RuntimeError("ROUND46-R2 status-guard regression receipt is not committed")
+    if result.get("runner_version", "").split("+")[0] != \
+            "round46-bc-initialized-constrained-ppo/3":
+        raise RuntimeError("ROUND46 V4 may reuse only the preserved V3 status-guard receipt")
+    if result.get("prelaunch_gate_sha256") != _sha256(V3_PRELAUNCH_GATE_PATH):
+        raise RuntimeError("ROUND46 V3 status-guard receipt no longer matches its original gate")
+    _require_committed_file(STATUS_GUARD_REGRESSION_PATH, _sha256(STATUS_GUARD_REGRESSION_PATH))
+    if not V4_STATUS_GUARD_REUSE_PATH.is_file():
+        raise RuntimeError("ROUND46 V4 status-guard reuse receipt is missing")
+    reused = _json(V4_STATUS_GUARD_REUSE_PATH)
+    current_hashes = _status_guard_function_hashes(Path(__file__).read_bytes())
+    if (reused.get("kind") != "round46-r2-v4-status-guard-reuse/1"
+            or reused.get("status") != "passed_reused_exact_implementation"
+            or reused.get("runner_version") != ROUND46_RUNNER_VERSION
+            or reused.get("training_version") != TRAINING_VERSION
+            or reused.get("prior_status_guard_receipt_sha256")
+            != _sha256(STATUS_GUARD_REGRESSION_PATH)
+            or reused.get("prior_prelaunch_gate_sha256") != _sha256(V3_PRELAUNCH_GATE_PATH)
+            or reused.get("v4_prelaunch_gate_sha256") != _sha256(PRELAUNCH_GATE_PATH)
+            or reused.get("v3_status_guard_source_function_sha256") != current_hashes
+            or reused.get("v4_status_guard_source_function_sha256") != current_hashes
+            or reused.get("actual_status_guard_regression_rerun") is not False
+            or any(reused.get(key) != 0 for key in (
+                "environment_constructor_calls", "run_invocation_calls", "normal_claims",
+                "reserve_claims", "ppo_updates", "optimizer_step_calls"))):
+        raise RuntimeError("ROUND46 V4 status-guard reuse identity or scope failed")
+    _require_committed_file(V4_STATUS_GUARD_REUSE_PATH, _sha256(V4_STATUS_GUARD_REUSE_PATH))
+
+
+def _verify_v4_binding_regression_receipt() -> None:
+    if not V4_BINDING_REGRESSION_PATH.is_file():
+        raise RuntimeError("ROUND46 V4 actual inner-claim binding regression is missing")
+    result = _json(V4_BINDING_REGRESSION_PATH)
+    expected = {
+        "kind": "round46-r2-v4-inner-claim-binding-regression/1",
+        "status": "passed",
+        "runner_version": ROUND46_RUNNER_VERSION,
+        "training_version": TRAINING_VERSION,
+        "runner_source_sha256": _sha256(Path(__file__)),
+        "frozen_config_sha256": _sha256(FROZEN_CONFIG_PATH),
+        "prelaunch_gate_sha256": _sha256(PRELAUNCH_GATE_PATH),
+        "input_identity_sha256": _sha256(INPUT_IDENTITY_PATH),
+        "binding_audit_sha256": _sha256(V4_BINDING_AUDIT_PATH),
+        "v3_stop_archive_sha256": _sha256(V3_STOP_ARCHIVE_PATH),
+        "status_guard_reuse_receipt_sha256": _sha256(V4_STATUS_GUARD_REUSE_PATH),
+    }
+    if any(result.get(key) != value for key, value in expected.items()):
+        raise RuntimeError("ROUND46 V4 inner-claim binding regression identity differs")
+    required_true = (
+        "actual_r42_to_r45_to_r44_claim_chain_exercised",
+        "stale_r45_binding_reproduced_before_atomic_claim",
+        "v4_binding_reached_atomic_claim_probe_once",
+        "source_mismatch_rejected_before_atomic_claim",
+        "config_mismatch_rejected_before_atomic_claim",
+        "key_plan_mismatch_rejected_before_atomic_claim",
+        "model_identity_mismatch_rejected_before_atomic_claim",
+        "all_temporary_mutations_restored_byte_identically",
+        "claim_ledger_checkpoint_and_output_snapshots_unchanged",
+        "trainer_rng_preserved",
+        "actual_r44_global_points_to_v4_verifier_after_regression",
+    )
+    if any(result.get(key) is not True for key in required_true):
+        raise RuntimeError("ROUND46 V4 inner-claim binding regression did not pass every case")
+    if (result.get("stale_binding_atomic_claim_probe_calls") != 0
+            or result.get("v4_binding_atomic_claim_probe_calls") != 1
+            or result.get("normal_claim_delta") != 0
+            or result.get("reserve_claim_delta") != 0
+            or result.get("environment_constructor_calls_delta") != 0
+            or result.get("run_invocation_calls_delta") != 0
+            or result.get("completed_steps_delta") != 0
+            or result.get("ppo_update_calls_delta") != 0
+            or result.get("optimizer_step_calls_delta") != 0
+            or result.get("checkpoint_write_calls_delta") != 0):
+        raise RuntimeError("ROUND46 V4 binding regression side-effect counters are not zero")
+    _require_committed_file(V4_BINDING_REGRESSION_PATH, _sha256(V4_BINDING_REGRESSION_PATH))
+
+
+def run_r2_v4_binding_regression() -> dict[str, Any]:
+    """Exercise the actual wrapped R42 -> R45 -> R44 claim with an atomic-boundary probe."""
+    global _R2_V4_REQUIRE_EXECUTION_EVIDENCE
+    _assert_branch_head()
+    _assert_source_worktree_clean()
+    if (V4_BINDING_REGRESSION_PATH.exists()
+            or V4_STATUS_GUARD_REUSE_PATH.exists()):
+        raise RuntimeError("ROUND46 V4 binding regression outputs already exist; refusing to overwrite")
+    module = _configure_runtime_module()
+    runtime = _RUNTIME
+    assert runtime is not None
+    if not PRELAUNCH_GATE_PATH.is_file() or not PRELAUNCH_SHA_PATH.is_file():
+        raise RuntimeError("ROUND46 V4 prelaunch gate must be committed before binding regression")
+    module.verify_prelaunch_identity = lambda _frozen=None: _verify_prelaunch_identity(
+        runtime, require_r2_v4_evidence=False)
+    module.ENFORCE_PRELAUNCH = True
+    _R2_V4_REQUIRE_EXECUTION_EVIDENCE = False
+    _verify_prelaunch_identity(runtime, require_r2_v4_evidence=False)
+
+    binding = runtime.get("round46_r44_claim_binding", {})
+    r44_module, actual_claim = _actual_r44_claim(runtime, module)
+    stale_verifier = binding.get("stale_verifier")
+    strict_verifier = binding.get("strict_verifier")
+    if (not callable(stale_verifier) or not callable(strict_verifier)
+            or actual_claim is not binding.get("claim_function")
+            or r44_module.verify_frozen_source is not strict_verifier):
+        raise RuntimeError("ROUND46 V4 regression did not start with the expected actual R44 binding")
+
+    run_module = runtime["r42_run"]
+    r40_common = runtime["r40_common"]
+    if run_module._ACTIVE_CLAIM is not None:
+        raise RuntimeError("ROUND46 V4 claim binding regression found an active claim")
+    plan = _json(KEY_PLAN_PATH)
+    scenario = int(plan["training_scenario_order"][0])
+    logical_job = "new_training_s11_e0"
+    metadata = {"training_seed": 11, "episode_index": 0}
+    context = module._context_for_cell(
+        "train", logical_job, scenario, metadata, {"tag": "train_s11_e0_r44"})
+    if logical_job not in set(plan["logical_jobs"]):
+        raise RuntimeError("ROUND46 V4 probe key is outside its committed logical-key plan")
+
+    class ClaimLaunchBoundaryProbe(RuntimeError):
+        pass
+
+    probe_calls = 0
+
+    def probe_claim_launch(*_args: Any, **_kwargs: Any):
+        nonlocal probe_calls
+        probe_calls += 1
+        raise ClaimLaunchBoundaryProbe("ROUND46 V4 stopped at the atomic claim boundary")
+
+    original_claim_launch = r40_common.claim_launch
+    original_task_state = {
+        path: path.read_bytes() for path in (CURRENT_TASK_PATH, R46_DIR / "CURRENT_TASK.json")
+        if path.is_file()
+    }
+    source_path = Path(__file__).resolve()
+    guarded_paths = (source_path, FROZEN_CONFIG_PATH, KEY_PLAN_PATH)
+    guarded_originals = {path: path.read_bytes() for path in guarded_paths}
+    ledger_before = run_module.ledger_snapshot(strict=True)
+    journal_before = CHECKPOINT_JOURNAL_PATH.read_bytes()
+    ledger_file_before = LEDGER_PATH.read_bytes() if LEDGER_PATH.is_file() else None
+    output_roots = (
+        R46_DIR / "rows", R46_DIR / "logs", R46_DIR / "launch_claims",
+        R46_DIR / "checkpoints", R46_DIR / "training_progress",
+        R46_DIR / "training_reports", R46_DIR / "failures", R46_DIR / "rejected",
+    )
+
+    def snapshot_outputs() -> dict[str, tuple[int, str]]:
+        files = {}
+        for root in output_roots:
+            if root.exists():
+                for path in sorted(item for item in root.rglob("*") if item.is_file()):
+                    files[path.relative_to(R46_DIR).as_posix()] = (path.stat().st_size, _sha256(path))
+        return files
+
+    outputs_before = snapshot_outputs()
+    rng_before = runtime["trainer"].rng_state()
+    original_input_identity = globals()["_input_identity"]
+
+    def call_actual_claim() -> None:
+        token = module.CURRENT_CONTEXT.set(dict(context))
+        try:
+            run_module._claim(logical_job, attempt=1, metadata=dict(metadata))
+        finally:
+            module.CURRENT_CONTEXT.reset(token)
+
+    stale_reproduced = False
+    fixed_binding_reached_probe = False
+    mismatch_results: dict[str, dict[str, Any]] = {}
+    r40_common.claim_launch = probe_claim_launch
+    try:
+        r44_module.verify_frozen_source = stale_verifier
+        try:
+            call_actual_claim()
+        except ClaimLaunchBoundaryProbe:
+            raise RuntimeError("stale R45 verifier unexpectedly passed the actual R44 claim")
+        except RuntimeError as error:
+            stale_reproduced = "R2 prelaunch/freeze status is not passed" in str(error)
+        if not stale_reproduced or probe_calls != 0:
+            raise RuntimeError("ROUND46 V4 did not reproduce the prior stale-binding rejection")
+
+        r44_module.verify_frozen_source = strict_verifier
+        try:
+            call_actual_claim()
+        except ClaimLaunchBoundaryProbe:
+            fixed_binding_reached_probe = True
+        if not fixed_binding_reached_probe or probe_calls != 1:
+            raise RuntimeError("ROUND46 V4 binding failed to reach the actual atomic claim probe")
+
+        def expect_rejection(label: str) -> None:
+            calls_before = probe_calls
+            try:
+                call_actual_claim()
+            except ClaimLaunchBoundaryProbe:
+                raise RuntimeError(f"ROUND46 V4 {label} mismatch reached the atomic claim probe")
+            except (RuntimeError, ValueError, OSError) as error:
+                mismatch_results[label] = {
+                    "rejected": True,
+                    "rejection": f"{type(error).__name__}: {error}",
+                    "atomic_probe_calls_delta": probe_calls - calls_before,
+                }
+            else:
+                raise RuntimeError(f"ROUND46 V4 {label} mismatch was not rejected")
+            if probe_calls != calls_before:
+                raise RuntimeError(f"ROUND46 V4 {label} mismatch reached claim_launch")
+
+        for label, path in (("source", source_path), ("config", FROZEN_CONFIG_PATH),
+                            ("key_plan", KEY_PLAN_PATH)):
+            original = guarded_originals[path]
+            try:
+                path.write_bytes(original + b"\n")
+                expect_rejection(label)
+            finally:
+                path.write_bytes(original)
+                if path.read_bytes() != original:
+                    raise RuntimeError(f"ROUND46 V4 {label} probe bytes were not restored")
+
+        original_input_identity_function = globals()["_input_identity"]
+        try:
+            def mismatched_input_identity() -> dict[str, Any]:
+                value = copy.deepcopy(original_input_identity_function())
+                value["bc_models_by_seed"]["11"]["parameter_sha256"] = "0" * 64
+                return value
+            globals()["_input_identity"] = mismatched_input_identity
+            expect_rejection("model_identity")
+        finally:
+            globals()["_input_identity"] = original_input_identity_function
+    finally:
+        globals()["_input_identity"] = original_input_identity
+        r44_module.verify_frozen_source = strict_verifier
+        r40_common.claim_launch = original_claim_launch
+
+    ledger_after = run_module.ledger_snapshot(strict=True)
+    rng_after = runtime["trainer"].rng_state()
+    outputs_after = snapshot_outputs()
+    task_restored = all(path.read_bytes() == contents
+                        for path, contents in original_task_state.items())
+    guarded_restored = all(path.read_bytes() == contents
+                           for path, contents in guarded_originals.items())
+    counters_before = ledger_before["counts"]
+    counters_after = ledger_after["counts"]
+    if (ledger_before != ledger_after
+            or outputs_before != outputs_after
+            or journal_before != CHECKPOINT_JOURNAL_PATH.read_bytes()
+            or ledger_file_before != (LEDGER_PATH.read_bytes() if LEDGER_PATH.is_file() else None)
+            or not task_restored or not guarded_restored
+            or run_module._ACTIVE_CLAIM is not None
+            or r44_module.verify_frozen_source is not strict_verifier
+            or module._same_value(rng_before, rng_after) is not True
+            or set(mismatch_results) != {"source", "config", "key_plan", "model_identity"}):
+        raise RuntimeError("ROUND46 V4 binding regression changed real execution state or missed a case")
+
+    status_reuse = _create_status_guard_reuse_receipt()
+    result = {
+        "kind": "round46-r2-v4-inner-claim-binding-regression/1",
+        "status": "passed",
+        "runner_version": ROUND46_RUNNER_VERSION,
+        "training_version": TRAINING_VERSION,
+        "head_at_regression": _run_git("rev-parse", "HEAD"),
+        "runner_source_sha256": _sha256(Path(__file__)),
+        "frozen_config_sha256": _sha256(FROZEN_CONFIG_PATH),
+        "prelaunch_gate_sha256": _sha256(PRELAUNCH_GATE_PATH),
+        "input_identity_sha256": _sha256(INPUT_IDENTITY_PATH),
+        "binding_audit_sha256": _sha256(V4_BINDING_AUDIT_PATH),
+        "v3_stop_archive_sha256": _sha256(V3_STOP_ARCHIVE_PATH),
+        "status_guard_reuse_receipt_sha256": _sha256(V4_STATUS_GUARD_REUSE_PATH),
+        "actual_r42_to_r45_to_r44_claim_chain_exercised": True,
+        "actual_claim_function_source": str(Path(actual_claim.__code__.co_filename).resolve()),
+        "actual_r44_global_points_to_v4_verifier_after_regression": True,
+        "stale_r45_binding_reproduced_before_atomic_claim": stale_reproduced,
+        "stale_binding_error": "R2 prelaunch/freeze status is not passed",
+        "stale_binding_atomic_claim_probe_calls": 0,
+        "v4_binding_reached_atomic_claim_probe_once": fixed_binding_reached_probe,
+        "v4_binding_atomic_claim_probe_calls": probe_calls,
+        "mismatch_rejections": mismatch_results,
+        "source_mismatch_rejected_before_atomic_claim": mismatch_results["source"]["rejected"],
+        "config_mismatch_rejected_before_atomic_claim": mismatch_results["config"]["rejected"],
+        "key_plan_mismatch_rejected_before_atomic_claim": mismatch_results["key_plan"]["rejected"],
+        "model_identity_mismatch_rejected_before_atomic_claim": mismatch_results["model_identity"]["rejected"],
+        "all_temporary_mutations_restored_byte_identically": guarded_restored,
+        "claim_ledger_checkpoint_and_output_snapshots_unchanged": (
+            ledger_before == ledger_after and outputs_before == outputs_after
+            and journal_before == CHECKPOINT_JOURNAL_PATH.read_bytes()),
+        "trainer_rng_preserved": module._same_value(rng_before, rng_after),
+        "task_state_restored_byte_identically": task_restored,
+        "status_guard_reuse_receipt_status": status_reuse["status"],
+        "counts_before": ledger_before["counts"],
+        "counts_after": ledger_after["counts"],
+        "normal_claim_delta": ledger_after["normal_used"] - ledger_before["normal_used"],
+        "reserve_claim_delta": ledger_after["reserve_used"] - ledger_before["reserve_used"],
+        "environment_constructor_calls_delta": counters_after["environment_constructor_calls"]
+            - counters_before["environment_constructor_calls"],
+        "run_invocation_calls_delta": counters_after["run_invocation_calls"]
+            - counters_before["run_invocation_calls"],
+        "completed_steps_delta": counters_after["completed_steps"] - counters_before["completed_steps"],
+        "ppo_update_calls_delta": counters_after["ppo_update_calls"]
+            - counters_before["ppo_update_calls"],
+        "optimizer_step_calls_delta": counters_after["optimizer_step_calls"]
+            - counters_before["optimizer_step_calls"],
+        "checkpoint_write_calls_delta": counters_after["checkpoint_write_calls"]
+            - counters_before["checkpoint_write_calls"],
+        "environment_constructed": 0,
+        "run_invocation_calls": 0,
+        "ppo_updates": 0,
+        "optimizer_step_calls": 0,
+    }
+    _write_json(V4_BINDING_REGRESSION_PATH, result, immutable=True)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return result
 
 
 def _check_first_four_report(seed: int, report: dict[str, Any]) -> None:
@@ -2425,14 +3239,17 @@ def _write_report(results: dict[str, Any], detail: dict[str, Any]) -> None:
 
 
 def execute() -> None:
+    global _R2_V4_REQUIRE_EXECUTION_EVIDENCE
     if not PRELAUNCH_GATE_PATH.is_file() or not PRELAUNCH_SHA_PATH.is_file():
         raise RuntimeError("ROUND46 zero-environment preflight receipt must be committed first")
     module = _configure_runtime_module()
     runtime = _RUNTIME
     assert runtime is not None
-    module.verify_prelaunch_identity = lambda _frozen=None: _verify_prelaunch_identity(runtime)
+    _R2_V4_REQUIRE_EXECUTION_EVIDENCE = True
+    module.verify_prelaunch_identity = lambda _frozen=None: _verify_prelaunch_identity(
+        runtime, require_r2_v4_evidence=True)
     module.ENFORCE_PRELAUNCH = True
-    _verify_prelaunch_identity(runtime)
+    _verify_prelaunch_identity(runtime, require_r2_v4_evidence=True)
     _verify_status_guard_regression_receipt()
     _assert_source_worktree_clean()
 
@@ -2520,6 +3337,8 @@ def main() -> None:
                        help="run the zero-environment BC/RNG/Adam/runtime identity gate")
     group.add_argument("--status-guard-regression", action="store_true",
                        help="verify mutable task-state writes before pre-claim identity checks; zero environments")
+    group.add_argument("--r2-v4-binding-regression", action="store_true",
+                       help="exercise the actual R42/R45/R44 claim verifier binding; zero claims/environments")
     group.add_argument("--execute", action="store_true",
                        help="run only the frozen 384 training + 96 final evaluation plan")
     args = parser.parse_args()
@@ -2529,6 +3348,8 @@ def main() -> None:
         preflight()
     elif args.status_guard_regression:
         run_status_guard_regression()
+    elif args.r2_v4_binding_regression:
+        run_r2_v4_binding_regression()
     elif args.execute:
         execute()
     else:
