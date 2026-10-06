@@ -10,7 +10,7 @@
   "prior_failed_real_bc_updates_preserved": 1000,
   "family_cumulative_bc_update_hard_cap": 4000,
   "this_attempt_bc_update_cap": 3000,
-  "stage": "R3 ledger snapshot/source correction complete; adoption, BC receipt and seam zero-environment checks passed; awaiting source commit and fresh freeze",
+  "stage": "R3 post-BC continuation freeze generated; zero-environment regressions and R3 prelaunch receipt pending",
   "pre_bc_freeze_sha256": "a42b6693ea0b3d83262517b386386f718d09038785b9e8ac1c79a09e52d5ed9c",
   "pre_bc_source_commit": "c47fb18eb15381841283fa83b42b01963c45e68f",
   "source_commit": "333d9226c6da46b0638b8a2078eb327666e816c4",
@@ -23,7 +23,7 @@
   "normal_environment_keys": 528,
   "technical_reserve_max": 24,
   "hard_environment_cap": 552,
-  "post_bc_freeze_sha256": "d97115cb5a9b165fc67e98d25e1f2ea5d90bcdc9c12c7152719f8bc4d831fba8",
+  "post_bc_freeze_sha256": "a5aef2fcc926841fef9a12bf17fcb0b049171ebabcf669f7c98a0150e79e34e9",
   "logical_key_plan_sha256": "6bbadc9634553e6cdd452172cb3237bd7a2cd793a60eca1f582ed80db1a04fca",
   "zero_environment_seam_gate": "passed",
   "zero_environment_seam_regression_sha256": "142ac5ffa15e6f26addc2d8e701ba4d2eb94661b1a132d11c750cf1631a7bfae",
@@ -60,7 +60,7 @@
   ],
   "normal_claims": 1,
   "reserve_claims": 0,
-  "corrected_runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1+round45-r2-bc-receipt-adoption/2+round45-r2-empty-transcript-zero-closure/2+round45-r2-r3-prelaunch-identity/1",
+  "corrected_runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1+round45-r2-bc-receipt-adoption/4+round45-r2-empty-transcript-zero-closure/3+round45-r2-r3-prelaunch-identity/2+round45-r2-adopted-ledger-snapshot/1",
   "pre_env_stops_preserved": 1,
   "corrected_source_commit": "a09d22e95329da161b789f29c3225ce098a20045",
   "corrected_freeze_commit": "bd41d230be817f96014b772c6f24ed578e80a44b",
@@ -98,9 +98,9 @@
     "type": "EvalIndexError",
     "message": "artifact receipt may only be created for a NEW evaluation row"
   },
-  "r3_post_bc_freeze_sha256": "d97115cb5a9b165fc67e98d25e1f2ea5d90bcdc9c12c7152719f8bc4d831fba8",
-  "r3_logical_key_plan_sha256": "7a8e946ec64b7fbe5ef9c3d210b02296141a09522f25053999fcc4bd1957af57",
-  "adopted_control_receipt_sha256": "1fb20d0d523e93b4e16cd10c22e022807df130867f710b71176e252ba4cabf7c",
+  "r3_post_bc_freeze_sha256": "a5aef2fcc926841fef9a12bf17fcb0b049171ebabcf669f7c98a0150e79e34e9",
+  "r3_logical_key_plan_sha256": "3bc6734f092e25b57b85fb69cd4b7ae802e08780c024dfc571a60102a838faf8",
+  "adopted_control_receipt_sha256": "1784271004be8877cd66e8b131b1357a82770730411d118391a34b3035cf22af",
   "adopted_completed_logical_jobs": 1,
   "r2_post_bc_freeze_sha256": "31cad256e95d48d9c307c4c5c2d0e0ccf5eff3d6a273649d32c0ffa65fef4311",
   "r2_logical_key_plan_sha256": "6bbadc9634553e6cdd452172cb3237bd7a2cd793a60eca1f582ed80db1a04fca",
@@ -231,7 +231,9 @@
   "r3_runner_source_sha256": "4c3d79e60dc3186832e7b23be0a4275d88f1b4250c64a5ff7df4c433b73512c6",
   "r3_prelaunch_receipt_sha256": "cf57fcbea299682cbbcbd6224b8be0259f7adb52183d71ea2a339b2a67230338",
   "r3_current_source_change": {
-    "status": "pending_commit",
+    "status": "committed_before_final2_freeze",
+    "source_commit": "f57570f6b9fc09ffb8d78a3c2f60c20a705be1b7",
+    "runner_git_blob_sha1": "e15a75dab0b85964c6cc7c4c1281afa6a6ce5036",
     "runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1+round45-r2-bc-receipt-adoption/4+round45-r2-empty-transcript-zero-closure/3+round45-r2-r3-prelaunch-identity/2+round45-r2-adopted-ledger-snapshot/1",
     "runner_path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/r45_r2_execute_r3.py",
     "runner_source_sha256": "316dac379731fbf82623cc8a720290a0a491978cb805fc1b257cd3649b0bc52d",
@@ -248,6 +250,26 @@
       "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_ZERO_ENV_SEAM_REGRESSION_R3_FINAL2.json",
       "sha256": "6c07e913317e439410b4fa722eed2c3afd44517680442a99947115240680ec30",
       "status": "passed"
+    },
+    "post_bc_freeze": {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_POST_BC_ENV_FREEZE_R3_FINAL2.json",
+      "sha256": "a5aef2fcc926841fef9a12bf17fcb0b049171ebabcf669f7c98a0150e79e34e9",
+      "status": "frozen_before_r3_continuation"
+    },
+    "logical_key_plan": {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_ENVIRONMENT_KEY_PLAN_R3_FINAL2.json",
+      "sha256": "3bc6734f092e25b57b85fb69cd4b7ae802e08780c024dfc571a60102a838faf8",
+      "normal_keys": 528,
+      "technical_reserve": 24,
+      "hard_cap": 552
+    },
+    "container_regression": {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_ZERO_ENV_CONTAINER_REGRESSION_R3_FINAL2.json",
+      "sha256": "b0ceaf5eb624884650719f2f08c8c4ed8f1cbd514c0bbf1fc51e9095a7082422",
+      "status": "passed",
+      "raw_completed_claim_jobs": 0,
+      "adopted_after_receipt_failure_jobs": 1,
+      "effective_unique_valid_jobs_including_adoptions": 1
     },
     "preserved_prelaunch_failures": [
       "runs/comm_rule_warmstart_cost_learning_20261006_r2/failures/ROUND45_R2_R3_ADOPTED_LEDGER_SNAPSHOT_FAILURE_V1.json",
