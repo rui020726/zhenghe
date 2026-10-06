@@ -1,0 +1,1252 @@
+{
+  "kind": "round45-r2-bc-only-greedy-control-gate/1",
+  "status": "failed",
+  "training_authorized_by_gate": false,
+  "technical_first_scene_gates": [
+    {
+      "seed": 11,
+      "scene": 1301000,
+      "claim_run_counts": {
+        "environment_constructor_calls": 1,
+        "run_invocation_calls": 1,
+        "joint_run_method_calls": 1,
+        "run_return_calls": 1,
+        "run_failure_calls": 0,
+        "completed_steps": 1000
+      },
+      "parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+      "optimizer_step_calls_before_after": [
+        0,
+        0
+      ],
+      "ppo_update_calls_before_after": [
+        0,
+        0
+      ],
+      "teacher_inference_used": false,
+      "original_claim_status": "failed_technical",
+      "adopted_after_receipt_failure": true,
+      "adoption_receipt_sha256": "767510f295b5267a49c1a2bc0bd687f521942e078d9f9705f506d23ea756497b"
+    },
+    {
+      "seed": 22,
+      "scene": 1301000,
+      "claim_run_counts": {
+        "environment_constructor_calls": 1,
+        "run_invocation_calls": 1,
+        "joint_run_method_calls": 1,
+        "run_return_calls": 1,
+        "run_failure_calls": 0,
+        "completed_steps": 1000
+      },
+      "parameter_sha256": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+      "optimizer_step_calls_before_after": [
+        0,
+        0
+      ],
+      "ppo_update_calls_before_after": [
+        0,
+        0
+      ],
+      "teacher_inference_used": false,
+      "original_claim_status": "complete",
+      "adopted_after_receipt_failure": false,
+      "adoption_receipt_sha256": null
+    },
+    {
+      "seed": 33,
+      "scene": 1301000,
+      "claim_run_counts": {
+        "environment_constructor_calls": 1,
+        "run_invocation_calls": 1,
+        "joint_run_method_calls": 1,
+        "run_return_calls": 1,
+        "run_failure_calls": 0,
+        "completed_steps": 1000
+      },
+      "parameter_sha256": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+      "optimizer_step_calls_before_after": [
+        0,
+        0
+      ],
+      "ppo_update_calls_before_after": [
+        0,
+        0
+      ],
+      "teacher_inference_used": false,
+      "original_claim_status": "complete",
+      "adopted_after_receipt_failure": false,
+      "adoption_receipt_sha256": null
+    }
+  ],
+  "baseline": {
+    "manifest_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_dual_response_ablation_20261004\\ROUND44_BASELINE_REUSE.json",
+    "manifest_sha256": "6decb2e53693694b75bca045534c7be559eeeda4faed6181cec1665d99e816e5",
+    "immediate_reference_row_sha256": {
+      "1301000": "3f04848adda4f860684c8e5263097d1cf1d35d5c236c03a52e45c84cedb0f512",
+      "1301001": "fa64dc395cf09d754117290c9d9f2648f1e72b11804060833910ee1b95a76342",
+      "1301002": "8be667038edf77aabcdb5b6576cc8a78cd6d7c0f63b34a60ba0b367f537b7ddd",
+      "1301003": "eb6189e75cf2309ebe7c174abb7d674370e7645d293659e08a29d60ad553fd3e",
+      "1301004": "8aba1ce94cfce2836a2644ee5f05aa84625afae35ab484607f7684bee6c192a3",
+      "1301005": "b4543bc46aeef4822db79eed6674878432a744a5511e487f9f0b5699d33c7ca9",
+      "1301006": "a1b0d64eb15e91d1a6b5254946ada923c7db870d1de1a574c783c35a83528a13",
+      "1301007": "8b7f67f5d7aa26afb86a848fa88d60c34a7d016cf17401cdd1879f69b2a60860",
+      "1301008": "ad99cf2c8a38b63a4ef87062e8a869273404e41dfc81bd77449c7bd83406206b",
+      "1301009": "6e3dab36f5b870330040e9d1881f64e98177ce8121d99e2de7d28a3987529db2",
+      "1301010": "fd4868efefc8ebb93fb82124e5192a5c8448d821270e1eed9e560be25ea0f9dc",
+      "1301011": "bced9b4f58ca1cb529666dae11ff918af148f2c6988d58f44027efc306e25963",
+      "1301012": "98f44338232093be79ecf981e44a1352a62c979777e0caa5e433150799eaf6db",
+      "1301013": "70db91fee542d8b258e31bf28cd6c517374a6072c6724619d4da094c0bc8e316",
+      "1301014": "6dca3e6c1fde3396becccbc57c63ad8a9d788f72fa700550fec469dd7fa95d61",
+      "1301015": "d639a13747c3eca67b2746e39bd9656e4335ba8e8c1dd616afd433f7e7cbb337"
+    },
+    "fixed_rule_row_sha256": {
+      "late_discovery_gate": {
+        "1301000": "6a29becc6a85d0cb52b06e7691181d1ced7a042e3fe6e5d0336f3bec9829883a",
+        "1301001": "b697613b6ed1844075c882369b819330b3d2cfe388de1548568d12f3498476e6",
+        "1301002": "d58ee4901d4805f198e8713a8f8557df8b1718dda42f9b42da3c9259dfc84d3c",
+        "1301003": "900ca216e536cbe9887e675bd04c7258cebfaf75d32cb7cae43fe96e4f2bc659",
+        "1301004": "130a25459be64425615b8a2eeb13d29bb554dfced8526236418ec1e7567dcb4c",
+        "1301005": "22d41c78d1ecd45ca10300e46416f13451778a2a4605da32ce74f13890b801dd",
+        "1301006": "a1debd759d9e9387a07480e122560911ac8f7cfaee5b0f56c7e04a2c34fa4c94",
+        "1301007": "b11c1c4a9cb63b480100c77b6b305589bbe062722a260dcf801e111339c51df5",
+        "1301008": "246170b6cbcdbb654622f5809a9f401ca420a47f1f4f5616291e71337c3e19c9",
+        "1301009": "988dd728a04aed1ee4f792df4ebd72e4ffcdfb5ba708b89d0c77f447f27d03e8",
+        "1301010": "d6ee08f21b78753908c95be35b35f2d8cc644c6ef7ad686b219013d94c98efe3",
+        "1301011": "c8238ac6c12553018ba85b8467706b08412470af779ea106da2b9d25da200cc9",
+        "1301012": "343fc3abb2946c3f390a07158994a823fce22e5c8f29e03161f8298723d265e6",
+        "1301013": "db51d1e5403c1792988fe933c7ae905f57283176bd5223b54b71ec0b53d260fb",
+        "1301014": "6edc821a39fcfd7f1dd557fcf83df72f5e95d6fd0ee6ca89f7da142a66f5c9e5",
+        "1301015": "fb54bd2549cb450e693ff4e1541a59c21832c809bc2e053b2cd13937ec3593c6"
+      },
+      "always_hold": {
+        "1301000": "8d261bd8f8153b512393b19803faeb5177338596fa28e5ebd9350a609c9f2bca",
+        "1301001": "99d52c5df968aadc177c7cca4b00f4446f6b359affb3b3718fbb7cf976f4f084",
+        "1301002": "1b8728484ba01cca195cb4536c1b9a5d11c2c39ea26043772d000506dae44b74",
+        "1301003": "acaf532a4bc91cb4cd410300aeac98791f031e001c044ce9d38fd2462174eb14",
+        "1301004": "6d90a976f07135f2c47f639d915ec8930d8426e660c9d5819ce8840dac2003e1",
+        "1301005": "06dbea4b83ea42275a57f5bbb009587f743945d16777a63f46323f74c7cf9763",
+        "1301006": "e8c7ebbc5cd9a50c71bc5f7ce867ae323ebff0ba66e3eacf97283e2bad0b3027",
+        "1301007": "49802bc06885fea942e5692d73c6f542265b5846e79f3bf7b2cc3f318e2ca568",
+        "1301008": "21d89189c2459819a8dff544edb2a688b87a8622e9982b61da6bbc6c316f882b",
+        "1301009": "36fbf436e384a69f9fa50fe07e9c88c6af0ea2f6dcc9d0d607ff1249bc256535",
+        "1301010": "7d6d5d3d3e0ad26fa1dd9ec279503461bf78f60f73c1ab44308b8a969d929a79",
+        "1301011": "c09c9c65c4cdb88e3fe51761c95117bde6b048bfb65ad61ade89f6f39c42ec2b",
+        "1301012": "a77b449ab3802f3d472fc031e38b44424e5126d4203151fa50b274ab502b8106",
+        "1301013": "7e87f5da38c8f4da32f934a2856744e11f4b0ed81483d67b8551da1182994fcd",
+        "1301014": "1fc925f25ff4a6d920e8b15dcf77e491cd12bb8e263071410d541b5409241b5a",
+        "1301015": "985a79d1e425d880b0aeb82ffd51bb44e33a8ffa93cdadb0b1aa81507687fc10"
+      }
+    },
+    "fixed_late_mean_spent_bytes": 4838.25,
+    "development_scenes": [
+      1301000,
+      1301001,
+      1301002,
+      1301003,
+      1301004,
+      1301005,
+      1301006,
+      1301007,
+      1301008,
+      1301009,
+      1301010,
+      1301011,
+      1301012,
+      1301013,
+      1301014,
+      1301015
+    ]
+  },
+  "per_seed": {
+    "11": {
+      "scene_count": 16,
+      "scene_identity_set_match_all": true,
+      "mean_spent_bytes": 5152.125,
+      "fixed_late_discovery_gate_mean_spent_bytes": 4838.25,
+      "mean_bytes_at_or_below_late_rule": false,
+      "passes_training_gate": false,
+      "scenes": [
+        {
+          "scene": 1301000,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 7284
+        },
+        {
+          "scene": 1301001,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 7878
+        },
+        {
+          "scene": 1301002,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 10182
+        },
+        {
+          "scene": 1301003,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2496
+        },
+        {
+          "scene": 1301004,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 0
+        },
+        {
+          "scene": 1301005,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2310
+        },
+        {
+          "scene": 1301006,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2694
+        },
+        {
+          "scene": 1301007,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 4812
+        },
+        {
+          "scene": 1301008,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 7212
+        },
+        {
+          "scene": 1301009,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 5220
+        },
+        {
+          "scene": 1301010,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 4986
+        },
+        {
+          "scene": 1301011,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2520
+        },
+        {
+          "scene": 1301012,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 5208
+        },
+        {
+          "scene": 1301013,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 12498
+        },
+        {
+          "scene": 1301014,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2514
+        },
+        {
+          "scene": 1301015,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 4620
+        }
+      ]
+    },
+    "22": {
+      "scene_count": 16,
+      "scene_identity_set_match_all": true,
+      "mean_spent_bytes": 5152.125,
+      "fixed_late_discovery_gate_mean_spent_bytes": 4838.25,
+      "mean_bytes_at_or_below_late_rule": false,
+      "passes_training_gate": false,
+      "scenes": [
+        {
+          "scene": 1301000,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 7284
+        },
+        {
+          "scene": 1301001,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 7878
+        },
+        {
+          "scene": 1301002,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 10182
+        },
+        {
+          "scene": 1301003,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2496
+        },
+        {
+          "scene": 1301004,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 0
+        },
+        {
+          "scene": 1301005,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2310
+        },
+        {
+          "scene": 1301006,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2694
+        },
+        {
+          "scene": 1301007,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 4812
+        },
+        {
+          "scene": 1301008,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 7212
+        },
+        {
+          "scene": 1301009,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 5220
+        },
+        {
+          "scene": 1301010,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 4986
+        },
+        {
+          "scene": 1301011,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2520
+        },
+        {
+          "scene": 1301012,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 5208
+        },
+        {
+          "scene": 1301013,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 12498
+        },
+        {
+          "scene": 1301014,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2514
+        },
+        {
+          "scene": 1301015,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 4620
+        }
+      ]
+    },
+    "33": {
+      "scene_count": 16,
+      "scene_identity_set_match_all": true,
+      "mean_spent_bytes": 5152.125,
+      "fixed_late_discovery_gate_mean_spent_bytes": 4838.25,
+      "mean_bytes_at_or_below_late_rule": false,
+      "passes_training_gate": false,
+      "scenes": [
+        {
+          "scene": 1301000,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 7284
+        },
+        {
+          "scene": 1301001,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 7878
+        },
+        {
+          "scene": 1301002,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 10182
+        },
+        {
+          "scene": 1301003,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2496
+        },
+        {
+          "scene": 1301004,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 0
+        },
+        {
+          "scene": 1301005,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2310
+        },
+        {
+          "scene": 1301006,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2694
+        },
+        {
+          "scene": 1301007,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 4812
+        },
+        {
+          "scene": 1301008,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 7212
+        },
+        {
+          "scene": 1301009,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 5220
+        },
+        {
+          "scene": 1301010,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 4986
+        },
+        {
+          "scene": 1301011,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2520
+        },
+        {
+          "scene": 1301012,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 5208
+        },
+        {
+          "scene": 1301013,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 12498
+        },
+        {
+          "scene": 1301014,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 2514
+        },
+        {
+          "scene": 1301015,
+          "immediate_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "bc_on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "exact_identity_set_match": true,
+          "on_time_count": 6,
+          "spent_bytes": 4620
+        }
+      ]
+    }
+  },
+  "optimizer_step_calls": 0,
+  "ppo_update_calls": 0,
+  "environment_cells": 48
+}

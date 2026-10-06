@@ -10,13 +10,13 @@
   "prior_failed_real_bc_updates_preserved": 1000,
   "family_cumulative_bc_update_hard_cap": 4000,
   "this_attempt_bc_update_cap": 3000,
-  "stage": "R3 source/adoption/freeze and zero-environment regressions committed; ready for 47 remaining BC controls",
+  "stage": "stopped after all BC-only controls: task identity preserved, cost gate failed for all three seeds; PPO and final evaluation not started",
   "pre_bc_freeze_sha256": "a42b6693ea0b3d83262517b386386f718d09038785b9e8ac1c79a09e52d5ed9c",
   "pre_bc_source_commit": "c47fb18eb15381841283fa83b42b01963c45e68f",
   "source_commit": "333d9226c6da46b0638b8a2078eb327666e816c4",
   "real_bc_updates": 3000,
   "synthetic_optimizer_updates": 2,
-  "environment_constructed": 1,
+  "environment_constructed": 48,
   "ppo_updates": 0,
   "remote_push": false,
   "family_cumulative_real_bc_updates": 4000,
@@ -33,7 +33,7 @@
   "python_executable": "D:\\project_env\\python.exe",
   "device": "cpu",
   "prelaunch_receipt_sha256": "71d03472a69f14ae1b9b40261820902507620ee5e5c6a3a81114d263496fb4e8",
-  "updated_at_local": "2026-10-06",
+  "updated_at_local": "2026-10-06 23:19:37",
   "pre_env_stops": [
     {
       "kind": "ROUND45-R2 pre-environment runner interface failure",
@@ -58,16 +58,16 @@
       "preserved_evidence": "ROUND45_R2_PRE_ENV_ENTRY_FAILURE_V1.json"
     }
   ],
-  "normal_claims": 1,
+  "normal_claims": 48,
   "reserve_claims": 0,
   "corrected_runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1+round45-r2-bc-receipt-adoption/4+round45-r2-empty-transcript-zero-closure/3+round45-r2-r3-prelaunch-identity/3+round45-r2-adopted-ledger-snapshot/1+round45-r2-status-path-normalization/1",
   "pre_env_stops_preserved": 1,
   "corrected_source_commit": "a09d22e95329da161b789f29c3225ce098a20045",
   "corrected_freeze_commit": "bd41d230be817f96014b772c6f24ed578e80a44b",
   "corrected_prelaunch_commit": "514142bc847efb2746046bfcf26c2d58ae8a9233",
-  "run_return_calls": 1,
-  "completed_steps": 1000,
-  "completed_logical_jobs": 1,
+  "run_return_calls": 48,
+  "completed_steps": 48000,
+  "completed_logical_jobs": 47,
   "valid_registered_control_rows": 1,
   "post_launch_stops": [
     {
@@ -95,8 +95,10 @@
     }
   ],
   "stop_reason": {
-    "type": "RuntimeError",
-    "message": "R2 frozen tracked source changed: ['M runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_CURRENT_TASK.json']"
+    "type": "ScientificControlGateFailed",
+    "message": "All three seeds exactly match immediate task-ID sets, but each mean charged-byte cost exceeds the fixed late-rule threshold by 313.875 B/scene. Frozen gate denied PPO continuation.",
+    "evidence_path": "ROUND45_R2_STOP_STATE_R3_FINAL3.json",
+    "evidence_sha256": "c6f8b9755631de8ee538987321f0b57fca0490ae9701ae9efec51fef63a6a467"
   },
   "r3_post_bc_freeze_sha256": "1deba66aa01aeb96782ecfffaf05f4c24a02b05fe8fcde9bb747d47ef9aaec67",
   "r3_logical_key_plan_sha256": "acfd7cf241fe145b60db76c628855014ce58df89d112b81cfd1fcc2b6c568852",
@@ -265,9 +267,9 @@
     "prelaunch_sha256": "609868f82e092265dde3ac78600e61345421ddfacb4aba1916ba2d08c4804b0a",
     "status": "retained_candidate_invalidated_by_FINAL3_status_path_and_reporting_source_changes"
   },
-  "raw_completed_claim_jobs": 0,
+  "raw_completed_claim_jobs": 47,
   "adopted_after_receipt_failure_jobs": 1,
-  "effective_unique_valid_jobs_including_adoptions": 1,
+  "effective_unique_valid_jobs_including_adoptions": 48,
   "r3_source_commit_status": "passed",
   "r3_final_zero_environment_regressions": {
     "bc_receipt": {
@@ -308,27 +310,11 @@
   "r3_prelaunch_receipt_sha256": "71d03472a69f14ae1b9b40261820902507620ee5e5c6a3a81114d263496fb4e8",
   "r3_enforced_ledger_readback": {
     "status": "passed",
-    "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_ADOPTED_LEDGER_READBACK_R3_FINAL2.json",
-    "sha256": "27b0a8d5ef40f4fe1ad39d5d857bba3128c8b289005b57577b468738a8d6e23b",
+    "path": "ROUND45_R2_ADOPTED_LEDGER_READBACK_R3_FINAL3.json",
+    "sha256": "d393a34ee01d3d52f1578d096bb219a6fee09a1346cc7a514ef8b2ade8d4b588",
     "enforcement_entry": "load_runtime(enforce_prelaunch=True)",
     "ledger_snapshot_calls": 3,
     "ledger_write_calls": 2,
-    "raw_completed_claim_jobs": 0,
-    "adopted_after_receipt_failure_jobs": 1,
-    "effective_unique_valid_jobs_including_adoptions": 1,
-    "original_claim_status": "failed_technical",
-    "original_claim_sha256": "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ec5c109c61c1f",
-    "original_row_sha256": "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
-    "environment_constructed_delta": 0,
-    "normal_claim_delta": 0,
-    "reserve_claim_delta": 0,
-    "run_call_delta": 0,
-    "completed_steps_delta": 0,
-    "ppo_update_delta": 0,
-    "optimizer_step_delta": 0,
-    "checkpoint_write_delta": 0,
-    "ledger_file_path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/runtime/ROUND45_R2_EXECUTION_LEDGER_R3_FINAL2.json",
-    "ledger_file_sha256": "e904c1b65381d184cff84b49ef0b9412dacc7621b9a6a5c8216d0e2a0305eb53",
     "expected_counts": {
       "normal_used": 1,
       "reserve_used": 0,
@@ -348,6 +334,52 @@
       "checkpoint_write_journal_entries": 0,
       "adopted_after_receipt_failure_jobs": 1,
       "effective_unique_valid_jobs_including_adoptions": 1
+    },
+    "current_counts_at_readback": {
+      "normal_used": 1,
+      "reserve_used": 0,
+      "total_used": 1,
+      "environment_constructor_calls": 1,
+      "run_invocation_calls": 1,
+      "run_return_calls": 1,
+      "completed_steps": 1000,
+      "completed_logical_jobs": 0,
+      "technical_failed_claims": 1,
+      "retry_claims": 0,
+      "optimizer_step_calls": 0,
+      "optimizer_step_journal_entries": 0,
+      "ppo_update_calls": 0,
+      "ppo_update_journal_entries": 0,
+      "checkpoint_write_calls": 0,
+      "checkpoint_write_journal_entries": 0,
+      "adopted_after_receipt_failure_jobs": 1,
+      "effective_unique_valid_jobs_including_adoptions": 1
+    },
+    "raw_completed_claim_jobs": 0,
+    "adopted_after_receipt_failure_jobs": 1,
+    "effective_unique_valid_jobs_including_adoptions": 1,
+    "original_claim_status": "failed_technical",
+    "original_claim_sha256_before_after": [
+      "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f",
+      "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f"
+    ],
+    "original_row_sha256_before_after": [
+      "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+      "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16"
+    ],
+    "ledger_file_path": "runtime/ROUND45_R2_EXECUTION_LEDGER_R3_FINAL3.json",
+    "ledger_file_sha256": "742e2ceab77209ae56bff4bd602404ba29ca921027600bee2bb8a2b0a614032b",
+    "preserved_prelaunch_snapshot_path": "runtime/ROUND45_R2_PRELAUNCH_LEDGER_SNAPSHOT_R3_FINAL3.json",
+    "preserved_prelaunch_snapshot_sha256": "742e2ceab77209ae56bff4bd602404ba29ca921027600bee2bb8a2b0a614032b",
+    "deltas": {
+      "environment_constructed_delta": 0,
+      "normal_claim_delta": 0,
+      "reserve_claim_delta": 0,
+      "run_call_delta": 0,
+      "completed_steps_delta": 0,
+      "ppo_update_delta": 0,
+      "optimizer_step_delta": 0,
+      "checkpoint_write_delta": 0
     }
   },
   "r3_current_source_change": {
@@ -455,5 +487,254 @@
       "checkpoint_write_calls": 0
     },
     "bc_rerun": false
-  }
+  },
+  "r3_final2_enforced_ledger_readback": {
+    "status": "passed",
+    "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_ADOPTED_LEDGER_READBACK_R3_FINAL2.json",
+    "sha256": "27b0a8d5ef40f4fe1ad39d5d857bba3128c8b289005b57577b468738a8d6e23b",
+    "enforcement_entry": "load_runtime(enforce_prelaunch=True)",
+    "ledger_snapshot_calls": 3,
+    "ledger_write_calls": 2,
+    "raw_completed_claim_jobs": 0,
+    "adopted_after_receipt_failure_jobs": 1,
+    "effective_unique_valid_jobs_including_adoptions": 1,
+    "original_claim_status": "failed_technical",
+    "original_claim_sha256": "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ec5c109c61c1f",
+    "original_row_sha256": "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+    "environment_constructed_delta": 0,
+    "normal_claim_delta": 0,
+    "reserve_claim_delta": 0,
+    "run_call_delta": 0,
+    "completed_steps_delta": 0,
+    "ppo_update_delta": 0,
+    "optimizer_step_delta": 0,
+    "checkpoint_write_delta": 0,
+    "ledger_file_path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/runtime/ROUND45_R2_EXECUTION_LEDGER_R3_FINAL2.json",
+    "ledger_file_sha256": "e904c1b65381d184cff84b49ef0b9412dacc7621b9a6a5c8216d0e2a0305eb53",
+    "expected_counts": {
+      "normal_used": 1,
+      "reserve_used": 0,
+      "total_used": 1,
+      "environment_constructor_calls": 1,
+      "run_invocation_calls": 1,
+      "run_return_calls": 1,
+      "completed_steps": 1000,
+      "completed_logical_jobs": 0,
+      "technical_failed_claims": 1,
+      "retry_claims": 0,
+      "optimizer_step_calls": 0,
+      "optimizer_step_journal_entries": 0,
+      "ppo_update_calls": 0,
+      "ppo_update_journal_entries": 0,
+      "checkpoint_write_calls": 0,
+      "checkpoint_write_journal_entries": 0,
+      "adopted_after_receipt_failure_jobs": 1,
+      "effective_unique_valid_jobs_including_adoptions": 1
+    }
+  },
+  "r3_prelaunch_ledger_correction": {
+    "status": "passed",
+    "path": "ROUND45_R2_PRELAUNCH_LEDGER_CORRECTION_R3_FINAL3.json",
+    "sha256": "7992451f47f0a4a603ec9bc2e41666681aa97c0ce905ea080fd28811c48843ca",
+    "report_path": "ROUND45_R2_PRELAUNCH_LEDGER_CORRECTION_R3_FINAL3.md",
+    "report_sha256": "b613bc5d24f7fbda7766986a39b2efcf05ad420d6c8e93be5952635a3a523153",
+    "superseded_report_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\ROUND45_R2_REPORT_R3.md",
+    "superseded_report_sha256": "e849f537c7c1a1f69864f8d609420a9e0a05710771b797443e34a00686eea89b",
+    "superseded_report_environment_constructed_claim": 0,
+    "correct_count_source": "preserved_prelaunch_r3_execution_ledger_snapshot",
+    "correct_execution_ledger_path": "runtime/ROUND45_R2_PRELAUNCH_LEDGER_SNAPSHOT_R3_FINAL3.json",
+    "correct_execution_ledger_sha256": "742e2ceab77209ae56bff4bd602404ba29ca921027600bee2bb8a2b0a614032b",
+    "enforced_readback_path": "ROUND45_R2_ADOPTED_LEDGER_READBACK_R3_FINAL3.json",
+    "enforced_readback_sha256": "d393a34ee01d3d52f1578d096bb219a6fee09a1346cc7a514ef8b2ade8d4b588",
+    "cumulative_counts": {
+      "normal_used": 1,
+      "reserve_used": 0,
+      "total_used": 1,
+      "environment_constructor_calls": 1,
+      "run_invocation_calls": 1,
+      "run_return_calls": 1,
+      "completed_steps": 1000,
+      "completed_logical_jobs": 0,
+      "technical_failed_claims": 1,
+      "retry_claims": 0,
+      "optimizer_step_calls": 0,
+      "optimizer_step_journal_entries": 0,
+      "ppo_update_calls": 0,
+      "ppo_update_journal_entries": 0,
+      "checkpoint_write_calls": 0,
+      "checkpoint_write_journal_entries": 0,
+      "adopted_after_receipt_failure_jobs": 1,
+      "effective_unique_valid_jobs_including_adoptions": 1
+    },
+    "original_claim_sha256": "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f",
+    "original_row_sha256": "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+    "readback_deltas": {
+      "environment_constructed_delta": 0,
+      "normal_claim_delta": 0,
+      "reserve_claim_delta": 0,
+      "run_call_delta": 0,
+      "completed_steps_delta": 0,
+      "ppo_update_delta": 0,
+      "optimizer_step_delta": 0,
+      "checkpoint_write_delta": 0
+    },
+    "old_report_modified": false
+  },
+  "r3_prelaunch_readback_status": "passed",
+  "r3_prelaunch_runtime_ledger_path": "runtime/ROUND45_R2_EXECUTION_LEDGER_R3_FINAL3.json",
+  "r3_prelaunch_runtime_ledger_sha256": "742e2ceab77209ae56bff4bd602404ba29ca921027600bee2bb8a2b0a614032b",
+  "control_gate": "failed",
+  "control_rows": 48,
+  "final_evaluations": 0,
+  "r3_historical_stop_reason_before_control_gate": {
+    "status": "superseded_as_current_reason_by_final3_scientific_gate",
+    "value": {
+      "type": "RuntimeError",
+      "message": "R2 frozen tracked source changed: ['M runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_CURRENT_TASK.json']"
+    }
+  },
+  "run_invocation_calls": 48,
+  "technical_failed_claims": 1,
+  "new_technical_failed_claims_final3": 0,
+  "retry_claims": 0,
+  "optimizer_step_calls": 0,
+  "checkpoint_write_calls": 0,
+  "normal_keys_used": 48,
+  "normal_keys_unspent_after_scientific_stop": 480,
+  "training_authorized_by_control_gate": false,
+  "final_evaluation_started": false,
+  "r3_final_runtime_ledger": {
+    "path": "runtime/ROUND45_R2_EXECUTION_LEDGER_R3_FINAL3.json",
+    "sha256": "c6c7884c9dad7fb2f823b3dce5e7a7ffa7e46c6babd7481dccaf12c3ab3f08fa",
+    "counts": {
+      "normal_used": 48,
+      "reserve_used": 0,
+      "total_used": 48,
+      "environment_constructor_calls": 48,
+      "joint_run_build_failures": 0,
+      "joint_run_constructed_calls": 48,
+      "run_invocation_calls": 48,
+      "joint_run_method_calls": 48,
+      "run_return_calls": 48,
+      "run_failure_calls": 0,
+      "completed_steps": 48000,
+      "completed_logical_jobs": 47,
+      "simulation_started": 48,
+      "technical_failed_claims": 1,
+      "retry_claims": 0,
+      "optimizer_step_calls": 0,
+      "optimizer_step_journal_entries": 0,
+      "ppo_update_calls": 0,
+      "ppo_update_journal_entries": 0,
+      "ppo_update_count_matches_committed_batches": true,
+      "checkpoint_write_calls": 0,
+      "checkpoint_write_journal_entries": 0,
+      "optimizer_step_count_matches_committed_batches": true,
+      "hard_cap": 552,
+      "adopted_after_receipt_failure_jobs": 1,
+      "effective_unique_valid_jobs_including_adoptions": 48
+    }
+  },
+  "r3_control_gate_summary": {
+    "path": "ROUND45_R2_BC_CONTROL_GATE_R3.json",
+    "sha256": "ccad7597d9b75c46683cd1b49e252deb928b1ee3b183fa9c1c4580d106e5af05",
+    "status": "failed",
+    "training_authorized_by_gate": false,
+    "per_seed": {
+      "11": {
+        "scene_count": 16,
+        "scene_identity_set_match_all": true,
+        "on_time_total": 96,
+        "spent_bytes_total": 82434,
+        "mean_spent_bytes": 5152.125,
+        "late_mean_spent_bytes": 4838.25,
+        "mean_byte_delta_vs_late": 313.875,
+        "passes_training_gate": false
+      },
+      "22": {
+        "scene_count": 16,
+        "scene_identity_set_match_all": true,
+        "on_time_total": 96,
+        "spent_bytes_total": 82434,
+        "mean_spent_bytes": 5152.125,
+        "late_mean_spent_bytes": 4838.25,
+        "mean_byte_delta_vs_late": 313.875,
+        "passes_training_gate": false
+      },
+      "33": {
+        "scene_count": 16,
+        "scene_identity_set_match_all": true,
+        "on_time_total": 96,
+        "spent_bytes_total": 82434,
+        "mean_spent_bytes": 5152.125,
+        "late_mean_spent_bytes": 4838.25,
+        "mean_byte_delta_vs_late": 313.875,
+        "passes_training_gate": false
+      }
+    }
+  },
+  "r3_final3_stop_state": {
+    "path": "ROUND45_R2_STOP_STATE_R3_FINAL3.json",
+    "sha256": "c6f8b9755631de8ee538987321f0b57fca0490ae9701ae9efec51fef63a6a467"
+  },
+  "r3_final3_report": {
+    "path": "ROUND45_R2_REPORT_R3_FINAL3.md",
+    "sha256": "cced9af10284ad6a88f28745ba9bda9bd9a705ea915fca107e1e163cd7c4312d"
+  },
+  "r3_training_stage_result": {
+    "technical_execution": "passed",
+    "scientific_control_gate": "failed",
+    "ppo_training_cells_started": 0,
+    "final_evaluation_cells_started": 0,
+    "reason": "cost threshold exceeded for all three seeds"
+  },
+  "new_technical_failed_claims_final3_controls": 0,
+  "r3_independent_raw_row_recomputation": {
+    "path": "ROUND45_R2_CONTROL_RAW_ROW_RECOMPUTATION_R3_FINAL3.json",
+    "sha256": "e7e954865fc65f8d8174f0ff68453cd7a698d0410373e2f6065adb83e8287f71",
+    "status": "passed",
+    "control_rows": 48,
+    "unique_seed_scene_keys": 48,
+    "adopted_row_included_once": true,
+    "claim_statuses": {
+      "failed_technical": 1,
+      "complete": 47
+    },
+    "per_seed": {
+      "11": {
+        "scene_count": 16,
+        "scene_identity_set_match_all": true,
+        "on_time_total": 96,
+        "spent_bytes_total": 82434,
+        "mean_spent_bytes": 5152.125,
+        "late_mean_spent_bytes": 4838.25,
+        "mean_byte_delta_vs_late": 313.875,
+        "passes_training_gate": false
+      },
+      "22": {
+        "scene_count": 16,
+        "scene_identity_set_match_all": true,
+        "on_time_total": 96,
+        "spent_bytes_total": 82434,
+        "mean_spent_bytes": 5152.125,
+        "late_mean_spent_bytes": 4838.25,
+        "mean_byte_delta_vs_late": 313.875,
+        "passes_training_gate": false
+      },
+      "33": {
+        "scene_count": 16,
+        "scene_identity_set_match_all": true,
+        "on_time_total": 96,
+        "spent_bytes_total": 82434,
+        "mean_spent_bytes": 5152.125,
+        "late_mean_spent_bytes": 4838.25,
+        "mean_byte_delta_vs_late": 313.875,
+        "passes_training_gate": false
+      }
+    },
+    "baseline_raw_manifest_sha256": "581852ea659e6433642e24745fe1b0ead417cd35bc8d443a388a90182ef7bb17",
+    "baseline_raw_manifest_rows_checked": 32,
+    "baseline_raw_manifest_digest_matches_all_32_rows": true
+  },
+  "execution_head_before_final_result_commit": "48a257f98ff03f4fcbd3eb2214f4b1ed91011872"
 }

@@ -1,0 +1,175 @@
+{
+  "kind": "round45-r2-fixed-plan-stop-state/2",
+  "status": "stopped_after_bc_only_control_scientific_gate",
+  "branch": "exp/comm-rule-warmstart-cost-learning-r2",
+  "execution_head_before_final_result_commit": "48a257f98ff03f4fcbd3eb2214f4b1ed91011872",
+  "runner_source_commit": "51cbf982970de71b6d8bfae203c9f931f1120ed1",
+  "prelaunch_freeze_commit": "11bf3b5b30f77500532e9aad807ae4bfccdcb4f0",
+  "fixed_control_gate": {
+    "path": "ROUND45_R2_BC_CONTROL_GATE_R3.json",
+    "sha256": "ccad7597d9b75c46683cd1b49e252deb928b1ee3b183fa9c1c4580d106e5af05",
+    "status": "failed",
+    "training_authorized_by_gate": false,
+    "per_seed": {
+      "11": {
+        "scene_count": 16,
+        "scene_identity_set_match_all": true,
+        "on_time_total": 96,
+        "spent_bytes_total": 82434,
+        "mean_spent_bytes": 5152.125,
+        "late_mean_spent_bytes": 4838.25,
+        "mean_byte_delta_vs_late": 313.875,
+        "passes_training_gate": false
+      },
+      "22": {
+        "scene_count": 16,
+        "scene_identity_set_match_all": true,
+        "on_time_total": 96,
+        "spent_bytes_total": 82434,
+        "mean_spent_bytes": 5152.125,
+        "late_mean_spent_bytes": 4838.25,
+        "mean_byte_delta_vs_late": 313.875,
+        "passes_training_gate": false
+      },
+      "33": {
+        "scene_count": 16,
+        "scene_identity_set_match_all": true,
+        "on_time_total": 96,
+        "spent_bytes_total": 82434,
+        "mean_spent_bytes": 5152.125,
+        "late_mean_spent_bytes": 4838.25,
+        "mean_byte_delta_vs_late": 313.875,
+        "passes_training_gate": false
+      }
+    }
+  },
+  "independent_raw_row_recomputation": {
+    "path": "ROUND45_R2_CONTROL_RAW_ROW_RECOMPUTATION_R3_FINAL3.json",
+    "sha256": "e7e954865fc65f8d8174f0ff68453cd7a698d0410373e2f6065adb83e8287f71",
+    "status": "passed",
+    "control_rows": 48,
+    "unique_seed_scene_keys": 48,
+    "adopted_row_included_once": true,
+    "claim_statuses": {
+      "failed_technical": 1,
+      "complete": 47
+    },
+    "baseline_rows": 32,
+    "method": "Independently parse each raw JSON row; on-time task IDs are unique task_reward_events with on_time=true and credited=true; sum row spent_bytes directly; validate immediate/late source row hashes against the ROUND42 raw artifact manifest and frozen control-gate hashes. No experiment code or environment entry point called.",
+    "baseline_raw_manifest_sha256": "581852ea659e6433642e24745fe1b0ead417cd35bc8d443a388a90182ef7bb17",
+    "baseline_raw_manifest_rows_checked": 32,
+    "baseline_raw_manifest_digest_matches_all_32_rows": true
+  },
+  "runtime_ledger": {
+    "path": "runtime/ROUND45_R2_EXECUTION_LEDGER_R3_FINAL3.json",
+    "sha256": "c6c7884c9dad7fb2f823b3dce5e7a7ffa7e46c6babd7481dccaf12c3ab3f08fa",
+    "counts": {
+      "normal_used": 48,
+      "reserve_used": 0,
+      "total_used": 48,
+      "environment_constructor_calls": 48,
+      "joint_run_build_failures": 0,
+      "joint_run_constructed_calls": 48,
+      "run_invocation_calls": 48,
+      "joint_run_method_calls": 48,
+      "run_return_calls": 48,
+      "run_failure_calls": 0,
+      "completed_steps": 48000,
+      "completed_logical_jobs": 47,
+      "simulation_started": 48,
+      "technical_failed_claims": 1,
+      "retry_claims": 0,
+      "optimizer_step_calls": 0,
+      "optimizer_step_journal_entries": 0,
+      "ppo_update_calls": 0,
+      "ppo_update_journal_entries": 0,
+      "ppo_update_count_matches_committed_batches": true,
+      "checkpoint_write_calls": 0,
+      "checkpoint_write_journal_entries": 0,
+      "optimizer_step_count_matches_committed_batches": true,
+      "hard_cap": 552,
+      "adopted_after_receipt_failure_jobs": 1,
+      "effective_unique_valid_jobs_including_adoptions": 48
+    }
+  },
+  "prelaunch_readback": {
+    "path": "ROUND45_R2_ADOPTED_LEDGER_READBACK_R3_FINAL3.json",
+    "sha256": "d393a34ee01d3d52f1578d096bb219a6fee09a1346cc7a514ef8b2ade8d4b588",
+    "enforcement": "load_runtime(enforce_prelaunch=True)",
+    "ledger_snapshot_calls": 3,
+    "ledger_write_calls": 2,
+    "raw_completed_claim_jobs": 0,
+    "adopted_after_receipt_failure_jobs": 1,
+    "effective_unique_valid_jobs_including_adoptions": 1,
+    "original_claim_sha256_before_after": [
+      "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f",
+      "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f"
+    ],
+    "original_row_sha256_before_after": [
+      "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+      "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16"
+    ],
+    "deltas": {
+      "environment_constructed_delta": 0,
+      "normal_claim_delta": 0,
+      "reserve_claim_delta": 0,
+      "run_call_delta": 0,
+      "completed_steps_delta": 0,
+      "ppo_update_delta": 0,
+      "optimizer_step_delta": 0,
+      "checkpoint_write_delta": 0
+    }
+  },
+  "prelaunch_snapshot": {
+    "path": "runtime/ROUND45_R2_PRELAUNCH_LEDGER_SNAPSHOT_R3_FINAL3.json",
+    "sha256": "742e2ceab77209ae56bff4bd602404ba29ca921027600bee2bb8a2b0a614032b"
+  },
+  "ledger_correction": {
+    "path": "ROUND45_R2_PRELAUNCH_LEDGER_CORRECTION_R3_FINAL3.json",
+    "sha256": "7992451f47f0a4a603ec9bc2e41666681aa97c0ce905ea080fd28811c48843ca",
+    "report_path": "ROUND45_R2_PRELAUNCH_LEDGER_CORRECTION_R3_FINAL3.md",
+    "report_sha256": "b613bc5d24f7fbda7766986a39b2efcf05ad420d6c8e93be5952635a3a523153",
+    "superseded_report_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\ROUND45_R2_REPORT_R3.md",
+    "superseded_report_sha256": "e849f537c7c1a1f69864f8d609420a9e0a05710771b797443e34a00686eea89b",
+    "old_report_modified": false
+  },
+  "counts": {
+    "normal_claims": 48,
+    "normal_cap": 528,
+    "normal_unspent": 480,
+    "reserve_claims": 0,
+    "reserve_cap": 24,
+    "hard_cap": 552,
+    "total_used": 48,
+    "environment_constructed": 48,
+    "run_invocations": 48,
+    "run_returns": 48,
+    "completed_steps": 48000,
+    "raw_completed_claim_jobs": 47,
+    "historical_technical_failed_claims": 1,
+    "new_technical_failures_in_final3_controls": 0,
+    "retries": 0,
+    "adopted_jobs": 1,
+    "effective_unique_jobs": 48,
+    "ppo_updates": 0,
+    "optimizer_steps_in_control_stage": 0,
+    "checkpoint_writes_in_control_stage": 0
+  },
+  "bc_training": {
+    "updates_this_attempt": 3000,
+    "family_cumulative_updates": 4000,
+    "synthetic_optimizer_updates_before_controls": 2,
+    "bc_rerun": false
+  },
+  "fixed_plan": {
+    "control_cells": 48,
+    "control_cells_completed": 48,
+    "ppo_cells_planned_but_not_started": 384,
+    "final_eval_cells_planned_but_not_started": 96,
+    "unspent_normal_keys_not_reallocated": 480,
+    "reserve_reallocated": false
+  },
+  "stop_reason": "Task-ID sets match immediate for every scene in all three seeds, but the mean charged bytes are +313.875 B/scene above the fixed late-rule baseline for every seed; the frozen gate denies PPO continuation.",
+  "no_additional_training_or_evaluation_after_gate": true,
+  "push_or_deploy": false
+}
