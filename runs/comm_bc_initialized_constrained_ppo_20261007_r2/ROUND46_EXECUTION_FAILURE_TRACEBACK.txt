@@ -1,0 +1,42 @@
+Captured formal-entry output (exit code 1). The console renderer displayed the Chinese characters in some filesystem paths as replacement glyphs; paths below are normalized to the actual launched repository root, while frame order, line numbers, calls, and exception text are transcribed from the captured traceback.
+
+Command: D:\project_env\python.exe runs\comm_bc_initialized_constrained_ppo_20261007_r2\r46_execute_r2.py --execute
+Working directory: D:\code\整合\zhenghe-round42
+
+R40 seed 11: fresh Controller(11); no old weights loaded
+Traceback (most recent call last):
+  File "D:\code\整合\zhenghe-round42\runs\comm_bc_initialized_constrained_ppo_20261007_r2\r46_execute_r2.py", line 2539, in <module>
+    main()
+  File "D:\code\整合\zhenghe-round42\runs\comm_bc_initialized_constrained_ppo_20261007_r2\r46_execute_r2.py", line 2533, in main
+    execute()
+  File "D:\code\整合\zhenghe-round42\runs\comm_bc_initialized_constrained_ppo_20261007_r2\r46_execute_r2.py", line 2440, in execute
+    first_four = _run_first_four_and_all_gates(module, runtime)
+  File "D:\code\整合\zhenghe-round42\runs\comm_bc_initialized_constrained_ppo_20261007_r2\r46_execute_r2.py", line 1868, in _run_first_four_and_all_gates
+    report = module._call_training_seed(runtime, seed, episodes=4)
+  File "D:\code\整合\zhenghe-round42\runs\comm_bc_initialized_constrained_ppo_20261007_r2\r46_execute_r2.py", line 774, in call_training_seed
+    return original_call(runtime_arg, seed, episodes=episodes)
+  File "D:\code\整合\zhenghe-round42\runs\comm_rule_warmstart_cost_learning_20261006_r2\r45_r2_execute_r3.py", line 1527, in _call_training_seed
+    report = runtime["r42_run"].train_seed(
+  File "D:\code\整合\zhenghe-round42\runs\comm_one_shot_full_trace_ablation_20261004\r42_run.py", line 857, in train_seed
+    report = r40_train.train_seed(
+  File "D:\code\整合\zhenghe-round42\runs\comm_rule_warmstart_cost_learning_20261006_r2\r40_train_resume_adapter.py", line 423, in train_seed
+    episode = run_training_episode(
+  File "D:\code\整合\zhenghe-round42\runs\comm_rule_warmstart_cost_learning_20261006_r2\r45_r2_execute_r3.py", line 1194, in training_episode
+    result = base_training_episode(
+  File "D:\code\整合\zhenghe-round42\runs\comm_dual_response_ablation_20261004\r44_runtime.py", line 203, in training_episode
+    row = run_module._execute_cell(
+  File "D:\code\整合\zhenghe-round42\runs\comm_rule_warmstart_cost_learning_20261006_r2\r45_r2_execute_r3.py", line 1136, in guarded_execute
+    return base_execute(
+  File "D:\code\整合\zhenghe-round42\runs\comm_one_shot_full_trace_ablation_20261004\r42_run.py", line 663, in _execute_cell
+    claim = _claim(logical_job, attempt=attempt, metadata=metadata)
+  File "D:\code\整合\zhenghe-round42\runs\comm_rule_warmstart_cost_learning_20261006_r2\r45_r2_execute_r3.py", line 1066, in claim
+    return _record_claim(context, logical_job, attempt, metadata, base_claim)
+  File "D:\code\整合\zhenghe-round42\runs\comm_bc_initialized_constrained_ppo_20261007_r2\r46_execute_r2.py", line 887, in record_claim
+    path = original_record_claim(context, logical_job, attempt, metadata, base_claim)
+  File "D:\code\整合\zhenghe-round42\runs\comm_rule_warmstart_cost_learning_20261006_r2\r45_r2_execute_r3.py", line 865, in _record_claim
+    path = base_claim(logical_job, attempt=attempt, metadata=metadata)
+  File "D:\code\整合\zhenghe-round42\runs\comm_dual_response_ablation_20261004\r44_runtime.py", line 150, in claim
+    head = verify_frozen_source(frozen)
+  File "D:\code\整合\zhenghe-round42\runs\comm_rule_warmstart_cost_learning_20261006_r2\r45_r2_execute_r3.py", line 268, in verify_prelaunch_identity
+    raise RuntimeError("R2 prelaunch/freeze status is not passed")
+RuntimeError: R2 prelaunch/freeze status is not passed

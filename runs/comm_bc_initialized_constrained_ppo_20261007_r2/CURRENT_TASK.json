@@ -1,8 +1,8 @@
 {
-  "kind": "round46-r2-current-task/1",
-  "stage": "ROUND46-R2 prelaunch passed; zero claims; status-guard regression is the next gate",
+  "kind": "round46-current-task/1",
+  "stage": "R2/3 stopped before first claim: inner R45 prelaunch identity rejected",
   "branch": "fix/comm-bc-initialization-readback",
-  "head": "c3232c7a316c280415d1b027fea6fa8ead2fc98e",
+  "head": "730679cf86330e64fff92c0638335aeb4d222156",
   "runner_version_previous": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
   "runner_version_current": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
   "runner_source_sha256": "035d49799ebc3ce21eb6230fd36b6163af8bed7223b403e41b67c1d6712561f2",
@@ -55,8 +55,8 @@
     "completed_steps": 0,
     "ppo_update_calls": 0,
     "optimizer_step_calls": 0,
-    "checkpoint_write_calls": 16,
-    "checkpoint_write_journal_entries": 16
+    "checkpoint_write_calls": 18,
+    "checkpoint_write_journal_entries": 18
   },
   "progress_artifacts": {
     "available_seed11_ep0_u0": true,
@@ -67,5 +67,22 @@
     "available_seed33_progress": false,
     "note": "Per-seed progress files absent for seeds 22/33; actual unclaimed cursor is taken from strict runtime ledger."
   },
-  "next_actual_command": "D:\\project_env\\python.exe runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\r46_execute_r2.py --status-guard-regression; commit regression receipt and the two task-state files; then run --execute."
+  "next_actual_command": "STOPPED: do not re-enter /3; proceed only under the separately authorized /4 binding fix.",
+  "round": 46,
+  "execution_attempted": true,
+  "execution_exit_code": 1,
+  "error": {
+    "type": "RuntimeError",
+    "message": "R2 prelaunch/freeze status is not passed",
+    "raised_at": "r45_r2_execute_r3.py:268 verify_prelaunch_identity"
+  },
+  "checkpoint_files_created": {
+    "count": 3,
+    "sha256": "330a80eb646bf422fbe31024951cc88c15740cc97579c903b0686a78107f97ed",
+    "episodes_done": 0,
+    "updates": 0
+  },
+  "failure_record": "ROUND46_EXECUTION_FAILURE.json",
+  "traceback_record": "ROUND46_EXECUTION_FAILURE_TRACEBACK.txt",
+  "stop_report": "ROUND46_STOP_REPORT.md"
 }
