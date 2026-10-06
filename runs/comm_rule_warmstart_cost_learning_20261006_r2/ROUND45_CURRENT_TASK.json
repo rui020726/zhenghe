@@ -10,7 +10,7 @@
   "prior_failed_real_bc_updates_preserved": 1000,
   "family_cumulative_bc_update_hard_cap": 4000,
   "this_attempt_bc_update_cap": 3000,
-  "stage": "stopped with preserved R2 evidence",
+  "stage": "corrected R2 post-BC freeze generated; zero-environment seam/container regressions and prelaunch receipt pending",
   "pre_bc_freeze_sha256": "a42b6693ea0b3d83262517b386386f718d09038785b9e8ac1c79a09e52d5ed9c",
   "pre_bc_source_commit": "c47fb18eb15381841283fa83b42b01963c45e68f",
   "source_commit": "333d9226c6da46b0638b8a2078eb327666e816c4",
@@ -23,7 +23,7 @@
   "normal_environment_keys": 528,
   "technical_reserve_max": 24,
   "hard_environment_cap": 552,
-  "post_bc_freeze_sha256": "e16e6a4e6c6e41c1d64eb220b21d75066f64f7afe88c64b68f8c31154d9263ff",
+  "post_bc_freeze_sha256": "31cad256e95d48d9c307c4c5c2d0e0ccf5eff3d6a273649d32c0ffa65fef4311",
   "logical_key_plan_sha256": "482d7942dcf5b88b807524124ad8d6f1b1fd6de8fcf2e37bbaf158023430b11f",
   "zero_environment_seam_gate": "passed",
   "zero_environment_seam_regression_sha256": "142ac5ffa15e6f26addc2d8e701ba4d2eb94661b1a132d11c750cf1631a7bfae",
@@ -59,5 +59,7 @@
     }
   ],
   "normal_claims": 0,
-  "reserve_claims": 0
+  "reserve_claims": 0,
+  "corrected_runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1",
+  "pre_env_stops_preserved": 1
 }
