@@ -1,0 +1,70 @@
+{
+  "status": "preserved; not resumed",
+  "prelaunch_commit": "116f4ba",
+  "counts": {
+    "checkpoint_write_journal_entries": 8,
+    "ppo_updates": 0,
+    "claims": 0,
+    "optimizer_step_calls": 0,
+    "completed_steps": 0,
+    "environment_constructor_calls": 0,
+    "run_invocation_calls": 0,
+    "preclaim_training_checkpoint_write_calls": 2,
+    "synthetic_fixture_writes": 6,
+    "checkpoint_write_calls": 8
+  },
+  "runner_version": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
+  "files": [
+    {
+      "sha256": "a45bf011c9b88728214f8448e4eb751629eb233c12ccc3433095131d307ac79c",
+      "archived_relative_path": "attempts/runner_v2_preclaim_guard/ROUND46_STOP_STATE.json",
+      "bytes": 2063,
+      "original_relative_path": "ROUND46_STOP_STATE.json"
+    },
+    {
+      "sha256": "f9926f50f0dc7964926226646623e80846ac4f48287e8af938dacd21c90c39e0",
+      "archived_relative_path": "attempts/runner_v2_preclaim_guard/runtime/ROUND45_R2_EP0_RECOVERY_s11.json",
+      "bytes": 1175,
+      "original_relative_path": "runtime/ROUND45_R2_EP0_RECOVERY_s11.json"
+    },
+    {
+      "sha256": "bef3a94f534bbc5be1a13c666143c3796c464c2810a0db0f2ae68df8e3d6d5e1",
+      "archived_relative_path": "attempts/runner_v2_preclaim_guard/checkpoints/v2_train_s11_before_b0.pt",
+      "bytes": 57477,
+      "original_relative_path": "checkpoints/v2_train_s11_before_b0.pt"
+    },
+    {
+      "sha256": "bef3a94f534bbc5be1a13c666143c3796c464c2810a0db0f2ae68df8e3d6d5e1",
+      "archived_relative_path": "attempts/runner_v2_preclaim_guard/checkpoints/v2_train_s11_ep0.pt",
+      "bytes": 57477,
+      "original_relative_path": "checkpoints/v2_train_s11_ep0.pt"
+    },
+    {
+      "sha256": "bef3a94f534bbc5be1a13c666143c3796c464c2810a0db0f2ae68df8e3d6d5e1",
+      "archived_relative_path": "attempts/runner_v2_preclaim_guard/checkpoints/v2_train_s11.pt",
+      "bytes": 57477,
+      "original_relative_path": "checkpoints/v2_train_s11.pt"
+    }
+  ],
+  "notes": [
+    "No claim was committed and no environment constructor was called.",
+    "Three untrained ep0/before-batch0/rolling paths all contained the same checkpoint payload; archived without resume.",
+    "Old ROUND46 v1 attempt remains in its separate original directory."
+  ],
+  "checkpoint_payloads": {
+    "all_three_files_byte_identical": true,
+    "optimizer_steps": 0,
+    "episodes_done": 0,
+    "seed": 11,
+    "lambda": 1.0,
+    "sha256": "bef3a94f534bbc5be1a13c666143c3796c464c2810a0db0f2ae68df8e3d6d5e1",
+    "updates": 0
+  },
+  "error": "tracked worktree is dirty; refusing ROUND46 environment entry: M runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+  "ledger_snapshot": {
+    "path": "attempts/runner_v2_preclaim_guard/runtime/ROUND46_EXECUTION_LEDGER_AT_STOP.json",
+    "sha256": "e78d463077d39b54d4c8b380da7bf70d7a7c868feacaf4b4a541839569e6b8fd"
+  },
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+  "kind": "round46-r2-runner-v2-preclaim-stop-archive/1"
+}

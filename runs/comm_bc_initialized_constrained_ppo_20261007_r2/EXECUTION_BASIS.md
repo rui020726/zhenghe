@@ -65,3 +65,11 @@ greedy 为主，sampled 为辅，逐 seed 报绝对任务数、计费字节、�
 
 模型、tape、日志与运行账本留在 Git 外；版本化报告、门禁摘要、清单及 runner 只放入 `runs/comm_bc_initialized_constrained_ppo_20261007/`。完成后只本地提交并停止，不推送、不部署、不追加实验。
 
+
+## ROUND46-R2 v2 pre-claim failure and v3 status guard
+
+The v2 frozen execution was attempted once (`exec-7e624ff9`) and stopped before its first atomic claim: `_task_state` had updated the tracked `ROUND46_CURRENT_TASK.json`, then `_assert_source_worktree_clean` treated that runtime state update as source drift. The actual stop and ledger recorded 0 claims, 0 environment construction, 0 run calls, 0 completed steps, 0 PPO updates, 0 optimizer steps, and 8 checkpoint-write calls. Those 8 are 6 synthetic readback-fixture saves plus 2 R40 pre-claim saves. Three seed11 ep0/before-batch0/rolling files were each untrained (`episodes_done=updates=optimizer_steps=0`, lambda 1), byte-identical at SHA-256 `bef3a94f534bbc5be1a13c666143c3796c464c2810a0db0f2ae68df8e3d6d5e1`; they are archived under `attempts/runner_v2_preclaim_guard/` and must never be resumed. The actual stop, recovery receipt, ledger snapshot, and files were hashed and verified in `ATTEMPT_ARCHIVE.json` (SHA-256 `eac5f0390a4ccb86bc986d1b764b7a6d5653f29cc324f29befb119cb5abe4403`).
+
+ROUND46-R2 v3 changes only the worktree cleanliness guard and runner identity. It permits modifications to exactly `CURRENT_TASK.json` and `ROUND46_CURRENT_TASK.json` when they are ordinary unstaged status updates. Changes to runner source, tests, frozen config, inputs, key plan, preflight gate, or any other tracked file remain rejected. A zero-environment regression follows the real task-state update into the same pre-claim `_verify_prelaunch_identity` hook, confirms both status files can change, and confirms simulated runner-source and frozen-config changes are rejected. No training state, checkpoint, or science parameter from v2 is reused.
+
+The training semantic version and the original 480-normal + 24-reserve (hard 504) fixed plan remain unchanged. After the new runner and status regression are committed and the formal zero-environment preflight passes, execution restarts all three seeds from their registered ROUND45 BC model-only weights and registered R44 ep0 rollout RNG, with new ep0 states, empty ten-parameter Adam, lambda 1, and cursor zero.

@@ -35,11 +35,12 @@ ROUND40_OUTPUT = ROUND40_ROOT / "runs" / "comm_first_report_training_ablation_20
 ROUND46_BRANCH = "fix/comm-bc-initialization-readback"
 ROUND46_START_HEAD = "f27bed1904ed3d8b08ead2d821c325bdaab6d04f"
 ROUND46_RUNNER_VERSION = (
-    "round46-bc-initialized-constrained-ppo/2+"
+    "round46-bc-initialized-constrained-ppo/3+"
     "round45-model-only-bc-loader/1+"
     "round44-constrained-ppo-runtime/1+"
     "cross-seed-batch0-gate/1+"
-    "checkpoint-readback-factory-scope/1"
+    "checkpoint-readback-factory-scope/1+"
+    "mutable-task-state-guard/1"
 )
 R2_BASIS_FIRST_LINE = (
     "当前任务=ROUND46-R2；分支=fix/comm-bc-initialization-readback；"
@@ -93,6 +94,11 @@ ARTIFACT_MANIFEST_PATH = R46_DIR / "ROUND46_ARTIFACT_MANIFEST.json"
 STOP_STATE_PATH = R46_DIR / "ROUND46_STOP_STATE.json"
 PRIOR_R46_DIR = REPO / "runs" / "comm_bc_initialized_constrained_ppo_20261007"
 READBACK_REGRESSION_PATH = R46_DIR / "test_round46_r2_checkpoint_readback.py"
+READBACK_REGRESSION_RESULT_PATH = R46_DIR / "ROUND46_R2_CHECKPOINT_READBACK_REGRESSION_R3.json"
+STATUS_GUARD_REGRESSION_PATH = R46_DIR / "ROUND46_R2_STATUS_GUARD_REGRESSION.json"
+R2_V2_PRECLAIM_ARCHIVE_PATH = (
+    R46_DIR / "attempts" / "runner_v2_preclaim_guard" / "ATTEMPT_ARCHIVE.json"
+)
 
 _R45_MODULE: Any = None
 _RUNTIME: dict[str, Any] | None = None
@@ -176,8 +182,25 @@ def _assert_branch_head(*, exact_start: bool = False) -> None:
 
 def _assert_source_worktree_clean() -> None:
     status = _run_git("status", "--porcelain", "--untracked-files=no")
-    if status:
-        raise RuntimeError(f"tracked worktree is dirty; refusing ROUND46 environment entry: {status}")
+    unexpected = _unexpected_source_status_lines(status)
+    if unexpected:
+        raise RuntimeError(
+            "tracked source worktree is dirty; refusing ROUND46 environment entry: "
+            + "\n".join(unexpected))
+
+
+def _unexpected_source_status_lines(status: str) -> list[str]:
+    mutable_task_paths = {
+        CURRENT_TASK_PATH.resolve().relative_to(REPO).as_posix(),
+        (R46_DIR / "CURRENT_TASK.json").resolve().relative_to(REPO).as_posix(),
+    }
+    unexpected = []
+    for line in status.splitlines():
+        path = line[3:].replace("\\", "/") if len(line) >= 4 else ""
+        if line[:2] == " M" and path in mutable_task_paths:
+            continue
+        unexpected.append(line)
+    return unexpected
 
 
 def _prior_failed_attempt_identity() -> dict[str, Any]:
@@ -247,6 +270,96 @@ def _prior_failed_attempt_identity() -> dict[str, Any]:
         "ep0_and_rolling_byte_identical": (
             actual["seed11_ep0"]["sha256"] == actual["seed11_rolling"]["sha256"]
         ),
+        "new_training_may_load_prior_checkpoint": False,
+    }
+
+
+def _prior_r2_preclaim_attempt_identity() -> dict[str, Any]:
+    """Bind the pre-claim v2 stop and prove its untrained checkpoints are archived."""
+    if not R2_V2_PRECLAIM_ARCHIVE_PATH.is_file():
+        raise FileNotFoundError(f"ROUND46-R2 v2 pre-claim archive is missing: {R2_V2_PRECLAIM_ARCHIVE_PATH}")
+    manifest = _json(R2_V2_PRECLAIM_ARCHIVE_PATH)
+    if (manifest.get("kind") != "round46-r2-runner-v2-preclaim-stop-archive/1"
+            or manifest.get("status") != "preserved; not resumed"
+            or manifest.get("training_version") != TRAINING_VERSION
+            or manifest.get("counts") != {
+                "claims": 0, "environment_constructor_calls": 0,
+                "run_invocation_calls": 0, "completed_steps": 0,
+                "ppo_updates": 0, "optimizer_step_calls": 0,
+                "checkpoint_write_calls": 8,
+                "checkpoint_write_journal_entries": 8,
+                "synthetic_fixture_writes": 6,
+                "preclaim_training_checkpoint_write_calls": 2,
+            }):
+        raise RuntimeError("ROUND46-R2 v2 pre-claim archive identity or counters changed")
+
+    archived_files = {}
+    for item in manifest.get("files", []):
+        relative = item.get("archived_relative_path")
+        path = (R46_DIR / str(relative)).resolve()
+        try:
+            path.relative_to(R46_DIR.resolve())
+        except ValueError as error:
+            raise RuntimeError(f"archived v2 artifact escapes R2 output: {path}") from error
+        if not path.is_file() or _sha256(path) != item.get("sha256"):
+            raise RuntimeError(f"archived v2 artifact identity changed: {path}")
+        archived_files[item.get("original_relative_path")] = item
+
+    checkpoint_entries = [item for key, item in archived_files.items()
+                          if str(key).startswith("checkpoints/") and str(key).endswith(".pt")]
+    checkpoint_hashes = {item["sha256"] for item in checkpoint_entries}
+    payload = manifest.get("checkpoint_payloads", {})
+    if (len(checkpoint_entries) != 3 or len(checkpoint_hashes) != 1
+            or checkpoint_hashes != {payload.get("sha256")}
+            or payload.get("all_three_files_byte_identical") is not True
+            or payload.get("seed") != 11 or payload.get("episodes_done") != 0
+            or payload.get("updates") != 0 or payload.get("optimizer_steps") != 0
+            or payload.get("lambda") != 1.0):
+        raise RuntimeError("archived v2 training checkpoints are not the verified untrained ep0 payload")
+    if list((R46_DIR / "checkpoints").glob("v2_train_s*.pt")):
+        raise RuntimeError("an archived ROUND46-R2 v2 checkpoint remains active for recovery")
+
+    stop_item = archived_files.get("ROUND46_STOP_STATE.json")
+    recovery_item = archived_files.get("runtime/ROUND45_R2_EP0_RECOVERY_s11.json")
+    if stop_item is None or recovery_item is None:
+        raise RuntimeError("ROUND46-R2 v2 stop or ep0 recovery receipt was not archived")
+    stop_path = R46_DIR / stop_item["archived_relative_path"]
+    stop = _json(stop_path)
+    stop_counts = stop.get("ledger", {}).get("counts", {})
+    if (stop.get("status") != "stopped"
+            or stop.get("error", {}).get("message")
+            != "tracked worktree is dirty; refusing ROUND46 environment entry: M runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json"
+            or any(int(stop_counts.get(key, -1)) != 0 for key in (
+                "environment_constructor_calls", "run_invocation_calls", "completed_steps",
+                "ppo_update_calls", "optimizer_step_calls"))
+            or int(stop_counts.get("checkpoint_write_calls", -1)) != 8):
+        raise RuntimeError("ROUND46-R2 v2 archived stop state no longer matches its pre-claim failure")
+    recovery_path = R46_DIR / recovery_item["archived_relative_path"]
+    recovery = _json(recovery_path)
+    if (recovery.get("status") != "passed" or recovery.get("seed") != 11
+            or recovery.get("episodes_done") != 0 or recovery.get("updates") != 0
+            or recovery.get("optimizer_steps") != 0
+            or recovery.get("source_sha256") != next(iter(checkpoint_hashes))
+            or recovery.get("byte_identical") is not True):
+        raise RuntimeError("ROUND46-R2 v2 ep0 recovery receipt does not match archived checkpoint bytes")
+
+    ledger_record = manifest.get("ledger_snapshot", {})
+    ledger_path = (R46_DIR / str(ledger_record.get("path", ""))).resolve()
+    if (not ledger_path.is_file()
+            or _sha256(ledger_path) != ledger_record.get("sha256")):
+        raise RuntimeError("ROUND46-R2 v2 stop ledger snapshot identity changed")
+    return {
+        "kind": manifest["kind"],
+        "archive_manifest_path": R2_V2_PRECLAIM_ARCHIVE_PATH.relative_to(REPO).as_posix(),
+        "archive_manifest_sha256": _sha256(R2_V2_PRECLAIM_ARCHIVE_PATH),
+        "runner_version": manifest["runner_version"],
+        "counts": manifest["counts"],
+        "archived_untrained_checkpoint_count": len(checkpoint_entries),
+        "archived_checkpoint_sha256": next(iter(checkpoint_hashes)),
+        "archived_stop_state_sha256": stop_item["sha256"],
+        "archived_recovery_receipt_sha256": recovery_item["sha256"],
+        "archived_ledger_snapshot_sha256": ledger_record["sha256"],
+        "active_prior_checkpoint_count": 0,
         "new_training_may_load_prior_checkpoint": False,
     }
 
@@ -689,11 +802,15 @@ def _input_identity() -> dict[str, Any]:
         "round45_gate_status_preserved": "failed",
         "round45_gate_training_authorized": False,
         "prior_round46_failed_attempt": _prior_failed_attempt_identity(),
+        "prior_round46_r2_preclaim_attempt": _prior_r2_preclaim_attempt_identity(),
     }
 
 
 def prepare() -> None:
-    _assert_branch_head(exact_start=True)
+    # A pre-claim runner-gate failure can require a new execution freeze. Keep
+    # all ROUND46 commits on the named branch and preserve the original start
+    # commit as an ancestor, while allowing that explicitly versioned refreeze.
+    _assert_branch_head()
     _assert_source_worktree_clean()
     if not (R46_DIR / "EXECUTION_BASIS.md").is_file():
         raise FileNotFoundError("EXECUTION_BASIS.md must be saved before ROUND46 prepare")
@@ -702,6 +819,8 @@ def prepare() -> None:
         raise RuntimeError("ROUND46-R2 execution basis first-line identity mismatch")
     if not READBACK_REGRESSION_PATH.is_file():
         raise FileNotFoundError("ROUND46-R2 real checkpoint-readback regression is missing")
+    if list((R46_DIR / "checkpoints").glob("v2_train_s*.pt")):
+        raise RuntimeError("ROUND46-R2 will not freeze while a prior untrained checkpoint is active")
 
     input_identity = _input_identity()
     _copy_runtime_aliases(input_identity)
@@ -930,7 +1049,7 @@ def preflight() -> None:
     readback_regression = regression_module.run_preflight_regression(
         sys.modules[__name__], module, runtime, write_result=True)
     after_readback_regression = runtime["r42_run"].ledger_snapshot(strict=True)
-    readback_result_sha256 = _sha256(R46_DIR / "ROUND46_R2_CHECKPOINT_READBACK_REGRESSION.json")
+    readback_result_sha256 = _sha256(READBACK_REGRESSION_RESULT_PATH)
     if (readback_regression.get("kind") != "round46-r2-checkpoint-readback-regression/1"
             or readback_regression.get("status") != "passed"
             or readback_regression.get("test_source_sha256") != frozen["readback_regression_sha256"]
@@ -943,6 +1062,17 @@ def preflight() -> None:
             - int(before_readback_regression["counts"]["checkpoint_write_calls"])
             != int(readback_regression["synthetic_fixture_trainer_save_calls_this_preflight"])):
         raise RuntimeError("ROUND46-R2 checkpoint readback regression identity or zero-side-effect check failed")
+    prior_r2_attempt = actual_inputs["prior_round46_r2_preclaim_attempt"]
+    prior_preclaim_writes = int(
+        prior_r2_attempt["counts"]["preclaim_training_checkpoint_write_calls"])
+    synthetic_fixture_writes = int(readback_regression[
+        "synthetic_fixture_trainer_save_calls_total"])
+    cumulative_checkpoint_writes = int(after_readback_regression["counts"][
+        "checkpoint_write_calls"])
+    if cumulative_checkpoint_writes != prior_preclaim_writes + synthetic_fixture_writes:
+        raise RuntimeError(
+            "ROUND46 checkpoint write ledger does not close across synthetic fixtures "
+            "and the archived pre-claim attempt")
     before_ledger = runtime["r42_run"].ledger_snapshot(strict=True)
     optimizer_steps_before = int(runtime["r42_run"]._OPTIMIZER_STEP_CALLS)
     ppo_updates_before = int(runtime["r42_run"]._PPO_UPDATE_CALLS)
@@ -1021,6 +1151,13 @@ def preflight() -> None:
     if old_gate_sha != frozen["inputs"]["round45_control_gate_sha256"]:
         raise RuntimeError("ROUND45 failed BC-only gate changed during ROUND46 preflight")
 
+    checkpoint_write_accounting = {
+        "cumulative_checkpoint_write_calls": cumulative_checkpoint_writes,
+        "synthetic_readback_fixture_writes": synthetic_fixture_writes,
+        "archived_v2_preclaim_training_writes": prior_preclaim_writes,
+        "new_preflight_checkpoint_writes": 0,
+        "unclassified_checkpoint_writes": 0,
+    }
     receipt = {
         "kind": "round46-zero-environment-preflight/1",
         "status": "passed", "round": 46, "branch": ROUND46_BRANCH,
@@ -1058,6 +1195,8 @@ def preflight() -> None:
             "ppo_update_calls": readback_regression["ppo_update_calls"],
             "optimizer_step_calls": readback_regression["optimizer_step_calls"],
         },
+        "prior_round46_r2_preclaim_attempt": prior_r2_attempt,
+        "checkpoint_write_accounting": checkpoint_write_accounting,
         "counts_before_checkpoint_readback_regression": before_readback_regression["counts"],
         "counts_after_checkpoint_readback_regression": after_readback_regression["counts"],
         "reference_cache": {
@@ -1076,7 +1215,7 @@ def preflight() -> None:
         "completed_episodes": 0, "ppo_updates": 0,
         "optimizer_step_calls": 0,
         "checkpoint_write_calls": int(after_ledger["counts"]["checkpoint_write_calls"]),
-        "checkpoint_write_calls_include_synthetic_readback_fixtures": True,
+        "checkpoint_write_accounting": checkpoint_write_accounting,
         "network_or_push": False,
     }
     _write_json(PRELAUNCH_GATE_PATH, receipt)
@@ -1105,12 +1244,16 @@ def _verify_prelaunch_identity(runtime: dict[str, Any]) -> None:
             or receipt.get("optimizer_step_calls") != 0):
         raise RuntimeError("ROUND46 prelaunch identity receipt failed")
     regression = receipt.get("checkpoint_readback_regression", {})
-    regression_path = R46_DIR / "ROUND46_R2_CHECKPOINT_READBACK_REGRESSION.json"
+    regression_path = READBACK_REGRESSION_RESULT_PATH
     if (regression.get("status") != "passed"
             or regression.get("source_sha256") != frozen.get("readback_regression_sha256")
             or not regression_path.is_file()
             or regression.get("receipt_sha256") != _sha256(regression_path)):
         raise RuntimeError("ROUND46 checkpoint readback regression receipt identity failed")
+    prior_r2_attempt = frozen.get("inputs", {}).get("prior_round46_r2_preclaim_attempt", {})
+    if (_sha256(R2_V2_PRECLAIM_ARCHIVE_PATH)
+            != prior_r2_attempt.get("archive_manifest_sha256")):
+        raise RuntimeError("ROUND46-R2 prior pre-claim attempt archive identity changed")
     ancestor = subprocess.run(
         ["git", "-C", str(REPO), "merge-base", "--is-ancestor",
          receipt["head_at_preflight"], "HEAD"], capture_output=True,
@@ -1139,6 +1282,138 @@ def _verify_prelaunch_identity(runtime: dict[str, Any]) -> None:
     if ((int(runtime["common"].NORMAL_LAUNCHES), int(runtime["common"].RESERVE_LAUNCHES),
             int(runtime["common"].LAUNCH_CAP)) != (NORMAL_CAP, RESERVE_CAP, HARD_CAP)):
         raise RuntimeError("ROUND46 runtime quota drifted after preflight")
+
+
+def run_status_guard_regression() -> dict[str, Any]:
+    """Exercise the actual task-state -> pre-claim identity seam with zero claims."""
+    _assert_branch_head()
+    _assert_source_worktree_clean()
+    module = _configure_runtime_module()
+    runtime = _RUNTIME
+    assert runtime is not None
+    module.verify_prelaunch_identity = lambda _frozen=None: _verify_prelaunch_identity(runtime)
+    module.ENFORCE_PRELAUNCH = True
+    module.verify_prelaunch_identity(runtime["frozen"])
+
+    task_paths = (CURRENT_TASK_PATH, R46_DIR / "CURRENT_TASK.json")
+    originals = {path: path.read_bytes() for path in task_paths}
+    original_run_git = _run_git
+    before = runtime["r42_run"].ledger_snapshot(strict=True)
+    status_update_passed = False
+    rejected_changes = {}
+    archived_v2_identity = _prior_r2_preclaim_attempt_identity()
+    try:
+        module._task_state(
+            "ROUND46-R2 zero-environment mutable task-state guard regression",
+            phase="status_guard_regression", training_started=False,
+        )
+        current_task = _json(R46_DIR / "CURRENT_TASK.json")
+        current_task["status_guard_probe"] = "temporary state update before pre-claim identity check"
+        _write_json(R46_DIR / "CURRENT_TASK.json", current_task)
+        module.verify_prelaunch_identity(runtime["frozen"])
+        status_update_passed = True
+
+        source_rel = Path(__file__).resolve().relative_to(REPO).as_posix()
+        frozen_rel = FROZEN_CONFIG_PATH.relative_to(REPO).as_posix()
+        for label, changed_path in (("runner_source", source_rel),
+                                    ("frozen_configuration", frozen_rel)):
+            def synthetic_status_git(*args: str) -> str:
+                if args == ("status", "--porcelain", "--untracked-files=no"):
+                    return f" M {changed_path}"
+                return original_run_git(*args)
+
+            globals()["_run_git"] = synthetic_status_git
+            try:
+                module.verify_prelaunch_identity(runtime["frozen"])
+            except RuntimeError as error:
+                if ("tracked source worktree is dirty" not in str(error)
+                        or changed_path not in str(error)):
+                    raise
+                rejected_changes[label] = {"status": "rejected", "path": changed_path}
+            else:
+                raise AssertionError(f"mutable task-state guard accepted changed {label}")
+            finally:
+                globals()["_run_git"] = original_run_git
+    finally:
+        globals()["_run_git"] = original_run_git
+        for path, contents in originals.items():
+            path.write_bytes(contents)
+
+    after = runtime["r42_run"].ledger_snapshot(strict=True)
+    for key in ("normal_used", "reserve_used", "total_used"):
+        if int(before[key]) != int(after[key]):
+            raise RuntimeError(f"status guard regression changed quota field {key}")
+    for key in ("environment_constructor_calls", "run_invocation_calls", "completed_steps",
+                "ppo_update_calls", "optimizer_step_calls", "checkpoint_write_calls"):
+        if int(before["counts"][key]) != int(after["counts"][key]):
+            raise RuntimeError(f"status guard regression changed execution count {key}")
+    if (not status_update_passed or set(rejected_changes) != {"runner_source", "frozen_configuration"}
+            or _run_git("status", "--porcelain", "--untracked-files=no")):
+        raise RuntimeError("status guard regression did not restore its temporary status-only changes")
+
+    result = {
+        "kind": "round46-r2-status-guard-regression/1",
+        "status": "passed",
+        "runner_version": ROUND46_RUNNER_VERSION,
+        "training_version": TRAINING_VERSION,
+        "head_at_regression": _run_git("rev-parse", "HEAD"),
+        "prelaunch_gate_sha256": _sha256(PRELAUNCH_GATE_PATH),
+        "old_v2_failure_reproduced_from_actual_archived_stop": {
+            "status": "passed",
+            "error": "tracked worktree is dirty; refusing ROUND46 environment entry: M runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+            "archived_stop_state_sha256": archived_v2_identity["archived_stop_state_sha256"],
+        },
+        "actual_task_state_then_preclaim_identity_passed": status_update_passed,
+        "mutable_status_paths_allowed": [
+            CURRENT_TASK_PATH.resolve().relative_to(REPO).as_posix(),
+            (R46_DIR / "CURRENT_TASK.json").resolve().relative_to(REPO).as_posix(),
+        ],
+        "scientific_source_refusals": rejected_changes,
+        "temporary_status_files_restored_byte_identically": True,
+        "counts_before": before["counts"],
+        "counts_after": after["counts"],
+        "normal_claims": after["normal_used"],
+        "reserve_claims": after["reserve_used"],
+        "environment_constructor_calls": after["counts"]["environment_constructor_calls"],
+        "run_invocation_calls": after["counts"]["run_invocation_calls"],
+        "completed_steps": after["counts"]["completed_steps"],
+        "ppo_updates": after["counts"]["ppo_update_calls"],
+        "optimizer_step_calls": after["counts"]["optimizer_step_calls"],
+        "checkpoint_write_calls": after["counts"]["checkpoint_write_calls"],
+        "checkpoint_write_delta": 0,
+        "synthetic_environment_files_written": 0,
+    }
+    _write_json(STATUS_GUARD_REGRESSION_PATH, result, immutable=True)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return result
+
+
+def _verify_status_guard_regression_receipt() -> None:
+    if not STATUS_GUARD_REGRESSION_PATH.is_file():
+        raise RuntimeError("ROUND46-R2 zero-environment status-guard regression is missing")
+    result = _json(STATUS_GUARD_REGRESSION_PATH)
+    expected_gate_sha = _sha256(PRELAUNCH_GATE_PATH)
+    if (result.get("kind") != "round46-r2-status-guard-regression/1"
+            or result.get("status") != "passed"
+            or result.get("runner_version") != ROUND46_RUNNER_VERSION
+            or result.get("training_version") != TRAINING_VERSION
+            or result.get("prelaunch_gate_sha256") != expected_gate_sha
+            or result.get("actual_task_state_then_preclaim_identity_passed") is not True
+            or result.get("temporary_status_files_restored_byte_identically") is not True
+            or result.get("checkpoint_write_delta") != 0
+            or any(result.get(key) != 0 for key in (
+                "normal_claims", "reserve_claims", "environment_constructor_calls",
+                "run_invocation_calls", "completed_steps", "ppo_updates",
+                "optimizer_step_calls"))):
+        raise RuntimeError("ROUND46-R2 zero-environment status-guard regression receipt failed")
+    relative = STATUS_GUARD_REGRESSION_PATH.relative_to(REPO).as_posix()
+    object_id = _run_git("rev-parse", f"HEAD:{relative}")
+    committed = subprocess.run(
+        ["git", "-C", str(REPO), "cat-file", "blob", object_id],
+        check=True, capture_output=True,
+    ).stdout
+    if hashlib.sha256(committed).hexdigest() != _sha256(STATUS_GUARD_REGRESSION_PATH):
+        raise RuntimeError("ROUND46-R2 status-guard regression receipt is not committed")
 
 
 def _check_first_four_report(seed: int, report: dict[str, Any]) -> None:
@@ -1723,6 +1998,7 @@ def execute() -> None:
     module.verify_prelaunch_identity = lambda _frozen=None: _verify_prelaunch_identity(runtime)
     module.ENFORCE_PRELAUNCH = True
     _verify_prelaunch_identity(runtime)
+    _verify_status_guard_regression_receipt()
     _assert_source_worktree_clean()
 
     try:
@@ -1807,6 +2083,8 @@ def main() -> None:
                        help="verify inputs and write the code/config/key freeze; zero environments")
     group.add_argument("--preflight", action="store_true",
                        help="run the zero-environment BC/RNG/Adam/runtime identity gate")
+    group.add_argument("--status-guard-regression", action="store_true",
+                       help="verify mutable task-state writes before pre-claim identity checks; zero environments")
     group.add_argument("--execute", action="store_true",
                        help="run only the frozen 384 training + 96 final evaluation plan")
     args = parser.parse_args()
@@ -1814,6 +2092,8 @@ def main() -> None:
         prepare()
     elif args.preflight:
         preflight()
+    elif args.status_guard_regression:
+        run_status_guard_regression()
     elif args.execute:
         execute()
     else:

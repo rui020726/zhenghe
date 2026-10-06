@@ -581,7 +581,7 @@ def run_preflight_regression(runner: Any, r45: Any,
         "optimizer_step_calls": 0,
     }
     if write_result:
-        result_path = runner.R46_DIR / "ROUND46_R2_CHECKPOINT_READBACK_REGRESSION.json"
+        result_path = runner.READBACK_REGRESSION_RESULT_PATH
         runner._write_json(result_path, result, immutable=True)
     return result
 
