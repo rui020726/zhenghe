@@ -1,0 +1,18 @@
+{
+  "kind": "round45-r2-r3-zero-env-seam-failure/1",
+  "status": "recovered_regression_harness_failure",
+  "phase": "first temporary synthetic successful key, before any production environment",
+  "exception_type": "EvalIndexError",
+  "exception_message": "row.artefacts.row path escapes the ROUND44 output because R3 receipt resolver used production RUN_DIR while the seam fixture used a temporary runtime root",
+  "source_head_before_fix": "52b7315521c53534560b5a8a4baaa5851de49103",
+  "production_environment_constructed_delta": 0,
+  "production_run_invocation_delta": 0,
+  "completed_steps_delta": 0,
+  "ppo_updates_delta": 0,
+  "optimizer_step_calls_delta": 0,
+  "checkpoint_write_calls_delta": 0,
+  "temporary_fixture_only": true,
+  "original_claim_sha256": "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f",
+  "original_row_sha256": "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+  "corrective_action": "bind module-level receipt RUN_DIR to the same temporary root for the duration of the seam fixture and restore it in finally"
+}

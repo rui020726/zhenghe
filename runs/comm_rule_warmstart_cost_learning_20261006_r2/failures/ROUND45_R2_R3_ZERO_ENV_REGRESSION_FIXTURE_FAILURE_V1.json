@@ -1,0 +1,19 @@
+{
+  "kind": "round45-r2-r3-zero-env-regression-failure/1",
+  "status": "recovered_fixture_failure",
+  "phase": "synthetic empty-transcript receipt case",
+  "exception_type": "RuntimeError",
+  "exception_message": "empty R3 transcript conflicts with relay_counters.ack_attempt_bytes",
+  "source_head_before_fix": "52b7315521c53534560b5a8a4baaa5851de49103",
+  "cause": "synthetic zero-cost relay fixture omitted ACK counters that are correctly required to be explicitly zero by the receipt validator",
+  "environment_constructed_delta": 0,
+  "run_invocation_delta": 0,
+  "completed_steps_delta": 0,
+  "ppo_updates_delta": 0,
+  "optimizer_step_calls_delta": 0,
+  "checkpoint_write_calls_delta": 0,
+  "original_claim_sha256": "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f",
+  "original_row_sha256": "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+  "corrective_action": "add explicit zero-valued ACK counters to synthetic receipt fixture, then rerun the identical zero-environment regression",
+  "scientific_row_changed": false
+}

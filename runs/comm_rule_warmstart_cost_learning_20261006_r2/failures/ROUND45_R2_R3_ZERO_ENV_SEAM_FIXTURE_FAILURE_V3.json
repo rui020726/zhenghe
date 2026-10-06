@@ -1,0 +1,16 @@
+{
+  "kind": "round45-r2-r3-zero-env-seam-failure/1",
+  "status": "recovered_regression_harness_failure",
+  "phase": "temporary synthetic seam run-count assertion",
+  "exception_type": "RuntimeError",
+  "exception_message": "returned step count 1000 differs from observed orchestrator completed steps 0",
+  "cause": "a prior synthetic fixture adjustment declared 1000 row steps without constructing a JointRun; the real _execute_cell correctly rejected the mismatch",
+  "production_environment_constructed_delta": 0,
+  "production_run_invocation_delta": 0,
+  "completed_steps_delta": 0,
+  "ppo_updates_delta": 0,
+  "optimizer_step_calls_delta": 0,
+  "checkpoint_write_calls_delta": 0,
+  "temporary_fixture_only": true,
+  "corrective_action": "keep synthetic row steps at zero and allow zero-step artifact receipt only under the explicit SEAM_TEST_MODE plus seam_regression key scope; production receipts continue to require 1000 steps"
+}
