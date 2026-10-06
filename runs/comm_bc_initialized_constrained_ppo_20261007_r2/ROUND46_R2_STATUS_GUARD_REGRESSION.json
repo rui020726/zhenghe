@@ -1,0 +1,113 @@
+{
+  "kind": "round46-r2-status-guard-regression/1",
+  "status": "passed",
+  "runner_version": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+  "head_at_regression": "c3232c7a316c280415d1b027fea6fa8ead2fc98e",
+  "prelaunch_gate_sha256": "ae5cc182976c810cf6d30cf1a387d3f064e83bd6f4e19820c08113d04d212ca5",
+  "old_v2_failure_reproduced_from_actual_archived_stop": {
+    "status": "passed",
+    "error": "tracked worktree is dirty; refusing ROUND46 environment entry: M runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+    "archived_stop_state_sha256": "a45bf011c9b88728214f8448e4eb751629eb233c12ccc3433095131d307ac79c"
+  },
+  "actual_task_state_then_preclaim_identity_passed": true,
+  "actual_git_porcelain_status_repr_after_task_state_write": "' M runs/comm_bc_initialized_constrained_ppo_20261007_r2/CURRENT_TASK.json\\n M runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json'",
+  "actual_git_porcelain_status_paths_after_task_state_write": [
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/CURRENT_TASK.json",
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json"
+  ],
+  "git_status_leading_space_preserved": true,
+  "git_status_baseline_repr": "' M runs/comm_bc_initialized_constrained_ppo_20261007_r2/CURRENT_TASK.json\\n M runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json'",
+  "git_status_restored_repr": "' M runs/comm_bc_initialized_constrained_ppo_20261007_r2/CURRENT_TASK.json\\n M runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json'",
+  "mutable_status_paths_allowed": [
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/CURRENT_TASK.json"
+  ],
+  "scientific_source_refusals": {
+    "runner_source": {
+      "status": "rejected by actual Git status",
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py",
+      "git_status_repr": "' M runs/comm_bc_initialized_constrained_ppo_20261007_r2/CURRENT_TASK.json\\n M runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json\\n M runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py'"
+    },
+    "frozen_configuration": {
+      "status": "rejected by actual Git status",
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_FROZEN_CONFIG.json",
+      "git_status_repr": "' M runs/comm_bc_initialized_constrained_ppo_20261007_r2/CURRENT_TASK.json\\n M runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json\\n M runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_FROZEN_CONFIG.json'"
+    }
+  },
+  "temporary_status_files_restored_byte_identically": true,
+  "source_and_frozen_config_changes_rejected_with_real_git_status": true,
+  "source_and_frozen_config_restored_byte_identically": true,
+  "source_and_frozen_config_sha256_before_after": {
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\r46_execute_r2.py": {
+      "before": "035d49799ebc3ce21eb6230fd36b6163af8bed7223b403e41b67c1d6712561f2",
+      "after": "035d49799ebc3ce21eb6230fd36b6163af8bed7223b403e41b67c1d6712561f2"
+    },
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_FROZEN_CONFIG.json": {
+      "before": "eed24787261055d1cb9727a8f8d86924ae222050be458331009013f9308498ae",
+      "after": "eed24787261055d1cb9727a8f8d86924ae222050be458331009013f9308498ae"
+    }
+  },
+  "counts_before": {
+    "normal_used": 0,
+    "reserve_used": 0,
+    "total_used": 0,
+    "environment_constructor_calls": 0,
+    "joint_run_build_failures": 0,
+    "joint_run_constructed_calls": 0,
+    "run_invocation_calls": 0,
+    "joint_run_method_calls": 0,
+    "run_return_calls": 0,
+    "run_failure_calls": 0,
+    "completed_steps": 0,
+    "completed_logical_jobs": 0,
+    "simulation_started": 0,
+    "technical_failed_claims": 0,
+    "retry_claims": 0,
+    "optimizer_step_calls": 0,
+    "optimizer_step_journal_entries": 0,
+    "ppo_update_calls": 0,
+    "ppo_update_journal_entries": 0,
+    "ppo_update_count_matches_committed_batches": true,
+    "checkpoint_write_calls": 16,
+    "checkpoint_write_journal_entries": 16,
+    "optimizer_step_count_matches_committed_batches": true,
+    "hard_cap": 504
+  },
+  "counts_after": {
+    "normal_used": 0,
+    "reserve_used": 0,
+    "total_used": 0,
+    "environment_constructor_calls": 0,
+    "joint_run_build_failures": 0,
+    "joint_run_constructed_calls": 0,
+    "run_invocation_calls": 0,
+    "joint_run_method_calls": 0,
+    "run_return_calls": 0,
+    "run_failure_calls": 0,
+    "completed_steps": 0,
+    "completed_logical_jobs": 0,
+    "simulation_started": 0,
+    "technical_failed_claims": 0,
+    "retry_claims": 0,
+    "optimizer_step_calls": 0,
+    "optimizer_step_journal_entries": 0,
+    "ppo_update_calls": 0,
+    "ppo_update_journal_entries": 0,
+    "ppo_update_count_matches_committed_batches": true,
+    "checkpoint_write_calls": 16,
+    "checkpoint_write_journal_entries": 16,
+    "optimizer_step_count_matches_committed_batches": true,
+    "hard_cap": 504
+  },
+  "normal_claims": 0,
+  "reserve_claims": 0,
+  "environment_constructor_calls": 0,
+  "run_invocation_calls": 0,
+  "completed_steps": 0,
+  "ppo_updates": 0,
+  "optimizer_step_calls": 0,
+  "checkpoint_write_calls": 16,
+  "checkpoint_write_delta": 0,
+  "synthetic_environment_files_written": 0
+}

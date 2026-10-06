@@ -1,8 +1,8 @@
 {
   "kind": "round46-r2-current-task/1",
-  "stage": "corrected runner /3 committed; formal preflight passed; actual Git status regression pending",
+  "stage": "ROUND46-R2 prelaunch passed; zero claims; status-guard regression is the next gate",
   "branch": "fix/comm-bc-initialization-readback",
-  "head": "8040af95ff0fe0164bf6a334d4e68780b5b748d7",
+  "head": "c3232c7a316c280415d1b027fea6fa8ead2fc98e",
   "runner_version_previous": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
   "runner_version_current": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
   "runner_source_sha256": "035d49799ebc3ce21eb6230fd36b6163af8bed7223b403e41b67c1d6712561f2",
@@ -44,5 +44,28 @@
   "python": "D:\\project_env\\python.exe",
   "runtime_device": "cpu",
   "training_started": false,
-  "next_action": "commit formal preflight receipts, run the actual task-state status regression and commit its receipt, then enter only the fixed plan if all gates pass"
+  "next_action": "commit formal preflight receipts, run the actual task-state status regression and commit its receipt, then enter only the fixed plan if all gates pass",
+  "repository": "D:\\code\\整合\\zhenghe-round42",
+  "actual_cursor": {
+    "normal_used": 0,
+    "reserve_used": 0,
+    "total_used": 0,
+    "environment_constructor_calls": 0,
+    "run_invocation_calls": 0,
+    "completed_steps": 0,
+    "ppo_update_calls": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_write_calls": 16,
+    "checkpoint_write_journal_entries": 16
+  },
+  "progress_artifacts": {
+    "available_seed11_ep0_u0": true,
+    "episodes_done": 0,
+    "updates": 0,
+    "optimizer_steps": 0,
+    "available_seed22_progress": false,
+    "available_seed33_progress": false,
+    "note": "Per-seed progress files absent for seeds 22/33; actual unclaimed cursor is taken from strict runtime ledger."
+  },
+  "next_actual_command": "D:\\project_env\\python.exe runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\r46_execute_r2.py --status-guard-regression; commit regression receipt and the two task-state files; then run --execute."
 }
