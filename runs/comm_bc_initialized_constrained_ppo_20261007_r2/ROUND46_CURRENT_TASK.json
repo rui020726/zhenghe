@@ -1,8 +1,8 @@
 {
   "kind": "round46-current-task/1",
-  "stage": "prepared; seam regression passed; formal preflight pending",
+  "stage": "formal zero-environment preflight passed; awaiting prelaunch receipt commit",
   "branch": "fix/comm-bc-initialization-readback",
-  "head": "f27bed1904ed3d8b08ead2d821c325bdaab6d04f",
+  "head": "f8d3380ab940579974875dfae34e838e4160400e",
   "runner_version": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
   "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
   "normal_environment_keys": 480,
@@ -16,5 +16,7 @@
   "checkpoint_write_calls": 6,
   "synthetic_fixture_checkpoint_writes": 6,
   "regression_status": "passed",
-  "formal_preflight": "pending"
+  "preflight_status": "passed",
+  "preflight_gate_sha256": "184d528cb1213adb1c293f63d15a4bb44bdc076ff3c40d03aed85005de26166f",
+  "training_started": false
 }
