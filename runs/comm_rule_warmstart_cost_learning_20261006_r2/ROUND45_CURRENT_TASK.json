@@ -10,7 +10,7 @@
   "prior_failed_real_bc_updates_preserved": 1000,
   "family_cumulative_bc_update_hard_cap": 4000,
   "this_attempt_bc_update_cap": 3000,
-  "stage": "R3 adoption and zero-environment receipt/seam regressions passed; final source commit and R3 freeze pending; no R3 environment or PPO started",
+  "stage": "R3 source committed and byte-bound; final freeze and all zero-environment gates passed; prelaunch identity commit pending",
   "pre_bc_freeze_sha256": "a42b6693ea0b3d83262517b386386f718d09038785b9e8ac1c79a09e52d5ed9c",
   "pre_bc_source_commit": "c47fb18eb15381841283fa83b42b01963c45e68f",
   "source_commit": "333d9226c6da46b0638b8a2078eb327666e816c4",
@@ -23,7 +23,7 @@
   "normal_environment_keys": 528,
   "technical_reserve_max": 24,
   "hard_environment_cap": 552,
-  "post_bc_freeze_sha256": "31cad256e95d48d9c307c4c5c2d0e0ccf5eff3d6a273649d32c0ffa65fef4311",
+  "post_bc_freeze_sha256": "d97115cb5a9b165fc67e98d25e1f2ea5d90bcdc9c12c7152719f8bc4d831fba8",
   "logical_key_plan_sha256": "6bbadc9634553e6cdd452172cb3237bd7a2cd793a60eca1f582ed80db1a04fca",
   "zero_environment_seam_gate": "passed",
   "zero_environment_seam_regression_sha256": "142ac5ffa15e6f26addc2d8e701ba4d2eb94661b1a132d11c750cf1631a7bfae",
@@ -98,8 +98,8 @@
     "type": "EvalIndexError",
     "message": "artifact receipt may only be created for a NEW evaluation row"
   },
-  "r3_post_bc_freeze_sha256": "1dff0c3eb233d0006968bb21c3c1e590a10e4b71c8d7da7ac52759d8e2e2de9e",
-  "r3_logical_key_plan_sha256": "bb8882f3f08dc192e2df61501a26175fbbb6441056ffcc563ddfb0a113c9747d",
+  "r3_post_bc_freeze_sha256": "d97115cb5a9b165fc67e98d25e1f2ea5d90bcdc9c12c7152719f8bc4d831fba8",
+  "r3_logical_key_plan_sha256": "7a8e946ec64b7fbe5ef9c3d210b02296141a09522f25053999fcc4bd1957af57",
   "adopted_control_receipt_sha256": "1fb20d0d523e93b4e16cd10c22e022807df130867f710b71176e252ba4cabf7c",
   "adopted_completed_logical_jobs": 1,
   "r2_post_bc_freeze_sha256": "31cad256e95d48d9c307c4c5c2d0e0ccf5eff3d6a273649d32c0ffa65fef4311",
@@ -165,8 +165,8 @@
       "path": "runs\\comm_rule_warmstart_cost_learning_20261006_r2\\failures\\ROUND45_R2_R3_ZERO_ENV_SEAM_FIXTURE_FAILURE_V5.json"
     }
   ],
-  "r3_prelaunch_receipt_status": "pending",
-  "r3_source_commit_status": "pending_force_add_and_commit_before_final_freeze",
+  "r3_prelaunch_receipt_status": "pending_seal",
+  "r3_source_commit_status": "passed",
   "r3_final_zero_environment_regressions": {
     "bc_receipt": {
       "ppo_updates_delta": 0,
@@ -187,8 +187,20 @@
       "optimizer_step_calls_delta": 0
     },
     "container": {
-      "status": "pending_after_committed_source_and_final_freeze",
-      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_ZERO_ENV_CONTAINER_REGRESSION_R3_FINAL.json"
+      "normal_claims_cumulative": 1,
+      "environment_constructed_delta": 0,
+      "checkpoint_write_calls": 0,
+      "optimizer_step_calls": 0,
+      "completed_steps_cumulative": 1000,
+      "sha256": "d4dd51a986dceb6c163781d95657cd64ce03b3558a62642e52bc648cedd159cd",
+      "environment_constructed_cumulative": 1,
+      "path": "runs\\comm_rule_warmstart_cost_learning_20261006_r2\\ROUND45_R2_ZERO_ENV_CONTAINER_REGRESSION_R3_FINAL.json",
+      "ppo_updates": 0,
+      "status": "passed",
+      "reserve_claims_cumulative": 0
     }
-  }
+  },
+  "r3_source_commit": "e405e7f3e8188841e3dfb48cec5901ed90eab77c",
+  "r3_runner_git_blob_sha1": "4071d3e3282e44973da20d9acf8ffce0deab0bab",
+  "r3_runner_source_sha256": "4c3d79e60dc3186832e7b23be0a4275d88f1b4250c64a5ff7df4c433b73512c6"
 }
