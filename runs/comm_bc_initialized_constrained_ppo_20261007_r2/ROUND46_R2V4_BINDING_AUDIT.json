@@ -1,0 +1,175 @@
+{
+  "kind": "round46-r2-v4-inner-claim-binding-audit/1",
+  "status": "confirmed_misbound",
+  "repository": "D:\\code\\整合\\zhenghe-round42",
+  "branch": "fix/comm-bc-initialization-readback",
+  "head": "02fd982354de2cf20e5363c8c68f50d9899eb1e9",
+  "observed_failure": "R2 prelaunch/freeze status is not passed",
+  "actual_call_chain": [
+    "R42 _execute_cell -> R45 claim -> R46 record_claim -> R45 _record_claim -> R44 claim -> verify_frozen_source"
+  ],
+  "binding_mechanism": {
+    "classification": "stale module-global function pointer in loaded R44 runtime module; not a verifier captured in the claim closure",
+    "r44_claim_source_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_dual_response_ablation_20261004\\r44_runtime.py",
+    "r44_claim_source_sha256": "aca3a837d6d29e3bf6256033f9580dfd7f72e45769af1470cc3f124f93555c0a",
+    "r44_claim_line": 150,
+    "r44_lookup_expression": "head = verify_frozen_source(frozen)",
+    "r44_verify_name_resolves_as": "module global in r44_runtime function globals",
+    "r45_load_runtime_source_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\r45_r2_execute_r3.py",
+    "r45_load_runtime_source_sha256": "f796ed07891bcc2457fe48e9ddd288a6c18c15a511fd8e505c5400a9e6819dd5",
+    "r45_assignment_line": 1239,
+    "r45_assignment": "r44_runtime.verify_frozen_source = verify_prelaunch_identity",
+    "r46_runner_source_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\r46_execute_r2.py",
+    "r46_runner_source_sha256": "035d49799ebc3ce21eb6230fd36b6163af8bed7223b403e41b67c1d6712561f2",
+    "r46_path_rebind_lines": "812-814 set R3_FREEZE_PATH/R3_PRELAUNCH_PATH to R46 files",
+    "r46_outer_override_line": 2433,
+    "r46_outer_override": "module.verify_prelaunch_identity = lambda ... _verify_prelaunch_identity(runtime)",
+    "r46_missing_action": "does not rebind R44 module global verify_frozen_source after replacing the R45 module attribute"
+  },
+  "actual_paths_read_by_stale_function": [
+    {
+      "role": "R3_PRELAUNCH_PATH",
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_PRELAUNCH_GATE.json",
+      "sha256": "ae5cc182976c810cf6d30cf1a387d3f064e83bd6f4e19820c08113d04d212ca5",
+      "kind": "round46-zero-environment-preflight/1",
+      "status": "passed",
+      "runner_version": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1"
+    },
+    {
+      "role": "R3_FREEZE_PATH",
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_RUNTIME_FREEZE.json",
+      "sha256": "f658d9cd045957fddefc50d05449af2d8365811f5d1f161953d98cdbee45904a",
+      "kind": "round44-dual-response-frozen-config/1",
+      "status": "prelaunch_frozen"
+    }
+  ],
+  "identity_expected_by_stale_function": {
+    "prelaunch_kind": "round45-r2-prelaunch-identity/6",
+    "freeze_kind": "round45-r2-post-bc-environment-freeze/6",
+    "same_round45_runner_version_required": true
+  },
+  "preserved_original_round45_files": [
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\ROUND45_R2_PRELAUNCH_IDENTITY_R3_FINAL3.json",
+      "sha256": "71d03472a69f14ae1b9b40261820902507620ee5e5c6a3a81114d263496fb4e8",
+      "kind": "round45-r2-prelaunch-identity/6",
+      "status": "passed",
+      "runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1+round45-r2-bc-receipt-adoption/4+round45-r2-empty-transcript-zero-closure/3+round45-r2-r3-prelaunch-identity/3+round45-r2-adopted-ledger-snapshot/1+round45-r2-status-path-normalization/1"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\ROUND45_R2_POST_BC_ENV_FREEZE_R3_FINAL3.json",
+      "sha256": "1deba66aa01aeb96782ecfffaf05f4c24a02b05fe8fcde9bb747d47ef9aaec67",
+      "kind": "round45-r2-post-bc-environment-freeze/6",
+      "status": "frozen_before_r3_continuation",
+      "runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1+round45-r2-bc-receipt-adoption/4+round45-r2-empty-transcript-zero-closure/3+round45-r2-r3-prelaunch-identity/3+round45-r2-adopted-ledger-snapshot/1+round45-r2-status-path-normalization/1"
+    }
+  ],
+  "actual_attempt": {
+    "head": "730679cf86330e64fff92c0638335aeb4d222156",
+    "exit_code": 1,
+    "claims": 0,
+    "environment_constructor_calls": 0,
+    "run_invocation_calls": 0,
+    "completed_steps": 0,
+    "ppo_updates": 0,
+    "optimizer_steps": 0,
+    "checkpoint_write_delta": 2,
+    "stop_state_sha256": "2f42fdf86a163e68e3f96618a8e835fd6d246140eec75e3464767253c3025016"
+  },
+  "archive_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v3_inner_gate_stop",
+  "archive_action_manifest": "ROUND46_R2_V3_STOP_ARCHIVE.json",
+  "archive_files": [
+    {
+      "role": "stop_evidence_copy",
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_STOP_STATE.json",
+      "archive": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v3_inner_gate_stop\\evidence\\ROUND46_STOP_STATE.json",
+      "action": "copied",
+      "size_bytes": 1989,
+      "sha256": "2f42fdf86a163e68e3f96618a8e835fd6d246140eec75e3464767253c3025016"
+    },
+    {
+      "role": "stop_evidence_copy",
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_EXECUTION_FAILURE.json",
+      "archive": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v3_inner_gate_stop\\evidence\\ROUND46_EXECUTION_FAILURE.json",
+      "action": "copied",
+      "size_bytes": 4754,
+      "sha256": "893e732e7ea0ce67bbeff7e6e8429a415365371900cc26dc8b03c9d94ffa655f"
+    },
+    {
+      "role": "stop_evidence_copy",
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_EXECUTION_FAILURE_TRACEBACK.txt",
+      "archive": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v3_inner_gate_stop\\evidence\\ROUND46_EXECUTION_FAILURE_TRACEBACK.txt",
+      "action": "copied",
+      "size_bytes": 3809,
+      "sha256": "136a193db6cdd4faa076d46e7589fe951ecc2aebc5d49cc56d3424e3b1fb158b"
+    },
+    {
+      "role": "stop_evidence_copy",
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_STOP_REPORT.md",
+      "archive": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v3_inner_gate_stop\\evidence\\ROUND46_STOP_REPORT.md",
+      "action": "copied",
+      "size_bytes": 2905,
+      "sha256": "a42f1d394411795810368f59baad2df421d1607300a3c02f1fb2e43eae5060f9"
+    },
+    {
+      "role": "runtime_ledger_snapshot",
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\runtime\\ROUND46_EXECUTION_LEDGER.json",
+      "archive": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v3_inner_gate_stop\\evidence\\ROUND46_EXECUTION_LEDGER.json",
+      "action": "copied",
+      "size_bytes": 1722,
+      "sha256": "b1f627db3446a83317d425bfc86fc3afb7a062dda9040213a47574bc4b114d3b"
+    },
+    {
+      "role": "checkpoint_write_journal_snapshot",
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\runtime\\checkpoint_writes.jsonl",
+      "archive": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v3_inner_gate_stop\\evidence\\checkpoint_writes.jsonl",
+      "action": "copied",
+      "entry_count": 18,
+      "size_bytes": 8831,
+      "sha256": "8f68b0ea38e046073720b72cb9b009a55345b496769d6104b486d2c42b99c288"
+    },
+    {
+      "role": "untrained_seed11_checkpoint",
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\checkpoints\\v2_train_s11_before_b0.pt",
+      "archive": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v3_inner_gate_stop\\checkpoints\\v2_train_s11_before_b0.pt",
+      "action": "moved_to_isolated_attempt_archive",
+      "size_bytes": 57477,
+      "sha256": "330a80eb646bf422fbe31024951cc88c15740cc97579c903b0686a78107f97ed",
+      "episodes_done": 0,
+      "updates": 0
+    },
+    {
+      "role": "untrained_seed11_checkpoint",
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\checkpoints\\v2_train_s11_ep0.pt",
+      "archive": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v3_inner_gate_stop\\checkpoints\\v2_train_s11_ep0.pt",
+      "action": "moved_to_isolated_attempt_archive",
+      "size_bytes": 57477,
+      "sha256": "330a80eb646bf422fbe31024951cc88c15740cc97579c903b0686a78107f97ed",
+      "episodes_done": 0,
+      "updates": 0
+    },
+    {
+      "role": "untrained_seed11_checkpoint",
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\checkpoints\\v2_train_s11.pt",
+      "archive": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v3_inner_gate_stop\\checkpoints\\v2_train_s11.pt",
+      "action": "moved_to_isolated_attempt_archive",
+      "size_bytes": 57477,
+      "sha256": "330a80eb646bf422fbe31024951cc88c15740cc97579c903b0686a78107f97ed",
+      "episodes_done": 0,
+      "updates": 0
+    },
+    {
+      "role": "untrained_progress_record",
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\training_progress\\seed11_ep000_u00_requested_limit_complete.json",
+      "archive": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v3_inner_gate_stop\\training_progress\\seed11_ep000_u00_requested_limit_complete.json",
+      "action": "moved_to_isolated_attempt_archive",
+      "size_bytes": 1211,
+      "sha256": "9eccfecdd2e773a31501e42e8d479efe51fd28f30de73108ddf57dbe02d582c5",
+      "episodes_done": 0,
+      "updates": 0,
+      "optimizer_steps": 0
+    }
+  ],
+  "raw_weights_remain_git_external": true,
+  "old_round45_gate_modified": false
+}
