@@ -1,10 +1,12 @@
 {
   "kind": "round46-r2-current-task/1",
-  "stage": "runner /3 path and Git status guards corrected; final freeze and formal preflight pending",
+  "stage": "corrected runner /3 freeze prepared; scientific configuration unchanged; formal preflight pending",
   "branch": "fix/comm-bc-initialization-readback",
-  "head": "1566e09f067a22e8e2822a063aa1c9c4971140c9",
-  "runner_version_current": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
-  "runner_version_proposed": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
+  "head": "7e149742a7805db75cf588716cbfbf1ae2202772",
+  "runner_version_previous": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
+  "runner_version_current": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
+  "runner_source_sha256": "035d49799ebc3ce21eb6230fd36b6163af8bed7223b403e41b67c1d6712561f2",
+  "freeze_input_route_audit_sha256": "18e57894e599c5bc646db20e72a44261fa293cdb69e684c234997d41f934481b",
   "preserved_prejournal_freeze_archive_sha256": "662e4a9fd531a7b8559063b4f34a4e0830fe618cf5e4f497bb0225dc0d1ef075",
   "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
   "fixed_plan": {
@@ -23,7 +25,7 @@
     "v3_fixture_writes": 6,
     "unclassified": 0,
     "r2_local_copy_created": true,
-    "actual_writer_rebind_probe": "passed; zero save calls yet"
+    "actual_writer_rebind_probe": "passed; 0 save calls yet; formal route save gate pending"
   },
   "counts": {
     "ppo_updates": 0,
@@ -39,5 +41,5 @@
   "python": "D:\\project_env\\python.exe",
   "runtime_device": "cpu",
   "training_started": false,
-  "next_action": "commit runner and audit, refreeze from committed source, run formal zero-environment preflight and actual Git-status regression, then enter only the fixed plan if all gates pass"
+  "next_action": "commit final freeze, run formal zero-environment preflight and actual Git-status regression, then enter only the fixed plan if all gates pass"
 }

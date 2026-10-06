@@ -136,7 +136,7 @@
   },
   "round42": {
     "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
-    "runner_version": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
+    "runner_version": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
     "reward_timing_version": "published-completion-event-at-relay-tick/2",
     "comm_action_eligibility": "first-report-only/1",
     "comm_action_semantics": "one-shot-send-skip/1",
@@ -149,7 +149,7 @@
       "round40_head": "8f8245a665b15960e70194fc6e245221b70db90e",
       "round42_basis_commit": "b6bf7ac4ce5e82c80c32f587e36e9599c0f5ddd0",
       "round42_previous_freeze_sha256": "409f65eef5ae1cfdb76f28fc788fdcf5674b8cc5d92395965090e371f7374ecc",
-      "runner_version": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
+      "runner_version": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
       "carryover_manifest_sha256": "53259276c726682eb7e75dd613f364bea5d403c3cc2df9a9043bbb211c358e4d",
       "runner_counting_regression_sha256": "fa0aef22b19c2ce67994819de5bfacf40e0e34563e3e1a34c0ca8345ab9a897b",
       "pure_compute_gate_sha256": "0fc68d41bdcbab32841b93c14272aaef6012459a80217dd3c219950e9b039bbc",
@@ -397,9 +397,9 @@
       },
       "eta_lambda": 0.5,
       "old_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/published-completion-event-at-relay-tick/2",
-      "execution_runner_version": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
+      "execution_runner_version": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
       "r43_delivery_head": "9f2b6b6411c50849ce1a9eedbaedffaf0aededa5",
-      "freeze_sha256": "15c5144c7877046a431b54b2df666caa0d78deeaf36ee11a3bb25e51aed148ae"
+      "freeze_sha256": "0c58e332bc169f598bead815cbb1a17b2704ba518a50299200e185f6b82ab978"
     },
     "allowed_differences_vs_round40": [
       "target action semantics: one-shot SEND_NOW/SKIP_EPISODE with per-target episode latch",

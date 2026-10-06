@@ -2,7 +2,7 @@
 
 ## Scope
 
-This correction is confined to the ROUND46 adapter and its zero-environment gates. The training semantic version, BC sources, model dimensions, optimizer, RNG source, scenario order, reward/cost math, quota, and fixed key plan remain unchanged. Runner identity remains `/3` until the corrected source is committed and frozen.
+This correction is confined to the ROUND46 adapter and its zero-environment gates. The training semantic version, BC sources, model dimensions, optimizer, RNG source, scenario order, reward/cost math, quota, and fixed key plan remain unchanged. The corrected runner is `/3`; the prepared freeze records source SHA256 `035d49799ebc3ce21eb6230fd36b6163af8bed7223b403e41b67c1d6712561f2` at prepare HEAD `7e149742a7805db75cf588716cbfbf1ae2202772`. The freeze commit is the next local commit.
 
 The earlier uncommitted `/3` prepare snapshot (before the journal-route correction) is preserved under `attempts/runner_v3_prejournal_refreeze/`; its archive manifest SHA256 is `662e4a9fd531a7b8559063b4f34a4e0830fe618cf5e4f497bb0225dc0d1ef075`. It was prepared at HEAD `1566e09f067a22e8e2822a063aa1c9c4971140c9`, before formal preflight, and had zero environments/claims/updates. The final `/3` freeze will be generated again from the committed corrected source.
 
@@ -39,5 +39,7 @@ Using `D:\project_env\python.exe` (Python 3.10.19; PyTorch 2.9.0+cu128; runtime 
 - claims, environment constructors, run invocations, PPO updates, and optimizer steps remain zero;
 - the old misrouted journal and R2 copy did not change during runtime configuration;
 - the actual porcelain output retains its leading space.
+
+The final prepared `ROUND46_CONFIGURATION_DIFF.json` matches the preserved pre-journal prepare on `training_version`, `scientific_changes`, `unchanged`, and `counts`; only execution identities/input audit hashes were refreshed. It still describes the sole scientific change as the same-seed ROUND45 four-module BC initialization. Prepare reported 0 environment constructions, 0 PPO updates, and 0 optimizer steps.
 
 The actual synthetic save route regression, final ROUND46 prepare/freeze, formal checkpoint/readback preflight, and real status-update-to-preclaim regression are still required before the fixed plan may enter its three seed first-four gates. No scientific execution has started.

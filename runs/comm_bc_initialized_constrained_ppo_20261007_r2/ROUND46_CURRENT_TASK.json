@@ -1,8 +1,8 @@
 {
   "kind": "round46-current-task/1",
-  "stage": "runner /3 path and Git status guards corrected; final freeze and formal preflight pending",
+  "stage": "prepared; zero environments",
   "branch": "fix/comm-bc-initialization-readback",
-  "head": "1566e09f067a22e8e2822a063aa1c9c4971140c9",
+  "head": "7e149742a7805db75cf588716cbfbf1ae2202772",
   "runner_version": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
   "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
   "normal_environment_keys": 480,
@@ -15,8 +15,8 @@
   "optimizer_step_calls": 0,
   "checkpoint_write_calls": 15,
   "checkpoint_write_journal_entries": 15,
-  "checkpoint_journal_route_audit": "ROUND46_R2_CHECKPOINT_JOURNAL_ROUTE_AUDIT_R2.json",
-  "preserved_prejournal_freeze_archive_sha256": "662e4a9fd531a7b8559063b4f34a4e0830fe618cf5e4f497bb0225dc0d1ef075",
+  "runner_source_sha256": "035d49799ebc3ce21eb6230fd36b6163af8bed7223b403e41b67c1d6712561f2",
+  "checkpoint_journal_route_audit_sha256": "18e57894e599c5bc646db20e72a44261fa293cdb69e684c234997d41f934481b",
   "training_started": false,
-  "next_action": "commit the narrow runner and audit, regenerate the freeze, then run the formal zero-environment preflight"
+  "next_action": "commit the prepared freeze, then run formal zero-environment preflight and real task-state status regression"
 }

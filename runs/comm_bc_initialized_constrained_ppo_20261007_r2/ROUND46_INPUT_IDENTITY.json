@@ -561,5 +561,33 @@
     },
     "ep0_and_rolling_byte_identical": true,
     "new_training_may_load_prior_checkpoint": false
-  }
+  },
+  "prior_round46_r2_preclaim_attempt": {
+    "kind": "round46-r2-runner-v2-preclaim-stop-archive/1",
+    "archive_manifest_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/attempts/runner_v2_preclaim_guard/ATTEMPT_ARCHIVE.json",
+    "archive_manifest_sha256": "eac5f0390a4ccb86bc986d1b764b7a6d5653f29cc324f29befb119cb5abe4403",
+    "runner_version": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
+    "counts": {
+      "checkpoint_write_journal_entries": 8,
+      "ppo_updates": 0,
+      "claims": 0,
+      "optimizer_step_calls": 0,
+      "completed_steps": 0,
+      "environment_constructor_calls": 0,
+      "run_invocation_calls": 0,
+      "preclaim_training_checkpoint_write_calls": 2,
+      "synthetic_fixture_writes": 6,
+      "checkpoint_write_calls": 8
+    },
+    "archived_untrained_checkpoint_count": 3,
+    "archived_checkpoint_sha256": "bef3a94f534bbc5be1a13c666143c3796c464c2810a0db0f2ae68df8e3d6d5e1",
+    "archived_stop_state_sha256": "a45bf011c9b88728214f8448e4eb751629eb233c12ccc3433095131d307ac79c",
+    "archived_recovery_receipt_sha256": "f9926f50f0dc7964926226646623e80846ac4f48287e8af938dacd21c90c39e0",
+    "archived_ledger_snapshot_sha256": "e78d463077d39b54d4c8b380da7bf70d7a7c868feacaf4b4a541839569e6b8fd",
+    "active_prior_checkpoint_count": 0,
+    "new_training_may_load_prior_checkpoint": false
+  },
+  "checkpoint_journal_route_audit_sha256": "18e57894e599c5bc646db20e72a44261fa293cdb69e684c234997d41f934481b",
+  "checkpoint_journal_route_legacy_sha256": "16d8f73c6606d44a4d5ebaf4b2c43d5976c8dc7f76ec4e0859b0974d14d0d8bd",
+  "checkpoint_journal_route_initial_entry_count": 15
 }
