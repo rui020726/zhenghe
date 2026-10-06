@@ -271,7 +271,8 @@ def run_preflight_regression(runner: Any, r45: Any,
         raise RuntimeError("R2 legacy failure path was not retained for the independent counterexample")
 
     r40_test = _load_actual_r40_adapter(runner)
-    fixture_root = runner.R46_DIR / "test_fixtures"
+    fixture_version = runner.ROUND46_RUNNER_VERSION.split("+", 1)[0].rsplit("/", 1)[-1]
+    fixture_root = runner.R46_DIR / "test_fixtures" / f"runner_{fixture_version}"
     before_all = _runtime_counts(runtime)
     fixture_manifest = _make_fixtures(runner, r45, runtime, r40_test, fixture_root)
     after_fixtures = _runtime_counts(runtime)

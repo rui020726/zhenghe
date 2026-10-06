@@ -5,3 +5,13 @@ Preserve the 384 training + 96 evaluation plan, technical reserve 24, hard cap 5
 ## Latest continuation instruction
 
 Preserve the actual v2 pre-claim stop and all eight checkpoint writes; never resume its three untrained checkpoints. The only mutable-path exception is the exact pair `CURRENT_TASK.json` and `ROUND46_CURRENT_TASK.json`; all code, science config, test, model inputs, key plan, freeze and prelaunch identities remain hash-checked. Run a zero-environment regression through task-state update and the actual pre-claim identity hook, allowing those two status files while still refusing source/freeze changes. Freeze a new runner version, rerun formal preflight, then continue the already-authorized fixed 480-key plan automatically after all three first-four gates pass. Do not create an extra environment, use reserve for this zero-claim failure, alter training semantics, or use the archived checkpoint. Keep all work local and stop after final local delivery.
+
+## ROUND46-R2 当前续接（2026-10-07）
+
+- 唯一任务仍是修复本地运行器计数/身份接缝，然后按原冻结计划执行：480 normal + 24 reserve、hard cap 504；384 训练键 + 96 固定评估键。首四集门禁通过后自动续完；不新增 BC、reference、rule、smoke、场景、超参或确认实验；不推送、合并、部署。
+- 训练语义仍为 `constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2`。只更新本轮 runner 执行身份；三 BC 模型仍只读四模块新初始化，空 Adam 十参数、λ=1，并使用登记的 R44 ep0 rollout RNG。
+- 使用已核验原实验解释器 `D:\project_env\python.exe`（Python 3.10.19、PyTorch 2.9.0+cu128），本轮运行设备固定 CPU。不要换用 PATH 上的解释器、扫描其他 Conda 环境或安装依赖。
+- R42 保存包装器在加载 ROUND45 运行配置时捕获 ROUND45 的 `checkpoint_writes.jsonl`。ROUND46 适配器现将真实 `trainer.save_checkpoint` 包装器闭包和 `r42_run.RUN_DIR` 重新绑定到 R2 输出；正式 preflight 会通过真实保存调用验证，要求 R2 journal 与 R2 ledger 一致、旧目录 journal hash 不变，claim/PPO/Adam/environment 均为零。此验证中的一笔合成 ep0 checkpoint 写入单独计数。
+- 旧目录误路由 journal 的 15 条记录原样保留，SHA256=`16d8f73c6606d44a4d5ebaf4b2c43d5976c8dc7f76ec4e0859b0974d14d0d8bd`；R2 有同字节本地副本。记录逐条按目标文件和 fixture/archive SHA 对账：v2 合成夹具 6、v2 首 claim 前保存 2、v3 失败探针夹具 1、v3 成功夹具 6；全部 ep0/0 updates，未分类 0。ROUND45 stop ledger checkpoint writes 为 0。不得删除、折算或将旧记录解释为 BC 更新。
+- Git porcelain 解析现保留真实 `git status --porcelain` 的首行 XY 空格。待正式 preflight commit 后，必须通过真实 `task-state update -> verify_prelaunch_identity` 回归：只容许上述两个 status 文件，源码和冻结配置改动必须实际被拒绝。
+- 当前现场账本：normal/reserve claims 0/0、环境构造 0、run 0、完成步数 0、PPO 0、Adam step 0；已登记 checkpoint writes 15（全部历史合成/ep0 写入）。下一步为提交窄修与审计材料、重做最终冻结和正式零环境 preflight；合成路由验证通过后再进入三个 seed 各首 4 集真实 gate。
