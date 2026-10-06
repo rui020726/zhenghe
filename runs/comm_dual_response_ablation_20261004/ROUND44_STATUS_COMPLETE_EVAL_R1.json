@@ -1,0 +1,94 @@
+{
+  "kind": "round44-project-status/5",
+  "round": 44,
+  "status": "complete_local_delivery",
+  "execution_matrix_status": "complete",
+  "branch": "exp/comm-dual-response-ablation",
+  "scientific_execution_head": "09d758ccd16d3bbeaca525dee97155d391fb1404",
+  "execution_identity_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_dual_response_ablation_20261004\\runtime\\ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R3.json",
+  "execution_identity_sha256": "5acf73e18e5b6f7d16fc9bb76dabf92942d7643e0d73cd4090041c02155fac75",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/published-completion-event-at-relay-tick/2",
+  "runner_version": "counted-jointrun-proxy/1+eval-key-index/1",
+  "receipt_representation_version": "round44-strict-json-value/1",
+  "eta_lambda_old": 0.05,
+  "eta_lambda_new": 0.5,
+  "result": "development_block_joint_improvement_not_observed",
+  "normal_claims": 480,
+  "reserve_claims": 1,
+  "total_claims": 481,
+  "hard_cap": 504,
+  "environment_constructor_calls": 481,
+  "run_invocation_calls": 481,
+  "completed_steps": 481000,
+  "ppo_update_calls": 96,
+  "optimizer_step_calls": 1016,
+  "checkpoint_write_calls": 297,
+  "training_episodes": 384,
+  "new_final_evaluations": 96,
+  "reserve_retry_key": [
+    11,
+    "greedy",
+    1301000
+  ],
+  "reserve_retry_attempt": 2,
+  "retry_gate_sha256": "1c47af79b9f95b4e7b523644bbc4c602d77b7d26627a0b57d2fc71eb3e5403c8",
+  "reused_old_r43_ep128_evaluations": 96,
+  "independent_confirmation": false,
+  "remote_push": false,
+  "report_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_dual_response_ablation_20261004\\ROUND44_REPORT.md",
+  "report_sha256": "5bf67af0d7b8f3ddc4bc269dd3efa59a2071cd73b4bf06a68fb39c72a22df5d3",
+  "raw_artifact_count": 3452,
+  "preserved_historical_stop_report": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_dual_response_ablation_20261004\\ROUND44_STOP_REPORT_EVAL_RECEIPT_MISMATCH.md",
+  "eval_matrix_audit_path": "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MATRIX_AUDIT.json",
+  "eval_matrix_audit_sha256": "16e8c9d628ca2bd8351b21a6e9fcccac335ecd6404136e41761cbbf51dda45bc",
+  "eval_matrix_unique_keys": 96,
+  "eval_matrix_group_counts": {
+    "s11_greedy": 16,
+    "s11_sampled": 16,
+    "s22_greedy": 16,
+    "s22_sampled": 16,
+    "s33_greedy": 16,
+    "s33_sampled": 16
+  },
+  "attempt_lineage": {
+    "key": [
+      11,
+      "greedy",
+      1301000
+    ],
+    "scientific_attempt": 2,
+    "attempt2_row_sha256": "76d8e3fb4896ed9464cbc4d3b5608c1b25294ce3305c22b0cbbf4a481a04164c",
+    "attempt2_claim_sha256": "9acc52b91428fce0c9ccc7478b7df43a324b6664cac11918e14caf23ccb70eda",
+    "attempt1_row_sha256": "409e8bd5d6a08a988c34486c1476c89104d341189c8064c988402387787417e5",
+    "attempt1_preserved": true,
+    "attempt1_in_scientific_index": false
+  },
+  "pre_eval_immutable_manifest_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EVAL_INPUT_IMMUTABLE_MANIFEST_R1.json",
+  "pre_eval_immutable_manifest_sha256": "b3bb6f7c2488b2acb03f467c799b6eb74554795cf9041eb30529031774a3ebeb",
+  "training_checkpoint_files_verified_against_pre_eval_manifest": 204,
+  "training_checkpoint_missing_or_hash_size_mismatches": 0,
+  "training_counter_journals_verified_against_pre_eval_manifest": {
+    "optimizer_step_calls.jsonl": {
+      "path": "runs/comm_dual_response_ablation_20261004/runtime/optimizer_step_calls.jsonl",
+      "sha256": "7d47c9a208160ac0ef943663eb7b04f21bf1ca91072dc8ec619c7e5395771bd5",
+      "record_count": 1016,
+      "current_record_count": 1016,
+      "matches_pre_eval_hash": true
+    },
+    "ppo_update_calls.jsonl": {
+      "path": "runs/comm_dual_response_ablation_20261004/runtime/ppo_update_calls.jsonl",
+      "sha256": "6f653bcb1bdd55ef570322ea1ac7d719e103ff798f5483942abf464ed2df93a0",
+      "record_count": 96,
+      "current_record_count": 96,
+      "matches_pre_eval_hash": true
+    },
+    "checkpoint_writes.jsonl": {
+      "path": "runs/comm_dual_response_ablation_20261004/runtime/checkpoint_writes.jsonl",
+      "sha256": "7957ec093b345da3b0a1488e0fb09641ce437fd45d28d23ac2436ea793718bdd",
+      "record_count": 297,
+      "current_record_count": 297,
+      "matches_pre_eval_hash": true
+    }
+  },
+  "post_evaluation_raw_manifest_used_as_baseline": false
+}

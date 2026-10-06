@@ -1,33 +1,24 @@
 {
   "active_execution_quota_snapshot": {
     "normal_plan": 480,
-    "normal_used": 385,
-    "normal_remaining": 95,
+    "normal_used": 480,
+    "normal_remaining": 0,
     "reserve_max": 24,
     "reserve_used": 1,
     "reserve_remaining": 23,
-    "total_used": 386,
+    "total_used": 481,
     "hard_cap": 504,
-    "hard_cap_remaining": 118,
+    "hard_cap_remaining": 23,
     "planned_new_eval_cells": 96,
-    "valid_new_eval_cells": 1,
-    "next_authorized_attempt": {
-      "attempt": 1,
-      "category": "normal",
-      "key": [
-        11,
-        "greedy",
-        1301001
-      ],
-      "blocked_until": "receipt-resume source and R2 identity pass; retry gate is rebuilt from durable attempt2"
-    },
+    "valid_new_eval_cells": 96,
+    "next_authorized_attempt": null,
+    "training_complete": 384,
+    "training_authorized_again": false,
     "failed_key": [
       11,
       "greedy",
       1301000
-    ],
-    "training_complete": 384,
-    "training_authorized_again": false
+    ]
   },
   "active_round": 44,
   "ambient_rng_read_only_guard": {
@@ -95,49 +86,40 @@
     "sha256": "d6ebc99354f02c61f6f986cd76adc612449a126bd612d896c12e8a271b15adf1",
     "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3"
   },
-  "current_head_at_persist": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
+  "current_head_at_persist": "09d758ccd16d3bbeaca525dee97155d391fb1404",
   "current_quota": {
     "normal_plan": 480,
-    "normal_used": 385,
-    "normal_remaining": 95,
+    "normal_used": 480,
+    "normal_remaining": 0,
     "reserve_max": 24,
     "reserve_used": 1,
     "reserve_remaining": 23,
-    "total_used": 386,
+    "total_used": 481,
     "hard_cap": 504,
-    "hard_cap_remaining": 118,
+    "hard_cap_remaining": 23,
     "planned_new_eval_cells": 96,
-    "valid_new_eval_cells": 1,
-    "next_authorized_attempt": {
-      "attempt": 1,
-      "category": "normal",
-      "key": [
-        11,
-        "greedy",
-        1301001
-      ],
-      "blocked_until": "receipt-resume source and R2 identity pass; retry gate is rebuilt from durable attempt2"
-    }
+    "valid_new_eval_cells": 96,
+    "next_authorized_attempt": null
   },
-  "current_stage": "ROUND44 queue cursor regression passed and R3 source was frozen. The first R3 identity was correctly rejected on stale raw evidence hashes before claims; preserve it and create an exact identity-hash repair source/identity pair, then resume the original 95 normal cells.",
+  "current_stage": "ROUND44 fixed evaluation and local evidence package complete; no push or further run.",
   "current_state": {
     "as_of": "2026-10-06",
     "counts": {
-      "checkpoint_write_calls": 297,
-      "completed_logical_jobs": 385,
-      "completed_steps": 386000,
-      "environment_constructor_calls": 386,
-      "joint_run_constructed_calls": 386,
-      "normal_used": 385,
-      "optimizer_step_calls": 1016,
-      "planned_new_eval_cells": 96,
-      "ppo_update_calls": 96,
+      "normal_used": 480,
       "reserve_used": 1,
-      "retry_claims": 1,
-      "run_invocation_calls": 386,
+      "total_used": 481,
+      "environment_constructor_calls": 481,
+      "run_invocation_calls": 481,
+      "completed_steps": 481000,
+      "completed_logical_jobs": 480,
       "technical_failed_claims": 1,
-      "total_used": 386,
-      "valid_new_eval_cells": 1
+      "retry_claims": 1,
+      "optimizer_step_calls": 1016,
+      "ppo_update_calls": 96,
+      "checkpoint_write_calls": 297,
+      "valid_new_eval_cells": 96,
+      "planned_new_eval_cells": 96,
+      "training_complete": 384
     },
     "ep128_index": {
       "11": {
@@ -266,7 +248,7 @@
     "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3"
   },
   "latest_current_head_at_continuation": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
-  "next_action": "Commit the exact five-path identity-hash repair source as a direct child of the preserved failed R3 identity attempt; verify the explicit ancestry and path allowlists; freeze and verify the corrected R3 gate/identity; rehydrate retry gate from attempt2 with no new claim, then execute only the original 95 normal cells and complete report/local commits.",
+  "next_action": "Stop after this local evidence commit; no further run or push.",
   "old_projection_failure_evidence": {
     "episodes": 4,
     "old_projection_differences_each_episode": 3,
@@ -347,26 +329,17 @@
   },
   "quota": {
     "normal_plan": 480,
-    "normal_used": 385,
-    "normal_remaining": 95,
+    "normal_used": 480,
+    "normal_remaining": 0,
     "reserve_max": 24,
     "reserve_used": 1,
     "reserve_remaining": 23,
-    "total_used": 386,
+    "total_used": 481,
     "hard_cap": 504,
-    "hard_cap_remaining": 118,
+    "hard_cap_remaining": 23,
     "planned_new_eval_cells": 96,
-    "valid_new_eval_cells": 1,
-    "next_authorized_attempt": {
-      "attempt": 1,
-      "category": "normal",
-      "key": [
-        11,
-        "greedy",
-        1301001
-      ],
-      "blocked_until": "receipt-resume source and R2 identity pass; retry gate is rebuilt from durable attempt2"
-    }
+    "valid_new_eval_cells": 96,
+    "next_authorized_attempt": null
   },
   "r43_read_only_parent_delivery": "9f2b6b6411c50849ce1a9eedbaedffaf0aededa5",
   "repository": "D:\\code\\整合\\zhenghe-round42",
@@ -400,10 +373,10 @@
       "a48261e5aa1def4ddf130f1377dbdff0e4cb51d1",
       "9c7fb0bc61da2ca925ff51ff8658c166cf5e2ba4",
       "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
-      "<R3 identity-hash repair source direct child of a7e2f86>"
+      "c918259ee5d8c862f501fbdb30ca948fc05446d8"
     ],
     "receipt_resume_revision_scope": "same five eval-only source/test/evidence paths; row JSON equality, claim-count reconciliation, retry-gate rehydration and R2 identity paths only",
-    "resume_source_head": "pending exact direct child of the preserved first R3 identity attempt",
+    "resume_source_head": "c918259ee5d8c862f501fbdb30ca948fc05446d8",
     "identity_artifacts": [
       "runtime/ROUND44_EVAL_ONLY_GATE_R3.json",
       "runtime/ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R3.json"
@@ -424,10 +397,10 @@
     "first_R3_identity_attempt_failure": "verify_eval_identity rejected before any claim at the immutable/prelaunch evidence check",
     "identity_hash_repair_source_parent": "a7e2f86392d31346a9bcfcc4cd8fe86b7068d066",
     "identity_hash_repair_revision_scope": "same five eval-only source/test/task/evidence paths; bind committed LF evidence blob hashes and preserve first rejected R3 identity attempt",
-    "final_identity_commit": "exact direct child of the identity-hash repair source with only the two R3 gate/identity paths"
+    "final_identity_commit": "09d758ccd16d3bbeaca525dee97155d391fb1404"
   },
   "stage": "eval_receipt_repair_then_fixed_evaluation",
-  "status": "authorized_eval_only_R3_identity_hash_repair_and_resume_pending",
+  "status": "complete_local_delivery",
   "stop_record": {
     "failure": "NameError: name 'run_module' is not defined in _compare_first_batch",
     "failure_capture": "runs/comm_dual_response_ablation_20261004/ROUND44_EXECUTION_FAILURE_CAPTURE_SEED11_B0.txt",
@@ -456,7 +429,26 @@
       "ambient_rng_preserved": true
     },
     "new_execution_identity": "Corrected R3 identity, direct child of the identity-hash repair source; first R3 identity attempt a7e2f86 remains preserved as rejected before claims.",
-    "progress": "R1 and absent R2 progress remain preserved; create a separate R3 progress file only after the corrected R3 identity passes."
+    "progress": "Completed: corrected R3 identity passed before evaluation; existing attempt2 was consumed once, the original remaining 95 normal cells completed, and no further attempt is authorized.",
+    "completion_lineage": {
+      "key": [
+        11,
+        "greedy",
+        1301000
+      ],
+      "attempt1": {
+        "preserved": true,
+        "row_sha256": "409e8bd5d6a08a988c34486c1476c89104d341189c8064c988402387787417e5",
+        "included_in_scientific_index": false
+      },
+      "attempt2": {
+        "attempt": 2,
+        "row_sha256": "76d8e3fb4896ed9464cbc4d3b5608c1b25294ce3305c22b0cbbf4a481a04164c",
+        "claim_sha256": "9acc52b91428fce0c9ccc7478b7df43a324b6664cac11918e14caf23ccb70eda",
+        "unique_index_entries": 1
+      },
+      "strict_index_status": "passed"
+    }
   },
   "claim_queue_cursor_repair": {
     "finding": "The installed guard validated keys[index], while successful completion popped keys[0] and then separately incremented index. After the first completion the fixed schedule could advance twice and reject/skip the next normal key.",
@@ -501,5 +493,63 @@
     "checkpoint_writes": 0,
     "attempt2_unchanged": true,
     "R1_R2_artifacts_unchanged": true
+  },
+  "final_report": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_dual_response_ablation_20261004\\ROUND44_REPORT.md",
+    "sha256": "5bf67af0d7b8f3ddc4bc269dd3efa59a2071cd73b4bf06a68fb39c72a22df5d3"
+  },
+  "eval_execution_identity": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_dual_response_ablation_20261004\\runtime\\ROUND44_EVAL_ONLY_EXECUTION_IDENTITY_R3.json",
+    "sha256": "5acf73e18e5b6f7d16fc9bb76dabf92942d7643e0d73cd4090041c02155fac75",
+    "source_commit": "c918259ee5d8c862f501fbdb30ca948fc05446d8",
+    "execution_commit": "09d758ccd16d3bbeaca525dee97155d391fb1404"
+  },
+  "final_eval_index_audit": {
+    "path": "runs/comm_dual_response_ablation_20261004/ROUND44_EVAL_MATRIX_AUDIT.json",
+    "sha256": "16e8c9d628ca2bd8351b21a6e9fcccac335ecd6404136e41761cbbf51dda45bc",
+    "status": "passed",
+    "cell_count": 96,
+    "unique_eval_keys": 96,
+    "group_counts": {
+      "s11_greedy": 16,
+      "s11_sampled": 16,
+      "s22_greedy": 16,
+      "s22_sampled": 16,
+      "s33_greedy": 16,
+      "s33_sampled": 16
+    },
+    "analysis_input": "r44_analysis.py reads NEW rows only from eval_audit.entries"
+  },
+  "post_execution_artifact_integrity": {
+    "baseline_manifest_path": "runs/comm_dual_response_ablation_20261004/runtime/ROUND44_EVAL_INPUT_IMMUTABLE_MANIFEST_R1.json",
+    "baseline_manifest_sha256": "b3bb6f7c2488b2acb03f467c799b6eb74554795cf9041eb30529031774a3ebeb",
+    "baseline_manifest_status": "passed",
+    "checkpoint_files_declared": 204,
+    "checkpoint_files_missing": 0,
+    "checkpoint_hash_or_size_mismatches": 0,
+    "counter_journals": {
+      "optimizer_step_calls.jsonl": {
+        "path": "runs/comm_dual_response_ablation_20261004/runtime/optimizer_step_calls.jsonl",
+        "sha256": "7d47c9a208160ac0ef943663eb7b04f21bf1ca91072dc8ec619c7e5395771bd5",
+        "record_count": 1016,
+        "current_record_count": 1016,
+        "matches_pre_eval_hash": true
+      },
+      "ppo_update_calls.jsonl": {
+        "path": "runs/comm_dual_response_ablation_20261004/runtime/ppo_update_calls.jsonl",
+        "sha256": "6f653bcb1bdd55ef570322ea1ac7d719e103ff798f5483942abf464ed2df93a0",
+        "record_count": 96,
+        "current_record_count": 96,
+        "matches_pre_eval_hash": true
+      },
+      "checkpoint_writes.jsonl": {
+        "path": "runs/comm_dual_response_ablation_20261004/runtime/checkpoint_writes.jsonl",
+        "sha256": "7957ec093b345da3b0a1488e0fb09641ce437fd45d28d23ac2436ea793718bdd",
+        "record_count": 297,
+        "current_record_count": 297,
+        "matches_pre_eval_hash": true
+      }
+    },
+    "post_evaluation_raw_manifest_used_as_baseline": false
   }
 }
