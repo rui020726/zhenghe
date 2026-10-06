@@ -1,0 +1,112 @@
+{
+  "kind": "round45-r2-post-launch-stop/1",
+  "status": "stopped_after_first_control_run_receipt_failure",
+  "branch": "exp/comm-rule-warmstart-cost-learning-r2",
+  "runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+  "source_commit": "a09d22e95329da161b789f29c3225ce098a20045",
+  "freeze_commit": "bd41d230be817f96014b772c6f24ed578e80a44b",
+  "prelaunch_commit": "514142bc847efb2746046bfcf26c2d58ae8a9233",
+  "identities": {
+    "post_bc_freeze_sha256": "31cad256e95d48d9c307c4c5c2d0e0ccf5eff3d6a273649d32c0ffa65fef4311",
+    "logical_key_plan_sha256": "6bbadc9634553e6cdd452172cb3237bd7a2cd793a60eca1f582ed80db1a04fca",
+    "prelaunch_receipt_sha256": "d085fb1764b9d9021dff409fffc687ac194b6e5c1e32f7f96c371c511a2a7cc5",
+    "zero_environment_seam_regression_sha256": "142ac5ffa15e6f26addc2d8e701ba4d2eb94661b1a132d11c750cf1631a7bfae",
+    "zero_environment_container_regression_sha256": "e51c21eb263cd433ba4c85a41700d097d19643e4f48ec0b049252007715b90d8"
+  },
+  "failure": {
+    "phase": "post-run booked/receipt hook, before logical-key completion",
+    "exception_type": "EvalIndexError",
+    "exception_message": "artifact receipt may only be created for a NEW evaluation row",
+    "root_cause_from_frozen_source": "R44 booked calls create_claim_artifact_receipt for eval rows; that R44 final-matrix index accepts only model_arm=NEW, while this registered BC-only row has model_arm=BC_ONLY_R2.",
+    "r44_runtime_sha256": "aca3a837d6d29e3bf6256033f9580dfd7f72e45769af1470cc3f124f93555c0a",
+    "r44_eval_index_sha256": "27131543835537325a0f8749dae0c4a5230638da106b09e2a45713f17f97e7fa"
+  },
+  "cell": {
+    "logical_job": "r45_bc_control_s11_scene1301000",
+    "attempt": 1,
+    "seed": 11,
+    "mode": "greedy",
+    "scene": 1301000,
+    "model_arm": "BC_ONLY_R2",
+    "claim_path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/launch_claims/r45_bc_control_s11_scene1301000/attempt_0001.json",
+    "claim_sha256": "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f",
+    "claim_status": "failed_technical",
+    "run_return_calls": 1,
+    "completed_steps": 1000,
+    "simulation_started": true,
+    "registered_complete": false,
+    "r44_eval_artifact_receipt_present": false,
+    "round45_artifact_receipt_present": false,
+    "raw_row_metrics_not_admitted_to_scientific_gate": {
+      "spent_bytes": 7284,
+      "on_time_tasks": 6
+    }
+  },
+  "raw_artifacts_preserved": [
+    {
+      "role": "row",
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/rows/v2_r45_bc_greedy_s11_scene1301000_s1301000_a1.json",
+      "size_bytes": 347215,
+      "sha256": "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16"
+    },
+    {
+      "role": "lifecycle",
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/logs/v2_r45_bc_greedy_s11_scene1301000_s1301000_a1_rp.jsonl",
+      "size_bytes": 556118,
+      "sha256": "ad0c7be3728b4a5173ac9e7339397498770e0cd53f27ee5162b7ef6dd7a1f3e8"
+    },
+    {
+      "role": "transcript",
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/logs/v2_r45_bc_greedy_s11_scene1301000_s1301000_a1_ct.jsonl",
+      "size_bytes": 5171,
+      "sha256": "5c2700772eafba0b9c522e72fe8c69c93fa5672e41606a5a2bd55204984786e5"
+    },
+    {
+      "role": "tape",
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/logs/v2_r45_bc_greedy_s11_scene1301000_s1301000_a1_tape.jsonl",
+      "size_bytes": 185829,
+      "sha256": "a5800c36faa8caab7396e3b963786375845933c0af6ee85b133077316ea72b5f"
+    }
+  ],
+  "counts": {
+    "bc_real_updates_this_attempt": 3000,
+    "bc_family_cumulative_real_updates": 4000,
+    "synthetic_optimizer_updates_previously_used": 2,
+    "normal_claims_used": 1,
+    "technical_reserve_claims_used": 0,
+    "total_claims_used": 1,
+    "environment_constructor_calls": 1,
+    "run_invocation_calls": 1,
+    "run_return_calls": 1,
+    "full_1000_step_runs_returned": 1,
+    "completed_logical_jobs": 0,
+    "valid_registered_control_rows": 0,
+    "technical_failed_claims": 1,
+    "reserve_retry_attempts": 0,
+    "ppo_updates": 0,
+    "adam_steps": 0,
+    "checkpoint_writes": 0,
+    "new_bc_training": false
+  },
+  "plan": {
+    "normal_keys_planned": 528,
+    "technical_reserve_max": 24,
+    "hard_cap": 552,
+    "bc_control_keys_unstarted": 47,
+    "ppo_episodes_unstarted": 384,
+    "final_evaluations_unstarted": 96
+  },
+  "retry_decision": {
+    "attempted": false,
+    "reason": "The environment completed all 1000 steps and returned before the receipt hook failed. The frozen R2 retry guard refuses retry of a claim with run_return_calls>0 or completed_steps>=1000; the execution basis also says not to rewrite a failed original as complete and permits only one mechanical repair, already used for the pre-environment eval-container defect."
+  },
+  "interpretation": {
+    "scientific_gate_evaluated": false,
+    "row_admitted_to_control_gate": false,
+    "scientific_failure_claimed": false,
+    "next_action_requires_new_decision": "Authorize or decline a second, versioned, zero-environment repair to separate BC-only receipts from R44 NEW final-matrix receipts and define how to account for this already completed but unregistered key."
+  },
+  "remote_push": false,
+  "deployment": false
+}

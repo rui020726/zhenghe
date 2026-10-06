@@ -10,13 +10,13 @@
   "prior_failed_real_bc_updates_preserved": 1000,
   "family_cumulative_bc_update_hard_cap": 4000,
   "this_attempt_bc_update_cap": 3000,
-  "stage": "corrected R2 runner, BC models, 528 keys, and zero-environment seam/container regressions frozen; ready for 48 controls",
+  "stage": "stopped after first BC-only control: R44 evaluation receipt rejected the BC_ONLY_R2 row",
   "pre_bc_freeze_sha256": "a42b6693ea0b3d83262517b386386f718d09038785b9e8ac1c79a09e52d5ed9c",
   "pre_bc_source_commit": "c47fb18eb15381841283fa83b42b01963c45e68f",
   "source_commit": "333d9226c6da46b0638b8a2078eb327666e816c4",
   "real_bc_updates": 3000,
   "synthetic_optimizer_updates": 2,
-  "environment_constructed": 0,
+  "environment_constructed": 1,
   "ppo_updates": 0,
   "remote_push": false,
   "family_cumulative_real_bc_updates": 4000,
@@ -24,7 +24,7 @@
   "technical_reserve_max": 24,
   "hard_environment_cap": 552,
   "post_bc_freeze_sha256": "31cad256e95d48d9c307c4c5c2d0e0ccf5eff3d6a273649d32c0ffa65fef4311",
-  "logical_key_plan_sha256": "482d7942dcf5b88b807524124ad8d6f1b1fd6de8fcf2e37bbaf158023430b11f",
+  "logical_key_plan_sha256": "6bbadc9634553e6cdd452172cb3237bd7a2cd793a60eca1f582ed80db1a04fca",
   "zero_environment_seam_gate": "passed",
   "zero_environment_seam_regression_sha256": "142ac5ffa15e6f26addc2d8e701ba4d2eb94661b1a132d11c750cf1631a7bfae",
   "environment_claims_before_prelaunch": 0,
@@ -33,7 +33,7 @@
   "python_executable": "D:\\project_env\\python.exe",
   "device": "cpu",
   "prelaunch_receipt_sha256": "d085fb1764b9d9021dff409fffc687ac194b6e5c1e32f7f96c371c511a2a7cc5",
-  "updated_at_local": "2026-10-06 18:12:26",
+  "updated_at_local": "2026-10-06 18:29:56",
   "pre_env_stops": [
     {
       "kind": "ROUND45-R2 pre-environment runner interface failure",
@@ -58,8 +58,44 @@
       "preserved_evidence": "ROUND45_R2_PRE_ENV_ENTRY_FAILURE_V1.json"
     }
   ],
-  "normal_claims": 0,
+  "normal_claims": 1,
   "reserve_claims": 0,
   "corrected_runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1",
-  "pre_env_stops_preserved": 1
+  "pre_env_stops_preserved": 1,
+  "corrected_source_commit": "a09d22e95329da161b789f29c3225ce098a20045",
+  "corrected_freeze_commit": "bd41d230be817f96014b772c6f24ed578e80a44b",
+  "corrected_prelaunch_commit": "514142bc847efb2746046bfcf26c2d58ae8a9233",
+  "run_return_calls": 1,
+  "completed_steps": 1000,
+  "completed_logical_jobs": 0,
+  "valid_registered_control_rows": 0,
+  "post_launch_stops": [
+    {
+      "kind": "ROUND45-R2 post-run receipt integration failure",
+      "head": "514142bc847efb2746046bfcf26c2d58ae8a9233",
+      "logical_job": "r45_bc_control_s11_scene1301000",
+      "attempt": 1,
+      "exception": {
+        "type": "EvalIndexError",
+        "message": "artifact receipt may only be created for a NEW evaluation row"
+      },
+      "claim_path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/launch_claims/r45_bc_control_s11_scene1301000/attempt_0001.json",
+      "claim_sha256": "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f",
+      "claim_status": "failed_technical",
+      "row_path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/rows/v2_r45_bc_greedy_s11_scene1301000_s1301000_a1.json",
+      "row_sha256": "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+      "environment_constructor_calls": 1,
+      "run_invocation_calls": 1,
+      "run_return_calls": 1,
+      "completed_steps": 1000,
+      "ppo_updates": 0,
+      "optimizer_step_calls": 0,
+      "reserve_retry_attempted": false,
+      "preserved_evidence": "ROUND45_R2_POST_LAUNCH_STOP_V1.json"
+    }
+  ],
+  "stop_reason": {
+    "type": "EvalIndexError",
+    "message": "artifact receipt may only be created for a NEW evaluation row"
+  }
 }
