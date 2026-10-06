@@ -1,8 +1,8 @@
 {
   "kind": "round46-current-task/1",
-  "stage": "ROUND46-R2/4 runner committed; V4 freeze prepared; zero-environment preflight pending",
+  "stage": "ROUND46-R2/4 stopped before V4 prelaunch gate; hash namespace mismatch",
   "branch": "fix/comm-bc-initialization-readback",
-  "head": "351eed33e640c3c2edcc5d2345df0958587baa4f",
+  "head": "774c821d1b7e9786d4450ae36c3aa2c2c4811302",
   "runner_version_previous": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
   "runner_version_current": "round46-bc-initialized-constrained-ppo/4+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/1+reused-zero-environment-gates/1",
   "runner_source_sha256": "822e5d1d9dd4bcc6a0903d19d12a9bdf503d2e9c7763e3573ab19603ec560b98",
@@ -45,7 +45,7 @@
   "python": "D:\\project_env\\python.exe",
   "runtime_device": "cpu",
   "training_started": false,
-  "next_action": "commit the six V4 freeze artifacts and task state; run reuse-only zero-environment preflight and commit its gate",
+  "next_action": "stop; obtain authorization for a separately versioned runner and freeze before any further preflight or execution",
   "repository": "D:\\code\\整合\\zhenghe-round42",
   "actual_cursor": {
     "normal_used": 0,
@@ -68,7 +68,7 @@
     "available_seed33_progress": false,
     "note": "Per-seed progress files absent for seeds 22/33; actual unclaimed cursor is taken from strict runtime ledger."
   },
-  "next_actual_command": "Run reuse-only zero-environment V4 preflight after the freeze artifacts are committed; do not rerun old fixtures.",
+  "next_actual_command": "STOPPED: V4 preflight rejected CRLF-normalized Git evidence before gate creation; do not patch or rerun under the committed V4 freeze.",
   "round": 46,
   "execution_attempted": true,
   "execution_exit_code": 1,
@@ -84,7 +84,9 @@
     "updates": 0
   },
   "v4_freeze_status": "prepared; zero environments; no training",
-  "v4_preflight_gate": "pending",
+  "v4_preflight_gate": "failed_before_receipt",
+  "v4_preflight_failure": "ROUND46_R2_V4_PREFLIGHT_FAILURE.json",
+  "v4_execute_invoked": false,
   "old_zero_environment_regressions_reexecuted": false,
   "v3_stop_archive_sha256": "c66fb42fa8fc1e4513eb6a768b14ea24e231091da55c14e6c47b7ccadc0d327a",
   "v4_binding_audit_sha256": "140bba1fcc4141df4b1cedb6117fe6cd51d22fc1129520ec735794c498c30a6b",

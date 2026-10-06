@@ -1,0 +1,19 @@
+Command:
+D:\project_env\python.exe runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py --preflight
+
+Exit code: 1
+
+Traceback (repository-relative paths; terminal rendered the Chinese path segment with replacement characters):
+  File "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py", line 3382, in <module>
+    main()
+  File "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py", line 3370, in main
+    preflight()
+  File "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py", line 1823, in preflight
+    _preflight_reuse_v3_zero_environment_evidence()
+  File "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py", line 1607, in _preflight_reuse_v3_zero_environment_evidence
+    _require_committed_file(path, expected)
+  File "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py", line 1119, in _require_committed_file
+    raise RuntimeError(f"ROUND46 required committed evidence is not byte-identical: {relative}")
+RuntimeError: ROUND46 required committed evidence is not byte-identical: runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V3_STOP_ARCHIVE.json
+
+The stop occurred while validating prior committed evidence. No prelaunch receipt was written. The source file was restored byte-identically to the committed V4 freeze after the failure was captured.

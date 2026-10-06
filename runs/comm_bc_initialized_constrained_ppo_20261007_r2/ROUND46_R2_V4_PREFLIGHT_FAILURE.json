@@ -1,0 +1,66 @@
+{
+  "kind": "round46-r2-v4-preflight-stop/1",
+  "status": "stopped_before_claim",
+  "round": 46,
+  "branch": "fix/comm-bc-initialization-readback",
+  "head_at_failure": "774c821d1b7e9786d4450ae36c3aa2c2c4811302",
+  "runner_version": "round46-bc-initialized-constrained-ppo/4+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/1+reused-zero-environment-gates/1",
+  "runner_source_sha256": "822e5d1d9dd4bcc6a0903d19d12a9bdf503d2e9c7763e3573ab19603ec560b98",
+  "freeze_commit": "774c821d1b7e9786d4450ae36c3aa2c2c4811302",
+  "freeze_config_sha256": "c90ce53f896c3ea4f77a07c46ad850ea7c2c86e918924a00f19b4341f39cbc4f",
+  "input_identity_sha256": "43b48bc9ad1f9dd2b68af36bda8c0a417dd2ec3f331ff2be91a5740da68bf1df",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+  "command": "D:\\project_env\\python.exe runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py --preflight",
+  "exit_code": 1,
+  "failure": {
+    "type": "RuntimeError",
+    "message": "ROUND46 required committed evidence is not byte-identical: runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V3_STOP_ARCHIVE.json",
+    "location": "_preflight_reuse_v3_zero_environment_evidence -> _require_committed_file",
+    "traceback_file": "ROUND46_R2_V4_PREFLIGHT_FAILURE_TRACEBACK.txt"
+  },
+  "hash_namespaces_at_failure": {
+    "v3_stop_archive_worktree_file_sha256": "c66fb42fa8fc1e4513eb6a768b14ea24e231091da55c14e6c47b7ccadc0d327a",
+    "v3_stop_archive_crlf_normalized_sha256": "80438b581c28ccd13dd6f535af4a551f242da0f08c0356e6d76ce77e538b19aa",
+    "v3_stop_archive_git_blob_sha256": "80438b581c28ccd13dd6f535af4a551f242da0f08c0356e6d76ce77e538b19aa",
+    "interpretation": "The committed blob equals the CRLF-normalized worktree contents. The V4 helper compared the Git blob hash directly to the raw worktree file hash and rejected this line-ending normalization. This is a preflight implementation error, not source or archive content drift."
+  },
+  "v4_gate_created": false,
+  "v4_binding_regression_run": false,
+  "v4_status_guard_reuse_receipt_created": false,
+  "execute_invoked": false,
+  "training_started": false,
+  "counts_at_stop": {
+    "normal_claims": 0,
+    "reserve_claims": 0,
+    "environment_constructor_calls": 0,
+    "run_invocation_calls": 0,
+    "completed_steps": 0,
+    "ppo_updates": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_write_calls": 18,
+    "checkpoint_write_journal_entries": 18,
+    "v4_preflight_checkpoint_write_delta": 0,
+    "active_checkpoint_files": 0,
+    "active_progress_files": 0
+  },
+  "unchanged_stop_snapshots": {
+    "ledger_sha256": "b1f627db3446a83317d425bfc86fc3afb7a062dda9040213a47574bc4b114d3b",
+    "checkpoint_journal_sha256": "8f68b0ea38e046073720b72cb9b009a55345b496769d6104b486d2c42b99c288",
+    "ledger_matches_v3_stop_archive": true,
+    "checkpoint_journal_matches_v3_stop_archive": true
+  },
+  "earlier_prepare_attempt": {
+    "status": "stopped_before_v4_freeze_write",
+    "cause": "prepare tried to recreate the historical 15-entry route-journal copy after the V3 stop had extended the local journal to 18 entries",
+    "corrected_by_commit": "351eed33e640c3c2edcc5d2345df0958587baa4f",
+    "subsequent_prepare_status": "passed",
+    "environment_constructor_calls": 0,
+    "claims": 0,
+    "optimizer_step_calls": 0
+  },
+  "frozen_runner_restored_after_stop": true,
+  "frozen_runner_worktree_sha256": "822e5d1d9dd4bcc6a0903d19d12a9bdf503d2e9c7763e3573ab19603ec560b98",
+  "old_round45_gate_modified": false,
+  "network_or_push": false,
+  "next_action": "Stop. Do not patch or rerun under the committed V4 freeze. A separately authorized runner identity and new freeze are required to correct Git/worktree line-ending hash handling."
+}
