@@ -112,6 +112,77 @@ def _module_hash(module: torch.nn.Module) -> str:
     return digest.hexdigest()
 
 
+BC_CHECKPOINT_SERIALIZATION_REPAIR_VERSION = "round45-bc-nested-controller-state/2"
+
+
+def _checkpoint_controller_state(controller: Any) -> dict[str, Any]:
+    """Clone the controller's nested module state dict for a CPU checkpoint payload."""
+    if any(parameter.device.type != "cpu" for parameter in controller.parameters):
+        raise RuntimeError("ROUND45 BC checkpoints require the registered CPU device")
+    state = controller.state_dict()
+    if not isinstance(state, dict):
+        raise TypeError("controller state_dict must be a mapping")
+    return copy.deepcopy(state)
+
+
+def build_bc_checkpoint_payload(controller: Any, optimizer: torch.optim.Optimizer,
+                                metadata: dict[str, Any]) -> dict[str, Any]:
+    """Build the unchanged nested BC checkpoint schema from live production objects."""
+    if "controller" in metadata or "bc_optimizer" in metadata:
+        raise ValueError("checkpoint metadata cannot replace controller or optimizer state")
+    payload = copy.deepcopy(metadata)
+    payload["controller"] = _checkpoint_controller_state(controller)
+    payload["bc_optimizer"] = copy.deepcopy(optimizer.state_dict())
+    return payload
+
+
+def write_bc_checkpoint(destination: Any, payload: dict[str, Any]) -> None:
+    """Write the production checkpoint payload to an exclusive path or binary stream."""
+    if payload.get("kind") != "round45-bc-post-model/1":
+        raise ValueError("unexpected ROUND45 BC checkpoint kind")
+    if isinstance(destination, (str, os.PathLike)):
+        path = Path(destination)
+        with path.open("xb") as handle:
+            torch.save(payload, handle)
+            handle.flush()
+            os.fsync(handle.fileno())
+        return
+    torch.save(payload, destination)
+
+
+def read_bc_checkpoint(source: Any) -> dict[str, Any]:
+    """Read the production nested checkpoint schema without restoring RNG or optimizer."""
+    if isinstance(source, (str, os.PathLike)):
+        with Path(source).open("rb") as handle:
+            payload = torch.load(handle, map_location="cpu", weights_only=False)
+    else:
+        payload = torch.load(source, map_location="cpu", weights_only=False)
+    if (not isinstance(payload, dict)
+            or payload.get("kind") != "round45-bc-post-model/1"
+            or not isinstance(payload.get("controller"), dict)
+            or not isinstance(payload.get("bc_optimizer"), dict)):
+        raise ValueError("invalid ROUND45 BC checkpoint payload")
+    expected_modules = {"trunk", "action_head", "value_task_head", "value_cost_head"}
+    if set(payload["controller"]) != expected_modules:
+        raise ValueError("ROUND45 BC checkpoint module keys do not match the frozen schema")
+    if set(payload["bc_optimizer"]) != {"state", "param_groups"}:
+        raise ValueError("ROUND45 BC Adam state keys do not match the frozen schema")
+    return payload
+
+
+def load_bc_controller_state(controller: Any, payload: dict[str, Any]) -> None:
+    """Load only the four nested controller modules; never restore BC Adam or RNG."""
+    state = payload.get("controller")
+    if not isinstance(state, dict):
+        raise ValueError("ROUND45 BC checkpoint has no nested controller state")
+    if set(state) != {"trunk", "action_head", "value_task_head", "value_cost_head"}:
+        raise ValueError("ROUND45 BC controller modules differ from the frozen schema")
+    controller.inner.trunk.load_state_dict(state["trunk"])
+    controller.inner.action_head.load_state_dict(state["action_head"])
+    controller.inner.value_head.load_state_dict(state["value_task_head"])
+    controller.cost_head.load_state_dict(state["value_cost_head"])
+
+
 def _rng_snapshot() -> dict[str, Any]:
     return {
         "python": random.getstate(),
@@ -453,25 +524,20 @@ def train_seed(seed: int, records: list[dict[str, Any]], *, dataset_sha256: str,
                              "invoked": step_index, "returned": step_index},
         }
         _write_exclusive(metrics_path, result)
-        payload = {
+        checkpoint_metadata = {
             "kind": "round45-bc-post-model/1", "seed": seed,
             "bc_version": BC_VERSION, "ppo_training_version": PPO_TRAINING_VERSION,
             "dataset_sha256": dataset_sha256,
             "r44_fresh_ep0_sha256": initial_hash,
             "post_bc_parameter_sha256": final_hash,
-            "controller": {name: value.detach().cpu().clone()
-                           for name, value in controller.state_dict().items()},
-            "bc_optimizer": copy.deepcopy(optimizer.state_dict()),
             "bc_updates": BC_UPDATES,
             "task_head_sha256": task_head_after,
             "cost_head_sha256": cost_head_after,
             "metrics_sha256": sha256_file(metrics_path),
             "parameter_scope": parameter_scope,
         }
-        with checkpoint_path.open("xb") as handle:
-            torch.save(payload, handle)
-            handle.flush()
-            os.fsync(handle.fileno())
+        payload = build_bc_checkpoint_payload(controller, optimizer, checkpoint_metadata)
+        write_bc_checkpoint(checkpoint_path, payload)
         return {
             "seed": seed, "checkpoint": str(checkpoint_path),
             "checkpoint_sha256": sha256_file(checkpoint_path),

@@ -1,0 +1,42 @@
+{
+  "kind": "round45-bc-checkpoint-serialization-regression/2",
+  "status": "passed",
+  "repair_version": "round45-bc-nested-controller-state/2",
+  "production_functions": [
+    "build_bc_checkpoint_payload",
+    "write_bc_checkpoint",
+    "read_bc_checkpoint",
+    "load_bc_controller_state"
+  ],
+  "roundtrip_transport": "io.BytesIO; no checkpoint file created",
+  "fixture_only_not_a_real_bc_checkpoint": true,
+  "old_frozen_comprehension_fails_on_actual_controller": true,
+  "old_failure": "'collections.OrderedDict' object has no attribute 'detach'",
+  "module_parameter_sha256_before": {
+    "trunk": "b1d3494d691270bfe31a4479f985ab271c7eced3d2b0df333408be0ddee1c7b7",
+    "action_head": "919b468b0b64ea3563ad9b09f2002236cf54fe7a18cfd260a81814acccc3e7b1",
+    "task_value_head": "e94ae85e5c97bfc5d9157370f03a5ac789507093f6151e135e0a2338537656b6",
+    "cost_value_head": "2678d4c8b7b1caa8a3c2f19375ad7deb93dadf5da18cc70b48a65f148032765a"
+  },
+  "module_parameter_sha256_after": {
+    "trunk": "b1d3494d691270bfe31a4479f985ab271c7eced3d2b0df333408be0ddee1c7b7",
+    "action_head": "919b468b0b64ea3563ad9b09f2002236cf54fe7a18cfd260a81814acccc3e7b1",
+    "task_value_head": "e94ae85e5c97bfc5d9157370f03a5ac789507093f6151e135e0a2338537656b6",
+    "cost_value_head": "2678d4c8b7b1caa8a3c2f19375ad7deb93dadf5da18cc70b48a65f148032765a"
+  },
+  "actor_task_cost_forward_equal": true,
+  "nested_state_tensor_count": 10,
+  "adam_state_entries": 6,
+  "adam_slot_keys": [
+    "step",
+    "exp_avg",
+    "exp_avg_sq"
+  ],
+  "adam_state_hash_before": "56b679922362ab38ce39a4ff0a0148593accec094517458fab1d72495b57b77d",
+  "adam_state_hash_after": "56b679922362ab38ce39a4ff0a0148593accec094517458fab1d72495b57b77d",
+  "serialized_bytes": 75919,
+  "rng_unchanged": true,
+  "optimizer_step_calls": 0,
+  "synthetic_optimizer_updates": 0,
+  "environment_constructed": 0
+}
