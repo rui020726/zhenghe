@@ -37,9 +37,10 @@ RUNNER_VERSION = (
     "round45-bc-nested-controller-state/2+round45-postbc-readback/1+"
     "round45-attempt/2+r2-durable-key-consumer/1+"
     "round45-r2-four-module-bc-eval/1+"
-    "round45-r2-bc-receipt-adoption/2+"
-    "round45-r2-empty-transcript-zero-closure/2+"
-    "round45-r2-r3-prelaunch-identity/1"
+    "round45-r2-bc-receipt-adoption/4+"
+    "round45-r2-empty-transcript-zero-closure/3+"
+    "round45-r2-r3-prelaunch-identity/2+"
+    "round45-r2-adopted-ledger-snapshot/1"
 )
 ADOPTABLE_ORIGIN_RUNNER_VERSION = (
     "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+"
@@ -47,13 +48,15 @@ ADOPTABLE_ORIGIN_RUNNER_VERSION = (
     "round45-attempt/2+r2-durable-key-consumer/1+"
     "round45-r2-four-module-bc-eval/1"
 )
-ADOPTION_PATH = RUN_DIR / "ROUND45_R2_ADOPTED_CONTROL_R3.json"
-R3_FREEZE_PATH = RUN_DIR / "ROUND45_R2_POST_BC_ENV_FREEZE_R3_FINAL.json"
-R3_KEY_PLAN_PATH = RUN_DIR / "ROUND45_R2_ENVIRONMENT_KEY_PLAN_R3_FINAL.json"
-R3_PRELAUNCH_PATH = RUN_DIR / "ROUND45_R2_PRELAUNCH_IDENTITY_R3_FINAL.json"
-R3_SEAM_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_ZERO_ENV_SEAM_REGRESSION_R3_FINAL.json"
-R3_CONTAINER_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_ZERO_ENV_CONTAINER_REGRESSION_R3_FINAL.json"
-R3_BC_RECEIPT_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_BC_RECEIPT_REGRESSION_R3_FINAL.json"
+ADOPTION_PATH = RUN_DIR / "ROUND45_R2_ADOPTED_CONTROL_R3_FINAL2.json"
+R3_FREEZE_PATH = RUN_DIR / "ROUND45_R2_POST_BC_ENV_FREEZE_R3_FINAL2.json"
+R3_KEY_PLAN_PATH = RUN_DIR / "ROUND45_R2_ENVIRONMENT_KEY_PLAN_R3_FINAL2.json"
+R3_PRELAUNCH_PATH = RUN_DIR / "ROUND45_R2_PRELAUNCH_IDENTITY_R3_FINAL2.json"
+R3_SEAM_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_ZERO_ENV_SEAM_REGRESSION_R3_FINAL2.json"
+R3_CONTAINER_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_ZERO_ENV_CONTAINER_REGRESSION_R3_FINAL2.json"
+R3_BC_RECEIPT_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_BC_RECEIPT_REGRESSION_R3_FINAL2.json"
+R3_LEDGER_READBACK_PATH = RUN_DIR / "ROUND45_R2_ADOPTED_LEDGER_READBACK_R3_FINAL2.json"
+R3_EXECUTION_LEDGER_PATH = RUN_DIR / "runtime" / "ROUND45_R2_EXECUTION_LEDGER_R3_FINAL2.json"
 
 CURRENT_CONTEXT: contextvars.ContextVar[dict[str, Any] | None] = contextvars.ContextVar(
     "round45_r2_key_context", default=None)
@@ -170,10 +173,10 @@ def verify_prelaunch_identity(_frozen: dict[str, Any] | None = None) -> str:
         raise RuntimeError("R2 prelaunch identity or post-BC freeze is missing")
     receipt = _json(receipt_path)
     frozen = _json(freeze_path)
-    if (receipt.get("kind") != "round45-r2-prelaunch-identity/4"
+    if (receipt.get("kind") != "round45-r2-prelaunch-identity/5"
             or receipt.get("status") != "passed"
             or receipt.get("runner_version") != RUNNER_VERSION
-            or frozen.get("kind") != "round45-r2-post-bc-environment-freeze/4"
+            or frozen.get("kind") != "round45-r2-post-bc-environment-freeze/5"
             or frozen.get("status") != "frozen_before_r3_continuation"
             or frozen.get("runner_version") != RUNNER_VERSION):
         raise RuntimeError("R2 prelaunch/freeze status is not passed")
@@ -208,7 +211,9 @@ def verify_prelaunch_identity(_frozen: dict[str, Any] | None = None) -> str:
         raise RuntimeError("R3 adopted control receipt identity changed")
     seam_result = _json(seam_path)
     container_result = _json(container_path)
-    if (seam_result.get("status") != "passed"
+    if (seam_result.get("kind") != "round45-r2-zero-environment-consumption-regression/3"
+            or seam_result.get("status") != "passed"
+            or container_result.get("kind") != "round45-r2-zero-environment-container-eval-regression/3"
             or container_result.get("status") != "passed"
             or container_result.get("environment_constructed_delta") != 0
             or container_result.get("environment_constructed") != 1
@@ -216,21 +221,32 @@ def verify_prelaunch_identity(_frozen: dict[str, Any] | None = None) -> str:
             or container_result.get("reserve_claims") != 0
             or container_result.get("run_calls") != 1
             or container_result.get("completed_steps") != 1000
+            or container_result.get("completed_claim_jobs") != 0
+            or container_result.get("adopted_after_receipt_failure_jobs") != 1
+            or container_result.get("effective_unique_valid_jobs_including_adoptions") != 1
             or container_result.get("ppo_updates") != 0
             or container_result.get("optimizer_step_calls") != 0
             or container_result.get("checkpoint_write_calls") != 0
             or _json(adoption_regression_path).get("kind")
-            != "round45-r2-zero-environment-bc-receipt-regression/2"
+            != "round45-r2-zero-environment-bc-receipt-regression/3"
             or _json(adoption_regression_path).get("status") != "passed"
             or _json(adoption_regression_path).get("environment_constructed_delta") != 0
             or _json(adoption_regression_path).get("ppo_updates_delta") != 0
             or _json(adoption_regression_path).get("optimizer_step_calls_delta") != 0
-            or _json(adoption_regression_path).get("checkpoint_write_calls_delta") != 0):
+            or _json(adoption_regression_path).get("checkpoint_write_calls_delta") != 0
+            or _json(adoption_regression_path).get("ledger_adoption_summary") != {
+                "completed_claim_jobs": 0,
+                "adopted_after_receipt_failure_jobs": 1,
+                "effective_unique_valid_jobs_including_adoptions": 1,
+            }):
         raise RuntimeError("R3 zero-environment regression results are not clean")
     if (receipt.get("historical_environment_constructed_before_r3") != 1
             or receipt.get("historical_normal_claims_before_r3") != 1
             or receipt.get("historical_reserve_claims_before_r3") != 0
             or receipt.get("historical_completed_steps_before_r3") != 1000
+            or receipt.get("raw_completed_claim_jobs_before_r3") != 0
+            or receipt.get("adopted_after_receipt_failure_jobs_before_r3") != 1
+            or receipt.get("effective_unique_valid_jobs_including_adoptions_before_r3") != 1
             or receipt.get("environment_constructed_during_r3_prelaunch") != 0
             or receipt.get("ppo_updates_before_seal") != 0
             or receipt.get("optimizer_step_calls_before_seal") != 0
@@ -543,7 +559,8 @@ def _load_adopted_control(context: dict[str, Any],
     if not ADOPTION_PATH.is_file():
         return None
     adoption = _json(ADOPTION_PATH)
-    if (adoption.get("status") != "adopted_after_receipt_failure"
+    if (adoption.get("kind") != "round45-r2-adopted-control-receipt/2"
+            or adoption.get("status") != "adopted_after_receipt_failure"
             or adoption.get("logical_job") != context["logical_job"]
             or adoption.get("origin_runner_version") != ADOPTABLE_ORIGIN_RUNNER_VERSION
             or adoption.get("adopting_runner_version") != RUNNER_VERSION
@@ -774,9 +791,13 @@ def _record_artifact_receipt(kind: str, row: dict[str, Any], active_claim: Path,
 
 def _annotate_adopted_ledger(ledger: dict[str, Any]) -> dict[str, Any]:
     """Report the adopted row separately without changing the original failed claim."""
-    if not ADOPTION_PATH.is_file():
+    if (Path(RUN_DIR).resolve() != Path(R2_DIR).resolve()
+            or not ADOPTION_PATH.is_file()):
         return ledger
     adoption = _json(ADOPTION_PATH)
+    if (adoption.get("kind") != "round45-r2-adopted-control-receipt/2"
+            or adoption.get("status") != "adopted_after_receipt_failure"):
+        raise RuntimeError("R3 ledger adoption identity is invalid")
     counts = ledger.setdefault("counts", {})
     adopted_count = 1 if adoption.get("status") == "adopted_after_receipt_failure" else 0
     counts["adopted_after_receipt_failure_jobs"] = adopted_count
@@ -792,6 +813,94 @@ def _annotate_adopted_ledger(ledger: dict[str, Any]) -> dict[str, Any]:
     return ledger
 
 
+def _verify_adopted_ledger_readback(runtime: dict[str, Any]) -> dict[str, Any]:
+    """Exercise the enforced runtime snapshot/write path without creating a claim."""
+    if not ENFORCE_PRELAUNCH:
+        raise RuntimeError("R3 adopted-ledger readback requires enforced prelaunch identity")
+    adoption = _json(ADOPTION_PATH)
+    claim_path = Path(adoption["original_claim_path"])
+    row_path = Path(adoption["original_row_path"])
+    before_claim_sha = _sha256(claim_path)
+    before_row_sha = _sha256(row_path)
+    run_module = runtime["r42_run"]
+
+    def ledger_identity(ledger: dict[str, Any]) -> dict[str, int]:
+        counts = ledger.get("counts", {})
+        names = (
+            "normal_used", "reserve_used", "total_used",
+            "environment_constructor_calls", "run_invocation_calls",
+            "run_return_calls", "completed_steps", "completed_logical_jobs",
+            "technical_failed_claims", "retry_claims", "optimizer_step_calls",
+            "optimizer_step_journal_entries", "ppo_update_calls",
+            "ppo_update_journal_entries", "checkpoint_write_calls",
+            "checkpoint_write_journal_entries", "adopted_after_receipt_failure_jobs",
+            "effective_unique_valid_jobs_including_adoptions",
+        )
+        return {name: int(counts.get(name, 0)) for name in names}
+
+    expected = {
+        "normal_used": 1, "reserve_used": 0, "total_used": 1,
+        "environment_constructor_calls": 1, "run_invocation_calls": 1,
+        "run_return_calls": 1, "completed_steps": 1000,
+        "completed_logical_jobs": 0, "technical_failed_claims": 1,
+        "retry_claims": 0, "optimizer_step_calls": 0,
+        "optimizer_step_journal_entries": 0, "ppo_update_calls": 0,
+        "ppo_update_journal_entries": 0, "checkpoint_write_calls": 0,
+        "checkpoint_write_journal_entries": 0,
+        "adopted_after_receipt_failure_jobs": 1,
+        "effective_unique_valid_jobs_including_adoptions": 1,
+    }
+    observed = [ledger_identity(run_module.ledger_snapshot(strict=True))
+                for _ in range(3)]
+    written = [ledger_identity(run_module.write_execution_ledger(strict=True))
+               for _ in range(2)]
+    written_file = _json(R3_EXECUTION_LEDGER_PATH)
+    written_file_identity = ledger_identity(written_file)
+    if (written_file.get("kind") != "round45-r2-execution-ledger/3"
+            or written_file.get("runner_version") != RUNNER_VERSION
+            or any(item != expected for item in observed + written + [written_file_identity])):
+        raise RuntimeError(
+            "R3 enforced ledger snapshot/write counts differ from the preserved claim plus adoption: "
+            f"expected={expected}, observed={observed}, written={written}, "
+            f"written_file={written_file_identity}")
+    original_claim = _json(claim_path)
+    after_claim_sha = _sha256(claim_path)
+    after_row_sha = _sha256(row_path)
+    if (original_claim.get("status") != "failed_technical"
+            or before_claim_sha != adoption.get("original_claim_sha256")
+            or before_row_sha != adoption.get("row_sha256")
+            or after_claim_sha != before_claim_sha
+            or after_row_sha != before_row_sha):
+        raise RuntimeError("R3 ledger readback changed or misidentified the original failed claim/row")
+    receipt = {
+        "kind": "round45-r2-adopted-ledger-readback/1",
+        "status": "passed",
+        "runner_version": RUNNER_VERSION,
+        "enforcement": "load_runtime(enforce_prelaunch=True)",
+        "ledger_snapshot_calls": 3,
+        "ledger_write_calls": 2,
+        "expected_counts": expected,
+        "snapshot_counts": observed,
+        "write_return_counts": written,
+        "written_file_counts": written_file_identity,
+        "written_ledger_path": str(R3_EXECUTION_LEDGER_PATH.resolve()),
+        "written_ledger_sha256": _sha256(R3_EXECUTION_LEDGER_PATH),
+        "original_claim_status": original_claim["status"],
+        "original_claim_sha256_before_after": [before_claim_sha, after_claim_sha],
+        "original_row_sha256_before_after": [before_row_sha, after_row_sha],
+        "environment_constructed_delta": 0,
+        "normal_claim_delta": 0,
+        "reserve_claim_delta": 0,
+        "run_call_delta": 0,
+        "completed_steps_delta": 0,
+        "ppo_update_delta": 0,
+        "optimizer_step_delta": 0,
+        "checkpoint_write_delta": 0,
+    }
+    _write_atomic(R3_LEDGER_READBACK_PATH, receipt)
+    return receipt
+
+
 def _install_runtime_adapters(runtime: dict[str, Any], *, enforcement: bool) -> None:
     global RUNTIME, R44_INDEX_MODULE, ENFORCE_PRELAUNCH
     RUNTIME = runtime
@@ -802,6 +911,13 @@ def _install_runtime_adapters(runtime: dict[str, Any], *, enforcement: bool) -> 
     assert r44 is not None
     import r44_eval_index
     R44_INDEX_MODULE = r44_eval_index
+
+    base_ledger_snapshot = run_module.ledger_snapshot
+
+    def ledger_snapshot(*, strict: bool = True) -> dict[str, Any]:
+        return _annotate_adopted_ledger(base_ledger_snapshot(strict=strict))
+
+    run_module.ledger_snapshot = ledger_snapshot
 
     base_claim = run_module._claim
 
@@ -820,12 +936,11 @@ def _install_runtime_adapters(runtime: dict[str, Any], *, enforcement: bool) -> 
 
     def write_ledger(*, strict: bool = True) -> dict[str, Any]:
         ledger = _annotate_adopted_ledger(run_module.ledger_snapshot(strict=strict))
-        ledger["kind"] = "round45-r2-execution-ledger/2"
+        ledger["kind"] = "round45-r2-execution-ledger/3"
         ledger["round"] = 45
         ledger["runner_version"] = RUNNER_VERSION
         ledger["training_version"] = runtime["r42_versions"].TRAINING_VERSION
-        path = RUN_DIR / "runtime" / "ROUND45_R2_EXECUTION_LEDGER_R3.json"
-        _write_atomic(path, ledger)
+        _write_atomic(R3_EXECUTION_LEDGER_PATH, ledger)
         return ledger
 
     run_module.write_execution_ledger = write_ledger
@@ -959,6 +1074,7 @@ def load_runtime(*, enforce_prelaunch: bool = True) -> dict[str, Any]:
         if enforce_prelaunch:
             verify_prelaunch_identity(RUNTIME["frozen"])
             R2_FREEZE = _json(R3_FREEZE_PATH)
+            RUNTIME["r3_adopted_ledger_readback"] = _verify_adopted_ledger_readback(RUNTIME)
         return RUNTIME
     if str(R2_DIR) not in sys.path:
         sys.path.insert(0, str(R2_DIR))
@@ -1058,6 +1174,7 @@ def load_runtime(*, enforce_prelaunch: bool = True) -> dict[str, Any]:
     if enforce_prelaunch:
         verify_prelaunch_identity(frozen)
         R2_FREEZE = _json(R3_FREEZE_PATH)
+        runtime["r3_adopted_ledger_readback"] = _verify_adopted_ledger_readback(runtime)
     return runtime
 
 
@@ -1452,8 +1569,8 @@ def prepare_completed_row_adoption() -> dict[str, Any]:
         raise RuntimeError("R3 adoption preconditions differ from the preserved R2 stop/freeze")
     old_freeze_sha = _sha256(old_freeze_path)
     old_prelaunch_sha = _sha256(old_prelaunch_path)
-    if (old_freeze_sha != task.get("post_bc_freeze_sha256")
-            or old_prelaunch_sha != task.get("prelaunch_receipt_sha256")
+    if (old_freeze_sha != task.get("r2_post_bc_freeze_sha256")
+            or old_prelaunch_sha != task.get("r2_prelaunch_identity_sha256")
             or old_prelaunch.get("post_bc_freeze_sha256") != old_freeze_sha
             or old_freeze.get("source_commit") != task.get("corrected_source_commit")
             or old_prelaunch.get("freeze_commit") != task.get("corrected_freeze_commit")
@@ -1589,7 +1706,7 @@ def prepare_completed_row_adoption() -> dict[str, Any]:
         raise RuntimeError("R3 adoption audit changed counters or an original claim/row")
 
     adoption = {
-        "kind": "round45-r2-adopted-control-receipt/1",
+        "kind": "round45-r2-adopted-control-receipt/2",
         "status": "adopted_after_receipt_failure",
         "logical_job": logical_job,
         "round45_key": copy.deepcopy(expected_key),
@@ -1652,6 +1769,9 @@ def run_zero_environment_container_regression() -> dict[str, Any]:
     run_module = runtime["r42_run"]
     trainer = runtime["trainer"]
     before_counts = run_module.ledger_snapshot(strict=False)["counts"]
+    if (before_counts.get("adopted_after_receipt_failure_jobs") != 1
+            or before_counts.get("effective_unique_valid_jobs_including_adoptions") != 1):
+        raise RuntimeError("R3 runtime ledger snapshot omits the preserved adopted control row")
     before_optimizer = int(run_module._OPTIMIZER_STEP_CALLS)
     before_updates = int(run_module._PPO_UPDATE_CALLS)
     before_checkpoints = int(runtime["r42_versions"].CHECKPOINT_WRITE_CALLS)
@@ -1695,13 +1815,16 @@ def run_zero_environment_container_regression() -> dict[str, Any]:
     checkpoints_after = int(runtime["r42_versions"].CHECKPOINT_WRITE_CALLS)
     if any(int(after_counts.get(name, 0)) != int(before_counts.get(name, 0))
            for name in ("environment_constructor_calls", "run_invocation_calls",
-                        "completed_steps", "normal_used", "reserve_used")):
+                        "run_return_calls", "completed_steps", "completed_logical_jobs",
+                        "technical_failed_claims", "retry_claims", "normal_used",
+                        "reserve_used", "adopted_after_receipt_failure_jobs",
+                        "effective_unique_valid_jobs_including_adoptions")):
         raise RuntimeError("BC container regression changed environment/claim counters")
     if (optimizer_after != before_optimizer or updates_after != before_updates
             or checkpoints_after != before_checkpoints):
         raise RuntimeError("BC container regression changed optimizer/PPO/checkpoint counters")
     result = {
-        "kind": "round45-r2-zero-environment-container-eval-regression/2",
+        "kind": "round45-r2-zero-environment-container-eval-regression/3",
         "status": "passed",
         "runner_version": RUNNER_VERSION,
         "controller_type": "StageCController container",
@@ -1717,6 +1840,11 @@ def run_zero_environment_container_regression() -> dict[str, Any]:
         "reserve_claims": int(after_counts.get("reserve_used", 0)),
         "run_calls": int(after_counts.get("run_invocation_calls", 0)),
         "completed_steps": int(after_counts.get("completed_steps", 0)),
+        "completed_claim_jobs": int(after_counts.get("completed_logical_jobs", 0)),
+        "adopted_after_receipt_failure_jobs": int(
+            after_counts.get("adopted_after_receipt_failure_jobs", 0)),
+        "effective_unique_valid_jobs_including_adoptions": int(
+            after_counts.get("effective_unique_valid_jobs_including_adoptions", 0)),
         "ppo_updates": updates_after - before_updates,
         "optimizer_step_calls": optimizer_after - before_optimizer,
         "checkpoint_write_calls": checkpoints_after - before_checkpoints,
@@ -1874,6 +2002,9 @@ def run_zero_environment_bc_receipt_regression() -> dict[str, Any]:
         raise RuntimeError("R44 NEW-only writer accepted a BC_ONLY_R2 row in regression")
 
     before_counts = run_module.ledger_snapshot(strict=False)["counts"]
+    if (before_counts.get("adopted_after_receipt_failure_jobs") != 1
+            or before_counts.get("effective_unique_valid_jobs_including_adoptions") != 1):
+        raise RuntimeError("R3 runtime ledger snapshot omits the preserved adopted control row")
     before_optim = int(run_module._OPTIMIZER_STEP_CALLS)
     before_ppo = int(run_module._PPO_UPDATE_CALLS)
     before_checkpoint = int(runtime["r42_versions"].CHECKPOINT_WRITE_CALLS)
@@ -1919,6 +2050,10 @@ def run_zero_environment_bc_receipt_regression() -> dict[str, Any]:
     if any(int(after_counts.get(k, 0)) != int(before_counts.get(k, 0))
            for k in no_change_fields):
         raise RuntimeError("R3 adoption consumer replay changed cumulative ledger counts")
+    if (after_counts.get("adopted_after_receipt_failure_jobs") != 1
+            or after_counts.get("effective_unique_valid_jobs_including_adoptions") != 1
+            or after_counts.get("completed_logical_jobs") != 0):
+        raise RuntimeError("R3 ledger must count the adoption separately and preserve failed-claim totals")
     if (int(run_module._OPTIMIZER_STEP_CALLS) != before_optim
             or int(run_module._PPO_UPDATE_CALLS) != before_ppo
             or int(runtime["r42_versions"].CHECKPOINT_WRITE_CALLS) != before_checkpoint):
@@ -1950,7 +2085,7 @@ def run_zero_environment_bc_receipt_regression() -> dict[str, Any]:
             != expected_cases):
         raise RuntimeError(f"R3 empty-transcript receipt cases did not match expectations: {synthetic_cases}")
     result = {
-        "kind": "round45-r2-zero-environment-bc-receipt-regression/2",
+        "kind": "round45-r2-zero-environment-bc-receipt-regression/3",
         "status": "passed",
         "runner_version": RUNNER_VERSION,
         "actual_row_consumer": "R3 guarded r42_run._execute_cell -> _completed_row -> _load_adopted_control",
@@ -1973,6 +2108,13 @@ def run_zero_environment_bc_receipt_regression() -> dict[str, Any]:
         "checkpoint_write_calls_delta": 0,
         "original_claim_status_after": attempts_after[0][1]["status"],
         "original_normal_charge_retained": adoption["normal_charge_retained"],
+        "ledger_adoption_summary": {
+            "completed_claim_jobs": after_counts.get("completed_logical_jobs"),
+            "adopted_after_receipt_failure_jobs":
+                after_counts.get("adopted_after_receipt_failure_jobs"),
+            "effective_unique_valid_jobs_including_adoptions":
+                after_counts.get("effective_unique_valid_jobs_including_adoptions"),
+        },
         "adopted_scene_on_time_task_ids": adoption["on_time_task_ids"],
         "adopted_scene_spent_bytes": adoption["spent_bytes"],
     }
@@ -2708,7 +2850,10 @@ def main(argv: list[str] | None = None) -> int:
                               "head": head, "runner_version": RUNNER_VERSION,
                               "environment_constructed": 0, "ppo_updates": 0,
                               "optimizer_step_calls": 0,
-                              "checkpoint_write_calls": 0}, ensure_ascii=False), flush=True)
+                              "checkpoint_write_calls": 0,
+                              "adopted_ledger_readback":
+                                  runtime["r3_adopted_ledger_readback"]},
+                             ensure_ascii=False), flush=True)
             return 0
         if arguments.execute_fixed_plan:
             try:
@@ -2779,7 +2924,7 @@ def _key_plan(runtime: dict[str, Any]) -> dict[str, Any]:
             or adoption.get("technical_reserve_used") != 0):
         raise RuntimeError("R3 logical key plan adoption identity is invalid")
     return {
-        "kind": "round45-r2-logical-key-plan/3",
+        "kind": "round45-r2-logical-key-plan/4",
         "r3_runner_git_identity": _committed_r3_runner_identity(_git("rev-parse", "HEAD")),
         "training_scenario_order": order,
         "training_scenario_order_sha256": hashlib.sha256(json.dumps(
@@ -2915,7 +3060,7 @@ def prepare_post_bc_freeze() -> dict[str, Any]:
     runner_git_identity = _committed_r3_runner_identity(source_commit)
     pre_bc = _json(RUN_DIR / "ROUND45_PRE_BC_FREEZE.json")
     freeze = {
-        "kind": "round45-r2-post-bc-environment-freeze/4",
+        "kind": "round45-r2-post-bc-environment-freeze/5",
         "status": "frozen_before_r3_continuation",
         "branch": task["branch"],
         "source_commit": source_commit,
@@ -3029,13 +3174,21 @@ def seal_prelaunch_identity() -> dict[str, Any]:
     adoption_regression_path = R3_BC_RECEIPT_REGRESSION_PATH
     adoption_regression = _json(adoption_regression_path)
     task = _json(task_path)
-    if (freeze.get("kind") != "round45-r2-post-bc-environment-freeze/4"
+    if (freeze.get("kind") != "round45-r2-post-bc-environment-freeze/5"
             or freeze.get("status") != "frozen_before_r3_continuation"
+            or regression.get("kind") != "round45-r2-zero-environment-consumption-regression/3"
             or regression.get("status") != "passed"
+            or container_regression.get("kind")
+            != "round45-r2-zero-environment-container-eval-regression/3"
             or container_regression.get("status") != "passed"
             or adoption_regression.get("kind")
-            != "round45-r2-zero-environment-bc-receipt-regression/2"
+            != "round45-r2-zero-environment-bc-receipt-regression/3"
             or adoption_regression.get("status") != "passed"
+            or adoption_regression.get("ledger_adoption_summary") != {
+                "completed_claim_jobs": 0,
+                "adopted_after_receipt_failure_jobs": 1,
+                "effective_unique_valid_jobs_including_adoptions": 1,
+            }
             or regression.get("environment_constructed") != 0
             or regression.get("ppo_updates") != 0
             or regression.get("optimizer_step_calls") != 0
@@ -3046,6 +3199,9 @@ def seal_prelaunch_identity() -> dict[str, Any]:
             or container_regression.get("reserve_claims") != 0
             or container_regression.get("run_calls") != 1
             or container_regression.get("completed_steps") != 1000
+            or container_regression.get("completed_claim_jobs") != 0
+            or container_regression.get("adopted_after_receipt_failure_jobs") != 1
+            or container_regression.get("effective_unique_valid_jobs_including_adoptions") != 1
             or container_regression.get("ppo_updates") != 0
             or container_regression.get("optimizer_step_calls") != 0
             or container_regression.get("checkpoint_write_calls") != 0
@@ -3065,7 +3221,7 @@ def seal_prelaunch_identity() -> dict[str, Any]:
         raise RuntimeError("tracked worktree must be committed before the R2 prelaunch seal")
     head = _git("rev-parse", "HEAD")
     receipt = {
-        "kind": "round45-r2-prelaunch-identity/4",
+        "kind": "round45-r2-prelaunch-identity/5",
         "status": "passed",
         "branch": _git("branch", "--show-current"),
         "freeze_commit": head,
@@ -3088,6 +3244,9 @@ def seal_prelaunch_identity() -> dict[str, Any]:
         "historical_normal_claims_before_r3": 1,
         "historical_reserve_claims_before_r3": 0,
         "historical_completed_steps_before_r3": 1000,
+        "raw_completed_claim_jobs_before_r3": 0,
+        "adopted_after_receipt_failure_jobs_before_r3": 1,
+        "effective_unique_valid_jobs_including_adoptions_before_r3": 1,
         "adopted_completed_logical_jobs": 1,
         "ppo_updates_before_seal": 0,
         "optimizer_step_calls_before_seal": 0,
@@ -3106,6 +3265,9 @@ def seal_prelaunch_identity() -> dict[str, Any]:
     task["reserve_claims"] = 0
     task["completed_steps"] = 1000
     task["adopted_completed_logical_jobs"] = 1
+    task["raw_completed_claim_jobs"] = 0
+    task["adopted_after_receipt_failure_jobs"] = 1
+    task["effective_unique_valid_jobs_including_adoptions"] = 1
     task["ppo_updates"] = 0
     _write_atomic(task_path, task)
     return receipt
@@ -3285,7 +3447,7 @@ def run_zero_environment_seam_regression() -> dict[str, Any]:
                     for receipt in receipts):
                 raise RuntimeError("R2 seam did not create/verify durable row artifact receipts")
             result = {
-                "kind": "round45-r2-zero-environment-consumption-regression/2",
+                "kind": "round45-r2-zero-environment-consumption-regression/3",
                 "status": "passed",
                 "actual_claim_consumer": "r40_common.claim_launch",
                 "actual_row_executor_seam": "R44 r44_runtime.configure + R43 r42_run._execute_cell",

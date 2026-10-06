@@ -1,0 +1,59 @@
+{
+  "kind": "round45-r2-r3-adopted-ledger-snapshot-audit-failure/1",
+  "status": "preserved_prelaunch_gate_failure",
+  "branch": "exp/comm-rule-warmstart-cost-learning-r2",
+  "observed_head": "e9d0cad4e021dc2999fdf18a6d712717280337e8",
+  "failure": {
+    "type": "RuntimeError",
+    "message": "read-only actual ledger audit omitted adopted_after_receipt_failure_jobs and effective_unique_valid_jobs_including_adoptions"
+  },
+  "observed_counts": {
+    "normal_used": 1,
+    "reserve_used": 0,
+    "total_used": 1,
+    "environment_constructor_calls": 1,
+    "run_invocation_calls": 1,
+    "run_return_calls": 1,
+    "completed_steps": 1000,
+    "completed_logical_jobs": 0,
+    "technical_failed_claims": 1,
+    "adopted_after_receipt_failure_jobs": null,
+    "effective_unique_valid_jobs_including_adoptions": null,
+    "ppo_update_calls": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_write_calls": 0
+  },
+  "expected_identity": {
+    "original_claim_status": "failed_technical",
+    "original_claim_sha256": "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f",
+    "original_row_sha256": "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+    "raw_completed_claim_jobs": 0,
+    "adopted_after_receipt_failure_jobs": 1,
+    "effective_unique_valid_jobs_including_adoptions": 1
+  },
+  "deltas": {
+    "environment_constructed": 0,
+    "normal_claims": 0,
+    "reserve_claims": 0,
+    "run_calls": 0,
+    "completed_steps": 0,
+    "ppo_updates": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0
+  },
+  "source_fix": "versioned R3 wrapper now annotates the real ledger_snapshot and write_execution_ledger paths idempotently; original failed claim remains unmodified",
+  "superseded_identity_candidates": [
+    {
+      "path": "ROUND45_R2_PRELAUNCH_IDENTITY_R3_FINAL.json",
+      "sha256": "cf57fcbea299682cbbcbd6224b8be0259f7adb52183d71ea2a339b2a67230338",
+      "status": "retained_candidate_invalidated_by_ledger_snapshot_source_change"
+    },
+    {
+      "path": "ROUND45_R2_POST_BC_ENV_FREEZE_R3_FINAL.json",
+      "sha256": "d97115cb5a9b165fc67e98d25e1f2ea5d90bcdc9c12c7152719f8bc4d831fba8",
+      "status": "retained_candidate_invalidated_by_ledger_snapshot_source_change"
+    }
+  ],
+  "new_environment_started": false,
+  "new_claim_created": false
+}

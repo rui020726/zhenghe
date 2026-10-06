@@ -10,7 +10,7 @@
   "prior_failed_real_bc_updates_preserved": 1000,
   "family_cumulative_bc_update_hard_cap": 4000,
   "this_attempt_bc_update_cap": 3000,
-  "stage": "R3 source/adoption/freeze and zero-environment regressions committed; ready for 47 remaining BC controls",
+  "stage": "R3 ledger snapshot/source correction complete; adoption, BC receipt and seam zero-environment checks passed; awaiting source commit and fresh freeze",
   "pre_bc_freeze_sha256": "a42b6693ea0b3d83262517b386386f718d09038785b9e8ac1c79a09e52d5ed9c",
   "pre_bc_source_commit": "c47fb18eb15381841283fa83b42b01963c45e68f",
   "source_commit": "333d9226c6da46b0638b8a2078eb327666e816c4",
@@ -165,7 +165,33 @@
       "path": "runs\\comm_rule_warmstart_cost_learning_20261006_r2\\failures\\ROUND45_R2_R3_ZERO_ENV_SEAM_FIXTURE_FAILURE_V5.json"
     }
   ],
-  "r3_prelaunch_receipt_status": "pending_seal",
+  "r3_prelaunch_receipt_status": "superseded_candidate_after_ledger_snapshot_audit",
+  "r3_prelaunch_superseded_candidate": {
+    "path": "runs\\comm_rule_warmstart_cost_learning_20261006_r2\\ROUND45_R2_PRELAUNCH_IDENTITY_R3_FINAL.json",
+    "sha256": "cf57fcbea299682cbbcbd6224b8be0259f7adb52183d71ea2a339b2a67230338",
+    "reason": "adopted-ledger snapshot source changed after a read-only audit found missing adoption counters"
+  },
+  "r3_ledger_snapshot_audit_failure": {
+    "path": "runs\\comm_rule_warmstart_cost_learning_20261006_r2\\failures\\ROUND45_R2_R3_ADOPTED_LEDGER_SNAPSHOT_FAILURE_V1.json",
+    "expected_raw_completed_claim_jobs": 0,
+    "expected_adopted_after_receipt_failure_jobs": 1,
+    "expected_effective_unique_valid_jobs_including_adoptions": 1,
+    "observed_environment_constructed": 1,
+    "observed_normal_claims": 1,
+    "observed_reserve_claims": 0,
+    "observed_completed_steps": 1000,
+    "new_environment_started": false
+  },
+  "r3_prelaunch_identity_guard_failure": {
+    "path": "runs\\comm_rule_warmstart_cost_learning_20261006_r2\\failures\\ROUND45_R2_R3_ADOPTION_POINTER_GUARD_FAILURE_V1.json",
+    "failure": "R2 adoption guard compared R2 artifacts against generic task fields already advanced to R3",
+    "r2_specific_freeze_and_prelaunch_hashes_verified": true,
+    "new_environment_started": false,
+    "new_claim_created": false
+  },
+  "raw_completed_claim_jobs": 0,
+  "adopted_after_receipt_failure_jobs": 1,
+  "effective_unique_valid_jobs_including_adoptions": 1,
   "r3_source_commit_status": "passed",
   "r3_final_zero_environment_regressions": {
     "bc_receipt": {
@@ -203,5 +229,41 @@
   "r3_source_commit": "e405e7f3e8188841e3dfb48cec5901ed90eab77c",
   "r3_runner_git_blob_sha1": "4071d3e3282e44973da20d9acf8ffce0deab0bab",
   "r3_runner_source_sha256": "4c3d79e60dc3186832e7b23be0a4275d88f1b4250c64a5ff7df4c433b73512c6",
-  "r3_prelaunch_receipt_sha256": "cf57fcbea299682cbbcbd6224b8be0259f7adb52183d71ea2a339b2a67230338"
+  "r3_prelaunch_receipt_sha256": "cf57fcbea299682cbbcbd6224b8be0259f7adb52183d71ea2a339b2a67230338",
+  "r3_current_source_change": {
+    "status": "pending_commit",
+    "runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1+round45-r2-bc-receipt-adoption/4+round45-r2-empty-transcript-zero-closure/3+round45-r2-r3-prelaunch-identity/2+round45-r2-adopted-ledger-snapshot/1",
+    "runner_path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/r45_r2_execute_r3.py",
+    "runner_source_sha256": "316dac379731fbf82623cc8a720290a0a491978cb805fc1b257cd3649b0bc52d",
+    "adopted_control_receipt": {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_ADOPTED_CONTROL_R3_FINAL2.json",
+      "sha256": "1784271004be8877cd66e8b131b1357a82770730411d118391a34b3035cf22af"
+    },
+    "bc_receipt_regression": {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_BC_RECEIPT_REGRESSION_R3_FINAL2.json",
+      "sha256": "dd06f444e6309ef783dd8790b9d1be433d07c9959a9b0e6e1f7ffde0979ec893",
+      "status": "passed"
+    },
+    "seam_regression": {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_R2_ZERO_ENV_SEAM_REGRESSION_R3_FINAL2.json",
+      "sha256": "6c07e913317e439410b4fa722eed2c3afd44517680442a99947115240680ec30",
+      "status": "passed"
+    },
+    "preserved_prelaunch_failures": [
+      "runs/comm_rule_warmstart_cost_learning_20261006_r2/failures/ROUND45_R2_R3_ADOPTED_LEDGER_SNAPSHOT_FAILURE_V1.json",
+      "runs/comm_rule_warmstart_cost_learning_20261006_r2/failures/ROUND45_R2_R3_ADOPTION_POINTER_GUARD_FAILURE_V1.json"
+    ],
+    "cumulative_counts": {
+      "environment_constructed": 1,
+      "normal_claims": 1,
+      "reserve_claims": 0,
+      "completed_steps": 1000,
+      "raw_completed_claim_jobs": 0,
+      "adopted_after_receipt_failure_jobs": 1,
+      "effective_unique_valid_jobs_including_adoptions": 1,
+      "ppo_updates": 0,
+      "optimizer_steps": 0,
+      "checkpoint_writes": 0
+    }
+  }
 }
