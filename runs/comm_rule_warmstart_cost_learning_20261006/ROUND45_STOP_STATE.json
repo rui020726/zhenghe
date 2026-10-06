@@ -1,0 +1,55 @@
+{
+  "kind": "round45-terminal-execution-state/1",
+  "status": "stopped_unrecoverable_bc_checkpoint_failure",
+  "branch": "exp/comm-rule-warmstart-cost-learning",
+  "frozen_source_commit": "6367afbb9fb19bde1a61f19634b70955dce77d70",
+  "pre_bc_freeze_commit": "c6aa274c7d7719a75824a5088bc4af2e3142a6ea",
+  "post_failure_repair_commit": "bfa0a952f9c558331c4d4033584d0231e93742be",
+  "frozen_r45_bc_source_sha256": "04ff2b2cffaefc5fb15928d2e785079aa23539fc7d60194fba7c639792d3c398",
+  "post_failure_repair_version": "round45-bc-nested-controller-state/2",
+  "post_failure_repair_source_sha256": "705a3e2b5e732e89a185e598396223bb46d217f817685ea5d8f248f308509a30",
+  "dataset_sha256": "93ffba45bfa484aa0f0aa5cbb334bd76c1284d0b21e7ca704b459ae6126f378d",
+  "seed_status": {
+    "11": {
+      "bc_optimizer_calls_returned": 1000,
+      "metrics_sha256": "8ba01d9719c7178d032e2261535796d8797cc07acfd2c2c92d2d2165e6d74894",
+      "step_journal_sha256": "754f3828e768ac4779904415d726ec7bde08be579f63d3dad5206ffffef27341",
+      "post_bc_checkpoint_exists": false,
+      "recoverable_complete_controller_and_optimizer_state": false,
+      "final_parameter_digest_only": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330"
+    },
+    "22": {"bc_optimizer_calls_returned": 0, "started": false},
+    "33": {"bc_optimizer_calls_returned": 0, "started": false}
+  },
+  "counts": {
+    "real_bc_optimizer_calls_returned": 1000,
+    "synthetic_optimizer_updates_already_used": 2,
+    "serializer_fixture_optimizer_step_calls": 0,
+    "ppo_updates": 0,
+    "ppo_optimizer_step_calls": 0,
+    "normal_environment_claims": 0,
+    "reserve_environment_claims": 0,
+    "environment_constructor_calls": 0,
+    "run_invocation_calls": 0,
+    "completed_episodes": 0,
+    "bc_only_controls": 0,
+    "final_evaluations": 0
+  },
+  "serializer_regression": {
+    "path": "ROUND45_CHECKPOINT_SERIALIZATION_REGRESSION_R2.json",
+    "sha256": "0fc654d199469cd879606e337ed499ed7cbb2fde039dcdbe277cf4954516cfff",
+    "status": "passed",
+    "real_production_save_read_functions": true,
+    "transport": "BytesIO",
+    "fixture_is_not_a_real_checkpoint": true,
+    "optimizer_step_calls": 0,
+    "environment_constructed": 0
+  },
+  "reports": {
+    "execution": "ROUND45_REPORT.md",
+    "failure": "ROUND45_BC_FAILURE_SEED11.md",
+    "repair": "ROUND45_BC_CHECKPOINT_SERIALIZATION_FIX.md"
+  },
+  "scientific_comparison_available": false,
+  "automatic_training_resume_or_retry": false
+}
