@@ -1,8 +1,8 @@
 {
   "kind": "round46-current-task/1",
-  "stage": "prepared; zero environments",
+  "stage": "corrected runner /3 committed; formal preflight passed; Git status guard regression pending",
   "branch": "fix/comm-bc-initialization-readback",
-  "head": "7e149742a7805db75cf588716cbfbf1ae2202772",
+  "head": "8040af95ff0fe0164bf6a334d4e68780b5b748d7",
   "runner_version": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
   "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
   "normal_environment_keys": 480,
@@ -13,10 +13,13 @@
   "completed_episodes": 0,
   "ppo_updates": 0,
   "optimizer_step_calls": 0,
-  "checkpoint_write_calls": 15,
-  "checkpoint_write_journal_entries": 15,
+  "checkpoint_write_calls": 16,
+  "checkpoint_write_journal_entries": 16,
   "runner_source_sha256": "035d49799ebc3ce21eb6230fd36b6163af8bed7223b403e41b67c1d6712561f2",
   "checkpoint_journal_route_audit_sha256": "18e57894e599c5bc646db20e72a44261fa293cdb69e684c234997d41f934481b",
+  "prelaunch_gate_sha256": "ae5cc182976c810cf6d30cf1a387d3f064e83bd6f4e19820c08113d04d212ca5",
+  "checkpoint_readback_regression_sha256": "9103b56acfc426f3ef85913e6931e5ac4b94854c4289765e7db481d147edfe83",
+  "checkpoint_journal_route_regression_sha256": "91de357f855a1ea04f9cfb5383433629aef20c8b363f8b1ca32bc23e12488378",
   "training_started": false,
-  "next_action": "commit the prepared freeze, then run formal zero-environment preflight and real task-state status regression"
+  "next_action": "commit formal preflight receipts, run the actual task-state status regression and commit its receipt, then enter only the fixed plan if all gates pass"
 }

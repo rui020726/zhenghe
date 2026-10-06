@@ -42,4 +42,10 @@ Using `D:\project_env\python.exe` (Python 3.10.19; PyTorch 2.9.0+cu128; runtime 
 
 The final prepared `ROUND46_CONFIGURATION_DIFF.json` matches the preserved pre-journal prepare on `training_version`, `scientific_changes`, `unchanged`, and `counts`; only execution identities/input audit hashes were refreshed. It still describes the sole scientific change as the same-seed ROUND45 four-module BC initialization. Prepare reported 0 environment constructions, 0 PPO updates, and 0 optimizer steps.
 
-The actual synthetic save route regression, final ROUND46 prepare/freeze, formal checkpoint/readback preflight, and real status-update-to-preclaim regression are still required before the fixed plan may enter its three seed first-four gates. No scientific execution has started.
+## Final freeze and preflight receipts
+
+The corrected `/3` freeze was committed at `8040af95ff0fe0164bf6a334d4e68780b5b748d7`. Formal preflight passed from that commit. It exercised the actual R42 `trainer.save_checkpoint` wrapper once with a synthetic ep0 controller: checkpoint SHA256 `b7365848a2e8dfac2912e2966cf7a2ed68262befa94b76799688dc073ff622f7`, one new R2 journal entry (15 → 16), with the prior ROUND45 journal still at SHA256 `16d8f73c6606d44a4d5ebaf4b2c43d5976c8dc7f76ec4e0859b0974d14d0d8bd`. The route receipt SHA256 is `91de357f855a1ea04f9cfb5383433629aef20c8b363f8b1ca32bc23e12488378`.
+
+The actual checkpoint readback regression also passed: three legacy fresh-load failures and three legacy resume failures were reproduced; fixed fresh and resume paths passed for seeds 11, 22, and 33. Its formal-preflight fixture save delta was zero because the version-3 fixtures were already verified. The cumulative 16 writes close as v2 fixtures 6 + v2 pre-claim saves 2 + partial v3 probe 1 + v3 fixtures 6 + route probe 1; unclassified 0. Preflight ended with claims 0, environment constructors 0, run calls 0, completed steps 0, PPO 0, Adam 0.
+
+The only remaining zero-environment gate before execution is the real task-state-update → `verify_prelaunch_identity` status regression. It must allow only the two task-state files and reject actual runner-source and frozen-config modifications. If it passes and its receipt is committed, execution may enter the already-authorized three-seed first-four real gate. No scientific execution has started.

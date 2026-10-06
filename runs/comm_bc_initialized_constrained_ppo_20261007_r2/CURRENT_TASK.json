@@ -1,12 +1,15 @@
 {
   "kind": "round46-r2-current-task/1",
-  "stage": "corrected runner /3 freeze prepared; scientific configuration unchanged; formal preflight pending",
+  "stage": "corrected runner /3 committed; formal preflight passed; actual Git status regression pending",
   "branch": "fix/comm-bc-initialization-readback",
-  "head": "7e149742a7805db75cf588716cbfbf1ae2202772",
+  "head": "8040af95ff0fe0164bf6a334d4e68780b5b748d7",
   "runner_version_previous": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
   "runner_version_current": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
   "runner_source_sha256": "035d49799ebc3ce21eb6230fd36b6163af8bed7223b403e41b67c1d6712561f2",
   "freeze_input_route_audit_sha256": "18e57894e599c5bc646db20e72a44261fa293cdb69e684c234997d41f934481b",
+  "prelaunch_gate_sha256": "ae5cc182976c810cf6d30cf1a387d3f064e83bd6f4e19820c08113d04d212ca5",
+  "checkpoint_readback_regression_sha256": "9103b56acfc426f3ef85913e6931e5ac4b94854c4289765e7db481d147edfe83",
+  "checkpoint_journal_route_regression_sha256": "91de357f855a1ea04f9cfb5383433629aef20c8b363f8b1ca32bc23e12488378",
   "preserved_prejournal_freeze_archive_sha256": "662e4a9fd531a7b8559063b4f34a4e0830fe618cf5e4f497bb0225dc0d1ef075",
   "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
   "fixed_plan": {
@@ -29,7 +32,7 @@
   },
   "counts": {
     "ppo_updates": 0,
-    "checkpoint_write_calls": 15,
+    "checkpoint_write_calls": 16,
     "run_invocation_calls": 0,
     "claims": 0,
     "optimizer_step_calls": 0,
@@ -41,5 +44,5 @@
   "python": "D:\\project_env\\python.exe",
   "runtime_device": "cpu",
   "training_started": false,
-  "next_action": "commit final freeze, run formal zero-environment preflight and actual Git-status regression, then enter only the fixed plan if all gates pass"
+  "next_action": "commit formal preflight receipts, run the actual task-state status regression and commit its receipt, then enter only the fixed plan if all gates pass"
 }

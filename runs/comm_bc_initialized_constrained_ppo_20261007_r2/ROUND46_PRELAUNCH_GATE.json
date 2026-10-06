@@ -3,13 +3,13 @@
   "status": "passed",
   "round": 46,
   "branch": "fix/comm-bc-initialization-readback",
-  "head_at_preflight": "f8d3380ab940579974875dfae34e838e4160400e",
-  "runner_version": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
+  "head_at_preflight": "8040af95ff0fe0164bf6a334d4e68780b5b748d7",
+  "runner_version": "round46-bc-initialized-constrained-ppo/3+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1",
   "runner_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py",
-  "runner_source_sha256": "1ad9c8c4e281a00dff34f3e692ad42dae89eafbd5fba105646a1fe3c07b7440f",
-  "frozen_config_sha256": "e52cb03619d3e69ad4f198b94c077e90eacd77023974e3c306dbd698f83b7014",
+  "runner_source_sha256": "035d49799ebc3ce21eb6230fd36b6163af8bed7223b403e41b67c1d6712561f2",
+  "frozen_config_sha256": "eed24787261055d1cb9727a8f8d86924ae222050be458331009013f9308498ae",
   "key_plan_sha256": "bd058fdc692f77a0cd7b6aa8bb3caa16078c1b95fd708cbc652ce4b94dbb34f7",
-  "input_identity_sha256": "35a95e889d9b141e18359e17c22b8537414354bbba5bfb379a8eb20b820f2500",
+  "input_identity_sha256": "43b48bc9ad1f9dd2b68af36bda8c0a417dd2ec3f331ff2be91a5740da68bf1df",
   "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
   "normal_cap": 480,
   "technical_reserve_max": 24,
@@ -171,8 +171,8 @@
   "checkpoint_readback_regression": {
     "kind": "round46-r2-checkpoint-readback-regression/1",
     "status": "passed",
-    "source_sha256": "6dbce21f3eab9b52448a3095e138d56ca142e63633ba6ef9a97508b1ac724ee1",
-    "receipt_sha256": "e5597c5a726f6a435981a8529f9cb498e88a515088560e87dc46f4a54a9a07a3",
+    "source_sha256": "0112dbdbe80f59ee4e3171461f2e9b68082f2d095dfe701a14c30c48945082a2",
+    "receipt_sha256": "9103b56acfc426f3ef85913e6931e5ac4b94854c4289765e7db481d147edfe83",
     "legacy_fresh_failures_reproduced": 3,
     "legacy_resume_failures_reproduced": 3,
     "fixed_fresh_seeds_passed": [
@@ -189,6 +189,50 @@
     "environment_constructor_calls": 0,
     "ppo_update_calls": 0,
     "optimizer_step_calls": 0
+  },
+  "prior_round46_r2_preclaim_attempt": {
+    "kind": "round46-r2-runner-v2-preclaim-stop-archive/1",
+    "archive_manifest_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/attempts/runner_v2_preclaim_guard/ATTEMPT_ARCHIVE.json",
+    "archive_manifest_sha256": "eac5f0390a4ccb86bc986d1b764b7a6d5653f29cc324f29befb119cb5abe4403",
+    "runner_version": "round46-bc-initialized-constrained-ppo/2+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1",
+    "counts": {
+      "checkpoint_write_journal_entries": 8,
+      "ppo_updates": 0,
+      "claims": 0,
+      "optimizer_step_calls": 0,
+      "completed_steps": 0,
+      "environment_constructor_calls": 0,
+      "run_invocation_calls": 0,
+      "preclaim_training_checkpoint_write_calls": 2,
+      "synthetic_fixture_writes": 6,
+      "checkpoint_write_calls": 8
+    },
+    "archived_untrained_checkpoint_count": 3,
+    "archived_checkpoint_sha256": "bef3a94f534bbc5be1a13c666143c3796c464c2810a0db0f2ae68df8e3d6d5e1",
+    "archived_stop_state_sha256": "a45bf011c9b88728214f8448e4eb751629eb233c12ccc3433095131d307ac79c",
+    "archived_recovery_receipt_sha256": "f9926f50f0dc7964926226646623e80846ac4f48287e8af938dacd21c90c39e0",
+    "archived_ledger_snapshot_sha256": "e78d463077d39b54d4c8b380da7bf70d7a7c868feacaf4b4a541839569e6b8fd",
+    "active_prior_checkpoint_count": 0,
+    "new_training_may_load_prior_checkpoint": false
+  },
+  "checkpoint_journal_route": {
+    "audit_sha256": "18e57894e599c5bc646db20e72a44261fa293cdb69e684c234997d41f934481b",
+    "legacy_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\runtime\\checkpoint_writes.jsonl",
+    "legacy_sha256": "16d8f73c6606d44a4d5ebaf4b2c43d5976c8dc7f76ec4e0859b0974d14d0d8bd",
+    "legacy_entry_count": 15,
+    "round46_local_copy_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\runtime\\checkpoint_writes.jsonl",
+    "round46_local_copy_sha256": "df2e7da9e5134ed40559790243bb86a9d8af807497d37fb88b73eb4a0747adde",
+    "future_writer_bound_to_round46_local_copy": true
+  },
+  "checkpoint_write_accounting": {
+    "cumulative_checkpoint_write_calls": 16,
+    "v2_synthetic_readback_fixture_writes": 6,
+    "archived_v2_preclaim_training_writes": 2,
+    "partial_v3_development_probe_fixture_writes": 1,
+    "v3_synthetic_readback_fixture_writes": 6,
+    "checkpoint_journal_route_probe_writes": 1,
+    "new_preflight_checkpoint_writes": 0,
+    "unclassified_checkpoint_writes": 0
   },
   "counts_before_checkpoint_readback_regression": {
     "normal_used": 0,
@@ -211,8 +255,8 @@
     "ppo_update_calls": 0,
     "ppo_update_journal_entries": 0,
     "ppo_update_count_matches_committed_batches": true,
-    "checkpoint_write_calls": 6,
-    "checkpoint_write_journal_entries": 6,
+    "checkpoint_write_calls": 16,
+    "checkpoint_write_journal_entries": 16,
     "optimizer_step_count_matches_committed_batches": true,
     "hard_cap": 504
   },
@@ -237,8 +281,8 @@
     "ppo_update_calls": 0,
     "ppo_update_journal_entries": 0,
     "ppo_update_count_matches_committed_batches": true,
-    "checkpoint_write_calls": 6,
-    "checkpoint_write_journal_entries": 6,
+    "checkpoint_write_calls": 16,
+    "checkpoint_write_journal_entries": 16,
     "optimizer_step_count_matches_committed_batches": true,
     "hard_cap": 504
   },
@@ -361,8 +405,8 @@
     "ppo_update_calls": 0,
     "ppo_update_journal_entries": 0,
     "ppo_update_count_matches_committed_batches": true,
-    "checkpoint_write_calls": 6,
-    "checkpoint_write_journal_entries": 6,
+    "checkpoint_write_calls": 16,
+    "checkpoint_write_journal_entries": 16,
     "optimizer_step_count_matches_committed_batches": true,
     "hard_cap": 504
   },
@@ -387,8 +431,8 @@
     "ppo_update_calls": 0,
     "ppo_update_journal_entries": 0,
     "ppo_update_count_matches_committed_batches": true,
-    "checkpoint_write_calls": 6,
-    "checkpoint_write_journal_entries": 6,
+    "checkpoint_write_calls": 16,
+    "checkpoint_write_journal_entries": 16,
     "optimizer_step_count_matches_committed_batches": true,
     "hard_cap": 504
   },
@@ -397,7 +441,25 @@
   "completed_episodes": 0,
   "ppo_updates": 0,
   "optimizer_step_calls": 0,
-  "checkpoint_write_calls": 6,
-  "checkpoint_write_calls_include_synthetic_readback_fixtures": true,
+  "checkpoint_write_calls": 16,
+  "checkpoint_journal_output_scope": {
+    "r42_run_output_dir": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2",
+    "journal_closure_before": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\runtime\\checkpoint_writes.jsonl",
+    "journal_closure_after": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\runtime\\checkpoint_writes.jsonl",
+    "journal_entry_count": 15,
+    "legacy_journal_sha256_preserved": "16d8f73c6606d44a4d5ebaf4b2c43d5976c8dc7f76ec4e0859b0974d14d0d8bd",
+    "route_audit_sha256": "18e57894e599c5bc646db20e72a44261fa293cdb69e684c234997d41f934481b"
+  },
+  "checkpoint_journal_route_regression": {
+    "kind": "round46-r2-checkpoint-journal-route-regression/1",
+    "status": "passed",
+    "receipt_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_CHECKPOINT_JOURNAL_ROUTE_REGRESSION.json",
+    "receipt_sha256": "91de357f855a1ea04f9cfb5383433629aef20c8b363f8b1ca32bc23e12488378",
+    "checkpoint_sha256": "b7365848a2e8dfac2912e2966cf7a2ed68262befa94b76799688dc073ff622f7",
+    "trainer_save_calls_delta": 1,
+    "claims": 0,
+    "environment_constructor_calls": 0,
+    "optimizer_step_calls": 0
+  },
   "network_or_push": false
 }
