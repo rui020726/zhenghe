@@ -1,0 +1,118 @@
+{
+  "normal": [
+    {
+      "category": "normal",
+      "slot": 1,
+      "logical_job": "r45_bc_control_s11_scene1301000",
+      "attempt": 1,
+      "claimed_at_unix": 1791282581.9603488
+    }
+  ],
+  "reserve": [],
+  "claims": [
+    {
+      "logical_job": "r45_bc_control_s11_scene1301000",
+      "attempt": 1,
+      "category": "normal",
+      "status": "failed_technical",
+      "claimed_at_unix": 1791282581.958787,
+      "launch_slot": 1,
+      "metadata": {
+        "arm": "BC_ONLY_R2",
+        "training_seed": 11,
+        "mode": "greedy",
+        "scenario_seed": 1301000
+      },
+      "environment_constructor_calls": 1,
+      "joint_run_build_failures": 0,
+      "joint_run_constructed_calls": 1,
+      "run_invocation_calls": 1,
+      "joint_run_method_calls": 1,
+      "run_return_calls": 1,
+      "run_failure_calls": 0,
+      "completed_steps": 1000,
+      "simulation_started": true,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 0,
+      "prelaunch_head": "514142bc847efb2746046bfcf26c2d58ae8a9233",
+      "round": 45,
+      "comm_action_semantics": "one-shot-send-skip/1",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+      "runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1",
+      "round45_key": {
+        "scope": "bc_only_greedy_control",
+        "logical_job": "r45_bc_control_s11_scene1301000",
+        "seed": 11,
+        "scenario_seed": 1301000,
+        "mode": "greedy",
+        "tag": "r45_bc_greedy_s11_scene1301000",
+        "kind": "eval"
+      },
+      "round45_artifact_paths": {
+        "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\logs\\v2_r45_bc_greedy_s11_scene1301000_s1301000_a1_rp.jsonl",
+        "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\logs\\v2_r45_bc_greedy_s11_scene1301000_s1301000_a1_ct.jsonl",
+        "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\logs\\v2_r45_bc_greedy_s11_scene1301000_s1301000_a1_tape.jsonl",
+        "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\rows\\v2_r45_bc_greedy_s11_scene1301000_s1301000_a1.json"
+      },
+      "round45_attempt_kind": "normal",
+      "constructor_called_at_unix": 1791282581.993767,
+      "simulation_started_at_unix": 1791282596.2038467,
+      "finished_at_unix": 1791282596.255572,
+      "detail": "EvalIndexError: artifact receipt may only be created for a NEW evaluation row; preserved={\"exception\": \"EvalIndexError: artifact receipt may only be created for a NEW evaluation row\", \"relay_counters_at_failure\": {\"generated_items\": 88, \"events_accepted\": 6, \"coalesced_changes\": 79, \"emissions\": 3, \"first_emissions\": 3, \"redundant_emissions\": 0, \"refresh_emissions\": 0, \"transmission_attempts\": 18, \"packets_lost\": 3, \"packets_delivered\": 15, \"deliveries_applied\": 15, \"delivery_duplicate\": 0, \"delivery_superseded\": 0, \"delivery_unknown_task\": 0, \"delivery_refused\": 0, \"emissions_suppressed_terminal\": 3, \"capacity_refused_sends\": 0, \"budget_refused_sends\": 0, \"emissions_policy\": 3, \"emissions_forced_maxwait\": 0, \"emissions_other\": 0, \"attempts_policy\": 18, \"attempts_forced_maxwait\": 0, \"attempts_other\": 0, \"bytes_policy\": 7284, \"bytes_forced_maxwait\": 0, \"bytes_other\": 0, \"refused_policy\": 0, \"refused_forced_maxwait\": 0, \"refused_other\": 0, \"airtime_bytes\": 7284, \"applied_bytes\": 6065, \"backlog_steps\": 0, \"unsent_change_steps\": 1987, \"flight_steps\": 0, \"max_in_flight\": 0, \"max_backlog_age\": 875, \"ack_emitted\": 0, \"ack_attempts\": 0, \"ack_attempt_bytes\": 0, \"ack_delivered\": 0, \"ack_lost"
+    }
+  ],
+  "normal_used": 1,
+  "reserve_used": 0,
+  "total_used": 1,
+  "plan": {
+    "normal": {
+      "bc_only_greedy_controls": 48,
+      "new_training": 384,
+      "new_final_evaluation": 96
+    },
+    "normal_total": 528,
+    "technical_reserve_max": 24,
+    "hard_cap": 552
+  },
+  "counts": {
+    "normal_used": 1,
+    "reserve_used": 0,
+    "total_used": 1,
+    "environment_constructor_calls": 1,
+    "joint_run_build_failures": 0,
+    "joint_run_constructed_calls": 1,
+    "run_invocation_calls": 1,
+    "joint_run_method_calls": 1,
+    "run_return_calls": 1,
+    "run_failure_calls": 0,
+    "completed_steps": 1000,
+    "completed_logical_jobs": 0,
+    "simulation_started": 1,
+    "technical_failed_claims": 1,
+    "retry_claims": 0,
+    "optimizer_step_calls": 0,
+    "optimizer_step_journal_entries": 0,
+    "ppo_update_calls": 0,
+    "ppo_update_journal_entries": 0,
+    "ppo_update_count_matches_committed_batches": true,
+    "checkpoint_write_calls": 0,
+    "checkpoint_write_journal_entries": 0,
+    "optimizer_step_count_matches_committed_batches": true,
+    "hard_cap": 552,
+    "adopted_after_receipt_failure_jobs": 1,
+    "effective_unique_valid_jobs_including_adoptions": 1
+  },
+  "adopted_completed_cells": [
+    {
+      "logical_job": "r45_bc_control_s11_scene1301000",
+      "receipt_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\ROUND45_R2_ADOPTED_CONTROL_R3_FINAL2.json",
+      "receipt_sha256": "1784271004be8877cd66e8b131b1357a82770730411d118391a34b3035cf22af",
+      "original_claim_status_preserved": "failed_technical",
+      "normal_charge_retained": true
+    }
+  ],
+  "kind": "round45-r2-execution-ledger/3",
+  "round": 45,
+  "runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1+round45-r2-bc-receipt-adoption/4+round45-r2-empty-transcript-zero-closure/3+round45-r2-r3-prelaunch-identity/2+round45-r2-adopted-ledger-snapshot/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2"
+}

@@ -1,0 +1,142 @@
+{
+  "kind": "round45-r2-adopted-control-receipt/2",
+  "status": "adopted_after_receipt_failure",
+  "logical_job": "r45_bc_control_s11_scene1301000",
+  "round45_key": {
+    "scope": "bc_only_greedy_control",
+    "logical_job": "r45_bc_control_s11_scene1301000",
+    "seed": 11,
+    "scenario_seed": 1301000,
+    "mode": "greedy",
+    "tag": "r45_bc_greedy_s11_scene1301000",
+    "kind": "eval"
+  },
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+  "origin_runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1",
+  "adopting_runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1+round45-r2-bc-receipt-adoption/4+round45-r2-empty-transcript-zero-closure/3+round45-r2-r3-prelaunch-identity/3+round45-r2-adopted-ledger-snapshot/1+round45-r2-status-path-normalization/1",
+  "original_claim_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\launch_claims\\r45_bc_control_s11_scene1301000\\attempt_0001.json",
+  "original_claim_sha256": "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f",
+  "original_claim_status": "failed_technical",
+  "original_row_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\rows\\v2_r45_bc_greedy_s11_scene1301000_s1301000_a1.json",
+  "row_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\rows\\v2_r45_bc_greedy_s11_scene1301000_s1301000_a1.json",
+  "row_sha256": "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+  "raw_artifact_receipt_sha256": "cfad4f9f23bfa5ca214d697c9f252983dd1df565b763ade23fc570b07dc380d6",
+  "round45_artifact_receipt": {
+    "kind": "round45-r2-artifact-receipt/2",
+    "attempt": 1,
+    "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+    "runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1",
+    "round45_key": {
+      "scope": "bc_only_greedy_control",
+      "logical_job": "r45_bc_control_s11_scene1301000",
+      "seed": 11,
+      "scenario_seed": 1301000,
+      "mode": "greedy",
+      "tag": "r45_bc_greedy_s11_scene1301000",
+      "kind": "eval"
+    },
+    "row_identity": {
+      "kind": "eval",
+      "model_arm": "BC_ONLY_R2",
+      "training_seed": 11,
+      "episode_index": null,
+      "eval_mode": "greedy",
+      "scenario_seed": 1301000,
+      "attempt": 1,
+      "steps": 1000,
+      "on_time": 6,
+      "spent_bytes": 7284,
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+      "runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1",
+      "comm_action_semantics": "one-shot-send-skip/1",
+      "on_time_task_ids": [
+        "piloc-e1-target-0",
+        "piloc-e1-target-1",
+        "piloc-e1-target-2",
+        "piloc-e1-target-3",
+        "piloc-e1-target-4",
+        "piloc-e1-target-5"
+      ],
+      "r45_evaluation_role": "BC_ONLY_GREEDY_CONTROL",
+      "bc_checkpoint_sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+      "bc_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+      "checkpoint_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+      "controller_parameter_sha256_after": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330"
+    },
+    "decision_tape_records": 86,
+    "artifacts": {
+      "row": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\rows\\v2_r45_bc_greedy_s11_scene1301000_s1301000_a1.json",
+        "sha256": "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+        "size_bytes": 347215
+      },
+      "lifecycle": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\logs\\v2_r45_bc_greedy_s11_scene1301000_s1301000_a1_rp.jsonl",
+        "sha256": "ad0c7be3728b4a5173ac9e7339397498770e0cd53f27ee5162b7ef6dd7a1f3e8",
+        "size_bytes": 556118
+      },
+      "transcript": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\logs\\v2_r45_bc_greedy_s11_scene1301000_s1301000_a1_ct.jsonl",
+        "sha256": "5c2700772eafba0b9c522e72fe8c69c93fa5672e41606a5a2bd55204984786e5",
+        "size_bytes": 5171
+      },
+      "tape": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\logs\\v2_r45_bc_greedy_s11_scene1301000_s1301000_a1_tape.jsonl",
+        "sha256": "a5800c36faa8caab7396e3b963786375845933c0af6ee85b133077316ea72b5f",
+        "size_bytes": 185829
+      }
+    }
+  },
+  "r2_stop_report_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\ROUND45_R2_POST_LAUNCH_STOP_V1.json",
+  "r2_stop_report_sha256": "fb06691c5ac60c2614a5b0178bba128f8df4018b213ce578a75a84a1a5d63b71",
+  "r2_post_bc_freeze_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\ROUND45_R2_POST_BC_ENV_FREEZE_R2.json",
+  "r2_post_bc_freeze_sha256": "31cad256e95d48d9c307c4c5c2d0e0ccf5eff3d6a273649d32c0ffa65fef4311",
+  "r2_prelaunch_identity_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\ROUND45_R2_PRELAUNCH_IDENTITY_R2.json",
+  "r2_prelaunch_identity_sha256": "d085fb1764b9d9021dff409fffc687ac194b6e5c1e32f7f96c371c511a2a7cc5",
+  "r2_source_commit": "a09d22e95329da161b789f29c3225ce098a20045",
+  "r2_prelaunch_commit": "bd41d230be817f96014b772c6f24ed578e80a44b",
+  "r2_postlaunch_stop_commit": "a09d22e95329da161b789f29c3225ce098a20045",
+  "r44_eval_index_sha256": "27131543835537325a0f8749dae0c4a5230638da106b09e2a45713f17f97e7fa",
+  "old_r44_writer_rejection": "artifact receipt may only be created for a NEW evaluation row",
+  "bc_checkpoint_sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+  "bc_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+  "bc_module_parameter_sha256": {
+    "trunk": "49e41b7191cf8470af661ed4f4e41e9709ac57a03fc4c22dbd4f70f2d0fcaade",
+    "action_head": "aad35fc6ba3fc43bfe174cb08a5fabb8180654765ba9ab39b6b71fdc42b8b102",
+    "task_value_head": "e94ae85e5c97bfc5d9157370f03a5ac789507093f6151e135e0a2338537656b6",
+    "cost_value_head": "2678d4c8b7b1caa8a3c2f19375ad7deb93dadf5da18cc70b48a65f148032765a"
+  },
+  "action_rng_seed": 7566968475784137584,
+  "scene": 1301000,
+  "training_seed": 11,
+  "eval_mode": "greedy",
+  "on_time": 6,
+  "spent_bytes": 7284,
+  "on_time_task_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+  ],
+  "immediate_reference_row_sha256": "3f04848adda4f860684c8e5263097d1cf1d35d5c236c03a52e45c84cedb0f512",
+  "immediate_reference_on_time_task_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+  ],
+  "this_scene_exact_task_set_match": true,
+  "normal_charge_retained": true,
+  "normal_slot": 1,
+  "technical_reserve_used": 0,
+  "original_claim_modified": false,
+  "original_row_or_raw_artifacts_modified": false,
+  "environment_constructed_during_adoption": 0,
+  "ppo_updates_during_adoption": 0,
+  "optimizer_step_calls_during_adoption": 0,
+  "checkpoint_writes_during_adoption": 0
+}

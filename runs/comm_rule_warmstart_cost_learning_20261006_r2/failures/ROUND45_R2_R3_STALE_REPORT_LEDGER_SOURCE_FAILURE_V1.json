@@ -1,0 +1,42 @@
+{
+  "kind": "round45-r2-r3-stale-report-ledger-source-failure/1",
+  "status": "preserved_report_source_failure",
+  "branch": "exp/comm-rule-warmstart-cost-learning-r2",
+  "observed_head": "2446499b80d0d96096cdcba499a7314fc1fb9b38",
+  "report_path": "ROUND45_R2_REPORT_R3.md",
+  "report_sha256": "e849f537c7c1a1f69864f8d609420a9e0a05710771b797443e34a00686eea89b",
+  "reported_environment_constructed": 0,
+  "incorrect_source": "runtime/ROUND45_R2_EXECUTION_LEDGER_R3.json",
+  "incorrect_source_note": "The old cached ledger contains a temporary synthetic seam-test key and is not the cumulative experiment ledger.",
+  "verified_correct_counts": {
+    "normal_used": 1,
+    "reserve_used": 0,
+    "total_used": 1,
+    "environment_constructor_calls": 1,
+    "run_invocation_calls": 1,
+    "run_return_calls": 1,
+    "completed_steps": 1000,
+    "completed_logical_jobs": 0,
+    "technical_failed_claims": 1,
+    "adopted_after_receipt_failure_jobs": 1,
+    "effective_unique_valid_jobs_including_adoptions": 1,
+    "ppo_update_calls": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_write_calls": 0
+  },
+  "verified_source": {
+    "enforcement_entry": "load_runtime(enforce_prelaunch=True)",
+    "ledger_snapshot_calls": 3,
+    "ledger_write_calls": 2,
+    "readback_receipt_path": "ROUND45_R2_ADOPTED_LEDGER_READBACK_R3_FINAL2.json",
+    "readback_receipt_sha256": "27b0a8d5ef40f4fe1ad39d5d857bba3128c8b289005b57577b468738a8d6e23b",
+    "execution_ledger_path": "runtime/ROUND45_R2_EXECUTION_LEDGER_R3_FINAL2.json",
+    "execution_ledger_sha256": "e904c1b65381d184cff84b49ef0b9412dacc7621b9a6a5c8216d0e2a0305eb53"
+  },
+  "original_claim_status": "failed_technical",
+  "original_claim_sha256": "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ec5c109c61c1f",
+  "original_row_sha256": "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+  "counts_changed_by_report_generation": false,
+  "corrective_source": "R3 FINAL3 reads live runtime ledger_snapshot, else its versioned R3 execution ledger, else the last verified readback in CURRENT_TASK; it never reads the stale R3 cache.",
+  "old_report_modified": false
+}

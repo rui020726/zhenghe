@@ -1,0 +1,53 @@
+{
+  "kind": "round45-r2-r3-task-allowlist-status-parse-failure/1",
+  "status": "preserved_prelaunch_gate_failure",
+  "branch": "exp/comm-rule-warmstart-cost-learning-r2",
+  "observed_head": "2446499b80d0d96096cdcba499a7314fc1fb9b38",
+  "command": "r45_r2_execute_r3.py --execute-fixed-plan",
+  "failure": {
+    "type": "RuntimeError",
+    "message": "R2 frozen tracked source changed: ['M runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_CURRENT_TASK.json']"
+  },
+  "parser_evidence": {
+    "git_status_porcelain_text": " M runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_CURRENT_TASK.json",
+    "_git_helper_returned_text": "M runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_CURRENT_TASK.json",
+    "fixed_three_character_slice_produced": "uns/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_CURRENT_TASK.json",
+    "resolved_expected_and_actual_task_path_match": true
+  },
+  "prior_enforced_ledger_readback": {
+    "status": "passed",
+    "receipt_path": "ROUND45_R2_ADOPTED_LEDGER_READBACK_R3_FINAL2.json",
+    "receipt_sha256": "27b0a8d5ef40f4fe1ad39d5d857bba3128c8b289005b57577b468738a8d6e23b",
+    "raw_completed_claim_jobs": 0,
+    "adopted_after_receipt_failure_jobs": 1,
+    "effective_unique_valid_jobs_including_adoptions": 1
+  },
+  "cumulative_counts": {
+    "environment_constructed": 1,
+    "normal_claims": 1,
+    "reserve_claims": 0,
+    "completed_steps": 1000,
+    "raw_completed_claim_jobs": 0,
+    "adopted_after_receipt_failure_jobs": 1,
+    "effective_unique_valid_jobs_including_adoptions": 1,
+    "ppo_updates": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0
+  },
+  "attempt_deltas": {
+    "environment_constructed": 0,
+    "new_claims": 0,
+    "normal_claims": 0,
+    "reserve_claims": 0,
+    "run_calls": 0,
+    "completed_steps": 0,
+    "ppo_updates": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0
+  },
+  "original_claim_status": "failed_technical",
+  "original_claim_sha256": "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ec5c109c61c1f",
+  "original_row_sha256": "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+  "preserved_stop_report_path": "ROUND45_R2_REPORT_R3.md",
+  "new_versioned_runner_report_path": "ROUND45_R2_REPORT_R3_FINAL3.md"
+}

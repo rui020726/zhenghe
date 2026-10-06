@@ -1,0 +1,65 @@
+{
+  "kind": "round45-r2-zero-environment-bc-receipt-regression/3",
+  "status": "passed",
+  "runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1+round45-r2-bc-receipt-adoption/4+round45-r2-empty-transcript-zero-closure/3+round45-r2-r3-prelaunch-identity/3+round45-r2-adopted-ledger-snapshot/1+round45-r2-status-path-normalization/1",
+  "actual_row_consumer": "R3 guarded r42_run._execute_cell -> _completed_row -> _load_adopted_control",
+  "original_claim_status_preserved": "failed_technical",
+  "original_claim_sha256_before_after": [
+    "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f",
+    "b06ce74fa6967c955e7496a8a5e91ff6c2aeb2d1302711dae98ee5c109c61c1f"
+  ],
+  "original_row_sha256_before_after": [
+    "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16",
+    "9fd29cdf30ccdca598ec083d89f93515d1c3772aaa29f6d120c8441d459d5b16"
+  ],
+  "old_r44_writer_rejection": "artifact receipt may only be created for a NEW evaluation row",
+  "r3_receipt_namespace": "round45-r2-artifact-receipt/2",
+  "adopted_row_returned_by_actual_consumer": true,
+  "new_claims_or_attempts_created": 0,
+  "raw_companion_hashes_unchanged": true,
+  "empty_transcript_cases": [
+    {
+      "case": "valid_zero_cost_empty_transcript",
+      "expected": "accept_zero_cost_empty_transcript",
+      "result": "accepted",
+      "receipt_kind": "round45-r2-artifact-receipt/2"
+    },
+    {
+      "case": "missing_transcript",
+      "expected": "reject_missing_transcript",
+      "result": "rejected",
+      "exception": "EvalIndexError"
+    },
+    {
+      "case": "positive_cost_empty_transcript",
+      "expected": "reject_positive_cost_empty_transcript",
+      "result": "rejected",
+      "exception": "RuntimeError",
+      "reason": "empty R3 transcript is incompatible with nonzero or missing row.spent_bytes"
+    }
+  ],
+  "environment_constructed_delta": 0,
+  "run_invocation_delta": 0,
+  "completed_steps_delta": 0,
+  "normal_claims_delta": 0,
+  "reserve_claims_delta": 0,
+  "ppo_updates_delta": 0,
+  "optimizer_step_calls_delta": 0,
+  "checkpoint_write_calls_delta": 0,
+  "original_claim_status_after": "failed_technical",
+  "original_normal_charge_retained": true,
+  "ledger_adoption_summary": {
+    "completed_claim_jobs": 0,
+    "adopted_after_receipt_failure_jobs": 1,
+    "effective_unique_valid_jobs_including_adoptions": 1
+  },
+  "adopted_scene_on_time_task_ids": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+  ],
+  "adopted_scene_spent_bytes": 7284
+}

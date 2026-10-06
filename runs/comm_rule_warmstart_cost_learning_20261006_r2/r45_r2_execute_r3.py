@@ -39,8 +39,9 @@ RUNNER_VERSION = (
     "round45-r2-four-module-bc-eval/1+"
     "round45-r2-bc-receipt-adoption/4+"
     "round45-r2-empty-transcript-zero-closure/3+"
-    "round45-r2-r3-prelaunch-identity/2+"
-    "round45-r2-adopted-ledger-snapshot/1"
+    "round45-r2-r3-prelaunch-identity/3+"
+    "round45-r2-adopted-ledger-snapshot/1+"
+    "round45-r2-status-path-normalization/1"
 )
 ADOPTABLE_ORIGIN_RUNNER_VERSION = (
     "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+"
@@ -48,15 +49,22 @@ ADOPTABLE_ORIGIN_RUNNER_VERSION = (
     "round45-attempt/2+r2-durable-key-consumer/1+"
     "round45-r2-four-module-bc-eval/1"
 )
-ADOPTION_PATH = RUN_DIR / "ROUND45_R2_ADOPTED_CONTROL_R3_FINAL2.json"
-R3_FREEZE_PATH = RUN_DIR / "ROUND45_R2_POST_BC_ENV_FREEZE_R3_FINAL2.json"
-R3_KEY_PLAN_PATH = RUN_DIR / "ROUND45_R2_ENVIRONMENT_KEY_PLAN_R3_FINAL2.json"
-R3_PRELAUNCH_PATH = RUN_DIR / "ROUND45_R2_PRELAUNCH_IDENTITY_R3_FINAL2.json"
-R3_SEAM_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_ZERO_ENV_SEAM_REGRESSION_R3_FINAL2.json"
-R3_CONTAINER_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_ZERO_ENV_CONTAINER_REGRESSION_R3_FINAL2.json"
-R3_BC_RECEIPT_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_BC_RECEIPT_REGRESSION_R3_FINAL2.json"
-R3_LEDGER_READBACK_PATH = RUN_DIR / "ROUND45_R2_ADOPTED_LEDGER_READBACK_R3_FINAL2.json"
-R3_EXECUTION_LEDGER_PATH = RUN_DIR / "runtime" / "ROUND45_R2_EXECUTION_LEDGER_R3_FINAL2.json"
+ADOPTION_PATH = RUN_DIR / "ROUND45_R2_ADOPTED_CONTROL_R3_FINAL3.json"
+R3_FREEZE_PATH = RUN_DIR / "ROUND45_R2_POST_BC_ENV_FREEZE_R3_FINAL3.json"
+R3_KEY_PLAN_PATH = RUN_DIR / "ROUND45_R2_ENVIRONMENT_KEY_PLAN_R3_FINAL3.json"
+R3_PRELAUNCH_PATH = RUN_DIR / "ROUND45_R2_PRELAUNCH_IDENTITY_R3_FINAL3.json"
+R3_SEAM_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_ZERO_ENV_SEAM_REGRESSION_R3_FINAL3.json"
+R3_CONTAINER_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_ZERO_ENV_CONTAINER_REGRESSION_R3_FINAL3.json"
+R3_BC_RECEIPT_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_BC_RECEIPT_REGRESSION_R3_FINAL3.json"
+R3_STATUS_PARSER_REGRESSION_PATH = RUN_DIR / "ROUND45_R2_ZERO_ENV_STATUS_PARSER_REGRESSION_R3_FINAL3.json"
+R3_LEDGER_READBACK_PATH = RUN_DIR / "ROUND45_R2_ADOPTED_LEDGER_READBACK_R3_FINAL3.json"
+R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH = RUN_DIR / "runtime" / "ROUND45_R2_PRELAUNCH_LEDGER_SNAPSHOT_R3_FINAL3.json"
+R3_EXECUTION_LEDGER_PATH = RUN_DIR / "runtime" / "ROUND45_R2_EXECUTION_LEDGER_R3_FINAL3.json"
+R3_REPORT_PATH = RUN_DIR / "ROUND45_R2_REPORT_R3_FINAL3.md"
+R3_LEDGER_CORRECTION_PATH = RUN_DIR / "ROUND45_R2_PRELAUNCH_LEDGER_CORRECTION_R3_FINAL3.json"
+R3_LEDGER_CORRECTION_REPORT_PATH = RUN_DIR / "ROUND45_R2_PRELAUNCH_LEDGER_CORRECTION_R3_FINAL3.md"
+R3_PRIOR_STOP_REPORT_PATH = RUN_DIR / "ROUND45_R2_REPORT_R3.md"
+R3_FINAL_RESULTS_PATH = RUN_DIR / "ROUND45_R2_FINAL_RESULTS_R3_FINAL3.json"
 
 CURRENT_CONTEXT: contextvars.ContextVar[dict[str, Any] | None] = contextvars.ContextVar(
     "round45_r2_key_context", default=None)
@@ -90,8 +98,86 @@ def _sha256(path: Path) -> str:
 
 
 def _git(*args: str) -> str:
-    return subprocess.run(["git", "-C", str(REPO), *args], check=True,
-                          capture_output=True, text=True).stdout.strip()
+    output = subprocess.run(["git", "-C", str(REPO), *args], check=True,
+                            capture_output=True, text=True).stdout
+    if args and args[0] == "status":
+        return output.rstrip("\r\n")
+    return output.strip()
+
+
+def _unexpected_tracked_status_lines(status_text: str) -> list[str]:
+    """Allow only the task state file while preserving Git's two-column prefix."""
+    allowed = {str((RUN_DIR / "ROUND45_CURRENT_TASK.json").resolve()).lower()}
+    unexpected = []
+    for line in status_text.splitlines():
+        if not line:
+            continue
+        if len(line) < 4 or line[2] != " ":
+            unexpected.append(line)
+            continue
+        raw = line[3:].strip().strip('"')
+        if not raw:
+            unexpected.append(line)
+            continue
+        path = (REPO / raw).resolve()
+        if str(path).lower() not in allowed:
+            unexpected.append(line)
+    return unexpected
+
+
+def run_zero_environment_status_parser_regression() -> dict[str, Any]:
+    """Test the real Git status seam and reject every tracked path except task state."""
+    task_relative = (RUN_DIR / "ROUND45_CURRENT_TASK.json").relative_to(REPO).as_posix()
+    runner_relative = (RUN_DIR / "r45_r2_execute_r3.py").relative_to(REPO).as_posix()
+    other_relative = (RUN_DIR / "ROUND45_CONFIGURATION_DIFF.json").relative_to(REPO).as_posix()
+    actual_status = _git("status", "--porcelain", "--untracked-files=no")
+    actual_rejected = _unexpected_tracked_status_lines(actual_status)
+    actual_lines = actual_status.splitlines()
+    actual_task_row = f" M {task_relative}"
+    actual_runner_row = f" M {runner_relative}"
+    task_prefix_preserved = actual_task_row in actual_lines
+    task_only = _unexpected_tracked_status_lines(f" M {task_relative}\n")
+    first_and_later_task = _unexpected_tracked_status_lines(
+        f" M {task_relative}\n M {task_relative}\n")
+    source_row = f" M {runner_relative}"
+    other_row = f" M {other_relative}"
+    source_rejected = _unexpected_tracked_status_lines(source_row) == [source_row]
+    other_rejected = _unexpected_tracked_status_lines(other_row) == [other_row]
+    if (not task_prefix_preserved or actual_runner_row not in actual_rejected
+            or len(actual_rejected) != 1 or task_only
+            or first_and_later_task or not source_rejected or not other_rejected):
+        raise RuntimeError(
+            "R3 Git status prefix/path allowlist regression failed: "
+            f"prefix={task_prefix_preserved}, actual={actual_rejected}, "
+            f"task={task_only}, first_and_later={first_and_later_task}, "
+            f"runner_rejected={source_rejected}, other_rejected={other_rejected}")
+    result = {
+        "kind": "round45-r2-zero-environment-status-path-regression/1",
+        "status": "passed",
+        "runner_version": RUNNER_VERSION,
+        "git_interface": "_git(status, --porcelain, --untracked-files=no)",
+        "actual_git_status": actual_status,
+        "actual_git_status_rejected_lines": actual_rejected,
+        "actual_task_m_row_seen_with_prefix": task_prefix_preserved,
+        "actual_runner_source_rejected": actual_runner_row in actual_rejected,
+        "task_m_path_accepted_as_only_dirty_entry": True,
+        "first_and_subsequent_task_m_rows_accepted": True,
+        "runner_source_rejected": source_rejected,
+        "other_tracked_path_rejected": other_rejected,
+        "allowed_dirty_scope": [task_relative],
+        "synthetic_status_texts": {
+            "first_and_later_task_rows": f" M {task_relative}\\n M {task_relative}",
+            "unauthorized_runner_source_row": source_row,
+            "unauthorized_other_tracked_row": other_row,
+        },
+        "environment_constructed": 0,
+        "new_claims": 0,
+        "ppo_updates": 0,
+        "optimizer_step_calls": 0,
+        "checkpoint_write_calls": 0,
+    }
+    _write_atomic(R3_STATUS_PARSER_REGRESSION_PATH, result)
+    return result
 
 
 def _committed_r3_runner_identity(commit: str = "HEAD") -> dict[str, str]:
@@ -173,10 +259,10 @@ def verify_prelaunch_identity(_frozen: dict[str, Any] | None = None) -> str:
         raise RuntimeError("R2 prelaunch identity or post-BC freeze is missing")
     receipt = _json(receipt_path)
     frozen = _json(freeze_path)
-    if (receipt.get("kind") != "round45-r2-prelaunch-identity/5"
+    if (receipt.get("kind") != "round45-r2-prelaunch-identity/6"
             or receipt.get("status") != "passed"
             or receipt.get("runner_version") != RUNNER_VERSION
-            or frozen.get("kind") != "round45-r2-post-bc-environment-freeze/5"
+            or frozen.get("kind") != "round45-r2-post-bc-environment-freeze/6"
             or frozen.get("status") != "frozen_before_r3_continuation"
             or frozen.get("runner_version") != RUNNER_VERSION):
         raise RuntimeError("R2 prelaunch/freeze status is not passed")
@@ -192,6 +278,7 @@ def verify_prelaunch_identity(_frozen: dict[str, Any] | None = None) -> str:
     seam_path = R3_SEAM_REGRESSION_PATH
     container_path = R3_CONTAINER_REGRESSION_PATH
     adoption_regression_path = R3_BC_RECEIPT_REGRESSION_PATH
+    status_parser_regression_path = R3_STATUS_PARSER_REGRESSION_PATH
     if (not seam_path.is_file()
             or _sha256(seam_path) != receipt.get("zero_environment_seam_regression_sha256")
             or not container_path.is_file()
@@ -199,7 +286,10 @@ def verify_prelaunch_identity(_frozen: dict[str, Any] | None = None) -> str:
             != receipt.get("zero_environment_container_regression_sha256")
             or not adoption_regression_path.is_file()
             or _sha256(adoption_regression_path)
-            != receipt.get("zero_environment_bc_receipt_regression_sha256")):
+            != receipt.get("zero_environment_bc_receipt_regression_sha256")
+            or not status_parser_regression_path.is_file()
+            or _sha256(status_parser_regression_path)
+            != receipt.get("zero_environment_status_parser_regression_sha256")):
         raise RuntimeError("R3 zero-environment regression identity changed")
     plan_path = R3_KEY_PLAN_PATH
     if (_sha256(plan_path) != receipt.get("logical_key_plan_sha256")
@@ -211,6 +301,7 @@ def verify_prelaunch_identity(_frozen: dict[str, Any] | None = None) -> str:
         raise RuntimeError("R3 adopted control receipt identity changed")
     seam_result = _json(seam_path)
     container_result = _json(container_path)
+    status_parser_result = _json(status_parser_regression_path)
     if (seam_result.get("kind") != "round45-r2-zero-environment-consumption-regression/3"
             or seam_result.get("status") != "passed"
             or container_result.get("kind") != "round45-r2-zero-environment-container-eval-regression/3"
@@ -238,7 +329,19 @@ def verify_prelaunch_identity(_frozen: dict[str, Any] | None = None) -> str:
                 "completed_claim_jobs": 0,
                 "adopted_after_receipt_failure_jobs": 1,
                 "effective_unique_valid_jobs_including_adoptions": 1,
-            }):
+            }
+            or status_parser_result.get("kind")
+            != "round45-r2-zero-environment-status-path-regression/1"
+            or status_parser_result.get("status") != "passed"
+            or status_parser_result.get("actual_git_status_rejected_lines") != [
+                status_parser_result.get("synthetic_status_texts", {}).get(
+                    "unauthorized_runner_source_row")]
+            or status_parser_result.get("actual_task_m_row_seen_with_prefix") is not True
+            or status_parser_result.get("actual_runner_source_rejected") is not True
+            or status_parser_result.get("task_m_path_accepted_as_only_dirty_entry") is not True
+            or status_parser_result.get("first_and_subsequent_task_m_rows_accepted") is not True
+            or status_parser_result.get("runner_source_rejected") is not True
+            or status_parser_result.get("other_tracked_path_rejected") is not True):
         raise RuntimeError("R3 zero-environment regression results are not clean")
     if (receipt.get("historical_environment_constructed_before_r3") != 1
             or receipt.get("historical_normal_claims_before_r3") != 1
@@ -266,13 +369,8 @@ def verify_prelaunch_identity(_frozen: dict[str, Any] | None = None) -> str:
         raise RuntimeError("R3 frozen source commit is not an ancestor of the runtime HEAD")
     if _git("rev-parse", "HEAD^") != receipt.get("freeze_commit"):
         raise RuntimeError("R2 HEAD is not the frozen prelaunch receipt child")
-    allowed_dirty = {str((RUN_DIR / "ROUND45_CURRENT_TASK.json").resolve()).lower()}
-    dirty = []
-    for line in _git("status", "--porcelain", "--untracked-files=no").splitlines():
-        raw = line[3:].strip().strip('"')
-        path = (REPO / raw).resolve()
-        if str(path).lower() not in allowed_dirty:
-            dirty.append(line)
+    dirty = _unexpected_tracked_status_lines(
+        _git("status", "--porcelain", "--untracked-files=no"))
     if dirty:
         raise RuntimeError(f"R2 frozen tracked source changed: {dirty[:4]}")
     actual_sources = _source_hashes()
@@ -838,7 +936,7 @@ def _verify_adopted_ledger_readback(runtime: dict[str, Any]) -> dict[str, Any]:
         )
         return {name: int(counts.get(name, 0)) for name in names}
 
-    expected = {
+    prelaunch_expected = {
         "normal_used": 1, "reserve_used": 0, "total_used": 1,
         "environment_constructor_calls": 1, "run_invocation_calls": 1,
         "run_return_calls": 1, "completed_steps": 1000,
@@ -852,16 +950,28 @@ def _verify_adopted_ledger_readback(runtime: dict[str, Any]) -> dict[str, Any]:
     }
     observed = [ledger_identity(run_module.ledger_snapshot(strict=True))
                 for _ in range(3)]
+    current_counts = observed[0]
+    if (current_counts["adopted_after_receipt_failure_jobs"] != 1
+            or current_counts["effective_unique_valid_jobs_including_adoptions"]
+            != current_counts["completed_logical_jobs"] + 1
+            or current_counts["technical_failed_claims"] < 1
+            or current_counts["total_used"]
+            != current_counts["normal_used"] + current_counts["reserve_used"]
+            or current_counts["environment_constructor_calls"] < 1
+            or current_counts["run_invocation_calls"] < 1
+            or current_counts["run_return_calls"] < 1
+            or current_counts["completed_steps"] < 1000):
+        raise RuntimeError(f"R3 current ledger lost its preserved adoption/cumulative identity: {current_counts}")
     written = [ledger_identity(run_module.write_execution_ledger(strict=True))
                for _ in range(2)]
     written_file = _json(R3_EXECUTION_LEDGER_PATH)
     written_file_identity = ledger_identity(written_file)
     if (written_file.get("kind") != "round45-r2-execution-ledger/3"
             or written_file.get("runner_version") != RUNNER_VERSION
-            or any(item != expected for item in observed + written + [written_file_identity])):
+            or any(item != current_counts for item in observed + written + [written_file_identity])):
         raise RuntimeError(
-            "R3 enforced ledger snapshot/write counts differ from the preserved claim plus adoption: "
-            f"expected={expected}, observed={observed}, written={written}, "
+            "R3 enforced ledger snapshot/write calls changed cumulative counts: "
+            f"initial={current_counts}, observed={observed}, written={written}, "
             f"written_file={written_file_identity}")
     original_claim = _json(claim_path)
     after_claim_sha = _sha256(claim_path)
@@ -872,19 +982,43 @@ def _verify_adopted_ledger_readback(runtime: dict[str, Any]) -> dict[str, Any]:
             or after_claim_sha != before_claim_sha
             or after_row_sha != before_row_sha):
         raise RuntimeError("R3 ledger readback changed or misidentified the original failed claim/row")
+    first_readback = not R3_LEDGER_READBACK_PATH.is_file()
+    if first_readback:
+        if current_counts != prelaunch_expected:
+            raise RuntimeError(
+                "first enforced R3 ledger readback is not at the sealed pre-environment baseline: "
+                f"{current_counts}")
+        if R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH.exists():
+            raise RuntimeError("orphan R3 prelaunch ledger snapshot exists without its receipt")
+        temporary_snapshot = R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH.with_suffix(
+            R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH.suffix + f".{os.getpid()}.tmp")
+        temporary_snapshot.write_bytes(R3_EXECUTION_LEDGER_PATH.read_bytes())
+        os.replace(temporary_snapshot, R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH)
+    else:
+        prior_receipt = _json(R3_LEDGER_READBACK_PATH)
+        if (prior_receipt.get("kind") != "round45-r2-adopted-ledger-readback/2"
+                or prior_receipt.get("status") != "passed"
+                or prior_receipt.get("expected_counts") != prelaunch_expected
+                or not R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH.is_file()
+                or _sha256(R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH)
+                != prior_receipt.get("preserved_prelaunch_ledger_sha256")):
+            raise RuntimeError("preserved R3 prelaunch ledger receipt/snapshot identity changed")
     receipt = {
-        "kind": "round45-r2-adopted-ledger-readback/1",
+        "kind": "round45-r2-adopted-ledger-readback/2",
         "status": "passed",
         "runner_version": RUNNER_VERSION,
         "enforcement": "load_runtime(enforce_prelaunch=True)",
         "ledger_snapshot_calls": 3,
         "ledger_write_calls": 2,
-        "expected_counts": expected,
+        "expected_counts": prelaunch_expected,
+        "current_counts_at_readback": current_counts,
         "snapshot_counts": observed,
         "write_return_counts": written,
         "written_file_counts": written_file_identity,
         "written_ledger_path": str(R3_EXECUTION_LEDGER_PATH.resolve()),
         "written_ledger_sha256": _sha256(R3_EXECUTION_LEDGER_PATH),
+        "preserved_prelaunch_ledger_path": str(R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH.resolve()),
+        "preserved_prelaunch_ledger_sha256": _sha256(R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH),
         "original_claim_status": original_claim["status"],
         "original_claim_sha256_before_after": [before_claim_sha, after_claim_sha],
         "original_row_sha256_before_after": [before_row_sha, after_row_sha],
@@ -897,7 +1031,8 @@ def _verify_adopted_ledger_readback(runtime: dict[str, Any]) -> dict[str, Any]:
         "optimizer_step_delta": 0,
         "checkpoint_write_delta": 0,
     }
-    _write_atomic(R3_LEDGER_READBACK_PATH, receipt)
+    if first_readback:
+        _write_atomic(R3_LEDGER_READBACK_PATH, receipt)
     return receipt
 
 
@@ -2677,18 +2812,110 @@ def _analyze_completed_run(runtime: dict[str, Any],
             "R43_rows_historical_only": True,
         },
     }
-    _write_atomic(RUN_DIR / "ROUND45_R2_FINAL_RESULTS_R3.json", result)
+    _write_atomic(R3_FINAL_RESULTS_PATH, result)
     return result
+
+
+def _current_execution_ledger_for_reporting() -> tuple[dict[str, Any], str]:
+    """Use the live R3 snapshot, its versioned ledger, or the last verified task copy."""
+    if RUNTIME is not None:
+        ledger = RUNTIME["r42_run"].ledger_snapshot(strict=False)
+        return ledger, "live_runtime_ledger_snapshot"
+    if R3_EXECUTION_LEDGER_PATH.is_file():
+        return _json(R3_EXECUTION_LEDGER_PATH), "versioned_r3_execution_ledger"
+    task = _json(RUN_DIR / "ROUND45_CURRENT_TASK.json")
+    readback = task.get("r3_enforced_ledger_readback", {})
+    expected = readback.get("expected_counts")
+    if isinstance(expected, dict):
+        return {"counts": copy.deepcopy(expected)}, "last_verified_prelaunch_readback_in_task"
+    raise RuntimeError(
+        "cannot report cumulative execution counts: runtime, versioned R3 ledger, "
+        "and verified task readback are all unavailable")
+
+
+def write_prelaunch_ledger_correction(runtime: dict[str, Any]) -> dict[str, Any]:
+    """Preserve the earlier wrong-cache report and write a versioned correction."""
+    readback = runtime.get("r3_adopted_ledger_readback", {})
+    if readback.get("status") != "passed" or not R3_PRIOR_STOP_REPORT_PATH.is_file():
+        raise RuntimeError("R3 prelaunch ledger correction lacks its verified readback or prior report")
+    if R3_LEDGER_CORRECTION_PATH.is_file():
+        existing = _json(R3_LEDGER_CORRECTION_PATH)
+        if (existing.get("kind") != "round45-r2-prelaunch-ledger-correction/1"
+                or existing.get("status") != "passed"
+                or existing.get("enforced_readback_sha256") != _sha256(R3_LEDGER_READBACK_PATH)
+                or existing.get("correct_execution_ledger_sha256")
+                != _sha256(R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH)):
+            raise RuntimeError("existing R3 ledger correction no longer matches preserved prelaunch evidence")
+        return existing
+    prior_text = R3_PRIOR_STOP_REPORT_PATH.read_text(encoding="utf-8")
+    prior_sha = _sha256(R3_PRIOR_STOP_REPORT_PATH)
+    prelaunch_ledger = _json(R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH)
+    prelaunch_receipt = _json(R3_LEDGER_READBACK_PATH)
+    ledger_source = "preserved_prelaunch_r3_execution_ledger_snapshot"
+    counts = prelaunch_ledger.get("counts", {})
+    expected = prelaunch_receipt.get("expected_counts", {})
+    selected = {name: int(counts.get(name, 0)) for name in expected}
+    if ("环境构造：0 次" not in prior_text
+            or selected != expected
+            or selected.get("environment_constructor_calls") != 1
+            or selected.get("completed_logical_jobs") != 0
+            or selected.get("adopted_after_receipt_failure_jobs") != 1
+            or selected.get("effective_unique_valid_jobs_including_adoptions") != 1
+            or _sha256(R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH)
+            != prelaunch_receipt.get("preserved_prelaunch_ledger_sha256")
+            or _sha256(R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH)
+            != prelaunch_receipt.get("written_ledger_sha256")):
+        raise RuntimeError("R3 ledger correction does not reconcile to the actual versioned readback")
+    correction = {
+        "kind": "round45-r2-prelaunch-ledger-correction/1",
+        "status": "passed",
+        "runner_version": RUNNER_VERSION,
+        "superseded_report_path": str(R3_PRIOR_STOP_REPORT_PATH.resolve()),
+        "superseded_report_sha256": prior_sha,
+        "superseded_report_environment_constructed_claim": 0,
+        "superseded_report_reason": "the prior R3 report read a stale R3 execution-ledger cache containing a synthetic seam-test key",
+        "correct_count_source": ledger_source,
+        "correct_execution_ledger_path": str(R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH.resolve()),
+        "correct_execution_ledger_sha256": _sha256(R3_PRELAUNCH_LEDGER_SNAPSHOT_PATH),
+        "enforced_readback_path": str(R3_LEDGER_READBACK_PATH.resolve()),
+        "enforced_readback_sha256": _sha256(R3_LEDGER_READBACK_PATH),
+        "cumulative_counts": selected,
+        "original_claim_status": readback.get("original_claim_status"),
+        "original_claim_sha256": readback.get("original_claim_sha256_before_after", [None])[0],
+        "original_row_sha256": readback.get("original_row_sha256_before_after", [None])[0],
+        "readback_deltas": {key: readback.get(key) for key in (
+            "environment_constructed_delta", "normal_claim_delta", "reserve_claim_delta",
+            "run_call_delta", "completed_steps_delta", "ppo_update_delta",
+            "optimizer_step_delta", "checkpoint_write_delta")},
+        "old_report_modified": False,
+    }
+    _write_atomic(R3_LEDGER_CORRECTION_PATH, correction)
+    lines = [
+        "# ROUND45-R2 预启动账本勘误", "",
+        f"旧报告 `{R3_PRIOR_STOP_REPORT_PATH.name}` 保留，SHA256 `{prior_sha}`；其中环境累计数写为 0。",
+        "本版只读强制入口的 snapshot/write 读回已冻结到独立版本化 ledger 快照，确认该累计数应为 1。",
+        "", "## 更正后的累计计数", "",
+        f"- normal/reserve/total：{selected['normal_used']}/{selected['reserve_used']}/{selected['total_used']}。",
+        f"- 环境构造 / run / 返回 / 完成步：{selected['environment_constructor_calls']} / {selected['run_invocation_calls']} / {selected['run_return_calls']} / {selected['completed_steps']}。",
+        f"- claim 原始完成数：{selected['completed_logical_jobs']}；adoption：{selected['adopted_after_receipt_failure_jobs']}；有效唯一任务：{selected['effective_unique_valid_jobs_including_adoptions']}。",
+        f"- PPO / optimizer / checkpoint：{selected['ppo_update_calls']} / {selected['optimizer_step_calls']} / {selected['checkpoint_write_calls']}。",
+        "- 原 claim 仍为 `failed_technical`；原 claim 与 row 哈希不变；三次 snapshot、两次 write 均无计数增量。",
+        "- 本次勘误没有启动新环境或创建 claim。",
+        "", f"读回收据：`{R3_LEDGER_READBACK_PATH.name}`（`{_sha256(R3_LEDGER_READBACK_PATH)}`）。",
+    ]
+    correction_text = "\n".join(lines) + "\n"
+    if R3_LEDGER_CORRECTION_REPORT_PATH.is_file():
+        if R3_LEDGER_CORRECTION_REPORT_PATH.read_text(encoding="utf-8") != correction_text:
+            raise RuntimeError("existing R3 ledger correction report differs; refusing overwrite")
+    else:
+        R3_LEDGER_CORRECTION_REPORT_PATH.write_text(correction_text, encoding="utf-8")
+    return correction
 
 
 def _write_final_report(result: dict[str, Any] | None, *, gate_failed: bool = False,
                         error: dict[str, Any] | None = None) -> Path:
-    ledger_path = RUN_DIR / "runtime" / "ROUND45_R2_EXECUTION_LEDGER_R3.json"
-    if ledger_path.is_file():
-        ledger = _json(ledger_path)
-        counts = ledger.get("counts", {})
-    else:
-        counts = {}
+    ledger, ledger_source = _current_execution_ledger_for_reporting()
+    counts = ledger.get("counts", {})
     task = _json(RUN_DIR / "ROUND45_CURRENT_TASK.json")
     bc_summary = _json(RUN_DIR / "ROUND45_R2_BC_TRAINING_SUMMARY.json")
     lines = [
@@ -2700,6 +2927,7 @@ def _write_final_report(result: dict[str, Any] | None, *, gate_failed: bool = Fa
         f"- 训练语义版本：`{_json(RUN_DIR / 'ROUND45_CONFIGURATION_DIFF.json')['training_version']}`",
         "", "## 计数", "",
         f"- BC：本次 {bc_summary['this_attempt_real_bc_optimizer_updates']} 次真实更新；含旧失败共 {bc_summary['family_cumulative_real_bc_optimizer_updates']} 次。没有重跑 BC。",
+        f"- 计数来源：`{ledger_source}`；claim raw completed={counts.get('completed_logical_jobs')}，adopted={counts.get('adopted_after_receipt_failure_jobs')}，effective unique={counts.get('effective_unique_valid_jobs_including_adoptions')}。",
         f"- 环境构造：{counts.get('environment_constructor_calls', 0)} 次；run 调用：{counts.get('run_invocation_calls', 0)} 次；成功返回：{counts.get('run_return_calls', 0)} 次。",
         f"- 正常 claim：{counts.get('normal_used', 0)}/528；技术 reserve：{counts.get('reserve_used', 0)}/24；总 claim：{counts.get('total_used', 0)}/552。",
         f"- PPO 更新：{counts.get('ppo_update_calls', 0)}；Adam step：{counts.get('optimizer_step_calls', 0)}。",
@@ -2715,7 +2943,7 @@ def _write_final_report(result: dict[str, Any] | None, *, gate_failed: bool = Fa
         lines += [f"- 研究判定：`{result['status']}`。",
                   f"- BC-only greedy 控制门禁：`{result['bc_only_control_gate']['status']}`。",
                   f"- 任务数与成本主目标：{result['interpretation']['primary_success']}。",
-                  "- 每 seed 详细指标、逐场景目标 ID、与 BC / R44 NEW / immediate / 两条固定规则的配对差异见 `ROUND45_R2_FINAL_RESULTS_R3.json`。"]
+                  f"- 每 seed 详细指标、逐场景目标 ID、与 BC / R44 NEW / immediate / 两条固定规则的配对差异见 `{R3_FINAL_RESULTS_PATH.name}`。"]
         for seed, item in result["per_seed"].items():
             lines.append(
                 f"- seed {seed}：精确保留 immediate 目标集合={item['final_greedy_task_ids_equal_immediate_every_scene']}；"
@@ -2727,7 +2955,7 @@ def _write_final_report(result: dict[str, Any] | None, *, gate_failed: bool = Fa
               "- R43 结果仅作历史记录；主要模型对照是固定 R44 NEW 矩阵。",
               "- 16 个开发场景不是独立确认集。未调参、未选 seed、未追加场景或训练。",
               "- 未推送、合并或部署。"]
-    report_path = RUN_DIR / "ROUND45_R2_REPORT_R3.md"
+    report_path = R3_REPORT_PATH
     report_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return report_path
 
@@ -2776,18 +3004,35 @@ def run_fixed_plan() -> dict[str, Any] | None:
 def _write_stop_state(error: BaseException) -> None:
     error_record = {"type": type(error).__name__, "message": str(error)}
     counts: dict[str, Any] = {}
+    count_source = "unavailable"
     try:
+        ledger, count_source = _current_execution_ledger_for_reporting()
+        counts = ledger.get("counts", {})
         if RUNTIME is not None:
-            ledger = RUNTIME["r42_run"].ledger_snapshot(strict=False)
             RUNTIME["r42_run"].write_execution_ledger(strict=False)
-            counts = ledger.get("counts", {})
     except BaseException as ledger_error:
         error_record["ledger_error"] = f"{type(ledger_error).__name__}: {ledger_error}"
+    if not counts:
+        error_record["ledger_count_source_error"] = error_record.get(
+            "ledger_error", "no cumulative ledger count source was returned")
+        raise RuntimeError(
+            "refusing to overwrite known cumulative task counts with missing runtime zeros")
     _task_state("stopped with preserved R2 evidence", stop_reason=error_record,
-                environment_constructed=counts.get("environment_constructor_calls", 0),
-                normal_claims=counts.get("normal_used", 0),
-                reserve_claims=counts.get("reserve_used", 0),
-                ppo_updates=counts.get("ppo_update_calls", 0))
+                count_source=count_source,
+                environment_constructed=int(counts["environment_constructor_calls"]),
+                normal_claims=int(counts["normal_used"]),
+                reserve_claims=int(counts["reserve_used"]),
+                completed_steps=int(counts["completed_steps"]),
+                raw_completed_claim_jobs=int(counts["completed_logical_jobs"]),
+                adopted_after_receipt_failure_jobs=int(
+                    counts["adopted_after_receipt_failure_jobs"]),
+                effective_unique_valid_jobs_including_adoptions=int(
+                    counts["effective_unique_valid_jobs_including_adoptions"]),
+                run_invocation_calls=int(counts["run_invocation_calls"]),
+                run_return_calls=int(counts["run_return_calls"]),
+                optimizer_step_calls=int(counts["optimizer_step_calls"]),
+                checkpoint_write_calls=int(counts["checkpoint_write_calls"]),
+                ppo_updates=int(counts["ppo_update_calls"]))
     _write_final_report(None, error=error_record)
 
 
@@ -2799,6 +3044,7 @@ def main(argv: list[str] | None = None) -> int:
     group.add_argument("--zero-environment-bc-receipt-regression", action="store_true")
     group.add_argument("--zero-environment-seam-regression", action="store_true")
     group.add_argument("--zero-environment-container-regression", action="store_true")
+    group.add_argument("--zero-environment-status-parser-regression", action="store_true")
     group.add_argument("--prepare-post-bc-freeze", action="store_true")
     group.add_argument("--seal-prelaunch-identity", action="store_true")
     group.add_argument("--verify-prelaunch-identity", action="store_true")
@@ -2829,6 +3075,10 @@ def main(argv: list[str] | None = None) -> int:
             result = run_zero_environment_container_regression()
             print(json.dumps(result, ensure_ascii=False), flush=True)
             return 0 if result.get("status") == "passed" else 1
+        if arguments.zero_environment_status_parser_regression:
+            result = run_zero_environment_status_parser_regression()
+            print(json.dumps(result, ensure_ascii=False), flush=True)
+            return 0 if result.get("status") == "passed" else 1
         if arguments.prepare_post_bc_freeze:
             result = prepare_post_bc_freeze()
             print(json.dumps({"status": result.get("status"),
@@ -2846,13 +3096,17 @@ def main(argv: list[str] | None = None) -> int:
         if arguments.verify_prelaunch_identity:
             runtime = load_runtime(enforce_prelaunch=True)
             head = verify_prelaunch_identity(runtime["frozen"])
+            correction = write_prelaunch_ledger_correction(runtime)
             print(json.dumps({"status": "passed", "branch": _git("branch", "--show-current"),
                               "head": head, "runner_version": RUNNER_VERSION,
                               "environment_constructed": 0, "ppo_updates": 0,
                               "optimizer_step_calls": 0,
                               "checkpoint_write_calls": 0,
                               "adopted_ledger_readback":
-                                  runtime["r3_adopted_ledger_readback"]},
+                                  runtime["r3_adopted_ledger_readback"],
+                              "ledger_correction": correction,
+                              "ledger_correction_report_path":
+                                  str(R3_LEDGER_CORRECTION_REPORT_PATH.resolve())},
                              ensure_ascii=False), flush=True)
             return 0
         if arguments.execute_fixed_plan:
@@ -2866,7 +3120,7 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps({"status": result["status"],
                               "environment_claims": result["counts"]["total_used"],
                               "ppo_updates": result["counts"]["ppo_update_calls"],
-                              "report": str((RUN_DIR / "ROUND45_R2_REPORT_R3.md").resolve())},
+                              "report": str(R3_REPORT_PATH.resolve())},
                              ensure_ascii=False), flush=True)
             return 0
     except BaseException as error:
@@ -3010,6 +3264,12 @@ def prepare_post_bc_freeze() -> dict[str, Any]:
         raise RuntimeError("R2 branch changed before the environment freeze")
     if _git("status", "--porcelain", "--untracked-files=no"):
         raise RuntimeError("tracked R2 source is dirty before environment freeze")
+    status_parser_regression = _json(R3_STATUS_PARSER_REGRESSION_PATH)
+    if (status_parser_regression.get("kind")
+            != "round45-r2-zero-environment-status-path-regression/1"
+            or status_parser_regression.get("status") != "passed"
+            or status_parser_regression.get("runner_version") != RUNNER_VERSION):
+        raise RuntimeError("R3 tracked-status parser regression is missing or stale")
     runtime = load_runtime(enforce_prelaunch=False)
     old_freeze_path = RUN_DIR / "ROUND45_R2_POST_BC_ENV_FREEZE_R2.json"
     old_prelaunch_path = RUN_DIR / "ROUND45_R2_PRELAUNCH_IDENTITY_R2.json"
@@ -3060,7 +3320,7 @@ def prepare_post_bc_freeze() -> dict[str, Any]:
     runner_git_identity = _committed_r3_runner_identity(source_commit)
     pre_bc = _json(RUN_DIR / "ROUND45_PRE_BC_FREEZE.json")
     freeze = {
-        "kind": "round45-r2-post-bc-environment-freeze/5",
+        "kind": "round45-r2-post-bc-environment-freeze/6",
         "status": "frozen_before_r3_continuation",
         "branch": task["branch"],
         "source_commit": source_commit,
@@ -3104,6 +3364,8 @@ def prepare_post_bc_freeze() -> dict[str, Any]:
         "r2_prelaunch_identity_sha256": _sha256(old_prelaunch_path),
         "r2_postlaunch_stop_sha256": _sha256(old_stop_path),
         "adopted_control_receipt_sha256": _sha256(ADOPTION_PATH),
+        "zero_environment_status_parser_regression_sha256":
+            _sha256(R3_STATUS_PARSER_REGRESSION_PATH),
         "adopted_control_logical_job": adoption["logical_job"],
         "bc_control_fixed_baseline": {
             "late_discovery_gate_mean_spent_bytes": baseline["late_mean_spent_bytes"],
@@ -3173,8 +3435,10 @@ def seal_prelaunch_identity() -> dict[str, Any]:
     container_regression = _json(container_path)
     adoption_regression_path = R3_BC_RECEIPT_REGRESSION_PATH
     adoption_regression = _json(adoption_regression_path)
+    status_parser_regression_path = R3_STATUS_PARSER_REGRESSION_PATH
+    status_parser_regression = _json(status_parser_regression_path)
     task = _json(task_path)
-    if (freeze.get("kind") != "round45-r2-post-bc-environment-freeze/5"
+    if (freeze.get("kind") != "round45-r2-post-bc-environment-freeze/6"
             or freeze.get("status") != "frozen_before_r3_continuation"
             or regression.get("kind") != "round45-r2-zero-environment-consumption-regression/3"
             or regression.get("status") != "passed"
@@ -3189,6 +3453,12 @@ def seal_prelaunch_identity() -> dict[str, Any]:
                 "adopted_after_receipt_failure_jobs": 1,
                 "effective_unique_valid_jobs_including_adoptions": 1,
             }
+            or status_parser_regression.get("kind")
+            != "round45-r2-zero-environment-status-path-regression/1"
+            or status_parser_regression.get("status") != "passed"
+            or status_parser_regression.get("runner_version") != RUNNER_VERSION
+            or _sha256(status_parser_regression_path)
+            != freeze.get("zero_environment_status_parser_regression_sha256")
             or regression.get("environment_constructed") != 0
             or regression.get("ppo_updates") != 0
             or regression.get("optimizer_step_calls") != 0
@@ -3221,7 +3491,7 @@ def seal_prelaunch_identity() -> dict[str, Any]:
         raise RuntimeError("tracked worktree must be committed before the R2 prelaunch seal")
     head = _git("rev-parse", "HEAD")
     receipt = {
-        "kind": "round45-r2-prelaunch-identity/5",
+        "kind": "round45-r2-prelaunch-identity/6",
         "status": "passed",
         "branch": _git("branch", "--show-current"),
         "freeze_commit": head,
@@ -3234,6 +3504,8 @@ def seal_prelaunch_identity() -> dict[str, Any]:
         "zero_environment_seam_regression_sha256": _sha256(regression_path),
         "zero_environment_container_regression_sha256": _sha256(container_path),
         "zero_environment_bc_receipt_regression_sha256": _sha256(adoption_regression_path),
+        "zero_environment_status_parser_regression_sha256":
+            _sha256(status_parser_regression_path),
         "adopted_control_receipt_sha256": _sha256(ADOPTION_PATH),
         "source_files_sha256": _source_hashes(),
         "r44_final_delivery_head": R44_FINAL_HEAD,
