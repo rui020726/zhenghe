@@ -1,0 +1,45 @@
+{
+  "kind": "round45-r2-zero-environment-consumption-regression/1",
+  "status": "passed",
+  "actual_claim_consumer": "r40_common.claim_launch",
+  "actual_row_executor_seam": "R44 r44_runtime.configure + R43 r42_run._execute_cell",
+  "actual_row_writer": "canonical v2_run._booked through R44/R2 receipt wrappers",
+  "prelaunch_verifier_scope": "temporary current-head stub inside temp-only synthetic claim fixture",
+  "sequential_unique_keys": 3,
+  "successful_keys_before_failure": 2,
+  "duplicate_completed_key_added_claim": false,
+  "completed_key_replay": "returned verified row without another _execute_cell body/claim",
+  "synthetic_failed_key": {
+    "attempt_1_exception": "ValueError preserved",
+    "implicit_retry": "refused without creating attempt_2",
+    "explicit_reserve_retry": "one attempt_2 only"
+  },
+  "claim_receipts": 3,
+  "python_executable": "D:\\project_env\\python.exe",
+  "actual_device": "cpu",
+  "production_quota_before_temp_fixture": {
+    "normal": 528,
+    "reserve": 24,
+    "hard_cap": 552,
+    "normal_launches": 528,
+    "reserve_launches": 24,
+    "launch_cap": 552
+  },
+  "actual_scientific_values": {
+    "observation_width": 19,
+    "gamma": 1.0,
+    "gae_lambda": 1.0,
+    "eta_lambda": 0.5,
+    "b0_bytes": 10000.0,
+    "delta": 0.0,
+    "lambda_init": 1.0,
+    "all_rows": "ALL_ROWS as encoded in the frozen v2_trainer; ACTIVE_ROWS is not reachable from this round's entry points"
+  },
+  "environment_constructed": 0,
+  "ppo_updates": 0,
+  "optimizer_step_calls": 0,
+  "checkpoint_write_calls": 0,
+  "normal_slots_in_temp_fixture": 3,
+  "reserve_slots_in_temp_fixture": 1,
+  "temporary_fixture_only": true
+}
