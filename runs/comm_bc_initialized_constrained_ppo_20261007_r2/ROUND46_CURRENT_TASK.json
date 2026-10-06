@@ -1,16 +1,62 @@
 {
-  "kind": "round46-current-task/1",
-  "stage": "prepared; zero environments",
+  "kind": "round46-stop-state/1",
+  "stage": "stopped with evidence preserved",
   "branch": "fix/comm-bc-initialization-readback",
-  "head": "198522ba83482a1d0a06ee4fabac1bf490ccae1e",
   "runner_version": "round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
   "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
-  "normal_environment_keys": 480,
-  "technical_reserve_max": 24,
-  "hard_environment_cap": 504,
+  "status": "stopped",
+  "error": {
+    "type": "RuntimeError",
+    "message": "seed 11: prior ep0 recovery receipt conflicts"
+  },
+  "ledger_source": "actual ROUND42/R40 ledger snapshot",
+  "ledger": {
+    "normal": [],
+    "reserve": [],
+    "claims": [],
+    "normal_used": 0,
+    "reserve_used": 0,
+    "total_used": 0,
+    "plan": {
+      "normal": {
+        "new_training": 384,
+        "new_final_evaluation": 96
+      },
+      "normal_total": 480,
+      "technical_reserve_max": 24,
+      "hard_cap": 504
+    },
+    "counts": {
+      "normal_used": 0,
+      "reserve_used": 0,
+      "total_used": 0,
+      "environment_constructor_calls": 0,
+      "joint_run_build_failures": 0,
+      "joint_run_constructed_calls": 0,
+      "run_invocation_calls": 0,
+      "joint_run_method_calls": 0,
+      "run_return_calls": 0,
+      "run_failure_calls": 0,
+      "completed_steps": 0,
+      "completed_logical_jobs": 0,
+      "simulation_started": 0,
+      "technical_failed_claims": 0,
+      "retry_claims": 0,
+      "optimizer_step_calls": 0,
+      "optimizer_step_journal_entries": 0,
+      "ppo_update_calls": 0,
+      "ppo_update_journal_entries": 0,
+      "ppo_update_count_matches_committed_batches": true,
+      "checkpoint_write_calls": 19,
+      "checkpoint_write_journal_entries": 19,
+      "optimizer_step_count_matches_committed_batches": true,
+      "hard_cap": 504
+    }
+  },
+  "old_round45_gate_preserved": true,
   "environment_constructed": 0,
   "run_invocation_calls": 0,
-  "completed_episodes": 0,
+  "completed_steps": 0,
   "ppo_updates": 0,
   "optimizer_step_calls": 0
 }

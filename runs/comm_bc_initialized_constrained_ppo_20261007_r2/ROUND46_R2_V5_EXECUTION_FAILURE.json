@@ -1,0 +1,121 @@
+{
+  "kind": "round46-r2-v5-execution-failure/1",
+  "task_id": "ROUND46-R2-V5-CONTINUE-20261007",
+  "round": 46,
+  "status": "stopped_before_atomic_claim",
+  "branch": "fix/comm-bc-initialization-readback",
+  "head_at_execute": "0c2d6c3a8109da44efa56727355084ca6a5c988b",
+  "runner_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py",
+  "runner_source_sha256": "ea5597d0ccbe0562d0fc4b87a81708ea0f525747d31900ef9bf46b4a7d228b86",
+  "command": "D:\\project_env\\python.exe runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py --execute",
+  "exit_code": 1,
+  "error": {
+    "type": "RuntimeError",
+    "message": "seed 11: prior ep0 recovery receipt conflicts",
+    "source": "runs/comm_rule_warmstart_cost_learning_20261006_r2/r45_r2_execute_r3.py:_promote_ep0_to_rolling",
+    "call_path": [
+      "r46_execute_r2.py:execute",
+      "r46_execute_r2.py:_run_first_four_and_all_gates",
+      "r45_r2_execute_r3.py:_call_training_seed",
+      "r42_run.py:train_seed",
+      "r40_train_resume_adapter.py:train_seed -> _save_milestone(episodes_done=0)",
+      "r45_r2_execute_r3.py:save_milestone -> _promote_ep0_to_rolling"
+    ]
+  },
+  "classification": "frozen runner/output-lineage validity error; stop and preserve, no retry or hotfix",
+  "receipt_conflict": {
+    "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/runtime/ROUND45_R2_EP0_RECOVERY_s11.json",
+    "receipt_sha256": "1a259177a313312ff9686a4831937a304205808656e00e2231577e991b81c300",
+    "recorded_source_sha256": "330a80eb646bf422fbe31024951cc88c15740cc97579c903b0686a78107f97ed",
+    "recorded_status": "passed",
+    "recorded_seed": 11,
+    "recorded_episodes_done": 0,
+    "recorded_updates": 0,
+    "recorded_optimizer_steps": 0,
+    "observed_new_ep0_sha256": "2ca8f764315795f5aadc89117901f23442c43c15e4d4802f5ae268765467950a",
+    "receipt_was_modified": false
+  },
+  "untrained_checkpoint_outputs_preserved": [
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/checkpoints/v2_train_s11_ep0.pt",
+      "sha256": "2ca8f764315795f5aadc89117901f23442c43c15e4d4802f5ae268765467950a",
+      "bytes": 57605,
+      "episodes_done": 0,
+      "updates": 0,
+      "optimizer_state_empty": true,
+      "resume_authorized": false
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/checkpoints/v2_train_s11.pt",
+      "sha256": "2ca8f764315795f5aadc89117901f23442c43c15e4d4802f5ae268765467950a",
+      "bytes": 57605,
+      "byte_identical_to_ep0": true,
+      "resume_authorized": false
+    }
+  ],
+  "last_checkpoint_journal_entry": {
+    "episodes_done": 0,
+    "updates": 0,
+    "sha256_at_write": "2ca8f764315795f5aadc89117901f23442c43c15e4d4802f5ae268765467950a"
+  },
+  "ledger_before_execute": {
+    "normal_used": 0,
+    "reserve_used": 0,
+    "environment_constructor_calls": 0,
+    "run_invocation_calls": 0,
+    "completed_steps": 0,
+    "ppo_update_calls": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_write_calls": 18,
+    "checkpoint_write_journal_entries": 18
+  },
+  "ledger_after_stop": {
+    "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/runtime/ROUND46_EXECUTION_LEDGER.json",
+    "sha256": "b3b76ae5ce524348152f41dbdd49800b1715436bdf7045ba74a53b83d1a9a2a3",
+    "normal_used": 0,
+    "reserve_used": 0,
+    "environment_constructor_calls": 0,
+    "run_invocation_calls": 0,
+    "completed_steps": 0,
+    "ppo_update_calls": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_write_calls": 19,
+    "checkpoint_write_journal_entries": 19
+  },
+  "ledger_delta": {
+    "normal_claims": 0,
+    "reserve_claims": 0,
+    "environment_constructor_calls": 0,
+    "run_invocation_calls": 0,
+    "completed_steps": 0,
+    "ppo_update_calls": 0,
+    "optimizer_step_calls": 0,
+    "checkpoint_write_calls": 1,
+    "checkpoint_write_journal_entries": 1
+  },
+  "checkpoint_journal_after_stop": {
+    "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/runtime/checkpoint_writes.jsonl",
+    "sha256": "0c612fda36556d589704b1df20ed7a5c06eae811ebeed2206f046d4df978f6d1",
+    "entries": 19
+  },
+  "stop_state": {
+    "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V5_STOP_STATE.json",
+    "sha256": "289a823b0dfe667ec109f9733832e7bf8109853266d12da66e653bb4a8a04fba"
+  },
+  "prelaunch_gates": {
+    "v5_zero_environment_preflight": "passed",
+    "actual_r42_r45_r44_claim_binding_regression": "passed",
+    "all_seed_first_batch_gates": "not_run",
+    "round45_failed_control_gate_preserved": true,
+    "round45_failed_control_gate_sha256": "ccad7597d9b75c46683cd1b49e252deb928b1ee3b183fa9c1c4580d106e5af05"
+  },
+  "execution_plan_remaining": {
+    "normal_claims": 480,
+    "reserve_max": 24,
+    "hard_cap": 504,
+    "training_episodes_completed": 0,
+    "final_evaluation_cells_completed": 0
+  },
+  "network_or_push": false,
+  "retry_or_hotfix": false
+}
