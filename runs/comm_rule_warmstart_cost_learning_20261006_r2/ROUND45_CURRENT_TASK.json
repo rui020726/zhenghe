@@ -10,7 +10,7 @@
   "prior_failed_real_bc_updates_preserved": 1000,
   "family_cumulative_bc_update_hard_cap": 4000,
   "this_attempt_bc_update_cap": 3000,
-  "stage": "R3 FINAL3 status-path and cumulative-report-source correction pending; fixed cells remain unstarted",
+  "stage": "R3 FINAL3 source committed; post-BC freeze, key plan, and four-module zero-environment regression recorded; awaiting freeze-evidence commit and prelaunch seal",
   "pre_bc_freeze_sha256": "a42b6693ea0b3d83262517b386386f718d09038785b9e8ac1c79a09e52d5ed9c",
   "pre_bc_source_commit": "c47fb18eb15381841283fa83b42b01963c45e68f",
   "source_commit": "333d9226c6da46b0638b8a2078eb327666e816c4",
@@ -23,7 +23,7 @@
   "normal_environment_keys": 528,
   "technical_reserve_max": 24,
   "hard_environment_cap": 552,
-  "post_bc_freeze_sha256": "a5aef2fcc926841fef9a12bf17fcb0b049171ebabcf669f7c98a0150e79e34e9",
+  "post_bc_freeze_sha256": "1deba66aa01aeb96782ecfffaf05f4c24a02b05fe8fcde9bb747d47ef9aaec67",
   "logical_key_plan_sha256": "6bbadc9634553e6cdd452172cb3237bd7a2cd793a60eca1f582ed80db1a04fca",
   "zero_environment_seam_gate": "passed",
   "zero_environment_seam_regression_sha256": "142ac5ffa15e6f26addc2d8e701ba4d2eb94661b1a132d11c750cf1631a7bfae",
@@ -33,7 +33,7 @@
   "python_executable": "D:\\project_env\\python.exe",
   "device": "cpu",
   "prelaunch_receipt_sha256": "609868f82e092265dde3ac78600e61345421ddfacb4aba1916ba2d08c4804b0a",
-  "updated_at_local": "2026-10-06 20:16:45",
+  "updated_at_local": "2026-10-06",
   "pre_env_stops": [
     {
       "kind": "ROUND45-R2 pre-environment runner interface failure",
@@ -60,7 +60,7 @@
   ],
   "normal_claims": 1,
   "reserve_claims": 0,
-  "corrected_runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1+round45-r2-bc-receipt-adoption/4+round45-r2-empty-transcript-zero-closure/3+round45-r2-r3-prelaunch-identity/2+round45-r2-adopted-ledger-snapshot/1",
+  "corrected_runner_version": "counted-jointrun-proxy/1+eval-key-index/1+round45-bc-warmstart/1+round45-bc-nested-controller-state/2+round45-postbc-readback/1+round45-attempt/2+r2-durable-key-consumer/1+round45-r2-four-module-bc-eval/1+round45-r2-bc-receipt-adoption/4+round45-r2-empty-transcript-zero-closure/3+round45-r2-r3-prelaunch-identity/3+round45-r2-adopted-ledger-snapshot/1+round45-r2-status-path-normalization/1",
   "pre_env_stops_preserved": 1,
   "corrected_source_commit": "a09d22e95329da161b789f29c3225ce098a20045",
   "corrected_freeze_commit": "bd41d230be817f96014b772c6f24ed578e80a44b",
@@ -98,9 +98,9 @@
     "type": "RuntimeError",
     "message": "R2 frozen tracked source changed: ['M runs/comm_rule_warmstart_cost_learning_20261006_r2/ROUND45_CURRENT_TASK.json']"
   },
-  "r3_post_bc_freeze_sha256": "a5aef2fcc926841fef9a12bf17fcb0b049171ebabcf669f7c98a0150e79e34e9",
-  "r3_logical_key_plan_sha256": "3bc6734f092e25b57b85fb69cd4b7ae802e08780c024dfc571a60102a838faf8",
-  "adopted_control_receipt_sha256": "1784271004be8877cd66e8b131b1357a82770730411d118391a34b3035cf22af",
+  "r3_post_bc_freeze_sha256": "1deba66aa01aeb96782ecfffaf05f4c24a02b05fe8fcde9bb747d47ef9aaec67",
+  "r3_logical_key_plan_sha256": "acfd7cf241fe145b60db76c628855014ce58df89d112b81cfd1fcc2b6c568852",
+  "adopted_control_receipt_sha256": "767510f295b5267a49c1a2bc0bd687f521942e078d9f9705f506d23ea756497b",
   "adopted_completed_logical_jobs": 1,
   "r2_post_bc_freeze_sha256": "31cad256e95d48d9c307c4c5c2d0e0ccf5eff3d6a273649d32c0ffa65fef4311",
   "r2_logical_key_plan_sha256": "6bbadc9634553e6cdd452172cb3237bd7a2cd793a60eca1f582ed80db1a04fca",
@@ -407,5 +407,53 @@
       "optimizer_steps": 0,
       "checkpoint_writes": 0
     }
+  },
+  "r3_pre_freeze_container_gate_attempt": {
+    "status": "precondition_rejected_before_checkpoint_load",
+    "exception": "RuntimeError: R2 post-BC freeze is required before using BC models",
+    "followup": "generated FINAL3 freeze, then reran once and passed",
+    "environment_constructed_delta": 0,
+    "claim_delta": 0,
+    "ppo_updates_delta": 0,
+    "optimizer_step_calls_delta": 0,
+    "checkpoint_write_calls_delta": 0
+  },
+  "r3_final3_zero_environment_container_regression": {
+    "status": "passed",
+    "path": "ROUND45_R2_ZERO_ENV_CONTAINER_REGRESSION_R3_FINAL3.json",
+    "sha256": "d275c24588ea5d50ebe8ee379f724f901577ccd55750e88bf1b94bd28440e591",
+    "seeds": [
+      11,
+      22,
+      33
+    ],
+    "module_eval_scope": [
+      "trunk",
+      "action_head",
+      "task_value_head",
+      "cost_value_head"
+    ],
+    "rng_unchanged": true,
+    "optimizer_or_training_state_restored": false,
+    "cumulative": {
+      "environment_constructed": 1,
+      "normal_claims": 1,
+      "reserve_claims": 0,
+      "run_calls": 1,
+      "completed_steps": 1000,
+      "raw_completed_claim_jobs": 0,
+      "adopted_after_receipt_failure_jobs": 1,
+      "effective_unique_valid_jobs_including_adoptions": 1,
+      "ppo_updates": 0,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 0
+    },
+    "delta": {
+      "environment_constructed": 0,
+      "ppo_updates": 0,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 0
+    },
+    "bc_rerun": false
   }
 }
