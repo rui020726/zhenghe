@@ -978,16 +978,28 @@ def _configure_runtime_module() -> Any:
     # The R42/R43/R44 modules bind their call journals, batch-record glob and
     # eval-artifact scope to RUN_DIR at configure time. Bind them to the /6
     # namespace first so journals and batch records share one root.
+    # R45's load_runtime hard-asserts its own RUN_DIR, then hands off to
+    # r44_runtime.configure, which binds the R42/R43 call journals, the batch
+    # record glob and the eval artefact scope from r44_runtime.RUN_DIR. Patch
+    # that seam so those roots resolve to the /6 namespace, keeping journals and
+    # batch records in one root without touching the R45/R44 sources.
     for _path in (ROUND45_DIR, R44_DIR, R42_DIR):
         if str(_path) not in sys.path:
             sys.path.insert(0, str(_path))
-    for _name in ("r42_run", "r44_prepare", "r44_runtime", "r44_eval_index"):
-        try:
-            _mod = importlib.import_module(_name)
-        except Exception:
-            continue
-        if hasattr(_mod, "RUN_DIR"):
-            _mod.RUN_DIR = V6_DIR
+    import r44_runtime
+    if not getattr(r44_runtime, "_round46_v6_bound", False):
+        _orig_r44_configure = r44_runtime.configure
+
+        def configure(frozen: Any) -> Any:
+            r44_runtime.RUN_DIR = V6_DIR
+            for _name in ("r44_prepare", "r42_run"):
+                _mod = sys.modules.get(_name)
+                if _mod is not None and hasattr(_mod, "RUN_DIR"):
+                    _mod.RUN_DIR = V6_DIR
+            return _orig_r44_configure(frozen)
+
+        r44_runtime.configure = configure
+        r44_runtime._round46_v6_bound = True
     try:
         runtime = module.load_runtime(enforce_prelaunch=False)
     finally:

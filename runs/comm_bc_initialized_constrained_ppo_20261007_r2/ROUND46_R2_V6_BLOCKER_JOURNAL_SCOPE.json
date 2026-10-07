@@ -1,6 +1,6 @@
 {
   "kind": "round46-r2-v6-blocker/1",
-  "status": "stopped_at_runtime_configure",
+  "status": "stopped_at_runtime_configure_provenance",
   "training_completed_episodes": 384,
   "training_checkpoints": [
     "v6/checkpoints/v2_train_s11_ep128.pt",
@@ -14,6 +14,8 @@
     "registered byte-identical quarantine of the two ROUND45-root call journals",
     "installed byte-identical copies under v6/runtime (688 optimizer / 96 ppo lines)"
   ],
-  "next_fix": "apply the R42/R43/R44 RUN_DIR rebinding to V6 after R45's own assignment and before r44_runtime.configure runs (i.e. inside the load_runtime window), so the journals and the batch-record glob share the v6 root",
-  "preserved": "no journal, batch record, claim or receipt was deleted or hand-edited"
+  "next_fix": "copy the runtime code aliases into v6/ and import them from there, then bind r44_runtime.RUN_DIR = V6 at the r44_runtime.configure seam (already patched) so journals, batch records and code provenance all share the v6 root",
+  "preserved": "no journal, batch record, claim or receipt was deleted or hand-edited",
+  "additional_error": "runtime import provenance mismatch for r40_train_resume_adapter: comm_one_shot_full_trace_ablation_20261004/r40_train_resume_adapter.py != v6/r40_train_resume_adapter.py",
+  "cause_full": "R42 configure asserts that the imported runtime-adapter modules live under RUN_DIR. Binding RUN_DIR to the /6 root therefore also requires the code aliases that R46 already copies into the R46 root (r40_train_resume_adapter.py, r42_one_shot.py, r42_versions.py, r43_call_counter_hooks.py) to be copied into v6/ and imported from there."
 }
