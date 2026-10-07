@@ -42,7 +42,8 @@ def critic_input_detached(controller: Any) -> Iterator[None]:
             raise AssertionError("temporary critic hooks were not fully removed")
 
 
-def install_on_verified_trainer(trainer: Any, *, source_sha256: str) -> Callable[[], None]:
+def install_on_verified_trainer(trainer: Any, *, source_sha256: str,
+                                source_path: Any | None = None) -> Callable[[], None]:
     """Install one scoped wrapper on a verified trainer object; no call is made.
 
     The returned undo function restores the exact method object.  Callers must
@@ -53,6 +54,18 @@ def install_on_verified_trainer(trainer: Any, *, source_sha256: str) -> Callable
     original = getattr(trainer, "ppo_update", None)
     if not callable(original):
         raise RuntimeError("verified trainer has no callable ppo_update")
+    if source_path is not None:
+        source = __import__("pathlib").Path(source_path).resolve()
+        body = original
+        seen = set()
+        while callable(body) and id(body) not in seen:
+            seen.add(id(body))
+            if not hasattr(body, "__wrapped__"):
+                break
+            body = body.__wrapped__
+        actual_file = __import__("pathlib").Path(body.__code__.co_filename).resolve()
+        if actual_file != source:
+            raise RuntimeError(f"live ppo_update unwrap source mismatch: {actual_file} != {source}")
 
     @wraps(original)
     def isolated_ppo_update(controller: Any, *args: Any, **kwargs: Any) -> Any:

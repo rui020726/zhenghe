@@ -1,26 +1,4340 @@
 {
-  "kind": "round53-isolated-critic-trial-plan/1",
+  "kind": "round53-fixed-job-plan/1",
   "status": "proposed_not_authorized",
-  "authorization": "PENDING_USER_APPROVAL",
-  "development_go": false,
-  "single_variable": "critic_representation_stop_gradient/1",
-  "normal_claims": {
-    "candidate_training": 384,
-    "candidate_greedy_eval": 48,
-    "candidate_sampled_eval": 48,
-    "BC_sampled_comparator_eval": 48
-  },
-  "normal_total": 528,
-  "new_technical_failure_reserve": 24,
+  "task_id": "ROUND53-ZERO-LAUNCH-ISOLATED-TRIAL-READINESS",
+  "branch": "feat/round53-critic-isolation-trial-readiness",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1",
+  "training_episode_count": 384,
+  "candidate_eval_count": 96,
+  "bc_sampled_eval_count": 48,
+  "normal_count": 528,
+  "technical_reserve_count": 24,
   "hard_cap": 552,
-  "quota_identity": "fresh ROUND53 isolated claim/slot/ledger namespace; historical ROUND46 504 cap is not carried over",
-  "seeds": [
-    11,
-    22,
-    33
+  "jobs": [
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e0",
+      "seed": 11,
+      "episode_index": 0,
+      "scene": 1300027,
+      "normal_slot": 1
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e1",
+      "seed": 11,
+      "episode_index": 1,
+      "scene": 1300014,
+      "normal_slot": 2
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e2",
+      "seed": 11,
+      "episode_index": 2,
+      "scene": 1300028,
+      "normal_slot": 3
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e3",
+      "seed": 11,
+      "episode_index": 3,
+      "scene": 1300044,
+      "normal_slot": 4
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e0",
+      "seed": 22,
+      "episode_index": 0,
+      "scene": 1300027,
+      "normal_slot": 5
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e1",
+      "seed": 22,
+      "episode_index": 1,
+      "scene": 1300014,
+      "normal_slot": 6
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e2",
+      "seed": 22,
+      "episode_index": 2,
+      "scene": 1300028,
+      "normal_slot": 7
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e3",
+      "seed": 22,
+      "episode_index": 3,
+      "scene": 1300044,
+      "normal_slot": 8
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e0",
+      "seed": 33,
+      "episode_index": 0,
+      "scene": 1300027,
+      "normal_slot": 9
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e1",
+      "seed": 33,
+      "episode_index": 1,
+      "scene": 1300014,
+      "normal_slot": 10
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e2",
+      "seed": 33,
+      "episode_index": 2,
+      "scene": 1300028,
+      "normal_slot": 11
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e3",
+      "seed": 33,
+      "episode_index": 3,
+      "scene": 1300044,
+      "normal_slot": 12
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e4",
+      "seed": 11,
+      "episode_index": 4,
+      "scene": 1300003,
+      "normal_slot": 13
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e5",
+      "seed": 11,
+      "episode_index": 5,
+      "scene": 1300010,
+      "normal_slot": 14
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e6",
+      "seed": 11,
+      "episode_index": 6,
+      "scene": 1300005,
+      "normal_slot": 15
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e7",
+      "seed": 11,
+      "episode_index": 7,
+      "scene": 1300008,
+      "normal_slot": 16
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e8",
+      "seed": 11,
+      "episode_index": 8,
+      "scene": 1300021,
+      "normal_slot": 17
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e9",
+      "seed": 11,
+      "episode_index": 9,
+      "scene": 1300034,
+      "normal_slot": 18
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e10",
+      "seed": 11,
+      "episode_index": 10,
+      "scene": 1300013,
+      "normal_slot": 19
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e11",
+      "seed": 11,
+      "episode_index": 11,
+      "scene": 1300001,
+      "normal_slot": 20
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e12",
+      "seed": 11,
+      "episode_index": 12,
+      "scene": 1300047,
+      "normal_slot": 21
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e13",
+      "seed": 11,
+      "episode_index": 13,
+      "scene": 1300012,
+      "normal_slot": 22
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e14",
+      "seed": 11,
+      "episode_index": 14,
+      "scene": 1300033,
+      "normal_slot": 23
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e15",
+      "seed": 11,
+      "episode_index": 15,
+      "scene": 1300039,
+      "normal_slot": 24
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e16",
+      "seed": 11,
+      "episode_index": 16,
+      "scene": 1300009,
+      "normal_slot": 25
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e17",
+      "seed": 11,
+      "episode_index": 17,
+      "scene": 1300002,
+      "normal_slot": 26
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e18",
+      "seed": 11,
+      "episode_index": 18,
+      "scene": 1300022,
+      "normal_slot": 27
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e19",
+      "seed": 11,
+      "episode_index": 19,
+      "scene": 1300030,
+      "normal_slot": 28
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e20",
+      "seed": 11,
+      "episode_index": 20,
+      "scene": 1300032,
+      "normal_slot": 29
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e21",
+      "seed": 11,
+      "episode_index": 21,
+      "scene": 1300041,
+      "normal_slot": 30
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e22",
+      "seed": 11,
+      "episode_index": 22,
+      "scene": 1300040,
+      "normal_slot": 31
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e23",
+      "seed": 11,
+      "episode_index": 23,
+      "scene": 1300038,
+      "normal_slot": 32
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e24",
+      "seed": 11,
+      "episode_index": 24,
+      "scene": 1300037,
+      "normal_slot": 33
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e25",
+      "seed": 11,
+      "episode_index": 25,
+      "scene": 1300045,
+      "normal_slot": 34
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e26",
+      "seed": 11,
+      "episode_index": 26,
+      "scene": 1300024,
+      "normal_slot": 35
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e27",
+      "seed": 11,
+      "episode_index": 27,
+      "scene": 1300017,
+      "normal_slot": 36
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e28",
+      "seed": 11,
+      "episode_index": 28,
+      "scene": 1300026,
+      "normal_slot": 37
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e29",
+      "seed": 11,
+      "episode_index": 29,
+      "scene": 1300035,
+      "normal_slot": 38
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e30",
+      "seed": 11,
+      "episode_index": 30,
+      "scene": 1300036,
+      "normal_slot": 39
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e31",
+      "seed": 11,
+      "episode_index": 31,
+      "scene": 1300000,
+      "normal_slot": 40
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e32",
+      "seed": 11,
+      "episode_index": 32,
+      "scene": 1300016,
+      "normal_slot": 41
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e33",
+      "seed": 11,
+      "episode_index": 33,
+      "scene": 1300018,
+      "normal_slot": 42
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e34",
+      "seed": 11,
+      "episode_index": 34,
+      "scene": 1300029,
+      "normal_slot": 43
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e35",
+      "seed": 11,
+      "episode_index": 35,
+      "scene": 1300011,
+      "normal_slot": 44
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e36",
+      "seed": 11,
+      "episode_index": 36,
+      "scene": 1300042,
+      "normal_slot": 45
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e37",
+      "seed": 11,
+      "episode_index": 37,
+      "scene": 1300019,
+      "normal_slot": 46
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e38",
+      "seed": 11,
+      "episode_index": 38,
+      "scene": 1300006,
+      "normal_slot": 47
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e39",
+      "seed": 11,
+      "episode_index": 39,
+      "scene": 1300023,
+      "normal_slot": 48
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e40",
+      "seed": 11,
+      "episode_index": 40,
+      "scene": 1300025,
+      "normal_slot": 49
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e41",
+      "seed": 11,
+      "episode_index": 41,
+      "scene": 1300046,
+      "normal_slot": 50
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e42",
+      "seed": 11,
+      "episode_index": 42,
+      "scene": 1300043,
+      "normal_slot": 51
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e43",
+      "seed": 11,
+      "episode_index": 43,
+      "scene": 1300004,
+      "normal_slot": 52
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e44",
+      "seed": 11,
+      "episode_index": 44,
+      "scene": 1300007,
+      "normal_slot": 53
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e45",
+      "seed": 11,
+      "episode_index": 45,
+      "scene": 1300020,
+      "normal_slot": 54
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e46",
+      "seed": 11,
+      "episode_index": 46,
+      "scene": 1300031,
+      "normal_slot": 55
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e47",
+      "seed": 11,
+      "episode_index": 47,
+      "scene": 1300015,
+      "normal_slot": 56
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e48",
+      "seed": 11,
+      "episode_index": 48,
+      "scene": 1300041,
+      "normal_slot": 57
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e49",
+      "seed": 11,
+      "episode_index": 49,
+      "scene": 1300022,
+      "normal_slot": 58
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e50",
+      "seed": 11,
+      "episode_index": 50,
+      "scene": 1300039,
+      "normal_slot": 59
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e51",
+      "seed": 11,
+      "episode_index": 51,
+      "scene": 1300036,
+      "normal_slot": 60
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e52",
+      "seed": 11,
+      "episode_index": 52,
+      "scene": 1300040,
+      "normal_slot": 61
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e53",
+      "seed": 11,
+      "episode_index": 53,
+      "scene": 1300038,
+      "normal_slot": 62
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e54",
+      "seed": 11,
+      "episode_index": 54,
+      "scene": 1300010,
+      "normal_slot": 63
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e55",
+      "seed": 11,
+      "episode_index": 55,
+      "scene": 1300007,
+      "normal_slot": 64
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e56",
+      "seed": 11,
+      "episode_index": 56,
+      "scene": 1300016,
+      "normal_slot": 65
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e57",
+      "seed": 11,
+      "episode_index": 57,
+      "scene": 1300029,
+      "normal_slot": 66
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e58",
+      "seed": 11,
+      "episode_index": 58,
+      "scene": 1300008,
+      "normal_slot": 67
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e59",
+      "seed": 11,
+      "episode_index": 59,
+      "scene": 1300046,
+      "normal_slot": 68
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e60",
+      "seed": 11,
+      "episode_index": 60,
+      "scene": 1300009,
+      "normal_slot": 69
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e61",
+      "seed": 11,
+      "episode_index": 61,
+      "scene": 1300047,
+      "normal_slot": 70
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e62",
+      "seed": 11,
+      "episode_index": 62,
+      "scene": 1300023,
+      "normal_slot": 71
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e63",
+      "seed": 11,
+      "episode_index": 63,
+      "scene": 1300027,
+      "normal_slot": 72
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e64",
+      "seed": 11,
+      "episode_index": 64,
+      "scene": 1300004,
+      "normal_slot": 73
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e65",
+      "seed": 11,
+      "episode_index": 65,
+      "scene": 1300002,
+      "normal_slot": 74
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e66",
+      "seed": 11,
+      "episode_index": 66,
+      "scene": 1300024,
+      "normal_slot": 75
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e67",
+      "seed": 11,
+      "episode_index": 67,
+      "scene": 1300015,
+      "normal_slot": 76
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e68",
+      "seed": 11,
+      "episode_index": 68,
+      "scene": 1300017,
+      "normal_slot": 77
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e69",
+      "seed": 11,
+      "episode_index": 69,
+      "scene": 1300034,
+      "normal_slot": 78
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e70",
+      "seed": 11,
+      "episode_index": 70,
+      "scene": 1300045,
+      "normal_slot": 79
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e71",
+      "seed": 11,
+      "episode_index": 71,
+      "scene": 1300020,
+      "normal_slot": 80
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e72",
+      "seed": 11,
+      "episode_index": 72,
+      "scene": 1300037,
+      "normal_slot": 81
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e73",
+      "seed": 11,
+      "episode_index": 73,
+      "scene": 1300031,
+      "normal_slot": 82
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e74",
+      "seed": 11,
+      "episode_index": 74,
+      "scene": 1300035,
+      "normal_slot": 83
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e75",
+      "seed": 11,
+      "episode_index": 75,
+      "scene": 1300011,
+      "normal_slot": 84
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e76",
+      "seed": 11,
+      "episode_index": 76,
+      "scene": 1300033,
+      "normal_slot": 85
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e77",
+      "seed": 11,
+      "episode_index": 77,
+      "scene": 1300026,
+      "normal_slot": 86
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e78",
+      "seed": 11,
+      "episode_index": 78,
+      "scene": 1300030,
+      "normal_slot": 87
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e79",
+      "seed": 11,
+      "episode_index": 79,
+      "scene": 1300044,
+      "normal_slot": 88
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e80",
+      "seed": 11,
+      "episode_index": 80,
+      "scene": 1300003,
+      "normal_slot": 89
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e81",
+      "seed": 11,
+      "episode_index": 81,
+      "scene": 1300018,
+      "normal_slot": 90
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e82",
+      "seed": 11,
+      "episode_index": 82,
+      "scene": 1300013,
+      "normal_slot": 91
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e83",
+      "seed": 11,
+      "episode_index": 83,
+      "scene": 1300042,
+      "normal_slot": 92
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e84",
+      "seed": 11,
+      "episode_index": 84,
+      "scene": 1300028,
+      "normal_slot": 93
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e85",
+      "seed": 11,
+      "episode_index": 85,
+      "scene": 1300012,
+      "normal_slot": 94
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e86",
+      "seed": 11,
+      "episode_index": 86,
+      "scene": 1300005,
+      "normal_slot": 95
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e87",
+      "seed": 11,
+      "episode_index": 87,
+      "scene": 1300025,
+      "normal_slot": 96
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e88",
+      "seed": 11,
+      "episode_index": 88,
+      "scene": 1300043,
+      "normal_slot": 97
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e89",
+      "seed": 11,
+      "episode_index": 89,
+      "scene": 1300019,
+      "normal_slot": 98
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e90",
+      "seed": 11,
+      "episode_index": 90,
+      "scene": 1300021,
+      "normal_slot": 99
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e91",
+      "seed": 11,
+      "episode_index": 91,
+      "scene": 1300000,
+      "normal_slot": 100
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e92",
+      "seed": 11,
+      "episode_index": 92,
+      "scene": 1300001,
+      "normal_slot": 101
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e93",
+      "seed": 11,
+      "episode_index": 93,
+      "scene": 1300014,
+      "normal_slot": 102
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e94",
+      "seed": 11,
+      "episode_index": 94,
+      "scene": 1300032,
+      "normal_slot": 103
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e95",
+      "seed": 11,
+      "episode_index": 95,
+      "scene": 1300006,
+      "normal_slot": 104
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e96",
+      "seed": 11,
+      "episode_index": 96,
+      "scene": 1300008,
+      "normal_slot": 105
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e97",
+      "seed": 11,
+      "episode_index": 97,
+      "scene": 1300013,
+      "normal_slot": 106
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e98",
+      "seed": 11,
+      "episode_index": 98,
+      "scene": 1300006,
+      "normal_slot": 107
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e99",
+      "seed": 11,
+      "episode_index": 99,
+      "scene": 1300024,
+      "normal_slot": 108
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e100",
+      "seed": 11,
+      "episode_index": 100,
+      "scene": 1300032,
+      "normal_slot": 109
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e101",
+      "seed": 11,
+      "episode_index": 101,
+      "scene": 1300031,
+      "normal_slot": 110
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e102",
+      "seed": 11,
+      "episode_index": 102,
+      "scene": 1300015,
+      "normal_slot": 111
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e103",
+      "seed": 11,
+      "episode_index": 103,
+      "scene": 1300042,
+      "normal_slot": 112
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e104",
+      "seed": 11,
+      "episode_index": 104,
+      "scene": 1300004,
+      "normal_slot": 113
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e105",
+      "seed": 11,
+      "episode_index": 105,
+      "scene": 1300005,
+      "normal_slot": 114
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e106",
+      "seed": 11,
+      "episode_index": 106,
+      "scene": 1300021,
+      "normal_slot": 115
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e107",
+      "seed": 11,
+      "episode_index": 107,
+      "scene": 1300027,
+      "normal_slot": 116
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e108",
+      "seed": 11,
+      "episode_index": 108,
+      "scene": 1300016,
+      "normal_slot": 117
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e109",
+      "seed": 11,
+      "episode_index": 109,
+      "scene": 1300010,
+      "normal_slot": 118
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e110",
+      "seed": 11,
+      "episode_index": 110,
+      "scene": 1300000,
+      "normal_slot": 119
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e111",
+      "seed": 11,
+      "episode_index": 111,
+      "scene": 1300009,
+      "normal_slot": 120
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e112",
+      "seed": 11,
+      "episode_index": 112,
+      "scene": 1300029,
+      "normal_slot": 121
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e113",
+      "seed": 11,
+      "episode_index": 113,
+      "scene": 1300022,
+      "normal_slot": 122
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e114",
+      "seed": 11,
+      "episode_index": 114,
+      "scene": 1300045,
+      "normal_slot": 123
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e115",
+      "seed": 11,
+      "episode_index": 115,
+      "scene": 1300039,
+      "normal_slot": 124
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e116",
+      "seed": 11,
+      "episode_index": 116,
+      "scene": 1300019,
+      "normal_slot": 125
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e117",
+      "seed": 11,
+      "episode_index": 117,
+      "scene": 1300035,
+      "normal_slot": 126
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e118",
+      "seed": 11,
+      "episode_index": 118,
+      "scene": 1300046,
+      "normal_slot": 127
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e119",
+      "seed": 11,
+      "episode_index": 119,
+      "scene": 1300020,
+      "normal_slot": 128
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e120",
+      "seed": 11,
+      "episode_index": 120,
+      "scene": 1300028,
+      "normal_slot": 129
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e121",
+      "seed": 11,
+      "episode_index": 121,
+      "scene": 1300036,
+      "normal_slot": 130
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e122",
+      "seed": 11,
+      "episode_index": 122,
+      "scene": 1300003,
+      "normal_slot": 131
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e123",
+      "seed": 11,
+      "episode_index": 123,
+      "scene": 1300038,
+      "normal_slot": 132
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e124",
+      "seed": 11,
+      "episode_index": 124,
+      "scene": 1300002,
+      "normal_slot": 133
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e125",
+      "seed": 11,
+      "episode_index": 125,
+      "scene": 1300047,
+      "normal_slot": 134
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e126",
+      "seed": 11,
+      "episode_index": 126,
+      "scene": 1300030,
+      "normal_slot": 135
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s11_e127",
+      "seed": 11,
+      "episode_index": 127,
+      "scene": 1300023,
+      "normal_slot": 136
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e4",
+      "seed": 22,
+      "episode_index": 4,
+      "scene": 1300003,
+      "normal_slot": 137
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e5",
+      "seed": 22,
+      "episode_index": 5,
+      "scene": 1300010,
+      "normal_slot": 138
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e6",
+      "seed": 22,
+      "episode_index": 6,
+      "scene": 1300005,
+      "normal_slot": 139
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e7",
+      "seed": 22,
+      "episode_index": 7,
+      "scene": 1300008,
+      "normal_slot": 140
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e8",
+      "seed": 22,
+      "episode_index": 8,
+      "scene": 1300021,
+      "normal_slot": 141
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e9",
+      "seed": 22,
+      "episode_index": 9,
+      "scene": 1300034,
+      "normal_slot": 142
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e10",
+      "seed": 22,
+      "episode_index": 10,
+      "scene": 1300013,
+      "normal_slot": 143
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e11",
+      "seed": 22,
+      "episode_index": 11,
+      "scene": 1300001,
+      "normal_slot": 144
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e12",
+      "seed": 22,
+      "episode_index": 12,
+      "scene": 1300047,
+      "normal_slot": 145
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e13",
+      "seed": 22,
+      "episode_index": 13,
+      "scene": 1300012,
+      "normal_slot": 146
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e14",
+      "seed": 22,
+      "episode_index": 14,
+      "scene": 1300033,
+      "normal_slot": 147
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e15",
+      "seed": 22,
+      "episode_index": 15,
+      "scene": 1300039,
+      "normal_slot": 148
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e16",
+      "seed": 22,
+      "episode_index": 16,
+      "scene": 1300009,
+      "normal_slot": 149
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e17",
+      "seed": 22,
+      "episode_index": 17,
+      "scene": 1300002,
+      "normal_slot": 150
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e18",
+      "seed": 22,
+      "episode_index": 18,
+      "scene": 1300022,
+      "normal_slot": 151
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e19",
+      "seed": 22,
+      "episode_index": 19,
+      "scene": 1300030,
+      "normal_slot": 152
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e20",
+      "seed": 22,
+      "episode_index": 20,
+      "scene": 1300032,
+      "normal_slot": 153
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e21",
+      "seed": 22,
+      "episode_index": 21,
+      "scene": 1300041,
+      "normal_slot": 154
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e22",
+      "seed": 22,
+      "episode_index": 22,
+      "scene": 1300040,
+      "normal_slot": 155
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e23",
+      "seed": 22,
+      "episode_index": 23,
+      "scene": 1300038,
+      "normal_slot": 156
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e24",
+      "seed": 22,
+      "episode_index": 24,
+      "scene": 1300037,
+      "normal_slot": 157
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e25",
+      "seed": 22,
+      "episode_index": 25,
+      "scene": 1300045,
+      "normal_slot": 158
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e26",
+      "seed": 22,
+      "episode_index": 26,
+      "scene": 1300024,
+      "normal_slot": 159
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e27",
+      "seed": 22,
+      "episode_index": 27,
+      "scene": 1300017,
+      "normal_slot": 160
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e28",
+      "seed": 22,
+      "episode_index": 28,
+      "scene": 1300026,
+      "normal_slot": 161
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e29",
+      "seed": 22,
+      "episode_index": 29,
+      "scene": 1300035,
+      "normal_slot": 162
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e30",
+      "seed": 22,
+      "episode_index": 30,
+      "scene": 1300036,
+      "normal_slot": 163
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e31",
+      "seed": 22,
+      "episode_index": 31,
+      "scene": 1300000,
+      "normal_slot": 164
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e32",
+      "seed": 22,
+      "episode_index": 32,
+      "scene": 1300016,
+      "normal_slot": 165
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e33",
+      "seed": 22,
+      "episode_index": 33,
+      "scene": 1300018,
+      "normal_slot": 166
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e34",
+      "seed": 22,
+      "episode_index": 34,
+      "scene": 1300029,
+      "normal_slot": 167
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e35",
+      "seed": 22,
+      "episode_index": 35,
+      "scene": 1300011,
+      "normal_slot": 168
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e36",
+      "seed": 22,
+      "episode_index": 36,
+      "scene": 1300042,
+      "normal_slot": 169
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e37",
+      "seed": 22,
+      "episode_index": 37,
+      "scene": 1300019,
+      "normal_slot": 170
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e38",
+      "seed": 22,
+      "episode_index": 38,
+      "scene": 1300006,
+      "normal_slot": 171
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e39",
+      "seed": 22,
+      "episode_index": 39,
+      "scene": 1300023,
+      "normal_slot": 172
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e40",
+      "seed": 22,
+      "episode_index": 40,
+      "scene": 1300025,
+      "normal_slot": 173
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e41",
+      "seed": 22,
+      "episode_index": 41,
+      "scene": 1300046,
+      "normal_slot": 174
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e42",
+      "seed": 22,
+      "episode_index": 42,
+      "scene": 1300043,
+      "normal_slot": 175
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e43",
+      "seed": 22,
+      "episode_index": 43,
+      "scene": 1300004,
+      "normal_slot": 176
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e44",
+      "seed": 22,
+      "episode_index": 44,
+      "scene": 1300007,
+      "normal_slot": 177
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e45",
+      "seed": 22,
+      "episode_index": 45,
+      "scene": 1300020,
+      "normal_slot": 178
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e46",
+      "seed": 22,
+      "episode_index": 46,
+      "scene": 1300031,
+      "normal_slot": 179
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e47",
+      "seed": 22,
+      "episode_index": 47,
+      "scene": 1300015,
+      "normal_slot": 180
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e48",
+      "seed": 22,
+      "episode_index": 48,
+      "scene": 1300041,
+      "normal_slot": 181
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e49",
+      "seed": 22,
+      "episode_index": 49,
+      "scene": 1300022,
+      "normal_slot": 182
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e50",
+      "seed": 22,
+      "episode_index": 50,
+      "scene": 1300039,
+      "normal_slot": 183
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e51",
+      "seed": 22,
+      "episode_index": 51,
+      "scene": 1300036,
+      "normal_slot": 184
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e52",
+      "seed": 22,
+      "episode_index": 52,
+      "scene": 1300040,
+      "normal_slot": 185
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e53",
+      "seed": 22,
+      "episode_index": 53,
+      "scene": 1300038,
+      "normal_slot": 186
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e54",
+      "seed": 22,
+      "episode_index": 54,
+      "scene": 1300010,
+      "normal_slot": 187
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e55",
+      "seed": 22,
+      "episode_index": 55,
+      "scene": 1300007,
+      "normal_slot": 188
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e56",
+      "seed": 22,
+      "episode_index": 56,
+      "scene": 1300016,
+      "normal_slot": 189
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e57",
+      "seed": 22,
+      "episode_index": 57,
+      "scene": 1300029,
+      "normal_slot": 190
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e58",
+      "seed": 22,
+      "episode_index": 58,
+      "scene": 1300008,
+      "normal_slot": 191
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e59",
+      "seed": 22,
+      "episode_index": 59,
+      "scene": 1300046,
+      "normal_slot": 192
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e60",
+      "seed": 22,
+      "episode_index": 60,
+      "scene": 1300009,
+      "normal_slot": 193
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e61",
+      "seed": 22,
+      "episode_index": 61,
+      "scene": 1300047,
+      "normal_slot": 194
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e62",
+      "seed": 22,
+      "episode_index": 62,
+      "scene": 1300023,
+      "normal_slot": 195
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e63",
+      "seed": 22,
+      "episode_index": 63,
+      "scene": 1300027,
+      "normal_slot": 196
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e64",
+      "seed": 22,
+      "episode_index": 64,
+      "scene": 1300004,
+      "normal_slot": 197
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e65",
+      "seed": 22,
+      "episode_index": 65,
+      "scene": 1300002,
+      "normal_slot": 198
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e66",
+      "seed": 22,
+      "episode_index": 66,
+      "scene": 1300024,
+      "normal_slot": 199
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e67",
+      "seed": 22,
+      "episode_index": 67,
+      "scene": 1300015,
+      "normal_slot": 200
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e68",
+      "seed": 22,
+      "episode_index": 68,
+      "scene": 1300017,
+      "normal_slot": 201
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e69",
+      "seed": 22,
+      "episode_index": 69,
+      "scene": 1300034,
+      "normal_slot": 202
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e70",
+      "seed": 22,
+      "episode_index": 70,
+      "scene": 1300045,
+      "normal_slot": 203
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e71",
+      "seed": 22,
+      "episode_index": 71,
+      "scene": 1300020,
+      "normal_slot": 204
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e72",
+      "seed": 22,
+      "episode_index": 72,
+      "scene": 1300037,
+      "normal_slot": 205
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e73",
+      "seed": 22,
+      "episode_index": 73,
+      "scene": 1300031,
+      "normal_slot": 206
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e74",
+      "seed": 22,
+      "episode_index": 74,
+      "scene": 1300035,
+      "normal_slot": 207
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e75",
+      "seed": 22,
+      "episode_index": 75,
+      "scene": 1300011,
+      "normal_slot": 208
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e76",
+      "seed": 22,
+      "episode_index": 76,
+      "scene": 1300033,
+      "normal_slot": 209
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e77",
+      "seed": 22,
+      "episode_index": 77,
+      "scene": 1300026,
+      "normal_slot": 210
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e78",
+      "seed": 22,
+      "episode_index": 78,
+      "scene": 1300030,
+      "normal_slot": 211
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e79",
+      "seed": 22,
+      "episode_index": 79,
+      "scene": 1300044,
+      "normal_slot": 212
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e80",
+      "seed": 22,
+      "episode_index": 80,
+      "scene": 1300003,
+      "normal_slot": 213
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e81",
+      "seed": 22,
+      "episode_index": 81,
+      "scene": 1300018,
+      "normal_slot": 214
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e82",
+      "seed": 22,
+      "episode_index": 82,
+      "scene": 1300013,
+      "normal_slot": 215
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e83",
+      "seed": 22,
+      "episode_index": 83,
+      "scene": 1300042,
+      "normal_slot": 216
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e84",
+      "seed": 22,
+      "episode_index": 84,
+      "scene": 1300028,
+      "normal_slot": 217
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e85",
+      "seed": 22,
+      "episode_index": 85,
+      "scene": 1300012,
+      "normal_slot": 218
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e86",
+      "seed": 22,
+      "episode_index": 86,
+      "scene": 1300005,
+      "normal_slot": 219
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e87",
+      "seed": 22,
+      "episode_index": 87,
+      "scene": 1300025,
+      "normal_slot": 220
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e88",
+      "seed": 22,
+      "episode_index": 88,
+      "scene": 1300043,
+      "normal_slot": 221
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e89",
+      "seed": 22,
+      "episode_index": 89,
+      "scene": 1300019,
+      "normal_slot": 222
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e90",
+      "seed": 22,
+      "episode_index": 90,
+      "scene": 1300021,
+      "normal_slot": 223
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e91",
+      "seed": 22,
+      "episode_index": 91,
+      "scene": 1300000,
+      "normal_slot": 224
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e92",
+      "seed": 22,
+      "episode_index": 92,
+      "scene": 1300001,
+      "normal_slot": 225
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e93",
+      "seed": 22,
+      "episode_index": 93,
+      "scene": 1300014,
+      "normal_slot": 226
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e94",
+      "seed": 22,
+      "episode_index": 94,
+      "scene": 1300032,
+      "normal_slot": 227
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e95",
+      "seed": 22,
+      "episode_index": 95,
+      "scene": 1300006,
+      "normal_slot": 228
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e96",
+      "seed": 22,
+      "episode_index": 96,
+      "scene": 1300008,
+      "normal_slot": 229
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e97",
+      "seed": 22,
+      "episode_index": 97,
+      "scene": 1300013,
+      "normal_slot": 230
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e98",
+      "seed": 22,
+      "episode_index": 98,
+      "scene": 1300006,
+      "normal_slot": 231
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e99",
+      "seed": 22,
+      "episode_index": 99,
+      "scene": 1300024,
+      "normal_slot": 232
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e100",
+      "seed": 22,
+      "episode_index": 100,
+      "scene": 1300032,
+      "normal_slot": 233
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e101",
+      "seed": 22,
+      "episode_index": 101,
+      "scene": 1300031,
+      "normal_slot": 234
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e102",
+      "seed": 22,
+      "episode_index": 102,
+      "scene": 1300015,
+      "normal_slot": 235
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e103",
+      "seed": 22,
+      "episode_index": 103,
+      "scene": 1300042,
+      "normal_slot": 236
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e104",
+      "seed": 22,
+      "episode_index": 104,
+      "scene": 1300004,
+      "normal_slot": 237
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e105",
+      "seed": 22,
+      "episode_index": 105,
+      "scene": 1300005,
+      "normal_slot": 238
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e106",
+      "seed": 22,
+      "episode_index": 106,
+      "scene": 1300021,
+      "normal_slot": 239
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e107",
+      "seed": 22,
+      "episode_index": 107,
+      "scene": 1300027,
+      "normal_slot": 240
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e108",
+      "seed": 22,
+      "episode_index": 108,
+      "scene": 1300016,
+      "normal_slot": 241
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e109",
+      "seed": 22,
+      "episode_index": 109,
+      "scene": 1300010,
+      "normal_slot": 242
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e110",
+      "seed": 22,
+      "episode_index": 110,
+      "scene": 1300000,
+      "normal_slot": 243
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e111",
+      "seed": 22,
+      "episode_index": 111,
+      "scene": 1300009,
+      "normal_slot": 244
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e112",
+      "seed": 22,
+      "episode_index": 112,
+      "scene": 1300029,
+      "normal_slot": 245
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e113",
+      "seed": 22,
+      "episode_index": 113,
+      "scene": 1300022,
+      "normal_slot": 246
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e114",
+      "seed": 22,
+      "episode_index": 114,
+      "scene": 1300045,
+      "normal_slot": 247
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e115",
+      "seed": 22,
+      "episode_index": 115,
+      "scene": 1300039,
+      "normal_slot": 248
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e116",
+      "seed": 22,
+      "episode_index": 116,
+      "scene": 1300019,
+      "normal_slot": 249
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e117",
+      "seed": 22,
+      "episode_index": 117,
+      "scene": 1300035,
+      "normal_slot": 250
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e118",
+      "seed": 22,
+      "episode_index": 118,
+      "scene": 1300046,
+      "normal_slot": 251
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e119",
+      "seed": 22,
+      "episode_index": 119,
+      "scene": 1300020,
+      "normal_slot": 252
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e120",
+      "seed": 22,
+      "episode_index": 120,
+      "scene": 1300028,
+      "normal_slot": 253
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e121",
+      "seed": 22,
+      "episode_index": 121,
+      "scene": 1300036,
+      "normal_slot": 254
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e122",
+      "seed": 22,
+      "episode_index": 122,
+      "scene": 1300003,
+      "normal_slot": 255
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e123",
+      "seed": 22,
+      "episode_index": 123,
+      "scene": 1300038,
+      "normal_slot": 256
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e124",
+      "seed": 22,
+      "episode_index": 124,
+      "scene": 1300002,
+      "normal_slot": 257
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e125",
+      "seed": 22,
+      "episode_index": 125,
+      "scene": 1300047,
+      "normal_slot": 258
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e126",
+      "seed": 22,
+      "episode_index": 126,
+      "scene": 1300030,
+      "normal_slot": 259
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s22_e127",
+      "seed": 22,
+      "episode_index": 127,
+      "scene": 1300023,
+      "normal_slot": 260
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e4",
+      "seed": 33,
+      "episode_index": 4,
+      "scene": 1300003,
+      "normal_slot": 261
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e5",
+      "seed": 33,
+      "episode_index": 5,
+      "scene": 1300010,
+      "normal_slot": 262
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e6",
+      "seed": 33,
+      "episode_index": 6,
+      "scene": 1300005,
+      "normal_slot": 263
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e7",
+      "seed": 33,
+      "episode_index": 7,
+      "scene": 1300008,
+      "normal_slot": 264
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e8",
+      "seed": 33,
+      "episode_index": 8,
+      "scene": 1300021,
+      "normal_slot": 265
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e9",
+      "seed": 33,
+      "episode_index": 9,
+      "scene": 1300034,
+      "normal_slot": 266
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e10",
+      "seed": 33,
+      "episode_index": 10,
+      "scene": 1300013,
+      "normal_slot": 267
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e11",
+      "seed": 33,
+      "episode_index": 11,
+      "scene": 1300001,
+      "normal_slot": 268
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e12",
+      "seed": 33,
+      "episode_index": 12,
+      "scene": 1300047,
+      "normal_slot": 269
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e13",
+      "seed": 33,
+      "episode_index": 13,
+      "scene": 1300012,
+      "normal_slot": 270
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e14",
+      "seed": 33,
+      "episode_index": 14,
+      "scene": 1300033,
+      "normal_slot": 271
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e15",
+      "seed": 33,
+      "episode_index": 15,
+      "scene": 1300039,
+      "normal_slot": 272
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e16",
+      "seed": 33,
+      "episode_index": 16,
+      "scene": 1300009,
+      "normal_slot": 273
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e17",
+      "seed": 33,
+      "episode_index": 17,
+      "scene": 1300002,
+      "normal_slot": 274
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e18",
+      "seed": 33,
+      "episode_index": 18,
+      "scene": 1300022,
+      "normal_slot": 275
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e19",
+      "seed": 33,
+      "episode_index": 19,
+      "scene": 1300030,
+      "normal_slot": 276
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e20",
+      "seed": 33,
+      "episode_index": 20,
+      "scene": 1300032,
+      "normal_slot": 277
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e21",
+      "seed": 33,
+      "episode_index": 21,
+      "scene": 1300041,
+      "normal_slot": 278
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e22",
+      "seed": 33,
+      "episode_index": 22,
+      "scene": 1300040,
+      "normal_slot": 279
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e23",
+      "seed": 33,
+      "episode_index": 23,
+      "scene": 1300038,
+      "normal_slot": 280
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e24",
+      "seed": 33,
+      "episode_index": 24,
+      "scene": 1300037,
+      "normal_slot": 281
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e25",
+      "seed": 33,
+      "episode_index": 25,
+      "scene": 1300045,
+      "normal_slot": 282
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e26",
+      "seed": 33,
+      "episode_index": 26,
+      "scene": 1300024,
+      "normal_slot": 283
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e27",
+      "seed": 33,
+      "episode_index": 27,
+      "scene": 1300017,
+      "normal_slot": 284
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e28",
+      "seed": 33,
+      "episode_index": 28,
+      "scene": 1300026,
+      "normal_slot": 285
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e29",
+      "seed": 33,
+      "episode_index": 29,
+      "scene": 1300035,
+      "normal_slot": 286
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e30",
+      "seed": 33,
+      "episode_index": 30,
+      "scene": 1300036,
+      "normal_slot": 287
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e31",
+      "seed": 33,
+      "episode_index": 31,
+      "scene": 1300000,
+      "normal_slot": 288
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e32",
+      "seed": 33,
+      "episode_index": 32,
+      "scene": 1300016,
+      "normal_slot": 289
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e33",
+      "seed": 33,
+      "episode_index": 33,
+      "scene": 1300018,
+      "normal_slot": 290
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e34",
+      "seed": 33,
+      "episode_index": 34,
+      "scene": 1300029,
+      "normal_slot": 291
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e35",
+      "seed": 33,
+      "episode_index": 35,
+      "scene": 1300011,
+      "normal_slot": 292
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e36",
+      "seed": 33,
+      "episode_index": 36,
+      "scene": 1300042,
+      "normal_slot": 293
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e37",
+      "seed": 33,
+      "episode_index": 37,
+      "scene": 1300019,
+      "normal_slot": 294
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e38",
+      "seed": 33,
+      "episode_index": 38,
+      "scene": 1300006,
+      "normal_slot": 295
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e39",
+      "seed": 33,
+      "episode_index": 39,
+      "scene": 1300023,
+      "normal_slot": 296
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e40",
+      "seed": 33,
+      "episode_index": 40,
+      "scene": 1300025,
+      "normal_slot": 297
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e41",
+      "seed": 33,
+      "episode_index": 41,
+      "scene": 1300046,
+      "normal_slot": 298
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e42",
+      "seed": 33,
+      "episode_index": 42,
+      "scene": 1300043,
+      "normal_slot": 299
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e43",
+      "seed": 33,
+      "episode_index": 43,
+      "scene": 1300004,
+      "normal_slot": 300
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e44",
+      "seed": 33,
+      "episode_index": 44,
+      "scene": 1300007,
+      "normal_slot": 301
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e45",
+      "seed": 33,
+      "episode_index": 45,
+      "scene": 1300020,
+      "normal_slot": 302
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e46",
+      "seed": 33,
+      "episode_index": 46,
+      "scene": 1300031,
+      "normal_slot": 303
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e47",
+      "seed": 33,
+      "episode_index": 47,
+      "scene": 1300015,
+      "normal_slot": 304
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e48",
+      "seed": 33,
+      "episode_index": 48,
+      "scene": 1300041,
+      "normal_slot": 305
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e49",
+      "seed": 33,
+      "episode_index": 49,
+      "scene": 1300022,
+      "normal_slot": 306
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e50",
+      "seed": 33,
+      "episode_index": 50,
+      "scene": 1300039,
+      "normal_slot": 307
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e51",
+      "seed": 33,
+      "episode_index": 51,
+      "scene": 1300036,
+      "normal_slot": 308
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e52",
+      "seed": 33,
+      "episode_index": 52,
+      "scene": 1300040,
+      "normal_slot": 309
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e53",
+      "seed": 33,
+      "episode_index": 53,
+      "scene": 1300038,
+      "normal_slot": 310
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e54",
+      "seed": 33,
+      "episode_index": 54,
+      "scene": 1300010,
+      "normal_slot": 311
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e55",
+      "seed": 33,
+      "episode_index": 55,
+      "scene": 1300007,
+      "normal_slot": 312
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e56",
+      "seed": 33,
+      "episode_index": 56,
+      "scene": 1300016,
+      "normal_slot": 313
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e57",
+      "seed": 33,
+      "episode_index": 57,
+      "scene": 1300029,
+      "normal_slot": 314
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e58",
+      "seed": 33,
+      "episode_index": 58,
+      "scene": 1300008,
+      "normal_slot": 315
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e59",
+      "seed": 33,
+      "episode_index": 59,
+      "scene": 1300046,
+      "normal_slot": 316
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e60",
+      "seed": 33,
+      "episode_index": 60,
+      "scene": 1300009,
+      "normal_slot": 317
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e61",
+      "seed": 33,
+      "episode_index": 61,
+      "scene": 1300047,
+      "normal_slot": 318
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e62",
+      "seed": 33,
+      "episode_index": 62,
+      "scene": 1300023,
+      "normal_slot": 319
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e63",
+      "seed": 33,
+      "episode_index": 63,
+      "scene": 1300027,
+      "normal_slot": 320
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e64",
+      "seed": 33,
+      "episode_index": 64,
+      "scene": 1300004,
+      "normal_slot": 321
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e65",
+      "seed": 33,
+      "episode_index": 65,
+      "scene": 1300002,
+      "normal_slot": 322
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e66",
+      "seed": 33,
+      "episode_index": 66,
+      "scene": 1300024,
+      "normal_slot": 323
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e67",
+      "seed": 33,
+      "episode_index": 67,
+      "scene": 1300015,
+      "normal_slot": 324
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e68",
+      "seed": 33,
+      "episode_index": 68,
+      "scene": 1300017,
+      "normal_slot": 325
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e69",
+      "seed": 33,
+      "episode_index": 69,
+      "scene": 1300034,
+      "normal_slot": 326
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e70",
+      "seed": 33,
+      "episode_index": 70,
+      "scene": 1300045,
+      "normal_slot": 327
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e71",
+      "seed": 33,
+      "episode_index": 71,
+      "scene": 1300020,
+      "normal_slot": 328
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e72",
+      "seed": 33,
+      "episode_index": 72,
+      "scene": 1300037,
+      "normal_slot": 329
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e73",
+      "seed": 33,
+      "episode_index": 73,
+      "scene": 1300031,
+      "normal_slot": 330
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e74",
+      "seed": 33,
+      "episode_index": 74,
+      "scene": 1300035,
+      "normal_slot": 331
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e75",
+      "seed": 33,
+      "episode_index": 75,
+      "scene": 1300011,
+      "normal_slot": 332
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e76",
+      "seed": 33,
+      "episode_index": 76,
+      "scene": 1300033,
+      "normal_slot": 333
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e77",
+      "seed": 33,
+      "episode_index": 77,
+      "scene": 1300026,
+      "normal_slot": 334
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e78",
+      "seed": 33,
+      "episode_index": 78,
+      "scene": 1300030,
+      "normal_slot": 335
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e79",
+      "seed": 33,
+      "episode_index": 79,
+      "scene": 1300044,
+      "normal_slot": 336
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e80",
+      "seed": 33,
+      "episode_index": 80,
+      "scene": 1300003,
+      "normal_slot": 337
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e81",
+      "seed": 33,
+      "episode_index": 81,
+      "scene": 1300018,
+      "normal_slot": 338
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e82",
+      "seed": 33,
+      "episode_index": 82,
+      "scene": 1300013,
+      "normal_slot": 339
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e83",
+      "seed": 33,
+      "episode_index": 83,
+      "scene": 1300042,
+      "normal_slot": 340
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e84",
+      "seed": 33,
+      "episode_index": 84,
+      "scene": 1300028,
+      "normal_slot": 341
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e85",
+      "seed": 33,
+      "episode_index": 85,
+      "scene": 1300012,
+      "normal_slot": 342
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e86",
+      "seed": 33,
+      "episode_index": 86,
+      "scene": 1300005,
+      "normal_slot": 343
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e87",
+      "seed": 33,
+      "episode_index": 87,
+      "scene": 1300025,
+      "normal_slot": 344
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e88",
+      "seed": 33,
+      "episode_index": 88,
+      "scene": 1300043,
+      "normal_slot": 345
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e89",
+      "seed": 33,
+      "episode_index": 89,
+      "scene": 1300019,
+      "normal_slot": 346
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e90",
+      "seed": 33,
+      "episode_index": 90,
+      "scene": 1300021,
+      "normal_slot": 347
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e91",
+      "seed": 33,
+      "episode_index": 91,
+      "scene": 1300000,
+      "normal_slot": 348
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e92",
+      "seed": 33,
+      "episode_index": 92,
+      "scene": 1300001,
+      "normal_slot": 349
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e93",
+      "seed": 33,
+      "episode_index": 93,
+      "scene": 1300014,
+      "normal_slot": 350
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e94",
+      "seed": 33,
+      "episode_index": 94,
+      "scene": 1300032,
+      "normal_slot": 351
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e95",
+      "seed": 33,
+      "episode_index": 95,
+      "scene": 1300006,
+      "normal_slot": 352
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e96",
+      "seed": 33,
+      "episode_index": 96,
+      "scene": 1300008,
+      "normal_slot": 353
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e97",
+      "seed": 33,
+      "episode_index": 97,
+      "scene": 1300013,
+      "normal_slot": 354
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e98",
+      "seed": 33,
+      "episode_index": 98,
+      "scene": 1300006,
+      "normal_slot": 355
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e99",
+      "seed": 33,
+      "episode_index": 99,
+      "scene": 1300024,
+      "normal_slot": 356
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e100",
+      "seed": 33,
+      "episode_index": 100,
+      "scene": 1300032,
+      "normal_slot": 357
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e101",
+      "seed": 33,
+      "episode_index": 101,
+      "scene": 1300031,
+      "normal_slot": 358
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e102",
+      "seed": 33,
+      "episode_index": 102,
+      "scene": 1300015,
+      "normal_slot": 359
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e103",
+      "seed": 33,
+      "episode_index": 103,
+      "scene": 1300042,
+      "normal_slot": 360
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e104",
+      "seed": 33,
+      "episode_index": 104,
+      "scene": 1300004,
+      "normal_slot": 361
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e105",
+      "seed": 33,
+      "episode_index": 105,
+      "scene": 1300005,
+      "normal_slot": 362
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e106",
+      "seed": 33,
+      "episode_index": 106,
+      "scene": 1300021,
+      "normal_slot": 363
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e107",
+      "seed": 33,
+      "episode_index": 107,
+      "scene": 1300027,
+      "normal_slot": 364
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e108",
+      "seed": 33,
+      "episode_index": 108,
+      "scene": 1300016,
+      "normal_slot": 365
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e109",
+      "seed": 33,
+      "episode_index": 109,
+      "scene": 1300010,
+      "normal_slot": 366
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e110",
+      "seed": 33,
+      "episode_index": 110,
+      "scene": 1300000,
+      "normal_slot": 367
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e111",
+      "seed": 33,
+      "episode_index": 111,
+      "scene": 1300009,
+      "normal_slot": 368
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e112",
+      "seed": 33,
+      "episode_index": 112,
+      "scene": 1300029,
+      "normal_slot": 369
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e113",
+      "seed": 33,
+      "episode_index": 113,
+      "scene": 1300022,
+      "normal_slot": 370
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e114",
+      "seed": 33,
+      "episode_index": 114,
+      "scene": 1300045,
+      "normal_slot": 371
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e115",
+      "seed": 33,
+      "episode_index": 115,
+      "scene": 1300039,
+      "normal_slot": 372
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e116",
+      "seed": 33,
+      "episode_index": 116,
+      "scene": 1300019,
+      "normal_slot": 373
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e117",
+      "seed": 33,
+      "episode_index": 117,
+      "scene": 1300035,
+      "normal_slot": 374
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e118",
+      "seed": 33,
+      "episode_index": 118,
+      "scene": 1300046,
+      "normal_slot": 375
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e119",
+      "seed": 33,
+      "episode_index": 119,
+      "scene": 1300020,
+      "normal_slot": 376
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e120",
+      "seed": 33,
+      "episode_index": 120,
+      "scene": 1300028,
+      "normal_slot": 377
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e121",
+      "seed": 33,
+      "episode_index": 121,
+      "scene": 1300036,
+      "normal_slot": 378
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e122",
+      "seed": 33,
+      "episode_index": 122,
+      "scene": 1300003,
+      "normal_slot": 379
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e123",
+      "seed": 33,
+      "episode_index": 123,
+      "scene": 1300038,
+      "normal_slot": 380
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e124",
+      "seed": 33,
+      "episode_index": 124,
+      "scene": 1300002,
+      "normal_slot": 381
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e125",
+      "seed": 33,
+      "episode_index": 125,
+      "scene": 1300047,
+      "normal_slot": 382
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e126",
+      "seed": 33,
+      "episode_index": 126,
+      "scene": 1300030,
+      "normal_slot": 383
+    },
+    {
+      "scope": "ppo_training",
+      "logical_job": "new_training_s33_e127",
+      "seed": 33,
+      "episode_index": 127,
+      "scene": 1300023,
+      "normal_slot": 384
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301000",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301000,
+      "normal_slot": 385
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301001",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301001,
+      "normal_slot": 386
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301002",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301002,
+      "normal_slot": 387
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301003",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301003,
+      "normal_slot": 388
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301004",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301004,
+      "normal_slot": 389
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301005",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301005,
+      "normal_slot": 390
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301006",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301006,
+      "normal_slot": 391
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301007",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301007,
+      "normal_slot": 392
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301008",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301008,
+      "normal_slot": 393
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301009",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301009,
+      "normal_slot": 394
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301010",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301010,
+      "normal_slot": 395
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301011",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301011,
+      "normal_slot": 396
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301012",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301012,
+      "normal_slot": 397
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301013",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301013,
+      "normal_slot": 398
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301014",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301014,
+      "normal_slot": 399
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_greedy_scene1301015",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1301015,
+      "normal_slot": 400
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301000",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301000,
+      "normal_slot": 401
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301001",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301001,
+      "normal_slot": 402
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301002",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301002,
+      "normal_slot": 403
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301003",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301003,
+      "normal_slot": 404
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301004",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301004,
+      "normal_slot": 405
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301005",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301005,
+      "normal_slot": 406
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301006",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301006,
+      "normal_slot": 407
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301007",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301007,
+      "normal_slot": 408
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301008",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301008,
+      "normal_slot": 409
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301009",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301009,
+      "normal_slot": 410
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301010",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301010,
+      "normal_slot": 411
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301011",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301011,
+      "normal_slot": 412
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301012",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301012,
+      "normal_slot": 413
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301013",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301013,
+      "normal_slot": 414
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301014",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301014,
+      "normal_slot": 415
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s11_sampled_scene1301015",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301015,
+      "normal_slot": 416
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301000",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301000,
+      "normal_slot": 417
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301001",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301001,
+      "normal_slot": 418
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301002",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301002,
+      "normal_slot": 419
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301003",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301003,
+      "normal_slot": 420
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301004",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301004,
+      "normal_slot": 421
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301005",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301005,
+      "normal_slot": 422
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301006",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301006,
+      "normal_slot": 423
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301007",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301007,
+      "normal_slot": 424
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301008",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301008,
+      "normal_slot": 425
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301009",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301009,
+      "normal_slot": 426
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301010",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301010,
+      "normal_slot": 427
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301011",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301011,
+      "normal_slot": 428
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301012",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301012,
+      "normal_slot": 429
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301013",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301013,
+      "normal_slot": 430
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301014",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301014,
+      "normal_slot": 431
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_greedy_scene1301015",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1301015,
+      "normal_slot": 432
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301000",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301000,
+      "normal_slot": 433
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301001",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301001,
+      "normal_slot": 434
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301002",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301002,
+      "normal_slot": 435
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301003",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301003,
+      "normal_slot": 436
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301004",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301004,
+      "normal_slot": 437
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301005",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301005,
+      "normal_slot": 438
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301006",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301006,
+      "normal_slot": 439
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301007",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301007,
+      "normal_slot": 440
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301008",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301008,
+      "normal_slot": 441
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301009",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301009,
+      "normal_slot": 442
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301010",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301010,
+      "normal_slot": 443
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301011",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301011,
+      "normal_slot": 444
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301012",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301012,
+      "normal_slot": 445
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301013",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301013,
+      "normal_slot": 446
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301014",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301014,
+      "normal_slot": 447
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s22_sampled_scene1301015",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301015,
+      "normal_slot": 448
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301000",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301000,
+      "normal_slot": 449
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301001",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301001,
+      "normal_slot": 450
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301002",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301002,
+      "normal_slot": 451
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301003",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301003,
+      "normal_slot": 452
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301004",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301004,
+      "normal_slot": 453
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301005",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301005,
+      "normal_slot": 454
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301006",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301006,
+      "normal_slot": 455
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301007",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301007,
+      "normal_slot": 456
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301008",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301008,
+      "normal_slot": 457
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301009",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301009,
+      "normal_slot": 458
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301010",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301010,
+      "normal_slot": 459
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301011",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301011,
+      "normal_slot": 460
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301012",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301012,
+      "normal_slot": 461
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301013",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301013,
+      "normal_slot": 462
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301014",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301014,
+      "normal_slot": 463
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_greedy_scene1301015",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1301015,
+      "normal_slot": 464
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301000",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301000,
+      "normal_slot": 465
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301001",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301001,
+      "normal_slot": 466
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301002",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301002,
+      "normal_slot": 467
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301003",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301003,
+      "normal_slot": 468
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301004",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301004,
+      "normal_slot": 469
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301005",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301005,
+      "normal_slot": 470
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301006",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301006,
+      "normal_slot": 471
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301007",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301007,
+      "normal_slot": 472
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301008",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301008,
+      "normal_slot": 473
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301009",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301009,
+      "normal_slot": 474
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301010",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301010,
+      "normal_slot": 475
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301011",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301011,
+      "normal_slot": 476
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301012",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301012,
+      "normal_slot": 477
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301013",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301013,
+      "normal_slot": 478
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301014",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301014,
+      "normal_slot": 479
+    },
+    {
+      "scope": "candidate_eval",
+      "logical_job": "model_eval_new_s33_sampled_scene1301015",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301015,
+      "normal_slot": 480
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301000",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301000,
+      "normal_slot": 481
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301001",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301001,
+      "normal_slot": 482
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301002",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301002,
+      "normal_slot": 483
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301003",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301003,
+      "normal_slot": 484
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301004",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301004,
+      "normal_slot": 485
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301005",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301005,
+      "normal_slot": 486
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301006",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301006,
+      "normal_slot": 487
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301007",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301007,
+      "normal_slot": 488
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301008",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301008,
+      "normal_slot": 489
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301009",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301009,
+      "normal_slot": 490
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301010",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301010,
+      "normal_slot": 491
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301011",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301011,
+      "normal_slot": 492
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301012",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301012,
+      "normal_slot": 493
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301013",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301013,
+      "normal_slot": 494
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301014",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301014,
+      "normal_slot": 495
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s11_sampled_scene1301015",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1301015,
+      "normal_slot": 496
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301000",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301000,
+      "normal_slot": 497
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301001",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301001,
+      "normal_slot": 498
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301002",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301002,
+      "normal_slot": 499
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301003",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301003,
+      "normal_slot": 500
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301004",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301004,
+      "normal_slot": 501
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301005",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301005,
+      "normal_slot": 502
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301006",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301006,
+      "normal_slot": 503
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301007",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301007,
+      "normal_slot": 504
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301008",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301008,
+      "normal_slot": 505
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301009",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301009,
+      "normal_slot": 506
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301010",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301010,
+      "normal_slot": 507
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301011",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301011,
+      "normal_slot": 508
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301012",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301012,
+      "normal_slot": 509
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301013",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301013,
+      "normal_slot": 510
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301014",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301014,
+      "normal_slot": 511
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s22_sampled_scene1301015",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1301015,
+      "normal_slot": 512
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301000",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301000,
+      "normal_slot": 513
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301001",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301001,
+      "normal_slot": 514
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301002",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301002,
+      "normal_slot": 515
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301003",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301003,
+      "normal_slot": 516
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301004",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301004,
+      "normal_slot": 517
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301005",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301005,
+      "normal_slot": 518
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301006",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301006,
+      "normal_slot": 519
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301007",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301007,
+      "normal_slot": 520
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301008",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301008,
+      "normal_slot": 521
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301009",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301009,
+      "normal_slot": 522
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301010",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301010,
+      "normal_slot": 523
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301011",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301011,
+      "normal_slot": 524
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301012",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301012,
+      "normal_slot": 525
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301013",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301013,
+      "normal_slot": 526
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301014",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301014,
+      "normal_slot": 527
+    },
+    {
+      "scope": "bc_sampled_eval",
+      "logical_job": "model_eval_bc_s33_sampled_scene1301015",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1301015,
+      "normal_slot": 528
+    }
   ],
-  "training_episodes_per_seed": 128,
-  "evaluation_scenes": [
+  "reserve_slots": [
+    {
+      "category": "reserve",
+      "slot": 1
+    },
+    {
+      "category": "reserve",
+      "slot": 2
+    },
+    {
+      "category": "reserve",
+      "slot": 3
+    },
+    {
+      "category": "reserve",
+      "slot": 4
+    },
+    {
+      "category": "reserve",
+      "slot": 5
+    },
+    {
+      "category": "reserve",
+      "slot": 6
+    },
+    {
+      "category": "reserve",
+      "slot": 7
+    },
+    {
+      "category": "reserve",
+      "slot": 8
+    },
+    {
+      "category": "reserve",
+      "slot": 9
+    },
+    {
+      "category": "reserve",
+      "slot": 10
+    },
+    {
+      "category": "reserve",
+      "slot": 11
+    },
+    {
+      "category": "reserve",
+      "slot": 12
+    },
+    {
+      "category": "reserve",
+      "slot": 13
+    },
+    {
+      "category": "reserve",
+      "slot": 14
+    },
+    {
+      "category": "reserve",
+      "slot": 15
+    },
+    {
+      "category": "reserve",
+      "slot": 16
+    },
+    {
+      "category": "reserve",
+      "slot": 17
+    },
+    {
+      "category": "reserve",
+      "slot": 18
+    },
+    {
+      "category": "reserve",
+      "slot": 19
+    },
+    {
+      "category": "reserve",
+      "slot": 20
+    },
+    {
+      "category": "reserve",
+      "slot": 21
+    },
+    {
+      "category": "reserve",
+      "slot": 22
+    },
+    {
+      "category": "reserve",
+      "slot": 23
+    },
+    {
+      "category": "reserve",
+      "slot": 24
+    }
+  ],
+  "eval_scenes": [
     1301000,
     1301001,
     1301002,
@@ -38,14 +4352,188 @@
     1301014,
     1301015
   ],
-  "reuse_only_after_row_identity_check": true,
-  "sealed_confirmation": "not opened",
-  "fresh_state": [
-    "BC_POST four-module parameters per seed",
-    "fresh Adam",
-    "fresh dual state per frozen contract",
-    "fresh RNG/data-order state"
+  "development_block_already_used": true,
+  "sealed_confirmation_opened": false,
+  "training_order": [
+    1300027,
+    1300014,
+    1300028,
+    1300044,
+    1300003,
+    1300010,
+    1300005,
+    1300008,
+    1300021,
+    1300034,
+    1300013,
+    1300001,
+    1300047,
+    1300012,
+    1300033,
+    1300039,
+    1300009,
+    1300002,
+    1300022,
+    1300030,
+    1300032,
+    1300041,
+    1300040,
+    1300038,
+    1300037,
+    1300045,
+    1300024,
+    1300017,
+    1300026,
+    1300035,
+    1300036,
+    1300000,
+    1300016,
+    1300018,
+    1300029,
+    1300011,
+    1300042,
+    1300019,
+    1300006,
+    1300023,
+    1300025,
+    1300046,
+    1300043,
+    1300004,
+    1300007,
+    1300020,
+    1300031,
+    1300015,
+    1300041,
+    1300022,
+    1300039,
+    1300036,
+    1300040,
+    1300038,
+    1300010,
+    1300007,
+    1300016,
+    1300029,
+    1300008,
+    1300046,
+    1300009,
+    1300047,
+    1300023,
+    1300027,
+    1300004,
+    1300002,
+    1300024,
+    1300015,
+    1300017,
+    1300034,
+    1300045,
+    1300020,
+    1300037,
+    1300031,
+    1300035,
+    1300011,
+    1300033,
+    1300026,
+    1300030,
+    1300044,
+    1300003,
+    1300018,
+    1300013,
+    1300042,
+    1300028,
+    1300012,
+    1300005,
+    1300025,
+    1300043,
+    1300019,
+    1300021,
+    1300000,
+    1300001,
+    1300014,
+    1300032,
+    1300006,
+    1300008,
+    1300013,
+    1300006,
+    1300024,
+    1300032,
+    1300031,
+    1300015,
+    1300042,
+    1300004,
+    1300005,
+    1300021,
+    1300027,
+    1300016,
+    1300010,
+    1300000,
+    1300009,
+    1300029,
+    1300022,
+    1300045,
+    1300039,
+    1300019,
+    1300035,
+    1300046,
+    1300020,
+    1300028,
+    1300036,
+    1300003,
+    1300038,
+    1300002,
+    1300047,
+    1300030,
+    1300023
   ],
-  "resume_policy": "No previous PPO optimizer/RNG resume. Route-version freeze identity must differ so old checkpoints reject; implementation and test of this checkpoint-version barrier remain required before READY.",
-  "zero_launch_this_turn": true
+  "training_order_sha256": "346f2cdde8d658f927ea282f83e143d54a600f4f5c729e4521fe657421afe840",
+  "source_freeze_sha256": "da268b58a053b16216353fd3f0767f8cecdac57a5a7ea82e793e818613a8448d",
+  "source_key_plan_sha256": "2d3928a11cdef5260c89c28698152b9577617260797e8fa28e03fbb8e347fc85",
+  "authorization": "PENDING_USER_APPROVAL",
+  "source_content_identities": {
+    "round46_runner_sha256": "dc086128aa244f847330bacfd5dbc457907ad987a700c1bd1cae70687886e19c",
+    "canonical_trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "round44_freeze_sha256": "354b2d4441ec1d4ce8d4aa6ba6f79b29d4cba17c82d525f2a566a68c4e5190ed",
+    "round44_reuse_manifest_sha256": "6decb2e53693694b75bca045534c7be559eeeda4faed6181cec1665d99e816e5",
+    "round46_input_identity_sha256": "0859d53d16d7dd949efc8bd70fabc9ce8337e08e830f268022627583faa5d1b0",
+    "round46_v10_manifest_sha256": "634e398016f305a0b3170000160ec779c3faf7731e7426c74fa39690b596bbc1",
+    "round52_prototype_contract_sha256": "fe6a85642813bde39cb37e37fa67564aefac1070bb9688f5045429074e249149",
+    "round52_gradient_evidence_sha256": "87d76bcae95dfc0303b31b38c9d65f8077c82d3ff45489bcf6a710515381f1a3",
+    "r53_executor_sha256": "bd4a38e576665b537b9791be2a6648f70e7ef07b0e9f2300361a167f5338175c",
+    "r53_contracts_sha256": "78b1aa76401ae4232b85e6123003fce24dd70f67a8cfddb91265e94aff12f485",
+    "r53_policy_adapter_sha256": "e2f16bf55478d1a95e0f9ee07338f1cc602041373feaf5e8fadee28ab7a7f0d9"
+  },
+  "scientific_config_identity": {
+    "objective": "min E[c] s.t. g=E[Yref]-E[Ypi]-delta<=0",
+    "actor_advantage": "lambda_before*A_task-A_positive_cost",
+    "frozen_round44_objective": {
+      "advantage_standardisation": "none",
+      "b0_bytes": 10000.0,
+      "delta": 0.0,
+      "eta_lambda": 0.5,
+      "gae_lambda": 1.0,
+      "gamma": 1.0,
+      "lambda_init": 1.0,
+      "log_prob_tolerance": 1e-06
+    },
+    "frozen_checks": {
+      "steps_per_episode": true,
+      "observation_width": true,
+      "b0_bytes": true,
+      "delta": true,
+      "gamma": true,
+      "gae_lambda": true,
+      "eta_lambda": true,
+      "lambda_init": true,
+      "ALL_ROWS": true,
+      "one_shot": true,
+      "training_episodes": true,
+      "updates": true
+    },
+    "search_and_allocation": "reuse exact ROUND44 frozen runtime; no edits",
+    "ack": "disabled per frozen immediate/training protocol",
+    "timing": "policy_owned_timing",
+    "actions": "one-shot SEND/SKIP; original masks and greedy tie rule",
+    "changed_training_factor_only": "critic representation stop-gradient at task/cost critic-head inputs",
+    "fresh_rng_scheme": "sha256('ROUND53-fresh-rng/1:{seed}')[0:8] big-endian; seed Python, NumPy, Torch; never restore prior PPO/RNG checkpoint"
+  },
+  "plan_sha256": "a49aa716095af9c47ab541f27595171a063a90325f5933ae331e62f44faaac9a"
 }

@@ -1,9 +1,30 @@
 {
-  "kind": "round53-zero-launch-evidence/1",
-  "status": "pure_tests_passed_no_project_runtime_loaded",
-  "pure_test_count": 7,
-  "pure_test_failures": 0,
-  "operations": {
+  "kind": "round53-zero-launch-test-evidence/2",
+  "status": "passed",
+  "test_count": 18,
+  "test_exit_code": 0,
+  "test_output_parsed_not_hardcoded": true,
+  "test_command": [
+    "D:\\project_env\\python.exe",
+    "-m",
+    "unittest",
+    "test_r53_execution",
+    "test_round53_pure",
+    "-v"
+  ],
+  "tests_run": "test_actual_entry_refuses_before_private_raw_namespace_creation (test_r53_execution.TestRound53Execution) ... ok\ntest_actual_frozen_runner_path_binder_is_private_and_separate_from_inputs (test_r53_execution.TestRound53Execution) ... ok\ntest_actual_nonfatal_snapshot_wrapper_preserves_complete_core_claim (test_r53_execution.TestRound53Execution) ... ok\ntest_actual_slots_joint_run_proxy_factory (test_r53_execution.TestRound53Execution) ... ok\ntest_authorization_refuses_pending_and_accepts_exact_receipt (test_r53_execution.TestRound53Execution) ... ok\ntest_checkpoint_version_rejects_round46_training_state_but_allows_bc_model_only (test_r53_execution.TestRound53Execution) ... ok\ntest_fixed_plan_exact_and_unique (test_r53_execution.TestRound53Execution) ... ok\ntest_guarded_actual_runtime_binding_in_private_sandbox (test_r53_execution.TestRound53Execution) ... ok\ntest_partial_core_claim_and_strict_close (test_r53_execution.TestRound53Execution) ... ok\ntest_real_baseline_rows_hash_close_without_generating_bc_sampled (test_r53_execution.TestRound53Execution) ... ok\ntest_wrong_source_hash_is_an_actual_refusal (test_r53_execution.TestRound53Execution) ... ok\ntest_authorization_gate_and_fake_ledger_closure (test_round53_pure.TestRound53Pure) ... ok\ntest_counter_fixture_is_zero_without_invoking_update (test_round53_pure.TestRound53Pure) ... ok\ntest_exception_cleanup (test_round53_pure.TestRound53Pure) ... ok\ntest_hooks_detach_only_head_inputs_and_restore (test_round53_pure.TestRound53Pure) ... ok\ntest_private_output_path_containment (test_round53_pure.TestRound53Pure) ... ok\ntest_role_and_runtime_identity_refusal (test_round53_pure.TestRound53Pure) ... ok\ntest_wrong_source_refused_and_method_restored (test_round53_pure.TestRound53Pure) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 6.678s\n\nOK\n",
+  "guard_observed_operation_counts": {
+    "environment_construction": 0,
+    "simulation": 0,
+    "new_scenes_or_flows": 0,
+    "new_evaluation": 0,
+    "real_training_updates": 0,
+    "synthetic_optimizer_steps": 0,
+    "checkpoint_writes": 0,
+    "claim_calls": 0
+  },
+  "runtime_configured_in_private_temporary_fixture": true,
+  "builder_run_environment_eval_optimizer_checkpoint_calls": {
     "environment_construction": 0,
     "simulation": 0,
     "new_scenes_or_flows": 0,
@@ -12,10 +33,9 @@
     "synthetic_optimizer_steps": 0,
     "checkpoint_writes": 0
   },
-  "test_command": "D:\\project_env\\python.exe -m unittest test_round53_pure.py -v",
-  "scope": "adapter hook lifecycle on fake heads; source/role fail-closed mechanics; in-memory quota/claim uniqueness fixture; authorization refusal; pure path containment; zero-counter fixture. Does not test project runtime booking/ledger integration, actual path binding, environment, optimizer, or checkpoint path.",
-  "project_runtime_imported": false,
-  "environment_builder_called": false,
-  "optimizer_step_called": false,
-  "checkpoint_written": false
+  "real_claims_created": 0,
+  "raw_checkpoint_files": 0,
+  "raw_claim_files": 0,
+  "protected_sources_unchanged": true,
+  "scope": "narrow R53 tests only; guarded actual runtime configure and output binding in disposable private fixture; no first-four environment gate or real evaluation/training was executed"
 }
