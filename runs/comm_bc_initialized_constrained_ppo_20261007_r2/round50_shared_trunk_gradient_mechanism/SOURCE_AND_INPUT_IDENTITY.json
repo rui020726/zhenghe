@@ -1,0 +1,78 @@
+{
+  "kind": "round50-source-and-input-identity/1",
+  "repository_head_at_analysis": "137f006da31da09535ad9245da12c2fc5f6d1a38",
+  "task_branch": "analysis/round50-shared-trunk-gradient-mechanism",
+  "frozen_trainer": {
+    "frozen_manifest_name": "canonical_v2_trainer.py",
+    "frozen_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "recoverable_source_path": null,
+    "source_bytes_available": false,
+    "current_candidate_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py",
+    "current_candidate_sha256": "ffb6953034cbc2548e6f7458a7c1d560fe3337ad3ccb846543bb8f6f4dcc05a6",
+    "current_candidate_matches_frozen": false,
+    "tracked_python_files_checked_at_head": 694,
+    "status": "BLOCKED_FROZEN_SOURCE_BYTES_NOT_AVAILABLE"
+  },
+  "round49_panel": {
+    "path": "round49_bc_input_policy_closure\\INPUT_PANEL_MANIFEST.json",
+    "sha256": "b4d940c17ec1c627af0e767b86280912a83f34ce4d534d28f4f2f6f8222c4d25",
+    "records": 576,
+    "feature_width": 19,
+    "dtype": "float32",
+    "records_preserved_individually": true,
+    "action_mapping": {
+      "SEND": 1,
+      "SKIP": 0
+    },
+    "tie_rule": "p_send >= 0.5 -> SEND",
+    "used_for_forward_sensitivity": false,
+    "reason": "The exact frozen loss/gradient function is unavailable; no component gradient exists to pair with a logit Jacobian."
+  },
+  "round49_bc_path_replay": {
+    "path": "round49_bc_input_policy_closure\\BC_PATH_REPLAY.json",
+    "sha256": "d33a9470597c49153f63d2de2cd7d8b921d15c7f4b220eea7f747ef84110eef1",
+    "bc_replay_all_seeds_passed": true,
+    "ppo_replay_all_seeds_passed": true,
+    "action_mapping": {
+      "SEND": 1,
+      "SKIP": 0
+    },
+    "tie_rule": "p_send >= 0.5 -> SEND",
+    "initializer_matches_round46": {
+      "11": true,
+      "22": true,
+      "33": true
+    },
+    "r43_registered_ep0_is_rejected_as_wrong_role": true
+  },
+  "round46_files_read": [
+    {
+      "path": "ROUND46_R2_V6_RUNTIME_FREEZE.json",
+      "sha256": "74b0facec770564b24b5e3ded4a075e10adda4ba8578af59341df649d931ab50"
+    },
+    {
+      "path": "ROUND46_FIRST_BATCH_GATE_s11.json",
+      "sha256": "2b7aa0e72fbdac676b107b3b9d4f4fe792c5bff6def2a73704c89b9f4a2bea87"
+    },
+    {
+      "path": "ROUND46_FIRST_BATCH_GATE_s22.json",
+      "sha256": "f2a8914f8ceea2e46d02d1a59c31685f0443d7c855ef858615521b8900c176f3"
+    },
+    {
+      "path": "ROUND46_FIRST_BATCH_GATE_s33.json",
+      "sha256": "ebf8969c2e5c4955902c5895f07c943fe5673b7eaba7773b1baa85d8bfac6cbd"
+    },
+    {
+      "path": "v6\\checkpoints\\r40_batch_s11_b0_attempt01.json",
+      "sha256": "db845ca9648adff252ac49ae95475f899c9ddb1c2d1ca8b47615161b79451c59"
+    },
+    {
+      "path": "v6\\checkpoints\\r40_batch_s22_b0_attempt01.json",
+      "sha256": "128a11b986d7e50bc5cf6e26fd71ee52e30962274953d15d2bdc70b619175287"
+    },
+    {
+      "path": "v6\\checkpoints\\r40_batch_s33_b0_attempt01.json",
+      "sha256": "12f87908b600d4b6e38b5c7bacdd03bba726c8c4f34e940acb5974b4377e8241"
+    }
+  ]
+}
