@@ -1,0 +1,64 @@
+{
+  "kind": "round46-r2-v6-ep0-receipt-isolation/1",
+  "status": "isolated",
+  "reason": "prior ep0 recovery receipt conflict at the reused R45 promotion seam",
+  "runner_source_sha256": "ea5597d0ccbe0562d0fc4b87a81708ea0f525747d31900ef9bf46b4a7d228b86",
+  "runner_source_sha256_expected": "ea5597d0ccbe0562d0fc4b87a81708ea0f525747d31900ef9bf46b4a7d228b86",
+  "active_receipt_absent_after": true,
+  "active_checkpoints_absent_after": true,
+  "preserved_stop_evidence_never_current_success": true,
+  "moved_files": [
+    {
+      "original_relative_path": "runtime/ROUND45_R2_EP0_RECOVERY_s11.json",
+      "preserved_relative_path": "attempts/runner_v5_ep0_receipt_conflict/runtime/ROUND45_R2_EP0_RECOVERY_s11.json",
+      "original_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\runtime\\ROUND45_R2_EP0_RECOVERY_s11.json",
+      "preserved_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v5_ep0_receipt_conflict\\runtime\\ROUND45_R2_EP0_RECOVERY_s11.json",
+      "bytes": 1175,
+      "sha256_before": "1a259177a313312ff9686a4831937a304205808656e00e2231577e991b81c300",
+      "sha256_after": "1a259177a313312ff9686a4831937a304205808656e00e2231577e991b81c300",
+      "byte_identical": true
+    },
+    {
+      "original_relative_path": "checkpoints/v2_train_s11_ep0.pt",
+      "preserved_relative_path": "attempts/runner_v5_ep0_receipt_conflict/checkpoints/v2_train_s11_ep0.pt",
+      "original_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\checkpoints\\v2_train_s11_ep0.pt",
+      "preserved_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v5_ep0_receipt_conflict\\checkpoints\\v2_train_s11_ep0.pt",
+      "bytes": 57605,
+      "sha256_before": "2ca8f764315795f5aadc89117901f23442c43c15e4d4802f5ae268765467950a",
+      "sha256_after": "2ca8f764315795f5aadc89117901f23442c43c15e4d4802f5ae268765467950a",
+      "byte_identical": true
+    },
+    {
+      "original_relative_path": "checkpoints/v2_train_s11.pt",
+      "preserved_relative_path": "attempts/runner_v5_ep0_receipt_conflict/checkpoints/v2_train_s11.pt",
+      "original_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\checkpoints\\v2_train_s11.pt",
+      "preserved_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v5_ep0_receipt_conflict\\checkpoints\\v2_train_s11.pt",
+      "bytes": 57605,
+      "sha256_before": "2ca8f764315795f5aadc89117901f23442c43c15e4d4802f5ae268765467950a",
+      "sha256_after": "2ca8f764315795f5aadc89117901f23442c43c15e4d4802f5ae268765467950a",
+      "byte_identical": true
+    }
+  ],
+  "temporary_copies_used": 3,
+  "family_before": {
+    "family_ledger_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\runtime\\ROUND46_EXECUTION_LEDGER.json",
+    "family_ledger_sha256": "b3b76ae5ce524348152f41dbdd49800b1715436bdf7045ba74a53b83d1a9a2a3",
+    "family_journal_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\runtime\\checkpoint_writes.jsonl",
+    "family_journal_sha256": "0c612fda36556d589704b1df20ed7a5c06eae811ebeed2206f046d4df978f6d1",
+    "family_journal_entries": 19
+  },
+  "family_after": {
+    "family_ledger_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\runtime\\ROUND46_EXECUTION_LEDGER.json",
+    "family_ledger_sha256": "b3b76ae5ce524348152f41dbdd49800b1715436bdf7045ba74a53b83d1a9a2a3",
+    "family_journal_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\runtime\\checkpoint_writes.jsonl",
+    "family_journal_sha256": "0c612fda36556d589704b1df20ed7a5c06eae811ebeed2206f046d4df978f6d1",
+    "family_journal_entries": 19
+  },
+  "family_journal_unchanged": true,
+  "environment_constructor_calls": 0,
+  "run_invocation_calls": 0,
+  "completed_steps": 0,
+  "ppo_updates": 0,
+  "optimizer_step_calls": 0,
+  "checkpoint_write_calls": 0
+}
