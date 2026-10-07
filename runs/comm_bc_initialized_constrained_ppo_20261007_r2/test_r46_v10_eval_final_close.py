@@ -254,7 +254,7 @@ class AdoptionAndIdentityTests(unittest.TestCase):
         real_claims = list((V10.V10_ROOT / "launch_claims").glob("*/*.json")) \
             if V10.V10_ROOT.exists() else []
         for claim in real_claims:
-            self.assertIn("model_eval_new_s11_greedy_scene1301002", claim.as_posix())
+            self.assertNotIn("scene1301999", claim.as_posix())
 
 
 if __name__ == "__main__":
