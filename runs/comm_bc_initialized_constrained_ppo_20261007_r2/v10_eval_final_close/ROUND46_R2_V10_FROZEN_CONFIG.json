@@ -1,15 +1,15 @@
 {
-  "kind": "round46-r2-v10-frozen-config/1",
+  "kind": "round46-r2-v10-frozen-config/2",
   "task_id": "ROUND46-R2-V10-EVAL-FINAL-CLOSE",
   "status": "frozen_before_environment",
-  "frozen_at_local": "2026-10-07 17:59:03",
-  "source_commit": "33b84f673d449b559a02c80b3cc9dc645f135f80",
+  "frozen_at_local": "2026-10-07 18:21:44",
+  "source_commit": "b11c18cebc3894d56ead89a68b22fcc0d8050cb7",
   "quota_branch": "adoption_1301002",
   "new_claim_count": 93,
   "quota_plan_sha256": "2acedb361cd1b21c0ed22ff9a043e9d7fc1c1927bf68af3d9c546331cbf25629",
   "code_files_sha256": {
-    "r46_v10_eval_final_close.py": "c862ab3e9252c4651454b158a2d5fd0adbe6106fddc2c08b06634c2f90227378",
-    "test_r46_v10_eval_final_close.py": "f4fb40e5971168530bcba70f61d95b58623b1c61dad7ad7b0a60d3bc924dd426"
+    "r46_v10_eval_final_close.py": "b88ed85bab876ecd7b3ae20086a953bc4c741fb193aaa28b2b1036c15d4ae9d5",
+    "test_r46_v10_eval_final_close.py": "7aaa9469a69cd139b3afc943dd1b1ce28a09bd3796241701d05da8fcadc6c7f1"
   },
   "checkpoint_files": {
     "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s11_ep128.pt": "0f161663aaf963552f8f02d6363f3c52e6f67119217f835c501cb2d0705bfc10",
@@ -51,6 +51,7 @@
     }
   ],
   "runtime_binding_table_sha256": "7c68c4a25911287a4a33524bf34cd2fa415831903054f2b67d5859bacf1ca5c3",
+  "refreeze_note": "re-frozen after the capacity-recovery category tolerance fix; 92 completed claims from the prior freeze are preserved and replay via the r45 completed-row path",
   "science_invariants": {
     "gamma": 1.0,
     "gae_lambda": 1.0,
