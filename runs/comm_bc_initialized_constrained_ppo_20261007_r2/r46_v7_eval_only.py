@@ -1316,7 +1316,8 @@ def install_eval_only_runtime_guards(runtime: dict[str, Any], plan: dict[str, An
         original_guarded_execute = run._execute_cell
         closure = dict(zip(original_guarded_execute.__code__.co_freevars,
                            original_guarded_execute.__closure__ or (), strict=True))
-        base_execute = closure.get("base_execute")
+        base_cell = closure.get("base_execute")
+        base_execute = getattr(base_cell, "cell_contents", None)
         if not callable(base_execute):
             raise V7Error("R45 guarded eval seam has no callable captured R42 execute function")
 
