@@ -1,15 +1,15 @@
 {
-  "kind": "round46-r2-v8-frozen-config/1",
+  "kind": "round46-r2-v8-frozen-config/2",
   "task_id": "ROUND46-R2-V8-EVAL-BOOKING-CLOSE",
   "status": "frozen_before_environment",
-  "frozen_at_local": "2026-10-07 16:37:02",
-  "source_commit": "97adde6d1774f5aa78381f8271f14aec932005b3",
+  "frozen_at_local": "2026-10-07 16:41:50",
+  "source_commit": "295988b9663172a8d95c30257a80368953707776",
   "quota_branch": "adoption_attempt2",
   "new_claim_count": 95,
   "quota_plan_sha256": "d3222fb6a45fba298c8b85b5f404196e9bc1ff3ad250ec9d571ba384f7e502cd",
   "code_files_sha256": {
-    "r46_v8_eval_booking_close.py": "62e89524178794124735dee3c6f0b0dd25c08b25f61e8972b333034a32f3b7a3",
-    "test_r46_v8_booking_close.py": "55669414398a11b3cd09b895f48e10ddee54c78f8f9092fab172c87a9b54938c"
+    "r46_v8_eval_booking_close.py": "04c8a9f0a82c86db9b6b259503f2448247048ef140cae0233c9748b39572ba2c",
+    "test_r46_v8_booking_close.py": "ea278a4b9a68e53b0fb42ca341caeafffd4eec8d2e93d15767baf83d62ff1b80"
   },
   "checkpoint_files": {
     "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s11_ep128.pt": "0f161663aaf963552f8f02d6363f3c52e6f67119217f835c501cb2d0705bfc10",
@@ -31,6 +31,7 @@
     "new_claim_created": false,
     "new_environment_created": false
   },
+  "false_claim_withdrawal_receipt_sha256": "4940a5d2c1205b1d4c8c31a0d78fa7f6ed2e0a41aa14c993ebc440da584b017d",
   "zero_environment_regression_receipt_sha256": "1e04dca21c928fa497eca2c75fcc4fc2bf57fc9c63859554e1fd9cef404ac16a",
   "science_invariants": {
     "gamma": 1.0,
@@ -44,5 +45,6 @@
     "ack": "off",
     "device": "cpu",
     "threads": 1
-  }
+  },
+  "refreeze_note": "re-frozen after withdrawing the zero-consumption false placeholder claim created by the reserve_slot signature defect; quota map unchanged"
 }
