@@ -1,0 +1,19 @@
+{
+  "kind": "round46-r2-v6-blocker/1",
+  "status": "stopped_at_runtime_configure",
+  "training_completed_episodes": 384,
+  "training_checkpoints": [
+    "v6/checkpoints/v2_train_s11_ep128.pt",
+    "v2_train_s22_ep128.pt",
+    "v2_train_s33_ep128.pt"
+  ],
+  "evaluation_cells_completed": 0,
+  "error": "R42 configure: ROUND43 call journals do not close against committed batch records; then ledger_snapshot(strict=True): optimizer step count mismatch: batch records=688, observed torch Adam.step=0",
+  "cause": "R45 load_runtime sets r44_runtime.RUN_DIR = RUN_DIR (ROUND45 dir) before r44_runtime.configure, which in turn binds r42_run.RUN_DIR and the optimizer/PPO call journals plus the batch-record glob. Those journals therefore landed in the ROUND45 root while the /6 batch records are in v6/checkpoints.",
+  "actions_taken": [
+    "registered byte-identical quarantine of the two ROUND45-root call journals",
+    "installed byte-identical copies under v6/runtime (688 optimizer / 96 ppo lines)"
+  ],
+  "next_fix": "apply the R42/R43/R44 RUN_DIR rebinding to V6 after R45's own assignment and before r44_runtime.configure runs (i.e. inside the load_runtime window), so the journals and the batch-record glob share the v6 root",
+  "preserved": "no journal, batch record, claim or receipt was deleted or hand-edited"
+}
