@@ -208,5 +208,38 @@
       ],
       "rerun_authorized_because_no_update_committed": true
     }
+  ],
+  "relocated_call_journals": [
+    {
+      "reason": "journals bound to the R45 root while batch records are in the /6 root",
+      "moved_files": [
+        {
+          "wave": "call_journal",
+          "original_relative_path": "v6/runtime/optimizer_step_calls.jsonl",
+          "preserved_relative_path": "attempts/runner_v5_ep0_receipt_conflict/call_journal/v6/runtime/optimizer_step_calls.jsonl",
+          "original_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\runtime\\optimizer_step_calls.jsonl",
+          "preserved_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v5_ep0_receipt_conflict\\call_journal\\v6\\runtime\\optimizer_step_calls.jsonl",
+          "bytes": 116662,
+          "sha256_before": "dfcfc85ccfbfa53616be0fb71340d7b3d007184bae2fe6014382fb46d277c6b7",
+          "sha256_after": "dfcfc85ccfbfa53616be0fb71340d7b3d007184bae2fe6014382fb46d277c6b7",
+          "byte_identical": true
+        },
+        {
+          "wave": "call_journal",
+          "original_relative_path": "v6/runtime/ppo_update_calls.jsonl",
+          "preserved_relative_path": "attempts/runner_v5_ep0_receipt_conflict/call_journal/v6/runtime/ppo_update_calls.jsonl",
+          "original_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\runtime\\ppo_update_calls.jsonl",
+          "preserved_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v5_ep0_receipt_conflict\\call_journal\\v6\\runtime\\ppo_update_calls.jsonl",
+          "bytes": 16063,
+          "sha256_before": "f7e13857ada2c115874247e2285bd8ed350550185dbcd77ccfa68d85b8a62e25",
+          "sha256_after": "f7e13857ada2c115874247e2285bd8ed350550185dbcd77ccfa68d85b8a62e25",
+          "byte_identical": true
+        }
+      ],
+      "journal_line_counts": {
+        "optimizer_step_calls.jsonl": 688,
+        "ppo_update_calls.jsonl": 96
+      }
+    }
   ]
 }

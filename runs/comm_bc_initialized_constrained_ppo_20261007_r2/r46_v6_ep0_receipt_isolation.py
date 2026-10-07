@@ -288,7 +288,54 @@ def _assert_registry(registry: dict[str, Any]) -> None:
                 raise RuntimeError(f"preserved stop evidence changed: {preserved}")
 
 
-def quarantine_stale_claim(logical_job: str) -> dict[str, Any]:
+CALL_JOURNAL_NAMES = ("optimizer_step_calls.jsonl", "ppo_update_calls.jsonl")
+
+
+def relocate_call_journals() -> dict[str, Any]:
+    """Move the /6 run's training-call journals into the private namespace.
+
+    The R42/R43 instrumentation binds `RUN_DIR/runtime/{optimizer_step,ppo_update}`
+    at configure time. During the /6 run those bound to the R45 root while the
+    batch records went to the private root, so the journal/batch closure check
+    cannot close. Both journals carry only /6 counts; move them, byte-identical,
+    so journals and batch records share one root again.
+    """
+    source_root = REPO / "runs" / "comm_rule_warmstart_cost_learning_20261006_r2" / "runtime"
+    target_root = RUN_DIR / "v6" / "runtime"
+    family_before = _family_state()
+    moved: list[dict[str, Any]] = []
+    for name in CALL_JOURNAL_NAMES:
+        source = source_root / name
+        if not source.is_file():
+            continue
+        destination = target_root / name
+        if destination.exists():
+            existing = destination.read_bytes()
+            if existing != source.read_bytes():
+                raise RuntimeError(f"/6 {name} already exists with different bytes")
+            continue
+        item = _move(f"v6/runtime/{name}", source, "call_journal")
+        moved.append(item)
+    if not moved:
+        raise RuntimeError("no /6 call journal needed relocation")
+    _assert_family_unchanged(family_before, _family_state())
+    for item in moved:
+        if not Path(item["preserved_path"]).is_file():
+            raise RuntimeError("relocated call journal is missing")
+    entry = {
+        "reason": "journals bound to the R45 root while batch records are in the /6 root",
+        "moved_files": moved,
+        "journal_line_counts": {
+            item["original_relative_path"].rsplit("/", 1)[-1]:
+                sum(1 for line in Path(item["preserved_path"]).read_text(
+                    encoding="utf-8").splitlines() if line.strip())
+            for item in moved
+        },
+    }
+    registry = _json(REGISTRY_PATH) if REGISTRY_PATH.is_file() else {}
+    registry.setdefault("relocated_call_journals", []).append(entry)
+    _write_json(REGISTRY_PATH, registry)
+    return entry
     """Register and relocate a claim written by the pre-fix adapter.
 
     The pre-fix /6 adapter overwrote the round-45 claim identity fields, so the
@@ -352,11 +399,15 @@ def main(argv: list[str] | None = None) -> int:
                        help="register and relocate the untrained-ep0 artifacts now in the active root")
     group.add_argument("--quarantine-stale-claim", metavar="LOGICAL_JOB",
                        help="register and relocate a pre-fix claim so its logical job can be re-run")
+    group.add_argument("--relocate-call-journals", action="store_true",
+                       help="move the /6 training-call journals into the private namespace")
     args = parser.parse_args(argv)
     if args.verify:
         result = verify()
     elif args.archive_active is not None:
         result = archive_active(args.archive_active)
+    elif args.relocate_call_journals:
+        result = relocate_call_journals()
     else:
         result = quarantine_stale_claim(args.quarantine_stale_claim)
     print(json.dumps(result, ensure_ascii=False, indent=2))

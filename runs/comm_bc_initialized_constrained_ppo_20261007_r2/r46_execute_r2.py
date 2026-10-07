@@ -627,7 +627,8 @@ def _rebind_checkpoint_journal(runtime: dict[str, Any]) -> dict[str, Any]:
     if journal_cell is None:
         raise RuntimeError("actual R42 checkpoint writer has no auditable journal-path closure")
     captured_path = Path(journal_cell.cell_contents).resolve()
-    if captured_path != LEGACY_CHECKPOINT_JOURNAL_PATH.resolve():
+    if captured_path not in (LEGACY_CHECKPOINT_JOURNAL_PATH.resolve(),
+                             CHECKPOINT_JOURNAL_PATH.resolve()):
         raise RuntimeError(f"unexpected captured R42 checkpoint journal path: {captured_path}")
     audit = _checkpoint_journal_route_audit(create=False)
     try:
@@ -974,6 +975,19 @@ def _configure_runtime_module() -> Any:
     # and optimizer journal through RUN_DIR. Read those immutable originals in
     # place; do not copy the BC journals into this ROUND46 output directory.
     module.RUN_DIR = ROUND45_DIR
+    # The R42/R43/R44 modules bind their call journals, batch-record glob and
+    # eval-artifact scope to RUN_DIR at configure time. Bind them to the /6
+    # namespace first so journals and batch records share one root.
+    for _path in (ROUND45_DIR, R44_DIR, R42_DIR):
+        if str(_path) not in sys.path:
+            sys.path.insert(0, str(_path))
+    for _name in ("r42_run", "r44_prepare", "r44_runtime", "r44_eval_index"):
+        try:
+            _mod = importlib.import_module(_name)
+        except Exception:
+            continue
+        if hasattr(_mod, "RUN_DIR"):
+            _mod.RUN_DIR = V6_DIR
     try:
         runtime = module.load_runtime(enforce_prelaunch=False)
     finally:
