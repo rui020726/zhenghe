@@ -1,0 +1,189 @@
+{
+  "kind": "round52-critic-gradient-isolation-prototype-contract/1",
+  "status": "passed_candidate_not_authorized_for_training",
+  "version": "critic_representation_stop_gradient/1",
+  "one_change": "Detach trunk representation only at task-value-head and cost-value-head inputs for critic-loss computation. Actor and entropy retain normal shared-trunk path.",
+  "unchanged": [
+    "same BC_POST four-module parameters and objects",
+    "same architecture, state_dict, 19D inputs and SEND=1/SKIP=0 mapping",
+    "same one-shot action/masks/greedy tie rule",
+    "same logits/task/cost predictions",
+    "same advantages, positive cost convention, lambda*Atask-Acost, GAE, loss terms and coefficients",
+    "same ALL_ROWS pooling and every denominator",
+    "same PPO config, clipping threshold, budget/reward/ACK/environment"
+  ],
+  "mechanism": "Temporary forward_pre_hooks on the two critic heads; detach first input only; try/finally removes hooks and asserts original hook set restored. No production files or trainer modified.",
+  "trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+  "round51_gradient_sha256": "b03489cbab64f5b4914bf8e29d58210f00fb6a00b7cfcba1defe2d12906f35d7",
+  "actual_send_skip": {
+    "SEND": 1,
+    "SKIP": 0
+  },
+  "critic_clip_norm_from_frozen_source": 0.5,
+  "batch_rows_per_seed": 265,
+  "seeds": [
+    11,
+    22,
+    33
+  ],
+  "real_panel_rows_per_seed": 576,
+  "operations_zero": {
+    "kind": "round52-pure-test-evidence/1",
+    "status": "passed",
+    "batch_baseline_matches_round51": true,
+    "scalar_loss_terms_and_predictions_equal": true,
+    "actor_entropy_gradient_equal": true,
+    "critic_heads_gradient_equal": true,
+    "critic_shared_trunk_gradient_none_or_zero": true,
+    "independent_module_parameter_enumeration": true,
+    "isolated_total_gradient_sum_closed": true,
+    "critic_head_detach_preserves_actor_path": true,
+    "exception_hooks_removed": true,
+    "repeated_calls_do_not_accumulate_hooks": true,
+    "wrong_model_role_refusal": true,
+    "round49_r43_role_mismatch_source": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_ep0.pt",
+      "file_sha256": "70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd",
+      "four_module_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff"
+    },
+    "optimizer_steps": 0,
+    "parameter_writes": 0,
+    "checkpoint_writes": 0,
+    "environment_construction": 0,
+    "simulation": 0,
+    "new_scenes_or_flows": 0,
+    "new_evaluation": 0,
+    "real_training_updates": 0,
+    "synthetic_optimizer_steps": 0,
+    "test_scope": "only source-bound forward/gradient, exact 576-row support, and scalar closed-form prototype seam",
+    "pure_test_run": {
+      "command": "python -m unittest runs/comm_bc_initialized_constrained_ppo_20261007_r2/round52_critic_gradient_isolation_prototype/test_round52_pure.py -v",
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "exit_code": 0
+    },
+    "analytic_expected": {
+      "old_critic_trunk_grad": 450.0,
+      "new_critic_trunk_grad": "None",
+      "critic_head_grad": 180.0,
+      "actor_logit_shared_trunk_derivative": 12.0
+    }
+  },
+  "development_go": false,
+  "model_identity": {
+    "11": {
+      "parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+      "checkpoint_sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a"
+    },
+    "22": {
+      "parameter_sha256": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+      "checkpoint_sha256": "3cdb83785c51f9e40005d66a1d024d06a5ba6940616e22f3b01a9bf65b5e609d"
+    },
+    "33": {
+      "parameter_sha256": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+      "checkpoint_sha256": "9329ef048dfc5c1805af5756c7ea0962eedfc8d01aa26841e35af7001616803a"
+    }
+  },
+  "proposed_not_authorized_resources": {
+    "reuse_controls": {
+      "BC_greedy": {
+        "index": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_INPUT_IDENTITY.json",
+        "sha256": "0859d53d16d7dd949efc8bd70fabc9ce8337e08e830f268022627583faa5d1b0",
+        "rows": 48,
+        "missing": "BC sampled rows; 48 must be collected for matched sampled comparison"
+      },
+      "current_shared_PPO": {
+        "index": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close\\ROUND46_R2_V10_ANALYSIS_INPUT_MANIFEST.json",
+        "sha256": "634e398016f305a0b3170000160ec779c3faf7731e7426c74fa39690b596bbc1",
+        "final_results": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close\\ROUND46_R2_V10_FINAL_RESULTS.json",
+        "final_results_sha256": "25b8f8dd4b62a184ffde63e545be7fc74819f257f9718bae4205816b402b9801",
+        "rows": 96,
+        "scope": "3 seeds x greedy/sampled x 16 scenes from exact Round46 final accepted matrix",
+        "machine_verdict": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close\\ROUND46_R2_V10_MACHINE_VERDICT.json",
+        "machine_verdict_sha256": "6b83636b4d5edfc84744cd6bfa74679b0f6d05e8e94bd82e9d2c27536243f51b",
+        "accepted_rows": 96,
+        "accepted_row_keys_sha256": "76b50037948036b3351db35f36b7fa58f275e2d9056db253b26b10fb08af1f05"
+      },
+      "immediate_late": {
+        "manifest": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_dual_response_ablation_20261004\\ROUND44_BASELINE_REUSE.json",
+        "sha256": "6decb2e53693694b75bca045534c7be559eeeda4faed6181cec1665d99e816e5",
+        "immediate_row_sha256_by_scene": {
+          "1301000": "3f04848adda4f860684c8e5263097d1cf1d35d5c236c03a52e45c84cedb0f512",
+          "1301001": "fa64dc395cf09d754117290c9d9f2648f1e72b11804060833910ee1b95a76342",
+          "1301002": "8be667038edf77aabcdb5b6576cc8a78cd6d7c0f63b34a60ba0b367f537b7ddd",
+          "1301003": "eb6189e75cf2309ebe7c174abb7d674370e7645d293659e08a29d60ad553fd3e",
+          "1301004": "8aba1ce94cfce2836a2644ee5f05aa84625afae35ab484607f7684bee6c192a3",
+          "1301005": "b4543bc46aeef4822db79eed6674878432a744a5511e487f9f0b5699d33c7ca9",
+          "1301006": "a1b0d64eb15e91d1a6b5254946ada923c7db870d1de1a574c783c35a83528a13",
+          "1301007": "8b7f67f5d7aa26afb86a848fa88d60c34a7d016cf17401cdd1879f69b2a60860",
+          "1301008": "ad99cf2c8a38b63a4ef87062e8a869273404e41dfc81bd77449c7bd83406206b",
+          "1301009": "6e3dab36f5b870330040e9d1881f64e98177ce8121d99e2de7d28a3987529db2",
+          "1301010": "fd4868efefc8ebb93fb82124e5192a5c8448d821270e1eed9e560be25ea0f9dc",
+          "1301011": "bced9b4f58ca1cb529666dae11ff918af148f2c6988d58f44027efc306e25963",
+          "1301012": "98f44338232093be79ecf981e44a1352a62c979777e0caa5e433150799eaf6db",
+          "1301013": "70db91fee542d8b258e31bf28cd6c517374a6072c6724619d4da094c0bc8e316",
+          "1301014": "6dca3e6c1fde3396becccbc57c63ad8a9d788f72fa700550fec469dd7fa95d61",
+          "1301015": "d639a13747c3eca67b2746e39bd9656e4335ba8e8c1dd616afd433f7e7cbb337"
+        },
+        "late_row_sha256_by_scene": {
+          "1301000": "6a29becc6a85d0cb52b06e7691181d1ced7a042e3fe6e5d0336f3bec9829883a",
+          "1301001": "b697613b6ed1844075c882369b819330b3d2cfe388de1548568d12f3498476e6",
+          "1301002": "d58ee4901d4805f198e8713a8f8557df8b1718dda42f9b42da3c9259dfc84d3c",
+          "1301003": "900ca216e536cbe9887e675bd04c7258cebfaf75d32cb7cae43fe96e4f2bc659",
+          "1301004": "130a25459be64425615b8a2eeb13d29bb554dfced8526236418ec1e7567dcb4c",
+          "1301005": "22d41c78d1ecd45ca10300e46416f13451778a2a4605da32ce74f13890b801dd",
+          "1301006": "a1debd759d9e9387a07480e122560911ac8f7cfaee5b0f56c7e04a2c34fa4c94",
+          "1301007": "b11c1c4a9cb63b480100c77b6b305589bbe062722a260dcf801e111339c51df5",
+          "1301008": "246170b6cbcdbb654622f5809a9f401ca420a47f1f4f5616291e71337c3e19c9",
+          "1301009": "988dd728a04aed1ee4f792df4ebd72e4ffcdfb5ba708b89d0c77f447f27d03e8",
+          "1301010": "d6ee08f21b78753908c95be35b35f2d8cc644c6ef7ad686b219013d94c98efe3",
+          "1301011": "c8238ac6c12553018ba85b8467706b08412470af779ea106da2b9d25da200cc9",
+          "1301012": "343fc3abb2946c3f390a07158994a823fce22e5c8f29e03161f8298723d265e6",
+          "1301013": "db51d1e5403c1792988fe933c7ae905f57283176bd5223b54b71ec0b53d260fb",
+          "1301014": "6edc821a39fcfd7f1dd557fcf83df72f5e95d6fd0ee6ca89f7da142a66f5c9e5",
+          "1301015": "fb54bd2549cb450e693ff4e1541a59c21832c809bc2e053b2cd13937ec3593c6"
+        },
+        "rows_each": 16,
+        "condition": "reuse only after per-row configuration/model/protocol/hash validation"
+      }
+    },
+    "new_normal_claims": {
+      "candidate_training": 384,
+      "candidate_greedy_eval": 48,
+      "candidate_sampled_eval": 48,
+      "BC_sampled_comparator_eval": 48,
+      "normal_total": 528,
+      "normal_sum": "384 + 96 + 48",
+      "new_technical_failure_reserve": 24,
+      "hard_cap": 552,
+      "ledger": "new isolated ledger; technical failures only; never borrow historical reserve",
+      "scenes": [
+        "1301000",
+        "1301001",
+        "1301002",
+        "1301003",
+        "1301004",
+        "1301005",
+        "1301006",
+        "1301007",
+        "1301008",
+        "1301009",
+        "1301010",
+        "1301011",
+        "1301012",
+        "1301013",
+        "1301014",
+        "1301015"
+      ],
+      "sealed_confirmation": "not opened",
+      "authorization": "proposed_not_authorized; no claims or harness construction this turn"
+    }
+  },
+  "historical_round46_budget_not_carryover": {
+    "normal": 480,
+    "reserve_max": 24,
+    "hard_cap": 504,
+    "available_to_round52": false
+  }
+}

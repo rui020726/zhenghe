@@ -1,0 +1,43 @@
+{
+  "kind": "round52-pure-test-evidence/1",
+  "status": "passed",
+  "batch_baseline_matches_round51": true,
+  "scalar_loss_terms_and_predictions_equal": true,
+  "actor_entropy_gradient_equal": true,
+  "critic_heads_gradient_equal": true,
+  "critic_shared_trunk_gradient_none_or_zero": true,
+  "independent_module_parameter_enumeration": true,
+  "isolated_total_gradient_sum_closed": true,
+  "critic_head_detach_preserves_actor_path": true,
+  "exception_hooks_removed": true,
+  "repeated_calls_do_not_accumulate_hooks": true,
+  "wrong_model_role_refusal": true,
+  "round49_r43_role_mismatch_source": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_ep0.pt",
+    "file_sha256": "70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd",
+    "four_module_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff"
+  },
+  "optimizer_steps": 0,
+  "parameter_writes": 0,
+  "checkpoint_writes": 0,
+  "environment_construction": 0,
+  "simulation": 0,
+  "new_scenes_or_flows": 0,
+  "new_evaluation": 0,
+  "real_training_updates": 0,
+  "synthetic_optimizer_steps": 0,
+  "test_scope": "only source-bound forward/gradient, exact 576-row support, and scalar closed-form prototype seam",
+  "pure_test_run": {
+    "command": "python -m unittest runs/comm_bc_initialized_constrained_ppo_20261007_r2/round52_critic_gradient_isolation_prototype/test_round52_pure.py -v",
+    "tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "exit_code": 0
+  },
+  "analytic_expected": {
+    "old_critic_trunk_grad": 450.0,
+    "new_critic_trunk_grad": "None",
+    "critic_head_grad": 180.0,
+    "actor_logit_shared_trunk_derivative": 12.0
+  }
+}
