@@ -899,6 +899,23 @@ def _seed_v6_output_namespace() -> dict[str, Any]:
                 "ppo_updates": 0, "normal_environment_keys": NORMAL_CAP,
                 "technical_reserve_max": RESERVE_CAP, "hard_environment_cap": HARD_CAP,
             })
+    # R42's configure asserts that each runtime adapter module was imported from
+    # RUN_DIR, and the loader resolves them relative to RUN_DIR. The /6 root is
+    # the run root, so it needs the same verified code aliases as the ROUND46
+    # root (copied byte-identically, never edited).
+    for name in ("r40_train_resume_adapter.py", "r42_one_shot.py",
+                 "r42_versions.py", "r43_call_counter_hooks.py"):
+        destination = V6_DIR / name
+        if destination.is_file():
+            continue
+        source = R46_DIR / name
+        if not source.is_file():
+            source = ROUND45_DIR / name
+        if not source.is_file():
+            raise FileNotFoundError(source)
+        shutil.copyfile(source, destination)
+        if _sha256(destination) != _sha256(source):
+            raise RuntimeError(f"/6 runtime code alias copy mismatch: {name}")
     if not FAMILY_JOURNAL_PATH.is_file():
         raise FileNotFoundError(FAMILY_JOURNAL_PATH)
     family_bytes = FAMILY_JOURNAL_PATH.read_bytes()
@@ -986,6 +1003,9 @@ def _configure_runtime_module() -> Any:
     for _path in (ROUND45_DIR, R44_DIR, R42_DIR):
         if str(_path) not in sys.path:
             sys.path.insert(0, str(_path))
+    # Resolve the runtime adapter modules from the /6 root (its own verified
+    # copies), so R42's import-provenance check matches RUN_DIR.
+    sys.path.insert(0, str(V6_DIR))
     import r44_runtime
     if not getattr(r44_runtime, "_round46_v6_bound", False):
         _orig_r44_configure = r44_runtime.configure
