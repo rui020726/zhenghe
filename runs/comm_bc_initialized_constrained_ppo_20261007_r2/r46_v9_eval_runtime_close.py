@@ -444,9 +444,8 @@ def install_eval_only_runtime_guards(runtime: dict[str, Any], plan: dict[str, An
 
     original_eval = run.run_model_eval
     adopted_rows = {
-        tuple(k): read_json(V9_ROOT / "adoption" / name)
-        for k, name in ((ADOPTED_KEYS[0], "attempt2_effective_row.json"),
-                        (ADOPTED_KEYS[1], "cell1301001_effective_row.json"))
+        ADOPTED_KEYS[0]: read_json(V8.V8_ROOT / "adoption/attempt2_effective_row.json"),
+        ADOPTED_KEYS[1]: read_json(V9_ROOT / "adoption/cell1301001_effective_row.json"),
     }
 
     def eval_or_adopt(*, arm: str, training_seed: int, mode: str,
