@@ -336,6 +336,9 @@ def relocate_call_journals() -> dict[str, Any]:
     registry.setdefault("relocated_call_journals", []).append(entry)
     _write_json(REGISTRY_PATH, registry)
     return entry
+
+
+def quarantine_stale_claim(logical_job: str) -> dict[str, Any]:
     """Register and relocate a claim written by the pre-fix adapter.
 
     The pre-fix /6 adapter overwrote the round-45 claim identity fields, so the
