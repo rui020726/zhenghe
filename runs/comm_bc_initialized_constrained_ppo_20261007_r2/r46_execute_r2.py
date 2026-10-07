@@ -3200,6 +3200,42 @@ def _check_first_four_report(seed: int, report: dict[str, Any]) -> None:
         raise RuntimeError(f"ROUND46 seed {seed} did not close its first real PPO batch")
 
 
+def _reuse_completed_training(module: Any,
+                              runtime: dict[str, Any]) -> dict[int, dict[str, Any]] | None:
+    """Reuse the verified ep128 training state instead of re-entering training.
+
+    A resumed run must not replay committed training. Reuse is only allowed when
+    every seed has a complete ep128 summary, all three batch0 gates passed, and
+    each summary's ep128 checkpoint hash still matches the file on disk.
+    """
+    summaries: dict[int, dict[str, Any]] = {}
+    for seed in SEEDS:
+        summary_path = R46_DIR / f"ROUND46_TRAINING_s{seed}.json"
+        gate_path = R46_DIR / f"ROUND46_FIRST_BATCH_GATE_s{seed}.json"
+        if not summary_path.is_file() or not gate_path.is_file():
+            return None
+        summary = _json(summary_path)
+        if (summary.get("status") != "complete" or int(summary.get("seed", -1)) != seed
+                or summary.get("training_version") != TRAINING_VERSION):
+            raise RuntimeError(f"ROUND46 seed {seed} ep128 summary is not the frozen complete result")
+        checkpoint = V6_CHECKPOINTS_DIR / f"v2_train_s{seed}_ep128.pt"
+        if not checkpoint.is_file() or _sha256(checkpoint) != summary.get("ep128_checkpoint_sha256"):
+            raise RuntimeError(f"ROUND46 seed {seed} ep128 checkpoint no longer matches its summary")
+        gate = _json(gate_path)
+        if gate.get("status") != "passed" or int(gate.get("seed", -1)) != seed:
+            raise RuntimeError(f"ROUND46 seed {seed} batch0 gate receipt is not the passed result")
+        report = summary.get("fixed_ep128_report", {})
+        if (int(report.get("episodes_done", -1)) != 128
+                or int(report.get("updates", -1)) != 32):
+            raise RuntimeError(f"ROUND46 seed {seed} summary is not a closed ep128 run")
+        summaries[seed] = summary
+    module._task_state(
+        "ROUND46 verified ep128 training reused; no training replayed",
+        reused_completed_training=True, completed_training_seeds=sorted(summaries),
+    )
+    return summaries
+
+
 def _run_first_four_and_all_gates(module: Any, runtime: dict[str, Any]) -> dict[int, dict[str, Any]]:
     first_four: dict[int, dict[str, Any]] = {}
     for seed in SEEDS:
@@ -3782,8 +3818,10 @@ def execute() -> None:
     _assert_source_worktree_clean()
 
     try:
-        first_four = _run_first_four_and_all_gates(module, runtime)
-        _continue_fixed_training(module, runtime, first_four)
+        training_summaries = _reuse_completed_training(module, runtime)
+        if training_summaries is None:
+            first_four = _run_first_four_and_all_gates(module, runtime)
+            training_summaries = _continue_fixed_training(module, runtime, first_four)
         module._task_state(
             "ROUND46 three seed ep128 complete; run exactly 96 fixed final evaluation cells",
             phase="final_evaluation",
