@@ -1,0 +1,48 @@
+{
+  "kind": "round46-r2-v8-frozen-config/1",
+  "task_id": "ROUND46-R2-V8-EVAL-BOOKING-CLOSE",
+  "status": "frozen_before_environment",
+  "frozen_at_local": "2026-10-07 16:37:02",
+  "source_commit": "97adde6d1774f5aa78381f8271f14aec932005b3",
+  "quota_branch": "adoption_attempt2",
+  "new_claim_count": 95,
+  "quota_plan_sha256": "d3222fb6a45fba298c8b85b5f404196e9bc1ff3ad250ec9d571ba384f7e502cd",
+  "code_files_sha256": {
+    "r46_v8_eval_booking_close.py": "62e89524178794124735dee3c6f0b0dd25c08b25f61e8972b333034a32f3b7a3",
+    "test_r46_v8_booking_close.py": "55669414398a11b3cd09b895f48e10ddee54c78f8f9092fab172c87a9b54938c"
+  },
+  "checkpoint_files": {
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s11_ep128.pt": "0f161663aaf963552f8f02d6363f3c52e6f67119217f835c501cb2d0705bfc10",
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s22_ep128.pt": "aae4aa1b24b7e7ffadffeb7a09d45935f44970ac62a8cfd4344630248472cc62",
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s33_ep128.pt": "10f3fc8d2c2a788b7e48e1f9021b5b234c39a00706bfe486e6f2bab84a0fb9b9"
+  },
+  "reused_inputs": {
+    "round46_r2_v5_frozen_config_sha256": "7b6bd69db1913ed38b38bad21e4ab259db614d73335e15f3434d2409d9c450cb",
+    "round46_r2_v5_input_identity_sha256": "43b48bc9ad1f9dd2b68af36bda8c0a417dd2ec3f331ff2be91a5740da68bf1df",
+    "round46_r2_v6_frozen_config_sha256": "da268b58a053b16216353fd3f0767f8cecdac57a5a7ea82e793e818613a8448d"
+  },
+  "adopted_attempt2": {
+    "logical_job": "model_eval_new_s11_greedy_scene1301000",
+    "attempt": 2,
+    "category": "reserve",
+    "slot": 1,
+    "adoption_receipt_sha256": "d3570da3b31fe757d3a165bbd62e7236d9cecaee12667bc9ffd447cc3cbae22c",
+    "effective_row_sha256": "ea94ea06e239395be8754183b64549873e180dc38153b990f4b8c11427f79ffc",
+    "new_claim_created": false,
+    "new_environment_created": false
+  },
+  "zero_environment_regression_receipt_sha256": "1e04dca21c928fa497eca2c75fcc4fc2bf57fc9c63859554e1fd9cef404ac16a",
+  "science_invariants": {
+    "gamma": 1.0,
+    "gae_lambda": 1.0,
+    "eta_lambda": 0.5,
+    "b0_bytes": 10000.0,
+    "delta": 0.0,
+    "steps_per_episode": 1000,
+    "num_goals": 6,
+    "bytes_budget": 29300,
+    "ack": "off",
+    "device": "cpu",
+    "threads": 1
+  }
+}
