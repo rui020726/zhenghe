@@ -293,10 +293,16 @@ def _unexpected_source_status_lines(status: str) -> list[str]:
         CURRENT_TASK_PATH.resolve().relative_to(REPO).as_posix(),
         (R46_DIR / "CURRENT_TASK.json").resolve().relative_to(REPO).as_posix(),
     }
+    # The family execution ledger lives under the round's runtime directory and
+    # is rewritten by every claim/ledger snapshot during a run, exactly like the
+    # mutable current-task aliases. Allow only the round-runtime mutable state.
+    mutable_runtime_prefix = (
+        (R46_DIR / "runtime").resolve().relative_to(REPO).as_posix() + "/")
     unexpected = []
     for line in status.splitlines():
         path = line[3:].replace("\\", "/") if len(line) >= 4 else ""
-        if line[:2] == " M" and path in mutable_task_paths:
+        if line[:2] == " M" and (path in mutable_task_paths
+                                 or path.startswith(mutable_runtime_prefix)):
             continue
         unexpected.append(line)
     return unexpected
