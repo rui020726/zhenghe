@@ -153,6 +153,10 @@ def main() -> int:
             "v5_binding_regression_sha256": _sha256(R2_DIR / "ROUND46_R2_V5_BINDING_REGRESSION.json"),
         },
     }
+    v5_frozen = _json(R2_DIR / "ROUND46_R2_V5_FROZEN_CONFIG.json")
+    frozen["reused_preflight_lineage"] = v5_frozen["reused_preflight_lineage"]
+    frozen["predecessor_stop_archive_sha256"] = v5_frozen["predecessor_stop_archive_sha256"]
+    frozen["binding_audit_sha256"] = v5_frozen["binding_audit_sha256"]
     _write(r.V6_FROZEN_CONFIG_PATH, frozen)
 
     readback = _json(r.READBACK_REGRESSION_RESULT_PATH)

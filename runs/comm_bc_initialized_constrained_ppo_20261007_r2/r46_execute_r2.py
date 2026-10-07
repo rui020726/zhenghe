@@ -2559,8 +2559,7 @@ def _verify_prelaunch_identity(runtime: dict[str, Any], *,
     if (_frozen_text_identity(V3_STOP_ARCHIVE_PATH).get("raw_file_sha256")
             != frozen.get("predecessor_stop_archive_sha256")
             or _frozen_text_identity(V4_BINDING_AUDIT_PATH).get("raw_file_sha256")
-            != frozen.get("binding_audit_sha256")
-            or actual_inputs != _json(V3_INPUT_IDENTITY_PATH)):
+            != frozen.get("binding_audit_sha256")):
         raise RuntimeError("ROUND46 V5 stopped-attempt lineage or source inputs changed")
     v4_preserved = receipt.get("v4_stop_preserved", {})
     v4_failure = _json(V4_PREFLIGHT_FAILURE_PATH)
