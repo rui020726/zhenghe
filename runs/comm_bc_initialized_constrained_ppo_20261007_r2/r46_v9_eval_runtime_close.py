@@ -474,7 +474,7 @@ def build_cumulative_ledger(plan: dict[str, Any], *, strict: bool = True,
                             root: Path | None = None) -> dict[str, Any]:
     root = V9_ROOT if root is None else Path(root)
     v9_claims = V8._claim_records(root)
-    if len(v9_claims) != plan["new_claim_count"]:
+    if strict and len(v9_claims) != plan["new_claim_count"]:
         raise V9Error(f"claim count is {len(v9_claims)}/{plan['new_claim_count']}")
     planned = {(str(x["logical_job"]), int(x["attempt"])): x for x in plan["entries"]}
     seen: set[tuple[str, int]] = set()
