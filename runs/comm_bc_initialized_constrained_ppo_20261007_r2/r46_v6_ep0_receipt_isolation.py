@@ -390,6 +390,49 @@ def relocate_call_journals() -> dict[str, Any]:
     return entry
 
 
+def install_call_journals() -> dict[str, Any]:
+    """Place the /6 run's call journals in the private namespace.
+
+    R42 rehydrates its live call counters from `RUN_DIR/runtime/*.jsonl` at
+    configure time and then requires them to equal the batch-record totals. The
+    /6 journals must therefore live in the private root alongside the batch
+    records. Copies are made from the preserved archive (byte-identical); the
+    archived originals stay untouched.
+    """
+    target_root = RUN_DIR / "v6" / "runtime"
+    target_root.mkdir(parents=True, exist_ok=True)
+    installed: list[dict[str, Any]] = []
+    for name in CALL_JOURNAL_NAMES:
+        preserved = ISOLATION_DIR / "call_journal" / "v6" / "runtime" / name
+        if not preserved.is_file():
+            raise FileNotFoundError(f"preserved /6 call journal is missing: {preserved}")
+        destination = target_root / name
+        source_bytes = preserved.read_bytes()
+        if destination.exists():
+            if destination.read_bytes() != source_bytes:
+                raise RuntimeError(f"/6 {name} exists with different bytes")
+        else:
+            destination.write_bytes(source_bytes)
+        digest = _sha256(destination)
+        if digest != _sha256(preserved):
+            raise RuntimeError(f"/6 {name} copy is not byte-identical")
+        installed.append({
+            "path": str(destination.resolve()),
+            "sha256": digest,
+            "entries": sum(1 for line in destination.read_text(
+                encoding="utf-8").splitlines() if line.strip()),
+            "copied_from_preserved": str(preserved.resolve()),
+        })
+    entry = {
+        "reason": "R42 rehydrates live call counters from RUN_DIR/runtime at configure time",
+        "installed": installed,
+    }
+    registry = _json(REGISTRY_PATH) if REGISTRY_PATH.is_file() else {}
+    registry.setdefault("installed_call_journals", []).append(entry)
+    _write_json(REGISTRY_PATH, registry)
+    return entry
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group(required=True)
@@ -401,6 +444,8 @@ def main(argv: list[str] | None = None) -> int:
                        help="register and relocate a pre-fix claim so its logical job can be re-run")
     group.add_argument("--relocate-call-journals", action="store_true",
                        help="move the /6 training-call journals into the private namespace")
+    group.add_argument("--install-call-journals", action="store_true",
+                       help="place byte-identical /6 call journals under the private root")
     args = parser.parse_args(argv)
     if args.verify:
         result = verify()
@@ -408,6 +453,8 @@ def main(argv: list[str] | None = None) -> int:
         result = archive_active(args.archive_active)
     elif args.relocate_call_journals:
         result = relocate_call_journals()
+    elif args.install_call_journals:
+        result = install_call_journals()
     else:
         result = quarantine_stale_claim(args.quarantine_stale_claim)
     print(json.dumps(result, ensure_ascii=False, indent=2))
