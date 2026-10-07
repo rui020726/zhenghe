@@ -4,8 +4,8 @@
   "runner_version": "round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
   "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
   "error": {
-    "type": "EvalIndexError",
-    "message": "row.artefacts.row path escapes the ROUND44 output: D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_eval_new_s11_greedy_s1301000_a1.json"
+    "type": "RuntimeError",
+    "message": "training progress receipt exists with a different state: D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\training_progress\\seed11_ep128_u32_requested_limit_complete.json"
   },
   "ledger_source": "actual ROUND42/R40 ledger snapshot",
   "ledger": {
@@ -56545,9 +56545,9 @@
       "technical_failed_claims": 1,
       "retry_claims": 0,
       "optimizer_step_calls": 688,
-      "optimizer_step_journal_entries": 0,
+      "optimizer_step_journal_entries": 688,
       "ppo_update_calls": 96,
-      "ppo_update_journal_entries": 0,
+      "ppo_update_journal_entries": 96,
       "ppo_update_count_matches_committed_batches": true,
       "checkpoint_write_calls": 318,
       "checkpoint_write_journal_entries": 318,
