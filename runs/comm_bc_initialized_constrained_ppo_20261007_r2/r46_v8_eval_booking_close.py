@@ -284,7 +284,7 @@ def install_quota_adapter(runtime: dict[str, Any], plan: dict[str, Any], *,
     original_slot = r40._reserve_slot
     original_next = r40.next_attempt
 
-    def reserve_slot(*, category: str, attempt: int, logical_job: str) -> int:
+    def reserve_slot(category: str, *, logical_job: str, attempt: int) -> int:
         item = expected.get((str(logical_job), int(attempt)))
         if item is None or item["category"] != category:
             raise V8Error("real R40 slot seam reached an unfrozen V8 claim")

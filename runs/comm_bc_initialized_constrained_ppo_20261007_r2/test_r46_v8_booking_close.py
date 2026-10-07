@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -165,6 +166,55 @@ class LiveRuntimeBindingTests(unittest.TestCase):
         # The live runtime is untouched by the isolated instance.
         self.assertEqual(self.runtime["v8_r44_module"].RUNNER_VERSION,
                          self.runtime["v8_runner_version"])
+
+
+class RealR40BookingSeamTests(unittest.TestCase):
+    """Book the real R40 claim seam against the frozen V8 map (zero environment)."""
+
+    def test_real_r40_claim_seam_books_planned_normal_and_reserve_once(self):
+        source = (MODULE_PATH.parents[2].parent
+                  / "zhenghe-round40/runs/comm_first_report_training_ablation_20261003/r40_common.py")
+        spec = importlib.util.spec_from_file_location("r40_common_v8_booking_test", source)
+        assert spec is not None and spec.loader is not None
+        r40 = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = r40
+        spec.loader.exec_module(r40)
+        plan = V8.build_quota_plan()
+        with tempfile.TemporaryDirectory(dir=V8.HERE) as directory:
+            root = Path(directory)
+            (root / "launch_slots" / "normal").mkdir(parents=True)
+            (root / "launch_slots" / "reserve").mkdir(parents=True)
+            old = {name: getattr(r40, name) for name in (
+                "ROUND_DIR", "NORMAL_CAP", "RESERVE_CAP", "HARD_CAP",
+                "_reserve_slot", "claim_launch", "next_attempt")}
+            try:
+                r40.ROUND_DIR = root
+                r40.NORMAL_CAP, r40.RESERVE_CAP, r40.HARD_CAP = 480, 24, 504
+                adapter = V8.install_quota_adapter({"r40_common": r40}, plan, output_root=root)
+                first = plan["entries"][0]
+                first_claim = r40.claim_launch(
+                    first["logical_job"], category=first["category"], attempt=1)
+                claim = V8.read_json(first_claim)
+                self.assertEqual((claim["status"], claim["category"], claim["launch_slot"]),
+                                 ("claimed_before_environment", "normal", 387))
+                last = plan["entries"][-1]
+                last_claim = r40.claim_launch(
+                    last["logical_job"], category=last["category"], attempt=1)
+                claim = V8.read_json(last_claim)
+                self.assertEqual((claim["category"], claim["launch_slot"]),
+                                 ("reserve", 2))
+                with self.assertRaises(RuntimeError):
+                    r40.claim_launch(first["logical_job"], category="normal", attempt=1)
+                with self.assertRaises(V8.V8Error):
+                    r40.claim_launch("model_eval_new_s11_greedy_scene1301000",
+                                     category="reserve", attempt=1)
+                self.assertEqual(len(adapter["claim_records"]), 2)
+                self.assertEqual(len(list((root / "launch_claims").glob("*/*.json"))), 2)
+                self.assertEqual(len(list((root / "launch_slots" / "normal").glob("*.json"))), 1)
+                self.assertEqual(len(list((root / "launch_slots" / "reserve").glob("*.json"))), 1)
+            finally:
+                for name, value in old.items():
+                    setattr(r40, name, value)
 
 
 class Attempt2AdoptionTests(unittest.TestCase):
