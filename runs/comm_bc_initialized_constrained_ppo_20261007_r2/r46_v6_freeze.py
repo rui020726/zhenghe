@@ -70,9 +70,6 @@ def main() -> int:
     text = r.run_r2_v5_text_identity_regression()
     if text.get("status") != "passed":
         raise RuntimeError("V6 text identity regression did not pass")
-    reuse = r._create_status_guard_reuse_receipt()
-    if reuse.get("status") != "passed_reused_exact_implementation":
-        raise RuntimeError("V6 status-guard reuse receipt did not pass")
 
     r._configure_runtime_module()
     r45_module = r._RUNTIME["module"]
@@ -110,6 +107,14 @@ def main() -> int:
     }
     _write(r.V6_RUNTIME_FREEZE_PATH, runtime_freeze)
 
+    text_manifest: dict[str, Any] = {}
+    for relative in (
+        (R2_DIR / "r46_execute_r2.py").relative_to(REPO).as_posix(),
+        r.READBACK_REGRESSION_PATH.relative_to(REPO).as_posix(),
+        r.CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH.relative_to(REPO).as_posix(),
+    ):
+        text_manifest[relative] = r._capture_committed_text_identity(REPO / Path(relative))
+
     frozen = {
         "kind": "round46-r2-v5-execution-freeze/1",
         "status": "prepared_before_environment",
@@ -127,6 +132,7 @@ def main() -> int:
         "input_identity_sha256": _sha256(r.V6_INPUT_IDENTITY_PATH),
         "runtime_freeze_sha256": _sha256(r.V6_RUNTIME_FREEZE_PATH),
         "inputs": inputs,
+        "text_file_identity_manifest": text_manifest,
         "v6_private_output_namespace": str(r.V6_DIR),
         "v5_preserved": {
             "v5_frozen_config_sha256": _sha256(R2_DIR / "ROUND46_R2_V5_FROZEN_CONFIG.json"),
@@ -139,13 +145,7 @@ def main() -> int:
     readback = _json(r.READBACK_REGRESSION_RESULT_PATH)
     route = _json(r.CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH)
     committed_text_checks: dict[str, dict[str, str]] = {}
-    for relative in (
-        (R2_DIR / "r46_execute_r2.py").relative_to(REPO).as_posix(),
-        r.READBACK_REGRESSION_PATH.relative_to(REPO).as_posix(),
-        r.CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH.relative_to(REPO).as_posix(),
-        r.V5_TEXT_IDENTITY_REGRESSION_PATH.relative_to(REPO).as_posix(),
-        r.V5_STATUS_GUARD_REUSE_PATH.relative_to(REPO).as_posix(),
-    ):
+    for relative in text_manifest:
         committed_text_checks[relative] = r._frozen_text_identity(REPO / Path(relative))
 
     before = r._RUNTIME
@@ -209,6 +209,10 @@ def main() -> int:
     _write(r.V6_PRELAUNCH_GATE_PATH, gate)
     r.V6_PRELAUNCH_SHA_PATH.write_text(_sha256(r.V6_PRELAUNCH_GATE_PATH) + "\n",
                                        encoding="ascii")
+
+    reuse = r._create_status_guard_reuse_receipt()
+    if reuse.get("status") != "passed_reused_exact_implementation":
+        raise RuntimeError("V6 status-guard reuse receipt did not pass")
 
     ledger_after = runtime["r42_run"].ledger_snapshot(strict=True)
     if ledger_before != ledger_after:
