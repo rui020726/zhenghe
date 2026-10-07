@@ -288,6 +288,61 @@ def _assert_registry(registry: dict[str, Any]) -> None:
                 raise RuntimeError(f"preserved stop evidence changed: {preserved}")
 
 
+def quarantine_stale_claim(logical_job: str) -> dict[str, Any]:
+    """Register and relocate a claim written by the pre-fix adapter.
+
+    The pre-fix /6 adapter overwrote the round-45 claim identity fields, so the
+    R45 completed-claim readback correctly refuses it. Nothing was committed
+    from it (no PPO update), so the affected logical job is re-run instead of
+    hand-editing the record. The stale claim and its row are preserved with
+    hashes so the aborted attempt stays auditable.
+    """
+    claim_dir = RUN_DIR / "v6" / "launch_claims" / logical_job
+    if not claim_dir.is_dir():
+        raise FileNotFoundError(claim_dir)
+    claim_files = sorted(claim_dir.glob("attempt_*.json"))
+    if len(claim_files) != 1:
+        raise RuntimeError(f"expected exactly one stale claim in {claim_dir}")
+    claim_path = claim_files[0]
+    claim = _json(claim_path)
+    if claim.get("round") != 46:
+        raise RuntimeError("named claim is not the pre-fix round-46 record; refusing to quarantine")
+    counts = {
+        "normal": int(claim.get("status") == "complete"),
+        "environment_constructor_calls": int(claim.get("environment_constructor_calls", 0)),
+        "run_invocation_calls": int(claim.get("run_invocation_calls", 0)),
+        "completed_steps": int(claim.get("completed_steps", 0)),
+        "ppo_update_calls": int(claim.get("ppo_update_calls", 0)),
+        "optimizer_step_calls": int(claim.get("optimizer_step_calls", 0)),
+    }
+    if counts["ppo_update_calls"] != 0 or counts["optimizer_step_calls"] != 0:
+        raise RuntimeError("stale claim committed an update; do not quarantine, audit first")
+
+    family_before = _family_state()
+    ISOLATION_DIR.mkdir(parents=True, exist_ok=True)
+    preserved = []
+    for path in [claim_path, *[p for p in sorted(claim_dir.iterdir()) if p != claim_path]]:
+        if not path.is_file():
+            continue
+        relative = f"v6/launch_claims/{logical_job}/{path.name}"
+        preserved.append(_move(relative, path, "stale_claim"))
+    claim_dir.rmdir()
+    _assert_family_unchanged(family_before, _family_state())
+
+    entry = {
+        "logical_job": logical_job,
+        "reason": "pre-fix /6 claim identity fields; R45 readback correctly refused it",
+        "claim_round_written": 46,
+        "aborted_attempt_counts": counts,
+        "moved_files": preserved,
+        "rerun_authorized_because_no_update_committed": True,
+    }
+    registry = _json(REGISTRY_PATH) if REGISTRY_PATH.is_file() else {}
+    registry.setdefault("quarantined_stale_claims", []).append(entry)
+    _write_json(REGISTRY_PATH, registry)
+    return entry
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group(required=True)
@@ -295,11 +350,15 @@ def main(argv: list[str] | None = None) -> int:
                        help="read-only check of the active namespace and family ledger")
     group.add_argument("--archive-active", metavar="WAVE",
                        help="register and relocate the untrained-ep0 artifacts now in the active root")
+    group.add_argument("--quarantine-stale-claim", metavar="LOGICAL_JOB",
+                       help="register and relocate a pre-fix claim so its logical job can be re-run")
     args = parser.parse_args(argv)
     if args.verify:
         result = verify()
-    else:
+    elif args.archive_active is not None:
         result = archive_active(args.archive_active)
+    else:
+        result = quarantine_stale_claim(args.quarantine_stale_claim)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0
 

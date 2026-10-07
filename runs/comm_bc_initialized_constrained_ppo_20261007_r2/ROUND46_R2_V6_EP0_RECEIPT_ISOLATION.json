@@ -179,5 +179,34 @@
       }
     ]
   },
-  "active_namespace_clean": true
+  "active_namespace_clean": true,
+  "quarantined_stale_claims": [
+    {
+      "logical_job": "new_training_s11_e0",
+      "reason": "pre-fix /6 claim identity fields; R45 readback correctly refused it",
+      "claim_round_written": 46,
+      "aborted_attempt_counts": {
+        "normal": 1,
+        "environment_constructor_calls": 1,
+        "run_invocation_calls": 1,
+        "completed_steps": 1000,
+        "ppo_update_calls": 0,
+        "optimizer_step_calls": 0
+      },
+      "moved_files": [
+        {
+          "wave": "stale_claim",
+          "original_relative_path": "v6/launch_claims/new_training_s11_e0/attempt_0001.json",
+          "preserved_relative_path": "attempts/runner_v5_ep0_receipt_conflict/stale_claim/v6/launch_claims/new_training_s11_e0/attempt_0001.json",
+          "original_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\launch_claims\\new_training_s11_e0\\attempt_0001.json",
+          "preserved_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\attempts\\runner_v5_ep0_receipt_conflict\\stale_claim\\v6\\launch_claims\\new_training_s11_e0\\attempt_0001.json",
+          "bytes": 7263,
+          "sha256_before": "bd4a3efa4a574754bb6996ebc089255c3d690c9c0e0af80dafbdc02ea0daecda",
+          "sha256_after": "bd4a3efa4a574754bb6996ebc089255c3d690c9c0e0af80dafbdc02ea0daecda",
+          "byte_identical": true
+        }
+      ],
+      "rerun_authorized_because_no_update_committed": true
+    }
+  ]
 }
