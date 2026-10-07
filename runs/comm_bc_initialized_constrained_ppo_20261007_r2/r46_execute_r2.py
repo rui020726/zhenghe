@@ -885,6 +885,19 @@ def _seed_v6_output_namespace() -> dict[str, Any]:
                       V6_DIR / "launch_claims", V6_DIR / "launch_slots",
                       V6_DIR / "training_reports", V6_DIR / "failures"):
         directory.mkdir(parents=True, exist_ok=True)
+    alias = V6_DIR / "ROUND45_CURRENT_TASK.json"
+    if not alias.exists():
+        source_alias = R46_DIR / "ROUND45_CURRENT_TASK.json"
+        if source_alias.is_file():
+            shutil.copyfile(source_alias, alias)
+        else:
+            _write_json(alias, {
+                "kind": "round46-r45-loader-task-alias/1", "stage": "prepared",
+                "branch": ROUND46_BRANCH, "runner_version": ROUND46_RUNNER_VERSION,
+                "training_version": TRAINING_VERSION, "environment_constructed": 0,
+                "ppo_updates": 0, "normal_environment_keys": NORMAL_CAP,
+                "technical_reserve_max": RESERVE_CAP, "hard_environment_cap": HARD_CAP,
+            })
     if not FAMILY_JOURNAL_PATH.is_file():
         raise FileNotFoundError(FAMILY_JOURNAL_PATH)
     family_bytes = FAMILY_JOURNAL_PATH.read_bytes()
