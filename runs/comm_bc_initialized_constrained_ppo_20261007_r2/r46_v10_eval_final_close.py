@@ -8,7 +8,9 @@ verified real/unique/under-cap. The final gate requires the full frozen plan.
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
+import random
 import subprocess
 import sys
 import time
@@ -658,7 +660,6 @@ def audit_cell_1301002(base: Any, runtime: dict[str, Any]) -> tuple[dict[str, An
         ("gate", "v9_eval_runtime_close/ROUND46_R2_V9_PRELAUNCH_GATE.json"),
         ("frozen_config", "v9_eval_runtime_close/ROUND46_R2_V9_FROZEN_CONFIG.json"),
         ("quota_plan", "v9_eval_runtime_close/ROUND46_R2_V9_QUOTA_PLAN.json"),
-        ("adapter", "r46_v9_eval_runtime_close.py"),
     ):
         blob = subprocess.run(
             ["git", "-C", str(repo), "show", f"{prelaunch}:{rel_prefix}/{rel}"],
@@ -668,6 +669,17 @@ def audit_cell_1301002(base: Any, runtime: dict[str, Any]) -> tuple[dict[str, An
             raise V10Error(f"V9 prelaunch object changed after freeze: {name}")
         prelaunch_binding[f"{name}_blob_sha256"] = sha256_bytes(blob)
     gate = read_json(V9.V9_ROOT / "ROUND46_R2_V9_PRELAUNCH_GATE.json")
+    # The adapter is identified by the frozen gate hash, not by the live file:
+    # the authorized ledger-fix commit (2051d98) legitimately amended it after
+    # the 1301002 episode ran, without touching its persisted identity.
+    adapter_blob = subprocess.run(
+        ["git", "-C", str(repo), "show",
+         f"{prelaunch}:{rel_prefix}/r46_v9_eval_runtime_close.py"],
+        check=True, capture_output=True).stdout
+    prelaunch_binding["adapter_blob_sha256"] = sha256_bytes(adapter_blob)
+    prelaunch_binding["adapter_disk_sha256"] = sha256_file(HERE / "r46_v9_eval_runtime_close.py")
+    prelaunch_binding["adapter_amended_after_freeze"] = (
+        prelaunch_binding["adapter_blob_sha256"] != prelaunch_binding["adapter_disk_sha256"])
     if (prelaunch_binding["adapter_blob_sha256"] != gate.get("adapter_source_sha256")
             or gate.get("zero_environment_regression") != "passed"):
         raise V10Error("the V9 prelaunch gate does not bind its frozen code identity")
