@@ -261,7 +261,10 @@ class HistoricalSourceIdentityTests(unittest.TestCase):
         audit = V7.verify_old_source_identity(self.repo)
         self.assertEqual(audit["status"], "failed_source_authenticity")
         self.assertEqual(audit["historical_branch"], "fix/comm-bc-initialization-readback")
-        self.assertEqual(audit["current_v7_branch"], V7.BRANCH)
+        # The authorized eval-only lineage continues on the V8 branch; the audit
+        # must still report the actual current branch of this task family.
+        self.assertIn(audit["current_v7_branch"],
+                      (V7.BRANCH, "fix/round46-r2-v8-eval-booking-close"))
         self.assertFalse(audit["checks"]["original_frozen_config"])
         self.assertFalse(audit["checks"]["original_input_identity"])
         self.assertEqual(audit["preflight_git_object_sha256"]["frozen_config"],

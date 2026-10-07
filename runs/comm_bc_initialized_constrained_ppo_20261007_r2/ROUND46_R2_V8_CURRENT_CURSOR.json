@@ -1,0 +1,44 @@
+{
+  "kind": "round46-r2-v8-current-cursor/1",
+  "task_id": "ROUND46-R2-V8-EVAL-BOOKING-CLOSE",
+  "updated_at_utc": "2026-10-07T08:36:27.815351+00:00",
+  "current_branch": "fix/round46-r2-v8-eval-booking-close",
+  "current_head": "d6efd3f1b3fe3a217f54007e5bc8b2d62d9ebfd5",
+  "source_freeze": "not yet created",
+  "v7_lineage": {
+    "stop_delivery_head": "d6efd3f1b3fe3a217f54007e5bc8b2d62d9ebfd5",
+    "v7_prelaunch_commit": "2758091509f1379720e0d3e7a8259dcf46de9fb3"
+  },
+  "root_cause_verified": {
+    "finding": "r44_runtime booked() reads the live r44_runtime module global RUNNER_VERSION at call time; V7 configure patched only runtime-dict entries and the dict has no r44_runtime key; row generation (r42_run) carried the V7 composite while booking kept the round46 original string; EvalIndexError raised by create_claim_artifact_receipt version binding",
+    "scope": "registration metadata only; no effect on model loading, actions, mask, RNG, billing, rewards or event order"
+  },
+  "zero_environment_regression": {
+    "v7_suite": "18/18 passed",
+    "v8_suite": "14/14 passed",
+    "runtime_receipt": "v8_eval_booking_close/ROUND46_R2_V8_RUNTIME_ZERO_ENV_REGRESSION.json",
+    "runtime_receipt_sha256": "1e04dca21c928fa497eca2c75fcc4fc2bf57fc9c63859554e1fd9cef404ac16a"
+  },
+  "attempt2_adoption": {
+    "status": "accepted",
+    "receipt": "v8_eval_booking_close/receipts/ROUND46_R2_V8_ATTEMPT2_ADOPTION_RECEIPT.json",
+    "receipt_sha256": "d3570da3b31fe757d3a165bbd62e7236d9cecaee12667bc9ffd447cc3cbae22c",
+    "effective_row": "v8_eval_booking_close/adoption/attempt2_effective_row.json",
+    "effective_row_sha256": "ea94ea06e239395be8754183b64549873e180dc38153b990f4b8c11427f79ffc",
+    "original_claim_status_unchanged": "failed_technical",
+    "config_hash_reconciliation": "per-run hash closes against its own config; attempt1/attempt2 configs equal after normalizing {output, comm_transcript} per the r44_execute.py precedent",
+    "new_claim_created": false,
+    "new_environment_created": false
+  },
+  "quota": {
+    "normal_used": 386,
+    "reserve_used": 1,
+    "total_used": 387,
+    "planned_after_completion": 482,
+    "hard_cap": 504
+  },
+  "effective_rows_completed": 1,
+  "effective_rows_missing": 95,
+  "next_command": "commit prelaunch freeze, then run the remaining 95 cells with pre-construction binding assertions",
+  "environment_launches": 0
+}
