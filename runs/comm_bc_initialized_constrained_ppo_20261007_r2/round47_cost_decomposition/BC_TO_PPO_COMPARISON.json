@@ -1,0 +1,365 @@
+{
+  "kind": "round47-bc-to-ppo-comparison/1",
+  "task_id": "ROUND47-READONLY-COST-DECOMPOSITION",
+  "bc_identity": {
+    "control_rows": 48,
+    "decoding": "greedy",
+    "per_seed_bc_checkpoint_identity_unique": true,
+    "per_seed": {
+      "11": [
+        "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+        "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330"
+      ],
+      "22": [
+        "3cdb83785c51f9e40005d66a1d024d06a5ba6940616e22f3b01a9bf65b5e609d",
+        "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0"
+      ],
+      "33": [
+        "9329ef048dfc5c1805af5756c7ea0962eedfc8d01aa26841e35af7001616803a",
+        "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5"
+      ]
+    },
+    "training_version_of_round46": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+    "note": "the rule-bc-late147-init token in the frozen ROUND46 training version is the BC initialization these controls replay; per-seed checkpoint hashes are stable across all 16 scenes"
+  },
+  "per_seed": {
+    "11": {
+      "ppo_greedy": {
+        "mean_on_time": 6.0,
+        "mean_spent_bytes": 5778.0,
+        "total_spent_bytes": 92448,
+        "scenes_exact_immediate_16_of_16": true,
+        "scenes_exact_bc_16_of_16": true,
+        "scenes_exact_immediate_count": 16,
+        "scenes_exact_bc_count": 16
+      },
+      "bc_greedy": {
+        "mean_on_time": 6.0,
+        "mean_spent_bytes": 5152.125,
+        "total_spent_bytes": 82434,
+        "scenes_exact_immediate_count": 16
+      },
+      "immediate_reference": {
+        "mean_on_time": 6.0,
+        "mean_spent_bytes": 14939.25
+      },
+      "late_rule": {
+        "mean_on_time": 6.0,
+        "mean_spent_bytes": 4838.25
+      },
+      "paired_bytes_ppo_minus_late": {
+        "per_scene": {
+          "1301000": 5022,
+          "1301001": 0,
+          "1301002": 0,
+          "1301003": 0,
+          "1301004": 0,
+          "1301005": 4998,
+          "1301006": 0,
+          "1301007": 0,
+          "1301008": 0,
+          "1301009": 0,
+          "1301010": 0,
+          "1301011": 0,
+          "1301012": 0,
+          "1301013": 0,
+          "1301014": 5016,
+          "1301015": 0
+        },
+        "bootstrap": {
+          "point_mean": 939.75,
+          "bootstrap_mean": 930.8949375,
+          "ci_low_linear": 0.0,
+          "ci_high_linear": 1881.0,
+          "replicates": 10000,
+          "index_seed": 20261007,
+          "index_shape": [
+            10000,
+            16
+          ]
+        },
+        "late_frozen_mean": 4838.25,
+        "late_recomputed_mean": 4838.25
+      },
+      "paired_bytes_ppo_minus_bc": {
+        "per_scene": {
+          "1301000": 2514,
+          "1301001": 0,
+          "1301002": 0,
+          "1301003": 0,
+          "1301004": 0,
+          "1301005": 4998,
+          "1301006": 0,
+          "1301007": 0,
+          "1301008": 0,
+          "1301009": 0,
+          "1301010": 0,
+          "1301011": 0,
+          "1301012": 0,
+          "1301013": 0,
+          "1301014": 2502,
+          "1301015": 0
+        },
+        "bootstrap": {
+          "point_mean": 625.875,
+          "bootstrap_mean": 619.0306875,
+          "ci_low_linear": 0.0,
+          "ci_high_linear": 1406.625,
+          "replicates": 10000,
+          "index_seed": 20261007,
+          "index_shape": [
+            10000,
+            16
+          ]
+        }
+      },
+      "paired_bytes_bc_minus_late": {
+        "bootstrap": {
+          "point_mean": 313.875,
+          "bootstrap_mean": 311.86425,
+          "ci_low_linear": 0.0,
+          "ci_high_linear": 784.5,
+          "replicates": 10000,
+          "index_seed": 20261007,
+          "index_shape": [
+            10000,
+            16
+          ]
+        }
+      },
+      "answers": {
+        "ppo_preserves_exact_target_sets_vs_immediate": true,
+        "ppo_bytes_vs_bc_direction": "increased",
+        "ppo_minus_bc_mean_bytes": 625.875,
+        "bc_covers_the_immediate_reduction": false
+      }
+    },
+    "22": {
+      "ppo_greedy": {
+        "mean_on_time": 6.0,
+        "mean_spent_bytes": 4694.25,
+        "total_spent_bytes": 75108,
+        "scenes_exact_immediate_16_of_16": true,
+        "scenes_exact_bc_16_of_16": true,
+        "scenes_exact_immediate_count": 16,
+        "scenes_exact_bc_count": 16
+      },
+      "bc_greedy": {
+        "mean_on_time": 6.0,
+        "mean_spent_bytes": 5152.125,
+        "total_spent_bytes": 82434,
+        "scenes_exact_immediate_count": 16
+      },
+      "immediate_reference": {
+        "mean_on_time": 6.0,
+        "mean_spent_bytes": 14939.25
+      },
+      "late_rule": {
+        "mean_on_time": 6.0,
+        "mean_spent_bytes": 4838.25
+      },
+      "paired_bytes_ppo_minus_late": {
+        "per_scene": {
+          "1301000": 0,
+          "1301001": 0,
+          "1301002": 0,
+          "1301003": 0,
+          "1301004": 0,
+          "1301005": 0,
+          "1301006": 0,
+          "1301007": -2508,
+          "1301008": 0,
+          "1301009": 0,
+          "1301010": -2310,
+          "1301011": 0,
+          "1301012": 0,
+          "1301013": 0,
+          "1301014": 2514,
+          "1301015": 0
+        },
+        "bootstrap": {
+          "point_mean": -144.0,
+          "bootstrap_mean": -147.2140125,
+          "ci_low_linear": -627.0,
+          "ci_high_linear": 327.0,
+          "replicates": 10000,
+          "index_seed": 20261007,
+          "index_shape": [
+            10000,
+            16
+          ]
+        },
+        "late_frozen_mean": 4838.25,
+        "late_recomputed_mean": 4838.25
+      },
+      "paired_bytes_ppo_minus_bc": {
+        "per_scene": {
+          "1301000": -2508,
+          "1301001": 0,
+          "1301002": 0,
+          "1301003": 0,
+          "1301004": 0,
+          "1301005": 0,
+          "1301006": 0,
+          "1301007": -2508,
+          "1301008": 0,
+          "1301009": 0,
+          "1301010": -2310,
+          "1301011": 0,
+          "1301012": 0,
+          "1301013": 0,
+          "1301014": 0,
+          "1301015": 0
+        },
+        "bootstrap": {
+          "point_mean": -457.875,
+          "bootstrap_mean": -459.0782625,
+          "ci_low_linear": -928.4343749999997,
+          "ci_high_linear": 0.0,
+          "replicates": 10000,
+          "index_seed": 20261007,
+          "index_shape": [
+            10000,
+            16
+          ]
+        }
+      },
+      "paired_bytes_bc_minus_late": {
+        "bootstrap": {
+          "point_mean": 313.875,
+          "bootstrap_mean": 311.86425,
+          "ci_low_linear": 0.0,
+          "ci_high_linear": 784.5,
+          "replicates": 10000,
+          "index_seed": 20261007,
+          "index_shape": [
+            10000,
+            16
+          ]
+        }
+      },
+      "answers": {
+        "ppo_preserves_exact_target_sets_vs_immediate": true,
+        "ppo_bytes_vs_bc_direction": "decreased",
+        "ppo_minus_bc_mean_bytes": -457.875,
+        "bc_covers_the_immediate_reduction": false
+      }
+    },
+    "33": {
+      "ppo_greedy": {
+        "mean_on_time": 6.0,
+        "mean_spent_bytes": 5621.625,
+        "total_spent_bytes": 89946,
+        "scenes_exact_immediate_16_of_16": true,
+        "scenes_exact_bc_16_of_16": true,
+        "scenes_exact_immediate_count": 16,
+        "scenes_exact_bc_count": 16
+      },
+      "bc_greedy": {
+        "mean_on_time": 6.0,
+        "mean_spent_bytes": 5152.125,
+        "total_spent_bytes": 82434,
+        "scenes_exact_immediate_count": 16
+      },
+      "immediate_reference": {
+        "mean_on_time": 6.0,
+        "mean_spent_bytes": 14939.25
+      },
+      "late_rule": {
+        "mean_on_time": 6.0,
+        "mean_spent_bytes": 4838.25
+      },
+      "paired_bytes_ppo_minus_late": {
+        "per_scene": {
+          "1301000": 5022,
+          "1301001": 0,
+          "1301002": 0,
+          "1301003": 0,
+          "1301004": 0,
+          "1301005": 4998,
+          "1301006": 0,
+          "1301007": 0,
+          "1301008": 0,
+          "1301009": 0,
+          "1301010": 0,
+          "1301011": 0,
+          "1301012": 0,
+          "1301013": 0,
+          "1301014": 2514,
+          "1301015": 0
+        },
+        "bootstrap": {
+          "point_mean": 783.375,
+          "bootstrap_mean": 776.3338875,
+          "ci_low_linear": 0.0,
+          "ci_high_linear": 1722.0,
+          "replicates": 10000,
+          "index_seed": 20261007,
+          "index_shape": [
+            10000,
+            16
+          ]
+        },
+        "late_frozen_mean": 4838.25,
+        "late_recomputed_mean": 4838.25
+      },
+      "paired_bytes_ppo_minus_bc": {
+        "per_scene": {
+          "1301000": 2514,
+          "1301001": 0,
+          "1301002": 0,
+          "1301003": 0,
+          "1301004": 0,
+          "1301005": 4998,
+          "1301006": 0,
+          "1301007": 0,
+          "1301008": 0,
+          "1301009": 0,
+          "1301010": 0,
+          "1301011": 0,
+          "1301012": 0,
+          "1301013": 0,
+          "1301014": 0,
+          "1301015": 0
+        },
+        "bootstrap": {
+          "point_mean": 469.5,
+          "bootstrap_mean": 464.4696375,
+          "ci_low_linear": 0.0,
+          "ci_high_linear": 1249.5,
+          "replicates": 10000,
+          "index_seed": 20261007,
+          "index_shape": [
+            10000,
+            16
+          ]
+        }
+      },
+      "paired_bytes_bc_minus_late": {
+        "bootstrap": {
+          "point_mean": 313.875,
+          "bootstrap_mean": 311.86425,
+          "ci_low_linear": 0.0,
+          "ci_high_linear": 784.5,
+          "replicates": 10000,
+          "index_seed": 20261007,
+          "index_shape": [
+            10000,
+            16
+          ]
+        }
+      },
+      "answers": {
+        "ppo_preserves_exact_target_sets_vs_immediate": true,
+        "ppo_bytes_vs_bc_direction": "increased",
+        "ppo_minus_bc_mean_bytes": 469.5,
+        "bc_covers_the_immediate_reduction": false
+      }
+    }
+  },
+  "inputs": {
+    "immediate_and_late": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_dual_response_ablation_20261004\\ROUND44_BASELINE_REUSE.json",
+    "bc_rows_dir": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\rows",
+    "ppo_rows": "V10 analysis matrix (3 adopted rows via registered receipts + 93 V10 rows)"
+  }
+}
