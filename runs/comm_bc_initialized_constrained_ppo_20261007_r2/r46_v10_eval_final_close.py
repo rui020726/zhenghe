@@ -490,7 +490,12 @@ def install_quota_adapter(runtime: dict[str, Any], plan: dict[str, Any], *,
         if item is None:
             raise V10Error(f"unplanned real R40 claim rejected: {logical_job}#{attempt}")
         if category != item["category"]:
-            raise V10Error("R40 claim category differs from the frozen V10 quota map")
+            # r44_runtime derives the category from the attempt number
+            # ("normal" for attempt 1); the capacity-recovery reserve item is the
+            # authorized exception (same tolerance as the V8 quota adapter).
+            if not (item["purpose"] == "technical-capacity-recovery"
+                    and int(attempt) == 1 and category == "normal"):
+                raise V10Error("R40 claim category differs from the frozen V10 quota map")
         user_meta = dict(metadata or {})
         user_meta.update({"v10_task_id": TASK_ID, "v10_purpose": item["purpose"],
                           "v10_slot": int(item["slot"])})
