@@ -1,0 +1,1921 @@
+{
+  "kind": "round46-paired-results/1",
+  "bootstrap": {
+    "rng": "numpy.random.Generator(PCG64(20261007))",
+    "replicates": 10000,
+    "scene_count": 16,
+    "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+    "aggregation": "values[index].mean(axis=1)",
+    "quantile_method": "linear"
+  },
+  "paired_comparisons": {
+    "s11_greedy": {
+      "BC_greedy": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 5152.125,
+          "new_mean": 5778.0,
+          "mean_new_minus_baseline": 625.875,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            1406.625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "immediate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 14939.25,
+          "new_mean": 5778.0,
+          "mean_new_minus_baseline": -9161.25,
+          "shared_scene_bootstrap_95_ci": [
+            -10682.259375,
+            -7587.281250000002
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "late_discovery_gate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 4838.25,
+          "new_mean": 5778.0,
+          "mean_new_minus_baseline": 939.75,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            1881.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "always_hold": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 0.0,
+          "new_mean": 5778.0,
+          "mean_new_minus_baseline": 5778.0,
+          "shared_scene_bootstrap_95_ci": [
+            4313.559375,
+            7322.643749999999
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 5.5,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.125,
+            1.0625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": false,
+        "baseline_task_id_set_counts": [
+          6,
+          5,
+          2,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          6,
+          5
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    },
+    "s11_sampled": {
+      "BC_greedy": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 5152.125,
+          "new_mean": 6706.125,
+          "mean_new_minus_baseline": 1554.0,
+          "shared_scene_bootstrap_95_ci": [
+            478.875,
+            2791.5093749999996
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "immediate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 14939.25,
+          "new_mean": 6706.125,
+          "mean_new_minus_baseline": -8233.125,
+          "shared_scene_bootstrap_95_ci": [
+            -9953.315625,
+            -6351.6656250000015
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "late_discovery_gate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 4838.25,
+          "new_mean": 6706.125,
+          "mean_new_minus_baseline": 1867.875,
+          "shared_scene_bootstrap_95_ci": [
+            750.75,
+            3291.375
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "always_hold": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 0.0,
+          "new_mean": 6706.125,
+          "mean_new_minus_baseline": 6706.125,
+          "shared_scene_bootstrap_95_ci": [
+            5010.328125,
+            8583.05625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 5.5,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.125,
+            1.0625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": false,
+        "baseline_task_id_set_counts": [
+          6,
+          5,
+          2,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          6,
+          5
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    },
+    "s22_greedy": {
+      "BC_greedy": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 5152.125,
+          "new_mean": 4694.25,
+          "mean_new_minus_baseline": -457.875,
+          "shared_scene_bootstrap_95_ci": [
+            -928.4343749999997,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "immediate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 14939.25,
+          "new_mean": 4694.25,
+          "mean_new_minus_baseline": -10245.0,
+          "shared_scene_bootstrap_95_ci": [
+            -11711.634375,
+            -8615.596875000001
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "late_discovery_gate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 4838.25,
+          "new_mean": 4694.25,
+          "mean_new_minus_baseline": -144.0,
+          "shared_scene_bootstrap_95_ci": [
+            -627.0,
+            327.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "always_hold": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 0.0,
+          "new_mean": 4694.25,
+          "mean_new_minus_baseline": 4694.25,
+          "shared_scene_bootstrap_95_ci": [
+            3253.115625,
+            6325.903125
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 5.5,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.125,
+            1.0625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": false,
+        "baseline_task_id_set_counts": [
+          6,
+          5,
+          2,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          6,
+          5
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    },
+    "s22_sampled": {
+      "BC_greedy": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 5152.125,
+          "new_mean": 4537.125,
+          "mean_new_minus_baseline": -615.0,
+          "shared_scene_bootstrap_95_ci": [
+            -1204.875,
+            -156.75
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "immediate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 14939.25,
+          "new_mean": 4537.125,
+          "mean_new_minus_baseline": -10402.125,
+          "shared_scene_bootstrap_95_ci": [
+            -11938.93125,
+            -8734.396875000002
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "late_discovery_gate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 4838.25,
+          "new_mean": 4537.125,
+          "mean_new_minus_baseline": -301.125,
+          "shared_scene_bootstrap_95_ci": [
+            -759.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "always_hold": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 0.0,
+          "new_mean": 4537.125,
+          "mean_new_minus_baseline": 4537.125,
+          "shared_scene_bootstrap_95_ci": [
+            3000.31875,
+            6219.468749999998
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 5.5,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.125,
+            1.0625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": false,
+        "baseline_task_id_set_counts": [
+          6,
+          5,
+          2,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          6,
+          5
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    },
+    "s33_greedy": {
+      "BC_greedy": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 5152.125,
+          "new_mean": 5621.625,
+          "mean_new_minus_baseline": 469.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            1249.5
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "immediate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 14939.25,
+          "new_mean": 5621.625,
+          "mean_new_minus_baseline": -9317.625,
+          "shared_scene_bootstrap_95_ci": [
+            -10890.4125,
+            -7691.56875
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "late_discovery_gate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 4838.25,
+          "new_mean": 5621.625,
+          "mean_new_minus_baseline": 783.375,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            1722.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "always_hold": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 0.0,
+          "new_mean": 5621.625,
+          "mean_new_minus_baseline": 5621.625,
+          "shared_scene_bootstrap_95_ci": [
+            4100.596875,
+            7200.05625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 5.5,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.125,
+            1.0625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": false,
+        "baseline_task_id_set_counts": [
+          6,
+          5,
+          2,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          6,
+          5
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    },
+    "s33_sampled": {
+      "BC_greedy": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 5152.125,
+          "new_mean": 6738.0,
+          "mean_new_minus_baseline": 1585.875,
+          "shared_scene_bootstrap_95_ci": [
+            784.5,
+            2518.5093749999996
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "immediate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 14939.25,
+          "new_mean": 6738.0,
+          "mean_new_minus_baseline": -8201.25,
+          "shared_scene_bootstrap_95_ci": [
+            -9687.43125,
+            -6679.06875
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "late_discovery_gate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 4838.25,
+          "new_mean": 6738.0,
+          "mean_new_minus_baseline": 1899.75,
+          "shared_scene_bootstrap_95_ci": [
+            934.875,
+            2987.2687499999997
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "always_hold": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 0.0,
+          "new_mean": 6738.0,
+          "mean_new_minus_baseline": 6738.0,
+          "shared_scene_bootstrap_95_ci": [
+            5201.615625,
+            8303.765624999998
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 5.5,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.125,
+            1.0625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": false,
+        "baseline_task_id_set_counts": [
+          6,
+          5,
+          2,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          6,
+          5
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    }
+  }
+}

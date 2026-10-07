@@ -1,0 +1,2223 @@
+{
+  "kind": "round46-final-results/1",
+  "status": "complete_primary_criterion_not_met",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+  "runner_version": "round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
+  "primary_readout": "greedy",
+  "secondary_readout": "sampled",
+  "seed_results": {
+    "11": {
+      "training_episode_count": 128,
+      "ppo_update_count": 32,
+      "optimizer_step_count": 180,
+      "bc_initial_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+      "final_parameter_identity": {
+        "parameter_count": 5700,
+        "parameter_sha256": "8b87f4d2591a3a0c573b71a08ec8444db1e3f91850edbf2f2b958dddb31e5670",
+        "shapes": {
+          "action_head.bias": [
+            2
+          ],
+          "action_head.weight": [
+            2,
+            64
+          ],
+          "trunk.0.bias": [
+            64
+          ],
+          "trunk.0.weight": [
+            64,
+            19
+          ],
+          "trunk.2.bias": [
+            64
+          ],
+          "trunk.2.weight": [
+            64,
+            64
+          ],
+          "value_cost_head.bias": [
+            1
+          ],
+          "value_cost_head.weight": [
+            1,
+            64
+          ],
+          "value_task_head.bias": [
+            1
+          ],
+          "value_task_head.weight": [
+            1,
+            64
+          ]
+        },
+        "init_seed": 20260927,
+        "heads": [
+          "action_head",
+          "value_task_head",
+          "value_cost_head"
+        ],
+        "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)"
+      },
+      "greedy_mean_on_time_task_count": 6.0,
+      "greedy_mean_spent_bytes": 5778.0,
+      "sampled_mean_on_time_task_count": 6.0,
+      "sampled_mean_spent_bytes": 6706.125,
+      "immediate_exact_task_id_sets_preserved_greedy": true,
+      "greedy_cost_strictly_below_late_rule": false,
+      "primary_seed_success": false,
+      "late_rule_mean_bytes": 4838.25,
+      "bc_greedy_mean_bytes": 5152.125,
+      "bc_sampled_paired_baseline": "unavailable; ROUND45 BC controls were greedy-only",
+      "training_rollout_means": {
+        "on_time_task_count": 5.953125,
+        "spent_bytes": 4442.8125
+      },
+      "first_choice_counts": {
+        "free_choices": 858,
+        "SEND_NOW": 264,
+        "SKIP_EPISODE": 594,
+        "fixed_HOLD": 18054,
+        "rows_without_action_counts": 0
+      }
+    },
+    "22": {
+      "training_episode_count": 128,
+      "ppo_update_count": 32,
+      "optimizer_step_count": 296,
+      "bc_initial_parameter_sha256": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+      "final_parameter_identity": {
+        "parameter_count": 5700,
+        "parameter_sha256": "b88a6b377d9e18c3cef17ab5205f7652b1394fcfbc6b28e5642140025028caf4",
+        "shapes": {
+          "action_head.bias": [
+            2
+          ],
+          "action_head.weight": [
+            2,
+            64
+          ],
+          "trunk.0.bias": [
+            64
+          ],
+          "trunk.0.weight": [
+            64,
+            19
+          ],
+          "trunk.2.bias": [
+            64
+          ],
+          "trunk.2.weight": [
+            64,
+            64
+          ],
+          "value_cost_head.bias": [
+            1
+          ],
+          "value_cost_head.weight": [
+            1,
+            64
+          ],
+          "value_task_head.bias": [
+            1
+          ],
+          "value_task_head.weight": [
+            1,
+            64
+          ]
+        },
+        "init_seed": 20260927,
+        "heads": [
+          "action_head",
+          "value_task_head",
+          "value_cost_head"
+        ],
+        "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)"
+      },
+      "greedy_mean_on_time_task_count": 6.0,
+      "greedy_mean_spent_bytes": 4694.25,
+      "sampled_mean_on_time_task_count": 6.0,
+      "sampled_mean_spent_bytes": 4537.125,
+      "immediate_exact_task_id_sets_preserved_greedy": true,
+      "greedy_cost_strictly_below_late_rule": true,
+      "primary_seed_success": true,
+      "late_rule_mean_bytes": 4838.25,
+      "bc_greedy_mean_bytes": 5152.125,
+      "bc_sampled_paired_baseline": "unavailable; ROUND45 BC controls were greedy-only",
+      "training_rollout_means": {
+        "on_time_task_count": 5.8671875,
+        "spent_bytes": 2145.234375
+      },
+      "first_choice_counts": {
+        "free_choices": 858,
+        "SEND_NOW": 139,
+        "SKIP_EPISODE": 719,
+        "fixed_HOLD": 26094,
+        "rows_without_action_counts": 0
+      }
+    },
+    "33": {
+      "training_episode_count": 128,
+      "ppo_update_count": 32,
+      "optimizer_step_count": 212,
+      "bc_initial_parameter_sha256": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+      "final_parameter_identity": {
+        "parameter_count": 5700,
+        "parameter_sha256": "dc2903397865c853c59ed631e7b0a699fcb2d55b7dee8956101c53984b36b821",
+        "shapes": {
+          "action_head.bias": [
+            2
+          ],
+          "action_head.weight": [
+            2,
+            64
+          ],
+          "trunk.0.bias": [
+            64
+          ],
+          "trunk.0.weight": [
+            64,
+            19
+          ],
+          "trunk.2.bias": [
+            64
+          ],
+          "trunk.2.weight": [
+            64,
+            64
+          ],
+          "value_cost_head.bias": [
+            1
+          ],
+          "value_cost_head.weight": [
+            1,
+            64
+          ],
+          "value_task_head.bias": [
+            1
+          ],
+          "value_task_head.weight": [
+            1,
+            64
+          ]
+        },
+        "init_seed": 20260927,
+        "heads": [
+          "action_head",
+          "value_task_head",
+          "value_cost_head"
+        ],
+        "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)"
+      },
+      "greedy_mean_on_time_task_count": 6.0,
+      "greedy_mean_spent_bytes": 5621.625,
+      "sampled_mean_on_time_task_count": 6.0,
+      "sampled_mean_spent_bytes": 6738.0,
+      "immediate_exact_task_id_sets_preserved_greedy": true,
+      "greedy_cost_strictly_below_late_rule": false,
+      "primary_seed_success": false,
+      "late_rule_mean_bytes": 4838.25,
+      "bc_greedy_mean_bytes": 5152.125,
+      "bc_sampled_paired_baseline": "unavailable; ROUND45 BC controls were greedy-only",
+      "training_rollout_means": {
+        "on_time_task_count": 5.9296875,
+        "spent_bytes": 4061.4375
+      },
+      "first_choice_counts": {
+        "free_choices": 858,
+        "SEND_NOW": 243,
+        "SKIP_EPISODE": 615,
+        "fixed_HOLD": 19983,
+        "rows_without_action_counts": 0
+      }
+    }
+  },
+  "baseline_summary": {
+    "immediate": {
+      "n": 16,
+      "on_time_total": 96,
+      "spent_bytes_total": 239028,
+      "mean_on_time": 6.0,
+      "mean_spent_bytes": 14939.25
+    },
+    "late_discovery_gate": {
+      "n": 16,
+      "on_time_total": 96,
+      "spent_bytes_total": 77412,
+      "mean_on_time": 6.0,
+      "mean_spent_bytes": 4838.25
+    },
+    "always_hold": {
+      "n": 16,
+      "on_time_total": 88,
+      "spent_bytes_total": 0,
+      "mean_on_time": 5.5,
+      "mean_spent_bytes": 0.0
+    },
+    "round45_bc_greedy": {
+      "11": {
+        "mean_on_time_task_count": 6.0,
+        "mean_spent_bytes": 5152.125
+      },
+      "22": {
+        "mean_on_time_task_count": 6.0,
+        "mean_spent_bytes": 5152.125
+      },
+      "33": {
+        "mean_on_time_task_count": 6.0,
+        "mean_spent_bytes": 5152.125
+      }
+    },
+    "round45_bc_sampled": "unavailable"
+  },
+  "paired_comparisons": {
+    "s11_greedy": {
+      "BC_greedy": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 5152.125,
+          "new_mean": 5778.0,
+          "mean_new_minus_baseline": 625.875,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            1406.625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "immediate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 14939.25,
+          "new_mean": 5778.0,
+          "mean_new_minus_baseline": -9161.25,
+          "shared_scene_bootstrap_95_ci": [
+            -10682.259375,
+            -7587.281250000002
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "late_discovery_gate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 4838.25,
+          "new_mean": 5778.0,
+          "mean_new_minus_baseline": 939.75,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            1881.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "always_hold": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 0.0,
+          "new_mean": 5778.0,
+          "mean_new_minus_baseline": 5778.0,
+          "shared_scene_bootstrap_95_ci": [
+            4313.559375,
+            7322.643749999999
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 5.5,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.125,
+            1.0625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": false,
+        "baseline_task_id_set_counts": [
+          6,
+          5,
+          2,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          6,
+          5
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    },
+    "s11_sampled": {
+      "BC_greedy": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 5152.125,
+          "new_mean": 6706.125,
+          "mean_new_minus_baseline": 1554.0,
+          "shared_scene_bootstrap_95_ci": [
+            478.875,
+            2791.5093749999996
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "immediate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 14939.25,
+          "new_mean": 6706.125,
+          "mean_new_minus_baseline": -8233.125,
+          "shared_scene_bootstrap_95_ci": [
+            -9953.315625,
+            -6351.6656250000015
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "late_discovery_gate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 4838.25,
+          "new_mean": 6706.125,
+          "mean_new_minus_baseline": 1867.875,
+          "shared_scene_bootstrap_95_ci": [
+            750.75,
+            3291.375
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "always_hold": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 0.0,
+          "new_mean": 6706.125,
+          "mean_new_minus_baseline": 6706.125,
+          "shared_scene_bootstrap_95_ci": [
+            5010.328125,
+            8583.05625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 5.5,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.125,
+            1.0625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": false,
+        "baseline_task_id_set_counts": [
+          6,
+          5,
+          2,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          6,
+          5
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    },
+    "s22_greedy": {
+      "BC_greedy": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 5152.125,
+          "new_mean": 4694.25,
+          "mean_new_minus_baseline": -457.875,
+          "shared_scene_bootstrap_95_ci": [
+            -928.4343749999997,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "immediate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 14939.25,
+          "new_mean": 4694.25,
+          "mean_new_minus_baseline": -10245.0,
+          "shared_scene_bootstrap_95_ci": [
+            -11711.634375,
+            -8615.596875000001
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "late_discovery_gate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 4838.25,
+          "new_mean": 4694.25,
+          "mean_new_minus_baseline": -144.0,
+          "shared_scene_bootstrap_95_ci": [
+            -627.0,
+            327.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "always_hold": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 0.0,
+          "new_mean": 4694.25,
+          "mean_new_minus_baseline": 4694.25,
+          "shared_scene_bootstrap_95_ci": [
+            3253.115625,
+            6325.903125
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 5.5,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.125,
+            1.0625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": false,
+        "baseline_task_id_set_counts": [
+          6,
+          5,
+          2,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          6,
+          5
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    },
+    "s22_sampled": {
+      "BC_greedy": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 5152.125,
+          "new_mean": 4537.125,
+          "mean_new_minus_baseline": -615.0,
+          "shared_scene_bootstrap_95_ci": [
+            -1204.875,
+            -156.75
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "immediate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 14939.25,
+          "new_mean": 4537.125,
+          "mean_new_minus_baseline": -10402.125,
+          "shared_scene_bootstrap_95_ci": [
+            -11938.93125,
+            -8734.396875000002
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "late_discovery_gate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 4838.25,
+          "new_mean": 4537.125,
+          "mean_new_minus_baseline": -301.125,
+          "shared_scene_bootstrap_95_ci": [
+            -759.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "always_hold": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 0.0,
+          "new_mean": 4537.125,
+          "mean_new_minus_baseline": 4537.125,
+          "shared_scene_bootstrap_95_ci": [
+            3000.31875,
+            6219.468749999998
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 5.5,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.125,
+            1.0625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": false,
+        "baseline_task_id_set_counts": [
+          6,
+          5,
+          2,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          6,
+          5
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    },
+    "s33_greedy": {
+      "BC_greedy": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 5152.125,
+          "new_mean": 5621.625,
+          "mean_new_minus_baseline": 469.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            1249.5
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "immediate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 14939.25,
+          "new_mean": 5621.625,
+          "mean_new_minus_baseline": -9317.625,
+          "shared_scene_bootstrap_95_ci": [
+            -10890.4125,
+            -7691.56875
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "late_discovery_gate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 4838.25,
+          "new_mean": 5621.625,
+          "mean_new_minus_baseline": 783.375,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            1722.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "always_hold": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 0.0,
+          "new_mean": 5621.625,
+          "mean_new_minus_baseline": 5621.625,
+          "shared_scene_bootstrap_95_ci": [
+            4100.596875,
+            7200.05625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 5.5,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.125,
+            1.0625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": false,
+        "baseline_task_id_set_counts": [
+          6,
+          5,
+          2,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          6,
+          5
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    },
+    "s33_sampled": {
+      "BC_greedy": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 5152.125,
+          "new_mean": 6738.0,
+          "mean_new_minus_baseline": 1585.875,
+          "shared_scene_bootstrap_95_ci": [
+            784.5,
+            2518.5093749999996
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "immediate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 14939.25,
+          "new_mean": 6738.0,
+          "mean_new_minus_baseline": -8201.25,
+          "shared_scene_bootstrap_95_ci": [
+            -9687.43125,
+            -6679.06875
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "late_discovery_gate": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 4838.25,
+          "new_mean": 6738.0,
+          "mean_new_minus_baseline": 1899.75,
+          "shared_scene_bootstrap_95_ci": [
+            934.875,
+            2987.2687499999997
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 6.0,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.0,
+          "shared_scene_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": true,
+        "baseline_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "always_hold": {
+        "cost_bytes": {
+          "n_scenes": 16,
+          "baseline_mean": 0.0,
+          "new_mean": 6738.0,
+          "mean_new_minus_baseline": 6738.0,
+          "shared_scene_bootstrap_95_ci": [
+            5201.615625,
+            8303.765624999998
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "on_time_task_count": {
+          "n_scenes": 16,
+          "baseline_mean": 5.5,
+          "new_mean": 6.0,
+          "mean_new_minus_baseline": 0.5,
+          "shared_scene_bootstrap_95_ci": [
+            0.125,
+            1.0625
+          ],
+          "bootstrap": {
+            "rng": "numpy.random.Generator(PCG64(20261007))",
+            "index_shape": [
+              10000,
+              16
+            ],
+            "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+            "aggregation": "values[index].mean(axis=1)",
+            "quantile_method": "linear"
+          }
+        },
+        "exact_task_id_set_equal_every_scene": false,
+        "baseline_task_id_set_counts": [
+          6,
+          5,
+          2,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          6,
+          5
+        ],
+        "new_task_id_set_counts": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    }
+  },
+  "bootstrap": {
+    "rng": "numpy.random.Generator(PCG64(20261007))",
+    "replicates": 10000,
+    "scene_count": 16,
+    "index_matrix_sha256": "9b1f9df6aa2478273cd00ac3cf99897efa31f4391a2cd4dd1d35e7373711c1a4",
+    "aggregation": "values[index].mean(axis=1)",
+    "quantile_method": "linear"
+  },
+  "counts": {
+    "environment_constructor_calls": 481,
+    "joint_run_constructed_calls": 481,
+    "run_invocation_calls": 481,
+    "joint_run_method_calls": 481,
+    "run_return_calls": 481,
+    "run_failure_calls": 0,
+    "completed_steps": 482000,
+    "ppo_update_calls": 96,
+    "optimizer_step_calls": 688,
+    "checkpoint_write_calls": 318,
+    "technical_failed_claims": 2,
+    "new_optimizer_step_calls": 0,
+    "new_checkpoint_write_calls": 0
+  },
+  "budget": {
+    "normal_planned": 480,
+    "normal_used": 480,
+    "reserve_used": 2,
+    "total_used": 482,
+    "hard_cap": 504,
+    "remaining_hard_cap": 22
+  },
+  "interpretation": {
+    "development_block_joint_improvement": false,
+    "criterion": "each seed's greedy exact immediate on-time task-ID sets in every development scene and mean spent bytes strictly below the fixed late_discovery_gate block mean",
+    "development_data_is_not_independent_confirmation": true,
+    "not_formal_noninferiority_or_generalization": true,
+    "round45_failed_gate_remains_failed": true,
+    "round45_gate_not_used_as_round46_training_authorization": true,
+    "tick_timing_is_not_claimed_to_explain_all_learning_failures": true
+  }
+}

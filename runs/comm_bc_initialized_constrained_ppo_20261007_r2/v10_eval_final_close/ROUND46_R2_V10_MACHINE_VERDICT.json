@@ -1,0 +1,288 @@
+{
+  "kind": "round46-r2-v10-machine-verdict/1",
+  "task_id": "ROUND46-R2-V10-EVAL-FINAL-CLOSE",
+  "status": "complete_primary_criterion_not_met",
+  "development_go": false,
+  "seed_results": {
+    "11": {
+      "training_episode_count": 128,
+      "ppo_update_count": 32,
+      "optimizer_step_count": 180,
+      "bc_initial_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+      "final_parameter_identity": {
+        "parameter_count": 5700,
+        "parameter_sha256": "8b87f4d2591a3a0c573b71a08ec8444db1e3f91850edbf2f2b958dddb31e5670",
+        "shapes": {
+          "action_head.bias": [
+            2
+          ],
+          "action_head.weight": [
+            2,
+            64
+          ],
+          "trunk.0.bias": [
+            64
+          ],
+          "trunk.0.weight": [
+            64,
+            19
+          ],
+          "trunk.2.bias": [
+            64
+          ],
+          "trunk.2.weight": [
+            64,
+            64
+          ],
+          "value_cost_head.bias": [
+            1
+          ],
+          "value_cost_head.weight": [
+            1,
+            64
+          ],
+          "value_task_head.bias": [
+            1
+          ],
+          "value_task_head.weight": [
+            1,
+            64
+          ]
+        },
+        "init_seed": 20260927,
+        "heads": [
+          "action_head",
+          "value_task_head",
+          "value_cost_head"
+        ],
+        "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)"
+      },
+      "greedy_mean_on_time_task_count": 6.0,
+      "greedy_mean_spent_bytes": 5778.0,
+      "sampled_mean_on_time_task_count": 6.0,
+      "sampled_mean_spent_bytes": 6706.125,
+      "immediate_exact_task_id_sets_preserved_greedy": true,
+      "greedy_cost_strictly_below_late_rule": false,
+      "primary_seed_success": false,
+      "late_rule_mean_bytes": 4838.25,
+      "bc_greedy_mean_bytes": 5152.125,
+      "bc_sampled_paired_baseline": "unavailable; ROUND45 BC controls were greedy-only",
+      "training_rollout_means": {
+        "on_time_task_count": 5.953125,
+        "spent_bytes": 4442.8125
+      },
+      "first_choice_counts": {
+        "free_choices": 858,
+        "SEND_NOW": 264,
+        "SKIP_EPISODE": 594,
+        "fixed_HOLD": 18054,
+        "rows_without_action_counts": 0
+      }
+    },
+    "22": {
+      "training_episode_count": 128,
+      "ppo_update_count": 32,
+      "optimizer_step_count": 296,
+      "bc_initial_parameter_sha256": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+      "final_parameter_identity": {
+        "parameter_count": 5700,
+        "parameter_sha256": "b88a6b377d9e18c3cef17ab5205f7652b1394fcfbc6b28e5642140025028caf4",
+        "shapes": {
+          "action_head.bias": [
+            2
+          ],
+          "action_head.weight": [
+            2,
+            64
+          ],
+          "trunk.0.bias": [
+            64
+          ],
+          "trunk.0.weight": [
+            64,
+            19
+          ],
+          "trunk.2.bias": [
+            64
+          ],
+          "trunk.2.weight": [
+            64,
+            64
+          ],
+          "value_cost_head.bias": [
+            1
+          ],
+          "value_cost_head.weight": [
+            1,
+            64
+          ],
+          "value_task_head.bias": [
+            1
+          ],
+          "value_task_head.weight": [
+            1,
+            64
+          ]
+        },
+        "init_seed": 20260927,
+        "heads": [
+          "action_head",
+          "value_task_head",
+          "value_cost_head"
+        ],
+        "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)"
+      },
+      "greedy_mean_on_time_task_count": 6.0,
+      "greedy_mean_spent_bytes": 4694.25,
+      "sampled_mean_on_time_task_count": 6.0,
+      "sampled_mean_spent_bytes": 4537.125,
+      "immediate_exact_task_id_sets_preserved_greedy": true,
+      "greedy_cost_strictly_below_late_rule": true,
+      "primary_seed_success": true,
+      "late_rule_mean_bytes": 4838.25,
+      "bc_greedy_mean_bytes": 5152.125,
+      "bc_sampled_paired_baseline": "unavailable; ROUND45 BC controls were greedy-only",
+      "training_rollout_means": {
+        "on_time_task_count": 5.8671875,
+        "spent_bytes": 2145.234375
+      },
+      "first_choice_counts": {
+        "free_choices": 858,
+        "SEND_NOW": 139,
+        "SKIP_EPISODE": 719,
+        "fixed_HOLD": 26094,
+        "rows_without_action_counts": 0
+      }
+    },
+    "33": {
+      "training_episode_count": 128,
+      "ppo_update_count": 32,
+      "optimizer_step_count": 212,
+      "bc_initial_parameter_sha256": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+      "final_parameter_identity": {
+        "parameter_count": 5700,
+        "parameter_sha256": "dc2903397865c853c59ed631e7b0a699fcb2d55b7dee8956101c53984b36b821",
+        "shapes": {
+          "action_head.bias": [
+            2
+          ],
+          "action_head.weight": [
+            2,
+            64
+          ],
+          "trunk.0.bias": [
+            64
+          ],
+          "trunk.0.weight": [
+            64,
+            19
+          ],
+          "trunk.2.bias": [
+            64
+          ],
+          "trunk.2.weight": [
+            64,
+            64
+          ],
+          "value_cost_head.bias": [
+            1
+          ],
+          "value_cost_head.weight": [
+            1,
+            64
+          ],
+          "value_task_head.bias": [
+            1
+          ],
+          "value_task_head.weight": [
+            1,
+            64
+          ]
+        },
+        "init_seed": 20260927,
+        "heads": [
+          "action_head",
+          "value_task_head",
+          "value_cost_head"
+        ],
+        "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)"
+      },
+      "greedy_mean_on_time_task_count": 6.0,
+      "greedy_mean_spent_bytes": 5621.625,
+      "sampled_mean_on_time_task_count": 6.0,
+      "sampled_mean_spent_bytes": 6738.0,
+      "immediate_exact_task_id_sets_preserved_greedy": true,
+      "greedy_cost_strictly_below_late_rule": false,
+      "primary_seed_success": false,
+      "late_rule_mean_bytes": 4838.25,
+      "bc_greedy_mean_bytes": 5152.125,
+      "bc_sampled_paired_baseline": "unavailable; ROUND45 BC controls were greedy-only",
+      "training_rollout_means": {
+        "on_time_task_count": 5.9296875,
+        "spent_bytes": 4061.4375
+      },
+      "first_choice_counts": {
+        "free_choices": 858,
+        "SEND_NOW": 243,
+        "SKIP_EPISODE": 615,
+        "fixed_HOLD": 19983,
+        "rows_without_action_counts": 0
+      }
+    }
+  },
+  "effective_matrix": {
+    "status": "passed",
+    "effective_rows": 96,
+    "new_claims": 93,
+    "adopted_cells": [
+      [
+        11,
+        "greedy",
+        1301000
+      ],
+      [
+        11,
+        "greedy",
+        1301001
+      ],
+      [
+        11,
+        "greedy",
+        1301002
+      ]
+    ],
+    "row_keys_sha256": "76b50037948036b3351db35f36b7fa58f275e2d9056db253b26b10fb08af1f05"
+  },
+  "adopted_cells": [
+    [
+      11,
+      "greedy",
+      1301000
+    ],
+    [
+      11,
+      "greedy",
+      1301001
+    ],
+    [
+      11,
+      "greedy",
+      1301002
+    ]
+  ],
+  "quota_branch": "adoption_1301002",
+  "budget": {
+    "normal_planned": 480,
+    "normal_used": 480,
+    "reserve_used": 2,
+    "total_used": 482,
+    "hard_cap": 504,
+    "remaining_hard_cap": 22
+  },
+  "new_training_episodes": 0,
+  "new_ppo_updates": 0,
+  "new_optimizer_steps": 0,
+  "new_checkpoint_writes": 0,
+  "independent_confirmation": false,
+  "generalization_claim": false
+}

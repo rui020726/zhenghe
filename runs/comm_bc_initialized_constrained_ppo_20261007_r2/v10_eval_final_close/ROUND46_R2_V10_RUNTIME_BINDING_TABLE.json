@@ -1,0 +1,68 @@
+{
+  "kind": "round46-r2-v10-runtime-binding-table/1",
+  "task_id": "ROUND46-R2-V10-EVAL-FINAL-CLOSE",
+  "rows": [
+    {
+      "reader": "r44_runtime.claim/booked (version)",
+      "module": "r44_runtime",
+      "global_read": "RUNNER_VERSION",
+      "expected": "round46-r2-v10-eval-final-close/1+round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
+      "actual": "round46-r2-v10-eval-final-close/1+round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
+      "verified": true
+    },
+    {
+      "reader": "r44_runtime.booked (run_dir containment)",
+      "module": "r44_runtime",
+      "global_read": "RUN_DIR",
+      "expected": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close",
+      "actual": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close",
+      "verified": true
+    },
+    {
+      "reader": "r42_run._execute_cell (row/claim version)",
+      "module": "r42_run",
+      "global_read": "RUNNER_VERSION",
+      "expected": "round46-r2-v10-eval-final-close/1+round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
+      "actual": "round46-r2-v10-eval-final-close/1+round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
+      "verified": true
+    },
+    {
+      "reader": "r45._create_round45_artifact_receipt (path containment)",
+      "module": "r45",
+      "global_read": "RUN_DIR",
+      "expected": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close",
+      "actual": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close",
+      "verified": true
+    },
+    {
+      "reader": "r40_common.claim/_update (claim root)",
+      "module": "r40_common",
+      "global_read": "ROUND_DIR",
+      "expected": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close",
+      "actual": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close",
+      "verified": true
+    },
+    {
+      "reader": "row/companion writing",
+      "module": "common",
+      "global_read": "OUTPUT_DIR/LOGS/ROWS",
+      "expected": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close",
+      "actual": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close",
+      "verified": true
+    }
+  ],
+  "head": "16f256074f92fa321541382c4f5aa51ad61d75df",
+  "adapter_source_sha256": "c862ab3e9252c4651454b158a2d5fd0adbe6106fddc2c08b06634c2f90227378",
+  "unit_tests": {
+    "v7": "18/18",
+    "v8": "15/15",
+    "v9": "15/15",
+    "v10": "17/17"
+  },
+  "checkpoint_journal_sha256": "2d915802158ded6bf39bdf2be302c2819ada9c959b6f9f6c621ee7b7700d8727",
+  "prelaunch_head_binding": "25183447a867f9e12b98dafe784355d446922a1a",
+  "status": "passed",
+  "environment_constructor_calls": 0,
+  "optimizer_step_calls": 0,
+  "checkpoint_write_calls": 0
+}
