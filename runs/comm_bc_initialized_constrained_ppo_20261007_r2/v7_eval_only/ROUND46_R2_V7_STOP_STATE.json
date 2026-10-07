@@ -1,0 +1,104 @@
+{
+  "kind": "round46-r2-v7-stop-state/1",
+  "task_id": "ROUND46-R2-V7-EVAL-ONLY-COMPLETE",
+  "status": "stopped_on_new_validity_error",
+  "stopped_at_local": "2026-10-07 15:30:51",
+  "branch": "fix/round46-r2-v7-eval-only",
+  "head_at_stop": "2758091509f1379720e0d3e7a8259dcf46de9fb3",
+  "frozen_identity": {
+    "gate_sha256": "bf00f953c87f1807e48bad99217b9076620e30ffde9197127a9c7819f26a8b81",
+    "frozen_config_sha256": "ad379f484fa36198fe0e6612d28c216b340ee5a9ce1576cccdeae4bf03a65d84",
+    "quota_plan_sha256": "da11b8b9b6a1f53c3a2abe88de5dd51d41fde507de1e60d6341248db32c1e4d9",
+    "source_commit": "5f5eb83616fa7b291b49960b5c593a1c6d237520"
+  },
+  "quota_consumption": {
+    "base_normal_used": 386,
+    "new_normal_used": 0,
+    "reserve_used": 1,
+    "reserve_detail": [
+      {
+        "slot": 1,
+        "purpose": "authorized-old-key-retry",
+        "attempt": 2,
+        "logical_job": "model_eval_new_s11_greedy_scene1301000",
+        "status": "failed_technical"
+      }
+    ],
+    "normal_used_after": 386,
+    "reserve_used_after": 1,
+    "total_used_after": 387,
+    "hard_cap": 504,
+    "plan_branch": "retry_attempt2",
+    "plan_predicted_total": 482,
+    "unclaimed": {
+      "normal_slots_387_480": 94,
+      "reserve_slot_2_capacity_recovery": 1
+    }
+  },
+  "effective_eval_cells_completed": 0,
+  "effective_eval_cells_missing": 96,
+  "failure": {
+    "cell": "model_eval_new_s11_greedy_scene1301000 attempt2 reserve slot1",
+    "exception": "EvalIndexError: new evaluation row has wrong version before claim completion",
+    "raise_site": "runs/comm_dual_response_ablation_20261004/r44_eval_index.py create_claim_artifact_receipt version binding check",
+    "root_cause_diagnosis": "V7 configure_eval_runtime patched RUNNER_VERSION on runtime-dict entries (runner/r42_run/r44_runtime/r44_prepare) but the runtime dict has no r44_runtime key; the real sys.modules r44_runtime module kept the R45-era runner_version, so r44_runtime.booked passed runner_version=<old r45 string> to create_claim_artifact_receipt while the completed row carried the frozen V7 composite runner_version. Booking/identity-layer defect in the modifiable V7 adapter layer; science row itself is complete and closed.",
+    "episode_closure": {
+      "steps": 1000,
+      "run_return_calls": 1,
+      "environment_constructor_calls": 1,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 0,
+      "on_time": 6,
+      "spent_bytes": 9798,
+      "note": "deterministic greedy retry reproduced the attempt1 outcome exactly (on_time 6, spent_bytes 9798, identical relay counters)"
+    },
+    "rule_applied": "contract rule: after a frozen-code validity error, do not hot-fix and continue; preserve failure, consumption and cursor; stop the affected run; no automatic extra reserve"
+  },
+  "preserved_artifacts": {
+    "claim": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v7_eval_only\\launch_claims\\model_eval_new_s11_greedy_scene1301000\\attempt_0002.json",
+      "sha256": "125a80c97b401e42c4e754da5e916185d9732113e5510d5040764b8b7648bde2"
+    },
+    "row": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v7_eval_only\\rows\\v2_r44_eval_new_s11_greedy_s1301000_a2.json",
+      "sha256": "44c1208f5ded0592fb96d65aa1e3020a3305925c7c0cb5e7ad915f614277b7c4"
+    },
+    "companions": {
+      "lifecycle": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v7_eval_only\\logs\\v2_r44_eval_new_s11_greedy_s1301000_a2_rp.jsonl",
+        "sha256": "176578e852f1afedd950c97bb77ba7388db5c15a7dcc28f5074738410f59240f"
+      },
+      "transcript": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v7_eval_only\\logs\\v2_r44_eval_new_s11_greedy_s1301000_a2_ct.jsonl",
+        "sha256": "590355f8a077ff790007463d1a2f76eb79c1c92ffc04f9117d1f74b2c36c5579"
+      },
+      "tape": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v7_eval_only\\logs\\v2_r44_eval_new_s11_greedy_s1301000_a2_tape.jsonl",
+        "sha256": "18f0e12cd41cfe0a395c74e6d5cbc4386010cb8cd3617977fd020a98112a1e8f"
+      }
+    },
+    "failure_receipt": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v7_eval_only\\failures\\eval_new_s11_greedy_s1301000_r44_a2.json",
+      "sha256": "8ed37f462883dedc1ea85648c16040868ea293643753a2b83be9e0f304213808"
+    },
+    "ledger_event": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v7_eval_only\\runtime\\ledger_events\\model_eval_new_s11_greedy_scene1301000_a0002.json",
+      "sha256": "ec09d919991b95267a645e11f52226efae84d3c56c1d9be0220c4cae092fdb2c"
+    }
+  },
+  "invariants": {
+    "old_attempt1_claim_untouched": true,
+    "old_attempt1_row_untouched": true,
+    "adoption_receipt_absent_because_adoption_rejected": true,
+    "checkpoint_journal_sha256_unchanged": "2d915802158ded6bf39bdf2be302c2819ada9c959b6f9f6c621ee7b7700d8727",
+    "checkpoint_journal_expected": "2d915802158ded6bf39bdf2be302c2819ada9c959b6f9f6c621ee7b7700d8727",
+    "new_ppo_updates": 0,
+    "new_optimizer_steps": 0,
+    "new_checkpoint_writes": 0,
+    "second_parallel_executor_started": false
+  },
+  "recoverable_cursor": {
+    "next_logical_step": "decision-side authorization required: either authorize a corrected V7 re-freeze plus a new quota decision for the consumed retry key (the 96-cell effective matrix is unreachable without it), or authorize adoption of the preserved complete attempt2 row; no further cells may be claimed under the frozen round46-r2-v7 plan",
+    "adapter_fix_sketch_registered": "in configure_eval_runtime, additionally rebind sys.modules['r44_runtime'].RUNNER_VERSION (the module whose booked() reads the global at call time) to the V7 composite before any run"
+  }
+}

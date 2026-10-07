@@ -1,10 +1,10 @@
 {
   "kind": "round46-r2-v7-current-cursor/1",
   "task_id": "ROUND46-R2-V7-EVAL-ONLY-COMPLETE",
-  "updated_at_utc": "2026-10-07T07:16:06.607962+00:00",
+  "updated_at_utc": "2026-10-07T07:31:10.068066+00:00",
   "current_branch": "fix/round46-r2-v7-eval-only",
   "current_source_head": "9981b8873f95668371c7b9b8750ccfbc01a44028",
-  "source_freeze": "not yet created",
+  "source_freeze": "round46-r2-v7 prelaunch gate/3 committed at 2758091; execution identity now closed by stop state",
   "execution_entry_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V7_EXECUTION_ENTRY.md",
   "execution_entry_body_sha256": "6f0d8d19d3d95ea71569af0c309c5a4c0edb8c2213e03e93440dc74cd02865f2",
   "planned_eval_keys": 96,
@@ -57,7 +57,7 @@
       "attempt": 2
     }
   },
-  "current_head": "9981b8873f95668371c7b9b8750ccfbc01a44028",
+  "current_head": "2758091509f1379720e0d3e7a8259dcf46de9fb3",
   "seam_fix_registered": {
     "change": "zero-environment regression gate moved from dead code into the live _verify_v7_freeze path",
     "unit_tests": "18/18 passed (test_r46_v7_episode_closure.py)"
@@ -67,5 +67,39 @@
     "runtime_regression_receipt": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v7_eval_only\\ROUND46_R2_V7_RUNTIME_ZERO_ENV_REGRESSION.json",
     "runtime_regression_receipt_sha256": "4a904555d40f898f38eb731d8cfd340e688f93b8622dab9a10620c5f6677c685"
   },
-  "environment_launches": 0
+  "environment_launches": 0,
+  "stage": "stopped_on_new_validity_error",
+  "quota_consumption_after_stop": {
+    "normal_used": 386,
+    "reserve_used": 1,
+    "total_used": 387,
+    "failed_new_claims": [
+      {
+        "logical_job": "model_eval_new_s11_greedy_scene1301000",
+        "attempt": 2,
+        "category": "reserve",
+        "slot": 1,
+        "status": "failed_technical",
+        "completed_steps": 1000
+      }
+    ],
+    "unclaimed": {
+      "normal_slots": "387..480 (94)",
+      "reserve_slot_2": 1
+    }
+  },
+  "stop_state": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v7_eval_only\\ROUND46_R2_V7_STOP_STATE.json",
+    "sha256": "4894a19c7152274d3c25ccc839a966cf8f9ea48b510c5c6b0cbaad0aa60fc732",
+    "cause": "attempt2 booking-layer EvalIndexError: r44_runtime.RUNNER_VERSION global was not rebound to the V7 composite by configure_eval_runtime (runtime dict lacks an r44_runtime key), while the completed row carried the V7 composite; row itself complete (1000 steps, on_time 6, spent_bytes 9798), 0 optimizer/checkpoint",
+    "rule_applied": "no hot-fix-and-continue after a frozen-run validity error; preserve failure, consumption and cursor; stop; no automatic extra reserve"
+  },
+  "recoverable_cursor": {
+    "next_command": "decision-side authorization required before any further claim; the 96-cell effective matrix is unreachable under the frozen retry_attempt2 plan because the only authorized attempt2 is consumed",
+    "options_for_decision_side": [
+      "authorize corrected V7 re-freeze plus explicit new quota decision covering the consumed retry key (e.g. isolated reserve attempt3) and the 95 remaining cells",
+      "or authorize technical adoption of the preserved complete attempt2 row plus re-freeze for the remaining 95 cells"
+    ],
+    "preserved originals": "old attempt1 claim/row/companions untouched; v6 checkpoint journal sha unchanged 2d915802158ded6bf39bdf2be302c2819ada9c959b6f9f6c621ee7b7700d8727"
+  }
 }
