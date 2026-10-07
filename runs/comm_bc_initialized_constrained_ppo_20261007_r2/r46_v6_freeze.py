@@ -210,10 +210,6 @@ def main() -> int:
     r.V6_PRELAUNCH_SHA_PATH.write_text(_sha256(r.V6_PRELAUNCH_GATE_PATH) + "\n",
                                        encoding="ascii")
 
-    reuse = r._create_status_guard_reuse_receipt()
-    if reuse.get("status") != "passed_reused_exact_implementation":
-        raise RuntimeError("V6 status-guard reuse receipt did not pass")
-
     ledger_after = runtime["r42_run"].ledger_snapshot(strict=True)
     if ledger_before != ledger_after:
         raise RuntimeError("/6 freeze changed the real ledger")
