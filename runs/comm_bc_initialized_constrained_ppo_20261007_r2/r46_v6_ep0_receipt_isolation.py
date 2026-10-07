@@ -355,8 +355,11 @@ def quarantine_stale_claim(logical_job: str) -> dict[str, Any]:
         raise RuntimeError(f"expected exactly one stale claim in {claim_dir}")
     claim_path = claim_files[0]
     claim = _json(claim_path)
-    if claim.get("round") != 46:
-        raise RuntimeError("named claim is not the pre-fix round-46 record; refusing to quarantine")
+    if (claim.get("status") not in {"failed_technical", "failed"}
+            or claim.get("round46_key") is None
+            or claim.get("round45_artifact_receipt") is not None
+            or claim.get("round44_eval_artifact_receipt") is not None):
+        raise RuntimeError("named claim is not the pre-fix /6 record; refusing to quarantine")
     counts = {
         "normal": int(claim.get("status") == "complete"),
         "environment_constructor_calls": int(claim.get("environment_constructor_calls", 0)),
