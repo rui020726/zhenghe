@@ -108,12 +108,25 @@ def main() -> int:
     _write(r.V6_RUNTIME_FREEZE_PATH, runtime_freeze)
 
     text_manifest: dict[str, Any] = {}
-    for relative in (
-        (R2_DIR / "r46_execute_r2.py").relative_to(REPO).as_posix(),
-        r.READBACK_REGRESSION_PATH.relative_to(REPO).as_posix(),
-        r.CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH.relative_to(REPO).as_posix(),
+    for path in (
+        R2_DIR / "r46_execute_r2.py",
+        r.READBACK_REGRESSION_PATH,
+        r.CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH,
+        r.READBACK_REGRESSION_RESULT_PATH,
+        r.STATUS_GUARD_REGRESSION_PATH,
+        r.V3_FROZEN_CONFIG_PATH,
+        r.V3_CONFIG_DIFF_PATH,
+        r.V3_INPUT_IDENTITY_PATH,
+        r.V3_KEY_PLAN_PATH,
+        r.V3_TRAINING_VERSION_PATH,
+        r.V3_RUNTIME_FREEZE_PATH,
+        r.V3_PRELAUNCH_GATE_PATH,
+        r.V3_PRELAUNCH_SHA_PATH,
+        r.V3_STOP_ARCHIVE_PATH,
+        r.V4_BINDING_AUDIT_PATH,
     ):
-        text_manifest[relative] = r._capture_committed_text_identity(REPO / Path(relative))
+        relative = path.resolve().relative_to(REPO).as_posix()
+        text_manifest[relative] = r._capture_committed_text_identity(path)
 
     frozen = {
         "kind": "round46-r2-v5-execution-freeze/1",
