@@ -1,13 +1,13 @@
 {
   "kind": "round46-r2-v6-blocker/1",
-  "status": "stopped_at_runtime_configure_provenance",
+  "status": "stopped_at_evaluation_after_one_technically_failed_cell",
   "training_completed_episodes": 384,
   "training_checkpoints": [
     "v6/checkpoints/v2_train_s11_ep128.pt",
     "v2_train_s22_ep128.pt",
     "v2_train_s33_ep128.pt"
   ],
-  "evaluation_cells_completed": 0,
+  "evaluation_cells_completed": 1,
   "error": "R42 configure: ROUND43 call journals do not close against committed batch records; then ledger_snapshot(strict=True): optimizer step count mismatch: batch records=688, observed torch Adam.step=0",
   "cause": "R45 load_runtime sets r44_runtime.RUN_DIR = RUN_DIR (ROUND45 dir) before r44_runtime.configure, which in turn binds r42_run.RUN_DIR and the optimizer/PPO call journals plus the batch-record glob. Those journals therefore landed in the ROUND45 root while the /6 batch records are in v6/checkpoints.",
   "actions_taken": [
@@ -17,5 +17,25 @@
   "next_fix": "copy the runtime code aliases into v6/ and import them from there, then bind r44_runtime.RUN_DIR = V6 at the r44_runtime.configure seam (already patched) so journals, batch records and code provenance all share the v6 root",
   "preserved": "no journal, batch record, claim or receipt was deleted or hand-edited",
   "additional_error": "runtime import provenance mismatch for r40_train_resume_adapter: comm_one_shot_full_trace_ablation_20261004/r40_train_resume_adapter.py != v6/r40_train_resume_adapter.py",
-  "cause_full": "R42 configure asserts that the imported runtime-adapter modules live under RUN_DIR. Binding RUN_DIR to the /6 root therefore also requires the code aliases that R46 already copies into the R46 root (r40_train_resume_adapter.py, r42_one_shot.py, r42_versions.py, r43_call_counter_hooks.py) to be copied into v6/ and imported from there."
+  "cause_full": "R42 configure asserts that the imported runtime-adapter modules live under RUN_DIR. Binding RUN_DIR to the /6 root therefore also requires the code aliases that R46 already copies into the R46 root (r40_train_resume_adapter.py, r42_one_shot.py, r42_versions.py, r43_call_counter_hooks.py) to be copied into v6/ and imported from there.",
+  "eval_blocker": {
+    "logical_job": "model_eval_new_s11_greedy_scene1301000",
+    "claim_round_written": 45,
+    "claim_status": "failed_technical",
+    "counts_in_claim": {
+      "environment_constructor_calls": 1,
+      "run_invocation_calls": 1,
+      "completed_steps": 1000,
+      "ppo_update_calls": 0,
+      "optimizer_step_calls": 0
+    },
+    "row_written": true,
+    "why_blocked": "R45 guarded_execute refuses a failed key that already returned a completed episode, so this eval cell can be neither re-booked from its existing row nor re-run.",
+    "note": "The failure was caused by the /6 receipt-scope bug (row written, booking raised), not by a real technical fault of the cell; the episode itself completed normally.",
+    "options": [
+      "add an adapter repair path that books the existing row for this cell without re-running it",
+      "or, under explicit authorization, spend one reserve claim and re-run the single cell (currently refused by the frozen guard)"
+    ]
+  },
+  "training_complete": true
 }
