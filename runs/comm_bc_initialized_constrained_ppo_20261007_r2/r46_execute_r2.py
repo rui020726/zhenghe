@@ -1035,9 +1035,15 @@ def _configure_runtime_module() -> Any:
     def record_claim(context: dict[str, Any], logical_job: str, attempt: int,
                      metadata: dict[str, Any], base_claim: Any):
         path = original_record_claim(context, logical_job, attempt, metadata, base_claim)
+        # The R45 completed-claim readback revalidates the round-45 identity
+        # fields, so /6 must ADD its identity rather than overwrite them.
         r40_common._update_claim(
-            path, round=46, runner_version=ROUND46_RUNNER_VERSION,
+            path,
             training_version=TRAINING_VERSION,
+            round46_identity={
+                "round": 46, "runner_version": ROUND46_RUNNER_VERSION,
+                "training_version": TRAINING_VERSION,
+            },
             round46_key=dict(context),
             round46_attempt_kind="normal" if attempt == 1 else "technical_reserve",
             round46_artifact_paths=module._claim_paths(context, attempt),
