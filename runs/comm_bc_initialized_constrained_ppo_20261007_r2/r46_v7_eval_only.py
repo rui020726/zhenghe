@@ -984,7 +984,8 @@ def _verify_v7_freeze(base: Any, _runtime: dict[str, Any], *,
     source_sha = gate.get("source_hashes", {}).get(Path(__file__).name)
     if source_sha != sha256_file(Path(__file__)):
         raise V7Error("V7 adapter source hash differs from the prelaunch gate")
-    status = _git(base.REPO, "status", "--porcelain")
+    status = subprocess.run(["git", "-C", str(base.REPO), "status", "--porcelain"],
+                            check=True, capture_output=True, text=True).stdout.rstrip("\n")
     allowed = {
         " M " + path for path in PROTECTED
     }
