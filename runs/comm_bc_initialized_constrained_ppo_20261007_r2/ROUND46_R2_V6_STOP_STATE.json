@@ -1,0 +1,204 @@
+{
+  "kind": "round46-stop-state/1",
+  "status": "stopped",
+  "runner_version": "round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+  "error": {
+    "type": "RuntimeError",
+    "message": "R2 completed claim identity mismatch: D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\launch_claims\\new_training_s11_e0\\attempt_0001.json"
+  },
+  "ledger_source": "actual ROUND42/R40 ledger snapshot",
+  "ledger": {
+    "normal": [
+      {
+        "category": "normal",
+        "slot": 1,
+        "logical_job": "new_training_s11_e0",
+        "attempt": 1,
+        "claimed_at_unix": 1791338204.0590563
+      }
+    ],
+    "reserve": [],
+    "claims": [
+      {
+        "logical_job": "new_training_s11_e0",
+        "attempt": 1,
+        "category": "normal",
+        "status": "complete",
+        "claimed_at_unix": 1791338204.0580578,
+        "launch_slot": 1,
+        "metadata": {
+          "arm": "NEW",
+          "training_seed": 11,
+          "episode_index": 0,
+          "scenario_seed": 1300027
+        },
+        "environment_constructor_calls": 1,
+        "joint_run_build_failures": 0,
+        "joint_run_constructed_calls": 1,
+        "run_invocation_calls": 1,
+        "joint_run_method_calls": 1,
+        "run_return_calls": 1,
+        "run_failure_calls": 0,
+        "completed_steps": 1000,
+        "simulation_started": true,
+        "optimizer_step_calls": 0,
+        "checkpoint_write_calls": 0,
+        "prelaunch_head": "22af76ca4ff0e45261c33fd0c5ec53fa95ac43a7",
+        "round": 46,
+        "comm_action_semantics": "one-shot-send-skip/1",
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+        "runner_version": "round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
+        "round45_key": {
+          "scope": "ppo_training",
+          "logical_job": "new_training_s11_e0",
+          "seed": 11,
+          "episode_index": 0,
+          "scenario_seed": 1300027,
+          "tag": "r44_train_s11_e0",
+          "kind": "train"
+        },
+        "round45_artifact_paths": {
+          "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e0_s1300027_a1_rp.jsonl",
+          "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e0_s1300027_a1_ct.jsonl",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e0_s1300027_a1_tape.jsonl",
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s11_e0_s1300027_a1.json"
+        },
+        "round45_attempt_kind": "normal",
+        "round46_key": {
+          "scope": "ppo_training",
+          "logical_job": "new_training_s11_e0",
+          "seed": 11,
+          "episode_index": 0,
+          "scenario_seed": 1300027,
+          "kind": "train",
+          "tag": "r44_train_s11_e0",
+          "lambda_at_rollout": 1.0,
+          "allow_technical_retry": true
+        },
+        "round46_attempt_kind": "normal",
+        "round46_artifact_paths": {
+          "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e0_s1300027_a1_rp.jsonl",
+          "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e0_s1300027_a1_ct.jsonl",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e0_s1300027_a1_tape.jsonl",
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s11_e0_s1300027_a1.json"
+        },
+        "constructor_called_at_unix": 1791338204.105718,
+        "simulation_started_at_unix": 1791338217.2290428,
+        "round45_artifact_receipt": {
+          "kind": "round45-r2-artifact-receipt/2",
+          "attempt": 1,
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+          "runner_version": "round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
+          "round45_key": {
+            "scope": "ppo_training",
+            "logical_job": "new_training_s11_e0",
+            "seed": 11,
+            "episode_index": 0,
+            "scenario_seed": 1300027,
+            "tag": "r44_train_s11_e0",
+            "kind": "train"
+          },
+          "row_identity": {
+            "kind": "train",
+            "model_arm": null,
+            "training_seed": 11,
+            "episode_index": 0,
+            "eval_mode": null,
+            "scenario_seed": 1300027,
+            "attempt": 1,
+            "steps": 1000,
+            "on_time": 6,
+            "spent_bytes": 2514,
+            "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+            "runner_version": "round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
+            "comm_action_semantics": "one-shot-send-skip/1",
+            "on_time_task_ids": [
+              "piloc-e1-target-0",
+              "piloc-e1-target-1",
+              "piloc-e1-target-2",
+              "piloc-e1-target-3",
+              "piloc-e1-target-4",
+              "piloc-e1-target-5"
+            ],
+            "checkpoint_parameter_sha256": null
+          },
+          "decision_tape_records": 66,
+          "artifacts": {
+            "row": {
+              "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s11_e0_s1300027_a1.json",
+              "sha256": "84d73aaf8113f9a0f7e8df5633177e4db48fed3b7b0a8ff7c514413eea2e74d1",
+              "size_bytes": 341683
+            },
+            "lifecycle": {
+              "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e0_s1300027_a1_rp.jsonl",
+              "sha256": "c681a1ab4854ad696e0d9b25c8398bd4aaa8dc42af081b0740536a7f57ec8eb7",
+              "size_bytes": 548729
+            },
+            "transcript": {
+              "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e0_s1300027_a1_ct.jsonl",
+              "sha256": "f878ed6c86a089eec00c4bdd56250bcd9a1ac17e14bf402466ced677f0ab4a83",
+              "size_bytes": 1998
+            },
+            "tape": {
+              "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e0_s1300027_a1_tape.jsonl",
+              "sha256": "6d4c4363ff490fafe08b55bbf369dcfaf6284b741c2802cf9ef3374d9b792421",
+              "size_bytes": 215820
+            }
+          },
+          "round46_execution_identity": {
+            "round": 46,
+            "runner_version": "round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
+            "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2"
+          }
+        },
+        "finished_at_unix": 1791338217.3379722,
+        "detail": "train scene=1300027 on_time=6 bytes=2514"
+      }
+    ],
+    "normal_used": 1,
+    "reserve_used": 0,
+    "total_used": 1,
+    "plan": {
+      "normal": {
+        "new_training": 384,
+        "new_final_evaluation": 96
+      },
+      "normal_total": 480,
+      "technical_reserve_max": 24,
+      "hard_cap": 504
+    },
+    "counts": {
+      "normal_used": 1,
+      "reserve_used": 0,
+      "total_used": 1,
+      "environment_constructor_calls": 1,
+      "joint_run_build_failures": 0,
+      "joint_run_constructed_calls": 1,
+      "run_invocation_calls": 1,
+      "joint_run_method_calls": 1,
+      "run_return_calls": 1,
+      "run_failure_calls": 0,
+      "completed_steps": 1000,
+      "completed_logical_jobs": 1,
+      "simulation_started": 1,
+      "technical_failed_claims": 0,
+      "retry_claims": 0,
+      "optimizer_step_calls": 0,
+      "optimizer_step_journal_entries": 0,
+      "ppo_update_calls": 0,
+      "ppo_update_journal_entries": 0,
+      "ppo_update_count_matches_committed_batches": true,
+      "checkpoint_write_calls": 23,
+      "checkpoint_write_journal_entries": 23,
+      "optimizer_step_count_matches_committed_batches": true,
+      "hard_cap": 504
+    }
+  },
+  "old_round45_gate_preserved": true,
+  "environment_constructed": 1,
+  "run_invocation_calls": 1,
+  "completed_steps": 1000,
+  "ppo_updates": 0,
+  "optimizer_step_calls": 0
+}
