@@ -1,0 +1,228 @@
+{
+  "kind": "round51-source-recovery/1",
+  "status": "exact_physical_source_found_and_verified",
+  "requested_task": "ROUND51-FROZEN-SOURCE-AND-GRADIENT-CLOSE",
+  "expected_trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+  "expected_physical_path_as_frozen_by_round45": "runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
+  "hash_contract": {
+    "round45_source_function": "r45_r2_execute_r3.py::_source_hashes -> _sha256(Path.open(\"rb\"))",
+    "round46_source_function": "r46_execute_r2.py::_sha256(Path.open(\"rb\"))",
+    "contract": "raw file bytes, SHA-256; no text decoding or newline normalization",
+    "frozen_text_manifest_has_trainer_entry": false,
+    "historical_gitattributes_at_candidate_commit_161bc6b347fc714e98196a48d4d564428b141fd8": "* text=auto\n*.py text eol=lf\n*.md text eol=lf\n*.txt text eol=lf\n*.json text eol=lf\n*.yaml text eol=lf\n*.yml text eol=lf\n*.sh text eol=lf\n*.ps1 text eol=crlf\n",
+    "current_git_core_autocrlf": "true (system config)",
+    "interpretation": "The historical .gitattributes explicitly requires *.py eol=lf, so autocrlf does not establish a CRLF reconstruction contract for this trainer."
+  },
+  "current_candidate": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\..\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py",
+    "raw_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "matches_expected_raw": true,
+    "physical_source_present": true
+  },
+  "line_ending_observation": {
+    "historical_blob_commit": "161bc6b347fc714e98196a48d4d564428b141fd8",
+    "historical_blob_path": "runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
+    "lf_blob_raw_sha256": "ffb6953034cbc2548e6f7458a7c1d560fe3337ad3ccb846543bb8f6f4dcc05a6",
+    "lf_to_crlf_transform_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "transformed_hash_equals_expected": true,
+    "accepted_as_source_recovery": true,
+    "reason": "Exact physical source found and raw hash matches; LF-to-CRLF historical transform is corroboration only."
+  },
+  "runtime_call_chain": [
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py",
+      "edge": "loads frozen R45 R3 helper and calls load_runtime(enforce_prelaunch=False)"
+    },
+    {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/r45_r2_execute_r3.py",
+      "edge": "load_runtime configures R44 runtime; _source_hashes labels INPUT_ROOT/runs/comm_cost_v2_rerun_20260928/v2_trainer.py as canonical_v2_trainer.py"
+    },
+    {
+      "path": "runs/comm_dual_response_ablation_20261004/r44_runtime.py",
+      "edge": "configure delegates to R43/R42 runtime and returns runtime[\"trainer\"]"
+    },
+    {
+      "path": "runs/comm_first_report_training_ablation_20261003/r40_worker.py",
+      "edge": "imports v2_trainer via importlib.import_module; common bootstrap puts canonical v2 output directory first on sys.path"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/v6/r40_train_resume_adapter.py",
+      "edge": "calls trainer.ppo_update(controller, optimizer, episodes_in_batch, update_index=batch_index)"
+    }
+  ],
+  "runtime_hashes": {
+    "r44_expected_sha256": "aca3a837d6d29e3bf6256033f9580dfd7f72e45769af1470cc3f124f93555c0a",
+    "r44_current_raw_sha256": "aca3a837d6d29e3bf6256033f9580dfd7f72e45769af1470cc3f124f93555c0a",
+    "r44_matches": true,
+    "frozen_trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "round45_input_identity_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "round45_post_bc_freeze_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "physical_trainer_current_raw_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "physical_trainer_matches_frozen": true
+  },
+  "searched_scope": {
+    "git_refs": "git rev-list --all --objects, filter trainer-named .py blobs; plus git log --all history for canonical physical trainer path",
+    "trainer_path_blob_candidates": [
+      {
+        "blob_oid": "7a90642cc52ee5266dfceb4ba352831c3519516f",
+        "path": "integrated_sar/tests/test_ctde_trainer.py",
+        "size": 15394,
+        "raw_sha256": "5f80dadf53c35d791b86603441b23b6a00d362ca356a199ffb8bff9a03fc74fc",
+        "lf_to_crlf_sha256": "53dc6e9ca3b8e5b44826b367101958abf03fc1e1ff1f4d6c09291411e89929f8",
+        "lf_count": 395,
+        "crlf_count": 0
+      },
+      {
+        "blob_oid": "c5ede0c25d91e89437b48016da68cc78f16c9f18",
+        "path": "piloc/src/DDQN/Trainer.py",
+        "size": 2359,
+        "raw_sha256": "39447d881bf3bd54cfb6874183d4bf15ce3fe8d2fd9cc826a4d1e9b2b9487f1b",
+        "lf_to_crlf_sha256": "0c0c6b8e53083be5fa14b842b2132ee24854ae338d341bec1bec1d89223750c3",
+        "lf_count": 63,
+        "crlf_count": 0
+      },
+      {
+        "blob_oid": "8192a7688501b871f7b7ccd2ed6ffb1e6492b325",
+        "path": "runs/comm_actor_reduction_ablation_20261001/r32_trainer.py",
+        "size": 27694,
+        "raw_sha256": "9f1df61c75d7df7166f1aef7c214f81d8718819abf3f7047a94907e6a1bf68d5",
+        "lf_to_crlf_sha256": "616e6906c568220b9370236e2a170edcd5ca900bada4130f966bb24077371322",
+        "lf_count": 482,
+        "crlf_count": 0
+      },
+      {
+        "blob_oid": "a590478a48ca6483ba3af69f07327b1111d32e0c",
+        "path": "runs/comm_cost_stage_c_20260927/sc_trainer.py",
+        "size": 20890,
+        "raw_sha256": "a30f746b3c962451a497ee611ea342434a1f5269befb31e50cbdbc9e9773ec9c",
+        "lf_to_crlf_sha256": "35a7a647c1ff13d9a64beab0f5fac54bad62a5692493f8726fd05c87eff14f74",
+        "lf_count": 371,
+        "crlf_count": 0
+      },
+      {
+        "blob_oid": "80346bbb49de4462cfead1e257a7524665726f08",
+        "path": "runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
+        "size": 24807,
+        "raw_sha256": "ffb6953034cbc2548e6f7458a7c1d560fe3337ad3ccb846543bb8f6f4dcc05a6",
+        "lf_to_crlf_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+        "lf_count": 445,
+        "crlf_count": 0
+      },
+      {
+        "blob_oid": "53cfa21ae0f54a0fabad1b4837df515890d3abbe",
+        "path": "runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
+        "size": 22556,
+        "raw_sha256": "399f9785e054b49c315862c089c25f5e90d30f954bd8a829db907ec94ab9f799",
+        "lf_to_crlf_sha256": "8741fa6a97e081c5910c78d88f9a0aa3d325427f18dd3d2f913d209e17d0fa64",
+        "lf_count": 395,
+        "crlf_count": 0
+      },
+      {
+        "blob_oid": "514318e164e5b245564be886d39c86bd73617b5e",
+        "path": "runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
+        "size": 22391,
+        "raw_sha256": "dfc45f0f44e685f70699c2c2654c3f899bc59f06f9b4b6509d87e765cb0e245e",
+        "lf_to_crlf_sha256": "64452036ad2470596f0260b28f02a8358d1bca1b4c16c2320f6cc58f1ee7df51",
+        "lf_count": 393,
+        "crlf_count": 0
+      },
+      {
+        "blob_oid": "8a03d56896149cb16a74da12d5918e62ecf10822",
+        "path": "runs/comm_cost_stage_c_20260927/sc_trainer.py",
+        "size": 17824,
+        "raw_sha256": "b98ce5570990c6dbe1c6e732b921c25d4f707c10142dc2ac5d9ba9b72ff4b5a8",
+        "lf_to_crlf_sha256": "4d1984998d524cc3d333eb456bf8217fbb88fd55593ad431c50d0b187fca9c5c",
+        "lf_count": 316,
+        "crlf_count": 0
+      },
+      {
+        "blob_oid": "5009735e5e95c0ece9b0845068a6120c2da06808",
+        "path": "runs/comm_cost_stage_c_20260927/sc_trainer.py",
+        "size": 17402,
+        "raw_sha256": "0a3dd64593e49b5937d1dcb548564ea85cb4a68899543fc5dff6760dfae8f58a",
+        "lf_to_crlf_sha256": "e5d2c731e41dc93fbd6acb5262101f1e08de21e1817deb7a55acbbc505a01461",
+        "lf_count": 309,
+        "crlf_count": 0
+      },
+      {
+        "blob_oid": "12e3dd132b6779a9ccb0f33eeaae5267af741579",
+        "path": "runs/comm_cost_stage_c_20260927/sc_trainer.py",
+        "size": 16931,
+        "raw_sha256": "127619ead3e1c619c451be2a4aeec37dc9f461179253b75c14a090923a2d7f8e",
+        "lf_to_crlf_sha256": "9870052d44c82df2b0f9b799deaacd259622dae1758d4b5393b4c0fbc9c3e6e3",
+        "lf_count": 301,
+        "crlf_count": 0
+      },
+      {
+        "blob_oid": "18e2f2d4b9edc56773fa1a347b7ca74076e85251",
+        "path": "runs/comm_cost_stage_c_20260927/sc_trainer.py",
+        "size": 16698,
+        "raw_sha256": "4e3f2858944dc219bb8b34685e170c9075a983890af276b4ff80cea299cc1f05",
+        "lf_to_crlf_sha256": "551aca6ba7c491be3c0338347d19e7c03e3f5dd0ee275b80cd3c081bf3437631",
+        "lf_count": 298,
+        "crlf_count": 0
+      },
+      {
+        "blob_oid": "8365ad9ca8874bb126393035a5f2a89a77bff4c7",
+        "path": "integrated_sar/tests/test_ctde_trainer.py",
+        "size": 11602,
+        "raw_sha256": "51ad3009751ff46ea21d5bac1ce24c4fb3ad6eb3112569742f46f9e67094b820",
+        "lf_to_crlf_sha256": "c869df79680a0b511162f7d3593c564cd90c8cf4ab0fcc3a29da235a35adb68d",
+        "lf_count": 310,
+        "crlf_count": 0
+      }
+    ],
+    "local_relevant_run_trees_scanned": [
+      "runs\\comm_rule_warmstart_cost_learning_20261006_r2",
+      "runs\\comm_bc_initialized_constrained_ppo_20261007_r2",
+      "runs\\comm_dual_response_ablation_20261004",
+      "runs\\comm_first_report_training_ablation_20261003",
+      "runs\\comm_cost_v2_rerun_20260928"
+    ],
+    "local_relevant_python_files_found": [
+      {
+        "path": "runs\\comm_rule_warmstart_cost_learning_20261006_r2\\r40_train_resume_adapter.py",
+        "size": 27830,
+        "raw_sha256": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca"
+      },
+      {
+        "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\r40_train_resume_adapter.py",
+        "size": 27830,
+        "raw_sha256": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca"
+      },
+      {
+        "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\r40_train_resume_adapter.py",
+        "size": 27830,
+        "raw_sha256": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca"
+      },
+      {
+        "path": "runs\\comm_dual_response_ablation_20261004\\r40_train_resume_adapter.py",
+        "size": 27830,
+        "raw_sha256": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca"
+      },
+      {
+        "path": "runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py",
+        "size": 24807,
+        "raw_sha256": "ffb6953034cbc2548e6f7458a7c1d560fe3337ad3ccb846543bb8f6f4dcc05a6"
+      }
+    ],
+    "matches_found_as_raw_file_or_git_blob": [],
+    "limit": "No full-disk scan, no model/checkpoint scan, no network. Existing R45/R46 indexed receipts were read only."
+  },
+  "round49_reused_identity": {
+    "input_panel_path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round49_bc_input_policy_closure\\INPUT_PANEL_MANIFEST.json",
+    "input_panel_sha256": "b4d940c17ec1c627af0e767b86280912a83f34ce4d534d28f4f2f6f8222c4d25",
+    "records": 576,
+    "bc_path_replay_path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round49_bc_input_policy_closure\\BC_PATH_REPLAY.json",
+    "bc_path_replay_sha256": "d33a9470597c49153f63d2de2cd7d8b921d15c7f4b220eea7f747ef84110eef1",
+    "round50_recorded_panel_sha256": "b4d940c17ec1c627af0e767b86280912a83f34ce4d534d28f4f2f6f8222c4d25",
+    "unchanged_from_round50": true
+  },
+  "minimum_missing_supplement": null,
+  "source_copy": {
+    "path": "frozen_sources/canonical_v2_trainer.py",
+    "raw_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "byte_identical_to_physical_source": true
+  },
+  "note_on_prior_draft": "Interim identity_not_resolved draft was superseded after finding exact sibling physical source; old rounds unchanged."
+}

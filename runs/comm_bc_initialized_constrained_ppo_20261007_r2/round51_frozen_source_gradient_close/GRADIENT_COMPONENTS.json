@@ -1,0 +1,668 @@
+{
+  "kind": "round51-gradient-components/2",
+  "status": "computed_exact_frozen_source",
+  "source_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+  "source_path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py",
+  "source_ast_sha256": "7215870c966ecb182e44dd0b7fda2ea9987fb6a48210e8f312dd8e175ad50c73",
+  "batch": {
+    "11": {
+      "checkpoint_ep0": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s11.pt",
+      "checkpoint_ep0_sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+      "parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+      "batch_record": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\r40_batch_s11_b0_attempt01.json",
+      "batch_record_sha256": "db845ca9648adff252ac49ae95475f899c9ddb1c2d1ca8b47615161b79451c59",
+      "samples": 265,
+      "gae_lambda": 1.0
+    },
+    "22": {
+      "checkpoint_ep0": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s22.pt",
+      "checkpoint_ep0_sha256": "3cdb83785c51f9e40005d66a1d024d06a5ba6940616e22f3b01a9bf65b5e609d",
+      "parameter_sha256": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+      "batch_record": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\r40_batch_s22_b0_attempt01.json",
+      "batch_record_sha256": "128a11b986d7e50bc5cf6e26fd71ee52e30962274953d15d2bdc70b619175287",
+      "samples": 265,
+      "gae_lambda": 1.0
+    },
+    "33": {
+      "checkpoint_ep0": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s33.pt",
+      "checkpoint_ep0_sha256": "9329ef048dfc5c1805af5756c7ea0962eedfc8d01aa26841e35af7001616803a",
+      "parameter_sha256": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+      "batch_record": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\r40_batch_s33_b0_attempt01.json",
+      "batch_record_sha256": "12f87908b600d4b6e38b5c7bacdd03bba726c8c4f34e940acb5974b4377e8241",
+      "samples": 265,
+      "gae_lambda": 1.0
+    }
+  },
+  "per_seed": {
+    "11": {
+      "samples": 265,
+      "target_rows": 543,
+      "free_rows": 23,
+      "masked_rows": 520,
+      "episodes": [
+        {
+          "episode": 0,
+          "scene": 1300027,
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s11_e0_s1300027_a1.json",
+          "row_sha256": "982006a909af1853d3d93238298c9db60a913a4849fbf6143f246220fa7a76b6",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e0_s1300027_a1_tape.jsonl",
+          "tape_sha256": "6d4c4363ff490fafe08b55bbf369dcfaf6284b741c2802cf9ef3374d9b792421",
+          "tape_rows": 66
+        },
+        {
+          "episode": 1,
+          "scene": 1300014,
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s11_e1_s1300014_a1.json",
+          "row_sha256": "b7918bb107e1815e9de76e4cd0846bd5e89e0eb2d56651355893f5e54a36dab0",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e1_s1300014_a1_tape.jsonl",
+          "tape_sha256": "cf1e622c4df1ecfb06182fbfb7246c1c31b48e580198eddeeb7faffcd93f005e",
+          "tape_rows": 71
+        },
+        {
+          "episode": 2,
+          "scene": 1300028,
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s11_e2_s1300028_a1.json",
+          "row_sha256": "83452663fdf2ace94b2539527b2228c69851b7f89973454487b2bfe450e0febe",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e2_s1300028_a1_tape.jsonl",
+          "tape_sha256": "42209e4df3cb36d4e909a00f790fb25b4aa6ff5521b9f186e6802573a8b7d005",
+          "tape_rows": 52
+        },
+        {
+          "episode": 3,
+          "scene": 1300044,
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s11_e3_s1300044_a1.json",
+          "row_sha256": "bd86a5c449493a6dac5359a5d9693fe74b9cd2704888505ceb3241bd00a1faf5",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s11_e3_s1300044_a1_tape.jsonl",
+          "tape_sha256": "6839f8319c10fd4f605178bbb1c696382efd42f5f9315a45a204aaaea6574f91",
+          "tape_rows": 76
+        }
+      ],
+      "loss_terms": {
+        "actor_surrogate": -3.1990911960601807,
+        "entropy": -2.1712516229399625e-07,
+        "task_value": 6.994218349456787,
+        "cost_value": 0.05954869091510773
+      },
+      "total_loss": 3.854675769805908,
+      "gradients": {
+        "actor_surrogate": {
+          "l1": 0.006938490085303783,
+          "l2": 0.00035060872323811054,
+          "max_abs": 5.950033664703369e-05
+        },
+        "entropy": {
+          "l1": 0.0008179069263860583,
+          "l2": 4.125509803998284e-05,
+          "max_abs": 6.933387794560986e-06
+        },
+        "task_value": {
+          "l1": 447.6050109863281,
+          "l2": 10.581291198730469,
+          "max_abs": 3.2619895935058594
+        },
+        "cost_value": {
+          "l1": 23.364831924438477,
+          "l2": 0.8228444457054138,
+          "max_abs": 0.13200272619724274
+        },
+        "total_loss": {
+          "l1": 452.6894836425781,
+          "l2": 10.586298942565918,
+          "max_abs": 3.2619895935058594
+        }
+      },
+      "gradient_by_parameter_group": {
+        "actor_surrogate": {
+          "shared_trunk": {
+            "l1": 0.006850848440080881,
+            "l2": 0.0003505198401398957,
+            "max_abs": 5.950033664703369e-05
+          },
+          "action_head": {
+            "l1": 8.764148515183479e-05,
+            "l2": 7.894263035268523e-06,
+            "max_abs": 1.370407971990062e-06
+          },
+          "task_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "cost_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          }
+        },
+        "entropy": {
+          "shared_trunk": {
+            "l1": 0.000811590114608407,
+            "l2": 4.125084888073616e-05,
+            "max_abs": 6.933387794560986e-06
+          },
+          "action_head": {
+            "l1": 6.316747658274835e-06,
+            "l2": 5.923842536503798e-07,
+            "max_abs": 1.6613995512670954e-07
+          },
+          "task_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "cost_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          }
+        },
+        "task_value": {
+          "shared_trunk": {
+            "l1": 406.9354553222656,
+            "l2": 8.154600143432617,
+            "max_abs": 2.4016857147216797
+          },
+          "action_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "task_value_head": {
+            "l1": 40.669586181640625,
+            "l2": 6.742863655090332,
+            "max_abs": 3.2619895935058594
+          },
+          "cost_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          }
+        },
+        "cost_value": {
+          "shared_trunk": {
+            "l1": 18.04332733154297,
+            "l2": 0.4559415876865387,
+            "max_abs": 0.08917940407991409
+          },
+          "action_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "task_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "cost_value_head": {
+            "l1": 5.321505546569824,
+            "l2": 0.6849746704101562,
+            "max_abs": 0.13200272619724274
+          }
+        },
+        "total_loss": {
+          "shared_trunk": {
+            "l1": 406.69830322265625,
+            "l2": 8.132301330566406,
+            "max_abs": 2.3385844230651855
+          },
+          "action_head": {
+            "l1": 8.1324738857802e-05,
+            "l2": 7.311010449484456e-06,
+            "max_abs": 1.204271484311903e-06
+          },
+          "task_value_head": {
+            "l1": 40.669586181640625,
+            "l2": 6.742863655090332,
+            "max_abs": 3.2619895935058594
+          },
+          "cost_value_head": {
+            "l1": 5.321505546569824,
+            "l2": 0.6849746704101562,
+            "max_abs": 0.13200272619724274
+          }
+        }
+      },
+      "shared_trunk_cosine": {
+        "actor_vs_task_value": 0.009702581912279129,
+        "actor_vs_cost_value": 0.47929903864860535,
+        "actor_vs_entropy": -0.9922218322753906,
+        "task_vs_cost_value": -0.07682470977306366
+      },
+      "gradient_closure": {
+        "l2": 1.3126680187269812e-06,
+        "max_abs": 9.5367431640625e-07
+      },
+      "hypothetical_global_clip_scale": 0.04723085969068709,
+      "actual_minibatches": 8,
+      "full_batch_is_not_replayed_minibatch": true,
+      "ep128_identity_verified": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s11_ep128.pt",
+        "file_sha256": "0f161663aaf963552f8f02d6363f3c52e6f67119217f835c501cb2d0705bfc10",
+        "parameter_sha256": "8b87f4d2591a3a0c573b71a08ec8444db1e3f91850edbf2f2b958dddb31e5670"
+      }
+    },
+    "22": {
+      "samples": 265,
+      "target_rows": 543,
+      "free_rows": 23,
+      "masked_rows": 520,
+      "episodes": [
+        {
+          "episode": 0,
+          "scene": 1300027,
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s22_e0_s1300027_a1.json",
+          "row_sha256": "b811e1b81e4f04e81177e599ee5d0a74ffc64d8660040a74b6fe2ba7e58651dc",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s22_e0_s1300027_a1_tape.jsonl",
+          "tape_sha256": "b218164ed38b1a643f83061a1d63ec1690ce6bf1f46c3bac808e2d2f679647c8",
+          "tape_rows": 66
+        },
+        {
+          "episode": 1,
+          "scene": 1300014,
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s22_e1_s1300014_a1.json",
+          "row_sha256": "924a0e46fea30823a836be0bd5db15be07957877b5b27725f8936ab4117eec85",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s22_e1_s1300014_a1_tape.jsonl",
+          "tape_sha256": "904b571ca8348f8223afa7e1dcc3ae95234ca1101707b2fa32008405cf481dde",
+          "tape_rows": 71
+        },
+        {
+          "episode": 2,
+          "scene": 1300028,
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s22_e2_s1300028_a1.json",
+          "row_sha256": "f68bbd5469ea8a9c542b2de979fbe6caf7ea7563c247cb7c6da0cd2ef14bc876",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s22_e2_s1300028_a1_tape.jsonl",
+          "tape_sha256": "7bfe1b2066f94b19623d1ce2ab8b6efce8f85831c1562146b1666341a5ec8055",
+          "tape_rows": 52
+        },
+        {
+          "episode": 3,
+          "scene": 1300044,
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s22_e3_s1300044_a1.json",
+          "row_sha256": "f7294ed6a287adc8882162d03d551720243d53ddc6c36c18b0609addbaf08500",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s22_e3_s1300044_a1_tape.jsonl",
+          "tape_sha256": "24972e0523042a7f922987a4e7b18bda50be132f941e804a40c3d77234a9ff26",
+          "tape_rows": 76
+        }
+      ],
+      "loss_terms": {
+        "actor_surrogate": -4.071731090545654,
+        "entropy": -3.5118139862788667e-07,
+        "task_value": 9.844686508178711,
+        "cost_value": 0.05330396816134453
+      },
+      "total_loss": 5.826258659362793,
+      "gradients": {
+        "actor_surrogate": {
+          "l1": 0.007592695765197277,
+          "l2": 0.0003985060902778059,
+          "max_abs": 9.160232002614066e-05
+        },
+        "entropy": {
+          "l1": 0.0007454094593413174,
+          "l2": 3.816663593170233e-05,
+          "max_abs": 7.372382697212743e-06
+        },
+        "task_value": {
+          "l1": 562.0905151367188,
+          "l2": 25.533512115478516,
+          "max_abs": 4.122071266174316
+        },
+        "cost_value": {
+          "l1": 8.814326286315918,
+          "l2": 0.2959408760070801,
+          "max_abs": 0.06396838277578354
+        },
+        "total_loss": {
+          "l1": 558.840087890625,
+          "l2": 25.464656829833984,
+          "max_abs": 4.122071266174316
+        }
+      },
+      "gradient_by_parameter_group": {
+        "actor_surrogate": {
+          "shared_trunk": {
+            "l1": 0.007317401934415102,
+            "l2": 0.00039768885471858084,
+            "max_abs": 9.160232002614066e-05
+          },
+          "action_head": {
+            "l1": 0.00027529336512088776,
+            "l2": 2.5508108592475764e-05,
+            "max_abs": 4.738848474516999e-06
+          },
+          "task_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "cost_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          }
+        },
+        "entropy": {
+          "shared_trunk": {
+            "l1": 0.0007350519299507141,
+            "l2": 3.8154666981427e-05,
+            "max_abs": 7.372382697212743e-06
+          },
+          "action_head": {
+            "l1": 1.0357493920309935e-05,
+            "l2": 9.557512612445862e-07,
+            "max_abs": 1.7314131639523112e-07
+          },
+          "task_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "cost_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          }
+        },
+        "task_value": {
+          "shared_trunk": {
+            "l1": 382.3577880859375,
+            "l2": 11.00555419921875,
+            "max_abs": 2.2622246742248535
+          },
+          "action_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "task_value_head": {
+            "l1": 179.7327117919922,
+            "l2": 23.0399227142334,
+            "max_abs": 4.122071266174316
+          },
+          "cost_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          }
+        },
+        "cost_value": {
+          "shared_trunk": {
+            "l1": 8.069862365722656,
+            "l2": 0.27271634340286255,
+            "max_abs": 0.06396838277578354
+          },
+          "action_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "task_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "cost_value_head": {
+            "l1": 0.7444627285003662,
+            "l2": 0.11492075771093369,
+            "max_abs": 0.05033983290195465
+          }
+        },
+        "total_loss": {
+          "shared_trunk": {
+            "l1": 378.36260986328125,
+            "l2": 10.84423542022705,
+            "max_abs": 2.2678096294403076
+          },
+          "action_head": {
+            "l1": 0.00026493583573028445,
+            "l2": 2.458176459185779e-05,
+            "max_abs": 4.565715698845452e-06
+          },
+          "task_value_head": {
+            "l1": 179.7327117919922,
+            "l2": 23.0399227142334,
+            "max_abs": 4.122071266174316
+          },
+          "cost_value_head": {
+            "l1": 0.7444627285003662,
+            "l2": 0.11492075771093369,
+            "max_abs": 0.05033983290195465
+          }
+        }
+      },
+      "shared_trunk_cosine": {
+        "actor_vs_task_value": 0.0017334335716441274,
+        "actor_vs_cost_value": 0.060161519795656204,
+        "actor_vs_entropy": -0.4367552697658539,
+        "task_vs_cost_value": -0.5996703505516052
+      },
+      "gradient_closure": {
+        "l2": 1.2296734439587453e-06,
+        "max_abs": 2.384185791015625e-07
+      },
+      "hypothetical_global_clip_scale": 0.019635057457919793,
+      "actual_minibatches": 8,
+      "full_batch_is_not_replayed_minibatch": true,
+      "ep128_identity_verified": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s22_ep128.pt",
+        "file_sha256": "aae4aa1b24b7e7ffadffeb7a09d45935f44970ac62a8cfd4344630248472cc62",
+        "parameter_sha256": "b88a6b377d9e18c3cef17ab5205f7652b1394fcfbc6b28e5642140025028caf4"
+      }
+    },
+    "33": {
+      "samples": 265,
+      "target_rows": 543,
+      "free_rows": 23,
+      "masked_rows": 520,
+      "episodes": [
+        {
+          "episode": 0,
+          "scene": 1300027,
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s33_e0_s1300027_a1.json",
+          "row_sha256": "3e55d474b3ebc0bd64c2af3e15f9572f745bb98bf13065b75a5fdbb14b22e98a",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s33_e0_s1300027_a1_tape.jsonl",
+          "tape_sha256": "f296f0f399b9437cd7c4c0ba597f196c3beceee447024673da468198dc7cab6e",
+          "tape_rows": 66
+        },
+        {
+          "episode": 1,
+          "scene": 1300014,
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s33_e1_s1300014_a1.json",
+          "row_sha256": "e5c44f26b2c2ee89497a194f22c6c582df53ef7d53573bdcb5521a4e1f475d99",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s33_e1_s1300014_a1_tape.jsonl",
+          "tape_sha256": "c3e0694202e87218438a122d2953dd8f2785222d4e0dcf0bf895728293d90c25",
+          "tape_rows": 71
+        },
+        {
+          "episode": 2,
+          "scene": 1300028,
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s33_e2_s1300028_a1.json",
+          "row_sha256": "be33474bc98926bfb1789e663a985f9b11c829aff30f92449b3d00220d5d54c7",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s33_e2_s1300028_a1_tape.jsonl",
+          "tape_sha256": "0d4682a916d014278a782484df7589a03d32299058a0deb4d7d00e5b41f6e98a",
+          "tape_rows": 52
+        },
+        {
+          "episode": 3,
+          "scene": 1300044,
+          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_train_s33_e3_s1300044_a1.json",
+          "row_sha256": "446ae538f1d4a05461615352a5d3ed3944e579fda3b99ca5ee09ce774066b9ee",
+          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_train_s33_e3_s1300044_a1_tape.jsonl",
+          "tape_sha256": "b98535862758c83a68c37146d19af4109f84473cff501dad98bf2eec21306121",
+          "tape_rows": 76
+        }
+      ],
+      "loss_terms": {
+        "actor_surrogate": -2.894944429397583,
+        "entropy": -2.3917769453873916e-07,
+        "task_value": 7.574935436248779,
+        "cost_value": 0.21626494824886322
+      },
+      "total_loss": 4.896255016326904,
+      "gradients": {
+        "actor_surrogate": {
+          "l1": 0.004210168495774269,
+          "l2": 0.0002596038393676281,
+          "max_abs": 5.473273267853074e-05
+        },
+        "entropy": {
+          "l1": 0.000692367204464972,
+          "l2": 3.590732376324013e-05,
+          "max_abs": 7.232491498143645e-06
+        },
+        "task_value": {
+          "l1": 458.6796875,
+          "l2": 18.456235885620117,
+          "max_abs": 3.4952757358551025
+        },
+        "cost_value": {
+          "l1": 80.77873229980469,
+          "l2": 3.5112006664276123,
+          "max_abs": 0.6003309488296509
+        },
+        "total_loss": {
+          "l1": 499.1702880859375,
+          "l2": 18.869882583618164,
+          "max_abs": 3.4952757358551025
+        }
+      },
+      "gradient_by_parameter_group": {
+        "actor_surrogate": {
+          "shared_trunk": {
+            "l1": 0.004085269756615162,
+            "l2": 0.00025935115991160274,
+            "max_abs": 5.473273267853074e-05
+          },
+          "action_head": {
+            "l1": 0.00012489885557442904,
+            "l2": 1.1450594683992676e-05,
+            "max_abs": 1.824113155635132e-06
+          },
+          "task_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "cost_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          }
+        },
+        "entropy": {
+          "shared_trunk": {
+            "l1": 0.0006854698294773698,
+            "l2": 3.5901601222576573e-05,
+            "max_abs": 7.232491498143645e-06
+          },
+          "action_head": {
+            "l1": 6.897427738294937e-06,
+            "l2": 6.410823516489472e-07,
+            "max_abs": 1.3463932191370986e-07
+          },
+          "task_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "cost_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          }
+        },
+        "task_value": {
+          "shared_trunk": {
+            "l1": 325.3005065917969,
+            "l2": 6.780646324157715,
+            "max_abs": 0.8158795833587646
+          },
+          "action_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "task_value_head": {
+            "l1": 133.37913513183594,
+            "l2": 17.165531158447266,
+            "max_abs": 3.4952757358551025
+          },
+          "cost_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          }
+        },
+        "cost_value": {
+          "shared_trunk": {
+            "l1": 55.46602249145508,
+            "l2": 1.3621903657913208,
+            "max_abs": 0.3268581032752991
+          },
+          "action_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "task_value_head": {
+            "l1": 0.0,
+            "l2": 0.0,
+            "max_abs": 0.0
+          },
+          "cost_value_head": {
+            "l1": 25.312715530395508,
+            "l2": 3.236196517944336,
+            "max_abs": 0.6003309488296509
+          }
+        },
+        "total_loss": {
+          "shared_trunk": {
+            "l1": 340.478271484375,
+            "l2": 7.137507438659668,
+            "max_abs": 0.842578649520874
+          },
+          "action_head": {
+            "l1": 0.00011853998148581013,
+            "l2": 1.0856634617084637e-05,
+            "max_abs": 1.7190541257150471e-06
+          },
+          "task_value_head": {
+            "l1": 133.37913513183594,
+            "l2": 17.165531158447266,
+            "max_abs": 3.4952757358551025
+          },
+          "cost_value_head": {
+            "l1": 25.312715530395508,
+            "l2": 3.236196517944336,
+            "max_abs": 0.6003309488296509
+          }
+        }
+      },
+      "shared_trunk_cosine": {
+        "actor_vs_task_value": 0.13797573745250702,
+        "actor_vs_cost_value": 0.21044319868087769,
+        "actor_vs_entropy": 0.28870201110839844,
+        "task_vs_cost_value": 0.168382465839386
+      },
+      "gradient_closure": {
+        "l2": 8.057297691266285e-07,
+        "max_abs": 1.1920928955078125e-07
+      },
+      "hypothetical_global_clip_scale": 0.02649725019667444,
+      "actual_minibatches": 8,
+      "full_batch_is_not_replayed_minibatch": true,
+      "ep128_identity_verified": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s33_ep128.pt",
+        "file_sha256": "10f3fc8d2c2a788b7e48e1f9021b5b234c39a00706bfe486e6f2bab84a0fb9b9",
+        "parameter_sha256": "dc2903397865c853c59ed631e7b0a699fcb2d55b7dee8956101c53984b36b821"
+      }
+    }
+  },
+  "operations": {
+    "optimizer_step": 0,
+    "backward": 0,
+    "checkpoint_write": 0,
+    "environment": 0
+  }
+}

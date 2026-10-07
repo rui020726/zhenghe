@@ -1,0 +1,63 @@
+{
+  "kind": "round51-source-and-input-identity/2",
+  "status": "verified",
+  "trainer_path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py",
+  "trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+  "trainer_copy_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+  "ast_extraction": "exact ppo_update statements from stacked through loss; all update calls excluded",
+  "runtime_chain": [
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py",
+      "edge": "loads frozen R45 R3 helper and calls load_runtime(enforce_prelaunch=False)"
+    },
+    {
+      "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/r45_r2_execute_r3.py",
+      "edge": "load_runtime configures R44 runtime; _source_hashes labels INPUT_ROOT/runs/comm_cost_v2_rerun_20260928/v2_trainer.py as canonical_v2_trainer.py"
+    },
+    {
+      "path": "runs/comm_dual_response_ablation_20261004/r44_runtime.py",
+      "edge": "configure delegates to R43/R42 runtime and returns runtime[\"trainer\"]"
+    },
+    {
+      "path": "runs/comm_first_report_training_ablation_20261003/r40_worker.py",
+      "edge": "imports v2_trainer via importlib.import_module; common bootstrap puts canonical v2 output directory first on sys.path"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/v6/r40_train_resume_adapter.py",
+      "edge": "calls trainer.ppo_update(controller, optimizer, episodes_in_batch, update_index=batch_index)"
+    }
+  ],
+  "active_GAE_lambda": 1.0,
+  "round46_batch": {
+    "11": {
+      "checkpoint_ep0": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s11.pt",
+      "checkpoint_ep0_sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+      "parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+      "batch_record": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\r40_batch_s11_b0_attempt01.json",
+      "batch_record_sha256": "db845ca9648adff252ac49ae95475f899c9ddb1c2d1ca8b47615161b79451c59",
+      "samples": 265,
+      "gae_lambda": 1.0
+    },
+    "22": {
+      "checkpoint_ep0": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s22.pt",
+      "checkpoint_ep0_sha256": "3cdb83785c51f9e40005d66a1d024d06a5ba6940616e22f3b01a9bf65b5e609d",
+      "parameter_sha256": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+      "batch_record": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\r40_batch_s22_b0_attempt01.json",
+      "batch_record_sha256": "128a11b986d7e50bc5cf6e26fd71ee52e30962274953d15d2bdc70b619175287",
+      "samples": 265,
+      "gae_lambda": 1.0
+    },
+    "33": {
+      "checkpoint_ep0": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s33.pt",
+      "checkpoint_ep0_sha256": "9329ef048dfc5c1805af5756c7ea0962eedfc8d01aa26841e35af7001616803a",
+      "parameter_sha256": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+      "batch_record": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\r40_batch_s33_b0_attempt01.json",
+      "batch_record_sha256": "12f87908b600d4b6e38b5c7bacdd03bba726c8c4f34e940acb5974b4377e8241",
+      "samples": 265,
+      "gae_lambda": 1.0
+    }
+  },
+  "round49_panel_sha256": "b4d940c17ec1c627af0e767b86280912a83f34ce4d534d28f4f2f6f8222c4d25",
+  "round49_panel_records": 576,
+  "models": "same-seed BC_POST and ep128 identities verified; CPU; optimizer/RNG not restored"
+}

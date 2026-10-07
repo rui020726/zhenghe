@@ -1,0 +1,29 @@
+{
+  "kind": "round51-pure-test-evidence/3",
+  "exact_source_hash": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+  "three_seed_batches": true,
+  "sample_count_per_seed": {
+    "11": 265,
+    "22": 265,
+    "33": 265
+  },
+  "gradient_closure_max_abs": 9.5367431640625e-07,
+  "panel_count": 576,
+  "directional_projection_count": 8640,
+  "checkpoint_and_parameter_hashes_unchanged": true,
+  "parameter_grad_buffers_empty": true,
+  "ast_update_operations_excluded": true,
+  "environment_construction": 0,
+  "simulation": 0,
+  "new_flow": 0,
+  "new_evaluation": 0,
+  "real_training_update": 0,
+  "synthetic_optimizer_step": 0,
+  "checkpoint_write": 0,
+  "pure_unit_tests": {
+    "command": "python -m unittest test_round51_pure.py",
+    "passed": 4,
+    "failed": 0,
+    "scope": "identity/count/gradient-closure/closed-form shared-trunk gradient only"
+  }
+}
