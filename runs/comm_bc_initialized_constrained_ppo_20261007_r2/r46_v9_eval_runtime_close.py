@@ -51,6 +51,7 @@ CELL_1301001 = {
 }
 
 V8Error = V8.V8Error
+JOURNAL_SHA = V8.JOURNAL_SHA
 V7Error = V7.V7Error
 
 sha256_bytes = V7.sha256_bytes
