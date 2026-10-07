@@ -1,9 +1,9 @@
 {
   "kind": "round46-r2-v8-current-cursor/1",
   "task_id": "ROUND46-R2-V8-EVAL-BOOKING-CLOSE",
-  "updated_at_utc": "2026-10-07T08:36:27.815351+00:00",
+  "updated_at_utc": "2026-10-07T08:44:26.916386+00:00",
   "current_branch": "fix/round46-r2-v8-eval-booking-close",
-  "current_head": "d6efd3f1b3fe3a217f54007e5bc8b2d62d9ebfd5",
+  "current_head": "b2f3c343d9d192a57d9088a1810a8c2f46c12796",
   "source_freeze": "not yet created",
   "v7_lineage": {
     "stop_delivery_head": "d6efd3f1b3fe3a217f54007e5bc8b2d62d9ebfd5",
@@ -31,14 +31,37 @@
     "new_environment_created": false
   },
   "quota": {
-    "normal_used": 386,
+    "normal_used": 387,
     "reserve_used": 1,
-    "total_used": 387,
-    "planned_after_completion": 482,
-    "hard_cap": 504
+    "total_used": 388,
+    "hard_cap": 504,
+    "failed_new_claims": [
+      {
+        "logical_job": "model_eval_new_s11_greedy_scene1301001",
+        "attempt": 1,
+        "slot": 387,
+        "status": "failed_technical",
+        "completed_steps": 1000,
+        "cause": "r44_runtime.RUN_DIR still pointed at the v6 root at booking time"
+      }
+    ],
+    "unclaimed": {
+      "normal_slots": "388..480 (93)",
+      "reserve_slot_2": 1
+    }
   },
   "effective_rows_completed": 1,
   "effective_rows_missing": 95,
   "next_command": "commit prelaunch freeze, then run the remaining 95 cells with pre-construction binding assertions",
-  "environment_launches": 0
+  "environment_launches": 0,
+  "stage": "stopped_on_new_validity_error",
+  "stop_state": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v8_eval_booking_close\\ROUND46_R2_V8_STOP_STATE.json",
+    "sha256": "dd1a78cf6b8229fae8aa878beb7f5f44723f791c0be07324287d1b68311efdb8",
+    "cause": "booking identity family defect: live r44_runtime module global RUN_DIR was not rebound from the v6 root to the private V8 root (same lookup-miss family as the V7 RUNNER_VERSION defect); the V8 unified binding covered RUNNER_VERSION and the pre-construction assertion did not cover RUN_DIR",
+    "rule_applied": "no hot-fix-and-continue; every remaining cell shares the defective booking identity; preserve failure, consumption and cursor; stop"
+  },
+  "recoverable_cursor": {
+    "next_command": "decision-side authorization (V9) required: fix the booking RUN_DIR binding + extend the pre-construction assertion to cover it, explicitly authorize technical adoption of the completed 1301001 row (zero new consumption), then run the remaining 93 normal + 1 reserve cells to close the 96-cell matrix"
+  }
 }

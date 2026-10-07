@@ -1,0 +1,99 @@
+{
+  "kind": "round46-r2-v8-stop-state/1",
+  "task_id": "ROUND46-R2-V8-EVAL-BOOKING-CLOSE",
+  "status": "stopped_on_new_validity_error",
+  "stopped_at_local": "2026-10-07 16:44:11",
+  "branch": "fix/round46-r2-v8-eval-booking-close",
+  "head_at_stop": "b2f3c343d9d192a57d9088a1810a8c2f46c12796",
+  "frozen_identity": {
+    "gate_sha256": "fac6ad0b11c86c6acafb484e9d9c026e5424400564afe05bbfbde7480fb767aa",
+    "frozen_config_sha256": "fe58041dad8dc8544531a759d93da7eff7f018614b9b6b728ed7d0d1635e7faa",
+    "source_commit": "295988b9663172a8d95c30257a80368953707776"
+  },
+  "completed_before_stop": {
+    "attempt2_adoption": "accepted (receipt + effective row; zero new claim/environment)",
+    "new_cells_completed_before_failure": 0,
+    "first_new_cell": "model_eval_new_s11_greedy_scene1301001"
+  },
+  "failure": {
+    "exception": "EvalIndexError: row.artefacts.row path escapes the ROUND44 output (v6 root) while the row lives under the private V8 root",
+    "raise_site": "r44_eval_index._resolve_in_run via r44_runtime.booked -> create_claim_artifact_receipt(RUN_DIR, ...)",
+    "root_cause": "same runtime-dict-lookup family as the V7 stop: configure patched runtime-dict entries only; the live r44_runtime module global RUN_DIR still points to the v6 root. The V8 unified binding fixed RUNNER_VERSION but not RUN_DIR, and the pre-construction assertion did not cover the booking module's RUN_DIR.",
+    "rule_applied": "no hot-fix-and-continue; every remaining cell shares the same defective booking identity, so the whole matrix run is affected and stopped; preserve failure, consumption and cursor"
+  },
+  "quota_consumption": {
+    "base_normal_used": 386,
+    "attempt2_reserve_slot1": 1,
+    "new_normal_used": 1,
+    "new_normal_detail": [
+      {
+        "slot": 387,
+        "logical_job": "model_eval_new_s11_greedy_scene1301001",
+        "attempt": 1,
+        "status": "failed_technical",
+        "completed_steps": 1000,
+        "run_return_calls": 1,
+        "optimizer_step_calls": 0,
+        "checkpoint_write_calls": 0
+      }
+    ],
+    "normal_used_after": 387,
+    "reserve_used_after": 1,
+    "total_used_after": 388,
+    "hard_cap": 504,
+    "unclaimed": {
+      "normal_slots": "388..480 (93)",
+      "reserve_slot_2": 1
+    }
+  },
+  "effective_matrix_state": {
+    "adopted_cells": 1,
+    "cells_completed_but_booking_failed": 1,
+    "cells_missing": 94,
+    "note": "the 96-cell closure is unreachable under this authorization: the consumed 1301001 attempt returned a completed episode (rerun-ineligible by design) and this prompt authorizes technical adoption only for the attempt2 cell"
+  },
+  "preserved_artifacts": {
+    "claim": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v8_eval_booking_close\\launch_claims\\model_eval_new_s11_greedy_scene1301001\\attempt_0001.json",
+      "sha256": "ec5bb1b2fe164f44894c1ab9e2abc095057ecde6d6b75dc4e2dc0e65296dd43e",
+      "size_bytes": 5686
+    },
+    "row": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v8_eval_booking_close\\rows\\v2_r44_eval_new_s11_greedy_s1301001_a1.json",
+      "sha256": "e5564a26c3422e8695f61ff1bb9c2b37b8bf2eaa320168e65724770e0ea6a969",
+      "size_bytes": 347203
+    },
+    "lifecycle": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v8_eval_booking_close\\logs\\v2_r44_eval_new_s11_greedy_s1301001_a1_rp.jsonl",
+      "sha256": "cb05f447b22233eca71855718c7e4f6887f336d30d01df763850d81252094b41",
+      "size_bytes": 583285
+    },
+    "transcript": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v8_eval_booking_close\\logs\\v2_r44_eval_new_s11_greedy_s1301001_a1_ct.jsonl",
+      "sha256": "6e69fc057bb62e0b2b5930f2f32bb34d87843891a56c1bdc493b5244ed9996d5",
+      "size_bytes": 4961
+    },
+    "tape": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v8_eval_booking_close\\logs\\v2_r44_eval_new_s11_greedy_s1301001_a1_tape.jsonl",
+      "sha256": "dfb0829344e44b0bd57b9ed4e64fd3b3bcacb2ffad412515e238a035de00ec4e",
+      "size_bytes": 225428
+    }
+  },
+  "preserved_slot_record": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v8_eval_booking_close\\launch_slots\\normal\\0387.json",
+    "sha256": "2aa7f476b7f93d98557c59defc448e2e5075d0c084c949537466e270470ed745"
+  },
+  "invariants": {
+    "journal_sha256_unchanged": "2d915802158ded6bf39bdf2be302c2819ada9c959b6f9f6c621ee7b7700d8727",
+    "journal_expected": "2d915802158ded6bf39bdf2be302c2819ada9c959b6f9f6c621ee7b7700d8727",
+    "attempt2_adoption_artifacts_untouched": true,
+    "old_v6_v7_originals_untouched": true,
+    "new_ppo_updates": 0,
+    "new_optimizer_steps": 0,
+    "new_checkpoint_writes": 0
+  },
+  "recoverable_cursor": {
+    "next_logical_step": "decision-side authorization required (V9): bind the live r44_runtime module's RUN_DIR (and any remaining booking-path globals) in configure, extend the pre-construction assertion to the booking module's RUN_DIR, and explicitly authorize the technical adoption of the completed 1301001 row (same zero-consumption machinery as attempt2) so the 96-cell closure becomes reachable; then run the remaining 93 normal + 1 reserve cells",
+    "diagnosis_confidence": "verified: the failing check reads r44_runtime.RUN_DIR (module global) at call time; row/companions are complete and closed"
+  }
+}
