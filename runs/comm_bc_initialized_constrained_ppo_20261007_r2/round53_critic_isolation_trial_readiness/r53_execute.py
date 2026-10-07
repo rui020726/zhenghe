@@ -7,13 +7,12 @@ This file is not invoked by the readiness/test commands.
 """
 from __future__ import annotations
 import hashlib, importlib.util, json, shutil, sys
-import random
 from pathlib import Path
 from typing import Any
 
 from r53_contracts import (BRANCH, HARD_CAP, NORMAL_CAP, RESERVE_CAP, SCENES,
     SEEDS, TASK_ID, TRAINING_VERSION, authorize_receipt, build_fixed_plan,
-    sha256_file, validate_claims)
+    sha256_file, validate_claims, validate_slot_records)
 from r53_contracts import nonfatal_derived_writer
 from round53_trial_adapter import (install_on_verified_trainer,
     require_private_output_root, validate_live_binding)
@@ -24,6 +23,7 @@ REPO = RUN_ROOT.parents[1]
 CANON = REPO.parent / "zhenghe" / "runs" / "comm_cost_v2_rerun_20260928"
 SOURCE_RUNNER = RUN_ROOT / "r46_execute_r2.py"
 R45_DIR = REPO / "runs" / "comm_rule_warmstart_cost_learning_20261006_r2"
+R43_DIR = REPO / "runs" / "comm_one_shot_full_trace_ablation_20261004"
 R44_DIR = REPO / "runs" / "comm_dual_response_ablation_20261004"
 R42_DIR = REPO / "runs" / "comm_one_shot_gate_resume_20261003_v2"
 RAW = HERE / "raw"
@@ -78,6 +78,27 @@ def plan_from_frozen_sources() -> dict[str, Any]:
     plan["source_freeze_sha256"] = sha256_file(RUN_ROOT / "ROUND46_R2_V6_FROZEN_CONFIG.json")
     plan["source_key_plan_sha256"] = sha256_file(RUN_ROOT / "ROUND46_R2_V6_KEY_PLAN.json")
     plan["authorization"] = "PENDING_USER_APPROVAL"
+    input_identity = read_json(RUN_ROOT / "ROUND46_R2_V6_INPUT_IDENTITY.json")
+    registered = input_identity.get("round44_registered_ep0_rng", {})
+    frozen_registered = r44_freeze.get("round43", {}).get("registered_ep0_inputs", {})
+    if set(registered) != {str(seed) for seed in SEEDS} or set(frozen_registered) != set(registered):
+        raise RuntimeError("registered R44 ep0 RNG identities are not exactly the three frozen seeds")
+    rng_sources = {}
+    for seed in SEEDS:
+        entry = registered[str(seed)]
+        frozen_entry = frozen_registered[str(seed)]
+        path = Path(entry["path"])
+        expected_sha = entry["sha256"]
+        if (Path(frozen_entry["path"]).resolve() != path.resolve()
+                or frozen_entry.get("file_sha256") != expected_sha
+                or path.name != f"v2_train_s{seed}_ep0.pt"
+                or not path.is_file() or sha256_file(path) != expected_sha):
+            raise RuntimeError(f"seed {seed}: registered R44 ep0 RNG source path/hash mismatch")
+        rng_sources[str(seed)] = {"path": str(path.resolve()), "sha256": expected_sha,
+                                  "rng_components": ["python", "numpy", "torch"],
+                                  "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+                                  "model_or_optimizer_restored": False}
+    plan["registered_r44_ep0_rng_only"] = rng_sources
     plan["source_content_identities"] = {
         "round46_runner_sha256": sha256_file(SOURCE_RUNNER),
         "canonical_trainer_sha256": sha256_file(CANON / "v2_trainer.py"),
@@ -101,7 +122,7 @@ def plan_from_frozen_sources() -> dict[str, Any]:
         "timing": "policy_owned_timing",
         "actions": "one-shot SEND/SKIP; original masks and greedy tie rule",
         "changed_training_factor_only": "critic representation stop-gradient at task/cost critic-head inputs",
-        "fresh_rng_scheme": "sha256('ROUND53-fresh-rng/1:{seed}')[0:8] big-endian; seed Python, NumPy, Torch; never restore prior PPO/RNG checkpoint",
+        "fresh_rng_scheme": "restore only the exact registered same-seed ROUND44 ep0 Python/NumPy/Torch RNG payload after BC_POST model-only initialization via frozen R42 train_seed; do not restore its model or optimizer",
     }
     return plan
 
@@ -113,6 +134,25 @@ def verify_baseline_reuse() -> dict[str, Any]:
     v10 = RUN_ROOT / "v10_eval_final_close"
     v10_manifest = read_json(v10 / "ROUND46_R2_V10_ANALYSIS_INPUT_MANIFEST.json")
     verdict = read_json(v10 / "ROUND46_R2_V10_MACHINE_VERDICT.json")
+    final_results = read_json(v10 / "ROUND46_R2_V10_FINAL_RESULTS.json")
+    expected_training_version = read_json(RUN_ROOT / "ROUND46_R2_V6_TRAINING_VERSION_MANIFEST.json")["training_version"]
+    ep128_parameters = {str(seed): final_results["seed_results"][str(seed)]["final_parameter_identity"]["parameter_sha256"]
+                        for seed in SEEDS}
+    ep128_models = {}
+    for seed in SEEDS:
+        summary_path = RUN_ROOT / f"ROUND46_TRAINING_s{seed}.json"
+        summary = read_json(summary_path)
+        model_path = Path(summary["ep128_checkpoint_path"])
+        if (summary.get("status") != "complete" or summary.get("training_version") != expected_training_version
+                or int(summary.get("fixed_ep128_report", {}).get("episodes_done", -1)) != 128
+                or not model_path.is_file()
+                or sha256_file(model_path) != summary.get("ep128_checkpoint_sha256")):
+            raise RuntimeError(f"PPO seed {seed} actual ep128 checkpoint identity is not closed")
+        ep128_models[str(seed)] = {"summary_path": str(summary_path),
+                                   "summary_sha256": sha256_file(summary_path),
+                                   "checkpoint_path": str(model_path),
+                                   "checkpoint_sha256": summary["ep128_checkpoint_sha256"],
+                                   "parameter_sha256": ep128_parameters[str(seed)]}
     order = [int(x) for x in read_json(RUN_ROOT / "ROUND46_R2_V6_KEY_PLAN.json")["training_scenario_order"]]
     train_scenes = set(order)
     immediate_registry = {int(item["scene"]): item for item in baseline["round42_immediate_references"]}
@@ -190,21 +230,39 @@ def verify_baseline_reuse() -> dict[str, Any]:
             raise RuntimeError(f"BC greedy row hash mismatch: {path}")
         row = read_json(path)
         seed = int(row.get("training_seed", -1))
+        scene = int(item.get("scene", row.get("scenario_seed", -1)))
+        transport = row.get("transport_parameters", {})
         if (row.get("model_arm") != "BC_ONLY_R2" or row.get("eval_mode") != "greedy"
                 or seed not in SEEDS
+                or int(row.get("scenario_seed", -1)) != scene or scene not in SCENES
                 or int(row.get("steps", -1)) != 1000
+                or row.get("training_version") != expected_training_version
+                or row.get("reward_timing_version") != "published-completion-event-at-relay-tick/2"
                 or row.get("comm_action_semantics") != "one-shot-send-skip/1"
-                or row.get("transport_parameters", {}).get("timing_mode") != "policy_owned_timing"
-                or row.get("transport_parameters", {}).get("ack_enabled") is not False
+                or row.get("comm_action_eligibility") != "first-report-only/1"
+                or transport.get("timing_mode") != "policy_owned_timing"
+                or transport.get("ack_enabled") is not False
+                or transport.get("budget", {}).get("bytes_per_episode") != 29300
+                or not isinstance(row.get("config_hash"), str) or not row["config_hash"]
+                or not isinstance(row.get("behaviour_sha256"), str) or not row["behaviour_sha256"]
+                or row.get("budget_bytes") != 29300 or row.get("b0_bytes") != 10000.0
                 or not isinstance(row.get("on_time"), int)
-                or not isinstance(row.get("spent_bytes"), int)):
+                or not isinstance(row.get("spent_bytes"), int)
+                or not 0 <= row["spent_bytes"] <= row["budget_bytes"]):
             raise RuntimeError(f"BC greedy row schema/protocol mismatch: {path}")
         expected_parameter = v6_identity["bc_models_by_seed"][str(seed)]["parameter_sha256"]
         actual_parameter = row.get("checkpoint_parameter_identity", {}).get("parameter_sha256")
-        if actual_parameter != expected_parameter:
+        if (actual_parameter != expected_parameter
+                or row.get("bc_parameter_sha256") != expected_parameter
+                or row.get("bc_checkpoint_sha256") != v6_identity["bc_models_by_seed"][str(seed)]["checkpoint_sha256"]):
             raise RuntimeError(f"BC greedy row parameter role mismatch: {path}")
         bc_rows.append({"path": str(path), "sha256": item["sha256"],
-                        "seed": int(row["training_seed"]), "scene": int(row["scenario_seed"])})
+                        "seed": seed, "scene": scene,
+                        "bc_parameter_sha256": row["bc_parameter_sha256"],
+                        "bc_checkpoint_sha256": row["bc_checkpoint_sha256"],
+                        "config_hash": row["config_hash"],
+                        "behaviour_sha256": row["behaviour_sha256"],
+                        "spent_bytes": row["spent_bytes"], "budget_bytes": row["budget_bytes"]})
     if len({(r["seed"], r["scene"]) for r in bc_rows}) != 48:
         raise RuntimeError("BC greedy rows do not close the 3x16 key matrix")
 
@@ -222,16 +280,37 @@ def verify_baseline_reuse() -> dict[str, Any]:
         row = read_json(path)
         if row.get("eval_mode") not in ("greedy", "sampled"):
             continue
-        if (int(row.get("steps", -1)) != 1000
-                or int(row.get("training_seed", -1)) not in SEEDS
-                or int(row.get("scenario_seed", -1)) not in SCENES
+        seed = int(row.get("training_seed", -1)); scene = int(row.get("scenario_seed", -1))
+        mode = row["eval_mode"]
+        transport = row.get("transport_parameters", {})
+        actual_parameter = row.get("checkpoint_parameter_identity", {}).get("parameter_sha256")
+        if (row.get("model_arm") != "NEW"
+                or int(row.get("steps", -1)) != 1000
+                or seed not in SEEDS
+                or scene not in SCENES
+                or row.get("training_version") != expected_training_version
+                or row.get("reward_timing_version") != "published-completion-event-at-relay-tick/2"
+                or row.get("comm_action_semantics") != "one-shot-send-skip/1"
+                or row.get("comm_action_eligibility") != "first-report-only/1"
+                or transport.get("timing_mode") != "policy_owned_timing"
+                or transport.get("ack_enabled") is not False
+                or transport.get("budget", {}).get("bytes_per_episode") != 29300
+                or not isinstance(row.get("config_hash"), str) or not row["config_hash"]
+                or not isinstance(row.get("behaviour_sha256"), str) or not row["behaviour_sha256"]
+                or row.get("budget_bytes") != 29300 or row.get("b0_bytes") != 10000.0
                 or not isinstance(row.get("on_time"), int)
-                or not isinstance(row.get("spent_bytes"), int)):
+                or not isinstance(row.get("spent_bytes"), int)
+                or not 0 <= row["spent_bytes"] <= row["budget_bytes"]
+                or actual_parameter != ep128_parameters.get(str(seed))):
             raise RuntimeError(f"PPO final row schema/configuration mismatch: {path}")
         ppo_checked.append({"path": str(path), "sha256": item["source_sha256"],
-                            "seed": int(row["training_seed"]), "scene": int(row["scenario_seed"]),
-                            "mode": row["eval_mode"]})
-    if len({(r["seed"], r["scene"], r["mode"]) for r in ppo_checked}) != 96:
+                            "seed": seed, "scene": scene, "mode": mode,
+                            "ep128_parameter_sha256": actual_parameter,
+                            "config_hash": row["config_hash"],
+                            "behaviour_sha256": row["behaviour_sha256"],
+                            "spent_bytes": row["spent_bytes"], "budget_bytes": row["budget_bytes"]})
+    if (len(ppo_checked) != 96
+            or len({(r["seed"], r["scene"], r["mode"]) for r in ppo_checked}) != 96):
         raise RuntimeError("shared PPO source rows do not close 3x2x16")
 
     refs = {}
@@ -258,6 +337,7 @@ def verify_baseline_reuse() -> dict[str, Any]:
             "bc_post_model_sources": bc_model_sources,
             "shared_ppo": {"accepted_rows": accepted, "verified_source_rows": len(ppo_checked),
                            "keys": ppo_checked,
+                           "ep128_models": ep128_models,
                            "manifest_sha256": sha256_file(v10 / "ROUND46_R2_V10_ANALYSIS_INPUT_MANIFEST.json")},
             "development_references": refs,
             "bc_sampled": {"required_new_evaluation_rows": 48,
@@ -414,6 +494,9 @@ def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any]) 
                  for row in verify_baseline_reuse()["training_immediate_cache"]["rows_by_scene"]}
     run.reference_cache = lambda: immediate
     r40_train = runtime["r40_train"]
+    r40_train.common = common
+    r40_train.runner = runtime["runner"]
+    r40_train.trainer = runtime["trainer"]
     original_r40_train_seed = r40_train.train_seed
     def verified_r40_train_seed(*args, **kwargs):
         if (r40_train.trainer is not runtime["trainer"]
@@ -423,38 +506,38 @@ def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any]) 
         return original_r40_train_seed(*args, **kwargs)
     r40_train.train_seed = verified_r40_train_seed
 
-    # Bypass only R42's legacy ep0 checkpoint RNG restoration wrapper. The real
-    # R40 train adapter, R45 BC model-only factory, episode runner, and PPO math
-    # remain the executed path. Fresh RNG is deterministically derived per seed;
-    # later continuation can resume only a same-R53 private checkpoint.
-    numpy = __import__("numpy")
-    torch = __import__("torch")
-    verified_reference_rows = {int(row["scene"]): read_json(Path(row["path"]))
-                               for row in verify_baseline_reuse()["training_immediate_cache"]["rows_by_scene"]}
-    def r53_fresh_rng(training_seed: int) -> int:
-        digest = hashlib.sha256(f"ROUND53-fresh-rng/1:{int(training_seed)}".encode("ascii")).digest()
-        seed_value = int.from_bytes(digest[:8], "big")
-        random.seed(seed_value)
-        numpy.random.seed(seed_value % (2 ** 32))
-        torch.manual_seed(seed_value % (2 ** 63 - 1))
-        return seed_value
-    def r53_train_seed(training_seed: int, *, episodes: int, frozen: dict[str, Any]) -> dict[str, Any]:
-        if int(training_seed) not in SEEDS or episodes not in (4, 128):
-            raise RuntimeError("R53 training entry accepts only frozen seed and 4/128 episode gates")
-        r40_train.common = common
-        r40_train.runner = runtime["runner"]
-        r40_train.trainer = runtime["trainer"]
-        checkpoint_dir = Path(common.CHECKPOINTS)
-        seed_checkpoints = list(checkpoint_dir.glob(f"v2_train_s{training_seed}*.pt"))
-        fresh_rng_seed = None if seed_checkpoints else r53_fresh_rng(training_seed)
-        report = r40_train.train_seed(
-            int(training_seed), episodes=int(episodes),
-            freeze=runtime["round42_freeze"], reference_cache=verified_reference_rows)
-        report["comm_action_semantics"] = "one-shot-send-skip/1"
-        report["training_version"] = TRAINING_VERSION
-        report["round53_rng_seed"] = fresh_rng_seed
-        return report
-    run.train_seed = r53_train_seed
+    # Preserve the frozen R46/R45/R42 fresh-start route.  R45 injects the
+    # same-seed BC_POST model-only state; the actual R42 train_seed then loads
+    # only the registered R44 ep0 RNG and restores it after fresh_controller.
+    # Same-R53 continuation is handled by the unchanged R40 resume adapter.
+    frozen_rng = runtime["frozen"]["round43"]["registered_ep0_inputs"]
+    expected_rng = plan["registered_r44_ep0_rng_only"]
+    for seed in SEEDS:
+        actual = frozen_rng.get(str(seed), {})
+        expected = expected_rng[str(seed)]
+        if (Path(actual.get("path", "")).resolve() != Path(expected["path"]).resolve()
+                or actual.get("file_sha256") != expected["sha256"]
+                or sha256_file(Path(expected["path"])) != expected["sha256"]):
+            raise RuntimeError(f"runtime frozen R44 ep0 RNG binding mismatch for seed {seed}")
+    legacy_train = runtime["round46_r2_legacy_call_training_seed"]
+    train_seed = run.train_seed
+    if (not callable(legacy_train) or legacy_train.__name__ != "_call_training_seed"
+            or Path(legacy_train.__code__.co_filename).resolve()
+               != (R45_DIR / "r45_r2_execute_r3.py").resolve()
+            or not callable(train_seed) or train_seed.__name__ != "train_seed"
+            or Path(train_seed.__code__.co_filename).resolve()
+               != (R43_DIR / "r42_run.py").resolve()):
+        raise RuntimeError("frozen R46->R45 BC initializer->R42 registered-RNG training route is not live")
+    r46_training_call = runtime["module"]._call_training_seed
+    if (not callable(r46_training_call)
+            or Path(r46_training_call.__code__.co_filename).resolve() != SOURCE_RUNNER.resolve()):
+        raise RuntimeError("ROUND46 factory-scope wrapper is not installed around the R45 training call")
+    rng_route_identity = {"R46_training_wrapper": str(Path(r46_training_call.__code__.co_filename).resolve()),
+                          "R45_model_only_initializer": str(Path(legacy_train.__code__.co_filename).resolve()),
+                          "R42_train_seed": str(Path(train_seed.__code__.co_filename).resolve()),
+                          "registered_sources": expected_rng,
+                          "restore_order": "BC_POST fresh_controller -> exact registered R44 ep0 RNG restore -> R40 first episode",
+                          "restores_old_model_optimizer": False}
 
     # A pre-claim guard validates every logical key before the actual durable claim.
     jobs = {item["logical_job"]: item for item in plan["jobs"]}
@@ -463,16 +546,37 @@ def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any]) 
         if logical_job not in jobs:
             raise RuntimeError(f"unplanned ROUND53 claim refused: {logical_job}")
         attempt = int(kwargs.get("attempt", args[0] if args else 1))
+        job = jobs[logical_job]
         slug = runtime["r40_common"]._slug(str(logical_job))
         attempt_one = raw / "launch_claims" / slug / "attempt_0001.json"
         if attempt == 1:
             if attempt_one.exists(): raise RuntimeError(f"duplicate normal claim refused: {logical_job}")
         elif attempt == 2:
-            if not attempt_one.is_file() or read_json(attempt_one).get("status") != "failed_technical":
+            original = read_json(attempt_one) if attempt_one.is_file() else {}
+            if (original.get("logical_job") != logical_job
+                    or int(original.get("attempt", -1)) != 1
+                    or original.get("category") != "normal"
+                    or int(original.get("launch_slot", -1)) != int(job["normal_slot"])
+                    or original.get("status") != "failed_technical"):
                 raise RuntimeError("technical reserve retry requires an actual failed_technical attempt 1")
         else:
             raise RuntimeError(f"attempt number outside frozen one-retry contract: {attempt}")
-        return original_claim(logical_job, *args, **kwargs)
+        claim_path = original_claim(logical_job, *args, **kwargs)
+        claim = read_json(claim_path)
+        expected_category = "normal" if attempt == 1 else "reserve"
+        slot = int(claim.get("launch_slot", 0))
+        expected_slot = int(job["normal_slot"]) if attempt == 1 else slot
+        slot_path = raw / "launch_slots" / expected_category / f"{slot:04d}.json"
+        slot_record = read_json(slot_path) if slot_path.is_file() else {}
+        if (claim.get("logical_job") != logical_job or int(claim.get("attempt", -1)) != attempt
+                or claim.get("category") != expected_category
+                or (attempt == 1 and slot != expected_slot)
+                or slot_record.get("category") != expected_category
+                or int(slot_record.get("slot", 0)) != slot
+                or slot_record.get("logical_job") != logical_job
+                or int(slot_record.get("attempt", 0)) != attempt):
+            raise RuntimeError("persisted claim/slot identity differs from the frozen ROUND53 plan")
+        return claim_path
     run._claim = planned_claim
 
     # The atomic claim is authoritative. A derived snapshot/write failure is
@@ -559,7 +663,9 @@ def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any]) 
             "r40_trainer_is_runtime_trainer": r40_train.trainer is runtime["trainer"],
             "ppo_update_wrapped": runtime["trainer"].ppo_update is not None,
             "checkpoint_version": TRAINING_VERSION,
-            "fresh_rng_contract": "sha256('ROUND53-fresh-rng/1:{seed}') first-8-bytes big-endian; Python/NumPy/Torch; no ROUND42 ep0 RNG checkpoint restoration",
+            "fresh_rng_contract": "registered R44 ep0 Python/NumPy/Torch state is restored by frozen R42 train_seed after BC-only controller construction",
+            "registered_ep0_rng_route": rng_route_identity,
+            "registered_ep0_rng_route_identity": rng_route_identity,
             "route_undo": undo_update}
 
 
@@ -617,13 +723,23 @@ def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
     if len(rows) != 144: raise RuntimeError(f"ROUND53 eval closure {len(rows)}/144")
     claim_paths = sorted((RAW / "launch_claims").glob("*/*.json"))
     claims = [read_json(path) for path in claim_paths]
+    for path, claim in zip(claim_paths, claims, strict=True):
+        expected_slug = runtime["r40_common"]._slug(str(claim.get("logical_job", "")))
+        expected_name = f"attempt_{int(claim.get('attempt', 0)):04d}.json"
+        if path.parent.name != expected_slug or path.name != expected_name:
+            raise RuntimeError(f"claim file path/core identity mismatch: {path}")
     core_closure = validate_claims(plan, claims, strict=True)
     normal_slots = list((RAW / "launch_slots" / "normal").glob("*.json"))
     reserve_slots = list((RAW / "launch_slots" / "reserve").glob("*.json"))
-    if (len(normal_slots) != NORMAL_CAP or len(reserve_slots) > RESERVE_CAP
-            or len({read_json(p).get("slot") for p in normal_slots}) != len(normal_slots)
-            or len({read_json(p).get("slot") for p in reserve_slots}) != len(reserve_slots)):
-        raise RuntimeError("ROUND53 actual slot ledger does not close the frozen caps")
+    normal_records = [read_json(p) for p in normal_slots]
+    reserve_records = [read_json(p) for p in reserve_slots]
+    for category, paths, records in (("normal", normal_slots, normal_records),
+                                     ("reserve", reserve_slots, reserve_records)):
+        for path, record in zip(paths, records, strict=True):
+            if path.name != f"{int(record.get('slot', 0)):04d}.json":
+                raise RuntimeError(f"slot file path/core identity mismatch: {path}")
+    slot_closure = validate_slot_records(
+        plan, claims, normal_records, reserve_records, strict=True)
     ledger = run.write_execution_ledger(strict=True)
     if ledger.get("status") == "deferred":
         raise RuntimeError("final derived ledger did not close; authoritative claims are preserved")
@@ -632,6 +748,7 @@ def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
               "training_version": TRAINING_VERSION, "training": trained,
               "first_four_and_gates": first4, "evaluation_rows": len(rows),
               "ledger": ledger, "claim_closure": core_closure,
+              "slot_closure": slot_closure,
               "normal_slots": len(normal_slots), "reserve_slots": len(reserve_slots),
               "baseline_reuse": baseline,
               "live_bindings": {k: v for k, v in live.items() if k != "route_undo"}}

@@ -4488,6 +4488,41 @@
   "source_freeze_sha256": "da268b58a053b16216353fd3f0767f8cecdac57a5a7ea82e793e818613a8448d",
   "source_key_plan_sha256": "2d3928a11cdef5260c89c28698152b9577617260797e8fa28e03fbb8e347fc85",
   "authorization": "PENDING_USER_APPROVAL",
+  "registered_r44_ep0_rng_only": {
+    "11": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_ep0.pt",
+      "sha256": "70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd",
+      "rng_components": [
+        "python",
+        "numpy",
+        "torch"
+      ],
+      "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+      "model_or_optimizer_restored": false
+    },
+    "22": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s22_ep0.pt",
+      "sha256": "96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5",
+      "rng_components": [
+        "python",
+        "numpy",
+        "torch"
+      ],
+      "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+      "model_or_optimizer_restored": false
+    },
+    "33": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s33_ep0.pt",
+      "sha256": "9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d",
+      "rng_components": [
+        "python",
+        "numpy",
+        "torch"
+      ],
+      "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+      "model_or_optimizer_restored": false
+    }
+  },
   "source_content_identities": {
     "round46_runner_sha256": "dc086128aa244f847330bacfd5dbc457907ad987a700c1bd1cae70687886e19c",
     "canonical_trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
@@ -4497,8 +4532,8 @@
     "round46_v10_manifest_sha256": "634e398016f305a0b3170000160ec779c3faf7731e7426c74fa39690b596bbc1",
     "round52_prototype_contract_sha256": "fe6a85642813bde39cb37e37fa67564aefac1070bb9688f5045429074e249149",
     "round52_gradient_evidence_sha256": "87d76bcae95dfc0303b31b38c9d65f8077c82d3ff45489bcf6a710515381f1a3",
-    "r53_executor_sha256": "bd4a38e576665b537b9791be2a6648f70e7ef07b0e9f2300361a167f5338175c",
-    "r53_contracts_sha256": "78b1aa76401ae4232b85e6123003fce24dd70f67a8cfddb91265e94aff12f485",
+    "r53_executor_sha256": "facc79bbf20f6b26867bb48ed2e123f663412d182a13e1d2e0b57ac5b8753a1e",
+    "r53_contracts_sha256": "ab0614ee3081c51a604687eba7feff00671942385a31012e81135b2a6eb0b00f",
     "r53_policy_adapter_sha256": "e2f16bf55478d1a95e0f9ee07338f1cc602041373feaf5e8fadee28ab7a7f0d9"
   },
   "scientific_config_identity": {
@@ -4533,7 +4568,7 @@
     "timing": "policy_owned_timing",
     "actions": "one-shot SEND/SKIP; original masks and greedy tie rule",
     "changed_training_factor_only": "critic representation stop-gradient at task/cost critic-head inputs",
-    "fresh_rng_scheme": "sha256('ROUND53-fresh-rng/1:{seed}')[0:8] big-endian; seed Python, NumPy, Torch; never restore prior PPO/RNG checkpoint"
+    "fresh_rng_scheme": "restore only the exact registered same-seed ROUND44 ep0 Python/NumPy/Torch RNG payload after BC_POST model-only initialization via frozen R42 train_seed; do not restore its model or optimizer"
   },
-  "plan_sha256": "a49aa716095af9c47ab541f27595171a063a90325f5933ae331e62f44faaac9a"
+  "plan_sha256": "c2ceb31a59283e743ae2dc611265e2ef62b1ef7175f80e7e0272f110ebea6698"
 }

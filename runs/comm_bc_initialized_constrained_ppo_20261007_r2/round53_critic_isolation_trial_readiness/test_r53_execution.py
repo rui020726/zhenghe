@@ -5,8 +5,10 @@ from types import SimpleNamespace
 
 from r53_contracts import (BRANCH, HARD_CAP, NORMAL_CAP, RESERVE_CAP, TASK_ID,
     TRAINING_VERSION, authorize_receipt, build_fixed_plan, derived_snapshot,
-    nonfatal_derived_writer, validate_checkpoint_identity, validate_claims)
+    nonfatal_derived_writer, validate_checkpoint_identity, validate_claims,
+    validate_slot_records)
 import r53_execute as r53
+from r53_rng_audit import audit_registered_rng
 from round53_trial_adapter import install_on_verified_trainer
 
 
@@ -74,6 +76,48 @@ class TestRound53Execution(unittest.TestCase):
         self.assertEqual(result["status"], "deferred")
         self.assertEqual(warnings, [result])
         self.assertEqual(core[0]["status"], "complete")
+
+    def test_final_strict_core_gate_is_not_swallowed_by_derived_writer(self):
+        first = self.plan["jobs"][0]
+        damaged = [{"logical_job": first["logical_job"], "attempt": 1,
+                    "category": "normal", "launch_slot": first["normal_slot"],
+                    "status": "complete"}]
+        wrapped = nonfatal_derived_writer(
+            lambda *, strict: derived_snapshot(self.plan, damaged, strict=strict), lambda _w: None)
+        self.assertEqual(wrapped(strict=True)["status"], "deferred")
+        with self.assertRaisesRegex(ValueError, "strict final ledger"):
+            validate_claims(self.plan, damaged, strict=True)
+
+    def test_reserve_is_optional_and_requires_failed_core_claim_and_matching_slots(self):
+        jobs = self.plan["jobs"]
+        fail_key = jobs[0]["logical_job"]
+        claims = []
+        normal_slots = []
+        for job in jobs:
+            status = "failed_technical" if job["logical_job"] == fail_key else "complete"
+            claim = {"logical_job": job["logical_job"], "attempt": 1, "category": "normal",
+                     "launch_slot": job["normal_slot"], "status": status}
+            claims.append(claim)
+            normal_slots.append({"logical_job": job["logical_job"], "attempt": 1,
+                                 "category": "normal", "slot": job["normal_slot"]})
+        retry = {"logical_job": fail_key, "attempt": 2, "category": "reserve",
+                 "launch_slot": 1, "status": "complete", "original_status": "failed_technical"}
+        claims.append(retry)
+        reserve_slots = [{"logical_job": fail_key, "attempt": 2, "category": "reserve", "slot": 1}]
+        # Deliberately reversed: closure is based on the core claim, not iteration order.
+        summary = validate_claims(self.plan, list(reversed(claims)), strict=True)
+        self.assertEqual(summary["counts"], {"normal": NORMAL_CAP, "reserve": 1})
+        self.assertEqual(validate_slot_records(self.plan, claims, normal_slots, reserve_slots,
+                                               strict=True)["reserve_slots"], 1)
+        # Reserve capacity is a maximum; unused slots are not an error.
+        all_complete = [{**claim, "status": "complete"} for claim in claims if claim["attempt"] == 1]
+        self.assertEqual(validate_claims(self.plan, all_complete, strict=True)["counts"]["reserve"], 0)
+        forged = [{**retry, "logical_job": jobs[1]["logical_job"]}]
+        with self.assertRaisesRegex(ValueError, "persisted technical-failed"):
+            validate_claims(self.plan, [*all_complete, *forged])
+        mismatched_slot = [dict(reserve_slots[0], logical_job=jobs[1]["logical_job"])]
+        with self.assertRaisesRegex(ValueError, "durable reserve slots"):
+            validate_slot_records(self.plan, claims, normal_slots, mismatched_slot, strict=True)
 
     def test_checkpoint_version_rejects_round46_training_state_but_allows_bc_model_only(self):
         freeze = {"training_version": TRAINING_VERSION,
@@ -145,11 +189,18 @@ before={str(p):sha256_file(p) for p in protected if p.is_file()}
 counts={"environment_construction":0,"simulation":0,"new_scenes_or_flows":0,
         "new_evaluation":0,"real_training_updates":0,"synthetic_optimizer_steps":0,
         "checkpoint_writes":0,"claim_calls":0}
-old_step=torch.optim.Optimizer.step
+guarded_steps=[]
+old_steps={cls:cls.step for cls in (torch.optim.Optimizer,torch.optim.Adam,torch.optim.SGD)}
+old_torch_save=torch.save
 def blocked_step(self,*a,**k):
  counts["synthetic_optimizer_steps"]+=1
  raise RuntimeError("blocked optimizer step")
-torch.optim.Optimizer.step=blocked_step
+def blocked_save(*a,**k):
+ counts["checkpoint_writes"]+=1
+ raise RuntimeError("blocked torch.save")
+for cls in old_steps:
+ cls.step=blocked_step; guarded_steps.append(cls.__name__)
+torch.save=blocked_save
 try:
  base=r.load_base_runner(); r.bind_runner_paths(base,raw); r.install_private_configure_seams(base)
  base._R45_MODULE=None; base._RUNTIME=None; base._configure_runtime_module()
@@ -180,30 +231,32 @@ try:
  rt["trainer"].ppo_update=reject_ppo
  rt["trainer"].save_checkpoint=reject_checkpoint
  rt["r40_common"].claim_launch=reject_claim
- called={}
- def capture_train(seed,*,episodes,freeze,reference_cache):
-  called.update({"seed":seed,"episodes":episodes,"same_trainer":train.trainer is rt["trainer"],
-                 "same_common":train.common is rt["common"],"same_runner":train.runner is rt["runner"]})
-  return {"episodes_done":0,"updates":0,"optimizer_steps":0}
- train.train_seed=capture_train
- run.train_seed(11,episodes=4,frozen={"round42":{"training_version":"fixture"}})
+ train_binding={"same_trainer":train.trainer is rt["trainer"],
+                 "same_common":train.common is rt["common"],"same_runner":train.runner is rt["runner"]}
+ run_seed_source=str(Path(run.train_seed.__code__.co_filename).resolve())
+ assert run.train_seed.__name__=="train_seed" and run_seed_source==str(r.R43_DIR/"r42_run.py")
  try: run._claim("unplanned-job",attempt=1,metadata={})
  except RuntimeError as e: claim_refused="unplanned" in str(e)
  else: claim_refused=False
  pt=list(raw.rglob("*.pt")); claim_files=list((raw/"launch_claims").rglob("*.json")) if (raw/"launch_claims").exists() else []
  journal=Path(base.CHECKPOINT_JOURNAL_PATH)
- assert live["r40_trainer_is_runtime_trainer"] and all(called.values()) and claim_refused
+ assert live["r40_trainer_is_runtime_trainer"] and all(train_binding.values()) and claim_refused
  assert not pt and not claim_files and journal.exists() and journal.stat().st_size==0
  assert all(v==0 for v in counts.values())
  after={str(p):sha256_file(p) for p in protected if p.is_file()}
  assert before==after
  assert len({str(Path(v).resolve()) for v in live["bindings"].values()}) == 1
  print(json.dumps({"status":"passed","live_bindings":{k:"<temporary fixture>/raw" for k in live["bindings"]},
-  "live_trainer_same_object":called,"unplanned_claim_refused":claim_refused,
+   "live_trainer_same_object":train_binding,"upstream_r42_train_seed_source":run_seed_source,
+   "optimizer_guard_targets":guarded_steps,"checkpoint_guard_target":"torch.save",
+   "rng_route_identity":live["registered_ep0_rng_route_identity"],
+   "unplanned_claim_refused":claim_refused,
   "raw_pt_files":len(pt),"raw_claim_files":len(claim_files),
   "private_journal_empty":True,"protected_sources_unchanged":before==after,"guards":counts}))
 finally:
- torch.optim.Optimizer.step=old_step; shutil.rmtree(root,ignore_errors=True)
+ for cls,old in old_steps.items(): cls.step=old
+ torch.save=old_torch_save
+ shutil.rmtree(root,ignore_errors=True)
 '''
         result = subprocess.run([sys.executable, "-c", script], cwd=r53.HERE,
                                 capture_output=True, text=True, timeout=120)
@@ -215,6 +268,9 @@ finally:
         self.assertEqual(evidence["raw_pt_files"], 0)
         self.assertEqual(evidence["raw_claim_files"], 0)
         self.assertTrue(evidence["protected_sources_unchanged"])
+        self.assertEqual(set(evidence["optimizer_guard_targets"]), {"Optimizer", "Adam", "SGD"})
+        self.assertEqual(evidence["checkpoint_guard_target"], "torch.save")
+        self.assertTrue(evidence["upstream_r42_train_seed_source"].endswith("r42_run.py"))
         result_path = r53.HERE / "RUNTIME_BINDING_FIXTURE_RESULT.json"
         result_path.write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + "\n",
                                encoding="utf-8")
@@ -227,6 +283,18 @@ finally:
         self.assertEqual(len(checked["development_references"]["immediate_dev"]), 16)
         self.assertEqual(len(checked["development_references"]["late_dev"]), 16)
         self.assertTrue(checked["bc_sampled"]["not_generated_in_readiness"])
+
+    def test_registered_ep0_rng_payloads_hash_match_frozen_identity_without_restore(self):
+        identity = r53.read_json(r53.RUN_ROOT / "ROUND46_R2_V6_INPUT_IDENTITY.json")
+        frozen = r53.read_json(r53.R44_DIR / "ROUND44_FROZEN_CONFIG.json")
+        for seed in r53.SEEDS:
+            entry = identity["round44_registered_ep0_rng"][str(seed)]
+            audit = audit_registered_rng(Path(entry["path"]), expected_file_sha256=entry["sha256"])
+            source = frozen["round43"]["registered_ep0_inputs"][str(seed)]
+            self.assertEqual(audit["checkpoint_sha256"], source["file_sha256"])
+            self.assertEqual(audit["rng_component_keys"], ["numpy", "python", "torch"])
+            self.assertFalse(audit["restored_or_set"])
+            self.assertGreater(audit["torch_state_bytes"], 0)
 
     def test_wrong_source_hash_is_an_actual_refusal(self):
         trainer = SimpleNamespace(ppo_update=lambda *_a, **_kw: None)

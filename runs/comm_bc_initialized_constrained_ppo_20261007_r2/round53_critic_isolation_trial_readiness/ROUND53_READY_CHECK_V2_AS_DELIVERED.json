@@ -1,0 +1,37 @@
+{
+  "kind": "round53-readiness-check/2",
+  "status": "conditional ready_for_authorized_execution",
+  "ready_for_authorized_execution": true,
+  "authorization": "PENDING_USER_APPROVAL",
+  "authorization_is_not_implied_by_readiness": true,
+  "trial_plan_status": "proposed_not_authorized",
+  "plan_sha256": "a49aa716095af9c47ab541f27595171a063a90325f5933ae331e62f44faaac9a",
+  "hard_cap": 552,
+  "normal_cap": 528,
+  "reserve_cap": 24,
+  "development_go": false,
+  "passed": [
+    "fixed 384 + 96 + 48 = 528 normal jobs and 24 fresh reserve; unique logical keys",
+    "48 training immediate rows hash/protocol checked against frozen training sequence",
+    "BC greedy48, shared PPO96, immediate/late dev16 each verified from indexed sources",
+    "BC sampled48 are planned outputs, not missing readiness inputs, and were not generated",
+    "actual runtime configure/binder passed in temporary sandbox; r44_runtime is explicitly bound",
+    "canonical live trainer method unwrapped to frozen source and same object is bound at R40 train adapter",
+    "private row/log/claim/slot/booking/checkpoint/journal roots point to fresh namespace",
+    "real R42 ep0 RNG restore path bypassed in favor of frozen deterministic fresh-RNG scheme",
+    "resume version/freeze gate rejects old ROUND46 state; BC model-only role accepted",
+    "first-four gate and strict cumulative budget check are wired in actual runner but not executed"
+  ],
+  "execution_not_performed": true,
+  "conditional_runtime_checks_after_explicit_approval": [
+    "first-four per-seed PPO correctness gates must pass before continuation",
+    "all 384 training logical claims must close before evaluation",
+    "96 candidate plus 48 BC sampled rows must close; final ledger strict check must pass",
+    "all actual output routes are revalidated by live binder before first training claim"
+  ],
+  "missing_input_blockers": [],
+  "not_authorized": [
+    "no authorization receipt exists",
+    "no raw ledger/claim/checkpoint namespace created"
+  ]
+}

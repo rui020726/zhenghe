@@ -1,6 +1,6 @@
 """Run the narrow ROUND53 tests and derive readiness/report artifacts from outputs."""
 from __future__ import annotations
-import json, re, subprocess, sys, time
+import ast, json, re, subprocess, sys, time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -9,6 +9,7 @@ REPO = RUN_ROOT.parents[1]
 sys.path.insert(0, str(HERE))
 import r53_execute as trial
 from r53_contracts import BRANCH, HARD_CAP, NORMAL_CAP, RESERVE_CAP, TASK_ID, TRAINING_VERSION
+from r53_rng_audit import audit_registered_rng
 
 
 def put(name: str, value) -> None:
@@ -17,6 +18,23 @@ def put(name: str, value) -> None:
 
 def sha_sources(paths):
     return [{"path": str(p), "sha256": trial.sha256_file(p)} for p in paths]
+
+
+def source_excerpt(title: str, path: Path, start_marker: str, end_marker: str) -> str:
+    lines = Path(path).read_text(encoding="utf-8").splitlines()
+    starts = [i for i, line in enumerate(lines) if start_marker in line]
+    if len(starts) != 1:
+        raise RuntimeError(f"source excerpt start marker not unique: {path} / {start_marker}")
+    start = starts[0]
+    ends = [i for i in range(start + 1, len(lines)) if end_marker in lines[i]]
+    if not ends:
+        raise RuntimeError(f"source excerpt end marker missing: {path} / {end_marker}")
+    end = ends[0]
+    selected = lines[start:end]
+    if not selected or len(selected) > 120:
+        raise RuntimeError(f"source excerpt must contain 1..120 lines, got {len(selected)}: {title}")
+    return (f"## {title}\n\n`{path}`:{start + 1}-{end}\n\n```python\n"
+            + "\n".join(selected) + "\n```\n")
 
 
 def build() -> dict:
@@ -43,6 +61,22 @@ def build() -> dict:
 
     baseline = trial.verify_baseline_reuse()
     plan = trial.plan_from_frozen_sources()
+    rng_identity = trial.read_json(RUN_ROOT / "ROUND46_R2_V6_INPUT_IDENTITY.json")["round44_registered_ep0_rng"]
+    rng_audit = {str(seed): audit_registered_rng(
+        Path(rng_identity[str(seed)]["path"]), expected_file_sha256=rng_identity[str(seed)]["sha256"])
+        for seed in (11, 22, 33)}
+    prior_ready_path = HERE / "ROUND53_READY_CHECK_V2_AS_DELIVERED.json"
+    prior_report_path = HERE / "ROUND53_READINESS_REPORT_V2_AS_DELIVERED.md"
+    if not prior_ready_path.exists():
+        prior_ready = (HERE / "READY_CHECK.json").read_bytes()
+        prior_doc = json.loads(prior_ready.decode("utf-8"))
+        if prior_doc.get("kind") != "round53-readiness-check/2":
+            raise RuntimeError("cannot preserve the delivered READY_CHECK /2 fact record")
+        prior_ready_path.write_bytes(prior_ready)
+    elif json.loads(prior_ready_path.read_text(encoding="utf-8")).get("kind") != "round53-readiness-check/2":
+        raise RuntimeError("preserved READY_CHECK /2 record is malformed")
+    if not prior_report_path.exists():
+        prior_report_path.write_bytes((HERE / "ROUND53_READINESS_REPORT_ADDENDUM.md").read_bytes())
     plan["authorization"] = "PENDING_USER_APPROVAL"
     plan["status"] = "proposed_not_authorized"
     plan["plan_sha256"] = trial.canonical_sha(plan)
@@ -60,9 +94,12 @@ def build() -> dict:
         trial.R45_DIR / "r40_train_resume_adapter.py",
         trial.R45_DIR / "r42_one_shot.py", trial.R45_DIR / "r42_versions.py",
         trial.R45_DIR / "r43_call_counter_hooks.py",
+        trial.R43_DIR / "r42_run.py", trial.R44_DIR / "ROUND44_CHECKPOINT_INDEX.json",
+        task_root / "ROUND46_PRELAUNCH_GATE.json",
         r40_root / "r40_common.py", r40_root / "r40_train.py", r40_root / "r40_run.py",
         HERE / "r53_execute.py", HERE / "r53_contracts.py",
         HERE / "round53_trial_adapter.py", HERE / "test_r53_execution.py",
+        HERE / "r53_rng_audit.py",
         HERE / "test_round53_pure.py",
         HERE / "build_readiness_artifacts.py",
         task_root / "ROUND46_R2_V6_FROZEN_CONFIG.json",
@@ -72,13 +109,17 @@ def build() -> dict:
         task_root / "v10_eval_final_close" / "ROUND46_R2_V10_ANALYSIS_INPUT_MANIFEST.json",
         trial.R44_DIR / "ROUND44_FROZEN_CONFIG.json",
         trial.R44_DIR / "ROUND44_BASELINE_REUSE.json",
+        *[Path(rng_identity[str(seed)]["path"]) for seed in (11, 22, 33)],
+        *[RUN_ROOT / f"ROUND46_TRAINING_s{seed}.json" for seed in (11, 22, 33)],
+        *[Path(trial.read_json(RUN_ROOT / f"ROUND46_TRAINING_s{seed}.json")["ep128_checkpoint_path"])
+          for seed in (11, 22, 33)],
         RUN_ROOT / "round52_critic_gradient_isolation_prototype" / "PROTOTYPE_CONTRACT.json",
         RUN_ROOT / "round52_critic_gradient_isolation_prototype" / "FORWARD_AND_GRADIENT_COMPARISON.json",
     ]
     sources = sha_sources(source_paths)
     fixture = test_record["runtime_fixture"]
     source_binding = {
-        "kind": "round53-source-binding/2", "status": "actual_runtime_objects_bound_in_guarded_private_fixture",
+        "kind": "round53-source-binding/3", "status": "actual_runtime_objects_and_frozen_rng_bound_in_guarded_private_fixture",
         "initial_head": "40adea4e16c5ccd6ee454f86462e4c959149da8a",
         "previous_delivery_head": "13f8d91ff67aba37938d0bf56bf62efa4f564b5f",
         "branch": BRANCH, "head_independent_scientific_identity": True,
@@ -96,7 +137,11 @@ def build() -> dict:
                                  "r42_analysis.RUN_DIR", "launch_claims", "launch_slots",
                                  "trainer.save_checkpoint closure journal"],
         "family_journal_seeded": False, "historical_R46_v6_seeder_called": False,
-        "R42_ep0_rng_restored": False,
+        "R42_ep0_rng_restored": True,
+        "registered_ep0_rng_only": rng_audit,
+        "rng_route": fixture.get("rng_route_identity"),
+        "optimizer_and_checkpoint_guards": {"optimizer_step_targets": fixture.get("optimizer_guard_targets"),
+                                             "checkpoint_save_target": fixture.get("checkpoint_guard_target")},
         "fresh_rng_scheme": plan["scientific_config_identity"]["fresh_rng_scheme"],
         "ppo_update_route": "actual runtime trainer object wrapped; __wrapped__ chain resolves to canonical source SHA",
         "training_math_rewritten": False,
@@ -105,12 +150,14 @@ def build() -> dict:
 
     operations = fixture["guards"]
     test_evidence = {
-        "kind": "round53-zero-launch-test-evidence/2", "status": "passed",
+        "kind": "round53-zero-launch-test-evidence/3", "status": "passed",
         "test_count": tests_run, "test_exit_code": proc.returncode,
         "test_output_parsed_not_hardcoded": True,
         "test_command": test_record["command"], "tests_run": test_record["output"],
         "guard_observed_operation_counts": operations,
         "runtime_configured_in_private_temporary_fixture": True,
+        "optimizer_guard_targets": fixture.get("optimizer_guard_targets"),
+        "checkpoint_guard_target": fixture.get("checkpoint_guard_target"),
         "builder_run_environment_eval_optimizer_checkpoint_calls": {
             k: operations[k] for k in ("environment_construction", "simulation",
                 "new_scenes_or_flows", "new_evaluation", "real_training_updates",
@@ -123,15 +170,21 @@ def build() -> dict:
     put("ZERO_LAUNCH_TEST_EVIDENCE.json", test_evidence)
 
     ready = {
-        "kind": "round53-readiness-check/2",
-        "status": "conditional ready_for_authorized_execution",
-        "ready_for_authorized_execution": True,
+        "kind": "round53-readiness-check/3",
+        "status": "conditional_readiness_withdrawn_after_rng_contract_mismatch",
+        "ready_for_authorized_execution": False,
+        "conditional_readiness_withdrawn": True,
+        "withdrawal_reason": "Earlier R53 hash-derived RNG path did not follow the frozen R46 registered-ep0 RNG restore contract. The source path has been minimally corrected, but no dynamic first-four execution is authorized or performed in this round.",
         "authorization": "PENDING_USER_APPROVAL",
         "authorization_is_not_implied_by_readiness": True,
         "trial_plan_status": "proposed_not_authorized",
         "plan_sha256": plan["plan_sha256"],
         "hard_cap": HARD_CAP, "normal_cap": NORMAL_CAP, "reserve_cap": RESERVE_CAP,
         "development_go": False,
+        "prior_v2_status": "conditional ready_for_authorized_execution (historical artifact preserved; readiness withdrawn)",
+        "post_fix_source_connection_status": "static_and_guarded_fixture_passed; dynamic_first_four_pending",
+        "prior_v2_record_preserved": str(prior_ready_path),
+        "current_rng_contract": "registered R44 ep0 RNG-only restore after same-seed BC_POST model-only init via actual R42 train_seed",
         "passed": ["fixed 384 + 96 + 48 = 528 normal jobs and 24 fresh reserve; unique logical keys",
                    "48 training immediate rows hash/protocol checked against frozen training sequence",
                    "BC greedy48, shared PPO96, immediate/late dev16 each verified from indexed sources",
@@ -139,7 +192,11 @@ def build() -> dict:
                    "actual runtime configure/binder passed in temporary sandbox; r44_runtime is explicitly bound",
                    "canonical live trainer method unwrapped to frozen source and same object is bound at R40 train adapter",
                    "private row/log/claim/slot/booking/checkpoint/journal roots point to fresh namespace",
-                   "real R42 ep0 RNG restore path bypassed in favor of frozen deterministic fresh-RNG scheme",
+                   "same-seed R45 BC model-only load is followed by the exact frozen R44 ep0 RNG-only restore in the upstream R42 train_seed",
+                   "registered RNG file bytes and Python/NumPy/Torch component digests match the V6 and R44 source identities",
+                   "all accepted PPO rows bind to the corresponding actual ep128 checkpoint parameter identity and evaluation mode",
+                   "final strict claim and durable slot closure is order-independent; reserve remains optional and requires real failed attempt 1",
+                   "guarded fixture blocks Optimizer/Adam/SGD.step and torch.save, not only the base optimizer method",
                    "resume version/freeze gate rejects old ROUND46 state; BC model-only role accepted",
                    "first-four gate and strict cumulative budget check are wired in actual runner but not executed"],
         "execution_not_performed": True,
@@ -152,8 +209,104 @@ def build() -> dict:
         "not_authorized": ["no authorization receipt exists", "no raw ledger/claim/checkpoint namespace created"],
     }
     put("READY_CHECK.json", ready)
-    report = f'''# ROUND53 后补实现与就绪检查\n\n**条件就绪：`conditional ready_for_authorized_execution`；执行授权仍待用户另行明确批准。** 本报告没有授权552额度，也没有启动训练或评估。`development_go=false` 保持。\n\n## 实现\n\n独立入口 `r53_execute.py` 在任何 runtime 配置前要求单独任务/分支/额度/计划哈希回执。它复用真实冻结 R46/R45/R44/R42/R40 接线，但不调用整体 ROUND46 `execute()`，以独立 `raw/` 路由输出，且替换旧 V6 namespace seeder，绝不复制 ROUND46 family journal。\n\n实时 private-fixture 接线测试确认 common 输出、R40 claim/slot 根、R42 booking、`r44_runtime`/`r44_prepare`/analysis RUN_DIR、checkpoint 根与实际 trainer 保存闭包 journal 全指向同一私有根。真实 canonical `v2_trainer.py` 字节 SHA为 `{trial.sha256_file(trial.CANON / 'v2_trainer.py')}`；live `ppo_update` 解包回该文件后才安装 ROUND53 head-input detach wrapper，且 R40 adapter持有同一个 trainer 对象。PPO loss/GAE/mask/clip/Adam/dual代码没有重写。\n\n初始模型只走同 seed R45 `BC_POST_MODEL` 四模块 factory；Adam/dual/RNG为本轮新状态，旧 ROUND46 PPO checkpoint freeze/version 会被拒绝。固定训练顺序来自原冻结 key plan；48场景 immediate 缓存逐键核验整数 `on_time`/计费、场景、one-shot 协议、ACK关闭、policy-owned timing及行SHA。评估固定144键：candidate greedy/sample各48，另BC sampled48；sampling seed通过原 `eval_action_seed`。\n\nFirst-four correctness门和预算额度逻辑已接入，first-four包含在384训练episode内；未运行。开发块1301000–1301015已使用，封存确认块未开。\n\n## 基线复用结果\n\n核验通过：training immediate 48；BC greedy 48；shared PPO 96；immediate/late开发参照各16。BC sampled48是本提案要产生的评估输出，并非准备输入，本轮没有生成。完整逐键哈希在 `BASELINE_REUSE_CHECK.json`。\n\n## 测试与操作计数\n\n测试结果直接解析自子进程 unittest 输出：**{tests_run}项，exit {proc.returncode}，OK**。实际调用配置器并在临时沙箱中验证live模块绑定；guard实测计数：{', '.join(f'{k}={v}' for k,v in operations.items() if k != 'claim_calls')}；真实claim数0；checkpoint `.pt` 数{fixture['raw_pt_files']}；sandbox claims数{fixture['raw_claim_files']}；两份受保护源文件和旧journal哈希未变。没有执行 first-four 环境门、真实训练或评估。\n\n## 执行边界与剩余条件\n\n`READY_CHECK.json` 只是条件代码/输入就绪检查。实际运行仍要求另行提供明确 human authorization receipt（严格匹配528 normal、24新reserve、552 cap、分支及计划哈希）；当前不存在该receipt。授权后仍必须通过first-four门和最终完整claim/slot/step/optimizer/checkpoint ledger闭合。未产生任何模型、账本或新评估行。\n\n当前交付提交完整SHA在回复中给出。未改写旧 `NOT_READY` 报告；本文件是后补版本。\n'''
+    review = {
+        "kind": "round53-final-connection-review/1", "status": "corrected_but_conditional_readiness_withdrawn",
+        "previous_head": "88ce17dc59cdc72e13274c00056e6d17a6fe68f5",
+        "rng_contract": {"finding": "old R53 hash-derived seeding was an uncontracted second factor; removed",
+                          "status": "fixed_and_source_bound",
+                          "registered_sources": plan["registered_r44_ep0_rng_only"],
+                          "component_state_hashes": rng_audit,
+                          "route_identity": fixture.get("rng_route_identity"),
+                          "call_order": ["R45 same-seed BC_POST four-module model-only init",
+                                         "R42 train_seed loads registered R44 ep0 payload and restores rng only after fresh_controller",
+                                         "R40 fresh Adam(empty), dual lambda 1, then first training episode"],
+                          "BC_optimizer_or_rng_restored": False,
+                          "R44_model_or_optimizer_restored": False,
+                          "same_round53_checkpoint_resume_only": True},
+        "strict_claims": {"status": "fixed_and_tested", "reserve_optional": True,
+                          "reserve_requires_persisted_same_key_failed_technical_attempt1": True,
+                          "original_status_self_report_is_not_authority": True,
+                          "slot_claims_cross_closed": True,
+                          "nonfatal_snapshot_cannot_replace_direct_strict_closure": True},
+        "optimizer_guard": {"status": "guarded", "step_methods": fixture.get("optimizer_guard_targets"),
+                            "checkpoint_write_guard": fixture.get("checkpoint_guard_target")},
+        "baseline_identity": {"status": baseline["status"], "BC_greedy_rows": baseline["bc_greedy"]["rows"],
+                              "PPO_rows": baseline["shared_ppo"]["verified_source_rows"],
+                              "PPO_ep128_models": baseline["shared_ppo"]["ep128_models"],
+                              "BC_sampled_generated": False},
+        "r53_execute_functions": [node.name for node in ast.parse(
+            (HERE / "r53_execute.py").read_text(encoding="utf-8")).body
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))],
+        "readiness": {"status": ready["status"], "authorization": "PENDING_USER_APPROVAL",
+                       "actual_first_four_gate_run": False, "actual_environment_or_training_run": False,
+                       "actual_evaluation_run": False},
+        "seven_zero_operation_counts": {k: operations[k] for k in (
+            "environment_construction", "simulation", "new_scenes_or_flows", "new_evaluation",
+            "real_training_updates", "synthetic_optimizer_steps", "checkpoint_writes")},
+        "real_claims_created": fixture["raw_claim_files"],
+        "preserved_delivered_v2_records": {
+            "ready_check_worktree_copy_sha256": trial.sha256_file(prior_ready_path),
+            "report_worktree_copy_sha256": trial.sha256_file(prior_report_path),
+            "copied_before_current_v3_overwrite": True},
+        "protected_files_current_sha256": {
+            str(path): trial.sha256_file(path) for path in (
+                RUN_ROOT / "ROUND46_CURRENT_TASK.json",
+                RUN_ROOT / "ROUND46_R2_V6_STOP_STATE.json",
+                RUN_ROOT / "runtime" / "checkpoint_writes.jsonl",
+                trial.R45_DIR / "runtime" / "checkpoint_writes.jsonl") if path.is_file()},
+    }
+    put("ROUND53_FINAL_CONNECTION_REVIEW.json", review)
+    function_list = review["r53_execute_functions"]
+    report = f'''# ROUND53 后补实现与连接复核\n\n**此前 conditional readiness 已撤回：R53 v2 使用了冻结契约未注册的 hash-seeded RNG 路径。源码已最小修正，但 first-four 动态门仍未执行/验证；因此当前 `ready_for_authorized_execution=false`。552额度仍 `PENDING_USER_APPROVAL`，未生成授权回执或启动运行。** `development_go=false` 不变。首次交付的 READY_CHECK /2 原件已逐字节保存在 `ROUND53_READY_CHECK_V2_AS_DELIVERED.json`；其关于RNG路径“bypassed / fresh hash RNG”的陈述是历史事实记录，但现已确认与冻结契约不符并被本复核撤回。\n\n## RNG合同复核与修复\n\nROUND46训练清单把唯一科学变化限定为 critic gradient route；它明示 `initializer=ROUND45 BC_POST_MODEL four modules, model-only, same seed`、fresh Adam、dual λ=1、`r44_ep0_rng_only=true`。冻结输入身份/ROUND44配置注册的ep0文件是 s11 `70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd`、s22 `96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5`、s33 `9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d`。三者文件SHA均与输入身份和ROUND44冻结登记一致；Python/NumPy/Torch状态分量摘要详见 `ROUND53_FINAL_CONNECTION_REVIEW.json`。\n\n冻结真实次序为：R45 `_call_training_seed` 临时装入同seed BC四模块；R42 `train_seed` 仅读取注册ep0 payload的 `rng`；`_registered_ep0_rng_after_init` 在同seed `fresh_controller`（含BC参数覆盖）返回后调用 `trainer.restore_rng(rng_state)`；之后R40 fresh adapter建立空Adam、λ=1并写本轮ep0状态/开始首集。R42 ep0的模型权重和optimizer没有恢复。ROUND53原先在R46→R45→R42路径外自行SHA-seed Python/NumPy/Torch并直调R40，构成额外随机过程因子；不能证明与注册状态逐字节相同。已删除该支路，现binder要求真实R46 factory-scope→R45 `_call_training_seed`→R42 `train_seed` 源路径和三seed冻结RNG路径/hash精确相符。训练续跑只允许私有ROUND53同版本checkpoint；BC仅模型初始化。\n\n## Claim/预算与基线连接\n\n严格claim检查改为两遍、与目录枚举顺序无关：reserve attempt 2 必须对应同key真实持久化的 normal attempt 1=`failed_technical`，不信任自报 `original_status`；normal必须精确闭合528，reserve上限24而非必须耗尽。新增slot文件与claim逐项身份交叉闭合，strict final门直接执行，不被nonfatal派生快照warning吞掉。纯反例覆盖少用reserve、伪报失败、错slot、坏strict关闭。\n\nBC 48行已核BC_ONLY_R2角色、真实BC_POST checkpoint及参数SHA（包含 `bc_parameter_sha256`）、scene/mode/steps、world/config与行为指纹、成本和冻结通信协议。PPO 96行逐行核NEW、seed/scene/mode、ep128参数SHA；并核三份真实ep128 checkpoint摘要、SHA及训练summary。成本校验涵盖整数spent/on_time、预算、B0、1000步、one-shot/first-report、reward timing、ACK关闭及policy-owned timing。开发参照与训练immediate缓存按索引复用，未做全历史重扫，也未重放forward或评估。\n\n## 当前 `r53_execute.py` 函数清单\n\n`{', '.join(function_list)}`。关键实际函数分段源码见 `ROUND53_ACTUAL_PATH_EXCERPTS.md`，每段不超过120行。\n\n## 测试范围及未覆盖项\n\n窄测试直接报告 **{tests_run}项，exit {proc.returncode}，OK**。隔离fixture实接了实际runtime配置器/输出绑定，但把真正train/env/eval/claim/save入口全部拒绝；optimizer守卫覆盖 `Optimizer.step`、`Adam.step`、`SGD.step`，checkpoint写守卫覆盖 `torch.save` 和trainer.save入口；实际观测七项操作计数均为0。实际first-four任务门、任何环境、模型更新、评估和最终真实ledger没有执行；获批后仍须验证这些动态性质。本复核不恢复条件就绪；它不代表科学成功或实验批准。\n\n## 交付\n\n`ROUND53_FINAL_CONNECTION_REVIEW.json`给出风险项逐条状态和RNG字节摘要；`ROUND53_ACTUAL_PATH_EXCERPTS.md`按每段≤120源码行列出未来训练/评估/RNG/init/save/load/budget关键接线。完整代码、纯反例和基线证据保持在本目录。旧 `/2`原件保留，只更新当前 `READY_CHECK.json`为`/3`。\n'''
     (HERE / "ROUND53_READINESS_REPORT_ADDENDUM.md").write_text(report, encoding="utf-8")
+    r40_root = REPO.parent / "zhenghe-round40" / "runs" / "comm_first_report_training_ablation_20261003"
+    r42_run = trial.R43_DIR / "r42_run.py"
+    r45_run = trial.R45_DIR / "r45_r2_execute_r3.py"
+    r46_run = trial.SOURCE_RUNNER
+    excerpts = [
+        source_excerpt("R53 frozen plan and registered RNG identity", HERE / "r53_execute.py",
+                       "def plan_from_frozen_sources", "def verify_baseline_reuse"),
+        source_excerpt("R53 live runtime binding before training-route check", HERE / "r53_execute.py",
+                       "def bind_live_runtime", "    # Preserve the frozen R46/R45/R42 fresh-start route."),
+        source_excerpt("R53 exact RNG route and upstream function identity guards", HERE / "r53_execute.py",
+                       "    # Preserve the frozen R46/R45/R42 fresh-start route.",
+                       "    # A pre-claim guard validates every logical key"),
+        source_excerpt("R53 planned claims and reserve precondition", HERE / "r53_execute.py",
+                       "    # A pre-claim guard validates every logical key",
+                       "    # The atomic claim is authoritative."),
+        source_excerpt("R53 strict closure and immutable trainer route", HERE / "r53_execute.py",
+                       "    # Route the exact physical trainer object", "    return {\"bindings\""),
+        source_excerpt("R53 authorized execution, train/evaluation order, final ledger", HERE / "r53_execute.py",
+                       "def execute_authorized", "if __name__ == \"__main__\":"),
+        source_excerpt("R42 post-controller RNG restore helper", r42_run,
+                       "def _registered_ep0_rng_after_init", "def train_seed("),
+        source_excerpt("R42 actual train_seed ep0 payload verification and restore", r42_run,
+                       "def train_seed(training_seed", "def load_eval_model("),
+        source_excerpt("R42 fixed evaluation model loading", r42_run,
+                       "def load_eval_model(", "def torch_load_cpu("),
+        source_excerpt("R42 evaluation cell path", r42_run,
+                       "def run_model_eval(", "def run_rule("),
+        source_excerpt("R45 BC model-only injection before actual R42 train_seed", r45_run,
+                       "def _call_training_seed(", "def _fixed_gate_baseline("),
+        source_excerpt("R46 first-four/cross-seed gates and fixed continuation", r46_run,
+                       "def _run_first_four_and_all_gates(", "def _load_round45_bc_comparison("),
+        source_excerpt("R40 checkpoint save milestone", r40_root / "r40_train.py",
+                       "def _save_milestone(", "def _batch_record_path("),
+        source_excerpt("R40 same-version resume source selection", r40_root / "r40_train.py",
+                       "def _latest_resume_source(", "def _save_progress("),
+        source_excerpt("R40 fresh BC controller/Adam/dual initialization and first rollout", r40_root / "r40_train.py",
+                       "def train_seed(training_seed", "    from r40_run import run_training_episode"),
+        source_excerpt("R40 PPO update and checkpoint commit path", r40_root / "r40_train.py",
+                       "        update_report = trainer.ppo_update", "__all__ ="),
+        source_excerpt("R53 order-independent strict claims", HERE / "r53_contracts.py",
+                       "def validate_claims(", "def validate_slot_records("),
+        source_excerpt("R53 durable quota slot cross-closure", HERE / "r53_contracts.py",
+                       "def validate_slot_records(", "def derived_snapshot("),
+    ]
+    (HERE / "ROUND53_ACTUAL_PATH_EXCERPTS.md").write_text(
+        "# ROUND53 actual future-path source excerpts\n\n"
+        "Generated from current source; every code segment is limited to at most 120 lines. "
+        "These are actual wired functions, not pseudocode.\n\n" + "\n".join(excerpts), encoding="utf-8")
     return {"tests": tests_run, "baseline": baseline["status"], "ready": ready["status"],
             "plan_sha256": plan["plan_sha256"], "test_exit_code": proc.returncode}
 

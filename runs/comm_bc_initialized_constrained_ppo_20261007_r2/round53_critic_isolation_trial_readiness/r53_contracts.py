@@ -66,53 +66,107 @@ def authorize_receipt(receipt: dict[str, Any], *, plan_sha256: str) -> None:
 
 
 def validate_claims(plan: dict[str, Any], claims: list[dict[str, Any]], *, strict: bool = False) -> dict[str, Any]:
+    """Validate authoritative claims independent of directory iteration order.
+
+    Reserve attempts are accepted only when the persisted attempt-1 core claim
+    for the same planned key is actually technical-failed.  A copied
+    ``original_status`` field is corroboration, never the authority.
+    """
     planned = {job["logical_job"]: job for job in plan["jobs"]}
-    seen: set[tuple[str, int]] = set()
-    completed: set[str] = set()
+    by_job: dict[str, dict[int, dict[str, Any]]] = {}
     counts = {"normal": 0, "reserve": 0}
-    prior_by_job: dict[str, dict[int, dict[str, Any]]] = {}
-    used_normal_slots: set[int] = set(); used_reserve_slots: set[int] = set()
+    completed: set[str] = set()
+    used_slots = {"normal": set(), "reserve": set()}
     for claim in claims:
-        logical = str(claim.get("logical_job")); attempt = int(claim.get("attempt", 1))
-        key = (logical, attempt)
-        if key in seen:
-            raise ValueError(f"duplicate claim attempt: {key}")
-        seen.add(key)
-        category = str(claim.get("category"))
+        logical = str(claim.get("logical_job", ""))
+        try:
+            attempt = int(claim.get("attempt", 1))
+            slot = int(claim.get("launch_slot", 0))
+        except (TypeError, ValueError) as exc:
+            raise ValueError("claim attempt/launch_slot must be integers") from exc
+        category = str(claim.get("category", ""))
+        status = claim.get("status")
         if logical not in planned:
             raise ValueError(f"unplanned logical job: {logical}")
-        if category == "normal" and attempt == 1:
-            counts["normal"] += 1
-            if claim.get("launch_slot") != planned[logical]["normal_slot"]:
+        if attempt not in (1, 2) or (category, attempt) not in (("normal", 1), ("reserve", 2)):
+            raise ValueError(f"claim category/attempt mismatch: {(logical, attempt)} {category}")
+        attempts = by_job.setdefault(logical, {})
+        if attempt in attempts:
+            raise ValueError(f"duplicate claim attempt: {(logical, attempt)}")
+        if status not in ("claimed_before_environment", "complete", "failed_technical",
+                          "not_started_quota_exhausted"):
+            raise ValueError(f"invalid claim status: {status}")
+        if category == "normal":
+            if slot != int(planned[logical]["normal_slot"]):
                 raise ValueError(f"normal claim slot mismatch: {logical}")
-            if int(claim["launch_slot"]) in used_normal_slots:
-                raise ValueError("duplicate normal launch slot")
-            used_normal_slots.add(int(claim["launch_slot"]))
-        elif category == "reserve" and attempt == 2:
-            original = prior_by_job.get(logical, {}).get(1)
-            if (original is None or original.get("status") != "failed_technical"
-                    or (claim.get("original_status") not in (None, "failed_technical"))):
-                raise ValueError("reserve may retry only a previously technical-failed key")
-            counts["reserve"] += 1
-            if not (1 <= int(claim.get("launch_slot", 0)) <= RESERVE_CAP):
-                raise ValueError("reserve slot outside the frozen technical reserve")
-            if int(claim["launch_slot"]) in used_reserve_slots:
-                raise ValueError("duplicate reserve launch slot")
-            used_reserve_slots.add(int(claim["launch_slot"]))
-        else:
-            raise ValueError(f"claim category/attempt mismatch: {key} {category}")
-        if claim.get("status") not in ("claimed_before_environment", "complete",
-                                        "failed_technical", "not_started_quota_exhausted"):
-            raise ValueError(f"invalid claim status: {claim.get('status')}")
-        if claim.get("status") == "complete": completed.add(logical)
-        prior_by_job.setdefault(logical, {})[attempt] = claim
+        elif not 1 <= slot <= RESERVE_CAP:
+            raise ValueError("reserve slot outside the frozen technical reserve")
+        if slot in used_slots[category]:
+            raise ValueError(f"duplicate {category} launch slot")
+        used_slots[category].add(slot)
+        counts[category] += 1
+        attempts[attempt] = claim
+        if status == "complete":
+            completed.add(logical)
+
+    for logical, attempts in by_job.items():
+        retry = attempts.get(2)
+        if retry is None:
+            continue
+        original = attempts.get(1)
+        if (original is None or original.get("category") != "normal"
+                or int(original.get("attempt", -1)) != 1
+                or original.get("status") != "failed_technical"
+                or int(original.get("launch_slot", -1)) != int(planned[logical]["normal_slot"])):
+            raise ValueError("reserve may retry only a persisted technical-failed normal core claim")
+        if retry.get("original_status") not in (None, "failed_technical"):
+            raise ValueError("reserve original_status contradicts the persisted core claim")
+
     if counts["normal"] > NORMAL_CAP or counts["reserve"] > RESERVE_CAP:
         raise ValueError("claim budget exceeds cap")
-    if strict and (counts["normal"] != NORMAL_CAP
-                   or completed != set(planned)):
+    if strict and (counts["normal"] != NORMAL_CAP or completed != set(planned)):
         raise ValueError("strict final ledger requires exact full plan closure")
     return {"counts": counts, "completed_logical_jobs": len(completed),
-            "claim_count": len(claims), "strict": strict}
+            "claim_count": len(claims), "strict": strict,
+            "reserve_slots_required_to_be_full": False}
+
+
+def validate_slot_records(plan: dict[str, Any], claims: list[dict[str, Any]],
+                          normal_slots: list[dict[str, Any]],
+                          reserve_slots: list[dict[str, Any]], *,
+                          strict: bool = False) -> dict[str, Any]:
+    """Close durable slot files against the authoritative normal/reserve claims."""
+    expected: dict[str, dict[int, tuple[str, int]]] = {"normal": {}, "reserve": {}}
+    for claim in claims:
+        category = str(claim.get("category", ""))
+        if category not in expected:
+            raise ValueError(f"unknown claim slot category: {category}")
+        slot = int(claim.get("launch_slot", 0))
+        logical = str(claim.get("logical_job", ""))
+        attempt = int(claim.get("attempt", 0))
+        if slot in expected[category]:
+            raise ValueError(f"duplicate claim slot: {category}/{slot}")
+        expected[category][slot] = (logical, attempt)
+
+    observed: dict[str, dict[int, tuple[str, int]]] = {"normal": {}, "reserve": {}}
+    for category, records in (("normal", normal_slots), ("reserve", reserve_slots)):
+        for record in records:
+            slot = int(record.get("slot", 0))
+            pair = (str(record.get("logical_job", "")), int(record.get("attempt", 0)))
+            if record.get("category") != category or slot <= 0:
+                raise ValueError(f"invalid durable slot record: {category}/{slot}")
+            if slot in observed[category]:
+                raise ValueError(f"duplicate durable slot record: {category}/{slot}")
+            observed[category][slot] = pair
+        if observed[category] != expected[category]:
+            raise ValueError(f"durable {category} slots do not match authoritative claims")
+    if strict and (len(observed["normal"]) != NORMAL_CAP
+                   or len(observed["reserve"]) > RESERVE_CAP):
+        raise ValueError("strict durable slot ledger exceeds or fails frozen slot closure")
+    return {"normal_slots": len(observed["normal"]),
+            "reserve_slots": len(observed["reserve"]),
+            "reserve_capacity_required_to_be_full": False,
+            "claims_and_slots_match": True}
 
 
 def derived_snapshot(plan: dict[str, Any], claims: list[dict[str, Any]], *, strict: bool = False) -> dict[str, Any]:

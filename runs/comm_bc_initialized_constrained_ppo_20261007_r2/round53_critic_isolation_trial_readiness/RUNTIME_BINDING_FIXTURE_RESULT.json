@@ -7,11 +7,58 @@
     "r42_analysis": "<temporary fixture>/raw"
   },
   "live_trainer_same_object": {
-    "seed": 11,
-    "episodes": 4,
     "same_trainer": true,
     "same_common": true,
     "same_runner": true
+  },
+  "upstream_r42_train_seed_source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\r42_run.py",
+  "optimizer_guard_targets": [
+    "Optimizer",
+    "Adam",
+    "SGD"
+  ],
+  "checkpoint_guard_target": "torch.save",
+  "rng_route_identity": {
+    "R46_training_wrapper": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\r46_execute_r2.py",
+    "R45_model_only_initializer": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\r45_r2_execute_r3.py",
+    "R42_train_seed": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\r42_run.py",
+    "registered_sources": {
+      "11": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_ep0.pt",
+        "sha256": "70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd",
+        "rng_components": [
+          "python",
+          "numpy",
+          "torch"
+        ],
+        "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+        "model_or_optimizer_restored": false
+      },
+      "22": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s22_ep0.pt",
+        "sha256": "96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5",
+        "rng_components": [
+          "python",
+          "numpy",
+          "torch"
+        ],
+        "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+        "model_or_optimizer_restored": false
+      },
+      "33": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s33_ep0.pt",
+        "sha256": "9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d",
+        "rng_components": [
+          "python",
+          "numpy",
+          "torch"
+        ],
+        "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+        "model_or_optimizer_restored": false
+      }
+    },
+    "restore_order": "BC_POST fresh_controller -> exact registered R44 ep0 RNG restore -> R40 first episode",
+    "restores_old_model_optimizer": false
   },
   "unplanned_claim_refused": true,
   "raw_pt_files": 0,

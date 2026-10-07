@@ -1,0 +1,247 @@
+{
+  "kind": "round53-final-connection-review/1",
+  "status": "corrected_but_conditional_readiness_withdrawn",
+  "previous_head": "88ce17dc59cdc72e13274c00056e6d17a6fe68f5",
+  "rng_contract": {
+    "finding": "old R53 hash-derived seeding was an uncontracted second factor; removed",
+    "status": "fixed_and_source_bound",
+    "registered_sources": {
+      "11": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_ep0.pt",
+        "sha256": "70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd",
+        "rng_components": [
+          "python",
+          "numpy",
+          "torch"
+        ],
+        "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+        "model_or_optimizer_restored": false
+      },
+      "22": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s22_ep0.pt",
+        "sha256": "96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5",
+        "rng_components": [
+          "python",
+          "numpy",
+          "torch"
+        ],
+        "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+        "model_or_optimizer_restored": false
+      },
+      "33": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s33_ep0.pt",
+        "sha256": "9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d",
+        "rng_components": [
+          "python",
+          "numpy",
+          "torch"
+        ],
+        "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+        "model_or_optimizer_restored": false
+      }
+    },
+    "component_state_hashes": {
+      "11": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_ep0.pt",
+        "checkpoint_sha256": "70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd",
+        "rng_component_keys": [
+          "numpy",
+          "python",
+          "torch"
+        ],
+        "python_state_sha256_pickle_protocol4": "ae9d4315ea7515a7479b61ebc5623d8bffcc0867c3114430e318d4a506c36a49",
+        "python_state_bytes": 3759,
+        "numpy_state_sha256_mt19937_u32le_plus_tail_protocol4": "ff8d06b5c2140477cdb976cb66fb2ccf872c103d1a29e7954c562cd883f32352",
+        "numpy_state_array_sha256_u32le": "f767876e983bcf8b92717d4a4a56ba4c05050e1459fca81903779699fab6ab25",
+        "numpy_state_array_elements": 624,
+        "numpy_state_position_and_gauss_tail": [
+          1,
+          0,
+          0.0
+        ],
+        "torch_state_sha256_raw_cpu_uint8_bytes": "7035c086984b0578656a9a77a05f183137f64738a98adf864d5c879deeb485c5",
+        "torch_state_bytes": 5056,
+        "restored_or_set": false
+      },
+      "22": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s22_ep0.pt",
+        "checkpoint_sha256": "96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5",
+        "rng_component_keys": [
+          "numpy",
+          "python",
+          "torch"
+        ],
+        "python_state_sha256_pickle_protocol4": "35076b2b25330b5b9e4b34a50ae6a50c40dabf3803fecf8a5bd17ae71b817cab",
+        "python_state_bytes": 3779,
+        "numpy_state_sha256_mt19937_u32le_plus_tail_protocol4": "3af11adebad22f449d9e44ea75011b25f19f02f48d54de2792ccedfcfb20aa0c",
+        "numpy_state_array_sha256_u32le": "70a6e4a52e144f6f016b173b8665f228c77f01276faeaffe3ceed2257deae4b2",
+        "numpy_state_array_elements": 624,
+        "numpy_state_position_and_gauss_tail": [
+          1,
+          0,
+          0.0
+        ],
+        "torch_state_sha256_raw_cpu_uint8_bytes": "e7d0727a3cfeaa1ab9cd2f81eaee468c7e59f4ad4d8d4999469f8083a26ae75f",
+        "torch_state_bytes": 5056,
+        "restored_or_set": false
+      },
+      "33": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s33_ep0.pt",
+        "checkpoint_sha256": "9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d",
+        "rng_component_keys": [
+          "numpy",
+          "python",
+          "torch"
+        ],
+        "python_state_sha256_pickle_protocol4": "35076b2b25330b5b9e4b34a50ae6a50c40dabf3803fecf8a5bd17ae71b817cab",
+        "python_state_bytes": 3779,
+        "numpy_state_sha256_mt19937_u32le_plus_tail_protocol4": "3af11adebad22f449d9e44ea75011b25f19f02f48d54de2792ccedfcfb20aa0c",
+        "numpy_state_array_sha256_u32le": "70a6e4a52e144f6f016b173b8665f228c77f01276faeaffe3ceed2257deae4b2",
+        "numpy_state_array_elements": 624,
+        "numpy_state_position_and_gauss_tail": [
+          1,
+          0,
+          0.0
+        ],
+        "torch_state_sha256_raw_cpu_uint8_bytes": "d7fcc2007f46189799009316ef84e640c731a6eb2b9c8f3f3ac70afce848859d",
+        "torch_state_bytes": 5056,
+        "restored_or_set": false
+      }
+    },
+    "route_identity": {
+      "R46_training_wrapper": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\r46_execute_r2.py",
+      "R45_model_only_initializer": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\r45_r2_execute_r3.py",
+      "R42_train_seed": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\r42_run.py",
+      "registered_sources": {
+        "11": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_ep0.pt",
+          "sha256": "70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd",
+          "rng_components": [
+            "python",
+            "numpy",
+            "torch"
+          ],
+          "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+          "model_or_optimizer_restored": false
+        },
+        "22": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s22_ep0.pt",
+          "sha256": "96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5",
+          "rng_components": [
+            "python",
+            "numpy",
+            "torch"
+          ],
+          "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+          "model_or_optimizer_restored": false
+        },
+        "33": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s33_ep0.pt",
+          "sha256": "9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d",
+          "rng_components": [
+            "python",
+            "numpy",
+            "torch"
+          ],
+          "load_role": "rng_only_after_same_seed_BC_POST_model_init",
+          "model_or_optimizer_restored": false
+        }
+      },
+      "restore_order": "BC_POST fresh_controller -> exact registered R44 ep0 RNG restore -> R40 first episode",
+      "restores_old_model_optimizer": false
+    },
+    "call_order": [
+      "R45 same-seed BC_POST four-module model-only init",
+      "R42 train_seed loads registered R44 ep0 payload and restores rng only after fresh_controller",
+      "R40 fresh Adam(empty), dual lambda 1, then first training episode"
+    ],
+    "BC_optimizer_or_rng_restored": false,
+    "R44_model_or_optimizer_restored": false,
+    "same_round53_checkpoint_resume_only": true
+  },
+  "strict_claims": {
+    "status": "fixed_and_tested",
+    "reserve_optional": true,
+    "reserve_requires_persisted_same_key_failed_technical_attempt1": true,
+    "original_status_self_report_is_not_authority": true,
+    "slot_claims_cross_closed": true,
+    "nonfatal_snapshot_cannot_replace_direct_strict_closure": true
+  },
+  "optimizer_guard": {
+    "status": "guarded",
+    "step_methods": [
+      "Optimizer",
+      "Adam",
+      "SGD"
+    ],
+    "checkpoint_write_guard": "torch.save"
+  },
+  "baseline_identity": {
+    "status": "passed",
+    "BC_greedy_rows": 48,
+    "PPO_rows": 96,
+    "PPO_ep128_models": {
+      "11": {
+        "summary_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_TRAINING_s11.json",
+        "summary_sha256": "8b2a80dbb7703d255dbd797bb5f6088f71b0bccf98feedb38b879ef0fd82772f",
+        "checkpoint_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s11_ep128.pt",
+        "checkpoint_sha256": "0f161663aaf963552f8f02d6363f3c52e6f67119217f835c501cb2d0705bfc10",
+        "parameter_sha256": "8b87f4d2591a3a0c573b71a08ec8444db1e3f91850edbf2f2b958dddb31e5670"
+      },
+      "22": {
+        "summary_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_TRAINING_s22.json",
+        "summary_sha256": "34aa3bd2c50f0c8af05f6fe9800b1b5f0fd3c1d337a021a0dd35dc8d84fabd13",
+        "checkpoint_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s22_ep128.pt",
+        "checkpoint_sha256": "aae4aa1b24b7e7ffadffeb7a09d45935f44970ac62a8cfd4344630248472cc62",
+        "parameter_sha256": "b88a6b377d9e18c3cef17ab5205f7652b1394fcfbc6b28e5642140025028caf4"
+      },
+      "33": {
+        "summary_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_TRAINING_s33.json",
+        "summary_sha256": "2ab18e363600e6da29892a2f1cee40fcf9033546dd57f12068c37a2635990fd6",
+        "checkpoint_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s33_ep128.pt",
+        "checkpoint_sha256": "10f3fc8d2c2a788b7e48e1f9021b5b234c39a00706bfe486e6f2bab84a0fb9b9",
+        "parameter_sha256": "dc2903397865c853c59ed631e7b0a699fcb2d55b7dee8956101c53984b36b821"
+      }
+    },
+    "BC_sampled_generated": false
+  },
+  "r53_execute_functions": [
+    "read_json",
+    "canonical_sha",
+    "plan_from_frozen_sources",
+    "verify_baseline_reuse",
+    "load_base_runner",
+    "bind_runner_paths",
+    "install_private_configure_seams",
+    "bind_live_runtime",
+    "execute_authorized"
+  ],
+  "readiness": {
+    "status": "conditional_readiness_withdrawn_after_rng_contract_mismatch",
+    "authorization": "PENDING_USER_APPROVAL",
+    "actual_first_four_gate_run": false,
+    "actual_environment_or_training_run": false,
+    "actual_evaluation_run": false
+  },
+  "seven_zero_operation_counts": {
+    "environment_construction": 0,
+    "simulation": 0,
+    "new_scenes_or_flows": 0,
+    "new_evaluation": 0,
+    "real_training_updates": 0,
+    "synthetic_optimizer_steps": 0,
+    "checkpoint_writes": 0
+  },
+  "real_claims_created": 0,
+  "preserved_delivered_v2_records": {
+    "ready_check_worktree_copy_sha256": "26af7c6a837f91039335803254dd7bec959cf27309cb6ecb273197e8491d5c18",
+    "report_worktree_copy_sha256": "972e387447a428ba88f464a5da2a754e596ebf288a2489b5370a105b438a7dc8",
+    "copied_before_current_v3_overwrite": true
+  },
+  "protected_files_current_sha256": {
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\runtime\\checkpoint_writes.jsonl": "82e486448a0d52d39ca8cb725125490d8ee83a7f3a9b4d41dbb7db2f6a215057",
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\runtime\\checkpoint_writes.jsonl": "16d8f73c6606d44a4d5ebaf4b2c43d5976c8dc7f76ec4e0859b0974d14d0d8bd"
+  }
+}
