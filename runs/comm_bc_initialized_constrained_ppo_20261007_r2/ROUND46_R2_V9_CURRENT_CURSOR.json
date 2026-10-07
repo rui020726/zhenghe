@@ -1,0 +1,34 @@
+{
+  "kind": "round46-r2-v9-current-cursor/1",
+  "task_id": "ROUND46-R2-V9-EVAL-RUNTIME-CLOSE",
+  "updated_at_utc": "2026-10-07T09:12:08.132743+00:00",
+  "current_branch": "fix/round46-r2-v9-eval-runtime-close",
+  "current_head": "639905fab353c0901f6b57eb4fa7d42c8e286f3c",
+  "source_freeze": "not yet created",
+  "lineage": {
+    "v8_stop_head": "639905fab353c0901f6b57eb4fa7d42c8e286f3c",
+    "v8_prelaunch_commit": "b2f3c343d9d192a57d9088a1810a8c2f46c12796"
+  },
+  "binding_table": "produced at runtime as v9_eval_runtime_close/ROUND46_R2_V9_RUNTIME_BINDING_TABLE.json",
+  "root_cause_scope": "registration chain reads verified on live objects: r44_runtime RUNNER_VERSION+RUN_DIR, r42_run RUNNER_VERSION, r45 RUN_DIR, r40 ROUND_DIR, common output roots",
+  "zero_environment_regression": {
+    "v7_suite": "18/18",
+    "v8_suite": "15/15",
+    "v9_suite": "15/15"
+  },
+  "adopted_cells": {
+    "attempt2": "v8 receipt reused",
+    "cell_1301001": "pending audit this round"
+  },
+  "quota": {
+    "normal_used": 387,
+    "reserve_used": 1,
+    "total_used": 388,
+    "planned_after_completion": 482,
+    "hard_cap": 504
+  },
+  "effective_rows_completed": 1,
+  "effective_rows_missing": 95,
+  "next_command": "adopt 1301001, commit prelaunch freeze, run the remaining 94 cells",
+  "environment_launches": 0
+}
