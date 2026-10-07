@@ -171,10 +171,20 @@ def build() -> dict:
 
     ready = {
         "kind": "round53-readiness-check/3",
-        "status": "conditional_readiness_withdrawn_after_rng_contract_mismatch",
-        "ready_for_authorized_execution": False,
-        "conditional_readiness_withdrawn": True,
-        "withdrawal_reason": "Earlier R53 hash-derived RNG path did not follow the frozen R46 registered-ep0 RNG restore contract. The source path has been minimally corrected, but no dynamic first-four execution is authorized or performed in this round.",
+        "status": "preflight_ready_pending_authorization_and_first_four",
+        "preflight_ready_for_authorized_first_four": True,
+        "preflight_basis": {
+            "frozen_source_identities": "passed",
+            "indexed_baseline_reuse": "passed",
+            "pure_and_guarded_runtime_tests": f"passed_{tests_run}_tests",
+            "actual_runtime_binding_fixture": "passed",
+            "registered_ep0_rng_route": "source_bound_to_frozen_R45_R42_R40_chain",
+        },
+        "prior_v2_conditional_readiness_withdrawn": True,
+        "prior_v2_withdrawal_reason": "R53 v2 used an unregistered hash-seeded RNG route; its original record is preserved, and that route has been removed.",
+        "first_four_dynamic_gate": "PENDING_NOT_EXECUTED",
+        "full_plan_execution_ready": False,
+        "full_plan_execution_dependency": "the authorized, quota-counted first-four dynamic gates must pass before continuation",
         "authorization": "PENDING_USER_APPROVAL",
         "authorization_is_not_implied_by_readiness": True,
         "trial_plan_status": "proposed_not_authorized",
@@ -182,7 +192,7 @@ def build() -> dict:
         "hard_cap": HARD_CAP, "normal_cap": NORMAL_CAP, "reserve_cap": RESERVE_CAP,
         "development_go": False,
         "prior_v2_status": "conditional ready_for_authorized_execution (historical artifact preserved; readiness withdrawn)",
-        "post_fix_source_connection_status": "static_and_guarded_fixture_passed; dynamic_first_four_pending",
+        "post_fix_source_connection_status": "preflight_passed; first_four_dynamic_gate_pending",
         "prior_v2_record_preserved": str(prior_ready_path),
         "current_rng_contract": "registered R44 ep0 RNG-only restore after same-seed BC_POST model-only init via actual R42 train_seed",
         "passed": ["fixed 384 + 96 + 48 = 528 normal jobs and 24 fresh reserve; unique logical keys",
@@ -200,8 +210,9 @@ def build() -> dict:
                    "resume version/freeze gate rejects old ROUND46 state; BC model-only role accepted",
                    "first-four gate and strict cumulative budget check are wired in actual runner but not executed"],
         "execution_not_performed": True,
-        "conditional_runtime_checks_after_explicit_approval": [
-            "first-four per-seed PPO correctness gates must pass before continuation",
+        "runtime_checks_after_explicit_approval": [
+            "enter the plan's quota-counted first-four episodes and per-seed PPO correctness gates",
+            "continue only if every dynamic first-four gate returns passed",
             "all 384 training logical claims must close before evaluation",
             "96 candidate plus 48 BC sampled rows must close; final ledger strict check must pass",
             "all actual output routes are revalidated by live binder before first training claim"],
@@ -210,7 +221,7 @@ def build() -> dict:
     }
     put("READY_CHECK.json", ready)
     review = {
-        "kind": "round53-final-connection-review/1", "status": "corrected_but_conditional_readiness_withdrawn",
+        "kind": "round53-final-connection-review/1", "status": "preflight_ready_pending_authorization_and_first_four",
         "previous_head": "88ce17dc59cdc72e13274c00056e6d17a6fe68f5",
         "rng_contract": {"finding": "old R53 hash-derived seeding was an uncontracted second factor; removed",
                           "status": "fixed_and_source_bound",
@@ -237,7 +248,13 @@ def build() -> dict:
         "r53_execute_functions": [node.name for node in ast.parse(
             (HERE / "r53_execute.py").read_text(encoding="utf-8")).body
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))],
-        "readiness": {"status": ready["status"], "authorization": "PENDING_USER_APPROVAL",
+        "readiness": {"status": ready["status"],
+                       "preflight_ready_for_authorized_first_four": ready["preflight_ready_for_authorized_first_four"],
+                       "first_four_dynamic_gate": "PENDING_NOT_EXECUTED",
+                       "full_plan_execution_ready": False,
+                       "full_plan_execution_dependency": ready["full_plan_execution_dependency"],
+                       "prior_v2_conditional_readiness_withdrawn": True,
+                       "authorization": "PENDING_USER_APPROVAL", "development_go": False,
                        "actual_first_four_gate_run": False, "actual_environment_or_training_run": False,
                        "actual_evaluation_run": False},
         "seven_zero_operation_counts": {k: operations[k] for k in (
@@ -257,7 +274,7 @@ def build() -> dict:
     }
     put("ROUND53_FINAL_CONNECTION_REVIEW.json", review)
     function_list = review["r53_execute_functions"]
-    report = f'''# ROUND53 后补实现与连接复核\n\n**此前 conditional readiness 已撤回：R53 v2 使用了冻结契约未注册的 hash-seeded RNG 路径。源码已最小修正，但 first-four 动态门仍未执行/验证；因此当前 `ready_for_authorized_execution=false`。552额度仍 `PENDING_USER_APPROVAL`，未生成授权回执或启动运行。** `development_go=false` 不变。首次交付的 READY_CHECK /2 原件已逐字节保存在 `ROUND53_READY_CHECK_V2_AS_DELIVERED.json`；其关于RNG路径“bypassed / fresh hash RNG”的陈述是历史事实记录，但现已确认与冻结契约不符并被本复核撤回。\n\n## RNG合同复核与修复\n\nROUND46训练清单把唯一科学变化限定为 critic gradient route；它明示 `initializer=ROUND45 BC_POST_MODEL four modules, model-only, same seed`、fresh Adam、dual λ=1、`r44_ep0_rng_only=true`。冻结输入身份/ROUND44配置注册的ep0文件是 s11 `70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd`、s22 `96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5`、s33 `9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d`。三者文件SHA均与输入身份和ROUND44冻结登记一致；Python/NumPy/Torch状态分量摘要详见 `ROUND53_FINAL_CONNECTION_REVIEW.json`。\n\n冻结真实次序为：R45 `_call_training_seed` 临时装入同seed BC四模块；R42 `train_seed` 仅读取注册ep0 payload的 `rng`；`_registered_ep0_rng_after_init` 在同seed `fresh_controller`（含BC参数覆盖）返回后调用 `trainer.restore_rng(rng_state)`；之后R40 fresh adapter建立空Adam、λ=1并写本轮ep0状态/开始首集。R42 ep0的模型权重和optimizer没有恢复。ROUND53原先在R46→R45→R42路径外自行SHA-seed Python/NumPy/Torch并直调R40，构成额外随机过程因子；不能证明与注册状态逐字节相同。已删除该支路，现binder要求真实R46 factory-scope→R45 `_call_training_seed`→R42 `train_seed` 源路径和三seed冻结RNG路径/hash精确相符。训练续跑只允许私有ROUND53同版本checkpoint；BC仅模型初始化。\n\n## Claim/预算与基线连接\n\n严格claim检查改为两遍、与目录枚举顺序无关：reserve attempt 2 必须对应同key真实持久化的 normal attempt 1=`failed_technical`，不信任自报 `original_status`；normal必须精确闭合528，reserve上限24而非必须耗尽。新增slot文件与claim逐项身份交叉闭合，strict final门直接执行，不被nonfatal派生快照warning吞掉。纯反例覆盖少用reserve、伪报失败、错slot、坏strict关闭。\n\nBC 48行已核BC_ONLY_R2角色、真实BC_POST checkpoint及参数SHA（包含 `bc_parameter_sha256`）、scene/mode/steps、world/config与行为指纹、成本和冻结通信协议。PPO 96行逐行核NEW、seed/scene/mode、ep128参数SHA；并核三份真实ep128 checkpoint摘要、SHA及训练summary。成本校验涵盖整数spent/on_time、预算、B0、1000步、one-shot/first-report、reward timing、ACK关闭及policy-owned timing。开发参照与训练immediate缓存按索引复用，未做全历史重扫，也未重放forward或评估。\n\n## 当前 `r53_execute.py` 函数清单\n\n`{', '.join(function_list)}`。关键实际函数分段源码见 `ROUND53_ACTUAL_PATH_EXCERPTS.md`，每段不超过120行。\n\n## 测试范围及未覆盖项\n\n窄测试直接报告 **{tests_run}项，exit {proc.returncode}，OK**。隔离fixture实接了实际runtime配置器/输出绑定，但把真正train/env/eval/claim/save入口全部拒绝；optimizer守卫覆盖 `Optimizer.step`、`Adam.step`、`SGD.step`，checkpoint写守卫覆盖 `torch.save` 和trainer.save入口；实际观测七项操作计数均为0。实际first-four任务门、任何环境、模型更新、评估和最终真实ledger没有执行；获批后仍须验证这些动态性质。本复核不恢复条件就绪；它不代表科学成功或实验批准。\n\n## 交付\n\n`ROUND53_FINAL_CONNECTION_REVIEW.json`给出风险项逐条状态和RNG字节摘要；`ROUND53_ACTUAL_PATH_EXCERPTS.md`按每段≤120源码行列出未来训练/评估/RNG/init/save/load/budget关键接线。完整代码、纯反例和基线证据保持在本目录。旧 `/2`原件保留，只更新当前 `READY_CHECK.json`为`/3`。\n'''
+    report = f'''# ROUND53 后补实现与连接复核\n\n**RNG 更正：R53 v2 的条件就绪状态已撤回并保留原件；错误 hash-seeded 路径已从当前源码移除。**\n\n- `preflight_ready_for_authorized_first_four=true`：冻结源身份、索引基线、{tests_run}项纯/守卫测试及真实绑定fixture均通过，足以在明确授权后进入首四集动态门。\n- `first_four_dynamic_gate=PENDING_NOT_EXECUTED`：首四集属于固定384集计划并计入配额；本轮没有运行，也不把未运行当作通过。\n- `full_plan_execution_ready=false`：仅当获批后的首四集动态门全部通过才可继续；失败则停止。\n- `authorization=PENDING_USER_APPROVAL`；`development_go=false`。\n\n## RNG合同复核与修复\n\nROUND46训练清单把唯一科学变化限定为 critic gradient route；它明示 `initializer=ROUND45 BC_POST_MODEL four modules, model-only, same seed`、fresh Adam、dual λ=1、`r44_ep0_rng_only=true`。冻结输入身份/ROUND44配置注册的ep0文件是 s11 `70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd`、s22 `96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5`、s33 `9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d`。三者文件SHA均与输入身份和ROUND44冻结登记一致；Python/NumPy/Torch状态分量摘要详见 `ROUND53_FINAL_CONNECTION_REVIEW.json`。\n\n冻结真实次序为：R45 `_call_training_seed` 临时装入同seed BC四模块；R42 `train_seed` 仅读取注册ep0 payload的 `rng`；`_registered_ep0_rng_after_init` 在同seed `fresh_controller`（含BC参数覆盖）返回后调用 `trainer.restore_rng(rng_state)`；之后R40 fresh adapter建立空Adam、λ=1并写本轮ep0状态/开始首集。R42 ep0的模型权重和optimizer没有恢复。ROUND53原先在R46→R45→R42路径外自行SHA-seed Python/NumPy/Torch并直调R40，构成额外随机过程因子；不能证明与注册状态逐字节相同。已删除该支路，现binder要求真实R46 factory-scope→R45 `_call_training_seed`→R42 `train_seed` 源路径和三seed冻结RNG路径/hash精确相符。训练续跑只允许私有ROUND53同版本checkpoint；BC仅模型初始化。\n\n## Claim/预算与基线连接\n\n严格claim检查改为两遍、与目录枚举顺序无关：reserve attempt 2 必须对应同key真实持久化的 normal attempt 1=`failed_technical`，不信任自报 `original_status`；normal必须精确闭合528，reserve上限24而非必须耗尽。新增slot文件与claim逐项身份交叉闭合，strict final门直接执行，不被nonfatal派生快照warning吞掉。纯反例覆盖少用reserve、伪报失败、错slot、坏strict关闭。\n\nBC 48行已核BC_ONLY_R2角色、真实BC_POST checkpoint及参数SHA（包含 `bc_parameter_sha256`）、scene/mode/steps、world/config与行为指纹、成本和冻结通信协议。PPO 96行逐行核NEW、seed/scene/mode、ep128参数SHA；并核三份真实ep128 checkpoint摘要、SHA及训练summary。成本校验涵盖整数spent/on_time、预算、B0、1000步、one-shot/first-report、reward timing、ACK关闭及policy-owned timing。开发参照与训练immediate缓存按索引复用，未做全历史重扫，也未重放forward或评估。\n\n## 当前 `r53_execute.py` 函数清单\n\n`{', '.join(function_list)}`。关键实际函数分段源码见 `ROUND53_ACTUAL_PATH_EXCERPTS.md`，每段不超过120行。\n\n## 测试范围及未覆盖项\n\n窄测试直接报告 **{tests_run}项，exit {proc.returncode}，OK**。隔离fixture实接了实际runtime配置器/输出绑定，但把真正train/env/eval/claim/save入口全部拒绝；optimizer守卫覆盖 `Optimizer.step`、`Adam.step`、`SGD.step`，checkpoint写守卫覆盖 `torch.save` 和trainer.save入口；实际观测七项操作计数均为0。实际first-four任务门、任何环境、模型更新、评估和最终真实ledger没有执行；获批后仍须验证这些动态性质。预检就绪只表示获批后可进入计划内、计入配额的逐seed首四集动态门；它不表示动态门已通过、全计划可继续或科学成功。\n\n## 交付\n\n`ROUND53_FINAL_CONNECTION_REVIEW.json`给出风险项逐条状态和RNG字节摘要；`ROUND53_ACTUAL_PATH_EXCERPTS.md`按每段≤120源码行列出未来训练/评估/RNG/init/save/load/budget关键接线。完整代码、纯反例和基线证据保持在本目录。旧 `/2`原件保留，只更新当前 `READY_CHECK.json`为`/3`。\n'''
     (HERE / "ROUND53_READINESS_REPORT_ADDENDUM.md").write_text(report, encoding="utf-8")
     r40_root = REPO.parent / "zhenghe-round40" / "runs" / "comm_first_report_training_ablation_20261003"
     r42_run = trial.R43_DIR / "r42_run.py"

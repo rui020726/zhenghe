@@ -1,6 +1,11 @@
 # ROUND53 后补实现与连接复核
 
-**此前 conditional readiness 已撤回：R53 v2 使用了冻结契约未注册的 hash-seeded RNG 路径。源码已最小修正，但 first-four 动态门仍未执行/验证；因此当前 `ready_for_authorized_execution=false`。552额度仍 `PENDING_USER_APPROVAL`，未生成授权回执或启动运行。** `development_go=false` 不变。首次交付的 READY_CHECK /2 原件已逐字节保存在 `ROUND53_READY_CHECK_V2_AS_DELIVERED.json`；其关于RNG路径“bypassed / fresh hash RNG”的陈述是历史事实记录，但现已确认与冻结契约不符并被本复核撤回。
+**RNG 更正：R53 v2 的条件就绪状态已撤回并保留原件；错误 hash-seeded 路径已从当前源码移除。**
+
+- `preflight_ready_for_authorized_first_four=true`：冻结源身份、索引基线、22项纯/守卫测试及真实绑定fixture均通过，足以在明确授权后进入首四集动态门。
+- `first_four_dynamic_gate=PENDING_NOT_EXECUTED`：首四集属于固定384集计划并计入配额；本轮没有运行，也不把未运行当作通过。
+- `full_plan_execution_ready=false`：仅当获批后的首四集动态门全部通过才可继续；失败则停止。
+- `authorization=PENDING_USER_APPROVAL`；`development_go=false`。
 
 ## RNG合同复核与修复
 
@@ -16,11 +21,11 @@ BC 48行已核BC_ONLY_R2角色、真实BC_POST checkpoint及参数SHA（包含 `
 
 ## 当前 `r53_execute.py` 函数清单
 
-`read_json, canonical_sha, plan_from_frozen_sources, verify_baseline_reuse, load_base_runner, bind_runner_paths, install_private_configure_seams, bind_live_runtime, execute_authorized`。关键实际函数分段源码见 `ROUND53_ACTUAL_PATH_EXCERPTS.md`，每段不超过120行。
+`read_json, canonical_sha, plan_from_frozen_sources, verify_baseline_reuse, load_base_runner, bind_runner_paths, install_private_configure_seams, bind_live_runtime, execute_authorized, run_first_four_gate_then_continue`。关键实际函数分段源码见 `ROUND53_ACTUAL_PATH_EXCERPTS.md`，每段不超过120行。
 
 ## 测试范围及未覆盖项
 
-窄测试直接报告 **21项，exit 0，OK**。隔离fixture实接了实际runtime配置器/输出绑定，但把真正train/env/eval/claim/save入口全部拒绝；optimizer守卫覆盖 `Optimizer.step`、`Adam.step`、`SGD.step`，checkpoint写守卫覆盖 `torch.save` 和trainer.save入口；实际观测七项操作计数均为0。实际first-four任务门、任何环境、模型更新、评估和最终真实ledger没有执行；获批后仍须验证这些动态性质。本复核不恢复条件就绪；它不代表科学成功或实验批准。
+窄测试直接报告 **22项，exit 0，OK**。隔离fixture实接了实际runtime配置器/输出绑定，但把真正train/env/eval/claim/save入口全部拒绝；optimizer守卫覆盖 `Optimizer.step`、`Adam.step`、`SGD.step`，checkpoint写守卫覆盖 `torch.save` 和trainer.save入口；实际观测七项操作计数均为0。实际first-four任务门、任何环境、模型更新、评估和最终真实ledger没有执行；获批后仍须验证这些动态性质。预检就绪只表示获批后可进入计划内、计入配额的逐seed首四集动态门；它不表示动态门已通过、全计划可继续或科学成功。
 
 ## 交付
 

@@ -1,6 +1,6 @@
 {
   "kind": "round53-final-connection-review/1",
-  "status": "corrected_but_conditional_readiness_withdrawn",
+  "status": "preflight_ready_pending_authorization_and_first_four",
   "previous_head": "88ce17dc59cdc72e13274c00056e6d17a6fe68f5",
   "rng_contract": {
     "finding": "old R53 hash-derived seeding was an uncontracted second factor; removed",
@@ -214,11 +214,18 @@
     "bind_runner_paths",
     "install_private_configure_seams",
     "bind_live_runtime",
-    "execute_authorized"
+    "execute_authorized",
+    "run_first_four_gate_then_continue"
   ],
   "readiness": {
-    "status": "conditional_readiness_withdrawn_after_rng_contract_mismatch",
+    "status": "preflight_ready_pending_authorization_and_first_four",
+    "preflight_ready_for_authorized_first_four": true,
+    "first_four_dynamic_gate": "PENDING_NOT_EXECUTED",
+    "full_plan_execution_ready": false,
+    "full_plan_execution_dependency": "the authorized, quota-counted first-four dynamic gates must pass before continuation",
+    "prior_v2_conditional_readiness_withdrawn": true,
     "authorization": "PENDING_USER_APPROVAL",
+    "development_go": false,
     "actual_first_four_gate_run": false,
     "actual_environment_or_training_run": false,
     "actual_evaluation_run": false

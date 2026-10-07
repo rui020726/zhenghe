@@ -41,6 +41,30 @@ class TestRound53Execution(unittest.TestCase):
         bad = dict(receipt, hard_cap=504)
         with self.assertRaises(PermissionError): authorize_receipt(bad, plan_sha256=digest)
 
+    def test_counted_first_four_is_the_dynamic_gate_before_continuation(self):
+        calls = []
+        first_four_result = {11: {"status": "passed"}}
+        base = SimpleNamespace(
+            _run_first_four_and_all_gates=lambda module, runtime:
+                calls.append(("first_four", module, runtime)) or first_four_result,
+            _continue_fixed_training=lambda module, runtime, result:
+                calls.append(("continue", module, runtime, result)) or "continued",
+        )
+        first_four, continuation = r53.run_first_four_gate_then_continue(base, "module", {"runtime": 1})
+        self.assertIs(first_four, first_four_result)
+        self.assertEqual(continuation, "continued")
+        self.assertEqual([call[0] for call in calls], ["first_four", "continue"])
+        self.assertIs(calls[1][3], first_four_result)
+
+        calls.clear()
+        def failed_first_four(_module, _runtime):
+            calls.append(("first_four",))
+            raise RuntimeError("dynamic first-four gate failed")
+        base._run_first_four_and_all_gates = failed_first_four
+        with self.assertRaisesRegex(RuntimeError, "dynamic first-four gate failed"):
+            r53.run_first_four_gate_then_continue(base, "module", {"runtime": 1})
+        self.assertEqual([call[0] for call in calls], ["first_four"])
+
     def test_actual_entry_refuses_before_private_raw_namespace_creation(self):
         with tempfile.TemporaryDirectory(dir=r53.HERE) as td:
             receipt = Path(td) / "missing_authorization.json"

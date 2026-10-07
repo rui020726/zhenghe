@@ -670,7 +670,7 @@ def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any]) 
 
 
 def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
-    """Actual execution entry. No auth receipt => refuse before runtime setup."""
+    """After authorization and source preflight, run counted first-four gates before continuation."""
     plan = plan_from_frozen_sources()
     plan_bytes_sha = canonical_sha(plan)
     receipt = read_json(auth_path)  # Missing file is a hard pre-runtime stop.
@@ -693,8 +693,7 @@ def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
     if runtime is None: raise RuntimeError("R53 private runtime did not configure")
     live = bind_live_runtime(base, runtime, plan)
     module = runtime["module"]
-    first4 = base._run_first_four_and_all_gates(module, runtime)
-    trained = base._continue_fixed_training(module, runtime, first4)
+    first4, trained = run_first_four_gate_then_continue(base, module, runtime)
     rows = []
     run = runtime["r42_run"]
     for seed in SEEDS:
@@ -755,6 +754,14 @@ def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
     (RAW / "ROUND53_EXECUTION_RESULT.json").write_text(
         json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return result
+
+
+def run_first_four_gate_then_continue(base: Any, module: Any,
+                                      runtime: dict[str, Any]) -> tuple[Any, Any]:
+    """Enter the plan's counted first-four gate; continuation is impossible unless it passes."""
+    first_four = base._run_first_four_and_all_gates(module, runtime)
+    continued = base._continue_fixed_training(module, runtime, first_four)
+    return first_four, continued
 
 
 if __name__ == "__main__":

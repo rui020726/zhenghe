@@ -1,19 +1,29 @@
 {
   "kind": "round53-readiness-check/3",
-  "status": "conditional_readiness_withdrawn_after_rng_contract_mismatch",
-  "ready_for_authorized_execution": false,
-  "conditional_readiness_withdrawn": true,
-  "withdrawal_reason": "Earlier R53 hash-derived RNG path did not follow the frozen R46 registered-ep0 RNG restore contract. The source path has been minimally corrected, but no dynamic first-four execution is authorized or performed in this round.",
+  "status": "preflight_ready_pending_authorization_and_first_four",
+  "preflight_ready_for_authorized_first_four": true,
+  "preflight_basis": {
+    "frozen_source_identities": "passed",
+    "indexed_baseline_reuse": "passed",
+    "pure_and_guarded_runtime_tests": "passed_22_tests",
+    "actual_runtime_binding_fixture": "passed",
+    "registered_ep0_rng_route": "source_bound_to_frozen_R45_R42_R40_chain"
+  },
+  "prior_v2_conditional_readiness_withdrawn": true,
+  "prior_v2_withdrawal_reason": "R53 v2 used an unregistered hash-seeded RNG route; its original record is preserved, and that route has been removed.",
+  "first_four_dynamic_gate": "PENDING_NOT_EXECUTED",
+  "full_plan_execution_ready": false,
+  "full_plan_execution_dependency": "the authorized, quota-counted first-four dynamic gates must pass before continuation",
   "authorization": "PENDING_USER_APPROVAL",
   "authorization_is_not_implied_by_readiness": true,
   "trial_plan_status": "proposed_not_authorized",
-  "plan_sha256": "c2ceb31a59283e743ae2dc611265e2ef62b1ef7175f80e7e0272f110ebea6698",
+  "plan_sha256": "334279e877638cc768391b97b437ac512deeafbfc0a1afd86e6e4cd53bdc9af2",
   "hard_cap": 552,
   "normal_cap": 528,
   "reserve_cap": 24,
   "development_go": false,
   "prior_v2_status": "conditional ready_for_authorized_execution (historical artifact preserved; readiness withdrawn)",
-  "post_fix_source_connection_status": "static_and_guarded_fixture_passed; dynamic_first_four_pending",
+  "post_fix_source_connection_status": "preflight_passed; first_four_dynamic_gate_pending",
   "prior_v2_record_preserved": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round53_critic_isolation_trial_readiness\\ROUND53_READY_CHECK_V2_AS_DELIVERED.json",
   "current_rng_contract": "registered R44 ep0 RNG-only restore after same-seed BC_POST model-only init via actual R42 train_seed",
   "passed": [
@@ -33,8 +43,9 @@
     "first-four gate and strict cumulative budget check are wired in actual runner but not executed"
   ],
   "execution_not_performed": true,
-  "conditional_runtime_checks_after_explicit_approval": [
-    "first-four per-seed PPO correctness gates must pass before continuation",
+  "runtime_checks_after_explicit_approval": [
+    "enter the plan's quota-counted first-four episodes and per-seed PPO correctness gates",
+    "continue only if every dynamic first-four gate returns passed",
     "all 384 training logical claims must close before evaluation",
     "96 candidate plus 48 BC sampled rows must close; final ledger strict check must pass",
     "all actual output routes are revalidated by live binder before first training claim"
