@@ -1,14 +1,14 @@
 {
-  "kind": "round46-r2-v7-frozen-config/1",
+  "kind": "round46-r2-v7-frozen-config/2",
   "task_id": "ROUND46-R2-V7-EVAL-ONLY-COMPLETE",
   "status": "frozen_before_environment",
-  "frozen_at_local": "2026-10-07 15:16:58",
-  "source_commit": "d1aba59b050fd3e464e311f69cdc5e74d313ec44",
+  "frozen_at_local": "2026-10-07 15:22:35",
+  "source_commit": "c71a585424ee67df9704bcc72b06dbe2a76011b0",
   "quota_branch": "retry_attempt2",
   "new_claim_count": 96,
   "quota_plan_sha256": "da11b8b9b6a1f53c3a2abe88de5dd51d41fde507de1e60d6341248db32c1e4d9",
   "code_files_sha256": {
-    "r46_v7_eval_only.py": "8c560ec22a2b330523b88458a77dcce6665e8ed20f40da8fc6c89acb128b95af",
+    "r46_v7_eval_only.py": "6d64921443e30910eb47b09bcad70d78009621cddb5a3387615ec0a78028eaa0",
     "test_r46_v7_episode_closure.py": "0d4d05a3963f24fbc400324a6d1e24faabb621aae0b1a34a779003197bfecb77",
     "ROUND46_R2_V7_EXECUTION_ENTRY.md": "fff07ed2f714e5a0715ed234ab967445fac8df4c8b19b5592b34420175919183"
   },
@@ -24,5 +24,6 @@
   },
   "adoption_decision": "rejected_source_authenticity",
   "fallback": "reserve retry attempt2 for model_eval_new_s11_greedy_scene1301000 plus capacity-recovery reserve",
-  "zero_environment_regression_receipt_sha256": "4a904555d40f898f38eb731d8cfd340e688f93b8622dab9a10620c5f6677c685"
+  "zero_environment_regression_receipt_sha256": "4a904555d40f898f38eb731d8cfd340e688f93b8622dab9a10620c5f6677c685",
+  "refreeze_note": "re-frozen before any environment claim after the closure-cell unwrap fix; zero claims/slots/rows existed at re-freeze"
 }
