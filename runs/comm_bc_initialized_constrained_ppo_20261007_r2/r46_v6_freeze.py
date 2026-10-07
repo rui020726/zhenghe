@@ -224,8 +224,8 @@ def main() -> int:
         "network_or_push": False,
     }
     _write(r.V6_PRELAUNCH_GATE_PATH, gate)
-    r.V6_PRELAUNCH_SHA_PATH.write_text(_sha256(r.V6_PRELAUNCH_GATE_PATH) + "\n",
-                                       encoding="ascii")
+    r.V6_PRELAUNCH_SHA_PATH.write_bytes(
+        (_sha256(r.V6_PRELAUNCH_GATE_PATH) + "\n").encode("ascii"))
 
     ledger_after = runtime["r42_run"].ledger_snapshot(strict=True)
     if ledger_before != ledger_after:
