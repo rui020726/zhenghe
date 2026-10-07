@@ -928,7 +928,7 @@ def _seed_v6_output_namespace() -> dict[str, Any]:
     scoped["v6_family_journal_entries"] = len(family_bytes.splitlines())
     # The scoped audit is derived from the preserved V5 audit plus the current
     # journal state; refresh it so a growing journal never deadlocks the run.
-    _write_json(CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH, scoped, immutable=True)
+    _write_json(CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH, scoped)
     return {"family_journal_entries": scoped["v6_family_journal_entries"], "seed_sha256": seed_sha}
 
 
