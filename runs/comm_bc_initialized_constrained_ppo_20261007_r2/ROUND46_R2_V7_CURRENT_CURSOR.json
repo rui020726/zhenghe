@@ -1,0 +1,71 @@
+{
+  "kind": "round46-r2-v7-current-cursor/1",
+  "task_id": "ROUND46-R2-V7-EVAL-ONLY-COMPLETE",
+  "updated_at_utc": "2026-10-07T07:16:06.607962+00:00",
+  "current_branch": "fix/round46-r2-v7-eval-only",
+  "current_source_head": "9981b8873f95668371c7b9b8750ccfbc01a44028",
+  "source_freeze": "not yet created",
+  "execution_entry_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V7_EXECUTION_ENTRY.md",
+  "execution_entry_body_sha256": "6f0d8d19d3d95ea71569af0c309c5a4c0edb8c2213e03e93440dc74cd02865f2",
+  "planned_eval_keys": 96,
+  "v7_effective_rows_completed": 0,
+  "v7_effective_rows_missing": 96,
+  "adoption_candidate": "slot386 old claim, row, lifecycle/transcript/tape, and s11 ep128 source/model identity under read-only verification; adoption decision is performance-neutral",
+  "next_command": "commit prelaunch freeze (quota plan retry_attempt2, frozen config, gate), then run the fixed 96-cell matrix",
+  "protected_round46_status_files_unchanged": true,
+  "training_or_environment_activity_this_turn": {
+    "environment_launches": 0,
+    "ppo_updates": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0
+  },
+  "completed_items": [
+    "full entry read",
+    "branch/status/protected hash check",
+    "actual R44/R45/R42 seam read",
+    "old artifact hashes and old 92bf gate/executor object read",
+    "window-versus-terminal lifecycle correction",
+    "7 zero-environment closure/source identity tests",
+    "actual slot386 row closure",
+    "actual historical gate/source object reconciliation",
+    "read-only ep128 model and real greedy tape forward",
+    "performance-neutral adoption rejection and fixed retry quota map"
+  ],
+  "cost_stream_output_policy": "emit aggregate counts/residual/hash or at most two records; never dump full stream",
+  "source_history_note": "old gate at 92bf records branch fix/comm-bc-initialization-readback; current V7 branch is distinct",
+  "working_tree_code_sha256": {
+    "r46_v7_eval_only.py": "8c560ec22a2b330523b88458a77dcce6665e8ed20f40da8fc6c89acb128b95af",
+    "test_r46_v7_episode_closure.py": "0d4d05a3963f24fbc400324a6d1e24faabb621aae0b1a34a779003197bfecb77"
+  },
+  "planned_quota_branch": "retry_attempt2",
+  "adoption_audit": {
+    "status": "rejected_source_authenticity",
+    "old_claim_preserved": true,
+    "new_claim_created": false,
+    "new_environment_created": false,
+    "performance_used": false,
+    "science_model_forward_closure": "passed",
+    "historical_branch": "fix/comm-bc-initialization-readback",
+    "current_branch": "fix/round46-r2-v7-eval-only",
+    "source_failures": [
+      "prelaunch freeze Git object hash does not match old gate record",
+      "prelaunch input identity Git object hash does not match old gate record"
+    ],
+    "selected_fallback": {
+      "category": "reserve",
+      "slot": 1,
+      "attempt": 2
+    }
+  },
+  "current_head": "9981b8873f95668371c7b9b8750ccfbc01a44028",
+  "seam_fix_registered": {
+    "change": "zero-environment regression gate moved from dead code into the live _verify_v7_freeze path",
+    "unit_tests": "18/18 passed (test_r46_v7_episode_closure.py)"
+  },
+  "zero_environment_regression": {
+    "unit_tests": "passed 18/18",
+    "runtime_regression_receipt": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v7_eval_only\\ROUND46_R2_V7_RUNTIME_ZERO_ENV_REGRESSION.json",
+    "runtime_regression_receipt_sha256": "4a904555d40f898f38eb731d8cfd340e688f93b8622dab9a10620c5f6677c685"
+  },
+  "environment_launches": 0
+}

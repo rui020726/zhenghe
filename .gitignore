@@ -540,3 +540,18 @@ runs/comm_one_shot_gate_resume_20261003_v2/failures/
 runs/comm_one_shot_gate_resume_20261003_v2/launch_claims/
 runs/comm_one_shot_gate_resume_20261003_v2/launch_slots/
 runs/comm_one_shot_gate_resume_20261003_v2/training_progress/
+
+# ROUND46-R2 V7 eval-only recovery: adapter code, zero-environment tests, entry
+# records and the immutable prelaunch identity are tracked; every live claim,
+# slot, row, log, tape, receipt, checkpoint and runtime state stays local.
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_v7_eval_only.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/test_r46_v7_episode_closure.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V7_EXECUTION_ENTRY.md
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V7_CURRENT_CURSOR.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v7_eval_only/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/v7_eval_only/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v7_eval_only/ROUND46_R2_V7_FROZEN_CONFIG.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v7_eval_only/ROUND46_R2_V7_PRELAUNCH_GATE.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v7_eval_only/ROUND46_R2_V7_QUOTA_PLAN.json
