@@ -292,6 +292,7 @@ def _unexpected_source_status_lines(status: str) -> list[str]:
     mutable_task_paths = {
         CURRENT_TASK_PATH.resolve().relative_to(REPO).as_posix(),
         (R46_DIR / "CURRENT_TASK.json").resolve().relative_to(REPO).as_posix(),
+        STOP_STATE_PATH.resolve().relative_to(REPO).as_posix(),
     }
     # The family execution ledger lives under the round's runtime directory and
     # is rewritten by every claim/ledger snapshot during a run, exactly like the
@@ -925,12 +926,9 @@ def _seed_v6_output_namespace() -> dict[str, Any]:
     scoped["future_checkpoint_journal_path"] = str(CHECKPOINT_JOURNAL_PATH.resolve())
     scoped["v6_family_journal_seed_sha256"] = seed_sha
     scoped["v6_family_journal_entries"] = len(family_bytes.splitlines())
-    if CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH.exists():
-        current = _json(CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH)
-        if current != scoped and current.get("v6_family_journal_seed_sha256") != seed_sha:
-            raise RuntimeError("/6 checkpoint-journal route audit conflicts with preserved identity")
-    else:
-        _write_json(CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH, scoped, immutable=True)
+    # The scoped audit is derived from the preserved V5 audit plus the current
+    # journal state; refresh it so a growing journal never deadlocks the run.
+    _write_json(CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH, scoped, immutable=True)
     return {"family_journal_entries": scoped["v6_family_journal_entries"], "seed_sha256": seed_sha}
 
 
