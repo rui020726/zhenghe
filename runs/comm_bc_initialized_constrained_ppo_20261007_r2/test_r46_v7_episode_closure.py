@@ -265,7 +265,8 @@ class HistoricalSourceIdentityTests(unittest.TestCase):
         # must still report the actual current branch of this task family.
         self.assertIn(audit["current_v7_branch"],
                       (V7.BRANCH, "fix/round46-r2-v8-eval-booking-close",
-                       "fix/round46-r2-v9-eval-runtime-close"))
+                       "fix/round46-r2-v9-eval-runtime-close",
+                       "fix/round46-r2-v10-eval-final-close"))
         self.assertFalse(audit["checks"]["original_frozen_config"])
         self.assertFalse(audit["checks"]["original_input_identity"])
         self.assertEqual(audit["preflight_git_object_sha256"]["frozen_config"],

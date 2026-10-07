@@ -1,0 +1,40 @@
+{
+  "kind": "round46-r2-v10-current-cursor/1",
+  "task_id": "ROUND46-R2-V10-EVAL-FINAL-CLOSE",
+  "updated_at_utc": "2026-10-07T09:54:30.857391+00:00",
+  "current_branch": "fix/round46-r2-v10-eval-final-close",
+  "current_head": "f0704fa51e2def860f71969e4904f34f863fd4f7",
+  "source_freeze": "not yet created",
+  "lineage": {
+    "v9_stop_head": "f0704fa51e2def860f71969e4904f34f863fd4f7",
+    "v9_prelaunch_commit": "25183447a867f9e12b98dafe784355d446922a1a"
+  },
+  "state_machine_contract": {
+    "core_facts": "exclusive claims, consumed slots, original artifacts, receipts, r40 raw ledger",
+    "mid_run_snapshots": "partial-tolerant, verified real/unique/planned/under-cap, plan-size-driven",
+    "final_gate": "full plan complete (==), all cumulative counts closed",
+    "derived_snapshot_failure": "warning receipt + deferred snapshot; never flips persisted core claims; core breakage re-raises"
+  },
+  "zero_environment_regression": {
+    "v7_suite": "18/18",
+    "v8_suite": "15/15",
+    "v9_suite": "15/15",
+    "v10_suite": "17/17"
+  },
+  "adopted_cells": {
+    "attempt2": "V8 receipt reused",
+    "cell_1301001": "V9 receipt reused",
+    "cell_1301002": "pending audit this round"
+  },
+  "quota": {
+    "normal_used": 388,
+    "reserve_used": 1,
+    "total_used": 389,
+    "planned_after_completion": 482,
+    "hard_cap": 504
+  },
+  "effective_rows_completed": 2,
+  "effective_rows_missing": 94,
+  "next_command": "audit and adopt 1301002, commit prelaunch freeze, run the remaining 93 cells",
+  "environment_launches": 0
+}
