@@ -1,0 +1,56 @@
+{
+  "kind": "round46-r2-v5-configuration-diff/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
+  "runner_version": "round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
+  "source_round44_frozen_config_sha256": "354b2d4441ec1d4ce8d4aa6ba6f79b29d4cba17c82d525f2a566a68c4e5190ed",
+  "source_round45_post_bc_freeze_sha256": "1deba66aa01aeb96782ecfffaf05f4c24a02b05fe8fcde9bb747d47ef9aaec67",
+  "scientific_changes": [
+    "initialization model: same-seed ROUND45 BC four-module weights"
+  ],
+  "unchanged": {
+    "training_scenes": "ROUND44 frozen 128-item order, elementwise verified for all seeds",
+    "development_scenes": [
+      1301000,
+      1301001,
+      1301002,
+      1301003,
+      1301004,
+      1301005,
+      1301006,
+      1301007,
+      1301008,
+      1301009,
+      1301010,
+      1301011,
+      1301012,
+      1301013,
+      1301014,
+      1301015
+    ],
+    "gamma": 1.0,
+    "gae_lambda": 1.0,
+    "eta_lambda": 0.5,
+    "b0_bytes": 10000.0,
+    "delta": 0.0,
+    "lambda_initial": 1.0,
+    "one_shot_action_semantics": "one-shot-send-skip/1",
+    "dual_critics": true,
+    "all_rows": true,
+    "ack": false,
+    "max_steps": 1000,
+    "goal_count": 6,
+    "communication_budget_bytes": 29300,
+    "device": "cpu",
+    "torch_threads": 1,
+    "interop_threads": 1
+  },
+  "counts": {
+    "training_episodes": 384,
+    "final_evaluation_cells": 96,
+    "normal_claims": 480,
+    "technical_reserve": 24,
+    "hard_cap": 504
+  },
+  "runner_source_sha256": "9dd6d92c5661841690b61f24565806fe309c589c0247922ee89db23c45e294ff",
+  "v6_private_output_namespace": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6"
+}
