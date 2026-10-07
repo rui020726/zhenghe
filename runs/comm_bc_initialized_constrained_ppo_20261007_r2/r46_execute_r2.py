@@ -980,6 +980,13 @@ def _configure_runtime_module() -> Any:
         module.RUN_DIR = V6_DIR
     if runtime["r42_versions"].TRAINING_VERSION != TRAINING_VERSION:
         raise RuntimeError("ROUND46 actual R42 trainer loaded a different training semantic version")
+    # R45 rebinds the R44 module roots to its own output dir so the R44 eval
+    # artifact receipt accepts rows written under that run. /6 writes rows under
+    # the private namespace, so bind the same modules to it.
+    for _name in ("r44_prepare", "r44_runtime"):
+        _mod = sys.modules.get(_name)
+        if _mod is not None and hasattr(_mod, "RUN_DIR"):
+            _mod.RUN_DIR = V6_DIR
     common = runtime["common"]
     r40_common = runtime["r40_common"]
     common.OUTPUT_DIR = V6_DIR
