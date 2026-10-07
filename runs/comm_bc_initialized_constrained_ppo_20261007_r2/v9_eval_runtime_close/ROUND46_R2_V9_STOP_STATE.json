@@ -1,0 +1,85 @@
+{
+  "kind": "round46-r2-v9-stop-state/1",
+  "task_id": "ROUND46-R2-V9-EVAL-RUNTIME-CLOSE",
+  "status": "stopped_on_new_validity_error",
+  "stopped_at_local": "2026-10-07 17:17:14",
+  "branch": "fix/round46-r2-v9-eval-runtime-close",
+  "head_at_stop": "2051d9874632755573d962bd050e3349bcbcbaf7",
+  "completed_before_stop": {
+    "binding_table": "8 rows verified on live objects",
+    "cell_1301001_adoption": "accepted",
+    "new_cells_completed_before_failure": 1,
+    "note": "the first environment cell (1301002) RAN its full 1000 steps AND booked successfully (the version/RUN_DIR unified binding works); the failure happened in the V9 adapter's own mid-run ledger snapshot"
+  },
+  "failure": {
+    "exception": "V9Error: claim count is 1/94 raised by build_cumulative_ledger during the per-cell write_execution_ledger",
+    "root_cause": "the V9 adapter's ledger_snapshot applied the full-plan count assertion to every per-cell mid-run ledger write; r42_run._execute_cell caught the ledger error and marked the already-completed claim failed_technical (zero science impact; row complete, counters closed)",
+    "fix_already_committed": "2051d98: mid-run snapshots are partial-tolerant; the full-count gate now applies only at final analysis",
+    "rule_applied": "no hot-fix-and-continue; preserve failure, consumption and cursor; stop"
+  },
+  "quota_consumption": {
+    "base_normal_used": 386,
+    "reserve_slot1_attempt2": "adopted (V8 receipt)",
+    "normal_slot387_1301001": "adopted (V9 receipt)",
+    "normal_slot388_1301002": {
+      "status": "failed_technical",
+      "completed_steps": 1000,
+      "episode_complete_but_unadopted": true
+    },
+    "normal_used_after": 388,
+    "reserve_used_after": 1,
+    "total_used_after": 389,
+    "hard_cap": 504,
+    "unclaimed": {
+      "normal_slots": "389..480 (92)",
+      "reserve_slot_2": 1
+    }
+  },
+  "effective_matrix_state": {
+    "adopted_cells": 2,
+    "cells_completed_but_unadopted": 1,
+    "cells_missing": 93,
+    "note": "96-cell closure is reachable in a V10 round: adopt the completed 1301002 row (zero new consumption, same machinery), then run the remaining 92 normal + 1 reserve cells with the already-committed partial-ledger fix"
+  },
+  "preserved_artifacts": {
+    "claim": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v9_eval_runtime_close\\launch_claims\\model_eval_new_s11_greedy_scene1301002\\attempt_0001.json",
+      "sha256": "8c19bcc8ca0e5af887b1cdc2a92fc9644dfe34a9c2e1d557b8c90d35e6481556",
+      "size_bytes": 12043
+    },
+    "row": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v9_eval_runtime_close\\rows\\v2_r44_eval_new_s11_greedy_s1301002_a1.json",
+      "sha256": "a0c5b0debd0a44e2312e487784bdc2644b9e8e471409fb14367dd852a3eba70a",
+      "size_bytes": 347293
+    },
+    "lifecycle": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v9_eval_runtime_close\\logs\\v2_r44_eval_new_s11_greedy_s1301002_a1_rp.jsonl",
+      "sha256": "8a1d032a2743e498ae809ad92511f1092bdac0e1e3d0567ac7c262eedd2960ba",
+      "size_bytes": 540029
+    },
+    "transcript": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v9_eval_runtime_close\\logs\\v2_r44_eval_new_s11_greedy_s1301002_a1_ct.jsonl",
+      "sha256": "663a6f6954707c21a773a2832d8ea99d942262f9f3b516d2d495765095456af9",
+      "size_bytes": 5421
+    },
+    "tape": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v9_eval_runtime_close\\logs\\v2_r44_eval_new_s11_greedy_s1301002_a1_tape.jsonl",
+      "sha256": "f6d38c10d493c9de605f25249e11c4c403132c4c58cbba2bf4e6d11feaf2d465",
+      "size_bytes": 205789
+    },
+    "slot": {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v9_eval_runtime_close\\launch_slots\\normal\\0388.json",
+      "sha256": "9d318fa948640d895eb0c13fe9063579adcb2b02baa29030481bc07c536dcce2",
+      "size_bytes": 234
+    }
+  },
+  "invariants": {
+    "journal_sha256_unchanged": "2d915802158ded6bf39bdf2be302c2819ada9c959b6f9f6c621ee7b7700d8727",
+    "journal_expected": "2d915802158ded6bf39bdf2be302c2819ada9c959b6f9f6c621ee7b7700d8727",
+    "attempt2_and_1301001_adoption_artifacts_untouched": true,
+    "old_v6_v7_v8_originals_untouched": true,
+    "new_ppo_updates": 0,
+    "new_optimizer_steps": 0,
+    "new_checkpoint_writes": 0
+  }
+}

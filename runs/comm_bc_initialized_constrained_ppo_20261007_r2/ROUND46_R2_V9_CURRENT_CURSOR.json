@@ -1,9 +1,9 @@
 {
   "kind": "round46-r2-v9-current-cursor/1",
   "task_id": "ROUND46-R2-V9-EVAL-RUNTIME-CLOSE",
-  "updated_at_utc": "2026-10-07T09:12:08.132743+00:00",
+  "updated_at_utc": "2026-10-07T09:17:30.762305+00:00",
   "current_branch": "fix/round46-r2-v9-eval-runtime-close",
-  "current_head": "639905fab353c0901f6b57eb4fa7d42c8e286f3c",
+  "current_head": "2051d9874632755573d962bd050e3349bcbcbaf7",
   "source_freeze": "not yet created",
   "lineage": {
     "v8_stop_head": "639905fab353c0901f6b57eb4fa7d42c8e286f3c",
@@ -21,14 +21,35 @@
     "cell_1301001": "pending audit this round"
   },
   "quota": {
-    "normal_used": 387,
+    "normal_used": 388,
     "reserve_used": 1,
-    "total_used": 388,
-    "planned_after_completion": 482,
-    "hard_cap": 504
+    "total_used": 389,
+    "hard_cap": 504,
+    "completed_but_unadopted": [
+      {
+        "logical_job": "model_eval_new_s11_greedy_scene1301002",
+        "slot": 388,
+        "attempt": 1,
+        "status": "failed_technical",
+        "completed_steps": 1000,
+        "cause": "adapter mid-run ledger snapshot raised after booking; row complete"
+      }
+    ],
+    "unclaimed": {
+      "normal_slots": "389..480 (92)",
+      "reserve_slot_2": 1
+    }
   },
-  "effective_rows_completed": 1,
+  "effective_rows_completed": 2,
   "effective_rows_missing": 95,
   "next_command": "adopt 1301001, commit prelaunch freeze, run the remaining 94 cells",
-  "environment_launches": 0
+  "environment_launches": 0,
+  "stage": "stopped_on_new_validity_error",
+  "stop_state": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v9_eval_runtime_close\\ROUND46_R2_V9_STOP_STATE.json",
+    "sha256": "4b0adbcd9f0c9b3acc5f055b29dca49a50bda09b5b05ba4a0189a56bcf6be1a2"
+  },
+  "recoverable_cursor": {
+    "next_command": "decision-side authorization (V10) required: technically adopt the completed 1301002 row (zero new consumption; the ledger strictness fix is already committed at 2051d98), then run the remaining 92 normal + 1 reserve cells to close the 96-cell matrix"
+  }
 }
