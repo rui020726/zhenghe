@@ -1,0 +1,78 @@
+{
+  "kind": "round53-source-binding/1",
+  "status": "source_hashes_captured_read_only",
+  "task_id": "ROUND53-ZERO-LAUNCH-ISOLATED-TRIAL-READINESS",
+  "initial_head": "40adea4e16c5ccd6ee454f86462e4c959149da8a",
+  "branch": "feat/round53-critic-isolation-trial-readiness",
+  "source_files": [
+    {
+      "path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py",
+      "sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\r46_execute_r2.py",
+      "sha256": "dc086128aa244f847330bacfd5dbc457907ad987a700c1bd1cae70687886e19c"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\r46_v10_eval_final_close.py",
+      "sha256": "b88ed85bab876ecd7b3ae20086a953bc4c741fb193aaa28b2b1036c15d4ae9d5"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round52_critic_gradient_isolation_prototype\\PROTOTYPE_CONTRACT.json",
+      "sha256": "fe6a85642813bde39cb37e37fa67564aefac1070bb9688f5045429074e249149"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round52_critic_gradient_isolation_prototype\\FORWARD_AND_GRADIENT_COMPARISON.json",
+      "sha256": "87d76bcae95dfc0303b31b38c9d65f8077c82d3ff45489bcf6a710515381f1a3"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round52_critic_gradient_isolation_prototype\\PURE_TEST_EVIDENCE.json",
+      "sha256": "f1d07e2c73e5accc7a84656fe49b0cd5ddd28ae684264199b8cf3e1a039d6897"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round51_frozen_source_gradient_close\\GRADIENT_COMPONENTS.json",
+      "sha256": "b03489cbab64f5b4914bf8e29d58210f00fb6a00b7cfcba1defe2d12906f35d7"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_FROZEN_CONFIG.json",
+      "sha256": "da268b58a053b16216353fd3f0767f8cecdac57a5a7ea82e793e818613a8448d"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_KEY_PLAN.json",
+      "sha256": "2d3928a11cdef5260c89c28698152b9577617260797e8fa28e03fbb8e347fc85"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_INPUT_IDENTITY.json",
+      "sha256": "0859d53d16d7dd949efc8bd70fabc9ce8337e08e830f268022627583faa5d1b0"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close\\ROUND46_R2_V10_ANALYSIS_INPUT_MANIFEST.json",
+      "sha256": "634e398016f305a0b3170000160ec779c3faf7731e7426c74fa39690b596bbc1"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close\\ROUND46_R2_V10_FINAL_RESULTS.json",
+      "sha256": "25b8f8dd4b62a184ffde63e545be7fc74819f257f9718bae4205816b402b9801"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v10_eval_final_close\\ROUND46_R2_V10_MACHINE_VERDICT.json",
+      "sha256": "6b83636b4d5edfc84744cd6bfa74679b0f6d05e8e94bd82e9d2c27536243f51b"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_dual_response_ablation_20261004\\ROUND44_BASELINE_REUSE.json",
+      "sha256": "6decb2e53693694b75bca045534c7be559eeeda4faed6181cec1665d99e816e5"
+    }
+  ],
+  "canonical_trainer_sha256_expected": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+  "canonical_trainer_sha256_observed": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+  "scientific_change": "task/cost critic-head input representation detached from shared trunk for critic-loss gradient only",
+  "preserved": [
+    "actor/entropy gradient route",
+    "forward values",
+    "losses and coefficients",
+    "mask and pooling",
+    "data order",
+    "fresh optimizer/dual/RNG contract",
+    "BC_POST four-module initializer identity"
+  ],
+  "no_claimed_runtime_binding": true
+}

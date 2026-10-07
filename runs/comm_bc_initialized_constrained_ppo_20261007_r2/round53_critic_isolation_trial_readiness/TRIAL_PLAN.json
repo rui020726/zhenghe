@@ -1,0 +1,51 @@
+{
+  "kind": "round53-isolated-critic-trial-plan/1",
+  "status": "proposed_not_authorized",
+  "authorization": "PENDING_USER_APPROVAL",
+  "development_go": false,
+  "single_variable": "critic_representation_stop_gradient/1",
+  "normal_claims": {
+    "candidate_training": 384,
+    "candidate_greedy_eval": 48,
+    "candidate_sampled_eval": 48,
+    "BC_sampled_comparator_eval": 48
+  },
+  "normal_total": 528,
+  "new_technical_failure_reserve": 24,
+  "hard_cap": 552,
+  "quota_identity": "fresh ROUND53 isolated claim/slot/ledger namespace; historical ROUND46 504 cap is not carried over",
+  "seeds": [
+    11,
+    22,
+    33
+  ],
+  "training_episodes_per_seed": 128,
+  "evaluation_scenes": [
+    1301000,
+    1301001,
+    1301002,
+    1301003,
+    1301004,
+    1301005,
+    1301006,
+    1301007,
+    1301008,
+    1301009,
+    1301010,
+    1301011,
+    1301012,
+    1301013,
+    1301014,
+    1301015
+  ],
+  "reuse_only_after_row_identity_check": true,
+  "sealed_confirmation": "not opened",
+  "fresh_state": [
+    "BC_POST four-module parameters per seed",
+    "fresh Adam",
+    "fresh dual state per frozen contract",
+    "fresh RNG/data-order state"
+  ],
+  "resume_policy": "No previous PPO optimizer/RNG resume. Route-version freeze identity must differ so old checkpoints reject; implementation and test of this checkpoint-version barrier remain required before READY.",
+  "zero_launch_this_turn": true
+}
