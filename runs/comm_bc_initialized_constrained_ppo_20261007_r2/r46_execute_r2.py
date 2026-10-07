@@ -127,10 +127,62 @@ V4_STATUS_GUARD_REUSE_PATH = R46_DIR / "ROUND46_R2_V4_STATUS_GUARD_REUSE.json"
 V5_BINDING_REGRESSION_PATH = R46_DIR / "ROUND46_R2_V5_BINDING_REGRESSION.json"
 V5_STATUS_GUARD_REUSE_PATH = R46_DIR / "ROUND46_R2_V5_STATUS_GUARD_REUSE.json"
 V5_TEXT_IDENTITY_REGRESSION_PATH = R46_DIR / "ROUND46_R2_V5_TEXT_IDENTITY_REGRESSION.json"
-CHECKPOINT_JOURNAL_PATH = R46_DIR / "runtime" / "checkpoint_writes.jsonl"
-CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH = (
-    R46_DIR / "ROUND46_R2_CHECKPOINT_JOURNAL_ROUTE_AUDIT_R2.json"
+# --- ROUND46 /6 private execution output namespace --------------------------
+# Every /5 execution output (recovery receipt, checkpoints, progress, rows,
+# logs, claims, journal) landed in the ROUND46 root. The frozen pre-claim guard
+# `_prior_r2_preclaim_attempt_identity` refuses to start while any
+# `v2_train_s*.pt` exists in `R46_DIR/checkpoints`, and training itself writes
+# exactly those files there, so a run in the shared root can never take its
+# first atomic claim. /6 therefore moves the whole output root to a private
+# directory and keeps every /5 file in place. The family execution ledger stays
+# the single cumulative ledger; the /6 journal is seeded byte-for-byte from the
+# family journal so the checkpoint-save count continues and is never reset.
+V6_DIR = R46_DIR / "v6"
+V6_RUNTIME_DIR = V6_DIR / "runtime"
+V6_CHECKPOINTS_DIR = V6_DIR / "checkpoints"
+V6_PROGRESS_DIR = V6_DIR / "training_progress"
+V6_LOGS_DIR = V6_DIR / "logs"
+V6_ROWS_DIR = V6_DIR / "rows"
+V6_REJECTED_DIR = V6_DIR / "rejected"
+FAMILY_LEDGER_PATH = R46_DIR / "runtime" / "ROUND46_EXECUTION_LEDGER.json"
+FAMILY_JOURNAL_PATH = R46_DIR / "runtime" / "checkpoint_writes.jsonl"
+
+# /6 artifacts. The /5 files they replace are preserved on disk unchanged; the
+# names below are the active identities the /6 run writes and verifies.
+V6_FROZEN_CONFIG_PATH = R46_DIR / "ROUND46_R2_V6_FROZEN_CONFIG.json"
+V6_CONFIG_DIFF_PATH = R46_DIR / "ROUND46_R2_V6_CONFIGURATION_DIFF.json"
+V6_KEY_PLAN_PATH = R46_DIR / "ROUND46_R2_V6_KEY_PLAN.json"
+V6_TRAINING_VERSION_PATH = R46_DIR / "ROUND46_R2_V6_TRAINING_VERSION_MANIFEST.json"
+V6_INPUT_IDENTITY_PATH = R46_DIR / "ROUND46_R2_V6_INPUT_IDENTITY.json"
+V6_RUNTIME_FREEZE_PATH = R46_DIR / "ROUND46_R2_V6_RUNTIME_FREEZE.json"
+V6_PRELAUNCH_GATE_PATH = R46_DIR / "ROUND46_R2_V6_PRELAUNCH_GATE.json"
+V6_PRELAUNCH_SHA_PATH = R46_DIR / "ROUND46_R2_V6_PRELAUNCH_GATE.sha256"
+V6_TEXT_IDENTITY_REGRESSION_PATH = (
+    R46_DIR / "ROUND46_R2_V6_TEXT_IDENTITY_REGRESSION.json"
 )
+V6_STATUS_GUARD_REUSE_PATH = R46_DIR / "ROUND46_R2_V6_STATUS_GUARD_REUSE.json"
+V6_BINDING_REGRESSION_PATH = R46_DIR / "ROUND46_R2_V6_BINDING_REGRESSION.json"
+V6_CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH = (
+    R46_DIR / "ROUND46_R2_V6_CHECKPOINT_JOURNAL_ROUTE_AUDIT.json"
+)
+V6_STOP_STATE_PATH = R46_DIR / "ROUND46_R2_V6_STOP_STATE.json"
+V6_PREFLIGHT_NOTE_PATH = R46_DIR / "ROUND46_R2_V6_PREFLIGHT_NOTE.json"
+
+FROZEN_CONFIG_PATH = V6_FROZEN_CONFIG_PATH
+CONFIG_DIFF_PATH = V6_CONFIG_DIFF_PATH
+KEY_PLAN_PATH = V6_KEY_PLAN_PATH
+TRAINING_VERSION_PATH = V6_TRAINING_VERSION_PATH
+INPUT_IDENTITY_PATH = V6_INPUT_IDENTITY_PATH
+RUNTIME_FREEZE_PATH = V6_RUNTIME_FREEZE_PATH
+PRELAUNCH_GATE_PATH = V6_PRELAUNCH_GATE_PATH
+PRELAUNCH_SHA_PATH = V6_PRELAUNCH_SHA_PATH
+V5_TEXT_IDENTITY_REGRESSION_PATH = V6_TEXT_IDENTITY_REGRESSION_PATH
+V5_STATUS_GUARD_REUSE_PATH = V6_STATUS_GUARD_REUSE_PATH
+V5_BINDING_REGRESSION_PATH = V6_BINDING_REGRESSION_PATH
+CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH = V6_CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH
+STOP_STATE_PATH = V6_STOP_STATE_PATH
+
+CHECKPOINT_JOURNAL_PATH = V6_RUNTIME_DIR / "checkpoint_writes.jsonl"
 CHECKPOINT_JOURNAL_ROUTE_REGRESSION_PATH = (
     R46_DIR / "ROUND46_R2_CHECKPOINT_JOURNAL_ROUTE_REGRESSION.json"
 )
@@ -585,13 +637,13 @@ def _rebind_checkpoint_journal(runtime: dict[str, Any]) -> dict[str, Any]:
     if Path(journal_cell.cell_contents).resolve() != CHECKPOINT_JOURNAL_PATH.resolve():
         raise RuntimeError("actual R42 checkpoint writer did not accept the ROUND46-local journal path")
 
-    run_module.RUN_DIR = R46_DIR
+    run_module.RUN_DIR = V6_DIR
     analysis_module = runtime.get("r42_analysis")
     if analysis_module is not None and Path(analysis_module.RUN_DIR).resolve() == ROUND45_DIR.resolve():
-        analysis_module.RUN_DIR = R46_DIR
+        analysis_module.RUN_DIR = V6_DIR
     line_count = sum(1 for line in CHECKPOINT_JOURNAL_PATH.open("r", encoding="utf-8") if line.strip())
     runtime["r42_versions"].CHECKPOINT_WRITE_CALLS = line_count
-    if (Path(run_module.RUN_DIR).resolve() != R46_DIR.resolve()
+    if (Path(run_module.RUN_DIR).resolve() != V6_DIR.resolve()
             or line_count < int(audit["legacy_entry_count"])):
         raise RuntimeError("ROUND46 checkpoint writer, ledger, and journal output scopes disagree")
     return {
@@ -820,10 +872,54 @@ def _install_round46_r2_training_factory_scope(module: Any,
     module._call_training_seed = call_training_seed
 
 
+def _seed_v6_output_namespace() -> dict[str, Any]:
+    """Create the /6 private output root and continue the family checkpoint journal.
+
+    The /6 journal starts as a byte-for-byte continuation of the family journal
+    (never zero), so the cumulative checkpoint-save count is preserved. The
+    preserved route audit is re-scoped to the /6 journal path with all of its
+    historical fields unchanged.
+    """
+    for directory in (V6_DIR, V6_RUNTIME_DIR, V6_CHECKPOINTS_DIR, V6_PROGRESS_DIR,
+                      V6_LOGS_DIR, V6_ROWS_DIR, V6_REJECTED_DIR,
+                      V6_DIR / "launch_claims", V6_DIR / "launch_slots",
+                      V6_DIR / "training_reports", V6_DIR / "failures"):
+        directory.mkdir(parents=True, exist_ok=True)
+    if not FAMILY_JOURNAL_PATH.is_file():
+        raise FileNotFoundError(FAMILY_JOURNAL_PATH)
+    family_bytes = FAMILY_JOURNAL_PATH.read_bytes()
+    if CHECKPOINT_JOURNAL_PATH.exists():
+        existing = CHECKPOINT_JOURNAL_PATH.read_bytes()
+        if not existing.startswith(family_bytes):
+            raise RuntimeError("/6 checkpoint journal no longer continues the family journal")
+    else:
+        with CHECKPOINT_JOURNAL_PATH.open("xb") as stream:
+            stream.write(family_bytes)
+            stream.flush()
+            os.fsync(stream.fileno())
+    seed_sha = hashlib.sha256(CHECKPOINT_JOURNAL_PATH.read_bytes()).hexdigest()
+    v5_audit_path = R46_DIR / "ROUND46_R2_CHECKPOINT_JOURNAL_ROUTE_AUDIT_R2.json"
+    if not v5_audit_path.is_file():
+        raise FileNotFoundError(v5_audit_path)
+    scoped = dict(_json(v5_audit_path))
+    scoped["r2_local_copy_path"] = str(CHECKPOINT_JOURNAL_PATH.resolve())
+    scoped["future_checkpoint_journal_path"] = str(CHECKPOINT_JOURNAL_PATH.resolve())
+    scoped["v6_family_journal_seed_sha256"] = seed_sha
+    scoped["v6_family_journal_entries"] = len(family_bytes.splitlines())
+    if CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH.exists():
+        current = _json(CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH)
+        if current != scoped and current.get("v6_family_journal_seed_sha256") != seed_sha:
+            raise RuntimeError("/6 checkpoint-journal route audit conflicts with preserved identity")
+    else:
+        _write_json(CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH, scoped, immutable=True)
+    return {"family_journal_entries": scoped["v6_family_journal_entries"], "seed_sha256": seed_sha}
+
+
 def _configure_runtime_module() -> Any:
     global _R45_MODULE, _RUNTIME
     if _R45_MODULE is not None and _RUNTIME is not None:
         return _R45_MODULE
+    _seed_v6_output_namespace()
     import torch
 
     torch.set_num_threads(1)
@@ -851,7 +947,7 @@ def _configure_runtime_module() -> Any:
             if actual_source_hashes.get(key) != expected_source_hashes.get(key)
         )
         raise RuntimeError(f"ROUND45 frozen runtime source identity changed: {differing}")
-    module.RUN_DIR = R46_DIR
+    module.RUN_DIR = V6_DIR
     module.RUNNER_VERSION = ROUND46_RUNNER_VERSION
     module.R3_FREEZE_PATH = RUNTIME_FREEZE_PATH
     module.R3_KEY_PLAN_PATH = KEY_PLAN_PATH
@@ -871,24 +967,24 @@ def _configure_runtime_module() -> Any:
     try:
         runtime = module.load_runtime(enforce_prelaunch=False)
     finally:
-        module.RUN_DIR = R46_DIR
+        module.RUN_DIR = V6_DIR
     if runtime["r42_versions"].TRAINING_VERSION != TRAINING_VERSION:
         raise RuntimeError("ROUND46 actual R42 trainer loaded a different training semantic version")
     common = runtime["common"]
     r40_common = runtime["r40_common"]
-    common.OUTPUT_DIR = R46_DIR
-    common.LOGS = R46_DIR / "logs"
-    common.ROWS = R46_DIR / "rows"
-    common.REJECTED = R46_DIR / "rejected"
-    common.CHECKPOINTS = R46_DIR / "checkpoints"
-    r40_common.ROUND_DIR = R46_DIR
+    common.OUTPUT_DIR = V6_DIR
+    common.LOGS = V6_LOGS_DIR
+    common.ROWS = V6_ROWS_DIR
+    common.REJECTED = V6_REJECTED_DIR
+    common.CHECKPOINTS = V6_CHECKPOINTS_DIR
+    r40_common.ROUND_DIR = V6_DIR
     common.NORMAL_LAUNCHES = NORMAL_CAP
     common.RESERVE_LAUNCHES = RESERVE_CAP
     common.LAUNCH_CAP = HARD_CAP
     r40_common.NORMAL_CAP = NORMAL_CAP
     r40_common.RESERVE_CAP = RESERVE_CAP
     r40_common.HARD_CAP = HARD_CAP
-    r40_common.ROUND_DIR = R46_DIR
+    r40_common.ROUND_DIR = V6_DIR
     r40_common.plan = lambda: {
         "normal": {"new_training": TRAINING_KEYS, "new_final_evaluation": EVALUATION_KEYS},
         "normal_total": NORMAL_CAP, "technical_reserve_max": RESERVE_CAP,
@@ -1410,7 +1506,7 @@ def prepare() -> None:
             V4_PRELAUNCH_GATE_PATH, V4_BINDING_REGRESSION_PATH,
             V4_STATUS_GUARD_REUSE_PATH)):
         raise RuntimeError("ROUND46 V4 unexpectedly has a gate or post-gate receipt; preserve and audit first")
-    if list((R46_DIR / "checkpoints").glob("v2_train_s*.pt")):
+    if list((V6_CHECKPOINTS_DIR).glob("v2_train_s*.pt")):
         raise RuntimeError("ROUND46-R2 will not freeze while a prior untrained checkpoint is active")
 
     if not all(path.is_file() for path in (
@@ -1994,9 +2090,9 @@ def _preflight_reuse_v3_zero_environment_evidence() -> dict[str, Any]:
             or runtime.get("r2_reference_cache_sha256") is None
             or runtime["r42_versions"].TRAINING_VERSION != TRAINING_VERSION):
         raise RuntimeError("ROUND46 V5 actual runtime/reference cache does not match its freeze")
-    if list((R46_DIR / "checkpoints").glob("v2_train_s*.pt")):
+    if list((V6_CHECKPOINTS_DIR).glob("v2_train_s*.pt")):
         raise RuntimeError("ROUND46 V5 found an active V3 checkpoint; refusing to resume it")
-    if list((R46_DIR / "training_progress").glob("*.json")):
+    if list((V6_PROGRESS_DIR).glob("*.json")):
         raise RuntimeError("ROUND46 V5 found active V3 progress; refusing to resume it")
     before = runtime["r42_run"].ledger_snapshot(strict=True)
     counts = before["counts"]
@@ -2407,7 +2503,7 @@ def _verify_prelaunch_identity(runtime: dict[str, Any], *,
     _assert_source_worktree_clean()
     journal_route = _checkpoint_journal_route_audit(create=False)
     bound_route = runtime.get("round46_checkpoint_journal_route", {})
-    if (Path(runtime["r42_run"].RUN_DIR).resolve() != R46_DIR.resolve()
+    if (Path(runtime["r42_run"].RUN_DIR).resolve() != V6_DIR.resolve()
             or Path(bound_route.get("journal_closure_after", "")).resolve()
             != CHECKPOINT_JOURNAL_PATH.resolve()
             or _sha256(CHECKPOINT_JOURNAL_ROUTE_AUDIT_PATH)
@@ -2860,9 +2956,9 @@ def run_r2_v5_binding_regression() -> dict[str, Any]:
     journal_before = CHECKPOINT_JOURNAL_PATH.read_bytes()
     ledger_file_before = LEDGER_PATH.read_bytes() if LEDGER_PATH.is_file() else None
     output_roots = (
-        R46_DIR / "rows", R46_DIR / "logs", R46_DIR / "launch_claims",
-        R46_DIR / "checkpoints", R46_DIR / "training_progress",
-        R46_DIR / "training_reports", R46_DIR / "failures", R46_DIR / "rejected",
+        V6_ROWS_DIR, V6_LOGS_DIR, V6_DIR / "launch_claims",
+        V6_CHECKPOINTS_DIR, V6_PROGRESS_DIR,
+        V6_DIR / "training_reports", V6_DIR / "failures", V6_REJECTED_DIR,
     )
 
     def snapshot_outputs() -> dict[str, tuple[int, str]]:
@@ -3102,7 +3198,7 @@ def _continue_fixed_training(module: Any, runtime: dict[str, Any],
                 or int(full.get("optimizer_steps", -1)) <= 0
                 or full.get("training_version") != TRAINING_VERSION):
             raise RuntimeError(f"ROUND46 seed {seed} fixed ep128 training failed closure")
-        checkpoint = R46_DIR / "checkpoints" / f"v2_train_s{seed}_ep128.pt"
+        checkpoint = V6_CHECKPOINTS_DIR / f"v2_train_s{seed}_ep128.pt"
         if not checkpoint.is_file():
             raise FileNotFoundError(checkpoint)
         summary = {
@@ -3433,7 +3529,7 @@ def _write_training_curves(runtime: dict[str, Any]) -> None:
     batches = []
     for seed in SEEDS:
         seed_rows = []
-        for path in sorted((R46_DIR / "rows").glob("*.json")):
+        for path in sorted((V6_ROWS_DIR).glob("*.json")):
             row = _json(path)
             if (row.get("training_version") == TRAINING_VERSION
                     and row.get("training_arm") == "NEW"
@@ -3450,7 +3546,7 @@ def _write_training_curves(runtime: dict[str, Any]) -> None:
                 "lambda_at_rollout": row.get("lambda_at_rollout"),
             })
         for batch_index in range(32):
-            candidates = sorted((R46_DIR / "checkpoints").glob(
+            candidates = sorted((V6_CHECKPOINTS_DIR).glob(
                 f"r40_batch_s{seed}_b{batch_index}_attempt*.json"))
             if len(candidates) != 1:
                 raise RuntimeError(f"ROUND46 seed {seed} batch {batch_index} missing/ambiguous")
@@ -3480,7 +3576,7 @@ def _write_checkpoint_index(runtime: dict[str, Any]) -> None:
     entries = []
     for seed in SEEDS:
         for episode in (0, 64, 128):
-            path = R46_DIR / "checkpoints" / f"v2_train_s{seed}_ep{episode}.pt"
+            path = V6_CHECKPOINTS_DIR / f"v2_train_s{seed}_ep{episode}.pt"
             if not path.is_file():
                 raise FileNotFoundError(path)
             payload = torch.load(path, map_location="cpu", weights_only=False)
@@ -3507,7 +3603,7 @@ def _write_checkpoint_index(runtime: dict[str, Any]) -> None:
             del controller, payload
         for batch_index in range(32):
             for prefix in ("r40_batch", "r40_preupdate"):
-                candidates = list((R46_DIR / "checkpoints").glob(
+                candidates = list((V6_CHECKPOINTS_DIR).glob(
                     f"{prefix}_s{seed}_b{batch_index}_attempt*.json"))
                 if prefix == "r40_batch" and len(candidates) != 1:
                     raise RuntimeError(f"ROUND46 batch state missing for seed {seed}, batch {batch_index}")
@@ -3528,9 +3624,9 @@ def _write_checkpoint_index(runtime: dict[str, Any]) -> None:
 def _write_artifact_manifest(runtime: dict[str, Any]) -> None:
     files = []
     include_roots = (
-        R46_DIR / "rows", R46_DIR / "logs", R46_DIR / "launch_claims",
-        R46_DIR / "checkpoints", R46_DIR / "training_progress",
-        R46_DIR / "training_reports", R46_DIR / "failures", R46_DIR / "rejected",
+        V6_ROWS_DIR, V6_LOGS_DIR, V6_DIR / "launch_claims",
+        V6_CHECKPOINTS_DIR, V6_PROGRESS_DIR,
+        V6_DIR / "training_reports", V6_DIR / "failures", V6_REJECTED_DIR,
     )
     for root in include_roots:
         if root.exists():
