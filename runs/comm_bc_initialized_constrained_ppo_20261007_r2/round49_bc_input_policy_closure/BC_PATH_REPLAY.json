@@ -1,0 +1,165 @@
+{
+  "kind": "round49-bc-path-replay/1",
+  "action_mapping": {
+    "SEND": 1,
+    "SKIP": 0
+  },
+  "greedy_tie_rule": "p_send >= 0.5 -> SEND",
+  "tolerance": 1e-06,
+  "bc_trajectory": {
+    "11": {
+      "records": 96,
+      "max_probability_error": 2.682209014892578e-07,
+      "probability_mismatches_over_tolerance": 0,
+      "greedy_action_mismatches": 0,
+      "valid": true
+    },
+    "22": {
+      "records": 96,
+      "max_probability_error": 3.5762786865234375e-07,
+      "probability_mismatches_over_tolerance": 0,
+      "greedy_action_mismatches": 0,
+      "valid": true
+    },
+    "33": {
+      "records": 96,
+      "max_probability_error": 5.066394805908203e-07,
+      "probability_mismatches_over_tolerance": 0,
+      "greedy_action_mismatches": 0,
+      "valid": true
+    },
+    "per_seed": {}
+  },
+  "ppo_trajectory": {
+    "11": {
+      "records": 96,
+      "max_probability_error": 1.7881393432617188e-07,
+      "probability_mismatches_over_tolerance": 0,
+      "greedy_action_mismatches": 0,
+      "valid": true
+    },
+    "22": {
+      "records": 96,
+      "max_probability_error": 2.086162567138672e-07,
+      "probability_mismatches_over_tolerance": 0,
+      "greedy_action_mismatches": 0,
+      "valid": true
+    },
+    "33": {
+      "records": 96,
+      "max_probability_error": 3.5762786865234375e-07,
+      "probability_mismatches_over_tolerance": 0,
+      "greedy_action_mismatches": 0,
+      "valid": true
+    },
+    "per_seed": {}
+  },
+  "discrepancies": [],
+  "source_model_identity": {
+    "11": {
+      "round46_initializer_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+      "bc_row_parameter_identity_match": true,
+      "BC checkpoint arm": "BC_ONLY_R2"
+    },
+    "22": {
+      "round46_initializer_parameter_sha256": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+      "bc_row_parameter_identity_match": true,
+      "BC checkpoint arm": "BC_ONLY_R2"
+    },
+    "33": {
+      "round46_initializer_parameter_sha256": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+      "bc_row_parameter_identity_match": true,
+      "BC checkpoint arm": "BC_ONLY_R2"
+    }
+  },
+  "round48_ep0_loader_audit": {
+    "root_cause": "r48_probe.py forward_panel lines 283-287 loads REGISTERED_EP0 path, whose actual parameter digest differs from ROUND46 BC_POST initializer; build_model_identity lines 162-166 compares BC_POST digest to a static REGISTERED_EP0 digest instead of checking the loaded file, while lines 168-171 separately record the true old-file digest.",
+    "per_seed": {
+      "11": {
+        "r48_forward_panel_registered_ep0_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s11_ep0.pt",
+        "r48_static_registered_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+        "r48_registered_file_actual_sha256": "70fe64c18f61b33d17b6aa528cf830b43919a89b22210b11d7edb732bd75f1fd",
+        "r48_registered_file_actual_parameter_sha256": "7eff0f40203fdae63437bb07a16204ab0289bf938e9c263f781b3adfc40d5eff",
+        "round46_bc_post_initializer_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s11.pt",
+        "round46_initializer_actual_file_sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+        "round46_initializer_actual_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+        "registered_file_matches_round46_initializer": false,
+        "r48_static_value_matches_round46_initializer": true
+      },
+      "22": {
+        "r48_forward_panel_registered_ep0_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s22_ep0.pt",
+        "r48_static_registered_parameter_sha256": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+        "r48_registered_file_actual_sha256": "96a09f2f4796069a10f77e5472a4fa8c09ddbf1407e44a7102c022c43c5790c5",
+        "r48_registered_file_actual_parameter_sha256": "b74c10c85c148a4b46b4513a6b04660446c31a778a6537a8f13e22ffc78e8095",
+        "round46_bc_post_initializer_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s22.pt",
+        "round46_initializer_actual_file_sha256": "3cdb83785c51f9e40005d66a1d024d06a5ba6940616e22f3b01a9bf65b5e609d",
+        "round46_initializer_actual_parameter_sha256": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+        "registered_file_matches_round46_initializer": false,
+        "r48_static_value_matches_round46_initializer": true
+      },
+      "33": {
+        "r48_forward_panel_registered_ep0_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_gate_resume_20261003_v2\\checkpoints\\v2_train_s33_ep0.pt",
+        "r48_static_registered_parameter_sha256": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+        "r48_registered_file_actual_sha256": "9030be21c945a490802692569e0fb5b4608602394e43233666ff83adcc2cfe8d",
+        "r48_registered_file_actual_parameter_sha256": "0ddebe7dc04019ebb079e25b9b4191b654e59167b928c416112393fbc6d0d3aa",
+        "round46_bc_post_initializer_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s33.pt",
+        "round46_initializer_actual_file_sha256": "9329ef048dfc5c1805af5756c7ea0962eedfc8d01aa26841e35af7001616803a",
+        "round46_initializer_actual_parameter_sha256": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+        "registered_file_matches_round46_initializer": false,
+        "r48_static_value_matches_round46_initializer": true
+      }
+    },
+    "corrected_round49_model_source": "MODEL_ROLE_IDENTITY.roles.ep0_training_init.round46_initializer_file"
+  },
+  "inference_guard": {
+    "controllers_loaded": 6,
+    "model_bindings_before_forward": {
+      "s11_ep0": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s11.pt",
+        "file_sha256_before_forward": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+        "parameter_sha256_before_forward": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+        "role_verified_before_forward": true
+      },
+      "s11_ep128": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s11_ep128.pt",
+        "file_sha256_before_forward": "0f161663aaf963552f8f02d6363f3c52e6f67119217f835c501cb2d0705bfc10",
+        "parameter_sha256_before_forward": "8b87f4d2591a3a0c573b71a08ec8444db1e3f91850edbf2f2b958dddb31e5670",
+        "role_verified_before_forward": true
+      },
+      "s22_ep0": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s22.pt",
+        "file_sha256_before_forward": "3cdb83785c51f9e40005d66a1d024d06a5ba6940616e22f3b01a9bf65b5e609d",
+        "parameter_sha256_before_forward": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+        "role_verified_before_forward": true
+      },
+      "s22_ep128": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s22_ep128.pt",
+        "file_sha256_before_forward": "aae4aa1b24b7e7ffadffeb7a09d45935f44970ac62a8cfd4344630248472cc62",
+        "parameter_sha256_before_forward": "b88a6b377d9e18c3cef17ab5205f7652b1394fcfbc6b28e5642140025028caf4",
+        "role_verified_before_forward": true
+      },
+      "s33_ep0": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s33.pt",
+        "file_sha256_before_forward": "9329ef048dfc5c1805af5756c7ea0962eedfc8d01aa26841e35af7001616803a",
+        "parameter_sha256_before_forward": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+        "role_verified_before_forward": true
+      },
+      "s33_ep128": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s33_ep128.pt",
+        "file_sha256_before_forward": "10f3fc8d2c2a788b7e48e1f9021b5b234c39a00706bfe486e6f2bab84a0fb9b9",
+        "parameter_sha256_before_forward": "dc2903397865c853c59ed631e7b0a699fcb2d55b7dee8956101c53984b36b821",
+        "role_verified_before_forward": true
+      }
+    },
+    "distinct_vectors_forwarded": 78,
+    "record_model_forwards_cached": 468,
+    "file_hashes_unchanged": true,
+    "checkpoint_write_calls": 0,
+    "optimizer_step_calls": 0,
+    "synthetic_optimizer_step_calls": 0,
+    "real_training_update_calls": 0,
+    "new_flow_calls": 0,
+    "environment_constructor_calls": 0,
+    "simulation_calls": 0
+  }
+}

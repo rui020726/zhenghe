@@ -1,0 +1,791 @@
+{
+  "kind": "round49-common-input-policy-comparison/1",
+  "task_id": "ROUND49-BC-INPUT-POLICY-CLOSURE",
+  "description": "descriptive common-input policy mapping; source trajectories remain distinct",
+  "paired_by_source_panel": {
+    "BC_trajectory": {
+      "11": {
+        "ep0": {
+          "n_records": 96,
+          "p_send_min": 9.531008515750727e-08,
+          "p_send_max": 1.0,
+          "p_send_mean": 0.34344766262359655,
+          "distance_to_half_min": 0.1576346755027771,
+          "distance_to_half_mean": 0.4881331625264164,
+          "greedy_action_counts": {
+            "SEND": 33,
+            "SKIP": 63
+          }
+        },
+        "ep128": {
+          "n_records": 96,
+          "p_send_min": 0.03476924076676369,
+          "p_send_max": 1.0,
+          "p_send_mean": 0.46333785727620125,
+          "distance_to_half_min": 0.058659255504608154,
+          "distance_to_half_mean": 0.4123355659345786,
+          "greedy_action_counts": {
+            "SEND": 37,
+            "SKIP": 59
+          }
+        },
+        "delta_p_mean_same_inputs": 0.11989019465260468,
+        "delta_p_abs_mean_same_inputs": 0.11989028157604498,
+        "greedy_transition_counts": {
+          "SEND->SEND": 33,
+          "SEND->SKIP": 0,
+          "SKIP->SEND": 4,
+          "SKIP->SKIP": 59
+        },
+        "boundary_crossings": 4
+      },
+      "22": {
+        "ep0": {
+          "n_records": 96,
+          "p_send_min": 3.8913159983167134e-07,
+          "p_send_max": 1.0,
+          "p_send_mean": 0.3446026561187369,
+          "distance_to_half_min": 0.09367865324020386,
+          "distance_to_half_mean": 0.48754360973570127,
+          "greedy_action_counts": {
+            "SEND": 33,
+            "SKIP": 63
+          }
+        },
+        "ep128": {
+          "n_records": 96,
+          "p_send_min": 3.646058530648588e-06,
+          "p_send_max": 1.0,
+          "p_send_mean": 0.3041832745411715,
+          "distance_to_half_min": 0.01459360122680664,
+          "distance_to_half_mean": 0.4761035131574947,
+          "greedy_action_counts": {
+            "SEND": 30,
+            "SKIP": 66
+          }
+        },
+        "delta_p_mean_same_inputs": -0.04041938157756538,
+        "delta_p_abs_mean_same_inputs": 0.04049647759863125,
+        "greedy_transition_counts": {
+          "SEND->SEND": 30,
+          "SEND->SKIP": 3,
+          "SKIP->SEND": 0,
+          "SKIP->SKIP": 63
+        },
+        "boundary_crossings": 3
+      },
+      "33": {
+        "ep0": {
+          "n_records": 96,
+          "p_send_min": 1.2014062633625144e-07,
+          "p_send_max": 1.0,
+          "p_send_mean": 0.34465333715911745,
+          "distance_to_half_min": 0.07332730293273926,
+          "distance_to_half_mean": 0.4881574559128678,
+          "greedy_action_counts": {
+            "SEND": 33,
+            "SKIP": 63
+          }
+        },
+        "ep128": {
+          "n_records": 96,
+          "p_send_min": 0.029544716700911522,
+          "p_send_max": 1.0,
+          "p_send_mean": 0.463674417968529,
+          "distance_to_half_min": 0.014833211898803711,
+          "distance_to_half_mean": 0.40893538610544056,
+          "greedy_action_counts": {
+            "SEND": 36,
+            "SKIP": 60
+          }
+        },
+        "delta_p_mean_same_inputs": 0.1190210808094115,
+        "delta_p_abs_mean_same_inputs": 0.1190222952540488,
+        "greedy_transition_counts": {
+          "SEND->SEND": 33,
+          "SEND->SKIP": 0,
+          "SKIP->SEND": 3,
+          "SKIP->SKIP": 60
+        },
+        "boundary_crossings": 3
+      }
+    },
+    "PPO_trajectory": {
+      "11": {
+        "ep0": {
+          "n_records": 96,
+          "p_send_min": 9.531008515750727e-08,
+          "p_send_max": 1.0,
+          "p_send_mean": 0.3434387942596002,
+          "distance_to_half_min": 0.15454575419425964,
+          "distance_to_half_mean": 0.48805994163515926,
+          "greedy_action_counts": {
+            "SEND": 33,
+            "SKIP": 63
+          }
+        },
+        "ep128": {
+          "n_records": 96,
+          "p_send_min": 0.03476924076676369,
+          "p_send_max": 1.0,
+          "p_send_mean": 0.46333376318216324,
+          "distance_to_half_min": 0.058659255504608154,
+          "distance_to_half_mean": 0.4123314718405406,
+          "greedy_action_counts": {
+            "SEND": 37,
+            "SKIP": 59
+          }
+        },
+        "delta_p_mean_same_inputs": 0.11989496892256302,
+        "delta_p_abs_mean_same_inputs": 0.11989505584600331,
+        "greedy_transition_counts": {
+          "SEND->SEND": 33,
+          "SEND->SKIP": 0,
+          "SKIP->SEND": 4,
+          "SKIP->SKIP": 59
+        },
+        "boundary_crossings": 4
+      },
+      "22": {
+        "ep0": {
+          "n_records": 96,
+          "p_send_min": 3.8913159983167134e-07,
+          "p_send_max": 1.0,
+          "p_send_mean": 0.3446026561187369,
+          "distance_to_half_min": 0.09367865324020386,
+          "distance_to_half_mean": 0.48754360973570127,
+          "greedy_action_counts": {
+            "SEND": 33,
+            "SKIP": 63
+          }
+        },
+        "ep128": {
+          "n_records": 96,
+          "p_send_min": 3.646058530648588e-06,
+          "p_send_max": 1.0,
+          "p_send_mean": 0.3041832782664618,
+          "distance_to_half_min": 0.01459360122680664,
+          "distance_to_half_mean": 0.476103516882785,
+          "greedy_action_counts": {
+            "SEND": 30,
+            "SKIP": 66
+          }
+        },
+        "delta_p_mean_same_inputs": -0.04041937785227508,
+        "delta_p_abs_mean_same_inputs": 0.04049647387334095,
+        "greedy_transition_counts": {
+          "SEND->SEND": 30,
+          "SEND->SKIP": 3,
+          "SKIP->SEND": 0,
+          "SKIP->SKIP": 63
+        },
+        "boundary_crossings": 3
+      },
+      "33": {
+        "ep0": {
+          "n_records": 96,
+          "p_send_min": 1.2014062633625144e-07,
+          "p_send_max": 1.0,
+          "p_send_mean": 0.3423561418636247,
+          "distance_to_half_min": 0.18388420343399048,
+          "distance_to_half_mean": 0.4881635293778177,
+          "greedy_action_counts": {
+            "SEND": 33,
+            "SKIP": 63
+          }
+        },
+        "ep128": {
+          "n_records": 96,
+          "p_send_min": 0.029544716700911522,
+          "p_send_max": 1.0,
+          "p_send_mean": 0.46358154275609803,
+          "distance_to_half_min": 0.014833211898803711,
+          "distance_to_half_mean": 0.4088425108930096,
+          "greedy_action_counts": {
+            "SEND": 36,
+            "SKIP": 60
+          }
+        },
+        "delta_p_mean_same_inputs": 0.12122540089247336,
+        "delta_p_abs_mean_same_inputs": 0.12122661533711065,
+        "greedy_transition_counts": {
+          "SEND->SEND": 33,
+          "SEND->SKIP": 0,
+          "SKIP->SEND": 3,
+          "SKIP->SKIP": 60
+        },
+        "boundary_crossings": 3
+      }
+    }
+  },
+  "cost_category_metadata": {
+    "BC_trajectory": {
+      "11": {
+        "neither_send": {
+          "n": 59,
+          "ep0_send": 0,
+          "ep128_send": 0,
+          "transitions": {
+            "SKIP->SKIP": 59
+          },
+          "delta_p_mean": 0.13471172424488367
+        },
+        "PPO_only_send": {
+          "n": 4,
+          "ep0_send": 0,
+          "ep128_send": 4,
+          "transitions": {
+            "SKIP->SEND": 4
+          },
+          "delta_p_mean": 0.7456814557472171
+        },
+        "both_send": {
+          "n": 33,
+          "ep0_send": 33,
+          "ep128_send": 33,
+          "transitions": {
+            "SEND->SEND": 33
+          },
+          "delta_p_mean": 0.017537610097364945
+        }
+      },
+      "22": {
+        "neither_send": {
+          "n": 63,
+          "ep0_send": 0,
+          "ep128_send": 0,
+          "transitions": {
+            "SKIP->SKIP": 63
+          },
+          "delta_p_mean": -0.008133939216128013
+        },
+        "BC_only_send": {
+          "n": 3,
+          "ep0_send": 3,
+          "ep128_send": 0,
+          "transitions": {
+            "SEND->SKIP": 3
+          },
+          "delta_p_mean": -0.6393811479210854
+        },
+        "both_send": {
+          "n": 30,
+          "ep0_send": 30,
+          "ep128_send": 30,
+          "transitions": {
+            "SEND->SEND": 30
+          },
+          "delta_p_mean": -0.048322633902231855
+        }
+      },
+      "33": {
+        "neither_send": {
+          "n": 60,
+          "ep0_send": 0,
+          "ep128_send": 0,
+          "transitions": {
+            "SKIP->SKIP": 60
+          },
+          "delta_p_mean": 0.14378582187406555
+        },
+        "PPO_only_send": {
+          "n": 3,
+          "ep0_send": 0,
+          "ep128_send": 3,
+          "transitions": {
+            "SKIP->SEND": 3
+          },
+          "delta_p_mean": 0.7634079878528913
+        },
+        "both_send": {
+          "n": 33,
+          "ep0_send": 33,
+          "ep128_send": 33,
+          "transitions": {
+            "SEND->SEND": 33
+          },
+          "delta_p_mean": 0.01541365096063325
+        }
+      }
+    },
+    "PPO_trajectory": {
+      "11": {
+        "neither_send": {
+          "n": 59,
+          "ep0_send": 0,
+          "ep128_send": 0,
+          "transitions": {
+            "SKIP->SKIP": 59
+          },
+          "delta_p_mean": 0.13471172424488367
+        },
+        "PPO_only_send": {
+          "n": 4,
+          "ep0_send": 0,
+          "ep128_send": 4,
+          "transitions": {
+            "SKIP->SEND": 4
+          },
+          "delta_p_mean": 0.7450230702916087
+        },
+        "both_send": {
+          "n": 33,
+          "ep0_send": 33,
+          "ep128_send": 33,
+          "transitions": {
+            "SEND->SEND": 33
+          },
+          "delta_p_mean": 0.01763130318034779
+        }
+      },
+      "22": {
+        "neither_send": {
+          "n": 63,
+          "ep0_send": 0,
+          "ep128_send": 0,
+          "transitions": {
+            "SKIP->SKIP": 63
+          },
+          "delta_p_mean": -0.008133939216128013
+        },
+        "BC_only_send": {
+          "n": 3,
+          "ep0_send": 3,
+          "ep128_send": 0,
+          "transitions": {
+            "SEND->SKIP": 3
+          },
+          "delta_p_mean": -0.6393811479210854
+        },
+        "both_send": {
+          "n": 30,
+          "ep0_send": 30,
+          "ep128_send": 30,
+          "transitions": {
+            "SEND->SEND": 30
+          },
+          "delta_p_mean": -0.048322621981302896
+        }
+      },
+      "33": {
+        "neither_send": {
+          "n": 60,
+          "ep0_send": 0,
+          "ep128_send": 0,
+          "transitions": {
+            "SKIP->SKIP": 60
+          },
+          "delta_p_mean": 0.14378582187406555
+        },
+        "PPO_only_send": {
+          "n": 3,
+          "ep0_send": 0,
+          "ep128_send": 3,
+          "transitions": {
+            "SKIP->SEND": 3
+          },
+          "delta_p_mean": 0.7983961924910545
+        },
+        "both_send": {
+          "n": 33,
+          "ep0_send": 33,
+          "ep128_send": 33,
+          "transitions": {
+            "SEND->SEND": 33
+          },
+          "delta_p_mean": 0.018645472598798347
+        }
+      }
+    }
+  },
+  "vector_counts": {
+    "BC_trajectory": {
+      "records": 288,
+      "unique_vectors": 69,
+      "repeated_vector_groups": 69,
+      "records_in_repeated_groups": 288,
+      "groups_shared_across_distinct_scene_targets": 13,
+      "cross_seed_repeated_groups": 69,
+      "largest_group_records": 15
+    },
+    "PPO_trajectory": {
+      "records": 288,
+      "unique_vectors": 76,
+      "repeated_vector_groups": 69,
+      "records_in_repeated_groups": 281,
+      "groups_shared_across_distinct_scene_targets": 13,
+      "cross_seed_repeated_groups": 69,
+      "largest_group_records": 15
+    },
+    "pooled": {
+      "records": 576,
+      "unique_vectors": 78,
+      "repeated_vector_groups": 74,
+      "records_in_repeated_groups": 572,
+      "groups_shared_across_distinct_scene_targets": 13,
+      "cross_seed_repeated_groups": 74,
+      "largest_group_records": 30
+    },
+    "per_seed_and_panel": {
+      "BC_trajectory": {
+        "11": {
+          "records": 96,
+          "unique_vectors": 69,
+          "repeated_vector_groups": 13,
+          "records_in_repeated_groups": 40,
+          "groups_shared_across_distinct_scene_targets": 13,
+          "cross_seed_repeated_groups": 0,
+          "largest_group_records": 5
+        },
+        "22": {
+          "records": 96,
+          "unique_vectors": 69,
+          "repeated_vector_groups": 13,
+          "records_in_repeated_groups": 40,
+          "groups_shared_across_distinct_scene_targets": 13,
+          "cross_seed_repeated_groups": 0,
+          "largest_group_records": 5
+        },
+        "33": {
+          "records": 96,
+          "unique_vectors": 69,
+          "repeated_vector_groups": 13,
+          "records_in_repeated_groups": 40,
+          "groups_shared_across_distinct_scene_targets": 13,
+          "cross_seed_repeated_groups": 0,
+          "largest_group_records": 5
+        }
+      },
+      "PPO_trajectory": {
+        "11": {
+          "records": 96,
+          "unique_vectors": 69,
+          "repeated_vector_groups": 13,
+          "records_in_repeated_groups": 40,
+          "groups_shared_across_distinct_scene_targets": 13,
+          "cross_seed_repeated_groups": 0,
+          "largest_group_records": 5
+        },
+        "22": {
+          "records": 96,
+          "unique_vectors": 69,
+          "repeated_vector_groups": 13,
+          "records_in_repeated_groups": 40,
+          "groups_shared_across_distinct_scene_targets": 13,
+          "cross_seed_repeated_groups": 0,
+          "largest_group_records": 5
+        },
+        "33": {
+          "records": 96,
+          "unique_vectors": 69,
+          "repeated_vector_groups": 13,
+          "records_in_repeated_groups": 40,
+          "groups_shared_across_distinct_scene_targets": 13,
+          "cross_seed_repeated_groups": 0,
+          "largest_group_records": 5
+        }
+      }
+    },
+    "all_arms_by_seed": {
+      "11": {
+        "records": 192,
+        "unique_vectors": 75,
+        "repeated_vector_groups": 63,
+        "records_in_repeated_groups": 180,
+        "groups_shared_across_distinct_scene_targets": 13,
+        "cross_seed_repeated_groups": 0,
+        "largest_group_records": 10
+      },
+      "22": {
+        "records": 192,
+        "unique_vectors": 72,
+        "repeated_vector_groups": 66,
+        "records_in_repeated_groups": 186,
+        "groups_shared_across_distinct_scene_targets": 13,
+        "cross_seed_repeated_groups": 0,
+        "largest_group_records": 10
+      },
+      "33": {
+        "records": 192,
+        "unique_vectors": 74,
+        "repeated_vector_groups": 64,
+        "records_in_repeated_groups": 182,
+        "groups_shared_across_distinct_scene_targets": 13,
+        "cross_seed_repeated_groups": 0,
+        "largest_group_records": 10
+      }
+    },
+    "support_overlap": {
+      "BC_unique_vectors": 69,
+      "PPO_unique_vectors": 76,
+      "intersection_unique_vectors": 67,
+      "BC_only_unique_vectors": 2,
+      "PPO_only_unique_vectors": 9
+    }
+  },
+  "round48_count_scope_reconciliation": {
+    "per_seed_records": 96,
+    "pooled_records": 288,
+    "pooled_distinct_feature_vectors": 76,
+    "pooled_vector_hash_groups_repeated": 69,
+    "meaning_note": "96 is the per-seed panel size (288 pooled). 76 is the number of unique feature hashes across the pooled PPO records. 69 counts those hashes occurring more than once, not independent scenes or necessarily distinct targets."
+  },
+  "feature_observations": {
+    "record_count": 576,
+    "columns": [
+      {
+        "index": 0,
+        "min": 0.0,
+        "max": 0.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 576,
+        "at_one_count": 0,
+        "name": "age_steps"
+      },
+      {
+        "index": 1,
+        "min": 0.0,
+        "max": 0.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 576,
+        "at_one_count": 0,
+        "name": "since_last_emission_time"
+      },
+      {
+        "index": 2,
+        "min": 0.0,
+        "max": 0.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 576,
+        "at_one_count": 0,
+        "name": "sent_count"
+      },
+      {
+        "index": 3,
+        "min": 1.0,
+        "max": 1.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 0,
+        "at_one_count": 576,
+        "name": "pending_event"
+      },
+      {
+        "index": 4,
+        "min": 1.0,
+        "max": 1.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 0,
+        "at_one_count": 576,
+        "name": "changed_view"
+      },
+      {
+        "index": 5,
+        "min": 1.0,
+        "max": 1.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 0,
+        "at_one_count": 576,
+        "name": "first_emission"
+      },
+      {
+        "index": 6,
+        "min": 0.0,
+        "max": 0.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 576,
+        "at_one_count": 0,
+        "name": "stage_changed"
+      },
+      {
+        "index": 7,
+        "min": 0.0,
+        "max": 0.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 576,
+        "at_one_count": 0,
+        "name": "requirements_changed"
+      },
+      {
+        "index": 8,
+        "min": 0.0,
+        "max": 0.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 576,
+        "at_one_count": 0,
+        "name": "members_changed"
+      },
+      {
+        "index": 9,
+        "min": 0.0,
+        "max": 0.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 576,
+        "at_one_count": 0,
+        "name": "progress_delta_abs"
+      },
+      {
+        "index": 10,
+        "min": 1.0,
+        "max": 1.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 0,
+        "at_one_count": 576,
+        "name": "revision_delta"
+      },
+      {
+        "index": 11,
+        "min": 1.0,
+        "max": 1.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 0,
+        "at_one_count": 576,
+        "name": "remaining_time_over_horizon"
+      },
+      {
+        "index": 12,
+        "min": 0.0,
+        "max": 0.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 576,
+        "at_one_count": 0,
+        "name": "urgency_now"
+      },
+      {
+        "index": 13,
+        "min": 0.0,
+        "max": 1.0,
+        "distinct_values": 2,
+        "constant": false,
+        "at_zero_count": 174,
+        "at_one_count": 402,
+        "name": "has_future_requirements"
+      },
+      {
+        "index": 14,
+        "min": 1.0,
+        "max": 6.0,
+        "distinct_values": 6,
+        "constant": false,
+        "at_zero_count": 0,
+        "at_one_count": 143,
+        "name": "queue_backlog_targets"
+      },
+      {
+        "index": 15,
+        "min": 0.6655972696245733,
+        "max": 1.0,
+        "distinct_values": 22,
+        "constant": false,
+        "at_zero_count": 0,
+        "at_one_count": 463,
+        "name": "budget_remaining_fraction"
+      },
+      {
+        "index": 16,
+        "min": 1.0,
+        "max": 1.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 0,
+        "at_one_count": 576,
+        "name": "capacity_remaining_fraction"
+      },
+      {
+        "index": 17,
+        "min": 6.0,
+        "max": 6.0,
+        "distinct_values": 1,
+        "constant": true,
+        "at_zero_count": 0,
+        "at_one_count": 0,
+        "name": "subscribers"
+      },
+      {
+        "index": 18,
+        "min": 0.001,
+        "max": 0.918,
+        "distinct_values": 47,
+        "constant": false,
+        "at_zero_count": 0,
+        "at_one_count": 0,
+        "name": "step_over_horizon"
+      }
+    ],
+    "interpretation": "columns are described by observed values; no feature causality is inferred"
+  },
+  "validation": {
+    "bc_source_probability_and_greedy_replay": true,
+    "ppo_source_ep128_probability_and_greedy_replay": true,
+    "tolerance": 1e-06,
+    "source_model_roles_verified": true,
+    "forward_guard": {
+      "controllers_loaded": 6,
+      "model_bindings_before_forward": {
+        "s11_ep0": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s11.pt",
+          "file_sha256_before_forward": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+          "parameter_sha256_before_forward": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+          "role_verified_before_forward": true
+        },
+        "s11_ep128": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s11_ep128.pt",
+          "file_sha256_before_forward": "0f161663aaf963552f8f02d6363f3c52e6f67119217f835c501cb2d0705bfc10",
+          "parameter_sha256_before_forward": "8b87f4d2591a3a0c573b71a08ec8444db1e3f91850edbf2f2b958dddb31e5670",
+          "role_verified_before_forward": true
+        },
+        "s22_ep0": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s22.pt",
+          "file_sha256_before_forward": "3cdb83785c51f9e40005d66a1d024d06a5ba6940616e22f3b01a9bf65b5e609d",
+          "parameter_sha256_before_forward": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+          "role_verified_before_forward": true
+        },
+        "s22_ep128": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s22_ep128.pt",
+          "file_sha256_before_forward": "aae4aa1b24b7e7ffadffeb7a09d45935f44970ac62a8cfd4344630248472cc62",
+          "parameter_sha256_before_forward": "b88a6b377d9e18c3cef17ab5205f7652b1394fcfbc6b28e5642140025028caf4",
+          "role_verified_before_forward": true
+        },
+        "s33_ep0": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\checkpoints\\BC_POST_MODEL_s33.pt",
+          "file_sha256_before_forward": "9329ef048dfc5c1805af5756c7ea0962eedfc8d01aa26841e35af7001616803a",
+          "parameter_sha256_before_forward": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+          "role_verified_before_forward": true
+        },
+        "s33_ep128": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\checkpoints\\v2_train_s33_ep128.pt",
+          "file_sha256_before_forward": "10f3fc8d2c2a788b7e48e1f9021b5b234c39a00706bfe486e6f2bab84a0fb9b9",
+          "parameter_sha256_before_forward": "dc2903397865c853c59ed631e7b0a699fcb2d55b7dee8956101c53984b36b821",
+          "role_verified_before_forward": true
+        }
+      },
+      "distinct_vectors_forwarded": 78,
+      "record_model_forwards_cached": 468,
+      "file_hashes_unchanged": true,
+      "checkpoint_write_calls": 0,
+      "optimizer_step_calls": 0,
+      "synthetic_optimizer_step_calls": 0,
+      "real_training_update_calls": 0,
+      "new_flow_calls": 0,
+      "environment_constructor_calls": 0,
+      "simulation_calls": 0
+    },
+    "read_only_checkpoint_identity": {
+      "all_identities_verified": true
+    }
+  },
+  "statistical_scope": "descriptive only; no independent-scene inference; no new CI or significance tests",
+  "development_go": false
+}
