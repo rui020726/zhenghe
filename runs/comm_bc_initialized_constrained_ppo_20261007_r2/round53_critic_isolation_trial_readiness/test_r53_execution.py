@@ -439,5 +439,87 @@ finally:
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
 
+    def test_recovery_batch0_checkpoint_verification_closes_and_refuses_tamper(self):
+        import hashlib, shutil
+        tmp = Path(tempfile.mkdtemp(prefix="r53_recovery_fixture_", dir=r53.HERE))
+        try:
+            checkpoints = tmp / "checkpoints"
+            checkpoints.mkdir(parents=True)
+            base = SimpleNamespace(V6_CHECKPOINTS_DIR=checkpoints)
+            for seed in r53.SEEDS:
+                pre = checkpoints / f"v2_train_s{seed}_before_b0.pt"
+                post = checkpoints / f"v2_train_s{seed}_after_b0.pt"
+                rolling = checkpoints / f"v2_train_s{seed}.pt"
+                pre.write_bytes(f"pre{seed}".encode())
+                post.write_bytes(f"post{seed}".encode())
+                rolling.write_bytes(f"post{seed}".encode())
+                sha = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
+                record = {
+                    "training_seed": int(seed), "batch": 0,
+                    "preupdate_checkpoint": pre.name,
+                    "preupdate_checkpoint_sha256": sha(pre),
+                    "postupdate_checkpoint": post.name,
+                    "controller_parameters_after": {"parameter_sha256": "x"},
+                }
+                record_path = checkpoints / f"r40_batch_s{seed}_b0_attempt01.json"
+                record_path.write_text(json.dumps(record), encoding="utf-8")
+                commit = {
+                    "batch_record": record_path.name,
+                    "batch_record_sha256": sha(record_path),
+                    "postupdate_checkpoint": post.name,
+                    "postupdate_checkpoint_sha256": sha(post),
+                    "rolling_checkpoint": rolling.name,
+                    "rolling_checkpoint_sha256": sha(rolling),
+                }
+                (checkpoints / f"r40_batch_commit_s{seed}_b0.json").write_text(
+                    json.dumps(commit), encoding="utf-8")
+            verified = r53._verify_existing_first_batch_checkpoints(base)
+            self.assertEqual(verified["status"], "passed")
+            self.assertEqual(sorted(verified["seeds"]), ["11", "22", "33"])
+            (checkpoints / "v2_train_s22.pt").write_bytes("tampered".encode())
+            with self.assertRaisesRegex(RuntimeError, "rolling checkpoint hash mismatch"):
+                r53._verify_existing_first_batch_checkpoints(base)
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    def test_recovery_gate_retry_rebuilds_gates_and_refuses_bad_receipt(self):
+        import shutil
+        tmp = Path(tempfile.mkdtemp(prefix="r53_recgate_fixture_", dir=r53.HERE))
+        try:
+            base = SimpleNamespace(R46_DIR=tmp, ROUND46_RUNNER_VERSION="runner-x",
+                                   _continue_fixed_training=lambda m, r, f: {"continued": sorted(f)})
+            calls = {"gate": [], "task": []}
+            class Module:
+                @staticmethod
+                def _run_first_batch_gate(runtime, seed):
+                    calls["gate"].append(int(seed))
+                    return {"kind": "round45-r2-first-batch-real-ppo-gate/1",
+                            "status": "passed", "seed": int(seed)}
+                @staticmethod
+                def _task_state(message, **kwargs):
+                    calls["task"].append(message)
+            runtime = {"module": Module}
+            for seed in r53.SEEDS:
+                (tmp / f"ROUND46_FIRST_FOUR_s{seed}.json").write_text(json.dumps({
+                    "kind": "round46-first-four-report/1", "seed": int(seed),
+                    "runner_version": "runner-x",
+                    "training_version": r53.TRAINING_VERSION, "report": {"episodes_done": 4},
+                }), encoding="utf-8")
+            gates, continued = r53.recover_first_batch_gate_then_continue(base, Module, runtime)
+            self.assertEqual(sorted(gates), [11, 22, 33])
+            self.assertTrue(all(g["recovery"].startswith("r53-first-batch-gate-retry")
+                                for g in gates.values()))
+            self.assertEqual(continued, {"continued": [11, 22, 33]})
+            self.assertEqual(calls["gate"], [11, 22, 33])
+            for seed in r53.SEEDS:
+                self.assertTrue((tmp / f"ROUND46_FIRST_BATCH_GATE_s{seed}.json").is_file())
+            (tmp / "ROUND46_FIRST_FOUR_s22.json").write_text(json.dumps({
+                "kind": "round46-first-four-report/1", "seed": 22,
+                "training_version": "wrong"}), encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "first-four receipt identity invalid"):
+                r53.recover_first_batch_gate_then_continue(base, Module, runtime)
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
 
 if __name__ == "__main__": unittest.main()

@@ -401,7 +401,8 @@ def bind_runner_paths(base: Any, raw_root: Path = RAW) -> dict[str, str]:
     return bound
 
 
-def install_private_configure_seams(base: Any) -> None:
+def install_private_configure_seams(base: Any, *,
+                                    allow_existing_journal: bool = False) -> None:
     """Replace V6/family-journal seams; never call the historical V6 seeder."""
     def prepare_r53_output_namespace():
         for path in (base.V6_DIR, base.V6_RUNTIME_DIR, base.V6_CHECKPOINTS_DIR,
@@ -439,9 +440,11 @@ def install_private_configure_seams(base: Any) -> None:
         if before not in allowed: raise RuntimeError(f"unexpected actual checkpoint journal closure: {before}")
         target = Path(base.CHECKPOINT_JOURNAL_PATH)
         target.parent.mkdir(parents=True, exist_ok=True)
-        if not target.exists(): target.write_bytes(b"")
+        if not target.exists():
+            target.write_bytes(b"")
         elif target.stat().st_size:
-            raise RuntimeError("new private checkpoint journal is not empty before training")
+            if not allow_existing_journal:
+                raise RuntimeError("new private checkpoint journal is not empty before training")
         cell.cell_contents = target
         run.RUN_DIR = base.V6_DIR
         return {"save_hook": "trainer.save_checkpoint", "closure_before": str(before),
@@ -555,7 +558,8 @@ def seed_private_task_state(raw: Path) -> None:
     path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any]) -> dict[str, Any]:
+def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any], *,
+                      allow_existing_training_state: bool = False) -> dict[str, Any]:
 
     """Explicitly bind all output-owning live modules and actual trainer call path."""
     raw = Path(base.V6_DIR).resolve()
@@ -720,10 +724,23 @@ def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any]) 
     run.TRAINING_VERSION = TRAINING_VERSION
     runtime["runner"].TRAINING_VERSION = TRAINING_VERSION
     runtime["round42_freeze"] = freeze
+
+    # R45's own version-boundary contract (r45 configure): the runtime frozen
+    # copy audited by the R43 first-batch gate must declare the same training
+    # version as the versions module.  The R44 claim verifier keeps the
+    # untouched registered R44 frozen object, so this weakens no source check.
+    runtime["frozen"]["round42"]["training_version"] = TRAINING_VERSION
     # The R40 adapter scans only its private checkpoint root. It must be empty.
     checkpoint_dir = Path(common.CHECKPOINTS)
     stale = list(checkpoint_dir.glob("*.pt"))
-    if stale: raise RuntimeError(f"private fresh-training checkpoint root is not empty: {stale}")
+    if stale:
+        if not allow_existing_training_state:
+            raise RuntimeError(f"private fresh-training checkpoint root is not empty: {stale}")
+        checkpoint_state = _verify_existing_first_batch_checkpoints(base)
+    else:
+        if allow_existing_training_state:
+            raise RuntimeError("recovery requires preserved batch-0 checkpoints")
+        checkpoint_state = {"kind": "round53-fresh-checkpoint-root/1", "status": "empty"}
     bindings = {label: str(Path(module.RUN_DIR).resolve())
                 for label, module in output_modules.items()}
     expected = str(raw)
@@ -769,6 +786,7 @@ def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any]) 
                                 "r42_run": id(run), "r44_runtime": id(r44_runtime)},
             "r40_trainer_is_runtime_trainer": r40_train.trainer is runtime["trainer"],
             "ppo_update_wrapped": runtime["trainer"].ppo_update is not None,
+            "checkpoint_state": checkpoint_state,
             "checkpoint_version": TRAINING_VERSION,
             "fresh_rng_contract": "registered R44 ep0 Python/NumPy/Torch state is restored by frozen R42 train_seed after BC-only controller construction",
             "registered_ep0_rng_route": rng_route_identity,
@@ -776,8 +794,142 @@ def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any]) 
             "route_undo": undo_update}
 
 
-def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
+def _verify_existing_first_batch_checkpoints(base: Any) -> dict[str, Any]:
+    """Hash-close preserved batch-0 training state against its durable receipts."""
+    checkpoints = Path(base.V6_CHECKPOINTS_DIR)
+    per_seed: dict[str, Any] = {}
+    for seed in SEEDS:
+        commit_path = checkpoints / f"r40_batch_commit_s{seed}_b0.json"
+        if not commit_path.is_file():
+            raise RuntimeError(f"recovery missing batch-0 commit receipt for seed {seed}")
+        commit = read_json(commit_path)
+        record_path = checkpoints / str(commit.get("batch_record", ""))
+        if (not record_path.is_file()
+                or sha256_file(record_path) != commit.get("batch_record_sha256")):
+            raise RuntimeError(f"recovery batch record does not match commit receipt for seed {seed}")
+        record = read_json(record_path)
+        if int(record.get("training_seed", -1)) != int(seed) or int(record.get("batch", -1)) != 0:
+            raise RuntimeError(f"recovery batch record identity mismatch for seed {seed}")
+        pre_path = checkpoints / str(record["preupdate_checkpoint"])
+        post_path = checkpoints / str(record["postupdate_checkpoint"])
+        if sha256_file(pre_path) != record.get("preupdate_checkpoint_sha256"):
+            raise RuntimeError(f"recovery preupdate checkpoint hash mismatch for seed {seed}")
+        if sha256_file(post_path) != commit.get("postupdate_checkpoint_sha256"):
+            raise RuntimeError(f"recovery postupdate checkpoint hash mismatch for seed {seed}")
+        rolling = checkpoints / f"v2_train_s{seed}.pt"
+        if (not rolling.is_file()
+                or sha256_file(rolling) != commit.get("rolling_checkpoint_sha256")):
+            raise RuntimeError(f"recovery rolling checkpoint hash mismatch for seed {seed}")
+        per_seed[str(seed)] = {"batch_record": str(record_path),
+                               "commit_receipt": str(commit_path)}
+    return {"kind": "round53-recovery-batch0-verification/1", "status": "passed",
+            "seeds": per_seed}
+
+
+def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any]) -> dict[str, Any]:
+    """Close the preserved first-four training state before a gate-only retry."""
+    claim_paths = sorted((raw / "launch_claims").glob("*/*.json"))
+    if len(claim_paths) != 12:
+        raise RuntimeError(f"recovery requires exactly 12 persisted claims, found {len(claim_paths)}")
+    claims = [read_json(path) for path in claim_paths]
+    closure = validate_claims(plan, claims, strict=False)
+    if (closure["counts"]["normal"] != 12 or closure["counts"]["reserve"] != 0
+            or closure["completed_logical_jobs"] != 12):
+        raise RuntimeError("recovery requires twelve complete normal first-four claims")
+    failed_gate_receipts = {}
+    for seed in SEEDS:
+        gate_path = raw / f"ROUND45_R2_FIRST_BATCH_GATE_R3_s{seed}.json"
+        if gate_path.is_file():
+            if read_json(gate_path).get("status") != "failed":
+                raise RuntimeError(
+                    f"recovery found a non-failed first-batch gate receipt for seed {seed}")
+            failed_gate_receipts[str(seed)] = sha256_file(gate_path)
+    if not failed_gate_receipts:
+        raise RuntimeError("recovery requires a persisted failed first-batch gate receipt")
+    first_four_receipts = {}
+    for seed in SEEDS:
+        receipt_path = raw / f"ROUND46_FIRST_FOUR_s{seed}.json"
+        if not receipt_path.is_file():
+            raise RuntimeError(f"recovery missing first-four receipt for seed {seed}")
+        saved = read_json(receipt_path)
+        if (saved.get("kind") != "round46-first-four-report/1"
+                or int(saved.get("seed", -1)) != seed
+                or saved.get("training_version") != TRAINING_VERSION):
+            raise RuntimeError(f"recovery first-four receipt identity invalid for seed {seed}")
+        first_four_receipts[str(seed)] = sha256_file(receipt_path)
+    checkpoints = _verify_existing_first_batch_checkpoints(base)
+    return {"kind": "round53-recovery-state-verification/1", "status": "passed",
+            "claim_closure": closure, "failed_gate_receipts": failed_gate_receipts,
+            "first_four_receipts": first_four_receipts, "checkpoints": checkpoints}
+
+
+def quarantine_failed_first_batch_gate_receipts(raw: Path) -> dict[str, Any]:
+    """Move only the failed audit receipts aside; training state stays in place."""
+    quarantine = raw / "runtime" / "failed_first_batch_gate_receipts_quarantine"
+    quarantine.mkdir(parents=True, exist_ok=True)
+    manifest = []
+    for seed in SEEDS:
+        source = raw / f"ROUND45_R2_FIRST_BATCH_GATE_R3_s{seed}.json"
+        if not source.is_file():
+            continue
+        destination = quarantine / source.name
+        if destination.exists():
+            if sha256_file(destination) == sha256_file(source):
+                source.unlink()
+                continue
+            index = 2
+            while (quarantine / f"{source.stem}__attempt{index}{source.suffix}").exists():
+                index += 1
+            destination = quarantine / f"{source.stem}__attempt{index}{source.suffix}"
+        shutil.move(str(source), str(destination))
+        manifest.append({"receipt": destination.name, "sha256": sha256_file(destination)})
+    payload = {"kind": "round53-failed-gate-quarantine/1", "receipts": manifest}
+    (quarantine / "MANIFEST.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return payload
+
+
+def recover_first_batch_gate_then_continue(base: Any, module: Any,
+                                           runtime: dict[str, Any]) -> tuple[Any, Any]:
+    """Re-run only the pure-audit first-batch gates, then resume fixed training.
+
+    No episode, claim, optimizer step, or checkpoint write happens in the gate
+    retry itself; the committed batch-0 state is audited in place and the
+    unchanged R40 resume adapter continues from the committed cursor.
+    """
+    first_four: dict[int, Any] = {}
+    for seed in SEEDS:
+        saved = read_json(Path(base.R46_DIR) / f"ROUND46_FIRST_FOUR_s{seed}.json")
+        if (saved.get("kind") != "round46-first-four-report/1"
+                or int(saved.get("seed", -1)) != seed
+                or saved.get("training_version") != TRAINING_VERSION):
+            raise RuntimeError(f"recovery first-four receipt identity invalid for seed {seed}")
+        first_four[seed] = saved["report"]
+    gates: dict[int, Any] = {}
+    for seed in SEEDS:
+        gate = module._run_first_batch_gate(runtime, seed)
+        if gate.get("status") != "passed":
+            raise RuntimeError(f"recovery seed {seed} first-batch gate failed")
+        gate_round46 = dict(gate)
+        gate_round46.update({
+            "kind": "round46-actual-first-batch-gate/1", "round": 46,
+            "runner_version": base.ROUND46_RUNNER_VERSION,
+            "training_version": TRAINING_VERSION,
+            "actual_gate_implementation": "R43 first_batch_gate via R44/R42 runtime",
+            "recovery": "r53-first-batch-gate-retry-after-version-wiring-fix/1",
+        })
+        (Path(base.R46_DIR) / f"ROUND46_FIRST_BATCH_GATE_s{seed}.json").write_text(
+            json.dumps(gate_round46, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        gates[seed] = gate_round46
+    continued = base._continue_fixed_training(module, runtime, first_four)
+    return gates, continued
+
+
+def execute_authorized(auth_path: Path = AUTH_PATH, *,
+                       mode: str = "fresh") -> dict[str, Any]:
     """After authorization and source preflight, run counted first-four gates before continuation."""
+    if mode not in ("fresh", "recover_first_batch_gate"):
+        raise ValueError(f"unknown ROUND53 execution mode: {mode}")
     plan = plan_from_frozen_sources()
     plan_bytes_sha = canonical_sha(plan)
     receipt = read_json(auth_path)  # Missing file is a hard pre-runtime stop.
@@ -787,12 +939,25 @@ def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
     expected_trainer = "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
     if sha256_file(CANON / "v2_trainer.py") != expected_trainer:
         raise RuntimeError("canonical trainer byte identity changed")
-    RAW.mkdir(parents=True, exist_ok=False)
-    plan_path = RAW / "ROUND53_FIXED_PLAN.json"
-    plan_path.write_text(json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    recovery_mode = mode == "recover_first_batch_gate"
+    if recovery_mode:
+        if not RAW.is_dir():
+            raise RuntimeError("recovery requires the preserved R53 raw namespace")
+        persisted_plan = RAW / "ROUND53_FIXED_PLAN.json"
+        plan_body = {key: value for key, value in plan.items()
+                     if key != "source_content_identities"}
+        persisted_body = {key: value for key, value in
+                          (read_json(persisted_plan) if persisted_plan.is_file() else {}).items()
+                          if key != "source_content_identities"}
+        if canonical_sha(persisted_body) != canonical_sha(plan_body):
+            raise RuntimeError("recovery plan identity does not match the authorized fixed plan")
+    else:
+        RAW.mkdir(parents=True, exist_ok=False)
+        plan_path = RAW / "ROUND53_FIXED_PLAN.json"
+        plan_path.write_text(json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     base = load_base_runner()
     bind_runner_paths(base, RAW)
-    install_private_configure_seams(base)
+    install_private_configure_seams(base, allow_existing_journal=recovery_mode)
     # Configure the exact frozen runtime, but never call the monolithic R46 execute.
     source_guard = install_protected_dirty_file_guard(base)
     base._R45_MODULE = None; base._RUNTIME = None
@@ -800,10 +965,18 @@ def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
     runtime = base._RUNTIME
     if runtime is None: raise RuntimeError("R53 private runtime did not configure")
     claim_verifier = install_r53_claim_verifier(base, runtime)
-    live = bind_live_runtime(base, runtime, plan)
+    live = bind_live_runtime(base, runtime, plan,
+                             allow_existing_training_state=recovery_mode)
     runtime["round53_protected_dirty_file_guard"] = source_guard
     module = runtime["module"]
-    first4, trained = run_first_four_gate_then_continue(base, module, runtime)
+    recovery_state = None
+    quarantined = None
+    if recovery_mode:
+        recovery_state = verify_persisted_first_batch_state(base, RAW, plan)
+        quarantined = quarantine_failed_first_batch_gate_receipts(RAW)
+        first4, trained = recover_first_batch_gate_then_continue(base, module, runtime)
+    else:
+        first4, trained = run_first_four_gate_then_continue(base, module, runtime)
     rows = []
     run = runtime["r42_run"]
     for seed in SEEDS:
@@ -854,6 +1027,10 @@ def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
         raise RuntimeError("final derived ledger did not close; authoritative claims are preserved")
     result = {"kind": "round53-execution-result/1", "status": "complete",
               "task_id": TASK_ID, "runner_version": R53_RUNNER_VERSION,
+              "mode": mode,
+              "recovery": (None if recovery_state is None else {
+                  "state_verification": recovery_state,
+                  "quarantined_failed_gate_receipts": quarantined}),
               "training_version": TRAINING_VERSION, "training": trained,
               "first_four_and_gates": first4, "evaluation_rows": len(rows),
               "ledger": ledger, "claim_closure": core_closure,
@@ -877,4 +1054,8 @@ def run_first_four_gate_then_continue(base: Any, module: Any,
 
 
 if __name__ == "__main__":
-    print(json.dumps(execute_authorized(), ensure_ascii=False, indent=2))
+    if len(sys.argv) > 1 and sys.argv[1] == "--recover-first-batch-gate":
+        result = execute_authorized(mode="recover_first_batch_gate")
+    else:
+        result = execute_authorized()
+    print(json.dumps(result, ensure_ascii=False, indent=2))

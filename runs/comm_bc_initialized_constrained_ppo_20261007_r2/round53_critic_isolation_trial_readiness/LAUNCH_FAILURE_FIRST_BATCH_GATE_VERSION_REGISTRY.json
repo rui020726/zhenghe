@@ -1,0 +1,31 @@
+{
+  "kind": "round53-launch-failure/5",
+  "status": "preserved_first_batch_gate_failure_with_committed_training_state",
+  "failed_head_before_fix": "86438c9eae1c82d431f1c4148a4387505968b64b",
+  "failure_time_local": "2026-10-08 09:47",
+  "phase": "seed 11 actual R43/R44 first-batch correctness gate (after all three seeds completed first-four episodes and batch-0 PPO updates)",
+  "error_type": "RuntimeError",
+  "error_message": "seed 11: actual first-batch gate failed: {'type': 'RuntimeError', 'message': 'seed 11: first batch has wrong training version'}",
+  "root_cause": "bind_live_runtime applied the R53 training version to r42_versions/trainer/runner/r42_run and round42_freeze but not to runtime[frozen][round42][training_version]; the R43 first_batch_gate compares the committed batch record against that frozen copy. R45's own version-boundary contract (r45_r2_execute_r3.py line 1252) requires updating frozen[round42][training_version] together with the versions module; the R53 harness omitted this seam.",
+  "wiring_not_science": true,
+  "evidence_batch_record_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1",
+  "evidence_runtime_frozen_training_version": "same string without the +r53-critic-representation-stop-gradient/1 suffix",
+  "committed_state": {
+    "normal_claims_complete": 12,
+    "episodes_run": 12,
+    "steps_run": 12000,
+    "ppo_updates": 3,
+    "optimizer_step_calls": 24,
+    "checkpoint_write_calls": 12,
+    "reserve_used": 0
+  },
+  "recovery_contract": {
+    "no_repeated_ppo_updates": "recovery re-runs only the pure-audit first_batch_gate (0 environment, 0 optimizer steps) on the preserved committed state, then continues via the unchanged R40 resume adapter",
+    "frozen_version_wiring": "runtime[frozen][round42][training_version] set to the declared R53 training version in bind_live_runtime, mirroring R45 configure line 1252; the R44 claim verifier keeps the untouched registered R44 frozen object",
+    "failed_gate_receipts": "quarantined into raw/runtime/failed_first_batch_gate_receipts_quarantine with SHA manifest before re-running the gate"
+  },
+  "preserved_namespace": "raw_launch_failure_first_batch_gate_version_20261008T014500Z",
+  "preserved_namespace_files": 118,
+  "preserved_namespace_sha256_verified": true,
+  "authorization_not_revoked": true
+}
