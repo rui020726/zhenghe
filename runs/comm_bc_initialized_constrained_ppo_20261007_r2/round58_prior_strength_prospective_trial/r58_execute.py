@@ -1013,6 +1013,71 @@ def quarantine_failed_first_batch_gate_receipts(raw: Path) -> dict[str, Any]:
     return payload
 
 
+
+def recover_batch0_in_runtime(base: Any, module: Any, runtime: dict[str, Any], plan: dict[str, Any]) -> dict[str, Any]:
+    """Path B: recompute the uncommitted batch-0 update inside the configured runtime."""
+    import torch
+    import v2_controller
+    import v2_trainer
+    seed = 11
+    ckpt_dir = Path(base.CHECKPOINT_JOURNAL_PATH).parent.parent / "checkpoints"
+    pre_path = ckpt_dir / f"v2_train_s{seed}_before_b0.pt"
+    payload = torch.load(pre_path, map_location="cpu", weights_only=False)
+    ts = payload["training_state"]
+    assert int(ts["updates"]) == 0 and int(ts["episodes_done"]) == 0
+    freeze = payload["freeze"]
+    controller = v2_controller.fresh_controller(seed)
+    sd = payload["controller"]
+    controller.inner.trunk.load_state_dict(sd["trunk"])
+    controller.inner.action_head.load_state_dict(sd["action_head"])
+    controller.inner.value_head.load_state_dict(sd["value_task_head"])
+    controller.cost_head.load_state_dict(sd["value_cost_head"])
+    optimizer = torch.optim.Adam(controller.parameters, lr=runtime["common"].LEARNING_RATE)
+    optimizer.load_state_dict(payload["optimizer"])
+    v2_trainer.restore_rng(payload.get("rng"))
+    rows_dir = RAW / "rows"
+    episodes = []
+    for e in range(4):
+        cands = sorted(rows_dir.glob(f"v2_r44_train_s{seed}_e{e}_*.json"))
+        row = read_json(cands[0])
+        tape_p = Path(row["artefacts"]["tape"])
+        tape_rows = [json.loads(l) for l in tape_p.read_text(encoding="utf-8").strip().splitlines()]
+        class FC:
+            def __init__(s, r): s.records = r
+        episodes.append({"collector": FC(tape_rows), "steps": 1000,
+                         "cost_stream": row["cost_stream"], "task_stream": row["task_stream"],
+                         "lambda": 1.0})
+    report = v2_trainer.ppo_update(controller, optimizer, episodes, update_index=0)
+    state = {"training_version": TRAINING_VERSION, "training_seed": seed,
+             "episodes_done": 4, "updates": 1,
+             "optimizer_steps": report["optimizer_steps"],
+             "lambda": ts["lambda"],
+             "lambda_history": [{"batch": 0, "g_hat": 0.0, "lambda_before": 1.0, "lambda_next": 1.0}]}
+    post_p = ckpt_dir / f"v2_train_s{seed}_after_b0.pt"
+    v2_trainer.save_checkpoint(controller, optimizer, state, post_p, freeze=freeze)
+    roll_p = ckpt_dir / f"v2_train_s{seed}.pt"
+    v2_trainer.save_checkpoint(controller, optimizer, state, roll_p, freeze=freeze)
+    ps = controller.parameter_summary()
+    br = {"kind": "round40-training-batch-record/1", "batch": 0, "training_seed": seed,
+          "episodes": [0,1,2,3], "episodes_done_after": 4, "update": report,
+          "controller_parameters_after": {"parameter_sha256": ps["parameter_sha256"]},
+          "training_version": TRAINING_VERSION, "recovered": True}
+    rp = ckpt_dir / f"r40_batch_s{seed}_b0_attempt01.json"
+    rp.write_text(json.dumps(br, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    cm = {"kind": "round40-batch-checkpoint-commit/1", "training_seed": seed, "batch": 0,
+          "episodes_done": 4, "updates": 1, "optimizer_steps": report["optimizer_steps"],
+          "lambda": ts["lambda"], "training_version": TRAINING_VERSION,
+          "comm_action_eligibility": "first-report-only/1",
+          "batch_record": rp.name, "batch_record_sha256": sha256_file(rp),
+          "rolling_checkpoint": roll_p.name, "rolling_checkpoint_sha256": sha256_file(roll_p),
+          "postupdate_checkpoint": post_p.name, "postupdate_checkpoint_sha256": sha256_file(post_p),
+          "controller_parameters": {"parameter_sha256": ps["parameter_sha256"]}, "recovered": True}
+    cp = ckpt_dir / f"r40_batch_commit_s{seed}_b0.json"
+    cp.write_text(json.dumps(cm, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"batch-0 recovered: steps={report['optimizer_steps']}")
+    return {"method": "path_B_recompute_in_configured_runtime", "optimizer_steps": report["optimizer_steps"]}
+
+
 def recover_first_batch_gate_then_continue(base: Any, module: Any,
                                            runtime: dict[str, Any]) -> tuple[Any, Any]:
     """Re-run only the pure-audit first-batch gates, then resume fixed training.
@@ -1069,7 +1134,7 @@ def _replace_non_json_callables(obj: Any, path: str = "result",
 def execute_authorized(auth_path: Path = AUTH_PATH, *,
                        mode: str = "fresh") -> dict[str, Any]:
     """After authorization and source preflight, run counted first-four gates before continuation."""
-    if mode not in ("fresh", "recover_first_batch_gate", "recover_after_candidate_eval"):
+    if mode not in ("fresh", "recover_first_batch_gate", "recover_after_candidate_eval", "recover_batch0"):
         raise ValueError(f"unknown ROUND53 execution mode: {mode}")
     run_mode = mode
     plan = plan_from_frozen_sources()
@@ -1084,6 +1149,7 @@ def execute_authorized(auth_path: Path = AUTH_PATH, *,
     recovery_mode = mode.startswith("recover_")
     gate_recovery_mode = mode == "recover_first_batch_gate"
     eval_recovery_mode = mode == "recover_after_candidate_eval"
+    batch0_recovery_mode = mode == "recover_batch0"
     if recovery_mode:
         if not RAW.is_dir():
             raise RuntimeError("recovery requires the preserved R53 raw namespace")
@@ -1109,15 +1175,23 @@ def execute_authorized(auth_path: Path = AUTH_PATH, *,
     runtime = base._RUNTIME
     if runtime is None: raise RuntimeError("R53 private runtime did not configure")
     claim_verifier = install_r53_claim_verifier(base, runtime)
-    checkpoint_mode = ("verify_batch0" if gate_recovery_mode
-                       else "verify_ep128" if eval_recovery_mode else "forbid_existing")
+    checkpoint_mode = ("verify_batch0" if gate_recovery_mode else
+                       "verify_ep128" if eval_recovery_mode else
+                       "verify_batch0" if batch0_recovery_mode else
+                       "forbid_existing")
+                       else "verify_ep128" if eval_recovery_mode else "forbid_existing"
+                       else "verify_batch0" if batch0_recovery_mode else "forbid_existing")
     live = bind_live_runtime(base, runtime, plan,
                              checkpoint_mode=checkpoint_mode)
     runtime["round53_protected_dirty_file_guard"] = source_guard
     module = runtime["module"]
     recovery_state = None
     quarantined = None
-    if gate_recovery_mode:
+    if batch0_recovery_mode:
+        recovery_state = recover_batch0_in_runtime(base, module, runtime, plan)
+        quarantined = None
+        first4, trained = run_first_four_gate_then_continue(base, module, runtime)
+    elif gate_recovery_mode:
         recovery_state = verify_persisted_first_batch_state(base, RAW, plan)
         quarantined = quarantine_failed_first_batch_gate_receipts(RAW)
         first4, trained = recover_first_batch_gate_then_continue(base, module, runtime)
@@ -1297,6 +1371,8 @@ if __name__ == "__main__":
     flag = sys.argv[1] if len(sys.argv) > 1 else ""
     if flag == "--recover-first-batch-gate":
         result = execute_authorized(mode="recover_first_batch_gate")
+    elif flag == "--recover-batch0":
+        result = execute_authorized(mode="recover_batch0")
     elif flag == "--recover-after-candidate-eval":
         result = execute_authorized(mode="recover_after_candidate_eval")
     else:
