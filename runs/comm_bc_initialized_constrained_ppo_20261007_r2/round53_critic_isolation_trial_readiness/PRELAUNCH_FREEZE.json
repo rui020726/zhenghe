@@ -1,0 +1,55 @@
+{
+  "kind": "round53-prelaunch-freeze/1",
+  "status": "frozen_before_launch",
+  "head_sha256": "c13df2f42f3277df5d5fdaf74bce898807dc04ae",
+  "authorization_file": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round53_critic_isolation_trial_readiness\\EXECUTION_AUTHORIZATION.json",
+  "authorization_file_sha256": "87efa566d91bfd8da2bf0067a94314131678a10833db9a0f6fb8c367aa63b016",
+  "execution_basis_file": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round53_critic_isolation_trial_readiness\\ROUND53_EXECUTION_BASIS_USER_PROMPT.md",
+  "execution_basis_file_sha256": "6e7780e134eccd96c94e849689d435370697de5b989218f4ff71c1112af0c8a2",
+  "source_prompt_sha256": "6e7780e134eccd96c94e849689d435370697de5b989218f4ff71c1112af0c8a2",
+  "plan_sha256": "334279e877638cc768391b97b437ac512deeafbfc0a1afd86e6e4cd53bdc9af2",
+  "canonical_trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+  "executor_sha256": "3252db0800d393b3d37c1faf1034a22ffd7862d464b01581c71c4fa76ca35ccf",
+  "contracts_sha256": "ab0614ee3081c51a604687eba7feff00671942385a31012e81135b2a6eb0b00f",
+  "policy_adapter_sha256": "e2f16bf55478d1a95e0f9ee07338f1cc602041373feaf5e8fadee28ab7a7f0d9",
+  "frozen_inputs": [
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_FROZEN_CONFIG.json",
+      "sha256": "da268b58a053b16216353fd3f0767f8cecdac57a5a7ea82e793e818613a8448d"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_KEY_PLAN.json",
+      "sha256": "2d3928a11cdef5260c89c28698152b9577617260797e8fa28e03fbb8e347fc85"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_INPUT_IDENTITY.json",
+      "sha256": "0859d53d16d7dd949efc8bd70fabc9ce8337e08e830f268022627583faa5d1b0"
+    }
+  ],
+  "statistics_contract": {
+    "unit": "scenario",
+    "grouping": "training seed and mode separately; no pooling across seeds",
+    "resampling": {
+      "rng": "numpy Generator PCG64",
+      "seed": 20261008,
+      "draws": 10000,
+      "sampling": "with replacement over 16 scenarios",
+      "indices_usage": "values[indices].mean(axis=1)",
+      "interval": "linear percentile 95% descriptive interval"
+    },
+    "difference_direction": "isolated candidate - control",
+    "required_comparisons": [
+      "isolated PPO vs shared PPO",
+      "isolated PPO vs true BC same mode",
+      "isolated PPO vs immediate and late"
+    ],
+    "reporting": [
+      "absolute on-time task count",
+      "exact on-time target ID sets",
+      "lost/saved targets",
+      "measured bytes",
+      "first reports",
+      "joint task-cost changes"
+    ]
+  }
+}
