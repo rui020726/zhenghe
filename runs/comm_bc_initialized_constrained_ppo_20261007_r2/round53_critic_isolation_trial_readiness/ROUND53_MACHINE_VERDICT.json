@@ -1,0 +1,56 @@
+{
+  "kind": "round53-machine-verdict/1",
+  "technical_execution_complete": true,
+  "claim_closure": {
+    "normal": 528,
+    "reserve": 0,
+    "hard_cap": 552
+  },
+  "critic_isolation_route": "critic_representation_stop_gradient/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1",
+  "development_go": false,
+  "development_gate": {
+    "criterion": "per seed: greedy on-time target ID sets identical to immediate in 16/16 scenes AND mean billed bytes < 4838.25 B/episode",
+    "per_seed": [
+      {
+        "seed": 11,
+        "greedy_on_time_total": 96,
+        "greedy_mean_billed_bytes": 4995.375,
+        "greedy_mean_billed_bytes_below_threshold": false,
+        "greedy_scenes_with_immediate_identical_on_time_ids": 16,
+        "greedy_vs_immediate_lost_targets": [],
+        "greedy_vs_immediate_saved_targets": [],
+        "greedy_vs_shared_ppo_on_time_difference_point": 0.0,
+        "sampled_vs_bc_sampled_on_time_difference_point": 0.0
+      },
+      {
+        "seed": 22,
+        "greedy_on_time_total": 96,
+        "greedy_mean_billed_bytes": 3923.25,
+        "greedy_mean_billed_bytes_below_threshold": true,
+        "greedy_scenes_with_immediate_identical_on_time_ids": 16,
+        "greedy_vs_immediate_lost_targets": [],
+        "greedy_vs_immediate_saved_targets": [],
+        "greedy_vs_shared_ppo_on_time_difference_point": 0.0,
+        "sampled_vs_bc_sampled_on_time_difference_point": 0.0
+      },
+      {
+        "seed": 33,
+        "greedy_on_time_total": 96,
+        "greedy_mean_billed_bytes": 4851.0,
+        "greedy_mean_billed_bytes_below_threshold": false,
+        "greedy_scenes_with_immediate_identical_on_time_ids": 16,
+        "greedy_vs_immediate_lost_targets": [],
+        "greedy_vs_immediate_saved_targets": [],
+        "greedy_vs_shared_ppo_on_time_difference_point": 0.0,
+        "sampled_vs_bc_sampled_on_time_difference_point": 0.0
+      }
+    ]
+  },
+  "claims_not_established": [
+    "no independent confirmation run",
+    "no formal non-inferiority test",
+    "no population-zero-loss or generalization claim",
+    "CI containing 0 is not equivalence"
+  ]
+}
