@@ -12,9 +12,11 @@ Source-patched copy of the frozen ppo_update exactly as in R56, plus:
 The frozen canonical trainer on disk is never modified.
 """
 from __future__ import annotations
-import difflib, inspect, json, math
+import difflib, hashlib, inspect, json, math
 from pathlib import Path
 from typing import Any
+
+import torch
 
 GATE_BETA = 1.00
 READY_CUT = 147.0
@@ -54,22 +56,12 @@ INSERT_LOSS = """                    - common.ENTROPY_BONUS * entropy_t.mean())
                          else torch.zeros((), dtype=torch.float32))
             loss = loss + GATE_BETA * gate_loss
             if GATE_DIAG["pending"] and not GATE_DIAG["done"]:
-                actor_params = (list(controller.inner.trunk.parameters())
-                                + list(controller.inner.action_head.parameters()))
-                base_only = loss - GATE_BETA * gate_loss
-                gb = torch.autograd.grad(base_only, actor_params, retain_graph=True,
-                                         allow_unused=True)
-                gg = torch.autograd.grad(GATE_BETA * gate_loss, actor_params,
-                                         retain_graph=True, allow_unused=True)
-                l1b = float(sum(float(g.detach().abs().sum()) for g in gb if g is not None))
-                l1g = float(sum(float(g.detach().abs().sum()) for g in gg if g is not None))
-                dot = float(sum(float((a * b).sum()) for a, b in zip(gb, gg)
-                                if a is not None and b is not None))
-                nb = math.sqrt(sum(float((g ** 2).sum()) for g in gb if g is not None))
-                ng = math.sqrt(sum(float((g ** 2).sum()) for g in gg if g is not None))
-                GATE_DIAG["record"] = {
-                    "base_actor_grad_l1": l1b, "prior_grad_l1": l1g,
-                    "dot": dot, "cosine": (dot / (nb * ng)) if nb > 0 and ng > 0 else None}
+                try:
+                    GATE_DIAG["record"] = capture_actor_gradient_diagnostic(
+                        controller, loss - GATE_BETA * gate_loss,
+                        GATE_BETA * gate_loss)
+                except Exception as exc:
+                    GATE_DIAG["error"] = f"{type(exc).__name__}: {exc}"
                 GATE_DIAG["done"] = True
 """
 
@@ -98,7 +90,7 @@ PATCH_RETURN = """        "samples": len(samples),
 ANCHOR_MINIB = """            minibatches += 1
 """
 
-INSERT_MINIB = """            GATE_RECORDS.append({
+INSERT_MINIB = """            record_minibatch({
                 "update_index": int(update_index), "minibatch": minibatches - 1,
                 "n_rows": len(chunk),
                 "gate_rows": len(gate_skip_log_probs),
@@ -131,19 +123,65 @@ def build_patched_source(trainer_module) -> tuple[str, str, list]:
     return original, patched, diff
 
 
-def install_gate_prior(trainer_module, controller_detach_context, raw_dir: Path) -> dict[str, Any]:
+def capture_actor_gradient_diagnostic(controller, base_loss, prior_loss) -> dict[str, Any]:
+    """Read separated gradients with autograd.grad; never populate parameter .grad."""
+    actor_params = (list(controller.inner.trunk.parameters())
+                    + list(controller.inner.action_head.parameters()))
+    base_grads = torch.autograd.grad(base_loss, actor_params, retain_graph=True,
+                                     allow_unused=True)
+    if prior_loss.requires_grad:
+        prior_grads = torch.autograd.grad(prior_loss, actor_params, retain_graph=True,
+                                          allow_unused=True)
+    else:
+        prior_grads = (None,) * len(actor_params)
+    dot = float(sum(float((a * b).sum()) for a, b in zip(base_grads, prior_grads)
+                    if a is not None and b is not None))
+    base_norm = math.sqrt(sum(float((g ** 2).sum()) for g in base_grads if g is not None))
+    prior_norm = math.sqrt(sum(float((g ** 2).sum()) for g in prior_grads if g is not None))
+    return {
+        "base_actor_grad_l1": float(sum(float(g.detach().abs().sum())
+                                          for g in base_grads if g is not None)),
+        "prior_grad_l1": float(sum(float(g.detach().abs().sum())
+                                    for g in prior_grads if g is not None)),
+        "base_actor_grad_l2": base_norm,
+        "prior_actor_grad_l2": prior_norm,
+        "dot": dot,
+        "cosine": dot / (base_norm * prior_norm)
+        if base_norm > 0 and prior_norm > 0 else None,
+    }
+
+
+def _append_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
+    if not rows:
+        return
+    with path.open("a", encoding="utf-8") as handle:
+        for row in rows:
+            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
+def install_gate_prior(trainer_module, controller_detach_context, raw_dir: Path,
+                       *, writer=_append_jsonl) -> dict[str, Any]:
     original_source, patched_source, diff = build_patched_source(trainer_module)
     namespace = dict(vars(trainer_module))
-    namespace["GATE_BETA"] = GATE_BETA
-    namespace["READY_CUT"] = READY_CUT
-    namespace["HORIZON"] = HORIZON
-    namespace["import math"] = None
-    exec(compile("import math", "<r58-math>", "exec"), namespace)
+    namespace.update({"GATE_BETA": GATE_BETA, "READY_CUT": READY_CUT,
+                      "HORIZON": HORIZON})
     GATE_RECORDS: list[dict[str, Any]] = []
-    GATE_DIAG: dict[str, Any] = {"pending": False, "done": False, "record": None}
+    GATE_DIAG: dict[str, Any] = {"pending": False, "done": False, "record": None,
+                                 "error": None, "record_errors": []}
     namespace["GATE_RECORDS"] = GATE_RECORDS
     namespace["GATE_DIAG"] = GATE_DIAG
-    exec(compile(patched_source, "<r58-gate-ppo-update>", "exec"), namespace)
+    namespace["capture_actor_gradient_diagnostic"] = capture_actor_gradient_diagnostic
+
+    def record_minibatch(row: dict[str, Any]) -> None:
+        try:
+            GATE_RECORDS.append(row)
+        except Exception as exc:
+            GATE_DIAG["record_errors"].append(
+                {"kind": "minibatch_record_capture",
+                 "error": f"{type(exc).__name__}: {exc}"})
+
+    namespace["record_minibatch"] = record_minibatch
+    exec(compile(patched_source, "<r58-gate-ppo-update-repaired>", "exec"), namespace)
     patched_fn = namespace["ppo_update"]
     previous = getattr(trainer_module, "ppo_update", None)
     record_path = Path(raw_dir) / "runtime" / "r58_minibatch_records.jsonl"
@@ -151,38 +189,45 @@ def install_gate_prior(trainer_module, controller_detach_context, raw_dir: Path)
 
     def r58_ppo_update(controller, optimizer, episodes, *, update_index):
         GATE_RECORDS.clear()
-        GATE_DIAG["pending"] = update_index in DIAG_UPDATES
-        GATE_DIAG["done"] = False
+        GATE_DIAG.update({"pending": update_index in DIAG_UPDATES, "done": False,
+                          "record": None, "error": None, "record_errors": []})
         before = {n: p.detach().clone() for n, p in
                   list(controller.inner.trunk.named_parameters())
                   + list(controller.inner.action_head.named_parameters())}
+        # Keep the real R53 context around likelihood recomputation and every PPO epoch.
+        # Core PPO errors propagate; only diagnostic work below is treated as passive.
         with controller_detach_context(controller):
             report = patched_fn(controller, optimizer, episodes, update_index=update_index)
-        with record_path.open("a", encoding="utf-8") as handle:
-            for rec in GATE_RECORDS:
-                handle.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+        passive_errors = list(GATE_DIAG["record_errors"])
+        try:
+            writer(record_path, GATE_RECORDS)
+        except Exception as exc:
+            passive_errors.append({"kind": "minibatch_record_write",
+                                   "error": f"{type(exc).__name__}: {exc}"})
+
         diag_record = None
         try:
-                    if GATE_DIAG["done"]:
-                        diag_record = {"update_index": update_index, **GATE_DIAG["record"],
-                                       "params_before_sha256": hashlib.sha256(b"".join(
-                                           p.detach().numpy().tobytes() for _, p in sorted(before.items()))
-                                           ).hexdigest(),
-                                       "params_after_sha256": hashlib.sha256(b"".join(
-                                           p.detach().numpy().tobytes() for _, p in sorted(
-                                               {n: pp.detach().clone() for n, pp in
-                                                list(controller.inner.trunk.named_parameters())
-                                                + list(controller.inner.action_head.named_parameters())
-                                            }.items()))).hexdigest()}
-                        with (Path(raw_dir) / "runtime" / "r58_gradient_diagnostics.jsonl").open(
-                                "a", encoding="utf-8") as handle:
-                            handle.write(json.dumps(diag_record, ensure_ascii=False) + "\n")
+            if GATE_DIAG["error"]:
+                raise RuntimeError(GATE_DIAG["error"])
+            if GATE_DIAG["done"]:
+                after = {n: p.detach() for n, p in
+                         list(controller.inner.trunk.named_parameters())
+                         + list(controller.inner.action_head.named_parameters())}
+                diag_record = {"update_index": update_index, **GATE_DIAG["record"],
+                               "params_before_sha256": hashlib.sha256(b"".join(
+                                   p.detach().cpu().contiguous().numpy().tobytes()
+                                   for _, p in sorted(before.items()))).hexdigest(),
+                               "params_after_sha256": hashlib.sha256(b"".join(
+                                   p.detach().cpu().contiguous().numpy().tobytes()
+                                   for _, p in sorted(after.items()))).hexdigest()}
+                writer(Path(raw_dir) / "runtime" / "r58_gradient_diagnostics.jsonl",
+                       [diag_record])
         except Exception as exc:
             diag_record = {"update_index": update_index,
                            "diagnostics_error": f"{type(exc).__name__}: {exc}"}
-            with (Path(raw_dir) / "runtime" / "r58_diagnostics_errors.jsonl").open(
-                    "a", encoding="utf-8") as handle:
-                handle.write(json.dumps(diag_record, ensure_ascii=False) + "\n")
+        if passive_errors:
+            report["passive_diagnostics_errors"] = passive_errors
         report["gate_diag"] = diag_record
         return report
 
@@ -192,11 +237,13 @@ def install_gate_prior(trainer_module, controller_detach_context, raw_dir: Path)
     def undo() -> None:
         if undone["flag"]:
             return
+        if trainer_module.ppo_update is not r58_ppo_update:
+            raise RuntimeError("trainer binding changed before adapter removal")
         trainer_module.ppo_update = previous
         undone["flag"] = True
 
-    return {"kind": "r58-gate-prior/1", "beta": GATE_BETA, "ready_cut": READY_CUT,
-            "skip_index": SKIP_INDEX, "diag_updates": list(DIAG_UPDATES),
-            "recorder_path": str(record_path),
+    return {"kind": "r58-gate-prior-repaired/1", "beta": GATE_BETA,
+            "ready_cut": READY_CUT, "skip_index": SKIP_INDEX,
+            "diag_updates": list(DIAG_UPDATES), "recorder_path": str(record_path),
             "lines_added": len(patched_source.splitlines()) - len(original_source.splitlines()),
             "diff": diff, "undo": undo}
