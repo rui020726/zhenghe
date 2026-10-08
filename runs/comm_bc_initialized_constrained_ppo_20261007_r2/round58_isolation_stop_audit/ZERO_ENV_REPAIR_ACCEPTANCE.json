@@ -1,0 +1,92 @@
+{
+  "kind": "round58-zero-environment-repair-acceptance/1",
+  "scope": "Isolated launcher and actual R40 commit seam regression only; not scientific plan completion or authorization to execute.",
+  "branch": "exp/round58-prior-strength-prospective-trial",
+  "verified_head_before_acceptance_commit": "3f7b6ee0a60f43ab6466f22d9bedb98ec8b2766a",
+  "scientific_plan": {
+    "status": "incomplete",
+    "effective_training_batches": 0,
+    "effective_optimizer_updates": 0,
+    "completed_training_tasks": 0,
+    "completed_evaluation_cells": 0,
+    "path_c_replacement_attempts": 0,
+    "next_run_authorized": false
+  },
+  "historical_evidence": {
+    "known_environment_construction_or_run_invocations": 16,
+    "gen1_complete_claims": 4,
+    "gen2_complete_claims": 12,
+    "historical_normal_reserve_classification": "unresolved: gen2 claims say normal while registration says four reserve starts; legacy ledger says normal=4,reserve=0",
+    "optimizer_call_total_evidence_supported": 48,
+    "optimizer_evidence": [
+      {"count": 8, "source": "gen1 timestamped failure hook", "persistence": "not persisted"},
+      {"count": 16, "source": "two distinct gen1 after-b0 checkpoints at Adam step 8 plus distinct hook suffixes", "evidence_grade": "inferred; reconstructed journal prefixes excluded"},
+      {"count": 24, "source": "gen2 timestamped hook lines, cross-checked by three after-b0 checkpoints at Adam step 8", "evidence_grade": "hook lines available; checkpoint attribution indirect"}
+    ],
+    "effective_valid_updates": 0,
+    "note": "Evidence-supported historical call total is not equivalent to a complete per-call raw journal; invalid calls remain counted historically."
+  },
+  "original_four_rollouts": {
+    "claims_and_row_tape_hashes": "four gen1 claims complete; row/tape hashes match receipts",
+    "controller_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+    "reuse_qualification": "candidate bytes preserved, not admitted as reproducible training batch",
+    "tape_replay_count": 0,
+    "unresolved": ["12 substituted/defaulted fields per row", "full pre-minibatch Python/NumPy/Torch RNG and exact permutation", "hash-closed canonical batch_samples/GAE input"]
+  },
+  "substituted_fields": [
+    {"field": "map_path", "classification": "world/path; science-risk", "record": "archived null; current default None"},
+    {"field": "comm_sends_per_tick", "classification": "communication protocol; science-risk", "record": "archived null; current default None"},
+    {"field": "comm_budget_bytes", "classification": "communication accounting; science-risk", "record": "archived null; current default None"},
+    {"field": "comm_max_wait_steps", "classification": "communication protocol; science-risk", "record": "archived null; current default None"},
+    {"field": "comm_urgent_wait_steps", "classification": "communication protocol; science-risk", "record": "archived null; current default None"},
+    {"field": "comm_ack_delay_ticks", "classification": "communication protocol; science-risk", "record": "archived null; current default None"},
+    {"field": "comm_ack_delivery_probability", "classification": "communication protocol; science-risk", "record": "archived null; current default None"},
+    {"field": "repository_root", "classification": "path/provenance", "record": "archived null; current default None"},
+    {"field": "replay_stream", "classification": "input/record provenance", "record": "archived null; current default None"},
+    {"field": "search_backend", "classification": "implementation choice; potential science-risk", "record": "archived field dropped; not current configuration field"},
+    {"field": "allocation_backend", "classification": "implementation choice; potential science-risk", "record": "archived field dropped; not current configuration field"},
+    {"field": "Stage B frozen overrides applied", "classification": "aggregate: includes communication/world science-risk values and passive instrumentation/runtime controls", "record": ["comm_ack", "comm_budget_bytes", "comm_delay_ticks", "comm_delivery_probability", "comm_max_wait_steps", "comm_range", "comm_sends_per_tick", "comm_subscribers", "comm_timing_mode", "comm_urgent_wait_steps", "decision_trace", "device", "gossip_interval", "info_probe", "mock", "num_goals", "quiet", "record_stream", "replay_stream", "search_probe", "steps"]}
+  ],
+  "runtime_source_identity": {
+    "trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "common_sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+    "controller_sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+    "binding_test": "actual R46 configure path binds actual R40 trainer and actual PPO globals/common to repaired adapter",
+    "execution_default": "denied"
+  },
+  "tests": {
+    "reused_prior_suite": {"count": 16, "exit_code": 0, "optimizer_spy_callbacks": 104},
+    "private_launcher_suite": {"count": 3, "exit_code": 0},
+    "actual_commit_seam_suite": {"count": 3, "exit_code": 0, "ppo_calls": 5, "fake_noop_optimizer_callbacks": 20},
+    "total_count": 22,
+    "real_optimizer_step_calls": 0,
+    "test_episode_provider": "stub only; not a constructed or simulated environment",
+    "transaction_io": "in-memory spies; no filesystem crash-atomicity claim"
+  },
+  "this_turn_operations": {
+    "environment_construction": 0,
+    "environment_starts": 0,
+    "simulation_runs": 0,
+    "new_claims": 0,
+    "training_tasks": 0,
+    "evaluation_cells": 0,
+    "real_optimizer_updates": 0,
+    "fake_noop_optimizer_callbacks": 20,
+    "checkpoint_writes": 0,
+    "successful_training_receipt_writes": 0,
+    "old_tapes_replayed": 0,
+    "real_rng_restores": 0,
+    "full_project_or_simulation_suites": 0
+  },
+  "protected_files": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+    "changed_or_staged": false
+  },
+  "limitations": [
+    "No Path C replacement run was performed.",
+    "No new training execution identity was frozen for scientific use.",
+    "No new scene-block availability audit or evaluation was performed.",
+    "In-memory transaction spies validate code-path ordering and failure propagation, not actual filesystem crash behavior."
+  ]
+}
