@@ -1,0 +1,35 @@
+{
+  "kind": "round58-execution-status/1",
+  "task_id": "ROUND58-PRIOR-STRENGTH-PROSPECTIVE-TRIAL",
+  "branch": "exp/round58-prior-strength-prospective-trial",
+  "status": "STARTED_NOT_COMPLETED",
+  "start_point": {
+    "branch": "analysis/round57-prior-effect-attribution",
+    "commit_prefix": "d874d5f4",
+    "r56_head_ancestor_verified": "e08aa34f2755fb88b7e5fd650ac4d9d16b56823f"
+  },
+  "completed": [
+    "start and ancestor chain verified (R53/R54/R55/R56)",
+    "branch exp/round58-prior-strength-prospective-trial created",
+    "prompt archive saved (this directory)",
+    "scene availability audit: round37 SCENE_USAGE_AUDIT.json shows block [1700000,1700063] free (occupied_count=0); first-choice block 1700000..1700031 is legal"
+  ],
+  "remaining_work": [
+    "r58_contracts.py: TASK_ID/BRANCH/TRAINING_VERSION (+r56...+r58-prior-strength-beta1p00/1), caps 1024/40/1064, plan = 384 train + 576 eval (R53/R56/R58 models x 3 seeds x 2 modes x 32 scenes) + 64 rule evals (immediate+late x 32)",
+    "r58_gate_prior.py: beta=1.00 (otherwise identical seam)",
+    "r58_execute.py: adapted from r56_execute.py; scene list 1700000..1700031; 3-model evaluation entries; 64 rule cells via run_rule; per-minibatch passive recorder; gradient diagnostics at batches 0/15/31 first minibatch (9 points)",
+    "narrow tests incl. beta=1 vs beta=0.10 gradient ratio 10x, passive-recorder neutrality, scene plan freeze",
+    "authorization receipt + prelaunch freeze + launch",
+    "training (384) + evaluations (640) + statistics on new block (PCG64(20261008), 10000x32) + report + machine verdict"
+  ],
+  "zero_ops_so_far": {
+    "environment_constructor_calls": 0,
+    "simulation_runs": 0,
+    "new_flows": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0,
+    "new_episode_rows": 0
+  },
+  "protected_dirty_files_unchanged_at_registration": true,
+  "updated_at": "2026-10-08T09:54:09.144101+00:00"
+}
