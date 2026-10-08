@@ -156,7 +156,8 @@ def install_gate_prior(trainer_module, controller_detach_context, raw_dir: Path)
         before = {n: p.detach().clone() for n, p in
                   list(controller.inner.trunk.named_parameters())
                   + list(controller.inner.action_head.named_parameters())}
-        report = patched_fn(controller, optimizer, episodes, update_index=update_index)
+        with controller_detach_context(controller):
+            report = patched_fn(controller, optimizer, episodes, update_index=update_index)
         with record_path.open("a", encoding="utf-8") as handle:
             for rec in GATE_RECORDS:
                 handle.write(json.dumps(rec, ensure_ascii=False) + "\n")

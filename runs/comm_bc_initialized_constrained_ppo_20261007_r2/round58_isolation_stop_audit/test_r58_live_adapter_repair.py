@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import pathlib
 import sys
+import tempfile
 import unittest
 
 import numpy as np
@@ -21,6 +22,7 @@ import r45_bc  # noqa: E402
 r45_bc.configure_source_imports()
 import v2_controller  # noqa: E402
 import v2_trainer  # noqa: E402
+from round53_trial_adapter import critic_input_detached  # noqa: E402
 
 
 def load_module(path: pathlib.Path, name: str):
@@ -101,6 +103,105 @@ class CounterRegression(unittest.TestCase):
         self.assertAlmostEqual(report["gate_loss"],
                                sum(r["gate_loss_raw"] for r in records) / 8,
                                places=6)
+
+
+class CriticIsolationRegression(unittest.TestCase):
+    def _gradients(self, loss, controller, modules):
+        params = [p for module in modules for p in module.parameters()]
+        return torch.autograd.grad(loss, params, allow_unused=True)
+
+    def test_real_task_and_cost_heads_detach_shared_trunk(self):
+        controller = v2_controller.fresh_controller(11)
+        features = torch.linspace(-0.3, 0.4, 19, dtype=torch.float32).reshape(1, 19)
+        trunk_params = list(controller.inner.trunk.parameters())
+
+        hidden = controller.inner.trunk(features)
+        with critic_input_detached(controller):
+            task_value = controller.inner.value_head(hidden).sum()
+            task_grads = torch.autograd.grad(
+                task_value, trunk_params + list(controller.inner.value_head.parameters()),
+                allow_unused=True)
+        n_trunk = len(trunk_params)
+        self.assertTrue(all(g is None for g in task_grads[:n_trunk]))
+        self.assertTrue(all(g is not None and float(g.abs().sum()) > 0
+                            for g in task_grads[n_trunk:]))
+
+        hidden = controller.inner.trunk(features)
+        with critic_input_detached(controller):
+            cost_value = controller.cost_head(hidden).sum()
+            cost_grads = torch.autograd.grad(
+                cost_value, trunk_params + list(controller.cost_head.parameters()),
+                allow_unused=True)
+        self.assertTrue(all(g is None for g in cost_grads[:n_trunk]))
+        self.assertTrue(all(g is not None and float(g.abs().sum()) > 0
+                            for g in cost_grads[n_trunk:]))
+
+        hidden = controller.inner.trunk(features)
+        actor_logits = controller.inner.action_head(hidden)
+        actor_loss = -torch.log_softmax(actor_logits, dim=-1)[0, 0]
+        actor_grads = torch.autograd.grad(
+            actor_loss,
+            trunk_params + list(controller.inner.action_head.parameters()),
+            allow_unused=True)
+        self.assertTrue(all(g is not None and float(g.abs().sum()) > 0
+                            for g in actor_grads))
+        for module in (controller.inner.value_head, controller.cost_head):
+            self.assertEqual(set(module._forward_pre_hooks), set())
+
+    def _run_with_forward_input_probe(self, fn, *, update_index):
+        controller = v2_controller.fresh_controller(11)
+        optimizer = SpyOptimizer(controller.parameters)
+        observed = {"task": [], "cost": []}
+        task = controller.inner.value_head
+        cost = controller.cost_head
+        task_forward, cost_forward = task.forward, cost.forward
+
+        def task_probe(x):
+            observed["task"].append(bool(x.requires_grad))
+            return task_forward(x)
+
+        def cost_probe(x):
+            observed["cost"].append(bool(x.requires_grad))
+            return cost_forward(x)
+
+        task.forward, cost.forward = task_probe, cost_probe
+        try:
+            report = fn(controller, optimizer, one_rollout(controller),
+                        update_index=update_index)
+        finally:
+            task.forward, cost.forward = task_forward, cost_forward
+        return report, optimizer.step_calls, observed
+
+    def test_historical_compiled_callable_bypasses_installed_critic_wrapper(self):
+        _, old_source, _ = old_gate.build_patched_source(v2_trainer)
+        namespace = dict(vars(v2_trainer))
+        namespace.update({"GATE_BETA": 1.0, "GATE_RECORDS": [],
+                          "GATE_DIAG": {"pending": False, "done": False, "record": None}})
+        exec(compile(old_source, "<historical-r58-source>", "exec"), namespace)
+        report, spy_steps, seen = self._run_with_forward_input_probe(
+            namespace["ppo_update"], update_index=1)
+        self.assertEqual(report["optimizer_steps"], 16)
+        self.assertEqual(spy_steps, 8)
+        # likelihood_alignment runs under no_grad and contributes the leading
+        # False values; the final eight are the four-epoch PPO forwards.
+        self.assertEqual(len(seen["task"]), 274, seen)
+        self.assertTrue(all(seen["task"][-8:]), seen)
+        self.assertEqual(len(seen["cost"]), 8, seen)
+        self.assertTrue(all(seen["cost"]), seen)
+
+    def test_repaired_installed_callable_enters_real_critic_context(self):
+        with tempfile.TemporaryDirectory(dir=HERE) as output:
+            installed = fixed_gate.install_gate_prior(
+                v2_trainer, critic_input_detached, pathlib.Path(output))
+            try:
+                report, spy_steps, seen = self._run_with_forward_input_probe(
+                    v2_trainer.ppo_update, update_index=1)
+                self.assertEqual(report["optimizer_steps"], 8)
+                self.assertEqual(spy_steps, 8)
+                self.assertTrue(seen["task"] and not any(seen["task"]))
+                self.assertTrue(seen["cost"] and not any(seen["cost"]))
+            finally:
+                installed["undo"]()
 
 
 if __name__ == "__main__":
