@@ -1,0 +1,32 @@
+{
+  "kind": "round53-launch-failure/6",
+  "status": "preserved_bc_eval_init_failure_with_committed_training_and_candidate_eval_state",
+  "failed_head_before_fix": "a1d4e3d lineage (amended to 90cced8)",
+  "failure_time_local": "2026-10-08 10:36",
+  "phase": "BC_POST sampled evaluation initialization (after all 384 training episodes and 96 candidate evaluations completed and claimed)",
+  "error_type": "RuntimeError",
+  "error_message": "BC_POST model-only initialization mismatch for seed 11",
+  "root_cause": "The R53 BC eval branch built the controller with fresh_controller(seed) alone and compared against the registered BC parameter identity. The registered BC_POST parameters come from the BC checkpoint state (r45_bc.load_bc_controller_state) applied to the same-seed fresh factory, exactly as R45's training injection and R46's model-only preflight do. The checkpoint load step was missing from the R53 harness.",
+  "wiring_not_science": true,
+  "claims_created_by_failed_branch": 0,
+  "episodes_run_by_failed_branch": 0,
+  "environment_constructor_calls_by_failed_branch": 0,
+  "committed_state_at_failure": {
+    "normal_claims_complete": 480,
+    "training_claims": 384,
+    "candidate_eval_claims": 96,
+    "bc_claims": 0,
+    "steps_run": 480000,
+    "ppo_updates": 96,
+    "optimizer_step_calls": 608,
+    "checkpoint_write_calls": 297,
+    "reserve_used": 0
+  },
+  "recovery_contract": {
+    "no_repeated_training": "ep128 summaries, gate receipts, and ep128 checkpoints are reused through the R46 verified _reuse_completed_training path; no episode or PPO update is replayed",
+    "no_repeated_candidate_eval": "the 96 completed candidate-eval claims are skipped by logical job; only the 48 BC sampled evals are launched",
+    "bc_init_fix": "fresh_controller(seed) + r45_bc.read_bc_checkpoint/load_bc_controller_state with checkpoint SHA, parameter identity, and ambient-RNG-preservation checks, mirroring R46's model-only preflight",
+    "live_namespace_preserved": "raw/ continues in place; no deletion; 533.6 MB intermediate state retained"
+  },
+  "authorization_not_revoked": true
+}

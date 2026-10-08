@@ -559,7 +559,7 @@ def seed_private_task_state(raw: Path) -> None:
 
 
 def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any], *,
-                      allow_existing_training_state: bool = False) -> dict[str, Any]:
+                      checkpoint_mode: str = "forbid_existing") -> dict[str, Any]:
 
     """Explicitly bind all output-owning live modules and actual trainer call path."""
     raw = Path(base.V6_DIR).resolve()
@@ -690,6 +690,23 @@ def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any], 
         return claim_path
     run._claim = planned_claim
 
+    # Register the 48 authorized R53 BC-sampled keys in the R2 in-memory key
+    # plan so the R45 claim-context validator accepts them.  The on-disk R45
+    # freeze stays untouched; the R53 fixed plan is the authorized source.
+    r45_module = getattr(base, "_R45_MODULE", None)
+    r2_freeze = getattr(r45_module, "R2_FREEZE", None) if r45_module else None
+    if not isinstance(r2_freeze, dict):
+        raise RuntimeError("R53 could not locate the live R2 key-plan freeze")
+    logical_jobs = set(r2_freeze["logical_key_plan"]["logical_jobs"])
+    bc_keys = {job["logical_job"] for job in plan["jobs"]
+               if job["scope"] == "bc_sampled_eval"}
+    existing_bc = bc_keys & logical_jobs
+    if existing_bc:
+        raise RuntimeError(f"R53 BC keys already present in the R2 key plan: {sorted(existing_bc)[:3]}")
+    if len(logical_jobs) != 480:
+        raise RuntimeError(f"unexpected R2 key-plan size before BC registration: {len(logical_jobs)}")
+    r2_freeze["logical_key_plan"]["logical_jobs"] = sorted(logical_jobs | bc_keys)
+
     # The atomic claim is authoritative. A derived snapshot/write failure is
     # recorded separately and must not escape into _execute_cell's broad except
     # (which would otherwise flip an already persisted complete claim to failed).
@@ -733,14 +750,20 @@ def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any], 
     # The R40 adapter scans only its private checkpoint root. It must be empty.
     checkpoint_dir = Path(common.CHECKPOINTS)
     stale = list(checkpoint_dir.glob("*.pt"))
-    if stale:
-        if not allow_existing_training_state:
+    if checkpoint_mode == "forbid_existing":
+        if stale:
             raise RuntimeError(f"private fresh-training checkpoint root is not empty: {stale}")
-        checkpoint_state = _verify_existing_first_batch_checkpoints(base)
-    else:
-        if allow_existing_training_state:
-            raise RuntimeError("recovery requires preserved batch-0 checkpoints")
         checkpoint_state = {"kind": "round53-fresh-checkpoint-root/1", "status": "empty"}
+    elif checkpoint_mode == "verify_batch0":
+        if not stale:
+            raise RuntimeError("batch-0 recovery requires preserved batch-0 checkpoints")
+        checkpoint_state = _verify_existing_first_batch_checkpoints(base)
+    elif checkpoint_mode == "verify_ep128":
+        if not stale:
+            raise RuntimeError("eval recovery requires preserved training checkpoints")
+        checkpoint_state = _verify_existing_ep128_checkpoints(base)
+    else:
+        raise RuntimeError(f"unknown ROUND53 checkpoint mode: {checkpoint_mode}")
     bindings = {label: str(Path(module.RUN_DIR).resolve())
                 for label, module in output_modules.items()}
     expected = str(raw)
@@ -792,6 +815,105 @@ def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any], 
             "registered_ep0_rng_route": rng_route_identity,
             "registered_ep0_rng_route_identity": rng_route_identity,
             "route_undo": undo_update}
+
+
+def run_bc_sampled_eval_cell(runtime: dict[str, Any], module: Any, seed: int, scene: int,
+                             controller: Any, identity: dict[str, Any],
+                             model: dict[str, Any]) -> dict[str, Any]:
+    """Run one R53 BC_POST sampled cell through the actual R45 eval cell path."""
+    from r42_one_shot import OneShotSendSkipCollector
+    run = runtime["r42_run"]
+    collector = OneShotSendSkipCollector(controller, greedy=False)
+    logical = f"model_eval_bc_s{int(seed)}_sampled_scene{int(scene)}"
+    tag = f"r53_bc_sampled_s{int(seed)}_scene{int(scene)}"
+    context = {
+        "scope": "bc_sampled_eval", "logical_job": logical,
+        "seed": int(seed), "mode": "sampled", "scenario_seed": int(scene),
+        "kind": "eval", "tag": tag,
+        "bc_checkpoint_sha256": model["checkpoint_sha256"],
+        "bc_parameter_sha256": model["parameter_sha256"],
+    }
+    action_seed = runtime["runner"].eval_action_seed(int(seed), int(scene), "sampled")
+    token = module.CURRENT_CONTEXT.set(context)
+    try:
+        return run._execute_cell(
+            f"model_eval_bc_s{int(seed)}_scene{int(scene)}_r53", logical, "eval",
+            int(scene),
+            {"arm": "BC_ONLY_R2", "training_seed": int(seed), "mode": "sampled",
+             "scenario_seed": int(scene)},
+            collector=collector,
+            runner_kwargs={
+                "policy": "learned", "attach": collector.policy(),
+                "controller": controller, "collector": collector,
+                "action_rng_seed": action_seed, "tag": tag,
+                "checkpoint_load_identity": identity,
+            },
+            row_updates={
+                "model_arm": "BC_ONLY_R2", "training_seed": int(seed),
+                "eval_mode": "sampled", "eval_block": "one_shot_sampled",
+                "action_rng_seed": action_seed,
+                "checkpoint_parameter_identity": identity["parameter_identity"],
+                "r53_evaluation_role": "BC_POST_SAMPLED_EVAL",
+                "bc_checkpoint_sha256": model["checkpoint_sha256"],
+                "bc_parameter_sha256": model["parameter_sha256"],
+                "teacher_inference_used": False,
+            },
+            identity=identity,
+        )
+    finally:
+        module.CURRENT_CONTEXT.reset(token)
+
+
+def _verify_existing_ep128_checkpoints(base: Any) -> dict[str, Any]:
+    """Hash-close preserved ep128 checkpoints against their training summaries."""
+    checkpoints = Path(base.V6_CHECKPOINTS_DIR)
+    per_seed: dict[str, Any] = {}
+    for seed in SEEDS:
+        summary_path = Path(base.R46_DIR) / f"ROUND46_TRAINING_s{seed}.json"
+        if not summary_path.is_file():
+            raise RuntimeError(f"eval recovery missing ep128 training summary for seed {seed}")
+        summary = read_json(summary_path)
+        if summary.get("status") != "complete" or int(summary.get("seed", -1)) != int(seed):
+            raise RuntimeError(f"eval recovery ep128 summary identity mismatch for seed {seed}")
+        checkpoint = checkpoints / f"v2_train_s{seed}_ep128.pt"
+        if not checkpoint.is_file() or sha256_file(checkpoint) != summary.get("ep128_checkpoint_sha256"):
+            raise RuntimeError(f"eval recovery ep128 checkpoint hash mismatch for seed {seed}")
+        per_seed[str(seed)] = {"summary": str(summary_path),
+                               "checkpoint": str(checkpoint)}
+    return {"kind": "round53-recovery-ep128-verification/1", "status": "passed",
+            "seeds": per_seed}
+
+
+def verify_persisted_candidate_eval_state(base: Any, raw: Path, plan: dict[str, Any]) -> dict[str, Any]:
+    """Close the preserved training + candidate-eval state before BC-sampled recovery."""
+    claim_paths = sorted((raw / "launch_claims").glob("*/*.json"))
+    if len(claim_paths) not in (480, 528):
+        raise RuntimeError(f"eval recovery requires 480 or 528 persisted claims, found {len(claim_paths)}")
+    claims = [read_json(path) for path in claim_paths]
+    closure = validate_claims(plan, claims, strict=False)
+    if (closure["counts"]["normal"] != len(claim_paths) or closure["counts"]["reserve"] != 0
+            or closure["completed_logical_jobs"] != len(claim_paths)):
+        raise RuntimeError("eval recovery requires all persisted normal claims complete")
+    completed = {str(claim.get("logical_job", "")) for claim in claims
+                 if claim.get("status") == "complete"}
+    training_jobs = {job["logical_job"] for job in plan["jobs"]
+                     if job["scope"] == "ppo_training"}
+    candidate_jobs = {job["logical_job"] for job in plan["jobs"]
+                      if job["scope"] == "candidate_eval"}
+    bc_jobs = {job["logical_job"] for job in plan["jobs"]
+               if job["scope"] == "bc_sampled_eval"}
+    if (not training_jobs <= completed or not candidate_jobs <= completed
+            or (len(claim_paths) == 528 and not bc_jobs <= completed)
+            or (len(claim_paths) == 480 and bc_jobs & completed)):
+        raise RuntimeError("eval recovery requires training and candidate-eval claims complete (and BC claims only in the closed state)")
+    for seed in SEEDS:
+        gate_path = raw / f"ROUND46_FIRST_BATCH_GATE_s{seed}.json"
+        if not gate_path.is_file() or read_json(gate_path).get("status") != "passed":
+            raise RuntimeError(f"eval recovery requires the passed first-batch gate receipt for seed {seed}")
+    return {"kind": "round53-eval-recovery-state-verification/1", "status": "passed",
+            "claim_closure": closure,
+            "completed_training": len(training_jobs & completed),
+            "completed_candidate_eval": len(candidate_jobs & completed)}
 
 
 def _verify_existing_first_batch_checkpoints(base: Any) -> dict[str, Any]:
@@ -925,11 +1047,29 @@ def recover_first_batch_gate_then_continue(base: Any, module: Any,
     return gates, continued
 
 
+def _replace_non_json_callables(obj: Any, path: str = "result",
+                                found: list[str] | None = None) -> Any:
+    """Replace stray callables in descriptive result fields with named markers."""
+    if found is None:
+        found = []
+    if callable(obj):
+        found.append(path)
+        return {"__callable__": getattr(obj, "__qualname__", repr(obj))}
+    if isinstance(obj, dict):
+        return {str(key): _replace_non_json_callables(value, f"{path}.{key}", found)
+                for key, value in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_replace_non_json_callables(value, f"{path}[{index}]", found)
+                for index, value in enumerate(obj)]
+    return obj
+
+
 def execute_authorized(auth_path: Path = AUTH_PATH, *,
                        mode: str = "fresh") -> dict[str, Any]:
     """After authorization and source preflight, run counted first-four gates before continuation."""
-    if mode not in ("fresh", "recover_first_batch_gate"):
+    if mode not in ("fresh", "recover_first_batch_gate", "recover_after_candidate_eval"):
         raise ValueError(f"unknown ROUND53 execution mode: {mode}")
+    run_mode = mode
     plan = plan_from_frozen_sources()
     plan_bytes_sha = canonical_sha(plan)
     receipt = read_json(auth_path)  # Missing file is a hard pre-runtime stop.
@@ -939,7 +1079,9 @@ def execute_authorized(auth_path: Path = AUTH_PATH, *,
     expected_trainer = "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
     if sha256_file(CANON / "v2_trainer.py") != expected_trainer:
         raise RuntimeError("canonical trainer byte identity changed")
-    recovery_mode = mode == "recover_first_batch_gate"
+    recovery_mode = mode.startswith("recover_")
+    gate_recovery_mode = mode == "recover_first_batch_gate"
+    eval_recovery_mode = mode == "recover_after_candidate_eval"
     if recovery_mode:
         if not RAW.is_dir():
             raise RuntimeError("recovery requires the preserved R53 raw namespace")
@@ -965,44 +1107,64 @@ def execute_authorized(auth_path: Path = AUTH_PATH, *,
     runtime = base._RUNTIME
     if runtime is None: raise RuntimeError("R53 private runtime did not configure")
     claim_verifier = install_r53_claim_verifier(base, runtime)
+    checkpoint_mode = ("verify_batch0" if gate_recovery_mode
+                       else "verify_ep128" if eval_recovery_mode else "forbid_existing")
     live = bind_live_runtime(base, runtime, plan,
-                             allow_existing_training_state=recovery_mode)
+                             checkpoint_mode=checkpoint_mode)
     runtime["round53_protected_dirty_file_guard"] = source_guard
     module = runtime["module"]
     recovery_state = None
     quarantined = None
-    if recovery_mode:
+    if gate_recovery_mode:
         recovery_state = verify_persisted_first_batch_state(base, RAW, plan)
         quarantined = quarantine_failed_first_batch_gate_receipts(RAW)
         first4, trained = recover_first_batch_gate_then_continue(base, module, runtime)
+    elif eval_recovery_mode:
+        recovery_state = verify_persisted_candidate_eval_state(base, RAW, plan)
+        summaries = base._reuse_completed_training(module, runtime)
+        first4 = {int(seed): summaries[seed]["first_four_report"] for seed in SEEDS}
+        trained = summaries
     else:
         first4, trained = run_first_four_gate_then_continue(base, module, runtime)
-    rows = []
     run = runtime["r42_run"]
+    complete_jobs = set()
+    if recovery_mode:
+        for claim_path in (RAW / "launch_claims").glob("*/*.json"):
+            claim = read_json(claim_path)
+            if claim.get("status") == "complete":
+                complete_jobs.add(str(claim.get("logical_job", "")))
+    rows = []
     for seed in SEEDS:
         controller, identity = run.load_eval_model("NEW", seed)
         for mode in ("greedy", "sampled"):
             for scene in SCENES:
+                if f"model_eval_new_s{seed}_{mode}_scene{scene}" in complete_jobs:
+                    continue
                 rows.append(run.run_model_eval(arm="NEW", training_seed=seed, mode=mode,
                                                scenario=scene, controller=controller,
                                                identity=identity))
-    # BC_POST model-only fresh factory; no optimizer/RNG state is restored.
+    # BC_POST model-only evaluation: the actual R45 read-only loader (fresh
+    # same-seed factory + registered BC checkpoint state + ambient-RNG restore
+    # + eval-mode modules), then the actual R45 eval-cell path with sampled
+    # collection.  No optimizer or RNG state is restored into the controller.
     bc_entries = read_json(RUN_ROOT / "ROUND46_R2_V6_INPUT_IDENTITY.json")["bc_models_by_seed"]
-    import torch
     for seed in SEEDS:
-        controller = runtime["controller_module"].fresh_controller(seed)
+        controller, identity, model = module._load_bc_eval_controller(runtime, seed)
         entry = bc_entries[str(seed)]
-        if controller.parameter_summary().get("parameter_sha256") != entry["parameter_sha256"]:
+        if (model["checkpoint_sha256"] != entry["checkpoint_sha256"]
+                or model["parameter_sha256"] != entry["parameter_sha256"]
+                or identity.get("file_sha256") != entry["checkpoint_sha256"]
+                or identity["parameter_identity"].get("parameter_sha256") != entry["parameter_sha256"]):
             raise RuntimeError(f"BC_POST model-only initialization mismatch for seed {seed}")
-        identity = {"arm": "BC", "training_seed": seed, "episodes_done": 0,
-                    "load_mode": "bc_model_only_four_modules", "optimizer_restored": False,
-                    "rng_restored": False, "file_sha256": entry["checkpoint_sha256"],
-                    "parameter_identity": {"parameter_sha256": entry["parameter_sha256"]}}
         for scene in SCENES:
-            rows.append(run.run_model_eval(arm="BC", training_seed=seed, mode="sampled",
-                                           scenario=scene, controller=controller,
-                                           identity=identity))
-    if len(rows) != 144: raise RuntimeError(f"ROUND53 eval closure {len(rows)}/144")
+            if f"model_eval_bc_s{seed}_sampled_scene{scene}" in complete_jobs:
+                continue
+            rows.append(run_bc_sampled_eval_cell(runtime, module, seed, scene,
+                                                 controller, identity, model))
+    reused_eval_claims = len([job for job in complete_jobs if job.startswith("model_eval_")])
+    if len(rows) + reused_eval_claims != 144:
+        raise RuntimeError(
+            f"ROUND53 eval closure {len(rows)} new + {reused_eval_claims} reused /144")
     claim_paths = sorted((RAW / "launch_claims").glob("*/*.json"))
     claims = [read_json(path) for path in claim_paths]
     for path, claim in zip(claim_paths, claims, strict=True):
@@ -1027,7 +1189,7 @@ def execute_authorized(auth_path: Path = AUTH_PATH, *,
         raise RuntimeError("final derived ledger did not close; authoritative claims are preserved")
     result = {"kind": "round53-execution-result/1", "status": "complete",
               "task_id": TASK_ID, "runner_version": R53_RUNNER_VERSION,
-              "mode": mode,
+              "mode": run_mode,
               "recovery": (None if recovery_state is None else {
                   "state_verification": recovery_state,
                   "quarantined_failed_gate_receipts": quarantined}),
@@ -1040,6 +1202,10 @@ def execute_authorized(auth_path: Path = AUTH_PATH, *,
               "live_bindings": {k: v for k, v in live.items() if k != "route_undo"},
               "protected_dirty_file_guard": source_guard,
               "r53_claim_verifier": claim_verifier}
+    non_json_callables: list[str] = []
+    result = _replace_non_json_callables(result, found=non_json_callables)
+    if non_json_callables:
+        result["non_json_callable_fields_replaced"] = sorted(non_json_callables)
     (RAW / "ROUND53_EXECUTION_RESULT.json").write_text(
         json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return result
@@ -1054,8 +1220,11 @@ def run_first_four_gate_then_continue(base: Any, module: Any,
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "--recover-first-batch-gate":
+    flag = sys.argv[1] if len(sys.argv) > 1 else ""
+    if flag == "--recover-first-batch-gate":
         result = execute_authorized(mode="recover_first_batch_gate")
+    elif flag == "--recover-after-candidate-eval":
+        result = execute_authorized(mode="recover_after_candidate_eval")
     else:
         result = execute_authorized()
     print(json.dumps(result, ensure_ascii=False, indent=2))
