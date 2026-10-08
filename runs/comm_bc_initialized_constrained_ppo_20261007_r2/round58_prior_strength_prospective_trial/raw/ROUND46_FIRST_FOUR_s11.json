@@ -1,0 +1,85 @@
+{
+  "kind": "round46-first-four-report/1",
+  "seed": 11,
+  "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+  "report": {
+    "training_seed": 11,
+    "episodes_done": 4,
+    "updates": 1,
+    "optimizer_steps": 16,
+    "lambda": 1.0,
+    "lambda_history": [
+      {
+        "batch": 0,
+        "g_hat": 0.0,
+        "lambda_before": 1.0,
+        "lambda_next": 1.0
+      }
+    ],
+    "seconds": 0.0,
+    "checkpoint": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\checkpoints\\v2_train_s11.pt",
+    "controller_parameters": {
+      "parameter_count": 5700,
+      "parameter_sha256": "6e45c107bf8204e030917ffb9d6df1e235990434d1bd56225dcade6520a98c2c",
+      "shapes": {
+        "action_head.bias": [
+          2
+        ],
+        "action_head.weight": [
+          2,
+          64
+        ],
+        "trunk.0.bias": [
+          64
+        ],
+        "trunk.0.weight": [
+          64,
+          19
+        ],
+        "trunk.2.bias": [
+          64
+        ],
+        "trunk.2.weight": [
+          64,
+          64
+        ],
+        "value_cost_head.bias": [
+          1
+        ],
+        "value_cost_head.weight": [
+          1,
+          64
+        ],
+        "value_task_head.bias": [
+          1
+        ],
+        "value_task_head.weight": [
+          1,
+          64
+        ]
+      },
+      "init_seed": 20260927,
+      "heads": [
+        "action_head",
+        "value_task_head",
+        "value_cost_head"
+      ],
+      "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)"
+    },
+    "history": [],
+    "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+    "comm_action_eligibility": "first-report-only/1",
+    "comm_action_semantics": "one-shot-send-skip/1",
+    "rng_priming": {
+      "source": "same_round43_process_resume",
+      "loaded_model": false,
+      "loaded_optimizer": false
+    },
+    "round45_bc_initialization": {
+      "seed": 11,
+      "applied": false
+    },
+    "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1"
+  }
+}

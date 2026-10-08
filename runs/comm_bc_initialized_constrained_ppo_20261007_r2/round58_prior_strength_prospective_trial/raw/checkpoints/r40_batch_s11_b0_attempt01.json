@@ -1,0 +1,58 @@
+{
+  "kind": "round40-training-batch-record/1",
+  "batch": 0,
+  "training_seed": 11,
+  "episodes": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "episodes_done_after": 4,
+  "update": {
+    "samples": 265,
+    "gate_loss": 0.0,
+    "gate_rows": 64,
+    "minibatches": 16,
+    "optimizer_steps": 16,
+    "epochs": 4,
+    "unassigned_prefix_task_reward": 0.0,
+    "unassigned_prefix_cost_bytes": 0.0,
+    "unassigned_prefix_cost_normalized": 0.0,
+    "policy_surrogate": 1.689547,
+    "value_loss_task": 7.240998,
+    "value_loss_cost": 0.058482,
+    "entropy": 4e-06,
+    "approx_kl": -0.0,
+    "clip_fraction": 0.0,
+    "gradient_norm_mean": 5.6399,
+    "module_gradient_l1_mean": {
+      "trunk": 417.690588072,
+      "action_head": 8.6502e-05,
+      "task_value_head": 47.022640109,
+      "cost_head": 3.539551022
+    },
+    "module_gradient_l1_min": {
+      "trunk": 227.430666327,
+      "action_head": 0.0,
+      "task_value_head": 38.297878265,
+      "cost_head": 0.938238606
+    },
+    "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+    "likelihood_alignment": {
+      "samples": 265,
+      "max_abs_gap": 2.3447910280083306e-13,
+      "tolerance": 1e-06,
+      "passed": true
+    },
+    "gate_diag": {
+      "update_index": 0,
+      "diagnostics_error": "NameError: name 'hashlib' is not defined"
+    }
+  },
+  "controller_parameters_after": {
+    "parameter_sha256": "6e45c107bf8204e030917ffb9d6df1e235990434d1bd56225dcade6520a98c2c"
+  },
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+  "recovered": true
+}
