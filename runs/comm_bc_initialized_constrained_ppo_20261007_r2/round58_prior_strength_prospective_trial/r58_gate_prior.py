@@ -162,18 +162,25 @@ def install_gate_prior(trainer_module, controller_detach_context, raw_dir: Path)
             for rec in GATE_RECORDS:
                 handle.write(json.dumps(rec, ensure_ascii=False) + "\n")
         diag_record = None
-        if GATE_DIAG["done"]:
-            diag_record = {"update_index": update_index, **GATE_DIAG["record"],
-                           "params_before_sha256": hashlib.sha256(b"".join(
-                               p.detach().numpy().tobytes() for _, p in sorted(before.items()))
-                               ).hexdigest(),
-                           "params_after_sha256": hashlib.sha256(b"".join(
-                               p.detach().numpy().tobytes() for _, p in sorted(
-                                   {n: pp.detach().clone() for n, pp in
-                                    list(controller.inner.trunk.named_parameters())
-                                    + list(controller.inner.action_head.named_parameters())
-                                }.items()))).hexdigest()}
-            with (Path(raw_dir) / "runtime" / "r58_gradient_diagnostics.jsonl").open(
+        try:
+                    if GATE_DIAG["done"]:
+                        diag_record = {"update_index": update_index, **GATE_DIAG["record"],
+                                       "params_before_sha256": hashlib.sha256(b"".join(
+                                           p.detach().numpy().tobytes() for _, p in sorted(before.items()))
+                                           ).hexdigest(),
+                                       "params_after_sha256": hashlib.sha256(b"".join(
+                                           p.detach().numpy().tobytes() for _, p in sorted(
+                                               {n: pp.detach().clone() for n, pp in
+                                                list(controller.inner.trunk.named_parameters())
+                                                + list(controller.inner.action_head.named_parameters())
+                                            }.items()))).hexdigest()}
+                        with (Path(raw_dir) / "runtime" / "r58_gradient_diagnostics.jsonl").open(
+                                "a", encoding="utf-8") as handle:
+                            handle.write(json.dumps(diag_record, ensure_ascii=False) + "\n")
+        except Exception as exc:
+            diag_record = {"update_index": update_index,
+                           "diagnostics_error": f"{type(exc).__name__}: {exc}"}
+            with (Path(raw_dir) / "runtime" / "r58_diagnostics_errors.jsonl").open(
                     "a", encoding="utf-8") as handle:
                 handle.write(json.dumps(diag_record, ensure_ascii=False) + "\n")
         report["gate_diag"] = diag_record

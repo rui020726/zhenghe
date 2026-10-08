@@ -1135,6 +1135,11 @@ def execute_authorized(auth_path: Path = AUTH_PATH, *,
         if (r53_gate.get("bc_parameter_sha256") != r56_gate.get("bc_parameter_sha256")
                 or r56_gate.get("status") != "passed"):
             raise RuntimeError(f"R58 ep0 identity differs from R56 ep0 for seed {seed}")
+    err_file = RAW / "runtime" / "r58_diagnostics_errors.jsonl"
+    if err_file.is_file() and err_file.stat().st_size > 0:
+        raise RuntimeError(
+            "R58 diagnostics errors were recorded during training; core state is "
+            "committed; controlled stop per the batch-transaction contract")
     run = runtime["r42_run"]
     complete_jobs = set()
     if recovery_mode:
