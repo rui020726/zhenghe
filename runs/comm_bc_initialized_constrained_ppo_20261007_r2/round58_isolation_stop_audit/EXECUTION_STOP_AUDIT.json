@@ -1,0 +1,551 @@
+{
+  "kind": "round58-isolation-stop-audit/1",
+  "audit_time_local": "2026-10-08 Asia/Shanghai (timestamp not independently sourced)",
+  "repository": "D:\\code\\整合\\zhenghe-round42",
+  "branch": "exp/round58-prior-strength-prospective-trial",
+  "head": "316f5f03b3b9481d1d85fa2160e4b2f815c2e394",
+  "decision": "STOP_BEFORE_ANY_NEW_ENVIRONMENT_OR_TRAINING",
+  "basis": "The user-defined precondition for the four-start seed11 Path C replacement is false: generation 2 already contains 12 complete claims (four episodes for each of seeds 11/22/33), not only the original four seed11 claims. The current generation ledger conflicts with those claim artifacts and does not establish a trustworthy continuation cursor.",
+  "generations": {
+    "round58_prior_strength_prospective_trial": {
+      "claims": [
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 11,
+          "episode": 0,
+          "scenario": 1300027,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/launch_claims/new_training_s11_e0/attempt_0001.json",
+          "claim_sha256": "f5344cd6aed74edf7de60885fae56e2cf3f688cb39d07ae2edc56b4fd153ebd3"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 11,
+          "episode": 1,
+          "scenario": 1300014,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/launch_claims/new_training_s11_e1/attempt_0001.json",
+          "claim_sha256": "25bbb4419d929c24445d5c3d951ccdc33d88c87e7f80da84d14eb85967602a6c"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 11,
+          "episode": 2,
+          "scenario": 1300028,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/launch_claims/new_training_s11_e2/attempt_0001.json",
+          "claim_sha256": "1414d39283fe2796a13248f3ec4eac41de75a8172e25197548438daf9ce82246"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 11,
+          "episode": 3,
+          "scenario": 1300044,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/launch_claims/new_training_s11_e3/attempt_0001.json",
+          "claim_sha256": "d975ae6dde07e32a7908b97389d2b271015095064bec978c2e1e07d0ce715cd2"
+        }
+      ],
+      "claim_count": 4,
+      "claim_status_counts": {
+        "complete": 4
+      },
+      "batch_records": [
+        {
+          "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/checkpoints/r40_batch_s11_b0_attempt01.json",
+          "sha256": "c03b58e0d998af2232349e154546ce67c4ba996f94cda3c8d86b5dcb298cdc4d",
+          "seed": 11,
+          "episodes": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "samples": 265,
+          "epochs": 4,
+          "minibatches": 16,
+          "optimizer_steps": 16,
+          "diagnostics_error": "NameError: name 'hashlib' is not defined"
+        }
+      ],
+      "ledger_summary": {
+        "normal_used": 4,
+        "reserve_used": 0,
+        "total_used": 4,
+        "counts": {
+          "normal_used": 4,
+          "reserve_used": 0,
+          "total_used": 4,
+          "environment_constructor_calls": 4,
+          "joint_run_build_failures": 0,
+          "joint_run_constructed_calls": 4,
+          "run_invocation_calls": 4,
+          "joint_run_method_calls": 4,
+          "run_return_calls": 4,
+          "run_failure_calls": 0,
+          "completed_steps": 4000,
+          "completed_logical_jobs": 4,
+          "simulation_started": 4,
+          "technical_failed_claims": 0,
+          "retry_claims": 0,
+          "optimizer_step_calls": 24,
+          "optimizer_step_journal_entries": 24,
+          "ppo_update_calls": 1,
+          "ppo_update_journal_entries": 1,
+          "ppo_update_count_matches_committed_batches": true,
+          "checkpoint_write_calls": 8,
+          "checkpoint_write_journal_entries": 8,
+          "optimizer_step_count_matches_committed_batches": false,
+          "hard_cap": 1064
+        }
+      }
+    },
+    "round58_gen2": {
+      "claims": [
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 11,
+          "episode": 0,
+          "scenario": 1300027,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s11_e0/attempt_0001.json",
+          "claim_sha256": "05b85834f9d20d310d6e36a17b1a4004425edff11b866de9a8f40bc8c9945188"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 11,
+          "episode": 1,
+          "scenario": 1300014,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s11_e1/attempt_0001.json",
+          "claim_sha256": "0d17206170d605a35b4beca29320dc0b43ca8fbc785853dc9b4883385835b0dd"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 11,
+          "episode": 2,
+          "scenario": 1300028,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s11_e2/attempt_0001.json",
+          "claim_sha256": "833671eb56394a51871112cef0ed5e07373180191a0cd36840c534071ade4c99"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 11,
+          "episode": 3,
+          "scenario": 1300044,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s11_e3/attempt_0001.json",
+          "claim_sha256": "a25c5b5a907b59b24db9ac759e4995d055a96e4bf00650f15af20b2e3db05cbf"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 22,
+          "episode": 0,
+          "scenario": 1300027,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s22_e0/attempt_0001.json",
+          "claim_sha256": "e7dfc16a9a191df92cc7e1d2542d4f794a6360b77e51f3cb8588835b83150983"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 22,
+          "episode": 1,
+          "scenario": 1300014,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s22_e1/attempt_0001.json",
+          "claim_sha256": "b3b3bf881b5056633abfc73a81e28a5cd8602821d3a560bd306bdbc3d54937dc"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 22,
+          "episode": 2,
+          "scenario": 1300028,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s22_e2/attempt_0001.json",
+          "claim_sha256": "a0d5e06cca821b965610b5d55c109b4c09a74969f1377a7097ac7400b2abf2a1"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 22,
+          "episode": 3,
+          "scenario": 1300044,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s22_e3/attempt_0001.json",
+          "claim_sha256": "1980528ba2accf8de1dc019c7402f7b3ed22bfc1ac5fd965b319a4fb44e9be60"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 33,
+          "episode": 0,
+          "scenario": 1300027,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s33_e0/attempt_0001.json",
+          "claim_sha256": "41eed3c7d0f8750aaea986247b0655381ca7d2f3dcc1332ef02299b043715e7e"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 33,
+          "episode": 1,
+          "scenario": 1300014,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s33_e1/attempt_0001.json",
+          "claim_sha256": "c597959fac449a4b45b7bccc0d513bf7b510fd6f9e3b22303251b9d3f960d361"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 33,
+          "episode": 2,
+          "scenario": 1300028,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s33_e2/attempt_0001.json",
+          "claim_sha256": "82822577d01f55665f119817b6626677de68a871c17be33a979b0a45ba56a2d1"
+        },
+        {
+          "logical_job": "launch_claims",
+          "status": "complete",
+          "category": "normal",
+          "seed": 33,
+          "episode": 3,
+          "scenario": 1300044,
+          "environment_constructor_calls": 1,
+          "run_invocation_calls": 1,
+          "completed_steps": 1000,
+          "claim_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s33_e3/attempt_0001.json",
+          "claim_sha256": "884ccad28eb178414d70e949d3ba5b28f69cd69b017e381ae6ebe8a179885caf"
+        }
+      ],
+      "claim_count": 12,
+      "claim_status_counts": {
+        "complete": 12
+      },
+      "batch_records": [
+        {
+          "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/checkpoints/r40_batch_s11_b0_attempt01.json",
+          "sha256": "34e35b613c9d717dd2ff939560f379641c81b29d65bce335abc8ff1116beec04",
+          "seed": 11,
+          "episodes": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "samples": 265,
+          "epochs": 4,
+          "minibatches": 16,
+          "optimizer_steps": 16,
+          "diagnostics_error": "NameError: name 'hashlib' is not defined"
+        },
+        {
+          "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/checkpoints/r40_batch_s22_b0_attempt01.json",
+          "sha256": "1dd1d5d4fea9c12ad3e5d4e7ec9f2e752eda2ed967f1c97167955825a9b6a68d",
+          "seed": 22,
+          "episodes": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "samples": 265,
+          "epochs": 4,
+          "minibatches": 16,
+          "optimizer_steps": 16,
+          "diagnostics_error": "NameError: name 'hashlib' is not defined"
+        },
+        {
+          "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/checkpoints/r40_batch_s33_b0_attempt01.json",
+          "sha256": "6e28bb3fbd519a5413ba9769e261f35857fd02041a096801c33476b31a167a5a",
+          "seed": 33,
+          "episodes": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "samples": 265,
+          "epochs": 4,
+          "minibatches": 16,
+          "optimizer_steps": 16,
+          "diagnostics_error": "NameError: name 'hashlib' is not defined"
+        }
+      ],
+      "ledger_summary": {
+        "normal_used": 4,
+        "reserve_used": 0,
+        "total_used": 4,
+        "counts": {
+          "normal_used": 4,
+          "reserve_used": 0,
+          "total_used": 4,
+          "environment_constructor_calls": 4,
+          "joint_run_build_failures": 0,
+          "joint_run_constructed_calls": 4,
+          "run_invocation_calls": 4,
+          "joint_run_method_calls": 4,
+          "run_return_calls": 4,
+          "run_failure_calls": 0,
+          "completed_steps": 4000,
+          "completed_logical_jobs": 4,
+          "simulation_started": 4,
+          "technical_failed_claims": 0,
+          "retry_claims": 0,
+          "optimizer_step_calls": 0,
+          "optimizer_step_journal_entries": 0,
+          "ppo_update_calls": 0,
+          "ppo_update_journal_entries": 0,
+          "ppo_update_count_matches_committed_batches": true,
+          "checkpoint_write_calls": 2,
+          "checkpoint_write_journal_entries": 2,
+          "optimizer_step_count_matches_committed_batches": true,
+          "hard_cap": 1064
+        }
+      },
+      "seed11_gate": {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/ROUND45_R2_FIRST_BATCH_GATE_R3_s11.json",
+        "sha256": "a057074b0c40caeae55c23e4bd3f432e6d30d5d37d86826f16fc8ec8487cce9a",
+        "status": "failed",
+        "failure_reasons": null,
+        "checks": null
+      }
+    }
+  },
+  "optimizer_hook_journals": {
+    "round58_prior_strength_prospective_trial": {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/runtime/optimizer_step_calls.jsonl",
+      "sha256": "4f115380f4790fa3329a533573f5f5e0786f78b92a8ae13f1328b58eec1662d6",
+      "line_count": 24,
+      "call_status_counts": {
+        "step_invoked": 24
+      },
+      "reconstructed_true_count": 16,
+      "optimizer_classes": {
+        "unspecified": 16,
+        "Adam": 8
+      }
+    },
+    "round58_gen2": {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/runtime/optimizer_step_calls.jsonl",
+      "sha256": "1302ade1552a07fcf9aca664ee674853e727a28d9984a63f3d5d07ca8d786b41",
+      "line_count": 24,
+      "call_status_counts": {
+        "step_invoked": 24
+      },
+      "reconstructed_true_count": 0,
+      "optimizer_classes": {
+        "Adam": 24
+      }
+    }
+  },
+  "runtime_process_check": "At the final process check no python or git process was listed. An earlier transient PID 46820 disappeared before command-line inspection; CIM access was denied. No process was terminated.",
+  "this_audit_operations": {
+    "environment_constructions": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0,
+    "tests_run": 0
+  },
+  "protected_file_hashes_unchanged_from_takeover": true,
+  "evidence_files": [
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/GENERATION2_REGISTRATION.json",
+      "sha256": "d70c10b6d3bd11e4bb32365fdcc22907da4497f6532413b7f5bce68ffec1fc8d",
+      "size_bytes": 956
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/PRELAUNCH_FREEZE.json",
+      "sha256": "3cd20d1579c9cb9a75d9d772688d46505c8947e2ef04b7090f4636a1283932ee",
+      "size_bytes": 1204
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/EXECUTION_AUTHORIZATION.json",
+      "sha256": "1a77eba7156af7b6c47d1f4a9f790057c3b37fce291a4ada4acdc7ae4d5c31e1",
+      "size_bytes": 1099
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/runtime/ROUND53_EXECUTION_LEDGER.json",
+      "sha256": "a40c7f6c4a690867a06c32fd4c127cd131cc2460aba0d87fc340ddd4b631f5fa",
+      "size_bytes": 38303
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/ROUND45_R2_FIRST_BATCH_GATE_R3_s11.json",
+      "sha256": "a057074b0c40caeae55c23e4bd3f432e6d30d5d37d86826f16fc8ec8487cce9a",
+      "size_bytes": 1604
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/runtime/optimizer_step_calls.jsonl",
+      "sha256": "1302ade1552a07fcf9aca664ee674853e727a28d9984a63f3d5d07ca8d786b41",
+      "size_bytes": 4037
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/runtime/checkpoint_writes.jsonl",
+      "sha256": "628fdb66eca12a6de29c0580d605513533cba7567da32256910cb6a164259ea4",
+      "size_bytes": 7071
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/runtime/optimizer_step_calls.jsonl",
+      "sha256": "4f115380f4790fa3329a533573f5f5e0786f78b92a8ae13f1328b58eec1662d6",
+      "size_bytes": 3772
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/runtime/ppo_update_calls.jsonl",
+      "sha256": "209fb791bdfc50e11ed0b54e1fc4cae95f2d0506697b0388e50d62d2bb474759",
+      "size_bytes": 176
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/launch_claims/new_training_s11_e0/attempt_0001.json",
+      "sha256": "f5344cd6aed74edf7de60885fae56e2cf3f688cb39d07ae2edc56b4fd153ebd3"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/launch_claims/new_training_s11_e1/attempt_0001.json",
+      "sha256": "25bbb4419d929c24445d5c3d951ccdc33d88c87e7f80da84d14eb85967602a6c"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/launch_claims/new_training_s11_e2/attempt_0001.json",
+      "sha256": "1414d39283fe2796a13248f3ec4eac41de75a8172e25197548438daf9ce82246"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/launch_claims/new_training_s11_e3/attempt_0001.json",
+      "sha256": "d975ae6dde07e32a7908b97389d2b271015095064bec978c2e1e07d0ce715cd2"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/checkpoints/r40_batch_s11_b0_attempt01.json",
+      "sha256": "c03b58e0d998af2232349e154546ce67c4ba996f94cda3c8d86b5dcb298cdc4d"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s11_e0/attempt_0001.json",
+      "sha256": "05b85834f9d20d310d6e36a17b1a4004425edff11b866de9a8f40bc8c9945188"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s11_e1/attempt_0001.json",
+      "sha256": "0d17206170d605a35b4beca29320dc0b43ca8fbc785853dc9b4883385835b0dd"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s11_e2/attempt_0001.json",
+      "sha256": "833671eb56394a51871112cef0ed5e07373180191a0cd36840c534071ade4c99"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s11_e3/attempt_0001.json",
+      "sha256": "a25c5b5a907b59b24db9ac759e4995d055a96e4bf00650f15af20b2e3db05cbf"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s22_e0/attempt_0001.json",
+      "sha256": "e7dfc16a9a191df92cc7e1d2542d4f794a6360b77e51f3cb8588835b83150983"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s22_e1/attempt_0001.json",
+      "sha256": "b3b3bf881b5056633abfc73a81e28a5cd8602821d3a560bd306bdbc3d54937dc"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s22_e2/attempt_0001.json",
+      "sha256": "a0d5e06cca821b965610b5d55c109b4c09a74969f1377a7097ac7400b2abf2a1"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s22_e3/attempt_0001.json",
+      "sha256": "1980528ba2accf8de1dc019c7402f7b3ed22bfc1ac5fd965b319a4fb44e9be60"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s33_e0/attempt_0001.json",
+      "sha256": "41eed3c7d0f8750aaea986247b0655381ca7d2f3dcc1332ef02299b043715e7e"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s33_e1/attempt_0001.json",
+      "sha256": "c597959fac449a4b45b7bccc0d513bf7b510fd6f9e3b22303251b9d3f960d361"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s33_e2/attempt_0001.json",
+      "sha256": "82822577d01f55665f119817b6626677de68a871c17be33a979b0a45ba56a2d1"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/launch_claims/new_training_s33_e3/attempt_0001.json",
+      "sha256": "884ccad28eb178414d70e949d3ba5b28f69cd69b017e381ae6ebe8a179885caf"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/checkpoints/r40_batch_s11_b0_attempt01.json",
+      "sha256": "34e35b613c9d717dd2ff939560f379641c81b29d65bce335abc8ff1116beec04"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/checkpoints/r40_batch_s22_b0_attempt01.json",
+      "sha256": "1dd1d5d4fea9c12ad3e5d4e7ec9f2e752eda2ed967f1c97167955825a9b6a68d"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/checkpoints/r40_batch_s33_b0_attempt01.json",
+      "sha256": "6e28bb3fbd519a5413ba9769e261f35857fd02041a096801c33476b31a167a5a"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+      "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+      "size_bytes": 3355066,
+      "protected": true
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+      "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+      "size_bytes": 3354969,
+      "protected": true
+    }
+  ],
+  "limitations": [
+    "Gen2 batch records report 16 optimizer steps each (48 total), while the shared optimizer hook journal has 24 lines without seed attribution; these sources do not close and no missing events were synthesized.",
+    "The gen2 summary execution ledger reports only 4 normal starts, 0 reserve starts and 0 optimizer steps despite 12 complete claim files and three batch records. The discrepancy is preserved.",
+    "The only persisted first-batch gate found is seed11 and it is failed. No seed has an accepted R58 effective training cursor."
+  ]
+}
