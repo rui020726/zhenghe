@@ -1,0 +1,2256 @@
+{
+  "kind": "round54-statistics-recheck/1",
+  "method": {
+    "rng": "numpy Generator PCG64",
+    "seed": 20261008,
+    "draws": 10000,
+    "sampling": "with replacement over 16 scenes",
+    "indices_usage": "values[indices].mean(axis=1)",
+    "indices_usage_independent_check_passed": true,
+    "interval": "numpy.percentile linear 2.5/97.5, unrounded",
+    "difference_direction": "isolated - control"
+  },
+  "comparisons": [
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4995.375,
+        "ci95_linear": [
+          3563.971875,
+          6595.912499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5778.0,
+        "ci95_linear": [
+          4249.115625,
+          7341.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -782.625,
+        "ci95_linear": [
+          -1721.25,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.0,
+        "ci95_linear": [
+          1.4375,
+          2.625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.3125,
+        "ci95_linear": [
+          1.6875,
+          2.9375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.3125,
+        "ci95_linear": [
+          -0.6875,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4995.375,
+        "ci95_linear": [
+          3563.971875,
+          6595.912499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 14939.25,
+        "ci95_linear": [
+          14745.365625,
+          15148.134375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -9943.875,
+        "ci95_linear": [
+          -11407.89375,
+          -8322.721875000001
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.0,
+        "ci95_linear": [
+          1.4375,
+          2.625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -4.0,
+        "ci95_linear": [
+          -4.5625,
+          -3.375
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4995.375,
+        "ci95_linear": [
+          3563.971875,
+          6595.912499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4838.25,
+        "ci95_linear": [
+          3287.221875,
+          6531.05625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 157.125,
+        "ci95_linear": [
+          0.0,
+          471.375
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.0,
+        "ci95_linear": [
+          1.4375,
+          2.625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.3125,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0625,
+        "ci95_linear": [
+          0.0,
+          0.1875
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4995.375,
+        "ci95_linear": [
+          3563.971875,
+          6595.912499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5152.125,
+        "ci95_linear": [
+          3686.990625,
+          6748.903125
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -156.75,
+        "ci95_linear": [
+          -470.25,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.0,
+        "ci95_linear": [
+          1.4375,
+          2.625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0625,
+        "ci95_linear": [
+          1.5,
+          2.6875
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.0625,
+        "ci95_linear": [
+          -0.1875,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4995.375,
+        "ci95_linear": [
+          3563.971875,
+          6595.912499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6706.125,
+        "ci95_linear": [
+          4976.990625,
+          8580.037499999999
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -1710.75,
+        "ci95_linear": [
+          -3254.625,
+          -478.875
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.0,
+        "ci95_linear": [
+          1.4375,
+          2.625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.6875,
+        "ci95_linear": [
+          2.0,
+          3.4375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.6875,
+        "ci95_linear": [
+          -1.3125,
+          -0.1875
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4995.375,
+        "ci95_linear": [
+          3563.971875,
+          6595.912499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 14939.25,
+        "ci95_linear": [
+          14745.365625,
+          15148.134375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -9943.875,
+        "ci95_linear": [
+          -11407.89375,
+          -8322.721875000001
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.0,
+        "ci95_linear": [
+          1.4375,
+          2.625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -4.0,
+        "ci95_linear": [
+          -4.5625,
+          -3.375
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4995.375,
+        "ci95_linear": [
+          3563.971875,
+          6595.912499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4838.25,
+        "ci95_linear": [
+          3287.221875,
+          6531.05625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 157.125,
+        "ci95_linear": [
+          0.0,
+          471.375
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.0,
+        "ci95_linear": [
+          1.4375,
+          2.625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.3125,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0625,
+        "ci95_linear": [
+          0.0,
+          0.1875
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4995.375,
+        "ci95_linear": [
+          3563.971875,
+          6595.912499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5152.125,
+        "ci95_linear": [
+          3686.990625,
+          6748.903125
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -156.75,
+        "ci95_linear": [
+          -470.25,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.0,
+        "ci95_linear": [
+          1.4375,
+          2.625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0625,
+        "ci95_linear": [
+          1.5,
+          2.6875
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.0625,
+        "ci95_linear": [
+          -0.1875,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 3923.25,
+        "ci95_linear": [
+          2197.115625,
+          5904.890624999998
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4694.25,
+        "ci95_linear": [
+          3239.23125,
+          6383.634375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -771.0,
+        "ci95_linear": [
+          -1372.134375,
+          -288.375
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.5625,
+        "ci95_linear": [
+          0.875,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.875,
+        "ci95_linear": [
+          1.3125,
+          2.5625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.3125,
+        "ci95_linear": [
+          -0.5625,
+          -0.125
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 3923.25,
+        "ci95_linear": [
+          2197.115625,
+          5904.890624999998
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 14939.25,
+        "ci95_linear": [
+          14745.365625,
+          15148.134375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -11016.0,
+        "ci95_linear": [
+          -12768.890625,
+          -9040.44375
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.5625,
+        "ci95_linear": [
+          0.875,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -4.4375,
+        "ci95_linear": [
+          -5.125,
+          -3.625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 3923.25,
+        "ci95_linear": [
+          2197.115625,
+          5904.890624999998
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4838.25,
+        "ci95_linear": [
+          3287.221875,
+          6531.05625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -915.0,
+        "ci95_linear": [
+          -1673.625,
+          -288.75
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.5625,
+        "ci95_linear": [
+          0.875,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.3125,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.375,
+        "ci95_linear": [
+          -0.6875,
+          -0.125
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 3923.25,
+        "ci95_linear": [
+          2197.115625,
+          5904.890624999998
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5152.125,
+        "ci95_linear": [
+          3686.990625,
+          6748.903125
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -1228.875,
+        "ci95_linear": [
+          -1988.259375,
+          -482.25
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.5625,
+        "ci95_linear": [
+          0.875,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0625,
+        "ci95_linear": [
+          1.5,
+          2.6875
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.5,
+        "ci95_linear": [
+          -0.8125,
+          -0.1875
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 3934.125,
+        "ci95_linear": [
+          2202.75,
+          5854.246874999998
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4537.125,
+        "ci95_linear": [
+          2973.365625,
+          6293.324999999999
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -603.0,
+        "ci95_linear": [
+          -1192.5,
+          -144.375
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.5625,
+        "ci95_linear": [
+          0.875,
+          2.3125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.8125,
+        "ci95_linear": [
+          1.1875,
+          2.5
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.25,
+        "ci95_linear": [
+          -0.5,
+          -0.0625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 3934.125,
+        "ci95_linear": [
+          2202.75,
+          5854.246874999998
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 14939.25,
+        "ci95_linear": [
+          14745.365625,
+          15148.134375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -11005.125,
+        "ci95_linear": [
+          -12715.125,
+          -9079.846875000001
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.5625,
+        "ci95_linear": [
+          0.875,
+          2.3125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -4.4375,
+        "ci95_linear": [
+          -5.125,
+          -3.6875
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 3934.125,
+        "ci95_linear": [
+          2202.75,
+          5854.246874999998
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4838.25,
+        "ci95_linear": [
+          3287.221875,
+          6531.05625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -904.125,
+        "ci95_linear": [
+          -1675.875,
+          -288.75
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.5625,
+        "ci95_linear": [
+          0.875,
+          2.3125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.3125,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.375,
+        "ci95_linear": [
+          -0.6875,
+          -0.125
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 3934.125,
+        "ci95_linear": [
+          2202.75,
+          5854.246874999998
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5175.375,
+        "ci95_linear": [
+          3716.56875,
+          6759.018749999999
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -1241.25,
+        "ci95_linear": [
+          -2166.0,
+          -469.125
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.5625,
+        "ci95_linear": [
+          0.875,
+          2.3125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0625,
+        "ci95_linear": [
+          1.5,
+          2.6875
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.5,
+        "ci95_linear": [
+          -0.875,
+          -0.1875
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4851.0,
+        "ci95_linear": [
+          3409.490625,
+          6481.153125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5621.625,
+        "ci95_linear": [
+          4068.0,
+          7228.190624999999
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -770.625,
+        "ci95_linear": [
+          -1709.25,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.375,
+          2.5625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.25,
+        "ci95_linear": [
+          1.625,
+          2.875
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.3125,
+        "ci95_linear": [
+          -0.6875,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4851.0,
+        "ci95_linear": [
+          3409.490625,
+          6481.153125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 14939.25,
+        "ci95_linear": [
+          14745.365625,
+          15148.134375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -10088.25,
+        "ci95_linear": [
+          -11544.76875,
+          -8444.203125
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.375,
+          2.5625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -4.0625,
+        "ci95_linear": [
+          -4.625,
+          -3.4375
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4851.0,
+        "ci95_linear": [
+          3409.490625,
+          6481.153125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4838.25,
+        "ci95_linear": [
+          3287.221875,
+          6531.05625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 12.75,
+        "ci95_linear": [
+          -433.125,
+          471.375
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.375,
+          2.5625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.3125,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          -0.1875,
+          0.1875
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4851.0,
+        "ci95_linear": [
+          3409.490625,
+          6481.153125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5152.125,
+        "ci95_linear": [
+          3686.990625,
+          6748.903125
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -301.125,
+        "ci95_linear": [
+          -746.625,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.375,
+          2.5625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0625,
+        "ci95_linear": [
+          1.5,
+          2.6875
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.125,
+        "ci95_linear": [
+          -0.3125,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4693.875,
+        "ci95_linear": [
+          3139.490625,
+          6401.25
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6738.0,
+        "ci95_linear": [
+          5180.578125,
+          8328.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -2044.125,
+        "ci95_linear": [
+          -3017.2875,
+          -1086.75
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.875,
+        "ci95_linear": [
+          1.25,
+          2.5625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.6875,
+        "ci95_linear": [
+          2.0625,
+          3.3125
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.8125,
+        "ci95_linear": [
+          -1.1875,
+          -0.4375
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4693.875,
+        "ci95_linear": [
+          3139.490625,
+          6401.25
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 14939.25,
+        "ci95_linear": [
+          14745.365625,
+          15148.134375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -10245.375,
+        "ci95_linear": [
+          -11790.075,
+          -8544.35625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.875,
+        "ci95_linear": [
+          1.25,
+          2.5625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -4.125,
+        "ci95_linear": [
+          -4.75,
+          -3.4375
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4693.875,
+        "ci95_linear": [
+          3139.490625,
+          6401.25
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4838.25,
+        "ci95_linear": [
+          3287.221875,
+          6531.05625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -144.375,
+        "ci95_linear": [
+          -433.125,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.875,
+        "ci95_linear": [
+          1.25,
+          2.5625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.3125,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.0625,
+        "ci95_linear": [
+          -0.1875,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4693.875,
+        "ci95_linear": [
+          3139.490625,
+          6401.25
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5018.625,
+        "ci95_linear": [
+          3594.375,
+          6600.75
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -324.75,
+        "ci95_linear": [
+          -806.625,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.875,
+        "ci95_linear": [
+          1.25,
+          2.5625
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0,
+        "ci95_linear": [
+          1.4375,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.125,
+        "ci95_linear": [
+          -0.3125,
+          0.0
+        ],
+        "significant": false
+      }
+    }
+  ],
+  "per_seed_summary": [
+    {
+      "seed": 11,
+      "greedy_on_time_total": 96,
+      "greedy_mean_billed_bytes": 4995.375,
+      "mean_billed_strictly_below_threshold": false,
+      "identical_on_time_id_scenes": 16,
+      "lost_targets": [],
+      "saved_targets": []
+    },
+    {
+      "seed": 22,
+      "greedy_on_time_total": 96,
+      "greedy_mean_billed_bytes": 3923.25,
+      "mean_billed_strictly_below_threshold": true,
+      "identical_on_time_id_scenes": 16,
+      "lost_targets": [],
+      "saved_targets": []
+    },
+    {
+      "seed": 33,
+      "greedy_on_time_total": 96,
+      "greedy_mean_billed_bytes": 4851.0,
+      "mean_billed_strictly_below_threshold": false,
+      "identical_on_time_id_scenes": 16,
+      "lost_targets": [],
+      "saved_targets": []
+    }
+  ],
+  "development_go": false,
+  "claim_cells": {
+    "vs_bc_only_s22_significant": {
+      "cells": {
+        "s11_greedy": false,
+        "s11_sampled": false,
+        "s22_greedy": true,
+        "s22_sampled": true,
+        "s33_greedy": false,
+        "s33_sampled": false
+      },
+      "verdict": "成立"
+    },
+    "sampled_vs_shared_ppo_three_seeds_negative_ci": {
+      "cells": {
+        "s11": [
+          -3254.625,
+          -478.875
+        ],
+        "s22": [
+          -1192.5,
+          -144.375
+        ],
+        "s33": [
+          -3017.2875,
+          -1086.75
+        ]
+      },
+      "verdict": "成立"
+    }
+  },
+  "matches_round53_statistics_exactly": true,
+  "compared_cells": 72,
+  "mismatched_cells": [],
+  "bootstrap_first_row": [
+    1,
+    2,
+    3,
+    15,
+    2,
+    15,
+    14,
+    6,
+    13,
+    12,
+    11,
+    1,
+    3,
+    5,
+    15,
+    2
+  ]
+}
