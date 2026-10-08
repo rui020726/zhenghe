@@ -1,0 +1,14 @@
+{
+  "kind": "round58-launch-failure/1",
+  "status": "preserved_first_batch_update_wrapper_failure",
+  "error": "NameError: name 'hashlib' is not defined in r58_gate_prior.r58_ppo_update diagnostic recording",
+  "when": "after the first real PPO update of seed 11 batch 0 completed inside patched_fn, during the wrapper's post-update diagnostic recording",
+  "durable_state": {
+    "episode_claims_complete": 4,
+    "batch0_commit_receipt": "absent (crash before adapter wrote it)",
+    "rolling_checkpoint_state": "see checkpoint journal above",
+    "in_memory_post_update_weights": "lost on process exit"
+  },
+  "fix_defined": "import hashlib in r58_gate_prior.py; then recover: if rolling checkpoint has updates=1, resume at episode 4; else the 4 episode claims are complete but the batch-0 parameter update must be re-derived from the ep0 boundary per the no-replay contract — recovery entry required before relaunch",
+  "authorization_not_revoked": true
+}

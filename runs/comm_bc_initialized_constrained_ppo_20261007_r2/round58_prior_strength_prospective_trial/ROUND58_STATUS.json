@@ -2,7 +2,7 @@
   "kind": "round58-execution-status/1",
   "task_id": "ROUND58-PRIOR-STRENGTH-PROSPECTIVE-TRIAL",
   "branch": "exp/round58-prior-strength-prospective-trial",
-  "status": "STARTED_NOT_COMPLETED",
+  "status": "IMPLEMENTATION_COMPLETE_RECOVERY_PENDING",
   "start_point": {
     "branch": "analysis/round57-prior-effect-attribution",
     "commit_prefix": "d874d5f4",
@@ -12,7 +12,12 @@
     "start and ancestor chain verified (R53/R54/R55/R56)",
     "branch exp/round58-prior-strength-prospective-trial created",
     "prompt archive saved (this directory)",
-    "scene availability audit: round37 SCENE_USAGE_AUDIT.json shows block [1700000,1700063] free (occupied_count=0); first-choice block 1700000..1700031 is legal"
+    "scene availability audit: round37 SCENE_USAGE_AUDIT.json shows block [1700000,1700063] free (occupied_count=0); first-choice block 1700000..1700031 is legal",
+    "r58_contracts.py, r58_gate_prior.py (beta=1.00 + recorder + diagnostics), r58_execute.py (3-model eval + rule cells + new scenes) written and committed",
+    "12/12 narrow gate tests passed (r58_gate_tests.py)",
+    "scene plan frozen (1700000..1700031)",
+    "authorization receipt + prelaunch freeze written",
+    "batch transaction safety: diag exceptions are caught, recorded, and never lose the committed core state"
   ],
   "remaining_work": [
     "r58_contracts.py: TASK_ID/BRANCH/TRAINING_VERSION (+r56...+r58-prior-strength-beta1p00/1), caps 1024/40/1064, plan = 384 train + 576 eval (R53/R56/R58 models x 3 seeds x 2 modes x 32 scenes) + 64 rule evals (immediate+late x 32)",
@@ -31,5 +36,37 @@
     "new_episode_rows": 0
   },
   "protected_dirty_files_unchanged_at_registration": true,
-  "updated_at": "2026-10-08T09:54:09.144101+00:00"
+  "updated_at": "2026-10-08T10:30:00+00:00",
+  "outstanding": [
+    "batch-0 recovery: seed 11 has 4 complete episode claims but the batch-0 parameter update was lost (diag wrapper crashed before post-update persistence). Path B (deterministic recompute from persisted tapes + ep0 checkpoint) is authorized but the recovery script has not been written yet.",
+    "after batch-0 recovery: first-batch gate + episodes 4..127 per seed + 640 evals (96 R58 + 192 R53/R56 models + 64 rule cells on new scenes) + statistics + report"
+  ],
+  "facts_reconstructed": {
+    "seed_11": {
+      "episodes_complete": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "batch_0_update": "executed in memory but lost (no commit receipt, no post-update checkpoint)",
+      "claims": "4 complete, not modified",
+      "rolling_checkpoint": "updates=0, episodes_done=0"
+    },
+    "seed_22": "not started",
+    "seed_33": "not started",
+    "total_env_starts": 4,
+    "total_optimizer_steps_executed": 8,
+    "total_optimizer_steps_persisted": 0,
+    "reserve_used": 0
+  },
+  "zero_ops_cumulative": {
+    "environment_constructor_calls": 4,
+    "simulation_runs": 4,
+    "new_flows": 0,
+    "optimizer_steps_executed": 8,
+    "optimizer_steps_persisted": 0,
+    "checkpoint_writes": 2,
+    "new_episode_rows": 4
+  }
 }
