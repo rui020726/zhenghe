@@ -450,6 +450,39 @@ def install_private_configure_seams(base: Any) -> None:
     base._rebind_checkpoint_journal = rebind_private_checkpoint_journal
 
 
+PROTECTED_PREEXISTING_DIRTY_FILES = {
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+}
+
+
+def install_protected_dirty_file_guard(base: Any) -> dict[str, Any]:
+    """Allow only the two byte-unchanged user-protected prelaunch dirty files."""
+    original = base._assert_source_worktree_clean
+
+    def guarded_assert_source_worktree_clean() -> None:
+        status = base._run_git("status", "--porcelain", "--untracked-files=no")
+        unexpected = base._unexpected_source_status_lines(status)
+        remaining = []
+        allowed = []
+        for line in unexpected:
+            relative = line[3:].replace("\\", "/") if len(line) >= 4 else ""
+            if relative in PROTECTED_PREEXISTING_DIRTY_FILES:
+                allowed.append(relative)
+            else:
+                remaining.append(line)
+        if remaining:
+            raise RuntimeError(
+                "tracked source worktree is dirty; ROUND53 allows only protected files: "
+                + "\n".join(remaining))
+        return None
+
+    guarded_assert_source_worktree_clean.__name__ = "guarded_assert_source_worktree_clean"
+    base._assert_source_worktree_clean = guarded_assert_source_worktree_clean
+    return {"original_function": original, "allowed_relative_paths":
+            sorted(PROTECTED_PREEXISTING_DIRTY_FILES)}
+
+
 def seed_private_task_state(raw: Path) -> None:
     """Seed the live R45 task-state owner without touching historical task files."""
     path = raw / "ROUND45_CURRENT_TASK.json"
@@ -711,11 +744,13 @@ def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
     bind_runner_paths(base, RAW)
     install_private_configure_seams(base)
     # Configure the exact frozen runtime, but never call the monolithic R46 execute.
+    source_guard = install_protected_dirty_file_guard(base)
     base._R45_MODULE = None; base._RUNTIME = None
     base._configure_runtime_module()
     runtime = base._RUNTIME
     if runtime is None: raise RuntimeError("R53 private runtime did not configure")
     live = bind_live_runtime(base, runtime, plan)
+    runtime["round53_protected_dirty_file_guard"] = source_guard
     module = runtime["module"]
     first4, trained = run_first_four_gate_then_continue(base, module, runtime)
     rows = []
@@ -774,7 +809,8 @@ def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
               "slot_closure": slot_closure,
               "normal_slots": len(normal_slots), "reserve_slots": len(reserve_slots),
               "baseline_reuse": baseline,
-              "live_bindings": {k: v for k, v in live.items() if k != "route_undo"}}
+              "live_bindings": {k: v for k, v in live.items() if k != "route_undo"},
+              "protected_dirty_file_guard": source_guard}
     (RAW / "ROUND53_EXECUTION_RESULT.json").write_text(
         json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return result

@@ -1,0 +1,24 @@
+{
+  "kind": "round53-launch-failure/2",
+  "status": "preserved_pre_training_launch_failure",
+  "failed_head_before_fix": "14b67490dad9686002962d5db604aa7162e38f13",
+  "failure_time_local": "2026-10-08 08:48",
+  "phase": "seed 11 first training claim before environment/run",
+  "error_type": "RuntimeError",
+  "error_message": "tracked source worktree is dirty; refusing ROUND46 environment entry",
+  "observed_dirty_paths": [
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json"
+  ],
+  "root_cause": "R46 strict source guard allowed its own mutable task files but not the two user-protected pre-existing dirty files",
+  "claims_created": 0,
+  "episodes_run": 0,
+  "environment_constructor_calls": 0,
+  "ppo_updates": 0,
+  "optimizer_steps": 0,
+  "checkpoint_writes": 2,
+  "checkpoint_scope": "private R53 seed-11 ep0 copies; no episode or optimizer update",
+  "preserved_namespace": "raw_launch_failure_dirty_guard_20261008T004825Z",
+  "fix_scope": "R53-only exact-path allowlist for the two protected files; do not modify or stage those files",
+  "authorization_not_revoked": true
+}

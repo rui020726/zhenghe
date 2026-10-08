@@ -65,6 +65,23 @@ class TestRound53Execution(unittest.TestCase):
             r53.run_first_four_gate_then_continue(base, "module", {"runtime": 1})
         self.assertEqual([call[0] for call in calls], ["first_four"])
 
+    def test_protected_dirty_guard_allows_exact_two_files_only(self):
+        calls = []
+        base = SimpleNamespace(
+            _run_git=lambda *args: calls.append(args) or "\n".join([
+                " M runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+                " M runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+            ]),
+            _assert_source_worktree_clean=lambda: (_ for _ in ()).throw(AssertionError("not wrapped")),
+            _unexpected_source_status_lines=lambda status: status.splitlines(),
+        )
+        record = r53.install_protected_dirty_file_guard(base)
+        self.assertEqual(record["allowed_relative_paths"], sorted(r53.PROTECTED_PREEXISTING_DIRTY_FILES))
+        base._assert_source_worktree_clean()
+        base._run_git = lambda *args: " M foreign.py"
+        with self.assertRaisesRegex(RuntimeError, "foreign.py"):
+            base._assert_source_worktree_clean()
+
     def test_private_task_state_seeding_is_idempotent_and_role_checked(self):
         with tempfile.TemporaryDirectory(dir=r53.HERE) as td:
             raw = Path(td) / "raw"
