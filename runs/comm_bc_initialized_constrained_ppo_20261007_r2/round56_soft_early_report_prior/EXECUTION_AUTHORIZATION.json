@@ -1,0 +1,23 @@
+{
+  "status": "explicitly_authorized",
+  "task_id": "ROUND56-SOFT-EARLY-REPORT-PRIOR",
+  "branch": "exp/round56-soft-early-report-prior",
+  "normal_cap": 480,
+  "reserve_cap": 24,
+  "hard_cap": 504,
+  "plan_sha256": "df16187e439e46b92d736c2de06145edcd2408cb9e7603da89ea0e72685bf388",
+  "authorized_by": "project owner via transferred ROUND56 prompt",
+  "approved_at": "2026-10-08T07:01:28.771035+00:00",
+  "approval_reference": "ROUND56 prompt archive sha256=39576a157b6174819e6d995c144e1a77b78ecedab3ec38b8de9220c42c86933a; 480 normal + 24 reserve = 504 max; beta=0.10 frozen",
+  "authorization_scope": "complete fixed plan after actual first-four dynamic gates pass; no new authorization per block",
+  "plan_summary": {
+    "normal_count": 480,
+    "ppo_training": 384,
+    "candidate_eval": 96,
+    "bc_sampled_eval": 0,
+    "reserve_cap": 24,
+    "hard_cap": 504
+  },
+  "science_method_variable": "single-sided soft early-report prior: beta*L_gate added to the R53 critic-isolation actor loss; beta frozen at 0.10",
+  "updated_at": "2026-10-08T09:15:47.683025+00:00"
+}

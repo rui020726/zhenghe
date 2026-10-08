@@ -1,0 +1,13 @@
+{
+  "kind": "round56-launch-failure/1",
+  "status": "preserved_first_batch_gate_sandbox_failure",
+  "phase": "seed 11 first-batch gate (after 12 first-four episodes + 3 PPO updates committed)",
+  "error_type": "RuntimeError",
+  "error_message": "frozen checkpoint is missing or outside its declared root",
+  "root_cause": "sandbox denies Path.resolve(strict=True) on the legal read-only frozen search/allocation checkpoint under D:/code/Integration/zhenghe (same artifact as R53's escalated runs); file exists and is readable",
+  "wiring_not_science": true,
+  "claims_created": 12, "episodes_run": 12, "ppo_updates": 3, "reserve_used": 0,
+  "recovery": "gate-only retry via --recover-first-batch-gate (pure audit), then R40 resume; no repeated updates",
+  "preserved_namespace": "raw_launch_failure_sandbox_path_resolve_20261008T061500Z",
+  "authorization_not_revoked": true
+}

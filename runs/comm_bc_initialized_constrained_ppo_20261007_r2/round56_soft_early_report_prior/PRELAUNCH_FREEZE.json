@@ -1,0 +1,39 @@
+{
+  "kind": "round56-prelaunch-freeze/1",
+  "status": "frozen_before_launch",
+  "head_at_freeze": "exp/round56-soft-early-report-prior (pre-launch commit)",
+  "base_delivery": {
+    "r55_head": "b3aff3d5f942096e961f273ee4f83020f94ea854",
+    "r54_head": "d0b91b94ded47ddb6cc10ff8b950cb0c9b768549",
+    "r53_head": "39b9cccf2a87862304ebde112c382bb8aa2b842c"
+  },
+  "authorization_file_sha256": "04e8305024b430c440cc0d90732f6e0311db98d1682fb091553d5697ced3e637",
+  "execution_basis_sha256": "39576a157b6174819e6d995c144e1a77b78ecedab3ec38b8de9220c42c86933a",
+  "plan_sha256": "fadf1dc17f97de486f91a5b487a73612d202a965695d175f3cb151bda1d2a5ab",
+  "canonical_trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+  "r53_policy_adapter_sha256": "e2f16bf55478d1a95e0f9ee07338f1cc602041373feaf5e8fadee28ab7a7f0d9",
+  "executor_sha256": "f82a65d48cb0866d528fecab6c8f45458a417fc6514a4f14ddb4a52b6d5878b8",
+  "contracts_sha256": "f00f5285758fb091eeab025dacd28c8200bf7611f4a5abfbd3e15e7e0bad2627",
+  "gate_prior_sha256": "3188d19cc727a9537beb956838c4af49f6f774342848e8ed1387e0a43b186480",
+  "gate_tests_sha256": "a114f6fe9ea2016c843a1ef99bffe0f368b8a71ec2fb67a09a80bd52db8d2079",
+  "beta": 0.1,
+  "ready_cut": 147.0,
+  "skip_index": 0,
+  "unique_variable": "L_R56 = L_R53 + beta*L_gate; L_gate = (1/N_rows)*sum q_ij*(-log pi(SKIP|x_ij)) over free first-report candidates with recovered ready_step <= 147; implemented as a source-patched copy of the frozen ppo_update inside the same critic-isolation detach context",
+  "frozen_inputs": [
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_FROZEN_CONFIG.json"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_KEY_PLAN.json"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_INPUT_IDENTITY.json"
+    }
+  ],
+  "protected_dirty_files": {
+    "ROUND46_CURRENT_TASK.json": "CF3AD1984D0D8EC526D53A57FAB98BD43963D5EEC5DE7F45AEC23D3396B2B39B",
+    "ROUND46_R2_V6_STOP_STATE.json": "93A2F69FF0C6CD2F8E153D4A165EE39D618F2F326343039B59F03C1588D03E18"
+  },
+  "updated_at": "2026-10-08T09:15:47.690034+00:00"
+}
