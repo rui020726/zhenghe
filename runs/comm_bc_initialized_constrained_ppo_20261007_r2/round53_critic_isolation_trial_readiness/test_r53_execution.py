@@ -65,6 +65,38 @@ class TestRound53Execution(unittest.TestCase):
             r53.run_first_four_gate_then_continue(base, "module", {"runtime": 1})
         self.assertEqual([call[0] for call in calls], ["first_four"])
 
+    def test_private_task_state_seeding_is_idempotent_and_role_checked(self):
+        with tempfile.TemporaryDirectory(dir=r53.HERE) as td:
+            raw = Path(td) / "raw"
+            r53.seed_private_task_state(raw)
+            first = (raw / "ROUND45_CURRENT_TASK.json").read_bytes()
+            state = json.loads(first)
+            self.assertEqual(state["kind"], "round53-private-task-state/1")
+            self.assertEqual(state["environment_constructed"], 0)
+            self.assertEqual(state["ppo_updates"], 0)
+            r53.seed_private_task_state(raw)
+            self.assertEqual((raw / "ROUND45_CURRENT_TASK.json").read_bytes(), first)
+            Path(raw / "ROUND45_CURRENT_TASK.json").write_text(
+                json.dumps({"kind": "foreign"}), encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "unexpected identity"):
+                r53.seed_private_task_state(raw)
+
+    def test_private_task_state_seeding_is_idempotent_and_role_checked(self):
+        with tempfile.TemporaryDirectory(dir=r53.HERE) as td:
+            raw = Path(td) / "raw"
+            r53.seed_private_task_state(raw)
+            first = (raw / "ROUND45_CURRENT_TASK.json").read_bytes()
+            state = json.loads(first)
+            self.assertEqual(state["kind"], "round53-private-task-state/1")
+            self.assertEqual(state["environment_constructed"], 0)
+            self.assertEqual(state["ppo_updates"], 0)
+            r53.seed_private_task_state(raw)
+            self.assertEqual((raw / "ROUND45_CURRENT_TASK.json").read_bytes(), first)
+            Path(raw / "ROUND45_CURRENT_TASK.json").write_text(
+                json.dumps({"kind": "foreign"}), encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "unexpected identity"):
+                r53.seed_private_task_state(raw)
+
     def test_actual_entry_refuses_before_private_raw_namespace_creation(self):
         with tempfile.TemporaryDirectory(dir=r53.HERE) as td:
             receipt = Path(td) / "missing_authorization.json"

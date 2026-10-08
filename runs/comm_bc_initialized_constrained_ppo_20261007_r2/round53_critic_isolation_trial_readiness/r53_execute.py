@@ -450,7 +450,30 @@ def install_private_configure_seams(base: Any) -> None:
     base._rebind_checkpoint_journal = rebind_private_checkpoint_journal
 
 
+def seed_private_task_state(raw: Path) -> None:
+    """Seed the live R45 task-state owner without touching historical task files."""
+    path = raw / "ROUND45_CURRENT_TASK.json"
+    if path.exists():
+        state = read_json(path)
+        if state.get("kind") != "round53-private-task-state/1":
+            raise RuntimeError("private R53 task state already exists with an unexpected identity")
+        return
+    state = {
+        "kind": "round53-private-task-state/1", "round": 53, "task_id": TASK_ID,
+        "branch": BRANCH, "training_version": TRAINING_VERSION,
+        "attempt": "ROUND53-private-critic-isolation/1",
+        "output_root": str(Path(raw).resolve()),
+        "environment_constructed": 0, "normal_claims": 0,
+        "reserve_claims": 0, "ppo_updates": 0, "optimizer_steps": 0,
+        "checkpoint_writes": 0, "remote_push": False,
+        "seed_reason": "R45 task_state expects an existing mutable current-task file in its RUN_DIR",
+    }
+    raw.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any]) -> dict[str, Any]:
+
     """Explicitly bind all output-owning live modules and actual trainer call path."""
     raw = Path(base.V6_DIR).resolve()
     required = ("common", "r40_common", "r42_run", "r40_train", "trainer",
@@ -474,6 +497,7 @@ def bind_live_runtime(base: Any, runtime: dict[str, Any], plan: dict[str, Any]) 
                         "task_id": TASK_ID}
     run = runtime["r42_run"]
     run.RUN_DIR = raw
+    seed_private_task_state(raw)
     # These are the modules actually imported by R45/R44/R42; bind each named
     # owner explicitly, including r44_runtime (the prior leak point).
     r45_module = getattr(base, "_R45_MODULE", None)

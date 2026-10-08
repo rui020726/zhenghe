@@ -1,0 +1,19 @@
+{
+  "kind": "round53-launch-failure/1",
+  "status": "preserved_pre_training_launch_failure",
+  "failed_head_before_fix": "b21bd1deef52536a1803695c2082e3f0fc5f917b",
+  "failure_time_local": "2026-10-08 08:42",
+  "phase": "first_four task-state update before any episode",
+  "error_type": "FileNotFoundError",
+  "missing_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round53_critic_isolation_trial_readiness/raw/ROUND45_CURRENT_TASK.json",
+  "root_cause": "private R53 live runtime did not seed the R45 module's current-task state file",
+  "claims_created": 0,
+  "episodes_run": 0,
+  "environment_constructor_calls": 0,
+  "ppo_updates": 0,
+  "optimizer_steps": 0,
+  "checkpoint_writes": 0,
+  "preserved_namespace": "raw_launch_failure_task_state_seed_20261008T004244Z",
+  "fix_scope": "startup wiring only; seed an explicit private R53 current-task state before live R45 task_state updates",
+  "authorization_not_revoked": true
+}
