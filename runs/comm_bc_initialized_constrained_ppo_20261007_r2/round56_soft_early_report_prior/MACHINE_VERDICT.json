@@ -1,0 +1,30 @@
+{
+  "kind": "round57-machine-verdict/1",
+  "input_identity": "verified (96+96 rows, ep128 identities, versions)",
+  "decomposition_closure": "all scenes close: deltaC = A - B + C; C = 0 everywhere (re-confirmed on R56-R53 and R56-late)",
+  "probe_self_check_max_abs_error": 3.427267074584961e-07,
+  "decision_points_probed": 1152,
+  "attribution": {
+    "s11": "+7704 B/episode total: extra early first reports in 1301000 (t4+t5) and 1301005 (t5); probe shows 3 early SKIP->SEND transitions; prior direction inverted in closed loop",
+    "s22": "+2694: one extra late-bucket send (1301006 t4, SKIP->SEND); early unchanged",
+    "s33": "-7128: three omitted first reports (1301005 t1, 1301007 t3, 1301014 t5); probe shows 1 early + 2 late SEND->SKIP; consistent with prior direction",
+    "C_common_price_difference": 0
+  },
+  "prior_exposure": {
+    "max_runtime_gate_loss": 0.015112,
+    "nonzero_batches": "32/96",
+    "prior_grad_l1_at_ep0_batch0": {
+      "11": 0.0081,
+      "22": 0.0504,
+      "33": 0.0315
+    }
+  },
+  "interpretation": "category: prior signal was weak (eligible cells already high pi(SKIP)) and closed-loop drift dominated; s11 early mapping moved opposite to the prior; evidence does not support beta-too-small claim, implementation error, or observability gap",
+  "development_go_unchanged": false,
+  "not_established": [
+    "root-cause uniqueness",
+    "base-vs-prior gradient separation (minibatch composition not persisted: 不可判)",
+    "receiver-side message state",
+    "any significance claim (all CIs contain 0)"
+  ]
+}
