@@ -1,0 +1,50 @@
+{
+  "kind": "round58-historical-consumption-reconciliation/1",
+  "classification": "Evidence-bounded reconciliation; raw claims, journals, ledgers, records, and checkpoints are preserved.",
+  "environment_consumption": {
+    "gen1_complete_claims": 4,
+    "gen2_complete_claims": 12,
+    "known_constructor_and_run_calls": 16,
+    "gen1_categories": {"normal": 4},
+    "gen2_claim_categories": {"normal": 12},
+    "gen2_registration_says_reserve_from_gen1_failure": 4,
+    "reserve_classification": "unreconciled: the generation registration says 4 reserve starts, but all gen2 claim files say normal and its ledger says reserve_used=0"
+  },
+  "optimizer_calls": {
+    "gen1_original_unpersisted_update": {
+      "count": 8,
+      "evidence": "Timestamped original failure hook records; updated weights were not durably committed."
+    },
+    "gen1_recovery_attempts": {
+      "count": 16,
+      "evidence": "Two distinct persisted after_b0 checkpoints each have all ten Adam parameter steps at 8, with distinct timestamped 8-event hook suffixes. The 16-entry reconstructed journal prefixes are derived copies and are not added again."
+    },
+    "gen2_updates": {
+      "count": 24,
+      "evidence": "24 timestamped optimizer-step hook entries and three after_b0 checkpoints with Adam step 8. Per-seed event linkage in the shared journal is indirect; per-seed attribution is supported by the three checkpoint/batch artifacts, not by journal identity alone."
+    },
+    "total_evidence_supported_actual_calls": 48,
+    "effective_r58_training_calls": 0,
+    "effective_batch_commits": 0,
+    "caveat": "Batch records claim 16 each for gen2 but live trainer math is 265 samples / 256 rows = 2 minibatches per epoch × 4 epochs = 8. Historical counters are not rewritten; actual hook/checkpoint evidence is reported separately from effective training."
+  },
+  "validity": {
+    "effective_training_cursor": null,
+    "gen2_seed11_first_batch_gate": "failed",
+    "critic_isolation": "not preserved by old compiled R58 adapter; critic-to-shared-trunk gradients observed",
+    "old_after_update_checkpoints_eligible_for_resume": false,
+    "original_four_rollout_bundles": "integrity-closed candidate data, not certified as reproducible training batch; see INPUT_REUSE_QUALIFICATION.json"
+  },
+  "source_records": {
+    "detailed_claims_and_artifact_hashes": "EXECUTION_STOP_AUDIT.json",
+    "new_read_only_data_qualification": "INPUT_REUSE_QUALIFICATION.json",
+    "live_module_hashes_and_values": "LIVE_MODULE_IDENTITY.json"
+  },
+  "this_turn_additional_counts": {
+    "environment_construction": 0,
+    "environment_run": 0,
+    "real_optimizer_step": 0,
+    "checkpoint_write": 0,
+    "training_tape_replay": 0
+  }
+}

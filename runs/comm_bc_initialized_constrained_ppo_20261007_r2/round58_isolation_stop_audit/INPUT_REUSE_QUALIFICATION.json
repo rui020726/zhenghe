@@ -1,0 +1,28 @@
+{
+  "kind": "round58-first-four-input-reuse-qualification/1",
+  "scope": "Read-only classification only; no tape was passed to batch_samples, GAE, PPO, or optimizer.",
+  "conclusion": "The original four rollout bundles are intact, hash-closed candidate inputs. They are not certified as sufficient/reproducible PPO training input by this audit.",
+  "positive_evidence": [
+    "All four gen1 claims are complete and each row/tape SHA-256 matches the claim artifact receipt.",
+    "All four rows report controller parameter SHA-256 37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330, matching the registered BC initialization receipt.",
+    "Each tape has action, log_prob, features, and budget-sequential-mask/1 records; each row records action_rng_seed, lambda_at_rollout=1.0, and reward_timing_version=published-completion-event-at-relay-tick/2.",
+    "The four rollouts predate the recorded batch0 updates. The subsequent invalid critic update does not by itself retroactively alter these persisted rollout bytes."
+  ],
+  "unresolved_before_reuse": [
+    "Rows list 12 substituted/defaulted configuration fields. The row receipt alone does not close the exact effective environment values against the frozen contract.",
+    "Per-episode action RNG seeds exist, but the full pre-minibatch Python/NumPy/Torch RNG states and exact shuffled minibatch permutation are not established by these episode records.",
+    "The canonical batch_samples/GAE inputs were not persisted as a separately hash-closed batch object; this audit did not reconstruct samples to prove equivalence to the frozen trainer contract.",
+    "Thus the rollout bytes are preserved candidate evidence, but are not admitted here as a reproducible training batch."
+  ],
+  "checkpoint_disposition": [
+    "Post-update model/Adam/lambda/RNG states associated with invalid critic-gradient routing are not accepted as effective checkpoints.",
+    "Complete claims remain historical environment consumption; claim completion alone does not establish model or batch validity."
+  ],
+  "per_episode": [
+    {"episode": 0, "scenario_seed": 1300027, "row_sha256": "a6e3435f139ff2ad0553d9baecb43a18a123d29891a607ec8add0979578356c7", "tape_sha256": "6d4c4363ff490fafe08b55bbf369dcfaf6284b741c2802cf9ef3374d9b792421", "tape_records": 66, "receipt_hashes_match": true, "controller_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330", "action_rng_seed": "5977906319549487799", "config_hash": "4ff7bd4631412a4f", "substituted_field_count": 12},
+    {"episode": 1, "scenario_seed": 1300014, "row_sha256": "064330ea609dc0c8997417c04099cde5882a0d6d0e7b068966e0c8003e8c9d14", "tape_sha256": "cf1e622c4df1ecfb06182fbfb7246c1c31b48e580198eddeeb7faffcd93f005e", "tape_records": 71, "receipt_hashes_match": true, "controller_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330", "action_rng_seed": "1845279286999982427", "config_hash": "81e8a3f51f5b5e1b", "substituted_field_count": 12},
+    {"episode": 2, "scenario_seed": 1300028, "row_sha256": "5cdf1e49b71ac2e4694ce7cba13006bb3d96e6adf1422852e962dd7f233d316a", "tape_sha256": "42209e4df3cb36d4e909a00f790fb25b4aa6ff5521b9f186e6802573a8b7d005", "tape_records": 52, "receipt_hashes_match": true, "controller_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330", "action_rng_seed": "16895519793064069753", "config_hash": "0b650373181b9664", "substituted_field_count": 12},
+    {"episode": 3, "scenario_seed": 1300044, "row_sha256": "4dd16b4a2e9845e81a3f4790b75adef27361967885942a831f336e408ac2c04f", "tape_sha256": "6839f8319c10fd4f605178bbb1c696382efd42f5f9315a45a204aaaea6574f91", "tape_records": 76, "receipt_hashes_match": true, "controller_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330", "action_rng_seed": "16283414727067527104", "config_hash": "3582889c870952b2", "substituted_field_count": 12}
+  ],
+  "interpretation": "Critic-isolation failure invalidates the post-update training chain. It does not automatically invalidate rollout bytes gathered at the registered BC parameter identity. Conversely, the claims and matching hashes do not resolve substituted runtime config or the missing exact PPO minibatch RNG/order, so reuse is not certified."
+}

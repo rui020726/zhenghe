@@ -1,0 +1,39 @@
+{
+  "kind": "round58-live-seam-identity/1",
+  "measurement": "Read-only configured import using r45_bc.configure_source_imports(); no environment construction.",
+  "configured_runtime": {
+    "r45_configurer": "runs/comm_rule_warmstart_cost_learning_20261006_r2/r45_bc.py",
+    "trainer_module": "v2_trainer",
+    "trainer_path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py",
+    "trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "ppo_update_code_filename_matches_configured_trainer": true,
+    "ppo_update_globals_common_is_configured_common": true,
+    "common_path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_common.py",
+    "common_sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+    "controller_path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_controller.py",
+    "controller_sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+    "live_values": {
+      "EPISODES_PER_UPDATE": 4, "MINIBATCH_STEPS": 256, "EPOCHS_PER_BATCH": 4,
+      "GAMMA": 1.0, "GAE_LAMBDA": 0.95, "LEARNING_RATE": 0.0003,
+      "CLIP": 0.2, "ENTROPY_BONUS": 0.01, "VALUE_COEFFICIENT": 0.5,
+      "MAX_GRAD_NORM": 0.5, "B0_BYTES": 10000.0, "ETA_LAMBDA": 0.05,
+      "LAMBDA_INIT": 1.0, "DATA_ORDER_SEED": 20260927
+    }
+  },
+  "historical_r58_binding": {
+    "executor": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/r58_execute.py",
+    "executor_sha256": "b5a5eabc94b5c9521777905c3ddee57a53fb79624b3d876e85bca58f31b58a77",
+    "old_gate_adapter": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/r58_gate_prior.py",
+    "old_gate_adapter_sha256": "1ab18256f6d2965be196fe76bef80a9a80e3f47f590e9e1b157afa82ea6357f6",
+    "observed_issue": "Old installer compiles a patched ppo_update and installs that callable directly; the installed R53 critic-detach wrapper/context is not retained around likelihood recomputation and PPO epochs.",
+    "frozen_gen2_executor_sha256": "2a7ff4c93ed96de96eb36065efe656ec0e6183449defb5c2d1dde3b2a5ace006",
+    "frozen_old_adapter_sha256": "18c4618dbaf247aed10955b06b867dc8df38c3acfa1fad67ba93ca85c42c36eb"
+  },
+  "isolated_repair": {
+    "adapter": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/r58_gate_prior_repaired.py",
+    "adapter_sha256": "7081557e6197aceac17fb453c03e1b5fd539f55ec60a7b3eae92d63f7e697688",
+    "entry": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/r58_repaired_entry.py",
+    "entry_sha256": "3cede2eded7ecef97bd01adb58ff59f7398c54d41a6559800b63e5b985bebc57",
+    "status": "Zero-launch binder and fail-closed resume eligibility tested on the actual configured module objects; not wired into the historical fixed-plan executor and not a training executor."
+  }
+}

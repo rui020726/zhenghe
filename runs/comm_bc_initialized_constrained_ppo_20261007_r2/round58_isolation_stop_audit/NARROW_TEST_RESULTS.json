@@ -1,0 +1,19 @@
+{
+  "kind": "round58-zero-environment-test-results/1",
+  "command": "D:\\project_env\\python.exe -m unittest -v runs.comm_bc_initialized_constrained_ppo_20261007_r2.round58_isolation_stop_audit.test_r58_live_adapter_repair runs.comm_bc_initialized_constrained_ppo_20261007_r2.round58_isolation_stop_audit.test_r58_repaired_entry",
+  "exit_code": 0,
+  "test_count": 16,
+  "suite_breakdown": {"live_adapter_repair": 13, "repaired_entry": 3},
+  "optimizer_accounting": {
+    "real_torch_optimizer_step_calls": 0,
+    "fake_spy_optimizer_step_callbacks": 104,
+    "note": "Callbacks only captured gradients and incremented counters; SpyOptimizer never changed parameters or Adam state. These are not training updates."
+  },
+  "other_counts": {
+    "environments_constructed": 0,
+    "environment_runs": 0,
+    "checkpoint_writes": 0,
+    "training_tapes_replayed": 0,
+    "project_wide_or_27_item_suite_runs": 0
+  }
+}
