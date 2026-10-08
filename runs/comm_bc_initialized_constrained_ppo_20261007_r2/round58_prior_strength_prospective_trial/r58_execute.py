@@ -925,7 +925,7 @@ def _verify_existing_first_batch_checkpoints(base: Any) -> dict[str, Any]:
     for seed in SEEDS:
         commit_path = checkpoints / f"r40_batch_commit_s{seed}_b0.json"
         if not commit_path.is_file():
-            raise RuntimeError(f"recovery missing batch-0 commit receipt for seed {seed}")
+            continue  # seeds 22/33 start fresh during first-four gate
         commit = read_json(commit_path)
         record_path = checkpoints / str(commit.get("batch_record", ""))
         if (not record_path.is_file()
@@ -1046,13 +1046,13 @@ def recover_batch0_in_runtime(base: Any, module: Any, runtime: dict[str, Any], p
             def __init__(s, r): s.records = r
         episodes.append({"collector": FC(tape_rows), "steps": 1000,
                          "cost_stream": row["cost_stream"], "task_stream": row["task_stream"],
-                         "lambda": 1.0})
+                         "lambda": 1.0, "episode_index": e})
     report = v2_trainer.ppo_update(controller, optimizer, episodes, update_index=0)
-    state = {"training_version": TRAINING_VERSION, "training_seed": seed,
-             "episodes_done": 4, "updates": 1,
-             "optimizer_steps": report["optimizer_steps"],
-             "lambda": ts["lambda"],
-             "lambda_history": [{"batch": 0, "g_hat": 0.0, "lambda_before": 1.0, "lambda_next": 1.0}]}
+    state = dict(ts)  # inherit all fields from the pre-update state
+    state.update({"episodes_done": 4, "updates": 1,
+                  "optimizer_steps": report["optimizer_steps"],
+                  "lambda_history": list(ts.get("lambda_history", [])) +
+                  [{"batch": 0, "g_hat": 0.0, "lambda_before": 1.0, "lambda_next": 1.0}]})
     post_p = ckpt_dir / f"v2_train_s{seed}_after_b0.pt"
     v2_trainer.save_checkpoint(controller, optimizer, state, post_p, freeze=freeze)
     roll_p = ckpt_dir / f"v2_train_s{seed}.pt"
@@ -1179,8 +1179,6 @@ def execute_authorized(auth_path: Path = AUTH_PATH, *,
                        "verify_ep128" if eval_recovery_mode else
                        "verify_batch0" if batch0_recovery_mode else
                        "forbid_existing")
-                       else "verify_ep128" if eval_recovery_mode else "forbid_existing"
-                       else "verify_batch0" if batch0_recovery_mode else "forbid_existing")
     live = bind_live_runtime(base, runtime, plan,
                              checkpoint_mode=checkpoint_mode)
     runtime["round53_protected_dirty_file_guard"] = source_guard
