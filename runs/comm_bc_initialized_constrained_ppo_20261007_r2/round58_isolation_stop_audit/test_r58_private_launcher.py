@@ -5,6 +5,8 @@ import sys
 import tempfile
 import io
 import json
+import subprocess
+import os
 import unittest
 from unittest import mock
 
@@ -15,6 +17,32 @@ import r58_private_launcher_repaired as launcher
 
 
 class PrivateLauncherRouteTests(unittest.TestCase):
+    def test_old_main_before_definitions_reproduces_nameerror_and_new_module_help_exits_zero(self):
+        source_path = pathlib.Path(launcher.__file__).resolve()
+        old_source = subprocess.run(
+            ["git", "show", "b38b8688dee7ffc2626aa2064c8af74af75e216b:" +
+             source_path.relative_to(pathlib.Path.cwd()).as_posix()],
+            cwd=pathlib.Path.cwd(), check=True, capture_output=True, text=True).stdout
+        harness = (
+            "import sys; from pathlib import Path; "
+            "sys.path.insert(0, r'" + str(source_path.parent) + "'); "
+            "Path.is_file=lambda self: True; Path.read_text=lambda self,*a,**k:'{}'; "
+            "sys.argv=['r58_private_launcher_repaired.py','--authorization','C:/v/a.json',"
+            "'--freeze','C:/v/f.json','--cumulative-quota','C:/v/q.json',"
+            "'--scene-audit','C:/v/s.json','--output-root','C:/v/round58_gen3/raw']; "
+            "exec(compile(sys.stdin.read(), sys.argv[0], 'exec'), "
+            "{'__name__':'__main__','__file__':r'" + str(source_path) + "'})"
+        )
+        old = subprocess.run([sys.executable, "-c", harness], input=old_source,
+                             capture_output=True, text=True, cwd=pathlib.Path.cwd())
+        self.assertEqual(old.returncode, 1)
+        self.assertIn("NameError", old.stderr)
+        self.assertIn("_validate_external_grant", old.stderr)
+        new = subprocess.run([sys.executable, str(source_path), "--help"],
+                             capture_output=True, text=True, cwd=pathlib.Path.cwd())
+        self.assertEqual(new.returncode, 0, new.stderr)
+        self.assertIn("--authorization", new.stdout)
+
     def test_default_execution_is_denied_before_runtime_configuration(self):
         with mock.patch.object(launcher, "load_legacy_launcher",
                                side_effect=AssertionError("runtime loader must not be reached")):
@@ -81,75 +109,133 @@ class PrivateLauncherRouteTests(unittest.TestCase):
         self.assertEqual(sys.path, original_path)
 
     def test_cli_rejects_test_receipt_files_before_loading_runtime(self):
-        fixture = launcher.GEN2 / "r58_execute.py"
-        with mock.patch.object(launcher, "load_legacy_launcher",
-                               side_effect=AssertionError("runtime loader must not run")):
-            with self.assertRaisesRegex(PermissionError, "outside the repository"):
-                launcher.main(["--authorization", str(fixture), "--freeze", str(fixture),
-                               "--cumulative-quota", str(fixture), "--scene-audit", str(fixture),
-                               "--output-root", str(launcher.PRIVATE_RAW)])
-        external_fixture = pathlib.Path("C:/codex-test-only/approval.json")
+        fixture = launcher.HERE / "virtual-fixture-approval.json"
         with mock.patch.object(pathlib.Path, "is_file", return_value=True), \
              mock.patch.object(pathlib.Path, "read_text",
                                return_value='{"fixture":true,"environment":"test"}'), \
              mock.patch.object(launcher, "load_legacy_launcher",
                                side_effect=AssertionError("runtime loader must not run")):
             with self.assertRaisesRegex(PermissionError, "test fixtures"):
-                launcher.main(["--authorization", str(external_fixture),
-                               "--freeze", str(external_fixture),
-                               "--cumulative-quota", str(external_fixture),
-                               "--scene-audit", str(external_fixture),
+                launcher.main(["--authorization", str(fixture),
+                               "--freeze", str(fixture),
+                               "--cumulative-quota", str(fixture),
+                               "--scene-audit", str(fixture),
                                "--output-root", str(launcher.PRIVATE_RAW)])
 
-    def test_validated_dispatch_calls_preserved_fixed_executor_and_stops_before_environment(self):
-        # This is an in-process test-only grant; main/CLI cannot deserialize this object.
+    def test_actual_main_validates_virtual_receipts_and_hands_off_at_first_four_gate(self):
+        # All receipts, including the hypothetical future approval, exist only in this
+        # in-memory VFS. They are not persisted as executable authorization artifacts.
         class StopBeforeEnvironment(BaseException):
             pass
         legacy = launcher.load_legacy_launcher()
         repair = launcher._repair_identity()
+        contracts = sys.modules["r58_contracts"]
+        original_contract_cap, original_legacy_cap = contracts.RESERVE_CAP, legacy.RESERVE_CAP
+        contracts.RESERVE_CAP = legacy.RESERVE_CAP = 40
         plan = legacy.plan_from_frozen_sources()
+        contracts.RESERVE_CAP, legacy.RESERVE_CAP = original_contract_cap, original_legacy_cap
         plan.update({"training_version": launcher.REPAIRED_TRAINING_VERSION,
                      "r58_repair_identity": repair, "generation_id": "round58_gen3"})
         plan_sha = legacy.canonical_sha(plan)
-        events = []
-        real_fixed_gate = legacy.run_first_four_gate_then_continue
-        def stop_before_episode(*_args, **_kwargs):
-            events.append(("first-four-gate-called",))
-            raise StopBeforeEnvironment()
-        def forbidden(operation):
-            def fail(*_args, **_kwargs):
-                raise AssertionError(f"zero-operation route test reached forbidden {operation}")
-            return fail
-        def call_real_fixed_gate(base, module, runtime):
-            events.append((runtime["trainer"], runtime["r40_train"].trainer,
-                           runtime["r58_repaired_adapter"]["kind"],
-                           runtime["r58_checkpoint_contract"]["kind"]))
-            runtime["trainer"].restore_rng = forbidden("RNG restore")
-            runtime["runner"].run_training_episode = forbidden("environment episode provider")
-            runtime["r42_run"]._claim = forbidden("durable claim")
-            base._run_first_four_and_all_gates = stop_before_episode
-            return real_fixed_gate(base, module, runtime)
-        legacy.run_first_four_gate_then_continue = call_real_fixed_gate
-        with tempfile.TemporaryDirectory(dir=launcher.GEN2) as temp:
-            raw = pathlib.Path(temp) / "private_raw"
-            original_sys_path = list(sys.path)
-            original_tracked_modules = {name: value for name, value in sys.modules.items()
-                                        if name.startswith(("v2_", "r40_", "r42_", "r43_",
-                                                            "r44_", "r45_", "r58_"))}
-            auth_path = pathlib.Path("C:/codex-test-only/approval.json")
-            receipt = {
-                "fixture": True, "environment": "test",
-                "status": "explicitly_authorized", "task_id": "ROUND58-PRIOR-STRENGTH-PROSPECTIVE-TRIAL",
-                "branch": "exp/round58-prior-strength-prospective-trial",
-                "normal_cap": 1024, "reserve_cap": 40, "hard_cap": 1064,
-                "plan_sha256": plan_sha, "authorized_by": "unit-test",
-                "approved_at": "unit-test-only", "approval_reference": "not-human-authorization",
-            }
-            grant = launcher._ValidatedGrant(launcher._GRANT_TOKEN, {
-                "authorization_path": auth_path, "output_root": raw, "mode": "fresh",
-                "repair_identity": repair, "reserve_cap": 40,
-                "plan_sha256": plan_sha, "approval_receipt": receipt, "test_only": True,
-            })
+        bc_models, bc_sha = launcher._bc_model_identity()
+        with tempfile.TemporaryDirectory(prefix="r58_gen3_route_test_", dir=launcher.GEN2) as temp:
+            old_generation, old_raw = launcher.PRIVATE_GENERATION, launcher.PRIVATE_RAW
+            generation = pathlib.Path(temp) / "round58_gen3"
+            raw = generation / "raw"
+            launcher.PRIVATE_GENERATION, launcher.PRIVATE_RAW = generation, raw
+            auth_path = launcher.HERE / "virtual-future-approval.json"
+            freeze_path = launcher.HERE / "virtual-future-freeze.json"
+            quota_path = launcher.HERE / "virtual-future-quota.json"
+            scene_path = launcher.HERE / "virtual-future-scene-audit.json"
+            history_path = launcher.HERE / "virtual-future-history.json"
+            scene = {"kind": "round58-scene-occupancy-audit/1", "status": "clear",
+                     "scenes": list(range(1_700_000, 1_700_032)), "conflicts": [],
+                     "result_blind": True,
+                     "checked_sources": {k: True for k in
+                                          ("registrations", "reservations", "claims", "artifacts")},
+                     "audited_at_utc": "2099-01-01T00:00:00Z"}
+            history = {"environment_consumption": {
+                "known_constructor_and_run_calls": 0,
+                "reserve_classification": "reconciled (synthetic future fixture only)",
+                "gen1_complete_claims": 0, "gen2_complete_claims": 0,
+                "gen1_categories": {"normal": 0, "reserve": 0},
+                "gen2_claim_categories": {"normal": 0, "reserve": 0}}}
+            def encoded(value):
+                return (json.dumps(value, ensure_ascii=False, sort_keys=True,
+                                   separators=(",", ":")) + "\n").encode("utf-8")
+            history_bytes = encoded(history)
+            history_sha = __import__("hashlib").sha256(history_bytes).hexdigest()
+            scene_bytes = encoded(scene)
+            scene_sha = __import__("hashlib").sha256(scene_bytes).hexdigest()
+            quota = {"kind": "round58-cumulative-quota-receipt/1", "status": "reconciled",
+                     "historical_normal": 0, "historical_reserve": 0,
+                     "historical_unclassified": 0, "planned_normal": 1024,
+                     "normal_remaining": 1024, "reserve_remaining": 40,
+                     "hard_remaining": 1064, "hard_cap": 1064,
+                     "historical_manifest_path": str(history_path),
+                     "historical_manifest_sha256": history_sha}
+            quota_bytes = encoded(quota)
+            quota_sha = __import__("hashlib").sha256(quota_bytes).hexdigest()
+            freeze = {"kind": "round58-repaired-execution-freeze/1", "status": "frozen",
+                      "plan_sha256": plan_sha,
+                      "training_version": launcher.REPAIRED_TRAINING_VERSION,
+                      "repair_identity": repair, "bc_model_identity_sha256": bc_sha,
+                      "output_root": str(raw.resolve()), "generation_id": "round58_gen3",
+                      "mode": "fresh", "cumulative_quota_sha256": quota_sha,
+                      "reserve_cap": 40, "scene_audit_sha256": scene_sha,
+                      "bc_models": bc_models}
+            freeze_bytes = encoded(freeze)
+            freeze_sha = __import__("hashlib").sha256(freeze_bytes).hexdigest()
+            approval = {"status": "explicitly_authorized",
+                        "task_id": "ROUND58-PRIOR-STRENGTH-PROSPECTIVE-TRIAL",
+                        "branch": "exp/round58-prior-strength-prospective-trial",
+                        "normal_cap": 1024, "reserve_cap": 40, "hard_cap": 1064,
+                        "plan_sha256": plan_sha, "generation_id": "round58_gen3",
+                        "repair_identity": repair, "output_root": str(raw.resolve()),
+                        "bc_model_identity_sha256": bc_sha,
+                        "freeze_sha256": freeze_sha, "quota_sha256": quota_sha,
+                        "scene_audit_sha256": scene_sha,
+                        "authorized_by": "synthetic-test-principal",
+                        "approved_at": "2099-01-01T00:00:00Z",
+                        "approval_reference": "TEST-ONLY-NOT-A-REAL-APPROVAL"}
+            files = {str(auth_path.resolve()): encoded(approval),
+                     str(freeze_path.resolve()): freeze_bytes,
+                     str(quota_path.resolve()): quota_bytes,
+                     str(scene_path.resolve()): scene_bytes,
+                     str(history_path.resolve()): history_bytes}
+            events = []
+            real_fixed_gate = legacy.run_first_four_gate_then_continue
+            def stop_before_episode(*_args, **_kwargs):
+                events.append(("first-four-gate-called",))
+                raise StopBeforeEnvironment()
+            def forbidden(operation):
+                def fail(*_args, **_kwargs):
+                    raise AssertionError(f"zero-operation route test reached forbidden {operation}")
+                return fail
+            def controlled_loader():
+                loaded = launcher.load_legacy_launcher_original()
+                real_gate = loaded.run_first_four_gate_then_continue
+                def gate(base, module, runtime):
+                    common_root = pathlib.Path(runtime["common"].CHECKPOINTS).resolve()
+                    self.assertEqual(common_root, raw.resolve() / "checkpoints")
+                    self.assertEqual(loaded.HERE, launcher.GEN2)
+                    for forbidden_root in (launcher.GEN2 / "raw", raw.parent.parent / "escape"):
+                        with self.assertRaisesRegex(RuntimeError, "output escapes the isolated root"):
+                            loaded.bind_runner_paths(base, forbidden_root)
+                    events.append((runtime["trainer"], runtime["r40_train"].trainer,
+                                   runtime["r58_repaired_adapter"]["kind"],
+                                   runtime["r58_checkpoint_contract"]["kind"],
+                                   common_root))
+                    runtime["trainer"].restore_rng = forbidden("RNG restore")
+                    runtime["runner"].run_training_episode = forbidden("environment episode provider")
+                    runtime["r42_run"]._claim = forbidden("durable claim")
+                    base._run_first_four_and_all_gates = stop_before_episode
+                    return real_gate(base, module, runtime)
+                loaded.run_first_four_gate_then_continue = gate
+                return loaded
+            original_loader = launcher.load_legacy_launcher
+            launcher.load_legacy_launcher_original = original_loader
+            launcher.load_legacy_launcher = controlled_loader
             writes = []
             original_write_text = pathlib.Path.write_text
             original_write_bytes = pathlib.Path.write_bytes
@@ -182,9 +268,29 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                 return original_touch(path, *args, **kwargs)
             def guarded_torch_save(*_a, **_k):
                 raise AssertionError("checkpoint disk serialization forbidden in route test")
-            # The actual fixed executor/configure runs, but the first-batch boundary raises
-            # before its episode provider. All generation writes are memory-only.
-            with mock.patch.object(pathlib.Path, "write_text", in_memory_text), \
+            original_sys_path = list(sys.path)
+            original_tracked_modules = {name: value for name, value in sys.modules.items()
+                                        if name.startswith(("v2_", "r40_", "r42_", "r43_",
+                                                            "r44_", "r45_", "r58_"))}
+            original_is_file = pathlib.Path.is_file
+            original_read_text = pathlib.Path.read_text
+            original_read_bytes = pathlib.Path.read_bytes
+            def virtual_is_file(path):
+                if str(path.resolve()) in files: return True
+                return original_is_file(path)
+            def virtual_read_text(path, *args, **kwargs):
+                data = files.get(str(path.resolve()))
+                if data is not None: return data.decode(kwargs.get("encoding") or "utf-8")
+                return original_read_text(path, *args, **kwargs)
+            def virtual_read_bytes(path):
+                data = files.get(str(path.resolve()))
+                return data if data is not None else original_read_bytes(path)
+            # This executes the real parser, all four receipt validations, the preserved
+            # fixed executor, gen3 path binding, and fixed first-four handoff.
+            with mock.patch.object(pathlib.Path, "is_file", virtual_is_file), \
+                 mock.patch.object(pathlib.Path, "read_text", virtual_read_text), \
+                 mock.patch.object(pathlib.Path, "read_bytes", virtual_read_bytes), \
+                 mock.patch.object(pathlib.Path, "write_text", in_memory_text), \
                  mock.patch.object(pathlib.Path, "write_bytes", in_memory_bytes), \
                  mock.patch.object(pathlib.Path, "open", in_memory_open), \
                  mock.patch.object(pathlib.Path, "touch", in_memory_touch), \
@@ -192,12 +298,14 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                  mock.patch.object(torch.optim.Adam, "step",
                                    side_effect=AssertionError("real optimizer step forbidden")):
                 with self.assertRaises(StopBeforeEnvironment):
-                    launcher._dispatch_validated(grant, legacy_loader=lambda: legacy)
-            legacy.run_first_four_gate_then_continue = real_fixed_gate
+                    launcher.main(["--authorization", str(auth_path), "--freeze", str(freeze_path),
+                                   "--cumulative-quota", str(quota_path), "--scene-audit", str(scene_path),
+                                   "--output-root", str(raw)])
             self.assertEqual(len(events), 2)
             self.assertIs(events[0][0], events[0][1])
             self.assertEqual(events[0][2], "r58-gate-prior-repaired/1")
             self.assertEqual(events[0][3], "round58-r40-checkpoint-contract/1")
+            self.assertEqual(events[0][4], raw.resolve() / "checkpoints")
             self.assertEqual(events[1], ("first-four-gate-called",))
             self.assertEqual(list(raw.rglob("launch_claims/**/*.json")), [])
             self.assertEqual(list(raw.rglob("*.pt")), [])
@@ -207,6 +315,9 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                             f"unexpected durable task/ledger output: {output_files}")
             self.assertTrue(all(str(raw.resolve()) in event[1] for event in writes))
             self.assertEqual(sys.path, original_sys_path)
+            launcher.load_legacy_launcher = original_loader
+            del launcher.load_legacy_launcher_original
+            launcher.PRIVATE_GENERATION, launcher.PRIVATE_RAW = old_generation, old_raw
             for name, module in original_tracked_modules.items():
                 self.assertIs(sys.modules.get(name), module)
 

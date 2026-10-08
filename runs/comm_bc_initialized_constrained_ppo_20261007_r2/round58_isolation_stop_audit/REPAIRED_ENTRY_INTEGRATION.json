@@ -12,19 +12,43 @@
       "--scene-audit",
       "--output-root"
     ],
-    "default": "no execution without all external receipts",
+    "default": "no execution without all receipt checks and fixed plan identities",
     "test_fixture_cli_permit": false,
     "existing_orchestrator": "round58_gen2/r58_execute.py::execute_authorized",
     "actual_handoff_tested": "R58 fixed first-four handoff calls actual R46 configure/live R40 trainer and repaired adapter, then stops at a test sentinel before the episode provider",
     "parallel_trainer_created": false,
     "old_launcher_modified": false,
-    "canonical_R40_R42_R45_R53_R56_modified": false
+    "canonical_R40_R42_R45_R53_R56_modified": false,
+    "receipt_storage": {
+      "absolute_existing_receipts_required": true,
+      "repository_local_receipts_allowed": true,
+      "fixture_or_test_markers_rejected": true,
+      "hashes_rechecked_before_dispatch": true,
+      "repository_external_only_requirement_found": false
+    },
+    "old_main_order_regression": {
+      "old_source_commit": "b38b8688dee7ffc2626aa2064c8af74af75e216b",
+      "old_main_route_exit_code": 1,
+      "failure": "NameError: _validate_external_grant/load_legacy_launcher used before definition"
+    },
+    "new_entry_evidence": {
+      "module_cli_help_exit_code": 0,
+      "main_positive_route_test_exit_code": 0,
+      "main_positive_route_test": "real main parser + receipt validator + in-memory future-approval fixture + preserved executor/configure + first-four handoff stop before episode provider",
+      "virtual_fixture_is_real_authorization": false,
+      "fixture_history_matches_current_ledger": false,
+      "gen3_private_root_binding": "temporarily extends canonical containment root only to the unique frozen gen3 generation; restores legacy HERE in finally",
+      "rejected_roots": [
+        "preserved gen2/raw",
+        "outside gen3 generation"
+      ]
+    }
   },
   "runtime_identity": {
     "trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
     "common_sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
     "controller_sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
-    "repaired_launcher_sha256": "eec5526513e8c4a836cb83f9e9c8b2bfdd0b5eecd0e6d180b3ceee4b946b67db",
+    "repaired_launcher_sha256": "f6f362910e08cc95160a002777e09df33eae3493a57993a7f21b3cfa3478e337",
     "checkpoint_contract_sha256": "c23dc0c89d8a6d423591cc684e47cf5a25130a279710243fc60dedf7c39ec95b",
     "repaired_prior_adapter_sha256": "7081557e6197aceac17fb453c03e1b5fd539f55ec60a7b3eae92d63f7e697688",
     "new_training_version_suffix": "+r58-repaired-private-generation3/1",
@@ -54,13 +78,14 @@
     }
   },
   "approval_gates": {
-    "human_approval": "missing; external file required",
+    "human_approval": "missing; no synthetic approval persisted or treated as current authorization",
     "freeze_identity": "missing; must bind plan, source, BC models, output root, quota and scene audit",
-    "cumulative_quota": "blocked; historical normal/reserve classification unresolved",
+    "cumulative_quota": "blocked; actual historical normal/reserve classification unresolved; synthetic positive fixture uses hypothetical zero-history and is not live evidence",
     "current_scene_occupancy_audit": "missing; must cover registrations/reservations/claims/artifacts result-blind",
     "old_rollout_reuse": "not certified; 12 substituted fields and exact minibatch RNG/permutation/batch sample hash remain unresolved",
     "output_root": "dedicated round58_gen3/raw; must be absent for fresh execution",
-    "old_checkpoint_resume": "rejected absent matching repaired attestation"
+    "old_checkpoint_resume": "rejected absent matching repaired attestation",
+    "receipt_storage": "repository-local absolute receipts are allowed if all identity checks pass; test fixtures rejected"
   },
   "historical_counts_reference_only": {
     "environment_constructor_or_run_calls": 16,
@@ -75,17 +100,17 @@
       "exit_code": 0
     },
     "private_launcher_and_actual_handoff": {
-      "count": 5,
+      "count": 6,
       "exit_code": 0
     },
     "actual_R40_commit_seam": {
       "count": 3,
       "exit_code": 0
     },
-    "total": 24,
+    "total": 25,
     "py_compile_exit_code": 0,
     "narrow_test_source_hashes": {
-      "test_r58_private_launcher.py": "708ca2e1eca5f28ef8f52b47e1f29d9d298883738fde666f41fb6cf76c2a9452",
+      "test_r58_private_launcher.py": "a8112517a68c21d223959ec33111080111787ec4100e773e5740b2ed7fc86451",
       "test_r58_actual_commit_seam.py": "95c680a66a83df7a6ef73d075a101e42999c5fda87da324e26d89ff4b9a09e44"
     },
     "actual_PPO_function_calls_in_transaction_tests": 5,

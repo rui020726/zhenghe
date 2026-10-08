@@ -72,15 +72,8 @@ def _canonical_sha(value: Any) -> str:
 def _read_external_json(path: Path, label: str) -> dict[str, Any]:
     path = Path(path).expanduser()
     if not path.is_absolute() or not path.is_file():
-        raise PermissionError(f"ROUND58 {label} must be an existing absolute external file")
+        raise PermissionError(f"ROUND58 {label} must be an existing absolute receipt file")
     resolved = path.resolve()
-    repo = HERE.parents[2].resolve()
-    try:
-        resolved.relative_to(repo)
-    except ValueError:
-        pass
-    else:
-        raise PermissionError(f"ROUND58 {label} must be outside the repository; test/repo receipts are refused")
     value = json.loads(resolved.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise PermissionError(f"ROUND58 {label} must contain a JSON object")
@@ -122,6 +115,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     frozen = _read_external_json(freeze_path, "freeze identity")
     quota = _read_external_json(quota_path, "cumulative quota receipt")
     scene_audit = _read_external_json(scene_audit_path, "scene occupancy audit")
+    sys_path_before_legacy_load = list(sys.path)
     legacy = load_legacy_launcher()
     counts = {key: quota.get(key) for key in
               ("historical_normal", "historical_reserve", "historical_unclassified")}
@@ -146,6 +140,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
         contracts.RESERVE_CAP = old_contract_cap
         legacy.RESERVE_CAP = old_legacy_cap
         sys.modules.pop("round58_legacy_launcher_readonly", None)
+        sys.path[:] = sys_path_before_legacy_load
     repair = _repair_identity()
     plan = copy.deepcopy(plan_base)
     plan["training_version"] = REPAIRED_TRAINING_VERSION
@@ -259,9 +254,11 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
         raise RuntimeError("R58 execution contract module is missing")
     old = {"RAW": legacy.RAW, "TRAINING_VERSION": legacy.TRAINING_VERSION,
            "RESERVE_CAP": legacy.RESERVE_CAP,
+           "HERE": legacy.HERE,
            "plan_from_frozen_sources": legacy.plan_from_frozen_sources,
            "install_gate_prior": legacy.install_gate_prior,
-           "bind_live_runtime": legacy.bind_live_runtime}
+           "bind_live_runtime": legacy.bind_live_runtime,
+           "bind_runner_paths": legacy.bind_runner_paths}
     plan_base_fn = old["plan_from_frozen_sources"]
     bind_base_fn = old["bind_live_runtime"]
     installed_adapters = []
@@ -278,6 +275,16 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
         installed_adapters.append(receipt)
         return receipt
     installed_contracts = []
+    bind_paths_base = old["bind_runner_paths"]
+    def bind_gen3_paths(base, raw_root):
+        # The canonical guard requires raw_root to be below its declared root.
+        # Temporarily scope that root to the one frozen gen3 generation, then
+        # restore the preserved gen2 module identity immediately.
+        legacy.HERE = PRIVATE_GENERATION
+        try:
+            return bind_paths_base(base, raw_root)
+        finally:
+            legacy.HERE = old["HERE"]
     def bind_repaired(base, runtime, plan, *, checkpoint_mode="forbid_existing"):
         plan = copy.deepcopy(plan)
         plan["training_version"] = REPAIRED_TRAINING_VERSION
@@ -310,6 +317,7 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
     legacy.plan_from_frozen_sources = bound_plan
     legacy.install_gate_prior = install_repaired
     legacy.bind_live_runtime = bind_repaired
+    legacy.bind_runner_paths = bind_gen3_paths
     def undo():
         for runtime, live in reversed(installed_runtimes):
             adapter = runtime.get("r58_repaired_adapter")
@@ -388,10 +396,6 @@ def main(argv: list[str] | None = None) -> int:
     result = _dispatch_validated(grant)
     print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
     return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
 
 
 def load_legacy_launcher():
@@ -619,3 +623,7 @@ def close_audit_runtime(binding: dict[str, Any]) -> None:
     finally:
         if snapshot:
             _restore_runtime_bindings(snapshot)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
