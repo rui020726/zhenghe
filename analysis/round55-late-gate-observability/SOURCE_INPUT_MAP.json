@@ -1,0 +1,120 @@
+{
+  "kind": "round55-source-input-map/1",
+  "feature_layout_source": "zhenghe/integrated_sar/comm_learning.py features() (19-dim /1 layout)",
+  "slots": [
+    {
+      "index": 0,
+      "name": "age_steps",
+      "role": "gate-recovery input"
+    },
+    {
+      "index": 1,
+      "name": "since_last_emission_time",
+      "role": "other"
+    },
+    {
+      "index": 2,
+      "name": "sent_count",
+      "role": "other"
+    },
+    {
+      "index": 3,
+      "name": "pending_event flag",
+      "role": "other"
+    },
+    {
+      "index": 4,
+      "name": "changed_view flag",
+      "role": "other"
+    },
+    {
+      "index": 5,
+      "name": "first_emission flag",
+      "role": "gate-recovery input"
+    },
+    {
+      "index": 6,
+      "name": "stage_changed flag",
+      "role": "other"
+    },
+    {
+      "index": 7,
+      "name": "requirements_changed flag",
+      "role": "other"
+    },
+    {
+      "index": 8,
+      "name": "members_changed flag",
+      "role": "other"
+    },
+    {
+      "index": 9,
+      "name": "abs(progress_delta)",
+      "role": "other"
+    },
+    {
+      "index": 10,
+      "name": "revision_delta",
+      "role": "other"
+    },
+    {
+      "index": 11,
+      "name": "remaining_time/horizon (clipped [-1,1])",
+      "role": "other"
+    },
+    {
+      "index": 12,
+      "name": "urgent flag (0 <= remaining <= horizon/2)",
+      "role": "other"
+    },
+    {
+      "index": 13,
+      "name": "has_future_requirements flag",
+      "role": "other"
+    },
+    {
+      "index": 14,
+      "name": "backlog_targets",
+      "role": "other"
+    },
+    {
+      "index": 15,
+      "name": "budget_fraction",
+      "role": "other"
+    },
+    {
+      "index": 16,
+      "name": "capacity_fraction",
+      "role": "other"
+    },
+    {
+      "index": 17,
+      "name": "subscribers",
+      "role": "other"
+    },
+    {
+      "index": 18,
+      "name": "min(1, step/1000)",
+      "role": "gate-recovery input"
+    }
+  ],
+  "late_gate_inputs": {
+    "slots": [
+      0,
+      5,
+      18
+    ],
+    "frozen_constants": {
+      "LATE_CUT_STEPS": 147.0,
+      "EPISODE_HORIZON_STEPS": 1000.0
+    }
+  },
+  "evidence_files": {
+    "rule": "zhenghe/runs/comm_cost_v2_rerun_20260928/v2_rules.py",
+    "policy_interface": "zhenghe/integrated_sar/comm_policy.py (SendItem, SendObservation)",
+    "feature_builder": "zhenghe/integrated_sar/comm_learning.py (features())",
+    "collector": "zhenghe-round42/runs/comm_one_shot_full_trace_ablation_20261004/r42_one_shot.py",
+    "age_definition": "zhenghe/integrated_sar/comm.py: age_steps=max(0, self._tick - int(ready_step))",
+    "rule_runner": "zhenghe-round42/runs/comm_one_shot_full_trace_ablation_20261004/r42_run.py run_rule() -> v2_rules.build_rule('late_discovery_gate', scenario)"
+  }
+}

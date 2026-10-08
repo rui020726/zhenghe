@@ -1,0 +1,93 @@
+{
+  "kind": "round55-statement-reconciliation/1",
+  "statement_under_audit": "s11 greedy vs late: significantly more expensive (+157.1*)",
+  "audited_files": [
+    "round53.../ROUND53_REPORT.md (contains 'seed 11 greedy significantly worse (+157.1)')",
+    "analysis/round54.../ROUND54_REPORT.md (repeats 'relative to late inconsistent (s11 significantly worse)')",
+    "analysis/round54.../ROUND54_CORRECTIONS.md (did NOT correct this wording; only rounding)"
+  ],
+  "machine_cell": {
+    "seed": 11,
+    "mode": "greedy",
+    "control_name": "late_dev",
+    "metric": "spent_bytes",
+    "direction": "isolated - control",
+    "isolated": {
+      "point": 4995.375,
+      "ci95_linear": [
+        3563.971875,
+        6595.912499999999
+      ]
+    },
+    "control": {
+      "point": 4838.25,
+      "ci95_linear": [
+        3287.221875,
+        6531.05625
+      ]
+    },
+    "difference": {
+      "point": 157.125,
+      "ci95_linear": [
+        0.0,
+        471.375
+      ]
+    }
+  },
+  "recomputed": {
+    "scene_delta_vector": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2514,
+      0
+    ],
+    "nonzero_scenes": [
+      [
+        1301014,
+        2514
+      ]
+    ],
+    "frozen_index_ci95": [
+      0.0,
+      471.375
+    ],
+    "resample_mean_zero_fraction": 0.3569,
+    "matches_frozen_cell": true
+  },
+  "analytic_binomial_check": {
+    "P_zero_sends_in_16_draws": 0.3560741304517928,
+    "P_k_le_3": 0.984874668968144,
+    "implied_lower_quantile_bytes": 0.0,
+    "implied_upper_quantile_bytes": 471.375
+  },
+  "distinct_claims": {
+    "one_target_explains_whole_gap": {
+      "verdict": "成立",
+      "note": "single decision cell 1301014/target-5 (+2514) explains the whole net gap"
+    },
+    "only_one_nonzero_scene_difference": {
+      "verdict": "成立",
+      "note": "15 zeros and one +2514; but this is exactly why significance fails: (15/16)^16 ~ 35.6% of resamples miss the cell entirely"
+    },
+    "significant_at_95": {
+      "verdict": "不成立",
+      "note": "CI95 = [0.0, 471.375]; lower bound is exactly 0 -> contains 0; 'significantly more expensive' is not supported"
+    }
+  },
+  "reconciled_statement": "s11 greedy vs late: point +157.125 B/episode, frozen bootstrap 95% CI [0.0, 471.375] contains 0 -> NOT significant; the gap is explained by the single decision cell 1301014/target-5",
+  "correction_status": "pending -> registered in this file; old reports preserved unchanged",
+  "development_go_unchanged": false,
+  "cost_means_unchanged": true
+}
