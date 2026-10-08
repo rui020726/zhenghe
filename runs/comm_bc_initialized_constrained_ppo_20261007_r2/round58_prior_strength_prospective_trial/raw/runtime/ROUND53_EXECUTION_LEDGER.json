@@ -1,0 +1,639 @@
+{
+  "normal": [
+    {
+      "category": "normal",
+      "slot": 1,
+      "logical_job": "new_training_s11_e0",
+      "attempt": 1,
+      "claimed_at_unix": 1791455156.558723
+    },
+    {
+      "category": "normal",
+      "slot": 2,
+      "logical_job": "new_training_s11_e1",
+      "attempt": 1,
+      "claimed_at_unix": 1791455169.930498
+    },
+    {
+      "category": "normal",
+      "slot": 3,
+      "logical_job": "new_training_s11_e2",
+      "attempt": 1,
+      "claimed_at_unix": 1791455182.7769513
+    },
+    {
+      "category": "normal",
+      "slot": 4,
+      "logical_job": "new_training_s11_e3",
+      "attempt": 1,
+      "claimed_at_unix": 1791455197.320523
+    }
+  ],
+  "reserve": [],
+  "claims": [
+    {
+      "logical_job": "new_training_s11_e0",
+      "attempt": 1,
+      "category": "normal",
+      "status": "complete",
+      "claimed_at_unix": 1791455156.5567212,
+      "launch_slot": 1,
+      "metadata": {
+        "arm": "NEW",
+        "training_seed": 11,
+        "episode_index": 0,
+        "scenario_seed": 1300027
+      },
+      "environment_constructor_calls": 1,
+      "joint_run_build_failures": 0,
+      "joint_run_constructed_calls": 1,
+      "run_invocation_calls": 1,
+      "joint_run_method_calls": 1,
+      "run_return_calls": 1,
+      "run_failure_calls": 0,
+      "completed_steps": 1000,
+      "simulation_started": true,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 0,
+      "prelaunch_head": "75bd9394bc428dcd08f63f5211fe35be76fa95a9",
+      "round": 45,
+      "comm_action_semantics": "one-shot-send-skip/1",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+      "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+      "round45_key": {
+        "scope": "ppo_training",
+        "logical_job": "new_training_s11_e0",
+        "seed": 11,
+        "episode_index": 0,
+        "scenario_seed": 1300027,
+        "tag": "r44_train_s11_e0",
+        "kind": "train"
+      },
+      "round45_artifact_paths": {
+        "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e0_s1300027_a1_rp.jsonl",
+        "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e0_s1300027_a1_ct.jsonl",
+        "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e0_s1300027_a1_tape.jsonl",
+        "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\rows\\v2_r44_train_s11_e0_s1300027_a1.json"
+      },
+      "round45_attempt_kind": "normal",
+      "round46_identity": {
+        "round": 46,
+        "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1"
+      },
+      "round46_key": {
+        "scope": "ppo_training",
+        "logical_job": "new_training_s11_e0",
+        "seed": 11,
+        "episode_index": 0,
+        "scenario_seed": 1300027,
+        "kind": "train",
+        "tag": "r44_train_s11_e0",
+        "lambda_at_rollout": 1.0,
+        "allow_technical_retry": true
+      },
+      "round46_attempt_kind": "normal",
+      "round46_artifact_paths": {
+        "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e0_s1300027_a1_rp.jsonl",
+        "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e0_s1300027_a1_ct.jsonl",
+        "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e0_s1300027_a1_tape.jsonl",
+        "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\rows\\v2_r44_train_s11_e0_s1300027_a1.json"
+      },
+      "constructor_called_at_unix": 1791455156.601229,
+      "simulation_started_at_unix": 1791455169.6451268,
+      "round45_artifact_receipt": {
+        "kind": "round45-r2-artifact-receipt/2",
+        "attempt": 1,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+        "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+        "round45_key": {
+          "scope": "ppo_training",
+          "logical_job": "new_training_s11_e0",
+          "seed": 11,
+          "episode_index": 0,
+          "scenario_seed": 1300027,
+          "tag": "r44_train_s11_e0",
+          "kind": "train"
+        },
+        "row_identity": {
+          "kind": "train",
+          "model_arm": null,
+          "training_seed": 11,
+          "episode_index": 0,
+          "eval_mode": null,
+          "scenario_seed": 1300027,
+          "attempt": 1,
+          "steps": 1000,
+          "on_time": 6,
+          "spent_bytes": 2514,
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+          "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+          "comm_action_semantics": "one-shot-send-skip/1",
+          "on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "checkpoint_parameter_sha256": null
+        },
+        "decision_tape_records": 66,
+        "artifacts": {
+          "row": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\rows\\v2_r44_train_s11_e0_s1300027_a1.json",
+            "sha256": "a6e3435f139ff2ad0553d9baecb43a18a123d29891a607ec8add0979578356c7",
+            "size_bytes": 341956
+          },
+          "lifecycle": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e0_s1300027_a1_rp.jsonl",
+            "sha256": "1f77da60cc19b5506c3fe50d492755c2fc77ca28f35aa4d071197cfcab8aba4c",
+            "size_bytes": 548858
+          },
+          "transcript": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e0_s1300027_a1_ct.jsonl",
+            "sha256": "f878ed6c86a089eec00c4bdd56250bcd9a1ac17e14bf402466ced677f0ab4a83",
+            "size_bytes": 1998
+          },
+          "tape": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e0_s1300027_a1_tape.jsonl",
+            "sha256": "6d4c4363ff490fafe08b55bbf369dcfaf6284b741c2802cf9ef3374d9b792421",
+            "size_bytes": 215820
+          }
+        },
+        "round46_execution_identity": {
+          "round": 46,
+          "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1"
+        }
+      },
+      "finished_at_unix": 1791455169.7576623,
+      "detail": "train scene=1300027 on_time=6 bytes=2514"
+    },
+    {
+      "logical_job": "new_training_s11_e1",
+      "attempt": 1,
+      "category": "normal",
+      "status": "complete",
+      "claimed_at_unix": 1791455169.9285057,
+      "launch_slot": 2,
+      "metadata": {
+        "arm": "NEW",
+        "training_seed": 11,
+        "episode_index": 1,
+        "scenario_seed": 1300014
+      },
+      "environment_constructor_calls": 1,
+      "joint_run_build_failures": 0,
+      "joint_run_constructed_calls": 1,
+      "run_invocation_calls": 1,
+      "joint_run_method_calls": 1,
+      "run_return_calls": 1,
+      "run_failure_calls": 0,
+      "completed_steps": 1000,
+      "simulation_started": true,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 0,
+      "prelaunch_head": "75bd9394bc428dcd08f63f5211fe35be76fa95a9",
+      "round": 45,
+      "comm_action_semantics": "one-shot-send-skip/1",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+      "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+      "round45_key": {
+        "scope": "ppo_training",
+        "logical_job": "new_training_s11_e1",
+        "seed": 11,
+        "episode_index": 1,
+        "scenario_seed": 1300014,
+        "tag": "r44_train_s11_e1",
+        "kind": "train"
+      },
+      "round45_artifact_paths": {
+        "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e1_s1300014_a1_rp.jsonl",
+        "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e1_s1300014_a1_ct.jsonl",
+        "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e1_s1300014_a1_tape.jsonl",
+        "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\rows\\v2_r44_train_s11_e1_s1300014_a1.json"
+      },
+      "round45_attempt_kind": "normal",
+      "round46_identity": {
+        "round": 46,
+        "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1"
+      },
+      "round46_key": {
+        "scope": "ppo_training",
+        "logical_job": "new_training_s11_e1",
+        "seed": 11,
+        "episode_index": 1,
+        "scenario_seed": 1300014,
+        "kind": "train",
+        "tag": "r44_train_s11_e1",
+        "lambda_at_rollout": 1.0,
+        "allow_technical_retry": true
+      },
+      "round46_attempt_kind": "normal",
+      "round46_artifact_paths": {
+        "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e1_s1300014_a1_rp.jsonl",
+        "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e1_s1300014_a1_ct.jsonl",
+        "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e1_s1300014_a1_tape.jsonl",
+        "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\rows\\v2_r44_train_s11_e1_s1300014_a1.json"
+      },
+      "constructor_called_at_unix": 1791455169.9745188,
+      "simulation_started_at_unix": 1791455182.428414,
+      "round45_artifact_receipt": {
+        "kind": "round45-r2-artifact-receipt/2",
+        "attempt": 1,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+        "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+        "round45_key": {
+          "scope": "ppo_training",
+          "logical_job": "new_training_s11_e1",
+          "seed": 11,
+          "episode_index": 1,
+          "scenario_seed": 1300014,
+          "tag": "r44_train_s11_e1",
+          "kind": "train"
+        },
+        "row_identity": {
+          "kind": "train",
+          "model_arm": null,
+          "training_seed": 11,
+          "episode_index": 1,
+          "eval_mode": null,
+          "scenario_seed": 1300014,
+          "attempt": 1,
+          "steps": 1000,
+          "on_time": 6,
+          "spent_bytes": 5010,
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+          "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+          "comm_action_semantics": "one-shot-send-skip/1",
+          "on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "checkpoint_parameter_sha256": null
+        },
+        "decision_tape_records": 71,
+        "artifacts": {
+          "row": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\rows\\v2_r44_train_s11_e1_s1300014_a1.json",
+            "sha256": "064330ea609dc0c8997417c04099cde5882a0d6d0e7b068966e0c8003e8c9d14",
+            "size_bytes": 342040
+          },
+          "lifecycle": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e1_s1300014_a1_rp.jsonl",
+            "sha256": "49128e4c75e945e8e4712647650a6cb659f4f2f2439ae014de979fbd8894a4dc",
+            "size_bytes": 562893
+          },
+          "transcript": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e1_s1300014_a1_ct.jsonl",
+            "sha256": "c4fe16854a77f52e332fa2ea66563efed161b4d1efaa030638d7524865246048",
+            "size_bytes": 3274
+          },
+          "tape": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e1_s1300014_a1_tape.jsonl",
+            "sha256": "cf1e622c4df1ecfb06182fbfb7246c1c31b48e580198eddeeb7faffcd93f005e",
+            "size_bytes": 190933
+          }
+        },
+        "round46_execution_identity": {
+          "round": 46,
+          "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1"
+        }
+      },
+      "finished_at_unix": 1791455182.6000476,
+      "detail": "train scene=1300014 on_time=6 bytes=5010"
+    },
+    {
+      "logical_job": "new_training_s11_e2",
+      "attempt": 1,
+      "category": "normal",
+      "status": "complete",
+      "claimed_at_unix": 1791455182.7749507,
+      "launch_slot": 3,
+      "metadata": {
+        "arm": "NEW",
+        "training_seed": 11,
+        "episode_index": 2,
+        "scenario_seed": 1300028
+      },
+      "environment_constructor_calls": 1,
+      "joint_run_build_failures": 0,
+      "joint_run_constructed_calls": 1,
+      "run_invocation_calls": 1,
+      "joint_run_method_calls": 1,
+      "run_return_calls": 1,
+      "run_failure_calls": 0,
+      "completed_steps": 1000,
+      "simulation_started": true,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 0,
+      "prelaunch_head": "75bd9394bc428dcd08f63f5211fe35be76fa95a9",
+      "round": 45,
+      "comm_action_semantics": "one-shot-send-skip/1",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+      "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+      "round45_key": {
+        "scope": "ppo_training",
+        "logical_job": "new_training_s11_e2",
+        "seed": 11,
+        "episode_index": 2,
+        "scenario_seed": 1300028,
+        "tag": "r44_train_s11_e2",
+        "kind": "train"
+      },
+      "round45_artifact_paths": {
+        "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e2_s1300028_a1_rp.jsonl",
+        "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e2_s1300028_a1_ct.jsonl",
+        "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e2_s1300028_a1_tape.jsonl",
+        "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\rows\\v2_r44_train_s11_e2_s1300028_a1.json"
+      },
+      "round45_attempt_kind": "normal",
+      "round46_identity": {
+        "round": 46,
+        "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1"
+      },
+      "round46_key": {
+        "scope": "ppo_training",
+        "logical_job": "new_training_s11_e2",
+        "seed": 11,
+        "episode_index": 2,
+        "scenario_seed": 1300028,
+        "kind": "train",
+        "tag": "r44_train_s11_e2",
+        "lambda_at_rollout": 1.0,
+        "allow_technical_retry": true
+      },
+      "round46_attempt_kind": "normal",
+      "round46_artifact_paths": {
+        "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e2_s1300028_a1_rp.jsonl",
+        "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e2_s1300028_a1_ct.jsonl",
+        "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e2_s1300028_a1_tape.jsonl",
+        "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\rows\\v2_r44_train_s11_e2_s1300028_a1.json"
+      },
+      "constructor_called_at_unix": 1791455182.821467,
+      "simulation_started_at_unix": 1791455197.0172892,
+      "round45_artifact_receipt": {
+        "kind": "round45-r2-artifact-receipt/2",
+        "attempt": 1,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+        "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+        "round45_key": {
+          "scope": "ppo_training",
+          "logical_job": "new_training_s11_e2",
+          "seed": 11,
+          "episode_index": 2,
+          "scenario_seed": 1300028,
+          "tag": "r44_train_s11_e2",
+          "kind": "train"
+        },
+        "row_identity": {
+          "kind": "train",
+          "model_arm": null,
+          "training_seed": 11,
+          "episode_index": 2,
+          "eval_mode": null,
+          "scenario_seed": 1300028,
+          "attempt": 1,
+          "steps": 1000,
+          "on_time": 5,
+          "spent_bytes": 0,
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+          "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+          "comm_action_semantics": "one-shot-send-skip/1",
+          "on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4"
+          ],
+          "checkpoint_parameter_sha256": null
+        },
+        "decision_tape_records": 52,
+        "artifacts": {
+          "row": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\rows\\v2_r44_train_s11_e2_s1300028_a1.json",
+            "sha256": "5cdf1e49b71ac2e4694ce7cba13006bb3d96e6adf1422852e962dd7f233d316a",
+            "size_bytes": 341499
+          },
+          "lifecycle": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e2_s1300028_a1_rp.jsonl",
+            "sha256": "8d89ab3cd539b723a4f46d7a7f334395ae65fc25a693f0b1359180c0b7dde74b",
+            "size_bytes": 541678
+          },
+          "transcript": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e2_s1300028_a1_ct.jsonl",
+            "sha256": "0596cccdb72c9c73f6f57460fb054a5caa7c39171c38af41bf8049ebc04bfec3",
+            "size_bytes": 602
+          },
+          "tape": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e2_s1300028_a1_tape.jsonl",
+            "sha256": "42209e4df3cb36d4e909a00f790fb25b4aa6ff5521b9f186e6802573a8b7d005",
+            "size_bytes": 188284
+          }
+        },
+        "round46_execution_identity": {
+          "round": 46,
+          "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1"
+        }
+      },
+      "finished_at_unix": 1791455197.1286168,
+      "detail": "train scene=1300028 on_time=5 bytes=0"
+    },
+    {
+      "logical_job": "new_training_s11_e3",
+      "attempt": 1,
+      "category": "normal",
+      "status": "complete",
+      "claimed_at_unix": 1791455197.3182757,
+      "launch_slot": 4,
+      "metadata": {
+        "arm": "NEW",
+        "training_seed": 11,
+        "episode_index": 3,
+        "scenario_seed": 1300044
+      },
+      "environment_constructor_calls": 1,
+      "joint_run_build_failures": 0,
+      "joint_run_constructed_calls": 1,
+      "run_invocation_calls": 1,
+      "joint_run_method_calls": 1,
+      "run_return_calls": 1,
+      "run_failure_calls": 0,
+      "completed_steps": 1000,
+      "simulation_started": true,
+      "optimizer_step_calls": 0,
+      "checkpoint_write_calls": 0,
+      "prelaunch_head": "75bd9394bc428dcd08f63f5211fe35be76fa95a9",
+      "round": 45,
+      "comm_action_semantics": "one-shot-send-skip/1",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+      "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+      "round45_key": {
+        "scope": "ppo_training",
+        "logical_job": "new_training_s11_e3",
+        "seed": 11,
+        "episode_index": 3,
+        "scenario_seed": 1300044,
+        "tag": "r44_train_s11_e3",
+        "kind": "train"
+      },
+      "round45_artifact_paths": {
+        "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e3_s1300044_a1_rp.jsonl",
+        "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e3_s1300044_a1_ct.jsonl",
+        "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e3_s1300044_a1_tape.jsonl",
+        "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\rows\\v2_r44_train_s11_e3_s1300044_a1.json"
+      },
+      "round45_attempt_kind": "normal",
+      "round46_identity": {
+        "round": 46,
+        "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1"
+      },
+      "round46_key": {
+        "scope": "ppo_training",
+        "logical_job": "new_training_s11_e3",
+        "seed": 11,
+        "episode_index": 3,
+        "scenario_seed": 1300044,
+        "kind": "train",
+        "tag": "r44_train_s11_e3",
+        "lambda_at_rollout": 1.0,
+        "allow_technical_retry": true
+      },
+      "round46_attempt_kind": "normal",
+      "round46_artifact_paths": {
+        "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e3_s1300044_a1_rp.jsonl",
+        "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e3_s1300044_a1_ct.jsonl",
+        "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e3_s1300044_a1_tape.jsonl",
+        "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\rows\\v2_r44_train_s11_e3_s1300044_a1.json"
+      },
+      "constructor_called_at_unix": 1791455197.3655205,
+      "simulation_started_at_unix": 1791455209.872616,
+      "round45_artifact_receipt": {
+        "kind": "round45-r2-artifact-receipt/2",
+        "attempt": 1,
+        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+        "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+        "round45_key": {
+          "scope": "ppo_training",
+          "logical_job": "new_training_s11_e3",
+          "seed": 11,
+          "episode_index": 3,
+          "scenario_seed": 1300044,
+          "tag": "r44_train_s11_e3",
+          "kind": "train"
+        },
+        "row_identity": {
+          "kind": "train",
+          "model_arm": null,
+          "training_seed": 11,
+          "episode_index": 3,
+          "eval_mode": null,
+          "scenario_seed": 1300044,
+          "attempt": 1,
+          "steps": 1000,
+          "on_time": 6,
+          "spent_bytes": 9984,
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+          "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+          "comm_action_semantics": "one-shot-send-skip/1",
+          "on_time_task_ids": [
+            "piloc-e1-target-0",
+            "piloc-e1-target-1",
+            "piloc-e1-target-2",
+            "piloc-e1-target-3",
+            "piloc-e1-target-4",
+            "piloc-e1-target-5"
+          ],
+          "checkpoint_parameter_sha256": null
+        },
+        "decision_tape_records": 76,
+        "artifacts": {
+          "row": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\rows\\v2_r44_train_s11_e3_s1300044_a1.json",
+            "sha256": "4dd16b4a2e9845e81a3f4790b75adef27361967885942a831f336e408ac2c04f",
+            "size_bytes": 342217
+          },
+          "lifecycle": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e3_s1300044_a1_rp.jsonl",
+            "sha256": "5fc45c61554bff31c77258ebcada73ca7d89ba38390fff4744ea34a1b0187c76",
+            "size_bytes": 592795
+          },
+          "transcript": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e3_s1300044_a1_ct.jsonl",
+            "sha256": "bd06e96e877f440fea35d53dff4319f34c3bedf02bcd5747b09e1d381d8d151d",
+            "size_bytes": 6034
+          },
+          "tape": {
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\logs\\v2_r44_train_s11_e3_s1300044_a1_tape.jsonl",
+            "sha256": "6839f8319c10fd4f605178bbb1c696382efd42f5f9315a45a204aaaea6574f91",
+            "size_bytes": 170273
+          }
+        },
+        "round46_execution_identity": {
+          "round": 46,
+          "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1"
+        }
+      },
+      "finished_at_unix": 1791455209.9802961,
+      "detail": "train scene=1300044 on_time=6 bytes=9984"
+    }
+  ],
+  "normal_used": 4,
+  "reserve_used": 0,
+  "total_used": 4,
+  "plan": {
+    "normal_total": 1024,
+    "technical_reserve_max": 40,
+    "hard_cap": 1064,
+    "training_keys": 384,
+    "evaluation_keys": 144,
+    "task_id": "ROUND58-PRIOR-STRENGTH-PROSPECTIVE-TRIAL"
+  },
+  "counts": {
+    "normal_used": 4,
+    "reserve_used": 0,
+    "total_used": 4,
+    "environment_constructor_calls": 4,
+    "joint_run_build_failures": 0,
+    "joint_run_constructed_calls": 4,
+    "run_invocation_calls": 4,
+    "joint_run_method_calls": 4,
+    "run_return_calls": 4,
+    "run_failure_calls": 0,
+    "completed_steps": 4000,
+    "completed_logical_jobs": 4,
+    "simulation_started": 4,
+    "technical_failed_claims": 0,
+    "retry_claims": 0,
+    "optimizer_step_calls": 8,
+    "optimizer_step_journal_entries": 8,
+    "ppo_update_calls": 0,
+    "ppo_update_journal_entries": 0,
+    "ppo_update_count_matches_committed_batches": true,
+    "checkpoint_write_calls": 2,
+    "checkpoint_write_journal_entries": 2,
+    "optimizer_step_count_matches_committed_batches": false,
+    "hard_cap": 1064
+  },
+  "kind": "round46-execution-ledger/1",
+  "round": 46,
+  "runner_version": "round58-private-runner/1+constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+  "normal_cap": 1024,
+  "technical_reserve_max": 40,
+  "hard_cap": 1064,
+  "logical_key_plan_sha256": "2d3928a11cdef5260c89c28698152b9577617260797e8fa28e03fbb8e347fc85"
+}

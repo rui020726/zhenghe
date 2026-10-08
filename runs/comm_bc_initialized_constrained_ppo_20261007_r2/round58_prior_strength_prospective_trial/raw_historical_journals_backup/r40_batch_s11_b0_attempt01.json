@@ -1,0 +1,72 @@
+{
+  "kind": "round40-training-batch-record/1",
+  "batch": 0,
+  "training_seed": 11,
+  "episodes": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "scenarios": [
+    1300027,
+    1300014,
+    1300028,
+    1300044
+  ],
+  "episodes_done_after": 4,
+  "update": {
+    "samples": 265,
+    "gate_loss": 0.0,
+    "gate_rows": 64,
+    "minibatches": 16,
+    "optimizer_steps": 16,
+    "epochs": 4,
+    "unassigned_prefix_task_reward": 0.0,
+    "unassigned_prefix_cost_bytes": 0.0,
+    "unassigned_prefix_cost_normalized": 0.0,
+    "policy_surrogate": 0.64431,
+    "value_loss_task": 1.008058,
+    "value_loss_cost": 0.03042,
+    "entropy": 5e-06,
+    "approx_kl": -0.0,
+    "clip_fraction": 0.0,
+    "gradient_norm_mean": 2.243,
+    "module_gradient_l1_mean": {
+      "trunk": 164.163334161,
+      "action_head": 4.4855e-05,
+      "task_value_head": 18.8471753,
+      "cost_head": 2.185646595
+    },
+    "module_gradient_l1_min": {
+      "trunk": 87.094634295,
+      "action_head": 0.0,
+      "task_value_head": 16.642287612,
+      "cost_head": 0.912920132
+    },
+    "module_gradient_scope": "per-minibatch pre-clip L1 of every module's parameters, read after backward and before clipping/step",
+    "likelihood_alignment": {
+      "samples": 265,
+      "max_abs_gap": 2.3447910280083306e-13,
+      "tolerance": 1e-06,
+      "passed": true
+    },
+    "gate_diag": {
+      "update_index": 0,
+      "diagnostics_error": "NameError: name 'hashlib' is not defined"
+    }
+  },
+  "controller_parameters_before": {
+    "parameter_sha256": "recomputed_pre_update"
+  },
+  "controller_parameters_after": {
+    "parameter_sha256": "14054b00096761be63cf9165ca411e5e9b5ae9772ce4315bbf6ff3569004651d"
+  },
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
+  "recovered": true,
+  "recovery_method": "path_B_deterministic_recompute_from_persisted_tapes_and_before_b0_checkpoint",
+  "preupdate_checkpoint": "v2_train_s11_before_b0.pt",
+  "preupdate_checkpoint_sha256": "f4514dfa57b3caea7b545818b1d738ecebadfb5898584ffffb5f35f4fd0af920",
+  "postupdate_checkpoint": "v2_train_s11_after_b0.pt",
+  "postupdate_checkpoint_sha256": "91a9c3c77d98f959bda1c0418a9c6a1f039a0c9f566e878287749b4911c398be"
+}
