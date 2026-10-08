@@ -483,6 +483,56 @@ def install_protected_dirty_file_guard(base: Any) -> dict[str, Any]:
             sorted(PROTECTED_PREEXISTING_DIRTY_FILES)}
 
 
+def install_r53_claim_verifier(base: Any, runtime: dict[str, Any]) -> dict[str, Any]:
+    """Replace the R46 historical-identity claim verifier for the private R53 route.
+
+    Keeps the frozen-source identity, branch/start-ancestor, and guarded
+    worktree-clean checks; validates the fresh private journal route instead of
+    the R46 prelaunch legacy-journal identity.  No science/config/trainer change.
+    """
+    r45_module = getattr(base, "_R45_MODULE", None)
+    r44_module = getattr(r45_module, "R44_RUNTIME_MODULE", None) if r45_module else None
+    if r44_module is None:
+        raise RuntimeError("R53 claim verifier could not locate the live R44 module")
+    stale = getattr(r44_module, "verify_frozen_source", None)
+    stale_code = getattr(stale, "__code__", None)
+    if (stale_code is None
+            or getattr(stale, "__name__", "") != "round46_r2_v5_claim_source_verifier"
+            or Path(stale_code.co_filename).resolve() != SOURCE_RUNNER.resolve()):
+        raise RuntimeError("R53 expected the R46 strict claim verifier before rebinding the R44 global")
+    registered_frozen = read_json(R44_DIR / "ROUND44_FROZEN_CONFIG.json")
+    raw = Path(base.V6_DIR).resolve()
+    journal = Path(base.CHECKPOINT_JOURNAL_PATH).resolve()
+
+    def r53_claim_verifier(frozen: dict[str, Any]) -> str:
+        if frozen != registered_frozen:
+            raise RuntimeError("R44 claim supplied a frozen object outside the registered R44 source")
+        base._assert_branch_head()
+        base._assert_source_worktree_clean()
+        if Path(runtime["r42_run"].RUN_DIR).resolve() != raw:
+            raise RuntimeError("R53 private run root moved before claim")
+        if journal.parent != (raw / "runtime").resolve():
+            raise RuntimeError("R53 claim journal is not the fresh private journal")
+        audit = base._checkpoint_journal_route_audit(create=False)
+        if (audit.get("status") != "fresh_private_route"
+                or audit.get("historical_family_journal_copied") is not False
+                or Path(audit.get("journal_path", "")).resolve() != journal):
+            raise RuntimeError("R53 checkpoint journal route audit does not close the fresh private journal")
+        return base._run_git("rev-parse", "HEAD")
+
+    r53_claim_verifier.__name__ = "round53_private_claim_source_verifier"
+    r53_claim_verifier.__qualname__ = r53_claim_verifier.__name__
+    r44_module.verify_frozen_source = r53_claim_verifier
+    if r44_module.verify_frozen_source is not r53_claim_verifier:
+        raise RuntimeError("R53 private claim verifier rebinding failed")
+    return {"kind": "round53-private-claim-verifier/1", "status": "installed",
+            "rebound_from": {"name": stale.__name__,
+                             "source": str(Path(stale_code.co_filename).resolve())},
+            "r44_module_file": (str(Path(r44_module.__file__).resolve())
+                                if getattr(r44_module, "__file__", None) else None),
+            "private_journal": str(journal)}
+
+
 def seed_private_task_state(raw: Path) -> None:
     """Seed the live R45 task-state owner without touching historical task files."""
     path = raw / "ROUND45_CURRENT_TASK.json"
@@ -749,6 +799,7 @@ def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
     base._configure_runtime_module()
     runtime = base._RUNTIME
     if runtime is None: raise RuntimeError("R53 private runtime did not configure")
+    claim_verifier = install_r53_claim_verifier(base, runtime)
     live = bind_live_runtime(base, runtime, plan)
     runtime["round53_protected_dirty_file_guard"] = source_guard
     module = runtime["module"]
@@ -810,7 +861,8 @@ def execute_authorized(auth_path: Path = AUTH_PATH) -> dict[str, Any]:
               "normal_slots": len(normal_slots), "reserve_slots": len(reserve_slots),
               "baseline_reuse": baseline,
               "live_bindings": {k: v for k, v in live.items() if k != "route_undo"},
-              "protected_dirty_file_guard": source_guard}
+              "protected_dirty_file_guard": source_guard,
+              "r53_claim_verifier": claim_verifier}
     (RAW / "ROUND53_EXECUTION_RESULT.json").write_text(
         json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return result

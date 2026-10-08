@@ -379,5 +379,65 @@ finally:
             install_on_verified_trainer(trainer, source_sha256=source_sha,
                                         source_path=r53.SOURCE_RUNNER)
 
+    def test_r53_private_claim_verifier_replaces_r46_historical_identity_check(self):
+        import shutil
+        tmp = Path(tempfile.mkdtemp(prefix="r53_verifier_fixture_", dir=r53.HERE))
+        try:
+            raw = tmp / "raw"
+            runtime_dir = raw / "runtime"
+            runtime_dir.mkdir(parents=True)
+            journal = runtime_dir / "checkpoint_writes.jsonl"
+            journal.write_bytes(b"")
+            verifier_calls = []
+            base = SimpleNamespace(
+                V6_DIR=raw, R46_DIR=raw, CHECKPOINT_JOURNAL_PATH=journal,
+                _assert_branch_head=lambda *a, **k: verifier_calls.append("branch"),
+                _assert_source_worktree_clean=lambda: verifier_calls.append("worktree"),
+                _checkpoint_journal_route_audit=lambda create=False: {
+                    "kind": "round53-private-journal-route/1",
+                    "status": "fresh_private_route",
+                    "journal_path": str(journal),
+                    "historical_family_journal_copied": False},
+                _run_git=lambda *a, **k: "53head")
+            runtime = {"r42_run": SimpleNamespace(RUN_DIR=raw)}
+
+            class R44:
+                pass
+            r44 = R44()
+            code = compile(
+                "def round46_r2_v5_claim_source_verifier(frozen):\n    return 'r46'\n",
+                str(r53.SOURCE_RUNNER), "exec")
+            namespace = {}
+            exec(code, namespace)
+            stale = namespace["round46_r2_v5_claim_source_verifier"]
+            r44.verify_frozen_source = stale
+            base._R45_MODULE = SimpleNamespace(R44_RUNTIME_MODULE=r44)
+
+            info = r53.install_r53_claim_verifier(base, runtime)
+            self.assertEqual(info["kind"], "round53-private-claim-verifier/1")
+            self.assertEqual(r44.verify_frozen_source.__name__,
+                             "round53_private_claim_source_verifier")
+            frozen = json.loads(
+                (r53.R44_DIR / "ROUND44_FROZEN_CONFIG.json").read_text(encoding="utf-8"))
+            self.assertEqual(r44.verify_frozen_source(frozen), "53head")
+            self.assertEqual(verifier_calls, ["branch", "worktree"])
+            with self.assertRaisesRegex(RuntimeError, "registered R44 source"):
+                r44.verify_frozen_source({"tampered": True})
+            base._checkpoint_journal_route_audit = lambda create=False: {
+                "status": "other", "journal_path": str(journal),
+                "historical_family_journal_copied": False}
+            with self.assertRaisesRegex(RuntimeError, "fresh private journal"):
+                r44.verify_frozen_source(frozen)
+
+            class R44b:
+                pass
+            r44b = R44b()
+            r44b.verify_frozen_source = lambda frozen: "not_r46"
+            base._R45_MODULE = SimpleNamespace(R44_RUNTIME_MODULE=r44b)
+            with self.assertRaisesRegex(RuntimeError, "expected the R46 strict claim verifier"):
+                r53.install_r53_claim_verifier(base, runtime)
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
 
 if __name__ == "__main__": unittest.main()

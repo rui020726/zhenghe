@@ -5,7 +5,7 @@
   "preflight_basis": {
     "frozen_source_identities": "passed",
     "indexed_baseline_reuse": "passed",
-    "pure_and_guarded_runtime_tests": "passed_22_tests",
+    "pure_and_guarded_runtime_tests": "passed_25_tests",
     "actual_runtime_binding_fixture": "passed",
     "registered_ep0_rng_route": "source_bound_to_frozen_R45_R42_R40_chain"
   },
@@ -14,7 +14,7 @@
   "first_four_dynamic_gate": "PENDING_NOT_EXECUTED",
   "full_plan_execution_ready": false,
   "full_plan_execution_dependency": "the authorized, quota-counted first-four dynamic gates must pass before continuation",
-  "authorization": "PENDING_USER_APPROVAL",
+  "authorization": "explicitly_authorized_receipt_registered",
   "authorization_is_not_implied_by_readiness": true,
   "trial_plan_status": "proposed_not_authorized",
   "plan_sha256": "334279e877638cc768391b97b437ac512deeafbfc0a1afd86e6e4cd53bdc9af2",
@@ -54,5 +54,11 @@
   "not_authorized": [
     "no authorization receipt exists",
     "no raw ledger/claim/checkpoint namespace created"
-  ]
+  ],
+  "prelaunch_wiring_corrections_after_freeze": [
+    "14b6749 private R45 task-state seeding (after task-state launch failure)",
+    "4ab9b1f R53-only protected dirty-file guard (after dirty-guard launch failure)",
+    "current head: R53-only private-journal claim verifier replacing R46 historical-identity check (after two journal-route launch failures; first fix was registered but never implemented)"
+  ],
+  "authorization_receipt": "EXECUTION_AUTHORIZATION.json"
 }

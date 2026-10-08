@@ -1,0 +1,20 @@
+{
+  "kind": "round53-launch-failure/3",
+  "status": "preserved_pre_training_launch_failure",
+  "failed_head_before_fix": "4ab9b1f5b76a662ecb9249ae38f1891025f33ca3",
+  "failure_time_local": "2026-10-08 08:50",
+  "phase": "seed 11 first training claim before environment/run",
+  "error_type": "RuntimeError",
+  "error_message": "ROUND46 checkpoint journal output scope or historical identity failed",
+  "root_cause": "R53 reused the R46 strict claim verifier; its fresh private journal route lacked the legacy-journal SHA and R46 prelaunch artifact contract, so the historical-prefix check failed",
+  "claims_created": 0,
+  "episodes_run": 0,
+  "environment_constructor_calls": 0,
+  "ppo_updates": 0,
+  "optimizer_steps": 0,
+  "checkpoint_writes": 2,
+  "checkpoint_scope": "private R53 seed-11 ep0 copies; no episode or optimizer update",
+  "preserved_namespace": "raw_launch_failure_journal_route_20261008T005009Z",
+  "fix_scope": "install an R53-only strict claim verifier that keeps source/frozen-input checks but validates the fresh private journal; no science/config/trainer change",
+  "authorization_not_revoked": true
+}

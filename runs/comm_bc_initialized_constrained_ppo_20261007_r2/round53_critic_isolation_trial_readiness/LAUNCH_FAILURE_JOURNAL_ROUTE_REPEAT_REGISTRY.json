@@ -1,0 +1,23 @@
+{
+  "kind": "round53-launch-failure/4",
+  "status": "preserved_pre_training_launch_failure",
+  "failed_head_before_fix": "4ab9b1f5b76a662ecb9249ae38f1891025f33ca3",
+  "failure_time_local": "2026-10-08 09:11",
+  "phase": "seed 11 first training claim before environment/run",
+  "error_type": "RuntimeError",
+  "error_message": "ROUND46 checkpoint journal output scope or historical identity failed",
+  "root_cause": "Second occurrence of the journal-route failure. The fix registered in LAUNCH_FAILURE_JOURNAL_ROUTE_REGISTRY.json (install an R53-only strict claim verifier) was never actually implemented in r53_execute.py; the actual claim path still reached ROUND46 _verify_prelaunch_identity, which validates the R46 historical legacy-journal identity and cannot pass on the fresh private R53 journal route.",
+  "claims_created": 0,
+  "episodes_run": 0,
+  "environment_constructor_calls": 0,
+  "ppo_updates": 0,
+  "optimizer_steps": 0,
+  "checkpoint_writes": 2,
+  "checkpoint_scope": "private R53 seed-11 ep0 identity copies (ep0/before_b0/rolling, all sha256 bcfb1d3d...); no episode, claim, or optimizer update",
+  "preserved_namespace": "raw_launch_failure_journal_route_repeat_20261008T011100Z",
+  "preserved_namespace_files": 17,
+  "preserved_namespace_sha256_verified": true,
+  "bc_parameter_identity_verified_seed_11": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+  "fix_scope": "implement the previously registered R53-only strict claim verifier: keep R44 freeze identity, guarded worktree-clean, branch/start-ancestor checks; validate the fresh private journal route instead of the R46 historical prelaunch identity; no science/config/trainer change",
+  "authorization_not_revoked": true
+}
