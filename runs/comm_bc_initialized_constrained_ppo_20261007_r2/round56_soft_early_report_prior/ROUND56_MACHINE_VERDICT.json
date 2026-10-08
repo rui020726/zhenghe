@@ -1,0 +1,114 @@
+{
+  "kind": "round56-machine-verdict/1",
+  "technical_execution_complete": true,
+  "claim_closure": {
+    "normal": 480,
+    "reserve": 0,
+    "hard_cap": 504
+  },
+  "beta": 0.1,
+  "ready_cut": 147.0,
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1",
+  "development_go": false,
+  "development_gate": {
+    "per_seed": [
+      {
+        "seed": 11,
+        "greedy_on_time_total": 96,
+        "greedy_mean_billed_bytes": 5476.875,
+        "mean_billed_strictly_below_threshold": false,
+        "identical_on_time_id_scenes": 16,
+        "lost_targets": [],
+        "saved_targets": []
+      },
+      {
+        "seed": 22,
+        "greedy_on_time_total": 96,
+        "greedy_mean_billed_bytes": 4091.625,
+        "mean_billed_strictly_below_threshold": true,
+        "identical_on_time_id_scenes": 16,
+        "lost_targets": [],
+        "saved_targets": []
+      },
+      {
+        "seed": 33,
+        "greedy_on_time_total": 96,
+        "greedy_mean_billed_bytes": 4405.5,
+        "mean_billed_strictly_below_threshold": true,
+        "identical_on_time_id_scenes": 16,
+        "lost_targets": [],
+        "saved_targets": []
+      }
+    ]
+  },
+  "r56_vs_r53_spent_bytes": [
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "point": 481.5,
+      "ci95_linear": [
+        0.0,
+        1255.5
+      ],
+      "significant": false
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "point": 481.5,
+      "ci95_linear": [
+        0.0,
+        1255.5
+      ],
+      "significant": false
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "point": 168.375,
+      "ci95_linear": [
+        0.0,
+        505.125
+      ],
+      "significant": false
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "point": 157.5,
+      "ci95_linear": [
+        0.0,
+        472.5
+      ],
+      "significant": false
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "point": -445.5,
+      "ci95_linear": [
+        -904.5,
+        0.0
+      ],
+      "significant": false
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "point": -445.125,
+      "ci95_linear": [
+        -1191.0,
+        0.0
+      ],
+      "significant": false
+    }
+  ],
+  "claims_not_established": [
+    "independent confirmation",
+    "formal non-inferiority",
+    "population zero-loss",
+    "generalization",
+    "deployment",
+    "CI containing 0 is not equivalence; late SKIP is not a safety oracle"
+  ]
+}

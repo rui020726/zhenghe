@@ -1,0 +1,2785 @@
+{
+  "kind": "round56-statistics/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1",
+  "scenes": [
+    "1301000",
+    "1301001",
+    "1301002",
+    "1301003",
+    "1301004",
+    "1301005",
+    "1301006",
+    "1301007",
+    "1301008",
+    "1301009",
+    "1301010",
+    "1301011",
+    "1301012",
+    "1301013",
+    "1301014",
+    "1301015"
+  ],
+  "resampling": {
+    "rng": "numpy Generator PCG64",
+    "seed": 20261008,
+    "draws": 10000,
+    "indices_usage": "values[indices].mean(axis=1)",
+    "interval": "linear percentile 95% descriptive"
+  },
+  "difference_direction": "R56 - control",
+  "comparisons": [
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "r53",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "r53",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 5476.875,
+        "ci95_linear": [
+          3946.865625,
+          7097.662499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4995.375,
+        "ci95_linear": [
+          3563.971875,
+          6595.912499999999
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 481.5,
+        "ci95_linear": [
+          0.0,
+          1255.5
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "r53",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.1875,
+        "ci95_linear": [
+          1.5625,
+          2.8125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0,
+        "ci95_linear": [
+          1.4375,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.1875,
+        "ci95_linear": [
+          0.0,
+          0.5
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 5476.875,
+        "ci95_linear": [
+          3946.865625,
+          7097.662499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5152.125,
+        "ci95_linear": [
+          3686.990625,
+          6748.903125
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 324.75,
+        "ci95_linear": [
+          0.0,
+          806.625
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.1875,
+        "ci95_linear": [
+          1.5625,
+          2.8125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0625,
+        "ci95_linear": [
+          1.5,
+          2.6875
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.125,
+        "ci95_linear": [
+          0.0,
+          0.3125
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 5476.875,
+        "ci95_linear": [
+          3946.865625,
+          7097.662499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5778.0,
+        "ci95_linear": [
+          4249.115625,
+          7341.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -301.125,
+        "ci95_linear": [
+          -758.625,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.1875,
+        "ci95_linear": [
+          1.5625,
+          2.8125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.3125,
+        "ci95_linear": [
+          1.6875,
+          2.9375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.125,
+        "ci95_linear": [
+          -0.3125,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 5476.875,
+        "ci95_linear": [
+          3946.865625,
+          7097.662499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 14939.25,
+        "ci95_linear": [
+          14745.365625,
+          15148.134375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -9462.375,
+        "ci95_linear": [
+          -11027.25,
+          -7808.971875
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.1875,
+        "ci95_linear": [
+          1.5625,
+          2.8125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -3.8125,
+        "ci95_linear": [
+          -4.4375,
+          -3.1875
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 5476.875,
+        "ci95_linear": [
+          3946.865625,
+          7097.662499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4838.25,
+        "ci95_linear": [
+          3287.221875,
+          6531.05625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 638.625,
+        "ci95_linear": [
+          0.0,
+          1434.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.1875,
+        "ci95_linear": [
+          1.5625,
+          2.8125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.3125,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.25,
+        "ci95_linear": [
+          0.0,
+          0.5625
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "r53",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "r53",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 5476.875,
+        "ci95_linear": [
+          3946.865625,
+          7097.662499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4995.375,
+        "ci95_linear": [
+          3563.971875,
+          6595.912499999999
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 481.5,
+        "ci95_linear": [
+          0.0,
+          1255.5
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "r53",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.1875,
+        "ci95_linear": [
+          1.5625,
+          2.8125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0,
+        "ci95_linear": [
+          1.4375,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.1875,
+        "ci95_linear": [
+          0.0,
+          0.5
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 5476.875,
+        "ci95_linear": [
+          3946.865625,
+          7097.662499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5152.125,
+        "ci95_linear": [
+          3686.990625,
+          6748.903125
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 324.75,
+        "ci95_linear": [
+          0.0,
+          806.625
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.1875,
+        "ci95_linear": [
+          1.5625,
+          2.8125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0625,
+        "ci95_linear": [
+          1.5,
+          2.6875
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.125,
+        "ci95_linear": [
+          0.0,
+          0.3125
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 5476.875,
+        "ci95_linear": [
+          3946.865625,
+          7097.662499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6706.125,
+        "ci95_linear": [
+          4976.990625,
+          8580.037499999999
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -1229.25,
+        "ci95_linear": [
+          -2175.759375,
+          -444.0
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.1875,
+        "ci95_linear": [
+          1.5625,
+          2.8125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.6875,
+        "ci95_linear": [
+          2.0,
+          3.4375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.5,
+        "ci95_linear": [
+          -0.875,
+          -0.1875
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 5476.875,
+        "ci95_linear": [
+          3946.865625,
+          7097.662499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 14939.25,
+        "ci95_linear": [
+          14745.365625,
+          15148.134375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -9462.375,
+        "ci95_linear": [
+          -11027.25,
+          -7808.971875
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.1875,
+        "ci95_linear": [
+          1.5625,
+          2.8125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -3.8125,
+        "ci95_linear": [
+          -4.4375,
+          -3.1875
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 5476.875,
+        "ci95_linear": [
+          3946.865625,
+          7097.662499999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4838.25,
+        "ci95_linear": [
+          3287.221875,
+          6531.05625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 638.625,
+        "ci95_linear": [
+          0.0,
+          1434.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 2.1875,
+        "ci95_linear": [
+          1.5625,
+          2.8125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.3125,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.25,
+        "ci95_linear": [
+          0.0,
+          0.5625
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "r53",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "r53",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4091.625,
+        "ci95_linear": [
+          2399.240625,
+          5980.143749999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 3923.25,
+        "ci95_linear": [
+          2197.115625,
+          5904.890624999998
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 168.375,
+        "ci95_linear": [
+          0.0,
+          505.125
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "r53",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.625,
+        "ci95_linear": [
+          0.9375,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.5625,
+        "ci95_linear": [
+          0.875,
+          2.375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0625,
+        "ci95_linear": [
+          0.0,
+          0.1875
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4091.625,
+        "ci95_linear": [
+          2399.240625,
+          5980.143749999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5152.125,
+        "ci95_linear": [
+          3686.990625,
+          6748.903125
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -1060.5,
+        "ci95_linear": [
+          -1819.5,
+          -433.125
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.625,
+        "ci95_linear": [
+          0.9375,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0625,
+        "ci95_linear": [
+          1.5,
+          2.6875
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.4375,
+        "ci95_linear": [
+          -0.75,
+          -0.1875
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4091.625,
+        "ci95_linear": [
+          2399.240625,
+          5980.143749999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4694.25,
+        "ci95_linear": [
+          3239.23125,
+          6383.634375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -602.625,
+        "ci95_linear": [
+          -1179.009375,
+          -144.375
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.625,
+        "ci95_linear": [
+          0.9375,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.875,
+        "ci95_linear": [
+          1.3125,
+          2.5625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.25,
+        "ci95_linear": [
+          -0.5,
+          -0.0625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4091.625,
+        "ci95_linear": [
+          2399.240625,
+          5980.143749999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 14939.25,
+        "ci95_linear": [
+          14745.365625,
+          15148.134375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -10847.625,
+        "ci95_linear": [
+          -12541.9875,
+          -8948.240625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.625,
+        "ci95_linear": [
+          0.9375,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -4.375,
+        "ci95_linear": [
+          -5.0625,
+          -3.625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4091.625,
+        "ci95_linear": [
+          2399.240625,
+          5980.143749999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4838.25,
+        "ci95_linear": [
+          3287.221875,
+          6531.05625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -746.625,
+        "ci95_linear": [
+          -1504.5,
+          -144.375
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.625,
+        "ci95_linear": [
+          0.9375,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.3125,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.3125,
+        "ci95_linear": [
+          -0.625,
+          -0.0625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "r53",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "r53",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4091.625,
+        "ci95_linear": [
+          2399.240625,
+          5980.143749999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 3934.125,
+        "ci95_linear": [
+          2202.75,
+          5854.246874999998
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 157.5,
+        "ci95_linear": [
+          0.0,
+          472.5
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "r53",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.625,
+        "ci95_linear": [
+          0.9375,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.5625,
+        "ci95_linear": [
+          0.875,
+          2.3125
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0625,
+        "ci95_linear": [
+          0.0,
+          0.1875
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4091.625,
+        "ci95_linear": [
+          2399.240625,
+          5980.143749999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5175.375,
+        "ci95_linear": [
+          3716.56875,
+          6759.018749999999
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -1083.75,
+        "ci95_linear": [
+          -2008.5,
+          -313.875
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.625,
+        "ci95_linear": [
+          0.9375,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0625,
+        "ci95_linear": [
+          1.5,
+          2.6875
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.4375,
+        "ci95_linear": [
+          -0.8125,
+          -0.125
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4091.625,
+        "ci95_linear": [
+          2399.240625,
+          5980.143749999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4537.125,
+        "ci95_linear": [
+          2973.365625,
+          6293.324999999999
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -445.5,
+        "ci95_linear": [
+          -904.134375,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.625,
+        "ci95_linear": [
+          0.9375,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.8125,
+        "ci95_linear": [
+          1.1875,
+          2.5
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.1875,
+        "ci95_linear": [
+          -0.375,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4091.625,
+        "ci95_linear": [
+          2399.240625,
+          5980.143749999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 14939.25,
+        "ci95_linear": [
+          14745.365625,
+          15148.134375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -10847.625,
+        "ci95_linear": [
+          -12541.9875,
+          -8948.240625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.625,
+        "ci95_linear": [
+          0.9375,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -4.375,
+        "ci95_linear": [
+          -5.0625,
+          -3.625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4091.625,
+        "ci95_linear": [
+          2399.240625,
+          5980.143749999999
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4838.25,
+        "ci95_linear": [
+          3287.221875,
+          6531.05625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -746.625,
+        "ci95_linear": [
+          -1504.5,
+          -144.375
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.625,
+        "ci95_linear": [
+          0.9375,
+          2.375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.3125,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.3125,
+        "ci95_linear": [
+          -0.625,
+          -0.0625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "r53",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "r53",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4405.5,
+        "ci95_linear": [
+          2809.05,
+          6212.278125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4851.0,
+        "ci95_linear": [
+          3409.490625,
+          6481.153125
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -445.5,
+        "ci95_linear": [
+          -904.5,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "r53",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.75,
+        "ci95_linear": [
+          1.125,
+          2.5
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.375,
+          2.5625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.1875,
+        "ci95_linear": [
+          -0.375,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4405.5,
+        "ci95_linear": [
+          2809.05,
+          6212.278125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5152.125,
+        "ci95_linear": [
+          3686.990625,
+          6748.903125
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -746.625,
+        "ci95_linear": [
+          -1336.134375,
+          -288.375
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "bc",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.75,
+        "ci95_linear": [
+          1.125,
+          2.5
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0625,
+        "ci95_linear": [
+          1.5,
+          2.6875
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.3125,
+        "ci95_linear": [
+          -0.5625,
+          -0.125
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4405.5,
+        "ci95_linear": [
+          2809.05,
+          6212.278125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5621.625,
+        "ci95_linear": [
+          4068.0,
+          7228.190624999999
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -1216.125,
+        "ci95_linear": [
+          -2301.009375,
+          -301.125
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "shared_ppo",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.75,
+        "ci95_linear": [
+          1.125,
+          2.5
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.25,
+        "ci95_linear": [
+          1.625,
+          2.875
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.5,
+        "ci95_linear": [
+          -0.9375,
+          -0.125
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4405.5,
+        "ci95_linear": [
+          2809.05,
+          6212.278125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 14939.25,
+        "ci95_linear": [
+          14745.365625,
+          15148.134375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -10533.75,
+        "ci95_linear": [
+          -12148.134375,
+          -8722.771875000002
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "immediate",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.75,
+        "ci95_linear": [
+          1.125,
+          2.5
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -4.25,
+        "ci95_linear": [
+          -4.875,
+          -3.5
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4405.5,
+        "ci95_linear": [
+          2809.05,
+          6212.278125
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4838.25,
+        "ci95_linear": [
+          3287.221875,
+          6531.05625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -432.75,
+        "ci95_linear": [
+          -866.25,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "control_name": "late",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.75,
+        "ci95_linear": [
+          1.125,
+          2.5
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.3125,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.1875,
+        "ci95_linear": [
+          -0.375,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "r53",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "r53",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4248.75,
+        "ci95_linear": [
+          2546.25,
+          6125.259375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4693.875,
+        "ci95_linear": [
+          3139.490625,
+          6401.25
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -445.125,
+        "ci95_linear": [
+          -1191.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "r53",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.6875,
+        "ci95_linear": [
+          1.0,
+          2.4375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.875,
+        "ci95_linear": [
+          1.25,
+          2.5625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.1875,
+        "ci95_linear": [
+          -0.5,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4248.75,
+        "ci95_linear": [
+          2546.25,
+          6125.259375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 5018.625,
+        "ci95_linear": [
+          3594.375,
+          6600.75
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -769.875,
+        "ci95_linear": [
+          -1694.625,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "bc",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.6875,
+        "ci95_linear": [
+          1.0,
+          2.4375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.0,
+        "ci95_linear": [
+          1.4375,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.3125,
+        "ci95_linear": [
+          -0.6875,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4248.75,
+        "ci95_linear": [
+          2546.25,
+          6125.259375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6738.0,
+        "ci95_linear": [
+          5180.578125,
+          8328.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -2489.25,
+        "ci95_linear": [
+          -3643.621875,
+          -1394.625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "shared_ppo",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.6875,
+        "ci95_linear": [
+          1.0,
+          2.4375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 2.6875,
+        "ci95_linear": [
+          2.0625,
+          3.3125
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -1.0,
+        "ci95_linear": [
+          -1.4375,
+          -0.5625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4248.75,
+        "ci95_linear": [
+          2546.25,
+          6125.259375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 14939.25,
+        "ci95_linear": [
+          14745.365625,
+          15148.134375
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -10690.5,
+        "ci95_linear": [
+          -12385.228125,
+          -8794.865625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "immediate",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.6875,
+        "ci95_linear": [
+          1.0,
+          2.4375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -4.3125,
+        "ci95_linear": [
+          -5.0,
+          -3.5625
+        ],
+        "significant": true
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "on_time",
+      "isolated": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 6.0,
+        "ci95_linear": [
+          6.0,
+          6.0
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": 0.0,
+        "ci95_linear": [
+          0.0,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "spent_bytes",
+      "isolated": {
+        "point": 4248.75,
+        "ci95_linear": [
+          2546.25,
+          6125.259375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 4838.25,
+        "ci95_linear": [
+          3287.221875,
+          6531.05625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -589.5,
+        "ci95_linear": [
+          -1335.375,
+          0.0
+        ],
+        "significant": false
+      }
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "control_name": "late",
+      "metric": "first_reports",
+      "isolated": {
+        "point": 1.6875,
+        "ci95_linear": [
+          1.0,
+          2.4375
+        ],
+        "significant": true
+      },
+      "control": {
+        "point": 1.9375,
+        "ci95_linear": [
+          1.3125,
+          2.625
+        ],
+        "significant": true
+      },
+      "difference": {
+        "point": -0.25,
+        "ci95_linear": [
+          -0.5625,
+          0.0
+        ],
+        "significant": false
+      }
+    }
+  ],
+  "per_seed_summary": [
+    {
+      "seed": 11,
+      "greedy_on_time_total": 96,
+      "greedy_mean_billed_bytes": 5476.875,
+      "mean_billed_strictly_below_threshold": false,
+      "identical_on_time_id_scenes": 16,
+      "lost_targets": [],
+      "saved_targets": []
+    },
+    {
+      "seed": 22,
+      "greedy_on_time_total": 96,
+      "greedy_mean_billed_bytes": 4091.625,
+      "mean_billed_strictly_below_threshold": true,
+      "identical_on_time_id_scenes": 16,
+      "lost_targets": [],
+      "saved_targets": []
+    },
+    {
+      "seed": 33,
+      "greedy_on_time_total": 96,
+      "greedy_mean_billed_bytes": 4405.5,
+      "mean_billed_strictly_below_threshold": true,
+      "identical_on_time_id_scenes": 16,
+      "lost_targets": [],
+      "saved_targets": []
+    }
+  ],
+  "development_go": false,
+  "r53_vs_r56_means": {
+    "11": {
+      "r53_mean_billed": {
+        "greedy": 4995.375,
+        "sampled": 4995.375
+      },
+      "r56_mean_billed": 5476.875
+    },
+    "22": {
+      "r53_mean_billed": {
+        "greedy": 3923.25,
+        "sampled": 3934.125
+      },
+      "r56_mean_billed": 4091.625
+    },
+    "33": {
+      "r53_mean_billed": {
+        "greedy": 4851.0,
+        "sampled": 4693.875
+      },
+      "r56_mean_billed": 4405.5
+    }
+  }
+}
