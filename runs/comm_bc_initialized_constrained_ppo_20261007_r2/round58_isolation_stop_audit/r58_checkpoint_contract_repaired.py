@@ -1,0 +1,268 @@
+"""Version/attestation guard on the live R40 trainer save/load seam."""
+from __future__ import annotations
+
+from copy import deepcopy
+import hashlib
+import json
+import os
+from pathlib import Path
+from typing import Any
+
+import torch
+
+
+def _attested(value: dict[str, Any], identity: dict[str, Any], *, version: str) -> dict[str, Any]:
+    result = deepcopy(value)
+    result["training_version"] = version
+    result["round58_repair_attestation"] = deepcopy(identity)
+    return result
+
+
+def require_payload(payload: Any, identity: dict[str, Any], *, version: str) -> None:
+    if not isinstance(payload, dict):
+        raise RuntimeError("R58 resume refused: checkpoint payload is not a mapping")
+    state, freeze = payload.get("training_state"), payload.get("freeze")
+    if (payload.get("training_version") != version
+            or payload.get("round58_repair_attestation") != identity
+            or not isinstance(state, dict)
+            or state.get("training_version") != version
+            or state.get("round58_repair_attestation") != identity
+            or not isinstance(freeze, dict)
+            or freeze.get("training_version") != version
+            or freeze.get("round58_repair_attestation") != identity):
+        raise RuntimeError("R58 resume refused before restore: missing/mismatched repaired-version attestation")
+
+
+def _file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
+            training_version: str, expected_checkpoint_root: Path,
+            versions: Any | None = None, r42_run: Any | None = None) -> dict[str, Any]:
+    """Wrap actual v2 trainer serialization and R40 candidate enumeration in memory."""
+    if getattr(r40_train, "trainer", None) is not trainer:
+        raise RuntimeError("cannot install checkpoint contract: R40 trainer object identity mismatch")
+    names = ("save_checkpoint", "load_checkpoint", "load_checkpoint_read_only",
+             "fresh_training_state", "TRAINING_VERSION")
+    trainer_before = {name: getattr(trainer, name) for name in names}
+    versions_before = (None if versions is None else
+                       {"module": versions, "TRAINING_VERSION": getattr(versions, "TRAINING_VERSION", None)})
+    r40_names = ("train_seed", "_latest_resume_source")
+    r40_before = {name: getattr(r40_train, name) for name in r40_names}
+    optional_r40_names = ("_preserving_checkpoint_path", "_write_immutable_snapshot",
+                          "_save_milestone")
+    optional_r40_before = {name: getattr(r40_train, name)
+                           for name in optional_r40_names if hasattr(r40_train, name)}
+    run_torch_load_cpu = (None if r42_run is None else
+                          getattr(r42_run, "torch_load_cpu", None))
+    save0 = trainer.save_checkpoint
+    load0 = trainer.load_checkpoint
+    load_ro0 = trainer.load_checkpoint_read_only
+    fresh0 = trainer.fresh_training_state
+    latest0 = r40_train._latest_resume_source
+    train0 = r40_train.train_seed
+    preserve0 = getattr(r40_train, "_preserving_checkpoint_path", None)
+    immutable0 = getattr(r40_train, "_write_immutable_snapshot", None)
+    milestone0 = getattr(r40_train, "_save_milestone", None)
+    root = Path(expected_checkpoint_root).resolve()
+
+    def checked_path(path: Path) -> Path:
+        resolved = Path(path).resolve()
+        try:
+            resolved.relative_to(root)
+        except ValueError as exc:
+            raise RuntimeError("R58 checkpoint path escaped the frozen generation root") from exc
+        return resolved
+
+    def sidecar_path(path: Path) -> Path:
+        return Path(path).with_name(Path(path).name + ".r58.json")
+
+    def require_sidecar(path: Path) -> dict[str, Any]:
+        checked = checked_path(path)
+        receipt_path = sidecar_path(checked)
+        if not receipt_path.is_file():
+            raise RuntimeError("R58 resume refused before checkpoint deserialization: repaired sidecar missing")
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+        if (receipt.get("kind") != "round58-checkpoint-sidecar/1"
+                or receipt.get("checkpoint_name") != checked.name
+                or receipt.get("training_version") != training_version
+                or receipt.get("round58_repair_attestation") != identity
+                or receipt.get("checkpoint_sha256") != _file_sha256(checked)):
+            raise RuntimeError("R58 resume refused before checkpoint deserialization: sidecar mismatch")
+        return receipt
+
+    def write_sidecar(path: Path) -> None:
+        checked = checked_path(path)
+        receipt = {"kind": "round58-checkpoint-sidecar/1",
+                   "checkpoint_name": checked.name,
+                   "checkpoint_sha256": _file_sha256(checked),
+                   "training_version": training_version,
+                   "round58_repair_attestation": deepcopy(identity)}
+        target = sidecar_path(checked)
+        temporary = target.with_name(target.name + f".{os.getpid()}.tmp")
+        if temporary.exists():
+            raise RuntimeError("stale R58 checkpoint sidecar temporary requires inspection")
+        with temporary.open("x", encoding="utf-8", newline="\n") as handle:
+            json.dump(receipt, handle, ensure_ascii=False, sort_keys=True)
+            handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, target)
+
+    def finish_renamed_checkpoint(path: Path, temporary_kind: str) -> None:
+        final = checked_path(path)
+        target_sidecar = sidecar_path(final)
+        if target_sidecar.is_file():
+            require_sidecar(final)
+        else:
+            write_sidecar(final)
+        temporary_checkpoint = final.with_name(
+            final.name + f".{os.getpid()}.{temporary_kind}-tmp")
+        temporary_sidecar = sidecar_path(temporary_checkpoint)
+        if temporary_sidecar.is_file():
+            receipt = json.loads(temporary_sidecar.read_text(encoding="utf-8"))
+            if (receipt.get("round58_repair_attestation") != identity
+                    or receipt.get("checkpoint_sha256") != _file_sha256(final)):
+                raise RuntimeError("renamed R58 checkpoint sidecar does not match final bytes")
+            temporary_sidecar.unlink()
+
+    def save(controller, optimizer, state, path, *, freeze):
+        checked_path(path)
+        state2 = _attested(state, identity, version=training_version)
+        freeze2 = _attested(freeze, identity, version=training_version)
+        # The actual ROUND42/R40 serializer remains the writer; inject top-level provenance
+        # exactly at its torch.save boundary, while the canonical schema code stays untouched.
+        save_torch = torch.save
+        def attested_torch_save(payload, file, *args, **kwargs):
+            payload2 = dict(payload)
+            payload2["round58_repair_attestation"] = deepcopy(identity)
+            return save_torch(payload2, file, *args, **kwargs)
+        torch.save = attested_torch_save
+        try:
+            result = save0(controller, optimizer, state2, path, freeze=freeze2)
+            write_sidecar(path)
+            return result
+        finally:
+            torch.save = save_torch
+
+    def load(path, *, freeze):
+        checked_path(path)
+        require_sidecar(path)
+        payload = torch.load(path, map_location="cpu", weights_only=False)
+        require_payload(payload, identity, version=training_version)
+        return load0(path, freeze=_attested(freeze, identity, version=training_version))
+
+    def load_read_only(path, *, freeze):
+        resolved = Path(path).resolve()
+        try:
+            resolved.relative_to(root)
+        except ValueError:
+            # External BC/reference checkpoints are read-only inputs, never R58 resume sources.
+            return load_ro0(path, freeze=freeze)
+        require_sidecar(path)
+        payload = torch.load(path, map_location="cpu", weights_only=False)
+        require_payload(payload, identity, version=training_version)
+        return load_ro0(path, freeze=_attested(freeze, identity, version=training_version))
+
+    def fresh_state(seed):
+        return _attested(fresh0(seed), identity, version=training_version)
+
+    def latest(seed, freeze):
+        candidates = ([r40_train._rolling_path(seed)] if r40_train._rolling_path(seed).exists() else [])
+        candidates.extend(sorted(Path(r40_train.common.CHECKPOINTS).glob(
+            f"v2_train_s{int(seed)}_after_b*.pt")))
+        # Reject every candidate before the frozen R40 selector can instantiate a controller.
+        for path in candidates:
+            require_sidecar(path)
+            payload = torch.load(path, map_location="cpu", weights_only=False)
+            require_payload(payload, identity, version=training_version)
+        return latest0(seed, _attested(freeze, identity, version=training_version))
+
+    def train_seed(seed, *, episodes, freeze, reference_cache):
+        if r40_train.trainer is not trainer:
+            raise RuntimeError("R58 live R40 trainer binding changed before training entry")
+        actual_root = Path(r40_train.common.CHECKPOINTS).resolve()
+        if actual_root != root:
+            raise RuntimeError("R58 live checkpoint root changed before training entry")
+        return train0(seed, episodes=episodes,
+                      freeze=_attested(freeze, identity, version=training_version),
+                      reference_cache=reference_cache)
+
+    def preserving_checkpoint_path(path, freeze):
+        resolved = Path(path).resolve()
+        if resolved.is_file():
+            require_sidecar(resolved)
+        return preserve0(path, freeze)
+
+    def write_immutable_snapshot(path, controller, optimizer, state, freeze):
+        resolved = Path(path).resolve()
+        if resolved.is_file():
+            require_sidecar(resolved)
+            return immutable0(path, controller, optimizer, state, freeze)
+        result = immutable0(path, controller, optimizer, state, freeze)
+        finish_renamed_checkpoint(path, "snapshot")
+        return result
+
+    def save_milestone(controller, optimizer, state, seed, episodes, freeze):
+        path = r40_train._milestone_path(seed, episodes, freeze)
+        existed = Path(path).is_file()
+        if existed:
+            require_sidecar(path)
+        result = milestone0(controller, optimizer, state, seed, episodes, freeze)
+        if not existed:
+            finish_renamed_checkpoint(path, "milestone")
+        return result
+
+    def guarded_torch_load_cpu(path):
+        resolved = Path(path).resolve()
+        try:
+            resolved.relative_to(root)
+        except ValueError:
+            return run_torch_load_cpu(path)
+        require_sidecar(resolved)
+        return run_torch_load_cpu(path)
+
+    trainer.TRAINING_VERSION = training_version
+    if versions is not None:
+        versions.TRAINING_VERSION = training_version
+    trainer.save_checkpoint = save
+    trainer.load_checkpoint = load
+    trainer.load_checkpoint_read_only = load_read_only
+    trainer.fresh_training_state = fresh_state
+    r40_train._latest_resume_source = latest
+    r40_train.train_seed = train_seed
+    if preserve0 is not None:
+        r40_train._preserving_checkpoint_path = preserving_checkpoint_path
+    if immutable0 is not None:
+        r40_train._write_immutable_snapshot = write_immutable_snapshot
+    if milestone0 is not None:
+        r40_train._save_milestone = save_milestone
+    if r42_run is not None and callable(run_torch_load_cpu):
+        r42_run.torch_load_cpu = guarded_torch_load_cpu
+
+    def undo() -> None:
+        for name, value in trainer_before.items():
+            setattr(trainer, name, value)
+        if versions_before is not None:
+            versions_before["module"].TRAINING_VERSION = versions_before["TRAINING_VERSION"]
+        for name, value in r40_before.items():
+            setattr(r40_train, name, value)
+        for name, value in optional_r40_before.items():
+            setattr(r40_train, name, value)
+        if r42_run is not None and run_torch_load_cpu is not None:
+            r42_run.torch_load_cpu = run_torch_load_cpu
+
+    return {"kind": "round58-r40-checkpoint-contract/1",
+            "identity": deepcopy(identity), "training_version": training_version,
+            "checkpoint_root": str(root), "undo": undo,
+            "wrapped_save": trainer.save_checkpoint is save,
+            "wrapped_load": trainer.load_checkpoint is load,
+            "wrapped_r40_train": r40_train.train_seed is train_seed,
+            "wrapped_candidate_selector": r40_train._latest_resume_source is latest,
+            "wrapped_checkpoint_sidecar": True,
+            "wrapped_readonly_runtime_loader": r42_run is not None and callable(run_torch_load_cpu)}

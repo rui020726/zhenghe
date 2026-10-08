@@ -9,11 +9,17 @@ from __future__ import annotations
 
 import importlib.util
 import io
+import json
 import sys
+import hashlib
+import argparse
+import copy
+import types
 from pathlib import Path
 from typing import Any
 
 HERE = Path(__file__).resolve().parent
+RUN_ROOT = HERE.parents[0]
 GEN2 = HERE.parent / "round58_gen2"
 R53 = HERE.parent / "round53_critic_isolation_trial_readiness"
 R45 = HERE.parents[2] / "runs" / "comm_rule_warmstart_cost_learning_20261006_r2"
@@ -25,17 +31,367 @@ for _path in (GEN2, R53, R45, CANON):
 
 import r58_gate_prior_repaired as repaired_adapter  # noqa: E402
 import r58_repaired_entry as resume_guard  # noqa: E402
+import r58_checkpoint_contract_repaired as checkpoint_contract  # noqa: E402
+
+PRIVATE_GENERATION = RUN_ROOT / "round58_gen3"
+PRIVATE_RAW = PRIVATE_GENERATION / "raw"
+REPAIRED_TRAINING_VERSION = (
+    "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/"
+    "dual-eta-lambda-0p5/1/rule-bc-late147-init/1/"
+    "published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+"
+    "r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+"
+    "r58-repaired-private-generation3/1"
+)
+_GRANT_TOKEN = object()
+
+
+class _ValidatedGrant:
+    """In-process result of validating external human receipts; never a CLI input type."""
+    def __init__(self, token: object, values: dict[str, Any]):
+        if token is not _GRANT_TOKEN:
+            raise PermissionError("validated grant objects are not user-constructible")
+        self.values = values
 
 
 def execute_authorized(*, authorization: dict[str, Any] | None = None,
                        freeze_identity: dict[str, Any] | None = None,
                        cumulative_quota: dict[str, Any] | None = None) -> None:
-    """Fail closed; this audit build deliberately has no execution capability."""
-    if not isinstance(authorization, dict) or authorization.get("status") != "explicitly_authorized":
-        raise PermissionError("ROUND58 execution denied: new explicit authorization is required")
-    if not isinstance(freeze_identity, dict) or not isinstance(cumulative_quota, dict):
-        raise PermissionError("ROUND58 execution denied: freeze identity and cumulative quota receipt are required")
-    raise RuntimeError("ROUND58 execution disabled in the zero-environment audit adapter")
+    """Unconditionally deny dictionary grants: CLI cannot turn test objects into execution.
+
+    Actual execution is reachable only through ``main`` with externally stored receipts,
+    and remains blocked unless all independent identities and cumulative accounting close.
+    """
+    raise PermissionError("ROUND58 execution requires external approval/freeze/quota/scene receipt files")
+
+
+def _canonical_sha(value: Any) -> str:
+    return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True,
+                                     separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
+def _read_external_json(path: Path, label: str) -> dict[str, Any]:
+    path = Path(path).expanduser()
+    if not path.is_absolute() or not path.is_file():
+        raise PermissionError(f"ROUND58 {label} must be an existing absolute external file")
+    resolved = path.resolve()
+    repo = HERE.parents[2].resolve()
+    try:
+        resolved.relative_to(repo)
+    except ValueError:
+        pass
+    else:
+        raise PermissionError(f"ROUND58 {label} must be outside the repository; test/repo receipts are refused")
+    value = json.loads(resolved.read_text(encoding="utf-8"))
+    if not isinstance(value, dict):
+        raise PermissionError(f"ROUND58 {label} must contain a JSON object")
+    if value.get("fixture") is True or value.get("environment") == "test":
+        raise PermissionError(f"ROUND58 {label}: test fixtures cannot authorize CLI execution")
+    return value
+
+
+def _bc_model_identity() -> tuple[dict[str, Any], str]:
+    identity_path = RUN_ROOT / "ROUND46_R2_V6_INPUT_IDENTITY.json"
+    identity = json.loads(identity_path.read_text(encoding="utf-8"))
+    models = identity.get("bc_models_by_seed")
+    if set(models or {}) != {"11", "22", "33"}:
+        raise PermissionError("ROUND58 registered BC model identities are incomplete")
+    body = {seed: {key: models[seed].get(key) for key in
+                   ("checkpoint_path", "checkpoint_sha256", "parameter_sha256")}
+            for seed in ("11", "22", "33")}
+    if any(not all(isinstance(v, str) and v for v in item.values()) for item in body.values()):
+        raise PermissionError("ROUND58 registered BC checkpoint/parameter identity is incomplete")
+    return body, _canonical_sha(body)
+
+
+def _repair_identity() -> dict[str, Any]:
+    return {"critic_route_version": resume_guard.ROUTE_VERSION,
+            **resume_guard.adapter_identity(),
+            "private_launcher_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            "checkpoint_contract_sha256": hashlib.sha256(
+                Path(checkpoint_contract.__file__).read_bytes()).hexdigest(),
+            "training_version": REPAIRED_TRAINING_VERSION}
+
+
+def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
+                             quota_path: Path, scene_audit_path: Path,
+                             output_root: Path, mode: str) -> _ValidatedGrant:
+    # This entire function is read-only and precedes legacy plan execution/configure.
+    if mode not in ("fresh", "recover_first_batch_gate"):
+        raise PermissionError("only frozen fresh start or attested first-batch continuation is admitted")
+    approval = _read_external_json(authorization_path, "human approval")
+    frozen = _read_external_json(freeze_path, "freeze identity")
+    quota = _read_external_json(quota_path, "cumulative quota receipt")
+    scene_audit = _read_external_json(scene_audit_path, "scene occupancy audit")
+    legacy = load_legacy_launcher()
+    counts = {key: quota.get(key) for key in
+              ("historical_normal", "historical_reserve", "historical_unclassified")}
+    if any(type(value) is not int or value < 0 for value in counts.values()):
+        raise PermissionError("ROUND58 quota receipt must provide nonnegative integer history counts")
+    historical_total = sum(counts.values())
+    if (counts["historical_unclassified"] != 0
+            or counts["historical_normal"] + 1024 > 1024
+            or counts["historical_reserve"] > 40
+            or historical_total + 1024 > 1064):
+        raise PermissionError("ROUND58 history does not fit the frozen normal/reserve/hard caps")
+    remaining_reserve = 40 - counts["historical_reserve"]
+    contracts = sys.modules.get("r58_contracts")
+    if contracts is None:
+        raise RuntimeError("ROUND58 plan contract module was not imported")
+    old_contract_cap, old_legacy_cap = contracts.RESERVE_CAP, legacy.RESERVE_CAP
+    contracts.RESERVE_CAP = remaining_reserve
+    legacy.RESERVE_CAP = remaining_reserve
+    try:
+        plan_base = legacy.plan_from_frozen_sources()
+    finally:
+        contracts.RESERVE_CAP = old_contract_cap
+        legacy.RESERVE_CAP = old_legacy_cap
+        sys.modules.pop("round58_legacy_launcher_readonly", None)
+    repair = _repair_identity()
+    plan = copy.deepcopy(plan_base)
+    plan["training_version"] = REPAIRED_TRAINING_VERSION
+    plan["r58_repair_identity"] = repair
+    plan["generation_id"] = "round58_gen3"
+    plan_sha = legacy.canonical_sha(plan)
+    # Reuse the canonical historical approval contract; extra fields bind the new generation.
+    from r58_contracts import authorize_receipt
+    old_cap = contracts.RESERVE_CAP
+    contracts.RESERVE_CAP = remaining_reserve
+    try:
+        authorize_receipt(approval, plan_sha256=plan_sha)
+    finally:
+        contracts.RESERVE_CAP = old_cap
+    bc_models, bc_sha = _bc_model_identity()
+    expected_output = PRIVATE_RAW.resolve()
+    requested_output = Path(output_root).expanduser()
+    if not requested_output.is_absolute() or requested_output.resolve() != expected_output:
+        raise PermissionError("ROUND58 output root must be the dedicated round58_gen3/raw path")
+    if mode == "fresh" and expected_output.exists():
+        raise PermissionError("ROUND58 fresh generation output already exists; refusing overwrite")
+    if mode == "recover_first_batch_gate" and not expected_output.is_dir():
+        raise PermissionError("ROUND58 continuation requires the existing generation root")
+    expected_freeze = {
+        "kind": "round58-repaired-execution-freeze/1", "status": "frozen",
+        "plan_sha256": plan_sha, "training_version": REPAIRED_TRAINING_VERSION,
+        "repair_identity": repair, "bc_model_identity_sha256": bc_sha,
+        "output_root": str(expected_output), "generation_id": "round58_gen3",
+        "mode": mode, "cumulative_quota_sha256": hashlib.sha256(
+            Path(quota_path).read_bytes()).hexdigest(), "reserve_cap": remaining_reserve,
+        "scene_audit_sha256": hashlib.sha256(Path(scene_audit_path).read_bytes()).hexdigest(),
+        "bc_models": bc_models,
+    }
+    for key, value in expected_freeze.items():
+        if frozen.get(key) != value:
+            raise PermissionError(f"ROUND58 freeze mismatch: {key}")
+    sources = scene_audit.get("checked_sources", {})
+    if (scene_audit.get("kind") != "round58-scene-occupancy-audit/1"
+            or scene_audit.get("status") != "clear"
+            or scene_audit.get("scenes") != list(range(1_700_000, 1_700_032))
+            or scene_audit.get("conflicts") != []
+            or scene_audit.get("result_blind") is not True
+            or any(sources.get(name) is not True
+                   for name in ("registrations", "reservations", "claims", "artifacts"))
+            or not isinstance(scene_audit.get("audited_at_utc"), str)
+            or len(scene_audit["audited_at_utc"]) < 20):
+        raise PermissionError("ROUND58 frozen evaluation scene block is not currently cleared")
+    if approval.get("plan_sha256") != plan_sha or approval.get("generation_id") != "round58_gen3" \
+            or approval.get("repair_identity") != repair or approval.get("output_root") != str(expected_output) \
+            or approval.get("bc_model_identity_sha256") != bc_sha \
+            or approval.get("freeze_sha256") != hashlib.sha256(Path(freeze_path).read_bytes()).hexdigest() \
+            or approval.get("quota_sha256") != hashlib.sha256(Path(quota_path).read_bytes()).hexdigest() \
+            or approval.get("scene_audit_sha256") != hashlib.sha256(Path(scene_audit_path).read_bytes()).hexdigest():
+        raise PermissionError("ROUND58 human approval does not bind the repaired generation/model/output")
+    # Historical classification is intentionally unresolved in the present ledger.
+    required_quota = {"kind": "round58-cumulative-quota-receipt/1", "status": "reconciled",
+                      "planned_normal": 1024, "normal_remaining": 1024-counts["historical_normal"],
+                      "reserve_remaining": remaining_reserve,
+                      "hard_remaining": 1064-historical_total, "hard_cap": 1064}
+    for key, value in required_quota.items():
+        if quota.get(key) != value:
+            raise PermissionError(f"ROUND58 cumulative quota not cleared: {key}")
+    if not isinstance(quota.get("historical_manifest_sha256"), str) \
+            or len(quota["historical_manifest_sha256"]) != 64:
+        raise PermissionError("ROUND58 cumulative quota needs a hash-closed history manifest")
+    history_path = Path(str(quota.get("historical_manifest_path", ""))).expanduser()
+    if (not history_path.is_absolute() or not history_path.is_file()
+            or hashlib.sha256(history_path.read_bytes()).hexdigest()
+               != quota["historical_manifest_sha256"]):
+        raise PermissionError("ROUND58 cumulative quota history manifest is missing or hash-mismatched")
+    history = json.loads(history_path.read_text(encoding="utf-8"))
+    environment_history = history.get("environment_consumption", {})
+    if (environment_history.get("known_constructor_and_run_calls") != historical_total
+            or str(environment_history.get("reserve_classification", "")).startswith("unreconciled")
+            or environment_history.get("gen1_complete_claims", 0)
+               + environment_history.get("gen2_complete_claims", 0) != historical_total):
+        raise PermissionError("ROUND58 historical launch categories are not reconciled to preserved evidence")
+    source_counts = environment_history.get("gen1_categories", {})
+    source_counts2 = environment_history.get("gen2_claim_categories", {})
+    if (source_counts.get("normal", 0) + source_counts.get("reserve", 0)
+            + source_counts2.get("normal", 0) + source_counts2.get("reserve", 0)
+            != historical_total
+            or source_counts.get("normal", 0) + source_counts2.get("normal", 0)
+               != counts["historical_normal"]
+            or source_counts.get("reserve", 0) + source_counts2.get("reserve", 0)
+               != counts["historical_reserve"]):
+        raise PermissionError("ROUND58 cumulative category totals disagree with source claims")
+    return _ValidatedGrant(_GRANT_TOKEN, {
+        "authorization_path": Path(authorization_path).resolve(),
+        "freeze_path": Path(freeze_path).resolve(), "quota_path": Path(quota_path).resolve(),
+        "scene_audit_path": Path(scene_audit_path).resolve(), "output_root": expected_output,
+        "mode": mode, "plan": plan, "plan_sha256": plan_sha,
+        "repair_identity": repair, "bc_models": bc_models, "bc_model_identity_sha256": bc_sha,
+        "reserve_cap": remaining_reserve, "quota_sha256": hashlib.sha256(
+            Path(quota_path).read_bytes()).hexdigest(),
+        "historical_manifest_path": history_path.resolve(),
+        "approval_receipt": copy.deepcopy(approval),
+        "input_file_sha256": {
+            "authorization": hashlib.sha256(Path(authorization_path).read_bytes()).hexdigest(),
+            "freeze": hashlib.sha256(Path(freeze_path).read_bytes()).hexdigest(),
+            "quota": hashlib.sha256(Path(quota_path).read_bytes()).hexdigest(),
+            "scene_audit": hashlib.sha256(Path(scene_audit_path).read_bytes()).hexdigest(),
+        },
+    })
+
+
+def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict[str, Any]:
+    values = grant.values
+    contract_module = sys.modules.get("r58_contracts")
+    if contract_module is None:
+        raise RuntimeError("R58 execution contract module is missing")
+    old = {"RAW": legacy.RAW, "TRAINING_VERSION": legacy.TRAINING_VERSION,
+           "RESERVE_CAP": legacy.RESERVE_CAP,
+           "plan_from_frozen_sources": legacy.plan_from_frozen_sources,
+           "install_gate_prior": legacy.install_gate_prior,
+           "bind_live_runtime": legacy.bind_live_runtime}
+    plan_base_fn = old["plan_from_frozen_sources"]
+    bind_base_fn = old["bind_live_runtime"]
+    installed_adapters = []
+    installed_runtimes = []
+    def bound_plan():
+        plan = plan_base_fn()
+        plan["training_version"] = REPAIRED_TRAINING_VERSION
+        plan["r58_repair_identity"] = values["repair_identity"]
+        plan["generation_id"] = "round58_gen3"
+        return plan
+    def install_repaired(trainer, detach_context, output_root):
+        receipt = repaired_adapter.install_gate_prior(
+            trainer, detach_context, Path(output_root))
+        installed_adapters.append(receipt)
+        return receipt
+    installed_contracts = []
+    def bind_repaired(base, runtime, plan, *, checkpoint_mode="forbid_existing"):
+        plan = copy.deepcopy(plan)
+        plan["training_version"] = REPAIRED_TRAINING_VERSION
+        plan["r58_repair_identity"] = values["repair_identity"]
+        live = bind_base_fn(base, runtime, plan, checkpoint_mode=checkpoint_mode)
+        if len(installed_adapters) != 1:
+            raise RuntimeError("repaired prior adapter was not installed exactly once")
+        runtime["r56_gate_prior"] = installed_adapters[0]
+        runtime["r58_repaired_adapter"] = installed_adapters[0]
+        if checkpoint_mode == "forbid_existing" and Path(runtime["common"].CHECKPOINTS).resolve() != values["output_root"] / "checkpoints":
+            raise RuntimeError("live Round58 checkpoint root differs from the approved generation root")
+        contract = checkpoint_contract.install(
+            runtime["trainer"], runtime["r40_train"],
+            identity=values["repair_identity"], training_version=REPAIRED_TRAINING_VERSION,
+            expected_checkpoint_root=runtime["common"].CHECKPOINTS,
+            versions=runtime["r42_versions"], r42_run=runtime["r42_run"])
+        runtime["r58_checkpoint_contract"] = contract
+        runtime["r58_repair_identity"] = values["repair_identity"]
+        if runtime["r40_train"].trainer is not runtime["trainer"]:
+            contract["undo"]()
+            raise RuntimeError("repaired checkpoint route is not the trainer used by R40")
+        installed_contracts.append(contract)
+        installed_runtimes.append((runtime, live))
+        return live
+    legacy.RAW = values["output_root"]
+    legacy.TRAINING_VERSION = REPAIRED_TRAINING_VERSION
+    legacy.RESERVE_CAP = values["reserve_cap"]
+    old_contract_reserve = getattr(contract_module, "RESERVE_CAP", None)
+    contract_module.RESERVE_CAP = values["reserve_cap"]
+    legacy.plan_from_frozen_sources = bound_plan
+    legacy.install_gate_prior = install_repaired
+    legacy.bind_live_runtime = bind_repaired
+    def undo():
+        for runtime, live in reversed(installed_runtimes):
+            adapter = runtime.get("r58_repaired_adapter")
+            if adapter and callable(adapter.get("undo")):
+                adapter["undo"]()
+            undo_live = live.get("route_undo")
+            if callable(undo_live):
+                undo_live()
+        for contract in reversed(installed_contracts):
+            contract["undo"]()
+        for key, value in old.items():
+            setattr(legacy, key, value)
+        contract_module.RESERVE_CAP = old_contract_reserve
+    return {"undo": undo, "installed_contracts": installed_contracts}
+
+
+def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
+    if not isinstance(grant, _ValidatedGrant) or not grant.values:
+        raise PermissionError("ROUND58 execution requires a validated external receipt set")
+    values = grant.values
+    if not values.get("test_only"):
+        paths = {"authorization": values["authorization_path"],
+                 "freeze": values["freeze_path"], "quota": values["quota_path"],
+                 "scene_audit": values["scene_audit_path"]}
+        for key, path in paths.items():
+            if hashlib.sha256(Path(path).read_bytes()).hexdigest() != values["input_file_sha256"][key]:
+                raise PermissionError(f"ROUND58 {key} receipt changed after preflight")
+        if _repair_identity() != values["repair_identity"]:
+            raise PermissionError("ROUND58 repaired source identity changed after preflight")
+        current_models, current_model_sha = _bc_model_identity()
+        if current_models != values["bc_models"] or current_model_sha != values["bc_model_identity_sha256"]:
+            raise PermissionError("ROUND58 BC model identity changed after preflight")
+        if values["mode"] == "fresh" and Path(values["output_root"]).exists():
+            raise PermissionError("ROUND58 output root appeared after preflight")
+    snapshot = _snapshot_runtime_bindings()
+    legacy = (load_legacy_launcher if legacy_loader is None else legacy_loader)()
+    route = None
+    try:
+        route = _install_repaired_runtime_route(legacy, grant)
+        if legacy.canonical_sha(legacy.plan_from_frozen_sources()) != values["plan_sha256"]:
+            raise PermissionError("ROUND58 frozen plan identity changed before execution")
+        if values.get("approval_receipt") is not None:
+            original_read_json = legacy.read_json
+            auth_path = Path(values["authorization_path"]).resolve()
+            approval_receipt = copy.deepcopy(values["approval_receipt"])
+            def frozen_read_json(path):
+                if Path(path).resolve() == auth_path:
+                    if not values.get("test_only") and hashlib.sha256(
+                            auth_path.read_bytes()).hexdigest() != values["input_file_sha256"]["authorization"]:
+                        raise PermissionError("ROUND58 human approval changed before legacy preflight")
+                    return copy.deepcopy(approval_receipt)
+                return original_read_json(path)
+            legacy.read_json = frozen_read_json
+        # This is the preserved ROUND58 fixed-plan orchestration, not a parallel trainer.
+        return legacy.execute_authorized(
+            auth_path=grant.values["authorization_path"], mode=grant.values["mode"])
+    finally:
+        if route is not None:
+            route["undo"]()
+        _restore_runtime_bindings(snapshot)
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Execute only an externally frozen ROUND58 generation")
+    parser.add_argument("--authorization", type=Path, required=True)
+    parser.add_argument("--freeze", type=Path, required=True)
+    parser.add_argument("--cumulative-quota", type=Path, required=True)
+    parser.add_argument("--scene-audit", type=Path, required=True)
+    parser.add_argument("--output-root", type=Path, required=True)
+    parser.add_argument("--mode", choices=("fresh", "recover_first_batch_gate"), default="fresh")
+    args = parser.parse_args(argv)
+    grant = _validate_external_grant(
+        authorization_path=args.authorization, freeze_path=args.freeze,
+        quota_path=args.cumulative_quota, scene_audit_path=args.scene_audit,
+        output_root=args.output_root, mode=args.mode)
+    result = _dispatch_validated(grant)
+    print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
 
 
 def load_legacy_launcher():
@@ -50,7 +406,77 @@ def load_legacy_launcher():
     return module
 
 
+def _snapshot_module_value(value):
+    if isinstance(value, (dict, list, set, tuple)):
+        try:
+            return copy.deepcopy(value)
+        except Exception:
+            return value
+    return value
+
+
+def _snapshot_runtime_bindings() -> dict[str, Any]:
+    modules = dict(sys.modules)
+    tracked_roots = tuple(path.resolve() for path in (GEN2, R53, R45, CANON))
+    states = {}
+    for name, module in modules.items():
+        if not isinstance(module, types.ModuleType):
+            continue
+        source = getattr(module, "__file__", None)
+        tracked = name.startswith(("v2_", "r40_", "r42_", "r43_", "r44_", "r45_", "r58_"))
+        if source:
+            try:
+                resolved = Path(source).resolve()
+                tracked = tracked or any(resolved == root or root in resolved.parents
+                                         for root in tracked_roots)
+            except (OSError, RuntimeError):
+                pass
+        if tracked:
+            states[name] = {key: _snapshot_module_value(value)
+                            for key, value in vars(module).items()}
+    return {"modules": modules, "module_states": states, "sys_path": list(sys.path),
+            "tracked_roots": tracked_roots}
+
+
+def _restore_runtime_bindings(snapshot: dict[str, Any]) -> None:
+    before = snapshot["modules"]
+    roots = snapshot["tracked_roots"]
+    prefixes = ("v2_", "r40_", "r42_", "r43_", "r44_", "r45_", "r58_")
+    for name, module in list(sys.modules.items()):
+        if name in before:
+            continue
+        source = getattr(module, "__file__", None)
+        under_root = False
+        if source:
+            try:
+                resolved = Path(source).resolve()
+                under_root = any(resolved == root or root in resolved.parents for root in roots)
+            except (OSError, RuntimeError):
+                pass
+        if name.startswith(prefixes) or under_root:
+            sys.modules.pop(name, None)
+    for name, state in snapshot["module_states"].items():
+        module = before.get(name)
+        if isinstance(module, types.ModuleType):
+            module.__dict__.clear()
+            module.__dict__.update(state)
+            sys.modules[name] = module
+    sys.path[:] = snapshot["sys_path"]
+
+
 def prepare_actual_runtime_for_audit(raw_root: Path, *, writer=None) -> dict[str, Any]:
+    """Configure live modules in-process, with reversible module/global bindings."""
+    snapshot = _snapshot_runtime_bindings()
+    try:
+        binding = _prepare_actual_runtime_for_audit_impl(raw_root, writer=writer)
+        binding["mutation_snapshot"] = snapshot
+        return binding
+    except BaseException:
+        _restore_runtime_bindings(snapshot)
+        raise
+
+
+def _prepare_actual_runtime_for_audit_impl(raw_root: Path, *, writer=None) -> dict[str, Any]:
     """Configure actual R46/R45/R40 objects and bind the repaired R58 adapter.
 
     This configures module objects and private paths only. It does not call the
@@ -145,11 +571,18 @@ def prepare_actual_runtime_for_audit(raw_root: Path, *, writer=None) -> dict[str
         raise RuntimeError("actual trainer ppo_update globals do not point at configured common")
     if runtime.get("r58_repaired_adapter", {}).get("kind") != "r58-gate-prior-repaired/1":
         raise RuntimeError("actual R58 runtime did not install the repaired prior adapter")
+    checkpoint = checkpoint_contract.install(
+        trainer, r40, identity=_repair_identity(),
+        training_version=REPAIRED_TRAINING_VERSION,
+        expected_checkpoint_root=runtime["common"].CHECKPOINTS,
+        versions=runtime["r42_versions"], r42_run=runtime["r42_run"])
+    runtime["r58_checkpoint_contract"] = checkpoint
     return {"legacy": legacy, "base": base, "runtime": runtime,
             "live": live, "torch": torch, "raw_root": raw_root,
             "trainer_object_id": id(trainer), "r40_trainer_object_id": id(r40.trainer),
             "compiled_ppo_object_id": id(compiled_updates[0]),
             "checkpoint_journal_io_spy": journal_route_spy,
+            "checkpoint_contract": checkpoint,
             "trainer_source": str(Path(trainer.ppo_update.__wrapped__.__code__.co_filename).resolve())
             if hasattr(trainer.ppo_update, "__wrapped__") else str(Path(trainer.ppo_update.__code__.co_filename).resolve())}
 
@@ -171,10 +604,18 @@ def resume_from_payload_before_any_restore(payload: dict[str, Any],
 
 
 def close_audit_runtime(binding: dict[str, Any]) -> None:
-    runtime = binding["runtime"]
-    adapter = runtime.get("r58_repaired_adapter")
-    if adapter and callable(adapter.get("undo")):
-        adapter["undo"]()
-    undo = binding.get("live", {}).get("route_undo")
-    if callable(undo):
-        undo()
+    snapshot = binding.get("mutation_snapshot")
+    try:
+        runtime = binding["runtime"]
+        checkpoint = runtime.get("r58_checkpoint_contract")
+        if checkpoint and callable(checkpoint.get("undo")):
+            checkpoint["undo"]()
+        adapter = runtime.get("r58_repaired_adapter")
+        if adapter and callable(adapter.get("undo")):
+            adapter["undo"]()
+        undo = binding.get("live", {}).get("route_undo")
+        if callable(undo):
+            undo()
+    finally:
+        if snapshot:
+            _restore_runtime_bindings(snapshot)

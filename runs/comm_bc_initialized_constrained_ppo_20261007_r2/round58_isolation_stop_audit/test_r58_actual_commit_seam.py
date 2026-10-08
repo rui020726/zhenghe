@@ -15,6 +15,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import r58_private_launcher_repaired as launcher  # noqa: E402
 import r58_gate_prior_repaired as adapter  # noqa: E402
+import r58_checkpoint_contract_repaired as checkpoint_contract  # noqa: E402
 from test_r58_live_adapter_repair import one_rollout  # noqa: E402
 
 
@@ -87,6 +88,7 @@ class ActualR40CommitSeamTests(unittest.TestCase):
         original_path_open = pathlib.Path.open
         original_fsync = os.fsync
         original_runner_sha = r42run.sha256
+        original_sidecar_sha = checkpoint_contract._file_sha256
 
         r40._latest_resume_source = lambda *_a, **_k: None
         r40._save_milestone = lambda _c, _o, _s, _seed, episodes, _freeze: (
@@ -137,7 +139,13 @@ class ActualR40CommitSeamTests(unittest.TestCase):
             name = getattr(path, "audit_name", pathlib.Path(path).name
                            if isinstance(path, (str, bytes, os.PathLike)) else "memory-file")
             events.append(("core_save", name))
-            real_torch_saves.append(name)
+            real_torch_saves.append({"name": name,
+                                     "training_version": payload.get("training_version"),
+                                     "top_attestation": payload.get("round58_repair_attestation"),
+                                     "state_attestation": payload.get("training_state", {}).get(
+                                         "round58_repair_attestation"),
+                                     "freeze_attestation": payload.get("freeze", {}).get(
+                                         "round58_repair_attestation")})
             return None
 
         torch.optim.Adam = no_update_adam
@@ -164,6 +172,7 @@ class ActualR40CommitSeamTests(unittest.TestCase):
         pathlib.Path.open = path_open_spy
         os.fsync = lambda _fd: events.append(("fsync_spy",))
         r42run.sha256 = lambda _path: "journal-spy-sha"
+        checkpoint_contract._file_sha256 = lambda _path: "memory-sidecar-sha"
         os.rename = lambda src, dst: events.append(
             ("snapshot_rename_spy", pathlib.Path(dst).name))
         def replace_spy(src, dst):
@@ -206,6 +215,7 @@ class ActualR40CommitSeamTests(unittest.TestCase):
             pathlib.Path.open = original_path_open
             os.fsync = original_fsync
             r42run.sha256 = original_runner_sha
+            checkpoint_contract._file_sha256 = original_sidecar_sha
             adapter.capture_actor_gradient_diagnostic = original_capture
             adapter.hashlib = original_adapter_hashlib
 
@@ -232,6 +242,13 @@ class ActualR40CommitSeamTests(unittest.TestCase):
                 self.assertLess(rolling_save, receipt)
                 self.assertTrue(any(event[0] == "receipt_spy_return"
                                     for event in result["events"]))
+                identity = type(self).binding["runtime"]["r58_checkpoint_contract"]["identity"]
+                self.assertTrue(result["save_calls"])
+                self.assertTrue(all(item["training_version"] == launcher.REPAIRED_TRAINING_VERSION
+                                    and item["top_attestation"] == identity
+                                    and item["state_attestation"] == identity
+                                    and item["freeze_attestation"] == identity
+                                    for item in result["save_calls"]))
 
     def test_core_checkpoint_failure_propagates_and_no_commit_receipt_is_attempted(self):
         result = self._run_actual_train_seed(save_failure=True)

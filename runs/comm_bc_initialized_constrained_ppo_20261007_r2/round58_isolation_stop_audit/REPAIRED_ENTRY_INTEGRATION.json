@@ -1,0 +1,121 @@
+{
+  "kind": "round58-repaired-entry-zero-execution/1",
+  "scientific_plan_status": "not executed; not complete",
+  "pre_integration_head": "c74017942fb6d1e7c51307f4ae59ae900644807f",
+  "branch": "exp/round58-prior-strength-prospective-trial",
+  "execution_entry": {
+    "file": "r58_private_launcher_repaired.py",
+    "cli_requires": [
+      "--authorization",
+      "--freeze",
+      "--cumulative-quota",
+      "--scene-audit",
+      "--output-root"
+    ],
+    "default": "no execution without all external receipts",
+    "test_fixture_cli_permit": false,
+    "existing_orchestrator": "round58_gen2/r58_execute.py::execute_authorized",
+    "actual_handoff_tested": "R58 fixed first-four handoff calls actual R46 configure/live R40 trainer and repaired adapter, then stops at a test sentinel before the episode provider",
+    "parallel_trainer_created": false,
+    "old_launcher_modified": false,
+    "canonical_R40_R42_R45_R53_R56_modified": false
+  },
+  "runtime_identity": {
+    "trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "common_sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+    "controller_sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+    "repaired_launcher_sha256": "eec5526513e8c4a836cb83f9e9c8b2bfdd0b5eecd0e6d180b3ceee4b946b67db",
+    "checkpoint_contract_sha256": "c23dc0c89d8a6d423591cc684e47cf5a25130a279710243fc60dedf7c39ec95b",
+    "repaired_prior_adapter_sha256": "7081557e6197aceac17fb453c03e1b5fd539f55ec60a7b3eae92d63f7e697688",
+    "new_training_version_suffix": "+r58-repaired-private-generation3/1",
+    "checkpoint_version_marker": [
+      "payload.round58_repair_attestation",
+      "training_state.round58_repair_attestation",
+      "freeze.round58_repair_attestation"
+    ],
+    "guarded_actual_seams": [
+      "R40 train_seed",
+      "rolling/after-batch candidate selector before controller restore",
+      "trainer.load_checkpoint before restore",
+      "trainer.load_checkpoint_read_only before restore"
+    ],
+    "critic_gradient_isolation": "installed repaired adapter around compiled PPO callable using actual R53 detach context",
+    "prior": {
+      "beta": 1.0,
+      "threshold": 147.0,
+      "ALL_ROWS_denominator": "preserved"
+    },
+    "checkpoint_attestation": {
+      "sidecar": "<checkpoint>.r58.json binds exact checkpoint SHA256, training version, repair identity",
+      "checked_before_deserialization": true,
+      "r40_snapshot_and_milestone_renames_finalize_sidecar": true,
+      "legacy_checkpoint_rejected_before_torch_load": true,
+      "disk_power_loss_durability_tested": false
+    }
+  },
+  "approval_gates": {
+    "human_approval": "missing; external file required",
+    "freeze_identity": "missing; must bind plan, source, BC models, output root, quota and scene audit",
+    "cumulative_quota": "blocked; historical normal/reserve classification unresolved",
+    "current_scene_occupancy_audit": "missing; must cover registrations/reservations/claims/artifacts result-blind",
+    "old_rollout_reuse": "not certified; 12 substituted fields and exact minibatch RNG/permutation/batch sample hash remain unresolved",
+    "output_root": "dedicated round58_gen3/raw; must be absent for fresh execution",
+    "old_checkpoint_resume": "rejected absent matching repaired attestation"
+  },
+  "historical_counts_reference_only": {
+    "environment_constructor_or_run_calls": 16,
+    "optimizer_calls_evidence_supported": 48,
+    "effective_scientific_batches": 0,
+    "effective_optimizer_updates": 0,
+    "source": "existing HISTORICAL_CONSUMPTION_RECONCILIATION.json; not reconstructed or rewritten here"
+  },
+  "tests": {
+    "prior_adapter_and_entry": {
+      "count": 16,
+      "exit_code": 0
+    },
+    "private_launcher_and_actual_handoff": {
+      "count": 5,
+      "exit_code": 0
+    },
+    "actual_R40_commit_seam": {
+      "count": 3,
+      "exit_code": 0
+    },
+    "total": 24,
+    "py_compile_exit_code": 0,
+    "narrow_test_source_hashes": {
+      "test_r58_private_launcher.py": "708ca2e1eca5f28ef8f52b47e1f29d9d298883738fde666f41fb6cf76c2a9452",
+      "test_r58_actual_commit_seam.py": "95c680a66a83df7a6ef73d075a101e42999c5fda87da324e26d89ff4b9a09e44"
+    },
+    "actual_PPO_function_calls_in_transaction_tests": 5,
+    "stub_episode_provider_calls": 20,
+    "fake_optimizer_noop_callbacks": {
+      "transaction_tests": 20,
+      "prior_gradient_probe_tests": 104,
+      "total": 124
+    },
+    "real_optimizer_step_calls": 0,
+    "load_restore_callbacks_for_legacy_payload": 0,
+    "environment_constructor_calls": 0,
+    "checkpoint_disk_writes": 0,
+    "claim_journal_receipt_disk_writes": 0,
+    "RNG_restores": 0,
+    "training_tape_replays": 0
+  },
+  "current_task_operations": {
+    "environment_construction": 0,
+    "environment_starts": 0,
+    "simulation": 0,
+    "claims": 0,
+    "real_optimizer_updates": 0,
+    "checkpoint_writes": 0,
+    "RNG_restores": 0,
+    "evaluation_cells": 0,
+    "pushes_merges_deployments": 0
+  },
+  "protected_files_sha256": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  }
+}
