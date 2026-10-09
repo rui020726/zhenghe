@@ -3,18 +3,19 @@
   "modules": [
     "test_r58_identity_ledger_close_v2",
     "test_r58_private_launcher",
-    "test_r58_resume_seam"
+    "test_r58_resume_seam",
+    "test_r58_plan_identity_migration"
   ],
-  "discovered": 31,
-  "excluded": [
-    "test_r58_private_launcher.PrivateLauncherRouteTests.test_old_main_before_definitions_reproduces_nameerror_and_new_module_help_exits_zero"
-  ],
-  "excluded_reason": "historical git object b38b868 is absent from this local object database",
-  "executed": 30,
+  "discovered": 38,
+  "excluded": [],
+  "historical_git_objects": {
+    "b38b8688dee7ffc2626aa2064c8af74af75e216b": "present; historical private-launcher and checkpoint-contract blobs are read by their exact repository paths"
+  },
+  "executed": 38,
   "failures": 0,
   "errors": 0,
   "exit_code": 0,
-  "finished_at_local": "2026-10-09T13:32:17.373827+08:00",
+  "finished_at_local": "2026-10-09T14:13:40.527432+08:00",
   "test_ids": [
     "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_declared_metadata_normalizes_but_arbitrary_freeze_fields_do_not",
     "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_each_identity_component_is_fail_closed_and_specific",
@@ -39,12 +40,20 @@
     "test_r58_private_launcher.PrivateLauncherRouteTests.test_cli_rejects_test_receipt_files_before_loading_runtime",
     "test_r58_private_launcher.PrivateLauncherRouteTests.test_default_execution_is_denied_before_runtime_configuration",
     "test_r58_private_launcher.PrivateLauncherRouteTests.test_legacy_checkpoint_rejected_before_restore_rng_environment_or_update",
+    "test_r58_private_launcher.PrivateLauncherRouteTests.test_old_main_before_definitions_reproduces_nameerror_and_new_module_help_exits_zero",
     "test_r58_private_launcher.ResumeApprovalSourceTests.test_owner_approval_source_accepts_exact_episode4_continuation_scope",
     "test_r58_private_launcher.ResumeApprovalSourceTests.test_owner_approval_source_rejects_expanded_scope",
     "test_r58_private_launcher.ResumeApprovalSourceTests.test_owner_approval_source_rejects_wrong_thread_or_quote",
     "test_r58_resume_seam.ResumeSourceContractTests.test_carryover_requires_exact_durable_batch_records_without_copying",
     "test_r58_resume_seam.ResumeSourceContractTests.test_direct_event_journal_requires_monotone_actual_call_indexes",
     "test_r58_resume_seam.ResumeSourceContractTests.test_mutated_source_map_identity_is_rejected",
-    "test_r58_resume_seam.ResumeSourceContractTests.test_only_exact_three_qualified_sources_are_mapped"
+    "test_r58_resume_seam.ResumeSourceContractTests.test_only_exact_three_qualified_sources_are_mapped",
+    "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_actual_old_comparison_reproduces_failure_on_saved_plan",
+    "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_legacy_reader_gets_only_an_in_memory_allowlisted_plan_view",
+    "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_migrated_source_map_or_journal_hash_must_match_live_source",
+    "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_non_allowlisted_current_identity_change_is_rejected",
+    "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_scientific_parameter_or_order_change_is_rejected",
+    "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_seed_original_attestation_mismatch_is_rejected",
+    "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_unique_approved_migration_is_proven_from_plan_freeze_auth_and_all_three_sidecars"
   ]
 }

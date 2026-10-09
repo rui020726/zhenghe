@@ -7,6 +7,7 @@ import inspect
 import json
 import os
 import re
+import subprocess
 import textwrap
 import threading
 import time
@@ -18,6 +19,23 @@ MAP_SHA256 = "82c6e9626f7705d36a13fdc420cfd2916985e3334fca251744d3445bf35cf64f"
 R42_RUN_SHA256 = "9c5feacb2ffcb2bb930d2b6022e2fca5210408765dc664859d400e6f2b5f8c2e"
 HISTORICAL_CHECKPOINT_JOURNAL_SHA256 = "2a43339ac45c2cfd13f84e744b72af0632024f44c3eedaa449bf8c8c7cab0165"
 QUALIFIED = "qualified_for_later_resume_review"
+PLAN_MIGRATION_VERSION = "round58-gen3-historical-plan-identity-migration/1"
+HISTORICAL_PLAN_SHA256 = "af33de50bdda045f0e8391b3373b7188edfe83d80f145ab300cb823c01bd965c"
+HISTORICAL_FREEZE_SHA256 = "253f0217e0a5d82f92d75d84db2843f087cf0d96d4219fe77a7106e9c69c9bf5"
+HISTORICAL_AUTHORIZATION_SHA256 = "24223fc38f8f2d3adb145dc8f289a03d37c96628d6322c3976bd14d7aec825fa"
+HISTORICAL_PLAN_GIT_PATH = "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_FIXED_PLAN.json"
+HISTORICAL_PRIVATE_LAUNCHER_COMMIT = "c153dfd001043a7d3365364489ba588fb29adb41"
+HISTORICAL_CHECKPOINT_CONTRACT_COMMIT = "b38b8688dee7ffc2626aa2064c8af74af75e216b"
+HISTORICAL_PRIVATE_LAUNCHER_SHA256 = "56e0b12819b5193437d0ef9b19ca2c6df2040f088f716df5dc1a3874065340c4"
+HISTORICAL_CHECKPOINT_CONTRACT_SHA256 = "c23dc0c89d8a6d423591cc684e47cf5a25130a279710243fc60dedf7c39ec95b"
+MIGRATION_CHANGED_FIELDS = {
+    "private_launcher_sha256", "checkpoint_contract_sha256",
+}
+MIGRATION_ADDED_FIELDS = {
+    "ppo_counter_bridge_version", "identity_ledger_schema", "identity_ledger_sha256",
+    "resume_seam_sha256", "approved_resume_map_sha256",
+    "historical_checkpoint_journal_sha256",
+}
 TRAINING_VERSION = (
     "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/"
     "dual-eta-lambda-0p5/1/rule-bc-late147-init/1/"
@@ -131,6 +149,243 @@ def validate_resume_sources(repo_root: Path, *, manifest_path: Path | None = Non
             "historical_optimizer_steps": sum(8 for _ in verified),
             "historical_checkpoint_journal": checkpoint_journal,
             "target_checkpoint_root": (root / manifest["target_checkpoint_root"]).resolve()}
+
+
+def _canonical_sha(value: Any) -> str:
+    return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True,
+                                    separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
+def _git_blob_sha(repo_root: Path, commit: str, relative_path: str) -> str:
+    result = subprocess.run(["git", "show", f"{commit}:{relative_path}"], cwd=repo_root,
+                            capture_output=True, check=False)
+    if result.returncode:
+        raise PermissionError(f"historical source blob unavailable: {commit}:{relative_path}")
+    return hashlib.sha256(result.stdout).hexdigest()
+
+
+def validate_historical_plan_identity_migration(
+        repo_root: Path, current_plan: dict[str, Any], current_repair_identity: dict[str, Any],
+        *, source_proof: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Prove the one approved identity-only migration without changing historical files.
+
+    The fixed-plan comparison remains exact after an in-memory, allow-listed view
+    substitutes only the new private execution attestation. Scientific plan fields,
+    source-content identities, and the original source attestations are independently
+    checked before that view can be installed.
+    """
+    root = Path(os.path.abspath(os.fspath(repo_root)))
+    run_root = root / "runs/comm_bc_initialized_constrained_ppo_20261007_r2"
+    audit = run_root / "round58_isolation_stop_audit"
+    raw_plan_path = run_root / "round58_gen3/raw/ROUND53_FIXED_PLAN.json"
+    frozen_plan_path = audit / "ROUND58_GEN3_FIXED_PLAN.json"
+    historical_freeze_path = audit / "ROUND58_GEN3_FREEZE.json"
+    historical_authorization_path = audit / "ROUND58_GEN3_EXECUTION_AUTHORIZATION.json"
+    for path, expected in ((raw_plan_path, HISTORICAL_PLAN_SHA256),
+                           (frozen_plan_path, HISTORICAL_PLAN_SHA256),
+                           (historical_freeze_path, HISTORICAL_FREEZE_SHA256),
+                           (historical_authorization_path, HISTORICAL_AUTHORIZATION_SHA256)):
+        if not path.is_file() or sha256(path) != expected:
+            raise PermissionError(f"historical plan identity evidence changed: {path.name}")
+    raw_bytes = raw_plan_path.read_bytes()
+    historical_plan = read_json(raw_plan_path)
+    old_freeze = read_json(historical_freeze_path)
+    old_authorization = read_json(historical_authorization_path)
+    historical_identity = historical_plan.get("r58_repair_identity")
+    if not isinstance(historical_identity, dict):
+        raise PermissionError("historical fixed plan lacks its original R58 repair identity")
+    if (old_freeze.get("kind") != "round58-repaired-execution-freeze/1"
+            or old_freeze.get("status") != "frozen"
+            or old_freeze.get("plan_artifact_sha256") != HISTORICAL_PLAN_SHA256
+            or old_freeze.get("repair_identity") != historical_identity
+            or old_authorization.get("status") != "explicitly_authorized"
+            or old_authorization.get("freeze_sha256") != HISTORICAL_FREEZE_SHA256
+            or old_authorization.get("plan_sha256") != old_freeze.get("plan_sha256")
+            or old_authorization.get("repair_identity") != historical_identity
+            or old_authorization.get("generation_id") != "round58_gen3"):
+        raise PermissionError("historical plan/freeze/authorization chain does not close")
+
+    verified_sources = source_proof or validate_resume_sources(root)
+    if set(verified_sources.get("sources", {})) != {11, 22, 33}:
+        raise PermissionError("historical identity migration requires exactly the three qualified seed sources")
+    for seed, source in verified_sources["sources"].items():
+        if source.get("original_identity") != historical_identity:
+            raise PermissionError(f"seed {seed}: original sidecar attestation differs from historical plan identity")
+
+    # The exact prior private code blobs must exist in Git history; matching only a
+    # JSON hash field would not authenticate the old implementation identity.
+    historical_launcher_path = "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/r58_private_launcher_repaired.py"
+    historical_contract_path = "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/r58_checkpoint_contract_repaired.py"
+    launcher_blob = _git_blob_sha(root, HISTORICAL_PRIVATE_LAUNCHER_COMMIT, historical_launcher_path)
+    contract_blob = _git_blob_sha(root, HISTORICAL_CHECKPOINT_CONTRACT_COMMIT, historical_contract_path)
+    if (launcher_blob != HISTORICAL_PRIVATE_LAUNCHER_SHA256
+            or contract_blob != HISTORICAL_CHECKPOINT_CONTRACT_SHA256
+            or historical_identity.get("private_launcher_sha256") != launcher_blob
+            or historical_identity.get("checkpoint_contract_sha256") != contract_blob):
+        raise PermissionError("historical private source code identity is not authenticated by its Git blobs")
+    ancestry = subprocess.run(["git", "merge-base", "--is-ancestor",
+                               HISTORICAL_PRIVATE_LAUNCHER_COMMIT, "HEAD"], cwd=root,
+                              capture_output=True, check=False)
+    if ancestry.returncode:
+        raise PermissionError("historical private launcher identity commit is not an ancestor of current HEAD")
+    ancestry = subprocess.run(["git", "merge-base", "--is-ancestor",
+                               HISTORICAL_CHECKPOINT_CONTRACT_COMMIT, "HEAD"], cwd=root,
+                              capture_output=True, check=False)
+    if ancestry.returncode:
+        raise PermissionError("historical checkpoint-contract identity commit is not an ancestor of current HEAD")
+
+    old_source_id = historical_plan.get("source_content_identities")
+    new_source_id = current_plan.get("source_content_identities")
+    if old_source_id != new_source_id:
+        raise PermissionError("source_content_identities differ; existing independent source verification cannot be reused")
+    ignored_by_legacy = {"source_content_identities"}
+    old_science = {k: v for k, v in historical_plan.items()
+                   if k not in ignored_by_legacy | {"r58_repair_identity"}}
+    new_science = {k: v for k, v in current_plan.items()
+                   if k not in ignored_by_legacy | {"r58_repair_identity"}}
+    if old_science != new_science:
+        changed = sorted(k for k in set(old_science) | set(new_science)
+                         if old_science.get(k) != new_science.get(k))
+        raise PermissionError(f"non-attestation frozen plan fields changed: {changed}")
+
+    old_keys, new_keys = set(historical_identity), set(current_repair_identity)
+    added, removed = new_keys - old_keys, old_keys - new_keys
+    changed = {k for k in old_keys & new_keys
+               if historical_identity[k] != current_repair_identity[k]}
+    if added != MIGRATION_ADDED_FIELDS or removed or changed != MIGRATION_CHANGED_FIELDS:
+        raise PermissionError(
+            "R58 repair-identity migration contains a non-allow-listed change "
+            f"(added={sorted(added)}, removed={sorted(removed)}, changed={sorted(changed)})")
+    for key in MIGRATION_ADDED_FIELDS:
+        if not current_repair_identity.get(key):
+            raise PermissionError(f"current repair identity lacks migrated field {key}")
+
+    audit_dir = Path(__file__).resolve().parent
+    expected_current_metadata = {
+        "private_launcher_sha256": sha256(audit_dir / "r58_private_launcher_repaired.py"),
+        "checkpoint_contract_sha256": sha256(audit_dir / "r58_checkpoint_contract_repaired.py"),
+        "ppo_counter_bridge_version": "round58-ppo-counter-bridge/2",
+        "identity_ledger_schema": "round58-gen3-identity-close/2",
+        "identity_ledger_sha256": sha256(audit_dir / "r58_identity_ledger_close_v2.py"),
+        "resume_seam_sha256": sha256(Path(__file__).resolve()),
+        "approved_resume_map_sha256": verified_sources["manifest_sha256"],
+        "historical_checkpoint_journal_sha256":
+            verified_sources["historical_checkpoint_journal"]["sha256"],
+    }
+    if any(current_repair_identity.get(k) != v for k, v in expected_current_metadata.items()):
+        raise PermissionError("current repair identity metadata differs from its live code/source bindings")
+    if historical_identity.get("private_launcher_sha256") != HISTORICAL_PRIVATE_LAUNCHER_SHA256 \
+            or historical_identity.get("checkpoint_contract_sha256") != HISTORICAL_CHECKPOINT_CONTRACT_SHA256:
+        raise PermissionError("historical repair identity contains a non-authenticated private source hash")
+
+    # Bind unchanged scientific/critic adapter sources too; the current adapter,
+    # trainer and common source must still match the historical identity.
+    candidate_identity = read_json(audit / "ROUND58_CANDIDATE_INPUT_IDENTITY.json")
+    runtime_hashes = candidate_identity.get("runtime_source_hashes", {})
+    private_hashes = candidate_identity.get("private_entry_hashes", {})
+    checks = {
+        "adapter_sha256": sha256(audit / "r58_gate_prior_repaired.py"),
+        "trainer_sha256": runtime_hashes.get("v2_trainer.py", {}).get("sha256"),
+        "common_sha256": runtime_hashes.get("v2_common.py", {}).get("sha256"),
+    }
+    if any(historical_identity.get(k) != v for k, v in checks.items()):
+        raise PermissionError("historical source hashes for adapter/trainer/common do not match current frozen files")
+    if (private_hashes.get("r58_gate_prior_repaired.py") != historical_identity.get("adapter_sha256")
+            or private_hashes.get("r58_checkpoint_contract_repaired.py") != HISTORICAL_CHECKPOINT_CONTRACT_SHA256):
+        raise PermissionError("candidate input identity does not corroborate historical private source hashes")
+
+    allowed_view = copy.deepcopy(historical_plan)
+    allowed_view["r58_repair_identity"] = copy.deepcopy(current_repair_identity)
+    if ({k: v for k, v in allowed_view.items() if k != "source_content_identities"}
+            != {k: v for k, v in current_plan.items() if k != "source_content_identities"}):
+        raise PermissionError("allow-listed historical plan view does not exactly match current plan")
+
+    body = {
+        "kind": PLAN_MIGRATION_VERSION,
+        "historical_plan_path": str(raw_plan_path.relative_to(root)).replace("\\", "/"),
+        "historical_plan_sha256": HISTORICAL_PLAN_SHA256,
+        "historical_plan_canonical_sha256": _canonical_sha(historical_plan),
+        "historical_freeze_sha256": HISTORICAL_FREEZE_SHA256,
+        "historical_authorization_sha256": HISTORICAL_AUTHORIZATION_SHA256,
+        "historical_repair_identity_sha256": _canonical_sha(historical_identity),
+        "current_plan_canonical_sha256": _canonical_sha(current_plan),
+        "current_repair_identity_sha256": _canonical_sha(current_repair_identity),
+        "source_content_identities_sha256": _canonical_sha(old_source_id),
+        "source_map_sha256": verified_sources["manifest_sha256"],
+        "qualified_seed_source_attestations": {
+            str(seed): {"checkpoint_sha256": source["checkpoint_sha256"],
+                        "sidecar_sha256": source["sidecar_sha256"],
+                        "batch_record_sha256": source["batch_record_sha256"],
+                        "commit_sha256": source["commit_sha256"],
+                        "original_attestation_sha256": _canonical_sha(source["original_identity"])}
+            for seed, source in sorted(verified_sources["sources"].items())},
+        "historical_git_blobs": {
+            "private_launcher": {"commit": HISTORICAL_PRIVATE_LAUNCHER_COMMIT,
+                                 "sha256": launcher_blob},
+            "checkpoint_contract": {"commit": HISTORICAL_CHECKPOINT_CONTRACT_COMMIT,
+                                    "sha256": contract_blob}},
+        "allowed_identity_migration": {
+            "changed_fields": sorted(MIGRATION_CHANGED_FIELDS),
+            "added_fields": sorted(MIGRATION_ADDED_FIELDS),
+            "removed_fields": [],
+            "scientific_plan_field_changes": [],
+            "source_content_identity_changed": False},
+        "actual_legacy_comparison_view": "historical raw plan with only r58_repair_identity replaced in memory by the current validated identity; original on-disk plan unchanged",
+    }
+    return {"proof": body, "historical_plan": historical_plan,
+            "allowed_comparison_view": allowed_view,
+            "source_proof": verified_sources,
+            "historical_plan_bytes_sha256": hashlib.sha256(raw_bytes).hexdigest()}
+
+
+def validate_committed_plan_migration_proof(repo_root: Path, proof_path: Path,
+                                            current_plan: dict[str, Any],
+                                            current_repair_identity: dict[str, Any],
+                                            *, expected_sha256: str) -> dict[str, Any]:
+    if sha256(proof_path) != expected_sha256:
+        raise PermissionError("plan identity migration proof file hash differs from freeze/receipt")
+    stored = read_json(proof_path)
+    if (stored.get("kind") != "round58-gen3-plan-identity-migration-proof/1"
+            or stored.get("status") != "verified_allowlisted_identity_only_migration"):
+        raise PermissionError("plan identity migration proof status/schema mismatch")
+    result = validate_historical_plan_identity_migration(
+        repo_root, current_plan, current_repair_identity)
+    if stored.get("proof") != result["proof"]:
+        raise PermissionError("committed plan identity migration proof does not match live historical/current identities")
+    result["proof_file_sha256"] = expected_sha256
+    return result
+
+
+def install_historical_plan_comparison_view(legacy: Any, *, repo_root: Path,
+                                           current_plan: dict[str, Any],
+                                           current_repair_identity: dict[str, Any],
+                                           proof_path: Path,
+                                           expected_proof_sha256: str) -> dict[str, Any]:
+    """Wrap only legacy's persisted-plan read; preserve its original exact equality check."""
+    verified = validate_committed_plan_migration_proof(
+        repo_root, proof_path, current_plan, current_repair_identity,
+        expected_sha256=expected_proof_sha256)
+    original_read_json = legacy.read_json
+    historical_path = (Path(repo_root) / verified["proof"]["historical_plan_path"]).resolve()
+    view = copy.deepcopy(verified["allowed_comparison_view"])
+
+    def migrated_read_json(path):
+        if Path(path).resolve() == historical_path:
+            original = original_read_json(path)
+            if _canonical_sha(original) != verified["proof"]["historical_plan_canonical_sha256"]:
+                raise PermissionError("historical fixed plan changed before legacy comparison")
+            return copy.deepcopy(view)
+        return original_read_json(path)
+
+    legacy.read_json = migrated_read_json
+    return {"kind": PLAN_MIGRATION_VERSION, "proof_sha256": expected_proof_sha256,
+            "historical_plan_path": str(historical_path),
+            "historical_plan_canonical_sha256": verified["proof"]["historical_plan_canonical_sha256"],
+            "current_plan_canonical_sha256": verified["proof"]["current_plan_canonical_sha256"],
+            "only_persisted_plan_read_is_normalized": True,
+            "normalization_field": "r58_repair_identity",
+            "legacy_exact_plan_equality_remains_enabled": True,
+            "undo": lambda: setattr(legacy, "read_json", original_read_json)}
 
 
 def validate_historical_checkpoint_journal(repo_root: Path) -> dict[str, Any]:

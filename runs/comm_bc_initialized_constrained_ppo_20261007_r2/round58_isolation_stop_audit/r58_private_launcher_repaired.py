@@ -238,6 +238,11 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     frozen = _read_external_json(freeze_path, "freeze identity")
     quota = _read_external_json(quota_path, "cumulative quota receipt")
     scene_audit = _read_external_json(scene_audit_path, "scene occupancy audit")
+    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF.json"
+    if mode == "recover_first_batch_gate" and not migration_proof_path.is_file():
+        raise PermissionError("ROUND58 recovery plan identity migration proof is missing")
+    migration_proof_sha256 = (hashlib.sha256(migration_proof_path.read_bytes()).hexdigest()
+                              if mode == "recover_first_batch_gate" else None)
     sys_path_before_legacy_load = list(sys.path)
     legacy = load_legacy_launcher()
     if (not isinstance(quota.get("historical_manifest_sha256"), str)
@@ -304,6 +309,8 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
         "scene_audit_sha256": hashlib.sha256(Path(scene_audit_path).read_bytes()).hexdigest(),
         **({"resume_approval_source_sha256": resume_approval_source["sha256"]}
            if resume_approval_source is not None else {}),
+        **({"plan_identity_migration_proof_sha256": migration_proof_sha256}
+           if migration_proof_sha256 is not None else {}),
         "bc_models": bc_models,
     }
     for key, value in expected_freeze.items():
@@ -330,7 +337,9 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
             or approval.get("scene_audit_sha256") != hashlib.sha256(Path(scene_audit_path).read_bytes()).hexdigest() \
             or (resume_approval_source is not None
                 and (approval.get("resume_approval_source_path") != resume_approval_source["path"]
-                     or approval.get("resume_approval_source_sha256") != resume_approval_source["sha256"])):
+                     or approval.get("resume_approval_source_sha256") != resume_approval_source["sha256"])) \
+            or (migration_proof_sha256 is not None
+                and approval.get("plan_identity_migration_proof_sha256") != migration_proof_sha256):
         raise PermissionError("ROUND58 human approval does not bind the repaired generation/model/output")
     return _ValidatedGrant(_GRANT_TOKEN, {
         "authorization_path": Path(authorization_path).resolve(),
@@ -351,6 +360,8 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
             "scene_audit": hashlib.sha256(Path(scene_audit_path).read_bytes()).hexdigest(),
             **({"resume_approval_source": resume_approval_source["sha256"]}
                if resume_approval_source is not None else {}),
+            **({"plan_identity_migration_proof": migration_proof_sha256}
+               if migration_proof_sha256 is not None else {}),
         },
     })
 
@@ -622,6 +633,26 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
             base.V6_CHECKPOINTS_DIR = Path(values["checkpoint_root"])
             if Path(runtime["common"].CHECKPOINTS).resolve() != base.V6_CHECKPOINTS_DIR.resolve():
                 raise RuntimeError("live R40 checkpoint selector is not bound to the private resume root")
+            selected_sources = {}
+            for seed in (11, 22, 33):
+                selected = Path(runtime["r40_train"]._latest_resume_source(seed)).resolve()
+                expected = Path(proof["sources"][seed]["path"]).resolve()
+                if selected != expected:
+                    raise PermissionError(f"seed {seed}: live resume selector did not choose its exact qualified source")
+                selected_sources[seed] = str(selected)
+            preflight_hook = globals().get("_ROUND58_PREFLIGHT_STOP_HOOK")
+            if preflight_hook is not None:
+                if not callable(preflight_hook):
+                    raise TypeError("ROUND58 preflight stop hook must be callable")
+                preflight_hook({"kind": "round58-full-cli-resume-preflight-handoff/1",
+                                "status": "all_gates_passed_before_fixed_continuation",
+                                "migration_proof_sha256": values["input_file_sha256"]["plan_identity_migration_proof"],
+                                "source_map_sha256": proof["manifest_sha256"],
+                                "selected_sources": selected_sources,
+                                "episode4_scenarios": {seed: 1300003 for seed in (11, 22, 33)},
+                                "environment_constructed": 0, "claims_created": 0,
+                                "optimizer_steps": 0, "ppo_updates": 0, "checkpoint_writes": 0})
+                raise RuntimeError("ROUND58 preflight stop hook returned without stopping execution")
             result = base._continue_fixed_training(module, runtime, first_four)
             return {"kind": "round58-qualified-episode4-continuation/1",
                     "status": "complete", "source_map_sha256": proof["manifest_sha256"],
@@ -670,6 +701,8 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
         paths = {"authorization": values["authorization_path"],
                  "freeze": values["freeze_path"], "quota": values["quota_path"],
                  "scene_audit": values["scene_audit_path"]}
+        if values["mode"] == "recover_first_batch_gate":
+            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF.json"
         for key, path in paths.items():
             if hashlib.sha256(Path(path).read_bytes()).hexdigest() != values["input_file_sha256"][key]:
                 raise PermissionError(f"ROUND58 {key} receipt changed after preflight")
@@ -683,6 +716,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
     snapshot = _snapshot_runtime_bindings()
     legacy = (load_legacy_launcher if legacy_loader is None else legacy_loader)()
     route = None
+    migration_route = None
     try:
         route = _install_repaired_runtime_route(legacy, grant)
         if legacy.canonical_sha(legacy.plan_from_frozen_sources()) != values["plan_sha256"]:
@@ -699,10 +733,21 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
                     return copy.deepcopy(approval_receipt)
                 return original_read_json(path)
             legacy.read_json = frozen_read_json
+        if values["mode"] == "recover_first_batch_gate":
+            current_live_plan = legacy.plan_from_frozen_sources()
+            migration_route = resume_seam.install_historical_plan_comparison_view(
+                legacy, repo_root=REPO_ROOT, current_plan=current_live_plan,
+                current_repair_identity=values["repair_identity"],
+                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF.json",
+                expected_proof_sha256=values["input_file_sha256"]["plan_identity_migration_proof"])
+            legacy.round58_plan_identity_migration = {
+                key: value for key, value in migration_route.items() if key != "undo"}
         # This is the preserved ROUND58 fixed-plan orchestration, not a parallel trainer.
         return legacy.execute_authorized(
             auth_path=grant.values["authorization_path"], mode=grant.values["mode"])
     finally:
+        if migration_route is not None:
+            migration_route["undo"]()
         if route is not None:
             route["undo"]()
         _restore_runtime_bindings(snapshot)

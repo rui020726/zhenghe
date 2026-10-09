@@ -21,10 +21,14 @@ import r58_private_launcher_repaired as launcher
 class PrivateLauncherRouteTests(unittest.TestCase):
     def test_old_main_before_definitions_reproduces_nameerror_and_new_module_help_exits_zero(self):
         source_path = pathlib.Path(launcher.__file__).resolve()
+        repo_root = source_path.parents[2]
+        historical_repo_path = pathlib.Path(
+            "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/"
+            "r58_private_launcher_repaired.py")
         old_source = subprocess.run(
             ["git", "show", "b38b8688dee7ffc2626aa2064c8af74af75e216b:" +
-             source_path.relative_to(pathlib.Path.cwd()).as_posix()],
-            cwd=pathlib.Path.cwd(), check=True, capture_output=True, text=True).stdout
+             historical_repo_path.as_posix()],
+            cwd=repo_root, check=True, capture_output=True, text=True).stdout
         harness = (
             "import sys; from pathlib import Path; "
             "sys.path.insert(0, r'" + str(source_path.parent) + "'); "
@@ -36,12 +40,12 @@ class PrivateLauncherRouteTests(unittest.TestCase):
             "{'__name__':'__main__','__file__':r'" + str(source_path) + "'})"
         )
         old = subprocess.run([sys.executable, "-c", harness], input=old_source,
-                             capture_output=True, text=True, cwd=pathlib.Path.cwd())
+                             capture_output=True, text=True, cwd=repo_root)
         self.assertEqual(old.returncode, 1)
         self.assertIn("NameError", old.stderr)
         self.assertIn("_validate_external_grant", old.stderr)
         new = subprocess.run([sys.executable, str(source_path), "--help"],
-                             capture_output=True, text=True, cwd=pathlib.Path.cwd())
+                             capture_output=True, text=True, cwd=repo_root)
         self.assertEqual(new.returncode, 0, new.stderr)
         self.assertIn("--authorization", new.stdout)
 

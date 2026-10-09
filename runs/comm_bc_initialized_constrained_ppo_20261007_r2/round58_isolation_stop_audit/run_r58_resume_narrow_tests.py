@@ -22,27 +22,26 @@ def main() -> int:
         "test_r58_identity_ledger_close_v2",
         "test_r58_private_launcher",
         "test_r58_resume_seam",
+        "test_r58_plan_identity_migration",
     )
     discovered_suite = unittest.TestSuite(loader.loadTestsFromName(name) for name in modules)
     discovered = list(flatten(discovered_suite))
-    # This single historical regression needs absent Git object b38b868; it
-    # validates an old source snapshot, not the current resume implementation.
-    missing_historical_object = "test_old_main_before_definitions_reproduces_nameerror_and_new_module_help_exits_zero"
-    excluded = [test.id() for test in discovered if missing_historical_object in test.id()]
-    selected = [test for test in discovered if missing_historical_object not in test.id()]
-    result = unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(selected))
+    result = unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(discovered))
     payload = {
         "kind": "round58-resume-narrow-regression-results/1",
         "modules": list(modules),
         "discovered": len(discovered),
-        "excluded": excluded,
-        "excluded_reason": "historical git object b38b868 is absent from this local object database",
+        "excluded": [],
+        "historical_git_objects": {
+            "b38b8688dee7ffc2626aa2064c8af74af75e216b":
+                "present; historical private-launcher and checkpoint-contract blobs are read by their exact repository paths",
+        },
         "executed": result.testsRun,
         "failures": len(result.failures),
         "errors": len(result.errors),
         "exit_code": 0 if result.wasSuccessful() else 1,
         "finished_at_local": dt.datetime.now().astimezone().isoformat(),
-        "test_ids": [test.id() for test in selected],
+        "test_ids": [test.id() for test in discovered],
     }
     out = ROOT / "ROUND58_RESUME_NARROW_TEST_RESULTS.json"
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
