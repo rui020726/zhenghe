@@ -21,12 +21,14 @@ RUN_ROOT = REPO / "runs/comm_bc_initialized_constrained_ppo_20261007_r2"
 RAW = RUN_ROOT / "round58_gen3/raw"
 RESUME_RAW = RUN_ROOT / "round58_gen3_resume/raw"
 LAUNCHER = HERE / "r58_private_launcher_repaired.py"
-OUTPUT = HERE / "ROUND58_GEN3_RESUME_FULL_CLI_PREFLIGHT_ATTEMPT04.json"
-FREEZE = HERE / "ROUND58_RESUME_FREEZE_V5.json"
-AUTH = HERE / "ROUND58_RESUME_EXECUTION_AUTHORIZATION_V5.json"
+OUTPUT = HERE / "ROUND58_GEN3_RESUME_FULL_CLI_PREFLIGHT_ATTEMPT05.json"
+FREEZE = HERE / "ROUND58_RESUME_FREEZE_V6.json"
+AUTH = HERE / "ROUND58_RESUME_EXECUTION_AUTHORIZATION_V6.json"
 QUOTA = HERE / "ROUND58_GEN3_CUMULATIVE_QUOTA.json"
 SCENES = HERE / "ROUND58_GEN3_RESUME_SCENE_OCCUPANCY_RECHECK.json"
-PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V3.json"
+PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V4.json"
+RUNTIME_ALIAS_NAMES = ("r40_train_resume_adapter.py", "r42_one_shot.py",
+                       "r42_versions.py", "r43_call_counter_hooks.py")
 
 PROTECTED = {
     RUN_ROOT / "ROUND46_CURRENT_TASK.json":
@@ -79,6 +81,19 @@ def run() -> dict[str, Any]:
     raw_before = tree_manifest((RAW / "launch_claims", RAW / "launch_slots",
                                 RAW / "checkpoints", RAW / "runtime"))
     resume_before = tree_manifest((RESUME_RAW,))
+    expected_resume_aliases = {}
+    for name in RUNTIME_ALIAS_NAMES:
+        candidate = REPO / "runs/comm_rule_warmstart_cost_learning_20261006_r2" / name
+        historical = RAW / name
+        target = RESUME_RAW / name
+        if not candidate.is_file() or not historical.is_file() or not target.is_file():
+            raise FileNotFoundError(f"approved resume runtime alias is missing: {target}")
+        hashes = {sha(candidate), sha(historical), sha(target)}
+        if len(hashes) != 1:
+            raise PermissionError(f"resume runtime alias differs from both frozen source and old generation: {name}")
+        expected_resume_aliases[str(target.resolve())] = next(iter(hashes))
+    if resume_before != expected_resume_aliases:
+        raise PermissionError("resume output root contains files beyond the exact four approved runtime aliases")
     process_rng_before = rng_digest()
     receipt_hashes = {name: sha(path) for name, path in {
         "authorization": AUTH, "freeze": FREEZE, "quota": QUOTA,
@@ -280,7 +295,7 @@ def run() -> dict[str, Any]:
                    and events["optimizer_step_denials"] == 0
                    and events["rng_restore_denials"] == 0
                    and protected_before == protected_after and raw_before == raw_after
-                   and resume_before == resume_after and not RESUME_RAW.exists()
+                   and resume_before == resume_after and resume_after == expected_resume_aliases
                    and event.get("status") == "all_gates_passed_before_fixed_continuation"
                    and set(event.get("selected_sources", {})) == {11, 22, 33}
                    and len(events["migration_install"]) == 1)
@@ -313,8 +328,8 @@ def run() -> dict[str, Any]:
             "protected_before_sha256": protected_before,
             "protected_after_sha256": protected_after,
             "raw_claim_slot_checkpoint_runtime_manifests_equal": raw_before == raw_after,
-            "resume_raw_absent_before": not bool(resume_before),
-            "resume_raw_absent_after": not RESUME_RAW.exists(),
+            "resume_raw_prepared_before": RESUME_RAW.is_dir(),
+            "resume_raw_contains_exact_approved_runtime_aliases": resume_before == expected_resume_aliases,
             "resume_manifests_equal": resume_before == resume_after,
             "process_rng_before": process_rng_before,
             "process_rng_after": process_rng_after,

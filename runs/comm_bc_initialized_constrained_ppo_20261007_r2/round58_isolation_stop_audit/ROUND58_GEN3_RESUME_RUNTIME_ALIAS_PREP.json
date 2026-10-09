@@ -1,0 +1,59 @@
+{
+  "kind": "round58-gen3-resume-runtime-alias-preparation/1",
+  "status": "prepared_exact_frozen_runtime_aliases_only",
+  "created_at_utc": "2026-10-09T06:31:16.5160333Z",
+  "target_root": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume\\raw",
+  "files": [
+    {
+      "target_matches_source": true,
+      "target": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume\\raw\\r40_train_resume_adapter.py",
+      "historical_gen3_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\r40_train_resume_adapter.py",
+      "source_matches_historical": true,
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\r40_train_resume_adapter.py",
+      "sha256": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+      "name": "r40_train_resume_adapter.py"
+    },
+    {
+      "target_matches_source": true,
+      "target": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume\\raw\\r42_one_shot.py",
+      "historical_gen3_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\r42_one_shot.py",
+      "source_matches_historical": true,
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\r42_one_shot.py",
+      "sha256": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+      "name": "r42_one_shot.py"
+    },
+    {
+      "target_matches_source": true,
+      "target": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume\\raw\\r42_versions.py",
+      "historical_gen3_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\r42_versions.py",
+      "source_matches_historical": true,
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\r42_versions.py",
+      "sha256": "26b9e1a3d4f3b9a5d39ca020a5ebd3653615c09a76a77ae4138f4ab98420a3d8",
+      "name": "r42_versions.py"
+    },
+    {
+      "target_matches_source": true,
+      "target": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume\\raw\\r43_call_counter_hooks.py",
+      "historical_gen3_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\r43_call_counter_hooks.py",
+      "source_matches_historical": true,
+      "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_rule_warmstart_cost_learning_20261006_r2\\r43_call_counter_hooks.py",
+      "sha256": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
+      "name": "r43_call_counter_hooks.py"
+    }
+  ],
+  "directories": [
+    "runtime",
+    "checkpoints",
+    "logs",
+    "rows",
+    "rejected",
+    "training_progress"
+  ],
+  "environment": 0,
+  "episode": 0,
+  "claim": 0,
+  "optimizer_step": 0,
+  "checkpoint_weight_write": 0,
+  "journal_write": 0,
+  "reason": "R42 configure imports these four modules from the receipt-bound sibling run root and checks __file__ provenance; copied byte-identical approved aliases enable true provenance without touching old gen3 inputs."
+}
