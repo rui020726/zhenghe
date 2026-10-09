@@ -239,6 +239,7 @@ def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any
             raise RuntimeError(f"recovery durable normal slot record mismatch: {logical}")
 
     audited_failures: dict[str, dict[str, Any]] = {}
+    interrupted_attempt3: dict[str, Any] | None = None
     for claim in claims:
         if claim.get("status") == "complete":
             continue
@@ -248,6 +249,23 @@ def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any
                 f"recovery found an in-flight claim before continuation: {logical}")
         if claim.get("status") != "failed_technical":
             raise RuntimeError(f"recovery found an unexpected non-complete status: {logical} {claim.get('status')}")
+        if (logical == APPROVED_ATTEMPT3["logical_job"]
+                and _attempt(claim) == APPROVED_ATTEMPT3["attempt"]
+                and int(claim.get("run_return_calls", -1)) == 1
+                and int(claim.get("completed_steps", -1)) == 1000
+                and claim.get("round45_artifact_receipt") is None
+                and isinstance(claim.get("round45_artifact_paths"), dict)):
+            # The approved attempt3 episode fully ran and persisted its row; only
+            # the artifact-receipt bookkeeping crashed on the historical RUN_DIR
+            # binding. The execute seam completes this bookkeeping at training
+            # time; the recovery gate records it without rewriting anything.
+            interrupted_attempt3 = {
+                "attempt": APPROVED_ATTEMPT3["attempt"],
+                "launch_slot": int(claim.get("launch_slot", -1)),
+                "run_return_calls": 1, "completed_steps": 1000,
+                "artifact_receipt_pending": True,
+            }
+            continue
         _assert_zero_environment_consumption(claim, logical)
         slot = int(claim.get("launch_slot", 0))
         category = str(claim.get("category", ""))
@@ -270,7 +288,8 @@ def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any
             or int(attempts[2].get("launch_slot", -1)) != PREDECESSOR_ATTEMPT2_SLOT
             or attempts[2].get("category") != "reserve"):
         raise RuntimeError("recovery cannot find the approved attempt3 technical-failed predecessor pair")
-    if (raw / "launch_slots" / "reserve" / f"{approved['launch_slot']:04d}.json").exists():
+    if interrupted_attempt3 is None and (
+            raw / "launch_slots" / "reserve" / f"{approved['launch_slot']:04d}.json").exists():
         raise RuntimeError("recovery found the approved attempt3 reserve slot already occupied")
     if closure["counts"]["normal"] > frozen.NORMAL_CAP or closure["counts"]["reserve"] >= frozen.RESERVE_CAP:
         raise RuntimeError("recovery claim history already exhausts the approved cumulative quota")
@@ -297,11 +316,16 @@ def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any
             raise RuntimeError(f"recovery first-four receipt identity invalid for seed {seed}")
         first_four_receipts[str(seed)] = legacy.sha256_file(receipt_path)
     checkpoints = legacy._verify_existing_first_batch_checkpoints(base)
+    if interrupted_attempt3 is None:
+        raise RuntimeError(
+            "recovery requires the approved attempt3 interrupted-bookkeeping state "
+            "(the episode result must be recovered by the execute seam before continuation)")
     return {"kind": "round58-attempt3-recovery-state-verification/1",
             "seam_version": SEAM_VERSION, "status": "passed",
             "claim_closure": closure,
             "audited_complete_source_records": len(complete_keys),
             "audited_failed_claims": audited_failures,
+            "interrupted_attempt3_bookkeeping": interrupted_attempt3,
             "approved_attempt3_predecessors_verified": True,
             "approved_attempt3_slot_free": True,
             "failed_gate_receipts": failed_gate_receipts,

@@ -53,7 +53,8 @@ def _zero_env(claim: dict[str, Any], label: str) -> None:
 
 def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
             frozen_wrapper: Any, normal_cap: int, reserve_cap: int,
-            hard_cap: int, historical_consumed: int = HISTORICAL_CONSUMED) -> dict[str, Any]:
+            hard_cap: int, historical_consumed: int = HISTORICAL_CONSUMED,
+            resume_root: Path | None = None) -> dict[str, Any]:
     """Bind the attempt3-aware wrapper as the live module ``_claim``."""
     raw_root = Path(raw_root)
     if getattr(run_module, "_r58_attempt3_seam_installed", False):
@@ -133,6 +134,77 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
         current_context = r45_globals["CURRENT_CONTEXT"]
         context_for_cell = r45_globals["_context_for_cell"]
         planned_key = r45_globals["_planned_key"]
+        # The live R45 module keeps the configure-time output namespace; every
+        # resume row/artefact receipt resolves against it. Bind it to the
+        # resume generation root (rows, logs, failures, execution ledger).
+        if resume_root is not None:
+            resume_root = Path(resume_root).resolve()
+            if str(r45_globals.get("RUN_DIR", "")) == str(resume_root):
+                pass
+            else:
+                previous_r45_run_dir = r45_globals.get("RUN_DIR")
+                r45_globals["RUN_DIR"] = resume_root
+                if r45_globals.get("R3_EXECUTION_LEDGER_PATH") is not None:
+                    r45_globals["R3_EXECUTION_LEDGER_PATH"] = (
+                        resume_root / "runtime" / "ROUND53_EXECUTION_LEDGER.json")
+        else:
+            previous_r45_run_dir = None
+
+        def _complete_interrupted_attempt3_bookkeeping() -> dict[str, Any] | None:
+            """Finish the receipt of an attempt3 episode that fully ran but whose
+            artifact-receipt hashing crashed on the historical RUN_DIR binding.
+
+            Uses the actual R45 receipt creator over the persisted row/tape and
+            appends a visible correction record to the claim; never reruns the
+            episode and never fabricates counters.
+            """
+            import time as _time
+            claim_dir = raw_root / "launch_claims" / APPROVED_ATTEMPT3["logical_job"]
+            attempt3_path = claim_dir / "attempt_0003.json"
+            if not attempt3_path.is_file():
+                return None
+            claim = _read(attempt3_path)
+            if claim.get("status") == "complete":
+                return claim
+            if (claim.get("status") != "failed_technical"
+                    or int(claim.get("attempt", -1)) != APPROVED_ATTEMPT3["attempt"]
+                    or int(claim.get("run_return_calls", -1)) != 1
+                    or int(claim.get("completed_steps", -1)) != 1000
+                    or int(claim.get("environment_constructor_calls", -1)) != 1
+                    or int(claim.get("run_invocation_calls", -1)) != 1
+                    or claim.get("round45_artifact_receipt") is not None
+                    or not isinstance(claim.get("round45_artifact_paths"), dict)):
+                return None
+            artifact_paths = claim["round45_artifact_paths"]
+            if not all(name in artifact_paths for name in ("row", "lifecycle", "transcript", "tape")):
+                return None
+            row_path = Path(artifact_paths["row"])
+            if not row_path.is_file() or row_path.resolve().parent != (resume_root / "rows").resolve():
+                return None
+            row = _read(row_path)
+            if (str(row.get("logical_job", "")) != APPROVED_ATTEMPT3["logical_job"]
+                    or int(row.get("steps", -1)) != 1000):
+                return None
+            create_receipt = r45_globals["_create_round45_artifact_receipt"]
+            receipt = create_receipt(row, claim)
+            correction = {
+                "kind": "round58-attempt3-receipt-failure-correction/1",
+                "original_status": "failed_technical",
+                "original_detail": str(claim.get("detail", ""))[:400],
+                "corrected_at_unix": _time.time(),
+                "reason": ("episode completed (run_return_calls=1, completed_steps=1000) and the "
+                           "row/tape persisted; only the artifact-receipt hashing crashed on the "
+                           "historical RUN_DIR binding. The live R45 output namespace was rebound "
+                           "to the resume root, then the actual receipt creator hashed the "
+                           "persisted artefacts. No episode was rerun and no counter was edited."),
+                "row_sha256_before_correction": __import__("hashlib").sha256(row_path.read_bytes()).hexdigest(),
+            }
+            import r58_attempt3_contract as _a3c
+            r40_common_module = _read_r40_common_via_r45(r45_globals)
+            r40_common_module._update_claim(
+                attempt3_path, round45_artifact_receipt=receipt,
+                status="complete", round58_receipt_failure_correction=correction)
+            return _read(attempt3_path)
 
         approved_job = planned_job(plan, APPROVED_ATTEMPT3["logical_job"])
         if approved_job is None:
@@ -179,6 +251,8 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
                             "scenario_seed": int(scenario),
                             "tag": str(local_kwargs.get("tag", context.get("tag", "")))})
             planned_key(context)
+            if (kind == "train" and logical_job == APPROVED_ATTEMPT3["logical_job"]):
+                _complete_interrupted_attempt3_bookkeeping()
             if (kind == "train" and logical_job == APPROVED_ATTEMPT3["logical_job"]
                     and _approved_pair_pending()):
                 preflight_attempt3_allocation(
@@ -218,11 +292,20 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
             "status": "installed", "approved": dict(APPROVED_ATTEMPT3),
             "plan_jobs": plan["jobs"],
             "execute_seam": "round58-gen3-attempt3-execute-wrapper/1",
+            "resume_root": str(resume_root) if resume_root is not None else None,
+            "previous_r45_run_dir": str(previous_r45_run_dir) if resume_root is not None else None,
             "historical_consumed": historical_consumed,
             "normal_cap": normal_cap, "reserve_cap": reserve_cap, "hard_cap": hard_cap,
             "frozen_wrapper": f"{Path(code.co_filename).name}:{code.co_firstlineno}",
             "base_claim_module": str(getattr(original_claim, "__module__", "")),
             "undo": undo}
+
+
+def _read_r40_common_via_r45(r45_globals: dict[str, Any]) -> Any:
+    runtime = r45_globals.get("RUNTIME")
+    if not isinstance(runtime, dict) or runtime.get("r40_common") is None:
+        raise RuntimeError("attempt3 correction cannot locate the live r40_common module")
+    return runtime["r40_common"]
 
 
 def _read(path: Path) -> dict[str, Any]:

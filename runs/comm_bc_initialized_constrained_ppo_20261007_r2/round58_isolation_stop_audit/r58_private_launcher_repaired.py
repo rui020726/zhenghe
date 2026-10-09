@@ -663,7 +663,8 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                 runtime["r42_run"], plan=plan, raw_root=Path(values["output_root"]),
                 frozen_wrapper=runtime["r42_run"]._claim,
                 normal_cap=1024, reserve_cap=values["reserve_cap"],
-                hard_cap=1064, historical_consumed=16)
+                hard_cap=1064, historical_consumed=16,
+                resume_root=Path(values["checkpoint_root"]).resolve().parent)
         resume_runtime = None
         if values.get("mode") == "recover_first_batch_gate":
             checkpoint_root = Path(values["checkpoint_root"]).resolve()
