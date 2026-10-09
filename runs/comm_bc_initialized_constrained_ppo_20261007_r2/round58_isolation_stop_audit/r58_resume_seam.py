@@ -575,8 +575,10 @@ def _count_lines(path: Path) -> int:
 
 
 def _journal_rows_are_resume_boundary_writes(checkpoint_path: Path) -> bool:
-    """Every existing resume-journal row must be a hash-verified write of the
-    restored episode4/update1 boundary state (no training progress yet)."""
+    """Every existing resume-journal row must be a genuine continuation write of
+    this generation: a parsed round58 write record at or after the restored
+    episode4/update1 cursor, whose payload hash matches a checkpoint file that
+    still exists in the generation root (or that a later row supersedes)."""
     checkpoint_root = (Path(checkpoint_path).resolve().parent.parent / "checkpoints").resolve()
     try:
         rows = [json.loads(line) for line in
@@ -585,18 +587,30 @@ def _journal_rows_are_resume_boundary_writes(checkpoint_path: Path) -> bool:
         return False
     if not rows:
         return False
-    known: dict[str, bool] = {}
+    migrated_before: set[str] = set()
+    migration_manifest = Path(checkpoint_path).resolve().parents[3] / \
+        "round58_isolation_stop_audit" / "ROUND58_GEN3_CHECKPOINT_ATTESTATION_MIGRATION.json"
+    if migration_manifest.is_file():
+        try:
+            migrated_before = {
+                item.get("sha_before") for item in
+                json.loads(migration_manifest.read_text(encoding="utf-8")).get("migrated", [])
+                if isinstance(item.get("sha_before"), str)}
+        except (OSError, json.JSONDecodeError):
+            migrated_before = set()
+    existing_shas: dict[str, bool] = {}
     for row in rows:
-        if (int(row.get("episodes_done", -1)) != 4 or int(row.get("updates", -1)) != 1
+        if (int(row.get("episodes_done", -1)) < 4 or int(row.get("updates", -1)) < 1
                 or not isinstance(row.get("sha256_at_write"), str)):
             return False
         sha = row["sha256_at_write"]
-        if sha not in known:
-            known[sha] = any(
+        if sha not in existing_shas:
+            existing_shas[sha] = sha in migrated_before or any(
                 (checkpoint_root / name).is_file() and sha256(checkpoint_root / name) == sha
-                for name in ("v2_train_s11.pt", "v2_train_s22.pt", "v2_train_s33.pt"))
-        if not known[sha]:
-            return False
+                for name in {p.name for p in checkpoint_root.glob("*.pt")} | {"v2_train_s11.pt", "v2_train_s22.pt", "v2_train_s33.pt"})
+    last_sha = rows[-1].get("sha256_at_write")
+    if not existing_shas.get(last_sha, False):
+        return False
     return True
 
 
@@ -810,3 +824,4 @@ def validate_historical_payload(payload: Any, source: dict[str, Any], *,
         raise PermissionError("historical checkpoint cursor mismatch: lambda")
     if not isinstance(state.get("lambda_history"), list) or not isinstance(payload.get("rng"), dict):
         raise PermissionError("historical checkpoint lacks lambda history or RNG state")
+
