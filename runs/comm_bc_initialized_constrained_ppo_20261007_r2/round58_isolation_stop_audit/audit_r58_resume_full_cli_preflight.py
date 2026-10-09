@@ -9,6 +9,7 @@ import pathlib
 import random
 import runpy
 import sys
+import traceback
 from typing import Any
 
 import numpy as np
@@ -21,12 +22,12 @@ RUN_ROOT = REPO / "runs/comm_bc_initialized_constrained_ppo_20261007_r2"
 RAW = RUN_ROOT / "round58_gen3/raw"
 RESUME_RAW = RUN_ROOT / "round58_gen3_resume/raw"
 LAUNCHER = HERE / "r58_private_launcher_repaired.py"
-OUTPUT = HERE / "ROUND58_GEN3_RESUME_FULL_CLI_PREFLIGHT_ATTEMPT09.json"
-FREEZE = HERE / "ROUND58_RESUME_FREEZE_V7.json"
-AUTH = HERE / "ROUND58_RESUME_EXECUTION_AUTHORIZATION_V7.json"
+OUTPUT = HERE / "ROUND58_GEN3_RESUME_FULL_CLI_PREFLIGHT_ATTEMPT18.json"
+FREEZE = HERE / "ROUND58_RESUME_FREEZE_V10.json"
+AUTH = HERE / "ROUND58_RESUME_EXECUTION_AUTHORIZATION_V10.json"
 QUOTA = HERE / "ROUND58_GEN3_CUMULATIVE_QUOTA.json"
 SCENES = HERE / "ROUND58_GEN3_RESUME_SCENE_OCCUPANCY_RECHECK.json"
-PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V5.json"
+PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V8.json"
 RUNTIME_ALIAS_NAMES = ("r40_train_resume_adapter.py", "r42_one_shot.py",
                        "r42_versions.py", "r43_call_counter_hooks.py")
 
@@ -125,7 +126,6 @@ def run() -> dict[str, Any]:
         if not isinstance(runtime, dict):
             raise RuntimeError("actual continuation handoff did not expose configured runtime")
         run_module = runtime.get("r42_run")
-        ledger = run_module.ledger_snapshot(strict=False)
         sentinel_holder["event"] = {
             **payload,
             "runtime_binding": {
@@ -133,7 +133,8 @@ def run() -> dict[str, Any]:
                 "checkpoint_root": str(pathlib.Path(runtime["common"].CHECKPOINTS).resolve()),
                 "historical_run_root": str(pathlib.Path(run_module.RUN_DIR).resolve()),
                 "resume_call_journal_bridge": runtime.get("r58_call_journals", {}).get("kind"),
-                "ledger_snapshot": ledger,
+                "optimizer_counter": int(getattr(run_module, "_OPTIMIZER_STEP_CALLS", -1)),
+                "ppo_counter": int(getattr(run_module, "_PPO_UPDATE_CALLS", -1)),
             },
         }
         raise ExpectedPreflightStop("intentional zero-side-effect stop before episode 4 provider")
@@ -142,6 +143,7 @@ def run() -> dict[str, Any]:
     sys.path.insert(0, str(HERE))
     import r58_resume_seam
     real_install_migration = r58_resume_seam.install_historical_plan_comparison_view
+    real_install_journals = r58_resume_seam.install_persistent_call_journals
 
     def observe_migration(*args, **kwargs):
         result = real_install_migration(*args, **kwargs)
@@ -149,6 +151,28 @@ def run() -> dict[str, Any]:
         return result
 
     r58_resume_seam.install_historical_plan_comparison_view = observe_migration
+
+    def observe_call_journals(*args, **kwargs):
+        result = real_install_journals(*args, **kwargs)
+        original_undo = result["undo"]
+        def observed_undo():
+            current_adam = torch.optim.Adam.step
+            current_ppo = args[0]["trainer"].ppo_update if args and isinstance(args[0], dict) else None
+            events["call_hook_teardown"] = {
+                "adam_is_expected_wrapper": current_adam is result["wrapper_step"],
+                "adam_current": getattr(current_adam, "__name__", type(current_adam).__name__),
+                "adam_current_id": id(current_adam),
+                "adam_expected_id": id(result["wrapper_step"]),
+                "ppo_is_expected_wrapper": current_ppo is result["wrapper_ppo"],
+                "ppo_current": getattr(current_ppo, "__name__", type(current_ppo).__name__),
+                "ppo_current_id": id(current_ppo),
+                "ppo_expected_id": id(result["wrapper_ppo"]),
+            }
+            return original_undo()
+        result["undo"] = observed_undo
+        return result
+
+    r58_resume_seam.install_persistent_call_journals = observe_call_journals
 
     original_open = builtins.open
     original_path_open = pathlib.Path.open
@@ -172,6 +196,7 @@ def run() -> dict[str, Any]:
     old_argv = sys.argv[:]
     old_dont_write = sys.dont_write_bytecode
     old_profile = sys.getprofile()
+    old_trace = sys.gettrace()
 
     def deny_write(label: str, target: Any) -> None:
         events["write_denials"].append({"kind": label, "target": str(target)})
@@ -237,10 +262,38 @@ def run() -> dict[str, Any]:
         if event == "call" and frame.f_code.co_name in {
                 "execute_authorized", "configure", "bind_live_runtime",
                 "bind_runner_paths", "verify_persisted_first_batch_state",
+                "quarantine_failed_first_batch_gate_receipts",
                 "resume_from_qualified_commits", "_continue_fixed_training"}:
             events["profile_calls"].append({"function": frame.f_code.co_name,
                                             "file": str(pathlib.Path(frame.f_code.co_filename).resolve()),
                                             "line": frame.f_code.co_firstlineno})
+        elif event == "exception" and frame.f_code.co_name in {
+                "verify_persisted_first_batch_state", "undo", "_continue_fixed_training"}:
+            exc_type, exc, _tb = arg
+            events.setdefault("observed_exceptions", []).append({
+                "function": frame.f_code.co_name,
+                "file": str(pathlib.Path(frame.f_code.co_filename).resolve()),
+                "exception": f"{exc_type.__name__}: {exc}",
+            })
+
+    def trace_exceptions(frame, event, arg):
+        target_frame = ("round58_gen2" in frame.f_code.co_filename
+                        or frame.f_code.co_name in {"verify_persisted_first_batch_state",
+                                                    "_verify_existing_first_batch_checkpoints"})
+        if event == "call" and target_frame:
+            return trace_exceptions
+        if not target_frame:
+            return None
+        if event == "exception":
+            exc_type, exc, _tb = arg
+            filename = str(pathlib.Path(frame.f_code.co_filename).resolve())
+            if "round58_gen2" in filename or frame.f_code.co_name in {
+                    "verify_persisted_first_batch_state", "_verify_existing_first_batch_checkpoints"}:
+                events.setdefault("trace_exceptions", []).append({
+                    "function": frame.f_code.co_name, "file": filename,
+                    "line": frame.f_lineno, "exception": f"{exc_type.__name__}: {exc}",
+                })
+        return trace_exceptions
 
     sys.dont_write_bytecode = True
     builtins.open = guarded_open
@@ -268,6 +321,7 @@ def run() -> dict[str, Any]:
         return original_torch_load(*args, **kwargs)
     torch.load = counted_load
     sys.setprofile(profile)
+    sys.settrace(trace_exceptions)
     cli_args = [str(LAUNCHER), "--authorization", str(AUTH), "--freeze", str(FREEZE),
                 "--cumulative-quota", str(QUOTA), "--scene-audit", str(SCENES),
                 "--output-root", str(RAW), "--mode", "recover_first_batch_gate"]
@@ -281,8 +335,10 @@ def run() -> dict[str, Any]:
         caught = str(exc)
     except BaseException as exc:
         error = f"{type(exc).__name__}: {exc}"
+        events["traceback"] = traceback.format_exc()
     finally:
         sys.setprofile(old_profile)
+        sys.settrace(old_trace)
         sys.argv = old_argv
         sys.dont_write_bytecode = old_dont_write
         builtins.open = original_open
@@ -305,6 +361,7 @@ def run() -> dict[str, Any]:
         torch.cuda.set_rng_state = original_cuda_setstate
         torch.cuda.set_rng_state_all = original_cuda_setstate_all
         r58_resume_seam.install_historical_plan_comparison_view = real_install_migration
+        r58_resume_seam.install_persistent_call_journals = real_install_journals
 
     protected_after = {str(p): sha(p) for p in PROTECTED}
     raw_after = tree_manifest((RAW / "launch_claims", RAW / "launch_slots",
@@ -325,10 +382,13 @@ def run() -> dict[str, Any]:
         "kind": "round58-gen3-full-cli-resume-preflight/1",
         "status": "passed_zero_side_effect_handoff" if success else "failed_or_incomplete",
         "starting_head": os.popen(f'git -C "{REPO}" rev-parse HEAD').read().strip(),
-        "cli_route": "runpy.run_path(real private launcher, run_name=__main__) with actual V6 receipts",
+        "cli_route": "runpy.run_path(real private launcher, run_name=__main__) with actual V10 receipts",
         "receipt_sha256": receipt_hashes,
         "migration_proof_install_calls": events["migration_install"],
         "callchain": events["profile_calls"],
+        "call_hook_teardown": events.get("call_hook_teardown"),
+        "observed_exceptions": events.get("observed_exceptions", []),
+        "trace_exceptions": events.get("trace_exceptions", []),
         "handoff": event,
         "intentional_stop": caught,
         "unexpected_error": error,

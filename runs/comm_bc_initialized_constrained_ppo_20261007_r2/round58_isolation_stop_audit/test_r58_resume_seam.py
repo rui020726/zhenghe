@@ -5,6 +5,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("r58_resume_seam_tested", HERE / "r58_resume_seam.py")
@@ -55,6 +56,54 @@ class ResumeSourceContractTests(unittest.TestCase):
                             encoding="utf-8")
             with self.assertRaisesRegex(RuntimeError, "non-invocation"):
                 seam._read_direct_journal(path, start=25)
+
+    def _install_call_journal(self, temp):
+        import torch
+        trainer = SimpleNamespace(ppo_update=lambda: None)
+        run = SimpleNamespace(_OPTIMIZER_STEP_CALLS=0, _PPO_UPDATE_CALLS=0)
+        version = SimpleNamespace(CHECKPOINT_WRITE_CALLS=12)
+        runtime = {
+            "trainer": trainer, "r42_run": run, "r42_versions": version,
+            "r58_resume_source_proof": {"historical_checkpoint_journal": {
+                "sha256": seam.HISTORICAL_CHECKPOINT_JOURNAL_SHA256, "rows": 12}},
+        }
+        before = torch.optim.Adam.step
+        receipt = seam.install_persistent_call_journals(
+            runtime, resume_runtime_dir=Path(temp) / "runtime")
+        return torch, trainer, receipt, before
+
+    def test_call_journal_teardown_accepts_exact_active_wrappers(self):
+        with tempfile.TemporaryDirectory(dir=HERE) as temp:
+            torch, trainer, receipt, before = self._install_call_journal(temp)
+            try:
+                self.assertIs(torch.optim.Adam.step, receipt["wrapper_step"])
+                self.assertIs(trainer.ppo_update, receipt["wrapper_ppo"])
+                receipt["undo"]()
+                self.assertIs(torch.optim.Adam.step, before)
+            finally:
+                torch.optim.Adam.step = before
+
+    def test_call_journal_teardown_accepts_exact_already_unwrapped_hooks(self):
+        with tempfile.TemporaryDirectory(dir=HERE) as temp:
+            torch, trainer, receipt, before = self._install_call_journal(temp)
+            try:
+                torch.optim.Adam.step = receipt["wrapped_step"]
+                trainer.ppo_update = receipt["wrapped_ppo"]
+                receipt["undo"]()
+                self.assertIs(torch.optim.Adam.step, receipt["wrapped_step"])
+                self.assertIs(trainer.ppo_update, receipt["wrapped_ppo"])
+            finally:
+                torch.optim.Adam.step = before
+
+    def test_call_journal_teardown_still_rejects_unrecognized_hook(self):
+        with tempfile.TemporaryDirectory(dir=HERE) as temp:
+            torch, trainer, receipt, before = self._install_call_journal(temp)
+            try:
+                torch.optim.Adam.step = lambda *args, **kwargs: None
+                with self.assertRaisesRegex(RuntimeError, "adam_expected_wrapper=False"):
+                    receipt["undo"]()
+            finally:
+                torch.optim.Adam.step = before
 
 
 if __name__ == "__main__":

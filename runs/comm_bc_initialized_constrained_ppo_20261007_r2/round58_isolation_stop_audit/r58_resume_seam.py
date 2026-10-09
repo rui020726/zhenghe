@@ -627,10 +627,25 @@ def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_
     trainer.ppo_update = counted_ppo
 
     def undo():
-        if torch.optim.Adam.step is not counted_step or trainer.ppo_update is not counted_ppo:
-            raise RuntimeError("live training call hooks changed before teardown")
-        torch.optim.Adam.step = original_step
-        trainer.ppo_update = original_ppo
+        current_step = torch.optim.Adam.step
+        current_ppo = trainer.ppo_update
+        if current_step is counted_step and current_ppo is counted_ppo:
+            torch.optim.Adam.step = original_step
+            trainer.ppo_update = original_ppo
+            return
+        # The frozen configure chain may already have unwound exactly these two
+        # wrappers before the private route closes. Accept only the exact
+        # immediate underlying objects captured at installation; any third
+        # function still signals hook replacement/corruption.
+        if current_step is original_step and current_ppo is original_ppo:
+            return
+        raise RuntimeError(
+            "live training call hooks changed before teardown: "
+            f"adam_expected_wrapper={current_step is counted_step}, "
+            f"adam_already_unwrapped={current_step is original_step}, "
+            f"ppo_expected_wrapper={current_ppo is counted_ppo}, "
+            f"ppo_already_unwrapped={current_ppo is original_ppo}"
+        )
 
     return {"kind": "round58-resume-call-journals/1", "status": "installed",
             "optimizer_baseline": historical_optimizer_rows,

@@ -16,6 +16,7 @@ import argparse
 import copy
 import types
 import builtins
+import hashlib
 from pathlib import Path
 from typing import Any
 
@@ -50,6 +51,10 @@ RESUME_APPROVAL_SOURCE_PATH = HERE / "ROUND58_GEN3_RESUME_APPROVAL_SOURCE.json"
 RESUME_APPROVAL_THREAD_ID = "01a0a044-592f-73e3-838c-19c1d79465d3"
 RESUME_APPROVAL_QUOTE = "核验通过后批准完成剩余固定计划"
 _GRANT_TOKEN = object()
+
+
+def _sha256_file(path: Path) -> str:
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
 class _ValidatedGrant:
@@ -239,7 +244,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     frozen = _read_external_json(freeze_path, "freeze identity")
     quota = _read_external_json(quota_path, "cumulative quota receipt")
     scene_audit = _read_external_json(scene_audit_path, "scene occupancy audit")
-    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V5.json"
+    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V8.json"
     if mode == "recover_first_batch_gate" and not migration_proof_path.is_file():
         raise PermissionError("ROUND58 recovery plan identity migration proof is missing")
     migration_proof_sha256 = (hashlib.sha256(migration_proof_path.read_bytes()).hexdigest()
@@ -712,7 +717,7 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                 item = original_read_json(path)
                 if item.get("status") != "failed":
                     raise RuntimeError(f"seed {seed}: existing failed gate receipt changed status")
-                rows.append({"seed": seed, "path": str(path), "sha256": sha256_file(path),
+                rows.append({"seed": seed, "path": str(path), "sha256": _sha256_file(path),
                              "status": "failed_preserved_no_quarantine"})
             if not rows:
                 raise RuntimeError("resume requires the original failed gate receipt to remain present")
@@ -738,7 +743,8 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                 raise RuntimeError("live R40 checkpoint selector is not bound to the private resume root")
             selected_sources = {}
             for seed in (11, 22, 33):
-                selected = Path(runtime["r40_train"]._latest_resume_source(seed)).resolve()
+                selected = Path(runtime["r40_train"]._latest_resume_source(
+                    seed, runtime["frozen"])).resolve()
                 expected = Path(proof["sources"][seed]["path"]).resolve()
                 if selected != expected:
                     raise PermissionError(f"seed {seed}: live resume selector did not choose its exact qualified source")
@@ -829,7 +835,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
                  "freeze": values["freeze_path"], "quota": values["quota_path"],
                  "scene_audit": values["scene_audit_path"]}
         if values["mode"] == "recover_first_batch_gate":
-            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V5.json"
+            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V8.json"
         for key, path in paths.items():
             if hashlib.sha256(Path(path).read_bytes()).hexdigest() != values["input_file_sha256"][key]:
                 raise PermissionError(f"ROUND58 {key} receipt changed after preflight")
@@ -865,7 +871,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
             migration_route = resume_seam.install_historical_plan_comparison_view(
                 legacy, repo_root=REPO_ROOT, current_plan=current_live_plan,
                 current_repair_identity=values["repair_identity"],
-                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V5.json",
+                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V8.json",
                 expected_proof_sha256=values["input_file_sha256"]["plan_identity_migration_proof"])
             legacy.round58_plan_identity_migration = {
                 key: value for key, value in migration_route.items() if key != "undo"}

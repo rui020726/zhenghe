@@ -6,16 +6,16 @@
     "test_r58_resume_seam",
     "test_r58_plan_identity_migration"
   ],
-  "discovered": 38,
+  "discovered": 41,
   "excluded": [],
   "historical_git_objects": {
     "b38b8688dee7ffc2626aa2064c8af74af75e216b": "present; historical private-launcher and checkpoint-contract blobs are read by their exact repository paths"
   },
-  "executed": 38,
+  "executed": 41,
   "failures": 0,
   "errors": 0,
   "exit_code": 0,
-  "finished_at_local": "2026-10-09T15:32:29.923480+08:00",
+  "finished_at_local": "2026-10-09T15:51:28.187320+08:00",
   "test_ids": [
     "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_declared_metadata_normalizes_but_arbitrary_freeze_fields_do_not",
     "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_each_identity_component_is_fail_closed_and_specific",
@@ -44,6 +44,9 @@
     "test_r58_private_launcher.ResumeApprovalSourceTests.test_owner_approval_source_accepts_exact_episode4_continuation_scope",
     "test_r58_private_launcher.ResumeApprovalSourceTests.test_owner_approval_source_rejects_expanded_scope",
     "test_r58_private_launcher.ResumeApprovalSourceTests.test_owner_approval_source_rejects_wrong_thread_or_quote",
+    "test_r58_resume_seam.ResumeSourceContractTests.test_call_journal_teardown_accepts_exact_active_wrappers",
+    "test_r58_resume_seam.ResumeSourceContractTests.test_call_journal_teardown_accepts_exact_already_unwrapped_hooks",
+    "test_r58_resume_seam.ResumeSourceContractTests.test_call_journal_teardown_still_rejects_unrecognized_hook",
     "test_r58_resume_seam.ResumeSourceContractTests.test_carryover_requires_exact_durable_batch_records_without_copying",
     "test_r58_resume_seam.ResumeSourceContractTests.test_direct_event_journal_requires_monotone_actual_call_indexes",
     "test_r58_resume_seam.ResumeSourceContractTests.test_mutated_source_map_identity_is_rejected",
