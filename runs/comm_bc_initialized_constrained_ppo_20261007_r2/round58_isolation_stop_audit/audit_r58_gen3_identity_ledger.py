@@ -137,7 +137,7 @@ def main() -> None:
             "samples": batch["update"].get("samples"),
             "minibatches": batch["update"].get("minibatches"),
             "optimizer_steps_recorded": batch["update"].get("optimizer_steps"),
-            "optimizer_step_journal_rows": sum(
+            "optimizer_step_journal_rows_global": sum(
                 e.get("call_status") == "step_invoked" for e in step_events),
             "batch_training_version_matches_freeze": batch.get("training_version") == expected_version,
             "payloads": files,
@@ -160,10 +160,14 @@ def main() -> None:
             ],
         })
 
-    # The raw optimizer hook is global; attribute sequence ranges by persisted commit order only.
+    # Raw step events have no seed field; ranges are explicitly an ordering inference,
+    # not per-call seed attribution from the hook itself.
     for i, seed in enumerate(seeds):
-        seed["optimizer_step_journal_rows"] = 8
-        seed["optimizer_step_call_indices"] = [list(range(i * 8 + 1, (i + 1) * 8 + 1))]
+        seed["optimizer_step_call_indices_inferred_by_committed_batch_order"] = list(
+            range(i * 8 + 1, (i + 1) * 8 + 1))
+        seed["optimizer_step_attribution_note"] = (
+            "step hook rows are global and carry no seed; inferred 8-call slice follows "
+            "the sequential per-seed batch commit order and is not a raw per-call seed field")
 
     result = {
         "kind": "round58-gen3-identity-ledger-audit/1",

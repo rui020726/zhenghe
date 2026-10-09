@@ -141,7 +141,7 @@
       "samples": 265,
       "minibatches": 8,
       "optimizer_steps_recorded": 8,
-      "optimizer_step_journal_rows": 8,
+      "optimizer_step_journal_rows_global": 24,
       "batch_training_version_matches_freeze": true,
       "payloads": {
         "pre": {
@@ -330,18 +330,17 @@
         "runtime ppo_update hook counter is zero despite committed batch records; source bridge was bypassed",
         "batch artifact does not itself prove the critic-detach context was active at each optimizer step"
       ],
-      "optimizer_step_call_indices": [
-        [
-          1,
-          2,
-          3,
-          4,
-          5,
-          6,
-          7,
-          8
-        ]
-      ]
+      "optimizer_step_call_indices_inferred_by_committed_batch_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "optimizer_step_attribution_note": "step hook rows are global and carry no seed; inferred 8-call slice follows the sequential per-seed batch commit order and is not a raw per-call seed field"
     },
     {
       "seed": 22,
@@ -361,7 +360,7 @@
       "samples": 265,
       "minibatches": 8,
       "optimizer_steps_recorded": 8,
-      "optimizer_step_journal_rows": 8,
+      "optimizer_step_journal_rows_global": 24,
       "batch_training_version_matches_freeze": true,
       "payloads": {
         "pre": {
@@ -550,18 +549,17 @@
         "runtime ppo_update hook counter is zero despite committed batch records; source bridge was bypassed",
         "batch artifact does not itself prove the critic-detach context was active at each optimizer step"
       ],
-      "optimizer_step_call_indices": [
-        [
-          9,
-          10,
-          11,
-          12,
-          13,
-          14,
-          15,
-          16
-        ]
-      ]
+      "optimizer_step_call_indices_inferred_by_committed_batch_order": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "optimizer_step_attribution_note": "step hook rows are global and carry no seed; inferred 8-call slice follows the sequential per-seed batch commit order and is not a raw per-call seed field"
     },
     {
       "seed": 33,
@@ -581,7 +579,7 @@
       "samples": 265,
       "minibatches": 8,
       "optimizer_steps_recorded": 8,
-      "optimizer_step_journal_rows": 8,
+      "optimizer_step_journal_rows_global": 24,
       "batch_training_version_matches_freeze": true,
       "payloads": {
         "pre": {
@@ -770,18 +768,17 @@
         "runtime ppo_update hook counter is zero despite committed batch records; source bridge was bypassed",
         "batch artifact does not itself prove the critic-detach context was active at each optimizer step"
       ],
-      "optimizer_step_call_indices": [
-        [
-          17,
-          18,
-          19,
-          20,
-          21,
-          22,
-          23,
-          24
-        ]
-      ]
+      "optimizer_step_call_indices_inferred_by_committed_batch_order": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "optimizer_step_attribution_note": "step hook rows are global and carry no seed; inferred 8-call slice follows the sequential per-seed batch commit order and is not a raw per-call seed field"
     }
   ],
   "ledger_reconciliation": {
