@@ -1,0 +1,16 @@
+{
+  "kind": "round58-gen3-identity-ledger-narrow-tests/1",
+  "command": "D:\\project_env\\python.exe -m unittest runs.comm_bc_initialized_constrained_ppo_20261007_r2.round58_isolation_stop_audit.test_r58_identity_ledger_close_v2 -v",
+  "final_run": {"tests": 11, "passed": 11, "failed": 0, "exit_code": 0},
+  "earlier_during_development": {"tests": 7, "passed": 6, "failed": 1, "cause": "expected exception text in test did not match the actual fail-closed resume refusal; test assertion was corrected, no production code change needed"},
+  "coverage": [
+    "reproduce old un-attested-freeze equality failure",
+    "accept exact gen3 attested freeze and reject altered version, semantics, freeze, top-level attestation, training-state version, and legacy generation",
+    "exercise existing private checkpoint contract _attested metadata constructor and its resume refusal",
+    "exercise gate compatibility wrapper against a spy using the real frozen gate signature and assertion shape",
+    "multi-root/seed claim-slot aggregation, duplicate and missing records, partial snapshot, final closure",
+    "PPO invocation counter bridge counts once while preserving return value"
+  ],
+  "not_covered": ["full first_batch_gate body, since it would enter model/tape audits and is not needed to prove the isolated predicate mismatch", "real R42 runtime module objects", "environment or training"],
+  "side_effect_counters": {"environment": 0, "episode_provider": 0, "claim_or_slot_write": 0, "optimizer_step": 0, "PPO_replay": 0, "RNG_restore": 0, "checkpoint_write": 0, "evaluation": 0}
+}

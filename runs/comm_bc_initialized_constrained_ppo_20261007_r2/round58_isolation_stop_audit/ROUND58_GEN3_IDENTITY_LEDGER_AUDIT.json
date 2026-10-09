@@ -1,0 +1,988 @@
+{
+  "kind": "round58-gen3-identity-ledger-audit/1",
+  "status": "audit_complete_execution_stopped",
+  "source_head": "e644b26e8607f50369d59e9bb0bf588f9eb32b47",
+  "scope": {
+    "environment_construction": 0,
+    "simulation": 0,
+    "new_claims": 0,
+    "optimizer_step": 0,
+    "PPO_replay": 0,
+    "RNG_restore": 0,
+    "checkpoint_write": 0,
+    "evaluation_cells": 0
+  },
+  "identity_contract": {
+    "expected_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+    "actual_payload_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+    "training_version_match": true,
+    "expected_action_semantics": "one-shot-send-skip/1",
+    "actual_action_semantics": "one-shot-send-skip/1",
+    "action_semantics_match": true,
+    "expected_action_eligibility": "first-report-only/1",
+    "repair_identity": {
+      "critic_route_version": "critic_representation_stop_gradient/1",
+      "adapter_module": "r58_gate_prior_repaired",
+      "adapter_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\r58_gate_prior_repaired.py",
+      "adapter_sha256": "7081557e6197aceac17fb453c03e1b5fd539f55ec60a7b3eae92d63f7e697688",
+      "trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+      "common_sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+      "private_launcher_sha256": "56e0b12819b5193437d0ef9b19ca2c6df2040f088f716df5dc1a3874065340c4",
+      "checkpoint_contract_sha256": "c23dc0c89d8a6d423591cc684e47cf5a25130a279710243fc60dedf7c39ec95b",
+      "candidate_config_sha256": "df24e76f76f16a61ac55890b3a5ad1dd79fdbc201ea3b7551bb2355fa11935d7",
+      "candidate_input_identity_sha256": "938fc21d17e0930dc3652cb2916d064e6e422dbfdd9d34e8e639a0554cb96600",
+      "execution_basis_sha256": "4e04e62f458dc5186b837b14266184a7aa84493a05b0827e31ec3a824c83201e",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2"
+    },
+    "repair_identity_sha256": "6f41bedaef91d3520ebec307179715e35a49b175d8f66ce5883d8271e683ef55",
+    "source_identities": {
+      "frozen_gen3_identity": {
+        "path": "ROUND58_GEN3_FREEZE.json",
+        "sha256": "253f0217e0a5d82f92d75d84db2843f087cf0d96d4219fe77a7106e9c69c9bf5"
+      },
+      "actual_gate": {
+        "path": "runs/comm_one_shot_gate_resume_20261003_v2/r42_analysis.py",
+        "sha256": "c758d7bdc84be011474d33f147fcfa1d769ebdf0b017405404773649d78a8e44"
+      },
+      "checkpoint_contract": {
+        "path": "r58_checkpoint_contract_repaired.py",
+        "sha256": "c23dc0c89d8a6d423591cc684e47cf5a25130a279710243fc60dedf7c39ec95b"
+      },
+      "gate_prior_adapter": {
+        "path": "r58_gate_prior_repaired.py",
+        "sha256": "7081557e6197aceac17fb453c03e1b5fd539f55ec60a7b3eae92d63f7e697688"
+      },
+      "gen2_executor": {
+        "path": "../round58_gen2/r58_execute.py",
+        "sha256": "b5a5eabc94b5c9521777905c3ddee57a53fb79624b3d876e85bca58f31b58a77"
+      },
+      "round46_executor": {
+        "path": "r46_execute_r2.py",
+        "sha256": "dc086128aa244f847330bacfd5dbc457907ad987a700c1bd1cae70687886e19c"
+      }
+    },
+    "historical_gate_source": "runs/comm_one_shot_gate_resume_20261003_v2/r42_analysis.py:342-345",
+    "historical_gate_comparison": "payload.training_version == frozen round42 training_version AND payload.comm_action_semantics == SEMANTICS AND payload.freeze == runtime round42_freeze",
+    "actual_top_version_and_semantics": "match for all 6 pre/post payloads; record training_version also matches frozen gen3 version",
+    "actual_freeze_metadata": "all six payload.freeze objects contain the exact private round58 repair_attestation; the old equality check compares against the un-attested runtime freeze object and rejects this serializer-added field. The actual runtime freeze object was not serialized separately, so any simultaneous base-freeze field drift beyond this proven extra field is marked unobserved.",
+    "diagnosis": "private gate/serializer contract mismatch; no evidence that the gate read a wrong module or that checkpoint loaded a different model/config. Gate message is generic, but its version and action-semantics operands pass; freeze equality is the failing operand.",
+    "per_field": [
+      {
+        "field": "training_version",
+        "expected": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+        "actual": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+        "matches": true,
+        "expected_source": "ROUND58_GEN3_FREEZE.json",
+        "actual_source": "checkpoint payload + training_state"
+      },
+      {
+        "field": "comm_action_semantics",
+        "expected": "one-shot-send-skip/1",
+        "actual": "one-shot-send-skip/1",
+        "matches": true,
+        "expected_source": "frozen action contract / r42_analysis.SEMANTICS",
+        "actual_source": "checkpoint payload + training_state"
+      },
+      {
+        "field": "freeze",
+        "expected": "runtime round42_freeze before serializer attestation",
+        "actual": "base freeze plus round58_repair_attestation (and gen3 metadata as serialized)",
+        "matches": false,
+        "expected_source": "r42_run.configure runtime['round42_freeze']; private expected object is not persisted",
+        "actual_source": "all six checkpoint payloads"
+      },
+      {
+        "field": "repair_attestation",
+        "expected": {
+          "critic_route_version": "critic_representation_stop_gradient/1",
+          "adapter_module": "r58_gate_prior_repaired",
+          "adapter_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\r58_gate_prior_repaired.py",
+          "adapter_sha256": "7081557e6197aceac17fb453c03e1b5fd539f55ec60a7b3eae92d63f7e697688",
+          "trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+          "common_sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+          "private_launcher_sha256": "56e0b12819b5193437d0ef9b19ca2c6df2040f088f716df5dc1a3874065340c4",
+          "checkpoint_contract_sha256": "c23dc0c89d8a6d423591cc684e47cf5a25130a279710243fc60dedf7c39ec95b",
+          "candidate_config_sha256": "df24e76f76f16a61ac55890b3a5ad1dd79fdbc201ea3b7551bb2355fa11935d7",
+          "candidate_input_identity_sha256": "938fc21d17e0930dc3652cb2916d064e6e422dbfdd9d34e8e639a0554cb96600",
+          "execution_basis_sha256": "4e04e62f458dc5186b837b14266184a7aa84493a05b0827e31ec3a824c83201e",
+          "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2"
+        },
+        "actual": "matches in payload top-level, training_state, freeze, and sidecars",
+        "matches": true,
+        "expected_source": "ROUND58_GEN3_FREEZE.json repair_identity",
+        "actual_source": "checkpoint payload/sidecar"
+      },
+      {
+        "field": "training_state cursor",
+        "expected": "pre=[0,0,0], post=[4,1,8]",
+        "actual": "per seed recorded below",
+        "matches": "see per-seed values",
+        "expected_source": "first-batch contract",
+        "actual_source": "checkpoint training_state"
+      }
+    ]
+  },
+  "seeds": [
+    {
+      "seed": 11,
+      "batch_record": "checkpoints\\r40_batch_s11_b0_attempt01.json",
+      "batch_record_sha256": "3a9447efcdd015ff8580dffa4559964e2de9d93545eb3c52cc589cccec7a1671",
+      "commit_receipt": "checkpoints\\r40_batch_commit_s11_b0.json",
+      "commit_receipt_sha256": "eaf69f4168e770f0cadfbc1058293e9028955c3113398b69a600f435ca94e957",
+      "commit_record_hash_matches": true,
+      "episodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "episode_artifact_count": 4,
+      "row_tape_hashes_exist": true,
+      "samples": 265,
+      "minibatches": 8,
+      "optimizer_steps_recorded": 8,
+      "optimizer_step_journal_rows": 8,
+      "batch_training_version_matches_freeze": true,
+      "payloads": {
+        "pre": {
+          "path": "checkpoints\\v2_train_s11_before_b0.pt",
+          "sha256": "8fa687b3294c8a8255a1ba22c063483005becbd7a3db5e7cb33d215dbf885eee",
+          "sidecar_path": "checkpoints\\v2_train_s11_before_b0.pt.r58.json",
+          "sidecar_sha256": "772752d7191b694c5aaecc36f1ab3a2d519cef8dd82e2c2d36f9eb2dc53a4767",
+          "sidecar_checkpoint_hash_matches": true,
+          "sidecar_version_matches": true,
+          "sidecar_attestation_matches_freeze": true,
+          "payload_version_matches_freeze": true,
+          "payload_semantics_matches_contract": true,
+          "checkpoint_schema": "constrained-cost-state/2",
+          "action_semantics": "one-shot-send-skip/1",
+          "action_eligibility": "first-report-only/1",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "loss_version": "constrained-lagrangian/2",
+          "gae_schema": "per-decision-next-value/1",
+          "optimizer_schema": "stage-c-four-module-parameter-set/1",
+          "reward_timing_schema": "post-action-most-recent-decision/1",
+          "training_state_version_matches": true,
+          "training_state_semantics_matches": true,
+          "payload_attestation_matches_freeze": true,
+          "freeze_has_attestation": true,
+          "optimizer_state_present": true,
+          "optimizer_state_entries": 0,
+          "optimizer_parameter_groups": 1,
+          "rng_bundle_present_read_only": true,
+          "controller_state_present": true,
+          "cursor": {
+            "training_seed": 11,
+            "episodes_done": 0,
+            "updates": 0,
+            "optimizer_steps": 0,
+            "lambda": 1.0
+          },
+          "freeze_keys": [
+            "active_dependency_sha256",
+            "base_head",
+            "carryover_manifest_sha256",
+            "comm_action_eligibility",
+            "comm_action_semantics",
+            "configuration_diff_sha256",
+            "critic_gradient_route_version",
+            "eta_lambda",
+            "execution_runner_version",
+            "freeze_sha256",
+            "kind",
+            "old_checkpoint_parameter_identities",
+            "old_training_version",
+            "output_directory_repo_relative",
+            "pure_compute_gate_sha256",
+            "r43_delivery_head",
+            "reward_timing_version",
+            "round40_ep128_parameter_identities",
+            "round40_freeze_sha256",
+            "round40_head",
+            "round40_initial_parameter_identities",
+            "round40_source_checkpoint_hashes",
+            "round41_freeze_sha256",
+            "round42_basis_commit",
+            "round42_checkout_dependency_sha256",
+            "round42_code_sha256",
+            "round42_previous_freeze_sha256",
+            "round42_reuse_source_sha256",
+            "round43_gae_lambda",
+            "round58_repair_attestation",
+            "runner_counting_regression_sha256",
+            "runner_version",
+            "scenario_order_sha256",
+            "source_round42_training_version",
+            "training_version"
+          ],
+          "freeze_round58_only_keys_vs_r46_base": [
+            "round58_repair_attestation"
+          ]
+        },
+        "post": {
+          "path": "checkpoints\\v2_train_s11_after_b0.pt",
+          "sha256": "0d9e8234487a995008189f7757e997d88cd7f0c9fd1f3092eaff03ab8a9b74ab",
+          "sidecar_path": "checkpoints\\v2_train_s11_after_b0.pt.r58.json",
+          "sidecar_sha256": "c66971448b08c574d2aacd6bcd649e522a3a176c3e37bf804f23b5cd1914b84b",
+          "sidecar_checkpoint_hash_matches": true,
+          "sidecar_version_matches": true,
+          "sidecar_attestation_matches_freeze": true,
+          "payload_version_matches_freeze": true,
+          "payload_semantics_matches_contract": true,
+          "checkpoint_schema": "constrained-cost-state/2",
+          "action_semantics": "one-shot-send-skip/1",
+          "action_eligibility": "first-report-only/1",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "loss_version": "constrained-lagrangian/2",
+          "gae_schema": "per-decision-next-value/1",
+          "optimizer_schema": "stage-c-four-module-parameter-set/1",
+          "reward_timing_schema": "post-action-most-recent-decision/1",
+          "training_state_version_matches": true,
+          "training_state_semantics_matches": true,
+          "payload_attestation_matches_freeze": true,
+          "freeze_has_attestation": true,
+          "optimizer_state_present": true,
+          "optimizer_state_entries": 10,
+          "optimizer_parameter_groups": 1,
+          "rng_bundle_present_read_only": true,
+          "controller_state_present": true,
+          "cursor": {
+            "training_seed": 11,
+            "episodes_done": 4,
+            "updates": 1,
+            "optimizer_steps": 8,
+            "lambda": 1.0
+          },
+          "freeze_keys": [
+            "active_dependency_sha256",
+            "base_head",
+            "carryover_manifest_sha256",
+            "comm_action_eligibility",
+            "comm_action_semantics",
+            "configuration_diff_sha256",
+            "critic_gradient_route_version",
+            "eta_lambda",
+            "execution_runner_version",
+            "freeze_sha256",
+            "kind",
+            "old_checkpoint_parameter_identities",
+            "old_training_version",
+            "output_directory_repo_relative",
+            "pure_compute_gate_sha256",
+            "r43_delivery_head",
+            "reward_timing_version",
+            "round40_ep128_parameter_identities",
+            "round40_freeze_sha256",
+            "round40_head",
+            "round40_initial_parameter_identities",
+            "round40_source_checkpoint_hashes",
+            "round41_freeze_sha256",
+            "round42_basis_commit",
+            "round42_checkout_dependency_sha256",
+            "round42_code_sha256",
+            "round42_previous_freeze_sha256",
+            "round42_reuse_source_sha256",
+            "round43_gae_lambda",
+            "round58_repair_attestation",
+            "runner_counting_regression_sha256",
+            "runner_version",
+            "scenario_order_sha256",
+            "source_round42_training_version",
+            "training_version"
+          ],
+          "freeze_round58_only_keys_vs_r46_base": [
+            "round58_repair_attestation"
+          ]
+        }
+      },
+      "checkpoint_cursors": {
+        "pre": [
+          0,
+          0,
+          0
+        ],
+        "post": [
+          4,
+          1,
+          8
+        ]
+      },
+      "likelihood_alignment": {
+        "samples": 265,
+        "max_abs_gap": 2.3447910280083306e-13,
+        "tolerance": 1e-06,
+        "passed": true
+      },
+      "gate_prior_summary": {
+        "gate_loss": 0.0,
+        "gate_rows": 64
+      },
+      "g_hat": 0.0,
+      "lambda_before_after": [
+        1.0,
+        1.0
+      ],
+      "commit_cursor_closes": true,
+      "first_batch_gate_status": "failed",
+      "readonly_qualification": "unverified",
+      "unverified_reasons": [
+        "the mandatory actual first-batch gate did not pass for this seed",
+        "runtime ppo_update hook counter is zero despite committed batch records; source bridge was bypassed",
+        "batch artifact does not itself prove the critic-detach context was active at each optimizer step"
+      ],
+      "optimizer_step_call_indices": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      ]
+    },
+    {
+      "seed": 22,
+      "batch_record": "checkpoints\\r40_batch_s22_b0_attempt01.json",
+      "batch_record_sha256": "a47478a5a5e82fbb24abd72415e78e2f256cf8062552efea3a4d6a01cc9d3943",
+      "commit_receipt": "checkpoints\\r40_batch_commit_s22_b0.json",
+      "commit_receipt_sha256": "2c71edcbe39845c034fb57b71189eb91e6cc425fbcbc72c2663eb25643ee6312",
+      "commit_record_hash_matches": true,
+      "episodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "episode_artifact_count": 4,
+      "row_tape_hashes_exist": true,
+      "samples": 265,
+      "minibatches": 8,
+      "optimizer_steps_recorded": 8,
+      "optimizer_step_journal_rows": 8,
+      "batch_training_version_matches_freeze": true,
+      "payloads": {
+        "pre": {
+          "path": "checkpoints\\v2_train_s22_before_b0.pt",
+          "sha256": "abf766747fa6f44ef718d421bc54cd505f1a345a8407ec53ac97144dcc617db4",
+          "sidecar_path": "checkpoints\\v2_train_s22_before_b0.pt.r58.json",
+          "sidecar_sha256": "ed7382bc53e6391eb442e42a8d5787f1381bca9ea212e56d977357399f3b3245",
+          "sidecar_checkpoint_hash_matches": true,
+          "sidecar_version_matches": true,
+          "sidecar_attestation_matches_freeze": true,
+          "payload_version_matches_freeze": true,
+          "payload_semantics_matches_contract": true,
+          "checkpoint_schema": "constrained-cost-state/2",
+          "action_semantics": "one-shot-send-skip/1",
+          "action_eligibility": "first-report-only/1",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "loss_version": "constrained-lagrangian/2",
+          "gae_schema": "per-decision-next-value/1",
+          "optimizer_schema": "stage-c-four-module-parameter-set/1",
+          "reward_timing_schema": "post-action-most-recent-decision/1",
+          "training_state_version_matches": true,
+          "training_state_semantics_matches": true,
+          "payload_attestation_matches_freeze": true,
+          "freeze_has_attestation": true,
+          "optimizer_state_present": true,
+          "optimizer_state_entries": 0,
+          "optimizer_parameter_groups": 1,
+          "rng_bundle_present_read_only": true,
+          "controller_state_present": true,
+          "cursor": {
+            "training_seed": 22,
+            "episodes_done": 0,
+            "updates": 0,
+            "optimizer_steps": 0,
+            "lambda": 1.0
+          },
+          "freeze_keys": [
+            "active_dependency_sha256",
+            "base_head",
+            "carryover_manifest_sha256",
+            "comm_action_eligibility",
+            "comm_action_semantics",
+            "configuration_diff_sha256",
+            "critic_gradient_route_version",
+            "eta_lambda",
+            "execution_runner_version",
+            "freeze_sha256",
+            "kind",
+            "old_checkpoint_parameter_identities",
+            "old_training_version",
+            "output_directory_repo_relative",
+            "pure_compute_gate_sha256",
+            "r43_delivery_head",
+            "reward_timing_version",
+            "round40_ep128_parameter_identities",
+            "round40_freeze_sha256",
+            "round40_head",
+            "round40_initial_parameter_identities",
+            "round40_source_checkpoint_hashes",
+            "round41_freeze_sha256",
+            "round42_basis_commit",
+            "round42_checkout_dependency_sha256",
+            "round42_code_sha256",
+            "round42_previous_freeze_sha256",
+            "round42_reuse_source_sha256",
+            "round43_gae_lambda",
+            "round58_repair_attestation",
+            "runner_counting_regression_sha256",
+            "runner_version",
+            "scenario_order_sha256",
+            "source_round42_training_version",
+            "training_version"
+          ],
+          "freeze_round58_only_keys_vs_r46_base": [
+            "round58_repair_attestation"
+          ]
+        },
+        "post": {
+          "path": "checkpoints\\v2_train_s22_after_b0.pt",
+          "sha256": "b0c56adf2039579a2c2d5a245af3cbe3ebcd3a31ef3ac253eb483e23e1a5ade6",
+          "sidecar_path": "checkpoints\\v2_train_s22_after_b0.pt.r58.json",
+          "sidecar_sha256": "34eecca1c493ba004b3525aebeee4b20254696755f6d3a477cff1fd7073d406c",
+          "sidecar_checkpoint_hash_matches": true,
+          "sidecar_version_matches": true,
+          "sidecar_attestation_matches_freeze": true,
+          "payload_version_matches_freeze": true,
+          "payload_semantics_matches_contract": true,
+          "checkpoint_schema": "constrained-cost-state/2",
+          "action_semantics": "one-shot-send-skip/1",
+          "action_eligibility": "first-report-only/1",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "loss_version": "constrained-lagrangian/2",
+          "gae_schema": "per-decision-next-value/1",
+          "optimizer_schema": "stage-c-four-module-parameter-set/1",
+          "reward_timing_schema": "post-action-most-recent-decision/1",
+          "training_state_version_matches": true,
+          "training_state_semantics_matches": true,
+          "payload_attestation_matches_freeze": true,
+          "freeze_has_attestation": true,
+          "optimizer_state_present": true,
+          "optimizer_state_entries": 10,
+          "optimizer_parameter_groups": 1,
+          "rng_bundle_present_read_only": true,
+          "controller_state_present": true,
+          "cursor": {
+            "training_seed": 22,
+            "episodes_done": 4,
+            "updates": 1,
+            "optimizer_steps": 8,
+            "lambda": 1.0
+          },
+          "freeze_keys": [
+            "active_dependency_sha256",
+            "base_head",
+            "carryover_manifest_sha256",
+            "comm_action_eligibility",
+            "comm_action_semantics",
+            "configuration_diff_sha256",
+            "critic_gradient_route_version",
+            "eta_lambda",
+            "execution_runner_version",
+            "freeze_sha256",
+            "kind",
+            "old_checkpoint_parameter_identities",
+            "old_training_version",
+            "output_directory_repo_relative",
+            "pure_compute_gate_sha256",
+            "r43_delivery_head",
+            "reward_timing_version",
+            "round40_ep128_parameter_identities",
+            "round40_freeze_sha256",
+            "round40_head",
+            "round40_initial_parameter_identities",
+            "round40_source_checkpoint_hashes",
+            "round41_freeze_sha256",
+            "round42_basis_commit",
+            "round42_checkout_dependency_sha256",
+            "round42_code_sha256",
+            "round42_previous_freeze_sha256",
+            "round42_reuse_source_sha256",
+            "round43_gae_lambda",
+            "round58_repair_attestation",
+            "runner_counting_regression_sha256",
+            "runner_version",
+            "scenario_order_sha256",
+            "source_round42_training_version",
+            "training_version"
+          ],
+          "freeze_round58_only_keys_vs_r46_base": [
+            "round58_repair_attestation"
+          ]
+        }
+      },
+      "checkpoint_cursors": {
+        "pre": [
+          0,
+          0,
+          0
+        ],
+        "post": [
+          4,
+          1,
+          8
+        ]
+      },
+      "likelihood_alignment": {
+        "samples": 265,
+        "max_abs_gap": 1.7053025658242404e-12,
+        "tolerance": 1e-06,
+        "passed": true
+      },
+      "gate_prior_summary": {
+        "gate_loss": 0.0,
+        "gate_rows": 64
+      },
+      "g_hat": 0.0,
+      "lambda_before_after": [
+        1.0,
+        1.0
+      ],
+      "commit_cursor_closes": true,
+      "first_batch_gate_status": "not_reached",
+      "readonly_qualification": "unverified",
+      "unverified_reasons": [
+        "the mandatory actual first-batch gate did not pass for this seed",
+        "runtime ppo_update hook counter is zero despite committed batch records; source bridge was bypassed",
+        "batch artifact does not itself prove the critic-detach context was active at each optimizer step"
+      ],
+      "optimizer_step_call_indices": [
+        [
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ]
+      ]
+    },
+    {
+      "seed": 33,
+      "batch_record": "checkpoints\\r40_batch_s33_b0_attempt01.json",
+      "batch_record_sha256": "90aa540cb22d877cd8d6c6745c4f7a4763cda93c4f7756e23434c44bf3ceaeda",
+      "commit_receipt": "checkpoints\\r40_batch_commit_s33_b0.json",
+      "commit_receipt_sha256": "512f8b2ef6d1fe4e6cd13f70f0495ef69bf98487103f95fb916e8b3b26432616",
+      "commit_record_hash_matches": true,
+      "episodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "episode_artifact_count": 4,
+      "row_tape_hashes_exist": true,
+      "samples": 265,
+      "minibatches": 8,
+      "optimizer_steps_recorded": 8,
+      "optimizer_step_journal_rows": 8,
+      "batch_training_version_matches_freeze": true,
+      "payloads": {
+        "pre": {
+          "path": "checkpoints\\v2_train_s33_before_b0.pt",
+          "sha256": "a6f4ae2a946d1e935833546cd537592efbd77b1148bb2130d685b325a3d38c6b",
+          "sidecar_path": "checkpoints\\v2_train_s33_before_b0.pt.r58.json",
+          "sidecar_sha256": "9722de0950320b5af6b66e1e53ec99222925ad8345835aa79a8cc8eb525880ed",
+          "sidecar_checkpoint_hash_matches": true,
+          "sidecar_version_matches": true,
+          "sidecar_attestation_matches_freeze": true,
+          "payload_version_matches_freeze": true,
+          "payload_semantics_matches_contract": true,
+          "checkpoint_schema": "constrained-cost-state/2",
+          "action_semantics": "one-shot-send-skip/1",
+          "action_eligibility": "first-report-only/1",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "loss_version": "constrained-lagrangian/2",
+          "gae_schema": "per-decision-next-value/1",
+          "optimizer_schema": "stage-c-four-module-parameter-set/1",
+          "reward_timing_schema": "post-action-most-recent-decision/1",
+          "training_state_version_matches": true,
+          "training_state_semantics_matches": true,
+          "payload_attestation_matches_freeze": true,
+          "freeze_has_attestation": true,
+          "optimizer_state_present": true,
+          "optimizer_state_entries": 0,
+          "optimizer_parameter_groups": 1,
+          "rng_bundle_present_read_only": true,
+          "controller_state_present": true,
+          "cursor": {
+            "training_seed": 33,
+            "episodes_done": 0,
+            "updates": 0,
+            "optimizer_steps": 0,
+            "lambda": 1.0
+          },
+          "freeze_keys": [
+            "active_dependency_sha256",
+            "base_head",
+            "carryover_manifest_sha256",
+            "comm_action_eligibility",
+            "comm_action_semantics",
+            "configuration_diff_sha256",
+            "critic_gradient_route_version",
+            "eta_lambda",
+            "execution_runner_version",
+            "freeze_sha256",
+            "kind",
+            "old_checkpoint_parameter_identities",
+            "old_training_version",
+            "output_directory_repo_relative",
+            "pure_compute_gate_sha256",
+            "r43_delivery_head",
+            "reward_timing_version",
+            "round40_ep128_parameter_identities",
+            "round40_freeze_sha256",
+            "round40_head",
+            "round40_initial_parameter_identities",
+            "round40_source_checkpoint_hashes",
+            "round41_freeze_sha256",
+            "round42_basis_commit",
+            "round42_checkout_dependency_sha256",
+            "round42_code_sha256",
+            "round42_previous_freeze_sha256",
+            "round42_reuse_source_sha256",
+            "round43_gae_lambda",
+            "round58_repair_attestation",
+            "runner_counting_regression_sha256",
+            "runner_version",
+            "scenario_order_sha256",
+            "source_round42_training_version",
+            "training_version"
+          ],
+          "freeze_round58_only_keys_vs_r46_base": [
+            "round58_repair_attestation"
+          ]
+        },
+        "post": {
+          "path": "checkpoints\\v2_train_s33_after_b0.pt",
+          "sha256": "265666d7ef5ba354ae71867957d536d4ac333aa9200c43696ce25e2a032927f0",
+          "sidecar_path": "checkpoints\\v2_train_s33_after_b0.pt.r58.json",
+          "sidecar_sha256": "3e48b2f94725a5717d744c00f729a688f52b2939252e28e54f501e97b2349f1e",
+          "sidecar_checkpoint_hash_matches": true,
+          "sidecar_version_matches": true,
+          "sidecar_attestation_matches_freeze": true,
+          "payload_version_matches_freeze": true,
+          "payload_semantics_matches_contract": true,
+          "checkpoint_schema": "constrained-cost-state/2",
+          "action_semantics": "one-shot-send-skip/1",
+          "action_eligibility": "first-report-only/1",
+          "reward_timing_version": "published-completion-event-at-relay-tick/2",
+          "loss_version": "constrained-lagrangian/2",
+          "gae_schema": "per-decision-next-value/1",
+          "optimizer_schema": "stage-c-four-module-parameter-set/1",
+          "reward_timing_schema": "post-action-most-recent-decision/1",
+          "training_state_version_matches": true,
+          "training_state_semantics_matches": true,
+          "payload_attestation_matches_freeze": true,
+          "freeze_has_attestation": true,
+          "optimizer_state_present": true,
+          "optimizer_state_entries": 10,
+          "optimizer_parameter_groups": 1,
+          "rng_bundle_present_read_only": true,
+          "controller_state_present": true,
+          "cursor": {
+            "training_seed": 33,
+            "episodes_done": 4,
+            "updates": 1,
+            "optimizer_steps": 8,
+            "lambda": 1.0
+          },
+          "freeze_keys": [
+            "active_dependency_sha256",
+            "base_head",
+            "carryover_manifest_sha256",
+            "comm_action_eligibility",
+            "comm_action_semantics",
+            "configuration_diff_sha256",
+            "critic_gradient_route_version",
+            "eta_lambda",
+            "execution_runner_version",
+            "freeze_sha256",
+            "kind",
+            "old_checkpoint_parameter_identities",
+            "old_training_version",
+            "output_directory_repo_relative",
+            "pure_compute_gate_sha256",
+            "r43_delivery_head",
+            "reward_timing_version",
+            "round40_ep128_parameter_identities",
+            "round40_freeze_sha256",
+            "round40_head",
+            "round40_initial_parameter_identities",
+            "round40_source_checkpoint_hashes",
+            "round41_freeze_sha256",
+            "round42_basis_commit",
+            "round42_checkout_dependency_sha256",
+            "round42_code_sha256",
+            "round42_previous_freeze_sha256",
+            "round42_reuse_source_sha256",
+            "round43_gae_lambda",
+            "round58_repair_attestation",
+            "runner_counting_regression_sha256",
+            "runner_version",
+            "scenario_order_sha256",
+            "source_round42_training_version",
+            "training_version"
+          ],
+          "freeze_round58_only_keys_vs_r46_base": [
+            "round58_repair_attestation"
+          ]
+        }
+      },
+      "checkpoint_cursors": {
+        "pre": [
+          0,
+          0,
+          0
+        ],
+        "post": [
+          4,
+          1,
+          8
+        ]
+      },
+      "likelihood_alignment": {
+        "samples": 265,
+        "max_abs_gap": 9.379164112033322e-13,
+        "tolerance": 1e-06,
+        "passed": true
+      },
+      "gate_prior_summary": {
+        "gate_loss": 0.0,
+        "gate_rows": 64
+      },
+      "g_hat": 0.0,
+      "lambda_before_after": [
+        1.0,
+        1.0
+      ],
+      "commit_cursor_closes": true,
+      "first_batch_gate_status": "not_reached",
+      "readonly_qualification": "unverified",
+      "unverified_reasons": [
+        "the mandatory actual first-batch gate did not pass for this seed",
+        "runtime ppo_update hook counter is zero despite committed batch records; source bridge was bypassed",
+        "batch artifact does not itself prove the critic-detach context was active at each optimizer step"
+      ],
+      "optimizer_step_call_indices": [
+        [
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24
+        ]
+      ]
+    }
+  ],
+  "ledger_reconciliation": {
+    "derived_reconciliation": {
+      "kind": "round58-derived-claim-slot-reconciliation/2",
+      "mode": "partial_snapshot",
+      "status": "partial_valid",
+      "claim_attempts": 12,
+      "slot_attempts": 12,
+      "normal_consumed": 12,
+      "reserve_consumed": 0,
+      "total_consumed": 12,
+      "duplicate_claim_keys": [],
+      "duplicate_slot_keys": [],
+      "claims_without_slots": [],
+      "unmatched_slots": [],
+      "category_mismatches": [],
+      "expected_normal": 1024,
+      "expected_reserve": 24,
+      "errors": false
+    },
+    "derived_snapshot": {
+      "kind": "round58-derived-runtime-snapshot/2",
+      "status": "partial_with_counter_gap",
+      "final_closure": false,
+      "roots": [
+        "round58_gen3/raw"
+      ],
+      "root_count": 1,
+      "claim_slot_reconciliation": {
+        "kind": "round58-derived-claim-slot-reconciliation/2",
+        "mode": "partial_snapshot",
+        "status": "partial_valid",
+        "claim_attempts": 12,
+        "slot_attempts": 12,
+        "normal_consumed": 12,
+        "reserve_consumed": 0,
+        "total_consumed": 12,
+        "duplicate_claim_keys": [],
+        "duplicate_slot_keys": [],
+        "claims_without_slots": [],
+        "unmatched_slots": [],
+        "category_mismatches": [],
+        "expected_normal": 1024,
+        "expected_reserve": 24,
+        "errors": false
+      },
+      "committed_batch_count": 3,
+      "duplicate_batch_keys": [],
+      "ppo_update_calls_observed": 0,
+      "ppo_hook_matches_committed_batches": false,
+      "optimizer_step_calls_observed": 24,
+      "normal_consumed": 12,
+      "reserve_consumed": 0,
+      "total_consumed": 12,
+      "success": false,
+      "warnings": [
+        "PPO invocation hook count differs from durable batch commits; values remain separate"
+      ]
+    },
+    "claims": 12,
+    "slots": 12,
+    "claim_statuses": [
+      "complete"
+    ],
+    "claim_categories_preserved": [
+      "normal"
+    ],
+    "normal_consumed": 12,
+    "reserve_consumed": 0,
+    "slot_names": [
+      "0001.json",
+      "0002.json",
+      "0003.json",
+      "0004.json",
+      "0005.json",
+      "0006.json",
+      "0007.json",
+      "0008.json",
+      "0009.json",
+      "0010.json",
+      "0011.json",
+      "0012.json"
+    ],
+    "old_snapshot": {
+      "path": "runtime\\ROUND53_EXECUTION_LEDGER.json",
+      "sha256": "c30f2ac3dd8e4db2781858384f107d7d1d8b5f4600f82755d29be297d626fec0",
+      "last_write_utc": "2026-10-09T01:50:44.951511Z",
+      "normal_used": 4,
+      "ppo_update_calls": 0
+    },
+    "snapshot_warnings": [
+      {
+        "kind": "round53-derived-snapshot-warning/1",
+        "status": "deferred",
+        "strict_requested": true,
+        "error": "RuntimeError: PPO update count mismatch: batch records=1, observed r42 trainer.ppo_update=0",
+        "core_claims_mutated": false
+      },
+      {
+        "kind": "round53-derived-snapshot-warning/1",
+        "status": "deferred",
+        "strict_requested": true,
+        "error": "RuntimeError: PPO update count mismatch: batch records=1, observed r42 trainer.ppo_update=0",
+        "core_claims_mutated": false
+      },
+      {
+        "kind": "round53-derived-snapshot-warning/1",
+        "status": "deferred",
+        "strict_requested": true,
+        "error": "RuntimeError: PPO update count mismatch: batch records=1, observed r42 trainer.ppo_update=0",
+        "core_claims_mutated": false
+      },
+      {
+        "kind": "round53-derived-snapshot-warning/1",
+        "status": "deferred",
+        "strict_requested": true,
+        "error": "RuntimeError: PPO update count mismatch: batch records=1, observed r42 trainer.ppo_update=0",
+        "core_claims_mutated": false
+      },
+      {
+        "kind": "round53-derived-snapshot-warning/1",
+        "status": "deferred",
+        "strict_requested": true,
+        "error": "RuntimeError: PPO update count mismatch: batch records=1, observed r42 trainer.ppo_update=0",
+        "core_claims_mutated": false
+      },
+      {
+        "kind": "round53-derived-snapshot-warning/1",
+        "status": "deferred",
+        "strict_requested": true,
+        "error": "RuntimeError: PPO update count mismatch: batch records=2, observed r42 trainer.ppo_update=0",
+        "core_claims_mutated": false
+      },
+      {
+        "kind": "round53-derived-snapshot-warning/1",
+        "status": "deferred",
+        "strict_requested": true,
+        "error": "RuntimeError: PPO update count mismatch: batch records=2, observed r42 trainer.ppo_update=0",
+        "core_claims_mutated": false
+      },
+      {
+        "kind": "round53-derived-snapshot-warning/1",
+        "status": "deferred",
+        "strict_requested": true,
+        "error": "RuntimeError: PPO update count mismatch: batch records=2, observed r42 trainer.ppo_update=0",
+        "core_claims_mutated": false
+      },
+      {
+        "kind": "round53-derived-snapshot-warning/1",
+        "status": "deferred",
+        "strict_requested": true,
+        "error": "RuntimeError: PPO update count mismatch: batch records=2, observed r42 trainer.ppo_update=0",
+        "core_claims_mutated": false
+      },
+      {
+        "kind": "round53-derived-snapshot-warning/1",
+        "status": "deferred",
+        "strict_requested": true,
+        "error": "RuntimeError: PPO update count mismatch: batch records=2, observed r42 trainer.ppo_update=0",
+        "core_claims_mutated": false
+      },
+      {
+        "kind": "round53-derived-snapshot-warning/1",
+        "status": "deferred",
+        "strict_requested": true,
+        "error": "RuntimeError: PPO update count mismatch: batch records=3, observed r42 trainer.ppo_update=0",
+        "core_claims_mutated": false
+      }
+    ],
+    "warning_root_cause": "r58_gate_prior_repaired.install_gate_prior compiles patched ppo_update and calls patched_fn directly, then replaces trainer.ppo_update; this bypasses the pre-existing R42 ppo_update counter wrapper. Actual gen3 attempts therefore persisted three batch commits and 24 optimizer step hook events while the R42 ppo_update counter stayed 0. The strict derived snapshot raised 'batch records=N, observed r42 trainer.ppo_update=0'; the nonfatal snapshot wrapper retained core claims but deferred all refreshes, leaving the pre-start 4-slot snapshot stale.",
+    "actual_optimizer_step_invocations": 24,
+    "actual_committed_batches": 3,
+    "ppo_update_hook_observed": 0,
+    "new_cumulative": {
+      "historical_environment_calls": 16,
+      "gen3_normal_consumed": 12,
+      "gen3_reserve_consumed": 0,
+      "cumulative_environment_calls": 28,
+      "normal_remaining": 1012,
+      "reserve_remaining": 24,
+      "hard_remaining": 1036,
+      "hard_cap": 1064
+    }
+  },
+  "runtime_counters": {
+    "optimizer_step_hook_rows": 24,
+    "minibatch_records": 24,
+    "gradient_diagnostic_rows": 3,
+    "checkpoint_write_hook_rows": 12,
+    "warning_count": 11
+  },
+  "new_identity_repair": {
+    "version": "round58-gen3-identity-close/1",
+    "scope": "private identity adapter + derived claim/slot reconciliation; audit-only until a separately frozen executor binds it",
+    "canonical_trainer_modified": false,
+    "old_artifacts_rewritten": false
+  },
+  "limitations": [
+    "The historical in-memory runtime round42_freeze object was not persisted independently; only the mismatch at the compound freeze equality and the serializer-added attestation are recoverable.",
+    "No first-batch gate was rerun; no batch was accepted or invalidated by this audit.",
+    "No critic-isolation autograd recomputation was run in this task."
+  ]
+}
