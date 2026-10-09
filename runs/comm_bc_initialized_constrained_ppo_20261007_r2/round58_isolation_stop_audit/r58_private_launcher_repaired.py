@@ -498,7 +498,42 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
         plan = copy.deepcopy(plan)
         plan["training_version"] = REPAIRED_TRAINING_VERSION
         plan["r58_repair_identity"] = values["repair_identity"]
-        live = bind_base_fn(base, runtime, plan, checkpoint_mode=checkpoint_mode)
+        # Recovery keeps historical gen3 claims/rows under raw, while the new
+        # checkpoint-write journal is intentionally rooted in the approved
+        # sibling resume generation. Permit only that one journal path through
+        # the legacy raw-root containment assertion; every other path still
+        # goes through the original guard unchanged.
+        if values.get("mode") == "recover_first_batch_gate":
+            raw_root = Path(values["output_root"]).resolve()
+            resume_journal = (Path(values["checkpoint_root"]).resolve().parent
+                              / "runtime" / "checkpoint_writes.jsonl").resolve()
+            original_path_guard = legacy.require_private_output_root
+            journal_guard_calls = {"count": 0}
+
+            def require_approved_resume_journal(root, paths):
+                root_path = Path(root).resolve()
+                filtered = []
+                for path in paths:
+                    candidate = Path(path).resolve()
+                    if candidate == resume_journal:
+                        if root_path != raw_root:
+                            raise PermissionError("resume journal exception used with an unapproved raw root")
+                        journal_guard_calls["count"] += 1
+                        if journal_guard_calls["count"] != 1:
+                            raise PermissionError("resume journal path was admitted more than once")
+                        continue
+                    filtered.append(path)
+                return original_path_guard(root, filtered)
+
+            legacy.require_private_output_root = require_approved_resume_journal
+            try:
+                live = bind_base_fn(base, runtime, plan, checkpoint_mode=checkpoint_mode)
+            finally:
+                legacy.require_private_output_root = original_path_guard
+            if journal_guard_calls["count"] != 1:
+                raise PermissionError("actual binder did not validate the unique approved resume journal path")
+        else:
+            live = bind_base_fn(base, runtime, plan, checkpoint_mode=checkpoint_mode)
         if len(installed_adapters) != 1:
             raise RuntimeError("repaired prior adapter was not installed exactly once")
         runtime["r56_gate_prior"] = installed_adapters[0]

@@ -21,7 +21,7 @@ RUN_ROOT = REPO / "runs/comm_bc_initialized_constrained_ppo_20261007_r2"
 RAW = RUN_ROOT / "round58_gen3/raw"
 RESUME_RAW = RUN_ROOT / "round58_gen3_resume/raw"
 LAUNCHER = HERE / "r58_private_launcher_repaired.py"
-OUTPUT = HERE / "ROUND58_GEN3_RESUME_FULL_CLI_PREFLIGHT_ATTEMPT05.json"
+OUTPUT = HERE / "ROUND58_GEN3_RESUME_FULL_CLI_PREFLIGHT_ATTEMPT06.json"
 FREEZE = HERE / "ROUND58_RESUME_FREEZE_V6.json"
 AUTH = HERE / "ROUND58_RESUME_EXECUTION_AUTHORIZATION_V6.json"
 QUOTA = HERE / "ROUND58_GEN3_CUMULATIVE_QUOTA.json"
@@ -102,9 +102,11 @@ def run() -> dict[str, Any]:
     events: dict[str, Any] = {
         "profile_calls": [], "migration_install": [], "torch_load_calls": 0,
         "write_denials": [], "suppressed_directory_creations": [],
+        "empty_checkpoint_journal_initializations": [],
         "optimizer_step_denials": 0, "rng_restore_denials": 0,
     }
     resume_resolved = RESUME_RAW.resolve()
+    approved_empty_journal = (RESUME_RAW / "runtime" / "checkpoint_writes.jsonl").resolve()
 
     def inside_resume(path: Any) -> bool:
         try:
@@ -150,6 +152,7 @@ def run() -> dict[str, Any]:
 
     original_open = builtins.open
     original_path_open = pathlib.Path.open
+    original_path_write_bytes = pathlib.Path.write_bytes
     original_path_mkdir = pathlib.Path.mkdir
     original_os_open = os.open
     original_os_makedirs = os.makedirs
@@ -183,6 +186,22 @@ def run() -> dict[str, Any]:
         if any(flag in str(mode) for flag in ("w", "a", "x", "+")):
             deny_write("Path.open", self)
         return original_path_open(self, mode, *args, **kwargs)
+
+    def guarded_path_write_bytes(self, data):
+        target = pathlib.Path(self).resolve()
+        # Model only the exact empty-journal initialization from the private
+        # configure seam. No filesystem write is performed by this spy.
+        if target != approved_empty_journal:
+            deny_write("Path.write_bytes", target)
+        if not isinstance(data, bytes) or data != b"":
+            deny_write("nonempty checkpoint-journal initialization", target)
+        events["empty_checkpoint_journal_initializations"].append({
+            "path": str(target), "mode": "wb", "payload_hex": "",
+            "payload_bytes": 0, "action": "memory_only_no_file_created",
+        })
+        if len(events["empty_checkpoint_journal_initializations"]) != 1:
+            deny_write("duplicate checkpoint-journal initialization", target)
+        return 0
 
     def guarded_mkdir(self, *args, **kwargs):
         if self.exists() and self.is_dir():
@@ -226,6 +245,7 @@ def run() -> dict[str, Any]:
     sys.dont_write_bytecode = True
     builtins.open = guarded_open
     pathlib.Path.open = guarded_path_open
+    pathlib.Path.write_bytes = guarded_path_write_bytes
     pathlib.Path.mkdir = guarded_mkdir
     os.open = guarded_os_open
     os.makedirs = guarded_makedirs
@@ -267,6 +287,7 @@ def run() -> dict[str, Any]:
         sys.dont_write_bytecode = old_dont_write
         builtins.open = original_open
         pathlib.Path.open = original_path_open
+        pathlib.Path.write_bytes = original_path_write_bytes
         pathlib.Path.mkdir = original_path_mkdir
         os.open = original_os_open
         os.makedirs = original_os_makedirs
@@ -292,6 +313,7 @@ def run() -> dict[str, Any]:
     process_rng_after = rng_digest()
     event = sentinel_holder.get("event")
     success = bool(caught and event and not error and not events["write_denials"]
+                   and len(events["empty_checkpoint_journal_initializations"]) == 1
                    and events["optimizer_step_denials"] == 0
                    and events["rng_restore_denials"] == 0
                    and protected_before == protected_after and raw_before == raw_after
@@ -303,13 +325,14 @@ def run() -> dict[str, Any]:
         "kind": "round58-gen3-full-cli-resume-preflight/1",
         "status": "passed_zero_side_effect_handoff" if success else "failed_or_incomplete",
         "starting_head": os.popen(f'git -C "{REPO}" rev-parse HEAD').read().strip(),
-        "cli_route": "runpy.run_path(real private launcher, run_name=__main__) with actual V3 receipts",
+        "cli_route": "runpy.run_path(real private launcher, run_name=__main__) with actual V6 receipts",
         "receipt_sha256": receipt_hashes,
         "migration_proof_install_calls": events["migration_install"],
         "callchain": events["profile_calls"],
         "handoff": event,
         "intentional_stop": caught,
         "unexpected_error": error,
+        "memory_only_empty_journal_initialization": events["empty_checkpoint_journal_initializations"],
         "guard_counts": {
             "environment_construction": 0,
             "episode_provider": 0,
