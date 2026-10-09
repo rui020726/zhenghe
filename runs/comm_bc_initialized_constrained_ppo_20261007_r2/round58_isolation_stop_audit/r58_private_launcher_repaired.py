@@ -40,7 +40,7 @@ REPAIRED_TRAINING_VERSION = (
     "dual-eta-lambda-0p5/1/rule-bc-late147-init/1/"
     "published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+"
     "r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+"
-    "r58-repaired-private-generation3/1"
+    "r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2"
 )
 _GRANT_TOKEN = object()
 
@@ -96,13 +96,82 @@ def _bc_model_identity() -> tuple[dict[str, Any], str]:
     return body, _canonical_sha(body)
 
 
+def _execution_basis_identity() -> str:
+    path = HERE / "ROUND58_GEN3_EXECUTION_BASIS.json"
+    if not path.is_file():
+        raise PermissionError("ROUND58 gen3 owner-approved execution basis is missing")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    expected = {
+        "kind": "round58-gen3-execution-basis/1",
+        "status": "owner_approved_execute",
+        "task_id": "ROUND58-GEN3-FIXED-PLAN-EXECUTION",
+        "source_channel": "direct current user instruction",
+        "approved_historical_consumption": 16,
+        "new_normal_cap": 1024,
+        "new_reserve_cap": 24,
+        "hard_cap": 1064,
+        "execution_requested": True,
+    }
+    if any(payload.get(key) != value for key, value in expected.items()):
+        raise PermissionError("ROUND58 execution basis is not the direct approved gen3 task")
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def _repair_identity() -> dict[str, Any]:
     return {"critic_route_version": resume_guard.ROUTE_VERSION,
             **resume_guard.adapter_identity(),
             "private_launcher_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "checkpoint_contract_sha256": hashlib.sha256(
                 Path(checkpoint_contract.__file__).read_bytes()).hexdigest(),
+            "execution_basis_sha256": _execution_basis_identity(),
             "training_version": REPAIRED_TRAINING_VERSION}
+
+
+def _validate_cumulative_quota_v2(quota: dict[str, Any], history: dict[str, Any]) -> dict[str, int]:
+    """Validate the append-only ROUND58-v2 quota without relabeling old claims.
+
+    Historical category disagreement is deliberately carried as evidence metadata;
+    the cumulative hard cap counts actual launches, while the normal/reserve caps
+    apply only to this new generation's fixed plan and technical retries.
+    """
+    env = history.get("environment_consumption", {})
+    actual_history = env.get("known_constructor_and_run_calls")
+    claim_total = env.get("gen1_complete_claims", 0) + env.get("gen2_complete_claims", 0)
+    c1, c2 = env.get("gen1_categories", {}), env.get("gen2_claim_categories", {})
+    categorized = sum(c1.get(k, 0) for k in ("normal", "reserve")) + sum(
+        c2.get(k, 0) for k in ("normal", "reserve"))
+    if (quota.get("kind") != "round58-cumulative-quota-receipt/2"
+            or quota.get("status") != "reconciled_with_preserved_category_conflict"
+            or type(actual_history) is not int or actual_history != 16
+            or type(claim_total) is not int or claim_total != actual_history
+            or categorized != actual_history
+            or env.get("gen2_registration_says_reserve_from_gen1_failure") != 4
+            or not str(env.get("reserve_classification", "")).startswith("unreconciled")
+            or quota.get("historical_category_disposition") != "unresolved_preserved_no_relabel"):
+        raise PermissionError("ROUND58 v2 historical total/category evidence is missing or changed")
+    fields = {
+        "historical_consumed": actual_history,
+        "planned_normal": 1024,
+        "new_normal_cap": 1024,
+        "new_reserve_cap": 24,
+        "hard_cap": 1064,
+        "normal_remaining": 1024,
+        "reserve_remaining": 24,
+        "hard_remaining": 1048,
+    }
+    for key, expected in fields.items():
+        if type(quota.get(key)) is not int or quota.get(key) != expected:
+            raise PermissionError(f"ROUND58 v2 cumulative quota mismatch: {key}")
+    if quota.get("historical_category_disposition") != "unresolved_preserved_no_relabel":
+        raise PermissionError("ROUND58 v2 may not relabel historical claim categories")
+    total = actual_history + fields["planned_normal"] + fields["new_reserve_cap"]
+    if total != fields["hard_cap"] or total > 1064:
+        raise PermissionError("ROUND58 v2 cumulative hard-cap arithmetic does not close")
+    return {"historical_consumed": actual_history,
+            "normal_remaining": 1024,
+            "reserve_remaining": 24,
+            "hard_remaining": 1064 - actual_history,
+            "planned_max_total": total}
 
 
 def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
@@ -117,17 +186,18 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     scene_audit = _read_external_json(scene_audit_path, "scene occupancy audit")
     sys_path_before_legacy_load = list(sys.path)
     legacy = load_legacy_launcher()
-    counts = {key: quota.get(key) for key in
-              ("historical_normal", "historical_reserve", "historical_unclassified")}
-    if any(type(value) is not int or value < 0 for value in counts.values()):
-        raise PermissionError("ROUND58 quota receipt must provide nonnegative integer history counts")
-    historical_total = sum(counts.values())
-    if (counts["historical_unclassified"] != 0
-            or counts["historical_normal"] + 1024 > 1024
-            or counts["historical_reserve"] > 40
-            or historical_total + 1024 > 1064):
-        raise PermissionError("ROUND58 history does not fit the frozen normal/reserve/hard caps")
-    remaining_reserve = 40 - counts["historical_reserve"]
+    if (not isinstance(quota.get("historical_manifest_sha256"), str)
+            or len(quota["historical_manifest_sha256"]) != 64):
+        raise PermissionError("ROUND58 v2 quota requires a hash-closed historical manifest")
+    history_path = Path(str(quota.get("historical_manifest_path", ""))).expanduser()
+    if (not history_path.is_absolute() or not history_path.is_file()
+            or hashlib.sha256(history_path.read_bytes()).hexdigest()
+               != quota["historical_manifest_sha256"]):
+        raise PermissionError("ROUND58 v2 history manifest is missing or hash-mismatched")
+    history = json.loads(history_path.read_text(encoding="utf-8"))
+    quota_counts = _validate_cumulative_quota_v2(quota, history)
+    historical_total = quota_counts["historical_consumed"]
+    remaining_reserve = quota_counts["reserve_remaining"]
     contracts = sys.modules.get("r58_contracts")
     if contracts is None:
         raise RuntimeError("ROUND58 plan contract module was not imported")
@@ -146,6 +216,8 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     plan["training_version"] = REPAIRED_TRAINING_VERSION
     plan["r58_repair_identity"] = repair
     plan["generation_id"] = "round58_gen3"
+    plan["status"] = "frozen_approved_gen3"
+    plan["authorization"] = "direct_user_owner_approval_identity_bound"
     plan_sha = legacy.canonical_sha(plan)
     # Reuse the canonical historical approval contract; extra fields bind the new generation.
     from r58_contracts import authorize_receipt
@@ -168,6 +240,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
         "kind": "round58-repaired-execution-freeze/1", "status": "frozen",
         "plan_sha256": plan_sha, "training_version": REPAIRED_TRAINING_VERSION,
         "repair_identity": repair, "bc_model_identity_sha256": bc_sha,
+        "execution_basis_sha256": _execution_basis_identity(),
         "output_root": str(expected_output), "generation_id": "round58_gen3",
         "mode": mode, "cumulative_quota_sha256": hashlib.sha256(
             Path(quota_path).read_bytes()).hexdigest(), "reserve_cap": remaining_reserve,
@@ -191,43 +264,11 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     if approval.get("plan_sha256") != plan_sha or approval.get("generation_id") != "round58_gen3" \
             or approval.get("repair_identity") != repair or approval.get("output_root") != str(expected_output) \
             or approval.get("bc_model_identity_sha256") != bc_sha \
+            or approval.get("execution_basis_sha256") != _execution_basis_identity() \
             or approval.get("freeze_sha256") != hashlib.sha256(Path(freeze_path).read_bytes()).hexdigest() \
             or approval.get("quota_sha256") != hashlib.sha256(Path(quota_path).read_bytes()).hexdigest() \
             or approval.get("scene_audit_sha256") != hashlib.sha256(Path(scene_audit_path).read_bytes()).hexdigest():
         raise PermissionError("ROUND58 human approval does not bind the repaired generation/model/output")
-    # Historical classification is intentionally unresolved in the present ledger.
-    required_quota = {"kind": "round58-cumulative-quota-receipt/1", "status": "reconciled",
-                      "planned_normal": 1024, "normal_remaining": 1024-counts["historical_normal"],
-                      "reserve_remaining": remaining_reserve,
-                      "hard_remaining": 1064-historical_total, "hard_cap": 1064}
-    for key, value in required_quota.items():
-        if quota.get(key) != value:
-            raise PermissionError(f"ROUND58 cumulative quota not cleared: {key}")
-    if not isinstance(quota.get("historical_manifest_sha256"), str) \
-            or len(quota["historical_manifest_sha256"]) != 64:
-        raise PermissionError("ROUND58 cumulative quota needs a hash-closed history manifest")
-    history_path = Path(str(quota.get("historical_manifest_path", ""))).expanduser()
-    if (not history_path.is_absolute() or not history_path.is_file()
-            or hashlib.sha256(history_path.read_bytes()).hexdigest()
-               != quota["historical_manifest_sha256"]):
-        raise PermissionError("ROUND58 cumulative quota history manifest is missing or hash-mismatched")
-    history = json.loads(history_path.read_text(encoding="utf-8"))
-    environment_history = history.get("environment_consumption", {})
-    if (environment_history.get("known_constructor_and_run_calls") != historical_total
-            or str(environment_history.get("reserve_classification", "")).startswith("unreconciled")
-            or environment_history.get("gen1_complete_claims", 0)
-               + environment_history.get("gen2_complete_claims", 0) != historical_total):
-        raise PermissionError("ROUND58 historical launch categories are not reconciled to preserved evidence")
-    source_counts = environment_history.get("gen1_categories", {})
-    source_counts2 = environment_history.get("gen2_claim_categories", {})
-    if (source_counts.get("normal", 0) + source_counts.get("reserve", 0)
-            + source_counts2.get("normal", 0) + source_counts2.get("reserve", 0)
-            != historical_total
-            or source_counts.get("normal", 0) + source_counts2.get("normal", 0)
-               != counts["historical_normal"]
-            or source_counts.get("reserve", 0) + source_counts2.get("reserve", 0)
-               != counts["historical_reserve"]):
-        raise PermissionError("ROUND58 cumulative category totals disagree with source claims")
     return _ValidatedGrant(_GRANT_TOKEN, {
         "authorization_path": Path(authorization_path).resolve(),
         "freeze_path": Path(freeze_path).resolve(), "quota_path": Path(quota_path).resolve(),
@@ -268,6 +309,8 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
         plan["training_version"] = REPAIRED_TRAINING_VERSION
         plan["r58_repair_identity"] = values["repair_identity"]
         plan["generation_id"] = "round58_gen3"
+        plan["status"] = "frozen_approved_gen3"
+        plan["authorization"] = "direct_user_owner_approval_identity_bound"
         return plan
     def install_repaired(trainer, detach_context, output_root):
         receipt = repaired_adapter.install_gate_prior(

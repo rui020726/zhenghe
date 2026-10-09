@@ -133,11 +133,13 @@ class PrivateLauncherRouteTests(unittest.TestCase):
         repair = launcher._repair_identity()
         contracts = sys.modules["r58_contracts"]
         original_contract_cap, original_legacy_cap = contracts.RESERVE_CAP, legacy.RESERVE_CAP
-        contracts.RESERVE_CAP = legacy.RESERVE_CAP = 40
+        contracts.RESERVE_CAP = legacy.RESERVE_CAP = 24
         plan = legacy.plan_from_frozen_sources()
         contracts.RESERVE_CAP, legacy.RESERVE_CAP = original_contract_cap, original_legacy_cap
         plan.update({"training_version": launcher.REPAIRED_TRAINING_VERSION,
-                     "r58_repair_identity": repair, "generation_id": "round58_gen3"})
+                     "r58_repair_identity": repair, "generation_id": "round58_gen3",
+                     "status": "frozen_approved_gen3",
+                     "authorization": "direct_user_owner_approval_identity_bound"})
         plan_sha = legacy.canonical_sha(plan)
         bc_models, bc_sha = launcher._bc_model_identity()
         # The disposable root is a sibling of gen2 under ROUND58's output parent,
@@ -159,11 +161,12 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                                           ("registrations", "reservations", "claims", "artifacts")},
                      "audited_at_utc": "2099-01-01T00:00:00Z"}
             history = {"environment_consumption": {
-                "known_constructor_and_run_calls": 0,
-                "reserve_classification": "reconciled (synthetic future fixture only)",
-                "gen1_complete_claims": 0, "gen2_complete_claims": 0,
-                "gen1_categories": {"normal": 0, "reserve": 0},
-                "gen2_claim_categories": {"normal": 0, "reserve": 0}}}
+                "known_constructor_and_run_calls": 16,
+                "reserve_classification": "unreconciled: preserved historical category conflict",
+                "gen1_complete_claims": 4, "gen2_complete_claims": 12,
+                "gen1_categories": {"normal": 4, "reserve": 0},
+                "gen2_claim_categories": {"normal": 12, "reserve": 0},
+                "gen2_registration_says_reserve_from_gen1_failure": 4}}
             def encoded(value):
                 return (json.dumps(value, ensure_ascii=False, sort_keys=True,
                                    separators=(",", ":")) + "\n").encode("utf-8")
@@ -171,11 +174,14 @@ class PrivateLauncherRouteTests(unittest.TestCase):
             history_sha = __import__("hashlib").sha256(history_bytes).hexdigest()
             scene_bytes = encoded(scene)
             scene_sha = __import__("hashlib").sha256(scene_bytes).hexdigest()
-            quota = {"kind": "round58-cumulative-quota-receipt/1", "status": "reconciled",
-                     "historical_normal": 0, "historical_reserve": 0,
-                     "historical_unclassified": 0, "planned_normal": 1024,
-                     "normal_remaining": 1024, "reserve_remaining": 40,
-                     "hard_remaining": 1064, "hard_cap": 1064,
+            quota = {"kind": "round58-cumulative-quota-receipt/2",
+                     "status": "reconciled_with_preserved_category_conflict",
+                     "historical_consumed": 16,
+                     "historical_category_disposition": "unresolved_preserved_no_relabel",
+                     "planned_normal": 1024, "new_normal_cap": 1024,
+                     "new_reserve_cap": 24, "normal_remaining": 1024,
+                     "reserve_remaining": 24, "hard_remaining": 1048,
+                     "hard_cap": 1064,
                      "historical_manifest_path": str(history_path),
                      "historical_manifest_sha256": history_sha}
             quota_bytes = encoded(quota)
@@ -184,19 +190,21 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                       "plan_sha256": plan_sha,
                       "training_version": launcher.REPAIRED_TRAINING_VERSION,
                       "repair_identity": repair, "bc_model_identity_sha256": bc_sha,
+                      "execution_basis_sha256": launcher._execution_basis_identity(),
                       "output_root": str(raw.resolve()), "generation_id": "round58_gen3",
                       "mode": "fresh", "cumulative_quota_sha256": quota_sha,
-                      "reserve_cap": 40, "scene_audit_sha256": scene_sha,
+                      "reserve_cap": 24, "scene_audit_sha256": scene_sha,
                       "bc_models": bc_models}
             freeze_bytes = encoded(freeze)
             freeze_sha = __import__("hashlib").sha256(freeze_bytes).hexdigest()
             approval = {"status": "explicitly_authorized",
                         "task_id": "ROUND58-PRIOR-STRENGTH-PROSPECTIVE-TRIAL",
                         "branch": "exp/round58-prior-strength-prospective-trial",
-                        "normal_cap": 1024, "reserve_cap": 40, "hard_cap": 1064,
+                        "normal_cap": 1024, "reserve_cap": 24, "hard_cap": 1064,
                         "plan_sha256": plan_sha, "generation_id": "round58_gen3",
                         "repair_identity": repair, "output_root": str(raw.resolve()),
                         "bc_model_identity_sha256": bc_sha,
+                        "execution_basis_sha256": launcher._execution_basis_identity(),
                         "freeze_sha256": freeze_sha, "quota_sha256": quota_sha,
                         "scene_audit_sha256": scene_sha,
                         "authorized_by": "synthetic-test-principal",
@@ -364,6 +372,58 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                 restore_rng=callbacks["rng"], construct_environment=callbacks["environment"],
                 optimizer_step=callbacks["step"])
         self.assertEqual(calls, [])
+
+
+class CumulativeQuotaV2Tests(unittest.TestCase):
+    def setUp(self):
+        self.history = {"environment_consumption": {
+            "known_constructor_and_run_calls": 16,
+            "gen1_complete_claims": 4, "gen2_complete_claims": 12,
+            "gen1_categories": {"normal": 4, "reserve": 0},
+            "gen2_claim_categories": {"normal": 12, "reserve": 0},
+            "gen2_registration_says_reserve_from_gen1_failure": 4,
+            "reserve_classification": "unreconciled: preserve conflicting source fields"}}
+        self.quota = {"kind": "round58-cumulative-quota-receipt/2",
+                      "status": "reconciled_with_preserved_category_conflict",
+                      "historical_consumed": 16,
+                      "historical_category_disposition": "unresolved_preserved_no_relabel",
+                      "planned_normal": 1024, "new_normal_cap": 1024,
+                      "new_reserve_cap": 24, "normal_remaining": 1024,
+                      "reserve_remaining": 24, "hard_remaining": 1048,
+                      "hard_cap": 1064}
+
+    def test_full_plan_closes_16_plus_1024_plus_24_at_1064(self):
+        result = launcher._validate_cumulative_quota_v2(self.quota, self.history)
+        self.assertEqual(result, {"historical_consumed": 16, "normal_remaining": 1024,
+                                  "reserve_remaining": 24, "hard_remaining": 1048,
+                                  "planned_max_total": 1064})
+
+    def test_legacy_quota_receipt_cannot_substitute_for_v2(self):
+        old = dict(self.quota, kind="round58-cumulative-quota-receipt/1",
+                   status="reconciled", reserve_cap=40)
+        with self.assertRaises(PermissionError):
+            launcher._validate_cumulative_quota_v2(old, self.history)
+
+    def test_history_cannot_be_omitted_duplicated_or_relabelled(self):
+        for changed in (dict(self.quota, historical_consumed=0),
+                        dict(self.quota, historical_consumed=32),
+                        dict(self.quota, historical_category_disposition="reclassified_as_reserve")):
+            with self.subTest(changed=changed), self.assertRaises(PermissionError):
+                launcher._validate_cumulative_quota_v2(changed, self.history)
+
+    def test_normal_reserve_and_hard_caps_are_independently_enforced(self):
+        for changed in (dict(self.quota, planned_normal=1023),
+                        dict(self.quota, new_normal_cap=1025),
+                        dict(self.quota, new_reserve_cap=25),
+                        dict(self.quota, hard_cap=1065)):
+            with self.subTest(changed=changed), self.assertRaises(PermissionError):
+                launcher._validate_cumulative_quota_v2(changed, self.history)
+
+    def test_historical_source_counts_must_close_without_resolving_conflict(self):
+        bad = json.loads(json.dumps(self.history))
+        bad["environment_consumption"]["gen2_complete_claims"] = 11
+        with self.assertRaises(PermissionError):
+            launcher._validate_cumulative_quota_v2(self.quota, bad)
 
 
 if __name__ == "__main__":
