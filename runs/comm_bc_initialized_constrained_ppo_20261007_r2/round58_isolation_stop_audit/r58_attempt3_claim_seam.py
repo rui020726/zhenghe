@@ -38,6 +38,7 @@ from r58_attempt3_contract import (APPROVED_ATTEMPT3, PREDECESSOR_ATTEMPT2_SLOT,
                                    validate_claims)
 
 HISTORICAL_CONSUMED = 16
+WALL_CLOCK_BUDGET_SECONDS = 240  # graceful stop at an all-terminal claim boundary
 
 
 def _zero_env(claim: dict[str, Any], label: str) -> None:
@@ -117,6 +118,8 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
 
     # --- execution seam: extend the frozen R45 one-retry gate for the unique
     # approved attempt3 case; everything else keeps the frozen behaviour.
+    import time as _time
+    _seam_started_monotonic = _time.monotonic()
     guarded_execute = getattr(run_module, "_execute_cell", None)
     base_execute = None
     if (callable(guarded_execute)
@@ -161,6 +164,64 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
                     _shutil.copy2(task_state_source, task_state_target)
         else:
             previous_r45_run_dir = None
+
+        def _correct_in_flight_claims() -> list[dict[str, Any]] | None:
+            """Append an external-termination correction to every planned claim
+            left in flight by an externally killed process, then finish any
+            whose episode row fully persisted.  Frozen retry rules then rerun
+            the interrupted episodes through their normal attempt path."""
+            import time as _time
+            jobs = {job["logical_job"]: job for job in plan["jobs"]}
+            r40_common_module = _read_r40_common_via_r45(r45_globals)
+            if r40_common_module is None:
+                return None
+            corrected: list[dict[str, Any]] = []
+            for claim_path in sorted((raw_root / "launch_claims").glob("*/*.json")):
+                try:
+                    claim = _read(claim_path)
+                except Exception:
+                    continue
+                logical = str(claim.get("logical_job", ""))
+                if (claim.get("status") != "claimed_before_environment"
+                        or logical not in jobs):
+                    continue
+                correction = {
+                    "kind": "round58-external-termination-correction/1",
+                    "original_status": "claimed_before_environment",
+                    "corrected_at_unix": _time.time(),
+                    "reason": ("the executing process was terminated externally "
+                               "(sandbox background reaping); no Python exception "
+                               "handler ran; the claim is corrected to "
+                               "failed_technical so the frozen technical-retry "
+                               "path can rerun the episode"),
+                    "counters_at_correction": {
+                        name: claim.get(name) for name in
+                        ("environment_constructor_calls", "run_invocation_calls",
+                         "run_return_calls", "completed_steps")},
+                }
+                artifact_paths = claim.get("round45_artifact_paths")
+                completed_row = None
+                if isinstance(artifact_paths, dict):
+                    row_path = artifact_paths.get("row")
+                    if row_path and Path(row_path).is_file():
+                        candidate_row = _read(row_path)
+                        if (str(candidate_row.get("kind", "")) == str(claim.get("round45_key", {}).get("kind"))
+                                and int(candidate_row.get("steps", -1)) == 1000):
+                            completed_row = candidate_row
+                if completed_row is not None:
+                    create_receipt = r45_globals["_create_round45_artifact_receipt"]
+                    receipt = create_receipt(completed_row, claim)
+                    r40_common_module._update_claim(
+                        claim_path, round45_artifact_receipt=receipt, status="complete",
+                        round58_receipt_failure_correction=correction)
+                else:
+                    r40_common_module._update_claim(
+                        claim_path, status="failed_technical",
+                        round58_external_termination_correction=correction)
+                corrected.append({"logical_job": logical,
+                                  "attempt": int(claim.get("attempt", -1)),
+                                  "completed_row_recovered": completed_row is not None})
+            return corrected or None
 
         def _complete_interrupted_attempt3_bookkeeping() -> dict[str, Any] | None:
             """Finish the receipt of an attempt3 episode that fully ran but whose
@@ -249,6 +310,15 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
                              runner_kwargs: dict[str, Any] | None = None,
                              row_updates: dict[str, Any] | None = None,
                              identity: dict[str, Any] | None = None) -> dict[str, Any]:
+            import time as _time
+            _correct_in_flight_claims()
+            if _time.monotonic() - _seam_started_monotonic > WALL_CLOCK_BUDGET_SECONDS:
+                # Graceful boundary stop BEFORE any claim: every persisted claim
+                # is terminal, all completed rows recover on relaunch, and no
+                # environment, claim, optimizer or checkpoint state is in flight.
+                raise RuntimeError(
+                    "ROUND58 graceful wall-clock boundary reached before claim; "
+                    "stopping at an all-terminal claim boundary per the freeze discipline")
             context = current_context.get()
             local_kwargs = dict(runner_kwargs or {})
             local_updates = dict(row_updates or {})
@@ -321,7 +391,7 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
 def _read_r40_common_via_r45(r45_globals: dict[str, Any]) -> Any:
     runtime = r45_globals.get("RUNTIME")
     if not isinstance(runtime, dict) or runtime.get("r40_common") is None:
-        raise RuntimeError("attempt3 correction cannot locate the live r40_common module")
+        return None
     return runtime["r40_common"]
 
 

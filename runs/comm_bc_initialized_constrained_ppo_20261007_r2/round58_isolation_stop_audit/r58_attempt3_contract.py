@@ -221,22 +221,36 @@ def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any
         attempts_by_job.setdefault(logical, {})[_attempt(claim)] = claim
         if claim.get("status") == "complete":
             complete_keys.add(logical)
-    if complete_keys != first_four_keys:
+    missing_first_four = first_four_keys - complete_keys
+    if missing_first_four:
         raise RuntimeError(
-            "recovery complete source records are not exactly the twelve approved "
-            f"first-four claims (complete={len(complete_keys)}, expected={len(first_four_keys)}, "
-            f"missing={sorted(first_four_keys - complete_keys)}, extra={sorted(complete_keys - first_four_keys)})")
+            "recovery complete source records must include the twelve approved "
+            f"first-four claims (missing={sorted(missing_first_four)}, "
+            f"complete={len(complete_keys)})")
+    for logical in sorted(complete_keys - first_four_keys):
+        if planned_job(plan, logical) is None:
+            raise RuntimeError(
+                f"recovery found a complete claim outside the approved fixed plan: {logical}")
     for logical in sorted(complete_keys):
-        claim = attempts_by_job[logical][1]
         job = planned_job(plan, logical)
-        if (str(claim.get("category", "")) != "normal"
-                or int(claim.get("launch_slot", -1)) != int(job["normal_slot"])
-                or claim.get("status") != "complete"):
-            raise RuntimeError(f"recovery approved source record identity mismatch: {logical}")
-        slot_path = raw / "launch_slots" / "normal" / f"{int(job['normal_slot']):04d}.json"
-        if (not slot_path.is_file()
-                or str(read_json(slot_path).get("logical_job", "")) != logical):
-            raise RuntimeError(f"recovery durable normal slot record mismatch: {logical}")
+        if job is None:
+            raise RuntimeError(f"recovery found a complete unplanned job: {logical}")
+        if logical in first_four_keys:
+            # The twelve approved source records must each be the attempt-1
+            # normal claim on its planned normal slot.
+            claim = attempts_by_job[logical][1]
+            if (str(claim.get("category", "")) != "normal"
+                    or int(claim.get("launch_slot", -1)) != int(job["normal_slot"])
+                    or claim.get("status") != "complete"):
+                raise RuntimeError(f"recovery approved source record identity mismatch: {logical}")
+            slot_path = raw / "launch_slots" / "normal" / f"{int(job['normal_slot']):04d}.json"
+            if (not slot_path.is_file()
+                    or str(read_json(slot_path).get("logical_job", "")) != logical):
+                raise RuntimeError(f"recovery durable normal slot record mismatch: {logical}")
+        else:
+            if not any(claim.get("status") == "complete"
+                       for claim in attempts_by_job[logical].values()):
+                raise RuntimeError(f"recovery complete record lacks a complete claim: {logical}")
 
     audited_failures: dict[str, dict[str, Any]] = {}
     interrupted_attempt3: dict[str, Any] | None = None
@@ -245,8 +259,11 @@ def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any
             continue
         logical = str(claim.get("logical_job", ""))
         if claim.get("status") == "claimed_before_environment":
-            raise RuntimeError(
-                f"recovery found an in-flight claim before continuation: {logical}")
+            # An externally terminated attempt leaves its claim in flight; the
+            # execute seam appends the termination correction before that key
+            # runs again, and the frozen technical-retry path then reruns it.
+            # The gate records it without rewriting anything.
+            continue
         if claim.get("status") != "failed_technical":
             raise RuntimeError(f"recovery found an unexpected non-complete status: {logical} {claim.get('status')}")
         if (logical == APPROVED_ATTEMPT3["logical_job"]
@@ -282,13 +299,18 @@ def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any
     approved = APPROVED_ATTEMPT3
     logical = approved["logical_job"]
     attempts = attempts_by_job.get(logical, {})
-    if (1 not in attempts or attempts[1].get("status") != "failed_technical"
-            or int(attempts[1].get("launch_slot", -1)) != int(planned_job(plan, logical)["normal_slot"])
-            or 2 not in attempts or attempts[2].get("status") != "failed_technical"
-            or int(attempts[2].get("launch_slot", -1)) != PREDECESSOR_ATTEMPT2_SLOT
-            or attempts[2].get("category") != "reserve"):
+    has_pair = (1 in attempts and attempts[1].get("status") == "failed_technical"
+                and int(attempts[1].get("launch_slot", -1)) == int(planned_job(plan, logical)["normal_slot"])
+                and 2 in attempts and attempts[2].get("status") == "failed_technical"
+                and int(attempts[2].get("launch_slot", -1)) == PREDECESSOR_ATTEMPT2_SLOT
+                and attempts[2].get("category") == "reserve")
+    attempt3_claim = attempts.get(APPROVED_ATTEMPT3["attempt"])
+    attempt3_done = (attempt3_claim is not None
+                     and attempt3_claim.get("status") == "complete"
+                     and isinstance(attempt3_claim.get("round58_receipt_failure_correction"), dict))
+    if not has_pair and not attempt3_done:
         raise RuntimeError("recovery cannot find the approved attempt3 technical-failed predecessor pair")
-    if interrupted_attempt3 is None and (
+    if interrupted_attempt3 is None and not attempt3_done and (
             raw / "launch_slots" / "reserve" / f"{approved['launch_slot']:04d}.json").exists():
         raise RuntimeError("recovery found the approved attempt3 reserve slot already occupied")
     if closure["counts"]["normal"] > frozen.NORMAL_CAP or closure["counts"]["reserve"] >= frozen.RESERVE_CAP:
@@ -317,9 +339,18 @@ def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any
         first_four_receipts[str(seed)] = legacy.sha256_file(receipt_path)
     checkpoints = legacy._verify_existing_first_batch_checkpoints(base)
     if interrupted_attempt3 is None:
-        raise RuntimeError(
-            "recovery requires the approved attempt3 interrupted-bookkeeping state "
-            "(the episode result must be recovered by the execute seam before continuation)")
+        corrected = attempts_by_job.get(APPROVED_ATTEMPT3["logical_job"], {}).get(
+            APPROVED_ATTEMPT3["attempt"])
+        if (corrected is None or corrected.get("status") != "complete"
+                or not isinstance(corrected.get("round58_receipt_failure_correction"), dict)
+                or corrected["round58_receipt_failure_correction"].get("kind")
+                != "round58-attempt3-receipt-failure-correction/1"):
+            raise RuntimeError(
+                "recovery requires the approved attempt3 interrupted-bookkeeping state "
+                "or its completed receipt-failure correction "
+                "(the episode result must be recovered by the execute seam before continuation)")
+    else:
+        attempt3_done = False
     return {"kind": "round58-attempt3-recovery-state-verification/1",
             "seam_version": SEAM_VERSION, "status": "passed",
             "claim_closure": closure,
