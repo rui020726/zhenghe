@@ -1,0 +1,100 @@
+{
+  "kind": "round58-gen3-resume-startup-identity-stop/1",
+  "status": "blocked_identity_stop_no_environment",
+  "task": "ROUND58-EXACT-RESTORE-THEN-FIXED-PLAN",
+  "source_commit_at_attempt": "8280c61cf8354eca5e5d63a43a8c9f39151676f0",
+  "head_at_report_creation": "8280c61cf8354eca5e5d63a43a8c9f39151676f0",
+  "branch": "exp/round58-prior-strength-prospective-trial",
+  "attempted_at_utc": "2026-10-09T05:38:38.559737+00:00",
+  "cli_mode": "recover_first_batch_gate",
+  "cli_exit_code": 1,
+  "traceback": "RuntimeError: recovery plan identity does not match the authorized fixed plan",
+  "throw_site": {
+    "file": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/r58_execute.py",
+    "line": 1163,
+    "check_occurs_before": "load_base_runner/configure_runtime, claim, environment, RNG restore, optimizer, checkpoint"
+  },
+  "identity_comparison": {
+    "expected_plan_sha256_without_source_content_identities": "fa4f38a501d28309e236a2b5053f83a80cce431634635314b596f18ac1eea1d6",
+    "persisted_plan_sha256_without_source_content_identities": "851b64add57b00d33106a30636f9aef22e9d2bb0c78fab7484b2f4011802e93b",
+    "persisted_plan_file_sha256": "af33de50bdda045f0e8391b3373b7188edfe83d80f145ab300cb823c01bd965c",
+    "difference_count_top_level": 1,
+    "differing_top_level_field": "r58_repair_identity",
+    "repair_identity_field_diffs": {
+      "approved_resume_map_sha256": {
+        "expected": "82c6e9626f7705d36a13fdc420cfd2916985e3334fca251744d3445bf35cf64f",
+        "persisted": "<missing>"
+      },
+      "checkpoint_contract_sha256": {
+        "expected": "d7eac8b9d568890013d2af0167970ef2fee7d3b055f2f4015d5937e3989e8aeb",
+        "persisted": "c23dc0c89d8a6d423591cc684e47cf5a25130a279710243fc60dedf7c39ec95b"
+      },
+      "historical_checkpoint_journal_sha256": {
+        "expected": "2a43339ac45c2cfd13f84e744b72af0632024f44c3eedaa449bf8c8c7cab0165",
+        "persisted": "<missing>"
+      },
+      "identity_ledger_schema": {
+        "expected": "round58-gen3-identity-close/2",
+        "persisted": "<missing>"
+      },
+      "identity_ledger_sha256": {
+        "expected": "54eb66cd9ce5a7821ee0954d0a8c1a38da19ddb8180562426c7e45b9b0ebb3e7",
+        "persisted": "<missing>"
+      },
+      "ppo_counter_bridge_version": {
+        "expected": "round58-ppo-counter-bridge/2",
+        "persisted": "<missing>"
+      },
+      "private_launcher_sha256": {
+        "expected": "ab054d410c9cc86869110e76a6fcf3922f86482f9b7cf22a2e971b18792b9d70",
+        "persisted": "56e0b12819b5193437d0ef9b19ca2c6df2040f088f716df5dc1a3874065340c4"
+      },
+      "resume_seam_sha256": {
+        "expected": "de435401d789945fa0740e1b7307497e39f67b96d80b539143eee01025aae3ab",
+        "persisted": "<missing>"
+      }
+    },
+    "interpretation": "The persisted gen3 plan retains the earlier private launcher/checkpoint-contract identities. The current recovery identity includes the committed resume seam/counter/ledger/source-map/checkpoint-journal bindings and current code hashes. The old fixed plan was not rewritten."
+  },
+  "receipt_identity": {
+    "authorization_sha256": "71572bf0838528f1c73891244d1b047d0aad53f3e45162d7721c0ea09751cfe7",
+    "freeze_sha256": "4a52537a553d2278bc40b6eabc25419e791c3007149d4219098871b92d300380",
+    "scene_recheck_sha256": "78a9e4112cc94691094e5605a7de39fe2375f73cb6708a4a913352e3bdfc35ac",
+    "approval_source_sha256": "f61d90e32b34c2e4f4236d9ba7ef853daea7447cd7e40bfb6cbce8d286056184",
+    "source_code_commit": "7126bfebefc4e2b4bb1b2e1f3d9bf2d632b0bb49"
+  },
+  "failure_log": {
+    "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_RESUME_EXECUTION.log",
+    "sha256": "8107b64def017d889b83dc5f5823a17d28e35bc2359eb02e0d4c3671231e9033"
+  },
+  "observed_after_stop": {
+    "resume_output_root_exists": false,
+    "existing_gen3_claim_files": 12,
+    "existing_gen3_normal_claims": 12,
+    "new_claims": 0,
+    "new_environment_constructions": 0,
+    "new_simulations": 0,
+    "new_optimizer_steps": 0,
+    "new_ppo_updates": 0,
+    "new_checkpoint_writes": 0,
+    "rng_restores_during_failed_cli": 0,
+    "evaluation_cells": 0,
+    "active_python_processes": 0
+  },
+  "cumulative_before_and_after": {
+    "historical_environment_consumption": 16,
+    "gen3_normal_claims": 12,
+    "gen3_reserve_claims": 0,
+    "total_consumed": 28,
+    "hard_cap": 1064,
+    "remaining_planned_normal_tasks": 1012,
+    "reserve_remaining": 24,
+    "cumulative_capacity_remaining": 1036
+  },
+  "decision": "Stopped after the frozen recovery-mode entry rejected historical plan identity. No code, freeze, approval, or old plan was modified after this failure; no retry or hotfix was attempted.",
+  "next_requirement": "A new explicitly approved/versioned recovery identity must define how the immutable historical gen3 fixed plan is validated against the resume-only adapter identity. Do not silently rewrite the old plan or relax equality. Then re-freeze and rerun only with explicit approval.",
+  "protected_file_sha256": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  }
+}
