@@ -565,6 +565,29 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
             if common_module is None:
                 raise PermissionError("cannot bind sp_common without the configured frozen v2_common")
             return _verified_sp_common_module(common_module)
+        if name == "train_pilot" and level == 0:
+            cached = sys.modules.get("train_pilot")
+            if cached is not None:
+                return cached
+            approved = values["repair_identity"]["train_pilot_source"]
+            approved_path = Path(approved["path"]).resolve()
+            if (not approved_path.is_file()
+                    or hashlib.sha256(approved_path.read_bytes()).hexdigest()
+                    != approved["sha256"]):
+                raise PermissionError("approved canonical train_pilot source is missing or changed")
+            pilot_dir = str(approved_path.parent)
+            if pilot_dir not in sys.path:
+                sys.path.insert(0, pilot_dir)
+            spec = importlib.util.spec_from_file_location("train_pilot", approved_path)
+            module = importlib.util.module_from_spec(spec)
+            sys.modules["train_pilot"] = module
+            spec.loader.exec_module(module)
+            loaded = sys.modules.get("train_pilot")
+            loaded_path = Path(getattr(loaded, "__file__", "")).resolve()
+            if (loaded_path != approved_path
+                    or hashlib.sha256(loaded_path.read_bytes()).hexdigest() != approved["sha256"]):
+                raise PermissionError("train_pilot import left the frozen canonical source")
+            return loaded
         imported = original_import(name, globals, locals, fromlist, level)
         if name == "r44_runtime":
             bind_r42_configure_root(sys.modules.get("r44_runtime", imported))

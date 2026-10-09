@@ -4,8 +4,8 @@
   "runner_version": "round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
   "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
   "error": {
-    "type": "RuntimeError",
-    "message": "R2 failed key already returned a completed episode: model_eval_new_s11_greedy_scene1301000"
+    "type": "CalledProcessError",
+    "message": "Command '['git', '-C', 'D:\\\\code\\\\整合\\\\zhenghe-round42', 'rev-parse', 'HEAD:runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_BINDING_REGRESSION.json']' returned non-zero exit status 3221225794."
   },
   "ledger_source": "actual ROUND42/R40 ledger snapshot",
   "ledger": {
@@ -2715,78 +2715,6 @@
     ],
     "reserve": [],
     "claims": [
-      {
-        "logical_job": "model_eval_new_s11_greedy_scene1301000",
-        "attempt": 1,
-        "category": "normal",
-        "status": "failed_technical",
-        "claimed_at_unix": 1791345995.9391413,
-        "launch_slot": 386,
-        "metadata": {
-          "arm": "NEW",
-          "training_seed": 11,
-          "mode": "greedy",
-          "scenario_seed": 1301000
-        },
-        "environment_constructor_calls": 1,
-        "joint_run_build_failures": 0,
-        "joint_run_constructed_calls": 1,
-        "run_invocation_calls": 1,
-        "joint_run_method_calls": 1,
-        "run_return_calls": 1,
-        "run_failure_calls": 0,
-        "completed_steps": 1000,
-        "simulation_started": true,
-        "optimizer_step_calls": 0,
-        "checkpoint_write_calls": 0,
-        "prelaunch_head": "92bf455ea3a85cae727110a9552e92a5804bcd25",
-        "round": 45,
-        "comm_action_semantics": "one-shot-send-skip/1",
-        "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2",
-        "runner_version": "round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
-        "round45_key": {
-          "scope": "final_ep128_eval",
-          "logical_job": "model_eval_new_s11_greedy_scene1301000",
-          "seed": 11,
-          "scenario_seed": 1301000,
-          "mode": "greedy",
-          "tag": "r44_eval_new_s11_greedy",
-          "kind": "eval"
-        },
-        "round45_artifact_paths": {
-          "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_eval_new_s11_greedy_s1301000_a1_rp.jsonl",
-          "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_eval_new_s11_greedy_s1301000_a1_ct.jsonl",
-          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_eval_new_s11_greedy_s1301000_a1_tape.jsonl",
-          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_eval_new_s11_greedy_s1301000_a1.json"
-        },
-        "round45_attempt_kind": "normal",
-        "round46_identity": {
-          "round": 46,
-          "runner_version": "round46-bc-initialized-constrained-ppo/5+round45-model-only-bc-loader/1+round44-constrained-ppo-runtime/1+cross-seed-batch0-gate/1+checkpoint-readback-factory-scope/1+mutable-task-state-guard/1+inner-claim-frozen-source-binding/2+reused-zero-environment-gates/2+git-worktree-text-identity-namespace/1",
-          "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2"
-        },
-        "round46_key": {
-          "scope": "final_ep128_eval",
-          "logical_job": "model_eval_new_s11_greedy_scene1301000",
-          "seed": 11,
-          "mode": "greedy",
-          "scenario_seed": 1301000,
-          "kind": "eval",
-          "tag": "r44_eval_new_s11_greedy",
-          "allow_technical_retry": true
-        },
-        "round46_attempt_kind": "normal",
-        "round46_artifact_paths": {
-          "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_eval_new_s11_greedy_s1301000_a1_rp.jsonl",
-          "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_eval_new_s11_greedy_s1301000_a1_ct.jsonl",
-          "tape": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\logs\\v2_r44_eval_new_s11_greedy_s1301000_a1_tape.jsonl",
-          "row": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_eval_new_s11_greedy_s1301000_a1.json"
-        },
-        "constructor_called_at_unix": 1791345996.0331783,
-        "simulation_started_at_unix": 1791346010.9043632,
-        "finished_at_unix": 1791346010.963818,
-        "detail": "EvalIndexError: row.artefacts.row path escapes the ROUND44 output: D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\v6\\rows\\v2_r44_eval_new_s11_greedy_s1301000_a1.json; preserved={\"exception\": \"EvalIndexError: row.artefacts.row path escapes the ROUND44 output: D:\\\\code\\\\整合\\\\zhenghe-round42\\\\runs\\\\comm_bc_initialized_constrained_ppo_20261007_r2\\\\v6\\\\rows\\\\v2_r44_eval_new_s11_greedy_s1301000_a1.json\", \"relay_counters_at_failure\": {\"generated_items\": 88, \"events_accepted\": 6, \"coalesced_changes\": 78, \"emissions\": 4, \"first_emissions\": 4, \"redundant_emissions\": 0, \"refresh_emissions\": 0, \"transmission_attempts\": 24, \"packets_lost\": 5, \"packets_delivered\": 19, \"deliveries_applied\": 19, \"delivery_duplicate\": 0, \"delivery_superseded\": 0, \"delivery_unknown_task\": 0, \"delivery_refused\": 0, \"emissions_suppressed_terminal\": 2, \"capacity_refused_sends\": 0, \"budget_refused_sends\": 0, \"emissions_policy\": 4, \"emissions_forced_maxwait\": 0, \"emissions_other\": 0, \"attempts_policy\": 24, \"attempts_forced_maxwait\": 0, \"attempts_other\": 0, \"bytes_policy\": 9798, \"bytes_forced_maxwait\": 0, \"bytes_other\": 0, \"refused_policy\": 0, \"refused_forced_maxwait\": 0, \"refused_other\": 0"
-      },
       {
         "logical_job": "new_training_s11_e0",
         "attempt": 1,
@@ -56532,17 +56460,17 @@
       "normal_used": 386,
       "reserve_used": 0,
       "total_used": 386,
-      "environment_constructor_calls": 385,
+      "environment_constructor_calls": 384,
       "joint_run_build_failures": 0,
-      "joint_run_constructed_calls": 385,
-      "run_invocation_calls": 385,
-      "joint_run_method_calls": 385,
-      "run_return_calls": 385,
+      "joint_run_constructed_calls": 384,
+      "run_invocation_calls": 384,
+      "joint_run_method_calls": 384,
+      "run_return_calls": 384,
       "run_failure_calls": 0,
-      "completed_steps": 385000,
+      "completed_steps": 384000,
       "completed_logical_jobs": 384,
-      "simulation_started": 385,
-      "technical_failed_claims": 1,
+      "simulation_started": 384,
+      "technical_failed_claims": 0,
       "retry_claims": 0,
       "optimizer_step_calls": 688,
       "optimizer_step_journal_entries": 688,
@@ -56556,9 +56484,9 @@
     }
   },
   "old_round45_gate_preserved": true,
-  "environment_constructed": 385,
-  "run_invocation_calls": 385,
-  "completed_steps": 385000,
+  "environment_constructed": 384,
+  "run_invocation_calls": 384,
+  "completed_steps": 384000,
   "ppo_updates": 96,
   "optimizer_step_calls": 688
 }
