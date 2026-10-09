@@ -1,0 +1,18 @@
+{
+  "kind": "round58-handoff-narrow-test-results/1",
+  "command": "D:\\project_env\\python.exe -m unittest test_r58_attempt3_seam test_r58_resume_seam test_r58_plan_identity_migration test_r58_train_pilot_restore_import -v",
+  "working_directory": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit",
+  "tests_run": 20,
+  "failures": 0,
+  "errors": 0,
+  "exit_code": 0,
+  "elapsed_seconds": 9.511,
+  "environment_constructions": 0,
+  "optimizer_calls": 0,
+  "checkpoint_payload_writes": 0,
+  "limitations": [
+    "These seam tests do not prove exact restoration of the uncommitted seed-11 batch at cursor 40.",
+    "The latest actual CLI path was separately attempted and failed closed at sidecar validation before checkpoint deserialization.",
+    "The prior 47-test receipt predates the latest private launcher edit and is not used as proof for that edit."
+  ]
+}
