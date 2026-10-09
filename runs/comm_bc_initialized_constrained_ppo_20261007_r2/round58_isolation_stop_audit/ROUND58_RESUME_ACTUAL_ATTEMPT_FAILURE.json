@@ -1,0 +1,113 @@
+{
+  "kind": "round58-resume-attempt-stop/1",
+  "status": "stopped_before_episode_provider_after_exact_source_selection",
+  "task": "ROUND58 fixed-plan resume; owner-approved exact continuation",
+  "frozen_identity": "ROUND58_RESUME_FREEZE_V10.json",
+  "authorization": "ROUND58_RESUME_EXECUTION_AUTHORIZATION_V10.json",
+  "pre_run_head": "f68218ab0f9b7c4a3e008c979eb1d9c0fe0e8b8c",
+  "preflight": "ROUND58_GEN3_RESUME_FULL_CLI_PREFLIGHT_ATTEMPT18.json",
+  "preflight_status": "passed_zero_side_effect_handoff",
+  "actual_cli": "private launcher __main__, mode recover_first_batch_gate; external receipts V10; valid absolute paths",
+  "failure": {
+    "type": "ModuleNotFoundError",
+    "message": "No module named 'train_pilot'",
+    "traceback_frames": [
+      {
+        "file": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/r58_execute.py",
+        "line": 1195,
+        "function": "execute_authorized"
+      },
+      {
+        "file": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/r58_private_launcher_repaired.py",
+        "line": 776,
+        "function": "resume_from_qualified_commits"
+      },
+      {
+        "file": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_execute_r2.py",
+        "line": 3299,
+        "function": "_continue_fixed_training"
+      },
+      {
+        "file": "runs/comm_rule_warmstart_cost_learning_20261006_r2/r45_r2_execute_r3.py",
+        "line": 1527,
+        "function": "_call_training_seed"
+      },
+      {
+        "file": "runs/comm_one_shot_full_trace_ablation_20261004/r42_run.py",
+        "line": 857,
+        "function": "train_seed"
+      },
+      {
+        "file": "runs/comm_rule_warmstart_cost_learning_20261006_r2/r40_train_resume_adapter.py",
+        "line": 356,
+        "function": "train_seed"
+      },
+      {
+        "file": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/r58_checkpoint_contract_repaired.py",
+        "line": 201,
+        "function": "load"
+      },
+      {
+        "file": "runs/comm_rule_warmstart_cost_learning_20261006_r2/r42_versions.py",
+        "line": 141,
+        "function": "load_checkpoint"
+      },
+      {
+        "file": "zhenghe/runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
+        "line": 378,
+        "function": "_restore_controller"
+      },
+      {
+        "file": "zhenghe/runs/comm_cost_stage_b_20260927/sb_controller.py",
+        "line": 26,
+        "function": "StageCController.__init__"
+      }
+    ],
+    "phase": "controller reconstruction during first seed11 checkpoint load; failure before model/optimizer restore completed and before environment/provider call",
+    "handling": "preserved process output and runtime files; did not hotfix, retry, restore another source, or continue under this frozen identity"
+  },
+  "counters": {
+    "new_environment_constructions": 0,
+    "new_claims": 0,
+    "episode_provider_calls": 0,
+    "new_optimizer_step_calls": 0,
+    "new_ppo_updates": 0,
+    "new_checkpoint_payload_writes": 0,
+    "new_eval_cells": 0,
+    "rng_restore_verified": 0,
+    "empty_checkpoint_journal_initialization_file_created": true,
+    "checkpoint_journal_events": 0,
+    "derived_runtime_ledger_file_written": true,
+    "runtime_ledger_path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume\\raw\\runtime\\ROUND53_EXECUTION_LEDGER.json",
+    "runtime_ledger_sha256": "7472989794c69db8dd786ea4e837d41864580e123217eb4fec55dda470e00add",
+    "runtime_ledger_reports_historical_normal": 12,
+    "historical_optimizer_steps_reported": 24,
+    "historical_ppo_commits_reported": 3,
+    "historical_checkpoint_events_reported": 12
+  },
+  "accounting": {
+    "historical_environment_consumption": 16,
+    "this_generation_preexisting_normal_claims": 12,
+    "this_generation_new_normal_claims": 0,
+    "this_generation_reserve_claims": 0,
+    "cumulative_environment_consumption": 28,
+    "hard_cap": 1064,
+    "new_plan_items_remaining": 1012,
+    "reserve_remaining": 24
+  },
+  "output_files": {
+    "empty_checkpoint_journal": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume\\raw\\runtime\\checkpoint_writes.jsonl",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "new_resume_checkpoints": []
+  },
+  "protected_sha256": {
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  },
+  "must_not_resume_same_identity": true,
+  "requires_new_private_source_identity_and_reauthorization_before_any_resume": true,
+  "generated_at_utc": "2026-10-09T07:55:10.354256+00:00"
+}
