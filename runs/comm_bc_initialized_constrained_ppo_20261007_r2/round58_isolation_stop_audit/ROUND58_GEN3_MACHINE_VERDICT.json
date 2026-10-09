@@ -1,0 +1,60 @@
+{
+  "kind": "round58-gen3-machine-verdict/1",
+  "status": "stopped_core_gate_failed",
+  "plan_complete": false,
+  "mandatory_gate_passed": false,
+  "failed_gate": {
+    "seed": 11,
+    "status": "failed",
+    "message": "seed 11: checkpoint identity does not match the frozen ROUND42 version",
+    "seed22_gate": "not_reached",
+    "seed33_gate": "not_reached"
+  },
+  "frozen_plan": {
+    "normal_jobs": 1024,
+    "training": 384,
+    "model_evaluation": 576,
+    "rule_evaluation": 64,
+    "reserve_cap": 24,
+    "hard_cap": 1064,
+    "evaluation_scenes": [1700000, 1700001, 1700002, 1700003, 1700004, 1700005, 1700006, 1700007, 1700008, 1700009, 1700010, 1700011, 1700012, 1700013, 1700014, 1700015, 1700016, 1700017, 1700018, 1700019, 1700020, 1700021, 1700022, 1700023, 1700024, 1700025, 1700026, 1700027, 1700028, 1700029, 1700030, 1700031]
+  },
+  "consumption": {
+    "historical_environment_calls": 16,
+    "gen3_environment_calls": 12,
+    "cumulative_environment_calls": 28,
+    "gen3_normal_claims_complete": 12,
+    "gen3_reserve_claims": 0,
+    "normal_remaining": 1012,
+    "reserve_remaining": 24,
+    "hard_remaining": 1036,
+    "historical_optimizer_calls_evidence_supported": 48,
+    "gen3_optimizer_step_calls": 24,
+    "cumulative_optimizer_calls_evidence_supported": 72,
+    "gen3_batch_commits": 3,
+    "gen3_batch_committed_optimizer_steps": 24,
+    "gen3_batches_accepted_by_gate": 0,
+    "gen3_evaluation_cells": 0,
+    "gen3_checkpoint_write_hook_entries": 12,
+    "registered_initial_rng_primings_applied": 3,
+    "old_r58_checkpoint_restores": 0
+  },
+  "execution_status": {
+    "first_cli_relative_receipt_attempt_exit": 1,
+    "first_cli_attempt_environment_calls": 0,
+    "absolute_receipt_execution_exit": 1,
+    "training_cursor_reports": {
+      "11": {"episodes_done": 4, "updates": 1, "optimizer_steps": 8, "gate": "failed"},
+      "22": {"episodes_done": 4, "updates": 1, "optimizer_steps": 8, "gate": "not_reached"},
+      "33": {"episodes_done": 4, "updates": 1, "optimizer_steps": 8, "gate": "not_reached"}
+    },
+    "evaluations_started": false,
+    "resume_under_same_freeze_allowed": false
+  },
+  "tests": {"new_narrow_tests": 11, "exit_code": 0, "diff_check_exit_code": 0},
+  "interpretation": "Actual claims, calls, batch commits, and checkpoint writes are retained. The three batch commits did not pass the required first-batch gate and are not accepted as effective ROUND58 training updates. Runtime ledger snapshot is incomplete relative to the claims/slot files; see ROUND58_GEN3_STOP_LEDGER.json.",
+  "protected_sha256": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  }
+}
