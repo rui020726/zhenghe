@@ -51,7 +51,12 @@ def migrate(path: Path) -> dict:
     return {"file": str(path), "had_run13_attestation": old_att is not None,
             "sha_before": before_sha, "sha_after": after_sha}
 
-manifest = []
+manifest_path = AUDIT / "ROUND58_GEN3_CHECKPOINT_ATTESTATION_MIGRATION.json"
+if manifest_path.is_file():
+    prior = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest = list(prior.get("migrated", []))
+else:
+    manifest = []
 targets = sorted(CKPT.glob("v2_train_s11_after_b*.pt")) + [CKPT / "v2_train_s11.pt"]
 for path in targets:
     if path.is_file():
@@ -72,5 +77,6 @@ payload_manifest = {
     "migrated": manifest,
 }
 out = AUDIT / "ROUND58_GEN3_CHECKPOINT_ATTESTATION_MIGRATION.json"
+payload_manifest["migrated_total_entries"] = len(manifest)
 out.write_text(json.dumps(payload_manifest, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
-print("migrated:", len(manifest))
+print("migration entries now:", len(manifest))
