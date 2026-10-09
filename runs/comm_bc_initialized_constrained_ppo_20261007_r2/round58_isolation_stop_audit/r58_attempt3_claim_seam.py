@@ -142,11 +142,23 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
             if str(r45_globals.get("RUN_DIR", "")) == str(resume_root):
                 pass
             else:
-                previous_r45_run_dir = r45_globals.get("RUN_DIR")
+                previous_r45_run_dir = Path(r45_globals.get("RUN_DIR"))
                 r45_globals["RUN_DIR"] = resume_root
                 if r45_globals.get("R3_EXECUTION_LEDGER_PATH") is not None:
                     r45_globals["R3_EXECUTION_LEDGER_PATH"] = (
                         resume_root / "runtime" / "ROUND53_EXECUTION_LEDGER.json")
+                # Provision the mutable R45 task-state file in the resume
+                # namespace (copy of the generation-seeded state; the original
+                # stays untouched in the historical generation root).
+                task_state_target = resume_root / "ROUND45_CURRENT_TASK.json"
+                if not task_state_target.exists():
+                    task_state_source = previous_r45_run_dir / "ROUND45_CURRENT_TASK.json"
+                    if not task_state_source.is_file():
+                        raise RuntimeError(
+                            "attempt3 seam cannot provision the R45 task state: "
+                            f"missing {task_state_source}")
+                    import shutil as _shutil
+                    _shutil.copy2(task_state_source, task_state_target)
         else:
             previous_r45_run_dir = None
 
