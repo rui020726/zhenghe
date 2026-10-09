@@ -1,0 +1,47 @@
+{
+  "kind": "round58-resume-narrow-regression-results/1",
+  "modules": [
+    "test_r58_identity_ledger_close_v2",
+    "test_r58_private_launcher",
+    "test_r58_resume_seam"
+  ],
+  "discovered": 28,
+  "excluded": [
+    "test_r58_private_launcher.PrivateLauncherRouteTests.test_old_main_before_definitions_reproduces_nameerror_and_new_module_help_exits_zero"
+  ],
+  "excluded_reason": "historical git object b38b868 is absent from this local object database",
+  "executed": 27,
+  "failures": 0,
+  "errors": 0,
+  "exit_code": 0,
+  "finished_at_local": "2026-10-09T13:28:48.948974+08:00",
+  "test_ids": [
+    "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_declared_metadata_normalizes_but_arbitrary_freeze_fields_do_not",
+    "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_each_identity_component_is_fail_closed_and_specific",
+    "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_gate_adapter_passes_exact_attested_freeze_to_frozen_gate",
+    "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_old_generation_without_attestation_is_rejected",
+    "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_private_v2_accepts_only_exact_approved_gen3_identity",
+    "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_real_serializer_attestation_shape_is_accepted",
+    "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_reproduces_legacy_compound_freeze_failure",
+    "test_r58_identity_ledger_close_v2.LedgerCloseTests.test_bridge_is_outermost_live_call_and_undo_restores_same_adapter",
+    "test_r58_identity_ledger_close_v2.LedgerCloseTests.test_derived_snapshot_keeps_hook_gap_separate_and_never_fakes_success",
+    "test_r58_identity_ledger_close_v2.LedgerCloseTests.test_duplicate_or_missing_records_fail",
+    "test_r58_identity_ledger_close_v2.LedgerCloseTests.test_multi_seed_roots_count_once_and_close",
+    "test_r58_identity_ledger_close_v2.LedgerCloseTests.test_partial_progress_allowed_but_final_incomplete_fails",
+    "test_r58_identity_ledger_close_v2.LedgerCloseTests.test_ppo_counter_bridge_counts_once_and_preserves_return",
+    "test_r58_private_launcher.CumulativeQuotaV2Tests.test_full_plan_closes_16_plus_1024_plus_24_at_1064",
+    "test_r58_private_launcher.CumulativeQuotaV2Tests.test_historical_source_counts_must_close_without_resolving_conflict",
+    "test_r58_private_launcher.CumulativeQuotaV2Tests.test_history_cannot_be_omitted_duplicated_or_relabelled",
+    "test_r58_private_launcher.CumulativeQuotaV2Tests.test_legacy_quota_receipt_cannot_substitute_for_v2",
+    "test_r58_private_launcher.CumulativeQuotaV2Tests.test_normal_reserve_and_hard_caps_are_independently_enforced",
+    "test_r58_private_launcher.PrivateLauncherRouteTests.test_actual_configured_r40_r53_runtime_binds_repaired_adapter_without_execution",
+    "test_r58_private_launcher.PrivateLauncherRouteTests.test_actual_main_validates_virtual_receipts_and_hands_off_at_first_four_gate",
+    "test_r58_private_launcher.PrivateLauncherRouteTests.test_cli_rejects_test_receipt_files_before_loading_runtime",
+    "test_r58_private_launcher.PrivateLauncherRouteTests.test_default_execution_is_denied_before_runtime_configuration",
+    "test_r58_private_launcher.PrivateLauncherRouteTests.test_legacy_checkpoint_rejected_before_restore_rng_environment_or_update",
+    "test_r58_resume_seam.ResumeSourceContractTests.test_carryover_requires_exact_durable_batch_records_without_copying",
+    "test_r58_resume_seam.ResumeSourceContractTests.test_direct_event_journal_requires_monotone_actual_call_indexes",
+    "test_r58_resume_seam.ResumeSourceContractTests.test_mutated_source_map_identity_is_rejected",
+    "test_r58_resume_seam.ResumeSourceContractTests.test_only_exact_three_qualified_sources_are_mapped"
+  ]
+}

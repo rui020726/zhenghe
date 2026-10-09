@@ -1,0 +1,75 @@
+{
+  "kind": "round58-gen3-exact-resume-restore-audit/1",
+  "status": "passed_all_three_sources",
+  "source_map_sha256": "82c6e9626f7705d36a13fdc420cfd2916985e3334fca251744d3445bf35cf64f",
+  "private_runtime": "actual R46/R45/R40/R42 configured objects; no environment provider",
+  "per_seed": [
+    {
+      "seed": 11,
+      "source_checkpoint_sha256": "0d9e8234487a995008189f7757e997d88cd7f0c9fd1f3092eaff03ab8a9b74ab",
+      "sidecar_sha256": "3c2eaa5fa73d08324658359ce1cb78803332923526c4e720b11b1482fd8530ee",
+      "cursor": {
+        "episodes_done": 4,
+        "updates": 1,
+        "optimizer_steps": 8
+      },
+      "lambda": 1.0,
+      "lambda_history_entries": 1,
+      "controller_parameter_sha256": "acb748912af62f0673ab700bbfd6bea76833c71239f6960e4d6a1c203756d34d",
+      "adam_parameter_states": 10,
+      "adam_step_values": [
+        8
+      ],
+      "rng_matches_source_payload": true,
+      "restore_status": "exact_payload_state_restored_and_checked"
+    },
+    {
+      "seed": 22,
+      "source_checkpoint_sha256": "b0c56adf2039579a2c2d5a245af3cbe3ebcd3a31ef3ac253eb483e23e1a5ade6",
+      "sidecar_sha256": "a20fb6d7df33a7a260a4dd1639844bf19676f0c1c817d3b70f538b2c581adcef",
+      "cursor": {
+        "episodes_done": 4,
+        "updates": 1,
+        "optimizer_steps": 8
+      },
+      "lambda": 1.0,
+      "lambda_history_entries": 1,
+      "controller_parameter_sha256": "149c2798583c28202503d37e6eb49c2133797dd3c7b5a8e0ae709a07f41e300f",
+      "adam_parameter_states": 10,
+      "adam_step_values": [
+        8
+      ],
+      "rng_matches_source_payload": true,
+      "restore_status": "exact_payload_state_restored_and_checked"
+    },
+    {
+      "seed": 33,
+      "source_checkpoint_sha256": "265666d7ef5ba354ae71867957d536d4ac333aa9200c43696ce25e2a032927f0",
+      "sidecar_sha256": "3bf6fe43d7bb4d4938a6dc991302456c8193a601e868d1471d797b5f637e82e6",
+      "cursor": {
+        "episodes_done": 4,
+        "updates": 1,
+        "optimizer_steps": 8
+      },
+      "lambda": 1.0,
+      "lambda_history_entries": 1,
+      "controller_parameter_sha256": "a1d91406af76fc89b063eb8ce93d8bbcd0b30fec763d9bb6173586f1b5175a83",
+      "adam_parameter_states": 10,
+      "adam_step_values": [
+        8
+      ],
+      "rng_matches_source_payload": true,
+      "restore_status": "exact_payload_state_restored_and_checked"
+    }
+  ],
+  "counts": {
+    "readonly_torch_deserializations": 9,
+    "optimizer_step": 0,
+    "ppo_update": 0,
+    "environment": 0,
+    "claim_write": 0,
+    "checkpoint_write": 0,
+    "rng_restore": 3
+  },
+  "scope": "weights, Adam state/moments/steps, lambda/history, cursor and Python/NumPy/Torch RNG verified; RNG restore is authorized; no training or environment"
+}

@@ -20,6 +20,7 @@ from typing import Any
 
 HERE = Path(__file__).resolve().parent
 RUN_ROOT = HERE.parents[0]
+REPO_ROOT = HERE.parents[2]
 GEN2 = HERE.parent / "round58_gen2"
 R53 = HERE.parent / "round53_critic_isolation_trial_readiness"
 R45 = HERE.parents[2] / "runs" / "comm_rule_warmstart_cost_learning_20261006_r2"
@@ -33,6 +34,7 @@ import r58_gate_prior_repaired as repaired_adapter  # noqa: E402
 import r58_repaired_entry as resume_guard  # noqa: E402
 import r58_checkpoint_contract_repaired as checkpoint_contract  # noqa: E402
 import r58_identity_ledger_close_v2 as identity_ledger  # noqa: E402
+import r58_resume_seam as resume_seam  # noqa: E402
 
 PRIVATE_GENERATION = RUN_ROOT / "round58_gen3"
 PRIVATE_RAW = PRIVATE_GENERATION / "raw"
@@ -132,6 +134,11 @@ def _repair_identity() -> dict[str, Any]:
             "private_launcher_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "checkpoint_contract_sha256": hashlib.sha256(
                 Path(checkpoint_contract.__file__).read_bytes()).hexdigest(),
+            "resume_seam_sha256": hashlib.sha256(
+                Path(resume_seam.__file__).read_bytes()).hexdigest(),
+            "approved_resume_map_sha256": resume_seam.MAP_SHA256,
+            "historical_checkpoint_journal_sha256": resume_seam.validate_historical_checkpoint_journal(
+                REPO_ROOT)["sha256"],
             "candidate_config_sha256": hashlib.sha256(candidate_path.read_bytes()).hexdigest(),
             "candidate_input_identity_sha256": hashlib.sha256(
                 input_identity_path.read_bytes()).hexdigest(),
@@ -224,6 +231,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
         sys.modules.pop("round58_legacy_launcher_readonly", None)
         sys.path[:] = sys_path_before_legacy_load
     repair = _repair_identity()
+    resume_sources = resume_seam.validate_resume_sources(REPO_ROOT)
     plan = copy.deepcopy(plan_base)
     plan["training_version"] = REPAIRED_TRAINING_VERSION
     plan["r58_repair_identity"] = repair
@@ -241,6 +249,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
         contracts.RESERVE_CAP = old_cap
     bc_models, bc_sha = _bc_model_identity()
     expected_output = PRIVATE_RAW.resolve()
+    expected_checkpoint_root = resume_sources["target_checkpoint_root"]
     requested_output = Path(output_root).expanduser()
     if not requested_output.is_absolute() or requested_output.resolve() != expected_output:
         raise PermissionError("ROUND58 output root must be the dedicated round58_gen3/raw path")
@@ -254,6 +263,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
         "repair_identity": repair, "bc_model_identity_sha256": bc_sha,
         "execution_basis_sha256": _execution_basis_identity(),
         "output_root": str(expected_output), "generation_id": "round58_gen3",
+        "checkpoint_root": str(expected_checkpoint_root),
         "mode": mode, "cumulative_quota_sha256": hashlib.sha256(
             Path(quota_path).read_bytes()).hexdigest(), "reserve_cap": remaining_reserve,
         "scene_audit_sha256": hashlib.sha256(Path(scene_audit_path).read_bytes()).hexdigest(),
@@ -275,6 +285,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
         raise PermissionError("ROUND58 frozen evaluation scene block is not currently cleared")
     if approval.get("plan_sha256") != plan_sha or approval.get("generation_id") != "round58_gen3" \
             or approval.get("repair_identity") != repair or approval.get("output_root") != str(expected_output) \
+            or approval.get("checkpoint_root") != str(expected_checkpoint_root) \
             or approval.get("bc_model_identity_sha256") != bc_sha \
             or approval.get("execution_basis_sha256") != _execution_basis_identity() \
             or approval.get("freeze_sha256") != hashlib.sha256(Path(freeze_path).read_bytes()).hexdigest() \
@@ -285,6 +296,8 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
         "authorization_path": Path(authorization_path).resolve(),
         "freeze_path": Path(freeze_path).resolve(), "quota_path": Path(quota_path).resolve(),
         "scene_audit_path": Path(scene_audit_path).resolve(), "output_root": expected_output,
+        "checkpoint_root": expected_checkpoint_root,
+        "resume_sources": resume_sources,
         "mode": mode, "plan": plan, "plan_sha256": plan_sha,
         "repair_identity": repair, "bc_models": bc_models, "bc_model_identity_sha256": bc_sha,
         "reserve_cap": remaining_reserve, "quota_sha256": hashlib.sha256(
@@ -311,7 +324,12 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
            "plan_from_frozen_sources": legacy.plan_from_frozen_sources,
            "install_gate_prior": legacy.install_gate_prior,
            "bind_live_runtime": legacy.bind_live_runtime,
-           "bind_runner_paths": legacy.bind_runner_paths}
+           "bind_runner_paths": legacy.bind_runner_paths,
+           "recover_first_batch_gate_then_continue": legacy.recover_first_batch_gate_then_continue,
+           "quarantine_failed_first_batch_gate_receipts": legacy.quarantine_failed_first_batch_gate_receipts,
+           "verify_persisted_first_batch_state": legacy.verify_persisted_first_batch_state,
+           "read_json": legacy.read_json,
+           "install_r53_claim_verifier": legacy.install_r53_claim_verifier}
     plan_base_fn = old["plan_from_frozen_sources"]
     bind_base_fn = old["bind_live_runtime"]
     installed_adapters = []
@@ -337,7 +355,22 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
         # restore the preserved gen2 module identity immediately.
         legacy.HERE = PRIVATE_GENERATION
         try:
-            return bind_paths_base(base, raw_root)
+            result = bind_paths_base(base, raw_root)
+            if values.get("mode") == "recover_first_batch_gate":
+                checkpoint_root = Path(values["checkpoint_root"]).resolve()
+                resume_root = checkpoint_root.parent
+                if (checkpoint_root != values["resume_sources"]["target_checkpoint_root"]
+                        or resume_root != checkpoint_root.parents[0]
+                        or resume_root == values["output_root"]):
+                    raise PermissionError("resume output route differs from the approved source map")
+                base.CHECKPOINT_JOURNAL_PATH = resume_root / "runtime" / "checkpoint_writes.jsonl"
+                base.FAMILY_JOURNAL_PATH = base.CHECKPOINT_JOURNAL_PATH
+                base.FAMILY_LEDGER_PATH = resume_root / "runtime" / "ROUND53_EXECUTION_LEDGER.json"
+                base.LEDGER_PATH = base.FAMILY_LEDGER_PATH
+                result.update({"resume_checkpoint_root": str(checkpoint_root),
+                               "resume_runtime_root": str(resume_root / "runtime"),
+                               "resume_claim_root_preserved": str(Path(raw_root).resolve())})
+            return result
         finally:
             legacy.HERE = old["HERE"]
     def bind_repaired(base, runtime, plan, *, checkpoint_mode="forbid_existing"):
@@ -349,17 +382,64 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
             raise RuntimeError("repaired prior adapter was not installed exactly once")
         runtime["r56_gate_prior"] = installed_adapters[0]
         runtime["r58_repaired_adapter"] = installed_adapters[0]
+        resume_runtime = None
+        if values.get("mode") == "recover_first_batch_gate":
+            checkpoint_root = Path(values["checkpoint_root"]).resolve()
+            resume_root = checkpoint_root.parent
+            resume_runtime = resume_root / "runtime"
+            if checkpoint_root != values["resume_sources"]["target_checkpoint_root"]:
+                raise PermissionError("resume checkpoint root changed after receipt validation")
+            # The old gen3 raw root remains authoritative for claims/slots and frozen inputs.
+            # All future rows, logs, progress, checkpoints, and call journals route to this
+            # explicit sibling resume generation; no historical checkpoint or journal is copied.
+            for path in (resume_root, resume_runtime, checkpoint_root,
+                         resume_root / "rows", resume_root / "logs",
+                         resume_root / "rejected", resume_root / "training_progress"):
+                if path.exists():
+                    if path == resume_root and not path.is_dir():
+                        raise RuntimeError("resume output root exists as a non-directory")
+                else:
+                    path.mkdir(parents=True, exist_ok=True)
+            common = runtime["common"]
+            common.OUTPUT_DIR = resume_root
+            common.LOGS = resume_root / "logs"
+            common.ROWS = resume_root / "rows"
+            common.REJECTED = resume_root / "rejected"
+            common.CHECKPOINTS = checkpoint_root
+            runtime["r40_common"].ROUND_DIR = values["output_root"]
+            runtime["r42_run"].RUN_DIR = values["output_root"]
+            base.CHECKPOINT_JOURNAL_PATH = resume_runtime / "checkpoint_writes.jsonl"
+            base.FAMILY_JOURNAL_PATH = base.CHECKPOINT_JOURNAL_PATH
+            base.FAMILY_LEDGER_PATH = resume_runtime / "ROUND53_EXECUTION_LEDGER.json"
+            base.LEDGER_PATH = base.FAMILY_LEDGER_PATH
         if checkpoint_mode == "forbid_existing" and Path(runtime["common"].CHECKPOINTS).resolve() != values["output_root"] / "checkpoints":
-            raise RuntimeError("live Round58 checkpoint root differs from the approved generation root")
+            if values.get("mode") != "recover_first_batch_gate":
+                raise RuntimeError("live Round58 checkpoint root differs from the approved generation root")
         contract = checkpoint_contract.install(
             runtime["trainer"], runtime["r40_train"],
             identity=values["repair_identity"], training_version=REPAIRED_TRAINING_VERSION,
             expected_checkpoint_root=runtime["common"].CHECKPOINTS,
-            versions=runtime["r42_versions"], r42_run=runtime["r42_run"])
+            versions=runtime["r42_versions"], r42_run=runtime["r42_run"],
+            approved_sources=(None if resume_runtime is None else values["resume_sources"]["sources"]),
+            resume_map_sha256=(None if resume_runtime is None
+                               else values["resume_sources"]["manifest_sha256"]))
         runtime["r58_checkpoint_contract"] = contract
-        counter_bridge = identity_ledger.bridge_ppo_update_counter(
-            runtime["trainer"], runtime["r42_run"])
-        runtime["r58_ppo_counter_bridge"] = counter_bridge
+        if resume_runtime is None:
+            counter_bridge = identity_ledger.bridge_ppo_update_counter(
+                runtime["trainer"], runtime["r42_run"])
+            runtime["r58_ppo_counter_bridge"] = counter_bridge
+        else:
+            configure_bridge = resume_seam.install_r42_configure_compat(
+                runtime["r42_run"], REPO_ROOT,
+                extra_batch_root=runtime["common"].CHECKPOINTS,
+                proof=values["resume_sources"], resume_runtime_dir=resume_runtime)
+            runtime["r58_resume_configure_bridge"] = configure_bridge
+            runtime["r58_resume_source_proof"] = values["resume_sources"]
+            call_journals = resume_seam.install_persistent_call_journals(
+                runtime, resume_runtime_dir=resume_runtime)
+            runtime["r58_ppo_counter_bridge"] = call_journals
+            runtime["r58_call_journals"] = call_journals
+            runtime["r58_resume_source_map_sha256"] = values["resume_sources"]["manifest_sha256"]
         runtime["r58_repair_identity"] = values["repair_identity"]
         if runtime["r40_train"].trainer is not runtime["trainer"]:
             contract["undo"]()
@@ -367,6 +447,148 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
         installed_contracts.append(contract)
         installed_runtimes.append((runtime, live))
         return live
+
+    if values.get("mode") == "recover_first_batch_gate":
+        raw_root = Path(values["output_root"]).resolve()
+        resume_journal = (Path(values["checkpoint_root"]).resolve().parent
+                          / "runtime" / "checkpoint_writes.jsonl").resolve()
+        def install_resume_claim_verifier(base, runtime):
+            # Preserve the frozen R53 source/branch/worktree assertions while binding
+            # claims to the exact sibling resume journal, not the historical gen3 root.
+            r45_module = getattr(base, "_R45_MODULE", None)
+            r44_module = getattr(r45_module, "R44_RUNTIME_MODULE", None) if r45_module else None
+            if r44_module is None:
+                raise RuntimeError("R58 resume claim verifier cannot locate live R44 module")
+            stale = getattr(r44_module, "verify_frozen_source", None)
+            stale_code = getattr(stale, "__code__", None)
+            if (stale_code is None
+                    or getattr(stale, "__name__", "") != "round46_r2_v5_claim_source_verifier"
+                    or Path(stale_code.co_filename).resolve() != legacy.SOURCE_RUNNER.resolve()):
+                raise RuntimeError("R58 resume expected the original R46 strict verifier")
+            registered_frozen = legacy.read_json(legacy.R44_DIR / "ROUND44_FROZEN_CONFIG.json")
+            raw = Path(base.V6_DIR).resolve()
+            if (Path(runtime["r42_run"].RUN_DIR).resolve() != raw
+                    or raw != raw_root):
+                raise RuntimeError("R58 resume claim namespace moved from historical gen3 raw")
+            journal = Path(base.CHECKPOINT_JOURNAL_PATH).resolve()
+            if journal != resume_journal:
+                raise RuntimeError("R58 resume claim journal differs from the approved sibling root")
+            def resume_claim_verifier(frozen):
+                if frozen != registered_frozen:
+                    raise RuntimeError("R44 claim supplied a frozen object outside registered source")
+                base._assert_branch_head()
+                base._assert_source_worktree_clean()
+                if Path(runtime["r42_run"].RUN_DIR).resolve() != raw:
+                    raise RuntimeError("R58 resume claim root moved before claim")
+                if Path(base.CHECKPOINT_JOURNAL_PATH).resolve() != journal:
+                    raise RuntimeError("R58 resume claim journal route changed")
+                audit = base._checkpoint_journal_route_audit(create=False)
+                if (audit.get("status") != "fresh_private_route"
+                        or audit.get("historical_family_journal_copied") is not False
+                        or Path(audit.get("journal_path", "")).resolve() != journal):
+                    raise RuntimeError("R58 resume private journal route audit did not close")
+                return base._run_git("rev-parse", "HEAD")
+            resume_claim_verifier.__name__ = "round58_resume_private_claim_source_verifier"
+            resume_claim_verifier.__qualname__ = resume_claim_verifier.__name__
+            r44_module.verify_frozen_source = resume_claim_verifier
+            if r44_module.verify_frozen_source is not resume_claim_verifier:
+                raise RuntimeError("R58 resume claim verifier binding failed")
+            return {"kind": "round58-resume-claim-verifier/1", "status": "installed",
+                    "historical_claim_root": str(raw), "resume_checkpoint_journal": str(journal),
+                    "source_verifier": str(Path(stale_code.co_filename).resolve())}
+
+        legacy.install_r53_claim_verifier = install_resume_claim_verifier
+        source_map = values["resume_sources"]
+        qualification_path = REPO_ROOT / resume_seam.MAP_REL
+        audit_ref = source_map["manifest"]["qualification_audit"]
+        verdict_ref = source_map["manifest"]["qualification_verdict"]
+        qualification_audit = json.loads((REPO_ROOT / audit_ref["path"]).read_text(encoding="utf-8"))
+        qualification_verdict = json.loads((REPO_ROOT / verdict_ref["path"]).read_text(encoding="utf-8"))
+        original_read_json = old["read_json"]
+        gate_path_by_seed = {seed: raw_root / f"ROUND45_R2_FIRST_BATCH_GATE_R3_s{seed}.json"
+                             for seed in (11, 22, 33)}
+
+        def resume_read_json(path):
+            resolved = Path(path).resolve()
+            for seed, source_path in gate_path_by_seed.items():
+                if resolved == source_path.resolve():
+                    row = next((item for item in qualification_audit.get("seeds", [])
+                                if int(item.get("seed", -1)) == seed), None)
+                    if row is None or row.get("status") != "passed":
+                        raise PermissionError(f"seed {seed}: prior actual read-only gate qualification missing")
+                    first_four_path = raw_root / f"ROUND46_FIRST_FOUR_s{seed}.json"
+                    first_four = original_read_json(first_four_path)
+                    bc_hash = (first_four.get("report", {})
+                               .get("round45_bc_initialization", {})
+                               .get("bc_parameter_sha256"))
+                    approved_bc = values["bc_models"][str(seed)]["parameter_sha256"]
+                    if bc_hash != approved_bc:
+                        raise PermissionError(f"seed {seed}: approved gate view has a BC identity mismatch")
+                    qualified = next((item for item in qualification_verdict.get("per_seed", [])
+                                      if int(item.get("seed", -1)) == seed), None)
+                    if qualified is None or qualified.get("qualification") != resume_seam.QUALIFIED:
+                        raise PermissionError(f"seed {seed}: prior qualification verdict is not accepted")
+                    return {"kind": "round58-in-memory-qualified-gate-view/1",
+                            "status": "passed", "seed": seed,
+                            "bc_parameter_sha256": bc_hash,
+                            "qualification_source_sha256": verdict_ref["sha256"],
+                            "original_failed_gate_preserved": source_path.is_file()}
+            return original_read_json(path)
+
+        verify_base = legacy.verify_persisted_first_batch_state
+        def verify_preserved_first_batch(base, raw, plan):
+            # The existing verifier must see the original failed receipt, never the derived view.
+            active = legacy.read_json
+            legacy.read_json = original_read_json
+            try:
+                result = verify_base(base, raw, plan)
+            finally:
+                legacy.read_json = active
+            if result.get("status") != "passed":
+                raise RuntimeError("preserved first-batch core state verification did not pass")
+            return result
+
+        def preserve_failed_gate_receipts(raw):
+            rows = []
+            for seed, path in gate_path_by_seed.items():
+                if not path.is_file():
+                    continue
+                item = original_read_json(path)
+                if item.get("status") != "failed":
+                    raise RuntimeError(f"seed {seed}: existing failed gate receipt changed status")
+                rows.append({"seed": seed, "path": str(path), "sha256": sha256_file(path),
+                             "status": "failed_preserved_no_quarantine"})
+            if not rows:
+                raise RuntimeError("resume requires the original failed gate receipt to remain present")
+            return {"kind": "round58-preserved-original-gate-receipts/1",
+                    "status": "preserved", "receipts": rows}
+
+        def resume_from_qualified_commits(base, module, runtime):
+            proof = resume_seam.validate_resume_sources(REPO_ROOT)
+            first_four = {}
+            for seed in (11, 22, 33):
+                path = raw_root / f"ROUND46_FIRST_FOUR_s{seed}.json"
+                row = original_read_json(path)
+                if (row.get("kind") != "round46-first-four-report/1"
+                        or int(row.get("seed", -1)) != seed
+                        or row.get("training_version") != REPAIRED_TRAINING_VERSION
+                        or int(row.get("report", {}).get("episodes_done", -1)) != 4):
+                    raise RuntimeError(f"seed {seed}: historical first-four receipt identity/cursor mismatch")
+                first_four[seed] = row["report"]
+            # Resume is now allowed only from the exact mapped history, never from gen2 or a glob.
+            base.R46_DIR = Path(values["checkpoint_root"]).parent
+            base.V6_CHECKPOINTS_DIR = Path(values["checkpoint_root"])
+            if Path(runtime["common"].CHECKPOINTS).resolve() != base.V6_CHECKPOINTS_DIR.resolve():
+                raise RuntimeError("live R40 checkpoint selector is not bound to the private resume root")
+            result = base._continue_fixed_training(module, runtime, first_four)
+            return {"kind": "round58-qualified-episode4-continuation/1",
+                    "status": "complete", "source_map_sha256": proof["manifest_sha256"],
+                    "first_four_reused": True, "gates_reused_from_actual_readonly_audit": True}, result
+
+        legacy.read_json = resume_read_json
+        legacy.verify_persisted_first_batch_state = verify_preserved_first_batch
+        legacy.quarantine_failed_first_batch_gate_receipts = preserve_failed_gate_receipts
+        legacy.recover_first_batch_gate_then_continue = resume_from_qualified_commits
     legacy.RAW = values["output_root"]
     legacy.TRAINING_VERSION = REPAIRED_TRAINING_VERSION
     legacy.RESERVE_CAP = values["reserve_cap"]
@@ -378,6 +600,9 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
     legacy.bind_runner_paths = bind_gen3_paths
     def undo():
         for runtime, live in reversed(installed_runtimes):
+            call_journals = runtime.get("r58_call_journals")
+            if call_journals and callable(call_journals.get("undo")):
+                call_journals["undo"]()
             counter = runtime.get("r58_ppo_counter_bridge")
             if counter and callable(counter.get("undo")):
                 counter["undo"]()

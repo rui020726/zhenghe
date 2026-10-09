@@ -147,6 +147,7 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                      "authorization": "direct_user_owner_approval_identity_bound"})
         plan_sha = legacy.canonical_sha(plan)
         bc_models, bc_sha = launcher._bc_model_identity()
+        resume_sources = launcher.resume_seam.validate_resume_sources(launcher.REPO_ROOT)
         # The disposable root is a sibling of gen2 under ROUND58's output parent,
         # matching the actual gen3 containment semantics (never a gen2 subdirectory).
         with tempfile.TemporaryDirectory(prefix="r58_gen3_route_test_", dir=launcher.RUN_ROOT) as temp:
@@ -197,6 +198,7 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                       "repair_identity": repair, "bc_model_identity_sha256": bc_sha,
                       "execution_basis_sha256": launcher._execution_basis_identity(),
                       "output_root": str(raw.resolve()), "generation_id": "round58_gen3",
+                      "checkpoint_root": str(resume_sources["target_checkpoint_root"]),
                       "mode": "fresh", "cumulative_quota_sha256": quota_sha,
                       "reserve_cap": 24, "scene_audit_sha256": scene_sha,
                       "bc_models": bc_models}
@@ -208,6 +210,7 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                         "normal_cap": 1024, "reserve_cap": 24, "hard_cap": 1064,
                         "plan_sha256": plan_sha, "generation_id": "round58_gen3",
                         "repair_identity": repair, "output_root": str(raw.resolve()),
+                        "checkpoint_root": str(resume_sources["target_checkpoint_root"]),
                         "bc_model_identity_sha256": bc_sha,
                         "execution_basis_sha256": launcher._execution_basis_identity(),
                         "freeze_sha256": freeze_sha, "quota_sha256": quota_sha,

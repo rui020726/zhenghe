@@ -1,0 +1,25 @@
+{
+  "kind": "round58-gen3-resume-owner-approval-source/1",
+  "status": "owner_approved_continue_after_exact_restore_gate",
+  "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3",
+  "approval_quote": "核验通过后批准完成剩余固定计划",
+  "approval_scope_as_relayed_by_owner": {
+    "resume_only_from_each_seed_episode_4": true,
+    "remaining_training_episodes": 372,
+    "remaining_evaluation_cells": 640,
+    "replay_first_12_episodes": false,
+    "replay_original_three_batch_updates": false,
+    "new_training_or_evaluation_quota": false,
+    "hyperparameter_change": false,
+    "push_merge_deploy": false
+  },
+  "conditions": [
+    "exact restoration audit passes for all three seed source checkpoints",
+    "actual train_seed resume entry reaches episode 4 before any episode provider",
+    "narrow tests pass",
+    "new versioned execution freeze and receipt bind the source map and current committed code",
+    "no launch until those conditions are closed"
+  ],
+  "authorized_cumulative_limit": 1064,
+  "note": "This records the explicit owner approval relayed in the current user instruction. It does not represent a new approval beyond that source statement."
+}

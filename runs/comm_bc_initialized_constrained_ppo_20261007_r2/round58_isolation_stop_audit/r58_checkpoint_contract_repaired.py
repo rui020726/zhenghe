@@ -11,6 +11,34 @@ from typing import Any
 import torch
 
 
+def _exact_state_equal(left: Any, right: Any) -> bool:
+    if isinstance(left, torch.Tensor) or isinstance(right, torch.Tensor):
+        return isinstance(left, torch.Tensor) and isinstance(right, torch.Tensor) \
+            and left.dtype == right.dtype and tuple(left.shape) == tuple(right.shape) \
+            and torch.equal(left.detach().cpu(), right.detach().cpu())
+    if isinstance(left, dict) or isinstance(right, dict):
+        return isinstance(left, dict) and isinstance(right, dict) \
+            and left.keys() == right.keys() \
+            and all(_exact_state_equal(left[key], right[key]) for key in left)
+    if isinstance(left, (list, tuple)) or isinstance(right, (list, tuple)):
+        return isinstance(left, (list, tuple)) and isinstance(right, (list, tuple)) \
+            and len(left) == len(right) \
+            and all(_exact_state_equal(a, b) for a, b in zip(left, right, strict=True))
+    try:
+        import numpy as np
+        if isinstance(left, np.ndarray) or isinstance(right, np.ndarray):
+            return isinstance(left, np.ndarray) and isinstance(right, np.ndarray) \
+                and left.dtype == right.dtype and left.shape == right.shape \
+                and np.array_equal(left, right)
+    except ImportError:
+        pass
+    try:
+        result = left == right
+        return bool(result) if not isinstance(result, torch.Tensor) else bool(result.all())
+    except Exception:
+        return False
+
+
 def _attested(value: dict[str, Any], identity: dict[str, Any], *, version: str) -> dict[str, Any]:
     result = deepcopy(value)
     result["training_version"] = version
@@ -43,7 +71,9 @@ def _file_sha256(path: Path) -> str:
 
 def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             training_version: str, expected_checkpoint_root: Path,
-            versions: Any | None = None, r42_run: Any | None = None) -> dict[str, Any]:
+            versions: Any | None = None, r42_run: Any | None = None,
+            approved_sources: dict[int, dict[str, Any]] | None = None,
+            resume_map_sha256: str | None = None) -> dict[str, Any]:
     """Wrap actual v2 trainer serialization and R40 candidate enumeration in memory."""
     if getattr(r40_train, "trainer", None) is not trainer:
         raise RuntimeError("cannot install checkpoint contract: R40 trainer object identity mismatch")
@@ -52,7 +82,7 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
     trainer_before = {name: getattr(trainer, name) for name in names}
     versions_before = (None if versions is None else
                        {"module": versions, "TRAINING_VERSION": getattr(versions, "TRAINING_VERSION", None)})
-    r40_names = ("train_seed", "_latest_resume_source")
+    r40_names = ("train_seed", "_latest_resume_source", "_recover_final_batch_commit")
     r40_before = {name: getattr(r40_train, name) for name in r40_names}
     optional_r40_names = ("_preserving_checkpoint_path", "_write_immutable_snapshot",
                           "_save_milestone")
@@ -70,6 +100,9 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
     immutable0 = getattr(r40_train, "_write_immutable_snapshot", None)
     milestone0 = getattr(r40_train, "_save_milestone", None)
     root = Path(expected_checkpoint_root).resolve()
+    approved_sources = {int(k): v for k, v in (approved_sources or {}).items()}
+    historical_path_seed = {Path(v["path"]).resolve(): int(k)
+                            for k, v in approved_sources.items()}
 
     def checked_path(path: Path) -> Path:
         resolved = Path(path).resolve()
@@ -151,7 +184,46 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             torch.save = save_torch
 
     def load(path, *, freeze):
-        checked_path(path)
+        resolved = Path(path).resolve()
+        if resolved in historical_path_seed:
+            seed = historical_path_seed[resolved]
+            source = approved_sources[seed]
+            if _file_sha256(resolved) != source["checkpoint_sha256"]:
+                raise RuntimeError("R58 historical source bytes changed before restore")
+            sidecar = Path(str(resolved) + ".r58.json")
+            if _file_sha256(sidecar) != source["sidecar_sha256"]:
+                raise RuntimeError("R58 historical source sidecar changed before restore")
+            payload = torch.load(resolved, map_location="cpu", weights_only=False)
+            source_freeze = deepcopy(freeze)
+            source_freeze.pop("round58_repair_attestation", None)
+            from r58_resume_seam import validate_historical_payload
+            validate_historical_payload(payload, source, base_freeze=source_freeze)
+            controller, optimizer, state = load0(
+                resolved, freeze=_attested(source_freeze, source["original_identity"],
+                                            version=training_version))
+            if not _exact_state_equal(controller.state_dict(), payload.get("controller")):
+                raise RuntimeError("R58 resumed model weights differ from the approved checkpoint")
+            if not _exact_state_equal(optimizer.state_dict(), payload.get("optimizer")):
+                raise RuntimeError("R58 resumed Adam state/moments differ from the approved checkpoint")
+            if not _exact_state_equal(trainer.rng_state(), payload.get("rng")):
+                raise RuntimeError("R58 restored Python/NumPy/Torch RNG differs from the approved checkpoint")
+            if (int(state.get("episodes_done", -1)), int(state.get("updates", -1)),
+                    int(state.get("optimizer_steps", -1))) != (4, 1, 8):
+                raise RuntimeError("R58 historical restore returned a cursor other than 4/1/8")
+            state = deepcopy(state)
+            state["round58_resume_provenance"] = {
+                "kind": "round58-qualified-historical-resume-source/1",
+                "source_map_sha256": resume_map_sha256,
+                "source_checkpoint_sha256": source["checkpoint_sha256"],
+                "source_sidecar_sha256": source["sidecar_sha256"],
+                "source_batch_sha256": source["batch_record_sha256"],
+                "source_commit_sha256": source["commit_sha256"],
+                "training_seed": seed,
+                "cursor": {"episodes_done": 4, "updates": 1, "optimizer_steps": 8},
+            }
+            state["round58_repair_attestation"] = deepcopy(identity)
+            return controller, optimizer, state
+        checked_path(resolved)
         require_sidecar(path)
         payload = torch.load(path, map_location="cpu", weights_only=False)
         require_payload(payload, identity, version=training_version)
@@ -181,7 +253,30 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             require_sidecar(path)
             payload = torch.load(path, map_location="cpu", weights_only=False)
             require_payload(payload, identity, version=training_version)
-        return latest0(seed, _attested(freeze, identity, version=training_version))
+        if candidates:
+            return latest0(seed, _attested(freeze, identity, version=training_version))
+        source = approved_sources.get(int(seed))
+        if source is None:
+            raise RuntimeError(f"R58 has no exact qualified resume source for seed {seed}")
+        path = Path(source["path"]).resolve()
+        if path not in historical_path_seed or _file_sha256(path) != source["checkpoint_sha256"]:
+            raise RuntimeError(f"R58 source selector refused unlisted or changed source for seed {seed}")
+        return path
+
+    recover_commit0 = r40_train._recover_final_batch_commit
+    def recover_final_batch_commit(seed, state, controller, checkpoint):
+        receipt = Path(r40_train._batch_commit_path(seed, 0))
+        provenance = state.get("round58_resume_provenance")
+        if (not receipt.exists() and int(state.get("episodes_done", -1)) == 4
+                and int(state.get("updates", -1)) == 1
+                and isinstance(provenance, dict)
+                and provenance.get("kind") == "round58-qualified-historical-resume-source/1"
+                and provenance.get("source_map_sha256") == resume_map_sha256
+                and provenance.get("training_seed") == int(seed)
+                and provenance.get("source_checkpoint_sha256")
+                    == approved_sources[int(seed)]["checkpoint_sha256"]):
+            return None
+        return recover_commit0(seed, state, controller, checkpoint)
 
     def train_seed(seed, *, episodes, freeze, reference_cache):
         if r40_train.trainer is not trainer:
@@ -235,6 +330,7 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
     trainer.load_checkpoint_read_only = load_read_only
     trainer.fresh_training_state = fresh_state
     r40_train._latest_resume_source = latest
+    r40_train._recover_final_batch_commit = recover_final_batch_commit
     r40_train.train_seed = train_seed
     if preserve0 is not None:
         r40_train._preserving_checkpoint_path = preserving_checkpoint_path
@@ -264,5 +360,7 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             "wrapped_load": trainer.load_checkpoint is load,
             "wrapped_r40_train": r40_train.train_seed is train_seed,
             "wrapped_candidate_selector": r40_train._latest_resume_source is latest,
+            "wrapped_historical_commit_boundary":
+                r40_train._recover_final_batch_commit is recover_final_batch_commit,
             "wrapped_checkpoint_sidecar": True,
             "wrapped_readonly_runtime_loader": r42_run is not None and callable(run_torch_load_cpu)}

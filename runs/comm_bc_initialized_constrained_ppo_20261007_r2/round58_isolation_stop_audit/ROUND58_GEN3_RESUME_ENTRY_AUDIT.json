@@ -1,0 +1,101 @@
+{
+  "kind": "round58-gen3-resume-entry-zero-environment-audit/1",
+  "status": "passed_three_seed_resume_entry_and_historical_ledger",
+  "source_map_sha256": "82c6e9626f7705d36a13fdc420cfd2916985e3334fca251744d3445bf35cf64f",
+  "historical_checkpoint_journal": {
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\runtime\\checkpoint_writes.jsonl",
+    "sha256": "2a43339ac45c2cfd13f84e744b72af0632024f44c3eedaa449bf8c8c7cab0165",
+    "rows": 12,
+    "per_seed_rows": {
+      "11": 4,
+      "22": 4,
+      "33": 4
+    },
+    "evidence": "retained direct checkpoint-write journal, each event byte-closed to checkpoint"
+  },
+  "per_seed": [
+    {
+      "seed": 11,
+      "source_checkpoint_sha256": "0d9e8234487a995008189f7757e997d88cd7f0c9fd1f3092eaff03ab8a9b74ab",
+      "selected_source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s11.pt",
+      "actual_train_seed_entry_episode": 4,
+      "episode4_scenario": 1300003,
+      "status": "actual_resume_loader_and_train_seed_reached_pre_environment_guard"
+    },
+    {
+      "seed": 22,
+      "source_checkpoint_sha256": "b0c56adf2039579a2c2d5a245af3cbe3ebcd3a31ef3ac253eb483e23e1a5ade6",
+      "selected_source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s22.pt",
+      "actual_train_seed_entry_episode": 4,
+      "episode4_scenario": 1300003,
+      "status": "actual_resume_loader_and_train_seed_reached_pre_environment_guard"
+    },
+    {
+      "seed": 33,
+      "source_checkpoint_sha256": "265666d7ef5ba354ae71867957d536d4ac333aa9200c43696ce25e2a032927f0",
+      "selected_source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s33.pt",
+      "actual_train_seed_entry_episode": 4,
+      "episode4_scenario": 1300003,
+      "status": "actual_resume_loader_and_train_seed_reached_pre_environment_guard"
+    }
+  ],
+  "counters": {
+    "optimizer_steps": 24,
+    "ppo_calls": 3,
+    "historical_checkpoint_writes": 12,
+    "strict_ledger": {
+      "normal_claims": 12,
+      "reserve_claims": 0,
+      "counts": {
+        "normal_used": 12,
+        "reserve_used": 0,
+        "total_used": 12,
+        "environment_constructor_calls": 12,
+        "joint_run_build_failures": 0,
+        "joint_run_constructed_calls": 12,
+        "run_invocation_calls": 12,
+        "joint_run_method_calls": 12,
+        "run_return_calls": 12,
+        "run_failure_calls": 0,
+        "completed_steps": 12000,
+        "completed_logical_jobs": 12,
+        "simulation_started": 12,
+        "technical_failed_claims": 0,
+        "retry_claims": 0,
+        "optimizer_step_calls": 24,
+        "optimizer_step_journal_entries": 24,
+        "ppo_update_calls": 3,
+        "ppo_update_journal_entries": 0,
+        "ppo_update_count_matches_committed_batches": true,
+        "checkpoint_write_calls": 12,
+        "checkpoint_write_journal_entries": 12,
+        "optimizer_step_count_matches_committed_batches": true,
+        "hard_cap": 1064
+      }
+    },
+    "direct_resume_optimizer_rows": 0,
+    "direct_resume_ppo_rows": 0,
+    "direct_resume_checkpoint_rows": 0,
+    "requested_checkpoint_saves_blocked_in_memory": 6,
+    "authorized_rng_restores": 3
+  },
+  "actual_side_effects": {
+    "environment_construct": 0,
+    "optimizer_step": 0,
+    "ppo_update": 0,
+    "checkpoint_write": 0,
+    "claim_or_journal_write": 0,
+    "rng_restore": 3
+  },
+  "blocked_or_intercepted_requests": {
+    "environment_construct": 0,
+    "episode_provider": 3,
+    "optimizer_step": 0,
+    "checkpoint_disk_write": 6,
+    "claim_journal_write": 0,
+    "rng_restore": 0
+  },
+  "reference_cache": "in-memory key-complete sentinel; provider guard fires before outcomes are read",
+  "note": "No environment constructed; checkpoint save requests intercepted in memory; no core disk write.",
+  "new_resume_root_was_temporary": true
+}
