@@ -1,0 +1,9 @@
+# ROUND58 V11 train_pilot restore fix basis
+
+- Status: owner-approved continuation; the current owner instruction explicitly continues the already-approved fixed plan and directs the private import repair, real restore gate, and remaining execution.
+- Science scope: unchanged. Resume only from the three qualified committed checkpoints at episode 4 / update 1 / optimizer step 8; then 372 remaining training episodes and 640 fixed evaluation cells. No replay of the first 12 episodes or 3 committed updates; no hyperparameter, scene, quota, or protocol change.
+- Cumulative accounting remains 28 consumed of 1064 before this attempt, with 1012 planned jobs remaining and 24 reserve remaining.
+- Prior V10 actual failure and its empty journal/derived ledger remain preserved. V11 uses a distinct checkpoint/runtime root `round58_gen3_resume_v11/raw`; source checkpoints remain the three hash-closed gen3 qualified inputs.
+- Root-cause finding: the configured canonical `v2_common.enter_round()` temporarily puts its frozen `PILOT_ROUND` on `sys.path`, but the private configure bridge restores the pre-configure path before lazy `StageCController` construction. The controller then imports `train_pilot` and fails. The repair binds only the canonical sibling `zhenghe/runs/comm_budget_pilot_20260919/train_pilot.py`, verifies its SHA-256 against the frozen Stage B manifest, rejects a conflicting cached module, and scopes the exact source directory around the actual loader call.
+- The branch-local `zhenghe-round42/runs/comm_budget_pilot_20260919/train_pilot.py` is not the live module source. The actual canonical module is resolved from the same sibling dependency tree as the configured `v2_trainer.py`; SHA-256 `87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81`.
+- This record is an execution-basis note, not a substitute for the actual owner message, the freeze/authorization receipts, or the real CLI and exact-restore gate.

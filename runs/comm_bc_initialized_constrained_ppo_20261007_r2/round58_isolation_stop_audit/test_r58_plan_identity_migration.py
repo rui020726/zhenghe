@@ -41,7 +41,8 @@ def current_plan_and_identity():
 class HistoricalPlanMigrationTests(unittest.TestCase):
     def setUp(self):
         self.plan, self.identity = current_plan_and_identity()
-        self.raw_path = (launcher.PRIVATE_RAW / "ROUND53_FIXED_PLAN.json").resolve()
+        self.raw_path = (launcher.RUN_ROOT / "round58_gen3" / "raw" /
+                         "ROUND53_FIXED_PLAN.json").resolve()
         self.historical = json.loads(self.raw_path.read_text(encoding="utf-8"))
 
     def test_actual_old_comparison_reproduces_failure_on_saved_plan(self):

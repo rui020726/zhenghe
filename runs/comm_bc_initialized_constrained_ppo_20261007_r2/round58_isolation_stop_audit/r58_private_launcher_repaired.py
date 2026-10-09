@@ -166,6 +166,7 @@ def _repair_identity() -> dict[str, Any]:
         raise PermissionError("ROUND58 candidate science/config/model identity inputs are missing")
     return {"critic_route_version": resume_guard.ROUTE_VERSION,
             **resume_guard.adapter_identity(),
+            "train_pilot_source": checkpoint_contract.train_pilot_source_identity(REPO_ROOT),
             "ppo_counter_bridge_version": "round58-ppo-counter-bridge/2",
             "identity_ledger_schema": identity_ledger.IDENTITY_VERSION,
             "identity_ledger_sha256": hashlib.sha256(
@@ -244,7 +245,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     frozen = _read_external_json(freeze_path, "freeze identity")
     quota = _read_external_json(quota_path, "cumulative quota receipt")
     scene_audit = _read_external_json(scene_audit_path, "scene occupancy audit")
-    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V8.json"
+    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V12.json"
     if mode == "recover_first_batch_gate" and not migration_proof_path.is_file():
         raise PermissionError("ROUND58 recovery plan identity migration proof is missing")
     migration_proof_sha256 = (hashlib.sha256(migration_proof_path.read_bytes()).hexdigest()
@@ -749,6 +750,15 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                 if selected != expected:
                     raise PermissionError(f"seed {seed}: live resume selector did not choose its exact qualified source")
                 selected_sources[seed] = str(selected)
+            restore_gate_hook = globals().get("_ROUND58_REAL_RESTORE_GATE_HOOK")
+            if restore_gate_hook is not None:
+                if not callable(restore_gate_hook):
+                    raise TypeError("ROUND58 real-restore gate hook must be callable")
+                restore_gate_hook({"kind": "round58-real-checkpoint-restore-gate/1",
+                                   "runtime": runtime, "proof": proof,
+                                   "freeze": runtime["frozen"],
+                                   "selected_sources": selected_sources})
+                raise RuntimeError("ROUND58 real-restore gate hook returned without controlled stop")
             preflight_hook = globals().get("_ROUND58_PREFLIGHT_STOP_HOOK")
             if preflight_hook is not None:
                 if not callable(preflight_hook):
@@ -835,7 +845,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
                  "freeze": values["freeze_path"], "quota": values["quota_path"],
                  "scene_audit": values["scene_audit_path"]}
         if values["mode"] == "recover_first_batch_gate":
-            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V8.json"
+            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V12.json"
         for key, path in paths.items():
             if hashlib.sha256(Path(path).read_bytes()).hexdigest() != values["input_file_sha256"][key]:
                 raise PermissionError(f"ROUND58 {key} receipt changed after preflight")
@@ -871,7 +881,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
             migration_route = resume_seam.install_historical_plan_comparison_view(
                 legacy, repo_root=REPO_ROOT, current_plan=current_live_plan,
                 current_repair_identity=values["repair_identity"],
-                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V8.json",
+                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V12.json",
                 expected_proof_sha256=values["input_file_sha256"]["plan_identity_migration_proof"])
             legacy.round58_plan_identity_migration = {
                 key: value for key, value in migration_route.items() if key != "undo"}

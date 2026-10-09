@@ -2,13 +2,64 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from contextlib import contextmanager
 import hashlib
+import importlib
 import json
 import os
 from pathlib import Path
+import sys
 from typing import Any
 
 import torch
+
+
+# The controller intentionally imports this frozen pilot module lazily when a
+# StageCController is reconstructed.  Bind only the reviewed source directory;
+# never search arbitrary paths or accept a same-named third-party module.
+TRAIN_PILOT_RELATIVE_PATH = Path("runs/comm_budget_pilot_20260919/train_pilot.py")
+TRAIN_PILOT_SHA256 = "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81"
+TRAIN_PILOT_BINDING_VERSION = "round58-frozen-train-pilot-restore-import/1"
+
+
+def train_pilot_source_identity(repo_root: Path) -> dict[str, str]:
+    # The approved R58 runtime imports the frozen dependency tree from the
+    # sibling `zhenghe` root (the same root that supplies v2_trainer).  The
+    # branch-local ROUND42 copy is not the live training dependency.
+    canonical_root = Path(repo_root).resolve().parent / "zhenghe"
+    source = (canonical_root / TRAIN_PILOT_RELATIVE_PATH).resolve()
+    if not source.is_file():
+        raise RuntimeError(f"frozen train_pilot source is missing: {source}")
+    actual = _file_sha256(source)
+    if actual != TRAIN_PILOT_SHA256:
+        raise RuntimeError(f"frozen train_pilot source SHA-256 mismatch: {actual}")
+    return {"path": str(source), "sha256": actual,
+            "frozen_manifest_sha256": TRAIN_PILOT_SHA256,
+            "binding_version": TRAIN_PILOT_BINDING_VERSION}
+
+
+@contextmanager
+def _verified_train_pilot_import_scope(repo_root: Path):
+    identity = train_pilot_source_identity(repo_root)
+    source = Path(identity["path"])
+    expected_dir = str(source.parent)
+    loaded = sys.modules.get("train_pilot")
+    if loaded is not None:
+        loaded_path = Path(getattr(loaded, "__file__", "")).resolve()
+        if loaded_path != source or _file_sha256(loaded_path) != identity["sha256"]:
+            raise RuntimeError(f"拒绝错误来源的 train_pilot 模块: {loaded_path}")
+        yield identity
+        return
+
+    previous_path = list(sys.path)
+    while expected_dir in sys.path:
+        sys.path.remove(expected_dir)
+    sys.path.insert(0, expected_dir)
+    importlib.invalidate_caches()
+    try:
+        yield identity
+    finally:
+        sys.path[:] = previous_path
 
 
 def _exact_state_equal(left: Any, right: Any) -> bool:
@@ -103,6 +154,29 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
     approved_sources = {int(k): v for k, v in (approved_sources or {}).items()}
     historical_path_seed = {Path(v["path"]).resolve(): int(k)
                             for k, v in approved_sources.items()}
+    repo_root = Path(__file__).resolve().parents[3]
+    train_pilot_identity = train_pilot_source_identity(repo_root)
+    configured_pilot_dir = Path(getattr(getattr(r40_train, "common", None),
+                                        "PILOT_ROUND", "")).resolve()
+    if configured_pilot_dir != Path(train_pilot_identity["path"]).parent:
+        raise RuntimeError("configured v2 common PILOT_ROUND does not match frozen train_pilot source")
+
+    def load_controller_state(loader, *args, **kwargs):
+        # The private configure bridge restores sys.path after configure. The
+        # StageCController imports train_pilot lazily, so bind only this exact
+        # verified source around actual controller reconstruction.
+        with _verified_train_pilot_import_scope(repo_root):
+            result = loader(*args, **kwargs)
+            module = sys.modules.get("train_pilot")
+            if module is None:
+                raise RuntimeError("controller restore did not load frozen train_pilot")
+            loaded_path = Path(getattr(module, "__file__", "")).resolve()
+            loaded_sha = _file_sha256(loaded_path)
+            if loaded_path != Path(train_pilot_identity["path"]) \
+                    or loaded_sha != train_pilot_identity["sha256"]:
+                raise RuntimeError("controller restore loaded train_pilot outside frozen identity")
+            trainer._round58_train_pilot_binding = dict(train_pilot_identity)
+            return result
 
     def checked_path(path: Path) -> Path:
         resolved = Path(path).resolve()
@@ -198,9 +272,10 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             source_freeze.pop("round58_repair_attestation", None)
             from r58_resume_seam import validate_historical_payload
             validate_historical_payload(payload, source, base_freeze=source_freeze)
-            controller, optimizer, state = load0(
-                resolved, freeze=_attested(source_freeze, source["original_identity"],
-                                            version=training_version))
+            controller, optimizer, state = load_controller_state(
+                load0, resolved,
+                freeze=_attested(source_freeze, source["original_identity"],
+                                 version=training_version))
             if not _exact_state_equal(controller.state_dict(), payload.get("controller")):
                 raise RuntimeError("R58 resumed model weights differ from the approved checkpoint")
             if not _exact_state_equal(optimizer.state_dict(), payload.get("optimizer")):
@@ -227,7 +302,8 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
         require_sidecar(path)
         payload = torch.load(path, map_location="cpu", weights_only=False)
         require_payload(payload, identity, version=training_version)
-        return load0(path, freeze=_attested(freeze, identity, version=training_version))
+        return load_controller_state(
+            load0, path, freeze=_attested(freeze, identity, version=training_version))
 
     def load_read_only(path, *, freeze):
         resolved = Path(path).resolve()
@@ -235,11 +311,12 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             resolved.relative_to(root)
         except ValueError:
             # External BC/reference checkpoints are read-only inputs, never R58 resume sources.
-            return load_ro0(path, freeze=freeze)
+            return load_controller_state(load_ro0, path, freeze=freeze)
         require_sidecar(path)
         payload = torch.load(path, map_location="cpu", weights_only=False)
         require_payload(payload, identity, version=training_version)
-        return load_ro0(path, freeze=_attested(freeze, identity, version=training_version))
+        return load_controller_state(
+            load_ro0, path, freeze=_attested(freeze, identity, version=training_version))
 
     def fresh_state(seed):
         return _attested(fresh0(seed), identity, version=training_version)

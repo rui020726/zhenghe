@@ -332,7 +332,7 @@ class PrivateLauncherRouteTests(unittest.TestCase):
             sys.argv = [str(launcher.__file__), "--authorization", str(auth_path),
                         "--freeze", str(freeze_path), "--cumulative-quota", str(quota_path),
                         "--scene-audit", str(scene_path), "--output-root",
-                        str(launcher.HERE.parent / "round58_gen3" / "raw")]
+                        str(launcher.PRIVATE_RAW)]
             try:
                 with mock.patch.object(pathlib.Path, "is_file", virtual_is_file), \
                      mock.patch.object(pathlib.Path, "read_text", virtual_read_text), \

@@ -23,6 +23,7 @@ def main() -> int:
         "test_r58_private_launcher",
         "test_r58_resume_seam",
         "test_r58_plan_identity_migration",
+        "test_r58_train_pilot_restore_import",
     )
     discovered_suite = unittest.TestSuite(loader.loadTestsFromName(name) for name in modules)
     discovered = list(flatten(discovered_suite))

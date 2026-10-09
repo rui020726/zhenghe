@@ -14,8 +14,8 @@ import time
 from pathlib import Path
 from typing import Any
 
-MAP_REL = Path("runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES.json")
-MAP_SHA256 = "82c6e9626f7705d36a13fdc420cfd2916985e3334fca251744d3445bf35cf64f"
+MAP_REL = Path("runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES_V11.json")
+MAP_SHA256 = "ee9399e7fe893d409414ac83889161a740802c79be7c627e037bdb3c5aea41be"
 R42_RUN_SHA256 = "9c5feacb2ffcb2bb930d2b6022e2fca5210408765dc664859d400e6f2b5f8c2e"
 HISTORICAL_CHECKPOINT_JOURNAL_SHA256 = "2a43339ac45c2cfd13f84e744b72af0632024f44c3eedaa449bf8c8c7cab0165"
 QUALIFIED = "qualified_for_later_resume_review"
@@ -35,6 +35,7 @@ MIGRATION_ADDED_FIELDS = {
     "ppo_counter_bridge_version", "identity_ledger_schema", "identity_ledger_sha256",
     "resume_seam_sha256", "approved_resume_map_sha256",
     "historical_checkpoint_journal_sha256",
+    "train_pilot_source",
 }
 TRAINING_VERSION = (
     "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/"
@@ -261,6 +262,13 @@ def validate_historical_plan_identity_migration(
             raise PermissionError(f"current repair identity lacks migrated field {key}")
 
     audit_dir = Path(__file__).resolve().parent
+    frozen_train_pilot = (root.parent / "zhenghe" / "runs" /
+                          "comm_budget_pilot_20260919" / "train_pilot.py").resolve()
+    if not frozen_train_pilot.is_file():
+        raise PermissionError("approved canonical train_pilot source is missing")
+    train_pilot_sha = sha256(frozen_train_pilot)
+    if train_pilot_sha != "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81":
+        raise PermissionError("approved canonical train_pilot source hash changed")
     expected_current_metadata = {
         "private_launcher_sha256": sha256(audit_dir / "r58_private_launcher_repaired.py"),
         "checkpoint_contract_sha256": sha256(audit_dir / "r58_checkpoint_contract_repaired.py"),
@@ -271,6 +279,11 @@ def validate_historical_plan_identity_migration(
         "approved_resume_map_sha256": verified_sources["manifest_sha256"],
         "historical_checkpoint_journal_sha256":
             verified_sources["historical_checkpoint_journal"]["sha256"],
+        "train_pilot_source": {
+            "path": str(frozen_train_pilot), "sha256": train_pilot_sha,
+            "frozen_manifest_sha256": train_pilot_sha,
+            "binding_version": "round58-frozen-train-pilot-restore-import/1",
+        },
     }
     if any(current_repair_identity.get(k) != v for k, v in expected_current_metadata.items()):
         raise PermissionError("current repair identity metadata differs from its live code/source bindings")
