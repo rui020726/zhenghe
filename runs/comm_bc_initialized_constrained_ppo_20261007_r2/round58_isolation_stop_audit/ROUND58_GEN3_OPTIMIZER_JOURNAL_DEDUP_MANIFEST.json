@@ -1,0 +1,14 @@
+{
+ "call_index_range": [
+  25,
+  76
+ ],
+ "corrected_at_local": "2026-10-09T22:18:04.336928+08:00",
+ "kept_rows": 52,
+ "kind": "round58-optimizer-journal-dedup-correction/1",
+ "reason": "The private resume seam appended a second journal row per Adam step alongside the frozen ROUND43 call counter, double-counting every step. Each removed row describes the same real step (same call_index/unix_time) as a retained frozen ROUND43 row; the frozen rows are kept verbatim and the removed rows are preserved in the sidecar file. The seam no longer appends optimizer rows.",
+ "removed_rows": 52,
+ "sidecar": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_GEN3_OPTIMIZER_JOURNAL_DEDUPLICATION_REMOVED_ROWS.jsonl",
+ "sidecar_sha256": "9631a121d19970fad05ff0171d0ddf2c9a8330d6a31c7d14193103ef790e0400",
+ "status": "corrected"
+}

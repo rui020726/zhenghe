@@ -640,7 +640,10 @@ def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_
         version_counter.CHECKPOINT_WRITE_CALLS = 12 + journal_row_count
     if _count_lines(checkpoint_path) != int(version_counter.CHECKPOINT_WRITE_CALLS) - 12:
         raise RuntimeError("resume checkpoint journal and live checkpoint counter do not close")
-    if int(getattr(run, "_OPTIMIZER_STEP_CALLS", -1)) not in (0, historical_optimizer_rows + len(opt_rows)):
+    if int(getattr(run, "_OPTIMIZER_STEP_CALLS", -1)) not in (
+            0, historical_optimizer_rows + len(opt_rows), len(opt_rows)):
+        # len(opt_rows) is the r42 configure count over the resume-scope journal;
+        # historical_optimizer_rows + len(opt_rows) is the global closed count.
         raise RuntimeError("R42 optimizer counter was not at the approved historical baseline")
     if int(getattr(run, "_PPO_UPDATE_CALLS", -1)) not in (0, historical_ppo_calls + len(ppo_rows)):
         raise RuntimeError("R42 PPO counter was not at the approved derived baseline")
@@ -667,10 +670,10 @@ def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_
             os.fsync(handle.fileno())
 
     def counted_step(optimizer, *args, **kwargs):
-        with lock:
-            index = int(run._OPTIMIZER_STEP_CALLS) + 1
-            append_call(opt_path, index, kind="adam_step", optimizer=optimizer)
-            return original_step(optimizer, *args, **kwargs)
+        # The frozen ROUND43 call counter already appends exactly one durable
+        # journal row per Adam step to the same journal file; appending here
+        # double-counted every step.  Delegate unchanged.
+        return original_step(optimizer, *args, **kwargs)
 
     def counted_ppo(*args, **kwargs):
         with lock:
