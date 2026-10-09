@@ -1,0 +1,77 @@
+{
+  "kind": "round58-gen3-resume-preflight-manifest/1",
+  "status": "approved_recovery_preflight_closed_not_started",
+  "source_commit": "7126bfebefc4e2b4bb1b2e1f3d9bf2d632b0bb49",
+  "branch": "exp/round58-prior-strength-prospective-trial",
+  "created_at_utc": "2026-10-09T05:36:23.755460+00:00",
+  "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3",
+  "approval_quote": "核验通过后批准完成剩余固定计划",
+  "plan": {
+    "resume_episode_start": 4,
+    "remaining_training_episodes": 372,
+    "remaining_eval_model_cells": 576,
+    "remaining_eval_rule_cells": 64,
+    "remaining_eval_cells": 640,
+    "remaining_normal_tasks": 1012,
+    "historical_environment_consumption": 16,
+    "existing_gen3_normal_claims": 12,
+    "cumulative_consumed": 28,
+    "new_normal_cap": 1024,
+    "remaining_normal_cap_for_unrun_plan": 1012,
+    "reserve_cap": 24,
+    "cumulative_hard_cap": 1064,
+    "remaining_cumulative_capacity": 1036
+  },
+  "restore_audit": {
+    "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_EXACT_RESUME_RESTORE_AUDIT.json",
+    "status": "passed_all_three_sources",
+    "rng_restores": 3
+  },
+  "entry_audit": {
+    "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_RESUME_ENTRY_AUDIT.json",
+    "status": "passed_three_seed_resume_entry_and_historical_ledger",
+    "seeds_reached_episode4_preprovider": [
+      11,
+      22,
+      33
+    ],
+    "direct_resume_optimizer_steps": 0,
+    "environment_construct": 0,
+    "checkpoint_disk_write": 0
+  },
+  "tests": {
+    "runner": "run_r58_resume_narrow_tests.py",
+    "discovered": 31,
+    "executed": 30,
+    "excluded": [
+      "test_r58_private_launcher.PrivateLauncherRouteTests.test_old_main_before_definitions_reproduces_nameerror_and_new_module_help_exits_zero"
+    ],
+    "exit_code": 0
+  },
+  "scene_audit": {
+    "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_RESUME_SCENE_OCCUPANCY_RECHECK.json",
+    "status": "clear",
+    "claim_files_scanned": 3372,
+    "conflicts": [],
+    "result_blind": true
+  },
+  "source_artifacts_sha256": {
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES.json": "82c6e9626f7705d36a13fdc420cfd2916985e3334fca251744d3445bf35cf64f",
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_EXACT_RESUME_RESTORE_AUDIT.json": "03c38e885ecf5b60a976b45f8f387e66363ea3ab284f248151a76793c14d17b2",
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_RESUME_ENTRY_AUDIT.json": "bc90f8eb23a07ef1560e146de981ffb461c192ee90bc064e9151b628ace54245",
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_RESUME_NARROW_TEST_RESULTS.json": "c37e28a08c1eeb35e424f27ae51c0fd309ac0096e184d678fec0822428a2e8a1",
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_RESUME_SCENE_OCCUPANCY_RECHECK.json": "78a9e4112cc94691094e5605a7de39fe2375f73cb6708a4a913352e3bdfc35ac",
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_RESUME_APPROVAL_SOURCE.json": "f61d90e32b34c2e4f4236d9ba7ef853daea7447cd7e40bfb6cbce8d286056184",
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_RESUME_FREEZE_V2.json": "4a52537a553d2278bc40b6eabc25419e791c3007149d4219098871b92d300380",
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_RESUME_EXECUTION_AUTHORIZATION_V2.json": "71572bf0838528f1c73891244d1b047d0aad53f3e45162d7721c0ea09751cfe7"
+  },
+  "prelaunch_old_drafts_not_used": [
+    "ROUND58_GEN3_RESUME_FREEZE.json",
+    "ROUND58_GEN3_RESUME_EXECUTION_AUTHORIZATION.json"
+  ],
+  "working_tree_only_protected_paths_dirty": [
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+    "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json"
+  ],
+  "launch_status": "not_started_until_manifest_and_v2_receipts committed; no environment/optimizer/checkpoint operation in preflight"
+}
