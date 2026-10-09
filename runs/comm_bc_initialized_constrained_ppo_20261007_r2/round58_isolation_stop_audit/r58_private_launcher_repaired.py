@@ -866,8 +866,11 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                 raise RuntimeError("live R40 checkpoint selector is not bound to the private resume root")
             selected_sources = {}
             for seed in (11, 22, 33):
+                # train_seed resumes against the round42 freeze (the same freeze
+                # the boundary saves attest); the umbrella runtime["frozen"]
+                # would not match the persisted payload freeze.
                 selected = Path(runtime["r40_train"]._latest_resume_source(
-                    seed, runtime["frozen"])).resolve()
+                    seed, runtime["round42_freeze"])).resolve()
                 expected = Path(proof["sources"][seed]["path"]).resolve()
                 if selected != expected:
                     raise PermissionError(f"seed {seed}: live resume selector did not choose its exact qualified source")
