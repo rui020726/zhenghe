@@ -124,7 +124,8 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             training_version: str, expected_checkpoint_root: Path,
             versions: Any | None = None, r42_run: Any | None = None,
             approved_sources: dict[int, dict[str, Any]] | None = None,
-            resume_map_sha256: str | None = None) -> dict[str, Any]:
+            resume_map_sha256: str | None = None,
+            committed_continuation: dict[str, Any] | None = None) -> dict[str, Any]:
     """Wrap actual v2 trainer serialization and R40 candidate enumeration in memory."""
     if getattr(r40_train, "trainer", None) is not trainer:
         raise RuntimeError("cannot install checkpoint contract: R40 trainer object identity mismatch")
@@ -154,6 +155,8 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
     approved_sources = {int(k): v for k, v in (approved_sources or {}).items()}
     historical_path_seed = {Path(v["path"]).resolve(): int(k)
                             for k, v in approved_sources.items()}
+    continuation = committed_continuation or {}
+    continuation_path = (Path(continuation["path"]).resolve() if continuation else None)
     repo_root = Path(__file__).resolve().parents[3]
     train_pilot_identity = train_pilot_source_identity(repo_root)
     configured_pilot_dir = Path(getattr(getattr(r40_train, "common", None),
@@ -259,6 +262,42 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
 
     def load(path, *, freeze):
         resolved = Path(path).resolve()
+        if continuation_path is not None and resolved == continuation_path:
+            if _file_sha256(resolved) != continuation["checkpoint_sha256"]:
+                raise RuntimeError("R58 exact batch9 continuation bytes changed")
+            commit = Path(continuation["commit_path"])
+            if _file_sha256(commit) != continuation["commit_sha256"]:
+                raise RuntimeError("R58 exact batch9 commit changed")
+            payload = torch.load(resolved, map_location="cpu", weights_only=False)
+            source_freeze = deepcopy(freeze)
+            source_freeze.pop("round58_repair_attestation", None)
+            original_freeze = payload.get("freeze")
+            if (not isinstance(original_freeze, dict)
+                    or {k: v for k, v in original_freeze.items()
+                        if k != "round58_repair_attestation"} != source_freeze
+                    or original_freeze.get("round58_repair_attestation")
+                       != continuation["original_identity"]
+                    or payload.get("round58_repair_attestation")
+                       != continuation["original_identity"]):
+                raise RuntimeError("R58 batch9 freeze/producer identity differs from approved source")
+            controller, optimizer, state = load_controller_state(
+                load0, resolved, freeze=original_freeze)
+            if (not _exact_state_equal(controller.state_dict(), payload.get("controller"))
+                    or not _exact_state_equal(optimizer.state_dict(), payload.get("optimizer"))
+                    or not _exact_state_equal(trainer.rng_state(), payload.get("rng"))
+                    or (int(state.get("episodes_done", -1)), int(state.get("updates", -1)),
+                        int(state.get("optimizer_steps", -1))) != (40, 10, 60)):
+                raise RuntimeError("R58 batch9 model/Adam/RNG/cursor did not restore exactly")
+            state = deepcopy(state)
+            state["round58_resume_provenance"] = {
+                "kind": "round58-exact-committed-batch9-source/1",
+                "source_checkpoint_sha256": continuation["checkpoint_sha256"],
+                "source_commit_sha256": continuation["commit_sha256"],
+                "training_seed": 11,
+                "cursor": {"episodes_done": 40, "updates": 10, "optimizer_steps": 60},
+            }
+            state["round58_repair_attestation"] = deepcopy(identity)
+            return controller, optimizer, state
         if resolved in historical_path_seed:
             seed = historical_path_seed[resolved]
             source = approved_sources[seed]
@@ -318,6 +357,60 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
         return load_controller_state(
             load_ro0, path, freeze=_attested(freeze, identity, version=training_version))
 
+    def validate_current_committed_source(path, seed):
+        resolved = checked_path(path)
+        require_sidecar(resolved)
+        payload = torch.load(resolved, map_location="cpu", weights_only=False)
+        require_payload(payload, identity, version=training_version)
+        state = payload["training_state"]
+        updates = int(state.get("updates", -1))
+        if (int(state.get("training_seed", -1)) != int(seed) or updates < 1
+                or int(state.get("episodes_done", -1)) != 4 * updates):
+            raise RuntimeError("R58 selected current checkpoint has a noncommitted cursor")
+        receipt_path = Path(r40_train._batch_commit_path(seed, updates - 1))
+        if not receipt_path.is_file():
+            provenance = state.get("round58_resume_provenance")
+            historical = approved_sources.get(int(seed))
+            b0_boundary = (int(seed) in (22, 33) and updates == 1
+                           and isinstance(provenance, dict)
+                           and provenance.get("kind") == "round58-qualified-historical-resume-source/1"
+                           and provenance.get("source_map_sha256") == resume_map_sha256
+                           and provenance.get("source_checkpoint_sha256")
+                           == (historical or {}).get("checkpoint_sha256"))
+            b9_boundary = (int(seed) == 11 and updates == 10
+                           and isinstance(provenance, dict)
+                           and provenance.get("kind") == "round58-exact-committed-batch9-source/1"
+                           and provenance.get("source_checkpoint_sha256")
+                           == continuation.get("checkpoint_sha256")
+                           and provenance.get("source_commit_sha256")
+                           == continuation.get("commit_sha256"))
+            if not (resolved == Path(r40_train._rolling_path(seed)).resolve()
+                    and (b0_boundary or b9_boundary)):
+                raise RuntimeError("R58 selected current checkpoint lacks its exact batch commit")
+            return {"path": str(resolved), "sha256": _file_sha256(resolved),
+                    "batch": updates - 1, "boundary_provenance": provenance,
+                    "cursor": {"episodes_done": 4 * updates, "updates": updates,
+                               "optimizer_steps": int(state["optimizer_steps"])}}
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+        digest = _file_sha256(resolved)
+        batch_record = root / str(receipt.get("batch_record", ""))
+        if (receipt.get("kind") != "round40-batch-checkpoint-commit/1"
+                or int(receipt.get("training_seed", -1)) != int(seed)
+                or int(receipt.get("batch", -1)) != updates - 1
+                or int(receipt.get("episodes_done", -1)) != 4 * updates
+                or int(receipt.get("updates", -1)) != updates
+                or int(receipt.get("optimizer_steps", -1))
+                   != int(state.get("optimizer_steps", -2))
+                or not batch_record.is_file()
+                or _file_sha256(batch_record) != receipt.get("batch_record_sha256")
+                or digest not in {receipt.get("rolling_checkpoint_sha256"),
+                                  receipt.get("postupdate_checkpoint_sha256")}):
+            raise RuntimeError("R58 selected current checkpoint is not bound to its batch/commit")
+        return {"path": str(resolved), "sha256": digest,
+                "batch": updates - 1, "commit_sha256": _file_sha256(receipt_path),
+                "cursor": {"episodes_done": 4 * updates, "updates": updates,
+                           "optimizer_steps": int(state["optimizer_steps"])}}
+
     def fresh_state(seed):
         return _attested(fresh0(seed), identity, version=training_version)
 
@@ -327,11 +420,13 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             f"v2_train_s{int(seed)}_after_b*.pt")))
         # Reject every candidate before the frozen R40 selector can instantiate a controller.
         for path in candidates:
-            require_sidecar(path)
-            payload = torch.load(path, map_location="cpu", weights_only=False)
-            require_payload(payload, identity, version=training_version)
+            validate_current_committed_source(path, seed)
         if candidates:
             return latest0(seed, _attested(freeze, identity, version=training_version))
+        if int(seed) == 11 and continuation_path is not None:
+            if _file_sha256(continuation_path) != continuation["checkpoint_sha256"]:
+                raise RuntimeError("R58 batch9 selector source changed")
+            return continuation_path
         source = approved_sources.get(int(seed))
         if source is None:
             raise RuntimeError(f"R58 has no exact qualified resume source for seed {seed}")
@@ -344,6 +439,12 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
     def recover_final_batch_commit(seed, state, controller, checkpoint):
         receipt = Path(r40_train._batch_commit_path(seed, 0))
         provenance = state.get("round58_resume_provenance")
+        if (int(seed) == 11 and int(state.get("episodes_done", -1)) == 40
+                and int(state.get("updates", -1)) == 10
+                and isinstance(provenance, dict)
+                and provenance.get("kind") == "round58-exact-committed-batch9-source/1"
+                and provenance.get("source_commit_sha256") == continuation.get("commit_sha256")):
+            return None
         if (not receipt.exists() and int(state.get("episodes_done", -1)) == 4
                 and int(state.get("updates", -1)) == 1
                 and isinstance(provenance, dict)
@@ -439,5 +540,7 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             "wrapped_candidate_selector": r40_train._latest_resume_source is latest,
             "wrapped_historical_commit_boundary":
                 r40_train._recover_final_batch_commit is recover_final_batch_commit,
+            "committed_batch9_source_bound": continuation_path is not None,
+            "validate_current_source": validate_current_committed_source,
             "wrapped_checkpoint_sidecar": True,
             "wrapped_readonly_runtime_loader": r42_run is not None and callable(run_torch_load_cpu)}

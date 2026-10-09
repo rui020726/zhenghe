@@ -41,6 +41,7 @@ import r58_identity_ledger_close_v2 as identity_ledger  # noqa: E402
 import r58_resume_seam as resume_seam  # noqa: E402
 import r58_attempt3_contract as attempt3_contract  # noqa: E402
 import r58_attempt3_claim_seam as attempt3_seam  # noqa: E402
+import r58_uncommitted_prefix_probe as prefix_probe  # noqa: E402
 
 PRIVATE_GENERATION = RUN_ROOT / "round58_gen3"
 PRIVATE_RAW = PRIVATE_GENERATION / "raw"
@@ -229,6 +230,8 @@ def _repair_identity() -> dict[str, Any]:
                 Path(checkpoint_contract.__file__).read_bytes()).hexdigest(),
             "resume_seam_sha256": hashlib.sha256(
                 Path(resume_seam.__file__).read_bytes()).hexdigest(),
+            "prefix_recovery_sha256": hashlib.sha256(
+                Path(prefix_probe.__file__).read_bytes()).hexdigest(),
             "attempt3_contract_sha256": hashlib.sha256(
                 Path(attempt3_contract.__file__).read_bytes()).hexdigest(),
             "attempt3_claim_seam_sha256": hashlib.sha256(
@@ -310,7 +313,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
                 "ROUND58 attempt3 special-case binding missing or mismatched")
     elif "attempt3_special_case" in frozen or "attempt3_special_case" in approval:
         raise PermissionError("ROUND58 fresh mode must not bind an attempt3 special case")
-    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V21.json"
+    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V25.json"
     if mode == "recover_first_batch_gate" and not migration_proof_path.is_file():
         raise PermissionError("ROUND58 recovery plan identity migration proof is missing")
     migration_proof_sha256 = (hashlib.sha256(migration_proof_path.read_bytes()).hexdigest()
@@ -728,8 +731,49 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
             versions=runtime["r42_versions"], r42_run=runtime["r42_run"],
             approved_sources=(None if resume_runtime is None else values["resume_sources"]["sources"]),
             resume_map_sha256=(None if resume_runtime is None
-                               else values["resume_sources"]["manifest_sha256"]))
+                               else values["resume_sources"]["manifest_sha256"]),
+            committed_continuation=(None if resume_runtime is None else
+                                    values["resume_sources"]["committed_continuation"]))
         runtime["r58_checkpoint_contract"] = contract
+        if resume_runtime is not None:
+            run_module = runtime["r40_run"]
+            if sys.modules.get("r40_run") is not run_module:
+                raise RuntimeError("R58 prefix route is not bound to the live R40 module")
+            original_episode = run_module.run_training_episode
+            prefix_cache = None
+            prefix_delivered = set()
+
+            def prefix_or_actual_episode(*args, **kwargs):
+                nonlocal prefix_cache
+                seed = int(kwargs.get("training_seed", -1))
+                ep = int(kwargs.get("episode_index", -1))
+                if seed != 11 or ep not in (40, 41, 42):
+                    return original_episode(*args, **kwargs)
+                if ep in prefix_delivered or ep != 40 + len(prefix_delivered):
+                    raise RuntimeError("R58 batch10 persisted prefix was requested out of order")
+                controller = args[2] if len(args) >= 3 else kwargs.get("controller")
+                if prefix_cache is None:
+                    prefix_cache = prefix_probe.materialize_for_live_batch(controller)
+                row = prefix_cache[ep]
+                if (int(kwargs.get("scenario_seed", -1)) != int(row["scenario_seed"])
+                        or float(kwargs.get("lam", float("nan"))) != float(row["lambda"])):
+                    raise RuntimeError("R58 persisted prefix scenario/lambda differs from live batch")
+                prefix_delivered.add(ep)
+                if ep == 42:
+                    # Restore the exact post-episode42 process RNG without constructing
+                    # an environment; episode39 provides an independent checkpoint control.
+                    source_row, tape, _ = prefix_probe._episode(42)
+                    replay = prefix_probe._replay_episode_rng(source_row, tape, controller)
+                    if replay["action_mismatches"] or replay["free_draws"] != 6:
+                        raise RuntimeError("R58 persisted prefix RNG replay did not close")
+                return row
+
+            run_module.run_training_episode = prefix_or_actual_episode
+            runtime["r58_prefix_route"] = {
+                "kind": "round58-s11-b10-uncommitted-prefix-route/1",
+                "source_episodes": [40, 41, 42], "environment_calls_for_prefix": 0,
+                "undo": lambda: setattr(run_module, "run_training_episode", original_episode),
+            }
         if resume_runtime is None:
             counter_bridge = identity_ledger.bridge_ppo_update_counter(
                 runtime["trainer"], runtime["r42_run"])
@@ -895,25 +939,10 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                 # would not match the persisted payload freeze.
                 selected = Path(runtime["r40_train"]._latest_resume_source(
                     seed, runtime["round42_freeze"])).resolve()
-                expected = Path(proof["sources"][seed]["path"]).resolve()
+                expected = Path((proof["committed_continuation"] if seed == 11 else
+                                 proof["sources"][seed])["path"]).resolve()
                 if selected != expected:
-                    # Once continuation batches are committed, the selector
-                    # chooses the newest current-identity checkpoint instead of
-                    # the historical qualified source.  Accept exactly that: a
-                    # checkpoint under the approved root whose sidecar attests
-                    # the current repair identity and whose bytes match it.
-                    sidecar = Path(str(selected) + ".r58.json")
-                    if (Path(selected).resolve().parent
-                            != Path(values["checkpoint_root"]).resolve()
-                            or not sidecar.is_file()):
-                        raise PermissionError(
-                            f"seed {seed}: live resume selector chose an unapproved source: {selected}")
-                    receipt = json.loads(sidecar.read_text(encoding="utf-8"))
-                    if (receipt.get("round58_repair_attestation") != values["repair_identity"]
-                            or receipt.get("checkpoint_sha256")
-                            != hashlib.sha256(selected.read_bytes()).hexdigest()):
-                        raise PermissionError(
-                            f"seed {seed}: live resume selector sidecar does not close")
+                    runtime["r58_checkpoint_contract"]["validate_current_source"](selected, seed)
                 selected_sources[seed] = str(selected)
             restore_gate_hook = globals().get("_ROUND58_REAL_RESTORE_GATE_HOOK")
             if restore_gate_hook is not None:
@@ -981,6 +1010,9 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                 run_module.configure = configure_bridge["original_configure"]
                 delattr(run_module, "_r58_resume_configure_bound")
         for runtime, live in reversed(installed_runtimes):
+            prefix_route = runtime.get("r58_prefix_route")
+            if prefix_route and callable(prefix_route.get("undo")):
+                prefix_route["undo"]()
             call_journals = runtime.get("r58_call_journals")
             if call_journals and callable(call_journals.get("undo")):
                 call_journals["undo"]()
@@ -1014,7 +1046,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
                  "freeze": values["freeze_path"], "quota": values["quota_path"],
                  "scene_audit": values["scene_audit_path"]}
         if values["mode"] == "recover_first_batch_gate":
-            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V21.json"
+            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V25.json"
         for key, path in paths.items():
             if hashlib.sha256(Path(path).read_bytes()).hexdigest() != values["input_file_sha256"][key]:
                 raise PermissionError(f"ROUND58 {key} receipt changed after preflight")
@@ -1050,7 +1082,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
             migration_route = resume_seam.install_historical_plan_comparison_view(
                 legacy, repo_root=REPO_ROOT, current_plan=current_live_plan,
                 current_repair_identity=values["repair_identity"],
-                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V21.json",
+                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V25.json",
                 expected_proof_sha256=values["input_file_sha256"]["plan_identity_migration_proof"])
             legacy.round58_plan_identity_migration = {
                 key: value for key, value in migration_route.items() if key != "undo"}
@@ -1333,4 +1365,3 @@ def close_audit_runtime(binding: dict[str, Any]) -> None:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -185,6 +185,25 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
                 if (claim.get("status") != "claimed_before_environment"
                         or logical not in jobs):
                     continue
+                if logical != "new_training_s11_e43" or int(claim.get("attempt", -1)) != 1:
+                    raise RuntimeError("unregistered in-flight claim cannot be auto-corrected")
+                import hashlib as _hashlib
+                from r58_attempt3_contract import _verify_interrupted_e43
+                _verify_interrupted_e43(raw_root, claim)
+                original_bytes = claim_path.read_bytes()
+                original_sha = _hashlib.sha256(original_bytes).hexdigest()
+                archive = (Path(resume_root).resolve() / "preserved"
+                           / "new_training_s11_e43_attempt1_original.json")
+                archive.parent.mkdir(parents=True, exist_ok=True)
+                if archive.exists():
+                    if archive.read_bytes() != original_bytes:
+                        raise RuntimeError("interrupted episode43 original archive conflicts")
+                else:
+                    with archive.open("xb") as saved:
+                        saved.write(original_bytes)
+                        saved.flush()
+                        import os as _os
+                        _os.fsync(saved.fileno())
                 correction = {
                     "kind": "round58-external-termination-correction/1",
                     "original_status": "claimed_before_environment",
@@ -198,6 +217,9 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
                         name: claim.get(name) for name in
                         ("environment_constructor_calls", "run_invocation_calls",
                          "run_return_calls", "completed_steps")},
+                    "original_claim_sha256": original_sha,
+                    "original_claim_archive": str(archive),
+                    "step_count_disposition": "unknown_from_partial_lifecycle_not_zero",
                 }
                 artifact_paths = claim.get("round45_artifact_paths")
                 completed_row = None

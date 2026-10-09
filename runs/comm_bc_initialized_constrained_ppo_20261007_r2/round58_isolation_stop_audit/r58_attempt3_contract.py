@@ -51,6 +51,55 @@ APPROVED_ATTEMPT3 = {
 }
 #: The persisted predecessor slot identities the approval binds.
 PREDECESSOR_ATTEMPT2_SLOT = 1
+INTERRUPTED_E43_ORIGINAL_SHA256 = "4b17c6ccd38dbf62cb28bc4dec3d79f95687ce26c29ee8bd0bd71fd3bef231a4"
+INTERRUPTED_E43_LIFECYCLE_SHA256 = "59b3639ca86f145269be2b1b3e2061cdf12e60b7e1d718318d9a9e8fc996958e"
+
+
+def _verify_interrupted_e43(raw: Path, claim: dict[str, Any]) -> dict[str, Any]:
+    """Accept only the observed partial attempt, never a generic in-flight claim."""
+    import hashlib
+    logical = "new_training_s11_e43"
+    slot_path = Path(raw) / "launch_slots" / "normal" / "0052.json"
+    if (claim.get("logical_job") != logical or _attempt(claim) != 1
+            or claim.get("category") != "normal" or claim.get("launch_slot") != 52
+            or claim.get("metadata", {}).get("scenario_seed") != 1300004
+            or claim.get("environment_constructor_calls") != 1
+            or claim.get("joint_run_constructed_calls") != 1
+            or claim.get("run_invocation_calls") != 1
+            or claim.get("run_return_calls") != 0
+            or claim.get("optimizer_step_calls") != 0
+            or claim.get("checkpoint_write_calls") != 0
+            or not slot_path.is_file()
+            or json.loads(slot_path.read_text(encoding="utf-8")).get("logical_job") != logical
+            or json.loads(slot_path.read_text(encoding="utf-8")).get("attempt") != 1):
+        raise RuntimeError("unclosed episode43 is not the exact observed attempt")
+    paths = claim.get("round45_artifact_paths", {})
+    lifecycle = Path(paths.get("lifecycle", ""))
+    expected_parent = Path(raw).resolve().parents[1] / "round58_gen3_resume_v18" / "raw" / "logs"
+    if (not lifecycle.is_file() or lifecycle.resolve().parent != expected_parent.resolve()
+            or hashlib.sha256(lifecycle.read_bytes()).hexdigest()
+               != INTERRUPTED_E43_LIFECYCLE_SHA256
+            or any(Path(paths.get(key, "")).exists()
+                   for key in ("row", "tape", "transcript"))):
+        raise RuntimeError("unclosed episode43 artifact state differs from the preserved partial run")
+    claim_path = Path(raw) / "launch_claims" / logical / "attempt_0001.json"
+    if claim.get("status") == "claimed_before_environment":
+        if hashlib.sha256(claim_path.read_bytes()).hexdigest() != INTERRUPTED_E43_ORIGINAL_SHA256:
+            raise RuntimeError("unclosed episode43 claim bytes differ from the observed original")
+    elif claim.get("status") == "failed_technical":
+        correction = claim.get("round58_external_termination_correction")
+        archive = Path((correction or {}).get("original_claim_archive", ""))
+        if (not isinstance(correction, dict)
+                or correction.get("original_claim_sha256") != INTERRUPTED_E43_ORIGINAL_SHA256
+                or not archive.is_file()
+                or hashlib.sha256(archive.read_bytes()).hexdigest()
+                   != INTERRUPTED_E43_ORIGINAL_SHA256):
+            raise RuntimeError("episode43 technical disposition lacks exact original archive")
+    else:
+        raise RuntimeError("episode43 has an unapproved status")
+    return {"logical_job": logical, "attempt": 1, "normal_slot": 52,
+            "constructor_calls": 1, "run_invocations": 1,
+            "complete_row": False, "completed_steps": "unknown_not_zero"}
 
 ZERO_ENVIRONMENT_COUNTERS = (
     "environment_constructor_calls", "joint_run_build_failures",
@@ -263,6 +312,7 @@ def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any
             # execute seam appends the termination correction before that key
             # runs again, and the frozen technical-retry path then reruns it.
             # The gate records it without rewriting anything.
+            _verify_interrupted_e43(raw, claim)
             continue
         if claim.get("status") != "failed_technical":
             raise RuntimeError(f"recovery found an unexpected non-complete status: {logical} {claim.get('status')}")
@@ -283,7 +333,10 @@ def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any
                 "artifact_receipt_pending": True,
             }
             continue
-        _assert_zero_environment_consumption(claim, logical)
+        if logical == "new_training_s11_e43" and _attempt(claim) == 1:
+            _verify_interrupted_e43(raw, claim)
+        else:
+            _assert_zero_environment_consumption(claim, logical)
         slot = int(claim.get("launch_slot", 0))
         category = str(claim.get("category", ""))
         slot_path = raw / "launch_slots" / category / f"{slot:04d}.json"
