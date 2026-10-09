@@ -29,7 +29,7 @@
     "old_main_order_regression": {
       "old_source_commit": "b38b8688dee7ffc2626aa2064c8af74af75e216b",
       "old_main_route_exit_code": 1,
-      "failure": "NameError: _validate_external_grant/load_legacy_launcher used before definition"
+      "failure": "main invoked _validate_external_grant, whose call to load_legacy_launcher raised NameError because that helper was defined later in the module"
     },
     "new_entry_evidence": {
       "module_cli_help_exit_code": 0,
