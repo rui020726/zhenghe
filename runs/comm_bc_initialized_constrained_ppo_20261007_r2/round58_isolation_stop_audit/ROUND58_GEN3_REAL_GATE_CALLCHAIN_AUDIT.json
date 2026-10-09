@@ -1,0 +1,1254 @@
+{
+  "kind": "round58-gen3-real-first-batch-gate-close/1",
+  "status": "all_three_actual_readonly_gates_passed",
+  "starting_head": "3f1a721e6414898c7ccdd0e786b0bcfef97dd5f8",
+  "gate_source": {
+    "module": "r42_analysis",
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_one_shot_full_trace_ablation_20261004\\r42_analysis.py",
+    "sha256": "3342367be6d8a3c732ac7bf541575d17ae8a168618bc3f9b1493781bf8345633",
+    "function": "first_batch_gate",
+    "callable_identity": 2593812783760
+  },
+  "source_attestation": {
+    "identity": {
+      "critic_route_version": "critic_representation_stop_gradient/1",
+      "adapter_module": "r58_gate_prior_repaired",
+      "adapter_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\r58_gate_prior_repaired.py",
+      "adapter_sha256": "7081557e6197aceac17fb453c03e1b5fd539f55ec60a7b3eae92d63f7e697688",
+      "trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+      "common_sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+      "private_launcher_sha256": "56e0b12819b5193437d0ef9b19ca2c6df2040f088f716df5dc1a3874065340c4",
+      "checkpoint_contract_sha256": "c23dc0c89d8a6d423591cc684e47cf5a25130a279710243fc60dedf7c39ec95b",
+      "candidate_config_sha256": "df24e76f76f16a61ac55890b3a5ad1dd79fdbc201ea3b7551bb2355fa11935d7",
+      "candidate_input_identity_sha256": "938fc21d17e0930dc3652cb2916d064e6e422dbfdd9d34e8e639a0554cb96600",
+      "execution_basis_sha256": "4e04e62f458dc5186b837b14266184a7aa84493a05b0827e31ec3a824c83201e",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2"
+    },
+    "canonical_identity": {
+      "critic_route_version": "critic_representation_stop_gradient/1",
+      "adapter_module": "r58_gate_prior_repaired",
+      "adapter_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\r58_gate_prior_repaired.py",
+      "adapter_sha256": "7081557e6197aceac17fb453c03e1b5fd539f55ec60a7b3eae92d63f7e697688",
+      "trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+      "common_sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+      "private_launcher_sha256": "56e0b12819b5193437d0ef9b19ca2c6df2040f088f716df5dc1a3874065340c4",
+      "checkpoint_contract_sha256": "c23dc0c89d8a6d423591cc684e47cf5a25130a279710243fc60dedf7c39ec95b",
+      "candidate_config_sha256": "df24e76f76f16a61ac55890b3a5ad1dd79fdbc201ea3b7551bb2355fa11935d7",
+      "candidate_input_identity_sha256": "938fc21d17e0930dc3652cb2916d064e6e422dbfdd9d34e8e639a0554cb96600",
+      "execution_basis_sha256": "4e04e62f458dc5186b837b14266184a7aa84493a05b0827e31ec3a824c83201e",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2"
+    },
+    "payload_identity_differing_fields": [],
+    "path_metadata_exception": null,
+    "sources": {
+      "adapter_sha256": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\r58_gate_prior_repaired.py",
+        "sha256": "7081557e6197aceac17fb453c03e1b5fd539f55ec60a7b3eae92d63f7e697688",
+        "matches_attestation": true
+      },
+      "checkpoint_contract_sha256": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\r58_checkpoint_contract_repaired.py",
+        "sha256": "c23dc0c89d8a6d423591cc684e47cf5a25130a279710243fc60dedf7c39ec95b",
+        "matches_attestation": true
+      },
+      "candidate_config_sha256": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_PRELAUNCH_CANDIDATE.json",
+        "sha256": "df24e76f76f16a61ac55890b3a5ad1dd79fdbc201ea3b7551bb2355fa11935d7",
+        "matches_attestation": true
+      },
+      "candidate_input_identity_sha256": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_CANDIDATE_INPUT_IDENTITY.json",
+        "sha256": "938fc21d17e0930dc3652cb2916d064e6e422dbfdd9d34e8e639a0554cb96600",
+        "matches_attestation": true
+      },
+      "execution_basis_sha256": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_GEN3_EXECUTION_BASIS.json",
+        "sha256": "4e04e62f458dc5186b837b14266184a7aa84493a05b0827e31ec3a824c83201e",
+        "matches_attestation": true
+      },
+      "private_launcher_sha256": {
+        "path": "git:3f1a721e6414898c7ccdd0e786b0bcfef97dd5f8:runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/r58_private_launcher_repaired.py",
+        "sha256": "56e0b12819b5193437d0ef9b19ca2c6df2040f088f716df5dc1a3874065340c4",
+        "matches_attestation": true
+      },
+      "private_launcher_current": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\r58_private_launcher_repaired.py",
+        "sha256": "0285f6ad9a71addc5f51d4d758b789b6ae447b09506f888ac8da6bf3e6324968",
+        "matches_historical_attestation": false
+      },
+      "trainer_sha256": {
+        "path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py",
+        "sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+        "matches_attestation": true
+      },
+      "common_sha256": {
+        "path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_common.py",
+        "sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+        "matches_attestation": true
+      }
+    },
+    "all_historical_sources_match": true
+  },
+  "source_attestation_checkpoint_deserializations": 1,
+  "pre_gate_checkpoint_deserializations": 6,
+  "runtime_setup_checkpoint_deserializations": 0,
+  "seeds": [
+    {
+      "seed": 11,
+      "status": "passed",
+      "serialized_identity_chain": {
+        "batch_record": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_s11_b0_attempt01.json",
+        "batch_record_sha256": "3a9447efcdd015ff8580dffa4559964e2de9d93545eb3c52cc589cccec7a1671",
+        "commit_receipt": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_commit_s11_b0.json",
+        "commit_sha256": "eaf69f4168e770f0cadfbc1058293e9028955c3113398b69a600f435ca94e957",
+        "record_commit_binding": true,
+        "episodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "recorded_optimizer_steps": 8,
+        "checkpoint_identity": [
+          {
+            "role": "pre",
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s11_before_b0.pt",
+            "sha256": "8fa687b3294c8a8255a1ba22c063483005becbd7a3db5e7cb33d215dbf885eee",
+            "sidecar": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s11_before_b0.pt.r58.json",
+            "sidecar_sha256": "772752d7191b694c5aaecc36f1ab3a2d519cef8dd82e2c2d36f9eb2dc53a4767",
+            "payload_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+            "action_semantics": "one-shot-send-skip/1",
+            "attestation_match": true,
+            "base_freeze_exact_after_metadata_normalization": true,
+            "optimizer_state_present": true,
+            "training_state_cursor": {
+              "episodes_done": 0,
+              "updates": 0,
+              "optimizer_steps": 0,
+              "training_seed": 11
+            }
+          },
+          {
+            "role": "post",
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s11_after_b0.pt",
+            "sha256": "0d9e8234487a995008189f7757e997d88cd7f0c9fd1f3092eaff03ab8a9b74ab",
+            "sidecar": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s11_after_b0.pt.r58.json",
+            "sidecar_sha256": "c66971448b08c574d2aacd6bcd649e522a3a176c3e37bf804f23b5cd1914b84b",
+            "payload_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+            "action_semantics": "one-shot-send-skip/1",
+            "attestation_match": true,
+            "base_freeze_exact_after_metadata_normalization": true,
+            "optimizer_state_present": true,
+            "training_state_cursor": {
+              "episodes_done": 4,
+              "updates": 1,
+              "optimizer_steps": 8,
+              "training_seed": 11
+            }
+          }
+        ]
+      },
+      "gate_result": {
+        "kind": "round42-first-four-real-batch-gate/1",
+        "status": "passed",
+        "training_seed": 11,
+        "episodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "batch": 0,
+        "batch_record": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_s11_b0_attempt01.json",
+          "sha256": "3a9447efcdd015ff8580dffa4559964e2de9d93545eb3c52cc589cccec7a1671"
+        },
+        "preupdate_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+        "postupdate_parameter_sha256": "acb748912af62f0673ab700bbfd6bea76833c71239f6960e4d6a1c203756d34d",
+        "preupdate_checkpoint": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s11_before_b0.pt",
+          "sha256": "8fa687b3294c8a8255a1ba22c063483005becbd7a3db5e7cb33d215dbf885eee",
+          "read_only": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true,
+            "comm_action_semantics": "one-shot-send-skip/1",
+            "action_semantics_interpretation": "one-shot-send-skip/1",
+            "read_only_for_round42": true,
+            "read_only_for_round44": true,
+            "ambient_rng_preserved": false,
+            "audit_rng_restore_suppressed": true
+          }
+        },
+        "postupdate_checkpoint": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s11_after_b0.pt",
+          "sha256": "0d9e8234487a995008189f7757e997d88cd7f0c9fd1f3092eaff03ab8a9b74ab",
+          "read_only": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true,
+            "comm_action_semantics": "one-shot-send-skip/1",
+            "action_semantics_interpretation": "one-shot-send-skip/1",
+            "read_only_for_round42": true,
+            "read_only_for_round44": true,
+            "ambient_rng_preserved": false,
+            "audit_rng_restore_suppressed": true
+          },
+          "episodes_done": 4,
+          "updates": 1,
+          "optimizer_steps": 8
+        },
+        "candidate_and_action_audit": {
+          "decision_tape_rows": 265,
+          "free_choices": 23,
+          "send_now_choices": 7,
+          "skip_episode_choices": 16,
+          "budget_or_capacity_masked_candidates": 0,
+          "closed_fixed_hold_candidates": 520,
+          "all_skip_choices_in_free_likelihood_set": true,
+          "closed_and_masked_excluded": true,
+          "one_free_choice_per_target_per_episode": true
+        },
+        "independent_likelihood": {
+          "max_abs_logged_vs_recomputed": 0.0,
+          "max_abs_entropy_helper_vs_independent_free_set_sum": 2.5011104298755527e-12,
+          "trainer_preupdate_alignment": {
+            "samples": 265,
+            "max_abs_gap": 2.3447910280083306e-13,
+            "tolerance": 1e-06,
+            "passed": true
+          },
+          "tolerance": 1e-06
+        },
+        "independent_reward_gae": {
+          "max_abs_sample_target_gap": 0.0,
+          "independent_prefix_task_reward": 0.0,
+          "independent_prefix_cost_bytes": 0.0,
+          "actual_batch_samples": 265,
+          "task_event_tick_and_cost_closure": true
+        },
+        "paired_constraint": {
+          "same_scene_reference_values": [
+            6.0,
+            6.0,
+            5.0,
+            6.0
+          ],
+          "policy_on_time_values": [
+            6.0,
+            6.0,
+            5.0,
+            6.0
+          ],
+          "independent_g_hat": 0.0,
+          "recorded_g_hat": 0.0,
+          "lambda_before": 1.0,
+          "lambda_next": 1.0,
+          "direction": "unchanged"
+        },
+        "optimizer_and_gradient_scope": {
+          "optimizer_parameter_count": 10,
+          "communication_modules": [
+            "action_head",
+            "cost_head",
+            "task_value_head",
+            "trunk"
+          ],
+          "task_critic_included": true,
+          "cost_critic_included": true,
+          "finite_metrics_gradients_and_critic_targets": true,
+          "module_gradient_l1_mean": {
+            "trunk": 0.00282636,
+            "action_head": 4.1139e-05,
+            "task_value_head": 49.762493372,
+            "cost_head": 3.625591171
+          },
+          "module_gradient_l1_min": {
+            "trunk": 0.0,
+            "action_head": 0.0,
+            "task_value_head": 39.888497591,
+            "cost_head": 0.873031847
+          },
+          "gradient_norm_mean": 7.9572,
+          "optimizer_steps": 8,
+          "extra_optimizer_steps_or_checkpoint_writes_during_gate": 0
+        },
+        "frozen_search_allocation_hashes_unchanged": true,
+        "frozen_checkpoint_path_identity": [
+          {
+            "frozen_name": "shared_mappo_model_21_3100.pth",
+            "record_key": "runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+            "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+            "declared_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+            "actual_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33"
+          },
+          {
+            "frozen_name": "ctde_final_7_1.pth",
+            "record_key": "runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+            "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+            "declared_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+            "actual_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+          }
+        ]
+      },
+      "all_post_identity_checks_reached": true,
+      "read_only_activity": {
+        "torch_load": 7,
+        "forward_calls": 1855,
+        "autograd_grad": 0
+      },
+      "actual_counters_before_after": {
+        "optimizer": [
+          24,
+          24
+        ],
+        "checkpoint_write": [
+          0,
+          0
+        ],
+        "ppo": [
+          0,
+          0
+        ]
+      },
+      "rng_state_comparison": {
+        "python_unchanged": true,
+        "numpy_unchanged": true,
+        "torch_cpu_unchanged": false
+      },
+      "denied_side_effect_attempts": {
+        "environment_construct": 0,
+        "episode_provider": 0,
+        "claim_journal_checkpoint_write": 0,
+        "optimizer_step": 0,
+        "checkpoint_write": 0,
+        "rng_restore": 0
+      },
+      "protected_raw_hashes_before_after": {
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_s11_b0_attempt01.json": {
+          "before": "3a9447efcdd015ff8580dffa4559964e2de9d93545eb3c52cc589cccec7a1671",
+          "after": "3a9447efcdd015ff8580dffa4559964e2de9d93545eb3c52cc589cccec7a1671",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_commit_s11_b0.json": {
+          "before": "eaf69f4168e770f0cadfbc1058293e9028955c3113398b69a600f435ca94e957",
+          "after": "eaf69f4168e770f0cadfbc1058293e9028955c3113398b69a600f435ca94e957",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s11_before_b0.pt": {
+          "before": "8fa687b3294c8a8255a1ba22c063483005becbd7a3db5e7cb33d215dbf885eee",
+          "after": "8fa687b3294c8a8255a1ba22c063483005becbd7a3db5e7cb33d215dbf885eee",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s11_before_b0.pt.r58.json": {
+          "before": "772752d7191b694c5aaecc36f1ab3a2d519cef8dd82e2c2d36f9eb2dc53a4767",
+          "after": "772752d7191b694c5aaecc36f1ab3a2d519cef8dd82e2c2d36f9eb2dc53a4767",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s11_after_b0.pt": {
+          "before": "0d9e8234487a995008189f7757e997d88cd7f0c9fd1f3092eaff03ab8a9b74ab",
+          "after": "0d9e8234487a995008189f7757e997d88cd7f0c9fd1f3092eaff03ab8a9b74ab",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s11_after_b0.pt.r58.json": {
+          "before": "c66971448b08c574d2aacd6bcd649e522a3a176c3e37bf804f23b5cd1914b84b",
+          "after": "c66971448b08c574d2aacd6bcd649e522a3a176c3e37bf804f23b5cd1914b84b",
+          "unchanged": true
+        }
+      },
+      "checkpoint_hashes_unchanged_by_gate": true
+    },
+    {
+      "seed": 22,
+      "status": "passed",
+      "serialized_identity_chain": {
+        "batch_record": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_s22_b0_attempt01.json",
+        "batch_record_sha256": "a47478a5a5e82fbb24abd72415e78e2f256cf8062552efea3a4d6a01cc9d3943",
+        "commit_receipt": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_commit_s22_b0.json",
+        "commit_sha256": "2c71edcbe39845c034fb57b71189eb91e6cc425fbcbc72c2663eb25643ee6312",
+        "record_commit_binding": true,
+        "episodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "recorded_optimizer_steps": 8,
+        "checkpoint_identity": [
+          {
+            "role": "pre",
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s22_before_b0.pt",
+            "sha256": "abf766747fa6f44ef718d421bc54cd505f1a345a8407ec53ac97144dcc617db4",
+            "sidecar": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s22_before_b0.pt.r58.json",
+            "sidecar_sha256": "ed7382bc53e6391eb442e42a8d5787f1381bca9ea212e56d977357399f3b3245",
+            "payload_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+            "action_semantics": "one-shot-send-skip/1",
+            "attestation_match": true,
+            "base_freeze_exact_after_metadata_normalization": true,
+            "optimizer_state_present": true,
+            "training_state_cursor": {
+              "episodes_done": 0,
+              "updates": 0,
+              "optimizer_steps": 0,
+              "training_seed": 22
+            }
+          },
+          {
+            "role": "post",
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s22_after_b0.pt",
+            "sha256": "b0c56adf2039579a2c2d5a245af3cbe3ebcd3a31ef3ac253eb483e23e1a5ade6",
+            "sidecar": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s22_after_b0.pt.r58.json",
+            "sidecar_sha256": "34eecca1c493ba004b3525aebeee4b20254696755f6d3a477cff1fd7073d406c",
+            "payload_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+            "action_semantics": "one-shot-send-skip/1",
+            "attestation_match": true,
+            "base_freeze_exact_after_metadata_normalization": true,
+            "optimizer_state_present": true,
+            "training_state_cursor": {
+              "episodes_done": 4,
+              "updates": 1,
+              "optimizer_steps": 8,
+              "training_seed": 22
+            }
+          }
+        ]
+      },
+      "gate_result": {
+        "kind": "round42-first-four-real-batch-gate/1",
+        "status": "passed",
+        "training_seed": 22,
+        "episodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "batch": 0,
+        "batch_record": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_s22_b0_attempt01.json",
+          "sha256": "a47478a5a5e82fbb24abd72415e78e2f256cf8062552efea3a4d6a01cc9d3943"
+        },
+        "preupdate_parameter_sha256": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+        "postupdate_parameter_sha256": "149c2798583c28202503d37e6eb49c2133797dd3c7b5a8e0ae709a07f41e300f",
+        "preupdate_checkpoint": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s22_before_b0.pt",
+          "sha256": "abf766747fa6f44ef718d421bc54cd505f1a345a8407ec53ac97144dcc617db4",
+          "read_only": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true,
+            "comm_action_semantics": "one-shot-send-skip/1",
+            "action_semantics_interpretation": "one-shot-send-skip/1",
+            "read_only_for_round42": true,
+            "read_only_for_round44": true,
+            "ambient_rng_preserved": false,
+            "audit_rng_restore_suppressed": true
+          }
+        },
+        "postupdate_checkpoint": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s22_after_b0.pt",
+          "sha256": "b0c56adf2039579a2c2d5a245af3cbe3ebcd3a31ef3ac253eb483e23e1a5ade6",
+          "read_only": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true,
+            "comm_action_semantics": "one-shot-send-skip/1",
+            "action_semantics_interpretation": "one-shot-send-skip/1",
+            "read_only_for_round42": true,
+            "read_only_for_round44": true,
+            "ambient_rng_preserved": false,
+            "audit_rng_restore_suppressed": true
+          },
+          "episodes_done": 4,
+          "updates": 1,
+          "optimizer_steps": 8
+        },
+        "candidate_and_action_audit": {
+          "decision_tape_rows": 265,
+          "free_choices": 23,
+          "send_now_choices": 7,
+          "skip_episode_choices": 16,
+          "budget_or_capacity_masked_candidates": 0,
+          "closed_fixed_hold_candidates": 520,
+          "all_skip_choices_in_free_likelihood_set": true,
+          "closed_and_masked_excluded": true,
+          "one_free_choice_per_target_per_episode": true
+        },
+        "independent_likelihood": {
+          "max_abs_logged_vs_recomputed": 0.0,
+          "max_abs_entropy_helper_vs_independent_free_set_sum": 2.000888343900442e-11,
+          "trainer_preupdate_alignment": {
+            "samples": 265,
+            "max_abs_gap": 1.7053025658242404e-12,
+            "tolerance": 1e-06,
+            "passed": true
+          },
+          "tolerance": 1e-06
+        },
+        "independent_reward_gae": {
+          "max_abs_sample_target_gap": 0.0,
+          "independent_prefix_task_reward": 0.0,
+          "independent_prefix_cost_bytes": 0.0,
+          "actual_batch_samples": 265,
+          "task_event_tick_and_cost_closure": true
+        },
+        "paired_constraint": {
+          "same_scene_reference_values": [
+            6.0,
+            6.0,
+            5.0,
+            6.0
+          ],
+          "policy_on_time_values": [
+            6.0,
+            6.0,
+            5.0,
+            6.0
+          ],
+          "independent_g_hat": 0.0,
+          "recorded_g_hat": 0.0,
+          "lambda_before": 1.0,
+          "lambda_next": 1.0,
+          "direction": "unchanged"
+        },
+        "optimizer_and_gradient_scope": {
+          "optimizer_parameter_count": 10,
+          "communication_modules": [
+            "action_head",
+            "cost_head",
+            "task_value_head",
+            "trunk"
+          ],
+          "task_critic_included": true,
+          "cost_critic_included": true,
+          "finite_metrics_gradients_and_critic_targets": true,
+          "module_gradient_l1_mean": {
+            "trunk": 0.006657149,
+            "action_head": 0.000126409,
+            "task_value_head": 184.523271918,
+            "cost_head": 3.057555739
+          },
+          "module_gradient_l1_min": {
+            "trunk": 0.0,
+            "action_head": 0.0,
+            "task_value_head": 168.328861237,
+            "cost_head": 0.443697385
+          },
+          "gradient_norm_mean": 23.7579,
+          "optimizer_steps": 8,
+          "extra_optimizer_steps_or_checkpoint_writes_during_gate": 0
+        },
+        "frozen_search_allocation_hashes_unchanged": true,
+        "frozen_checkpoint_path_identity": [
+          {
+            "frozen_name": "shared_mappo_model_21_3100.pth",
+            "record_key": "runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+            "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+            "declared_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+            "actual_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33"
+          },
+          {
+            "frozen_name": "ctde_final_7_1.pth",
+            "record_key": "runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+            "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+            "declared_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+            "actual_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+          }
+        ]
+      },
+      "all_post_identity_checks_reached": true,
+      "read_only_activity": {
+        "torch_load": 7,
+        "forward_calls": 1855,
+        "autograd_grad": 0
+      },
+      "actual_counters_before_after": {
+        "optimizer": [
+          24,
+          24
+        ],
+        "checkpoint_write": [
+          0,
+          0
+        ],
+        "ppo": [
+          0,
+          0
+        ]
+      },
+      "rng_state_comparison": {
+        "python_unchanged": true,
+        "numpy_unchanged": true,
+        "torch_cpu_unchanged": false
+      },
+      "denied_side_effect_attempts": {
+        "environment_construct": 0,
+        "episode_provider": 0,
+        "claim_journal_checkpoint_write": 0,
+        "optimizer_step": 0,
+        "checkpoint_write": 0,
+        "rng_restore": 0
+      },
+      "protected_raw_hashes_before_after": {
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_s22_b0_attempt01.json": {
+          "before": "a47478a5a5e82fbb24abd72415e78e2f256cf8062552efea3a4d6a01cc9d3943",
+          "after": "a47478a5a5e82fbb24abd72415e78e2f256cf8062552efea3a4d6a01cc9d3943",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_commit_s22_b0.json": {
+          "before": "2c71edcbe39845c034fb57b71189eb91e6cc425fbcbc72c2663eb25643ee6312",
+          "after": "2c71edcbe39845c034fb57b71189eb91e6cc425fbcbc72c2663eb25643ee6312",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s22_before_b0.pt": {
+          "before": "abf766747fa6f44ef718d421bc54cd505f1a345a8407ec53ac97144dcc617db4",
+          "after": "abf766747fa6f44ef718d421bc54cd505f1a345a8407ec53ac97144dcc617db4",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s22_before_b0.pt.r58.json": {
+          "before": "ed7382bc53e6391eb442e42a8d5787f1381bca9ea212e56d977357399f3b3245",
+          "after": "ed7382bc53e6391eb442e42a8d5787f1381bca9ea212e56d977357399f3b3245",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s22_after_b0.pt": {
+          "before": "b0c56adf2039579a2c2d5a245af3cbe3ebcd3a31ef3ac253eb483e23e1a5ade6",
+          "after": "b0c56adf2039579a2c2d5a245af3cbe3ebcd3a31ef3ac253eb483e23e1a5ade6",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s22_after_b0.pt.r58.json": {
+          "before": "34eecca1c493ba004b3525aebeee4b20254696755f6d3a477cff1fd7073d406c",
+          "after": "34eecca1c493ba004b3525aebeee4b20254696755f6d3a477cff1fd7073d406c",
+          "unchanged": true
+        }
+      },
+      "checkpoint_hashes_unchanged_by_gate": true
+    },
+    {
+      "seed": 33,
+      "status": "passed",
+      "serialized_identity_chain": {
+        "batch_record": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_s33_b0_attempt01.json",
+        "batch_record_sha256": "90aa540cb22d877cd8d6c6745c4f7a4763cda93c4f7756e23434c44bf3ceaeda",
+        "commit_receipt": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_commit_s33_b0.json",
+        "commit_sha256": "512f8b2ef6d1fe4e6cd13f70f0495ef69bf98487103f95fb916e8b3b26432616",
+        "record_commit_binding": true,
+        "episodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "recorded_optimizer_steps": 8,
+        "checkpoint_identity": [
+          {
+            "role": "pre",
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s33_before_b0.pt",
+            "sha256": "a6f4ae2a946d1e935833546cd537592efbd77b1148bb2130d685b325a3d38c6b",
+            "sidecar": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s33_before_b0.pt.r58.json",
+            "sidecar_sha256": "9722de0950320b5af6b66e1e53ec99222925ad8345835aa79a8cc8eb525880ed",
+            "payload_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+            "action_semantics": "one-shot-send-skip/1",
+            "attestation_match": true,
+            "base_freeze_exact_after_metadata_normalization": true,
+            "optimizer_state_present": true,
+            "training_state_cursor": {
+              "episodes_done": 0,
+              "updates": 0,
+              "optimizer_steps": 0,
+              "training_seed": 33
+            }
+          },
+          {
+            "role": "post",
+            "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s33_after_b0.pt",
+            "sha256": "265666d7ef5ba354ae71867957d536d4ac333aa9200c43696ce25e2a032927f0",
+            "sidecar": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s33_after_b0.pt.r58.json",
+            "sidecar_sha256": "3e48b2f94725a5717d744c00f729a688f52b2939252e28e54f501e97b2349f1e",
+            "payload_training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+            "action_semantics": "one-shot-send-skip/1",
+            "attestation_match": true,
+            "base_freeze_exact_after_metadata_normalization": true,
+            "optimizer_state_present": true,
+            "training_state_cursor": {
+              "episodes_done": 4,
+              "updates": 1,
+              "optimizer_steps": 8,
+              "training_seed": 33
+            }
+          }
+        ]
+      },
+      "gate_result": {
+        "kind": "round42-first-four-real-batch-gate/1",
+        "status": "passed",
+        "training_seed": 33,
+        "episodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "batch": 0,
+        "batch_record": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_s33_b0_attempt01.json",
+          "sha256": "90aa540cb22d877cd8d6c6745c4f7a4763cda93c4f7756e23434c44bf3ceaeda"
+        },
+        "preupdate_parameter_sha256": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+        "postupdate_parameter_sha256": "a1d91406af76fc89b063eb8ce93d8bbcd0b30fec763d9bb6173586f1b5175a83",
+        "preupdate_checkpoint": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s33_before_b0.pt",
+          "sha256": "a6f4ae2a946d1e935833546cd537592efbd77b1148bb2130d685b325a3d38c6b",
+          "read_only": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true,
+            "comm_action_semantics": "one-shot-send-skip/1",
+            "action_semantics_interpretation": "one-shot-send-skip/1",
+            "read_only_for_round42": true,
+            "read_only_for_round44": true,
+            "ambient_rng_preserved": false,
+            "audit_rng_restore_suppressed": true
+          }
+        },
+        "postupdate_checkpoint": {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s33_after_b0.pt",
+          "sha256": "265666d7ef5ba354ae71867957d536d4ac333aa9200c43696ce25e2a032927f0",
+          "read_only": {
+            "load_mode": "read_only",
+            "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+            "reward_timing_version": "published-completion-event-at-relay-tick/2",
+            "timing_interpretation": "versioned_capture_semantics",
+            "optimizer_restored": false,
+            "rng_restored": false,
+            "comm_action_eligibility": "first-report-only/1",
+            "action_eligibility_interpretation": "first-report-only/1",
+            "read_only_for_round40": true,
+            "comm_action_semantics": "one-shot-send-skip/1",
+            "action_semantics_interpretation": "one-shot-send-skip/1",
+            "read_only_for_round42": true,
+            "read_only_for_round44": true,
+            "ambient_rng_preserved": false,
+            "audit_rng_restore_suppressed": true
+          },
+          "episodes_done": 4,
+          "updates": 1,
+          "optimizer_steps": 8
+        },
+        "candidate_and_action_audit": {
+          "decision_tape_rows": 265,
+          "free_choices": 23,
+          "send_now_choices": 7,
+          "skip_episode_choices": 16,
+          "budget_or_capacity_masked_candidates": 0,
+          "closed_fixed_hold_candidates": 520,
+          "all_skip_choices_in_free_likelihood_set": true,
+          "closed_and_masked_excluded": true,
+          "one_free_choice_per_target_per_episode": true
+        },
+        "independent_likelihood": {
+          "max_abs_logged_vs_recomputed": 0.0,
+          "max_abs_entropy_helper_vs_independent_free_set_sum": 2.7284841053187847e-12,
+          "trainer_preupdate_alignment": {
+            "samples": 265,
+            "max_abs_gap": 9.379164112033322e-13,
+            "tolerance": 1e-06,
+            "passed": true
+          },
+          "tolerance": 1e-06
+        },
+        "independent_reward_gae": {
+          "max_abs_sample_target_gap": 0.0,
+          "independent_prefix_task_reward": 0.0,
+          "independent_prefix_cost_bytes": 0.0,
+          "actual_batch_samples": 265,
+          "task_event_tick_and_cost_closure": true
+        },
+        "paired_constraint": {
+          "same_scene_reference_values": [
+            6.0,
+            6.0,
+            5.0,
+            6.0
+          ],
+          "policy_on_time_values": [
+            6.0,
+            6.0,
+            5.0,
+            6.0
+          ],
+          "independent_g_hat": 0.0,
+          "recorded_g_hat": 0.0,
+          "lambda_before": 1.0,
+          "lambda_next": 1.0,
+          "direction": "unchanged"
+        },
+        "optimizer_and_gradient_scope": {
+          "optimizer_parameter_count": 10,
+          "communication_modules": [
+            "action_head",
+            "cost_head",
+            "task_value_head",
+            "trunk"
+          ],
+          "task_critic_included": true,
+          "cost_critic_included": true,
+          "finite_metrics_gradients_and_critic_targets": true,
+          "module_gradient_l1_mean": {
+            "trunk": 0.010031356,
+            "action_head": 7.5848e-05,
+            "task_value_head": 139.437960267,
+            "cost_head": 24.788342841
+          },
+          "module_gradient_l1_min": {
+            "trunk": 0.0,
+            "action_head": 0.0,
+            "task_value_head": 122.007575274,
+            "cost_head": 20.944209933
+          },
+          "gradient_norm_mean": 18.3253,
+          "optimizer_steps": 8,
+          "extra_optimizer_steps_or_checkpoint_writes_during_gate": 0
+        },
+        "frozen_search_allocation_hashes_unchanged": true,
+        "frozen_checkpoint_path_identity": [
+          {
+            "frozen_name": "shared_mappo_model_21_3100.pth",
+            "record_key": "runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+            "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+            "declared_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+            "actual_sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33"
+          },
+          {
+            "frozen_name": "ctde_final_7_1.pth",
+            "record_key": "runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+            "resolved_path": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+            "declared_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+            "actual_sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+          }
+        ]
+      },
+      "all_post_identity_checks_reached": true,
+      "read_only_activity": {
+        "torch_load": 7,
+        "forward_calls": 1855,
+        "autograd_grad": 0
+      },
+      "actual_counters_before_after": {
+        "optimizer": [
+          24,
+          24
+        ],
+        "checkpoint_write": [
+          0,
+          0
+        ],
+        "ppo": [
+          0,
+          0
+        ]
+      },
+      "rng_state_comparison": {
+        "python_unchanged": true,
+        "numpy_unchanged": true,
+        "torch_cpu_unchanged": false
+      },
+      "denied_side_effect_attempts": {
+        "environment_construct": 0,
+        "episode_provider": 0,
+        "claim_journal_checkpoint_write": 0,
+        "optimizer_step": 0,
+        "checkpoint_write": 0,
+        "rng_restore": 0
+      },
+      "protected_raw_hashes_before_after": {
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_s33_b0_attempt01.json": {
+          "before": "90aa540cb22d877cd8d6c6745c4f7a4763cda93c4f7756e23434c44bf3ceaeda",
+          "after": "90aa540cb22d877cd8d6c6745c4f7a4763cda93c4f7756e23434c44bf3ceaeda",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_commit_s33_b0.json": {
+          "before": "512f8b2ef6d1fe4e6cd13f70f0495ef69bf98487103f95fb916e8b3b26432616",
+          "after": "512f8b2ef6d1fe4e6cd13f70f0495ef69bf98487103f95fb916e8b3b26432616",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s33_before_b0.pt": {
+          "before": "a6f4ae2a946d1e935833546cd537592efbd77b1148bb2130d685b325a3d38c6b",
+          "after": "a6f4ae2a946d1e935833546cd537592efbd77b1148bb2130d685b325a3d38c6b",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s33_before_b0.pt.r58.json": {
+          "before": "9722de0950320b5af6b66e1e53ec99222925ad8345835aa79a8cc8eb525880ed",
+          "after": "9722de0950320b5af6b66e1e53ec99222925ad8345835aa79a8cc8eb525880ed",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s33_after_b0.pt": {
+          "before": "265666d7ef5ba354ae71867957d536d4ac333aa9200c43696ce25e2a032927f0",
+          "after": "265666d7ef5ba354ae71867957d536d4ac333aa9200c43696ce25e2a032927f0",
+          "unchanged": true
+        },
+        "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\v2_train_s33_after_b0.pt.r58.json": {
+          "before": "3e48b2f94725a5717d744c00f729a688f52b2939252e28e54f501e97b2349f1e",
+          "after": "3e48b2f94725a5717d744c00f729a688f52b2939252e28e54f501e97b2349f1e",
+          "unchanged": true
+        }
+      },
+      "checkpoint_hashes_unchanged_by_gate": true
+    }
+  ],
+  "side_effect_totals": {
+    "environment_construct": 0,
+    "episode_provider": 0,
+    "claim_journal_checkpoint_write": 0,
+    "optimizer_step": 0,
+    "PPO_update_execution": 0,
+    "PPO_noop_spy_invocations": 1,
+    "RNG_restore": 0,
+    "checkpoint_write": 0,
+    "evaluation_cells": 0,
+    "new_claims": 0,
+    "RNG_state_restores": 0,
+    "RNG_state_changes": 3,
+    "episode_tapes_replayed": 0,
+    "memory_spy_calls": 1
+  },
+  "historical_first12_claim_slot_recheck": {
+    "claim_count": 12,
+    "slot_count": 12,
+    "one_to_one": true,
+    "episodes_by_seed": {
+      "11": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "22": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "33": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "claim_files": [
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s11_e0\\attempt_0001.json",
+        "sha256": "fe89b9e7b76491a0a9031fd7cea5cd14f2200cdae365fad434b17c1a6fd1d3c5",
+        "logical_job": "new_training_s11_e0",
+        "slot": 1,
+        "category": "normal",
+        "status": "complete"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s11_e1\\attempt_0001.json",
+        "sha256": "0ec671f0ab78ec4e60d09185d0f3648028e5e227a768dfeea3328ec26a360f95",
+        "logical_job": "new_training_s11_e1",
+        "slot": 2,
+        "category": "normal",
+        "status": "complete"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s11_e2\\attempt_0001.json",
+        "sha256": "0138f8b01a01e24566ed3dfe011a70b1748944ccdc677dd684632bedb3b8fc6c",
+        "logical_job": "new_training_s11_e2",
+        "slot": 3,
+        "category": "normal",
+        "status": "complete"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s11_e3\\attempt_0001.json",
+        "sha256": "6453e99ee59e2994b56e86037580703ed4b284df1936dfab68fbb3d6a16a4163",
+        "logical_job": "new_training_s11_e3",
+        "slot": 4,
+        "category": "normal",
+        "status": "complete"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s22_e0\\attempt_0001.json",
+        "sha256": "94dbe0b36d0a11daf07a8d830a1405729425d7e659624aab8ca13c9171a884a5",
+        "logical_job": "new_training_s22_e0",
+        "slot": 5,
+        "category": "normal",
+        "status": "complete"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s22_e1\\attempt_0001.json",
+        "sha256": "0f0fd2996fd2f71a3a86df1c318521a9fc9d0dacb7ef20f038ea0cd67fe3a79b",
+        "logical_job": "new_training_s22_e1",
+        "slot": 6,
+        "category": "normal",
+        "status": "complete"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s22_e2\\attempt_0001.json",
+        "sha256": "309da2e2190656ed4d83d53e6570719712edd7d7d5c21702558fbdf7f7de76da",
+        "logical_job": "new_training_s22_e2",
+        "slot": 7,
+        "category": "normal",
+        "status": "complete"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s22_e3\\attempt_0001.json",
+        "sha256": "877456586db64a3ee7364b9ffa04557c11636321ef9e69b92745cdefea3b789d",
+        "logical_job": "new_training_s22_e3",
+        "slot": 8,
+        "category": "normal",
+        "status": "complete"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s33_e0\\attempt_0001.json",
+        "sha256": "2d1ba2550886bea6eea39fb35105b064189992c25578f995e93ae66d0ebea384",
+        "logical_job": "new_training_s33_e0",
+        "slot": 9,
+        "category": "normal",
+        "status": "complete"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s33_e1\\attempt_0001.json",
+        "sha256": "21b8c501064beccd8d9443937ff72c1196a75f0c5466718c78fb989e69afa0df",
+        "logical_job": "new_training_s33_e1",
+        "slot": 10,
+        "category": "normal",
+        "status": "complete"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s33_e2\\attempt_0001.json",
+        "sha256": "a1a36aca735e5f9c44bdc3630e6fe57b4dd8ce48a01905ae289d053b70571005",
+        "logical_job": "new_training_s33_e2",
+        "slot": 11,
+        "category": "normal",
+        "status": "complete"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s33_e3\\attempt_0001.json",
+        "sha256": "80921d0e152d912634e76ccd56786a814137fa22e404e99fd058d2ed361cfb45",
+        "logical_job": "new_training_s33_e3",
+        "slot": 12,
+        "category": "normal",
+        "status": "complete"
+      }
+    ],
+    "slot_files": [
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0001.json",
+        "sha256": "f326f8fecf8b3f2b86f58f2e11ab6939981af58b9e0557d9cb8ead317edc9bec",
+        "logical_job": "new_training_s11_e0",
+        "slot": 1,
+        "category": "normal"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0002.json",
+        "sha256": "51261a8f7d4070021253285a37b6c14d9a3eb46d8d4a1c1f88cc37932770571d",
+        "logical_job": "new_training_s11_e1",
+        "slot": 2,
+        "category": "normal"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0003.json",
+        "sha256": "2f73e2071f05dca0fa9b0aca88164dabb6ebb6ccf021b14e5f7c08973497ddc8",
+        "logical_job": "new_training_s11_e2",
+        "slot": 3,
+        "category": "normal"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0004.json",
+        "sha256": "623aa3cc665ab371e651ff3a571efc77dac1403b1315b2adf43c163237013463",
+        "logical_job": "new_training_s11_e3",
+        "slot": 4,
+        "category": "normal"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0005.json",
+        "sha256": "a512b8e10da83958a96d3c1cf4e9a7628eee2a2c9427001dd89cf79acf330fa2",
+        "logical_job": "new_training_s22_e0",
+        "slot": 5,
+        "category": "normal"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0006.json",
+        "sha256": "f809a1e679c88cbfecc541a0becac2c662917f38577e648c27c17f78ddbb4189",
+        "logical_job": "new_training_s22_e1",
+        "slot": 6,
+        "category": "normal"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0007.json",
+        "sha256": "5a61a01fc2d33c410a4e63bf0854db0ad01ca821fb8caf306b2e071251f26dfb",
+        "logical_job": "new_training_s22_e2",
+        "slot": 7,
+        "category": "normal"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0008.json",
+        "sha256": "80f2ed4971ed052ee8a5bf9794faf02b619eddb9617210c9d96ec197ce917092",
+        "logical_job": "new_training_s22_e3",
+        "slot": 8,
+        "category": "normal"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0009.json",
+        "sha256": "44bab182270cacbd46c4382e22ce8bb98bd639059c914b107836e6294098f497",
+        "logical_job": "new_training_s33_e0",
+        "slot": 9,
+        "category": "normal"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0010.json",
+        "sha256": "de750ac80688f71be894acf25963e5766d59f5370f54dcfd14c6f72b543ee788",
+        "logical_job": "new_training_s33_e1",
+        "slot": 10,
+        "category": "normal"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0011.json",
+        "sha256": "aa5bdafca4ab789a7de6eb5603d915ddfbb7b69bc79a9c90bf6e767baf6f971f",
+        "logical_job": "new_training_s33_e2",
+        "slot": 11,
+        "category": "normal"
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0012.json",
+        "sha256": "655e535ae3a16e3a8e24adfe94e039059e2e47bec7f5d392b1bb245d34b17d53",
+        "logical_job": "new_training_s33_e3",
+        "slot": 12,
+        "category": "normal"
+      }
+    ]
+  },
+  "live_binding": {
+    "trainer_id": 2593811941632,
+    "r40_trainer_same_object": true,
+    "ppo_wrapper_name": "r58_counted_ppo_update",
+    "counter_bridge": "round58-ppo-counter-bridge/2",
+    "counter_bridge_counter_is_r42_run_object": true,
+    "private_adapter_kind": "r58-gate-prior-repaired/1",
+    "base_freeze_matches_payload_after_registered_metadata_normalization": true,
+    "gate_run_dir": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw",
+    "gate_checkpoint_root": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints",
+    "gate_rows_root": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\rows",
+    "gate_uses_actual_configured_analysis_module": true,
+    "read_only_loader": "canonical base loader via private no-RNG-restore split",
+    "read_only_loader_original_identity": 2593812778576,
+    "ambient_rng_restore_suppressed": true
+  },
+  "frozen_readonly_input_path_binding": [
+    {
+      "name": "shared_mappo_model_21_3100.pth",
+      "path": "D:\\code\\整合\\zhenghe\\runs\\cur_v2rep05_s2\\best\\shared_mappo_model_21_3100.pth",
+      "sha256": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+      "size_bytes": 62614754,
+      "matches_frozen": true,
+      "normalization": "path only; exact original SHA256 and size retained"
+    },
+    {
+      "name": "ctde_final_7_1.pth",
+      "path": "D:\\code\\整合\\zhenghe\\runs\\joint_eval_20260916\\ctde_final_7_1.pth",
+      "sha256": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d",
+      "size_bytes": 2124729,
+      "matches_frozen": true,
+      "normalization": "path only; exact original SHA256 and size retained"
+    }
+  ],
+  "historical_optimizer_counter_baseline": {
+    "value": 24,
+    "source": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\runtime\\optimizer_step_calls.jsonl",
+    "sha256": "dbf77b4d70c15259332140034550b34e13fa70904ce3f3c2beb328e59efc7ecb",
+    "event_rows": 24,
+    "all_step_invoked": true,
+    "indices_contiguous_from_one": true,
+    "evidence_kind": "reconstructed in-memory gate baseline from preserved original hook rows",
+    "journal_modified": false
+  },
+  "live_counter_spy": {
+    "same_trainer_object_used_by_r40": true,
+    "bridge_wraps_exact_prior_adapter": true,
+    "compiled_delegate_replaced_only_in_memory": true,
+    "delegate_calls": 1,
+    "returned_noop_marker": true,
+    "counter_before_after": [
+      0,
+      1
+    ],
+    "increment_exactly_once": true,
+    "same_live_ledger_snapshot_count": 1,
+    "snapshot_sees_the_same_hook": true,
+    "memory_writer_calls": [
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\tmpgpy54n09\\audit_raw\\runtime\\r58_minibatch_records.jsonl",
+        "row_count": 0
+      }
+    ],
+    "memory_writer_call_count": 1,
+    "optimizer_step_calls": 0,
+    "denied_side_effect_attempts": {
+      "environment_construct": 0,
+      "episode_provider": 0,
+      "claim_journal_checkpoint_write": 0,
+      "optimizer_step": 0,
+      "checkpoint_write": 0,
+      "rng_restore": 0
+    }
+  },
+  "actual_multiseed_derived_snapshot": {
+    "status": "strict_snapshot_returned",
+    "normal_used": 12,
+    "reserve_used": 0,
+    "total_used": 12,
+    "completed_logical_jobs": 12,
+    "committed_batch_records": 3,
+    "ppo_update_calls": 3,
+    "optimizer_step_calls": 24,
+    "ppo_matches_batches": true,
+    "optimizer_steps_match_batches": true,
+    "source": "actual configured r42_run.ledger_snapshot + r40_common.ledger_snapshot",
+    "mode": "read-only historical reconstruction; no ledger writer called",
+    "denied_side_effect_attempts": {
+      "environment_construct": 0,
+      "episode_provider": 0,
+      "claim_journal_checkpoint_write": 0,
+      "optimizer_step": 0,
+      "checkpoint_write": 0,
+      "rng_restore": 0
+    }
+  },
+  "audit_process_rng_after_gates": {
+    "python_unchanged": true,
+    "numpy_unchanged": true,
+    "torch_cpu_unchanged": false
+  }
+}

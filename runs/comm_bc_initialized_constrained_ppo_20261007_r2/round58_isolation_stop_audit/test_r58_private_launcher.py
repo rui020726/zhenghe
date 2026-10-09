@@ -63,6 +63,11 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                 self.assertEqual(runtime["r58_repaired_adapter"]["kind"], "r58-gate-prior-repaired/1")
                 self.assertEqual(runtime["r58_repaired_adapter"]["beta"], 1.0)
                 self.assertTrue(runtime["trainer"].ppo_update.__name__.startswith("r58_"))
+                self.assertEqual(runtime["r58_ppo_counter_bridge"]["kind"],
+                                 "round58-ppo-counter-bridge/2")
+                self.assertIs(runtime["r58_ppo_counter_bridge"]["counter_object"],
+                              runtime["r42_run"])
+                self.assertIs(runtime["r40_train"].trainer, runtime["trainer"])
                 self.assertTrue(runtime["r58_checkpoint_contract"]["wrapped_save"])
                 self.assertTrue(runtime["r58_checkpoint_contract"]["wrapped_load"])
                 self.assertTrue(runtime["r58_checkpoint_contract"]["wrapped_r40_train"])

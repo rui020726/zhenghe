@@ -1,0 +1,63 @@
+{
+  "kind": "round58-gen3-real-gate-callchain-close/1",
+  "status": "readonly_gate_passed_all_three_qualified_for_later_resume_review",
+  "starting_head": "3f1a721e6414898c7ccdd0e786b0bcfef97dd5f8",
+  "actual_gate_audit": "ROUND58_GEN3_REAL_GATE_CALLCHAIN_AUDIT.json",
+  "actual_gate_audit_status": "all_three_actual_readonly_gates_passed",
+  "identity_root_cause": "Legacy gate compared whole payload freeze to runtime ROUND42 freeze; approved gen3 training_version and round58_repair_attestation metadata caused mismatch although base science freeze matched. The adapter validates both metadata fields and exact source, normalizes only these declared fields, then requires exact base freeze equality.",
+  "actual_gate": {
+    "module_path": "runs/comm_one_shot_full_trace_ablation_20261004/r42_analysis.py",
+    "function": "first_batch_gate",
+    "sha256": "3342367be6d8a3c732ac7bf541575d17ae8a168618bc3f9b1493781bf8345633",
+    "passed_seeds": [11, 22, 33],
+    "identity_assertion_and_remaining_checks_executed": true,
+    "checkpoint_and_sidecar_hashes_unchanged": true
+  },
+  "per_seed": [
+    {"seed": 11, "qualification": "qualified_for_later_resume_review", "episodes": [0, 1, 2, 3], "batch": 0, "optimizer_steps": 8, "samples": 265, "likelihood_max_abs_gap": 2.3447910280083306e-13, "reward_gae_max_abs_gap": 0.0, "g_hat": 0.0, "lambda": [1.0, 1.0], "critic_isolation_evidence_grade": "B", "checkpoint_hashes_unchanged": true},
+    {"seed": 22, "qualification": "qualified_for_later_resume_review", "episodes": [0, 1, 2, 3], "batch": 0, "optimizer_steps": 8, "samples": 265, "likelihood_max_abs_gap": 1.7053025658242404e-12, "reward_gae_max_abs_gap": 0.0, "g_hat": 0.0, "lambda": [1.0, 1.0], "critic_isolation_evidence_grade": "B", "checkpoint_hashes_unchanged": true},
+    {"seed": 33, "qualification": "qualified_for_later_resume_review", "episodes": [0, 1, 2, 3], "batch": 0, "optimizer_steps": 8, "samples": 265, "likelihood_max_abs_gap": 9.379164112033322e-13, "reward_gae_max_abs_gap": 0.0, "g_hat": 0.0, "lambda": [1.0, 1.0], "critic_isolation_evidence_grade": "B", "checkpoint_hashes_unchanged": true}
+  ],
+  "critic_isolation": {
+    "grade": "B",
+    "basis": ["historical execution source identity and source hashes match attestation", "actual execute binding installs critic adapter and gate-prior wrapper on same trainer bound to R40", "prior wrapper holds critic_detach_context across compiled PPO delegate", "no bypass branch found in frozen call path"],
+    "direct_per_optimizer_step_telemetry": false,
+    "not_claimed": "grade A direct execution telemetry"
+  },
+  "ppo_call_counter": {
+    "bridge": "round58-ppo-counter-bridge/2",
+    "actual_wrapper_path": true,
+    "same_trainer_and_counter_object": true,
+    "no_op_spy_calls": 1,
+    "counter_before_after": [0, 1],
+    "same_live_snapshot_observed": 1,
+    "optimizer_steps": 0,
+    "historical_snapshot": {"normal_claims": 12, "reserve_claims": 0, "completed_jobs": 12, "durable_batches": 3, "ppo_calls_reconstructed_from_unique_batches": 3, "optimizer_step_journal_rows": 24},
+    "historical_ppo_invocation_rows": "missing; 3 calls are explicitly derived from durable unique batch submissions, not fabricated raw events"
+  },
+  "tests": {"command_modules": ["test_r58_identity_ledger_close_v2", "test_r58_private_launcher"], "count": 24, "exit_code": 0},
+  "audit_script_exit_code": 0,
+  "side_effects": {
+    "environment_construct": 0,
+    "episode_provider": 0,
+    "new_claim": 0,
+    "optimizer_step": 0,
+    "real_ppo_update": 0,
+    "rng_restore": 0,
+    "checkpoint_write": 0,
+    "claim_or_journal_write": 0,
+    "evaluation_cells": 0,
+    "tape_replay": 0,
+    "readonly_torch_deserializations": 28,
+    "module_forward_calls": 5565,
+    "autograd_grad_calls": 0,
+    "memory_noop_ppo_spy": 1,
+    "memory_writer_spy": 1,
+    "process_rng_state_changes": {"python": 0, "numpy": 0, "torch_cpu": 3}
+  },
+  "next_route": "No training in this task. All three batches are technically qualified for later exact-resume review from episode 4, subject to a separate explicit approval; no resume approval is implied.",
+  "protected_file_sha256": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  }
+}

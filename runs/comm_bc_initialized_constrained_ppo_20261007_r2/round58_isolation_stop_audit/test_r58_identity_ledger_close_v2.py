@@ -64,20 +64,35 @@ class IdentityCloseTests(unittest.TestCase):
     def test_private_v2_accepts_only_exact_approved_gen3_identity(self):
         module.require_identity(self.payload, **self.expected)
 
+    def test_declared_metadata_normalizes_but_arbitrary_freeze_fields_do_not(self):
+        altered = {**self.payload, "freeze": dict(self.payload["freeze"]),
+                   "training_state": dict(self.payload["training_state"])}
+        altered["freeze"]["unregistered_extension"] = True
+        fields = {item["field"] for item in module.identity_differences(
+            altered, **self.expected)}
+        self.assertIn("freeze.base_science_identity", fields)
+        altered["freeze"].pop("unregistered_extension")
+        altered["freeze"]["training_version"] = "wrong/version"
+        fields = {item["field"] for item in module.identity_differences(
+            altered, **self.expected)}
+        self.assertIn("freeze.training_version", fields)
+
     def test_old_generation_without_attestation_is_rejected(self):
         legacy = {**self.payload, "training_version": "legacy/gen1",
                   "round58_repair_attestation": None,
                   "freeze": {"freeze_sha256": "old"}}
         fields = {item["field"] for item in module.identity_differences(
             legacy, **self.expected)}
-        self.assertTrue({"training_version", "round58_repair_attestation", "freeze"}
+        self.assertTrue({"training_version", "round58_repair_attestation",
+                         "freeze.training_version", "freeze.base_science_identity"}
                         .issubset(fields))
 
     def test_each_identity_component_is_fail_closed_and_specific(self):
         cases = [
             ("training_version", lambda p: p.update(training_version="legacy")),
             ("comm_action_semantics", lambda p: p.update(comm_action_semantics="other")),
-            ("freeze", lambda p: p["freeze"].update(freeze_sha256="tampered")),
+            ("freeze.base_science_identity",
+             lambda p: p["freeze"].update(freeze_sha256="tampered")),
             ("round58_repair_attestation", lambda p: p.update(round58_repair_attestation={"legacy": True})),
             ("training_state.training_version", lambda p: p["training_state"].update(training_version="legacy")),
         ]
@@ -168,6 +183,19 @@ class LedgerCloseTests(unittest.TestCase):
         self.assertEqual(run._PPO_UPDATE_CALLS, 1)
         with self.assertRaisesRegex(RuntimeError, "already installed"):
             module.bridge_ppo_update_counter(trainer, run)
+
+    def test_bridge_is_outermost_live_call_and_undo_restores_same_adapter(self):
+        calls = []
+        adapter = lambda x: calls.append(x) or "adapter-result"
+        trainer = SimpleNamespace(ppo_update=adapter)
+        run = SimpleNamespace(_PPO_UPDATE_CALLS=7)
+        bridge = module.bridge_ppo_update_counter(trainer, run)
+        self.assertIs(trainer.ppo_update.__wrapped__, adapter)
+        self.assertEqual(trainer.ppo_update("spy"), "adapter-result")
+        self.assertEqual(calls, ["spy"])
+        self.assertEqual(run._PPO_UPDATE_CALLS, 8)
+        bridge["undo"]()
+        self.assertIs(trainer.ppo_update, adapter)
 
 
 if __name__ == "__main__":

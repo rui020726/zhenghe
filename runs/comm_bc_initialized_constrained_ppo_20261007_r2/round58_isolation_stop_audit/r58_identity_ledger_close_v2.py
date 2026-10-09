@@ -9,7 +9,7 @@ from copy import deepcopy
 from typing import Any, Iterable
 
 
-IDENTITY_VERSION = "round58-gen3-identity-close/1"
+IDENTITY_VERSION = "round58-gen3-identity-close/2"
 
 
 def attested_freeze(base_freeze: dict[str, Any], identity: dict[str, Any],
@@ -24,17 +24,36 @@ def attested_freeze(base_freeze: dict[str, Any], identity: dict[str, Any],
 def identity_differences(payload: Any, *, training_version: str,
                          action_semantics: str, base_freeze: dict[str, Any],
                          repair_identity: dict[str, Any]) -> list[dict[str, Any]]:
-    """Return field-specific mismatches; never accept a set of legacy versions."""
+    """Validate gen3 metadata separately, then require exact science-freeze equality.
+
+    The private serializer overwrites the freeze's training_version and adds one
+    attestation object. Both metadata values are checked independently; after
+    restoring only the base version and removing the declared attestation key,
+    every remaining freeze field must equal the approved base freeze exactly.
+    """
     if not isinstance(payload, dict):
         return [{"field": "payload", "expected": "mapping", "actual": type(payload).__name__}]
-    expected_freeze = attested_freeze(base_freeze, repair_identity, training_version)
     checks = [
         ("training_version", training_version, payload.get("training_version")),
         ("comm_action_semantics", action_semantics, payload.get("comm_action_semantics")),
         ("round58_repair_attestation", repair_identity,
          payload.get("round58_repair_attestation")),
-        ("freeze", expected_freeze, payload.get("freeze")),
     ]
+    actual_freeze = payload.get("freeze")
+    if not isinstance(actual_freeze, dict):
+        checks.append(("freeze", "mapping", type(actual_freeze).__name__))
+    else:
+        checks.append(("freeze.training_version", training_version,
+                       actual_freeze.get("training_version")))
+        checks.append(("freeze.round58_repair_attestation", repair_identity,
+                       actual_freeze.get("round58_repair_attestation")))
+        normalized = deepcopy(actual_freeze)
+        normalized.pop("round58_repair_attestation", None)
+        if "training_version" in base_freeze:
+            normalized["training_version"] = base_freeze["training_version"]
+        else:
+            normalized.pop("training_version", None)
+        checks.append(("freeze.base_science_identity", base_freeze, normalized))
     state = payload.get("training_state")
     if not isinstance(state, dict):
         checks.append(("training_state", "mapping", type(state).__name__))
@@ -100,9 +119,19 @@ def bridge_ppo_update_counter(trainer: Any, run_module: Any) -> dict[str, Any]:
     counted._r58_counter_bridge = True
     counted.__wrapped__ = current
     trainer.ppo_update = counted
-    return {"kind": "round58-ppo-counter-bridge/1", "status": "installed",
+    undone = {"value": False}
+    def undo() -> None:
+        if undone["value"]:
+            return
+        if trainer.ppo_update is not counted:
+            raise RuntimeError("trainer binding changed before PPO counter bridge removal")
+        trainer.ppo_update = current
+        undone["value"] = True
+    return {"kind": "round58-ppo-counter-bridge/2", "status": "installed",
             "wraps_private_adapter": current.__name__,
-            "counter_owner": "r42_run._PPO_UPDATE_CALLS"}
+            "counter_owner": "r42_run._PPO_UPDATE_CALLS", "undo": undo,
+            "wrapper_object": counted, "wrapped_object": current,
+            "counter_object": run_module}
 
 
 def reconcile_claims_slots(claims: Iterable[dict[str, Any]],

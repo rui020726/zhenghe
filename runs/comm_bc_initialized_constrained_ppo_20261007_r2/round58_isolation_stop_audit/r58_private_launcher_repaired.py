@@ -32,6 +32,7 @@ for _path in (GEN2, R53, R45, CANON):
 import r58_gate_prior_repaired as repaired_adapter  # noqa: E402
 import r58_repaired_entry as resume_guard  # noqa: E402
 import r58_checkpoint_contract_repaired as checkpoint_contract  # noqa: E402
+import r58_identity_ledger_close_v2 as identity_ledger  # noqa: E402
 
 PRIVATE_GENERATION = RUN_ROOT / "round58_gen3"
 PRIVATE_RAW = PRIVATE_GENERATION / "raw"
@@ -124,6 +125,10 @@ def _repair_identity() -> dict[str, Any]:
         raise PermissionError("ROUND58 candidate science/config/model identity inputs are missing")
     return {"critic_route_version": resume_guard.ROUTE_VERSION,
             **resume_guard.adapter_identity(),
+            "ppo_counter_bridge_version": "round58-ppo-counter-bridge/2",
+            "identity_ledger_schema": identity_ledger.IDENTITY_VERSION,
+            "identity_ledger_sha256": hashlib.sha256(
+                Path(identity_ledger.__file__).read_bytes()).hexdigest(),
             "private_launcher_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "checkpoint_contract_sha256": hashlib.sha256(
                 Path(checkpoint_contract.__file__).read_bytes()).hexdigest(),
@@ -352,6 +357,9 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
             expected_checkpoint_root=runtime["common"].CHECKPOINTS,
             versions=runtime["r42_versions"], r42_run=runtime["r42_run"])
         runtime["r58_checkpoint_contract"] = contract
+        counter_bridge = identity_ledger.bridge_ppo_update_counter(
+            runtime["trainer"], runtime["r42_run"])
+        runtime["r58_ppo_counter_bridge"] = counter_bridge
         runtime["r58_repair_identity"] = values["repair_identity"]
         if runtime["r40_train"].trainer is not runtime["trainer"]:
             contract["undo"]()
@@ -370,6 +378,9 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
     legacy.bind_runner_paths = bind_gen3_paths
     def undo():
         for runtime, live in reversed(installed_runtimes):
+            counter = runtime.get("r58_ppo_counter_bridge")
+            if counter and callable(counter.get("undo")):
+                counter["undo"]()
             adapter = runtime.get("r58_repaired_adapter")
             if adapter and callable(adapter.get("undo")):
                 adapter["undo"]()
@@ -604,6 +615,12 @@ def _prepare_actual_runtime_for_audit_impl(raw_root: Path, *, writer=None) -> di
             raise RuntimeError("actual Round46 configure did not produce runtime object map")
         plan = legacy.plan_from_frozen_sources()
         live = legacy.bind_live_runtime(base, runtime, plan, checkpoint_mode="forbid_existing")
+        # The audit-only configure path does not pass through the CLI grant
+        # dispatcher; bind the same real outer counter bridge before returning
+        # its live trainer so the call chain under audit is identical.
+        if not runtime.get("r58_ppo_counter_bridge"):
+            runtime["r58_ppo_counter_bridge"] = identity_ledger.bridge_ppo_update_counter(
+                runtime["trainer"], runtime["r42_run"])
     finally:
         Path.write_bytes = original_write_bytes
         Path.open = original_open
@@ -617,7 +634,16 @@ def _prepare_actual_runtime_for_audit_impl(raw_root: Path, *, writer=None) -> di
     r40 = runtime["r40_train"]
     if r40.trainer is not trainer:
         raise RuntimeError("actual R40 training module is not bound to the configured trainer object")
-    closure_values = [cell.cell_contents for cell in (getattr(trainer.ppo_update, "__closure__", None) or ())]
+    closure_values = []
+    wrapper_chain = []
+    cursor = trainer.ppo_update
+    seen = set()
+    while callable(cursor) and id(cursor) not in seen:
+        seen.add(id(cursor))
+        wrapper_chain.append(cursor)
+        closure_values.extend(cell.cell_contents for cell in
+                              (getattr(cursor, "__closure__", None) or ()))
+        cursor = getattr(cursor, "__wrapped__", None)
     compiled_updates = [value for value in closure_values
                         if callable(value) and getattr(value, "__code__", None)
                         and value.__code__.co_filename.startswith("<r58-gate-ppo-update-repaired")]
@@ -638,7 +664,10 @@ def _prepare_actual_runtime_for_audit_impl(raw_root: Path, *, writer=None) -> di
             "checkpoint_journal_io_spy": journal_route_spy,
             "checkpoint_contract": checkpoint,
             "trainer_source": str(Path(trainer.ppo_update.__wrapped__.__code__.co_filename).resolve())
-            if hasattr(trainer.ppo_update, "__wrapped__") else str(Path(trainer.ppo_update.__code__.co_filename).resolve())}
+            if hasattr(trainer.ppo_update, "__wrapped__") else str(Path(trainer.ppo_update.__code__.co_filename).resolve()),
+            "ppo_wrapper_chain": [getattr(value, "__name__", type(value).__name__)
+                                  for value in wrapper_chain],
+            "compiled_ppo_identity": id(compiled_updates[0])}
 
 
 def resume_from_payload_before_any_restore(payload: dict[str, Any],
@@ -661,6 +690,9 @@ def close_audit_runtime(binding: dict[str, Any]) -> None:
     snapshot = binding.get("mutation_snapshot")
     try:
         runtime = binding["runtime"]
+        counter = runtime.get("r58_ppo_counter_bridge")
+        if counter and callable(counter.get("undo")):
+            counter["undo"]()
         checkpoint = runtime.get("r58_checkpoint_contract")
         if checkpoint and callable(checkpoint.get("undo")):
             checkpoint["undo"]()
