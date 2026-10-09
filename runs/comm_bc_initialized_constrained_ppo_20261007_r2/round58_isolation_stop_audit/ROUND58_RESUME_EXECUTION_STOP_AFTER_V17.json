@@ -1,0 +1,192 @@
+{
+  "kind": "round58-resume-execution-stop-after-restore-v1",
+  "status": "stopped_on_runtime_import_failure_no_same_identity_hotfix",
+  "observed_at": "2026-10-09",
+  "branch": "exp/round58-prior-strength-prospective-trial",
+  "head": "b60bafd864b61c26c32de6de25ffe5b257817e3d",
+  "execution_identity": "V16 private freeze/auth; exact restore gate V17 audit correction",
+  "commits": {
+    "source_and_gate_freeze": "b60bafd864b61c26c32de6de25ffe5b257817e3d",
+    "train_pilot_import_fix": "85a1cfade0cd1659004c4d8b500b417ba8982a3c"
+  },
+  "gate": {
+    "report": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_GEN3_REAL_RESTORE_GATE_V17.json",
+    "status": "passed",
+    "tests_executed": 45,
+    "test_exit_code": 0,
+    "restore_seeds": [
+      11,
+      22,
+      33
+    ],
+    "per_seed_controller_adam_lambda_history_cursor_rng_verified": true,
+    "cursor": "episode4/update1/optimizer_steps8",
+    "train_pilot_path": "D:\\code\\整合\\zhenghe\\runs\\comm_budget_pilot_20260919\\train_pilot.py",
+    "train_pilot_sha256": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81",
+    "gate_side_effects": {
+      "environment_constructions": 0,
+      "episode_provider_calls": 0,
+      "claims": 0,
+      "PPO_updates": 0,
+      "optimizer_steps": 0,
+      "checkpoint_payload_writes": 0,
+      "torch_load_calls": 9,
+      "torch_save_calls": 0,
+      "RNG_restore_calls": 9
+    }
+  },
+  "formal_launch": {
+    "invocations": 2,
+    "preflight_rejection_relative_paths": {
+      "exit_code": 1,
+      "claims_or_slots": 0,
+      "reason": "authorization receipts require absolute paths"
+    },
+    "absolute_path_invocation": {
+      "exit_code": 1,
+      "failure": "ModuleNotFoundError: No module named 'sp_common'",
+      "trace_site": "v2_common.py:373 stage_b_inherited_config -> import sp_common",
+      "failure_before_environment_constructor": true
+    }
+  },
+  "failed_logical_job": {
+    "job": "new_training_s11_e4",
+    "seed": 11,
+    "episode_index": 4,
+    "scenario_seed": 1300003,
+    "attempts": [
+      {
+        "attempt": 1,
+        "category": "normal",
+        "slot": 13,
+        "status": "failed_technical"
+      },
+      {
+        "attempt": 2,
+        "category": "reserve",
+        "slot": 1,
+        "status": "failed_technical"
+      }
+    ],
+    "both_claims_report_environment_constructor_calls_0_joint_run_constructed_calls_0_run_invocation_calls_0_completed_steps_0_simulation_started_false_optimizer_step_calls_0_checkpoint_write_calls_0": true,
+    "tape_sha256_each": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "accounting": {
+    "historical_environment_consumption": 16,
+    "prior_gen3_completed_episode_launches": 12,
+    "new_normal_slots_used": 1,
+    "new_reserve_slots_used": 1,
+    "cumulative_claimed_launch_slots": 30,
+    "cumulative_cap": 1064,
+    "normal_slots_used_total": 13,
+    "normal_cap": 1024,
+    "normal_slots_remaining": 1011,
+    "reserve_slots_used_total": 1,
+    "reserve_cap": 24,
+    "reserve_slots_remaining": 23,
+    "hard_cap_remaining": 1034,
+    "environment_constructor_calls_this_attempt": 0,
+    "cumulative_confirmed_environment_constructions_remains": 28,
+    "valid_episode_completions_from_this_invocation": 0,
+    "fixed_plan_tasks_uncompleted": 1012,
+    "evaluations_completed": 0
+  },
+  "other_actual_side_effects": {
+    "environment_constructions": 0,
+    "simulation_steps": 0,
+    "new_episodes_completed": 0,
+    "optimizer_steps": 0,
+    "PPO_updates": 0,
+    "checkpoint_payload_writes": 0,
+    "evaluation_cells": 0,
+    "claims_created": 2,
+    "launch_slots_claimed": 2,
+    "RNG_restore_in_formal_execution": "seed11 checkpoint restore occurred; no per-call journal counter recorded"
+  },
+  "root_cause_observed": "The lazy Stage B configuration import in frozen v2_common.py requests sp_common, but the execution sys.path/private runtime alias set does not expose that module. This is a runtime import-context failure separate from the repaired train_pilot restore import. No same-identity hotfix was made.",
+  "preservation": {
+    "V10_and_prior_failures_preserved": true,
+    "V16_audit_false_negative_preserved": true,
+    "V17_restore_gate_pass_preserved": true,
+    "claims_slots_failures_tapes_preserved": true,
+    "protected_hashes": {
+      "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+      "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+    }
+  },
+  "evidence_sha256": {
+    "normal_claim": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s11_e4\\attempt_0001.json",
+      "sha256": "0a76a3e61188f58386f52023415817890afa06459fa1f77751e209cb8640f08e"
+    },
+    "reserve_claim": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s11_e4\\attempt_0002.json",
+      "sha256": "e303fe551335de8400d4197f4bf3e995e1e70887562d25f9f785095a2b993dd6"
+    },
+    "normal_slot": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\normal\\0013.json",
+      "sha256": "4edcc3b05d778275d21ae007c76b32125f8713bb235c0f4c917ee5eede686c75"
+    },
+    "reserve_slot": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_slots\\reserve\\0001.json",
+      "sha256": "e2a96058e22d662e25e89462bad4cf2faeb65f5b44da390115960d18b3ac0b57"
+    },
+    "failure_a1": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\failures\\train_s11_e4_r44_a1.json",
+      "sha256": "3fee3496d525c3c2e24659ec57c7cd3755e6c4e1c07146dd300337a1d69cf16a"
+    },
+    "failure_a2": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\failures\\train_s11_e4_r44_a2.json",
+      "sha256": "83a1652413a2b2f7b44c063354302e0ecbdd36b63a4f82be663e9bc28592493c"
+    },
+    "gate_pass": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_GEN3_REAL_RESTORE_GATE_V17.json",
+      "sha256": "209bb89bfc66acb62ab37e0d5055f9f48ad00937863967abbb1807ffda4e7418"
+    },
+    "gate_false_negative": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_GEN3_REAL_RESTORE_GATE_V16.json",
+      "sha256": "892f2f34579bcb076aff020e04b8dc0bc890a7966dcf8de89842123040fddbe8"
+    },
+    "authorization": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_RESUME_EXECUTION_AUTHORIZATION_V16.json",
+      "sha256": "839614cab27a2d1b0562b2af5654c24f1b57cdcb656bd03084d6525f2e97b465"
+    },
+    "freeze": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_RESUME_FREEZE_V16.json",
+      "sha256": "fc17d18840c368a6dbb7b3ea39e288f2fca3b0eb7242c99f4a463361cb361db2"
+    },
+    "source_map": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_GEN3_APPROVED_RESUME_SOURCES_V16.json",
+      "sha256": "e5149ed0500ed46db744523f905c29b8252cb1866779fa9bf8efc32f160d142b"
+    },
+    "launcher": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\r58_private_launcher_repaired.py",
+      "sha256": "cb5a827b2233c7f626aaec3c9c07d5256e37be8be5b4465cc0acc3447254d830"
+    },
+    "checkpoint_contract": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\r58_checkpoint_contract_repaired.py",
+      "sha256": "0bb1c878cee2626e5e3e5c91c2bf6e377ead23a66fdc3736453816765ba66a77"
+    },
+    "resume_seam": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\r58_resume_seam.py",
+      "sha256": "a5989705b66907318ce223745e58eed73c1d4a201f6cdda32bf73d0e258a7c33"
+    },
+    "train_pilot": {
+      "path": "D:\\code\\整合\\zhenghe\\runs\\comm_budget_pilot_20260919\\train_pilot.py",
+      "sha256": "87dcf2e5251c99fc533ba52480a43da89902a3a0c371f5b9cfec6240d202ae81"
+    },
+    "sp_common": {
+      "path": "D:\\code\\整合\\zhenghe\\runs\\search_trace_and_policy_20260925\\sp_common.py",
+      "sha256": "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc"
+    },
+    "protected_task": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_CURRENT_TASK.json",
+      "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b"
+    },
+    "protected_stop": {
+      "path": "runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_STOP_STATE.json",
+      "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+    }
+  },
+  "next_state": "STOPPED. Do not resume under V16 after the frozen runtime failure; any follow-up needs a separately versioned private identity and review of the consumed normal/reserve slots. No additional approval requested here."
+}
