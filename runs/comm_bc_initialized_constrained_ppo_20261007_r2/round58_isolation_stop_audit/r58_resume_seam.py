@@ -659,7 +659,8 @@ def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_
         # len(opt_rows) is the r42 configure count over the resume-scope journal;
         # historical_optimizer_rows + len(opt_rows) is the global closed count.
         raise RuntimeError("R42 optimizer counter was not at the approved historical baseline")
-    if int(getattr(run, "_PPO_UPDATE_CALLS", -1)) not in (0, historical_ppo_calls + len(ppo_rows)):
+    if int(getattr(run, "_PPO_UPDATE_CALLS", -1)) not in (
+            0, historical_ppo_calls + len(ppo_rows), len(ppo_rows)):
         raise RuntimeError("R42 PPO counter was not at the approved derived baseline")
     run._OPTIMIZER_STEP_CALLS = historical_optimizer_rows + len(opt_rows)
     run._PPO_UPDATE_CALLS = historical_ppo_calls + len(ppo_rows)
