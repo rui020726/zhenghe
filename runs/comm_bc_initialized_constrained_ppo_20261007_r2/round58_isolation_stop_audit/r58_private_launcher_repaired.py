@@ -118,11 +118,18 @@ def _execution_basis_identity() -> str:
 
 
 def _repair_identity() -> dict[str, Any]:
+    candidate_path = HERE / "ROUND58_PRELAUNCH_CANDIDATE.json"
+    input_identity_path = HERE / "ROUND58_CANDIDATE_INPUT_IDENTITY.json"
+    if not candidate_path.is_file() or not input_identity_path.is_file():
+        raise PermissionError("ROUND58 candidate science/config/model identity inputs are missing")
     return {"critic_route_version": resume_guard.ROUTE_VERSION,
             **resume_guard.adapter_identity(),
             "private_launcher_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "checkpoint_contract_sha256": hashlib.sha256(
                 Path(checkpoint_contract.__file__).read_bytes()).hexdigest(),
+            "candidate_config_sha256": hashlib.sha256(candidate_path.read_bytes()).hexdigest(),
+            "candidate_input_identity_sha256": hashlib.sha256(
+                input_identity_path.read_bytes()).hexdigest(),
             "execution_basis_sha256": _execution_basis_identity(),
             "training_version": REPAIRED_TRAINING_VERSION}
 
