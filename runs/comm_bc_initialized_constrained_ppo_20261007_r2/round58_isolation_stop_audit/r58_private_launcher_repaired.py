@@ -45,6 +45,9 @@ REPAIRED_TRAINING_VERSION = (
     "r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+"
     "r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2"
 )
+RESUME_APPROVAL_SOURCE_PATH = HERE / "ROUND58_GEN3_RESUME_APPROVAL_SOURCE.json"
+RESUME_APPROVAL_THREAD_ID = "01a0a044-592f-73e3-838c-19c1d79465d3"
+RESUME_APPROVAL_QUOTE = "核验通过后批准完成剩余固定计划"
 _GRANT_TOKEN = object()
 
 
@@ -83,6 +86,36 @@ def _read_external_json(path: Path, label: str) -> dict[str, Any]:
     if value.get("fixture") is True or value.get("environment") == "test":
         raise PermissionError(f"ROUND58 {label}: test fixtures cannot authorize CLI execution")
     return value
+
+
+def _validate_resume_approval_source_payload(value: dict[str, Any]) -> None:
+    scope = value.get("approval_scope_as_relayed_by_owner", {})
+    expected = {
+        "resume_only_from_each_seed_episode_4": True,
+        "remaining_training_episodes": 372,
+        "remaining_evaluation_cells": 640,
+        "replay_first_12_episodes": False,
+        "replay_original_three_batch_updates": False,
+        "new_training_or_evaluation_quota": False,
+        "hyperparameter_change": False,
+        "push_merge_deploy": False,
+    }
+    if (value.get("kind") != "round58-gen3-resume-owner-approval-source/1"
+            or value.get("status") != "owner_approved_continue_after_exact_restore_gate"
+            or value.get("source_thread_id") != RESUME_APPROVAL_THREAD_ID
+            or value.get("approval_quote") != RESUME_APPROVAL_QUOTE
+            or scope != expected or value.get("authorized_cumulative_limit") != 1064):
+        raise PermissionError("ROUND58 resume owner approval source is missing or scope-mismatched")
+
+
+def _resume_approval_source_identity() -> dict[str, str]:
+    if not RESUME_APPROVAL_SOURCE_PATH.is_file():
+        raise PermissionError("ROUND58 resume owner approval source file is missing")
+    raw = RESUME_APPROVAL_SOURCE_PATH.read_bytes()
+    value = json.loads(raw.decode("utf-8"))
+    _validate_resume_approval_source_payload(value)
+    return {"path": str(RESUME_APPROVAL_SOURCE_PATH.resolve()),
+            "sha256": hashlib.sha256(raw).hexdigest()}
 
 
 def _bc_model_identity() -> tuple[dict[str, Any], str]:
@@ -199,6 +232,8 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     # This entire function is read-only and precedes legacy plan execution/configure.
     if mode not in ("fresh", "recover_first_batch_gate"):
         raise PermissionError("only frozen fresh start or attested first-batch continuation is admitted")
+    resume_approval_source = (_resume_approval_source_identity()
+                              if mode == "recover_first_batch_gate" else None)
     approval = _read_external_json(authorization_path, "human approval")
     frozen = _read_external_json(freeze_path, "freeze identity")
     quota = _read_external_json(quota_path, "cumulative quota receipt")
@@ -267,6 +302,8 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
         "mode": mode, "cumulative_quota_sha256": hashlib.sha256(
             Path(quota_path).read_bytes()).hexdigest(), "reserve_cap": remaining_reserve,
         "scene_audit_sha256": hashlib.sha256(Path(scene_audit_path).read_bytes()).hexdigest(),
+        **({"resume_approval_source_sha256": resume_approval_source["sha256"]}
+           if resume_approval_source is not None else {}),
         "bc_models": bc_models,
     }
     for key, value in expected_freeze.items():
@@ -290,7 +327,10 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
             or approval.get("execution_basis_sha256") != _execution_basis_identity() \
             or approval.get("freeze_sha256") != hashlib.sha256(Path(freeze_path).read_bytes()).hexdigest() \
             or approval.get("quota_sha256") != hashlib.sha256(Path(quota_path).read_bytes()).hexdigest() \
-            or approval.get("scene_audit_sha256") != hashlib.sha256(Path(scene_audit_path).read_bytes()).hexdigest():
+            or approval.get("scene_audit_sha256") != hashlib.sha256(Path(scene_audit_path).read_bytes()).hexdigest() \
+            or (resume_approval_source is not None
+                and (approval.get("resume_approval_source_path") != resume_approval_source["path"]
+                     or approval.get("resume_approval_source_sha256") != resume_approval_source["sha256"])):
         raise PermissionError("ROUND58 human approval does not bind the repaired generation/model/output")
     return _ValidatedGrant(_GRANT_TOKEN, {
         "authorization_path": Path(authorization_path).resolve(),
@@ -309,6 +349,8 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
             "freeze": hashlib.sha256(Path(freeze_path).read_bytes()).hexdigest(),
             "quota": hashlib.sha256(Path(quota_path).read_bytes()).hexdigest(),
             "scene_audit": hashlib.sha256(Path(scene_audit_path).read_bytes()).hexdigest(),
+            **({"resume_approval_source": resume_approval_source["sha256"]}
+               if resume_approval_source is not None else {}),
         },
     })
 

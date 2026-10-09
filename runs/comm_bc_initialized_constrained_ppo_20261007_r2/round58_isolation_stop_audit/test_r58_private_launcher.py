@@ -434,5 +434,27 @@ class CumulativeQuotaV2Tests(unittest.TestCase):
             launcher._validate_cumulative_quota_v2(self.quota, bad)
 
 
+class ResumeApprovalSourceTests(unittest.TestCase):
+    def setUp(self):
+        self.source = json.loads(launcher.RESUME_APPROVAL_SOURCE_PATH.read_text(encoding="utf-8"))
+
+    def test_owner_approval_source_accepts_exact_episode4_continuation_scope(self):
+        launcher._validate_resume_approval_source_payload(self.source)
+
+    def test_owner_approval_source_rejects_wrong_thread_or_quote(self):
+        for key, value in (("source_thread_id", "unrelated-thread"),
+                           ("approval_quote", "核验后开始全新训练")):
+            bad = json.loads(json.dumps(self.source))
+            bad[key] = value
+            with self.subTest(key=key), self.assertRaises(PermissionError):
+                launcher._validate_resume_approval_source_payload(bad)
+
+    def test_owner_approval_source_rejects_expanded_scope(self):
+        bad = json.loads(json.dumps(self.source))
+        bad["approval_scope_as_relayed_by_owner"]["remaining_training_episodes"] = 384
+        with self.assertRaises(PermissionError):
+            launcher._validate_resume_approval_source_payload(bad)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
