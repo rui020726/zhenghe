@@ -4,18 +4,19 @@
     "test_r58_identity_ledger_close_v2",
     "test_r58_private_launcher",
     "test_r58_resume_seam",
-    "test_r58_plan_identity_migration"
+    "test_r58_plan_identity_migration",
+    "test_r58_train_pilot_restore_import"
   ],
-  "discovered": 41,
+  "discovered": 45,
   "excluded": [],
   "historical_git_objects": {
     "b38b8688dee7ffc2626aa2064c8af74af75e216b": "present; historical private-launcher and checkpoint-contract blobs are read by their exact repository paths"
   },
-  "executed": 41,
+  "executed": 45,
   "failures": 0,
   "errors": 0,
   "exit_code": 0,
-  "finished_at_local": "2026-10-09T15:51:28.187320+08:00",
+  "finished_at_local": "2026-10-09T17:03:48.944485+08:00",
   "test_ids": [
     "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_declared_metadata_normalizes_but_arbitrary_freeze_fields_do_not",
     "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_each_identity_component_is_fail_closed_and_specific",
@@ -46,6 +47,8 @@
     "test_r58_private_launcher.ResumeApprovalSourceTests.test_owner_approval_source_rejects_wrong_thread_or_quote",
     "test_r58_resume_seam.ResumeSourceContractTests.test_call_journal_teardown_accepts_exact_active_wrappers",
     "test_r58_resume_seam.ResumeSourceContractTests.test_call_journal_teardown_accepts_exact_already_unwrapped_hooks",
+    "test_r58_resume_seam.ResumeSourceContractTests.test_call_journal_teardown_accepts_frozen_r42_adam_cleanup_only",
+    "test_r58_resume_seam.ResumeSourceContractTests.test_call_journal_teardown_accepts_only_exact_pytorch_wrapped_step_chain",
     "test_r58_resume_seam.ResumeSourceContractTests.test_call_journal_teardown_still_rejects_unrecognized_hook",
     "test_r58_resume_seam.ResumeSourceContractTests.test_carryover_requires_exact_durable_batch_records_without_copying",
     "test_r58_resume_seam.ResumeSourceContractTests.test_direct_event_journal_requires_monotone_actual_call_indexes",
@@ -57,6 +60,8 @@
     "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_non_allowlisted_current_identity_change_is_rejected",
     "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_scientific_parameter_or_order_change_is_rejected",
     "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_seed_original_attestation_mismatch_is_rejected",
-    "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_unique_approved_migration_is_proven_from_plan_freeze_auth_and_all_three_sidecars"
+    "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_unique_approved_migration_is_proven_from_plan_freeze_auth_and_all_three_sidecars",
+    "test_r58_train_pilot_restore_import.TrainPilotRestoreImportTests.test_clean_old_restore_path_reproduces_missing_train_pilot",
+    "test_r58_train_pilot_restore_import.TrainPilotRestoreImportTests.test_verified_private_scope_loads_only_frozen_module_in_clean_child"
   ]
 }

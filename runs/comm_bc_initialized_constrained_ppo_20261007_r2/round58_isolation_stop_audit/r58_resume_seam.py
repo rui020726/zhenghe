@@ -14,8 +14,8 @@ import time
 from pathlib import Path
 from typing import Any
 
-MAP_REL = Path("runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES_V11.json")
-MAP_SHA256 = "ee9399e7fe893d409414ac83889161a740802c79be7c627e037bdb3c5aea41be"
+MAP_REL = Path("runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES_V16.json")
+MAP_SHA256 = "e5149ed0500ed46db744523f905c29b8252cb1866779fa9bf8efc32f160d142b"
 R42_RUN_SHA256 = "9c5feacb2ffcb2bb930d2b6022e2fca5210408765dc664859d400e6f2b5f8c2e"
 HISTORICAL_CHECKPOINT_JOURNAL_SHA256 = "2a43339ac45c2cfd13f84e744b72af0632024f44c3eedaa449bf8c8c7cab0165"
 QUALIFIED = "qualified_for_later_resume_review"
@@ -36,6 +36,7 @@ MIGRATION_ADDED_FIELDS = {
     "resume_seam_sha256", "approved_resume_map_sha256",
     "historical_checkpoint_journal_sha256",
     "train_pilot_source",
+    "resume_runtime_aliases",
 }
 TRAINING_VERSION = (
     "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/"
@@ -609,6 +610,9 @@ def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_
     lock = threading.Lock()
     original_step = torch.optim.Adam.step
     original_ppo = trainer.ppo_update
+    configured_r42_runtime = getattr(run, "_RUNTIME", None)
+    frozen_adam_restore = (configured_r42_runtime.get("restore_adam_step")
+                           if isinstance(configured_r42_runtime, dict) else None)
 
     def append_call(path: Path, index: int, *, kind: str, optimizer: Any = None):
         row = {"call_index": int(index), "call_status": "step_invoked",
@@ -636,6 +640,16 @@ def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_
             run._PPO_UPDATE_CALLS = index
         return original_ppo(*args, **kwargs)
 
+    def wrapper_chain_reaches(candidate, target) -> bool:
+        seen = set()
+        current = candidate
+        while callable(current) and id(current) not in seen:
+            if current is target:
+                return True
+            seen.add(id(current))
+            current = getattr(current, "__wrapped__", None)
+        return False
+
     torch.optim.Adam.step = counted_step
     trainer.ppo_update = counted_ppo
 
@@ -644,6 +658,20 @@ def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_
         current_ppo = trainer.ppo_update
         if current_step is counted_step and current_ppo is counted_ppo:
             torch.optim.Adam.step = original_step
+            trainer.ppo_update = original_ppo
+            return
+        # PyTorch may place its documented optimizer wrapper around a class-level
+        # step hook. Accept only a __wrapped__ chain that reaches this exact
+        # invocation counter and only while the paired PPO hook is still exact.
+        if wrapper_chain_reaches(current_step, counted_step) and current_ppo is counted_ppo:
+            torch.optim.Adam.step = original_step
+            trainer.ppo_update = original_ppo
+            return
+        # The frozen R42 execution wrapper restores its own Adam hook when its
+        # authorized call returns. In a controlled pre-episode stop this can
+        # happen before the outer private route tears down its PPO journal.
+        # Accept only that exact mixed state; never accept an unknown wrapper.
+        if current_step is frozen_adam_restore and current_ppo is counted_ppo:
             trainer.ppo_update = original_ppo
             return
         # The frozen configure chain may already have unwound exactly these two
@@ -666,6 +694,7 @@ def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_
             "optimizer_rows_existing": len(opt_rows), "ppo_rows_existing": len(ppo_rows),
             "optimizer_path": str(opt_path), "ppo_path": str(ppo_path),
             "checkpoint_path": str(checkpoint_path), "undo": undo,
+            "frozen_r42_adam_restore_captured": frozen_adam_restore is not None,
             "wrapper_step": counted_step, "wrapper_ppo": counted_ppo,
             "wrapped_step": original_step, "wrapped_ppo": original_ppo}
 

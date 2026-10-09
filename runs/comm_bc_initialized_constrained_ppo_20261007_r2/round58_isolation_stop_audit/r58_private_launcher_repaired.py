@@ -47,6 +47,12 @@ REPAIRED_TRAINING_VERSION = (
     "r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+"
     "r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2"
 )
+RESUME_RUNTIME_ALIAS_HASHES = {
+    "r40_train_resume_adapter.py": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+    "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+    "r42_versions.py": "26b9e1a3d4f3b9a5d39ca020a5ebd3653615c09a76a77ae4138f4ab98420a3d8",
+    "r43_call_counter_hooks.py": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
+}
 RESUME_APPROVAL_SOURCE_PATH = HERE / "ROUND58_GEN3_RESUME_APPROVAL_SOURCE.json"
 RESUME_APPROVAL_THREAD_ID = "01a0a044-592f-73e3-838c-19c1d79465d3"
 RESUME_APPROVAL_QUOTE = "核验通过后批准完成剩余固定计划"
@@ -167,6 +173,7 @@ def _repair_identity() -> dict[str, Any]:
     return {"critic_route_version": resume_guard.ROUTE_VERSION,
             **resume_guard.adapter_identity(),
             "train_pilot_source": checkpoint_contract.train_pilot_source_identity(REPO_ROOT),
+            "resume_runtime_aliases": dict(RESUME_RUNTIME_ALIAS_HASHES),
             "ppo_counter_bridge_version": "round58-ppo-counter-bridge/2",
             "identity_ledger_schema": identity_ledger.IDENTITY_VERSION,
             "identity_ledger_sha256": hashlib.sha256(
@@ -245,7 +252,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     frozen = _read_external_json(freeze_path, "freeze identity")
     quota = _read_external_json(quota_path, "cumulative quota receipt")
     scene_audit = _read_external_json(scene_audit_path, "scene occupancy audit")
-    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V12.json"
+    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V17.json"
     if mode == "recover_first_batch_gate" and not migration_proof_path.is_file():
         raise PermissionError("ROUND58 recovery plan identity migration proof is missing")
     migration_proof_sha256 = (hashlib.sha256(migration_proof_path.read_bytes()).hexdigest()
@@ -418,6 +425,31 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                 raise RuntimeError("ROUND58 resume configure bridge has ambiguous ownership")
             original_configure = run_module.configure
 
+            def provision_frozen_runtime_aliases(target_root: Path) -> dict[str, str]:
+                """Create only the four hash-frozen R42 aliases in the private resume root."""
+                target_root = Path(target_root).resolve()
+                target_root.mkdir(parents=True, exist_ok=True)
+                materialized = {}
+                for name, expected_sha in RESUME_RUNTIME_ALIAS_HASHES.items():
+                    source = PRIVATE_RAW / name
+                    if not source.is_file() or hashlib.sha256(source.read_bytes()).hexdigest() != expected_sha:
+                        raise PermissionError(f"frozen runtime alias source mismatch: {source}")
+                    target = target_root / name
+                    if target.exists():
+                        actual = hashlib.sha256(target.read_bytes()).hexdigest()
+                        if actual != expected_sha:
+                            raise PermissionError(f"refusing to replace non-matching resume alias: {target}")
+                    else:
+                        payload = source.read_bytes()
+                        with target.open("xb") as handle:
+                            handle.write(payload)
+                            handle.flush()
+                            os.fsync(handle.fileno())
+                        if hashlib.sha256(target.read_bytes()).hexdigest() != expected_sha:
+                            raise RuntimeError(f"resume runtime alias copy failed hash check: {target}")
+                    materialized[name] = hashlib.sha256(target.read_bytes()).hexdigest()
+                return materialized
+
             def configure_with_resume_root(frozen, round40_freeze):
                 previous_run_dir = Path(run_module.RUN_DIR).resolve()
                 previous_sys_path = list(sys.path)
@@ -429,9 +461,24 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                 # provenance to the fresh sibling generation. Its exact runtime
                 # source aliases are separately hash-checked at that root.
                 run_module.RUN_DIR = resume_root_for_configure
+                configure_bridge["runtime_aliases"] = provision_frozen_runtime_aliases(
+                    resume_root_for_configure)
                 if str(resume_root_for_configure) in sys.path:
                     sys.path.remove(str(resume_root_for_configure))
                 sys.path.insert(0, str(resume_root_for_configure))
+                for name, expected_sha in RESUME_RUNTIME_ALIAS_HASHES.items():
+                    alias = Path(name).stem
+                    loaded = sys.modules.get(alias)
+                    if loaded is None:
+                        continue
+                    loaded_path = Path(getattr(loaded, "__file__", "")).resolve()
+                    loaded_sha = (hashlib.sha256(loaded_path.read_bytes()).hexdigest()
+                                  if loaded_path.is_file() else None)
+                    if loaded_path == (PRIVATE_RAW / name).resolve() and loaded_sha == expected_sha:
+                        sys.modules.pop(alias, None)
+                    elif (loaded_path != (resume_root_for_configure / name).resolve()
+                          or loaded_sha != expected_sha):
+                        raise PermissionError(f"refusing cached runtime alias with unapproved provenance: {name}")
                 try:
                     return original_configure(frozen, round40_freeze)
                 finally:
@@ -756,7 +803,8 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                     raise TypeError("ROUND58 real-restore gate hook must be callable")
                 restore_gate_hook({"kind": "round58-real-checkpoint-restore-gate/1",
                                    "runtime": runtime, "proof": proof,
-                                   "freeze": runtime["frozen"],
+                                   # train_seed receives round42_freeze, not the umbrella R43/R44 freeze.
+                                   "freeze": runtime["round42_freeze"],
                                    "selected_sources": selected_sources})
                 raise RuntimeError("ROUND58 real-restore gate hook returned without controlled stop")
             preflight_hook = globals().get("_ROUND58_PREFLIGHT_STOP_HOOK")
@@ -845,7 +893,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
                  "freeze": values["freeze_path"], "quota": values["quota_path"],
                  "scene_audit": values["scene_audit_path"]}
         if values["mode"] == "recover_first_batch_gate":
-            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V12.json"
+            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V17.json"
         for key, path in paths.items():
             if hashlib.sha256(Path(path).read_bytes()).hexdigest() != values["input_file_sha256"][key]:
                 raise PermissionError(f"ROUND58 {key} receipt changed after preflight")
@@ -881,7 +929,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
             migration_route = resume_seam.install_historical_plan_comparison_view(
                 legacy, repo_root=REPO_ROOT, current_plan=current_live_plan,
                 current_repair_identity=values["repair_identity"],
-                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V12.json",
+                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V17.json",
                 expected_proof_sha256=values["input_file_sha256"]["plan_identity_migration_proof"])
             legacy.round58_plan_identity_migration = {
                 key: value for key, value in migration_route.items() if key != "undo"}

@@ -68,8 +68,10 @@ class ResumeSourceContractTests(unittest.TestCase):
                 "sha256": seam.HISTORICAL_CHECKPOINT_JOURNAL_SHA256, "rows": 12}},
         }
         before = torch.optim.Adam.step
+        run._RUNTIME = {"restore_adam_step": before}
         receipt = seam.install_persistent_call_journals(
             runtime, resume_runtime_dir=Path(temp) / "runtime")
+        receipt["_test_run"] = run
         return torch, trainer, receipt, before
 
     def test_call_journal_teardown_accepts_exact_active_wrappers(self):
@@ -91,6 +93,42 @@ class ResumeSourceContractTests(unittest.TestCase):
                 trainer.ppo_update = receipt["wrapped_ppo"]
                 receipt["undo"]()
                 self.assertIs(torch.optim.Adam.step, receipt["wrapped_step"])
+                self.assertIs(trainer.ppo_update, receipt["wrapped_ppo"])
+            finally:
+                torch.optim.Adam.step = before
+
+    def test_call_journal_teardown_accepts_frozen_r42_adam_cleanup_only(self):
+        with tempfile.TemporaryDirectory(dir=HERE) as temp:
+            torch, trainer, receipt, before = self._install_call_journal(temp)
+            try:
+                # install_persistent_call_journals captures the exact active R42
+                # runtime object; emulate its documented final Adam-hook restore
+                # while the outer persistent PPO journal is still installed.
+                # The helper's closure retains that runtime via r42_run.
+                run = receipt.get("_test_run")
+                if run is None:
+                    self.skipTest("test fixture does not expose R42 runtime")
+                torch.optim.Adam.step = before
+                trainer.ppo_update = receipt["wrapper_ppo"]
+                receipt["undo"]()
+                self.assertIs(torch.optim.Adam.step, before)
+                self.assertIs(trainer.ppo_update, receipt["wrapped_ppo"])
+            finally:
+                torch.optim.Adam.step = before
+
+    def test_call_journal_teardown_accepts_only_exact_pytorch_wrapped_step_chain(self):
+        from functools import wraps
+        with tempfile.TemporaryDirectory(dir=HERE) as temp:
+            torch, trainer, receipt, before = self._install_call_journal(temp)
+            try:
+                target = receipt["wrapper_step"]
+                @wraps(target)
+                def torch_style_wrapper(*args, **kwargs):
+                    return target(*args, **kwargs)
+                torch.optim.Adam.step = torch_style_wrapper
+                trainer.ppo_update = receipt["wrapper_ppo"]
+                receipt["undo"]()
+                self.assertIs(torch.optim.Adam.step, before)
                 self.assertIs(trainer.ppo_update, receipt["wrapped_ppo"])
             finally:
                 torch.optim.Adam.step = before
