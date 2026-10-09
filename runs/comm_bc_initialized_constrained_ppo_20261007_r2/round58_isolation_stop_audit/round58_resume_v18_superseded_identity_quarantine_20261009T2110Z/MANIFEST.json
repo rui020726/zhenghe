@@ -1,0 +1,44 @@
+{
+ "attempt3_allocated_by_first_attempt": false,
+ "consumed_claims": 0,
+ "environment_constructions": 0,
+ "evaluation_cells": 0,
+ "files": [
+  {
+   "original_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v18\\raw\\checkpoints\\v2_train_s11.pt",
+   "quarantined_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\round58_resume_v18_superseded_identity_quarantine_20261009T2110Z\\checkpoints\\v2_train_s11.pt",
+   "sha256": "d726531cd43438b6ec8767d9ab6c13668899fddacdb00832269e094819305978"
+  },
+  {
+   "original_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v18\\raw\\checkpoints\\v2_train_s11.pt.r58.json",
+   "quarantined_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\round58_resume_v18_superseded_identity_quarantine_20261009T2110Z\\checkpoints\\v2_train_s11.pt.r58.json",
+   "sha256": "761873afd172a01bdb47bb5a160870dd182b93ddaa754d88c4390a415b947e78"
+  },
+  {
+   "original_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v18\\raw\\checkpoints\\v2_train_s11_before_b1.pt",
+   "quarantined_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\round58_resume_v18_superseded_identity_quarantine_20261009T2110Z\\checkpoints\\v2_train_s11_before_b1.pt",
+   "sha256": "d726531cd43438b6ec8767d9ab6c13668899fddacdb00832269e094819305978"
+  },
+  {
+   "original_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v18\\raw\\checkpoints\\v2_train_s11_before_b1.pt.r58.json",
+   "quarantined_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\round58_resume_v18_superseded_identity_quarantine_20261009T2110Z\\checkpoints\\v2_train_s11_before_b1.pt.r58.json",
+   "sha256": "49c9ff8d13da450ac2e8fb456cfb2a68cbb304cbb8542163f52412f0e4b4fe63"
+  },
+  {
+   "original_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v18\\raw\\runtime\\checkpoint_writes.jsonl",
+   "quarantined_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\round58_resume_v18_superseded_identity_quarantine_20261009T2110Z\\runtime\\checkpoint_writes.jsonl",
+   "sha256": "b77f0fe379980ea4757326acd321dc36bfdafa61e7baff0061f13bc548850a6e"
+  },
+  {
+   "original_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v18\\raw\\runtime\\ROUND53_EXECUTION_LEDGER.json",
+   "quarantined_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\round58_resume_v18_superseded_identity_quarantine_20261009T2110Z\\runtime\\ROUND53_EXECUTION_LEDGER.json",
+   "sha256": "cd363acade0af90c2a4137e2c172a594621aa65656f3a217c407744c4cd9f6a9"
+  }
+ ],
+ "kind": "round58-superseded-identity-quarantine/1",
+ "optimizer_steps": 0,
+ "ppo_updates": 0,
+ "quarantined_at_local": "2026-10-09T21:10:00+08:00",
+ "reason": "The first authorized V20 continuation attempt wrote two hash-identical resume-boundary checkpoints (rolling re-save and pre-batch-1 snapshot of the restored episode4/update1 state, sha256 d726531cd43438b6ec8767d9ab6c13668899fddacdb00832269e094819305978) under a private repair identity that was subsequently extended (R45 one-retry gate seam). The current contract correctly refuses candidate sidecars attested by a superseded identity; per the frozen quarantine discipline the boundary artifacts are moved aside hash-closed, never deleted, and the qualified gen3 sources remain the only resume inputs.",
+ "status": "quarantined_not_deleted"
+}

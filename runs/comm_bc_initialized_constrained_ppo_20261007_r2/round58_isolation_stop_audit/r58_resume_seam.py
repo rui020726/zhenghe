@@ -37,6 +37,7 @@ MIGRATION_ADDED_FIELDS = {
     "historical_checkpoint_journal_sha256",
     "train_pilot_source", "stage_b_sp_common_source",
     "resume_runtime_aliases",
+    "attempt3_contract_sha256", "attempt3_claim_seam_sha256",
 }
 TRAINING_VERSION = (
     "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/"
@@ -573,6 +574,32 @@ def _count_lines(path: Path) -> int:
             if Path(path).is_file() else 0)
 
 
+def _journal_rows_are_resume_boundary_writes(checkpoint_path: Path) -> bool:
+    """Every existing resume-journal row must be a hash-verified write of the
+    restored episode4/update1 boundary state (no training progress yet)."""
+    checkpoint_root = (Path(checkpoint_path).resolve().parent.parent / "checkpoints").resolve()
+    try:
+        rows = [json.loads(line) for line in
+                Path(checkpoint_path).read_text(encoding="utf-8").splitlines() if line.strip()]
+    except (OSError, json.JSONDecodeError):
+        return False
+    if not rows:
+        return False
+    known: dict[str, bool] = {}
+    for row in rows:
+        if (int(row.get("episodes_done", -1)) != 4 or int(row.get("updates", -1)) != 1
+                or not isinstance(row.get("sha256_at_write"), str)):
+            return False
+        sha = row["sha256_at_write"]
+        if sha not in known:
+            known[sha] = any(
+                (checkpoint_root / name).is_file() and sha256(checkpoint_root / name) == sha
+                for name in ("v2_train_s11.pt", "v2_train_s22.pt", "v2_train_s33.pt"))
+        if not known[sha]:
+            return False
+    return True
+
+
 def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_dir: Path,
                                      historical_optimizer_rows: int = 24,
                                      historical_ppo_calls: int = 3) -> dict[str, Any]:
@@ -595,10 +622,22 @@ def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_
         raise RuntimeError("resume checkpoint counter lacks the verified historical journal baseline")
     version_counter = runtime["r42_versions"]
     current_checkpoint_count = int(getattr(version_counter, "CHECKPOINT_WRITE_CALLS", -1))
+    journal_row_count = _count_lines(checkpoint_path)
     if current_checkpoint_count == 0:
         version_counter.CHECKPOINT_WRITE_CALLS = 12
-    elif current_checkpoint_count != 12:
-        raise RuntimeError("configured checkpoint counter conflicts with the verified 12-event history")
+    elif current_checkpoint_count != 12 and not (
+            current_checkpoint_count == journal_row_count
+            and journal_row_count > 0
+            and _journal_rows_are_resume_boundary_writes(checkpoint_path)):
+        raise RuntimeError(
+            "configured checkpoint counter conflicts with the verified 12-event history: "
+            f"counter={current_checkpoint_count}, journal_rows={journal_row_count}, "
+            f"journal={checkpoint_path}")
+    if current_checkpoint_count not in (0, 12) and current_checkpoint_count == journal_row_count:
+        # The fresh resume journal namespace counts its own rows; rebase the live
+        # counter onto the verified 12-event historical baseline so the closed
+        # invariant stays "counter - 12 == new journal rows".
+        version_counter.CHECKPOINT_WRITE_CALLS = 12 + journal_row_count
     if _count_lines(checkpoint_path) != int(version_counter.CHECKPOINT_WRITE_CALLS) - 12:
         raise RuntimeError("resume checkpoint journal and live checkpoint counter do not close")
     if int(getattr(run, "_OPTIMIZER_STEP_CALLS", -1)) not in (0, historical_optimizer_rows + len(opt_rows)):

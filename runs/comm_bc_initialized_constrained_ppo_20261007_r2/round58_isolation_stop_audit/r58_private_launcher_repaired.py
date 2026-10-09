@@ -39,6 +39,8 @@ import r58_repaired_entry as resume_guard  # noqa: E402
 import r58_checkpoint_contract_repaired as checkpoint_contract  # noqa: E402
 import r58_identity_ledger_close_v2 as identity_ledger  # noqa: E402
 import r58_resume_seam as resume_seam  # noqa: E402
+import r58_attempt3_contract as attempt3_contract  # noqa: E402
+import r58_attempt3_claim_seam as attempt3_seam  # noqa: E402
 
 PRIVATE_GENERATION = RUN_ROOT / "round58_gen3"
 PRIVATE_RAW = PRIVATE_GENERATION / "raw"
@@ -227,6 +229,10 @@ def _repair_identity() -> dict[str, Any]:
                 Path(checkpoint_contract.__file__).read_bytes()).hexdigest(),
             "resume_seam_sha256": hashlib.sha256(
                 Path(resume_seam.__file__).read_bytes()).hexdigest(),
+            "attempt3_contract_sha256": hashlib.sha256(
+                Path(attempt3_contract.__file__).read_bytes()).hexdigest(),
+            "attempt3_claim_seam_sha256": hashlib.sha256(
+                Path(attempt3_seam.__file__).read_bytes()).hexdigest(),
             "approved_resume_map_sha256": resume_seam.MAP_SHA256,
             "historical_checkpoint_journal_sha256": resume_seam.validate_historical_checkpoint_journal(
                 REPO_ROOT)["sha256"],
@@ -296,7 +302,15 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     frozen = _read_external_json(freeze_path, "freeze identity")
     quota = _read_external_json(quota_path, "cumulative quota receipt")
     scene_audit = _read_external_json(scene_audit_path, "scene occupancy audit")
-    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V18.json"
+    if mode == "recover_first_batch_gate":
+        approved_attempt3 = dict(attempt3_contract.APPROVED_ATTEMPT3)
+        if (frozen.get("attempt3_special_case") != approved_attempt3
+                or approval.get("attempt3_special_case") != approved_attempt3):
+            raise PermissionError(
+                "ROUND58 attempt3 special-case binding missing or mismatched")
+    elif "attempt3_special_case" in frozen or "attempt3_special_case" in approval:
+        raise PermissionError("ROUND58 fresh mode must not bind an attempt3 special case")
+    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V21.json"
     if mode == "recover_first_batch_gate" and not migration_proof_path.is_file():
         raise PermissionError("ROUND58 recovery plan identity migration proof is missing")
     migration_proof_sha256 = (hashlib.sha256(migration_proof_path.read_bytes()).hexdigest()
@@ -370,6 +384,8 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
         **({"plan_identity_migration_proof_sha256": migration_proof_sha256}
            if migration_proof_sha256 is not None else {}),
         "bc_models": bc_models,
+        "attempt3_special_case": (dict(attempt3_contract.APPROVED_ATTEMPT3)
+                                  if mode == "recover_first_batch_gate" else None),
     }
     for key, value in expected_freeze.items():
         if frozen.get(key) != value:
@@ -440,7 +456,9 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
            "quarantine_failed_first_batch_gate_receipts": legacy.quarantine_failed_first_batch_gate_receipts,
            "verify_persisted_first_batch_state": legacy.verify_persisted_first_batch_state,
            "read_json": legacy.read_json,
+           "validate_claims": legacy.validate_claims,
            "install_r53_claim_verifier": legacy.install_r53_claim_verifier}
+    legacy.validate_claims = attempt3_contract.validate_claims
     plan_base_fn = old["plan_from_frozen_sources"]
     bind_base_fn = old["bind_live_runtime"]
     installed_adapters = []
@@ -640,6 +658,12 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
             raise RuntimeError("repaired prior adapter was not installed exactly once")
         runtime["r56_gate_prior"] = installed_adapters[0]
         runtime["r58_repaired_adapter"] = installed_adapters[0]
+        if values.get("mode") == "recover_first_batch_gate":
+            runtime["r58_attempt3_claim_seam"] = attempt3_seam.install(
+                runtime["r42_run"], plan=plan, raw_root=Path(values["output_root"]),
+                frozen_wrapper=runtime["r42_run"]._claim,
+                normal_cap=1024, reserve_cap=values["reserve_cap"],
+                hard_cap=1064, historical_consumed=16)
         resume_runtime = None
         if values.get("mode") == "recover_first_batch_gate":
             checkpoint_root = Path(values["checkpoint_root"]).resolve()
@@ -793,13 +817,15 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                             "original_failed_gate_preserved": source_path.is_file()}
             return original_read_json(path)
 
-        verify_base = legacy.verify_persisted_first_batch_state
         def verify_preserved_first_batch(base, raw, plan):
-            # The existing verifier must see the original failed receipt, never the derived view.
+            # The attempt3-aware recovery gate must see the original failed
+            # receipts, never the derived qualified gate views.
             active = legacy.read_json
             legacy.read_json = original_read_json
             try:
-                result = verify_base(base, raw, plan)
+                result = attempt3_contract.verify_persisted_first_batch_state(
+                    base, raw, plan, legacy=legacy,
+                    training_version=legacy.TRAINING_VERSION)
             finally:
                 legacy.read_json = active
             if result.get("status") != "passed":
@@ -918,6 +944,9 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
             counter = runtime.get("r58_ppo_counter_bridge")
             if counter and callable(counter.get("undo")):
                 counter["undo"]()
+            seam = runtime.get("r58_attempt3_claim_seam")
+            if seam and callable(seam.get("undo")):
+                seam["undo"]()
             adapter = runtime.get("r58_repaired_adapter")
             if adapter and callable(adapter.get("undo")):
                 adapter["undo"]()
@@ -942,7 +971,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
                  "freeze": values["freeze_path"], "quota": values["quota_path"],
                  "scene_audit": values["scene_audit_path"]}
         if values["mode"] == "recover_first_batch_gate":
-            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V18.json"
+            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V21.json"
         for key, path in paths.items():
             if hashlib.sha256(Path(path).read_bytes()).hexdigest() != values["input_file_sha256"][key]:
                 raise PermissionError(f"ROUND58 {key} receipt changed after preflight")
@@ -978,7 +1007,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
             migration_route = resume_seam.install_historical_plan_comparison_view(
                 legacy, repo_root=REPO_ROOT, current_plan=current_live_plan,
                 current_repair_identity=values["repair_identity"],
-                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V18.json",
+                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V21.json",
                 expected_proof_sha256=values["input_file_sha256"]["plan_identity_migration_proof"])
             legacy.round58_plan_identity_migration = {
                 key: value for key, value in migration_route.items() if key != "undo"}
@@ -1261,3 +1290,4 @@ def close_audit_runtime(binding: dict[str, Any]) -> None:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
