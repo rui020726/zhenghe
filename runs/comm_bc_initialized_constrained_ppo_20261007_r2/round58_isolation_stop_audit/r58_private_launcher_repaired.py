@@ -239,7 +239,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     frozen = _read_external_json(freeze_path, "freeze identity")
     quota = _read_external_json(quota_path, "cumulative quota receipt")
     scene_audit = _read_external_json(scene_audit_path, "scene occupancy audit")
-    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V2.json"
+    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V3.json"
     if mode == "recover_first_batch_gate" and not migration_proof_path.is_file():
         raise PermissionError("ROUND58 recovery plan identity migration proof is missing")
     migration_proof_sha256 = (hashlib.sha256(migration_proof_path.read_bytes()).hexdigest()
@@ -403,9 +403,14 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
 
         def load_r43_with_private_resume_root():
             run_module = load_r43()
+            previously_bound = configure_bootstrap.get("run_module")
+            if previously_bound is run_module and getattr(run_module, "_round58_resume_configure_bound", False):
+                return run_module
+            if previously_bound is not None and previously_bound is not run_module:
+                raise RuntimeError("ROUND58 resume configure loader returned a second R42 module object")
             original_configure = run_module.configure
             if getattr(run_module, "_round58_resume_configure_bound", False):
-                raise RuntimeError("ROUND58 resume configure bridge was installed more than once")
+                raise RuntimeError("ROUND58 resume configure bridge ownership is ambiguous")
 
             def configure_with_private_resume_root(frozen, round40_freeze):
                 previous_run_dir = Path(run_module.RUN_DIR).resolve()
@@ -425,6 +430,7 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
 
             run_module.configure = configure_with_private_resume_root
             run_module._round58_resume_configure_bound = True
+            configure_bootstrap["run_module"] = run_module
             configure_bootstrap["original_configure"] = original_configure
             configure_bootstrap["installed"] = True
             return run_module
@@ -776,7 +782,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
                  "freeze": values["freeze_path"], "quota": values["quota_path"],
                  "scene_audit": values["scene_audit_path"]}
         if values["mode"] == "recover_first_batch_gate":
-            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V2.json"
+            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V3.json"
         for key, path in paths.items():
             if hashlib.sha256(Path(path).read_bytes()).hexdigest() != values["input_file_sha256"][key]:
                 raise PermissionError(f"ROUND58 {key} receipt changed after preflight")
@@ -812,7 +818,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
             migration_route = resume_seam.install_historical_plan_comparison_view(
                 legacy, repo_root=REPO_ROOT, current_plan=current_live_plan,
                 current_repair_identity=values["repair_identity"],
-                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V2.json",
+                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V3.json",
                 expected_proof_sha256=values["input_file_sha256"]["plan_identity_migration_proof"])
             legacy.round58_plan_identity_migration = {
                 key: value for key, value in migration_route.items() if key != "undo"}
