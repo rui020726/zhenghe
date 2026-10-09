@@ -7,16 +7,16 @@
     "test_r58_plan_identity_migration",
     "test_r58_train_pilot_restore_import"
   ],
-  "discovered": 45,
+  "discovered": 47,
   "excluded": [],
   "historical_git_objects": {
     "b38b8688dee7ffc2626aa2064c8af74af75e216b": "present; historical private-launcher and checkpoint-contract blobs are read by their exact repository paths"
   },
-  "executed": 45,
+  "executed": 47,
   "failures": 0,
   "errors": 0,
   "exit_code": 0,
-  "finished_at_local": "2026-10-09T17:03:48.944485+08:00",
+  "finished_at_local": "2026-10-09T17:34:25.973578+08:00",
   "test_ids": [
     "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_declared_metadata_normalizes_but_arbitrary_freeze_fields_do_not",
     "test_r58_identity_ledger_close_v2.IdentityCloseTests.test_each_identity_component_is_fail_closed_and_specific",
@@ -62,6 +62,8 @@
     "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_seed_original_attestation_mismatch_is_rejected",
     "test_r58_plan_identity_migration.HistoricalPlanMigrationTests.test_unique_approved_migration_is_proven_from_plan_freeze_auth_and_all_three_sidecars",
     "test_r58_train_pilot_restore_import.TrainPilotRestoreImportTests.test_clean_old_restore_path_reproduces_missing_train_pilot",
-    "test_r58_train_pilot_restore_import.TrainPilotRestoreImportTests.test_verified_private_scope_loads_only_frozen_module_in_clean_child"
+    "test_r58_train_pilot_restore_import.TrainPilotRestoreImportTests.test_clean_old_stage_b_import_fails_after_configure_path_cleanup",
+    "test_r58_train_pilot_restore_import.TrainPilotRestoreImportTests.test_verified_private_scope_loads_only_frozen_module_in_clean_child",
+    "test_r58_train_pilot_restore_import.TrainPilotRestoreImportTests.test_verified_sp_common_binding_survives_path_cleanup_and_rejects_wrong_cache"
   ]
 }

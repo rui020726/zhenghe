@@ -14,8 +14,8 @@ import time
 from pathlib import Path
 from typing import Any
 
-MAP_REL = Path("runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES_V16.json")
-MAP_SHA256 = "e5149ed0500ed46db744523f905c29b8252cb1866779fa9bf8efc32f160d142b"
+MAP_REL = Path("runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES_V18.json")
+MAP_SHA256 = "468d39f79729dc9b3a9f5ac898fb0e91216658ca12182b4bca48811b63a12789"
 R42_RUN_SHA256 = "9c5feacb2ffcb2bb930d2b6022e2fca5210408765dc664859d400e6f2b5f8c2e"
 HISTORICAL_CHECKPOINT_JOURNAL_SHA256 = "2a43339ac45c2cfd13f84e744b72af0632024f44c3eedaa449bf8c8c7cab0165"
 QUALIFIED = "qualified_for_later_resume_review"
@@ -35,7 +35,7 @@ MIGRATION_ADDED_FIELDS = {
     "ppo_counter_bridge_version", "identity_ledger_schema", "identity_ledger_sha256",
     "resume_seam_sha256", "approved_resume_map_sha256",
     "historical_checkpoint_journal_sha256",
-    "train_pilot_source",
+    "train_pilot_source", "stage_b_sp_common_source",
     "resume_runtime_aliases",
 }
 TRAINING_VERSION = (

@@ -1,0 +1,71 @@
+{
+  "kind": "round58-gen3-plan-identity-migration-proof/1",
+  "status": "verified_allowlisted_identity_only_migration",
+  "proof": {
+    "kind": "round58-gen3-historical-plan-identity-migration/1",
+    "historical_plan_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen3/raw/ROUND53_FIXED_PLAN.json",
+    "historical_plan_sha256": "af33de50bdda045f0e8391b3373b7188edfe83d80f145ab300cb823c01bd965c",
+    "historical_plan_canonical_sha256": "46fe4d39b928154389ade21c5c7052f5bb1fba91d61e299ff698ddfae0d0d506",
+    "historical_freeze_sha256": "253f0217e0a5d82f92d75d84db2843f087cf0d96d4219fe77a7106e9c69c9bf5",
+    "historical_authorization_sha256": "24223fc38f8f2d3adb145dc8f289a03d37c96628d6322c3976bd14d7aec825fa",
+    "historical_repair_identity_sha256": "6f41bedaef91d3520ebec307179715e35a49b175d8f66ce5883d8271e683ef55",
+    "current_plan_canonical_sha256": "e0414d89fe29f2666d35b10b12622f9487cb3b70e46b365e878cc93fe4d899eb",
+    "current_repair_identity_sha256": "ea60b3cad4d2e85e450c96e749090cb073d0abc28f9557a5b950309cfc7d5705",
+    "source_content_identities_sha256": "b2a0f9b9ce6124e94af47899386ef70e8e644d0a05339c361b7cb2915fafcb12",
+    "source_map_sha256": "468d39f79729dc9b3a9f5ac898fb0e91216658ca12182b4bca48811b63a12789",
+    "qualified_seed_source_attestations": {
+      "11": {
+        "checkpoint_sha256": "0d9e8234487a995008189f7757e997d88cd7f0c9fd1f3092eaff03ab8a9b74ab",
+        "sidecar_sha256": "3c2eaa5fa73d08324658359ce1cb78803332923526c4e720b11b1482fd8530ee",
+        "batch_record_sha256": "3a9447efcdd015ff8580dffa4559964e2de9d93545eb3c52cc589cccec7a1671",
+        "commit_sha256": "eaf69f4168e770f0cadfbc1058293e9028955c3113398b69a600f435ca94e957",
+        "original_attestation_sha256": "6f41bedaef91d3520ebec307179715e35a49b175d8f66ce5883d8271e683ef55"
+      },
+      "22": {
+        "checkpoint_sha256": "b0c56adf2039579a2c2d5a245af3cbe3ebcd3a31ef3ac253eb483e23e1a5ade6",
+        "sidecar_sha256": "a20fb6d7df33a7a260a4dd1639844bf19676f0c1c817d3b70f538b2c581adcef",
+        "batch_record_sha256": "a47478a5a5e82fbb24abd72415e78e2f256cf8062552efea3a4d6a01cc9d3943",
+        "commit_sha256": "2c71edcbe39845c034fb57b71189eb91e6cc425fbcbc72c2663eb25643ee6312",
+        "original_attestation_sha256": "6f41bedaef91d3520ebec307179715e35a49b175d8f66ce5883d8271e683ef55"
+      },
+      "33": {
+        "checkpoint_sha256": "265666d7ef5ba354ae71867957d536d4ac333aa9200c43696ce25e2a032927f0",
+        "sidecar_sha256": "3bf6fe43d7bb4d4938a6dc991302456c8193a601e868d1471d797b5f637e82e6",
+        "batch_record_sha256": "90aa540cb22d877cd8d6c6745c4f7a4763cda93c4f7756e23434c44bf3ceaeda",
+        "commit_sha256": "512f8b2ef6d1fe4e6cd13f70f0495ef69bf98487103f95fb916e8b3b26432616",
+        "original_attestation_sha256": "6f41bedaef91d3520ebec307179715e35a49b175d8f66ce5883d8271e683ef55"
+      }
+    },
+    "historical_git_blobs": {
+      "private_launcher": {
+        "commit": "c153dfd001043a7d3365364489ba588fb29adb41",
+        "sha256": "56e0b12819b5193437d0ef9b19ca2c6df2040f088f716df5dc1a3874065340c4"
+      },
+      "checkpoint_contract": {
+        "commit": "b38b8688dee7ffc2626aa2064c8af74af75e216b",
+        "sha256": "c23dc0c89d8a6d423591cc684e47cf5a25130a279710243fc60dedf7c39ec95b"
+      }
+    },
+    "allowed_identity_migration": {
+      "changed_fields": [
+        "checkpoint_contract_sha256",
+        "private_launcher_sha256"
+      ],
+      "added_fields": [
+        "approved_resume_map_sha256",
+        "historical_checkpoint_journal_sha256",
+        "identity_ledger_schema",
+        "identity_ledger_sha256",
+        "ppo_counter_bridge_version",
+        "resume_runtime_aliases",
+        "resume_seam_sha256",
+        "stage_b_sp_common_source",
+        "train_pilot_source"
+      ],
+      "removed_fields": [],
+      "scientific_plan_field_changes": [],
+      "source_content_identity_changed": false
+    },
+    "actual_legacy_comparison_view": "historical raw plan with only r58_repair_identity replaced in memory by the current validated identity; original on-disk plan unchanged"
+  }
+}

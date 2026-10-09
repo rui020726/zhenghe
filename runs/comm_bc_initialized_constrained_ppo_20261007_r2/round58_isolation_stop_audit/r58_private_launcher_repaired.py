@@ -27,6 +27,8 @@ GEN2 = HERE.parent / "round58_gen2"
 R53 = HERE.parent / "round53_critic_isolation_trial_readiness"
 R45 = HERE.parents[2] / "runs" / "comm_rule_warmstart_cost_learning_20261006_r2"
 CANON = HERE.parents[2].parent / "zhenghe" / "runs" / "comm_cost_v2_rerun_20260928"
+FROZEN_SP_COMMON_SHA256 = "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc"
+FROZEN_SP_COMMON_BINDING_VERSION = "round58-exact-stage-b-sp-common-source/1"
 
 for _path in (GEN2, R53, R45, CANON):
     if str(_path) not in sys.path:
@@ -61,6 +63,43 @@ _GRANT_TOKEN = object()
 
 def _sha256_file(path: Path) -> str:
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def _verified_sp_common_module(common_module: Any):
+    """Load only the frozen Stage-B sp_common selected by the live v2_common."""
+    expected_root = CANON.parents[1] / "runs" / "search_trace_and_policy_20260925"
+    expected_source = expected_root / "sp_common.py"
+    actual_v2 = Path(getattr(common_module, "__file__", "")).resolve()
+    declared_root = Path(getattr(common_module, "ROUND18_DIR", "")).resolve()
+    if actual_v2 != (CANON / "v2_common.py").resolve():
+        raise PermissionError("refusing sp_common binding: live v2_common source mismatch")
+    if declared_root != expected_root.resolve():
+        raise PermissionError("refusing sp_common binding: live ROUND18_DIR differs from frozen source root")
+    if (not expected_source.is_file()
+            or _sha256_file(expected_source) != FROZEN_SP_COMMON_SHA256):
+        raise PermissionError("frozen Stage-B sp_common source is missing or hash-mismatched")
+    cached = sys.modules.get("sp_common")
+    if cached is not None:
+        cached_path = Path(getattr(cached, "__file__", "")).resolve()
+        if (cached_path != expected_source.resolve()
+                or _sha256_file(cached_path) != FROZEN_SP_COMMON_SHA256):
+            raise PermissionError("refusing cached sp_common with unapproved provenance")
+        return cached
+    spec = importlib.util.spec_from_file_location("sp_common", expected_source)
+    if spec is None or spec.loader is None:
+        raise ImportError("cannot create exact frozen sp_common import spec")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["sp_common"] = module
+    try:
+        spec.loader.exec_module(module)
+    except BaseException:
+        sys.modules.pop("sp_common", None)
+        raise
+    if (Path(getattr(module, "__file__", "")).resolve() != expected_source.resolve()
+            or _sha256_file(module.__file__) != FROZEN_SP_COMMON_SHA256):
+        sys.modules.pop("sp_common", None)
+        raise PermissionError("loaded sp_common failed post-import provenance check")
+    return module
 
 
 class _ValidatedGrant:
@@ -173,6 +212,11 @@ def _repair_identity() -> dict[str, Any]:
     return {"critic_route_version": resume_guard.ROUTE_VERSION,
             **resume_guard.adapter_identity(),
             "train_pilot_source": checkpoint_contract.train_pilot_source_identity(REPO_ROOT),
+            "stage_b_sp_common_source": {
+                "path": str((CANON.parents[1] / "runs" / "search_trace_and_policy_20260925" / "sp_common.py").resolve()),
+                "sha256": FROZEN_SP_COMMON_SHA256,
+                "binding_version": FROZEN_SP_COMMON_BINDING_VERSION,
+            },
             "resume_runtime_aliases": dict(RESUME_RUNTIME_ALIAS_HASHES),
             "ppo_counter_bridge_version": "round58-ppo-counter-bridge/2",
             "identity_ledger_schema": identity_ledger.IDENTITY_VERSION,
@@ -252,7 +296,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     frozen = _read_external_json(freeze_path, "freeze identity")
     quota = _read_external_json(quota_path, "cumulative quota receipt")
     scene_audit = _read_external_json(scene_audit_path, "scene occupancy audit")
-    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V17.json"
+    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V18.json"
     if mode == "recover_first_batch_gate" and not migration_proof_path.is_file():
         raise PermissionError("ROUND58 recovery plan identity migration proof is missing")
     migration_proof_sha256 = (hashlib.sha256(migration_proof_path.read_bytes()).hexdigest()
@@ -498,6 +542,11 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
         configure_bridge["original_loader"] = original_loader
 
     def private_import(name, globals=None, locals=None, fromlist=(), level=0):
+        if name == "sp_common" and level == 0:
+            common_module = sys.modules.get("v2_common")
+            if common_module is None:
+                raise PermissionError("cannot bind sp_common without the configured frozen v2_common")
+            return _verified_sp_common_module(common_module)
         imported = original_import(name, globals, locals, fromlist, level)
         if name == "r44_runtime":
             bind_r42_configure_root(sys.modules.get("r44_runtime", imported))
@@ -893,7 +942,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
                  "freeze": values["freeze_path"], "quota": values["quota_path"],
                  "scene_audit": values["scene_audit_path"]}
         if values["mode"] == "recover_first_batch_gate":
-            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V17.json"
+            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V18.json"
         for key, path in paths.items():
             if hashlib.sha256(Path(path).read_bytes()).hexdigest() != values["input_file_sha256"][key]:
                 raise PermissionError(f"ROUND58 {key} receipt changed after preflight")
@@ -929,7 +978,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
             migration_route = resume_seam.install_historical_plan_comparison_view(
                 legacy, repo_root=REPO_ROOT, current_plan=current_live_plan,
                 current_repair_identity=values["repair_identity"],
-                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V17.json",
+                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V18.json",
                 expected_proof_sha256=values["input_file_sha256"]["plan_identity_migration_proof"])
             legacy.round58_plan_identity_migration = {
                 key: value for key, value in migration_route.items() if key != "undo"}
