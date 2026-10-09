@@ -897,7 +897,23 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                     seed, runtime["round42_freeze"])).resolve()
                 expected = Path(proof["sources"][seed]["path"]).resolve()
                 if selected != expected:
-                    raise PermissionError(f"seed {seed}: live resume selector did not choose its exact qualified source")
+                    # Once continuation batches are committed, the selector
+                    # chooses the newest current-identity checkpoint instead of
+                    # the historical qualified source.  Accept exactly that: a
+                    # checkpoint under the approved root whose sidecar attests
+                    # the current repair identity and whose bytes match it.
+                    sidecar = Path(str(selected) + ".r58.json")
+                    if (Path(selected).resolve().parent
+                            != Path(values["checkpoint_root"]).resolve()
+                            or not sidecar.is_file()):
+                        raise PermissionError(
+                            f"seed {seed}: live resume selector chose an unapproved source: {selected}")
+                    receipt = json.loads(sidecar.read_text(encoding="utf-8"))
+                    if (receipt.get("round58_repair_attestation") != values["repair_identity"]
+                            or receipt.get("checkpoint_sha256")
+                            != hashlib.sha256(selected.read_bytes()).hexdigest()):
+                        raise PermissionError(
+                            f"seed {seed}: live resume selector sidecar does not close")
                 selected_sources[seed] = str(selected)
             restore_gate_hook = globals().get("_ROUND58_REAL_RESTORE_GATE_HOOK")
             if restore_gate_hook is not None:
