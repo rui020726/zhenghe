@@ -25,6 +25,8 @@
 
 三者均核对 265 个样本、自由候选/mask闭合、正成本与奖励时序、GAE和组合约束、更新前后参数身份、10个 optimizer 参数、task/cost critic head 纳入优化器、batch/commit和前后 checkpoint 元数据及 sidecar SHA 绑定；gate 期间原件哈希均不变。保存记录显示每批 8 次 Adam 调用，批游标均为 episode4/update1。task/cost critic head 有梯度不等于 critic 对 trunk 有梯度；隔离结论来自下面的源码和活体调用链证据，而非梯度范数推断。
 
+先验旁证：冻结训练版本和经哈希核验的 prior adapter 固定 `GATE_BETA=1.00`；保留的 minibatch journal（SHA256 `323480e2bc5a467240f204be848b7f96cebe84586abe44e73595af1e102616415`）有 24 条记录、192 个 early eligible rows，逐行 weighted loss 等于 raw loss，符合 β=1。该 journal 没有 seed 字段，故只作为合并的运行旁证，不虚构逐 seed 分摊。batch record 本身未重复保存 prior 字段。
+
 ### Critic 隔离证据分级
 
 - 冻结 gen3 attestation 所指 prior adapter、trainer/common、配置及 checkpoint-contract 内容哈希均通过；历史 source attestation 完整匹配。
