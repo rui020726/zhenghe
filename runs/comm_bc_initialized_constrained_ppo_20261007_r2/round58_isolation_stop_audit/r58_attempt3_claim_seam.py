@@ -194,8 +194,13 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
             if not row_path.is_file() or row_path.resolve().parent != (resume_root / "rows").resolve():
                 return None
             row = _read(row_path)
-            if (str(row.get("logical_job", "")) != APPROVED_ATTEMPT3["logical_job"]
-                    or int(row.get("steps", -1)) != 1000):
+            # Training rows do not carry a top-level logical_job; the R44 key is
+            # training_seed + episode_index + attempt + kind + full steps.
+            if (str(row.get("kind", "")) != "train"
+                    or int(row.get("steps", -1)) != 1000
+                    or int(row.get("training_seed", -1)) != 11
+                    or int(row.get("episode_index", -1)) != 4
+                    or int(row.get("attempt", -1)) != APPROVED_ATTEMPT3["attempt"]):
                 return None
             create_receipt = r45_globals["_create_round45_artifact_receipt"]
             receipt = create_receipt(row, claim)
