@@ -7,6 +7,8 @@ import io
 import json
 import subprocess
 import os
+import runpy
+import importlib.util
 import unittest
 from unittest import mock
 
@@ -138,7 +140,9 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                      "r58_repair_identity": repair, "generation_id": "round58_gen3"})
         plan_sha = legacy.canonical_sha(plan)
         bc_models, bc_sha = launcher._bc_model_identity()
-        with tempfile.TemporaryDirectory(prefix="r58_gen3_route_test_", dir=launcher.GEN2) as temp:
+        # The disposable root is a sibling of gen2 under ROUND58's output parent,
+        # matching the actual gen3 containment semantics (never a gen2 subdirectory).
+        with tempfile.TemporaryDirectory(prefix="r58_gen3_route_test_", dir=launcher.RUN_ROOT) as temp:
             old_generation, old_raw = launcher.PRIVATE_GENERATION, launcher.PRIVATE_RAW
             generation = pathlib.Path(temp) / "round58_gen3"
             raw = generation / "raw"
@@ -204,7 +208,6 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                      str(scene_path.resolve()): scene_bytes,
                      str(history_path.resolve()): history_bytes}
             events = []
-            real_fixed_gate = legacy.run_first_four_gate_then_continue
             def stop_before_episode(*_args, **_kwargs):
                 events.append(("first-four-gate-called",))
                 raise StopBeforeEnvironment()
@@ -212,30 +215,6 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                 def fail(*_args, **_kwargs):
                     raise AssertionError(f"zero-operation route test reached forbidden {operation}")
                 return fail
-            def controlled_loader():
-                loaded = launcher.load_legacy_launcher_original()
-                real_gate = loaded.run_first_four_gate_then_continue
-                def gate(base, module, runtime):
-                    common_root = pathlib.Path(runtime["common"].CHECKPOINTS).resolve()
-                    self.assertEqual(common_root, raw.resolve() / "checkpoints")
-                    self.assertEqual(loaded.HERE, launcher.GEN2)
-                    for forbidden_root in (launcher.GEN2 / "raw", raw.parent.parent / "escape"):
-                        with self.assertRaisesRegex(RuntimeError, "output escapes the isolated root"):
-                            loaded.bind_runner_paths(base, forbidden_root)
-                    events.append((runtime["trainer"], runtime["r40_train"].trainer,
-                                   runtime["r58_repaired_adapter"]["kind"],
-                                   runtime["r58_checkpoint_contract"]["kind"],
-                                   common_root))
-                    runtime["trainer"].restore_rng = forbidden("RNG restore")
-                    runtime["runner"].run_training_episode = forbidden("environment episode provider")
-                    runtime["r42_run"]._claim = forbidden("durable claim")
-                    base._run_first_four_and_all_gates = stop_before_episode
-                    return real_gate(base, module, runtime)
-                loaded.run_first_four_gate_then_continue = gate
-                return loaded
-            original_loader = launcher.load_legacy_launcher
-            launcher.load_legacy_launcher_original = original_loader
-            launcher.load_legacy_launcher = controlled_loader
             writes = []
             original_write_text = pathlib.Path.write_text
             original_write_bytes = pathlib.Path.write_bytes
@@ -275,6 +254,46 @@ class PrivateLauncherRouteTests(unittest.TestCase):
             original_is_file = pathlib.Path.is_file
             original_read_text = pathlib.Path.read_text
             original_read_bytes = pathlib.Path.read_bytes
+            original_resolve = pathlib.Path.resolve
+            fixed_generation = original_resolve(launcher.RUN_ROOT / "round58_gen3")
+            def map_gen3_resolve(path, *args, **kwargs):
+                resolved = original_resolve(path, *args, **kwargs)
+                try:
+                    suffix = resolved.relative_to(fixed_generation)
+                except ValueError:
+                    return resolved
+                return original_resolve(generation) / suffix
+            class GateStoppingLoader:
+                def __init__(self, wrapped): self.wrapped = wrapped
+                def create_module(self, spec):
+                    return self.wrapped.create_module(spec) if hasattr(self.wrapped, "create_module") else None
+                def exec_module(self, loaded):
+                    self.wrapped.exec_module(loaded)
+                    real_gate = loaded.run_first_four_gate_then_continue
+                    def gate(base, module, runtime):
+                        common_root = pathlib.Path(runtime["common"].CHECKPOINTS).resolve()
+                        self_outer.assertEqual(common_root, raw.resolve() / "checkpoints")
+                        self_outer.assertEqual(loaded.HERE, launcher.GEN2)
+                        for forbidden_root in (launcher.GEN2 / "raw", raw.parent.parent / "escape"):
+                            with self_outer.assertRaisesRegex(RuntimeError, "output escapes the isolated root"):
+                                loaded.bind_runner_paths(base, forbidden_root)
+                        events.append((runtime["trainer"], runtime["r40_train"].trainer,
+                                       runtime["r58_repaired_adapter"]["kind"],
+                                       runtime["r58_checkpoint_contract"]["kind"], common_root))
+                        runtime["trainer"].restore_rng = forbidden("RNG restore")
+                        runtime["runner"].run_training_episode = forbidden("environment episode provider")
+                        runtime["r42_run"]._claim = forbidden("durable claim")
+                        base._run_first_four_and_all_gates = stop_before_episode
+                        return real_gate(base, module, runtime)
+                    loaded.run_first_four_gate_then_continue = gate
+            self_outer = self
+            original_spec = importlib.util.spec_from_file_location
+            def guarded_spec(name, location, *args, **kwargs):
+                spec = original_spec(name, location, *args, **kwargs)
+                if spec is not None and str(pathlib.Path(location).resolve()) == str(
+                        (launcher.GEN2 / "r58_execute.py").resolve()):
+                    spec.loader = GateStoppingLoader(spec.loader)
+                return spec
             def virtual_is_file(path):
                 if str(path.resolve()) in files: return True
                 return original_is_file(path)
@@ -285,22 +304,32 @@ class PrivateLauncherRouteTests(unittest.TestCase):
             def virtual_read_bytes(path):
                 data = files.get(str(path.resolve()))
                 return data if data is not None else original_read_bytes(path)
-            # This executes the real parser, all four receipt validations, the preserved
-            # fixed executor, gen3 path binding, and fixed first-four handoff.
-            with mock.patch.object(pathlib.Path, "is_file", virtual_is_file), \
-                 mock.patch.object(pathlib.Path, "read_text", virtual_read_text), \
-                 mock.patch.object(pathlib.Path, "read_bytes", virtual_read_bytes), \
-                 mock.patch.object(pathlib.Path, "write_text", in_memory_text), \
-                 mock.patch.object(pathlib.Path, "write_bytes", in_memory_bytes), \
-                 mock.patch.object(pathlib.Path, "open", in_memory_open), \
-                 mock.patch.object(pathlib.Path, "touch", in_memory_touch), \
-                 mock.patch.object(torch, "save", guarded_torch_save), \
-                 mock.patch.object(torch.optim.Adam, "step",
-                                   side_effect=AssertionError("real optimizer step forbidden")):
-                with self.assertRaises(StopBeforeEnvironment):
-                    launcher.main(["--authorization", str(auth_path), "--freeze", str(freeze_path),
-                                   "--cumulative-quota", str(quota_path), "--scene-audit", str(scene_path),
-                                   "--output-root", str(raw)])
+            # Run the source as __main__: this exercises the actual CLI entry route,
+            # receipt validation, fixed-plan configure/bind and first-four handoff.
+            # Path resolution maps only the approved gen3/raw namespace into this
+            # disposable test location; no synthetic approval is written to disk.
+            old_argv = sys.argv[:]
+            sys.argv = [str(launcher.__file__), "--authorization", str(auth_path),
+                        "--freeze", str(freeze_path), "--cumulative-quota", str(quota_path),
+                        "--scene-audit", str(scene_path), "--output-root",
+                        str(launcher.HERE.parent / "round58_gen3" / "raw")]
+            try:
+                with mock.patch.object(pathlib.Path, "is_file", virtual_is_file), \
+                     mock.patch.object(pathlib.Path, "read_text", virtual_read_text), \
+                     mock.patch.object(pathlib.Path, "read_bytes", virtual_read_bytes), \
+                     mock.patch.object(pathlib.Path, "resolve", map_gen3_resolve), \
+                     mock.patch.object(pathlib.Path, "write_text", in_memory_text), \
+                     mock.patch.object(pathlib.Path, "write_bytes", in_memory_bytes), \
+                     mock.patch.object(pathlib.Path, "open", in_memory_open), \
+                     mock.patch.object(pathlib.Path, "touch", in_memory_touch), \
+                     mock.patch.object(importlib.util, "spec_from_file_location", guarded_spec), \
+                     mock.patch.object(torch, "save", guarded_torch_save), \
+                     mock.patch.object(torch.optim.Adam, "step",
+                                       side_effect=AssertionError("real optimizer step forbidden")):
+                    with self.assertRaises(StopBeforeEnvironment):
+                        runpy.run_path(str(launcher.__file__), run_name="__main__")
+            finally:
+                sys.argv = old_argv
             self.assertEqual(len(events), 2)
             self.assertIs(events[0][0], events[0][1])
             self.assertEqual(events[0][2], "r58-gate-prior-repaired/1")
@@ -315,8 +344,6 @@ class PrivateLauncherRouteTests(unittest.TestCase):
                             f"unexpected durable task/ledger output: {output_files}")
             self.assertTrue(all(str(raw.resolve()) in event[1] for event in writes))
             self.assertEqual(sys.path, original_sys_path)
-            launcher.load_legacy_launcher = original_loader
-            del launcher.load_legacy_launcher_original
             launcher.PRIVATE_GENERATION, launcher.PRIVATE_RAW = old_generation, old_raw
             for name, module in original_tracked_modules.items():
                 self.assertIs(sys.modules.get(name), module)

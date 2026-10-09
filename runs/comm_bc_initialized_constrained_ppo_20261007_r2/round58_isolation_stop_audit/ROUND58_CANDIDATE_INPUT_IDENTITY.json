@@ -1,0 +1,350 @@
+{
+  "kind": "round58-prelaunch-input-identity/1",
+  "status": "candidate_only",
+  "models": {
+    "11": {
+      "R45_BC_POST": {
+        "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt",
+        "expected_sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+        "actual_sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+        "matches": true,
+        "parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+        "role": "fresh model-only initialization; fresh optimizer/lambda/RNG contract separately"
+      },
+      "R53_ep128": {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round53_critic_isolation_trial_readiness/raw/checkpoints/v2_train_s11_ep128.pt",
+        "expected_sha256": "81ac9894fcd2e31ce2b5f60b8e8bcbfaf150fd409047d02b0add094417d0292f",
+        "actual_sha256": "81ac9894fcd2e31ce2b5f60b8e8bcbfaf150fd409047d02b0add094417d0292f",
+        "matches": true,
+        "role": "read-only evaluation comparator"
+      },
+      "R56_ep128": {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round56_soft_early_report_prior/raw/checkpoints/v2_train_s11_ep128.pt",
+        "expected_sha256": "d09da0f2df3415df7488cac3b90b20a31b3ab6cbf7e06dd3dd2b610115d76a26",
+        "actual_sha256": "d09da0f2df3415df7488cac3b90b20a31b3ab6cbf7e06dd3dd2b610115d76a26",
+        "matches": true,
+        "role": "read-only evaluation comparator"
+      }
+    },
+    "22": {
+      "R45_BC_POST": {
+        "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s22.pt",
+        "expected_sha256": "3cdb83785c51f9e40005d66a1d024d06a5ba6940616e22f3b01a9bf65b5e609d",
+        "actual_sha256": "3cdb83785c51f9e40005d66a1d024d06a5ba6940616e22f3b01a9bf65b5e609d",
+        "matches": true,
+        "parameter_sha256": "e8531e0aff95ed207bc70026247d45869656d266aa974838a7ec2cfe352479b0",
+        "role": "fresh model-only initialization; fresh optimizer/lambda/RNG contract separately"
+      },
+      "R53_ep128": {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round53_critic_isolation_trial_readiness/raw/checkpoints/v2_train_s22_ep128.pt",
+        "expected_sha256": "cb1f3c2fba9c1919194187d0ea3b95275733cf08ea56afed6a47c2a707756d22",
+        "actual_sha256": "cb1f3c2fba9c1919194187d0ea3b95275733cf08ea56afed6a47c2a707756d22",
+        "matches": true,
+        "role": "read-only evaluation comparator"
+      },
+      "R56_ep128": {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round56_soft_early_report_prior/raw/checkpoints/v2_train_s22_ep128.pt",
+        "expected_sha256": "7261f36ce3acb508add78057b6ee55ce7fe18929c9318bef18c54ff94c472fa2",
+        "actual_sha256": "7261f36ce3acb508add78057b6ee55ce7fe18929c9318bef18c54ff94c472fa2",
+        "matches": true,
+        "role": "read-only evaluation comparator"
+      }
+    },
+    "33": {
+      "R45_BC_POST": {
+        "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s33.pt",
+        "expected_sha256": "9329ef048dfc5c1805af5756c7ea0962eedfc8d01aa26841e35af7001616803a",
+        "actual_sha256": "9329ef048dfc5c1805af5756c7ea0962eedfc8d01aa26841e35af7001616803a",
+        "matches": true,
+        "parameter_sha256": "10bae22f3896adc507f05c5d868aad43b0441d19f754f2ef4dc373fc964e57a5",
+        "role": "fresh model-only initialization; fresh optimizer/lambda/RNG contract separately"
+      },
+      "R53_ep128": {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round53_critic_isolation_trial_readiness/raw/checkpoints/v2_train_s33_ep128.pt",
+        "expected_sha256": "237d99e3439400365703fa2b12e8db978b4467d059faf9e451989dcfc19ab9cb",
+        "actual_sha256": "237d99e3439400365703fa2b12e8db978b4467d059faf9e451989dcfc19ab9cb",
+        "matches": true,
+        "role": "read-only evaluation comparator"
+      },
+      "R56_ep128": {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round56_soft_early_report_prior/raw/checkpoints/v2_train_s33_ep128.pt",
+        "expected_sha256": "756f8641da7788ab9d51625aca311f51df0481f070b22d6464faf3d6ceb1bf83",
+        "actual_sha256": "756f8641da7788ab9d51625aca311f51df0481f070b22d6464faf3d6ceb1bf83",
+        "matches": true,
+        "role": "read-only evaluation comparator"
+      }
+    }
+  },
+  "runtime_source_hashes": {
+    "v2_trainer.py": {
+      "path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py",
+      "sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+      "exists": true
+    },
+    "v2_common.py": {
+      "path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_common.py",
+      "sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+      "exists": true
+    },
+    "v2_controller.py": {
+      "path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_controller.py",
+      "sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+      "exists": true
+    }
+  },
+  "private_entry_hashes": {
+    "r58_private_launcher_repaired.py": "f6f362910e08cc95160a002777e09df33eae3493a57993a7f21b3cfa3478e337",
+    "r58_checkpoint_contract_repaired.py": "c23dc0c89d8a6d423591cc684e47cf5a25130a279710243fc60dedf7c39ec95b",
+    "r58_gate_prior_repaired.py": "7081557e6197aceac17fb453c03e1b5fd539f55ec60a7b3eae92d63f7e697688",
+    "r58_repaired_entry.py": "3cede2eded7ecef97bd01adb58ff59f7398c54d41a6559800b63e5b985bebc57"
+  },
+  "plan_identity": {
+    "plan_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+    "plan_sha256": "26e122b907b37e4895ff4eea5ec6da329a3caa5d66346ba8766c6229d66b7673",
+    "job_count": 1024,
+    "training_job_count": 384,
+    "model_eval_count": 576,
+    "rule_eval_count": 64,
+    "evaluation_scenes": [
+      1700000,
+      1700001,
+      1700002,
+      1700003,
+      1700004,
+      1700005,
+      1700006,
+      1700007,
+      1700008,
+      1700009,
+      1700010,
+      1700011,
+      1700012,
+      1700013,
+      1700014,
+      1700015,
+      1700016,
+      1700017,
+      1700018,
+      1700019,
+      1700020,
+      1700021,
+      1700022,
+      1700023,
+      1700024,
+      1700025,
+      1700026,
+      1700027,
+      1700028,
+      1700029,
+      1700030,
+      1700031
+    ],
+    "note": "Existing fixed plan is historical input identity only; its 32-scene block and declared matrix are recorded, no jobs executed in this task."
+  },
+  "scene_audit": {
+    "block": [
+      1700000,
+      1700031
+    ],
+    "n": 32,
+    "path_embedded_candidate_ids": {},
+    "tracked_context_candidate_id_sources": {
+      "1700000": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/EXECUTION_AUTHORIZATION.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/PRELAUNCH_FREEZE.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_REPAIRED_ENTRY_INTEGRATION.md",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/EXECUTION_AUTHORIZATION.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/PRELAUNCH_FREEZE.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/ROUND58_STATUS.json"
+      ],
+      "1700001": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/PRELAUNCH_FREEZE.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/PRELAUNCH_FREEZE.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700002": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/PRELAUNCH_FREEZE.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/PRELAUNCH_FREEZE.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700003": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/PRELAUNCH_FREEZE.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/PRELAUNCH_FREEZE.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700004": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700005": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700006": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700007": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700008": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700009": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700010": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700011": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700012": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700013": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700014": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700015": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700016": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700017": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700018": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700019": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700020": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700021": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700022": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700023": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700024": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700025": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700026": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700027": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700028": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700029": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700030": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_diag_hashlib_20261008T090000Z/ROUND53_FIXED_PLAN.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/raw_launch_failure_dirty_worktree_run2_20261008T080000Z/ROUND53_FIXED_PLAN.json"
+      ],
+      "1700031": [
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/EXECUTION_AUTHORIZATION.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/ROUND58_EXECUTION_BASIS_USER_PROMPT.md",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_REPAIRED_ENTRY_INTEGRATION.md",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/EXECUTION_AUTHORIZATION.json",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/ROUND58_EXECUTION_BASIS_USER_PROMPT.md",
+        "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/ROUND58_STATUS.json"
+      ]
+    },
+    "candidate_registration_sources": [
+      "round58_gen2/PRELAUNCH_FREEZE.json",
+      "round58_prior_strength_prospective_trial/PRELAUNCH_FREEZE.json",
+      "round58_prior_strength_prospective_trial/raw/ROUND53_FIXED_PLAN.json"
+    ],
+    "interpretation": "The block is already registered/reserved by this ROUND58 plan. No path-embedded artifacts/claims carrying these candidate IDs were found. Tracked textual hits are plan/registration lineage, not evidence of a completed episode. Not an unregistered/free block.",
+    "third_party_conflict_found": false,
+    "result_fields_read": false,
+    "gen3_root_exists": false,
+    "gen3_raw_exists": false
+  },
+  "old_freeze_sha256": "3cd20d1579c9cb9a75d9d772688d46505c8947e2ef04b7090f4636a1283932ee",
+  "prior_authorization_artifact": {
+    "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_prior_strength_prospective_trial/EXECUTION_AUTHORIZATION.json",
+    "sha256": "1a77eba7156af7b6c47d1f4a9f790057c3b37fce291a4ada4acdc7ae4d5c31e1",
+    "status": "explicitly_authorized",
+    "caps": {
+      "normal": 1024,
+      "reserve": 40,
+      "hard": 1064
+    },
+    "plan_sha256": "8a91ee51912b2003f3338dd39b5e0637ae1c58a637ce51c3b082250ae75f3bae",
+    "approval_reference": "ROUND58 prompt archive sha256=1889ce50d87510d4c64eb7b957b73a4e76cdc53ca2dd8d74b346d7a8044a88e2; 1024 normal + 40 reserve = 1064 max; beta=1.00 frozen; scenes 1700000..1700031",
+    "scope_note": "Historical artifact binds original 1024+40 contract and stale freeze; not approval of changed cumulative classification/contract. This task itself explicitly forbids launch."
+  }
+}
