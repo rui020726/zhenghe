@@ -1,0 +1,86 @@
+{
+  "kind": "round58-scene-occupancy-audit/1",
+  "status": "clear",
+  "scenes": [
+    1700000,
+    1700001,
+    1700002,
+    1700003,
+    1700004,
+    1700005,
+    1700006,
+    1700007,
+    1700008,
+    1700009,
+    1700010,
+    1700011,
+    1700012,
+    1700013,
+    1700014,
+    1700015,
+    1700016,
+    1700017,
+    1700018,
+    1700019,
+    1700020,
+    1700021,
+    1700022,
+    1700023,
+    1700024,
+    1700025,
+    1700026,
+    1700027,
+    1700028,
+    1700029,
+    1700030,
+    1700031
+  ],
+  "conflicts": [],
+  "result_blind": true,
+  "checked_sources": {
+    "registrations": true,
+    "reservations": true,
+    "claims": true,
+    "artifacts": true
+  },
+  "audited_at_utc": "2026-10-09T01:48:04Z",
+  "scope": "current repository runs tree; this trial's own frozen reservation is permitted; result fields were not read",
+  "findings": {
+    "current_round58_reservation": "1700000..1700031; own registration, not claimed as never registered",
+    "claim_json_files_scanned": 3355,
+    "claim_scene_matches": 0,
+    "artifact_paths_with_candidate_scene_ids": 0,
+    "nonplan_json_scene_identity_matches": 0,
+    "plan_or_audit_mentions_are_reservations_not_consumption": true,
+    "third_party_consumption_or_reservation_found": false,
+    "outcome_fields_read": false,
+    "gen3_output_root_preexisting": false
+  },
+  "evidence": [
+    {
+      "role": "R37_historical_audit",
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_final_evaluation_20261002\\SCENE_USAGE_AUDIT.json",
+      "sha256": "128be7b11a49e2cdbe4d7c724080d175dc3abc1dd1455deaf4dd24ae5856cdcd"
+    },
+    {
+      "role": "candidate_config",
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_PRELAUNCH_CANDIDATE.json",
+      "sha256": "df24e76f76f16a61ac55890b3a5ad1dd79fdbc201ea3b7551bb2355fa11935d7"
+    },
+    {
+      "role": "candidate_input_identity",
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_CANDIDATE_INPUT_IDENTITY.json",
+      "sha256": "938fc21d17e0930dc3652cb2916d064e6e422dbfdd9d34e8e639a0554cb96600"
+    },
+    {
+      "role": "current_claim_and_history_audit",
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\EXECUTION_STOP_AUDIT.json",
+      "sha256": "6ed095ebce43e250fdff967cec8f5107f37c8ddfa4c7a21a6a29494f96ef711f"
+    },
+    {
+      "role": "direct_task_basis",
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\ROUND58_GEN3_EXECUTION_BASIS.json",
+      "sha256": "4e04e62f458dc5186b837b14266184a7aa84493a05b0827e31ec3a824c83201e"
+    }
+  ]
+}
