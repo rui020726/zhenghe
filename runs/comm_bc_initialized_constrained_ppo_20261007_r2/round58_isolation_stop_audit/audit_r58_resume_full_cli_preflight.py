@@ -21,12 +21,12 @@ RUN_ROOT = REPO / "runs/comm_bc_initialized_constrained_ppo_20261007_r2"
 RAW = RUN_ROOT / "round58_gen3/raw"
 RESUME_RAW = RUN_ROOT / "round58_gen3_resume/raw"
 LAUNCHER = HERE / "r58_private_launcher_repaired.py"
-OUTPUT = HERE / "ROUND58_GEN3_RESUME_FULL_CLI_PREFLIGHT.json"
-FREEZE = HERE / "ROUND58_RESUME_FREEZE_V3.json"
-AUTH = HERE / "ROUND58_RESUME_EXECUTION_AUTHORIZATION_V3.json"
+OUTPUT = HERE / "ROUND58_GEN3_RESUME_FULL_CLI_PREFLIGHT_ATTEMPT03.json"
+FREEZE = HERE / "ROUND58_RESUME_FREEZE_V4.json"
+AUTH = HERE / "ROUND58_RESUME_EXECUTION_AUTHORIZATION_V4.json"
 QUOTA = HERE / "ROUND58_GEN3_CUMULATIVE_QUOTA.json"
 SCENES = HERE / "ROUND58_GEN3_RESUME_SCENE_OCCUPANCY_RECHECK.json"
-PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF.json"
+PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V2.json"
 
 PROTECTED = {
     RUN_ROOT / "ROUND46_CURRENT_TASK.json":
@@ -170,6 +170,9 @@ def run() -> dict[str, Any]:
         return original_path_open(self, mode, *args, **kwargs)
 
     def guarded_mkdir(self, *args, **kwargs):
+        if self.exists() and self.is_dir():
+            events.setdefault("existing_directory_noops", []).append(str(self.resolve()))
+            return None
         if inside_resume(self):
             events["suppressed_directory_creations"].append(str(self.resolve()))
             return None

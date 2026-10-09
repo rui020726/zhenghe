@@ -1,0 +1,85 @@
+{
+  "kind": "round58-gen3-full-cli-resume-preflight/1",
+  "status": "failed_or_incomplete",
+  "starting_head": "d28db715c0da6e9026914f97ca4916489b6e2e14",
+  "cli_route": "runpy.run_path(real private launcher, run_name=__main__) with actual V3 receipts",
+  "receipt_sha256": {
+    "authorization": "ac7ba44df23570716f44319fc21757358873f740a0dfb3e4c7a0423779b3ef08",
+    "freeze": "5d9f38a56129abb39ae36f64ac7357d79f1879d1f8204dcdad7a8587bc841cb1",
+    "quota": "eec5fbbfcf1a481ffaed355373438535635704e93d3b1061fd2769c6bdf58eb5",
+    "scene_audit": "78a9e4112cc94691094e5605a7de39fe2375f73cb6708a4a913352e3bdfc35ac",
+    "migration_proof": "91da85df94098b5e9d7430693d86d9fde2c21aaa3c0eacace9496ce8060af555"
+  },
+  "migration_proof_install_calls": [
+    {
+      "kind": "round58-gen3-historical-plan-identity-migration/1",
+      "proof_sha256": "91da85df94098b5e9d7430693d86d9fde2c21aaa3c0eacace9496ce8060af555",
+      "historical_plan_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\ROUND53_FIXED_PLAN.json",
+      "historical_plan_canonical_sha256": "46fe4d39b928154389ade21c5c7052f5bb1fba91d61e299ff698ddfae0d0d506",
+      "current_plan_canonical_sha256": "e82b1d4a2682d0205e7041a81d98c2095e9d60a2b190a71b2fbe27125217ab71",
+      "only_persisted_plan_read_is_normalized": true,
+      "normalization_field": "r58_repair_identity",
+      "legacy_exact_plan_equality_remains_enabled": true
+    }
+  ],
+  "callchain": [
+    {
+      "function": "execute_authorized",
+      "file": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\r58_execute.py",
+      "line": 1134
+    },
+    {
+      "function": "bind_runner_paths",
+      "file": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\r58_execute.py",
+      "line": 363
+    }
+  ],
+  "handoff": null,
+  "intentional_stop": null,
+  "unexpected_error": "DeniedSideEffect: preflight hard guard denied Path.mkdir: D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw",
+  "guard_counts": {
+    "environment_construction": 0,
+    "episode_provider": 0,
+    "new_claims": 0,
+    "optimizer_step": 0,
+    "PPO_update_execution": 0,
+    "legacy_tape_PPO_replay": 0,
+    "RNG_restore": 0,
+    "checkpoint_write": 0,
+    "claim_or_journal_file_write": 0,
+    "evaluation_cells": 0,
+    "read_only_torch_load_calls": 0,
+    "suppressed_resume_directory_requests": []
+  },
+  "integrity": {
+    "protected_before_sha256": {
+      "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+      "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+    },
+    "protected_after_sha256": {
+      "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+      "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+    },
+    "raw_claim_slot_checkpoint_runtime_manifests_equal": true,
+    "resume_raw_absent_before": true,
+    "resume_raw_absent_after": true,
+    "resume_manifests_equal": true,
+    "process_rng_before": {
+      "python": "b5cf341510d95a47ec7f37c39d23a92c059da824e2d04b2063e63880bce346f3",
+      "numpy": "5b03d39e60a6422e90e75acd9e45cc4817efa80ff13909d4b4bfa55bd21bbcb2",
+      "torch_cpu": "94a0a6d99b70c9d7a868b016c61f10cf979d42f9e82772747d4dec9793919e4d"
+    },
+    "process_rng_after": {
+      "python": "b5cf341510d95a47ec7f37c39d23a92c059da824e2d04b2063e63880bce346f3",
+      "numpy": "5b03d39e60a6422e90e75acd9e45cc4817efa80ff13909d4b4bfa55bd21bbcb2",
+      "torch_cpu": "94a0a6d99b70c9d7a868b016c61f10cf979d42f9e82772747d4dec9793919e4d"
+    },
+    "rng_restore_calls": 0
+  },
+  "guard_write_attempts": [
+    {
+      "kind": "Path.mkdir",
+      "target": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw"
+    }
+  ]
+}

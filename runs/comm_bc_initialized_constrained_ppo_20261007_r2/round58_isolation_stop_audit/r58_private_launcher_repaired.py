@@ -15,6 +15,7 @@ import hashlib
 import argparse
 import copy
 import types
+import builtins
 from pathlib import Path
 from typing import Any
 
@@ -238,7 +239,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
     frozen = _read_external_json(freeze_path, "freeze identity")
     quota = _read_external_json(quota_path, "cumulative quota receipt")
     scene_audit = _read_external_json(scene_audit_path, "scene occupancy audit")
-    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF.json"
+    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V2.json"
     if mode == "recover_first_batch_gate" and not migration_proof_path.is_file():
         raise PermissionError("ROUND58 recovery plan identity migration proof is missing")
     migration_proof_sha256 = (hashlib.sha256(migration_proof_path.read_bytes()).hexdigest()
@@ -387,6 +388,62 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
     bind_base_fn = old["bind_live_runtime"]
     installed_adapters = []
     installed_runtimes = []
+    original_import = builtins.__import__
+    resume_root_for_configure = (Path(values["checkpoint_root"]).resolve().parent
+                                 if values.get("mode") == "recover_first_batch_gate" else None)
+    configure_bootstrap: dict[str, Any] = {"installed": False, "run_module": None,
+                                           "original_run_dir": None, "configure_input_run_dir": None}
+
+    def bind_resume_configure_before_r42_call(r44_module: Any) -> None:
+        if resume_root_for_configure is None or configure_bootstrap["installed"]:
+            return
+        load_r43 = getattr(r44_module, "_load_r43_runner", None)
+        if not callable(load_r43):
+            raise RuntimeError("ROUND58 resume cannot bind the R42 configure input before configure")
+
+        def load_r43_with_private_resume_root():
+            run_module = load_r43()
+            original_configure = run_module.configure
+            if getattr(run_module, "_round58_resume_configure_bound", False):
+                raise RuntimeError("ROUND58 resume configure bridge was installed more than once")
+
+            def configure_with_private_resume_root(frozen, round40_freeze):
+                previous_run_dir = Path(run_module.RUN_DIR).resolve()
+                configure_bootstrap["run_module"] = run_module
+                configure_bootstrap["original_run_dir"] = str(previous_run_dir)
+                configure_bootstrap["configure_input_run_dir"] = str(resume_root_for_configure)
+                # R42 configure's own preflight requires journals for any batches it
+                # discovers. Configure against the fresh, receipt-bound resume
+                # namespace so historical gen3 batches are not mistaken for updates
+                # in this new call-journal generation. The post-configure adapter
+                # rebinds the runtime to immutable gen3 claims and exact batch inputs.
+                run_module.RUN_DIR = resume_root_for_configure
+                try:
+                    return original_configure(frozen, round40_freeze)
+                finally:
+                    run_module.RUN_DIR = previous_run_dir
+
+            run_module.configure = configure_with_private_resume_root
+            run_module._round58_resume_configure_bound = True
+            configure_bootstrap["original_configure"] = original_configure
+            configure_bootstrap["installed"] = True
+            return run_module
+
+        r44_module._load_r43_runner = load_r43_with_private_resume_root
+        configure_bootstrap["r44_module"] = r44_module
+        configure_bootstrap["original_load_r43_runner"] = load_r43
+
+    def private_import(name, globals=None, locals=None, fromlist=(), level=0):
+        result = original_import(name, globals, locals, fromlist, level)
+        if name == "r44_runtime":
+            bind_resume_configure_before_r42_call(sys.modules.get("r44_runtime", result))
+        return result
+
+    if resume_root_for_configure is not None:
+        already_loaded_r44 = sys.modules.get("r44_runtime")
+        if already_loaded_r44 is not None:
+            bind_resume_configure_before_r42_call(already_loaded_r44)
+        builtins.__import__ = private_import
     def bound_plan():
         plan = plan_base_fn()
         plan["training_version"] = REPAIRED_TRAINING_VERSION
@@ -649,6 +706,11 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                                 "migration_proof_sha256": values["input_file_sha256"]["plan_identity_migration_proof"],
                                 "source_map_sha256": proof["manifest_sha256"],
                                 "selected_sources": selected_sources,
+                                "configure_bootstrap": {
+                                    "installed_before_r42_configure": configure_bootstrap["installed"],
+                                    "historical_run_dir": configure_bootstrap["original_run_dir"],
+                                    "configure_input_run_dir": configure_bootstrap["configure_input_run_dir"],
+                                },
                                 "episode4_scenarios": {seed: 1300003 for seed in (11, 22, 33)},
                                 "environment_constructed": 0, "claims_created": 0,
                                 "optimizer_steps": 0, "ppo_updates": 0, "checkpoint_writes": 0})
@@ -672,6 +734,17 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
     legacy.bind_live_runtime = bind_repaired
     legacy.bind_runner_paths = bind_gen3_paths
     def undo():
+        if resume_root_for_configure is not None:
+            if builtins.__import__ is not private_import:
+                raise RuntimeError("ROUND58 private configure import bridge changed before teardown")
+            builtins.__import__ = original_import
+            r44_module = configure_bootstrap.get("r44_module")
+            if r44_module is not None:
+                r44_module._load_r43_runner = configure_bootstrap["original_load_r43_runner"]
+            run_module = configure_bootstrap.get("run_module")
+            if run_module is not None and getattr(run_module, "_round58_resume_configure_bound", False):
+                run_module.configure = configure_bootstrap["original_configure"]
+                delattr(run_module, "_round58_resume_configure_bound")
         for runtime, live in reversed(installed_runtimes):
             call_journals = runtime.get("r58_call_journals")
             if call_journals and callable(call_journals.get("undo")):
@@ -690,7 +763,8 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
         for key, value in old.items():
             setattr(legacy, key, value)
         contract_module.RESERVE_CAP = old_contract_reserve
-    return {"undo": undo, "installed_contracts": installed_contracts}
+    return {"undo": undo, "installed_contracts": installed_contracts,
+            "resume_configure_bootstrap": configure_bootstrap}
 
 
 def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
@@ -702,7 +776,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
                  "freeze": values["freeze_path"], "quota": values["quota_path"],
                  "scene_audit": values["scene_audit_path"]}
         if values["mode"] == "recover_first_batch_gate":
-            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF.json"
+            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V2.json"
         for key, path in paths.items():
             if hashlib.sha256(Path(path).read_bytes()).hexdigest() != values["input_file_sha256"][key]:
                 raise PermissionError(f"ROUND58 {key} receipt changed after preflight")
@@ -738,7 +812,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
             migration_route = resume_seam.install_historical_plan_comparison_view(
                 legacy, repo_root=REPO_ROOT, current_plan=current_live_plan,
                 current_repair_identity=values["repair_identity"],
-                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF.json",
+                proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V2.json",
                 expected_proof_sha256=values["input_file_sha256"]["plan_identity_migration_proof"])
             legacy.round58_plan_identity_migration = {
                 key: value for key, value in migration_route.items() if key != "undo"}
