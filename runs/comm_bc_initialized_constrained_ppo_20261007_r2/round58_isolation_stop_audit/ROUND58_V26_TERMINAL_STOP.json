@@ -1,0 +1,24 @@
+{
+  "kind": "round58-v26-terminal-stop/1",
+  "status": "stopped_core_recovery_contract_error",
+  "frozen_execution_head": "864bad654ce1b9cc11fe04079887f00540bf0245",
+  "child_exit_code": 1,
+  "error": "R58 selected current checkpoint lacks its exact batch commit",
+  "failure_path": "r58_private_launcher_repaired.py:757 -> r58_checkpoint_contract_repaired.py:403",
+  "approved_source_sha256": "4c4a8c7115a0bcc08cf58d5912d97bd0605d4bf38a3654b0768c57482e82694f",
+  "ineligible_v26_checkpoint_sha256": "75fdee2865347c05835d6184dcdc0e33421655e69d0ed2e3bfcec58e1464c9b4",
+  "last_eligible_seed11_cursor": {"episode": 60, "update": 15, "adam_step": 88},
+  "gen3_claim_attempts": 73,
+  "gen3_complete_logical_jobs": 70,
+  "gen3_failed_technical_claims": 3,
+  "cumulative_attempt_slots": 89,
+  "cumulative_actual_environment_starts": 87,
+  "remaining_logical_jobs": {"training": 314, "evaluation": 640, "total": 954},
+  "v26_attempt_effects": {"claim_writes": 0, "environment_starts": 0, "episodes": 0, "ppo_calls": 0, "optimizer_steps": 0, "batch_commits": 0, "checkpoint_payload_writes": 2, "evaluation_cells": 0},
+  "protected_sha256": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  },
+  "scientific_plan_complete": false,
+  "relaunch_v26_allowed": false
+}
