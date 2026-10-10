@@ -333,7 +333,14 @@ def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any
                 "artifact_receipt_pending": True,
             }
             continue
-        if logical == "new_training_s11_e43" and _attempt(claim) == 1:
+        if logical == "model_eval_new_s11_greedy_scene1700000" and _attempt(claim) == 1:
+            # This V34 failure occurred *after* an actual full evaluation run
+            # but before R44's old-scene receipt completed. Preserve its
+            # normal slot and construction; permit only this byte-authenticated
+            # record in the history audit, not in the valid science matrix.
+            from r58_v35_eval_booking import _verify_failed_first_eval
+            _verify_failed_first_eval(raw, plan)
+        elif logical == "new_training_s11_e43" and _attempt(claim) == 1:
             _verify_interrupted_e43(raw, claim)
         else:
             _assert_zero_environment_consumption(claim, logical)

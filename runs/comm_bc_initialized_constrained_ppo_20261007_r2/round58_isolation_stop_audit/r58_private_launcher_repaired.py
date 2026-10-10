@@ -43,11 +43,12 @@ import r58_attempt3_contract as attempt3_contract  # noqa: E402
 import r58_attempt3_claim_seam as attempt3_seam  # noqa: E402
 import r58_uncommitted_prefix_probe as prefix_probe  # noqa: E402
 import r58_committed_prefix_bridge as committed_prefix  # noqa: E402
+import r58_v35_eval_booking as eval_booking  # noqa: E402
 
 PRIVATE_GENERATION = RUN_ROOT / "round58_gen3"
 PRIVATE_RAW = PRIVATE_GENERATION / "raw"
-V33_SOURCE_MAP = HERE / "ROUND58_GEN3_APPROVED_RESUME_SOURCES_V33.json"
-V33_MIGRATION_PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V34.json"
+V33_SOURCE_MAP = HERE / "ROUND58_GEN3_APPROVED_RESUME_SOURCES_V35.json"
+V33_MIGRATION_PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V36.json"
 REPAIRED_TRAINING_VERSION = (
     "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/"
     "dual-eta-lambda-0p5/1/rule-bc-late147-init/1/"
@@ -237,6 +238,8 @@ def _repair_identity() -> dict[str, Any]:
                 Path(prefix_probe.__file__).read_bytes()).hexdigest(),
             "committed_prefix_bridge_sha256": hashlib.sha256(
                 Path(committed_prefix.__file__).read_bytes()).hexdigest(),
+            "eval_booking_sha256": hashlib.sha256(
+                Path(eval_booking.__file__).read_bytes()).hexdigest(),
             "attempt3_contract_sha256": hashlib.sha256(
                 Path(attempt3_contract.__file__).read_bytes()).hexdigest(),
             "attempt3_claim_seam_sha256": hashlib.sha256(
@@ -934,6 +937,9 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
             runtime["r58_ppo_counter_bridge"] = call_journals
             runtime["r58_call_journals"] = call_journals
             runtime["r58_resume_source_map_sha256"] = values["resume_sources"]["manifest_sha256"]
+        if resume_runtime is not None:
+            runtime["r58_eval_booking_bridge"] = eval_booking.install(
+                runtime, base._R45_MODULE, plan, raw_root=Path(values["output_root"]))
         runtime["r58_repair_identity"] = values["repair_identity"]
         if runtime["r40_train"].trainer is not runtime["trainer"]:
             contract["undo"]()
@@ -1234,6 +1240,9 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
             if counter and callable(counter.get("undo")):
                 counter["undo"]()
             seam = runtime.get("r58_attempt3_claim_seam")
+            booking = runtime.get("r58_eval_booking_bridge")
+            if booking and callable(booking.get("undo")):
+                booking["undo"]()
             if seam and callable(seam.get("undo")):
                 seam["undo"]()
             adapter = runtime.get("r58_repaired_adapter")

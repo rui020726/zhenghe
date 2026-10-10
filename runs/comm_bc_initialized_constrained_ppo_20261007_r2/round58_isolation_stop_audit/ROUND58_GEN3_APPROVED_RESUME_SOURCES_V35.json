@@ -1,0 +1,96 @@
+{
+  "kind": "round58-gen3-approved-resume-source-map/1",
+  "status": "source_qualified_not_execution_authorization",
+  "generation": "round58_gen3",
+  "qualification_audit": {
+    "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_REAL_GATE_CALLCHAIN_AUDIT.json",
+    "sha256": "8c1bf05e161665636a55b71a09477e3d122812a66821c5811362893be25d12d4"
+  },
+  "qualification_verdict": {
+    "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_REAL_GATE_CALLCHAIN_CLOSE.json",
+    "sha256": "f4ceb60ffa4152cf879d32e7180bf21b2892fa5642b7d011ba90d434f3ac1538"
+  },
+  "source_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen3/raw/checkpoints",
+  "target_checkpoint_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen3_resume_v35/raw/checkpoints",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+  "expected_cursor": {
+    "episodes_done": 4,
+    "updates": 1,
+    "optimizer_steps": 8,
+    "lambda": 1.0
+  },
+  "seeds": [
+    {
+      "seed": 11,
+      "qualification": "qualified_for_later_resume_review",
+      "checkpoint": "v2_train_s11.pt",
+      "checkpoint_sha256": "0d9e8234487a995008189f7757e997d88cd7f0c9fd1f3092eaff03ab8a9b74ab",
+      "sidecar_sha256": "3c2eaa5fa73d08324658359ce1cb78803332923526c4e720b11b1482fd8530ee",
+      "batch_record": "r40_batch_s11_b0_attempt01.json",
+      "batch_record_sha256": "3a9447efcdd015ff8580dffa4559964e2de9d93545eb3c52cc589cccec7a1671",
+      "commit_receipt": "r40_batch_commit_s11_b0.json",
+      "commit_sha256": "eaf69f4168e770f0cadfbc1058293e9028955c3113398b69a600f435ca94e957"
+    },
+    {
+      "seed": 22,
+      "qualification": "qualified_for_later_resume_review",
+      "checkpoint": "v2_train_s22.pt",
+      "checkpoint_sha256": "b0c56adf2039579a2c2d5a245af3cbe3ebcd3a31ef3ac253eb483e23e1a5ade6",
+      "sidecar_sha256": "a20fb6d7df33a7a260a4dd1639844bf19676f0c1c817d3b70f538b2c581adcef",
+      "batch_record": "r40_batch_s22_b0_attempt01.json",
+      "batch_record_sha256": "a47478a5a5e82fbb24abd72415e78e2f256cf8062552efea3a4d6a01cc9d3943",
+      "commit_receipt": "r40_batch_commit_s22_b0.json",
+      "commit_sha256": "2c71edcbe39845c034fb57b71189eb91e6cc425fbcbc72c2663eb25643ee6312"
+    },
+    {
+      "seed": 33,
+      "qualification": "qualified_for_later_resume_review",
+      "checkpoint": "v2_train_s33.pt",
+      "checkpoint_sha256": "265666d7ef5ba354ae71867957d536d4ac333aa9200c43696ce25e2a032927f0",
+      "sidecar_sha256": "3bf6fe43d7bb4d4938a6dc991302456c8193a601e868d1471d797b5f637e82e6",
+      "batch_record": "r40_batch_s33_b0_attempt01.json",
+      "batch_record_sha256": "90aa540cb22d877cd8d6c6745c4f7a4763cda93c4f7756e23434c44bf3ceaeda",
+      "commit_receipt": "r40_batch_commit_s33_b0.json",
+      "commit_sha256": "512f8b2ef6d1fe4e6cd13f70f0495ef69bf98487103f95fb916e8b3b26432616"
+    }
+  ],
+  "execution_generation": "round58_gen3_resume_v35",
+  "derived_from_map_sha256": "b5bd3a2a4065f6b10ae5b0291fd42e4623fdaa76cbcccb4eaae93e5bc3ba43a2",
+  "runtime_aliases": {
+    "r40_train_resume_adapter.py": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+    "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+    "r42_versions.py": "26b9e1a3d4f3b9a5d39ca020a5ebd3653615c09a76a77ae4138f4ab98420a3d8",
+    "r43_call_counter_hooks.py": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7"
+  },
+  "continuation_note": "seed11 V29 committed b31 at ep128/u32; seed22 V29 committed b4 at ep20/u5; seed33 qualified b0 at ep4/u1",
+  "supersedes_failed_generation": "round58_gen3_resume_v31-prelaunch-only",
+  "completed_training_sources": {
+    "11": {
+      "summary_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen3_resume_v29/raw/ROUND46_TRAINING_s11.json",
+      "summary_sha256": "f09e328f024625a48623b28b482e144e0e2f3d7bcb1cd7b303a2e5b4f3d3819d",
+      "checkpoint_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen3_resume_v29/raw/checkpoints/v2_train_s11_ep128.pt",
+      "checkpoint_sha256": "e0f5c6466731b0feac2dcddd21425e97f82dd6431c5613afd523268745efe3d9",
+      "commit_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen3_resume_v29/raw/checkpoints/r40_batch_commit_s11_b31.json",
+      "commit_sha256": "8a85ab8441c3c3f1fed83d2547e22b710ca988097e786f8fc5f64d8f7b312cd6",
+      "optimizer_steps": 184
+    },
+    "22": {
+      "summary_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen3_resume_v32/raw/ROUND46_TRAINING_s22.json",
+      "summary_sha256": "76d4bd5df5bbb9c6eb369fda90e605180dac785a0b6492319f8379025c2bbae8",
+      "checkpoint_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen3_resume_v32/raw/checkpoints/v2_train_s22_ep128.pt",
+      "checkpoint_sha256": "b9fa445b5fe7b5afa97272ada06a29c67a2b7796e7ce2a6a386142b51d5002d4",
+      "commit_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen3_resume_v32/raw/checkpoints/r40_batch_commit_s22_b31.json",
+      "commit_sha256": "4ea86650f21eae11f7c6b4c87ae9916d363f763c914a831296eebb6bcfa5b223",
+      "optimizer_steps": 180
+    },
+    "33": {
+      "summary_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen3_resume_v32/raw/ROUND46_TRAINING_s33.json",
+      "summary_sha256": "37841b57eea5797ad06f7e7dc4f7b72ab219c0efbdbdefb3c38fbf9888ae2cf6",
+      "checkpoint_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen3_resume_v32/raw/checkpoints/v2_train_s33_ep128.pt",
+      "checkpoint_sha256": "75710efb09fd40b898cec77dbbbb524f9636add3ca70ee5a1a6cf32936aa236a",
+      "commit_path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen3_resume_v32/raw/checkpoints/r40_batch_commit_s33_b31.json",
+      "commit_sha256": "34dcafaf9cd97e40cf3a214affdb12487145c1d1f6b20218bf33eed07b755fb1",
+      "optimizer_steps": 192
+    }
+  }
+}
