@@ -48,7 +48,7 @@ import r58_v35_eval_booking as eval_booking  # noqa: E402
 PRIVATE_GENERATION = RUN_ROOT / "round58_gen3"
 PRIVATE_RAW = PRIVATE_GENERATION / "raw"
 V33_SOURCE_MAP = HERE / "ROUND58_GEN3_APPROVED_RESUME_SOURCES_V35.json"
-V33_MIGRATION_PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V36.json"
+V33_MIGRATION_PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V37.json"
 REPAIRED_TRAINING_VERSION = (
     "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/"
     "dual-eta-lambda-0p5/1/rule-bc-late147-init/1/"

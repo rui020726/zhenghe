@@ -80,6 +80,7 @@ def install(runtime: dict[str, Any], r45: Any, plan: dict[str, Any],
     run, runner = runtime["r42_run"], runtime["runner"]
     r40 = runtime["r40_common"]
     old_booked, old_execute = runner._booked, run._execute_cell
+    old_completed_row = r45._completed_row
     if (getattr(old_booked, "__name__", "") != "booked"
             or Path(old_booked.__code__.co_filename).resolve() != Path(r45.__file__).resolve()
             or getattr(old_execute, "__name__", "") != "round58_attempt3_execute_wrapper"):
@@ -98,6 +99,78 @@ def install(runtime: dict[str, Any], r45: Any, plan: dict[str, Any],
     if not callable(base_execute) or not callable(r45._record_artifact_receipt):
         raise RuntimeError("V35 cannot locate original actual execution/receipt functions")
     failure = _verify_failed_first_eval(Path(raw_root), plan)
+
+    def v35_completed_row(context: dict[str, Any], attempts: list[tuple[Path, dict[str, Any]]],
+                          *, collector=None, runner_kwargs=None, identity=None):
+        logical = str(context.get("logical_job", ""))
+        job = frozen_jobs.get(logical)
+        complete = [(path, claim) for path, claim in attempts
+                    if claim.get("status") == "complete"]
+        if job is None or not complete:
+            return old_completed_row(context, attempts, collector=collector,
+                                     runner_kwargs=runner_kwargs, identity=identity)
+        if (len(complete) != 1 or attempts[-1] != complete[0]
+                or any(claim.get("status") not in ("complete", "failed_technical")
+                       for _, claim in attempts)):
+            raise RuntimeError("V35 completed evaluation has ambiguous attempts")
+        claim_path, claim = complete[0]
+        attempt = int(claim.get("attempt", -1))
+        category = str(claim.get("category", ""))
+        slot = int(claim.get("launch_slot", -1))
+        expected_category = "normal" if attempt == 1 else "reserve"
+        if (attempt not in (1, 2) or category != expected_category
+                or (attempt == 1 and slot != int(job["normal_slot"]))
+                or claim.get("logical_job") != logical
+                or claim.get("round") != 45
+                or claim.get("round45_key") != r45._serializable_key(context)
+                or claim.get("training_version") != r45.RUNTIME["r42_versions"].TRAINING_VERSION
+                or claim.get("runner_version") != r45.RUNNER_VERSION
+                or claim.get("comm_action_semantics") != "one-shot-send-skip/1"):
+            raise RuntimeError("V35 completed evaluation claim identity mismatch")
+        slot_path = Path(raw_root) / "launch_slots" / category / f"{slot:04d}.json"
+        slot_row = json.loads(slot_path.read_text(encoding="utf-8")) if slot_path.is_file() else {}
+        if (slot_row.get("logical_job") != logical
+                or int(slot_row.get("attempt", -1)) != attempt
+                or int(slot_row.get("slot", -1)) != slot
+                or slot_row.get("category") != category):
+            raise RuntimeError("V35 completed evaluation slot identity mismatch")
+        if any(int(claim.get(name, -1)) != value for name, value in {
+                "environment_constructor_calls": 1, "run_invocation_calls": 1,
+                "joint_run_method_calls": 1, "run_return_calls": 1,
+                "run_failure_calls": 0, "completed_steps": 1000}.items()):
+            raise RuntimeError("V35 completed evaluation lacks a full real run")
+        artifacts = claim.get("round45_artifact_paths")
+        row_path = Path(artifacts.get("row", "")) if isinstance(artifacts, dict) else Path()
+        if (not row_path.is_file()
+                or Path(r45.RUN_DIR).resolve() not in row_path.resolve().parents):
+            raise RuntimeError("V35 completed evaluation row is outside its private root")
+        row = json.loads(row_path.read_text(encoding="utf-8"))
+        if (row.get("kind") != "eval"
+                or int(row.get("attempt", -1)) != attempt
+                or int(row.get("scenario_seed", -1)) != int(job["scene"])
+                or int(row.get("steps", -1)) != 1000
+                or row.get("training_version") != claim.get("training_version")
+                or row.get("runner_version") != claim.get("runner_version")):
+            raise RuntimeError("V35 completed evaluation row identity mismatch")
+        if job["scope"].startswith("model_eval_"):
+            expected_arm = "NEW" if job["scope"] == "model_eval_r58" else job["scope"].removeprefix("model_eval_").upper()
+            if (row.get("model_arm") != expected_arm
+                    or int(row.get("training_seed", -1)) != int(job["seed"])
+                    or row.get("eval_mode") != job["mode"]):
+                raise RuntimeError("V35 completed model evaluation key mismatch")
+            expected_param = (identity or (runner_kwargs or {}).get("checkpoint_load_identity") or {}).get(
+                "parameter_identity", {}).get("parameter_sha256")
+            if (not expected_param or row.get("checkpoint_parameter_identity", {}).get(
+                    "parameter_sha256") != expected_param):
+                raise RuntimeError("V35 completed evaluation uses a different fixed model")
+        elif row.get("model_arm") != job["rule_arm"].upper() + "_RULE":
+            raise RuntimeError("V35 completed rule evaluation key mismatch")
+        r45._verify_receipt_artifacts(claim, row)
+        if claim.get("round44_eval_artifact_receipt") is not None:
+            raise RuntimeError("V35 completed new-scene cell unexpectedly has an R44 receipt")
+        if collector is not None:
+            collector.records = r45._load_jsonl(Path(row["artefacts"]["tape"]))
+        return row
 
     def v35_booked(label: str, kind: str, row: dict[str, Any], ledger: Any) -> None:
         if kind != "eval":
@@ -164,15 +237,19 @@ def install(runtime: dict[str, Any], r45: Any, plan: dict[str, Any],
     v35_execute.__name__ = "round58_v35_eval_execute"
     runner._booked = v35_booked
     run._execute_cell = v35_execute
+    r45._completed_row = v35_completed_row
 
     def undo() -> None:
         if runner._booked is v35_booked:
             runner._booked = old_booked
         if run._execute_cell is v35_execute:
             run._execute_cell = old_execute
+        if r45._completed_row is v35_completed_row:
+            r45._completed_row = old_completed_row
 
     return {"kind": "round58-v35-frozen-eval-booking/1", "status": "installed",
             "registered_failed_retry": failure, "plan_eval_keys": len(frozen_jobs),
             "row_writer": str(Path(original_booked.__code__.co_filename).resolve()),
             "r45_receipt_source": str(Path(r45.__file__).resolve()),
+            "completed_row_route": "R45_four_artifact_receipt_and_frozen_640_key_matrix",
             "undo": undo}

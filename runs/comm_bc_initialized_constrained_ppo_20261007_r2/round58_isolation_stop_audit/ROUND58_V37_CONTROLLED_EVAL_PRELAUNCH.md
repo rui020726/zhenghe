@@ -1,0 +1,9 @@
+# ROUND58 V37 controlled evaluation continuation
+
+V36 stopped at the **explicit safe committed-cell boundary**, not a core failure: 403/1024 unique logical jobs complete, including all 384 training jobs and 19 evaluation cells; 621 frozen eval keys remain. Cumulative attempts/constructions are 423/421, no in-flight claim, no new technical-failure claim in that cycle. `ROUND58_V36_EVAL_SUPERVISOR_STATE.json` and child logs are preserved.
+
+The archived R45 completed-row validator required R44's obsolete 16-scene receipt. The V37 private completion route validates the same live R45 four-artifact receipt against the immutable row/companions, exact claim/slot/attempt, full 1000-step counters, frozen 640-key arm/seed/mode/scene identity and matching fixed-model parameter hash. It bypasses only the inapplicable R44 receipt condition for this R58 new-scene matrix. It neither changes training nor accepts a failed claim. The original V34 failed eval remains failed; its V36 attempt2 reserve result is complete and hash-validated.
+
+`ROUND58_V37B_ACTUAL_EXISTING_CELLS_GATE.json` passed via actual clean-process `__main__`: all 19 existing cells were returned through their original completed claims/rows without provider, claim, optimizer or checkpoint write; three ep128 models were loaded model-only. The prior V36D–G negative/debug reports remain as distinct evidence. The new single-instance supervisor accepts only the exact before-claim graceful marker with positive, ledger-closed progress and unchanged failure count; any other exit stops. One synthetic supervisor transaction test crossed the actual state writer, graceful cycle, complete cycle and lock release (exit0).
+
+The V37 freeze/source map still references the exact V29/V32 training endpoints and the V35 evaluation artifact root; it does not rewrite historical checkpoint, row, tape, claim or journal bytes. This note does **not** claim the remaining 621 cells or statistics have completed.
