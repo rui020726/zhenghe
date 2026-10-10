@@ -14,8 +14,8 @@ import time
 from pathlib import Path
 from typing import Any
 
-MAP_REL = Path("runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES_V32.json")
-MAP_SHA256 = "30b71868269cf391bf1cf43d211f87cf29e54ebde59779da003b4e81a3dbd830"
+MAP_REL = Path("runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES_V33.json")
+MAP_SHA256 = "b5bd3a2a4065f6b10ae5b0291fd42e4623fdaa76cbcccb4eaae93e5bc3ba43a2"
 R42_RUN_SHA256 = "9c5feacb2ffcb2bb930d2b6022e2fca5210408765dc664859d400e6f2b5f8c2e"
 HISTORICAL_CHECKPOINT_JOURNAL_SHA256 = "2a43339ac45c2cfd13f84e744b72af0632024f44c3eedaa449bf8c8c7cab0165"
 QUALIFIED = "qualified_for_later_resume_review"

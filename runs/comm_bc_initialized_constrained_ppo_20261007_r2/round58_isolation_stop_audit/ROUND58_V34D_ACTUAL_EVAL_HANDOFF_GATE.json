@@ -1,0 +1,190 @@
+{
+  "kind": "round58-v33-actual-cli-eval-handoff-gate/1",
+  "status": "passed",
+  "event": {
+    "status": "passed_before_first_eval_provider",
+    "model_rows": [
+      {
+        "seed": 11,
+        "checkpoint_sha256": "e0f5c6466731b0feac2dcddd21425e97f82dd6431c5613afd523268745efe3d9",
+        "summary_sha256": "f09e328f024625a48623b28b482e144e0e2f3d7bcb1cd7b303a2e5b4f3d3819d"
+      },
+      {
+        "seed": 22,
+        "checkpoint_sha256": "b9fa445b5fe7b5afa97272ada06a29c67a2b7796e7ce2a6a386142b51d5002d4",
+        "summary_sha256": "76d4bd5df5bbb9c6eb369fda90e605180dac785a0b6492319f8379025c2bbae8"
+      },
+      {
+        "seed": 33,
+        "checkpoint_sha256": "75710efb09fd40b898cec77dbbbb524f9636add3ca70ee5a1a6cf32936aa236a",
+        "summary_sha256": "37841b57eea5797ad06f7e7dc4f7b72ab219c0efbdbdefb3c38fbf9888ae2cf6"
+      }
+    ],
+    "matrix_rows": 640,
+    "scenes": [
+      1700000,
+      1700001,
+      1700002,
+      1700003,
+      1700004,
+      1700005,
+      1700006,
+      1700007,
+      1700008,
+      1700009,
+      1700010,
+      1700011,
+      1700012,
+      1700013,
+      1700014,
+      1700015,
+      1700016,
+      1700017,
+      1700018,
+      1700019,
+      1700020,
+      1700021,
+      1700022,
+      1700023,
+      1700024,
+      1700025,
+      1700026,
+      1700027,
+      1700028,
+      1700029,
+      1700030,
+      1700031
+    ],
+    "training_replayed": false,
+    "configured_controller_source": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_controller.py"
+  },
+  "intentional_stop": "actual CLI bound all 640 eval cells and model-only endpoints before provider",
+  "unexpected_error": null,
+  "traceback": null,
+  "debug_identity": {
+    "seed": 33,
+    "actual": {
+      "load_mode": "read_only",
+      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r58-repaired-private-generation3/1+r58-cumulative-quota-history16-normal1024-reserve24-hard1064/2",
+      "reward_timing_version": "published-completion-event-at-relay-tick/2",
+      "timing_interpretation": "versioned_capture_semantics",
+      "optimizer_restored": false,
+      "rng_restored": false,
+      "comm_action_eligibility": "first-report-only/1",
+      "action_eligibility_interpretation": "first-report-only/1",
+      "read_only_for_round40": true,
+      "comm_action_semantics": "one-shot-send-skip/1",
+      "action_semantics_interpretation": "one-shot-send-skip/1",
+      "read_only_for_round42": true,
+      "read_only_for_round44": true,
+      "ambient_rng_preserved": true,
+      "arm": "NEW",
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v32\\raw\\checkpoints\\v2_train_s33_ep128.pt",
+      "file_sha256": "75710efb09fd40b898cec77dbbbb524f9636add3ca70ee5a1a6cf32936aa236a",
+      "training_seed": 33,
+      "episodes_done": 128,
+      "updates": 32,
+      "optimizer_steps": 192,
+      "lambda": 1.125,
+      "parameter_identity": {
+        "parameter_count": 5700,
+        "parameter_sha256": "237b3d2e14141685fafcd60d9537b27fd3c433e4f42924c72276c1b006f409cc",
+        "shapes": {
+          "action_head.bias": [
+            2
+          ],
+          "action_head.weight": [
+            2,
+            64
+          ],
+          "trunk.0.bias": [
+            64
+          ],
+          "trunk.0.weight": [
+            64,
+            19
+          ],
+          "trunk.2.bias": [
+            64
+          ],
+          "trunk.2.weight": [
+            64,
+            64
+          ],
+          "value_cost_head.bias": [
+            1
+          ],
+          "value_cost_head.weight": [
+            1,
+            64
+          ],
+          "value_task_head.bias": [
+            1
+          ],
+          "value_task_head.weight": [
+            1,
+            64
+          ]
+        },
+        "init_seed": 20260927,
+        "heads": [
+          "action_head",
+          "value_task_head",
+          "value_cost_head"
+        ],
+        "note": "actor+task critic mirror the pilot round's Controller; the cost head is the constrained objective's addition (Stage A: new trainer state)"
+      },
+      "evaluation_semantics": "one-shot-send-skip/1",
+      "r58_reused_completed_training_source": {
+        "summary_sha256": "37841b57eea5797ad06f7e7dc4f7b72ab219c0efbdbdefb3c38fbf9888ae2cf6",
+        "checkpoint_sha256": "75710efb09fd40b898cec77dbbbb524f9636add3ca70ee5a1a6cf32936aa236a",
+        "model_only": true
+      }
+    },
+    "expected_sha": "75710efb09fd40b898cec77dbbbb524f9636add3ca70ee5a1a6cf32936aa236a"
+  },
+  "side_effects": {
+    "environment": 0,
+    "claims": 0,
+    "optimizer_steps": 0,
+    "checkpoint_payload_writes": 0,
+    "RNG_restore_calls": [
+      "python",
+      "numpy",
+      "torch_cpu",
+      "python",
+      "numpy",
+      "torch_cpu",
+      "python",
+      "numpy",
+      "torch_cpu"
+    ],
+    "torch_load_calls": 42,
+    "empty_journal_memory_spy": [
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v33\\raw\\runtime\\checkpoint_writes.jsonl",
+        "mode": "wb",
+        "bytes": 0,
+        "action": "memory_only_no_file_created"
+      }
+    ],
+    "derived_ledger_memory_spy": [],
+    "write_attempts": []
+  },
+  "protected_sha256_before": {
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  },
+  "protected_sha256_after": {
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  },
+  "source_files_unchanged": true,
+  "input_sha256": {
+    "ROUND58_RESUME_EXECUTION_AUTHORIZATION_V34.json": "a3d46b8cb0e04f0bcb7a82dc99fb43791c3b789042731d2d68e01915c80ec414",
+    "ROUND58_RESUME_FREEZE_V34.json": "6f96172c619a4ddefbe014d5cf557dee24ba983b36abea19bd8df82d4056b06c",
+    "ROUND58_GEN3_CUMULATIVE_QUOTA.json": "eec5fbbfcf1a481ffaed355373438535635704e93d3b1061fd2769c6bdf58eb5",
+    "ROUND58_GEN3_RESUME_SCENE_OCCUPANCY_RECHECK.json": "78a9e4112cc94691094e5605a7de39fe2375f73cb6708a4a913352e3bdfc35ac",
+    "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V34.json": "b76ed19b8f5c46dc91e820e63cde7b799d0ecb3710de9aadeefdceb4103efc20"
+  }
+}

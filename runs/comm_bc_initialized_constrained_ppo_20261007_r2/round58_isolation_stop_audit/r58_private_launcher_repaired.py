@@ -46,6 +46,8 @@ import r58_committed_prefix_bridge as committed_prefix  # noqa: E402
 
 PRIVATE_GENERATION = RUN_ROOT / "round58_gen3"
 PRIVATE_RAW = PRIVATE_GENERATION / "raw"
+V33_SOURCE_MAP = HERE / "ROUND58_GEN3_APPROVED_RESUME_SOURCES_V33.json"
+V33_MIGRATION_PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V34.json"
 REPAIRED_TRAINING_VERSION = (
     "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/"
     "dual-eta-lambda-0p5/1/rule-bc-late147-init/1/"
@@ -239,7 +241,7 @@ def _repair_identity() -> dict[str, Any]:
                 Path(attempt3_contract.__file__).read_bytes()).hexdigest(),
             "attempt3_claim_seam_sha256": hashlib.sha256(
                 Path(attempt3_seam.__file__).read_bytes()).hexdigest(),
-            "approved_resume_map_sha256": resume_seam.MAP_SHA256,
+            "approved_resume_map_sha256": _sha256_file(V33_SOURCE_MAP),
             "historical_checkpoint_journal_sha256": resume_seam.validate_historical_checkpoint_journal(
                 REPO_ROOT)["sha256"],
             "candidate_config_sha256": hashlib.sha256(candidate_path.read_bytes()).hexdigest(),
@@ -247,6 +249,52 @@ def _repair_identity() -> dict[str, Any]:
                 input_identity_path.read_bytes()).hexdigest(),
             "execution_basis_sha256": _execution_basis_identity(),
             "training_version": REPAIRED_TRAINING_VERSION}
+
+
+def _qualified_completed_training_sources(manifest: dict[str, Any]) -> dict[int, dict[str, Any]]:
+    """Bind all ep128 eval-only sources to original summaries and batch31 commits."""
+    listed = manifest.get("completed_training_sources")
+    if not isinstance(listed, dict) or set(listed) != {"11", "22", "33"}:
+        raise PermissionError("V33 requires exactly three completed training sources")
+    result = {}
+    for seed in (11, 22, 33):
+        item = listed[str(seed)]
+        paths = {}
+        for name in ("summary", "checkpoint", "commit"):
+            relative = Path(item[f"{name}_path"])
+            path = (REPO_ROOT / relative).resolve()
+            if relative.is_absolute() or REPO_ROOT.resolve() not in path.parents:
+                raise PermissionError(f"seed {seed}: completed source escapes repository")
+            if not path.is_file() or _sha256_file(path) != item[f"{name}_sha256"]:
+                raise PermissionError(f"seed {seed}: completed {name} source hash mismatch")
+            paths[name] = path
+        summary = json.loads(paths["summary"].read_text(encoding="utf-8"))
+        commit = json.loads(paths["commit"].read_text(encoding="utf-8"))
+        report = summary.get("fixed_ep128_report", {})
+        if (summary.get("status") != "complete" or int(summary.get("seed", -1)) != seed
+                or summary.get("training_version") != REPAIRED_TRAINING_VERSION
+                or int(report.get("episodes_done", -1)) != 128
+                or int(report.get("updates", -1)) != 32
+                or int(report.get("optimizer_steps", -1)) != int(item["optimizer_steps"])
+                or Path(summary.get("ep128_checkpoint_path", "")).resolve() != paths["checkpoint"]
+                or summary.get("ep128_checkpoint_sha256") != item["checkpoint_sha256"]
+                or int(commit.get("training_seed", -1)) != seed
+                or int(commit.get("batch", -1)) != 31
+                or int(commit.get("episodes_done", -1)) != 128
+                or int(commit.get("updates", -1)) != 32
+                or int(commit.get("optimizer_steps", -1)) != int(item["optimizer_steps"])
+                or commit.get("postupdate_checkpoint_sha256") != item["checkpoint_sha256"]):
+            raise PermissionError(f"seed {seed}: completed source summary/commit does not close")
+        for episode in range(128):
+            folder = PRIVATE_RAW / "launch_claims" / f"new_training_s{seed}_e{episode}"
+            complete = [path for path in folder.glob("attempt_*.json")
+                        if json.loads(path.read_text(encoding="utf-8")).get("status") == "complete"]
+            if len(complete) != 1:
+                raise PermissionError(f"seed {seed} episode {episode}: not exactly one complete claim")
+        result[seed] = {"summary": summary, "commit": commit, "paths": paths,
+                        "checkpoint_sha256": item["checkpoint_sha256"],
+                        "summary_sha256": item["summary_sha256"]}
+    return result
 
 
 def _validate_cumulative_quota_v2(quota: dict[str, Any], history: dict[str, Any]) -> dict[str, int]:
@@ -316,7 +364,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
                 "ROUND58 attempt3 special-case binding missing or mismatched")
     elif "attempt3_special_case" in frozen or "attempt3_special_case" in approval:
         raise PermissionError("ROUND58 fresh mode must not bind an attempt3 special case")
-    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V32.json"
+    migration_proof_path = V33_MIGRATION_PROOF
     if mode == "recover_first_batch_gate" and not migration_proof_path.is_file():
         raise PermissionError("ROUND58 recovery plan identity migration proof is missing")
     migration_proof_sha256 = (hashlib.sha256(migration_proof_path.read_bytes()).hexdigest()
@@ -349,7 +397,10 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
         sys.modules.pop("round58_legacy_launcher_readonly", None)
         sys.path[:] = sys_path_before_legacy_load
     repair = _repair_identity()
-    resume_sources = resume_seam.validate_resume_sources(REPO_ROOT)
+    resume_sources = resume_seam.validate_resume_sources(
+        REPO_ROOT, manifest_path=V33_SOURCE_MAP,
+        expected_map_sha256=_sha256_file(V33_SOURCE_MAP))
+    completed_sources = _qualified_completed_training_sources(resume_sources["manifest"])
     plan = copy.deepcopy(plan_base)
     plan["training_version"] = REPAIRED_TRAINING_VERSION
     plan["r58_repair_identity"] = repair
@@ -428,6 +479,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
         "checkpoint_root": expected_checkpoint_root,
         "resume_sources": resume_sources,
         "mode": mode, "plan": plan, "plan_sha256": plan_sha,
+        "completed_training_sources": completed_sources,
         "repair_identity": repair, "bc_models": bc_models, "bc_model_identity_sha256": bc_sha,
         "reserve_cap": remaining_reserve, "quota_sha256": hashlib.sha256(
             Path(quota_path).read_bytes()).hexdigest(),
@@ -464,6 +516,9 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
            "read_json": legacy.read_json,
            "validate_claims": legacy.validate_claims,
            "install_r53_claim_verifier": legacy.install_r53_claim_verifier}
+    missing = object()
+    eval_globals_before = {key: getattr(legacy, key, missing)
+                           for key in ("SCENES_NEW", "TV53", "TV56", "v2_controller")}
     legacy.validate_claims = attempt3_contract.validate_claims
     plan_base_fn = old["plan_from_frozen_sources"]
     bind_base_fn = old["bind_live_runtime"]
@@ -647,6 +702,30 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
         plan = copy.deepcopy(plan)
         plan["training_version"] = REPAIRED_TRAINING_VERSION
         plan["r58_repair_identity"] = values["repair_identity"]
+        # The preserved gen2 dispatcher forgot these four eval-only globals.
+        # Bind exactly the frozen scene list, historical version contracts and
+        # the controller module used by this configured runtime.
+        import r53_contracts
+        r56_contract_path = HERE.parent / "round56_soft_early_report_prior/r56_contracts.py"
+        spec = importlib.util.spec_from_file_location("round58_r56_contracts_eval_only", r56_contract_path)
+        if spec is None or spec.loader is None:
+            raise RuntimeError("R56 evaluation version source cannot be loaded")
+        r56_contracts = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(r56_contracts)
+        frozen_scenes = tuple(int(x) for x in plan["eval_scenes_new"])
+        contract_scenes = tuple(sys.modules["r58_contracts"].SCENES_NEW)
+        if (frozen_scenes != contract_scenes
+                or frozen_scenes != tuple(range(1_700_000, 1_700_032))
+                or {int(job["seed"]) for job in plan["jobs"]
+                    if job["scope"] == "ppo_training"} != {11, 22, 33}):
+            raise PermissionError("eval scene/seed dispatch differs from frozen plan")
+        controller_module = runtime.get("controller_module")
+        if controller_module is None or sys.modules.get("v2_controller") is not controller_module:
+            raise RuntimeError("eval controller module differs from configured live module")
+        legacy.SCENES_NEW = frozen_scenes
+        legacy.TV53 = r53_contracts.TRAINING_VERSION
+        legacy.TV56 = r56_contracts.TRAINING_VERSION
+        legacy.v2_controller = controller_module
         # Recovery keeps historical gen3 claims/rows under raw, while the new
         # checkpoint-write journal is intentionally rooted in the approved
         # sibling resume generation. Permit only that one journal path through
@@ -1048,48 +1127,7 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                                 "environment_constructed": 0, "claims_created": 0,
                                 "optimizer_steps": 0, "ppo_updates": 0, "checkpoint_writes": 0})
                 raise RuntimeError("ROUND58 preflight stop hook returned without stopping execution")
-            completed_source = proof["committed_continuation"]
-            completed_root = Path(completed_source["path"]).resolve().parent.parent
-            completed_summary_path = completed_root / "ROUND46_TRAINING_s11.json"
-            completed_summary = original_read_json(completed_summary_path)
-            completed_model = completed_root / "checkpoints/v2_train_s11_ep128.pt"
-            if (completed_summary.get("kind") != "round46-seed-training-result/1"
-                    or completed_summary.get("status") != "complete"
-                    or int(completed_summary.get("seed", -1)) != 11
-                    or completed_summary.get("training_version") != REPAIRED_TRAINING_VERSION
-                    or Path(completed_summary.get("ep128_checkpoint_path", "")).resolve() != completed_model
-                    or completed_summary.get("ep128_checkpoint_sha256")
-                       != completed_source["checkpoint_sha256"]
-                    or _sha256_file(completed_model) != completed_source["checkpoint_sha256"]
-                    or int(completed_summary.get("fixed_ep128_report", {}).get("episodes_done", -1)) != 128
-                    or int(completed_summary["fixed_ep128_report"].get("updates", -1)) != 32
-                    or int(completed_summary["fixed_ep128_report"].get("optimizer_steps", -1)) != 184):
-                raise RuntimeError("R58 completed seed11 source summary/checkpoint does not close")
-            for ep in range(128):
-                folder = Path(values["output_root"]) / "launch_claims" / f"new_training_s11_e{ep}"
-                complete = [p for p in folder.glob("attempt_*.json")
-                            if original_read_json(p).get("status") == "complete"]
-                if len(complete) != 1:
-                    raise RuntimeError(f"R58 completed seed11 episode {ep} lacks one complete claim")
-            original_call_training_seed = module._call_training_seed
-            normal_checkpoint_root = base.V6_CHECKPOINTS_DIR
-            def reuse_completed_or_train(runtime_arg, seed, *, episodes):
-                if int(seed) == 11:
-                    if int(episodes) != 128:
-                        raise RuntimeError("R58 completed seed11 can only be reused at ep128")
-                    base.V6_CHECKPOINTS_DIR = completed_root / "checkpoints"
-                    report = copy.deepcopy(completed_summary["fixed_ep128_report"])
-                    report["r58_reused_completed_training_source"] = {
-                        "kind": "round58-exact-completed-seed-reuse/1",
-                        "summary_path": str(completed_summary_path),
-                        "summary_sha256": _sha256_file(completed_summary_path),
-                        "checkpoint_sha256": completed_source["checkpoint_sha256"],
-                        "optimizer_or_episode_replayed": False,
-                    }
-                    return report
-                base.V6_CHECKPOINTS_DIR = normal_checkpoint_root
-                return original_call_training_seed(runtime_arg, seed, episodes=episodes)
-            module._call_training_seed = reuse_completed_or_train
+            completed = values["completed_training_sources"]
             full_gate_hook = globals().get("_ROUND58_FULL_V30_GATE_HOOK")
             if full_gate_hook is not None:
                 if not callable(full_gate_hook):
@@ -1097,31 +1135,33 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                 full_gate_hook({"runtime": runtime, "proof": proof,
                                 "freeze": runtime["round42_freeze"],
                                 "selected_sources": selected_sources,
-                                "reuse_completed_or_train": reuse_completed_or_train,
-                                "completed_summary": completed_summary,
-                                "completed_source": completed_source})
+                                "completed_training_sources": completed})
                 raise RuntimeError("ROUND58 full V30 gate hook returned without stopping")
-            try:
-                result = base._continue_fixed_training(module, runtime, first_four)
-            finally:
-                module._call_training_seed = original_call_training_seed
-                base.V6_CHECKPOINTS_DIR = normal_checkpoint_root
-            # The completed seed remains a model-only read-only source; do not
-            # copy/retag its payload into the new generation.
+            # All 384 training jobs are already complete. No training entry or
+            # immutable completion summary is called/written in this identity.
+            result = {seed: copy.deepcopy(completed[seed]["summary"])
+                      for seed in (11, 22, 33)}
+            # Each ep128 checkpoint is model-only and read-only. Never copy or
+            # retag its payload into the new evaluation-only generation.
             original_load_eval_model = runtime["r42_run"].load_eval_model
             original_read_only_loader = runtime["trainer"].load_checkpoint_read_only
             def load_eval_with_completed_seed(arm, training_seed):
-                if arm != "NEW" or int(training_seed) != 11:
+                if arm != "NEW":
                     return original_load_eval_model(arm, training_seed)
+                seed = int(training_seed)
+                if seed not in completed:
+                    raise RuntimeError("R58 evaluation requested unknown completed seed")
+                source = completed[seed]
+                completed_model = source["paths"]["checkpoint"]
                 common = runtime["common"]
                 previous_root = common.CHECKPOINTS
                 def exact_source_read_only(path, *, freeze):
                     if (Path(path).resolve() != completed_model
-                            or _sha256_file(path) != completed_source["checkpoint_sha256"]):
-                        raise RuntimeError("R58 completed seed11 evaluation source changed")
+                            or _sha256_file(path) != source["checkpoint_sha256"]):
+                        raise RuntimeError(f"R58 completed seed{seed} evaluation source changed")
                     source_payload = runtime["r42_run"].torch_load_cpu(path)
                     return original_read_only_loader(path, freeze=source_payload["freeze"])
-                common.CHECKPOINTS = completed_root / "checkpoints"
+                common.CHECKPOINTS = completed_model.parent
                 runtime["trainer"].load_checkpoint_read_only = exact_source_read_only
                 try:
                     model, identity = original_load_eval_model(arm, training_seed)
@@ -1129,17 +1169,27 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                     runtime["trainer"].load_checkpoint_read_only = original_read_only_loader
                     common.CHECKPOINTS = previous_root
                 identity["r58_reused_completed_training_source"] = {
-                    "summary_sha256": _sha256_file(completed_summary_path),
-                    "checkpoint_sha256": completed_source["checkpoint_sha256"],
+                    "summary_sha256": source["summary_sha256"],
+                    "checkpoint_sha256": source["checkpoint_sha256"],
                     "model_only": True,
                 }
                 return model, identity
             runtime["r42_run"].load_eval_model = load_eval_with_completed_seed
             runtime["r58_completed_eval_undo"] = lambda: setattr(
                 runtime["r42_run"], "load_eval_model", original_load_eval_model)
-            return {"kind": "round58-qualified-episode4-continuation/1",
+            eval_handoff_hook = globals().get("_ROUND58_V33_EVAL_HANDOFF_HOOK")
+            if eval_handoff_hook is not None:
+                if not callable(eval_handoff_hook):
+                    raise TypeError("ROUND58 eval handoff hook must be callable")
+                eval_handoff_hook({"runtime": runtime, "plan": values["plan"],
+                                   "completed_training_sources": completed,
+                                   "evaluation_loader": load_eval_with_completed_seed,
+                                   "legacy": legacy})
+                raise RuntimeError("ROUND58 eval handoff hook returned without stopping")
+            return {"kind": "round58-qualified-eval-only-continuation/1",
                     "status": "complete", "source_map_sha256": proof["manifest_sha256"],
-                    "first_four_reused": True, "gates_reused_from_actual_readonly_audit": True}, result
+                    "all_training_reused": True,
+                    "gates_reused_from_actual_readonly_audit": True}, result
 
         legacy.read_json = resume_read_json
         legacy.verify_persisted_first_batch_state = verify_preserved_first_batch
@@ -1196,6 +1246,12 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
             contract["undo"]()
         for key, value in old.items():
             setattr(legacy, key, value)
+        for key, value in eval_globals_before.items():
+            if value is missing:
+                if hasattr(legacy, key):
+                    delattr(legacy, key)
+            else:
+                setattr(legacy, key, value)
         contract_module.RESERVE_CAP = old_contract_reserve
     return {"undo": undo, "installed_contracts": installed_contracts,
             "resume_configure_bridge": configure_bridge}
@@ -1210,7 +1266,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
                  "freeze": values["freeze_path"], "quota": values["quota_path"],
                  "scene_audit": values["scene_audit_path"]}
         if values["mode"] == "recover_first_batch_gate":
-            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V32.json"
+            paths["plan_identity_migration_proof"] = V33_MIGRATION_PROOF
         for key, path in paths.items():
             if hashlib.sha256(Path(path).read_bytes()).hexdigest() != values["input_file_sha256"][key]:
                 raise PermissionError(f"ROUND58 {key} receipt changed after preflight")
@@ -1246,7 +1302,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
             migration_route = resume_seam.install_historical_plan_comparison_view(
                 legacy, repo_root=REPO_ROOT, current_plan=current_live_plan,
                 current_repair_identity=values["repair_identity"],
-            proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V32.json",
+            proof_path=V33_MIGRATION_PROOF,
                 expected_proof_sha256=values["input_file_sha256"]["plan_identity_migration_proof"])
             legacy.round58_plan_identity_migration = {
                 key: value for key, value in migration_route.items() if key != "undo"}
