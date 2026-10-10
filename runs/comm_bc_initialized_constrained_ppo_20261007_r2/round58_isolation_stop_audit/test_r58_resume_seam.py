@@ -38,39 +38,39 @@ class ResumeSourceContractTests(unittest.TestCase):
     def test_carryover_requires_exact_durable_batch_records_without_copying(self):
         proof = seam.validate_resume_sources(REPO)
         batch_dir = proof["sources"][11]["path"].parent
-        prior = proof["committed_continuation"]["prior_resume_raw"] / "checkpoints"
+        prior = [Path(root) / "checkpoints" for root in
+                 proof["committed_continuation"]["prior_batch_roots"]]
         records = seam._batch_records(Path("Z:/absent-round58-resume-root"), batch_dir, prior)
-        self.assertEqual(seam.carryover_count_from_batches(records, proof), 12)
-        self.assertEqual(len(records), 12)
+        self.assertEqual(seam.carryover_count_from_batches(records, proof), 17)
+        self.assertEqual(len(records), 17)
         with self.assertRaisesRegex(RuntimeError, "committed continuation batch missing"):
             seam.carryover_count_from_batches(records[:-1], proof)
 
     def test_direct_event_journal_requires_monotone_actual_call_indexes(self):
         with tempfile.TemporaryDirectory(dir=HERE) as temp:
             path = Path(temp) / "optimizer_step_calls.jsonl"
-            path.write_text(json.dumps({"call_index": 77, "call_status": "step_invoked"}) + "\n",
+            path.write_text(json.dumps({"call_index": 105, "call_status": "step_invoked"}) + "\n",
                             encoding="utf-8")
-            self.assertEqual(seam._read_direct_journal(path, start=77)[0]["call_index"], 77)
-            path.write_text(json.dumps({"call_index": 78, "call_status": "step_invoked"}) + "\n",
+            self.assertEqual(seam._read_direct_journal(path, start=105)[0]["call_index"], 105)
+            path.write_text(json.dumps({"call_index": 106, "call_status": "step_invoked"}) + "\n",
                             encoding="utf-8")
             with self.assertRaisesRegex(RuntimeError, "index gap/collision"):
-                seam._read_direct_journal(path, start=77)
-            path.write_text(json.dumps({"call_index": 77, "call_status": "estimated"}) + "\n",
+                seam._read_direct_journal(path, start=105)
+            path.write_text(json.dumps({"call_index": 105, "call_status": "estimated"}) + "\n",
                             encoding="utf-8")
             with self.assertRaisesRegex(RuntimeError, "non-invocation"):
-                seam._read_direct_journal(path, start=77)
+                seam._read_direct_journal(path, start=105)
 
     def _install_call_journal(self, temp):
         import torch
         trainer = SimpleNamespace(ppo_update=lambda: None)
         run = SimpleNamespace(_OPTIMIZER_STEP_CALLS=0, _PPO_UPDATE_CALLS=0)
-        version = SimpleNamespace(CHECKPOINT_WRITE_CALLS=41)
+        version = SimpleNamespace(CHECKPOINT_WRITE_CALLS=58)
         runtime = {
             "trainer": trainer, "r42_run": run, "r42_versions": version,
             "r58_resume_source_proof": {"historical_checkpoint_journal": {
                 "sha256": seam.HISTORICAL_CHECKPOINT_JOURNAL_SHA256, "rows": 12},
-                "committed_continuation": {"prior_direct_journals": {
-                    "checkpoint_writes.jsonl": {"rows": 29}}}},
+                "committed_continuation": {"historical_checkpoint_writes": 58}},
         }
         before = torch.optim.Adam.step
         run._RUNTIME = {"restore_adam_step": before}

@@ -334,13 +334,6 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
                              identity: dict[str, Any] | None = None) -> dict[str, Any]:
             import time as _time
             _correct_in_flight_claims()
-            if _time.monotonic() - _seam_started_monotonic > WALL_CLOCK_BUDGET_SECONDS:
-                # Graceful boundary stop BEFORE any claim: every persisted claim
-                # is terminal, all completed rows recover on relaunch, and no
-                # environment, claim, optimizer or checkpoint state is in flight.
-                raise RuntimeError(
-                    "ROUND58 graceful wall-clock boundary reached before claim; "
-                    "stopping at an all-terminal claim boundary per the freeze discipline")
             context = current_context.get()
             local_kwargs = dict(runner_kwargs or {})
             local_updates = dict(row_updates or {})
@@ -360,6 +353,40 @@ def install(run_module: Any, *, plan: dict[str, Any], raw_root: Path,
                             "scenario_seed": int(scenario),
                             "tag": str(local_kwargs.get("tag", context.get("tag", "")))})
             planned_key(context)
+            if _time.monotonic() - _seam_started_monotonic > WALL_CLOCK_BUDGET_SECONDS:
+                # A terminal claim is not enough: an interrupted four-episode
+                # rollout batch has no optimizer commit.  Training can stop
+                # only before the next complete, durable batch; evaluation
+                # cells are individually committed and may stop before claim.
+                import hashlib as _hashlib
+                import json as _json
+                import re as _re
+                safe = kind != "train"
+                if kind == "train":
+                    match = _re.fullmatch(r"new_training_s(11|22|33)_e(\d+)", logical_job)
+                    if match is None:
+                        raise RuntimeError("unrecognized training key at time boundary")
+                    seed, ep = map(int, match.groups())
+                    if ep % 4 == 0 and ep > 4:
+                        root = Path(resume_root) / "checkpoints"
+                        receipt_path = root / f"r40_batch_commit_s{seed}_b{ep // 4 - 1}.json"
+                        rolling = root / f"v2_train_s{seed}.pt"
+                        if receipt_path.is_file() and rolling.is_file():
+                            receipt = _json.loads(receipt_path.read_text(encoding="utf-8"))
+                            actual = _hashlib.sha256(rolling.read_bytes()).hexdigest()
+                            if (int(receipt.get("training_seed", -1)) == seed
+                                    and int(receipt.get("episodes_done", -1)) == ep
+                                    and int(receipt.get("updates", -1)) == ep // 4
+                                    and receipt.get("rolling_checkpoint_sha256") == actual):
+                                safe = True
+                if safe:
+                    inflight = [p for p in (raw_root / "launch_claims").glob("*/*.json")
+                                if _read(p).get("status") == "claimed_before_environment"]
+                    if inflight:
+                        raise RuntimeError("cannot stop with an in-flight claim")
+                    raise RuntimeError(
+                        "ROUND58 graceful committed-batch/cell boundary reached before claim; "
+                        "all completed scientific operations are durable")
             if (kind == "train" and logical_job == APPROVED_ATTEMPT3["logical_job"]):
                 _complete_interrupted_attempt3_bookkeeping()
             if (kind == "train" and logical_job == APPROVED_ATTEMPT3["logical_job"]

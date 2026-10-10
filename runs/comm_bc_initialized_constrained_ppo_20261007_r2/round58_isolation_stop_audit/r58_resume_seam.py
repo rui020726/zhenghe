@@ -14,8 +14,8 @@ import time
 from pathlib import Path
 from typing import Any
 
-MAP_REL = Path("runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES_V22.json")
-MAP_SHA256 = "902aea5d7c081d099eb2687d7ef43d55bae7315fe41ec688ddfbc6f448c2a605"
+MAP_REL = Path("runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES_V26.json")
+MAP_SHA256 = "d0aa61dc19798e5caf19607db66d2187268482dec0b74dbb1b7e0606c941227e"
 R42_RUN_SHA256 = "9c5feacb2ffcb2bb930d2b6022e2fca5210408765dc664859d400e6f2b5f8c2e"
 HISTORICAL_CHECKPOINT_JOURNAL_SHA256 = "2a43339ac45c2cfd13f84e744b72af0632024f44c3eedaa449bf8c8c7cab0165"
 QUALIFIED = "qualified_for_later_resume_review"
@@ -38,7 +38,7 @@ MIGRATION_ADDED_FIELDS = {
     "train_pilot_source", "stage_b_sp_common_source",
     "resume_runtime_aliases",
     "attempt3_contract_sha256", "attempt3_claim_seam_sha256",
-    "prefix_recovery_sha256",
+    "prefix_recovery_sha256", "committed_prefix_bridge_sha256",
 }
 TRAINING_VERSION = (
     "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/"
@@ -148,7 +148,7 @@ def validate_resume_sources(repo_root: Path, *, manifest_path: Path | None = Non
             "original_sidecar": sc,
         }
     checkpoint_journal = validate_historical_checkpoint_journal(root)
-    continuation = validate_committed_seed11_batch9(root)
+    continuation = validate_committed_seed11_batch14(root, validate_committed_seed11_batch9(root))
     return {"manifest": manifest, "manifest_sha256": expected_map_sha256,
             "sources": verified, "historical_ppo_carryover": len(verified),
             "historical_optimizer_steps": sum(8 for _ in verified),
@@ -258,6 +258,82 @@ def validate_committed_seed11_batch9(repo_root: Path) -> dict[str, Any]:
             "prior_direct_journals": {name: {"sha256": digest, "rows": count}
                                       for name, (digest, count) in journals.items()},
             "cursor": {"episodes_done": 40, "updates": 10, "optimizer_steps": 60}}
+
+
+def validate_committed_seed11_batch14(repo_root: Path, parent: dict[str, Any]) -> dict[str, Any]:
+    """Bind the next five real V25 commits and their original direct journals."""
+    import torch
+    root = Path(repo_root).resolve()
+    run_root = root / "runs/comm_bc_initialized_constrained_ppo_20261007_r2"
+    audit = run_root / "round58_isolation_stop_audit"
+    raw = run_root / "round58_gen3_resume_v22/raw"
+    cp = raw / "checkpoints"
+    source = cp / "v2_train_s11.pt"
+    source_sha = "4c4a8c7115a0bcc08cf58d5912d97bd0605d4bf38a3654b0768c57482e82694f"
+    commit_path = cp / "r40_batch_commit_s11_b14.json"
+    commit_sha = "c18ae6bdd702e8ce139c44a6bf44ad50b7ea8100a4dcc452452f4398f0e0b7f5"
+    frozen_path = audit / "ROUND58_RESUME_FREEZE_V25.json"
+    if (sha256(source) != source_sha or sha256(commit_path) != commit_sha
+            or sha256(frozen_path) != "443018e791d6c6c0f3a36caa349637dcae6dda6ba32af9286fb6f6fcd12fad14"):
+        raise PermissionError("V25 batch14 source, commit or freeze bytes changed")
+    freeze = read_json(frozen_path)
+    attestation = freeze["repair_identity"]
+    sidecar_path = Path(str(source) + ".r58.json")
+    sidecar = read_json(sidecar_path)
+    commit = read_json(commit_path)
+    if (sidecar.get("checkpoint_sha256") != source_sha
+            or sidecar.get("round58_repair_attestation") != attestation
+            or commit.get("rolling_checkpoint_sha256") != source_sha
+            or (commit.get("training_seed"), commit.get("batch"),
+                commit.get("episodes_done"), commit.get("updates"),
+                commit.get("optimizer_steps")) != (11, 14, 60, 15, 88)
+            or sha256(cp / commit["batch_record"]) != commit["batch_record_sha256"]):
+        raise PermissionError("V25 batch14 sidecar/record/commit do not close")
+    for batch in range(10, 15):
+        receipt = read_json(cp / f"r40_batch_commit_s11_b{batch}.json")
+        if (int(receipt.get("training_seed", -1)) != 11
+                or int(receipt.get("batch", -1)) != batch
+                or int(receipt.get("episodes_done", -1)) != 4 * (batch + 1)
+                or sha256(cp / receipt["batch_record"]) != receipt["batch_record_sha256"]):
+            raise PermissionError(f"V25 batch{batch} durable input differs")
+    journal_sources = {
+        "optimizer_step_calls.jsonl": ("c61faf8166e424a61fb2aaed54cc5c89a80d1d15baf4d90ed7a81403d8aa9513", 28),
+        "ppo_update_calls.jsonl": ("a3bdbf49caeb1b0e70496180251238e7143841b7c3bbc40f182c910792ecfd58", 5),
+        "checkpoint_writes.jsonl": ("8b9e1a06de6544d69a661d01e540e7e32690ac6475a79fc726d352ae3011fcf5", 17),
+    }
+    for name, (digest, rows) in journal_sources.items():
+        path = raw / "runtime" / name
+        if sha256(path) != digest or _count_lines(path) != rows:
+            raise PermissionError(f"V25 direct journal differs: {name}")
+    payload = torch.load(source, map_location="cpu", weights_only=False)
+    historical = torch.load(parent["path"], map_location="cpu", weights_only=False)
+    state = payload.get("training_state", {})
+    science_freeze = lambda p: {k: v for k, v in p["freeze"].items()
+                                if k != "round58_repair_attestation"}
+    if (payload.get("round58_repair_attestation") != attestation
+            or state.get("round58_repair_attestation") != attestation
+            or payload["freeze"].get("round58_repair_attestation") != attestation
+            or science_freeze(payload) != science_freeze(historical)
+            or state.get("round58_resume_provenance", {}).get("source_checkpoint_sha256")
+               != parent["checkpoint_sha256"]
+            or (state.get("episodes_done"), state.get("updates"), state.get("optimizer_steps"))
+               != (60, 15, 88)):
+        raise PermissionError("V25 payload does not bind approved b9 ancestry/science/cursor")
+    return {"path": source.resolve(), "checkpoint_sha256": source_sha,
+            "sidecar_path": sidecar_path.resolve(), "sidecar_sha256": sha256(sidecar_path),
+            "commit_path": commit_path.resolve(), "commit_sha256": commit_sha,
+            "batch_record_sha256": commit["batch_record_sha256"],
+            "original_identity": attestation,
+            "prior_resume_raw": parent["prior_resume_raw"],
+            "prior_batch_roots": [parent["prior_resume_raw"], raw.resolve()],
+            "parent_b9": {"checkpoint_sha256": parent["checkpoint_sha256"],
+                          "commit_sha256": parent["commit_sha256"]},
+            "prior_direct_journals": parent["prior_direct_journals"],
+            "v25_direct_journals": {name: {"sha256": digest, "rows": rows}
+                                    for name, (digest, rows) in journal_sources.items()},
+            "historical_ppo_calls": 17, "historical_optimizer_calls": 104,
+            "historical_checkpoint_writes": 58,
+            "cursor": {"episodes_done": 60, "updates": 15, "optimizer_steps": 88}}
 
 
 def _canonical_sha(value: Any) -> str:
@@ -563,11 +639,10 @@ def validate_historical_checkpoint_journal(repo_root: Path) -> dict[str, Any]:
 
 
 def _batch_records(run_root: Path, extra_root: Path,
-                   prior_root: Path | None = None) -> list[Path]:
+                   prior_roots: list[Path] | None = None) -> list[Path]:
     found: dict[str, Path] = {}
     directories = [Path(run_root) / "checkpoints", Path(extra_root)]
-    if prior_root is not None:
-        directories.insert(1, Path(prior_root))
+    directories[1:1] = [Path(path) for path in (prior_roots or [])]
     for directory in directories:
         if directory.is_dir():
             for p in directory.glob("r40_batch_s*_b*_attempt*.json"):
@@ -601,7 +676,14 @@ def carryover_count_from_batches(batch_records: list[Path], proof: dict[str, Any
             if (key not in by_key or by_key[key].resolve() != expected.resolve()
                     or sha256(by_key[key]) != sha256(expected)):
                 raise RuntimeError(f"committed continuation batch missing/ambiguous: {key}")
-    expected_total = len(approved) + (9 if continuation is not None else 0)
+        v25 = Path(continuation["prior_batch_roots"][1]) / "checkpoints"
+        for batch in range(10, 15):
+            key = (11, batch)
+            expected = v25 / f"r40_batch_s11_b{batch}_attempt01.json"
+            if (key not in by_key or by_key[key].resolve() != expected.resolve()
+                    or sha256(by_key[key]) != sha256(expected)):
+                raise RuntimeError(f"V25 committed continuation batch missing/ambiguous: {key}")
+    expected_total = len(approved) + (14 if continuation is not None else 0)
     if len(by_key) < expected_total:
         raise RuntimeError("carryover batch count is below the verified committed history")
     return expected_total
@@ -642,12 +724,16 @@ def install_r42_configure_compat(run_module: Any, repo_root: Path, *, extra_batc
     run_module._R58_OPTIMIZER_JOURNAL = str(optimizer_journal)
     run_module._R58_PPO_JOURNAL = str(ppo_journal)
     run_module._R58_CHECKPOINT_JOURNAL = str(checkpoint_journal)
-    prior_batch_root = (None if "committed_continuation" not in proof else
-                        Path(proof["committed_continuation"]["prior_resume_raw"]) / "checkpoints")
+    prior_batch_roots = ([Path(raw) / "checkpoints" for raw in
+                          proof["committed_continuation"]["prior_batch_roots"]]
+                         if "committed_continuation" in proof else [])
     run_module._r58_batch_records = lambda base: _batch_records(
-        Path(run_module.RUN_DIR), Path(run_module._R58_EXTRA_BATCH_ROOT), prior_batch_root)
-    history_ppo = int(proof["historical_ppo_carryover"]) + (9 if prior_batch_root else 0)
-    history_optimizer = int(proof["historical_optimizer_steps"]) + (52 if prior_batch_root else 0)
+        Path(run_module.RUN_DIR), Path(run_module._R58_EXTRA_BATCH_ROOT), prior_batch_roots)
+    continuation = proof.get("committed_continuation")
+    history_ppo = (int(continuation["historical_ppo_calls"])
+                   if continuation else int(proof["historical_ppo_carryover"]))
+    history_optimizer = (int(continuation["historical_optimizer_calls"])
+                         if continuation else int(proof["historical_optimizer_steps"]))
     run_module._r58_history_ppo_carryover = history_ppo
     run_module._r58_history_batch_verifier = lambda rows: carryover_count_from_batches(rows, proof)
     ledger_source = ledger_source.replace(ledger_anchor,
@@ -662,8 +748,9 @@ def install_r42_configure_compat(run_module: Any, repo_root: Path, *, extra_batc
     if int(_PPO_UPDATE_CALLS) != ppo_update_calls:
         raise RuntimeError("ROUND58 live PPO counter differs from direct journal plus carryover")'''
     ledger_source = ledger_source.replace(old_counter_lines, new_counter_lines, 1)
-    new_journal_lines = '''        "checkpoint_write_journal_entries": _r58_count_lines(
-            Path(RUN_DIR) / "runtime" / "checkpoint_writes.jsonl")
+    history_checkpoint = (int(continuation["historical_checkpoint_writes"])
+                          if continuation else 12)
+    new_journal_lines = f'''        "checkpoint_write_journal_entries": {history_checkpoint}
             + _r58_count_lines(Path(_R58_CHECKPOINT_JOURNAL)),'''
     ledger_source = ledger_source.replace(old_journal_lines, new_journal_lines, 1)
     # Compile the exact frozen ledger function in its original module namespace.
@@ -697,8 +784,10 @@ def _read_direct_journal(path: Path, *, start: int) -> list[dict[str, Any]]:
 
 
 def _count_lines(path: Path) -> int:
-    return (sum(1 for line in Path(path).open("r", encoding="utf-8") if line.strip())
-            if Path(path).is_file() else 0)
+    if not Path(path).is_file():
+        return 0
+    with Path(path).open("r", encoding="utf-8") as stream:
+        return sum(1 for line in stream if line.strip())
 
 
 def _journal_rows_are_resume_boundary_writes(checkpoint_path: Path) -> bool:
@@ -742,8 +831,8 @@ def _journal_rows_are_resume_boundary_writes(checkpoint_path: Path) -> bool:
 
 
 def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_dir: Path,
-                                     historical_optimizer_rows: int = 76,
-                                     historical_ppo_calls: int = 12) -> dict[str, Any]:
+                                     historical_optimizer_rows: int = 104,
+                                     historical_ppo_calls: int = 17) -> dict[str, Any]:
     """Journal future calls at their actual outer call sites; historical values stay derived."""
     import torch
     trainer, run = runtime["trainer"], runtime["r42_run"]
@@ -758,13 +847,12 @@ def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_
     checkpoint_baseline = runtime.get("r58_resume_source_proof", {}).get(
         "historical_checkpoint_journal")
     continuation = runtime.get("r58_resume_source_proof", {}).get("committed_continuation")
-    historical_checkpoint_rows = 12 + (int(continuation["prior_direct_journals"]
-                                           ["checkpoint_writes.jsonl"]["rows"])
-                                      if continuation is not None else 0)
+    historical_checkpoint_rows = (int(continuation["historical_checkpoint_writes"])
+                                  if continuation is not None else 12)
     if (not isinstance(checkpoint_baseline, dict)
             or checkpoint_baseline.get("sha256") != HISTORICAL_CHECKPOINT_JOURNAL_SHA256
             or int(checkpoint_baseline.get("rows", -1)) != 12
-            or historical_checkpoint_rows != 41):
+            or historical_checkpoint_rows != 58):
         raise RuntimeError("resume checkpoint counter lacks the verified historical journal baseline")
     version_counter = runtime["r42_versions"]
     current_checkpoint_count = int(getattr(version_counter, "CHECKPOINT_WRITE_CALLS", -1))

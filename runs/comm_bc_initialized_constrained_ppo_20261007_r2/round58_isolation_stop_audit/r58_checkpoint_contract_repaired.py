@@ -282,19 +282,22 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
                 raise RuntimeError("R58 batch9 freeze/producer identity differs from approved source")
             controller, optimizer, state = load_controller_state(
                 load0, resolved, freeze=original_freeze)
+            approved_cursor = continuation["cursor"]
             if (not _exact_state_equal(controller.state_dict(), payload.get("controller"))
                     or not _exact_state_equal(optimizer.state_dict(), payload.get("optimizer"))
                     or not _exact_state_equal(trainer.rng_state(), payload.get("rng"))
                     or (int(state.get("episodes_done", -1)), int(state.get("updates", -1)),
-                        int(state.get("optimizer_steps", -1))) != (40, 10, 60)):
-                raise RuntimeError("R58 batch9 model/Adam/RNG/cursor did not restore exactly")
+                        int(state.get("optimizer_steps", -1))) !=
+                       (int(approved_cursor["episodes_done"]), int(approved_cursor["updates"]),
+                        int(approved_cursor["optimizer_steps"]))):
+                raise RuntimeError("R58 committed source model/Adam/RNG/cursor did not restore exactly")
             state = deepcopy(state)
             state["round58_resume_provenance"] = {
-                "kind": "round58-exact-committed-batch9-source/1",
+                "kind": "round58-exact-committed-v25-source/1",
                 "source_checkpoint_sha256": continuation["checkpoint_sha256"],
                 "source_commit_sha256": continuation["commit_sha256"],
                 "training_seed": 11,
-                "cursor": {"episodes_done": 40, "updates": 10, "optimizer_steps": 60},
+                "cursor": deepcopy(approved_cursor),
             }
             state["round58_repair_attestation"] = deepcopy(identity)
             return controller, optimizer, state
@@ -358,6 +361,17 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             load_ro0, path, freeze=_attested(freeze, identity, version=training_version))
 
     def validate_current_committed_source(path, seed):
+        resolved = Path(path).resolve()
+        if continuation_path is not None and resolved == continuation_path:
+            if (int(seed) != 11
+                    or _file_sha256(resolved) != continuation["checkpoint_sha256"]
+                    or _file_sha256(continuation["commit_path"]) != continuation["commit_sha256"]
+                    or _file_sha256(continuation["sidecar_path"]) != continuation["sidecar_sha256"]):
+                raise RuntimeError("R58 historical V25 continuation changed")
+            return {"path": str(resolved), "sha256": continuation["checkpoint_sha256"],
+                    "batch": int(continuation["cursor"]["updates"]) - 1,
+                    "commit_sha256": continuation["commit_sha256"],
+                    "cursor": deepcopy(continuation["cursor"])}
         resolved = checked_path(path)
         require_sidecar(resolved)
         payload = torch.load(resolved, map_location="cpu", weights_only=False)
@@ -439,10 +453,11 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
     def recover_final_batch_commit(seed, state, controller, checkpoint):
         receipt = Path(r40_train._batch_commit_path(seed, 0))
         provenance = state.get("round58_resume_provenance")
-        if (int(seed) == 11 and int(state.get("episodes_done", -1)) == 40
-                and int(state.get("updates", -1)) == 10
+        if (int(seed) == 11
+                and int(state.get("episodes_done", -1)) == int(continuation.get("cursor", {}).get("episodes_done", -1))
+                and int(state.get("updates", -1)) == int(continuation.get("cursor", {}).get("updates", -1))
                 and isinstance(provenance, dict)
-                and provenance.get("kind") == "round58-exact-committed-batch9-source/1"
+                and provenance.get("kind") == "round58-exact-committed-v25-source/1"
                 and provenance.get("source_commit_sha256") == continuation.get("commit_sha256")):
             return None
         if (not receipt.exists() and int(state.get("episodes_done", -1)) == 4

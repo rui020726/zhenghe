@@ -1,0 +1,5 @@
+# Generator-tail correction record (append-only)
+
+Before V26 receipt generation, the V25 receipt generator was copied. Its committed tail (`HEAD` at `c1a8ef6f150c32cf6969c05a886575ec4f320f5c`, blob `9007671b907449191b211dc5baafe1f59112510e`) contained a literal `\\r\\n` line after `main()`, so that committed preparatory generator is not valid Python. An attempted local cleanup removed only that tail; the modified V25 worktree SHA256 was `412b4b82d70e320904bd0eaf4fce7e18ea910a7949407125c7b03b4fd9b58463` and `py_compile` then returned 0. This was not a historical execution-source repair and does not change any V25 freeze, authorization, checkpoint, journal or scientific artifact.
+
+The local V25 generator edit is reverted to the committed source after this record is written. The new V26 generator's tail is corrected separately and `py_compile` returned 0 before V26 receipts were generated. V25 prepared receipts and the successful V25 run remain unchanged; the invalid committed V25 generator is recorded as a provenance defect, not used for V26 execution.
