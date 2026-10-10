@@ -125,7 +125,8 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             versions: Any | None = None, r42_run: Any | None = None,
             approved_sources: dict[int, dict[str, Any]] | None = None,
             resume_map_sha256: str | None = None,
-            committed_continuation: dict[str, Any] | None = None) -> dict[str, Any]:
+             committed_continuation: dict[str, Any] | None = None,
+             additional_continuations: dict[int, dict[str, Any]] | None = None) -> dict[str, Any]:
     """Wrap actual v2 trainer serialization and R40 candidate enumeration in memory."""
     if getattr(r40_train, "trainer", None) is not trainer:
         raise RuntimeError("cannot install checkpoint contract: R40 trainer object identity mismatch")
@@ -157,6 +158,13 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
                             for k, v in approved_sources.items()}
     continuation = committed_continuation or {}
     continuation_path = (Path(continuation["path"]).resolve() if continuation else None)
+    continuation_by_seed = ({11: continuation} if continuation else {})
+    continuation_by_seed.update({int(k): v for k, v in
+                                 (additional_continuations or {}).items()})
+    continuation_by_path = {Path(v["path"]).resolve(): (seed, v)
+                            for seed, v in continuation_by_seed.items()}
+    if len(continuation_by_path) != len(continuation_by_seed):
+        raise RuntimeError("R58 committed continuation paths are not unique")
     repo_root = Path(__file__).resolve().parents[3]
     train_pilot_identity = train_pilot_source_identity(repo_root)
     configured_pilot_dir = Path(getattr(getattr(r40_train, "common", None),
@@ -262,11 +270,12 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
 
     def load(path, *, freeze):
         resolved = Path(path).resolve()
-        if continuation_path is not None and resolved == continuation_path:
-            if _file_sha256(resolved) != continuation["checkpoint_sha256"]:
+        if resolved in continuation_by_path:
+            continuation_seed, entry = continuation_by_path[resolved]
+            if _file_sha256(resolved) != entry["checkpoint_sha256"]:
                 raise RuntimeError("R58 exact batch9 continuation bytes changed")
-            commit = Path(continuation["commit_path"])
-            if _file_sha256(commit) != continuation["commit_sha256"]:
+            commit = Path(entry["commit_path"])
+            if _file_sha256(commit) != entry["commit_sha256"]:
                 raise RuntimeError("R58 exact batch9 commit changed")
             payload = torch.load(resolved, map_location="cpu", weights_only=False)
             source_freeze = deepcopy(freeze)
@@ -276,13 +285,13 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
                     or {k: v for k, v in original_freeze.items()
                         if k != "round58_repair_attestation"} != source_freeze
                     or original_freeze.get("round58_repair_attestation")
-                       != continuation["original_identity"]
+                        != entry["original_identity"]
                     or payload.get("round58_repair_attestation")
-                       != continuation["original_identity"]):
+                        != entry["original_identity"]):
                 raise RuntimeError("R58 batch9 freeze/producer identity differs from approved source")
             controller, optimizer, state = load_controller_state(
                 load0, resolved, freeze=original_freeze)
-            approved_cursor = continuation["cursor"]
+            approved_cursor = entry["cursor"]
             if (not _exact_state_equal(controller.state_dict(), payload.get("controller"))
                     or not _exact_state_equal(optimizer.state_dict(), payload.get("optimizer"))
                     or not _exact_state_equal(trainer.rng_state(), payload.get("rng"))
@@ -294,9 +303,9 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             state = deepcopy(state)
             state["round58_resume_provenance"] = {
                 "kind": "round58-exact-committed-continuation-source/1",
-                "source_checkpoint_sha256": continuation["checkpoint_sha256"],
-                "source_commit_sha256": continuation["commit_sha256"],
-                "training_seed": 11,
+                "source_checkpoint_sha256": entry["checkpoint_sha256"],
+                "source_commit_sha256": entry["commit_sha256"],
+                "training_seed": continuation_seed,
                 "cursor": deepcopy(approved_cursor),
             }
             state["round58_repair_attestation"] = deepcopy(identity)
@@ -362,16 +371,17 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
 
     def validate_current_committed_source(path, seed):
         resolved = Path(path).resolve()
-        if continuation_path is not None and resolved == continuation_path:
-            if (int(seed) != 11
-                    or _file_sha256(resolved) != continuation["checkpoint_sha256"]
-                    or _file_sha256(continuation["commit_path"]) != continuation["commit_sha256"]
-                    or _file_sha256(continuation["sidecar_path"]) != continuation["sidecar_sha256"]):
+        if resolved in continuation_by_path:
+            source_seed, entry = continuation_by_path[resolved]
+            if (int(seed) != source_seed
+                    or _file_sha256(resolved) != entry["checkpoint_sha256"]
+                    or _file_sha256(entry["commit_path"]) != entry["commit_sha256"]
+                    or _file_sha256(entry["sidecar_path"]) != entry["sidecar_sha256"]):
                 raise RuntimeError("R58 historical V25 continuation changed")
-            return {"path": str(resolved), "sha256": continuation["checkpoint_sha256"],
-                    "batch": int(continuation["cursor"]["updates"]) - 1,
-                    "commit_sha256": continuation["commit_sha256"],
-                    "cursor": deepcopy(continuation["cursor"])}
+            return {"path": str(resolved), "sha256": entry["checkpoint_sha256"],
+                    "batch": int(entry["cursor"]["updates"]) - 1,
+                    "commit_sha256": entry["commit_sha256"],
+                    "cursor": deepcopy(entry["cursor"])}
         resolved = checked_path(path)
         require_sidecar(resolved)
         payload = torch.load(resolved, map_location="cpu", weights_only=False)
@@ -398,15 +408,16 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
                            == continuation.get("checkpoint_sha256")
                            and provenance.get("source_commit_sha256")
                            == continuation.get("commit_sha256"))
-            migrated_boundary = (int(seed) == 11
-                                 and updates == int(continuation.get("cursor", {}).get("updates", -1))
+            boundary = continuation_by_seed.get(int(seed), {})
+            migrated_boundary = (bool(boundary)
+                                 and updates == int(boundary.get("cursor", {}).get("updates", -1))
                                  and isinstance(provenance, dict)
                                  and provenance.get("kind")
                                      == "round58-exact-committed-continuation-source/1"
                                  and provenance.get("source_checkpoint_sha256")
-                                     == continuation.get("checkpoint_sha256")
+                                     == boundary.get("checkpoint_sha256")
                                  and provenance.get("source_commit_sha256")
-                                     == continuation.get("commit_sha256"))
+                                     == boundary.get("commit_sha256"))
             if not (resolved == Path(r40_train._rolling_path(seed)).resolve()
                     and (b0_boundary or b9_boundary or migrated_boundary)):
                 raise RuntimeError("R58 selected current checkpoint lacks its exact batch commit")
@@ -446,10 +457,12 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
             validate_current_committed_source(path, seed)
         if candidates:
             return latest0(seed, _attested(freeze, identity, version=training_version))
-        if int(seed) == 11 and continuation_path is not None:
-            if _file_sha256(continuation_path) != continuation["checkpoint_sha256"]:
+        selected_continuation = continuation_by_seed.get(int(seed))
+        if selected_continuation is not None:
+            selected_path = Path(selected_continuation["path"]).resolve()
+            if _file_sha256(selected_path) != selected_continuation["checkpoint_sha256"]:
                 raise RuntimeError("R58 batch9 selector source changed")
-            return continuation_path
+            return selected_path
         source = approved_sources.get(int(seed))
         if source is None:
             raise RuntimeError(f"R58 has no exact qualified resume source for seed {seed}")
@@ -462,12 +475,13 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
     def recover_final_batch_commit(seed, state, controller, checkpoint):
         receipt = Path(r40_train._batch_commit_path(seed, 0))
         provenance = state.get("round58_resume_provenance")
-        if (int(seed) == 11
-                and int(state.get("episodes_done", -1)) == int(continuation.get("cursor", {}).get("episodes_done", -1))
-                and int(state.get("updates", -1)) == int(continuation.get("cursor", {}).get("updates", -1))
+        boundary = continuation_by_seed.get(int(seed), {})
+        if (boundary
+                and int(state.get("episodes_done", -1)) == int(boundary.get("cursor", {}).get("episodes_done", -1))
+                and int(state.get("updates", -1)) == int(boundary.get("cursor", {}).get("updates", -1))
                 and isinstance(provenance, dict)
                 and provenance.get("kind") == "round58-exact-committed-continuation-source/1"
-                and provenance.get("source_commit_sha256") == continuation.get("commit_sha256")):
+                and provenance.get("source_commit_sha256") == boundary.get("commit_sha256")):
             return None
         if (not receipt.exists() and int(state.get("episodes_done", -1)) == 4
                 and int(state.get("updates", -1)) == 1
