@@ -340,6 +340,13 @@ def verify_persisted_first_batch_state(base: Any, raw: Path, plan: dict[str, Any
             # record in the history audit, not in the valid science matrix.
             from r58_v35_eval_booking import _verify_failed_first_eval
             _verify_failed_first_eval(raw, plan)
+        elif logical == "rule_immediate_scene1700000" and _attempt(claim) == 1:
+            # Native rules have no learned actor collector/tape. The archived
+            # R45 four-artifact receipt failed after the real 1000-step run.
+            # Only this exact byte-authenticated failure is admitted to the
+            # consumption history, never to the valid evaluation matrix.
+            from r58_v35_eval_booking import _verify_failed_first_rule
+            _verify_failed_first_rule(raw, plan)
         elif logical == "new_training_s11_e43" and _attempt(claim) == 1:
             _verify_interrupted_e43(raw, claim)
         else:

@@ -48,7 +48,7 @@ import r58_v35_eval_booking as eval_booking  # noqa: E402
 PRIVATE_GENERATION = RUN_ROOT / "round58_gen3"
 PRIVATE_RAW = PRIVATE_GENERATION / "raw"
 V33_SOURCE_MAP = HERE / "ROUND58_GEN3_APPROVED_RESUME_SOURCES_V35.json"
-V33_MIGRATION_PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V37.json"
+V33_MIGRATION_PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V41.json"
 REPAIRED_TRAINING_VERSION = (
     "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/"
     "dual-eta-lambda-0p5/1/rule-bc-late147-init/1/"
@@ -1187,11 +1187,17 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
             if eval_handoff_hook is not None:
                 if not callable(eval_handoff_hook):
                     raise TypeError("ROUND58 eval handoff hook must be callable")
-                eval_handoff_hook({"runtime": runtime, "plan": values["plan"],
-                                   "completed_training_sources": completed,
-                                   "evaluation_loader": load_eval_with_completed_seed,
-                                   "legacy": legacy})
-                raise RuntimeError("ROUND58 eval handoff hook returned without stopping")
+                hook_result = eval_handoff_hook({"runtime": runtime, "plan": values["plan"],
+                                                 "completed_training_sources": completed,
+                                                 "evaluation_loader": load_eval_with_completed_seed,
+                                                 "legacy": legacy})
+                # A separately injected, write-denying audit hook may follow
+                # the real frozen evaluator through all completed model cells
+                # and must itself stop before the first rule provider. Normal
+                # execution has no injected hook; all other hook returns fail.
+                if not (hook_result == "round58-readonly-existing-matrix/1"
+                        and getattr(eval_handoff_hook, "_r58_readonly_matrix_gate", False) is True):
+                    raise RuntimeError("ROUND58 eval handoff hook returned without stopping")
             return {"kind": "round58-qualified-eval-only-continuation/1",
                     "status": "complete", "source_map_sha256": proof["manifest_sha256"],
                     "all_training_reused": True,

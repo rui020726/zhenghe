@@ -9,6 +9,9 @@ from typing import Any
 FAILED_KEY = "model_eval_new_s11_greedy_scene1700000"
 FAILED_CLAIM_SHA256 = "d8dd8a7e91e77e6e3c02836be0b13103a8fbe5c5192e1e15ae10b9f5906f983c"
 FAILED_SLOT_SHA256 = "88f349363eea12f9aab1d0677d81f2a1c330a8dc1abe485d4b982c2361c48a87"
+FAILED_RULE_KEY = "rule_immediate_scene1700000"
+FAILED_RULE_CLAIM_SHA256 = "c52adf4d83df8cfc88aecf12af14eb99c6edb6a2eccc30d5bbec5329145f0437"
+FAILED_RULE_SLOT_SHA256 = "84ed775f089dba0b212d35edcd5b6dfd7bfe9747a2e059e25c72b399bf0af5b5"
 
 
 def _closure(fn: Any) -> dict[str, Any]:
@@ -69,6 +72,122 @@ def _verify_failed_first_eval(raw_root: Path, plan: dict[str, Any]) -> dict[str,
             "expected_reserve_slot": 4, "retry_status": retry_status}
 
 
+def _verify_failed_first_rule(raw_root: Path, plan: dict[str, Any]) -> dict[str, Any]:
+    """Bind the sole failed rule cell to its immutable normal attempt and slot."""
+    path = raw_root / "launch_claims" / FAILED_RULE_KEY / "attempt_0001.json"
+    slot = raw_root / "launch_slots/normal/0961.json"
+    if not path.is_file() or not slot.is_file():
+        raise RuntimeError("registered failed rule claim/slot is missing")
+    if (hashlib.sha256(path.read_bytes()).hexdigest() != FAILED_RULE_CLAIM_SHA256
+            or hashlib.sha256(slot.read_bytes()).hexdigest() != FAILED_RULE_SLOT_SHA256):
+        raise RuntimeError("registered failed rule original bytes changed")
+    claim = json.loads(path.read_text(encoding="utf-8"))
+    booked = json.loads(slot.read_text(encoding="utf-8"))
+    matches = [job for job in plan["jobs"] if job["logical_job"] == FAILED_RULE_KEY]
+    if (len(matches) != 1 or matches[0]["normal_slot"] != 961
+            or matches[0]["scope"] != "rule_eval_immediate"
+            or matches[0]["scene"] != 1700000
+            or claim.get("logical_job") != FAILED_RULE_KEY
+            or claim.get("status") != "failed_technical"
+            or claim.get("category") != "normal"
+            or int(claim.get("attempt", -1)) != 1
+            or int(claim.get("launch_slot", -1)) != 961
+            or int(claim.get("environment_constructor_calls", -1)) != 1
+            or int(claim.get("run_return_calls", -1)) != 1
+            or int(claim.get("completed_steps", -1)) != 1000
+            or claim.get("round45_artifact_receipt") is not None
+            or "row.artefacts.tape artifact is missing" not in str(claim.get("detail", ""))
+            or booked.get("logical_job") != FAILED_RULE_KEY
+            or booked.get("category") != "normal"
+            or int(booked.get("slot", -1)) != 961
+            or int(booked.get("attempt", -1)) != 1):
+        raise RuntimeError("registered rule failure differs from the receipt defect")
+    retry = raw_root / "launch_claims" / FAILED_RULE_KEY / "attempt_0002.json"
+    retry_slot = raw_root / "launch_slots/reserve/0005.json"
+    if retry.exists() or retry_slot.exists():
+        if not retry.is_file() or not retry_slot.is_file():
+            raise RuntimeError("registered rule reserve claim/slot is incomplete")
+        second = json.loads(retry.read_text(encoding="utf-8"))
+        slot5 = json.loads(retry_slot.read_text(encoding="utf-8"))
+        if (second.get("logical_job") != FAILED_RULE_KEY
+                or second.get("status") != "complete"
+                or second.get("category") != "reserve"
+                or int(second.get("attempt", -1)) != 2
+                or int(second.get("launch_slot", -1)) != 5
+                or not isinstance(second.get("round58_rule_artifact_receipt"), dict)
+                or second.get("round45_artifact_receipt") is not None
+                or slot5.get("logical_job") != FAILED_RULE_KEY
+                or slot5.get("category") != "reserve"
+                or int(slot5.get("slot", -1)) != 5
+                or int(slot5.get("attempt", -1)) != 2):
+            raise RuntimeError("registered rule retry is not a complete qualified task")
+        retry_status = "complete"
+    else:
+        retry_status = "pending"
+    return {"claim_path": str(path.resolve()), "slot_path": str(slot.resolve()),
+            "logical_job": FAILED_RULE_KEY, "next_attempt": 2,
+            "expected_reserve_slot": 5, "retry_status": retry_status}
+
+
+def _rule_receipt(r45: Any, row: dict[str, Any], claim: dict[str, Any]) -> dict[str, Any]:
+    """Hash the three artifacts actually emitted by a native rule policy.
+
+    Rules have no learned actor collector. A fabricated empty tape would make
+    the R45 four-artifact receipt appear to observe an actor that was absent.
+    """
+    if (row.get("collector_summary") is not None
+            or row.get("kind") != "eval"
+            or row.get("model_arm") not in ("IMMEDIATE_RULE", "LATE_RULE")
+            or int(row.get("steps", -1)) != 1000
+            or row.get("training_version") != claim.get("training_version")
+            or row.get("runner_version") != claim.get("runner_version")
+            or int(row.get("attempt", -1)) != int(claim.get("attempt", -2))
+            or int(row.get("scenario_seed", -1)) != int(
+                claim.get("round45_key", {}).get("scenario_seed", -2))):
+        raise RuntimeError("V38 rule row/collector contract mismatch")
+    paths = row.get("artefacts")
+    if not isinstance(paths, dict) or set(paths) != {"row", "lifecycle", "transcript", "tape"}:
+        raise RuntimeError("V38 rule artifact map differs from frozen Stage B")
+    root = Path(r45.RUN_DIR).resolve()
+    artifacts = {}
+    for name in ("row", "lifecycle", "transcript"):
+        path = Path(paths[name]).resolve()
+        expected_dir = root / ("rows" if name == "row" else "logs")
+        if path.parent != expected_dir or not path.is_file():
+            raise RuntimeError(f"V38 rule {name} artifact missing or outside private root")
+        if Path(claim.get("round45_artifact_paths", {}).get(name, "")).resolve() != path:
+            raise RuntimeError(f"V38 rule claim {name} path mismatch")
+        artifacts[name] = {"path": str(path), "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                           "size_bytes": path.stat().st_size}
+    tape_path = Path(paths["tape"]).resolve()
+    if (tape_path.parent != root / "logs"
+            or tape_path.name != Path(paths["row"]).stem + "_tape.jsonl"):
+        raise RuntimeError("V38 native rule has an unexpected absent-tape path")
+    if tape_path.exists():
+        raise RuntimeError("V38 native rule unexpectedly has an actor tape")
+    stored = json.loads(Path(paths["row"]).read_text(encoding="utf-8"))
+    if stored != row:
+        raise RuntimeError("V38 rule in-memory/persisted row mismatch")
+    lifecycle = r45._load_jsonl(Path(paths["lifecycle"]))
+    transcript = r45._load_jsonl(Path(paths["transcript"]))
+    if not lifecycle:
+        raise RuntimeError("V38 rule lifecycle is empty")
+    if not transcript:
+        r45._assert_empty_transcript_zero_closure(row)
+    if (int(row.get("spent_bytes", -1)) != int(row.get("airtime_tap_total", -2))
+            or int(row.get("emissions", -1)) != len(row.get("emission_sequence", []))):
+        raise RuntimeError("V38 rule cost or emission closure mismatch")
+    return {"kind": "round58-native-rule-three-artifact-receipt/1",
+            "attempt": int(claim["attempt"]), "logical_job": str(claim["logical_job"]),
+            "round45_key": claim["round45_key"],
+            "training_version": claim["training_version"],
+            "runner_version": claim["runner_version"],
+            "row_identity": {key: row.get(key) for key in
+                             ("model_arm", "eval_mode", "scenario_seed", "attempt", "steps",
+                              "on_time", "spent_bytes", "emissions", "training_version", "runner_version")},
+            "artifacts": artifacts, "actor_tape": "structurally_absent_for_native_rule"}
+
+
 def install(runtime: dict[str, Any], r45: Any, plan: dict[str, Any],
             *, raw_root: Path) -> dict[str, Any]:
     """Route only frozen R58 eval cells around R44's archived 16-scene receipt.
@@ -99,6 +218,7 @@ def install(runtime: dict[str, Any], r45: Any, plan: dict[str, Any],
     if not callable(base_execute) or not callable(r45._record_artifact_receipt):
         raise RuntimeError("V35 cannot locate original actual execution/receipt functions")
     failure = _verify_failed_first_eval(Path(raw_root), plan)
+    failed_rule = _verify_failed_first_rule(Path(raw_root), plan)
 
     def v35_completed_row(context: dict[str, Any], attempts: list[tuple[Path, dict[str, Any]]],
                           *, collector=None, runner_kwargs=None, identity=None):
@@ -165,7 +285,14 @@ def install(runtime: dict[str, Any], r45: Any, plan: dict[str, Any],
                 raise RuntimeError("V35 completed evaluation uses a different fixed model")
         elif row.get("model_arm") != job["rule_arm"].upper() + "_RULE":
             raise RuntimeError("V35 completed rule evaluation key mismatch")
-        r45._verify_receipt_artifacts(claim, row)
+        if job["scope"].startswith("rule_eval_"):
+            if claim.get("round45_artifact_receipt") is not None:
+                raise RuntimeError("V38 native rule cannot claim a learned-actor receipt")
+            expected = _rule_receipt(r45, row, claim)
+            if claim.get("round58_rule_artifact_receipt") != expected:
+                raise RuntimeError("V38 native rule original artifacts differ from receipt")
+        else:
+            r45._verify_receipt_artifacts(claim, row)
         if claim.get("round44_eval_artifact_receipt") is not None:
             raise RuntimeError("V35 completed new-scene cell unexpectedly has an R44 receipt")
         if collector is not None:
@@ -196,24 +323,34 @@ def install(runtime: dict[str, Any], r45: Any, plan: dict[str, Any],
                     raise RuntimeError("V35 model eval role/seed/mode differs from frozen job")
         elif row.get("model_arm") != job["rule_arm"].upper() + "_RULE":
             raise RuntimeError("V35 rule eval arm differs from frozen job")
-        # R44's 1301000..1301015 receipt is intentionally inapplicable here.
-        # Retain the actual row writer and R45's full artifact hash validation.
-        r45._record_artifact_receipt(kind, row, Path(active), original_booked, label, ledger)
+        if job["scope"].startswith("rule_eval_"):
+            # Native immediate/late policy runs do not install an actor
+            # collector. Preserve exactly their three real artifacts.
+            original_booked(label, kind, row, ledger)
+            claim = json.loads(Path(active).read_text(encoding="utf-8"))
+            receipt = _rule_receipt(r45, row, claim)
+            r40._update_claim(Path(active), round58_rule_artifact_receipt=receipt)
+        else:
+            # R44's old 16-scene receipt is inapplicable. The learned-model
+            # eval retains R45's strict four-artifact/tape receipt unchanged.
+            r45._record_artifact_receipt(kind, row, Path(active), original_booked, label, ledger)
 
     def v35_execute(label: str, logical_job: str, kind: str, scenario: int,
                     metadata: dict[str, Any], *, collector=None,
                     runner_kwargs=None, row_updates=None, identity=None):
-        if logical_job != FAILED_KEY:
+        if logical_job not in (FAILED_KEY, FAILED_RULE_KEY):
             return old_execute(label, logical_job, kind, scenario, metadata,
                                collector=collector, runner_kwargs=runner_kwargs,
                                row_updates=row_updates, identity=identity)
-        registered = _verify_failed_first_eval(Path(raw_root), plan)
+        registered = (_verify_failed_first_eval(Path(raw_root), plan)
+                      if logical_job == FAILED_KEY else
+                      _verify_failed_first_rule(Path(raw_root), plan))
         if registered["retry_status"] == "complete":
             return old_execute(label, logical_job, kind, scenario, metadata,
                                collector=collector, runner_kwargs=runner_kwargs,
                                row_updates=row_updates, identity=identity)
         if kind != "eval" or int(scenario) != 1700000:
-            raise RuntimeError("V35 retry requested outside the registered first evaluation")
+            raise RuntimeError("V38 retry requested outside the registered evaluation scene")
         context = r45.CURRENT_CONTEXT.get()
         if context is None:
             context = r45._context_for_cell(kind, logical_job, int(scenario), metadata,
@@ -224,7 +361,7 @@ def install(runtime: dict[str, Any], r45: Any, plan: dict[str, Any],
                         "tag": str((runner_kwargs or {}).get("tag", context.get("tag", "")))})
         r45._planned_key(context)
         if r40.next_attempt(logical_job) != registered["next_attempt"]:
-            raise RuntimeError("V35 retry cursor is not attempt2")
+            raise RuntimeError("V38 retry cursor is not attempt2")
         token = r45.CURRENT_CONTEXT.set(context)
         try:
             return base_execute(label, logical_job, kind, int(scenario), metadata,
@@ -248,7 +385,8 @@ def install(runtime: dict[str, Any], r45: Any, plan: dict[str, Any],
             r45._completed_row = old_completed_row
 
     return {"kind": "round58-v35-frozen-eval-booking/1", "status": "installed",
-            "registered_failed_retry": failure, "plan_eval_keys": len(frozen_jobs),
+            "registered_failed_retry": failure, "registered_failed_rule_retry": failed_rule,
+            "plan_eval_keys": len(frozen_jobs),
             "row_writer": str(Path(original_booked.__code__.co_filename).resolve()),
             "r45_receipt_source": str(Path(r45.__file__).resolve()),
             "completed_row_route": "R45_four_artifact_receipt_and_frozen_640_key_matrix",
