@@ -22,7 +22,7 @@ STDERR = HERE / "ROUND58_V34_EVAL_STDERR.log"
 
 def atomic_json(path: Path, value: dict) -> None:
     temp = path.with_name(path.name + ".pending")
-    with temp.open("xb", encoding="utf-8") as stream:
+    with temp.open("x", encoding="utf-8") as stream:
         json.dump(value, stream, ensure_ascii=False, indent=2)
         stream.write("\n")
         stream.flush()
