@@ -293,7 +293,7 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
                 raise RuntimeError("R58 committed source model/Adam/RNG/cursor did not restore exactly")
             state = deepcopy(state)
             state["round58_resume_provenance"] = {
-                "kind": "round58-exact-committed-v25-source/1",
+                "kind": "round58-exact-committed-continuation-source/1",
                 "source_checkpoint_sha256": continuation["checkpoint_sha256"],
                 "source_commit_sha256": continuation["commit_sha256"],
                 "training_seed": 11,
@@ -398,8 +398,17 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
                            == continuation.get("checkpoint_sha256")
                            and provenance.get("source_commit_sha256")
                            == continuation.get("commit_sha256"))
+            migrated_boundary = (int(seed) == 11
+                                 and updates == int(continuation.get("cursor", {}).get("updates", -1))
+                                 and isinstance(provenance, dict)
+                                 and provenance.get("kind")
+                                     == "round58-exact-committed-continuation-source/1"
+                                 and provenance.get("source_checkpoint_sha256")
+                                     == continuation.get("checkpoint_sha256")
+                                 and provenance.get("source_commit_sha256")
+                                     == continuation.get("commit_sha256"))
             if not (resolved == Path(r40_train._rolling_path(seed)).resolve()
-                    and (b0_boundary or b9_boundary)):
+                    and (b0_boundary or b9_boundary or migrated_boundary)):
                 raise RuntimeError("R58 selected current checkpoint lacks its exact batch commit")
             return {"path": str(resolved), "sha256": _file_sha256(resolved),
                     "batch": updates - 1, "boundary_provenance": provenance,
@@ -457,7 +466,7 @@ def install(trainer: Any, r40_train: Any, *, identity: dict[str, Any],
                 and int(state.get("episodes_done", -1)) == int(continuation.get("cursor", {}).get("episodes_done", -1))
                 and int(state.get("updates", -1)) == int(continuation.get("cursor", {}).get("updates", -1))
                 and isinstance(provenance, dict)
-                and provenance.get("kind") == "round58-exact-committed-v25-source/1"
+                and provenance.get("kind") == "round58-exact-committed-continuation-source/1"
                 and provenance.get("source_commit_sha256") == continuation.get("commit_sha256")):
             return None
         if (not receipt.exists() and int(state.get("episodes_done", -1)) == 4

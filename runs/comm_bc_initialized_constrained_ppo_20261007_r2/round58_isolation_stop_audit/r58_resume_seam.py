@@ -14,8 +14,8 @@ import time
 from pathlib import Path
 from typing import Any
 
-MAP_REL = Path("runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES_V27.json")
-MAP_SHA256 = "eb28211259c9e67c6048f23852551bf44e7b951c16c77576b73071a10eb4b964"
+MAP_REL = Path("runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_isolation_stop_audit/ROUND58_GEN3_APPROVED_RESUME_SOURCES_V29.json")
+MAP_SHA256 = "b183d68936fcbd69b7e48a6d78b488157f93cbdf86dbd4413bd7212eece22c16"
 R42_RUN_SHA256 = "9c5feacb2ffcb2bb930d2b6022e2fca5210408765dc664859d400e6f2b5f8c2e"
 HISTORICAL_CHECKPOINT_JOURNAL_SHA256 = "2a43339ac45c2cfd13f84e744b72af0632024f44c3eedaa449bf8c8c7cab0165"
 QUALIFIED = "qualified_for_later_resume_review"
@@ -148,11 +148,20 @@ def validate_resume_sources(repo_root: Path, *, manifest_path: Path | None = Non
             "original_sidecar": sc,
         }
     checkpoint_journal = validate_historical_checkpoint_journal(root)
-    continuation = validate_committed_seed11_batch14(root, validate_committed_seed11_batch9(root))
+    discarded_v26 = (root / "runs/comm_bc_initialized_constrained_ppo_20261007_r2"
+                     / "round58_gen3_resume_v26/raw/runtime/checkpoint_writes.jsonl")
+    discarded_v26_sha = "d8bd1fe2ea804ac6fb654bcd89791800604025c809bbb2ace0b58857a913cef6"
+    if sha256(discarded_v26) != discarded_v26_sha or _count_lines(discarded_v26) != 2:
+        raise PermissionError("failed V26 identity-migration checkpoint events changed")
+    continuation = validate_committed_seed11_batch20(
+        root, validate_committed_seed11_batch14(root, validate_committed_seed11_batch9(root)))
     return {"manifest": manifest, "manifest_sha256": expected_map_sha256,
             "sources": verified, "historical_ppo_carryover": len(verified),
             "historical_optimizer_steps": sum(8 for _ in verified),
             "historical_checkpoint_journal": checkpoint_journal,
+            "discarded_v26_identity_writes": {"path": str(discarded_v26.resolve()),
+                                              "sha256": discarded_v26_sha, "rows": 2,
+                                              "scientific_chain": False},
             "committed_continuation": continuation,
             "target_checkpoint_root": (root / manifest["target_checkpoint_root"]).resolve()}
 
@@ -334,6 +343,82 @@ def validate_committed_seed11_batch14(repo_root: Path, parent: dict[str, Any]) -
             "historical_ppo_calls": 17, "historical_optimizer_calls": 104,
             "historical_checkpoint_writes": 58,
             "cursor": {"episodes_done": 60, "updates": 15, "optimizer_steps": 88}}
+
+
+def validate_committed_seed11_batch20(repo_root: Path, parent: dict[str, Any]) -> dict[str, Any]:
+    """Bind the six V27 committed batches, excluding its later failed restart."""
+    import torch
+    root = Path(repo_root).resolve()
+    run_root = root / "runs/comm_bc_initialized_constrained_ppo_20261007_r2"
+    audit = run_root / "round58_isolation_stop_audit"
+    raw = run_root / "round58_gen3_resume_v27/raw"
+    cp = raw / "checkpoints"
+    source = cp / "v2_train_s11_after_b20.pt"
+    source_sha = "bb14d99d82409ce7fe35c912e5208dc5a1f23e3f893d3ee5f87ec89fd6722489"
+    commit_path = cp / "r40_batch_commit_s11_b20.json"
+    commit_sha = "3f2810a67e789bf188f43d9d9e725b013b3e4011d5156cc0f7a33ba26fce98ce"
+    frozen_path = audit / "ROUND58_RESUME_FREEZE_V27.json"
+    if (sha256(source) != source_sha or sha256(commit_path) != commit_sha
+            or sha256(frozen_path) != "1c55a8a03191060ca5e21afaa1d63cfab6d4672a0d53266349a6c6224c3d7a98"):
+        raise PermissionError("V27 b20 source, commit or frozen identity changed")
+    attestation = read_json(frozen_path)["repair_identity"]
+    sidecar_path = Path(str(source) + ".r58.json")
+    sidecar = read_json(sidecar_path)
+    commit = read_json(commit_path)
+    if (sidecar.get("checkpoint_sha256") != source_sha
+            or sidecar.get("round58_repair_attestation") != attestation
+            or commit.get("postupdate_checkpoint_sha256") != source_sha
+            or (commit.get("training_seed"), commit.get("batch"),
+                commit.get("episodes_done"), commit.get("updates"),
+                commit.get("optimizer_steps")) != (11, 20, 84, 21, 116)
+            or sha256(cp / commit["batch_record"]) != commit["batch_record_sha256"]):
+        raise PermissionError("V27 b20 sidecar/record/commit do not close")
+    for batch in range(15, 21):
+        receipt = read_json(cp / f"r40_batch_commit_s11_b{batch}.json")
+        if (int(receipt.get("training_seed", -1)) != 11
+                or int(receipt.get("batch", -1)) != batch
+                or int(receipt.get("episodes_done", -1)) != 4 * (batch + 1)
+                or sha256(cp / receipt["batch_record"]) != receipt["batch_record_sha256"]
+                or sha256(cp / receipt["postupdate_checkpoint"])
+                   != receipt["postupdate_checkpoint_sha256"]):
+            raise PermissionError(f"V27 b{batch} durable input differs")
+    journal_sources = {
+        "optimizer_step_calls.jsonl": ("f0322ec4f9c9cdef0a6eb2ec26b3f8c4000a30a30eed9a4ecfe7a86cf816e43e", 28),
+        "ppo_update_calls.jsonl": ("dac80680768be7b595602bccc13099c60f0c9a25633766a7516128132bb7d7f3", 6),
+        "checkpoint_writes.jsonl": ("59c32ee4353b82c09a9d01e7913bc712692a77f54b73040747034d069cfb57b5", 21),
+    }
+    for name, (digest, rows) in journal_sources.items():
+        path = raw / "runtime" / name
+        if sha256(path) != digest or _count_lines(path) != rows:
+            raise PermissionError(f"V27 direct journal differs: {name}")
+    payload = torch.load(source, map_location="cpu", weights_only=False)
+    prior = torch.load(parent["path"], map_location="cpu", weights_only=False)
+    state = payload.get("training_state", {})
+    science = lambda p: {k: v for k, v in p["freeze"].items()
+                         if k != "round58_repair_attestation"}
+    if (payload.get("round58_repair_attestation") != attestation
+            or state.get("round58_repair_attestation") != attestation
+            or payload["freeze"].get("round58_repair_attestation") != attestation
+            or science(payload) != science(prior)
+            or state.get("round58_resume_provenance", {}).get("source_checkpoint_sha256")
+               != parent["checkpoint_sha256"]
+            or (state.get("episodes_done"), state.get("updates"), state.get("optimizer_steps"))
+               != (84, 21, 116)):
+        raise PermissionError("V27 b20 payload ancestry/science/cursor differs")
+    return {**parent, "path": source.resolve(), "checkpoint_sha256": source_sha,
+            "sidecar_path": sidecar_path.resolve(), "sidecar_sha256": sha256(sidecar_path),
+            "commit_path": commit_path.resolve(), "commit_sha256": commit_sha,
+            "batch_record_sha256": commit["batch_record_sha256"],
+            "original_identity": attestation,
+            "prior_batch_roots": [*parent["prior_batch_roots"], raw.resolve()],
+            "parent_b14": {"checkpoint_sha256": parent["checkpoint_sha256"],
+                           "commit_sha256": parent["commit_sha256"]},
+            "v27_direct_journals": {name: {"sha256": digest, "rows": rows}
+                                    for name, (digest, rows) in journal_sources.items()},
+            "historical_ppo_calls": parent["historical_ppo_calls"] + 6,
+            "historical_optimizer_calls": parent["historical_optimizer_calls"] + 28,
+            "historical_checkpoint_writes": parent["historical_checkpoint_writes"] + 21,
+            "cursor": {"episodes_done": 84, "updates": 21, "optimizer_steps": 116}}
 
 
 def _canonical_sha(value: Any) -> str:
@@ -683,7 +768,14 @@ def carryover_count_from_batches(batch_records: list[Path], proof: dict[str, Any
             if (key not in by_key or by_key[key].resolve() != expected.resolve()
                     or sha256(by_key[key]) != sha256(expected)):
                 raise RuntimeError(f"V25 committed continuation batch missing/ambiguous: {key}")
-    expected_total = len(approved) + (14 if continuation is not None else 0)
+        v27 = Path(continuation["prior_batch_roots"][2]) / "checkpoints"
+        for batch in range(15, 21):
+            key = (11, batch)
+            expected = v27 / f"r40_batch_s11_b{batch}_attempt01.json"
+            if (key not in by_key or by_key[key].resolve() != expected.resolve()
+                    or sha256(by_key[key]) != sha256(expected)):
+                raise RuntimeError(f"V27 committed continuation batch missing/ambiguous: {key}")
+    expected_total = len(approved) + (20 if continuation is not None else 0)
     if len(by_key) < expected_total:
         raise RuntimeError("carryover batch count is below the verified committed history")
     return expected_total
@@ -849,10 +941,15 @@ def install_persistent_call_journals(runtime: dict[str, Any], *, resume_runtime_
     continuation = runtime.get("r58_resume_source_proof", {}).get("committed_continuation")
     historical_checkpoint_rows = (int(continuation["historical_checkpoint_writes"])
                                   if continuation is not None else 12)
+    discarded_v26 = runtime.get("r58_resume_source_proof", {}).get(
+        "discarded_v26_identity_writes")
     if (not isinstance(checkpoint_baseline, dict)
             or checkpoint_baseline.get("sha256") != HISTORICAL_CHECKPOINT_JOURNAL_SHA256
             or int(checkpoint_baseline.get("rows", -1)) != 12
-            or historical_checkpoint_rows != 58):
+            or historical_checkpoint_rows != 58 + 21
+            or not isinstance(discarded_v26, dict)
+            or discarded_v26.get("sha256") != "d8bd1fe2ea804ac6fb654bcd89791800604025c809bbb2ace0b58857a913cef6"
+            or int(discarded_v26.get("rows", -1)) != 2):
         raise RuntimeError("resume checkpoint counter lacks the verified historical journal baseline")
     version_counter = runtime["r42_versions"]
     current_checkpoint_count = int(getattr(version_counter, "CHECKPOINT_WRITE_CALLS", -1))

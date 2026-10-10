@@ -316,7 +316,7 @@ def _validate_external_grant(*, authorization_path: Path, freeze_path: Path,
                 "ROUND58 attempt3 special-case binding missing or mismatched")
     elif "attempt3_special_case" in frozen or "attempt3_special_case" in approval:
         raise PermissionError("ROUND58 fresh mode must not bind an attempt3 special case")
-    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V27.json"
+    migration_proof_path = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V29.json"
     if mode == "recover_first_batch_gate" and not migration_proof_path.is_file():
         raise PermissionError("ROUND58 recovery plan identity migration proof is missing")
     migration_proof_sha256 = (hashlib.sha256(migration_proof_path.read_bytes()).hexdigest()
@@ -762,12 +762,25 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                         raise RuntimeError("R58 prefix source was not selected before rolling copy")
                     selected = Path(selected_before_copy[seed]).resolve()
                     expected = Path(values["resume_sources"]["committed_continuation"]["path"]).resolve()
+                    source = contract["validate_current_source"](selected, seed)
+                    cursor = int(source["cursor"]["episodes_done"])
+                    approved_cursor = int(values["resume_sources"]["committed_continuation"]
+                                          ["cursor"]["episodes_done"])
                     if selected != expected:
-                        raise RuntimeError("R58 prefix source differs from the approved commit")
-                    prefix_cache = committed_prefix.materialize(
-                        controller, seed=seed, claim_root=Path(values["output_root"]),
-                        source_root=selected.parent.parent, source_checkpoint=selected,
-                        validate_current_source=contract["validate_current_source"])
+                        if (selected.parent != Path(runtime["common"].CHECKPOINTS).resolve()
+                                or cursor <= approved_cursor):
+                            raise RuntimeError("R58 prefix source differs from the approved commit")
+                    if ep < cursor or cursor < approved_cursor or cursor % 4:
+                        raise RuntimeError("R58 provider cursor differs from the committed source")
+                    if cursor == 60:
+                        prefix_cache = committed_prefix.materialize(
+                            controller, seed=seed, claim_root=Path(values["output_root"]),
+                            source_root=selected.parent.parent, source_checkpoint=selected,
+                            validate_current_source=contract["validate_current_source"])
+                    else:
+                        # A later exact commit has consumed the old prefix. Never
+                        # rediscover or redeliver episode60/61 on a safe relaunch.
+                        prefix_cache = {"rows": {}, "source": source}
                 if ep not in prefix_cache["rows"]:
                     return original_episode(*args, **kwargs)
                 expected = prefix_cache["proof"]["episodes"][len(prefix_delivered)]
@@ -805,7 +818,11 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
             runtime["r58_resume_configure_bridge"] = configure_bridge
             runtime["r58_resume_source_proof"] = values["resume_sources"]
             call_journals = resume_seam.install_persistent_call_journals(
-                runtime, resume_runtime_dir=resume_runtime)
+                runtime, resume_runtime_dir=resume_runtime,
+                historical_optimizer_rows=int(values["resume_sources"]
+                                               ["committed_continuation"]["historical_optimizer_calls"]),
+                historical_ppo_calls=int(values["resume_sources"]
+                                         ["committed_continuation"]["historical_ppo_calls"]))
             runtime["r58_ppo_counter_bridge"] = call_journals
             runtime["r58_call_journals"] = call_journals
             runtime["r58_resume_source_map_sha256"] = values["resume_sources"]["manifest_sha256"]
@@ -1069,7 +1086,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
                  "freeze": values["freeze_path"], "quota": values["quota_path"],
                  "scene_audit": values["scene_audit_path"]}
         if values["mode"] == "recover_first_batch_gate":
-            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V27.json"
+            paths["plan_identity_migration_proof"] = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V29.json"
         for key, path in paths.items():
             if hashlib.sha256(Path(path).read_bytes()).hexdigest() != values["input_file_sha256"][key]:
                 raise PermissionError(f"ROUND58 {key} receipt changed after preflight")
@@ -1105,7 +1122,7 @@ def _dispatch_validated(grant: _ValidatedGrant, *, legacy_loader=None):
             migration_route = resume_seam.install_historical_plan_comparison_view(
                 legacy, repo_root=REPO_ROOT, current_plan=current_live_plan,
                 current_repair_identity=values["repair_identity"],
-            proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V27.json",
+            proof_path=HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V29.json",
                 expected_proof_sha256=values["input_file_sha256"]["plan_identity_migration_proof"])
             legacy.round58_plan_identity_migration = {
                 key: value for key, value in migration_route.items() if key != "undo"}
