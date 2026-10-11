@@ -29,6 +29,45 @@ R45 = HERE.parents[2] / "runs" / "comm_rule_warmstart_cost_learning_20261006_r2"
 CANON = HERE.parents[2].parent / "zhenghe" / "runs" / "comm_cost_v2_rerun_20260928"
 FROZEN_SP_COMMON_SHA256 = "b119e430c95db23e39f8214d4dab2eeab0853f23a8bf7d80f8758a898fc9f0dc"
 FROZEN_SP_COMMON_BINDING_VERSION = "round58-exact-stage-b-sp-common-source/1"
+FROZEN_V2_RULES_SHA256 = "a7ce36de2d465cadaba90bd70b36539b5e865a73be8c4e075b9faf5a86c53a57"
+
+
+def _bind_frozen_late_rule_constructor(module: Any) -> dict[str, Any]:
+    """Translate only the archived keyword typo to the real fixed 147-step rule."""
+    source = (CANON / "v2_rules.py").resolve()
+    loaded = Path(getattr(module, "__file__", "")).resolve()
+    if (loaded != source or not source.is_file()
+            or hashlib.sha256(source.read_bytes()).hexdigest() != FROZEN_V2_RULES_SHA256):
+        raise PermissionError("frozen late-rule module provenance mismatch")
+    original = module.LateDiscoveryGatePolicy
+    code = original.__init__.__code__
+    if (original.__module__ != module.__name__
+            or code.co_kwonlyargcount != 1
+            or code.co_varnames[1] != "cut_steps"
+            or float(module.LATE_CUT_STEPS) != 147.0
+            or original(cut_steps=147.0).parameters() != {"cut_steps": 147.0}):
+        raise PermissionError("frozen late-rule constructor/threshold changed")
+
+    class FrozenLateRuleKeywordBridge(original):
+        def __init__(self, *, cut=None, cut_steps=None):
+            if cut is not None and cut_steps is not None:
+                raise TypeError("late-rule cut alias is ambiguous")
+            value = 147.0 if cut is None and cut_steps is None else (cut if cut is not None else cut_steps)
+            if type(value) not in (float, int) or float(value) != 147.0:
+                raise ValueError("ROUND58 late-rule cut must remain exactly 147.0")
+            super().__init__(cut_steps=147.0)
+
+    FrozenLateRuleKeywordBridge.__name__ = "LateDiscoveryGatePolicy"
+    module.LateDiscoveryGatePolicy = FrozenLateRuleKeywordBridge
+
+    def undo() -> None:
+        if module.LateDiscoveryGatePolicy is not FrozenLateRuleKeywordBridge:
+            raise RuntimeError("frozen late-rule bridge was replaced during execution")
+        module.LateDiscoveryGatePolicy = original
+
+    return {"module": module, "source": str(source), "source_sha256": FROZEN_V2_RULES_SHA256,
+            "original_class": original, "bound_class": FrozenLateRuleKeywordBridge,
+            "undo": undo}
 
 for _path in (GEN2, R53, R45, CANON):
     if str(_path) not in sys.path:
@@ -48,7 +87,7 @@ import r58_v35_eval_booking as eval_booking  # noqa: E402
 PRIVATE_GENERATION = RUN_ROOT / "round58_gen3"
 PRIVATE_RAW = PRIVATE_GENERATION / "raw"
 V33_SOURCE_MAP = HERE / "ROUND58_GEN3_APPROVED_RESUME_SOURCES_V35.json"
-V33_MIGRATION_PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V41.json"
+V33_MIGRATION_PROOF = HERE / "ROUND58_GEN3_PLAN_IDENTITY_MIGRATION_PROOF_V42.json"
 REPAIRED_TRAINING_VERSION = (
     "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/"
     "dual-eta-lambda-0p5/1/rule-bc-late147-init/1/"
@@ -623,6 +662,8 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
         configure_bridge["r44_module"] = r44_module
         configure_bridge["original_loader"] = original_loader
 
+    late_rule_binding: dict[str, Any] = {}
+
     def private_import(name, globals=None, locals=None, fromlist=(), level=0):
         if name == "sp_common" and level == 0:
             common_module = sys.modules.get("v2_common")
@@ -653,6 +694,12 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
                 raise PermissionError("train_pilot import left the frozen canonical source")
             return loaded
         imported = original_import(name, globals, locals, fromlist, level)
+        if name == "v2_rules" and level == 0:
+            if not late_rule_binding:
+                late_rule_binding.update(_bind_frozen_late_rule_constructor(imported))
+            elif (imported is not late_rule_binding["module"]
+                  or imported.LateDiscoveryGatePolicy is not late_rule_binding["bound_class"]):
+                raise PermissionError("late-rule module binding changed after frozen import")
         if name == "r44_runtime":
             bind_r42_configure_root(sys.modules.get("r44_runtime", imported))
         return imported
@@ -1217,6 +1264,8 @@ def _install_repaired_runtime_route(legacy: Any, grant: _ValidatedGrant) -> dict
     legacy.bind_live_runtime = bind_repaired
     legacy.bind_runner_paths = bind_gen3_paths
     def undo():
+        if late_rule_binding:
+            late_rule_binding["undo"]()
         if resume_root_for_configure is not None:
             if builtins.__import__ is not private_import:
                 raise RuntimeError("ROUND58 resume import bridge changed before teardown")
