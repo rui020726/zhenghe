@@ -6,7 +6,7 @@
 
 - 训练：seed 11/22/33 各 128 集、32 批，合计 **384 集、96 个已提交 PPO 批**。最终 ep128 模型来自已批准的 V29/V32 源，三个种子的 checkpoint 字节哈希及末次提交见 `ROUND58_FINAL_ACCOUNTING.json`。原三个首批及首 12 集未重跑，历史 gen1/gen2 无效状态未用作训练初值。
 - 评估：R53/R56/R58 × 3 seed × greedy/sampled × 32 场景 = **576 格**；immediate/late ×32 = **64 格**。场景固定 `1700000..1700031`。原始唯一 complete claim、row、lifecycle/transcript/tape 的适用收据和逐项 SHA 由 `r58_final_source_aware_stats.py` 只读核验，1024 个来源列于 `ROUND58_FINAL_SOURCE_INDEX.json`。原生规则只有三件真实产物，不伪造 actor tape。
-- V42 真正 CLI 正向门禁 `ROUND58_V42C_ACTUAL_EXISTING_CELLS_GATE.json` 为 passed：复核既有 608 个评估格、批准身份、路径及冻结 native late 构造接缝，且在新 provider 前停止。V42 原受控执行会话 39613 最终退出码 **0**；`ROUND58_V42_CONTROLLED_STATE.json` 为 `fixed_plan_cli_complete`。七个子周期中前六个在已提交 cell 后、下一 claim 前到达预设安全边界；第七个完成全部 32 个 late 格。历史 V41 late 构造失败发生在 claim/环境之前，原件保留。
+- V42 真正 CLI 正向门禁 `ROUND58_V42C_ACTUAL_EXISTING_CELLS_GATE.json` 为 passed：复核既有 608 个评估格、批准身份、路径及冻结 native late 构造接缝，且在新 provider 前停止。V42 原受控执行会话 39613 最终退出码 **0**；`ROUND58_V42_CONTROLLED_STATE.json` 为 `fixed_plan_cli_complete`。七个子周期分别新增 4、5、5、5、5、4、4 格，**累计**完成 32 个 late 格；前六个子周期在已提交 cell 后、下一 claim 前到达预设安全边界，第七个仅完成剩余 4 格。历史 V41 late 构造失败发生在 claim/环境之前，原件保留。
 - 真实 late 使用冻结 `v2_rules.py` 的 `cut_steps=147`。私有桥只将旧调用名 `cut=147.0` 精确映射到此参数；不修改规则判定、科学配置、canonical 源码或旧输出。训练仍为 β=1.00、critic→共享 trunk 梯度隔离、19 维一次性 SEND/SKIP、正成本与原冻结 PPO/GAE/对偶配置。修复/恢复身份及来源沿用 V42 freeze/authorization，未把修复后的新身份回贴旧 checkpoint。
 
 ## 原始账本与诊断
