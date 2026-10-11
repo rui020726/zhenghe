@@ -732,7 +732,7 @@ def main(argv=None) -> int:
     if args.phase in ("eval", "all"):
         for seed in seeds:
             print(f"R60 eval seed {seed} ...", flush=True)
-            print(json.dumps(eval_seed(cfg, ledger, plan, seed), flush=True))
+            print(json.dumps(eval_seed(cfg, ledger, plan, seed)), flush=True)
     if args.phase in ("stats", "all"):
         stats = compute_stats(raw_root)
         _write_json(raw_root / "ROUND60_STATISTICS.json", stats)
