@@ -1,0 +1,388 @@
+{
+  "kind": "round58-final-original-operation-accounting/1",
+  "status": "all_1024_logical_jobs_complete",
+  "raw_claim_slot_audit": {
+    "historical_environment_starts": 16,
+    "gen3_claim_attempts": 1029,
+    "gen3_normal_slots": 1024,
+    "gen3_reserve_slots": 5,
+    "cumulative_attempt_slots": 1045,
+    "gen3_actual_constructor_calls": 1027,
+    "gen3_actual_run_invocations": 1027,
+    "cumulative_actual_constructor_calls": 1043,
+    "cumulative_actual_run_invocations": 1043,
+    "complete_logical_jobs": 1024,
+    "remaining_plan_keys": 0,
+    "failed_technical_claims": 5,
+    "inflight_claims": 0,
+    "kind": "round58-v26-independent-prelaunch-ledger/1",
+    "status": "raw_claim_slot_and_historical_accounting_closed",
+    "quota_sha256": "eec5fbbfcf1a481ffaed355373438535635704e93d3b1061fd2769c6bdf58eb5",
+    "historical_manifest_sha256": "f1b2f061f8f126a333924f6fc9d5b6fc0ddf59236d3ee1bae5bb38e389b23cd1",
+    "negative_controls": {
+      "missing_failed_claim": "slot without exact matching claim",
+      "zero_historical_consumption": "historical evidence/quota unit mismatch",
+      "derived_zero_or_minus_one_physical_start": "rejected"
+    },
+    "actual_cli_derived_ledger_write_spy": "not_invoked_in_V26_restore_gate"
+  },
+  "quota": {
+    "historical_consumed": 16,
+    "normal_cap": 1024,
+    "reserve_cap": 24,
+    "hard_cap": 1064,
+    "normal_used": 1024,
+    "reserve_used": 5,
+    "cumulative_attempt_slots": 1045,
+    "cumulative_actual_environment_constructions": 1043,
+    "reserve_remaining": 19,
+    "hard_attempt_headroom": 19
+  },
+  "failed_attempts": [
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\model_eval_new_s11_greedy_scene1700000\\attempt_0001.json",
+      "sha256": "d8dd8a7e91e77e6e3c02836be0b13103a8fbe5c5192e1e15ae10b9f5906f983c",
+      "logical_job": "model_eval_new_s11_greedy_scene1700000",
+      "attempt": 1,
+      "category": "normal",
+      "launch_slot": 385,
+      "environment_constructor_calls": 1,
+      "run_invocation_calls": 1,
+      "recorded_completed_steps": 1000,
+      "note": null
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s11_e4\\attempt_0001.json",
+      "sha256": "0a76a3e61188f58386f52023415817890afa06459fa1f77751e209cb8640f08e",
+      "logical_job": "new_training_s11_e4",
+      "attempt": 1,
+      "category": "normal",
+      "launch_slot": 13,
+      "environment_constructor_calls": 0,
+      "run_invocation_calls": 0,
+      "recorded_completed_steps": 0,
+      "note": null
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s11_e4\\attempt_0002.json",
+      "sha256": "e303fe551335de8400d4197f4bf3e995e1e70887562d25f9f785095a2b993dd6",
+      "logical_job": "new_training_s11_e4",
+      "attempt": 2,
+      "category": "reserve",
+      "launch_slot": 1,
+      "environment_constructor_calls": 0,
+      "run_invocation_calls": 0,
+      "recorded_completed_steps": 0,
+      "note": null
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s11_e43\\attempt_0001.json",
+      "sha256": "616a9bbd3567fcac54cfe1d4add07a572f6d3610e55df7f707a92eacc9d38ab6",
+      "logical_job": "new_training_s11_e43",
+      "attempt": 1,
+      "category": "normal",
+      "launch_slot": 52,
+      "environment_constructor_calls": 1,
+      "run_invocation_calls": 1,
+      "recorded_completed_steps": 0,
+      "note": "actual simulation step count unknown after external interruption"
+    },
+    {
+      "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\rule_immediate_scene1700000\\attempt_0001.json",
+      "sha256": "c52adf4d83df8cfc88aecf12af14eb99c6edb6a2eccc30d5bbec5329145f0437",
+      "logical_job": "rule_immediate_scene1700000",
+      "attempt": 1,
+      "category": "normal",
+      "launch_slot": 961,
+      "environment_constructor_calls": 1,
+      "run_invocation_calls": 1,
+      "recorded_completed_steps": 1000,
+      "note": null
+    }
+  ],
+  "simulation_steps": {
+    "source_scope": "gen3 master launch claims only; historical gen1/gen2 steps separate",
+    "gen3_sum_recorded_completed_steps_known_lower_bound": 1026000,
+    "unknown_actual_step_claims": [
+      "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\launch_claims\\new_training_s11_e43\\attempt_0001.json"
+    ],
+    "not_claimed_exact_for_interrupted_attempt": true,
+    "historical_gen1_gen2_recorded_completed_steps": 16000,
+    "historical_claim_sources": [
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\launch_claims\\new_training_s11_e0\\attempt_0001.json",
+        "sha256": "f5344cd6aed74edf7de60885fae56e2cf3f688cb39d07ae2edc56b4fd153ebd3",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\launch_claims\\new_training_s11_e1\\attempt_0001.json",
+        "sha256": "25bbb4419d929c24445d5c3d951ccdc33d88c87e7f80da84d14eb85967602a6c",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\launch_claims\\new_training_s11_e2\\attempt_0001.json",
+        "sha256": "1414d39283fe2796a13248f3ec4eac41de75a8172e25197548438daf9ce82246",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\launch_claims\\new_training_s11_e3\\attempt_0001.json",
+        "sha256": "d975ae6dde07e32a7908b97389d2b271015095064bec978c2e1e07d0ce715cd2",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\launch_claims\\new_training_s11_e0\\attempt_0001.json",
+        "sha256": "05b85834f9d20d310d6e36a17b1a4004425edff11b866de9a8f40bc8c9945188",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\launch_claims\\new_training_s11_e1\\attempt_0001.json",
+        "sha256": "0d17206170d605a35b4beca29320dc0b43ca8fbc785853dc9b4883385835b0dd",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\launch_claims\\new_training_s11_e2\\attempt_0001.json",
+        "sha256": "833671eb56394a51871112cef0ed5e07373180191a0cd36840c534071ade4c99",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\launch_claims\\new_training_s11_e3\\attempt_0001.json",
+        "sha256": "a25c5b5a907b59b24db9ac759e4995d055a96e4bf00650f15af20b2e3db05cbf",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\launch_claims\\new_training_s22_e0\\attempt_0001.json",
+        "sha256": "e7dfc16a9a191df92cc7e1d2542d4f794a6360b77e51f3cb8588835b83150983",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\launch_claims\\new_training_s22_e1\\attempt_0001.json",
+        "sha256": "b3b3bf881b5056633abfc73a81e28a5cd8602821d3a560bd306bdbc3d54937dc",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\launch_claims\\new_training_s22_e2\\attempt_0001.json",
+        "sha256": "a0d5e06cca821b965610b5d55c109b4c09a74969f1377a7097ac7400b2abf2a1",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\launch_claims\\new_training_s22_e3\\attempt_0001.json",
+        "sha256": "1980528ba2accf8de1dc019c7402f7b3ed22bfc1ac5fd965b319a4fb44e9be60",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\launch_claims\\new_training_s33_e0\\attempt_0001.json",
+        "sha256": "41eed3c7d0f8750aaea986247b0655381ca7d2f3dcc1332ef02299b043715e7e",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\launch_claims\\new_training_s33_e1\\attempt_0001.json",
+        "sha256": "c597959fac449a4b45b7bccc0d513bf7b510fd6f9e3b22303251b9d3f960d361",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\launch_claims\\new_training_s33_e2\\attempt_0001.json",
+        "sha256": "82822577d01f55665f119817b6626677de68a871c17be33a979b0a45ba56a2d1",
+        "completed_steps": 1000
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\launch_claims\\new_training_s33_e3\\attempt_0001.json",
+        "sha256": "884ccad28eb178414d70e949d3ba5b28f69cd69b017e381ae6ebe8a179885caf",
+        "completed_steps": 1000
+      }
+    ],
+    "combined_known_completed_steps_lower_bound": 1042000
+  },
+  "optimizer": {
+    "gen3_actual_hook_calls": 556,
+    "journal_sources": [
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\runtime\\optimizer_step_calls.jsonl",
+        "sha256": "dbf77b4d70c15259332140034550b34e13fa70904ce3f3c2beb328e59efc7ecb",
+        "events": 24
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v18\\raw\\runtime\\optimizer_step_calls.jsonl",
+        "sha256": "48df4533df9340dae6b3f5a388bad671811061d3c38eada51012b9f336bfa20b",
+        "events": 52
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v22\\raw\\runtime\\optimizer_step_calls.jsonl",
+        "sha256": "c61faf8166e424a61fb2aaed54cc5c89a80d1d15baf4d90ed7a81403d8aa9513",
+        "events": 28
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v27\\raw\\runtime\\optimizer_step_calls.jsonl",
+        "sha256": "f0322ec4f9c9cdef0a6eb2ec26b3f8c4000a30a30eed9a4ecfe7a86cf816e43e",
+        "events": 28
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v29\\raw\\runtime\\optimizer_step_calls.jsonl",
+        "sha256": "782315de7ff8c7099292686fc62083ab99fd5c24d3dd03ce64b8696fc6181140",
+        "events": 92
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v32\\raw\\runtime\\optimizer_step_calls.jsonl",
+        "sha256": "8ec1bafe60f7d05c7aa722336a53a55bd91aabfd784006e43ec3cf74fce0cb80",
+        "events": 332
+      }
+    ],
+    "effective_ep128_seed_steps": {
+      "11": 184,
+      "22": 180,
+      "33": 192
+    },
+    "historical_gen1_gen2_supported_calls_separate": 48,
+    "historical_evidence": {
+      "manifest": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\HISTORICAL_CONSUMPTION_RECONCILIATION.json",
+      "manifest_sha256": "f1b2f061f8f126a333924f6fc9d5b6fc0ddf59236d3ee1bae5bb38e389b23cd1",
+      "audit": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_isolation_stop_audit\\EXECUTION_STOP_AUDIT.json",
+      "audit_sha256": "6ed095ebce43e250fdff967cec8f5107f37c8ddfa4c7a21a6a29494f96ef711f",
+      "hook_journals": [
+        {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_prior_strength_prospective_trial\\raw\\runtime\\optimizer_step_calls.jsonl",
+          "sha256": "4f115380f4790fa3329a533573f5f5e0786f78b92a8ae13f1328b58eec1662d6",
+          "original_line_count": 24,
+          "reconstructed_true_count": 16
+        },
+        {
+          "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\raw\\runtime\\optimizer_step_calls.jsonl",
+          "sha256": "1302ade1552a07fcf9aca664ee674853e727a28d9984a63f3d5d07ca8d786b41",
+          "original_line_count": 24,
+          "reconstructed_true_count": 0
+        }
+      ],
+      "qualification": "48 evidence-supported actual calls, including derived/reconstructed historical evidence; not 48 independent raw hook lines"
+    }
+  },
+  "ppo_updates": {
+    "direct_hook_rows": 93,
+    "journal_sources": [
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v18\\raw\\runtime\\ppo_update_calls.jsonl",
+        "sha256": "30d3e96b3864de6881452d8c28e0e8062ff365d039100978af7395483a21daeb",
+        "events": 9
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v22\\raw\\runtime\\ppo_update_calls.jsonl",
+        "sha256": "a3bdbf49caeb1b0e70496180251238e7143841b7c3bbc40f182c910792ecfd58",
+        "events": 5
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v27\\raw\\runtime\\ppo_update_calls.jsonl",
+        "sha256": "dac80680768be7b595602bccc13099c60f0c9a25633766a7516128132bb7d7f3",
+        "events": 6
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v29\\raw\\runtime\\ppo_update_calls.jsonl",
+        "sha256": "30f7175bb8221c6d03be9a783c6fce4c5ac46c0b057d1bd1c7acdea5d6626141",
+        "events": 15
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v32\\raw\\runtime\\ppo_update_calls.jsonl",
+        "sha256": "2f9d6abf9e9a85ed8964ce7ee07eabca3994066ed1d1106fe39f29cc88c808c2",
+        "events": 58
+      }
+    ],
+    "first_three_commits_without_original_direct_hook_rows": [
+      {
+        "seed": 11,
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_commit_s11_b0.json",
+        "sha256": "eaf69f4168e770f0cadfbc1058293e9028955c3113398b69a600f435ca94e957"
+      },
+      {
+        "seed": 22,
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_commit_s22_b0.json",
+        "sha256": "2c71edcbe39845c034fb57b71189eb91e6cc425fbcbc72c2663eb25643ee6312"
+      },
+      {
+        "seed": 33,
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\checkpoints\\r40_batch_commit_s33_b0.json",
+        "sha256": "512f8b2ef6d1fe4e6cd13f70f0495ef69bf98487103f95fb916e8b3b26432616"
+      }
+    ],
+    "effective_committed_batches": 96,
+    "direct_hook_gap_not_fabricated": true
+  },
+  "checkpoint_write_journal": {
+    "raw_event_rows": 312,
+    "sources": [
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3\\raw\\runtime\\checkpoint_writes.jsonl",
+        "sha256": "2a43339ac45c2cfd13f84e744b72af0632024f44c3eedaa449bf8c8c7cab0165",
+        "events": 12
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v16\\raw\\runtime\\checkpoint_writes.jsonl",
+        "sha256": "ed5d782ea8661cf8fa4f13447cfd5417f8ba1f442463c9936abdc54c9a70c7b1",
+        "events": 2
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v18\\raw\\runtime\\checkpoint_writes.jsonl",
+        "sha256": "e0b2aa5903baa1f5251f6fe9f4dd0b7a412d97b08cc5cc19903983930c5c9916",
+        "events": 29
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v22\\raw\\runtime\\checkpoint_writes.jsonl",
+        "sha256": "8b9e1a06de6544d69a661d01e540e7e32690ac6475a79fc726d352ae3011fcf5",
+        "events": 17
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v26\\raw\\runtime\\checkpoint_writes.jsonl",
+        "sha256": "d8bd1fe2ea804ac6fb654bcd89791800604025c809bbb2ace0b58857a913cef6",
+        "events": 2
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v27\\raw\\runtime\\checkpoint_writes.jsonl",
+        "sha256": "59c32ee4353b82c09a9d01e7913bc712692a77f54b73040747034d069cfb57b5",
+        "events": 21
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v29\\raw\\runtime\\checkpoint_writes.jsonl",
+        "sha256": "11a8d70bd423bcf6614e9290a2c9063deb37fbcbb7ddd059a484b3b31b2dd177",
+        "events": 49
+      },
+      {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v32\\raw\\runtime\\checkpoint_writes.jsonl",
+        "sha256": "3270039258dbc2cdd027db85715d6c7498c89c168bd87c40a5fde04ed5de4c05",
+        "events": 180
+      }
+    ],
+    "interpretation": "write events, not distinct checkpoint files"
+  },
+  "completed_training_sources": [
+    {
+      "seed": 11,
+      "checkpoint": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v29\\raw\\checkpoints\\v2_train_s11_ep128.pt",
+      "checkpoint_sha256": "e0f5c6466731b0feac2dcddd21425e97f82dd6431c5613afd523268745efe3d9",
+      "summary": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v29\\raw\\ROUND46_TRAINING_s11.json",
+      "summary_sha256": "f09e328f024625a48623b28b482e144e0e2f3d7bcb1cd7b303a2e5b4f3d3819d",
+      "batch31_commit": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v29\\raw\\checkpoints\\r40_batch_commit_s11_b31.json",
+      "commit_sha256": "8a85ab8441c3c3f1fed83d2547e22b710ca988097e786f8fc5f64d8f7b312cd6",
+      "optimizer_steps": 184
+    },
+    {
+      "seed": 22,
+      "checkpoint": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v32\\raw\\checkpoints\\v2_train_s22_ep128.pt",
+      "checkpoint_sha256": "b9fa445b5fe7b5afa97272ada06a29c67a2b7796e7ce2a6a386142b51d5002d4",
+      "summary": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v32\\raw\\ROUND46_TRAINING_s22.json",
+      "summary_sha256": "76d4bd5df5bbb9c6eb369fda90e605180dac785a0b6492319f8379025c2bbae8",
+      "batch31_commit": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v32\\raw\\checkpoints\\r40_batch_commit_s22_b31.json",
+      "commit_sha256": "4ea86650f21eae11f7c6b4c87ae9916d363f763c914a831296eebb6bcfa5b223",
+      "optimizer_steps": 180
+    },
+    {
+      "seed": 33,
+      "checkpoint": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v32\\raw\\checkpoints\\v2_train_s33_ep128.pt",
+      "checkpoint_sha256": "75710efb09fd40b898cec77dbbbb524f9636add3ca70ee5a1a6cf32936aa236a",
+      "summary": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v32\\raw\\ROUND46_TRAINING_s33.json",
+      "summary_sha256": "37841b57eea5797ad06f7e7dc4f7b72ab219c0efbdbdefb3c38fbf9888ae2cf6",
+      "batch31_commit": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen3_resume_v32\\raw\\checkpoints\\r40_batch_commit_s33_b31.json",
+      "commit_sha256": "34dcafaf9cd97e40cf3a214affdb12487145c1d1f6b20218bf33eed07b755fb1",
+      "optimizer_steps": 192
+    }
+  ],
+  "protected_sha256": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  }
+}

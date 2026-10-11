@@ -1,0 +1,164 @@
+{
+  "kind": "round58-fixed-plan-final-machine-verdict/1",
+  "execution": "complete_1024_of_1024_on_frozen_development_block",
+  "correctness": "source_claim_receipt_checkpoint_ledger_diagnostics_closed",
+  "scientific_result": {
+    "comparison": "r58-minus-r56",
+    "cost_direction_counts_across_six_seed_modes": {
+      "lower": 2,
+      "equal": 0,
+      "higher": 4
+    },
+    "cross_seed_and_mode_cost_direction_consistent": false,
+    "target_loss_comparisons": 2
+  },
+  "historical_development_go_unchanged": false,
+  "new_block_development_go": "not_defined_by_frozen_plan",
+  "no_deployment_or_population_noninferiority_claim": true,
+  "quota": {
+    "historical_consumed": 16,
+    "normal_cap": 1024,
+    "reserve_cap": 24,
+    "hard_cap": 1064,
+    "normal_used": 1024,
+    "reserve_used": 5,
+    "cumulative_attempt_slots": 1045,
+    "cumulative_actual_environment_constructions": 1043,
+    "reserve_remaining": 19,
+    "hard_attempt_headroom": 19
+  },
+  "primary_r58_minus_r56": [
+    {
+      "seed": 11,
+      "mode": "greedy",
+      "cost_mean_delta_B_per_scene": -402.375,
+      "cost_ci95_B_per_scene": [
+        -816.0,
+        -78.0
+      ],
+      "task_mean_delta_per_scene": -0.03125,
+      "on_time_id_changes": [
+        {
+          "scene": 1700027,
+          "lost": [
+            "piloc-e1-target-5"
+          ],
+          "rescued": [],
+          "identical": false
+        }
+      ]
+    },
+    {
+      "seed": 11,
+      "mode": "sampled",
+      "cost_mean_delta_B_per_scene": -414.9375,
+      "cost_ci95_B_per_scene": [
+        -841.125,
+        -78.375
+      ],
+      "task_mean_delta_per_scene": -0.03125,
+      "on_time_id_changes": [
+        {
+          "scene": 1700027,
+          "lost": [
+            "piloc-e1-target-5"
+          ],
+          "rescued": [],
+          "identical": false
+        }
+      ]
+    },
+    {
+      "seed": 22,
+      "mode": "greedy",
+      "cost_mean_delta_B_per_scene": 872.25,
+      "cost_ci95_B_per_scene": [
+        246.375,
+        1667.760937499998
+      ],
+      "task_mean_delta_per_scene": 0.03125,
+      "on_time_id_changes": [
+        {
+          "scene": 1700027,
+          "lost": [],
+          "rescued": [
+            "piloc-e1-target-5"
+          ],
+          "identical": false
+        }
+      ]
+    },
+    {
+      "seed": 22,
+      "mode": "sampled",
+      "cost_mean_delta_B_per_scene": 728.4375,
+      "cost_ci95_B_per_scene": [
+        234.1875,
+        1392.1171874999982
+      ],
+      "task_mean_delta_per_scene": 0.03125,
+      "on_time_id_changes": [
+        {
+          "scene": 1700027,
+          "lost": [],
+          "rescued": [
+            "piloc-e1-target-5"
+          ],
+          "identical": false
+        }
+      ]
+    },
+    {
+      "seed": 33,
+      "mode": "greedy",
+      "cost_mean_delta_B_per_scene": 246.0,
+      "cost_ci95_B_per_scene": [
+        0.0,
+        654.0
+      ],
+      "task_mean_delta_per_scene": 0.03125,
+      "on_time_id_changes": [
+        {
+          "scene": 1700027,
+          "lost": [],
+          "rescued": [
+            "piloc-e1-target-5"
+          ],
+          "identical": false
+        }
+      ]
+    },
+    {
+      "seed": 33,
+      "mode": "sampled",
+      "cost_mean_delta_B_per_scene": 84.0,
+      "cost_ci95_B_per_scene": [
+        0.0,
+        252.0
+      ],
+      "task_mean_delta_per_scene": 0.0,
+      "on_time_id_changes": []
+    }
+  ],
+  "bootstrap": {
+    "rng": "NumPy Generator PCG64",
+    "seed": 20261008,
+    "draws": 10000,
+    "scene_unit": 32,
+    "index_sha256": "8421defbdc5cf4ba5485e7c1cfd0fb2952c2446720a490ff195d4637ccc7445b",
+    "quantile": "numpy linear 0.025/0.975"
+  },
+  "evidence": {
+    "ROUND58_FINAL_STATISTICS.json": "18e451112beb7048c0dc20b75319eada54a0e994c2b38577062f87fb5c677b8e",
+    "ROUND58_FINAL_SOURCE_INDEX.json": "959cb5894d97a8b6ed5780a25e5e7a0e453ae22314ef5094ccfcaf7953e80d91",
+    "ROUND58_FINAL_ACCOUNTING.json": "b12f6e6c9aba9cdfa36098508d0d8615cc46b3290f70b4cbcbf6843f14680e5c",
+    "ROUND58_FINAL_DIAGNOSTIC_COVERAGE.json": "8696a677ee7da9f6cc510273318594fa181e4dcc2e20b077767ab56ea7fe24ff",
+    "ROUND58_FINAL_CHECKPOINT_INDEX.json": "db6f1ba6d07571d278b22dc92ca900661e2e458b220ae160e9c5351141e0e53d"
+  },
+  "limitations": [
+    "development scenes are not independent deployment or non-inferiority evidence",
+    "historical gen1/gen2 48 optimizer calls are evidence-supported, partly reconstructed, not gen3 effective updates",
+    "external interruption at seed11 episode43 has unknown exact simulation step count",
+    "CI containing zero does not establish equivalence"
+  ]
+}
