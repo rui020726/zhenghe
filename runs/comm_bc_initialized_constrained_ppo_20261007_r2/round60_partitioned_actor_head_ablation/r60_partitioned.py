@@ -531,8 +531,12 @@ def save_checkpoint(controller: PartitionedController, optimizer: torch.optim.Op
         "rng": trainer.rng_state(),
     }
     Path(path).parent.mkdir(parents=True, exist_ok=True)
-    torch.save(payload, path)
-    return Path(path)
+    import os
+    path = Path(path)
+    tmp = path.with_suffix(path.suffix + f".{os.getpid()}.tmp")
+    torch.save(payload, tmp)
+    os.replace(tmp, path)  # atomic commit; a crash never leaves a half-written checkpoint
+    return path
 
 
 def _validate_base(path: Path, payload: dict[str, Any], *, freeze: dict[str, Any]) -> dict[str, Any]:

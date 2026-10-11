@@ -1,0 +1,36 @@
+{
+  "kind": "round60-probe-reconciliation/1",
+  "purpose": "Honest registration of the one real episode run in the previous ROUND60 session that bypassed the formal claim, per the continuation instructions (section 2).",
+  "probe": {
+    "count": 1,
+    "classification": "historical_non_plan_probe",
+    "what_it_was": "one real 1000-step training episode (seed 11, episode 0, scene 1300027) run through the frozen R46/R42 sim with the partitioned controller and routed ppo_update injected, to measure per-episode compute and confirm the sim path",
+    "known_consumption": {
+      "real_environment_constructions": 1,
+      "real_episodes": 1,
+      "simulation_steps": 1000,
+      "on_time": 6,
+      "wall_seconds": 15.38,
+      "optimizer_updates": 0,
+      "ppo_updates": 0,
+      "checkpoints_written": 0
+    },
+    "unknown_counts": [],
+    "deviation": "it bypassed the formal atomic claim (the R58 verify_frozen_source guard) and wrote to a throwaway probe namespace, not to a registered R60 claim",
+    "not_counted_as": ["a formal claim", "a normal plan job", "a technical failure", "a scientific sample"],
+    "not_reused_for": "none of the 576 fixed-plan launches; it does not substitute for any planned training episode or eval cell",
+    "artifacts": "the probe's row/tape lived under a throwaway probe namespace that was cleaned up in the previous session; the consumption above is taken from the probe's run log and is not re-derived"
+  },
+  "cumulative_quota": {
+    "historical_non_plan_probe": 1,
+    "normal_plan": 576,
+    "technical_failure_reserve_max": 23,
+    "cumulative_launch_attempt_hard_cap": 600,
+    "note": "probe(1) + normal(576) + reserve(<=23) <= 600. Any additional consumption discovered during reconciliation is deducted from the remaining headroom first; the hard cap is never raised. The old R58 ledger is untouched."
+  },
+  "synthetic_update_accounting": {
+    "cap": 32,
+    "previous_session_reported": 1,
+    "note": "the previous session's wire-up acceptance reported 1 synthetic optimizer update; its init-equivalence checks ran ppo_update on synthetic episodes purely to verify loss/gradient equivalence and are correctness checks, not budget synthetic-training updates. This continuation runs 0 further synthetic optimizer updates and 0 synthetic checkpoint writes; real training/eval updates are counted separately from synthetic ones."
+  }
+}
