@@ -1,0 +1,69 @@
+{
+  "kind": "round61-machine-verdict/1",
+  "branch": "exp/round61-early-report-value-intervention",
+  "task": "early first-report value paired intervention on frozen R60 seed33 ep128 greedy",
+  "model": {
+    "source": "R60 compliant seed33 ep128 (verified chain)",
+    "path": "round60_partitioned_actor_head_ablation/raw/checkpoints/v2_train_s33_ep128.pt",
+    "file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+    "parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a",
+    "structure": "partitioned-early-late-actor-head/1",
+    "load_mode": "read_only", "optimizer_restored": false, "rng_restored": false, "training_cursor_restored": false,
+    "file_unchanged_after_run": true
+  },
+  "resource_guard": {
+    "tests_passed": 16,
+    "atomic_slot_before_builder": true,
+    "no_refund": true,
+    "independent_of_r60_ledger": true,
+    "r60_historical_608_not_claimed_as_r61_headroom": true
+  },
+  "case_freeze": {
+    "focus": {"scene": 1700027, "target": "piloc-e1-target-5", "ready_step": 134, "baseline_action": "SKIP"},
+    "controls": 7,
+    "all_baseline_skip": true,
+    "early_candidates_total": 146, "send_candidates": 0, "skip_candidates": 146,
+    "distance_columns": [13, 14, 15, 18],
+    "note": "model SKIPs every early first-report; action-layer insufficient, handled by rules without forcing labels"
+  },
+  "gate": {"status": "passed", "L_equals_L0": true, "L_matches_r60_focus": true,
+           "L_on_time": 5, "L_bytes": 4812, "training_side_effects": 0},
+  "intervention": {
+    "point": "after real sequential mask + model action draw, before one-shot latch / emission / shadow-gate charge",
+    "force_send": "override to SEND (really billed, same _emit path)", "force_skip": "override to HOLD",
+    "once_per_episode_then_frozen_greedy": true,
+    "records_original_prob_and_action": true
+  },
+  "paired_results": {
+    "focus": {"Y_SEND": 1, "Y_SKIP": 0, "target_delta": 1, "whole_system_SEND": 6, "whole_system_SKIP": 5,
+              "cost_delta_bytes": 2688, "new_under_SEND": ["piloc-e1-target-5"], "lost_under_SEND": [],
+              "consequential": true},
+    "controls": {"count": 7, "all_target_delta_0": true, "all_whole_system_delta_0": true,
+                 "cost_delta_range_bytes": [378, 2688], "consequential": false},
+    "identical_vector_conflicts": 0
+  },
+  "consumption": {
+    "slots_consumed": 19, "normal": 18, "reserve": 1, "hard_cap": 20, "headroom": 1,
+    "qualified_results": 18, "technical_failures": 1, "reserve_retries": 1,
+    "builder_calls": 19, "recorded_env_constructions": 18, "actual_env_constructions_lower_bound_confirmed": 19,
+    "run_returns": 18, "steps_total": 18000,
+    "note": "L0 first attempt consumed a normal slot and was interrupted by a shadow_gate code defect (preserved, no refund); fixed, re-accepted zero-env, reserve-retried successfully. Valid results (18) != actual consumption (19)."
+  },
+  "training_side_effects": {
+    "real_optimizer_updates": 0, "synthetic_optimizer_updates": 0, "ppo_replays": 0,
+    "training_restores": 0, "checkpoint_writes": 0, "readonly_cpu_forwards_for_identity_check": "counted within setup, no extra",
+    "model_file_sha_unchanged": true
+  },
+  "answers": {
+    "key_target_outcome_changed_under_send_skip": true,
+    "control_benefit_changes": "none (no task/whole-system change; FORCE_SEND only costs more)",
+    "legal_input_clues": "focus and controls nearby-but-different on cols 13/14/15/18; 0 identical-vector conflicts (no aliasing observed); deadline/remaining_time are candidate clues only",
+    "missing_evidence": "8 post-hoc cases, single frozen policy, one random realization per scene cannot prove separability or 19-dim sufficiency; no conflict found is not proof of sufficiency"
+  },
+  "boundaries": "describes SEND/SKIP differences in this realization only; does not prove messages generally necessary, safe skip, overall non-inferiority, or generalization; no small-sample significance packaging; L/L0 not independent samples; accepted != task benefit; same-outcome != safe-deletion truth",
+  "protected_files_unchanged": {
+    "ROUND46_CURRENT_TASK.json_sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json_sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+    "unchanged": true
+  }
+}
