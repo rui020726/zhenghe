@@ -1,0 +1,62 @@
+{
+  "kind": "round60-reconciliation-verdict/1",
+  "mode": "zero-environment reconciliation; no retrain/rerun/quota",
+  "head_verified": "3a8bae8ef35b1fbc99847c4b8f347f02d615cdac",
+  "this_pass_side_effects": {
+    "environment_constructions": 0, "simulations": 0, "new_claims": 0,
+    "real_optimizer_updates": 0, "synthetic_optimizer_updates": 0, "ppo_replays": 0,
+    "rng_restores": 0, "checkpoint_writes": 0, "new_evaluations": 0
+  },
+  "consumption_reconstruction": {
+    "historical_non_plan_probe": {"env_constructions": 1, "episodes": 1, "ppo_updates": 0, "optimizer_steps": 0, "checkpoints": 0},
+    "non_compliant_real_training_quarantined": {
+      "seed": 11, "location": "_quarantine_attempt1_criticdetect_missing",
+      "env_constructions": 31, "completed_episodes": 30, "committed_batches": 7, "ppo_updates": 7,
+      "optimizer_steps": 44, "episode_range": "0..30 (e30 env built, 0 steps, interrupted)",
+      "execution_version": "pre-critic-isolation-fix train_seed -> partitioned_ppo_update (detach bypassed)",
+      "note": "real consumption; scientifically excluded and quarantined, not deleted"
+    },
+    "final_compliant_training": {"env_constructions": 384, "episodes": 384, "ppo_updates": 96, "optimizer_steps": 556},
+    "final_eval": {"env_constructions": 192},
+    "technical_failure_reserve_retries": 0,
+    "pure_synthetic_tests": {"env_constructions": 0, "optimizer_updates": "reported 1 (acceptance); init-equivalence 12/run not journaled, cumulative unknown (lower bound >=13); this pass 0", "checkpoints": "synthetic, test dir only"}
+  },
+  "totals": {
+    "real_environment_constructions": 608,
+    "real_optimizer_steps": 600,
+    "hard_cap": 600,
+    "over_by": 8,
+    "over_attribution": "entirely the 31 non-compliant re-run env constructions; planned/effective was 577 (within cap)",
+    "no_reclassification_to_hide": true,
+    "no_additional_approval": true
+  },
+  "number_corrections": {
+    "576_effective_compliant_results": "correct (384 train + 192 eval, all complete, compliant chain)",
+    "556_optimizer_steps": "correct for compliant chain; total real optimizer steps = 600 (556 + 44 non-compliant)",
+    "577_cumulative_including_probe": "WRONG -> 608",
+    "headroom_23": "WRONG -> over by 8"
+  },
+  "seed_qualification": {
+    "11": "verified", "22": "verified", "33": "verified",
+    "evidence": {
+      "fresh_start_from_partitioned_ep0": "b0 params_before == partitioned ep0 (fb82ad80 = R58 ep0 trunk/dual-critic + early=late=action_head)",
+      "full_32_batches_per_seed": true,
+      "b31_equals_ep128": true,
+      "no_non_compliant_inheritance": "compliant b0 after (998d57db) != non-compliant b0 (a95b6010) != non-compliant b6 (ff70d4ae)",
+      "critic_trunk_isolation_actually_applied": "call path train_seed -> routed_ppo -> critic_input_detached (code lines 432/210/214); compliant vs non-compliant b0 differ only in trunk gradient under identical episodes/RNG",
+      "eval_bound_to_compliant_ep128": "eval checkpoint_load_identity param_sha == compliant ep128 for all three seeds (809f35f7/286e2f84/bce71a0e), read_only, no optimizer/rng restore"
+    },
+    "unverified_seeds": []
+  },
+  "conclusions": {
+    "retained_from_verified_compliant_chain": "NEW-R58 / NEW-immediate / NEW-late task+cost comparisons; seed 11 identical to R58 on eval outputs; seed 22 kept task + cost down (CI includes 0); seed 33 greedy lost scene 1700027/piloc-e1-target-5; sampled kept task; early key target varies by seed/mode; bootstrap index matches R58 frozen",
+    "deferred_or_not_claimed": "cross-seed consistent cost decrease (all cost CIs contain 0, seed 11 flat -> not established); shared-interference root cause; generalization; non-inferiority; deployment",
+    "wording_scope": "s11 byte-identical is limited to EVAL OUTPUTS (per-scene on_time, spent_bytes, emission sequences), NOT training parameters or update trajectory; partitioned forward/loss init-equivalence does not imply equal gradient norm, global clip, or Adam trajectory (correction retained)",
+    "governance_disclosure": "actual cumulative 608 exceeds the 600 hard cap by 8, entirely from the non-compliant re-run; disclosed, not hidden, not reclassified, no added approval; does not change the compliant chain's scientific validity"
+  },
+  "protected_files_unchanged": {
+    "ROUND46_CURRENT_TASK.json_sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json_sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+    "unchanged": true
+  }
+}
