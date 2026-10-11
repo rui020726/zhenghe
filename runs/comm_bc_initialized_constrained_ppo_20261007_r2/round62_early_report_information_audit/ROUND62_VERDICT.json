@@ -1,0 +1,116 @@
+{
+  "kind": "round62-early-report-information-audit/1",
+  "status": "complete",
+  "branch": "analysis/round62-early-report-information-audit",
+  "start_head": "e14a7fe7ad24b888e81fcf4485f576b9268661c18",
+  "scope": "read-only reconstruction of ROUND61 frozen-model early SEND/SKIP interventions and decision information",
+  "source_evidence": {
+    "r61_case_freeze_verified": true,
+    "r61_model_identity_matches_file": true,
+    "r61_gate_L_equals_L0_and_R60_focus": true,
+    "force_pairs_recomputed_from_lifecycle_and_transcript": 8,
+    "pre_decision_tape_prefix_and_opportunity_checks_passed": 8,
+    "R60_saved_greedy_scene_tapes_read": 32,
+    "early_candidates_recomputed": 146,
+    "baseline_send_candidates": 0,
+    "baseline_skip_candidates": 146
+  },
+  "paired_effects": {
+    "focus": {
+      "scene": 1700027,
+      "target": "piloc-e1-target-5",
+      "ready_step": 134,
+      "Y_SEND": 1,
+      "Y_SKIP": 0,
+      "whole_system_delta": 1,
+      "gained_under_SEND": ["piloc-e1-target-5"],
+      "lost_under_SEND": [],
+      "cost_delta_bytes": 2688,
+      "local_consequential_effect_observed": true
+    },
+    "seven_controls": {
+      "all_target_outcomes_equal": true,
+      "all_whole_system_target_sets_equal": true,
+      "identity_exchanges": 0,
+      "all_send_cost_deltas_positive": true,
+      "cost_delta_bytes": [2496, 2496, 2688, 2496, 2682, 378, 2484]
+    }
+  },
+  "information_findings": {
+    "eight_float32_vectors_distinct": true,
+    "same_vector_different_observed_task_delta": 0,
+    "dimensions_varying_across_eight_cases": [14, 18],
+    "remaining_time_raw_is_legal_sender_state": true,
+    "remaining_time_raw_was_directly_serialized_for_skip_arms": false,
+    "remaining_time_reconstruction_source": "detection timestamp + deadline_offset, and verified current_time=decision_step-1",
+    "actor_deadline_feature": "clip(remaining_time/50,-1,1)",
+    "eight_case_deadline_feature_saturated": "8/8 at 1.0",
+    "R60_32_scene_early_deadline_feature_saturated": "146/146 at 1.0",
+    "sufficiency_or_nonseparability_proven": false
+  },
+  "R61_consumption_corrected": {
+    "hard_cap": 20,
+    "slots_consumed": 19,
+    "normal_slots": 18,
+    "reserve_slots": 1,
+    "headroom": 1,
+    "qualified_results": 18,
+    "technical_failures": 1,
+    "reserve_retries": 1,
+    "builder_calls": 19,
+    "environment_constructions_proven": 19,
+    "runner_invocations_proven": 19,
+    "ledger_run_returns": 18,
+    "successful_return_steps": 18000,
+    "failed_attempt_step_lower_bound": 5,
+    "total_attempt_steps_exact": null,
+    "total_attempt_steps_lower_bound": 18005,
+    "total_attempt_steps_upper_bound_from_configured_horizon": 19000,
+    "historical_claim_slot2_file": "overwritten by same-logical reserve retry; no fabricated claim",
+    "reported_shadow_gate_cause_traceback_verified": false,
+    "R60_over_cap_608_remains_separate_history": true
+  },
+  "historical_encoding_context": {
+    "R29_saturation_audit_read": true,
+    "R30_single_column_remaining_over_1000_training_ablation_read": true,
+    "R30_greedy_task_delta": "zero across 48/48 scenes",
+    "R30_cost_direction_consistent_across_seeds": false,
+    "same_training_ablation_recommended_again": false
+  },
+  "one_research_variable_recommendation": {
+    "variable": "raw remaining_time as a local intervention-effect modifier, matched on ready_step (feature 18) and backlog (feature 14)",
+    "distinguishes": "late arrival leaving little response time versus deadline slack explaining the SEND/SKIP outcome under comparable timing and queue state",
+    "remaining_confounders": ["scene/task difficulty", "target location", "stochastic delivery"],
+    "authorization": "recommendation only; no new run or training authorization"
+  },
+  "round62_side_effects": {
+    "environment_constructions": 0,
+    "simulations": 0,
+    "new_claims": 0,
+    "new_episodes": 0,
+    "real_optimizer_updates": 0,
+    "synthetic_optimizer_updates": 0,
+    "PPO_replays": 0,
+    "training_or_RNG_restores": 0,
+    "checkpoint_writes": 0,
+    "new_evaluations": 0,
+    "CPU_forward_calls": 0
+  },
+  "tests": {
+    "command": "D:\\project_env\\python.exe -m unittest -v runs.comm_bc_initialized_constrained_ppo_20261007_r2.round62_early_report_information_audit.test_round62_analysis",
+    "tests_run": 5,
+    "failures": 0,
+    "exit_code": 0
+  },
+  "protected_hashes_match": true,
+  "deliverables": [
+    "ROUND62_EXECUTION_BASIS.md",
+    "ROUND62_REPORT.md",
+    "ROUND62_VERDICT.json",
+    "ROUND61_EVIDENCE_RECHECK.json",
+    "DECISION_INFORMATION_PANEL.json",
+    "round62_analysis.py",
+    "test_round62_analysis.py"
+  ],
+  "stop": "local commit and stop; no training, sampling expansion, extra intervention, threshold tuning, push, merge, or deployment"
+}

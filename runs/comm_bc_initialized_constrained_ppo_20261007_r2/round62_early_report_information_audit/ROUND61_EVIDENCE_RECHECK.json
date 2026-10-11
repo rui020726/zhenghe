@@ -1,0 +1,449 @@
+{
+  "kind": "round61-evidence-recheck/1",
+  "source_head": "e14a7fe7ad24b888e81fcf4485f576b9268661c18",
+  "model": {
+    "path": "round60_partitioned_actor_head_ablation/raw/checkpoints/v2_train_s33_ep128.pt",
+    "file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+    "parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a",
+    "structure": "partitioned-early-late-actor-head/1",
+    "mode": "greedy",
+    "training_seed": 33,
+    "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1"
+  },
+  "case_freeze": {
+    "cases": 8,
+    "early_candidates": {
+      "total_early": 146,
+      "send": 0,
+      "skip": 146,
+      "distinct_scenes": 32
+    },
+    "outcome_blind_declared": true,
+    "case_action_inputs_equal_both_arms": true,
+    "all_eight_prefix_and_opportunity_checks_pass": true
+  },
+  "gate": {
+    "L": {
+      "on_time": 5,
+      "spent_bytes": 4812,
+      "emission_sequence": [
+        [
+          222,
+          "piloc-e1-target-1",
+          1,
+          2502,
+          6,
+          true
+        ],
+        [
+          276,
+          "piloc-e1-target-3",
+          1,
+          2310,
+          6,
+          true
+        ]
+      ],
+      "on_time_ids": [
+        "piloc-e1-target-0",
+        "piloc-e1-target-1",
+        "piloc-e1-target-2",
+        "piloc-e1-target-3",
+        "piloc-e1-target-4"
+      ]
+    },
+    "L0": {
+      "on_time": 5,
+      "spent_bytes": 4812,
+      "emission_sequence": [
+        [
+          222,
+          "piloc-e1-target-1",
+          1,
+          2502,
+          6,
+          true
+        ],
+        [
+          276,
+          "piloc-e1-target-3",
+          1,
+          2310,
+          6,
+          true
+        ]
+      ],
+      "on_time_ids": [
+        "piloc-e1-target-0",
+        "piloc-e1-target-1",
+        "piloc-e1-target-2",
+        "piloc-e1-target-3",
+        "piloc-e1-target-4"
+      ]
+    },
+    "r60_focus": {
+      "on_time": 5,
+      "spent_bytes": 4812,
+      "emission_sequence": [
+        [
+          222,
+          "piloc-e1-target-1",
+          1,
+          2502,
+          6,
+          true
+        ],
+        [
+          276,
+          "piloc-e1-target-3",
+          1,
+          2310,
+          6,
+          true
+        ]
+      ]
+    },
+    "model_param_sha": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a",
+    "L_equals_L0": true,
+    "L_matches_r60_focus": true,
+    "status": "passed"
+  },
+  "independent_pair_recomputation": {
+    "all_16_force_cells_recomputed_from_raw_lifecycle_and_transcript": true,
+    "focus": {
+      "Y_SEND": 1,
+      "Y_SKIP": 0,
+      "task_delta": 1,
+      "system_delta": 1,
+      "cost_delta_bytes": 2688,
+      "gained": [
+        "piloc-e1-target-5"
+      ],
+      "lost": []
+    },
+    "controls": [
+      {
+        "scene": 1700015,
+        "target_delta": 0,
+        "system_delta": 0,
+        "gained": [],
+        "lost": [],
+        "cost_delta_bytes": 2496
+      },
+      {
+        "scene": 1700012,
+        "target_delta": 0,
+        "system_delta": 0,
+        "gained": [],
+        "lost": [],
+        "cost_delta_bytes": 2496
+      },
+      {
+        "scene": 1700000,
+        "target_delta": 0,
+        "system_delta": 0,
+        "gained": [],
+        "lost": [],
+        "cost_delta_bytes": 2688
+      },
+      {
+        "scene": 1700009,
+        "target_delta": 0,
+        "system_delta": 0,
+        "gained": [],
+        "lost": [],
+        "cost_delta_bytes": 2496
+      },
+      {
+        "scene": 1700016,
+        "target_delta": 0,
+        "system_delta": 0,
+        "gained": [],
+        "lost": [],
+        "cost_delta_bytes": 2682
+      },
+      {
+        "scene": 1700018,
+        "target_delta": 0,
+        "system_delta": 0,
+        "gained": [],
+        "lost": [],
+        "cost_delta_bytes": 378
+      },
+      {
+        "scene": 1700005,
+        "target_delta": 0,
+        "system_delta": 0,
+        "gained": [],
+        "lost": [],
+        "cost_delta_bytes": 2484
+      }
+    ],
+    "raw_source_files_by_case": [
+      {
+        "scene": 1700027,
+        "target": "piloc-e1-target-5",
+        "arms": {
+          "FORCE_SEND": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700027_target-5_s1700027_a1_rp.jsonl",
+            "lifecycle_sha256": "1b7082baae1c2d78bf9610142e558c004831c9e91d3b44f1a6848f974b7bcfac",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700027_target-5_s1700027_a1_ct.jsonl",
+            "transcript_sha256": "ad73d739f2e62d0ce973e603b0938fe64861308e435aa6aec74cf04487ebf9ee"
+          },
+          "FORCE_SKIP": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700027_target-5_s1700027_a1_rp.jsonl",
+            "lifecycle_sha256": "e59dd8edba67cc6b167321ba8f62897a549a458c0a9261d3ead58db47795478c",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700027_target-5_s1700027_a1_ct.jsonl",
+            "transcript_sha256": "125104fa9dd3db353ea3f3656eeea383e31a7e526a11b9d1630f39f3db0f1678"
+          }
+        }
+      },
+      {
+        "scene": 1700015,
+        "target": "piloc-e1-target-0",
+        "arms": {
+          "FORCE_SEND": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700015_target-0_s1700015_a1_rp.jsonl",
+            "lifecycle_sha256": "82fde0df5f6321449141ec02b4cea5c5561b6886fada6f137b4b75677ea129ea",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700015_target-0_s1700015_a1_ct.jsonl",
+            "transcript_sha256": "2a577110430d9be12b4ffcf4e02b7dbde3837aa5df8a22aa85d32258d60e4e06"
+          },
+          "FORCE_SKIP": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700015_target-0_s1700015_a1_rp.jsonl",
+            "lifecycle_sha256": "c87647529a9c584b98a00adae5f2a0c0ad5832243573722283114b9d92eb2147",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700015_target-0_s1700015_a1_ct.jsonl",
+            "transcript_sha256": "b895b4f0755712c89e467a48c9ed419f1567d07df97b0d371f181ceaf4dd433b"
+          }
+        }
+      },
+      {
+        "scene": 1700012,
+        "target": "piloc-e1-target-4",
+        "arms": {
+          "FORCE_SEND": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700012_target-4_s1700012_a1_rp.jsonl",
+            "lifecycle_sha256": "e08e0b82ada9210a4b55f4bbfd2ab94dbf3b3c165a1df5c884281dd73e1b5977",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700012_target-4_s1700012_a1_ct.jsonl",
+            "transcript_sha256": "656c7e4885d7a3a3604bfe145925872a06b088414c4aab0944fe6f20fd7bcc79"
+          },
+          "FORCE_SKIP": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700012_target-4_s1700012_a1_rp.jsonl",
+            "lifecycle_sha256": "c8e67e1844b2e5ce6e2c7a6660190d3437973424b658a0953da39159bd88858d",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700012_target-4_s1700012_a1_ct.jsonl",
+            "transcript_sha256": "3ceb95e3b204dfd1ba3315b3d2e2b411b8244f2097e0415efd042bca911bc742"
+          }
+        }
+      },
+      {
+        "scene": 1700000,
+        "target": "piloc-e1-target-2",
+        "arms": {
+          "FORCE_SEND": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700000_target-2_s1700000_a1_rp.jsonl",
+            "lifecycle_sha256": "0e601ce1c1acddae5fd3aaa80c10f6289ee8703fb510134ab8097b47c25bb681",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700000_target-2_s1700000_a1_ct.jsonl",
+            "transcript_sha256": "3afc052f8746d14ff0e46005f494f231ccd4bdf776215d90164e57462b9cc20f"
+          },
+          "FORCE_SKIP": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700000_target-2_s1700000_a1_rp.jsonl",
+            "lifecycle_sha256": "c7555c7cab51088c1bceccf399edabbe1dc2d8c5c5fc15ed1b7088b418f4a52d",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700000_target-2_s1700000_a1_ct.jsonl",
+            "transcript_sha256": "584449d8d619c38f392c8f44497ca52731eba32ac7c96c9dbee96983ae609f61"
+          }
+        }
+      },
+      {
+        "scene": 1700009,
+        "target": "piloc-e1-target-0",
+        "arms": {
+          "FORCE_SEND": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700009_target-0_s1700009_a1_rp.jsonl",
+            "lifecycle_sha256": "4527aecb977a8951a9156cad729e96e530c6fcfc410ac3046046d6a22bf6bbbb",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700009_target-0_s1700009_a1_ct.jsonl",
+            "transcript_sha256": "7c56abe9ebd1c559b1b71f0a02cd4005555ac2501ae89af7a725557b69861a1a"
+          },
+          "FORCE_SKIP": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700009_target-0_s1700009_a1_rp.jsonl",
+            "lifecycle_sha256": "0498d8907c2c9c7fb1be613e7e95d1190401e3c055510988ea4f25fe37c3dd7c",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700009_target-0_s1700009_a1_ct.jsonl",
+            "transcript_sha256": "219a33b198d6d63276e3a126829da0f7ca6739d9c4edf7e7eff90845f9e18d2f"
+          }
+        }
+      },
+      {
+        "scene": 1700016,
+        "target": "piloc-e1-target-0",
+        "arms": {
+          "FORCE_SEND": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700016_target-0_s1700016_a1_rp.jsonl",
+            "lifecycle_sha256": "43144d6652f98a65a7e4cdf8306e39e3e796ce5706a58222f10386bd000e15f8",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700016_target-0_s1700016_a1_ct.jsonl",
+            "transcript_sha256": "86a18ec63256ba092a62300a0bd6fe74a00cbcbafc5342d2771688cb6adaf5a8"
+          },
+          "FORCE_SKIP": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700016_target-0_s1700016_a1_rp.jsonl",
+            "lifecycle_sha256": "f08a132255d6c07a3939f44ca0a8a1da6d3db6a06674acb496fe8db11811626f",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700016_target-0_s1700016_a1_ct.jsonl",
+            "transcript_sha256": "bb2e799c5c4b3160e76407e5891a51eab4265df1b059a03278ab7ef0158fc9d5"
+          }
+        }
+      },
+      {
+        "scene": 1700018,
+        "target": "piloc-e1-target-3",
+        "arms": {
+          "FORCE_SEND": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700018_target-3_s1700018_a1_rp.jsonl",
+            "lifecycle_sha256": "d4d4954d64883d70920c0e515e4b8965aa028772fe979d036ffdba55bf6bf2b6",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700018_target-3_s1700018_a1_ct.jsonl",
+            "transcript_sha256": "4a5dd0ba1824fc2c4befa78c66bd4aa44d4567a8c2250af6cb7c3331d738d954"
+          },
+          "FORCE_SKIP": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700018_target-3_s1700018_a1_rp.jsonl",
+            "lifecycle_sha256": "64cff1d192f4e7ab7e375d92b883f0169ec9f1c96785d420864f6d5bca6bbf0c",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700018_target-3_s1700018_a1_ct.jsonl",
+            "transcript_sha256": "84179d0486c1248035fc63caf3def9ef66b58260052910a618409adef916c128"
+          }
+        }
+      },
+      {
+        "scene": 1700005,
+        "target": "piloc-e1-target-3",
+        "arms": {
+          "FORCE_SEND": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700005_target-3_s1700005_a1_rp.jsonl",
+            "lifecycle_sha256": "e0e98562199123392e54b028544fc7c49b93c8c13c8f70c20c736730d1eace99",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SEND_s1700005_target-3_s1700005_a1_ct.jsonl",
+            "transcript_sha256": "91a27dfd6a4c2f203589b6c69baffbbc746f4bfc06347f661c655bfdae69c64c"
+          },
+          "FORCE_SKIP": {
+            "lifecycle": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700005_target-3_s1700005_a1_rp.jsonl",
+            "lifecycle_sha256": "c5d98bbb797ada9acdfc20117ac824cd2285a1925d7aafc10f38b02425ffdbd1",
+            "transcript": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\raw\\logs\\v2_r61_FORCE_SKIP_s1700005_target-3_s1700005_a1_ct.jsonl",
+            "transcript_sha256": "f5442c9c80e4e81ba667ead13c6df05e7d542aeafed64343311597bff0003387"
+          }
+        }
+      }
+    ]
+  },
+  "identity_hashes": {
+    "case_freeze_sha256": "cba8d5b1a086630021a5955c55931d1cc9506ef7ce2143b75646320f5060ca4e",
+    "cell_results_sha256": "680958eefe0273a65dc25f31569b44e01565a5a85747f9abfe333a7a841c8ae2",
+    "model_file_sha256_actual": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+    "model_file_sha256_matches_freeze": true,
+    "source_files": {
+      "r61_execute.py": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\r61_execute.py",
+        "sha256": "3258e0f9d5d5aa7734d857c5b992210b2591be3fdf232df262a89503a4e2f74b"
+      },
+      "r61_intervene.py": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round61_early_report_value_intervention\\r61_intervene.py",
+        "sha256": "ca16bd7e7ea14c3930c9a191c4cb6b595eb9ba6ded3078498d70593ca3cc28da"
+      },
+      "integrated_sar/comm_learning.py": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\integrated_sar\\comm_learning.py",
+        "sha256": "a9add53099c2fe86f459797bd7c38d24361934b264e235ed9fb36118d55cf60f"
+      },
+      "integrated_sar/comm_policy.py": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\integrated_sar\\comm_policy.py",
+        "sha256": "d3015f89469b095a7bddade3640fd59402b688c17acd886c9a14155b6e5ed16a"
+      },
+      "integrated_sar/comm.py": {
+        "path": "D:\\code\\整合\\zhenghe-round42\\integrated_sar\\comm.py",
+        "sha256": "9be1e9097b6b5285c52b4f0c939e29d57e7aabb949c651fc0d427060e90a8a46"
+      }
+    },
+    "protected_file_hashes": {
+      "ROUND46_CURRENT_TASK.json": {
+        "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+        "matches_expected": true
+      },
+      "ROUND46_R2_V6_STOP_STATE.json": {
+        "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+        "matches_expected": true
+      }
+    }
+  },
+  "consumption_reconstruction": {
+    "slot_files": 19,
+    "slot_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "normal_slots": 18,
+    "reserve_slots": 1,
+    "hard_cap": 20,
+    "headroom": 1,
+    "builder_calls_ledger": 19,
+    "env_constructed_events": 18,
+    "env_constructions_proven": 19,
+    "runner_invocations_proven": 19,
+    "run_returned_count": 18,
+    "successful_return_steps": 18000,
+    "failed_attempt": {
+      "slot": 2,
+      "logical": "r61_L0_focus_s1700027",
+      "slot_events": [
+        "slot_consumed",
+        "builder_called",
+        "interrupted"
+      ],
+      "builder_called": true,
+      "guard_run_called_hook_recorded": false,
+      "runner_entered_proved_by_run_config": true,
+      "run_configured_horizon": 1000,
+      "max_lifecycle_timestamp_observed": 5.0,
+      "lower_bound_steps_reached": 5,
+      "exact_steps": null,
+      "upper_bound_steps": 1000,
+      "partial_lifecycle_event_count": 8,
+      "final_run_record_present": false,
+      "separate_claim_file_for_failed_slot": false,
+      "note": "Attempt slot 2 claim path was reused by reserve retry slot 3; original slot 2 ledger+partial lifecycle remain. Executor calls run_called only after _run_episode returns, so the hook omitted this failed invocation. No traceback artifact was found; reported shadow_gate cause is not independently traceback-verified."
+    },
+    "total_steps": {
+      "known_successful_returns": 18000,
+      "minimum_proven_including_failed_attempt": 18005,
+      "maximum_from_horizon_if_all_invocations_respect_config": 19000,
+      "exact": null
+    },
+    "qualified_results": 18,
+    "technical_failures": 1,
+    "reserve_retries": 1,
+    "claim_overwrite_note": "The retry wrote the same attempt_0001.json path as the failed logical attempt; the slot ledger and partial raw logs are the surviving evidence. No claim has been fabricated."
+  },
+  "side_effects_this_round": {
+    "environment_constructions": 0,
+    "simulations": 0,
+    "new_claims": 0,
+    "new_episodes": 0,
+    "optimizer_updates_real": 0,
+    "optimizer_updates_synthetic": 0,
+    "ppo_replays": 0,
+    "training_or_rng_restores": 0,
+    "checkpoint_writes": 0,
+    "new_evaluations": 0,
+    "cpu_forward_count": 0
+  },
+  "protected_hashes": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  }
+}
