@@ -263,7 +263,9 @@ def fresh_partitioned_controller(seed: int, *, ep0_state: dict[str, Any] | None 
     loaded here.
     """
     import v2_controller
-    base = v2_controller.fresh_controller(int(seed))
+    # Use the StageCController class directly, not fresh_controller(), so a harness that patches
+    # controller_module.fresh_controller to a partitioned factory cannot cause recursion here.
+    base = v2_controller.StageCController(int(seed))
     controller = PartitionedController(base)
     if ep0_state is not None:
         expected = {"trunk", "action_head", "value_task_head", "value_cost_head"}

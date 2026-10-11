@@ -212,7 +212,17 @@ def configure_and_inject(raw_root: Path) -> dict[str, Any]:
         # the two value heads receive a detached shared representation; the actor (routed) path
         # stays connected. Same context object R58 uses around its ppo_update.
         with critic_input_detached(controller):
-            return r60.partitioned_ppo_update(controller, optimizer, episodes, update_index=update_index)
+            report = r60.partitioned_ppo_update(controller, optimizer, episodes, update_index=update_index)
+        # One durable ppo_update call-journal line per committed update, so the R42 configure
+        # resume guard (ppo_update_calls vs committed batch records) closes on the R60 namespace.
+        import os as _os
+        ppo_journal = raw_root / "runtime" / "ppo_update_calls.jsonl"
+        with ppo_journal.open("a", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps({"update_index": int(update_index),
+                                 "optimizer_steps": int(report.get("optimizer_steps", 0)),
+                                 "structure": "partitioned-early-late-actor-head/1"}) + "\n")
+            fh.flush(); _os.fsync(fh.fileno())
+        return report
     def r60_save(controller, optimizer, state, path, *, freeze):
         return r60.save_checkpoint(controller, optimizer, state, path, freeze=R60_FREEZE)
     def r60_load(path, *, freeze):
@@ -384,6 +394,13 @@ def train_seed(cfg, ledger, plan, seed, order, references, *, stop_after_first_g
         _write_json(ckpt_dir / f"r60_ep0_identity_s{seed}.json", ep0_identity)
         resumed = False
     gate_path = cfg["raw_root"] / "runtime" / f"r60_first_batch_gate_s{seed}.json"
+    # Resume safety: if the first batch already committed but its gate did not record (e.g. an
+    # earlier interruption after commit, before the gate), run the gate from the committed batch-0
+    # record + reloaded episodes before continuing. The 4 episodes are not re-run.
+    if int(state["episodes_done"]) >= EPISODES_PER_UPDATE:
+        g = _gate_from_committed(cfg, seed, controller, state)
+        if g is not None and stop_after_first_gate:
+            return {"seed": seed, "status": "first_gate_passed_from_committed", "gate": g["status"]}
     while int(state["episodes_done"]) < EPISODES_PER_SEED:
         batch = int(state["updates"])
         if int(state["episodes_done"]) != batch * EPISODES_PER_UPDATE:
@@ -409,7 +426,10 @@ def train_seed(cfg, ledger, plan, seed, order, references, *, stop_after_first_g
             episodes.append(row)
         if len(episodes) != EPISODES_PER_UPDATE:
             raise RuntimeError(f"seed {seed} batch {batch}: partial PPO batch")
-        update_report = r60.partitioned_ppo_update(controller, optimizer, episodes, update_index=batch)
+        # Route through trainer.ppo_update (routed_ppo): applies the R53 critic->trunk isolation
+        # and writes the durable ppo_update call journal. Calling partitioned_ppo_update directly
+        # would skip both.
+        update_report = trainer.ppo_update(controller, optimizer, episodes, update_index=batch)
         g_record = trainer.batch_g_hat(episodes, references)
         dual_record = trainer.dual_update(state["lambda"], g_record["g_hat"])
         state["lambda"] = dual_record["lambda_next"]
@@ -434,12 +454,14 @@ def train_seed(cfg, ledger, plan, seed, order, references, *, stop_after_first_g
                         "episodes_done_after": int(state["episodes_done"]),
                         "optimizer_steps_after": int(state["optimizer_steps"]),
                         "structure": "partitioned-early-late-actor-head/1"}
-        _write_json(ckpt_dir / f"r60_batch_record_s{seed}_b{batch}.json", batch_record)
+        # Name matches the R42 configure resume glob r40_batch_s*_b*_attempt*.json so the
+        # ppo/optimizer call journals close against committed batch records on resume.
+        _write_json(ckpt_dir / f"r40_batch_s{seed}_b{batch}_attempt01.json", batch_record)
         ledger.write_ledger()
         # First-batch gate: run the real gate immediately after the first update of this seed.
         if batch == 0 and not gate_path.exists():
-            gate = _first_batch_gate(cfg, controller, optimizer, state, episodes, update_report,
-                                     g_record, dual_record, before, after, ep0_identity=(None if resumed else _read_json(ckpt_dir / f"r60_ep0_identity_s{seed}.json")))
+            ep0_id = _read_json(ckpt_dir / f"r60_ep0_identity_s{seed}.json")
+            gate = _first_batch_gate(cfg, controller, state, batch_record, episodes, ep0_identity=ep0_id)
             _write_json(gate_path, gate)
             if gate["status"] != "passed":
                 raise RuntimeError(f"seed {seed}: first-batch gate failed: {gate}")
@@ -455,18 +477,44 @@ def train_seed(cfg, ledger, plan, seed, order, references, *, stop_after_first_g
             "lambda_final": float(state["lambda"])}
 
 
-def _first_batch_gate(cfg, controller, optimizer, state, episodes, update_report, g_record,
-                      dual_record, before, after, *, ep0_identity):
+def _gate_from_committed(cfg, seed, controller, state):
+    """Run the first-batch gate from the committed batch-0 record + reloaded episodes (resume)."""
+    gate_path = cfg["raw_root"] / "runtime" / f"r60_first_batch_gate_s{seed}.json"
+    if gate_path.exists() or int(state["episodes_done"]) < EPISODES_PER_UPDATE:
+        return None
+    ckpt_dir = Path(cfg["common"].CHECKPOINTS)
+    record = _read_json(ckpt_dir / f"r40_batch_s{seed}_b0_attempt01.json")
+    order = [int(x) for x in cfg["common"].scenario_order()]
+    lam = float(record["lambda_at_rollout"])
+    episodes = []
+    for ep in record["episodes"]:
+        scenario = int(order[int(ep)])
+        paths = cfg["common"].cell_paths("train", scenario, 1, tag=f"r60_train_s{seed}_e{ep}")
+        episodes.append(_reload_episode(paths["row"], paths["tape"], seed=seed, ep=int(ep),
+                                        scenario=scenario, lam=lam))
+    ep0_id = _read_json(ckpt_dir / f"r60_ep0_identity_s{seed}.json")
+    gate = _first_batch_gate(cfg, controller, state, record, episodes, ep0_identity=ep0_id)
+    _write_json(gate_path, gate)
+    if gate["status"] != "passed":
+        raise RuntimeError(f"seed {seed}: first-batch gate failed (from committed): {gate}")
+    return gate
+
+
+def _first_batch_gate(cfg, controller, state, record, episodes, *, ep0_identity):
     """Real first-batch gate: verify actual dual-head routing, ep0 init, optimizer coverage,
     critic->trunk isolation, mask/likelihood, reward/cost/GAE, dual lambda, and checkpoint id."""
     from round53_trial_adapter import critic_input_detached
+    update_report = record["update"]
+    dual_record = record["dual"]
+    before_sha = record["parameters_before_sha"]
+    after = controller.parameter_summary()
     checks = {}
     checks["dual_head_routing_active"] = bool(update_report.get("early_free", 0) > 0
                                               and update_report.get("late_free", 0) > 0)
     checks["early_free"] = int(update_report.get("early_free", 0))
     checks["late_free"] = int(update_report.get("late_free", 0))
     if ep0_identity is not None:
-        checks["init_params_equal_r58_ep0"] = (before["parameter_sha256"] == ep0_identity["parameter_sha256"])
+        checks["init_params_equal_r58_ep0"] = (before_sha == ep0_identity["parameter_sha256"])
     checks["optimizer_covers_12"] = (after["parameter_object_count"] == 12)
     checks["structure_partitioned"] = (after.get("structure") == "partitioned-early-late-actor-head/1")
     checks["five_modules"] = (sorted(after["shapes"].keys()) ==
@@ -479,7 +527,7 @@ def _first_batch_gate(cfg, controller, optimizer, state, episodes, update_report
     checks["lambda_updated"] = ("lambda_next" in dual_record)
     # critic->trunk isolation: value loss must give zero shared-trunk gradient while the routed
     # actor path stays connected (deterministic probe on the live controller).
-    feats = torch.as_tensor(np.concatenate([t["features"] for ep in episodes for t in ep["collector"].records], axis=0))
+    feats = torch.as_tensor(np.concatenate([t["features"] for ep in episodes for t in ep["collector"].records], axis=0), dtype=torch.float32)
     with critic_input_detached(controller):
         h = controller.inner.trunk(feats)
         vt = controller.inner.value_head(h).squeeze(-1)
@@ -647,6 +695,8 @@ def main(argv=None) -> int:
     ap.add_argument("--raw-root", type=Path, required=True)
     ap.add_argument("--phase", choices=("acceptance", "train", "eval", "stats", "all"), required=True)
     ap.add_argument("--seed", type=int, choices=(11, 22, 33), default=None)
+    ap.add_argument("--first-gate-only", action="store_true",
+                    help="run each seed's first 4 episodes + first update + real gate, then stop (episodes count toward 128)")
     args = ap.parse_args(argv)
     raw_root = args.raw_root.resolve()
     cfg = configure_and_inject(raw_root)
@@ -673,8 +723,12 @@ def main(argv=None) -> int:
     if args.phase in ("train", "all"):
         for seed in seeds:
             print(f"R60 training seed {seed} ...", flush=True)
-            print(json.dumps(train_seed(cfg, ledger, plan, seed, order, references), flush=True))
+            print(json.dumps(train_seed(cfg, ledger, plan, seed, order, references,
+                                        stop_after_first_gate=args.first_gate_only)), flush=True)
             ledger.write_ledger()
+        if args.first_gate_only:
+            ledger.write_ledger()
+            return 0
     if args.phase in ("eval", "all"):
         for seed in seeds:
             print(f"R60 eval seed {seed} ...", flush=True)
