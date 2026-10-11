@@ -1,0 +1,84 @@
+{
+  "kind": "round60-partitioned-actor-head-freeze/1",
+  "status": "implementation_and_wireup_acceptance_frozen; fixed_plan_run_not_executed_this_session",
+  "branch": "exp/round60-partitioned-actor-head-ablation",
+  "base_commit": "6be5b1c332b6ac442af328db33031d6252bb3105",
+  "r58_delivery_head": "80e00de5b48348eff53830072b73ca2a92462f74",
+  "research_question": "Does splitting the early/late SEND/SKIP actor output mapping into two independent heads (shared trunk unchanged) improve cross-seed on-time task retention and metered cost, relative to the accepted ROUND58 shared-head actor?",
+  "structural_intervention": {
+    "single_change": "OLD shared action_head -> NEW two independent heads early_head + late_head on the same shared trunk",
+    "routing": "ready_step = round(f[18]*1000) - round(f[0]); ready_step <= 147 -> early_head; ready_step > 147 -> late_head",
+    "routing_inputs": "legal 19-dim observation + frozen constant only; no task outcome, receiver knowledge, scenario id or target id",
+    "routing_is_not_an_action_rule": "early may still SEND, late may still SKIP; no hard send/skip, no extra emission, sequential budget mask never bypassed",
+    "initialization": "both heads are exact deepcopies of the OLD action_head (independent parameter objects, no RNG draw); trunk and dual critic taken unchanged from each seed's verified R58 ep0 model; ep128 and any OLD Adam/lambda are NOT loaded",
+    "unchanged": "shared trunk, task-value head, cost-value head, critic->trunk gradient isolation, beta=1.00 ready_cut=147 gate prior (now acting through the routed early head), 19-dim obs, one-shot SEND/SKIP, sequential budget mask"
+  },
+  "frozen_living_config_verified_from_r58_ep128_checkpoint": {
+    "source": "round58_gen3_resume_v32/raw/checkpoints/v2_train_s33_after_b31.pt training_state",
+    "gamma": 1.0,
+    "gae_lambda": 1.0,
+    "eta_lambda": 0.5,
+    "delta": 0.0,
+    "lambda_init": 1.0,
+    "data_order_seed": 20260927,
+    "b0_bytes": 10000.0,
+    "learning_rate": 0.0003,
+    "clip": 0.2,
+    "entropy_bonus": 0.01,
+    "value_coefficient": 0.5,
+    "max_grad_norm": 0.5,
+    "epochs_per_batch": 4,
+    "minibatch_steps": 256,
+    "episodes_per_update": 4,
+    "episodes_per_seed": 128,
+    "log_prob_tolerance": 1e-06,
+    "note": "module import defaults gae_lambda=0.95/eta_lambda=0.05 are the OLD values and are NOT used; the live overrides 1.0/0.5 are asserted at import"
+  },
+  "gate_prior_preserved": {"beta": 1.0, "ready_cut": 147.0, "skip_index": 0, "horizon": 1000.0},
+  "sim_world_frozen": {"max_steps": 1000, "goal_count": 6, "communication_budget_bytes": 29300, "seeds": [11, 22, 33]},
+  "new_contract": {
+    "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1",
+    "state_schema": "constrained-cost-state/2+partitioned-actor-head/1",
+    "optimizer_schema": "stage-c-partitioned-five-module-parameter-set/1",
+    "loss_version": "constrained-lagrangian/2+partitioned-actor-head/1",
+    "controller_modules": ["trunk", "early_head", "late_head", "value_task_head", "value_cost_head"],
+    "parameter_object_count": 12,
+    "old_single_head_resume": "rejected as NEW training-resume source; accepted only as model-only initialization source"
+  },
+  "r58_ep0_init_sources": {
+    "11": {"path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt", "checkpoint_sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a", "action_head_sha256": "aad35fc6ba3fc43bfe174cb08a5fabb8180654765ba9ab39b6b71fdc42b8b102"},
+    "22": {"path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s22.pt", "checkpoint_sha256": "3cdb83785c51f9e40005d66a1d024d06a5ba6940616e22f3b01a9bf65b5e609d", "action_head_sha256": "0d0d3581d130341225634b5543f0b926cd21112e0631de19089f6f156da05bd2"},
+    "33": {"path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s33.pt", "checkpoint_sha256": "9329ef048dfc5c1805af5756c7ea0962eedfc8d01aa26841e35af7001616803a", "action_head_sha256": "5fff65a080c1e6587ee7206b097f706c1e11093b9dc914f2076506bf66b01af3"}
+  },
+  "fixed_plan": {
+    "new_normal_launches": 576,
+    "new_training_episodes": 384,
+    "new_training_breakdown": "3 seeds x 128 episodes (first 4 of each seed count toward the 128)",
+    "new_model_eval_cells": 192,
+    "new_model_eval_breakdown": "NEW x 3 seeds x {greedy,sampled} x 32 scenes",
+    "readonly_reuse_cells": 256,
+    "readonly_reuse_breakdown": "R58 same-seed/mode 192 cells (3 seeds x 2 modes x 32 scenes) + immediate/late rule 64 cells; NOT counted as new launches",
+    "training_scene_order": "frozen 48-scene order 1300000..1300047 repeated to 128 per seed (inherited unchanged)",
+    "eval_block": "1700000..1700031 (32 scenes, fixed; already used for analysis/method selection; development ablation, not an unseen confirmation set)",
+    "technical_reserve": 24,
+    "hard_cap": 600,
+    "primary_comparison": "NEW - R58, same seed, same mode, same scene; greedy is the primary reading, sampled reported independently",
+    "statistics": "scene is the pairing unit; R58 32-scene ordering, shared bootstrap index and interval convention reused; no seed pooling, no treating the two modes as independent repeats, no new statistical method"
+  },
+  "protected_files_unchanged": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  },
+  "acceptance": {
+    "wireup_checks_passed": 36,
+    "wireup_log": "ROUND60_WIREUP_ACCEPTANCE.log",
+    "init_equivalence_passed": true,
+    "init_equivalence_log": "ROUND60_INIT_EQUIVALENCE.log"
+  },
+  "deliverable_sha256": {
+    "r60_partitioned.py": "37fb8670214aff5ee728200113c96e3e8e6aec244b3466d7b54936de58115a94",
+    "test_r60_wireup_acceptance.py": "693db08ce340a9226834fe5f1801d24c9fd462033cb3ab1dff660836573b2260",
+    "test_r60_init_equivalence_ppo.py": "31e87a1a8491f6babf9ab2a153f5301bef70cc60a3033442416a52202e544346",
+    "r60_probe_episode.py": "7ba64780ef7bbed24fc2d9d3f3a83b372688e646ffc2bd4d54ea9dad38b123db"
+  }
+}

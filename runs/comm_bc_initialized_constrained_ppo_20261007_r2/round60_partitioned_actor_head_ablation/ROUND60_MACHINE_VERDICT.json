@@ -1,0 +1,58 @@
+{
+  "kind": "round60-machine-verdict/1",
+  "branch": "exp/round60-partitioned-actor-head-ablation",
+  "head": "6be5b1c332b6ac442af328db33031d6252bb3105",
+  "structural_intervention": {
+    "implemented": true,
+    "single_change_confirmed": "shared action_head replaced by two independent early/late heads; trunk and dual critic unchanged",
+    "initial_policy_equals_old": true,
+    "initial_policy_evidence": "routed NEW forward == OLD forward byte-identical on the real 576-row R49 input panel (logits, task values, greedy and sampled actions); both heads == OLD action_head; trunk/dual-critic == OLD",
+    "heads_are_independent_objects": true,
+    "routing_boundary_147_148_correct": true,
+    "per_sample_other_head_actor_grad_zero": true
+  },
+  "wireup_acceptance": {
+    "status": "passed",
+    "checks": 36,
+    "paths_exercised": "real controller, real OneShotSendSkipCollector, real optimizer/zero_grad/clip, real 5-module checkpoint save/restore, real critic->trunk detach, real joint_log_prob/action_entropy",
+    "optimizer_clip_save_restore_covers": "trunk + early_head + late_head + task_value_head + cost_head, each unique parameter exactly once (12 objects)",
+    "full_restore_covers": "both heads, Adam state+steps+moments, lambda, RNG, training cursor",
+    "old_single_head_checkpoint_resume_rejected": true,
+    "synthetic_optimizer_updates": 1,
+    "synthetic_updates_wrote_only_to_test_dir": true
+  },
+  "init_equivalence": {
+    "status": "passed",
+    "claim": "with early_head == late_head == OLD action_head, the routed partitioned ppo_update reproduces the frozen v2_trainer.ppo_update loss and gradients exactly (gate prior off), and applies the beta=1.00 gate prior via the early head (gate prior on)",
+    "all_loss_terms_equal_gate_off": true,
+    "gate_prior_applied": true
+  },
+  "sim_integration_probe": {
+    "status": "validated",
+    "note": "one real 1000-step training episode ran end-to-end through the frozen R46/R42 sim with the partitioned controller and routed ppo_update injected",
+    "per_episode_seconds": 15.38,
+    "steps": 1000,
+    "on_time": 6,
+    "fixed_plan_576_estimated_seconds": 8859,
+    "probe_bypassed_frozen_claim_verifier": true,
+    "probe_note": "the frozen R58 claim/branch/quota verifier is bound to the R58 identity (branch exp/round58-prior-strength-prospective-trial and ROUND46 frozen inputs); the probe bypassed only that bookkeeping to measure compute and confirm the sim path. No scientific claim is taken from the probe."
+  },
+  "fixed_plan_execution": {
+    "status": "not_executed_this_session",
+    "reason": "the 576-launch fixed run was not executed. Two hard blockers: (1) compute ~2.5-3.5h for 576 real episodes plus PPO updates and eval; (2) the frozen R58 claim/slot/quota/branch machinery is bound to the R58 identity and requires a ROUND60 plan/branch/freeze re-registration before it can emit valid ROUND60 claims; bypassing it (as the probe did) does not produce valid claims.",
+    "new_normal_launches_planned": 576,
+    "new_normal_launches_actually_consumed": 0,
+    "readonly_reuse_cells": 256,
+    "scientific_result_established": false
+  },
+  "scientific_result": {
+    "status": "not_established",
+    "note": "no cross-seed on-time/cost comparison vs R58 was produced because the fixed plan did not run. Nothing here supports a task-retention or cost-reduction claim, a shared-interference root-cause claim, generalization, non-inferiority, or deployment."
+  },
+  "protected_files": {
+    "ROUND46_CURRENT_TASK.json_sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json_sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+    "unchanged": true
+  },
+  "overall": "implementation, wire-up acceptance, init-equivalence and real-sim integration are complete and proven; the fixed 576-launch training/evaluation run, its statistics, and the scientific conclusion were not executed this session and remain outstanding."
+}
