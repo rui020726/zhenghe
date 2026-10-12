@@ -87,6 +87,7 @@ _CLAIMS_BEFORE = {p.name: p.read_text(encoding="utf-8")
 _SLOTS_BEFORE = sorted(p.name for p in (RAW / "launch_slots" / "normal").glob("*.json"))
 _ROWS_BEFORE = sorted(p.name for p in (RAW / "rows").glob("*")) if (RAW / "rows").is_dir() else []
 _LOGS_BEFORE = sorted(p.name for p in (RAW / "logs").glob("*")) if (RAW / "logs").is_dir() else []
+_CKPTS_BEFORE = sorted(p.name for p in (RAW / "checkpoints").glob("*")) if (RAW / "checkpoints").is_dir() else []
 
 
 def check(name, passed, **detail):
@@ -395,7 +396,7 @@ check("m1_gate_diag_labels_frozen_structurally",
 check("m1_late_actor_received_gradient", float(d1.get("late_actor_grad_l1", -1.0) or 0.0) > 0.0, diag=d1)
 check("m1_critic_received_gradient", float(d1.get("critic_grad_l1", -1.0) or 0.0) > 0.0, diag=d1)
 check("m1_value_losses_finite",
-      bool(np.isfinite([m1_report.get("value_loss_task", 0.0), m1_report.get("value_loss_cost", 0.0)])))
+      bool(np.isfinite([m1_report.get("value_loss_task", 0.0), m1_report.get("value_loss_cost", 0.0)]).all()))
 NOTES.append("the beta=1.00 gate prior acts on early first-emission free candidates, which route to "
              "the FROZEN early_head, so on the ROUND68 controller the prior cannot move any "
              "trainable parameter; that is the documented ROUND66 effect and is recorded as "
@@ -915,6 +916,16 @@ check("synthetic_checkpoint_confined_to_scratch_dir",
       ckpt.is_file() and str(ckpt.resolve()).startswith(str(_SCRATCH.resolve()))
       and not any(str(p.resolve()).startswith(str((RAW / "checkpoints").resolve()))
                   for p in _SCRATCH.glob("*.pt") if p != ckpt))
+_ckpt_after = sorted(p.name for p in (RAW / "checkpoints").glob("*")) if (RAW / "checkpoints").is_dir() else []
+_new_ckpt = [n for n in _ckpt_after if n not in _CKPTS_BEFORE]
+check("makeup_gates_created_no_new_checkpoint_weights",
+      all(n.endswith(".json") and n.startswith("r68_init_identity_s") for n in _new_ckpt),
+      before=_CKPTS_BEFORE, new_files=_new_ckpt)
+NOTES.append("M3 exercises the real injected factory for seeds 11 and 22, so the live factory path "
+             "rewrote raw/checkpoints/r68_init_identity_s11.json (identical deterministic content) "
+             "and created raw/checkpoints/r68_init_identity_s22.json. Both are identity-metadata "
+             "JSONs (parameter SHA + late_init_alpha), carry no weights, and are exactly the files "
+             "the real per-seed training start writes; no .pt checkpoint was created or modified.")
 check("trunk_hook_total_matches_charged_rows",
       sum(e["rows"] for e in HOOK_LOG if e["counted"]) == MAKEUP_FWD.used()
       and MAKEUP_FWD.used() <= 2048, charged=MAKEUP_FWD.used())
