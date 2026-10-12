@@ -1,0 +1,131 @@
+{
+ "kind": "round68-late-initial-confidence-freeze/1",
+ "task_id": "ROUND68-LATE-INITIAL-CONFIDENCE-ABLATION",
+ "branch": "exp/round68-late-initial-confidence-ablation",
+ "base_commit": "fe17ccf8b3be127680eb4b43b60cf7ac189fa807",
+ "r60_source_commit": "cbae709f6bb2bf566acf341d626de659524772f4",
+ "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1+r66-frozen-early-path-late-adaptation/1+r68-late-initial-confidence-alpha0.10/1",
+ "loss_version": "constrained-lagrangian/2+partitioned-actor-head/1+frozen-early-path/1",
+ "state_schema": "constrained-cost-state/2+partitioned-actor-head/1+frozen-early-path/1+r68-late-init-alpha/1",
+ "optimizer_schema": "stage-c-frozen-early-path-six-module-parameter-set/1+r68-late-init-alpha/1",
+ "trainer_tag": "constrained-cost-v2-frozen-early-path-late-init-alpha",
+ "structure": "partitioned-early-late-actor-head/1+frozen-early-path-late-adaptation/1+late-initial-confidence-alpha0.10/1",
+ "only_scientific_difference_vs_round66": "one-time late_head.weight *= 0.10 and late_head.bias *= 0.10 on the fresh controller built (model-only, bit-exact) from the compliant ROUND60 ep0; trunk + early_head stay frozen; loss/routed-forward/mask/joint-log-prob/lambda*A_task-A_cost/GAE/ALL_ROWS/clip/ratio-clip/beta=1.00 gate prior/dual update are ROUND66's unchanged; scale is init-only, never a per-forward temperature, never re-applied on resume",
+ "late_init_alpha": 0.1,
+ "frozen_modules": [
+  "trunk",
+  "early_head"
+ ],
+ "trainable_modules": [
+  "late_head",
+  "value_task_head",
+  "value_cost_head"
+ ],
+ "parameter_object_count": 12,
+ "frozen_scalar_count": 5570,
+ "trainable_scalar_count": 260,
+ "living_config_verified_via_acceptance": {
+  "gamma": 1.0,
+  "gae_lambda": 1.0,
+  "eta_lambda": 0.5,
+  "delta": 0.0,
+  "lambda_init": 1.0,
+  "data_order_seed": 20260927,
+  "b0_bytes": 10000.0,
+  "lr": 0.0003,
+  "clip": 0.2,
+  "entropy_bonus": 0.01,
+  "value_coef": 0.5,
+  "max_grad_norm": 0.5,
+  "epochs_per_batch": 4,
+  "minibatch_steps": 256,
+  "episodes_per_update": 4,
+  "log_prob_tol": 1e-06,
+  "gate_beta": 1.0,
+  "ready_cut": 147,
+  "episodes_per_seed": 128,
+  "training_seeds": [
+   11,
+   22,
+   33
+  ],
+  "eval_scenes_new": [
+   1800000,
+   1800001,
+   1800002,
+   1800003,
+   1800004,
+   1800005,
+   1800006,
+   1800007,
+   1800008,
+   1800009,
+   1800010,
+   1800011,
+   1800012,
+   1800013,
+   1800014,
+   1800015,
+   1800016,
+   1800017,
+   1800018,
+   1800019,
+   1800020,
+   1800021,
+   1800022,
+   1800023,
+   1800024,
+   1800025,
+   1800026,
+   1800027,
+   1800028,
+   1800029,
+   1800030,
+   1800031
+  ],
+  "focal_scene": 1700027
+ },
+ "r60_ep0_model_source_sha256": {
+  "s11": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\checkpoints\\v2_train_s11_before_b0.pt",
+   "sha256": "f267558d0cc8933987c09576b8d6d6ad512dbc3c73653d059104705c1faca437"
+  },
+  "s22": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\checkpoints\\v2_train_s22_before_b0.pt",
+   "sha256": "249f769770fd0bffcc8df345539088890f9323f1338a224e3c8195d35adc8555"
+  },
+  "s33": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\checkpoints\\v2_train_s33_before_b0.pt",
+   "sha256": "5f47f28b2678a0091e2370345b622aad7bdf1d8064b19d3ed57282bc8f005e93"
+  }
+ },
+ "acceptance": {
+  "status": "passed",
+  "parameter_sha256": "22c995c5709e2319cea524e3b29d53789096991843c038a06668c95805df06b3",
+  "checks_all_true": true,
+  "num_checks": 28,
+  "trainer_module": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py",
+  "controller_module": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_controller.py",
+  "common_module": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_common.py"
+ },
+ "budget": {
+  "normal_cap": 774,
+  "reserve_cap": 26,
+  "hard_cap": 800,
+  "historical_non_plan_probe": 0,
+  "normal_breakdown": "384 training episodes (3 seeds x 128) + 384 model-arm eval (2 arms x 3 seeds x 2 modes x 32 scenes) + 6 focal (2 arms x 3 seeds)",
+  "acceptance_forward_row_cap": 8192,
+  "synthetic_step_cap": 32,
+  "synthetic_ppo_cap": 32
+ },
+ "code_sha256": {
+  "_r68_launch.py": "928f73bf86dcf9cc424a93e61d40787de7cd54060258894e816e886b2c37d5c2",
+  "_r68_pure_recheck.py": "83a444910b98a231a0e5ae910e9695d9d37234ff44d8dc9e01f90e663ca6d672",
+  "_smoke_r68.py": "b52bbef854b52afcd1211bd4f88e1fd163ea13a0e70f7e318186d41fdfd15d70",
+  "r68_eval.py": "12245fe1a0d59fc447241b710467d0240ed2f53d63b975eb506dbac94456a32e",
+  "r68_execute.py": "3a9dd2a41e8e273666c22bfaceec75d01ed5756a54a765b758a25ae075afba2a",
+  "r68_frozen.py": "8c90a0b1510f8d91c4e9e3d97385139bb6eb6bf357da8a395aaccd28e8ecbd69",
+  "r68_guards.py": "06551c222167d7ab4b2e3b51d4917079ecc439c58ea10de5265ad2443960b0f3",
+  "test_r68_zero_env.py": "29ab4624ba4b7452691a41668bbb6d96c3893161b99f2cadff496b7741bedeb0"
+ }
+}
