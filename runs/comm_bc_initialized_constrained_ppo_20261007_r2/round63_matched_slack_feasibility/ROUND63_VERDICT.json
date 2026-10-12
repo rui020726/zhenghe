@@ -1,0 +1,74 @@
+{
+  "kind": "round63-matched-slack-feasibility/1",
+  "branch": "analysis/round63-matched-slack-feasibility",
+  "source_head": "62dcb2419f323461b6aa07bb79ce39e3d17a4ac7",
+  "question": "Do saved R60/R61 early first-report cases support matching ready timing separately from deadline slack?",
+  "decision": "focus has no exact cross-scene ready/backlog common support; do not estimate or relax matching",
+  "inputs": {
+    "r60_model_identity": {
+      "source": "R60 compliant seed33 ep128 greedy; identity reused, no load",
+      "file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a"
+    },
+    "r60_saved_scene_tapes": 32,
+    "eligible_early_candidates": 146,
+    "baseline_action_counts": {"SKIP": 146, "SEND": 0},
+    "duplicate_scene_target_rows": 0,
+    "missing_deadline_sources": 0,
+    "focus": {"scene": 1700027, "target": "piloc-e1-target-5", "ready_step": 134, "backlog": 1.0},
+    "r61_raw_pair_source_sha256": "4b303efa39563a92c5bb8fab8f74ccd84e6bec7e0eab26b09f1745c9d5446bbd",
+    "r61_case_freeze_sha256": "cba8d5b1a086630021a5955c55931d1cc9506ef7ce2143b75646320f5060ca4e"
+  },
+  "matching": {
+    "primary_keys": ["ready_step", "backlog"],
+    "exact_group_count": 66,
+    "multi_scene_groups_with_remaining_time_variation": 20,
+    "focus_exact_group_candidate_count": 1,
+    "focus_exact_group_distinct_scenes": 1,
+    "focus_other_scene_exact_support": 0,
+    "extended_keys": ["ready_step", "backlog", "has_future_requirements", "budget_fraction"],
+    "extended_group_count": 80,
+    "extended_multi_scene_group_count": 23,
+    "nearest_different_scene": {
+      "scene": 1700012,
+      "target": "piloc-e1-target-1",
+      "ready_step": 87,
+      "backlog": 3.0,
+      "absolute_ready_difference": 47,
+      "absolute_backlog_difference": 2.0
+    },
+    "r61_selection_distance": "range-scaled squared distance on feature columns 13,14,15,18 only; not full 19D Euclidean distance"
+  },
+  "r61_eight_historical_cases": {
+    "effects_joined_from_raw_pairs": 8,
+    "focus_target_delta": 1,
+    "focus_cost_delta_bytes": 2688,
+    "seven_controls_target_delta_all_zero": true,
+    "seven_controls_have_ready_backlog_match": false,
+    "all_other_candidates_outcome_labels": null
+  },
+  "validation": {
+    "analysis_exit_code": 0,
+    "unit_tests": 5,
+    "unit_tests_passed": 5,
+    "unit_test_exit_code": 0,
+    "test_scope": "pure synthetic arithmetic only; no environment/model/RNG/optimizer"
+  },
+  "side_effect_counts": {
+    "environment_builds": 0,
+    "environment_runs": 0,
+    "environment_steps": 0,
+    "claims_or_slots": 0,
+    "model_loads": 0,
+    "model_forwards": 0,
+    "rng_restores": 0,
+    "optimizer_updates": 0,
+    "ppo_replays": 0,
+    "checkpoint_writes": 0,
+    "new_evaluations": 0
+  },
+  "protected_files_unchanged": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  },
+  "scope_limit": "Feasibility audit only. The focus has no common ready/backlog support; slack variation across other scenes is descriptive, not causal. No new experiment, classifier, threshold, or policy rule."
+}
