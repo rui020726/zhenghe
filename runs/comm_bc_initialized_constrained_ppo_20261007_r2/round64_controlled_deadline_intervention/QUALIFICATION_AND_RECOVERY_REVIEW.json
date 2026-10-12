@@ -1,0 +1,150 @@
+{
+  "kind": "round64-qualification-and-recovery-review/1",
+  "review_mode": "read_only_zero_environment",
+  "source_head_before_review": "d74b6024dd9764b435452e0425a8ec12eaab136d",
+  "qualification": {
+    "executor_version": "round64-controlled-deadline-intervention/6",
+    "guard_ledger_version": "round64-controlled-deadline-intervention/4",
+    "decision": "four_completed_matrix_cells_technically_qualified_with_version_label_deviation",
+    "basis": "prelaunch source-history diff isolates version stamp, exact transcript-path metadata reconciliation, and gate wiring; runtime/intervention and inherited strategy sources unchanged",
+    "preserved_original_gate": "failed",
+    "preserved_separate_path_reconciliation": "passed",
+    "prelaunch_source_commit": "16cf1f92c308082112d0b9e39035e18450566443",
+    "source_sha256": {
+      "r64_execute.py": "1545ba7ca7a9159c76d904abbc4e06ffe8c068a42027b97f26f303c0749ec519",
+      "r64_guard.py": "c50d0facf95e0fa745033430283c4bad653e92e5bf5743866eb090b1103b8acd",
+      "r64_runtime.py": "3ae654d240ed97ddf5296299f969849c9e0927ad08d2b41b4fcb36ce915bc099",
+      "r64_intervention.py": "eb77f35d9bea539a183bbd041c20e2a5d4156d32ad649650a2b4742d7a0d8c46",
+      "r61_execute.py": "3258e0f9d5d5aa7734d857c5b992210b2591be3fdf232df262a89503a4e2f74b",
+      "r60_execute.py": "470f8fc6322945b0b7ce3a475f98e66fdcdcfd0a5e30f6fbda3f612929affb28",
+      "r60_partitioned.py": "faf4a9402b5c98a1bfca1bbe67fca1c387c7255f827f8ed5e0b1a6911f25b137",
+      "r58_execute.py": "03bdc3ad047360fe232380b436d1711eee8fbb0aacdfbf384367d57e50664d12"
+    },
+    "model": {
+      "file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+      "parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a",
+      "load_mode": "read_only_model_only",
+      "optimizer_restored": false,
+      "rng_restored": false,
+      "training_cursor_restored": false,
+      "post_parameter_sha_matches": true
+    },
+    "cells": [
+      {
+        "logical": "d-30_FORCE_SEND",
+        "slot": "normal-03",
+        "status": "qualified",
+        "steps": 1000,
+        "target_on_time_ids": ["piloc-e1-target-0", "piloc-e1-target-1", "piloc-e1-target-2", "piloc-e1-target-3", "piloc-e1-target-4", "piloc-e1-target-5"],
+        "on_time": 6,
+        "spent_bytes": 7500,
+        "focus_emission": [134, "piloc-e1-target-5", 1, 2688, 6, true]
+      },
+      {
+        "logical": "d-30_FORCE_SKIP",
+        "slot": "normal-04",
+        "status": "qualified",
+        "steps": 1000,
+        "target_on_time_ids": ["piloc-e1-target-0", "piloc-e1-target-1", "piloc-e1-target-2", "piloc-e1-target-3", "piloc-e1-target-4"],
+        "on_time": 5,
+        "spent_bytes": 4812,
+        "focus_emission": null
+      },
+      {
+        "logical": "d+0_FORCE_SEND",
+        "slot": "normal-05",
+        "status": "qualified",
+        "steps": 1000,
+        "target_on_time_ids": ["piloc-e1-target-0", "piloc-e1-target-1", "piloc-e1-target-2", "piloc-e1-target-3", "piloc-e1-target-4", "piloc-e1-target-5"],
+        "on_time": 6,
+        "spent_bytes": 7500,
+        "focus_emission": [134, "piloc-e1-target-5", 1, 2688, 6, true]
+      },
+      {
+        "logical": "d+0_FORCE_SKIP",
+        "slot": "normal-06",
+        "status": "qualified",
+        "steps": 1000,
+        "target_on_time_ids": ["piloc-e1-target-0", "piloc-e1-target-1", "piloc-e1-target-2", "piloc-e1-target-3", "piloc-e1-target-4"],
+        "on_time": 5,
+        "spent_bytes": 4812,
+        "focus_emission": null
+      }
+    ],
+    "common": {
+      "decision_step": 134,
+      "ready_step": 134,
+      "features_19d_float32_identical_across_four_cells": true,
+      "original_greedy_action": "SKIP",
+      "p_send": 0.19370390474796295,
+      "p_skip": 0.8062961101531982,
+      "quote_bytes": 2688,
+      "legal_and_sequentially_affordable": true,
+      "pre_action_prefix_equal_within_pairs": true
+    },
+    "paired_deltas_send_minus_skip": [
+      {"deadline_delta": -30, "target_on_time": 1, "system_on_time": 1, "gained_ids": ["piloc-e1-target-5"], "lost_ids": [], "cost_bytes": 2688},
+      {"deadline_delta": 0, "target_on_time": 1, "system_on_time": 1, "gained_ids": ["piloc-e1-target-5"], "lost_ids": [], "cost_bytes": 2688}
+    ],
+    "limits": [
+      "one frozen model, one scene seed, and one stochastic realization per arm pair",
+      "not a general necessity or safe-skip result",
+      "not evidence of 19D feature sufficiency, generalization, noninferiority, or deployment suitability"
+    ]
+  },
+  "consumption": {
+    "hard_cap": 12,
+    "slots_consumed": 9,
+    "normal_consumed": 7,
+    "reserve_consumed": 2,
+    "headroom": 3,
+    "normal_headroom": 3,
+    "reserve_headroom": 0,
+    "builder_calls": 9,
+    "environment_constructions": 9,
+    "run_calls": 9,
+    "run_returns": 8,
+    "known_returned_steps": 8000,
+    "unknown_run_calls": 1,
+    "nonterminal_cell": {
+      "logical": "d+30_FORCE_SEND",
+      "slot": "normal-07",
+      "run_called": true,
+      "run_returned": false,
+      "steps": null,
+      "last_observed_lifecycle_timestamp": 916,
+      "interpretation": "partial observed timestamp only; not a completed-step count"
+    },
+    "terminal_validation_failures": [
+      {"slot": "normal-01", "logical": "L", "returned_steps": 1000, "reason": "load-mode metadata label mismatch"},
+      {"slot": "reserve-01", "logical": "L", "returned_steps": 1000, "reason": "returned row JSON not persisted"}
+    ],
+    "unstarted_cells": ["d+30_FORCE_SKIP", "d+60_FORCE_SEND", "d+60_FORCE_SKIP"],
+    "remaining_original_logical_cells_to_complete": 4,
+    "additional_attempts_required": 4,
+    "continuation_possible_under_existing_headroom": false,
+    "requires_new_explicit_authorization": true,
+    "qualified_complete_cells_including_L_L0": 6
+  },
+  "training_side_effects": {
+    "optimizer_updates": 0,
+    "ppo_replays": 0,
+    "training_rng_restores": 0,
+    "checkpoint_writes": 0,
+    "review_environment_constructions": 0,
+    "review_claims": 0,
+    "review_run_calls": 0,
+    "review_model_loads_or_forwards": 0
+  },
+  "protected_files": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  },
+  "prior_untracked_r59_log_touched": false,
+  "historical_reports_and_raw_ledger_modified": false,
+  "tests": {
+    "round64_narrow_suite": "passed: 25 tests via unittest; pytest unavailable in configured interpreter"
+  },
+  "review_head_after_commit": null,
+  "review_head_note": "The commit containing this file is identified by git HEAD; a file cannot embed its own resulting commit hash."
+}
