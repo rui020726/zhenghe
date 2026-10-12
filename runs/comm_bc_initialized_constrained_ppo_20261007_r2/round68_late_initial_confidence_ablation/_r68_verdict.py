@@ -50,6 +50,9 @@ def main(argv=None) -> int:
     gf = R(rt / "r68_guard_forward_rows.json")
     gs = R(rt / "r68_guard_synthetic_steps.json")
     gp = R(rt / "r68_guard_synthetic_ppo.json")
+    chain = R(raw / "ROUND68_SEED_CHAIN_ELIGIBILITY.json")
+    final_ledger = R(raw / "ROUND68_LEDGER_FINAL.json")
+    corr = R(rt / "R68_LEDGER_CORRECTION.json")
     freeze = R(HERE / "ROUND68_FREEZE.json")
 
     n_normal = len(list((raw / "launch_slots" / "normal").glob("*.json")))
@@ -111,12 +114,40 @@ def main(argv=None) -> int:
                 ledger["counts"]["actual_environment_constructions"]
                 != guard["actual_environment_constructions"],
             "authoritative_source": "raw/runtime/ROUND68_EVAL_QUOTA_GUARD.json + launch_slots files",
+            "final_ledger_actual": final_ledger["counts"]["actual_environment_constructions"],
+            "final_ledger_agrees_with_guard": final_ledger["quota_guard_agreement"]["agree"],
+            "final_ledger_document": "raw/ROUND68_LEDGER_FINAL.json (authoritative)",
+            "reserve_is_late_registered_e1_correction": True,
+            "composition_note": ("775 = 774 complete logical jobs + 1 historical partial "
+                                 "construction (seed-11 e1 original), not 775 complete episodes"),
         },
         "claim_admission": {
             "logical_jobs": len(claim_dirs),
             "jobs_with_exactly_one_attempt": len(claim_dirs) - len(multi),
             "multi_attempt_jobs": multi,
             "retries_in_round": len(multi),
+        },
+        "claim_admission_scope_note": (
+            "retries_in_round==0 is scoped to the registered claim directories: no logical job has "
+            "an attempt_0002. It does NOT assert that no episode was ever constructed twice. Seed "
+            "11 e1 was double-constructed (original partial >=495 steps, compliant re-run 1000 "
+            "steps, original attempt record and rollout log overwritten in place); the extra "
+            "construction is charged exactly once as reserve slot 1 by the after-the-fact "
+            "correction below."),
+        "e1_ledger_correction": {
+            "document": "raw/runtime/R68_LEDGER_CORRECTION.json",
+            "double_constructed_episode": "r68_new_training_s11_e1",
+            "original_environment_constructions":
+                corr["e1_original_failed_execution_receipt"]["environment_constructions"],
+            "original_real_partial_steps_lower_bound":
+                corr["e1_original_failed_execution_receipt"]["real_partial_steps_lower_bound"],
+            "rerun_completed_steps":
+                corr["e1_successful_retry_receipt"]["completed_steps"],
+            "extra_constructions": corr["accounting"]["extra_constructions"],
+            "reserve1_registration": corr["accounting"]["reserve1_registration"],
+            "original_billing_violation_stands_as_recorded": True,
+            "other_duplicate_episodes": 0,
+            "rng_equivalence_not_byte_identity": True,
         },
         "training": {
             "seeds": [11, 22, 33],
@@ -187,6 +218,33 @@ def main(argv=None) -> int:
             "checks_failed": receipt["checks_failed"],
             "deep_per_seed_receipt_seeds": [11],
         },
+        "seed_chain_eligibility": {
+            "status": "verified" if chain["all_seeds_verified"] else "FAILED",
+            "all_seeds_verified": chain["all_seeds_verified"],
+            "per_seed": {s: {
+                "checks_total": len(chain["seeds"][s]["checks"]),
+                "checks_failed": chain["seeds"][s]["checks_failed"],
+                "ep128_parameter_sha256": chain["seeds"][s]["facts"]["ep128_parameter_sha256"],
+                "init_pre_scale_equals_r60_ep0":
+                    chain["seeds"][s]["checks"]["init_pre_scale_equals_r60_ep0"],
+                "trunk_ep128_equals_r60_ep0":
+                    chain["seeds"][s]["checks"]["trunk_ep128_equals_r60_ep0"],
+                "early_head_ep128_equals_r60_ep0":
+                    chain["seeds"][s]["checks"]["early_head_ep128_equals_r60_ep0"],
+                "lambda_final": chain["seeds"][s]["facts"]["lambda_final"],
+                "optimizer_steps_after_b31":
+                    chain["seeds"][s]["facts"]["optimizer_steps_after_b31"]}
+                for s in sorted(chain["seeds"])},
+            "journals": chain["journals"],
+            "zero_side_effects": {
+                "environment_constructions": chain["environment_constructions"],
+                "model_forwards": chain["model_forwards"],
+                "ppo_calls": chain["ppo_calls"],
+                "optimizer_steps": chain["optimizer_steps"],
+                "checkpoint_writes": chain["checkpoint_writes"],
+                "read_only_model_loads_for_identity": chain["read_only_model_loads_for_identity"]},
+            "document": "raw/ROUND68_SEED_CHAIN_ELIGIBILITY.json",
+        },
         "independent_projection_cross_check": {
             "all_match": proj.get("cross_check_all_match"),
             "bootstrap_index_sha_match": proj.get("bootstrap_index_sha_match"),
@@ -227,6 +285,9 @@ def main(argv=None) -> int:
             "ROUND68_EVAL_QUOTA_GUARD.json": sha(rt / "ROUND68_EVAL_QUOTA_GUARD.json"),
             "R68_SEED11_ELIGIBILITY_RECEIPT.json": sha(
                 rt / "R68_SEED11_ELIGIBILITY_RECEIPT.json"),
+            "ROUND68_SEED_CHAIN_ELIGIBILITY.json": sha(
+                raw / "ROUND68_SEED_CHAIN_ELIGIBILITY.json"),
+            "ROUND68_LEDGER_FINAL.json": sha(raw / "ROUND68_LEDGER_FINAL.json"),
         },
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -243,6 +304,8 @@ def main(argv=None) -> int:
         "protected_unchanged": all(x["expected"] == x["actual"]
                                    for x in v["protected_files"].values()),
         "cross_check_all_match": v["independent_projection_cross_check"]["all_match"],
+        "seed_chain_all_verified": v["seed_chain_eligibility"]["all_seeds_verified"],
+        "final_ledger_agrees_with_guard": v["budget"]["final_ledger_agrees_with_guard"],
         "primary_greedy": {k: (val["task_delta_mean"], val["cost_delta_B_per_scene"])
                            for k, val in v["primary_trained_minus_init"].items()
                            if val["mode"] == "greedy"},

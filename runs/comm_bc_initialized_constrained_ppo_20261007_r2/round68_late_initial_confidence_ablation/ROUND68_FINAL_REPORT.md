@@ -306,3 +306,110 @@ untouched and unstaged.
   `_r68_slim_export.py`, `_r68_checkpoint_index.py`, `_r68_verdict.py`) construct no environment,
   load no model for policy purposes beyond read-only checkpoint identity, and perform no PPO,
   optimizer or checkpoint-write operation.
+## 11. Post-delivery close-out (appended; zero-environment)
+
+This section was appended after the delivery commit `d7b6eae4`. Nothing above was rewritten. The
+additions below come from read-only re-derivations that construct no environment, load no model for
+policy purposes beyond read-only checkpoint identity, and perform no PPO, optimizer or
+checkpoint-write operation.
+
+### 11.1 Per-seed chain eligibility: all three seeds now verified
+
+`raw/ROUND68_SEED_CHAIN_ELIGIBILITY.json` (produced by `_r68_seed_chain.py`; zero side effects: 0
+environment constructions, 0 model forwards, 0 PPO calls, 0 optimizer steps, 0 checkpoint writes; 6
+read-only model loads for identity only). Each of seeds 11, 22 and 33 passes 24 structural checks
+with 0 failures. Per seed it proves:
+
+- 32 single-attempt batch records; episodes 0..127 covered exactly once, 4 episodes per batch.
+- `parameters_after[b] == parameters_before[b+1]` for every consecutive batch pair: the committed
+  parameter chain is unbroken across all 32 updates.
+- `b0_before == post_scale_parameter_sha256`, and the pre-scale init equals ROUND60 ep0 exactly
+  (seed 11 `fb82ad80…`, seed 22 `a9e77761…`, seed 33 `10bce624…`); the late head is scaled exactly
+  once, `init_alpha = 0.10`.
+- `b31_after == ep128 parameter_sha256` (seed 11 `3aa8bd17…`, seed 22 `f468ba11…`, seed 33
+  `b4f635c0…`), matching the checkpoint index in section 4.
+- trunk and early_head at ep128 are bit-identical to ROUND60 ep0 on every seed, while the late head
+  and both critics moved.
+- `lambda_at_rollout == dual.lambda_before` on every batch (the actor uses the pre-update dual
+  variable) and `lambda_at_rollout[b] == dual.lambda_next[b-1]`; lambda is monotone non-decreasing
+  and its final value (1.625 / 1.375 / 1.500) matches the training state.
+- optimizer steps are positive on every batch and sum to `optimizer_steps_after` (236 / 208 / 232).
+- Journals: 96 PPO update lines with `update_index` 0..31 exactly three times each; the step counts
+  sum to 676, equal to the 676 optimizer-step lines, all `step_invoked` and Adam, with `call_index`
+  1..676 contiguous.
+
+**This amends the section-7 caveat and the section-10 limitation.** The structural provenance chain
+(episode coverage, parameter contiguity, init identity, lambda chain, optimizer continuity) is now
+evidenced for all three seeds, not only seed 11. The seed-11 receipt remains the deepest
+single-seed proof (125 checks); the chain file brings seeds 22 and 33 to the same structural depth.
+
+### 11.2 The checkpoint-write journal is NOT_INSTRUMENTED
+
+`raw/runtime/checkpoint_writes.jsonl` contains 0 lines, and no code path in this round ever appends
+to it. Its emptiness is therefore **not** evidence that zero training checkpoints were written, and
+no such claim is made. The journal status is recorded as `NOT_INSTRUMENTED`; the actual training
+checkpoint writes are counted from the artefacts on disk instead: per seed 32 `before_b*`, 32
+`after_b*`, 1 rolling and 1 ep128 file (listed with hashes in the manifest, section 11.3).
+
+### 11.3 Authoritative final ledger and Git-external manifest
+
+`raw/ROUND68_LEDGER_FINAL.json` is now the authoritative cumulative ledger. It is derived from the
+atomic slot files (774 normal + 1 reserve = **775** actual environment constructions), agrees with
+the live quota guard (`quota_guard_agreement.agree = true`), and records hard headroom 25 under the
+800 cap, `hard_cap_exceeded_by = 0`, historical non-plan probe 0, unregistered extra 0. Claim
+admission: 774 logical jobs, exactly one `attempt_0001.json` each, zero multi-attempt directories,
+zero retries anywhere in the round. It supersedes - and preserves rather than rewrites - the stale
+385-value phase snapshot disclosed in section 2.
+
+`raw/ROUND68_GIT_EXTERNAL_MANIFEST.json` names every Git-external original with byte size and
+SHA-256: 10 top-level documents (including the final ledger itself, whose recorded hash was
+verified to match the file), 29 runtime files (including the four journals, with the checkpoint-write
+journal flagged uninstrumented), the three seeds' checkpoint sets, and the row counts. `raw/` stays
+gitignored; the manifest is the pointer of record for everything outside Git.
+
+### 11.4 Eval action-RNG identity across arms (source-code evidence only)
+
+Delegated identity check, answered read-only. The registered eval action seed is
+`runner.eval_action_seed(training_seed, scenario_seed, mode)` =
+`sha256("round24-eval:{seed}:{scene}:{mode}")[:16]` (defined in
+`runs/comm_cost_v2_rerun_20260928/v2_run.py`, called from `r68_eval.py` for every model and focal
+cell). The derivation takes no arm or label input, so **INIT and TRAINED_ALPHA share the same
+action-RNG seed for each of the 192 (seed, scene, mode) pairs**, and ROUND66's evaluation used the
+identical call and label, so its rows share the same derivation. Evidence level: **source-code
+only** - the seed is not persisted in any row (0 of the 384 R68 model rows and 6 focal rows; 0 of
+ROUND66's 1111 rows) nor in the eval plan, so there is no per-cell field-level proof. The sharing is
+a common action-sampling stream seed per cell; it is not a claim of identical per-message drop
+experience, and the environment/channel RNG remains scenario-seeded and untouched.
+### 11.5 Wording corrections (appended; the first-report text above is preserved)
+
+Two statements from the earlier delivery are narrowed here. Nothing above is edited.
+
+**(a) "Zero retries" is scoped to the registered claim directories.** Claim admission shows 774
+logical jobs with exactly one `attempt_0001.json` each and no `attempt_0002` anywhere, so *within
+the registered claim records* no retry exists. That must not be read as "no episode was ever
+constructed twice". Seed 11 episode 1 was: the prior session's original e1 constructed an
+environment and streamed a partial rollout of at least 495 steps before the process ended (its
+claim recorded `completed_steps=0 / simulation_started=false` only because the progress hooks never
+fired; the real consumption was higher). The compliant re-run reused the same `attempt_0001` through
+the frozen `_atomic_run` without charging a new slot at the time, overwriting the original attempt
+record and the original rollout log in place; the missing construction was registered as reserve
+slot 1 only after the fact (late registration, noncompliant pre-debit). The full record is
+`raw/runtime/R68_LEDGER_CORRECTION.json`. Consequences for the ledger wording:
+
+- **775 = 774 complete logical jobs + 1 historical partial construction** (the original e1), not
+  775 independent complete episodes.
+- The original missing/advance-billing violation stands as recorded; this close-out does not
+  relabel it as a compliant original-time pre-charge.
+- The corrected chain remains eligible: the per-episode RNG contract resets deterministically from
+  `(scenario_seed, action_seed(seed, episode))`, so the re-run e1 is RNG-equivalent to a clean e1,
+  corroborated by the first-batch gate's likelihood-alignment check. That is RNG equivalence, not
+  byte-level identity to the overwritten original, which no longer exists.
+
+**(b) The "both arms 183 on-time / 4066.5 B/scene" line is greedy-only.** In sampled mode the arms
+do not hold 183: seed 11 is 180/176 on-time (TRAINED/INIT) at 3308.4/2756.6 B/scene, seed 22 is
+183/183 at 3338.2 B/scene, seed 33 is 181/181 at 3491.1/3406.9 B/scene. Against IMMEDIATE's 183,
+the sampled arms are short on seed 11 (INIT -0.219/scene, 7 targets lost; TRAINED -0.094/scene, 3
+lost) and on seed 33 (-0.063/scene, 2 lost); only seed 22's sampled arm matches it. Likewise "no
+target was lost on any seed in either mode" is scoped to **TRAINED_ALPHA minus its corresponding
+INIT_ALPHA arm**; it is not a statement against the IMMEDIATE / LATE_DISCOVERY_GATE / ALWAYS_HOLD
+rule baselines, against which the sampled arms do lose targets (ALWAYS_HOLD reaches only 170).
