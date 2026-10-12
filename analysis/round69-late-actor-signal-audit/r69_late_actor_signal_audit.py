@@ -21,6 +21,19 @@ separate buckets; a multi-candidate joint decision counts once as one training r
 The exact minibatch membership is reconstructed from the frozen data-order RNG (pure in-memory
 ``random.Random`` replay, no environment) and cross-checked against the recorded per-minibatch
 ``gate_records``; a mismatch would fail the audit rather than be smoothed over.
+
+Caliber warning (registered after delegation review): the ``early_free`` / ``late_free`` fields
+in ``update`` and in ``gate_diag`` are EPOCH-ACCUMULATED EXPOSURE counts (4 PPO epochs per
+batch), not unique per-tape candidates. Every row / target count reported by this audit is
+rebuilt from the tapes as a UNIQUE joint decision row or UNIQUE free candidate per batch; the
+recorded exposure figures are only used as a cross-check via ``unique * EPOCHS == recorded`` and
+are listed separately. A mixed early+late row is counted once in the row denominator (the
+``rows_with_late_free`` and ``rows_early_only`` buckets are disjoint and sum to ``free_rows``),
+so it is never double counted.
+
+The n_rows / early_free / late_free agreement is an AGGREGATE cross-check only: the shuffle is
+source-derivable and the per-minibatch aggregate counts match, but the per-entry member indices
+of each minibatch were NOT persisted on disk and are therefore not independently provable.
 """
 from __future__ import annotations
 
@@ -337,12 +350,29 @@ def main():
     mb_late_rows = []
     mb_all_rows = 0
     mb_plan_count = []
+    # Actual execution totals read straight from the 96 batch commit records, NOT derived
+    # from the reconstructed plan, so plan-vs-execution can be compared instead of assumed.
+    rec_entries_total = 0
+    rec_entries_late_gt0 = 0
+    rec_update_minibatches_sum = 0
+    rec_optimizer_steps_sum = 0
+    rec_count_mismatch = []
     for seed, b, rec in batches:
         eps = [episodes[(seed, int(e))] for e in rec["episodes"]]
         flat = [s for e in eps for s in e["steps"]]
         plan = minibatch_plan(len(flat), b)
         mb_plan_count.extend(plan)
         gr = rec["update"]["gate_records"]
+        upd = rec["update"]
+        rec_entries_total += len(gr)
+        rec_entries_late_gt0 += sum(1 for g in gr if g["late_free"] > 0)
+        rec_update_minibatches_sum += int(upd["minibatches"])
+        rec_optimizer_steps_sum += int(upd["optimizer_steps"])
+        if not (len(gr) == int(upd["minibatches"]) == int(upd["optimizer_steps"])):
+            rec_count_mismatch.append(
+                {"seed": seed, "batch": b, "gate_record_entries": len(gr),
+                 "recorded_minibatches": int(upd["minibatches"]),
+                 "recorded_optimizer_steps": int(upd["optimizer_steps"])})
         if len(plan) != len(gr):
             mb_mismatch.append({"seed": seed, "batch": b, "why": "minibatch count",
                                 "plan": len(plan), "recorded": len(gr)})
@@ -364,6 +394,24 @@ def main():
             if l_rows > 0:
                 mb_late_rows.append(l_rows)
             mb_all_rows += len(chunk)
+
+    def unique_free_for_batch(seed, b):
+        """Unique joint rows / unique free candidates for one batch, rebuilt from its tapes."""
+        rows = early = late = late_rows = early_only = 0
+        for (sd, _ep), ed in episodes.items():
+            if sd != seed or ed["batch"] != b:
+                continue
+            for s in ed["steps"]:
+                rows += 1
+                early += s["n_early_free"]
+                late += s["n_late_free"]
+                if s["n_late_free"] > 0:
+                    late_rows += 1
+                elif s["n_early_free"] > 0:
+                    early_only += 1
+        return {"rows": rows, "unique_early_free_targets": early,
+                "unique_late_free_targets": late, "rows_with_late_free": late_rows,
+                "rows_early_only": early_only, "free_rows": late_rows + early_only}
 
     # ------------------------------------------------ deliverable 2: decomposition ---------
     def bucket(pred):
@@ -509,6 +557,78 @@ def main():
         "task_id": "ROUND69-LATE-ACTOR-SIGNAL-READONLY-AUDIT",
         "branch": "analysis/round69-late-actor-signal-audit",
         "source_round": "ROUND68-LATE-INITIAL-CONFIDENCE-ABLATION",
+        "corrections": {
+            "discipline": ("Append-only. The original report and this JSON are not rewritten; "
+                           "every amendment below is registered here and summarised in section "
+                           "8 of ROUND69_REPORT.md."),
+            "items": [
+                {"id": "C1",
+                 "topic": "minibatch total",
+                 "was": ("An earlier draft reported minibatches_total = 501, derived as "
+                         "128184 // 256 + 1."),
+                 "now": ("676, matching the 676 recorded gate-record entries and the "
+                         "676 reconstructed plan minibatches. The 501 figure assumed every "
+                         "minibatch is full-256 and ignored the partial final chunk of each "
+                         "epoch; it is retained only as superseded_erroneous_minibatches_total "
+                         "correction evidence."),
+                 "effect_on_results": "None on any scientific quantity; the count was wrong, "
+                                      "not the data."},
+                {"id": "C2",
+                 "topic": "minibatch membership proof strength",
+                 "was": "Implied the exact minibatch membership was fully reproduced.",
+                 "now": ("Downgraded to an aggregate cross-check: the shuffle is "
+                         "source-derivable and n_rows / early_free / late_free match per "
+                         "minibatch with zero mismatches, but per-entry member indices were "
+                         "not persisted on disk and remain unprovable."),
+                 "effect_on_results": "No number changes; the claim strength is reduced."},
+                {"id": "C3",
+                 "topic": "counterfactual SEND/SKIP action value",
+                 "was": ("Stated that counterfactual action value would need a model forward "
+                         "pass or a PPO replay, both forbidden this round."),
+                 "now": ("Withdrawn. A forward pass or a PPO replay could not settle the "
+                         "causal question either: on-policy chosen-action advantages are not "
+                         "causal action values under any permitted recomputation. The "
+                         "question is not identifiable from the saved on-policy data, and no "
+                         "computation allowed in this round would change that."),
+                 "effect_on_results": "The item moves from 'needs a forbidden computation' to "
+                                      "'not identifiable from saved data'."},
+                {"id": "C4",
+                 "topic": "direction does not distinguish SEND/SKIP",
+                 "was": ("Read as evidence that the late signal cannot separate SEND from "
+                         "SKIP."),
+                 "now": ("Withdrawn as an inference. Both action groups showing positive "
+                         "chosen-action advantage says nothing about whether the expected "
+                         "policy gradient can separate the two actions; chosen-action "
+                         "advantage is measured against a critic baseline, not between "
+                         "actions. The SEND/SKIP breakdown is retained strictly as a "
+                         "descriptive distribution."),
+                 "effect_on_results": "Descriptive counts unchanged; no separability claim."},
+                {"id": "C5",
+                 "topic": "gradient magnitude gap and clipping",
+                 "was": ("The L1 gap between late_head (mean 0.269) and the critic heads "
+                         "(78.07 / 3.73) invited a clip-suppression reading."),
+                 "now": ("Withdrawn. The heads have different parameter counts, so their L1 "
+                         "gradient magnitudes are not comparable, and no clipping inference "
+                         "is drawn from the gap. The provable facts are only: late-actor "
+                         "signal is sparse (1.60% of rows), its residuals are "
+                         "positive-skewed, and the recorded late_head gradients are non-zero "
+                         "on all 96 batches. These are explicitly NOT designated as the root "
+                         "cause of anything."),
+                 "effect_on_results": "No number changes; an unsupported inference removed."},
+                {"id": "C6",
+                 "topic": "exposure vs unique counts",
+                 "was": ("A delegation reminder flagged that update/gate_diag early_free and "
+                         "late_free are epoch-accumulated exposure counts and must not be "
+                         "divided by tape rows as if they were unique row shares."),
+                 "now": ("Confirmed already satisfied by this audit and now stated "
+                         "explicitly: every row / target figure is rebuilt from the tapes as "
+                         "unique per batch, recorded exposures are cross-checked via "
+                         "unique * 4 epochs == recorded, mixed early+late rows are counted "
+                         "once, and the two buckets are disjoint. See "
+                         "exposure_vs_unique_counts."),
+                 "effect_on_results": "None; the audit already used the correct caliber."},
+            ],
+        },
         "zero_side_effects": {
             "environment_constructions": 0, "episodes": 0, "claims": 0,
             "optimizer_updates_real": 0, "optimizer_updates_synthetic": 0,
@@ -543,6 +663,56 @@ def main():
             "totals": totals,
             "per_batch": per_batch,
         },
+        "exposure_vs_unique_counts": {
+            "warning": ("update.early_free / update.late_free and the gate_diag equivalents "
+                        "are EPOCH-ACCUMULATED EXPOSURE counts across the 4 PPO epochs of a "
+                        "batch. They are NOT unique per-tape candidates and must not be "
+                        "divided by tape row totals as a row share."),
+            "recorded_exposure_totals_epoch_accumulated": {
+                "early_free": sum(p["recorded_early_free"] for p in per_batch),
+                "late_free": sum(p["recorded_late_free"] for p in per_batch),
+                "gate_rows": sum(p["recorded_gate_rows"] for p in per_batch),
+                "epochs_per_batch": EPOCHS,
+            },
+            "unique_rebuilt_from_tapes_per_batch": {
+                "joint_decision_rows": totals["samples_total"],
+                "unique_early_free_targets": totals["targets_early_free"],
+                "unique_late_free_targets": totals["targets_late_free"],
+                "unique_free_targets": totals["targets_free_unique"],
+                "rows_with_late_free": totals["rows_with_late_free"],
+                "rows_early_only": totals["rows_early_only"],
+                "free_rows": totals["free_rows"],
+            },
+            "cross_check_rule": ("unique_per_batch * EPOCHS == recorded exposure, applied per "
+                                 "batch for samples, early_free and late_free; all 96 batches "
+                                 "agree (batch_cross_check_all_agree)."),
+            "mixed_row_accounting": ("rows_with_late_free and rows_early_only are disjoint "
+                                     "partitions and sum exactly to free_rows, so a row "
+                                     "carrying both an early and a late free candidate is "
+                                     "counted once in the row denominator and never twice."),
+            "spot_check_first_batch": {
+                "s22": {"batch": 0,
+                        "unique_from_tapes": unique_free_for_batch(22, 0),
+                        "recorded_exposure": {
+                            "early_free": next(p["recorded_early_free"] for p in per_batch
+                                               if p["seed"] == 22 and p["batch"] == 0),
+                            "late_free": next(p["recorded_late_free"] for p in per_batch
+                                              if p["seed"] == 22 and p["batch"] == 0)}},
+                "s33": {"batch": 0,
+                        "unique_from_tapes": unique_free_for_batch(33, 0),
+                        "recorded_exposure": {
+                            "early_free": next(p["recorded_early_free"] for p in per_batch
+                                               if p["seed"] == 33 and p["batch"] == 0),
+                            "late_free": next(p["recorded_late_free"] for p in per_batch
+                                              if p["seed"] == 33 and p["batch"] == 0)}},
+                "note": ("For s22 batch 0 the recorded 64/28 exposure corresponds to 16/7 "
+                         "unique free candidates (16*4=64, 7*4=28). The same recomputation "
+                         "for s33 batch 0 also yields 16/7 unique, not the 16/6 quoted in "
+                         "the delegation reminder; the on-disk value is 16/7 and the 16/6 "
+                         "figure does not reproduce. This affects no audit total, which uses "
+                         "the full 96-batch recomputation."),
+            },
+        },
         "minibatch_reconstruction": {
             "minibatches_total": len(mb_plan_count),
             "minibatch_row_instances": mb_all_rows,
@@ -550,6 +720,39 @@ def main():
             "late_rows_inside_late_minibatches": sum(mb_late_rows),
             "mismatches_vs_recorded_gate_records": mb_mismatch,
             "cross_check_passed": not mb_mismatch,
+            "recorded_gate_record_entries_total": rec_entries_total,
+            "recorded_minibatches_with_late_free_gt0": rec_entries_late_gt0,
+            "recorded_update_minibatches_sum": rec_update_minibatches_sum,
+            "recorded_optimizer_steps_sum": rec_optimizer_steps_sum,
+            "recorded_count_mismatches": rec_count_mismatch,
+            "plan_equals_recorded_execution": (
+                len(mb_plan_count) == rec_entries_total
+                and len(mb_late_rows) == rec_entries_late_gt0
+                and not rec_count_mismatch and not mb_mismatch),
+            "superseded_erroneous_minibatches_total": 501,
+            "superseded_value_bug": (
+                "An earlier draft of this audit reported minibatches_total = 501, computed as "
+                "all_rows_denominator_instances // MINIBATCH_STEPS + 1 (128184 // 256 + 1). "
+                "That formula implicitly assumes every minibatch is a full 256 rows, which is "
+                "false: each epoch's final chunk is partial, so the true count is the sum over "
+                "batches of EPOCHS * ceil(samples / MINIBATCH_STEPS). The value 501 is wrong "
+                "and is kept here only as documented correction evidence; it is superseded by "
+                "the recorded 676 gate-record entries and the 676 plan minibatches, which "
+                "agree exactly per batch."),
+            "plan_vs_execution_note": (
+                "The theoretical all-4-epoch plan and the actual recorded execution coincide "
+                "per batch: for every one of the 96 batches the reconstructed plan length, "
+                "the recorded gate_records length, update.minibatches and "
+                "update.optimizer_steps are all equal, and each plan minibatch's n_rows, "
+                "early_free and late_free match its recorded gate_record. The plan is "
+                "therefore not a hypothetical alternative schedule but a reproduction of "
+                "what ran."),
+            "aggregate_cross_check_caveat": (
+                "This is an AGGREGATE cross-check. The data-order shuffle is derivable from "
+                "the frozen source and the per-minibatch aggregate counts match with zero "
+                "mismatches, but the per-entry member indices of each minibatch were never "
+                "persisted to disk. Agreement on n_rows / early_free / late_free therefore "
+                "does not independently prove which specific rows sat in which minibatch."),
         },
         "late_signal_trend_by_quarter": trend,
         "context_inputs": context,
@@ -568,6 +771,32 @@ def main():
                      "(lambda*V_task - V_cost) exactly, because A = R - V for each critic; a "
                      "multi-candidate joint decision is ONE training row (row weight 1) and its "
                      "targets are not independent samples"),
+        },
+        "withdrawn_inferences": {
+            "counterfactual_action_value": (
+                "Withdrawn. The earlier wording implied that a model forward pass or a PPO "
+                "replay would answer whether late sending is worth it. It would not: "
+                "on-policy chosen-action advantage is not a causal action value, and no "
+                "recomputation permitted in a read-only round can make it one. The SEND/SKIP "
+                "causal question is simply not identifiable from the saved on-policy data."),
+            "direction_separates_send_skip": (
+                "Withdrawn. Both action groups carrying positive chosen-action advantage "
+                "does not show that the expected policy gradient cannot separate SEND from "
+                "SKIP. The chosen-action advantage compares the taken joint action with a "
+                "critic baseline, never the two actions with each other. Kept strictly "
+                "descriptive."),
+            "clip_suppression_from_magnitude_gap": (
+                "Withdrawn. The late_head L1 (mean 0.269) versus task_value_head (78.07) and "
+                "cost_head (3.73) gap cannot support a clipping or suppression inference: "
+                "the heads carry different parameter counts, so raw L1 magnitudes are not "
+                "comparable across them."),
+            "what_remains_provable": (
+                "Only these facts stand: the late-actor signal is sparse (1.60% of rows, "
+                "about 3 rows per minibatch), its combined-advantage residuals are "
+                "positive-skewed (92.2% positive), and the recorded late_head gradients are "
+                "non-zero on all 96 batches. None of these is designated as the unique root "
+                "cause of the R68 greedy zero-change, and none licenses deleting messages, "
+                "changing a threshold, or naming a single loss as the cause."),
         },
     }
     dst = HERE / "ROUND69_LATE_ACTOR_SIGNAL_AUDIT.json"
