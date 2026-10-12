@@ -57,6 +57,8 @@ def _limits():
 class VersionBindingTests(unittest.TestCase):
     def test_one_binding_drives_executor_guard_and_candidate(self):
         self.assertEqual(R64_EXECUTION_VERSION, BINDING.execution_version)
+        self.assertEqual(BINDING.gate_reconciliation_filename,
+                         "ROUND64_GATE_RECONCILIATION_v8.json")
         self.assertEqual(R64Guard.EXECUTION_VERSION, BINDING.execution_version)
         self.assertEqual((R64Guard.NORMAL_CAP, R64Guard.RESERVE_CAP, R64Guard.HARD_CAP),
                          (BINDING.normal_cap, BINDING.reserve_cap, BINDING.hard_cap))

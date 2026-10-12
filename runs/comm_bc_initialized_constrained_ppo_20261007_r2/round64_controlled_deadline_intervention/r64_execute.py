@@ -626,7 +626,7 @@ def run_phase(cfg, phase, retry_logical=None):
         reconciliation = build_gate_reconciliation(root, cfg["model_identity"])
         if reconciliation.get("status") != "passed":
             raise RuntimeError("fixed intervention matrix blocked: explicit gate reconciliation failed")
-        write_or_verify(root / "ROUND64_GATE_RECONCILIATION.json", reconciliation)
+        write_or_verify(root / BINDING.gate_reconciliation_filename, reconciliation)
         for spec in PLAN[2:]:
             cells[spec["logical"]] = _cell_cursor(cfg, spec, retry_logical)
         pair_check = compare_force_pairs(cells)

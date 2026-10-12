@@ -25,6 +25,7 @@ class R64ExecutionBinding:
     branch: str
     execution_version: str
     candidate_sha256: str
+    gate_reconciliation_filename: str
     approval_path: Path
     approval_sha256: str
     source_freeze_path: Path
@@ -73,6 +74,7 @@ def load_binding(path: Path = CANDIDATE_PATH) -> R64ExecutionBinding:
         task_id=doc["task"], branch=doc["branch"],
         execution_version=doc["candidate_execution_version"],
         candidate_sha256=_sha256(path),
+        gate_reconciliation_filename=doc["gate_reconciliation_filename"],
         approval_path=approval_path,
         approval_sha256=approval["sha256"],
         source_freeze_path=(path.parent / source["path"]).resolve(),
@@ -111,6 +113,9 @@ def validate_live_binding(
     doc = json.loads(candidate_path.read_text(encoding="utf-8"))
     if doc.get("candidate_execution_version") != binding.execution_version:
         raise RuntimeError("R64 candidate execution version differs from the shared binding")
+    if (doc.get("gate_reconciliation_filename") != binding.gate_reconciliation_filename or
+            Path(binding.gate_reconciliation_filename).name != binding.gate_reconciliation_filename):
+        raise RuntimeError("R64 gate reconciliation output is not bound to a private versioned path")
     if _sha256(binding.source_freeze_path) != binding.source_freeze_sha256:
         raise RuntimeError("historical ROUND64_FREEZE changed; candidate identity is stale")
     approval_ref = doc.get("approval", {})
