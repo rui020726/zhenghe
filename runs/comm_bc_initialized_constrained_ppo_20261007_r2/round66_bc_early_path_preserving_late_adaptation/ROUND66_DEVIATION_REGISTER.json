@@ -1,0 +1,40 @@
+{
+  "kind": "round66-deviation-register/1",
+  "appended_at_unix": 1791790374.7014341,
+  "appended_by": "ROUND66 continuation session",
+  "rule": "Append-only. No prior claim, log, freeze, row, checkpoint or verdict is rewritten. Corrections are new records that reference the originals.",
+  "deviations": [
+    {
+      "id": "D1-reaped-reference-attempt-claim-reuse",
+      "severity": "accounting / retry-rule",
+      "what_happened": "A first detached launch (exec session 16026, launcher pid 55388, --phase train --seed 11 --first-gate-only) was killed by the sandbox while it was inside the environment constructor for logical job r66_ref_immediate_s1300001 (normal slot 2). Its attempt-0001 claim was left in status claimed_before_environment with environment_constructor_calls=1, joint_run_constructed_calls=0, run_invocation_calls=0, completed_steps=0, simulation_started=false, constructor_called_at_unix=1791788083.9323554 and no row/tape. A second supervised launch (exec session 70516, launcher pid 56024, --phase train) then re-ran the SAME attempt-0001 claim: r66_execute.run_block_a_references saw the claim was not complete, _atomic_run found an existing claim whose status was neither complete nor failed_technical, fell through, and called run_fn() again - a second real environment construction - then finish_launch(ok=True) at 1791788364.3801718 with detail on_time=6 bytes=15084, completed_steps=1000.",
+      "why_it_is_a_deviation": "The decision-side retry rule requires a new attempt / reserve slot for a retried reference job, with no refund and no claim reuse. The re-used branch is the inherited R58/R60 resume semantics for a claim interrupted inside an uncommitted batch; it conflicts with that rule for a hard-killed attempt.",
+      "evidence": [
+        "r66_execute.py run_block_a_references: ledger.is_complete(logical) is False for status claimed_before_environment, so the caller proceeds to _atomic_run.",
+        "r66_execute.py _atomic_run: an existing claim whose status is not complete/failed_technical falls through without opening a new attempt or reserving a new slot, then calls run_fn().",
+        "r42_run.write_run_progress (frozen, in runs/comm_one_shot_full_trace_ablation_20261004/r42_run.py lines 462-474): constructor_called_at_unix is first-writer-wins while the counter fields are overwritten by the CURRENT attempt's progress.",
+        "Claim r66_ref_immediate_s1300001/attempt_0001.json now holds constructor_called_at_unix=1791788083.9323554 (BEFORE the second launcher's started_unix=1791788346.5173004, therefore belonging to the reaped attempt) together with finished_at_unix=1791788364.3801718 and the second attempt's counters.",
+        "raw/runtime/launch_records.jsonl holds a start record for launcher pid 55388 and NO exit record; had that launcher survived its child it would have appended an exit record within seconds.",
+        "_r66_train_s11_gate.log is intact at 1480 bytes (sha256 c9662aadc10abdb712b047fee192094475b19d31bf2b058588d20a94ecaf21c2), last line 'actor_type:discrete', no traceback, no LAUNCHER_DONE line. It was NOT overwritten: the second launch writes _r66_train.log because it carries no --seed/--first-gate-only tag.",
+        "Original exec session 16026 polled again during this session and returned its final output 'RUNNING' - an in-session liveness check of pid 55388 at launch+20s, i.e. the detached process was alive 20s after start and dead before the second launcher began."
+      ],
+      "not_proven": "Positive termination by process handle is NOT established: process enumeration is blind from these exec sessions (Get-Process -Name python returns 0 while the training is provably alive by heartbeat; tasklist is denied). Termination is established at artifact level only (no exit record, frozen log, frozen claim, clean handoff with no duplicate-claim or interleaved-write errors across 150+ subsequent slots).",
+      "adjudication": "A builder was invoked for a claim that already recorded an environment-constructor entry, so this IS an R66 non-compliant retry under the decision-side rule. Actual environment constructions for this logical job = 2 (one reaped partial with 0 steps, one complete with 1000 steps); the claim-level counter shows 1. No refund, no new slot, no claim rewritten.",
+      "eligibility": "The completed reference value (scene 1300001, immediate rule, on_time=6, bytes=15084) comes from a complete 1000-step episode under a valid claim. The immediate rule is deterministic given the scenario seed (no model, no per-launch RNG draw beyond the scenario seed), so the value is uniquely qualified and no reserve re-run is necessary. The reaped partial attempt contributed no scientific content (0 steps, no row, no tape, no checkpoint). The training science chain is NOT voided by this registration error.",
+      "accounting_rule_adopted": "actual_environment_constructions = consumed slots (normal + reserve) + unregistered extra constructions. To keep actual <= 1150 with 1110 normal slots planned, reserve use in this round is capped at 39, not 40."
+    },
+    {
+      "id": "D2-eval-matrix-deviation",
+      "severity": "plan / scientific scope",
+      "what_happened": "ROUND66_FREEZE.json at commit 7267fc7 recorded model_eval = NEW 192 + BC 192 = 384 and rule_eval = 288 (immediate/late_discovery_gate/always_hold in both modes = 192 plus periodic_20/random_send/event greedy = 96), i.e. it dropped the OLD (R60 ep128) arm on the new block and added extra rule arms. The decision-side plan's C block is NEW/R60ep128/BC three roles x 3 seeds x 2 modes x 32 = 576 plus immediate/late147/always_hold x 32 = 96.",
+      "status": "No evaluation has run (0 model_eval / rule_eval / focal claims exist), so no wrong-matrix consumption occurred. The running --phase train process does not enter evaluation.",
+      "correction": "The erroneous freeze is preserved unchanged. The corrected evaluation matrix is registered in ROUND66_EVAL_PLAN_CORRECTED.json and implemented by the new private adapter r66_eval_fixed.py with its own evaluation identity, committed and frozen BEFORE the first evaluation builder. It shares the same R66 resource ledger, raw root, claim/slot roots and 1110/40/1150 quota. r66_execute.py is NOT hot-edited while training runs; its --phase eval / --phase all paths must not be used."
+    }
+  ],
+  "existing_c_block_consumption": {
+    "model_eval_claims": 0,
+    "rule_eval_claims": 0,
+    "focal_claims": 0,
+    "note": "verified from raw/launch_claims at registration time; each is preserved and counted if any appear later"
+  }
+}

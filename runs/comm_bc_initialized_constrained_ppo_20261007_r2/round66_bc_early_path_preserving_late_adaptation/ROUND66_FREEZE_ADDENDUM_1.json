@@ -1,0 +1,192 @@
+{
+  "kind": "round66-freeze-addendum/1",
+  "addendum_id": "ROUND66_FREEZE_ADDENDUM_1",
+  "task_id": "ROUND66-BC-EARLY-PATH-PRESERVING-LATE-ADAPTATION",
+  "branch": "exp/round66-bc-early-path-preserving-late-adaptation",
+  "appended_at_unix": 1791791140.9558969,
+  "appended_by": "ROUND66 continuation session (pre-evaluation, zero-environment)",
+  "rule": "Append-only. ROUND66_FREEZE.json at 7267fc7 is preserved byte-identical; this addendum registers corrections and new identities that reference it. No prior freeze, claim, row, checkpoint, log or verdict is rewritten.",
+  "base_freeze": {
+    "file": "ROUND66_FREEZE.json",
+    "sha256": "dcbd55d0749ebcdd1ae804103f5243dd462ad178fdca74191dbf3cef4ef539b5",
+    "commit": "7267fc732568c5cff2f9771b804b51175c3fde9d",
+    "preserved_unchanged": true,
+    "note": "sha256 matches the value recorded at commit 7267fc7 (dcbd55d0...); the erroneous evaluation scopes inside it are superseded by A1 below, not edited."
+  },
+  "corrections": [
+    {
+      "id": "A1-eval-matrix",
+      "severity": "plan / scientific scope",
+      "what": "ROUND66_FREEZE.json recorded model_eval = NEW192 + BC192 = 384 and rule_eval = 288 (immediate/late_discovery_gate/always_hold in both modes = 192 plus periodic_20/random_send/event greedy = 96). That dropped the OLD arm (compliant R60 ep128) on the new block and added rule arms the decision side did not ask for.",
+      "corrected": {
+        "model_eval": "NEW/R60ep128/BC x 3 seeds x 2 modes x 32 = 576",
+        "rule_eval": "immediate/late147/always_hold x 32 greedy = 96",
+        "focal": "NEW+BC x 3 seeds on scene 1700027 greedy = 6",
+        "total": 678,
+        "normal_slot_range": [
+          433,
+          1110
+        ],
+        "already_numbered": "48 block-A references + 384 training episodes = 432",
+        "normal_cap_unchanged": true,
+        "normal_cap": 1110
+      },
+      "implemented_by": "r66_eval_fixed.py",
+      "plan_file": "raw/ROUND66_EVAL_PLAN_CORRECTED.json",
+      "plan_file_sha256": "c0bce2266fc0d3b53e6286deb0ea7626dde8e1e8b78e513f9be6ca544a7364f1",
+      "status": "No evaluation builder has run: 0 model_eval / rule_eval / focal claims exist, so no wrong-matrix consumption occurred. The running --phase train process never enters evaluation (verified in r66_execute.main)."
+    },
+    {
+      "id": "A2-d1-accounting-rule",
+      "severity": "accounting / retry rule",
+      "what": "The reaped detached attempt (exec session 16026, launcher pid 55388) left attempt-0001 of logical job r66_ref_immediate_s1300001 in status claimed_before_environment with environment_constructor_calls=1; the supervised launch (session 70516, launcher pid 56024) fell through the inherited resume branch and constructed the environment a second time under the same claim and slot.",
+      "accounting_rule_adopted": "actual_environment_constructions = consumed slots (normal + reserve) + unregistered extra constructions. Reserve use is capped at 39, not 40, so actual constructions stay <= 1150 with 1110 normal slots.",
+      "no_refund": true,
+      "no_claim_rewrite": true,
+      "register": "ROUND66_DEVIATION_REGISTER.json",
+      "register_sha256": "6b45a76f029d823e4e4af7498700502d00f530a267ab18069d686ec4e5bcde01"
+    },
+    {
+      "id": "A3-new-block-occupancy",
+      "severity": "procedural (audit timing)",
+      "what": "The scenario-seed occupancy audit for the new block 1800000..1800031 was written after the freeze but before any new-block builder. 22,881 artifacts scanned; the seeds appear only in ROUND66's own freeze/plan; 0 hits outside ROUND66. Prior rounds used prefixes 130 (40,883 artifacts) and 170 (10,698 artifacts).",
+      "audit": "ROUND66_NEW_BLOCK_OCCUPANCY_AUDIT.json",
+      "audit_sha256": "cba7d8d34c88d70e4eca1fbca0504fa910b8eecb3c7c68a01419baed3acf9126"
+    }
+  ],
+  "private_identities": {
+    "eval_adapter": {
+      "file": "r66_eval_fixed.py",
+      "sha256": "2bbdc9724f53629d49ede5fca2a85d9ac712ce81700052786c5db8f613e3fac1",
+      "eval_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1+r66-frozen-early-path-late-adaptation/1+r66-eval-matrix-correction/1",
+      "row_tag_prefixes": [
+        "r66eval_model_",
+        "r66eval_rule_",
+        "r66eval_focal_"
+      ],
+      "row_glob_prefixes": [
+        "v2_r66eval_model_*.json",
+        "v2_r66eval_rule_*.json",
+        "v2_r66eval_focal_*.json"
+      ],
+      "rejected_row_glob_prefixes": [
+        "v2_r66_eval_new_*.json",
+        "v2_r66_eval_bc_*.json",
+        "v2_r66_rule_*.json",
+        "v2_r66_focal_*.json"
+      ],
+      "note": "The two namespaces are disjoint in both directions (proved by test_r66_eval_adapter_zero_env.py), so statistics over the corrected rows can never pick up rows from the rejected matrix."
+    },
+    "arms": {
+      "NEW": "R66 ep128 read-only, frozen early-path mask asserted intact",
+      "OLD": "compliant R60 ep128 read-only, NOT frozen (runs exactly as R60 had it)",
+      "BC": "compliant R60 ep0 read-only, NOT frozen (initial value)"
+    },
+    "zero_env_test": {
+      "file": "test_r66_eval_adapter_zero_env.py",
+      "sha256": "78117fca901bdeafea2c4a01b929981571a2d0d7c2fb82a68275db4b6acc944e",
+      "verdict_file": "raw/runtime/ROUND66_EVAL_ADAPTER_ZERO_ENV.json",
+      "verdict_sha256": "2b94a59d4ae49027f5be2d5664936f1e2e3726d27411af97b4a7b1b8cbb780f0",
+      "status": "passed",
+      "checks": 23,
+      "synthetic_optimizer_updates": 0,
+      "environment_constructions": 0
+    }
+  },
+  "launcher_change": {
+    "file": "_r66_launch.py",
+    "sha256": "1a9e76105660a6c06eb03f6413e48ebd6d37ec5db7436c7a4fc3aa6ced4d73d7",
+    "change": "optional --module execute|eval_fixed selector (default execute)",
+    "backward_compatible": true,
+    "note": "Every historical invocation keeps the same child command. Only the log file name is now module-prefixed (_r66_execute_*.log / _r66_eval_fixed_*.log) so concurrent phases cannot overwrite each other's log. The already-written _r66_train.log and _r66_train_s11_gate.log are untouched.",
+    "why": "so the corrected evaluation runs through the same auditable launcher, launch_records.jsonl and 60-second heartbeat as training"
+  },
+  "known_inherited_labels": {
+    "ledger_kind": {
+      "value": "round60-ledger/1",
+      "note": "R66Ledger.write_ledger inherits the R60 ledger 'kind' label while task_id/branch/training_version are ROUND66. Registered here as a cosmetic inherited label; the live ledger is rewritten by the running process and is not edited."
+    },
+    "executor_docstring": {
+      "value": "r66_execute.py module docstring still describes the R60 matrix",
+      "note": "The module docstring's quota arithmetic (48+384+672+6 = 1110) has the same total as the corrected matrix (48+384+576+96+6 = 1110); only the composition differs. The docstring is not hot-edited while training runs; the corrected composition lives in raw/ROUND66_EVAL_PLAN_CORRECTED.json and this addendum."
+    }
+  },
+  "protected_files": {
+    "ROUND46_CURRENT_TASK.json": {
+      "expected_sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+      "actual_sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+      "modified": false,
+      "staged": false
+    },
+    "ROUND46_R2_V6_STOP_STATE.json": {
+      "expected_sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+      "actual_sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+      "modified": false,
+      "staged": false
+    }
+  },
+  "state_at_write": {
+    "head_commit": "7267fc732568c5cff2f9771b804b51175c3fde9d",
+    "training_in_progress": true,
+    "launcher_pid": 56024,
+    "exec_session": 70516,
+    "normal_slots_consumed": 230,
+    "claim_status_counts": {
+      "complete": 229,
+      "claimed_before_environment": 1
+    },
+    "first_batch_gates": {
+      "r60_first_batch_gate_s11.json": {
+        "status": "passed",
+        "failed": [],
+        "checks": {
+          "dual_head_routing_active": true,
+          "early_free": 64,
+          "late_free": 28,
+          "init_params_equal_r60_ep0": true,
+          "structure_r66_frozen_early_path": true,
+          "parameter_objects_12": true,
+          "five_modules": true,
+          "frozen_modules_requires_grad_false": true,
+          "trainable_modules_requires_grad_true": true,
+          "optimizer_owns_six_trainable": true,
+          "frozen_six_recorded": true,
+          "frozen_modules_gradient_recorded_none": true,
+          "trainable_modules_gradient_recorded_number": true,
+          "critic_received_gradient": true,
+          "late_actor_received_gradient": true,
+          "gate_diag_frozen_labelled": true,
+          "likelihood_alignment_passed": true,
+          "value_losses_finite": true,
+          "lambda_updated": true
+        }
+      },
+      "r60_first_batch_gate_s22.json": {
+        "status": "passed",
+        "failed": [],
+        "checks": {
+          "dual_head_routing_active": true,
+          "early_free": 64,
+          "late_free": 28,
+          "init_params_equal_r60_ep0": true,
+          "structure_r66_frozen_early_path": true,
+          "parameter_objects_12": true,
+          "five_modules": true,
+          "frozen_modules_requires_grad_false": true,
+          "trainable_modules_requires_grad_true": true,
+          "optimizer_owns_six_trainable": true,
+          "frozen_six_recorded": true,
+          "frozen_modules_gradient_recorded_none": true,
+          "trainable_modules_gradient_recorded_number": true,
+          "critic_received_gradient": true,
+          "late_actor_received_gradient": true,
+          "gate_diag_frozen_labelled": true,
+          "likelihood_alignment_passed": true,
+          "value_losses_finite": true,
+          "lambda_updated": true
+        }
+      }
+    },
+    "note": "Seed 11 completed 128 episodes / 32 updates. Seed 22 and seed 33 training continue under the same supervised process; their first-batch gates are checked as they appear."
+  }
+}

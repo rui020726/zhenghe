@@ -1,0 +1,29 @@
+{
+  "kind": "round66-new-block-occupancy-audit/1",
+  "audited_at_unix": 1791790374.7014341,
+  "audited_by": "ROUND66 continuation session (read-only, zero environment construction)",
+  "question": "Were scenario seeds 1800000..1800031 (the R66 evaluation block) already used by any prior round, so that 'fresh block' results could be contaminated?",
+  "method": [
+    "Walked every artifact under runs/comm_bc_initialized_constrained_ppo_20261007_r2/ (both repos' other run roots were not needed: all prior rounds of this line live there).",
+    "Pass 1 (JSON only): 13,323 *.json files scanned for any 1800000..1800031 occurrence.",
+    "Pass 2 (json/jsonl/log/txt/md): 22,881 files scanned for the same block.",
+    "Pass 3 (precise): 22,881 files scanned with scenario-seed-specific patterns (\"scenario_seed\": 18000xx, scene18000xx, _s18000xx_, \"scene\": 18000xx), filenames included.",
+    "R66's own directory was excluded from passes 2-3 and reported separately."
+  ],
+  "results": {
+    "pass1_hits": 2,
+    "pass1_hits_detail": [
+      "round66_bc_early_path_preserving_late_adaptation/ROUND66_FREEZE.json (the block declaration itself)",
+      "round66_bc_early_path_preserving_late_adaptation/raw/ROUND66_FIXED_PLAN.json (the block declaration itself)"
+    ],
+    "pass2_loose_hits_outside_r66": 72,
+    "pass2_loose_hits_note": "loose 7-digit matches inside tape payloads (byte counts / coordinates), NOT scenario seeds; e.g. round53 tapes for scenes 1300047/1300016/1300018",
+    "pass3_precise_hits_outside_r66": 0,
+    "prior_round_scenario_prefixes_observed": {
+      "130": 40883,
+      "170": 10698
+    },
+    "conclusion": "No prior round used scenario seeds 1800000..1800031. The only artifacts naming the block are R66's own freeze and fixed plan. The block is fresh."
+  },
+  "procedural_deviation": "The freeze at 7267fc7 declared this block WITHOUT this audit having been performed. The audit has now been completed BEFORE any new-block environment builder (evaluation has not started; 0 eval claims exist). This is registered as a procedural deviation, not a scientific one."
+}

@@ -1,0 +1,6074 @@
+{
+  "kind": "round66-corrected-eval-plan/1",
+  "task_id": "ROUND66-BC-EARLY-PATH-PRESERVING-LATE-ADAPTATION",
+  "branch": "exp/round66-bc-early-path-preserving-late-adaptation",
+  "eval_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1+r66-frozen-early-path-late-adaptation/1+r66-eval-matrix-correction/1",
+  "supersedes": "the model_eval/rule_eval scopes of raw/ROUND66_FIXED_PLAN.json written from the erroneous freeze at 7267fc7; that file is preserved unchanged",
+  "model_eval_count": 576,
+  "rule_eval_count": 96,
+  "focal_count": 6,
+  "eval_total": 678,
+  "model_arms": [
+    "NEW",
+    "OLD",
+    "BC"
+  ],
+  "rule_arms": [
+    "immediate",
+    "late_discovery_gate",
+    "always_hold"
+  ],
+  "eval_scenes": [
+    1800000,
+    1800001,
+    1800002,
+    1800003,
+    1800004,
+    1800005,
+    1800006,
+    1800007,
+    1800008,
+    1800009,
+    1800010,
+    1800011,
+    1800012,
+    1800013,
+    1800014,
+    1800015,
+    1800016,
+    1800017,
+    1800018,
+    1800019,
+    1800020,
+    1800021,
+    1800022,
+    1800023,
+    1800024,
+    1800025,
+    1800026,
+    1800027,
+    1800028,
+    1800029,
+    1800030,
+    1800031
+  ],
+  "focal_scene": 1700027,
+  "normal_slot_range": [
+    433,
+    1110
+  ],
+  "quota": {
+    "normal_cap": 1110,
+    "reserve_cap": 40,
+    "hard_cap": 1150,
+    "note": "shared with the R66 training ledger; reserve use is capped at 39 so that actual constructions (slots + the D1 reaped partial) stay <= 1150"
+  },
+  "jobs": [
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800000",
+      "normal_slot": 433
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800001",
+      "normal_slot": 434
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800002",
+      "normal_slot": 435
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800003",
+      "normal_slot": 436
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800004",
+      "normal_slot": 437
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800005",
+      "normal_slot": 438
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800006",
+      "normal_slot": 439
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800007",
+      "normal_slot": 440
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800008",
+      "normal_slot": 441
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800009",
+      "normal_slot": 442
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800010",
+      "normal_slot": 443
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800011",
+      "normal_slot": 444
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800012",
+      "normal_slot": 445
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800013",
+      "normal_slot": 446
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800014",
+      "normal_slot": 447
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800015",
+      "normal_slot": 448
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800016",
+      "normal_slot": 449
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800017",
+      "normal_slot": 450
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800018",
+      "normal_slot": 451
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800019",
+      "normal_slot": 452
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800020",
+      "normal_slot": 453
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800021",
+      "normal_slot": 454
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800022",
+      "normal_slot": 455
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800023",
+      "normal_slot": 456
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800024",
+      "normal_slot": 457
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800025",
+      "normal_slot": 458
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800026",
+      "normal_slot": 459
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800027",
+      "normal_slot": 460
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800028",
+      "normal_slot": 461
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800029",
+      "normal_slot": 462
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800030",
+      "normal_slot": 463
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_new_s11_greedy_scene1800031",
+      "normal_slot": 464
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800000",
+      "normal_slot": 465
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800001",
+      "normal_slot": 466
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800002",
+      "normal_slot": 467
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800003",
+      "normal_slot": 468
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800004",
+      "normal_slot": 469
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800005",
+      "normal_slot": 470
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800006",
+      "normal_slot": 471
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800007",
+      "normal_slot": 472
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800008",
+      "normal_slot": 473
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800009",
+      "normal_slot": 474
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800010",
+      "normal_slot": 475
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800011",
+      "normal_slot": 476
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800012",
+      "normal_slot": 477
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800013",
+      "normal_slot": 478
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800014",
+      "normal_slot": 479
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800015",
+      "normal_slot": 480
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800016",
+      "normal_slot": 481
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800017",
+      "normal_slot": 482
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800018",
+      "normal_slot": 483
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800019",
+      "normal_slot": 484
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800020",
+      "normal_slot": 485
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800021",
+      "normal_slot": 486
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800022",
+      "normal_slot": 487
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800023",
+      "normal_slot": 488
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800024",
+      "normal_slot": 489
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800025",
+      "normal_slot": 490
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800026",
+      "normal_slot": 491
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800027",
+      "normal_slot": 492
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800028",
+      "normal_slot": 493
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800029",
+      "normal_slot": 494
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800030",
+      "normal_slot": 495
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_new_s11_sampled_scene1800031",
+      "normal_slot": 496
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800000",
+      "normal_slot": 497
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800001",
+      "normal_slot": 498
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800002",
+      "normal_slot": 499
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800003",
+      "normal_slot": 500
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800004",
+      "normal_slot": 501
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800005",
+      "normal_slot": 502
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800006",
+      "normal_slot": 503
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800007",
+      "normal_slot": 504
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800008",
+      "normal_slot": 505
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800009",
+      "normal_slot": 506
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800010",
+      "normal_slot": 507
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800011",
+      "normal_slot": 508
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800012",
+      "normal_slot": 509
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800013",
+      "normal_slot": 510
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800014",
+      "normal_slot": 511
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800015",
+      "normal_slot": 512
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800016",
+      "normal_slot": 513
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800017",
+      "normal_slot": 514
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800018",
+      "normal_slot": 515
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800019",
+      "normal_slot": 516
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800020",
+      "normal_slot": 517
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800021",
+      "normal_slot": 518
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800022",
+      "normal_slot": 519
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800023",
+      "normal_slot": 520
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800024",
+      "normal_slot": 521
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800025",
+      "normal_slot": 522
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800026",
+      "normal_slot": 523
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800027",
+      "normal_slot": 524
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800028",
+      "normal_slot": 525
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800029",
+      "normal_slot": 526
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800030",
+      "normal_slot": 527
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_new_s22_greedy_scene1800031",
+      "normal_slot": 528
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800000",
+      "normal_slot": 529
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800001",
+      "normal_slot": 530
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800002",
+      "normal_slot": 531
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800003",
+      "normal_slot": 532
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800004",
+      "normal_slot": 533
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800005",
+      "normal_slot": 534
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800006",
+      "normal_slot": 535
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800007",
+      "normal_slot": 536
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800008",
+      "normal_slot": 537
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800009",
+      "normal_slot": 538
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800010",
+      "normal_slot": 539
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800011",
+      "normal_slot": 540
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800012",
+      "normal_slot": 541
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800013",
+      "normal_slot": 542
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800014",
+      "normal_slot": 543
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800015",
+      "normal_slot": 544
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800016",
+      "normal_slot": 545
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800017",
+      "normal_slot": 546
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800018",
+      "normal_slot": 547
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800019",
+      "normal_slot": 548
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800020",
+      "normal_slot": 549
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800021",
+      "normal_slot": 550
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800022",
+      "normal_slot": 551
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800023",
+      "normal_slot": 552
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800024",
+      "normal_slot": 553
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800025",
+      "normal_slot": 554
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800026",
+      "normal_slot": 555
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800027",
+      "normal_slot": 556
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800028",
+      "normal_slot": 557
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800029",
+      "normal_slot": 558
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800030",
+      "normal_slot": 559
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_new_s22_sampled_scene1800031",
+      "normal_slot": 560
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800000",
+      "normal_slot": 561
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800001",
+      "normal_slot": 562
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800002",
+      "normal_slot": 563
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800003",
+      "normal_slot": 564
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800004",
+      "normal_slot": 565
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800005",
+      "normal_slot": 566
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800006",
+      "normal_slot": 567
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800007",
+      "normal_slot": 568
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800008",
+      "normal_slot": 569
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800009",
+      "normal_slot": 570
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800010",
+      "normal_slot": 571
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800011",
+      "normal_slot": 572
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800012",
+      "normal_slot": 573
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800013",
+      "normal_slot": 574
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800014",
+      "normal_slot": 575
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800015",
+      "normal_slot": 576
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800016",
+      "normal_slot": 577
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800017",
+      "normal_slot": 578
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800018",
+      "normal_slot": 579
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800019",
+      "normal_slot": 580
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800020",
+      "normal_slot": 581
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800021",
+      "normal_slot": 582
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800022",
+      "normal_slot": 583
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800023",
+      "normal_slot": 584
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800024",
+      "normal_slot": 585
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800025",
+      "normal_slot": 586
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800026",
+      "normal_slot": 587
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800027",
+      "normal_slot": 588
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800028",
+      "normal_slot": 589
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800029",
+      "normal_slot": 590
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800030",
+      "normal_slot": 591
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_new_s33_greedy_scene1800031",
+      "normal_slot": 592
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800000",
+      "normal_slot": 593
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800001",
+      "normal_slot": 594
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800002",
+      "normal_slot": 595
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800003",
+      "normal_slot": 596
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800004",
+      "normal_slot": 597
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800005",
+      "normal_slot": 598
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800006",
+      "normal_slot": 599
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800007",
+      "normal_slot": 600
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800008",
+      "normal_slot": 601
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800009",
+      "normal_slot": 602
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800010",
+      "normal_slot": 603
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800011",
+      "normal_slot": 604
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800012",
+      "normal_slot": 605
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800013",
+      "normal_slot": 606
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800014",
+      "normal_slot": 607
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800015",
+      "normal_slot": 608
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800016",
+      "normal_slot": 609
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800017",
+      "normal_slot": 610
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800018",
+      "normal_slot": 611
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800019",
+      "normal_slot": 612
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800020",
+      "normal_slot": 613
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800021",
+      "normal_slot": 614
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800022",
+      "normal_slot": 615
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800023",
+      "normal_slot": 616
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800024",
+      "normal_slot": 617
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800025",
+      "normal_slot": 618
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800026",
+      "normal_slot": 619
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800027",
+      "normal_slot": 620
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800028",
+      "normal_slot": 621
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800029",
+      "normal_slot": 622
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800030",
+      "normal_slot": 623
+    },
+    {
+      "scope": "model_eval",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_new_s33_sampled_scene1800031",
+      "normal_slot": 624
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800000",
+      "normal_slot": 625
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800001",
+      "normal_slot": 626
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800002",
+      "normal_slot": 627
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800003",
+      "normal_slot": 628
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800004",
+      "normal_slot": 629
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800005",
+      "normal_slot": 630
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800006",
+      "normal_slot": 631
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800007",
+      "normal_slot": 632
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800008",
+      "normal_slot": 633
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800009",
+      "normal_slot": 634
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800010",
+      "normal_slot": 635
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800011",
+      "normal_slot": 636
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800012",
+      "normal_slot": 637
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800013",
+      "normal_slot": 638
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800014",
+      "normal_slot": 639
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800015",
+      "normal_slot": 640
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800016",
+      "normal_slot": 641
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800017",
+      "normal_slot": 642
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800018",
+      "normal_slot": 643
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800019",
+      "normal_slot": 644
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800020",
+      "normal_slot": 645
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800021",
+      "normal_slot": 646
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800022",
+      "normal_slot": 647
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800023",
+      "normal_slot": 648
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800024",
+      "normal_slot": 649
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800025",
+      "normal_slot": 650
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800026",
+      "normal_slot": 651
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800027",
+      "normal_slot": 652
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800028",
+      "normal_slot": 653
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800029",
+      "normal_slot": 654
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800030",
+      "normal_slot": 655
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_old_s11_greedy_scene1800031",
+      "normal_slot": 656
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800000",
+      "normal_slot": 657
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800001",
+      "normal_slot": 658
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800002",
+      "normal_slot": 659
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800003",
+      "normal_slot": 660
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800004",
+      "normal_slot": 661
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800005",
+      "normal_slot": 662
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800006",
+      "normal_slot": 663
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800007",
+      "normal_slot": 664
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800008",
+      "normal_slot": 665
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800009",
+      "normal_slot": 666
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800010",
+      "normal_slot": 667
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800011",
+      "normal_slot": 668
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800012",
+      "normal_slot": 669
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800013",
+      "normal_slot": 670
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800014",
+      "normal_slot": 671
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800015",
+      "normal_slot": 672
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800016",
+      "normal_slot": 673
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800017",
+      "normal_slot": 674
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800018",
+      "normal_slot": 675
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800019",
+      "normal_slot": 676
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800020",
+      "normal_slot": 677
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800021",
+      "normal_slot": 678
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800022",
+      "normal_slot": 679
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800023",
+      "normal_slot": 680
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800024",
+      "normal_slot": 681
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800025",
+      "normal_slot": 682
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800026",
+      "normal_slot": 683
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800027",
+      "normal_slot": 684
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800028",
+      "normal_slot": 685
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800029",
+      "normal_slot": 686
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800030",
+      "normal_slot": 687
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_old_s11_sampled_scene1800031",
+      "normal_slot": 688
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800000",
+      "normal_slot": 689
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800001",
+      "normal_slot": 690
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800002",
+      "normal_slot": 691
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800003",
+      "normal_slot": 692
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800004",
+      "normal_slot": 693
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800005",
+      "normal_slot": 694
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800006",
+      "normal_slot": 695
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800007",
+      "normal_slot": 696
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800008",
+      "normal_slot": 697
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800009",
+      "normal_slot": 698
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800010",
+      "normal_slot": 699
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800011",
+      "normal_slot": 700
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800012",
+      "normal_slot": 701
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800013",
+      "normal_slot": 702
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800014",
+      "normal_slot": 703
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800015",
+      "normal_slot": 704
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800016",
+      "normal_slot": 705
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800017",
+      "normal_slot": 706
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800018",
+      "normal_slot": 707
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800019",
+      "normal_slot": 708
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800020",
+      "normal_slot": 709
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800021",
+      "normal_slot": 710
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800022",
+      "normal_slot": 711
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800023",
+      "normal_slot": 712
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800024",
+      "normal_slot": 713
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800025",
+      "normal_slot": 714
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800026",
+      "normal_slot": 715
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800027",
+      "normal_slot": 716
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800028",
+      "normal_slot": 717
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800029",
+      "normal_slot": 718
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800030",
+      "normal_slot": 719
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_old_s22_greedy_scene1800031",
+      "normal_slot": 720
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800000",
+      "normal_slot": 721
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800001",
+      "normal_slot": 722
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800002",
+      "normal_slot": 723
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800003",
+      "normal_slot": 724
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800004",
+      "normal_slot": 725
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800005",
+      "normal_slot": 726
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800006",
+      "normal_slot": 727
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800007",
+      "normal_slot": 728
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800008",
+      "normal_slot": 729
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800009",
+      "normal_slot": 730
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800010",
+      "normal_slot": 731
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800011",
+      "normal_slot": 732
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800012",
+      "normal_slot": 733
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800013",
+      "normal_slot": 734
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800014",
+      "normal_slot": 735
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800015",
+      "normal_slot": 736
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800016",
+      "normal_slot": 737
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800017",
+      "normal_slot": 738
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800018",
+      "normal_slot": 739
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800019",
+      "normal_slot": 740
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800020",
+      "normal_slot": 741
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800021",
+      "normal_slot": 742
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800022",
+      "normal_slot": 743
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800023",
+      "normal_slot": 744
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800024",
+      "normal_slot": 745
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800025",
+      "normal_slot": 746
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800026",
+      "normal_slot": 747
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800027",
+      "normal_slot": 748
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800028",
+      "normal_slot": 749
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800029",
+      "normal_slot": 750
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800030",
+      "normal_slot": 751
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_old_s22_sampled_scene1800031",
+      "normal_slot": 752
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800000",
+      "normal_slot": 753
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800001",
+      "normal_slot": 754
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800002",
+      "normal_slot": 755
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800003",
+      "normal_slot": 756
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800004",
+      "normal_slot": 757
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800005",
+      "normal_slot": 758
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800006",
+      "normal_slot": 759
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800007",
+      "normal_slot": 760
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800008",
+      "normal_slot": 761
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800009",
+      "normal_slot": 762
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800010",
+      "normal_slot": 763
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800011",
+      "normal_slot": 764
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800012",
+      "normal_slot": 765
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800013",
+      "normal_slot": 766
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800014",
+      "normal_slot": 767
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800015",
+      "normal_slot": 768
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800016",
+      "normal_slot": 769
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800017",
+      "normal_slot": 770
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800018",
+      "normal_slot": 771
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800019",
+      "normal_slot": 772
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800020",
+      "normal_slot": 773
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800021",
+      "normal_slot": 774
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800022",
+      "normal_slot": 775
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800023",
+      "normal_slot": 776
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800024",
+      "normal_slot": 777
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800025",
+      "normal_slot": 778
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800026",
+      "normal_slot": 779
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800027",
+      "normal_slot": 780
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800028",
+      "normal_slot": 781
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800029",
+      "normal_slot": 782
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800030",
+      "normal_slot": 783
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_old_s33_greedy_scene1800031",
+      "normal_slot": 784
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800000",
+      "normal_slot": 785
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800001",
+      "normal_slot": 786
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800002",
+      "normal_slot": 787
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800003",
+      "normal_slot": 788
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800004",
+      "normal_slot": 789
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800005",
+      "normal_slot": 790
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800006",
+      "normal_slot": 791
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800007",
+      "normal_slot": 792
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800008",
+      "normal_slot": 793
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800009",
+      "normal_slot": 794
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800010",
+      "normal_slot": 795
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800011",
+      "normal_slot": 796
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800012",
+      "normal_slot": 797
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800013",
+      "normal_slot": 798
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800014",
+      "normal_slot": 799
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800015",
+      "normal_slot": 800
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800016",
+      "normal_slot": 801
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800017",
+      "normal_slot": 802
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800018",
+      "normal_slot": 803
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800019",
+      "normal_slot": 804
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800020",
+      "normal_slot": 805
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800021",
+      "normal_slot": 806
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800022",
+      "normal_slot": 807
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800023",
+      "normal_slot": 808
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800024",
+      "normal_slot": 809
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800025",
+      "normal_slot": 810
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800026",
+      "normal_slot": 811
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800027",
+      "normal_slot": 812
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800028",
+      "normal_slot": 813
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800029",
+      "normal_slot": 814
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800030",
+      "normal_slot": 815
+    },
+    {
+      "scope": "model_eval",
+      "arm": "OLD",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_old_s33_sampled_scene1800031",
+      "normal_slot": 816
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800000",
+      "normal_slot": 817
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800001",
+      "normal_slot": 818
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800002",
+      "normal_slot": 819
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800003",
+      "normal_slot": 820
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800004",
+      "normal_slot": 821
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800005",
+      "normal_slot": 822
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800006",
+      "normal_slot": 823
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800007",
+      "normal_slot": 824
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800008",
+      "normal_slot": 825
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800009",
+      "normal_slot": 826
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800010",
+      "normal_slot": 827
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800011",
+      "normal_slot": 828
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800012",
+      "normal_slot": 829
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800013",
+      "normal_slot": 830
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800014",
+      "normal_slot": 831
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800015",
+      "normal_slot": 832
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800016",
+      "normal_slot": 833
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800017",
+      "normal_slot": 834
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800018",
+      "normal_slot": 835
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800019",
+      "normal_slot": 836
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800020",
+      "normal_slot": 837
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800021",
+      "normal_slot": 838
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800022",
+      "normal_slot": 839
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800023",
+      "normal_slot": 840
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800024",
+      "normal_slot": 841
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800025",
+      "normal_slot": 842
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800026",
+      "normal_slot": 843
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800027",
+      "normal_slot": 844
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800028",
+      "normal_slot": 845
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800029",
+      "normal_slot": 846
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800030",
+      "normal_slot": 847
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_bc_s11_greedy_scene1800031",
+      "normal_slot": 848
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800000",
+      "normal_slot": 849
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800001",
+      "normal_slot": 850
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800002",
+      "normal_slot": 851
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800003",
+      "normal_slot": 852
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800004",
+      "normal_slot": 853
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800005",
+      "normal_slot": 854
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800006",
+      "normal_slot": 855
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800007",
+      "normal_slot": 856
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800008",
+      "normal_slot": 857
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800009",
+      "normal_slot": 858
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800010",
+      "normal_slot": 859
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800011",
+      "normal_slot": 860
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800012",
+      "normal_slot": 861
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800013",
+      "normal_slot": 862
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800014",
+      "normal_slot": 863
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800015",
+      "normal_slot": 864
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800016",
+      "normal_slot": 865
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800017",
+      "normal_slot": 866
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800018",
+      "normal_slot": 867
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800019",
+      "normal_slot": 868
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800020",
+      "normal_slot": 869
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800021",
+      "normal_slot": 870
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800022",
+      "normal_slot": 871
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800023",
+      "normal_slot": 872
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800024",
+      "normal_slot": 873
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800025",
+      "normal_slot": 874
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800026",
+      "normal_slot": 875
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800027",
+      "normal_slot": 876
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800028",
+      "normal_slot": 877
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800029",
+      "normal_slot": 878
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800030",
+      "normal_slot": 879
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "sampled",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_bc_s11_sampled_scene1800031",
+      "normal_slot": 880
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800000",
+      "normal_slot": 881
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800001",
+      "normal_slot": 882
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800002",
+      "normal_slot": 883
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800003",
+      "normal_slot": 884
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800004",
+      "normal_slot": 885
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800005",
+      "normal_slot": 886
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800006",
+      "normal_slot": 887
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800007",
+      "normal_slot": 888
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800008",
+      "normal_slot": 889
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800009",
+      "normal_slot": 890
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800010",
+      "normal_slot": 891
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800011",
+      "normal_slot": 892
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800012",
+      "normal_slot": 893
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800013",
+      "normal_slot": 894
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800014",
+      "normal_slot": 895
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800015",
+      "normal_slot": 896
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800016",
+      "normal_slot": 897
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800017",
+      "normal_slot": 898
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800018",
+      "normal_slot": 899
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800019",
+      "normal_slot": 900
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800020",
+      "normal_slot": 901
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800021",
+      "normal_slot": 902
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800022",
+      "normal_slot": 903
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800023",
+      "normal_slot": 904
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800024",
+      "normal_slot": 905
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800025",
+      "normal_slot": 906
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800026",
+      "normal_slot": 907
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800027",
+      "normal_slot": 908
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800028",
+      "normal_slot": 909
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800029",
+      "normal_slot": 910
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800030",
+      "normal_slot": 911
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_bc_s22_greedy_scene1800031",
+      "normal_slot": 912
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800000",
+      "normal_slot": 913
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800001",
+      "normal_slot": 914
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800002",
+      "normal_slot": 915
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800003",
+      "normal_slot": 916
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800004",
+      "normal_slot": 917
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800005",
+      "normal_slot": 918
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800006",
+      "normal_slot": 919
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800007",
+      "normal_slot": 920
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800008",
+      "normal_slot": 921
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800009",
+      "normal_slot": 922
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800010",
+      "normal_slot": 923
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800011",
+      "normal_slot": 924
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800012",
+      "normal_slot": 925
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800013",
+      "normal_slot": 926
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800014",
+      "normal_slot": 927
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800015",
+      "normal_slot": 928
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800016",
+      "normal_slot": 929
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800017",
+      "normal_slot": 930
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800018",
+      "normal_slot": 931
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800019",
+      "normal_slot": 932
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800020",
+      "normal_slot": 933
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800021",
+      "normal_slot": 934
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800022",
+      "normal_slot": 935
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800023",
+      "normal_slot": 936
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800024",
+      "normal_slot": 937
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800025",
+      "normal_slot": 938
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800026",
+      "normal_slot": 939
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800027",
+      "normal_slot": 940
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800028",
+      "normal_slot": 941
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800029",
+      "normal_slot": 942
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800030",
+      "normal_slot": 943
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "sampled",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_bc_s22_sampled_scene1800031",
+      "normal_slot": 944
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800000",
+      "normal_slot": 945
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800001",
+      "normal_slot": 946
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800002",
+      "normal_slot": 947
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800003",
+      "normal_slot": 948
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800004",
+      "normal_slot": 949
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800005",
+      "normal_slot": 950
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800006",
+      "normal_slot": 951
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800007",
+      "normal_slot": 952
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800008",
+      "normal_slot": 953
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800009",
+      "normal_slot": 954
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800010",
+      "normal_slot": 955
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800011",
+      "normal_slot": 956
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800012",
+      "normal_slot": 957
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800013",
+      "normal_slot": 958
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800014",
+      "normal_slot": 959
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800015",
+      "normal_slot": 960
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800016",
+      "normal_slot": 961
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800017",
+      "normal_slot": 962
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800018",
+      "normal_slot": 963
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800019",
+      "normal_slot": 964
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800020",
+      "normal_slot": 965
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800021",
+      "normal_slot": 966
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800022",
+      "normal_slot": 967
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800023",
+      "normal_slot": 968
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800024",
+      "normal_slot": 969
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800025",
+      "normal_slot": 970
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800026",
+      "normal_slot": 971
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800027",
+      "normal_slot": 972
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800028",
+      "normal_slot": 973
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800029",
+      "normal_slot": 974
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800030",
+      "normal_slot": 975
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_bc_s33_greedy_scene1800031",
+      "normal_slot": 976
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800000,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800000",
+      "normal_slot": 977
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800001,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800001",
+      "normal_slot": 978
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800002,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800002",
+      "normal_slot": 979
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800003,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800003",
+      "normal_slot": 980
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800004,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800004",
+      "normal_slot": 981
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800005,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800005",
+      "normal_slot": 982
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800006,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800006",
+      "normal_slot": 983
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800007,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800007",
+      "normal_slot": 984
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800008,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800008",
+      "normal_slot": 985
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800009,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800009",
+      "normal_slot": 986
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800010,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800010",
+      "normal_slot": 987
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800011,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800011",
+      "normal_slot": 988
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800012,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800012",
+      "normal_slot": 989
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800013,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800013",
+      "normal_slot": 990
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800014,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800014",
+      "normal_slot": 991
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800015,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800015",
+      "normal_slot": 992
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800016,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800016",
+      "normal_slot": 993
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800017,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800017",
+      "normal_slot": 994
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800018,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800018",
+      "normal_slot": 995
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800019,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800019",
+      "normal_slot": 996
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800020,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800020",
+      "normal_slot": 997
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800021,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800021",
+      "normal_slot": 998
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800022,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800022",
+      "normal_slot": 999
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800023,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800023",
+      "normal_slot": 1000
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800024,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800024",
+      "normal_slot": 1001
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800025,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800025",
+      "normal_slot": 1002
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800026,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800026",
+      "normal_slot": 1003
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800027,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800027",
+      "normal_slot": 1004
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800028,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800028",
+      "normal_slot": 1005
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800029,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800029",
+      "normal_slot": 1006
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800030,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800030",
+      "normal_slot": 1007
+    },
+    {
+      "scope": "model_eval",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "sampled",
+      "scene": 1800031,
+      "logical_job": "r66eval_model_bc_s33_sampled_scene1800031",
+      "normal_slot": 1008
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800000,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800000",
+      "normal_slot": 1009
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800001,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800001",
+      "normal_slot": 1010
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800002,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800002",
+      "normal_slot": 1011
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800003,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800003",
+      "normal_slot": 1012
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800004,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800004",
+      "normal_slot": 1013
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800005,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800005",
+      "normal_slot": 1014
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800006,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800006",
+      "normal_slot": 1015
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800007,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800007",
+      "normal_slot": 1016
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800008,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800008",
+      "normal_slot": 1017
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800009,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800009",
+      "normal_slot": 1018
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800010,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800010",
+      "normal_slot": 1019
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800011,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800011",
+      "normal_slot": 1020
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800012,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800012",
+      "normal_slot": 1021
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800013,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800013",
+      "normal_slot": 1022
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800014,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800014",
+      "normal_slot": 1023
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800015,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800015",
+      "normal_slot": 1024
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800016,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800016",
+      "normal_slot": 1025
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800017,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800017",
+      "normal_slot": 1026
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800018,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800018",
+      "normal_slot": 1027
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800019,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800019",
+      "normal_slot": 1028
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800020,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800020",
+      "normal_slot": 1029
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800021,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800021",
+      "normal_slot": 1030
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800022,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800022",
+      "normal_slot": 1031
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800023,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800023",
+      "normal_slot": 1032
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800024,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800024",
+      "normal_slot": 1033
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800025,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800025",
+      "normal_slot": 1034
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800026,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800026",
+      "normal_slot": 1035
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800027,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800027",
+      "normal_slot": 1036
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800028,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800028",
+      "normal_slot": 1037
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800029,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800029",
+      "normal_slot": 1038
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800030,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800030",
+      "normal_slot": 1039
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "IMMEDIATE",
+      "mode": "greedy",
+      "scene": 1800031,
+      "logical_job": "r66eval_rule_immediate_greedy_scene1800031",
+      "normal_slot": 1040
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800000,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800000",
+      "normal_slot": 1041
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800001,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800001",
+      "normal_slot": 1042
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800002,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800002",
+      "normal_slot": 1043
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800003,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800003",
+      "normal_slot": 1044
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800004,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800004",
+      "normal_slot": 1045
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800005,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800005",
+      "normal_slot": 1046
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800006,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800006",
+      "normal_slot": 1047
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800007,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800007",
+      "normal_slot": 1048
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800008,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800008",
+      "normal_slot": 1049
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800009,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800009",
+      "normal_slot": 1050
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800010,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800010",
+      "normal_slot": 1051
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800011,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800011",
+      "normal_slot": 1052
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800012,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800012",
+      "normal_slot": 1053
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800013,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800013",
+      "normal_slot": 1054
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800014,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800014",
+      "normal_slot": 1055
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800015,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800015",
+      "normal_slot": 1056
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800016,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800016",
+      "normal_slot": 1057
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800017,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800017",
+      "normal_slot": 1058
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800018,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800018",
+      "normal_slot": 1059
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800019,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800019",
+      "normal_slot": 1060
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800020,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800020",
+      "normal_slot": 1061
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800021,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800021",
+      "normal_slot": 1062
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800022,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800022",
+      "normal_slot": 1063
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800023,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800023",
+      "normal_slot": 1064
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800024,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800024",
+      "normal_slot": 1065
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800025,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800025",
+      "normal_slot": 1066
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800026,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800026",
+      "normal_slot": 1067
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800027,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800027",
+      "normal_slot": 1068
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800028,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800028",
+      "normal_slot": 1069
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800029,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800029",
+      "normal_slot": 1070
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800030,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800030",
+      "normal_slot": 1071
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "LATE_DISCOVERY_GATE",
+      "mode": "greedy",
+      "scene": 1800031,
+      "logical_job": "r66eval_rule_late_discovery_gate_greedy_scene1800031",
+      "normal_slot": 1072
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800000,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800000",
+      "normal_slot": 1073
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800001,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800001",
+      "normal_slot": 1074
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800002,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800002",
+      "normal_slot": 1075
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800003,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800003",
+      "normal_slot": 1076
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800004,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800004",
+      "normal_slot": 1077
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800005,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800005",
+      "normal_slot": 1078
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800006,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800006",
+      "normal_slot": 1079
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800007,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800007",
+      "normal_slot": 1080
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800008,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800008",
+      "normal_slot": 1081
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800009,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800009",
+      "normal_slot": 1082
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800010,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800010",
+      "normal_slot": 1083
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800011,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800011",
+      "normal_slot": 1084
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800012,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800012",
+      "normal_slot": 1085
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800013,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800013",
+      "normal_slot": 1086
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800014,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800014",
+      "normal_slot": 1087
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800015,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800015",
+      "normal_slot": 1088
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800016,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800016",
+      "normal_slot": 1089
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800017,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800017",
+      "normal_slot": 1090
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800018,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800018",
+      "normal_slot": 1091
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800019,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800019",
+      "normal_slot": 1092
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800020,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800020",
+      "normal_slot": 1093
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800021,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800021",
+      "normal_slot": 1094
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800022,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800022",
+      "normal_slot": 1095
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800023,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800023",
+      "normal_slot": 1096
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800024,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800024",
+      "normal_slot": 1097
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800025,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800025",
+      "normal_slot": 1098
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800026,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800026",
+      "normal_slot": 1099
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800027,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800027",
+      "normal_slot": 1100
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800028,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800028",
+      "normal_slot": 1101
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800029,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800029",
+      "normal_slot": 1102
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800030,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800030",
+      "normal_slot": 1103
+    },
+    {
+      "scope": "rule_eval",
+      "arm": "ALWAYS_HOLD",
+      "mode": "greedy",
+      "scene": 1800031,
+      "logical_job": "r66eval_rule_always_hold_greedy_scene1800031",
+      "normal_slot": 1104
+    },
+    {
+      "scope": "focal",
+      "arm": "NEW",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1700027,
+      "logical_job": "r66eval_focal_new_s11_scene1700027",
+      "normal_slot": 1105
+    },
+    {
+      "scope": "focal",
+      "arm": "BC",
+      "seed": 11,
+      "mode": "greedy",
+      "scene": 1700027,
+      "logical_job": "r66eval_focal_bc_s11_scene1700027",
+      "normal_slot": 1106
+    },
+    {
+      "scope": "focal",
+      "arm": "NEW",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1700027,
+      "logical_job": "r66eval_focal_new_s22_scene1700027",
+      "normal_slot": 1107
+    },
+    {
+      "scope": "focal",
+      "arm": "BC",
+      "seed": 22,
+      "mode": "greedy",
+      "scene": 1700027,
+      "logical_job": "r66eval_focal_bc_s22_scene1700027",
+      "normal_slot": 1108
+    },
+    {
+      "scope": "focal",
+      "arm": "NEW",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1700027,
+      "logical_job": "r66eval_focal_new_s33_scene1700027",
+      "normal_slot": 1109
+    },
+    {
+      "scope": "focal",
+      "arm": "BC",
+      "seed": 33,
+      "mode": "greedy",
+      "scene": 1700027,
+      "logical_job": "r66eval_focal_bc_s33_scene1700027",
+      "normal_slot": 1110
+    }
+  ]
+}
