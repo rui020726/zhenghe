@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import sys
 import unittest
+import json
+import tempfile
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -29,6 +31,8 @@ from r64_identity import BINDING, validate_live_binding
 from r64_intervention import make_intervene_collector
 
 FOCUS = BINDING.focus_target
+SCRATCH = HERE / ".test_scratch"
+SCRATCH.mkdir(exist_ok=True)
 
 
 def _model_identity(version=BINDING.execution_version):
@@ -62,8 +66,8 @@ class VersionBindingTests(unittest.TestCase):
             model_identity=_model_identity(), guard_limits=_limits(), raw_root=RAW,
         )
         self.assertTrue(receipt["validated"])
-        self.assertEqual(receipt["limits"], {"normal_cap": 10, "reserve_cap": 2,
-                                              "hard_cap": 12})
+        self.assertEqual(receipt["limits"], {"normal_cap": 10, "reserve_cap": 3,
+                                              "hard_cap": 13})
 
     def test_old_6_executor_4_guard_is_rejected_before_slot_or_builder(self):
         calls = {"claim": 0, "builder": 0}
@@ -96,7 +100,7 @@ class VersionBindingTests(unittest.TestCase):
                 run_cell(cfg, {"logical": "synthetic", "delta": 30, "arm": "FORCE_SEND"})
         self.assertEqual(calls, {"claim": 0, "builder": 0})
 
-    def test_remaining_plan_is_rejected_for_unknown_cell_and_three_slots(self):
+    def test_approved_receipt_makes_four_cells_fit_only_under_cap_thirteen(self):
         logicals = ["d+30_FORCE_SEND", "d+30_FORCE_SKIP",
                     "d+60_FORCE_SEND", "d+60_FORCE_SKIP"]
         slots = [{"category": "normal", "logical": f"historical-{i}"}
@@ -109,15 +113,66 @@ class VersionBindingTests(unittest.TestCase):
                         "d+0_FORCE_SEND", "d+0_FORCE_SKIP"):
             rows.append({"logical": logical, "event": "result_qualified"})
         rows.append({"logical": "d+30_FORCE_SEND", "event": "slot_consumed"})
-        status = resume_plan_status(slots, rows, logicals,
-                                    normal_cap=10, reserve_cap=2, hard_cap=12)
-        self.assertFalse(status["can_resume"])
-        self.assertEqual(status["unresolved_logicals"], logicals)
-        self.assertEqual(status["nonterminal_logicals"], ["d+30_FORCE_SEND"])
-        self.assertEqual(status["additional_attempts_required"], 4)
-        self.assertEqual(status["normal_available"], 3)
-        self.assertEqual(status["reserve_available"], 0)
-        self.assertEqual(status["hard_cap_headroom"], 3)
+        rows.append({"logical": "d+30_FORCE_SEND", "event": "run_called"})
+        receipt = {"d+30_FORCE_SEND": {"receipt_sha256": "synthetic"}}
+        old_cap = resume_plan_status(slots, rows, logicals,
+                                     normal_cap=10, reserve_cap=2, hard_cap=12,
+                                     recovery_receipts=receipt)
+        self.assertFalse(old_cap["can_resume"])
+        self.assertEqual(old_cap["unresolved_logicals"], logicals)
+        self.assertEqual(old_cap["additional_attempts_required"], 4)
+        self.assertEqual(old_cap["normal_available"], 3)
+        self.assertEqual(old_cap["reserve_available"], 0)
+        self.assertEqual(old_cap["hard_cap_headroom"], 3)
+        approved = resume_plan_status(slots, rows, logicals,
+                                      normal_cap=10, reserve_cap=3, hard_cap=13,
+                                      recovery_receipts=receipt)
+        self.assertTrue(approved["can_resume"])
+        self.assertEqual(approved["nonterminal_logicals"], [])
+        self.assertEqual(approved["normal_attempts_required"], 3)
+        self.assertEqual(approved["reserve_retries_required"], 1)
+        self.assertEqual(approved["hard_cap_headroom"], 4)
+
+    def test_original_partial_is_retryable_only_with_verified_receipt(self):
+        guard = R64Guard(RAW, allow_build=False)
+        records = guard.verified_recovery_receipts()
+        self.assertEqual(set(records), {"d+30_FORCE_SEND"})
+        self.assertTrue(records["d+30_FORCE_SEND"]["receipt_sha256"])
+        receipt = records["d+30_FORCE_SEND"]["receipt"]
+        self.assertEqual(receipt["interrupted_attempt"]["slot"], "normal-07")
+        self.assertFalse(receipt["interrupted_attempt"]["ledger_prefix"]["terminal_event_present"])
+        self.assertEqual(receipt["recovery_authorized"]["only_slot"], "reserve-03")
+
+    def test_fourteenth_attempt_is_refused_after_thirteen_synthetic_slots(self):
+        with tempfile.TemporaryDirectory(prefix="r64-cap13-", dir=SCRATCH) as directory:
+            root = Path(directory)
+            slots_root = root / "guard_slots"
+            slots_root.mkdir()
+            ledger = []
+            for ordinal in range(1, 14):
+                category = "normal" if ordinal <= 10 else "reserve"
+                slot = f"{category}-{ordinal if category == 'normal' else ordinal - 10:02d}"
+                logical = f"fixture-{ordinal:02d}"
+                payload = {"task": "ROUND64", "execution_version": BINDING.execution_version,
+                           "slot": slot, "logical": logical, "category": category,
+                           "retry": False, "created_unix": 0}
+                (slots_root / f"{slot}.slot").write_text(json.dumps(payload), encoding="utf-8")
+                ledger.append({"task": "ROUND64", "execution_version": BINDING.execution_version,
+                               "slot": slot, "logical": logical, "event": "slot_consumed"})
+            (root / "ROUND64_LEDGER.jsonl").write_text(
+                "".join(json.dumps(row) + "\n" for row in ledger), encoding="utf-8")
+            guard = R64Guard(root)
+            with self.assertRaisesRegex(RuntimeError, "normal cap reached"):
+                guard._claim("fixture-14", "normal")
+            self.assertEqual(len(guard._slot_files()), 13)
+            cfg = {"r64_guard": guard, "model_identity": _model_identity(),
+                   "raw_root": root, "cells_dir": root / "cells"}
+            with patch("r64_execute.RAW", root), \
+                 patch("r64_execute.validate_live_binding"):
+                with self.assertRaisesRegex(RuntimeError, "normal cap reached"):
+                    run_cell(cfg, {"logical": "fixture-14", "delta": 60,
+                                   "arm": "FORCE_SKIP"})
+            self.assertFalse((root / "launch_claims").exists())
 
 
 class _StubController:

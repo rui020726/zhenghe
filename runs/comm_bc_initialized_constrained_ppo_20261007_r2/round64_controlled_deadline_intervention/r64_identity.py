@@ -11,7 +11,7 @@ from typing import Any, Mapping
 HERE = Path(__file__).resolve().parent
 CANDIDATE_PATH = HERE / "ROUND64_RESUME_SEAM_CANDIDATE.json"
 HISTORICAL_EXECUTION_VERSIONS = frozenset(
-    f"round64-controlled-deadline-intervention/{n}" for n in (2, 3, 4, 5, 6)
+    f"round64-controlled-deadline-intervention/{n}" for n in (2, 3, 4, 5, 6, 7)
 )
 
 
@@ -25,6 +25,8 @@ class R64ExecutionBinding:
     branch: str
     execution_version: str
     candidate_sha256: str
+    approval_path: Path
+    approval_sha256: str
     source_freeze_path: Path
     source_freeze_sha256: str
     scene: int
@@ -48,15 +50,31 @@ class R64ExecutionBinding:
 def load_binding(path: Path = CANDIDATE_PATH) -> R64ExecutionBinding:
     path = Path(path).resolve()
     doc = json.loads(path.read_text(encoding="utf-8"))
-    if doc.get("kind") != "round64-resume-seam-candidate-freeze/1":
+    if doc.get("kind") != "round64-approved-resume-freeze/1":
         raise RuntimeError("unsupported R64 candidate freeze")
     experiment = doc["fixed_experiment"]
     limits = doc["attempt_limits"]
     source = doc["source_freeze"]
+    approval = doc["approval"]
+    approval_path = (path.parent / approval["path"]).resolve()
+    if _sha256(approval_path) != approval["sha256"]:
+        raise RuntimeError("R64 cap amendment approval hash mismatch")
+    approval_doc = json.loads(approval_path.read_text(encoding="utf-8"))
+    approved = approval_doc.get("approval_scope", {})
+    if (approval_doc.get("kind") != "round64-explicit-cap-amendment/1" or
+            approval_doc.get("human_answer") != "批准累计最多13次，完成原矩阵" or
+            approved.get("cumulative_hard_cap") != int(limits["hard_cap"]) or
+            approved.get("normal_cap") != int(limits["normal"]) or
+            approved.get("reserve_cap") != int(limits["reserve"]) or
+            approved.get("new_attempts_authorized") != 4 or
+            approved.get("failed_attempts_refund") is not False):
+        raise RuntimeError("R64 candidate limits are not covered by the explicit approval")
     return R64ExecutionBinding(
         task_id=doc["task"], branch=doc["branch"],
         execution_version=doc["candidate_execution_version"],
         candidate_sha256=_sha256(path),
+        approval_path=approval_path,
+        approval_sha256=approval["sha256"],
         source_freeze_path=(path.parent / source["path"]).resolve(),
         source_freeze_sha256=source["sha256"],
         scene=int(experiment["scene"]), focus_target=experiment["focus_target"],
@@ -95,6 +113,11 @@ def validate_live_binding(
         raise RuntimeError("R64 candidate execution version differs from the shared binding")
     if _sha256(binding.source_freeze_path) != binding.source_freeze_sha256:
         raise RuntimeError("historical ROUND64_FREEZE changed; candidate identity is stale")
+    approval_ref = doc.get("approval", {})
+    if (approval_ref.get("path") != binding.approval_path.name or
+            approval_ref.get("sha256") != binding.approval_sha256 or
+            _sha256(binding.approval_path) != binding.approval_sha256):
+        raise RuntimeError("R64 cap amendment approval changed after binding")
     source_freeze = json.loads(binding.source_freeze_path.read_text(encoding="utf-8"))
     source_model = source_freeze["model"]
     source_world = source_freeze["world"]
@@ -118,6 +141,15 @@ def validate_live_binding(
     )
     if not all(frozen_values):
         raise RuntimeError("R64 candidate values differ from the immutable historical freeze")
+    original_limits = source_freeze.get("authorization", {})
+    approval_doc = json.loads(binding.approval_path.read_text(encoding="utf-8"))
+    approved_limits = approval_doc.get("approval_scope", {})
+    if (original_limits.get("hard_attempt_cap") != 12 or
+            approved_limits.get("cumulative_hard_cap") != binding.hard_cap or
+            approved_limits.get("normal_cap") != binding.normal_cap or
+            approved_limits.get("reserve_cap") != binding.reserve_cap or
+            approved_limits.get("new_attempts_authorized") != 4):
+        raise RuntimeError("R64 cap amendment does not preserve and explicitly supersede the old cap")
     if executor_version != guard_version:
         raise RuntimeError(
             f"R64 executor/guard version mismatch: {executor_version!r} != {guard_version!r}"

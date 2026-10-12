@@ -1,0 +1,44 @@
+{
+  "kind": "round64-post-hoc-interruption-recovery-receipt/1",
+  "task": "ROUND64",
+  "classification": "interrupted_before_observed_run_terminal",
+  "recorded_at_utc": "2026-10-12 02:34:51 UTC",
+  "authority": {
+    "path": "ROUND64_CAP13_APPROVAL.json",
+    "sha256": "57ec591d356d50c50b6d6b5e40cc589f0244474e19c2ff19b0332dec3c90d1b9",
+    "qualification_review_path": "QUALIFICATION_AND_RECOVERY_REVIEW.json",
+    "qualification_review_sha256": "a0111752c51f247cd582021fdcaacb7e0f29973880e894de6fb8aa507158ff44"
+  },
+  "interrupted_attempt": {
+    "logical": "d+30_FORCE_SEND",
+    "slot": "normal-07",
+    "category": "normal",
+    "retry": false,
+    "execution_version": "round64-controlled-deadline-intervention/4",
+    "claim_path": "raw/launch_claims/d+30_FORCE_SEND/attempt_01.json",
+    "claim_sha256": "44aaa1c7b893e5891d762477294596de90bde7b9e8624e7e577db64ead6615b8",
+    "slot_path": "raw/guard_slots/normal-07.slot",
+    "slot_sha256": "eee3a28674e3d79621f92ef83c2ebbdec7a13e343b7ab1437f73fa2e884db001",
+    "partial_lifecycle_path": "raw/logs/v2_d+30_FORCE_SEND_a01_s1700027_a1_rp.jsonl",
+    "partial_lifecycle_sha256": "27b71de92557616ff796fb6fdab6d7bd5f74a970cc955f5aa2f3e1d121b3ab54",
+    "partial_lifecycle_last_step": 916,
+    "last_step_is_not_completed_step_count": true,
+    "ledger_prefix": {
+      "path": "raw/ROUND64_LEDGER.jsonl",
+      "sha256": "0f36b1a1c6f2ffa7a0f168c451fca7c01c34c70f6890c493345650bd5838779e",
+      "line_count": 58,
+      "byte_count": 12993,
+      "terminal_event_present": false,
+      "run_called_present": true,
+      "run_returned_present": false
+    },
+    "source_review_conclusion": "prior stop/commit and qualification review establish this run as interrupted; the original ledger remains nonterminal and no historical terminal event is synthesized"
+  },
+  "recovery_authorized": {
+    "only_logical": "d+30_FORCE_SEND",
+    "only_category": "reserve",
+    "only_slot": "reserve-03",
+    "must_not_repeat_qualified_cells": true,
+    "original_normal_attempt_classification_preserved": true
+  }
+}

@@ -1,6 +1,7 @@
 """Small persistent ROUND64 attempt guard; slots are consumed before any builder call."""
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import threading
@@ -9,6 +10,17 @@ from contextlib import contextmanager
 from pathlib import Path
 
 from r64_identity import BINDING, HISTORICAL_EXECUTION_VERSIONS
+
+HERE = Path(__file__).resolve().parent
+RECOVERY_RECEIPT_PATH = HERE / "ROUND64_RECOVERY_RECEIPT.json"
+
+
+def _sha256_bytes(payload):
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _sha256_file(path):
+    return _sha256_bytes(Path(path).read_bytes())
 
 
 class R64GuardError(RuntimeError):
@@ -83,7 +95,72 @@ class R64Guard:
             self._slot_payloads(), self.rows(), logicals,
             normal_cap=self.normal_cap, reserve_cap=self.reserve_cap,
             hard_cap=self.hard_cap,
+            recovery_receipts=self.verified_recovery_receipts(),
         )
+
+    def verified_recovery_receipts(self):
+        if self.root != (HERE / "raw").resolve():
+            return {}
+        if not RECOVERY_RECEIPT_PATH.is_file():
+            return {}
+        receipt = json.loads(RECOVERY_RECEIPT_PATH.read_text(encoding="utf-8"))
+        if receipt.get("kind") != "round64-post-hoc-interruption-recovery-receipt/1":
+            raise R64GuardError("unsupported R64 recovery receipt")
+        if receipt.get("task") != self.TASK_ID:
+            raise R64GuardError("R64 recovery receipt belongs to another task")
+        authority = receipt.get("authority", {})
+        if (authority.get("path") != BINDING.approval_path.name or
+                authority.get("sha256") != BINDING.approval_sha256 or
+                authority.get("qualification_review_path") != "QUALIFICATION_AND_RECOVERY_REVIEW.json"):
+            raise R64GuardError("R64 recovery receipt is not bound to the approved recovery source")
+        if _sha256_file(BINDING.approval_path) != BINDING.approval_sha256:
+            raise R64GuardError("R64 cap approval changed after binding")
+        review_path = HERE / authority["qualification_review_path"]
+        if _sha256_file(review_path) != authority.get("qualification_review_sha256"):
+            raise R64GuardError("R64 recovery qualification review hash mismatch")
+        source = receipt.get("interrupted_attempt", {})
+        logical = source.get("logical")
+        if (logical != "d+30_FORCE_SEND" or source.get("slot") != "normal-07" or
+                source.get("category") != "normal" or source.get("retry") is not False or
+                receipt.get("classification") != "interrupted_before_observed_run_terminal"):
+            raise R64GuardError("R64 recovery receipt attempts to reclassify another attempt")
+        expected_sources = (
+            (source.get("claim_path"), source.get("claim_sha256")),
+            (source.get("slot_path"), source.get("slot_sha256")),
+            (source.get("partial_lifecycle_path"), source.get("partial_lifecycle_sha256")),
+        )
+        for relative, expected in expected_sources:
+            path = (self.root.parent / relative).resolve()
+            if not path.is_relative_to(self.root.resolve().parent) or _sha256_file(path) != expected:
+                raise R64GuardError(f"R64 recovery source hash mismatch: {relative}")
+        ledger = self.ledger.read_bytes()
+        prefix = source.get("ledger_prefix", {})
+        count = int(prefix.get("line_count", -1))
+        lines = ledger.splitlines(keepends=True)
+        prefix_bytes = b"".join(lines[:count])
+        if (len(lines) < count or len(prefix_bytes) != int(prefix.get("byte_count", -1)) or
+                _sha256_bytes(prefix_bytes) != prefix.get("sha256")):
+            raise R64GuardError("R64 recovery ledger-prefix identity mismatch")
+        prefix_rows = [json.loads(line) for line in prefix_bytes.splitlines() if line.strip()]
+        events = [row for row in prefix_rows if row.get("logical") == logical]
+        if (not any(row.get("event") == "run_called" for row in events) or
+                any(row.get("event") in ("run_returned", "run_failed", "interrupted",
+                                           "result_qualified", "result_disqualified")
+                    for row in events)):
+            raise R64GuardError("R64 recovery receipt does not match the preserved nonterminal prefix")
+        claim = json.loads((self.root.parent / source["claim_path"]).read_text(encoding="utf-8"))
+        slot = json.loads((self.root.parent / source["slot_path"]).read_text(encoding="utf-8"))
+        if (claim.get("logical") != logical or claim.get("slot") != "normal-07" or
+                slot.get("logical") != logical or slot.get("slot") != "normal-07"):
+            raise R64GuardError("R64 recovery receipt source identity mismatch")
+        authorized = receipt.get("recovery_authorized", {})
+        if (authorized.get("only_logical") != logical or
+                authorized.get("only_category") != "reserve" or
+                authorized.get("only_slot") != "reserve-03" or
+                authorized.get("must_not_repeat_qualified_cells") is not True):
+            raise R64GuardError("R64 recovery receipt grants an invalid retry scope")
+        return {logical: {"receipt_sha256": _sha256_file(RECOVERY_RECEIPT_PATH),
+                          "receipt": receipt}}
 
     def require_resumable_plan(self, logicals):
         status = self.resume_plan_status(logicals)
@@ -122,6 +199,7 @@ class R64Guard:
             self.snapshot()
             current = self._slot_payloads()
             events = self._logical_events(logical)
+            receipt_retry = False
             if category == "normal":
                 if any(x["logical"] == logical for x in current):
                     raise R64GuardError(f"normal logical already consumed: {logical}")
@@ -130,7 +208,10 @@ class R64Guard:
             else:
                 terminal = next((x["event"] for x in reversed(events)
                                  if x["event"] in ("result_qualified", "result_disqualified", "interrupted")), None)
-                if not retry or terminal != "interrupted":
+                receipt = self.verified_recovery_receipts().get(logical)
+                receipt_retry = (terminal is None and receipt is not None and
+                                 logical == "d+30_FORCE_SEND")
+                if not retry or (terminal != "interrupted" and not receipt_retry):
                     raise R64GuardError("reserve requires explicit retry of an interrupted attempt")
                 if any(x["logical"] == logical and x["event"] == "result_qualified" for x in events):
                     raise R64GuardError("cannot retry a qualified logical")
@@ -143,19 +224,24 @@ class R64Guard:
             prefix = category + "-"
             for ordinal in range(1, limit + 1):
                 slot = f"{prefix}{ordinal:02d}"
+                if receipt_retry and slot != "reserve-03":
+                    continue
                 path = self.slots / f"{slot}.slot"
                 try:
                     fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
                 except FileExistsError:
                     continue
+                receipt_sha = receipt["receipt_sha256"] if category == "reserve" and receipt_retry else None
                 payload = {"task": self.TASK_ID, "execution_version": self.execution_version,
                            "slot": slot, "logical": logical, "category": category,
-                           "retry": bool(retry), "created_unix": time.time()}
+                           "retry": bool(retry), "created_unix": time.time(),
+                           "recovery_receipt_sha256": receipt_sha}
                 with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as handle:
                     handle.write(json.dumps(payload, ensure_ascii=False) + "\n")
                     handle.flush()
                     os.fsync(handle.fileno())
-                self._append(slot, logical, "slot_consumed", category=category, retry=bool(retry))
+                self._append(slot, logical, "slot_consumed", category=category,
+                             retry=bool(retry), recovery_receipt_sha256=receipt_sha)
                 return slot
             raise R64GuardError(f"no {category} slot available")
 
@@ -237,7 +323,8 @@ class R64Attempt:
         self.event("finished")
 
 
-def resume_plan_status(slot_payloads, rows, logicals, *, normal_cap, reserve_cap, hard_cap):
+def resume_plan_status(slot_payloads, rows, logicals, *, normal_cap, reserve_cap, hard_cap,
+                       recovery_receipts=None):
     """Pure readiness calculation; it never creates a claim or consumes a slot."""
     by_logical = {}
     for row in rows:
@@ -251,6 +338,7 @@ def resume_plan_status(slot_payloads, rows, logicals, *, normal_cap, reserve_cap
     nonterminal = []
     disqualified = []
     unresolved = []
+    recovery_receipts = recovery_receipts or {}
     for logical in logicals:
         events = by_logical.get(logical, [])
         terminal = next((row.get("event") for row in reversed(events)
@@ -263,7 +351,10 @@ def resume_plan_status(slot_payloads, rows, logicals, *, normal_cap, reserve_cap
         elif terminal == "interrupted":
             required_reserve += 1
         elif slots_by_logical.get(logical):
-            nonterminal.append(logical)
+            if logical in recovery_receipts:
+                required_reserve += 1
+            else:
+                nonterminal.append(logical)
         else:
             required_normal += 1
     normal_available = max(0, int(normal_cap) - consumed_normal)

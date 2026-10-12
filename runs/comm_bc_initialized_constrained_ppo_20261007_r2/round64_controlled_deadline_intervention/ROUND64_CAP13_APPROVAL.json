@@ -1,0 +1,31 @@
+{
+  "kind": "round64-explicit-cap-amendment/1",
+  "task": "ROUND64-APPROVED-CAP13-RESUME-AND-COMPLETE",
+  "source_thread_id": "01a0a044-592f-73e3-838c-19c1d79465d3",
+  "question_item_id": [
+    "request_user_input_async",
+    "call_LriqpEPUNvxCAaSbOwt2djZb",
+    0
+  ],
+  "question": "ROUND64 已消费9次；原计划还缺4格，但12次上限只余3次。若被中断的+30 SEND确无完整结果，是否批准增加1次技术储备，将累计硬上限改为13次（10正常＋3储备），在源码资格复核通过后只完成这4格？不重跑已完成格、不训练、不调参。",
+  "human_answer": "批准累计最多13次，完成原矩阵",
+  "approval_scope": {
+    "cumulative_hard_cap": 13,
+    "normal_cap": 10,
+    "reserve_cap": 3,
+    "new_attempts_authorized": 4,
+    "only_fixed_unresolved_cells": [
+      "d+30_FORCE_SEND",
+      "d+30_FORCE_SKIP",
+      "d+60_FORCE_SEND",
+      "d+60_FORCE_SKIP"
+    ],
+    "retry_mapping": {"d+30_FORCE_SEND": "reserve-03"},
+    "no_training_or_tuning": true,
+    "no_new_scenes_or_probes": true,
+    "failed_attempts_refund": false,
+    "old_12_attempt_freeze_rewritten": false
+  },
+  "recorded_at_utc": "2026-10-12 02:34:05 UTC",
+  "recorded_from": "latest human approval relayed in the active execution request; approval itself is not inferred from a historical report"
+}

@@ -348,9 +348,11 @@ def run_cell(cfg, spec, *, retry=False):
     previous = guard.terminal(logical)
     if previous in ("result_qualified", "result_disqualified"):
         raise R64GuardError(f"refusing to repeat terminal cell {logical}")
-    use_reserve = previous == "interrupted"
+    approved_recovery = guard.verified_recovery_receipts().get(logical)
+    receipt_resume = previous is None and approved_recovery is not None
+    use_reserve = previous == "interrupted" or receipt_resume
     if use_reserve and not retry:
-        raise R64GuardError(f"{logical} interrupted; retry requires explicit --retry-failed")
+        raise R64GuardError(f"{logical} requires its explicit approved reserve retry")
     if retry and not use_reserve:
         raise R64GuardError("reserve may only retry an interrupted logical")
     category = "reserve" if use_reserve else "normal"
@@ -568,6 +570,9 @@ def _cell_cursor(cfg, spec, retry_logical=None):
             raise R64GuardError(f"{logical} interrupted; explicit reserve retry required")
         return run_cell(cfg, spec, retry=True)
     if slot_rows:
+        if (retry_logical == logical and
+                logical in guard.verified_recovery_receipts()):
+            return run_cell(cfg, spec, retry=True)
         raise R64GuardError(f"{logical} has consumed a slot without a terminal receipt; refusing replay")
     if path.exists():
         raise R64GuardError(f"unclaimed cell evidence exists without a slot receipt: {logical}")

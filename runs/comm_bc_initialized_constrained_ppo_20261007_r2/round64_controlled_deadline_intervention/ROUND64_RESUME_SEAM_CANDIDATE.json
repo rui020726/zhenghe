@@ -1,8 +1,14 @@
 {
-  "kind": "round64-resume-seam-candidate-freeze/1",
+  "kind": "round64-approved-resume-freeze/1",
   "task": "ROUND64",
   "branch": "exp/round64-controlled-deadline-intervention",
-  "candidate_execution_version": "round64-controlled-deadline-intervention/7",
+  "candidate_execution_version": "round64-controlled-deadline-intervention/8",
+  "approval": {
+    "path": "ROUND64_CAP13_APPROVAL.json",
+    "sha256": "57ec591d356d50c50b6d6b5e40cc589f0244474e19c2ff19b0332dec3c90d1b9",
+    "authority": "explicit-human-approval",
+    "scientific_freeze_override": false
+  },
   "source_freeze": {
     "path": "ROUND64_FREEZE.json",
     "sha256": "cea67404615906e28a846989e19b94177b6ad682aacc4321af999dcc4c5a080e",
@@ -25,8 +31,8 @@
   },
   "attempt_limits": {
     "normal": 10,
-    "reserve": 2,
-    "hard_cap": 12,
+    "reserve": 3,
+    "hard_cap": 13,
     "refund_failed_attempts": false
   },
   "reviewed_balance_at_candidate_creation": {
@@ -36,7 +42,9 @@
     "normal_headroom": 3,
     "reserve_headroom": 0,
     "unresolved_matrix_cells": 4,
-    "continuation_authorized": false
+    "continuation_authorized": true,
+    "approved_attempts": 4,
+    "retry_receipt_required_for": "d+30_FORCE_SEND"
   },
-  "status": "identity_and_tests_candidate_only_no_run_authority"
+  "status": "approved_fixed_matrix_resume_identity"
 }
