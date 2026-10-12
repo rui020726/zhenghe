@@ -1,0 +1,208 @@
+{
+ "kind": "round66-freeze-addendum/2",
+ "addendum_id": "ROUND66_FREEZE_ADDENDUM_2",
+ "task_id": "ROUND66-BC-EARLY-PATH-PRESERVING-LATE-ADAPTATION",
+ "branch": "exp/round66-bc-early-path-preserving-late-adaptation",
+ "appended_at_unix": 1791796569.4487007,
+ "appended_by": "ROUND66 continuation session (post-training, pre-evaluation)",
+ "rule": "Append-only. ROUND66_FREEZE.json at 7267fc7 is preserved byte-identical and ROUND66_FREEZE_ADDENDUM_1.json is preserved byte-identical; this addendum registers the evaluation adapter v2 identity, the training outcome it will evaluate, and the accounting and evidence rules it runs under. No prior freeze, claim, row, checkpoint, log or verdict is rewritten.",
+ "git": {
+  "head_at_append": "7e8014fda6c228d0931e347ffd32d4ce812d350a",
+  "working_tree_status_excluding_the_r59_log": [],
+  "note": "committed separately, after this addendum, before the first eval builder"
+ },
+ "training_outcome": {
+  "launcher": "_r66_train.log",
+  "terminal_line": "LAUNCHER_DONE phase=train exit_code=0",
+  "normal_claims": 432,
+  "reserve_claims": 0,
+  "complete": 432,
+  "failed_technical": 0,
+  "already_numbered": "48 block-A references + 384 training episodes = 432",
+  "seeds": {
+   "11": {
+    "episodes": 128,
+    "updates": 32,
+    "optimizer_steps": 180,
+    "lambda_final": 1.0
+   },
+   "22": {
+    "episodes": 128,
+    "updates": 32,
+    "optimizer_steps": 180,
+    "lambda_final": 1.0
+   },
+   "33": {
+    "episodes": 128,
+    "updates": 32,
+    "optimizer_steps": 180,
+    "lambda_final": 1.0
+   }
+  },
+  "first_batch_gates": {
+   "11": {
+    "file": "raw/runtime/r60_first_batch_gate_s11.json",
+    "status": "passed",
+    "sha256": "d5a38705e63850bdc0bbcd24e0ae3a598d0c2b07eb94f1f8a2c2b02eda96acdd"
+   },
+   "22": {
+    "file": "raw/runtime/r60_first_batch_gate_s22.json",
+    "status": "passed",
+    "sha256": "1ac7a97b29d6e5e0ea7bccace3d8ecbfd7c8db9e2c11f2eb394c4cc5cd159744"
+   },
+   "33": {
+    "file": "raw/runtime/r60_first_batch_gate_s33.json",
+    "status": "passed",
+    "sha256": "8eb863f43981f6dcff357c489431bcfce0bcc784700747a984efd368b1ee73ab"
+   }
+  },
+  "ep128_checkpoints": {
+   "s11": {
+    "file": "raw/checkpoints/v2_train_s11_ep128.pt",
+    "bytes": 56521,
+    "sha256": "d5c003c60b67716f4d25a4cdfa170f43c6fda3265a782a8e63b30ca2293da3d7"
+   },
+   "s22": {
+    "file": "raw/checkpoints/v2_train_s22_ep128.pt",
+    "bytes": 56521,
+    "sha256": "77c2606d559455f0892e22989f94d1509dd2fd01855cc03106d32aed601656cf"
+   },
+   "s33": {
+    "file": "raw/checkpoints/v2_train_s33_ep128.pt",
+    "bytes": 56521,
+    "sha256": "8c61ea7b82baf1833bd1afa4a9850ab14bae88d2e668d240dad2ce1626a9f06a"
+   }
+  },
+  "synthetic_optimizer_updates_used_before_training": 4,
+  "synthetic_optimizer_update_cap": 32
+ },
+ "evaluation_adapter_v2": {
+  "file": "r66_eval_fixed2.py",
+  "sha256": "40232092ef26f09d605d73eb105f058d02276b1679e8f63843927f35e03b4cb0",
+  "eval_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1+r66-frozen-early-path-late-adaptation/1+r66-eval-matrix-correction/2",
+  "supersedes": "r66_eval_fixed.py (v1) is preserved unchanged at 7e8014f; v2 is a new file and a new row namespace, never an edit of the committed v1",
+  "row_namespace": {
+   "tag_prefix": "r66eval2",
+   "globs": [
+    "v2_r66eval2_model_*.json",
+    "v2_r66eval2_rule_*.json",
+    "v2_r66eval2_focal_*.json"
+   ],
+   "disjoint_from": [
+    "v2_r66_eval_*.json",
+    "v2_r66_rule_*.json",
+    "v2_r66_focal_*.json",
+    "v2_r66eval_*.json"
+   ]
+  },
+  "plan_file": {
+   "path": "raw/ROUND66_EVAL_PLAN_CORRECTED_2.json",
+   "sha256": "51afcad954f29163a664822eec4fe380cc05923b29e3abb4f21a8cf4d4d2a854",
+   "matrix": {
+    "rule_eval": 96,
+    "model_eval": 576,
+    "focal": 6,
+    "total": 678
+   },
+   "planned_normal_slot_range": [
+    433,
+    1110
+   ]
+  },
+  "zero_env_verdict": {
+   "path": "raw/runtime/ROUND66_EVAL_ADAPTER2_ZERO_ENV.json",
+   "sha256": "60d154497df0383ad09cf6be2acc0f5aead96b3572bfa02bb525bfae0ec4b4b9",
+   "status": "passed",
+   "checks": 100,
+   "failed": 0,
+   "log": {
+    "path": "raw/runtime/ROUND66_EVAL_ADAPTER2_ZERO_ENV.log",
+    "sha256": "47a4c25ebde79429868599a1f0bf4551c4a986fde97dc0f0b77dd4aca9f0f4fc"
+   }
+  },
+  "seams": {
+   "E1": "reserve ceiling is booked 39, not the inherited 40, and the D1 +1 unregistered environment construction is counted inside the 1150 hard cap",
+   "E2": "an incomplete / already-run / unreadable prior attempt is never reused; the retry takes the next attempt number in the RESERVE category with an attempt-isolated run tag, and the original claim, row and log survive byte-identical",
+   "E3": "a single generator eval_job_order() drives both the plan and the executor loops; planned_normal_slot is declared a plan enumeration, not a binding, because the real number comes from r40_common._reserve_slot lowest-free; _assert_visited_order proves the executor visited every planned cell in exactly the planned order",
+   "E4": "a complete claim is admissible only with a sound durable receipt: row path, row sha256, companions with path/sha256/bytes, re-hashed and re-read, plus row identity; the same test gates _prepare_claim so an unsound complete claim cannot deadlock a cell",
+   "E5": "the row and its receipt are persisted and re-verified BEFORE finish_launch(ok=True); a failing row write leaves failed_technical and never complete",
+   "E6": "target-set differences are paired per (scene, target_id) and never merged, so a same-named target in two scenes cannot cancel",
+   "E7": "the on-time target set is rebuilt from task_reward_events and closed in two ways against row['on_time']; anything unreadable or inconsistent raises",
+   "E7b": "a legitimate zero-task row (empty or absent event list with on_time == 0) closes to the empty set; emptiness alone is never treated as a data error",
+   "E8": "every row entering the statistics is named by a complete claim whose receipt re-proves from disk; an orphan row left by a failed retry is excluded and reported, never chosen by glob order; two sound receipts for one logical job are refused as ambiguous; a receipted row whose own identity contradicts its claim is refused"
+  },
+  "comparison_labels_fixed": {
+   "NEW_minus_OLD": "structural contrast only (R66 ep128 minus the compliant R60 ep128)",
+   "NEW_minus_BC": "the authorised added-learning reading (R66 ep128 minus the compliant R60 ep0)",
+   "labels_fixed_by": "the authorisation text; not re-chosen from the results"
+  }
+ },
+ "accounting": {
+  "normal_cap": 1110,
+  "booked_reserve_ceiling": 39,
+  "hard_cap": 1150,
+  "unregistered_extra_environment_constructions": 1,
+  "arithmetic": "actual = consumed slots (normal + reserve) + unregistered extras; booked_normal 1110 + booked_reserve 39 + 1 = 1150",
+  "historical_non_plan_probe": 0,
+  "r58_r60_historical_constructions_are_not_r66_consumption": true,
+  "ledger": {
+   "path": "raw/runtime/ROUND66_LEDGER.json",
+   "sha256": "8bf1f16e995fc7eb536bc48e4485290369cf716ee5dabd050e51f7ca575de7ef",
+   "counts": {
+    "normal_claims": 432,
+    "reserve_claims": 0,
+    "complete": 432,
+    "failed_technical": 0,
+    "cumulative_attempts": 432,
+    "cumulative_attempts_including_historical_probe": 432,
+    "hard_cap": 1150,
+    "hard_headroom": 718
+   }
+  }
+ },
+ "d1_pid_evidence_update": {
+  "checked_at_unix": 1791796569.4522119,
+  "method": "Get-CimInstance Win32_Process (read-only, escalated)",
+  "result": "the process table now contains ZERO python processes: pid 55388 (the reaped detached launcher), pid 56024 (the supervised launcher) and pid 31916 (its child) are all absent",
+  "what_this_closes": "D1's not_proven item is closed at artifact level from both ends: the reaped launcher left no exit record and a frozen claim carrying a constructor timestamp that predates the second launcher, and it is now confirmed gone; the supervised launcher ended with a recorded LAUNCHER_DONE exit_code=0 after 432/432 claims, so PID recycling during the gap cannot be mistaken for survival",
+  "what_this_does_not_change": "the accounting rule already adopted: two real environment constructions for r66_ref_immediate_s1300001, no refund, no new slot, no claim rewritten, reserve ceiling 39"
+ },
+ "new_block_occupancy": {
+  "question": "were scenario seeds 1800000..1800031 already used by any prior round?",
+  "audited_scope": [
+   "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ in full (13,323 JSON files, then 22,881 files, then 22,881 files with scenario-seed-specific patterns) - preserved in ROUND66_NEW_BLOCK_OCCUPANCY_AUDIT.json",
+   "this session additionally scanned the WHOLE of D:\\code outside that root and outside the R66 directory, for structured scenario-seed keys, paths and registered ranges"
+  ],
+  "structured_hits_outside_the_r2_root": 0,
+  "filename_hits_outside_the_r2_root": 0,
+  "bare_integer_matches_outside_the_r2_root": {
+   "lines": 208,
+   "files": 165,
+   "classification": "every one is an unrelated 7-digit integer, not a scenario seed: float coordinates inside RALTestSet graph.yaml files (e.g. 0.7386758721800007), hex Unicode code points in a vendored idna table, and byte totals in old audits such as comm_bytes_difference_total = 1805736",
+   "decision_side_rule_applied": "only structured scenario-seed keys, paths and registered ranges count as occupancy; plain integers in logs and metrics do not"
+  },
+  "scope_limitation": "the conclusion is therefore scoped: no historical consumption was found in the currently audited scope, and the outside-R2 evidence is structured-key-only. A scenario number that existed solely inside an ignored or non-textual artefact and appeared in no path, key or registered range would still be missed, exactly as the ROUND37 SCENE_USAGE_AUDIT method note states.",
+  "note_on_the_1800000_1899999_band": "ROUND37's SCENE_USAGE_AUDIT records the band 1800000-1899999 with a single member, 1805736; that number resolves to a byte total in old audits, not a scenario seed, and in any case lies outside 1800000..1800031"
+ },
+ "protected_files": {
+  "ROUND46_CURRENT_TASK.json": {
+   "path": "..\\ROUND46_CURRENT_TASK.json",
+   "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+   "expected_sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+   "matches": true,
+   "modified_this_round": false
+  },
+  "ROUND46_R2_V6_STOP_STATE.json": {
+   "path": "..\\ROUND46_R2_V6_STOP_STATE.json",
+   "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+   "expected_sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+   "matches": true,
+   "modified_this_round": false
+  }
+ },
+ "open_items_before_the_first_eval_builder": [
+  "commit this addendum, the v2 adapter, the v2 test, the corrected v2 plan and the zero-env verdict, with a message stating scope, data dimensions, tests run and unresolved risks",
+  "run the 678-cell evaluation through _r66_launch.py eval --module eval_fixed",
+  "produce the corrected statistics and the final delivery"
+ ]
+}

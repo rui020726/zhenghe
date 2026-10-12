@@ -1,0 +1,43 @@
+{
+ "kind": "round66-eval-adapter2-zero-env/2",
+ "status": "passed",
+ "checks": 100,
+ "failed": [],
+ "synthetic_optimizer_updates": 0,
+ "environment_constructions": 0,
+ "real_claims_opened": 0,
+ "real_slots_consumed": 0,
+ "bootstrap_index_sha256": "fefcfebb1c1cf9822ba6f55e107ffcfa5368a72640f764a768eddd7c8b8b278e",
+ "eval_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1+r66-frozen-early-path-late-adaptation/1+r66-eval-matrix-correction/2",
+ "seams": {
+  "E1_reserve_cap_39_and_d1_extra_in_the_hard_cap": true,
+  "E2_no_reuse_of_incomplete_attempts_reserve_retry_isolated_artifact": true,
+  "E3_plan_order_equals_request_order_slots_declared_pool_allocated": true,
+  "E4_complete_claim_requires_a_durable_re_provable_row": true,
+  "E5_row_and_receipt_persisted_before_the_success_commit": true,
+  "E6_target_set_diffs_paired_per_scene": true,
+  "E7_on_time_target_sets_evidenced_and_closed_fail_closed": true,
+  "E8_row_source_is_a_sound_complete_receipt_never_glob_order": true,
+  "E7b_a_legitimate_zero_task_row_closes_to_the_empty_set": true
+ },
+ "matrix": {
+  "rule_eval": 96,
+  "model_eval": 576,
+  "focal": 6,
+  "total": 678,
+  "planned_normal_slot_range": [
+   433,
+   1110
+  ]
+ },
+ "adapter": {
+  "file": "r66_eval_fixed2.py",
+  "sha256": "40232092ef26f09d605d73eb105f058d02276b1679e8f63843927f35e03b4cb0"
+ },
+ "test_file": {
+  "file": "test_r66_eval_adapter2_zero_env.py",
+  "sha256": "c9e6685196e626ac6cbf3f7fa05c266c017372dbd15fe5e0eb64c28b7f554060"
+ },
+ "recorded_at_unix": 1791796510.4985073,
+ "run_after": "training completed: LAUNCHER_DONE phase=train exit_code=0, 432/432 normal claims complete, three first-batch gates passed; this run is zero environment and did not touch any claim, slot or row"
+}

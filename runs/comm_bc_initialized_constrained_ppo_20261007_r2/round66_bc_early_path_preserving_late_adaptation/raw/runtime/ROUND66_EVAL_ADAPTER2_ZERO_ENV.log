@@ -1,0 +1,233 @@
+r66_frozen module loaded
+PASS plan_matches_the_single_order_generator
+PASS matrix_is_96_576_6
+PASS executor_order_is_rules_then_model_then_focal
+PASS model_cells_iterate_seed_then_arm_then_mode_then_scene
+PASS rule_cells_come_first_and_are_greedy_only
+PASS focal_cells_are_new_and_bc_greedy_on_1700027
+PASS planned_slots_are_the_contiguous_range_433_to_1110
+PASS slot_mechanism_is_declared_as_pool_allocation_not_a_binding
+PASS already_numbered_cells_plus_eval_equals_the_normal_cap
+PASS booked_reserve_ceiling_is_39_not_the_inherited_40
+PASS d1_extra_construction_is_counted_in_the_arithmetic
+PASS configure_r66_eval_rebinds_reserve_on_the_live_modules
+PASS quota_guard_counts_the_d1_extra_construction
+PASS quota_guard_records_live_bindings
+PASS quota_guard_accepts_the_full_1110_plus_39_booked_reserve
+PASS configure_r66_eval_itself_accepts_the_fully_booked_quota
+PASS quota_guard_refuses_a_40th_booked_reserve_slot
+PASS quota_guard_refuses_when_the_unregistered_extra_would_break_the_hard_cap
+PASS prepare_claim_on_a_fresh_cell_takes_attempt_1_in_the_normal_category
+PASS prepare_claim_on_a_fresh_cell_reserves_one_normal_slot
+PASS safe_run_on_a_fresh_cell_runs_attempt_1_normal_and_completes_it
+PASS safe_run_passes_the_unmarked_attempt_1_tag_to_the_builder
+PASS safe_run_leaves_exactly_one_claim_and_one_normal_slot
+PASS a_complete_cell_is_accepted_read_only_without_rerunning
+PASS cell_with_a_complete_attempt_is_skipped_read_only
+PASS claimed_before_environment_attempt_is_never_reused
+PASS the_original_claim_is_preserved_byte_identical
+PASS the_retry_records_what_it_retries_and_why
+PASS the_retry_reserves_a_reserve_slot_not_a_normal_one
+PASS status_failed_technical_also_takes_a_new_reserve_attempt
+PASS status_not_started_quota_exhausted_also_takes_a_new_reserve_attempt
+PASS status_claiming_also_takes_a_new_reserve_attempt
+PASS status_unreadable_also_takes_a_new_reserve_attempt
+PASS a_complete_retry_attempt_makes_the_cell_complete
+PASS prepare_claim_refuses_to_open_a_third_attempt_when_one_is_complete
+PASS safe_run_refuses_nested_claims
+PASS safe_run_passes_the_attempt_isolated_tag_to_the_builder
+PASS a_failed_builder_marks_the_claim_failed_technical_and_propagates
+PASS assert_visited_order_accepts_the_planned_order
+PASS assert_visited_order_rejects_a_divergent_execution_order
+{
+ "kind": "round66-corrected-eval-plan/2",
+ "task_id": "ROUND66-BC-EARLY-PATH-PRESERVING-LATE-ADAPTATION",
+ "branch": "exp/round66-bc-early-path-preserving-late-adaptation",
+ "eval_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1+r66-frozen-early-path-late-adaptation/1+r66-eval-matrix-correction/2",
+ "supersedes": "raw/ROUND66_EVAL_PLAN_CORRECTED.json written by r66_eval_fixed.py at 7e8014f, which is preserved unchanged; and the model_eval/rule_eval scopes of raw/ROUND66_FIXED_PLAN.json written from the erroneous freeze at 7267fc7, also preserved unchanged",
+ "correction": "r66-eval-matrix-correction/2: retry discipline + reserve cap 39 + slot semantics",
+ "matrix": {
+  "rule_eval": 96,
+  "model_eval": 576,
+  "focal": 6,
+  "total": 678
+ },
+ "already_numbered_cells": 432,
+ "already_numbered_note": "48 block-A immediate references + 384 training episodes",
+ "model_arms": [
+  "NEW",
+  "OLD",
+  "BC"
+ ],
+ "rule_arms": [
+  "immediate",
+  "late_discovery_gate",
+  "always_hold"
+ ],
+ "eval_scenes": [
+  1800000,
+  1800001,
+  1800002,
+  1800003,
+  1800004,
+  1800005,
+  1800006,
+  1800007,
+  1800008,
+  1800009,
+  1800010,
+  1800011,
+  1800012,
+  1800013,
+  1800014,
+  1800015,
+  1800016,
+  1800017,
+  1800018,
+  1800019,
+  1800020,
+  1800021,
+  1800022,
+  1800023,
+  1800024,
+  1800025,
+  1800026,
+  1800027,
+  1800028,
+  1800029,
+  1800030,
+  1800031
+ ],
+ "focal_scene": 1700027,
+ "execution_order": [
+  "rule_eval",
+  "model_eval",
+  "focal"
+ ],
+ "slot_allocation": {
+  "mechanism": "r40_common._reserve_slot takes the lowest free number in raw/launch_slots/<category>",
+  "planned_field": "planned_normal_slot is a plan enumeration, NOT a binding",
+  "planned_range": [
+   433,
+   1110
+  ],
+  "plan_order_equals_request_order": true,
+  "enforced_by": "r66_eval_fixed2._assert_visited_order at the end of the eval phase"
+ },
+ "quota": {
+  "normal_cap": 1110,
+  "reserve_cap_inherited_from_base": 40,
+  "reserve_cap_booked_here": 39,
+  "hard_cap": 1150,
+  "unregistered_extra_environment_constructions": 1,
+  "arithmetic": "booked_normal + booked_reserve + 1 (D1) <= 1150; with 1110 normal slots the booked reserve ceiling is 39",
+  "d1_reference": "ROUND66_DEVIATION_REGISTER.json#D1-reaped-reference-attempt-claim-reuse"
+ },
+ "row_namespace": {
+  "tag_prefix": "r66eval2",
+  "row_globs": [
+   "v2_r66eval2_model_*.json",
+   "v2_r66eval2_rule_*.json",
+   "v2_r66eval2_focal_*.json"
+  ],
+  "disjoint_from": [
+   "v2_r66_eval_*.json",
+   "v2_r66_rule_*.json",
+   "v2_r66_focal_*.json",
+   "v2_r66eval_*.json"
+  ]
+ }
+}
+PASS plan_phase_returns_zero_without_configuring_the_runtime
+PASS plan_phase_writes_the_v2_plan_file
+PASS eval_phase_binds_the_live_runtime_before_anything_else
+PASS eval_phase_cannot_bypass_the_quota_guard
+PASS v2_row_names_are_678
+PASS v2_rows_cannot_match_any_earlier_namespace
+PASS earlier_namespaces_cannot_match_the_v2_globs
+PASS v2_version_extends_the_r66_training_version
+PASS v2_shares_the_r66_task_branch_and_hard_cap
+PASS bootstrap_index_is_the_frozen_pcg64_20261012_draw
+PASS persist_result_writes_the_row_and_records_a_receipt
+PASS persist_result_refuses_a_row_missing_a_companion_key
+PASS persist_result_refuses_an_empty_companion
+PASS persist_result_refuses_a_companion_that_is_not_on_disk
+PASS a_failing_row_write_leaves_failed_technical_and_never_complete
+PASS safe_run_commits_only_after_the_row_is_durable
+PASS a_complete_claim_with_a_sound_receipt_is_accepted_read_only
+PASS a_complete_claim_without_a_receipt_is_not_skipped
+PASS a_complete_claim_whose_row_is_missing_is_not_skipped
+PASS a_complete_claim_whose_row_hash_does_not_match_is_not_skipped
+PASS a_complete_claim_whose_companion_is_missing_is_not_skipped
+PASS a_complete_claim_whose_companion_is_empty_is_not_skipped
+PASS a_complete_claim_whose_row_identity_is_wrong_is_not_skipped
+PASS a_complete_claim_whose_row_records_no_steps_is_not_skipped
+PASS an_unreadable_claim_fails_closed
+PASS an_unsound_complete_claim_is_not_skipped
+PASS prepare_claim_opens_a_reserve_retry_beside_an_unsound_complete_claim
+PASS the_unsound_complete_claim_is_preserved_untouched
+PASS a_companion_whose_content_changed_is_detected
+PASS a_companion_whose_size_changed_is_detected
+PASS a_sound_complete_attempt_qualifies_even_if_another_attempt_is_unsound
+PASS e6_lost_is_reported_as_scene_target_pairs
+PASS e6_gained_is_reported_as_scene_target_pairs
+PASS e6_counts_are_nonzero_where_a_merged_set_would_cancel
+PASS e6_rule_comparisons_appear_only_in_the_greedy_entry
+PASS e6_new_vs_immediate_reports_task_count_and_target_set
+PASS the_merged_set_would_have_cancelled_this_loss_so_the_test_is_meaningful
+PASS stats_still_covers_all_three_seeds_and_both_modes
+PASS e7_extracts_the_evidenced_on_time_set
+PASS e7_ignores_the_absent_target_id_field
+PASS e7_skips_events_that_are_not_on_time
+PASS e7_refuses_no_events_instead_of_writing_an_empty_set
+PASS e7_refuses_missing_events_instead_of_writing_an_empty_set
+PASS e7_refuses_events_not_a_list_instead_of_writing_an_empty_set
+PASS e7_refuses_count_mismatch_instead_of_writing_an_empty_set
+PASS e7_refuses_duplicate_ids_instead_of_writing_an_empty_set
+PASS e7_refuses_event_without_task_id_instead_of_writing_an_empty_set
+PASS e7_refuses_malformed_event_instead_of_writing_an_empty_set
+PASS e7_refuses_on_time_not_an_int_instead_of_writing_an_empty_set
+PASS e7_the_row_loader_fails_closed_on_an_unclosed_target_set
+PASS e8_an_orphan_row_from_a_failed_attempt_never_shadows_the_receipted_row
+PASS e8_the_excluded_orphan_is_reported_rather_than_silently_dropped
+PASS e8_an_unclaimed_row_file_is_not_admitted
+PASS e8_two_sound_receipts_for_one_cell_are_refused_not_ordered
+PASS e8_a_receipted_row_whose_identity_contradicts_its_claim_is_refused
+PASS e7b_a_zero_task_row_with_an_empty_event_list_closes_to_the_empty_set
+PASS e7b_a_zero_task_row_with_absent_events_also_closes_to_the_empty_set
+PASS e7b_a_nonzero_claim_with_an_empty_event_list_is_still_a_data_error
+PASS e7b_a_zero_task_row_with_an_off_time_event_closes_to_the_empty_set
+PASS e7b_a_legitimate_zero_row_loads_with_an_empty_target_set
+{
+ "kind": "round66-eval-adapter2-zero-env/1",
+ "status": "passed",
+ "checks": 100,
+ "failed": [],
+ "synthetic_optimizer_updates": 0,
+ "environment_constructions": 0,
+ "real_claims_opened": 0,
+ "real_slots_consumed": 0,
+ "bootstrap_index_sha256": "fefcfebb1c1cf9822ba6f55e107ffcfa5368a72640f764a768eddd7c8b8b278e",
+ "eval_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1+r66-frozen-early-path-late-adaptation/1+r66-eval-matrix-correction/2",
+ "seams": {
+  "E1_reserve_cap_39_and_d1_extra_in_the_hard_cap": true,
+  "E2_no_reuse_of_incomplete_attempts_reserve_retry_isolated_artifact": true,
+  "E3_plan_order_equals_request_order_slots_declared_pool_allocated": true,
+  "E4_complete_claim_requires_a_durable_re_provable_row": true,
+  "E5_row_and_receipt_persisted_before_the_success_commit": true,
+  "E6_target_set_diffs_paired_per_scene": true,
+  "E7_on_time_target_sets_evidenced_and_closed_fail_closed": true
+ },
+ "matrix": {
+  "rule_eval": 96,
+  "model_eval": 576,
+  "focal": 6,
+  "total": 678,
+  "planned_normal_slot_range": [
+   433,
+   1110
+  ]
+ }
+}
+
+=== stderr ===
