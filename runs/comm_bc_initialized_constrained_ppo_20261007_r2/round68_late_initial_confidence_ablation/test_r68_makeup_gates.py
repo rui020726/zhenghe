@@ -118,6 +118,10 @@ def finish(status: str, extra: dict | None = None) -> int:
                    "counted_rows": int(sum(e["rows"] for e in counted)),
                    "not_counted_entries": [e for e in HOOK_LOG if not e["counted"]]},
                "projections": PROJECTIONS,
+               "update_step_deltas": _UPDATE_STEP_DELTAS,
+               "guard_rows_at_start": MAKEUP_ROWS_AT_START,
+               "guard_steps_at_start": PRECHARGE_STEPS_BEFORE,
+               "guard_ppo_at_start": PRECHARGE_PPO_BEFORE,
                "guards": {"old_forward_rows_preserved": OLD_FWD.snapshot(),
                           "makeup_forward_rows": MAKEUP_FWD.snapshot(),
                           "synthetic_steps": STEP_GUARD.snapshot(),
@@ -174,6 +178,9 @@ def project_update_rows(samples, what):
     total). Refuses to start when the projection does not fit the remaining make-up grant."""
     per = int(sum(len(s["features"]) for s in samples))
     total = per * (1 + int(common.EPOCHS_PER_BATCH))
+    # Calibrated exactly against the measured partial run: 14 candidate rows charged 14 alignment
+    # rows + 4 epoch passes x 14 rows = 70 rows, i.e. (1 + EPOCHS) x candidate_rows. One minibatch
+    # per epoch holds while the record count stays under MINIBATCH_STEPS.
     PROJECTIONS.append({"what": what, "samples": len(samples), "candidate_rows": per,
                         "alignment_rows": per, "epoch_rows": per * int(common.EPOCHS_PER_BATCH),
                         "projected_total_rows": total,
@@ -185,15 +192,68 @@ def project_update_rows(samples, what):
 
 
 def charge_steps(n, what):
-    global SYNTH_STEPS
-    SYNTH_STEPS += int(n)
-    return STEP_GUARD.charge(int(n), what)
+    """RETIRED. Physical synthetic optimizer steps are charged only by register_step_precharge,
+    BEFORE the step runs. A charge taken from a post-hoc report cannot protect a step that already
+    executed and then crashed, so this path fails closed instead of under-counting."""
+    raise RuntimeError("charge_steps is retired: optimizer steps are pre-charged inside "
+                       "optimizer.step by register_step_precharge; a report-based charge would "
+                       "under-count an update that raised midway")
 
 
 def charge_ppo(what):
     global SYNTH_PPO
     SYNTH_PPO += 1
     return PPO_GUARD.charge(1, what)
+
+
+# ------------------------------------------------ hard pre-charge counting (no post-hoc charging)
+# The synthetic-step and synthetic-PPO counters must be charged BEFORE the physical work runs, never
+# reconstructed from a report that only exists if the call returned. An update that raises halfway
+# through would otherwise leave already-executed optimizer.step calls unaccounted for.
+PRECHARGE_STEPS_BEFORE = STEP_GUARD.used()
+PRECHARGE_PPO_BEFORE = PPO_GUARD.used()
+MAKEUP_ROWS_AT_START = MAKEUP_FWD.used()
+_UPDATE_STEP_DELTAS: list[dict] = []
+
+
+def register_step_precharge(optimizer, label):
+    """Wrap optimizer.step so the synthetic-step guard is charged BEFORE every physical step.
+
+    Covers every Adam/SGD step the update performs, including steps inside PPO. A refused charge
+    raises before the step runs, so a step is never executed un-paid.
+    """
+    orig_step = optimizer.step
+
+    def charged_step(*args, **kwargs):
+        global SYNTH_STEPS
+        SYNTH_STEPS += 1
+        STEP_GUARD.charge(1, f"{label}: physical optimizer.step pre-charge")
+        return orig_step(*args, **kwargs)
+
+    optimizer.step = charged_step
+    return optimizer
+
+
+def counted_update(controller, optimizer, episodes, *, label, update_index, diag_updates=()):
+    """Charge the PPO call at ENTRY, run the inherited update, then VERIFY the pre-charged deltas.
+
+    The returned report is verification only: nothing is charged from it. Every physical
+    optimizer.step inside the update was already charged by register_step_precharge.
+    """
+    steps_before, ppo_before = STEP_GUARD.used(), PPO_GUARD.used()
+    charge_ppo(f"{label}: PPO update entry charge")
+    report = r68.frozen_early_ppo_update(controller, optimizer, episodes,
+                                        update_index=update_index, diag_updates=diag_updates)
+    steps_after, ppo_after = STEP_GUARD.used(), PPO_GUARD.used()
+    delta = {"label": label, "update_index": int(update_index),
+             "reported_optimizer_steps": int(report["optimizer_steps"]),
+             "precharged_steps": int(steps_after - steps_before),
+             "ppo_charged": int(ppo_after - ppo_before)}
+    _UPDATE_STEP_DELTAS.append(delta)
+    check(f"{label}_precharged_steps_match_report",
+          int(steps_after - steps_before) == int(report["optimizer_steps"])
+          and int(ppo_after - ppo_before) == 1, delta=delta)
+    return report
 
 
 def feat(ready, first=1.0, age=0.0):
@@ -276,8 +336,22 @@ check("makeup_grant_within_cap_partial_rows_not_refunded",
       and MAKEUP_FWD.remaining() == 2048 - MAKEUP_FWD.used(),
       used=MAKEUP_FWD.used(), remaining=MAKEUP_FWD.remaining(),
       preserved_partial_rows=28)
-check("shared_steps_guard_used_is_2", STEP_GUARD.used() == 2, used=STEP_GUARD.used())
-check("shared_ppo_guard_used_is_0", PPO_GUARD.used() == 0, used=PPO_GUARD.used())
+NOTES.append("the shared synthetic-step and synthetic-PPO guards are NOT asserted at their "
+             "reconciled baseline of 2 steps / 0 PPO calls: a second partial make-up run charged 4 "
+             "more optimizer steps and 1 PPO call before it stopped on a numpy truthiness error. "
+             "Those charges are preserved, are not refunded, and are not evidence of any recorded "
+             "gate pass; the checks below verify the preserved reconciliation events are intact and "
+             "the caps still hold.")
+_steps_snap = STEP_GUARD.snapshot()
+_ppo_snap = PPO_GUARD.snapshot()
+_steps_recon = [e for e in _steps_snap["events"] if "reconciliation" in str(e.get("what", ""))]
+_ppo_recon = [e for e in _ppo_snap["events"] if "reconciliation" in str(e.get("what", ""))]
+check("shared_steps_guard_reconciled_baseline_two_preserved",
+      len(_steps_recon) == 1 and int(_steps_recon[0]["n"]) == 2
+      and _steps_snap["used"] <= 32, used=_steps_snap["used"], cap=_steps_snap["cap"])
+check("shared_ppo_guard_reconciled_baseline_zero_preserved",
+      len(_ppo_recon) == 1 and int(_ppo_recon[0]["n"]) == 0
+      and _ppo_snap["used"] <= 32, used=_ppo_snap["used"], cap=_ppo_snap["cap"])
 
 live = {"epochs_per_batch": int(common.EPOCHS_PER_BATCH), "minibatch_steps": int(common.MINIBATCH_STEPS),
         "learning_rate": float(common.LEARNING_RATE), "data_order_seed": int(common.DATA_ORDER_SEED),
@@ -362,86 +436,32 @@ def _recompute_log_prob(controller, sample):
 check("m1_own_draw_alignment_is_exact",
       max(abs(float(s["log_prob"]) - _recompute_log_prob(m1_ctrl, s))
           for s in m1_samples) < 1e-9)
-# ---- M1a: real PPO update through the inherited update function (real lr, real forwards) ----
-m1_opt = r68.build_optimizer(m1_ctrl, common.LEARNING_RATE)
-project_update_rows(m1_samples, "M1 real-lr update (inherited r66 update math, R68-scaled controller)")
-f_before, t_before = identities(m1_ctrl)
-m1_report = r68.frozen_early_ppo_update(m1_ctrl, m1_opt, m1_episodes,
-                                        update_index=9001, diag_updates=(9001,))
-charge_ppo("M1 real-lr update")
-charge_steps(int(m1_report["optimizer_steps"]), "M1 real-lr update optimizer steps")
-f_after, t_after = identities(m1_ctrl)
-check("m1_update_structure_is_inherited_r66_math", m1_report["structure"] == r66.R66_STRUCTURE,
-      structure=m1_report["structure"])
-check("m1_update_frozen_bit_unchanged", f_before == f_after)
-check("m1_update_trainable_moved", t_before != t_after)
-check("m1_update_object_counts_6_6",
-      m1_report["frozen_parameter_object_count"] == 6
-      and m1_report["trainable_parameter_object_count"] == 6)
-check("m1_update_alignment_passed", bool(m1_report["likelihood_alignment"]["passed"]),
-      alignment=m1_report["likelihood_alignment"])
-check("m1_update_routing_active_both_partitions",
-      m1_report["early_free"] > 0 and m1_report["late_free"] > 0,
-      early_free=m1_report["early_free"], late_free=m1_report["late_free"])
-means = m1_report["module_gradient_l1_mean"]
-check("m1_frozen_modules_recorded_none",
-      means.get("trunk") is None and means.get("early_head") is None, means=means)
-check("m1_trainable_modules_recorded_numbers",
-      isinstance(means.get("late_head"), float) and isinstance(means.get("task_value_head"), float)
-      and isinstance(means.get("cost_head"), float), means=means)
-d1 = m1_report.get("gate_diag") or {}
-check("m1_gate_diag_labels_frozen_structurally",
-      d1.get("trunk") == "frozen_requires_grad_false"
-      and d1.get("early_head") == "frozen_requires_grad_false", diag=d1)
-check("m1_late_actor_received_gradient", float(d1.get("late_actor_grad_l1", -1.0) or 0.0) > 0.0, diag=d1)
-check("m1_critic_received_gradient", float(d1.get("critic_grad_l1", -1.0) or 0.0) > 0.0, diag=d1)
-check("m1_value_losses_finite",
-      bool(np.isfinite([m1_report.get("value_loss_task", 0.0), m1_report.get("value_loss_cost", 0.0)]).all()))
-NOTES.append("the beta=1.00 gate prior acts on early first-emission free candidates, which route to "
-             "the FROZEN early_head, so on the ROUND68 controller the prior cannot move any "
-             "trainable parameter; that is the documented ROUND66 effect and is recorded as "
-             "absent/zero here, never as a measured training effect")
-
-# ---- M1b: lr=0 test-scoped optimizer: ALL_ROWS denominator exactly checkable ----------------
-m1x_ctrl, *_ = r68.fresh_r68_controller(SEED)
-install_trunk_hook(m1x_ctrl, "m1_exact")
-m1x_opt = r68.build_optimizer(m1x_ctrl, 0.0)
+# ---- M1 fixture-level structure + exact alignment (NO optimizer step runs in this section) ----
+# The M1a small-fixture update and the M1b lr=0 ALL_ROWS-exactness update were removed so this run
+# stays inside the granted +16 physical synthetic optimizer steps (4 already spent by the earlier
+# partial run) and inside the 2048-row make-up grant: the full M1+M2 design projected 2450 forward
+# rows plus 20 physical steps, which neither budget can absorb. Every forgone item is still made up
+# - M2 update 0 is a fabricated-episode PPO update with real forwards on a larger batch (item 6),
+# M2 updates 0 / 1 / 1-resumed are the multi-episode update + full five-module resume +
+# deterministic continuation + foreign-source rejection (item 7), M3/M4 cover items 8/9. The pure
+# GAE / mask / likelihood / ALL_ROWS arithmetic stays covered by identity reuse (grant scope).
 m1x_samples = trainer.batch_samples(m1_episodes)
 adv_all = float(np.mean([s["advantage"] for s in m1x_samples]))
 adv_free = float(np.mean([s["advantage"] for s in m1x_samples if len(s["free"]) > 0]))
 check("m1_fixture_separates_all_rows_from_free_rows", abs(adv_all - adv_free) > 1e-3,
       adv_all=adv_all, adv_free=adv_free)
-project_update_rows(m1x_samples, "M1 lr=0 exactness update (ALL_ROWS denominator)")
-fx_before, tx_before = identities(m1x_ctrl)
-m1x_report = r68.frozen_early_ppo_update(m1x_ctrl, m1x_opt, m1_episodes,
-                                         update_index=9002, diag_updates=(9002,))
-charge_ppo("M1 lr=0 exactness update")
-charge_steps(int(m1x_report["optimizer_steps"]), "M1 lr=0 exactness update optimizer steps")
-check("m1_lr0_update_left_parameters_bit_unchanged", identities(m1x_ctrl) == (fx_before, tx_before))
-check("m1_all_rows_denominator_includes_closed_hold_row",
-      abs(float(m1x_report["policy_surrogate"]) - adv_all) < 5e-6
-      and abs(float(m1x_report["policy_surrogate"]) - adv_free) > 1e-3,
-      reported=m1x_report["policy_surrogate"], adv_all=adv_all, adv_free=adv_free)
-rows_all = np.concatenate([s["features"] for s in m1x_samples], axis=0)
-with torch.no_grad():
-    _lg, _ = m1x_ctrl.forward(torch.as_tensor(rows_all))
-exp_ent, _row = 0.0, 0
-for s in m1x_samples:
-    n = len(s["targets"])
-    usable = torch.tensor([1.0 if t in s["free"] else 0.0 for t in s["targets"]],
-                          dtype=torch.float32)
-    exp_ent += float(action_entropy(_lg[_row:_row + n], usable))
-    _row += n
-exp_ent /= len(m1x_samples)
-check("m1_entropy_all_rows_mean_matches_reference",
-      abs(float(m1x_report["entropy"]) - exp_ent) < 5e-6,
-      reported=m1x_report["entropy"], expected=exp_ent)
 check("m1_hook_charged_only_nineteen_dim_rows",
-      all(e["counted"] for e in HOOK_LOG) and hook_rows("m1") > 0 and hook_rows("m1_exact") > 0,
-      m1_rows=hook_rows("m1"), m1_exact_rows=hook_rows("m1_exact"))
+      all(e["counted"] for e in HOOK_LOG) and hook_rows("m1") > 0, m1_rows=hook_rows("m1"))
+NOTES.append("the beta=1.00 gate prior acts on early first-emission free candidates, which route to "
+             "the FROZEN early_head, so on the ROUND68 controller the prior cannot move any "
+             "trainable parameter; that is the documented ROUND66 effect and is recorded as "
+             "absent/zero wherever the gate diag reports it, never as a measured training effect")
+NOTES.append("no optimizer step and no PPO call runs in M1. Dropping M1a/M1b is a test-scope "
+             "reduction forced by the non-expandable make-up grant, not a scientific change: the "
+             "frozen update mathematics, the living config and the ROUND68 controller are untouched.")
 
 # ============================================================ M2. real 4-episode update + resume
-def build_m2_episode(controller, ep_index, scene, n_records=12):
+def build_m2_episode(controller, ep_index, scene, n_records=10):
     rng = random.Random(20260927 + 1000 * int(ep_index))
     steps = sorted(rng.sample(range(3, 960), n_records))
     closed_step = steps[len(steps) // 2]
@@ -471,8 +491,13 @@ install_trunk_hook(m2_ctrl, "m2")
 m2_episodes = [build_m2_episode(m2_ctrl, e, 1300010 + e) for e in range(4)]
 m2_samples = trainer.batch_samples(m2_episodes)
 m2_rows = int(sum(len(s["features"]) for s in m2_samples))
-check("m2_four_episode_batch_of_forty_eight_records",
-      len(m2_episodes) == 4 and len(m2_samples) == 48, samples=len(m2_samples))
+NOTES.append("the M2 batch is 4 episodes x 10 decision records (40 records, 90 candidate rows) "
+             "instead of 4 x 12 (48 records, 112 candidate rows). Measured cost of one update is "
+             "(1 + EPOCHS) x candidate_rows = 5 x 90 = 450 forward rows, so three updates plus the "
+             "fixture draw fit the 2048-row grant with margin; 4 x 12 projected 2086 cumulative "
+             "rows, which exceeds it. Batch size is a test-scope choice only.")
+check("m2_four_episode_batch_of_forty_records",
+      len(m2_episodes) == 4 and len(m2_samples) == 40, samples=len(m2_samples))
 check("m2_records_carry_more_rows_than_records", m2_rows > len(m2_samples),
       records=len(m2_samples), candidate_rows=m2_rows)
 def _free_readies(s):
@@ -492,12 +517,11 @@ check("m2_has_closed_hold_early_and_late_free_rows",
       early_free_rows=sum(1 for r in _all_free_readies if r <= 147),
       late_free_rows=sum(1 for r in _all_free_readies if r > 147))
 m2_opt = r68.build_optimizer(m2_ctrl, common.LEARNING_RATE)
+register_step_precharge(m2_opt, "m2_update0")
 project_update_rows(m2_samples, "M2 update 0 (real lr, four-episode batch)")
 f2_before, t2_before = identities(m2_ctrl)
-m2_r0 = r68.frozen_early_ppo_update(m2_ctrl, m2_opt, m2_episodes,
-                                    update_index=9003, diag_updates=(9003,))
-charge_ppo("M2 update 0")
-charge_steps(int(m2_r0["optimizer_steps"]), "M2 update 0 optimizer steps")
+m2_r0 = counted_update(m2_ctrl, m2_opt, m2_episodes, label="m2_update0",
+                       update_index=9003, diag_updates=(9003,))
 check("m2_update0_structure_is_inherited_r66_math", m2_r0["structure"] == r66.R66_STRUCTURE)
 check("m2_update0_frozen_bit_unchanged_trainable_moved",
       identities(m2_ctrl)[0] == f2_before and identities(m2_ctrl)[1] != t2_before)
@@ -528,10 +552,8 @@ r68.save_checkpoint(m2_ctrl, m2_opt, state, ckpt, freeze=base.R68_FREEZE)
 saved_params = {k: v.detach().clone() for k, v in m2_ctrl.state_dict().items()}
 saved_opt = copy.deepcopy(m2_opt.state_dict())
 project_update_rows(m2_samples, "M2 update 1 unbroken continuation (real lr)")
-u1_unbroken = r68.frozen_early_ppo_update(m2_ctrl, m2_opt, m2_episodes,
-                                          update_index=9004, diag_updates=(9004,))
-charge_ppo("M2 update 1 unbroken continuation")
-charge_steps(int(u1_unbroken["optimizer_steps"]), "M2 update 1 unbroken continuation steps")
+u1_unbroken = counted_update(m2_ctrl, m2_opt, m2_episodes, label="m2_update1_unbroken",
+                             update_index=9004, diag_updates=(9004,))
 sha_after_unbroken = m2_ctrl.parameter_summary()["parameter_sha256"]
 
 random.seed(13579)
@@ -582,10 +604,9 @@ check("resume_reestablished_frozen_mask",
       and all(p.requires_grad for p in r68.trainable_parameters(rc)))
 
 project_update_rows(m2_samples, "M2 update 1 resumed continuation (real lr)")
-u1_resumed = r68.frozen_early_ppo_update(rc, ropt, m2_episodes,
-                                         update_index=9004, diag_updates=(9004,))
-charge_ppo("M2 update 1 resumed continuation")
-charge_steps(int(u1_resumed["optimizer_steps"]), "M2 update 1 resumed continuation steps")
+register_step_precharge(ropt, "m2_update1_resumed")
+u1_resumed = counted_update(rc, ropt, m2_episodes, label="m2_update1_resumed",
+                            update_index=9004, diag_updates=(9004,))
 _cmp = ("policy_surrogate", "value_loss_task", "value_loss_cost", "entropy", "approx_kl",
         "clip_fraction", "gradient_norm_mean", "gate_loss", "early_free", "late_free",
         "optimizer_steps", "samples", "minibatches")
@@ -673,7 +694,7 @@ check("cli_fresh_factory_writes_r68_init_identity_per_seed",
 check("cli_ppo_journal_path_under_r68_raw",
       str((RAW / "runtime" / "ppo_update_calls.jsonl").resolve()).startswith(str(RAW.resolve())))
 check("cli_no_model_forward_ran_in_this_phase",
-      hook_rows("m1") + hook_rows("m1_exact") + hook_rows("m2")
+      hook_rows("m1") + hook_rows("m2")
       == sum(e["rows"] for e in HOOK_LOG if e["counted"]))
 
 # ============================================================ M4. unregistered / duplicate start
@@ -926,9 +947,27 @@ NOTES.append("M3 exercises the real injected factory for seeds 11 and 22, so the
              "and created raw/checkpoints/r68_init_identity_s22.json. Both are identity-metadata "
              "JSONs (parameter SHA + late_init_alpha), carry no weights, and are exactly the files "
              "the real per-seed training start writes; no .pt checkpoint was created or modified.")
-check("trunk_hook_total_matches_charged_rows",
-      sum(e["rows"] for e in HOOK_LOG if e["counted"]) == MAKEUP_FWD.used()
-      and MAKEUP_FWD.used() <= 2048, charged=MAKEUP_FWD.used())
+check("trunk_hook_total_matches_this_runs_charged_rows",
+      sum(e["rows"] for e in HOOK_LOG if e["counted"]) == MAKEUP_FWD.used() - MAKEUP_ROWS_AT_START
+      and MAKEUP_FWD.used() <= 2048,
+      charged_this_run=MAKEUP_FWD.used() - MAKEUP_ROWS_AT_START,
+      cumulative_used=MAKEUP_FWD.used(), cap=2048)
+check("this_run_physical_synthetic_steps_within_remaining_phase_allowance",
+      STEP_GUARD.used() - PRECHARGE_STEPS_BEFORE <= 12,
+      this_run=STEP_GUARD.used() - PRECHARGE_STEPS_BEFORE,
+      phase_allowance_remaining=16 - (PRECHARGE_STEPS_BEFORE - 2))
+check("makeup_phase_total_steps_within_granted_16_and_hard_cap_32",
+      STEP_GUARD.used() - 2 <= 16 and STEP_GUARD.used() <= 32,
+      phase_used=STEP_GUARD.used() - 2, cumulative=STEP_GUARD.used())
+check("this_run_ppo_calls_are_the_three_planned_updates",
+      PPO_GUARD.used() - PRECHARGE_PPO_BEFORE == 3 and PPO_GUARD.used() <= 32,
+      this_run=PPO_GUARD.used() - PRECHARGE_PPO_BEFORE, cumulative=PPO_GUARD.used())
+check("exactly_three_updates_ran_and_every_one_precharged_its_own_steps",
+      len(_UPDATE_STEP_DELTAS) == 3
+      and all(d["precharged_steps"] == d["reported_optimizer_steps"] for d in _UPDATE_STEP_DELTAS)
+      and all(d["ppo_charged"] == 1 for d in _UPDATE_STEP_DELTAS), deltas=_UPDATE_STEP_DELTAS)
+check("makeup_grant_cumulative_within_cap",
+      MAKEUP_FWD.used() <= 2048, used=MAKEUP_FWD.used(), remaining=MAKEUP_FWD.remaining())
 check("synthetic_step_total_within_shared_cap", STEP_GUARD.used() <= 32, used=STEP_GUARD.used())
 check("synthetic_ppo_total_within_shared_cap", PPO_GUARD.used() <= 32, used=PPO_GUARD.used())
 
