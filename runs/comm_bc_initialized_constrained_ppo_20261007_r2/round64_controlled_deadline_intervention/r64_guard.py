@@ -15,10 +15,11 @@ class R64GuardError(RuntimeError):
 
 class R64Guard:
     TASK_ID = "ROUND64"
-    EXECUTION_VERSION = "round64-controlled-deadline-intervention/3"
+    EXECUTION_VERSION = "round64-controlled-deadline-intervention/4"
     ACCEPTED_EXECUTION_VERSIONS = {
         "round64-controlled-deadline-intervention/2",
         "round64-controlled-deadline-intervention/3",
+        "round64-controlled-deadline-intervention/4",
     }
     NORMAL_CAP = 10
     RESERVE_CAP = 2

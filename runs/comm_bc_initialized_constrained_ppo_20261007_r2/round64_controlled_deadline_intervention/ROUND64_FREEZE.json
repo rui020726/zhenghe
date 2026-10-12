@@ -4,15 +4,19 @@
   "branch": "exp/round64-controlled-deadline-intervention",
   "pre_freeze_base_head": "252f2fc4d6101693ef363c9969090eb1ba0bb6a1",
   "initial_execution_version": "round64-controlled-deadline-intervention/2",
-  "execution_version": "round64-controlled-deadline-intervention/3",
+  "execution_version": "round64-controlled-deadline-intervention/4",
   "repair": {
-    "prior_attempt": "normal-01/L",
-    "prior_attempt_steps": 1000,
-    "prior_result": "interrupted at metadata-contract check; no training-state restore, optimizer update, or checkpoint write observed",
-    "prior_slot_refunded": false,
-    "repair_scope": "identity label only: load_mode=read_only, load_scope=model_only",
+    "prior_attempts": [
+      {"slot": "normal-01", "version": "/2", "logical": "L", "steps": 1000,
+       "result": "interrupted at read-only metadata-contract check"},
+      {"slot": "reserve-01", "version": "/3", "logical": "L", "steps": 1000,
+       "result": "interrupted because executor did not persist returned row JSON"}
+    ],
+    "prior_slots_refunded": false,
+    "repair_scope": "persist returned R42 row object exclusively within frozen R64 raw root",
     "science_configuration_changed": false,
-    "reserve_retry_authorized": 1
+    "reserve_slots_already_consumed": 1,
+    "reserve_slots_remaining": 1
   },
   "authorization": {
     "planned_attempts": 10,
@@ -75,7 +79,7 @@
     "no general necessity, safe-deletion, noninferiority, or deployment claim"
   ],
   "preflight": {
-    "file": "ROUND64_PREFLIGHT_12.json",
+    "file": "ROUND64_PREFLIGHT_13.json",
     "status": "passed",
     "environment_builds": 0,
     "environment_runs": 0,
@@ -89,14 +93,14 @@
     "read_only_model_loads": 1
   },
   "source_sha256": {
-    "r64_execute.py": "893402516c92a1d32bc02398f6d17f87a875339444af04c944749972664356a5",
+    "r64_execute.py": "010b89e96ce010d689cfbf86d8563a5f1c7722107d8f9fd64b1d7604abebc69a",
     "r64_runtime.py": "3ae654d240ed97ddf5296299f969849c9e0927ad08d2b41b4fcb36ce915bc099",
-    "r64_guard.py": "ce88c65604e4988445d41b769604d124e7dd1e2ccfa31a9c64edab29c2e61fba",
+    "r64_guard.py": "7bba6e0f5d64939db361edf457d1201150a4123b6288ddeb97a90d4de1642400",
     "r64_intervention.py": "eb77f35d9bea539a183bbd041c20e2a5d4156d32ad649650a2b4742d7a0d8c46",
     "r64_preflight.py": "28de32cb805109977c364a3a86c9bba96e9c9ad2419aa3cd204adfc1f77af56e",
     "r64_analysis.py": "f5b3e065cc1e43479db475a43d62cc07ed993e1532375aa587d387a4910498a0",
-    "test_round64_zero_env.py": "7f51f9a679949975e5cd9b88e03ef475b1bd542f7dd7c1920f6e6b433145fc16",
+    "test_round64_zero_env.py": "9a104f76ac6591a8006a7fc1b6e0bbe99c96edc1ca5599e22d9afcd0afefc906",
     "test_round64_analysis.py": "5ee7aa1e1c4a186305877c3f03adbe94806ca1c3f381975f801f4f01bd49b10f",
-    "ROUND64_PREFLIGHT_12.json": "d50a9d708603f4d91f3a2a799ea4479a525cc9c737fb51155eda63aa8ea036a5"
+    "ROUND64_PREFLIGHT_13.json": "e2f4c12b908327ed5100caa35e03dc05235fd1bc446782b18d7ba8b51e917861"
   }
 }

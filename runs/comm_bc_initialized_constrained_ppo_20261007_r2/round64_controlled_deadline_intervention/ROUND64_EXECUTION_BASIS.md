@@ -2,7 +2,7 @@
 
 ## Authorization and Boundary
 
-This package executes the user's fixed ROUND64 local deadline-by-action experiment. Initial execution identity `/2` consumed normal slot 1 on L and completed 1,000 steps, but its result was interrupted at a metadata-contract check because the executor label was `read_only_model_only` while the accepted R60 loader contract is `read_only`. The stored loader state showed no restore, optimizer step, or checkpoint write. The slot and artifacts remain preserved. The narrow `/3` repair records `load_mode=read_only` and `load_scope=model_only`; no scientific or world setting changes. The experiment authorizes at most 10 planned logical episodes plus 2 technical-reserve attempts (12 total slots), all serially through `r64_guard.py`. A failed, interrupted, or disqualified attempt consumes its slot. No further cases or retries are authorized beyond that cap.
+This package executes the user's fixed ROUND64 local deadline-by-action experiment. Initial `/2` L consumed normal slot 1 and completed 1,000 steps, then failed the read-only identity label check. `/3` corrected the label and preserved that result, but exposed the inherited runner contract: `_run_episode` returns a row object while the outer R60 executor normally persists its JSON. R64 omitted that persistence, so reserve slot 1 also completed 1,000 steps and was interrupted with the three raw logs preserved. Neither attempt restored training state, stepped an optimizer, or wrote a checkpoint. `/4` adds exclusive persistence of the returned row under the frozen raw root; no scientific or world setting changes. All attempts remain in one cumulative ledger; it accepts only the explicitly frozen `/2`, `/3`, and `/4` identities. The experiment authorizes at most 10 planned logical episodes plus 2 technical-reserve attempts (12 total slots); failures consume slots.
 
 No training, optimizer update, PPO replay, training-state/RNG restore, or checkpoint write is permitted. Only read-only loading of the fixed model and normal environment episodes are allowed. No push, merge, deployment, or follow-on experiment.
 
@@ -10,7 +10,7 @@ No training, optimizer update, PPO replay, training-state/RNG restore, or checkp
 
 - Branch: `exp/round64-controlled-deadline-intervention`
 - Pre-freeze base HEAD: `252f2fc4d6101693ef363c9969090eb1ba0bb6a1`
-- Initial freeze commit: `4f49e78` (`/2`); repaired execution version: `round64-controlled-deadline-intervention/3`; the append-only cumulative ledger explicitly accepts only these two identities.
+- Initial freeze commit: `4f49e78` (`/2`); identity repair commit: `e7bae95` (`/3`); current row-persistence repair: `round64-controlled-deadline-intervention/4`; the append-only cumulative ledger accepts only these three identities.
 - Model: R60 compliant seed 33, greedy, ep128; exact path, file SHA256 and parameter SHA256 are in `ROUND64_FREEZE.json`.
 - Scene: `1700027`; focus target: `piloc-e1-target-5`.
 - World: inherited R60 frozen configuration; horizon 1000, six goals, 29,300-byte communication budget, ACK disabled, same search/allocation checkpoints and greedy tie rule.

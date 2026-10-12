@@ -20,7 +20,7 @@ sys.path.insert(0, str(MASK_SOURCE))
 sys.path.insert(0, str(ELIGIBILITY_SOURCE))
 sys.path.insert(0, str(STAGE_B_SOURCE))
 
-from r64_execute import RAW, _cell_cursor, setup_runtime
+from r64_execute import RAW, _cell_cursor, persist_episode_row, setup_runtime
 from r64_guard import R64Guard, R64GuardError
 from r64_preflight import saved_focus_features_by_deadline_delta
 from r64_runtime import authority_chain, install_counting_hooks, install_deadline_overlay
@@ -191,6 +191,19 @@ class GuardTests(unittest.TestCase):
         tmp = tempfile.TemporaryDirectory(dir=SCRATCH)
         self.addCleanup(tmp.cleanup)
         return R64Guard(Path(tmp.name) / "raw")
+
+    def test_returned_row_is_exclusively_persisted_inside_frozen_raw(self):
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as tmp:
+            root = Path(tmp) / "raw"
+            row_path = root / "rows" / "row.json"
+            row = {"artefacts": {"row": str(row_path)}, "steps": 1000}
+            self.assertEqual(persist_episode_row(root, row), row_path)
+            self.assertEqual(json.loads(row_path.read_text(encoding="utf-8")), row)
+            with self.assertRaises(FileExistsError):
+                persist_episode_row(root, row)
+            outside = Path(tmp) / "outside.json"
+            with self.assertRaisesRegex(RuntimeError, "escaped"):
+                persist_episode_row(root, {"artefacts": {"row": str(outside)}})
 
     def test_ten_normal_then_eleventh_refused_and_restart_does_not_reset(self):
         guard = self.temp_guard()

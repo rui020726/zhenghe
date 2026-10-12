@@ -20,7 +20,7 @@ MODE = "greedy"
 DELTAS = (-30, 0, 30, 60)
 EXPECTED_FILE_SHA = "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a"
 EXPECTED_PARAM_SHA = "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a"
-R64_EXECUTION_VERSION = "round64-controlled-deadline-intervention/3"
+R64_EXECUTION_VERSION = "round64-controlled-deadline-intervention/4"
 PLAN = [
     {"logical": "L", "delta": 0, "arm": "L", "action": None},
     {"logical": "L0", "delta": 0, "arm": "L0", "action": None},
@@ -64,6 +64,14 @@ def write_or_verify(path, value):
             raise RuntimeError(f"existing immutable R64 record conflicts: {path}")
         return
     write_exclusive(path, value)
+
+
+def persist_episode_row(raw_root, row):
+    path = Path(row["artefacts"]["row"]).resolve()
+    if not path.is_relative_to(Path(raw_root).resolve()):
+        raise RuntimeError(f"R64 row output escaped the frozen raw root: {path}")
+    write_exclusive(path, row)
+    return path
 
 
 def _slug(value):
@@ -364,6 +372,7 @@ def run_cell(cfg, spec, *, retry=False):
         attempt.configuration = getattr(attempt, "configuration", None)
         if attempt.configuration is None:
             raise RuntimeError("builder did not capture actual live configuration")
+        persist_episode_row(cfg["raw_root"], row)
         if (int(progress.get("completed_steps", -1)) != 1000 or int(row.get("steps", -1)) != 1000):
             raise RuntimeError("fixed 1000-step episode did not complete")
         for name, artifact_path in row.get("artefacts", {}).items():
