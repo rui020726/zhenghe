@@ -8,19 +8,21 @@ import re
 import sys
 from pathlib import Path
 
+from r64_identity import BINDING, validate_live_binding
+
 HERE = Path(__file__).resolve().parent
 R2 = HERE.parent
 R60_DIR = R2 / "round60_partitioned_actor_head_ablation"
 R61_DIR = R2 / "round61_early_report_value_intervention"
 RAW = HERE / "raw"
-SCENE = 1700027
-TARGET = "piloc-e1-target-5"
-SEED = 33
-MODE = "greedy"
-DELTAS = (-30, 0, 30, 60)
-EXPECTED_FILE_SHA = "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a"
-EXPECTED_PARAM_SHA = "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a"
-R64_EXECUTION_VERSION = "round64-controlled-deadline-intervention/6"
+SCENE = BINDING.scene
+TARGET = BINDING.focus_target
+SEED = BINDING.seed
+MODE = BINDING.mode
+DELTAS = BINDING.deadline_deltas
+EXPECTED_FILE_SHA = BINDING.model_file_sha256
+EXPECTED_PARAM_SHA = BINDING.model_parameter_sha256
+R64_EXECUTION_VERSION = BINDING.execution_version
 PLAN = [
     {"logical": "L", "delta": 0, "arm": "L", "action": None},
     {"logical": "L0", "delta": 0, "arm": "L0", "action": None},
@@ -316,9 +318,30 @@ def cfg_model_identity(attempt):
     return attempt.model_identity
 
 
+def build_cell_collector(cfg, arm, delta):
+    if arm == "L":
+        return cfg["plain_cls"](cfg["controller"], greedy=True)
+    if arm not in ("L0", "FORCE_SEND", "FORCE_SKIP"):
+        raise RuntimeError(f"unknown frozen R64 arm: {arm}")
+    from budget_masked import HOLD, SEND
+    forced = SEND if arm == "FORCE_SEND" else HOLD
+    return cfg["r64_cls"](
+        cfg["controller"], greedy=True, target=TARGET, forced_action=forced,
+        reason=f"round64:{delta}:{arm}", override_enabled=arm.startswith("FORCE_"),
+    )
+
+
 def run_cell(cfg, spec, *, retry=False):
     from r64_guard import R64GuardError
     guard = cfg["r64_guard"]
+    validate_live_binding(
+        executor_version=R64_EXECUTION_VERSION,
+        guard_version=guard.execution_version,
+        model_identity=cfg["model_identity"],
+        guard_limits={"normal_cap": guard.normal_cap, "reserve_cap": guard.reserve_cap,
+                      "hard_cap": guard.hard_cap},
+        raw_root=guard.root,
+    )
     if guard.root != RAW.resolve() or not guard.allow_build:
         raise R64GuardError("cell execution is not bound to the unique live R64 root")
     logical, delta, arm = spec["logical"], int(spec["delta"]), spec["arm"]
@@ -349,14 +372,7 @@ def run_cell(cfg, spec, *, retry=False):
         r42_run = cfg["r42_run"]
         r42_run._ACTIVE_CLAIM = claim_path
         r42_run._ACTIVE_PROGRESS = r42_run._new_run_progress()
-        if arm == "L":
-            collector = cfg["plain_cls"](cfg["controller"], greedy=True)
-        else:
-            from budget_masked import HOLD, SEND
-            forced = SEND if arm == "FORCE_SEND" else HOLD
-            collector = cfg["r64_cls"](cfg["controller"], greedy=True, target=TARGET,
-                                        forced_action=forced, reason=f"round64:{delta}:{arm}",
-                                        override_enabled=arm.startswith("FORCE_"))
+        collector = build_cell_collector(cfg, arm, delta)
         try:
             row = cfg["runner"]._run_episode(
                 slug, "eval", SCENE, policy="learned", attach=collector.policy(),
@@ -565,6 +581,8 @@ def run_phase(cfg, phase, retry_logical=None):
     root = cfg["raw_root"]
     gate_file = root / "ROUND64_GATE.json"
     cells = {}
+    if phase in ("matrix", "all"):
+        guard.require_resumable_plan(spec["logical"] for spec in PLAN[2:])
     if phase in ("gate", "all"):
         for spec in PLAN[:2]:
             cells[spec["logical"]] = _cell_cursor(cfg, spec, retry_logical)

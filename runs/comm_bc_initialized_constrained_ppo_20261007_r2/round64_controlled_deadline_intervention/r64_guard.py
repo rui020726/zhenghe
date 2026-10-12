@@ -8,28 +8,30 @@ import time
 from contextlib import contextmanager
 from pathlib import Path
 
+from r64_identity import BINDING, HISTORICAL_EXECUTION_VERSIONS
+
 
 class R64GuardError(RuntimeError):
     pass
 
 
 class R64Guard:
-    TASK_ID = "ROUND64"
-    EXECUTION_VERSION = "round64-controlled-deadline-intervention/4"
-    ACCEPTED_EXECUTION_VERSIONS = {
-        "round64-controlled-deadline-intervention/2",
-        "round64-controlled-deadline-intervention/3",
-        "round64-controlled-deadline-intervention/4",
-        "round64-controlled-deadline-intervention/5",
-        "round64-controlled-deadline-intervention/6",
+    TASK_ID = BINDING.task_id
+    EXECUTION_VERSION = BINDING.execution_version
+    ACCEPTED_EXECUTION_VERSIONS = HISTORICAL_EXECUTION_VERSIONS | {
+        BINDING.execution_version
     }
-    NORMAL_CAP = 10
-    RESERVE_CAP = 2
-    HARD_CAP = 12
+    NORMAL_CAP = BINDING.normal_cap
+    RESERVE_CAP = BINDING.reserve_cap
+    HARD_CAP = BINDING.hard_cap
 
     def __init__(self, root: Path, *, allow_build=True):
         self.root = Path(root).resolve()
         self.allow_build = bool(allow_build)
+        self.execution_version = BINDING.execution_version
+        self.normal_cap = BINDING.normal_cap
+        self.reserve_cap = BINDING.reserve_cap
+        self.hard_cap = BINDING.hard_cap
         self.slots = self.root / "guard_slots"
         self.ledger = self.root / "ROUND64_LEDGER.jsonl"
         self.slots.mkdir(parents=True, exist_ok=True)
@@ -61,13 +63,13 @@ class R64Guard:
         if len(consumed_rows) != len(files) or {row["slot"] for row in consumed_rows} != {
                 value["slot"] for value in files}:
             raise R64GuardError("slot files and append-only consumption ledger disagree; fail closed")
-        if len(files) > self.HARD_CAP:
+        if len(files) > self.hard_cap:
             raise R64GuardError("persisted R64 attempt count exceeds hard cap")
         count = lambda event: sum(row["event"] == event for row in rows)
         return {
             "slots_consumed": len(files), "normal": sum(x["category"] == "normal" for x in files),
             "reserve": sum(x["category"] == "reserve" for x in files),
-            "hard_cap": self.HARD_CAP, "headroom": self.HARD_CAP - len(files),
+            "hard_cap": self.hard_cap, "headroom": self.hard_cap - len(files),
             "builder_calls": count("builder_called"), "builder_returns": count("env_constructed"),
             "run_calls": count("run_called"), "run_returns": count("run_returned"),
             "run_failures": count("run_failed"),
@@ -76,8 +78,28 @@ class R64Guard:
             "disqualified": count("result_disqualified"),
         }
 
+    def resume_plan_status(self, logicals):
+        return resume_plan_status(
+            self._slot_payloads(), self.rows(), logicals,
+            normal_cap=self.normal_cap, reserve_cap=self.reserve_cap,
+            hard_cap=self.hard_cap,
+        )
+
+    def require_resumable_plan(self, logicals):
+        status = self.resume_plan_status(logicals)
+        if not status["can_resume"]:
+            raise R64GuardError(
+                "R64 fixed-plan recovery gate refused before any new slot: "
+                f"unresolved={status['unresolved_logicals']}, "
+                f"additional_attempts_required={status['additional_attempts_required']}, "
+                f"normal_available={status['normal_available']}, "
+                f"reserve_available={status['reserve_available']}, "
+                f"nonterminal={status['nonterminal_logicals']}"
+            )
+        return status
+
     def _append(self, slot: str, logical: str, event: str, **details):
-        record = {"task": self.TASK_ID, "execution_version": self.EXECUTION_VERSION,
+        record = {"task": self.TASK_ID, "execution_version": self.execution_version,
                   "slot": slot, "logical": logical, "event": event,
                   "unix": time.time(), **details}
         with self.ledger.open("a", encoding="utf-8", newline="\n") as handle:
@@ -103,7 +125,7 @@ class R64Guard:
             if category == "normal":
                 if any(x["logical"] == logical for x in current):
                     raise R64GuardError(f"normal logical already consumed: {logical}")
-                if sum(x["category"] == "normal" for x in current) >= self.NORMAL_CAP:
+                if sum(x["category"] == "normal" for x in current) >= self.normal_cap:
                     raise R64GuardError("normal cap reached")
             else:
                 terminal = next((x["event"] for x in reversed(events)
@@ -112,12 +134,12 @@ class R64Guard:
                     raise R64GuardError("reserve requires explicit retry of an interrupted attempt")
                 if any(x["logical"] == logical and x["event"] == "result_qualified" for x in events):
                     raise R64GuardError("cannot retry a qualified logical")
-                if sum(x["category"] == "reserve" for x in current) >= self.RESERVE_CAP:
+                if sum(x["category"] == "reserve" for x in current) >= self.reserve_cap:
                     raise R64GuardError("reserve cap reached")
-            if len(current) >= self.HARD_CAP:
+            if len(current) >= self.hard_cap:
                 raise R64GuardError("hard cap reached")
 
-            limit = self.NORMAL_CAP if category == "normal" else self.RESERVE_CAP
+            limit = self.normal_cap if category == "normal" else self.reserve_cap
             prefix = category + "-"
             for ordinal in range(1, limit + 1):
                 slot = f"{prefix}{ordinal:02d}"
@@ -126,7 +148,7 @@ class R64Guard:
                     fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
                 except FileExistsError:
                     continue
-                payload = {"task": self.TASK_ID, "execution_version": self.EXECUTION_VERSION,
+                payload = {"task": self.TASK_ID, "execution_version": self.execution_version,
                            "slot": slot, "logical": logical, "category": category,
                            "retry": bool(retry), "created_unix": time.time()}
                 with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as handle:
@@ -213,3 +235,55 @@ class R64Attempt:
     def finish(self):
         self.closed = True
         self.event("finished")
+
+
+def resume_plan_status(slot_payloads, rows, logicals, *, normal_cap, reserve_cap, hard_cap):
+    """Pure readiness calculation; it never creates a claim or consumes a slot."""
+    by_logical = {}
+    for row in rows:
+        by_logical.setdefault(row.get("logical"), []).append(row)
+    slots_by_logical = {}
+    for slot in slot_payloads:
+        slots_by_logical.setdefault(slot.get("logical"), []).append(slot)
+    consumed_normal = sum(slot.get("category") == "normal" for slot in slot_payloads)
+    consumed_reserve = sum(slot.get("category") == "reserve" for slot in slot_payloads)
+    required_normal = required_reserve = 0
+    nonterminal = []
+    disqualified = []
+    unresolved = []
+    for logical in logicals:
+        events = by_logical.get(logical, [])
+        terminal = next((row.get("event") for row in reversed(events)
+                         if row.get("event") in ("result_qualified", "result_disqualified", "interrupted")), None)
+        if terminal == "result_qualified":
+            continue
+        unresolved.append(logical)
+        if terminal == "result_disqualified":
+            disqualified.append(logical)
+        elif terminal == "interrupted":
+            required_reserve += 1
+        elif slots_by_logical.get(logical):
+            nonterminal.append(logical)
+        else:
+            required_normal += 1
+    normal_available = max(0, int(normal_cap) - consumed_normal)
+    reserve_available = max(0, int(reserve_cap) - consumed_reserve)
+    additional = required_normal + required_reserve + len(nonterminal)
+    can_resume = (
+        not disqualified and not nonterminal and
+        required_normal <= normal_available and
+        required_reserve <= reserve_available and
+        additional <= max(0, int(hard_cap) - len(slot_payloads))
+    )
+    return {
+        "can_resume": can_resume,
+        "unresolved_logicals": unresolved,
+        "nonterminal_logicals": nonterminal,
+        "disqualified_logicals": disqualified,
+        "normal_attempts_required": required_normal,
+        "reserve_retries_required": required_reserve,
+        "additional_attempts_required": additional,
+        "normal_available": normal_available,
+        "reserve_available": reserve_available,
+        "hard_cap_headroom": max(0, int(hard_cap) - len(slot_payloads)),
+    }

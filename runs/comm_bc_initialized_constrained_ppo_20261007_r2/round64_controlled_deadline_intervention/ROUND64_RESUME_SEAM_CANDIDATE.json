@@ -1,0 +1,42 @@
+{
+  "kind": "round64-resume-seam-candidate-freeze/1",
+  "task": "ROUND64",
+  "branch": "exp/round64-controlled-deadline-intervention",
+  "candidate_execution_version": "round64-controlled-deadline-intervention/7",
+  "source_freeze": {
+    "path": "ROUND64_FREEZE.json",
+    "sha256": "cea67404615906e28a846989e19b94177b6ad682aacc4321af999dcc4c5a080e",
+    "note": "The historical freeze remains unchanged; this candidate is a separate seam identity."
+  },
+  "fixed_experiment": {
+    "scene": 1700027,
+    "focus_target": "piloc-e1-target-5",
+    "seed": 33,
+    "mode": "greedy",
+    "deadline_deltas": [-30, 0, 30, 60],
+    "horizon_steps": 1000,
+    "goals": 6,
+    "budget_bytes": 29300,
+    "ack": false,
+    "observation_dimensions": 19,
+    "model_path_relative_to_r2": "round60_partitioned_actor_head_ablation/raw/checkpoints/v2_train_s33_ep128.pt",
+    "model_file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+    "model_parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a"
+  },
+  "attempt_limits": {
+    "normal": 10,
+    "reserve": 2,
+    "hard_cap": 12,
+    "refund_failed_attempts": false
+  },
+  "reviewed_balance_at_candidate_creation": {
+    "consumed": 9,
+    "normal_consumed": 7,
+    "reserve_consumed": 2,
+    "normal_headroom": 3,
+    "reserve_headroom": 0,
+    "unresolved_matrix_cells": 4,
+    "continuation_authorized": false
+  },
+  "status": "identity_and_tests_candidate_only_no_run_authority"
+}
