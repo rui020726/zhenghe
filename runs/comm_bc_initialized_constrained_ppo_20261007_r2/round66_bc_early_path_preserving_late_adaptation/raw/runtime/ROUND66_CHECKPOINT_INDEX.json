@@ -1,0 +1,47 @@
+{
+  "kind": "round66-checkpoint-index/1",
+  "audited_code_head": "39ac0a41b932ebccfb744cea365cdb9dcf0fce6a",
+  "structure": "five_modules (shared_trunk, early_head, late_head, task_critic, cost_critic)",
+  "frozen": [
+    "shared_trunk",
+    "early_head"
+  ],
+  "trainable": [
+    "late_head",
+    "task_critic",
+    "cost_critic"
+  ],
+  "episodes_per_seed": 128,
+  "checkpoints": {
+    "s11": {
+      "path": "raw\\checkpoints\\v2_train_s11_ep128.pt",
+      "bytes": 56521,
+      "sha256": "d5c003c60b67716f4d25a4cdfa170f43c6fda3265a782a8e63b30ca2293da3d7",
+      "episodes_done": 128,
+      "arm": "NEW",
+      "structure": "five_modules",
+      "frozen": "shared_trunk+early_head requires_grad=False",
+      "trainable": "late_head + task_critic + cost_critic"
+    },
+    "s22": {
+      "path": "raw\\checkpoints\\v2_train_s22_ep128.pt",
+      "bytes": 56521,
+      "sha256": "77c2606d559455f0892e22989f94d1509dd2fd01855cc03106d32aed601656cf",
+      "episodes_done": 128,
+      "arm": "NEW",
+      "structure": "five_modules",
+      "frozen": "shared_trunk+early_head requires_grad=False",
+      "trainable": "late_head + task_critic + cost_critic"
+    },
+    "s33": {
+      "path": "raw\\checkpoints\\v2_train_s33_ep128.pt",
+      "bytes": 56521,
+      "sha256": "8c61ea7b82baf1833bd1afa4a9850ab14bae88d2e668d240dad2ce1626a9f06a",
+      "episodes_done": 128,
+      "arm": "NEW",
+      "structure": "five_modules",
+      "frozen": "shared_trunk+early_head requires_grad=False",
+      "trainable": "late_head + task_critic + cost_critic"
+    }
+  }
+}

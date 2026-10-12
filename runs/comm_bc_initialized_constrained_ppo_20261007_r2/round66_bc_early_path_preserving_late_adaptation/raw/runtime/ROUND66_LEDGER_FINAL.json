@@ -1,0 +1,43 @@
+{
+  "kind": "round66-final-ledger/1",
+  "task_id": "ROUND66-BC-EARLY-PATH-PRESERVING-LATE-ADAPTATION",
+  "branch": "exp/round66-bc-early-path-preserving-late-adaptation",
+  "audited_code_head": "39ac0a41b932ebccfb744cea365cdb9dcf0fce6a",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1+r66-frozen-early-path-late-adaptation/1+r66-eval-matrix-correction/2",
+  "note": "FINAL reconciled cumulative ledger for the whole round; the earlier raw/runtime/ROUND66_LEDGER.json (training-phase snapshot, 432 normal) is preserved unchanged.",
+  "quota": {
+    "normal_cap": 1110,
+    "reserve_cap_booked": 39,
+    "reserve_cap_inherited": 40,
+    "hard_cap": 1150,
+    "historical_probe": 0
+  },
+  "consumption": {
+    "normal_slots": 1110,
+    "normal_complete": 1109,
+    "normal_failed_technical": 1,
+    "reserve_slots": 1,
+    "reserve_complete": 1,
+    "consumed_slots_total": 1111,
+    "d1_unregistered_extra_constructions": 1,
+    "d1_step_count": "unknown",
+    "actual_environment_constructions": 1112,
+    "synthetic_optimizer_updates": 4,
+    "real_optimizer_steps": 540,
+    "real_ppo_updates": 96
+  },
+  "valid_logical_tasks": {
+    "total_normal": 1110,
+    "block_a_references": 48,
+    "training_episodes": 384,
+    "eval_cells": 678
+  },
+  "closure": {
+    "normal_cap_met": true,
+    "within_hard_cap": true,
+    "hard_headroom": 38,
+    "eval_cells_admissible": 678,
+    "eval_cells_planned": 678,
+    "all_576_plan_complete": true
+  }
+}

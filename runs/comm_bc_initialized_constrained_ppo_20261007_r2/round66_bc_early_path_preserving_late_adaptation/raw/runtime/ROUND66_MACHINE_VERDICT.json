@@ -1,0 +1,656 @@
+{
+  "kind": "round66-machine-verdict/1",
+  "task_id": "ROUND66-BC-EARLY-PATH-PRESERVING-LATE-ADAPTATION",
+  "branch": "exp/round66-bc-early-path-preserving-late-adaptation",
+  "audited_code_head": "39ac0a41b932ebccfb744cea365cdb9dcf0fce6a",
+  "verdict": "COMPLETE",
+  "structure_intervention": {
+    "what": "freeze shared trunk + early_head (requires_grad=False); train only late_head + both critics",
+    "init": "both heads copied from each seed's compliant R60 ep0; model-only, no optimizer/lambda/RNG/cursor inherited",
+    "routing": "ready_step = round(f[18]*1000) - round(f[0]); <=147 early head, >147 late head",
+    "unchanged": "beta=1.00, 19-dim obs, one-shot SEND/SKIP, sequential budget mask, dual critic, critic->trunk isolation, lambda*A_task - A_cost, GAE, ALL_ROWS, dual update, 6 targets, 29300B, ACK off"
+  },
+  "training": {
+    "complete": 432,
+    "seeds": [
+      11,
+      22,
+      33
+    ],
+    "episodes_per_seed": 128,
+    "normal_claims": 432,
+    "failed_technical": 0,
+    "real_optimizer_steps": 540,
+    "real_optimizer_steps_per_seed": 180,
+    "real_ppo_updates": 96,
+    "real_ppo_updates_per_seed": 32,
+    "synthetic_optimizer_updates": 4,
+    "synthetic_note": "pre-training acceptance only, counted separately",
+    "first_batch_gates": {
+      "s11": "passed",
+      "s22": "passed",
+      "s33": "passed"
+    },
+    "gate_s33_checks_all_true": [
+      "dual_head_routing_active",
+      "init_params_equal_r60_ep0",
+      "structure_r66_frozen_early_path",
+      "five_modules",
+      "frozen_modules_requires_grad_false",
+      "trainable_modules_requires_grad_true",
+      "optimizer_owns_six_trainable",
+      "frozen_modules_gradient_recorded_none",
+      "critic_received_gradient",
+      "late_actor_received_gradient",
+      "likelihood_alignment_passed",
+      "lambda_updated"
+    ],
+    "checkpoints": {
+      "s11": {
+        "path": "raw\\checkpoints\\v2_train_s11_ep128.pt",
+        "bytes": 56521,
+        "sha256": "d5c003c60b67716f4d25a4cdfa170f43c6fda3265a782a8e63b30ca2293da3d7",
+        "episodes_done": 128,
+        "arm": "NEW",
+        "structure": "five_modules",
+        "frozen": "shared_trunk+early_head requires_grad=False",
+        "trainable": "late_head + task_critic + cost_critic"
+      },
+      "s22": {
+        "path": "raw\\checkpoints\\v2_train_s22_ep128.pt",
+        "bytes": 56521,
+        "sha256": "77c2606d559455f0892e22989f94d1509dd2fd01855cc03106d32aed601656cf",
+        "episodes_done": 128,
+        "arm": "NEW",
+        "structure": "five_modules",
+        "frozen": "shared_trunk+early_head requires_grad=False",
+        "trainable": "late_head + task_critic + cost_critic"
+      },
+      "s33": {
+        "path": "raw\\checkpoints\\v2_train_s33_ep128.pt",
+        "bytes": 56521,
+        "sha256": "8c61ea7b82baf1833bd1afa4a9850ab14bae88d2e668d240dad2ce1626a9f06a",
+        "episodes_done": 128,
+        "arm": "NEW",
+        "structure": "five_modules",
+        "frozen": "shared_trunk+early_head requires_grad=False",
+        "trainable": "late_head + task_critic + cost_critic"
+      }
+    }
+  },
+  "evaluation": {
+    "planned_cells": 678,
+    "matrix": {
+      "rule_eval": 96,
+      "model_eval": 576,
+      "focal": 6
+    },
+    "independent_auditor_summary": {
+      "admissible_logical_jobs": 678,
+      "all_expected_cells_admissible": true,
+      "ambiguous_logical_jobs": 0,
+      "complete_eval_claims_audited": 678,
+      "excluded_logical_jobs": 0,
+      "expected_cells": 678,
+      "orphan_row_files": 1,
+      "out_of_scope_complete_claims": 432,
+      "run_class_breakdown": {
+        "model": 582,
+        "rule": 96
+      },
+      "unreadable_claims": 0
+    },
+    "independent_auditor_verdict": "ALL_678_CELLS_ADMISSIBLE",
+    "crosscheck_adapter_vs_independent_auditor": "AGREE (678/678 logical jobs, 0 row-path mismatch, 0 ambiguous)",
+    "adapter_orphan_field_bug": {
+      "finding": "r66_eval_fixed2._load_qualified_rows computes named via resolved_path.startswith('r66eval2_<prefix>_'), which is always False for absolute paths, so row_source_audit.*.orphan_row_files_excluded_from_statistics lists ALL on-disk rows (576 model / 97 rule) instead of the true orphans",
+      "science_impact": "NONE - the admitted rows and every statistic come from the sound-receipt qualified map, which the independent auditor re-derived and confirmed (678 admissible, 1 true orphan)",
+      "true_orphans": {
+        "model": 0,
+        "rule": 1,
+        "total": 1,
+        "which": "v2_r66eval2_rule_immediate_a1_s1800000_a1.json (failed slot-433 attempt, excluded)"
+      },
+      "adapter_not_edited": true
+    },
+    "eligibility_audit_file": "raw/runtime/ROUND66_EVAL_ELIGIBILITY_AUDIT.json",
+    "statistics_file": "raw/ROUND66_CORRECTED_STATISTICS.json"
+  },
+  "accounting": {
+    "normal_cap": 1110,
+    "reserve_cap_booked": 39,
+    "hard_cap": 1150,
+    "valid_logical_tasks_normal": 1110,
+    "valid_logical_tasks_breakdown": {
+      "block_a_references": 48,
+      "training_episodes": 384,
+      "eval_cells": 678
+    },
+    "block_a_references_provenance": "NEWLY RUN this round as normal slots 1-48 (48 real environment constructions); NOT cache-reused; separate from the 678 eval cells (slots 433-1110)",
+    "normal_slots_consumed": 1110,
+    "normal_complete": 1109,
+    "normal_failed_technical": 1,
+    "reserve_slots_consumed": 1,
+    "reserve_complete": 1,
+    "consumed_slots_total": 1111,
+    "failed_technical_detail": "r66eval2_rule_immediate_greedy_scene1800000 normal slot 433: persist_result raised 'artefact tape is missing or empty' (rule arm attaches no collector); 1 environment construction, 1000 steps; retried via reserve slot 1 (attempt a2) and completed; original a1 row preserved as orphan",
+    "d1_unregistered_extra_constructions": 1,
+    "d1_detail": "reaped partial for r66_ref_immediate_s1300001 (normal slot 2): first launch killed inside the environment constructor; second launch reused attempt-0001 and ran a complete 1000-step episode. Slot counted once; the killed partial is the +1 unregistered construction.",
+    "d1_step_count": "unknown",
+    "d1_step_count_note": "the claim's last-persisted counter reads completed_steps=0 / simulation_started=false, but positive termination by process handle is NOT established and the exact number of steps executed before the hard kill cannot be proven, so it is recorded UNKNOWN, not asserted as 0; no refund, no new slot, no claim rewritten",
+    "actual_environment_constructions": 1112,
+    "actual_rule": "consumed slots (normal+reserve) + unregistered extra constructions = 1111 + 1 = 1112",
+    "hard_headroom": 38,
+    "within_hard_cap": true
+  },
+  "science": {
+    "labels_fixed_by_authorisation": {
+      "NEW_minus_OLD": "structural contrast: R66 ep128 (frozen early path) minus the compliant R60 ep128 it started from - isolates the restricted policy family, NOT an added-learning gain",
+      "NEW_minus_BC": "the authorised added-learning reading: R66 ep128 minus the compliant R60 ep0 initial value it was initialised from",
+      "labels_fixed": true
+    },
+    "greedy_primary": true,
+    "sampled_separate": true,
+    "seeds_not_pooled": true,
+    "bootstrap": {
+      "rng": "PCG64",
+      "seed": 20261012,
+      "draws": 10000,
+      "index_sha256": "fefcfebb1c1cf9822ba6f55e107ffcfa5368a72640f764a768eddd7c8b8b278e",
+      "quantile": "numpy linear 0.025/0.975"
+    },
+    "per_seed_mode": {
+      "11/greedy": {
+        "NEW_on_time": 183,
+        "NEW_bytes_per_scene": 4066.5,
+        "OLD_on_time": 182,
+        "OLD_bytes_per_scene": 3753.56,
+        "BC_on_time": 183,
+        "BC_bytes_per_scene": 4066.5,
+        "NEW_minus_OLD": {
+          "task_mean": 0.03125,
+          "task_ci95": [
+            0.0,
+            0.0938
+          ],
+          "cost_B_per_scene": 312.94,
+          "cost_ci95": [
+            0.0,
+            722.62
+          ],
+          "scenes_better/worse/cheaper": [
+            1,
+            0,
+            0
+          ],
+          "targets_lost": [],
+          "targets_gained": [
+            {
+              "scene": 1800014,
+              "target_id": "piloc-e1-target-2"
+            }
+          ]
+        },
+        "NEW_minus_BC": {
+          "task_mean": 0.0,
+          "task_ci95": [
+            0.0,
+            0.0
+          ],
+          "cost_B_per_scene": 0.0,
+          "cost_ci95": [
+            0.0,
+            0.0
+          ],
+          "scenes_better/worse/cheaper": [
+            0,
+            0,
+            0
+          ],
+          "targets_lost": [],
+          "targets_gained": []
+        },
+        "rule_arms_greedy": {
+          "immediate": {
+            "on_time": 183,
+            "bytes_per_scene": 14356.5,
+            "NEW_minus_cost_B_per_scene": -10290.0,
+            "task_delta_mean": 0.0,
+            "targets_lost": [],
+            "targets_gained_count": 0
+          },
+          "late_discovery_gate": {
+            "on_time": 183,
+            "bytes_per_scene": 3897.94,
+            "NEW_minus_cost_B_per_scene": 168.56,
+            "task_delta_mean": 0.0,
+            "targets_lost": [],
+            "targets_gained_count": 0
+          },
+          "always_hold": {
+            "on_time": 170,
+            "bytes_per_scene": 0.0,
+            "NEW_minus_cost_B_per_scene": 4066.5,
+            "task_delta_mean": 0.40625,
+            "targets_lost": [],
+            "targets_gained_count": 13
+          }
+        }
+      },
+      "11/sampled": {
+        "NEW_on_time": 183,
+        "NEW_bytes_per_scene": 3981.94,
+        "OLD_on_time": 182,
+        "OLD_bytes_per_scene": 3753.56,
+        "BC_on_time": 183,
+        "BC_bytes_per_scene": 3981.94,
+        "NEW_minus_OLD": {
+          "task_mean": 0.03125,
+          "task_ci95": [
+            0.0,
+            0.0938
+          ],
+          "cost_B_per_scene": 228.38,
+          "cost_ci95": [
+            0.0,
+            492.56
+          ],
+          "scenes_better/worse/cheaper": [
+            1,
+            0,
+            0
+          ],
+          "targets_lost": [],
+          "targets_gained": [
+            {
+              "scene": 1800014,
+              "target_id": "piloc-e1-target-2"
+            }
+          ]
+        },
+        "NEW_minus_BC": {
+          "task_mean": 0.0,
+          "task_ci95": [
+            0.0,
+            0.0
+          ],
+          "cost_B_per_scene": 0.0,
+          "cost_ci95": [
+            0.0,
+            0.0
+          ],
+          "scenes_better/worse/cheaper": [
+            0,
+            0,
+            0
+          ],
+          "targets_lost": [],
+          "targets_gained": []
+        },
+        "rule_arms": "not_comparable_in_sampled_mode"
+      },
+      "22/greedy": {
+        "NEW_on_time": 183,
+        "NEW_bytes_per_scene": 4066.5,
+        "OLD_on_time": 182,
+        "OLD_bytes_per_scene": 3922.12,
+        "BC_on_time": 183,
+        "BC_bytes_per_scene": 4066.5,
+        "NEW_minus_OLD": {
+          "task_mean": 0.03125,
+          "task_ci95": [
+            0.0,
+            0.0938
+          ],
+          "cost_B_per_scene": 144.38,
+          "cost_ci95": [
+            0.0,
+            361.31
+          ],
+          "scenes_better/worse/cheaper": [
+            1,
+            0,
+            0
+          ],
+          "targets_lost": [],
+          "targets_gained": [
+            {
+              "scene": 1800014,
+              "target_id": "piloc-e1-target-2"
+            }
+          ]
+        },
+        "NEW_minus_BC": {
+          "task_mean": 0.0,
+          "task_ci95": [
+            0.0,
+            0.0
+          ],
+          "cost_B_per_scene": 0.0,
+          "cost_ci95": [
+            0.0,
+            0.0
+          ],
+          "scenes_better/worse/cheaper": [
+            0,
+            0,
+            0
+          ],
+          "targets_lost": [],
+          "targets_gained": []
+        },
+        "rule_arms_greedy": {
+          "immediate": {
+            "on_time": 183,
+            "bytes_per_scene": 14356.5,
+            "NEW_minus_cost_B_per_scene": -10290.0,
+            "task_delta_mean": 0.0,
+            "targets_lost": [],
+            "targets_gained_count": 0
+          },
+          "late_discovery_gate": {
+            "on_time": 183,
+            "bytes_per_scene": 3897.94,
+            "NEW_minus_cost_B_per_scene": 168.56,
+            "task_delta_mean": 0.0,
+            "targets_lost": [],
+            "targets_gained_count": 0
+          },
+          "always_hold": {
+            "on_time": 170,
+            "bytes_per_scene": 0.0,
+            "NEW_minus_cost_B_per_scene": 4066.5,
+            "task_delta_mean": 0.40625,
+            "targets_lost": [],
+            "targets_gained_count": 13
+          }
+        }
+      },
+      "22/sampled": {
+        "NEW_on_time": 183,
+        "NEW_bytes_per_scene": 4066.5,
+        "OLD_on_time": 182,
+        "OLD_bytes_per_scene": 3922.12,
+        "BC_on_time": 183,
+        "BC_bytes_per_scene": 4066.5,
+        "NEW_minus_OLD": {
+          "task_mean": 0.03125,
+          "task_ci95": [
+            0.0,
+            0.0938
+          ],
+          "cost_B_per_scene": 144.38,
+          "cost_ci95": [
+            0.0,
+            361.31
+          ],
+          "scenes_better/worse/cheaper": [
+            1,
+            0,
+            0
+          ],
+          "targets_lost": [],
+          "targets_gained": [
+            {
+              "scene": 1800014,
+              "target_id": "piloc-e1-target-2"
+            }
+          ]
+        },
+        "NEW_minus_BC": {
+          "task_mean": 0.0,
+          "task_ci95": [
+            0.0,
+            0.0
+          ],
+          "cost_B_per_scene": 0.0,
+          "cost_ci95": [
+            0.0,
+            0.0
+          ],
+          "scenes_better/worse/cheaper": [
+            0,
+            0,
+            0
+          ],
+          "targets_lost": [],
+          "targets_gained": []
+        },
+        "rule_arms": "not_comparable_in_sampled_mode"
+      },
+      "33/greedy": {
+        "NEW_on_time": 183,
+        "NEW_bytes_per_scene": 4066.5,
+        "OLD_on_time": 181,
+        "OLD_bytes_per_scene": 3471.19,
+        "BC_on_time": 183,
+        "BC_bytes_per_scene": 4066.5,
+        "NEW_minus_OLD": {
+          "task_mean": 0.0625,
+          "task_ci95": [
+            0.0,
+            0.1562
+          ],
+          "cost_B_per_scene": 595.31,
+          "cost_ci95": [
+            168.56,
+            1095.77
+          ],
+          "scenes_better/worse/cheaper": [
+            2,
+            0,
+            0
+          ],
+          "targets_lost": [],
+          "targets_gained": [
+            {
+              "scene": 1800014,
+              "target_id": "piloc-e1-target-2"
+            },
+            {
+              "scene": 1800030,
+              "target_id": "piloc-e1-target-2"
+            }
+          ]
+        },
+        "NEW_minus_BC": {
+          "task_mean": 0.0,
+          "task_ci95": [
+            0.0,
+            0.0
+          ],
+          "cost_B_per_scene": 0.0,
+          "cost_ci95": [
+            0.0,
+            0.0
+          ],
+          "scenes_better/worse/cheaper": [
+            0,
+            0,
+            0
+          ],
+          "targets_lost": [],
+          "targets_gained": []
+        },
+        "rule_arms_greedy": {
+          "immediate": {
+            "on_time": 183,
+            "bytes_per_scene": 14356.5,
+            "NEW_minus_cost_B_per_scene": -10290.0,
+            "task_delta_mean": 0.0,
+            "targets_lost": [],
+            "targets_gained_count": 0
+          },
+          "late_discovery_gate": {
+            "on_time": 183,
+            "bytes_per_scene": 3897.94,
+            "NEW_minus_cost_B_per_scene": 168.56,
+            "task_delta_mean": 0.0,
+            "targets_lost": [],
+            "targets_gained_count": 0
+          },
+          "always_hold": {
+            "on_time": 170,
+            "bytes_per_scene": 0.0,
+            "NEW_minus_cost_B_per_scene": 4066.5,
+            "task_delta_mean": 0.40625,
+            "targets_lost": [],
+            "targets_gained_count": 13
+          }
+        }
+      },
+      "33/sampled": {
+        "NEW_on_time": 183,
+        "NEW_bytes_per_scene": 4066.5,
+        "OLD_on_time": 181,
+        "OLD_bytes_per_scene": 3443.44,
+        "BC_on_time": 183,
+        "BC_bytes_per_scene": 4066.5,
+        "NEW_minus_OLD": {
+          "task_mean": 0.0625,
+          "task_ci95": [
+            0.0,
+            0.1562
+          ],
+          "cost_B_per_scene": 623.06,
+          "cost_ci95": [
+            168.28,
+            1153.32
+          ],
+          "scenes_better/worse/cheaper": [
+            2,
+            0,
+            0
+          ],
+          "targets_lost": [],
+          "targets_gained": [
+            {
+              "scene": 1800014,
+              "target_id": "piloc-e1-target-2"
+            },
+            {
+              "scene": 1800030,
+              "target_id": "piloc-e1-target-2"
+            }
+          ]
+        },
+        "NEW_minus_BC": {
+          "task_mean": 0.0,
+          "task_ci95": [
+            0.0,
+            0.0
+          ],
+          "cost_B_per_scene": 0.0,
+          "cost_ci95": [
+            0.0,
+            0.0
+          ],
+          "scenes_better/worse/cheaper": [
+            0,
+            0,
+            0
+          ],
+          "targets_lost": [],
+          "targets_gained": []
+        },
+        "rule_arms": "not_comparable_in_sampled_mode"
+      }
+    },
+    "focal_scene_1700027": {
+      "BC_s11_greedy": {
+        "on_time": 6,
+        "spent_bytes": 7500,
+        "on_time_ids": [
+          "piloc-e1-target-0",
+          "piloc-e1-target-1",
+          "piloc-e1-target-2",
+          "piloc-e1-target-3",
+          "piloc-e1-target-4",
+          "piloc-e1-target-5"
+        ],
+        "target_5_on_time": true
+      },
+      "BC_s22_greedy": {
+        "on_time": 6,
+        "spent_bytes": 7500,
+        "on_time_ids": [
+          "piloc-e1-target-0",
+          "piloc-e1-target-1",
+          "piloc-e1-target-2",
+          "piloc-e1-target-3",
+          "piloc-e1-target-4",
+          "piloc-e1-target-5"
+        ],
+        "target_5_on_time": true
+      },
+      "BC_s33_greedy": {
+        "on_time": 6,
+        "spent_bytes": 7500,
+        "on_time_ids": [
+          "piloc-e1-target-0",
+          "piloc-e1-target-1",
+          "piloc-e1-target-2",
+          "piloc-e1-target-3",
+          "piloc-e1-target-4",
+          "piloc-e1-target-5"
+        ],
+        "target_5_on_time": true
+      },
+      "NEW_s11_greedy": {
+        "on_time": 6,
+        "spent_bytes": 7500,
+        "on_time_ids": [
+          "piloc-e1-target-0",
+          "piloc-e1-target-1",
+          "piloc-e1-target-2",
+          "piloc-e1-target-3",
+          "piloc-e1-target-4",
+          "piloc-e1-target-5"
+        ],
+        "target_5_on_time": true
+      },
+      "NEW_s22_greedy": {
+        "on_time": 6,
+        "spent_bytes": 7500,
+        "on_time_ids": [
+          "piloc-e1-target-0",
+          "piloc-e1-target-1",
+          "piloc-e1-target-2",
+          "piloc-e1-target-3",
+          "piloc-e1-target-4",
+          "piloc-e1-target-5"
+        ],
+        "target_5_on_time": true
+      },
+      "NEW_s33_greedy": {
+        "on_time": 6,
+        "spent_bytes": 7500,
+        "on_time_ids": [
+          "piloc-e1-target-0",
+          "piloc-e1-target-1",
+          "piloc-e1-target-2",
+          "piloc-e1-target-3",
+          "piloc-e1-target-4",
+          "piloc-e1-target-5"
+        ],
+        "target_5_on_time": true
+      }
+    },
+    "focal_note": "all 6 focal cells (NEW and BC x 3 seeds, greedy) reach on_time=6 including target-5; NEW preserves scene 1700027/target-5 for every seed including seed 33, identical to the initial value"
+  },
+  "conclusions": {
+    "initial_policy_equivalence": "NEW initialised from R60 ep0 with both heads copied; gate s33 confirms init_params_equal_r60_ep0=True; forward/loss equivalence at init verified by the gate",
+    "added_learning_NEW_minus_BC": "IDENTICAL on task and cost for all 3 seeds x 2 modes (task delta 0, cost delta 0, zero target-set differences; per-scene NEW==BC in 32/32 scenes for seed 33 greedy). The restricted late adaptation produced no measured task or cost change versus the initial value on this development block.",
+    "structural_NEW_minus_OLD": "NEW never loses a target and gains 1-2 (mostly scene 1800014/target-2; seed 33 also 1800030/target-2), but is MORE expensive than OLD in every case (scenes_NEW_cheaper_than_OLD = 0/32 for all seeds); cost CIs are >= 0. No cross-seed cost reduction.",
+    "early_key_target": "scene 1700027/target-5 preserved on-time for NEW in all three seeds (focal), matching BC; the loss R60 full training caused for seed 33 is not reproduced by the restricted family.",
+    "vs_rules_greedy": "NEW is far cheaper than immediate (-10290 B/scene, same task) and close to late_discovery_gate (+168.6 B/scene, same task); it beats always_hold on task (+0.406, 13 targets gained) at +4066.5 B/scene."
+  },
+  "limitations": [
+    "Single development block (scenes 1800000-1800031 + focal 1700027); NOT a confirmation set.",
+    "Restricted policy family result only; does not prove parameter-sharing interference was the sole root cause, nor global optimality, non-inferiority, or deployment readiness.",
+    "NEW==BC is behavioural equivalence of measured outcomes on this block; it does NOT prove the trained parameters, gradient norms, clipping, or Adam trajectories equal the initial value.",
+    "CI containing 0 is not equivalence; no small-sample significance packaging.",
+    "The adapter's row_source_audit orphan field is unreliable (absolute-path startswith bug); the independent auditor is the authority on orphan accounting.",
+    "Rule arms are greedy-only; sampled NEW-vs-rule comparisons are explicitly non-applicable."
+  ]
+}

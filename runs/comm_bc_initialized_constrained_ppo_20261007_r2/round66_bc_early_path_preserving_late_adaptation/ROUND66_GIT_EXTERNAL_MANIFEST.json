@@ -1,0 +1,78 @@
+{
+  "kind": "round66-git-external-manifest/1",
+  "audited_code_head": "39ac0a41b932ebccfb744cea365cdb9dcf0fce6a",
+  "note": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/* is gitignored; these originals are deliverables kept on disk but NOT committed (no weights, no raw rows/tape/lifecycle/transcript/logs in git).",
+  "git_external_originals": {
+    "checkpoints": {
+      "dir": "raw/checkpoints",
+      "files": [
+        {
+          "file": "v2_train_s11_ep128.pt",
+          "bytes": 56521,
+          "sha256": "d5c003c60b67716f4d25a4cdfa170f43c6fda3265a782a8e63b30ca2293da3d7"
+        },
+        {
+          "file": "v2_train_s22_ep128.pt",
+          "bytes": 56521,
+          "sha256": "77c2606d559455f0892e22989f94d1509dd2fd01855cc03106d32aed601656cf"
+        },
+        {
+          "file": "v2_train_s33_ep128.pt",
+          "bytes": 56521,
+          "sha256": "8c61ea7b82baf1833bd1afa4a9850ab14bae88d2e668d240dad2ce1626a9f06a"
+        }
+      ]
+    },
+    "rows": {
+      "dir": "raw/rows",
+      "total_json": 1111,
+      "by_prefix": {
+        "v2_r66eval2_model": 576,
+        "v2_r66eval2_rule": 97,
+        "v2_r66eval2_focal": 6,
+        "v2_r60_train": 384,
+        "v2_r66_ref": 48
+      }
+    },
+    "companions": {
+      "dir": "raw/logs",
+      "tape_files": 966,
+      "lifecycle_files": 1111,
+      "transcript_files": 1111,
+      "note": "966 tapes = 384 training + 582 model/focal (collector-attached); 96 rule + 48 ref rows attach no collector and carry no tape"
+    },
+    "claims": {
+      "attempt_files": 1111,
+      "normal_slot_files": 1110,
+      "reserve_slot_files": 1
+    },
+    "runtime_logs": {
+      "dir": ".",
+      "logs": [
+        "_r66_eval_fixed2_eval.log",
+        "_r66_train.log",
+        "_r66_train_s11_gate.log"
+      ]
+    }
+  },
+  "committed_this_round": {
+    "code_tests": [
+      "r66_eval_eligibility_audit.py",
+      "test_r66_eval_eligibility_audit_zero_env.py"
+    ],
+    "reports_json": [
+      "ROUND66_FINAL_REPORT.md",
+      "ROUND66_GIT_EXTERNAL_MANIFEST.json",
+      "raw/runtime/ROUND66_MACHINE_VERDICT.json",
+      "raw/runtime/ROUND66_LEDGER_FINAL.json",
+      "raw/runtime/ROUND66_CHECKPOINT_INDEX.json",
+      "raw/runtime/INDEPENDENT_REVIEW_INPUTS.json",
+      "raw/runtime/ROUND66_EVAL_ELIGIBILITY_AUDIT.json",
+      "raw/ROUND66_CORRECTED_STATISTICS.json"
+    ]
+  },
+  "protected_untouched": [
+    "ROUND46_CURRENT_TASK.json (sha cf3ad198...)",
+    "ROUND46_R2_V6_STOP_STATE.json (sha 93a2f69f...)"
+  ]
+}
