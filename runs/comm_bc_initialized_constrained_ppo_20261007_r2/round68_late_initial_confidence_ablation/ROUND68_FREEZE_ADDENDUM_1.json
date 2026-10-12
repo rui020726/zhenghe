@@ -1,0 +1,127 @@
+{
+ "kind": "round68-freeze-addendum/1",
+ "amends": "ROUND68_FREEZE.json",
+ "task_id": "ROUND68-LATE-INITIAL-CONFIDENCE-ABLATION",
+ "branch": "exp/round68-late-initial-confidence-ablation",
+ "base_commit": "7805ff8f424e3e36169cfcf7dc1a5e88dcf7ef87",
+ "recorded_unix": 1791827538.3074436,
+ "purpose": "Close the ROUND68 make-up acceptance gates (the forgone zero-environment tail) without changing any research configuration and without retroactively approving the pre-existing forward-row overage. Records eligibility to resume training; does NOT itself resume training, construct an environment, or run any PPO update.",
+ "old_violation_preserved": {
+  "acceptance_forward_row_guard": {
+   "cap": 8192,
+   "used": 9319,
+   "over_by": 1127,
+   "status": "EXCEEDED"
+  },
+  "synthetic_optimizer_step_guard": {
+   "cap": 32,
+   "used_at_grant": 2,
+   "status": "within_cap"
+  },
+  "synthetic_ppo_call_guard": {
+   "cap": 32,
+   "used_at_grant": 0,
+   "status": "within_cap"
+  },
+  "note": "unchanged; not refunded, not zeroed, not retroactively approved."
+ },
+ "grant": {
+  "additional_forward_rows_cap": 2048,
+  "additional_physical_synthetic_steps_cap": 16,
+  "total_physical_synthetic_steps_cap_unchanged": 32,
+  "ppo_calls_counted_separately": true,
+  "source": "raw/runtime/ROUND68_MAKEUP_GRANT.json"
+ },
+ "makeup_phase_real_consumption": {
+  "forward_rows": {
+   "used": 1958,
+   "cap": 2048,
+   "remaining": 90
+  },
+  "physical_synthetic_steps": {
+   "used": 18,
+   "cap": 32
+  },
+  "synthetic_ppo_calls": {
+   "used": 5,
+   "cap": 32
+  },
+  "this_closing_tail_run": {
+   "forward_rows": 0,
+   "physical_synthetic_steps": 0,
+   "synthetic_ppo_calls": 0,
+   "sections": [
+    "M0",
+    "M3",
+    "M4",
+    "M5",
+    "M6"
+   ]
+  },
+  "note": "The closing tail re-executed only M0/M3/M4/M5/M6 and reused M1/M2's prior pass, so it consumed 0 forward rows / 0 steps / 0 PPO calls. The 1958 rows were consumed by the earlier partial make-up runs (cost_stream / state_dict / alignment crashes + the M0-M2 pass), preserved in raw/runtime/r68_makeup_forward_rows.json; not refunded."
+ },
+ "gates_scope": {
+  "status": "passed",
+  "total_checks": 104,
+  "this_run_checks": 74,
+  "reused_checks": 30,
+  "passed_by_reuse_from_prior_makeup_run": {
+   "M1": {
+    "count": 6,
+    "note": "own-draw synthetic fixture structure + exact log-prob alignment; no optimizer step, no PPO call"
+   },
+   "M2": {
+    "count": 24,
+    "note": "post-update-0 resume eligibility + two continuation updates + read-only load + foreign-source rejection"
+   }
+  },
+  "newly_passed_this_run": {
+   "M0": "preserved guard state + living-config-vs-freeze + pure GAE/mask/likelihood math (re-verified fresh)",
+   "M3": "real CLI configure_and_inject identity chain, stop before provider",
+   "M4": "unregistered / duplicate start rejection before environment construction",
+   "M5": "pure cumulative-guard semantics + grant non-expandability + ROUND60 608 is not ROUND68 headroom",
+   "M6": "protection (ROUND46 files byte-identical) + no side effects"
+  },
+  "not_passed": [],
+  "evidence": {
+   "machine_verdict": "raw/runtime/ROUND68_MAKEUP_GATES.json",
+   "this_run_log": "_r68_makeup_tail_run.log",
+   "prior_run_log": "_r68_makeup_gates_run.log",
+   "reused_sections": "raw/runtime/ROUND68_MAKEUP_SECTIONS.json"
+  }
+ },
+ "test_harness_fixes_applied_this_session": {
+  "science_impact": "none; no research configuration, freeze value, network, mask, likelihood, GAE, advantage, clip, dual update, threshold, beta, or budget was changed",
+  "m3_gae_ordering": "restored the v2_common module defaults (GAE_LAMBDA=0.95, ETA_LAMBDA=0.05) immediately before configure_and_inject so r42_run's ROUND42 provenance guard sees the same pre-override state a fresh r68_execute.main sees; configure_and_inject re-applies the living 1.0/0.5. The prior run only ever failed here because the test's M1/M2 setup had already overridden GAE/ETA; a real executor calls configure_and_inject first.",
+  "m4_name_kwarg_collision": "renamed one check's detail kwarg name= to builder_name= (it collided with check()'s positional name parameter and raised TypeError); the assertion is unchanged.",
+  "m5_dup_probe_category": "the deterministic-duplicate-not-deduped probe used category=normal after the normal cap (20) was already exhausted, so it could never claim; the two probe claims now use category=reserve (RESERVE_CAP=2, unused). The assertion total_used==booked+2 is unchanged.",
+  "m6_evidence_attribution": "in a tail run the two 'this run executed 2 updates / 2 PPO calls' checks and the M2 scratch-checkpoint reference cannot describe THIS process (M1/M2 are reused); they now assert the reused evidence and that this tail ran 0 updates / 0 PPO, and the M2 scratch path is hoisted. No assertion weakened; the 2 updates are attributed to the prior run that produced them.",
+  "temp_redirect": "TEMP/TMP/TMPDIR were pointed at a writable dir under the run tree for the test's synthetic fixtures only (the sandbox default temp was not writable); environment-only, no code or science change."
+ },
+ "update0_checkpoint_binding": {
+  "file": "_r68_makeup_scratch/v2_train_s11_makeup_resume_test.pt",
+  "sha256": "f43e0c768855a74acf8a838edda5c8adc09586e7b2ef48e9f741f02496f42182",
+  "bytes": 55177,
+  "state": {
+   "updates": 1,
+   "optimizer_steps": 4,
+   "episodes_done": 4,
+   "lambda": 0.73,
+   "structure": "R68_STRUCTURE",
+   "late_init_alpha": 0.1
+  },
+  "role": "synthetic make-up test artifact written by the earlier pre-charged partial run; used ONLY as the M2 resume source to prove five-module/Adam/lambda/RNG/cursor restore. NOT a real-training checkpoint and NOT a training resume source."
+ },
+ "r60_ep0_model_source_unchanged": {
+  "s11": "f267558d0cc8933987c09576b8d6d6ad512dbc3c73653d059104705c1faca437",
+  "s22": "249f769770fd0bffcc8df345539088890f9323f1338a224e3c8195d35adc8555",
+  "s33": "5f47f28b2678a0091e2370345b622aad7bdf1d8064b19d3ed57282bc8f005e93",
+  "note": "R68 init is model-only bit-exact from the compliant ROUND60 ep0, then late_head *= 0.10; unchanged by this addendum."
+ },
+ "new_source_identity": {
+  "gate_script": "test_r68_makeup_gates.py",
+  "gate_script_sha256": "61fe6fac55dded5af0811ca5552049d608a64e406d6d770e2f72349f7c6d111e",
+  "frozen_code_unchanged": "r68_execute.py / r68_frozen.py / r68_guards.py / r68_eval.py SHAs still match ROUND68_FREEZE.json code_sha256 (re-verified this session)."
+ },
+ "eligibility_statement": "With M0-M6 established, the ROUND68 executor is eligible to resume the fixed training plan (3 seeds x 128 episodes = 384 training env constructions; then 390 eval cells) within the R68 774+26/800 env budget, per the frozen order and init. This addendum grants no new env/training authorization by itself."
+}

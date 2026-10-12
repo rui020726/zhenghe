@@ -91,6 +91,68 @@ _LOGS_BEFORE = sorted(p.name for p in (RAW / "logs").glob("*")) if (RAW / "logs"
 _CKPTS_BEFORE = sorted(p.name for p in (RAW / "checkpoints").glob("*")) if (RAW / "checkpoints").is_dir() else []
 
 
+import os as _os
+_ALL_SECTIONS = ("M0", "M1", "M2", "M3", "M4", "M5", "M6")
+_sel_env = _os.environ.get("R68_MAKEUP_SECTIONS")
+SELECTED = (tuple(s.strip().upper() for s in _sel_env.split(",") if s.strip())
+            if _sel_env else _ALL_SECTIONS)
+
+
+def _want(tag):
+    return tag in SELECTED
+
+
+def _want_early():
+    # M1 and M2 are the forward-row / physical-step consuming sections; skipped together in a tail.
+    return _want("M1") or _want("M2")
+
+
+_SECTIONS_FILE = RT / "ROUND68_MAKEUP_SECTIONS.json"
+
+
+def _load_sections():
+    if _SECTIONS_FILE.is_file():
+        try:
+            return json.load(open(_SECTIONS_FILE, encoding="utf-8"))
+        except Exception:
+            return {}
+    return {}
+
+
+REUSED = []
+_reused_notes = []
+for _tag in _ALL_SECTIONS:
+    if _tag in SELECTED:
+        continue
+    _sec = _load_sections().get(_tag)
+    if _sec and _sec.get("results"):
+        for _r in _sec["results"]:
+            _rr = dict(_r)
+            _rr["reused"] = True
+            REUSED.append(_rr)
+        _reused_notes.append(
+            f"{_tag}: {len(_sec['results'])} checks reused from the prior make-up run and NOT "
+            f"re-executed this run (preserves the non-expandable forward-row/synthetic-step grant); "
+            f"evidence in raw/runtime/ROUND68_MAKEUP_SECTIONS.json + _r68_makeup_gates_run.log + guards.")
+NOTES.extend(_reused_notes)
+
+
+def _persist_progress(tag):
+    # Non-fatal incremental snapshot so a tail error never forces the whole prefix to re-run.
+    try:
+        base._write_json(RT / "ROUND68_MAKEUP_PROGRESS.json",
+                         {"last_section": tag, "sections_this_run": list(SELECTED),
+                          "results": list(RESULTS), "finished_unix": time.time()})
+    except Exception as exc:
+        NOTES.append(f"incremental persist of {tag} failed (non-fatal): {exc}")
+
+
+# The M2 post-update-0 scratch checkpoint is a durable artifact of the prior run; hoist its path so
+# the M6 no-side-effects check can assert it regardless of whether M2 executed in THIS process.
+_SCRATCH.mkdir(parents=True, exist_ok=True)
+ckpt = _SCRATCH / "v2_train_s11_makeup_resume_test.pt"
+
+
 def check(name, passed, **detail):
     RESULTS.append({"check": name, "passed": bool(passed), **detail})
     print(("PASS " if passed else "FAIL ") + name +
@@ -107,8 +169,8 @@ def finish(status: str, extra: dict | None = None) -> int:
     counted = [e for e in HOOK_LOG if e["counted"]]
     payload = {"kind": "round68-makeup-gates/1",
                "task_id": base.TASK_ID, "branch": base.BRANCH,
-               "status": status, "checks": len(RESULTS),
-               "failed": [r["check"] for r in RESULTS if not r["passed"]],
+               "status": status, "checks": len(REUSED) + len(RESULTS),
+               "failed": [r["check"] for r in REUSED + RESULTS if not r["passed"]],
                "synthetic_optimizer_steps": SYNTH_STEPS, "synthetic_ppo_calls": SYNTH_PPO,
                "trunk_hook": {
                    "rule": ("rows = prod(shape[:-1]) when the last dimension is 19 (a 1-D "
@@ -127,7 +189,14 @@ def finish(status: str, extra: dict | None = None) -> int:
                           "makeup_forward_rows": MAKEUP_FWD.snapshot(),
                           "synthetic_steps": STEP_GUARD.snapshot(),
                           "synthetic_ppo": PPO_GUARD.snapshot()},
-               "results": RESULTS, "notes": NOTES, "finished_unix": time.time()}
+               "results": REUSED + RESULTS, "notes": NOTES, "finished_unix": time.time(),
+               "this_run_sections": list(SELECTED),
+               "reused_from_prior_run": [r["check"] for r in REUSED],
+               "coverage_note": ("checks under this_run_sections executed in THIS process; checks "
+                                 "in reused_from_prior_run passed in the prior make-up run and were "
+                                 "NOT re-executed, to preserve the non-expandable forward-row/"
+                                 "synthetic-step grant (evidence: ROUND68_MAKEUP_SECTIONS.json + "
+                                 "_r68_makeup_gates_run.log + durable guards)")}
     if extra:
         payload.update(extra)
     out = RT / "ROUND68_MAKEUP_GATES.json"
@@ -393,295 +462,303 @@ check("joint_log_prob_all_masked_row_is_zero",
 check("entropy_all_masked_row_is_zero", float(action_entropy(logits3, torch.zeros(3))) == 0.0)
 
 # ============================================================ M1. real PPO update (own draw) ==
-M1_SPEC = {
-    0: {"scene": 1300000, "steps": 1000,
-        "records": [
-            (5, [("t1", 100, 1.0, True), ("t2", 140, 1.0, True), ("t3", 200, 0.0, False)]),
-            (9, [("t1", 180, 1.0, True), ("t2", 181, 1.0, True)]),
-            (13, [("t1", 50, 1.0, False)]),
-            (20, [("t1", 147, 0.0, True), ("t2", 147, 1.0, True)]),
-        ],
-        "cost": {5: 120.0, 9: 0.0, 13: 80.0, 20: 40.0, 30: 60.0},
-        "task": {5: 0.0, 9: 1.0, 13: 0.0, 20: 0.5, 30: 0.0}},
-    1: {"scene": 1300001, "steps": 1000,
-        "records": [
-            (4, [("t1", 148, 1.0, True), ("t2", 300, 1.0, True)]),
-            (11, [("t1", 200, 1.0, True)]),
-            (16, [("t1", 90, 1.0, True), ("t2", 95, 1.0, False)]),
-            (22, [("t1", 260, 1.0, False)]),
-        ],
-        "cost": {4: 200.0, 11: 0.0, 16: 90.0, 22: 30.0, 33: 55.0},
-        "task": {4: 0.0, 11: 1.0, 16: 0.0, 22: 0.5, 33: 0.0}},
-}
+if _want_early():
+    M1_SPEC = {
+        0: {"scene": 1300000, "steps": 1000,
+            "records": [
+                (5, [("t1", 100, 1.0, True), ("t2", 140, 1.0, True), ("t3", 200, 0.0, False)]),
+                (9, [("t1", 180, 1.0, True), ("t2", 181, 1.0, True)]),
+                (13, [("t1", 50, 1.0, False)]),
+                (20, [("t1", 147, 0.0, True), ("t2", 147, 1.0, True)]),
+            ],
+            "cost": {5: 120.0, 9: 0.0, 13: 80.0, 20: 40.0, 30: 60.0},
+            "task": {5: 0.0, 9: 1.0, 13: 0.0, 20: 0.5, 30: 0.0}},
+        1: {"scene": 1300001, "steps": 1000,
+            "records": [
+                (4, [("t1", 148, 1.0, True), ("t2", 300, 1.0, True)]),
+                (11, [("t1", 200, 1.0, True)]),
+                (16, [("t1", 90, 1.0, True), ("t2", 95, 1.0, False)]),
+                (22, [("t1", 260, 1.0, False)]),
+            ],
+            "cost": {4: 200.0, 11: 0.0, 16: 90.0, 22: 30.0, 33: 55.0},
+            "task": {4: 0.0, 11: 1.0, 16: 0.0, 22: 0.5, 33: 0.0}},
+    }
 
-m1_ctrl, *_ = r68.fresh_r68_controller(SEED)
-install_trunk_hook(m1_ctrl, "m1")
-m1_episodes = [build_episode(m1_ctrl, 0, M1_SPEC[0]["scene"], M1_SPEC[0]),
-               build_episode(m1_ctrl, 1, M1_SPEC[1]["scene"], M1_SPEC[1])]
-m1_samples = trainer.batch_samples(m1_episodes)
-check("m1_one_sample_per_decision_step", len(m1_samples) == 8, got=len(m1_samples))
-check("m1_closed_hold_rows_present", sum(1 for s in m1_samples if len(s["free"]) == 0) == 2)
-check("m1_masked_targets_inside_bundles_present",
-      any(len(s["targets"]) > len(s["free"]) > 0 for s in m1_samples))
-def _recompute_log_prob(controller, sample):
-    x = torch.as_tensor(np.asarray(sample["features"], dtype=np.float32))
-    with torch.no_grad():
-        logits, _ = controller.forward(x)
-    return float(joint_log_prob(
-        logits,
-        torch.tensor([sample["actions"][t] for t in sample["targets"]], dtype=torch.long),
-        torch.tensor([1.0 if t in sample["free"] else 0.0 for t in sample["targets"]],
-                     dtype=torch.float32)))
-
-
-check("m1_own_draw_alignment_is_exact",
-      max(abs(float(s["log_prob"]) - _recompute_log_prob(m1_ctrl, s))
-          for s in m1_samples) < 1e-9)
-# ---- M1 fixture-level structure + exact alignment (NO optimizer step runs in this section) ----
-# The M1a small-fixture update and the M1b lr=0 ALL_ROWS-exactness update were removed so this run
-# stays inside the granted +16 physical synthetic optimizer steps and inside the 2048-row make-up
-# grant: measured, one update costs (1 + EPOCHS) x candidate_rows forward rows and EPOCHS physical
-# steps, and the full M1+M2 design needed 2450 rows plus 20 steps, which neither budget absorbs.
-# The forgone items are still made up: the M2 continuation updates are fabricated-episode PPO
-# updates with real forwards on a 4-episode batch (item 6) and the full five-module resume plus
-# deterministic continuation plus foreign-source rejection (item 7); M3/M4 cover items 8/9. The pure
-# GAE / mask / likelihood / ALL_ROWS arithmetic stays covered by identity reuse (grant scope).
-m1x_samples = trainer.batch_samples(m1_episodes)
-adv_all = float(np.mean([s["advantage"] for s in m1x_samples]))
-adv_free = float(np.mean([s["advantage"] for s in m1x_samples if len(s["free"]) > 0]))
-check("m1_fixture_separates_all_rows_from_free_rows", abs(adv_all - adv_free) > 1e-3,
-      adv_all=adv_all, adv_free=adv_free)
-check("m1_hook_charged_only_nineteen_dim_rows",
-      all(e["counted"] for e in HOOK_LOG) and hook_rows("m1") > 0, m1_rows=hook_rows("m1"))
-NOTES.append("the beta=1.00 gate prior acts on early first-emission free candidates, which route to "
-             "the FROZEN early_head, so on the ROUND68 controller the prior cannot move any "
-             "trainable parameter; that is the documented ROUND66 effect and is recorded as "
-             "absent/zero wherever the gate diag reports it, never as a measured training effect")
-NOTES.append("no optimizer step and no PPO call runs in M1. Dropping M1a/M1b is a test-scope "
-             "reduction forced by the non-expandable make-up grant, not a scientific change: the "
-             "frozen update mathematics, the living config and the ROUND68 controller are untouched.")
-
-# ============================================================ M2. real 4-episode update + resume
-def build_m2_episode(controller, ep_index, scene, n_records=7):
-    rng = random.Random(20260927 + 1000 * int(ep_index))
-    steps = sorted(rng.sample(range(3, 960), n_records))
-    closed_step = steps[len(steps) // 2]
-    records, cost, task = [], {}, {}
-    for st in steps:
-        spec = []
-        for j in range(rng.choice([1, 2, 2, 3, 4])):
-            early = rng.random() < 0.5
-            ready = rng.randint(30, 147) if early else rng.randint(148, 420)
-            first = 1.0 if rng.random() < 0.6 else 0.0
-            free = (st != closed_step) and (rng.random() < 0.78)
-            spec.append((f"t{j + 1}", ready, first, free))
-        records.append(draw_record(controller, st, spec))
-        cost[st] = float(rng.choice([0.0, 40.0, 90.0, 150.0, 220.0]))
-        task[st] = float(rng.choice([0.0, 0.5, 1.0]))
-    cost[1000] = 60.0
-    task[1000] = 0.0
-    return {"collector": SimpleNamespace(records=records), "steps": 1000,
-            "cost_stream": {int(k): {"airtime_bytes": float(v)} for k, v in cost.items()},
-            "task_stream": {int(k): float(v) for k, v in task.items()},
-            "lambda": 1.0, "episode_index": int(ep_index), "training_seed": SEED,
-            "scenario_seed": int(scene)}
+    m1_ctrl, *_ = r68.fresh_r68_controller(SEED)
+    install_trunk_hook(m1_ctrl, "m1")
+    m1_episodes = [build_episode(m1_ctrl, 0, M1_SPEC[0]["scene"], M1_SPEC[0]),
+                   build_episode(m1_ctrl, 1, M1_SPEC[1]["scene"], M1_SPEC[1])]
+    m1_samples = trainer.batch_samples(m1_episodes)
+    check("m1_one_sample_per_decision_step", len(m1_samples) == 8, got=len(m1_samples))
+    check("m1_closed_hold_rows_present", sum(1 for s in m1_samples if len(s["free"]) == 0) == 2)
+    check("m1_masked_targets_inside_bundles_present",
+          any(len(s["targets"]) > len(s["free"]) > 0 for s in m1_samples))
+    def _recompute_log_prob(controller, sample):
+        x = torch.as_tensor(np.asarray(sample["features"], dtype=np.float32))
+        with torch.no_grad():
+            logits, _ = controller.forward(x)
+        return float(joint_log_prob(
+            logits,
+            torch.tensor([sample["actions"][t] for t in sample["targets"]], dtype=torch.long),
+            torch.tensor([1.0 if t in sample["free"] else 0.0 for t in sample["targets"]],
+                         dtype=torch.float32)))
 
 
-# ---- update 0 was already executed and pre-charged by the previous partial run ----------------
-# The make-up phase has only 8 of its 16 granted physical synthetic optimizer steps left (4 spent
-# by the cost_stream partial run, 4 by the state_dict partial run), so update 0 is NOT re-run here:
-# a third execution would push the phase past its grant. The post-update-0 checkpoint that run wrote
-# is the resume source, exactly as a real training resume would be, and its eligibility is proven
-# below rather than assumed.
-_SCRATCH.mkdir(parents=True, exist_ok=True)
-ckpt = _SCRATCH / "v2_train_s11_makeup_resume_test.pt"
-check("m2_update0_checkpoint_exists_from_the_precharged_partial_run", ckpt.is_file(),
-      path=str(ckpt), bytes=(ckpt.stat().st_size if ckpt.is_file() else 0))
+    check("m1_own_draw_alignment_is_exact",
+          max(abs(float(s["log_prob"]) - _recompute_log_prob(m1_ctrl, s))
+              for s in m1_samples) < 1e-9)
+    # ---- M1 fixture-level structure + exact alignment (NO optimizer step runs in this section) ----
+    # The M1a small-fixture update and the M1b lr=0 ALL_ROWS-exactness update were removed so this run
+    # stays inside the granted +16 physical synthetic optimizer steps and inside the 2048-row make-up
+    # grant: measured, one update costs (1 + EPOCHS) x candidate_rows forward rows and EPOCHS physical
+    # steps, and the full M1+M2 design needed 2450 rows plus 20 steps, which neither budget absorbs.
+    # The forgone items are still made up: the M2 continuation updates are fabricated-episode PPO
+    # updates with real forwards on a 4-episode batch (item 6) and the full five-module resume plus
+    # deterministic continuation plus foreign-source rejection (item 7); M3/M4 cover items 8/9. The pure
+    # GAE / mask / likelihood / ALL_ROWS arithmetic stays covered by identity reuse (grant scope).
+    m1x_samples = trainer.batch_samples(m1_episodes)
+    adv_all = float(np.mean([s["advantage"] for s in m1x_samples]))
+    adv_free = float(np.mean([s["advantage"] for s in m1x_samples if len(s["free"]) > 0]))
+    check("m1_fixture_separates_all_rows_from_free_rows", abs(adv_all - adv_free) > 1e-3,
+          adv_all=adv_all, adv_free=adv_free)
+    check("m1_hook_charged_only_nineteen_dim_rows",
+          all(e["counted"] for e in HOOK_LOG) and hook_rows("m1") > 0, m1_rows=hook_rows("m1"))
+    NOTES.append("the beta=1.00 gate prior acts on early first-emission free candidates, which route to "
+                 "the FROZEN early_head, so on the ROUND68 controller the prior cannot move any "
+                 "trainable parameter; that is the documented ROUND66 effect and is recorded as "
+                 "absent/zero wherever the gate diag reports it, never as a measured training effect")
+    NOTES.append("no optimizer step and no PPO call runs in M1. Dropping M1a/M1b is a test-scope "
+                 "reduction forced by the non-expandable make-up grant, not a scientific change: the "
+                 "frozen update mathematics, the living config and the ROUND68 controller are untouched.")
 
-# ---- first load: the unbroken continuation -----------------------------------------------------
-c1, o1, s1 = r68.load_checkpoint(ckpt, freeze=base.R68_FREEZE)
-install_trunk_hook(c1, "m2")
-register_step_precharge(o1, "m2_update1_unbroken")
-_fresh_ctrl = r68.fresh_r68_controller(SEED)[0]
-check("resume_source_is_the_post_update0_checkpoint",
-      int(s1["updates"]) == 1 and int(s1["optimizer_steps"]) == 4
-      and int(s1["episodes_done"]) == 4 and abs(float(s1["lambda"]) - 0.73) < 1e-12
-      and s1["structure"] == r68.R68_STRUCTURE
-      and abs(float(s1["late_init_alpha"]) - r68.LATE_INIT_ALPHA) < 1e-12
-      and len(s1["lambda_history"]) == 1,
-      state={k: s1.get(k) for k in ("updates", "optimizer_steps", "episodes_done", "lambda",
-                                    "structure", "late_init_alpha")})
-check("resume_source_moved_trainable_away_from_the_fresh_init_and_left_frozen_bit_identical",
-      identities(c1)[1] != identities(_fresh_ctrl)[1]
-      and identities(c1)[0] == identities(_fresh_ctrl)[0])
-check("resume_reestablished_frozen_mask_on_the_first_load",
-      not any(p.requires_grad for p in r68.frozen_parameters(c1))
-      and all(p.requires_grad for p in r68.trainable_parameters(c1)))
-check("resume_source_owns_the_six_trainable_parameters_only",
-      [len(g["params"]) for g in o1.state_dict()["param_groups"]] == [6],
-      frozen_objects=len(r68.frozen_parameters(c1)),
-      trainable_objects=len(r68.trainable_parameters(c1)))
-
-# ---- the behaviour records are drawn from the controller that will actually run the update -----
-# likelihood_alignment inside the update recomputes every logged log-probability through the CURRENT
-# controller and refuses the update when it does not describe the draw, so the records must come
-# from the post-update-0 controller. Drawing them from the fresh controller instead is exactly what
-# made the previous attempt stop here with a 0.10 alignment gap.
-m2_episodes = [build_m2_episode(c1, e, 1300010 + e) for e in range(4)]
-m2_samples = trainer.batch_samples(m2_episodes)
-m2_rows = int(sum(len(s["features"]) for s in m2_samples))
-NOTES.append("the M2 batch is 4 episodes x 7 decision records (28 records, 66 candidate rows) drawn "
-             "from the loaded post-update-0 controller, because likelihood_alignment recomputes each "
-             "logged log-probability through the controller that runs the update. Measured cost: one "
-             "update is (1 + EPOCHS) x candidate_rows = 5 x 66 = 330 forward rows, so this run costs "
-             "42 (M1 fixture + alignment) + 132 (batch draw) + 660 (two updates) = 834 rows against "
-             "924 remaining. Batch size is a test-scope choice only.")
-check("m2_four_episode_batch_of_twenty_eight_records",
-      len(m2_episodes) == 4 and len(m2_samples) == 28, samples=len(m2_samples))
-check("m2_records_carry_more_rows_than_records", m2_rows > len(m2_samples),
-      records=len(m2_samples), candidate_rows=m2_rows)
-def _free_readies(s):
-    out = []
-    for i, t in enumerate(s["targets"]):
-        if t in s["free"]:
-            f = s["features"][i]
-            out.append(int(round(float(f[18]) * 1000) - round(float(f[0]))))
-    return out
+    # ============================================================ M2. real 4-episode update + resume
+    def build_m2_episode(controller, ep_index, scene, n_records=7):
+        rng = random.Random(20260927 + 1000 * int(ep_index))
+        steps = sorted(rng.sample(range(3, 960), n_records))
+        closed_step = steps[len(steps) // 2]
+        records, cost, task = [], {}, {}
+        for st in steps:
+            spec = []
+            for j in range(rng.choice([1, 2, 2, 3, 4])):
+                early = rng.random() < 0.5
+                ready = rng.randint(30, 147) if early else rng.randint(148, 420)
+                first = 1.0 if rng.random() < 0.6 else 0.0
+                free = (st != closed_step) and (rng.random() < 0.78)
+                spec.append((f"t{j + 1}", ready, first, free))
+            records.append(draw_record(controller, st, spec))
+            cost[st] = float(rng.choice([0.0, 40.0, 90.0, 150.0, 220.0]))
+            task[st] = float(rng.choice([0.0, 0.5, 1.0]))
+        cost[1000] = 60.0
+        task[1000] = 0.0
+        return {"collector": SimpleNamespace(records=records), "steps": 1000,
+                "cost_stream": {int(k): {"airtime_bytes": float(v)} for k, v in cost.items()},
+                "task_stream": {int(k): float(v) for k, v in task.items()},
+                "lambda": 1.0, "episode_index": int(ep_index), "training_seed": SEED,
+                "scenario_seed": int(scene)}
 
 
-_all_free_readies = [r for s in m2_samples for r in _free_readies(s)]
-check("m2_has_closed_hold_early_and_late_free_rows",
-      any(not s["free"] for s in m2_samples)
-      and any(r <= 147 for r in _all_free_readies) and any(r > 147 for r in _all_free_readies),
-      closed=sum(1 for s in m2_samples if not s["free"]),
-      early_free_rows=sum(1 for r in _all_free_readies if r <= 147),
-      late_free_rows=sum(1 for r in _all_free_readies if r > 147))
+    # ---- update 0 was already executed and pre-charged by the previous partial run ----------------
+    # The make-up phase has only 8 of its 16 granted physical synthetic optimizer steps left (4 spent
+    # by the cost_stream partial run, 4 by the state_dict partial run), so update 0 is NOT re-run here:
+    # a third execution would push the phase past its grant. The post-update-0 checkpoint that run wrote
+    # is the resume source, exactly as a real training resume would be, and its eligibility is proven
+    # below rather than assumed.
+    _SCRATCH.mkdir(parents=True, exist_ok=True)
+    ckpt = _SCRATCH / "v2_train_s11_makeup_resume_test.pt"
+    check("m2_update0_checkpoint_exists_from_the_precharged_partial_run", ckpt.is_file(),
+          path=str(ckpt), bytes=(ckpt.stat().st_size if ckpt.is_file() else 0))
+
+    # ---- first load: the unbroken continuation -----------------------------------------------------
+    c1, o1, s1 = r68.load_checkpoint(ckpt, freeze=base.R68_FREEZE)
+    install_trunk_hook(c1, "m2")
+    register_step_precharge(o1, "m2_update1_unbroken")
+    _fresh_ctrl = r68.fresh_r68_controller(SEED)[0]
+    check("resume_source_is_the_post_update0_checkpoint",
+          int(s1["updates"]) == 1 and int(s1["optimizer_steps"]) == 4
+          and int(s1["episodes_done"]) == 4 and abs(float(s1["lambda"]) - 0.73) < 1e-12
+          and s1["structure"] == r68.R68_STRUCTURE
+          and abs(float(s1["late_init_alpha"]) - r68.LATE_INIT_ALPHA) < 1e-12
+          and len(s1["lambda_history"]) == 1,
+          state={k: s1.get(k) for k in ("updates", "optimizer_steps", "episodes_done", "lambda",
+                                        "structure", "late_init_alpha")})
+    check("resume_source_moved_trainable_away_from_the_fresh_init_and_left_frozen_bit_identical",
+          identities(c1)[1] != identities(_fresh_ctrl)[1]
+          and identities(c1)[0] == identities(_fresh_ctrl)[0])
+    check("resume_reestablished_frozen_mask_on_the_first_load",
+          not any(p.requires_grad for p in r68.frozen_parameters(c1))
+          and all(p.requires_grad for p in r68.trainable_parameters(c1)))
+    check("resume_source_owns_the_six_trainable_parameters_only",
+          [len(g["params"]) for g in o1.state_dict()["param_groups"]] == [6],
+          frozen_objects=len(r68.frozen_parameters(c1)),
+          trainable_objects=len(r68.trainable_parameters(c1)))
+
+    # ---- the behaviour records are drawn from the controller that will actually run the update -----
+    # likelihood_alignment inside the update recomputes every logged log-probability through the CURRENT
+    # controller and refuses the update when it does not describe the draw, so the records must come
+    # from the post-update-0 controller. Drawing them from the fresh controller instead is exactly what
+    # made the previous attempt stop here with a 0.10 alignment gap.
+    m2_episodes = [build_m2_episode(c1, e, 1300010 + e) for e in range(4)]
+    m2_samples = trainer.batch_samples(m2_episodes)
+    m2_rows = int(sum(len(s["features"]) for s in m2_samples))
+    NOTES.append("the M2 batch is 4 episodes x 7 decision records (28 records, 66 candidate rows) drawn "
+                 "from the loaded post-update-0 controller, because likelihood_alignment recomputes each "
+                 "logged log-probability through the controller that runs the update. Measured cost: one "
+                 "update is (1 + EPOCHS) x candidate_rows = 5 x 66 = 330 forward rows, so this run costs "
+                 "42 (M1 fixture + alignment) + 132 (batch draw) + 660 (two updates) = 834 rows against "
+                 "924 remaining. Batch size is a test-scope choice only.")
+    check("m2_four_episode_batch_of_twenty_eight_records",
+          len(m2_episodes) == 4 and len(m2_samples) == 28, samples=len(m2_samples))
+    check("m2_records_carry_more_rows_than_records", m2_rows > len(m2_samples),
+          records=len(m2_samples), candidate_rows=m2_rows)
+    def _free_readies(s):
+        out = []
+        for i, t in enumerate(s["targets"]):
+            if t in s["free"]:
+                f = s["features"][i]
+                out.append(int(round(float(f[18]) * 1000) - round(float(f[0]))))
+        return out
 
 
-def flat_params(controller):
-    """Flatten the five-module state_dict into one {module.param: tensor} mapping."""
-    out = {}
-    for module, sd in controller.state_dict().items():
-        for key, value in sd.items():
-            out[f"{module}.{key}"] = value.detach().clone()
-    return out
+    _all_free_readies = [r for s in m2_samples for r in _free_readies(s)]
+    check("m2_has_closed_hold_early_and_late_free_rows",
+          any(not s["free"] for s in m2_samples)
+          and any(r <= 147 for r in _all_free_readies) and any(r > 147 for r in _all_free_readies),
+          closed=sum(1 for s in m2_samples if not s["free"]),
+          early_free_rows=sum(1 for r in _all_free_readies if r <= 147),
+          late_free_rows=sum(1 for r in _all_free_readies if r > 147))
 
 
-def adam_state_equal(a, b):
-    if set(a["state"]) != set(b["state"]):
-        return False
-    for k in a["state"]:
-        sa, sb = a["state"][k], b["state"][k]
-        if set(sa) != set(sb):
+    def flat_params(controller):
+        """Flatten the five-module state_dict into one {module.param: tensor} mapping."""
+        out = {}
+        for module, sd in controller.state_dict().items():
+            for key, value in sd.items():
+                out[f"{module}.{key}"] = value.detach().clone()
+        return out
+
+
+    def adam_state_equal(a, b):
+        if set(a["state"]) != set(b["state"]):
             return False
-        for kk in sa:
-            va, vb = sa[kk], sb[kk]
-            if isinstance(va, torch.Tensor) or isinstance(vb, torch.Tensor):
-                if not (isinstance(va, torch.Tensor) and isinstance(vb, torch.Tensor)
-                        and torch.equal(va, vb)):
-                    return False
-            elif va != vb:
+        for k in a["state"]:
+            sa, sb = a["state"][k], b["state"][k]
+            if set(sa) != set(sb):
                 return False
-    return ([len(g["params"]) for g in a["param_groups"]]
-            == [len(g["params"]) for g in b["param_groups"]])
+            for kk in sa:
+                va, vb = sa[kk], sb[kk]
+                if isinstance(va, torch.Tensor) or isinstance(vb, torch.Tensor):
+                    if not (isinstance(va, torch.Tensor) and isinstance(vb, torch.Tensor)
+                            and torch.equal(va, vb)):
+                        return False
+                elif va != vb:
+                    return False
+        return ([len(g["params"]) for g in a["param_groups"]]
+                == [len(g["params"]) for g in b["param_groups"]])
 
 
-saved_params = flat_params(c1)
-saved_opt = copy.deepcopy(o1.state_dict())
-rng_after_first_load = trainer.rng_state()
-check("resume_source_carries_every_parameter_tensor",
-      len(saved_params) == len(flat_params(_fresh_ctrl)) and len(saved_params) >= 12,
-      tensors=len(saved_params))
+    saved_params = flat_params(c1)
+    saved_opt = copy.deepcopy(o1.state_dict())
+    rng_after_first_load = trainer.rng_state()
+    check("resume_source_carries_every_parameter_tensor",
+          len(saved_params) == len(flat_params(_fresh_ctrl)) and len(saved_params) >= 12,
+          tensors=len(saved_params))
 
-project_update_rows(m2_samples, "M2 update 1 unbroken continuation (real lr)")
-u1_unbroken = counted_update(c1, o1, m2_episodes, label="m2_update1_unbroken",
-                             update_index=9004, diag_updates=(9004,))
-sha_after_unbroken = c1.parameter_summary()["parameter_sha256"]
+    project_update_rows(m2_samples, "M2 update 1 unbroken continuation (real lr)")
+    u1_unbroken = counted_update(c1, o1, m2_episodes, label="m2_update1_unbroken",
+                                 update_index=9004, diag_updates=(9004,))
+    sha_after_unbroken = c1.parameter_summary()["parameter_sha256"]
 
-# ---- second load after perturbing every RNG stream: the resumed continuation ------------------
-for _attempt in range(64):
-    random.seed(13579 + _attempt)
-    np.random.seed(13579 + _attempt)
-    torch.manual_seed(13579 + _attempt)
-    if trainer.rng_state() != rng_after_first_load:
-        break
-check("rng_streams_were_actually_perturbed_before_the_second_load",
-      trainer.rng_state() != rng_after_first_load)
-rc, ropt, rstate = r68.load_checkpoint(ckpt, freeze=base.R68_FREEZE)
-install_trunk_hook(rc, "m2_update1_resumed")
-restored_params = flat_params(rc)
-check("resume_restores_every_parameter_tensor_bit_exact",
-      set(restored_params) == set(saved_params)
-      and all(torch.equal(restored_params[k], saved_params[k]) for k in saved_params),
-      tensors=len(restored_params))
-check("resume_restores_six_parameter_adam_state_bit_exact",
-      adam_state_equal(ropt.state_dict(), saved_opt)
-      and [len(g["params"]) for g in ropt.state_dict()["param_groups"]] == [6])
-check("resume_restores_lambda_history_and_cursor",
-      float(rstate["lambda"]) == 0.73 and int(rstate["episodes_done"]) == 4
-      and int(rstate["updates"]) == 1 and int(rstate["optimizer_steps"]) == 4
-      and rstate["structure"] == r68.R68_STRUCTURE
-      and abs(float(rstate["late_init_alpha"]) - r68.LATE_INIT_ALPHA) < 1e-12
-      and len(rstate["lambda_history"]) == 1,
-      state={k: rstate.get(k) for k in ("lambda", "episodes_done", "updates",
-                                        "optimizer_steps", "structure", "late_init_alpha")})
-check("resume_restores_all_three_rng_streams", trainer.rng_state() == rng_after_first_load)
-check("resume_reestablished_frozen_mask_on_the_second_load",
-      not any(p.requires_grad for p in r68.frozen_parameters(rc))
-      and all(p.requires_grad for p in r68.trainable_parameters(rc)))
+    # ---- second load after perturbing every RNG stream: the resumed continuation ------------------
+    for _attempt in range(64):
+        random.seed(13579 + _attempt)
+        np.random.seed(13579 + _attempt)
+        torch.manual_seed(13579 + _attempt)
+        if trainer.rng_state() != rng_after_first_load:
+            break
+    check("rng_streams_were_actually_perturbed_before_the_second_load",
+          trainer.rng_state() != rng_after_first_load)
+    rc, ropt, rstate = r68.load_checkpoint(ckpt, freeze=base.R68_FREEZE)
+    install_trunk_hook(rc, "m2_update1_resumed")
+    restored_params = flat_params(rc)
+    check("resume_restores_every_parameter_tensor_bit_exact",
+          set(restored_params) == set(saved_params)
+          and all(torch.equal(restored_params[k], saved_params[k]) for k in saved_params),
+          tensors=len(restored_params))
+    check("resume_restores_six_parameter_adam_state_bit_exact",
+          adam_state_equal(ropt.state_dict(), saved_opt)
+          and [len(g["params"]) for g in ropt.state_dict()["param_groups"]] == [6])
+    check("resume_restores_lambda_history_and_cursor",
+          float(rstate["lambda"]) == 0.73 and int(rstate["episodes_done"]) == 4
+          and int(rstate["updates"]) == 1 and int(rstate["optimizer_steps"]) == 4
+          and rstate["structure"] == r68.R68_STRUCTURE
+          and abs(float(rstate["late_init_alpha"]) - r68.LATE_INIT_ALPHA) < 1e-12
+          and len(rstate["lambda_history"]) == 1,
+          state={k: rstate.get(k) for k in ("lambda", "episodes_done", "updates",
+                                            "optimizer_steps", "structure", "late_init_alpha")})
+    check("resume_restores_all_three_rng_streams", trainer.rng_state() == rng_after_first_load)
+    check("resume_reestablished_frozen_mask_on_the_second_load",
+          not any(p.requires_grad for p in r68.frozen_parameters(rc))
+          and all(p.requires_grad for p in r68.trainable_parameters(rc)))
 
-project_update_rows(m2_samples, "M2 update 1 resumed continuation (real lr)")
-register_step_precharge(ropt, "m2_update1_resumed")
-u1_resumed = counted_update(rc, ropt, m2_episodes, label="m2_update1_resumed",
-                            update_index=9004, diag_updates=(9004,))
-_cmp = ("policy_surrogate", "value_loss_task", "value_loss_cost", "entropy", "approx_kl",
-        "clip_fraction", "gradient_norm_mean", "gate_loss", "early_free", "late_free",
-        "optimizer_steps", "samples", "minibatches")
-check("resumed_update_matches_unbroken_continuation",
-      all(float(u1_unbroken.get(k, -1e18)) == float(u1_resumed.get(k, -1e18)) for k in _cmp),
-      unbroken={k: u1_unbroken.get(k) for k in _cmp}, resumed={k: u1_resumed.get(k) for k in _cmp})
-check("resumed_final_parameters_match_unbroken",
-      rc.parameter_summary()["parameter_sha256"] == sha_after_unbroken)
+    project_update_rows(m2_samples, "M2 update 1 resumed continuation (real lr)")
+    register_step_precharge(ropt, "m2_update1_resumed")
+    u1_resumed = counted_update(rc, ropt, m2_episodes, label="m2_update1_resumed",
+                                update_index=9004, diag_updates=(9004,))
+    _cmp = ("policy_surrogate", "value_loss_task", "value_loss_cost", "entropy", "approx_kl",
+            "clip_fraction", "gradient_norm_mean", "gate_loss", "early_free", "late_free",
+            "optimizer_steps", "samples", "minibatches")
+    check("resumed_update_matches_unbroken_continuation",
+          all(float(u1_unbroken.get(k, -1e18)) == float(u1_resumed.get(k, -1e18)) for k in _cmp),
+          unbroken={k: u1_unbroken.get(k) for k in _cmp}, resumed={k: u1_resumed.get(k) for k in _cmp})
+    check("resumed_final_parameters_match_unbroken",
+          rc.parameter_summary()["parameter_sha256"] == sha_after_unbroken)
 
-ro_ctrl, ro_state, ro_ident = r68.load_checkpoint_read_only(ckpt, freeze=base.R68_FREEZE)
-check("read_only_load_restores_no_optimizer_or_rng",
-      ro_ident["optimizer_restored"] is False and ro_ident["rng_restored"] is False)
-check("read_only_load_identity_carries_r68_contract",
-      ro_ident["structure"] == r68.R68_STRUCTURE
-      and float(ro_ident["late_init_alpha"]) == r68.LATE_INIT_ALPHA)
-for seed, role in ((SEED, "ep0"), (SEED, "ep128"), (22, "ep0")):
+    ro_ctrl, ro_state, ro_ident = r68.load_checkpoint_read_only(ckpt, freeze=base.R68_FREEZE)
+    check("read_only_load_restores_no_optimizer_or_rng",
+          ro_ident["optimizer_restored"] is False and ro_ident["rng_restored"] is False)
+    check("read_only_load_identity_carries_r68_contract",
+          ro_ident["structure"] == r68.R68_STRUCTURE
+          and float(ro_ident["late_init_alpha"]) == r68.LATE_INIT_ALPHA)
+    for seed, role in ((SEED, "ep0"), (SEED, "ep128"), (22, "ep0")):
+        rejected = False
+        try:
+            r68.load_checkpoint(r66.r60_model_path(seed, role), freeze=base.R68_FREEZE)
+        except RuntimeError as error:
+            rejected = "ROUND60" in str(error)
+        except Exception:
+            rejected = True
+        check(f"r60_{role}_checkpoint_rejected_as_r68_resume", rejected)
+    r66_ep128 = R66_DIR / "raw" / "checkpoints" / "v2_train_s11_ep128.pt"
     rejected = False
     try:
-        r68.load_checkpoint(r66.r60_model_path(seed, role), freeze=base.R68_FREEZE)
+        r68.load_checkpoint(r66_ep128, freeze=base.R68_FREEZE)
     except RuntimeError as error:
-        rejected = "ROUND60" in str(error)
+        rejected = "ROUND60/ROUND66" in str(error)
     except Exception:
         rejected = True
-    check(f"r60_{role}_checkpoint_rejected_as_r68_resume", rejected)
-r66_ep128 = R66_DIR / "raw" / "checkpoints" / "v2_train_s11_ep128.pt"
-rejected = False
-try:
-    r68.load_checkpoint(r66_ep128, freeze=base.R68_FREEZE)
-except RuntimeError as error:
-    rejected = "ROUND60/ROUND66" in str(error)
-except Exception:
-    rejected = True
-check("r66_ep128_checkpoint_rejected_as_r68_resume", rejected)
-rejected = False
-try:
-    r68.load_checkpoint(ckpt, freeze={"kind": "wrong-freeze"})
-except RuntimeError:
-    rejected = True
-check("wrong_freeze_rejected_on_resume", rejected)
-quarantine_like = (r66.R60_DIR / "_quarantine_attempt1_criticdetect_missing" / "raw"
-                   / "checkpoints" / "v2_train_s11_before_b0.pt")
-rejected = False
-try:
-    r66._require_compliant_r60_path(quarantine_like)
-except RuntimeError:
-    rejected = True
-check("quarantined_r60_source_rejected", rejected)
+    check("r66_ep128_checkpoint_rejected_as_r68_resume", rejected)
+    rejected = False
+    try:
+        r68.load_checkpoint(ckpt, freeze={"kind": "wrong-freeze"})
+    except RuntimeError:
+        rejected = True
+    check("wrong_freeze_rejected_on_resume", rejected)
+    quarantine_like = (r66.R60_DIR / "_quarantine_attempt1_criticdetect_missing" / "raw"
+                       / "checkpoints" / "v2_train_s11_before_b0.pt")
+    rejected = False
+    try:
+        r66._require_compliant_r60_path(quarantine_like)
+    except RuntimeError:
+        rejected = True
+    check("quarantined_r60_source_rejected", rejected)
 # ============================================================ M3. real CLI configure chain =====
+# Reproduce the fresh-executor entry state for the R42 provenance guard: a real `r68_execute.main`
+# calls configure_and_inject BEFORE configure_source_imports overrides GAE/ETA, so r42_run's guard
+# sees the v2_common module defaults (0.95 / 0.05). This test process already imported+overrode them
+# during M1/M2 setup, so restore the defaults only for the duration of this call;
+# configure_and_inject re-applies the living 1.0 / 0.5, so the science and the freeze are unchanged.
+common.GAE_LAMBDA = 0.95
+common.ETA_LAMBDA = 0.05
 cfg = base.configure_and_inject(RAW)
 ident = cfg["identity"]
 check("cli_trainer_is_frozen_v2", Path(cfg["trainer"].__file__).name == "v2_trainer.py")
@@ -725,11 +802,12 @@ check("cli_no_model_forward_ran_in_this_phase",
       <= {"m1", "m2", "m2_update1_resumed"},
       charged_controllers=sorted({e["controller"] for e in HOOK_LOG if e["counted"]}))
 
+_persist_progress("M3")
 # ============================================================ M4. unregistered / duplicate start
 r42_run = cfg["r42_run"]
 runner = cfg["runner"]
 check("cli_builder_is_the_counted_builder", runner.build_joint_run.__name__ == "counted_build",
-      name=getattr(runner.build_joint_run, "__name__", None))
+      builder_name=getattr(runner.build_joint_run, "__name__", None))
 real_rows_dir = RAW / "rows"
 real_logs_dir = RAW / "logs"
 before_rows = sorted(p.name for p in real_rows_dir.glob("*")) if real_rows_dir.is_dir() else []
@@ -768,6 +846,7 @@ check("active_claim_globals_restored",
       r42_run._ACTIVE_CLAIM is None and r42_run._ACTIVE_PROGRESS is None)
 shutil.rmtree(dup_dir, ignore_errors=True)
 
+_persist_progress("M4")
 # ============================================================ M5. pure cumulative-guard semantics
 gdir = Path(tempfile.mkdtemp(prefix="r68_makeup_guard_synth_"))
 g1 = guards.ForwardRowGuard(gdir / "rows.json", cap=20)
@@ -888,8 +967,8 @@ try:
     check("slot_backup_copy_is_not_a_new_execution",
           r40.ledger_snapshot()["total_used"] == booked)
     meta = {"arm": "SYNTHETIC", "scenario_seed": 1800000, "note": "identical deterministic output"}
-    ca = r40.claim_launch("synthetic_dup_a", category="normal", attempt=1, metadata=dict(meta))
-    cb = r40.claim_launch("synthetic_dup_b", category="normal", attempt=1, metadata=dict(meta))
+    ca = r40.claim_launch("synthetic_dup_a", category="reserve", attempt=1, metadata=dict(meta))
+    cb = r40.claim_launch("synthetic_dup_b", category="reserve", attempt=1, metadata=dict(meta))
     r40.finish_launch(ca, ok=True, detail="identical")
     r40.finish_launch(cb, ok=True, detail="identical")
     check("slot_deterministic_duplicate_claims_not_deduped",
@@ -944,6 +1023,7 @@ check("r68_ledger_records_exactly_the_two_real_launches",
       and r68_counts["hard_cap"] == 800 and r68_counts["hard_headroom"] == 798,
       counts=r68_counts)
 
+_persist_progress("M5")
 # ============================================================ M6. protection + no side effects
 prot1 = RUN_ROOT / "ROUND46_CURRENT_TASK.json"
 prot2 = RUN_ROOT / "ROUND46_R2_V6_STOP_STATE.json"
@@ -987,13 +1067,29 @@ check("this_run_physical_synthetic_steps_within_remaining_phase_allowance",
 check("makeup_phase_total_steps_within_granted_16_and_hard_cap_32",
       STEP_GUARD.used() - 2 <= 16 and STEP_GUARD.used() <= 32,
       phase_used=STEP_GUARD.used() - 2, cumulative=STEP_GUARD.used())
-check("this_run_ppo_calls_are_the_two_planned_updates",
-      PPO_GUARD.used() - PRECHARGE_PPO_BEFORE == 2 and PPO_GUARD.used() <= 32,
-      this_run=PPO_GUARD.used() - PRECHARGE_PPO_BEFORE, cumulative=PPO_GUARD.used())
-check("exactly_two_updates_ran_and_every_one_precharged_its_own_steps",
-      len(_UPDATE_STEP_DELTAS) == 2
-      and all(d["precharged_steps"] == d["reported_optimizer_steps"] for d in _UPDATE_STEP_DELTAS)
-      and all(d["ppo_charged"] == 1 for d in _UPDATE_STEP_DELTAS), deltas=_UPDATE_STEP_DELTAS)
+_this_run_ppo = PPO_GUARD.used() - PRECHARGE_PPO_BEFORE
+_reused_update_checks = {"m2_update1_unbroken_precharged_steps_match_report",
+                         "m2_update1_resumed_precharged_steps_match_report"}
+if _want_early():
+    check("this_run_ppo_calls_are_the_two_planned_updates",
+          _this_run_ppo == 2 and PPO_GUARD.used() <= 32,
+          this_run=_this_run_ppo, cumulative=PPO_GUARD.used())
+else:
+    check("reused_m2_ran_the_two_planned_updates_and_this_tail_ran_none",
+          _this_run_ppo == 0 and PPO_GUARD.used() <= 32
+          and _reused_update_checks <= {r["check"] for r in REUSED},
+          this_run=_this_run_ppo, cumulative=PPO_GUARD.used(),
+          note="M1/M2 reused from the prior make-up run; this tail charged no PPO call")
+if _want_early():
+    check("exactly_two_updates_ran_and_every_one_precharged_its_own_steps",
+          len(_UPDATE_STEP_DELTAS) == 2
+          and all(d["precharged_steps"] == d["reported_optimizer_steps"] for d in _UPDATE_STEP_DELTAS)
+          and all(d["ppo_charged"] == 1 for d in _UPDATE_STEP_DELTAS), deltas=_UPDATE_STEP_DELTAS)
+else:
+    check("reused_m2_two_updates_precharged_their_own_steps",
+          len(_UPDATE_STEP_DELTAS) == 0
+          and _reused_update_checks <= {r["check"] for r in REUSED},
+          note="M1/M2 reused from the prior make-up run; this tail ran no update")
 check("makeup_grant_cumulative_within_cap",
       MAKEUP_FWD.used() <= 2048, used=MAKEUP_FWD.used(), remaining=MAKEUP_FWD.remaining())
 check("synthetic_step_total_within_shared_cap", STEP_GUARD.used() <= 32, used=STEP_GUARD.used())
