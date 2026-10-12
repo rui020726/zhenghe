@@ -1,0 +1,66 @@
+{
+  "kind": "round67-final-review-errata-verdict/1",
+  "task_id": "ROUND67-FINAL-REVIEW-INCREMENTAL-RECONCILIATION",
+  "branch": "analysis/round67-late-adaptation-diagnosis",
+  "reviewed_delivery_head": "36931efc099ef280211646b7980e0d2ecdaca009",
+  "nature": "read-only reconciliation; append-only; no rerun of analysis/forward/tests; no next round",
+  "zero_side_effect": {
+    "environment_constructions": 0,
+    "simulations": 0,
+    "new_claims_or_slots": 0,
+    "real_optimizer_updates": 0,
+    "synthetic_optimizer_updates": 0,
+    "ppo_update_calls": 0,
+    "rng_restores": 0,
+    "checkpoint_writes": 0,
+    "parameter_edits": 0,
+    "threshold_or_schema_edits": 0,
+    "additional_read_only_forward_rows": 0,
+    "read_only_parses": "report, verdict, execution basis, ledger, panel/paired/exposure/probe jsons, 96 batch records, first-batch gates, r66_frozen.py, v2_common.py",
+    "pure_arithmetic": {"poisson_p0": 0.947663, "grad_clip_coef_s11": 0.06644, "grad_clip_coef_s22": 0.03105, "grad_clip_coef_s33": 0.04381}
+  },
+  "correction_1_clip": {
+    "claim_in_report": "clip_fraction is 0.0000 for every seed, so the global clip never bound an update",
+    "verdict": "category_error_and_inverted",
+    "clip_fraction_meaning": "PPO importance-ratio clip fraction = mean(|ratio-1| > CLIP); CLIP=0.2; 0.0 means no ratio sample was clipped; carries no information about gradient clipping",
+    "clip_fraction_source": "r66_frozen.py:850 (compute), :876 (record)",
+    "global_grad_clip_source": "r66_frozen.py:840-841 clip_grad_norm_(trainable_params, MAX_GRAD_NORM); MAX_GRAD_NORM=0.5 at v2_common.py:76",
+    "recorded_preclip_gradient_norm_mean": {"s11": 7.5252, "s22": 16.1051, "s33": 11.4117},
+    "norm_over_cap_ratio": {"s11": 15.1, "s22": 32.2, "s33": 22.8},
+    "clip_coefficient_recorded": false,
+    "clip_coefficient_status": "missing (not persisted); direction unambiguous from norm vs cap",
+    "corrected_statement": "the global grad clip bound on essentially every minibatch (pre-clip norm 7.5-16.1 >> MAX_GRAD_NORM 0.5)",
+    "machine_verdict_phrase_to_fix": "conclusions_deferred 'the never-binding clip' is wrong; replace with the corrected_statement",
+    "adam_attribution": "softened to 'consistent with Adam per-parameter normalisation'; not a measured per-step update and interacts with the binding global grad clip; not the confirmed sole cause"
+  },
+  "correction_2_sampling": {
+    "claim_in_report": "sum|dp| = 0.0538 expected draw flips over 147 rows; observing 0 is expected, P(0) ~ 0.947",
+    "verdict": "downgrade_to_assumption_dependent_descriptive_approximation",
+    "measured_facts": {"sampled_late_free_rows": 147, "rows_per_seed": 49, "sum_abs_dp": 0.053755879402160645, "per_seed_max_abs_dp": {"s11": 0.0058366060, "s22": 0.0139876604, "s33": 0.0054136515}, "min_p_send_both_arms": 0.9395838975906372, "observed_action_differences": 0},
+    "unverified_assumptions": ["coupling: NEW and BC share the same uniform inverse-CDF draw so per-row flip prob = |dp|; same-seed reuse does not establish this and the script never inspects the sampler RNG", "independence: the 147 rows are treated as independent Bernoulli trials; they are trajectory-coupled (state k+1 depends on action k)"],
+    "poisson_p0": "exp(-0.05376) = 0.947663, an approximation under coupling+independence, not the real-execution flip probability",
+    "retained": "147 records, small probability changes, 0 action differences; 0 differences is expected from saturation (p(SEND) >= 0.939 both arms) independent of the coupling assumption"
+  },
+  "correction_3_forward_guard": {
+    "claim_in_execution_basis": "a persisted round-level ledger is read and appended by every script that forwards, so the cap holds across processes",
+    "verdict": "ledger_is_retrospective_not_a_prerun_cumulative_hard_guard",
+    "actual_preforward_gate": "local in-process RowGuard in r67_probability_panel.py (FORWARD_ROW_CAP=5000 line 49; class line 85; charge line 93; plan pre-check lines 242-243; guard.charge line 254); scope = panel process only; never reads the round-level ledger",
+    "ledger_timeline": {"panel_output_mtime": "21:19:34", "focal_probe_output_mtime": "21:28:04 (ledger did not yet hold panel rows; probe saw used=0)", "patch2_seeded_ledger_mtime": "21:29:59 (reads panel OUTPUT json; overwrites with panel-only event)", "patch4_rebuilt_ledger_mtime": "21:34:24 (rebuilds both events 4708+3 from output jsons)"},
+    "cap_breached": false,
+    "cap_note": "4708 and 4711 both <= 5000; correction is about enforcement mechanism/timing, not a violation",
+    "duplicate_forward_from_rerun": "unknown; one clean panel run recorded (forward_batches_charged=9, forward_rows_used=4708); no invocation logs; in-memory RowGuard + backfilled ledger would not expose an earlier crashed run; no forward run to check"
+  },
+  "retained_conclusions": [
+    "NEW==BC action-for-action and message-for-message on 192 eval + 6 focal cells (only wall-clock seconds differs)",
+    "mechanism = softmax saturation of the only head that moved (late_head), not absence of learning",
+    "forward path reproduces 2232/2232 saved probabilities within 1.19e-07; early route bit-identical",
+    "late route saturated: p ~ 0.999, max|dp| 0.0140, 0 argmax flips, 140/300 late free at p=1.0 exactly",
+    "beta=1.00 gate prior has no trainable path (measured 0.0 on a live graph)",
+    "focal attribution: R60 ep128 flips the early head on scene 1700027/target-5 for s11 and s33"
+  ],
+  "protected_files_reverified": {
+    "ROUND46_CURRENT_TASK.json": {"sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b", "status": "verified_untouched"},
+    "ROUND46_R2_V6_STOP_STATE.json": {"sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18", "status": "verified_untouched"}
+  },
+  "no_push_no_merge_no_deploy": true
+}
