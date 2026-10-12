@@ -2,7 +2,7 @@
 
 ## Authorization and Boundary
 
-This package executes the user's fixed ROUND64 local deadline-by-action experiment. Initial `/2` L consumed normal slot 1 and completed 1,000 steps, then failed the read-only identity label check. `/3` corrected the label and preserved that result, but exposed the inherited runner contract: `_run_episode` returns a row object while the outer R60 executor normally persists its JSON. R64 omitted that persistence, so reserve slot 1 also completed 1,000 steps and was interrupted with the three raw logs preserved. Neither attempt restored training state, stepped an optimizer, or wrote a checkpoint. `/4` adds exclusive persistence of the returned row under the frozen raw root; no scientific or world setting changes. All attempts remain in one cumulative ledger; it accepts only the explicitly frozen `/2`, `/3`, and `/4` identities. The experiment authorizes at most 10 planned logical episodes plus 2 technical-reserve attempts (12 total slots); failures consume slots.
+This package executes the user's fixed ROUND64 local deadline-by-action experiment. Initial `/2` L consumed normal slot 1 and completed 1,000 steps, then failed the read-only identity label check. `/3` corrected the label but exposed the inherited row persistence contract, consuming reserve slot 1 on another L attempt. `/4` persisted the returned row under the frozen raw root. L and L0 then qualified, but the strict gate recorded `failed` because the run-level final lifecycle record embeds each run's own transcript output path. `/5` added exact path-only reconciliation; `/6` limits it to the run-level final record, leaving six target-level final records unchanged. All original attempts and the strict failed gate remain preserved. No scientific or world setting changed. The cumulative ledger accepts only `/2` through `/6`. Both reserve slots are already consumed; 8 normal slots remain for the fixed matrix.
 
 No training, optimizer update, PPO replay, training-state/RNG restore, or checkpoint write is permitted. Only read-only loading of the fixed model and normal environment episodes are allowed. No push, merge, deployment, or follow-on experiment.
 
@@ -10,7 +10,7 @@ No training, optimizer update, PPO replay, training-state/RNG restore, or checkp
 
 - Branch: `exp/round64-controlled-deadline-intervention`
 - Pre-freeze base HEAD: `252f2fc4d6101693ef363c9969090eb1ba0bb6a1`
-- Initial freeze commit: `4f49e78` (`/2`); identity repair commit: `e7bae95` (`/3`); current row-persistence repair: `round64-controlled-deadline-intervention/4`; the append-only cumulative ledger accepts only these three identities.
+- Initial freeze commit: `4f49e78` (`/2`); identity repair: `e7bae95` (`/3`); row persistence: `581c7c8` (`/4`); current explicit gate metadata reconciliation: `round64-controlled-deadline-intervention/6`.
 - Model: R60 compliant seed 33, greedy, ep128; exact path, file SHA256 and parameter SHA256 are in `ROUND64_FREEZE.json`.
 - Scene: `1700027`; focus target: `piloc-e1-target-5`.
 - World: inherited R60 frozen configuration; horizon 1000, six goals, 29,300-byte communication budget, ACK disabled, same search/allocation checkpoints and greedy tie rule.
@@ -24,7 +24,7 @@ No training, optimizer update, PPO replay, training-state/RNG restore, or checkp
 2. `L0`: delta 0, intervention installed but override disabled.
 3. For each delta in `-30, 0, +30, +60`, run `FORCE_SEND`, then `FORCE_SKIP`.
 
-The first two runs must pass exact behavior/tape/lifecycle comparison against each other and the R60 focus baseline before any matrix episode is allowed. The remaining eight are fixed; no result-dependent selection is permitted. This yields 10 normal attempts and at most 2 reserve retries.
+The first two runs must match on all frozen scientific fields, tape, transcript, and lifecycle after excluding only `run_config` plus the exact embedded `final.detail.metrics.comm_transcript` output path; the path values are separately preserved. They must also match the R60 focus baseline on common scientific fields. The initial strict gate did not perform the embedded-path exclusion and remains preserved as `failed`; a separate versioned reconciliation must pass before any matrix episode is allowed. The remaining eight are fixed; no result-dependent selection is permitted. This yields 10 normal attempts and at most 2 reserve retries.
 
 ## Accounting and Qualification
 

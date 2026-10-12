@@ -70,9 +70,10 @@ def _prefix_summary(cell):
 
 def analyze(raw=RAW):
     raw = Path(raw).resolve()
-    gate = read_json(raw / "ROUND64_GATE.json")
+    gate = read_json(raw / "ROUND64_GATE_RECONCILIATION.json")
     prefix_gate = read_json(raw / "ROUND64_PAIR_PREFIX_GATE.json")
-    if gate.get("status") != "passed" or not gate.get("matches_R60_focus"):
+    reconciled = gate.get("reconciled_gate", {})
+    if gate.get("status") != "passed" or not reconciled.get("matches_R60_focus"):
         raise RuntimeError("R64 neutral gate is not qualified")
     if any(not item.get("common_prefix_equal") for item in prefix_gate.values()):
         raise RuntimeError("one or more SEND/SKIP pairs lack the frozen common pre-action prefix")
@@ -201,7 +202,7 @@ def analyze(raw=RAW):
     return {
         "kind": "round64-paired-deadline-analysis/1",
         "interpretation": "Fixed single-scene, single frozen-policy, one realization per deadline condition; descriptive intervention only.",
-        "baseline_gate": baseline,
+        "baseline_gate": gate,
         "pairs_by_deadline_delta": pairs,
         "cross_delta_actor_state_and_slack": cross_delta,
         "cross_delta_trajectory_audit": trajectory_audit,

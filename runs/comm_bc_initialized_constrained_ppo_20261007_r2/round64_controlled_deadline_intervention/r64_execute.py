@@ -20,7 +20,7 @@ MODE = "greedy"
 DELTAS = (-30, 0, 30, 60)
 EXPECTED_FILE_SHA = "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a"
 EXPECTED_PARAM_SHA = "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a"
-R64_EXECUTION_VERSION = "round64-controlled-deadline-intervention/4"
+R64_EXECUTION_VERSION = "round64-controlled-deadline-intervention/6"
 PLAN = [
     {"logical": "L", "delta": 0, "arm": "L", "action": None},
     {"logical": "L0", "delta": 0, "arm": "L0", "action": None},
@@ -400,7 +400,19 @@ def run_cell(cfg, spec, *, retry=False):
 
 
 def _normalized_lifecycle(path):
-    return [row for row in read_jsonl(path) if row.get("event_type") != "run_config"]
+    rows = [row for row in read_jsonl(path) if row.get("event_type") != "run_config"]
+    for row in rows:
+        if row.get("event_type") == "final" and row.get("target_id") == "__run__":
+            row.get("detail", {}).get("metrics", {}).pop("comm_transcript", None)
+    return rows
+
+
+def _final_transcript_path(path):
+    finals = [row for row in read_jsonl(path) if row.get("event_type") == "final" and
+              row.get("target_id") == "__run__"]
+    if len(finals) != 1:
+        raise RuntimeError("lifecycle must contain exactly one final event")
+    return finals[0].get("detail", {}).get("metrics", {}).get("comm_transcript")
 
 
 def gate_compare(L, L0):
@@ -417,13 +429,70 @@ def gate_compare(L, L0):
         "science_fields": {k: {"L": L["metrics"][k], "L0": L0["metrics"][k]}
                            for k in behavior_fields},
         "bytewise_tape_equal": tape_equal, "bytewise_transcript_equal": transcript_equal,
-        "lifecycle_equal_after_explicit_run_config_exclusion": lifecycle_equal,
+        "lifecycle_equal_after_explicit_metadata_exclusions": lifecycle_equal,
+        "lifecycle_metadata_normalization": {
+            "field": "final.detail.metrics.comm_transcript",
+            "L": _final_transcript_path(l_art["lifecycle"]["path"]),
+            "L0": _final_transcript_path(l0_art["lifecycle"]["path"]),
+        },
         "metadata_differences": {
             "logical": [L["logical"], L0["logical"]],
             "artifact_paths": {k: [L["artifacts"][k]["path"], L0["artifacts"][k]["path"]]
                                for k in L["artifacts"]},
             "run_signature": [L["run_signature"], L0["run_signature"]],
         },
+    }
+
+
+def build_gate_reconciliation(raw_root, model_identity):
+    raw_root = Path(raw_root).resolve()
+    old_path = raw_root / "ROUND64_GATE.json"
+    old_gate = read_json(old_path)
+    if old_gate.get("status") != "failed":
+        raise RuntimeError("path-metadata reconciliation requires the preserved failed gate")
+    cells_root = raw_root / "cells"
+    L, L0 = read_json(cells_root / "L.json"), read_json(cells_root / "L0.json")
+    gate = gate_compare(L, L0)
+    r60row_path = R60_DIR / "raw" / "rows" / "v2_r60_eval_new_s33_greedy_s1700027_a1.json"
+    r60row = read_json(r60row_path)
+    r60life = r60row["artefacts"]["lifecycle"]
+    baseline = {
+        "row_path": str(r60row_path), "row_sha256": sha256(r60row_path),
+        "on_time": r60row["on_time"], "on_time_ids": _on_time_ids(read_jsonl(r60life)),
+        "spent_bytes": r60row["spent_bytes"], "emission_sequence": r60row["emission_sequence"],
+        "L_tape_equal_R60": read_jsonl(L["artifacts"]["tape"]["path"]) ==
+                            read_jsonl(r60row["artefacts"]["tape"]),
+        "L_transcript_equal_R60": read_jsonl(L["artifacts"]["transcript"]["path"]) ==
+                                  read_jsonl(r60row["artefacts"]["transcript"]),
+        "L_lifecycle_equal_R60_after_exact_path_normalization":
+            _normalized_lifecycle(L["artifacts"]["lifecycle"]["path"]) ==
+            _normalized_lifecycle(r60life),
+        "R60_final_transcript_path": _final_transcript_path(r60life),
+    }
+    gate["matches_R60_focus"] = all((
+        baseline["L_tape_equal_R60"], baseline["L_transcript_equal_R60"],
+        baseline["L_lifecycle_equal_R60_after_exact_path_normalization"],
+        L["metrics"]["on_time"] == baseline["on_time"],
+        L["metrics"]["on_time_ids"] == baseline["on_time_ids"],
+        L["metrics"]["spent_bytes"] == baseline["spent_bytes"],
+        L["metrics"]["emission_sequence"] == baseline["emission_sequence"],
+    ))
+    gate["status"] = "passed" if gate["L_equals_L0"] and gate["matches_R60_focus"] else "failed"
+    gate["R60_focus"] = baseline
+    gate["model_identity"] = model_identity
+    return {
+        "kind": "round64-neutral-gate-path-metadata-reconciliation/1",
+        "status": gate["status"],
+        "preserved_original_gate": {"status": old_gate["status"], "path": str(old_path),
+                                    "sha256": sha256(old_path)},
+        "explicitly_normalized_field": "final.detail.metrics.comm_transcript",
+        "metadata_path_values": {
+            "L": _final_transcript_path(L["artifacts"]["lifecycle"]["path"]),
+            "L0": _final_transcript_path(L0["artifacts"]["lifecycle"]["path"]),
+            "R60": baseline["R60_final_transcript_path"],
+        },
+        "strict_original_reason": "final lifecycle metrics embed each run's own transcript output path",
+        "reconciled_gate": gate,
     }
 
 
@@ -531,8 +600,10 @@ def run_phase(cfg, phase, retry_logical=None):
         if gate["status"] != "passed":
             raise RuntimeError("L/L0/R60 baseline gate failed; matrix remains blocked")
     if phase in ("matrix", "all"):
-        if not gate_file.is_file() or read_json(gate_file).get("status") != "passed":
-            raise RuntimeError("fixed intervention matrix blocked until L/L0 gate passes")
+        reconciliation = build_gate_reconciliation(root, cfg["model_identity"])
+        if reconciliation.get("status") != "passed":
+            raise RuntimeError("fixed intervention matrix blocked: explicit gate reconciliation failed")
+        write_or_verify(root / "ROUND64_GATE_RECONCILIATION.json", reconciliation)
         for spec in PLAN[2:]:
             cells[spec["logical"]] = _cell_cursor(cfg, spec, retry_logical)
         pair_check = compare_force_pairs(cells)

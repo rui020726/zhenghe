@@ -20,7 +20,7 @@ sys.path.insert(0, str(MASK_SOURCE))
 sys.path.insert(0, str(ELIGIBILITY_SOURCE))
 sys.path.insert(0, str(STAGE_B_SOURCE))
 
-from r64_execute import RAW, _cell_cursor, persist_episode_row, setup_runtime
+from r64_execute import RAW, _cell_cursor, _normalized_lifecycle, persist_episode_row, setup_runtime
 from r64_guard import R64Guard, R64GuardError
 from r64_preflight import saved_focus_features_by_deadline_delta
 from r64_runtime import authority_chain, install_counting_hooks, install_deadline_overlay
@@ -204,6 +204,28 @@ class GuardTests(unittest.TestCase):
             outside = Path(tmp) / "outside.json"
             with self.assertRaisesRegex(RuntimeError, "escaped"):
                 persist_episode_row(root, {"artefacts": {"row": str(outside)}})
+
+    def test_lifecycle_gate_normalizes_only_explicit_transcript_output_path(self):
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as tmp:
+            paths = [Path(tmp) / "a.jsonl", Path(tmp) / "b.jsonl"]
+            rows = [
+                [{"event_type": "run_config", "detail": {"output": "a"}},
+                 {"event_type": "progress", "detail": {"status": "completed"}},
+                 {"event_type": "final", "target_id": "__run__", "detail": {"metrics": {
+                     "steps": 1000, "comm_transcript": "a.ct"}}}],
+                [{"event_type": "run_config", "detail": {"output": "b"}},
+                 {"event_type": "progress", "detail": {"status": "completed"}},
+                 {"event_type": "final", "target_id": "__run__", "detail": {"metrics": {
+                     "steps": 1000, "comm_transcript": "b.ct"}}}],
+            ]
+            for path, values in zip(paths, rows):
+                path.write_text("".join(json.dumps(row) + "\n" for row in values),
+                                encoding="utf-8")
+            self.assertEqual(_normalized_lifecycle(paths[0]), _normalized_lifecycle(paths[1]))
+            rows[1][-1]["detail"]["metrics"]["steps"] = 999
+            paths[1].write_text("".join(json.dumps(row) + "\n" for row in rows[1]),
+                                encoding="utf-8")
+            self.assertNotEqual(_normalized_lifecycle(paths[0]), _normalized_lifecycle(paths[1]))
 
     def test_ten_normal_then_eleventh_refused_and_restart_does_not_reset(self):
         guard = self.temp_guard()

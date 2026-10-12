@@ -20,6 +20,8 @@ class R64Guard:
         "round64-controlled-deadline-intervention/2",
         "round64-controlled-deadline-intervention/3",
         "round64-controlled-deadline-intervention/4",
+        "round64-controlled-deadline-intervention/5",
+        "round64-controlled-deadline-intervention/6",
     }
     NORMAL_CAP = 10
     RESERVE_CAP = 2
