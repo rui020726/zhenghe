@@ -1,0 +1,64 @@
+{
+  "kind": "round65-critical-state-training-signal-audit-freeze/1",
+  "task": "ROUND65-CRITICAL-STATE-TRAINING-SIGNAL-AUDIT: zero-environment, read-only audit of training coverage and learning signal for the focal early first-report (scene 1700027 / piloc-e1-target-5), plus a read-only focal-policy forward probe.",
+  "branch": "analysis/round65-critical-state-training-signal",
+  "base_head": "a28e516bf1e3bc9a906379c521fffaf52a7d4397",
+  "base_branch": "exp/round64-controlled-deadline-intervention",
+  "delegated_from_thread": "01a0a044-592f-73e3-838c-19c1d79465d3",
+  "scope": "read-only data/source/checkpoint inspection, pure computation, and at most 9 CPU no_grad batched model forwards.",
+  "hard_prohibitions_honored": [
+    "no environment/episode/provider/claim/slot/new streams",
+    "no real or synthetic optimizer updates",
+    "no PPO replay / autograd / gradient replay",
+    "no training RNG/optimizer/lambda/cursor restore",
+    "no checkpoint write-back",
+    "no beta/147/encoding/reward/GAE/reduction/model changes",
+    "no rule/threshold/classifier fitting",
+    "no push/merge/deploy; no calling training/eval launch entry points"
+  ],
+  "model_identity": {
+    "focal_model": "R60 verified seed 33, ep128, greedy (partitioned-early-late-actor-head/1)",
+    "file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+    "parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a",
+    "note": "taken from the formal R60/R64 checkpoint index; not guessed by filename"
+  },
+  "focal_encoding": {
+    "scene": 1700027,
+    "target": "piloc-e1-target-5",
+    "decision_step": 134,
+    "source": "parsed from R64 L baseline tape v2_L_a03_s1700027_a3_tape.jsonl (float32)",
+    "float32_hex": "0000000000000000000000000000803f0000803f0000803f000000000000000000000000000000000000803f0000803f000000000000803f0000803f0000803f0000803f0000c0404c37093e",
+    "authority": "parsed value is authoritative; r65_common constant validated equal at startup and used only as a test expectation; matching aborts on drift"
+  },
+  "canonical_modules": {
+    "canon_dir": "D:/code/zhenghe/runs/comm_cost_v2_rerun_20260928",
+    "bound_via": "r60_partitioned.configure_source_imports()",
+    "v2_trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+    "v2_common_sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+    "v2_controller_sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+    "note": "real controller + routing reused for the forward probe; no hand-written network"
+  },
+  "compliant_source_index": {
+    "rule": "96 attempt01 batch records are the source of truth; episodes/scenes read from records, never globbed; R60 isolated non-compliant constructions excluded",
+    "n_batches": 96,
+    "n_episodes": 384
+  },
+  "protected_files_unchanged": {
+    "ROUND46_CURRENT_TASK.json_sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json_sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+    "unchanged": true
+  },
+  "deliverables": [
+    "ROUND65_REPORT.md",
+    "TRAINING_COVERAGE.json",
+    "LEARNING_SIGNAL_AUDIT.json",
+    "FOCAL_POLICY_PROBE.json",
+    "INPUT_SOURCES.json",
+    "r65_common.py",
+    "r65_audit.py",
+    "r65_probe.py",
+    "r65_sources.py",
+    "test_r65_pure.py"
+  ],
+  "git_external_artifacts": "raw tapes, rows, model .pt weights and original logs are NOT added to Git; only summaries, key examples and path SHAs are recorded."
+}
