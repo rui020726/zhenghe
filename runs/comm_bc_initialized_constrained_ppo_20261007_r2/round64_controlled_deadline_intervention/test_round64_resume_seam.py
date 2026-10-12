@@ -121,7 +121,10 @@ class VersionBindingTests(unittest.TestCase):
 
 
 class _StubController:
+    forward_calls = 0
+
     def forward(self, matrix):
+        type(self).forward_calls += 1
         logits = torch.zeros((matrix.shape[0], 2), dtype=torch.float32)
         for i, row in enumerate(matrix):
             # The ordinary greedy policy holds age-1 and sends age-2.
@@ -155,7 +158,13 @@ def _observation(items, *, remaining=1000, budget=1000):
 class ActualCollectorPathTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        _StubController.forward_calls = 0
         cls.intervene_cls = make_intervene_collector(OneShotSendSkipCollector)
+
+    @classmethod
+    def tearDownClass(cls):
+        if _StubController.forward_calls != 7:
+            raise AssertionError(f"expected 7 pure stub forwards, got {_StubController.forward_calls}")
 
     def collector(self, arm):
         cfg = {"plain_cls": OneShotSendSkipCollector, "r64_cls": self.intervene_cls,
