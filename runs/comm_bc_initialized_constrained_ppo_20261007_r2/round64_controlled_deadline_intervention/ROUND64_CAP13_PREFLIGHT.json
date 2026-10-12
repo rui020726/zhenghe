@@ -1,0 +1,66 @@
+{
+  "kind": "round64-cap13-prelaunch-acceptance/1",
+  "status": "passed_before_any_cap13_builder",
+  "recorded_at_utc": "2026-10-12 02:47:07 UTC",
+  "record_note": "This record was appended after the matrix from the completed prelaunch CLI/configuration checks; recorded_at_utc is the documentation time, while the bound setup and resume gate ran before the first new builder.",
+  "execution_source_head": "50fee3236f8fd093598cd9862b52d364dc600645",
+  "execution_version": "round64-controlled-deadline-intervention/8",
+  "candidate_freeze_sha256": "d18f622210fc5028d722eecf101182a3eba01c208eb9d86ffb080ab0ac5070d6",
+  "human_approval_sha256": "57ec591d356d50c50b6d6b5e40cc589f0244474e19c2ff19b0332dec3c90d1b9",
+  "historical_scientific_freeze_sha256": "cea67404615906e28a846989e19b94177b6ad682aacc4321af999dcc4c5a080e",
+  "live_binding": {
+    "validated": true,
+    "raw_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/raw",
+    "normal_cap": 10,
+    "reserve_cap": 3,
+    "hard_cap": 13,
+    "versioned_gate_reconciliation": "ROUND64_GATE_RECONCILIATION_v8.json",
+    "model_file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+    "model_parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a",
+    "load_mode": "read_only_model_only",
+    "optimizer_restored": false,
+    "training_rng_restored": false,
+    "training_cursor_restored": false
+  },
+  "live_counter_hooks": {
+    "runner_module": "v2_run",
+    "joint_driver_module": "integrated_sar.joint_driver",
+    "builder_binding": "r42-counted-builder-delegates-to-cli-joint-driver",
+    "counted_builder_delegate_verified": true,
+    "builder_hooked_in_runner_and_cli": true,
+    "joint_run_method_hooked": true
+  },
+  "resume_gate_before_first_new_slot": {
+    "consumed": 9,
+    "normal_consumed": 7,
+    "reserve_consumed": 2,
+    "normal_available": 3,
+    "reserve_available": 1,
+    "hard_cap_headroom": 4,
+    "additional_attempts_required": 4,
+    "normal_attempts_required": 3,
+    "receipt_authorized_reserve_retry": "d+30_FORCE_SEND -> reserve-03",
+    "status": "can_resume"
+  },
+  "old_identity_artifacts": {
+    "strict_raw_gate_sha256": "5de91c0da3dd59bacd841ed36e21a3d750ea5492929d0a6467e573445ccdbeda",
+    "old_raw_reconciliation_sha256": "ffbbfa8b86ec8291e97d7ce206483dfd3f72388e1c08c1e4c5f7a3b3b041bd06",
+    "old_package_reconciliation_sha256": "ffbbfa8b86ec8291e97d7ce206483dfd3f72388e1c08c1e4c5f7a3b3b041bd06",
+    "old_12_attempt_freeze_modified": false
+  },
+  "prelaunch_counts": {
+    "read_only_model_loads_across_preflight_and_cli_setup": 4,
+    "model_only_loads": 4,
+    "environment_constructions": 0,
+    "builder_calls": 0,
+    "run_calls": 0,
+    "new_slots": 0,
+    "PPO_replays": 0,
+    "optimizer_updates": 0,
+    "training_rng_restores": 0,
+    "checkpoint_writes": 0,
+    "tape_replays": 0
+  },
+  "fixed_cli": "r64_execute.py --phase matrix --retry-failed d+30_FORCE_SEND",
+  "no_probe_or_smoke_episode": true
+}
