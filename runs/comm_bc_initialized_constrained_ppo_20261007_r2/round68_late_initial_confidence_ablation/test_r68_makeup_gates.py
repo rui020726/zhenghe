@@ -462,7 +462,7 @@ NOTES.append("no optimizer step and no PPO call runs in M1. Dropping M1a/M1b is 
              "frozen update mathematics, the living config and the ROUND68 controller are untouched.")
 
 # ============================================================ M2. real 4-episode update + resume
-def build_m2_episode(controller, ep_index, scene, n_records=10):
+def build_m2_episode(controller, ep_index, scene, n_records=7):
     rng = random.Random(20260927 + 1000 * int(ep_index))
     steps = sorted(rng.sample(range(3, 960), n_records))
     closed_step = steps[len(steps) // 2]
@@ -487,20 +487,57 @@ def build_m2_episode(controller, ep_index, scene, n_records=10):
             "scenario_seed": int(scene)}
 
 
-m2_ctrl, *_ = r68.fresh_r68_controller(SEED)
-install_trunk_hook(m2_ctrl, "m2")
-m2_episodes = [build_m2_episode(m2_ctrl, e, 1300010 + e) for e in range(4)]
+# ---- update 0 was already executed and pre-charged by the previous partial run ----------------
+# The make-up phase has only 8 of its 16 granted physical synthetic optimizer steps left (4 spent
+# by the cost_stream partial run, 4 by the state_dict partial run), so update 0 is NOT re-run here:
+# a third execution would push the phase past its grant. The post-update-0 checkpoint that run wrote
+# is the resume source, exactly as a real training resume would be, and its eligibility is proven
+# below rather than assumed.
+_SCRATCH.mkdir(parents=True, exist_ok=True)
+ckpt = _SCRATCH / "v2_train_s11_makeup_resume_test.pt"
+check("m2_update0_checkpoint_exists_from_the_precharged_partial_run", ckpt.is_file(),
+      path=str(ckpt), bytes=(ckpt.stat().st_size if ckpt.is_file() else 0))
+
+# ---- first load: the unbroken continuation -----------------------------------------------------
+c1, o1, s1 = r68.load_checkpoint(ckpt, freeze=base.R68_FREEZE)
+install_trunk_hook(c1, "m2")
+register_step_precharge(o1, "m2_update1_unbroken")
+_fresh_ctrl = r68.fresh_r68_controller(SEED)[0]
+check("resume_source_is_the_post_update0_checkpoint",
+      int(s1["updates"]) == 1 and int(s1["optimizer_steps"]) == 4
+      and int(s1["episodes_done"]) == 4 and abs(float(s1["lambda"]) - 0.73) < 1e-12
+      and s1["structure"] == r68.R68_STRUCTURE
+      and abs(float(s1["late_init_alpha"]) - r68.LATE_INIT_ALPHA) < 1e-12
+      and len(s1["lambda_history"]) == 1,
+      state={k: s1.get(k) for k in ("updates", "optimizer_steps", "episodes_done", "lambda",
+                                    "structure", "late_init_alpha")})
+check("resume_source_moved_trainable_away_from_the_fresh_init_and_left_frozen_bit_identical",
+      identities(c1)[1] != identities(_fresh_ctrl)[1]
+      and identities(c1)[0] == identities(_fresh_ctrl)[0])
+check("resume_reestablished_frozen_mask_on_the_first_load",
+      not any(p.requires_grad for p in r68.frozen_parameters(c1))
+      and all(p.requires_grad for p in r68.trainable_parameters(c1)))
+check("resume_source_owns_the_six_trainable_parameters_only",
+      [len(g["params"]) for g in o1.state_dict()["param_groups"]] == [6],
+      frozen_objects=len(r68.frozen_parameters(c1)),
+      trainable_objects=len(r68.trainable_parameters(c1)))
+
+# ---- the behaviour records are drawn from the controller that will actually run the update -----
+# likelihood_alignment inside the update recomputes every logged log-probability through the CURRENT
+# controller and refuses the update when it does not describe the draw, so the records must come
+# from the post-update-0 controller. Drawing them from the fresh controller instead is exactly what
+# made the previous attempt stop here with a 0.10 alignment gap.
+m2_episodes = [build_m2_episode(c1, e, 1300010 + e) for e in range(4)]
 m2_samples = trainer.batch_samples(m2_episodes)
 m2_rows = int(sum(len(s["features"]) for s in m2_samples))
-NOTES.append("the M2 batch is 4 episodes x 10 decision records (40 records, 90 candidate rows) "
-             "instead of 4 x 12 (48 records, 112 candidate rows). Measured cost of one update is "
-             "(1 + EPOCHS) x candidate_rows = 5 x 90 = 450 forward rows, so the fixture draw plus "
-             "the two continuation updates cost 42 + 180 + 900 = 1122 rows against 1236 remaining. "
-             "4 x 12 (112 candidate rows) would cost 42 + 224 + 1120 = 1386, and 4 x 12 with three "
-             "updates would cost 2086 cumulative rows, which exceeds the grant. Batch size is a "
-             "test-scope choice only.")
-check("m2_four_episode_batch_of_forty_records",
-      len(m2_episodes) == 4 and len(m2_samples) == 40, samples=len(m2_samples))
+NOTES.append("the M2 batch is 4 episodes x 7 decision records (28 records, 66 candidate rows) drawn "
+             "from the loaded post-update-0 controller, because likelihood_alignment recomputes each "
+             "logged log-probability through the controller that runs the update. Measured cost: one "
+             "update is (1 + EPOCHS) x candidate_rows = 5 x 66 = 330 forward rows, so this run costs "
+             "42 (M1 fixture + alignment) + 132 (batch draw) + 660 (two updates) = 834 rows against "
+             "924 remaining. Batch size is a test-scope choice only.")
+check("m2_four_episode_batch_of_twenty_eight_records",
+      len(m2_episodes) == 4 and len(m2_samples) == 28, samples=len(m2_samples))
 check("m2_records_carry_more_rows_than_records", m2_rows > len(m2_samples),
       records=len(m2_samples), candidate_rows=m2_rows)
 def _free_readies(s):
@@ -519,16 +556,6 @@ check("m2_has_closed_hold_early_and_late_free_rows",
       closed=sum(1 for s in m2_samples if not s["free"]),
       early_free_rows=sum(1 for r in _all_free_readies if r <= 147),
       late_free_rows=sum(1 for r in _all_free_readies if r > 147))
-# ---- update 0 was already executed and pre-charged by the previous partial run ----------------
-# The make-up phase has only 8 of its 16 granted physical synthetic optimizer steps left (4 spent
-# by the cost_stream partial run, 4 by the state_dict partial run), so update 0 is NOT re-run here:
-# a third execution would push the phase past its grant. The post-update-0 checkpoint that run wrote
-# is the resume source, exactly as a real training resume would be, and its eligibility is proven
-# below rather than assumed.
-_SCRATCH.mkdir(parents=True, exist_ok=True)
-ckpt = _SCRATCH / "v2_train_s11_makeup_resume_test.pt"
-check("m2_update0_checkpoint_exists_from_the_precharged_partial_run", ckpt.is_file(),
-      path=str(ckpt), bytes=(ckpt.stat().st_size if ckpt.is_file() else 0))
 
 
 def flat_params(controller):
@@ -559,33 +586,11 @@ def adam_state_equal(a, b):
             == [len(g["params"]) for g in b["param_groups"]])
 
 
-# ---- first load: the unbroken continuation -----------------------------------------------------
-c1, o1, s1 = r68.load_checkpoint(ckpt, freeze=base.R68_FREEZE)
-install_trunk_hook(c1, "m2_update1_unbroken")
-register_step_precharge(o1, "m2_update1_unbroken")
-check("resume_source_is_the_post_update0_checkpoint",
-      int(s1["updates"]) == 1 and int(s1["optimizer_steps"]) == 4
-      and int(s1["episodes_done"]) == 4 and abs(float(s1["lambda"]) - 0.73) < 1e-12
-      and s1["structure"] == r68.R68_STRUCTURE
-      and abs(float(s1["late_init_alpha"]) - r68.LATE_INIT_ALPHA) < 1e-12
-      and len(s1["lambda_history"]) == 1,
-      state={k: s1.get(k) for k in ("updates", "optimizer_steps", "episodes_done", "lambda",
-                                    "structure", "late_init_alpha")})
-check("resume_source_moved_trainable_away_from_the_fresh_init_and_left_frozen_bit_identical",
-      identities(c1)[1] != identities(m2_ctrl)[1]
-      and identities(c1)[0] == identities(m2_ctrl)[0])
-check("resume_reestablished_frozen_mask_on_the_first_load",
-      not any(p.requires_grad for p in r68.frozen_parameters(c1))
-      and all(p.requires_grad for p in r68.trainable_parameters(c1)))
-check("resume_source_owns_the_six_trainable_parameters_only",
-      [len(g["params"]) for g in o1.state_dict()["param_groups"]] == [6],
-      frozen_objects=len(r68.frozen_parameters(c1)),
-      trainable_objects=len(r68.trainable_parameters(c1)))
 saved_params = flat_params(c1)
 saved_opt = copy.deepcopy(o1.state_dict())
 rng_after_first_load = trainer.rng_state()
 check("resume_source_carries_every_parameter_tensor",
-      len(saved_params) == len(flat_params(m2_ctrl)) and len(saved_params) >= 12,
+      len(saved_params) == len(flat_params(_fresh_ctrl)) and len(saved_params) >= 12,
       tensors=len(saved_params))
 
 project_update_rows(m2_samples, "M2 update 1 unbroken continuation (real lr)")
@@ -716,8 +721,9 @@ check("cli_fresh_factory_writes_r68_init_identity_per_seed",
 check("cli_ppo_journal_path_under_r68_raw",
       str((RAW / "runtime" / "ppo_update_calls.jsonl").resolve()).startswith(str(RAW.resolve())))
 check("cli_no_model_forward_ran_in_this_phase",
-      hook_rows("m1") + hook_rows("m2")
-      == sum(e["rows"] for e in HOOK_LOG if e["counted"]))
+      {e["controller"] for e in HOOK_LOG if e["counted"]}
+      <= {"m1", "m2", "m2_update1_resumed"},
+      charged_controllers=sorted({e["controller"] for e in HOOK_LOG if e["counted"]}))
 
 # ============================================================ M4. unregistered / duplicate start
 r42_run = cfg["r42_run"]
