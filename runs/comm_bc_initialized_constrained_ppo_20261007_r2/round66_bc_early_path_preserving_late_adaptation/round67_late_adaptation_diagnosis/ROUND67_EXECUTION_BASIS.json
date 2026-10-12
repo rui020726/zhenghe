@@ -1,0 +1,60 @@
+{
+ "kind": "round67-execution-basis/1",
+ "task_id": "ROUND67-READONLY-LATE-ADAPTATION-DIAGNOSIS",
+ "branch": "analysis/round67-late-adaptation-diagnosis",
+ "base_head": "c962a2ceccb5ee767debef349eac9cac66c77706",
+ "repository": "D:\\code\\整合\\zhenghe-round42",
+ "python": "D:\\project_env\\python.exe",
+ "runtime_device": "cpu",
+ "deliverable_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round66_bc_early_path_preserving_late_adaptation/round67_late_adaptation_diagnosis",
+ "question": "ROUND66 froze trunk+early_head and trained only late_head and both critics; late_head moved (L2 0.090/0.237/0.116) yet NEW and BC are identical on task count, cost and target-ID sets in all 192 eval cells. Did the actions not change at all, or change and cancel? Is there direct evidence of saturated (high-confidence) decisions or lack of exploration?",
+ "scope": {
+  "arms": {"NEW": "R66 ep128, frozen early path, read-only load",
+           "BC": "compliant R60 ep0, model-only read-only",
+           "R60_ep128": "compliant R60 ep128, read-only, used only by the 3-row focal attribution probe"},
+  "cells": "3 seeds x 2 modes x 32 scenes (192) + 6 focal cells (NEW and BC on scene 1700027)",
+  "eval_block": "1800000..1800031, the already-used ROUND66 development block, not an unseen confirmation set",
+  "focal_scene": 1700027,
+  "routing": "ready_step = round(f[18]*1000) - round(f[0]); <=147 early_head, >147 late_head; the same routed forward is used for every measurement in this round",
+  "greedy_tie_rule": "SEND when p(SEND) >= p(SKIP), so the decision boundary is p = 0.5"
+ },
+ "inputs_read_only": {
+  "rows": "raw/rows/v2_r66eval2_model_{new,bc}_s{seed}_{mode}_a1_s{scene}_a1.json",
+  "tapes": "raw/logs/v2_r66eval2_model_{new,bc}_s{seed}_{mode}_a1_s{scene}_a1_tape.jsonl",
+  "focal_tapes": "raw/logs/v2_r66eval2_focal_{new,bc}_s{seed}_a1_s1700027_a1_tape.jsonl",
+  "batch_records": "raw/checkpoints/r40_batch_s{seed}_b{batch}_attempt01.json (96 files)",
+  "gates": "raw/runtime/r60_first_batch_gate_s{seed}.json",
+  "journals": "raw/runtime/ppo_update_calls.jsonl, optimizer_step_calls.jsonl",
+  "training_tapes": "raw/logs/v2_r60_train_s{seed}_e{ep}_s*_a1_tape.jsonl (384 files)",
+  "r60_focal_rows": "round60_partitioned_actor_head_ablation/raw/rows/v2_r60_eval_new_s{seed}_{mode}_s1700027_a1.json",
+  "checkpoints": {"r66_ep128": "raw/checkpoints/v2_train_s{seed}_ep128.pt",
+                  "r60_ep0": "round60_partitioned_actor_head_ablation/raw/checkpoints/v2_train_s{seed}_before_b0.pt",
+                  "r60_ep128": "round60_partitioned_actor_head_ablation/raw/checkpoints/v2_train_s{seed}_ep128.pt"}
+ },
+ "forward_row_budget": {
+  "cap": 5000,
+  "enforcement": "the plan is counted and checked before the first forward; a persisted round-level ledger (r67_forward_row_ledger.json) is read and appended by every script that forwards, so the cap holds across processes",
+  "panel_rows": 4708,
+  "focal_probe_rows": 3,
+  "total": 4711,
+  "unused": 289,
+  "why_unused": "every remaining question was answerable from persisted data, so no further forward was run"
+ },
+ "boundaries": {
+  "no_environment": true, "no_simulation": true, "no_new_claims": true,
+  "no_optimizer_step": true, "no_ppo_replay": true, "no_rng_restore": true,
+  "no_checkpoint_write": true, "no_parameter_or_threshold_edit": true,
+  "no_tuning": true, "no_new_block_or_scene_selection": true,
+  "forward_only_under_no_grad": true
+ },
+ "method_notes": [
+  "distinct input key = (seed, exact float32 bytes of the 19-dim observation); dedup is outcome-independent",
+  "the forward path was verified against 100% of the saved probability records before any interpretation (2232/2232 within 1e-6)",
+  "saturation is reported with the fixed descriptive rule p >= 0.99 or p <= 0.01; no threshold was fitted",
+  "the actor loss reaches free rows only, because joint_log_prob and action_entropy multiply by the recorded usable mask",
+  "no full-disk scan, no rerun of the ROUND66 suite, no reuse of unverified evidence"
+ ],
+ "protected_files": ["runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+                      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json"],
+ "no_push_no_merge_no_deploy": true
+}

@@ -1,0 +1,27 @@
+{
+ "cap": 5000,
+ "events": [
+  {
+   "kind": "round67-task23-joint-probability-panel/1",
+   "rows": 4708,
+   "models": "R66 ep128 (NEW) + R60 ep0 (BC), read-only, torch.no_grad",
+   "detail": {
+    "A_free_census": 748,
+    "B_late_nonfree": 3720,
+    "C_early_nonfree": 240
+   },
+   "source_artifact": "r67_probability_panel.json"
+  },
+  {
+   "kind": "round67-focal-attribution-probe/1",
+   "rows": 3,
+   "models": "R60 ep128 (read-only), 3 rows, torch.no_grad",
+   "detail": [
+    "s11",
+    "s22",
+    "s33"
+   ],
+   "source_artifact": "r67_focal_attribution_probe.json"
+  }
+ ]
+}
