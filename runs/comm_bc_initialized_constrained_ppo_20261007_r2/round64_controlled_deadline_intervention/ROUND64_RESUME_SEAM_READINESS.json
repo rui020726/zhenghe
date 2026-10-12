@@ -1,0 +1,124 @@
+{
+  "kind": "round64-resume-seam-readiness/1",
+  "status": "zero_environment_seam_repair_tested_resume_blocked",
+  "source_head_before_repair": "d2f9d31f897c513c3fa473efe59efc112486a439",
+  "candidate_code_head": "016a512bb7768fd28149916d19e87ecca77e9de5",
+  "candidate_execution_version": "round64-controlled-deadline-intervention/7",
+  "identity_binding": {
+    "single_source": "r64_identity.BINDING loaded from ROUND64_RESUME_SEAM_CANDIDATE.json",
+    "executor_and_model_row_use_binding": true,
+    "guard_ledger_version_and_caps_use_binding": true,
+    "historical_versions_read_only_accepted": [
+      "round64-controlled-deadline-intervention/2",
+      "round64-controlled-deadline-intervention/3",
+      "round64-controlled-deadline-intervention/4",
+      "round64-controlled-deadline-intervention/5",
+      "round64-controlled-deadline-intervention/6"
+    ],
+    "old_6_executor_4_guard_rejected_before_slot": true,
+    "consistent_7_executor_guard_model_row_validated": true,
+    "historical_freeze_path": "ROUND64_FREEZE.json",
+    "historical_freeze_sha256": "cea67404615906e28a846989e19b94177b6ad682aacc4321af999dcc4c5a080e",
+    "historical_freeze_modified": false,
+    "candidate_is_run_authority": false
+  },
+  "fixed_identity_and_limits": {
+    "scene": 1700027,
+    "focus_target": "piloc-e1-target-5",
+    "seed": 33,
+    "mode": "greedy",
+    "deadline_deltas": [-30, 0, 30, 60],
+    "model_file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+    "model_parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a",
+    "normal_cap": 10,
+    "reserve_cap": 2,
+    "hard_cap": 12
+  },
+  "collector_path_tests": {
+    "factory_shared_with_run_cell": "build_cell_collector",
+    "base_class": "R60/R61 inherited OneShotSendSkipCollector",
+    "actual_method_exercised": "generated R64 collector _choose_masked",
+    "force_send_free_branch": "passed",
+    "force_skip_free_branch": "passed",
+    "sequential_mask_blocks_unaffordable_send": "passed",
+    "one_shot_target_closes_and_other_target_remains_greedy": "passed",
+    "disabled_interposer_parent_actions_and_tape_equal": "passed",
+    "emit_builder_and_write_spies": "fail if invoked; none invoked"
+  },
+  "tests": {
+    "command": "python -m unittest runs.comm_bc_initialized_constrained_ppo_20261007_r2.round64_controlled_deadline_intervention.test_round64_zero_env runs.comm_bc_initialized_constrained_ppo_20261007_r2.round64_controlled_deadline_intervention.test_round64_resume_seam -v",
+    "test_count": 30,
+    "exit_code": 0,
+    "existing_guard_runtime_tests": 23,
+    "new_resume_seam_tests": 7,
+    "stub_controller_forwards": 7,
+    "isolated_fake_run_returns": 2,
+    "preliminary_pure_test_failures_corrected": [
+      "wrong synthetic base collector and missing slot-to-logical fixture identity",
+      "missing onpolicy import path and wrong synthetic focus target",
+      "guard branch indentation regression; fixed before final combined suite"
+    ]
+  },
+  "actual_raw_resume_gate": {
+    "raw_ledger_sha256_before_and_after": "0f36b1a1c6f2ffa7a0f168c451fca7c01c34c70f6890c493345650bd5838779e",
+    "ledger_sha_unchanged": true,
+    "slot_count_before_and_after": 9,
+    "consumed_slots": 9,
+    "normal_consumed": 7,
+    "reserve_consumed": 2,
+    "hard_cap": 12,
+    "normal_available": 3,
+    "reserve_available": 0,
+    "hard_cap_headroom": 3,
+    "qualified_cells": 6,
+    "unresolved_cells": [
+      "d+30_FORCE_SEND",
+      "d+30_FORCE_SKIP",
+      "d+60_FORCE_SEND",
+      "d+60_FORCE_SKIP"
+    ],
+    "nonterminal_cells": ["d+30_FORCE_SEND"],
+    "additional_attempts_required": 4,
+    "recovery_gate_status": "refused_before_any_new_slot",
+    "attempt_13_approved": false
+  },
+  "zero_environment_side_effects": {
+    "environment_constructions": 0,
+    "actual_joint_driver_builder_calls": 0,
+    "actual_joint_run_calls": 0,
+    "real_claims": 0,
+    "new_persistent_r64_slots": 0,
+    "raw_ledger_writes": 0,
+    "real_optimizer_updates": 0,
+    "synthetic_optimizer_updates": 0,
+    "PPO_replays": 0,
+    "training_rng_restores": 0,
+    "training_state_restores": 0,
+    "checkpoint_loads": 0,
+    "checkpoint_writes": 0,
+    "old_tape_replays": 0,
+    "R60_model_loads_or_forwards": 0,
+    "historical_round64_outputs_modified": false
+  },
+  "protected_hashes": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  },
+  "code_sha256": {
+    "r64_execute.py": "66ea657490ce0ba32df6347db2158c138fb4f9d3502bc2e7d7ab4ff72b137c30",
+    "r64_guard.py": "8d1b207ee28b77eba8ee4d70f1b11de187230e6c4e19f417ac08831f03c3f0fa",
+    "r64_identity.py": "a2f80d91ddbc3270ce80520d3c9ea8b362a295f7d1b9c4fefa234b59a86b3af5",
+    "test_round64_resume_seam.py": "378ecb6b4c88d5e40d2e24808c184a50657ca7341e372b7e75da3f7ea9f60d01",
+    "ROUND64_RESUME_SEAM_CANDIDATE.json": "28a0845cb02a8bf5c431a36b4426cdfcf6874270b09a4efef0f3e33d9b5dea5e"
+  },
+  "unchanged_sha256": {
+    "r64_runtime.py": "3ae654d240ed97ddf5296299f969849c9e0927ad08d2b41b4fcb36ce915bc099",
+    "r64_intervention.py": "eb77f35d9bea539a183bbd041c20e2a5d4156d32ad649650a2b4742d7a0d8c46",
+    "ROUND64_FREEZE.json": "cea67404615906e28a846989e19b94177b6ad682aacc4321af999dcc4c5a080e",
+    "raw/ROUND64_GATE.json": "5de91c0da3dd59bacd841ed36e21a3d750ea5492929d0a6467e573445ccdbeda",
+    "raw/ROUND64_LEDGER.jsonl": "0f36b1a1c6f2ffa7a0f168c451fca7c01c34c70f6890c493345650bd5838779e",
+    "ROUND64_MACHINE_VERDICT.json": "5085ffa54718e1b8e83a5e91e1dfc7754b0fde3d273792917c978ac617525219",
+    "QUALIFICATION_AND_RECOVERY_REVIEW.json": "a0111752c51f247cd582021fdcaacb7e0f29973880e894de6fb8aa507158ff44"
+  },
+  "continuation_boundary": "Four incomplete fixed cells versus three currently available slots; authorization/ceiling must be resolved by the responsible decision maker. This readiness result grants no episode and no 13th attempt."
+}
