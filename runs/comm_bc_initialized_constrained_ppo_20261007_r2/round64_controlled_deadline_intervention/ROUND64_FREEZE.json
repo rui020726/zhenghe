@@ -1,0 +1,91 @@
+{
+  "kind": "round64-frozen-execution/1",
+  "task": "ROUND64",
+  "branch": "exp/round64-controlled-deadline-intervention",
+  "pre_freeze_base_head": "252f2fc4d6101693ef363c9969090eb1ba0bb6a1",
+  "execution_version": "round64-controlled-deadline-intervention/2",
+  "authorization": {
+    "planned_attempts": 10,
+    "technical_reserve": 2,
+    "hard_attempt_cap": 12,
+    "serial": true,
+    "failed_attempts_refund": false,
+    "training_updates": 0,
+    "ppo_replays": 0,
+    "training_state_restore": false,
+    "checkpoint_writes": 0
+  },
+  "model": {
+    "source_round": "R60",
+    "seed": 33,
+    "episode": 128,
+    "mode": "greedy",
+    "path_relative_to_r2": "round60_partitioned_actor_head_ablation/raw/checkpoints/v2_train_s33_ep128.pt",
+    "file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+    "parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a",
+    "load_mode": "read_only_model_only"
+  },
+  "world": {
+    "scene": 1700027,
+    "steps": 1000,
+    "num_goals": 6,
+    "comm_budget_bytes": 29300,
+    "comm_ack": false,
+    "focus_target": "piloc-e1-target-5",
+    "search_and_allocation_checkpoints": "inherited unchanged from R60 frozen run configuration"
+  },
+  "intervention": {
+    "kind": "focused deadline offset within generated profile",
+    "deltas": [-30, 0, 30, 60],
+    "profile_provider_calls_per_run": 1,
+    "profile_generation_and_rng_order_preserved": true,
+    "feature_schema_dimensions": 19,
+    "forced_action_point": "after sequential mask, before one-shot action latch/emission",
+    "override_once": true,
+    "post_override_policy": "frozen greedy model"
+  },
+  "fixed_plan": [
+    {"logical": "L", "delta": 0, "arm": "baseline", "action": "greedy"},
+    {"logical": "L0", "delta": 0, "arm": "interposer-disabled", "action": "greedy"},
+    {"logical": "d-30_FORCE_SEND", "delta": -30, "arm": "FORCE_SEND", "action": "SEND"},
+    {"logical": "d-30_FORCE_SKIP", "delta": -30, "arm": "FORCE_SKIP", "action": "SKIP"},
+    {"logical": "d+0_FORCE_SEND", "delta": 0, "arm": "FORCE_SEND", "action": "SEND"},
+    {"logical": "d+0_FORCE_SKIP", "delta": 0, "arm": "FORCE_SKIP", "action": "SKIP"},
+    {"logical": "d+30_FORCE_SEND", "delta": 30, "arm": "FORCE_SEND", "action": "SEND"},
+    {"logical": "d+30_FORCE_SKIP", "delta": 30, "arm": "FORCE_SKIP", "action": "SKIP"},
+    {"logical": "d+60_FORCE_SEND", "delta": 60, "arm": "FORCE_SEND", "action": "SEND"},
+    {"logical": "d+60_FORCE_SKIP", "delta": 60, "arm": "FORCE_SKIP", "action": "SKIP"}
+  ],
+  "case_selection": "single predeclared focus scene and target; no outcome-based case selection",
+  "analysis_limitations": [
+    "L and L0 are a gate, not independent samples",
+    "downstream random draws may diverge after interventions",
+    "one realization per fixed scene and frozen policy",
+    "no general necessity, safe-deletion, noninferiority, or deployment claim"
+  ],
+  "preflight": {
+    "file": "ROUND64_PREFLIGHT_10.json",
+    "status": "passed",
+    "environment_builds": 0,
+    "environment_runs": 0,
+    "environment_steps": 0,
+    "claims": 0,
+    "slots": 0,
+    "optimizer_updates": 0,
+    "ppo_replays": 0,
+    "rng_restores": 0,
+    "checkpoint_writes": 0,
+    "read_only_model_loads": 1
+  },
+  "source_sha256": {
+    "r64_execute.py": "ef8dcaf05900bdeb91c6de46a8e03a5dbd42eeb5b145d96c1c5fce39ff30fd03",
+    "r64_runtime.py": "3ae654d240ed97ddf5296299f969849c9e0927ad08d2b41b4fcb36ce915bc099",
+    "r64_guard.py": "0628cea09a31b72510705ef463b94b07c0c28df279acd24f698fbf4690557a21",
+    "r64_intervention.py": "eb77f35d9bea539a183bbd041c20e2a5d4156d32ad649650a2b4742d7a0d8c46",
+    "r64_preflight.py": "28de32cb805109977c364a3a86c9bba96e9c9ad2419aa3cd204adfc1f77af56e",
+    "r64_analysis.py": "f5b3e065cc1e43479db475a43d62cc07ed993e1532375aa587d387a4910498a0",
+    "test_round64_zero_env.py": "a049e301214d1da5330367b050f713ea877b9dcf67bc8cd3bebb51b857ff22f1",
+    "test_round64_analysis.py": "5ee7aa1e1c4a186305877c3f03adbe94806ca1c3f381975f801f4f01bd49b10f",
+    "ROUND64_PREFLIGHT_10.json": "1449aceac20af0ed852583d2ab4651f561d5ba60b37e75aadffbaaba3a373424"
+  }
+}
