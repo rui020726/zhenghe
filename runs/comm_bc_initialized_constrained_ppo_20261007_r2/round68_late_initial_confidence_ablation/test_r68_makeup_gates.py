@@ -211,7 +211,8 @@ def identities(controller):
 def build_episode(controller, ep_index, scene, spec):
     records = [draw_record(controller, st, targets) for (st, targets) in spec["records"]]
     return {"collector": SimpleNamespace(records=records), "steps": int(spec["steps"]),
-            "cost_stream": {int(k): float(v) for k, v in spec["cost"].items()},
+            "cost_stream": {int(k): {"airtime_bytes": float(v)}
+                            for k, v in spec["cost"].items()},
             "task_stream": {int(k): float(v) for k, v in spec["task"].items()},
             "lambda": 1.0, "episode_index": int(ep_index), "training_seed": SEED,
             "scenario_seed": int(scene)}
@@ -263,7 +264,17 @@ except RuntimeError as exc:
     refused = str(exc)
 check("old_forward_guard_still_refuses_further_charge",
       "would take used to 9320 > cap 8192" in refused and OLD_FWD.used() == 9319, error=refused[:200])
-check("makeup_grant_fresh_zero_used", MAKEUP_FWD.used() == 0 and MAKEUP_FWD.remaining() == 2048)
+NOTES.append("make-up grant is NOT asserted fresh-zero: the first partial make-up run charged 28 "
+             "forward rows (M1 synthetic fixture generation only, shapes [3,19]/[2,19]/[1,19]) and "
+             "then stopped on a fixture format error inside trainer.batch_samples before any update "
+             "ran. Those 28 rows are preserved in raw/runtime/r68_makeup_forward_rows.json, are not "
+             "refunded, and are not evidence of any committed update; the partial run's failed gate "
+             "output is preserved separately as ROUND68_MAKEUP_GATES_PARTIAL_FAILED.json.")
+check("makeup_grant_within_cap_partial_rows_not_refunded",
+      MAKEUP_FWD.used() >= 28 and MAKEUP_FWD.used() < 2048
+      and MAKEUP_FWD.remaining() == 2048 - MAKEUP_FWD.used(),
+      used=MAKEUP_FWD.used(), remaining=MAKEUP_FWD.remaining(),
+      preserved_partial_rows=28)
 check("shared_steps_guard_used_is_2", STEP_GUARD.used() == 2, used=STEP_GUARD.used())
 check("shared_ppo_guard_used_is_0", PPO_GUARD.used() == 0, used=PPO_GUARD.used())
 
@@ -448,7 +459,7 @@ def build_m2_episode(controller, ep_index, scene, n_records=12):
     cost[1000] = 60.0
     task[1000] = 0.0
     return {"collector": SimpleNamespace(records=records), "steps": 1000,
-            "cost_stream": {int(k): float(v) for k, v in cost.items()},
+            "cost_stream": {int(k): {"airtime_bytes": float(v)} for k, v in cost.items()},
             "task_stream": {int(k): float(v) for k, v in task.items()},
             "lambda": 1.0, "episode_index": int(ep_index), "training_seed": SEED,
             "scenario_seed": int(scene)}
