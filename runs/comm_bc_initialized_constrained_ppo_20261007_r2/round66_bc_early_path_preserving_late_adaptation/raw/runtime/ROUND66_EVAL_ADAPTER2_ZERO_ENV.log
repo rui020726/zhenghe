@@ -149,9 +149,11 @@ PASS v2_version_extends_the_r66_training_version
 PASS v2_shares_the_r66_task_branch_and_hard_cap
 PASS bootstrap_index_is_the_frozen_pcg64_20261012_draw
 PASS persist_result_writes_the_row_and_records_a_receipt
-PASS persist_result_refuses_a_row_missing_a_companion_key
+PASS a_declared_but_never_written_tape_is_recorded_not_treated_as_missing
+PASS persist_result_refuses_a_run_that_produced_no_companion_at_all
 PASS persist_result_refuses_an_empty_companion
-PASS persist_result_refuses_a_companion_that_is_not_on_disk
+PASS a_companion_the_runner_never_wrote_is_recorded_as_such
+PASS a_receipt_fails_closed_once_a_never_written_slot_appears_on_disk
 PASS a_failing_row_write_leaves_failed_technical_and_never_complete
 PASS safe_run_commits_only_after_the_row_is_durable
 PASS a_complete_claim_with_a_sound_receipt_is_accepted_read_only
@@ -201,7 +203,7 @@ PASS e7b_a_legitimate_zero_row_loads_with_an_empty_target_set
 {
  "kind": "round66-eval-adapter2-zero-env/1",
  "status": "passed",
- "checks": 100,
+ "checks": 102,
  "failed": [],
  "synthetic_optimizer_updates": 0,
  "environment_constructions": 0,

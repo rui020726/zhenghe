@@ -284,6 +284,14 @@ def _receipt_is_sound(claim: dict, cell: dict | None) -> bool:
                 return False
         except Exception:
             return False
+    for entry in receipt.get("declared_but_not_produced") or []:
+        # a slot recorded as never-written must still be absent, or the receipt no longer
+        # describes the disk it was taken from
+        try:
+            if entry.get("path") and Path(entry["path"]).exists():
+                return False
+        except Exception:
+            return False
     if cell is None:
         return True
     try:
@@ -359,22 +367,32 @@ def _prepare_claim(cfg: dict[str, Any], logical: str, metadata: dict, tag: str,
     return claim_path, attempt, f"{tag}_a{attempt}"
 
 
+ARTEFACT_KEYS = ("row", "lifecycle", "transcript", "tape")
+
+
 def persist_result(cfg, row, run_tag: str) -> dict:
     """E5: write the result row and prove the durable artifacts exist, before anything is committed.
 
     Raises on any problem so the caller marks the attempt failed_technical instead of committing a
     complete claim with no result behind it.
+
+    The frozen runner declares all four artefact slots for every cell but only writes a tape when a
+    collector is attached. A rule arm or an immediate reference attaches no collector, so those rows
+    legitimately carry a declared tape path with no file behind it - the 48 block-A references
+    already registered in this raw root have exactly that shape. Such a slot is recorded as
+    declared_but_not_produced instead of being silently dropped or mistaken for a missing result,
+    and the receipt re-check at admission time fails if that slot has since appeared on disk, so the
+    receipt can never drift away from the disk state it describes. A row with no row path, an empty
+    file, a row that reads back inconsistently, or a run that produced no companion at all still
+    fails.
     """
     base._write_row(cfg, row)
     artefacts = row.get("artefacts") or {}
-    missing = [k for k in ("row", "lifecycle", "transcript", "tape") if not artefacts.get(k)]
-    if missing:
-        raise RuntimeError(f"{run_tag}: result row is missing artefact keys {missing}")
-    for key in ("row", "lifecycle", "transcript", "tape"):
-        path = Path(artefacts[key])
-        if not path.is_file() or path.stat().st_size == 0:
-            raise RuntimeError(f"{run_tag}: artefact {key} is missing or empty at {path}")
+    if not artefacts.get("row"):
+        raise RuntimeError(f"{run_tag}: result row declares no row artefact")
     row_path = Path(artefacts["row"])
+    if not row_path.is_file() or row_path.stat().st_size == 0:
+        raise RuntimeError(f"{run_tag}: result row is missing or empty at {row_path}")
     first = base._sha256_file(row_path)
     reread = base._read_json(row_path)
     if int(reread.get("steps", -1)) <= 0:
@@ -383,15 +401,31 @@ def persist_result(cfg, row, run_tag: str) -> dict:
         raise RuntimeError(f"{run_tag}: persisted row does not read back consistently")
     if base._sha256_file(row_path) != first:
         raise RuntimeError(f"{run_tag}: persisted row hash is not stable across re-reads")
-    companions = {}
-    for key in ("lifecycle", "transcript", "tape"):
-        companion = Path(artefacts[key])
-        companions[key] = {"path": str(companion),
-                           "sha256": base._sha256_file(companion),
-                           "bytes": int(companion.stat().st_size)}
+    companions, not_produced, present = {}, [], []
+    for key in ARTEFACT_KEYS:
+        if key == "row":
+            continue
+        declared = artefacts.get(key)
+        if not declared:
+            not_produced.append({"key": key, "reason": "not declared by this row"})
+            continue
+        path = Path(declared)
+        if not path.is_file():
+            not_produced.append({"key": key, "path": str(path),
+                                 "reason": "declared by the runner but never written: this run "
+                                           "kind attached no collector"})
+            continue
+        if path.stat().st_size == 0:
+            raise RuntimeError(f"{run_tag}: artefact {key} is empty at {path}")
+        companions[key] = {"path": str(path), "sha256": base._sha256_file(path),
+                           "bytes": int(path.stat().st_size), "status": "present"}
+        present.append(key)
+    if not present:
+        raise RuntimeError(f"{run_tag}: no companion artefact was produced at all")
     return {"row_path": str(row_path), "row_sha256": first,
             "row_bytes": int(row_path.stat().st_size),
             "companions": companions,
+            "declared_but_not_produced": not_produced,
             "run_tag": run_tag, "persisted_at_unix": time.time()}
 
 

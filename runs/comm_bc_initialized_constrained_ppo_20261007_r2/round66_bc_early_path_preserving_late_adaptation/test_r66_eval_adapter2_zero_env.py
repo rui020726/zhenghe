@@ -521,13 +521,24 @@ with scratch() as root:
           and sorted(receipt["companions"]) == ["lifecycle", "tape", "transcript"],
           companions=sorted(receipt.get("companions") or {}))
 
-    bad, _ = _make_row(root, "no_tape", omit=("tape",))
+    # a rule / immediate-reference row declares a tape path the runner never writes; that is the
+    # real shape of all 48 block-A references, so it is recorded, not treated as a missing result
+    rule_shaped, rule_art = _make_row(root, "rule_shaped")
+    rule_art["tape"] = str(root / "logs" / "never_written_tape.jsonl")
+    rule_receipt = v2.persist_result(cfg, rule_shaped, "rule_shaped_a1")
+    check("a_declared_but_never_written_tape_is_recorded_not_treated_as_missing",
+          sorted(rule_receipt["companions"]) == ["lifecycle", "transcript"]
+          and [e["key"] for e in rule_receipt["declared_but_not_produced"]] == ["tape"],
+          not_produced=rule_receipt["declared_but_not_produced"])
+
+    no_companions, no_art = _make_row(root, "no_companions", omit=("lifecycle", "transcript", "tape"))
+    no_art["lifecycle"] = str(root / "logs" / "absent_lifecycle.jsonl")
     try:
-        v2.persist_result(cfg, bad, "no_tape_a1")
+        v2.persist_result(cfg, no_companions, "no_companions_a1")
         raised = False
     except RuntimeError:
         raised = True
-    check("persist_result_refuses_a_row_missing_a_companion_key", raised)
+    check("persist_result_refuses_a_run_that_produced_no_companion_at_all", raised)
 
     empty_row, _ = _make_row(root, "empty_tape", empty=("tape",))
     try:
@@ -539,12 +550,16 @@ with scratch() as root:
 
     ghost, art = _make_row(root, "ghost")
     art["tape"] = str(root / "logs" / "does_not_exist.json")
-    try:
-        v2.persist_result(cfg, ghost, "ghost_a1")
-        raised = False
-    except RuntimeError:
-        raised = True
-    check("persist_result_refuses_a_companion_that_is_not_on_disk", raised)
+    ghost_receipt = v2.persist_result(cfg, ghost, "ghost_a1")
+    check("a_companion_the_runner_never_wrote_is_recorded_as_such",
+          "tape" not in ghost_receipt["companions"]
+          and [e["key"] for e in ghost_receipt["declared_but_not_produced"]] == ["tape"])
+    # ...but a receipt can never drift: if that slot later appears, admission fails closed
+    Path(ghost_receipt["declared_but_not_produced"][0]["path"]).write_text('{"x": 1}\n',
+                                                                          encoding="utf-8")
+    check("a_receipt_fails_closed_once_a_never_written_slot_appears_on_disk",
+          v2._receipt_is_sound({"result_receipt": ghost_receipt}, None) is False
+          and v2._receipt_is_sound({"result_receipt": rule_receipt}, None) is True)
 
 with scratch() as root:
     cfg = _cfg_with(root)

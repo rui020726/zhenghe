@@ -1,0 +1,91 @@
+{
+ "kind": "round66-eval-adapter-persist-fix-register/1",
+ "task_id": "ROUND66-BC-EARLY-PATH-PRESERVING-LATE-ADAPTATION",
+ "branch": "exp/round66-bc-early-path-preserving-late-adaptation",
+ "registered_at_unix": 1791797167.5220249,
+ "registered_by": "ROUND66 continuation session",
+ "rule": "Append-only. ROUND66_DEVIATION_REGISTER.json and ROUND66_FREEZE_ADDENDUM_2.json are preserved byte-identical; this file registers the first evaluation-builder failure and the accounting it implies. No claim, row, log, tape or checkpoint is rewritten.",
+ "git_head_before_this_registration": "fd4c5acbf9f4171b97da7ef828217a634dc4c30b",
+ "failure": {
+  "id": "A3-eval-adapter-persist-tape",
+  "severity": "technical failure inside the private evaluation adapter (not a scientific deviation)",
+  "what_happened": "the first v2 evaluation builder, logical job r66eval2_rule_immediate_greedy_scene1800000, constructed the environment, ran a complete 1000-step episode, wrote its row, lifecycle and transcript, and then raised inside persist_result because it demanded a non-empty tape artefact. The frozen runner declares all four artefact slots for every cell but only writes a tape when a collector is attached; a rule arm and an immediate reference attach none, so those rows legitimately carry a declared tape path with no file behind it. All 48 block-A references already registered in this raw root have exactly that shape, which is what made the defect diagnosable without guessing.",
+  "evidence": {
+   "claim": "raw/launch_claims/r66eval2_rule_immediate_greedy_scene1800000/attempt_0001.json",
+   "claim_status": "failed_technical",
+   "claim_category": "normal",
+   "launch_slot": 433,
+   "environment_constructor_calls": 1,
+   "joint_run_constructed_calls": 1,
+   "run_invocation_calls": 1,
+   "run_return_calls": 1,
+   "run_failure_calls": 0,
+   "completed_steps": 1000,
+   "simulation_started": true,
+   "detail": "RuntimeError: r66eval2_rule_immediate_a1: artefact tape is missing or empty at D:\\code\\\u6574\u5408\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round66_bc_early_path_preserving_late_adaptation\\raw\\logs\\v2_r66eval2_rule_immediate_a1_s1800000_a1_tape.jsonl",
+   "row_written": "raw/rows/v2_r66eval2_rule_immediate_a1_s1800000_a1.json",
+   "row_sha256": "674cffbf24877885c2572daa7417cec6075e409a20f506ab129e207f68ac39f7",
+   "row_on_time": 6,
+   "row_spent_bytes": 15876,
+   "artefacts_present": [
+    "row",
+    "lifecycle (_rp.jsonl)",
+    "transcript (_ct.jsonl)"
+   ],
+   "artefacts_declared_but_never_written": [
+    "tape"
+   ],
+   "launcher_log": "_r66_eval_fixed2_eval.log"
+  },
+  "actual_consumption": {
+   "normal_slots_consumed_by_this_failure": 1,
+   "reserve_slots_consumed_by_this_failure": 0,
+   "real_environment_constructions": 1,
+   "completed_steps": 1000,
+   "refund": 0,
+   "claim_rewritten": false
+  },
+  "eligibility": "the attempt is failed_technical with no result_receipt, so under seam E8 its row cannot enter the statistics. It is neither a qualified result nor a scientific sample; it is a consumed technical attempt.",
+  "preservation": "the claim, the row, the lifecycle log, the transcript and the launcher log are all preserved byte-identical. Nothing was deleted or renumbered."
+ },
+ "fix": {
+  "scope": "r66_eval_fixed2.py (private v2 adapter) and its zero-environment test only",
+  "what_changed": [
+   "persist_result records a declared-but-never-written artefact slot as declared_but_not_produced instead of raising, so a rule or reference row is not mistaken for a missing result",
+   "persist_result still raises for a row with no row path, a missing or empty row file, a row that reads back inconsistently or unstably, an empty companion file, and a run that produced no companion artefact at all",
+   "_receipt_is_sound additionally fails closed if a slot recorded as never-written has since appeared on disk, so a receipt can never drift away from the disk state it describes"
+  ],
+  "what_did_not_change": "the scientific configuration, the frozen runner, r66_execute.py, r66_frozen.py, the plan matrix, the row namespace, the reserve rule, the quota arithmetic and the comparison labels are all untouched. No clip, likelihood, mask, reward, GAE or checkpoint behaviour is involved: this defect lived entirely in the result-persistence path.",
+  "re_acceptance": {
+   "file": "test_r66_eval_adapter2_zero_env.py",
+   "sha256": "09c60c272d83cd4e69b7d260889e5d1acee728ffbb99e6ba92e56970300e99be",
+   "status": "passed",
+   "checks": 102,
+   "failed": 0,
+   "environment_constructions": 0,
+   "real_claims_opened": 0,
+   "real_slots_consumed": 0,
+   "synthetic_optimizer_updates": 0
+  }
+ },
+ "accounting_after_this_registration": {
+  "normal_slot_files_on_disk": 433,
+  "reserve_slot_files_on_disk": 0,
+  "consumed_slots": 433,
+  "unregistered_extra_environment_constructions": 1,
+  "actual_environment_constructions": 434,
+  "hard_cap": 1150,
+  "hard_headroom": 716,
+  "normal_cap": 1110,
+  "booked_reserve_ceiling": 39,
+  "remaining_planned_normal_cells": 677,
+  "planned_eval_cells": 678,
+  "note": "one planned cell must therefore be served from the reserve pool under seam E2, because normal slot 433 is already burnt by the failed attempt and is never refunded. The booked reserve ceiling of 39 accommodates that.",
+  "historical_non_plan_probe": 0,
+  "r58_r60_historical_constructions_are_not_r66_consumption": true
+ },
+ "unresolved_risks": [
+  "the corrected evaluation has not been re-launched yet; 677 planned normal cells and 1 reserve retry remain",
+  "the failed attempt's row (on_time=6, spent_bytes=15876 for scene 1800000 immediate) is preserved but is not a qualified result and must not be quoted as one"
+ ]
+}
