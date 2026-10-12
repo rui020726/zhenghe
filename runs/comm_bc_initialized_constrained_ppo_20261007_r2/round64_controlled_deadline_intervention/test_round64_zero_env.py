@@ -20,7 +20,8 @@ sys.path.insert(0, str(MASK_SOURCE))
 sys.path.insert(0, str(ELIGIBILITY_SOURCE))
 sys.path.insert(0, str(STAGE_B_SOURCE))
 
-from r64_execute import RAW, _cell_cursor, _normalized_lifecycle, persist_episode_row, setup_runtime
+from r64_execute import (RAW, _cell_cursor, _decision_prefix, _normalized_lifecycle,
+                         persist_episode_row, setup_runtime)
 from r64_guard import R64Guard, R64GuardError
 from r64_preflight import saved_focus_features_by_deadline_delta
 from r64_runtime import authority_chain, install_counting_hooks, install_deadline_overlay
@@ -226,6 +227,27 @@ class GuardTests(unittest.TestCase):
             paths[1].write_text("".join(json.dumps(row) + "\n" for row in rows[1]),
                                 encoding="utf-8")
             self.assertNotEqual(_normalized_lifecycle(paths[0]), _normalized_lifecycle(paths[1]))
+
+    def test_decision_prefix_reader_returns_prior_same_tick_candidates(self):
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as tmp:
+            tape = Path(tmp) / "tape.jsonl"
+            rows = [
+                {"step": 133, "targets": [], "features": [], "actions": {},
+                 "candidate_audit": {}},
+                {"step": 134, "targets": ["earlier", "piloc-e1-target-5"],
+                 "features": [[1.0], [2.0]], "actions": {"earlier": 0},
+                 "candidate_audit": {"earlier": {"legal": True}}},
+            ]
+            tape.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+            prefix = _decision_prefix({
+                "focus": {"target": "piloc-e1-target-5", "ready_step": 134},
+                "artifacts": {
+                    "tape": {"path": str(tape)},
+                    "lifecycle": {"path": str(tape)},
+                },
+            })
+            self.assertEqual(prefix["prior_tape_rows"], [rows[0]])
+            self.assertEqual(prefix["prior_same_tick_candidates"]["targets"], ["earlier"])
 
     def test_ten_normal_then_eleventh_refused_and_restart_does_not_reset(self):
         guard = self.temp_guard()

@@ -513,7 +513,7 @@ def _decision_prefix(cell):
                 (float(row.get("timestamp", 0)) < decision_step or
                  (float(row.get("timestamp", 0)) == decision_step and
                   row.get("event_type") == "detection"))]
-    return {"prior_tape_rows": prior, "prior_same_tick_candidates": prior_same,
+    return {"prior_tape_rows": prior, "prior_same_tick_candidates": prior_same_tick,
             "pre_action_lifecycle": pre_life}
 
 

@@ -35,6 +35,16 @@
     "interrupted_attempts": ["L normal-01 /2", "L reserve-01 /3"],
     "matrix_attempts_started": 0
   },
+  "post_run_deviation": {
+    "detected_after_matrix_start": true,
+    "executor_and_model_identity_version": "round64-controlled-deadline-intervention/6",
+    "guard_and_matrix_ledger_version": "round64-controlled-deadline-intervention/4",
+    "affected_matrix_logicals": [
+      "d-30_FORCE_SEND", "d-30_FORCE_SKIP", "d+0_FORCE_SEND", "d+0_FORCE_SKIP",
+      "d+30_FORCE_SEND"
+    ],
+    "response": "preserve all files; stop active matrix process; do not retry, reclassify versions, or infer formal intervention effects"
+  },
   "authorization": {
     "planned_attempts": 10,
     "technical_reserve": 2,
@@ -110,13 +120,13 @@
     "read_only_model_loads": 1
   },
   "source_sha256": {
-    "r64_execute.py": "1545ba7ca7a9159c76d904abbc4e06ffe8c068a42027b97f26f303c0749ec519",
+    "r64_execute.py": "5174893b84429cef1bd43953f2a9ecdeae4b16c28c73c738a1d2e3d6cdf79818",
     "r64_runtime.py": "3ae654d240ed97ddf5296299f969849c9e0927ad08d2b41b4fcb36ce915bc099",
     "r64_guard.py": "c50d0facf95e0fa745033430283c4bad653e92e5bf5743866eb090b1103b8acd",
     "r64_intervention.py": "eb77f35d9bea539a183bbd041c20e2a5d4156d32ad649650a2b4742d7a0d8c46",
     "r64_preflight.py": "28de32cb805109977c364a3a86c9bba96e9c9ad2419aa3cd204adfc1f77af56e",
     "r64_analysis.py": "3dc4343a4ea8c61ce7265a2592303c1ffe60cca963f841a867dea861d5e87873",
-    "test_round64_zero_env.py": "1dfef3a43359aee54a8e87f809ae179cbb610d2001b22c67226440186270810b",
+    "test_round64_zero_env.py": "ff15fa253cdc364d7d9376cb290bbe0e99bee1745de17d0696960a22826c98ab",
     "test_round64_analysis.py": "5ee7aa1e1c4a186305877c3f03adbe94806ca1c3f381975f801f4f01bd49b10f",
     "ROUND64_PREFLIGHT_15.json": "0ace9b83d1429312471fa238b6653aa9e15d86eb9d585c8901352d7b2889fe84"
   }

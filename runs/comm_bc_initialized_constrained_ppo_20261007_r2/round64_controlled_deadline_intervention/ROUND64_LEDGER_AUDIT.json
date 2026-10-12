@@ -1,0 +1,48 @@
+{
+  "kind": "round64-cumulative-ledger-audit/1",
+  "task": "ROUND64",
+  "ledger_path": "raw/ROUND64_LEDGER.jsonl",
+  "ledger_sha256": "0f36b1a1c6f2ffa7a0f168c451fca7c01c34c70f6890c493345650bd5838779e",
+  "hard_cap": 12,
+  "consumption": {
+    "slot_attempts": 9,
+    "normal_slots": 7,
+    "reserve_slots": 2,
+    "headroom": 3,
+    "builder_calls": 9,
+    "environment_constructions": 9,
+    "run_calls_at_joint_run_entry": 9,
+    "run_returns": 8,
+    "run_failures": 0,
+    "known_returned_steps": 8000,
+    "steps_for_nonterminal_run": null,
+    "qualified_by_runner": 6,
+    "explicit_interrupted_receipts": 2,
+    "nonterminal_slot_receipts": 1
+  },
+  "slot_map": [
+    {"slot": "normal-01", "logical": "L", "version": "/2", "builders": 1, "run_returns": 1, "steps": 1000, "qualification": "interrupted: row carried read_only_model_only, while verified loader contract was read_only"},
+    {"slot": "reserve-01", "logical": "L", "version": "/3", "builders": 1, "run_returns": 1, "steps": 1000, "qualification": "interrupted: returned row JSON was not persisted by the R64 outer runner"},
+    {"slot": "reserve-02", "logical": "L", "version": "/4", "builders": 1, "run_returns": 1, "steps": 1000, "qualification": "qualified"},
+    {"slot": "normal-02", "logical": "L0", "version": "/4", "builders": 1, "run_returns": 1, "steps": 1000, "qualification": "qualified"},
+    {"slot": "normal-03", "logical": "d-30_FORCE_SEND", "entry_version": "/6", "ledger_guard_version": "/4", "builders": 1, "run_returns": 1, "steps": 1000, "qualification": "qualified by runner; execution identity mismatch makes scientific use unverified"},
+    {"slot": "normal-04", "logical": "d-30_FORCE_SKIP", "entry_version": "/6", "ledger_guard_version": "/4", "builders": 1, "run_returns": 1, "steps": 1000, "qualification": "qualified by runner; execution identity mismatch makes scientific use unverified"},
+    {"slot": "normal-05", "logical": "d+0_FORCE_SEND", "entry_version": "/6", "ledger_guard_version": "/4", "builders": 1, "run_returns": 1, "steps": 1000, "qualification": "qualified by runner; execution identity mismatch makes scientific use unverified"},
+    {"slot": "normal-06", "logical": "d+0_FORCE_SKIP", "entry_version": "/6", "ledger_guard_version": "/4", "builders": 1, "run_returns": 1, "steps": 1000, "qualification": "qualified by runner; execution identity mismatch makes scientific use unverified"},
+    {"slot": "normal-07", "logical": "d+30_FORCE_SEND", "entry_version": "/6", "ledger_guard_version": "/4", "builders": 1, "run_called": true, "run_returned": false, "steps": null, "qualification": "unknown terminal state after agent stopped the matrix process; no terminal ledger event was fabricated"}
+  ],
+  "not_started": ["d+30_FORCE_SKIP", "d+60_FORCE_SEND", "d+60_FORCE_SKIP"],
+  "training_side_effects": {
+    "optimizer_updates": 0,
+    "ppo_replays": 0,
+    "training_rng_restores": 0,
+    "checkpoint_writes": 0,
+    "checkpoint_write_ledger_bytes": 0
+  },
+  "notes": [
+    "Each slot is counted once even when a completed result is interrupted at validation.",
+    "The unknown run's environment construction and run entry are counted; its step count is not guessed.",
+    "The preserved strict L/L0 gate remains failed; a separate exact-path reconciliation passes for L/L0 and the R60 common science fields.",
+    "No run is retried or deduplicated. The R60 model/checkpoint is read-only."
+  ]
+}

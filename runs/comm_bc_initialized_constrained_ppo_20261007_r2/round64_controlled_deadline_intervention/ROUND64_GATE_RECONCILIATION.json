@@ -1,0 +1,207 @@
+{
+  "kind": "round64-neutral-gate-path-metadata-reconciliation/1",
+  "status": "passed",
+  "preserved_original_gate": {
+    "status": "failed",
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\ROUND64_GATE.json",
+    "sha256": "5de91c0da3dd59bacd841ed36e21a3d750ea5492929d0a6467e573445ccdbeda"
+  },
+  "explicitly_normalized_field": "final.detail.metrics.comm_transcript",
+  "metadata_path_values": {
+    "L": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\logs\\v2_L_a03_s1700027_a3_ct.jsonl",
+    "L0": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\logs\\v2_L0_a01_s1700027_a1_ct.jsonl",
+    "R60": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\logs\\v2_r60_eval_new_s33_greedy_s1700027_a1_ct.jsonl"
+  },
+  "strict_original_reason": "final lifecycle metrics embed each run's own transcript output path",
+  "reconciled_gate": {
+    "L_equals_L0": true,
+    "science_fields": {
+      "steps": {
+        "L": 1000,
+        "L0": 1000
+      },
+      "on_time": {
+        "L": 5,
+        "L0": 5
+      },
+      "on_time_ids": {
+        "L": [
+          "piloc-e1-target-0",
+          "piloc-e1-target-1",
+          "piloc-e1-target-2",
+          "piloc-e1-target-3",
+          "piloc-e1-target-4"
+        ],
+        "L0": [
+          "piloc-e1-target-0",
+          "piloc-e1-target-1",
+          "piloc-e1-target-2",
+          "piloc-e1-target-3",
+          "piloc-e1-target-4"
+        ]
+      },
+      "spent_bytes": {
+        "L": 4812,
+        "L0": 4812
+      },
+      "emission_sequence": {
+        "L": [
+          [
+            222,
+            "piloc-e1-target-1",
+            1,
+            2502,
+            6,
+            true
+          ],
+          [
+            276,
+            "piloc-e1-target-3",
+            1,
+            2310,
+            6,
+            true
+          ]
+        ],
+        "L0": [
+          [
+            222,
+            "piloc-e1-target-1",
+            1,
+            2502,
+            6,
+            true
+          ],
+          [
+            276,
+            "piloc-e1-target-3",
+            1,
+            2310,
+            6,
+            true
+          ]
+        ]
+      }
+    },
+    "bytewise_tape_equal": true,
+    "bytewise_transcript_equal": true,
+    "lifecycle_equal_after_explicit_metadata_exclusions": true,
+    "lifecycle_metadata_normalization": {
+      "field": "final.detail.metrics.comm_transcript",
+      "L": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\logs\\v2_L_a03_s1700027_a3_ct.jsonl",
+      "L0": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\logs\\v2_L0_a01_s1700027_a1_ct.jsonl"
+    },
+    "metadata_differences": {
+      "logical": [
+        "L",
+        "L0"
+      ],
+      "artifact_paths": {
+        "lifecycle": [
+          "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\logs\\v2_L_a03_s1700027_a3_rp.jsonl",
+          "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\logs\\v2_L0_a01_s1700027_a1_rp.jsonl"
+        ],
+        "transcript": [
+          "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\logs\\v2_L_a03_s1700027_a3_ct.jsonl",
+          "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\logs\\v2_L0_a01_s1700027_a1_ct.jsonl"
+        ],
+        "tape": [
+          "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\logs\\v2_L_a03_s1700027_a3_tape.jsonl",
+          "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\logs\\v2_L0_a01_s1700027_a1_tape.jsonl"
+        ],
+        "row": [
+          "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\rows\\v2_L_a03_s1700027_a3.json",
+          "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round64_controlled_deadline_intervention\\raw\\rows\\v2_L0_a01_s1700027_a1.json"
+        ]
+      },
+      "run_signature": [
+        {
+          "format": "run-signature/1",
+          "arm": "coalplan0.25sticky+redrel+noself+commlearned+bud29300+policy_owned_timing",
+          "sticky_commitments": true,
+          "code_commit": "4e989a9088111ce6d9171cb1a21629a4b2b1e861",
+          "checkpoints": {
+            "piloc": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+            "ctde": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+          },
+          "seed": 1700027,
+          "stream": {
+            "path": null,
+            "sha256": null
+          },
+          "config_hash": "6a1143f917d17d47",
+          "trace_schema": "allocation-decision-trace/3"
+        },
+        {
+          "format": "run-signature/1",
+          "arm": "coalplan0.25sticky+redrel+noself+commlearned+bud29300+policy_owned_timing",
+          "sticky_commitments": true,
+          "code_commit": "4e989a9088111ce6d9171cb1a21629a4b2b1e861",
+          "checkpoints": {
+            "piloc": "d57aed25b3d46dffb2bd269ea87140953828ba7f51a960bb01995ec054dfca33",
+            "ctde": "c7c256da0fc20451c1104996ce494148f567e4f83acf265d9baae8f0f053500d"
+          },
+          "seed": 1700027,
+          "stream": {
+            "path": null,
+            "sha256": null
+          },
+          "config_hash": "923da4d9e0b67d90",
+          "trace_schema": "allocation-decision-trace/3"
+        }
+      ]
+    },
+    "matches_R60_focus": true,
+    "status": "passed",
+    "R60_focus": {
+      "row_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\rows\\v2_r60_eval_new_s33_greedy_s1700027_a1.json",
+      "row_sha256": "05cc651b2825b4642c216afb346b2d8446f565fa6499195bf2bf6114299224ca",
+      "on_time": 5,
+      "on_time_ids": [
+        "piloc-e1-target-0",
+        "piloc-e1-target-1",
+        "piloc-e1-target-2",
+        "piloc-e1-target-3",
+        "piloc-e1-target-4"
+      ],
+      "spent_bytes": 4812,
+      "emission_sequence": [
+        [
+          222,
+          "piloc-e1-target-1",
+          1,
+          2502,
+          6,
+          true
+        ],
+        [
+          276,
+          "piloc-e1-target-3",
+          1,
+          2310,
+          6,
+          true
+        ]
+      ],
+      "L_tape_equal_R60": true,
+      "L_transcript_equal_R60": true,
+      "L_lifecycle_equal_R60_after_exact_path_normalization": true,
+      "R60_final_transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\logs\\v2_r60_eval_new_s33_greedy_s1700027_a1_ct.jsonl"
+    },
+    "model_identity": {
+      "model_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\checkpoints\\v2_train_s33_ep128.pt",
+      "file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+      "parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a",
+      "structure": "partitioned-early-late-actor-head/1",
+      "parameter_identity": {
+        "parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a"
+      },
+      "execution_version": "round64-controlled-deadline-intervention/6",
+      "load_mode": "read_only",
+      "load_scope": "model_only",
+      "optimizer_restored": false,
+      "rng_restored": false,
+      "training_cursor_restored": false
+    }
+  }
+}

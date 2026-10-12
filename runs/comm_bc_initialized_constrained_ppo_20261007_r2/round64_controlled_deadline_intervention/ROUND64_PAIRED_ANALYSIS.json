@@ -1,0 +1,64 @@
+{
+  "kind": "round64-partial-paired-observations/1",
+  "status": "descriptive_only_incomplete_identity_mismatch",
+  "fixed_scene": 1700027,
+  "focus_target": "piloc-e1-target-5",
+  "model": {
+    "path": "../round60_partitioned_actor_head_ablation/raw/checkpoints/v2_train_s33_ep128.pt",
+    "file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+    "parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a",
+    "load_mode": "read_only",
+    "load_scope": "model_only"
+  },
+  "baseline_gate": {
+    "L_metrics": {"on_time": 5, "on_time_ids": ["piloc-e1-target-0", "piloc-e1-target-1", "piloc-e1-target-2", "piloc-e1-target-3", "piloc-e1-target-4"], "spent_bytes": 4812},
+    "L0_metrics": {"on_time": 5, "on_time_ids": ["piloc-e1-target-0", "piloc-e1-target-1", "piloc-e1-target-2", "piloc-e1-target-3", "piloc-e1-target-4"], "spent_bytes": 4812},
+    "R60_common_science_fields_match": true,
+    "original_strict_gate": "failed",
+    "separate_explicit_path_metadata_reconciliation": "passed",
+    "normalization": "only final.detail.metrics.comm_transcript path; all 1383 lifecycle rows otherwise equal"
+  },
+  "actor_at_focus": {
+    "ready_step": 134,
+    "current_time": 133.0,
+    "original_greedy_action": "SKIP",
+    "p_send": 0.19370390474796295,
+    "p_skip": 0.8062961101531982,
+    "quote_bytes": 2688,
+    "legal_and_sequentially_affordable": true,
+    "features_19d": [0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 6.0, 0.134],
+    "all_four_complete_matrix_cells_have_identical_float32_features": true
+  },
+  "completed_pairs": [
+    {
+      "deadline_delta": -30,
+      "absolute_deadline": 201.84999816741998,
+      "send_item_remaining_time": 68.84999816741998,
+      "common_pre_action_prefix_equal": true,
+      "send": {"focus_on_time": true, "on_time": 6, "on_time_ids": ["piloc-e1-target-0", "piloc-e1-target-1", "piloc-e1-target-2", "piloc-e1-target-3", "piloc-e1-target-4", "piloc-e1-target-5"], "spent_bytes": 7500, "focus_emission": [134, "piloc-e1-target-5", 1, 2688, 6, true]},
+      "skip": {"focus_on_time": false, "on_time": 5, "on_time_ids": ["piloc-e1-target-0", "piloc-e1-target-1", "piloc-e1-target-2", "piloc-e1-target-3", "piloc-e1-target-4"], "spent_bytes": 4812, "focus_emission": null},
+      "observed_delta_send_minus_skip": {"target_on_time": 1, "system_task_count": 1, "cost_bytes": 2688, "gained_ids": ["piloc-e1-target-5"], "lost_ids": []}
+    },
+    {
+      "deadline_delta": 0,
+      "absolute_deadline": 231.84999816741998,
+      "send_item_remaining_time": 98.84999816741998,
+      "common_pre_action_prefix_equal": true,
+      "send": {"focus_on_time": true, "on_time": 6, "on_time_ids": ["piloc-e1-target-0", "piloc-e1-target-1", "piloc-e1-target-2", "piloc-e1-target-3", "piloc-e1-target-4", "piloc-e1-target-5"], "spent_bytes": 7500, "focus_emission": [134, "piloc-e1-target-5", 1, 2688, 6, true]},
+      "skip": {"focus_on_time": false, "on_time": 5, "on_time_ids": ["piloc-e1-target-0", "piloc-e1-target-1", "piloc-e1-target-2", "piloc-e1-target-3", "piloc-e1-target-4"], "spent_bytes": 4812, "focus_emission": null},
+      "observed_delta_send_minus_skip": {"target_on_time": 1, "system_task_count": 1, "cost_bytes": 2688, "gained_ids": ["piloc-e1-target-5"], "lost_ids": []}
+    }
+  ],
+  "missing_matrix_cells": [
+    {"logical": "d+30_FORCE_SEND", "reason": "run was interrupted during unknown execution-version mismatch; terminal receipt absent; no step count inferred"},
+    {"logical": "d+30_FORCE_SKIP", "reason": "not started"},
+    {"logical": "d+60_FORCE_SEND", "reason": "not started"},
+    {"logical": "d+60_FORCE_SKIP", "reason": "not started"}
+  ],
+  "identity_qualification": {
+    "executor_and_cell_model_version": "round64-controlled-deadline-intervention/6",
+    "guard_ledger_version_for_matrix": "round64-controlled-deadline-intervention/4",
+    "matrix_pairs_formal_eligibility": "unverified",
+    "limits": ["No general necessity or safe-skip truth", "No generalization", "No 19D sufficiency proof", "No inferential statistics or deployment claim"]
+  }
+}

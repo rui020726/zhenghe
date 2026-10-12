@@ -36,5 +36,9 @@ The feature audit preserves all 19 inputs and may describe observed distinctions
 
 ## Pre-Run Evidence
 
-Before the next real episode: zero-environment preflight, source binding, read-only model identity, guard tests, and exact run order for `/3` are frozen and locally committed. The preflight and machine-readable identities are recorded in the versioned entries in `ROUND64_FREEZE.json`.
+Before the first real episode, `/2` source, model identity, and fixed run order were committed after zero-environment acceptance. Narrow `/3` and `/4` corrections were separately committed and reaccepted before their retries. `/5` and `/6` gate-metadata reconciliation changes were committed before the matrix phase; the `/6` guard version inconsistency is recorded below as a stop-causing deviation.
+
+## Final Execution Deviation
+
+The committed `/6` executor and model identity were paired with a live guard whose `EXECUTION_VERSION` constant was still `/4`. This mismatch was not asserted before builder calls. The first four matrix cells were therefore retained but marked scientifically unverified; the fifth (`d+30_FORCE_SEND`) was stopped after `run()` entry and has no terminal receipt or known step count. Three fixed cells were not started. Both reserve slots had already been consumed by earlier R64 validation failures. The original gate and all partial outputs remain unchanged; no further run or retry was made.
 

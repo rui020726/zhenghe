@@ -1,0 +1,49 @@
+{
+  "kind": "round64-machine-verdict/1",
+  "status": "stopped_incomplete_technical_identity_mismatch",
+  "branch": "exp/round64-controlled-deadline-intervention",
+  "source_head_before_final_accounting_commit": "16cf1f92c308082112d0b9e39035e18450566443",
+  "frozen_attempt_cap": 12,
+  "attempts": {
+    "planned_logical_cells": 10,
+    "qualified_logical_cells": 6,
+    "matrix_cells_qualified": 4,
+    "matrix_cells_planned": 8,
+    "attempt_slots_consumed": 9,
+    "normal": 7,
+    "reserve": 2,
+    "headroom": 3,
+    "builder_calls": 9,
+    "environment_constructions": 9,
+    "run_calls": 9,
+    "run_returns": 8,
+    "unknown_terminal_run_calls": 1,
+    "known_completed_steps": 8000,
+    "unknown_steps": true,
+    "technical_failures_with_terminal_receipt": 2,
+    "unstarted_fixed_cells": 3
+  },
+  "gate": {
+    "strict_original": "failed",
+    "explicit_path_only_reconciliation": "passed",
+    "matrix_prefix_gate": "not completed for all planned pairs"
+  },
+  "scientific_status": {
+    "L_L0_baseline": "matches R60 common fields after exact output-path normalization",
+    "partial_SEND_SKIP_observations": "retained as descriptive only",
+    "formal_intervention_conclusion": "withheld because matrix is incomplete and matrix counter identity (/4) conflicts with executor/model identity (/6)"
+  },
+  "training_side_effects": {
+    "optimizer_updates": 0,
+    "ppo_replays": 0,
+    "training_rng_restores": 0,
+    "checkpoint_writes": 0
+  },
+  "originals": {
+    "manifest": "ROUND64_ORIGINALS_MANIFEST.json",
+    "raw_ledger": "raw/ROUND64_LEDGER.jsonl",
+    "strict_gate_preserved": "raw/ROUND64_GATE.json",
+    "partial_run_not_terminally_rewritten": true
+  },
+  "stop_reason": "The matrix process was stopped after detecting that the live executor/model identity was /6 while the active cumulative guard stamped matrix attempts /4. One active slot has no terminal ledger event and unknown step count. No further environment may be run or retried under this authorization."
+}
