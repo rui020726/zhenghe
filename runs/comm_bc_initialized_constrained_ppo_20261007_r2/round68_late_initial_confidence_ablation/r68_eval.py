@@ -235,35 +235,6 @@ def _cell_complete(cfg: dict[str, Any], logical: str, cell: dict | None = None) 
     return False
 
 
-def _prepare_claim(cfg: dict[str, Any], logical: str, metadata: dict, tag: str, cell: dict | None = None):
-    """Claim a cell without ever reusing an incomplete attempt. A retry takes the next attempt in
-    the RESERVE category with an attempt-isolated tag, so the original claim/row/log survive."""
-    r40 = cfg["runtime"]["r40_common"]
-    directory = r40.ROUND_DIR / "launch_claims" / r40._slug(logical)
-    prior = []
-    if directory.is_dir():
-        for path in sorted(directory.glob("attempt_*.json")):
-            try:
-                prior.append(json.loads(path.read_text(encoding="utf-8")))
-            except Exception:
-                prior.append({"attempt": None, "status": "unreadable"})
-    if any(c.get("status") == "complete" and _receipt_is_sound(c, cell) for c in prior):
-        raise AlreadyComplete(f"{logical}: a complete attempt with a sound receipt already exists")
-    if prior:
-        attempt = r40.next_attempt(logical)
-        category = "reserve"
-        retry = {"retry_of_attempt": max(int(c.get("attempt") or 0) for c in prior),
-                 "retry_reason": "prior attempt is not verifiably complete and is never reused",
-                 "prior_statuses": [c.get("status") for c in prior],
-                 "retry_artifact_isolated": True}
-    else:
-        attempt, category, retry = 1, "normal", {}
-    claim_path = r40.claim_launch(logical, category=category, attempt=attempt,
-                                  metadata={**metadata, **retry, "eval_version": EVAL_VERSION,
-                                            "row_tag": f"{tag}_a{attempt}"})
-    return claim_path, attempt, f"{tag}_a{attempt}"
-
-
 ARTEFACT_KEYS = ("row", "lifecycle", "transcript", "tape")
 
 
@@ -314,34 +285,54 @@ def persist_result(cfg, row, run_tag: str) -> dict:
 
 
 def _safe_atomic_run(cfg, logical, metadata, run_fn, *, detail, tag, persist=None, cell=None):
-    """r66-style atomic run with the open-claim rerun defect removed. persist runs INSIDE the
-    success path, before finish_launch, so a complete claim always has a re-provable result."""
+    """ROUND68 evaluation booking.
+
+    Delegates to the SHARED base._r68_atomic_run, so training and evaluation go through ONE
+    claimed-but-started-safe helper and ONE construction-permit regime instead of two booking paths
+    that can drift apart (ROUND68_FREEZE_ADDENDUM_2.json). Behaviour preserved:
+      * a complete attempt with a sound receipt is skipped (AlreadyComplete);
+      * a complete attempt with an UNSOUND receipt is retried on a NEW reserve attempt, never
+        reused (base allow_complete_retry=True; base itself refuses a free reuse of any attempt
+        that already committed to an environment construction);
+      * persist still runs INSIDE the success path, before finish_launch, so a complete claim
+        always has a re-provable result;
+      * the per-attempt run tag stays <tag>_a<attempt> and is stamped on the claim.
+    """
     r40 = cfg["runtime"]["r40_common"]
     r42_run = cfg["r42_run"]
     if r42_run._ACTIVE_CLAIM is not None:
         raise RuntimeError("nested ROUND68 evaluation claims are not allowed")
-    claim_path, attempt, run_tag = _prepare_claim(cfg, logical, metadata, tag, cell)
-    r42_run._ACTIVE_CLAIM = claim_path
-    r42_run._ACTIVE_PROGRESS = r42_run._new_run_progress()
-    try:
-        row = run_fn(run_tag)
-        receipt = persist(row, run_tag) if persist is not None else None
-        if receipt is not None:
-            r40._update_claim(claim_path, result_receipt=receipt)
-        r40.finish_launch(claim_path, ok=True, detail=detail(row))
+    directory = r40.ROUND_DIR / "launch_claims" / r40._slug(logical)
+    prior = []
+    if directory.is_dir():
+        for path in sorted(directory.glob("attempt_*.json")):
+            try:
+                prior.append(json.loads(path.read_text(encoding="utf-8")))
+            except Exception:
+                prior.append({"attempt": None, "status": "unreadable"})
+    if any(c.get("status") == "complete" and _receipt_is_sound(c, cell) for c in prior):
+        raise AlreadyComplete(f"{logical}: a complete attempt with a sound receipt already exists")
+
+    holder = {"run_tag": f"{tag}_a1", "claim_path": None, "attempt": None}
+
+    def _on_claim(claim_path, attempt):
+        holder["run_tag"] = f"{tag}_a{int(attempt)}"
+        holder["claim_path"] = claim_path
+        holder["attempt"] = int(attempt)
+        r40._update_claim(claim_path, row_tag=holder["run_tag"], eval_version=EVAL_VERSION)
+
+    def _wrapped():
+        row = run_fn(holder["run_tag"])
+        if persist is not None:
+            receipt = persist(row, holder["run_tag"])
+            r40._update_claim(holder["claim_path"], result_receipt=receipt)
         if isinstance(row, dict):
-            row["claim_attempt"] = int(attempt)
-            row["claim_path"] = str(claim_path)
+            row["claim_attempt"] = int(holder["attempt"])
+            row["claim_path"] = str(holder["claim_path"])
         return row
-    except BaseException as exc:
-        try:
-            r40.finish_launch(claim_path, ok=False, detail=f"{type(exc).__name__}: {exc}")
-        except BaseException:
-            pass
-        raise
-    finally:
-        r42_run._ACTIVE_CLAIM = None
-        r42_run._ACTIVE_PROGRESS = None
+
+    return base._r68_atomic_run(cfg, logical, metadata, _wrapped, detail=detail,
+                                on_claim=_on_claim, allow_complete_retry=True)
 
 
 def _load_arm(cfg, seed: int, arm: str):

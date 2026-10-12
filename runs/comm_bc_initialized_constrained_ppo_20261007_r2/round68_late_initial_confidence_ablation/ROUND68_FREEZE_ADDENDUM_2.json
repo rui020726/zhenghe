@@ -1,0 +1,146 @@
+{
+ "kind": "round68-freeze-addendum/2",
+ "amends": "ROUND68_FREEZE.json",
+ "task_id": "ROUND68-LATE-INITIAL-CONFIDENCE-ABLATION",
+ "branch": "exp/round68-late-initial-confidence-ablation",
+ "base_commit": "a389bbc666108734b142df407319cda79233fc8d",
+ "recorded_unix": 1791832026.0382628,
+ "purpose": "Register the new ROUND68 execution identity for the durable construction-permit booking layer, close the claimed-but-started retry seam family, and record the ledger-correction-aware hard-cap resolver. Guards and scientific eligibility are now closed; this addendum itself constructs no environment, runs no PPO update and changes no research configuration.",
+ "science_impact": {
+  "status": "none",
+  "detail": "run_fn, controller, environment, PPO math, GAE, mask, joint log-prob, combined advantage lambda*A_task - A_cost, ALL_ROWS, global clip, ratio clip, beta=1.00 prior, dual update, data order, world configuration, late_init_alpha=0.10, the frozen modules and the five-module checkpoint contract are all unchanged. The only changes are to identity and booking seams: which slot is charged, and what durable evidence is required before an environment constructor may run.",
+  "not_changed": [
+   "beta",
+   "threshold 147",
+   "reduction denominators",
+   "training volume",
+   "network trunk",
+   "critic structure",
+   "observation schema",
+   "target count",
+   "budget 29300B",
+   "checkpoint selection"
+  ]
+ },
+ "code_change": {
+  "files": {
+   "r68_execute.py": "e65f5b049fe0217db72e5bbf15fc1e083e5e03e21cfbf3a2c3f93c28a1bf71cc",
+   "r68_eval.py": "ff496305c884ec4ca15cff2e2ebd1ba6c7430ac3303810c78b7459f370c7e6a3",
+   "test_r68_retry_charge.py": "758b7376f3ffd81de1c32d71bb3363aa431834e7e805e26f6ba2f7542c05d4a1"
+  },
+  "unchanged_files": {
+   "r68_frozen.py": "8c90a0b1510f8d91c4e9e3d97385139bb6eb6bf357da8a395aaccd28e8ecbd69",
+   "r68_guards.py": "06551c222167d7ab4b2e3b51d4917079ecc439c58ea10de5265ad2443960b0f3"
+  },
+  "changes": [
+   "r68_execute.py: added the durable construction-permit layer (PERMIT_REGIME=r68-construction-permit/1). _r68_atomic_run creates launch_claims/<slug>/permits/<attempt>.json in state not_issued (exclusive create + fsync) at claim time, BEFORE run_fn. _issue_permit performs an ATOMIC issuance via the exclusive creation of <attempt>.issued.json, so two competing constructions can never both hold the permit. _attempt_started never reads a missing field as a zero: the permit is authoritative when present, hook counters are the labelled legacy fallback, and the verdict records which evidence was used.",
+   "r68_execute.py: _r68_atomic_run free reuse is now permitted ONLY when the permit is explicitly not_issued AND the attempt never constructed anything AND its status is neither failed_technical nor complete. A zero-construction failure therefore books a NEW reserve attempt and the old failed claim is preserved, never overwritten. A missing permit under this regime refuses the retry outright.",
+   "r68_execute.py: _make_permit_guarded_builder wraps the LIVE r42_run counted builder (r42_run._make_counted_builder) so the permit is issued BEFORE the real environment constructor runs, a second construction for the same attempt is refused, and a construction with no active claim is refused. configure_and_inject installs it on runner.build_joint_run; the counted builder stays inside the guard.",
+   "r68_execute.py: R68Ledger.counts now separates booked attempts from ACTUAL environment constructions and reads the late-registered ledger correction exactly once. A correction slot is counted only when no reserve claim references the same (logical_job, attempt) and that attempt is complete, so a retry can never re-charge it.",
+   "r68_eval.py: _safe_atomic_run now delegates to the SHARED base._r68_atomic_run instead of keeping a second booking path. Training and evaluation therefore share one claimed-but-started rule and one construction-permit regime. persist still runs inside the success path before finish_launch; a complete-but-unsound receipt is retried on a new reserve attempt (allow_complete_retry=True) and never reused; the per-attempt run tag stays <tag>_a<attempt>."
+  ],
+  "r66x_reuse_unchanged": "r68_execute still reuses only the seam-free r66 helpers (_sha256_file/_read_json/_write_json/_write_row/_reload_episode/_slot_for). _atomic_run is NOT r66x._atomic_run."
+ },
+ "why_the_permit_layer_was_needed": {
+  "frozen_builder_already_persists_before_construction": "runs/comm_one_shot_full_trace_ablation_20261004/r42_run.py counted_build increments environment_constructor_calls and calls write_progress BEFORE original_builder(configuration), so the happy path already leaves durable evidence.",
+  "residual_seam_1_no_fsync": "runs/comm_first_report_training_ablation_20261003/r40_common.py _update_claim persists with os.replace and NO fsync (unlike _write_new, which fsyncs), so a hard interruption can lose the hook write.",
+  "residual_seam_2_missing_field_read_as_zero": "the previous resolver inferred 'environment_constructor_calls absent therefore never constructed'. A missing field is not a zero; the permit makes the negative claim explicit and durable.",
+  "residual_seam_3_two_booking_paths": "r68_eval._safe_atomic_run was a second, independently maintained booking path that never went through the fixed helper, so a fix applied to training would not have covered evaluation."
+ },
+ "counterexample_evidence": {
+  "test": "test_r68_retry_charge.py",
+  "test_sha256": "758b7376f3ffd81de1c32d71bb3363aa431834e7e805e26f6ba2f7542c05d4a1",
+  "isolated_test_raw_root": "_r68_permit_test_raw",
+  "consumption": {
+   "model_forward_rows": 0,
+   "synthetic_optimizer_steps": 0,
+   "synthetic_ppo_calls": 0,
+   "environment_constructions": 0
+  },
+  "result": "PASS",
+  "checks": 29,
+  "cases": {
+   "A": "the FROZEN r66x._atomic_run free-reuses a constructed-but-interrupted attempt (the bug)",
+   "B": "the FIXED helper charges a NEW reserve slot for that attempt",
+   "C": "a claimed-but-never-constructed attempt stays a free reuse, justified by a durable not_issued permit",
+   "D": "permit ISSUED but hook stats NOT refreshed (hard interruption) -> new reserve charged, never a free reuse",
+   "E": "a MISSING permit under the regime refuses instead of assuming never-constructed",
+   "F": "a ZERO-CONSTRUCTION failed_technical attempt books a new reserve and the old failure is preserved",
+   "G": "the REAL permit guard over the REAL r42_run counted builder: permit issued before the spied constructor is entered; second build refused; no-claim build refused",
+   "H": "permit issuance is atomic: the first issuance wins, the competing issuance is refused",
+   "I": "TRAINING and EVALUATION both reach base._r68_atomic_run through their real call paths",
+   "J": "the hard cap reads the late reserve correction exactly once and does not double count"
+  }
+ },
+ "cli_forward_acceptance": {
+  "command": "r68_execute.py --raw-root _r68_acceptance_raw --phase acceptance",
+  "status": "passed",
+  "new_checks": {
+   "build_joint_run_is_permit_guarded": true,
+   "construction_permit_regime_r68": true,
+   "counted_builder_inside_permit_guard": true
+  },
+  "identity": {
+   "counted_builder_inside_permit_guard": "_make_counted_builder.<locals>.counted_build",
+   "construction_permit_regime": "r68-construction-permit/1",
+   "parameter_sha256": "22c995c5709e2319cea524e3b29d53789096991843c038a06668c95805df06b3",
+   "common_GAE_LAMBDA": 1.0,
+   "common_ETA_LAMBDA": 0.5
+  },
+  "note": "parameter_sha256 equals the seed-11 r68_init_identity post_scale_parameter_sha256, so the initial policy is unchanged by the booking-only edits."
+ },
+ "e1_ledger_correction_carried_forward": {
+  "source": "raw/runtime/R68_LEDGER_CORRECTION.json",
+  "reserve_slot": "raw/launch_slots/reserve/0001.json",
+  "extra_constructions": 1,
+  "actual_after_seed11": 129,
+  "booked_after_seed11": 128,
+  "hard_cap": 800,
+  "hard_headroom": 671,
+  "hard_cap_exceeded_by": 0,
+  "double_count_guard": "counted only when no reserve claim references the same (logical_job, attempt) and that attempt is complete",
+  "note": "The correction is bookkeeping, NOT scientific eligibility. Seed-11 eligibility is re-verified separately from the committed gate/update/weight/RNG/data chain."
+ },
+ "rng_eligibility_unchanged": {
+  "finding": "The run contract resets ALL RNG streams deterministically per episode, so e1's sampling-start RNG depends only on (scenario_seed=1300014, action_seed(11,1)=1845279286999982427) and is independent of episode order. Reloading e0 vs re-running it cannot change e1's RNG.",
+  "status": "inference from frozen source, not a byte comparison",
+  "sources": [
+   "runs/comm_cost_v2_rerun_20260928/v2_run.py action_seed / _run_episode",
+   "integrated_sar/joint_driver.py build_joint_run seed propagation",
+   "integrated_sar/piloc_runtime.py random.seed / np.random.seed / reseed"
+  ]
+ },
+ "guards_and_caps": {
+  "environment_construction_budget": {
+   "normal_cap": 774,
+   "reserve_cap": 26,
+   "hard_cap": 800,
+   "measured_in": "actual environment constructions"
+  },
+  "acceptance_computation_caps": {
+   "forward_rows": {
+    "cap": 8192,
+    "used": 9319,
+    "status": "EXCEEDED (historical, not refunded)"
+   },
+   "synthetic_optimizer_steps": {
+    "cap": 32,
+    "used": 18,
+    "status": "within cap"
+   },
+   "synthetic_ppo_calls": {
+    "cap": 32,
+    "used": 5,
+    "status": "within cap"
+   },
+   "this_addendum_consumption": {
+    "forward_rows": 0,
+    "synthetic_optimizer_steps": 0,
+    "synthetic_ppo_calls": 0
+   }
+  },
+  "note": "The persistent forward-row guard refuses further charges; the new tests deliberately perform 0 model forwards, 0 optimizer steps and 0 environment constructions."
+ },
+ "eligibility_statement": "With the construction-permit regime installed on the live builder, the claimed-but-started retry family covered by pure-ledger counter-examples, and both the training and evaluation call paths proven to share one helper, the ROUND68 executor is eligible to resume the fixed training plan (3 seeds x 128 episodes = 384, then 390 eval cells) within the 774+26/800 actual-construction budget. This addendum grants no new environment or training authorization by itself, and it does not by itself establish scientific eligibility for seed 11.",
+ "append_only_note": "ROUND68_FREEZE.json and ROUND68_FREEZE_ADDENDUM_1.json are preserved unchanged; this addendum only records the new execution identity."
+}

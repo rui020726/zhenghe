@@ -1,0 +1,174 @@
+{
+ "kind": "round68-freeze-addendum/3",
+ "amends": "ROUND68_FREEZE.json",
+ "task_id": "ROUND68-LATE-INITIAL-CONFIDENCE-ABLATION",
+ "branch": "exp/round68-late-initial-confidence-ablation",
+ "base_commit": "a389bbc666108734b142df407319cda79233fc8d",
+ "recorded_unix": 1791833628.0322473,
+ "purpose": "Close the two remaining tail acceptances inside the already-approved ROUND68 scope: (1) prove, with a zero-environment fixture, that a training attempt-2 owns independent row/tape/log/lifecycle/transcript artefacts and that a completed retry's reload, gate and slot resolution reads the QUALIFIED attempt instead of a hard-coded a1; and (2) record the verified synthetic-PPO call count (5, including one failed entry) together with the guard's contract/implementation difference. Also registers the seed-11 original-chain eligibility receipt. This addendum changes no research configuration and authorizes no new environment construction.",
+ "science_impact": {
+  "status": "none",
+  "detail": "run_fn, controller, environment, PPO math, GAE, mask, joint log-prob, combined advantage lambda*A_task - A_cost, ALL_ROWS, global clip, ratio clip, beta=1.00 gate prior, dual update, data order, world configuration, late_init_alpha=0.10, the frozen modules and the five-module checkpoint contract are all unchanged. The only code change is which ATTEMPT's artefacts an episode books and which attempt the reload, gate and slot resolution reads. For attempt 1 the artefact name is byte-identical to the historical one, so the 128 committed seed-11 episodes are untouched.",
+  "not_changed": [
+   "beta",
+   "threshold 147",
+   "reduction denominators",
+   "training volume",
+   "network trunk",
+   "critic structure",
+   "observation schema",
+   "target count",
+   "budget 29300B",
+   "checkpoint selection",
+   "training seeds and episode order",
+   "greedy tie-break",
+   "sampled evaluation RNG scheme"
+  ]
+ },
+ "code_change": {
+  "files": {
+   "r68_execute.py": "c123dfe753effc5b6e35b8ce680e6bb1092a80a0d0deb40a0971df09e1c2cd3e",
+   "r68_eval.py": "ff496305c884ec4ca15cff2e2ebd1ba6c7430ac3303810c78b7459f370c7e6a3",
+   "r68_frozen.py": "8c90a0b1510f8d91c4e9e3d97385139bb6eb6bf357da8a395aaccd28e8ecbd69",
+   "r68_guards.py": "06551c222167d7ab4b2e3b51d4917079ecc439c58ea10de5265ad2443960b0f3",
+   "test_r68_retry_charge.py": "758b7376f3ffd81de1c32d71bb3363aa431834e7e805e26f6ba2f7542c05d4a1",
+   "test_r68_attempt2_paths.py": "f04268ee26ed14a1aebf29ca0a0158da78d6f7f3d97808f1a6b4f530ed1cfbcd",
+   "_r68_seed11_eligibility.py": "8f3a781c6e5db0ce2ac3a50b24831f6b1f2ce5af8071af4beffe511bd55dd783"
+  },
+  "changed_files": {
+   "r68_execute.py": [
+    "added _active_attempt(cfg): the attempt number of the LIVE active claim, so an episode booked on a reserve retry passes attempt=<that attempt> to runner._run_episode and books its OWN row/tape/log/lifecycle/transcript artefacts instead of overwriting attempt 1's",
+    "added _qualified_attempt(r40, logical): the attempt number of the QUALIFIED (complete) claim; the train_seed reload branch now reads that attempt's row/tape",
+    "added _qualified_batch_record(cfg, seed, batch, *, episodes_done_after, before_sha, controller, state): resolves the QUALIFIED immutable batch record and REFUSES when zero or more than one candidate qualifies, instead of falling back to a fixed attempt01",
+    "_gate_from_committed now resolves the qualified batch record and the qualified per-episode attempt, and stamps batch_record_path / batch_record_attempt / reload_attempt_resolution on the gate verdict"
+   ],
+   "r68_eval.py": "unchanged by this tail acceptance (already attempt-aware: the per-attempt run tag <tag>_a<attempt> comes from the shared on_claim hook, and _qualified_row_paths only admits a row named by a complete claim with a sound receipt)"
+  },
+  "unchanged_files": {
+   "r68_frozen.py": "8c90a0b1510f8d91c4e9e3d97385139bb6eb6bf357da8a395aaccd28e8ecbd69",
+   "r68_guards.py": "06551c222167d7ab4b2e3b51d4917079ecc439c58ea10de5265ad2443960b0f3"
+  }
+ },
+ "tail_acceptance_1_attempt2_paths": {
+  "test": "test_r68_attempt2_paths.py",
+  "status": "passed",
+  "checks_total": 95,
+  "checks_failed": [],
+  "consumption": {
+   "environment_constructions": 0,
+   "model_forward_rows": 0,
+   "synthetic_optimizer_steps": 0,
+   "synthetic_ppo_calls": 0,
+   "checkpoint_writes": 0
+  },
+  "isolated_test_raw_root": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round68_late_initial_confidence_ablation\\_r68_attempt2_test_raw\\run_1791833430_67556",
+  "proved": [
+   "attempt 1 keeps exactly the historical artefact name (v2_r68_train_s11_e100_s<scene>_a1.json)",
+   "a failed attempt-1 is retried on a RESERVE attempt-2 with its own launch slot, the old failure preserved, and both permits present",
+   "attempt 2's row/tape/log/lifecycle/transcript paths are all independent of attempt 1's",
+   "_qualified_attempt returns 2 for the retried job and 1 for the never-retried one",
+   "_qualified_batch_record ignores a decoy attempt01 and resolves attempt02, and refuses when zero or more than one candidate qualifies",
+   "the gate-from-committed reload loop reads the attempt-2 row and tape",
+   "the gate verdict records batch_record_attempt=2 and the qualified resolution mode",
+   "a tripwire on the permit-guarded builder proves ZERO environment constructions"
+  ],
+  "counter_example_record": "raw/runtime/ROUND68_ATTEMPT2_COUNTEREXAMPLE.json (pre-fix source lines extracted from git HEAD, preserved)",
+  "seed11_note": "Seed 11 never exercised this path: all 128 claims are attempt_0001 and all 128 rows are _a1, so the fix is forward-looking and changes nothing already committed."
+ },
+ "tail_acceptance_2_synthetic_ppo_disclosure": {
+  "record": "raw/runtime/ROUND68_SYNTHETIC_PPO_DISCLOSURE.json",
+  "actual_synthetic_ppo_calls": 5,
+  "actual_includes_one_failed_entry": true,
+  "not_rewritten_as_3": true,
+  "no_cap_of_3_is_declared_anywhere": true,
+  "guard_contract_vs_implementation": {
+   "class_docstring": "r68_guards.SyntheticPpoGuard: 'Counts synthetic PPO update calls separately (no hard cap asserted here; for the record).'",
+   "implementation": "the constructor defaults to cap=32 and _AtomicCounter.charge() RAISES when used + n > cap, so the guard does enforce 32 in practice",
+   "declared_contract_difference": "the docstring says no hard cap is asserted while the code enforces 32. This is a contract/implementation mismatch, preserved here rather than silently reconciled. The authorisation only required PPO calls to be COUNTED SEPARATELY; the physical synthetic-step cap of 32 with the 16 make-up sub-limit is the binding constraint.",
+   "actual_status": "5 of 32; within the enforced 32 and far inside any stated contract"
+  },
+  "physical_synthetic_optimizer_steps": {
+   "cap": 32,
+   "used": 18,
+   "makeup_sublimit_used": 16,
+   "makeup_sublimit_cap": 16,
+   "total_cap_unchanged": true,
+   "status": "18 of 32 cumulative; the 16 make-up sub-limit is exhausted"
+  },
+  "acceptance_forward_rows": {
+   "cap": 8192,
+   "used": 9319,
+   "over_by": 1127,
+   "status": "EXCEEDED (historical, preserved, not refunded, not retroactively approved)"
+  }
+ },
+ "seed11_eligibility": {
+  "script": "_r68_seed11_eligibility.py",
+  "receipt": "raw/runtime/R68_SEED11_ELIGIBILITY_RECEIPT.json",
+  "status": "verified",
+  "checks_total": 125,
+  "checks_failed": [],
+  "consumption": {
+   "environment_constructions": 0,
+   "model_forward_rows": 0,
+   "synthetic_optimizer_steps": 0,
+   "synthetic_ppo_calls": 0,
+   "checkpoint_writes": 0,
+   "ppo_replays": 0
+  },
+  "proved": [
+   "the live chain is the ROUND68 one (trainer/controller/common modules, ppo/save/load/load_ro, permit-guarded builder, GAE lambda 1.0, eta lambda 0.5, raw root)",
+   "the start parameters are the compliant ROUND60 ep0 with the one-time 0.10 late-head scale, trunk/early_head/critics bit-identical to R60 ep0, late_head exactly 0.10 x ep0",
+   "the batch-0 pre-update checkpoint has an EMPTY Adam state (no momentum inherited), lambda 1.0, episodes_done 0, data_order_seed 20260927, and all three RNG streams present",
+   "the 32-batch parameter chain is unbroken from the post-scale init to the ep128 identity",
+   "128 complete normal claims, one constructor call and 1000 steps each, no reserve, no permits dir",
+   "128 rows match the frozen scenario order; no _a2 row exists",
+   "the PPO journal holds 32 contiguous update indices summing to 236 optimizer steps, matching the 236-line optimizer-step journal and the ep128 Adam step count",
+   "the first-batch gate passed with all 21 boolean checks true and both early and late free rows",
+   "ep128: structure r68, 12 parameter objects, frozen mask trunk+early_head, episodes_done 128, updates 32, lambda 1.625 with a 32-entry monotone lambda history, trunk and early_head still bit-identical to R60 ep0, late head and both critics moved",
+   "the ledger reads 128 normal / 0 reserve / 129 actual constructions / 671 headroom / 0 over cap, with the late correction counted exactly once",
+   "both ROUND46 protected files are byte-unchanged"
+  ],
+  "scope_note": "Eligibility of the seed-11 ep128 model for the ROUND68 statistics. It does NOT by itself establish the scientific result; it establishes that the model comes from a complete compliant chain with no non-compliant inheritance."
+ },
+ "pure_ledger_test": {
+  "test": "test_r68_retry_charge.py",
+  "status": "passed",
+  "checks": 29,
+  "failed": 0,
+  "consumption": {
+   "environment_constructions": 0,
+   "model_forward_rows": 0,
+   "synthetic_optimizer_steps": 0,
+   "synthetic_ppo_calls": 0
+  },
+  "note": "Re-run after the r68_execute.py attempt-scoping edit; cases A-J still hold."
+ },
+ "budget": {
+  "environment_construction_budget": {
+   "normal_cap": 774,
+   "reserve_cap": 26,
+   "hard_cap": 800,
+   "measured_in": "actual environment constructions"
+  },
+  "after_seed11": {
+   "normal_claims": 128,
+   "reserve_claims": 0,
+   "booked_attempts": 128,
+   "actual_environment_constructions": 129,
+   "hard_headroom": 671,
+   "hard_cap_exceeded_by": 0
+  },
+  "this_addendum_consumption": {
+   "environment_constructions": 0,
+   "model_forward_rows": 0,
+   "synthetic_optimizer_steps": 0,
+   "synthetic_ppo_calls": 0,
+   "checkpoint_writes": 0,
+   "ppo_replays": 0
+  },
+  "remaining_plan": "646 (256 training episodes for seeds 22 and 33 + 390 evaluation cells)"
+ },
+ "eligibility_statement": "With the attempt-2 artefact independence proven, the qualified reload/gate/slot resolution in place, the seed-11 chain verified end to end and both booking paths proven to share one helper, the ROUND68 executor is eligible to resume the fixed plan for seeds 22 and 33 inside the 800 actual-construction hard cap. This addendum grants no new environment or training authorization by itself and does not by itself establish the scientific result.",
+ "append_only_note": "ROUND68_FREEZE.json, ROUND68_FREEZE_ADDENDUM_1.json and ROUND68_FREEZE_ADDENDUM_2.json are preserved unchanged; the earlier synthetic_ppo_calls record (cap 32, used 5) is NOT rewritten - this addendum only adds the contract/implementation clarification and the failed-entry breakdown."
+}

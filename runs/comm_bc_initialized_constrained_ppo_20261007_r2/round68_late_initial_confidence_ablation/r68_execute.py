@@ -20,7 +20,7 @@ gate, plan, output roots) is defined HERE with explicit r68.* / r66x.* qualifica
 __globals__; the live chain is proven by zero_env_acceptance on the live modules.
 """
 from __future__ import annotations
-import argparse, json, sys, time
+import argparse, io, json, os, re, sys, time, uuid
 from pathlib import Path
 from typing import Any
 import numpy as np
@@ -74,10 +74,267 @@ R68_FREEZE = {
 _sha256_file = r66x._sha256_file
 _read_json = r66x._read_json
 _write_json = r66x._write_json
-_atomic_run = r66x._atomic_run
+# _atomic_run is intentionally NOT r66x._atomic_run here. ROUND68 overrides it below with
+# _r68_atomic_run to charge claimed-but-started retries (ROUND68_FREEZE_ADDENDUM_2.json).
 _write_row = r66x._write_row
 _reload_episode = r66x._reload_episode
 _slot_for = r66x._slot_for
+
+# ---------------------------------------------------------------------------
+# Durable construction-permit layer (ROUND68_FREEZE_ADDENDUM_2.json)
+#
+# The frozen R42 counted builder already records environment_constructor_calls BEFORE it calls the
+# real constructor (runs/comm_one_shot_full_trace_ablation_20261004/r42_run.py:144-147), so the
+# happy path is covered. Two residual seams were not:
+#   (a) r40_common._update_claim persists with os.replace and NO fsync, so a hard interruption can
+#       lose the hook write;
+#   (b) a retry resolver that reads a MISSING field as proof of "never constructed" would then let
+#       an attempt that had already started constructing be re-run with a free slot.
+#
+# ROUND68 therefore books an explicit durable construction permit per attempt:
+#   * _r68_atomic_run creates launch_claims/<slug>/permits/<attempt>.json in state "not_issued"
+#     (exclusive create + fsync) at claim time, BEFORE run_fn;
+#   * the permit-guarded builder wrapper installed in configure_and_inject flips it to "issued"
+#     with a unique permit id BEFORE it delegates to the counted builder, hence before the real
+#     environment constructor, and refuses a second construction for the same attempt;
+#   * a retry may reuse an attempt ONLY when its permit is explicitly "not_issued".
+# A permit file that is missing under this regime is an ANOMALY, never a zero, and refuses.
+# Attempts written before this regime keep the legacy hook-counter inference and are labelled as a
+# legacy inference, never as "field absent therefore never constructed".
+# The permits/ subdirectory is deliberate: r40_common.next_attempt and R68Ledger.counts glob
+# attempt_*.json / */*.json, and permits/<n>.json matches neither.
+# ---------------------------------------------------------------------------
+
+PERMIT_REGIME = "r68-construction-permit/1"
+PERMIT_STATES = ("not_issued", "issued", "consumed")
+
+
+def _permit_path(r40, logical: str, attempt: int) -> Path:
+    return r40.ROUND_DIR / "launch_claims" / r40._slug(logical) / "permits" / f"{int(attempt):04d}.json"
+
+
+def _permit_token_path(r40, logical: str, attempt: int) -> Path:
+    """The exclusive issuance token. Its O_CREAT|O_EXCL creation IS the atomic gate: whichever
+    construction wins the create owns the permit, and every later one is refused."""
+    return (r40.ROUND_DIR / "launch_claims" / r40._slug(logical) / "permits"
+            / f"{int(attempt):04d}.issued.json")
+
+
+def _permit_status(r40, logical: str, attempt: int) -> dict:
+    path = _permit_path(r40, logical, attempt)
+    token = _permit_token_path(r40, logical, attempt)
+    file_state = None
+    if path.is_file():
+        try:
+            file_state = str(_read_json(path).get("state"))
+        except Exception:
+            file_state = "unreadable"
+    token_exists = token.is_file()
+    if file_state in ("issued", "consumed"):
+        state = file_state
+    elif token_exists:
+        state = "issued"          # token created but the state flip did not land: still issued
+    elif file_state is not None:
+        state = file_state
+    else:
+        state = None
+    return {"state": state, "file_state": file_state, "token_exists": token_exists,
+            "permit_path": str(path), "token_path": str(token)}
+
+
+def _permit_state(r40, logical: str, attempt: int):
+    return _permit_status(r40, logical, attempt)["state"]
+
+
+def _write_permit(r40, logical: str, attempt: int, state: str, **extra) -> dict:
+    if state not in PERMIT_STATES:
+        raise RuntimeError(f"R68 permit: unknown state {state!r}")
+    path = _permit_path(r40, logical, attempt)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {"kind": "round68-construction-permit/1", "regime": PERMIT_REGIME,
+               "logical_job": str(logical), "attempt": int(attempt), "state": state,
+               "permit_id": extra.pop("permit_id", None) or uuid.uuid4().hex,
+               "recorded_unix": time.time()}
+    payload.update(extra)
+    tmp = path.with_suffix(path.suffix + f".{os.getpid()}.tmp")
+    with io.open(tmp, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+        fh.flush()
+        os.fsync(fh.fileno())
+    os.replace(tmp, path)
+    return payload
+
+
+def _create_permit_not_issued(r40, logical: str, attempt: int):
+    """Exclusive-create the not_issued permit. None means one already exists for this attempt."""
+    path = _permit_path(r40, logical, attempt)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {"kind": "round68-construction-permit/1", "regime": PERMIT_REGIME,
+               "logical_job": str(logical), "attempt": int(attempt), "state": "not_issued",
+               "permit_id": uuid.uuid4().hex, "recorded_unix": time.time()}
+    try:
+        fd = os.open(str(path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    except FileExistsError:
+        return None
+    with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+        fh.flush()
+        os.fsync(fh.fileno())
+    return payload
+
+
+def _issue_permit(r40, logical: str, attempt: int) -> dict:
+    """Atomically issue the construction permit for one attempt.
+
+    The exclusive creation of the issuance token is the single serialization point, so two
+    competing constructions can never both hold the permit even across processes: the loser gets
+    FileExistsError and is refused. Only after the token exists is the state flipped to "issued".
+    """
+    status = _permit_status(r40, logical, attempt)
+    if status["state"] != "not_issued":
+        raise RuntimeError(f"R68 {logical} attempt {attempt}: construction permit is "
+                           f"{status['state']}, not not_issued; issuance refused")
+    token = _permit_token_path(r40, logical, attempt)
+    token.parent.mkdir(parents=True, exist_ok=True)
+    payload = {"kind": "round68-construction-permit-token/1", "regime": PERMIT_REGIME,
+               "logical_job": str(logical), "attempt": int(attempt),
+               "permit_id": uuid.uuid4().hex, "issued_at_unix": time.time(),
+               "issuance": "exclusive_create"}
+    try:
+        fd = os.open(str(token), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    except FileExistsError:
+        raise RuntimeError(f"R68 {logical} attempt {attempt}: the construction permit is already "
+                           "issued (issuance token exists); a second environment construction is "
+                           "refused")
+    with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+        fh.flush()
+        os.fsync(fh.fileno())
+    issued = _write_permit(r40, logical, attempt, "issued",
+                           permit_id=payload["permit_id"], issued_before_constructor=True,
+                           issuance="exclusive_create", issuance_token=str(token))
+    return issued
+
+
+def _attempt_started(latest: dict, r40, logical: str, attempt: int) -> dict:
+    """Did this attempt already commit to constructing an environment?
+
+    Never reads a missing field as a zero: the durable permit (state file + issuance token) is
+    authoritative when present, the hook counters are the legacy fallback, and the verdict records
+    which evidence was used.
+    """
+    status = _permit_status(r40, logical, attempt)
+    permit = status["state"]
+    counters = {"environment_constructor_calls": int(latest.get("environment_constructor_calls", 0) or 0),
+                "simulation_started": bool(latest.get("simulation_started")),
+                "completed_steps": int(latest.get("completed_steps", 0) or 0)}
+    started = bool(counters["environment_constructor_calls"] > 0
+                   or counters["simulation_started"]
+                   or counters["completed_steps"] > 0)
+    evidence = "hook_counters"
+    if permit in ("issued", "consumed"):
+        started = True
+        evidence = "construction_permit"
+    elif permit == "not_issued":
+        evidence = "construction_permit_not_issued"
+    return {"started": started, "permit_state": permit, "permit_status": status,
+            "counters": counters, "evidence": evidence, "permit_regime": permit is not None}
+
+
+def _r68_atomic_run(cfg, logical, metadata, run_fn, *, detail, on_claim=None,
+                    allow_complete_retry=False):
+    """ROUND68 claimed-but-started-safe atomic run.
+
+    Science-identical to r66x._atomic_run: same run_fn, controller, environment, PPO math, data,
+    same nested-claim guard, same finish_launch ok/fail handling. The ONLY differences are booking:
+      * every attempt carries a DURABLE construction permit (state "not_issued", exclusive create
+        + fsync) created at claim time, BEFORE run_fn;
+      * if the latest attempt exists, is not complete, but ALREADY committed to an environment
+        construction (permit issued/consumed, or environment_constructor_calls>0, or
+        simulation_started, or completed_steps>0), the retry is a REAL extra environment
+        construction and is charged as a NEW reserve attempt instead of a free slot reuse;
+      * an attempt is a free reuse ONLY when its permit is explicitly "not_issued" AND the attempt
+        never constructed anything AND its status is neither failed_technical nor complete, so a
+        zero-construction failure can never be papered over by reusing the failed claim;
+      * a MISSING permit under this regime is an anomaly and refuses (a missing field is never read
+        as a zero); failed_technical always books a reserve retry, preserving the old failure.
+    This closes the seam that let a 495-step-partial re-run reuse attempt-0001 without a slot
+    (ROUND68_LEDGER_CORRECTION.json / ROUND68_FREEZE_ADDENDUM_2.json).
+
+    on_claim(claim_path, attempt) is a booking-only hook so the evaluation adapter shares THIS ONE
+    helper instead of keeping a second booking path. allow_complete_retry lets a caller that has
+    already proved a complete attempt's receipt unsound take a new reserve attempt.
+    """
+    r40 = cfg["runtime"]["r40_common"]
+    r42_run = cfg["r42_run"]
+    if r42_run._ACTIVE_CLAIM is not None:
+        raise RuntimeError("nested R68 environment claims are not allowed")
+    claim_dir = r40.ROUND_DIR / "launch_claims" / r40._slug(logical)
+    existing = sorted(claim_dir.glob("attempt_*.json")) if claim_dir.exists() else []
+    if existing:
+        latest = _read_json(existing[-1])
+        st = latest.get("status")
+        if st == "complete" and not allow_complete_retry:
+            raise RuntimeError(f"R68 {logical}: already complete; caller must skip before running")
+        prior_attempt = int(latest.get("attempt") or 0) or int(existing[-1].stem.split("_")[-1])
+        verdict = _attempt_started(latest, r40, logical, prior_attempt)
+        c = verdict["counters"]
+        no_evidence_at_all = (verdict["permit_state"] is None
+                              and not c["environment_constructor_calls"]
+                              and not c["simulation_started"]
+                              and not c["completed_steps"])
+        if no_evidence_at_all:
+            # The attempt was not booked by this regime and carries no hook evidence. A missing
+            # field is NOT a zero, so a free reuse is refused rather than assumed safe.
+            raise RuntimeError(
+                f"R68 {logical} attempt {prior_attempt}: no construction permit and no hook "
+                "evidence on record; cannot prove the attempt never constructed an environment, "
+                "so a free reuse is refused (book the permit or take a reserve attempt)")
+        reusable = (verdict["permit_state"] == "not_issued"
+                    and not verdict["started"]
+                    and st not in ("failed_technical", "complete"))
+        if reusable:
+            # Provably never constructed AND never failed: the only safe free reuse.
+            claim_path = existing[-1]
+        else:
+            nxt = r40.next_attempt(logical)
+            retry_meta = {
+                "retry_of_attempt": prior_attempt,
+                "retry_reason": ("prior attempt already committed to an environment construction"
+                                 if verdict["started"] else "prior attempt failed_technical"),
+                "prior_statuses": [_read_json(q).get("status") for q in existing],
+                "prior_permit_state": verdict["permit_state"],
+                "prior_evidence": verdict["evidence"]}
+            claim_path = r40.claim_launch(logical, category="reserve", attempt=nxt,
+                                          metadata={**(metadata or {}), **retry_meta})
+    else:
+        claim_path = r40.claim_launch(logical, category="normal", attempt=1, metadata=metadata)
+    attempt_no = int(claim_path.stem.split("_")[-1])
+    if _create_permit_not_issued(r40, logical, attempt_no) is None:
+        st = _permit_state(r40, logical, attempt_no)
+        if st != "not_issued":
+            raise RuntimeError(f"R68 {logical} attempt {attempt_no}: construction permit already "
+                               f"{st}; refusing to run under a consumed permit")
+    r42_run._ACTIVE_CLAIM = claim_path
+    r42_run._ACTIVE_PROGRESS = r42_run._new_run_progress()
+    if on_claim is not None:
+        on_claim(claim_path, attempt_no)
+    try:
+        row = run_fn()
+        r40.finish_launch(claim_path, ok=True, detail=detail(row))
+        return row
+    except BaseException as exc:
+        try:
+            r40.finish_launch(claim_path, ok=False, detail=f"{type(exc).__name__}: {exc}")
+        except BaseException:
+            pass
+        raise
+    finally:
+        r42_run._ACTIVE_CLAIM = None
+        r42_run._ACTIVE_PROGRESS = None
+
+
+_atomic_run = _r68_atomic_run
 
 
 class R68Ledger:
@@ -100,8 +357,65 @@ class R68Ledger:
         return self.claims_dir / self._slug(logical) / "attempt_0001.json"
 
     def is_complete(self, logical: str) -> bool:
-        p = self.claim_path(logical)
-        return p.is_file() and _read_json(p).get("status") == "complete"
+        d = self.claims_dir / self._slug(logical)
+        if not d.exists():
+            return False
+        return any(_read_json(p).get("status") == "complete"
+                   for p in sorted(d.glob("attempt_*.json")))
+
+    def _late_correction_extra(self) -> dict:
+        """Actual environment constructions registered AFTER the fact by a ledger correction.
+
+        These are non-compliant pre-debits: at the original time the frozen helper charged nothing.
+        The correction books a reserve slot file that carries no attempt claim, so the charge is
+        counted from the slot, never from a claim. Double counting is prevented structurally: a
+        correction slot is counted only when NO reserve claim references the same
+        (logical_job, attempt) pair, and its logical job's attempt_0001 is complete (so it can
+        never re-run and be charged again).
+        """
+        slots_dir = self.slots_dir / "reserve"
+        referenced = set()
+        for path in self.claims_dir.glob("*/*.json"):
+            try:
+                c = _read_json(path)
+            except Exception:
+                continue
+            if c.get("category") == "reserve":
+                referenced.add((str(c.get("logical_job")), int(c.get("attempt") or 0)))
+        extras, sources = [], []
+        if slots_dir.is_dir():
+            for slot_path in sorted(slots_dir.glob("*.json")):
+                try:
+                    slot = _read_json(slot_path)
+                except Exception:
+                    continue
+                if not slot.get("correction_note"):
+                    continue
+                key = (str(slot.get("logical_job")), int(slot.get("attempt") or 0))
+                if key in referenced:
+                    continue
+                attempt_path = (self.claims_dir / self._slug(key[0])
+                                / f"attempt_{key[1]:04d}.json")
+                complete = False
+                if attempt_path.is_file():
+                    try:
+                        complete = _read_json(attempt_path).get("status") == "complete"
+                    except Exception:
+                        complete = False
+                extras.append({"slot": str(slot_path), "logical_job": key[0],
+                               "attempt": key[1], "registration": slot.get("registration"),
+                               "predebit_status": slot.get("predebit_status"),
+                               "referenced_by_reserve_claim": False,
+                               "attempt_complete_no_rerun_possible": complete,
+                               "counted": True})
+                sources.append(str(slot_path))
+        correction_path = self.runtime_dir / "R68_LEDGER_CORRECTION.json"
+        return {"correction_artifacts": sources, "extra_constructions": len(extras),
+                "extras": extras,
+                "correction_present": correction_path.is_file(),
+                "double_count_guard": ("a correction slot is counted only when no reserve claim "
+                                       "references the same (logical_job, attempt) and that attempt "
+                                       "is complete, so it cannot be re-charged by a retry")}
 
     def counts(self) -> dict:
         normal = reserve = complete = failed = 0
@@ -115,19 +429,75 @@ class R68Ledger:
                 complete += 1
             elif c.get("status") == "failed_technical":
                 failed += 1
+        correction = self._late_correction_extra()
+        extra = int(correction["extra_constructions"])
+        booked = normal + reserve
+        actual = booked + extra
         return {"normal_claims": normal, "reserve_claims": reserve, "complete": complete,
-                "failed_technical": failed, "cumulative_attempts": normal + reserve,
-                "cumulative_attempts_including_historical_probe": normal + reserve + HISTORICAL_PROBE,
-                "hard_cap": HARD_CAP, "hard_headroom": HARD_CAP - (normal + reserve + HISTORICAL_PROBE)}
+                "failed_technical": failed,
+                "booked_attempts": booked,
+                "cumulative_attempts": booked,
+                "cumulative_attempts_including_historical_probe": booked + HISTORICAL_PROBE,
+                "late_correction_extra_constructions": extra,
+                "actual_environment_constructions": actual,
+                "actual_constructions_including_historical_probe": actual + HISTORICAL_PROBE,
+                "hard_cap": HARD_CAP,
+                "hard_headroom": HARD_CAP - (actual + HISTORICAL_PROBE),
+                "hard_cap_exceeded_by": max(0, (actual + HISTORICAL_PROBE) - HARD_CAP),
+                "correction": correction}
 
     def write_ledger(self) -> dict:
         led = {"kind": "round68-ledger/1", "task_id": TASK_ID, "branch": BRANCH,
                "training_version": r68.R68_TRAINING_VERSION, "late_init_alpha": r68.LATE_INIT_ALPHA,
                "historical_non_plan_probe": HISTORICAL_PROBE,
                "normal_cap": NORMAL_CAP, "reserve_cap": RESERVE_CAP, "hard_cap": HARD_CAP,
+               "construction_permit_regime": PERMIT_REGIME,
                "counts": self.counts(), "updated_unix": time.time()}
         _write_json(self.ledger_path, led)
         return led
+
+
+def _make_permit_guarded_builder(counted_build_joint_run, r40_common, r42_run):
+    """Wrap the LIVE counted builder with the ROUND68 construction-permit gate.
+
+    Kept as a module-level factory (not a closure inside configure_and_inject) so the zero-env
+    tests can exercise the SAME guard code with a spied innermost constructor: the only thing the
+    test replaces is original_builder, i.e. the call that would build a real environment. The
+    counted builder from r42_run._make_counted_builder stays in the chain, so its "no build without
+    a claim" guard and its own counters still apply.
+    """
+    def permit_guarded_build_joint_run(configuration):
+        claim = r42_run._ACTIVE_CLAIM
+        progress = r42_run._ACTIVE_PROGRESS
+        if claim is None or progress is None:
+            raise RuntimeError("R68 environment construction attempted without an atomic quota claim")
+        try:
+            claim_obj = _read_json(claim)
+        except Exception as exc:
+            raise RuntimeError(f"R68 permit: cannot read the active claim {claim}: {exc}")
+        logical = str(claim_obj.get("logical_job") or "")
+        attempt_no = int(claim_obj.get("attempt") or 0) or int(Path(claim).stem.split("_")[-1])
+        status = _permit_status(r40_common, logical, attempt_no)
+        if status["state"] is None:
+            raise RuntimeError(f"R68 {logical} attempt {attempt_no}: no construction permit on "
+                               "record; refusing to construct an environment")
+        # Atomic issuance: the exclusive token create is the single serialization point, so two
+        # competing constructions can never both hold this permit.
+        _issue_permit(r40_common, logical, attempt_no)
+        try:
+            target = counted_build_joint_run(configuration)
+        except BaseException:
+            _write_permit(r40_common, logical, attempt_no, "consumed",
+                          constructor_raised=True, constructor_returned=False)
+            raise
+        _write_permit(r40_common, logical, attempt_no, "consumed",
+                      constructor_returned=True)
+        return target
+
+    permit_guarded_build_joint_run.__qualname__ = "permit_guarded_build_joint_run"
+    permit_guarded_build_joint_run._r68_permit_guard = True
+    permit_guarded_build_joint_run._r68_inner_counted_builder = counted_build_joint_run
+    return permit_guarded_build_joint_run
 
 
 def configure_and_inject(raw_root: Path) -> dict[str, Any]:
@@ -172,6 +542,9 @@ def configure_and_inject(raw_root: Path) -> dict[str, Any]:
     r40_common.plan = lambda: {"normal_total": NORMAL_CAP, "technical_reserve_max": RESERVE_CAP,
                                "hard_cap": HARD_CAP, "task_id": TASK_ID}
     r40_common.ROUND_DIR = raw_root
+    # ROUND68 durable construction-permit seam (see _make_permit_guarded_builder below).
+    runner.build_joint_run = _make_permit_guarded_builder(runner.build_joint_run,
+                                                          r40_common, r42_run)
     # Inject the ROUND68 late-initial-confidence controller factory (5-tuple + init identity write).
     orig_fresh = controller_module.fresh_controller
 
@@ -236,12 +609,92 @@ def configure_and_inject(raw_root: Path) -> dict[str, Any]:
         "load_is_r68": trainer.load_checkpoint is r68_load,
         "load_ro_is_r68": trainer.load_checkpoint_read_only is r68_load_ro,
         "fresh_is_frozen": controller_module.fresh_controller is frozen_fresh,
+        "build_joint_run_is_permit_guarded": bool(getattr(runner.build_joint_run,
+                                                          "_r68_permit_guard", False)),
+        "construction_permit_regime": PERMIT_REGIME,
+        "counted_builder_inside_permit_guard": str(getattr(runner.build_joint_run,
+                                                           "_r68_inner_counted_builder", None)
+                                                   and getattr(runner.build_joint_run
+                                                               ._r68_inner_counted_builder,
+                                                               "__qualname__", "")),
         "training_version": r68.R68_TRAINING_VERSION,
         "common_GAE_LAMBDA": float(common.GAE_LAMBDA), "common_ETA_LAMBDA": float(common.ETA_LAMBDA),
     }
     return {"runtime": runtime, "trainer": trainer, "controller_module": controller_module,
             "common": common, "runner": runner, "r42_run": r42_run, "raw_root": raw_root,
             "frozen_fresh": frozen_fresh, "identity": identity}
+
+
+def _active_attempt(cfg) -> int:
+    """The attempt number of the claim the running episode is booked under.
+
+    Read from the LIVE active claim inside _r68_atomic_run. A reserve retry therefore books its
+    OWN row/tape/log/lifecycle/transcript artefacts instead of overwriting attempt 1's. For
+    attempt 1 this is exactly the historical artefact name, so nothing already committed moves.
+    """
+    claim = cfg["r42_run"]._ACTIVE_CLAIM
+    if claim is None:
+        raise RuntimeError("R68: an episode must run inside _r68_atomic_run (no active claim)")
+    return int(Path(claim).stem.split("_")[-1])
+
+
+def _qualified_attempt(r40, logical: str) -> int:
+    """The attempt number of the QUALIFIED (complete) claim for one logical job.
+
+    A logical job may be completed on a reserve attempt after an earlier failed_technical one.
+    Reload, gate and slot resolution must read that attempt's artefacts, never a hard-coded
+    attempt 1. Returns 1 only when no attempt is complete (nothing qualified yet).
+    """
+    claim_dir = r40.ROUND_DIR / "launch_claims" / r40._slug(logical)
+    best = 0
+    if claim_dir.is_dir():
+        for path in sorted(claim_dir.glob("attempt_*.json")):
+            try:
+                claim = _read_json(path)
+            except Exception:
+                continue
+            if claim.get("status") != "complete":
+                continue
+            best = max(best, int(claim.get("attempt") or 0) or int(path.stem.split("_")[-1]))
+    return best or 1
+
+
+def _qualified_batch_record(cfg, seed: int, batch: int, *, episodes_done_after: int,
+                            before_sha=None, controller=None, state=None):
+    """Resolve the QUALIFIED immutable batch record for one batch index.
+
+    The frozen adapter names each batch attempt r40_batch_s{seed}_b{batch}_attempt{NN}.json and
+    takes the next free number, so a re-run batch leaves attempt02 behind. The gate and the
+    resume path must read the qualified attempt, never a fixed attempt01. Qualification is proven
+    from the record itself: the committed episode cursor and, when supplied, the pre-update
+    parameter identity; when the live controller/state sit exactly on that batch, their parameter
+    identity must agree too.
+    """
+    ckpt_dir = Path(cfg["common"].CHECKPOINTS)
+    candidates = []
+    for path in sorted(ckpt_dir.glob(f"r40_batch_s{seed}_b{batch}_attempt*.json")):
+        try:
+            rec = _read_json(path)
+        except Exception:
+            continue
+        if int(rec.get("episodes_done_after", -1)) != int(episodes_done_after):
+            continue
+        if before_sha is not None and rec.get("parameters_before_sha") != before_sha:
+            continue
+        candidates.append((path, rec))
+    if len(candidates) != 1:
+        raise RuntimeError(
+            f"R68 seed {seed} batch {batch}: cannot resolve exactly one qualified batch record "
+            f"(candidates={len(candidates)}); refusing to fall back to a fixed attempt01")
+    path, rec = candidates[0]
+    if controller is not None and state is not None:
+        if int(state["episodes_done"]) == int(rec["episodes_done_after"]):
+            live = controller.parameter_summary()["parameter_sha256"]
+            if live != rec.get("parameters_after_sha"):
+                raise RuntimeError(
+                    f"R68 seed {seed} batch {batch}: the live controller ({live}) does not match "
+                    f"the qualified record {path.name} ({rec.get('parameters_after_sha')})")
+    return path, rec
 
 
 def _run_train_episode(cfg, controller, collector, *, seed, ep, scenario, lam):
@@ -255,7 +708,8 @@ def _run_train_episode(cfg, controller, collector, *, seed, ep, scenario, lam):
     def _do():
         row = runner._run_episode(tag, "train", int(scenario), policy="learned",
                                   attach=collector.policy(), controller=controller, collector=collector,
-                                  action_rng_seed=action_seed, tag=tag)
+                                  action_rng_seed=action_seed, tag=tag,
+                                  attempt=_active_attempt(cfg))
         row["collector"] = collector
         row["training_seed"] = int(seed); row["episode_index"] = int(ep)
         row["scenario_seed"] = int(scenario); row["lambda"] = float(lam)
@@ -371,7 +825,8 @@ def train_seed(cfg, ledger, plan, seed, order, references, *, stop_after_first_g
             scenario = int(order[ep])
             logical = f"r68_new_training_s{seed}_e{ep}"
             if ledger.is_complete(logical):
-                paths = common.cell_paths("train", scenario, 1, tag=f"r68_train_s{seed}_e{ep}")
+                att = _qualified_attempt(cfg["runtime"]["r40_common"], logical)
+                paths = common.cell_paths("train", scenario, att, tag=f"r68_train_s{seed}_e{ep}")
                 episodes.append(_reload_episode(paths["row"], paths["tape"],
                                                 seed=seed, ep=ep, scenario=scenario, lam=lam))
                 continue
@@ -433,17 +888,24 @@ def _gate_from_committed(cfg, seed, controller, state):
     if gate_path.exists() or int(state["episodes_done"]) < EPISODES_PER_UPDATE:
         return None
     ckpt_dir = Path(cfg["common"].CHECKPOINTS)
-    record = _read_json(ckpt_dir / f"r40_batch_s{seed}_b0_attempt01.json")
+    ep0_id = _read_json(ckpt_dir / f"r68_init_identity_s{seed}.json")
+    record_path, record = _qualified_batch_record(
+        cfg, seed, 0, episodes_done_after=EPISODES_PER_UPDATE,
+        before_sha=ep0_id["post_scale_parameter_sha256"], controller=controller, state=state)
     order = [int(x) for x in cfg["common"].scenario_order()]
     lam = float(record["lambda_at_rollout"])
+    r40 = cfg["runtime"]["r40_common"]
     episodes = []
     for ep in record["episodes"]:
         scenario = int(order[int(ep)])
-        paths = cfg["common"].cell_paths("train", scenario, 1, tag=f"r68_train_s{seed}_e{ep}")
+        att = _qualified_attempt(r40, f"r68_new_training_s{seed}_e{int(ep)}")
+        paths = cfg["common"].cell_paths("train", scenario, att, tag=f"r68_train_s{seed}_e{ep}")
         episodes.append(_reload_episode(paths["row"], paths["tape"], seed=seed, ep=int(ep),
                                         scenario=scenario, lam=lam))
-    ep0_id = _read_json(ckpt_dir / f"r68_init_identity_s{seed}.json")
     gate = _first_batch_gate(cfg, controller, state, record, episodes, ep0_identity=ep0_id)
+    gate["batch_record_path"] = record_path.name
+    gate["batch_record_attempt"] = int(re.search(r"attempt(\d+)$", record_path.stem).group(1))
+    gate["reload_attempt_resolution"] = "qualified_attempt_from_complete_claim"
     _write_json(gate_path, gate)
     if gate["status"] != "passed":
         raise RuntimeError(f"seed {seed}: first-batch gate failed (from committed): {gate}")
@@ -558,6 +1020,12 @@ def zero_env_acceptance(cfg) -> dict:
         "rows_root_under_r68_raw": str(Path(common.ROWS).resolve()).startswith(str(cfg["raw_root"].resolve())),
         "r40_normal_cap_774": int(runtime["r40_common"].NORMAL_CAP) == 774,
         "r40_hard_cap_800": int(runtime["r40_common"].HARD_CAP) == 800,
+        "build_joint_run_is_permit_guarded": bool(cfg["identity"]["build_joint_run_is_permit_guarded"]),
+        "construction_permit_regime_r68": cfg["identity"]["construction_permit_regime"] == PERMIT_REGIME,
+        "counted_builder_inside_permit_guard": ("_make_counted_builder" in
+                                                str(cfg["identity"]["counted_builder_inside_permit_guard"])
+                                                or "counted_build" in
+                                                str(cfg["identity"]["counted_builder_inside_permit_guard"])),
     }
     status = "passed" if all(checks.values()) else "failed"
     return {"kind": "round68-zero-env-acceptance/1", "status": status, "checks": checks,
