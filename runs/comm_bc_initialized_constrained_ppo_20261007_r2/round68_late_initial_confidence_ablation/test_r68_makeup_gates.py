@@ -12,16 +12,17 @@ checkpoint / CLI paths (no import-mode stubs, no rerun of the sections that alre
 
   M0  preserved guard state, living-config-vs-freeze values, and the pure mask / likelihood /
       ALL_ROWS / GAE math re-verified in its corrected form (the previously failed GAE check);
-  M1  a real PPO update through the inherited r66 update function on the ROUND68-scaled
-      controller, driven by the controller's OWN synthetic behaviour record (multi-target bundles
-      with mixed early/late routing inside one bundle, masked targets, closed-HOLD rows, both SEND
-      and SKIP actions), plus a test-scoped lr=0 optimizer instance that makes the ALL_ROWS
-      denominator exactly checkable (the frozen EPOCHS=4 / MINIBATCH=256 living values are NOT
-      modified anywhere in this file);
-  M2  a real 4-episode PPO update, full five-module + six-parameter Adam + lambda + RNG + cursor
-      checkpoint save/restore, a deterministic post-resume update that must match the unbroken
-      continuation, read-only load semantics, and rejection of ROUND60 / ROUND66 / wrong-freeze /
-      quarantine sources;
+  M1  the controller's OWN synthetic behaviour record (multi-target bundles with mixed early/late
+      routing inside one bundle, masked targets, closed-HOLD rows, both SEND and SKIP actions) at
+      fixture level: one sample per decision step, exact recomputed log-probability through the same
+      routed forward, and ALL_ROWS-vs-free-rows separation. NO optimizer step and NO PPO call run in
+      M1 (see the M1 note for why, and what covers the dropped update instead);
+  M2  the post-update-0 checkpoint written by the earlier partial run is loaded the way a real
+      resume would be, its eligibility is proven rather than assumed, and two continuation updates
+      run: one unbroken from the first load and one after every RNG stream is perturbed and the
+      checkpoint is reloaded. They must match bit-exactly, which proves the five modules, the
+      six-parameter Adam, lambda, the RNG streams and the cursor are all restored. Then read-only
+      load semantics and rejection of ROUND60 / ROUND66 / wrong-freeze / quarantine sources;
   M3  the real CLI configure_and_inject identity chain, stopping before any episode provider;
   M4  unregistered-start and duplicate-start rejection BEFORE environment construction;
   M5  pure cumulative-guard semantics (hard boundary, no refund, restart/subdir/backup isolation,
@@ -438,12 +439,12 @@ check("m1_own_draw_alignment_is_exact",
           for s in m1_samples) < 1e-9)
 # ---- M1 fixture-level structure + exact alignment (NO optimizer step runs in this section) ----
 # The M1a small-fixture update and the M1b lr=0 ALL_ROWS-exactness update were removed so this run
-# stays inside the granted +16 physical synthetic optimizer steps (4 already spent by the earlier
-# partial run) and inside the 2048-row make-up grant: the full M1+M2 design projected 2450 forward
-# rows plus 20 physical steps, which neither budget can absorb. Every forgone item is still made up
-# - M2 update 0 is a fabricated-episode PPO update with real forwards on a larger batch (item 6),
-# M2 updates 0 / 1 / 1-resumed are the multi-episode update + full five-module resume +
-# deterministic continuation + foreign-source rejection (item 7), M3/M4 cover items 8/9. The pure
+# stays inside the granted +16 physical synthetic optimizer steps and inside the 2048-row make-up
+# grant: measured, one update costs (1 + EPOCHS) x candidate_rows forward rows and EPOCHS physical
+# steps, and the full M1+M2 design needed 2450 rows plus 20 steps, which neither budget absorbs.
+# The forgone items are still made up: the M2 continuation updates are fabricated-episode PPO
+# updates with real forwards on a 4-episode batch (item 6) and the full five-module resume plus
+# deterministic continuation plus foreign-source rejection (item 7); M3/M4 cover items 8/9. The pure
 # GAE / mask / likelihood / ALL_ROWS arithmetic stays covered by identity reuse (grant scope).
 m1x_samples = trainer.batch_samples(m1_episodes)
 adv_all = float(np.mean([s["advantage"] for s in m1x_samples]))
@@ -493,9 +494,11 @@ m2_samples = trainer.batch_samples(m2_episodes)
 m2_rows = int(sum(len(s["features"]) for s in m2_samples))
 NOTES.append("the M2 batch is 4 episodes x 10 decision records (40 records, 90 candidate rows) "
              "instead of 4 x 12 (48 records, 112 candidate rows). Measured cost of one update is "
-             "(1 + EPOCHS) x candidate_rows = 5 x 90 = 450 forward rows, so three updates plus the "
-             "fixture draw fit the 2048-row grant with margin; 4 x 12 projected 2086 cumulative "
-             "rows, which exceeds it. Batch size is a test-scope choice only.")
+             "(1 + EPOCHS) x candidate_rows = 5 x 90 = 450 forward rows, so the fixture draw plus "
+             "the two continuation updates cost 42 + 180 + 900 = 1122 rows against 1236 remaining. "
+             "4 x 12 (112 candidate rows) would cost 42 + 224 + 1120 = 1386, and 4 x 12 with three "
+             "updates would cost 2086 cumulative rows, which exceeds the grant. Batch size is a "
+             "test-scope choice only.")
 check("m2_four_episode_batch_of_forty_records",
       len(m2_episodes) == 4 and len(m2_samples) == 40, samples=len(m2_samples))
 check("m2_records_carry_more_rows_than_records", m2_rows > len(m2_samples),
@@ -516,55 +519,25 @@ check("m2_has_closed_hold_early_and_late_free_rows",
       closed=sum(1 for s in m2_samples if not s["free"]),
       early_free_rows=sum(1 for r in _all_free_readies if r <= 147),
       late_free_rows=sum(1 for r in _all_free_readies if r > 147))
-m2_opt = r68.build_optimizer(m2_ctrl, common.LEARNING_RATE)
-register_step_precharge(m2_opt, "m2_update0")
-project_update_rows(m2_samples, "M2 update 0 (real lr, four-episode batch)")
-f2_before, t2_before = identities(m2_ctrl)
-m2_r0 = counted_update(m2_ctrl, m2_opt, m2_episodes, label="m2_update0",
-                       update_index=9003, diag_updates=(9003,))
-check("m2_update0_structure_is_inherited_r66_math", m2_r0["structure"] == r66.R66_STRUCTURE)
-check("m2_update0_frozen_bit_unchanged_trainable_moved",
-      identities(m2_ctrl)[0] == f2_before and identities(m2_ctrl)[1] != t2_before)
-check("m2_update0_alignment_passed", bool(m2_r0["likelihood_alignment"]["passed"]),
-      alignment=m2_r0["likelihood_alignment"])
-check("m2_update0_routing_active_both_partitions",
-      m2_r0["early_free"] > 0 and m2_r0["late_free"] > 0,
-      early_free=m2_r0["early_free"], late_free=m2_r0["late_free"])
-means2 = m2_r0["module_gradient_l1_mean"]
-check("m2_update0_frozen_modules_recorded_none",
-      means2.get("trunk") is None and means2.get("early_head") is None, means=means2)
-d2 = m2_r0.get("gate_diag") or {}
-check("m2_update0_late_actor_and_critic_received_gradient",
-      float(d2.get("late_actor_grad_l1", -1.0) or 0.0) > 0.0
-      and float(d2.get("critic_grad_l1", -1.0) or 0.0) > 0.0, diag=d2)
-
-# ---- full resume: five modules + six-parameter Adam + lambda + RNG + cursor ------------------
-state = r68.fresh_training_state(SEED)
-state["episodes_done"] = 4
-state["updates"] = 1
-state["optimizer_steps"] = int(m2_r0["optimizer_steps"])
-state["lambda"] = 0.73
-state["lambda_history"] = [{"batch": 0, "g_hat": 0.1, "lambda_before": 1.0, "lambda_next": 0.73}]
+# ---- update 0 was already executed and pre-charged by the previous partial run ----------------
+# The make-up phase has only 8 of its 16 granted physical synthetic optimizer steps left (4 spent
+# by the cost_stream partial run, 4 by the state_dict partial run), so update 0 is NOT re-run here:
+# a third execution would push the phase past its grant. The post-update-0 checkpoint that run wrote
+# is the resume source, exactly as a real training resume would be, and its eligibility is proven
+# below rather than assumed.
 _SCRATCH.mkdir(parents=True, exist_ok=True)
 ckpt = _SCRATCH / "v2_train_s11_makeup_resume_test.pt"
-rng_at_save = trainer.rng_state()
-r68.save_checkpoint(m2_ctrl, m2_opt, state, ckpt, freeze=base.R68_FREEZE)
-saved_params = {k: v.detach().clone() for k, v in m2_ctrl.state_dict().items()}
-saved_opt = copy.deepcopy(m2_opt.state_dict())
-project_update_rows(m2_samples, "M2 update 1 unbroken continuation (real lr)")
-u1_unbroken = counted_update(m2_ctrl, m2_opt, m2_episodes, label="m2_update1_unbroken",
-                             update_index=9004, diag_updates=(9004,))
-sha_after_unbroken = m2_ctrl.parameter_summary()["parameter_sha256"]
+check("m2_update0_checkpoint_exists_from_the_precharged_partial_run", ckpt.is_file(),
+      path=str(ckpt), bytes=(ckpt.stat().st_size if ckpt.is_file() else 0))
 
-random.seed(13579)
-np.random.seed(13579)
-torch.manual_seed(13579)
-rc, ropt, rstate = r68.load_checkpoint(ckpt, freeze=base.R68_FREEZE)
-restored_params = {k: v.detach().clone() for k, v in rc.state_dict().items()}
-check("resume_restores_all_twelve_parameters_bit_exact",
-      set(restored_params) == set(saved_params)
-      and all(torch.equal(restored_params[k], saved_params[k]) for k in saved_params),
-      keys=sorted(restored_params))
+
+def flat_params(controller):
+    """Flatten the five-module state_dict into one {module.param: tensor} mapping."""
+    out = {}
+    for module, sd in controller.state_dict().items():
+        for key, value in sd.items():
+            out[f"{module}.{key}"] = value.detach().clone()
+    return out
 
 
 def adam_state_equal(a, b):
@@ -586,20 +559,69 @@ def adam_state_equal(a, b):
             == [len(g["params"]) for g in b["param_groups"]])
 
 
+# ---- first load: the unbroken continuation -----------------------------------------------------
+c1, o1, s1 = r68.load_checkpoint(ckpt, freeze=base.R68_FREEZE)
+install_trunk_hook(c1, "m2_update1_unbroken")
+register_step_precharge(o1, "m2_update1_unbroken")
+check("resume_source_is_the_post_update0_checkpoint",
+      int(s1["updates"]) == 1 and int(s1["optimizer_steps"]) == 4
+      and int(s1["episodes_done"]) == 4 and abs(float(s1["lambda"]) - 0.73) < 1e-12
+      and s1["structure"] == r68.R68_STRUCTURE
+      and abs(float(s1["late_init_alpha"]) - r68.LATE_INIT_ALPHA) < 1e-12
+      and len(s1["lambda_history"]) == 1,
+      state={k: s1.get(k) for k in ("updates", "optimizer_steps", "episodes_done", "lambda",
+                                    "structure", "late_init_alpha")})
+check("resume_source_moved_trainable_away_from_the_fresh_init_and_left_frozen_bit_identical",
+      identities(c1)[1] != identities(m2_ctrl)[1]
+      and identities(c1)[0] == identities(m2_ctrl)[0])
+check("resume_reestablished_frozen_mask_on_the_first_load",
+      not any(p.requires_grad for p in r68.frozen_parameters(c1))
+      and all(p.requires_grad for p in r68.trainable_parameters(c1)))
+check("resume_source_owns_the_six_trainable_parameters_only",
+      [len(g["params"]) for g in o1.state_dict()["param_groups"]] == [6],
+      frozen_objects=len(r68.frozen_parameters(c1)),
+      trainable_objects=len(r68.trainable_parameters(c1)))
+saved_params = flat_params(c1)
+saved_opt = copy.deepcopy(o1.state_dict())
+rng_after_first_load = trainer.rng_state()
+check("resume_source_carries_every_parameter_tensor",
+      len(saved_params) == len(flat_params(m2_ctrl)) and len(saved_params) >= 12,
+      tensors=len(saved_params))
+
+project_update_rows(m2_samples, "M2 update 1 unbroken continuation (real lr)")
+u1_unbroken = counted_update(c1, o1, m2_episodes, label="m2_update1_unbroken",
+                             update_index=9004, diag_updates=(9004,))
+sha_after_unbroken = c1.parameter_summary()["parameter_sha256"]
+
+# ---- second load after perturbing every RNG stream: the resumed continuation ------------------
+for _attempt in range(64):
+    random.seed(13579 + _attempt)
+    np.random.seed(13579 + _attempt)
+    torch.manual_seed(13579 + _attempt)
+    if trainer.rng_state() != rng_after_first_load:
+        break
+check("rng_streams_were_actually_perturbed_before_the_second_load",
+      trainer.rng_state() != rng_after_first_load)
+rc, ropt, rstate = r68.load_checkpoint(ckpt, freeze=base.R68_FREEZE)
+install_trunk_hook(rc, "m2_update1_resumed")
+restored_params = flat_params(rc)
+check("resume_restores_every_parameter_tensor_bit_exact",
+      set(restored_params) == set(saved_params)
+      and all(torch.equal(restored_params[k], saved_params[k]) for k in saved_params),
+      tensors=len(restored_params))
 check("resume_restores_six_parameter_adam_state_bit_exact",
       adam_state_equal(ropt.state_dict(), saved_opt)
       and [len(g["params"]) for g in ropt.state_dict()["param_groups"]] == [6])
 check("resume_restores_lambda_history_and_cursor",
       float(rstate["lambda"]) == 0.73 and int(rstate["episodes_done"]) == 4
-      and int(rstate["updates"]) == 1 and int(rstate["optimizer_steps"]) == int(m2_r0["optimizer_steps"])
+      and int(rstate["updates"]) == 1 and int(rstate["optimizer_steps"]) == 4
       and rstate["structure"] == r68.R68_STRUCTURE
       and abs(float(rstate["late_init_alpha"]) - r68.LATE_INIT_ALPHA) < 1e-12
-      and len(rstate["lambda_history"]) == 1, state={k: rstate.get(k) for k in
-                                                    ("lambda", "episodes_done", "updates",
-                                                     "optimizer_steps", "structure",
-                                                     "late_init_alpha")})
-check("resume_restores_all_three_rng_streams", trainer.rng_state() == rng_at_save)
-check("resume_reestablished_frozen_mask",
+      and len(rstate["lambda_history"]) == 1,
+      state={k: rstate.get(k) for k in ("lambda", "episodes_done", "updates",
+                                        "optimizer_steps", "structure", "late_init_alpha")})
+check("resume_restores_all_three_rng_streams", trainer.rng_state() == rng_after_first_load)
+check("resume_reestablished_frozen_mask_on_the_second_load",
       not any(p.requires_grad for p in r68.frozen_parameters(rc))
       and all(p.requires_grad for p in r68.trainable_parameters(rc)))
 
@@ -953,17 +975,17 @@ check("trunk_hook_total_matches_this_runs_charged_rows",
       charged_this_run=MAKEUP_FWD.used() - MAKEUP_ROWS_AT_START,
       cumulative_used=MAKEUP_FWD.used(), cap=2048)
 check("this_run_physical_synthetic_steps_within_remaining_phase_allowance",
-      STEP_GUARD.used() - PRECHARGE_STEPS_BEFORE <= 12,
+      STEP_GUARD.used() - PRECHARGE_STEPS_BEFORE <= 8,
       this_run=STEP_GUARD.used() - PRECHARGE_STEPS_BEFORE,
       phase_allowance_remaining=16 - (PRECHARGE_STEPS_BEFORE - 2))
 check("makeup_phase_total_steps_within_granted_16_and_hard_cap_32",
       STEP_GUARD.used() - 2 <= 16 and STEP_GUARD.used() <= 32,
       phase_used=STEP_GUARD.used() - 2, cumulative=STEP_GUARD.used())
-check("this_run_ppo_calls_are_the_three_planned_updates",
-      PPO_GUARD.used() - PRECHARGE_PPO_BEFORE == 3 and PPO_GUARD.used() <= 32,
+check("this_run_ppo_calls_are_the_two_planned_updates",
+      PPO_GUARD.used() - PRECHARGE_PPO_BEFORE == 2 and PPO_GUARD.used() <= 32,
       this_run=PPO_GUARD.used() - PRECHARGE_PPO_BEFORE, cumulative=PPO_GUARD.used())
-check("exactly_three_updates_ran_and_every_one_precharged_its_own_steps",
-      len(_UPDATE_STEP_DELTAS) == 3
+check("exactly_two_updates_ran_and_every_one_precharged_its_own_steps",
+      len(_UPDATE_STEP_DELTAS) == 2
       and all(d["precharged_steps"] == d["reported_optimizer_steps"] for d in _UPDATE_STEP_DELTAS)
       and all(d["ppo_charged"] == 1 for d in _UPDATE_STEP_DELTAS), deltas=_UPDATE_STEP_DELTAS)
 check("makeup_grant_cumulative_within_cap",
@@ -977,8 +999,15 @@ NOTES.extend([
     "those forgone items",
     "ROUND60's historical tapes were not used and not modified; every tape here is a synthetic "
     "behaviour record drawn from the ROUND68 controller under test",
-    "the lr=0 optimizer in M1b is a test-scoped instance that makes the ALL_ROWS arithmetic "
-    "exactly checkable; the frozen living lr 3e-4, EPOCHS=4 and MINIBATCH=256 are unchanged",
+    "no lr=0 optimizer and no extra update was introduced to make the ALL_ROWS arithmetic exactly "
+    "checkable; the frozen living lr 3e-4, EPOCHS=4 and MINIBATCH=256 are unchanged, and the pure "
+    "ALL_ROWS / mask / likelihood / GAE arithmetic is re-verified in M0",
+    "the two M2 continuation updates both start from the SAME saved post-update-0 checkpoint. The "
+    "first runs straight after its load; the second runs after all three RNG streams are perturbed "
+    "and the checkpoint is reloaded. Matching them proves the restore is complete and deterministic; "
+    "it does not by itself prove that the save captured state the update never reads, which is why "
+    "the parameter / Adam / lambda / cursor / RNG bit-exact restore checks are asserted separately "
+    "against snapshots taken before the perturbation",
     "the inherited update report stamps the ROUND66 update-math structure because the update "
     "function IS ROUND66's; the ROUND68 stamp lives in the controller summary, the gate, the ppo "
     "journal and the checkpoint contract",
@@ -988,10 +1017,11 @@ NOTES.extend([
 
 raise SystemExit(finish("passed", extra={
     "sections": {"M0": "preserved guards + living config + pure math",
-                 "M1": "real PPO update on the R68-scaled controller from its own synthetic draw "
-                       "(real lr) + lr=0 exactness of the ALL_ROWS denominator",
-                 "M2": "real 4-episode update + full resume + deterministic continuation + "
-                       "read-only load + foreign-source rejection",
+                 "M1": "own-draw synthetic fixture structure + exact log-prob alignment; no "
+                       "optimizer step, no PPO call",
+                 "M2": "post-update-0 resume source eligibility + two continuation updates "
+                       "(unbroken vs perturbed-RNG reload) + read-only load + foreign-source "
+                       "rejection",
                  "M3": "real CLI configure_and_inject identity chain (stop before provider)",
                  "M4": "unregistered / duplicate start rejection before environment construction",
                  "M5": "pure cumulative-guard semantics + grant non-expandability + R60 608",
