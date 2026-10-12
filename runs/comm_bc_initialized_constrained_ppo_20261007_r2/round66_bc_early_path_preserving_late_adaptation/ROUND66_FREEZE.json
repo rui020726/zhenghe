@@ -1,0 +1,226 @@
+{
+  "kind": "round66-frozen-early-path-freeze/1",
+  "task_id": "ROUND66-BC-EARLY-PATH-PRESERVING-LATE-ADAPTATION",
+  "branch": "exp/round66-bc-early-path-preserving-late-adaptation",
+  "frozen_at_head": "cbae709f6bb2bf566acf341d626de659524772f4",
+  "repository": "D:\\code\\整合\\zhenghe-round42",
+  "python": "D:\\project_env\\python.exe",
+  "runtime_device": "cpu",
+  "research_question": "Freeze the WHOLE early policy computation path (shared trunk + early_head, requires_grad=False) and let only late_head and both critics learn, starting model-only from each seed's compliant ROUND60 ep0. Does the restricted policy family preserve initial-value task performance while gaining cost reduction? This is a restricted-family result on one development block, not a global optimality, non-inferiority or deployment claim.",
+  "single_structural_intervention": {
+    "old": "accepted ROUND60 partitioned controller: shared Tanh trunk, two independent early/late SEND/SKIP heads routed by ready_step, task-value head and cost-value head on the same trunk; all twelve parameter objects trainable",
+    "new": "identical five modules and identical routing; trunk and early_head get requires_grad=False (six frozen parameter objects, 5570 scalars); late_head, value_task_head and value_cost_head stay trainable (six objects, 260 scalars)",
+    "not_claimed": "freezing the trunk is NOT evidence that the R53 critic->trunk gradient isolation was repaired; the R53 critic_input_detached context is still applied around every update exactly as R58/R60 applied it"
+  },
+  "routing": {
+    "rule": "ready_step = round(f[18]*1000) - round(f[0]); ready_step<=147 -> early_head, >147 -> late_head",
+    "ready_cut": 147,
+    "horizon": 1000,
+    "not_an_action_rule": "early candidates may still SEND and late candidates may still SKIP; no hard send/skip, no extra emission, the sequential budget mask is never bypassed; sampling, greedy, PPO likelihood recomputation and read-only evaluation all call the same routed forward"
+  },
+  "versions": {
+    "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1+r66-frozen-early-path-late-adaptation/1",
+    "structure": "partitioned-early-late-actor-head/1+frozen-early-path-late-adaptation/1",
+    "loss_version": "constrained-lagrangian/2+partitioned-actor-head/1+frozen-early-path/1",
+    "state_schema": "constrained-cost-state/2+partitioned-actor-head/1+frozen-early-path/1",
+    "optimizer_schema": "stage-c-frozen-early-path-six-module-parameter-set/1",
+    "trainer_tag": "constrained-cost-v2-frozen-early-path",
+    "frozen_modules": [
+      "trunk",
+      "early_head"
+    ],
+    "trainable_modules": [
+      "late_head",
+      "value_task_head",
+      "value_cost_head"
+    ],
+    "parameter_object_count": 12,
+    "frozen_scalar_count": 5570,
+    "trainable_scalar_count": 260,
+    "optimizer": "Adam(lr=3e-4) over the six trainable objects only"
+  },
+  "initialisation": {
+    "source": "compliant ROUND60 ep0 checkpoint per seed, model-only, read through the exact resolved path",
+    "per_seed": {
+      "11": {
+        "ep0_file": "v2_train_s11_before_b0.pt",
+        "ep0_file_sha256": "f267558d0cc8933987c09576b8d6d6ad512dbc3c73653d059104705c1faca437",
+        "ep0_parameter_sha256": "fb82ad80724afa37ff8f3cbd5bd8bae958e221586eb799bdf61701af80878ec4",
+        "ep0_episodes_done": 0,
+        "ep128_file": "v2_train_s11_ep128.pt",
+        "ep128_file_sha256": "1c765c27294c673aa82b1ab7cd8dd8f379699ede8f924cc3438bfcd73fa0c60e",
+        "ep128_parameter_sha256": "809f35f77ae2659526b70a49b543996c68f0f5942c633d8f69e3f00f3e4d06db",
+        "ep128_episodes_done": 128,
+        "ep128_lambda_at_source": 1.0,
+        "load_mode": "model_only_read_only",
+        "role": "ep0 = initialisation; ep128 = comparison context only, never a training resume source"
+      },
+      "22": {
+        "ep0_file": "v2_train_s22_before_b0.pt",
+        "ep0_file_sha256": "249f769770fd0bffcc8df345539088890f9323f1338a224e3c8195d35adc8555",
+        "ep0_parameter_sha256": "a9e7776171e5581dd0c3c972dbbc9504337b2513d18b691a137d528d6221b46b",
+        "ep0_episodes_done": 0,
+        "ep128_file": "v2_train_s22_ep128.pt",
+        "ep128_file_sha256": "79bd3769d6382e5e908b22db2794ebfbb22cab430162fb211d87bb196550e234",
+        "ep128_parameter_sha256": "286e2f84ab7d0abc65a3201495ff41f3ad8423775b456c5e379765fd43d75365",
+        "ep128_episodes_done": 128,
+        "ep128_lambda_at_source": 1.0,
+        "load_mode": "model_only_read_only",
+        "role": "ep0 = initialisation; ep128 = comparison context only, never a training resume source"
+      },
+      "33": {
+        "ep0_file": "v2_train_s33_before_b0.pt",
+        "ep0_file_sha256": "5f47f28b2678a0091e2370345b622aad7bdf1d8064b19d3ed57282bc8f005e93",
+        "ep0_parameter_sha256": "10bce624e9fa8079144b1150b6bbc6ece2be17771233a6e7bf3720770bea5b26",
+        "ep0_episodes_done": 0,
+        "ep128_file": "v2_train_s33_ep128.pt",
+        "ep128_file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+        "ep128_parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a",
+        "ep128_episodes_done": 128,
+        "ep128_lambda_at_source": 1.125,
+        "load_mode": "model_only_read_only",
+        "role": "ep0 = initialisation; ep128 = comparison context only, never a training resume source"
+      }
+    },
+    "initial_parameter_sha256_s11": "fb82ad80724afa37ff8f3cbd5bd8bae958e221586eb799bdf61701af80878ec4",
+    "never_loaded": [
+      "ROUND60 ep128 as a training initialisation",
+      "ROUND60 Adam state",
+      "ROUND60 lambda",
+      "ROUND60 training RNG or training cursor"
+    ],
+    "checkpoint_contract": "an R60 single-head or partitioned checkpoint is REJECTED as an R66 training-resume source; R66 resumes only its own frozen-early-path schema",
+    "upstream_chain": "R60 ep0 itself came from the verified R58 ep0 BC_POST model-only source (ROUND46_R2_V6_INPUT_IDENTITY); no R66 parameter is trained before its first R66 update"
+  },
+  "living_config_verified": {
+    "gamma": 1.0,
+    "gae_lambda": 1.0,
+    "eta_lambda": 0.5,
+    "delta": 0.0,
+    "lambda_init": 1.0,
+    "data_order_seed": 20260927,
+    "b0_bytes": 10000.0,
+    "learning_rate": 0.0003,
+    "clip": 0.2,
+    "entropy_bonus": 0.01,
+    "value_coefficient": 0.5,
+    "max_grad_norm": 0.5,
+    "epochs_per_batch": 4,
+    "minibatch_steps": 256,
+    "episodes_per_update": 4,
+    "log_prob_tolerance": 1e-06,
+    "gate_beta": 1.0,
+    "ready_cut": 147,
+    "note": "read from the live modules after configure_source_imports(); the module import defaults gae_lambda=0.95 / eta_lambda=0.05 are OLD and are NOT used"
+  },
+  "canonical_modules": {
+    "trainer": {
+      "sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+      "match": true
+    },
+    "common": {
+      "sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+      "match": true
+    },
+    "controller": {
+      "sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+      "match": true
+    }
+  },
+  "scenes": {
+    "training_block": {
+      "first": 1300000,
+      "last": 1300047,
+      "unique_scenes": 48,
+      "episodes_per_seed": 128,
+      "order_sha256": "346f2cdde8d658f927ea282f83e143d54a600f4f5c729e4521fe657421afe840",
+      "order_source": "common.scenario_order() with the frozen data_order_seed"
+    },
+    "eval_block_new": {
+      "first": 1800000,
+      "last": 1800031,
+      "count": 32,
+      "status": "fresh development block for ROUND66; not an unseen confirmation set"
+    },
+    "focal_scene": 1700027
+  },
+  "fixed_plan": {
+    "immediate_reference": 48,
+    "ppo_training": 384,
+    "model_eval": 384,
+    "model_eval_split": {
+      "NEW": 192,
+      "BC": 192
+    },
+    "rule_eval": 288,
+    "rule_eval_split": {
+      "immediate_both_modes": 64,
+      "late_discovery_gate_both_modes": 64,
+      "always_hold_both_modes": 64,
+      "periodic_20_greedy": 32,
+      "random_send_greedy": 32,
+      "event_greedy": 32
+    },
+    "focal": 6,
+    "normal_total": 1110,
+    "technical_reserve_max": 40,
+    "hard_cap": 1150,
+    "historical_non_plan_probe": 0,
+    "eval_split_note": "eval 672 = NEW(192)+BC(192)+immediate/late/always_hold both modes(192)+periodic_20/random_send/event greedy(96); the split was adjudicated by the executor author from the scoped plan and is recorded here as the contract",
+    "quota_provenance_note": "the 1110/40/1150 figures are this round's recorded execution contract authored with the scoped plan; they are not a separately human-chosen threshold and must not be described as one"
+  },
+  "comparison_arms": {
+    "NEW": "R66 ep128 (frozen early path intact, read-only load)",
+    "BC": "compliant R60 ep0 initial value, read-only, NOT frozen (runs exactly as R60 had it)",
+    "OLD_R60": "read-only context reuse of R60 rows; never a training source and never re-counted as an R66 launch",
+    "primary": "NEW_minus_BC, same seed, same mode, same 32 scenes, paired",
+    "greedy_is_primary": true,
+    "sampled_reported_separately": true,
+    "seeds_not_pooled": true
+  },
+  "statistics": {
+    "bootstrap": "numpy PCG64 seed 20261012, 10000 draws over the 32 scenes",
+    "quantiles": "linear 0.025/0.975",
+    "unit": "scene",
+    "ci_note": "a CI containing 0 is not equivalence"
+  },
+  "gate_policy": {
+    "first_four_episodes_count": true,
+    "gate_timing": "real first-batch gate immediately after the first committed update of each seed, before episode 4 continues",
+    "eval_checkpoint": "fixed ep128 only; no checkpoint selection",
+    "degradation_is_not_a_technical_failure": true,
+    "failures_consume_quota": true
+  },
+  "synthetic_budget": {
+    "optimizer_update_cap": 32,
+    "consumed_before_first_real_launch": 4,
+    "detail": "2 synthetic updates in the prior session wire-up acceptance + 2 in this session's independent re-verification; synthetic checkpoint writes stay under the round's throwaway test directory"
+  },
+  "protected_files": [
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+      "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+      "status": "verified_untouched"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+      "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+      "status": "verified_untouched"
+    }
+  ],
+  "acceptance_evidence": {
+    "wireup_acceptance": {
+      "file": "test_r66_frozen_acceptance.py",
+      "checks": 87,
+      "status": "passed",
+      "reverified_by": "this session (independent re-run), plus the prior session run"
+    },
+    "zero_env_cli_acceptance": {
+      "file": "raw/runtime/ROUND66_ZERO_ENV_ACCEPTANCE.json",
+      "status": "passed",
+      "checks": 18,
+      "reverified_by": "this session (real CLI, RC 0)"
+    },
+    "real_launches_consumed_at_freeze": 0
+  }
+}
