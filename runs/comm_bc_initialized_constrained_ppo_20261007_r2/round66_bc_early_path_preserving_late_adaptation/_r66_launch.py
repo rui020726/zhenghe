@@ -1,13 +1,14 @@
 """ROUND66 detached phase launcher: runs one R66 phase module as an auditable, heartbeat-reporting process.
 
 Usage:
-    _r66_launch.py <phase> [seed] [gate] [--module execute|eval_fixed]
+    _r66_launch.py <phase> [seed] [gate] [--module execute|eval_fixed|eval_fixed2]
 
 <phase> is forwarded verbatim to the chosen module's --phase argument, so the same launcher drives
-r66_execute.py (acceptance/train/eval/stats/all) and the private corrected evaluation adapter
-r66_eval_fixed.py (plan/eval/stats). --module defaults to "execute", so every historical invocation
-keeps exactly the same child command; only the log file name is now module-prefixed so two phases
-cannot overwrite each other's log.
+r66_execute.py (acceptance/train/eval/stats/all), the private corrected evaluation adapter
+r66_eval_fixed.py (v1, plan/eval/stats) and its successor r66_eval_fixed2.py (v2, plan/eval/stats).
+--module defaults to "execute", so every historical invocation keeps exactly the same child command;
+the "eval_fixed2" key is purely additive and never rewrites what "eval_fixed" pointed at. Only the
+log file name is module-prefixed so two phases cannot overwrite each other's log.
 
 Records pid/command/log/exit code under raw/runtime/launch_records.jsonl and prints a heartbeat line
 every 60 seconds so a supervising session can tell the run is alive without touching the science.
@@ -20,7 +21,8 @@ for root, dirs, files in os.walk(r"D:\code"):
     if os.path.basename(root) == "round66_bc_early_path_preserving_late_adaptation":
         R66 = root; break
 PY = r"D:\project_env\python.exe"
-MODULES = {"execute": "r66_execute.py", "eval_fixed": "r66_eval_fixed.py"}
+MODULES = {"execute": "r66_execute.py", "eval_fixed": "r66_eval_fixed.py",
+           "eval_fixed2": "r66_eval_fixed2.py"}
 argv = list(sys.argv[1:])
 module_key = "execute"
 if "--module" in argv:
