@@ -15,7 +15,11 @@ class R64GuardError(RuntimeError):
 
 class R64Guard:
     TASK_ID = "ROUND64"
-    EXECUTION_VERSION = "round64-controlled-deadline-intervention/2"
+    EXECUTION_VERSION = "round64-controlled-deadline-intervention/3"
+    ACCEPTED_EXECUTION_VERSIONS = {
+        "round64-controlled-deadline-intervention/2",
+        "round64-controlled-deadline-intervention/3",
+    }
     NORMAL_CAP = 10
     RESERVE_CAP = 2
     HARD_CAP = 12
@@ -46,10 +50,10 @@ class R64Guard:
         rows = self.rows()
         consumed_rows = [row for row in rows if row["event"] == "slot_consumed"]
         if any(row.get("task") != self.TASK_ID or
-               row.get("execution_version") != self.EXECUTION_VERSION for row in rows):
+               row.get("execution_version") not in self.ACCEPTED_EXECUTION_VERSIONS for row in rows):
             raise R64GuardError("R64 ledger contains a foreign task or execution version")
         if any(value.get("task") != self.TASK_ID or
-               value.get("execution_version") != self.EXECUTION_VERSION for value in files):
+               value.get("execution_version") not in self.ACCEPTED_EXECUTION_VERSIONS for value in files):
             raise R64GuardError("R64 slot contains a foreign task or execution version")
         if len(consumed_rows) != len(files) or {row["slot"] for row in consumed_rows} != {
                 value["slot"] for value in files}:

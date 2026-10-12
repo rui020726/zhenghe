@@ -20,7 +20,7 @@ MODE = "greedy"
 DELTAS = (-30, 0, 30, 60)
 EXPECTED_FILE_SHA = "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a"
 EXPECTED_PARAM_SHA = "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a"
-R64_EXECUTION_VERSION = "round64-controlled-deadline-intervention/2"
+R64_EXECUTION_VERSION = "round64-controlled-deadline-intervention/3"
 PLAN = [
     {"logical": "L", "delta": 0, "arm": "L", "action": None},
     {"logical": "L0", "delta": 0, "arm": "L0", "action": None},
@@ -102,7 +102,7 @@ def setup_runtime(raw=RAW, *, preflight=False):
         "parameter_sha256": parameter_sha, "structure": identity.get("structure"),
         "parameter_identity": {"parameter_sha256": parameter_sha},
         "execution_version": R64_EXECUTION_VERSION,
-        "load_mode": "read_only_model_only", "optimizer_restored": False,
+        "load_mode": "read_only", "load_scope": "model_only", "optimizer_restored": False,
         "rng_restored": False, "training_cursor_restored": False,
     }
     if Path(cfg["identity"]["raw_root"]).resolve() != raw:

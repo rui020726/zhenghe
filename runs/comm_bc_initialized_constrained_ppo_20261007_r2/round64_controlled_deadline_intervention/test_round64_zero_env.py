@@ -244,6 +244,20 @@ class GuardTests(unittest.TestCase):
         with self.assertRaisesRegex(R64GuardError, "foreign task or execution version"):
             guard.snapshot()
 
+    def test_frozen_prior_execution_version_remains_in_same_cumulative_ledger(self):
+        guard = self.temp_guard()
+        with guard.attempt("prior", category="normal") as attempt:
+            attempt.finish()
+        slot = next(guard.slots.glob("*.slot"))
+        payload = json.loads(slot.read_text(encoding="utf-8"))
+        payload["execution_version"] = "round64-controlled-deadline-intervention/2"
+        slot.write_text(json.dumps(payload), encoding="utf-8")
+        rows = guard.rows()
+        for row in rows:
+            row["execution_version"] = "round64-controlled-deadline-intervention/2"
+        guard.ledger.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+        self.assertEqual(guard.snapshot()["slots_consumed"], 1)
+
     def test_alternate_live_output_root_is_refused_before_configuration(self):
         with self.assertRaisesRegex(RuntimeError, "single frozen raw root"):
             setup_runtime(HERE / "other-root")

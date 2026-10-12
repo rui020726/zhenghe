@@ -2,7 +2,7 @@
 
 ## Authorization and Boundary
 
-This package executes the user's fixed ROUND64 local deadline-by-action experiment. It authorizes at most 10 planned episodes plus 2 technical-reserve attempts (12 total slots), all serially through `r64_guard.py`. A failed, interrupted, or disqualified attempt consumes its slot. No further cases or retries are authorized beyond that cap.
+This package executes the user's fixed ROUND64 local deadline-by-action experiment. Initial execution identity `/2` consumed normal slot 1 on L and completed 1,000 steps, but its result was interrupted at a metadata-contract check because the executor label was `read_only_model_only` while the accepted R60 loader contract is `read_only`. The stored loader state showed no restore, optimizer step, or checkpoint write. The slot and artifacts remain preserved. The narrow `/3` repair records `load_mode=read_only` and `load_scope=model_only`; no scientific or world setting changes. The experiment authorizes at most 10 planned logical episodes plus 2 technical-reserve attempts (12 total slots), all serially through `r64_guard.py`. A failed, interrupted, or disqualified attempt consumes its slot. No further cases or retries are authorized beyond that cap.
 
 No training, optimizer update, PPO replay, training-state/RNG restore, or checkpoint write is permitted. Only read-only loading of the fixed model and normal environment episodes are allowed. No push, merge, deployment, or follow-on experiment.
 
@@ -10,6 +10,7 @@ No training, optimizer update, PPO replay, training-state/RNG restore, or checkp
 
 - Branch: `exp/round64-controlled-deadline-intervention`
 - Pre-freeze base HEAD: `252f2fc4d6101693ef363c9969090eb1ba0bb6a1`
+- Initial freeze commit: `4f49e78` (`/2`); repaired execution version: `round64-controlled-deadline-intervention/3`; the append-only cumulative ledger explicitly accepts only these two identities.
 - Model: R60 compliant seed 33, greedy, ep128; exact path, file SHA256 and parameter SHA256 are in `ROUND64_FREEZE.json`.
 - Scene: `1700027`; focus target: `piloc-e1-target-5`.
 - World: inherited R60 frozen configuration; horizon 1000, six goals, 29,300-byte communication budget, ACK disabled, same search/allocation checkpoints and greedy tie rule.
@@ -35,5 +36,5 @@ The feature audit preserves all 19 inputs and may describe observed distinctions
 
 ## Pre-Run Evidence
 
-Before any real episode: zero-environment preflight, source binding, read-only model identity, guard tests, and exact run order are frozen and locally committed. The final preflight and machine-readable identities are recorded in `ROUND64_FREEZE.json` and `ROUND64_PREFLIGHT_10.json`.
+Before the next real episode: zero-environment preflight, source binding, read-only model identity, guard tests, and exact run order for `/3` are frozen and locally committed. The preflight and machine-readable identities are recorded in the versioned entries in `ROUND64_FREEZE.json`.
 
