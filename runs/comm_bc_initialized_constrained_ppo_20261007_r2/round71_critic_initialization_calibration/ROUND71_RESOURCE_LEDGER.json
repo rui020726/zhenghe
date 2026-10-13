@@ -1,0 +1,86 @@
+{
+ "kind": "round71-final-resource-ledger/1",
+ "task_id": "ROUND71-APPROVED-CALIBRATION-FIXED-TRIAL",
+ "approval_id": "ROUND71-APPROVED-CALIBRATION-FIXED-TRIAL",
+ "run_id": "r71-trial-20261013",
+ "branch": "exp/round71-critic-initialization-calibration",
+ "authorisation": "archived verbatim in ROUND71_TRIAL_EXECUTION_BASIS.md: \"582 normal + 18 reserve, environment hard cap 600; offline real trunk input cap 72,000 rows; synthetic optimizer step at most 16.\"",
+ "live_ledger_counts": {
+  "normal_claims": 582,
+  "reserve_claims": 1,
+  "complete": 582,
+  "failed_technical": 0,
+  "booked_attempts": 583,
+  "cumulative_attempts": 583,
+  "cumulative_attempts_including_historical_probe": 583,
+  "historical_non_plan_probe": 0,
+  "actual_environment_constructions": 583,
+  "normal_cap": 582,
+  "reserve_cap": 18,
+  "hard_cap": 600,
+  "normal_headroom": 0,
+  "reserve_headroom": 17,
+  "hard_headroom": 17,
+  "hard_cap_exceeded_by": 0
+ },
+ "attempt_breakdown_from_claims_on_disk": {
+  "attempt_files": 583,
+  "groups": {
+   "training": 385,
+   "eval_focal": 6,
+   "eval_model": 192
+  },
+  "statuses": {
+   "eval_focal|complete": 6,
+   "eval_model|complete": 192,
+   "training|claimed_before_environment": 1,
+   "training|complete": 384
+  },
+  "sum_environment_constructor_calls": 583,
+  "sum_completed_steps": 582000,
+  "completed_1000_step_episodes": 582,
+  "aborted_attempts_with_zero_steps": [
+   {
+    "claim": "r71_new_training_s11_e0",
+    "status": "claimed_before_environment",
+    "environment_constructor_calls": 1,
+    "simulation_started": false,
+    "completed_steps": 0,
+    "note": "permit/quota consumption with 0 steps, non-refundable; the hook counted one constructor call but simulation_started is false and completed_steps is 0, so actual builder invocation is NOT asserted from the permit alone"
+   }
+  ]
+ },
+ "offline_forward_ledger": {
+  "rows": 70693,
+  "calls": 78,
+  "joint_rows": 37508,
+  "cap": 72000,
+  "remaining": 1307
+ },
+ "synthetic_optimizer_steps": {
+  "used": 4,
+  "cap": 16
+ },
+ "real_training_updates": {
+  "ppo_update_calls": 96,
+  "optimizer_step_calls": 696,
+  "per_seed": {
+   "s11": 32,
+   "s22": 32,
+   "s33": 32
+  },
+  "episodes_per_seed": 128
+ },
+ "training_side_effects_in_eval": {
+  "eval_rows": 198,
+  "rows_with_optimizer_steps_nonzero": 0,
+  "rows_with_steps_not_1000": 0,
+  "checkpoint_writes_jsonl_bytes": 0
+ },
+ "historical_non_plan_probe": 0,
+ "quota_note": "ROUND71 used a fresh, independent quota. R60/R66/R68 historical consumption and their ledgers are unchanged and are NOT borrowed from.",
+ "reconciliation_notes": [
+  "The main ROUND71_LEDGER.json on disk was written before the 198-cell eval finished and showed 385 attempts. phase_ledger() recomputes it from the claim files on disk; the recomputed and now on-disk values are 582 normal + 1 reserve = 583 attempts, which is what live_ledger_counts above records. The pre-eval value is superseded, not deleted.",
+  "Offline trunk-input rows: the durable forward ledger records 70,693 rows over 78 calls with 0 refusals. Per-seed cumulative snapshots in the offline-fit receipts imply s11 = 31,778, s22 = 18,691, s33 = 20,224. The seed-11 receipt reconstruction note separately records \"20,013 real trunk-input rows\" for the successful seed-11 fit. The 11,765-row gap between the durable cumulative snapshot and that note is not evidenced by any durable per-call record (the ForwardLedger persists aggregates only), so the per-seed split beyond the durable total is registered as an unresolved bookkeeping gap. The durable total is the quantity compared against the 72,000-row cap, so the cap check itself is unaffected: 70,693 <= 72,000, remaining 1,307."
+ ]
+}

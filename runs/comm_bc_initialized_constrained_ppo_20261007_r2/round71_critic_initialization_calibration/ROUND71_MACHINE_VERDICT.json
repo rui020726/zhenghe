@@ -1,0 +1,483 @@
+{
+ "kind": "round71-machine-verdict/1",
+ "task_id": "ROUND71-APPROVED-CALIBRATION-FIXED-TRIAL",
+ "run_id": "r71-trial-20261013",
+ "branch": "exp/round71-critic-initialization-calibration",
+ "delivered_head": "af92f9787971fe7e2b8d07719112f1c6bc69d5d9",
+ "delivered_head_note": "HEAD at verdict-write time, carrying all ROUND71 code, gates, tests and the trial wiring. The delivery commit made afterwards adds this verdict, the final report, the consolidated resource ledger, the checkpoint index and the git-external manifest, so HEAD advances again; the post-delivery HEAD is the one named in the delivery message.",
+ "round_dir": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round71_critic_initialization_calibration/",
+ "python": "D:\\project_env\\python.exe",
+ "intervention": {
+  "what": "replace each seed's two critic initial affine heads (task inner.value_head, cost cost_head) with a per-seed dual-output ridge calibration fitted on that seed's own R68 128-episode teacher data",
+  "unchanged": [
+   "trunk",
+   "early_head",
+   "late_head (R68 post-scale x0.10)",
+   "initial actor policy",
+   "initial RNG state",
+   "fresh optimizer",
+   "lambda init 1.0"
+  ],
+  "changed_modules_verified": [
+   "value_cost_head",
+   "value_task_head"
+  ],
+  "digest_before_equals_after_for_unchanged_modules": true,
+  "fit": {
+   "ridge": 0.001,
+   "center_scale_scope": "all training teacher rows of that seed",
+   "constant_column_scale": 1.0,
+   "intercept_penalized": false,
+   "no_cv": true,
+   "no_seed_selection": true
+  },
+  "parameter_objects": 12,
+  "parameter_scalars": 5830,
+  "frozen_objects": 6,
+  "frozen_scalars": 5570,
+  "trainable_objects": 6,
+  "trainable_scalars": 260
+ },
+ "gates": {
+  "prelaunch_g1_to_g8": "passed",
+  "first_batch_gate_s11": "passed",
+  "first_batch_gate_s22": "passed",
+  "first_batch_gate_s33": "passed",
+  "first_batch_behaviour_matches_r68_all_seeds": true,
+  "unit_tests_passed": 84,
+  "unit_tests_failed": 0
+ },
+ "training": {
+  "seeds": [
+   11,
+   22,
+   33
+  ],
+  "episodes_per_seed": 128,
+  "batches_per_seed": 32,
+  "ppo_updates": 96,
+  "real_optimizer_steps": 696,
+  "episodes_done_in_ep128_checkpoints": {
+   "s11": 128,
+   "s22": 128,
+   "s33": 128
+  },
+  "updates_in_ep128_checkpoints": {
+   "s11": 32,
+   "s22": 32,
+   "s33": 32
+  },
+  "lambda_at_ep128": {
+   "s11": 1.625,
+   "s22": 1.5,
+   "s33": 1.625
+  },
+  "chain_init_equals_before_b0": true,
+  "chain_ep128_equals_after_b31": true,
+  "trunk_and_early_head_unchanged_init_to_ep128": true
+ },
+ "evaluation": {
+  "planned_cells": 198,
+  "executed_cells": 198,
+  "model_cells": 192,
+  "focal_cells": 6,
+  "order_check": "passed",
+  "steps_per_cell": 1000,
+  "rows_with_optimizer_steps_nonzero": 0,
+  "rows_whose_controller_sha_does_not_match_an_on_disk_checkpoint": 0,
+  "eval_block": "1800000..1800031 (already-used development block, NOT a confirmation set)",
+  "r68_control_reuse": "read-only reuse of the R68 TRAINED_ALPHA / INIT_ALPHA rows on the same 32 scenes"
+ },
+ "results_primary_greedy": {
+  "11/greedy": {
+   "new_ep128_on_time_total": 183,
+   "new_ep128_bytes_per_scene": 4066.5,
+   "task_delta_mean": 0.0,
+   "task_ci95": [
+    0.0,
+    0.0
+   ],
+   "cost_delta_B_per_scene": 0.0,
+   "cost_ci95": [
+    0.0,
+    0.0
+   ],
+   "targets_lost": [],
+   "targets_gained": [],
+   "scenes_cheaper": 0,
+   "scenes_worse_task": 0,
+   "changed_first_report_events": 0
+  },
+  "22/greedy": {
+   "new_ep128_on_time_total": 183,
+   "new_ep128_bytes_per_scene": 4066.5,
+   "task_delta_mean": 0.0,
+   "task_ci95": [
+    0.0,
+    0.0
+   ],
+   "cost_delta_B_per_scene": 0.0,
+   "cost_ci95": [
+    0.0,
+    0.0
+   ],
+   "targets_lost": [],
+   "targets_gained": [],
+   "scenes_cheaper": 0,
+   "scenes_worse_task": 0,
+   "changed_first_report_events": 0
+  },
+  "33/greedy": {
+   "new_ep128_on_time_total": 183,
+   "new_ep128_bytes_per_scene": 4066.5,
+   "task_delta_mean": 0.0,
+   "task_ci95": [
+    0.0,
+    0.0
+   ],
+   "cost_delta_B_per_scene": 0.0,
+   "cost_ci95": [
+    0.0,
+    0.0
+   ],
+   "targets_lost": [],
+   "targets_gained": [],
+   "scenes_cheaper": 0,
+   "scenes_worse_task": 0,
+   "changed_first_report_events": 0
+  }
+ },
+ "results_secondary_sampled": {
+  "11/sampled": {
+   "new_ep128_on_time_total": 180,
+   "new_ep128_bytes_per_scene": 3152.625,
+   "task_delta_mean": 0.0,
+   "task_ci95": [
+    0.0,
+    0.0
+   ],
+   "cost_delta_B_per_scene": -155.8125,
+   "cost_ci95": [
+    -389.625,
+    0.0
+   ],
+   "targets_lost": [],
+   "targets_gained": [],
+   "scenes_cheaper": 2,
+   "scenes_worse_task": 0,
+   "changed_first_report_events": 2
+  },
+  "22/sampled": {
+   "new_ep128_on_time_total": 183,
+   "new_ep128_bytes_per_scene": 3669.375,
+   "task_delta_mean": 0.0,
+   "task_ci95": [
+    0.0,
+    0.0
+   ],
+   "cost_delta_B_per_scene": 331.125,
+   "cost_ci95": [
+    78.375,
+    662.625
+   ],
+   "targets_lost": [],
+   "targets_gained": [],
+   "scenes_cheaper": 0,
+   "scenes_worse_task": 0,
+   "changed_first_report_events": 4
+  },
+  "33/sampled": {
+   "new_ep128_on_time_total": 180,
+   "new_ep128_bytes_per_scene": 2848.875,
+   "task_delta_mean": -0.03125,
+   "task_ci95": [
+    -0.09375,
+    0.0
+   ],
+   "cost_delta_B_per_scene": -642.1875,
+   "cost_ci95": [
+    -1133.8125,
+    -239.625
+   ],
+   "targets_lost": [
+    {
+     "scene": 1800019,
+     "target_id": "piloc-e1-target-0"
+    }
+   ],
+   "targets_gained": [],
+   "scenes_cheaper": 7,
+   "scenes_worse_task": 1,
+   "changed_first_report_events": 8
+  }
+ },
+ "results_focal_scene_1700027_target5": {
+  "seed11": {
+   "cells_present": {
+    "NEW_INIT": true,
+    "NEW_EP128": true,
+    "R68_INIT_ALPHA": true,
+    "R68_TRAINED_ALPHA": true
+   },
+   "new_init_minus_r68_init_alpha_task_delta": 0,
+   "new_init_minus_r68_init_alpha_cost_delta_B": 0,
+   "new_ep128_minus_r68_trained_task_delta": 0,
+   "new_ep128_minus_r68_trained_cost_delta_B": 0,
+   "new_ep128_minus_new_init_task_delta": 0,
+   "new_ep128_minus_new_init_cost_delta_B": 0,
+   "target5_on_time_new_ep128": true,
+   "target5_first_reports_new_ep128": [
+    {
+     "target": "piloc-e1-target-5",
+     "step": 134,
+     "action": 1,
+     "ready_step": 134,
+     "region": "early"
+    }
+   ],
+   "on_time_ids_new_ep128": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "spent_bytes_new_ep128": 7500
+  },
+  "seed22": {
+   "cells_present": {
+    "NEW_INIT": true,
+    "NEW_EP128": true,
+    "R68_INIT_ALPHA": true,
+    "R68_TRAINED_ALPHA": true
+   },
+   "new_init_minus_r68_init_alpha_task_delta": 0,
+   "new_init_minus_r68_init_alpha_cost_delta_B": 0,
+   "new_ep128_minus_r68_trained_task_delta": 0,
+   "new_ep128_minus_r68_trained_cost_delta_B": 0,
+   "new_ep128_minus_new_init_task_delta": 0,
+   "new_ep128_minus_new_init_cost_delta_B": 0,
+   "target5_on_time_new_ep128": true,
+   "target5_first_reports_new_ep128": [
+    {
+     "target": "piloc-e1-target-5",
+     "step": 134,
+     "action": 1,
+     "ready_step": 134,
+     "region": "early"
+    }
+   ],
+   "on_time_ids_new_ep128": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "spent_bytes_new_ep128": 7500
+  },
+  "seed33": {
+   "cells_present": {
+    "NEW_INIT": true,
+    "NEW_EP128": true,
+    "R68_INIT_ALPHA": true,
+    "R68_TRAINED_ALPHA": true
+   },
+   "new_init_minus_r68_init_alpha_task_delta": 0,
+   "new_init_minus_r68_init_alpha_cost_delta_B": 0,
+   "new_ep128_minus_r68_trained_task_delta": 0,
+   "new_ep128_minus_r68_trained_cost_delta_B": 0,
+   "new_ep128_minus_new_init_task_delta": 0,
+   "new_ep128_minus_new_init_cost_delta_B": 0,
+   "target5_on_time_new_ep128": true,
+   "target5_first_reports_new_ep128": [
+    {
+     "target": "piloc-e1-target-5",
+     "step": 134,
+     "action": 1,
+     "ready_step": 134,
+     "region": "early"
+    }
+   ],
+   "on_time_ids_new_ep128": [
+    "piloc-e1-target-0",
+    "piloc-e1-target-1",
+    "piloc-e1-target-2",
+    "piloc-e1-target-3",
+    "piloc-e1-target-4",
+    "piloc-e1-target-5"
+   ],
+   "spent_bytes_new_ep128": 7500
+  }
+ },
+ "first_report_split": {
+  "greedy": {
+   "early_identical_all_seeds": true,
+   "late_identical_all_seeds": true,
+   "detail": {
+    "11": {
+     "new": [
+      2,
+      132,
+      49,
+      0
+     ],
+     "r68": [
+      2,
+      132,
+      49,
+      0
+     ]
+    },
+    "22": {
+     "new": [
+      2,
+      132,
+      49,
+      0
+     ],
+     "r68": [
+      2,
+      132,
+      49,
+      0
+     ]
+    },
+    "33": {
+     "new": [
+      2,
+      132,
+      49,
+      0
+     ],
+     "r68": [
+      2,
+      132,
+      49,
+      0
+     ]
+    }
+   }
+  },
+  "sampled": {
+   "early_identical_all_seeds": true,
+   "late_differs": true,
+   "detail": {
+    "11": {
+     "new": [
+      1,
+      133,
+      38,
+      11
+     ],
+     "r68": [
+      1,
+      133,
+      40,
+      9
+     ]
+    },
+    "22": {
+     "new": [
+      2,
+      132,
+      44,
+      5
+     ],
+     "r68": [
+      2,
+      132,
+      40,
+      9
+     ]
+    },
+    "33": {
+     "new": [
+      2,
+      132,
+      34,
+      15
+     ],
+     "r68": [
+      2,
+      132,
+      42,
+      7
+     ]
+    }
+   }
+  },
+  "order": "[sends_early, skips_early, sends_late, skips_late]"
+ },
+ "vs_rules_greedy_all_seeds": {
+  "IMMEDIATE": {
+   "task": 183,
+   "rule_task": 183,
+   "cost_B_per_scene": 4066.5,
+   "rule_cost": 14356.5,
+   "cost_delta": -10290.0
+  },
+  "LATE_DISCOVERY_GATE": {
+   "task": 183,
+   "rule_task": 183,
+   "cost_B_per_scene": 4066.5,
+   "rule_cost": 3897.9375,
+   "cost_delta": 168.5625
+  }
+ },
+ "consumption": {
+  "normal_claims": 582,
+  "normal_cap": 582,
+  "reserve_claims": 1,
+  "reserve_cap": 18,
+  "booked_attempts": 583,
+  "actual_environment_constructions": 583,
+  "hard_cap": 600,
+  "hard_headroom": 17,
+  "hard_cap_exceeded_by": 0,
+  "historical_non_plan_probe": 0,
+  "attempt_breakdown": {
+   "training": 385,
+   "eval_model": 192,
+   "eval_focal": 6
+  },
+  "completed_1000_step_episodes": 582,
+  "aborted_attempts_zero_steps": 1,
+  "offline_trunk_input_rows": 70693,
+  "offline_row_cap": 72000,
+  "offline_rows_remaining": 1307,
+  "offline_calls": 78,
+  "offline_refusals": 0,
+  "synthetic_optimizer_steps_used": 4,
+  "synthetic_optimizer_step_cap": 16,
+  "real_optimizer_steps": 696
+ },
+ "conclusions_retained": [
+  "On the primary greedy reading the calibrated critic init preserved the R68 task outcome exactly in all three seeds: 183 on-time targets over 32 scenes, identical on-time target ID sets, task delta 0, CI [0,0], zero targets lost or gained.",
+  "On the primary greedy reading the cost change is exactly zero in all three seeds: 4066.5 B per scene, delta 0.0, CI [0,0], zero scenes cheaper, zero scenes dearer, zero changed first-report events.",
+  "The early key target scene 1700027 / piloc-e1-target-5 is preserved in all three seeds under both the calibrated init and the trained model: 6/6 on-time, 7500 B, first report at step 134 in the early region.",
+  "The calibrated init reproduces the R68 initial policy bit-for-bit on the focal scene: NEW_INIT minus R68_INIT_ALPHA is task 0 and cost 0 with identical target ID sets in all three seeds.",
+  "Every observed first-report difference is confined to the late region; the early region is bit-identical in every cell because trunk and early_head are frozen by the inherited R66/R68 intervention."
+ ],
+ "conclusions_deferred": [
+  "No cost reduction: sampled cost direction is -155.8 / +331.1 / -642.2 B per scene across seeds 11/22/33, so the cross-seed direction is not consistent, and seed 22 sampled is significantly MORE expensive (CI [78.4, 662.6] excludes 0).",
+  "Seed 33 sampled loses one on-time target versus R68 (scene 1800019 / piloc-e1-target-0) and both seed 11 and seed 33 sampled lose 3 on-time targets versus the IMMEDIATE rule.",
+  "The greedy bit-identity is partly structural (frozen early path plus a two-way head), not evidence that critic calibration is behaviourally neutral in general.",
+  "ROUND71 added offline teacher exposure that R68 did not have: 70,693 real trunk-input rows over 78 calls. This is NOT a same-training-budget race against R68 and must not be read as one.",
+  "Eval block 1800000..1800031 is an already-used development block, not an unseen confirmation set; n=32 scenes per cell, one random realisation per cell, three seeds not pooled, and a CI containing 0 is not equivalence.",
+  "These results support only the whole critic-initialisation-calibration structure on this development block. They do not prove the uncalibrated critic init was the only root cause and they do not support generalisation, formal non-inferiority or deployment."
+ ],
+ "registered_bookkeeping_gaps": [
+  "The seed-11 offline-fit receipt was reconstructed read-only after an ndarray serialization defect. Its durable ledger snapshot records 31,778 cumulative rows at the end of the seed-11 phase, while its reconstruction note records 20,013 rows for the successful seed-11 fit. The 11,765-row difference is not evidenced by any durable per-call record (the ForwardLedger persists aggregates only). The durable total of 70,693 rows is the quantity compared against the 72,000-row cap, so the cap check is unaffected.",
+  "The aborted seed-11 episode-0 attempt (claim r71_new_training_s11_e0) has environment_constructor_calls=1, simulation_started=False and completed_steps=0. It is counted as a non-refundable permit/quota consumption with zero steps; actual builder invocation is not asserted from the permit alone."
+ ],
+ "corrections_logged": 6,
+ "protected_files_untouched": {
+  "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+  "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+ },
+ "no_push_no_merge_no_deploy": true,
+ "weights_and_raw_logs_committed": false
+}
