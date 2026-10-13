@@ -67,6 +67,132 @@ N_FOLDS = 5                 # fixed fold count
 RIDGE = 1e-3                # fixed regularisation
 FORWARD_ROW_CAP = 36000     # new, independent hard cap on neural input-row forwards
 BATCH_CAP = 1024            # max rows per forward batch
+
+# ---- appended resource correction (delegation review); original counts are NOT rewritten ----
+RESOURCE_CORRECTIONS = {
+    "id": "R70-C1",
+    "discipline": "Append-only. resource_counts, the report text and all failure material are "
+                  "preserved exactly as produced; this block is an appended correction.",
+    "authoritative_unit": ("the actual 19-D input-vector rows fed to the trunk, including "
+                           "NumPy-equivalent network computation, including first / failure / "
+                           "repeat, and INCLUDING the mean-over-targets internal expansion. "
+                           "NOT the joint decision-step row count and NOT the forward-call count."),
+    "independent_readonly_reconciliation": {
+        "method": ("zero-neural-forward recount that rebuilds only the row/target counts and the "
+                   "exact charging + batching schedule from the on-disk 96 batch records and 384 "
+                   "tapes; no trunk forward, no critic head, no model load, no fit"),
+        "decision_step_rows_charged": 33158,
+        "decision_step_rows_breakdown": "32,046 embedding rows + 1,112 wiring-verification rows",
+        "target_level_trunk_input_rows_AUTHORITATIVE": 60800,
+        "target_level_breakdown": "58,928 embedding flushes + 1,872 wiring-verification rows",
+        "forward_calls": 1171,
+        "forward_calls_breakdown": "59 embedding flushes + 1,112 per-row wiring calls",
+        "max_real_input_batch_target_rows": 1024,
+        "batch_cap_respected": True,
+        "note": ("reproduces the recorded 33158 / 60800 / 1171 / 1024 exactly, so the recorded "
+                 "numbers are accurate; only the unit used for the cap comparison was wrong"),
+    },
+    "verdict": {
+        "cap": 36000,
+        "authoritative_consumption": 60800,
+        "exceeded": True,
+        "over_by": 24800,
+        "over_by_pct": 68.9,
+        "superseded_headline": ("the report's '33158 / 36000 (within cap)' and the JSON "
+                                "resource_counts.neural_forward.within_cap=true used the "
+                                "joint-decision-row unit and are NOT compliance statements"),
+        "where_it_would_have_refused": ("verify_wiring charged 1,872 target rows first; a "
+                                        "correct-unit guard would have refused at embedding flush "
+                                        "34 (seed 22) with cumulative 35,193, because the next "
+                                        "1,023-row batch would total 36,216 > 36,000, after only "
+                                        "17,734 of 32,046 decision rows (~55%)"),
+    },
+    "not_remediable_by_rerun": ("computing all 32,046 mean-over-targets embeddings inherently "
+                                "requires 58,928 target-level trunk input rows, so the ALL_ROWS "
+                                "diagnostic cannot be completed inside a 36,000 target-row cap. "
+                                "No re-run was attempted, no additional budget was consumed, and "
+                                "the unit was not changed to claim compliance."),
+    "scientific_eligibility_verified_separately_zero_forward": {
+        "note": ("listed separately from the resource violation; none of these checks consumed a "
+                 "neural forward"),
+        "fold_grouping": ("48 training scenes split 10/10/10/9/9; no scene appears in two folds; "
+                          "scene->fold shared by all three seeds; per-seed fold row counts match "
+                          "the recorded folds exactly; every fold non-empty for every seed"),
+        "original_critic_column_recomputed_from_saved_values": {
+            "all_rows_task": {"bias": 2.25260478443761, "mae": 2.500040589590874,
+                              "rmse": 3.2303212707468307, "n": 32046},
+            "late_free_task": {"bias": 1.5231530639904844, "mae": 1.5664222638960565,
+                               "rmse": 1.8287570303970602, "n": 513},
+            "late_free_composite": {"bias": 1.6330666015087845, "mae": 1.706884068402443,
+                                    "rmse": 2.0100304818663313, "n": 513},
+            "matches_reported_table": True,
+        },
+        "wiring_verification": ("before_b0/b15/b31 seed 11, rollout-before tape values, max abs "
+                                "gap <= 2.384e-07 (float32 precision), all three passed; ep128 "
+                                "critic values never substituted"),
+        "trunk_bitwise_frozen": ("one distinct trunk digest per seed across before_b0/b15/b31, "
+                                 "three distinct digests across seeds"),
+        "fits": "15 dual-output ridge + 15 intercept-only = 30, all in-memory, no weights saved",
+        "config_frozen_before_fit": ("CV_SEED=20261013, N_FOLDS=5, RIDGE=1e-3 are module "
+                                     "constants and build_folds runs before the fit loop; no "
+                                     "fold/regularisation/feature sweep, no best-seed selection"),
+        "historical_test_note": ("test_forward_budget_rejects_before_exceeding locks the "
+                                 "superseded decision-row caliber and is retained as historical "
+                                 "evidence, not as a compliance statement"),
+    },
+    "effect_on_scientific_reading": ("the OOF comparison remains a valid descriptive "
+                                     "prediction-capability statement on the frozen "
+                                     "representation, but it now carries this registered resource "
+                                     "violation and must be read with it."),
+    "evidence_grade_of_the_60800_figure": {
+        "grade": "reconstruction from frozen source call order + surviving inputs",
+        "not_a_per_call_persistent_ledger": True,
+        "what_it_is": ("the 60,800 target-level input rows are RECONSTRUCTED by replaying the "
+                       "charging and batching schedule of the frozen source against the on-disk "
+                       "96 batch records and 384 tapes, then cross-checked against the run's own "
+                       "recorded 60,800 / 33,158 / 1,171 / 1,024. The schedule is deterministic, "
+                       "so the reconstruction reproduces the recorded figures exactly."),
+        "what_it_is_not": ("it is NOT a per-call persistent ledger written at the time of each "
+                           "forward. No such ledger exists for this round."),
+        "untracked_early_attempts": "UNKNOWN",
+        "untracked_early_attempts_note": ("any earlier, aborted or failed forward attempt that was "
+                                          "never recorded cannot be recovered from disk and is "
+                                          "registered as UNKNOWN, not as zero. Therefore 60,800 is "
+                                          "a LOWER BOUND on this round's actual neural input-row "
+                                          "consumption for the recorded successful path, and must "
+                                          "not be presented as the complete precise historical "
+                                          "consumption."),
+        "consequence": ("the 24,800 overage is established independently of this evidence-grade "
+                        "caveat, because even the recorded successful path alone already exceeds "
+                        "the cap; the caveat can only make the overage larger, never smaller."),
+    },
+    "wording_tightening": {
+        "applies_to": "ROUND70_REPORT.md sections 4 and 5 (original text preserved)",
+        "significantly_reduced_bias": ("tightened. No inference test was run, so 'significantly "
+                                       "reduced bias' is downgraded to a NUMERICAL / PREDICTIVE "
+                                       "observation on the held-out rows of this post-hoc split."),
+        "real_gain_from_representation": ("tightened. 'the 64-D representation still brings a real "
+                                          "gain' is downgraded to a NUMERICAL / PREDICTIVE "
+                                          "observation; no significance or generalisation claim."),
+        "constant_dominates": ("limited to specific metrics. The 'constant level correction is "
+                               "primary' reading holds for the ALL_ROWS task metrics, where the "
+                               "intercept-only baseline already removes most of the critic's "
+                               "systematic under-prediction (task bias +2.253 -> -0.116, RMSE "
+                               "3.230 -> 2.271). It must NOT be generalised to every metric."),
+        "composite_late_residual_not_attributable_to_constant": ("on the late-free composite "
+                                                                 "residual the affine baseline "
+                                                                 "beats the intercept-only "
+                                                                 "baseline (RMSE 1.120 vs "
+                                                                 "1.663, bias +0.244 vs "
+                                                                 "-1.271), so that error "
+                                                                 "reduction comes from the "
+                                                                 "representation and must NOT "
+                                                                 "be loosely attributed to "
+                                                                 "the constant."),
+        "unchanged": ("all predictive numbers in sections 4 and 5 are preserved exactly as "
+                      "produced; only the inferential wording is tightened."),
+    },
+}
 # ============================================================ .pt loader (no torch) =========
 _DTYPES = {
     "FloatStorage": np.dtype("<f4"),
@@ -153,6 +279,15 @@ class ForwardBudget:
     Authoritative unit = the decision-step tape row (the 'row' used throughout R68/R69 and the
     task's own '32,046 row-embedding' framing).  The target-level trunk evaluations needed to
     form each step's mean-embedding are tracked and disclosed separately (target_evals).
+
+    CORRECTION (appended after delegation review; the paragraph above is the ORIGINAL, superseded
+    caliber and is retained as historical evidence).  The authoritative unit is NOT the joint
+    decision-step row and NOT the forward-call count.  It is the actual 19-D input-vector rows
+    fed to the trunk, including NumPy-equivalent network computation, including first / failure /
+    repeat, and INCLUDING the mean-over-targets internal expansion.  On that unit this round
+    consumed 60,800 input rows against a 36,000 hard cap, i.e. 24,800 OVER.  The decision-row
+    charge above therefore under-counts by the mean-over-targets fan-out and its cap check never
+    refused.  See RESOURCE_CORRECTIONS and the 'corrections' block this script emits.
     """
 
     def __init__(self, cap):
@@ -586,6 +721,7 @@ def main():
                               "optimizer_step": 0, "ppo_replay": 0, "autograd": 0,
                               "training_rng_restore": 0, "checkpoint_write": 0},
     }
+    out["corrections"] = RESOURCE_CORRECTIONS
     out["limitations"] = [
         "The R68 model repeatedly SAW these training scenes during its own training; the OOF split "
         "is OOF only for the diagnostic regression, not for the model. Not an independent confirmation.",

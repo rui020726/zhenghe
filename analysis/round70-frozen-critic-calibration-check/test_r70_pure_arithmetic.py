@@ -116,6 +116,89 @@ def test_fold_grouping_is_scene_shared_and_deterministic():
         assert 0 <= s2f1[s] < 5
 
 
+# --------------------------------------------------------------------------------------
+# Appended after the R70-C1 resource correction.  These lock the CORRECTED caliber: the
+# authoritative forward unit is the actual 19-D input-vector rows fed to the trunk, including
+# the mean-over-targets expansion, NOT the joint decision-step row and NOT the call count.
+# Pure arithmetic only: synthetic row lists, no data files, no network.
+# --------------------------------------------------------------------------------------
+from r70_frozen_critic_calibration_check import BATCH_CAP, RESOURCE_CORRECTIONS  # noqa: E402
+
+
+def _schedule(target_counts, batch_cap):
+    """Reproduce the extract_embeddings flush schedule (pure counting, no trunk call)."""
+    flushes, batch, batch_targets = [], [], 0
+    for k in target_counts:
+        if batch and (batch_targets + k > batch_cap):
+            flushes.append(batch)
+            batch, batch_targets = [], 0
+        batch.append(k)
+        batch_targets += k
+    if batch:
+        flushes.append(batch)
+    return flushes
+
+
+def test_authoritative_unit_is_target_level_input_rows():
+    # 3 decision rows with 6 / 2 / 1 targets: 3 joint rows but 9 trunk input rows.
+    counts = [6, 2, 1]
+    flushes = _schedule(counts, BATCH_CAP)
+    decision_rows = sum(len(f) for f in flushes)
+    authoritative = sum(sum(f) for f in flushes)
+    assert decision_rows == 3
+    assert authoritative == 9
+    # the two units are NOT interchangeable; the cap must be read on the authoritative one
+    assert authoritative != decision_rows
+
+
+def test_batching_schedule_respects_batch_cap_and_totals():
+    import random as _r
+    rng = _r.Random(7)
+    counts = [rng.randint(1, 6) for _ in range(500)]
+    flushes = _schedule(counts, BATCH_CAP)
+    assert all(sum(f) <= BATCH_CAP for f in flushes)          # never exceeds the per-batch cap
+    assert sum(len(f) for f in flushes) == len(counts)        # no row lost or duplicated
+    assert sum(sum(f) for f in flushes) == sum(counts)        # every target row charged once
+    # a single oversized row is still flushed alone (and would breach the cap on its own)
+    big = _schedule([1, BATCH_CAP + 5, 1], BATCH_CAP)
+    assert sum(big[1]) == BATCH_CAP + 5
+
+
+def test_decision_row_charge_can_pass_while_authoritative_unit_exceeds():
+    # Concretely locks the R70-C1 bug: charging joint rows can stay under the cap while the
+    # mean-over-targets expansion already blew past it.
+    b = ForwardBudget(36000)
+    for _ in range(100):
+        b.charge(320, 590)          # 320 joint rows -> 590 target-level trunk input rows
+    assert b.rows == 32000 and b.target_evals == 59000
+    assert b.rows <= 36000                      # the old check passes ...
+    assert b.target_evals > 36000               # ... but the authoritative unit already exceeded
+
+
+def test_recorded_reconciliation_arithmetic():
+    c = RESOURCE_CORRECTIONS["independent_readonly_reconciliation"]
+    assert c["target_level_trunk_input_rows_AUTHORITATIVE"] == 58928 + 1872
+    assert c["decision_step_rows_charged"] == 32046 + 1112
+    assert c["forward_calls"] == 59 + 1112
+    v = RESOURCE_CORRECTIONS["verdict"]
+    assert v["authoritative_consumption"] - v["cap"] == v["over_by"] == 24800
+    assert v["exceeded"] is True
+    assert c["max_real_input_batch_target_rows"] <= BATCH_CAP
+
+
+def test_evidence_grade_registers_unknown_not_zero():
+    g = RESOURCE_CORRECTIONS["evidence_grade_of_the_60800_figure"]
+    assert g["not_a_per_call_persistent_ledger"] is True
+    assert g["untracked_early_attempts"] == "UNKNOWN"      # never silently zero
+    assert "LOWER BOUND" in g["untracked_early_attempts_note"].upper()
+
+
+def test_fit_plan_is_15_ridge_plus_15_intercept():
+    n_seeds, n_folds = 3, 5
+    assert n_seeds * n_folds == 15 and n_seeds * n_folds == 15
+    assert n_seeds * n_folds * 2 == 30
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     for fn in fns:
