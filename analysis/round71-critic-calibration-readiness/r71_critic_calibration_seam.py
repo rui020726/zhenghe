@@ -20,10 +20,15 @@ raw 64-D embedding affine head is exact closed-form algebra, implemented below.
 """
 from __future__ import annotations
 
+import contextlib
 import json
+import os
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import numpy as np
+
+FEATURE_DIM = 19          # the real 19-D per-target trunk input row
 
 # ----------------------------------------------------------------------------------------
 # frozen structural facts, taken from on-disk R68/R70 JSON evidence (no .pt opened here)
@@ -41,6 +46,15 @@ TRAINING_VERSION = (
     "+r66-frozen-early-path-late-adaptation/1+r68-late-initial-confidence-alpha0.10/1")
 R68_STRUCTURE = "partitioned-early-late-actor-head/1+frozen-early-path-late-adaptation/1"
 
+# restore-source role contract (correction pass): an INIT source is the qualified R68 ep0
+# model-only parameters; a FULL restore may only carry THIS NEW run's own trained state.
+RESTORE_ROLES = ("r68_ep0_model_only", "new_full_restore", "rule_control_readonly")
+RESTORE_IDENTITY_FIELDS = ("seed", "role", "structure", "module_set",
+                           "training_version", "source_kind")
+INIT_SOURCE_KINDS = ("r68_ep0",)            # the qualified R68 ep0 model-only parameters
+OWN_RUN_SOURCE_KINDS = ("this_run",)        # this NEW run's own checkpoint
+FOREIGN_SOURCE_KINDS = ("foreign_run", "other_round", "r58", "r60", "r66", "r68_trained")
+
 # candidate diagnostic configuration, LOCKED (registered, not licensed)
 RIDGE = 1e-3                 # fixed; no sweep
 CENTER_SCALE_SCOPE = "all training teacher rows of that seed"   # no held-out fold in the candidate
@@ -51,6 +65,9 @@ FITS_PER_SEED = 1            # one dual-output fit per seed, no CV, no seed sele
 # candidate resource budgets (offline phase only; any licensed run is counted separately)
 OFFLINE_INPUT_ROW_CAP = 72000   # actual 19-D trunk input-vector rows
 BATCH_INPUT_ROW_CAP = 1024      # max real input rows per forward batch
+
+# persisted-ledger identity: a state file of any other identity is NEVER adopted as ours
+LEDGER_IDENTITY = "round71-critic-calibration-offline-trunk-input-ledger/1"
 CANDIDATE_SYNTHETIC_OPTIMIZER_CAP = 16   # registered only; 0 consumed this round
 
 
@@ -68,6 +85,22 @@ class DuplicateOutput(RuntimeError):
 
 class IllegalRestoreSource(RuntimeError):
     """Raised when an old checkpoint is offered as a NEW training restore source."""
+
+
+class LedgerStateError(RuntimeError):
+    """Persisted ledger state is missing, corrupt, inconsistent, or of a foreign identity."""
+
+
+class LicenseInvalid(RuntimeError):
+    """A presented licence object failed verification and is NOT a licence."""
+
+
+class BatchTooLarge(RuntimeError):
+    """A REAL trunk input batch exceeds the per-batch input-row cap."""
+
+
+class TrunkInputError(RuntimeError):
+    """A real trunk input matrix failed shape validation at the trunk entry."""
 
 
 # ========================================================================================
@@ -206,9 +239,21 @@ class ForwardLedger:
     retry and repeat is charged.
 
     ``debit`` is called BEFORE the forward and refuses when the charge would cross the cap, so
-    an over-cap batch is never started.  This is an in-process guard over a persisted counter;
-    it does NOT claim physical power-loss atomicity -- a spy or no-op is not a real update, and
-    this class does not pretend otherwise.
+    an over-cap batch is never started.  This is an in-process guard over a persisted counter.
+
+    Correction pass (R71) hardening, each verified by a spy test:
+      * persisted state is VALIDATED on load: missing, corrupt, non-integer, negative,
+        over-cap, wrong-cap or foreign-identity state raises ``LedgerStateError`` and is NEVER
+        silently treated as zero;
+      * ``_persist`` writes a same-directory temporary file, fsyncs it and ``os.replace``s it
+        over the state file, so a reader never observes a half-written counter;
+      * mutation is serialised by a same-directory lock file that FAILS CLOSED on a residual
+        lock unless the caller supplies an explicit recorded ``recovery_basis``; the lock is
+        never auto-deleted;
+      * ``debit`` persists the NEW state BEFORE committing it in memory, so a persist failure
+        leaves the in-memory counter untouched, and a refusal is recorded without any refund.
+    This class does NOT claim physical power-loss atomicity, and a spy or no-op is not a real
+    update; it does not pretend otherwise.
     """
 
     def __init__(self, cap=OFFLINE_INPUT_ROW_CAP, state_path=None):
@@ -218,31 +263,123 @@ class ForwardLedger:
         self.refusals = 0
         self.joint_rows = 0          # informational only; NEVER used for the cap comparison
         self.state_path = Path(state_path) if state_path else None
+        self.last_recovery_basis = None
         if self.state_path is not None and self.state_path.is_file():
+            self._load()
+
+    # ------------------------------------------------------------------ state validation
+    def _load(self):
+        """Adopt persisted state ONLY after full validation; never silently zero."""
+        try:
             saved = json.loads(self.state_path.read_text(encoding="utf-8"))
-            self.rows = int(saved.get("rows", 0))
-            self.calls = int(saved.get("calls", 0))
+        except (OSError, ValueError) as exc:
+            raise LedgerStateError(
+                f"forward ledger state {self.state_path} is unreadable or corrupt: {exc}") from exc
+        if not isinstance(saved, dict):
+            raise LedgerStateError("forward ledger state must be a JSON object")
+        for key in ("identity", "cap", "rows", "calls", "refusals", "joint_rows"):
+            if key not in saved:
+                raise LedgerStateError(
+                    f"forward ledger state is missing the required key {key!r}; a partial or "
+                    f"foreign state file is never silently treated as zero")
+        for key in ("cap", "rows", "calls", "refusals", "joint_rows"):
+            v = saved[key]
+            if isinstance(v, bool) or not isinstance(v, int):
+                raise LedgerStateError(f"forward ledger state key {key!r} must be an int")
+            if v < 0:
+                raise LedgerStateError(
+                    f"forward ledger state key {key!r} must be non-negative")
+        if saved["identity"] != LEDGER_IDENTITY:
+            raise LedgerStateError(
+                f"forward ledger state identity {saved['identity']!r} != {LEDGER_IDENTITY!r}; "
+                f"a foreign ledger is never adopted as this round's consumption")
+        if saved["cap"] != self.cap:
+            raise LedgerStateError(
+                f"forward ledger state cap {saved['cap']} != this ledger's cap {self.cap}")
+        if saved["rows"] > saved["cap"]:
+            raise LedgerStateError(
+                f"forward ledger state rows {saved['rows']} exceed its cap {saved['cap']}")
+        self.rows = saved["rows"]
+        self.calls = saved["calls"]
+        self.refusals = saved["refusals"]
+        self.joint_rows = saved["joint_rows"]
+
+    def _state_dict(self):
+        return {"identity": LEDGER_IDENTITY, "cap": self.cap, "rows": self.rows,
+                "calls": self.calls, "refusals": self.refusals,
+                "joint_rows": self.joint_rows}
 
     def _persist(self):
+        """Atomically replace the state file: same-dir temp, fsync, os.replace."""
         if self.state_path is None:
             return
-        self.state_path.write_text(json.dumps({"rows": self.rows, "calls": self.calls}),
-                                   encoding="utf-8")
+        self.state_path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = self.state_path.with_name(self.state_path.name + ".tmp")
+        with open(tmp, "w", encoding="utf-8") as fh:
+            json.dump(self._state_dict(), fh)
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(tmp, self.state_path)
 
-    def debit(self, n_input_rows, n_joint_rows=0):
+    # ------------------------------------------------------------------ locking
+    @contextlib.contextmanager
+    def _locked(self, recovery_basis=None):
+        """Serialise mutation; fail closed on a residual lock without a legal basis.
+
+        A residual lock is NEVER auto-deleted: the caller must pass an explicit
+        ``recovery_basis`` string, which is recorded on the ledger.  Without one the ledger
+        refuses to mutate, because silently stealing a lock could double-charge.
+        """
+        if self.state_path is None:
+            yield
+            return
+        lock = self.state_path.with_name(self.state_path.name + ".lock")
+        try:
+            fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        except FileExistsError:
+            if recovery_basis is None:
+                raise LedgerStateError(
+                    f"residual ledger lock {lock} is present; refusing to mutate without an "
+                    f"explicit recorded recovery basis (locks are never auto-deleted)")
+            os.unlink(lock)
+            self.last_recovery_basis = str(recovery_basis)
+            fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        try:
+            with os.fdopen(fd, "w") as fh:
+                fh.write(str(os.getpid()))
+            yield
+        finally:
+            try:
+                os.unlink(lock)
+            except OSError:
+                pass
+
+    def debit(self, n_input_rows, n_joint_rows=0, recovery_basis=None):
         """Atomically reserve n_input_rows BEFORE any forward.  Refuses before exceeding."""
         n_input_rows = int(n_input_rows)
+        n_joint_rows = int(n_joint_rows)
         if n_input_rows < 0:
             raise ValueError("negative input-row charge")
         if self.rows + n_input_rows > self.cap:
-            self.refusals += 1
+            # a refusal is recorded and persisted; it is never refunded and never dropped
+            with self._locked(recovery_basis):
+                self.refusals += 1
+                self._persist()
             raise BudgetExceeded(
                 f"forward ledger: refusing {n_input_rows} input rows; used {self.rows} of "
                 f"cap {self.cap} (would reach {self.rows + n_input_rows})")
-        self.rows += n_input_rows
-        self.joint_rows += int(n_joint_rows)
-        self.calls += 1
-        self._persist()
+        # persist the NEW state first; only then commit in memory, so a persist failure
+        # cannot leave a phantom in-memory charge that was never made durable
+        with self._locked(recovery_basis):
+            saved = (self.rows, self.calls, self.refusals, self.joint_rows)
+            self.rows += n_input_rows
+            self.joint_rows += n_joint_rows
+            self.calls += 1
+            try:
+                self._persist()
+            except OSError:
+                (self.rows, self.calls, self.refusals, self.joint_rows) = saved
+                raise
         return self.rows
 
     def remaining(self):
@@ -250,12 +387,18 @@ class ForwardLedger:
 
 
 def build_batches(target_counts, cap=BATCH_INPUT_ROW_CAP):
-    """Group decision steps into forward batches of at most ``cap`` REAL input rows.
+    """ESTIMATE-ONLY planner: group decision steps into prospective forward batches.
 
-    Whole decision steps are kept together (a step's embedding is the mean over its targets),
-    and a step is only added when it still fits.  A single step whose own target count exceeds
-    the cap is emitted alone and reported as an over-cap batch by the caller, never silently
-    split, because splitting would change the mean-over-targets aggregation.
+    Correction note (R71): the per-step target counts are ESTIMATES known before any real
+    trunk call, so this planner is NOT billing evidence and must never pre-debit the ledger.
+    The real charge is the actual row count of the matrix handed to the trunk, validated and
+    atomically debited at the trunk entry (see ``CalibrationInitializer.guarded_trunk_forward``),
+    which REFUSES an over-cap real batch (``BatchTooLarge``) instead of forwarding it.  The
+    earlier "never silently split, because splitting would change the mean-over-targets
+    aggregation" rationale is not a licence to forward an over-cap batch; it only explains why
+    the planner does not itself split.  Planner behaviour is unchanged: whole decision steps
+    are kept together, a step is only added when it still fits, and a single step whose own
+    target count exceeds the cap is emitted alone for the caller to report.
     """
     batches, batch, batch_rows = [], [], 0
     for k in target_counts:
@@ -270,33 +413,101 @@ def build_batches(target_counts, cap=BATCH_INPUT_ROW_CAP):
     return batches
 
 
-class LicenseGate:
-    """Fail-closed gate.  A real experiment licence token is REQUIRED for every gated action.
+@dataclass(frozen=True)
+class RealLicense:
+    """A verified experiment licence.  A raw token string or dict is NEVER a licence.
 
-    No licence is present this round, so ``require`` always raises.  The gate is checked
-    BEFORE any data fit, model forward, claim or checkpoint write, and before any episode
-    call.  It deliberately adds no extra conditions of its own (no "receipt must live outside
-    the repo", no "exactly N claim files", and similar invented requirements).
+    Correction note (R71): the previous gate accepted ANY truthy token.  A licence must now
+    carry a complete declared identity, and only a verifier-accepted ``RealLicense`` counts.
+    """
+
+    approval_id: str
+    task_id: str
+    source_freeze_sha256: str
+    input_identity_sha256: str
+    quota_identity: str
+    issued_by: str
+    test_only: bool = False
+
+    @classmethod
+    def from_mapping(cls, mapping):
+        if not isinstance(mapping, dict):
+            raise LicenseInvalid("a licence must be a declared mapping")
+        required = ("approval_id", "task_id", "source_freeze_sha256",
+                    "input_identity_sha256", "quota_identity", "issued_by")
+        missing = [k for k in required if not mapping.get(k)]
+        if missing:
+            raise LicenseInvalid(f"licence mapping is missing fields: {missing}")
+        return cls(**{k: mapping[k] for k in required},
+                   test_only=bool(mapping.get("test_only", False)))
+
+
+def spy_license_verifier(license):
+    """Spy verifier for tests ONLY; it can never unlock the real provider."""
+    return isinstance(license, RealLicense)
+
+
+spy_license_verifier.test_only = True
+
+
+class LicenseGate:
+    """Fail-closed gate.  A VERIFIED RealLicense is REQUIRED for every gated action.
+
+    Correction note (R71): ``licensed`` is no longer ``bool(self.token)``.  A licence must be
+    a ``RealLicense`` accepted by a verifier; with no verifier the gate refuses everything; a
+    test-only spy verifier can never unlock the real provider; and ``require`` refuses both an
+    absent licence and a test-only one.  No real licence is present this round, so every gated
+    action still fails closed, and the gate deliberately adds no invented conditions of its
+    own (no "receipt must live outside the repo", no "exactly N claim files").
     """
 
     GATED_ACTIONS = ("fit_real_data", "model_forward", "claim_write", "checkpoint_write",
                      "episode_call", "optimizer_step", "ppo_replay", "environment_build")
 
-    def __init__(self, token=None):
-        self.token = token
+    def __init__(self, token=None, verifier=None):
+        self.verifier = verifier
+        self._license = None
+        if token is None:
+            return
+        if not isinstance(token, RealLicense):
+            raise LicenseInvalid(
+                f"a raw {type(token).__name__} is not a licence; a verifier-accepted "
+                f"RealLicense object is required")
+        if verifier is None or not verifier(token):
+            raise LicenseInvalid("the presented licence failed verification")
+        self._license = token
 
     @property
     def licensed(self):
-        return bool(self.token)
+        return self.present()
+
+    def present(self):
+        """True only on the REAL path: a verified, non-test-only licence AND verifier."""
+        if self._license is None or self._license.test_only:
+            return False
+        if self.verifier is None or getattr(self.verifier, "test_only", False):
+            return False
+        return True
+
+    def present_for_test(self):
+        """Spy path: a test-only licence was accepted by the test-only spy verifier."""
+        return (self._license is not None and self._license.test_only
+                and getattr(self.verifier, "test_only", False))
 
     def require(self, action):
         if action not in self.GATED_ACTIONS:
             raise ValueError(f"unknown gated action: {action}")
-        if not self.licensed:
-            raise LicenseMissing(
-                f"action '{action}' refused: no real experiment licence token is present "
-                f"(ROUND71 is zero-consumption preparation only; the candidate plan is "
-                f"APPROVAL_PENDING and must not be treated as an authorisation)")
+        if self.present():
+            return
+        if self._license is not None and (self._license.test_only
+                                          or getattr(self.verifier, "test_only", False)):
+            raise LicenseInvalid(
+                f"action '{action}' refused: only a TEST-ONLY licence/verifier is present; "
+                f"it cannot unlock the real provider")
+        raise LicenseMissing(
+            f"action '{action}' refused: no verified real experiment licence is present "
+            f"(ROUND71 is zero-consumption preparation only; the candidate plan is "
+            f"APPROVAL_PENDING and must not be treated as an authorisation)")
 
 
 class DuplicateOutputGuard:
@@ -313,41 +524,88 @@ class DuplicateOutputGuard:
 
 
 def validate_restore_source(source):
-    """Refuse any old checkpoint as a NEW training restore source.
+    """Refuse any illegal NEW training initialise/restore source (descriptive layer only).
 
-    The candidate must start from a legitimate NEW training state built on the qualified R68
-    ep0 parameters.  A trained ep128, an R68 four-module checkpoint, or anything carrying a
-    trained optimizer / lambda / RNG state is NOT a legal initialisation or restore source.
+    Correction note (R71): the previous version trusted caller boolean flags and let an EMPTY
+    module list pass.  A source must now declare a complete identity block (seed, role,
+    structure, module_set, training_version, source_kind), and the flags are interpreted
+    through that identity:
+
+      * ``r68_ep0_model_only`` (source_kind ``r68_ep0``) is the legal INIT source: the
+        qualified R68 ep0 model parameters.  It MAY carry the frozen INITIAL random state
+        (``carries_initial_rng_state``) -- that is NOT a trained RNG and must not be
+        misclassified as one -- but it may NOT carry a trained optimizer, a trained dual
+        lambda, or advanced training RNG state;
+      * ``new_full_restore`` (source_kind ``this_run``) may carry THIS NEW run's own trained
+        optimizer / lambda / advanced training RNG; a FOREIGN run's trained state is refused,
+        so a future legitimate resume of this run is not blocked while R58/R60/R66/R68
+        artefacts are still refused;
+      * ``rule_control_readonly`` is a read-only rule control and may carry no trained state.
+
+    A trained ep128, an old single-head / four-module checkpoint, an incomplete identity, a
+    foreign structure/version, or both initial and advanced RNG flags together are all
+    refused.  This check is descriptive only: it opens no .pt file and restores nothing.
     """
     if not isinstance(source, dict):
         raise IllegalRestoreSource("restore source must be a declared dict")
-    declared = source.get("declared_purpose")
-    if declared != "new_training_initialisation":
+    identity = source.get("identity")
+    if not isinstance(identity, dict):
         raise IllegalRestoreSource(
-            f"restore source declared_purpose={declared!r}; only "
-            f"'new_training_initialisation' is legal for the candidate")
-    if source.get("carries_trained_optimizer_state"):
+            "restore source must declare an 'identity' block; caller flags alone are not a "
+            "declaration")
+    missing = [f for f in RESTORE_IDENTITY_FIELDS if f not in identity]
+    if missing:
+        raise IllegalRestoreSource(f"restore source identity is incomplete: missing {missing}")
+    role = identity["role"]
+    if role not in RESTORE_ROLES:
         raise IllegalRestoreSource(
-            "restore source carries a trained optimizer state; the candidate must start a "
-            "fresh optimizer from the R68 ep0 parameters")
-    if source.get("carries_trained_lambda"):
+            f"restore source role {role!r} not in {RESTORE_ROLES}")
+    seed = identity["seed"]
+    if isinstance(seed, bool) or not isinstance(seed, int):
+        raise IllegalRestoreSource("restore source identity 'seed' must be an int")
+    if identity["structure"] != R68_STRUCTURE:
         raise IllegalRestoreSource(
-            "restore source carries a trained dual lambda; the candidate must start from the "
-            "R68 ep0 lambda")
-    if source.get("carries_training_rng"):
+            f"restore source structure {identity['structure']!r} != {R68_STRUCTURE!r}")
+    tv = identity["training_version"]
+    if not isinstance(tv, str) or not tv.startswith(TRAINING_VERSION):
         raise IllegalRestoreSource(
-            "restore source carries a training RNG state; the candidate must start from the "
-            "frozen initial random state")
+            "restore source training_version must extend the frozen R68 version string")
+    kind = identity["source_kind"]
+    module_set = set(identity["module_set"] or ())
+    if role != "rule_control_readonly" and module_set != set(MODULES):
+        raise IllegalRestoreSource(
+            f"restore source module set {sorted(module_set)} != the 5-module contract "
+            f"{sorted(MODULES)}; an old single-head / four-module checkpoint is not a legal "
+            f"NEW restore source")
+    carries_opt = bool(source.get("carries_trained_optimizer_state"))
+    carries_lam = bool(source.get("carries_trained_lambda"))
+    carries_adv_rng = bool(source.get("carries_advanced_training_rng"))
+    carries_init_rng = bool(source.get("carries_initial_rng_state"))
+    if carries_init_rng and carries_adv_rng:
+        raise IllegalRestoreSource(
+            "a source cannot carry both the initial and an advanced training RNG state")
     if source.get("from_trained_ep128"):
         raise IllegalRestoreSource(
             "restore source is a trained ep128 checkpoint; the candidate may not be "
             "initialised or resumed from a trained ep128")
-    modules = set(source.get("modules", ()))
-    if modules and modules != set(MODULES):
-        raise IllegalRestoreSource(
-            f"restore source module set {sorted(modules)} != the 5-module contract "
-            f"{sorted(MODULES)}; an old single-head / four-module checkpoint is not a legal "
-            f"NEW restore source")
+    if role == "r68_ep0_model_only":
+        if kind not in INIT_SOURCE_KINDS:
+            raise IllegalRestoreSource(
+                f"r68_ep0_model_only source_kind {kind!r} not in {INIT_SOURCE_KINDS}")
+        if carries_opt or carries_lam or carries_adv_rng:
+            raise IllegalRestoreSource(
+                "the R68 ep0 INIT source carries trained optimizer/lambda/RNG state; the "
+                "candidate must start a fresh optimizer, the ep0 lambda and the frozen "
+                "initial random state")
+    elif role == "new_full_restore":
+        if kind not in OWN_RUN_SOURCE_KINDS:
+            raise IllegalRestoreSource(
+                f"new_full_restore source_kind {kind!r} not in {OWN_RUN_SOURCE_KINDS}; a "
+                f"foreign run's trained state (e.g. {list(FOREIGN_SOURCE_KINDS)}) is never a "
+                f"legal restore source for this run")
+    else:  # rule_control_readonly
+        if carries_opt or carries_lam or carries_adv_rng:
+            raise IllegalRestoreSource("a read-only rule control may carry no trained state")
     return True
 
 
@@ -358,38 +616,74 @@ class CalibrationInitializer:
     """Orchestrates the candidate critic-calibration initialisation.
 
     Every step that would touch real state is gated.  The collaborators (embedding extractor,
-    ridge fitter, head installer) are injected so tests can substitute pure-arithmetic or spy
-    implementations and never reach a real model.  With no licence token, ``run`` fails closed
-    at the FIRST gate, before any fit, forward, claim or checkpoint write.
+    ridge fitter, head installer, trunk delegate) are injected so tests can substitute
+    pure-arithmetic or spy implementations and never reach a real model.  With no licence
+    token, ``run`` fails closed at the FIRST gate, before any fit, forward, claim or
+    checkpoint write.
+
+    Correction note (R71): ``run`` no longer pre-debits the ledger from ESTIMATED per-step
+    target counts.  The only charge is the REAL row count of the matrix handed to the trunk,
+    validated and atomically debited inside ``guarded_trunk_forward`` at the trunk entry,
+    which then delegates the same matrix exactly once.  Estimated counts are recorded as
+    trace metadata only and are never billing evidence; joint decision rows and real
+    target-level input rows are counted separately by the ledger.
     """
 
     def __init__(self, gate, ledger, embedding_extractor=None, ridge_fitter=None,
-                 head_installer=None, output_path=None):
+                 head_installer=None, output_path=None, trunk_delegate=None):
         self.gate = gate
         self.ledger = ledger
         self.embedding_extractor = embedding_extractor
         self.ridge_fitter = ridge_fitter
         self.head_installer = head_installer
         self.output_path = Path(output_path) if output_path else None
+        # the real trunk forward is NOT wired this round; the default delegate is an identity
+        # echo so the guard boundary itself can be tested without any neural computation
+        self.trunk_delegate = trunk_delegate or (lambda matrix: matrix)
         self.trace = []
 
-    def run(self, seeds, target_counts_by_seed):
+    def guarded_trunk_forward(self, matrix, n_joint_rows=1):
+        """The single REAL trunk entry: validate, debit the actual rows, delegate once.
+
+        Refuses BEFORE any charge: a non-2-D matrix, a wrong feature width, a non-positive
+        row count, or more than ``BATCH_INPUT_ROW_CAP`` real input rows.  Every accepted call
+        is charged, including repeats and calls whose delegate then fails.
+        """
+        m = np.asarray(matrix)
+        if m.ndim != 2 or m.shape[1] != FEATURE_DIM:
+            raise TrunkInputError(
+                f"trunk input must be a 2-D (N, {FEATURE_DIM}) matrix, got shape {m.shape}")
+        n = int(m.shape[0])
+        if n <= 0:
+            raise TrunkInputError("trunk input must carry at least one real row")
+        if n > BATCH_INPUT_ROW_CAP:
+            raise BatchTooLarge(
+                f"trunk input batch of {n} real rows exceeds the per-batch cap "
+                f"{BATCH_INPUT_ROW_CAP}; refused BEFORE any charge")
+        self.ledger.debit(n, n_joint_rows=n_joint_rows)
+        return self.trunk_delegate(m)
+
+    def run(self, seeds, target_counts_by_seed=None):
         # gate 1: real-data fit
         self.gate.require("fit_real_data")
         self.trace.append("gate:fit_real_data")
         # gate 2: model forward (the embedding extraction itself)
         self.gate.require("model_forward")
         self.trace.append("gate:model_forward")
-        # reserve the ledger BEFORE any forward, per batch of real input rows
-        for seed in seeds:
-            for batch in build_batches(target_counts_by_seed[seed]):
-                self.ledger.debit(sum(batch), n_joint_rows=len(batch))
-            self.trace.append(f"ledger:seed{seed}")
-        embeddings = {s: self.embedding_extractor(s) for s in seeds}
+        # estimated per-step counts are TRACE METADATA ONLY -- never a ledger pre-debit
+        if target_counts_by_seed:
+            for seed in seeds:
+                est = sum(int(k) for k in target_counts_by_seed.get(seed, ()))
+                self.trace.append(f"estimate_only:seed{seed}:{est}")
+        # the extractor receives the guarded trunk entry and is charged for REAL rows only
+        embeddings = {s: self.embedding_extractor(s, self.guarded_trunk_forward)
+                      for s in seeds}
         fits = {s: self.ridge_fitter(s, embeddings[s]) for s in seeds}
         # gate 3: checkpoint write
         self.gate.require("checkpoint_write")
         self.trace.append("gate:checkpoint_write")
+        if self.output_path is None:
+            raise ValueError("a licensed run must declare an explicit output path")
         DuplicateOutputGuard(self.output_path).check()
         heads = {s: self.head_installer(s, fits[s]) for s in seeds}
         return heads

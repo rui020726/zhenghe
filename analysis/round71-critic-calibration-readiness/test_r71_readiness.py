@@ -6,6 +6,7 @@ autograd, no real-data fit, no model load, no RNG restore, no checkpoint write, 
 and no episode.  The only numbers are synthetic in-memory arrays and a private temporary
 counter.  A spy or no-op here is NOT a real update and does not prove power-loss atomicity.
 """
+import json
 import sys
 from pathlib import Path
 
@@ -16,9 +17,12 @@ from r71_critic_calibration_seam import (  # noqa: E402
     EMBED_DIM, MODULES, FROZEN_MODULES, TRAINABLE_MODULES, CRITIC_HEAD_MODULES,
     OFFLINE_INPUT_ROW_CAP, BATCH_INPUT_ROW_CAP, RIDGE, CANDIDATE_PLAN,
     LicenseMissing, BudgetExceeded, DuplicateOutput, IllegalRestoreSource,
+    LedgerStateError, LicenseInvalid, BatchTooLarge, TrunkInputError,
     standardized_to_raw_affine, predict_standardized, predict_raw, affine_to_critic_heads,
     CriticHeadSet, ParameterContainer, ForwardLedger, build_batches, LicenseGate,
-    DuplicateOutputGuard, validate_restore_source, CalibrationInitializer)
+    DuplicateOutputGuard, validate_restore_source, CalibrationInitializer,
+    FEATURE_DIM, LEDGER_IDENTITY, RESTORE_ROLES, R68_STRUCTURE, TRAINING_VERSION,
+    RealLicense, spy_license_verifier)
 
 
 # ------------------------------------------------------------------ 1. coefficient transform
@@ -366,11 +370,35 @@ def test_trained_ep128_and_old_checkpoints_are_refused():
         assert raised, f"must be refused: {src}"
 
 
-def test_legal_new_training_initialisation_is_accepted():
-    ok = {"declared_purpose": "new_training_initialisation", "modules": list(MODULES),
-          "carries_trained_optimizer_state": False, "carries_trained_lambda": False,
-          "carries_training_rng": False, "from_trained_ep128": False}
-    assert validate_restore_source(ok) is True
+def test_superseded_incomplete_initialisation_is_now_refused():
+    """SUPERSEDED CONTRACT (correction note, R71).
+
+    The first pass accepted a bare flag dict with NO identity block as a legal NEW training
+    initialisation, and its ``if modules and modules != set(MODULES)`` test let an EMPTY
+    module list pass.  The corrected contract requires a complete identity block and refuses
+    the old shape.  The legal forms are covered by
+    ``test_legal_r68_ep0_model_only_source_is_accepted`` and
+    ``test_legal_new_full_restore_of_this_run_is_accepted`` below.
+    """
+    superseded = {"declared_purpose": "new_training_initialisation", "modules": list(MODULES),
+                  "carries_trained_optimizer_state": False, "carries_trained_lambda": False,
+                  "carries_training_rng": False, "from_trained_ep128": False}
+    raised = False
+    try:
+        validate_restore_source(superseded)
+    except IllegalRestoreSource:
+        raised = True
+    assert raised, "an identity-less flag dict is no longer a legal restore source"
+    empty_modules = {"identity": {"seed": 11, "role": "r68_ep0_model_only",
+                                  "structure": R68_STRUCTURE, "module_set": [],
+                                  "training_version": TRAINING_VERSION,
+                                  "source_kind": "r68_ep0"}}
+    raised = False
+    try:
+        validate_restore_source(empty_modules)
+    except IllegalRestoreSource:
+        raised = True
+    assert raised, "an empty module set is no longer waved through"
 
 
 def test_duplicate_output_guard_refuses_implicit_rerun():
@@ -399,6 +427,404 @@ def test_candidate_plan_is_registered_as_approval_pending():
     assert CANDIDATE_PLAN["budgets"]["offline_input_row_cap"] == OFFLINE_INPUT_ROW_CAP == 72000
     assert CANDIDATE_PLAN["budgets"]["batch_input_row_cap"] == BATCH_INPUT_ROW_CAP == 1024
     assert CANDIDATE_PLAN["budgets"]["candidate_synthetic_optimizer_cap"] == 16
+
+
+# ========================================================================================
+# 7. ROUND71 correction-pass spy counterexamples (still pure arithmetic / spy only)
+# ========================================================================================
+def _write_state(p, payload):
+    p.write_text(payload if isinstance(payload, str) else json.dumps(payload),
+                 encoding="utf-8")
+
+
+def _state(rows=0, calls=0, refusals=0, joint_rows=0, cap=1000,
+           identity=LEDGER_IDENTITY):
+    return {"identity": identity, "cap": cap, "rows": rows, "calls": calls,
+            "refusals": refusals, "joint_rows": joint_rows}
+
+
+# ---------------------------------------------------------------- licence gate hardening
+def test_raw_string_or_dict_token_is_not_a_licence():
+    for bad in ("RAW-TOKEN-1234", {"approval_id": "x", "task_id": "y"}):
+        raised = False
+        try:
+            LicenseGate(token=bad)
+        except LicenseInvalid:
+            raised = True
+        assert raised, f"a raw {type(bad).__name__} must be rejected at construction"
+
+
+def test_licence_mapping_missing_fields_is_refused():
+    raised = False
+    try:
+        RealLicense.from_mapping({"approval_id": "only-this"})
+    except LicenseInvalid:
+        raised = True
+    assert raised, "an incomplete licence mapping is refused"
+
+
+def test_spy_license_verifier_cannot_unlock_the_real_provider():
+    lic = RealLicense(approval_id="SYNTHETIC", task_id="ROUND71-TEST",
+                      source_freeze_sha256="0" * 64, input_identity_sha256="1" * 64,
+                      quota_identity="round71-offline-cap-72000/1", issued_by="spy",
+                      test_only=True)
+    gate = LicenseGate(token=lic, verifier=spy_license_verifier)
+    assert gate.present_for_test() and not gate.present()
+    raised = False
+    try:
+        gate.require("model_forward")
+    except LicenseInvalid:
+        raised = True
+    assert raised, "a test-only spy licence must not unlock the real provider"
+    # even a NON-test-only licence object fails if only a spy verifier attests it
+    lic2 = replace_test_only(lic, False)
+    gate2 = LicenseGate(token=lic2, verifier=spy_license_verifier)
+    assert not gate2.present()
+    raised = False
+    try:
+        gate2.require("model_forward")
+    except LicenseInvalid:
+        raised = True
+    assert raised, "a spy verifier alone is not a real verification"
+
+
+def replace_test_only(lic, flag):
+    return RealLicense(approval_id=lic.approval_id, task_id=lic.task_id,
+                       source_freeze_sha256=lic.source_freeze_sha256,
+                       input_identity_sha256=lic.input_identity_sha256,
+                       quota_identity=lic.quota_identity, issued_by=lic.issued_by,
+                       test_only=flag)
+
+
+def _real_verifier(license):
+    """NOT a spy: stands in for a real verifier so the gate's accept path is testable."""
+    return isinstance(license, RealLicense) and not license.test_only
+
+
+def test_verified_real_licence_opens_the_gate():
+    """Synthetic licence OBJECT only -- this is not a real approval and confers nothing."""
+    lic = RealLicense(approval_id="SYNTHETIC-NOT-A-REAL-APPROVAL",
+                      task_id="ROUND71-CRITIC-CALIBRATION-ZERO-USE-READINESS",
+                      source_freeze_sha256="0" * 64, input_identity_sha256="1" * 64,
+                      quota_identity="round71-offline-cap-72000/1", issued_by="test")
+    gate = LicenseGate(token=lic, verifier=_real_verifier)
+    assert gate.present() and gate.licensed
+    for action in LicenseGate.GATED_ACTIONS:
+        gate.require(action)          # must not raise
+
+
+# ---------------------------------------------------------------- ledger state hardening
+def test_ledger_refuses_corrupt_state():
+    with _ephemeral(_scratch_dir("led_corrupt")) as d:
+        p = d / "ledger.json"
+        _write_state(p, "{this is not json")
+        raised = False
+        try:
+            ForwardLedger(cap=100, state_path=p)
+        except LedgerStateError:
+            raised = True
+        assert raised, "corrupt state must be refused, never silently zeroed"
+
+
+def test_ledger_refuses_state_missing_required_key():
+    with _ephemeral(_scratch_dir("led_missing")) as d:
+        p = d / "ledger.json"
+        _write_state(p, {"rows": 5})            # no identity / cap / calls / joint_rows
+        raised = False
+        try:
+            ForwardLedger(cap=100, state_path=p)
+        except LedgerStateError:
+            raised = True
+        assert raised
+
+
+def test_ledger_refuses_negative_state():
+    with _ephemeral(_scratch_dir("led_negative")) as d:
+        p = d / "ledger.json"
+        _write_state(p, _state(rows=-1))
+        raised = False
+        try:
+            ForwardLedger(cap=100, state_path=p)
+        except LedgerStateError:
+            raised = True
+        assert raised
+
+
+def test_ledger_refuses_foreign_identity_state():
+    with _ephemeral(_scratch_dir("led_foreign")) as d:
+        p = d / "ledger.json"
+        _write_state(p, _state(rows=7, identity="some-other-round-ledger/9"))
+        raised = False
+        try:
+            ForwardLedger(cap=100, state_path=p)
+        except LedgerStateError:
+            raised = True
+        assert raised, "a foreign ledger is never adopted as this round's consumption"
+
+
+def test_ledger_refuses_over_cap_state():
+    with _ephemeral(_scratch_dir("led_overcap")) as d:
+        p = d / "ledger.json"
+        _write_state(p, _state(rows=50, cap=10))
+        raised = False
+        try:
+            ForwardLedger(cap=10, state_path=p)
+        except LedgerStateError:
+            raised = True
+        assert raised
+
+
+def test_ledger_refuses_wrong_cap_state():
+    with _ephemeral(_scratch_dir("led_wrongcap")) as d:
+        p = d / "ledger.json"
+        _write_state(p, _state(rows=5, cap=1000))
+        raised = False
+        try:
+            ForwardLedger(cap=100, state_path=p)
+        except LedgerStateError:
+            raised = True
+        assert raised
+
+
+def test_residual_lock_fails_closed_without_recovery_basis():
+    with _ephemeral(_scratch_dir("led_lock")) as d:
+        p = d / "ledger.json"
+        led = ForwardLedger(cap=100, state_path=p)
+        led.debit(10)
+        (d / "ledger.json.lock").write_text("stale", encoding="utf-8")
+        raised = False
+        try:
+            led.debit(5)
+        except LedgerStateError:
+            raised = True
+        assert raised and led.rows == 10 and led.calls == 1, "nothing may be mutated"
+        # with an explicit recorded basis the stale lock is legally recovered
+        led.debit(5, recovery_basis="operator-verified stale lock from a crashed pid")
+        assert led.rows == 15 and led.last_recovery_basis.startswith("operator")
+
+
+def test_debit_persist_failure_preserves_consumed_state():
+    with _ephemeral(_scratch_dir("led_persist_fail")) as d:
+        p = d / "ledger.json"
+        led = ForwardLedger(cap=100, state_path=p)
+        led.debit(30)                                   # durable 30
+
+        def boom():
+            raise OSError("synthetic disk failure")
+
+        led._persist = boom
+        raised = False
+        try:
+            led.debit(10)
+        except OSError:
+            raised = True
+        assert raised
+        assert led.rows == 30 and led.calls == 1, "in-memory state must roll back"
+        reloaded = ForwardLedger(cap=100, state_path=p)
+        assert reloaded.rows == 30, "durable state must be unchanged by the failed debit"
+
+
+# ---------------------------------------------------------------- real trunk entry
+def _guarded_initializer(led, seen=None, delegate=None, fail_after_debit=False):
+    seen = seen if seen is not None else {}
+
+    def extractor(seed, guarded):
+        m = np.zeros((3, FEATURE_DIM))
+        out = guarded(m, n_joint_rows=1)
+        seen["calls"] = seen.get("calls", 0) + 1
+        if fail_after_debit:
+            raise RuntimeError("synthetic extractor failure AFTER the debit")
+        return out
+
+    init = CalibrationInitializer(LicenseGate(token=None), ledger=led,
+                                  embedding_extractor=extractor,
+                                  ridge_fitter=lambda s, e: (np.zeros((EMBED_DIM, 2)),
+                                                             np.zeros(2)),
+                                  head_installer=lambda s, f: f,
+                                  trunk_delegate=delegate or (lambda m: m))
+    return init, seen
+
+
+def test_guarded_trunk_forward_charges_real_rows_once():
+    led = ForwardLedger(cap=OFFLINE_INPUT_ROW_CAP)
+    delegated = {"n": 0}
+
+    def delegate(m):
+        delegated["n"] += 1
+        return m
+
+    init = CalibrationInitializer(LicenseGate(token=None), ledger=led,
+                                  embedding_extractor=lambda s, g: None,
+                                  ridge_fitter=lambda s, e: None,
+                                  head_installer=lambda s, f: f,
+                                  trunk_delegate=delegate)
+    m = np.ones((5, FEATURE_DIM))
+    out = init.guarded_trunk_forward(m, n_joint_rows=1)
+    assert out.shape == (5, FEATURE_DIM)
+    assert led.rows == 5 and led.calls == 1 and led.joint_rows == 1
+    assert delegated["n"] == 1, "the same matrix is delegated exactly once"
+
+
+def test_guarded_trunk_forward_repeat_is_charged_every_time():
+    led = ForwardLedger(cap=OFFLINE_INPUT_ROW_CAP)
+    init, _ = _guarded_initializer(led)
+    m = np.ones((4, FEATURE_DIM))
+    for _ in range(3):
+        init.guarded_trunk_forward(m)
+    assert led.rows == 12 and led.calls == 3, "repeats are never deduplicated"
+
+
+def test_guarded_trunk_forward_refuses_oversize_before_charge():
+    led = ForwardLedger(cap=OFFLINE_INPUT_ROW_CAP)
+    init, _ = _guarded_initializer(led)
+    raised = False
+    try:
+        init.guarded_trunk_forward(np.ones((BATCH_INPUT_ROW_CAP + 1, FEATURE_DIM)))
+    except BatchTooLarge:
+        raised = True
+    assert raised and led.rows == 0 and led.calls == 0, "refused BEFORE any charge"
+
+
+def test_guarded_trunk_forward_refuses_wrong_dims_before_charge():
+    led = ForwardLedger(cap=OFFLINE_INPUT_ROW_CAP)
+    init, _ = _guarded_initializer(led)
+    for bad in (np.ones(19), np.ones((3, 18)), np.ones((0, FEATURE_DIM))):
+        raised = False
+        try:
+            init.guarded_trunk_forward(bad)
+        except TrunkInputError:
+            raised = True
+        assert raised, f"shape {np.asarray(bad).shape} must be refused"
+    assert led.rows == 0 and led.calls == 0
+
+
+def test_joint_and_target_rows_are_counted_separately():
+    led = ForwardLedger(cap=OFFLINE_INPUT_ROW_CAP)
+    init, _ = _guarded_initializer(led)
+    init.guarded_trunk_forward(np.ones((9, FEATURE_DIM)), n_joint_rows=3)
+    init.guarded_trunk_forward(np.ones((2, FEATURE_DIM)), n_joint_rows=1)
+    assert led.rows == 11 and led.joint_rows == 4 and led.rows != led.joint_rows
+
+
+def test_run_charges_real_rows_not_estimated_counts():
+    led = ForwardLedger(cap=OFFLINE_INPUT_ROW_CAP)
+    seen = {}
+
+    def extractor(seed, guarded):
+        return guarded(np.zeros((3, FEATURE_DIM)), n_joint_rows=1)
+
+    out = _scratch_dir("init_run") / "out.json"
+    init = CalibrationInitializer(
+        LicenseGate(token=RealLicense(approval_id="SYNTHETIC-NOT-A-REAL-APPROVAL",
+                                      task_id="ROUND71-CRITIC-CALIBRATION-ZERO-USE-READINESS",
+                                      source_freeze_sha256="0" * 64,
+                                      input_identity_sha256="1" * 64,
+                                      quota_identity="round71-offline-cap-72000/1",
+                                      issued_by="test"),
+                    verifier=_real_verifier),
+        ledger=led, embedding_extractor=extractor,
+        ridge_fitter=lambda s, e: (np.zeros((EMBED_DIM, 2)), np.zeros(2)),
+        head_installer=lambda s, f: f, output_path=out)
+    heads = init.run([11, 22], {11: [5000, 5000], 22: [7000]})
+    assert set(heads) == {11, 22}
+    assert led.rows == 6 and led.calls == 2, "billing is the REAL rows, not the 17000 estimate"
+    assert any(t.startswith("estimate_only") for t in init.trace)
+    out.unlink(missing_ok=True)
+
+
+def test_run_failure_after_debit_keeps_the_charge():
+    led = ForwardLedger(cap=OFFLINE_INPUT_ROW_CAP)
+    init, seen = _guarded_initializer(led, fail_after_debit=True)
+    raised = False
+    try:
+        init.run([11], {11: [3, 3]})
+    except LicenseMissing:
+        raised = True
+    assert raised and led.rows == 0, "unlicensed: refused at the first gate, no charge"
+    # licensed path: the debit happens, then the extractor fails -> the charge stays
+    lic = RealLicense(approval_id="SYNTHETIC-NOT-A-REAL-APPROVAL",
+                      task_id="ROUND71-CRITIC-CALIBRATION-ZERO-USE-READINESS",
+                      source_freeze_sha256="0" * 64, input_identity_sha256="1" * 64,
+                      quota_identity="round71-offline-cap-72000/1", issued_by="test")
+    init.gate = LicenseGate(token=lic, verifier=_real_verifier)
+    init.output_path = _scratch_dir("init_run") / "fail.json"
+    raised = False
+    try:
+        init.run([11], {11: [3, 3]})
+    except RuntimeError:
+        raised = True
+    assert raised and led.rows == 3 and led.calls == 1, "a failure never refunds the charge"
+    init.output_path.unlink(missing_ok=True)
+
+
+# ---------------------------------------------------------------- restore source hardening
+def _identity(role="r68_ep0_model_only", kind="r68_ep0", seed=33,
+              structure=R68_STRUCTURE, version=TRAINING_VERSION, modules=None):
+    return {"seed": seed, "role": role, "structure": structure,
+            "module_set": list(MODULES) if modules is None else modules,
+            "training_version": version, "source_kind": kind}
+
+
+def test_incomplete_restore_source_is_refused():
+    bad = [
+        {},                                                       # no identity at all
+        {"identity": {"seed": 11}},                               # almost everything missing
+        {"identity": _identity(role="invented_role")},
+        {"identity": _identity(structure="some-other-structure/1")},
+        {"identity": _identity(version="an-unrelated-version/1")},
+        {"identity": _identity(kind="r68_trained")},
+        {"identity": _identity(modules=["trunk", "early_head", "late_head", "actor_head"])},
+    ]
+    for src in bad:
+        raised = False
+        try:
+            validate_restore_source(src)
+        except IllegalRestoreSource:
+            raised = True
+        assert raised, f"must be refused: {src}"
+
+
+def test_legal_r68_ep0_model_only_source_is_accepted():
+    ok = {"identity": _identity(), "carries_initial_rng_state": True,
+          "carries_advanced_training_rng": False,
+          "carries_trained_optimizer_state": False, "carries_trained_lambda": False,
+          "from_trained_ep128": False}
+    assert validate_restore_source(ok) is True
+
+
+def test_legal_new_full_restore_of_this_run_is_accepted():
+    ok = {"identity": _identity(role="new_full_restore", kind="this_run", seed=11),
+          "carries_trained_optimizer_state": True, "carries_trained_lambda": True,
+          "carries_advanced_training_rng": True, "carries_initial_rng_state": False,
+          "from_trained_ep128": False}
+    assert validate_restore_source(ok) is True, "this run's own resume must stay legal"
+
+
+def test_foreign_run_trained_state_is_refused():
+    for kind in ("foreign_run", "r58", "r60", "r66", "r68_trained"):
+        bad = {"identity": _identity(role="new_full_restore", kind=kind),
+               "carries_trained_optimizer_state": True, "carries_trained_lambda": True,
+               "carries_advanced_training_rng": True}
+        raised = False
+        try:
+            validate_restore_source(bad)
+        except IllegalRestoreSource:
+            raised = True
+        assert raised, f"a foreign run's trained state ({kind}) must be refused"
+
+
+def test_initial_rng_on_ep0_source_is_not_misclassified():
+    """The R68 ep0 INITIAL random state is legal and must not be read as trained RNG."""
+    ok = {"identity": _identity(), "carries_initial_rng_state": True}
+    assert validate_restore_source(ok) is True
+    both = {"identity": _identity(), "carries_initial_rng_state": True,
+            "carries_advanced_training_rng": True}
+    raised = False
+    try:
+        validate_restore_source(both)
+    except IllegalRestoreSource:
+        raised = True
+    assert raised, "initial AND advanced training RNG together is inconsistent"
 
 
 if __name__ == "__main__":

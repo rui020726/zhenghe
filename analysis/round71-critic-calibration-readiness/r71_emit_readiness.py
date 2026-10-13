@@ -41,7 +41,15 @@ def main():
         "task_id": "ROUND71-CRITIC-CALIBRATION-ZERO-USE-READINESS",
         "branch": "analysis/round71-critic-calibration-readiness",
         "base_head": "92571c62b27b0c38d755b501a6d0153b630a08ed",
+        "first_pass_commit": "53f9eb7d2319f295c7c087ca2edd6606cc3979f6",
         "stage": "ZERO_CONSUMPTION_PREPARATION_COMPLETE",
+        "correction_pass": {
+            "of_commit": "53f9eb7d2319f295c7c087ca2edd6606cc3979f6",
+            "trigger": ("a delegated source review found 4 real gaps in the first-pass guard "
+                        "code; all 4 were verified present in the committed blobs before "
+                        "patching"),
+            "consumption": 0,
+        },
         "authorisation": {
             "experiment_licensed": False,
             "candidate_status": seam.CANDIDATE_PLAN["status"],
@@ -90,7 +98,22 @@ def main():
                             "batches are grouped by real input rows with a 1024 cap and an "
                             "oversized single step is reported rather than silently split; "
                             "DuplicateOutputGuard refuses an implicit re-run over an existing "
-                            "artefact"),
+                            "artefact; LicenseGate requires a VERIFIED RealLicense (a raw "
+                            "string/dict token is rejected at construction, a test-only spy "
+                            "verifier cannot unlock the real provider, and require refuses "
+                            "both an absent and a test-only licence); CalibrationInitializer "
+                            "bills ONLY the real row count at the trunk entry "
+                            "(guarded_trunk_forward: 2-D (N,19) shape, N>0, N<=1024, atomic "
+                            "debit of the real N, then the same matrix delegated exactly once) "
+                            "and never pre-debits from estimated counts"),
+                "hardening": ("persisted ledger state is validated on load (missing/corrupt/"
+                              "non-int/negative/over-cap/wrong-cap/foreign-identity state "
+                              "raises LedgerStateError and is never silently zeroed); persist "
+                              "is same-dir temp + fsync + os.replace under a lock file that "
+                              "fails closed on a residual lock unless an explicit recorded "
+                              "recovery_basis is supplied (never auto-deleted); debit persists "
+                              "the new state before committing in memory and records refusals "
+                              "without refunding"),
                 "fail_closed": ("LicenseGate refuses every gated action (real-data fit, model "
                                 "forward, claim write, checkpoint write, episode call, "
                                 "optimizer step, PPO replay, environment build) when no real "
@@ -103,11 +126,54 @@ def main():
                               "the repository' or 'exactly N claim files'"),
             },
             "restore_source_legality": {
-                "covered": ("validate_restore_source refuses a trained ep128, a resume-purpose "
-                            "source, a source carrying trained optimizer / lambda / training "
-                            "RNG state, and any module set other than the 5-module contract"),
+                "covered": ("validate_restore_source requires a complete identity block (seed, "
+                            "role, structure, module_set, training_version, source_kind); "
+                            "r68_ep0_model_only is the legal INIT source and MAY carry the "
+                            "frozen INITIAL random state (not misclassified as trained RNG) "
+                            "but no trained optimizer/lambda/advanced RNG; new_full_restore "
+                            "may carry only THIS run's own trained state; rule_control_readonly "
+                            "carries no trained state; a trained ep128, an old single-head / "
+                            "four-module set, an empty module set, an incomplete identity, a "
+                            "foreign structure/version, or a foreign run's trained state are "
+                            "all refused"),
             },
             "read_only_input_count": counts["totals"],
+        },
+        "corrections": {
+            "gaps_found_and_fixed": [
+                ("LicenseGate.licensed was bool(self.token): any string/dict passed. Now a "
+                 "verifier-accepted RealLicense is required; no verifier refuses everything; "
+                 "test-only spy verifiers cannot unlock the real provider."),
+                ("ForwardLedger loaded state via saved.get('rows', 0) with no identity/cap/"
+                 "validation and persisted with a plain write_text. Now state is fully "
+                 "validated on load (never silently zeroed), persisted atomically (same-dir "
+                 "temp + fsync + os.replace) under a fail-closed lock, and debit persists "
+                 "before committing in memory; refusals are recorded without refund."),
+                ("CalibrationInitializer.run pre-debited all batches from ESTIMATED "
+                 "target_counts and left the real matrices/call counts/batch sizes unguarded. "
+                 "Now the only charge is the real row count at the trunk entry, which also "
+                 "refuses wrong-shape and over-1024 real batches before any charge; estimated "
+                 "counts are trace metadata only."),
+                ("validate_restore_source trusted caller flags and let an EMPTY module list "
+                 "pass. Now a complete identity block is required and roles/source kinds "
+                 "distinguish r68_ep0_model_only from new_full_restore; future legitimate NEW "
+                 "restores stay legal while foreign trained state is refused."),
+            ],
+            "superseded_test": ("test_legal_new_training_initialisation_is_accepted encoded the "
+                                "old flag-only contract; it is superseded by "
+                                "test_superseded_incomplete_initialisation_is_now_refused with "
+                                "an explicit correction note, and the legal forms are covered "
+                                "by test_legal_r68_ep0_model_only_source_is_accepted / "
+                                "test_legal_new_full_restore_of_this_run_is_accepted"),
+            "not_claimed": [
+                "the ParameterContainer in the tests is a STAND-IN, not real R68 wiring; real "
+                "5-module construction/install coverage is not yet executed",
+                "the default trunk_delegate is an identity echo; no real trunk forward is "
+                "wired or run",
+                "no power-loss atomicity is claimed for the ledger",
+                "0 .pt opens / 0 model loads / 0 RNG restores / 0 checkpoint writes / 0 real or "
+                "synthetic optimizer updates in the correction pass",
+            ],
         },
         "real_gates_not_yet_executed": [
             "real initialisation equivalence (calibrated heads vs the R68 ep0 critic heads on a "
@@ -117,6 +183,8 @@ def main():
             "the actual offline ridge fit and the resulting coefficient transform on real data",
             "any real embedding extraction, model forward, claim, checkpoint write or episode",
             "first-batch gate, per-seed 128-episode training and the fixed-ep128 evaluations",
+            "real 5-module model construction and head installation on actual R68 parameters "
+            "(the tests' ParameterContainer is a stand-in only)",
         ],
         "tests": {
             "file": "test_r71_readiness.py",

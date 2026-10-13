@@ -58,3 +58,31 @@ autograd 0；真实数据统计拟合 0；模型加载 0；打开 .pt 0；训练
 
 保护文件 `ROUND46_CURRENT_TASK.json`（`cf3ad198...`）、`ROUND46_R2_V6_STOP_STATE.json`（`93a2f69f...`）
 字节未变且未暂存；未跟踪的 r59 日志未暂存。未推送、未合并、未部署。
+## 更正轮次（append-only；不改写上方首轮内容）
+
+首轮提交 `53f9eb7d2319f295c7c087ca2edd6606cc3979f6` 的守卫代码经委派源码审查发现 4 处真实缺口，
+均在改写前于已提交 blob 中核实存在。本更正轮零消费修复并追加窄测试；首轮 23 项测试收据原样保留。
+
+1. **许可门**：原 `licensed = bool(self.token)` 使任意字符串/字典通过。现要求经 verifier 接受的
+   `RealLicense`（完整声明字段）；无 verifier 一律拒绝；test-only spy verifier 不能解锁真实路径；
+   `require` 对缺失与 test-only 许可均拒绝。原始 token 在构造时即被拒。
+2. **前向账本**：原 `saved.get("rows", 0)` 无身份/上限/校验，`_persist` 为普通写文件。现加载时
+   全量校验（缺失/损坏/非整/负值/超上限/上限不符/异身份一律 `LedgerStateError`，绝不静默清零）；
+   持久化改为同目录临时文件 + fsync + `os.replace`；变更由同目录锁串行化，残留锁在无明确记录的
+   `recovery_basis` 时 fail closed，绝不自动删除；`debit` 先持久化新状态再提交内存，拒绝只记录不退款。
+3. **真实 trunk 入口**：原 `run` 按**估计** target_counts 预扣全部批次，真实矩阵/调用数/批大小无守护。
+  现唯一计费为 trunk 入口的真实行数：`guarded_trunk_forward` 校验 2 维 (N,19)、N>0、N<=1024，
+   原子 debit 真实 N 后对同一矩阵恰好委托一次；估计量仅作 trace 元数据，永不作计费证据。
+4. **恢复来源**：原信任调用方布尔标志且空模块列表可通行。现要求完整 identity 块（seed/role/
+   structure/module_set/training_version/source_kind）；`r68_ep0_model_only` 为合法 INIT 来源，
+   可携带冻结**初始** RNG（不被误判为已训练 RNG），不得携带已训练 optimizer/lambda/进阶训练 RNG；
+   `new_full_restore` 仅可携带**本 run 自己**的已训练状态；外来 run、旧四模块、空模块集合、
+   ep128、身份不全一律拒绝。
+
+测试：47/47 通过，退出码 0（22 项首轮测试原样通过 + 25 项新增 spy 反例；
+`test_legal_new_training_initialisation_is_accepted` 被
+`test_superseded_incomplete_initialisation_is_now_refused` 显式取代并附更正说明）。
+仍未宣称：测试中的 `ParameterContainer` 只是替身，非真实 R68 接线；默认 `trunk_delegate` 为恒等回显，
+未接真实前向；不宣称物理断电原子性。更正轮消费：0 .pt 打开 / 0 模型加载 / 0 RNG 恢复 /
+0 checkpoint 写入 / 0 真实或合成 optimizer 更新。阶段不变：候选计划仍 `APPROVAL_PENDING`，
+测试全绿不构成批准。
