@@ -254,8 +254,8 @@ def test_extract_and_fit_charges_real_rows_and_pools():
         return rng.normal(size=(matrix.shape[0], EMBED_DIM))
 
     provider = CalibrationProvider(_FakeController(), ledger, trunk_callable=spy)
-    rows = [(rng.normal(size=(5, 19)), [2, 3], rng.normal(size=(2, 2))),
-            (rng.normal(size=(4, 19)), [1, 1, 2], rng.normal(size=(3, 2)))]
+    rows = [(rng.normal(size=(5, 19)), [2, 3], rng.normal(size=(2, 2)), {}),
+            (rng.normal(size=(4, 19)), [1, 1, 2], rng.normal(size=(3, 2)), {})]
     fit = provider.extract_and_fit(rows)
     assert ledger.rows == 9 and ledger.joint_rows == 5
     assert fit["rows"] == 5

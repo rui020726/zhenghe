@@ -38,7 +38,7 @@ for _d in (READINESS_DIR, str(R68_DIR)):
         sys.path.insert(0, str(_d))
 
 from r71_critic_calibration_seam import (  # noqa: E402
-    BATCH_INPUT_ROW_CAP, OFFLINE_INPUT_ROW_CAP, DuplicateOutput, ForwardLedger,
+    BATCH_INPUT_ROW_CAP, OFFLINE_INPUT_ROW_CAP, DuplicateOutputGuard, ForwardLedger,
     LicenseGate, LicenseInvalid, LicenseMissing,
 )
 import r71_runtime_binding as readiness  # noqa: E402
@@ -235,7 +235,7 @@ def offline_fit_seed(*, seed: int, gate: LicenseGate, model_read_approval, run_i
             "ROUND71 offline fit stops at the model read-in boundary: an explicit model-read "
             "approval is required before the ep0 model is read")
     for path in (init_path, identity_path):
-        DuplicateOutput(path).check(overwrite=overwrite)
+        DuplicateOutputGuard(path).check(overwrite=overwrite)
     import r66_frozen as r66
     import r68_frozen as r68
     import v2_trainer as trainer

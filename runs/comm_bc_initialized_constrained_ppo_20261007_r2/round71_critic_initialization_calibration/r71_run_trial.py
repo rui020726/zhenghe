@@ -36,6 +36,26 @@ import r71_trial_execute as execute                                     # noqa: 
 import r71_offline_fit as fit                                           # noqa: E402
 import r71_runtime_binding as readiness                                  # noqa: E402
 
+import numpy as np  # noqa: E402
+
+
+def _json_safe(obj):
+    """Recursively convert numpy types to JSON-native Python for derived receipts only."""
+    if isinstance(obj, dict):
+        return {k: _json_safe(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_json_safe(v) for v in obj]
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    if isinstance(obj, np.integer):
+        return int(obj)
+    if isinstance(obj, np.floating):
+        return float(obj)
+    if isinstance(obj, np.bool_):
+        return bool(obj)
+    return obj
+
+
 SEEDS = execute.SEEDS
 TASK_ID = trial.R71_TRIAL_TASK_ID
 BRANCH = trial.R71_TRIAL_BRANCH
@@ -135,7 +155,7 @@ def phase_offline_fit(cfg, raw_root: Path, seeds) -> dict:
         receipt = {k: v for k, v in result.items() if k not in ("identity",)}
         receipt["init_parameter_sha256"] = result["identity"]["init_parameter_sha256"]
         receipt["calibration_module_sha"] = result["identity"]["calibration"]
-        _write_json(raw_root / "runtime" / f"r71_offline_fit_s{int(seed)}.json", receipt)
+        _write_json(raw_root / "runtime" / f"r71_offline_fit_s{int(seed)}.json", _json_safe(receipt))
         out.append(receipt)
         print(f"R71 offline-fit seed {seed}: rows={result['ledger']['rows']} "
               f"joint_rows={result['ledger']['joint_rows']} "

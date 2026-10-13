@@ -722,13 +722,13 @@ class CalibrationProvider:
     def extract_and_fit(self, teacher_rows) -> dict:
         """Extract the teacher embeddings through the guarded trunk, pool, then fit.
 
-        ``teacher_rows`` yields ``(matrix, counts, targets)`` per batch: the real (N,19) input
+        ``teacher_rows`` yields ``(matrix, counts, returns, meta)`` per batch: the real (N,19) input
         rows, the per-joint-row target counts, and the (joint_rows, 2) Monte-Carlo task/cost
         returns aligned with the pooled rows.  Every batch is charged at the trunk entry; an
         over-cap or malformed batch is refused before any charge.
         """
         pooled, targets = [], []
-        for matrix, counts, target_rows in teacher_rows:
+        for matrix, counts, returns, meta in teacher_rows:
             m = np.asarray(matrix)
             counts = [int(c) for c in counts]
             hidden = np.asarray(self.trunk_forward(m, n_joint_rows=len(counts)),
@@ -740,7 +740,7 @@ class CalibrationProvider:
                 raise SourceIdentityError(
                     f"trunk returned width {hidden.shape[1]}, expected {EMBED_DIM}")
             pooled.append(self.mean_over_targets(hidden, counts))
-            targets.append(np.asarray(target_rows, dtype=np.float64))
+            targets.append(np.asarray(returns, dtype=np.float64))
         if not pooled:
             raise ValueError("no teacher rows were supplied")
         return self.fit_dual_output_ridge(np.concatenate(pooled), np.concatenate(targets))
