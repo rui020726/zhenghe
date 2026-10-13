@@ -86,3 +86,25 @@ autograd 0；真实数据统计拟合 0；模型加载 0；打开 .pt 0；训练
 未接真实前向；不宣称物理断电原子性。更正轮消费：0 .pt 打开 / 0 模型加载 / 0 RNG 恢复 /
 0 checkpoint 写入 / 0 真实或合成 optimizer 更新。阶段不变：候选计划仍 `APPROVAL_PENDING`，
 测试全绿不构成批准。
+## 最终账本更正（append-only；零消费）
+
+委派审查指出 `ForwardLedger.debit` 的额度判定在锁外用 `self.rows`，锁内未重读持久状态：同一状态文件
+构造两个实例（均 rows=0）时，双方都会通过各自过期副本的检查，后一次写会覆盖前一次消费（丢更新）。
+本次最小修复，不新增恢复系统：
+
+1. **同锁内取新鲜基值**：额度判定、拒绝、rows/calls/joint_rows 计算与原子保存全部在同一锁内完成，
+   基值取经验证的最新**持久**状态（无持久文件时才回落内存态），新状态先落盘才发布内存；
+   拒绝与持久化失败同样从新鲜基值计算，绝不覆写另一实例已消费的状态。
+2. **不实现锁回收**：原 `_locked(recovery_basis=...)` 会 `os.unlink` 残留锁，可能删除活锁，且
+   `last_recovery_basis` 仅内存、不构成持久恢复证据。现任何残留锁一律 fail closed，
+   `debit` 不再接受 basis 参数（传参即 `TypeError`）；不做 pid 探测、不结束任何进程；
+   正式回收路径需既有合法批准与独立只读的 owner-已结束证据，本轮零消费准备没有需要回收的真实运行锁。
+
+新增反例（旧实现会失败）：同路径 cap=10，L1.debit(6) 后 L2.debit(6) 必须拒绝且持久 rows 仍为 6；
+合法 4 使总数达 10 后再扣即拒；重启读回 10 不清零。拒绝不覆写他人 rows/calls/joint_rows；
+持久化失败不回写他人消费。失败 spy 调用仍扣一次（原有反例保留），矩阵宽 19/批 1024 约束不变。
+
+测试：50/50 通过，退出码 0（47 项收据中 `test_residual_lock_fails_closed_without_recovery_basis`
+被 `test_residual_lock_always_fails_closed_no_basis_can_delete` 显式取代并附更正说明，另新增 3 项
+丢更新/拒绝/持久化失败反例）。本轮消费仍全零。阶段不变：候选计划 `APPROVAL_PENDING`，
+测试全绿不构成批准；声明层 restore 校验与默认 echo delegate 仍不构成真实 R68 接线。

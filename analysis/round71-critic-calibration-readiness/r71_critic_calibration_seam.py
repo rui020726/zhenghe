@@ -241,19 +241,20 @@ class ForwardLedger:
     ``debit`` is called BEFORE the forward and refuses when the charge would cross the cap, so
     an over-cap batch is never started.  This is an in-process guard over a persisted counter.
 
-    Correction pass (R71) hardening, each verified by a spy test:
-      * persisted state is VALIDATED on load: missing, corrupt, non-integer, negative,
-        over-cap, wrong-cap or foreign-identity state raises ``LedgerStateError`` and is NEVER
-        silently treated as zero;
-      * ``_persist`` writes a same-directory temporary file, fsyncs it and ``os.replace``s it
-        over the state file, so a reader never observes a half-written counter;
-      * mutation is serialised by a same-directory lock file that FAILS CLOSED on a residual
-        lock unless the caller supplies an explicit recorded ``recovery_basis``; the lock is
-        never auto-deleted;
-      * ``debit`` persists the NEW state BEFORE committing it in memory, so a persist failure
-        leaves the in-memory counter untouched, and a refusal is recorded without any refund.
-    This class does NOT claim physical power-loss atomicity, and a spy or no-op is not a real
-    update; it does not pretend otherwise.
+    Final correction (R71): the budget determination, the refusal, the rows/calls/joint_rows
+    computation and the atomic save all happen INSIDE the same lock, with the base value taken
+    from the validated latest DURABLE state (not from a possibly stale in-memory copy), and the
+    in-memory state is published only after the new state is durable.  An exclusive lock alone
+    does not prevent a lost update: two instances constructed from the same state file would
+    both pass a check made against their own stale ``self.rows``.  A refusal or a persist
+    failure therefore also computes from the fresh durable base and never overwrites another
+    instance's already-consumed state.
+
+    Lock recovery is deliberately NOT implemented: ANY residual lock fails closed and no basis
+    text authorises deleting a lock.  A formal recovery path would need a prior legal approval
+    plus independent read-only owner-finished evidence, and this zero-consumption preparation
+    has no real run lock to recover.  This class does NOT claim physical power-loss atomicity,
+    and a spy or no-op is not a real update; it does not pretend otherwise.
     """
 
     def __init__(self, cap=OFFLINE_INPUT_ROW_CAP, state_path=None):
@@ -263,13 +264,13 @@ class ForwardLedger:
         self.refusals = 0
         self.joint_rows = 0          # informational only; NEVER used for the cap comparison
         self.state_path = Path(state_path) if state_path else None
-        self.last_recovery_basis = None
-        if self.state_path is not None and self.state_path.is_file():
-            self._load()
+        self._load()
 
     # ------------------------------------------------------------------ state validation
-    def _load(self):
-        """Adopt persisted state ONLY after full validation; never silently zero."""
+    def _read_persisted(self):
+        """Validated latest DURABLE state dict, or None when no durable file exists yet."""
+        if self.state_path is None or not self.state_path.is_file():
+            return None
         try:
             saved = json.loads(self.state_path.read_text(encoding="utf-8"))
         except (OSError, ValueError) as exc:
@@ -299,10 +300,17 @@ class ForwardLedger:
         if saved["rows"] > saved["cap"]:
             raise LedgerStateError(
                 f"forward ledger state rows {saved['rows']} exceed its cap {saved['cap']}")
-        self.rows = saved["rows"]
-        self.calls = saved["calls"]
-        self.refusals = saved["refusals"]
-        self.joint_rows = saved["joint_rows"]
+        return saved
+
+    def _load(self):
+        """Adopt persisted state ONLY after full validation; never silently zero."""
+        fresh = self._read_persisted()
+        if fresh is None:
+            return
+        self.rows = fresh["rows"]
+        self.calls = fresh["calls"]
+        self.refusals = fresh["refusals"]
+        self.joint_rows = fresh["joint_rows"]
 
     def _state_dict(self):
         return {"identity": LEDGER_IDENTITY, "cap": self.cap, "rows": self.rows,
@@ -321,14 +329,26 @@ class ForwardLedger:
             os.fsync(fh.fileno())
         os.replace(tmp, self.state_path)
 
+    def _publish(self, candidate):
+        """Persist the candidate state FIRST; commit to memory only once it is durable."""
+        saved = (self.rows, self.calls, self.refusals, self.joint_rows)
+        (self.rows, self.calls, self.refusals, self.joint_rows) = candidate
+        try:
+            self._persist()
+        except OSError:
+            (self.rows, self.calls, self.refusals, self.joint_rows) = saved
+            raise
+
     # ------------------------------------------------------------------ locking
     @contextlib.contextmanager
-    def _locked(self, recovery_basis=None):
-        """Serialise mutation; fail closed on a residual lock without a legal basis.
+    def _locked(self):
+        """Serialise mutation.  ANY residual lock fails closed, with no exceptions.
 
-        A residual lock is NEVER auto-deleted: the caller must pass an explicit
-        ``recovery_basis`` string, which is recorded on the ledger.  Without one the ledger
-        refuses to mutate, because silently stealing a lock could double-charge.
+        Correction note (R71, final): the previous version deleted a residual lock when the
+        caller supplied a ``recovery_basis`` string, which could delete a LIVE lock, and the
+        recorded basis was memory-only, not durable recovery evidence.  Lock recovery is not
+        implemented this round: no text authorises deleting a lock, there is no pid probing
+        and no process is ever signalled.
         """
         if self.state_path is None:
             yield
@@ -337,13 +357,9 @@ class ForwardLedger:
         try:
             fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
         except FileExistsError:
-            if recovery_basis is None:
-                raise LedgerStateError(
-                    f"residual ledger lock {lock} is present; refusing to mutate without an "
-                    f"explicit recorded recovery basis (locks are never auto-deleted)")
-            os.unlink(lock)
-            self.last_recovery_basis = str(recovery_basis)
-            fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            raise LedgerStateError(
+                f"residual ledger lock {lock} is present; refusing to mutate (lock recovery "
+                f"is not implemented and no basis text authorises deleting a lock)")
         try:
             with os.fdopen(fd, "w") as fh:
                 fh.write(str(os.getpid()))
@@ -354,32 +370,34 @@ class ForwardLedger:
             except OSError:
                 pass
 
-    def debit(self, n_input_rows, n_joint_rows=0, recovery_basis=None):
-        """Atomically reserve n_input_rows BEFORE any forward.  Refuses before exceeding."""
+    def debit(self, n_input_rows, n_joint_rows=0):
+        """Atomically reserve n_input_rows BEFORE any forward.  Refuses before exceeding.
+
+        The whole decision (base value, budget check, refusal, new counters, atomic save) runs
+        inside the lock and reads the validated latest durable state, so two instances sharing
+        a state file cannot both pass a check made against a stale copy.  In-memory state is
+        published only after the new state is durable, and a refusal or persist failure never
+        overwrites another instance's consumption.
+        """
         n_input_rows = int(n_input_rows)
         n_joint_rows = int(n_joint_rows)
         if n_input_rows < 0:
             raise ValueError("negative input-row charge")
-        if self.rows + n_input_rows > self.cap:
-            # a refusal is recorded and persisted; it is never refunded and never dropped
-            with self._locked(recovery_basis):
-                self.refusals += 1
-                self._persist()
-            raise BudgetExceeded(
-                f"forward ledger: refusing {n_input_rows} input rows; used {self.rows} of "
-                f"cap {self.cap} (would reach {self.rows + n_input_rows})")
-        # persist the NEW state first; only then commit in memory, so a persist failure
-        # cannot leave a phantom in-memory charge that was never made durable
-        with self._locked(recovery_basis):
-            saved = (self.rows, self.calls, self.refusals, self.joint_rows)
-            self.rows += n_input_rows
-            self.joint_rows += n_joint_rows
-            self.calls += 1
-            try:
-                self._persist()
-            except OSError:
-                (self.rows, self.calls, self.refusals, self.joint_rows) = saved
-                raise
+        with self._locked():
+            fresh = self._read_persisted()
+            if fresh is None:
+                base = (self.rows, self.calls, self.refusals, self.joint_rows)
+            else:
+                base = (fresh["rows"], fresh["calls"], fresh["refusals"],
+                        fresh["joint_rows"])
+            if base[0] + n_input_rows > self.cap:
+                # refusal against the FRESH base: another instance's consumption is preserved
+                self._publish((base[0], base[1], base[2] + 1, base[3]))
+                raise BudgetExceeded(
+                    f"forward ledger: refusing {n_input_rows} input rows; used {base[0]} of "
+                    f"cap {self.cap} (would reach {base[0] + n_input_rows})")
+            self._publish((base[0] + n_input_rows, base[1] + 1, base[2],
+                           base[3] + n_joint_rows))
         return self.rows
 
     def remaining(self):

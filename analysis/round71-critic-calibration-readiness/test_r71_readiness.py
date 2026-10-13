@@ -586,7 +586,15 @@ def test_ledger_refuses_wrong_cap_state():
         assert raised
 
 
-def test_residual_lock_fails_closed_without_recovery_basis():
+def test_residual_lock_always_fails_closed_no_basis_can_delete():
+    """SUPERSEDED CONTRACT (correction note, R71 final).
+
+    The previous version deleted a residual lock when the caller supplied a
+    ``recovery_basis`` string, which could delete a LIVE lock, and the recorded basis was
+    memory-only.  Lock recovery is deliberately NOT implemented: ANY residual lock fails
+    closed, no basis text authorises deleting a lock, and the API no longer offers a basis
+    parameter at all.
+    """
     with _ephemeral(_scratch_dir("led_lock")) as d:
         p = d / "ledger.json"
         led = ForwardLedger(cap=100, state_path=p)
@@ -598,9 +606,16 @@ def test_residual_lock_fails_closed_without_recovery_basis():
         except LedgerStateError:
             raised = True
         assert raised and led.rows == 10 and led.calls == 1, "nothing may be mutated"
-        # with an explicit recorded basis the stale lock is legally recovered
-        led.debit(5, recovery_basis="operator-verified stale lock from a crashed pid")
-        assert led.rows == 15 and led.last_recovery_basis.startswith("operator")
+        reloaded = ForwardLedger(cap=100, state_path=p)
+        assert reloaded.rows == 10, "the durable state must be untouched by the refusal"
+        # no basis parameter exists any more: no text can authorise deleting a lock
+        raised = False
+        try:
+            led.debit(5, recovery_basis="operator-says-delete-it")
+        except TypeError:
+            raised = True
+        assert raised, "the debit API must not offer a lock-deletion basis"
+        assert ForwardLedger(cap=100, state_path=p).rows == 10
 
 
 def test_debit_persist_failure_preserves_consumed_state():
@@ -825,6 +840,79 @@ def test_initial_rng_on_ep0_source_is_not_misclassified():
     except IllegalRestoreSource:
         raised = True
     assert raised, "initial AND advanced training RNG together is inconsistent"
+
+
+# ------------------------------------- final ledger correction: no lost update, no recovery
+def test_two_instances_cannot_lose_an_update():
+    """The delegation counterexample: same path, cap=10, two instances built at rows=0.
+
+    The old implementation checked the budget OUTSIDE the lock against a stale in-memory
+    ``self.rows``, so L2.debit(6) would pass and clobber the file even though the two real
+    delegations total 12 > 10.  The corrected ledger reads the validated latest DURABLE state
+    inside the same lock, so the second 6 is refused and the durable rows stay 6.
+    """
+    with _ephemeral(_scratch_dir("led_lost_update")) as d:
+        p = d / "ledger.json"
+        l1 = ForwardLedger(cap=10, state_path=p)
+        l2 = ForwardLedger(cap=10, state_path=p)      # both still see rows == 0
+        l1.debit(6)                                   # durable 6
+        raised = False
+        try:
+            l2.debit(6)                               # would reach 12 > 10
+        except BudgetExceeded:
+            raised = True
+        assert raised, "the second 6 must be refused against the durable state"
+        assert ForwardLedger(cap=10, state_path=p).rows == 6, "durable rows stay 6"
+        l2.debit(4)                                   # legal: total exactly 10
+        assert ForwardLedger(cap=10, state_path=p).rows == 10
+        raised = False
+        try:
+            l2.debit(1)
+        except BudgetExceeded:
+            raised = True
+        assert raised, "the next charge after the cap is refused"
+        restarted = ForwardLedger(cap=10, state_path=p)
+        assert restarted.rows == 10 and restarted.remaining() == 0, "restart does not zero"
+
+
+def test_refusal_does_not_overwrite_another_instances_consumption():
+    with _ephemeral(_scratch_dir("led_refusal_keep")) as d:
+        p = d / "ledger.json"
+        l1 = ForwardLedger(cap=10, state_path=p)
+        l1.debit(6, n_joint_rows=2)                   # durable rows 6, calls 1, joint 2
+        l2 = ForwardLedger(cap=10, state_path=p)
+        raised = False
+        try:
+            l2.debit(6)
+        except BudgetExceeded:
+            raised = True
+        assert raised
+        reloaded = ForwardLedger(cap=10, state_path=p)
+        assert (reloaded.rows, reloaded.calls, reloaded.joint_rows) == (6, 1, 2), \
+            "a refusal must preserve the other instance's rows/calls/joint_rows"
+        assert reloaded.refusals == 1, "the refusal itself is still recorded"
+
+
+def test_persist_failure_does_not_overwrite_another_instances_consumption():
+    with _ephemeral(_scratch_dir("led_persist_keep")) as d:
+        p = d / "ledger.json"
+        l1 = ForwardLedger(cap=10, state_path=p)
+        l1.debit(6)                                   # durable 6
+        l2 = ForwardLedger(cap=10, state_path=p)
+
+        def boom():
+            raise OSError("synthetic disk failure")
+
+        l2._persist = boom
+        raised = False
+        try:
+            l2.debit(4)
+        except OSError:
+            raised = True
+        # l2 was constructed AFTER the durable 6, so rollback returns it to 6, not 0
+        assert raised and l2.rows == 6 and l2.calls == 1, "in-memory rolls back to its own base"
+        reloaded = ForwardLedger(cap=10, state_path=p)
+        assert reloaded.rows == 6, "a failed persist must not touch the durable state"
 
 
 if __name__ == "__main__":

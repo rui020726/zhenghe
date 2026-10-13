@@ -109,11 +109,14 @@ def main():
                 "hardening": ("persisted ledger state is validated on load (missing/corrupt/"
                               "non-int/negative/over-cap/wrong-cap/foreign-identity state "
                               "raises LedgerStateError and is never silently zeroed); persist "
-                              "is same-dir temp + fsync + os.replace under a lock file that "
-                              "fails closed on a residual lock unless an explicit recorded "
-                              "recovery_basis is supplied (never auto-deleted); debit persists "
-                              "the new state before committing in memory and records refusals "
-                              "without refunding"),
+                              "is same-dir temp + fsync + os.replace under a lock file; the "
+                              "budget check, refusal, counter computation and atomic save all "
+                              "run inside the same lock with the base read from the validated "
+                              "latest DURABLE state (no lost update across instances), memory "
+                              "is published only after durability, refusals are recorded "
+                              "without refund, and ANY residual lock fails closed (lock "
+                              "recovery is not implemented; no basis text authorises deleting "
+                              "a lock)"),
                 "fail_closed": ("LicenseGate refuses every gated action (real-data fit, model "
                                 "forward, claim write, checkpoint write, episode call, "
                                 "optimizer step, PPO replay, environment build) when no real "
@@ -158,6 +161,16 @@ def main():
                  "pass. Now a complete identity block is required and roles/source kinds "
                  "distinguish r68_ep0_model_only from new_full_restore; future legitimate NEW "
                  "restores stay legal while foreign trained state is refused."),
+                ("ForwardLedger.debit determined the budget OUTSIDE the lock from a possibly "
+                 "stale in-memory self.rows, so two instances sharing a state file could both "
+                 "pass and the second write clobbered the first (lost update). Now the whole "
+                 "decision runs inside the same lock from the validated latest durable "
+                 "state, and refusals / persist failures never overwrite another instance's "
+                 "consumption."),
+                ("_locked deleted a residual lock when the caller supplied a recovery_basis "
+                 "string, which could delete a LIVE lock, and the basis was memory-only. Lock "
+                 "recovery is deliberately NOT implemented: any residual lock fails closed and "
+                 "the debit API no longer offers a basis parameter."),
             ],
             "superseded_test": ("test_legal_new_training_initialisation_is_accepted encoded the "
                                 "old flag-only contract; it is superseded by "
@@ -171,6 +184,8 @@ def main():
                 "the default trunk_delegate is an identity echo; no real trunk forward is "
                 "wired or run",
                 "no power-loss atomicity is claimed for the ledger",
+                "lock recovery is not implemented and no real run lock exists to recover; no "
+                "process is ever probed or signalled",
                 "0 .pt opens / 0 model loads / 0 RNG restores / 0 checkpoint writes / 0 real or "
                 "synthetic optimizer updates in the correction pass",
             ],
