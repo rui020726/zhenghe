@@ -29,6 +29,7 @@
     "pt_files_opened": 0,
     "rng_restores": 0,
     "checkpoint_writes": 0,
+    "runtime_binding_phase": "read-only source hashing of registered .py sources, import of the live R68/R66/R53 modules (attribute presence only; no model, no forward), static identity parsing and private scratch receipts",
     "allowed_and_used": "read of existing JSON batch records and tape paths for counting/hashing, pure in-memory arithmetic coefficient transform, in-memory spies, test-only private temporary counters in the writable scratch root"
   },
   "candidate_plan": {
@@ -165,10 +166,133 @@
     "first-batch gate, per-seed 128-episode training and the fixed-ep128 evaluations",
     "real 5-module model construction and head installation on actual R68 parameters (the tests' ParameterContainer is a stand-in only)"
   ],
+  "runtime_binding": {
+    "module": "r71_runtime_binding.py",
+    "cli": "r71_run_calibration.py",
+    "tests": {
+      "file": "test_r71_runtime_binding.py",
+      "total": 22,
+      "passed": 22,
+      "failed": [],
+      "exit_code": 0,
+      "all_pass": true,
+      "scope": "static / spy / pure arithmetic only; the trunk is an injected spy, no model is loaded, no .pt is opened, and no forward, fit, optimizer, autograd, RNG restore, checkpoint, claim or episode happens"
+    },
+    "coverage": {
+      "real_source_binding": {
+        "covered": "read-only source manifest with live SHA256 identities and static function/line resolution for the canonical trainer/common/controller, the frozen PPO primitives, the partitioned controller + frozen-early-path PPO update, the critic->trunk detach, the ROUND68 identity/checkpoint contract, the ROUND68 executor (claim/slot/quota/permit), the ROUND58 base-runner seams and the evaluation seam; the ROUND60 ep0/ep128 model sources are registered by expected identity only and no .pt is opened",
+        "verified_by": "verify_source_manifest (recompute + drift + freeze-literal + reuse)"
+      },
+      "provider_binding": {
+        "covered": "the real trunk entry (N,19) with the 1024 guard and the ForwardLedger debit BEFORE the forward; mean-over-targets pooling to joint rows in the R66 order (after the trunk, per joint row); the fixed dual-output ridge (1e-3, all-row centre/scale, constant column 1, intercept unpenalised); the exact standardised->raw affine transform to the two Linear(64,1) critic heads; copy_ installation into ONLY the two critic parameters with before/after per-module digests proving trunk/early/late untouched; no re-scale and no RNG draw at install",
+        "not_covered": "no real trunk forward is run and no real model is constructed this round; the production delegate is the controller's own inner.trunk and tests inject an explicit spy - an echo delegate does not exist in production"
+      },
+      "payload_role_validation": {
+        "covered": "payload-bound roles: R68 ep0 model-only INIT (registered file/parameter/cursor identity, exact R68 version literal, no optimizer/lambda/RNG), R68 ep128 read-only CONTROL (refused as INIT), this run's NEW full restore (exact ROUND71 version, live run-identity block equality, trained state present), rule control read-only; a declared source_kind or a prefix-only version is never sufficient"
+      },
+      "runtime_and_cli": {
+        "covered": "configure_r71_runtime stands up the REAL runtime through r68_execute.configure_and_inject and rebinds ONLY quota/version/checkpoint save-load to the ROUND71 contract, leaving the routed PPO update, mask, loss and dual update untouched; live-config capture refuses drift from the frozen fields; the CLI validates licence, phase, model-read approval, source/input identity and quota BEFORE any model load and fails closed with no raw-root side effects",
+        "not_covered": "no licence exists this round, so no runtime is ever stood up; the model read-in point is a controlled stop boundary and every phase except binding-acceptance fails closed"
+      },
+      "real_gates_awaiting_approval": [
+        "real initialisation equivalence (calibrated critic heads vs the R68 ep0 heads)",
+        "real gradient gate (critic->trunk isolation with the calibrated heads)",
+        "real restore/resume gate (fresh optimizer, lambda and RNG; foreign resumes refused)",
+        "the actual offline ridge fit and teacher extraction on real data",
+        "first-batch gate, per-seed 128-episode training and the fixed-ep128 evaluations"
+      ]
+    },
+    "acceptance_receipt": {
+      "kind": "round71-critic-calibration-cli/1",
+      "task_id": "ROUND71-REAL-RUNTIME-BINDING-ZERO-EXEC",
+      "branch": "analysis/round71-critic-calibration-readiness",
+      "phase": "binding-acceptance",
+      "run_id": "r71-candidate-unassigned",
+      "consumption": 0,
+      "acceptance": {
+        "kind": "round71-real-runtime-binding/acceptance/1",
+        "task_id": "ROUND71-REAL-RUNTIME-BINDING-ZERO-EXEC",
+        "branch": "analysis/round71-critic-calibration-readiness",
+        "consumption": 0,
+        "source_manifest": {
+          "status": "passed",
+          "source_entries": 20,
+          "checks": 22,
+          "drift": [],
+          "offline_input_reuse": {
+            "registered_from": "ROUND71_OFFLINE_INPUT_COUNT.json",
+            "teacher_source": {
+              "round": "ROUND68-LATE-INITIAL-CONFIDENCE-ABLATION",
+              "training_scene_range": "1300000..1300047 (real training scenes, not the 180 block)",
+              "batch_records": 96,
+              "episodes": 384,
+              "row_files_read": 384
+            },
+            "joint_decision_rows": 32046,
+            "target_level_19d_input_rows": 58928,
+            "reuse_rule": "reused only while the teacher source and counted totals are unchanged; no number is ever guessed (no 58632-style invention)"
+          }
+        },
+        "live_modules": {
+          "imported": [
+            "r68_execute",
+            "r68_frozen",
+            "r66_frozen",
+            "round53_trial_adapter"
+          ],
+          "import_stdout": "r66_frozen module loaded\nr68_frozen module loaded; LATE_INIT_ALPHA= 0.1",
+          "attributes": {
+            "r68_execute.configure_and_inject": true,
+            "r68_frozen.save_checkpoint": true,
+            "r68_frozen.load_checkpoint": true,
+            "r66_frozen.frozen_early_ppo_update": true,
+            "r66_frozen.load_r60_model": true,
+            "r66_frozen.freeze_early_path": true,
+            "round53_trial_adapter.critic_input_detached": true,
+            "round53_trial_adapter.install_on_verified_trainer": true
+          },
+          "r68_training_version_literal": true,
+          "seam_training_version_literal": true,
+          "seam_structure_literal": true
+        },
+        "fail_closed": {
+          "no_licence": "LicenseMissing: action 'environment_build' refused: no verified real experiment licence is present (ROUND71 is zero-consumption preparation only; the candidate plan is APPROVAL_PENDING and must not be treated as an authorisation)",
+          "test_only_licence": "LicenseInvalid: refused"
+        },
+        "status": "passed"
+      },
+      "status": "passed"
+    },
+    "source_manifest": {
+      "status": "passed",
+      "drift": [],
+      "offline_input_reuse": {
+        "registered_from": "ROUND71_OFFLINE_INPUT_COUNT.json",
+        "teacher_source": {
+          "round": "ROUND68-LATE-INITIAL-CONFIDENCE-ABLATION",
+          "training_scene_range": "1300000..1300047 (real training scenes, not the 180 block)",
+          "batch_records": 96,
+          "episodes": 384,
+          "row_files_read": 384
+        },
+        "joint_decision_rows": 32046,
+        "target_level_19d_input_rows": 58928,
+        "reuse_rule": "reused only while the teacher source and counted totals are unchanged; no number is ever guessed (no 58632-style invention)"
+      }
+    },
+    "consumption": 0,
+    "files": [
+      "r71_runtime_binding.py",
+      "r71_run_calibration.py",
+      "test_r71_runtime_binding.py",
+      "ROUND71_RUNTIME_SOURCE_MANIFEST.json",
+      "ROUND71_RUNTIME_BINDING_ACCEPTANCE.json"
+    ]
+  },
   "tests": {
     "file": "test_r71_readiness.py",
-    "total": 50,
-    "passed": 50,
+    "total": 72,
+    "passed": 72,
     "failed": [],
     "exit_code": 0,
     "all_pass": true,
@@ -222,7 +346,29 @@
       "test_trained_ep128_and_old_checkpoints_are_refused",
       "test_two_instances_cannot_lose_an_update",
       "test_unknown_action_is_refused",
-      "test_verified_real_licence_opens_the_gate"
+      "test_verified_real_licence_opens_the_gate",
+      "runtime_binding.test_cli_binding_acceptance_passes_with_zero_consumption",
+      "runtime_binding.test_cli_fails_closed_on_every_licensed_phase",
+      "runtime_binding.test_cli_phase_requirements_are_checked_before_anything_else",
+      "runtime_binding.test_cli_refuses_to_silently_overwrite_a_receipt",
+      "runtime_binding.test_configure_refuses_before_importing_the_runtime_or_touching_disk",
+      "runtime_binding.test_coverage_block_declares_what_is_not_covered",
+      "runtime_binding.test_default_trunk_delegate_is_never_an_echo",
+      "runtime_binding.test_ep0_init_counterexamples_are_refused",
+      "runtime_binding.test_ep128_is_a_readonly_control_and_never_an_init",
+      "runtime_binding.test_extract_and_fit_charges_real_rows_and_pools",
+      "runtime_binding.test_install_critic_heads_touches_only_the_two_critic_modules",
+      "runtime_binding.test_manifest_registers_model_sources_without_opening_them",
+      "runtime_binding.test_model_read_boundary_requires_an_explicit_approval",
+      "runtime_binding.test_offline_input_reuse_registration",
+      "runtime_binding.test_pooling_matches_the_r66_mean_over_targets_order",
+      "runtime_binding.test_r68_ep0_model_only_init_payload_is_accepted",
+      "runtime_binding.test_r71_new_full_restore_requires_this_runs_exact_identity",
+      "runtime_binding.test_r71_version_extends_r68_and_matches_the_freeze_json",
+      "runtime_binding.test_ridge_roundtrip_on_synthetic_data",
+      "runtime_binding.test_rule_control_and_unknown_roles",
+      "runtime_binding.test_source_manifest_matches_the_live_tree",
+      "runtime_binding.test_trunk_entry_guards_charge_and_delegate_exactly_once"
     ],
     "scope": "pure arithmetic / static / spy only; no real or synthetic neural forward, optimizer, autograd, real-data fit or checkpoint save"
   },

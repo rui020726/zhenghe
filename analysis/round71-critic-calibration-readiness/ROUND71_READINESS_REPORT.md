@@ -108,3 +108,62 @@ autograd 0；真实数据统计拟合 0；模型加载 0；打开 .pt 0；训练
 被 `test_residual_lock_always_fails_closed_no_basis_can_delete` 显式取代并附更正说明，另新增 3 项
 丢更新/拒绝/持久化失败反例）。本轮消费仍全零。阶段不变：候选计划 `APPROVAL_PENDING`，
 测试全绿不构成批准；声明层 restore 校验与默认 echo delegate 仍不构成真实 R68 接线。
+
+## 真实运行接线轮（append-only；仍零消费；`APPROVAL_PENDING` 不变）
+
+任务：`ROUND71-REAL-RUNTIME-BINDING-ZERO-EXEC`。本轮把未来校准 provider 绑到**真实** R68 运行源码，
+不新增治理框架、不使用 mock 冒充接线，仍不启动任何科研运行。
+
+新增文件（本地提交，未推送/合并/部署）：
+
+- `r71_runtime_binding.py`：真实接线模块（导入轻量：torch/r68 只在受门控函数内惰性导入）。
+- `r71_run_calibration.py`：真实 CLI（`--phase binding-acceptance|offline-fit|train|eval`）。
+- `test_r71_runtime_binding.py`：22 项窄测试（静态/spy/纯算术）。
+- `ROUND71_RUNTIME_SOURCE_MANIFEST.json`：只读来源清单（20 条来源 + 验证回执）。
+- `ROUND71_RUNTIME_BINDING_ACCEPTANCE.json`：零消费验收回执（CLI 实跑生成）。
+
+### 本轮接上的真实接缝（静态核验，非 mock）
+
+1. **来源身份**：只读清单登记 canonical trainer/common/controller、冻结 PPO 原语、分头 controller 与
+   frozen-early-path PPO 更新、critic→trunk detach、R68 身份/五模块 checkpoint、R68 executor
+   （claim/slot/额度/construction permit）、R58 base-runner 接缝与评估接缝的实时 SHA256 与
+   函数/行号解析；canonical 三件套 SHA 与 r66_frozen 的 `EXPECTED_*` 常量逐一相符（`0550b99e…`/
+   `66d019a3…`/`9b2362ee…`）。6 个 R60 ep0/ep128 模型来源只按已登记期望身份记录，**从不打开或哈希 .pt**。
+2. **运行stand-up**：`configure_r71_runtime` 经真实 `r68_execute.configure_and_inject` 起租，
+   **只**重绑定额度（582/18/600，已登记未授权）、版本字面量与 checkpoint 存/读到 R71 契约；
+   `trainer.ppo_update` 保持 R68 路由更新不变（critic detach + frozen-early-path 数学），
+   顺序 mask、loss、对偶更新一律不动；`capture_live_config` 从活体 `common`/`r66_frozen`/`r68_frozen`
+   读取 11 个冻结字段，任何漂移即拒。
+3. **provider**：trunk 入口取 controller 自己的 `inner.trunk`（生产默认不再是恒等回显——此项更正上一轮
+   "默认 trunk_delegate 为恒等回显" 的未覆盖声明；测试仅允许显式注入 spy）；(N,19) 校验、1024 守卫、
+   `ForwardLedger` 在 forward **前** debit 真实行；mean-over-targets 汇聚按 R66 顺序（trunk 之后、
+   逐联合行）；固定 dual-output ridge（1e-3、全行中心/尺度、常数列 1、截距不惩罚）；经
+   `standardized_to_raw_affine` + `affine_to_critic_heads` 精确写回两个 `Linear(64,1)` critic 头；
+   `copy_` 只装两个 critic 参数，安装前后逐模块参数 digest 证明 trunk/early/late 逐字节不变，不重缩放、
+   不抽 RNG。
+4. **载荷角色校验**（`validate_calibration_source`，纯描述、不开 .pt）：R68 ep0 model-only INIT
+   （登记 file/parameter/cursor 身份、R68 版本字面量精确相等、禁 optimizer/lambda/RNG）、
+   R68 ep128 只读对照（拒绝充当 INIT）、本 run 的 NEW full restore（R71 版本**精确**相等、
+   `run_identity` 块逐字段等于活体身份、已训练状态必须齐全——仅声明 `source_kind` 或前缀版本一律拒绝）、
+   规则只读对照。
+5. **CLI 与门禁**：顺序固定为 licence gate → phase 要求 → model-read approval → configure；
+   模型读入点是受控停止边界；`binding-acceptance` 无需 licence 实跑通过，其余 phase 在**任何**
+   raw-root 副作用之前 fail closed（无 licence→`LicenseMissing`；test-only→`LicenseInvalid`；
+   有 licence 无批准→`ModelReadBoundary`，raw-root 均未创建）。
+
+### 验收与测试
+
+- 验收回执：20 条来源、22 项检查、drift 0；活体模块（r68_execute/r68_frozen/r66_frozen/
+  round53_trial_adapter）属性在场；R68 训练版本字面量与 `ROUND68_FREEZE.json` 相等；
+  两条 fail-closed 实证均按预期拒绝。
+- 测试：**72/72 通过，退出码 0**（原 50 项原样通过 + 新 22 项）。
+- 本轮消费仍全零：0 环境构造、0 episode/claim、0 真实或合成 optimizer/autograd/PPO、
+  0 神经前向（含 NumPy 等价）、0 真实数据拟合、0 模型加载、0 .pt 打开、0 RNG 恢复、0 checkpoint 写入。
+  唯一文件读为已登记 JSON 与 .py 源哈希；活体模块导入仅作属性在场核验。
+
+### 仍未执行 / 不宣称
+
+真实初始化等价（校准头 vs R68 ep0 头）、真实梯度门禁、真实 restore/resume 门禁、真实离线 ridge 拟合
+与 embedding 提取、首 batch 门禁、逐 seed 128 集训练与固定 ep128 评估**均未执行**；测试中的 numpy
+结构替身仍非真实参数；测试全绿不构成批准。阶段不变：候选计划 `APPROVAL_PENDING`（582 正常 + 18 储备、
+硬顶 600；离线 72,000 输入行 / 批 1,024；合成 optimizer 上限 16——均已登记，无一获授权）。

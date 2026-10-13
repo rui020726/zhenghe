@@ -1,0 +1,61 @@
+{
+ "kind": "round71-critic-calibration-cli/1",
+ "task_id": "ROUND71-REAL-RUNTIME-BINDING-ZERO-EXEC",
+ "branch": "analysis/round71-critic-calibration-readiness",
+ "phase": "binding-acceptance",
+ "run_id": "r71-candidate-unassigned",
+ "consumption": 0,
+ "acceptance": {
+  "kind": "round71-real-runtime-binding/acceptance/1",
+  "task_id": "ROUND71-REAL-RUNTIME-BINDING-ZERO-EXEC",
+  "branch": "analysis/round71-critic-calibration-readiness",
+  "consumption": 0,
+  "source_manifest": {
+   "status": "passed",
+   "source_entries": 20,
+   "checks": 22,
+   "drift": [],
+   "offline_input_reuse": {
+    "registered_from": "ROUND71_OFFLINE_INPUT_COUNT.json",
+    "teacher_source": {
+     "round": "ROUND68-LATE-INITIAL-CONFIDENCE-ABLATION",
+     "training_scene_range": "1300000..1300047 (real training scenes, not the 180 block)",
+     "batch_records": 96,
+     "episodes": 384,
+     "row_files_read": 384
+    },
+    "joint_decision_rows": 32046,
+    "target_level_19d_input_rows": 58928,
+    "reuse_rule": "reused only while the teacher source and counted totals are unchanged; no number is ever guessed (no 58632-style invention)"
+   }
+  },
+  "live_modules": {
+   "imported": [
+    "r68_execute",
+    "r68_frozen",
+    "r66_frozen",
+    "round53_trial_adapter"
+   ],
+   "import_stdout": "r66_frozen module loaded\nr68_frozen module loaded; LATE_INIT_ALPHA= 0.1",
+   "attributes": {
+    "r68_execute.configure_and_inject": true,
+    "r68_frozen.save_checkpoint": true,
+    "r68_frozen.load_checkpoint": true,
+    "r66_frozen.frozen_early_ppo_update": true,
+    "r66_frozen.load_r60_model": true,
+    "r66_frozen.freeze_early_path": true,
+    "round53_trial_adapter.critic_input_detached": true,
+    "round53_trial_adapter.install_on_verified_trainer": true
+   },
+   "r68_training_version_literal": true,
+   "seam_training_version_literal": true,
+   "seam_structure_literal": true
+  },
+  "fail_closed": {
+   "no_licence": "LicenseMissing: action 'environment_build' refused: no verified real experiment licence is present (ROUND71 is zero-consumption preparation only; the candidate plan is APPROVAL_PENDING and must not be treated as an authorisation)",
+   "test_only_licence": "LicenseInvalid: refused"
+  },
+  "status": "passed"
+ },
+ "status": "passed"
+}

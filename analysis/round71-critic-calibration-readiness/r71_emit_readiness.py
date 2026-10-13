@@ -17,10 +17,12 @@ sys.path.insert(0, str(HERE))
 
 import r71_critic_calibration_seam as seam  # noqa: E402
 import test_r71_readiness as tests  # noqa: E402
+import test_r71_runtime_binding as binding_tests  # noqa: E402
+import r71_runtime_binding as binding  # noqa: E402
 
 
-def run_tests():
-    fns = [(k, v) for k, v in sorted(vars(tests).items())
+def run_tests(module):
+    fns = [(k, v) for k, v in sorted(vars(module).items())
            if k.startswith("test_") and callable(v)]
     passed, failed = [], []
     for name, fn in fns:
@@ -34,7 +36,11 @@ def run_tests():
 
 def main():
     counts = json.loads((HERE / "ROUND71_OFFLINE_INPUT_COUNT.json").read_text(encoding="utf-8"))
-    passed, failed = run_tests()
+    passed, failed = run_tests(tests)
+    b_passed, b_failed = run_tests(binding_tests)
+    passed = passed + [f"runtime_binding.{name}" for name in b_passed]
+    failed = failed + [{"test": f"runtime_binding.{item['test']}", "error": item["error"]}
+                       for item in b_failed]
 
     out = {
         "kind": "round71-critic-calibration-readiness/1",
@@ -64,6 +70,10 @@ def main():
             "autograd_calls": 0, "real_data_statistical_fits": 0,
             "model_loads": 0, "pt_files_opened": 0, "rng_restores": 0,
             "checkpoint_writes": 0,
+            "runtime_binding_phase": ("read-only source hashing of registered .py sources, "
+                                      "import of the live R68/R66/R53 modules (attribute "
+                                      "presence only; no model, no forward), static identity "
+                                      "parsing and private scratch receipts"),
             "allowed_and_used": ("read of existing JSON batch records and tape paths for "
                                  "counting/hashing, pure in-memory arithmetic coefficient "
                                  "transform, in-memory spies, test-only private temporary "
@@ -201,6 +211,37 @@ def main():
             "real 5-module model construction and head installation on actual R68 parameters "
             "(the tests' ParameterContainer is a stand-in only)",
         ],
+        "runtime_binding": {
+            "module": "r71_runtime_binding.py",
+            "cli": "r71_run_calibration.py",
+            "tests": {
+                "file": "test_r71_runtime_binding.py",
+                "total": len(b_passed) + len(b_failed),
+                "passed": len(b_passed),
+                "failed": b_failed,
+                "exit_code": 0 if not b_failed else 1,
+                "all_pass": not b_failed,
+                "scope": ("static / spy / pure arithmetic only; the trunk is an injected spy, no "
+                          "model is loaded, no .pt is opened, and no forward, fit, optimizer, "
+                          "autograd, RNG restore, checkpoint, claim or episode happens"),
+            },
+            "coverage": binding.runtime_binding_coverage(),
+            "acceptance_receipt": (
+                json.loads((HERE / "ROUND71_RUNTIME_BINDING_ACCEPTANCE.json").read_text(
+                    encoding="utf-8"))
+                if (HERE / "ROUND71_RUNTIME_BINDING_ACCEPTANCE.json").is_file()
+                else "not regenerated this run"),
+            "source_manifest": (
+                json.loads((HERE / "ROUND71_RUNTIME_SOURCE_MANIFEST.json").read_text(
+                    encoding="utf-8"))["verification"]
+                if (HERE / "ROUND71_RUNTIME_SOURCE_MANIFEST.json").is_file()
+                else binding.verify_source_manifest()),
+            "consumption": 0,
+            "files": ["r71_runtime_binding.py", "r71_run_calibration.py",
+                      "test_r71_runtime_binding.py",
+                      "ROUND71_RUNTIME_SOURCE_MANIFEST.json",
+                      "ROUND71_RUNTIME_BINDING_ACCEPTANCE.json"],
+        },
         "tests": {
             "file": "test_r71_readiness.py",
             "total": len(passed) + len(failed),
@@ -225,6 +266,8 @@ def main():
     dst.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({"stage": out["stage"], "licensed": out["authorisation"]["experiment_licensed"],
                       "tests": out["tests"]["passed"], "failed": len(failed),
+                      "runtime_binding_tests": out["runtime_binding"]["tests"]["passed"],
+                      "runtime_binding_failed": len(b_failed),
                       "exit": out["tests"]["exit_code"],
                       "offline_input_rows": counts["totals"]["target_level_19d_input_rows_AUTHORITATIVE"],
                       "within_offline_cap": counts["candidate_offline_budget"]["within_cap"]},
