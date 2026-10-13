@@ -1,0 +1,67 @@
+{
+  "kind": "round71-critic-calibration-readiness/offline-input-count/1",
+  "task_id": "ROUND71-CRITIC-CALIBRATION-ZERO-USE-READINESS",
+  "zero_consumption": {
+    "neural_forwards": 0,
+    "pt_files_loaded": 0,
+    "rng_restores": 0,
+    "statistical_fits": 0,
+    "model_loads": 0,
+    "optimizer_steps": 0,
+    "environment": 0,
+    "episodes": 0,
+    "claims": 0,
+    "checkpoint_writes": 0,
+    "note": "only existing JSON batch records and tape paths were read and hashed"
+  },
+  "teacher_data_source": {
+    "round": "ROUND68-LATE-INITIAL-CONFIDENCE-ABLATION",
+    "training_scene_range": "1300000..1300047 (real training scenes, not the 180 block)",
+    "batch_records": 96,
+    "episodes": 384,
+    "row_files_read": 384
+  },
+  "per_seed": {
+    "11": {
+      "joint_decision_rows": 11009,
+      "target_level_19d_input_rows": 20013,
+      "max_targets_in_one_joint_row": 6,
+      "episodes": 128,
+      "scenes": 48,
+      "batches_at_cap_1024": 20,
+      "max_real_input_batch": 1024
+    },
+    "22": {
+      "joint_decision_rows": 9762,
+      "target_level_19d_input_rows": 18691,
+      "max_targets_in_one_joint_row": 6,
+      "episodes": 128,
+      "scenes": 48,
+      "batches_at_cap_1024": 19,
+      "max_real_input_batch": 1024
+    },
+    "33": {
+      "joint_decision_rows": 11275,
+      "target_level_19d_input_rows": 20224,
+      "max_targets_in_one_joint_row": 6,
+      "episodes": 128,
+      "scenes": 48,
+      "batches_at_cap_1024": 20,
+      "max_real_input_batch": 1024
+    }
+  },
+  "totals": {
+    "joint_decision_rows": 32046,
+    "target_level_19d_input_rows_AUTHORITATIVE": 58928,
+    "batches_at_cap_1024": 58,
+    "max_real_input_batch": 1024
+  },
+  "candidate_offline_budget": {
+    "input_row_cap": 72000,
+    "batch_cap": 1024,
+    "authoritative_consumption": 58928,
+    "within_cap": true,
+    "headroom": 13072,
+    "note": "cap constrains the offline calibration phase only; any future licensed training/evaluation consumption is counted separately and in full"
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "kind": "round71-critic-calibration-readiness/1",
+  "task_id": "ROUND71-CRITIC-CALIBRATION-ZERO-USE-READINESS",
+  "branch": "analysis/round71-critic-calibration-readiness",
+  "base_head": "92571c62b27b0c38d755b501a6d0153b630a08ed",
+  "stage": "ZERO_CONSUMPTION_PREPARATION_COMPLETE",
+  "authorisation": {
+    "experiment_licensed": false,
+    "candidate_status": "APPROVAL_PENDING",
+    "note": "no human approval for a new experiment has been received; the candidate plan is registered only and confers no run authorisation. Tests being green does not advance the stage."
+  },
+  "zero_consumption_this_round": {
+    "environment_constructions": 0,
+    "episodes": 0,
+    "claims": 0,
+    "optimizer_steps_real": 0,
+    "optimizer_steps_synthetic": 0,
+    "ppo_replays": 0,
+    "neural_forwards": 0,
+    "autograd_calls": 0,
+    "real_data_statistical_fits": 0,
+    "model_loads": 0,
+    "pt_files_opened": 0,
+    "rng_restores": 0,
+    "checkpoint_writes": 0,
+    "allowed_and_used": "read of existing JSON batch records and tape paths for counting/hashing, pure in-memory arithmetic coefficient transform, in-memory spies, test-only private temporary counters in the writable scratch root"
+  },
+  "candidate_plan": {
+    "status": "APPROVAL_PENDING",
+    "intervention": "initialise the dual critic affine heads of each R68 seed model from a ridge calibration on that seed's own existing training teacher data over the frozen trunk's true mean-over-targets representation",
+    "unchanged": "trunk, early/late actor heads (late initial value scaled x0.10), the initial policy, and a legitimate NEW training state from the qualified R68 ep0 (optimizer / lambda / RNG)",
+    "fit_config": {
+      "ridge": 0.001,
+      "center_scale_scope": "all training teacher rows of that seed",
+      "constant_column_scale": 1.0,
+      "intercept_penalized": false,
+      "fits_per_seed": 1,
+      "forbidden": [
+        "180 evaluation data",
+        "threshold fitting",
+        "seed selection",
+        "treating late labels as safe ground truth"
+      ]
+    },
+    "budgets": {
+      "offline_input_row_cap": 72000,
+      "batch_input_row_cap": 1024,
+      "candidate_synthetic_optimizer_cap": 16,
+      "note": "the offline cap constrains the offline phase only; any future licensed training/evaluation consumption is counted separately and in full"
+    },
+    "future_run_plan_if_ever_licensed": {
+      "normal": 582,
+      "technical_reserve": 18,
+      "hard_total": 600,
+      "breakdown": "384 training from the calibrated initialisation + 192 fixed-ep128 evaluations (3 seeds x 2 modes x 32 old dev scenes 1800000..1800031) + 6 frozen-focus greedy cells at scene 1700027 (INIT/TRAINED x 3 seeds)",
+      "controls": "R68 same-seed / same-mode / same-scenario controls and the rule arms are read-only reuse subject to source, config and behaviour-policy identity eligibility; no old-round quota is borrowed"
+    },
+    "not_claimed": "extra offline learning cost and a policy-distribution change risk are acknowledged; this is not a same-training-budget comparison and no improvement is pre-claimed"
+  },
+  "offline_input_count": {
+    "totals": {
+      "joint_decision_rows": 32046,
+      "target_level_19d_input_rows_AUTHORITATIVE": 58928,
+      "batches_at_cap_1024": 58,
+      "max_real_input_batch": 1024
+    },
+    "per_seed": {
+      "11": {
+        "joint_decision_rows": 11009,
+        "target_level_19d_input_rows": 20013,
+        "max_targets_in_one_joint_row": 6,
+        "episodes": 128,
+        "scenes": 48,
+        "batches_at_cap_1024": 20,
+        "max_real_input_batch": 1024
+      },
+      "22": {
+        "joint_decision_rows": 9762,
+        "target_level_19d_input_rows": 18691,
+        "max_targets_in_one_joint_row": 6,
+        "episodes": 128,
+        "scenes": 48,
+        "batches_at_cap_1024": 19,
+        "max_real_input_batch": 1024
+      },
+      "33": {
+        "joint_decision_rows": 11275,
+        "target_level_19d_input_rows": 20224,
+        "max_targets_in_one_joint_row": 6,
+        "episodes": 128,
+        "scenes": 48,
+        "batches_at_cap_1024": 20,
+        "max_real_input_batch": 1024
+      }
+    },
+    "budget": {
+      "input_row_cap": 72000,
+      "batch_cap": 1024,
+      "authoritative_consumption": 58928,
+      "within_cap": true,
+      "headroom": 13072,
+      "note": "cap constrains the offline calibration phase only; any future licensed training/evaluation consumption is counted separately and in full"
+    },
+    "teacher_source": {
+      "round": "ROUND68-LATE-INITIAL-CONFIDENCE-ABLATION",
+      "training_scene_range": "1300000..1300047 (real training scenes, not the 180 block)",
+      "batch_records": 96,
+      "episodes": 384,
+      "row_files_read": 384
+    }
+  },
+  "preparation_coverage": {
+    "calibration_initialisation_seam": {
+      "covered": "exact closed-form transform of a dual-output ridge fitted on the STANDARDISED embedding back to the raw 64-D embedding affine head (B[j,:]=A[j,:]/sigma[j]; b=c-mu@B), plus expression of (B,b) as the two real Linear(64,1) critic heads; only the two critic heads may be replaced, and replacement is not in place",
+      "design_basis": "the verified real critic input/affine-head path from ROUND70: value = head(mean over targets of trunk(features)), both real critic heads are Linear(64,1) on the frozen-trunk embedding, so the dual-output affine baseline is the same function class",
+      "not_done": "no real model opened, no real data fitted, no model weights produced"
+    },
+    "resource_and_entry_guard": {
+      "covered": "ForwardLedger debits the REAL 19-D input-vector rows BEFORE any forward and refuses before exceeding the cap; billing unit is the target-level input row (never the joint decision row, never the call count); failures, retries and repeats are all charged; the counter persists across instances so a restart does not zero it; batches are grouped by real input rows with a 1024 cap and an oversized single step is reported rather than silently split; DuplicateOutputGuard refuses an implicit re-run over an existing artefact",
+      "fail_closed": "LicenseGate refuses every gated action (real-data fit, model forward, claim write, checkpoint write, episode call, optimizer step, PPO replay, environment build) when no real licence token is present, and the initialiser raises at the FIRST gate so no collaborator runs and no charge occurs",
+      "not_claimed": "the ledger is an in-process guard over a persisted counter; it does NOT claim physical power-loss atomicity, and a spy/no-op is not a real update",
+      "not_added": "no invented conditions such as 'the receipt must live outside the repository' or 'exactly N claim files'"
+    },
+    "restore_source_legality": {
+      "covered": "validate_restore_source refuses a trained ep128, a resume-purpose source, a source carrying trained optimizer / lambda / training RNG state, and any module set other than the 5-module contract"
+    },
+    "read_only_input_count": {
+      "joint_decision_rows": 32046,
+      "target_level_19d_input_rows_AUTHORITATIVE": 58928,
+      "batches_at_cap_1024": 58,
+      "max_real_input_batch": 1024
+    }
+  },
+  "real_gates_not_yet_executed": [
+    "real initialisation equivalence (calibrated heads vs the R68 ep0 critic heads on a real rollout input)",
+    "real gradient gate (critic-to-trunk isolation still holds with the calibrated heads)",
+    "real restore / resume gate (fresh optimizer, lambda and RNG from the R68 ep0 state)",
+    "the actual offline ridge fit and the resulting coefficient transform on real data",
+    "any real embedding extraction, model forward, claim, checkpoint write or episode",
+    "first-batch gate, per-seed 128-episode training and the fixed-ep128 evaluations"
+  ],
+  "tests": {
+    "file": "test_r71_readiness.py",
+    "total": 23,
+    "passed": 23,
+    "failed": [],
+    "exit_code": 0,
+    "all_pass": true,
+    "names": [
+      "test_affine_to_critic_heads_layout",
+      "test_analytic_roundtrip_on_full_embedding_dim",
+      "test_batch_boundary_1024_and_refusal_before_exceeding",
+      "test_batches_never_exceed_cap_and_cover_every_target",
+      "test_billing_unit_is_target_expansion_not_joint_rows",
+      "test_calibration_touches_only_critic_heads",
+      "test_candidate_plan_is_registered_as_approval_pending",
+      "test_constant_column_scale_must_be_one_not_zero",
+      "test_duplicate_output_guard_refuses_implicit_rerun",
+      "test_failed_fake_call_still_consumes_the_debit",
+      "test_freeze_partition_is_preserved_by_the_candidate",
+      "test_head_set_replacement_is_not_in_place",
+      "test_initializer_refuses_before_any_fit_or_forward",
+      "test_ledger_persists_across_instances",
+      "test_legal_new_training_initialisation_is_accepted",
+      "test_missing_licence_fails_closed_on_every_gated_action",
+      "test_predictors_agree_on_random_embeddings",
+      "test_retries_and_repeats_are_charged_every_time",
+      "test_single_oversized_step_is_emitted_alone_not_split",
+      "test_spy_collaborators_prove_no_real_update_happened",
+      "test_tiny_hand_computed_counterexample",
+      "test_trained_ep128_and_old_checkpoints_are_refused",
+      "test_unknown_action_is_refused"
+    ],
+    "scope": "pure arithmetic / static / spy only; no real or synthetic neural forward, optimizer, autograd, real-data fit or checkpoint save"
+  },
+  "protected_files": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+    "status": "byte-unchanged and unstaged"
+  },
+  "untracked_left_alone": "analysis/round59-communication-decision-density/r59_analysis_run.log"
+}
