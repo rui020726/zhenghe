@@ -466,7 +466,13 @@ def _first_batch_gate(cfg, controller, state, record, episodes, *, init_identity
     checks["early_free"] = int(update_report.get("early_free", 0))
     checks["late_free"] = int(update_report.get("late_free", 0))
     cal = init_identity["calibration"]
-    module_sha = {name: r68._module_sha(controller, name)
+    # The init-identity checks must read the PRE-update INIT module shas, not the post-update
+    # controller: late_head and both critic heads are trainable and move during the first PPO
+    # update, so comparing the post-update shas against the recorded INIT shas would always
+    # fail. Load the INIT checkpoint read-only (parameter hashing only: no forward/env/optimizer).
+    _init_ctrl, _init_state, _init_id = readiness.r71_load_checkpoint_read_only(
+        init_paths(cfg, int(state["training_seed"]))["init"])
+    module_sha = {name: r68._module_sha(_init_ctrl, name)
                   for name in ("trunk", "early_head", "late_head", "value_task_head", "cost_head")}
     checks["init_trunk_is_r68_ep0_trunk"] = (module_sha["trunk"] == cal["trunk_sha256"])
     checks["init_early_head_is_r68_ep0"] = (module_sha["early_head"] == cal["early_head_sha256"])
