@@ -1,0 +1,761 @@
+{
+  "kind": "ROUND70-FROZEN-CRITIC-CALIBRATION-CHECK",
+  "task_id": "ROUND70-FROZEN-CRITIC-CALIBRATION-CHECK",
+  "branch": "analysis/round70-frozen-critic-calibration-check",
+  "base_head": "4f66ae783bd6e49afdba777210a0cef28c8ebe04",
+  "source_round": "ROUND68-LATE-INITIAL-CONFIDENCE-ABLATION / ROUND69 audit",
+  "scope": {
+    "decision_step_rows": 32046,
+    "episodes": 384,
+    "batch_records": 96,
+    "seeds": [
+      11,
+      22,
+      33
+    ],
+    "training_scene_min": 1300000,
+    "training_scene_max": 1300047,
+    "training_scene_unique": 48,
+    "lambda_row_vs_batch_mismatches": 0
+  },
+  "provenance_correction": {
+    "training_stats_source": "REAL training scenes 1300000..1300047 (batch scenarios + row scenario_seed)",
+    "not_source": "1800000..1800031 is the R68 EVALUATION block (background only)",
+    "r69_mislabel": "R69 report prose (sections 6 and correction C-block) called the audited block '1800000..1800031'; the audited training tapes are 1300000..1300047. R69 original text preserved; this is an appended source correction.",
+    "eval_block_usage": "180 eval results are background only; never added to any fit or model selection."
+  },
+  "trunk_frozen_eligibility": {
+    "note": "Each seed's trunk is requires_grad=False (R68 freeze) and byte-identical across before_bN/after_bN; per-seed chain eligibility reused from R68 and re-confirmed here on before_b0/b15/b31 (distinct trunks across seeds, one per seed).",
+    "per_seed": {
+      "11": {
+        "distinct_trunk_digests": 1,
+        "trunk_sha256": "ce7b1126273d5f786378374c126d09a57ee5f43eb665773fbc971857bccd5cb2",
+        "bitwise_frozen_across_sampled_batches": true
+      },
+      "22": {
+        "distinct_trunk_digests": 1,
+        "trunk_sha256": "458ae217e6b4095e1a44d1dda5d1dde8de6594678be8c277a881a32bc8db8b11",
+        "bitwise_frozen_across_sampled_batches": true
+      },
+      "33": {
+        "distinct_trunk_digests": 1,
+        "trunk_sha256": "07c691866e8b2fc7122a14926c89eb25458d63c683dd36f01cc630c574a0f42a",
+        "bitwise_frozen_across_sampled_batches": true
+      }
+    }
+  },
+  "critic_head_architecture": {
+    "trunk": "Sequential(Linear(19,64),Tanh,Linear(64,64),Tanh); frozen per seed",
+    "value_task_head": "Linear(64,1) -> affine on the 64-D frozen-trunk embedding",
+    "value_cost_head": "Linear(64,1) -> affine on the 64-D frozen-trunk embedding",
+    "real_critic_head_is_affine_on_representation": true,
+    "applicable": true,
+    "note": "Both real critic heads are single Linear maps on the frozen-trunk embedding, so the dual-output affine baseline is the SAME function class as the real critic; the diagnostic premise holds (not the critic-head-not-affine inapplicable-stop branch). The model class was not changed to force a fit."
+  },
+  "wiring_verification": {
+    "method": "fresh full critic forward on before_b0/b15/b31 rollout inputs; value/cost = head(mean over targets of trunk(features)); compared to SAVED rollout-before tape values (not ep128 critic values).",
+    "checks": [
+      {
+        "batch": 0,
+        "rows": 265,
+        "task_value_max_abs_gap": 1.1920928955078125e-07,
+        "cost_value_max_abs_gap": 1.4901161193847656e-07,
+        "passed": true
+      },
+      {
+        "batch": 15,
+        "rows": 552,
+        "task_value_max_abs_gap": 1.7881393432617188e-07,
+        "cost_value_max_abs_gap": 1.7881393432617188e-07,
+        "passed": true
+      },
+      {
+        "batch": 31,
+        "rows": 295,
+        "task_value_max_abs_gap": 2.384185791015625e-07,
+        "cost_value_max_abs_gap": 1.4901161193847656e-07,
+        "passed": true
+      }
+    ],
+    "all_passed": true
+  },
+  "embeddings": {
+    "rows": 32046,
+    "dim": 64,
+    "extracted_once": true,
+    "reused_across_folds": true
+  },
+  "cv_config": {
+    "pcg64_seed": 20261013,
+    "n_folds": 5,
+    "ridge": 0.001,
+    "grouping": "by real training scene, shared across seeds; same scene -> same fold",
+    "normalization": "train-fold center/scale; constant-column scale=1; intercept unpenalised",
+    "note": "post-hoc diagnosis; no fold/regularisation/feature sweep; no best-seed selection"
+  },
+  "folds": [
+    {
+      "fold": 0,
+      "n_scenes": 10,
+      "scenes": [
+        1300000,
+        1300004,
+        1300008,
+        1300010,
+        1300016,
+        1300020,
+        1300025,
+        1300038,
+        1300042,
+        1300047
+      ],
+      "scene_sha256": "4ed8ccbb22c0429b543005b996ab76d7e63485bac706d190d768a3ad97bdfa7e",
+      "rows_by_seed": {
+        "11": 2369,
+        "22": 1866,
+        "33": 1867
+      },
+      "rows_total": 6102
+    },
+    {
+      "fold": 1,
+      "n_scenes": 10,
+      "scenes": [
+        1300006,
+        1300011,
+        1300019,
+        1300022,
+        1300024,
+        1300028,
+        1300032,
+        1300039,
+        1300045,
+        1300046
+      ],
+      "scene_sha256": "c446e5b0aa3c90e271f8899b60b45f6528b068eb3ddb56008d1739970002aaee",
+      "rows_by_seed": {
+        "11": 3539,
+        "22": 3593,
+        "33": 2749
+      },
+      "rows_total": 9881
+    },
+    {
+      "fold": 2,
+      "n_scenes": 10,
+      "scenes": [
+        1300001,
+        1300005,
+        1300013,
+        1300014,
+        1300021,
+        1300029,
+        1300031,
+        1300034,
+        1300035,
+        1300041
+      ],
+      "scene_sha256": "1bf92a5fcf6b7cb04ed2b3113331fc60d3b77451d100198a12910eda16fe13db",
+      "rows_by_seed": {
+        "11": 2214,
+        "22": 1415,
+        "33": 1434
+      },
+      "rows_total": 5063
+    },
+    {
+      "fold": 3,
+      "n_scenes": 9,
+      "scenes": [
+        1300002,
+        1300003,
+        1300007,
+        1300015,
+        1300018,
+        1300026,
+        1300033,
+        1300043,
+        1300044
+      ],
+      "scene_sha256": "209d96936dbfb4f6246216f4b68069be17c228eae0861709f0cea1cc424f448a",
+      "rows_by_seed": {
+        "11": 1400,
+        "22": 1398,
+        "33": 1398
+      },
+      "rows_total": 4196
+    },
+    {
+      "fold": 4,
+      "n_scenes": 9,
+      "scenes": [
+        1300009,
+        1300012,
+        1300017,
+        1300023,
+        1300027,
+        1300030,
+        1300036,
+        1300037,
+        1300040
+      ],
+      "scene_sha256": "579b92b5b43615d0c9fa3a1661fb80195719efb51946fbb9219b1fa756cbb9db",
+      "rows_by_seed": {
+        "11": 1487,
+        "22": 1490,
+        "33": 3827
+      },
+      "rows_total": 6804
+    }
+  ],
+  "results": {
+    "11": {
+      "all_rows": {
+        "original_critic": {
+          "task": {
+            "n": 11009,
+            "bias": 2.4228959343004757,
+            "mae": 2.49531122990879,
+            "rmse": 3.2253150555653507
+          },
+          "cost": {
+            "n": 11009,
+            "bias": 0.018645420923561997,
+            "mae": 0.1623950699493106,
+            "rmse": 0.21502276368372367
+          },
+          "composite": {
+            "n": 11009,
+            "bias": 3.387666520193935,
+            "mae": 3.4696909798597955,
+            "rmse": 4.530131650144069
+          }
+        },
+        "oof_affine": {
+          "task": {
+            "n": 11009,
+            "bias": -0.023977899470040843,
+            "mae": 0.669319239126886,
+            "rmse": 0.8853519232092527
+          },
+          "cost": {
+            "n": 11009,
+            "bias": -0.004616372346595926,
+            "mae": 0.16239060204739234,
+            "rmse": 0.20877170851034252
+          },
+          "composite": {
+            "n": 11009,
+            "bias": -0.019358371824791224,
+            "mae": 0.8172398947421601,
+            "rmse": 1.1179161945392022
+          }
+        },
+        "oof_intercept": {
+          "task": {
+            "n": 11009,
+            "bias": -0.05781910010885142,
+            "mae": 1.8948172031797106,
+            "rmse": 2.1408487923564747
+          },
+          "cost": {
+            "n": 11009,
+            "bias": -0.002589026812220933,
+            "mae": 0.17801098285335942,
+            "rmse": 0.21451667782858214
+          },
+          "composite": {
+            "n": 11009,
+            "bias": 0.02707532265183379,
+            "mae": 2.497903784313724,
+            "rmse": 2.873366043896032
+          }
+        }
+      },
+      "late_free": {
+        "original_critic": {
+          "task": {
+            "n": 171,
+            "bias": 1.6922260550033215,
+            "mae": 1.6927929929040961,
+            "rmse": 1.907514425634121
+          },
+          "cost": {
+            "n": 171,
+            "bias": 0.3380057077130466,
+            "mae": 0.33940104297651363,
+            "rmse": 0.39344497779884613
+          },
+          "composite": {
+            "n": 171,
+            "bias": 2.0498174265186058,
+            "mae": 2.0505654764438996,
+            "rmse": 2.339736706742129
+          }
+        },
+        "oof_affine": {
+          "task": {
+            "n": 171,
+            "bias": 0.19941905437627513,
+            "mae": 0.8140827172922168,
+            "rmse": 0.9882745916157385
+          },
+          "cost": {
+            "n": 171,
+            "bias": 0.052075427432434006,
+            "mae": 0.19600205464346615,
+            "rmse": 0.23902851898538663
+          },
+          "composite": {
+            "n": 171,
+            "bias": 0.22677326253012026,
+            "mae": 0.9714439787598398,
+            "rmse": 1.1806699803726868
+          }
+        },
+        "oof_intercept": {
+          "task": {
+            "n": 171,
+            "bias": -0.7962574906201125,
+            "mae": 1.0370334504981968,
+            "rmse": 1.170023084478355
+          },
+          "cost": {
+            "n": 171,
+            "bias": 0.1968004737604902,
+            "mae": 0.21234291278186007,
+            "rmse": 0.27725364851790274
+          },
+          "composite": {
+            "n": 171,
+            "bias": -1.3309184457868999,
+            "mae": 1.4879277862537,
+            "rmse": 1.7182297423820745
+          }
+        }
+      }
+    },
+    "22": {
+      "all_rows": {
+        "original_critic": {
+          "task": {
+            "n": 9762,
+            "bias": 2.485238503508522,
+            "mae": 2.755061979997521,
+            "rmse": 3.467905633924894
+          },
+          "cost": {
+            "n": 9762,
+            "bias": 0.03325494615250895,
+            "mae": 0.19161823075430753,
+            "rmse": 0.2513926333653151
+          },
+          "composite": {
+            "n": 9762,
+            "bias": 2.7766937837090073,
+            "mae": 3.0833603613868124,
+            "rmse": 3.8381609339971257
+          }
+        },
+        "oof_affine": {
+          "task": {
+            "n": 9762,
+            "bias": -1.1736598341393178,
+            "mae": 1.769338750778689,
+            "rmse": 2.9725759725373675
+          },
+          "cost": {
+            "n": 9762,
+            "bias": -0.029507990926584002,
+            "mae": 0.17289380535847215,
+            "rmse": 0.2509756516579775
+          },
+          "composite": {
+            "n": 9762,
+            "bias": -1.3071108351519376,
+            "mae": 1.927241807428659,
+            "rmse": 3.294776700649594
+          }
+        },
+        "oof_intercept": {
+          "task": {
+            "n": 9762,
+            "bias": -0.1508752109382158,
+            "mae": 2.0185127254361297,
+            "rmse": 2.302536097173809
+          },
+          "cost": {
+            "n": 9762,
+            "bias": -0.007533360761305411,
+            "mae": 0.1850022709918261,
+            "rmse": 0.21845132931410596
+          },
+          "composite": {
+            "n": 9762,
+            "bias": -0.15075623781730177,
+            "mae": 2.2221166949409117,
+            "rmse": 2.558511275862486
+          }
+        }
+      },
+      "late_free": {
+        "original_critic": {
+          "task": {
+            "n": 171,
+            "bias": 1.606640284586894,
+            "mae": 1.6819049497053289,
+            "rmse": 1.950309371250744
+          },
+          "cost": {
+            "n": 171,
+            "bias": 0.24520765134419,
+            "mae": 0.26564617537513197,
+            "rmse": 0.33051920675889956
+          },
+          "composite": {
+            "n": 171,
+            "bias": 1.559061979428182,
+            "mae": 1.6657624304535315,
+            "rmse": 1.9125515748751636
+          }
+        },
+        "oof_affine": {
+          "task": {
+            "n": 171,
+            "bias": 0.26227883038496896,
+            "mae": 0.7814520551195334,
+            "rmse": 0.9863168909230151
+          },
+          "cost": {
+            "n": 171,
+            "bias": 0.05540439908402917,
+            "mae": 0.20604913141798278,
+            "rmse": 0.24989130737638648
+          },
+          "composite": {
+            "n": 171,
+            "bias": 0.2439179446748998,
+            "mae": 0.7342034250487471,
+            "rmse": 0.9586579219618792
+          }
+        },
+        "oof_intercept": {
+          "task": {
+            "n": 171,
+            "bias": -1.0342134824833038,
+            "mae": 1.1945994620359122,
+            "rmse": 1.394205531323889
+          },
+          "cost": {
+            "n": 171,
+            "bias": 0.17686459313697117,
+            "mae": 0.21201605609750113,
+            "rmse": 0.2679657114051637
+          },
+          "composite": {
+            "n": 171,
+            "bias": -1.3833670733263141,
+            "mae": 1.4559380933118016,
+            "rmse": 1.70232048336058
+          }
+        }
+      }
+    },
+    "33": {
+      "all_rows": {
+        "original_critic": {
+          "task": {
+            "n": 11275,
+            "bias": 1.8849147059976514,
+            "mae": 2.2838584793993335,
+            "rmse": 3.0147450373812235
+          },
+          "cost": {
+            "n": 11275,
+            "bias": 0.08687688731933364,
+            "mae": 0.2116864293278372,
+            "rmse": 0.2738908897047658
+          },
+          "composite": {
+            "n": 11275,
+            "bias": 2.3539235803334124,
+            "mae": 2.7950723956459855,
+            "rmse": 3.78850723029279
+          }
+        },
+        "oof_affine": {
+          "task": {
+            "n": 11275,
+            "bias": -0.16913388108696634,
+            "mae": 0.6896428931879716,
+            "rmse": 1.9421943349036594
+          },
+          "cost": {
+            "n": 11275,
+            "bias": -0.016889634383973458,
+            "mae": 0.13577625734671195,
+            "rmse": 0.2703980176433302
+          },
+          "composite": {
+            "n": 11275,
+            "bias": -0.18166665733897708,
+            "mae": 0.8111377627715254,
+            "rmse": 2.227450899628596
+          }
+        },
+        "oof_intercept": {
+          "task": {
+            "n": 11275,
+            "bias": -0.14378029163104797,
+            "mae": 2.080897455749846,
+            "rmse": 2.3656132328837907
+          },
+          "cost": {
+            "n": 11275,
+            "bias": -0.0066340402443896005,
+            "mae": 0.1752492490071503,
+            "rmse": 0.21297337729823934
+          },
+          "composite": {
+            "n": 11275,
+            "bias": -0.0654705961762287,
+            "mae": 2.5176975509639683,
+            "rmse": 2.8846758412373945
+          }
+        }
+      },
+      "late_free": {
+        "original_critic": {
+          "task": {
+            "n": 171,
+            "bias": 1.2705928523812378,
+            "mae": 1.3245688490787444,
+            "rmse": 1.6095772429707365
+          },
+          "cost": {
+            "n": 171,
+            "bias": 0.3393498327947739,
+            "mae": 0.34366285210059005,
+            "rmse": 0.4134541361126238
+          },
+          "composite": {
+            "n": 171,
+            "bias": 1.2903203985795662,
+            "mae": 1.4043242983098987,
+            "rmse": 1.7287123041910166
+          }
+        },
+        "oof_affine": {
+          "task": {
+            "n": 171,
+            "bias": 0.23650835549531016,
+            "mae": 0.855518810806614,
+            "rmse": 1.0601263081936447
+          },
+          "cost": {
+            "n": 171,
+            "bias": 0.05997940619292107,
+            "mae": 0.19165579942448668,
+            "rmse": 0.2347361351900421
+          },
+          "composite": {
+            "n": 171,
+            "bias": 0.2619018520129919,
+            "mae": 0.9879961515334561,
+            "rmse": 1.2055792408354498
+          }
+        },
+        "oof_intercept": {
+          "task": {
+            "n": 171,
+            "bias": -0.6790082391620648,
+            "mae": 0.9683554466293762,
+            "rmse": 1.1645154762243108
+          },
+          "cost": {
+            "n": 171,
+            "bias": 0.2075556421190626,
+            "mae": 0.23571639174375728,
+            "rmse": 0.29701311729312757
+          },
+          "composite": {
+            "n": 171,
+            "bias": -1.0990184098389422,
+            "mae": 1.3095116631558463,
+            "rmse": 1.5633041989142813
+          }
+        }
+      }
+    },
+    "all": {
+      "all_rows": {
+        "original_critic": {
+          "task": {
+            "n": 32046,
+            "bias": 2.25260478443761,
+            "mae": 2.500040589590874,
+            "rmse": 3.2303212707468307
+          },
+          "cost": {
+            "n": 32046,
+            "bias": 0.047102263240771804,
+            "mae": 0.18863973614076246,
+            "rmse": 0.24804975070511248
+          },
+          "composite": {
+            "n": 32046,
+            "bias": 2.8378391626300186,
+            "mae": 3.1146487270187553,
+            "rmse": 4.072779563830755
+          }
+        },
+        "oof_affine": {
+          "task": {
+            "n": 32046,
+            "bias": -0.42527068917772093,
+            "mae": 1.0115628786539295,
+            "rmse": 2.070792632535906
+          },
+          "cost": {
+            "n": 32046,
+            "bias": -0.016517171511835748,
+            "mae": 0.15622619882148547,
+            "rmse": 0.2447159369466219
+          },
+          "composite": {
+            "n": 32046,
+            "bias": -0.46874567339665824,
+            "mae": 1.153226823958808,
+            "rmse": 2.341336649201113
+          }
+        },
+        "oof_intercept": {
+          "task": {
+            "n": 32046,
+            "bias": -0.1164106930792384,
+            "mae": 1.997968003154604,
+            "rmse": 2.2712247243583534
+          },
+          "cost": {
+            "n": 32046,
+            "bias": -0.005518381941056492,
+            "mae": 0.17916901835519125,
+            "rmse": 0.215184184666379
+          },
+          "composite": {
+            "n": 32046,
+            "bias": -0.05965771510907574,
+            "mae": 2.4208564508719257,
+            "rmse": 2.7853473637872357
+          }
+        }
+      },
+      "late_free": {
+        "original_critic": {
+          "task": {
+            "n": 513,
+            "bias": 1.5231530639904844,
+            "mae": 1.5664222638960565,
+            "rmse": 1.8287570303970602
+          },
+          "cost": {
+            "n": 513,
+            "bias": 0.30752106395067014,
+            "mae": 0.31623669015074524,
+            "rmse": 0.38078262357951803
+          },
+          "composite": {
+            "n": 513,
+            "bias": 1.6330666015087845,
+            "mae": 1.706884068402443,
+            "rmse": 2.0100304818663313
+          }
+        },
+        "oof_affine": {
+          "task": {
+            "n": 513,
+            "bias": 0.2327354134188514,
+            "mae": 0.8170178610727881,
+            "rmse": 1.0121553680269948
+          },
+          "cost": {
+            "n": 513,
+            "bias": 0.05581974423646142,
+            "mae": 0.19790232849531184,
+            "rmse": 0.24130295726505627
+          },
+          "composite": {
+            "n": 513,
+            "bias": 0.24419768640600395,
+            "mae": 0.8978811851140144,
+            "rmse": 1.1204802422513436
+          }
+        },
+        "oof_intercept": {
+          "task": {
+            "n": 513,
+            "bias": -0.8364930707551603,
+            "mae": 1.0666627863878284,
+            "rmse": 1.2475121076436233
+          },
+          "cost": {
+            "n": 513,
+            "bias": 0.19374023633884133,
+            "mae": 0.22002512020770615,
+            "rmse": 0.28100533799766475
+          },
+          "composite": {
+            "n": 513,
+            "bias": -1.2711013096507189,
+            "mae": 1.4177925142404495,
+            "rmse": 1.6627415607983491
+          }
+        }
+      }
+    }
+  },
+  "resource_counts": {
+    "neural_forward": {
+      "decision_step_rows": 33158,
+      "target_level_trunk_evals": 60800,
+      "forward_calls": 1171,
+      "cap": 36000,
+      "within_cap": true,
+      "batch_cap": 1024,
+      "caliber_note": "authoritative input-row unit = decision-step tape row (matches the task's '32,046 row-embedding' and the 36,000 budget); the mean-over-targets embedding internally evaluates the trunk per target (target_level_trunk_evals) and is disclosed separately."
+    },
+    "readonly_model_loads": 9,
+    "statistical_fits": {
+      "ridge": 15,
+      "intercept": 15,
+      "total": 30
+    },
+    "zero_side_effects": {
+      "environment": 0,
+      "episode": 0,
+      "claim": 0,
+      "optimizer_step": 0,
+      "ppo_replay": 0,
+      "autograd": 0,
+      "training_rng_restore": 0,
+      "checkpoint_write": 0
+    }
+  },
+  "limitations": [
+    "The R68 model repeatedly SAW these training scenes during its own training; the OOF split is OOF only for the diagnostic regression, not for the model. Not an independent confirmation.",
+    "OOF fitting uses different-period (held-out-scene) data than the critic's own training; this is a post-hoc calibration probe, not a same-training-budget fair algorithm comparison.",
+    "Original value = each row's SAVED rollout-before critic value; never re-forwarded or overwritten.",
+    "Only OOF predictions enter the main table; training-residual-mean-0 is not treated as success."
+  ],
+  "cannot_infer": [
+    "Does not prove the critic is wrong, only whether a better affine predictor exists on this representation.",
+    "Does not show a baseline would improve the policy.",
+    "Does not establish the causal value of a message.",
+    "Does not identify the root cause of any clipping."
+  ],
+  "missing_or_undecidable": {
+    "missing_fields": [],
+    "unclear_wiring": [],
+    "note": "All required fields present on disk; critic input/value wiring verified end-to-end against the saved rollout-before values (max abs gap ~2e-7). No zero-fill, no guessed input, no re-run episode; nothing marked undecidable this round."
+  }
+}
