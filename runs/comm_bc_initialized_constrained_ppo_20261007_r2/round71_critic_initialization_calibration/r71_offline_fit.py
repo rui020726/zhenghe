@@ -195,6 +195,27 @@ def _pack(batch, fidelity):
     return matrix, counts, returns, meta
 
 
+def r68_initial_controller(seed: int):
+    """The verified ROUND68 initial controller as the same 5-tuple ``fresh_r68_controller``
+    returned BEFORE the harness rebound ``controller_module.fresh_controller``.
+
+    ``configure_and_inject`` (run by every ROUND71 entry point) rebinds
+    ``v2_controller.fresh_controller`` to the frozen partitioned factory, so calling
+    ``r68.fresh_r68_controller`` AFTER configure wraps an already-partitioned controller a
+    second time and fails.  ROUND60's own ``fresh_partitioned_controller`` documents the same
+    hazard and builds ``v2_controller.StageCController`` directly.  This is the identical
+    construction (same class, same seed, same RNG consumption order) through the identical
+    verified chain (R60 ep0 model-only load + frozen early path + one late-head scale), and it
+    writes no identity file.
+    """
+    import r66_frozen as r66
+    import r68_frozen as r68
+    import v2_controller as vc
+    r66.configure_source_imports()          # idempotent; re-verifies canonical byte identity
+    base = vc.StageCController(int(seed))
+    return r68.build_frozen_controller(base, int(seed))
+
+
 def offline_fit_seed(*, seed: int, gate: LicenseGate, model_read_approval, run_identity,
                      ledger: ForwardLedger, init_path: Path, identity_path: Path,
                      overwrite: bool = False) -> dict:
@@ -220,7 +241,7 @@ def offline_fit_seed(*, seed: int, gate: LicenseGate, model_read_approval, run_i
     import v2_trainer as trainer
 
     # 1+2: the verified ROUND68 initial controller (model-only ROUND60 ep0 + late scale)
-    controller, ep0, frozen_identity, post, scale_id = r68.fresh_r68_controller(int(seed))
+    controller, ep0, frozen_identity, post, scale_id = r68_initial_controller(int(seed))
     rng_after_construction = trainer.rng_state()
     init_payload = {
         "identity": {"seed": int(seed), "structure": readiness.SEAM_R68_STRUCTURE,
@@ -328,7 +349,7 @@ def gate_fit_probe(*, seed: int, gate: LicenseGate, model_read_approval, ledger:
     import r66_frozen as r66
     import r68_frozen as r68
     import v2_trainer as trainer
-    controller, ep0, frozen_identity, post, scale_id = r68.fresh_r68_controller(int(seed))
+    controller, ep0, frozen_identity, post, scale_id = r68_initial_controller(int(seed))
     rng_after_construction = trainer.rng_state()
     before_digest = readiness.module_parameter_digest(controller)
     provider = readiness.CalibrationProvider(controller, ledger)

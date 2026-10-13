@@ -109,10 +109,10 @@ def configure_r71_trial(raw_root: Path, gate, run_identity, *, model_read_approv
         "normal_cap": NORMAL_CAP, "reserve_cap": RESERVE_CAP, "hard_cap": HARD_CAP,
         "historical_non_plan_probe": HISTORICAL_PROBE,
         "approval_id": trial.TRIAL_APPROVAL_ID,
-        "ppo_update_is_r68_routed": cfg["identity"]["ppo_update_unchanged"],
-        "save_is_r71": cfg["identity"]["save_is_r71"],
-        "load_is_r71": cfg["identity"]["load_is_r71"],
-        "load_ro_is_r71": cfg["identity"]["load_ro_is_r71"]}
+        "ppo_update_is_r68_routed": cfg["r71"]["identity"]["ppo_update_unchanged"],
+        "save_is_r71": cfg["r71"]["identity"]["save_is_r71"],
+        "load_is_r71": cfg["r71"]["identity"]["load_is_r71"],
+        "load_ro_is_r71": cfg["r71"]["identity"]["load_ro_is_r71"]}
     return cfg
 
 

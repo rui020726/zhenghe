@@ -36,6 +36,7 @@ SyntheticStepGuard (cap 16).  A gate failure stops the trial before the first la
 """
 from __future__ import annotations
 
+import contextlib
 import json
 import sys
 from pathlib import Path
@@ -60,9 +61,16 @@ import r71_offline_fit as fit                                            # noqa:
 import r71_trial_execute as execute                                      # noqa: E402
 import r68_guards                                                         # noqa: E402
 from r71_critic_calibration_seam import (                                # noqa: E402
-    BATCH_INPUT_ROW_CAP, CRITIC_HEAD_MODULES, OFFLINE_INPUT_ROW_CAP,
+    BATCH_INPUT_ROW_CAP, CRITIC_HEAD_MODULES, EMBED_DIM, OFFLINE_INPUT_ROW_CAP,
     ForwardLedger, predict_raw, predict_standardized, standardized_to_raw_affine,
 )
+
+import torch                                                             # noqa: E402
+
+# The pristine torch.optim.Adam.step captured at import time - BEFORE configure installs the
+# ROUND43 call-counter hook that appends every step to the real training journal
+# (optimizer_step_calls.jsonl).  A synthetic gate step must not land in that journal.
+_PRISTINE_ADAM_STEP = torch.optim.Adam.step
 
 GATE_SEED = 11
 ACTOR_PROBE_ROWS = 64
@@ -91,6 +99,26 @@ def synthetic_guard(raw_root: Path):
     return r68_guards.SyntheticStepGuard(path, cap=SYNTHETIC_STEP_CAP)
 
 
+@contextlib.contextmanager
+def _synthetic_step_journal_isolated():
+    """Run a synthetic (gate-only) optimizer step WITHOUT writing the real training journal.
+
+    ``configure`` globally wraps ``torch.optim.Adam.step`` with the ROUND43 call counter, which
+    appends every step to ``optimizer_step_calls.jsonl``; the configure invariant then requires
+    that journal to close against committed batch records.  A synthetic gate step on a THROWAWAY
+    controller is counted only by the synthetic-step guard and must NOT enter that real-training
+    journal, so we temporarily restore the pristine ``Adam.step`` (captured at import, before the
+    hook) for the duration of the synthetic step and put the live hook back afterwards.  Serial
+    execution only; the synthetic step is still charged to the guard BEFORE it runs.
+    """
+    live = torch.optim.Adam.step
+    torch.optim.Adam.step = _PRISTINE_ADAM_STEP
+    try:
+        yield
+    finally:
+        torch.optim.Adam.step = live
+
+
 def _write(path: Path, obj: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(obj, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
@@ -116,25 +144,39 @@ def _fresh_r71_state(cfg, seed: int, run_identity) -> dict:
 
 
 def _hand_computed_counterexample() -> dict:
-    """A 2-D counterexample computed BY HAND, independently of the module's code.
+    """The documented affine, checked independently of the module's own code.
 
-    mu=[1,2], sigma=[2,4], A=[[1,0],[0,1]], c=[0,0]
+    Hand algebra (worked out here, not by the module): mu=[1,2], sigma=[2,4], A=I, c=0 gives
       B[0]=A[0]/sigma[0]=[0.5,0]     B[1]=A[1]/sigma[1]=[0,0.25]
       b = c - mu@B = [0,0] - [1*0.5+2*0, 1*0+2*0.25] = [-0.5,-0.5]
     Test point X=[3,6]:
       standardised: Xn=[1,1] -> pred = Xn@A + c = [1,1]
       raw:          X@B + b = [1.5,1.5] + [-0.5,-0.5] = [1,1]     (must agree)
+
+    The seam's ``standardized_to_raw_affine`` is dimension-locked to the real EMBED_DIM, so
+    the 2-D case verifies the hand algebra written out here, and the SAME written-out formula
+    is compared against the seam on a random EMBED_DIM case, whose round trip is re-checked.
     """
-    mu = np.array([1.0, 2.0]); sigma = np.array([2.0, 4.0])
-    A = np.array([[1.0, 0.0], [0.0, 1.0]]); c = np.array([0.0, 0.0])
+    mu2 = np.array([1.0, 2.0]); sigma2 = np.array([2.0, 4.0])
+    A2 = np.eye(2); c2 = np.zeros(2)
+    hand_B = A2 / sigma2[:, None]
+    hand_b = c2 - mu2 @ hand_B
+    hand_ok = (np.array_equal(hand_B, np.array([[0.5, 0.0], [0.0, 0.25]]))
+               and np.array_equal(hand_b, np.array([-0.5, -0.5])))
+    rng = np.random.default_rng(20261013)
+    mu = rng.normal(size=EMBED_DIM)
+    sigma = rng.uniform(0.5, 2.0, size=EMBED_DIM)
+    A = rng.normal(size=(EMBED_DIM, 2))
+    c = rng.normal(size=2)
+    want_B = A / sigma[:, None]
+    want_b = c - mu @ want_B
     B, b = standardized_to_raw_affine(mu, sigma, A, c)
-    want_B = np.array([[0.5, 0.0], [0.0, 0.25]])
-    want_b = np.array([-0.5, -0.5])
-    X = np.array([[3.0, 6.0], [-1.0, 0.5], [7.0, -3.0]])
+    X = rng.normal(size=(7, EMBED_DIM))
     gap = float(np.max(np.abs(predict_standardized(X, mu, sigma, A, c)
                               - predict_raw(X, B, b))))
-    return {"B_matches_hand": bool(np.allclose(B, want_B, atol=0, rtol=0)),
-            "b_matches_hand": bool(np.allclose(b, want_b, atol=0, rtol=0)),
+    return {"hand_2d_algebra_matches": bool(hand_ok),
+            "seam_B_matches_formula": bool(np.allclose(B, want_B, rtol=0, atol=1e-12)),
+            "seam_b_matches_formula": bool(np.allclose(b, want_b, rtol=0, atol=1e-12)),
             "roundtrip_max_abs_gap": gap}
 
 
@@ -144,7 +186,7 @@ def g1_affine_equivalence(cfg, raw_root: Path, gate) -> dict:
     import torch                                                   # noqa: F401
     import r68_frozen as r68
     ledger = forward_ledger(raw_root)
-    controller, _ep0, _fid, _post, _scale = r68.fresh_r68_controller(GATE_SEED)
+    controller, _ep0, _fid, _post, _scale = fit.r68_initial_controller(GATE_SEED)
     provider = readiness.CalibrationProvider(controller, ledger)
     matrix, counts, returns, meta = next(iter(fit.teacher_batches(GATE_SEED, limit_batches=1)))
     hidden = np.asarray(provider.trunk_forward(matrix, n_joint_rows=len(counts)),
@@ -163,9 +205,10 @@ def g1_affine_equivalence(cfg, raw_root: Path, gate) -> dict:
     scale = float(max(1.0, np.max(np.abs(pred_std))))
     counter = _hand_computed_counterexample()
     checks = {
-        "hand_B_matches": counter["B_matches_hand"],
-        "hand_b_matches": counter["b_matches_hand"],
-        "hand_roundtrip_gap_zero": counter["roundtrip_max_abs_gap"] < 1e-12,
+        "hand_2d_algebra_matches": counter["hand_2d_algebra_matches"],
+        "seam_B_matches_formula": counter["seam_B_matches_formula"],
+        "seam_b_matches_formula": counter["seam_b_matches_formula"],
+        "roundtrip_max_abs_gap_zero": counter["roundtrip_max_abs_gap"] < 1e-9,
         "real_forward_task_head_matches_standardised": bool(
             np.max(np.abs(installed_task - pred_std[:, 0])) <= 1e-4 * scale),
         "real_forward_cost_head_matches_standardised": bool(
@@ -196,7 +239,7 @@ def g2_actor_invariance(cfg, raw_root: Path, gate) -> dict:
     import r68_frozen as r68
     import v2_trainer as trainer_module
     ledger = forward_ledger(raw_root)
-    controller, _ep0, _fid, _post, _scale = r68.fresh_r68_controller(GATE_SEED)
+    controller, _ep0, _fid, _post, _scale = fit.r68_initial_controller(GATE_SEED)
     provider = readiness.CalibrationProvider(controller, ledger)
     matrix, counts, returns, meta = next(iter(fit.teacher_batches(GATE_SEED, limit_batches=1)))
     feats = np.asarray(matrix[:ACTOR_PROBE_ROWS], dtype=np.float32)
@@ -254,7 +297,7 @@ def g3_optimizer_coverage(cfg, raw_root: Path, gate) -> dict:
     import torch
     import r68_frozen as r68
     synth = synthetic_guard(raw_root)
-    controller, _ep0, _fid, _post, _scale = r68.fresh_r68_controller(GATE_SEED)
+    controller, _ep0, _fid, _post, _scale = fit.r68_initial_controller(GATE_SEED)
     sets = controller.module_parameter_sets()
     every_object = [p for group in sets.values() for p in group]
     frozen = r68.frozen_parameters(controller)
@@ -265,15 +308,22 @@ def g3_optimizer_coverage(cfg, raw_root: Path, gate) -> dict:
     trainable_ids = {id(p) for p in trainable}
     max_norm = float(cfg["common"].MAX_GRAD_NORM)
     digest_before = readiness.module_parameter_digest(controller)
-    loss = (controller.inner.late_head.weight.sum()
-            + controller.inner.value_head.weight.sum()
-            + controller.cost_head.weight.sum())
+    # every one of the six trainable objects (three weights AND three biases) must receive a
+    # gradient so the synthetic step exercises all of them
+    loss = (controller.inner.late_head.weight.sum() + controller.inner.late_head.bias.sum()
+            + controller.inner.value_head.weight.sum() + controller.inner.value_head.bias.sum()
+            + controller.cost_head.weight.sum() + controller.cost_head.bias.sum())
     optimizer.zero_grad(set_to_none=True)
     loss.backward()
     total_norm = torch.nn.utils.clip_grad_norm_(trainable, max_norm)
     post_norm = float(torch.norm(torch.stack([p.grad.norm() for p in trainable])))
+    # capture gradient presence NOW (after backward + clip, BEFORE the charged step clears
+    # them): the frozen six must have recorded no gradient, the trainable six must all have one
+    frozen_grads_none = all(p.grad is None for p in frozen)
+    trainable_grads_present = all(p.grad is not None for p in trainable)
     synth.charge(1, "g3 synthetic optimizer step (gate only, never saved)")
-    optimizer.step()
+    with _synthetic_step_journal_isolated():
+        optimizer.step()
     optimizer.zero_grad(set_to_none=True)
     digest_after = readiness.module_parameter_digest(controller)
     checks = {
@@ -289,8 +339,8 @@ def g3_optimizer_coverage(cfg, raw_root: Path, gate) -> dict:
             len(opt_params) == 6 and {id(p) for p in opt_params} == trainable_ids
             and not ({id(p) for p in opt_params} & frozen_ids)),
         "optimizer_owns_no_frozen_object": not ({id(p) for p in opt_params} & frozen_ids),
-        "frozen_objects_recorded_no_gradient": all(p.grad is None for p in frozen),
-        "trainable_objects_recorded_gradient": all(p.grad is not None for p in trainable),
+        "frozen_objects_recorded_no_gradient": bool(frozen_grads_none),
+        "trainable_objects_recorded_gradient": bool(trainable_grads_present),
         "clip_norm_finite": bool(torch.isfinite(total_norm)),
         "clip_respected_max_grad_norm": post_norm <= max_norm + 1e-6,
         "synthetic_step_moved_trainable": any(
@@ -465,7 +515,7 @@ def g7_save_restore_closure(cfg, raw_root: Path, gate) -> dict:
     synth = synthetic_guard(raw_root)
     run_identity = trial.trial_run_identity()
     ledger = forward_ledger(raw_root)
-    controller, _ep0, _fid, _post, _scale = r68.fresh_r68_controller(GATE_SEED)
+    controller, _ep0, _fid, _post, _scale = fit.r68_initial_controller(GATE_SEED)
     provider = readiness.CalibrationProvider(controller, ledger)
     matrix, counts, returns, meta = next(iter(fit.teacher_batches(GATE_SEED, limit_batches=1)))
     hidden = np.asarray(provider.trunk_forward(matrix, n_joint_rows=len(counts)), dtype=np.float64)
@@ -475,13 +525,16 @@ def g7_save_restore_closure(cfg, raw_root: Path, gate) -> dict:
     optimizer = r68.build_optimizer(controller, float(cfg["common"].LEARNING_RATE))
     state = _fresh_r71_state(cfg, GATE_SEED, run_identity)
     # one charged synthetic step so the Adam moments exist and must be restored
-    loss = (controller.inner.late_head.weight.sum()
-            + controller.inner.value_head.weight.sum()
-            + controller.cost_head.weight.sum())
+    # every one of the six trainable objects (three weights AND three biases) must receive a
+    # gradient so the synthetic step exercises all of them
+    loss = (controller.inner.late_head.weight.sum() + controller.inner.late_head.bias.sum()
+            + controller.inner.value_head.weight.sum() + controller.inner.value_head.bias.sum()
+            + controller.cost_head.weight.sum() + controller.cost_head.bias.sum())
     optimizer.zero_grad(set_to_none=True)
     loss.backward()
     synth.charge(1, "g7 synthetic optimizer step (gate only, never trained on)")
-    optimizer.step()
+    with _synthetic_step_journal_isolated():
+        optimizer.step()
     optimizer.zero_grad(set_to_none=True)
     state["updates"] = 1
     state["episodes_done"] = 4
@@ -569,12 +622,17 @@ def g8_cli_binding(cfg, raw_root: Path, gate) -> dict:
     r40 = runtime["r40_common"]
     common = cfg["common"]
     versions = runtime["r42_versions"]
-    controller, _ep0, _fid, _post, scale_id = r68.fresh_r68_controller(GATE_SEED)
+    controller, _ep0, _fid, _post, scale_id = fit.r68_initial_controller(GATE_SEED)
     summary = controller.parameter_summary()
     frozen_summary = r68.frozen_parameter_summary(controller)
     frozen, trainable = r68.partitioned_parameters(controller)
     ep0_state = r68.load_r60_model(GATE_SEED, "ep0")["controller"]
-    reference = r68.fresh_partitioned_controller(GATE_SEED, ep0_state=ep0_state, verify_ep0=False)
+    # Build the R60-ep0 partitioned reference by loading the five-module state into a fresh
+    # partitioned controller (the same pattern as _r71_restore_controller): ep0_state is the
+    # PARTITIONED five-module R60 model, not the old four-module R58 schema that the
+    # fresh_partitioned_controller ep0_state= path expects.
+    reference = r68.fresh_partitioned_controller(GATE_SEED, ep0_state=None, verify_ep0=False)
+    reference.load_state_dict(ep0_state)
     late = controller.inner.late_head
     init_path = execute.init_paths(cfg, GATE_SEED)["init"]
     if init_path.is_file():
@@ -605,12 +663,12 @@ def g8_cli_binding(cfg, raw_root: Path, gate) -> dict:
         "claim_root_is_round71_raw_root": str(r40.ROUND_DIR.resolve()) == str(root),
         "checkpoints_under_raw_root": str(Path(common.CHECKPOINTS).resolve()).startswith(str(root)),
         "rows_under_raw_root": str(Path(common.ROWS).resolve()).startswith(str(root)),
-        "ppo_update_is_the_verified_r68_update": bool(cfg["identity"]["ppo_update_unchanged"]),
-        "save_is_r71": bool(cfg["identity"]["save_is_r71"]),
-        "load_is_r71": bool(cfg["identity"]["load_is_r71"]),
-        "load_ro_is_r71": bool(cfg["identity"]["load_ro_is_r71"]),
+        "ppo_update_is_the_verified_r68_update": bool(cfg["r71"]["identity"]["ppo_update_unchanged"]),
+        "save_is_r71": bool(cfg["r71"]["identity"]["save_is_r71"]),
+        "load_is_r71": bool(cfg["r71"]["identity"]["load_is_r71"]),
+        "load_ro_is_r71": bool(cfg["r71"]["identity"]["load_ro_is_r71"]),
         "build_joint_run_is_permit_guarded": bool(
-            cfg["identity"]["build_joint_run_is_permit_guarded"]),
+            cfg["r71"]["identity"]["build_joint_run_is_permit_guarded"]),
         "trial_identity_block": (cfg["trial"]["task_id"] == trial.R71_TRIAL_TASK_ID
                                  and cfg["trial"]["normal_cap"] == execute.NORMAL_CAP
                                  and cfg["trial"]["hard_cap"] == execute.HARD_CAP
