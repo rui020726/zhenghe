@@ -1,0 +1,385 @@
+{
+ "kind": "round74-phase-b1-verdict/1",
+ "mode": "production",
+ "canonical_root": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round74_constrained_early_head_adaptation\\raw\\runtime",
+ "adam_step_unchanged_since_import": true,
+ "r43_training_driver_not_loaded": true,
+ "control_commit": "fe53d476efb56baaae194d68d7f749a546b14389",
+ "live": {
+  "GAMMA": 1.0,
+  "GAE_LAMBDA": 1.0,
+  "ETA_LAMBDA": 0.5,
+  "CLIP": 0.2,
+  "VALUE_COEFFICIENT": 0.5,
+  "ENTROPY_BONUS": 0.01,
+  "LEARNING_RATE": 0.0003,
+  "MAX_GRAD_NORM": 0.5,
+  "EPOCHS_PER_BATCH": 4,
+  "MINIBATCH_STEPS": 256,
+  "READY_CUT": 147.0,
+  "GATE_BETA": 1.0
+ },
+ "before": {
+  "mode": "production",
+  "canonical_root": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round74_constrained_early_head_adaptation\\raw\\runtime",
+  "root": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round74_constrained_early_head_adaptation\\raw\\runtime",
+  "pinned_to_canonical": true,
+  "total_ledger_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round74_constrained_early_head_adaptation\\raw\\runtime\\r74_total_ledger.jsonl",
+  "total_ledger_events": 5,
+  "env_slots": {
+   "kind": "r74-env-construction-slot-guard/1",
+   "unit": "environment_construction",
+   "mode": "production",
+   "normal_cap": 579,
+   "reserve_cap": 21,
+   "hard_cap": 600,
+   "used_normal": 0,
+   "used_reserve": 0,
+   "used": 0,
+   "remaining": 600,
+   "refusals": 0
+  },
+  "synthetic_physical_steps": {
+   "kind": "r74-synthetic-physical-optimizer-step-guard/1",
+   "unit": "physical_optimizer_step",
+   "mode": "production",
+   "normal_cap": 12,
+   "reserve_cap": 4,
+   "hard_cap": 16,
+   "used_normal": 2,
+   "used_reserve": 0,
+   "used": 2,
+   "remaining": 14,
+   "refusals": 0
+  },
+  "offline_forward_target_rows": {
+   "kind": "r74-offline-trunk-target-forward-guard/1",
+   "unit": "offline_trunk_target_row",
+   "mode": "production",
+   "normal_cap": 3000,
+   "reserve_cap": 3000,
+   "hard_cap": 6000,
+   "used_normal": 0,
+   "used_reserve": 0,
+   "used": 0,
+   "remaining": 6000,
+   "refusals": 0
+  },
+  "joint_records": {
+   "kind": "r74-joint-record-guard/1",
+   "unit": "joint_record",
+   "mode": "production",
+   "normal_cap": 1000000000,
+   "reserve_cap": 1000000000,
+   "hard_cap": 1000000000,
+   "used_normal": 0,
+   "used_reserve": 0,
+   "used": 0,
+   "remaining": 1000000000,
+   "refusals": 0
+  },
+  "ppo_calls": {
+   "kind": "r74-ppo-call-guard/1",
+   "unit": "ppo_update_call",
+   "mode": "production",
+   "normal_cap": 1000000000,
+   "reserve_cap": 1000000000,
+   "hard_cap": 1000000000,
+   "used_normal": 0,
+   "used_reserve": 0,
+   "used": 0,
+   "remaining": 1000000000,
+   "refusals": 0
+  }
+ },
+ "gates": {
+  "B1-G1": {
+   "id": "B1-G1",
+   "name": "model_identity_and_mask",
+   "seeds": {
+    "s11": {
+     "pass": true,
+     "checks": {
+      "param_sha_matches_registered": true,
+      "file_sha_matches_registered": true,
+      "from_trained_ep128_is_false": true,
+      "optimizer_fresh": true,
+      "mask_8_trainable_4_frozen_12_total": true,
+      "scalars_390_5440_5830": true,
+      "early_head_trainable": true,
+      "trunk_frozen": true,
+      "structure_is_r74": true
+     },
+     "init_parameter_sha256": "6f6581cff959dc027dfe5e771d963ef4b27b5a2f9d6847bf3d1bc6328c5de32f"
+    },
+    "s22": {
+     "pass": true,
+     "checks": {
+      "param_sha_matches_registered": true,
+      "file_sha_matches_registered": true,
+      "from_trained_ep128_is_false": true,
+      "optimizer_fresh": true,
+      "mask_8_trainable_4_frozen_12_total": true,
+      "scalars_390_5440_5830": true,
+      "early_head_trainable": true,
+      "trunk_frozen": true,
+      "structure_is_r74": true
+     },
+     "init_parameter_sha256": "29dbecdb9eaeae5ba346d8a68d03a13ca4ebb56680e28b4fff288032acfd1aa9"
+    },
+    "s33": {
+     "pass": true,
+     "checks": {
+      "param_sha_matches_registered": true,
+      "file_sha_matches_registered": true,
+      "from_trained_ep128_is_false": true,
+      "optimizer_fresh": true,
+      "mask_8_trainable_4_frozen_12_total": true,
+      "scalars_390_5440_5830": true,
+      "early_head_trainable": true,
+      "trunk_frozen": true,
+      "structure_is_r74": true
+     },
+     "init_parameter_sha256": "3685f4aa30367276e2cc4f9cb6cad23773350fa084476cd249ae1f11be62f0ca"
+    }
+   },
+   "status": "passed",
+   "offline_rows": 0,
+   "physical_steps": 0
+  },
+  "B1-G2": {
+   "id": "B1-G2",
+   "name": "routed_forward_boundary",
+   "checks": {
+    "every_row_bit_exact": true,
+    "boundary_147_early_148_late": true
+   },
+   "per_row": {
+    "0": {
+     "ready": 100,
+     "route": "early",
+     "bit_exact": true
+    },
+    "1": {
+     "ready": 147,
+     "route": "early",
+     "bit_exact": true
+    },
+    "2": {
+     "ready": 148,
+     "route": "late",
+     "bit_exact": true
+    },
+    "3": {
+     "ready": 200,
+     "route": "late",
+     "bit_exact": true
+    },
+    "4": {
+     "ready": 50,
+     "route": "early",
+     "bit_exact": true
+    },
+    "5": {
+     "ready": 300,
+     "route": "late",
+     "bit_exact": true
+    },
+    "6": {
+     "ready": 147,
+     "route": "early",
+     "bit_exact": true
+    },
+    "7": {
+     "ready": 148,
+     "route": "late",
+     "bit_exact": true
+    }
+   },
+   "status": "passed",
+   "offline_rows": 8,
+   "physical_steps": 0
+  },
+  "B1-G3": {
+   "id": "B1-G3",
+   "name": "gradient_routing_and_critic_isolation",
+   "critic_isolation": {
+    "isolated_trunk_grad_none_or_zero": true,
+    "plain_trunk_grad_nonzero": true,
+    "temporary_hooks_removed": true
+   },
+   "gradient_routing": {
+    "early_sample_early_grad_pos": true,
+    "early_sample_late_grad_zero": true,
+    "early_sample_critics_grad_pos": true,
+    "late_sample_late_grad_pos": true,
+    "late_sample_early_grad_zero": true,
+    "late_sample_critics_grad_pos": true
+   },
+   "advantage_sign": {
+    "At+1.0_Ac+0.0": true,
+    "At+0.0_Ac+1.0": true,
+    "At+1.0_Ac+1.0": true,
+    "At-1.0_Ac+0.5": true
+   },
+   "early_info": {
+    "early_free": 2,
+    "late_free": 0,
+    "grad_l1_early_head": 89.28006505966187,
+    "grad_l1_late_head": 0.0,
+    "grad_l1_value_task_head": 106.99396181106567,
+    "grad_l1_value_cost_head": 0.8738591521978378,
+    "preclip_total_norm": 17.96895980834961
+   },
+   "late_info": {
+    "early_free": 0,
+    "late_free": 2,
+    "grad_l1_early_head": 0.0,
+    "grad_l1_late_head": 47.387726187705994,
+    "grad_l1_value_task_head": 192.05772876739502,
+    "grad_l1_value_cost_head": 10.728990018367767,
+    "preclip_total_norm": 24.714351654052734
+   },
+   "status": "passed",
+   "offline_rows": 8,
+   "physical_steps": 0
+  },
+  "B1-G4": {
+   "id": "B1-G4",
+   "name": "controlled_real_adam_step",
+   "checks": {
+    "optimizer_owns_exactly_8_trainable": true,
+    "adam_nonempty_after_step": true,
+    "trunk_digest_unchanged": true,
+    "early_head_moved": true,
+    "late_head_moved": true,
+    "task_head_moved": true,
+    "cost_head_moved": true,
+    "trunk_params_grad_none": true,
+    "trainable_params_grad_present": true
+   },
+   "clip_norm": 20.20630645751953,
+   "adam_state_entries": 8,
+   "status": "passed",
+   "offline_rows": 4,
+   "physical_steps": 1
+  },
+  "B1-G5": {
+   "id": "B1-G5",
+   "name": "full_restore_and_resume_contract",
+   "save_checks": {
+    "schema_is_r74": true,
+    "trainer_tag_is_r74": true,
+    "structure_is_r74": true,
+    "optimizer_single_group_covers_8": true,
+    "frozen_mask_frozen_scalar_5440": true
+   },
+   "restore_checks": {
+    "param_match": true,
+    "adam_match": true,
+    "rng_match": true,
+    "lambda_is_1": true,
+    "state_schema_r74": true,
+    "restored_optimizer_owns_8": true
+   },
+   "determinism_checks": {
+    "same_update_param_identical": true,
+    "same_update_adam_identical": true
+   },
+   "resume_checks": {
+    "foreign_r71_init_full_resume_refused": true,
+    "self_r74_accepted": true
+   },
+   "foreign_refusal_exception": "RuntimeError",
+   "status": "passed",
+   "offline_rows": 8,
+   "physical_steps": 2
+  }
+ },
+ "counterexamples": {
+  "B1-G1": "an old four-module/ep128 INIT would fail param_sha_matches_registered or from_trained_ep128_is_false; a still-frozen early_head fails early_head_trainable",
+  "B1-G2": "the ready=148 rows must route to late_head; a single shared head would match early rows but the 147/148 pair pins the boundary",
+  "B1-G3": "a LATE sample with early_grad>0 would mean the heads are not partitioned; critic_input_detached removing the plain trunk grad proves critic->trunk isolation",
+  "B1-G5": "loading the R71 calibration INIT as a full-resume source must raise; a divergent source-vs-restore param/adam digest would mean the checkpoint does not carry full state"
+ },
+ "errors": [],
+ "after": {
+  "mode": "production",
+  "canonical_root": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round74_constrained_early_head_adaptation\\raw\\runtime",
+  "root": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round74_constrained_early_head_adaptation\\raw\\runtime",
+  "pinned_to_canonical": true,
+  "total_ledger_path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round74_constrained_early_head_adaptation\\raw\\runtime\\r74_total_ledger.jsonl",
+  "total_ledger_events": 16,
+  "env_slots": {
+   "kind": "r74-env-construction-slot-guard/1",
+   "unit": "environment_construction",
+   "mode": "production",
+   "normal_cap": 579,
+   "reserve_cap": 21,
+   "hard_cap": 600,
+   "used_normal": 0,
+   "used_reserve": 0,
+   "used": 0,
+   "remaining": 600,
+   "refusals": 0
+  },
+  "synthetic_physical_steps": {
+   "kind": "r74-synthetic-physical-optimizer-step-guard/1",
+   "unit": "physical_optimizer_step",
+   "mode": "production",
+   "normal_cap": 12,
+   "reserve_cap": 4,
+   "hard_cap": 16,
+   "used_normal": 5,
+   "used_reserve": 0,
+   "used": 5,
+   "remaining": 11,
+   "refusals": 0
+  },
+  "offline_forward_target_rows": {
+   "kind": "r74-offline-trunk-target-forward-guard/1",
+   "unit": "offline_trunk_target_row",
+   "mode": "production",
+   "normal_cap": 3000,
+   "reserve_cap": 3000,
+   "hard_cap": 6000,
+   "used_normal": 28,
+   "used_reserve": 0,
+   "used": 28,
+   "remaining": 5972,
+   "refusals": 0
+  },
+  "joint_records": {
+   "kind": "r74-joint-record-guard/1",
+   "unit": "joint_record",
+   "mode": "production",
+   "normal_cap": 1000000000,
+   "reserve_cap": 1000000000,
+   "hard_cap": 1000000000,
+   "used_normal": 0,
+   "used_reserve": 0,
+   "used": 0,
+   "remaining": 1000000000,
+   "refusals": 0
+  },
+  "ppo_calls": {
+   "kind": "r74-ppo-call-guard/1",
+   "unit": "ppo_update_call",
+   "mode": "production",
+   "normal_cap": 1000000000,
+   "reserve_cap": 1000000000,
+   "hard_cap": 1000000000,
+   "used_normal": 0,
+   "used_reserve": 0,
+   "used": 0,
+   "remaining": 1000000000,
+   "refusals": 0
+  }
+ },
+ "env_constructions": 0,
+ "synthetic_steps_charged_this_run": 3,
+ "offline_rows_charged_this_run": 28,
+ "all_gates_passed": true,
+ "env_is_zero": true,
+ "exit_code": 0
+}

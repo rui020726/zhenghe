@@ -1,0 +1,19 @@
+{
+  "kind": "round74-phase-b1-metadata-correction/1",
+  "purpose": "Record the ACTUAL git line-ending behaviour of the R74 PHASE B1 committed files, and correct an earlier apples-to-oranges hash comparison.",
+  "earlier_error": "A first metadata attempt compared Get-FileHash SHA-256 of the work bytes against `git hash-object --stdin` / `git rev-parse` output. `git hash-object` and `git rev-parse HEAD:path` return a SHA-1 git OBJECT name, not a SHA-256 of the bytes, so a SHA-256!=SHA-1 mismatch is NOT evidence of CRLF/LF normalization. That comparison is discarded.",
+  "correct_method": "SHA-256 of the work-file bytes vs SHA-256 of the actual blob bytes (git cat-file blob HEAD:path), plus git check-attr text/eol.",
+  "gitattributes_in_effect": {
+    "repo_level": "* text=auto ; *.py/*.md/*.txt/*.json/*.yaml/*.yml text eol=lf ; *.ps1 text eol=crlf ; core.autocrlf=true",
+    "round74_dir_level": "runs/.../round74_constrained_early_head_adaptation/.gitattributes = `* -text` (deeper file wins for the text attribute)",
+    "check_attr_result": "text: unset ; eol: lf  (the deeper `* -text` unsets text, so NO end-of-line normalization is applied to these files)"
+  },
+  "files": {
+    "r74_model.py": {"work_sha256": "dfd1c4744053a83d43727a9107e2fb3acdab86b5dcbe51484464cbff39b54260", "blob_sha256": "dfd1c4744053a83d43727a9107e2fb3acdab86b5dcbe51484464cbff39b54260", "git_obj_sha1": "85127fff0c2eb3cbb4ddee9beba948740185d306", "verdict": "BYTE-IDENTICAL"},
+    "r74_phase_b1.py": {"work_sha256": "95e93875fec9dc54205194b14993921fc96a4c9b8971399dd912f33e9da65b20", "blob_sha256": "95e93875fec9dc54205194b14993921fc96a4c9b8971399dd912f33e9da65b20", "git_obj_sha1": "c87722da72a9bb143d85eee728be997a0efddfef", "verdict": "BYTE-IDENTICAL"},
+    "ROUND74_PHASE_B1_GATE_PLAN.json": {"work_sha256": "a074b80b6d7b8adb93e727f5f81b375e57b05d97216a77bf21dd662bb80889d4", "blob_sha256": "a074b80b6d7b8adb93e727f5f81b375e57b05d97216a77bf21dd662bb80889d4", "git_obj_sha1": "aa3dbe562f91f51c8af10287a817cc8ef6c346f9", "verdict": "BYTE-IDENTICAL"},
+    "ROUND74_PHASE_B1_FREEZE.json": {"work_sha256": "ac0f6619de66a6394a0d0d227d3c56a31cba2a4289f85033509553257b61bb16", "blob_sha256": "ac0f6619de66a6394a0d0d227d3c56a31cba2a4289f85033509553257b61bb16", "git_obj_sha1": "092dcea74c13e958c861fefc3106a0a535dace70", "verdict": "BYTE-IDENTICAL"}
+  },
+  "conclusion": "All four R74 PHASE B1 files are stored BYTE-IDENTICAL to their work bytes (LF preserved, work_CRLF=0, blob_CRLF=0). The round74-dir `* -text` disables normalization, so the earlier 'DIFFERENT' reading was purely the SHA-256-vs-SHA-1 algorithm mix-up. No original receipt is rewritten; this record is additive.",
+  "scope_note": "Only the NEW PHASE B1 files are re-hashed here. Pre-existing PHASE A receipts are left byte-identical and are not re-tested for formatting."
+}
