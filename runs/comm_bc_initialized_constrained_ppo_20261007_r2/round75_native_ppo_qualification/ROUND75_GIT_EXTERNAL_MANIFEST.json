@@ -439,4 +439,145 @@
     "s1_authorized": false,
     "s1_executed": false
   }
+,
+    "s1_native_qualification_execution": {
+    "request_id": "R75_S1_NATIVE_QUALIFICATION_20261015",
+    "authorization": "decision-side release of the paid S1 path for this ONE fixed matrix only; it supersedes the S0 not-yet-authorized boundary for this request and is not a new effect experiment, not environment training, and not an extension of any R74 quota",
+    "supersedes_note": "committed_restore_failfast_revision.s1_authorized=false and s1_executed=false recorded the state at that revision; they are preserved unchanged and are superseded for this request only",
+    "code_head_at_execution": "af9b80e97bfeaf382108f0615ee317d9f0ea551d",
+    "parent_head": "cc0d3a29089bc361890e20520ad9800906184a24",
+    "code_sha256": {
+      "r75_s1_runner.py": "2a3586f17ba36ffbde9686d06c9278a0699c5c936fb94d12bede2b6a5f216b91",
+      "r75_s1_precheck.py": "20a1b81fbe7bc8f9e3e6e6e546bcbb0316a96b48192e60f73b16c27a3dd071e9",
+      "r75_frozen.py": "a4b556a687c3aff9650404d11149cb387879a4b4009c85502fc970d7bbe27996",
+      "r75_guard.py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+      "r75_replay_adapter.py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+      "ROUND75_S1_RUN_PLAN.json": "34024113349cdb2f774b9d2751ec0e1f46800ae2fb5720470254432b16ae26c6"
+    },
+    "data_sha256": {
+      "row": {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/rows/v2_r44_train_s11_e0_s1300027_a1.json",
+        "sha256": "882711788d8ccae4ec8092b4eb26df7da6771c9b352b6c7507624d3644abebd8"
+      },
+      "tape": {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/logs/v2_r44_train_s11_e0_s1300027_a1_tape.jsonl",
+        "sha256": "6d4c4363ff490fafe08b55bbf369dcfaf6284b741c2802cf9ef3374d9b792421"
+      },
+      "r58_ep0_model": {
+        "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt",
+        "sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+        "registry_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330"
+      }
+    },
+    "canonical_ledger_zero_start": {
+      "r75_total_ledger_jsonl_sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b",
+      "events": 12,
+      "charged": 0,
+      "four_guards": "normal/reserve/refusal all 0/0/0",
+      "residual_lock": false,
+      "files_byte_match_frozen_snapshot": true,
+      "extra_files_in_runtime": []
+    },
+    "pre_charge_verification": "all six code SHAs, all three data SHAs, the ledger snapshot and HEAD match the delegation; no raw/s1 existed and the request id appeared nowhere before this round; no python process was running; git worktree clean except the untracked R59 analysis log, so there is no uncommitted runtime logic change",
+    "outer_execution_wrapper": {
+      "file": "r75_s1_outer_exec.py",
+      "sha256": "b1c4fa4c3be0f2983fb3baf10e16c1e8d9c18a37c0b0736bbdc693c436c45115",
+      "bytes": 13818,
+      "lines": 295,
+      "registered_before_paid_launch": true,
+      "role": "stdlib-only outer record: re-verifies the pre-charge identities, registers ONE attempt with an O_EXCL marker inside raw/s1/, writes the pre-launch manifest, launches the frozen runner exactly once with --run-s1, captures the complete stdout/stderr bytes and the REAL exit code, and writes a read-only post-run ledger snapshot; it performs no neural work and does not modify the frozen runner"
+    },
+    "registered_at": "2026-10-15T01:56:45+08:00",
+    "runner_launched_at_registration_time": false,
+    "note": "the outcome of the single attempt is recorded separately in raw/s1/r75_s1_outer_outcome.json and is NOT written into this registration"
+  }
+,
+    "s1_native_qualification_outcome": {
+    "request_id": "R75_S1_NATIVE_QUALIFICATION_20261015",
+    "qualification_passed": false,
+    "attempt": {
+      "authorized": 1,
+      "executed": 1,
+      "exhausted": true,
+      "second_launch_forbidden": true,
+      "marker_created_before_any_paid_python": true
+    },
+    "failure": {
+      "phase": "paid_module_import",
+      "runner_exit_code": 1,
+      "error_type": "ModuleNotFoundError",
+      "error": "No module named v2_trainer",
+      "deterministic": true,
+      "root_cause": "the canonical trainer tree runs/comm_cost_v2_rerun_20260928 is never put on sys.path: r75_frozen.py inserts only R66_DIR and never calls r66_frozen.configure_source_imports(); the runner inserts only HERE",
+      "retry_performed": false,
+      "script_or_parameter_modified": false,
+      "technical_reserve_used": false,
+      "refund_claimed": false
+    },
+    "actual_consumption": {
+      "torch_import_actual_module_loads": 1,
+      "model_load_or_construction": 0,
+      "forward": 0,
+      "backward": 0,
+      "optimizer_step_real_or_synthetic": 0,
+      "ppo_update_or_replay": 0,
+      "physical_optimizer_step": 0,
+      "offline_trunk_target_row": 0,
+      "joint_record": 0,
+      "environment_construction": 0,
+      "gate_controller_constructions": 0,
+      "optimizer_constructions": 0,
+      "checkpoint_loads": 0,
+      "checkpoint_writes": 0,
+      "ledger_charged_events": 0,
+      "recorded_completed_calls_in_runner_counters": 0,
+      "import_attempt_lower_bound": "numpy, torch and r66_frozen imported; v2_trainer failed; missing entries are a known lower bound, not zero-filled"
+    },
+    "ledger_after": {
+      "total_ledger_events": 12,
+      "charged_events": 0,
+      "four_guards": "all 0/0/0",
+      "r75_total_ledger_jsonl_sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b",
+      "nine_files_byte_match_frozen_snapshot": true
+    },
+    "runner_internal_precheck": {
+      "ran": true,
+      "passed": true,
+      "checks_run": 68,
+      "checks_failed": [],
+      "external_duplicate_run": false
+    },
+    "outer_wrapper": {
+      "file": "r75_s1_outer_exec.py",
+      "sha256": "b1c4fa4c3be0f2983fb3baf10e16c1e8d9c18a37c0b0736bbdc693c436c45115",
+      "bytes": 13818,
+      "lines": 322,
+      "defect_disclosed": "its __main__ guard caught its own SystemExit and recorded raw/s1/r75_s1_outer_wrapper_failure.json; the real runner exit code was 1; the original is kept byte-identical and clarified by r75_s1_outer_wrapper_failure_clarification.json"
+    },
+    "new_derived_documents": [
+      {
+        "file": "ROUND75_S1_NATIVE_QUALIFICATION_REPORT.md",
+        "sha256": "490ddbbc24bedb04ff71ebaf72321c2a28e993a24c203ceeb9fa2a585d9a0a34"
+      },
+      {
+        "file": "ROUND75_S1_NATIVE_QUALIFICATION_VERDICT.json",
+        "sha256": "c4a0b3e34032cee2bb06ea3b2ee5b670ed3875402e6644087350e7b906ac779a"
+      }
+    ],
+    "git_external_originals_added_under_raw_s1": [
+      "r75_s1_outer_attempt_marker.json",
+      "r75_s1_outer_prelaunch_manifest.json",
+      "r75_s1_outer_stdout.bin",
+      "r75_s1_outer_stderr.bin",
+      "r75_s1_outer_stdout.txt",
+      "r75_s1_outer_stderr.txt",
+      "r75_s1_outer_outcome.json",
+      "r75_s1_outer_wrapper_failure.json",
+      "r75_s1_outer_wrapper_failure_clarification.json"
+    ],
+    "note": "raw/s1/ holds only the outer execution record; the runner itself produced no trial record, no failure receipt and no attempt counters because the failure happened before its try block, exactly as the previously registered boundary stated",
+    "s1_authorized": true,
+    "s1_executed": true,
+    "s1_qualification_passed": false
+  }
 }
