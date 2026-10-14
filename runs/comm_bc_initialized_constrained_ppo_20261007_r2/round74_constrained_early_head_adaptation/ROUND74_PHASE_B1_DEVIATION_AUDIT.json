@@ -1,0 +1,82 @@
+{
+  "kind": "round74-phase-b1-deviation-audit/1",
+  "authority": "decision-end READ-ONLY close-out; zero new model load / forward / backward / optimizer / PPO / gate execution",
+  "head_at_audit": "812b435b7350e20dbf32967e63eb68f69279adb1",
+  "core_correction": {
+    "claim_withdrawn": "fixture mode == simulated NN/Adam with 0 physical cost",
+    "fact": "R74ResourcesProd.fixture(root) separates ONLY the durable ledger/counters. The torch controller, forward_logits_values, minibatch_loss backward, clip, and Adam.step are the SAME real objects in both modes (r74_phase_b1.py: line 77 res=R74ResourcesProd.production() vs line 80 res=R74ResourcesProd.fixture(fixture_root); every later line is shared). A fixture run therefore performs REAL forward/backward/Adam.step; it only redirects WHERE the charge is recorded.",
+    "consequence": "the canonical counter records toy(2)+production(3)=5 synthetic steps and production-only 28 offline rows. The two fixture runs' REAL work (6 steps, 56 rows) landed in throwaway ledgers and is absent from the canonical count. Prior 'fixture = simulated' language in the gate report is withdrawn."
+  },
+  "central_ledger_preserved": {
+    "synthetic_steps_used_normal": 5, "offline_rows_used_normal": 28, "env_used": 0,
+    "note": "canonical raw/runtime counters + r74_total_ledger.jsonl are NOT rewritten; this audit is additive only"
+  },
+  "caps_unchanged": {
+    "synthetic_steps": {"normal": 12, "reserve": 4, "hard": 16},
+    "offline_rows": {"normal": 3000, "reserve": 3000, "hard": 6000, "per_batch": 1024},
+    "env": {"normal": 579, "reserve": 21, "hard": 600}
+  },
+  "attempts": [
+    {"id": "A0-toy", "session": "prior/phaseA", "mode": "toy", "real_adam_step": 2, "rows": 0,
+     "metered_where": "canonical", "evidence": "r74_total_ledger.jsonl phase_a_toy_adam_step_1/2; r74_phase_a_toy_proof.done.json", "originals_intact": true},
+    {"id": "A-dev", "session": "prior", "mode": "raw dev scripts (unmetered)",
+     "scripts": ["_dev_wiring_check.py", "_dev_loss_check.py", "_dev_restore_check.py"],
+     "real_adam_step": ">=4 (UNKNOWN exact)", "rows": ">=10 (UNKNOWN exact)",
+     "metered_where": "none (raw)", "evidence": "handoff description only",
+     "originals_intact": false, "note": "deleted this session per handoff 'delete before commit'; exact forward/step counts UNKNOWN, kept as disclosed lower bound; cannot re-verify"},
+    {"id": "B1-run1-fixture-EXIT1", "session": "this", "mode": "fixture", "exit_code": 1,
+     "real_adam_step": 3, "rows": 28, "trunk_forwards": 8, "constructions": 5, "torch_load": 6, "saves": 1,
+     "metered_where": "throwaway _b1_fixture ledger", "gate_result": "G1-G4 pass, G5 failed (optimizer_param_groups_2222 assertion)",
+     "evidence": "captured stdout EXIT1 SYNTH_STEPS3 OFFLINE_ROWS28", "originals_intact": false,
+     "note": "receipt + throwaway ledger DELETED before run2; NOT replaced by the rebuilt fixture"},
+    {"id": "B1-del", "session": "this", "action": "Remove-Item -Recurse of run1 _b1_fixture (counters, ledger, receipt, gate_checkpoints/*.pt)",
+     "originals_intact": false, "note": "run1 receipt destroyed; exit code + consumption preserved only via captured stdout"},
+    {"id": "B1-run2-fixture-EXIT0", "session": "this", "mode": "fixture", "exit_code": 0,
+     "real_adam_step": 3, "rows": 28, "trunk_forwards": 8, "constructions": 5, "torch_load": 6, "saves": 1,
+     "metered_where": "throwaway _b1_fixture ledger (rebuilt: synth 3 / offline 28)",
+     "evidence": "captured stdout EXIT0; _b1_fixture/r74_synthetic_step_counter.json used=3, r74_offline_forward_counter.json used=28",
+     "originals_intact": true},
+    {"id": "B1-run3-production-EXIT0", "session": "this", "mode": "production", "exit_code": 0,
+     "real_adam_step": 3, "rows": 28, "trunk_forwards": 8, "constructions": 5, "torch_load": 6, "saves": 1,
+     "metered_where": "canonical (synth 2->5, offline 0->28)",
+     "evidence": "captured stdout EXIT0; raw/runtime/round74_phase_b1/ROUND74_PHASE_B1_VERDICT.json", "originals_intact": true}
+  ],
+  "actual_consumption_reconciliation": {
+    "real_adam_step": {"firmly_evidenced": 11, "breakdown": "toy 2 + B1 3 runs x 3 = 9", "plus_dev_unknown": ">=4", "total_lower_bound": ">=11 (plausibly >=15 with dev)", "canonical_shows": 5, "undercount": ">=6 (the two fixture runs)"},
+    "real_19d_trunk_target_rows": {"firmly_evidenced": 84, "breakdown": "B1 3 runs x 28", "plus_dev_unknown": ">=10", "canonical_shows": 28, "undercount": 56},
+    "real_trunk_forward_calls": {"firmly_evidenced": 24, "breakdown": "B1 3 runs x 8", "plus_throwaway_linear_critic_isolation": 6, "note": "throwaway Linear is 3-dim, not a 19-d target row, unmetered"},
+    "controller_constructions": {"firmly_evidenced": 15, "breakdown": "B1 3 runs x 5 (4 load_init + 1 restore)"},
+    "torch_load_calls": {"firmly_evidenced": 18, "breakdown": "B1 3 runs x 6 (4 R71-INIT + 1 ckpt + 1 foreign-refused)"},
+    "synthetic_gate_checkpoint_writes": {"firmly_evidenced": 3, "breakdown": "B1 3 runs x 1 save_checkpoint", "plus_dev_deleted": 1},
+    "real_ppo_update_calls": {"v2_trainer.ppo_update": 0, "r66.frozen_early_ppo_update": 0, "note": "all runs used r74_model.minibatch_loss transcription only"},
+    "real_env_constructions": 0
+  },
+  "coverage_map": {
+    "covered_actually": [
+      "real controller construction + model-only R71 INIT load (5 modules bit-identical) + R74 mask (early trainable / trunk frozen)",
+      "real routed forward boundary (route_logits early<=147 / late>147) via forward_logits_values",
+      "real autograd gradient routing (early/late/critics) + critic_input_detached isolation",
+      "r74_model.minibatch_loss transcription forward/backward (clipped surrogate + dual-critic + entropy + beta gate prior)",
+      "real Adam.step on the 8 trainable objects; trunk frozen; full-state save/restore; same-update determinism; foreign-resume refusal",
+      "R74 resource seam (charge-before-step + trunk-entry offline meter) firing at the real boundaries"
+    ],
+    "missing_not_exercised": [
+      "real multi-epoch v2_trainer.ppo_update / r66.frozen_early_ppo_update loop (EPOCHS_PER_BATCH x MINIBATCH_STEPS + DATA_ORDER_SEED shuffle)",
+      "v2_trainer.batch_samples(episodes) from real rollouts",
+      "GAE advantage/return computation from real rewards (dummy adv/returns were used)",
+      "likelihood_alignment rollout-consistency check",
+      "real collector / environment sequential budget mask on real candidate streams (synthetic free-sets were used)",
+      "ALL_ROWS full-batch pooling end-to-end (minibatch_loss matches the per-minibatch per-sample-mean reduction, but the full epoch/batch ALL_ROWS path is not driven)",
+      "the real training CLI entrypoint end-to-end (the runner calls M.configure()+model API directly)"
+    ]
+  },
+  "minimal_real_wiring_fix_location": {
+    "read_only_locate": true, "implemented": false, "tested": false,
+    "fix": "Replace the G4/G5 hand-built minibatch_loss + manual Adam.step with a call to r66.frozen_early_ppo_update(controller, optimizer, episodes, update_index=...) on a REAL batch. The real batch must be produced by (a) a genuine environment rollout through the real collector + v2_trainer.batch_samples + GAE, or (b) offline replay of a frozen recorded R71 episode batch through batch_samples + GAE. Then the source-vs-full-restore determinism gate wraps that real update. Option (a) consumes real Env slots; option (b) is offline replay of recorded rollouts. This is a decision-end choice and is NOT implemented or tested here."
+  },
+  "remaining_quota": {
+    "statement": "Firmly evidenced real synthetic steps >= 11 (toy 2 + B1 9). Normal cap 12, hard cap 16. The deleted prior-session dev scripts add an UNKNOWN positive number of real steps/forwards that cannot be reconstructed, so exhaustiveness is NOT provable. Per decision-end instruction, consumable remaining is treated as 0 until the count is re-baselined; no remaining quota is spent by this audit.",
+    "no_retroactive_exemption": true,
+    "no_reclassification_to_hide": true
+  }
+}
