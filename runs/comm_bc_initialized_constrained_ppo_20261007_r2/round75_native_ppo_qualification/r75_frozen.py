@@ -284,7 +284,14 @@ def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]],
     if not alignment["passed"]:
         raise RuntimeError(
             f"update {update_index}: logged probability does not describe the draw: {alignment}")
-    alignment_meter = _meter_delta(pre_meter, meter.snapshot())
+    # Cumulative snapshot at the END of the alignment pass. The per-phase report must
+    # difference CUMULATIVE snapshots: _meter_delta(before, after) = after - before, so the
+    # epoch phase has to start from this cumulative value and not from the alignment DELTA
+    # (subtracting a delta from a cumulative over-counts the epoch phase by whatever the
+    # controller already consumed before this update). alignment + epochs == total for every
+    # component, and the cross-update cumulative is preserved because the meter stays on.
+    alignment_end = meter.snapshot()
+    alignment_meter = _meter_delta(pre_meter, alignment_end)
     if not samples:
         return {"samples": 0, "minibatches": 0, "optimizer_steps": 0,
                 "unassigned_prefix_task_reward": prefix_task,
@@ -458,7 +465,7 @@ def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]],
                                  "early_free": early_free, "late_free": late_free,
                                  "gate_loss_raw": float(gate_loss.item()),
                                  "gate_loss_weighted": float(gate_beta * gate_loss.item())})
-    epochs_meter = _meter_delta(alignment_meter, meter.snapshot())
+    epochs_meter = _meter_delta(alignment_end, meter.snapshot())
     diag_record = None
     if gate_diag["done"]:
         diag_record = {"update_index": update_index, **gate_diag["record"]}
@@ -472,7 +479,7 @@ def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]],
         "value_loss_task": round(totals["value_task"] / minibatches, 6),
         "value_loss_cost": round(totals["value_cost"] / minibatches, 6),
         "entropy": round(totals["entropy"] / minibatches, 6),
-        "approx_kl": round(totals["approx_kl"] / minibatches, 6) if minibatches else 0.0,
+        "approx_kl": round(totals["kl"] / minibatches, 6) if minibatches else 0.0,
         "clip_fraction": round(totals["clip"] / minibatches, 4),
         "gradient_norm_mean": round(totals["grad"] / minibatches, 4),
         "gate_loss": round(totals["gate"] / minibatches, 6) if minibatches else 0.0,

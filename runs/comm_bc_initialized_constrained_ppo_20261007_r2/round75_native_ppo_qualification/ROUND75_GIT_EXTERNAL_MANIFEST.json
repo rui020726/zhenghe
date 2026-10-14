@@ -1,6 +1,7 @@
 {
   "kind": "round75-git-external-manifest/1",
   "audited_code_head": "c1a228e1629c3e501ed0def121f0d11ba43d2cdc",
+  "audited_code_head_scope": "HISTORICAL: round74 code audit only, not the parent of this delivery. The parent of the R75_S0_GIT_FINALIZE_20261015 commit is c16ce9362f93993192cf9a1ec3330cba90d25f30 (see committed_final_prep_revision.parent_head).",
   "note": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/* is gitignored; these originals are deliverables kept on disk. No weights, no raw rows/tape/lifecycle/transcripts/logs, no runtime ledger state are committed to git.",
   "git_external_originals": {
     "code_and_tests": [
@@ -304,5 +305,54 @@
       "analysis/round59-communication-decision-density/r59_analysis_run.log"
     ],
     "s1_authorized": false
+  },
+  "committed_final_prep_revision": {
+    "request_id": "R75_S0_GIT_FINALIZE_20261015",
+    "continues": ["R75_S0_FINAL_PREP_20261014", "R75_S0_DRIVER_CLOSEOUT_20261015"],
+    "parent_head": "c16ce9362f93993192cf9a1ec3330cba90d25f30",
+    "parent_head_note": "read from git before this commit; the final HEAD is deliberately NOT written into this file (no self-hash, no claimed success) and is read from git after the commit",
+    "final_content_identity": [
+      {"file": "r75_frozen.py", "sha256": "a4b556a687c3aff9650404d11149cb387879a4b4009c85502fc970d7bbe27996", "bytes": 32160, "lines": 536, "role": "native PPO update path; carries the two prior-session fixes (KL return key totals[kl] at :482; alignment_end phase split at :293/:294/:468), byte-verified, unchanged in the closeout round"},
+      {"file": "r75_s1_runner.py", "sha256": "d3f7e9a9a4c476ac13d3b14d57a135c45cc47ea6ac83ac69146338716914bc68", "bytes": 50219, "lines": 899, "role": "paid S1 driver after the seven seam-gap repairs (recursive _clone_value preserving container types, _optimizer_payload + real optimizer.load_state_dict, 14-field disk bundle, four-state comparator, _fixed_rng_triple, per-minibatch early/late + gradient observers, 13-item failure gate); lazy torch import inside the run path only; no-argument run prints the frozen plan and exits 0"},
+      {"file": "r75_s1_precheck.py", "sha256": "20a1b81fbe7bc8f9e3e6e6e546bcbb0316a96b48192e60f73b16c27a3dd071e9", "bytes": 20328, "lines": 368, "role": "pure-file zero-charge freeze precheck; fixed to resolve paths against the repo root and to take per_charge_cap 1024 from two verified sources (guard attribute + frozen contract), never compared to None; 68/68 exit 0 from repo root, the R75 dir and C:\\"},
+      {"file": "r75_guard.py", "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f", "bytes": 25100, "lines": 459, "role": "central resource guard; mechanism and source pin untouched"},
+      {"file": "r75_replay_adapter.py", "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2", "bytes": 6904, "lines": 144, "role": "qualified replay adapter; bytes pinned; CWD independence is provided by the callers resolving absolute paths"},
+      {"file": "ROUND75_S1_RUN_PLAN.json", "sha256": "34024113349cdb2f774b9d2751ec0e1f46800ae2fb5720470254432b16ae26c6", "bytes": 18109, "lines": 332, "role": "historical frozen data / budget / comparison contract; status PREPARED_NOT_AUTHORIZED_NOT_EXECUTED; byte-unchanged; its source_identity binds only the upstream canonical sources and r66_frozen, NOT the current driver"},
+      {"file": "test_r75_s0_driver_closeout.py", "sha256": "6edeb9cf4d74afca429b7cbe5c0875598c78933c6cde1a697952e1654f833e94", "bytes": 43572, "lines": 849, "role": "40 counterexample tests (pure stdlib + fakes): 40 OK exit 0 against the repaired runner; 4 failures + 30 errors exit 1 against the old runner; includes the betas tuple-type regression asserts at lines 405/407/412"},
+      {"file": "test_r75_s0_final_prep.py", "sha256": "3d721caa487ccef4b2714b01d49647b902031c7584ca4ce18132e1d7ecacbb35", "bytes": 16300, "lines": 344, "role": "final-prep counterexamples for the two r75_frozen.py defects (KL key, non-zero pre_meter), run in the prior session and reused as evidence, not re-run"},
+      {"file": "r75_s1_plan_gen_archived.py", "sha256": "ba884cb85322b535fcf71aa5a090b8fb8fc283fc271c7d1cd8f51be68789bfb", "bytes": 19784, "lines": 283, "role": "one-shot plan generator renamed for explicit archival; byte-identical before and after the rename"},
+      {"file": "ROUND75_S0_FINAL_PREP_REPORT.md", "sha256": "b85dec5a3f3c9bc40da56d15205c760f19d00f92118484048b0f5d9d6e54153d", "bytes": 14808, "lines": 135, "role": "closeout report including the section-9 errata of R75_S0_GIT_FINALIZE_20261015"},
+      {"file": "ROUND75_S0_FINAL_PREP_VERDICT.json", "sha256": "33b73490c4315cffa9802c4b2a65e629363e2084d495c7feff529de3239d762f", "bytes": 16842, "lines": 233, "role": "machine verdict including erratum_r75_s0_git_finalize_20261015"}
+    ],
+    "test_evidence_reused_not_rerun": {
+      "driver_closeout_suite": "40 OK / exit 0 on the repaired runner; 4 failures + 30 errors / exit 1 on the old runner (old runner SHA d68153da...)",
+      "precheck": "68/68 checks, exit 0, from three different working directories",
+      "no_argument_runner": "prints the frozen plan summary, imports no paid module, exit 0",
+      "note": "these results support pure preparation only; they do not prove real Adam, disk restore, PPO eligibility or any policy effect; the old 7 / historical 31 / 20 suites were not re-run"
+    },
+    "old_originals_missing": {
+      "pre_fix_runner": {"sha256": "d68153dacb5b1023688ca67bb253a5410d0847e3396b13e76cda80ec8bdc3bd5", "status": "MISSING on disk and in every git ref (git log --all empty for the path; the c16ce936 tree lacks it; recursive hash sweep found no copy); evidence layer = recorded SHA + prior-session tool record"},
+      "pre_fix_precheck": {"sha256": null, "status": "MISSING on disk and in every git ref; its then-SHA was never recorded (unknown)"},
+      "rule": "nothing was recreated; no rebuilt copy is passed off as an original"
+    },
+    "plan_scope_note": "ROUND75_S1_RUN_PLAN.json stays byte-unchanged as a frozen data/budget/comparison contract; the current driver/precheck/native binding lives in final_content_identity above and in this commit, not inside the plan",
+    "runtime_ledger": "raw/runtime byte-unchanged (12 events, 0 charged, four zero counters, no lock); see committed_this_round.canonical_ledger_state and the live re-verification in this round's tool output; nothing bootstrapped, rebuilt or rewritten",
+    "commit_scope": "explicit git add -f of the named code / driver / precheck / plan / tests / report / verdict / manifest / archived source; NO weights, NO raw runtime originals, NO R59 analysis log, NO protected files, NO __pycache__",
+    "zero_environment_this_registration": {
+      "torch_imported": false,
+      "model_load_or_construction": 0,
+      "forward_backward": 0,
+      "optimizer_step_real_or_synthetic": 0,
+      "ppo_update_or_replay": 0,
+      "environment_construction": 0,
+      "sampling": 0,
+      "checkpoint_write": 0,
+      "training_resume": 0,
+      "rng_restore": 0,
+      "ledger_charged_events": 0,
+      "tests_rerun": 0
+    },
+    "s1_authorized": false,
+    "s1_executed": false
   }
 }

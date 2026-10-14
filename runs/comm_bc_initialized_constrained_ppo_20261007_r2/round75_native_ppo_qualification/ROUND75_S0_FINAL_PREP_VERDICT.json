@@ -1,0 +1,233 @@
+{
+  "kind": "round75-s0-driver-closeout-verdict/1",
+  "request_id": "R75_S0_DRIVER_CLOSEOUT_20261015",
+  "continues": "R75_S0_FINAL_PREP_20261014",
+  "branch": "exp/round75-native-ppo-qualification",
+  "head_at_writing": "c16ce9362f93993192cf9a1ec3330cba90d25f30",
+  "parent_head": "0f8574accae16676a75a248da180be9d49e9fa04",
+  "status": "SOURCE_REVISED_AND_CLOSED_OUT_LOCALLY_S1_STILL_NOT_AUTHORIZED",
+  "meaning": "The paid S1 driver has been repaired to its original contract and the close-out is delivered locally. Nothing paid was executed: S1 remains unauthorized and is NOT run by this revision.",
+  "authorization_scope": {
+    "allowed": ["source edits", "stdlib", "AST", "existing JSON", "zero-cost precheck", "local close-out"],
+    "forbidden_and_not_done": ["torch import", "model load or construction", "forward", "backward",
+                               "optimizer or PPO step", "environment", "sampling", "checkpoint write",
+                               "training resume", "RNG restore", "new experiment"],
+    "s1_authorized": false,
+    "s1_executed": false
+  },
+  "reused_verified_fixes": {
+    "note": "carried over from the prior session, byte-identity re-verified here, NOT re-run",
+    "r75_frozen_py": {
+      "sha256": "a4b556a687c3aff9650404d11149cb387879a4b4009c85502fc970d7bbe27996",
+      "bytes": 32160,
+      "lines": 536,
+      "changed_this_round": false,
+      "kl_return_key": "r75_frozen.py:482 reads totals[\"kl\"]; the field name approx_kl is preserved",
+      "meter_phase_fix": "alignment_end cumulative snapshot at :293; alignment_meter = _meter_delta(pre_meter, alignment_end) at :294; epochs_meter = _meter_delta(alignment_end, meter.snapshot()) at :468"
+    },
+    "r75_guard_py": {
+      "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+      "bytes": 25100,
+      "changed_this_round": false,
+      "note": "mechanism and source pin untouched; not weakened"
+    },
+    "r75_replay_adapter_py": {
+      "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+      "bytes": 6904,
+      "changed_this_round": false,
+      "note": "its bytes are pinned; CWD independence is provided by the callers resolving absolute paths"
+    },
+    "ROUND75_S1_RUN_PLAN.json": {
+      "sha256": "34024113349cdb2f774b9d2751ec0e1f46800ae2fb5720470254432b16ae26c6",
+      "bytes": 18109,
+      "changed_this_round": false
+    }
+  },
+  "seven_seam_gaps": {
+    "1_mutable_snapshot_aliasing": {
+      "found_on_disk": true,
+      "defect": "_module_payloads kept module.state_dict() references and the Adam step kept the live tensor reference, so A2's in-place step and parameter writes rewrote the captured state and A3 restored A2's post-update values",
+      "fix": "recursive _clone_value (detach/clone, dict and list recursion, container TYPE preserved) and _clone_module_state; a separate payload layer from the report layer"
+    },
+    "2_digest_used_as_running_state": {
+      "found_on_disk": true,
+      "defect": "capture_full_state turned state[\"step\"] into a _tensor_digest dict and restore_full_state assigned that dict back as Adam's running step",
+      "fix": "_optimizer_payload builds an immutable optimizer.state_dict()-shaped payload (state by parameter index, param groups with the real hyperparameters and the index mapping); the restore goes through the real optimizer.load_state_dict; a bootstrap object with no state stays absent and is never fabricated",
+      "additional_real_defect_found_and_fixed": "_clone_value normalised tuples into lists, which would have drifted Adam betas and produced a spurious param-group difference"
+    },
+    "3_incomplete_bundle_and_no_disk_restore": {
+      "found_on_disk": true,
+      "defect": "save_state_bundle omitted lambda, cursor, data configuration and structural identity, and A3 restored from the in-memory dict without ever reading the written .pt",
+      "fix": "build_state_bundle writes 14 fields; load_state_bundle reads the actual serialized file; _bundle_to_saved adapts it; A3 restores only from the disk file"
+    },
+    "4_comparator_missed_scientific_fields": {
+      "found_on_disk": true,
+      "defect": "the comparison hardcoded a skip of trunk_entry_meter, batch_read, gate_records and gate_diag, never compared the A2/A3 end states, and recorded meter_additivity without letting it affect the exit code",
+      "fix": "four frozen states compared value by value; compare_scientific_returns uses only the plan's frozen exclusion list; reconcile_trunk_meter reconciles the second controller's absolute readings instead of diffing them; a 13-item failure gate returns non-zero"
+    },
+    "5_fixed_non_default_rng_triple": {
+      "found_on_disk": "partial",
+      "defect": "the RNG was saved and restored but from the ambient post-construction state, which proves nothing",
+      "fix": "_fixed_rng_triple installs a named non-default triple before the capture; the restore happens after the A3 construction and before the update; verify_restore proves the start state value-identical. DATA_ORDER_SEED's shuffle is untouched"
+    },
+    "6_real_step_entry_observation": {
+      "found_on_disk": true,
+      "defect": "no attempt/completed/failed records, no per-permit reconciliation, and trunk_moved was a hardcoded False",
+      "fix": "ObservedStepEntry passively observes the real step entry bound to the same production counter (the pre-charge precedes the call, so the window is the increment from the previous exit reading to this entry reading and must be exactly one; the step itself must charge nothing); run_a1 measures trunk immobility and the eight-object coverage from live digests"
+    },
+    "7_precheck_order_none_cap_and_literal_config": {
+      "found_on_disk": true,
+      "severity": "the precheck had NEVER passed, so it had gated nothing",
+      "defects": [
+        "the precheck ran AFTER _load_paid_modules()",
+        "per_charge_cap was read as None from the raw counter JSON and compared, raising TypeError",
+        "plan paths are repo-relative and were resolved against the CWD, raising FileNotFoundError from any other directory",
+        "the runner wrote the living GAE/eta/epochs/clip configuration as literals"
+      ],
+      "fix": [
+        "the precheck now runs before any paid module is imported",
+        "verified_per_charge_cap takes 1024 from two independent verified sources (the guard source attribute and the frozen plan contract); an absent raw value is expected, a contradicting one fails; it is never compared against None and no old counter is rewritten or bootstrapped",
+        "resolve_path resolves every plan path against the repository root found by walking up for .git",
+        "_live_configuration reads every configuration value from the live module namespace"
+      ]
+    }
+  },
+  "counterexample_tests": {
+    "file": "test_r75_s0_driver_closeout.py",
+    "sha256": "6edeb9cf4d74afca429b7cbe5c0875598c78933c6cde1a697952e1654f833e94",
+    "bytes": 43572,
+    "lines": 849,
+    "count": 40,
+    "pure_stdlib": true,
+    "torch_imported": false,
+    "against_the_old_runner": {"failures": 4, "errors": 30, "exit_code": 1,
+                               "old_runner_sha256": "d68153dacb5b1023688ca67bb253a5410d0847e3396b13e76cda80ec8bdc3bd5"},
+    "against_the_new_runner": {"failures": 0, "errors": 0, "exit_code": 0,
+                               "new_runner_sha256": "d3f7e9a9a4c476ac13d3b14d57a135c45cc47ea6ac83ac69146338716914bc68"},
+    "development_failures_disclosed": "during authoring I fixed my own test defects (fake state keyed by id() instead of the parameter object, a wrong observer permit window, ast.unparse rendering, three directory-switch cases, the non-one-to-one assertion form): 6 failures + 10 errors, then 2 failures. ERRATUM R75_S0_GIT_FINALIZE_20261015: of those 2, one is CONFIRMED as a REAL driver defect (typed optimizer restore turned Adam betas from tuple into list - the real _clone_value type drift already admitted in seam gap 2, caught by the regression asserts at test_r75_s0_driver_closeout.py lines 405/407/412) and must NOT be counted as a test defect; the other failure in that run has no per-item tool record and is registered as unknown, not presumed. None of the recorded items was used to mask a code defect.",
+    "not_rerun": ["test_r75_s0_final_prep.py (7 cases)", "test_r75_s0_acceptance.py (31 cases)",
+                  "test_r75_s0_spy.py (20 cases, historically 11 ok / 9 designed ERROR)"]
+  },
+  "precheck_evidence": {
+    "file": "r75_s1_precheck.py",
+    "sha256": "20a1b81fbe7bc8f9e3e6e6e546bcbb0316a96b48192e60f73b16c27a3dd071e9",
+    "bytes": 20328,
+    "lines": 368,
+    "before_this_round": {
+      "from_repo_root": "exit 1, TypeError: '<=' not supported between instances of 'int' and 'NoneType'",
+      "from_the_r75_directory": "exit 1, FileNotFoundError on a repo-relative plan path",
+      "from_c_drive_root": "exit 1, FileNotFoundError on a repo-relative plan path",
+      "conclusion": "the precheck had never passed and therefore gated nothing"
+    },
+    "after_this_round": {
+      "from_repo_root": {"passed": true, "checks_run": 68, "checks_failed": 0, "exit_code": 0},
+      "from_the_r75_directory": {"passed": true, "checks_run": 68, "checks_failed": 0, "exit_code": 0},
+      "from_c_drive_root": {"passed": true, "checks_run": 68, "checks_failed": 0, "exit_code": 0}
+    },
+    "costs": {"torch_imported": false, "model_load_or_construction": 0, "forward": 0, "backward": 0,
+              "optimizer_step": 0, "ppo_update": 0, "environment": 0, "sampling": 0,
+              "checkpoint_write": 0, "ledger_charged_events": 0}
+  },
+  "runner": {
+    "file": "r75_s1_runner.py",
+    "sha256": "d3f7e9a9a4c476ac13d3b14d57a135c45cc47ea6ac83ac69146338716914bc68",
+    "bytes": 50219,
+    "lines": 899,
+    "no_argument_run": "prints the frozen plan summary only, imports no paid module, exit 0",
+    "run_s1_executed": false
+  },
+  "canonical_ledger": {
+    "dir": "raw/runtime",
+    "unchanged": true,
+    "total_ledger": {"file": "r75_total_ledger.jsonl",
+                     "sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b",
+                     "bytes": 2579, "events": 12, "charged_events": 0},
+    "zero_counters": [
+      {"file": "r75_physical_optimizer_step_guard.json", "sha256": "13b9d36da125823d69196c67ed44361fa6cf121fbbf8ada618e667312ba894aa"},
+      {"file": "r75_offline_trunk_target_row_guard.json", "sha256": "314fbb13412443a381ebb59e6479be5ae10431a45c5672beb370a899f18ae778"},
+      {"file": "r75_joint_record_guard.json", "sha256": "1d4022fcd21516d1b91b60ba3f3ca9efc3ee837da8a615012f9dcad2e69a8a9d"},
+      {"file": "r75_environment_construction_guard.json", "sha256": "be58a93de378a1fe9e05bc3f2d2cb7059f705b161ef59191c6aab09701c3981b"}
+    ],
+    "legacy_s0_counters_unchanged": [
+      {"file": "r75_physical_optimizer_step.json", "sha256": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa"},
+      {"file": "r75_offline_trunk_target_row.json", "sha256": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527"},
+      {"file": "r75_joint_record.json", "sha256": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3"},
+      {"file": "r75_environment_construction.json", "sha256": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6"}
+    ],
+    "no_residual_lock": true
+  },
+  "zero_cost_counts": {
+    "torch_imported": false,
+    "model_load_or_construction": 0,
+    "forward_read_only_cpu": 0,
+    "backward": 0,
+    "optimizer_step_real_or_synthetic": 0,
+    "ppo_update": 0,
+    "ppo_replay": 0,
+    "environment_construction": 0,
+    "sampling": 0,
+    "checkpoint_write": 0,
+    "training_resume": 0,
+    "rng_restore": 0,
+    "ledger_charged_events": 0,
+    "new_claims": 0
+  },
+  "s1_plan_upper_bounds": {
+    "physical_optimizer_steps": 9,
+    "offline_trunk_target_rows": 1680,
+    "trunk_entry_calls": 140,
+    "joint_records": 2,
+    "environment_constructions": 0,
+    "caps": {"physical_optimizer_step": "normal 12 + technical 4 / hard 16",
+             "offline_trunk_target_row": "normal 5000 + technical 1000 / hard 6000, per-charge 1024",
+             "environment_construction": "0 / 0 / 0 - forbidden by source"},
+    "headroom_after_plan": {"physical_optimizer_steps": 7, "offline_trunk_target_rows": 4320},
+    "note": "bookkeeping arithmetic only; it authorizes no extra consumption and does not borrow the R74 historical quota"
+  },
+  "not_covered": [
+    "torch import, model load/construction and the state-dict mapping outcome",
+    "the real likelihood_alignment outcome",
+    "any real or synthetic optimizer step, PPO update or replay",
+    "the real collector, real episodes, closed-loop simulation, any evaluation block",
+    "full multi-batch training and any research checkpoint",
+    "any communication-policy effect, cost or task-outcome conclusion"
+  ],
+  "protected_untouched": [
+    {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+     "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+     "status": "untouched, unstaged, re-hashed this round"},
+    {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+     "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+     "status": "untouched, unstaged, re-hashed this round"}
+  ],
+  "never_staged": ["analysis/round59-communication-decision-density/r59_analysis_run.log"],
+  "housekeeping": {
+    "archived_one_shot_generator": {"from": "_s1_plan_gen.py", "to": "r75_s1_plan_gen_archived.py",
+                                    "sha256_before": "ba884cb85322b535fcf71aa5a090b8fb8fc283fc271c7d1cd8f51be68789bfb",
+                                    "sha256_after": "ba884cb85322b535fcf71aa5a090b8fb8fc283fc271c7d1cd8f51be68789bfb",
+                                    "note": "renamed for explicit archival, byte-identical, evidence preserved"},
+    "pycache_removed": true,
+    "scratch_copies_removed": ["_backup_precheck_before_closeout.py",
+                               "_backup_runner_before_closeout.py",
+                               "_fixed_runner_snapshot.py"],
+    "scratch_note": "RETRACTED R75_S0_GIT_FINALIZE_20261015: the pre-fix content is NOT recoverable from git HEAD. The pre-fix runner (d68153dacb5b1023688ca67bb253a5410d0847e3396b13e76cda80ec8bdc3bd5) and the pre-fix precheck were never committed on any ref (git log --all is empty for both paths; the c16ce9362f93993192cf9a1ec3330cba90d25f30 tree contains neither), and a read-only recursive hash sweep of the output root and the repo root found no byte-identical copy. The old originals are registered as MISSING; the pre-fix precheck additionally has no recorded SHA (unknown). Only the recorded SHA and the prior-session tool record remain as an independent evidence layer. Nothing was recreated and no rebuilt copy is passed off as an original."
+  },
+  "future_command_not_executable_now": "D:\\project_env\\python.exe runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_runner.py --run-s1",
+  "git": {"pushed": false, "merged": false, "deployed": false,
+          "commit_scope": "local explicit named commit only; no weights, no raw runtime ledger state, no raw rows/tape/logs, no build artifacts, no protected files"},
+  "erratum_r75_s0_git_finalize_20261015": {
+    "request_id": "R75_S0_GIT_FINALIZE_20261015",
+    "scope": "zero-environment registration and explicit local commit only; no torch, no model load or construction, no forward/backward, no optimizer or PPO, no environment, no sampling, no checkpoint write, no ledger change, no test re-run",
+    "errata": [
+      "development_failures_disclosed corrected: one of the later 2 failures is a REAL driver defect (betas tuple->list after typed optimizer restore, consistent with seam gap 2), not a test defect; the other failure in that run is unknown",
+      "scratch_note retracted: the pre-fix runner and precheck originals are missing from disk and from every git ref; not recoverable from HEAD; not recreated"
+    ],
+    "old_originals_status": {
+      "pre_fix_runner": {"sha256": "d68153dacb5b1023688ca67bb253a5410d0847e3396b13e76cda80ec8bdc3bd5", "status": "MISSING on disk and in every git ref; evidence = recorded SHA plus the prior-session tool record only"},
+      "pre_fix_precheck": {"sha256": null, "status": "MISSING on disk and in every git ref; its then-SHA was never recorded (unknown)"}
+    },
+    "manifest_registration": "final SHAs are registered in ROUND75_GIT_EXTERNAL_MANIFEST.json under committed_final_prep_revision; that manifest holds no self-hash and no claimed final HEAD - the delivered HEAD is read from git after the commit",
+    "s1_authorized": false,
+    "s1_executed": false
+  }
+}
