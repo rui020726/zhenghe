@@ -115,6 +115,10 @@ class _ProdCounter:
             v = obj[k]
             if isinstance(v, bool) or not isinstance(v, int) or v < 0:
                 raise LedgerStateError(f"counter {k!r} must be a non-negative int")
+        if obj["used_normal"] > self.normal_cap or obj["used_reserve"] > self.reserve_cap:
+            raise LedgerStateError(
+                "counter per-category used exceeds its own normal/reserve cap; a stale/foreign "
+                "state that overfills one category fails closed")
         if obj["used_normal"] + obj["used_reserve"] > self.hard_cap:
             raise LedgerStateError(
                 f"counter used {obj['used_normal'] + obj['used_reserve']} exceeds hard cap {self.hard_cap}")
@@ -130,10 +134,12 @@ class _ProdCounter:
                     ledger_max = max(ledger_max, int(e.get("used_after", 0)))
                 except (TypeError, ValueError):
                     raise LedgerStateError("ledger used_after is not an int")
-        if used < ledger_max:
+        if used != ledger_max:
             raise LedgerStateError(
-                f"production counter used {used} < ledger-recorded {ledger_max} for {self.kind}; "
-                f"a stale/low backup is being adopted and fails closed")
+                f"production counter used {used} != ledger-recorded {ledger_max} for {self.kind}; "
+                f"a low backup (used<ledger), a persist-interrupted counter-ahead (used>ledger), or "
+                f"a non-zero counter with a missing ledger all fail closed; consumed permission is "
+                f"preserved, nothing is refunded, recovered, or rewritten")
 
     def _init_state(self) -> None:
         if self.path.is_file():
@@ -201,8 +207,8 @@ class _ProdCounter:
             cat_key = "used_normal" if category == "normal" else "used_reserve"
             cat_cap = self.normal_cap if category == "normal" else self.reserve_cap
             reason = None
-            if category == "normal" and base[cat_key] + n > cat_cap:
-                reason = f"normal cap {cat_cap}"
+            if base[cat_key] + n > cat_cap:
+                reason = f"{category} cap {cat_cap}"
             elif used + n > self.hard_cap:
                 reason = f"hard cap {self.hard_cap}"
             if reason is not None:
@@ -300,7 +306,7 @@ class ProdPpoCallGuard(_ProdCounter):
 # ======================================================================================
 # unified per-physical-step pre-charge seam (real PPO / Adam / pristine / scratch steps)
 # ======================================================================================
-def make_charged_step(original_step, step_guard, *, what):
+def make_charged_step(original_step, step_guard, *, what, category="normal"):
     """Wrap a REAL optimizer step so the physical-step guard is charged BEFORE it runs.
 
     Built on the ACTUAL r43 count_at_entry boundary (COUNTER_HOOK_VERSION), the same
@@ -317,7 +323,7 @@ def make_charged_step(original_step, step_guard, *, what):
     hook-bypassing physical steps are metered by the same hard-16 budget.
     """
     def _record(*_args, **_kwargs):
-        step_guard.charge(1, what)                # charge BEFORE the physical step; may refuse
+        step_guard.charge(1, what, category=category)                # charge BEFORE the physical step; may refuse
     wrapped = count_at_entry(original_step, _record)
     return wrapped
 
@@ -349,6 +355,13 @@ class R74ResourcesProd:
         else:
             if root is None:
                 raise ValueError("fixture resources require an explicit throwaway root")
+            canonical = Path(R74_CANONICAL_ROOT).resolve()
+            cand = Path(root).resolve()
+            if cand == canonical or canonical in cand.parents:
+                raise LedgerStateError(
+                    "a fixture may not use the canonical durable root or any path inside it; a pure "
+                    "fixture must never touch the real ledger. Real PHASE B wiring must use "
+                    "R74ResourcesProd.production(), never an injected fixture.")
             self.root = Path(root)
         self.root.mkdir(parents=True, exist_ok=True)
         self.ledger = R74TotalLedger(self.root / "r74_total_ledger.jsonl")

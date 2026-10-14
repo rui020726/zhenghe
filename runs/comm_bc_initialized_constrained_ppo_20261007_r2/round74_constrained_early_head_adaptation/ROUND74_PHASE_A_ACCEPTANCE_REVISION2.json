@@ -1,0 +1,96 @@
+{
+  "round": 74,
+  "phase": "A",
+  "kind": "acceptance_boundary_revision2",
+  "git_head": "6a3fbacde75468b6f0d030cc4c52f6573c777f48",
+  "branch": "exp/round74-constrained-early-head-adaptation",
+  "relationship": "APPENDED revision 2; ROUND74_PHASE_A_ACCEPTANCE.json and ROUND74_PHASE_A_ACCEPTANCE_REVISION.json are PRESERVED byte-identical and are NOT overwritten. r74_guard_prod.py is the only modified source; the 4 receipt/prior files stay byte-identical.",
+  "scope": "Third (final narrow) decision-end delegation: three hardening gaps in r74_guard_prod.py. The original 17 (test_r74_guard.py) and the full 27 (test_r74_guard_prod.py) suites are NOT re-run. The 2 used canonical steps are NOT refunded. No push/merge/deploy.",
+  "fixes": {
+    "1_reserve_category_cap_independent": {
+      "charge": "per-category cap now enforced for BOTH categories: `if base[cat_key] + n > cat_cap: reason = f\"{category} cap {cat_cap}\"` (was: only normal cap + hard cap)",
+      "_read_persisted": "added pre-check `if obj[\"used_normal\"] > self.normal_cap or obj[\"used_reserve\"] > self.reserve_cap:` raising LedgerStateError; a stale/foreign state that overfills ONE category fails closed even if the hard total is still under",
+      "make_charged_step": "signature now (original_step, step_guard, *, what, category=\"normal\") and charges `step_guard.charge(1, what, category=category)`; reserve routing is an EXPLICIT category bound to a registered attempt, NEVER by swapping the ledger or relaxing the normal gate; a normal gate refuses at the normal cap and never auto-upgrades to reserve",
+      "counter_example": "the 5th synthetic RESERVE charge is refused while the total is still < hard 16; a normal gate that has filled its normal cap refuses and leaves reserve untouched"
+    },
+    "2_cross_check_fail_closed_on_any_mismatch": {
+      "_cross_check_ledger": "changed `if used < ledger_max:` to `if used != ledger_max:`; fails closed on counter-ahead (used>ledger, e.g. a persist interruption), a non-zero counter with a missing ledger, AND the existing low-backup (used<ledger)",
+      "guarantees": "blocks further work, preserves already-consumed permission, performs NO self-refund/recovery/rewrite; does NOT claim physical power-loss atomicity"
+    },
+    "3_fixture_refuses_canonical": {
+      "R74ResourcesProd.__init__": "fixture branch adds `if cand == canonical or canonical in cand.parents: raise LedgerStateError(...)` BEFORE any mkdir/guard construction; a fixture may not use the canonical durable root or any path inside it",
+      "rule": "real PHASE B must use R74ResourcesProd.production(), never an injected fixture"
+    }
+  },
+  "modified_source": {
+    "path": "r74_guard_prod.py",
+    "sha256_before": "eb711ddb37988b6bc52ef9eccef2cd1613de76028632ba0675ccebeae36cb8be",
+    "sha256_after": "623b9ec6cd243d27321e8c745a0247c97126c9028141cb0ed4760dd90c0796db"
+  },
+  "byte_identical_receipts": {
+    "r74_guard.py": "9a6b06374fc5b56b6d8077dc6aa332444533198aca0967cb36b867795af614d7",
+    "test_r74_guard.py": "e522d66bffa190a5da1a0f0d4212e8033b1d850ab4011625569667b9b3fe66a0",
+    "r74_phase_a.py": "7452687d6eda4b7d576d6dc7d6e6501592ab86cbfbea137d986a139b52e6d2d0",
+    "test_r74_guard_prod.py": "868b5710878bd8777e84f92eaedc82560aed2e243498a64243d49eb4cc2814b3"
+  },
+  "new_test": {
+    "path": "test_r74_guard_prod_revision.py",
+    "sha256": "6192186818459c71e66c652aec9f2f5be5fce41adcc8001bd1bf9c0a65e8efac",
+    "kind": "independent pure-fixture counter-examples on self-cleaned throwaway SIBLING roots; never touches the canonical ledger/marker/2 real toy steps",
+    "result": {"total": 14, "pass": 14, "fail": 0, "all_pass": true, "exit_code": 0, "sentinel": "R74_REVISION_TESTS ALL_PASS"},
+    "checks": [
+      "reserve_first_4_ok",
+      "reserve_first_5th_refused_total_below_hard",
+      "reserve_first_normal_still_independent",
+      "normal_cap_12_enforced",
+      "reserve_still_open_after_normal_cap",
+      "make_charged_step_explicit_reserve",
+      "normal_gate_refuses_no_reserve_autoupgrade",
+      "cross_check_counter_ahead_fails_closed",
+      "cross_check_low_backup_fails_closed",
+      "cross_check_nonzero_counter_missing_ledger_fails_closed",
+      "cross_check_consistent_pair_accepted",
+      "fixture_refuses_canonical_root",
+      "fixture_refuses_path_inside_canonical",
+      "fixture_legit_sibling_works"
+    ]
+  },
+  "caps_preserved": {
+    "env_construction": {"normal": 579, "reserve": 21, "hard": 600},
+    "synthetic_physical_step": {"normal": 12, "reserve": 4, "hard": 16},
+    "offline_trunk_forward": {"normal": 3000, "reserve": 3000, "hard": 6000}
+  },
+  "read_only_production_pinning_check": {
+    "construction": "R74ResourcesProd.production() read-only, no charge",
+    "pinned_to_canonical": true,
+    "ledger_events": 5,
+    "synth_used": 2,
+    "synth_hard": 16,
+    "synth_used_normal": 2,
+    "synth_used_reserve": 0,
+    "env_used": 0,
+    "offline_used": 0,
+    "ppo_used": 0,
+    "joint_used": 0,
+    "canonical_sha_diff_before_after_empty": true,
+    "note": "canonical synth used=2 == ledger charged max=2, so the tightened used!=ledger cross-check still ACCEPTS the canonical pair (no false positive)"
+  },
+  "consumption_this_revision": {
+    "real_physical_optimizer_steps": 0,
+    "environment_constructions": 0,
+    "offline_forward_target_rows": 0,
+    "ppo_update_calls": 0,
+    "note": "all new verification is pure synthetic/fixture on throwaway roots plus ONE read-only production construction; canonical ledger/marker and the 2 real toy steps are byte-unchanged"
+  },
+  "cumulative_round74_phase_a": {
+    "real_physical_optimizer_steps": 2,
+    "spy_tests_original": 17,
+    "spy_tests_production_seam": 27,
+    "spy_tests_revision2": 14,
+    "phase_b_status": "NOT_AUTHORIZED - 17 + 27 + 14 pure-fixture passes do NOT authorize or prove PHASE B; real CLI/controller/collector/PPO/model gate remains a separate decision-end continuation"
+  },
+  "protected_files_unchanged": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  }
+}
