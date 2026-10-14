@@ -1,0 +1,178 @@
+{
+  "kind": "round75-native-ppo-qualification-freeze/1",
+  "task": "ROUND75 S0: implementation + read-only freeze preparation for the native PPO qualification wiring (trunk frozen; early/late actor heads + dual critic trainable). This freeze authorizes ZERO model load/construction, ZERO forward/backward, ZERO optimizer/PPO, ZERO environment construction, ZERO sampling, ZERO checkpoint write, ZERO training resume, ZERO RNG restore. The paid S1 execution is NOT authorized by this freeze and requires separate decision-side approval.",
+  "branch": "exp/round75-native-ppo-qualification",
+  "frozen_at_head": "c1a228e1629c3e501ed0def121f0d11ba43d2cdc",
+  "repository": "D:\\code\\\u6574\u5408\\zhenghe-round42",
+  "python": "D:\\project_env\\python.exe",
+  "run_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification",
+  "s0_zero_cost_counts": {
+    "model_load_or_construction": 0,
+    "forward_read_only_cpu": 0,
+    "backward": 0,
+    "optimizer_step_real_or_synthetic": 0,
+    "ppo_update": 0,
+    "ppo_replay": 0,
+    "environment_construction": 0,
+    "sampling": 0,
+    "checkpoint_write": 0,
+    "training_resume": 0,
+    "rng_restore": 0,
+    "torch_imported_in_s0": false,
+    "note": "S0 executed only read-only file/hash verification, pure-stdlib spy tests with fake objects over real frozen JSON, AST-level source checks, and the pure-file ledger bootstrap. No torch import occurred in any S0 step."
+  },
+  "protected_files": [
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+      "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+      "status": "verified_untouched_in_s0"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+      "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+      "status": "verified_untouched_in_s0"
+    }
+  ],
+  "never_staged": [
+    "analysis/round59-communication-decision-density/r59_analysis_run.log"
+  ],
+  "code": {
+    "r75_frozen.py": {"sha256": "3cf38b6e4eb668f41c93c1f9037376a17de44af4631c06fb5a32802a40eb1340", "role": "native PPO qualification update (faithful r66 adaptation, trunk-only freeze, R75 resource seam)"},
+    "r75_guard.py": {"sha256": "09bdf88875f2b5bb9a5aa847152510ed5b093650da4a95145f85477f3b21327f", "role": "the ONLY R75 central production resource ledger (stdlib-only; fixture mode cancelled; bootstrap added in S0)"},
+    "r75_replay_adapter.py": {"sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2", "role": "torch-free row+tape to episode adapter with fail-closed validation"},
+    "test_r75_s0_spy.py": {"sha256": "d42a81eb4dbdf4a7d776c844f444352faedcb75c2850d2d97e16ef8453c7bbf0", "role": "S0 spy tests (20/20 pass, zero torch)"},
+    "ROUND75_NATIVE_WIRING_DIFF.md": {"sha256": "ce017ca8f6b7c645aca3ad2bc7dee2e5c53ccbb6a45d5656155e8afbdde80cb6", "role": "function-level diff of the only permitted wiring changes"},
+    "ROUND75_NATIVE_WIRING_IDENTITY.json": {"sha256": "7f7addcffb8700df2116eded165a610942cd94c14bbf1af8fa24b62052cbe786", "role": "function-level source hash identity (old r66 / new r75)"}
+  },
+  "wiring_identity": {
+    "old": {
+      "file": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round66_bc_early_path_preserving_late_adaptation/r66_frozen.py",
+      "function": "frozen_early_ppo_update",
+      "function_source_sha256": "0a891308d06128dc4f7ee41fc137455a26d2f332ea2e1aa570fe7975064c0572",
+      "lines": 237,
+      "file_sha256": "a22425729c9327ffcb1d57f4820f3b38f2bb7e35a6d6d81890fe64a75a246b10"
+    },
+    "new": {
+      "file": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_frozen.py",
+      "function": "r75_native_ppo_update",
+      "function_source_sha256": "07f502fa71b2ae56239819711147aa26811235ef1b864f74fe903b431dd53281",
+      "lines": 237,
+      "file_sha256": "3cf38b6e4eb668f41c93c1f9037376a17de44af4631c06fb5a32802a40eb1340"
+    },
+    "permitted_changes_only": [
+      "freeze set (trunk+early_head -> trunk only)",
+      "trainable/optimizer/clip parameter set (6 -> 8 objects)",
+      "gradient-read scope (early_head becomes a measured module)",
+      "R75 identity strings",
+      "mandatory R75 central production ledger resource seam (pre-charge before every physical step and every real trunk forward)"
+    ],
+    "canonical_modules_verified_in_s0": {
+      "trainer": {"path": "D:/code/\u6574\u5408/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_trainer.py", "sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841", "match": true},
+      "common": {"path": "D:/code/\u6574\u5408/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_common.py", "sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a", "match": true},
+      "controller": {"path": "D:/code/\u6574\u5408/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_controller.py", "sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1", "match": true},
+      "note": "r66_frozen.configure_source_imports() re-verifies these byte identities and applies the ROUND58 living overrides common.GAE_LAMBDA=1.0 / common.ETA_LAMBDA=0.5 before any science runs. The in-module import defaults GAE_LAMBDA=0.95 / ETA_LAMBDA=0.05 are OLD and are NOT used."
+    }
+  },
+  "qualification_data": {
+    "selection": "seed 11 / round58_gen2 / episode 0 / scenario 1300027 (the R58-compliant recorded batch already evidenced in R66/R71)",
+    "row": {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/rows/v2_r44_train_s11_e0_s1300027_a1.json", "sha256": "882711788d8ccae4ec8092b4eb26df7da6771c9b352b6c7507624d3644abebd8"},
+    "tape": {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/logs/v2_r44_train_s11_e0_s1300027_a1_tape.jsonl", "sha256": "6d4c4363ff490fafe08b55bbf369dcfaf6284b741c2802cf9ef3374d9b792421"},
+    "facts": {
+      "records": 66,
+      "horizon": 1000,
+      "steps": 1000,
+      "first_step": 1,
+      "last_step": 192,
+      "candidate_rows": 168,
+      "free_early_rows": 5,
+      "free_late_rows": 1,
+      "gate_eligible_early_rows": 5,
+      "feature_dims": 19,
+      "cost_stream_ticks": 1000,
+      "task_stream_targets": 6,
+      "lambda_at_record": 1.0,
+      "budget_bytes": 29300,
+      "b0_bytes": 10000.0
+    },
+    "substituted_fields": {
+      "count": 12,
+      "classification": "every substituted field was classified in S0; the comm_* mask/timing fields resolve to values consistent with the frozen configuration (budget 29300, ACK off, no send-rate cap, no wait cap, policy-owned timing). No stop condition triggered.",
+      "residual": "the archived original values are unrecoverable from the row; the record relies on the row-parsed values plus config_hash. Registered as a known residual, not as a defect."
+    },
+    "behaviour_model_identity": {
+      "row_controller_parameters_after_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+      "parameter_count": 5700,
+      "heads": ["action_head", "value_task_head", "value_cost_head"],
+      "equals_r58_gen2_ep0": true,
+      "r58_ep0_registry_entry": {
+        "seed": 11,
+        "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt",
+        "checkpoint_sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
+        "parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
+        "action_head_sha256": "aad35fc6ba3fc43bfe174cb08a5fabb8180654765ba9ab39b6b71fdc42b8b102",
+        "verified_on_disk_in_s0": true
+      },
+      "conversion_path": "r66.load_r58_ep0_model(seed) -> r66.fresh_partitioned_controller(seed, ep0_state=...) sets BOTH independent heads to the OLD action head; trunk frozen by freeze_trunk_only. The conversion source is the already-implemented and previously verified r66 path; it is NOT re-executed in S0 (torch.load is a paid, licensed step)."
+    }
+  },
+  "living_config_verified": {
+    "source": "ROUND66_FREEZE.json living_config_verified (read from the live modules after configure_source_imports()); re-verified against the canonical modules on disk in S0",
+    "gamma": 1.0,
+    "gae_lambda": 1.0,
+    "eta_lambda": 0.5,
+    "delta": 0.0,
+    "lambda_init": 1.0,
+    "data_order_seed": 20260927,
+    "b0_bytes": 10000.0,
+    "learning_rate": 0.0003,
+    "clip": 0.2,
+    "entropy_bonus": 0.01,
+    "value_coefficient": 0.5,
+    "max_grad_norm": 0.5,
+    "epochs_per_batch": 4,
+    "minibatch_steps": 256,
+    "episodes_per_update": 4,
+    "log_prob_tolerance": 1e-06,
+    "gate_beta": 1.0,
+    "ready_cut": 147,
+    "note": "the module import defaults gae_lambda=0.95 / eta_lambda=0.05 are OLD and are NOT used; r66_frozen.configure_source_imports() sets common.GAE_LAMBDA=1.0 and common.ETA_LAMBDA=0.5 at import time"
+  },
+  "structure": {
+    "frozen_modules": ["trunk"],
+    "trainable_modules": ["early_head", "late_head", "value_task_head", "value_cost_head"],
+    "frozen_parameter_objects": 4,
+    "frozen_scalars": 5440,
+    "trainable_parameter_objects": 8,
+    "trainable_scalars": 390,
+    "total_parameter_objects": 12,
+    "total_scalars": 5830,
+    "single_structural_intervention": "vs R66 (trunk+early_head frozen, 6 trainable): early_head moves out of the frozen set; nothing else in the loss, mask, GAE, shuffle, clip, optimizer protocol or return contract changes"
+  },
+  "versions": {
+    "training_version": "round75-native-ppo-qualification/1",
+    "trainer_tag": "constrained-cost-v2-r75-native-ppo-qualification",
+    "structure": "partitioned-early-late-actor-head/1+native-ppo-qualification-trunk-frozen/1",
+    "loss_version": "constrained-lagrangian/2+partitioned-actor-head/1+native-ppo-qualification/1",
+    "state_schema": "constrained-cost-state/2+partitioned-actor-head/1+native-ppo-qualification/1",
+    "optimizer_schema": "stage-c-native-qualification-eight-object-parameter-set/1"
+  },
+  "resource_contract": {
+    "ledger_kind": "r75-central-production-ledger/1",
+    "ledger_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/raw/runtime",
+    "mode": "production only; R75Resources.simulated() raises; the native wiring refuses any resource object without r75_central_production=True, and refuses None",
+    "units": {
+      "physical_optimizer_step": {"normal": 12, "technical": 4, "hard": 16, "per_charge": null},
+      "offline_trunk_target_row": {"normal": 5000, "technical": 1000, "hard": 6000, "per_charge": 1024},
+      "joint_record": {"normal": null, "technical": null, "hard": null, "note": "tracked separately; no numeric cap in the contract"},
+      "environment_construction": {"normal": 0, "technical": 0, "hard": 0, "note": "forbidden entirely in R75"}
+    },
+    "semantics": "pre-charge before the work; failures never refund; refusals log and consume nothing; restart does not clear consumption; backup copies are not new executions; identical-output real re-runs are not de-duplicated; technical reserve requires a PRE-REGISTERED failed attempt; consistency_check reconciles counters against the append-only ledger",
+    "bootstrap": "R75Resources.bootstrap() persisted the zero-value identity at S0 close (four zero counters + four ledger-opened markers); consistency_check reported consistent with zero totals",
+    "r60_history": "the R60 historical 608 environment constructions are NOT imported into this ledger and are NOT spendable headroom; R75 is a new, independent authorization"
+  },
+  "known_unknowns_for_s1": [
+    "the R58 ep0 controller state-dict key mapping into the five-module partitioned controller is verified at the paid read-only load (r66.load_r58_ep0_model checks the four-module schema; fresh_partitioned_controller consumes it); if the mapping fails, the run STOPS and no science is claimed",
+    "whether the recorded behaviour log-probs reproduce within log_prob_tolerance=1e-06 is decided by the paid native r66.likelihood_alignment; on failure the run STOPS, the data is never rewritten and the alignment is never disabled",
+    "the first torch import of the project happens at S1; S0 never imported torch"
+  ]
+}

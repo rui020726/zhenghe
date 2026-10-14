@@ -1,0 +1,82 @@
+{
+  "kind": "round75-s0-verdict/1",
+  "verdict": "S0_COMPLETE_AWAITING_DECISION_SIDE",
+  "meaning": "The implementation and read-only freeze preparation are complete and internally consistent. The paid S1 execution is NOT authorized by this verdict and must not start without a separate decision-side approval.",
+  "branch": "exp/round75-native-ppo-qualification",
+  "head": "c1a228e1629c3e501ed0def121f0d11ba43d2cdc",
+  "questions": {
+    "q1_native_call_chain_implemented": {
+      "answer": true,
+      "evidence": [
+        "r75_native_ppo_update is a full-function adaptation of the real r66_frozen.frozen_early_ppo_update: function-level sha256 old 0a891308d06128dc4f7ee41fc137455a26d2f332ea2e1aa570fe7975064c0572 / new 07f502fa71b2ae56239819711147aa26811235ef1b864f74fe903b431dd53281, both 237 lines, 194 diff lines",
+        "ROUND75_NATIVE_WIRING_DIFF.md enumerates the only permitted changes: freeze set (trunk+early_head -> trunk), parameter ownership 6 -> 8 objects, gradient-read scope, R75 identity strings, and the mandatory R75 production-ledger resource seam",
+        "AST-level spy tests assert the real calls are present (trainer.batch_samples, r66.likelihood_alignment, r66.route_logits, common.EPOCHS_PER_BATCH/MINIBATCH_STEPS/DATA_ORDER_SEED/MAX_GRAD_NORM, clip_grad_norm_, zero_grad, loss.backward, optimizer.step) and that transcription/shortcut patterns are absent",
+        "the resource seam is source-enforced: _require_production_ledger refuses None and any non-production object; charge_physical_step precedes optimizer.step in source order; the minibatch trunk-forward charge precedes the forward"
+      ]
+    },
+    "q2_r58_behaviour_model_traceable": {
+      "answer": true,
+      "evidence": [
+        "three-way closure: the e0 row controller_parameters_after.parameter_sha256 = 37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330 (5700 parameters, single head [action_head, value_task_head, value_cost_head]) equals the R58 gen2 ep0 entry registered in r66_frozen.R58_EP0_MODELS[11]",
+        "the registered R58 ep0 file runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt was re-hashed on disk in S0: 76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a, matching the registry; action_head_sha256 aad35fc6ba3fc43bfe174cb08a5fabb8180654765ba9ab39b6b71fdc42b8b102",
+        "the conversion path r66.load_r58_ep0_model -> r66.fresh_partitioned_controller(ep0_state=...) sets both independent heads to the OLD action head, so the routed forward reproduces the single-head behaviour by construction; the conversion source is the previously verified r66 path and was NOT re-executed in S0"
+      ]
+    },
+    "q3_required_data_fields_complete": {
+      "answer": true,
+      "evidence": [
+        "the frozen qualification episode (row 882711788d8ccae4ec8092b4eb26df7da6771c9b352b6c7507624d3644abebd8 / tape 6d4c4363ff490fafe08b55bbf369dcfaf6284b741c2802cf9ef3374d9b792421) rebuilds through the torch-free adapter with fail-closed validation",
+        "66 records (<= 256), features all 19-dim, steps 1..192 monotonic within a 1000-step horizon, cost_stream 1000 ticks with airtime_bytes, task_stream 6 targets, lambda 1.0, candidate rows 168, free early 5 / late 1, gate-eligible early 5",
+        "the 12 substituted_fields were classified: comm_* mask/timing fields resolve consistently with the frozen configuration (budget 29300, ACK off, no send-rate cap, no wait cap, policy-owned timing); no stop condition triggered; the residual (archived originals unrecoverable, reliance on row-parsed values + config_hash) is registered as a known residual"
+      ]
+    },
+    "q4_conservative_bounds_hold": {
+      "answer": true,
+      "evidence": [
+        "per update over the frozen 66-sample batch: physical optimizer steps = 4 x ceil(66/256) = 4; offline trunk target rows = 168 x (4 epochs + 1 alignment pass) = 840 (pure-arithmetic update_accounting, covered by test_update_accounting_arithmetic)",
+        "the S1 candidate totals <= 9 physical steps (cap 12 normal / 16 hard) and <= 1680 offline rows (cap 5000 normal / 6000 hard); the largest single row charge is 168 (per-charge cap 1024)",
+        "environment constructions are 0/0/0 by contract and refused by source; joint records are tracked separately with none planned"
+      ]
+    },
+    "q5_difference_from_r71_init_and_uncovered": {
+      "answer": "The qualification parameters are NOT the R71 research INIT. The research INIT remains the compliant R71 calibration model-only five-module checkpoint; nothing produced here enters it. Uncovered by S0: the paid read-only model load and state-dict key mapping, the paid likelihood_alignment outcome, the real collector / real episodes / closed-loop simulation, full multi-batch training, any evaluation block, and any effect conclusion. The R58 rollout data is NOT an R71 trajectory; it is used only as a real recorded batch replayed through a gate-only controller whose behaviour actor is the R58 single-head model copied into the two heads.",
+      "evidence": [
+        "r75_frozen module docstring carries these provenance caveats verbatim",
+        "ROUND75_S0_PLAN.json lists the S1 gate checks, stop conditions and the explicitly-not-covered set"
+      ]
+    }
+  },
+  "zero_cost_counts": {
+    "model_load_or_construction": 0,
+    "forward_read_only_cpu": 0,
+    "backward": 0,
+    "optimizer_step_real_or_synthetic": 0,
+    "ppo_update": 0,
+    "ppo_replay": 0,
+    "environment_construction": 0,
+    "sampling": 0,
+    "checkpoint_write": 0,
+    "training_resume": 0,
+    "rng_restore": 0,
+    "torch_imported": false
+  },
+  "tests": {
+    "suite": "test_r75_s0_spy.py",
+    "ran": 20,
+    "failed": 0,
+    "torch_imported": false,
+    "coverage": "real-JSON adapter + fail-closed validation; fake-caller ledger (pre-charge, caps, refusal-does-not-consume, no-refund, restart persistence, consistency, lock, env-forbidden, fixture-mode-cancelled, bootstrap zero identity); AST-level wiring source proof; pure-arithmetic accounting"
+  },
+  "ledger": {
+    "kind": "r75-central-production-ledger/1",
+    "root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/raw/runtime",
+    "state": "zero-value identity bootstrapped at S0 close; four zero counters; four ledger-opened markers; no charge events; no lock held",
+    "consistency_check": "consistent with zero totals",
+    "r60_history_note": "the R60 historical 608 environment constructions are not imported here and are not spendable headroom"
+  },
+  "protected_files_verified": [
+    {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json", "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b", "status": "untouched"},
+    {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json", "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18", "status": "untouched"}
+  ],
+  "s1_authorized": false
+}

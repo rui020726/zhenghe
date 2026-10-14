@@ -1,0 +1,70 @@
+{
+  "kind": "round75-s0-plan/1",
+  "status": "DESIGN ONLY - NOT AUTHORIZED, NOT EXECUTED. The paid S1 execution requires a separate decision-side approval; this plan is the candidate gate that would be run under that approval.",
+  "branch": "exp/round75-native-ppo-qualification",
+  "frozen_at_head": "c1a228e1629c3e501ed0def121f0d11ba43d2cdc",
+  "run_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification",
+  "s1_goal": "Prove, on the ONE frozen real recorded batch (seed 11 / round58_gen2 / e0 / scenario 1300027), that the native R75 PPO path is technically eligible: the two-head gate-only controller reproduces the recorded behaviour, the eight-object Adam covers exactly the trainable objects, the trunk freeze and the resource seam hold, and a full-state save/restore round-trips the same update. This is qualification, not effect research.",
+  "candidate_components": [
+    {
+      "id": "A1-nonempty-adam-critic-only-control-step",
+      "physical_optimizer_steps": 1,
+      "offline_trunk_target_rows": 0,
+      "design": "Build the R75 optimizer (Adam lr=3e-4) over the eight trainable objects. Run ONE synthetic physical optimizer step in which only the two critic modules carry gradient and both actor heads carry none. Proves: (a) Adam state (exp_avg/exp_avg_sq) materializes non-empty for the stepped objects after one step; (b) an object with no gradient in a step is skipped by Adam without corrupting the other objects' state; (c) zero_grad / clip_grad_norm_ / step act on exactly the eight trainable objects, each once; (d) the frozen trunk (requires_grad=False) is never handed to the optimizer.",
+      "why_needed": "an empty Adam state after a real step would silently disable adaptation; this control step isolates that failure mode from the real update"
+    },
+    {
+      "id": "A2-source-actual-update",
+      "physical_optimizer_steps": 4,
+      "offline_trunk_target_rows": 840,
+      "design": "Run r75_native_ppo_update once (update_index=0) on the frozen qualification episode through the real path: trainer.batch_samples + GAE, the charged r66.likelihood_alignment pass (168 candidate rows), the DATA_ORDER_SEED-seeded shuffle, 4 epochs x 1 minibatch (66 samples <= 256), each minibatch charging its 168 trunk rows before the forward, the beta=1.00/ready_cut=147 gate prior, the clipped surrogate + dual critic + entropy + gate loss, the global clip over the eight trainable objects, optimizer.step. Accounting per update_accounting(66, 168): steps = 4 x ceil(66/256) = 4; rows = 168 x (4+1) = 840.",
+      "why_needed": "this is the only place the recorded log-probs are tested against the model; alignment failure is a hard stop"
+    },
+    {
+      "id": "A3-full-state-save-restore-same-update",
+      "physical_optimizer_steps": 4,
+      "offline_trunk_target_rows": 840,
+      "design": "BEFORE A2, persist the full pre-update state (five-module parameters, the eight-object Adam state, lambda, the DATA_ORDER_SEED training RNG state and the update cursor). AFTER A2, restore that exact pre-update state into fresh objects and re-execute the SAME update (update_index=0). Gate: the re-run record must equal the A2 record (the re-run is executed from the restored pre-state and does not advance the scientific cursor; it replaces the trial, it is not a second committed update). Any mismatch means the restore is incomplete: STOP, claim nothing.",
+      "why_needed": "proves the checkpoint contract covers every piece of mutable state a resume needs, without duplicating a committed update"
+    }
+  ],
+  "candidate_accounting": {
+    "physical_optimizer_steps_total": 9,
+    "physical_optimizer_steps_normal_cap": 12,
+    "physical_optimizer_steps_hard_cap": 16,
+    "offline_trunk_target_rows_total": 1680,
+    "offline_trunk_target_rows_normal_cap": 5000,
+    "offline_trunk_target_rows_hard_cap": 6000,
+    "per_charge_row_cap": 1024,
+    "largest_single_row_charge": 168,
+    "environment_constructions": 0,
+    "joint_records": 0,
+    "headroom_after_candidate": {"physical_optimizer_steps": 3, "offline_trunk_target_rows": 3320},
+    "note": "conservative upper bounds computed by the pure-arithmetic update_accounting over the frozen 66-sample batch; technical reserve (4 steps / 1000 rows) stays available for a PRE-REGISTERED failed attempt only"
+  },
+  "s1_gate_checks": [
+    "module byte identities re-verified at import (trainer/common/controller + r66 source) before any torch.load",
+    "R58 ep0 checkpoint byte identity (76ffc86c...) re-verified at the paid read-only load; four-module schema accepted; both heads set to the OLD action head; trunk frozen (requires_grad=False) with the frozen-tensor digest recorded",
+    "initial routed forward equals the OLD single-head behaviour on the recorded batch (decided by the paid likelihood_alignment within log_prob_tolerance=1e-06; the gate prior is a training-loss term only and never enters the forward)",
+    "optimizer owns exactly the eight trainable objects, each once; the four trunk objects are absent",
+    "critic-to-trunk isolation: trunk receives no gradient because it does not require one (structural fact, not a measured zero)",
+    "sequential mask, joint_log_prob, action_entropy, ALL_ROWS reduction, GAE lambda=1.0, dual eta=0.5, reward-event attribution unchanged (function-level diff + hash identity)",
+    "every physical optimizer step and every real trunk forward is pre-charged to the R75 central production ledger; a refused charge stops the run",
+    "passive diagnostics only: early/late free row counts, per-module pre-clip gradient reads, gate prior exposure and loss, parameter/batch/checkpoint identity chain; diagnostics never change the shuffle or the update"
+  ],
+  "stop_conditions": [
+    "any canonical module or R58 ep0 byte-identity mismatch",
+    "the R58 ep0 state-dict key mapping into the five-module controller fails",
+    "likelihood_alignment fails (data is never rewritten; alignment is never disabled)",
+    "A3 re-run record != A2 record",
+    "any ledger refusal, any simulated/None resource attachment, any environment construction attempt (refused by source)",
+    "non-finite loss or gradient norm"
+  ],
+  "explicitly_not_covered_by_s1": [
+    "the real collector, real episodes, closed-loop simulation and any evaluation block",
+    "full multi-batch training and any research checkpoint",
+    "the R71 research INIT (the qualification parameters never enter it; the research INIT remains the compliant R71 calibration model-only five-module checkpoint)",
+    "joint records (tracked separately; none planned in this candidate)",
+    "any conclusion about communication-policy effect, cost or task outcomes"
+  ]
+}
