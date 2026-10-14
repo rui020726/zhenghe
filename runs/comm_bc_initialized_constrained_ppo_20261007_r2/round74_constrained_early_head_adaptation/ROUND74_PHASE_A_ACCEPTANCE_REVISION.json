@@ -1,0 +1,77 @@
+{
+  "round": 74,
+  "phase": "A",
+  "kind": "acceptance_boundary_revision",
+  "git_head": "accc47bab5b5c9aaa15b10e06919f29b0240e03e",
+  "branch": "exp/round74-constrained-early-head-adaptation",
+  "relationship": "APPENDED revision; the original ROUND74_PHASE_A_ACCEPTANCE.json is PRESERVED byte-identical and is NOT overwritten.",
+  "boundary_corrections": {
+    "proof_ok_write_omission": {
+      "issue": "original ROUND74_PHASE_A_ACCEPTANCE.json carries no top-level toy_adam_proof_ok (reads None)",
+      "actual_proof_ok": true,
+      "evidence": [
+        "driver printed R74_PHASE_A OK (only emitted when proof_ok is True)",
+        "marker r74_phase_a_toy_proof.done.json written only after the proof invariants held",
+        "toy_adam_proof: third_attempt_refused=true, param_unchanged_after_refusal=true, global_synth_steps_used=2, sublimit_used=2"
+      ]
+    },
+    "adam_per_value_state": {
+      "retracted_claim": "the original compared only exp_avg ROW COUNT before/after the refused 3rd attempt (1==1), not per-element values",
+      "status": "UNVERIFIED - a full per-value Adam state snapshot was not retained at proof time and is NOT re-run (no budget)",
+      "what_is_verified": "the 3rd attempt was refused BEFORE opt.step() was entered (the sub-limit charge raised first) and the scalar param value was unchanged (-0.19999998807907104 before and after); opt.step() was never entered on the 3rd attempt, but the per-value snapshot evidence is not retained"
+    }
+  },
+  "hardening_delivered": {
+    "new_module": "r74_guard_prod.py",
+    "new_module_sha256": "eb711ddb37988b6bc52ef9eccef2cd1613de76028632ba0675ccebeae36cb8be",
+    "new_tests": "test_r74_guard_prod.py",
+    "new_tests_sha256": "868b5710878bd8777e84f92eaedc82560aed2e243498a64243d49eb4cc2814b3",
+    "new_tests_result": {
+      "total": 27,
+      "pass": 27,
+      "fail": 0,
+      "all_pass": true
+    },
+    "fixes": [
+      "count_target_vectors: (19,) now counts 1 (was 0); a non-19 last dim raises LedgerStateError at the trunk entry instead of defaulting to 0",
+      "make_charged_step per-physical-step seam built on the REAL r43 count_at_entry boundary (not a re-manual-charge spy): multi-step each charged, refusal before the original step, no refund on original-step failure",
+      "charge_trunk_forward trunk-entry seam: counts ACTUAL 19-D rows, per-batch 1024 ALWAYS enforced at the production entry (not bypassable), non-19 raises; only this offline seam moves the offline unit",
+      "_ProdCounter: durable-base-inside-lock, cross-instance/cross-process O_EXCL lock (PHASE A threading.Lock was per-instance/in-process only), fail-closed on corrupt/partial/foreign/used>hard/lost-counter/low-backup/residual-lock, no refund, no lock recovery",
+      "production vs fixture separated: R74ResourcesProd.production() pins canonical and refuses any non-canonical/redirected root; R74ResourcesProd.fixture(root) records simulated consumption only and cannot reset production quota"
+    ],
+    "real_connection_points": {
+      "adam_step_hook": "r43_call_counter_hooks.count_at_entry (round43-training-call-counter/2), installed around torch.optim.Adam.step by configure() in r46_execute_r2.py",
+      "pristine_step": "_PRISTINE_ADAM_STEP captured at import before the hook, restored around gate updates (round71_critic_initialization_calibration/r71_trial_gates.py; round73_pure_cost_actor_ablation/_patch_a.py,_patch_c.py,_patch_f.py,_patch_k.py,test_r73_qualification_gates.py); these bypass the hook and must be wrapped by the same seam",
+      "trunk_entry": "controller.inner.trunk(x), x = 19-D rows; metered by charge_trunk_forward per the R71 guarded_trunk_forward/ForwardLedger pattern"
+    },
+    "seam_boundary_note": "make_charged_step charges the NORMAL category, so it refuses at the normal cap (12); the hard cap (16) is reachable only via reserve charges. Phase B sets its own physical-step budget sizing at decision-end."
+  },
+  "read_only_production_pinning_check": {
+    "construction": "R74ResourcesProd.production() read-only, no charge",
+    "pinned_to_canonical": true,
+    "synth_used": 2,
+    "synth_hard": 16,
+    "env_used": 0,
+    "offline_used": 0,
+    "ppo_used": 0,
+    "joint_used": 0,
+    "canonical_ledger_events_unchanged": true
+  },
+  "consumption_this_revision": {
+    "real_physical_optimizer_steps": 0,
+    "environment_constructions": 0,
+    "offline_forward_target_rows": 0,
+    "ppo_update_calls": 0,
+    "note": "all new verification is pure synthetic/fixture on throwaway roots plus ONE read-only production construction; canonical ledger/marker and the 2 real toy steps are byte-unchanged"
+  },
+  "cumulative_round74_phase_a": {
+    "real_physical_optimizer_steps": 2,
+    "spy_tests_original": 17,
+    "spy_tests_production_seam": 27,
+    "phase_b_status": "NOT_STARTED - 17 + 27 pure spy passes do NOT prove the real production wiring is qualified; production training/model gate eligibility awaits a separate decision-end PHASE B"
+  },
+  "protected_files_unchanged": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  }
+}

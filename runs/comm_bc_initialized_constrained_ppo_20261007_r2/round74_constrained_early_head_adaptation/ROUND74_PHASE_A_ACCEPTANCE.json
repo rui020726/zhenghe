@@ -1,0 +1,143 @@
+{
+  "round": 74,
+  "phase": "A",
+  "git_head": "accc47bab5b5c9aaa15b10e06919f29b0240e03e",
+  "files": {
+    "r74_guard.py": "9a6b06374fc5b56b6d8077dc6aa332444533198aca0967cb36b867795af614d7",
+    "test_r74_guard.py": "e522d66bffa190a5da1a0f0d4212e8033b1d850ab4011625569667b9b3fe66a0",
+    "r74_phase_a.py": "7452687d6eda4b7d576d6dc7d6e6501592ab86cbfbea137d986a139b52e6d2d0"
+  },
+  "spy_tests": {
+    "total": 17,
+    "pass": 17,
+    "fail": 0,
+    "all_pass": true
+  },
+  "toy_adam_proof": {
+    "permitted_calls": [
+      {
+        "call": 1,
+        "before": 0.0,
+        "after": -0.09999998658895493,
+        "sublimit_used_after": 1,
+        "global_used_after": 1
+      },
+      {
+        "call": 2,
+        "before": -0.09999998658895493,
+        "after": -0.19999998807907104,
+        "sublimit_used_after": 2,
+        "global_used_after": 2
+      }
+    ],
+    "third_attempt_refused": true,
+    "third_attempt_refusal_error": "r74-phase-a-toy-sublimit/1: charging 1 (phase_a_toy_step_3_refused, normal) refused; used_normal=2/2, hard used=2/2",
+    "param_before_refusal": -0.19999998807907104,
+    "param_after_refusal": -0.19999998807907104,
+    "param_unchanged_after_refusal": true,
+    "adam_state_rows_before_refusal": 1,
+    "adam_state_rows_after_refusal": 1,
+    "global_synth_steps_used": 2,
+    "sublimit_used": 2,
+    "sublimit_refusals": 1
+  },
+  "consumption": {
+    "physical_optimizer_steps_real": 2,
+    "environment_constructions": 0,
+    "offline_forward_target_rows": 0,
+    "ppo_update_calls": 0,
+    "joint_records": 0
+  },
+  "zero_side_effect": {
+    "environment_constructions": true,
+    "offline_forward_target_rows": true,
+    "ppo_update_calls": true
+  },
+  "snapshots": {
+    "canonical_root": "D:\\code\\\u6574\u5408\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round74_constrained_early_head_adaptation\\raw\\runtime",
+    "total_ledger_path": "D:\\code\\\u6574\u5408\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round74_constrained_early_head_adaptation\\raw\\runtime\\r74_total_ledger.jsonl",
+    "total_ledger_events": 5,
+    "env_slots": {
+      "kind": "r74-env-construction-slot-guard/1",
+      "unit": "environment_construction",
+      "normal_cap": 579,
+      "reserve_cap": 21,
+      "hard_cap": 600,
+      "used_normal": 0,
+      "used_reserve": 0,
+      "used": 0,
+      "remaining": 600,
+      "refusals": 0,
+      "events": []
+    },
+    "synthetic_physical_steps": {
+      "kind": "r74-synthetic-physical-optimizer-step-guard/1",
+      "unit": "physical_optimizer_step",
+      "normal_cap": 12,
+      "reserve_cap": 4,
+      "hard_cap": 16,
+      "used_normal": 2,
+      "used_reserve": 0,
+      "used": 2,
+      "remaining": 14,
+      "refusals": 0,
+      "events": [
+        {
+          "what": "phase_a_toy_adam_step_1",
+          "n": 1,
+          "category": "normal",
+          "used_after": 0,
+          "unix": 1791970038.0842226
+        },
+        {
+          "what": "phase_a_toy_adam_step_2",
+          "n": 1,
+          "category": "normal",
+          "used_after": 1,
+          "unix": 1791970038.114491
+        }
+      ]
+    },
+    "offline_forward_target_rows": {
+      "kind": "r74-offline-trunk-target-forward-guard/1",
+      "unit": "offline_trunk_target_row",
+      "normal_cap": 3000,
+      "reserve_cap": 3000,
+      "hard_cap": 6000,
+      "used_normal": 0,
+      "used_reserve": 0,
+      "used": 0,
+      "remaining": 6000,
+      "refusals": 0,
+      "events": []
+    },
+    "joint_records": {
+      "kind": "r74-joint-record-guard/1",
+      "unit": "joint_record",
+      "normal_cap": 1000000000,
+      "reserve_cap": 1000000000,
+      "hard_cap": 1000000000,
+      "used_normal": 0,
+      "used_reserve": 0,
+      "used": 0,
+      "remaining": 1000000000,
+      "refusals": 0,
+      "events": []
+    },
+    "ppo_calls": {
+      "kind": "r74-ppo-call-guard/1",
+      "unit": "ppo_update_call",
+      "normal_cap": 1000000000,
+      "reserve_cap": 1000000000,
+      "hard_cap": 1000000000,
+      "used_normal": 0,
+      "used_reserve": 0,
+      "used": 0,
+      "remaining": 1000000000,
+      "refusals": 0,
+      "events": []
+    }
+  },
+  "phase_b_status": "NOT_STARTED - PHASE A is resource wiring only; PHASE B (real CLI/controller/PPO/training/eval) awaits a separate decision-end continuation and is NOT authorized here.",
+  "note": "PHASE A wiring only. Real physical consumption = 2 toy Adam.step on a constant scalar with an explicit gradient (no model/env/forward). The 3rd attempt is refused by the sub-limit-2 before the global charge and before opt.step; the parameter and Adam state are unchanged and the global hard-16 stays at 2."
+}
