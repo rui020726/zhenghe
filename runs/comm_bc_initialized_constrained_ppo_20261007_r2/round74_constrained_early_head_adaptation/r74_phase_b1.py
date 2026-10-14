@@ -28,7 +28,9 @@ if str(R53_DIR) not in sys.path:
 
 import torch
 _PRISTINE_ADAM_STEP = torch.optim.Adam.step
-_ADAM_PRISTINE_AT_IMPORT = not hasattr(torch.optim.Adam.step, "__wrapped__")
+# NOTE: torch sets __wrapped__ on Adam.step via its own @_use_grad_for_differentiable, so a
+# __wrapped__ attribute is NOT an r43-hook signal. The hook is installed only by r42_run.configure()
+# (via r46); B1 never loads that driver, and we prove the step was never swapped below.
 
 import numpy as np
 import r74_model as M
@@ -82,8 +84,8 @@ def run_all(mode, fixture_root=None):
     verdict = {
         "kind": "round74-phase-b1-verdict/1", "mode": mode,
         "canonical_root": str(R74_CANONICAL_ROOT),
-        "adam_pristine_at_import": bool(_ADAM_PRISTINE_AT_IMPORT),
-        "adam_pristine_at_run": bool(torch.optim.Adam.step is _PRISTINE_ADAM_STEP),
+        "adam_step_unchanged_since_import": bool(torch.optim.Adam.step is _PRISTINE_ADAM_STEP),
+        "r43_training_driver_not_loaded": bool("r42_run" not in sys.modules and "r46_execute_r2" not in sys.modules),
         "control_commit": CONTROL_COMMIT,
         "live": {k: live[k] for k in LIVE_KEYS},
         "before": res.snapshots(), "gates": {}, "counterexamples": {}, "errors": [],
@@ -269,7 +271,7 @@ def run_all(mode, fixture_root=None):
         save = {"schema_is_r74": payload.get("schema") == M.R74_STATE_SCHEMA,
                 "trainer_tag_is_r74": payload.get("trainer_tag") == M.R74_TRAINER_TAG,
                 "structure_is_r74": payload.get("structure") == M.R74_STRUCTURE,
-                "optimizer_param_groups_2222": payload.get("optimizer_param_groups") == [2, 2, 2, 2],
+                "optimizer_single_group_covers_8": payload.get("optimizer_param_groups") == [8],
                 "frozen_mask_frozen_scalar_5440": payload.get("frozen_mask", {}).get("frozen_scalar_count") == 5440}
         src_param = M.module_parameter_digest(c); src_adam = _adam_digest(opt); src_rng = trainer.rng_state()
         c2, opt2, ts2 = M.load_checkpoint(ckpt, live=live)
