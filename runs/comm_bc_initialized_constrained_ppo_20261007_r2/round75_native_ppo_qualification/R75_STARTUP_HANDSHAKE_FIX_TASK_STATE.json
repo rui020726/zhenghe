@@ -1,0 +1,73 @@
+{
+  "kind": "round75-task-state/1",
+  "request_id": "R75_S0_STARTUP_HANDSHAKE_FIX_20261015",
+  "authorization": "pure source fix + narrow stdlib tests + freeze + local closeout; ends the read-only evidence task; NO new experiment; NO real S1; NO torch/model/env/optimizer/PPO",
+  "branch": "exp/round75-native-ppo-qualification",
+  "head_at_start": "3803dad0468a24e0c78589c557aace00085e2b60",
+  "parent_head": "0cc788d4fae87f9af2fdf3b863fbe07c3626f9e6",
+  "output_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification",
+  "supersedes_read_only_request": "R75_S0_COMMITTED_EVIDENCE_READ_20261015",
+  "defects_to_fix_once": [
+    "1 argv double-prefix: run() builds [python,runner]+flags and launch_once() prepends [python,runner] again -> single assembly build_child_argv(), launch_once execs verbatim",
+    "2 parent-marker self-refusal: register_attempt() writes the pre-launch marker then child _bind_execution_identity() refuses on its own id -> parent->child license handoff: fresh issued marker consumed once via O_EXCL consumption record; missing/mismatch/consumed/old-id/historical-dir/cross-dir replay refused",
+    "3 test discovery: unittest.main at line 653 precedes the last 12 methods (RunnerWiringAstTest/RunnerIdentityRoutingTest) -> move entry after all classes; preserve old 30-run record; append correction that 12 did not execute; add real wrapper-register->child-bind seam counterexamples",
+    "4 identity/dir discipline: duplicate_request_refusal only scans current dir + raw/s1; main fixes raw/s1_revised + fixed filenames -> per-attempt dir base/<request-id>, global dedup by request, refuse overwrite; prepare creates no license and no child"
+  ],
+  "contract_preserved": {
+    "r75_frozen_py_sha256": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+    "pinned_sources_unchanged": [
+      "r66_frozen",
+      "canonical onpolicy/common/controller/cost_math",
+      "r75_guard",
+      "r75_replay_adapter"
+    ],
+    "training_math_data_rng_ppo_matrix": "unchanged",
+    "scope": "wrapper/runner argv, launch license, path/execution identity, test discovery ONLY"
+  },
+  "zero_environment": {
+    "torch_import": 0,
+    "numpy_import": 0,
+    "model_load_or_construction": 0,
+    "forward": 0,
+    "backward": 0,
+    "optimizer_step": 0,
+    "ppo_update": 0,
+    "ppo_replay": 0,
+    "environment_construction": 0,
+    "sampling": 0,
+    "checkpoint_write": 0,
+    "real_launch": 0,
+    "ledger_charge": 0,
+    "new_claims": 0
+  },
+  "test_discipline": "stdlib/AST/fake modules/fake Popen or fake paid spy + independent temp dirs; may import stdlib-only wrapper and lazy runner; must NOT import real numpy/torch/r75_frozen/r66/canonical; no real --launch or --run-s1",
+  "protected_untouched": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  },
+  "future_plan_frozen_not_authorized": {
+    "note": "bookkeeping only; authorizes no paid execution",
+    "contract": "R58 s11/e0/scenario1300027, 66 records/168 candidates; A1 critic-only once + A2/A3 each once native update0 = 9 normal physical / 1680 target / 140 trunk calls / 2 batch-read / Env 0",
+    "caps": "physical 12 normal + 4 technical / hard 16; target 5000 normal + 1000 technical / hard 6000 / per-batch 1024; no expansion, no zeroing, no borrowing R74"
+  },
+  "status": "COMPLETE",
+  "resume_cursor": "delivered: four defects fixed; affected pure suite 49 OK exit 0; updated-pin precheck 74/74 exit 0; manifest/report/verdict written; local explicit commit done; S1 still unauthorized",
+  "git_external_originals_preserved": [
+    "raw/s1 nine originals",
+    "r75_s1_outer_exec.py b1c4fa4c",
+    "old 30-run stdout"
+  ],
+  "completed": {
+    "wrapper_sha256": "c448d465c7b841419427fcf0c0357fe012720b723fc88ef697010fcf0ba0622e",
+    "runner_sha256": "3ba6ea272942a7f77d65ff6d5922de13395e7149d800972730ca83a8cbd2309d",
+    "test_sha256": "48ed8cec62f07c6e08f72f7022764b06ff24b1b2342bd0c8665cb19ad663ec05",
+    "suite": "declared=discovered=executed=49 OK exit 0",
+    "precheck": "74 checks, 0 failed, exit 0, zero cost",
+    "development_failures_disclosed": "1 failure + 5 errors on first run, all test-authoring defects (5 register_attempt-before-mkdir FileNotFoundError; 1 ast.walk BFS order), fixed; none masked a code defect",
+    "delivery": [
+      "ROUND75_STARTUP_HANDSHAKE_FIX_REPORT.md",
+      "ROUND75_STARTUP_HANDSHAKE_FIX_VERDICT.json",
+      "ROUND75_GIT_EXTERNAL_MANIFEST.json (startup_handshake_fix_revision appended)"
+    ]
+  }
+}

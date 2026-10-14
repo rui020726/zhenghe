@@ -51,7 +51,7 @@ OUTCOME_RECORD = "r75_s1_outer_v2_outcome.json"
 WRAPPER_FAILURE_RECORD = "r75_s1_outer_v2_wrapper_failure.json"
 
 EXPECT_CODE = {
-    "r75_s1_runner.py": "0d773a54b201f08bb02e075d763dc720e87f8e652b02a6e3bf2b9079f69b893f",
+    "r75_s1_runner.py": "3ba6ea272942a7f77d65ff6d5922de13395e7149d800972730ca83a8cbd2309d",
     "r75_s1_precheck.py": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c",
     "r75_frozen.py": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
     "r75_guard.py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
@@ -149,6 +149,7 @@ def ledger_snapshot(runtime_dir, frozen):
 
 
 def write_json(path, payload):
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
     tmp = str(path) + ".tmp"
     with open(tmp, "w", encoding="utf-8", newline="\n") as handle:
         json.dump(payload, handle, indent=2, ensure_ascii=False, default=str)
@@ -183,21 +184,29 @@ def first_attempt_state(here):
 
 
 def duplicate_request_refusal(request_id, s1_dir, here):
-    """A request id runs at most once, in any output directory. Read-only; returns a reason or None."""
+    """A request id runs at most once, in ANY attempt directory. Read-only; returns a reason or None.
+
+    The search is global across the whole attempts base (every per-attempt subdirectory) plus the
+    preserved raw/s1, so a request id cannot be re-launched by moving to a different directory. The
+    first failed attempt id is refused by name in every directory."""
     if request_id == FIRST_ATTEMPT_REQUEST_ID:
         return ("request id %s is the first failed attempt; its O_EXCL marker forbids a second "
                 "launch in any directory" % request_id)
-    for directory in (s1_dir, here / FIRST_ATTEMPT_DIR):
-        if not directory.exists():
+    candidates = []
+    attempts_base = here / OUTPUT_DIR_NAME
+    if attempts_base.exists():
+        candidates.extend(sorted(attempts_base.rglob("r75_s1_outer_v2_attempt_marker_*.json")))
+    historical = here / FIRST_ATTEMPT_DIR
+    if historical.exists():
+        candidates.extend(sorted(historical.glob("r75_s1_outer_v2_attempt_marker_*.json")))
+    for path in candidates:
+        try:
+            recorded = json.loads(path.read_text(encoding="utf-8")).get("request_id")
+        except (ValueError, OSError):
             continue
-        for path in sorted(directory.glob("r75_s1_outer_v2_attempt_marker_*.json")):
-            try:
-                recorded = json.loads(path.read_text(encoding="utf-8")).get("request_id")
-            except (ValueError, OSError):
-                continue
-            if recorded == request_id:
-                return ("an attempt marker for request id %s already exists at %s"
-                        % (request_id, path.name))
+        if recorded == request_id:
+            return ("an attempt marker for request id %s already exists at %s"
+                    % (request_id, path))
     return None
 
 
@@ -265,20 +274,41 @@ def register_attempt(s1_dir, request_id, argv, head, parent, wrapper_sha):
         return None, marker
     with os.fdopen(handle, "w", encoding="utf-8", newline="\n") as fh:
         json.dump({"kind": "round75-s1-outer-v2-attempt-marker/1", "request_id": request_id,
+                   "attempt_dir": str(s1_dir),
                    "created_at": now(), "wrapper_pid": os.getpid(), "head": head,
-                   "parent": parent, "argv": argv,
-                   "note": ("created with O_EXCL before any paid Python started; its existence "
-                            "forbids a second launch of this request id")}, fh, indent=2)
+                   "parent": parent, "argv": list(argv),
+                   "license_state": "issued", "consumed_at": None, "consumed_by_pid": None,
+                   "note": ("created with O_EXCL before any paid Python started; it is the ONE "
+                            "parent->child launch license. The child consumes it exactly once by "
+                            "creating an O_EXCL consumption record; its existence also forbids a "
+                            "second launch of this request id")}, fh, indent=2)
         fh.write("\n")
         fh.flush()
         os.fsync(fh.fileno())
     return marker, marker
 
 
+def build_child_argv(runner_path, flags):
+    """Assemble the ONE real child argument vector, exactly once.
+
+    The interpreter and the script path appear a single time as the first two entries; the caller
+    passes only the runner flags. launch_once() execs the returned vector verbatim and never
+    re-prefixes it, so a real command can never carry python/runner twice."""
+    return [sys.executable, str(runner_path)] + list(flags)
+
+
 def launch_once(repo, runner_path, argv, timeout_s):
-    """Run the frozen runner exactly once and return the child facts. No retry, no fallback."""
+    """Run the frozen runner exactly once and return the child facts. No retry, no fallback.
+
+    ``argv`` is the COMPLETE vector assembled once by build_child_argv(); its first two entries are
+    already the interpreter and this runner path, so it is exec'd verbatim. ``runner_path`` is
+    cross-checked against argv and is NEVER prepended a second time."""
+    argv = list(argv)
+    if argv[1:2] != [str(runner_path)]:
+        raise ValueError("launch_once received an argv whose script entry is not the runner: %r"
+                         % (argv,))
     started = now()
-    proc = subprocess.Popen([sys.executable, str(runner_path)] + argv, cwd=str(repo),
+    proc = subprocess.Popen(argv, cwd=str(repo),
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     timed_out = False
     try:
@@ -374,8 +404,9 @@ def run(repo, here, s1_dir, request_id, plan, runtime_dir):
                     "note": ("the frozen runner was NOT launched; a request id runs at most once "
                              "and the first attempt id can never run again")})
         return 4, [refusal]
-    argv = ([sys.executable, str(here / RUNNER_NAME)] + RUNNER_ARGV
-            + ["--request-id", request_id, "--attempt-dir", str(s1_dir)])
+    argv = build_child_argv(here / RUNNER_NAME,
+                            RUNNER_ARGV + ["--request-id", request_id,
+                                           "--attempt-dir", str(s1_dir)])
     marker, marker_path = register_attempt(s1_dir, request_id, argv, record["head"],
                                            record["parent"], wrapper_sha)
     if marker is None:
@@ -417,6 +448,28 @@ def _request_id_from_argv(argv):
     return FOLLOW_UP_REQUEST_ID
 
 
+def _resolve_attempt_dir(here, request_id, attempt_dir):
+    """Resolve this attempt's private directory.
+
+    Default: <attempts base>/<request-id> so distinct request ids never share a directory and never
+    overwrite each other's originals. An explicit --attempt-dir is honoured only when it lives inside
+    the output root and is not the historical raw/s1 or anything under it. Returns None to signal a
+    refusal; the caller records it and returns 2."""
+    if attempt_dir:
+        target = Path(attempt_dir)
+        if not target.is_absolute():
+            target = here / target
+        target = Path(os.path.normpath(str(target)))
+        historical = Path(os.path.normpath(str(here / FIRST_ATTEMPT_DIR)))
+        if target == historical or historical in target.parents:
+            return None
+        if target != here and here not in target.parents:
+            return None
+        return target
+    safe = "".join(ch if (ch.isalnum() or ch in "._-") else "_" for ch in request_id)
+    return here / OUTPUT_DIR_NAME / safe
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="ROUND75 S1 outer execution record, revised")
     parser.add_argument("--launch", action="store_true",
@@ -425,14 +478,21 @@ def main(argv=None):
                         help="verify and record only; creates no marker and starts no child")
     parser.add_argument("--request-id", default=FOLLOW_UP_REQUEST_ID,
                         help="the request id this attempt belongs to")
+    parser.add_argument("--attempt-dir", default=None,
+                        help="optional explicit attempt directory inside the output root; defaults "
+                             "to <attempts base>/<request-id> so each attempt is isolated")
     args = parser.parse_args(argv)
     here = Path(__file__).resolve().parent
     repo = here
     while not (repo / ".git").exists():
         repo = repo.parent
-    s1_dir = here / OUTPUT_DIR_NAME
     runtime_dir = here / "raw" / "runtime"
     plan = json.loads((here / "ROUND75_S1_RUN_PLAN.json").read_text(encoding="utf-8"))
+    s1_dir = _resolve_attempt_dir(here, args.request_id, args.attempt_dir)
+    if s1_dir is None:
+        sys.stderr.write("S1 OUTER V2 REFUSED: --attempt-dir must live inside the output root and "
+                         "must not be the historical raw/s1 or anything under it\n")
+        return 2
     s1_dir.mkdir(parents=True, exist_ok=True)
     if args.launch:
         if args.request_id == FOLLOW_UP_REQUEST_ID:
@@ -468,8 +528,8 @@ if __name__ == "__main__":
     except BaseException as _error:
         try:
             _here = Path(__file__).resolve().parent
-            record_wrapper_failure(_here / OUTPUT_DIR_NAME,
-                                   _request_id_from_argv(sys.argv[1:]), _error)
+            _crash_id = _request_id_from_argv(sys.argv[1:])
+            record_wrapper_failure(_here / OUTPUT_DIR_NAME / _crash_id, _crash_id, _error)
         except Exception:
             pass
         sys.stderr.write("S1 OUTER V2 WRAPPER FAILED: %s: %s\n" % (type(_error).__name__, _error))

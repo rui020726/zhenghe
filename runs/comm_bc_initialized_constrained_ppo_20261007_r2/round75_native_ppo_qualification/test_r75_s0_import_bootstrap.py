@@ -586,6 +586,38 @@ class WrapperBehaviourTest(Scratch):
         self.assertIn("--attempt-dir", recorded["argv"])
         self.assertIn(str(self.out), recorded["argv"])
 
+    def test_two_request_ids_do_not_share_or_overwrite_a_directory(self) -> None:
+        dir_a = self.here / "raw" / "s1_revised" / "R75_TEST_DIR_A"
+        dir_b = self.here / "raw" / "s1_revised" / "R75_TEST_DIR_B"
+        dir_a.mkdir(parents=True)
+        dir_b.mkdir(parents=True)
+        self.launch(0)
+        code_a, problems_a = self.mod.run(REAL_REPO, self.here, dir_a, "R75_TEST_DIR_A",
+                                          self.plan, self.runtime)
+        code_b, problems_b = self.mod.run(REAL_REPO, self.here, dir_b, "R75_TEST_DIR_B",
+                                          self.plan, self.runtime)
+        self.assertEqual((code_a, problems_a), (0, []))
+        self.assertEqual((code_b, problems_b), (0, []))
+        names_a = sorted(p.name for p in dir_a.iterdir())
+        names_b = sorted(p.name for p in dir_b.iterdir())
+        self.assertIn("r75_s1_outer_v2_attempt_marker_R75_TEST_DIR_A.json", names_a)
+        self.assertNotIn("r75_s1_outer_v2_attempt_marker_R75_TEST_DIR_B.json", names_a,
+                         "one attempt directory must never hold another request id's marker")
+        self.assertIn("r75_s1_outer_v2_attempt_marker_R75_TEST_DIR_B.json", names_b)
+        self.assertNotIn("r75_s1_outer_v2_attempt_marker_R75_TEST_DIR_A.json", names_b)
+
+    def test_prepare_creates_no_license_and_starts_no_child(self) -> None:
+        attempt = self.here / "raw" / "s1_revised" / "R75_TEST_PREPARE_ONLY"
+        attempt.mkdir(parents=True)
+        payload, problems = self.mod.prepare(REAL_REPO, self.here, attempt,
+                                             "R75_TEST_PREPARE_ONLY", self.plan, self.runtime)
+        self.assertEqual(problems, [])
+        self.assertFalse(payload["launched"])
+        self.assertFalse(payload["attempt_marker_created"])
+        self.assertEqual(self.launches, [], "prepare must never start a child")
+        self.assertEqual(sorted(p.name for p in attempt.iterdir()), [self.mod.PREPARED_RECORD],
+                         "prepare writes only the prepared record and no attempt license")
+
 
 class WrapperMainGuardTest(Scratch):
     """The __main__ guard must let SystemExit through and never call it a wrapper crash."""
@@ -650,9 +682,6 @@ class WrapperRealPrepareTest(unittest.TestCase):
         self.assertFalse((here / "raw" / "s1" / "r75_s1_outer_v2_stdout.bin").exists())
 
 
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
-
 RUNNER_SRC = HERE / "r75_s1_runner.py"
 
 
@@ -662,6 +691,24 @@ def load_runner():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def issue_fresh_license(target, request_id):
+    """Register ONE real parent->child launch license into target exactly as the wrapper does.
+
+    The marker is written by the REAL wrapper build_child_argv()+register_attempt(), so its argv is
+    the genuine child vector the runner later parses; no child is started and nothing paid runs."""
+    target = Path(target)
+    target.mkdir(parents=True, exist_ok=True)
+    wrapper = load_wrapper()
+    argv = wrapper.build_child_argv(RUNNER_SRC,
+                                    ["--run-s1", "--request-id", request_id,
+                                     "--attempt-dir", str(target)])
+    marker, marker_path = wrapper.register_attempt(target, request_id, argv,
+                                                   "0" * 40, "1" * 40, "test-wrapper-sha")
+    if marker is None:
+        raise AssertionError("the fresh license marker already exists at %s" % marker_path)
+    return marker_path
 
 
 class RunnerWiringAstTest(Scratch):
@@ -686,8 +733,10 @@ class RunnerWiringAstTest(Scratch):
     def test_the_identity_is_bound_before_the_paid_path(self) -> None:
         main = next(node for node in self.tree.body
                     if isinstance(node, ast.FunctionDef) and node.name == "main")
-        calls = [node.func.id for node in ast.walk(main)
-                 if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)]
+        named = sorted(((node.func.id, node.lineno) for node in ast.walk(main)
+                        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)),
+                       key=lambda item: item[1])
+        calls = [name for name, _line in named]
         self.assertIn("_bind_execution_identity", calls)
         self.assertIn("run_s1", calls)
         self.assertLess(calls.index("_bind_execution_identity"), calls.index("run_s1"),
@@ -750,31 +799,121 @@ class RunnerIdentityRoutingTest(Scratch):
             self.assertIn("raw/s1", str(caught.exception))
 
     def test_a_directory_outside_the_output_root_is_refused(self) -> None:
+        outside = HERE.parent / "_r75_outside_probe"
         with self.assertRaises(RuntimeError) as caught:
-            self.module._bind_execution_identity("R75_TEST_ROUTE", str(self.tmp / "elsewhere"))
+            self.module._bind_execution_identity("R75_TEST_ROUTE", str(outside))
         self.assertIn("output root", str(caught.exception))
+        self.assertIsNone(self.module.EXECUTION_REQUEST_ID)
 
     def test_a_valid_identity_binds_the_directory(self) -> None:
         target = self.tmp / "raw" / "s1_independent"
+        issue_fresh_license(target, "R75_TEST_ROUTE")
         bound = self.module._bind_execution_identity("R75_TEST_ROUTE", str(target))
         self.assertEqual(bound, target)
         self.assertEqual(self.module.S1_DIR, target)
         self.assertEqual(self.module.EXECUTION_REQUEST_ID, "R75_TEST_ROUTE")
+        self.assertTrue((target / "r75_s1_outer_v2_license_consumed_R75_TEST_ROUTE.json").is_file(),
+                        "binding must leave the non-repeatable consumption evidence")
         self.assertEqual(sorted(path.name for path in (HERE / "raw" / "s1").iterdir()),
                          self.historical)
 
     def test_a_repeated_request_id_in_one_directory_is_refused(self) -> None:
         target = self.tmp / "raw" / "s1_independent"
-        target.mkdir(parents=True)
-        (target / "r75_s1_outer_v2_attempt_marker_R75_TEST_ROUTE.json").write_text(
-            json.dumps({"request_id": "R75_TEST_ROUTE"}), encoding="utf-8")
+        issue_fresh_license(target, "R75_TEST_ROUTE")
+        self.module._bind_execution_identity("R75_TEST_ROUTE", str(target))
         with self.assertRaises(RuntimeError) as caught:
             self.module._bind_execution_identity("R75_TEST_ROUTE", str(target))
-        self.assertIn("already exists", str(caught.exception))
+        self.assertIn("not a fresh, unconsumed", str(caught.exception))
 
     def test_the_child_directory_agrees_with_the_outer_record(self) -> None:
         out = self.tmp / "raw" / "s1_revised"
         out.mkdir(parents=True)
+        marker = issue_fresh_license(out, "R75_TEST_AGREE")
+        recorded = json.loads(marker.read_text(encoding="utf-8"))
+        self.assertEqual(recorded["license_state"], "issued")
         bound = self.module._bind_execution_identity("R75_TEST_AGREE", str(out))
         self.assertEqual(bound, out)
         self.assertEqual(self.module.S1_DIR, out)
+        self.assertEqual(self.module.EXECUTION_REQUEST_ID, "R75_TEST_AGREE")
+
+class ParentChildLicenseSeamTest(Scratch):
+    """The real wrapper registration bridged to the real runner binding, with the paid path spied.
+
+    A fresh parent license reaches the spied run_s1() exactly once; a second child, a cross-directory
+    replay, the historical request id and an already-consumed license file are each refused. No torch,
+    no model, no environment, no real subprocess: run_s1 and Popen are replaced by spies."""
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.wrapper = load_wrapper()
+        self.module = load_runner()
+        self.reached = []
+        self.module.run_s1 = lambda: (self.reached.append(1) or 0)
+
+    def child_argv(self, request_id, target):
+        target = Path(target)
+        target.mkdir(parents=True, exist_ok=True)
+        return self.wrapper.build_child_argv(RUNNER_SRC,
+                                             ["--run-s1", "--request-id", request_id,
+                                              "--attempt-dir", str(target)])
+
+    def test_the_real_child_argv_reaches_the_spied_paid_path_exactly_once(self) -> None:
+        target = self.tmp / "raw" / "s1_bridge"
+        argv = self.child_argv("R75_TEST_BRIDGE", target)
+        self.assertEqual(argv[0], sys.executable)
+        self.assertEqual(argv[1], str(RUNNER_SRC))
+        self.assertEqual(argv.count(sys.executable), 1, "the interpreter must appear exactly once")
+        self.assertEqual(argv.count(str(RUNNER_SRC)), 1, "the script must appear exactly once")
+        marker, _ = self.wrapper.register_attempt(target, "R75_TEST_BRIDGE", argv,
+                                                  "0" * 40, "1" * 40, "test-wrapper-sha")
+        self.assertIsNotNone(marker)
+        code = self.module.main(argv[2:])
+        self.assertEqual(code, 0)
+        self.assertEqual(self.reached, [1], "one fresh license reaches the paid path exactly once")
+        self.assertTrue((target / "r75_s1_outer_v2_license_consumed_R75_TEST_BRIDGE.json").is_file())
+
+    def test_a_second_child_cannot_reuse_the_same_license(self) -> None:
+        target = self.tmp / "raw" / "s1_bridge"
+        argv = self.child_argv("R75_TEST_SECOND", target)
+        self.wrapper.register_attempt(target, "R75_TEST_SECOND", argv,
+                                      "0" * 40, "1" * 40, "test-wrapper-sha")
+        self.assertEqual(self.module.main(argv[2:]), 0)
+        self.assertEqual(self.reached, [1])
+        self.assertEqual(self.module.main(argv[2:]), 2, "the second child is refused")
+        self.assertEqual(self.reached, [1], "a refused second child never reaches the paid path")
+
+    def test_a_license_issued_for_another_directory_is_refused(self) -> None:
+        issued = self.tmp / "raw" / "s1_issued"
+        replay = self.tmp / "raw" / "s1_replay"
+        argv = self.child_argv("R75_TEST_REPLAY", issued)
+        self.wrapper.register_attempt(issued, "R75_TEST_REPLAY", argv,
+                                      "0" * 40, "1" * 40, "test-wrapper-sha")
+        self.assertEqual(self.module.main(["--run-s1", "--request-id", "R75_TEST_REPLAY",
+                                           "--attempt-dir", str(replay)]), 2)
+        self.assertEqual(self.reached, [], "a cross-directory replay never reaches the paid path")
+
+    def test_the_historical_request_id_is_refused_even_with_a_marker_present(self) -> None:
+        target = self.tmp / "raw" / "s1_hist"
+        argv = self.child_argv(self.module.FIRST_ATTEMPT_REQUEST_ID, target)
+        self.wrapper.register_attempt(target, self.module.FIRST_ATTEMPT_REQUEST_ID, argv,
+                                      "0" * 40, "1" * 40, "test-wrapper-sha")
+        self.assertEqual(self.module.main(argv[2:]), 2)
+        self.assertEqual(self.reached, [])
+
+    def test_an_already_consumed_license_file_is_refused(self) -> None:
+        target = self.tmp / "raw" / "s1_preconsumed"
+        argv = self.child_argv("R75_TEST_PRECONSUMED", target)
+        self.wrapper.register_attempt(target, "R75_TEST_PRECONSUMED", argv,
+                                      "0" * 40, "1" * 40, "test-wrapper-sha")
+        consumed = target / "r75_s1_outer_v2_license_consumed_R75_TEST_PRECONSUMED.json"
+        fd = os.open(str(consumed), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write("{}")
+        with self.assertRaises(RuntimeError) as caught:
+            self.module._bind_execution_identity("R75_TEST_PRECONSUMED", str(target))
+        self.assertIn("already consumed", str(caught.exception))
+        self.assertEqual(self.reached, [])
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

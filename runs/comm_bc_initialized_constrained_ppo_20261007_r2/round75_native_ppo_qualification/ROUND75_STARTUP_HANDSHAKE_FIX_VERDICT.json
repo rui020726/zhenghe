@@ -1,0 +1,92 @@
+{
+  "kind": "round75-s0-startup-handshake-fix-verdict/1",
+  "request_id": "R75_S0_STARTUP_HANDSHAKE_FIX_20261015",
+  "supersedes_read_only_request": "R75_S0_COMMITTED_EVIDENCE_READ_20261015",
+  "branch": "exp/round75-native-ppo-qualification",
+  "parent_head": "3803dad0468a24e0c78589c557aace00085e2b60",
+  "parent_head_note": "read from git before the commit; the delivered HEAD is deliberately not embedded (no self-hash) and is read from git after the commit",
+  "status": "STARTUP_HANDSHAKE_FIXED_AND_CLOSED_OUT_LOCALLY_S1_STILL_NOT_AUTHORIZED",
+  "meaning": "The four startup wiring defects are repaired, the affected pure suite and the updated-pin precheck pass with zero cost, and the result is committed locally. Nothing paid was executed: S1 remains unauthorized and is not run by this revision.",
+  "authorization_scope": "pure source fix + narrow stdlib fake-seam tests + freeze + local closeout; no new experiment; no real S1; no torch/model/env/optimizer/PPO",
+  "defects_fixed": [
+    "argv double-prefix (build_child_argv single assembly; verbatim launch_once with script-entry cross-check)",
+    "parent-marker self-refusal (parent->child one-time license; O_EXCL consumption record; missing/mismatch/consumed/old-id/historical-dir/cross-dir refused)",
+    "test discovery (unittest.main moved to EOF; latter 12 now execute; old Ran-30 preserved with appended correction)",
+    "identity/dir discipline (per-attempt base/<request-id>, global dedup, refuse overwrite; prepare issues no license and starts no child)"
+  ],
+  "test_evidence": {
+    "affected_suite": "test_r75_s0_import_bootstrap.py",
+    "sha256": "48ed8cec62f07c6e08f72f7022764b06ff24b1b2342bd0c8665cb19ad663ec05",
+    "declared": 49,
+    "discovered": 49,
+    "executed": 49,
+    "result": "OK",
+    "exit_code": 0,
+    "composition": "original 30 + previously-unexecuted latter 12 (corrected) + 7 new (ParentChildLicenseSeamTest 5 + WrapperBehaviourTest +2)",
+    "precheck": {
+      "file": "r75_s1_precheck.py",
+      "checks_run": 74,
+      "checks_failed": 0,
+      "exit_code": 0,
+      "zero_cost": true
+    }
+  },
+  "development_failures_disclosed": {
+    "first_run": "1 failure + 5 errors",
+    "five_errors": "ParentChildLicenseSeamTest register_attempt before mkdir (FileNotFoundError); fixed via mkdir in child_argv",
+    "one_failure": "RunnerWiringAstTest compared calls in ast.walk BFS order; fixed to node.lineno source order",
+    "attribution": "test-authoring defects only; after fixes 49 OK; none masked a code defect"
+  },
+  "content_identity": [
+    {
+      "file": "r75_s1_outer_exec_v2.py",
+      "sha256": "c448d465c7b841419427fcf0c0357fe012720b723fc88ef697010fcf0ba0622e"
+    },
+    {
+      "file": "r75_s1_runner.py",
+      "sha256": "3ba6ea272942a7f77d65ff6d5922de13395e7149d800972730ca83a8cbd2309d",
+      "wrapper_expect_code_pin_matches": true
+    },
+    {
+      "file": "test_r75_s0_import_bootstrap.py",
+      "sha256": "48ed8cec62f07c6e08f72f7022764b06ff24b1b2342bd0c8665cb19ad663ec05"
+    }
+  ],
+  "not_rerun": "old 40/34/31/20/7 suites not re-run; their records preserved",
+  "canonical_ledger": "raw/runtime byte-unchanged (12 events, 0 charged, four zero counters, no lock); re-confirmed by the pure precheck",
+  "zero_cost_counts": {
+    "torch_imported": false,
+    "numpy_import": false,
+    "model_load_or_construction": 0,
+    "forward": 0,
+    "backward": 0,
+    "optimizer_step_real_or_synthetic": 0,
+    "ppo_update": 0,
+    "ppo_replay": 0,
+    "environment_construction": 0,
+    "sampling": 0,
+    "checkpoint_write": 0,
+    "training_resume": 0,
+    "rng_restore": 0,
+    "ledger_charged_events": 0,
+    "real_launch": 0,
+    "new_claims": 0
+  },
+  "future_plan_frozen_not_authorized": {
+    "contract": "R58 s11/e0/scenario1300027, 66 records/168 candidates; A1 critic-only once + A2/A3 each once native update0 = 9 normal physical / 1680 target / 140 trunk calls / 2 batch-read / Env 0",
+    "caps": "physical 12 normal + 4 technical / hard 16; target 5000 normal + 1000 technical / hard 6000 / per-charge 1024; no expansion, no zeroing, reserve untouched; does not borrow R74",
+    "note": "bookkeeping only; authorizes no paid execution"
+  },
+  "protected_untouched": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  },
+  "git": {
+    "pushed": false,
+    "merged": false,
+    "deployed": false,
+    "commit_scope": "explicit named local commit of wrapper/runner/test/report/verdict/task-state/manifest only; no weights, no raw, no protected files, no pycache, no scratch logs"
+  },
+  "s1_authorized": false,
+  "s1_executed": false
+}

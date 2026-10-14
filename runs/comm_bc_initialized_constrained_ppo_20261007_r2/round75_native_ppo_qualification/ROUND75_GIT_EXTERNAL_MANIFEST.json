@@ -679,4 +679,81 @@
       "s1_authorized": false,
       "s1_executed": false
     }
+,
+  "startup_handshake_fix_revision": {
+    "request_id": "R75_S0_STARTUP_HANDSHAKE_FIX_20261015",
+    "parent_head": "3803dad0468a24e0c78589c557aace00085e2b60",
+    "parent_head_note": "read from git before this commit; the delivered HEAD is deliberately NOT embedded here (no self-hash) and is read from git after the commit",
+    "supersedes_read_only_request": "R75_S0_COMMITTED_EVIDENCE_READ_20261015",
+    "defects_fixed": [
+      "argv double-prefix: run() and launch_once() both prefixed [python, runner]; build_child_argv() assembles the vector once and launch_once() execs it verbatim with a script-entry cross-check",
+      "parent-marker self-refusal: register_attempt() wrote the pre-launch marker and the child then refused on its own id; now a parent->child one-time license: an issued marker consumed exactly once via an O_EXCL consumption record",
+      "test discovery: unittest.main at line 653 preceded the last 12 methods so only 30 ran; the entry moved to EOF, the 12 now execute, the old Ran-30 record is preserved with an appended correction",
+      "identity/dir discipline: per-attempt directory base/<request-id>, global dedup by request id, refuse overwrite; prepare creates no license and starts no child"
+    ],
+    "final_content_identity": [
+      {
+        "file": "r75_s1_outer_exec_v2.py",
+        "sha256": "c448d465c7b841419427fcf0c0357fe012720b723fc88ef697010fcf0ba0622e",
+        "bytes": 28338,
+        "lines": 537,
+        "role": "revised outer wrapper: build_child_argv single assembly, verbatim launch_once with argv[1]==runner cross-check, license-bearing register_attempt marker (license_state issued/consumed), global duplicate_request_refusal, per-attempt _resolve_attempt_dir, --attempt-dir, EXPECT_CODE pins the current runner sha256; stdlib-only"
+      },
+      {
+        "file": "r75_s1_runner.py",
+        "sha256": "3ba6ea272942a7f77d65ff6d5922de13395e7149d800972730ca83a8cbd2309d",
+        "bytes": 90414,
+        "lines": 1577,
+        "role": "paid S1 driver: _license_flag_value/_license_is_fresh and the license-consuming _bind_execution_identity (O_EXCL consumption record) ahead of run_s1(); historical id and raw/s1 refused in any directory; module level stdlib-only, torch stays lazy inside run_s1(); bytes unchanged this registration (edited in the prior handshake step)"
+      },
+      {
+        "file": "test_r75_s0_import_bootstrap.py",
+        "sha256": "48ed8cec62f07c6e08f72f7022764b06ff24b1b2342bd0c8665cb19ad663ec05",
+        "bytes": 46465,
+        "lines": 920,
+        "role": "pure stdlib/AST/fake suite: issue_fresh_license real-wrapper->real-runner seam, ParentChildLicenseSeamTest (fresh reaches a spied run_s1 once; second/cross-dir/historical-id/already-consumed refused), two wrapper directory/prepare cases, corrected latter-12 assertions, unittest.main moved to EOF; declared=discovered=executed=49 OK exit 0"
+      }
+    ],
+    "test_evidence": {
+      "affected_suite": "test_r75_s0_import_bootstrap.py",
+      "declared": 49,
+      "discovered": 49,
+      "executed": 49,
+      "result": "OK",
+      "exit_code": 0,
+      "composition": "original 30 unchanged + previously-unexecuted latter 12 (RunnerWiringAstTest 5 + RunnerIdentityRoutingTest 7, corrected to the real license contract) + 7 new this round (ParentChildLicenseSeamTest 5 + WrapperBehaviourTest +2)",
+      "old_record_preserved": "the historical Ran-30 stdout is preserved; an appended correction records that the latter 12 had not executed before the entry move",
+      "precheck": "r75_s1_precheck.py 74 checks, 0 failed, exit 0, zero cost; frozen sources (r75_frozen/r66/canonical/guard/adapter) untouched",
+      "not_rerun": "the old 40 / 34 / 31 / 20 / 7 suites were not re-run"
+    },
+    "development_failures_disclosed": {
+      "first_run": "1 failure + 5 errors",
+      "items": [
+        "5 errors: ParentChildLicenseSeamTest called register_attempt before the attempt directory existed (FileNotFoundError at wrapper register_attempt os.open); fixed by mkdir in child_argv, mirroring issue_fresh_license",
+        "1 failure: RunnerWiringAstTest.test_the_identity_is_bound_before_the_paid_path compared calls in ast.walk (BFS) order and saw run_s1 at index 0; fixed to compare by node.lineno source order"
+      ],
+      "attribution": "all six were test-authoring defects, not driver or paid-path defects; after the fixes the suite is 49 OK exit 0; none was used to mask a code defect"
+    },
+    "canonical_ledger": "raw/runtime byte-unchanged (12 events, 0 charged, four zero counters, no residual lock); re-confirmed by the pure precheck this round",
+    "zero_environment_this_round": {
+      "torch_imported": false,
+      "numpy_import": false,
+      "model_load_or_construction": 0,
+      "forward": 0,
+      "backward": 0,
+      "optimizer_step_real_or_synthetic": 0,
+      "ppo_update_or_replay": 0,
+      "environment_construction": 0,
+      "sampling": 0,
+      "checkpoint_write": 0,
+      "training_resume": 0,
+      "rng_restore": 0,
+      "ledger_charged_events": 0,
+      "real_launch": 0,
+      "new_claims": 0
+    },
+    "commit_scope": "explicit git add -f of the named wrapper / runner / test / report / verdict / task-state / manifest; NO weights, NO raw runtime originals, NO raw/s1 originals, NO R59 analysis log, NO protected files, NO __pycache__, NO scratch logs",
+    "s1_authorized": false,
+    "s1_executed": false
+  }
 }

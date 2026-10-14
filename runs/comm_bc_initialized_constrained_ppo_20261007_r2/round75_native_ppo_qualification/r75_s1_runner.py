@@ -1403,15 +1403,47 @@ def run_s1() -> int:
                 print(f"the attempt-counter append failed: {type(counter_error).__name__}: "
                       f"{counter_error}", file=sys.stderr)
 
+def _license_flag_value(argv, flag):
+    """The value following --flag (or after --flag=) in a recorded child argv, or None."""
+    for index, item in enumerate(argv):
+        if item == flag and index + 1 < len(argv):
+            return argv[index + 1]
+        if isinstance(item, str) and item.startswith(flag + "="):
+            return item.split("=", 1)[1]
+    return None
+
+
+def _license_is_fresh(recorded, request_id, target):
+    """True only for a parent-issued, not-yet-consumed license matching THIS request and directory.
+
+    A marker without license_state == "issued", without a --run-s1 argv, or whose recorded
+    --request-id / --attempt-dir disagree with this child is NOT a consumable license; taking it
+    over anyway would let a stale or cross-directory marker authorize a run."""
+    if not isinstance(recorded, dict) or recorded.get("license_state") != "issued":
+        return False
+    argv = recorded.get("argv")
+    if not isinstance(argv, list) or "--run-s1" not in argv:
+        return False
+    if _license_flag_value(argv, "--request-id") != request_id:
+        return False
+    recorded_dir = _license_flag_value(argv, "--attempt-dir")
+    if recorded_dir is None:
+        return False
+    return Path(os.path.normpath(recorded_dir)) == Path(os.path.normpath(str(target)))
+
+
 def _bind_execution_identity(request_id, attempt_dir) -> Path:
     """Bind the ONE execution identity and its private attempt directory. Path wiring only.
 
     The rules are the same ones the outer record enforces, restated here because the child is the
-    process that actually writes: the request id that already consumed its single attempt is
-    refused in ANY directory; the attempt directory must sit inside this output root and must not
-    be the historical raw/s1 (nor anything under it); and a second run of the same request id in
-    the same directory is refused. The central production ledger is NOT touched: it stays at
-    raw/runtime, so a new attempt directory never becomes a second ledger.
+    process that actually writes: the historical request id is refused in ANY directory; the attempt
+    directory must sit inside this output root and must not be the historical raw/s1 (nor anything
+    under it); and the ONE parent->child launch license is taken over exactly once. The parent's
+    register_attempt() writes a fresh "issued" license into this directory immediately before the
+    launch; THIS function consumes it with an O_EXCL consumption record instead of mistaking the
+    parent's own fresh marker for a duplicate. A missing, mismatched, already-consumed, old-id,
+    historical-directory or cross-directory license is refused. The central production ledger is NOT
+    touched: it stays at raw/runtime, so a new attempt directory never becomes a second ledger.
     """
     global S1_DIR, EXECUTION_REQUEST_ID
     if not request_id:
@@ -1432,15 +1464,51 @@ def _bind_execution_identity(request_id, attempt_dir) -> Path:
     if target != HERE and HERE not in target.parents:
         raise RuntimeError("the attempt directory must live inside the ROUND75 output root: %s"
                            % target)
+    license_marker = None
+    recorded_license = None
     if target.exists():
         for marker in sorted(target.glob("r75_s1_*attempt_marker*.json")):
             try:
-                recorded = json.loads(marker.read_text(encoding="utf-8")).get("request_id")
+                recorded = json.loads(marker.read_text(encoding="utf-8"))
             except (ValueError, OSError):
                 recorded = None
-            if recorded == request_id:
-                raise RuntimeError("an attempt marker for request id %s already exists at %s"
-                                   % (request_id, marker.name))
+            if not isinstance(recorded, dict) or recorded.get("request_id") != request_id:
+                continue
+            if _license_is_fresh(recorded, request_id, target):
+                license_marker, recorded_license = marker, recorded
+                break
+            raise RuntimeError("the attempt license for request id %s at %s is not a fresh, "
+                               "unconsumed parent license" % (request_id, marker.name))
+    if license_marker is None:
+        raise RuntimeError("no fresh parent license for request id %s in %s; a child may only take "
+                           "over a license its parent just issued in this directory"
+                           % (request_id, target))
+    consumed = target / ("r75_s1_outer_v2_license_consumed_%s.json" % request_id)
+    try:
+        handle = os.open(str(consumed), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+    except FileExistsError:
+        raise RuntimeError("the attempt license for request id %s was already consumed; a request "
+                           "id takes over its parent license exactly once" % request_id)
+    with os.fdopen(handle, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump({"kind": "round75-s1-license-consumed/1", "request_id": request_id,
+                   "consumed_at": {"unix": time.time(),
+                                   "iso": time.strftime("%Y-%m-%dT%H:%M:%S%z", time.localtime())},
+                   "consumed_by_pid": os.getpid(), "license_marker": license_marker.name,
+                   "argv": recorded_license.get("argv"),
+                   "note": ("non-repeatable takeover evidence; its O_EXCL creation is what forbids "
+                            "a second child from consuming the same license")}, fh, indent=2)
+        fh.write("\n")
+        fh.flush()
+        os.fsync(fh.fileno())
+    try:
+        recorded_license["license_state"] = "consumed"
+        recorded_license["consumed_at"] = {"unix": time.time(),
+                                           "iso": time.strftime("%Y-%m-%dT%H:%M:%S%z",
+                                                                time.localtime())}
+        recorded_license["consumed_by_pid"] = os.getpid()
+        license_marker.write_text(json.dumps(recorded_license, indent=2) + "\n", encoding="utf-8")
+    except OSError:
+        pass
     S1_DIR = target
     EXECUTION_REQUEST_ID = request_id
     return target
