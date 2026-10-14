@@ -138,6 +138,8 @@ def r73_save_checkpoint(controller, optimizer, state: dict, path) -> str:
     import v2_trainer as trainer
     import r66_frozen as r66
     frozen_identity = r66.freeze_early_path(controller)
+    optimizer_state = optimizer.state_dict()
+    rng_payload = trainer.rng_state()
     payload = {
         "schema": R73_STATE_SCHEMA, "trainer_tag": R73_TRAINER_TAG,
         "training_version": R73_TRAINING_VERSION,
@@ -153,8 +155,8 @@ def r73_save_checkpoint(controller, optimizer, state: dict, path) -> str:
         "late_init_alpha": float(state.get("late_init_alpha", 0.10)),
         "freeze": R73_FREEZE,
         "controller": {key: value for key, value in controller.state_dict().items()},
-        "optimizer": optimizer.state_dict(),
-        "optimizer_param_groups": [len(g["params"]) for g in optimizer.state_dict()["param_groups"]],
+        "optimizer": optimizer_state,
+        "optimizer_param_groups": [len(g["params"]) for g in optimizer_state["param_groups"]],
         "frozen_mask": {"frozen_modules": list(FROZEN_MODULES),
                         "trainable_modules": list(TRAINABLE_MODULES),
                         "frozen_sha256": frozen_identity["sha256"],
@@ -165,11 +167,13 @@ def r73_save_checkpoint(controller, optimizer, state: dict, path) -> str:
                                 "are stored as-is; resume never re-fits or re-scales"},
         "training_state": state,
         "run_identity": state.get("run_identity"),
-        "rng": trainer.rng_state(),
-        # self-describing restore roles (a full ROUND73 training resume, never model-only)
-        "carries_trained_optimizer_state": bool(payload["optimizer"]["state"]),
+        "rng": rng_payload,
+        # self-describing restore roles (a full ROUND73 training resume, never model-only).
+        # Computed from the locals above: the dict literal below must never read `payload`,
+        # which does not exist until the literal finishes evaluating.
+        "carries_trained_optimizer_state": bool(optimizer_state["state"]),
         "carries_trained_lambda": "lambda" in state and "lambda_history" in state,
-        "carries_advanced_training_rng": payload["rng"] is not None,
+        "carries_advanced_training_rng": rng_payload is not None,
     }
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
