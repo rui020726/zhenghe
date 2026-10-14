@@ -30,3 +30,13 @@ budget_bytes=29300 现由真实 episode row 带内证实。从真实 row 归约 
 ## 消费与 HEAD
 
 本轮实际消费全为 0。证据 HEAD fe53d476efb56baaae194d68d7f749a546b14389；交付 HEAD 6d28f40afcac8e2818fa7c1bc6f3f6f5c5bf8519；本 erratum 为其上新本地提交。
+
+## 追加更正 2b：预算/拒付字段的逐行覆盖收据（coverage receipt）
+
+新增 ROUND72_COVERAGE_RECEIPT.json（由 r72_coverage.py 生成，零环境只读）。逐行核验 609 个真实 episode row 的字段“存在性 + 类型”，只在字段确实存在处累计数值：
+
+- executor 拒付通道（refusal_sequence、cost_stream.*.budget_refused_sends / capacity_refused_sends）：三个 split 的每一行都以 list/dict 存在，且全部实测为 0（学习 192、immediate 33、训练 384；分别覆盖 192000/33000/384000 步，缺字段步数均为 0）。这是“实测零且字段在场”，不是以 0 代替缺失字段。
+- collector 预 mask 通道（one_shot_counts.masked_budget_or_capacity、eligibility_counts.{budget,capacity}_masked_first_reports）：学习 192 行与训练 384 行运行了 learned collector（collector_summary 为 dict），字段在场且实测 0；immediate 33 行是规则臂，collector_summary 为 None，从未运行 learned collector，故该通道记为 N/A，不是“实测 0”。更正 2 中 budget_agg 对 immediate 报告的两个 mask 计数 0 是 .get 默认值，由本收据重新定性为 N/A；immediate 的 executor 拒付 0 则确为实测（字段在场）。
+- immediate 行组成更正：33 行 = 32 个开发块场景（1800000..1800031）各一行 + 1 个 1800000 的重复重跑（run immediate_a2，spent 15876，与 immediate_a1 逐字节相同）。该 glob 中不存在 1700027 焦点行（focal_scene_1700027_rows=0），早前“焦点行”的假定据此更正；重复重跑不得并入按场景均值。
+
+以上不改变任何科学结论，仅把“实测零、非缺失”的措辞收紧到确有字段覆盖的通道；机器锁定见 test_r72_coverage_checks.py。

@@ -114,6 +114,9 @@ budget = {
     "training": budget_agg("training", glob.glob(R71R + "/v2_r71_train_*.json")),
 }
 
+# ---- strict per-row coverage receipt (grounds the measured-zero claim) ----
+cov = load(DELIV / "ROUND72_COVERAGE_RECEIPT.json")
+
 # ---- per-seed primary task/cost ----
 def prim(cell):
     p = r71_stats["per_seed_mode"][cell]
@@ -144,6 +147,12 @@ for sp in budget.values():
     assert sp["rows_with_refusal_sequence"] == 0
     assert sp["collector_masked_budget_or_capacity"] == 0
     assert sp["missing_fields"] == []
+# coverage-receipt grounded assertions (strict per-row existence+type)
+assert cov["channel_verdicts"]["executor_refusal_channel"]["covered_all_splits"] is True
+assert cov["channel_verdicts"]["executor_refusal_channel"]["measured_zero_all_splits"] is True
+assert cov["channel_verdicts"]["collector_premask_channel"]["measured_zero_where_covered"] is True
+assert cov["channel_verdicts"]["collector_premask_channel"]["na_splits"] == ["dev_eval_immediate"]
+assert cov["composition_notes"]["dev_eval_immediate"]["focal_scene_1700027_rows"] == 0
 assert ts11["gamma"] == 1.0 and ts11["gae_lambda"] == 1.0
 assert r71_led["offline_forward_ledger"]["rows"] == 70693
 
@@ -161,6 +170,7 @@ sources = {
     "canonical_v2_trainer.py": str(FROZEN_SRC / "canonical_v2_trainer.py"),
     "comm_budget.py": str(REPO / "integrated_sar" / "comm_budget.py"),
     "comm_learning.py": str(REPO / "integrated_sar" / "comm_learning.py"),
+    "ROUND72_COVERAGE_RECEIPT.json": str(DELIV / "ROUND72_COVERAGE_RECEIPT.json"),
 }
 source_hashes = {name: {"path": path, "sha256": sha256(path)} for name, path in sources.items()}
 
@@ -184,10 +194,18 @@ errata = {
     },
     "correction_2_budget": {
         "budget_bytes": 29300,
-        "evidence_basis": "measured from real episode rows: spent_bytes, budget_bytes, budget_used_fraction, refusal_sequence, cost_stream.budget_refused_sends/capacity_refused_sends, collector_summary mask counts; both the executor-refusal channel and the collector pre-mask channel were checked",
+        "evidence_basis": "measured from real episode rows: spent_bytes, budget_bytes, budget_used_fraction, refusal_sequence, cost_stream.budget_refused_sends/capacity_refused_sends, collector_summary mask counts; both the executor-refusal channel and the collector pre-mask channel were checked. Strict per-row existence+type is proven in ROUND72_COVERAGE_RECEIPT.json.",
         "splits": budget,
-        "downgrade": "the previous 'NOT binding' inferred from spent<29300 is replaced by measured zero refusals and zero masks in every split; no hidden refusal or pre-mask exists in these originals",
-        "measured_zero_not_missing": True,
+        "downgrade": "the previous 'NOT binding' inferred from spent<29300 is replaced by MEASURED zero refusals with the fields PRESENT on every row (executor channel, all 609 rows across the three splits), and MEASURED zero collector pre-masks where the learned collector runs (learned 192 + training 384); for the immediate rule arm the collector pre-mask is N/A (collector_summary is None), NOT 'measured 0'.",
+        "measured_zero_not_missing": {
+            "executor_refusal_channel": "measured_zero_and_field_present_on_every_row",
+            "collector_premask_channel_learned": "measured_zero_and_field_present",
+            "collector_premask_channel_training": "measured_zero_and_field_present",
+            "collector_premask_channel_immediate": "not_applicable_rule_path_collector_summary_is_None"
+        },
+        "immediate_collector_note": "In the budget_agg 'splits' the immediate collector mask value 0 is a .get-default because collector_summary is None; the coverage receipt reclassifies it as N/A (rule path), NOT a measured 0. The immediate executor-refusal zeros ARE measured (refusal_sequence and cost_stream refusal fields are present on all 33 rows).",
+        "immediate_row_composition": cov["composition_notes"]["dev_eval_immediate"],
+        "coverage_receipt": "ROUND72_COVERAGE_RECEIPT.json",
         "training_block_note": "training rows (block 1300000..1300047) were located via r72_paths and the frozen jobs index; they DO carry the budget/refusal fields, so the training block is now evidenced, not asserted",
     },
     "correction_3_teacher_billing": {

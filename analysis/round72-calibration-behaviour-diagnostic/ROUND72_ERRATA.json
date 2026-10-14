@@ -47,7 +47,7 @@
  },
  "correction_2_budget": {
   "budget_bytes": 29300,
-  "evidence_basis": "measured from real episode rows: spent_bytes, budget_bytes, budget_used_fraction, refusal_sequence, cost_stream.budget_refused_sends/capacity_refused_sends, collector_summary mask counts; both the executor-refusal channel and the collector pre-mask channel were checked",
+  "evidence_basis": "measured from real episode rows: spent_bytes, budget_bytes, budget_used_fraction, refusal_sequence, cost_stream.budget_refused_sends/capacity_refused_sends, collector_summary mask counts; both the executor-refusal channel and the collector pre-mask channel were checked. Strict per-row existence+type is proven in ROUND72_COVERAGE_RECEIPT.json.",
   "splits": {
    "dev_eval_learned": {
     "rows": 192,
@@ -101,8 +101,35 @@
     "missing_fields": []
    }
   },
-  "downgrade": "the previous 'NOT binding' inferred from spent<29300 is replaced by measured zero refusals and zero masks in every split; no hidden refusal or pre-mask exists in these originals",
-  "measured_zero_not_missing": true,
+  "downgrade": "the previous 'NOT binding' inferred from spent<29300 is replaced by MEASURED zero refusals with the fields PRESENT on every row (executor channel, all 609 rows across the three splits), and MEASURED zero collector pre-masks where the learned collector runs (learned 192 + training 384); for the immediate rule arm the collector pre-mask is N/A (collector_summary is None), NOT 'measured 0'.",
+  "measured_zero_not_missing": {
+   "executor_refusal_channel": "measured_zero_and_field_present_on_every_row",
+   "collector_premask_channel_learned": "measured_zero_and_field_present",
+   "collector_premask_channel_training": "measured_zero_and_field_present",
+   "collector_premask_channel_immediate": "not_applicable_rule_path_collector_summary_is_None"
+  },
+  "immediate_collector_note": "In the budget_agg 'splits' the immediate collector mask value 0 is a .get-default because collector_summary is None; the coverage receipt reclassifies it as N/A (rule path), NOT a measured 0. The immediate executor-refusal zeros ARE measured (refusal_sequence and cost_stream refusal fields are present on all 33 rows).",
+  "immediate_row_composition": {
+   "dev_block_canonical_rows": 32,
+   "dev_block_scene_range": [
+    1800000,
+    1800031
+   ],
+   "extra_repeat_rows": [
+    {
+     "scene": 1800000,
+     "run_token": "a2",
+     "file": "v2_r66eval2_rule_immediate_a2_s1800000_a1.json",
+     "canonical_file": "v2_r66eval2_rule_immediate_a1_s1800000_a1.json",
+     "spent_bytes": 15876,
+     "canonical_spent_bytes": 15876,
+     "spent_equals_canonical": true
+    }
+   ],
+   "focal_scene_1700027_rows": 0,
+   "note": "immediate glob = 32 canonical dev-block rows (scenes 1800000..1800031) + 1 extra re-attempt of scene 1800000 (run immediate_a2). There is NO 1700027 focal row in this glob; the earlier 'focal row' assumption is corrected. All 33 are executor rows with identical field shape; the extra re-attempt must not be folded into a per-scene mean."
+  },
+  "coverage_receipt": "ROUND72_COVERAGE_RECEIPT.json",
   "training_block_note": "training rows (block 1300000..1300047) were located via r72_paths and the frozen jobs index; they DO carry the budget/refusal fields, so the training block is now evidenced, not asserted"
  },
  "correction_3_teacher_billing": {
@@ -273,6 +300,10 @@
   "comm_learning.py": {
    "path": "D:\\code\\整合\\zhenghe-round42\\integrated_sar\\comm_learning.py",
    "sha256": "a9add53099c2fe86f459797bd7c38d24361934b264e235ed9fb36118d55cf60f"
+  },
+  "ROUND72_COVERAGE_RECEIPT.json": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\analysis\\round72-calibration-behaviour-diagnostic\\ROUND72_COVERAGE_RECEIPT.json",
+   "sha256": "61232a38fabafd5cc69b70dc623ecf2b8a327742938b0ec0054a580591d9a844"
   }
  }
 }
