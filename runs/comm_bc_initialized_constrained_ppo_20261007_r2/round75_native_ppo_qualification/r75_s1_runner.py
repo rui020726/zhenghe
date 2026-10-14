@@ -36,8 +36,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import random
 import sys
+import time
+import traceback
 from pathlib import Path
 from typing import Any
 
@@ -71,6 +74,97 @@ def _rng_states(np, torch) -> dict[str, Any]:
     return {"python_random_state": repr(random.getstate()),
             "numpy_random_state": repr(np.random.get_state()),
             "torch_rng_state_sha256": _sha256_bytes(torch.get_rng_state().numpy().tobytes())}
+
+
+def _payload_bytes(state) -> bytes:
+    """The raw bytes of a tensor-like RNG payload (a torch CPU tensor, or the fake in tests)."""
+    inner = state.numpy() if hasattr(state, "numpy") else state
+    return inner.tobytes()
+
+
+def _rng_report_from_payloads(numpy_state, torch_state, python_state) -> dict[str, Any]:
+    """The expected RNG report, derived FROM THE RAW PAYLOADS of the loaded bundle.
+
+    verify_restore needs a report to compare the live RNG against. Rebuilding it here from the
+    payloads that were actually loaded keeps the expectation independent of the restore: it is
+    computed BEFORE any live state is read, so a restore that installed the wrong state cannot
+    supply its own expectation. The authoritative check is the raw payload comparison in
+    _rng_payload_differences; this report mirrors _rng_states key for key.
+    """
+    return {"python_random_state": repr(python_state),
+            "numpy_random_state": repr(numpy_state),
+            "torch_rng_state_sha256": _sha256_bytes(_payload_bytes(torch_state))}
+
+
+def _rng_tensor_meta(obj) -> tuple:
+    return (str(getattr(obj, "dtype", None)), tuple(getattr(obj, "shape", ()) or ()))
+
+
+def _raw_equal(live, expected) -> bool:
+    """Structural value equality over raw RNG payloads.
+
+    Tuples and lists are compared element-wise, tensor-like buffers by their FULL raw bytes
+    (with dtype and shape beside them), and everything else by ==. A printed abbreviation can
+    hide a difference; raw bytes cannot.
+    """
+    if isinstance(live, (tuple, list)) or isinstance(expected, (tuple, list)):
+        if not (isinstance(live, (tuple, list)) and isinstance(expected, (tuple, list))):
+            return False
+        if len(live) != len(expected):
+            return False
+        return all(_raw_equal(left, right) for left, right in zip(live, expected))
+    if hasattr(live, "tobytes") or hasattr(expected, "tobytes"):
+        if not (hasattr(live, "tobytes") and hasattr(expected, "tobytes")):
+            return False
+        if _rng_tensor_meta(live) != _rng_tensor_meta(expected):
+            return False
+        return _payload_bytes(live) == _payload_bytes(expected)
+    return live == expected
+
+
+def _first_raw_difference(live, expected, path: str):
+    """The first differing position inside two raw payloads, for an actionable message."""
+    if isinstance(live, (tuple, list)) and isinstance(expected, (tuple, list)):
+        if len(live) != len(expected):
+            return {"where": path, "live_len": len(live), "expected_len": len(expected)}
+        for index, (left, right) in enumerate(zip(live, expected)):
+            if not _raw_equal(left, right):
+                return _first_raw_difference(left, right, f"{path}[{index}]")
+        return {"where": path, "note": "no element difference found"}
+    if hasattr(live, "tobytes") and hasattr(expected, "tobytes"):
+        left, right = _payload_bytes(live), _payload_bytes(expected)
+        if left == right:
+            return {"where": path, "note": "bytes equal"}
+        for index, (a, b) in enumerate(zip(left, right)):
+            if a != b:
+                return {"where": path, "first_diff_byte": index, "live": a, "expected": b,
+                        "live_len": len(left), "expected_len": len(right)}
+        return {"where": path, "live_len": len(left), "expected_len": len(right),
+                "note": "one payload is a prefix of the other"}
+    return {"where": path, "live": repr(live)[:120], "expected": repr(expected)[:120]}
+
+
+def _rng_payload_differences(saved, np_mod, torch_mod) -> list[dict[str, Any]]:
+    """Value-by-value comparison of the THREE RAW RNG payloads against the loaded bundle.
+
+    The repr summary in the record can truncate; this walks the actual objects, so a single
+    differing byte inside the MT19937 state or the torch RNG tensor is reported. Read-only:
+    nothing is drawn, forwarded or stepped here.
+    """
+    problems: list[dict[str, Any]] = []
+    live_numpy, expected_numpy = np_mod.random.get_state(), saved["_numpy_state"]
+    if not _raw_equal(live_numpy, expected_numpy):
+        problems.append({"where": "rng_payload:numpy_random_state",
+                         "detail": _first_raw_difference(live_numpy, expected_numpy, "numpy")})
+    live_torch, expected_torch = torch_mod.get_rng_state(), saved["_torch_state"]
+    if not _raw_equal(live_torch, expected_torch):
+        problems.append({"where": "rng_payload:torch_rng_state",
+                         "detail": _first_raw_difference(live_torch, expected_torch, "torch")})
+    live_python, expected_python = random.getstate(), saved["_python_state"]
+    if not _raw_equal(live_python, expected_python):
+        problems.append({"where": "rng_payload:python_random_state",
+                         "detail": _first_raw_difference(live_python, expected_python, "python")})
+    return problems
 
 
 def _head_input_dim(module) -> int:
@@ -352,9 +446,20 @@ def save_state_bundle(path: Path, saved: dict[str, Any]) -> None:
 
 
 def load_state_bundle(path: Path) -> dict[str, Any]:
-    """Read the bundle back from the actual serialized file."""
+    """Read the bundle back from the actual serialized file.
+
+    The loading behaviour is PINNED EXPLICITLY instead of inheriting whatever default this
+    torch build happens to carry. This environment installs torch 2.9.0, whose ``torch.load``
+    resolves an UNSET ``weights_only`` to True (``_default_to_weights_only`` returns True when
+    no pickle module is given), and the complete bundle carries the three raw RNG payloads - a
+    NumPy MT19937 state tuple among them - which the restricted weights-only unpickler is not
+    guaranteed to accept. The bundle is self-generated by this runner and hash-bound (its
+    sha256 is recorded at save time and re-verified before the restore), so the full-load
+    behaviour is chosen here, deliberately, instead of being discovered for the first time
+    inside the paid S1 path.
+    """
     torch = sys.modules["torch"]
-    return torch.load(path, map_location="cpu")
+    return torch.load(path, map_location="cpu", weights_only=False)
 
 
 def _bundle_to_saved(bundle: dict[str, Any]) -> dict[str, Any]:
@@ -375,6 +480,11 @@ def _bundle_to_saved(bundle: dict[str, Any]) -> dict[str, Any]:
     saved["param_groups"] = [{key: value for key, value in group.items() if key != "params"}
                              | {"parameter_count": len(group["params"])}
                              for group in bundle["optimizer_payload"]["param_groups"]]
+    # The RNG report is REBUILT FROM THE LOADED RAW PAYLOADS, never copied from the live
+    # post-restore state: the expectation must exist before the restore is verified, or
+    # verify_restore compares the live RNG against None and the restore can never pass.
+    saved["rng"] = _rng_report_from_payloads(bundle["numpy_state"], bundle["torch_state"],
+                                             bundle["python_state"])
     return saved
 
 
@@ -407,10 +517,12 @@ def verify_restore(controller, optimizer, saved, *, np_mod, torch_mod) -> dict[s
                         ("update_cursor", int(saved["update_cursor"]))):
         if live != saved.get(field):
             problems.append({"where": field, "live": live, "captured": saved.get(field)})
+    rng_payload_problems = _rng_payload_differences(saved, np_mod, torch_mod)
+    problems.extend(rng_payload_problems)
     return {"problems": problems, "restored_exactly": not problems,
             "restored_from_payload": ["five module payloads", "optimizer payload (all Adam values "
                                       "and param-group hyperparameters)",
-                                      "numpy / torch / python RNG states",
+                                      "numpy / torch / python RNG raw payloads (value by value)",
                                       "lambda / lambda_at_rollout / eta_lambda", "update cursor",
                                       "data identity", "configuration", "code identity"]}
 
@@ -457,9 +569,14 @@ class ObservedStepEntry:
 
         The pre-charge for a step happens immediately BEFORE the call, so the reconciliation
         window is the interval between the previous step's exit reading and this entry reading:
-        exactly ONE new permit must appear there - never zero (an unlicensed step) and never two
-        (a permit spent twice). The step itself must then charge nothing, which is what proves
-        the observer neither double-charges nor frees the step.
+        exactly ONE new permit must appear there. A MISSING or a DUPLICATED permit REFUSES the
+        step BEFORE the inner optimizer is ever delegated to - an unlicensed step never runs and
+        a permit spent twice never fires a second real update. The refusal keeps the consumed
+        permits (no refund, no counter edit) and stops the attempt by raising, so the failure
+        surfaces at the boundary instead of after four more steps. Once the permit is right the
+        inner step runs, and if the step itself charges something that is recorded at the return
+        and further work is refused there too. The observer never charges, never refunds and
+        never opens another root; everything except ``step`` is delegated unchanged.
         """
         index = len(self.__dict__["_records"]) + 1
         before = self._durable_used()
@@ -471,18 +588,43 @@ class ObservedStepEntry:
                    "new_permits_since_previous_step": new_permits,
                    "exactly_one_new_permit": new_permits == 1,
                    "permits_issued_since_start": before - self.__dict__["_start_used"]}
+        if new_permits != 1:
+            self.__dict__["_records"].append(
+                {**attempt, "phase": "refused", "delegated": False,
+                 "reason": ("no new permit was issued since the previous step"
+                            if new_permits == 0 else
+                            f"{new_permits} new permits appeared where exactly one is required"),
+                 "note": ("refused BEFORE delegation: the real step was not executed and the "
+                          "consumed permits are kept, never refunded")})
+            raise RuntimeError(
+                f"{self.__dict__['_label']} step #{index} refused: {new_permits} new permit(s) "
+                f"since the previous step, exactly 1 required; the real step was not executed")
+        # EXACTLY ONE terminal record per real step attempt. A separate "delegated" marker would
+        # double the observed count, so a perfect run would report twice the frozen nine steps and
+        # trip the step-count gate; the delegation is carried by the "delegated" flag instead.
         try:
             result = self.__dict__["_inner_step"](*args, **kwargs)
         except BaseException as error:                       # a failed step is recorded, never refunded
-            self.__dict__["_records"].append({**attempt, "phase": "failed",
-                                              "error": f"{type(error).__name__}: {error}",
-                                              "durable_used_after": self._durable_used()})
+            self.__dict__["_records"].append(
+                {**attempt, "phase": "failed", "delegated": True,
+                 "error": f"{type(error).__name__}: {error}",
+                 "durable_used_after": self._durable_used()})
             raise
         after = self._durable_used()
-        self.__dict__["_records"].append({**attempt, "phase": "completed",
+        if after != before:
+            self.__dict__["_records"].append(
+                {**attempt, "phase": "completed", "delegated": True,
+                 "durable_used_after": after,
+                 "permit_delta": after - before, "step_charged_nothing": False,
+                 "refused_further_work": True,
+                 "reason": ("the step itself charged the durable counter; further work is "
+                            "refused at the return")})
+            raise RuntimeError(
+                f"{self.__dict__['_label']} step #{index} charged {after - before} unit(s) "
+                f"itself; the observer neither double-charges nor frees a step")
+        self.__dict__["_records"].append({**attempt, "phase": "completed", "delegated": True,
                                           "durable_used_after": after,
-                                          "permit_delta": after - before,
-                                          "step_charged_nothing": after == before})
+                                          "permit_delta": 0, "step_charged_nothing": True})
         self.__dict__["_previous_used"] = after
         return result
 
@@ -663,11 +805,312 @@ def run_a1(controller, optimizer, resources, *, torch, np_mod, record: dict,
     return record["A1"]
 
 
+# ------------------------------------------- fail-fast gates, receipts and real-entry counters --
+BUNDLE_FIELDS = ("module_payloads", "adam_payloads", "optimizer_payload", "numpy_state",
+                 "torch_state", "python_state", "lambda", "lambda_at_rollout", "eta_lambda",
+                 "update_cursor", "data_identity", "configuration", "code_identity", "contract")
+
+COUNTER_UNITS = ("paid_module_imports", "replay_data_reads", "checkpoint_file_loads",
+                 "gate_controller_constructions", "optimizer_constructions",
+                 "native_ppo_update_attempts", "optimizer_step_attempts")
+
+
+def _expected_trainable_objects() -> int:
+    """The frozen plan states the trainable-object count; it is READ from there, never assumed."""
+    for entry in PLAN["gate_only_controller"]["r71_research_config_unchanged"]:
+        if "trainable objects" in entry:
+            return int(entry.split()[0])
+    raise RuntimeError("the frozen plan does not state the trainable-object count")
+
+
+def _new_counters() -> dict[str, list]:
+    """Real-entry counters, one list per unit. Recording an entry never performs an operation."""
+    return {unit: [] for unit in COUNTER_UNITS}
+
+
+def _conservative_attempt_bounds() -> dict[str, Any]:
+    """A conservative UPPER BOUND on the paid entries this driver can perform at all.
+
+    The bound is stated before anything runs and does not depend on what actually happens, so the
+    record can never shrink a real attempt by relabelling it. Only the entries that really happen
+    are counted, one by one, with their unit. A dev or fixture path is never described as simulated
+    and therefore free: the same counter is what a real run writes.
+    """
+    return {"paid_module_imports": {"bound": 4, "unit": "modules",
+                                    "detail": "numpy, torch, r75_frozen and r75_guard"},
+            "replay_data_reads": {"bound": 2, "unit": "files",
+                                  "detail": "the frozen qualification row and the frozen tape"},
+            "checkpoint_file_loads": {"bound": 3, "unit": "files",
+                                      "detail": "the R58 ep0 behaviour checkpoint read inside "
+                                                "build_gate_only_controller for the A1/A2 "
+                                                "controller, the same read for the A3 controller, "
+                                                "and the A1 state bundle read back from disk"},
+            "gate_controller_constructions": {"bound": 2, "unit": "controllers",
+                                              "detail": "one for A1/A2 and one for A3"},
+            "optimizer_constructions": {"bound": 2, "unit": "optimizers",
+                                        "detail": "one for A1/A2 and one for A3"},
+            "native_ppo_update_attempts": {"bound": 2, "unit": "updates",
+                                           "detail": "one A2 and one A3 native update; a failed "
+                                                     "attempt is still an attempt"},
+            "optimizer_step_attempts": {"bound": int(PLAN["accounting"]["planned_totals"]
+                                                     ["physical_optimizer_steps"]),
+                                        "unit": "steps",
+                                        "detail": "the frozen plan total: 1 A1 control step, 4 A2 "
+                                                  "and 4 A3, a refused or failed attempt included"}}
+
+
+class _RunState:
+    """Everything a failure receipt needs, kept apart from the scientific record.
+
+    A failure has to be reportable from wherever it happens, so the phase, the real entry counters,
+    the observers and the meters live here from the first paid line onwards. An item that cannot be
+    read is recorded as UNKNOWN and never defaulted to zero: a zero would claim that nothing
+    happened, which is a different statement from "we could not read it".
+    """
+
+    def __init__(self) -> None:
+        self.phase = "start"
+        self.record: dict[str, Any] = {}
+        self.counters = _new_counters()
+        self.resources = None
+        self.observers: dict[str, Any] = {}
+        self.meters: dict[str, Any] = {}
+        self.unread: list[str] = []
+        self.closed_out = False
+
+    def count(self, unit: str, what: str, **detail) -> None:
+        self.counters[unit].append({"what": what, "phase": self.phase, **detail})
+
+    def _observed_step_entries(self) -> list[dict[str, Any]]:
+        """The REAL optimizer.step attempts, read from the observed entries themselves.
+
+        A refused step is an attempt: the entry was reached and the permit was wrong. A failed step
+        is an attempt too. Counting from the records instead of from an expectation is what keeps a
+        dev or fixture path from being described as free.
+        """
+        entries: list[dict[str, Any]] = []
+        for label, observer in self.observers.items():
+            try:
+                for entry in observer.records:
+                    entries.append({"what": f"{label}:step_{entry.get('index')}",
+                                    "phase": entry.get("phase"),
+                                    "exactly_one_new_permit": entry.get("exactly_one_new_permit"),
+                                    "step_charged_nothing": entry.get("step_charged_nothing")})
+            except Exception as error:                          # pragma: no cover - defensive
+                self.unread.append(f"optimizer_step_attempts:{label}")
+                entries.append({"what": f"{label}:step_?",
+                                "unknown": f"{type(error).__name__}: {error}"})
+        return entries
+
+    def counter_report(self) -> dict[str, Any]:
+        bounds = _conservative_attempt_bounds()
+        report: dict[str, Any] = {}
+        for unit in COUNTER_UNITS:
+            entries = (self._observed_step_entries() if unit == "optimizer_step_attempts"
+                       else self.counters[unit])
+            report[unit] = {"unit": bounds[unit]["unit"], "counted": len(entries),
+                            "entries": entries,
+                            "within_conservative_bound": len(entries) <= bounds[unit]["bound"]}
+        return report
+
+    def step_records(self) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        for label, observer in self.observers.items():
+            try:
+                out[label] = observer.records
+            except Exception as error:                          # pragma: no cover - defensive
+                self.unread.append(f"step_records:{label}")
+                out[label] = {"unknown": f"{type(error).__name__}: {error}"}
+        return out
+
+    def meter_report(self) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        for label, meter in self.meters.items():
+            try:
+                out[label] = meter.snapshot()
+            except Exception as error:                          # pragma: no cover - defensive
+                self.unread.append(f"meter:{label}")
+                out[label] = {"unknown": f"{type(error).__name__}: {error}"}
+        return out
+
+    def durable_report(self) -> dict[str, Any]:
+        if self.resources is None:
+            self.unread.append("durable_counters:the production resources were never opened")
+            return {"unknown": "the production resources were never opened in this attempt"}
+        try:
+            return self.resources.snapshots()
+        except Exception as error:                              # pragma: no cover - defensive
+            self.unread.append("durable_counters")
+            return {"unknown": f"{type(error).__name__}: {error}"}
+
+
+def _append_jsonl(path: Path, event: dict) -> None:
+    """Append one event and fsync it. A receipt that is not on disk is not a receipt."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "a", encoding="utf-8") as handle:
+        handle.write(json.dumps(event, default=str) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+
+
+def _write_failure_receipt(state: _RunState, error: BaseException) -> Path:
+    """The durable receipt of a FAILED attempt: appended, fsynced, never masking the exception.
+
+    Nothing here reruns, refunds or repairs anything. It records where the run stopped, the raw
+    exception and its traceback, which real attempts were already consumed, what the observed step
+    entries and the per-controller meters said, and what could not be read. The caller re-raises the
+    original error, so a failure is never converted into a success by its own bookkeeping.
+    """
+    event = {"kind": "round75-s1-failure-receipt/1",
+             "request_id": PLAN["request_id"],
+             "head_at_writing": PLAN["head_at_writing"],
+             "phase": state.phase,
+             "error": {"type": type(error).__name__, "message": str(error)},
+             "traceback": traceback.format_exc(),
+             "counters": state.counter_report(),
+             "conservative_attempt_bounds": _conservative_attempt_bounds(),
+             "step_observations": state.step_records(),
+             "meter_snapshots": state.meter_report(),
+             "durable_counters": state.durable_report(),
+             "unread": sorted(set(state.unread)),
+             "note": ("appended and fsynced at the moment of failure; the original exception is "
+                      "re-raised unchanged, nothing is retried, refunded or repaired")}
+    path = S1_DIR / "r75_s1_failure_receipts.jsonl"
+    _append_jsonl(path, event)
+    return path
+
+
+# --------------------------------------------------------------- the fail-fast gates ----------
+def _gate_a1(a1: dict) -> dict[str, Any]:
+    """A1 must pass BEFORE anything expensive is started.
+
+    The control step is cheap, so a broken control step must not be discovered four paid updates
+    later: the actor heads and the trunk have to be measurably untouched, the eight-object mapping
+    has to be one-to-one and unique, and both critics have to carry a non-empty Adam state. A
+    failure raises here, with the measurements beside it.
+    """
+    expected = _expected_trainable_objects()
+    problems: list[str] = []
+    if a1["trunk_moved"]:
+        problems.append(f"a trunk parameter moved in the critic-only control step: "
+                        f"{a1['trunk_moved_parameters']}")
+    if a1["trunk_parameters_in_optimizer"]:
+        problems.append(f"{a1['trunk_parameters_in_optimizer']} trunk parameter(s) are inside the "
+                        f"optimizer")
+    if not a1["object_coverage"]["coverage_complete"]:
+        problems.append(f"the trainable-object coverage is not complete: {a1['object_coverage']}")
+    objects = list(a1["objects"])
+    if len(objects) != len(set(objects)):
+        problems.append("the trainable-object name mapping is not unique")
+    if len(objects) != expected:
+        problems.append(f"{len(objects)} trainable objects were mapped, {expected} are required by "
+                        f"the frozen plan")
+    for name in objects:
+        if not name.startswith("value_"):
+            continue
+        entry = a1["adam_record"].get(name) or {}
+        if not entry.get("state_present"):
+            problems.append(f"the critic {name} carries no Adam state after the control step")
+        elif not (entry.get("exp_avg_present") and entry.get("exp_avg_sq_present")):
+            problems.append(f"the critic {name} has an incomplete Adam state")
+    if problems:
+        raise RuntimeError("A1 gate refused: " + "; ".join(problems))
+    return {"passed": True, "expected_trainable_objects": expected,
+            "mapped_trainable_objects": len(objects),
+            "trunk_moved": a1["trunk_moved"],
+            "trunk_parameters_in_optimizer": a1["trunk_parameters_in_optimizer"],
+            "critics_with_nonempty_adam": sorted(
+                name for name in objects if name.startswith("value_")
+                and (a1["adam_record"].get(name) or {}).get("state_present")),
+            "note": ("measured from the live parameters and the live optimizer state, and enforced "
+                     "before the first paid native update is issued")}
+
+
+def _gate_loaded_bundle(bundle: dict, bundle_path: Path, recorded_sha256: str) -> dict[str, Any]:
+    """The disk file must be the resume source, byte for byte and field for field.
+
+    A bundle that does not hash to the value recorded at save time is not the file this run wrote;
+    a bundle whose code identity differs from the sources on disk is not the driver that was
+    frozen. Either way the run stops here, before any restore and long before a paid update.
+    """
+    problems: list[str] = []
+    actual = _sha256_bytes(bundle_path.read_bytes())
+    if actual != recorded_sha256:
+        problems.append(f"the bundle file hashes to {actual[:16]} but {recorded_sha256[:16]} was "
+                        f"recorded at save time")
+    missing = [field for field in BUNDLE_FIELDS if field not in bundle]
+    if missing:
+        problems.append(f"the loaded bundle is missing {missing}")
+    for field in ("data_identity", "configuration", "code_identity", "contract"):
+        if field in bundle and not bundle[field]:
+            problems.append(f"the loaded bundle field {field} is empty")
+    if bundle.get("code_identity") != _code_identity():
+        problems.append("the bundle's code identity does not match the sources on disk")
+    if problems:
+        raise RuntimeError("bundle gate refused: " + "; ".join(problems))
+    return {"passed": True, "file_sha256": actual, "recorded_sha256": recorded_sha256,
+            "fields_present": sorted(field for field in BUNDLE_FIELDS if field in bundle),
+            "note": ("the file on disk is hashed and compared with the value recorded when this "
+                     "run wrote it, and its identity fields are compared with the live sources")}
+
+
+def _gate_a3_start(baseline: dict, a3_start: dict, restore_report: dict, bundle: dict, *,
+                   controller, optimizer, episode, update_index: int,
+                   np_mod, torch_mod) -> dict[str, Any]:
+    """The A3 start state must be PROVEN, and bound to the objects the update will use.
+
+    The disk restore has to reproduce the A1 baseline value by value, the three raw RNG payloads
+    have to match, and the state that is ABOUT to be updated has to be the state that was just
+    proven: the live objects are re-read immediately before the call and must still hold the
+    verified values, and the update is bound to those very objects and to the cursor the bundle
+    carried. Only then is the second paid native update issued.
+    """
+    problems: list[str] = []
+    if not restore_report["restored_exactly"]:
+        problems.append(f"the disk restore did not reproduce the captured state: "
+                        f"{restore_report['problems']}")
+    differences = compare_full_states(baseline, a3_start,
+                                      "A1_baseline_vs_A3_start_after_disk_restore")
+    if differences:
+        problems.append(f"{len(differences)} full-state difference(s) between the A1 baseline and "
+                        f"the A3 start after the disk restore")
+    rng_problems = _rng_payload_differences(a3_start, np_mod, torch_mod)
+    if rng_problems:
+        problems.append(f"{len(rng_problems)} raw RNG payload difference(s) at the A3 start")
+    live_again = capture_full_state(controller, optimizer, np_mod=np_mod, torch_mod=torch_mod,
+                                    data_identity=a3_start["data_identity"],
+                                    configuration=a3_start["configuration"],
+                                    cursor=a3_start["update_cursor"])
+    drift = compare_full_states(a3_start, live_again, "A3_start_re_read_before_the_native_update")
+    if drift:
+        problems.append(f"{len(drift)} difference(s) between the verified A3 start and the live "
+                        f"state re-read immediately before the native update")
+    if int(bundle["update_cursor"]) != int(a3_start["update_cursor"]):
+        problems.append("the bundle cursor and the verified start cursor disagree")
+    if problems:
+        raise RuntimeError("A3 start gate refused: " + "; ".join(problems))
+    return {"passed": True, "differences": differences, "rng_problems": rng_problems,
+            "re_read_drift": drift,
+            "binding": {"controller_id": id(controller), "optimizer_id": id(optimizer),
+                        "episode_id": id(episode), "update_index": int(update_index),
+                        "update_cursor": int(bundle["update_cursor"]),
+                        "note": ("the native update is addressed to exactly these objects and to "
+                                 "this cursor, and the live state was re-read and proven equal to "
+                                 "the verified start immediately before the call")}}
+
 # ------------------------------------------------------------------------------- run -----
 def run_s1() -> int:
+    # Every paid phase below is registered in ``state`` BEFORE it runs, so a failure anywhere can
+    # be receipted with the real phase, the real attempts and the real durable readings instead of
+    # a reconstructed story. The known pre-condition failures are gated where they are found: a
+    # broken control step, a bundle that is not the file this run wrote, or an A3 start that was
+    # never proven stops the run immediately rather than being collected into one end-of-run list.
+    state = _RunState()
+
     # The pure-file precheck runs BEFORE any paid module is touched. It is stdlib only, so it can
     # refuse the run before torch, numpy, the model, the optimizer or the ledger is ever opened.
     sys.path.insert(0, str(HERE))
+    state.phase = "precheck"
     import r75_s1_precheck
 
     precheck_code = r75_s1_precheck.main()
@@ -675,182 +1118,279 @@ def run_s1() -> int:
         print("S1 REFUSED: the freeze precheck failed; nothing paid was started", file=sys.stderr)
         return 2
 
+    state.phase = "paid_module_import"
     np_mod, torch, r75_frozen, r75_guard = _load_paid_modules()
+    for module in ("numpy", "torch", "r75_frozen", "r75_guard"):
+        state.count("paid_module_imports", module)
 
-    configuration = _live_configuration(r75_frozen)
-    if not configuration["lr_matches_live_learning_rate"]:
-        print("S1 REFUSED: the runner LR is not the live LEARNING_RATE", file=sys.stderr)
-        return 2
-    identity = PLAN["input_identity"]
-    data_identity = {"row_sha256": identity["row"]["sha256"],
-                     "tape_sha256": identity["tape"]["sha256"],
-                     "model_sha256": identity["r58_ep0_model"]["sha256"],
-                     "behaviour_parameter_sha256": identity["behaviour_parameters"]["value"]}
+    try:
+        state.phase = "live_configuration"
+        configuration = _live_configuration(r75_frozen)
+        if not configuration["lr_matches_live_learning_rate"]:
+            print("S1 REFUSED: the runner LR is not the live LEARNING_RATE", file=sys.stderr)
+            return 2
+        identity = PLAN["input_identity"]
+        data_identity = {"row_sha256": identity["row"]["sha256"],
+                         "tape_sha256": identity["tape"]["sha256"],
+                         "model_sha256": identity["r58_ep0_model"]["sha256"],
+                         "behaviour_parameter_sha256": identity["behaviour_parameters"]["value"]}
 
-    resources = r75_guard.R75Resources.production()
-    resources.verify_or_fail()
-    print("canonical production ledger opened and reconciled at the zero starting point")
+        state.phase = "production_ledger"
+        resources = r75_guard.R75Resources.production()
+        state.resources = resources
+        resources.verify_or_fail()
+        print("canonical production ledger opened and reconciled at the zero starting point")
 
-    # --- gate-only controller: R58 ep0 behaviour, two equal heads, trunk frozen ------------
-    controller, ep0_state, frozen_identity, summary = r75_frozen.build_gate_only_controller(SEED)
-    # Install the meter BEFORE any possible forward (A2 controller).
-    meter_a2 = resources.ensure_trunk_meter(controller, what_prefix="r75_s1_A2")
-    pre_a2 = meter_a2.snapshot()
+        # --- gate-only controller: R58 ep0 behaviour, two equal heads, trunk frozen ------------
+        state.phase = "A2_controller_construction"
+        controller, ep0_state, frozen_identity, summary = r75_frozen.build_gate_only_controller(SEED)
+        state.count("gate_controller_constructions", "build_gate_only_controller",
+                    label="A1_A2", seed=SEED)
+        state.count("checkpoint_file_loads", "r58_ep0_behaviour_checkpoint",
+                    label="A1_A2", seed=SEED,
+                    detail="read inside build_gate_only_controller")
+        # Install the meter BEFORE any possible forward (A2 controller).
+        meter_a2 = resources.ensure_trunk_meter(controller, what_prefix="r75_s1_A2")
+        state.meters["A2"] = meter_a2
+        pre_a2 = meter_a2.snapshot()
 
-    episode, facts = r75_replay_adapter_load()
-    optimizer = r75_frozen.build_optimizer(controller, LR)
-    # A1 and A2 share one controller, one optimizer and therefore one observed step entry.
-    observer = ObservedStepEntry(optimizer, resources, "r75_s1_A1_A2")
+        state.phase = "replay_data_load"
+        episode, facts = r75_replay_adapter_load()
+        state.count("replay_data_reads", "qualification_row", path=identity["row"]["path"])
+        state.count("replay_data_reads", "qualification_tape", path=identity["tape"]["path"])
+        optimizer = r75_frozen.build_optimizer(controller, LR)
+        state.count("optimizer_constructions", "build_optimizer", label="A1_A2", lr=LR)
+        # A1 and A2 share one controller, one optimizer and therefore one observed step entry.
+        observer = ObservedStepEntry(optimizer, resources, "r75_s1_A1_A2")
+        state.observers["A1_A2"] = observer
 
-    record: dict[str, Any] = {"kind": "round75-s1-trial/1", "request_id": PLAN["request_id"],
-                              "head_at_writing": PLAN["head_at_writing"], "seed": SEED,
-                              "data_identity": data_identity, "batch_facts": facts,
-                              "frozen_identity": frozen_identity,
-                              "parameter_summary": summary,
-                              "pre_meter_a2": pre_a2,
-                              "configuration": configuration,
-                              "code_identity_at_start": _code_identity()}
+        record = state.record
+        record.update({"kind": "round75-s1-trial/1", "request_id": PLAN["request_id"],
+                       "head_at_writing": PLAN["head_at_writing"], "seed": SEED,
+                       "data_identity": data_identity, "batch_facts": facts,
+                       "frozen_identity": frozen_identity,
+                       "parameter_summary": summary,
+                       "pre_meter_a2": pre_a2,
+                       "configuration": configuration,
+                       "code_identity_at_start": _code_identity()})
 
-    # --- A1: the critic-only control step --------------------------------------------------
-    a1 = run_a1(controller, observer, resources, torch=torch, np_mod=np_mod, record=record,
-                configuration=configuration)
+        # --- A1: the critic-only control step --------------------------------------------------
+        state.phase = "A1_critic_only_control_step"
+        a1 = run_a1(controller, observer, resources, torch=torch, np_mod=np_mod, record=record,
+                    configuration=configuration)
+        # FAIL FAST: the control step is cheap, so a broken one must not surface four paid updates
+        # later. The actor heads and the trunk must be measurably untouched, the object mapping
+        # one-to-one and unique, and both critics must carry a non-empty Adam state.
+        record["A1_gate"] = _gate_a1(a1)
 
-    # --- the frozen A1 baseline: the ONE state that A2 and A3 both start from ---------------
-    fixed_rng = _fixed_rng_triple(np_mod, torch, "r75_s1_pre_capture")
-    a1_baseline = capture_full_state(controller, observer, np_mod=np_mod, torch_mod=torch,
-                                     data_identity=data_identity, configuration=configuration,
-                                     cursor=0)
-    record["fixed_rng_triple"] = fixed_rng
-    bundle_path = S1_DIR / "r75_s1_A1_full_state.pt"
-    save_state_bundle(bundle_path, a1_baseline)
-    record["A1_baseline_bundle"] = {"path": str(bundle_path),
-                                    "sha256": _sha256_bytes(bundle_path.read_bytes()),
-                                    "fields": sorted(build_state_bundle(a1_baseline))}
+        # --- the frozen A1 baseline: the ONE state that A2 and A3 both start from ---------------
+        state.phase = "A1_baseline_capture"
+        fixed_rng = _fixed_rng_triple(np_mod, torch, "r75_s1_pre_capture")
+        a1_baseline = capture_full_state(controller, observer, np_mod=np_mod, torch_mod=torch,
+                                         data_identity=data_identity, configuration=configuration,
+                                         cursor=0)
+        record["fixed_rng_triple"] = fixed_rng
+        bundle_path = S1_DIR / "r75_s1_A1_full_state.pt"
+        save_state_bundle(bundle_path, a1_baseline)
+        record["A1_baseline_bundle"] = {"path": str(bundle_path),
+                                        "sha256": _sha256_bytes(bundle_path.read_bytes()),
+                                        "fields": sorted(build_state_bundle(a1_baseline))}
 
-    # --- A2: the real native update from the A1 state --------------------------------------
-    record["A2"] = r75_frozen.r75_native_ppo_update(
-        controller, observer, [episode], update_index=0, resources=resources)
-    record["post_meter_a2"] = meter_a2.snapshot()
-    a2_end = capture_full_state(controller, observer, np_mod=np_mod, torch_mod=torch,
-                                data_identity=data_identity, configuration=configuration, cursor=1)
+        # --- A2: the real native update from the A1 state --------------------------------------
+        state.phase = "A2_native_update"
+        state.count("native_ppo_update_attempts", "r75_native_ppo_update", label="A2",
+                    update_index=0)
+        record["A2"] = r75_frozen.r75_native_ppo_update(
+            controller, observer, [episode], update_index=0, resources=resources)
+        record["post_meter_a2"] = meter_a2.snapshot()
+        a2_end = capture_full_state(controller, observer, np_mod=np_mod, torch_mod=torch,
+                                    data_identity=data_identity, configuration=configuration, cursor=1)
 
-    # --- A3: restore from the ACTUAL SERIALIZED FILE into fresh objects --------------------
-    controller3, _state3, _frozen3, _summary3 = r75_frozen.build_gate_only_controller(SEED)
-    meter_a3 = resources.ensure_trunk_meter(controller3, what_prefix="r75_s1_A3")
-    optimizer3 = r75_frozen.build_optimizer(controller3, LR)
-    observer3 = ObservedStepEntry(optimizer3, resources, "r75_s1_A3")
-    # The disk file is the resume source. The in-memory capture is NEVER used as a substitute.
-    bundle = load_state_bundle(bundle_path)
-    record["A3_bundle_code_identity_matches_disk"] = bundle["code_identity"] == _code_identity()
-    record["A3_bundle_lambda"] = {"lambda": bundle["lambda"],
-                                  "lambda_at_rollout": bundle["lambda_at_rollout"],
-                                  "eta_lambda": bundle["eta_lambda"],
-                                  "update_cursor": bundle["update_cursor"]}
-    # The restore happens AFTER the construction (which may consume torch RNG) and BEFORE the
-    # update, so the start state is proven value-identical instead of being assumed.
-    restore_report = restore_full_state(controller3, optimizer3, _bundle_to_saved(bundle),
-                                        np_mod=np_mod, torch_mod=torch)
-    record["A3_restore"] = restore_report
-    a3_start = capture_full_state(controller3, observer3, np_mod=np_mod, torch_mod=torch,
-                                  data_identity=bundle["data_identity"],
-                                  configuration=bundle["configuration"],
-                                  cursor=bundle["update_cursor"])
-    record["A3"] = r75_frozen.r75_native_ppo_update(
-        controller3, observer3, [episode], update_index=0, resources=resources)
-    record["post_meter_a3"] = meter_a3.snapshot()
-    a3_end = capture_full_state(controller3, observer3, np_mod=np_mod, torch_mod=torch,
-                                data_identity=bundle["data_identity"],
-                                configuration=bundle["configuration"],
-                                cursor=int(bundle["update_cursor"]) + 1)
+        # --- A3: restore from the ACTUAL SERIALIZED FILE into fresh objects --------------------
+        state.phase = "A3_controller_construction"
+        controller3, _state3, _frozen3, _summary3 = r75_frozen.build_gate_only_controller(SEED)
+        state.count("gate_controller_constructions", "build_gate_only_controller",
+                    label="A3", seed=SEED)
+        state.count("checkpoint_file_loads", "r58_ep0_behaviour_checkpoint",
+                    label="A3", seed=SEED,
+                    detail="read inside build_gate_only_controller")
+        meter_a3 = resources.ensure_trunk_meter(controller3, what_prefix="r75_s1_A3")
+        state.meters["A3"] = meter_a3
+        optimizer3 = r75_frozen.build_optimizer(controller3, LR)
+        state.count("optimizer_constructions", "build_optimizer", label="A3", lr=LR)
+        observer3 = ObservedStepEntry(optimizer3, resources, "r75_s1_A3")
+        state.observers["A3"] = observer3
 
-    # --- the four comparisons the contract demands -----------------------------------------
-    excluded = PLAN["comparison_contract"]["excluded_in_advance_and_accounted_separately"]
-    restore_diffs = compare_full_states(a1_baseline, a3_start,
-                                        "A1_baseline_vs_A3_start_after_disk_restore")
-    end_diffs = compare_full_states(a2_end, a3_end, "A2_end_vs_A3_end")
-    compared_fields, science_diffs = compare_scientific_returns(record["A2"], record["A3"], PLAN)
-    meter_reconciliation = reconcile_trunk_meter(record["A2"], record["A3"], PLAN)
+        state.phase = "A3_bundle_load"
+        # The disk file is the resume source. The in-memory capture is NEVER used as a substitute.
+        bundle = load_state_bundle(bundle_path)
+        state.count("checkpoint_file_loads", "A1_state_bundle", path=str(bundle_path))
+        # FAIL FAST: the file must be the one this run wrote and must carry the frozen identity.
+        record["A3_bundle_gate"] = _gate_loaded_bundle(bundle, bundle_path,
+                                                       record["A1_baseline_bundle"]["sha256"])
+        record["A3_bundle_code_identity_matches_disk"] = bundle["code_identity"] == _code_identity()
+        record["A3_bundle_lambda"] = {"lambda": bundle["lambda"],
+                                      "lambda_at_rollout": bundle["lambda_at_rollout"],
+                                      "eta_lambda": bundle["eta_lambda"],
+                                      "update_cursor": bundle["update_cursor"]}
+        # The restore happens AFTER the construction (which may consume torch RNG) and BEFORE the
+        # update, so the start state is proven value-identical instead of being assumed.
+        state.phase = "A3_restore"
+        restore_report = restore_full_state(controller3, optimizer3, _bundle_to_saved(bundle),
+                                            np_mod=np_mod, torch_mod=torch)
+        record["A3_restore"] = restore_report
+        a3_start = capture_full_state(controller3, observer3, np_mod=np_mod, torch_mod=torch,
+                                      data_identity=bundle["data_identity"],
+                                      configuration=bundle["configuration"],
+                                      cursor=bundle["update_cursor"])
+        # FAIL FAST: the start state must be proven, and bound to the objects the update will use,
+        # before the second paid native update is issued.
+        state.phase = "A3_start_gate"
+        a3_gate = _gate_a3_start(a1_baseline, a3_start, restore_report, bundle,
+                                 controller=controller3, optimizer=optimizer3, episode=episode,
+                                 update_index=0, np_mod=np_mod, torch_mod=torch)
+        restore_diffs = a3_gate["differences"]
+        record["A3_start_gate"] = a3_gate
 
-    # --- the observed real step entries ----------------------------------------------------
-    step_records = {"A1_A2": observer.records, "A3": observer3.records}
-    step_problems = [entry for entries in step_records.values() for entry in entries
-                     if entry["phase"] == "completed"
-                     and not (entry["exactly_one_new_permit"] and entry["step_charged_nothing"])]
-    failed_steps = [entry for entries in step_records.values() for entry in entries
-                    if entry["phase"] == "failed"]
-    total_real_steps = sum(len(entries) for entries in step_records.values())
-    expected_steps = PLAN["accounting"]["planned_totals"]["physical_optimizer_steps"]
-    record["step_entry_observation"] = {
-        "records": step_records, "total_real_steps": total_real_steps,
-        "expected_steps": expected_steps, "steps_match_plan": total_real_steps == expected_steps,
-        "permit_problems": step_problems, "failed_steps": failed_steps,
-        "note": ("passive observation of the REAL optimizer.step entry, bound to the same "
-                 "production counter: it never charges, never refunds and never opens another "
-                 "root; every completed step must show exactly one new permit issued by the "
-                 "pre-charge and must charge nothing itself")}
+        state.phase = "A3_native_update"
+        state.count("native_ppo_update_attempts", "r75_native_ppo_update", label="A3",
+                    update_index=0)
+        record["A3"] = r75_frozen.r75_native_ppo_update(
+            controller3, observer3, [episode], update_index=0, resources=resources)
+        record["post_meter_a3"] = meter_a3.snapshot()
+        a3_end = capture_full_state(controller3, observer3, np_mod=np_mod, torch_mod=torch,
+                                    data_identity=bundle["data_identity"],
+                                    configuration=bundle["configuration"],
+                                    cursor=int(bundle["update_cursor"]) + 1)
 
-    record["comparison"] = {
-        "compared_fields": PLAN["comparison_contract"]["compared_value_by_value"],
-        "compared_native_fields": compared_fields,
-        "excluded_in_advance": excluded,
-        "restore_differences": restore_diffs,
-        "end_state_differences": end_diffs,
-        "scientific_return_differences": science_diffs,
-        "meter_reconciliation": meter_reconciliation}
-    record["meter_additivity"] = {label: data["additive"] for label, data
-                                  in meter_reconciliation["controllers"].items()}
-    record["ledger"] = resources.snapshots()
-    resources.verify_or_fail()
+        # --- the four comparisons the contract demands -----------------------------------------
+        state.phase = "comparison"
+        excluded = PLAN["comparison_contract"]["excluded_in_advance_and_accounted_separately"]
+        end_diffs = compare_full_states(a2_end, a3_end, "A2_end_vs_A3_end")
+        compared_fields, science_diffs = compare_scientific_returns(record["A2"], record["A3"], PLAN)
+        meter_reconciliation = reconcile_trunk_meter(record["A2"], record["A3"], PLAN)
 
-    # --- the failure gate: any inconsistency is a non-zero exit ----------------------------
-    failures: list[str] = []
-    if not restore_report["restored_exactly"]:
-        failures.append("the A3 disk restore did not reproduce the captured A1 state exactly")
-    if restore_diffs:
-        failures.append(f"{len(restore_diffs)} full-state difference(s) between the A1 baseline "
-                        f"and the A3 start after the disk restore")
-    if end_diffs:
-        failures.append(f"{len(end_diffs)} full-state difference(s) between the A2 and A3 end states")
-    if science_diffs:
-        failures.append(f"{len(science_diffs)} scientific return difference(s) between A2 and A3")
-    if not all(record["meter_additivity"].values()):
-        failures.append("the trunk-entry meter phase split is not additive")
-    for label, data in meter_reconciliation["controllers"].items():
-        if not (data["calls_match_plan"] and data["rows_match_plan"]):
-            failures.append(f"the {label} trunk-entry metering does not match the frozen accounting")
-    if a1["trunk_moved"]:
-        failures.append("a trunk parameter moved in the critic-only control step")
-    if a1["trunk_parameters_in_optimizer"]:
-        failures.append("a trunk parameter is inside the optimizer")
-    if not a1["object_coverage"]["coverage_complete"]:
-        failures.append("the eight-object coverage is not complete")
-    if step_problems:
-        failures.append(f"{len(step_problems)} real step(s) without exactly one new permit")
-    if failed_steps:
-        failures.append(f"{len(failed_steps)} real step(s) failed")
-    if not record["step_entry_observation"]["steps_match_plan"]:
-        failures.append("the real step count does not match the frozen plan")
-    if not record["A3_bundle_code_identity_matches_disk"]:
-        failures.append("the bundle's code identity does not match the sources on disk")
-    record["failures"] = failures
+        # --- the observed real step entries ----------------------------------------------------
+        step_records = {"A1_A2": observer.records, "A3": observer3.records}
+        step_problems = [entry for entries in step_records.values() for entry in entries
+                         if entry["phase"] == "completed"
+                         and not (entry["exactly_one_new_permit"] and entry["step_charged_nothing"])]
+        failed_steps = [entry for entries in step_records.values() for entry in entries
+                        if entry["phase"] == "failed"]
+        total_real_steps = sum(len(entries) for entries in step_records.values())
+        expected_steps = PLAN["accounting"]["planned_totals"]["physical_optimizer_steps"]
+        record["step_entry_observation"] = {
+            "records": step_records, "total_real_steps": total_real_steps,
+            "expected_steps": expected_steps, "steps_match_plan": total_real_steps == expected_steps,
+            "permit_problems": step_problems, "failed_steps": failed_steps,
+            "note": ("passive observation of the REAL optimizer.step entry, bound to the same "
+                     "production counter: it never charges, never refunds and never opens another "
+                     "root; every completed step must show exactly one new permit issued by the "
+                     "pre-charge and must charge nothing itself")}
 
-    S1_DIR.mkdir(parents=True, exist_ok=True)
-    (S1_DIR / "r75_s1_trial_record.json").write_text(
-        json.dumps(record, indent=2, default=str) + "\n", encoding="utf-8")
-    print(json.dumps({"kind": "round75-s1-summary/1",
-                      "A1_moved_objects": a1["moved_objects"],
-                      "A1_trunk_moved": a1["trunk_moved"],
-                      "A1_objects_with_gradient": a1["objects_with_gradient"],
-                      "A2_optimizer_steps": record["A2"]["optimizer_steps"],
-                      "A3_optimizer_steps": record["A3"]["optimizer_steps"],
-                      "real_steps_observed": total_real_steps,
-                      "restore_differences": len(restore_diffs),
-                      "end_state_differences": len(end_diffs),
-                      "scientific_return_differences": len(science_diffs),
-                      "meter_additivity": record["meter_additivity"],
-                      "failures": failures,
-                      "ledger": record["ledger"]}, indent=2, default=str))
-    return 0 if not failures else 3
+        record["comparison"] = {
+            "compared_fields": PLAN["comparison_contract"]["compared_value_by_value"],
+            "compared_native_fields": compared_fields,
+            "excluded_in_advance": excluded,
+            "restore_differences": restore_diffs,
+            "end_state_differences": end_diffs,
+            "scientific_return_differences": science_diffs,
+            "meter_reconciliation": meter_reconciliation}
+        record["meter_additivity"] = {label: data["additive"] for label, data
+                                      in meter_reconciliation["controllers"].items()}
+        record["ledger"] = resources.snapshots()
+        resources.verify_or_fail()
+
+        # --- the failure gate: any inconsistency is a non-zero exit ----------------------------
+        failures: list[str] = []
+        if not restore_report["restored_exactly"]:
+            failures.append("the A3 disk restore did not reproduce the captured A1 state exactly")
+        if restore_diffs:
+            failures.append(f"{len(restore_diffs)} full-state difference(s) between the A1 baseline "
+                            f"and the A3 start after the disk restore")
+        if end_diffs:
+            failures.append(f"{len(end_diffs)} full-state difference(s) between the A2 and A3 end states")
+        if science_diffs:
+            failures.append(f"{len(science_diffs)} scientific return difference(s) between A2 and A3")
+        if not all(record["meter_additivity"].values()):
+            failures.append("the trunk-entry meter phase split is not additive")
+        for label, data in meter_reconciliation["controllers"].items():
+            if not (data["calls_match_plan"] and data["rows_match_plan"]):
+                failures.append(f"the {label} trunk-entry metering does not match the frozen accounting")
+        if a1["trunk_moved"]:
+            failures.append("a trunk parameter moved in the critic-only control step")
+        if a1["trunk_parameters_in_optimizer"]:
+            failures.append("a trunk parameter is inside the optimizer")
+        if not a1["object_coverage"]["coverage_complete"]:
+            failures.append("the eight-object coverage is not complete")
+        if step_problems:
+            failures.append(f"{len(step_problems)} real step(s) without exactly one new permit")
+        if failed_steps:
+            failures.append(f"{len(failed_steps)} real step(s) failed")
+        if not record["step_entry_observation"]["steps_match_plan"]:
+            failures.append("the real step count does not match the frozen plan")
+        if not record["A3_bundle_code_identity_matches_disk"]:
+            failures.append("the bundle's code identity does not match the sources on disk")
+        record["failures"] = failures
+        record["attempt_accounting"] = {
+            "counted": state.counter_report(),
+            "conservative_attempt_bounds": _conservative_attempt_bounds(),
+            "note": ("the counted entries are read from the real call sites and from the observed "
+                     "step entries, one by one, with their unit; a failed or refused attempt is "
+                     "still an attempt. The conservative bounds are stated before anything runs, "
+                     "so relabelling can never shrink a real attempt. Nothing here is a simulation "
+                     "and nothing here is free.")}
+
+        state.phase = "closeout"
+        S1_DIR.mkdir(parents=True, exist_ok=True)
+        (S1_DIR / "r75_s1_trial_record.json").write_text(
+            json.dumps(record, indent=2, default=str) + "\n", encoding="utf-8")
+        print(json.dumps({"kind": "round75-s1-summary/1",
+                          "A1_moved_objects": a1["moved_objects"],
+                          "A1_trunk_moved": a1["trunk_moved"],
+                          "A1_objects_with_gradient": a1["objects_with_gradient"],
+                          "A1_gate": record["A1_gate"]["passed"],
+                          "A2_optimizer_steps": record["A2"]["optimizer_steps"],
+                          "A3_optimizer_steps": record["A3"]["optimizer_steps"],
+                          "real_steps_observed": total_real_steps,
+                          "restore_differences": len(restore_diffs),
+                          "end_state_differences": len(end_diffs),
+                          "scientific_return_differences": len(science_diffs),
+                          "meter_additivity": record["meter_additivity"],
+                          "counted_attempts": {unit: data["counted"]
+                                               for unit, data in state.counter_report().items()},
+                          "failures": failures,
+                          "ledger": record["ledger"]}, indent=2, default=str))
+        state.closed_out = True
+        return 0 if not failures else 3
+    except BaseException as error:
+        # The receipt is a record, never a mask: the ORIGINAL exception leaves this process
+        # unchanged, nothing is retried, refunded or repaired.
+        try:
+            receipt = _write_failure_receipt(state, error)
+            receipt_note = str(receipt)
+        except Exception as receipt_error:                    # pragma: no cover - defensive
+            receipt_note = (f"the rich receipt could not be written: "
+                            f"{type(receipt_error).__name__}: {receipt_error}")
+        print(f"S1 FAILED in phase {state.phase!r}: {type(error).__name__}: {error}",
+              file=sys.stderr)
+        print(f"durable failure receipt: {receipt_note}", file=sys.stderr)
+        raise
+    finally:
+        if not state.closed_out:
+            # The real attempt count must survive no matter how the run ends, so it is appended and
+            # fsynced here, after the receipt body, and before the exception leaves the process.
+            try:
+                _append_jsonl(S1_DIR / "r75_s1_attempt_counters.jsonl",
+                              {"kind": "round75-s1-attempt-counters/1",
+                               "request_id": PLAN["request_id"],
+                               "phase": state.phase,
+                               "counters": state.counter_report(),
+                               "conservative_attempt_bounds": _conservative_attempt_bounds(),
+                               "unread": sorted(set(state.unread))})
+            except Exception as counter_error:                # pragma: no cover - defensive
+                print(f"the attempt-counter append failed: {type(counter_error).__name__}: "
+                      f"{counter_error}", file=sys.stderr)
 
 def _repo_root() -> Path:
     """The repository root, found by walking up. The paid path must not depend on the CWD either:

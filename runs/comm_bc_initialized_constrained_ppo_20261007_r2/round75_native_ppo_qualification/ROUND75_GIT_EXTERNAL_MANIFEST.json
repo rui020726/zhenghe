@@ -354,5 +354,89 @@
     },
     "s1_authorized": false,
     "s1_executed": false
+  },
+  "committed_restore_failfast_revision": {
+    "request_id": "R75_S0_RESTORE_FAILFAST_20261015",
+    "continues": ["R75_S0_FINAL_PREP_20261014", "R75_S0_DRIVER_CLOSEOUT_20261015"],
+    "parent_head": "7eff4a4218f275e2090ec2d9f42604b42bb6e7e9",
+    "parent_head_note": "read from git before this commit; the delivered HEAD is deliberately NOT written into this file (no self-hash, no claimed success) and is read from git after the commit",
+    "content_identity": [
+      {"file": "r75_s1_runner.py", "sha256": "2a3586f17ba36ffbde9686d06c9278a0699c5c936fb94d12bede2b6a5f216b91", "bytes": 82497, "lines": 1439, "role": "paid S1 driver: adds the three fail-fast gates (_gate_a1 / _gate_loaded_bundle / _gate_a3_start), the durable failure-receipt writer under raw/s1/ (append + fsync), the real-entry counters with explicit units beside conservative bounds, and the phase registration; one terminal step record per attempt"},
+      {"file": "test_r75_s0_driver_closeout.py", "sha256": "c6eeffaca04e6778e535ec47bf8ed70df6d5b82ed5755f4c3f906b2e2698ab28", "bytes": 45340, "lines": 876, "role": "40 counterexamples; 40 OK exit 0; five affected selectors rewritten to the refuse-before-delegation contract and disclosed as affected; normalized to pure LF before commit (2 stray CRLF removed, bytes 45342 -> 45340, content otherwise identical)"},
+      {"file": "test_r75_s0_restore_failfast.py", "sha256": "de7d0c5320e99206680cd005009e6b785e24a86c244a69fdef5fbc9ac051386e", "bytes": 30310, "lines": 568, "role": "NEW this round: 34 counterexamples for the complete-bundle bridge, the payload-derived RNG expectation, the permit refusal contract, the three fail-fast gates with source-order proof, and the durable receipt contents"},
+      {"file": "R75_RESTORE_FAILFAST_TASK_STATE.json", "sha256": "f1cd4a20baf2315d018ad44a6c2836c7040eced8ea41b9483c9861e712447458", "bytes": 3802, "lines": 83, "role": "continuation note only: request id, actual HEAD, zero-NN permission, completed and remaining items, evidence paths; changes no ledger and is not an experiment authorization"},
+      {"file": "ROUND75_S0_RESTORE_FAILFAST_REPORT.md", "sha256": "84475c141411e46ae800dee73eb7771b161b7ec2bf49b7faa9231c971b0b2b78", "bytes": 11924, "lines": 111, "role": "closeout report: the three implemented items, the two real driver defects found and fixed, the affected old selectors, the disclosed development failures, the comparison-method statement and the unresolved boundaries"},
+      {"file": "ROUND75_S0_RESTORE_FAILFAST_VERDICT.json", "sha256": "f428e77b327f2a7c40db48de95f41ef0be511eb48dd594439b38c51fc69f522c", "bytes": 10984, "lines": 214, "role": "machine verdict for this revision"}
+    ],
+    "byte_unchanged_reverified_this_round": [
+      {"file": "r75_frozen.py", "sha256": "a4b556a687c3aff9650404d11149cb387879a4b4009c85502fc970d7bbe27996", "bytes": 32160, "lines": 536, "status": "unchanged; carries the two prior-session fixes (KL return key totals[kl] at :482; alignment_end phase split at :293/:294/:468)"},
+      {"file": "r75_guard.py", "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f", "bytes": 25100, "lines": 459, "status": "unchanged; mechanism and source pin untouched"},
+      {"file": "r75_s1_precheck.py", "sha256": "20a1b81fbe7bc8f9e3e6e6e546bcbb0316a96b48192e60f73b16c27a3dd071e9", "bytes": 20328, "lines": 368, "status": "unchanged; 68/68 exit 0 re-run this round against the revised runner"},
+      {"file": "r75_replay_adapter.py", "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2", "bytes": 6904, "lines": 144, "status": "unchanged; bytes pinned"},
+      {"file": "ROUND75_S1_RUN_PLAN.json", "sha256": "34024113349cdb2f774b9d2751ec0e1f46800ae2fb5720470254432b16ae26c6", "bytes": 18109, "lines": 332, "status": "unchanged; the frozen data / budget / comparison contract is not edited by a driver revision"},
+      {"file": "test_r75_s0_final_prep.py", "sha256": "3d721caa487ccef4b2714b01d49647b902031c7584ca4ce18132e1d7ecacbb35", "bytes": 16300, "lines": 344, "status": "unchanged; prior-session evidence reused, not re-run"},
+      {"file": "r75_s1_plan_gen_archived.py", "sha256": "ba884cb85322b535fcfe71aa5a090b8fb8fc283fc271c7d1cd8f51be68789bfb", "bytes": 19784, "lines": 283, "status": "unchanged; explicitly archived"}
+    ],
+    "real_defects_found_and_fixed_this_round": [
+      {"defect": "ObservedStepEntry appended TWO records per successful step (a delegated marker plus the completed record), so run_s1 total_real_steps would read 18 against the frozen 9 and a perfect run would trip the frozen step-count gate", "fix": "exactly ONE terminal record per real step attempt; the delegation is carried by the delegated boolean; the failed record also carries delegated=True"},
+      {"defect": "a hardcoded expected trainable-object count in the A1 gate would decouple from the live object mapping", "fix": "the expected count is parsed from PLAN[gate_only_controller][r71_research_config_unchanged] and the mapping must be unique and equal to it"}
+    ],
+    "affected_old_selectors_disclosed": [
+      "test_a_step_without_a_new_permit_is_a_failure_not_a_note",
+      "test_a_double_charged_permit_is_detected",
+      "test_a_sequence_of_steps_reconciles_one_permit_each",
+      "test_a_failed_step_is_recorded_and_never_refunded",
+      "test_the_observer_delegates_everything_except_step"
+    ],
+    "test_evidence_this_round": {
+      "driver_closeout_suite": "40 OK / exit 0 against the revised runner; re-run after the pure-LF normalization of test_r75_s0_driver_closeout.py (result unchanged)",
+      "restore_failfast_suite": "34 OK / exit 0 (new this round)",
+      "precheck": "68/68 checks, checks_failed [], exit 0",
+      "no_argument_runner": "prints the frozen plan summary, imports no paid module, exit 0",
+      "not_rerun": "the prior 7 counterexamples, the historical 31 and 20 suites",
+      "note": "these results support pure preparation only; they do not prove real Adam, disk restore, PPO eligibility or any policy effect"
+    },
+    "canonical_ledger_state": {
+      "root": "raw/runtime",
+      "r75_total_ledger_jsonl_sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b",
+      "events": 12, "charged": 0, "four_counters": "all zero", "residual_lock": false,
+      "raw_s1_created_by_tests": false,
+      "note": "the tests redirect S1_DIR to a scratch directory inside the output root and remove it; raw/ still contains only raw/runtime/"
+    },
+    "comparison_method_statement": {
+      "compare_full_states": "tensor byte digest plus dtype and shape, NOT a real torch Tensor value-by-value path",
+      "rng": "the three RNG streams are compared as RAW PAYLOADS value by value",
+      "head_split_equivalence": "forward equivalence of the split heads does NOT imply equal gradient norms, equal global clipping or an identical Adam trajectory; the clip algorithm was not modified to manufacture equivalence"
+    },
+    "zero_environment_this_revision": {
+      "torch_imported": false, "model_load_or_construction": 0, "forward_backward": 0,
+      "optimizer_step_real_or_synthetic": 0, "ppo_update_or_replay": 0,
+      "environment_construction": 0, "sampling": 0, "checkpoint_write": 0,
+      "training_resume": 0, "rng_restore": 0, "ledger_charged_events": 0,
+      "canonical_raw_runtime_bytes_changed": false
+    },
+    "disclosed_development_failures": [
+      "the default tempfile root is not writable under this sandbox; the tests build their scratch directory inside the R75 output root and remove it",
+      "a deep single-byte difference fixture made both sides equal at that offset; rebuilt so the first difference is located at byte 2047",
+      "an AST ordering test wrongly treated ast.walk BFS order as source order; it now sorts by line number",
+      "a json.dumps deep copy of a bundle holding FakeTensor raised TypeError; the bundle product is used directly",
+      "a tampered-module test compared both sides against the same payload; it now asserts the bundle reproduces exactly while compare_full_states against the baseline reports the module difference",
+      "a critic-Adam assertion expected 2 objects where both critic modules contribute 2 parameters each",
+      "_installed was applied to a capture_full_state product whose keys are _numpy_state and friends; the states are installed manually"
+    ],
+    "unresolved_boundaries": [
+      "the outer try starts AFTER _load_paid_modules(), so a failure inside the paid import itself is not receipted; that failure consumes nothing and surfaces as the interpreter traceback. This keeps the existing AST assertions about r75_s1_precheck.main preceding _load_paid_modules intact",
+      "if the receipt write itself fails the original exception is still re-raised unchanged and the receipt is lost; this is printed to stderr",
+      "the three new gates coexist with the original end-of-run 13-item failure gate, which is unchanged and still decides the exit code",
+      "the weights_only=False compatibility is argued at the documentation and fake-object level only; it was NOT verified against real torch, which this round forbids importing"
+    ],
+    "protected_untouched": [
+      {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json", "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b", "status": "untouched, unstaged, re-hashed this round"},
+      {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json", "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18", "status": "untouched, unstaged, re-hashed this round"}
+    ],
+    "never_staged": ["analysis/round59-communication-decision-density/r59_analysis_run.log", "__pycache__", "raw/runtime", "model weights", "raw rows/tape/logs"],
+    "commit_scope": "explicit git add -f of the named runner / tests / state / report / verdict / manifest; NO weights, NO raw runtime originals, NO R59 analysis log, NO protected files, NO __pycache__",
+    "s1_authorized": false,
+    "s1_executed": false
   }
 }

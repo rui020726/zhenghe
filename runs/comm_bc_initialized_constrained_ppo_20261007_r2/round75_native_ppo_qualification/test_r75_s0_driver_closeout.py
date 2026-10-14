@@ -648,20 +648,34 @@ class StepEntryObservationTests(unittest.TestCase):
 
     def test_a_step_without_a_new_permit_is_a_failure_not_a_note(self):
         _controller, _optimizer, observer = self._observer()
-        observer.step()                                          # NO permit was issued
+        # NO permit was issued: the step must be REFUSED before delegation, not merely noted.
+        with self.assertRaises(RuntimeError):
+            observer.step()
         record = observer.records[-1]
+        self.assertEqual(record["phase"], "refused")
         self.assertEqual(record["new_permits_since_previous_step"], 0)
         self.assertFalse(record["exactly_one_new_permit"])
+        self.assertFalse(record["delegated"])
+        self.assertIn("refused BEFORE delegation", record["note"])
+        self.assertEqual(observer._optimizer.step_calls, 0,
+                         "an unlicensed step must never reach the real optimizer")
+        self.assertEqual(observer._resources.used, 0, "a refusal must not charge anything new")
 
     def test_a_double_charged_permit_is_detected(self):
         _controller, _optimizer, observer = self._observer()
         observer._resources.charge_physical_step("permit")
         observer._resources.charge_physical_step("permit-again")
-        observer.step()
+        with self.assertRaises(RuntimeError):
+            observer.step()
         record = observer.records[-1]
+        self.assertEqual(record["phase"], "refused")
         self.assertEqual(record["new_permits_since_previous_step"], 2)
         self.assertFalse(record["exactly_one_new_permit"],
                          "a permit spent twice must be visible to the failure gate")
+        self.assertFalse(record["delegated"])
+        self.assertEqual(observer._optimizer.step_calls, 0,
+                         "a doubly licensed step must never fire a second real update")
+        self.assertEqual(observer._resources.used, 2, "a refusal must NOT be refunded")
 
     def test_a_sequence_of_steps_reconciles_one_permit_each(self):
         _controller, _optimizer, observer = self._observer()
@@ -673,10 +687,17 @@ class StepEntryObservationTests(unittest.TestCase):
         self.assertEqual([entry["index"] for entry in observer.records], [1, 2, 3, 4])
         self.assertEqual(observer.records[-1]["permits_issued_since_start"], 4)
         self.assertEqual(observer.records[-1]["durable_used_after"], 4)
-        # the fifth step with no permit must break the sequence
-        observer.step()
+        self.assertEqual([entry["delegated"] for entry in observer.records],
+                         [True, True, True, True])
+        # the fifth step with no permit must break the sequence WITHOUT ever being delegated
+        with self.assertRaises(RuntimeError):
+            observer.step()
         self.assertFalse(observer.records[-1]["exactly_one_new_permit"])
         self.assertEqual(observer.records[-1]["new_permits_since_previous_step"], 0)
+        self.assertFalse(observer.records[-1]["delegated"])
+        self.assertEqual(observer._optimizer.step_calls, 4,
+                         "the refused step must not reach the real optimizer")
+        self.assertEqual(observer._resources.used, 4, "a refused step must NOT be refunded")
 
     def test_a_failed_step_is_recorded_and_never_refunded(self):
         controller, optimizer, _names = _controller_and_optimizer()
@@ -686,12 +707,13 @@ class StepEntryObservationTests(unittest.TestCase):
                 raise RuntimeError("the real step failed")
 
         resources = FakeResources()
-        resources.charge_physical_step("permit")
         observer = runner.ObservedStepEntry(Boom(), resources, "probe")
+        resources.charge_physical_step("permit")   # the permit precedes the step, as the runner does
         with self.assertRaises(RuntimeError):
             observer.step()
         record = observer.records[-1]
         self.assertEqual(record["phase"], "failed")
+        self.assertTrue(record["delegated"])
         self.assertIn("RuntimeError", record["error"])
         self.assertEqual(resources.used, 1, "a failed step must NOT be refunded")
 
@@ -718,7 +740,12 @@ class StepEntryObservationTests(unittest.TestCase):
         self.assertIs(observer.state, optimizer.state)
         observer.zero_grad()
         self.assertEqual(observer.step_calls, 0)
+        observer._resources.charge_physical_step("permit")       # the pre-charge, as r75_frozen does
         observer.step()
+        self.assertEqual(observer.step_calls, 1)
+        # a second step without a fresh permit is refused and never delegated
+        with self.assertRaises(RuntimeError):
+            observer.step()
         self.assertEqual(observer.step_calls, 1)
 
     def test_the_planned_step_count_is_nine_and_is_enforced(self):

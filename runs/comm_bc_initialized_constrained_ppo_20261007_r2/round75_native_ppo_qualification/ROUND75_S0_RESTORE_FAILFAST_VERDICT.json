@@ -1,0 +1,214 @@
+{
+  "kind": "round75-s0-restore-failfast-verdict/1",
+  "request_id": "R75_S0_RESTORE_FAILFAST_20261015",
+  "continues": [
+    "R75_S0_FINAL_PREP_20261014",
+    "R75_S0_DRIVER_CLOSEOUT_20261015"
+  ],
+  "branch": "exp/round75-native-ppo-qualification",
+  "head_at_writing": "7eff4a4218f275e2090ec2d9f42604b42bb6e7e9",
+  "parent_head": "c16ce9362f93993192cf9a1ec3330cba90d25f30",
+  "output_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/",
+  "status": "FAILFAST_GATES_RECEIPTS_AND_REAL_ENTRY_COUNTERS_IMPLEMENTED_LOCALLY_S1_STILL_NOT_AUTHORIZED",
+  "meaning": "The paid S1 driver now refuses a known pre-condition failure where it is found, receipts a failed attempt durably, and counts its real entries with explicit units beside conservative bounds. Nothing paid was executed: S1 remains unauthorized and is NOT run by this revision.",
+  "authorization_scope": {
+    "allowed": [
+      "source revision (runner)",
+      "stdlib",
+      "AST",
+      "fake-object counterexamples",
+      "report / verdict / manifest append",
+      "explicit local git add and commit"
+    ],
+    "forbidden_and_not_done": [
+      "torch or numpy NN path",
+      "model load or construction",
+      "forward",
+      "backward",
+      "Adam or optimizer step",
+      "PPO update or replay",
+      "environment",
+      "sampling",
+      "training",
+      "evaluation",
+      "checkpoint write",
+      "RNG restore",
+      "new experiment"
+    ],
+    "s1_authorized": false,
+    "s1_executed": false
+  },
+  "carried_over_from_the_prior_session_and_not_reimplemented": [
+    "RNG bridge helpers and the payload-derived expected RNG report in _bundle_to_saved",
+    "the three-payload value-by-value comparison extended into verify_restore",
+    "ObservedStepEntry refuses a missing or duplicated permit BEFORE delegation",
+    "load_state_bundle pins weights_only=False with the torch 2.9.0 default documented",
+    "imports extended with os / time / traceback"
+  ],
+  "implemented_this_round": {
+    "fail_fast_gates": {
+      "helpers": [
+        "_gate_a1",
+        "_gate_loaded_bundle",
+        "_gate_a3_start"
+      ],
+      "a1_gate": "actor/trunk measurably unmoved, one-to-one and unique eight-object mapping equal to the frozen contract count, both critics carrying a non-empty Adam state; raised BEFORE the first paid native update",
+      "bundle_gate": "disk file sha256 equals the value recorded at save time, all 14 resume fields present, non-empty data/configuration/code identity and contract, code identity equal to the live sources; raised BEFORE the restore is trusted",
+      "a3_start_gate": "restored_exactly, zero full-state difference against the A1 baseline, zero raw RNG payload difference, zero drift when the live objects are re-read immediately before the call, bundle cursor equal to the verified cursor, and the update bound to those objects; raised BEFORE the second paid native update"
+    },
+    "durable_failure_receipts": {
+      "directory": "raw/s1/ (new; the canonical raw/runtime/ ledger is untouched)",
+      "files": [
+        "r75_s1_failure_receipts.jsonl",
+        "r75_s1_attempt_counters.jsonl"
+      ],
+      "mechanism": "append + fsync; the original exception is re-raised unchanged; nothing is retried, refunded or repaired",
+      "fields": [
+        "phase",
+        "raw exception type and message",
+        "full traceback",
+        "real entry counters",
+        "observed step records",
+        "per-controller meter snapshots",
+        "durable counter and ledger snapshots",
+        "unread list"
+      ],
+      "unknown_rule": "an item that cannot be read is recorded as unknown and listed in unread; it is never defaulted to zero"
+    },
+    "real_entry_counters": {
+      "units": [
+        "paid_module_imports",
+        "replay_data_reads",
+        "checkpoint_file_loads",
+        "gate_controller_constructions",
+        "optimizer_constructions",
+        "native_ppo_update_attempts",
+        "optimizer_step_attempts"
+      ],
+      "step_attempts_source": "computed live from ObservedStepEntry.records, so a refused or failed step is still counted as an attempt",
+      "bounds": "a conservative upper bound per unit is stated before anything runs and is written beside the counted entries, so relabelling can never shrink a real attempt",
+      "side_effects": "recording performs no operation and changes no NN call graph"
+    }
+  },
+  "real_defects_found_and_fixed_this_round": [
+    {
+      "defect": "ObservedStepEntry appended TWO records per successful step (a delegated marker plus the completed record), so total_real_steps would read 18 against the frozen 9 and a perfect run would trip the frozen step-count gate",
+      "fix": "exactly ONE terminal record per real step attempt, with the delegation carried by the delegated boolean; the failed record also carries delegated=True"
+    },
+    {
+      "defect": "a hardcoded expected trainable-object count in the A1 gate would decouple from the live mapping",
+      "fix": "the expected count is parsed from PLAN[gate_only_controller][r71_research_config_unchanged] and the mapping must be unique and equal to it"
+    }
+  ],
+  "tests": {
+    "test_r75_s0_driver_closeout_py": {
+      "ran": true,
+      "result": "OK",
+      "exit_code": 0,
+      "cases": 40
+    },
+    "test_r75_s0_restore_failfast_py": {
+      "ran": true,
+      "result": "OK",
+      "exit_code": 0,
+      "cases": 34,
+      "new_this_round": true
+    },
+    "r75_s1_precheck_py": {
+      "ran": true,
+      "result": "PASS",
+      "exit_code": 0,
+      "checks_run": 68,
+      "checks_failed": 0
+    },
+    "r75_s1_runner_py_no_argument": {
+      "ran": true,
+      "result": "prints the frozen plan summary, imports no paid module",
+      "exit_code": 0
+    },
+    "affected_old_selectors": [
+      "test_a_step_without_a_new_permit_is_a_failure_not_a_note",
+      "test_a_double_charged_permit_is_detected",
+      "test_a_sequence_of_steps_reconciles_one_permit_each",
+      "test_a_failed_step_is_recorded_and_never_refunded",
+      "test_the_observer_delegates_everything_except_step"
+    ],
+    "affected_old_selectors_note": "these five encoded the old behaviour (a missing or duplicated permit still delegated) and were rewritten to the refuse-before-delegation contract; the other 35 cases were not touched",
+    "not_rerun": [
+      "the prior 7 counterexamples",
+      "the historical 31 and 20 suites"
+    ]
+  },
+  "comparison_method_statement": {
+    "compare_full_states": "tensor byte digest plus dtype and shape, NOT a real torch Tensor value-by-value path",
+    "rng": "the three RNG streams are compared as RAW PAYLOADS value by value (tuple/list recursion, tensors by full bytes with dtype and shape)",
+    "head_split_equivalence": "forward equivalence of the split heads does NOT imply equal gradient norms, equal global clipping or an identical Adam trajectory; the clip algorithm was not modified to manufacture equivalence"
+  },
+  "consumption": {
+    "charged_events": 0,
+    "canonical_raw_runtime": {
+      "events": 12,
+      "charged": 0,
+      "four_counters": "all zero",
+      "residual_lock": false
+    },
+    "r75_total_ledger_jsonl_sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b",
+    "r75_total_ledger_unchanged": true,
+    "torch_imported": 0,
+    "model_load_or_construction": 0,
+    "forward": 0,
+    "backward": 0,
+    "optimizer_step": 0,
+    "ppo_update_or_replay": 0,
+    "environment_construction": 0,
+    "sampling": 0,
+    "checkpoint_write": 0,
+    "training_resume": 0,
+    "rng_restore": 0,
+    "raw_s1_created_by_tests": false,
+    "note": "the tests redirect S1_DIR to a scratch directory inside the output root and remove it; raw/ still contains only raw/runtime/"
+  },
+  "disclosed_development_failures": [
+    "the default tempfile root is not writable under this sandbox; the tests now build their scratch directory inside the R75 output root",
+    "a deep single-byte difference fixture made both sides equal at that offset; rebuilt so the first difference is located at byte 2047",
+    "an AST ordering test wrongly treated ast.walk BFS order as source order; it now sorts by line number",
+    "a json.dumps deep copy of a bundle holding FakeTensor raised TypeError; the bundle product is used directly",
+    "a tampered-module test compared both sides against the same payload and therefore could not differ; it now asserts the bundle reproduces exactly while compare_full_states against the baseline reports the module difference",
+    "a critic-Adam assertion expected 2 objects where both critic modules contribute 2 parameters each",
+    "_installed was applied to a capture_full_state product whose keys are _numpy_state and friends; the states are installed manually"
+  ],
+  "unresolved_boundaries": [
+    "the outer try starts AFTER _load_paid_modules(), so a failure inside the paid import itself is not receipted; that failure consumes nothing and surfaces as the interpreter traceback. This keeps the existing AST assertions about r75_s1_precheck.main preceding _load_paid_modules intact",
+    "if the receipt write itself fails, the original exception is still re-raised unchanged and the receipt is lost; this is printed to stderr",
+    "the three new gates coexist with the original end-of-run 13-item failure gate, which is unchanged and still decides the exit code",
+    "the weights_only=False compatibility is argued at the documentation and fake-object level only; it was NOT verified against real torch, which this round forbids importing"
+  ],
+  "protected_untouched": [
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+      "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+      "status": "untouched, unstaged, re-hashed this round"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+      "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+      "status": "untouched, unstaged, re-hashed this round"
+    }
+  ],
+  "never_staged": [
+    "analysis/round59-communication-decision-density/r59_analysis_run.log",
+    "__pycache__",
+    "raw/runtime",
+    "model weights",
+    "raw rows/tape/logs"
+  ],
+  "git": {
+    "pushed": false,
+    "merged": false,
+    "deployed": false,
+    "commit_scope": "local explicit named commit only; no weights, no raw runtime ledger state, no raw rows/tape/logs, no build artifacts, no protected files"
+  },
+  "future_command_not_executable_now": "D:\\project_env\\python.exe runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_runner.py --run-s1",
+  "s1_authorized": false,
+  "s1_executed": false
+}

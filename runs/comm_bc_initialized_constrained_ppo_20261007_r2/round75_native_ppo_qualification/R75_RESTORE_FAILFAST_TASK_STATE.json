@@ -1,0 +1,83 @@
+{
+  "kind": "round75-restore-failfast-task-state/1",
+  "request_id": "R75_S0_RESTORE_FAILFAST_20261015",
+  "continues": [
+    "R75_S0_FINAL_PREP_20261014",
+    "R75_S0_DRIVER_CLOSEOUT_20261015"
+  ],
+  "branch": "exp/round75-native-ppo-qualification",
+  "head_at_writing": "7eff4a4218f275e2090ec2d9f42604b42bb6e7e9",
+  "parent_head": "c16ce9362f93993192cf9a1ec3330cba90d25f30",
+  "output_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/",
+  "status": "COMPLETED_AND_CLOSED_OUT_LOCALLY_S1_STILL_NOT_AUTHORIZED",
+  "note": "Continuation note only. It changes no ledger, no scientific data, no matrix and no quota, and it is NOT an experiment authorization. S1 remains unauthorized.",
+  "authorization_scope": {
+    "allowed": [
+      "source revision (runner)",
+      "stdlib",
+      "AST",
+      "fake-object counterexamples",
+      "report / verdict / manifest append",
+      "explicit local git add and commit"
+    ],
+    "forbidden_and_not_done": [
+      "torch or numpy NN path",
+      "model load or construction",
+      "forward",
+      "backward",
+      "Adam or optimizer step",
+      "PPO update or replay",
+      "environment",
+      "sampling",
+      "training",
+      "evaluation",
+      "checkpoint write",
+      "RNG restore",
+      "new experiment"
+    ],
+    "s1_authorized": false,
+    "s1_executed": false
+  },
+  "already_landed_on_disk": [
+    "RNG bridge helpers and the payload-derived expected RNG report in _bundle_to_saved",
+    "the three-payload value-by-value comparison extended into verify_restore",
+    "ObservedStepEntry refuses a missing or duplicated permit BEFORE delegation",
+    "load_state_bundle pins weights_only=False with the torch 2.9.0 default documented",
+    "imports extended with os / time / traceback"
+  ],
+  "completed_this_round": [
+    "fail-fast gates _gate_a1 / _gate_loaded_bundle / _gate_a3_start, each raising where the problem is found and before the paid update it guards",
+    "durable failure receipts appended and fsynced under raw/s1/ (phase, raw exception and traceback, real entry counters, observed step records, per-controller meters, durable counters, unread list)",
+    "real-entry counters with explicit units beside conservative upper bounds, including the step attempts read live from ObservedStepEntry.records",
+    "34 new counterexamples in test_r75_s0_restore_failfast.py; 5 affected old selectors rewritten and disclosed",
+    "two real driver defects found and fixed (double step record; hardcoded object count)",
+    "ROUND75_S0_RESTORE_FAILFAST_REPORT.md, ROUND75_S0_RESTORE_FAILFAST_VERDICT.json, manifest append, explicit local commit"
+  ],
+  "remaining": [],
+  "current_worktree_state": {
+    "runner": {
+      "path": "r75_s1_runner.py",
+      "sha256": "2a3586f17ba36ffbde9686d06c9278a0699c5c936fb94d12bede2b6a5f216b91",
+      "bytes": 82497,
+      "lines": 1439,
+      "head_version_sha256": "d3f7e9a9a4c476ac13d3b14d57a135c45cc47ea6ac83ac69146338716914bc68",
+      "status": "revised, to be committed by this round"
+    },
+    "canonical_raw_runtime": {
+      "r75_total_ledger_jsonl_sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b",
+      "events": 12,
+      "charged": 0,
+      "status": "read-only, unchanged"
+    },
+    "protected_untouched": [
+      {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+        "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b"
+      },
+      {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+        "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+      }
+    ]
+  }
+}
