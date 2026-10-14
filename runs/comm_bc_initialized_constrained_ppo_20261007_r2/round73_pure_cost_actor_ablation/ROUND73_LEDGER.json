@@ -1,0 +1,35 @@
+{
+ "kind": "round73-ledger/1",
+ "task_id": "ROUND73-PURE-COST-ACTOR-ABLATION",
+ "consumption": {
+  "real_environment_constructions": 0,
+  "offline_trunk_forward_rows": 0,
+  "synthetic_optimizer_steps": 0,
+  "synthetic_checkpoint_writes": 0,
+  "ppo_updates": 0,
+  "model_loads": 0,
+  "new_claims": 0
+ },
+ "gates_consumption": {
+  "real_environment_constructions": 0,
+  "offline_trunk_forward_rows": 0,
+  "synthetic_optimizer_steps": 0,
+  "note": "the 5 zero-environment gates run batch_samples/log-softmax only; no trunk forward, no optimizer step"
+ },
+ "caps": {
+  "hard_cap": 600,
+  "normal_cap": 579,
+  "reserve_cap": 21,
+  "offline_trunk_rows_cap": 6000,
+  "synthetic_optimizer_steps_cap": 8
+ },
+ "headroom": {
+  "hard": 600,
+  "normal": 579,
+  "reserve": 21,
+  "offline_trunk_rows": 6000,
+  "synthetic_optimizer_steps": 8
+ },
+ "historical_probe": 0,
+ "note": "no R60/R71 consumption is carried into R73; R73 is a fresh independent budget"
+}

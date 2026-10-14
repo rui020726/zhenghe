@@ -1,0 +1,29 @@
+{
+ "kind": "round73-execution-plan/1",
+ "task_id": "ROUND73-PURE-COST-ACTOR-ABLATION",
+ "normal_jobs": {
+  "train": "3 seeds x 128 episodes = 384",
+  "model_eval": "NEW ep128 x 3 seeds x {greedy,sampled} x 32 scenes = 192",
+  "focal": "NEW ep128 x 3 seeds x greedy x scene 1700027 = 3",
+  "total": 579
+ },
+ "read_only_reuse": {
+  "r71_ep128_eval_cells": 192,
+  "rule_arms": [
+   "immediate",
+   "late",
+   "always_hold"
+  ],
+  "references": "reused only when world/raw-discovery-flow/rules/billing identity close",
+  "immediate_duplicate_attempt": "the R66 immediate glob has 33 rows = 32 dev-block scenes + 1 duplicate re-attempt of scene 1800000; the duplicate must NOT enter the 32-scene mean"
+ },
+ "phases": [
+  "gates (DONE, zero consumption)",
+  "zero-env CLI acceptance (DONE, zero consumption)",
+  "init staging (DONE, zero consumption)",
+  "train (NOT started)",
+  "eval (NOT started)",
+  "stats (NOT started)"
+ ],
+ "status": "implementation + 11 gates + 18-check zero-env CLI acceptance + per-seed INIT staging complete; the 579-construction fixed run NOT started"
+}

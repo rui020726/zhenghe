@@ -1,0 +1,110 @@
+{
+ "kind": "round73-freeze/1",
+ "task_id": "ROUND73-PURE-COST-ACTOR-ABLATION",
+ "branch": "exp/round73-pure-cost-actor-ablation",
+ "run_id": "r73-pure-cost-actor-20261014",
+ "base_head": "00a7a5151739ac88f04ad1defa28ecda2d8bcdda",
+ "r71_science_start": "fe53d476efb56baaae194d68d7f749a546b14389",
+ "intervention": {
+  "actor_objective": "pure-cost/1",
+  "objective_version": "actor-objective/pure-cost-minus-A_cost/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1+r66-frozen-early-path-late-adaptation/1+r68-late-initial-confidence-alpha0.10/1+r71-critic-calibration-init/1+r73-pure-cost-actor-objective/1",
+  "control_r71": "A = lambda_dual*A_task - A_cost",
+  "new_r73": "A = -A_cost",
+  "scope": "ONLY the combined actor advantage in canonical_v2_trainer.batch_samples; task critic, dual-lambda update, GAE, reward timing, mask, entropy, clip all unchanged; lambda still updated/reported but not in the actor advantage",
+  "structure": "partitioned-early-late-actor-head/1+frozen-early-path-late-adaptation/1+late-initial-confidence-alpha0.10/1+r71-critic-calibration-heads/1+r73-pure-cost-actor-objective/1",
+  "loss_version": "constrained-lagrangian/2+partitioned-actor-head/1+frozen-early-path/1+pure-cost-actor-objective/1",
+  "state_schema": "constrained-cost-state/2+partitioned-actor-head/1+frozen-early-path/1+r68-late-init-alpha/1+r71-critic-calibration-init/1+r73-pure-cost-actor-objective/1",
+  "optimizer_schema": "stage-c-frozen-early-path-six-module-parameter-set/1+r68-late-init-alpha/1+r71-critic-calibration-init/1+r73-pure-cost-actor-objective/1",
+  "control_training_version": "the FULL verified ROUND71 training version; R73 EXTENDS it with +r73-pure-cost-actor-objective/1 and never truncates it"
+ },
+ "live_constants": {
+  "gamma": 1.0,
+  "gae_lambda": 1.0,
+  "eta_lambda": 0.5,
+  "lambda_init": 1.0,
+  "beta": 1.0,
+  "ready_threshold": 147,
+  "note": "live values from the ROUND71 frozen checkpoint index; NOT the v2_common module defaults gae_lambda=0.95/eta=0.05"
+ },
+ "unchanged": [
+  "19-dim observation",
+  "one-shot SEND/SKIP",
+  "candidate order",
+  "sequential budget mask",
+  "positive cost billed_bytes/B0",
+  "dual critic targets/losses",
+  "critic->trunk gradient isolation",
+  "reward timing / event attribution",
+  "GAE reduction ALL_ROWS",
+  "entropy bonus",
+  "global grad clip",
+  "dual-lambda update (eta=0.5)",
+  "frozen trunk + early_head",
+  "trainable late_head + both critic heads",
+  "five-module checkpoint structure",
+  "6 goals",
+  "29300B budget",
+  "ACK off",
+  "1000-step horizon",
+  "search/assignment checkpoints",
+  "world fields",
+  "scenario set + deadlines",
+  "3 training seeds 11/22/33 and their 128-episode order (inherited from R71)",
+  "greedy tie rule and sampled eval RNG scheme"
+ ],
+ "init_source_per_seed": {
+  "s11": {
+   "file": "v2_train_s11_init.pt",
+   "file_sha256": "fc25ead19bce38d00ae3bf619971ab717084711bdd2b5eb0431d1dda720a952f",
+   "parameter_sha256": "6f6581cff959dc027dfe5e771d963ef4b27b5a2f9d6847bf3d1bc6328c5de32f",
+   "parameter_object_count": 12,
+   "source": "ROUND71 calibrated INIT (model-only); five-module tensor identity inherited unchanged from R71 init_identity"
+  },
+  "s22": {
+   "file": "v2_train_s22_init.pt",
+   "file_sha256": "d95b9a27d5c28c8cd0b80c63b3539c78763bbaf53b79734a522e8e5a59cd8f81",
+   "parameter_sha256": "29dbecdb9eaeae5ba346d8a68d03a13ca4ebb56680e28b4fff288032acfd1aa9",
+   "parameter_object_count": 12,
+   "source": "ROUND71 calibrated INIT (model-only); five-module tensor identity inherited unchanged from R71 init_identity"
+  },
+  "s33": {
+   "file": "v2_train_s33_init.pt",
+   "file_sha256": "27baa262443a5ca6c6fb15bd60e0b294f6313324fe84cf386a2ac24377a874a9",
+   "parameter_sha256": "3685f4aa30367276e2cc4f9cb6cad23773350fa084476cd249ae1f11be62f0ca",
+   "parameter_object_count": 12,
+   "source": "ROUND71 calibrated INIT (model-only); five-module tensor identity inherited unchanged from R71 init_identity"
+  }
+ },
+ "quota": {
+  "normal": 579,
+  "normal_breakdown": {
+   "train": 384,
+   "model_eval": 192,
+   "focal_greedy": 3
+  },
+  "reserve": 21,
+  "hard_cap": 600,
+  "offline_trunk_rows_cap": 6000,
+  "offline_trunk_rows_normal": 3000,
+  "offline_trunk_rows_reserve": 3000,
+  "synthetic_optimizer_steps_cap": 8,
+  "note": "R73 uses an INDEPENDENT new quota; it does not borrow any R60/R71 remainder"
+ },
+ "eval_block": {
+  "dev_block": [
+   1800000,
+   1800031
+  ],
+  "focal_scene": 1700027,
+  "note": "dev block already exposed for analysis/method selection; not an unseen confirmation set"
+ },
+ "phases_completed": {
+  "gates": true,
+  "zero_env_cli_acceptance": true,
+  "init_staging": true,
+  "train": false,
+  "eval": false,
+  "stats": false
+ }
+}
