@@ -80,4 +80,41 @@
       }
     ]
   }
+,
+    "post_commit_correction": {
+    "appended_at_head": "cc0d3a29089bc361890e20520ad9800906184a24",
+    "appended_at_head_parent": "7eff4a4218f275e2090ec2d9f42604b42bb6e7e9",
+    "resolves": "current_worktree_state.runner.status",
+    "original_claim": "revised, to be committed by this round",
+    "resolution": "the explicit local commit has now been made; the original field above is preserved unchanged and is resolved by this append only",
+    "committed_paths": [
+      "r75_s1_runner.py",
+      "test_r75_s0_driver_closeout.py",
+      "test_r75_s0_restore_failfast.py",
+      "R75_RESTORE_FAILFAST_TASK_STATE.json",
+      "ROUND75_S0_RESTORE_FAILFAST_REPORT.md",
+      "ROUND75_S0_RESTORE_FAILFAST_VERDICT.json",
+      "ROUND75_GIT_EXTERNAL_MANIFEST.json"
+    ],
+    "commit_scope": "explicit git add -f of exactly these seven files; nothing else was staged; no push, no merge, no deploy",
+    "line_ending_normalization": {
+      "file": "test_r75_s0_driver_closeout.py",
+      "change": "2 stray CRLF removed before the commit; bytes 45342 -> 45340; sha256 1dde40a246efc1e823e9d519e2236396030c5b8bf0ad135636f1d97de4988de8 -> c6eeffaca04e6778e535ec47bf8ed70df6d5b82ed5755f4c3f906b2e2698ab28; content otherwise identical",
+      "manifest_sync": "ROUND75_GIT_EXTERNAL_MANIFEST.json committed_restore_failfast_revision.content_identity entry and test_evidence_this_round.driver_closeout_suite updated to match",
+      "reverified_after": "driver-closeout 40 OK exit 0; restore/fail-fast 34 OK exit 0; precheck 68/68 checks_failed [] exit 0; no-argument runner exit 0"
+    },
+    "post_commit_reverification": {
+      "raw_dir_children": [
+        "runtime"
+      ],
+      "raw_s1_created": false,
+      "scratch_leftovers": 0,
+      "r75_total_ledger_jsonl_sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b",
+      "protected_current_task_sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+      "protected_stop_state_sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+      "worktree_status": "clean except the untracked analysis/round59-communication-decision-density/r59_analysis_run.log, which is not staged"
+    },
+    "s1_authorized": false,
+    "s1_executed": false
+  }
 }
