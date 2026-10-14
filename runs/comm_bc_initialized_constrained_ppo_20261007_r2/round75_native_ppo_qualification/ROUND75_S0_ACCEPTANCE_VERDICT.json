@@ -1,0 +1,180 @@
+{
+  "kind": "round75-s0-acceptance-verdict/1",
+  "verdict": "S0_ACCEPTANCE_DEFECTS_CLOSED_ZERO_ENVIRONMENT",
+  "meaning": "The five decision-end defects found in the S0 delivery (commit 0f8574a) are closed in source, each with a failing-before/passing-after counterexample, at zero environment cost. S1 paid execution remains NOT authorized; this verdict authorizes nothing beyond the zero-environment acceptance work it records.",
+  "branch": "exp/round75-native-ppo-qualification",
+  "head_at_writing": "0f8574accae16676a75a248da180be9d49e9fa04",
+  "commit_status": "these files are delivered by the local acceptance commit that follows this write; its full SHA is reported in the final answer, not guessed here",
+  "supersedes": "ROUND75_S0_VERDICT.json / ROUND75_S0_REPORT.md at 0f8574a (originals preserved byte-identical and still registered in ROUND75_GIT_EXTERNAL_MANIFEST.json)",
+  "scope_of_this_round": "zero-environment only: no model load or construction, no NN forward or backward, no optimizer or PPO step (real or synthetic), no environment construction, no sampling, no checkpoint write, no RNG or training restore, no torch import",
+  "code_identity": {
+    "r75_guard.py": {"sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f", "bytes": 25100, "lines": 459},
+    "r75_frozen.py": {"sha256": "a17482bf1c8557bad5ae425e72af2c3dd104d722c35cfec48e2913b81f79e9b3", "bytes": 32122, "lines": 529},
+    "test_r75_s0_acceptance.py": {"sha256": "88fc8ea2289fcebbb8b90ac61241464b14a4440f2395678f9df61569703a8e0e", "bytes": 21723, "role": "pure-stdlib acceptance counterexamples"},
+    "r75_native_ppo_update": {"sha256": "40110d8a4f45eb4bea5582cff36276c1c04deca24eabbca3237e37bac6c99855", "lines": 278, "s0_receipt_sha256": "07f502fa71b2ae56239819711147aa26811235ef1b864f74fe903b431dd53281", "s0_receipt_lines": 237, "unchanged": "math, sampling, GAE, shuffle, loss, clip algorithm, optimizer protocol, return contract"},
+    "guard_source_pin_in_r75_frozen": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+    "guard_source_pin_matches_disk": true
+  },
+  "defects_closed": [
+    {
+      "id": 1,
+      "defect": "The production root was not pinned (a redirected output root could mint fresh quota) and the production object was identified by a forgeable boolean.",
+      "fix": [
+        "r75_guard.py:73 R75_CANONICAL_ROOT = HERE / \"raw\" / \"runtime\" is THE canonical durable root",
+        "r75_guard.py:244-251 production() refuses any non-canonical root by source",
+        "r75_guard.py:252-260 fixture(root) is a SEPARATE non-production interface: explicit throwaway root, and the canonical root and any path inside it are refused",
+        "r75_guard.py:284-288 simulated() raises; there is no simulated quota path",
+        "r75_guard.py:427-459 assert_native_production_resources checks the ACTUAL class identity (type(resources) is not R75Resources refuses a duck-typed object carrying r75_central_production), the production mode, the canonical root, and the byte identity of r75_guard.py itself",
+        "r75_frozen.py:85 pins EXPECTED_R75_GUARD_SOURCE_SHA256 and r75_frozen.py:195-196 passes it into that check, so a weakened guard cannot ride in on a renamed object"
+      ],
+      "tests": ["ProductionPinningTests.test_production_refuses_non_canonical_root", "ProductionPinningTests.test_production_accepts_the_pinned_canonical_root_only", "ProductionPinningTests.test_fixture_is_the_separate_non_production_interface", "ProductionPinningTests.test_fixture_refuses_canonical_root_and_descendants", "ProductionPinningTests.test_simulated_classmethod_is_refused", "ProductionPinningTests.test_native_entry_refuses_fixture_and_forged_objects", "ProductionPinningTests.test_native_entry_checks_the_guard_source_pin", "ProductionPinningTests.test_r75_frozen_pins_the_actual_guard_source_hash"],
+      "test_count": 8,
+      "result": "8/8 ok"
+    },
+    {
+      "id": 2,
+      "defect": "The counter had no technical-category cap of its own, no durable-state validation, and reconciliation was report-only instead of blocking.",
+      "fix": [
+        "r74_guard_prod.py (_ProdCounter, count_target_vectors, LedgerStateError, sha 623b9ec6cd243d27321e8c745a0247c97126c9028141cb0ed4760dd90c0796db), r74_guard.py (R74TotalLedger, R74QuotaExhausted, sha 9a6b06374fc5b56b6d8077dc6aa332444533198aca0967cb36b867795af614d7) and r43_call_counter_hooks.py (count_at_entry, sha 02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7) are IMPORTED live, not re-written weaker",
+        "r75_guard.py:92-104 verify_reused_source_identity() fails closed if any reused source drifts from its pinned byte identity",
+        "r75_guard.py:114-156 R75 caps: physical step 12 normal + 4 technical / 16 hard; offline trunk rows 5000 + 1000 / 6000 with a 1024 per-charge cap; joint record tracked separately; environment construction 0/0/0",
+        "r75_guard.py:128-137 charge_rows enforces the per-charge cap BEFORE any work and consumes nothing on refusal",
+        "r75_guard.py:300-307 _require_registered refuses a technical charge that is not a PRE-REGISTERED failed attempt",
+        "r75_guard.py:351-368 verify_or_fail() blocks in production; 370-376 consistency_check() is the report-only twin; 290-291 no instance-held lock is recovered (every counter lock is per-charge O_EXCL with no recovery)"
+      ],
+      "tests": ["CounterHardeningTests.test_technical_category_cap_enforced_below_the_hard_cap", "CounterHardeningTests.test_normal_cap_then_hard_cap", "CounterHardeningTests.test_technical_without_preregistration_refused", "CounterHardeningTests.test_corrupt_durable_states_fail_closed (5 subtests: missing_kind, wrong_cap, negative_used, over_normal_cap, over_hard_cap)", "CounterHardeningTests.test_missing_counter_with_prior_charges_fails_closed", "CounterHardeningTests.test_counter_ahead_of_ledger_fails_closed", "CounterHardeningTests.test_low_backup_counter_fails_closed", "CounterHardeningTests.test_charge_never_refunds_and_restart_keeps_consumption", "CounterHardeningTests.test_residual_lock_fails_closed_without_recovery", "CounterHardeningTests.test_verify_or_fail_blocks_before_work_in_production", "CounterHardeningTests.test_consistency_check_reports_without_blocking", "CounterHardeningTests.test_environment_construction_is_forbidden", "CounterHardeningTests.test_offline_rows_per_charge_cap_enforced"],
+      "test_count": 13,
+      "result": "13/13 ok"
+    },
+    {
+      "id": 3,
+      "defect": "Metering was not at the real entry: two call sites charged caller-side aggregates instead of the actual trunk forward.",
+      "fix": [
+        "r75_guard.py:162-224 TrunkEntryMeter wraps the REAL controller.inner.trunk.forward: it counts the ACTUAL input shape with the verified r74 count_target_vectors, pre-charges at the entry, and reports attempted / charged(licensed) / completed calls and rows separately; a refused call never runs the forward, a failed forward stays charged but is never counted as completed",
+        "r75_guard.py:327-348 install_trunk_meter / ensure_trunk_meter (idempotent, double install refused) / uninstall_trunk_meters",
+        "r75_frozen.py:275-279 the meter is installed before r66.likelihood_alignment and therefore covers the alignment pass, every epoch and any other legitimate trunk call of that controller",
+        "both caller-side aggregate pre-charges are removed from r75_frozen.py (AST-asserted absent)"
+      ],
+      "tests": ["TrunkEntryMeterTests.test_count_target_vectors_is_the_verified_r74_rule", "TrunkEntryMeterTests.test_meter_counts_actual_shape_and_precharges", "TrunkEntryMeterTests.test_meter_refuses_before_the_forward_runs", "TrunkEntryMeterTests.test_failed_forward_is_charged_but_never_counted_as_completed", "TrunkEntryMeterTests.test_double_install_refused_and_uninstall_restores", "TrunkEntryMeterTests.test_caller_side_aggregate_charges_are_gone"],
+      "test_count": 6,
+      "result": "6/6 ok"
+    },
+    {
+      "id": 4,
+      "defect": "Trainability was implicit: nothing set requires_grad, so the four trainable modules relied on the nn.Module default.",
+      "fix": [
+        "r75_frozen.py:145-165 freeze_trunk_only sets the four trainable modules requires_grad_(True) EXPLICITLY and only then freezes the trunk, and assert_mask verifies both directions",
+        "static evidence recorded in ROUND75_S0_ACCEPTANCE_IDENTITY.json: 0 requires_grad occurrences in r66 fresh_partitioned_controller, in r66 _PartitionedInner and in the canonical controller chain, which is why the default was load-bearing"
+      ],
+      "tests": ["FreezeFlagTests.test_freeze_trunk_only_trainables_explicitly_before_freezing", "FreezeFlagTests.test_r66_constructor_sets_no_requires_grad"],
+      "test_count": 2,
+      "result": "2/2 ok"
+    },
+    {
+      "id": 5,
+      "defect": "A native batch read of the SAME recorded records was not accounted, and the S0 plan declared joint records = 0.",
+      "fix": [
+        "r75_frozen.py:250-268 one joint record is charged BEFORE the native batch read, and batch_read reports unique_input_records, record_exposures, native_batch_reads and joint_records_charged",
+        "the same unique records read again are a repeated exposure, never a new environment episode; the environment guard stays 0/0/0",
+        "the S0 plan's joint_records = 0 is SUPERSEDED by this revision (see plan_revision below)"
+      ],
+      "tests": ["BatchReadAccountingTests.test_joint_record_charged_before_the_native_read", "BatchReadAccountingTests.test_two_native_reads_of_the_same_records_are_accounted (real adapter: 66 records x 2 reads = 132 exposures, 2 joint records, env 0)"],
+      "test_count": 2,
+      "result": "2/2 ok"
+    }
+  ],
+  "tests": {
+    "suite": "test_r75_s0_acceptance.py",
+    "ran": 31,
+    "failed": 0,
+    "errors": 0,
+    "exit_code": 0,
+    "torch_imported": false,
+    "per_class": {"ProductionPinningTests": 8, "CounterHardeningTests": 13, "TrunkEntryMeterTests": 6, "FreezeFlagTests": 2, "BatchReadAccountingTests": 2},
+    "technique": "pure stdlib counterexamples; production-mode tests patch guard_mod.R75_CANONICAL_ROOT IN-PROCESS to a throwaway root (the shipped source is unchanged); no fixture is ever handed to the native NN path",
+    "verified_anew_at_delivery": "re-run at delivery time: Ran 31 tests, OK, exit code 0"
+  },
+  "prior_suite_disclosure": {
+    "suite": "test_r75_s0_spy.py",
+    "recorded_result": "11 ok (5 AdapterTests + 6 WiringSourceTests) / 9 GuardTests ERROR, exit code 1",
+    "why_the_9_errors_are_designed_not_regressions": "GuardTests._open() calls R75Resources.production(self.root) with self.root = $R/_s0_selftest/ledger, i.e. a NON-canonical root, which defect-1's pin refuses by source; the old suite also still references the pre-revision attribute names (synth_steps, the old four counter files). The old suite was therefore NOT re-run at delivery time and its numbers are not re-used as acceptance evidence.",
+    "status": "disclosed, not repaired, not counted; the acceptance suite above replaces it",
+    "note": "the S0 report's 'test_r75_s0_spy.py 20/20' statement refers to the pre-hardening code and is preserved as the historical S0 receipt; it is not a claim about the current code"
+  },
+  "canonical_ledger_read_only_evidence": {
+    "root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/raw/runtime",
+    "state": "zero-value identity under the new schema; 12 ledger events; 0 charged events; no lock held",
+    "total_ledger": {"file": "r75_total_ledger.jsonl", "sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b", "events": 12, "charged_events": 0},
+    "new_schema_zero_counters": {
+      "r75_physical_optimizer_step_guard.json": "13b9d36da125823d69196c67ed44361fa6cf121fbbf8ada618e667312ba894aa",
+      "r75_offline_trunk_target_row_guard.json": "314fbb13412443a381ebb59e6479be5ae10431a45c5672beb370a899f18ae778",
+      "r75_joint_record_guard.json": "1d4022fcd21516d1b91b60ba3f3ca9efc3ee837da8a615012f9dcad2e69a8a9d",
+      "r75_environment_construction_guard.json": "be58a93de378a1fe9e05bc3f2d2cb7059f705b161ef59191c6aab09701c3981b"
+    },
+    "legacy_s0_zero_counters_unchanged": {
+      "r75_physical_optimizer_step.json": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa",
+      "r75_offline_trunk_target_row.json": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527",
+      "r75_joint_record.json": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3",
+      "r75_environment_construction.json": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6"
+    },
+    "bootstrap_is_read_only_regarding_legacy": "bootstrap() only registers the legacy S0 counters by hash and refuses to rewrite them; it appends ledger events, which is why the canonical ledger has 12 events and still 0 charged events",
+    "r60_history_note": "the R60 historical 608 environment constructions are not imported here and are not spendable headroom; R61/R74 histories are likewise not imported"
+  },
+  "plan_revision": {
+    "superseded_s0_field": "ROUND75_S0_PLAN.json candidate_accounting.joint_records = 0",
+    "new_value": "each native batch read of the frozen 66-record batch charges 1 joint record; the A2+A3 candidate charges 2 in total",
+    "per_native_update_measured_upper_bound": {
+      "physical_optimizer_steps": 4,
+      "trunk_entry_calls": 70,
+      "trunk_entry_calls_breakdown": "alignment pass = 66 calls (one per sample, 168 candidate rows in total) + 4 epochs x 1 minibatch call (168 rows each) = 70 calls",
+      "offline_trunk_target_rows": 840,
+      "rows_breakdown": "168 (alignment) + 4 x 168 (epochs) = 840, identical to the conservative pure-arithmetic update_accounting(66, 168) = 168 x (4 epochs + 1 alignment)",
+      "largest_single_row_charge": 168,
+      "joint_records": 1,
+      "environment_constructions": 0
+    },
+    "candidate_totals": {
+      "A1_nonempty_adam_critic_only_control_step": {"physical_optimizer_steps": 1, "offline_trunk_target_rows": 0, "joint_records": 0},
+      "A2_source_actual_update": {"physical_optimizer_steps": 4, "offline_trunk_target_rows": 840, "joint_records": 1},
+      "A3_full_state_save_restore_same_update": {"physical_optimizer_steps": 4, "offline_trunk_target_rows": 840, "joint_records": 1},
+      "total_physical_optimizer_steps": 9,
+      "total_offline_trunk_target_rows": 1680,
+      "total_joint_records": 2,
+      "total_environment_constructions": 0,
+      "against_caps": {"physical_steps": "9 <= 12 normal / 16 hard", "offline_rows": "1680 <= 5000 normal / 6000 hard", "largest_single_charge": "168 <= 1024 per-charge cap"}
+    },
+    "bound_validity": "the 70-call / 840-row figure is an upper bound that holds for the frozen 66-record / 168-candidate-row batch; a different batch size changes ceil(n/256) and the row count",
+    "s1_archive_requirement_added": "S1 must register, object by object for the eight trainable objects, whether Adam state (exp_avg / exp_avg_sq) is present after a step; an absent state must be recorded as absent and never fabricated as non-empty; the recorded old log-probs must not be rewritten; the alignment boundary stays log_prob_tolerance = 1e-6"
+  },
+  "not_covered_by_this_round": [
+    "torch import, model load or construction, and the R58 ep0 state-dict key mapping",
+    "the real likelihood_alignment outcome (the 2.3e-13 figure is the previously recorded R71 alignment gap, not a new measurement)",
+    "any real or synthetic optimizer step, PPO update or replay",
+    "the real collector, real episodes, closed-loop simulation and any evaluation block",
+    "full multi-batch training and any research checkpoint",
+    "any conclusion about communication-policy effect, cost or task outcomes"
+  ],
+  "zero_cost_counts": {
+    "model_load_or_construction": 0,
+    "forward_read_only_cpu": 0,
+    "backward": 0,
+    "optimizer_step_real_or_synthetic": 0,
+    "ppo_update": 0,
+    "ppo_replay": 0,
+    "environment_construction": 0,
+    "sampling": 0,
+    "checkpoint_write": 0,
+    "training_resume": 0,
+    "rng_restore": 0,
+    "torch_imported": false,
+    "ledger_charged_events": 0,
+    "note": "the 12 canonical ledger events are bootstrap/registration appends (ledger-opened, legacy-s0-zero-superseded), not charges; the four new-schema counters remain at zero"
+  },
+  "protected_files_verified": [
+    {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json", "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b", "status": "untouched, unstaged, re-hashed at delivery"},
+    {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json", "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18", "status": "untouched, unstaged, re-hashed at delivery"}
+  ],
+  "never_staged": ["analysis/round59-communication-decision-density/r59_analysis_run.log"],
+  "hygiene": "the __pycache__ directory recreated by running the acceptance suite was removed; no build artifact is committed",
+  "s1_authorized": false
+}

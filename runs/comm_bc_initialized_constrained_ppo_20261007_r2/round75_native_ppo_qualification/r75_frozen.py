@@ -20,9 +20,12 @@ THE ONLY structural change vs R66: the freeze set. R66 froze ("trunk", "early_he
 advantage combination, mask or protocol was added, removed or re-derived.
 
 R75 additionally hard-wires the resource seam: every real NN/Adam path REQUIRES the unique ROUND75
-central production ledger (``resources``). Passing None, or any simulated/fixture ledger, is
-refused by source. Each physical optimizer step is charged BEFORE ``optimizer.step``; each real
-trunk forward over target rows is charged BEFORE the forward. Failures do not refund.
+central production ledger (``resources``), verified by ACTUAL class identity, production mode,
+canonical root and the pinned byte identity of r75_guard.py (a forged boolean is not enough; a
+fixture is a separate non-production interface and is refused). Each physical optimizer step is
+charged BEFORE ``optimizer.step``; every real trunk forward is metered at the REAL
+``controller.inner.trunk.forward`` entry (actual input shape, pre-charge, attempted / charged /
+completed reported separately). Failures do not refund.
 
 Provenance caveats carried with this module:
 - R58 rollout data is NOT an R71 trajectory. It is used here only as a real recorded batch for
@@ -59,6 +62,10 @@ import v2_trainer as trainer                              # noqa: E402  frozen c
 import v2_common as common                                # noqa: E402  frozen canonical constants
 from onpolicy import action_entropy, joint_log_prob       # noqa: E402  frozen canonical math
 
+if str(HERE) not in sys.path:                    # the hardened central production ledger lives here
+    sys.path.insert(0, str(HERE))
+import r75_guard                                  # noqa: E402  R75 resources (stdlib-only reuse)
+
 # ------------------------------------------------------------------ frozen identity ------
 # The exact frozen canonical module byte identity accepted by ROUND58 and inherited since.
 EXPECTED_TRAINER_SHA256 = "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
@@ -71,6 +78,11 @@ R75_STRUCTURE = ("partitioned-early-late-actor-head/1+native-ppo-qualification-t
 R75_LOSS_VERSION = "constrained-lagrangian/2+partitioned-actor-head/1+native-ppo-qualification/1"
 R75_STATE_SCHEMA = ("constrained-cost-state/2+partitioned-actor-head/1+native-ppo-qualification/1")
 R75_OPTIMIZER_SCHEMA = "stage-c-native-qualification-eight-object-parameter-set/1"
+
+# The byte identity of the hardened central production ledger the native path demands. Any edit
+# to r75_guard.py fails the native entry closed until this pin is re-registered through an
+# explicit acceptance revision (a weakened guard cannot ride in on a renamed object).
+EXPECTED_R75_GUARD_SOURCE_SHA256 = "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f"
 
 # THE single structural change vs R66/R71: early_head moves out of the frozen set.
 FROZEN_MODULES = ("trunk",)
@@ -131,8 +143,17 @@ def assert_mask(controller) -> dict[str, Any]:
 
 
 def freeze_trunk_only(controller) -> dict[str, Any]:
-    """requires_grad=False on the trunk only; return the frozen-tensor identity."""
-    frozen, _trainable = partition(controller)
+    """Explicitly trainable-ize the four modules, then freeze the trunk only.
+
+    r66.fresh_partitioned_controller performs NO requires_grad assignment (statically verified:
+    neither the canonical StageCController chain nor _PartitionedInner sets any flag), so every
+    module relies on the nn.Module default requires_grad=True. R75 no longer RELIES on that
+    default: the four trainable modules are set True EXPLICITLY before the trunk is set False,
+    and assert_mask verifies both directions afterwards.
+    """
+    frozen, trainable = partition(controller)
+    for parameter in trainable:
+        parameter.requires_grad_(True)
     for parameter in frozen:
         parameter.requires_grad_(False)
     mask = assert_mask(controller)
@@ -164,15 +185,15 @@ def build_optimizer(controller, lr: float):
 
 
 def _require_production_ledger(resources) -> None:
-    """Fail closed: real NN/Adam may only attach to the ROUND75 central production ledger."""
-    if resources is None:
-        raise RuntimeError(
-            "R75 native PPO requires the ROUND75 central production ledger; a None/simulated "
-            "attachment is refused by source (fixture execution mode is cancelled in R75)")
-    if not getattr(resources, "r75_central_production", False):
-        raise RuntimeError(
-            "R75 native PPO received a resource object that is not the ROUND75 central "
-            "production ledger; simulated attachment refused by source")
+    """Fail closed: real NN/Adam may only attach to the ROUND75 central PRODUCTION ledger.
+
+    Delegates to the strict native-entry check in r75_guard: the ACTUAL class identity (a
+    duck-typed object carrying a forgeable ``r75_central_production`` boolean is refused), the
+    production mode (a fixture is the separate non-production spy interface and is refused),
+    the canonical durable root, and the pinned byte identity of r75_guard.py itself.
+    """
+    r75_guard.assert_native_production_resources(
+        resources, expected_guard_source_sha256=EXPECTED_R75_GUARD_SOURCE_SHA256)
 
 
 # ------------------------------------------------------------------ gate-only init ------
@@ -198,6 +219,15 @@ def build_gate_only_controller(seed: int) -> tuple:
 
 
 # ------------------------------------------------------------------ native PPO update ---
+_METER_KEYS = ("calls_attempted", "calls_charged", "rows_charged", "calls_completed",
+               "rows_completed", "calls_refused", "calls_failed")
+
+
+def _meter_delta(before: dict[str, int], after: dict[str, int]) -> dict[str, int]:
+    """Per-phase trunk-entry meter delta (attempted / charged / completed stay separate)."""
+    return {key: int(after.get(key, 0)) - int(before.get(key, 0)) for key in _METER_KEYS}
+
+
 def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]], *,
                           update_index: int, resources,
                           diag_updates: tuple[int, ...] = (0, 15, 31),
@@ -206,30 +236,65 @@ def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]],
 
     Faithful adaptation of ``r66_frozen.frozen_early_ppo_update``. Everything except the freeze
     set, the parameter ownership (6 -> 8 objects) and the R75 resource seam is the real function.
+
+    Resource instrumentation (S0 acceptance revision): the strict native-entry identity check;
+    ONE joint record per native batch read (the SAME unique recorded records are read again - a
+    repeated exposure, never a new environment episode); the unified trunk-entry meter at the
+    REAL controller.inner.trunk.forward (actual input shape, pre-charge at the entry, attempted
+    / charged / completed reported separately). No caller-side aggregate pre-charge exists.
     """
     _require_production_ledger(resources)
     frozen_parameters(controller)
     trainable_parameters(controller)
+
+    # One native batch READ over the recorded episode, pre-charged as ONE joint record: the
+    # SAME unique input records are read again (a repeated exposure, never a new environment
+    # episode; the environment guard stays 0/0/0).
+    resources.charge_joint_record(1, what=f"r75_native_update_{update_index}_batch_read")
+    unique_input_records = 0
+    for episode in episodes:
+        collector = episode.get("collector")
+        records = getattr(collector, "records", None) if collector is not None else None
+        if records is None:
+            raise RuntimeError(
+                "R75 native update: an episode without collector.records cannot be accounted; "
+                "the unique input record count is required for the joint-record accounting")
+        unique_input_records += len(records)
+    batch_read = {"update_index": int(update_index), "native_batch_reads": 1,
+                  "unique_input_records": int(unique_input_records),
+                  "record_exposures": int(unique_input_records),
+                  "joint_records_charged": 1,
+                  "note": ("a repeated read of the SAME recorded records; not a new "
+                           "environment episode; the env guard stays 0/0/0")}
 
     # Real recorded batch -> samples (real batch_samples + GAE + reward-event attribution).
     # batch_samples performs no trunk forward (recorded-value tensor math only): no charge here.
     samples = trainer.batch_samples(episodes)
     prefix_task, prefix_cost_bytes = trainer._unassigned_prefix_totals(episodes)
 
-    # Real likelihood recomputation through the SAME routed forward as sampling.
-    resources.charge_offline_rows(
-        sum(len(item["features"]) for item in samples),
-        what=f"r75_native_update_{update_index}_alignment")
+    # Unified real-entry metering: every controller.inner.trunk.forward call (the alignment
+    # pass, every epoch, any other legitimate check) counts its ACTUAL input shape and is
+    # pre-charged at the entry. There is no caller-side aggregate pre-charge any more.
+    meter = resources.ensure_trunk_meter(
+        controller, what_prefix=f"r75_native_update_{update_index}")
+    pre_meter = meter.snapshot()
+
+    # Real likelihood recomputation through the SAME routed forward as sampling (metered).
     alignment = r66.likelihood_alignment(controller, samples)
     if not alignment["passed"]:
         raise RuntimeError(
             f"update {update_index}: logged probability does not describe the draw: {alignment}")
+    alignment_meter = _meter_delta(pre_meter, meter.snapshot())
     if not samples:
         return {"samples": 0, "minibatches": 0, "optimizer_steps": 0,
                 "unassigned_prefix_task_reward": prefix_task,
                 "unassigned_prefix_cost_bytes": prefix_cost_bytes,
                 "unassigned_prefix_cost_normalized": prefix_cost_bytes / common.B0_BYTES,
-                "likelihood_alignment": alignment, "note": "no decision step in the batch"}
+                "likelihood_alignment": alignment, "note": "no decision step in the batch",
+                "batch_read": batch_read,
+                "trunk_entry_meter": {"alignment": alignment_meter,
+                                      "epochs": {key: 0 for key in _METER_KEYS},
+                                      "total": alignment_meter}}
 
     shuffle = random.Random(int(hashlib.sha256(
         f"{common.DATA_ORDER_SEED}:{int(update_index)}".encode("utf-8")).hexdigest()[:16], 16))
@@ -251,9 +316,7 @@ def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]],
         for start in range(0, len(order), common.MINIBATCH_STEPS):
             chunk = [samples[index] for index in order[start:start + common.MINIBATCH_STEPS]]
             stacked = torch.as_tensor(np.concatenate([item["features"] for item in chunk], axis=0))
-            resources.charge_offline_rows(int(stacked.shape[0]),
-                                          what=f"r75_native_update_{update_index}_minibatch_{minibatches}_trunk")
-            hidden = controller.inner.trunk(stacked)
+            hidden = controller.inner.trunk(stacked)   # metered at the real trunk entry
             logits = r66.route_logits(controller, stacked, hidden)
             candidate_values_task = controller.inner.value_head(hidden).squeeze(-1)
             candidate_values_cost = controller.cost_head(hidden).squeeze(-1)
@@ -395,6 +458,7 @@ def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]],
                                  "early_free": early_free, "late_free": late_free,
                                  "gate_loss_raw": float(gate_loss.item()),
                                  "gate_loss_weighted": float(gate_beta * gate_loss.item())})
+    epochs_meter = _meter_delta(alignment_meter, meter.snapshot())
     diag_record = None
     if gate_diag["done"]:
         diag_record = {"update_index": update_index, **gate_diag["record"]}
@@ -428,6 +492,13 @@ def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]],
                                   "the frozen trunk is None because requires_grad=False, which "
                                   "is a structural fact and not a measured zero gradient"),
         "gate_diag": diag_record, "gate_records": gate_records,
+        "batch_read": batch_read,
+        "trunk_entry_meter": {"alignment": alignment_meter, "epochs": epochs_meter,
+                              "total": _meter_delta(pre_meter, meter.snapshot()),
+                              "scope": ("actual controller.inner.trunk.forward calls; "
+                                        "attempted / charged(licensed) / completed are separate; "
+                                        "a mid-way failure never passes a pre-charge off as a "
+                                        "completed forward")},
         "likelihood_alignment": alignment,
         "structure": R75_STRUCTURE,
         "frozen_modules": list(FROZEN_MODULES),

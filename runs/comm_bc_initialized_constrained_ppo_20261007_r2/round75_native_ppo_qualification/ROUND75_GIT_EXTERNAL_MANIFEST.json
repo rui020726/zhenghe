@@ -4,38 +4,115 @@
   "note": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/* is gitignored; these originals are deliverables kept on disk. No weights, no raw rows/tape/lifecycle/transcripts/logs, no runtime ledger state are committed to git.",
   "git_external_originals": {
     "code_and_tests": [
-      {"file": "r75_frozen.py", "sha256": "3cf38b6e4eb668f41c93c1f9037376a17de44af4631c06fb5a32802a40eb1340", "bytes": 27486},
-      {"file": "r75_guard.py", "sha256": "09bdf88875f2b5bb9a5aa847152510ed5b093650da4a95145f85477f3b21327f", "bytes": 12522},
-      {"file": "r75_replay_adapter.py", "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2", "bytes": 6904},
-      {"file": "test_r75_s0_spy.py", "sha256": "d42a81eb4dbdf4a7d776c844f444352faedcb75c2850d2d97e16ef8453c7bbf0", "bytes": 13000}
+      {
+        "file": "r75_frozen.py",
+        "sha256": "3cf38b6e4eb668f41c93c1f9037376a17de44af4631c06fb5a32802a40eb1340",
+        "bytes": 27486
+      },
+      {
+        "file": "r75_guard.py",
+        "sha256": "09bdf88875f2b5bb9a5aa847152510ed5b093650da4a95145f85477f3b21327f",
+        "bytes": 12522
+      },
+      {
+        "file": "r75_replay_adapter.py",
+        "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+        "bytes": 6904
+      },
+      {
+        "file": "test_r75_s0_spy.py",
+        "sha256": "d42a81eb4dbdf4a7d776c844f444352faedcb75c2850d2d97e16ef8453c7bbf0",
+        "bytes": 13000
+      }
     ],
     "derived_reports": [
-      {"file": "ROUND75_NATIVE_WIRING_DIFF.md", "sha256": "ce017ca8f6b7c645aca3ad2bc7dee2e5c53ccbb6a45d5656155e8afbdde80cb6"},
-      {"file": "ROUND75_NATIVE_WIRING_IDENTITY.json", "sha256": "7f7addcffb8700df2116eded165a610942cd94c14bbf1af8fa24b62052cbe786"},
-      {"file": "ROUND75_FREEZE.json", "sha256": "0584f684250cd5dcde15805166d8fc7c3ae8372acd8c8df5173850c1b41386e5"},
-      {"file": "ROUND75_S0_PLAN.json", "sha256": "a3f283fff3ad6b1920a161ddacb25b5aab2b0ae39b413a944430c27a6e4eb362"},
-      {"file": "ROUND75_S0_VERDICT.json", "sha256": "5f9668787d84215cb3099ff2d54ff5ea57872238cb56b11ea882fa5f53d24c96"},
-      {"file": "ROUND75_S0_REPORT.md", "sha256": "235bb888be7939a70ec5af33e731d611b6e502ed3e5964498ee45283a257db3b"}
+      {
+        "file": "ROUND75_NATIVE_WIRING_DIFF.md",
+        "sha256": "ce017ca8f6b7c645aca3ad2bc7dee2e5c53ccbb6a45d5656155e8afbdde80cb6"
+      },
+      {
+        "file": "ROUND75_NATIVE_WIRING_IDENTITY.json",
+        "sha256": "7f7addcffb8700df2116eded165a610942cd94c14bbf1af8fa24b62052cbe786"
+      },
+      {
+        "file": "ROUND75_FREEZE.json",
+        "sha256": "0584f684250cd5dcde15805166d8fc7c3ae8372acd8c8df5173850c1b41386e5"
+      },
+      {
+        "file": "ROUND75_S0_PLAN.json",
+        "sha256": "a3f283fff3ad6b1920a161ddacb25b5aab2b0ae39b413a944430c27a6e4eb362"
+      },
+      {
+        "file": "ROUND75_S0_VERDICT.json",
+        "sha256": "5f9668787d84215cb3099ff2d54ff5ea57872238cb56b11ea882fa5f53d24c96"
+      },
+      {
+        "file": "ROUND75_S0_REPORT.md",
+        "sha256": "235bb888be7939a70ec5af33e731d611b6e502ed3e5964498ee45283a257db3b"
+      }
     ],
     "runtime_ledger_state": {
       "dir": "raw/runtime",
       "state": "zero-value identity bootstrapped at S0 close; no charge events; no lock held",
       "files": [
-        {"file": "r75_physical_optimizer_step.json", "sha256": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa"},
-        {"file": "r75_offline_trunk_target_row.json", "sha256": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527"},
-        {"file": "r75_joint_record.json", "sha256": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3"},
-        {"file": "r75_environment_construction.json", "sha256": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6"},
-        {"file": "r75_total_ledger.jsonl", "sha256": "b12eedb6f91bd7a9aa14bc644a3c161d06f1aa59b930ecc742129e1f2d793a3e"}
+        {
+          "file": "r75_physical_optimizer_step.json",
+          "sha256": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa"
+        },
+        {
+          "file": "r75_offline_trunk_target_row.json",
+          "sha256": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527"
+        },
+        {
+          "file": "r75_joint_record.json",
+          "sha256": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3"
+        },
+        {
+          "file": "r75_environment_construction.json",
+          "sha256": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6"
+        },
+        {
+          "file": "r75_total_ledger.jsonl",
+          "sha256": "b12eedb6f91bd7a9aa14bc644a3c161d06f1aa59b930ecc742129e1f2d793a3e"
+        }
       ]
     },
     "upstream_evidence_read_only_verified": [
-      {"role": "qualification row", "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/rows/v2_r44_train_s11_e0_s1300027_a1.json", "sha256": "882711788d8ccae4ec8092b4eb26df7da6771c9b352b6c7507624d3644abebd8"},
-      {"role": "qualification tape", "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/logs/v2_r44_train_s11_e0_s1300027_a1_tape.jsonl", "sha256": "6d4c4363ff490fafe08b55bbf369dcfaf6284b741c2802cf9ef3374d9b792421"},
-      {"role": "R58 ep0 behaviour model", "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt", "sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a"},
-      {"role": "canonical trainer", "path": "D:/code/\u6574\u5408/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_trainer.py", "sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"},
-      {"role": "canonical common", "path": "D:/code/\u6574\u5408/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_common.py", "sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a"},
-      {"role": "canonical controller", "path": "D:/code/\u6574\u5408/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_controller.py", "sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1"},
-      {"role": "r66 frozen wiring source", "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round66_bc_early_path_preserving_late_adaptation/r66_frozen.py", "sha256": "a22425729c9327ffcb1d57f4820f3b38f2bb7e35a6d6d81890fe64a75a246b10"}
+      {
+        "role": "qualification row",
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/rows/v2_r44_train_s11_e0_s1300027_a1.json",
+        "sha256": "882711788d8ccae4ec8092b4eb26df7da6771c9b352b6c7507624d3644abebd8"
+      },
+      {
+        "role": "qualification tape",
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/logs/v2_r44_train_s11_e0_s1300027_a1_tape.jsonl",
+        "sha256": "6d4c4363ff490fafe08b55bbf369dcfaf6284b741c2802cf9ef3374d9b792421"
+      },
+      {
+        "role": "R58 ep0 behaviour model",
+        "path": "runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt",
+        "sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a"
+      },
+      {
+        "role": "canonical trainer",
+        "path": "D:/code/\u6574\u5408/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
+        "sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
+      },
+      {
+        "role": "canonical common",
+        "path": "D:/code/\u6574\u5408/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_common.py",
+        "sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a"
+      },
+      {
+        "role": "canonical controller",
+        "path": "D:/code/\u6574\u5408/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_controller.py",
+        "sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1"
+      },
+      {
+        "role": "r66 frozen wiring source",
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round66_bc_early_path_preserving_late_adaptation/r66_frozen.py",
+        "sha256": "a22425729c9327ffcb1d57f4820f3b38f2bb7e35a6d6d81890fe64a75a246b10"
+      }
     ]
   },
   "committed_this_round": {
@@ -57,10 +134,175 @@
     "mechanism": "explicit git add -f (runs/ is gitignored); no weights, no raw rows/tape/logs, no runtime ledger state, no protected files"
   },
   "protected_untouched": [
-    {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json", "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b"},
-    {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json", "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"}
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+      "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+      "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+    }
   ],
   "never_staged": [
     "analysis/round59-communication-decision-density/r59_analysis_run.log"
-  ]
+  ],
+  "committed_acceptance_revision": {
+    "supersedes": "the S0 code at commit 0f8574accae16676a75a248da180be9d49e9fa04; the S0 originals are preserved byte-identical under git_external_originals above",
+    "head_at_writing": "0f8574accae16676a75a248da180be9d49e9fa04",
+    "reason": "decision-end review found five real defects in the S0 delivery (unpinned production root, forgeable production identity, missing technical cap / state validation / blocking reconciliation, metering off the real entry, implicit trainable flags, unaccounted joint records); this revision closes them and registers the plan revision",
+    "code_and_tests": [
+      {
+        "file": "r75_guard.py",
+        "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+        "bytes": 25100,
+        "role": "hardened central production ledger: pinned canonical root, production/fixture split, unified trunk-entry meter, strict native-entry identity check with the guard source pin"
+      },
+      {
+        "file": "r75_frozen.py",
+        "sha256": "a17482bf1c8557bad5ae425e72af2c3dd104d722c35cfec48e2913b81f79e9b3",
+        "bytes": 32122,
+        "role": "native PPO qualification wiring: explicit trainable flags, strict production-ledger entry with the pinned guard source hash, real-entry metering, joint-record accounting per native batch read"
+      },
+      {
+        "file": "test_r75_s0_acceptance.py",
+        "sha256": "88fc8ea2289fcebbb8b90ac61241464b14a4440f2395678f9df61569703a8e0e",
+        "bytes": 21723,
+        "role": "31 pure-stdlib acceptance counterexamples (no torch), 31/31 ok exit 0 at delivery"
+      }
+    ],
+    "reports_json": [
+      {
+        "file": "ROUND75_S0_ACCEPTANCE_VERDICT.json",
+        "sha256": "3c984ad852c2c509f897b2bffe67f52b9ac46054982239e30ce0d083f33c868a",
+        "bytes": 17131
+      },
+      {
+        "file": "ROUND75_S0_ACCEPTANCE_IDENTITY.json",
+        "sha256": "b969d8f7d4073af3983a76e52ea65b6398b5389fae2922cd66fcd247d64059ad",
+        "bytes": 4427
+      },
+      {
+        "file": "ROUND75_S0_ACCEPTANCE_REPORT.md",
+        "sha256": "b0fe9e283c76576caf7c8bb8986fac87b36c2decd943b41410460ac2d4015784",
+        "bytes": 11761
+      },
+      {
+        "file": "ROUND75_GIT_EXTERNAL_MANIFEST.json",
+        "sha256": "2b988d2e90bdbb44640a61dc9344338296cd7ed22e99a9af88f96dd5e6597679",
+        "bytes": 5195
+      }
+    ],
+    "mechanism": "explicit git add -f (runs/ is gitignored); no weights, no raw rows/tape/logs, no runtime ledger state, no build artifacts (__pycache__ removed), no protected files",
+    "tests": {
+      "suite": "test_r75_s0_acceptance.py",
+      "ran": 31,
+      "failed": 0,
+      "errors": 0,
+      "exit_code": 0,
+      "torch_imported": false
+    },
+    "prior_suite_disclosure": "test_r75_s0_spy.py was run once after the hardening: 11 ok (5 Adapter + 6 WiringSource) / 9 GuardTests ERROR, exit 1; the 9 errors are designed (the old suite opens a NON-canonical root, which defect 1 refuses by source, and uses pre-revision attribute names). It is disclosed, not repaired and not counted as acceptance evidence.",
+    "canonical_ledger_state": {
+      "dir": "raw/runtime",
+      "state": "zero-value identity under the new schema; 12 events; 0 charged events; no lock held",
+      "new_schema_zero_counters": [
+        {
+          "file": "raw/runtime/r75_physical_optimizer_step_guard.json",
+          "sha256": "13b9d36da125823d69196c67ed44361fa6cf121fbbf8ada618e667312ba894aa",
+          "bytes": 223
+        },
+        {
+          "file": "raw/runtime/r75_offline_trunk_target_row_guard.json",
+          "sha256": "314fbb13412443a381ebb59e6479be5ae10431a45c5672beb370a899f18ae778",
+          "bytes": 232
+        },
+        {
+          "file": "raw/runtime/r75_joint_record_guard.json",
+          "sha256": "1d4022fcd21516d1b91b60ba3f3ca9efc3ee837da8a615012f9dcad2e69a8a9d",
+          "bytes": 226
+        },
+        {
+          "file": "raw/runtime/r75_environment_construction_guard.json",
+          "sha256": "be58a93de378a1fe9e05bc3f2d2cb7059f705b161ef59191c6aab09701c3981b",
+          "bytes": 223
+        }
+      ],
+      "total_ledger": {
+        "file": "raw/runtime/r75_total_ledger.jsonl",
+        "sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b",
+        "bytes": 2579
+      },
+      "legacy_s0_zero_counters_unchanged": [
+        {
+          "file": "raw/runtime/r75_physical_optimizer_step.json",
+          "sha256": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa",
+          "bytes": 288
+        },
+        {
+          "file": "raw/runtime/r75_offline_trunk_target_row.json",
+          "sha256": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527",
+          "bytes": 297
+        },
+        {
+          "file": "raw/runtime/r75_joint_record.json",
+          "sha256": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3",
+          "bytes": 273
+        },
+        {
+          "file": "raw/runtime/r75_environment_construction.json",
+          "sha256": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6",
+          "bytes": 288
+        }
+      ]
+    },
+    "plan_revision": {
+      "superseded_field": "ROUND75_S0_PLAN.json candidate_accounting.joint_records = 0",
+      "per_native_update": {
+        "physical_optimizer_steps": 4,
+        "trunk_entry_calls": 70,
+        "offline_trunk_target_rows": 840,
+        "largest_single_row_charge": 168,
+        "joint_records": 1,
+        "environment_constructions": 0
+      },
+      "candidate_totals": {
+        "physical_optimizer_steps": 9,
+        "offline_trunk_target_rows": 1680,
+        "joint_records": 2,
+        "environment_constructions": 0
+      },
+      "validity": "upper bound for the frozen 66-record / 168-candidate-row batch only"
+    },
+    "zero_cost_counts": {
+      "model_load_or_construction": 0,
+      "forward_read_only_cpu": 0,
+      "backward": 0,
+      "optimizer_step_real_or_synthetic": 0,
+      "ppo_update": 0,
+      "ppo_replay": 0,
+      "environment_construction": 0,
+      "sampling": 0,
+      "checkpoint_write": 0,
+      "training_resume": 0,
+      "rng_restore": 0,
+      "torch_imported": false,
+      "ledger_charged_events": 0
+    },
+    "protected_untouched": [
+      {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+        "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+        "status": "untouched, unstaged, re-hashed at delivery"
+      },
+      {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+        "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+        "status": "untouched, unstaged, re-hashed at delivery"
+      }
+    ],
+    "never_staged": [
+      "analysis/round59-communication-decision-density/r59_analysis_run.log"
+    ],
+    "s1_authorized": false
+  }
 }

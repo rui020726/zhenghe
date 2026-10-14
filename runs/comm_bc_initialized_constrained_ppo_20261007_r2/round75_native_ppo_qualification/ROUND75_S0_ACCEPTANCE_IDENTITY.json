@@ -1,0 +1,46 @@
+{
+  "kind": "round75-s0-acceptance-identity/1",
+  "supersedes": "the S0 delivery at commit 0f8574accae16676a75a248da180be9d49e9fa04 (originals preserved byte-identical)",
+  "branch": "exp/round75-native-ppo-qualification",
+  "code": {
+    "r75_guard.py": {"sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f", "bytes": 25100, "role": "hardened central production ledger (pinned root, production/fixture split, unified trunk-entry meter, strict native-entry check)"},
+    "r75_frozen.py": {"sha256": "a17482bf1c8557bad5ae425e72af2c3dd104d722c35cfec48e2913b81f79e9b3", "bytes": 32122, "role": "native PPO qualification wiring (strict entry, explicit trainable flags, entry metering, joint-record accounting)"},
+    "test_r75_s0_acceptance.py": {"sha256": "88fc8ea2289fcebbb8b90ac61241464b14a4440f2395678f9df61569703a8e0e", "bytes": 21723, "role": "31 acceptance counterexamples (pure stdlib, zero torch)"}
+  },
+  "wiring_identity": {
+    "old_function": {"file": "round66_bc_early_path_preserving_late_adaptation/r66_frozen.py", "function": "frozen_early_ppo_update", "sha256": "0a891308d06128dc4f7ee41fc137455a26d2f332ea2e1aa570fe7975064c0572", "lines": 237},
+    "s0_function": {"function": "r75_native_ppo_update", "sha256": "07f502fa71b2ae56239819711147aa26811235ef1b864f74fe903b431dd53281", "lines": 237, "status": "S0 receipt"},
+    "acceptance_function": {"function": "r75_native_ppo_update", "sha256": "40110d8a4f45eb4bea5582cff36276c1c04deca24eabbca3237e37bac6c99855", "lines": 278, "status": "current; only the resource instrumentation and the freeze-flag explicitness changed; math/sampling/GAE/shuffle/loss/clip/protocol unchanged"},
+    "guard_source_pin_in_r75_frozen": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+    "guard_source_pin_matches_disk": true
+  },
+  "reused_verified_sources": {
+    "note": "imported live (not re-written); byte identity verified at import by verify_reused_source_identity()",
+    "r74_guard_prod.py": {"path": "round74_constrained_early_head_adaptation/r74_guard_prod.py", "sha256": "623b9ec6cd243d27321e8c745a0247c97126c9028141cb0ed4760dd90c0796db", "provides": ["_ProdCounter", "count_target_vectors", "LedgerStateError"]},
+    "r74_guard.py": {"path": "round74_constrained_early_head_adaptation/r74_guard.py", "sha256": "9a6b06374fc5b56b6d8077dc6aa332444533198aca0967cb36b867795af614d7", "provides": ["R74TotalLedger", "R74QuotaExhausted"]},
+    "r43_call_counter_hooks.py": {"path": "r43_call_counter_hooks.py", "sha256": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7", "provides": ["count_at_entry", "COUNTER_HOOK_VERSION"]}
+  },
+  "canonical_ledger": {
+    "root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/raw/runtime",
+    "state": "zero-value identity under the new schema; 12 ledger events; 0 charged events",
+    "new_schema_counters": {
+      "r75_physical_optimizer_step_guard.json": "13b9d36da125823d69196c67ed44361fa6cf121fbbf8ada618e667312ba894aa",
+      "r75_offline_trunk_target_row_guard.json": "314fbb13412443a381ebb59e6479be5ae10431a45c5672beb370a899f18ae778",
+      "r75_joint_record_guard.json": "1d4022fcd21516d1b91b60ba3f3ca9efc3ee837da8a615012f9dcad2e69a8a9d",
+      "r75_environment_construction_guard.json": "be58a93de378a1fe9e05bc3f2d2cb7059f705b161ef59191c6aab09701c3981b"
+    },
+    "total_ledger": {"file": "r75_total_ledger.jsonl", "sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b", "events": 12, "charged_events": 0},
+    "legacy_s0_counters_unchanged": {
+      "r75_physical_optimizer_step.json": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa",
+      "r75_offline_trunk_target_row.json": "5531991a84b76129693a9993eb511354ccfcdde0d019b6f35a04b1ffb36244527",
+      "r75_joint_record.json": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3",
+      "r75_environment_construction.json": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6"
+    }
+  },
+  "static_evidence_issue_4": {
+    "r66_fresh_partitioned_controller_requires_grad_occurrences": 0,
+    "r66_PartitionedInner_requires_grad_occurrences": 0,
+    "canonical_v2_controller_requires_grad_occurrences": 0,
+    "conclusion": "the constructor chain sets no requires_grad flag, so the S0 code relied on the nn.Module default; the acceptance revision sets the four trainable modules True explicitly"
+  }
+}
