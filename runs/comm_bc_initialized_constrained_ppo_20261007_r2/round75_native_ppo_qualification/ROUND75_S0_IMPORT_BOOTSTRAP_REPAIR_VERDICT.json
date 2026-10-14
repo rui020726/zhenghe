@@ -1,0 +1,208 @@
+{
+  "kind": "round75-s0-import-bootstrap-repair-verdict/1",
+  "request_id": "R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015",
+  "continues": "R75_S0_DRIVER_CLOSEOUT_20261015",
+  "branch": "exp/round75-native-ppo-qualification",
+  "head_at_writing": "464cb95076bb69cebde74e9a07a07a4670c128ed",
+  "parent_head": "af9b80e97bfeaf382108f0615ee317d9f0ea551d",
+  "status": "IMPORT_BOOTSTRAP_AND_OUTPUT_ROUTING_REPAIRED_AND_CLOSED_OUT_LOCALLY_S1_STILL_NOT_AUTHORIZED",
+  "meaning": "the self-comparing module-identity check, the wrapper's history-equals-refusal gate and the child output-routing seam are repaired and verified on fakes, AST and the real CLI; nothing paid was executed and S1 remains unauthorized",
+  "authorization_scope": {
+    "allowed": ["source repair outside the paid runner", "stdlib/AST/fake-module/fake-subprocess tests",
+                "zero-cost precheck rerun of the affected checks", "freeze updates",
+                "close-out documents and explicit local commit"],
+    "forbidden_and_not_done": ["torch or numpy real NN path", "model load or construction",
+                               "forward", "backward", "optimizer step real or synthetic",
+                               "PPO update or replay", "environment construction or sampling",
+                               "training or evaluation run", "checkpoint write",
+                               "launch of the production runner"],
+    "s1_authorized": false,
+    "s1_executed": false
+  },
+  "repairs": {
+    "1_module_identity_was_a_self_comparison": {
+      "defect": "_verify_canonical_bindings read CANONICAL_SOURCES.get(key) twice and compared the two reads, so the object-identity layer could never fail; a same-path, same-digest impostor or a shadowing sys.modules entry passed that layer",
+      "fix": "the module-level bindings actually used (trainer, common, CONTROLLER_MODULE) must BE the object configure_source_imports() returned; sys.modules under v2_trainer / v2_common / v2_controller must hold that same object; the resolved __file__ must sit under r66.CANON and the file actually read must hash to the pin; onpolicy is checked the same way including its two helper objects; cost_math is read back from sys.modules (never imported again here) and pinned by resolved path and digest",
+      "cost_math_pin": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+      "cost_math_source": "D:/code/整合/zhenghe/runs/comm_cost_controller_stage_a_20260927/cost_math.py (the configured v2_common.STAGE_A_DIR)",
+      "cost_math_caveat": "the checkout copy under zhenghe-round42 has the SAME digest, so only the resolved __file__ distinguishes the source; registered in the plan note",
+      "unchanged": "r66_frozen.configure_source_imports() still runs before every canonical import (AST verified), and the living GAE=1.0 / ETA=0.5 / GAMMA=1.0 are still read back from the configured module"
+    },
+    "2_wrapper_history_gate_and_placeholder": {
+      "defect": "verify_pre_charge recorded a problem whenever raw/s1 existed and was non-empty, so every later legal request had to fail unless the preserved originals were deleted; EXPECT_SIBLING was a mojibake/None placeholder that no check ever read",
+      "fix": "EXPECT_SIBLING removed with no replacement claim; the nine preserved originals are re-hashed on every run and only a missing or changed original is a problem; duplicate_request_refusal refuses a repeated request id in ANY output directory (including the historical one) while a different authorized id in its own directory is not refused merely because history exists; unregistered files in raw/s1 are recorded, not refused",
+      "return_code_attribution": "child_returncode, wrapper_return and wrapper_exception stay separate; SystemExit passes through the __main__ guard before the BaseException handler; .bin is authoritative and .txt loss is registered"
+    },
+    "3_child_output_routing_seam": {
+      "defect": "the runner wrote its bundle, failure receipts, trial record and durable counters to the fixed HERE/raw/s1, so the revised wrapper's independent directory did not isolate a later attempt",
+      "fix": "S1_DIR keeps the historical default and becomes bindable; _bind_execution_identity(request_id, attempt_dir) refuses an empty id, the historical id in any directory, the historical raw/s1 and anything under it, a directory outside the output root, and a repeated id already marked in the target directory; the CLI requires --request-id and --attempt-dir and binds them BEFORE the precheck and before any paid import; every runner write goes through the bound S1_DIR; the wrapper passes the same id and directory to the child and records them in the attempt marker",
+      "identity_separation": "receipts and counters record request_id = EXECUTION_REQUEST_ID or PLAN[request_id] plus plan_request_id and attempt_dir, so the new execution identity and the historical data/budget plan are never conflated",
+      "ledger": "unchanged and singular: r75_guard.R75Resources.production() still points at raw/runtime; a new attempt directory is not a second ledger and nothing is cleared",
+      "science_untouched": "loss, data, RNG advancement, model/Adam construction counts, PPO matrix, epochs, minibatch, LR, data order, clip and dual update are all unchanged"
+    }
+  },
+  "tests": {
+    "module": "test_r75_s0_import_bootstrap.py",
+    "bytes": 38192,
+    "sha256": "c36a2939e17c539f110912e5db2cca5c83893bed16176200c0dca15f5f3b6ba8",
+    "command": "D:\\project_env\\python.exe runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/test_r75_s0_import_bootstrap.py",
+    "ran": 30,
+    "passed": 30,
+    "failed": 0,
+    "errors": 0,
+    "exit_code": 0,
+    "purity": "stdlib plus the two pure files by path; r75_frozen is AST-parsed and its verification function executed against fakes; no numpy, torch, r75_frozen, r75_guard, r66_frozen or canonical module is imported; no model, optimizer, environment or child is created",
+    "not_an_import_qualification": true
+  },
+  "real_cli_checks": [
+    {"argv": "--run-s1", "exit_code": 2, "refusal": "requires --request-id and --attempt-dir"},
+    {"argv": "--run-s1 --request-id R75_S1_NATIVE_QUALIFICATION_20261015 --attempt-dir <temp>", "exit_code": 2, "refusal": "historical request id can never run again, in any directory"},
+    {"argv": "--run-s1 --request-id R75_CLI_PROBE --attempt-dir <raw/s1>", "exit_code": 2, "refusal": "must not be the historical raw/s1 or anything under it"},
+    {"argv": "--run-s1 --request-id R75_CLI_PROBE --attempt-dir <outside the output root>", "exit_code": 2, "refusal": "must live inside the ROUND75 output root"},
+    {"argv": "(none) and --print-plan", "exit_code": 0, "note": "prints the frozen plan summary, imports no paid module"}
+  ],
+  "raw_s1_after_cli_checks": "nine originals byte-identical, no probe directory created",
+  "precheck": {
+    "command": "D:\\project_env\\python.exe .../r75_s1_precheck.py",
+    "checks_run": 74,
+    "checks_failed": [],
+    "exit_code": 0,
+    "note": "the new plan entry canonical_cost_math is verified by check_source_identity; the old 40/34 suites are reused as registered evidence and were not re-run"
+  },
+  "prepare_run": {
+    "command": "D:\\project_env\\python.exe .../r75_s1_outer_exec_v2.py --prepare --request-id R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015",
+    "exit_code": 0,
+    "launched": false,
+    "attempt_marker_created": false,
+    "record": "raw/s1_revised/r75_s1_outer_v2_prepared.json",
+    "first_attempt_registered_files": 9,
+    "first_attempt_problems": [],
+    "ledger_zero_start_events": 12,
+    "frozen_snapshot_match": true
+  },
+  "source_identity": {
+    "r75_frozen_py": {"bytes": 41689, "sha256": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80"},
+    "r75_s1_runner_py": {"bytes": 86613, "sha256": "0d773a54b201f08bb02e075d763dc720e87f8e652b02a6e3bf2b9079f69b893f"},
+    "r75_s1_outer_exec_v2_py": {"bytes": 25056, "sha256": "84b81cad3d4d22763a2c4bced2a0d81ba85ba5870ff0a2cd327699990d322fc6"},
+    "r75_s1_precheck_py": {"bytes": 23423, "sha256": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c"},
+    "ROUND75_S1_RUN_PLAN_json": {"bytes": 20451, "sha256": "ab7120d5c469f2936ea7162023ad70b1d04dc3d50955c4e6535c46e6480ce735"},
+    "unchanged": {
+      "r75_guard_py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+      "r75_replay_adapter_py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+      "r75_s1_outer_exec_py": "b1c4fa4c3be0f2983fb3baf10e16c1e8d9c18a37c0b0736bbdc693c436c45115"
+    }
+  },
+  "preserved_first_attempt": {
+    "directory": "raw/s1",
+    "request_id": "R75_S1_NATIVE_QUALIFICATION_20261015",
+    "rerunnable": false,
+    "files": {
+      "r75_s1_outer_attempt_marker.json": "3723fb40b71bbe3fbf2ab56770c3c833d0278540b8ac542cba6188ddef0e496",
+      "r75_s1_outer_outcome.json": "61475ef3b77e4401ec3048718abc9b19f7a811187978310e8e0b5403ea6e41fc",
+      "r75_s1_outer_prelaunch_manifest.json": "fe93a5bda22d23a9de8255af1f959f57d28aee640cd91ba84500575738c4f09e",
+      "r75_s1_outer_stderr.bin": "db569234b8624fbca27eea14ff001d0341f4261498bbe5e6355231ce0856c438",
+      "r75_s1_outer_stderr.txt": "7c031d1e17b2a70c19ba3007eba95880e31e2d459045282ff6d3e1e1155eb639",
+      "r75_s1_outer_stdout.bin": "37b5f7e364dcb0fbb6a435b309fff1ad2a284914a4da163de26dbc8aa1ddf22e",
+      "r75_s1_outer_stdout.txt": "37b5f7e364dcb0fbb6a435b309fff1ad2a284914a4da163de26dbc8aa1ddf22e",
+      "r75_s1_outer_wrapper_failure.json": "0810ac8e9a838010dbaa5b34ba50d635052e901e5e23e3939ebf69b0d867e7a6",
+      "r75_s1_outer_wrapper_failure_clarification.json": "831390add015d4d60cb17db5164214bb966815f6bb11b1cfd02309f29f79c148"
+    }
+  },
+  "development_failures_disclosed": [
+    "a self-inflicted placeholder digest in EXPECT_FIRST_ATTEMPT_FILES, together with the changed r75_frozen digest, made the first real prepare refuse (exit 3); pure development failure, no child, no consumption; corrected against the digests read from disk",
+    "an early guard test installed its record_wrapper_failure spy before executing the module head, so the real definition overwrote it and a fake-child wrapper exception wrote raw/s1_revised/r75_s1_outer_v2_wrapper_failure.json (request id R75_TEST_GUARD_ID); the file is kept and registered, and the test now installs the spy after the head",
+    "one PowerShell bulk replacement placed the new verification function after its module-level call; caught by a line-number re-read and rebuilt in the same working sequence; the intermediate state was never committed and never executed"
+  ],
+  "zero_environment_this_round": {
+    "torch_imported": false,
+    "numpy_imported": false,
+    "model_load_or_construction": 0,
+    "forward": 0,
+    "backward": 0,
+    "optimizer_step_real_or_synthetic": 0,
+    "ppo_update_or_replay": 0,
+    "environment_construction": 0,
+    "sampling": 0,
+    "checkpoint_write": 0,
+    "training_resume": 0,
+    "rng_restore": 0,
+    "ledger_charged_events": 0,
+    "production_runner_launches": 0,
+    "tests_rerun_from_history": 0
+  },
+  "ledger_state": {
+    "root": "raw/runtime",
+    "total_ledger_events": 12,
+    "charged": 0,
+    "four_guards": "normal/reserve/refusal all 0/0/0",
+    "r75_total_ledger_jsonl_sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b",
+    "frozen_snapshot_match": true,
+    "note": "unchanged from the zero start; no second ledger was created and nothing was cleared"
+  },
+  "protected_untouched": [
+    {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+     "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+     "status": "untouched, unstaged, re-hashed this round"},
+    {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+     "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+     "status": "untouched, unstaged, re-hashed this round"}
+  ],
+  "not_covered": [
+    "any real torch import, model load or construction, state-dict mapping or real likelihood alignment",
+    "any real or synthetic optimizer step, PPO update or replay",
+    "the real collector, real episodes, closed-loop simulation or any evaluation block",
+    "the import-time binding check has only been executed against FAKE module objects, never against the real canonical tree",
+    "any communication-policy effect, cost or task-outcome conclusion"
+  ],
+  "future_plan_not_authorized": "A1 one critic-only update plus A2/A3 one full native update each: 9 normal physical steps / 1680 offline trunk target rows / 140 trunk calls / 2 batch reads / 0 environment constructions. A fresh decision-side release is required; the R75 caps (normal 12 + technical 4 = hard 16 physical; normal 5000 + technical 1000 = hard 6000 target rows; per charge 1024) are neither extended nor cleared and no R74 quota is borrowed.",
+  "git": {"pushed": false, "merged": false, "deployed": false,
+          "commit_scope": "explicit local named commit of the repaired sources, the narrow test, the plan, the report, the verdict and the manifest append; no weights, no raw runtime, no raw/s1 originals, no protected files, no build artifacts"}
+,
+  "goal_audit": {
+    "method": "get_goal was called before any file edit, exactly as the continuation instruction required",
+    "internal_goal": null,
+    "internal_goal_state": "no active goal exists in this session, so no stale goal could auto-continue over this task and nothing needed closing by a completion audit",
+    "goal_created_this_round": false,
+    "goal_closed_this_round": false,
+    "research_paused_by_this_instruction": false,
+    "current_task_id": "R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015",
+    "separate_readonly_check_from_previous_turn": {
+      "what": "a read-only receipt check of R75_S0_FINAL_PREP_20261014 and of the current HEAD",
+      "relation_to_this_task": "that request is a DIFFERENT, historical one already delivered and locally committed at 7eff4a4; it is not this task",
+      "outcome": "received and executed; the described content matched (kl return key, non-zero pre_meter diff, zero-cost S1 driver preparation); the live HEAD read 464cb95076bb69cebde74e9a07a07a4670c128ed, four commits ahead of the c16ce93 the checker had been given",
+      "counted_as_this_delivery": false,
+      "scientific_or_ledger_state_changed": false
+    }
+  },
+  "delivery": {
+    "items_completed": [
+      "1. r75_frozen.py: the _verify_canonical_bindings self-comparison is replaced by real object-identity, sys.modules, __file__, sha256 and live GAE/ETA/GAMMA checks over the bindings actually used, plus the cost_math read-back with its own path and digest pin",
+      "2. r75_s1_outer_exec_v2.py: the raw/s1-nonempty blanket refusal is replaced by per-original digest registration with a duplicate-request-id refusal across any output directory; EXPECT_SIBLING removed with no replacement claim",
+      "3. test_r75_s0_import_bootstrap.py: 30 narrow stdlib/AST/fake-module/fake-subprocess counterexamples, 30 passed, exit 0",
+      "4. r75_s1_precheck.py rerun of the affected checks 74/74 with checks_failed empty and exit 0; report, verdict, task-state and manifest append written; one explicit named local commit",
+      "additional. parent-to-child output routing and execution identity: S1_DIR bindable, --request-id and --attempt-dir required and bound before the precheck and before any paid import, receipts and durable counters carry the execution id plus plan_request_id and attempt_dir, the single central ledger at raw/runtime untouched"
+    ],
+    "reused_without_rerun": [
+      "the 30/30 narrow suite output and exit code from the prior turn, re-verified this turn only by byte identity and AST parsing",
+      "the 74/74 precheck output and exit code from the prior turn",
+      "the old 40/34 suites and the earlier 68-check precheck run, registered as reused evidence"
+    ],
+    "byte_identity_reverified_this_turn": {
+      "r75_frozen_py": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+      "r75_s1_runner_py": "0d773a54b201f08bb02e075d763dc720e87f8e652b02a6e3bf2b9079f69b893f",
+      "r75_s1_outer_exec_v2_py": "84b81cad3d4d22763a2c4bced2a0d81ba85ba5870ff0a2cd327699990d322fc6",
+      "r75_s1_precheck_py": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c",
+      "ROUND75_S1_RUN_PLAN_json": "ab7120d5c469f2936ea7162023ad70b1d04dc3d50955c4e6535c46e6480ce735",
+      "test_r75_s0_import_bootstrap_py": "c36a2939e17c539f110912e5db2cca5c83893bed16176200c0dca15f5f3b6ba8",
+      "unchanged_r75_guard_py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+      "unchanged_r75_replay_adapter_py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+      "unchanged_r75_s1_outer_exec_py": "b1c4fa4c3be0f2983fb3baf10e16c1e8d9c18a37c0b0736bbdc693c436c45115",
+      "ast_parse": "all five source files parse cleanly this turn"
+    },
+    "paid_prohibition_held": "0 torch imports, 0 numpy real NN path, 0 model load or construction, 0 forward, 0 backward, 0 real or synthetic optimizer step, 0 PPO update or replay, 0 environment construction, 0 sampling, 0 checkpoint write, 0 production runner launch (no --launch), 0 ledger charged events",
+    "commit": "one explicit named local commit after git add -f of the named files; the delivered HEAD and its parent are read from git after the commit and are deliberately not claimed inside any file",
+    "pushed": false,
+    "merged": false,
+    "deployed": false
+  }
+}

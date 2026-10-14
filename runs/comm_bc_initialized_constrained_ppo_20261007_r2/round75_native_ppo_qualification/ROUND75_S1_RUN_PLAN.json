@@ -94,10 +94,23 @@
       "expected": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
       "note": "the verified mechanisms are NOT touched by this revision"
     },
+    "canonical_onpolicy": {
+      "path": "D:/code/整合/zhenghe/runs/comm_tight_budget_20260919/onpolicy.py",
+      "sha256": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+      "expected": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+      "note": "onpolicy.py is NOT in the canonical run directory; it is reached through the same wiring, from the tight-budget round that v2_common.enter_round() puts on sys.path. Pinned by R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015 by reading that live file; no replacement copy is introduced."
+    },
+    "canonical_cost_math": {
+      "path": "D:/code/整合/zhenghe/runs/comm_cost_controller_stage_a_20260927/cost_math.py",
+      "sha256": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+      "expected": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+      "note": "cost_math.py is NOT in the canonical run directory either; it is imported by configure_source_imports() from the stage-A directory that v2_common.enter_round() puts on sys.path, and r75_frozen reads the already-imported object back from sys.modules instead of importing a second copy. Pinned by R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015 by reading that live file; the checkout copy under zhenghe-round42 carries the SAME digest, so the resolved path is what distinguishes the two."
+    },
     "r75_frozen": {
       "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_frozen.py",
-      "sha256": "a4b556a687c3aff9650404d11149cb387879a4b4009c85502fc970d7bbe27996",
-      "revision": "final-prep: the returned approx_kl reads the real kl accumulator; the epoch meter phase differences cumulative snapshots"
+      "sha256": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+      "expected": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+      "revision": "import-bootstrap-repair: r66_frozen.configure_source_imports() now runs BEFORE any canonical import, and _verify_canonical_bindings() asserts at import time that each canonical binding is the object the helper returned, that its resolved __file__ sits under the canonical root, that the file actually read hashes to the pinned value, and that the living GAE=1.0 / ETA=0.5 / GAMMA=1.0 came from the configured module; the identity check then compared that dictionary entry with itself, so it proved nothing - it now compares the module-level bindings this module uses (trainer / common / controller) and the sys.modules cache against the helper return, and reads cost_math back from sys.modules with its own resolved path and digest pin (never imported again here)"
     },
     "r75_replay_adapter": {
       "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_replay_adapter.py",
@@ -123,7 +136,8 @@
     "gae_default_distinction": {
       "v2_common_default": "GAE_LAMBDA = 0.95, ETA_LAMBDA = 0.05 (module defaults, NOT used)",
       "r66_living_override": "configure_source_imports() sets common.GAE_LAMBDA = 1.0 and common.ETA_LAMBDA = 0.5",
-      "requirement": "the S1 run must report the LIVE values 1.0 / 0.5 and must never silently fall back to the 0.95 / 0.05 defaults"
+      "requirement": "the S1 run must report the LIVE values 1.0 / 0.5 and must never silently fall back to the 0.95 / 0.05 defaults",
+    "enforcement": "r75_frozen._verify_canonical_bindings() reads common.GAE_LAMBDA / common.ETA_LAMBDA / common.GAMMA back from the configured module at import time and refuses the run if they are not 1.0 / 0.5 / 1.0"
     }
   },
   "gate_only_controller": {

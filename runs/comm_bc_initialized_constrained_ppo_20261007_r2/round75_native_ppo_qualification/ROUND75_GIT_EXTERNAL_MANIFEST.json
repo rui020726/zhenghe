@@ -579,5 +579,104 @@
     "s1_authorized": true,
     "s1_executed": true,
     "s1_qualification_passed": false
+  },
+  "import_bootstrap_repair_revision": {
+    "request_id": "R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015",
+    "continues": "R75_S0_DRIVER_CLOSEOUT_20261015",
+    "parent_head": "464cb95076bb69cebde74e9a07a07a4670c128ed",
+    "parent_head_note": "read from git before this commit; the delivered HEAD is read from git after the commit and is deliberately not written here",
+    "scope": "source repair outside the paid runner, pure stdlib/AST/fake tests, zero-cost precheck, freeze updates and local close-out; no torch, no model, no optimizer, no PPO, no environment, no checkpoint write, no production runner launch",
+    "repaired": [
+      "r75_frozen.py: _verify_canonical_bindings compared one CANONICAL_SOURCES.get(key) read with itself; it now compares the module-level bindings actually used (trainer, common, CONTROLLER_MODULE) and the sys.modules cache against the helper return, plus __file__, file sha256 and the living GAE/ETA/GAMMA, and reads cost_math back from sys.modules with its own path and digest pin",
+      "r75_s1_outer_exec_v2.py: the pre-charge gate refused every later request whenever raw/s1 held the preserved first failure; it now registers the nine originals by digest and refuses only a repeated request id in any output directory. EXPECT_SIBLING (an unused mojibake/None placeholder) was removed with no replacement claim",
+      "r75_s1_runner.py: the child wrote to the fixed HERE/raw/s1; S1_DIR is now bindable through _bind_execution_identity and the CLI requires --request-id and --attempt-dir before the precheck and before any paid import, so bundle, receipts, trial record and counters share the outer record directory and identity. The single central ledger at raw/runtime is unchanged",
+      "ROUND75_S1_RUN_PLAN.json: source_identity gains canonical_cost_math and the r75_frozen sha256/revision entry is updated; data, budget, matrix and exclusion list untouched"
+    ],
+    "content_identity": [
+      {"file": "r75_frozen.py", "sha256": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80", "bytes": 41689},
+      {"file": "r75_s1_runner.py", "sha256": "0d773a54b201f08bb02e075d763dc720e87f8e652b02a6e3bf2b9079f69b893f", "bytes": 86613},
+      {"file": "r75_s1_outer_exec_v2.py", "sha256": "84b81cad3d4d22763a2c4bced2a0d81ba85ba5870ff0a2cd327699990d322fc6", "bytes": 25056},
+      {"file": "r75_s1_precheck.py", "sha256": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c", "bytes": 23423},
+      {"file": "ROUND75_S1_RUN_PLAN.json", "sha256": "ab7120d5c469f2936ea7162023ad70b1d04dc3d50955c4e6535c46e6480ce735", "bytes": 20451},
+      {"file": "test_r75_s0_import_bootstrap.py", "sha256": "c36a2939e17c539f110912e5db2cca5c83893bed16176200c0dca15f5f3b6ba8", "bytes": 38192},
+      {"file": "R75_IMPORT_BOOTSTRAP_REPAIR_TASK_STATE.json", "sha256": "6ad2c5b3aff4dac116dd011d215de6b593d666bd693a4f5a3a3556ac3c044453", "bytes": 9250, "note": "hash and size read from disk in the close-out turn, after the file was finalised and before the commit"},
+      {"file": "ROUND75_S0_IMPORT_BOOTSTRAP_REPAIR_REPORT.md", "sha256": "8e6da10ddaa800ac874f22c93fc33e89f9935b1e57d32e1fca4b065caebefd07", "bytes": 19949, "note": "hash and size read from disk in the close-out turn, after the file was finalised and before the commit"},
+      {"file": "ROUND75_S0_IMPORT_BOOTSTRAP_REPAIR_VERDICT.json", "sha256": "484726e49d2250280c7876e434d40ea77c98098c2ed142ce054a0ec91db9e17b", "bytes": 17614, "note": "hash and size read from disk in the close-out turn, after the file was finalised and before the commit"}
+    ],
+    "unchanged_byte_identical": [
+      {"file": "r75_guard.py", "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f"},
+      {"file": "r75_replay_adapter.py", "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2"},
+      {"file": "r75_s1_outer_exec.py", "sha256": "b1c4fa4c3be0f2983fb3baf10e16c1e8d9c18a37c0b0736bbdc693c436c45115"}
+    ],
+    "new_pins": {
+      "EXPECTED_COST_MATH_SHA256": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+      "cost_math_source": "D:/code/整合/zhenghe/runs/comm_cost_controller_stage_a_20260927/cost_math.py",
+      "cost_math_caveat": "the checkout copy under zhenghe-round42 carries the SAME digest, so the resolved __file__ path is what distinguishes the source"
+    },
+    "test_evidence": {
+      "narrow_suite": "test_r75_s0_import_bootstrap.py: 30 tests, 30 passed, exit 0 (stdlib + AST + fake modules + fake subprocess; no paid import)",
+      "real_cli": "five real invocations of the runner CLI: four refusals with exit 2 and the plan print with exit 0; raw/s1 stayed byte-identical and no probe directory was created",
+      "precheck": "r75_s1_precheck.py 74/74, checks_failed empty, exit 0",
+      "prepare": "r75_s1_outer_exec_v2.py --prepare: exit 0, launched false, no attempt marker, nine first-attempt originals registered and intact",
+      "not_rerun": "the old 40/34 suites and the prior 68-check precheck run are reused as registered evidence"
+    },
+    "development_failures_disclosed": [
+      "a placeholder digest in EXPECT_FIRST_ATTEMPT_FILES plus the changed r75_frozen digest made the first real prepare refuse (exit 3); pure development failure with no child and no consumption, corrected against digests read from disk",
+      "an early guard test installed its spy before executing the module head, so a fake-child wrapper exception wrote raw/s1_revised/r75_s1_outer_v2_wrapper_failure.json (request id R75_TEST_GUARD_ID); kept and registered here, and the test was fixed",
+      "one PowerShell bulk replacement placed the new verification function after its module-level call; caught by a line-number re-read, rebuilt in the same working sequence, never committed and never executed"
+    ],
+    "raw_s1_revised_contents": [
+      "r75_s1_outer_v2_prepared.json (the genuine prepare record of this request)",
+      "r75_s1_outer_v2_wrapper_failure.json (a pure test-side wrapper record from a superseded test version; no real child, no consumption)"
+    ],
+    "ledger": "raw/runtime unchanged: 12 events, 0 charged, four counters 0/0/0, r75_total_ledger.jsonl sha256 1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b; no second ledger, nothing cleared",
+    "zero_environment": "0 torch imports, 0 model loads or constructions, 0 forward, 0 backward, 0 optimizer steps, 0 PPO updates, 0 environment constructions, 0 sampling, 0 checkpoint writes, 0 ledger charged events, 0 production runner launches",
+    "s1_authorized": false,
+    "s1_executed": false
   }
+,
+    "import_bootstrap_repair_delivery": {
+      "request_id": "R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015",
+      "closed_out_note": "appended in the close-out turn; the delivered HEAD and its parent are read from git after the commit and are deliberately not written here",
+      "parent_head_before_commit": "464cb95076bb69cebde74e9a07a07a4670c128ed",
+      "internal_goal_at_close_out": null,
+      "items_completed": [
+        "1. r75_frozen.py: the _verify_canonical_bindings self-comparison replaced by real object-identity, sys.modules, __file__, sha256 and live GAE/ETA/GAMMA checks over the bindings actually used, plus the cost_math read-back with its own path and digest pin",
+        "2. r75_s1_outer_exec_v2.py: the raw/s1-nonempty blanket refusal replaced by per-original digest registration with a duplicate-request-id refusal across any output directory; EXPECT_SIBLING removed with no replacement claim",
+        "3. test_r75_s0_import_bootstrap.py: 30 narrow stdlib/AST/fake-module/fake-subprocess counterexamples, 30 passed, exit 0",
+        "4. r75_s1_precheck.py rerun of the affected checks 74/74 with checks_failed empty and exit 0; report, verdict, task-state and manifest append written; one explicit named local commit",
+        "additional. parent-to-child output routing and execution identity: S1_DIR bindable, --request-id and --attempt-dir required and bound before the precheck and before any paid import, receipts and durable counters carry the execution id plus plan_request_id and attempt_dir, the single central ledger at raw/runtime untouched"
+      ],
+      "reused_without_rerun": [
+        "the 30/30 narrow suite output and exit code from the prior turn, re-verified this turn only by byte identity and AST parsing",
+        "the 74/74 precheck output and exit code from the prior turn",
+        "the old 40/34 suites and the earlier 68-check precheck run, registered as reused evidence"
+      ],
+      "byte_identity_reverified": {
+        "r75_frozen_py": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+        "r75_s1_runner_py": "0d773a54b201f08bb02e075d763dc720e87f8e652b02a6e3bf2b9079f69b893f",
+        "r75_s1_outer_exec_v2_py": "84b81cad3d4d22763a2c4bced2a0d81ba85ba5870ff0a2cd327699990d322fc6",
+        "r75_s1_precheck_py": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c",
+        "ROUND75_S1_RUN_PLAN_json": "ab7120d5c469f2936ea7162023ad70b1d04dc3d50955c4e6535c46e6480ce735",
+        "test_r75_s0_import_bootstrap_py": "c36a2939e17c539f110912e5db2cca5c83893bed16176200c0dca15f5f3b6ba8",
+        "unchanged_r75_guard_py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+        "unchanged_r75_replay_adapter_py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+        "unchanged_r75_s1_outer_exec_py": "b1c4fa4c3be0f2983fb3baf10e16c1e8d9c18a37c0b0736bbdc693c436c45115",
+        "ast_parse": "all five source files parse cleanly this turn"
+      },
+      "paid_prohibition_held": "0 torch imports, 0 numpy real NN path, 0 model load or construction, 0 forward, 0 backward, 0 real or synthetic optimizer step, 0 PPO update or replay, 0 environment construction, 0 sampling, 0 checkpoint write, 0 production runner launch (no --launch), 0 ledger charged events",
+      "commit_scope": "explicit git add -f of r75_frozen.py, r75_s1_runner.py, r75_s1_outer_exec_v2.py, r75_s1_precheck.py, ROUND75_S1_RUN_PLAN.json, test_r75_s0_import_bootstrap.py, R75_IMPORT_BOOTSTRAP_REPAIR_TASK_STATE.json, ROUND75_S0_IMPORT_BOOTSTRAP_REPAIR_REPORT.md, ROUND75_S0_IMPORT_BOOTSTRAP_REPAIR_VERDICT.json and ROUND75_GIT_EXTERNAL_MANIFEST.json; no weights, no raw runtime, no raw/s1 originals, no raw/s1_revised, no protected files, no build artifacts",
+      "not_staged": [
+        "raw/s1 originals",
+        "raw/s1_revised",
+        "raw/runtime",
+        "model weights",
+        "raw rows/tape/logs",
+        "the R59 analysis log",
+        "the ROUND46 protected files",
+        "__pycache__"
+      ],
+      "s1_authorized": false,
+      "s1_executed": false
+    }
 }

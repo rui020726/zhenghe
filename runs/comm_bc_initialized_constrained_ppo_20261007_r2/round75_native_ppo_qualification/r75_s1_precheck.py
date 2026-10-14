@@ -71,7 +71,8 @@ class Report:
 def check_source_identity(plan: dict, report: Report) -> None:
     identity = plan["source_identity"]
     for key in ("canonical_trainer", "canonical_common", "canonical_controller",
-                "r66_frozen", "r75_guard", "r75_frozen", "r75_replay_adapter"):
+                "canonical_onpolicy", "r66_frozen", "r75_guard", "r75_frozen",
+                "r75_replay_adapter"):
         entry = identity[key]
         resolved = resolve_path(entry["path"])
         actual = sha256_file(resolved)
@@ -330,6 +331,56 @@ def check_final_prep_fixes(plan: dict, report: Report) -> None:
                  "the frozen metering contract states the invariant")
 
 
+def check_import_bootstrap(plan: dict, report: Report) -> None:
+    """The canonical import bootstrap must be wired BEFORE the canonical modules are used.
+
+    The first S1 attempt failed at r75_frozen.py:61 with ModuleNotFoundError: No module named
+    'v2_trainer', because the canonical directories were never put on sys.path. The repair routes
+    the EXISTING R45/R58 wiring through r66_frozen.configure_source_imports() and then asserts the
+    bindings. This check is a pure AST pass over the source on disk: it imports nothing, so it
+    cannot itself be mistaken for an import qualification.
+    """
+    identity = plan["source_identity"]
+    tree = ast.parse(FROZEN_SRC)
+    helper_line = None
+    imports: list[tuple[int, str]] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Name) and target.id == "CANONICAL_SOURCES":
+                    helper_line = node.lineno
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name in ("v2_trainer", "v2_common", "onpolicy", "cost_math",
+                                  "v2_controller"):
+                    imports.append((node.lineno, alias.name))
+        if isinstance(node, ast.ImportFrom) and node.module == "onpolicy":
+            imports.append((node.lineno, "onpolicy"))
+    first_import = min((line for line, _ in imports), default=None)
+    report.check("bootstrap:helper_called_before_canonical_imports",
+                 helper_line is not None and bool(imports) and helper_line < first_import,
+                 f"CANONICAL_SOURCES = r66.configure_source_imports() at line {helper_line}; "
+                 f"first canonical import at line {first_import}")
+    verify_called = any(isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+                        and node.func.id == "_verify_canonical_bindings"
+                        for node in ast.walk(tree))
+    report.check("bootstrap:bindings_verified_at_import", verify_called,
+                 "_verify_canonical_bindings() is invoked at module level")
+    pinned = re.search(r'EXPECTED_ONPOLICY_SHA256 = "([0-9a-f]{64})"', FROZEN_SRC)
+    report.check("bootstrap:onpolicy_pin_present", pinned is not None,
+                 "r75_frozen pins the onpolicy source sha256")
+    if pinned:
+        onpolicy_path = resolve_path(identity["canonical_onpolicy"]["path"])
+        report.check("bootstrap:onpolicy_pin_matches_disk_and_plan",
+                     pinned.group(1) == sha256_file(onpolicy_path)
+                     == identity["canonical_onpolicy"]["expected"],
+                     f"pinned {pinned.group(1)[:16]} vs disk and plan")
+    report.check("bootstrap:helper_source_is_the_pinned_r66",
+                 sha256_file(resolve_path(identity["r66_frozen"]["path"]))
+                 == identity["r66_frozen"]["expected"],
+                 "the helper is the pinned r66_frozen.py, not a local reimplementation")
+
+
 def main() -> int:
     plan = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
     report = Report()
@@ -342,6 +393,7 @@ def main() -> int:
     check_living_config(plan, report)
     check_living_config_is_not_literal(plan, report)
     check_final_prep_fixes(plan, report)
+    check_import_bootstrap(plan, report)
 
     verdict = {
         "kind": "round75-s1-precheck/1",

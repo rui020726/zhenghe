@@ -58,10 +58,27 @@ for _d in (str(R66_DIR),):
         sys.path.insert(0, _d)
 
 import r66_frozen as r66                                  # noqa: E402  real frozen-early-path module
+
+# The frozen canonical sources must reach sys.path through the EXISTING R45/R58 wiring BEFORE any
+# canonical module is imported or used. r66_frozen.configure_source_imports() is that wiring: it
+# puts the canonical directories on sys.path, imports the canonical modules, verifies their byte
+# identity against the pinned values and applies the R58 living GAE/ETA overrides. It therefore has
+# to run before the canonical imports below, and the modules it returns are the bindings this
+# module must use; importing by name afterwards would only re-read sys.modules, so the identity is
+# asserted by _verify_canonical_bindings() rather than assumed.
+CANONICAL_SOURCES = r66.configure_source_imports()
+
 import v2_trainer as trainer                              # noqa: E402  frozen canonical trainer
 import v2_common as common                                # noqa: E402  frozen canonical constants
 from onpolicy import action_entropy, joint_log_prob       # noqa: E402  frozen canonical math
-
+import onpolicy                                           # noqa: E402  frozen canonical math module
+# The bindings this module actually uses, bound explicitly so the check below compares real
+# objects. The controller module is reached only through the helper return, so it is bound once
+# here and then compared with what the import system cached under its canonical name.
+CONTROLLER_MODULE = CANONICAL_SOURCES.get("controller_module")
+# cost_math was imported by configure_source_imports(); reading it back from sys.modules keeps this
+# module from importing a second copy out of a different tree.
+COST_MATH_MODULE = sys.modules.get("cost_math")
 if str(HERE) not in sys.path:                    # the hardened central production ledger lives here
     sys.path.insert(0, str(HERE))
 import r75_guard                                  # noqa: E402  R75 resources (stdlib-only reuse)
@@ -71,7 +88,136 @@ import r75_guard                                  # noqa: E402  R75 resources (s
 EXPECTED_TRAINER_SHA256 = "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
 EXPECTED_COMMON_SHA256 = "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a"
 EXPECTED_R66_SOURCE_SHA256 = "a22425729c9327ffcb1d57f4820f3b38f2bb7e35a6d6d81890fe64a75a246b10"
+EXPECTED_CONTROLLER_SHA256 = "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1"
+# onpolicy.py does not live in the canonical run directory. It is reached through the same wiring,
+# from the tight-budget round that v2_common.enter_round() puts on sys.path. This digest was READ
+# from that live file (9830 bytes); it is not a guessed hash and no replacement copy is introduced.
+EXPECTED_ONPOLICY_SHA256 = "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3"
+# cost_math.py is imported by configure_source_imports() from the stage-A directory that
+# v2_common.enter_round() puts on sys.path. This digest was READ from that live file (17384
+# bytes); it is not a guessed hash and no replacement copy is introduced. The checkout copy under
+# zhenghe-round42 carries the SAME digest, so the resolved path is what tells the two apart.
+EXPECTED_COST_MATH_SHA256 = "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026"
 
+
+def _sha256_of(path) -> str:
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+CANONICAL_IMPORT_NAMES = {"trainer": "v2_trainer", "common": "v2_common",
+                          "controller": "v2_controller"}
+
+
+def _verify_canonical_bindings() -> dict[str, Any]:
+    """Fail closed unless the canonical modules really are the pinned ones from the canonical tree.
+
+    Wiring the directories onto sys.path does not by itself prove WHICH file was imported, and
+    comparing a dictionary entry with itself proves nothing at all. Each binding is therefore
+    checked against the object this module actually uses, three ways: the module-level name bound
+    by the canonical imports must BE the object configure_source_imports() returned, so a
+    same-path, same-digest but different object cannot ride in; sys.modules under the canonical
+    import name must hold that same object, so a stale or shadowing cache entry is caught; and the
+    file that was actually read must sit under the canonical root and hash to the pinned value.
+    The R58 living GAE/ETA/GAMMA values are read back from the configured module. onpolicy and
+    cost_math are checked the same way, cost_math being read back from sys.modules (the helper
+    imported it) and never imported again here.
+    """
+    problems: list[str] = []
+    canon = Path(r66.CANON).resolve()
+    expected = {"trainer": ("trainer", "v2_trainer.py", EXPECTED_TRAINER_SHA256),
+                "common": ("common", "v2_common.py", EXPECTED_COMMON_SHA256),
+                "controller": ("controller_module", "v2_controller.py", EXPECTED_CONTROLLER_SHA256)}
+    used = {"trainer": trainer, "common": common, "controller": CONTROLLER_MODULE}
+    checked: dict[str, Any] = {}
+    for label, (key, filename, digest) in expected.items():
+        returned = CANONICAL_SOURCES.get(key)
+        import_name = CANONICAL_IMPORT_NAMES[label]
+        if returned is None:
+            problems.append(f"configure_source_imports() returned no {label}")
+            continue
+        bound = used[label]
+        if bound is None:
+            problems.append(f"this module holds no {label} binding to check")
+            continue
+        if bound is not returned:
+            problems.append(f"the {label} binding used here is not the object "
+                            f"configure_source_imports() returned; a different file may be bound")
+        cached = sys.modules.get(import_name)
+        if cached is not returned:
+            problems.append(f"sys.modules[{import_name!r}] is not the object "
+                            f"configure_source_imports() returned (stale or shadowing entry)")
+        path = Path(getattr(bound, "__file__", "") or "").resolve()
+        if path != canon / filename:
+            problems.append(f"{label}.__file__ resolved to {path}, expected {canon / filename}")
+            checked[label] = {"used_is_helper_return": bound is returned}
+            continue
+        actual = _sha256_of(path)
+        if actual != digest:
+            problems.append(f"{label} byte identity is {actual[:16]}, expected {digest[:16]}")
+        checked[label] = {"path": str(path), "sha256": actual,
+                          "used_is_helper_return": bound is returned,
+                          "sys_modules_is_helper_return": cached is returned}
+    tight = Path(getattr(common, "TIGHT_ROUND", "") or "").resolve()
+    onpolicy_path = Path(getattr(onpolicy, "__file__", "") or "").resolve()
+    if onpolicy_path != tight / "onpolicy.py":
+        problems.append(f"onpolicy.__file__ resolved to {onpolicy_path}, "
+                        f"expected {tight / 'onpolicy.py'}")
+    else:
+        actual = _sha256_of(onpolicy_path)
+        if actual != EXPECTED_ONPOLICY_SHA256:
+            problems.append(f"onpolicy byte identity is {actual[:16]}, "
+                            f"expected {EXPECTED_ONPOLICY_SHA256[:16]}")
+    if sys.modules.get("onpolicy") is not onpolicy:
+        problems.append("sys.modules['onpolicy'] is not the onpolicy module bound here")
+    for helper_name, helper_object in (("action_entropy", action_entropy),
+                                       ("joint_log_prob", joint_log_prob)):
+        if getattr(onpolicy, helper_name, None) is not helper_object:
+            problems.append(f"onpolicy.{helper_name} is not the object bound here")
+        elif not callable(helper_object):
+            problems.append(f"onpolicy.{helper_name} is not callable")
+    if COST_MATH_MODULE is None:
+        problems.append("cost_math is absent from sys.modules; configure_source_imports() must "
+                        "have imported it and this module never imports it")
+    else:
+        stage_a = Path(getattr(common, "STAGE_A_DIR", "") or "")
+        cost_path = Path(getattr(COST_MATH_MODULE, "__file__", "") or "").resolve()
+        wanted = (stage_a / "cost_math.py").resolve() if str(stage_a) else None
+        if wanted is None or cost_path != wanted:
+            problems.append(f"cost_math.__file__ resolved to {cost_path}, expected {wanted}")
+        else:
+            actual = _sha256_of(cost_path)
+            if actual != EXPECTED_COST_MATH_SHA256:
+                problems.append(f"cost_math byte identity is {actual[:16]}, "
+                                f"expected {EXPECTED_COST_MATH_SHA256[:16]}")
+            checked["cost_math"] = {"path": str(cost_path), "sha256": actual}
+    for attribute, wanted_value in (("GAE_LAMBDA", 1.0), ("ETA_LAMBDA", 0.5), ("GAMMA", 1.0)):
+        value = getattr(common, attribute, None)
+        if value is None or float(value) != float(wanted_value):
+            problems.append(f"common.{attribute} is {value!r}, expected {wanted_value!r} (the "
+                            f"living override must come from the configured module, not the "
+                            f"default)")
+    if problems:
+        raise RuntimeError("R75 canonical binding refused: " + "; ".join(problems))
+    return {"canonical_root": str(canon), "onpolicy_root": str(tight),
+            "trainer": str(Path(trainer.__file__).resolve()),
+            "common": str(Path(common.__file__).resolve()),
+            "controller": str(Path(CONTROLLER_MODULE.__file__).resolve()),
+            "onpolicy": str(onpolicy_path),
+            "trainer_sha256": _sha256_of(Path(trainer.__file__).resolve()),
+            "common_sha256": _sha256_of(Path(common.__file__).resolve()),
+            "controller_sha256": _sha256_of(Path(CONTROLLER_MODULE.__file__).resolve()),
+            "onpolicy_sha256": _sha256_of(onpolicy_path),
+            "cost_math_sha256": _sha256_of(Path(COST_MATH_MODULE.__file__).resolve()),
+            "gae_lambda": float(common.GAE_LAMBDA), "eta_lambda": float(common.ETA_LAMBDA),
+            "gamma": float(common.GAMMA), "bindings": checked,
+            "note": ("checked at import time by object identity against the helper return and "
+                     "against sys.modules, by resolved __file__ under the canonical root and by "
+                     "the pinned byte identity of the file actually read")}
+CANONICAL_BINDINGS = _verify_canonical_bindings()
 R75_TRAINER_TAG = "constrained-cost-v2-r75-native-ppo-qualification"
 R75_TRAINING_VERSION = "round75-native-ppo-qualification/1"
 R75_STRUCTURE = ("partitioned-early-late-actor-head/1+native-ppo-qualification-trunk-frozen/1")

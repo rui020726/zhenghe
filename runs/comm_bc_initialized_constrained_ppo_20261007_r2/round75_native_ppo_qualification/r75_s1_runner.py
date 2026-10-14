@@ -48,6 +48,13 @@ HERE = Path(__file__).resolve().parent
 PLAN_PATH = HERE / "ROUND75_S1_RUN_PLAN.json"
 PLAN = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
 S1_DIR = HERE / "raw" / "s1"
+# The request id that already consumed its ONE attempt, and the directory holding its originals.
+# Both stay the default so the preserved history keeps its place and an old command can never
+# silently write into it again. A later attempt must name itself and its own directory on the
+# command line; _bind_execution_identity() binds them BEFORE the precheck and before any paid
+# import, so a run that cannot name itself never reaches torch.
+FIRST_ATTEMPT_REQUEST_ID = "R75_S1_NATIVE_QUALIFICATION_20261015"
+EXECUTION_REQUEST_ID = None
 
 SEED = 11
 LR = 3e-4
@@ -962,7 +969,9 @@ def _write_failure_receipt(state: _RunState, error: BaseException) -> Path:
     original error, so a failure is never converted into a success by its own bookkeeping.
     """
     event = {"kind": "round75-s1-failure-receipt/1",
-             "request_id": PLAN["request_id"],
+             "request_id": EXECUTION_REQUEST_ID or PLAN["request_id"],
+             "plan_request_id": PLAN["request_id"],
+             "attempt_dir": str(S1_DIR),
              "head_at_writing": PLAN["head_at_writing"],
              "phase": state.phase,
              "error": {"type": type(error).__name__, "message": str(error)},
@@ -1383,7 +1392,9 @@ def run_s1() -> int:
             try:
                 _append_jsonl(S1_DIR / "r75_s1_attempt_counters.jsonl",
                               {"kind": "round75-s1-attempt-counters/1",
-                               "request_id": PLAN["request_id"],
+                               "request_id": EXECUTION_REQUEST_ID or PLAN["request_id"],
+                               "plan_request_id": PLAN["request_id"],
+                               "attempt_dir": str(S1_DIR),
                                "phase": state.phase,
                                "counters": state.counter_report(),
                                "conservative_attempt_bounds": _conservative_attempt_bounds(),
@@ -1391,6 +1402,49 @@ def run_s1() -> int:
             except Exception as counter_error:                # pragma: no cover - defensive
                 print(f"the attempt-counter append failed: {type(counter_error).__name__}: "
                       f"{counter_error}", file=sys.stderr)
+
+def _bind_execution_identity(request_id, attempt_dir) -> Path:
+    """Bind the ONE execution identity and its private attempt directory. Path wiring only.
+
+    The rules are the same ones the outer record enforces, restated here because the child is the
+    process that actually writes: the request id that already consumed its single attempt is
+    refused in ANY directory; the attempt directory must sit inside this output root and must not
+    be the historical raw/s1 (nor anything under it); and a second run of the same request id in
+    the same directory is refused. The central production ledger is NOT touched: it stays at
+    raw/runtime, so a new attempt directory never becomes a second ledger.
+    """
+    global S1_DIR, EXECUTION_REQUEST_ID
+    if not request_id:
+        raise RuntimeError("no request id was given; renaming a request is not an authorization")
+    if request_id == FIRST_ATTEMPT_REQUEST_ID:
+        raise RuntimeError("request id %s already consumed its one attempt and can never run "
+                           "again, in any directory" % request_id)
+    target = Path(attempt_dir) if attempt_dir else None
+    if target is None or not str(target):
+        raise RuntimeError("no attempt directory was given")
+    if not target.is_absolute():
+        target = HERE / target
+    target = Path(os.path.normpath(str(target)))
+    historical = Path(os.path.normpath(str(HERE / "raw" / "s1")))
+    if target == historical or historical in target.parents:
+        raise RuntimeError("the attempt directory must not be the historical raw/s1 or anything "
+                           "under it: %s" % target)
+    if target != HERE and HERE not in target.parents:
+        raise RuntimeError("the attempt directory must live inside the ROUND75 output root: %s"
+                           % target)
+    if target.exists():
+        for marker in sorted(target.glob("r75_s1_*attempt_marker*.json")):
+            try:
+                recorded = json.loads(marker.read_text(encoding="utf-8")).get("request_id")
+            except (ValueError, OSError):
+                recorded = None
+            if recorded == request_id:
+                raise RuntimeError("an attempt marker for request id %s already exists at %s"
+                                   % (request_id, marker.name))
+    S1_DIR = target
+    EXECUTION_REQUEST_ID = request_id
+    return target
+
 
 def _repo_root() -> Path:
     """The repository root, found by walking up. The paid path must not depend on the CWD either:
@@ -1418,12 +1472,18 @@ def r75_replay_adapter_load():
     return adapter.load_qualification_batch(row_path, tape_path)
 
 
-def main() -> int:
+def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="ROUND75 S1 runner (prepared, not run)")
     parser.add_argument("--run-s1", action="store_true",
                         help="execute the paid S1 path (requires a separate decision-side approval)")
     parser.add_argument("--print-plan", action="store_true", help="print the frozen plan summary")
-    args = parser.parse_args()
+    parser.add_argument("--request-id", default=None,
+                        help="the execution identity of THIS attempt; the historical request id "
+                             "is refused in any directory")
+    parser.add_argument("--attempt-dir", default=None,
+                        help="this attempt's private directory inside the ROUND75 output root; "
+                             "raw/s1 keeps the preserved first failure")
+    args = parser.parse_args(argv)
     if args.print_plan or not args.run_s1:
         print(json.dumps({"kind": PLAN["kind"], "request_id": PLAN["request_id"],
                           "status": PLAN["status"], "head_at_writing": PLAN["head_at_writing"],
@@ -1432,6 +1492,16 @@ def main() -> int:
                           "note": ("no argument (or --print-plan) imports no torch and starts "
                                    "nothing; --run-s1 is the paid path")}, indent=2))
         return 0
+    if not args.request_id or not args.attempt_dir:
+        sys.stderr.write("S1 REFUSED: --run-s1 requires --request-id and --attempt-dir; a run "
+                         "that cannot name itself and its own directory never reaches the paid "
+                         "path\n")
+        return 2
+    try:
+        _bind_execution_identity(args.request_id, args.attempt_dir)
+    except RuntimeError as error:
+        sys.stderr.write("S1 REFUSED: %s\n" % error)
+        return 2
     return run_s1()
 
 

@@ -1,0 +1,103 @@
+{
+  "kind": "round75-s0-import-bootstrap-repair-task-state/1",
+  "request_id": "R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015",
+  "continues": "R75_S0_DRIVER_CLOSEOUT_20261015",
+  "branch": "exp/round75-native-ppo-qualification",
+  "head_at_registration": "464cb95076bb69cebde74e9a07a07a4670c128ed",
+  "parent_head": "af9b80e97bfeaf382108f0615ee317d9f0ea551d",
+  "output_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/",
+  "registered_at_note": "written at the start of the close-out increment; the final HEAD is read from git after the commit and is deliberately not claimed here",
+  "authorization": {
+    "allowed": [
+      "source repair outside the paid runner",
+      "pure stdlib / AST / fake-module / fake-subprocess tests",
+      "zero-cost file precheck rerun of the affected checks",
+      "close-out documents and manifest append",
+      "explicit local git add / commit of named files only"
+    ],
+    "forbidden_and_not_done": [
+      "torch or numpy real NN path",
+      "model load or construction",
+      "forward / backward",
+      "optimizer step, real or synthetic",
+      "PPO update or replay",
+      "environment construction or sampling",
+      "training or evaluation run",
+      "checkpoint write",
+      "launch of the production runner (no --launch in this task)",
+      "push / merge / deploy"
+    ]
+  },
+  "original_message_basis": "The delegation asks for one close-out of four items: (1) repair the real module-identity check in r75_frozen.py, whose current form compares configure_source_imports() output with itself and therefore proves nothing, comparing instead the modules actually used (trainer / common / controller) with the helper return value, with __file__, file sha256 and the living GAE 1.0 / ETA 0.5 / GAMMA 1.0 read back, and freezing the onpolicy and cost_math sources that the existing wiring reaches; (2) finish the revised outer wrapper so that a preserved first failure does not make every later legal request fail, refusing only a repeated request id across any output directory, and removing the EXPECT_SIBLING placeholder that is not a verification; (3) deliver the narrow fake-module / fake-subprocess counterexamples that the original request required; (4) deliver the report, verdict, manifest identity and the explicit local commit.",
+  "already_on_disk_from_the_prior_turn": {
+    "r75_frozen_py": {"sha256": "d6ee0e3603674cff758c0f0025c786a461f3b772930b2ed603739b1622d0301e", "bytes": 37843, "state": "modified, uncommitted"},
+    "r75_s1_precheck_py": {"sha256": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c", "bytes": 23423, "state": "modified, uncommitted"},
+    "ROUND75_S1_RUN_PLAN_json": {"sha256": "4cf23fe66a80b0e4dccb974a27a2fa4528ee86b1c899f36eed9b912c8a445eac", "bytes": 19300, "state": "modified, uncommitted"},
+    "r75_s1_outer_exec_v2_py": {"sha256": "969e2fced0592ac7ffab3ce5fdd23f848591a75afd1d42ed8296cc4c892d3b6f", "bytes": 19671, "state": "on disk, ignored by .gitignore:548, not added"},
+    "precheck_evidence": "74/74 checks, checks_failed empty, exit 0 (reused as partial preparation evidence, not an import qualification)"
+  },
+  "verified_sources": {
+    "canonical_root": "D:/code/整合/zhenghe/runs/comm_cost_v2_rerun_20260928",
+    "onpolicy": {"path": "D:/code/整合/zhenghe/runs/comm_tight_budget_20260919/onpolicy.py", "sha256": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3", "bytes": 9830, "note": "read from the live file reached by v2_common.enter_round(); not a guessed digest"},
+    "cost_math": {"path": "D:/code/整合/zhenghe/runs/comm_cost_controller_stage_a_20260927/cost_math.py", "sha256": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026", "bytes": 17384, "note": "STAGE_A_DIR of the configured v2_common; imported by configure_source_imports() and read back from sys.modules, never imported again here"},
+    "cost_math_caveat": "the checkout copy under zhenghe-round42 has the SAME sha256, so the resolved __file__ path is what distinguishes the source; both are registered"
+  },
+  "remaining_items": [
+    "1. replace the self-comparison in _verify_canonical_bindings with real object-identity, __file__, sha256 and live-value checks over the bindings actually used, plus the cost_math identity",
+    "2. repair the revised outer wrapper: preserved-first-attempt identity instead of a blanket refusal, repeated request id refused across any output directory, EXPECT_SIBLING removed",
+    "3. write and run the narrow fake-module / fake-subprocess test module",
+    "4. rerun only the affected zero-cost precheck, then write the report, verdict and manifest append and commit locally"
+  ],
+  "frozen_contracts_unchanged": [
+    "R58 s11 / e0 / scenario1300027 single recorded batch and its 66 rows / 168 candidate identity",
+    "gate-only equivalent dual head, trunk frozen, lambda*A_task - A_cost",
+    "epochs 4, minibatch 256, original LR and data order, entropy, clip, dual update, 19-dim input, ready cut 147, beta 1.00",
+    "R75 quotas: normal 12 + technical 4 = hard 16 physical optimizer steps; normal 5000 + technical 1000 = hard 6000 offline trunk target rows; per charge 1024; no extension, no clearing, no borrowing the R74 quota",
+    "the first failed attempt raw/s1 originals and its request id R75_S1_NATIVE_QUALIFICATION_20261015 stay permanently un-rerunnable"
+  ],
+  "future_plan_not_authorized": "A1 one critic-only update plus A2/A3 one full native update each, 9 normal physical steps / 1680 target rows / 140 trunk calls / 2 batch reads / 0 environment, remains a plan that needs a fresh release",
+  "protected_files": [
+    {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json", "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b"},
+    {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json", "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"}
+  ],
+  "s1_status": "still not authorized by this task; no production runner was started"
+,
+    "internal_goal_state": {
+      "checked_with": "get_goal, called before any file edit",
+      "result": {
+        "goal": null,
+        "completionBudgetReport": null,
+        "remainingTokens": null
+      },
+      "consequence": "no active internal goal exists, so there is no stale goal to close and no risk of an old goal auto-continuing over this task; no goal was created and none was marked complete",
+      "current_task_id": "R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015",
+      "note": "the read-only R75_S0_FINAL_PREP_20261014 receipt check from the previous turn is a separate, already-delivered historical request committed at 7eff4a4; it is not this task and changed no scientific or ledger state"
+    },
+    "completion": {
+      "item_1_canonical_binding_identity": "done",
+      "item_2_wrapper_history_gate_and_placeholder": "done",
+      "item_3_narrow_counterexample_tests": "done (30/30, exit 0)",
+      "item_4_precheck_report_verdict_manifest_and_commit": "done in this close-out turn",
+      "additional_parent_to_child_output_routing": "done",
+      "reused_without_rerun": [
+        "30/30 narrow suite",
+        "74/74 precheck",
+        "old 40/34 suites",
+        "earlier 68-check precheck"
+      ],
+      "remaining": [],
+      "remaining_note": "nothing inside the authorized source-repair scope is left; only the decision-side S1 release remains and this task does not grant it"
+    },
+    "resume_instructions": "On resume read this task-state first. The authorized scope is source repair outside the paid runner, pure stdlib/AST/fake tests, zero-cost precheck, freeze updates and the explicit local commit. Paid work stays forbidden: no torch or numpy real NN path, no model load or construction, no forward/backward, no real or synthetic optimizer step, no PPO update or replay, no environment or sampling, no checkpoint write, no --launch. Do not re-run the 30/30 or 74/74 evidence; re-verify byte identity and AST instead. The original S1 request R75_S1_NATIVE_QUALIFICATION_20261015 is permanently un-rerunnable; any future attempt needs a new request id, its own attempt directory and a fresh decision-side release.",
+    "latest_input": {
+      "kind": "continuation correction from the parent thread",
+      "asks": [
+        "verify the internal goal against the on-disk task-state and the newest delegation, and record the difference in this file",
+        "close only a genuinely finished old goal; never mark IMPORT_BOOTSTRAP or any research goal complete",
+        "do not create a goal, an alternative chat or an experiment, and do not pause research",
+        "keep every current change and finish the missing close-out instead of re-opening the old receipt history",
+        "deliver the fixed sources, the executed test evidence, report/verdict, the latest identity manifest, the originals-unchanged evidence and the explicit named local commit with the full HEAD and parent"
+      ],
+      "honored": "the goal was read first and was null, no goal was created or closed, all existing changes were kept, the close-out was completed on top of them, and the old receipt history was not re-opened"
+    }
+}
